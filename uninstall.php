@@ -1,0 +1,2 @@
+<?php
+//todo: uninstall procedure
