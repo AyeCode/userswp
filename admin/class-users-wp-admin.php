@@ -62,6 +62,8 @@ class Users_WP_Admin {
 
         require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-users-wp-admin-settings.php';
 
+        require_once dirname(dirname( __FILE__ )) . '/admin/menus/class-users-wp-menus.php';
+
 
     }
 
@@ -85,7 +87,7 @@ class Users_WP_Admin {
          * class.
          */
 
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/users-wp-admin.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp-admin.css', array(), $this->version, 'all' );
 
     }
 
@@ -108,7 +110,7 @@ class Users_WP_Admin {
          * class.
          */
 
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/users-wp-admin.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.js', array( 'jquery' ), $this->version, false );
 
     }
 

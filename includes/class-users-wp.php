@@ -150,11 +150,13 @@ class Users_WP {
 
         $plugin_admin = new Users_WP_Admin( $this->get_plugin_name(), $this->get_version() );
         $plugin_admin_settings = new Users_WP_Admin_Settings();
+        $plugin_admin_menus = new Users_WP_Menus();
 
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
         $this->loader->add_action( 'admin_menu', $plugin_admin, 'setup_admin_menus' );
         $this->loader->add_action( 'admin_init', $plugin_admin_settings, 'users_wp_register_general_settings' );
+        $this->loader->add_action( 'load-nav-menus.php', $plugin_admin_menus, 'users_wp_admin_menu_metabox' );
 
     }
 
@@ -213,5 +215,6 @@ class Users_WP {
     public function get_version() {
         return $this->version;
     }
+
 
 }
