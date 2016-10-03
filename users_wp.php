@@ -3,7 +3,7 @@
 Plugin Name: UsersWP
 Plugin URI: https://wpgeodirectory.com
 Description: User management plugin.
-Version: 0.0.1
+Version: 1.0.0
 Author: GeoDirectory team
 Author URI: https://wpgeodirectory.com
 License: GPL-2.0+
@@ -50,7 +50,7 @@ require_once('includes/class-users-wp.php');
  * then kicking off the plugin from this point in the file does
  * not affect the page life cycle.
  *
- * @since 0.0.1
+ * @since 1.0.0
  */
 function run_users_wp() {
     $plugin = new Users_WP();

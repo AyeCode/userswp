@@ -6,7 +6,7 @@
  * public-facing side of the site and the admin area.
  *
  * @link       http://wpgeodirectory.com
- * @since      0.0.1
+ * @since      1.0.0
  *
  * @package    Users_WP
  * @subpackage Users_WP/includes
@@ -21,7 +21,7 @@
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
  *
- * @since      0.0.1
+ * @since      1.0.0
  * @package    Users_WP
  * @subpackage Users_WP/includes
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
@@ -32,7 +32,7 @@ class Users_WP {
      * The loader that's responsible for maintaining and registering all hooks that power
      * the plugin.
      *
-     * @since    0.0.1
+     * @since    1.0.0
      * @access   protected
      * @var      Users_WP_Loader    $loader    Maintains and registers all hooks for the plugin.
      */
@@ -41,7 +41,7 @@ class Users_WP {
     /**
      * The unique identifier of this plugin.
      *
-     * @since    0.0.1
+     * @since    1.0.0
      * @access   protected
      * @var      string    $users_wp    The string used to uniquely identify this plugin.
      */
@@ -50,7 +50,7 @@ class Users_WP {
     /**
      * The current version of the plugin.
      *
-     * @since    0.0.1
+     * @since    1.0.0
      * @access   protected
      * @var      string    $version    The current version of the plugin.
      */
@@ -63,12 +63,12 @@ class Users_WP {
      * Load the dependencies, define the locale, and set the hooks for the admin area and
      * the public-facing side of the site.
      *
-     * @since    0.0.1
+     * @since    1.0.0
      */
     public function __construct() {
 
         $this->plugin_name = 'users-wp';
-        $this->version = '0.0.1';
+        $this->version = '1.0.0';
 
         $this->load_dependencies();
         $this->set_locale();
@@ -90,7 +90,7 @@ class Users_WP {
      * Create an instance of the loader which will be used to register the hooks
      * with WordPress.
      *
-     * @since    0.0.1
+     * @since    1.0.0
      * @access   private
      */
     private function load_dependencies() {
@@ -128,7 +128,7 @@ class Users_WP {
      * Uses the Users_WP_i18n class in order to set the domain and to register the hook
      * with WordPress.
      *
-     * @since    0.0.1
+     * @since    1.0.0
      * @access   private
      */
     private function set_locale() {
@@ -143,7 +143,7 @@ class Users_WP {
      * Register all of the hooks related to the admin area functionality
      * of the plugin.
      *
-     * @since    0.0.1
+     * @since    1.0.0
      * @access   private
      */
     private function define_admin_hooks() {
@@ -164,7 +164,7 @@ class Users_WP {
      * Register all of the hooks related to the public-facing functionality
      * of the plugin.
      *
-     * @since    0.0.1
+     * @since    1.0.0
      * @access   private
      */
     private function define_public_hooks() {
@@ -179,7 +179,7 @@ class Users_WP {
     /**
      * Run the loader to execute all of the hooks with WordPress.
      *
-     * @since    0.0.1
+     * @since    1.0.0
      */
     public function run() {
         $this->loader->run();
@@ -189,7 +189,7 @@ class Users_WP {
      * The name of the plugin used to uniquely identify it within the context of
      * WordPress and to define internationalization functionality.
      *
-     * @since     0.0.1
+     * @since     1.0.0
      * @return    string    The name of the plugin.
      */
     public function get_plugin_name() {
@@ -199,7 +199,7 @@ class Users_WP {
     /**
      * The reference to the class that orchestrates the hooks with the plugin.
      *
-     * @since     0.0.1
+     * @since     1.0.0
      * @return    Users_WP_Loader    Orchestrates the hooks of the plugin.
      */
     public function get_loader() {
@@ -209,7 +209,7 @@ class Users_WP {
     /**
      * Retrieve the version number of the plugin.
      *
-     * @since     0.0.1
+     * @since     1.0.0
      * @return    string    The version number of the plugin.
      */
     public function get_version() {

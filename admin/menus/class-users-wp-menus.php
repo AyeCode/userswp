@@ -3,7 +3,7 @@
  * The nav menu specific functionality of the plugin.
  *
  * @link       http://wpgeodirectory.com
- * @since      0.0.1
+ * @since      1.0.0
  *
  * @package    Users_WP
  * @subpackage Users_WP/admin/menus
@@ -21,7 +21,7 @@ class Users_WP_Menus {
     /**
      * Initialize the class and set its properties.
      *
-     * @since    0.0.1
+     * @since    1.0.0
      */
     public function __construct() {
 
@@ -36,7 +36,7 @@ class Users_WP_Menus {
     /**
      * Load new metabox for nav menu ui.
      *
-     * @since 0.0.1
+     * @since 1.0.0
      * @return void
      */
     public function users_wp_admin_menu_metabox() {
@@ -47,7 +47,7 @@ class Users_WP_Menus {
     /**
      * Build and populate the users_wp metabox into the menu manager ui.
      *
-     * @since 0.0.1
+     * @since 1.0.0
      * @return void
      */
     public function users_wp_admin_do_wp_nav_menu_metabox() {
@@ -128,7 +128,7 @@ class Users_WP_Menus {
      * This function creates the list of Logged-In only pages,
      * for the admin menu manager.
      *
-     * @since 0.0.1
+     * @since 1.0.0
      * @return mixed A URL or an array of pages.
      */
     public function
@@ -191,7 +191,7 @@ class Users_WP_Menus {
      * This function creates the list of Logged-In only pages,
      * for the admin menu manager.
      *
-     * @since 0.0.1
+     * @since 1.0.0
      * @return mixed A URL or an array of pages.
      */
     public function users_wp_nav_menu_get_loggedin_pages() {
@@ -248,7 +248,7 @@ class Users_WP_Menus {
      * This function creates the list of Logged-Out only pages,
      * for the admin menu manager.
      *
-     * @since 0.0.1
+     * @since 1.0.0
      * @return mixed A URL or an array of pages.
      */
     public function users_wp_nav_menu_get_loggedout_pages() {
@@ -316,7 +316,7 @@ class Users_WP_Menus {
     /**
      * Restrict various items from view if editing a users_wp menu.
      *
-     * @since 0.0.1
+     * @since 1.0.0
      * @return void
      */
     public function users_wp_admin_wp_nav_menu_restrict_items() {

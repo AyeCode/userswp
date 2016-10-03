@@ -3,7 +3,7 @@
  * Create a set of Users WP specific links for use in the Menus admin UI.
  *
  * @link       http://wpgeodirectory.com
- * @since      0.0.1
+ * @since      1.0.0
  *
  * @package    Users_WP
  * @subpackage Users_WP/admin/menus
@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
  * Borrowed heavily from {@link Walker_Nav_Menu_Checklist}, but modified so as not
  * to require an actual post type or taxonomy, and to force certain CSS classes.
  *
- * @since 0.0.1
+ * @since 1.0.0
  */
 class Users_WP_Walker_Nav_Menu_Checklist extends Walker_Nav_Menu {
 
