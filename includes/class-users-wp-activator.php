@@ -29,12 +29,12 @@ class Users_WP_Activator {
     }
 
     public static function generate_pages() {
-        self::uwp_create_page(esc_sql(_x('register', 'page_slug', 'users-wp')), 'uwp_register_page', __('Register', 'users-wp'), '');
-        self::uwp_create_page(esc_sql(_x('login', 'page_slug', 'users-wp')), 'uwp_login_page', __('Login', 'users-wp'), '');
-        self::uwp_create_page(esc_sql(_x('account', 'page_slug', 'users-wp')), 'uwp_account_page', __('Account', 'users-wp'), '');
-        self::uwp_create_page(esc_sql(_x('forgot', 'page_slug', 'users-wp')), 'uwp_forgot_pass_page', __('Forgot Password?', 'users-wp'), '');
-        self::uwp_create_page(esc_sql(_x('profile', 'page_slug', 'users-wp')), 'uwp_user_profile_page', __('Profile', 'users-wp'), '');
-        self::uwp_create_page(esc_sql(_x('users', 'page_slug', 'users-wp')), 'uwp_users_list_page', __('Users', 'users-wp'), '');
+        self::uwp_create_page(esc_sql(_x('register', 'page_slug', 'users-wp')), 'uwp_register_page', __('Register', 'users-wp'), '[uwp_register]');
+        self::uwp_create_page(esc_sql(_x('login', 'page_slug', 'users-wp')), 'uwp_login_page', __('Login', 'users-wp'), '[uwp_login]');
+        self::uwp_create_page(esc_sql(_x('account', 'page_slug', 'users-wp')), 'uwp_account_page', __('Account', 'users-wp'), '[uwp_account]');
+        self::uwp_create_page(esc_sql(_x('forgot', 'page_slug', 'users-wp')), 'uwp_forgot_pass_page', __('Forgot Password?', 'users-wp'), '[uwp_forgot]');
+        self::uwp_create_page(esc_sql(_x('profile', 'page_slug', 'users-wp')), 'uwp_user_profile_page', __('Profile', 'users-wp'), '[uwp_profile]');
+        self::uwp_create_page(esc_sql(_x('users', 'page_slug', 'users-wp')), 'uwp_users_list_page', __('Users', 'users-wp'), '[uwp_users]');
     }
 
     public static function uwp_create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish') {

@@ -43,6 +43,7 @@ register_deactivation_hook( __FILE__, 'deactivate_users_wp' );
  * admin-specific hooks, and public-facing site hooks.
  */
 require_once('includes/class-users-wp.php');
+require_once('includes/helpers.php');
 /**
  * Begins execution of the plugin.
  *

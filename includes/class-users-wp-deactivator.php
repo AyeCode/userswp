@@ -28,4 +28,13 @@ class Users_WP_Deactivator {
 
     }
 
+    public function delete_settings() {
+        delete_option('uwp_user_profile_page');
+        delete_option('uwp_register_page');
+        delete_option('uwp_login_page');
+        delete_option('uwp_account_page');
+        delete_option('uwp_forgot_pass_page');
+        delete_option('uwp_users_list_page');
+    }
+
 }

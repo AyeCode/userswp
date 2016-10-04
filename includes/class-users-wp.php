@@ -74,6 +74,7 @@ class Users_WP {
         $this->set_locale();
         $this->define_admin_hooks();
         $this->define_public_hooks();
+        $this->define_shortcodes();
 
     }
 
@@ -108,6 +109,11 @@ class Users_WP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-i18n.php';
 
         /**
+         * The class responsible for defining all shortcodes
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-shortcodes.php';
+
+        /**
          * The class responsible for defining all actions that occur in the admin area.
          */
         require_once dirname(dirname( __FILE__ )) . '/admin/class-users-wp-admin.php';
@@ -117,6 +123,7 @@ class Users_WP {
          * side of the site.
          */
         require_once dirname(dirname( __FILE__ )) . '/public/class-users-wp-public.php';
+
 
         $this->loader = new Users_WP_Loader();
 
@@ -173,6 +180,20 @@ class Users_WP {
 
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+    }
+
+    private function define_shortcodes() {
+
+        $shortcodes = new Users_WP_Shortcodes();
+
+        add_shortcode( 'uwp_register', array($shortcodes,'register'));
+        add_shortcode( 'uwp_login', array($shortcodes,'login'));
+        add_shortcode( 'uwp_forgot', array($shortcodes,'forgot'));
+        add_shortcode( 'uwp_account', array($shortcodes,'account'));
+        add_shortcode( 'uwp_profile', array($shortcodes,'profile'));
+        add_shortcode( 'uwp_users', array($shortcodes,'users'));
+
 
     }
 

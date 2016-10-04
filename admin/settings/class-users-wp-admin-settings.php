@@ -268,6 +268,7 @@ class Users_WP_Admin_Settings {
             <?php settings_fields( 'users-wp' ); ?>
             <?php do_settings_sections( 'users-wp' );
 
+
             $user_profile_page = esc_attr( get_option('uwp_user_profile_page', ''));
             $register_page = esc_attr( get_option('uwp_register_page', ''));
             $login_page = esc_attr( get_option('uwp_login_page', ''));
@@ -452,45 +453,9 @@ class Users_WP_Admin_Settings {
         $tabs['recaptcha']   = __( 'reCaptcha', 'users-wp' );
         $tabs['notifications']   = __( 'Notifications', 'users-wp' );
 
-        return apply_filters( 'users_wp_settings_tabs', $tabs );
+        return apply_filters( 'uwp_settings_tabs', $tabs );
     }
 
-    function get_registered_settings_sections() {
-
-        static $sections = false;
-        if ( false !== $sections ) {
-            return $sections;
-        }
-
-        $sections = array(
-            'general'    => apply_filters( 'users_wp_settings_sections_general', array(
-                'main'               => __( 'General Settings', 'users-wp' ),
-                'shortcodes'           => __( 'Shortcodes List', 'users-wp' ),
-                'info'                => __( 'Info', 'users-wp' ),
-            ) ),
-            'form_builder'    => apply_filters( 'users_wp_settings_sections_form_builder', array() ),
-            'recaptcha'    => apply_filters( 'users_wp_settings_sections_recaptcha', array() ),
-            'notifications'    => apply_filters( 'users_wp_settings_sections_notifications', array() ),
-
-        );
-        $sections = apply_filters( 'users_wp_settings_sections', $sections );
-        return $sections;
-    }
-
-    function users_wp_get_settings() {
-        $settings = get_option( 'users_wp_settings' );
-        if( empty( $settings ) ) {
-            // Update old settings with new single option
-            $general_settings = is_array( get_option( 'users_wp_settings_general' ) )    ? get_option( 'users_wp_settings_general' )    : array();
-            $form_builder_settings = is_array( get_option( 'users_wp_settings_form_builder' ) )    ? get_option( 'users_wp_settings_form_builder' )    : array();
-            $recaptcha_settings = is_array( get_option( 'users_wp_settings_recaptcha' ) )    ? get_option( 'users_wp_settings_recaptcha' )    : array();
-            $notifications_settings = is_array( get_option( 'users_wp_settings_notifications' ) )    ? get_option( 'users_wp_settings_notifications' )    : array();
-
-            $settings = array_merge( $general_settings, $form_builder_settings, $recaptcha_settings, $notifications_settings );
-            update_option( 'users_wp_settings', $settings );
-        }
-        return apply_filters( 'users_wp_get_settings', $settings );
-    }
 
     /**
      * Get the current page url.
@@ -513,7 +478,7 @@ class Users_WP_Admin_Settings {
          *
          * @param string $pageURL The URL of the current page.
          */
-        return apply_filters( 'users_wp_get_current_page_url', $pageURL );
+        return apply_filters( 'uwp_get_current_page_url', $pageURL );
     }
 
 
