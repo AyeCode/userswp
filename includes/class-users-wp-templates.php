@@ -21,9 +21,10 @@
  */
 class Users_WP_Templates {
 
+    protected $loader;
 
-    public function __construct() {
-
+    public function __construct($loader) {
+        $this->loader = $loader;
     }
 
     public function uwp_locate_template( $template ) {
@@ -122,6 +123,53 @@ class Users_WP_Templates {
                 $template = apply_filters('uwp_template_users', $template);
                 return $template;
                 break;
+        }
+
+        return false;
+    }
+
+    public function access_checks() {
+        global $wp_query;
+
+        if (!is_page()) {
+            return false;
+        }
+
+        $current_page_id = $wp_query->query_vars['page_id'];
+        $condition = "";
+
+        $register_page = esc_attr( get_option('uwp_register_page', false));
+        if ( $register_page && ((int) $register_page ==  $current_page_id ) ) {
+            $condition = "non_logged_in";
+        }
+
+        $login_page = esc_attr( get_option('uwp_login_page', false));
+        if ( $login_page && ((int) $login_page ==  $current_page_id ) ) {
+            $condition = "non_logged_in";
+        }
+
+        $forgot_pass_page = esc_attr( get_option('uwp_forgot_pass_page', false));
+        if ( $forgot_pass_page && ((int) $forgot_pass_page ==  $current_page_id ) ) {
+            $condition = "non_logged_in";
+        }
+
+        $account_page = esc_attr( get_option('uwp_account_page', false));
+        if ( $account_page && ((int) $account_page ==  $current_page_id ) ) {
+            $condition = "logged_in";
+        }
+
+        if ($condition == "non_logged_in") {
+            if (is_user_logged_in()) {
+                wp_redirect(home_url('/'));
+                exit();
+            }
+        } elseif ($condition == "logged_in") {
+            if (!is_user_logged_in()) {
+                wp_redirect(get_permalink($login_page));
+                exit();
+            }
+        } else {
+            return false;
         }
 
         return false;

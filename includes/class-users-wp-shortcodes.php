@@ -23,11 +23,13 @@ class Users_WP_Shortcodes {
 
     private $templates;
 
+    protected $loader;
 
-    public function __construct() {
+    public function __construct($loader) {
 
+        $this->loader = $loader;
         $this->load_dependencies();
-        $this->templates = new Users_WP_Templates();
+        $this->templates = new Users_WP_Templates($loader);
 
 
     }

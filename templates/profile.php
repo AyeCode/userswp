@@ -1,3 +1,4 @@
+<?php do_action('uwp_template_before', 'profile'); ?>
 <div class="uwp-content-wrap">
     <div class="uwp-profile-header">
         <div class="uwp-profile-header-img"></div>
@@ -31,3 +32,4 @@
         </div>
     </div>
 </div>
+<?php do_action('uwp_template_after', 'profile'); ?>

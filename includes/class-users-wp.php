@@ -109,6 +109,17 @@ class Users_WP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-i18n.php';
 
         /**
+         * The class responsible for defining form handler functionality
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-forms.php';
+
+        /**
+         * The class responsible for defining all shortcodes
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-templates.php';
+
+        /**
          * The class responsible for defining all shortcodes
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-shortcodes.php';
@@ -178,14 +189,20 @@ class Users_WP {
 
         $plugin_public = new Users_WP_Public( $this->get_plugin_name(), $this->get_version() );
 
+        $forms = new Users_WP_Forms();
+        $templates = new Users_WP_Templates($this->loader);
+
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+        $this->loader->add_action( 'uwp_template_form_title_after', $forms, 'handler' );
+        $this->loader->add_action( 'template_redirect', $templates, 'access_checks' );
 
     }
 
     private function define_shortcodes() {
 
-        $shortcodes = new Users_WP_Shortcodes();
+        $shortcodes = new Users_WP_Shortcodes($this->loader);
 
         add_shortcode( 'uwp_register', array($shortcodes,'register'));
         add_shortcode( 'uwp_login', array($shortcodes,'login'));

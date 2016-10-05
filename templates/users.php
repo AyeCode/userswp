@@ -1,3 +1,4 @@
+<?php do_action('uwp_template_before', 'users'); ?>
 <div class="uwp-content-wrap">
     <div class="uwp-users-list">
         <div class="uwp-users-list-sort-search">
@@ -31,3 +32,4 @@
         </ul>
     </div>
 </div>
+<?php do_action('uwp_template_after', 'users'); ?>
