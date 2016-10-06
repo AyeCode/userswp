@@ -26,6 +26,12 @@ class Users_WP_Admin_Settings {
     protected $loader;
 
     public function __construct() {
+        $this->load_dependencies();
+    }
+
+    private function load_dependencies() {
+
+        require_once dirname(dirname( __FILE__ )) . '/settings/class-users-wp-form-builder.php';
 
     }
 
@@ -78,7 +84,7 @@ class Users_WP_Admin_Settings {
 
             <div id="users-wp">
                 <div class="item-list-tabs content-box">
-                    <ul>
+                    <ul class="item-list-tabs-ul">
 
                         <li id="users-wp-general-li" class="<?php if ($tab == 'general') { echo "current selected"; } ?>">
                             <a id="users-wp-general" href="<?php echo add_query_arg('tab', 'general', $current_page_url); ?>">General</a>
@@ -149,9 +155,11 @@ class Users_WP_Admin_Settings {
     }
 
     public function get_form_builder_content() {
+        $form_builder = new Users_WP_Form_Builder();
         ?>
-
+        <h3 class="users_wp_section_heading">Manage Form Fields</h3>
         <?php
+        $form_builder->uwp_form_builder();
     }
 
     public function get_recaptcha_content() {
@@ -198,8 +206,8 @@ class Users_WP_Admin_Settings {
         <?php settings_fields( 'users-wp' ); ?>
         <?php do_settings_sections( 'users-wp' );
 
-        $uwp_registration_success_email_subject = esc_attr( get_option('uwp_registration_success_email_subject', ''));
-        $uwp_registration_success_email_content = esc_attr( get_option('uwp_registration_success_email_content', ''));
+        $uwp_register_success_subject = esc_attr( get_option('uwp_register_success_subject', ''));
+        $uwp_register_success_content = esc_attr( get_option('uwp_register_success_content', ''));
 
         $uwp_forgot_password_subject = esc_attr( get_option('uwp_forgot_password_subject', ''));
         $uwp_forgot_password_content = esc_attr( get_option('uwp_forgot_password_content', ''));
@@ -221,7 +229,7 @@ class Users_WP_Admin_Settings {
                <tr valign="top">
                     <th scope="row" class="titledesc">Registration success email</th>
                     <td class="forminp">
-                        <input name="uwp_registration_success_email_subject" id="uwp_registration_success_email_subject" type="text" style=" min-width:300px;" value="<?php echo esc_attr( $uwp_registration_success_email_subject ); ?>" />
+                        <input name="uwp_registration_success_email_subject" id="uwp_registration_success_email_subject" type="text" style=" min-width:300px;" value="<?php echo esc_attr( $uwp_register_success_subject ); ?>" />
                         <span class="description"></span>
                     </td>
                </tr>
@@ -229,7 +237,7 @@ class Users_WP_Admin_Settings {
                <tr valign="top">
                     <th scope="row" class="titledesc"></th>
                     <td class="forminp">
-                        <textarea name="uwp_registration_success_email_content" id="uwp_registration_success_email_content" style="width:500px; height: 150px;"><?php echo esc_attr( $uwp_registration_success_email_content ); ?></textarea>
+                        <textarea name="uwp_registration_success_email_content" id="uwp_registration_success_email_content" style="width:500px; height: 150px;"><?php echo esc_attr( $uwp_register_success_content ); ?></textarea>
                         <span class="description"></span>
 
                     </td>

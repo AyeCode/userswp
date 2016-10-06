@@ -64,7 +64,6 @@ class Users_WP_Admin {
 
         require_once dirname(dirname( __FILE__ )) . '/admin/menus/class-users-wp-menus.php';
 
-
     }
 
 

@@ -75,6 +75,7 @@ class Users_WP {
         $this->define_admin_hooks();
         $this->define_public_hooks();
         $this->define_shortcodes();
+        $this->init_form_builder();
 
     }
 
@@ -135,6 +136,8 @@ class Users_WP {
          */
         require_once dirname(dirname( __FILE__ )) . '/public/class-users-wp-public.php';
 
+        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-users-wp-form-builder.php';
+
 
         $this->loader = new Users_WP_Loader();
 
@@ -166,7 +169,7 @@ class Users_WP {
      */
     private function define_admin_hooks() {
 
-        $plugin_admin = new Users_WP_Admin( $this->get_plugin_name(), $this->get_version() );
+        $plugin_admin = new Users_WP_Admin( $this->get_plugin_name(), $this->get_version());
         $plugin_admin_settings = new Users_WP_Admin_Settings();
         $plugin_admin_menus = new Users_WP_Menus();
 
@@ -212,6 +215,14 @@ class Users_WP {
         add_shortcode( 'uwp_users', array($shortcodes,'users'));
 
 
+    }
+
+    public function init_form_builder() {
+        $form_builder = new Users_WP_Form_Builder();
+
+        $this->loader->add_action('uwp_manage_available_fields_predefined', $form_builder, 'uwp_manage_available_fields_predefined');
+        $this->loader->add_action('uwp_manage_available_fields_custom', $form_builder, 'uwp_manage_available_fields_custom');
+        $this->loader->add_action('uwp_manage_available_fields', $form_builder, 'uwp_manage_available_fields');
     }
 
     /**
