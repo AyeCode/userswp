@@ -223,6 +223,7 @@ class Users_WP {
         $this->loader->add_action('uwp_manage_available_fields_predefined', $form_builder, 'uwp_manage_available_fields_predefined');
         $this->loader->add_action('uwp_manage_available_fields_custom', $form_builder, 'uwp_manage_available_fields_custom');
         $this->loader->add_action('uwp_manage_available_fields', $form_builder, 'uwp_manage_available_fields');
+        $this->loader->add_action('uwp_manage_selected_fields', $form_builder, 'uwp_manage_selected_fields');
     }
 
     /**

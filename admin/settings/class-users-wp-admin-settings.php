@@ -87,16 +87,16 @@ class Users_WP_Admin_Settings {
                     <ul class="item-list-tabs-ul">
 
                         <li id="users-wp-general-li" class="<?php if ($tab == 'general') { echo "current selected"; } ?>">
-                            <a id="users-wp-general" href="<?php echo add_query_arg('tab', 'general', $current_page_url); ?>">General</a>
+                            <a id="users-wp-general" href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => false), $current_page_url); ?>">General</a>
                         </li>
                         <li id="users-wp-form-builder-li" class="<?php if ($tab == 'form_builder') { echo "current selected"; } ?>">
-                            <a id="users-wp-form-builder" href="<?php echo add_query_arg('tab', 'form_builder', $current_page_url); ?>">Form Builder</a>
+                            <a id="users-wp-form-builder" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => false), $current_page_url); ?>">Form Builder</a>
                         </li>
                         <li id="users-wp-recaptcha-li" class="<?php if ($tab == 'recaptcha') { echo "current selected"; } ?>">
-                            <a id="users-wp-recaptcha" href="<?php echo add_query_arg('tab', 'recaptcha', $current_page_url); ?>">ReCaptcha</a>
+                            <a id="users-wp-recaptcha" href="<?php echo add_query_arg(array('tab' => 'recaptcha', 'subtab' => false), $current_page_url); ?>">ReCaptcha</a>
                         </li>
                         <li id="users-wp-notifications-li" class="<?php if ($tab == 'notifications') { echo "current selected"; } ?>">
-                            <a id="users-wp-notifications" href="<?php echo add_query_arg('tab', 'notifications', $current_page_url); ?>">Notifications</a>
+                            <a id="users-wp-notifications" href="<?php echo add_query_arg(array('tab' => 'notifications', 'subtab' => false), $current_page_url); ?>">Notifications</a>
                         </li>
                     </ul>
 
@@ -132,7 +132,7 @@ class Users_WP_Admin_Settings {
 
         ?>
         <div class="item-list-sub-tabs">
-            <ul>
+            <ul class="item-list-tabs-ul">
                 <li id="users-wp-general-general-li" class="<?php if ($subtab == 'general') { echo "current selected"; } ?>">
                     <a id="users-wp-general-general" href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'general'), $current_page_url); ?>">General Settings</a>
                 </li>
@@ -156,10 +156,54 @@ class Users_WP_Admin_Settings {
 
     public function get_form_builder_content() {
         $form_builder = new Users_WP_Form_Builder();
+
+        $subtab = 'register';
+
+        if (isset($_GET['subtab'])) {
+            $subtab = $_GET['subtab'];
+        }
+
+        $current_page_url = $this->get_current_page_url();
+
         ?>
-        <h3 class="users_wp_section_heading">Manage Form Fields</h3>
+        <div class="item-list-sub-tabs">
+            <ul class="item-list-tabs-ul">
+                <li id="users-wp-form-builder-register-li" class="<?php if ($subtab == 'register') { echo "current selected"; } ?>">
+                    <a id="users-wp-form-builder-register" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'register'), $current_page_url); ?>">Register</a>
+                </li>
+                <li id="users-wp-form-builder-login-li" class="<?php if ($subtab == 'login') { echo "current selected"; } ?>">
+                    <a id="users-wp-form-builder-login" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'login'), $current_page_url); ?>">Login</a>
+                </li>
+                <li id="users-wp-form-builder-forgot-li" class="<?php if ($subtab == 'forgot') { echo "current selected"; } ?>">
+                    <a id="users-wp-form-builder-forgot" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'forgot'), $current_page_url); ?>">Forgot</a>
+                </li>
+                <li id="users-wp-form-builder-account-li" class="<?php if ($subtab == 'account') { echo "current selected"; } ?>">
+                    <a id="users-wp-form-builder-account" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'account'), $current_page_url); ?>">Account</a>
+                </li>
+            </ul>
+        </div>
         <?php
-        $form_builder->uwp_form_builder();
+        if ($subtab == 'register') {
+            ?>
+            <h3 class="users_wp_section_heading">Manage Register Form Fields</h3>
+            <?php
+            $form_builder->uwp_form_builder();
+        } elseif ($subtab == 'login') {
+            ?>
+            <h3 class="users_wp_section_heading">Manage Login Form Fields</h3>
+            <?php
+            $form_builder->uwp_form_builder();
+        } elseif ($subtab == 'forgot') {
+            ?>
+            <h3 class="users_wp_section_heading">Manage Forgot Form Fields</h3>
+            <?php
+            $form_builder->uwp_form_builder();
+        } elseif ($subtab == 'account') {
+            ?>
+            <h3 class="users_wp_section_heading">Manage Account Form Fields</h3>
+            <?php
+            $form_builder->uwp_form_builder();
+        }
     }
 
     public function get_recaptcha_content() {

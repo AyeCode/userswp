@@ -214,99 +214,102 @@
 /*.general-form-builder-frame{ margin-left:290px;}*/
 /*.uwp-side-sortables{ margin-left:-290px; float:left;}*/
 
-.field_row_main {
-  margin: 0 7px;
-  background: #fff;
-  ul {
-    margin-top: 0;
+#uwp_form_builder_container {
+  .field_row_main {
+    margin: 0 7px;
+    background: #fff;
+    ul {
+      margin-top: 0;
+    }
+    .title {
+      border: 1px #DFDFDF solid;
+      background: #F1F1F1;
+      height: auto;
+      line-height: 32px;
+      overflow: hidden;
+      padding-left: 10px;
+      position: relative;
+      text-shadow: 0 1px 0 #FFFFFF;
+      word-wrap: break-word;
+      padding-top: 3px;
+      margin-bottom: 1px;
+      cursor: move;
+      .handlediv {
+        float: right;
+        height: 26px;
+        width: 26px;
+        margin: 2px;
+        cursor: pointer;
+        background: url(../../images/arrows_down.png) no-repeat center center;
+        vertical-align: middle;
+      }
+      .handlediv.close {
+        font-size: 18px;
+        color: #D70000;
+        margin-top: -2px;
+      }
+      .handlediv.move {
+        font-size: 18px;
+        color: #666;
+        margin-top: -2px;
+      }
+    }
+    .uwp-fieldset {
+      background: linear-gradient(to bottom, #E3E3E3 0px, #CCCCCC 100%) repeat scroll 0 0 #E3E3E3;
+      box-shadow: 0 1px 0 #E3E3E3 inset;
+    }
   }
-  .title {
-    border: 1px #DFDFDF solid;
-    background: #F1F1F1;
-    height: auto;
-    line-height: 32px;
-    overflow: hidden;
-    padding-left: 10px;
-    position: relative;
-    text-shadow: 0 1px 0 #FFFFFF;
-    word-wrap: break-word;
-    padding-top: 3px;
-    margin-bottom: 1px;
-    cursor: move;
-    .handlediv {
-      float: right;
-      height: 26px;
-      width: 26px;
-      margin: 2px;
-      cursor: pointer;
-      background: url(../../images/arrows_down.png) no-repeat center center;
-      vertical-align: middle;
+
+  .field_row_main_sort {
+    float: left;
+    margin: 0 7px;
+    border: 1px solid #dfdfdf;
+    background: #fff;
+    padding: 10px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    min-height: 405px;
+    width: 95%;
+    ul {
+      margin-top: 0;
     }
-    .handlediv.close {
-      font-size: 18px;
-      color: #D70000;
-      margin-top: -2px;
+    .title {
+      border: 1px #DFDFDF solid;
+      background: #F1F1F1;
+      height: auto;
+      line-height: 32px;
+      overflow: hidden;
+      padding-left: 10px;
+      position: relative;
+      text-shadow: 0 1px 0 #FFFFFF;
+      word-wrap: break-word;
+      padding-top: 3px;
+      margin-bottom: 1px;
+      cursor: move;
+      .handlediv {
+        float: right;
+        height: 26px;
+        width: 26px;
+        margin: 2px;
+        cursor: pointer;
+        background: url(../../images/arrows_down.png) no-repeat center center;
+        vertical-align: middle;
+      }
+      .handlediv.close {
+        background: url(../../images/cross-img.png) no-repeat center center;
+      }
+      .handlediv.move {
+        background: url(../../images/move.png) no-repeat center center;
+      }
     }
-    .handlediv.move {
-      font-size: 18px;
-      color: #666;
-      margin-top: -2px;
+    .uwp-fieldset {
+      background: linear-gradient(to bottom, #E3E3E3 0px, #CCCCCC 100%) repeat scroll 0 0 #E3E3E3;
+      box-shadow: 0 1px 0 #E3E3E3 inset;
     }
-  }
-  .uwp-fieldset {
-    background: linear-gradient(to bottom, #E3E3E3 0px, #CCCCCC 100%) repeat scroll 0 0 #E3E3E3;
-    box-shadow: 0 1px 0 #E3E3E3 inset;
   }
 }
 
-.field_row_main_sort {
-  float: left;
-  margin: 0 7px;
-  border: 1px solid #dfdfdf;
-  background: #fff;
-  padding: 10px;
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  min-height: 405px;
-  width: 95%;
-  ul {
-    margin-top: 0;
-  }
-  .title {
-    border: 1px #DFDFDF solid;
-    background: #F1F1F1;
-    height: auto;
-    line-height: 32px;
-    overflow: hidden;
-    padding-left: 10px;
-    position: relative;
-    text-shadow: 0 1px 0 #FFFFFF;
-    word-wrap: break-word;
-    padding-top: 3px;
-    margin-bottom: 1px;
-    cursor: move;
-    .handlediv {
-      float: right;
-      height: 26px;
-      width: 26px;
-      margin: 2px;
-      cursor: pointer;
-      background: url(../../images/arrows_down.png) no-repeat center center;
-      vertical-align: middle;
-    }
-    .handlediv.close {
-      background: url(../../images/cross-img.png) no-repeat center center;
-    }
-    .handlediv.move {
-      background: url(../../images/move.png) no-repeat center center;
-    }
-  }
-  .uwp-fieldset {
-    background: linear-gradient(to bottom, #E3E3E3 0px, #CCCCCC 100%) repeat scroll 0 0 #E3E3E3;
-    box-shadow: 0 1px 0 #E3E3E3 inset;
-  }
-}
 
 #uwp-selected-fields {
   .ui-sortable-handle{
