@@ -3,19 +3,19 @@
     <div class="uwp-login">
         <div class="uwp-lf-icon"><i class="fa fa-user fa-fw"></i></div>
         <?php do_action('uwp_template_form_title_before', 'login'); ?>
-        <h2>Sign In</h2>
+        <h2><?php echo __( 'Sign In', 'users-wp' ); ?></h2>
         <?php do_action('uwp_template_form_title_after', 'login'); ?>
         <form class="uwp-login-form" method="post">
-            <input name="username" placeholder="Username" required=" " type="text"><br>
-            <input name="password" class="password" placeholder="Password" required=" " type="password"><br>
-            <input name="uwp_login_submit" value="login" type="submit"><br>
-            <div class="uwp-forgetmenot">
-                <label for="rememberme"><input name="rememberme" id="rememberme" value="forever" type="checkbox"> Remember Me</label>
+            <?php do_action('uwp_template_fields', 'login'); ?>
+            <input type="hidden" name="uwp_login_nonce" value="<?php echo wp_create_nonce( 'uwp-login-nonce' ); ?>" />
+            <input name="uwp_login_submit" value="<?php echo __( 'Login', 'users-wp' ); ?>" type="submit">
+            <div class="uwp-remember-me">
+                <label for="remember_me"><input name="remember_me" id="remember_me" value="forever" type="checkbox"> <?php echo __( 'Remember Me', 'users-wp' ); ?></label>
             </div>
         </form>
-        <div class="uwp-forgotpsw"><a href="<?php echo uwp_get_page_link('forgot'); ?>">Forgot password?</a></div>
+        <div class="uwp-forgotpsw"><a href="<?php echo uwp_get_page_link('forgot'); ?>"><?php echo __( 'Forgot password?', 'users-wp' ); ?></a></div>
         <div class="clfx"></div>
-        <div class="uwp-register-now">Not a Member? <a rel="nofollow" href="<?php echo uwp_get_page_link('register'); ?>">Create Account</a></div>
+        <div class="uwp-register-now"><?php echo __( 'Not a Member?', 'users-wp' ); ?> <a rel="nofollow" href="<?php echo uwp_get_page_link('register'); ?>"><?php echo __( 'Create Account', 'users-wp' ); ?></a></div>
     </div>
 </div>
 <?php do_action('uwp_template_after', 'login'); ?>

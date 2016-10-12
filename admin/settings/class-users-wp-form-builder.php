@@ -444,7 +444,6 @@ class Users_WP_Form_Builder {
             'name'        =>  __('Country', 'users-wp'),
             'description' =>  __('Adds a input for Country field.', 'users-wp'),
             'defaults'    => array(
-                'data_type'           =>  'VARCHAR',
                 'admin_title'         =>  'Country',
                 'site_title'          =>  'Country',
                 'htmlvar_name'        =>  'country',
@@ -466,7 +465,6 @@ class Users_WP_Form_Builder {
             'name'        =>  __('Gender', 'users-wp'),
             'description' =>  __('Adds a input for Gender field.', 'users-wp'),
             'defaults'    => array(
-                'data_type'           =>  'VARCHAR',
                 'admin_title'         =>  'Gender',
                 'site_title'          =>  'Gender',
                 'htmlvar_name'        =>  'gender',
@@ -488,7 +486,6 @@ class Users_WP_Form_Builder {
             'name'        =>  __('Mobile', 'users-wp'),
             'description' =>  __('Adds a input for Mobile field.', 'users-wp'),
             'defaults'    => array(
-                'data_type'           =>  'VARCHAR',
                 'admin_title'         =>  'Mobile',
                 'site_title'          =>  'Mobile',
                 'htmlvar_name'        =>  'mobile',
@@ -509,7 +506,6 @@ class Users_WP_Form_Builder {
             'name'        =>  __('Facebook', 'users-wp'),
             'description' =>  __('Adds a input for Facebook field.', 'users-wp'),
             'defaults'    => array(
-                'data_type'           =>  'VARCHAR',
                 'admin_title'         =>  'Facebook',
                 'site_title'          =>  'Facebook',
                 'htmlvar_name'        =>  'facebook',
@@ -530,7 +526,6 @@ class Users_WP_Form_Builder {
             'name'        =>  __('Twitter', 'users-wp'),
             'description' =>  __('Adds a input for Twitter field.', 'users-wp'),
             'defaults'    => array(
-                'data_type'           =>  'VARCHAR',
                 'admin_title'         =>  'Twitter',
                 'site_title'          =>  'Twitter',
                 'htmlvar_name'        =>  'twitter',
@@ -551,7 +546,6 @@ class Users_WP_Form_Builder {
             'name'        =>  __('Youtube', 'users-wp'),
             'description' =>  __('Adds a input for Youtube field.', 'users-wp'),
             'defaults'    => array(
-                'data_type'           =>  'VARCHAR',
                 'admin_title'         =>  'Youtube',
                 'site_title'          =>  'Youtube',
                 'htmlvar_name'        =>  'youtube',
@@ -572,7 +566,6 @@ class Users_WP_Form_Builder {
             'name'        =>  __('Instagram', 'users-wp'),
             'description' =>  __('Adds a input for Instagram field.', 'users-wp'),
             'defaults'    => array(
-                'data_type'           =>  'VARCHAR',
                 'admin_title'         =>  'Instagram',
                 'site_title'          =>  'Instagram',
                 'htmlvar_name'        =>  'instagram',
@@ -593,7 +586,6 @@ class Users_WP_Form_Builder {
             'name'        =>  __('Soundcloud', 'users-wp'),
             'description' =>  __('Adds a input for Soundcloud field.', 'users-wp'),
             'defaults'    => array(
-                'data_type'           =>  'VARCHAR',
                 'admin_title'         =>  'Soundcloud',
                 'site_title'          =>  'Soundcloud',
                 'htmlvar_name'        =>  'soundcloud',
@@ -614,7 +606,6 @@ class Users_WP_Form_Builder {
             'name'        =>  __('Reddit', 'users-wp'),
             'description' =>  __('Adds a input for Reddit field.', 'users-wp'),
             'defaults'    => array(
-                'data_type'           =>  'VARCHAR',
                 'admin_title'         =>  'Reddit',
                 'site_title'          =>  'Reddit',
                 'htmlvar_name'        =>  'reddit',
@@ -635,7 +626,6 @@ class Users_WP_Form_Builder {
             'name'        =>  __('Skype', 'users-wp'),
             'description' =>  __('Adds a input for Skype field.', 'users-wp'),
             'defaults'    => array(
-                'data_type'           =>  'VARCHAR',
                 'admin_title'         =>  'Skype',
                 'site_title'          =>  'Skype',
                 'htmlvar_name'        =>  'skype',
@@ -897,38 +887,13 @@ class Users_WP_Form_Builder {
                     <input type="hidden" name="field_type" id="field_type" value="<?php echo $field_type; ?>"/>
                     <input type="hidden" name="field_type_key" id="field_type_key" value="<?php echo $field_type_key; ?>"/>
                     <input type="hidden" name="field_id" id="field_id" value="<?php echo esc_attr($result_str); ?>"/>
-                    <input type="hidden" name="data_type" id="data_type" value="<?php if (isset($field_info->data_type)) {
-                        echo $field_info->data_type;
-                    } ?>"/>
                     <input type="hidden" name="is_active" id="is_active" value="1"/>
 
                     <input type="hidden" name="is_default" value="<?php echo isset($field_info->is_default) ? $field_info->is_default : '';?>" /><?php // show in sidebar value?>
-                    <input type="hidden" name="show_on_listing" value="<?php echo isset($field_info->show_on_listing) ? $field_info->show_on_listing : '';?>" />
-                    <input type="hidden" name="show_on_detail" value="<?php echo isset($field_info->show_on_listing) ? $field_info->show_on_listing : '';?>" />
-                    <input type="hidden" name="show_as_tab" value="<?php echo isset($field_info->show_as_tab) ? $field_info->show_as_tab : '';?>" />
 
                     <ul class="widefat post fixed" style="width:100%;">
 
                         <?php
-
-                        // data_type
-                        if(has_filter("uwp_cfa_data_type_{$field_type}")){
-
-                            echo apply_filters("uwp_cfa_data_type_{$field_type}",'',$result_str,$cf,$field_info);
-
-                        }else{
-                            $value = '';
-                            if (isset($field_info->data_type)) {
-                                $value = esc_attr($field_info->data_type);
-                            }elseif(isset($cf['defaults']['data_type']) && $cf['defaults']['data_type']){
-                                $value = $cf['defaults']['data_type'];
-                            }
-                            ?>
-                            <input type="hidden" name="data_type" id="data_type" value="<?php echo $value;?>"/>
-                            <?php
-                        }
-
-
                         // site_title
                         if(has_filter("uwp_cfa_site_title_{$field_type}")){
 
@@ -1111,95 +1076,12 @@ class Users_WP_Form_Builder {
                         }
 
 
-                        // show_in
-                        if(has_filter("uwp_cfa_show_in_{$field_type}")){
-
-                            echo apply_filters("uwp_cfa_show_in_{$field_type}",'',$result_str,$cf,$field_info);
-
-                        }else{
-                            $value = '';
-                            if (isset($field_info->show_in)) {
-                                $value = esc_attr($field_info->show_in);
-                            }elseif(isset($cf['defaults']['show_in']) && $cf['defaults']['show_in']){
-                                $value = esc_attr($cf['defaults']['show_in']);
-                            }
-                            ?>
-                            <li>
-                                <label for="show_in" class="gd-cf-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Show in what locations?:', 'users-wp'); ?>
-                                    <div class="gdcf-tooltip">
-                                        <?php _e('Select in what locations you want to display this field.', 'users-wp'); ?>
-                                    </div>
-                                </label>
-                                <div class="gd-cf-input-wrap">
-
-                                    <?php
-
-                                    /*
-                                     * We wrap the key values in [] so we can search the DB easier with a LIKE query.
-                                     */
-                                    $show_in_locations = array(
-                                        "[detail]" => __("Details page sidebar", 'users-wp'),
-                                        "[moreinfo]" => __("More info tab", 'users-wp'),
-                                        "[listing]" => __("Listings page", 'users-wp'),
-                                        "[owntab]" => __("Details page own tab", 'users-wp'),
-                                        "[mapbubble]" => __("Map bubble", 'users-wp'),
-                                    );
-
-                                    $show_in_locations = apply_filters('uwp_show_in_locations',$show_in_locations,$field_info,$field_type);
-
-
-                                    // remove some locations for some field types
-
-                                    // don't show new tab option for some types
-
-                                    if (in_array($field_type, array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
-                                    }else{
-                                        unset($show_in_locations['[owntab]']);
-                                    }
-
-                                    if(!$display_on_listing){
-                                        unset($show_in_locations['[listings]']);
-                                    }
-
-                                    ?>
-
-                                    <select multiple="multiple" name="show_in[]"
-                                            id="show_in"
-                                            style="min-width:300px;"
-                                            class="chosen_select"
-                                            data-placeholder="<?php _e('Select locations', 'users-wp'); ?>"
-                                            option-ajaxchosen="false">
-                                        <?php
-
-                                        $show_in_values = explode(',',$value);
-
-                                        foreach( $show_in_locations as $key => $val){
-                                            $selected = '';
-
-                                            if(is_array($show_in_values) && in_array($key,$show_in_values ) ){
-                                                $selected = 'selected';
-                                            }
-
-                                            ?>
-                                            <option  value="<?php echo $key;?>" <?php echo $selected;?>><?php echo $val;?></option>
-                                            <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </li>
-                            <?php
-                        }
-
-
                         // advanced_editor
                         if(has_filter("uwp_cfa_advanced_editor_{$field_type}")){
 
                             echo apply_filters("uwp_cfa_advanced_editor_{$field_type}",'',$result_str,$cf,$field_info);
 
                         }
-
-
 
 
                         ?>
@@ -1357,55 +1239,6 @@ class Users_WP_Form_Builder {
                                            value="<?php if (isset($field_info->css_class)) {
                                                echo esc_attr($field_info->css_class);
                                            }?>"/>
-                                </div>
-                            </li>
-                            <?php
-                        }
-
-
-                        // cat_sort
-                        if(has_filter("uwp_cfa_cat_sort_{$field_type}")){
-
-                            echo apply_filters("uwp_cfa_cat_sort_{$field_type}",'',$result_str,$cf,$field_info);
-
-                        }else{
-                            $value = '';
-                            $hide_cat_sort  ='';
-                            if (isset($field_info->cat_sort)) {
-                                $value = esc_attr($field_info->cat_sort);
-                            }elseif(isset($cf['defaults']['cat_sort']) && $cf['defaults']['cat_sort']){
-                                $value = $cf['defaults']['cat_sort'];
-                                $hide_cat_sort = ($value===false) ? "style='display:none;'" : '';
-                            }
-
-                            $hide_cat_sort = (isset($cf['defaults']['cat_sort']) && $cf['defaults']['cat_sort']===false) ? "style='display:none;'" : '';
-                            ?>
-                            <li <?php echo $hide_cat_sort ;?>>
-                                <h3><?php
-                                    echo apply_filters('uwp_advance_custom_fields_heading', __('Posts sort options', 'users-wp'), $field_type);
-
-                                    ?></h3>
-                                <label for="cat_sort" class="gd-cf-tooltip-wrap">
-                                    <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Include this field in sorting options :', 'users-wp'); ?>
-                                    <div class="gdcf-tooltip">
-                                        <?php _e('Lets you use this filed as a sorting option, set from sorting options above.', 'users-wp');?>
-                                    </div>
-                                </label>
-
-                                <div class="gd-cf-input-wrap gd-switch">
-
-                                    <input type="radio" id="cat_sort_yes<?php echo $radio_id;?>" name="cat_sort" class="gdri-enabled"  value="1"
-                                        <?php if ($value == '1') {
-                                            echo 'checked';
-                                        } ?>/>
-                                    <label for="cat_sort_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'users-wp'); ?></span></label>
-
-                                    <input type="radio" id="cat_sort_no<?php echo $radio_id;?>" name="cat_sort" class="gdri-disabled" value="0"
-                                        <?php if (!$value) {
-                                            echo 'checked';
-                                        } ?>/>
-                                    <label for="cat_sort_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'users-wp'); ?></span></label>
-
                                 </div>
                             </li>
                             <?php

@@ -29,44 +29,6 @@ class Users_WP_Templates {
 
     public function uwp_locate_template( $template ) {
 
-//        global $wp_query;
-//
-//        if (!is_page()) {
-//            return $template;
-//        }
-//
-//        $current_page_id = $wp_query->query_vars['page_id'];
-//
-//        $register_page = esc_attr( get_option('uwp_register_page', false));
-//        if ( $register_page && ((int) $register_page ==  $current_page_id ) ) {
-//            $template = "register";
-//        }
-//
-//        $login_page = esc_attr( get_option('uwp_login_page', false));
-//        if ( $login_page && ((int) $login_page ==  $current_page_id ) ) {
-//            $template = "login";
-//        }
-//
-//        $forgot_pass_page = esc_attr( get_option('uwp_forgot_pass_page', false));
-//        if ( $forgot_pass_page && ((int) $forgot_pass_page ==  $current_page_id ) ) {
-//            $template = "forgot";
-//        }
-//
-//        $account_page = esc_attr( get_option('uwp_account_page', false));
-//        if ( $account_page && ((int) $account_page ==  $current_page_id ) ) {
-//            $template = "account";
-//        }
-//
-//        $user_profile_page = esc_attr( get_option('uwp_user_profile_page', false));
-//        if ( $user_profile_page && ((int) $user_profile_page ==  $current_page_id ) ) {
-//            $template = "profile";
-//        }
-//
-//        $users_list_page = esc_attr( get_option('uwp_users_list_page', false));
-//        if ( $users_list_page && ((int) $users_list_page ==  $current_page_id ) ) {
-//            $template = "users";
-//        }
-
         $plugin_path = dirname( dirname( __FILE__ ) );
 
         switch ($template) {
@@ -175,6 +137,43 @@ class Users_WP_Templates {
         return false;
     }
 
+    public function uwp_template_fields($form_type) {
 
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_custom_fields';
+
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array($form_type)));
+
+        if (!empty($fields)) {
+            foreach ($fields as $field) {
+                $this->uwp_template_fields_html($field, $form_type);
+            }
+        }
+    }
+
+    public function uwp_template_fields_html($field, $form_type) {
+
+        $value = $field->default_value;
+        if ($form_type == 'account') {
+            $user_id = get_current_user_id();
+            $value = get_user_meta($user_id, $field->htmlvar_name, true);
+        }
+
+        if (empty($value)) {
+            $value = "";
+        }
+
+        switch($field->field_type) {
+            default:
+                ?>
+                <input name="<?php echo $field->htmlvar_name; ?>"
+                       class="<?php echo $field->css_class; ?>"
+                       placeholder="<?php echo $field->site_title; ?>"
+                    <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                       type="<?php echo $field->field_type; ?>"
+                       value="<?php echo $value; ?>">
+                <?php
+        }
+    }
 
 }

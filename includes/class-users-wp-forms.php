@@ -48,18 +48,9 @@ class Users_WP_Forms {
             exit();
         }
 
-        $data = array(
-            'username' => $_POST['username'],
-            'first_name' => $_POST['first_name'],
-            'last_name' => $_POST['last_name'],
-            'email' => $_POST['email'],
-            'password' => $_POST['password'],
-            'confirm_password' => $_POST['confirm_password'],
-            'auto_login' => false
-        );
+        $_POST['auto_login'] = false;
 
-
-        $errors = $this->process_register($data);
+        $errors = $this->process_register($_POST);
 
 
         /* display error in registration form */
@@ -68,7 +59,7 @@ class Users_WP_Forms {
             echo $errors->get_error_message();
             echo '</div>';
         } else {
-            if ($data['auto_login']) {
+            if ($_POST['auto_login']) {
                 wp_redirect(home_url('/'));
                 exit();
             } else {
@@ -93,48 +84,10 @@ class Users_WP_Forms {
             return $errors;
         }
 
-        $user_first = sanitize_text_field($data['first_name']);
-        $user_last  = sanitize_text_field($data['last_name']);
-        $username = sanitize_text_field($data['username']);
-        $email = sanitize_email($data['email']);
+        $result = $this->validate_fields($data, 'register');
 
-        //check the name
-        if ($user_first == '') {
-            $errors->add('empty_fname', __('<strong>Error</strong>: Please enter your first name.', 'users-wp'));
-        }
-
-        if ($user_last == '') {
-            $errors->add('empty_lname', __('<strong>Error</strong>: Please enter your last name.', 'users-wp'));
-        }
-        // Check the username
-        if ($username == '') {
-            $errors->add('empty_username', __('<strong>Error</strong>: Please enter a username.', 'users-wp'));
-        } elseif (!validate_username($username)) {
-            $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'users-wp'));
-            $username = '';
-        } elseif (username_exists($username)) {
-            $errors->add('username_exists', __('<strong>Error</strong>: This username is already registered. Please choose another one.', 'users-wp'));
-        }
-
-        // Check the e-mail address
-        if ($data['email'] == '') {
-            $errors->add('empty_email', __('<strong>Error</strong>: Please type your e-mail address.', 'users-wp'));
-        } elseif (!is_email($email)) {
-            $errors->add('invalid_email', __('<strong>Error</strong>: The email address isn&#8217;t correct.', 'users-wp'));
-            $user_email = '';
-        } elseif (email_exists($email)) {
-            $errors->add('email_exists', __('<strong>Error</strong>: This email is already registered, please choose another one.', 'users-wp'));
-        }
-
-        //check password
-        if( empty( $data['password'] ) ) {
-            $errors->add( 'empty_password', __( 'Please enter a password', 'users-wp' ) );
-        }
-
-        if ($data['password'] != $data['confirm_password']) {
-            $errors->add('pass_match', __('ERROR: Passwords do not match.', 'users-wp'));
-        } elseif (strlen($data['password']) < 7) {
-            $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', 'users-wp'));
+        if (is_wp_error($result)) {
+            return $result;
         }
 
         if ($errors->get_error_code())
@@ -146,12 +99,12 @@ class Users_WP_Forms {
             return $errors;
 
         $args = array(
-            'user_login'   => $username,
-            'user_email'   => $email,
-            'user_pass'    => $data['password'],
-            'display_name' => $user_first . ' ' . $user_last,
-            'first_name'   => $user_first,
-            'last_name'    => $user_last
+            'user_login'   => $result['uwp_register_username'],
+            'user_email'   => $result['uwp_register_email'],
+            'user_pass'    => $result['password'],
+            'display_name' => $result['uwp_register_first_name'] . ' ' . $result['uwp_register_last_name'],
+            'first_name'   => $result['uwp_register_first_name'],
+            'last_name'    => $result['uwp_register_last_name']
         );
 
         $user_id = wp_insert_user( $args );
@@ -166,8 +119,8 @@ class Users_WP_Forms {
 
         if ($data['auto_login']) {
             $login_data = array(
-                'username' => $username,
-                'password' => $data['password'],
+                'username' => $result['uwp_register_username'],
+                'password' => $result['password'],
             );
 
             return $this->process_login($login_data);
@@ -186,7 +139,7 @@ class Users_WP_Forms {
         $data = array(
             'username' => $_POST['username'],
             'password' => $_POST['password'],
-            'rememberme' => $_POST['rememberme']
+            'remember_me' => $_POST['remember_me']
         );
 
 
@@ -224,16 +177,16 @@ class Users_WP_Forms {
         if ($errors->get_error_code())
             return $errors;
 
-        if ($data['rememberme'] == 'forever') {
-            $rememberme = true;
+        if ($data['remember_me'] == 'forever') {
+            $remember_me = true;
         } else {
-            $rememberme = false;
+            $remember_me = false;
         }
         $result = wp_signon(
             array(
                 'user_login' => $user_login,
                 'user_password' => $data['password'],
-                'remember' => $rememberme
+                'remember' => $remember_me
             ),
             false
         );
@@ -333,40 +286,10 @@ class Users_WP_Forms {
         }
 
 
-        $user_first = sanitize_text_field($data['first_name']);
-        $user_last  = sanitize_text_field($data['last_name']);
-        $email = sanitize_email($data['email']);
+        $result = $this->validate_fields($data, 'register');
 
-        //check the name
-        if ($user_first == '') {
-            $errors->add('empty_fname', __('<strong>Error</strong>: Please enter your first name.', 'users-wp'));
-        }
-
-        if ($user_last == '') {
-            $errors->add('empty_lname', __('<strong>Error</strong>: Please enter your last name.', 'users-wp'));
-        }
-
-        // Check the e-mail address
-        if ($data['email'] == '') {
-            $errors->add('empty_email', __('<strong>Error</strong>: Please type your e-mail address.', 'users-wp'));
-        } elseif (!is_email($email)) {
-            $errors->add('invalid_email', __('<strong>Error</strong>: The email address isn&#8217;t correct.', 'users-wp'));
-            $user_email = '';
-        } elseif (email_exists($email)) {
-            $errors->add('email_exists', __('<strong>Error</strong>: This email is already registered, please choose another one.', 'users-wp'));
-        }
-
-        //check password
-        if( empty( $data['password'] ) ) {
-            $password_change = false;
-            // no password change
-        } else {
-            $password_change = true;
-            if ($data['password'] != $data['confirm_password']) {
-                $errors->add('pass_match', __('ERROR: Passwords do not match.', 'users-wp'));
-            } elseif (strlen($data['password']) < 7) {
-                $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', 'users-wp'));
-            }
+        if (is_wp_error($result)) {
+            return $result;
         }
 
 
@@ -380,14 +303,14 @@ class Users_WP_Forms {
 
         $args = array(
             'ID' => $current_user_id,
-            'user_email'   => $email,
-            'display_name' => $user_first . ' ' . $user_last,
-            'first_name'   => $user_first,
-            'last_name'    => $user_last
+            'user_email'   => $result['uwp_account_email'],
+            'display_name' => $result['uwp_account_first_name'] . ' ' . $result['uwp_account_last_name'],
+            'first_name'   => $result['uwp_account_first_name'],
+            'last_name'    => $result['uwp_account_last_name']
         );
 
-        if ($password_change) {
-            $args['user_pass'] = $data['password'];
+        if ($result['password']) {
+            $args['user_pass'] = $result['password'];
         }
 
         $user_id = wp_update_user( $args );
@@ -401,6 +324,84 @@ class Users_WP_Forms {
 
         return true;
 
+    }
+
+    public function validate_fields($data, $type) {
+
+        $errors = new WP_Error();
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_custom_fields';
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array($type)));
+
+        $validated_data = array();
+
+        if (!empty($fields)) {
+            foreach ($fields as $field) {
+
+                if ($field->field_type == 'password') {
+                    continue;
+                }
+
+                $value = $data[$field->htmlvar_name];
+
+                if ($field->htmlvar_name == 'uwp_register_username') {
+                    $sanitized_value = sanitize_user($value);
+                } elseif ($field->field_type == 'email') {
+                    $sanitized_value = sanitize_email($value);
+                } else {
+                    $sanitized_value = sanitize_text_field($value);
+                }
+
+                if ($field->is_required == 1 && $sanitized_value == '') {
+                    $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'users-wp'));
+                }
+
+                if ($field->field_type == 'email' && !is_email($sanitized_value)) {
+                    $errors->add('invalid_email', __('<strong>Error</strong>: The email address isn&#8217;t correct.', 'users-wp'));
+                }
+
+                //register email
+                if ($field->htmlvar_name == 'uwp_register_email' && email_exists($sanitized_value)) {
+                    $errors->add('email_exists', __('<strong>Error</strong>: This email is already registered, please choose another one.', 'users-wp'));
+                }
+
+                // Check the username
+                if ($field->htmlvar_name == 'uwp_register_username') {
+                    if (!validate_username($sanitized_value)) {
+                        $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'users-wp'));
+                    }
+                    if (username_exists($sanitized_value)) {
+                        $errors->add('username_exists', __('<strong>Error</strong>: This username is already registered. Please choose another one.', 'users-wp'));
+                    }
+                }
+
+                $validated_data[$field->htmlvar_name] = $sanitized_value;
+
+            }
+        }
+
+        if ($type == 'register' || ($type == 'account' && empty( $data['password']))) {
+            //check password
+            if( empty( $data['password'] ) ) {
+                $errors->add( 'empty_password', __( 'Please enter a password', 'users-wp' ) );
+            }
+
+            if ($data['password'] != $data['confirm_password']) {
+                $errors->add('pass_match', __('ERROR: Passwords do not match.', 'users-wp'));
+            }
+            if (strlen($data['password']) < 7) {
+                $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', 'users-wp'));
+            }
+
+            $validated_data['password'] = $data['password'];
+        }
+
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        return $validated_data;
     }
 
 }

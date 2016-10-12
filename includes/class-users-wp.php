@@ -200,6 +200,7 @@ class Users_WP {
 
         $this->loader->add_action( 'uwp_template_form_title_after', $forms, 'handler' );
         $this->loader->add_action( 'template_redirect', $templates, 'access_checks' );
+        $this->loader->add_action( 'uwp_template_fields', $templates, 'uwp_template_fields', 10, 1 );
 
     }
 
