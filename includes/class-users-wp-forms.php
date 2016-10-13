@@ -339,19 +339,59 @@ class Users_WP_Forms {
         if (!empty($fields)) {
             foreach ($fields as $field) {
 
+                $value = $data[$field->htmlvar_name];
+                $sanitized_value = $value;
+
                 if ($field->field_type == 'password') {
                     continue;
                 }
 
-                $value = $data[$field->htmlvar_name];
+                $sanitized = false;
 
-                if ($field->htmlvar_name == 'uwp_register_username') {
-                    $sanitized_value = sanitize_user($value);
-                } elseif ($field->field_type == 'email') {
-                    $sanitized_value = sanitize_email($value);
-                } else {
-                    $sanitized_value = sanitize_text_field($value);
+                // sanitize our default fields
+                switch($field->htmlvar_name) {
+
+                    case 'uwp_register_username':
+                    case 'uwp_login_username':
+                        $sanitized_value = sanitize_user($value);
+                        $sanitized = true;
+                        break;
+
+                    case 'uwp_register_first_name':
+                    case 'uwp_register_last_name':
+                    case 'uwp_account_first_name':
+                    case 'uwp_account_last_name':
+                        $sanitized_value = sanitize_text_field($value);
+                        $sanitized = true;
+                        break;
+
+                    case 'uwp_register_email':
+                    case 'uwp_forgot_email':
+                    case 'uwp_account_email':
+                        $sanitized_value = sanitize_email($value);
+                        $sanitized = true;
+                        break;
+
                 }
+
+                if (!$sanitized) {
+                    // sanitize by field type
+                    switch($field->field_type) {
+
+                        case 'text':
+                            $sanitized_value = sanitize_text_field($value);
+                            break;
+
+                        case 'email':
+                            $sanitized_value = sanitize_email($value);
+                            break;
+
+                        default:
+                            $sanitized_value = sanitize_text_field($value);
+
+                    }
+                }
+
 
                 if ($field->is_required == 1 && $sanitized_value == '') {
                     $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'users-wp'));

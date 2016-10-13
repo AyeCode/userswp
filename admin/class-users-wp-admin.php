@@ -111,6 +111,16 @@ class Users_WP_Admin {
 
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.js', array( 'jquery' ), $this->version, false );
 
+        $ajax_cons_data = array(
+            'url' => admin_url('admin-ajax.php'),
+            'custom_field_not_blank_var' => __('HTML Variable Name must not be blank', 'users-wp'),
+            'custom_field_not_special_char' => __('Please do not use special character and spaces in HTML Variable Name.', 'users-wp'),
+            'custom_field_unique_name' => __('HTML Variable Name should be a unique name.', 'users-wp'),
+            'custom_field_delete' => __('Are you wish to delete this field?', 'users-wp'),
+            'custom_field_id_required' => __('This field is required.', 'users-wp'),
+        );
+        wp_localize_script($this->plugin_name, 'uwp_admin_ajax', $ajax_cons_data);
+
     }
 
     public function setup_admin_menus() {
