@@ -71,6 +71,7 @@ class Users_WP {
         $this->version = '1.0.0';
 
         $this->load_dependencies();
+        $this->init_settings();
         $this->set_locale();
         $this->define_admin_hooks();
         $this->define_public_hooks();
@@ -97,7 +98,6 @@ class Users_WP {
      * @access   private
      */
     private function load_dependencies() {
-
         /**
          * The class responsible for orchestrating the actions and filters of the
          * core plugin.
@@ -183,8 +183,14 @@ class Users_WP {
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
         $this->loader->add_action( 'admin_menu', $plugin_admin, 'setup_admin_menus' );
-        $this->loader->add_action( 'admin_init', $plugin_admin_settings, 'users_wp_register_general_settings' );
+        $this->loader->add_action( 'admin_init', $plugin_admin_settings, 'uwp_register_settings' );
         $this->loader->add_action( 'load-nav-menus.php', $plugin_admin_menus, 'users_wp_admin_menu_metabox' );
+
+        //register settings
+        $this->loader->add_action( 'uwp_settings_general_tab_content', $plugin_admin_settings, 'get_general_content' );
+        $this->loader->add_action( 'uwp_settings_form_builder_tab_content', $plugin_admin_settings, 'get_form_builder_content' );
+        $this->loader->add_action( 'uwp_settings_recaptcha_tab_content', $plugin_admin_settings, 'get_recaptcha_content' );
+        $this->loader->add_action( 'uwp_settings_notifications_tab_content', $plugin_admin_settings, 'get_notifications_content' );
 
     }
 
@@ -222,6 +228,15 @@ class Users_WP {
         add_shortcode( 'uwp_profile', array($shortcodes,'profile'));
         add_shortcode( 'uwp_users', array($shortcodes,'users'));
 
+
+    }
+
+    private function init_settings() {
+
+        global $uwp_options;
+        $plugin_admin = new Users_WP_Admin( $this->get_plugin_name(), $this->get_version());
+        $plugin_admin_settings = new Users_WP_Admin_Settings();
+        $uwp_options = $plugin_admin_settings->uwp_get_settings();
 
     }
 

@@ -21,7 +21,6 @@
  */
 class Users_WP_Admin_Settings {
 
-    private $users_wp;
 
     protected $loader;
 
@@ -35,28 +34,7 @@ class Users_WP_Admin_Settings {
 
     }
 
-    public function users_wp_get_pages() {
-        $pages_options = array( '' => 'Select a Page' ); // Blank option
-
-        $pages = get_pages();
-        if ( $pages ) {
-            foreach ( $pages as $page ) {
-                $pages_options[ $page->ID ] = $page->post_title;
-            }
-        }
-        return $pages_options;
-    }
-
-    public function users_wp_get_pages_as_option($selected) {
-        $page_options = $this->users_wp_get_pages();
-        foreach ($page_options as $key => $page_title) {
-            ?>
-            <option value="<?php echo $key; ?>" <?php selected( $selected, $key ); ?>><?php echo $page_title; ?></option>
-            <?php
-        }
-    }
-
-    function users_wp_register_general_settings() {
+    function users_wp_register_settings() {
         //pages
         register_setting( 'users-wp', 'uwp_user_profile_page' );
         register_setting( 'users-wp', 'uwp_register_page' );
@@ -65,19 +43,17 @@ class Users_WP_Admin_Settings {
         register_setting( 'users-wp', 'uwp_forgot_pass_page' );
         register_setting( 'users-wp', 'uwp_users_list_page' );
 
+        do_action('users_wp_register_settings');
+
         //recapcha
         register_setting( 'users-wp', 'uwp_recaptcha_api_key' );
         register_setting( 'users-wp', 'uwp_recaptcha_api_secret' );
     }
 
     function users_wp_general_settings_page() {
-        $tab = 'general';
 
-        if (isset($_GET['tab'])) {
-            $tab = $_GET['tab'];
-        }
+        $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $this->get_settings_tabs() ) ? $_GET['tab'] : 'general';
 
-        $current_page_url = $this->get_current_page_url();
         ?>
         <div class="wrap">
             <h2><?php echo __( 'Page Settings', 'users-wp' ); ?></h2>
@@ -86,31 +62,28 @@ class Users_WP_Admin_Settings {
                 <div class="item-list-tabs content-box">
                     <ul class="item-list-tabs-ul">
 
-                        <li id="users-wp-general-li" class="<?php if ($tab == 'general') { echo "current selected"; } ?>">
-                            <a id="users-wp-general" href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => false), $current_page_url); ?>">General</a>
+                    <?php
+                     foreach( $this->get_settings_tabs() as $tab_id => $tab_name ) {
+
+                        $tab_url = add_query_arg( array(
+                            'settings-updated' => false,
+                            'tab' => $tab_id,
+                            'subtab' => false
+                        ) );
+
+                        $active = $active_tab == $tab_id ? ' current selected' : '';
+                        ?>
+                        <li id="uwp-<?php echo $tab_id; ?>-li" class="<?php echo $active; ?>">
+                            <a id="uwp-<?php echo $tab_id; ?>" href="<?php echo esc_url( $tab_url ); ?>"><?php echo esc_html( $tab_name ); ?></a>
                         </li>
-                        <li id="users-wp-form-builder-li" class="<?php if ($tab == 'form_builder') { echo "current selected"; } ?>">
-                            <a id="users-wp-form-builder" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => false), $current_page_url); ?>">Form Builder</a>
-                        </li>
-                        <li id="users-wp-recaptcha-li" class="<?php if ($tab == 'recaptcha') { echo "current selected"; } ?>">
-                            <a id="users-wp-recaptcha" href="<?php echo add_query_arg(array('tab' => 'recaptcha', 'subtab' => false), $current_page_url); ?>">ReCaptcha</a>
-                        </li>
-                        <li id="users-wp-notifications-li" class="<?php if ($tab == 'notifications') { echo "current selected"; } ?>">
-                            <a id="users-wp-notifications" href="<?php echo add_query_arg(array('tab' => 'notifications', 'subtab' => false), $current_page_url); ?>">Notifications</a>
-                        </li>
-                    </ul>
+                        <?php
+                     }
+                     ?>
+                     </ul>
 
                     <div class="tab-content">
                         <?php
-                        if ($tab == 'general') {
-                            $this->get_general_content();
-                        } elseif ($tab == 'form_builder') {
-                            $this->get_form_builder_content();
-                        } elseif ($tab == 'recaptcha') {
-                            $this->get_recaptcha_content();
-                        } elseif ($tab == 'notifications') {
-                            $this->get_notifications_content();
-                        }
+                        do_action('uwp_settings_'.$active_tab.'_tab_content');
                         ?>
                     </div>
                 </div>
@@ -120,7 +93,17 @@ class Users_WP_Admin_Settings {
         </div>
     <?php }
 
-    //main tabs
+    public function get_settings_tabs() {
+
+        $tabs = array();
+
+        $tabs['general']  = __( 'General', 'users-wp' );
+        $tabs['form_builder'] = __( 'Form Builder', 'users-wp' );
+        $tabs['notifications']   = __( 'Notifications', 'users-wp' );
+
+        return apply_filters( 'uwp_settings_tabs', $tabs );
+    }
+
     public function get_general_content() {
         $subtab = 'general';
 
@@ -128,19 +111,18 @@ class Users_WP_Admin_Settings {
             $subtab = $_GET['subtab'];
         }
 
-        $current_page_url = $this->get_current_page_url();
 
         ?>
         <div class="item-list-sub-tabs">
             <ul class="item-list-tabs-ul">
-                <li id="users-wp-general-general-li" class="<?php if ($subtab == 'general') { echo "current selected"; } ?>">
-                    <a id="users-wp-general-general" href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'general'), $current_page_url); ?>">General Settings</a>
+                <li id="uwp-general-general-li" class="<?php if ($subtab == 'general') { echo "current selected"; } ?>">
+                    <a id="uwp-general-general" href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'general')); ?>">General Settings</a>
                 </li>
-                <li id="users-wp-general-shortcodes-li" class="<?php if ($subtab == 'shortcodes') { echo "current selected"; } ?>">
-                    <a id="users-wp-general-shortcodes" href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'shortcodes'), $current_page_url); ?>">Shortcodes</a>
+                <li id="uwp-general-shortcodes-li" class="<?php if ($subtab == 'shortcodes') { echo "current selected"; } ?>">
+                    <a id="uwp-general-shortcodes" href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'shortcodes')); ?>">Shortcodes</a>
                 </li>
-                <li id="users-wp-general-info-li" class="<?php if ($subtab == 'info') { echo "current selected"; } ?>">
-                    <a id="users-wp-general-info" href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'info'), $current_page_url); ?>">Info</a>
+                <li id="uwp-general-info-li" class="<?php if ($subtab == 'info') { echo "current selected"; } ?>">
+                    <a id="uwp-general-info" href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'info')); ?>">Info</a>
                 </li>
             </ul>
         </div>
@@ -154,254 +136,44 @@ class Users_WP_Admin_Settings {
         }
     }
 
-    public function get_form_builder_content() {
-        $form_builder = new Users_WP_Form_Builder();
+    //main tabs
 
-        $subtab = 'register';
-
-        if (isset($_GET['subtab'])) {
-            $subtab = $_GET['subtab'];
-        }
-
-        $current_page_url = $this->get_current_page_url();
-
-        ?>
-        <div class="item-list-sub-tabs">
-            <ul class="item-list-tabs-ul">
-                <li id="users-wp-form-builder-register-li" class="<?php if ($subtab == 'register') { echo "current selected"; } ?>">
-                    <a id="users-wp-form-builder-register" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'register'), $current_page_url); ?>">Register</a>
-                </li>
-                <li id="users-wp-form-builder-login-li" class="<?php if ($subtab == 'login') { echo "current selected"; } ?>">
-                    <a id="users-wp-form-builder-login" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'login'), $current_page_url); ?>">Login</a>
-                </li>
-                <li id="users-wp-form-builder-forgot-li" class="<?php if ($subtab == 'forgot') { echo "current selected"; } ?>">
-                    <a id="users-wp-form-builder-forgot" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'forgot'), $current_page_url); ?>">Forgot</a>
-                </li>
-                <li id="users-wp-form-builder-account-li" class="<?php if ($subtab == 'account') { echo "current selected"; } ?>">
-                    <a id="users-wp-form-builder-account" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'account'), $current_page_url); ?>">Account</a>
-                </li>
-            </ul>
-        </div>
-        <?php
-        if ($subtab == 'register') {
-            ?>
-            <h3 class="users_wp_section_heading">Manage Register Form Fields</h3>
-            <?php
-            $form_builder->uwp_form_builder();
-        } elseif ($subtab == 'login') {
-            ?>
-            <h3 class="users_wp_section_heading">Manage Login Form Fields</h3>
-            <?php
-            $form_builder->uwp_form_builder();
-        } elseif ($subtab == 'forgot') {
-            ?>
-            <h3 class="users_wp_section_heading">Manage Forgot Form Fields</h3>
-            <?php
-            $form_builder->uwp_form_builder();
-        } elseif ($subtab == 'account') {
-            ?>
-            <h3 class="users_wp_section_heading">Manage Account Form Fields</h3>
-            <?php
-            $form_builder->uwp_form_builder();
-        }
-    }
-
-    public function get_recaptcha_content() {
+    public function display_form() {
+        $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $this->get_settings_tabs() ) ? $_GET['tab'] : 'general';
         ?>
         <form method="post" action="options.php">
-            <?php settings_fields( 'users-wp' ); ?>
-            <?php do_settings_sections( 'users-wp' );
-
-            $uwp_recaptcha_api_key = esc_attr( get_option('uwp_recaptcha_api_key', ''));
-            $uwp_recaptcha_api_secret = esc_attr( get_option('uwp_recaptcha_api_secret', ''));
-
-            ?>
-
-        <table class="uwp-form-table">
-
-            <tr valign="top">
-                <th scope="row"><?php echo __( 'Google ReCaptcha API Key:', 'users-wp' ); ?></th>
-                <td>
-                    <input type="text" name="uwp_recaptcha_api_key" value="<?php echo esc_attr( $uwp_recaptcha_api_key ); ?>" id="uwp_recaptcha_api_key" />
-                    <span class="description">*Required - Enter Re-Captcha site key that you get after site registration at <a target="_blank" href="https://www.google.com/recaptcha/admin#list">here</a>.</span>
-                </td>
-            </tr>
-
-            <tr valign="top">
-                <th scope="row"><?php echo __( 'Google ReCaptcha API Secret:', 'users-wp' ); ?></th>
-                <td>
-                    <input type="text" name="uwp_recaptcha_api_secret" value="<?php echo esc_attr( $uwp_recaptcha_api_secret ); ?>" id="uwp_recaptcha_api_secret" />
-                    <span class="description">*Required - Enter Re-Captcha secret key that you get after site registration at <a target="_blank" href="https://www.google.com/recaptcha/admin#list">here</a>.</span>
-                </td>
-            </tr>
-
-            <tr valign="top">
-                <th></th>
-                <td><?php submit_button(null, 'primary','submit',false); ?></td>
-            </tr>
-        </table>
-        <?php
-    }
-
-    public function get_notifications_content() {
-        ?>
-        <form method="post" action="options.php">
-
-        <?php settings_fields( 'users-wp' ); ?>
-        <?php do_settings_sections( 'users-wp' );
-
-        $uwp_register_success_subject = esc_attr( get_option('uwp_register_success_subject', ''));
-        $uwp_register_success_content = esc_attr( get_option('uwp_register_success_content', ''));
-
-        $uwp_forgot_password_subject = esc_attr( get_option('uwp_forgot_password_subject', ''));
-        $uwp_forgot_password_content = esc_attr( get_option('uwp_forgot_password_content', ''));
-
-        ?>
-
-        <h3 class="users_wp_section_heading">Email Notifications</h3>
-
-            <table class="uwp-form-table">
-               <tbody>
-
-               <tr valign="top">
-                    <th scope="row" class="titledesc">List of usable shortcodes</th>
-                    <td class="forminp">
-                        <span class="description">[#client_name#],[#login_url#],[#username#],[#user_email#],[#site_name_url#],[#site_name#],[#from_email#](the admin email) </span>
-                    </td>
-               </tr>
-
-               <tr valign="top">
-                    <th scope="row" class="titledesc">Registration success email</th>
-                    <td class="forminp">
-                        <input name="uwp_registration_success_email_subject" id="uwp_registration_success_email_subject" type="text" style=" min-width:300px;" value="<?php echo esc_attr( $uwp_register_success_subject ); ?>" />
-                        <span class="description"></span>
-                    </td>
-               </tr>
-
-               <tr valign="top">
-                    <th scope="row" class="titledesc"></th>
-                    <td class="forminp">
-                        <textarea name="uwp_registration_success_email_content" id="uwp_registration_success_email_content" style="width:500px; height: 150px;"><?php echo esc_attr( $uwp_register_success_content ); ?></textarea>
-                        <span class="description"></span>
-
-                    </td>
-               </tr>
-
-                <tr valign="top">
-                    <th scope="row" class="titledesc">User forgot password email</th>
-                    <td class="forminp">
-                        <input name="uwp_forgot_password_subject" id="uwp_forgot_password_subject" type="text" style=" min-width:300px;" value="<?php echo esc_attr( $uwp_forgot_password_subject ); ?>" />
-                        <span class="description"></span>
-                    </td>
-                </tr>
-
-                <tr valign="top">
-                    <th scope="row" class="titledesc"></th>
-                    <td class="forminp">
-                        <textarea name="uwp_forgot_password_content" id="uwp_forgot_password_content" style="width:500px; height: 150px;"><?php echo esc_attr( $uwp_forgot_password_content ); ?></textarea>
-                        <span class="description"></span>
-                    </td>
-                </tr>
-
-                <tr valign="top">
-                    <th></th>
-                    <td><?php submit_button(null, 'primary','submit',false); ?></td>
-                </tr>
-               </tbody>
-            </table>
-        </form>
-        <?php
-    }
-
-    //subtabs
-    public function get_general_general_content() {
-        ?>
-        <form method="post" action="options.php">
-            <?php settings_fields( 'users-wp' ); ?>
-            <?php do_settings_sections( 'users-wp' );
-
-
-            $user_profile_page = esc_attr( get_option('uwp_user_profile_page', ''));
-            $register_page = esc_attr( get_option('uwp_register_page', ''));
-            $login_page = esc_attr( get_option('uwp_login_page', ''));
-            $account_page = esc_attr( get_option('uwp_account_page', ''));
-            $forgot_pass_page = esc_attr( get_option('uwp_forgot_pass_page', ''));
-            $users_list_page = esc_attr( get_option('uwp_users_list_page', ''));
-
-            ?>
 
             <h3 class="users_wp_section_heading">General Options</h3>
 
-            <table class="uwp-form-table">
-
-                <tr valign="top">
-                    <th scope="row"><?php echo __( 'User Profile Page', 'users-wp' ); ?></th>
-                    <td>
-                        <select id="uwp_user_profile_page" name="uwp_user_profile_page">
-                            <?php $this->users_wp_get_pages_as_option($user_profile_page); ?>
-                        </select>
-                        <span class="description">This is the front end user's profile page. This page automatically override the default WordPress author page.</span>
-                    </td>
-                </tr>
-
-                <tr valign="top">
-                    <th scope="row"><?php echo __( 'Register Page', 'users-wp' ); ?></th>
-                    <td>
-                        <select id="uwp_register_page" name="uwp_register_page">
-                            <?php $this->users_wp_get_pages_as_option($register_page); ?>
-                        </select>
-                        <span class="description">This is the front end register page. This is where users creates their account.</span>
-                    </td>
-                </tr>
-
-                <tr valign="top">
-                    <th scope="row"><?php echo __( 'Login Page', 'users-wp' ); ?></th>
-                    <td>
-                        <select id="uwp_login_page" name="uwp_login_page">
-                            <?php $this->users_wp_get_pages_as_option($login_page); ?>
-                        </select>
-                        <span class="description">This is the front end login page. This is where users will login after creating their account.</span>
-                    </td>
-                </tr>
-
-                <tr valign="top">
-                    <th scope="row"><?php echo __( 'Account Page', 'users-wp' ); ?></th>
-                    <td>
-                        <select id="uwp_account_page" name="uwp_account_page">
-                            <?php $this->users_wp_get_pages_as_option($account_page); ?>
-                        </select>
-                        <span class="description">This is the front end account page. This is where users can edit their account.</span>
-                    </td>
-                </tr>
-
-                <tr valign="top">
-                    <th scope="row"><?php echo __( 'Forgot Password Page', 'users-wp' ); ?></th>
-                    <td>
-                        <select id="uwp_forgot_pass_page" name="uwp_forgot_pass_page">
-                            <?php $this->users_wp_get_pages_as_option($forgot_pass_page); ?>
-                        </select>
-                        <span class="description">This is the front end Forgot Password page. This is the page where users are sent to reset their password when they lose it.</span>
-                    </td>
-                </tr>
-
-                <tr valign="top">
-                    <th scope="row"><?php echo __( 'Users List Page', 'users-wp' ); ?></th>
-                    <td>
-                        <select id="uwp_users_list_page" name="uwp_users_list_page">
-                            <?php $this->users_wp_get_pages_as_option($users_list_page); ?>
-                        </select>
-                        <span class="description">This is the front end Users List page. This is the page where all registered users of the websites are listed.</span>
-                    </td>
-                </tr>
-
-                <tr valign="top">
-                    <th></th>
-                    <td><?php submit_button(null, 'primary','submit',false); ?></td>
-                </tr>
-            </table>
+            <table class="form-table">
+                <?php settings_fields( 'uwp_settings' ); ?>
+				<?php do_settings_fields( 'uwp_settings_' . $active_tab, 'uwp_settings_' . $active_tab ); ?>
+			</table>
+			<?php submit_button(); ?>
 
         </form>
         <?php
+    }
+
+    public function uwp_get_pages_as_option($selected) {
+        $page_options = $this->uwp_get_pages();
+        foreach ($page_options as $key => $page_title) {
+            ?>
+            <option value="<?php echo $key; ?>" <?php selected( $selected, $key ); ?>><?php echo $page_title; ?></option>
+            <?php
+        }
+    }
+
+    public function uwp_get_pages() {
+        $pages_options = array( '' => 'Select a Page' ); // Blank option
+
+        $pages = get_pages();
+        if ( $pages ) {
+            foreach ( $pages as $page ) {
+                $pages_options[ $page->ID ] = $page->post_title;
+            }
+        }
+        return $pages_options;
     }
 
     public function get_general_shortcodes_content() {
@@ -466,6 +238,11 @@ class Users_WP_Admin_Settings {
         <?php
     }
 
+    //subtabs
+
+    public function get_general_general_content() {
+        $this->display_form();
+    }
     public function get_general_info_content() {
         ?>
         <h3>Welcome to UsersWP</h3>
@@ -496,43 +273,323 @@ class Users_WP_Admin_Settings {
         <?php
     }
 
-    public function get_settings_tabs() {
+    public function get_form_builder_content() {
+        $form_builder = new Users_WP_Form_Builder();
 
-        $tabs = array();
+        $subtab = 'register';
 
-        $tabs['general']  = __( 'General', 'users-wp' );
-        $tabs['form_builder'] = __( 'Form Builder', 'users-wp' );
-        $tabs['recaptcha']   = __( 'reCaptcha', 'users-wp' );
-        $tabs['notifications']   = __( 'Notifications', 'users-wp' );
+        if (isset($_GET['subtab'])) {
+            $subtab = $_GET['subtab'];
+        }
 
-        return apply_filters( 'uwp_settings_tabs', $tabs );
+        ?>
+        <div class="item-list-sub-tabs">
+            <ul class="item-list-tabs-ul">
+                <li id="uwp-form-builder-register-li" class="<?php if ($subtab == 'register') { echo "current selected"; } ?>">
+                    <a id="uwp-form-builder-register" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'register')); ?>">Register</a>
+                </li>
+                <li id="uwp-form-builder-login-li" class="<?php if ($subtab == 'login') { echo "current selected"; } ?>">
+                    <a id="uwp-form-builder-login" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'login')); ?>">Login</a>
+                </li>
+                <li id="uwp-form-builder-forgot-li" class="<?php if ($subtab == 'forgot') { echo "current selected"; } ?>">
+                    <a id="uwp-form-builder-forgot" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'forgot')); ?>">Forgot</a>
+                </li>
+                <li id="uwp-form-builder-account-li" class="<?php if ($subtab == 'account') { echo "current selected"; } ?>">
+                    <a id="uwp-form-builder-account" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'account')); ?>">Account</a>
+                </li>
+            </ul>
+        </div>
+        <?php
+        if ($subtab == 'register') {
+            ?>
+            <h3 class="users_wp_section_heading">Manage Register Form Fields</h3>
+            <?php
+            $form_builder->uwp_form_builder();
+        } elseif ($subtab == 'login') {
+            ?>
+            <h3 class="users_wp_section_heading">Manage Login Form Fields</h3>
+            <?php
+            $form_builder->uwp_form_builder();
+        } elseif ($subtab == 'forgot') {
+            ?>
+            <h3 class="users_wp_section_heading">Manage Forgot Form Fields</h3>
+            <?php
+            $form_builder->uwp_form_builder();
+        } elseif ($subtab == 'account') {
+            ?>
+            <h3 class="users_wp_section_heading">Manage Account Form Fields</h3>
+            <?php
+            $form_builder->uwp_form_builder();
+        }
     }
 
+    public function get_recaptcha_content() {
+        $this->display_form();
+    }
 
-    /**
-     * Get the current page url.
-     *
-     * @since     1.0.0
-     * @return    string    current page url.
-     */
-    public function get_current_page_url() {
-        $pageURL = 'http';
-        if ( isset( $_SERVER["HTTPS"] ) && $_SERVER["HTTPS"] == "on" ) {
-            $pageURL .= "s";
+    public function get_notifications_content() {
+        ?>
+        <h3 class="users_wp_section_heading">Email Notifications</h3>
+
+            <table class="uwp-form-table">
+               <tbody>
+               <tr valign="top">
+                    <th scope="row" class="titledesc">List of usable shortcodes</th>
+                    <td class="forminp">
+                        <span class="description">[#client_name#],[#login_url#],[#username#],[#user_email#],[#site_name_url#],[#site_name#],[#from_email#](the admin email) </span>
+                    </td>
+               </tr>
+               </tbody>
+            </table>
+
+        <?php
+        $this->display_form();
+    }
+
+    public function uwp_register_settings() {
+
+        if ( false == get_option( 'uwp_settings' ) ) {
+            add_option( 'uwp_settings' );
         }
-        $pageURL .= "://";
-        $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+
+        foreach( $this->uwp_get_registered_settings() as $tab => $settings ) {
+
+            add_settings_section(
+                'uwp_settings_' . $tab,
+                __return_null(),
+                '__return_false',
+                'uwp_settings_' . $tab
+            );
+
+            foreach ( $settings as $option ) {
+
+                $name = isset( $option['name'] ) ? $option['name'] : '';
+
+                add_settings_field(
+                    'uwp_settings[' . $option['id'] . ']',
+                    $name,
+                    function_exists( 'uwp_' . $option['type'] . '_callback' ) ? 'uwp_' . $option['type'] . '_callback' : 'uwp_missing_callback',
+                    'uwp_settings_' . $tab,
+                    'uwp_settings_' . $tab,
+                    array(
+                        'section'     => $tab,
+                        'id'          => isset( $option['id'] )          ? $option['id']          : null,
+                        'desc'        => ! empty( $option['desc'] )      ? $option['desc']        : '',
+                        'name'        => isset( $option['name'] )        ? $option['name']        : null,
+                        'size'        => isset( $option['size'] )        ? $option['size']        : null,
+                        'options'     => isset( $option['options'] )     ? $option['options']     : '',
+                        'std'         => isset( $option['std'] )         ? $option['std']         : '',
+                        'min'         => isset( $option['min'] )         ? $option['min']         : null,
+                        'max'         => isset( $option['max'] )         ? $option['max']         : null,
+                        'step'        => isset( $option['step'] )        ? $option['step']        : null,
+                        'chosen'      => isset( $option['chosen'] )      ? $option['chosen']      : null,
+                        'placeholder' => isset( $option['placeholder'] ) ? $option['placeholder'] : null,
+                        'allow_blank' => isset( $option['allow_blank'] ) ? $option['allow_blank'] : true,
+                        'readonly'    => isset( $option['readonly'] )    ? $option['readonly']    : false,
+                        'faux'        => isset( $option['faux'] )        ? $option['faux']        : false,
+                    )
+                );
+            }
+
+        }
+
+        // Creates our settings in the options table
+        register_setting( 'uwp_settings', 'uwp_settings', array($this, 'uwp_settings_sanitize') );
+
+    }
+
+    public function uwp_get_registered_settings() {
+
+        $register_success_subject = __('Your Log In Details', 'users-wp');
+        $register_success_content = __("<p>Dear [#client_name#],</p><p>You can log in  with the following information:</p><p>[#login_details#]</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>",'users-wp');
+
+        $forgot_password_subject = __('[#site_name#] - Your new password', 'users-wp');
+        $forgot_password_content = __("<p>Dear [#client_name#],<p><p>You requested a new password for [#site_name_url#]</p><p>[#login_details#]</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>",'users-wp');
 
         /**
-         * Filter the current page URL returned by function get_current_page_url().
-         *
-         * @since 1.0.0
-         *
-         * @param string $pageURL The URL of the current page.
+         * 'Whitelisted' uwp settings, filters are provided for each settings
+         * section to allow extensions and other plugins to add their own settings
          */
-        return apply_filters( 'uwp_get_current_page_url', $pageURL );
+        $uwp_settings = array(
+            /** General Settings */
+            'general' => apply_filters( 'uwp_settings_general',
+                array(
+                    'user_profile_page' => array(
+                        'id' => 'user_profile_page',
+                        'name' => __( 'User Profile Page', 'users-wp' ),
+                        'desc' => __( 'This is the front end user\'s profile page. This page automatically override the default WordPress author page.', 'users-wp' ),
+                        'type' => 'select',
+                        'options' => $this->uwp_get_pages(),
+                        'chosen' => true,
+                        'placeholder' => __( 'Select a page', 'users-wp' )
+                    ),
+                    'register_page' => array(
+                        'id' => 'register_page',
+                        'name' => __( 'Register Page', 'users-wp' ),
+                        'desc' => __( 'This is the front end register page. This is where users creates their account.', 'users-wp' ),
+                        'type' => 'select',
+                        'options' => $this->uwp_get_pages(),
+                        'chosen' => true,
+                        'placeholder' => __( 'Select a page', 'users-wp' )
+                    ),
+                    'login_page' => array(
+                        'id' => 'login_page',
+                        'name' => __( 'Login Page', 'users-wp' ),
+                        'desc' => __( 'This is the front end login page. This is where users will login after creating their account.', 'users-wp' ),
+                        'type' => 'select',
+                        'options' => $this->uwp_get_pages(),
+                        'chosen' => true,
+                        'placeholder' => __( 'Select a page', 'users-wp' )
+                    ),
+                    'account_page' => array(
+                        'id' => 'account_page',
+                        'name' => __( 'Account Page', 'users-wp' ),
+                        'desc' => __( 'This is the front end account page. This is where users can edit their account.', 'users-wp' ),
+                        'type' => 'select',
+                        'options' => $this->uwp_get_pages(),
+                        'chosen' => true,
+                        'placeholder' => __( 'Select a page', 'users-wp' )
+                    ),
+                    'forgot_pass_page' => array(
+                        'id' => 'forgot_pass_page',
+                        'name' => __( 'Forgot Password Page', 'users-wp' ),
+                        'desc' => __( 'This is the front end Forgot Password page. This is the page where users are sent to reset their password when they lose it.', 'users-wp' ),
+                        'type' => 'select',
+                        'options' => $this->uwp_get_pages(),
+                        'chosen' => true,
+                        'placeholder' => __( 'Select a page', 'users-wp' )
+                    ),
+                    'users_list_page' => array(
+                        'id' => 'users_list_page',
+                        'name' => __( 'Users List Page', 'users-wp' ),
+                        'desc' => __( 'This is the front end Users List page. This is the page where all registered users of the websites are listed.', 'users-wp' ),
+                        'type' => 'select',
+                        'options' => $this->uwp_get_pages(),
+                        'chosen' => true,
+                        'placeholder' => __( 'Select a page', 'users-wp' )
+                    ),
+                )
+            ),
+            'notifications' => apply_filters( 'uwp_settings_notifications',
+                array(
+                    'registration_success_email_subject' => array(
+                        'id' => 'registration_success_email_subject',
+                        'name' => __( 'Registration success email', 'users-wp' ),
+                        'desc' => "",
+                        'type' => 'text',
+                        'size' => 'regular',
+                        'std'  => $register_success_subject,
+                        'placeholder' => __( 'Enter Registration success email Subject', 'users-wp' )
+                    ),
+                    'registration_success_email_content' => array(
+                        'id' => 'registration_success_email_content',
+                        'name' => "",
+                        'desc' => "",
+                        'type' => 'textarea',
+                        'std'  => $register_success_content,
+                        'placeholder' => __( 'Enter Registration success email Content', 'users-wp' )
+                    ),
+                    'forgot_password_email_subject' => array(
+                        'id' => 'forgot_password_email_subject',
+                        'name' => __( 'Forgot password email', 'users-wp' ),
+                        'desc' => "",
+                        'type' => 'text',
+                        'size' => 'regular',
+                        'std'  => $forgot_password_subject,
+                        'placeholder' => __( 'Enter forgot password email Subject', 'users-wp' )
+                    ),
+                    'forgot_password_email_content' => array(
+                        'id' => 'forgot_password_email_content',
+                        'name' => "",
+                        'desc' => "",
+                        'type' => 'textarea',
+                        'std'  => $forgot_password_content,
+                        'placeholder' => __( 'Enter forgot password email Content', 'users-wp' )
+                    ),
+                )
+            ),
+
+            /** Extension Settings */
+            'extensions' => apply_filters('uwp_settings_extensions',
+                array()
+            ),
+        );
+
+        return apply_filters( 'uwp_registered_settings', $uwp_settings );
     }
 
+    public function uwp_get_settings() {
 
+        $settings = get_option( 'uwp_settings' );
+
+        if( empty( $settings ) ) {
+
+            // Update old settings with new single option
+
+            $general_settings = is_array( get_option( 'uwp_settings_general' ) )    ? get_option( 'uwp_settings_general' )    : array();
+            $ext_settings     = is_array( get_option( 'uwp_settings_extensions' ) ) ? get_option( 'uwp_settings_extensions' ) : array();
+
+            $settings = array_merge( $general_settings, $ext_settings );
+
+            update_option( 'uwp_settings', $settings );
+
+        }
+        return apply_filters( 'uwp_get_settings', $settings );
+    }
+
+    public function uwp_settings_sanitize( $input = array() ) {
+
+        global $uwp_options;
+
+        if ( empty( $_POST['_wp_http_referer'] ) ) {
+            return $input;
+        }
+
+        parse_str( $_POST['_wp_http_referer'], $referrer );
+
+        $settings = $this->uwp_get_registered_settings();
+        $tab      = isset( $referrer['tab'] ) ? $referrer['tab'] : 'general';
+
+        $input = $input ? $input : array();
+        $input = apply_filters( 'uwp_settings_' . $tab . '_sanitize', $input );
+
+        // Loop through each setting being saved and pass it through a sanitization filter
+        foreach ( $input as $key => $value ) {
+
+            // Get the setting type (checkbox, select, etc)
+            $type = isset( $settings[$tab][$key]['type'] ) ? $settings[$tab][$key]['type'] : false;
+
+            if ( $type ) {
+                // Field type specific filter
+                $input[$key] = apply_filters( 'uwp_settings_sanitize_' . $type, $value, $key );
+            }
+
+            // General filter
+            $input[$key] = apply_filters( 'uwp_settings_sanitize', $input[$key], $key );
+        }
+
+        // Loop through the whitelist and unset any that are empty for the tab being saved
+        if ( ! empty( $settings[$tab] ) ) {
+            foreach ( $settings[$tab] as $key => $value ) {
+
+                // settings used to have numeric keys, now they have keys that match the option ID. This ensures both methods work
+                if ( is_numeric( $key ) ) {
+                    $key = $value['id'];
+                }
+
+                if ( empty( $input[$key] ) ) {
+                    unset( $uwp_options[$key] );
+                }
+
+            }
+        }
+
+        // Merge our new settings with the existing
+        $output = array_merge( $uwp_options, $input );
+
+        add_settings_error( 'uwp-notices', '', __( 'Settings updated.', 'easy-digital-downloads' ), 'updated' );
+
+        return $output;
+    }
 
 }
