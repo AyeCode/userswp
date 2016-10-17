@@ -1,0 +1,80 @@
+#users-wp {
+  .widefat {
+    border: none;
+    box-shadow: none;
+  }
+  .content-box {
+    background-color: #fff;
+    border: 1px solid #fff;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+    padding: 20px;
+  }
+  a {
+    text-decoration: none;
+  }
+  .item-list-tabs ul.item-list-tabs-ul {
+    border-bottom: 1px solid #ddd;
+    > li {
+      float: left;
+      // Make the list-items overlay the bottom border
+      margin-bottom: -1px;
+
+      // Actual tabs (as links)
+      > a {
+        position: relative;
+        display: block;
+        padding: 10px 15px;
+        margin-right: 2px;
+        line-height: 1.42857143;
+        border: 1px solid transparent;
+        border-radius: 4px 4px 0 0;
+        &:hover {
+          border-color: #eee #eee #ddd;
+        }
+      }
+
+      // Active state, and its :hover to override normal :hover
+      &.selected > a {
+        &,
+        &:hover,
+        &:focus {
+          color: #555;
+          cursor: default;
+          background-color: #fff;
+          border: 1px solid #ddd;
+          border-bottom-color: transparent;
+          opacity: 1;
+          font-weight: normal;
+        }
+      }
+    }
+    &:before,
+    &:after {
+      display: table;
+      content: "";
+      line-height: 0;
+    }
+    &:after {
+      clear: both;
+    }
+  }
+
+  .item-list-sub-tabs ul {
+    > li {
+      float: left
+    }
+  }
+}
+
+.users_page_users-wp .form-table {
+  label {
+    display: block;
+  }
+  label {
+    color: #666;
+    font-size: 14px;
+    font-style: italic;
+    margin: 4px 0 0;
+  }
+}
