@@ -25,38 +25,55 @@ class Users_WP_Activator {
      * @since    1.0.0
      */
     public static function activate() {
+        self::load_dependencies();
         self::generate_pages();
         self::add_default_options();
         self::uwp_create_tables();
         self::uwp_create_default_fields();
     }
 
+    public static function load_dependencies() {
+        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-users-wp-form-builder.php';
+    }
+
     public static function generate_pages() {
-        self::uwp_create_page(esc_sql(_x('register', 'page_slug', 'users-wp')), 'uwp_register_page', __('Register', 'users-wp'), '[uwp_register]');
-        self::uwp_create_page(esc_sql(_x('login', 'page_slug', 'users-wp')), 'uwp_login_page', __('Login', 'users-wp'), '[uwp_login]');
-        self::uwp_create_page(esc_sql(_x('account', 'page_slug', 'users-wp')), 'uwp_account_page', __('Account', 'users-wp'), '[uwp_account]');
-        self::uwp_create_page(esc_sql(_x('forgot', 'page_slug', 'users-wp')), 'uwp_forgot_pass_page', __('Forgot Password?', 'users-wp'), '[uwp_forgot]');
-        self::uwp_create_page(esc_sql(_x('profile', 'page_slug', 'users-wp')), 'uwp_user_profile_page', __('Profile', 'users-wp'), '[uwp_profile]');
-        self::uwp_create_page(esc_sql(_x('users', 'page_slug', 'users-wp')), 'uwp_users_list_page', __('Users', 'users-wp'), '[uwp_users]');
+        self::uwp_create_page(esc_sql(_x('register', 'page_slug', 'users-wp')), 'register_page', __('Register', 'users-wp'), '[uwp_register]');
+        self::uwp_create_page(esc_sql(_x('login', 'page_slug', 'users-wp')), 'login_page', __('Login', 'users-wp'), '[uwp_login]');
+        self::uwp_create_page(esc_sql(_x('account', 'page_slug', 'users-wp')), 'account_page', __('Account', 'users-wp'), '[uwp_account]');
+        self::uwp_create_page(esc_sql(_x('forgot', 'page_slug', 'users-wp')), 'forgot_pass_page', __('Forgot Password?', 'users-wp'), '[uwp_forgot]');
+        self::uwp_create_page(esc_sql(_x('profile', 'page_slug', 'users-wp')), 'user_profile_page', __('Profile', 'users-wp'), '[uwp_profile]');
+        self::uwp_create_page(esc_sql(_x('users', 'page_slug', 'users-wp')), 'users_list_page', __('Users', 'users-wp'), '[uwp_users]');
     }
 
     public static function add_default_options() {
-        $forgot_password_subject = __('[#site_name#] - Your new password', 'users-wp');
-        $forgot_password_content = __("<p>Dear [#client_name#],<p><p>You requested a new password for [#site_name_url#]</p><p>[#login_details#]</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>",'users-wp');
 
         $register_success_subject = __('Your Log In Details', 'users-wp');
-        $register_success_content = __("<p>Dear [#client_name#],</p><p>You can log in  with the following information:</p><p>[#login_details#]</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>",'users-wp');
+        $register_success_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p><p>[#login_details#]</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>",'users-wp');
 
-        update_option('uwp_forgot_password_subject', $forgot_password_subject);
-        update_option('uwp_forgot_password_content', $forgot_password_content);
-        update_option('uwp_register_success_subject', $register_success_subject);
-        update_option('uwp_register_success_content', $register_success_content);
+        $forgot_password_subject = __('[#site_name#] - Your new password', 'users-wp');
+        $forgot_password_content = __("<p>Dear [#user_name#],<p><p>You requested a new password for [#site_name_url#]</p><p>[#login_details#]</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>",'users-wp');
+
+        $settings = get_option( 'uwp_settings', array());
+
+        $settings['registration_success_email_subject'] = $register_success_subject;
+        $settings['registration_success_email_content'] = $register_success_content;
+
+        $settings['forgot_password_email_subject'] = $forgot_password_subject;
+        $settings['forgot_password_email_content'] = $forgot_password_content;
+
+        update_option( 'uwp_settings', $settings );
+
     }
 
     public static function uwp_create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish') {
         global $wpdb, $current_user;
 
-        $option_value = get_option($option);
+        $settings = get_option( 'uwp_settings', array());
+        if (isset($settings[$option])) {
+            $option_value = $settings[$option];
+        } else {
+            $option_value = false;
+        }
 
         if ($option_value > 0) :
             if (get_post($option_value)) :
@@ -74,7 +91,10 @@ class Users_WP_Activator {
 
         if ($page_found) :
             // Page exists
-            if (!$option_value) update_option($option, $page_found);
+            if (!$option_value) {
+                $settings[$option] = $page_found;
+                update_option( 'uwp_settings', $settings );
+            }
             return;
         endif;
 
@@ -90,7 +110,8 @@ class Users_WP_Activator {
         );
         $page_id = wp_insert_post($page_data);
 
-        add_option($option, $page_id);
+        $settings[$option] = $page_id;
+        update_option( 'uwp_settings', $settings );
 
     }
 
@@ -148,13 +169,14 @@ class Users_WP_Activator {
 
     public static function uwp_create_default_fields()
     {
+        $form_builder = new Users_WP_Form_Builder();
 
         $fields = self::uwp_default_custom_fields();
 
         $fields = apply_filters('uwp_before_default_custom_fields_saved', $fields);
 
         foreach ($fields as $field_index => $field) {
-            self::uwp_custom_field_save($field);
+            $form_builder->uwp_custom_field_save($field);
         }
     }
 
@@ -366,18 +388,6 @@ class Users_WP_Activator {
         $fields = apply_filters('uwp_default_custom_fields_account', $fields);
 
         return  $fields;
-    }
-
-
-    public static function uwp_user_field_save($user_id = 0, $key, $value) {
-
-        if (empty($user_id) || empty($key) || empty($value)) {
-            return false;
-        }
-
-        update_user_meta( $user_id, $key, $value );
-
-        return true;
     }
 
 }

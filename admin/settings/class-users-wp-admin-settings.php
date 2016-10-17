@@ -34,6 +34,7 @@ class Users_WP_Admin_Settings {
 
     }
 
+    //todo: remove this function
     function users_wp_register_settings() {
         //pages
         register_setting( 'users-wp', 'uwp_user_profile_page' );
@@ -53,7 +54,6 @@ class Users_WP_Admin_Settings {
     function users_wp_general_settings_page() {
 
         $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $this->get_settings_tabs() ) ? $_GET['tab'] : 'general';
-
         ?>
         <div class="wrap">
             <h2><?php echo __( 'Page Settings', 'users-wp' ); ?></h2>
@@ -138,12 +138,13 @@ class Users_WP_Admin_Settings {
 
     //main tabs
 
-    public function display_form() {
+    public function display_form($title) {
         $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $this->get_settings_tabs() ) ? $_GET['tab'] : 'general';
         ?>
         <form method="post" action="options.php">
-
-            <h3 class="users_wp_section_heading">General Options</h3>
+            <?php if ($title) { ?>
+                <h3 class="users_wp_section_heading"><?php echo $title; ?></h3>
+            <?php } ?>
 
             <table class="form-table">
                 <?php settings_fields( 'uwp_settings' ); ?>
@@ -241,7 +242,7 @@ class Users_WP_Admin_Settings {
     //subtabs
 
     public function get_general_general_content() {
-        $this->display_form();
+        $this->display_form(__('General Options', 'users-wp'));
     }
     public function get_general_info_content() {
         ?>
@@ -324,7 +325,7 @@ class Users_WP_Admin_Settings {
     }
 
     public function get_recaptcha_content() {
-        $this->display_form();
+        $this->display_form(__('ReCaptcha Settings', 'users-wp'));
     }
 
     public function get_notifications_content() {
@@ -336,14 +337,14 @@ class Users_WP_Admin_Settings {
                <tr valign="top">
                     <th scope="row" class="titledesc">List of usable shortcodes</th>
                     <td class="forminp">
-                        <span class="description">[#client_name#],[#login_url#],[#username#],[#user_email#],[#site_name_url#],[#site_name#],[#from_email#](the admin email) </span>
+                        <span class="description">[#site_name_url#],[#site_name#],[#to_name#],[#from_name#],[#login_url#],[#user_name#],[#from_email#],[#user_login#],[#username#],[#current_date#],[#login_details#]</span>
                     </td>
                </tr>
                </tbody>
             </table>
 
         <?php
-        $this->display_form();
+        $this->display_form(false);
     }
 
     public function uwp_register_settings() {
@@ -399,12 +400,6 @@ class Users_WP_Admin_Settings {
     }
 
     public function uwp_get_registered_settings() {
-
-        $register_success_subject = __('Your Log In Details', 'users-wp');
-        $register_success_content = __("<p>Dear [#client_name#],</p><p>You can log in  with the following information:</p><p>[#login_details#]</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>",'users-wp');
-
-        $forgot_password_subject = __('[#site_name#] - Your new password', 'users-wp');
-        $forgot_password_content = __("<p>Dear [#client_name#],<p><p>You requested a new password for [#site_name_url#]</p><p>[#login_details#]</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>",'users-wp');
 
         /**
          * 'Whitelisted' uwp settings, filters are provided for each settings
@@ -478,7 +473,6 @@ class Users_WP_Admin_Settings {
                         'desc' => "",
                         'type' => 'text',
                         'size' => 'regular',
-                        'std'  => $register_success_subject,
                         'placeholder' => __( 'Enter Registration success email Subject', 'users-wp' )
                     ),
                     'registration_success_email_content' => array(
@@ -486,7 +480,6 @@ class Users_WP_Admin_Settings {
                         'name' => "",
                         'desc' => "",
                         'type' => 'textarea',
-                        'std'  => $register_success_content,
                         'placeholder' => __( 'Enter Registration success email Content', 'users-wp' )
                     ),
                     'forgot_password_email_subject' => array(
@@ -495,7 +488,6 @@ class Users_WP_Admin_Settings {
                         'desc' => "",
                         'type' => 'text',
                         'size' => 'regular',
-                        'std'  => $forgot_password_subject,
                         'placeholder' => __( 'Enter forgot password email Subject', 'users-wp' )
                     ),
                     'forgot_password_email_content' => array(
@@ -503,7 +495,6 @@ class Users_WP_Admin_Settings {
                         'name' => "",
                         'desc' => "",
                         'type' => 'textarea',
-                        'std'  => $forgot_password_content,
                         'placeholder' => __( 'Enter forgot password email Content', 'users-wp' )
                     ),
                 )

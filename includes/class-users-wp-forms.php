@@ -59,6 +59,7 @@ class Users_WP_Forms {
             echo $errors->get_error_message();
             echo '</div>';
         } else {
+            //todo: redirect not working. fix this
             if ($_POST['auto_login']) {
                 wp_redirect(home_url('/'));
                 exit();
@@ -84,7 +85,12 @@ class Users_WP_Forms {
             return $errors;
         }
 
+        //todo: recaptcha check
+        do_action('uwp_before_validate_register');
+
         $result = $this->validate_fields($data, 'register');
+
+        do_action('uwp_after_validate_register', $result);
 
         if (is_wp_error($result)) {
             return $result;
@@ -93,18 +99,37 @@ class Users_WP_Forms {
         if ($errors->get_error_code())
             return $errors;
 
-        //todo: recaptcha check
+        if (isset($result['password']) && !empty($result['password'])) {
+            $password = $result['password'];
+            $generated_password = false;
+        } else {
+            $password = wp_generate_password();
+            $generated_password = true;
+        }
 
-        if ($errors->get_error_code())
-            return $errors;
+        $first_name = "";
+        if (isset($result['uwp_register_first_name']) && !empty($result['uwp_register_first_name'])) {
+            $first_name = $result['uwp_register_first_name'];
+        }
+
+        $last_name = "";
+        if (isset($result['uwp_register_last_name']) && !empty($result['uwp_register_last_name'])) {
+            $last_name = $result['uwp_register_last_name'];
+        }
+
+        if (!empty($first_name) || !empty($last_name)) {
+            $display_name = $first_name . ' ' . $last_name;
+        } else {
+            $display_name = $result['uwp_register_username'];
+        }
 
         $args = array(
             'user_login'   => $result['uwp_register_username'],
             'user_email'   => $result['uwp_register_email'],
-            'user_pass'    => $result['password'],
-            'display_name' => $result['uwp_register_first_name'] . ' ' . $result['uwp_register_last_name'],
-            'first_name'   => $result['uwp_register_first_name'],
-            'last_name'    => $result['uwp_register_last_name']
+            'user_pass'    => $password,
+            'display_name' => $display_name,
+            'first_name'   => $first_name,
+            'last_name'    => $last_name
         );
 
         $user_id = wp_insert_user( $args );
@@ -114,7 +139,33 @@ class Users_WP_Forms {
             return $errors;
         }
 
-        wp_new_user_notification($user_id, $data['user_pass']);
+        $result = $this->uwp_save_user_extra_fields($user_id, $result, 'register');
+
+        if (!$result) {
+            $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'users-wp'));
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        if ($generated_password) {
+            $message_pass = $password;
+        } else {
+            $message_pass = "Password you entered";
+        }
+
+        $login_details = __('<p><b>' . __('Your login Information :', 'users-wp') . '</b></p>
+        <p>' . __('Username:', 'users-wp') . ' ' . $result['uwp_register_username'] . '</p>
+        <p>' . __('Password:', 'users-wp') . ' ' . $message_pass . '</p>');
+
+        $result = $this->uwp_send_email( 'register', $user_id, $login_details );
+
+        if (!$result) {
+            $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'users-wp'));
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
 
 
         if ($data['auto_login']) {
@@ -134,16 +185,8 @@ class Users_WP_Forms {
 
     public function login() {
 
-        //$login_page = esc_attr( get_option('uwp_login_page', false));
 
-        $data = array(
-            'username' => $_POST['username'],
-            'password' => $_POST['password'],
-            'remember_me' => $_POST['remember_me']
-        );
-
-
-        $errors = $this->process_login($data);
+        $errors = $this->process_login($_POST);
 
 
         /* display error in registration form */
@@ -162,7 +205,7 @@ class Users_WP_Forms {
 
         $errors = new WP_Error();
 
-        $user_login = sanitize_user($data['username']);
+        $user_login = sanitize_user($data['uwp_login_username']);
         // Check the username
         if ($user_login == '') {
             $errors->add('empty_username', __('<strong>Error</strong>: Please enter a username.', 'users-wp'));
@@ -171,7 +214,7 @@ class Users_WP_Forms {
             $user_login = '';
         }
 
-        if ($data['password'] == '') {
+        if ($data['uwp_login_password'] == '') {
             $errors->add('empty_password', __('<strong>Error</strong>: Please enter your password.', 'users-wp'));
         }
         if ($errors->get_error_code())
@@ -185,7 +228,7 @@ class Users_WP_Forms {
         $result = wp_signon(
             array(
                 'user_login' => $user_login,
-                'user_password' => $data['password'],
+                'user_password' => $data['uwp_login_password'],
                 'remember' => $remember_me
             ),
             false
@@ -195,19 +238,15 @@ class Users_WP_Forms {
             $errors->add('invalid_userorpass', __('<strong>Error</strong>: Invalid username or Password.', 'users-wp'));
             return $errors;
         } else {
-            return true;
+            //todo: fix redirect
+            wp_redirect(home_url('/'));
+            exit();
         }
     }
 
     public function forgot() {
 
-        //$forgot_pass_page = esc_attr( get_option('uwp_forgot_pass_page', ''));
-
-        $data = array(
-            'email' => $_POST['email'],
-        );
-
-        $errors = $this->process_forgot($data);
+        $errors = $this->process_forgot($_POST);
 
         /* display error in registration form */
         if (is_wp_error($errors)) {
@@ -226,10 +265,10 @@ class Users_WP_Forms {
 
         $errors = new WP_Error();
 
-        $email = sanitize_email($data['email']);
+        $email = sanitize_email($data['uwp_forgot_email']);
 
         // Check the e-mail address
-        if ($data['email'] == '') {
+        if ($email == '') {
             $errors->add('empty_email', __('<strong>Error</strong>: Please type your e-mail address.', 'users-wp'));
         }
         if (!is_email($email)) {
@@ -242,22 +281,44 @@ class Users_WP_Forms {
         if ($errors->get_error_code())
             return $errors;
 
+        $user_data = get_user_by('email', $email);
+
+        $login_details = $this->generate_forgot_message($user_data);
+
+        $result = $this->uwp_send_email( 'forgot', $user_data->ID, $login_details );
+
+        if (!$result) {
+            if (get_option('admin_email') == $email) {
+                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please check your site error log for more details.', 'users-wp'));
+            } else {
+                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'users-wp'));
+            }
+
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
         return true;
     }
 
+    public function generate_forgot_message($user_data) {
+
+        $new_pass = wp_generate_password(12, false);
+
+        wp_set_password($new_pass, $user_data->ID);
+        update_user_meta($user_data->ID, 'default_password_nag', true); //Set up the Password change nag.
+        $login_details = '<p><b>' . __('Your login Information :', 'users-wp') . '</b></p>';
+        $login_details .= '<p>' . sprintf(__('Username: %s', 'users-wp'), $user_data->user_login) . "</p>";
+        $login_details .= '<p>' . sprintf(__('Password: %s', 'users-wp'), $new_pass) . "</p>";
+
+        return $login_details;
+
+    }
+
     public function account() {
-        $account_page = esc_attr( get_option('uwp_account_page', false));
 
-        $data = array(
-            'first_name' => $_POST['first_name'],
-            'last_name' => $_POST['last_name'],
-            'email' => $_POST['email'],
-            'password' => $_POST['password'],
-            'confirm_password' => $_POST['confirm_password']
-        );
-
-
-        $errors = $this->process_account($data);
+        $errors = $this->process_account($_POST);
 
 
         /* display error in registration form */
@@ -285,21 +346,19 @@ class Users_WP_Forms {
             return false;
         }
 
+        do_action('uwp_before_validate_account');
 
-        $result = $this->validate_fields($data, 'register');
+        $result = $this->validate_fields($data, 'account');
+
+        do_action('uwp_after_validate_account', $result);
 
         if (is_wp_error($result)) {
             return $result;
         }
 
-
         if ($errors->get_error_code())
             return $errors;
 
-        //todo: recaptcha check
-
-        if ($errors->get_error_code())
-            return $errors;
 
         $args = array(
             'ID' => $current_user_id,
@@ -309,10 +368,11 @@ class Users_WP_Forms {
             'last_name'    => $result['uwp_account_last_name']
         );
 
-        if ($result['password']) {
+        if (isset($result['password'])) {
             $args['user_pass'] = $result['password'];
         }
 
+        //todo: find a way to fix auth cookie headers already sent by problem
         $user_id = wp_update_user( $args );
 
         if (!$user_id) {
@@ -320,7 +380,16 @@ class Users_WP_Forms {
             return $errors;
         }
 
-        //todo: update account notification
+        $result = $this->uwp_save_user_extra_fields($user_id, $result, 'account');
+
+        if (!$result) {
+            $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'users-wp'));
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        //todo: update account notification. some users maybe interested in that
 
         return true;
 
@@ -393,6 +462,11 @@ class Users_WP_Forms {
                 }
 
 
+                if (($field->htmlvar_name == 'uwp_account_password' || $field->htmlvar_name == 'uwp_account_confirm_password') && empty($value)) {
+                    $field->is_required = 0;
+                }
+
+
                 if ($field->is_required == 1 && $sanitized_value == '') {
                     $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'users-wp'));
                 }
@@ -405,6 +479,8 @@ class Users_WP_Forms {
                 if ($field->htmlvar_name == 'uwp_register_email' && email_exists($sanitized_value)) {
                     $errors->add('email_exists', __('<strong>Error</strong>: This email is already registered, please choose another one.', 'users-wp'));
                 }
+
+                //todo: move forgot form validation here
 
                 // Check the username
                 if ($field->htmlvar_name == 'uwp_register_username') {
@@ -421,20 +497,20 @@ class Users_WP_Forms {
             }
         }
 
-        if ($type == 'register' || ($type == 'account' && empty( $data['password']))) {
+        if ($type == 'register' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
             //check password
-            if( empty( $data['password'] ) ) {
+            if( empty( $data['uwp_'.$type.'_password'] ) ) {
                 $errors->add( 'empty_password', __( 'Please enter a password', 'users-wp' ) );
             }
 
-            if ($data['password'] != $data['confirm_password']) {
+            if ($data['uwp_'.$type.'_password'] != $data['uwp_'.$type.'_confirm_password']) {
                 $errors->add('pass_match', __('ERROR: Passwords do not match.', 'users-wp'));
             }
-            if (strlen($data['password']) < 7) {
+            if (strlen($data['uwp_'.$type.'_password']) < 7) {
                 $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', 'users-wp'));
             }
 
-            $validated_data['password'] = $data['password'];
+            $validated_data['password'] = $data['uwp_'.$type.'_password'];
         }
 
 
@@ -442,6 +518,216 @@ class Users_WP_Forms {
             return $errors;
 
         return $validated_data;
+    }
+
+    public function uwp_save_user_extra_fields($user_id, $data, $type) {
+
+        if (empty($user_id) || empty($data) || empty($type)) {
+            return false;
+        }
+
+        // custom user fields not applicable for login and forgot
+        if ($type == 'login' || $type == 'forgot') {
+            return true;
+        }
+
+        //unset default fields
+        if ($type == 'register') {
+            if (isset($data['uwp_register_username'])) {
+                unset($data['uwp_register_username']);
+            }
+            if (isset($data['uwp_register_email'])) {
+                unset($data['uwp_register_email']);
+            }
+            if (isset($data['password'])) {
+                unset($data['password']);
+            }
+            if (isset($data['uwp_register_first_name'])) {
+                unset($data['uwp_register_first_name']);
+            }
+            if (isset($data['uwp_register_last_name'])) {
+                unset($data['uwp_register_last_name']);
+            }
+        }
+
+        if ($type == 'account') {
+            if (isset($data['uwp_account_email'])) {
+                unset($data['uwp_account_email']);
+            }
+            if (isset($data['password'])) {
+                unset($data['password']);
+            }
+            if (isset($data['uwp_account_first_name'])) {
+                unset($data['uwp_account_first_name']);
+            }
+            if (isset($data['uwp_account_last_name'])) {
+                unset($data['uwp_account_last_name']);
+            }
+        }
+
+        if (empty($data)) {
+            return true;
+        } else {
+            foreach($data as $key => $value) {
+                update_user_meta($user_id, $key, $value);
+            }
+            return true;
+        }
+    }
+
+    public function uwp_send_email( $message_type, $user_id, $login_details ) {
+
+        global $uwp_options;
+        $user_data = get_userdata($user_id);
+
+        $login_page_id = $uwp_options['login_page'];
+        if ($login_page_id) {
+            $login_page_url = get_permalink($login_page_id);
+        } else {
+            $login_page_url = wp_login_url();
+        }
+
+        $subject = "";
+        $message = "";
+
+        if ( $message_type == 'register' ) {
+            $subject = $uwp_options['registration_success_email_subject'];
+            $message = $uwp_options['registration_success_email_content'];
+        } elseif ( $message_type == 'forgot' ) {
+            $subject = $uwp_options['forgot_password_email_subject'];
+            $message = $uwp_options['forgot_password_email_content'];
+        }
+
+        if ( ! empty( $subject ) ) {
+            $subject = __( stripslashes_deep( $subject ), 'users-wp' );
+        }
+
+        if ( ! empty( $message ) ) {
+            $message = __( stripslashes_deep( $message ), 'users-wp' );
+        }
+
+        $sitefromEmail     = get_option( 'admin_email' );
+        $sitefromEmailName =  stripslashes(get_option('blogname'));
+
+
+        $user_login = '';
+        if ( $user_id > 0 && $user_info = get_userdata( $user_id ) ) {
+            $user_login = $user_info->user_login;
+        }
+
+        $siteurl       = home_url();
+        $siteurl_link  = '<a href="' . $siteurl . '">' . $siteurl . '</a>';
+        $loginurl      = $login_page_url;
+        $loginurl_link = '<a href="' . $loginurl . '">login</a>';
+
+        $current_date     = date_i18n( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
+
+        $site_email = get_option( 'admin_email' );
+
+        $site_name = stripslashes(get_option('blogname'));
+
+        //user
+        $user_name = $user_data->display_name;
+        $user_email = $user_data->user_email;
+
+        $search_array  = array(
+            '[#site_name_url#]',
+            '[#site_name#]',
+            '[#to_name#]',
+            '[#from_name#]',
+            '[#login_url#]',
+            '[#user_name#]',
+            '[#from_email#]',
+            '[#user_login#]',
+            '[#username#]',
+            '[#current_date#]',
+            '[#login_details#]',
+        );
+        $replace_array = array(
+            $siteurl_link,
+            $sitefromEmailName,
+            $user_name,
+            $site_name,
+            $loginurl_link,
+            $user_name,
+            $site_email,
+            $user_login,
+            $user_login,
+            $current_date,
+            $login_details
+        );
+        $message = str_replace( $search_array, $replace_array, $message );
+
+        $search_array  = array(
+            '[#site_name_url#]',
+            '[#site_name#]',
+            '[#to_name#]',
+            '[#from_name#]',
+            '[#user_name#]',
+            '[#from_email#]',
+            '[#user_login#]',
+            '[#username#]',
+            '[#current_date#]'
+        );
+        $replace_array = array(
+            $siteurl_link,
+            $sitefromEmailName,
+            $user_name,
+            $site_name,
+            $user_name,
+            $site_email,
+            $user_login,
+            $user_login,
+            $current_date
+        );
+        $subject = str_replace( $search_array, $replace_array, $subject );
+
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+        $headers .= "Reply-To: " . $site_email . "\r\n";
+        $headers .= 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>' . "\r\n";
+
+        $to = $user_email;
+
+        $to = apply_filters( 'uwp_send_email_to', $to, $message_type, $user_id );
+
+        $subject = apply_filters( 'uwp_send_email_subject', $subject, $message_type, $user_id  );
+
+        $message = apply_filters( 'uwp_send_email_message', $message, $message_type, $user_id  );
+
+        $headers = apply_filters( 'uwp_send_email_headers', $headers, $message_type, $user_id  );
+
+        $sent = wp_mail( $to, $subject, $message, $headers );
+
+        if ( ! $sent ) {
+            if ( is_array( $to ) ) {
+                $to = implode( ',', $to );
+            }
+            $log_message = sprintf(
+                __( "Email from UsersWP failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'users-wp' ),
+                $message_type,
+                date_i18n( 'F j Y H:i:s', current_time( 'timestamp' ) ),
+                $to,
+                $subject
+            );
+            $this->uwp_error_log( $log_message );
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function uwp_error_log($log){
+
+        $should_log = apply_filters( 'uwp_log_errors', WP_DEBUG);
+        if ( true === $should_log ) {
+            if ( is_array( $log ) || is_object( $log ) ) {
+                error_log( print_r( $log, true ) );
+            } else {
+                error_log( $log );
+            }
+        }
     }
 
 }

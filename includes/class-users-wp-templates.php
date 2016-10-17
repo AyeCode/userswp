@@ -156,8 +156,28 @@ class Users_WP_Templates {
         $value = $field->default_value;
         if ($form_type == 'account') {
             $user_id = get_current_user_id();
-            $value = get_user_meta($user_id, $field->htmlvar_name, true);
+            $user_data = get_userdata($user_id);
+
+            if ($field->htmlvar_name == 'uwp_account_email') {
+                $value = $user_data->user_email;
+            } elseif ($field->htmlvar_name == 'uwp_account_password') {
+                $value = '';
+                $field->is_required = 0;
+            } elseif ($field->htmlvar_name == 'uwp_account_confirm_password') {
+                $value = '';
+                $field->is_required = 0;
+            } elseif ($field->htmlvar_name == 'uwp_account_first_name') {
+                $value = $user_data->first_name;
+            } elseif ($field->htmlvar_name == 'uwp_account_last_name') {
+                $value = $user_data->last_name;
+            } else {
+                $value = get_user_meta($user_id, $field->htmlvar_name, true);
+            }
+
+
         }
+
+
 
         if (empty($value)) {
             $value = "";

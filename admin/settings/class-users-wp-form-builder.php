@@ -734,6 +734,8 @@ class Users_WP_Form_Builder {
 
 
     public function uwp_manage_available_fields_predefined(){
+        global $uwp_options;
+        var_dump($uwp_options);
         $this->uwp_custom_available_fields('predefined');
     }
 
@@ -924,7 +926,7 @@ class Users_WP_Form_Builder {
                                 <div class="gd-cf-input-wrap">
                                     <input type="text" name="htmlvar_name" id="htmlvar_name" pattern="[a-zA-Z0-9]+" title="<?php _e('Must not contain spaces or special characters', 'users-wp');?>"
                                            value="<?php if ($value) {
-                                               echo preg_replace('/uwp_/', '', $value, 1);
+                                               echo preg_replace('/uwp_'.$form_type.'_/', '', $value, 1);
                                            }?>" <?php if ($default) {
                                         echo 'readonly="readonly"';
                                     }?> />
