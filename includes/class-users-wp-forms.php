@@ -26,15 +26,12 @@ class Users_WP_Forms {
 
     }
 
-    public function display_notices() {
-        if( $out = get_transient( get_current_user_id().'missingfield' ) ) {
-            delete_transient( get_current_user_id().'missingfield' );
-            echo "<div class=\"error\"><p>$out</p></div>";
-        }
-    }
-
     public function handler()
     {
+        global $uwp_notices;
+
+        ob_start();
+
         if (isset($_POST['uwp_register_submit'])) {
             $this->register();
         } elseif (isset($_POST['uwp_login_submit'])) {
@@ -44,6 +41,15 @@ class Users_WP_Forms {
         } elseif (isset($_POST['uwp_account_submit'])) {
             $this->account();
         }
+
+        $uwp_notices = ob_get_contents();
+        ob_end_clean();
+
+    }
+
+    public function display_notices() {
+        global $uwp_notices;
+        echo $uwp_notices;
     }
 
     public function register() {
