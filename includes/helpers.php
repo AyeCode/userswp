@@ -149,3 +149,19 @@ function uwp_textarea_callback( $args ) {
 
     echo $html;
 }
+
+function uwp_checkbox_callback( $args ) {
+    global $uwp_options;
+
+    if ( isset( $args['faux'] ) && true === $args['faux'] ) {
+        $name = '';
+    } else {
+        $name = 'name="uwp_settings[' . $args['id'] . ']"';
+    }
+
+    $checked = isset( $uwp_options[ $args['id'] ] ) ? checked( 1, $uwp_options[ $args['id'] ], false ) : '';
+    $html = '<input type="checkbox" id="uwp_settings[' . $args['id'] . ']"' . $name . ' value="1" ' . $checked . '/>';
+    $html .= '<label for="uwp_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+    echo $html;
+}

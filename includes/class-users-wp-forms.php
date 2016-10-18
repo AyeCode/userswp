@@ -26,6 +26,13 @@ class Users_WP_Forms {
 
     }
 
+    public function display_notices() {
+        if( $out = get_transient( get_current_user_id().'missingfield' ) ) {
+            delete_transient( get_current_user_id().'missingfield' );
+            echo "<div class=\"error\"><p>$out</p></div>";
+        }
+    }
+
     public function handler()
     {
         if (isset($_POST['uwp_register_submit'])) {
@@ -86,15 +93,17 @@ class Users_WP_Forms {
         }
 
         //todo: recaptcha check
-        do_action('uwp_before_validate_register');
+        do_action('uwp_before_validate', 'register');
 
         $result = $this->validate_fields($data, 'register');
 
-        do_action('uwp_after_validate_register', $result);
+        $result = apply_filters('uwp_validate_result', $result, 'register');
 
         if (is_wp_error($result)) {
             return $result;
         }
+
+        do_action('uwp_after_validate', 'register');
 
         if ($errors->get_error_code())
             return $errors;
@@ -205,36 +214,34 @@ class Users_WP_Forms {
 
         $errors = new WP_Error();
 
-        $user_login = sanitize_user($data['uwp_login_username']);
-        // Check the username
-        if ($user_login == '') {
-            $errors->add('empty_username', __('<strong>Error</strong>: Please enter a username.', 'users-wp'));
-        } elseif (!validate_username($user_login)) {
-            $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'users-wp'));
-            $user_login = '';
+        do_action('uwp_before_validate', 'login');
+
+        $result = $this->validate_fields($data, 'login');
+
+        $result = apply_filters('uwp_validate_result', $result, 'login');
+
+        if (is_wp_error($result)) {
+            return $result;
         }
 
-        if ($data['uwp_login_password'] == '') {
-            $errors->add('empty_password', __('<strong>Error</strong>: Please enter your password.', 'users-wp'));
-        }
-        if ($errors->get_error_code())
-            return $errors;
+        do_action('uwp_after_validate', 'login');
 
         if ($data['remember_me'] == 'forever') {
             $remember_me = true;
         } else {
             $remember_me = false;
         }
-        $result = wp_signon(
+
+        $res = wp_signon(
             array(
-                'user_login' => $user_login,
-                'user_password' => $data['uwp_login_password'],
+                'user_login' => $result['uwp_login_username'],
+                'user_password' => $result['password'],
                 'remember' => $remember_me
             ),
             false
         );
 
-        if (is_wp_error($result)) {
+        if (is_wp_error($res)) {
             $errors->add('invalid_userorpass', __('<strong>Error</strong>: Invalid username or Password.', 'users-wp'));
             return $errors;
         } else {
@@ -462,6 +469,7 @@ class Users_WP_Forms {
                 }
 
 
+
                 if (($field->htmlvar_name == 'uwp_account_password' || $field->htmlvar_name == 'uwp_account_confirm_password') && empty($value)) {
                     $field->is_required = 0;
                 }
@@ -480,9 +488,7 @@ class Users_WP_Forms {
                     $errors->add('email_exists', __('<strong>Error</strong>: This email is already registered, please choose another one.', 'users-wp'));
                 }
 
-                //todo: move forgot form validation here
-
-                // Check the username
+                // Check the username for register
                 if ($field->htmlvar_name == 'uwp_register_username') {
                     if (!validate_username($sanitized_value)) {
                         $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'users-wp'));
@@ -492,22 +498,38 @@ class Users_WP_Forms {
                     }
                 }
 
+                // Check the username for login
+                if ($field->htmlvar_name == 'uwp_login_username') {
+                    if (!validate_username($sanitized_value)) {
+                        $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'users-wp'));
+                    }
+                }
+
+                //todo: move forgot form validation here
+
+
                 $validated_data[$field->htmlvar_name] = $sanitized_value;
 
             }
         }
 
-        if ($type == 'register' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
+        if ($type == 'login' || $type == 'register' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
             //check password
             if( empty( $data['uwp_'.$type.'_password'] ) ) {
                 $errors->add( 'empty_password', __( 'Please enter a password', 'users-wp' ) );
             }
 
-            if ($data['uwp_'.$type.'_password'] != $data['uwp_'.$type.'_confirm_password']) {
-                $errors->add('pass_match', __('ERROR: Passwords do not match.', 'users-wp'));
-            }
             if (strlen($data['uwp_'.$type.'_password']) < 7) {
                 $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', 'users-wp'));
+            }
+
+            $validated_data['password'] = $data['uwp_'.$type.'_password'];
+        }
+
+        if ($type == 'register' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
+            //check password
+            if ($data['uwp_'.$type.'_password'] != $data['uwp_'.$type.'_confirm_password']) {
+                $errors->add('pass_match', __('ERROR: Passwords do not match.', 'users-wp'));
             }
 
             $validated_data['password'] = $data['uwp_'.$type.'_password'];
