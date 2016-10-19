@@ -34,7 +34,7 @@ class Users_WP_i18n {
     public function load_plugin_textdomain() {
 
         load_plugin_textdomain(
-            'users-wp',
+            'uwp',
             false,
             dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
         );

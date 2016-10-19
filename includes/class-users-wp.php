@@ -216,6 +216,8 @@ class Users_WP {
         $this->loader->add_action( 'template_redirect', $templates, 'access_checks' );
         $this->loader->add_action( 'uwp_template_fields', $templates, 'uwp_template_fields', 10, 1 );
 
+        $this->loader->add_filter( 'the_content', $templates, 'uwp_author_page_content', 10, 1 );
+
     }
 
     private function define_shortcodes() {
@@ -235,7 +237,7 @@ class Users_WP {
     private function init_settings() {
 
         global $uwp_options;
-        $plugin_admin = new Users_WP_Admin( $this->get_plugin_name(), $this->get_version());
+        $plugin_admin = new Users_WP_Admin( $this->get_plugin_name(), $this->get_version()); //required to load dependencies
         $plugin_admin_settings = new Users_WP_Admin_Settings();
         $uwp_options = $plugin_admin_settings->uwp_get_settings();
 
@@ -248,6 +250,32 @@ class Users_WP {
         $this->loader->add_action('uwp_manage_available_fields_custom', $form_builder, 'uwp_manage_available_fields_custom');
         $this->loader->add_action('uwp_manage_available_fields', $form_builder, 'uwp_manage_available_fields');
         $this->loader->add_action('uwp_manage_selected_fields', $form_builder, 'uwp_manage_selected_fields');
+
+        $this->loader->add_filter('uwp_cfa_extra_fields_multiselect', $form_builder, 'uwp_cfa_extra_fields_smr', 10, 4);
+        $this->loader->add_filter('uwp_cfa_extra_fields_select', $form_builder, 'uwp_cfa_extra_fields_smr', 10, 4);
+        $this->loader->add_filter('uwp_cfa_extra_fields_radio', $form_builder, 'uwp_cfa_extra_fields_smr', 10, 4);
+
+        $this->loader->add_filter('uwp_cfa_extra_fields_datepicker', $form_builder, 'uwp_cfa_extra_fields_datepicker', 10, 4);
+
+        // htmlvar not needed for fieldset and taxonomy
+        $this->loader->add_filter('uwp_cfa_htmlvar_name_fieldset',$form_builder, 'return_empty_string',10,4);
+        $this->loader->add_filter('uwp_cfa_htmlvar_name_taxonomy',$form_builder, 'return_empty_string',10,4);
+
+
+        // default_value not needed for textarea, html, file, fieldset
+        $this->loader->add_filter('uwp_cfa_default_value_textarea',$form_builder, 'return_empty_string',10,4);
+        $this->loader->add_filter('uwp_cfa_default_value_html',$form_builder, 'return_empty_string',10,4);
+        $this->loader->add_filter('uwp_cfa_default_value_file',$form_builder, 'return_empty_string',10,4);
+        $this->loader->add_filter('uwp_cfa_default_value_fieldset',$form_builder, 'return_empty_string',10,4);
+
+        // is_required not needed for fieldset
+        $this->loader->add_filter('uwp_cfa_is_required_fieldset',$form_builder, 'return_empty_string',10,4);
+        $this->loader->add_filter('uwp_cfa_required_msg_fieldset',$form_builder, 'return_empty_string',10,4);
+
+        // field_icon not needed for fieldset
+        $this->loader->add_filter('uwp_cfa_field_icon_fieldset',$form_builder, 'return_empty_string',10,4);
+        $this->loader->add_filter('uwp_cfa_css_class_fieldset',$form_builder, 'return_empty_string',10,4);
+
     }
 
     public function init_ajax() {

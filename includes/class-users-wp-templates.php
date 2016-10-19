@@ -196,4 +196,13 @@ class Users_WP_Templates {
         }
     }
 
+    public function uwp_author_page_content($content) {
+        if (is_author()) {
+            return do_shortcode('[uwp_profile]');
+        } else {
+            return $content;
+        }
+
+    }
+
 }

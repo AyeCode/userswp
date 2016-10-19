@@ -69,9 +69,20 @@ function uwp_get_users() {
     return $uwp_users;
 }
 
+function uwp_comment_count($user_id) {
+    global $wpdb;
+
+    $count = $wpdb->get_var('
+             SELECT COUNT(comment_ID)
+             FROM ' . $wpdb->comments. '
+             WHERE user_id = "' . $user_id . '"'
+    );
+    return $count;
+}
+
 function uwp_missing_callback($args) {
     printf(
-        __( 'The callback function used for the %s setting is missing.', 'users-wp' ),
+        __( 'The callback function used for the %s setting is missing.', 'uwp' ),
         '<strong>' . $args['id'] . '</strong>'
     );
 }

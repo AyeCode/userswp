@@ -96,5 +96,7 @@ class Users_WP_Ajax {
             }
         }
 
+        wp_die();
+
     }
 }

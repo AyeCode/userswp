@@ -113,11 +113,11 @@ class Users_WP_Admin {
 
         $ajax_cons_data = array(
             'url' => admin_url('admin-ajax.php'),
-            'custom_field_not_blank_var' => __('HTML Variable Name must not be blank', 'users-wp'),
-            'custom_field_not_special_char' => __('Please do not use special character and spaces in HTML Variable Name.', 'users-wp'),
-            'custom_field_unique_name' => __('HTML Variable Name should be a unique name.', 'users-wp'),
-            'custom_field_delete' => __('Are you wish to delete this field?', 'users-wp'),
-            'custom_field_id_required' => __('This field is required.', 'users-wp'),
+            'custom_field_not_blank_var' => __('HTML Variable Name must not be blank', 'uwp'),
+            'custom_field_not_special_char' => __('Please do not use special character and spaces in HTML Variable Name.', 'uwp'),
+            'custom_field_unique_name' => __('HTML Variable Name should be a unique name.', 'uwp'),
+            'custom_field_delete' => __('Are you wish to delete this field?', 'uwp'),
+            'custom_field_id_required' => __('This field is required.', 'uwp'),
         );
         wp_localize_script($this->plugin_name, 'uwp_admin_ajax', $ajax_cons_data);
 

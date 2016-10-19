@@ -34,29 +34,12 @@ class Users_WP_Admin_Settings {
 
     }
 
-    //todo: remove this function
-    function users_wp_register_settings() {
-        //pages
-        register_setting( 'users-wp', 'uwp_user_profile_page' );
-        register_setting( 'users-wp', 'uwp_register_page' );
-        register_setting( 'users-wp', 'uwp_login_page' );
-        register_setting( 'users-wp', 'uwp_account_page' );
-        register_setting( 'users-wp', 'uwp_forgot_pass_page' );
-        register_setting( 'users-wp', 'uwp_users_list_page' );
-
-        do_action('users_wp_register_settings');
-
-        //recapcha
-        register_setting( 'users-wp', 'uwp_recaptcha_api_key' );
-        register_setting( 'users-wp', 'uwp_recaptcha_api_secret' );
-    }
-
     function users_wp_general_settings_page() {
 
         $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $this->get_settings_tabs() ) ? $_GET['tab'] : 'general';
         ?>
         <div class="wrap">
-            <h2><?php echo __( 'Page Settings', 'users-wp' ); ?></h2>
+            <h2><?php echo __( 'Page Settings', 'uwp' ); ?></h2>
 
             <div id="users-wp">
                 <div class="item-list-tabs content-box">
@@ -97,9 +80,9 @@ class Users_WP_Admin_Settings {
 
         $tabs = array();
 
-        $tabs['general']  = __( 'General', 'users-wp' );
-        $tabs['form_builder'] = __( 'Form Builder', 'users-wp' );
-        $tabs['notifications']   = __( 'Notifications', 'users-wp' );
+        $tabs['general']  = __( 'General', 'uwp' );
+        $tabs['form_builder'] = __( 'Form Builder', 'uwp' );
+        $tabs['notifications']   = __( 'Notifications', 'uwp' );
 
         return apply_filters( 'uwp_settings_tabs', $tabs );
     }
@@ -182,7 +165,7 @@ class Users_WP_Admin_Settings {
         <table class="uwp-form-table">
 
             <tr valign="top">
-                <th scope="row"><?php echo __( 'User Profile Shortcode', 'users-wp' ); ?></th>
+                <th scope="row"><?php echo __( 'User Profile Shortcode', 'uwp' ); ?></th>
                 <td>
                     <span class="short_code">[uwp_profile]</span>
                     <span class="description">This is the shortcode for the front end user's profile.</span>
@@ -191,7 +174,7 @@ class Users_WP_Admin_Settings {
             </tr>
 
             <tr valign="top">
-                <th scope="row"><?php echo __( 'Register Form Shortcode', 'users-wp' ); ?></th>
+                <th scope="row"><?php echo __( 'Register Form Shortcode', 'uwp' ); ?></th>
                 <td>
                     <span class="short_code">[uwp_register]</span>
                     <span class="description">This is the shortcode for the front end register form.</span>
@@ -200,7 +183,7 @@ class Users_WP_Admin_Settings {
             </tr>
 
             <tr valign="top">
-                <th scope="row"><?php echo __( 'Login Form Shortcode', 'users-wp' ); ?></th>
+                <th scope="row"><?php echo __( 'Login Form Shortcode', 'uwp' ); ?></th>
                 <td>
                     <span class="short_code">[uwp_login]</span>
                     <span class="description">This is the shortcode for the front end login form.</span>
@@ -209,7 +192,7 @@ class Users_WP_Admin_Settings {
             </tr>
 
             <tr valign="top">
-                <th scope="row"><?php echo __( 'Account Form Shortcode', 'users-wp' ); ?></th>
+                <th scope="row"><?php echo __( 'Account Form Shortcode', 'uwp' ); ?></th>
                 <td>
                     <span class="short_code">[uwp_account]</span>
                     <span class="description">This is the shortcode for the front end account form.</span>
@@ -218,7 +201,7 @@ class Users_WP_Admin_Settings {
             </tr>
 
             <tr valign="top">
-                <th scope="row"><?php echo __( 'Forgot Password Form Shortcode', 'users-wp' ); ?></th>
+                <th scope="row"><?php echo __( 'Forgot Password Form Shortcode', 'uwp' ); ?></th>
                 <td>
                     <span class="short_code">[uwp_forgot]</span>
                     <span class="description">This is the shortcode for the front end reset password form.</span>
@@ -227,7 +210,7 @@ class Users_WP_Admin_Settings {
             </tr>
 
             <tr valign="top">
-                <th scope="row"><?php echo __( 'Users List Shortcode', 'users-wp' ); ?></th>
+                <th scope="row"><?php echo __( 'Users List Shortcode', 'uwp' ); ?></th>
                 <td>
                     <span class="short_code">[uwp_users]</span>
                     <span class="description">This is the shortcode for the front end users list.</span>
@@ -242,7 +225,7 @@ class Users_WP_Admin_Settings {
     //subtabs
 
     public function get_general_general_content() {
-        $this->display_form(__('General Options', 'users-wp'));
+        $this->display_form(__('General Options', 'uwp'));
     }
     public function get_general_info_content() {
         ?>
@@ -325,7 +308,7 @@ class Users_WP_Admin_Settings {
     }
 
     public function get_recaptcha_content() {
-        $this->display_form(__('ReCaptcha Settings', 'users-wp'));
+        $this->display_form(__('ReCaptcha Settings', 'uwp'));
     }
 
     public function get_notifications_content() {
@@ -411,57 +394,57 @@ class Users_WP_Admin_Settings {
                 array(
                     'user_profile_page' => array(
                         'id' => 'user_profile_page',
-                        'name' => __( 'User Profile Page', 'users-wp' ),
-                        'desc' => __( 'This is the front end user\'s profile page. This page automatically override the default WordPress author page.', 'users-wp' ),
+                        'name' => __( 'User Profile Page', 'uwp' ),
+                        'desc' => __( 'This is the front end user\'s profile page. This page automatically override the default WordPress author page.', 'uwp' ),
                         'type' => 'select',
                         'options' => $this->uwp_get_pages(),
                         'chosen' => true,
-                        'placeholder' => __( 'Select a page', 'users-wp' )
+                        'placeholder' => __( 'Select a page', 'uwp' )
                     ),
                     'register_page' => array(
                         'id' => 'register_page',
-                        'name' => __( 'Register Page', 'users-wp' ),
-                        'desc' => __( 'This is the front end register page. This is where users creates their account.', 'users-wp' ),
+                        'name' => __( 'Register Page', 'uwp' ),
+                        'desc' => __( 'This is the front end register page. This is where users creates their account.', 'uwp' ),
                         'type' => 'select',
                         'options' => $this->uwp_get_pages(),
                         'chosen' => true,
-                        'placeholder' => __( 'Select a page', 'users-wp' )
+                        'placeholder' => __( 'Select a page', 'uwp' )
                     ),
                     'login_page' => array(
                         'id' => 'login_page',
-                        'name' => __( 'Login Page', 'users-wp' ),
-                        'desc' => __( 'This is the front end login page. This is where users will login after creating their account.', 'users-wp' ),
+                        'name' => __( 'Login Page', 'uwp' ),
+                        'desc' => __( 'This is the front end login page. This is where users will login after creating their account.', 'uwp' ),
                         'type' => 'select',
                         'options' => $this->uwp_get_pages(),
                         'chosen' => true,
-                        'placeholder' => __( 'Select a page', 'users-wp' )
+                        'placeholder' => __( 'Select a page', 'uwp' )
                     ),
                     'account_page' => array(
                         'id' => 'account_page',
-                        'name' => __( 'Account Page', 'users-wp' ),
-                        'desc' => __( 'This is the front end account page. This is where users can edit their account.', 'users-wp' ),
+                        'name' => __( 'Account Page', 'uwp' ),
+                        'desc' => __( 'This is the front end account page. This is where users can edit their account.', 'uwp' ),
                         'type' => 'select',
                         'options' => $this->uwp_get_pages(),
                         'chosen' => true,
-                        'placeholder' => __( 'Select a page', 'users-wp' )
+                        'placeholder' => __( 'Select a page', 'uwp' )
                     ),
                     'forgot_pass_page' => array(
                         'id' => 'forgot_pass_page',
-                        'name' => __( 'Forgot Password Page', 'users-wp' ),
-                        'desc' => __( 'This is the front end Forgot Password page. This is the page where users are sent to reset their password when they lose it.', 'users-wp' ),
+                        'name' => __( 'Forgot Password Page', 'uwp' ),
+                        'desc' => __( 'This is the front end Forgot Password page. This is the page where users are sent to reset their password when they lose it.', 'uwp' ),
                         'type' => 'select',
                         'options' => $this->uwp_get_pages(),
                         'chosen' => true,
-                        'placeholder' => __( 'Select a page', 'users-wp' )
+                        'placeholder' => __( 'Select a page', 'uwp' )
                     ),
                     'users_list_page' => array(
                         'id' => 'users_list_page',
-                        'name' => __( 'Users List Page', 'users-wp' ),
-                        'desc' => __( 'This is the front end Users List page. This is the page where all registered users of the websites are listed.', 'users-wp' ),
+                        'name' => __( 'Users List Page', 'uwp' ),
+                        'desc' => __( 'This is the front end Users List page. This is the page where all registered users of the websites are listed.', 'uwp' ),
                         'type' => 'select',
                         'options' => $this->uwp_get_pages(),
                         'chosen' => true,
-                        'placeholder' => __( 'Select a page', 'users-wp' )
+                        'placeholder' => __( 'Select a page', 'uwp' )
                     ),
                 )
             ),
@@ -469,33 +452,33 @@ class Users_WP_Admin_Settings {
                 array(
                     'registration_success_email_subject' => array(
                         'id' => 'registration_success_email_subject',
-                        'name' => __( 'Registration success email', 'users-wp' ),
+                        'name' => __( 'Registration success email', 'uwp' ),
                         'desc' => "",
                         'type' => 'text',
                         'size' => 'regular',
-                        'placeholder' => __( 'Enter Registration success email Subject', 'users-wp' )
+                        'placeholder' => __( 'Enter Registration success email Subject', 'uwp' )
                     ),
                     'registration_success_email_content' => array(
                         'id' => 'registration_success_email_content',
                         'name' => "",
                         'desc' => "",
                         'type' => 'textarea',
-                        'placeholder' => __( 'Enter Registration success email Content', 'users-wp' )
+                        'placeholder' => __( 'Enter Registration success email Content', 'uwp' )
                     ),
                     'forgot_password_email_subject' => array(
                         'id' => 'forgot_password_email_subject',
-                        'name' => __( 'Forgot password email', 'users-wp' ),
+                        'name' => __( 'Forgot password email', 'uwp' ),
                         'desc' => "",
                         'type' => 'text',
                         'size' => 'regular',
-                        'placeholder' => __( 'Enter forgot password email Subject', 'users-wp' )
+                        'placeholder' => __( 'Enter forgot password email Subject', 'uwp' )
                     ),
                     'forgot_password_email_content' => array(
                         'id' => 'forgot_password_email_content',
                         'name' => "",
                         'desc' => "",
                         'type' => 'textarea',
-                        'placeholder' => __( 'Enter forgot password email Content', 'users-wp' )
+                        'placeholder' => __( 'Enter forgot password email Content', 'uwp' )
                     ),
                 )
             ),
