@@ -37,19 +37,19 @@ class Users_WP_Form_Builder {
                 <div class="uwp-side-sortables" id="uwp-available-fields">
                     <h3 class="hndle">
                     <span>
-                        <?php echo apply_filters('uwp_form_builder_available_fields_head', __('Add new form field', 'users-wp')); ?>
+                        <?php echo apply_filters('uwp_form_builder_available_fields_head', __('Add new form field', 'uwp')); ?>
                     </span>
                     </h3>
 
                     <p>
                         <?php
-                        $note = sprintf(__('Click on any box below to add a field of that type on '.$form_type.' form. You must be use a fieldset to group your fields.', 'users-wp'));
+                        $note = sprintf(__('Click on any box below to add a field of that type on '.$form_type.' form. You must be use a fieldset to group your fields.', 'uwp'));
                         echo apply_filters('uwp_form_builder_available_fields_note', $note);
                         ?>
                     </p>
 
                     <h3>
-                        <?php _e('Setup New Field','users-wp'); ?>
+                        <?php _e('Setup New Field' ,'uwp'); ?>
                     </h3>
 
                     <div class="inside">
@@ -59,24 +59,24 @@ class Users_WP_Form_Builder {
                     </div>
 
                     <h3>
-                        <?php _e('Predefined Fields','users-wp'); ?>
+                        <?php _e('Predefined Fields' ,'uwp'); ?>
                     </h3>
 
                     <div class="inside">
-                        <div id="uwp-form-builder-tab" class="uwp-tabs-panel">
+                        <div id="uwp-form-builder-tab-predefined" class="uwp-tabs-panel">
                             <?php do_action('uwp_manage_available_fields_predefined'); ?>
                         </div>
                     </div>
 
-                    <h3>
-                        <?php _e('Custom Fields','users-wp'); ?>
-                    </h3>
-
-                    <div class="inside">
-                        <div id="uwp-form-builder-tab" class="uwp-tabs-panel">
-                            <?php do_action('uwp_manage_available_fields_custom'); ?>
-                        </div>
-                    </div>
+<!--                    <h3>-->
+<!--                        --><?php //_e('Custom Fields' ,'uwp'); ?>
+<!--                    </h3>-->
+<!---->
+<!--                    <div class="inside">-->
+<!--                        <div id="uwp-form-builder-tab-custom" class="uwp-tabs-panel">-->
+<!--                            --><?php //do_action('uwp_manage_available_fields_custom'); ?>
+<!--                        </div>-->
+<!--                    </div>-->
 
                 </div>
 
@@ -86,19 +86,19 @@ class Users_WP_Form_Builder {
                     <h3 class="hndle">
                         <span>
                             <?php
-                            $title = __('List of fields those will appear on add new listing form', 'users-wp');
+                            $title = __('List of fields those will appear on add new listing form', 'uwp');
                             echo apply_filters('uwp_form_builder_selected_fields_head', $title); ?>
                         </span>
                     </h3>
 
                     <p>
                         <?php
-                        $note = __('Click to expand and view field related settings. You may drag and drop to arrange fields order on '.$form_type.' form too.', 'users-wp');
+                        $note = __('Click to expand and view field related settings. You may drag and drop to arrange fields order on '.$form_type.' form too.', 'uwp');
                         echo apply_filters('uwp_form_builder_selected_fields_note', $note); ?>
                     </p>
 
                     <div class="inside">
-                        <div id="uwp-form-builder-tab" class="uwp-tabs-panel">
+                        <div id="uwp-form-builder-tab-selected" class="uwp-tabs-panel">
                             <div class="field_row_main">
                                 <?php do_action('uwp_manage_selected_fields'); ?>
                             </div>
@@ -130,7 +130,7 @@ class Users_WP_Form_Builder {
             <ul class="full uwp-tooltip-wrap">
                 <li>
                     <div class="uwp-tooltip">
-                        <?php _e('This adds a section separator with a title.', 'users-wp');?>
+                        <?php _e('This adds a section separator with a title.', 'uwp');?>
                     </div>
                     <a id="uwp-fieldset"
                        class="uwp-draggable-form-items uwp-fieldset"
@@ -141,7 +141,7 @@ class Users_WP_Form_Builder {
 
                         <i class="fa fa-long-arrow-left " aria-hidden="true"></i>
                         <i class="fa fa-long-arrow-right " aria-hidden="true"></i>
-                        <?php _e('Fieldset (section separator)', 'users-wp');?>
+                        <?php _e('Fieldset (section separator)', 'uwp');?>
                     </a>
                 </li>
             </ul>
@@ -180,7 +180,7 @@ class Users_WP_Form_Builder {
                 <?php
             }
         }else{
-            _e('There are no custom fields here yet.', 'users-wp');
+            _e('There are no custom fields here yet.', 'uwp');
         }
         ?>
         </ul>
@@ -439,11 +439,11 @@ class Users_WP_Form_Builder {
 
         // Country
         $custom_fields['country'] = array( // The key value should be unique and not contain any spaces.
-            'field_type'  =>  'text',
+            'field_type'  =>  'select',
             'class'       =>  'uwp-country',
             'icon'        =>  'fa fa-map-marker',
-            'name'        =>  __('Country', 'users-wp'),
-            'description' =>  __('Adds a input for Country field.', 'users-wp'),
+            'name'        =>  __('Country', 'uwp'),
+            'description' =>  __('Adds a input for Country field.', 'uwp'),
             'defaults'    => array(
                 'admin_title'         =>  'Country',
                 'site_title'          =>  'Country',
@@ -460,11 +460,11 @@ class Users_WP_Form_Builder {
 
         // Gender
         $custom_fields['gender'] = array( // The key value should be unique and not contain any spaces.
-            'field_type'  =>  'text',
+            'field_type'  =>  'select',
             'class'       =>  'uwp-gender',
             'icon'        =>  'fa fa-user',
-            'name'        =>  __('Gender', 'users-wp'),
-            'description' =>  __('Adds a input for Gender field.', 'users-wp'),
+            'name'        =>  __('Gender', 'uwp'),
+            'description' =>  __('Adds a input for Gender field.', 'uwp'),
             'defaults'    => array(
                 'admin_title'         =>  'Gender',
                 'site_title'          =>  'Gender',
@@ -472,7 +472,7 @@ class Users_WP_Form_Builder {
                 'is_active'           =>  1,
                 'default_value'       =>  '',
                 'is_required'         =>  0,
-                'option_values'       =>  __('Select Gender/,Male,Female,Other','users-wp'),
+                'option_values'       =>  __('Select Gender/,Male,Female,Other' ,'uwp'),
                 'required_msg'        =>  '',
                 'field_icon'          =>  'fa fa-user',
                 'css_class'           =>  ''
@@ -484,8 +484,8 @@ class Users_WP_Form_Builder {
             'field_type'  =>  'phone',
             'class'       =>  'uwp-mobile',
             'icon'        =>  'fa fa-mobile',
-            'name'        =>  __('Mobile', 'users-wp'),
-            'description' =>  __('Adds a input for Mobile field.', 'users-wp'),
+            'name'        =>  __('Mobile', 'uwp'),
+            'description' =>  __('Adds a input for Mobile field.', 'uwp'),
             'defaults'    => array(
                 'admin_title'         =>  'Mobile',
                 'site_title'          =>  'Mobile',
@@ -504,8 +504,8 @@ class Users_WP_Form_Builder {
             'field_type'  =>  'text',
             'class'       =>  'uwp-facebook',
             'icon'        =>  'fa fa-facebook',
-            'name'        =>  __('Facebook', 'users-wp'),
-            'description' =>  __('Adds a input for Facebook field.', 'users-wp'),
+            'name'        =>  __('Facebook', 'uwp'),
+            'description' =>  __('Adds a input for Facebook field.', 'uwp'),
             'defaults'    => array(
                 'admin_title'         =>  'Facebook',
                 'site_title'          =>  'Facebook',
@@ -524,8 +524,8 @@ class Users_WP_Form_Builder {
             'field_type'  =>  'text',
             'class'       =>  'uwp-twitter',
             'icon'        =>  'fa fa-twitter',
-            'name'        =>  __('Twitter', 'users-wp'),
-            'description' =>  __('Adds a input for Twitter field.', 'users-wp'),
+            'name'        =>  __('Twitter', 'uwp'),
+            'description' =>  __('Adds a input for Twitter field.', 'uwp'),
             'defaults'    => array(
                 'admin_title'         =>  'Twitter',
                 'site_title'          =>  'Twitter',
@@ -544,8 +544,8 @@ class Users_WP_Form_Builder {
             'field_type'  =>  'text',
             'class'       =>  'uwp-youtube',
             'icon'        =>  'fa fa-youtube',
-            'name'        =>  __('Youtube', 'users-wp'),
-            'description' =>  __('Adds a input for Youtube field.', 'users-wp'),
+            'name'        =>  __('Youtube', 'uwp'),
+            'description' =>  __('Adds a input for Youtube field.', 'uwp'),
             'defaults'    => array(
                 'admin_title'         =>  'Youtube',
                 'site_title'          =>  'Youtube',
@@ -564,8 +564,8 @@ class Users_WP_Form_Builder {
             'field_type'  =>  'text',
             'class'       =>  'uwp-instagram',
             'icon'        =>  'fa fa-instagram',
-            'name'        =>  __('Instagram', 'users-wp'),
-            'description' =>  __('Adds a input for Instagram field.', 'users-wp'),
+            'name'        =>  __('Instagram', 'uwp'),
+            'description' =>  __('Adds a input for Instagram field.', 'uwp'),
             'defaults'    => array(
                 'admin_title'         =>  'Instagram',
                 'site_title'          =>  'Instagram',
@@ -584,8 +584,8 @@ class Users_WP_Form_Builder {
             'field_type'  =>  'text',
             'class'       =>  'uwp-soundcloud',
             'icon'        =>  'fa fa-soundcloud',
-            'name'        =>  __('Soundcloud', 'users-wp'),
-            'description' =>  __('Adds a input for Soundcloud field.', 'users-wp'),
+            'name'        =>  __('Soundcloud', 'uwp'),
+            'description' =>  __('Adds a input for Soundcloud field.', 'uwp'),
             'defaults'    => array(
                 'admin_title'         =>  'Soundcloud',
                 'site_title'          =>  'Soundcloud',
@@ -604,8 +604,8 @@ class Users_WP_Form_Builder {
             'field_type'  =>  'text',
             'class'       =>  'uwp-reddit',
             'icon'        =>  'fa fa-reddit',
-            'name'        =>  __('Reddit', 'users-wp'),
-            'description' =>  __('Adds a input for Reddit field.', 'users-wp'),
+            'name'        =>  __('Reddit', 'uwp'),
+            'description' =>  __('Adds a input for Reddit field.', 'uwp'),
             'defaults'    => array(
                 'admin_title'         =>  'Reddit',
                 'site_title'          =>  'Reddit',
@@ -624,8 +624,8 @@ class Users_WP_Form_Builder {
             'field_type'  =>  'text',
             'class'       =>  'uwp-skype',
             'icon'        =>  'fa fa-skype',
-            'name'        =>  __('Skype', 'users-wp'),
-            'description' =>  __('Adds a input for Skype field.', 'users-wp'),
+            'name'        =>  __('Skype', 'uwp'),
+            'description' =>  __('Adds a input for Skype field.', 'uwp'),
             'defaults'    => array(
                 'admin_title'         =>  'Skype',
                 'site_title'          =>  'Skype',
@@ -654,78 +654,78 @@ class Users_WP_Form_Builder {
                 'field_type'  =>  'text',
                 'class' =>  'uwp-text',
                 'icon'  =>  'fa fa-minus',
-                'name'  =>  __('Text', 'users-wp'),
-                'description' =>  __('Add any sort of text field, text or numbers', 'users-wp')
+                'name'  =>  __('Text', 'uwp'),
+                'description' =>  __('Add any sort of text field, text or numbers', 'uwp')
             ),
             'datepicker' => array(
                 'field_type'  =>  'datepicker',
                 'class' =>  'uwp-datepicker',
                 'icon'  =>  'fa fa-calendar',
-                'name'  =>  __('Date', 'users-wp'),
-                'description' =>  __('Adds a date picker.', 'users-wp')
+                'name'  =>  __('Date', 'uwp'),
+                'description' =>  __('Adds a date picker.', 'uwp')
             ),
             'textarea' => array(
                 'field_type'  =>  'textarea',
                 'class' =>  'uwp-textarea',
                 'icon'  =>  'fa fa-bars',
-                'name'  =>  __('Textarea', 'users-wp'),
-                'description' =>  __('Adds a textarea', 'users-wp')
+                'name'  =>  __('Textarea', 'uwp'),
+                'description' =>  __('Adds a textarea', 'uwp')
             ),
             'time' => array(
                 'field_type'  =>  'time',
                 'class' =>  'uwp-time',
                 'icon' =>  'fa fa-clock-o',
-                'name'  =>  __('Time', 'users-wp'),
-                'description' =>  __('Adds a time picker', 'users-wp')
+                'name'  =>  __('Time', 'uwp'),
+                'description' =>  __('Adds a time picker', 'uwp')
             ),
             'checkbox' => array(
                 'field_type'  =>  'checkbox',
                 'class' =>  'uwp-checkbox',
                 'icon' =>  'fa fa-check-square-o',
-                'name'  =>  __('Checkbox', 'users-wp'),
-                'description' =>  __('Adds a checkbox', 'users-wp')
+                'name'  =>  __('Checkbox', 'uwp'),
+                'description' =>  __('Adds a checkbox', 'uwp')
             ),
             'phone' => array(
                 'field_type'  =>  'phone',
                 'class' =>  'uwp-phone',
                 'icon' =>  'fa fa-phone',
-                'name'  =>  __('Phone', 'users-wp'),
-                'description' =>  __('Adds a phone input', 'users-wp')
+                'name'  =>  __('Phone', 'uwp'),
+                'description' =>  __('Adds a phone input', 'uwp')
             ),
             'radio' => array(
                 'field_type'  =>  'radio',
                 'class' =>  'uwp-radio',
                 'icon' =>  'fa fa-dot-circle-o',
-                'name'  =>  __('Radio', 'users-wp'),
-                'description' =>  __('Adds a radio input', 'users-wp')
+                'name'  =>  __('Radio', 'uwp'),
+                'description' =>  __('Adds a radio input', 'uwp')
             ),
             'email' => array(
                 'field_type'  =>  'email',
                 'class' =>  'uwp-email',
                 'icon' =>  'fa fa-envelope-o',
-                'name'  =>  __('Email', 'users-wp'),
-                'description' =>  __('Adds a email input', 'users-wp')
+                'name'  =>  __('Email', 'uwp'),
+                'description' =>  __('Adds a email input', 'uwp')
             ),
             'select' => array(
                 'field_type'  =>  'select',
                 'class' =>  'uwp-select',
                 'icon' =>  'fa fa-caret-square-o-down',
-                'name'  =>  __('Select', 'users-wp'),
-                'description' =>  __('Adds a select input', 'users-wp')
+                'name'  =>  __('Select', 'uwp'),
+                'description' =>  __('Adds a select input', 'uwp')
             ),
             'multiselect' => array(
                 'field_type'  =>  'multiselect',
                 'class' =>  'uwp-multiselect',
                 'icon' =>  'fa fa-caret-square-o-down',
-                'name'  =>  __('Multi Select', 'users-wp'),
-                'description' =>  __('Adds a multiselect input', 'users-wp')
+                'name'  =>  __('Multi Select', 'uwp'),
+                'description' =>  __('Adds a multiselect input', 'uwp')
             ),
             'url' => array(
                 'field_type'  =>  'url',
                 'class' =>  'uwp-url',
                 'icon' =>  'fa fa-link',
-                'name'  =>  __('URL', 'users-wp'),
-                'description' =>  __('Adds a url input', 'users-wp')
+                'name'  =>  __('URL', 'uwp'),
+                'description' =>  __('Adds a url input', 'uwp')
             ),
         );
 
@@ -734,8 +734,6 @@ class Users_WP_Form_Builder {
 
 
     public function uwp_manage_available_fields_predefined(){
-        global $uwp_options;
-        var_dump($uwp_options);
         $this->uwp_custom_available_fields('predefined');
     }
 
@@ -827,7 +825,7 @@ class Users_WP_Form_Builder {
         ?>
         <li class="text" id="licontainer_<?php echo $result_str; ?>">
             <div class="title title<?php echo $result_str; ?> uwp-fieldset"
-                 title="<?php _e('Double Click to toggle and drag-drop to sort', 'users-wp'); ?>"
+                 title="<?php _e('Double Click to toggle and drag-drop to sort', 'uwp'); ?>"
                  ondblclick="show_hide('field_frm<?php echo $result_str; ?>')">
                 <?php
 
@@ -835,9 +833,9 @@ class Users_WP_Form_Builder {
                 ?>
 
                 <?php if ($default): ?>
-                    <div title="<?php _e('Default field, should not be removed.', 'users-wp'); ?>" class="handlediv move gd-default-remove"><i class="fa fa-times" aria-hidden="true"></i></div>
+                    <div title="<?php _e('Default field, should not be removed.', 'uwp'); ?>" class="handlediv move gd-default-remove"><i class="fa fa-times" aria-hidden="true"></i></div>
                 <?php else: ?>
-                    <div title="<?php _e('Click to remove field', 'users-wp'); ?>"
+                    <div title="<?php _e('Click to remove field', 'uwp'); ?>"
                          onclick="delete_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>')"
                          class="handlediv close"><i class="fa fa-times" aria-hidden="true"></i></div>
                 <?php endif;
@@ -846,7 +844,7 @@ class Users_WP_Form_Builder {
                     <i class="fa fa-long-arrow-left " aria-hidden="true"></i>
                     <i class="fa fa-long-arrow-right " aria-hidden="true"></i>
                     <b style="cursor:pointer;"
-                       onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo $this->uwp_ucwords(__('Fieldset:', 'users-wp') . ' ' . $field_site_title);?></b>
+                       onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo $this->uwp_ucwords(__('Fieldset:', 'uwp') . ' ' . $field_site_title);?></b>
                     <?php
                 } else {echo $field_icon;
                     ?>
@@ -890,12 +888,12 @@ class Users_WP_Form_Builder {
                             }
                             ?>
                             <li>
-                                <label for="site_title" class="uwp-tooltip-wrap"> <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Form Label :', 'users-wp'); ?>
+                                <label for="site_title" class="uwp-tooltip-wrap"> <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Form Label :', 'uwp'); ?>
                                     <div class="uwp-tooltip">
-                                        <?php _e('This will be the label for the field on the form.', 'users-wp'); ?>
+                                        <?php _e('This will be the label for the field on the form.', 'uwp'); ?>
                                     </div>
                                 </label>
-                                <div class="gd-cf-input-wrap">
+                                <div class="uwp-input-wrap">
                                     <input type="text" name="site_title" id="site_title"
                                            value="<?php echo $value; ?>"/>
                                 </div>
@@ -918,13 +916,13 @@ class Users_WP_Form_Builder {
                             }
                             ?>
                             <li>
-                                <label for="htmlvar_name" class="uwp-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('HTML variable name :', 'users-wp');?>
+                                <label for="htmlvar_name" class="uwp-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('HTML variable name :', 'uwp');?>
                                     <div class="uwp-tooltip">
-                                        <?php _e('This is a unique identifier used in the HTML, it MUST NOT contain spaces or special characters.', 'users-wp'); ?>
+                                        <?php _e('This is a unique identifier used in the HTML, it MUST NOT contain spaces or special characters.', 'uwp'); ?>
                                     </div>
                                 </label>
-                                <div class="gd-cf-input-wrap">
-                                    <input type="text" name="htmlvar_name" id="htmlvar_name" pattern="[a-zA-Z0-9]+" title="<?php _e('Must not contain spaces or special characters', 'users-wp');?>"
+                                <div class="uwp-input-wrap">
+                                    <input type="text" name="htmlvar_name" id="htmlvar_name" pattern="[a-zA-Z0-9]+" title="<?php _e('Must not contain spaces or special characters', 'uwp');?>"
                                            value="<?php if ($value) {
                                                echo preg_replace('/uwp_'.$form_type.'_/', '', $value, 1);
                                            }?>" <?php if ($default) {
@@ -950,24 +948,24 @@ class Users_WP_Form_Builder {
                             }
                             ?>
                             <li <?php echo $field_display; ?>>
-                                <label for="is_active" class="uwp-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Is active :', 'users-wp'); ?>
+                                <label for="is_active" class="uwp-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Is active :', 'uwp'); ?>
                                     <div class="uwp-tooltip">
-                                        <?php _e('If no is selected then the field will not be displayed anywhere.', 'users-wp'); ?>
+                                        <?php _e('If no is selected then the field will not be displayed anywhere.', 'uwp'); ?>
                                     </div>
                                 </label>
-                                <div class="gd-cf-input-wrap gd-switch">
+                                <div class="uwp-input-wrap gd-switch">
 
                                     <input type="radio" id="is_active_yes<?php echo $radio_id;?>" name="is_active" class="gdri-enabled"  value="1"
                                         <?php if ($value == '1') {
                                             echo 'checked';
                                         } ?>/>
-                                    <label for="is_active_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'users-wp'); ?></span></label>
+                                    <label for="is_active_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'uwp'); ?></span></label>
 
                                     <input type="radio" id="is_active_no<?php echo $radio_id;?>" name="is_active" class="gdri-disabled" value="0"
                                         <?php if ($value == '0' || !$value) {
                                             echo 'checked';
                                         } ?>/>
-                                    <label for="is_active_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'users-wp'); ?></span></label>
+                                    <label for="is_active_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'uwp'); ?></span></label>
 
                                 </div>
                             </li>
@@ -989,27 +987,27 @@ class Users_WP_Form_Builder {
                             }
                             ?>
                             <li>
-                                <label for="default_value" class="uwp-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Default value :', 'users-wp');?>
+                                <label for="default_value" class="uwp-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Default value :', 'uwp');?>
                                     <div class="uwp-tooltip">
                                         <?php
                                         if ($field_type == 'checkbox') {
-                                            _e('Should the checkbox be checked by default?', 'users-wp');
+                                            _e('Should the checkbox be checked by default?', 'uwp');
                                         } else if ($field_type == 'email') {
-                                            _e('A default value for the field, usually blank. Ex: info@mysite.com', 'users-wp');
+                                            _e('A default value for the field, usually blank. Ex: info@mysite.com', 'uwp');
                                         } else {
-                                            _e('A default value for the field, usually blank. (for "link" this will be used as the link text)', 'users-wp');
+                                            _e('A default value for the field, usually blank. (for "link" this will be used as the link text)', 'uwp');
                                         }
                                         ?>
                                     </div>
                                 </label>
-                                <div class="gd-cf-input-wrap">
+                                <div class="uwp-input-wrap">
                                     <?php if ($field_type == 'checkbox') { ?>
                                         <select name="default_value" id="default_value">
-                                            <option value=""><?php _e('Unchecked', 'users-wp'); ?></option>
-                                            <option value="1" <?php selected(true, (int)$value === 1);?>><?php _e('Checked', 'users-wp'); ?></option>
+                                            <option value=""><?php _e('Unchecked', 'uwp'); ?></option>
+                                            <option value="1" <?php selected(true, (int)$value === 1);?>><?php _e('Checked', 'uwp'); ?></option>
                                         </select>
                                     <?php } else if ($field_type == 'email') { ?>
-                                        <input type="email" name="default_value" placeholder="<?php _e('info@mysite.com', 'users-wp') ;?>" id="default_value" value="<?php echo esc_attr($value);?>" /><br/>
+                                        <input type="email" name="default_value" placeholder="<?php _e('info@mysite.com', 'uwp') ;?>" id="default_value" value="<?php echo esc_attr($value);?>" /><br/>
                                     <?php } else { ?>
                                         <input type="text" name="default_value" id="default_value" value="<?php echo esc_attr($value);?>" /><br/>
                                     <?php } ?>
@@ -1050,25 +1048,25 @@ class Users_WP_Form_Builder {
                             }
                             ?>
                             <li>
-                                <label for="is_required" class="uwp-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Is required :', 'users-wp'); ?>
+                                <label for="is_required" class="uwp-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Is required :', 'uwp'); ?>
                                     <div class="uwp-tooltip">
-                                        <?php _e('Select yes to set field as required', 'users-wp'); ?>
+                                        <?php _e('Select yes to set field as required', 'uwp'); ?>
                                     </div>
                                 </label>
 
-                                <div class="gd-cf-input-wrap gd-switch">
+                                <div class="uwp-input-wrap gd-switch">
 
                                     <input type="radio" id="is_required_yes<?php echo $radio_id;?>" name="is_required" class="gdri-enabled"  value="1"
                                         <?php if ($value == '1') {
                                             echo 'checked';
                                         } ?>/>
-                                    <label onclick="show_hide_radio(this,'show','cf-is-required-msg');" for="is_required_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'users-wp'); ?></span></label>
+                                    <label onclick="show_hide_radio(this,'show','cf-is-required-msg');" for="is_required_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'uwp'); ?></span></label>
 
                                     <input type="radio" id="is_required_no<?php echo $radio_id;?>" name="is_required" class="gdri-disabled" value="0"
                                         <?php if ($value == '0' || !$value) {
                                             echo 'checked';
                                         } ?>/>
-                                    <label onclick="show_hide_radio(this,'hide','cf-is-required-msg');" for="is_required_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'users-wp'); ?></span></label>
+                                    <label onclick="show_hide_radio(this,'hide','cf-is-required-msg');" for="is_required_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'uwp'); ?></span></label>
 
                                 </div>
 
@@ -1092,12 +1090,12 @@ class Users_WP_Form_Builder {
                             ?>
                             <li class="cf-is-required-msg" <?php if ((isset($field_info->is_required) && $field_info->is_required == '0') || !isset($field_info->is_required)) {echo "style='display:none;'";}?>>
                                 <label for="required_msg" class="uwp-tooltip-wrap">
-                                    <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Required message:', 'users-wp'); ?>
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Required message:', 'uwp'); ?>
                                     <div class="uwp-tooltip">
-                                        <?php _e('Enter text for the error message if the field is required and has not fulfilled the requirements.', 'users-wp'); ?>
+                                        <?php _e('Enter text for the error message if the field is required and has not fulfilled the requirements.', 'uwp'); ?>
                                     </div>
                                 </label>
-                                <div class="gd-cf-input-wrap">
+                                <div class="uwp-input-wrap">
                                     <input type="text" name="required_msg" id="required_msg"
                                            value="<?php echo esc_attr($value); ?>"/>
                                 </div>
@@ -1138,12 +1136,12 @@ class Users_WP_Form_Builder {
                             <li>
 
                                 <label for="field_icon" class="uwp-tooltip-wrap">
-                                    <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Upload icon :', 'users-wp'); ?>
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Upload icon :', 'uwp'); ?>
                                     <div class="uwp-tooltip">
-                                        <?php _e('Upload icon using media and enter its url path, or enter <a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank" >font awesome </a>class eg:"fa fa-home"', 'users-wp');?>
+                                        <?php _e('Upload icon using media and enter its url path, or enter <a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank" >font awesome </a>class eg:"fa fa-home"', 'uwp');?>
                                     </div>
                                 </label>
-                                <div class="gd-cf-input-wrap">
+                                <div class="uwp-input-wrap">
                                     <input type="text" name="field_icon" id="field_icon"
                                            value="<?php echo $value;?>"/>
                                 </div>
@@ -1169,13 +1167,13 @@ class Users_WP_Form_Builder {
                             <li>
 
                                 <label for="css_class" class="uwp-tooltip-wrap">
-                                    <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Css class :', 'users-wp'); ?>
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Css class :', 'uwp'); ?>
                                     <div class="uwp-tooltip">
-                                        <?php _e('Enter custom css class for field custom style.', 'users-wp');?>
-                                        <?php if($field_type=='multiselect'){_e('(Enter class `gd-comma-list` to show list as comma separated)', 'users-wp');}?>
+                                        <?php _e('Enter custom css class for field custom style.', 'uwp');?>
+                                        <?php if($field_type=='multiselect'){_e('(Enter class `gd-comma-list` to show list as comma separated)', 'uwp');}?>
                                     </div>
                                 </label>
-                                <div class="gd-cf-input-wrap">
+                                <div class="uwp-input-wrap">
                                     <input type="text" name="css_class" id="css_class"
                                            value="<?php if (isset($field_info->css_class)) {
                                                echo esc_attr($field_info->css_class);
@@ -1204,11 +1202,11 @@ class Users_WP_Form_Builder {
 
                             <label for="save" class="uwp-tooltip-wrap">
                             </label>
-                            <div class="gd-cf-input-wrap">
-                                <input type="button" class="button button-primary" name="save" id="save" value="<?php echo esc_attr(__('Save','users-wp'));?>"
+                            <div class="uwp-input-wrap">
+                                <input type="button" class="button button-primary" name="save" id="save" value="<?php echo esc_attr(__('Save' ,'uwp'));?>"
                                        onclick="save_field('<?php echo esc_attr($result_str); ?>')"/>
                                 <?php if (!$default): ?>
-                                    <a href="javascript:void(0)"><input type="button" name="delete" value="<?php echo esc_attr(__('Delete','users-wp'));?>"
+                                    <a href="javascript:void(0)"><input type="button" name="delete" value="<?php echo esc_attr(__('Delete' ,'uwp'));?>"
                                                                         onclick="delete_field('<?php echo esc_attr($result_str); ?>', '<?php echo $nonce; ?>')"
                                                                         class="button"/></a>
                                 <?php endif; ?>
@@ -1525,6 +1523,194 @@ class Users_WP_Form_Builder {
                 return 0;
         } else
             return 0;
+    }
+
+    public function uwp_cfa_extra_fields_smr($output,$result_str,$cf,$field_info){
+
+        ob_start();
+
+        $value = '';
+        if (isset($field_info->option_values)) {
+            $value = esc_attr($field_info->option_values);
+        }elseif(isset($cf['defaults']['option_values']) && $cf['defaults']['option_values']){
+            $value = esc_attr($cf['defaults']['option_values']);
+        }
+
+        $field_type = isset($field_info->field_type) ? $field_info->field_type : '';
+        ?>
+        <li>
+            <label for="option_values" class="uwp-tooltip-wrap">
+                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Option Values :', 'uwp'); ?>
+                <div class="uwp-tooltip">
+                    <span><?php _e('Option Values should be separated by comma.', 'uwp');?></span>
+                    <br/>
+                    <small><span><?php _e('If using for a "tick filter" place a / and then either a 1 for true or 0 for false', 'uwp');?></span>
+                        <br/>
+                        <span><?php _e('eg: "No Dogs Allowed/0,Dogs Allowed/1" (Select only, not multiselect)', 'uwp');?></span>
+                        <?php if ($field_type == 'multiselect' || $field_type == 'select') { ?>
+                            <br/>
+                            <span><?php _e('- If using OPTGROUP tag to grouping options, use "{optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"', 'uwp'); ?></span>
+                            <br/>
+                            <span><?php _e('eg: "{optgroup}Pets Allowed|No Dogs Allowed/0,Dogs Allowed/1{/optgroup},{optgroup}Sports|Cricket/Cricket,Football/Football,Hockey{/optgroup}"', 'uwp'); ?></span>
+                        <?php } ?></small>
+                </div>
+            </label>
+            <div class="uwp-input-wrap">
+                <input type="text" name="option_values" id="option_values"
+                       value="<?php echo $value;?>"/>
+                <br/>
+
+            </div>
+        </li>
+        <?php
+
+        $html = ob_get_clean();
+        return $output.$html;
+    }
+
+    public function uwp_cfa_extra_fields_datepicker($output,$result_str,$cf,$field_info){
+        ob_start();
+        $extra = array();
+        if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
+            $extra = unserialize($field_info->extra_fields);
+        }
+        ?>
+        <li>
+            <label for="date_format" class="uwp-tooltip-wrap">
+                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Date Format :', 'uwp'); ?>
+                <div class="uwp-tooltip">
+                    <?php _e('Select the date format.', 'uwp');?>
+                </div>
+            </label>
+            <div class="uwp-input-wrap" style="overflow:inherit;">
+                <?php
+                $date_formats = array(
+                    'm/d/Y',
+                    'd/m/Y',
+                    'Y/m/d',
+                    'm-d-Y',
+                    'd-m-Y',
+                    'Y-m-d',
+                    'F j, Y',
+                );
+                
+                $date_formats = apply_filters('uwp_date_formats',$date_formats);
+                ?>
+                <select name="extra[date_format]" id="date_format">
+                    <?php
+                    foreach($date_formats as $format){
+                        $selected = '';
+                        if(!empty($extra) && esc_attr($extra['date_format'])==$format){
+                            $selected = "selected='selected'";
+                        }
+                        echo "<option $selected value='$format'>$format       (".date_i18n( $format, time()).")</option>";
+                    }
+                    ?>
+                </select>
+
+            </div>
+        </li>
+        <?php
+
+        $html = ob_get_clean();
+        return $output.$html;
+    }
+
+    public function uwp_cfa_extra_fields_file($output,$result_str,$cf,$field_info){
+        ob_start();
+        $allowed_file_types = $this->uwp_allowed_mime_types();
+
+        $extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
+        $gd_file_types = !empty($extra_fields) && !empty($extra_fields['uwp_file_types']) ? $extra_fields['uwp_file_types'] : array('*');
+        ?>
+        <li>
+            <label for="gd_file_types" class="uwp-tooltip-wrap">
+                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Allowed file types :', 'uwp'); ?>
+                <div class="uwp-tooltip">
+                    <?php _e('Select file types to allowed for file uploading. (Select multiple file types by holding down "Ctrl" key.)', 'uwp');?>
+                </div>
+            </label>
+            <div class="uwp-input-wrap">
+                <select name="extra[uwp_file_types][]" id="uwp_file_types" multiple="multiple" style="height:100px;width:90%;">
+                    <option value="*" <?php selected(true, in_array('*', $gd_file_types));?>><?php _e('All types', 'uwp') ;?></option>
+                    <?php foreach ( $allowed_file_types as $format => $types ) { ?>
+                        <optgroup label="<?php echo esc_attr( wp_sprintf(__('%s formats', 'uwp'), __($format, 'uwp') ) ) ;?>">
+                            <?php foreach ( $types as $ext => $type ) { ?>
+                                <option value="<?php echo esc_attr($ext) ;?>" <?php selected(true, in_array($ext, $gd_file_types));?>><?php echo '.' . $ext ;?></option>
+                            <?php } ?>
+                        </optgroup>
+                    <?php } ?>
+                </select>
+            </div>
+        </li>
+        <?php
+
+        $html = ob_get_clean();
+        return $output.$html;
+    }
+
+    public function uwp_allowed_mime_types() {
+        return apply_filters( 'uwp_allowed_mime_types', array(
+                'Image'       => array( // Image formats.
+                    'jpg'  => 'image/jpeg',
+                    'jpe'  => 'image/jpeg',
+                    'jpeg' => 'image/jpeg',
+                    'gif'  => 'image/gif',
+                    'png'  => 'image/png',
+                    'bmp'  => 'image/bmp',
+                    'ico'  => 'image/x-icon',
+                ),
+                'Video'       => array( // Video formats.
+                    'asf'  => 'video/x-ms-asf',
+                    'avi'  => 'video/avi',
+                    'flv'  => 'video/x-flv',
+                    'mkv'  => 'video/x-matroska',
+                    'mp4'  => 'video/mp4',
+                    'mpeg' => 'video/mpeg',
+                    'mpg'  => 'video/mpeg',
+                    'wmv'  => 'video/x-ms-wmv',
+                    '3gp'  => 'video/3gpp',
+                ),
+                'Audio'       => array( // Audio formats.
+                    'ogg' => 'audio/ogg',
+                    'mp3' => 'audio/mpeg',
+                    'wav' => 'audio/wav',
+                    'wma' => 'audio/x-ms-wma',
+                ),
+                'Text'        => array( // Text formats.
+                    'css'  => 'text/css',
+                    'csv'  => 'text/csv',
+                    'htm'  => 'text/html',
+                    'html' => 'text/html',
+                    'txt'  => 'text/plain',
+                    'rtx'  => 'text/richtext',
+                    'vtt'  => 'text/vtt',
+                ),
+                'Application' => array( // Application formats.
+                    'doc'  => 'application/msword',
+                    'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'exe'  => 'application/x-msdownload',
+                    'js'   => 'application/javascript',
+                    'odt'  => 'application/vnd.oasis.opendocument.text',
+                    'pdf'  => 'application/pdf',
+                    'pot'  => 'application/vnd.ms-powerpoint',
+                    'ppt'  => 'application/vnd.ms-powerpoint',
+                    'pptx' => 'application/vnd.ms-powerpoint',
+                    'psd'  => 'application/octet-stream',
+                    'rar'  => 'application/rar',
+                    'rtf'  => 'application/rtf',
+                    'swf'  => 'application/x-shockwave-flash',
+                    'tar'  => 'application/x-tar',
+                    'xls'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'zip'  => 'application/zip',
+                )
+            )
+        );
+    }
+
+    public function return_empty_string() {
+        return "";
     }
 
 }

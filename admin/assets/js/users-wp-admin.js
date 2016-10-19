@@ -85,15 +85,15 @@ function validate_field(field) {
 }
 
 jQuery(document).ready(function () {
-    jQuery("#uwp-form-builder-tab").find("ul li a").click(function () {
+    jQuery("#uwp-form-builder-tab, #uwp-form-builder-tab-predefined").find("ul li a").click(function () {
         if(!jQuery(this).attr('id')){return;}
         var type = jQuery(this).data("field-type");
         var type_key = jQuery(this).data("field-type-key");
         var custom_type = jQuery(this).data("field-custom-type");
-        var form_type = jQuery(this).closest('#uwp-form-builder-tab').find('#form_type').val();
+        var form_type = jQuery(this).closest('#uwp-form-builder-tab, #uwp-form-builder-tab-predefined').find('#form_type').val();
         var id = 'new' + jQuery(".field_row_main ul.core li:last").index();
         var manage_field_type = jQuery(this).closest('#uwp-available-fields').find(".manage_field_type").val();
-        if (manage_field_type == 'custom_fields' || manage_field_type == 'sorting_options') {
+        if (manage_field_type == 'custom_fields') {
             jQuery.get(uwp_admin_ajax.url + '?action=uwp_ajax_action&create_field=true', {
                 field_type: type,
                 field_type_key: type_key,
@@ -111,9 +111,6 @@ jQuery(document).ready(function () {
                 }, 1000);
 
             });
-            if (manage_field_type == 'sorting_options') {
-                jQuery(this).closest('li').hide();
-            }
         }
     });
     jQuery(".field_row_main ul.core").sortable({

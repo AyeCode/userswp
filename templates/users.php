@@ -18,13 +18,17 @@
             foreach ($users as $user) {
                 ?>
                 <li class="uwp-users-list-user">
-                    <div class="uwp-users-list-user-avatar"><?php echo $user['avatar']; ?></div>
-                    <div class="uwp-users-list-user-name">
-                        <h3><a href="<?php echo $user['link']; ?>"><?php echo $user['name']; ?></a></h3>
+                    <div class="uwp-users-list-user-left">
+                        <div class="uwp-users-list-user-avatar"><?php echo $user['avatar']; ?></div>
                     </div>
-                    <div class="uwp-users-list-user-social"><i class="fa fa-facebook-official"></i> &nbsp; <i class="fa fa-twitter-square"></i> </div>
-                    <div class="uwp-users-list-user-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua… <a href="#">More</a></div>
-                    <div class="clfx"></div>
+                    <div class="uwp-users-list-user-right">
+                        <div class="uwp-users-list-user-name">
+                            <h3><a href="<?php echo $user['link']; ?>"><?php echo $user['name']; ?></a></h3>
+                        </div>
+                        <div class="uwp-users-list-user-social"><i class="fa fa-facebook-official"></i> &nbsp; <i class="fa fa-twitter-square"></i> </div>
+                        <div class="uwp-users-list-user-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua… <a href="#">More</a></div>
+                        <div class="clfx"></div>
+                    </div>
                 </li>
             <?php
             }

@@ -46,7 +46,7 @@ class Users_WP_Extension_Activation {
         if ( isset( $plugins[$this->plugin_path . '/' . $this->plugin_file]['Name'] ) ) {
             $this->plugin_name = str_replace( 'UsersWP - ', '', $plugins[$this->plugin_path . '/' . $this->plugin_file]['Name'] );
         } else {
-            $this->plugin_name = __( 'This plugin', 'users-wp' );
+            $this->plugin_name = __( 'This plugin', 'uwp' );
         }
 
         // Is UsersWP installed?
@@ -80,9 +80,9 @@ class Users_WP_Extension_Activation {
      */
     public function missing_uwp_notice() {
         if ( $this->is_uwp_installed ) {
-            echo '<div class="error"><p>' . $this->plugin_name . sprintf( __( ' requires %sUsersWP%s. Please activate it to continue.', 'users-wp' ), '<a href="https://wpgeodirectory.com/users-wp/" title="UsersWP" target="_blank">', '</a>' ) . '</p></div>';
+            echo '<div class="error"><p>' . $this->plugin_name . sprintf( __( ' requires %sUsersWP%s. Please activate it to continue.', 'uwp' ), '<a href="https://wpgeodirectory.com/users-wp/" title="UsersWP" target="_blank">', '</a>' ) . '</p></div>';
         } else {
-            echo '<div class="error"><p>' . $this->plugin_name . sprintf( __( ' requires %sUsersWP%s. Please install it to continue.', 'users-wp' ), '<a href="https://wpgeodirectory.com/users-wp/" title="UsersWP" target="_blank">', '</a>' ) . '</p></div>';
+            echo '<div class="error"><p>' . $this->plugin_name . sprintf( __( ' requires %sUsersWP%s. Please install it to continue.', 'uwp' ), '<a href="https://wpgeodirectory.com/users-wp/" title="UsersWP" target="_blank">', '</a>' ) . '</p></div>';
         }
     }
 }
