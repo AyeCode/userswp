@@ -109,6 +109,7 @@ class Users_WP_Admin {
          * class.
          */
 
+        wp_enqueue_script('jquery-ui-sortable');
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.js', array( 'jquery' ), $this->version, false );
 
         $ajax_cons_data = array(

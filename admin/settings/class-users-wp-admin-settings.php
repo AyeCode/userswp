@@ -358,6 +358,7 @@ class Users_WP_Admin_Settings {
                     array(
                         'section'     => $tab,
                         'id'          => isset( $option['id'] )          ? $option['id']          : null,
+                        'class'       => isset( $option['class'] )       ? $option['class']       : null,
                         'desc'        => ! empty( $option['desc'] )      ? $option['desc']        : '',
                         'name'        => isset( $option['name'] )        ? $option['name']        : null,
                         'size'        => isset( $option['size'] )        ? $option['size']        : null,

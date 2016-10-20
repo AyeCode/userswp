@@ -1,46 +1,47 @@
 <?php
 function uwp_get_page_link($page) {
+    global $uwp_options;
 
     $link = "";
 
     switch ($page) {
         case 'register':
-            $page_id = esc_attr( get_option('uwp_register_page', false));
+            $page_id = isset($uwp_options['register_page']) ? esc_attr( $uwp_options['register_page']) : false;
             if ($page_id) {
                 $link = get_permalink($page_id);
             }
             break;
 
         case 'login':
-            $page_id = esc_attr( get_option('uwp_login_page', false));
+            $page_id = isset($uwp_options['login_page']) ? esc_attr( $uwp_options['login_page']) : false;
             if ($page_id) {
                 $link = get_permalink($page_id);
             }
             break;
 
         case 'forgot':
-            $page_id = esc_attr( get_option('uwp_forgot_pass_page', false));
+            $page_id = isset($uwp_options['forgot_pass_page']) ? esc_attr( $uwp_options['forgot_pass_page']) : false;
             if ($page_id) {
                 $link = get_permalink($page_id);
             }
             break;
 
         case 'account':
-            $page_id = esc_attr( get_option('uwp_account_page', false));
+            $page_id = isset($uwp_options['account_page']) ? esc_attr( $uwp_options['account_page']) : false;
             if ($page_id) {
                 $link = get_permalink($page_id);
             }
             break;
 
         case 'profile':
-            $page_id = esc_attr( get_option('uwp_user_profile_page', false));
+            $page_id = isset($uwp_options['user_profile_page']) ? esc_attr( $uwp_options['user_profile_page']) : false;
             if ($page_id) {
                 $link = get_permalink($page_id);
             }
             break;
 
         case 'users':
-            $page_id = esc_attr( get_option('uwp_users_list_page', false));
+            $page_id = isset($uwp_options['users_list_page']) ? esc_attr( $uwp_options['users_list_page']) : false;
             if ($page_id) {
                 $link = get_permalink($page_id);
             }

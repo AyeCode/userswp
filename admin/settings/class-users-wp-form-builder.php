@@ -757,6 +757,8 @@ class Users_WP_Form_Builder {
         $table_name = $wpdb->prefix . 'uwp_custom_fields';
         $form_type = (isset($_REQUEST['subtab']) && $_REQUEST['subtab'] != '') ? sanitize_text_field($_REQUEST['subtab']) : 'register';
         ?>
+        <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type;?>"/>
+        <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">
         <ul class="core">
             <?php
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s ORDER BY sort_order ASC", array($form_type)));

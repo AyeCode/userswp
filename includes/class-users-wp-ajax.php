@@ -9,6 +9,7 @@ class Users_WP_Ajax {
 
     public function handler()
     {
+        global $uwp_options;
         if ((isset($_REQUEST['uwp_ajax']) && $_REQUEST['uwp_ajax'] == 'admin_ajax') || isset($_REQUEST['create_field']) || isset($_REQUEST['sort_create_field'])) {
             if (current_user_can('manage_options')) {
                 if (isset($_REQUEST['create_field'])) {
@@ -16,7 +17,7 @@ class Users_WP_Ajax {
                     $this->uwp_die();
                 }
             } else {
-                $login_page = esc_attr( get_option('uwp_login_page', false));
+                $login_page = isset($uwp_options['login_page']) ? esc_attr( $uwp_options['login_page']) : false;
                 if ($login_page) {
                     wp_redirect(get_permalink($login_page));
                 } else {
