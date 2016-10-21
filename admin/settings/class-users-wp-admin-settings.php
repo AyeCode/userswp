@@ -272,12 +272,6 @@ class Users_WP_Admin_Settings {
                 <li id="uwp-form-builder-register-li" class="<?php if ($subtab == 'register') { echo "current selected"; } ?>">
                     <a id="uwp-form-builder-register" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'register')); ?>">Register</a>
                 </li>
-                <li id="uwp-form-builder-login-li" class="<?php if ($subtab == 'login') { echo "current selected"; } ?>">
-                    <a id="uwp-form-builder-login" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'login')); ?>">Login</a>
-                </li>
-                <li id="uwp-form-builder-forgot-li" class="<?php if ($subtab == 'forgot') { echo "current selected"; } ?>">
-                    <a id="uwp-form-builder-forgot" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'forgot')); ?>">Forgot</a>
-                </li>
                 <li id="uwp-form-builder-account-li" class="<?php if ($subtab == 'account') { echo "current selected"; } ?>">
                     <a id="uwp-form-builder-account" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'account')); ?>">Account</a>
                 </li>
@@ -287,16 +281,6 @@ class Users_WP_Admin_Settings {
         if ($subtab == 'register') {
             ?>
             <h3 class="users_wp_section_heading">Manage Register Form Fields</h3>
-            <?php
-            $form_builder->uwp_form_builder();
-        } elseif ($subtab == 'login') {
-            ?>
-            <h3 class="users_wp_section_heading">Manage Login Form Fields</h3>
-            <?php
-            $form_builder->uwp_form_builder();
-        } elseif ($subtab == 'forgot') {
-            ?>
-            <h3 class="users_wp_section_heading">Manage Forgot Form Fields</h3>
             <?php
             $form_builder->uwp_form_builder();
         } elseif ($subtab == 'account') {

@@ -70,6 +70,19 @@ function uwp_get_users() {
     return $uwp_users;
 }
 
+function uwp_post_count($user_id) {
+    global $wpdb;
+
+    $count = $wpdb->get_var('
+             SELECT COUNT(ID)
+             FROM ' . $wpdb->posts. '
+             WHERE post_author = "' . $user_id . '"
+             AND post_status = "publish"
+             AND post_type = "post"'
+    );
+    return $count;
+}
+
 function uwp_comment_count($user_id) {
     global $wpdb;
 

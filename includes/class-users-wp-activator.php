@@ -365,6 +365,17 @@ class Users_WP_Activator {
 
         $fields[] = array(
             'form_type' => 'account',
+            'field_type' => 'textarea',
+            'site_title' => __('Bio', 'uwp'),
+            'htmlvar_name' => 'bio',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_required' => '1'
+        );
+
+        $fields[] = array(
+            'form_type' => 'account',
             'field_type' => 'text',
             'site_title' => __('Password', 'uwp'),
             'htmlvar_name' => 'password',
