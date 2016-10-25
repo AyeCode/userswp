@@ -133,25 +133,29 @@
   padding-bottom: 5px;
 }
 
-.uwp-profile-post-label, .uwp-profile-comment-label {
+.uwp-profile-tab-label {
   display: block;
   font-size: 11px;
   line-height: 11px;
   text-align: center;
+  text-transform: uppercase;
 }
 
-.uwp-profile-post-count, .uwp-profile-comment-count {
+.uwp-profile-tab-count {
   display: block;
   font-size: 18px;
   line-height: 18px;
   text-align: center;
+  padding-top: 5px
 }
 
 .uwp-profile-nav .active {
   border-bottom: 3px solid #ccc;
 }
 
-.uwp-profile-nav a {
+.uwp-profile-nav a,
+.uwp-profile-nav a:active,
+.uwp-profile-nav a:visited {
   color: #717171;
   text-decoration: none;
 }

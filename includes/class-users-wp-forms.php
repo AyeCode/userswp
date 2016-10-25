@@ -587,9 +587,15 @@ class Users_WP_Forms {
         }
 
         if (empty($data)) {
+            // no extra fields. so just return
             return true;
         } else {
             foreach($data as $key => $value) {
+                // Register and Account form extra fields should be saved under common name
+                // So it can be created and updated on the same meta.
+                // For this reason, lets replace all register meta keys with account meta keys
+                // todo: instead of using separate meta, use a single meta for all values
+                $key = str_replace('uwp_register_', 'uwp_account_', $key);
                 update_user_meta($user_id, $key, $value);
             }
             return true;

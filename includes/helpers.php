@@ -117,7 +117,7 @@ function uwp_select_callback($args) {
     }
 
     if ( isset( $args['chosen'] ) ) {
-        $chosen = 'class="uwp-chosen"';
+        $chosen = "class='uwp-chosen'".($args['multiple'] ? "[]' multiple='multiple' style='height:auto'" : "'");
     } else {
         $chosen = '';
     }

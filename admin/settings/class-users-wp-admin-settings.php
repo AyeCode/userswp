@@ -295,6 +295,10 @@ class Users_WP_Admin_Settings {
         $this->display_form(__('ReCaptcha Settings', 'uwp'));
     }
 
+    public function get_geodirectory_content() {
+        $this->display_form(__('GeoDirectory Settings', 'uwp'));
+    }
+
     public function get_notifications_content() {
         ?>
         <h3 class="users_wp_section_heading">Email Notifications</h3>
@@ -356,6 +360,7 @@ class Users_WP_Admin_Settings {
                         'allow_blank' => isset( $option['allow_blank'] ) ? $option['allow_blank'] : true,
                         'readonly'    => isset( $option['readonly'] )    ? $option['readonly']    : false,
                         'faux'        => isset( $option['faux'] )        ? $option['faux']        : false,
+                        'multiple'        => isset( $option['multiple'] )        ? $option['multiple']        : false,
                     )
                 );
             }
@@ -474,7 +479,9 @@ class Users_WP_Admin_Settings {
             ),
         );
 
-        return apply_filters( 'uwp_registered_settings', $uwp_settings );
+        $uwp_settings = apply_filters( 'uwp_registered_settings', $uwp_settings );
+
+        return $uwp_settings;
     }
 
     public function uwp_get_settings() {

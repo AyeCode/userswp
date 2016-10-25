@@ -128,6 +128,11 @@ class Users_WP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-templates.php';
 
         /**
+         * The class responsible for defining profile content
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-profile.php';
+
+        /**
          * The class responsible for defining all shortcodes
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-shortcodes.php';
@@ -190,6 +195,7 @@ class Users_WP {
         $this->loader->add_action( 'uwp_settings_general_tab_content', $plugin_admin_settings, 'get_general_content' );
         $this->loader->add_action( 'uwp_settings_form_builder_tab_content', $plugin_admin_settings, 'get_form_builder_content' );
         $this->loader->add_action( 'uwp_settings_recaptcha_tab_content', $plugin_admin_settings, 'get_recaptcha_content' );
+        $this->loader->add_action( 'uwp_settings_geodirectory_tab_content', $plugin_admin_settings, 'get_geodirectory_content' );
         $this->loader->add_action( 'uwp_settings_notifications_tab_content', $plugin_admin_settings, 'get_notifications_content' );
 
     }
@@ -208,6 +214,8 @@ class Users_WP {
         $forms = new Users_WP_Forms();
         $templates = new Users_WP_Templates($this->loader);
 
+        $profile = new Users_WP_Profile($this->loader);
+
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
@@ -217,6 +225,17 @@ class Users_WP {
         $this->loader->add_action( 'uwp_template_fields', $templates, 'uwp_template_fields', 10, 1 );
 
         $this->loader->add_filter( 'the_content', $templates, 'uwp_author_page_content', 10, 1 );
+
+        //profile page
+        $this->loader->add_action( 'uwp_profile_header', $profile, 'get_profile_header', 10, 1 );
+        $this->loader->add_action( 'uwp_profile_title', $profile, 'get_profile_title', 10, 1 );
+        $this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_bio', 10, 1 );
+        $this->loader->add_action( 'uwp_profile_social', $profile, 'get_profile_social', 10, 1 );
+
+        $this->loader->add_action( 'uwp_profile_content', $profile, 'get_profile_tabs_content', 10, 1 );
+        $this->loader->add_action( 'uwp_profile_pagination', $profile, 'get_profile_pagination');
+        $this->loader->add_action( 'uwp_profile_posts_tab_content', $profile, 'get_profile_posts');
+        $this->loader->add_action( 'uwp_profile_comments_tab_content', $profile, 'get_profile_comments');
 
     }
 
