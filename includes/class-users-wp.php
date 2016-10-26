@@ -227,6 +227,12 @@ class Users_WP {
         $this->loader->add_filter( 'the_content', $templates, 'uwp_author_page_content', 10, 1 );
 
         //profile page
+        $this->loader->add_filter('query_vars', $profile, 'profile_query_vars', 10, 1 );
+        $this->loader->add_action('init', $profile, 'rewrite_profile_link' , 10, 1 );
+        //$this->loader->add_filter( 'uwp_profile_link', $profile, 'view_profile_link', 10, 2 );
+        $this->loader->add_filter( 'uwp_profile_link', $profile, 'get_profile_link', 10, 2 );
+        $this->loader->add_filter( 'the_title', $profile, 'modify_profile_page_title', 10, 2 );
+
         $this->loader->add_action( 'uwp_profile_header', $profile, 'get_profile_header', 10, 1 );
         $this->loader->add_action( 'uwp_profile_title', $profile, 'get_profile_title', 10, 1 );
         $this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_bio', 10, 1 );
@@ -234,8 +240,8 @@ class Users_WP {
 
         $this->loader->add_action( 'uwp_profile_content', $profile, 'get_profile_tabs_content', 10, 1 );
         $this->loader->add_action( 'uwp_profile_pagination', $profile, 'get_profile_pagination');
-        $this->loader->add_action( 'uwp_profile_posts_tab_content', $profile, 'get_profile_posts');
-        $this->loader->add_action( 'uwp_profile_comments_tab_content', $profile, 'get_profile_comments');
+        $this->loader->add_action( 'uwp_profile_posts_tab_content', $profile, 'get_profile_posts', 10, 1);
+        $this->loader->add_action( 'uwp_profile_comments_tab_content', $profile, 'get_profile_comments', 10, 1);
 
     }
 

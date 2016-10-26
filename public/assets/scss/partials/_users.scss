@@ -90,7 +90,8 @@ ul.uwp-users-list-wrap.grid {
   }
 
   .uwp-profile-main {
-    .uwp-profile-nav {
+    .uwp-profile-nav,
+    .uwp-profile-subnav {
       ul {
         display: inline-block;
         li {

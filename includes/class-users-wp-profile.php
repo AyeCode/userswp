@@ -75,35 +75,32 @@ class Users_WP_Profile {
         <?php
     }
 
-    public function get_profile_tabs() {
-
-        //todo: fix this
-        $author_id = get_current_user_id();
+    public function get_profile_tabs($user) {
 
         $tabs = array();
 
         $tabs['posts']  = array(
             'title' => __( 'Posts', 'uwp' ),
-            'count' => uwp_post_count($author_id)
+            'count' => uwp_post_count($user->ID, 'post')
         );
         $tabs['comments'] = array(
             'title' => __( 'Comments', 'uwp' ),
-            'count' => uwp_comment_count($author_id)
+            'count' => uwp_comment_count($user->ID)
         );
 
-        return apply_filters( 'uwp_profile_tabs', $tabs );
+        return apply_filters( 'uwp_profile_tabs', $tabs, $user );
     }
 
-    function get_profile_tabs_content() {
+    function get_profile_tabs_content($user) {
         global $uwp_options;
         $account_page = isset($uwp_options['account_page']) ? esc_attr( $uwp_options['account_page']) : false;
-        $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $this->get_profile_tabs() ) ? $_GET['tab'] : 'posts';
+        $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $this->get_profile_tabs($user) ) ? $_GET['tab'] : 'posts';
         ?>
         <div class="uwp-profile-content">
             <div class="uwp-profile-nav">
                 <ul class="item-list-tabs-ul">
                     <?php
-                    foreach( $this->get_profile_tabs() as $tab_id => $tab ) {
+                    foreach( $this->get_profile_tabs($user) as $tab_id => $tab ) {
 
                         $tab_url = add_query_arg( array(
                             'tab' => $tab_id,
@@ -131,7 +128,7 @@ class Users_WP_Profile {
 
             <div class="uwp-profile-entries">
                 <?php
-                do_action('uwp_profile_'.$active_tab.'_tab_content');
+                do_action('uwp_profile_'.$active_tab.'_tab_content', $user);
                 ?>
             </div>
         </div>
@@ -157,10 +154,7 @@ class Users_WP_Profile {
         <?php
     }
 
-    function get_profile_posts() {
-        //todo: fix this
-        $author_id = get_current_user_id();
-        $user = get_user_by('id', $author_id);
+    function get_profile_posts($user) {
         ?>
         <h3><?php echo $user->display_name; ?>’s Posts</h3>
 
@@ -172,7 +166,7 @@ class Users_WP_Profile {
                 'post_type' => 'post',
                 'post_status' => 'publish',
                 'posts_per_page' => 10,
-                'author' => $author_id,
+                'author' => $user->ID,
                 'paged' => $paged,
             );
             // The Query
@@ -228,10 +222,8 @@ class Users_WP_Profile {
         <?php
     }
 
-    function get_profile_comments() {
+    function get_profile_comments($user) {
         //todo: fix this
-        $author_id = get_current_user_id();
-        $user = get_user_by('id', $author_id);
         ?>
         <h3><?php echo $user->display_name; ?>’s Comments</h3>
 
@@ -298,6 +290,94 @@ class Users_WP_Profile {
             ?>
         </div>
         <?php
+    }
+
+    public function view_profile_link( $link, $id ) {
+        global $uwp_options;
+        $page_id = isset($uwp_options['user_profile_page']) ? esc_attr( $uwp_options['user_profile_page']) : false;
+        if ($page_id) {
+            $link = add_query_arg( array( 'uwp_profile' => $id ), get_page_link( $page_id ) );
+        } else {
+            $link = get_author_posts_url( $id );
+        }
+        return $link;
+    }
+
+    public function rewrite_profile_link() {
+        global $uwp_options;
+        $page_id = isset($uwp_options['user_profile_page']) ? esc_attr( $uwp_options['user_profile_page']) : false;
+
+        if ($page_id && !isset($_REQUEST['page_id'])) {
+            $link = get_page_link($page_id);
+            $uwp_profile_link = rtrim(substr(str_replace(home_url(), '', $link), 1), '/') . '/';
+            $uwp_profile_link_with_slash = '^' . $uwp_profile_link . '([^/]+)/?';
+            $uwp_profile_link_empty_slash = '^' . $uwp_profile_link . '([^/]+)?';
+            $uwp_profile_page_id = url_to_postid($link);
+
+            add_rewrite_rule($uwp_profile_link_empty_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]', 'top');
+            add_rewrite_rule($uwp_profile_link_with_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]', 'top');
+        }
+    }
+
+    public function profile_query_vars($query_vars) {
+        $query_vars[] = 'uwp_profile';
+        return $query_vars;
+    }
+
+    public function get_profile_link($link, $user_id) {
+        global $uwp_options;
+        $page_id = isset($uwp_options['user_profile_page']) ? esc_attr( $uwp_options['user_profile_page']) : false;
+
+        if ($page_id) {
+            $link = get_permalink($page_id);
+        } else {
+            $link = '';
+        }
+
+        if ($link != '') {
+
+            if (isset($_REQUEST['page_id'])) {
+                $permalink_structure = 'DEFAULT';
+            } else {
+                $permalink_structure = 'CUSTOM';
+                // Add forward slash if not available
+                $link = rtrim($link, '/') . '/';
+            }
+
+
+            $url_type = 1;
+
+            if ($url_type && 2 == $url_type) {
+                $username = get_the_author_meta('user_login', $user_id);
+                if ('DEFAULT' == $permalink_structure) {
+                    return add_query_arg(array('username' => $username), $link);
+                } else {
+                    $username = str_replace('@', '-at-', $username);
+                    return $link . $username;
+                }
+            } else {
+                if ('DEFAULT' == $permalink_structure) {
+                    return add_query_arg(array('viewuser' => $user_id), $link);
+                } else {
+                    return $link . $user_id;
+                }
+            }
+        } else {
+            return '';
+        }
+    }
+
+    public function modify_profile_page_title( $title, $id = null ) {
+
+        global $uwp_options, $wp_query;
+        $page_id = isset($uwp_options['user_profile_page']) ? esc_attr( $uwp_options['user_profile_page']) : false;
+
+        if ($page_id == $id && isset($wp_query->query_vars['uwp_profile'])) {
+            $user = get_user_by('id', $wp_query->query_vars['uwp_profile']);
+            $title = $user->display_name;
+        }
+
+        return $title;
     }
 
 }

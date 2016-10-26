@@ -553,7 +553,8 @@ class Users_WP_Admin_Settings {
         // Merge our new settings with the existing
         $output = array_merge( $uwp_options, $input );
 
-        add_settings_error( 'uwp-notices', '', __( 'Settings updated.', 'easy-digital-downloads' ), 'updated' );
+        flush_rewrite_rules();
+        add_settings_error( 'uwp-notices', '', __( 'Settings updated.', 'uwp' ), 'updated' );
 
         return $output;
     }

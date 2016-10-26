@@ -58,6 +58,7 @@ function uwp_get_users() {
     $users = get_users( array( 'number' => '20' ) );
     foreach ( $users as $user ) {
         $uwp_users[] = array(
+            'id' => $user->ID,
             'name' => $user->display_name,
             'avatar' => get_avatar( $user->user_email, 128 ),
             'link'  => get_author_posts_url($user->ID),
@@ -70,7 +71,7 @@ function uwp_get_users() {
     return $uwp_users;
 }
 
-function uwp_post_count($user_id) {
+function uwp_post_count($user_id, $post_type) {
     global $wpdb;
 
     $count = $wpdb->get_var('
@@ -78,7 +79,7 @@ function uwp_post_count($user_id) {
              FROM ' . $wpdb->posts. '
              WHERE post_author = "' . $user_id . '"
              AND post_status = "publish"
-             AND post_type = "post"'
+             AND post_type = "' . $post_type . '"'
     );
     return $count;
 }
