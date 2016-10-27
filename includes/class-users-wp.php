@@ -229,7 +229,6 @@ class Users_WP {
         //profile page
         $this->loader->add_filter('query_vars', $profile, 'profile_query_vars', 10, 1 );
         $this->loader->add_action('init', $profile, 'rewrite_profile_link' , 10, 1 );
-        //$this->loader->add_filter( 'uwp_profile_link', $profile, 'view_profile_link', 10, 2 );
         $this->loader->add_filter( 'uwp_profile_link', $profile, 'get_profile_link', 10, 2 );
         $this->loader->add_filter( 'the_title', $profile, 'modify_profile_page_title', 10, 2 );
 

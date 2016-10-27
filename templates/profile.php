@@ -1,7 +1,6 @@
 <?php do_action('uwp_template_before', 'profile'); ?>
 <?php
-global $wp_query;
-$author_id = $wp_query->query_vars['uwp_profile'];
+$author_id = get_query_var('uwp_profile');
 $user = get_user_by('id', $author_id);
 ?>
 <div class="uwp-content-wrap">

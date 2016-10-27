@@ -74,11 +74,18 @@ function uwp_get_users() {
 function uwp_post_count($user_id, $post_type) {
     global $wpdb;
 
+    $post_status = "";
+    if ($user_id == get_current_user_id()) {
+        $post_status = ' OR post_status = "draft" OR post_status = "private"';
+    }
+
+    $post_status_where = ' AND ( post_status = "publish" ' . $post_status . ' )';
+
     $count = $wpdb->get_var('
              SELECT COUNT(ID)
              FROM ' . $wpdb->posts. '
              WHERE post_author = "' . $user_id . '"
-             AND post_status = "publish"
+             ' . $post_status_where . '
              AND post_type = "' . $post_type . '"'
     );
     return $count;
@@ -190,4 +197,66 @@ function uwp_checkbox_callback( $args ) {
     $html .= '<label for="uwp_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
 
     echo $html;
+}
+
+function uwp_build_profile_tab_url($user_id, $tab = false, $subtab = false) {
+
+    $link = apply_filters('uwp_profile_link', get_author_posts_url($user_id), $user_id);
+
+    if ($link != '') {
+        if (isset($_REQUEST['page_id'])) {
+            $permalink_structure = 'DEFAULT';
+        } else {
+            $permalink_structure = 'CUSTOM';
+            $link = rtrim($link, '/') . '/';
+        }
+
+        if ('DEFAULT' == $permalink_structure) {
+            $link = add_query_arg(
+                array(
+                    'uwp_tab' => $tab,
+                    'uwp_subtab' => $subtab
+                ),
+                $link
+            );
+        } else {
+            if ($tab) {
+                $link = $link . $tab;
+            }
+
+            if ($subtab) {
+                $link = $link .'/'.$subtab;
+            }
+        }
+    }
+
+    return $link;
+
+}
+
+function uwp_geodir_get_reviews_by_user_id($post_type = 'gd_place', $user_id, $count_only = false, $offset = 0, $limit = 20)
+{
+    global $wpdb;
+
+    if ($count_only) {
+        $results = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(overall_rating) FROM " . GEODIR_REVIEW_TABLE . " WHERE user_id = %d AND post_type = %s AND status=1 AND overall_rating>0",
+                array($user_id, $post_type)
+            )
+        );
+    } else {
+        $results = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE user_id = %d AND post_type = %s AND status=1 AND overall_rating>0 LIMIT %d OFFSET %d",
+                array($user_id, $post_type, $limit, $offset )
+            )
+        );
+    }
+
+
+    if (!empty($results))
+        return $results;
+    else
+        return false;
 }

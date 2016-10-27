@@ -93,8 +93,11 @@ class Users_WP_Profile {
 
     function get_profile_tabs_content($user) {
         global $uwp_options;
+        $tab = get_query_var('uwp_tab');
+
         $account_page = isset($uwp_options['account_page']) ? esc_attr( $uwp_options['account_page']) : false;
-        $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $this->get_profile_tabs($user) ) ? $_GET['tab'] : 'posts';
+
+        $active_tab = !empty( $tab ) && array_key_exists( $tab, $this->get_profile_tabs($user) ) ? $tab : 'posts';
         ?>
         <div class="uwp-profile-content">
             <div class="uwp-profile-nav">
@@ -102,10 +105,7 @@ class Users_WP_Profile {
                     <?php
                     foreach( $this->get_profile_tabs($user) as $tab_id => $tab ) {
 
-                        $tab_url = add_query_arg( array(
-                            'tab' => $tab_id,
-                            'subtab' => false
-                        ) );
+                        $tab_url = uwp_build_profile_tab_url($user->ID, $tab_id, false);
 
                         $active = $active_tab == $tab_id ? ' active' : '';
                         ?>
@@ -292,17 +292,6 @@ class Users_WP_Profile {
         <?php
     }
 
-    public function view_profile_link( $link, $id ) {
-        global $uwp_options;
-        $page_id = isset($uwp_options['user_profile_page']) ? esc_attr( $uwp_options['user_profile_page']) : false;
-        if ($page_id) {
-            $link = add_query_arg( array( 'uwp_profile' => $id ), get_page_link( $page_id ) );
-        } else {
-            $link = get_author_posts_url( $id );
-        }
-        return $link;
-    }
-
     public function rewrite_profile_link() {
         global $uwp_options;
         $page_id = isset($uwp_options['user_profile_page']) ? esc_attr( $uwp_options['user_profile_page']) : false;
@@ -310,17 +299,67 @@ class Users_WP_Profile {
         if ($page_id && !isset($_REQUEST['page_id'])) {
             $link = get_page_link($page_id);
             $uwp_profile_link = rtrim(substr(str_replace(home_url(), '', $link), 1), '/') . '/';
-            $uwp_profile_link_with_slash = '^' . $uwp_profile_link . '([^/]+)/?';
-            $uwp_profile_link_empty_slash = '^' . $uwp_profile_link . '([^/]+)?';
+
             $uwp_profile_page_id = url_to_postid($link);
 
+
+            // example.com/profile/1
+            $uwp_profile_link_empty_slash = '^' . $uwp_profile_link . '([^/]+)?$';
             add_rewrite_rule($uwp_profile_link_empty_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]', 'top');
+
+            // example.com/profile/1/
+            $uwp_profile_link_with_slash = '^' . $uwp_profile_link . '([^/]+)/?$';
             add_rewrite_rule($uwp_profile_link_with_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]', 'top');
+
+            // example.com/profile/1/page/1
+            $uwp_profile_link_empty_slash_paged = '^' . $uwp_profile_link . '([^/]+)/page/([0-9]+)?$';
+            add_rewrite_rule($uwp_profile_link_empty_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&paged=$matches[2]', 'top');
+
+            // example.com/profile/1/page/1/
+            $uwp_profile_link_with_slash_paged = '^' . $uwp_profile_link . '([^/]+)/page/([0-9]+)/?$';
+            add_rewrite_rule($uwp_profile_link_with_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&paged=$matches[2]', 'top');
+
+            // example.com/profile/1/tab-slug
+            $uwp_profile_tab_empty_slash = '^' . $uwp_profile_link . '([^/]+)/([^/]+)?$';
+            add_rewrite_rule($uwp_profile_tab_empty_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]', 'top');
+
+            // example.com/profile/1/tab-slug/
+            $uwp_profile_tab_with_slash = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/?$';
+            add_rewrite_rule($uwp_profile_tab_with_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]', 'top');
+
+            // example.com/profile/1/tab-slug/page/1
+            $uwp_profile_tab_empty_slash_paged = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/page/([0-9]+)?$';
+            add_rewrite_rule($uwp_profile_tab_empty_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&paged=$matches[3]', 'top');
+
+            // example.com/profile/1/tab-slug/page/1/
+            $uwp_profile_tab_with_slash_paged = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/page/([0-9]+)/?$';
+            add_rewrite_rule($uwp_profile_tab_with_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&paged=$matches[3]', 'top');
+
+            // example.com/profile/1/tab-slug/subtab-slug
+            $uwp_profile_tab_empty_slash = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/([^/]+)?$';
+            add_rewrite_rule($uwp_profile_tab_empty_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&uwp_subtab=$matches[3]', 'top');
+
+            // example.com/profile/1/tab-slug/subtab-slug/
+            $uwp_profile_tab_with_slash = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/([^/]+)/?$';
+            add_rewrite_rule($uwp_profile_tab_with_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&uwp_subtab=$matches[3]', 'top');
+
+            // example.com/profile/1/tab-slug/subtab-slug/page/1
+            $uwp_profile_tab_empty_slash_paged = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/([^/]+)/page/([0-9]+)?$';
+            add_rewrite_rule($uwp_profile_tab_empty_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&uwp_subtab=$matches[3]&paged=$matches[4]', 'top');
+
+            // example.com/profile/1/tab-slug/subtab-slug/page/1/
+            $uwp_profile_tab_with_slash_paged = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/([^/]+)/page/([0-9]+)/?$';
+            add_rewrite_rule($uwp_profile_tab_with_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&uwp_subtab=$matches[3]&paged=$matches[4]', 'top');
+
+
+
         }
     }
 
     public function profile_query_vars($query_vars) {
         $query_vars[] = 'uwp_profile';
+        $query_vars[] = 'uwp_tab';
+        $query_vars[] = 'uwp_subtab';
         return $query_vars;
     }
 
