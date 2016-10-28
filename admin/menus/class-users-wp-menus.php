@@ -133,9 +133,8 @@ class Users_WP_Menus {
      */
     public function users_wp_nav_menu_get_common_pages() {
 
-        global $uwp_options;
-        $user_profile_page = isset($uwp_options['user_profile_page']) ? esc_attr( $uwp_options['user_profile_page']) : false;
-        $users_list_page = isset($uwp_options['users_list_page']) ? esc_attr( $uwp_options['users_list_page']) : false;
+        $user_profile_page = uwp_get_option('user_profile_page', false);
+        $users_list_page = uwp_get_option('users_list_page', false);
 
         $users_wp_menu_items = array();
 
@@ -194,9 +193,8 @@ class Users_WP_Menus {
      * @return mixed A URL or an array of pages.
      */
     public function users_wp_nav_menu_get_loggedin_pages() {
-        global $uwp_options;
 
-        $account_page = isset($uwp_options['account_page']) ? esc_attr( $uwp_options['account_page']) : false;
+        $account_page = uwp_get_option('account_page', false);
 
         $users_wp_menu_items = array();
 
@@ -251,11 +249,10 @@ class Users_WP_Menus {
      * @return mixed A URL or an array of pages.
      */
     public function users_wp_nav_menu_get_loggedout_pages() {
-        global $uwp_options;
 
-        $register_page = isset($uwp_options['register_page']) ? esc_attr( $uwp_options['register_page']) : false;
-        $login_page = isset($uwp_options['login_page']) ? esc_attr( $uwp_options['login_page']) : false;
-        $forgot_pass_page = isset($uwp_options['forgot_pass_page']) ? esc_attr( $uwp_options['forgot_pass_page']) : false;
+        $register_page = uwp_get_option('register_page', false);
+        $login_page = uwp_get_option('login_page', false);
+        $forgot_pass_page = uwp_get_option('forgot_pass_page', false);
 
         $users_wp_menu_items = array();
 

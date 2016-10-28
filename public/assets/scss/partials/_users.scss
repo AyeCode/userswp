@@ -149,3 +149,19 @@ ul.uwp-users-list-wrap.grid {
     }
   }
 }
+
+.uwp-time-ratings-wrap {
+  display: block;
+  overflow: hidden;
+  time,
+  .uwp-ratings {
+    display: block;
+  }
+  .uwp-num-comments {
+    display: inline-block;
+    float: left
+  }
+  .gd-star-rating {
+    float: left;
+  }
+}

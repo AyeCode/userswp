@@ -1,47 +1,46 @@
 <?php
 function uwp_get_page_link($page) {
-    global $uwp_options;
 
     $link = "";
 
     switch ($page) {
         case 'register':
-            $page_id = isset($uwp_options['register_page']) ? esc_attr( $uwp_options['register_page']) : false;
+            $page_id = uwp_get_option('register_page', false);
             if ($page_id) {
                 $link = get_permalink($page_id);
             }
             break;
 
         case 'login':
-            $page_id = isset($uwp_options['login_page']) ? esc_attr( $uwp_options['login_page']) : false;
+            $page_id = uwp_get_option('login_page', false);
             if ($page_id) {
                 $link = get_permalink($page_id);
             }
             break;
 
         case 'forgot':
-            $page_id = isset($uwp_options['forgot_pass_page']) ? esc_attr( $uwp_options['forgot_pass_page']) : false;
+            $page_id = uwp_get_option('forgot_pass_page', false);
             if ($page_id) {
                 $link = get_permalink($page_id);
             }
             break;
 
         case 'account':
-            $page_id = isset($uwp_options['account_page']) ? esc_attr( $uwp_options['account_page']) : false;
+            $page_id = uwp_get_option('account_page', false);
             if ($page_id) {
                 $link = get_permalink($page_id);
             }
             break;
 
         case 'profile':
-            $page_id = isset($uwp_options['user_profile_page']) ? esc_attr( $uwp_options['user_profile_page']) : false;
+            $page_id = uwp_get_option('user_profile_page', false);
             if ($page_id) {
                 $link = get_permalink($page_id);
             }
             break;
 
         case 'users':
-            $page_id = isset($uwp_options['users_list_page']) ? esc_attr( $uwp_options['users_list_page']) : false;
+            $page_id = uwp_get_option('users_list_page', false);
             if ($page_id) {
                 $link = get_permalink($page_id);
             }
@@ -125,15 +124,23 @@ function uwp_select_callback($args) {
     }
 
     if ( isset( $args['chosen'] ) ) {
-        $chosen = "class='uwp-chosen'".($args['multiple'] ? "[]' multiple='multiple' style='height:auto'" : "'");
+        $chosen = ($args['multiple'] ? '[]" multiple="multiple" class="uwp-chosen" style="height:auto"' : "'");
     } else {
         $chosen = '';
     }
 
-    $html = '<select id="uwp_settings[' . $args['id'] . ']" name="uwp_settings[' . $args['id'] . ']" ' . $chosen . 'data-placeholder="' . $placeholder . '" />';
+    $html = '<select id="uwp_settings[' . $args['id'] . ']" name="uwp_settings[' . $args['id'] . ']' . $chosen . ' data-placeholder="' . $placeholder . '" />';
 
     foreach ( $args['options'] as $option => $name ) {
-        $selected = selected( $option, $value, false );
+        if (is_array($value)) {
+            if (in_array($option, $value)) {
+                $selected = 'selected="selected"';
+            } else {
+                $selected = '';
+            }
+        } else {
+            $selected = selected( $option, $value, false );
+        }
         $html .= '<option value="' . $option . '" ' . $selected . '>' . $name . '</option>';
     }
 
@@ -259,4 +266,27 @@ function uwp_geodir_get_reviews_by_user_id($post_type = 'gd_place', $user_id, $c
         return $results;
     else
         return false;
+}
+
+function uwp_geodir_count_favorite( $post_type, $user_id = 0 ) {
+    global $wpdb;
+
+    $post_status = is_super_admin() ? " OR " . $wpdb->posts . ".post_status = 'private'" : '';
+    if ( $user_id && $user_id == get_current_user_id() ) {
+        $post_status .= " OR " . $wpdb->posts . ".post_status = 'draft' OR " . $wpdb->posts . ".post_status = 'private'";
+    }
+
+    $user_fav_posts = get_user_meta( (int)$user_id, 'gd_user_favourite_post', true );
+    $user_fav_posts = !empty( $user_fav_posts ) ? implode( "','", $user_fav_posts ) : "-1";
+
+    $count = (int)$wpdb->get_var( "SELECT count( ID ) FROM ".$wpdb->posts." WHERE " . $wpdb->posts . ".ID IN ('" . $user_fav_posts . "') AND post_type='" . $post_type . "' AND ( post_status = 'publish' " . $post_status . " )" );
+
+    return apply_filters( 'uwp_geodir_count_favorite', $count, $user_id );
+}
+
+function uwp_get_option( $key = '', $default = false ) {
+    global $uwp_options;
+    $value = ! empty( $uwp_options[ $key ] ) ? $uwp_options[ $key ] : $default;
+    $value = apply_filters( 'uwp_get_option', $value, $key, $default );
+    return apply_filters( 'uwp_get_option_' . $key, $value, $key, $default );
 }

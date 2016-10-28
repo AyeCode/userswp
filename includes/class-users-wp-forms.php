@@ -604,10 +604,9 @@ class Users_WP_Forms {
 
     public function uwp_send_email( $message_type, $user_id, $login_details ) {
 
-        global $uwp_options;
         $user_data = get_userdata($user_id);
 
-        $login_page_id = $uwp_options['login_page'];
+        $login_page_id = uwp_get_option('login_page', false);
         if ($login_page_id) {
             $login_page_url = get_permalink($login_page_id);
         } else {
@@ -618,11 +617,11 @@ class Users_WP_Forms {
         $message = "";
 
         if ( $message_type == 'register' ) {
-            $subject = $uwp_options['registration_success_email_subject'];
-            $message = $uwp_options['registration_success_email_content'];
+            $subject = uwp_get_option('registration_success_email_subject', '');
+            $message = uwp_get_option('registration_success_email_content', '');
         } elseif ( $message_type == 'forgot' ) {
-            $subject = $uwp_options['forgot_password_email_subject'];
-            $message = $uwp_options['forgot_password_email_content'];
+            $subject = uwp_get_option('forgot_password_email_subject', '');
+            $message = uwp_get_option('forgot_password_email_content', '');
         }
 
         if ( ! empty( $subject ) ) {
