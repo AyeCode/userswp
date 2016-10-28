@@ -77,4 +77,15 @@
     font-style: italic;
     margin: 4px 0 0;
   }
+  .uwp_label_inline {
+    label {
+      display: inline !important;
+    }
+    td {
+      padding: 5px 10px;
+    }
+    th {
+      padding: 0;
+    }
+  }
 }

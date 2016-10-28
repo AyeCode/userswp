@@ -117,47 +117,61 @@
   margin: 0 0 0 5%;
   width: 70%;
 }
-
-.uwp-profile-nav {
-  margin: 8px 0 0;
-}
-
-.uwp-profile-nav > ul {
+.uwp-profile-subcontent {
   margin: 0;
 }
 
-.uwp-profile-nav li {
+.uwp-profile-nav,
+.uwp-profile-subnav {
+  margin: 8px 0 0;
+}
+
+.uwp-profile-nav > ul,
+.uwp-profile-subnav > ul {
+  margin: 0;
+}
+
+.uwp-profile-nav li,
+.uwp-profile-subnav li {
   float: left;
   list-style: outside none none;
   margin: 5px 10px 0 0;
   padding-bottom: 5px;
 }
 
-.uwp-profile-post-label, .uwp-profile-comment-label {
+.uwp-profile-tab-label {
   display: block;
   font-size: 11px;
   line-height: 11px;
   text-align: center;
+  text-transform: uppercase;
 }
 
-.uwp-profile-post-count, .uwp-profile-comment-count {
+.uwp-profile-tab-count {
   display: block;
   font-size: 18px;
   line-height: 18px;
   text-align: center;
+  padding-top: 5px
 }
 
-.uwp-profile-nav .active {
+.uwp-profile-nav .active,
+.uwp-profile-subnav .active {
   border-bottom: 3px solid #ccc;
 }
 
-.uwp-profile-nav a {
-  color: #717171;
-  text-decoration: none;
-}
+.uwp-profile-nav,
+.uwp-profile-subnav {
+  a,
+  a:active,
+  a:visited {
+    color: #717171;
+    text-decoration: none;
+  }
 
-.uwp-profile-nav a:hover {
-  color: #555;
+  a:hover {
+    color: #555;
+  }
 }
 
 .page-id-118 .uwp-profile-header-img {
@@ -173,7 +187,7 @@
   margin: 15px 0;
 }
 
-.rpwe-block li {
+.uwp-profile-item-block li {
   margin-left: 0;
 }
 

@@ -91,7 +91,7 @@ class Users_WP_Templates {
     }
 
     public function access_checks() {
-        global $wp_query;
+        global $wp_query, $uwp_options;
 
         if (!is_page()) {
             return false;
@@ -100,22 +100,22 @@ class Users_WP_Templates {
         $current_page_id = $wp_query->query_vars['page_id'];
         $condition = "";
 
-        $register_page = esc_attr( get_option('uwp_register_page', false));
+        $register_page = isset($uwp_options['register_page']) ? esc_attr( $uwp_options['register_page']) : false;
         if ( $register_page && ((int) $register_page ==  $current_page_id ) ) {
             $condition = "non_logged_in";
         }
 
-        $login_page = esc_attr( get_option('uwp_login_page', false));
+        $login_page = isset($uwp_options['login_page']) ? esc_attr( $uwp_options['login_page']) : false;
         if ( $login_page && ((int) $login_page ==  $current_page_id ) ) {
             $condition = "non_logged_in";
         }
 
-        $forgot_pass_page = esc_attr( get_option('uwp_forgot_pass_page', false));
+        $forgot_pass_page = isset($uwp_options['forgot_pass_page']) ? esc_attr( $uwp_options['forgot_pass_page']) : false;
         if ( $forgot_pass_page && ((int) $forgot_pass_page ==  $current_page_id ) ) {
             $condition = "non_logged_in";
         }
 
-        $account_page = esc_attr( get_option('uwp_account_page', false));
+        $account_page = isset($uwp_options['account_page']) ? esc_attr( $uwp_options['account_page']) : false;
         if ( $account_page && ((int) $account_page ==  $current_page_id ) ) {
             $condition = "logged_in";
         }

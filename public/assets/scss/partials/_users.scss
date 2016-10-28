@@ -73,3 +73,79 @@ ul.uwp-users-list-wrap.grid {
     display: none;
   }
 }
+
+
+//profile
+.uwp-content-wrap {
+
+  .uwp-profile-social-ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    li {
+      float: left;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+  }
+
+  .uwp-profile-main {
+    .uwp-profile-nav,
+    .uwp-profile-subnav {
+      ul {
+        display: inline-block;
+        li {
+          display: inline-block;
+        }
+      }
+    }
+    .uwp-profile-item-ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      li.uwp-profile-item-li {
+        clear: both;
+        padding-top: 10px;
+        margin-top: 10px;
+        border-top: 1px solid #ccc;
+        min-height: 80px;
+        .uwp-profile-item-time {
+          color: #ccc;
+        }
+      }
+    }
+    .uwp-profile-item-img img {
+      float: left;
+      margin-right: 10px;
+      width: 80px;
+    }
+    h3.uwp-profile-item-title {
+      margin: 0;
+    }
+  }
+}
+
+//pagination
+.uwp-pagination {
+  margin-top: 30px;
+  text-align: center;
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    li {
+      float: left;
+      a, span.dots,span.current {
+        border: 1px solid #555;
+        color: #555;
+        margin-right: 5px;
+        padding: 0 7px;
+        text-decoration: none;
+      }
+      span.current {
+        background-color: #ccc;
+      }
+    }
+  }
+}

@@ -48,10 +48,10 @@ class Users_WP_Activator {
     public static function add_default_options() {
 
         $register_success_subject = __('Your Log In Details', 'uwp');
-        $register_success_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p><p>[#login_details#]</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
+        $register_success_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
 
         $forgot_password_subject = __('[#site_name#] - Your new password', 'uwp');
-        $forgot_password_content = __("<p>Dear [#user_name#],<p><p>You requested a new password for [#site_name_url#]</p><p>[#login_details#]</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
+        $forgot_password_content = __("<p>Dear [#user_name#],<p><p>You requested a new password for [#site_name_url#]</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
 
         $settings = get_option( 'uwp_settings', array());
 
@@ -357,6 +357,17 @@ class Users_WP_Activator {
             'field_type' => 'email',
             'site_title' => __('Email', 'uwp'),
             'htmlvar_name' => 'email',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_required' => '1'
+        );
+
+        $fields[] = array(
+            'form_type' => 'account',
+            'field_type' => 'textarea',
+            'site_title' => __('Bio', 'uwp'),
+            'htmlvar_name' => 'bio',
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',

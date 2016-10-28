@@ -109,6 +109,7 @@ class Users_WP_Admin {
          * class.
          */
 
+        wp_enqueue_script('jquery-ui-sortable');
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.js', array( 'jquery' ), $this->version, false );
 
         $ajax_cons_data = array(
@@ -125,13 +126,15 @@ class Users_WP_Admin {
 
     public function setup_admin_menus() {
         $plugin_admin_settings = new Users_WP_Admin_Settings();
-        add_submenu_page(
-            "users.php",
-            "UsersWP Settings",
-            "UsersWP Settings",
+
+        add_menu_page(
+            'UsersWP Settings',
+            'UsersWP',
             'manage_options',
             'users-wp',
-            array( $plugin_admin_settings, 'users_wp_general_settings_page' )
+            array( $plugin_admin_settings, 'users_wp_general_settings_page' ),
+            'dashicons-admin-users',
+            70
         );
     }
 
