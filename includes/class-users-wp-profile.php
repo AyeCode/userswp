@@ -45,7 +45,7 @@ class Users_WP_Profile {
     }
 
     public function get_profile_bio($user) {
-        $bio = get_user_meta($user->ID, 'uwp_account_bio', true);
+        $bio = uwp_get_usermeta($user->ID, 'uwp_account_bio', '');
         if ($bio) {
             ?>
             <div class="uwp-profile-bio">
@@ -66,7 +66,7 @@ class Users_WP_Profile {
             <ul class="uwp-profile-social-ul">
                 <?php
                 foreach ($social as $value) {
-                    $link = get_user_meta($user->ID, 'uwp_account_social_'.$value, true);
+                    $link = uwp_get_usermeta($user->ID, 'uwp_account_social_'.$value, '');
                     echo '<li><a href="'.$link.'"><i class="fa fa-'.$value.'"></i></a></li>';
                 }
                 ?>

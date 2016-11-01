@@ -34,39 +34,49 @@ class Users_WP_Admin_Settings {
 
     }
 
-    function users_wp_general_settings_page() {
+    public function uwp_settings_page() {
 
-        $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $this->get_settings_tabs() ) ? $_GET['tab'] : 'general';
+        $page = isset( $_GET['page'] ) ? $_GET['page'] : 'uwp';
+
+        $settings_array = $this->get_settings_tabs();
+        $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $settings_array[$page] ) ? $_GET['tab'] : 'main';
         ?>
         <div class="wrap">
-            <h2><?php echo __( 'Page Settings', 'uwp' ); ?></h2>
+
+            <h1><?php echo get_admin_page_title(); ?></h1>
 
             <div id="users-wp">
                 <div class="item-list-tabs content-box">
-                    <ul class="item-list-tabs-ul">
 
-                    <?php
-                     foreach( $this->get_settings_tabs() as $tab_id => $tab_name ) {
+                    <?php if (count($settings_array[$page]) > 1) { ?>
 
-                        $tab_url = add_query_arg( array(
-                            'settings-updated' => false,
-                            'tab' => $tab_id,
-                            'subtab' => false
-                        ) );
-
-                        $active = $active_tab == $tab_id ? ' current selected' : '';
-                        ?>
-                        <li id="uwp-<?php echo $tab_id; ?>-li" class="<?php echo $active; ?>">
-                            <a id="uwp-<?php echo $tab_id; ?>" href="<?php echo esc_url( $tab_url ); ?>"><?php echo esc_html( $tab_name ); ?></a>
-                        </li>
+                        <ul class="item-list-tabs-ul">
                         <?php
-                     }
-                     ?>
-                     </ul>
+                        foreach( $settings_array[$page] as $tab_id => $tab_name ) {
+
+                            $tab_url = add_query_arg( array(
+                                'settings-updated' => false,
+                                'tab' => $tab_id,
+                                'subtab' => false
+                            ) );
+
+                            $active = $active_tab == $tab_id ? ' current selected' : '';
+                            ?>
+                            <li id="uwp-<?php echo $tab_id; ?>-li" class="<?php echo $active; ?>">
+                                <a id="uwp-<?php echo $tab_id; ?>" href="<?php echo esc_url( $tab_url ); ?>"><?php echo esc_html( $tab_name ); ?></a>
+                            </li>
+                            <?php
+                        }
+                        ?>
+                        </ul>
+
+                    <?php } ?>
 
                     <div class="tab-content">
                         <?php
-                        do_action('uwp_settings_'.$active_tab.'_tab_content');
+                        // {current page}_settings_{active tab}_tab_content
+                        // ex: uwp_settings_main_tab_content
+                        do_action($page.'_settings_'.$active_tab.'_tab_content', $this->display_form());
                         ?>
                     </div>
                 </div>
@@ -80,9 +90,20 @@ class Users_WP_Admin_Settings {
 
         $tabs = array();
 
-        $tabs['general']  = __( 'General', 'uwp' );
-        $tabs['form_builder'] = __( 'Form Builder', 'uwp' );
-        $tabs['notifications']   = __( 'Notifications', 'uwp' );
+        // wp-admin/admin.php?page=uwp
+        $tabs['uwp']  = array(
+            'main' => __( 'General', 'uwp' ),
+        );
+
+        // wp-admin/admin.php?page=uwp_form_builder
+        $tabs['uwp_form_builder'] = array(
+            'main' => __( 'Form Builder', 'uwp' ),
+        );
+
+        // wp-admin/admin.php?page=uwp_notifications
+        $tabs['uwp_notifications'] = array(
+            'main' => __( 'Notifications', 'uwp' ),
+        );
 
         return apply_filters( 'uwp_settings_tabs', $tabs );
     }
@@ -93,19 +114,17 @@ class Users_WP_Admin_Settings {
         if (isset($_GET['subtab'])) {
             $subtab = $_GET['subtab'];
         }
-
-
         ?>
         <div class="item-list-sub-tabs">
             <ul class="item-list-tabs-ul">
-                <li id="uwp-general-general-li" class="<?php if ($subtab == 'general') { echo "current selected"; } ?>">
-                    <a id="uwp-general-general" href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'general')); ?>">General Settings</a>
+                <li class="<?php if ($subtab == 'general') { echo "current selected"; } ?>">
+                    <a href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'general')); ?>">General Settings</a>
                 </li>
-                <li id="uwp-general-shortcodes-li" class="<?php if ($subtab == 'shortcodes') { echo "current selected"; } ?>">
-                    <a id="uwp-general-shortcodes" href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'shortcodes')); ?>">Shortcodes</a>
+                <li class="<?php if ($subtab == 'shortcodes') { echo "current selected"; } ?>">
+                    <a href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'shortcodes')); ?>">Shortcodes</a>
                 </li>
-                <li id="uwp-general-info-li" class="<?php if ($subtab == 'info') { echo "current selected"; } ?>">
-                    <a id="uwp-general-info" href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'info')); ?>">Info</a>
+                <li class="<?php if ($subtab == 'info') { echo "current selected"; } ?>">
+                    <a href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'info')); ?>">Info</a>
                 </li>
             </ul>
         </div>
@@ -120,23 +139,38 @@ class Users_WP_Admin_Settings {
     }
 
     //main tabs
+    public function display_form() {
 
-    public function display_form($title) {
-        $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $this->get_settings_tabs() ) ? $_GET['tab'] : 'general';
+        $page = isset( $_GET['page'] ) ? $_GET['page'] : 'uwp';
+        $settings_array = $this->get_settings_tabs();
+
+        $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $settings_array[$page] ) ? $_GET['tab'] : 'main';
+        ob_start();
         ?>
         <form method="post" action="options.php">
-            <?php if ($title) { ?>
-                <h3 class="users_wp_section_heading"><?php echo $title; ?></h3>
+            <?php
+            $title = apply_filters('uwp_display_form_title', false, $page, $active_tab);
+            if ($title) { ?>
+                <h2 class="title"><?php echo $title; ?></h2>
             <?php } ?>
 
-            <table class="form-table">
+            <table class="uwp-form-table">
                 <?php settings_fields( 'uwp_settings' ); ?>
-				<?php do_settings_fields( 'uwp_settings_' . $active_tab, 'uwp_settings_' . $active_tab ); ?>
+                <?php
+                global $wp_settings_fields;
+                //var_dump($wp_settings_fields);
+                ?>
+				<?php do_settings_fields( 'uwp_settings_' . $page, 'uwp_settings_' . $page ); ?>
 			</table>
 			<?php submit_button(); ?>
 
         </form>
+
         <?php
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return $output;
     }
 
     public function uwp_get_pages_as_option($selected) {
@@ -225,8 +259,16 @@ class Users_WP_Admin_Settings {
     //subtabs
 
     public function get_general_general_content() {
-        $this->display_form(__('General Options', 'uwp'));
+        echo $this->display_form();
     }
+
+    public function display_form_title($title, $page, $active_tab) {
+        if ($page == 'uwp' && $active_tab == 'main') {
+            $title = __('General Options', 'uwp');
+        }
+        return $title;
+    }
+
     public function get_general_info_content() {
         ?>
         <h3>Welcome to UsersWP</h3>
@@ -292,11 +334,11 @@ class Users_WP_Admin_Settings {
     }
 
     public function get_recaptcha_content() {
-        $this->display_form(__('ReCaptcha Settings', 'uwp'));
+        echo $this->display_form();
     }
 
     public function get_geodirectory_content() {
-        $this->display_form(__('GeoDirectory Settings', 'uwp'));
+        echo $this->display_form();
     }
 
     public function get_notifications_content() {
@@ -315,7 +357,7 @@ class Users_WP_Admin_Settings {
             </table>
 
         <?php
-        $this->display_form(false);
+        echo $this->display_form();
     }
 
     public function uwp_register_settings() {
@@ -326,43 +368,45 @@ class Users_WP_Admin_Settings {
 
         foreach( $this->uwp_get_registered_settings() as $tab => $settings ) {
 
-            add_settings_section(
-                'uwp_settings_' . $tab,
-                __return_null(),
-                '__return_false',
-                'uwp_settings_' . $tab
-            );
+            foreach ( $settings as $key => $opt ) {
 
-            foreach ( $settings as $option ) {
-
-                $name = isset( $option['name'] ) ? $option['name'] : '';
-
-                add_settings_field(
-                    'uwp_settings[' . $option['id'] . ']',
-                    $name,
-                    function_exists( 'uwp_' . $option['type'] . '_callback' ) ? 'uwp_' . $option['type'] . '_callback' : 'uwp_missing_callback',
-                    'uwp_settings_' . $tab,
-                    'uwp_settings_' . $tab,
-                    array(
-                        'section'     => $tab,
-                        'id'          => isset( $option['id'] )          ? $option['id']          : null,
-                        'class'       => isset( $option['class'] )       ? $option['class']       : null,
-                        'desc'        => ! empty( $option['desc'] )      ? $option['desc']        : '',
-                        'name'        => isset( $option['name'] )        ? $option['name']        : null,
-                        'size'        => isset( $option['size'] )        ? $option['size']        : null,
-                        'options'     => isset( $option['options'] )     ? $option['options']     : '',
-                        'std'         => isset( $option['std'] )         ? $option['std']         : '',
-                        'min'         => isset( $option['min'] )         ? $option['min']         : null,
-                        'max'         => isset( $option['max'] )         ? $option['max']         : null,
-                        'step'        => isset( $option['step'] )        ? $option['step']        : null,
-                        'chosen'      => isset( $option['chosen'] )      ? $option['chosen']      : null,
-                        'placeholder' => isset( $option['placeholder'] ) ? $option['placeholder'] : null,
-                        'allow_blank' => isset( $option['allow_blank'] ) ? $option['allow_blank'] : true,
-                        'readonly'    => isset( $option['readonly'] )    ? $option['readonly']    : false,
-                        'faux'        => isset( $option['faux'] )        ? $option['faux']        : false,
-                        'multiple'        => isset( $option['multiple'] )        ? $option['multiple']        : false,
-                    )
+                add_settings_section(
+                    'uwp_settings_' . $tab .'_'.$key,
+                    __return_null(),
+                    '__return_false',
+                    'uwp_settings_' . $tab .'_'.$key
                 );
+
+                foreach ($opt as $option) {
+                    $name = isset( $option['name'] ) ? $option['name'] : '';
+
+                    add_settings_field(
+                        'uwp_settings[' . $option['id'] . ']',
+                        $name,
+                        function_exists( 'uwp_' . $option['type'] . '_callback' ) ? 'uwp_' . $option['type'] . '_callback' : 'uwp_missing_callback',
+                        'uwp_settings_' . $tab,
+                        'uwp_settings_' . $tab,
+                        array(
+                            'section'     => $tab,
+                            'id'          => isset( $option['id'] )          ? $option['id']          : null,
+                            'class'       => isset( $option['class'] )       ? $option['class']       : null,
+                            'desc'        => ! empty( $option['desc'] )      ? $option['desc']        : '',
+                            'name'        => isset( $option['name'] )        ? $option['name']        : null,
+                            'size'        => isset( $option['size'] )        ? $option['size']        : null,
+                            'options'     => isset( $option['options'] )     ? $option['options']     : '',
+                            'std'         => isset( $option['std'] )         ? $option['std']         : '',
+                            'min'         => isset( $option['min'] )         ? $option['min']         : null,
+                            'max'         => isset( $option['max'] )         ? $option['max']         : null,
+                            'step'        => isset( $option['step'] )        ? $option['step']        : null,
+                            'chosen'      => isset( $option['chosen'] )      ? $option['chosen']      : null,
+                            'placeholder' => isset( $option['placeholder'] ) ? $option['placeholder'] : null,
+                            'allow_blank' => isset( $option['allow_blank'] ) ? $option['allow_blank'] : true,
+                            'readonly'    => isset( $option['readonly'] )    ? $option['readonly']    : false,
+                            'faux'        => isset( $option['faux'] )        ? $option['faux']        : false,
+                            'multiple'        => isset( $option['multiple'] )        ? $option['multiple']        : false,
+                        )
+                    );
+                }
             }
 
         }
@@ -380,109 +424,114 @@ class Users_WP_Admin_Settings {
          */
         $uwp_settings = array(
             /** General Settings */
-            'general' => apply_filters( 'uwp_settings_general',
-                array(
-                    'user_profile_page' => array(
-                        'id' => 'user_profile_page',
-                        'name' => __( 'User Profile Page', 'uwp' ),
-                        'desc' => __( 'This is the front end user\'s profile page. This page automatically override the default WordPress author page.', 'uwp' ),
-                        'type' => 'select',
-                        'options' => $this->uwp_get_pages(),
-                        'chosen' => true,
-                        'placeholder' => __( 'Select a page', 'uwp' )
-                    ),
-                    'register_page' => array(
-                        'id' => 'register_page',
-                        'name' => __( 'Register Page', 'uwp' ),
-                        'desc' => __( 'This is the front end register page. This is where users creates their account.', 'uwp' ),
-                        'type' => 'select',
-                        'options' => $this->uwp_get_pages(),
-                        'chosen' => true,
-                        'placeholder' => __( 'Select a page', 'uwp' )
-                    ),
-                    'login_page' => array(
-                        'id' => 'login_page',
-                        'name' => __( 'Login Page', 'uwp' ),
-                        'desc' => __( 'This is the front end login page. This is where users will login after creating their account.', 'uwp' ),
-                        'type' => 'select',
-                        'options' => $this->uwp_get_pages(),
-                        'chosen' => true,
-                        'placeholder' => __( 'Select a page', 'uwp' )
-                    ),
-                    'account_page' => array(
-                        'id' => 'account_page',
-                        'name' => __( 'Account Page', 'uwp' ),
-                        'desc' => __( 'This is the front end account page. This is where users can edit their account.', 'uwp' ),
-                        'type' => 'select',
-                        'options' => $this->uwp_get_pages(),
-                        'chosen' => true,
-                        'placeholder' => __( 'Select a page', 'uwp' )
-                    ),
-                    'forgot_pass_page' => array(
-                        'id' => 'forgot_pass_page',
-                        'name' => __( 'Forgot Password Page', 'uwp' ),
-                        'desc' => __( 'This is the front end Forgot Password page. This is the page where users are sent to reset their password when they lose it.', 'uwp' ),
-                        'type' => 'select',
-                        'options' => $this->uwp_get_pages(),
-                        'chosen' => true,
-                        'placeholder' => __( 'Select a page', 'uwp' )
-                    ),
-                    'users_list_page' => array(
-                        'id' => 'users_list_page',
-                        'name' => __( 'Users List Page', 'uwp' ),
-                        'desc' => __( 'This is the front end Users List page. This is the page where all registered users of the websites are listed.', 'uwp' ),
-                        'type' => 'select',
-                        'options' => $this->uwp_get_pages(),
-                        'chosen' => true,
-                        'placeholder' => __( 'Select a page', 'uwp' )
-                    ),
-                    'profile_no_of_items' => array(
-                        'id' => 'profile_no_of_items',
-                        'name' => __( 'Number of Items', 'uwp-gd' ),
-                        'type' => 'text',
-                        'std' => '',
-                        'desc' 	=> __( 'Enter number of items to display in profile tabs.', 'uwp-gd' ),
-                    ),
-                )
+            'uwp' => array(
+                'main' => apply_filters( 'uwp_settings_general_main',
+                    array(
+                        'user_profile_page' => array(
+                            'id' => 'user_profile_page',
+                            'name' => __( 'User Profile Page', 'uwp' ),
+                            'desc' => __( 'This is the front end user\'s profile page. This page automatically override the default WordPress author page.', 'uwp' ),
+                            'type' => 'select',
+                            'options' => $this->uwp_get_pages(),
+                            'chosen' => true,
+                            'placeholder' => __( 'Select a page', 'uwp' ),
+                            'class' => 'uwp_label_block',
+                        ),
+                        'register_page' => array(
+                            'id' => 'register_page',
+                            'name' => __( 'Register Page', 'uwp' ),
+                            'desc' => __( 'This is the front end register page. This is where users creates their account.', 'uwp' ),
+                            'type' => 'select',
+                            'options' => $this->uwp_get_pages(),
+                            'chosen' => true,
+                            'placeholder' => __( 'Select a page', 'uwp' ),
+                            'class' => 'uwp_label_block',
+                        ),
+                        'login_page' => array(
+                            'id' => 'login_page',
+                            'name' => __( 'Login Page', 'uwp' ),
+                            'desc' => __( 'This is the front end login page. This is where users will login after creating their account.', 'uwp' ),
+                            'type' => 'select',
+                            'options' => $this->uwp_get_pages(),
+                            'chosen' => true,
+                            'placeholder' => __( 'Select a page', 'uwp' ),
+                            'class' => 'uwp_label_block',
+                        ),
+                        'account_page' => array(
+                            'id' => 'account_page',
+                            'name' => __( 'Account Page', 'uwp' ),
+                            'desc' => __( 'This is the front end account page. This is where users can edit their account.', 'uwp' ),
+                            'type' => 'select',
+                            'options' => $this->uwp_get_pages(),
+                            'chosen' => true,
+                            'placeholder' => __( 'Select a page', 'uwp' ),
+                            'class' => 'uwp_label_block',
+                        ),
+                        'forgot_pass_page' => array(
+                            'id' => 'forgot_pass_page',
+                            'name' => __( 'Forgot Password Page', 'uwp' ),
+                            'desc' => __( 'This is the front end Forgot Password page. This is the page where users are sent to reset their password when they lose it.', 'uwp' ),
+                            'type' => 'select',
+                            'options' => $this->uwp_get_pages(),
+                            'chosen' => true,
+                            'placeholder' => __( 'Select a page', 'uwp' ),
+                            'class' => 'uwp_label_block',
+                        ),
+                        'users_list_page' => array(
+                            'id' => 'users_list_page',
+                            'name' => __( 'Users List Page', 'uwp' ),
+                            'desc' => __( 'This is the front end Users List page. This is the page where all registered users of the websites are listed.', 'uwp' ),
+                            'type' => 'select',
+                            'options' => $this->uwp_get_pages(),
+                            'chosen' => true,
+                            'placeholder' => __( 'Select a page', 'uwp' ),
+                            'class' => 'uwp_label_block',
+                        ),
+                        'profile_no_of_items' => array(
+                            'id' => 'profile_no_of_items',
+                            'name' => __( 'Number of Items', 'uwp-gd' ),
+                            'type' => 'text',
+                            'std' => '',
+                            'desc' 	=> __( 'Enter number of items to display in profile tabs.', 'uwp-gd' ),
+                        ),
+                    )
+                ),
             ),
-            'notifications' => apply_filters( 'uwp_settings_notifications',
-                array(
-                    'registration_success_email_subject' => array(
-                        'id' => 'registration_success_email_subject',
-                        'name' => __( 'Registration success email', 'uwp' ),
-                        'desc' => "",
-                        'type' => 'text',
-                        'size' => 'regular',
-                        'placeholder' => __( 'Enter Registration success email Subject', 'uwp' )
-                    ),
-                    'registration_success_email_content' => array(
-                        'id' => 'registration_success_email_content',
-                        'name' => "",
-                        'desc' => "",
-                        'type' => 'textarea',
-                        'placeholder' => __( 'Enter Registration success email Content', 'uwp' )
-                    ),
-                    'forgot_password_email_subject' => array(
-                        'id' => 'forgot_password_email_subject',
-                        'name' => __( 'Forgot password email', 'uwp' ),
-                        'desc' => "",
-                        'type' => 'text',
-                        'size' => 'regular',
-                        'placeholder' => __( 'Enter forgot password email Subject', 'uwp' )
-                    ),
-                    'forgot_password_email_content' => array(
-                        'id' => 'forgot_password_email_content',
-                        'name' => "",
-                        'desc' => "",
-                        'type' => 'textarea',
-                        'placeholder' => __( 'Enter forgot password email Content', 'uwp' )
-                    ),
-                )
-            ),
-
-            /** Extension Settings */
-            'extensions' => apply_filters('uwp_settings_extensions',
-                array()
+            'uwp_notifications' => array(
+                'main' => apply_filters( 'uwp_settings_notifications_main',
+                    array(
+                        'registration_success_email_subject' => array(
+                            'id' => 'registration_success_email_subject',
+                            'name' => __( 'Registration success email', 'uwp' ),
+                            'desc' => "",
+                            'type' => 'text',
+                            'size' => 'regular',
+                            'placeholder' => __( 'Enter Registration success email Subject', 'uwp' )
+                        ),
+                        'registration_success_email_content' => array(
+                            'id' => 'registration_success_email_content',
+                            'name' => "",
+                            'desc' => "",
+                            'type' => 'textarea',
+                            'placeholder' => __( 'Enter Registration success email Content', 'uwp' )
+                        ),
+                        'forgot_password_email_subject' => array(
+                            'id' => 'forgot_password_email_subject',
+                            'name' => __( 'Forgot password email', 'uwp' ),
+                            'desc' => "",
+                            'type' => 'text',
+                            'size' => 'regular',
+                            'placeholder' => __( 'Enter forgot password email Subject', 'uwp' )
+                        ),
+                        'forgot_password_email_content' => array(
+                            'id' => 'forgot_password_email_content',
+                            'name' => "",
+                            'desc' => "",
+                            'type' => 'textarea',
+                            'placeholder' => __( 'Enter forgot password email Content', 'uwp' )
+                        ),
+                    )
+                ),
             ),
         );
 

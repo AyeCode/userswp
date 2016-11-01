@@ -171,7 +171,7 @@ class Users_WP_Templates {
             } elseif ($field->htmlvar_name == 'uwp_account_last_name') {
                 $value = $user_data->last_name;
             } else {
-                $value = get_user_meta($user_id, $field->htmlvar_name, true);
+                $value = uwp_get_usermeta($user_id, $field->htmlvar_name, '');
             }
 
 

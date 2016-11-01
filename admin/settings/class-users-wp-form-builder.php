@@ -727,6 +727,13 @@ class Users_WP_Form_Builder {
                 'name'  =>  __('URL', 'uwp'),
                 'description' =>  __('Adds a url input', 'uwp')
             ),
+            'file' => array(
+                'field_type'  =>  'file',
+                'class' =>  'gd-file',
+                'icon' =>  'fa fa-file',
+                'name'  =>  __('File Upload', 'uwp'),
+                'description' =>  __('Adds a file input', 'uwp')
+            )
         );
 
         return apply_filters('uwp_custom_fields', $custom_fields, $type);
@@ -1713,6 +1720,206 @@ class Users_WP_Form_Builder {
 
     public function return_empty_string() {
         return "";
+    }
+
+    public function uwp_save_user_images($user_id = 0, $user_image = array())
+    {
+
+
+        global $wpdb, $current_user;
+
+        $valid_file_ids = array();
+        $valid_files_condition = '';
+        $uwp_uploaddir = '';
+
+        $remove_files = array();
+
+        if (!empty($user_image)) {
+
+            $uploads = wp_upload_dir();
+            $uploads_dir = $uploads['path'];
+
+            $uwp_uploadpath = $uploads['path'];
+            $uwp_uploadurl = $uploads['url'];
+            $sub_dir = isset($uploads['subdir']) ? $uploads['subdir'] : '';
+
+            $invalid_files = array();
+            $postcurr_images = array();
+
+            for ($m = 0; $m < count($user_image); $m++) {
+                $menu_order = $m + 1;
+
+                $file_path = '';
+                /* --------- start ------- */
+
+                $split_img_path = explode(str_replace(array('http://','https://'),'',$uploads['baseurl']), str_replace(array('http://','https://'),'',$user_image[$m]));
+
+                $split_img_file_path = isset($split_img_path[1]) ? $split_img_path[1] : '';
+
+
+                if (!$find_image = $wpdb->get_var($wpdb->prepare("SELECT ID FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE file=%s AND post_id = %d", array($split_img_file_path, $user_id)))) {
+
+                    /* --------- end ------- */
+                    $curr_img_url = $user_image[$m];
+
+                    $image_name_arr = explode('/', $curr_img_url);
+
+                    $count_image_name_arr = count($image_name_arr) - 2;
+
+                    $count_image_name_arr = ($count_image_name_arr >= 0) ? $count_image_name_arr : 0;
+
+                    $curr_img_dir = $image_name_arr[$count_image_name_arr];
+
+                    $filename = end($image_name_arr);
+                    if (strpos($filename, '?') !== false) {
+                        list($filename) = explode('?', $filename);
+                    }
+
+                    $curr_img_dir = str_replace($uploads['baseurl'], "", $curr_img_url);
+                    $curr_img_dir = str_replace($filename, "", $curr_img_dir);
+
+                    $img_name_arr = explode('.', $filename);
+
+                    $file_title = isset($img_name_arr[0]) ? $img_name_arr[0] : $filename;
+                    if (!empty($img_name_arr) && count($img_name_arr) > 2) {
+                        $new_img_name_arr = $img_name_arr;
+                        if (isset($new_img_name_arr[count($img_name_arr) - 1])) {
+                            unset($new_img_name_arr[count($img_name_arr) - 1]);
+                            $file_title = implode('.', $new_img_name_arr);
+                        }
+                    }
+                    $file_title = sanitize_file_name($file_title);
+                    $file_name = sanitize_file_name($filename);
+
+                    $arr_file_type = wp_check_filetype($filename);
+
+                    $uploaded_file_type = $arr_file_type['type'];
+
+                    // Set an array containing a list of acceptable formats
+                    $allowed_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png');
+
+                    // If the uploaded file is the right format
+                    if (in_array($uploaded_file_type, $allowed_file_types)) {
+                        if (!function_exists('wp_handle_upload')) {
+                            require_once(ABSPATH . 'wp-admin/includes/file.php');
+                        }
+
+                        if (!is_dir($uwp_uploadpath)) {
+                            mkdir($uwp_uploadpath);
+                        }
+
+                        $external_img = false;
+                        if (strpos(str_replace(array('http://','https://'),'',$curr_img_url), str_replace(array('http://','https://'),'',$uploads['baseurl'])) !== false) {
+                        } else {
+                            $external_img = true;
+                        }
+
+
+                        $new_name = $post_id . '_' . $file_name;
+
+                        if ($curr_img_dir == $sub_dir) {
+                            $img_path = $uwp_uploadpath . '/' . $filename;
+                            $img_url = $uwp_uploadurl . '/' . $filename;
+                        } else {
+                            $img_path = $uploads_dir . '/temp_' . $current_user->data->ID . '/' . $filename;
+                            $img_url = $uploads['url'] . '/temp_' . $current_user->data->ID . '/' . $filename;
+                        }
+
+                        $uploaded_file = '';
+
+                        if (file_exists($img_path)) {
+                            $uploaded_file = copy($img_path, $uwp_uploadpath . '/' . $new_name);
+                            $file_path = '';
+                        } else if (file_exists($uploads['basedir'] . $curr_img_dir . $filename)) {
+                            $uploaded_file = true;
+                            $file_path = $curr_img_dir . '/' . $filename;
+                        }
+
+                        if ($curr_img_dir != $uwp_uploaddir && file_exists($img_path))
+                            unlink($img_path);
+
+
+                        if (!empty($uploaded_file)) {
+                            if (!isset($file_path) || !$file_path) {
+                                $file_path = $sub_dir . '/' . $new_name;
+                            }
+
+                            $postcurr_images[] = str_replace(array('http://','https://'),'',$uploads['baseurl'] . $file_path);
+
+                            if ($menu_order == 1) {
+
+                                $wpdb->query($wpdb->prepare("UPDATE " . $table . " SET featured_image = %s where post_id =%d", array($file_path, $post_id)));
+
+                            }
+
+                            // Set up options array to add this file as an attachment
+                            $attachment = array();
+                            $attachment['post_id'] = $post_id;
+                            $attachment['title'] = $file_title;
+                            $attachment['content'] = '';
+                            $attachment['file'] = $file_path;
+                            $attachment['mime_type'] = $uploaded_file_type;
+                            $attachment['menu_order'] = $menu_order;
+                            $attachment['is_featured'] = 0;
+
+                            $attachment_set = '';
+
+                            foreach ($attachment as $key => $val) {
+                                if ($val != '')
+                                    $attachment_set .= $key . " = '" . $val . "', ";
+                            }
+
+                            $attachment_set = trim($attachment_set, ", ");
+
+                            $wpdb->query("INSERT INTO " . GEODIR_ATTACHMENT_TABLE . " SET " . $attachment_set);
+
+                            $valid_file_ids[] = $wpdb->insert_id;
+                        }
+
+                    }
+
+
+                }
+
+
+            }
+
+            if (!empty($valid_file_ids)) {
+
+                $remove_files = $valid_file_ids;
+
+                $remove_files_length = count($remove_files);
+                $remove_files_format = array_fill(0, $remove_files_length, '%d');
+                $format = implode(',', $remove_files_format);
+                $valid_files_condition = " ID NOT IN ($format) AND ";
+
+            }
+
+            //Get and remove all old images of post from database to set by new order
+
+            if (!empty($user_images)) {
+
+                foreach ($user_images as $img) {
+
+                    if (!in_array(str_replace(array('http://','https://'),'',$img->src), $postcurr_images)) {
+
+                        $invalid_files[] = (object)array('src' => $img->src);
+
+                    }
+
+                }
+
+            }
+
+            $invalid_files = (object)$invalid_files;
+        }
+
+        $remove_files[] = $post_id;
+
+        $wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE " . $valid_files_condition . " post_id = %d", $remove_files));
+
+        if (!empty($invalid_files))
+            geodir_remove_attachments($invalid_files);
     }
 
 }

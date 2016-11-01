@@ -39,7 +39,7 @@ class Users_WP_Forms {
 
         if (isset($_POST['uwp_register_submit'])) {
             $_POST['auto_login'] = apply_filters('uwp_register_auto_login', true);
-            $errors = $this->process_register($_POST);
+            $errors = $this->process_register($_POST, $_FILES);
             $message = __('Account registered successfully.', 'uwp');
             if ($_POST['auto_login']) {
                 $redirect = apply_filters('login_redirect', home_url('/'));
@@ -54,7 +54,7 @@ class Users_WP_Forms {
             $message = __('Please check your email.', 'uwp');
             $processed = true;
         } elseif (isset($_POST['uwp_account_submit'])) {
-            $errors = $this->process_account($_POST);
+            $errors = $this->process_account($_POST, $_FILES);
             $message = __('Account updated successfully.', 'uwp');
             $processed = true;
         }
@@ -86,7 +86,7 @@ class Users_WP_Forms {
         echo $uwp_notices;
     }
 
-    public function process_register($data = array()) {
+    public function process_register($data = array(), $files = array()) {
 
         $errors = new WP_Error();
 
@@ -109,7 +109,15 @@ class Users_WP_Forms {
             return $result;
         }
 
+        $uploads_result = $this->validate_uploads($files, 'register');
+
+        if (is_wp_error($uploads_result)) {
+            return $uploads_result;
+        }
+
         do_action('uwp_after_validate', 'register');
+
+        $result = array_merge( $result, $uploads_result );
 
         if ($errors->get_error_code())
             return $errors;
@@ -339,7 +347,7 @@ class Users_WP_Forms {
 
     }
 
-    public function process_account($data = array()) {
+    public function process_account($data = array(), $files = array()) {
 
         $current_user_id = get_current_user_id();
         if (!$current_user_id) {
@@ -362,7 +370,15 @@ class Users_WP_Forms {
             return $result;
         }
 
+        $uploads_result = $this->validate_uploads($files, 'account');
+
+        if (is_wp_error($uploads_result)) {
+            return $uploads_result;
+        }
+
         do_action('uwp_after_validate', 'account');
+
+        $result = array_merge( $result, $uploads_result );
 
         $args = array(
             'ID' => $current_user_id,
@@ -404,7 +420,7 @@ class Users_WP_Forms {
 
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_custom_fields';
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array($type)));
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
 
         $validated_data = array();
 
@@ -541,6 +557,39 @@ class Users_WP_Forms {
         return $validated_data;
     }
 
+    public function validate_uploads($files, $type) {
+
+        $errors = new WP_Error();
+        $validated_data = array();
+
+        if (empty($files)) {
+            return $validated_data;
+        }
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_custom_fields';
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
+
+
+        if (!empty($fields)) {
+            foreach ($fields as $field) {
+
+                if(isset($files[$field->htmlvar_name])) {
+                    $file_uploaded = $files[$field->htmlvar_name];
+
+                    $overrides = array('test_form' => false);
+
+                    $file = wp_handle_upload($file_uploaded, $overrides);
+
+                    $validated_data[$field->htmlvar_name] = $file['url'];
+                }
+
+            }
+        }
+
+        return $validated_data;
+    }
+
     public function uwp_save_user_extra_fields($user_id, $data, $type) {
 
         if (empty($user_id) || empty($data) || empty($type)) {
@@ -594,9 +643,8 @@ class Users_WP_Forms {
                 // Register and Account form extra fields should be saved under common name
                 // So it can be created and updated on the same meta.
                 // For this reason, lets replace all register meta keys with account meta keys
-                // todo: instead of using separate meta, use a single meta for all values
                 $key = str_replace('uwp_register_', 'uwp_account_', $key);
-                update_user_meta($user_id, $key, $value);
+                uwp_update_usermeta($user_id, $key, $value);
             }
             return true;
         }

@@ -192,11 +192,10 @@ class Users_WP {
         $this->loader->add_action( 'load-nav-menus.php', $plugin_admin_menus, 'users_wp_admin_menu_metabox' );
 
         //register settings
-        $this->loader->add_action( 'uwp_settings_general_tab_content', $plugin_admin_settings, 'get_general_content' );
-        $this->loader->add_action( 'uwp_settings_form_builder_tab_content', $plugin_admin_settings, 'get_form_builder_content' );
-        $this->loader->add_action( 'uwp_settings_recaptcha_tab_content', $plugin_admin_settings, 'get_recaptcha_content' );
-        $this->loader->add_action( 'uwp_settings_geodirectory_tab_content', $plugin_admin_settings, 'get_geodirectory_content' );
-        $this->loader->add_action( 'uwp_settings_notifications_tab_content', $plugin_admin_settings, 'get_notifications_content' );
+        $this->loader->add_action( 'uwp_settings_main_tab_content', $plugin_admin_settings, 'get_general_content' );
+        $this->loader->add_action( 'uwp_form_builder_settings_main_tab_content', $plugin_admin_settings, 'get_form_builder_content' );
+        $this->loader->add_action( 'uwp_display_form_title', $plugin_admin_settings, 'display_form_title', 10, 3 );
+        $this->loader->add_action( 'uwp_notifications_settings_main_tab_content', $plugin_admin_settings, 'get_notifications_content' );
 
     }
 

@@ -290,3 +290,43 @@ function uwp_get_option( $key = '', $default = false ) {
     $value = apply_filters( 'uwp_get_option', $value, $key, $default );
     return apply_filters( 'uwp_get_option_' . $key, $value, $key, $default );
 }
+
+function uwp_update_usermeta( $user_id = false, $key, $value ) {
+
+    if (!$user_id || !$key || !$value) {
+        return false;
+    }
+
+    $usermeta = get_user_meta( $user_id, 'uwp_usermeta' );
+
+    if( !is_array( $usermeta ) ) {
+        $usermeta = array();
+    }
+
+    $usermeta[ $key ] = $value;
+
+    $usermeta = apply_filters( 'uwp_update_usermeta', $usermeta, $user_id, $key, $value );
+    $usermeta =  apply_filters( 'uwp_update_usermeta_' . $key, $usermeta, $user_id, $key, $value );
+
+    update_user_meta($user_id, 'uwp_usermeta', $usermeta);
+
+    return true;
+}
+
+
+function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
+
+    if (!$user_id) {
+        return $default;
+    }
+
+    $usermeta = get_user_meta( $user_id, 'uwp_usermeta' );
+
+    if( !is_array( $usermeta ) ) {
+        $usermeta = array();
+    }
+
+    $value = ! empty( $usermeta[ $key ] ) ? $usermeta[ $key ] : $default;
+    $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
+    return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
+}
