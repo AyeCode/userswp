@@ -436,6 +436,13 @@ class Users_WP_Admin_Settings {
                         'chosen' => true,
                         'placeholder' => __( 'Select a page', 'uwp' )
                     ),
+                    'profile_no_of_items' => array(
+                        'id' => 'profile_no_of_items',
+                        'name' => __( 'Number of Items', 'uwp-gd' ),
+                        'type' => 'text',
+                        'std' => '',
+                        'desc' 	=> __( 'Enter number of items to display in profile tabs.', 'uwp-gd' ),
+                    ),
                 )
             ),
             'notifications' => apply_filters( 'uwp_settings_notifications',
