@@ -109,6 +109,7 @@ class Users_WP_Admin_Settings {
     }
 
     public function get_general_content() {
+
         $subtab = 'general';
 
         if (isset($_GET['subtab'])) {
@@ -560,26 +561,31 @@ class Users_WP_Admin_Settings {
     }
 
     public function uwp_settings_sanitize( $input = array() ) {
-
         global $uwp_options;
 
         if ( empty( $_POST['_wp_http_referer'] ) ) {
             return $input;
         }
 
-        parse_str( $_POST['_wp_http_referer'], $referrer );
+        $parsed_url = wp_parse_url($_POST['_wp_http_referer']);
+
+        if (!isset($parsed_url['query'])) {
+            return $input;
+        }
+        parse_str( $parsed_url['query'], $referrer );
 
         $settings = $this->uwp_get_registered_settings();
-        $tab      = isset( $referrer['tab'] ) ? $referrer['tab'] : 'general';
+
+        $tab      = isset( $referrer['tab'] ) ? $referrer['tab'] : 'main';
+        $page      = isset( $referrer['page'] ) ? $referrer['page'] : 'uwp';
 
         $input = $input ? $input : array();
-        $input = apply_filters( 'uwp_settings_' . $tab . '_sanitize', $input );
+        $input = apply_filters( 'uwp_settings_'.$page.'_' . $tab . '_sanitize', $input );
 
         // Loop through each setting being saved and pass it through a sanitization filter
         foreach ( $input as $key => $value ) {
-
             // Get the setting type (checkbox, select, etc)
-            $type = isset( $settings[$tab][$key]['type'] ) ? $settings[$tab][$key]['type'] : false;
+            $type = isset( $settings[$page][$tab][$key]['type'] ) ? $settings[$page][$tab][$key]['type'] : false;
 
             if ( $type ) {
                 // Field type specific filter
@@ -591,8 +597,8 @@ class Users_WP_Admin_Settings {
         }
 
         // Loop through the whitelist and unset any that are empty for the tab being saved
-        if ( ! empty( $settings[$tab] ) ) {
-            foreach ( $settings[$tab] as $key => $value ) {
+        if ( ! empty( $settings[$page][$tab] ) ) {
+            foreach ( $settings[$page][$tab] as $key => $value ) {
 
                 // settings used to have numeric keys, now they have keys that match the option ID. This ensures both methods work
                 if ( is_numeric( $key ) ) {

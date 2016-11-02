@@ -3,66 +3,88 @@
   -moz-box-sizing: content-box;
   box-sizing: content-box
 }
-.uwp-login, .uwp-registration {
+.uwp-login,
+.uwp-registration,
+.uwp-forgot,
+.uwp-account {
   background: #f1f1f1 none repeat scroll 0 0;
   margin: 0 auto;
   max-width: 340px;
   padding: 40px;
   width: 100%;
+  .uwp-lf-icon,
+  .uwp-rf-icon {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    height: auto;
+    margin: 0 auto;
+    padding: 22px;
+    width: 36px;
+    .fa {
+      color: #ccc;
+      font-size: 30px;
+    }
+  }
+
+  > h2 {
+    color: #717171;
+    font-size: 24px;
+    margin: 10px 0 30px;
+    text-align: center;
+  }
 }
 
-.uwp-lf-icon, .uwp-rf-icon {
-  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-  border: 1px solid #ccc;
-  border-radius: 50px;
-  height: auto;
-  margin: 0 auto;
-  padding: 22px;
-  width: 36px;
+
+
+.uwp-login-form,
+.uwp-registration-form,
+.uwp-forgot-form,
+.uwp-account-form {
+
+  label {
+    display: none;
+  }
+
+  input,
+  select {
+    margin: 0 0 20px;
+    padding: 12px 15px !important;
+    height: auto !important;
+    line-height: normal !important;
+    width: 90% !important;
+  }
+
+  select {
+    height: 45px !important;
+    width: 99% !important;
+  }
+
+  input.uwp-half {
+    margin: 0 5px 20px 0;
+    padding: 12px 15px !important;
+    width: 39.5% !important;
+    float: left !important;
+  }
+
+  input.uwp-half.uwp-half-right {
+    margin-right: 0;
+  }
+
+  input.uwp-half:nth-child(4) {
+    margin-right: 0;
+  }
+
+  input[type="submit"] {
+    background: #717171 none repeat scroll 0 0;
+    border: 0 none;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100%;
+  }
 }
 
-.uwp-login .fa-user, .uwp-registration .fa-pencil {
-  color: #ccc;
-  font-size: 30px;
-}
-
-.uwp-login > h2, .uwp-registration > h2 {
-  color: #717171;
-  font-size: 24px;
-  margin: 10px 0 30px;
-  text-align: center;
-}
-
-.uwp-login-form > input, .uwp-registration-form > input {
-  margin: 0 0 20px;
-  padding: 12px 15px !important;
-  height: auto !important;
-  line-height: normal !important;
-  width: 90% !important;
-}
-
-.uwp-registration-form > input.uwp-half {
-  margin: 0 5px 20px 0;
-  padding: 12px 15px !important;
-  width: 39.5% !important;
-  float: left !important;
-}
-.uwp-registration-form > input.uwp-half.uwp-half-right {
-  margin-right: 0;
-}
-
-.uwp-registration-form > input.uwp-half:nth-child(4) {
-  margin-right: 0;
-}
-
-.uwp-login-form > input[type="submit"], .uwp-registration-form > input[type="submit"] {
-  background: #717171 none repeat scroll 0 0;
-  border: 0 none;
-  color: #fff;
-  font-weight: bold;
-  text-transform: uppercase;
-  width: 100%;
-}
 
 .uwp-remember-me {
   float: left;

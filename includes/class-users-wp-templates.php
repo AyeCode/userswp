@@ -153,9 +153,10 @@ class Users_WP_Templates {
 
     public function uwp_template_fields_html($field, $form_type) {
 
+        $user_id = get_current_user_id();
+
         $value = $field->default_value;
         if ($form_type == 'account') {
-            $user_id = get_current_user_id();
             $user_data = get_userdata($user_id);
 
             if ($field->htmlvar_name == 'uwp_account_email') {
@@ -177,22 +178,23 @@ class Users_WP_Templates {
 
         }
 
-
-
         if (empty($value)) {
             $value = "";
         }
 
-        switch($field->field_type) {
-            default:
-                ?>
-                <input name="<?php echo $field->htmlvar_name; ?>"
-                       class="<?php echo $field->css_class; ?>"
-                       placeholder="<?php echo $field->site_title; ?>"
-                    <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
-                       type="<?php echo $field->field_type; ?>"
-                       value="<?php echo $value; ?>">
-                <?php
+        $html = apply_filters("uwp_form_input_html_{$field->field_type}", "", $field, $value, $form_type);
+
+        if (empty($html)) {
+            ?>
+            <input name="<?php echo $field->htmlvar_name; ?>"
+                   class="<?php echo $field->css_class; ?>"
+                   placeholder="<?php echo $field->site_title; ?>"
+                <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                   type="<?php echo $field->field_type; ?>"
+                   value="<?php echo $value; ?>">
+            <?php
+        } else {
+            echo $html;
         }
     }
 
@@ -203,6 +205,142 @@ class Users_WP_Templates {
             return $content;
         }
 
+    }
+
+    public function uwp_form_input_datepicker($html, $field, $value, $form_type){
+
+        // Check if there is a field specific filter.
+        if(has_filter("uwp_form_input_html_datepicker_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_html_datepicker_{$field->htmlvar_name}", $html, $field, $value, $form_type);
+        }
+
+        // If no html then we run the standard output.
+        if(empty($html)) {
+
+            ob_start(); // Start  buffering;
+
+            $extra_fields = unserialize($field->extra_fields);
+
+            if ($extra_fields['date_format'] == '')
+                $extra_fields['date_format'] = 'yy-mm-dd';
+
+            $date_format = $extra_fields['date_format'];
+            $jquery_date_format  = $date_format;
+
+
+            // check if we need to change the format or not
+            $date_format_len = strlen(str_replace(' ', '', $date_format));
+            if($date_format_len>5){// if greater then 5 then it's the old style format.
+
+                $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
+                $replace = array('d','j','l','m','n','F','Y');//PHP date format
+
+                $date_format = str_replace($search, $replace, $date_format);
+            }else{
+                $jquery_date_format = uwp_date_format_php_to_jqueryui( $jquery_date_format );
+            }
+
+            if($value=='0000-00-00'){$value='';}//if date not set, then mark it empty
+            $value = uwp_date($value, 'Y-m-d', $date_format);
+
+            ?>
+            <script type="text/javascript">
+
+                jQuery(function () {
+
+                    jQuery("#<?php echo $field->htmlvar_name;?>").datepicker({changeMonth: true, changeYear: true <?php
+
+                    echo apply_filters("uwp_datepicker_extra_{$field->htmlvar_name}",'');?>});
+
+                    jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("option", "dateFormat", '<?php echo $jquery_date_format;?>');
+
+                    <?php if(!empty($value)){?>
+                    jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("setDate", '<?php echo $value;?>');
+                    <?php } ?>
+
+                });
+
+            </script>
+            <div id="<?php echo $field->htmlvar_name;?>_row"
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp-fieldset-details">
+                <label>
+
+                    <?php $site_title = __($field->site_title, 'uwp');
+                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                    <?php if ($field->is_required) echo '<span>*</span>';?>
+                </label>
+
+                <input name="<?php echo $field->htmlvar_name;?>" id="<?php echo $field->htmlvar_name;?>"
+                       value="<?php echo esc_attr($value);?>" type="text" class="uwp_textfield"/>
+
+                <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
+                <?php if ($field->is_required) { ?>
+                    <span class="uwp_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>
+                <?php } ?>
+            </div>
+
+            <?php
+            $html = ob_get_clean();
+        }
+
+        return $html;
+    }
+
+
+    public function uwp_form_input_select($html, $field, $value, $form_type){
+
+        // Check if there is a field specific filter.
+        if(has_filter("uwp_form_input_html_select_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_html_select_{$field->htmlvar_name}", $html, $field, $value, $form_type);
+        }
+
+        // If no html then we run the standard output.
+        if(empty($html)) {
+
+            ob_start(); // Start  buffering;
+
+            ?>
+            <div id="<?php echo $field->htmlvar_name;?>_row"
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row">
+                <label>
+                    <?php $site_title = __($field->site_title, 'uwp');
+                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                    <?php if ($field->is_required) echo '<span>*</span>';?>
+                </label>
+                <?php
+                $option_values_arr = uwp_string_values_to_options($field->option_values, true);
+                $select_options = '';
+                if (!empty($option_values_arr)) {
+                    foreach ($option_values_arr as $option_row) {
+                        if (isset($option_row['optgroup']) && ($option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end')) {
+                            $option_label = isset($option_row['label']) ? $option_row['label'] : '';
+
+                            $select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr($option_label) . '">' : '</optgroup>';
+                        } else {
+                            $option_label = isset($option_row['label']) ? $option_row['label'] : '';
+                            $option_value = isset($option_row['value']) ? $option_row['value'] : '';
+                            $selected = $option_value == $value ? 'selected="selected"' : '';
+
+                            $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
+                        }
+                    }
+                }
+                ?>
+                <select name="<?php echo $field->htmlvar_name;?>" id="<?php echo $field->htmlvar_name;?>"
+                        class="uwp_textfield uwp_chosen_select"
+                        data-placeholder="<?php echo __('Choose', 'uwp') . ' ' . $site_title . '&hellip;';?>"
+                        option-ajaxchosen="false"><?php echo $select_options;?></select>
+                <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
+                <?php if ($field->is_required) { ?>
+                    <span class="uwp_message_error"><?php _e($field->is_required, 'uwp'); ?></span>
+                <?php } ?>
+            </div>
+
+            <?php
+            $html = ob_get_clean();
+        }
+
+        return $html;
     }
 
 }
