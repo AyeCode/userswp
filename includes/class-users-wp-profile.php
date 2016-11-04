@@ -385,22 +385,22 @@ class Users_WP_Profile {
             }
 
 
-            $url_type = 1;
+            $url_type = apply_filters('uwp_profile_url_type', 'login');
 
-            if ($url_type && 2 == $url_type) {
-                $username = get_the_author_meta('user_login', $user_id);
-                if ('DEFAULT' == $permalink_structure) {
-                    return add_query_arg(array('username' => $username), $link);
-                } else {
-                    $username = str_replace('@', '-at-', $username);
-                    return $link . $username;
-                }
-            } else {
+            if ($url_type && 'id' == $url_type) {
                 if ('DEFAULT' == $permalink_structure) {
                     return add_query_arg(array('viewuser' => $user_id), $link);
                 } else {
                     return $link . $user_id;
                 }
+            } else {
+                $username = get_the_author_meta('user_login', $user_id);
+                if ('DEFAULT' == $permalink_structure) {
+                    return add_query_arg(array('username' => $username), $link);
+                } else {
+                    return $link . $username;
+                }
+
             }
         } else {
             return '';
@@ -413,7 +413,16 @@ class Users_WP_Profile {
         $page_id = uwp_get_option('user_profile_page', false);
 
         if ($page_id == $id && isset($wp_query->query_vars['uwp_profile'])) {
-            $user = get_user_by('id', $wp_query->query_vars['uwp_profile']);
+
+            $url_type = apply_filters('uwp_profile_url_type', 'login');
+
+            $author_slug = $wp_query->query_vars['uwp_profile'];
+
+            if ($url_type == 'id') {
+                $user = get_user_by('id', $author_slug);
+            } else {
+                $user = get_user_by('login', $author_slug);
+            }
             $title = $user->display_name;
         }
 

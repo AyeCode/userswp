@@ -1,7 +1,13 @@
 <?php do_action('uwp_template_before', 'profile'); ?>
 <?php
-$author_id = get_query_var('uwp_profile');
-$user = get_user_by('id', $author_id);
+$url_type = apply_filters('uwp_profile_url_type', 'login');
+
+$author_slug = get_query_var('uwp_profile');
+if ($url_type == 'id') {
+    $user = get_user_by('id', $author_slug);
+} else {
+    $user = get_user_by('login', $author_slug);
+}
 ?>
 <div class="uwp-content-wrap">
 <?php do_action('uwp_profile_header', $user ); ?>

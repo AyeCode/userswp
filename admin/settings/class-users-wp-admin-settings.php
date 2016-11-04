@@ -46,7 +46,7 @@ class Users_WP_Admin_Settings {
             <h1><?php echo get_admin_page_title(); ?></h1>
 
             <div id="users-wp">
-                <div class="item-list-tabs content-box">
+                <div class="item-list-tabs">
 
                     <?php if (count($settings_array[$page]) > 1) { ?>
 
@@ -93,6 +93,9 @@ class Users_WP_Admin_Settings {
         // wp-admin/admin.php?page=uwp
         $tabs['uwp']  = array(
             'main' => __( 'General', 'uwp' ),
+            'register' => __( 'Register', 'uwp' ),
+            'login' => __( 'Login', 'uwp' ),
+            'profile' => __( 'Profile', 'uwp' ),
         );
 
         // wp-admin/admin.php?page=uwp_form_builder
@@ -117,15 +120,15 @@ class Users_WP_Admin_Settings {
         }
         ?>
         <div class="item-list-sub-tabs">
-            <ul class="item-list-tabs-ul">
+            <ul class="item-list-sub-tabs-ul">
                 <li class="<?php if ($subtab == 'general') { echo "current selected"; } ?>">
-                    <a href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'general')); ?>">General Settings</a>
+                    <a href="<?php echo add_query_arg(array('tab' => 'main', 'subtab' => 'general')); ?>">General Settings</a>
                 </li>
                 <li class="<?php if ($subtab == 'shortcodes') { echo "current selected"; } ?>">
-                    <a href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'shortcodes')); ?>">Shortcodes</a>
+                    <a href="<?php echo add_query_arg(array('tab' => 'main', 'subtab' => 'shortcodes')); ?>">Shortcodes</a>
                 </li>
                 <li class="<?php if ($subtab == 'info') { echo "current selected"; } ?>">
-                    <a href="<?php echo add_query_arg(array('tab' => 'general', 'subtab' => 'info')); ?>">Info</a>
+                    <a href="<?php echo add_query_arg(array('tab' => 'main', 'subtab' => 'info')); ?>">Info</a>
                 </li>
             </ul>
         </div>
@@ -158,10 +161,10 @@ class Users_WP_Admin_Settings {
             <table class="uwp-form-table">
                 <?php settings_fields( 'uwp_settings' ); ?>
                 <?php
-                global $wp_settings_fields;
+                //global $wp_settings_fields;
                 //var_dump($wp_settings_fields);
                 ?>
-				<?php do_settings_fields( 'uwp_settings_' . $page, 'uwp_settings_' . $page ); ?>
+				<?php do_settings_fields( 'uwp_settings_' . $page .'_'.$active_tab, 'uwp_settings_' . $page .'_'.$active_tab ); ?>
 			</table>
 			<?php submit_button(); ?>
 
@@ -323,15 +326,19 @@ class Users_WP_Admin_Settings {
         <?php
         if ($subtab == 'register') {
             ?>
-            <h3 class="users_wp_section_heading">Manage Register Form Fields</h3>
+            <h3 class="">Manage Register Form Fields</h3>
             <?php
             $form_builder->uwp_form_builder();
         } elseif ($subtab == 'account') {
             ?>
-            <h3 class="users_wp_section_heading">Manage Account Form Fields</h3>
+            <h3 class="">Manage Account Form Fields</h3>
             <?php
             $form_builder->uwp_form_builder();
         }
+    }
+
+    public function generic_display_form() {
+        echo $this->display_form();
     }
 
     public function get_recaptcha_content() {
@@ -344,7 +351,7 @@ class Users_WP_Admin_Settings {
 
     public function get_notifications_content() {
         ?>
-        <h3 class="users_wp_section_heading">Email Notifications</h3>
+        <h3 class="">Email Notifications</h3>
 
             <table class="uwp-form-table">
                <tbody>
@@ -370,7 +377,6 @@ class Users_WP_Admin_Settings {
         foreach( $this->uwp_get_registered_settings() as $tab => $settings ) {
 
             foreach ( $settings as $key => $opt ) {
-
                 add_settings_section(
                     'uwp_settings_' . $tab .'_'.$key,
                     __return_null(),
@@ -385,8 +391,8 @@ class Users_WP_Admin_Settings {
                         'uwp_settings[' . $option['id'] . ']',
                         $name,
                         function_exists( 'uwp_' . $option['type'] . '_callback' ) ? 'uwp_' . $option['type'] . '_callback' : 'uwp_missing_callback',
-                        'uwp_settings_' . $tab,
-                        'uwp_settings_' . $tab,
+                        'uwp_settings_' . $tab .'_'.$key,
+                        'uwp_settings_' . $tab .'_'.$key,
                         array(
                             'section'     => $tab,
                             'id'          => isset( $option['id'] )          ? $option['id']          : null,
@@ -494,6 +500,86 @@ class Users_WP_Admin_Settings {
                             'type' => 'text',
                             'std' => '',
                             'desc' 	=> __( 'Enter number of items to display in profile tabs.', 'uwp-gd' ),
+                        ),
+                    )
+                ),
+                'register' => apply_filters( 'uwp_settings_general_register',
+                    array(
+                        'enable_register_password' => array(
+                            'id'   => 'enable_register_password',
+                            'name' => 'Display Password field in Regsiter Form',
+                            'desc' => '',
+                            'type' => 'checkbox',
+                            'std'  => '1',
+                            'class' => 'uwp_label_inline',
+                        ),
+                    )
+                ),
+                'login' => apply_filters( 'uwp_settings_general_login',
+                    array(
+                        'login_redirect_to' => array(
+                            'id' => 'login_redirect_to',
+                            'name' => __( 'Login Redirect Page', 'uwp' ),
+                            'desc' => __( 'Set the page to redirect the user after logging in. If no page set it will user WordPress default.', 'uwp' ),
+                            'type' => 'select',
+                            'options' => $this->uwp_get_pages(),
+                            'chosen' => true,
+                            'placeholder' => __( 'Select a page', 'uwp' ),
+                            'class' => 'uwp_label_block',
+                        ),
+                        'logout_redirect_to' => array(
+                            'id' => 'logout_redirect_to',
+                            'name' => __( 'Logout Redirect Page', 'uwp' ),
+                            'desc' => __( 'Set the page to redirect the user after logging out. If no page set it will user WordPress default', 'uwp' ),
+                            'type' => 'select',
+                            'options' => $this->uwp_get_pages(),
+                            'chosen' => true,
+                            'placeholder' => __( 'Select a page', 'uwp' ),
+                            'class' => 'uwp_label_block',
+                        ),
+                    )
+                ),
+                'profile' => apply_filters( 'uwp_settings_general_profile',
+                    array(
+                        'enable_profile_header' => array(
+                            'id'   => 'enable_profile_header',
+                            'name' => 'Display Header in Profile',
+                            'desc' => '',
+                            'type' => 'checkbox',
+                            'std'  => '1',
+                            'class' => 'uwp_label_inline',
+                        ),
+                        'enable_profile_body' => array(
+                            'id'   => 'enable_profile_body',
+                            'name' => 'Display Body in Profile',
+                            'desc' => '',
+                            'type' => 'checkbox',
+                            'std'  => '1',
+                            'class' => 'uwp_label_inline',
+                        ),
+                        'enable_profile_posts_tab' => array(
+                            'id'   => 'enable_profile_posts_tab',
+                            'name' => 'Display Posts Tab in Profile',
+                            'desc' => '',
+                            'type' => 'checkbox',
+                            'std'  => '1',
+                            'class' => 'uwp_label_inline',
+                        ),
+                        'enable_profile_comments_tab' => array(
+                            'id'   => 'enable_profile_comments_tab',
+                            'name' => 'Display Comments Tab in Profile',
+                            'desc' => '',
+                            'type' => 'checkbox',
+                            'std'  => '1',
+                            'class' => 'uwp_label_inline',
+                        ),
+                        'profile_avatar_max_size' => array(
+                            'id' => 'profile_avatar_max_size',
+                            'name' => __( 'Profile Avatar Max File Size', 'uwp' ),
+                            'desc' => "",
+                            'type' => 'text',
+                            'size' => 'regular',
+                            'placeholder' => __( 'Enter Registration success email Subject', 'uwp' )
                         ),
                     )
                 ),

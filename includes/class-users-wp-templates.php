@@ -122,7 +122,14 @@ class Users_WP_Templates {
 
         if ($condition == "non_logged_in") {
             if (is_user_logged_in()) {
-                wp_redirect(home_url('/'));
+                $redirect_page_id = uwp_get_option('account_page', '');
+                if (empty($redirect_page_id)) {
+                    $redirect_to = home_url('/');
+                } else {
+                    $redirect_to = get_permalink($redirect_page_id);
+                }
+                $redirect_to = apply_filters('uwp_logged_in_redirect', $redirect_to);
+                wp_redirect($redirect_to);
                 exit();
             }
         } elseif ($condition == "logged_in") {
@@ -341,6 +348,114 @@ class Users_WP_Templates {
         }
 
         return $html;
+    }
+
+    public function uwp_setup_nav_menu_item( $menu_item ) {
+
+        if ( is_admin() ) {
+            return $menu_item;
+        }
+
+        // Prevent a notice error when using the customizer
+        $menu_classes = $menu_item->classes;
+
+        if ( is_array( $menu_classes ) ) {
+            $menu_classes = implode( ' ', $menu_item->classes );
+            $str = 'users-wp-menu ';
+            if (strpos($menu_classes, 'users-wp-menu ') !== false) {
+                $menu_classes = str_replace($str, '', $menu_classes);
+            }
+        }
+
+        $register_slug = $this->uwp_get_page_slug('register_page');
+        $login_slug = $this->uwp_get_page_slug('login_page');
+        $account_slug = $this->uwp_get_page_slug('account_page');
+        $forgot_slug = $this->uwp_get_page_slug('forgot_pass_page');
+        $logout_slug = "logout";
+
+        $register_class = "users-wp-{$register_slug}-nav";
+        $login_class = "users-wp-{$login_slug}-nav";
+        $account_class = "users-wp-{$account_slug}-nav";
+        $forgot_class = "users-wp-{$forgot_slug}-nav";
+        $logout_class = "users-wp-{$logout_slug}-nav";
+
+        switch ( $menu_classes ) {
+            case $register_class:
+                if ( is_user_logged_in() ) {
+                    $menu_item->_invalid = true;
+                } else {
+                    $menu_item->url = get_permalink(uwp_get_option('register_page', 0));
+                }
+                break;
+            case $login_class:
+                if ( is_user_logged_in() ) {
+                    $menu_item->_invalid = true;
+                } else {
+                    $menu_item->url = get_permalink(uwp_get_option('login_page', 0));
+                }
+                break;
+            case $account_class:
+                if ( ! is_user_logged_in() ) {
+                    $menu_item->_invalid = true;
+                } else {
+                    $menu_item->url = get_permalink(uwp_get_option('account_page', 0));
+                }
+                break;
+            case $forgot_class:
+                if ( is_user_logged_in() ) {
+                    $menu_item->_invalid = true;
+                } else {
+                    $menu_item->url = get_permalink(uwp_get_option('forgot_pass_page', 0));
+                }
+                break;
+            case $logout_class:
+                if ( ! is_user_logged_in() ) {
+                    $menu_item->_invalid = true;
+                } else {
+                    $menu_item->url = $this->uwp_logout_url();
+                }
+                break;
+        }
+
+        return $menu_item;
+
+    }
+
+    public function uwp_get_page_slug($page_type = 'register_page') {
+        $page_id = uwp_get_option($page_type, 0);
+        if ($page_id) {
+            $slug = get_post_field( 'post_name', get_post($page_id) );
+        } else {
+            $slug = false;
+        }
+        return $slug;
+
+    }
+
+    public function uwp_logout_url( $custom_redirect = null ) {
+
+        $redirect = null;
+
+        if ( !empty( $custom_redirect ) ) {
+            $redirect = esc_url( $custom_redirect );
+        } else if ( uwp_get_option('logout_redirect_to', false) ) {
+            $redirect = esc_url( get_permalink( uwp_get_option('logout_redirect_to', 0) ) );
+        }
+
+        return wp_logout_url( apply_filters( 'uwp_logout_url', $redirect, $custom_redirect ) );
+
+    }
+
+    public function uwp_activation_redirect() {
+
+        if (get_option('uwp_activation_redirect', false)) {
+
+            delete_option('uwp_activation_redirect');
+
+            wp_redirect(admin_url('admin.php?page=uwp&tab=main&subtab=info'));
+
+        }
+
     }
 
 }

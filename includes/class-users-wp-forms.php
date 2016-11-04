@@ -37,17 +37,25 @@ class Users_WP_Forms {
         $redirect = false;
         $processed = false;
 
+        $redirect_page_id = uwp_get_option('login_redirect_to', '');
+        if (empty($redirect_page_id)) {
+            $redirect_to = home_url('/');
+        } else {
+            $redirect_to = get_permalink($redirect_page_id);
+        }
+        $redirect_to = apply_filters('uwp_login_redirect', $redirect_to);
+
         if (isset($_POST['uwp_register_submit'])) {
             $_POST['auto_login'] = apply_filters('uwp_register_auto_login', true);
             $errors = $this->process_register($_POST, $_FILES);
             $message = __('Account registered successfully.', 'uwp');
             if ($_POST['auto_login']) {
-                $redirect = apply_filters('login_redirect', home_url('/'));
+                $redirect = $redirect_to;
             }
             $processed = true;
         } elseif (isset($_POST['uwp_login_submit'])) {
             $errors = $this->process_login($_POST);
-            $redirect = apply_filters('login_redirect', home_url('/'));
+            $redirect = $redirect_to;
             $processed = true;
         } elseif (isset($_POST['uwp_forgot_submit'])) {
             $errors = $this->process_forgot($_POST);
@@ -256,7 +264,14 @@ class Users_WP_Forms {
             $errors->add('invalid_userorpass', __('<strong>Error</strong>: Invalid username or Password.', 'uwp'));
             return $errors;
         } else {
-            wp_redirect(home_url('/'));
+            $redirect_page_id = uwp_get_option('login_redirect_to', '');
+            if (empty($redirect_page_id)) {
+                $redirect_to = home_url('/');
+            } else {
+                $redirect_to = get_permalink($redirect_page_id);
+            }
+            $redirect_to = apply_filters('uwp_login_redirect', $redirect_to);
+            wp_redirect($redirect_to);
             exit();
         }
     }
@@ -575,11 +590,8 @@ class Users_WP_Forms {
             foreach ($fields as $field) {
 
                 if(isset($files[$field->htmlvar_name])) {
-                    $file_uploaded = $files[$field->htmlvar_name];
 
-                    $overrides = array('test_form' => false);
-
-                    $file = wp_handle_upload($file_uploaded, $overrides);
+                    $url = $this->handle_file_upload($field->htmlvar_name);
 
                     $validated_data[$field->htmlvar_name] = $file['url'];
                 }
@@ -802,6 +814,132 @@ class Users_WP_Forms {
                 error_log( $log );
             }
         }
+    }
+
+    public function handle_file_upload( $field_key, $field ) {
+
+        if ( isset( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ]['name'] ) ) {
+
+            $allowed_mime_types = apply_filters('uwp_allowed_mime_types', get_allowed_mime_types(), $field_key);
+
+            $file_urls       = array();
+            $files_to_upload = $this->uwp_prepare_files( $_FILES[ $field_key ] );
+
+            foreach ( $files_to_upload as $file_key => $file_to_upload ) {
+
+                // Trigger validation rules for avatar only.
+                if( $field_key == 'user_avatar' ) {
+
+                    if ( !in_array( $file_to_upload['type'] , $allowed_mime_types ) )
+                        return new WP_Error( 'validation-error', sprintf( __( 'Allowed files types are: %s', 'uwp' ), implode( ', ', array_keys( $allowed_mime_types ) ) ) );
+
+                    if ( $field_key == 'user_avatar' && $file_to_upload['size'] > uwp_get_option('profile_avatar_max_size', 1000) )
+                        return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big.', 'uwp' ) );
+
+                } else {
+
+                    // Trigger verification for other file fields.
+                    if( array_key_exists( 'allowed_extensions' , $field ) && is_array( $field['allowed_extensions'] ) ) {
+
+                        $allowed_field_extensions = $field['allowed_extensions'];
+                        $uploaded_file_extension  = pathinfo( $file_to_upload['name'] );
+                        $uploaded_file_extension  = $uploaded_file_extension['extension'];
+
+                        if( ! in_array( $uploaded_file_extension , $allowed_field_extensions ) ) {
+                            return new WP_Error( 'validation-error', sprintf( esc_html__( 'Error: the "%s" field allows only %s files to be uploaded.', 'uwp' ), $field['label'], implode ( ", ", $allowed_field_extensions ) ) );
+                        }
+
+                    }
+
+                }
+
+                $uploaded_file = $this->uwp_upload_file( $file_to_upload, array( 'file_key' => $file_key ) );
+
+                if ( is_wp_error( $uploaded_file ) ) {
+
+                    return new WP_Error( 'validation-error', $uploaded_file->get_error_message() );
+
+                } else {
+
+                    $file_urls[] = array(
+                        'url'  => $uploaded_file->url,
+                        'path' => $uploaded_file->path,
+                        'size' => $uploaded_file->size
+                    );
+
+                }
+
+            }
+
+            if ( ! empty( $field['multiple'] ) ) {
+                return $file_urls;
+            } else {
+                return current( $file_urls );
+            }
+
+        }
+        return true;
+
+    }
+
+    public function uwp_prepare_files( $file_data ) {
+        $files_to_upload = array();
+
+        if ( is_array( $file_data['name'] ) ) {
+            foreach ( $file_data['name'] as $file_data_key => $file_data_value ) {
+
+                if ( $file_data['name'][ $file_data_key ] ) {
+                    $files_to_upload[] = array(
+                        'name'     => $file_data['name'][ $file_data_key ],
+                        'type'     => $file_data['type'][ $file_data_key ],
+                        'tmp_name' => $file_data['tmp_name'][ $file_data_key ],
+                        'error'    => $file_data['error'][ $file_data_key ],
+                        'size'     => $file_data['size'][ $file_data_key ]
+                    );
+                }
+            }
+        } else {
+            $files_to_upload[] = $file_data;
+        }
+
+        return $files_to_upload;
+    }
+
+    function uwp_upload_file( $file, $args = array() ) {
+
+        include_once ABSPATH . 'wp-admin/includes/file.php';
+        include_once ABSPATH . 'wp-admin/includes/media.php';
+
+        $args = wp_parse_args( $args, array(
+            'file_key'           => '',
+            'file_label'         => '',
+            'allowed_mime_types' => get_allowed_mime_types()
+        ) );
+
+        $uploaded_file              = new stdClass();
+
+        if ( ! in_array( $file['type'], $args['allowed_mime_types'] ) ) {
+            if ( $args['file_label'] ) {
+                return new WP_Error( 'upload', sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s', 'uwp' ), $args['file_label'], $file['type'], implode( ', ', array_keys( $args['allowed_mime_types'] ) ) ) );
+            } else {
+                return new WP_Error( 'upload', sprintf( __( 'Uploaded files need to be one of the following file types: %s', 'uwp' ), implode( ', ', array_keys( $args['allowed_mime_types'] ) ) ) );
+            }
+        } else {
+            $upload = wp_handle_upload( $file, apply_filters( 'uwp_handle_upload_overrides', array( 'test_form' => false ) ) );
+            if ( ! empty( $upload['error'] ) ) {
+                return new WP_Error( 'upload', $upload['error'] );
+            } else {
+                $uploaded_file->url       = $upload['url'];
+                $uploaded_file->name      = basename( $upload['file'] );
+                $uploaded_file->path      = $upload['file'];
+                $uploaded_file->type      = $upload['type'];
+                $uploaded_file->size      = $file['size'];
+                $uploaded_file->extension = substr( strrchr( $uploaded_file->name, '.' ), 1 );
+            }
+        }
+
+
+        return $uploaded_file;
     }
 
 }

@@ -241,49 +241,6 @@ function uwp_build_profile_tab_url($user_id, $tab = false, $subtab = false) {
 
 }
 
-function uwp_geodir_get_reviews_by_user_id($post_type = 'gd_place', $user_id, $count_only = false, $offset = 0, $limit = 20)
-{
-    global $wpdb;
-
-    if ($count_only) {
-        $results = $wpdb->get_var(
-            $wpdb->prepare(
-                "SELECT COUNT(overall_rating) FROM " . GEODIR_REVIEW_TABLE . " WHERE user_id = %d AND post_type = %s AND status=1 AND overall_rating>0",
-                array($user_id, $post_type)
-            )
-        );
-    } else {
-        $results = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE user_id = %d AND post_type = %s AND status=1 AND overall_rating>0 LIMIT %d OFFSET %d",
-                array($user_id, $post_type, $limit, $offset )
-            )
-        );
-    }
-
-
-    if (!empty($results))
-        return $results;
-    else
-        return false;
-}
-
-function uwp_geodir_count_favorite( $post_type, $user_id = 0 ) {
-    global $wpdb;
-
-    $post_status = is_super_admin() ? " OR " . $wpdb->posts . ".post_status = 'private'" : '';
-    if ( $user_id && $user_id == get_current_user_id() ) {
-        $post_status .= " OR " . $wpdb->posts . ".post_status = 'draft' OR " . $wpdb->posts . ".post_status = 'private'";
-    }
-
-    $user_fav_posts = get_user_meta( (int)$user_id, 'gd_user_favourite_post', true );
-    $user_fav_posts = !empty( $user_fav_posts ) ? implode( "','", $user_fav_posts ) : "-1";
-
-    $count = (int)$wpdb->get_var( "SELECT count( ID ) FROM ".$wpdb->posts." WHERE " . $wpdb->posts . ".ID IN ('" . $user_fav_posts . "') AND post_type='" . $post_type . "' AND ( post_status = 'publish' " . $post_status . " )" );
-
-    return apply_filters( 'uwp_geodir_count_favorite', $count, $user_id );
-}
-
 function uwp_get_option( $key = '', $default = false ) {
     global $uwp_options;
     $value = ! empty( $uwp_options[ $key ] ) ? $uwp_options[ $key ] : $default;
@@ -585,4 +542,22 @@ function uwp_string_to_options($input = '', $translated = false)
     }
 
     return $return;
+}
+
+add_filter('uwp_allowed_image_types', 'uwp_allowed_image_types', 10, 2);
+function uwp_allowed_image_types( $image_mimes, $field_key ) {
+
+    if ($field_key != 'uwp_avatar') {
+        return $image_mimes;
+    }
+
+    $allowed_types = array(
+        'jpg|jpeg|jpe' => 'image/jpeg',
+        'gif'          => 'image/gif',
+        'png'          => 'image/png'
+    );
+
+    $image_mimes = array_intersect_key( $image_mimes, $allowed_types );
+
+    return $image_mimes;
 }
