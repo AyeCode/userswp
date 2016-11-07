@@ -727,6 +727,13 @@ class Users_WP_Form_Builder {
                 'name'  =>  __('URL', 'uwp'),
                 'description' =>  __('Adds a url input', 'uwp')
             ),
+            'file' => array(
+                'field_type'  =>  'file',
+                'class' =>  'gd-file',
+                'icon' =>  'fa fa-file',
+                'name'  =>  __('File Upload', 'uwp'),
+                'description' =>  __('Adds a file input', 'uwp')
+            )
         );
 
         return apply_filters('uwp_custom_fields', $custom_fields, $type);
@@ -1367,7 +1374,7 @@ class Users_WP_Form_Builder {
                             option_values = %s,
                             extra_fields = %s,
                             validation_pattern = %s,
-                            validation_msg = %s,
+                            validation_msg = %s
                             where id = %d",
 
                         array(
@@ -1620,7 +1627,7 @@ class Users_WP_Form_Builder {
 
     public function uwp_cfa_extra_fields_file($output,$result_str,$cf,$field_info){
         ob_start();
-        $allowed_file_types = $this->uwp_allowed_mime_types();
+        $allowed_file_types = uwp_allowed_mime_types();
 
         $extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
         $gd_file_types = !empty($extra_fields) && !empty($extra_fields['uwp_file_types']) ? $extra_fields['uwp_file_types'] : array('*');
@@ -1649,66 +1656,6 @@ class Users_WP_Form_Builder {
 
         $html = ob_get_clean();
         return $output.$html;
-    }
-
-    public function uwp_allowed_mime_types() {
-        return apply_filters( 'uwp_allowed_mime_types', array(
-                'Image'       => array( // Image formats.
-                    'jpg'  => 'image/jpeg',
-                    'jpe'  => 'image/jpeg',
-                    'jpeg' => 'image/jpeg',
-                    'gif'  => 'image/gif',
-                    'png'  => 'image/png',
-                    'bmp'  => 'image/bmp',
-                    'ico'  => 'image/x-icon',
-                ),
-                'Video'       => array( // Video formats.
-                    'asf'  => 'video/x-ms-asf',
-                    'avi'  => 'video/avi',
-                    'flv'  => 'video/x-flv',
-                    'mkv'  => 'video/x-matroska',
-                    'mp4'  => 'video/mp4',
-                    'mpeg' => 'video/mpeg',
-                    'mpg'  => 'video/mpeg',
-                    'wmv'  => 'video/x-ms-wmv',
-                    '3gp'  => 'video/3gpp',
-                ),
-                'Audio'       => array( // Audio formats.
-                    'ogg' => 'audio/ogg',
-                    'mp3' => 'audio/mpeg',
-                    'wav' => 'audio/wav',
-                    'wma' => 'audio/x-ms-wma',
-                ),
-                'Text'        => array( // Text formats.
-                    'css'  => 'text/css',
-                    'csv'  => 'text/csv',
-                    'htm'  => 'text/html',
-                    'html' => 'text/html',
-                    'txt'  => 'text/plain',
-                    'rtx'  => 'text/richtext',
-                    'vtt'  => 'text/vtt',
-                ),
-                'Application' => array( // Application formats.
-                    'doc'  => 'application/msword',
-                    'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                    'exe'  => 'application/x-msdownload',
-                    'js'   => 'application/javascript',
-                    'odt'  => 'application/vnd.oasis.opendocument.text',
-                    'pdf'  => 'application/pdf',
-                    'pot'  => 'application/vnd.ms-powerpoint',
-                    'ppt'  => 'application/vnd.ms-powerpoint',
-                    'pptx' => 'application/vnd.ms-powerpoint',
-                    'psd'  => 'application/octet-stream',
-                    'rar'  => 'application/rar',
-                    'rtf'  => 'application/rtf',
-                    'swf'  => 'application/x-shockwave-flash',
-                    'tar'  => 'application/x-tar',
-                    'xls'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'zip'  => 'application/zip',
-                )
-            )
-        );
     }
 
     public function return_empty_string() {

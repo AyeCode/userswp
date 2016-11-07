@@ -30,6 +30,8 @@ class Users_WP_Activator {
         self::add_default_options();
         self::uwp_create_tables();
         self::uwp_create_default_fields();
+
+        add_option('uwp_activation_redirect', 1);
     }
 
     public static function load_dependencies() {
@@ -47,19 +49,38 @@ class Users_WP_Activator {
 
     public static function add_default_options() {
 
+        $settings = get_option( 'uwp_settings', array());
+
+        //general
+        $settings['profile_no_of_items'] = '10';
+
+        //register
+        $settings['enable_register_password'] = '1';
+
+        //login
+        $settings['login_redirect_to'] = '';
+
+        //profile
+        $settings['enable_profile_header'] = '1';
+        $settings['enable_profile_body'] = '1';
+        $settings['enable_profile_posts_tab'] = '1';
+        $settings['enable_profile_comments_tab'] = '1';
+
+        //notifications
+
         $register_success_subject = __('Your Log In Details', 'uwp');
         $register_success_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
 
         $forgot_password_subject = __('[#site_name#] - Your new password', 'uwp');
         $forgot_password_content = __("<p>Dear [#user_name#],<p><p>You requested a new password for [#site_name_url#]</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
 
-        $settings = get_option( 'uwp_settings', array());
-
         $settings['registration_success_email_subject'] = $register_success_subject;
         $settings['registration_success_email_content'] = $register_success_content;
 
         $settings['forgot_password_email_subject'] = $forgot_password_subject;
         $settings['forgot_password_email_content'] = $forgot_password_content;
+
+
 
         update_option( 'uwp_settings', $settings );
 
@@ -143,6 +164,7 @@ class Users_WP_Activator {
 							  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
 							  field_type_key varchar(255) NOT NULL,
 							  site_title varchar(255) NULL DEFAULT NULL,
+							  help_text varchar(255) NULL DEFAULT NULL,
 							  htmlvar_name varchar(255) NULL DEFAULT NULL,
 							  default_value text NULL DEFAULT NULL,
 							  sort_order int(11) NOT NULL,
@@ -372,6 +394,46 @@ class Users_WP_Activator {
             'option_values' => '',
             'is_default' => '1',
             'is_required' => '1'
+        );
+
+        $fields[] = array(
+            'form_type' => 'account',
+            'field_type' => 'file',
+            'site_title' => __('Avatar', 'uwp'),
+            'htmlvar_name' => 'avatar',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_required' => '1',
+            'extra_fields'        =>  array(
+                'uwp_file_types'  =>  array(
+                    'jpg',
+                    'jpe',
+                    'jpeg',
+                    'gif',
+                    'png'
+                ),
+            )
+        );
+
+        $fields[] = array(
+            'form_type' => 'account',
+            'field_type' => 'file',
+            'site_title' => __('Banner', 'uwp'),
+            'htmlvar_name' => 'banner',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_required' => '1',
+            'extra_fields'        =>  array(
+                'uwp_file_types'  =>  array(
+                    'jpg',
+                    'jpe',
+                    'jpeg',
+                    'gif',
+                    'png'
+                ),
+            )
         );
 
         $fields[] = array(

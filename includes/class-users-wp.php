@@ -192,11 +192,14 @@ class Users_WP {
         $this->loader->add_action( 'load-nav-menus.php', $plugin_admin_menus, 'users_wp_admin_menu_metabox' );
 
         //register settings
-        $this->loader->add_action( 'uwp_settings_general_tab_content', $plugin_admin_settings, 'get_general_content' );
-        $this->loader->add_action( 'uwp_settings_form_builder_tab_content', $plugin_admin_settings, 'get_form_builder_content' );
-        $this->loader->add_action( 'uwp_settings_recaptcha_tab_content', $plugin_admin_settings, 'get_recaptcha_content' );
-        $this->loader->add_action( 'uwp_settings_geodirectory_tab_content', $plugin_admin_settings, 'get_geodirectory_content' );
-        $this->loader->add_action( 'uwp_settings_notifications_tab_content', $plugin_admin_settings, 'get_notifications_content' );
+        $this->loader->add_action( 'uwp_settings_main_tab_content', $plugin_admin_settings, 'get_general_content' );
+        $this->loader->add_action( 'uwp_settings_register_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'uwp_settings_login_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'uwp_settings_profile_tab_content', $plugin_admin_settings, 'generic_display_form' );
+
+        $this->loader->add_action( 'uwp_form_builder_settings_main_tab_content', $plugin_admin_settings, 'get_form_builder_content' );
+        $this->loader->add_action( 'uwp_display_form_title', $plugin_admin_settings, 'display_form_title', 10, 3 );
+        $this->loader->add_action( 'uwp_notifications_settings_main_tab_content', $plugin_admin_settings, 'get_notifications_content' );
 
     }
 
@@ -223,8 +226,14 @@ class Users_WP {
         $this->loader->add_action( 'uwp_template_form_title_after', $forms, 'display_notices' );
         $this->loader->add_action( 'template_redirect', $templates, 'access_checks' );
         $this->loader->add_action( 'uwp_template_fields', $templates, 'uwp_template_fields', 10, 1 );
+        $this->loader->add_filter( 'wp_setup_nav_menu_item', $templates, 'uwp_setup_nav_menu_item', 10, 1 );
 
         $this->loader->add_filter( 'the_content', $templates, 'uwp_author_page_content', 10, 1 );
+        $this->loader->add_filter( 'uwp_form_input_html_datepicker', $templates, 'uwp_form_input_datepicker', 10, 4 );
+        $this->loader->add_filter( 'uwp_form_input_html_select', $templates, 'uwp_form_input_select', 10, 4 );
+        $this->loader->add_filter( 'uwp_form_input_html_file', $templates, 'uwp_form_input_file', 10, 4 );
+
+        $this->loader->add_action( 'admin_init', $templates, 'uwp_activation_redirect');
 
         //profile page
         $this->loader->add_filter('query_vars', $profile, 'profile_query_vars', 10, 1 );
@@ -241,6 +250,7 @@ class Users_WP {
         $this->loader->add_action( 'uwp_profile_pagination', $profile, 'get_profile_pagination');
         $this->loader->add_action( 'uwp_profile_posts_tab_content', $profile, 'get_profile_posts', 10, 1);
         $this->loader->add_action( 'uwp_profile_comments_tab_content', $profile, 'get_profile_comments', 10, 1);
+
 
     }
 

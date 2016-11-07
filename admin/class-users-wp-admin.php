@@ -131,11 +131,32 @@ class Users_WP_Admin {
             'UsersWP Settings',
             'UsersWP',
             'manage_options',
-            'users-wp',
-            array( $plugin_admin_settings, 'users_wp_general_settings_page' ),
+            'uwp',
+            array( $plugin_admin_settings, 'uwp_settings_page' ),
             'dashicons-admin-users',
             70
         );
+
+        add_submenu_page(
+            "uwp",
+            "Form Builder",
+            "Form Builder",
+            'manage_options',
+            'uwp_form_builder',
+            array( $plugin_admin_settings, 'uwp_settings_page' )
+        );
+
+        add_submenu_page(
+            "uwp",
+            "Notifications",
+            "Notifications",
+            'manage_options',
+            'uwp_notifications',
+            array( $plugin_admin_settings, 'uwp_settings_page' )
+        );
+
+        $settings_page = array( $plugin_admin_settings, 'uwp_settings_page' );
+        do_action('uwp_admin_sub_menus', $settings_page, $plugin_admin_settings);
     }
 
 }

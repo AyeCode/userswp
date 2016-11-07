@@ -241,52 +241,375 @@ function uwp_build_profile_tab_url($user_id, $tab = false, $subtab = false) {
 
 }
 
-function uwp_geodir_get_reviews_by_user_id($post_type = 'gd_place', $user_id, $count_only = false, $offset = 0, $limit = 20)
-{
-    global $wpdb;
-
-    if ($count_only) {
-        $results = $wpdb->get_var(
-            $wpdb->prepare(
-                "SELECT COUNT(overall_rating) FROM " . GEODIR_REVIEW_TABLE . " WHERE user_id = %d AND post_type = %s AND status=1 AND overall_rating>0",
-                array($user_id, $post_type)
-            )
-        );
-    } else {
-        $results = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE user_id = %d AND post_type = %s AND status=1 AND overall_rating>0 LIMIT %d OFFSET %d",
-                array($user_id, $post_type, $limit, $offset )
-            )
-        );
-    }
-
-
-    if (!empty($results))
-        return $results;
-    else
-        return false;
-}
-
-function uwp_geodir_count_favorite( $post_type, $user_id = 0 ) {
-    global $wpdb;
-
-    $post_status = is_super_admin() ? " OR " . $wpdb->posts . ".post_status = 'private'" : '';
-    if ( $user_id && $user_id == get_current_user_id() ) {
-        $post_status .= " OR " . $wpdb->posts . ".post_status = 'draft' OR " . $wpdb->posts . ".post_status = 'private'";
-    }
-
-    $user_fav_posts = get_user_meta( (int)$user_id, 'gd_user_favourite_post', true );
-    $user_fav_posts = !empty( $user_fav_posts ) ? implode( "','", $user_fav_posts ) : "-1";
-
-    $count = (int)$wpdb->get_var( "SELECT count( ID ) FROM ".$wpdb->posts." WHERE " . $wpdb->posts . ".ID IN ('" . $user_fav_posts . "') AND post_type='" . $post_type . "' AND ( post_status = 'publish' " . $post_status . " )" );
-
-    return apply_filters( 'uwp_geodir_count_favorite', $count, $user_id );
-}
-
 function uwp_get_option( $key = '', $default = false ) {
     global $uwp_options;
     $value = ! empty( $uwp_options[ $key ] ) ? $uwp_options[ $key ] : $default;
     $value = apply_filters( 'uwp_get_option', $value, $key, $default );
     return apply_filters( 'uwp_get_option_' . $key, $value, $key, $default );
+}
+
+function uwp_update_usermeta( $user_id = false, $key, $value ) {
+
+    if (!$user_id || !$key || !$value) {
+        return false;
+    }
+
+    $usermeta = get_user_meta( $user_id, 'uwp_usermeta', true );
+
+    if( !is_array( $usermeta ) ) {
+        $usermeta = array();
+    }
+
+    $usermeta[ $key ] = $value;
+
+    $usermeta = apply_filters( 'uwp_update_usermeta', $usermeta, $user_id, $key, $value );
+    $usermeta =  apply_filters( 'uwp_update_usermeta_' . $key, $usermeta, $user_id, $key, $value );
+
+    update_user_meta($user_id, 'uwp_usermeta', $usermeta);
+
+    return true;
+}
+
+
+function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
+
+    if (!$user_id) {
+        return $default;
+    }
+
+    $usermeta = get_user_meta( $user_id, 'uwp_usermeta', true );
+
+    if( !is_array( $usermeta ) ) {
+        $usermeta = array();
+    }
+
+    $value = ! empty( $usermeta[ $key ] ) ? $usermeta[ $key ] : $default;
+    $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
+    return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
+}
+
+function uwp_date_format_php_to_jqueryui( $php_format ) {
+    $symbols = array(
+        // Day
+        'd' => 'dd',
+        'D' => 'D',
+        'j' => 'd',
+        'l' => 'DD',
+        'N' => '',
+        'S' => '',
+        'w' => '',
+        'z' => 'o',
+        // Week
+        'W' => '',
+        // Month
+        'F' => 'MM',
+        'm' => 'mm',
+        'M' => 'M',
+        'n' => 'm',
+        't' => '',
+        // Year
+        'L' => '',
+        'o' => '',
+        'Y' => 'yy',
+        'y' => 'y',
+        // Time
+        'a' => 'tt',
+        'A' => 'TT',
+        'B' => '',
+        'g' => 'h',
+        'G' => 'H',
+        'h' => 'hh',
+        'H' => 'HH',
+        'i' => 'mm',
+        's' => '',
+        'u' => ''
+    );
+
+    $jqueryui_format = "";
+    $escaping = false;
+
+    for ( $i = 0; $i < strlen( $php_format ); $i++ ) {
+        $char = $php_format[$i];
+
+        // PHP date format escaping character
+        if ( $char === '\\' ) {
+            $i++;
+
+            if ( $escaping ) {
+                $jqueryui_format .= $php_format[$i];
+            } else {
+                $jqueryui_format .= '\'' . $php_format[$i];
+            }
+
+            $escaping = true;
+        } else {
+            if ( $escaping ) {
+                $jqueryui_format .= "'";
+                $escaping = false;
+            }
+
+            if ( isset( $symbols[$char] ) ) {
+                $jqueryui_format .= $symbols[$char];
+            } else {
+                $jqueryui_format .= $char;
+            }
+        }
+    }
+
+    return $jqueryui_format;
+}
+
+function uwp_date($date_input, $date_to, $date_from = '') {
+    if (empty($date_input) || empty($date_to)) {
+        return NULL;
+    }
+
+    $date = '';
+    if (!empty($date_from)) {
+        $datetime = date_create_from_format($date_from, $date_input);
+
+        if (!empty($datetime)) {
+            $date = $datetime->format($date_to);
+        }
+    }
+
+    if (empty($date)) {
+        $date = strpos($date_input, '/') !== false ? str_replace('/', '-', $date_input) : $date_input;
+        $date = date_i18n($date_to, strtotime($date));
+    }
+
+    $date = uwp_maybe_untranslate_date($date);
+
+    return apply_filters('uwp_date', $date, $date_input, $date_to, $date_from);
+}
+
+function uwp_maybe_untranslate_date($date){
+    $english_long_months = array(
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    );
+
+    $non_english_long_months  = array(
+        __('January'),
+        __('February'),
+        __('March'),
+        __('April'),
+        __('May'),
+        __('June'),
+        __('July'),
+        __('August'),
+        __('September'),
+        __('October'),
+        __('November'),
+        __('December'),
+    );
+    $date = str_replace($non_english_long_months,$english_long_months,$date);
+
+
+    $english_short_months = array(
+        ' Jan ',
+        ' Feb ',
+        ' Mar ',
+        ' Apr ',
+        ' May ',
+        ' Jun ',
+        ' Jul ',
+        ' Aug ',
+        ' Sep ',
+        ' Oct ',
+        ' Nov ',
+        ' Dec ',
+    );
+
+    $non_english_short_months = array(
+        ' '._x( 'Jan', 'January abbreviation' ).' ',
+        ' '._x( 'Feb', 'February abbreviation' ).' ',
+        ' '._x( 'Mar', 'March abbreviation' ).' ',
+        ' '._x( 'Apr', 'April abbreviation' ).' ',
+        ' '._x( 'May', 'May abbreviation' ).' ',
+        ' '._x( 'Jun', 'June abbreviation' ).' ',
+        ' '._x( 'Jul', 'July abbreviation' ).' ',
+        ' '._x( 'Aug', 'August abbreviation' ).' ',
+        ' '._x( 'Sep', 'September abbreviation' ).' ',
+        ' '._x( 'Oct', 'October abbreviation' ).' ',
+        ' '._x( 'Nov', 'November abbreviation' ).' ',
+        ' '._x( 'Dec', 'December abbreviation' ).' ',
+    );
+
+    $date = str_replace($non_english_short_months,$english_short_months,$date);
+
+
+    return $date;
+}
+
+function uwp_string_values_to_options($option_values = '', $translated = false)
+{
+    $options = array();
+    if ($option_values == '') {
+        return NULL;
+    }
+
+    if (strpos($option_values, "{/optgroup}") !== false) {
+        $option_values_arr = explode("{/optgroup}", $option_values);
+
+        foreach ($option_values_arr as $optgroup) {
+            if (strpos($optgroup, "{optgroup}") !== false) {
+                $optgroup_arr = explode("{optgroup}", $optgroup);
+
+                $count = 0;
+                foreach ($optgroup_arr as $optgroup_str) {
+                    $count++;
+                    $optgroup_str = trim($optgroup_str);
+
+                    $optgroup_label = '';
+                    if (strpos($optgroup_str, "|") !== false) {
+                        $optgroup_str_arr = explode("|", $optgroup_str, 2);
+                        $optgroup_label = trim($optgroup_str_arr[0]);
+                        if ($translated && $optgroup_label != '') {
+                            $optgroup_label = __($optgroup_label, 'uwp');
+                        }
+                        $optgroup_label = ucfirst($optgroup_label);
+                        $optgroup_str = $optgroup_str_arr[1];
+                    }
+
+                    $optgroup3 = uwp_string_to_options($optgroup_str, $translated);
+
+                    if ($count > 1 && $optgroup_label != '' && !empty($optgroup3)) {
+                        $optgroup_start = array(array('label' => $optgroup_label, 'value' => NULL, 'optgroup' => 'start'));
+                        $optgroup_end = array(array('label' => $optgroup_label, 'value' => NULL, 'optgroup' => 'end'));
+                        $optgroup3 = array_merge($optgroup_start, $optgroup3, $optgroup_end);
+                    }
+                    $options = array_merge($options, $optgroup3);
+                }
+            } else {
+                $optgroup1 = uwp_string_to_options($optgroup, $translated);
+                $options = array_merge($options, $optgroup1);
+            }
+        }
+    } else {
+        $options = uwp_string_to_options($option_values, $translated);
+    }
+
+    return $options;
+}
+
+function uwp_string_to_options($input = '', $translated = false)
+{
+    $return = array();
+    if ($input != '') {
+        $input = trim($input);
+        $input = rtrim($input, ",");
+        $input = ltrim($input, ",");
+        $input = trim($input);
+    }
+
+    $input_arr = explode(',', $input);
+
+    if (!empty($input_arr)) {
+        foreach ($input_arr as $input_str) {
+            $input_str = trim($input_str);
+
+            if (strpos($input_str, "/") !== false) {
+                $input_str = explode("/", $input_str, 2);
+                $label = trim($input_str[0]);
+                if ($translated && $label != '') {
+                    $label = __($label, 'uwp');
+                }
+                $label = ucfirst($label);
+                $value = trim($input_str[1]);
+            } else {
+                if ($translated && $input_str != '') {
+                    $input_str = __($input_str, 'uwp');
+                }
+                $label = ucfirst($input_str);
+                $value = $input_str;
+            }
+
+            if ($label != '') {
+                $return[] = array('label' => $label, 'value' => $value, 'optgroup' => NULL);
+            }
+        }
+    }
+
+    return $return;
+}
+
+function uwp_allowed_mime_types() {
+    return apply_filters( 'uwp_allowed_mime_types', array(
+            'Image'       => array( // Image formats.
+                'jpg'  => 'image/jpeg',
+                'jpe'  => 'image/jpeg',
+                'jpeg' => 'image/jpeg',
+                'gif'  => 'image/gif',
+                'png'  => 'image/png',
+                'bmp'  => 'image/bmp',
+                'ico'  => 'image/x-icon',
+            ),
+            'Video'       => array( // Video formats.
+                'asf'  => 'video/x-ms-asf',
+                'avi'  => 'video/avi',
+                'flv'  => 'video/x-flv',
+                'mkv'  => 'video/x-matroska',
+                'mp4'  => 'video/mp4',
+                'mpeg' => 'video/mpeg',
+                'mpg'  => 'video/mpeg',
+                'wmv'  => 'video/x-ms-wmv',
+                '3gp'  => 'video/3gpp',
+            ),
+            'Audio'       => array( // Audio formats.
+                'ogg' => 'audio/ogg',
+                'mp3' => 'audio/mpeg',
+                'wav' => 'audio/wav',
+                'wma' => 'audio/x-ms-wma',
+            ),
+            'Text'        => array( // Text formats.
+                'css'  => 'text/css',
+                'csv'  => 'text/csv',
+                'htm'  => 'text/html',
+                'html' => 'text/html',
+                'txt'  => 'text/plain',
+                'rtx'  => 'text/richtext',
+                'vtt'  => 'text/vtt',
+            ),
+            'Application' => array( // Application formats.
+                'doc'  => 'application/msword',
+                'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'exe'  => 'application/x-msdownload',
+                'js'   => 'application/javascript',
+                'odt'  => 'application/vnd.oasis.opendocument.text',
+                'pdf'  => 'application/pdf',
+                'pot'  => 'application/vnd.ms-powerpoint',
+                'ppt'  => 'application/vnd.ms-powerpoint',
+                'pptx' => 'application/vnd.ms-powerpoint',
+                'psd'  => 'application/octet-stream',
+                'rar'  => 'application/rar',
+                'rtf'  => 'application/rtf',
+                'swf'  => 'application/x-shockwave-flash',
+                'tar'  => 'application/x-tar',
+                'xls'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'zip'  => 'application/zip',
+            )
+        )
+    );
+}
+
+function uwp_get_file_type($ext) {
+    $allowed_file_types = uwp_allowed_mime_types();
+    $file_types = array();
+    foreach ( $allowed_file_types as $format => $types ) {
+        $file_types = array_merge($file_types, $types);
+    }
+    $file_types = array_flip($file_types);
+    return $file_types[$ext];
 }
