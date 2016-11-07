@@ -28,10 +28,17 @@ class Users_WP_Profile {
     }
 
     public function get_profile_header($user) {
+        $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner', '');
+        $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar', '');
+        if (empty($avatar)) {
+            $avatar = get_avatar($user->user_email, 128);
+        } else {
+            $avatar = '<img src="'.$avatar.'" class="avatar avatar-128 photo" width="128" height="128">';
+        }
         ?>
         <div class="uwp-profile-header">
-            <div class="uwp-profile-header-img"></div>
-            <div class="uwp-profile-avatar"><?php echo get_avatar($user->user_email, 128); ?></div>
+            <div class="uwp-profile-header-img" style="background-image: url('<?php echo $banner; ?>')"></div>
+            <div class="uwp-profile-avatar"><?php echo $avatar; ?></div>
         </div>
         <?php
     }
@@ -79,14 +86,21 @@ class Users_WP_Profile {
 
         $tabs = array();
 
-        $tabs['posts']  = array(
-            'title' => __( 'Posts', 'uwp' ),
-            'count' => uwp_post_count($user->ID, 'post')
-        );
-        $tabs['comments'] = array(
-            'title' => __( 'Comments', 'uwp' ),
-            'count' => uwp_comment_count($user->ID)
-        );
+        $enable_profile_posts_tab = uwp_get_option('enable_profile_posts_tab', false);
+        if ($enable_profile_posts_tab == '1') {
+            $tabs['posts']  = array(
+                'title' => __( 'Posts', 'uwp' ),
+                'count' => uwp_post_count($user->ID, 'post')
+            );
+        }
+
+        $enable_profile_comments_tab = uwp_get_option('enable_profile_comments_tab', false);
+        if ($enable_profile_comments_tab == '1') {
+            $tabs['comments'] = array(
+                'title' => __( 'Comments', 'uwp' ),
+                'count' => uwp_comment_count($user->ID)
+            );
+        }
 
         return apply_filters( 'uwp_profile_tabs', $tabs, $user );
     }
@@ -97,7 +111,20 @@ class Users_WP_Profile {
 
         $account_page = uwp_get_option('account_page', false);
 
-        $active_tab = !empty( $tab ) && array_key_exists( $tab, $this->get_profile_tabs($user) ) ? $tab : 'posts';
+        $all_tabs = $this->get_profile_tabs($user);
+
+        $tab_keys = array_keys($all_tabs);
+
+        if (!empty($tab_keys)) {
+            $default_key = $tab_keys[0];
+        } else {
+            $default_key = false;
+        }
+
+        $active_tab = !empty( $tab ) && array_key_exists( $tab, $all_tabs ) ? $tab : $default_key;
+        if (!$active_tab) {
+            return;
+        }
         ?>
         <div class="uwp-profile-content">
             <div class="uwp-profile-nav">
@@ -156,6 +183,10 @@ class Users_WP_Profile {
 
 
     function get_profile_posts($user) {
+        $enable_profile_posts_tab = uwp_get_option('enable_profile_posts_tab', false);
+        if ($enable_profile_posts_tab != '1') {
+            return;
+        }
         ?>
         <h3><?php echo $user->display_name; ?>’s Posts</h3>
 
@@ -224,6 +255,10 @@ class Users_WP_Profile {
     }
 
     function get_profile_comments($user) {
+        $enable_profile_comments_tab = uwp_get_option('enable_profile_comments_tab', false);
+        if ($enable_profile_comments_tab == '1') {
+            return;
+        }
         ?>
         <h3><?php echo $user->display_name; ?>’s Comments</h3>
 

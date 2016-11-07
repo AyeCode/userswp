@@ -353,7 +353,7 @@ class Users_WP_Forms {
             $message .= sprintf(__('Username: %s'), $user_data->user_login) . "\r\n\r\n";
             $message .= __('If this was a mistake, just ignore this email and nothing will happen.') . "\r\n\r\n";
             $message .= __('To reset your password, visit the following address:') . "\r\n\r\n";
-            $message .= '<' . site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user_data->user_login), 'login') . ">\r\n";
+            $message .= site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
 
         }
 
@@ -574,7 +574,6 @@ class Users_WP_Forms {
 
     public function validate_uploads($files, $type) {
 
-        $errors = new WP_Error();
         $validated_data = array();
 
         if (empty($files)) {
@@ -591,9 +590,13 @@ class Users_WP_Forms {
 
                 if(isset($files[$field->htmlvar_name])) {
 
-                    $url = $this->handle_file_upload($field->htmlvar_name);
+                    $file_urls = $this->handle_file_upload($field, $files);
 
-                    $validated_data[$field->htmlvar_name] = $file['url'];
+                    if (is_wp_error($file_urls)) {
+                        return $file_urls;
+                    }
+
+                    $validated_data[$field->htmlvar_name] = $file_urls['url'];
                 }
 
             }
@@ -816,42 +819,36 @@ class Users_WP_Forms {
         }
     }
 
-    public function handle_file_upload( $field_key, $field ) {
+    public function handle_file_upload( $field, $files ) {
 
-        if ( isset( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ]['name'] ) ) {
+        if ( isset( $files[ $field->htmlvar_name ] ) && ! empty( $files[ $field->htmlvar_name ] ) && ! empty( $files[ $field->htmlvar_name ]['name'] ) ) {
 
-            $allowed_mime_types = apply_filters('uwp_allowed_mime_types', get_allowed_mime_types(), $field_key);
+            $extra_fields = unserialize($field->extra_fields);
+
+            $allowed_mime_types = array();
+            if (isset($extra_fields['uwp_file_types'])) {
+                $allowed_mime_types = $extra_fields['uwp_file_types'];
+            }
+
+            $allowed_mime_types = apply_filters('uwp_allowed_mime_types', $allowed_mime_types, $field->htmlvar_name);
 
             $file_urls       = array();
-            $files_to_upload = $this->uwp_prepare_files( $_FILES[ $field_key ] );
+            $files_to_upload = $this->uwp_prepare_files( $files[ $field->htmlvar_name ] );
 
             foreach ( $files_to_upload as $file_key => $file_to_upload ) {
 
-                // Trigger validation rules for avatar only.
-                if( $field_key == 'user_avatar' ) {
+                if (!empty($allowed_mime_types)) {
+                    $ext = uwp_get_file_type($file_to_upload['type']);
 
-                    if ( !in_array( $file_to_upload['type'] , $allowed_mime_types ) )
-                        return new WP_Error( 'validation-error', sprintf( __( 'Allowed files types are: %s', 'uwp' ), implode( ', ', array_keys( $allowed_mime_types ) ) ) );
-
-                    if ( $field_key == 'user_avatar' && $file_to_upload['size'] > uwp_get_option('profile_avatar_max_size', 1000) )
-                        return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big.', 'uwp' ) );
-
-                } else {
-
-                    // Trigger verification for other file fields.
-                    if( array_key_exists( 'allowed_extensions' , $field ) && is_array( $field['allowed_extensions'] ) ) {
-
-                        $allowed_field_extensions = $field['allowed_extensions'];
-                        $uploaded_file_extension  = pathinfo( $file_to_upload['name'] );
-                        $uploaded_file_extension  = $uploaded_file_extension['extension'];
-
-                        if( ! in_array( $uploaded_file_extension , $allowed_field_extensions ) ) {
-                            return new WP_Error( 'validation-error', sprintf( esc_html__( 'Error: the "%s" field allows only %s files to be uploaded.', 'uwp' ), $field['label'], implode ( ", ", $allowed_field_extensions ) ) );
-                        }
-
-                    }
-
+                    $allowed_error_text = implode(', ', $allowed_mime_types);
+                    if ( !in_array( $ext , $allowed_mime_types ) )
+                        return new WP_Error( 'validation-error', sprintf( __( 'Allowed files types are: %s', 'uwp' ),  $allowed_error_text) );
                 }
+
+
+                if ( $file_to_upload['size'] > uwp_get_option('profile_avatar_max_size', 1048576) )
+                    return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big.', 'uwp' ) );
+
 
                 $uploaded_file = $this->uwp_upload_file( $file_to_upload, array( 'file_key' => $file_key ) );
 
@@ -871,11 +868,11 @@ class Users_WP_Forms {
 
             }
 
-            if ( ! empty( $field['multiple'] ) ) {
-                return $file_urls;
-            } else {
+//            if ( ! empty( $field['multiple'] ) ) {
+//                return $file_urls;
+//            } else {
                 return current( $file_urls );
-            }
+//            }
 
         }
         return true;

@@ -398,6 +398,46 @@ class Users_WP_Activator {
 
         $fields[] = array(
             'form_type' => 'account',
+            'field_type' => 'file',
+            'site_title' => __('Avatar', 'uwp'),
+            'htmlvar_name' => 'avatar',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_required' => '1',
+            'extra_fields'        =>  array(
+                'uwp_file_types'  =>  array(
+                    'jpg',
+                    'jpe',
+                    'jpeg',
+                    'gif',
+                    'png'
+                ),
+            )
+        );
+
+        $fields[] = array(
+            'form_type' => 'account',
+            'field_type' => 'file',
+            'site_title' => __('Banner', 'uwp'),
+            'htmlvar_name' => 'banner',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_required' => '1',
+            'extra_fields'        =>  array(
+                'uwp_file_types'  =>  array(
+                    'jpg',
+                    'jpe',
+                    'jpeg',
+                    'gif',
+                    'png'
+                ),
+            )
+        );
+
+        $fields[] = array(
+            'form_type' => 'account',
             'field_type' => 'text',
             'site_title' => __('Password', 'uwp'),
             'htmlvar_name' => 'password',

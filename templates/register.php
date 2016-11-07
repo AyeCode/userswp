@@ -5,7 +5,7 @@
         <?php do_action('uwp_template_form_title_before', 'register'); ?>
         <h2><?php echo __( 'Create Account', 'uwp' ); ?></h2>
         <?php do_action('uwp_template_form_title_after', 'register'); ?>
-        <form class="uwp-registration-form" method="post">
+        <form class="uwp-registration-form" method="post" enctype="multipart/form-data">
             <?php do_action('uwp_template_fields', 'register'); ?>
             <input type="hidden" name="uwp_register_nonce" value="<?php echo wp_create_nonce( 'uwp-register-nonce' ); ?>" />
             <input name="uwp_register_submit" value="<?php echo __( 'Create Account', 'uwp' ); ?>" type="submit">

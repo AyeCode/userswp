@@ -339,7 +339,46 @@ class Users_WP_Templates {
                         option-ajaxchosen="false"><?php echo $select_options;?></select>
                 <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->is_required, 'uwp'); ?></span>
+                    <span class="uwp_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>
+                <?php } ?>
+            </div>
+
+            <?php
+            $html = ob_get_clean();
+        }
+
+        return $html;
+    }
+
+    public function uwp_form_input_file($html, $field, $value, $form_type){
+
+        // Check if there is a field specific filter.
+        if(has_filter("uwp_form_input_html_file_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_html_file_{$field->htmlvar_name}", $html, $field, $value, $form_type);
+        }
+
+        // If no html then we run the standard output.
+        if(empty($html)) {
+
+            ob_start(); // Start  buffering;
+
+            ?>
+            <div id="<?php echo $field->htmlvar_name;?>_row"
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+                <label>
+                    <?php $site_title = __($field->site_title, 'uwp');
+                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                    <?php if ($field->is_required) echo '<span>*</span>';?>
+                </label>
+                <input name="<?php echo $field->htmlvar_name; ?>"
+                       class="<?php echo $field->css_class; ?>"
+                       placeholder="<?php echo $field->site_title; ?>"
+                    <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                       type="<?php echo $field->field_type; ?>"
+                       value="<?php echo $value; ?>">
+                <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
+                <?php if ($field->is_required) { ?>
+                    <span class="uwp_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>
                 <?php } ?>
             </div>
 
