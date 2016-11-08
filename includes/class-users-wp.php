@@ -242,6 +242,7 @@ class Users_WP {
         $this->loader->add_filter( 'the_title', $profile, 'modify_profile_page_title', 10, 2 );
 
         $this->loader->add_action( 'uwp_profile_header', $profile, 'get_profile_header', 10, 1 );
+        $this->loader->add_action( 'uwp_profile_header', $profile, 'uwp_image_crop_form', 10, 1 );
         $this->loader->add_action( 'uwp_profile_title', $profile, 'get_profile_title', 10, 1 );
         $this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_bio', 10, 1 );
         $this->loader->add_action( 'uwp_profile_social', $profile, 'get_profile_social', 10, 1 );

@@ -1,0 +1,40 @@
+.uwp-modal {
+  width: 80%;
+  z-index: 1999;
+  -webkit-tap-highlight-color: transparent;
+  padding: 9px;
+  background: #454144;
+  border-radius: 12px;
+  display: block;
+  position: fixed;
+  top: 10%;
+}
+
+.uwp-modal-content-wrap {
+  position: relative;
+  z-index: 6;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 6px;
+}
+
+.uwp-modal-title {
+  margin: 0;
+  background: #fff;
+  -webkit-border-radius: 6px 6px 0 0;
+  border-bottom: 1px solid #b0b0b0;
+  padding-bottom: 11px;
+}
+
+.uwp-modal-title h2 {
+  margin: 0 20px 0 0;
+  font-size: 18px;
+  line-height: 1.33333em;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+  font-weight: bold;
+}
+
+.uwp-modal-content,
+.uwp-modal-title {
+  padding: 12px 18px;
+}

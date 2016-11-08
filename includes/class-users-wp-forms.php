@@ -65,6 +65,14 @@ class Users_WP_Forms {
             $errors = $this->process_account($_POST, $_FILES);
             $message = __('Account updated successfully.', 'uwp');
             $processed = true;
+        } elseif (isset($_POST['uwp_avatar_crop'])) {
+            $errors = $this->process_image_crop($_POST, 'avatar');
+            $message = __('Avatar cropped successfully.', 'uwp');
+            $processed = true;
+        } elseif (isset($_POST['uwp_banner_crop'])) {
+            $errors = $this->process_image_crop($_POST, 'banner');
+            $message = __('Banner cropped successfully.', 'uwp');
+            $processed = true;
         }
 
         if ($processed) {
@@ -427,6 +435,43 @@ class Users_WP_Forms {
 
         return true;
 
+    }
+
+    public function process_image_crop($data = array(), $type = 'avatar') {
+        $user_id = get_current_user_id();
+        if ($type == 'avatar') {
+            $large_image_location = uwp_get_usermeta($user_id, 'uwp_account_avatar', '');
+        } else {
+            $large_image_location = uwp_get_usermeta($user_id, 'uwp_account_banner', '');
+        }
+        if ($large_image_location) {
+            $uploads = wp_upload_dir();
+            $upload_url = $uploads['baseurl'];
+            $upload_path = $uploads['basedir'];
+            $large_image_location = str_replace($upload_url, $upload_path, $large_image_location);
+            $ext = pathinfo($large_image_location, PATHINFO_EXTENSION); // to get extension
+            $name =pathinfo($large_image_location, PATHINFO_FILENAME); //file name without extension
+            $thumb_image_name = $name.'_uwp_thumb'.'.'.$ext;
+            $thumb_image_location = str_replace($name.'.'.$ext, $thumb_image_name, $large_image_location);
+            //Get the new coordinates to crop the image.
+            $x1 = $data["x1"];
+            $y1 = $data["y1"];
+            $x2 = $data["x2"]; // not really required
+            $y2 = $data["y2"]; // not really required
+            $w = $data["w"];
+            $h = $data["h"];
+            //Scale the image to the 100px by 100px
+            $scale = 100/$w;
+            $cropped = uwp_resizeThumbnailImage($thumb_image_location, $large_image_location,$w,$h,$x1,$y1,$scale);
+            $cropped = str_replace($upload_path, $upload_url, $cropped);
+            if ($type == 'avatar') {
+                uwp_update_usermeta($user_id, 'uwp_account_avatar_thumb', $cropped);
+            } else {
+                uwp_update_usermeta($user_id, 'uwp_account_banner_thumb', $cropped);
+            }
+            return true;
+        }
+        return true;
     }
 
     public function validate_fields($data, $type) {
@@ -902,7 +947,7 @@ class Users_WP_Forms {
         return $files_to_upload;
     }
 
-    function uwp_upload_file( $file, $args = array() ) {
+    public function uwp_upload_file( $file, $args = array() ) {
 
         include_once ABSPATH . 'wp-admin/includes/file.php';
         include_once ABSPATH . 'wp-admin/includes/media.php';
@@ -938,5 +983,6 @@ class Users_WP_Forms {
 
         return $uploaded_file;
     }
+
 
 }
