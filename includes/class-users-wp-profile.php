@@ -33,11 +33,11 @@ class Users_WP_Profile {
         if (empty($avatar)) {
             $avatar = get_avatar($user->user_email, 128);
         } else {
-            $avatar = '<img src="'.$avatar.'" class="avatar avatar-128 photo" width="128" height="128">';
+            $avatar = '<img src="'.$avatar.'" class="avatar uwp-profile-avatar-modal-trigger avatar-128 photo" width="128" height="128">';
         }
         ?>
         <div class="uwp-profile-header">
-            <div class="uwp-profile-header-img" style="background-image: url('<?php echo $banner; ?>')"></div>
+            <div class="uwp-profile-header-img uwp-profile-banner-modal-trigger" style="background-image: url('<?php echo $banner; ?>')"></div>
             <div class="uwp-profile-avatar"><?php echo $avatar; ?></div>
         </div>
         <?php
@@ -146,7 +146,7 @@ class Users_WP_Profile {
                     }
                     ?>
                 </ul>
-                <?php if ($account_page) { ?>
+                <?php if ($account_page && is_user_logged_in() && get_current_user_id() == $user->ID) { ?>
                     <div class="uwp-edit-account">
                         <a href="<?php echo get_permalink( $account_page ); ?>" title="Edit Account"><i class="fa fa-gear"></i></a>
                     </div>
@@ -527,8 +527,6 @@ class Users_WP_Profile {
                 }( jQuery, window ));
 
             </script>
-
-            <h2>Crop <?php echo $type; ?></h2>
             <div align="center">
                 <img src="<?php echo $large_image_location; ?>" style="float: left; margin-right: 10px;" id="<?php echo $image_id; ?>" alt="Create Thumbnail" />
                 <div class="<?php echo $image_id_thumb; ?>" style="width:<?php echo $thumb_width;?>px; height:<?php echo $thumb_height;?>px;">
@@ -556,13 +554,19 @@ class Users_WP_Profile {
         }
     }
 
-    public function uwp_image_crop_form($user) {
-        $ajax_nonce = wp_create_nonce("uwp-image-crop-nonce");
+    public function uwp_image_crop_init($user) {
+        $this->uwp_image_crop_form($user, $type = 'avatar');
+        $this->uwp_image_crop_form($user, $type = 'banner');
+    }
+
+    public function uwp_image_crop_form($user, $type = 'avatar') {
+        $ajax_nonce = wp_create_nonce("uwp-image-".$type."-crop-nonce");
         ?>
-        <div id="uwp-avatar-modal" class="uwp-modal" style="display: none;">
+        <div id="uwp-<?php echo $type; ?>-modal" class="uwp-modal" style="display: none;">
+            <a id="uwp-<?php echo $type; ?>-modal-close" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>
             <div class="uwp-modal-content-wrap">
                 <div class="uwp-modal-title">
-                    <h2><?php echo __( 'Choose avatar image:', 'uwp' ); ?></h2>
+                    <h2><?php echo __( 'Choose '.$type.' image:', 'uwp' ); ?></h2>
                 </div>
                 <div class="uwp-modal-content">
                     <?php $this->uwp_image_crop_popup($user, 'avatar'); ?>
@@ -571,8 +575,12 @@ class Users_WP_Profile {
         </div>
         <script type="text/javascript">
             jQuery(document).ready(function() {
-                jQuery('.uwp-profile-avatar').find('img').click(function (e) {
-                    jQuery('#uwp-avatar-modal').show();
+                jQuery('.uwp-profile-<?php echo $type; ?>-modal-trigger').click(function (e) {
+                    jQuery('#uwp-<?php echo $type; ?>-modal').show();
+                });
+                jQuery('#uwp-<?php echo $type; ?>-modal-close').click(function (e) {
+                    e.preventDefault();
+                    jQuery('#uwp-<?php echo $type; ?>-modal').hide();
                 });
             });
         </script>

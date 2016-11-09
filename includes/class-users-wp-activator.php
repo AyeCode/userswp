@@ -43,6 +43,7 @@ class Users_WP_Activator {
         self::uwp_create_page(esc_sql(_x('login', 'page_slug', 'uwp')), 'login_page', __('Login', 'uwp'), '[uwp_login]');
         self::uwp_create_page(esc_sql(_x('account', 'page_slug', 'uwp')), 'account_page', __('Account', 'uwp'), '[uwp_account]');
         self::uwp_create_page(esc_sql(_x('forgot', 'page_slug', 'uwp')), 'forgot_pass_page', __('Forgot Password?', 'uwp'), '[uwp_forgot]');
+        self::uwp_create_page(esc_sql(_x('reset', 'page_slug', 'uwp')), 'reset_pass_page', __('Reset Password', 'uwp'), '[uwp_reset]');
         self::uwp_create_page(esc_sql(_x('profile', 'page_slug', 'uwp')), 'user_profile_page', __('Profile', 'uwp'), '[uwp_profile]');
         self::uwp_create_page(esc_sql(_x('users', 'page_slug', 'uwp')), 'users_list_page', __('Users', 'uwp'), '[uwp_users]');
     }
@@ -72,6 +73,9 @@ class Users_WP_Activator {
         $register_success_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
 
         $forgot_password_subject = __('[#site_name#] - Your new password', 'uwp');
+        $forgot_password_content = __("<p>Dear [#user_name#],<p><p>You requested a new password for [#site_name_url#]</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
+
+        $forgot_password_subject = __('[#site_name#] - Password has been reset', 'uwp');
         $forgot_password_content = __("<p>Dear [#user_name#],<p><p>You requested a new password for [#site_name_url#]</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
 
         $settings['registration_success_email_subject'] = $register_success_subject;
@@ -207,6 +211,7 @@ class Users_WP_Activator {
         $register = self::uwp_default_custom_fields_register();
         $login = self::uwp_default_custom_fields_login();
         $forgot = self::uwp_default_custom_fields_forgot();
+        $reset = self::uwp_default_custom_fields_reset();
         $account = self::uwp_default_custom_fields_account();
 
         $fields = array_merge($register, $login, $forgot, $account);
@@ -342,6 +347,37 @@ class Users_WP_Activator {
         );
 
         $fields = apply_filters('uwp_default_custom_fields_forgot', $fields);
+
+        return  $fields;
+    }
+
+    public static function uwp_default_custom_fields_reset(){
+
+        $fields = array();
+
+        $fields[] = array(
+            'form_type' => 'reset',
+            'field_type' => 'password',
+            'site_title' => __('Password', 'uwp'),
+            'htmlvar_name' => 'password',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_required' => '1'
+        );
+
+        $fields[] = array(
+            'form_type' => 'reset',
+            'field_type' => 'password',
+            'site_title' => __('Confirm Password', 'uwp'),
+            'htmlvar_name' => 'confirm_password',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_required' => '1'
+        );
+
+        $fields = apply_filters('uwp_default_custom_fields_reset', $fields);
 
         return  $fields;
     }

@@ -59,6 +59,15 @@ class Users_WP_Templates {
                 return $template;
                 break;
 
+            case 'reset':
+                $template = locate_template(array("userswp/reset.php"));
+                if (!$template) {
+                    $template = $plugin_path . '/templates/reset.php';
+                }
+                $template = apply_filters('uwp_template_reset', $template);
+                return $template;
+                break;
+
             case 'account':
                 $template = locate_template(array("userswp/account.php"));
                 if (!$template) {
@@ -115,6 +124,11 @@ class Users_WP_Templates {
             $condition = "non_logged_in";
         }
 
+        $reset_pass_page = uwp_get_option('reset_pass_page', false);
+        if ( $reset_pass_page && ((int) $reset_pass_page ==  $current_page_id ) ) {
+            $condition = "non_logged_in";
+        }
+
         $account_page = uwp_get_option('account_page', false);
         if ( $account_page && ((int) $account_page ==  $current_page_id ) ) {
             $condition = "logged_in";
@@ -142,6 +156,44 @@ class Users_WP_Templates {
         }
 
         return false;
+    }
+
+    public function profile_redirect() {
+        if (is_page()) {
+            global $wp_query;
+            $current_page_id = $wp_query->query_vars['page_id'];
+            $account_page = uwp_get_option('user_profile_page', false);
+            if ( $account_page && ((int) $account_page ==  $current_page_id ) ) {
+
+                if (isset($wp_query->query_vars['uwp_profile'])) {
+                    //must be profile page
+                } else {
+                    if (is_user_logged_in()) {
+                        $user_id = get_current_user_id();
+                        $profile_url = uwp_build_profile_tab_url($user_id);
+                        wp_redirect( $profile_url );
+                        exit();
+                    } else {
+                        wp_redirect( home_url('/') );
+                        exit();
+                    }
+
+                }
+
+            }
+        }
+    }
+
+    public function logout_redirect() {
+        $redirect_page_id = uwp_get_option('logout_redirect_to', '');
+        if (empty($redirect_page_id)) {
+            $redirect_to = home_url('/');
+        } else {
+            $redirect_to = get_permalink($redirect_page_id);
+        }
+        $redirect_to = apply_filters('uwp_logout_redirect', $redirect_to);
+        wp_redirect( $redirect_to );
+        exit();
     }
 
     public function uwp_template_fields($form_type) {

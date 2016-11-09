@@ -224,7 +224,9 @@ class Users_WP {
 
         $this->loader->add_action( 'init', $forms, 'handler' );
         $this->loader->add_action( 'uwp_template_form_title_after', $forms, 'display_notices' );
-        $this->loader->add_action( 'template_redirect', $templates, 'access_checks' );
+        $this->loader->add_action( 'template_redirect', $templates, 'profile_redirect', 10);
+        $this->loader->add_action( 'template_redirect', $templates, 'access_checks', 20);
+        $this->loader->add_action( 'wp_logout', $templates, 'logout_redirect');
         $this->loader->add_action( 'uwp_template_fields', $templates, 'uwp_template_fields', 10, 1 );
         $this->loader->add_filter( 'wp_setup_nav_menu_item', $templates, 'uwp_setup_nav_menu_item', 10, 1 );
 
@@ -242,7 +244,7 @@ class Users_WP {
         $this->loader->add_filter( 'the_title', $profile, 'modify_profile_page_title', 10, 2 );
 
         $this->loader->add_action( 'uwp_profile_header', $profile, 'get_profile_header', 10, 1 );
-        $this->loader->add_action( 'uwp_profile_header', $profile, 'uwp_image_crop_form', 10, 1 );
+        $this->loader->add_action( 'uwp_profile_header', $profile, 'uwp_image_crop_init', 10, 1 );
         $this->loader->add_action( 'uwp_profile_title', $profile, 'get_profile_title', 10, 1 );
         $this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_bio', 10, 1 );
         $this->loader->add_action( 'uwp_profile_social', $profile, 'get_profile_social', 10, 1 );
@@ -262,6 +264,7 @@ class Users_WP {
         add_shortcode( 'uwp_register', array($shortcodes,'register'));
         add_shortcode( 'uwp_login', array($shortcodes,'login'));
         add_shortcode( 'uwp_forgot', array($shortcodes,'forgot'));
+        add_shortcode( 'uwp_reset', array($shortcodes,'reset_pass'));
         add_shortcode( 'uwp_account', array($shortcodes,'account'));
         add_shortcode( 'uwp_profile', array($shortcodes,'profile'));
         add_shortcode( 'uwp_users', array($shortcodes,'users'));

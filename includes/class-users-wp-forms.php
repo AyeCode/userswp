@@ -61,6 +61,10 @@ class Users_WP_Forms {
             $errors = $this->process_forgot($_POST);
             $message = __('Please check your email.', 'uwp');
             $processed = true;
+        } elseif (isset($_POST['uwp_reset_submit'])) {
+            $errors = $this->process_reset($_POST);
+            $message = __('Password updated successfully. Please login with your new password', 'uwp');
+            $processed = true;
         } elseif (isset($_POST['uwp_account_submit'])) {
             $errors = $this->process_account($_POST, $_FILES);
             $message = __('Account updated successfully.', 'uwp');
@@ -326,6 +330,48 @@ class Users_WP_Forms {
         return true;
     }
 
+    public function process_reset($data) {
+
+        $errors = new WP_Error();
+
+        if( ! isset( $data['uwp_reset_nonce'] ) || ! wp_verify_nonce( $data['uwp_reset_nonce'], 'uwp-reset-nonce' ) ) {
+            return false;
+        }
+
+        do_action('uwp_before_validate', 'reset');
+
+        $result = $this->validate_fields($data, 'reset');
+
+        $result = apply_filters('uwp_validate_result', $result, 'reset');
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        do_action('uwp_after_validate', 'reset');
+
+
+        $user_data = get_user_by('login', $data['uwp_reset_username']);
+
+        $login_details = "";
+
+        $res = $this->uwp_send_email( 'reset', $user_data->ID, $login_details );
+
+        if (!$res) {
+            if (get_option('admin_email') == $user_data->user_email) {
+                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please check your site error log for more details.', 'uwp'));
+            } else {
+                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'uwp'));
+            }
+
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        return true;
+    }
+
     public function generate_forgot_message($user_data) {
 
         global $wpdb;
@@ -361,7 +407,7 @@ class Users_WP_Forms {
             $message .= sprintf(__('Username: %s'), $user_data->user_login) . "\r\n\r\n";
             $message .= __('If this was a mistake, just ignore this email and nothing will happen.') . "\r\n\r\n";
             $message .= __('To reset your password, visit the following address:') . "\r\n\r\n";
-            $message .= site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
+            $message .= site_url("reset?key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
 
         }
 
@@ -501,6 +547,7 @@ class Users_WP_Forms {
 
                     case 'uwp_register_username':
                     case 'uwp_login_username':
+                    case 'uwp_reset_username':
                         $sanitized_value = sanitize_user($value);
                         $sanitized = true;
                         break;
@@ -730,6 +777,9 @@ class Users_WP_Forms {
         } elseif ( $message_type == 'forgot' ) {
             $subject = uwp_get_option('forgot_password_email_subject', '');
             $message = uwp_get_option('forgot_password_email_content', '');
+        } elseif ( $message_type == 'reset' ) {
+            $subject = uwp_get_option('reset_password_email_subject', '');
+            $message = uwp_get_option('reset_password_email_content', '');
         }
 
         if ( ! empty( $subject ) ) {
@@ -816,10 +866,10 @@ class Users_WP_Forms {
         );
         $subject = str_replace( $search_array, $replace_array, $subject );
 
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-        $headers .= "Reply-To: " . $site_email . "\r\n";
-        $headers .= 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>' . "\r\n";
+        $headers  = array();
+        $headers[] = 'Content-type: text/html; charset=UTF-8';
+        $headers[] = "Reply-To: " . $site_email;
+        $headers[] = 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>';
 
         $to = $user_email;
 

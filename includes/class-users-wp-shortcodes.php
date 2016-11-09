@@ -84,6 +84,19 @@ class Users_WP_Shortcodes {
         return trim($output);
     }
 
+    public function reset_pass() {
+        $template = $this->templates->uwp_locate_template('reset');
+
+        ob_start();
+        if ($template) {
+            include($template);
+        }
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return trim($output);
+    }
+
     public function account() {
         $template = $this->templates->uwp_locate_template('account');
 

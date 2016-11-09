@@ -6,8 +6,9 @@
   background: #454144;
   border-radius: 12px;
   display: block;
-  position: fixed;
-  top: 10%;
+  position: absolute;
+  top: 9%;
+  left: 8%;
 }
 
 .uwp-modal-content-wrap {
@@ -37,4 +38,18 @@
 .uwp-modal-content,
 .uwp-modal-title {
   padding: 12px 18px;
+}
+
+.uwp-modal-close-x {
+  cursor: pointer;
+  position: absolute;
+  right: 28px;
+  top: 20px;
+  z-index: 9;
+}
+
+#save_uwp_avatar,
+#save_uwp_banner {
+  float: left;
+  margin-top: 10px
 }
