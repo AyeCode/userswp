@@ -69,12 +69,32 @@ class Users_WP_Forms {
             $errors = $this->process_account($_POST, $_FILES);
             $message = __('Account updated successfully.', 'uwp');
             $processed = true;
+        } elseif (isset($_POST['uwp_avatar_submit'])) {
+            $errors = $this->process_upload_submit($_POST, $_FILES, 'avatar');
+            if (!is_wp_error($errors)) {
+                $redirect = $errors;
+            }
+            $message = __('Avatar cropped successfully.', 'uwp');
+            $processed = true;
+        } elseif (isset($_POST['uwp_banner_submit'])) {
+            $errors = $this->process_upload_submit($_POST, $_FILES, 'banner');
+            if (!is_wp_error($errors)) {
+                $redirect = $errors;
+            }
+            $message = __('Banner cropped successfully.', 'uwp');
+            $processed = true;
         } elseif (isset($_POST['uwp_avatar_crop'])) {
             $errors = $this->process_image_crop($_POST, 'avatar');
+            if (!is_wp_error($errors)) {
+                $redirect = $errors;
+            }
             $message = __('Avatar cropped successfully.', 'uwp');
             $processed = true;
         } elseif (isset($_POST['uwp_banner_crop'])) {
             $errors = $this->process_image_crop($_POST, 'banner');
+            if (!is_wp_error($errors)) {
+                $redirect = $errors;
+            }
             $message = __('Banner cropped successfully.', 'uwp');
             $processed = true;
         }
@@ -483,41 +503,84 @@ class Users_WP_Forms {
 
     }
 
-    public function process_image_crop($data = array(), $type = 'avatar') {
-        $user_id = get_current_user_id();
-        if ($type == 'avatar') {
-            $large_image_location = uwp_get_usermeta($user_id, 'uwp_account_avatar', '');
-        } else {
-            $large_image_location = uwp_get_usermeta($user_id, 'uwp_account_banner', '');
+    public function process_upload_submit($data = array(), $files = array(), $type = 'avatar') {
+
+        $current_user_id = get_current_user_id();
+        if (!$current_user_id) {
+            return false;
         }
-        if ($large_image_location) {
+
+        if( ! isset( $data['uwp_upload_nonce'] ) || ! wp_verify_nonce( $data['uwp_upload_nonce'], 'uwp-upload-nonce' ) ) {
+            return false;
+        }
+
+        do_action('uwp_before_validate', $type);
+
+        $result = $this->validate_uploads($files, $type);
+
+        $result = apply_filters('uwp_validate_result', $result, $type);
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        $profile_url = uwp_build_profile_tab_url($current_user_id);
+
+        $url = add_query_arg(
+            array(
+                'uwp_crop' => $result['uwp_'.$type.'_file'],
+                'type' => $type
+            ),
+            $profile_url);
+
+        return $url;
+
+    }
+
+    public function process_image_crop($data = array(), $type = 'avatar') {
+        
+        if (!is_user_logged_in()) {
+            return false;
+        }
+        $user_id = get_current_user_id();
+        $image_url = $data['uwp_crop'];
+        
+        $errors = new WP_Error();
+        if (empty($image_url)) {
+            $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'uwp'));
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+        
+        if ($image_url) {
             $uploads = wp_upload_dir();
             $upload_url = $uploads['baseurl'];
             $upload_path = $uploads['basedir'];
-            $large_image_location = str_replace($upload_url, $upload_path, $large_image_location);
-            $ext = pathinfo($large_image_location, PATHINFO_EXTENSION); // to get extension
-            $name =pathinfo($large_image_location, PATHINFO_FILENAME); //file name without extension
+            $image_url = str_replace($upload_url, $upload_path, $image_url);
+            $ext = pathinfo($image_url, PATHINFO_EXTENSION); // to get extension
+            $name =pathinfo($image_url, PATHINFO_FILENAME); //file name without extension
             $thumb_image_name = $name.'_uwp_thumb'.'.'.$ext;
-            $thumb_image_location = str_replace($name.'.'.$ext, $thumb_image_name, $large_image_location);
+            $thumb_image_location = str_replace($name.'.'.$ext, $thumb_image_name, $image_url);
             //Get the new coordinates to crop the image.
-            $x1 = $data["x1"];
-            $y1 = $data["y1"];
-            $x2 = $data["x2"]; // not really required
-            $y2 = $data["y2"]; // not really required
+            $x = $data["x"];
+            $y = $data["y"];
             $w = $data["w"];
             $h = $data["h"];
             //Scale the image to the 100px by 100px
             $scale = 100/$w;
-            $cropped = uwp_resizeThumbnailImage($thumb_image_location, $large_image_location,$w,$h,$x1,$y1,$scale);
+            $cropped = uwp_resizeThumbnailImage($thumb_image_location, $image_url,$w,$h,$x,$y,$scale);
             $cropped = str_replace($upload_path, $upload_url, $cropped);
             if ($type == 'avatar') {
                 uwp_update_usermeta($user_id, 'uwp_account_avatar_thumb', $cropped);
             } else {
                 uwp_update_usermeta($user_id, 'uwp_account_banner_thumb', $cropped);
             }
-            return true;
         }
-        return true;
+
+        $profile_url = uwp_build_profile_tab_url($user_id);
+        return $profile_url;
+
     }
 
     public function validate_fields($data, $type) {
@@ -675,6 +738,7 @@ class Users_WP_Forms {
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_custom_fields';
         $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
+
 
 
         if (!empty($fields)) {

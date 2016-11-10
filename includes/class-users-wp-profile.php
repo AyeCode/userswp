@@ -463,124 +463,238 @@ class Users_WP_Profile {
         return $title;
     }
 
-    public function uwp_image_crop_popup($user, $type = 'avatar') {
-        if ($type == 'avatar') {
-            $large_image_location = uwp_get_usermeta($user->ID, 'uwp_account_avatar', '');
-        } else {
-            $large_image_location = uwp_get_usermeta($user->ID, 'uwp_account_banner', '');
-        }
-        $image_id = 'uwp_'.$type;
-        $image_id_thumb = 'uwp_'.$type.'_thumb';
-        if(strlen($large_image_location)>0){
+    public function uwp_image_crop_popup($user, $form_type = 'avatar') {
 
-            $thumb_width = apply_filters('uwp_avatar_image_width', 128);
-            $thumb_height = apply_filters('uwp_avatar_image_height', 128);
-            $current_large_image_width = uwp_getImageWidth($large_image_location);
-            $current_large_image_height = uwp_getImageHeight($large_image_location);?>
+        if(isset($_GET['uwp_crop']) && isset($_GET['type']) && $_GET['uwp_crop'] != '') {
+
+            $type = $_GET['type'];
+            $image_url = $_GET['uwp_crop'];
+
+            $uploads = wp_upload_dir();
+            $upload_url = $uploads['baseurl'];
+            $upload_path = $uploads['basedir'];
+            $image_path = str_replace($upload_url, $upload_path, $image_url);
+
+            $image = apply_filters( 'uwp_'.$type.'_cropper_image', getimagesize( $image_path ) );
+            if ( empty( $image ) ) {
+                return;
+            }
+
+            // Get avatar full width and height.
+            if ($type == 'avatar') {
+                $full_height = apply_filters('uwp_avatar_image_height', 128);
+                $full_width  = apply_filters('uwp_avatar_image_width', 128);
+            } else {
+                $full_height = apply_filters('uwp_banner_image_height', 300);
+                $full_width  = apply_filters('uwp_banner_image_width', 700);
+            }
+
+            // Calculate Aspect Ratio.
+            if ( !empty( $full_height ) && ( $full_width != $full_height ) ) {
+                $aspect_ratio = $full_width / $full_height;
+            } else {
+                $aspect_ratio = 1;
+            }
+
+            // Default cropper coordinates.
+            // Smaller than full-width: cropper defaults to entire image.
+            if ( $image[0] < $full_width ) {
+                $crop_left  = 0;
+                $crop_right = $image[0];
+
+                // Less than 2x full-width: cropper defaults to full-width.
+            } elseif ( $image[0] < ( $full_width * 2 ) ) {
+                $padding_w  = round( ( $image[0] - $full_width ) / 2 );
+                $crop_left  = $padding_w;
+                $crop_right = $image[0] - $padding_w;
+
+                // Larger than 2x full-width: cropper defaults to 1/2 image width.
+            } else {
+                $crop_left  = round( $image[0] / 4 );
+                $crop_right = $image[0] - $crop_left;
+            }
+
+            // Smaller than full-height: cropper defaults to entire image.
+            if ( $image[1] < $full_height ) {
+                $crop_top    = 0;
+                $crop_bottom = $image[1];
+
+                // Less than double full-height: cropper defaults to full-height.
+            } elseif ( $image[1] < ( $full_height * 2 ) ) {
+                $padding_h   = round( ( $image[1] - $full_height ) / 2 );
+                $crop_top    = $padding_h;
+                $crop_bottom = $image[1] - $padding_h;
+
+                // Larger than 2x full-height: cropper defaults to 1/2 image height.
+            } else {
+                $crop_top    = round( $image[1] / 4 );
+                $crop_bottom = $image[1] - $crop_top;
+            }
+
+            ?>
+
+
+
             <script type="text/javascript">
-                ( function( $, window, undefined ) {
-                    function preview(img, selection) {
-                        var width = <?php echo $thumb_width; ?>;
-                        var height = <?php echo $thumb_height; ?>;
-                        var scaleX = width / selection.width;
-                        var scaleY = height / selection.height;
+                jQuery(window).load( function(){
+                    jQuery('#uwp-<?php echo $type; ?>-to-crop').Jcrop({
+                        onChange: showPreview,
+                        onSelect: updateCoords,
+                        aspectRatio: <?php echo (int) $aspect_ratio; ?>,
+                        setSelect: [ <?php echo (int) $crop_left; ?>, <?php echo (int) $crop_top; ?>, <?php echo (int) $crop_right; ?>, <?php echo (int) $crop_bottom; ?> ]
+                    });
+                });
 
-                        $('#<?php echo $image_id; ?>').find('+ div > img').css({
-                            width: Math.round(scaleX * <?php echo $current_large_image_width;?>) + 'px',
-                            height: Math.round(scaleY * <?php echo $current_large_image_height;?>) + 'px',
-                            marginLeft: '-' + Math.round(scaleX * selection.x1) + 'px',
-                            marginTop: '-' + Math.round(scaleY * selection.y1) + 'px'
+                function updateCoords(c) {
+                    jQuery('#<?php echo $type; ?>-x').val(c.x);
+                    jQuery('#<?php echo $type; ?>-y').val(c.y);
+                    jQuery('#<?php echo $type; ?>-w').val(c.w);
+                    jQuery('#<?php echo $type; ?>-h').val(c.h);
+                }
+
+                function showPreview(coords) {
+                    if ( parseInt(coords.w) > 0 ) {
+                        var fw = <?php echo (int) $full_width; ?>;
+                        var fh = <?php echo (int) $full_height; ?>;
+                        var rx = fw / coords.w;
+                        var ry = fh / coords.h;
+
+                        jQuery( '#uwp-<?php echo $type; ?>-crop-preview' ).css({
+                            width: Math.round(rx * <?php echo (int) $image[0]; ?>) + 'px',
+                            height: Math.round(ry * <?php echo (int) $image[1]; ?>) + 'px',
+                            marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+                            marginTop: '-' + Math.round(ry * coords.y) + 'px'
                         });
-                        $('#x1').val(selection.x1);
-                        $('#y1').val(selection.y1);
-                        $('#x2').val(selection.x2);
-                        $('#y2').val(selection.y2);
-                        $('#w').val(selection.width);
-                        $('#h').val(selection.height);
                     }
-
-
-                    $(document).ready(function () {
-                        $('#save_uwp_avatar').click(function() {
-                            var x1 = $('#x1').val();
-                            var y1 = $('#y1').val();
-                            var x2 = $('#x2').val();
-                            var y2 = $('#y2').val();
-                            var w = $('#w').val();
-                            var h = $('#h').val();
-                            if(x1=="" || y1=="" || x2=="" || y2=="" || w=="" || h==""){
-                                alert("You must make a selection first");
-                                return false;
-                            }else{
-                                return true;
-                            }
-                        });
-                    });
-
-                    $(window).load(function () {
-                        $('#<?php echo $image_id; ?>').imgAreaSelect({
-                            aspectRatio: '1:1',
-                            onSelectChange: preview,
-                            handles: true
-                        });
-                    });
-                }( jQuery, window ));
-
+                }
             </script>
-            <div align="center">
-                <img src="<?php echo $large_image_location; ?>" style="float: left; margin-right: 10px;" id="<?php echo $image_id; ?>" alt="Create Thumbnail" />
-                <div class="<?php echo $image_id_thumb; ?>" style="width:<?php echo $thumb_width;?>px; height:<?php echo $thumb_height;?>px;">
-                    <img src="<?php echo $large_image_location; ?>" alt="Thumbnail Preview" />
-                </div>
 
-                <form class="uwp-crop-form" method="post">
-                    <input type="hidden" name="x1" value="" id="x1" />
-                    <input type="hidden" name="y1" value="" id="y1" />
-                    <input type="hidden" name="x2" value="" id="x2" />
-                    <input type="hidden" name="y2" value="" id="y2" />
-                    <input type="hidden" name="w" value="" id="w" />
-                    <input type="hidden" name="h" value="" id="h" />
-                    <input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp-crop-nonce' ); ?>" />
-                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="Save Thumbnail" id="save_uwp_<?php echo $type; ?>" />
-                </form>
+            <div align="center">
+                <img src="<?php echo $image_url; ?>" id="uwp-<?php echo $type; ?>-to-crop" />
+                <div class="uwp-<?php echo $type; ?>-crop-p-wrap">
+                    <div id="uwp-<?php echo $type; ?>-crop-pane" style="width:<?php echo $full_width; ?>px; height:<?php echo $full_height; ?>px">
+                        <img src="<?php echo $image_url; ?>" id="uwp-<?php echo $type; ?>-crop-preview" />
+                    </div>
+                    <div id="<?php echo $type; ?>-crop-actions">
+                        <form class="uwp-crop-form" method="post">
+                            <input type="hidden" name="x" value="" id="<?php echo $type; ?>-x" />
+                            <input type="hidden" name="y" value="" id="<?php echo $type; ?>-y" />
+                            <input type="hidden" name="w" value="" id="<?php echo $type; ?>-w" />
+                            <input type="hidden" name="h" value="" id="<?php echo $type; ?>-h" />
+                            <input type="hidden" name="uwp_crop" value="<?php echo $image_url; ?>" />
+                            <input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp-crop-nonce' ); ?>" />
+                            <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="Crop Image" id="save_uwp_<?php echo $type; ?>" />
+                        </form>
+                    </div>
+                </div>
             </div>
         <?php } else {
+            $type = $form_type;
             ?>
-            <form class="uwp-account-form" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="uwp_account_nonce" value="<?php echo wp_create_nonce( 'uwp-account-nonce' ); ?>" />
-                <input name="uwp_account_submit" value="<?php echo __( 'Upload Avatar', 'uwp' ); ?>" type="submit">
+            <form id="uwp-upload-<?php echo $type; ?>-form" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
+                <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
+                <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();">Upload <?php echo $type; ?></button>
+                <div class="uwp_upload_field" style="display: none">
+                    <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" onchange="this.form.submit()" required="required" type="file" value="">
+                    <button type="submit" id="uwp_<?php echo $type; ?>_submit_button" style="display: none"></button>
+                </div>
             </form>
             <?php
         }
     }
 
     public function uwp_image_crop_init($user) {
-        $this->uwp_image_crop_form($user, $type = 'avatar');
-        $this->uwp_image_crop_form($user, $type = 'banner');
+
+        $this->uwp_image_crop_form($user);
+        $this->uwp_image_crop_js();
+
     }
 
-    public function uwp_image_crop_form($user, $type = 'avatar') {
-        $ajax_nonce = wp_create_nonce("uwp-image-".$type."-crop-nonce");
+    public function uwp_image_crop_form($user) {
+        if (isset($_GET['uwp_crop']) && isset($_GET['type']) && $_GET['type'] == 'avatar') {
+            $avatar_style = "display: block";
+        } else {
+            $avatar_style = "display: none";
+        }
+
+        if (isset($_GET['uwp_crop']) && isset($_GET['type']) && $_GET['type'] == 'banner') {
+            $banner_style = "display: block";
+        } else {
+            $banner_style = "display: none";
+        }
         ?>
-        <div id="uwp-<?php echo $type; ?>-modal" class="uwp-modal" style="display: none;">
-            <a id="uwp-<?php echo $type; ?>-modal-close" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>
-            <div class="uwp-modal-content-wrap">
-                <div class="uwp-modal-title">
-                    <h2><?php echo __( 'Choose '.$type.' image:', 'uwp' ); ?></h2>
-                </div>
-                <div class="uwp-modal-content">
-                    <?php $this->uwp_image_crop_popup($user, 'avatar'); ?>
+        <?php if (isset($_GET['uwp_crop']) && isset($_GET['type'])) {
+            $type = $_GET['type'];
+            ?>
+            <div id="uwp-avatar-modal" class="uwp-modal" style="display:block;">
+                <a id="uwp-avatar-modal-close" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>
+                <div class="uwp-modal-content-wrap">
+                    <div class="uwp-modal-content">
+
+                        <?php
+                        $this->uwp_image_crop_popup($user, $type);
+                        ?>
+                    </div>
                 </div>
             </div>
-        </div>
+        <?php } else { ?>
+            <div id="uwp-avatar-modal" class="uwp-modal" style="<?php echo $avatar_style; ?>">
+                <a id="uwp-avatar-modal-close" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>
+                <div class="uwp-modal-content-wrap">
+                    <div class="uwp-modal-content">
+
+                        <?php
+                        $this->uwp_image_crop_popup($user, 'avatar');
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <div id="uwp-banner-modal" class="uwp-modal" style="<?php echo $banner_style; ?>">
+                <a id="uwp-banner-modal-close" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>
+                <div class="uwp-modal-content-wrap">
+                    <div class="uwp-modal-content">
+                        <?php $this->uwp_image_crop_popup($user, 'banner'); ?>
+                    </div>
+                </div>
+            </div>
+            <?php
+        }
+    }
+
+    public function uwp_image_crop_js() {
+        if (isset($_GET['uwp_crop'])) {
+            $backdrop = true;
+        } else {
+            $backdrop = false;
+        }
+        ?>
         <script type="text/javascript">
             jQuery(document).ready(function() {
-                jQuery('.uwp-profile-<?php echo $type; ?>-modal-trigger').click(function (e) {
-                    jQuery('#uwp-<?php echo $type; ?>-modal').show();
+                <?php
+                if ($backdrop) {
+                ?>
+                jQuery(document.body).append("<div id='uwp-modal-backdrop'></div>");
+                <?php
+                }
+                ?>
+                jQuery('.uwp-profile-avatar-modal-trigger').click(function (e) {
+                    jQuery('#uwp-avatar-modal').show();
+                    jQuery(document.body).append("<div id='uwp-modal-backdrop'></div>");
                 });
-                jQuery('#uwp-<?php echo $type; ?>-modal-close').click(function (e) {
+                jQuery('#uwp-avatar-modal-close').click(function (e) {
                     e.preventDefault();
-                    jQuery('#uwp-<?php echo $type; ?>-modal').hide();
+                    jQuery('#uwp-avatar-modal').hide();
+                    jQuery("#uwp-modal-backdrop").remove();
+                });
+                jQuery('.uwp-profile-banner-modal-trigger').click(function (e) {
+                    jQuery('#uwp-banner-modal').show();
+                    jQuery(document.body).append("<div id='uwp-modal-backdrop'></div>");
+                });
+                jQuery('#uwp-banner-modal-close').click(function (e) {
+                    e.preventDefault();
+                    jQuery('#uwp-banner-modal').hide();
+                    jQuery("#uwp-modal-backdrop").remove();
                 });
             });
         </script>

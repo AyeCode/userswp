@@ -32,5 +32,11 @@ function preview(img, selection) {
                 return true;
             }
         });
+        //$('#uwp_upload_avatar').change(function() {
+        //    $('#uwp-upload-avatar-form').submit();
+        //});
+        $('#uwp_upload_banner').change(function() {
+            $('#uwp-upload-banner-form').submit();
+        });
     });
 }( jQuery, window ));

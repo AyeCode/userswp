@@ -1,14 +1,18 @@
 .uwp-modal {
+  box-sizing: border-box;
+  display: table;
   width: 80%;
-  z-index: 1999;
-  -webkit-tap-highlight-color: transparent;
-  padding: 9px;
-  background: #454144;
-  border-radius: 12px;
+  position: fixed;
+  background-color: #fff;
+  top: 10%;
+  left: 10%;
+  border: 4px dashed #bbb;
+  z-index: 1050;
+}
+
+.uwp_upload_button {
+  margin: 30px auto;
   display: block;
-  position: absolute;
-  top: 9%;
-  left: 8%;
 }
 
 .uwp-modal-content-wrap {
@@ -23,8 +27,8 @@
   margin: 0;
   background: #fff;
   -webkit-border-radius: 6px 6px 0 0;
-  border-bottom: 1px solid #b0b0b0;
-  padding-bottom: 11px;
+  border-bottom: 4px dashed #bbb;
+  padding-bottom: 11px
 }
 
 .uwp-modal-title h2 {
@@ -51,5 +55,34 @@
 #save_uwp_avatar,
 #save_uwp_banner {
   float: left;
-  margin-top: 10px
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#uwp-avatar-to-crop {
+  float: left;
+  margin: 0 auto 20px;
+  text-align: left;
+}
+.uwp-modal-content .jcrop-holder {
+  float: left;
+  margin: 0 auto 20px;
+  margin-right: 20px;
+  text-align: left;
+}
+.uwp-avatar-crop-p-wrap {
+  float: left;
+  clear: none;
+  padding-top: 0;
+  overflow: hidden;
+  text-align: center;
+}
+#uwp-modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000;
+  opacity: 0.5;
 }

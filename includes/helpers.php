@@ -250,7 +250,7 @@ function uwp_get_option( $key = '', $default = false ) {
 
 function uwp_update_usermeta( $user_id = false, $key, $value ) {
 
-    if (!$user_id || !$key || !$value) {
+    if (!$user_id || !$key ) {
         return false;
     }
 

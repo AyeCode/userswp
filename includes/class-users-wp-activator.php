@@ -75,8 +75,8 @@ class Users_WP_Activator {
         $forgot_password_subject = __('[#site_name#] - Your new password', 'uwp');
         $forgot_password_content = __("<p>Dear [#user_name#],<p><p>You requested a new password for [#site_name_url#]</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
 
-        $forgot_password_subject = __('[#site_name#] - Password has been reset', 'uwp');
-        $forgot_password_content = __("<p>Dear [#user_name#],<p><p>You requested a new password for [#site_name_url#]</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
+        $reset_password_subject = __('[#site_name#] - Password has been reset', 'uwp');
+        $reset_password_content = __("<p>Dear [#user_name#],<p><p>Your password has been reset</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
 
         $settings['registration_success_email_subject'] = $register_success_subject;
         $settings['registration_success_email_content'] = $register_success_content;
@@ -84,7 +84,8 @@ class Users_WP_Activator {
         $settings['forgot_password_email_subject'] = $forgot_password_subject;
         $settings['forgot_password_email_content'] = $forgot_password_content;
 
-
+        $settings['reset_password_email_subject'] = $reset_password_subject;
+        $settings['reset_password_email_content'] = $reset_password_content;
 
         update_option( 'uwp_settings', $settings );
 
@@ -211,10 +212,12 @@ class Users_WP_Activator {
         $register = self::uwp_default_custom_fields_register();
         $login = self::uwp_default_custom_fields_login();
         $forgot = self::uwp_default_custom_fields_forgot();
+        $avatar = self::uwp_default_custom_fields_avatar();
+        $banner = self::uwp_default_custom_fields_banner();
         $reset = self::uwp_default_custom_fields_reset();
         $account = self::uwp_default_custom_fields_account();
 
-        $fields = array_merge($register, $login, $forgot, $account);
+        $fields = array_merge($register, $login, $forgot, $account, $avatar, $banner, $reset);
 
         $fields = apply_filters('uwp_default_custom_fields', $fields);
 
@@ -351,6 +354,64 @@ class Users_WP_Activator {
         return  $fields;
     }
 
+    public static function uwp_default_custom_fields_avatar(){
+
+        $fields = array();
+
+        $fields[] = array(
+            'form_type' => 'avatar',
+            'field_type' => 'file',
+            'site_title' => __('Avatar', 'uwp'),
+            'htmlvar_name' => 'avatar',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_required' => '1',
+            'extra_fields'        =>  array(
+                'uwp_file_types'  =>  array(
+                    'jpg',
+                    'jpe',
+                    'jpeg',
+                    'gif',
+                    'png'
+                ),
+            )
+        );
+
+        $fields = apply_filters('uwp_default_custom_fields_avatar', $fields);
+
+        return  $fields;
+    }
+
+    public static function uwp_default_custom_fields_banner(){
+
+        $fields = array();
+
+        $fields[] = array(
+            'form_type' => 'banner',
+            'field_type' => 'file',
+            'site_title' => __('Banner', 'uwp'),
+            'htmlvar_name' => 'banner',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_required' => '1',
+            'extra_fields'        =>  array(
+                'uwp_file_types'  =>  array(
+                    'jpg',
+                    'jpe',
+                    'jpeg',
+                    'gif',
+                    'png'
+                ),
+            )
+        );
+
+        $fields = apply_filters('uwp_default_custom_fields_banner', $fields);
+
+        return  $fields;
+    }
+
     public static function uwp_default_custom_fields_reset(){
 
         $fields = array();
@@ -430,46 +491,6 @@ class Users_WP_Activator {
             'option_values' => '',
             'is_default' => '1',
             'is_required' => '1'
-        );
-
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'file',
-            'site_title' => __('Avatar', 'uwp'),
-            'htmlvar_name' => 'avatar',
-            'default_value' => '',
-            'option_values' => '',
-            'is_default' => '1',
-            'is_required' => '1',
-            'extra_fields'        =>  array(
-                'uwp_file_types'  =>  array(
-                    'jpg',
-                    'jpe',
-                    'jpeg',
-                    'gif',
-                    'png'
-                ),
-            )
-        );
-
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'file',
-            'site_title' => __('Banner', 'uwp'),
-            'htmlvar_name' => 'banner',
-            'default_value' => '',
-            'option_values' => '',
-            'is_default' => '1',
-            'is_required' => '1',
-            'extra_fields'        =>  array(
-                'uwp_file_types'  =>  array(
-                    'jpg',
-                    'jpe',
-                    'jpeg',
-                    'gif',
-                    'png'
-                ),
-            )
         );
 
         $fields[] = array(
