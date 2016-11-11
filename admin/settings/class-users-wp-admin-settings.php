@@ -629,7 +629,7 @@ class Users_WP_Admin_Settings {
                         ),
                         'reset_password_email_subject' => array(
                             'id' => 'reset_password_email_subject',
-                            'name' => __( 'Forgot password email', 'uwp' ),
+                            'name' => __( 'Reset password email', 'uwp' ),
                             'desc' => "",
                             'type' => 'text',
                             'size' => 'regular',
