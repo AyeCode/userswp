@@ -31,7 +31,7 @@ class Users_WP_Profile {
         $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
         $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar_thumb', '');
         if (empty($avatar)) {
-            $avatar = get_avatar($user->user_email, 128);
+            $avatar = get_avatar($user->user_email, 128, null, null, array('class' => array('uwp-profile-avatar-modal-trigger') ));
         } else {
             $avatar = '<img src="'.$avatar.'" class="avatar uwp-profile-avatar-modal-trigger avatar-128 photo" width="128" height="128">';
         }
