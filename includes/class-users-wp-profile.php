@@ -28,16 +28,16 @@ class Users_WP_Profile {
     }
 
     public function get_profile_header($user) {
-        $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner', '');
-        $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar', '');
+        $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
+        $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar_thumb', '');
         if (empty($avatar)) {
-            $avatar = get_avatar($user->user_email, 128);
+            $avatar = get_avatar($user->user_email, 128, null, null, array('class' => array('uwp-profile-avatar-modal-trigger') ));
         } else {
-            $avatar = '<img src="'.$avatar.'" class="avatar avatar-128 photo" width="128" height="128">';
+            $avatar = '<img src="'.$avatar.'" class="avatar uwp-profile-avatar-modal-trigger avatar-128 photo" width="128" height="128">';
         }
         ?>
         <div class="uwp-profile-header">
-            <div class="uwp-profile-header-img" style="background-image: url('<?php echo $banner; ?>')"></div>
+            <div class="uwp-profile-header-img uwp-profile-banner-modal-trigger" style="background-image: url('<?php echo $banner; ?>')"></div>
             <div class="uwp-profile-avatar"><?php echo $avatar; ?></div>
         </div>
         <?php
@@ -105,7 +105,7 @@ class Users_WP_Profile {
         return apply_filters( 'uwp_profile_tabs', $tabs, $user );
     }
 
-    function get_profile_tabs_content($user) {
+    public function get_profile_tabs_content($user) {
 
         $tab = get_query_var('uwp_tab');
 
@@ -146,7 +146,7 @@ class Users_WP_Profile {
                     }
                     ?>
                 </ul>
-                <?php if ($account_page) { ?>
+                <?php if ($account_page && is_user_logged_in() && get_current_user_id() == $user->ID) { ?>
                     <div class="uwp-edit-account">
                         <a href="<?php echo get_permalink( $account_page ); ?>" title="Edit Account"><i class="fa fa-gear"></i></a>
                     </div>
@@ -161,7 +161,7 @@ class Users_WP_Profile {
         </div>
     <?php }
 
-    function get_profile_pagination($total) {
+    public function get_profile_pagination($total) {
         ?>
         <div class="uwp-pagination">
             <?php
@@ -181,8 +181,7 @@ class Users_WP_Profile {
         <?php
     }
 
-
-    function get_profile_posts($user) {
+    public function get_profile_posts($user) {
         $enable_profile_posts_tab = uwp_get_option('enable_profile_posts_tab', false);
         if ($enable_profile_posts_tab != '1') {
             return;
@@ -254,7 +253,7 @@ class Users_WP_Profile {
         <?php
     }
 
-    function get_profile_comments($user) {
+    public function get_profile_comments($user) {
         $enable_profile_comments_tab = uwp_get_option('enable_profile_comments_tab', false);
         if ($enable_profile_comments_tab == '1') {
             return;
@@ -462,6 +461,204 @@ class Users_WP_Profile {
         }
 
         return $title;
+    }
+
+    public function uwp_image_crop_popup($image_url, $type) {
+
+        ob_start();
+            $uploads = wp_upload_dir();
+            $upload_url = $uploads['baseurl'];
+            $upload_path = $uploads['basedir'];
+            $image_path = str_replace($upload_url, $upload_path, $image_url);
+
+            $image = apply_filters( 'uwp_'.$type.'_cropper_image', getimagesize( $image_path ) );
+            if ( empty( $image ) ) {
+                return "";
+            }
+
+            // Get avatar full width and height.
+            if ($type == 'avatar') {
+                $full_height = apply_filters('uwp_avatar_image_height', 128);
+                $full_width  = apply_filters('uwp_avatar_image_width', 128);
+            } else {
+                $full_height = apply_filters('uwp_banner_image_height', 300);
+                $full_width  = apply_filters('uwp_banner_image_width', 700);
+            }
+
+            // Calculate Aspect Ratio.
+            if ( !empty( $full_height ) && ( $full_width != $full_height ) ) {
+                $aspect_ratio = $full_width / $full_height;
+            } else {
+                $aspect_ratio = 1;
+            }
+
+            // Default cropper coordinates.
+            // Smaller than full-width: cropper defaults to entire image.
+            if ( $image[0] < $full_width ) {
+                $crop_left  = 0;
+                $crop_right = $image[0];
+
+                // Less than 2x full-width: cropper defaults to full-width.
+            } elseif ( $image[0] < ( $full_width * 2 ) ) {
+                $padding_w  = round( ( $image[0] - $full_width ) / 2 );
+                $crop_left  = $padding_w;
+                $crop_right = $image[0] - $padding_w;
+
+                // Larger than 2x full-width: cropper defaults to 1/2 image width.
+            } else {
+                $crop_left  = round( $image[0] / 4 );
+                $crop_right = $image[0] - $crop_left;
+            }
+
+            // Smaller than full-height: cropper defaults to entire image.
+            if ( $image[1] < $full_height ) {
+                $crop_top    = 0;
+                $crop_bottom = $image[1];
+
+                // Less than double full-height: cropper defaults to full-height.
+            } elseif ( $image[1] < ( $full_height * 2 ) ) {
+                $padding_h   = round( ( $image[1] - $full_height ) / 2 );
+                $crop_top    = $padding_h;
+                $crop_bottom = $image[1] - $padding_h;
+
+                // Larger than 2x full-height: cropper defaults to 1/2 image height.
+            } else {
+                $crop_top    = round( $image[1] / 4 );
+                $crop_bottom = $image[1] - $crop_top;
+            }
+            ?>
+
+            <script type="text/javascript">
+                jQuery(window).load( function(){
+                    jQuery('#uwp-<?php echo $type; ?>-to-crop').Jcrop({
+                        onChange: showPreview,
+                        onSelect: updateCoords,
+                        aspectRatio: <?php echo (int) $aspect_ratio; ?>,
+                        setSelect: [ <?php echo (int) $crop_left; ?>, <?php echo (int) $crop_top; ?>, <?php echo (int) $crop_right; ?>, <?php echo (int) $crop_bottom; ?> ]
+                    });
+                });
+
+                function updateCoords(c) {
+                    jQuery('#<?php echo $type; ?>-x').val(c.x);
+                    jQuery('#<?php echo $type; ?>-y').val(c.y);
+                    jQuery('#<?php echo $type; ?>-w').val(c.w);
+                    jQuery('#<?php echo $type; ?>-h').val(c.h);
+                }
+
+                function showPreview(coords) {
+                    if ( parseInt(coords.w) > 0 ) {
+                        var fw = <?php echo (int) $full_width; ?>;
+                        var fh = <?php echo (int) $full_height; ?>;
+                        var rx = fw / coords.w;
+                        var ry = fh / coords.h;
+
+                        jQuery( '#uwp-<?php echo $type; ?>-crop-preview' ).css({
+                            width: Math.round(rx * <?php echo (int) $image[0]; ?>) + 'px',
+                            height: Math.round(ry * <?php echo (int) $image[1]; ?>) + 'px',
+                            marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+                            marginTop: '-' + Math.round(ry * coords.y) + 'px'
+                        });
+                    }
+                }
+            </script>
+
+            <div align="center">
+                <img src="<?php echo $image_url; ?>" id="uwp-<?php echo $type; ?>-to-crop" />
+                <div class="uwp-<?php echo $type; ?>-crop-p-wrap">
+                    <div id="uwp-<?php echo $type; ?>-crop-pane" style="width:<?php echo $full_width; ?>px; height:<?php echo $full_height; ?>px">
+                        <img src="<?php echo $image_url; ?>" id="uwp-<?php echo $type; ?>-crop-preview" />
+                    </div>
+                    <div id="<?php echo $type; ?>-crop-actions">
+                        <form class="uwp-crop-form" method="post">
+                            <input type="hidden" name="x" value="" id="<?php echo $type; ?>-x" />
+                            <input type="hidden" name="y" value="" id="<?php echo $type; ?>-y" />
+                            <input type="hidden" name="w" value="" id="<?php echo $type; ?>-w" />
+                            <input type="hidden" name="h" value="" id="<?php echo $type; ?>-h" />
+                            <input type="hidden" name="uwp_crop" value="<?php echo $image_url; ?>" />
+                            <input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp-crop-nonce' ); ?>" />
+                            <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="Crop Image" id="save_uwp_<?php echo $type; ?>" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <?php
+        $output = ob_get_contents();
+        ob_end_clean();
+        return trim($output);
+    }
+
+    public function uwp_image_crop_init($user) {
+
+        $this->uwp_image_crop_modal($user);
+        $this->uwp_image_crop_js();
+
+    }
+
+    public function uwp_image_crop_modal($user) {
+
+        if(isset($_GET['uwp_crop']) && isset($_GET['type']) && $_GET['uwp_crop'] != '' && $_GET['type'] != '') {
+            $type = sanitize_text_field($_GET['type']);
+            $image_url = esc_url_raw($_GET['uwp_crop']);
+            $style = "display: block";
+            $this->uwp_image_crop_modal_html('avatar', $style, $this->uwp_image_crop_popup($image_url, $type));
+        } else {
+            $style = "display: none";
+            $this->uwp_image_crop_modal_html('avatar', $style, $this->uwp_crop_submit_form('avatar'));
+            $this->uwp_image_crop_modal_html('banner', $style, $this->uwp_crop_submit_form('banner'));
+        }
+
+    }
+
+    public function uwp_image_crop_modal_html($type, $style, $content) {
+        ?>
+        <div id="uwp-<?php echo $type; ?>-modal" class="uwp-modal" style="<?php echo $style; ?>">
+            <a id="uwp-<?php echo $type; ?>-modal-close" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>
+            <div class="uwp-modal-content-wrap">
+                <div class="uwp-modal-content">
+                    <?php echo $content; ?>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
+    public function uwp_crop_submit_form($type = 'avatar') {
+        ob_start();
+        ?>
+        <form id="uwp-upload-<?php echo $type; ?>-form" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
+            <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
+            <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();">Upload <?php echo $type; ?></button>
+            <div class="uwp_upload_field" style="display: none">
+                <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" onchange="this.form.submit()" required="required" type="file" value="">
+                <button type="submit" id="uwp_<?php echo $type; ?>_submit_button" style="display: none"></button>
+            </div>
+        </form>
+        <?php
+        $output = ob_get_contents();
+        ob_end_clean();
+        return trim($output);
+    }
+
+    public function uwp_image_crop_js() {
+        if (isset($_GET['uwp_crop']) && isset($_GET['type'])) {
+            $backdrop = true;
+        } else {
+            $backdrop = false;
+        }
+        ?>
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+                <?php
+                if ($backdrop) {
+                ?>
+                jQuery(document.body).append("<div id='uwp-modal-backdrop'></div>");
+                <?php
+                }
+                ?>
+            });
+        </script>
+        <?php
     }
 
 }

@@ -8,10 +8,12 @@
         <form class="uwp-login-form" method="post">
             <?php do_action('uwp_template_fields', 'login'); ?>
             <input type="hidden" name="uwp_login_nonce" value="<?php echo wp_create_nonce( 'uwp-login-nonce' ); ?>" />
-            <input name="uwp_login_submit" value="<?php echo __( 'Login', 'uwp' ); ?>" type="submit">
             <div class="uwp-remember-me">
-                <label for="remember_me"><input name="remember_me" id="remember_me" value="forever" type="checkbox"> <?php echo __( 'Remember Me', 'uwp' ); ?></label>
+                <label style="display: inline-block;" for="remember_me"><input name="remember_me" id="remember_me" value="forever" type="checkbox">
+                    <?php echo __( 'Remember Me', 'uwp' ); ?>
+                </label>
             </div>
+            <input name="uwp_login_submit" value="<?php echo __( 'Login', 'uwp' ); ?>" type="submit">
         </form>
         <div class="uwp-forgotpsw"><a href="<?php echo uwp_get_page_link('forgot'); ?>"><?php echo __( 'Forgot password?', 'uwp' ); ?></a></div>
         <div class="clfx"></div>

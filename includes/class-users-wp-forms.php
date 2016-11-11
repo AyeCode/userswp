@@ -61,9 +61,41 @@ class Users_WP_Forms {
             $errors = $this->process_forgot($_POST);
             $message = __('Please check your email.', 'uwp');
             $processed = true;
+        } elseif (isset($_POST['uwp_reset_submit'])) {
+            $errors = $this->process_reset($_POST);
+            $message = __('Password updated successfully. Please login with your new password', 'uwp');
+            $processed = true;
         } elseif (isset($_POST['uwp_account_submit'])) {
             $errors = $this->process_account($_POST, $_FILES);
             $message = __('Account updated successfully.', 'uwp');
+            $processed = true;
+        } elseif (isset($_POST['uwp_avatar_submit'])) {
+            $errors = $this->process_upload_submit($_POST, $_FILES, 'avatar');
+            if (!is_wp_error($errors)) {
+                $redirect = $errors;
+            }
+            $message = __('Avatar cropped successfully.', 'uwp');
+            $processed = true;
+        } elseif (isset($_POST['uwp_banner_submit'])) {
+            $errors = $this->process_upload_submit($_POST, $_FILES, 'banner');
+            if (!is_wp_error($errors)) {
+                $redirect = $errors;
+            }
+            $message = __('Banner cropped successfully.', 'uwp');
+            $processed = true;
+        } elseif (isset($_POST['uwp_avatar_crop'])) {
+            $errors = $this->process_image_crop($_POST, 'avatar');
+            if (!is_wp_error($errors)) {
+                $redirect = $errors;
+            }
+            $message = __('Avatar cropped successfully.', 'uwp');
+            $processed = true;
+        } elseif (isset($_POST['uwp_banner_crop'])) {
+            $errors = $this->process_image_crop($_POST, 'banner');
+            if (!is_wp_error($errors)) {
+                $redirect = $errors;
+            }
+            $message = __('Banner cropped successfully.', 'uwp');
             $processed = true;
         }
 
@@ -318,9 +350,58 @@ class Users_WP_Forms {
         return true;
     }
 
+    public function process_reset($data) {
+
+        $errors = new WP_Error();
+
+        if( ! isset( $data['uwp_reset_nonce'] ) || ! wp_verify_nonce( $data['uwp_reset_nonce'], 'uwp-reset-nonce' ) ) {
+            return false;
+        }
+
+        do_action('uwp_before_validate', 'reset');
+
+        $result = $this->validate_fields($data, 'reset');
+
+        $result = apply_filters('uwp_validate_result', $result, 'reset');
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        do_action('uwp_after_validate', 'reset');
+
+        $login = $data['uwp_reset_username'];
+        $key = $data['uwp_reset_key'];
+        $user_data = check_password_reset_key( $key, $login );
+
+        if (is_wp_error($user_data)) {
+            return $user_data;
+        }
+
+        $login_details = "";
+
+        $res = $this->uwp_send_email( 'reset', $user_data->ID, $login_details );
+
+        if (!$res) {
+            if (get_option('admin_email') == $user_data->user_email) {
+                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please check your site error log for more details.', 'uwp'));
+            } else {
+                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'uwp'));
+            }
+
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        wp_set_password( $data['uwp_reset_password'], $user_data->ID );
+
+        return true;
+    }
+
     public function generate_forgot_message($user_data) {
 
-        global $wpdb;
+        global $wpdb, $wp_hasher;
 
         $allow = apply_filters('allow_password_reset', true, $user_data->ID);
         if ( ! $allow )
@@ -353,7 +434,7 @@ class Users_WP_Forms {
             $message .= sprintf(__('Username: %s'), $user_data->user_login) . "\r\n\r\n";
             $message .= __('If this was a mistake, just ignore this email and nothing will happen.') . "\r\n\r\n";
             $message .= __('To reset your password, visit the following address:') . "\r\n\r\n";
-            $message .= site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
+            $message .= site_url("reset?key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
 
         }
 
@@ -429,6 +510,95 @@ class Users_WP_Forms {
 
     }
 
+    public function process_upload_submit($data = array(), $files = array(), $type = 'avatar') {
+
+        $current_user_id = get_current_user_id();
+        if (!$current_user_id) {
+            return false;
+        }
+
+        if( ! isset( $data['uwp_upload_nonce'] ) || ! wp_verify_nonce( $data['uwp_upload_nonce'], 'uwp-upload-nonce' ) ) {
+            return false;
+        }
+
+        do_action('uwp_before_validate', $type);
+
+        $result = $this->validate_uploads($files, $type);
+
+        $result = apply_filters('uwp_validate_result', $result, $type);
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        $profile_url = uwp_build_profile_tab_url($current_user_id);
+
+        $url = add_query_arg(
+            array(
+                'uwp_crop' => $result['uwp_'.$type.'_file'],
+                'type' => $type
+            ),
+            $profile_url);
+
+        return $url;
+
+    }
+
+    public function process_image_crop($data = array(), $type = 'avatar') {
+        
+        if (!is_user_logged_in()) {
+            return false;
+        }
+        $user_id = get_current_user_id();
+        $image_url = $data['uwp_crop'];
+        
+        $errors = new WP_Error();
+        if (empty($image_url)) {
+            $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'uwp'));
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+        
+        if ($image_url) {
+            if ($type == 'avatar') {
+                $full_height = apply_filters('uwp_avatar_image_height', 128);
+                $full_width  = apply_filters('uwp_avatar_image_width', 128);
+            } else {
+                $full_height = apply_filters('uwp_banner_image_height', 300);
+                $full_width  = apply_filters('uwp_banner_image_width', 700);
+            }
+
+            $uploads = wp_upload_dir();
+            $upload_url = $uploads['baseurl'];
+            $upload_path = $uploads['basedir'];
+            $image_url = str_replace($upload_url, $upload_path, $image_url);
+            $ext = pathinfo($image_url, PATHINFO_EXTENSION); // to get extension
+            $name =pathinfo($image_url, PATHINFO_FILENAME); //file name without extension
+            $thumb_image_name = $name.'_uwp_thumb'.'.'.$ext;
+            $thumb_image_location = str_replace($name.'.'.$ext, $thumb_image_name, $image_url);
+            //Get the new coordinates to crop the image.
+            $x = $data["x"];
+            $y = $data["y"];
+            $w = $data["w"];
+            $h = $data["h"];
+            //Scale the image based on cropped width setting
+            $scale = $full_width/$w;
+            $cropped = uwp_resizeThumbnailImage($thumb_image_location, $image_url,$w,$h,$x,$y,$scale);
+            $cropped = str_replace($upload_path, $upload_url, $cropped);
+            if ($type == 'avatar') {
+                uwp_update_usermeta($user_id, 'uwp_account_avatar_thumb', $cropped);
+            } else {
+                uwp_update_usermeta($user_id, 'uwp_account_banner_thumb', $cropped);
+            }
+        }
+
+
+        $profile_url = uwp_build_profile_tab_url($user_id);
+        return $profile_url;
+
+    }
+
     public function validate_fields($data, $type) {
 
         $errors = new WP_Error();
@@ -456,6 +626,7 @@ class Users_WP_Forms {
 
                     case 'uwp_register_username':
                     case 'uwp_login_username':
+                    case 'uwp_reset_username':
                         $sanitized_value = sanitize_user($value);
                         $sanitized = true;
                         break;
@@ -556,7 +727,7 @@ class Users_WP_Forms {
             $validated_data['password'] = $data['uwp_'.$type.'_password'];
         }
 
-        if ($type == 'register' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
+        if ($type == 'register' || $type == 'reset' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
             //check password
             if ($data['uwp_'.$type.'_password'] != $data['uwp_'.$type.'_confirm_password']) {
                 $errors->add('pass_match', __('ERROR: Passwords do not match.', 'uwp'));
@@ -583,6 +754,7 @@ class Users_WP_Forms {
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_custom_fields';
         $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
+
 
 
         if (!empty($fields)) {
@@ -685,6 +857,9 @@ class Users_WP_Forms {
         } elseif ( $message_type == 'forgot' ) {
             $subject = uwp_get_option('forgot_password_email_subject', '');
             $message = uwp_get_option('forgot_password_email_content', '');
+        } elseif ( $message_type == 'reset' ) {
+            $subject = uwp_get_option('reset_password_email_subject', '');
+            $message = uwp_get_option('reset_password_email_content', '');
         }
 
         if ( ! empty( $subject ) ) {
@@ -771,10 +946,10 @@ class Users_WP_Forms {
         );
         $subject = str_replace( $search_array, $replace_array, $subject );
 
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-        $headers .= "Reply-To: " . $site_email . "\r\n";
-        $headers .= 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>' . "\r\n";
+        $headers  = array();
+        $headers[] = 'Content-type: text/html; charset=UTF-8';
+        $headers[] = "Reply-To: " . $site_email;
+        $headers[] = 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>';
 
         $to = $user_email;
 
@@ -902,7 +1077,7 @@ class Users_WP_Forms {
         return $files_to_upload;
     }
 
-    function uwp_upload_file( $file, $args = array() ) {
+    public function uwp_upload_file( $file, $args = array() ) {
 
         include_once ABSPATH . 'wp-admin/includes/file.php';
         include_once ABSPATH . 'wp-admin/includes/media.php';
@@ -938,5 +1113,48 @@ class Users_WP_Forms {
 
         return $uploaded_file;
     }
+
+    public function check_password_reset_key( $key, $login ) {
+        global $wpdb, $wp_hasher;
+
+        $key = preg_replace( '/[^a-z0-9]/i', '', $key );
+
+        $errors = new WP_Error();
+
+        if ( empty( $key ) || ! is_string( $key ) ) {
+            $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Reset Key.', 'uwp'));
+            return false;
+        }
+
+        if ( empty( $login ) || ! is_string( $login ) ) {
+            $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Reset Key.', 'uwp'));
+            return false;
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        $user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_login = %s", $login ) );
+
+        if ( ! empty( $user ) ) {
+            if ( empty( $wp_hasher ) ) {
+                require_once ABSPATH . 'wp-includes/class-phpass.php';
+                $wp_hasher = new PasswordHash( 8, true );
+            }
+
+            $valid = $wp_hasher->CheckPassword( $key, $user->user_activation_key );
+        }
+
+        if ( empty( $user ) || empty( $valid ) ) {
+            $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Reset Key.', 'uwp'));
+            return false;
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        return get_userdata( $user->ID );
+    }
+
 
 }

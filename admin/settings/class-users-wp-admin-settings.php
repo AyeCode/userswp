@@ -484,6 +484,16 @@ class Users_WP_Admin_Settings {
                             'placeholder' => __( 'Select a page', 'uwp' ),
                             'class' => 'uwp_label_block',
                         ),
+                        'reset_pass_page' => array(
+                            'id' => 'reset_pass_page',
+                            'name' => __( 'Reset Password Page', 'uwp' ),
+                            'desc' => __( 'This is the front end Reset Password page. This is the page where users can reset their password when they lose it.', 'uwp' ),
+                            'type' => 'select',
+                            'options' => $this->uwp_get_pages(),
+                            'chosen' => true,
+                            'placeholder' => __( 'Select a page', 'uwp' ),
+                            'class' => 'uwp_label_block',
+                        ),
                         'users_list_page' => array(
                             'id' => 'users_list_page',
                             'name' => __( 'Users List Page', 'uwp' ),
@@ -616,6 +626,21 @@ class Users_WP_Admin_Settings {
                             'desc' => "",
                             'type' => 'textarea',
                             'placeholder' => __( 'Enter forgot password email Content', 'uwp' )
+                        ),
+                        'reset_password_email_subject' => array(
+                            'id' => 'reset_password_email_subject',
+                            'name' => __( 'Reset password email', 'uwp' ),
+                            'desc' => "",
+                            'type' => 'text',
+                            'size' => 'regular',
+                            'placeholder' => __( 'Enter reset password email Subject', 'uwp' )
+                        ),
+                        'reset_password_email_content' => array(
+                            'id' => 'reset_password_email_content',
+                            'name' => "",
+                            'desc' => "",
+                            'type' => 'textarea',
+                            'placeholder' => __( 'Enter reset password email Content', 'uwp' )
                         ),
                     )
                 ),

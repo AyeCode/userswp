@@ -1,0 +1,98 @@
+.uwp-modal {
+  box-sizing: border-box;
+  display: table;
+  width: 80%;
+  position: fixed;
+  background-color: #fff;
+  top: 10%;
+  left: 10%;
+  border: 4px dashed #bbb;
+  z-index: 1050;
+}
+
+.uwp_upload_button {
+  margin: 30px auto;
+  display: block;
+}
+
+.uwp-modal-content-wrap {
+  position: relative;
+  z-index: 6;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 6px;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.uwp-modal-title {
+  margin: 0;
+  background: #fff;
+  -webkit-border-radius: 6px 6px 0 0;
+  border-bottom: 4px dashed #bbb;
+  padding-bottom: 11px
+}
+
+.uwp-modal-title h2 {
+  margin: 0 20px 0 0;
+  font-size: 18px;
+  line-height: 1.33333em;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+  font-weight: bold;
+}
+
+.uwp-modal-content,
+.uwp-modal-title {
+  padding: 12px 18px;
+}
+
+.uwp-modal-close-x {
+  cursor: pointer;
+  position: absolute;
+  right: 28px;
+  top: 20px;
+  z-index: 9;
+}
+
+#save_uwp_avatar,
+#save_uwp_banner {
+  float: left;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#uwp-avatar-to-crop {
+  float: left;
+  margin: 0 auto 20px;
+  text-align: left;
+}
+.uwp-modal-content .jcrop-holder {
+  float: left;
+  margin: 0 auto 20px;
+  margin-right: 20px;
+  text-align: left;
+}
+.uwp-avatar-crop-p-wrap {
+  float: left;
+  clear: none;
+  padding-top: 0;
+  overflow: hidden;
+  text-align: center;
+}
+#uwp-modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000;
+  opacity: 0.5;
+}
+#uwp-avatar-crop-pane,
+#uwp-banner-crop-pane {
+  overflow: hidden;
+  img {
+    max-width: none !important;
+    max-height: none !important
+  }
+}

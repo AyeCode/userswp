@@ -59,6 +59,15 @@ class Users_WP_Templates {
                 return $template;
                 break;
 
+            case 'reset':
+                $template = locate_template(array("userswp/reset.php"));
+                if (!$template) {
+                    $template = $plugin_path . '/templates/reset.php';
+                }
+                $template = apply_filters('uwp_template_reset', $template);
+                return $template;
+                break;
+
             case 'account':
                 $template = locate_template(array("userswp/account.php"));
                 if (!$template) {
@@ -91,13 +100,13 @@ class Users_WP_Templates {
     }
 
     public function access_checks() {
-        global $wp_query;
+        global $wp_query, $post;
 
         if (!is_page()) {
             return false;
         }
 
-        $current_page_id = $wp_query->query_vars['page_id'];
+        $current_page_id = $post->ID;
         $condition = "";
 
         $register_page = uwp_get_option('register_page', false);
@@ -112,6 +121,11 @@ class Users_WP_Templates {
 
         $forgot_pass_page = uwp_get_option('forgot_pass_page', false);
         if ( $forgot_pass_page && ((int) $forgot_pass_page ==  $current_page_id ) ) {
+            $condition = "non_logged_in";
+        }
+
+        $reset_pass_page = uwp_get_option('reset_pass_page', false);
+        if ( $reset_pass_page && ((int) $reset_pass_page ==  $current_page_id ) ) {
             $condition = "non_logged_in";
         }
 
@@ -142,6 +156,44 @@ class Users_WP_Templates {
         }
 
         return false;
+    }
+
+    public function profile_redirect() {
+        if (is_page()) {
+            global $wp_query, $post;
+            $current_page_id = $post->ID;
+            $account_page = uwp_get_option('user_profile_page', false);
+            if ( $account_page && ((int) $account_page ==  $current_page_id ) ) {
+
+                if (isset($wp_query->query_vars['uwp_profile'])) {
+                    //must be profile page
+                } else {
+                    if (is_user_logged_in()) {
+                        $user_id = get_current_user_id();
+                        $profile_url = uwp_build_profile_tab_url($user_id);
+                        wp_redirect( $profile_url );
+                        exit();
+                    } else {
+                        wp_redirect( home_url('/') );
+                        exit();
+                    }
+
+                }
+
+            }
+        }
+    }
+
+    public function logout_redirect() {
+        $redirect_page_id = uwp_get_option('logout_redirect_to', '');
+        if (empty($redirect_page_id)) {
+            $redirect_to = home_url('/');
+        } else {
+            $redirect_to = get_permalink($redirect_page_id);
+        }
+        $redirect_to = apply_filters('uwp_logout_redirect', $redirect_to);
+        wp_redirect( $redirect_to );
+        exit();
     }
 
     public function uwp_template_fields($form_type) {
@@ -376,6 +428,45 @@ class Users_WP_Templates {
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                        type="<?php echo $field->field_type; ?>"
                        value="<?php echo $value; ?>">
+                <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
+                <?php if ($field->is_required) { ?>
+                    <span class="uwp_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>
+                <?php } ?>
+            </div>
+
+            <?php
+            $html = ob_get_clean();
+        }
+
+        return $html;
+    }
+
+    public function uwp_form_input_textarea($html, $field, $value, $form_type){
+
+        // Check if there is a field specific filter.
+        if(has_filter("uwp_form_input_html_file_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_html_file_{$field->htmlvar_name}", $html, $field, $value, $form_type);
+        }
+
+        // If no html then we run the standard output.
+        if(empty($html)) {
+
+            ob_start(); // Start  buffering;
+
+            ?>
+            <div id="<?php echo $field->htmlvar_name;?>_row"
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+                <label>
+                    <?php $site_title = __($field->site_title, 'uwp');
+                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                    <?php if ($field->is_required) echo '<span>*</span>';?>
+                </label>
+                <textarea name="<?php echo $field->htmlvar_name; ?>"
+                          class="<?php echo $field->css_class; ?>"
+                          placeholder="<?php echo $field->site_title; ?>"
+                    <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                          type="<?php echo $field->field_type; ?>"
+                          rows="4"><?php echo $value; ?></textarea>
                 <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
                 <?php if ($field->is_required) { ?>
                     <span class="uwp_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>

@@ -46,7 +46,13 @@
     display: none;
   }
 
-  input,
+  input[type="text"],
+  textarea,
+  input[type="password"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="url"],
+  input[type="email"],
   select {
     margin: 0 0 20px;
     padding: 12px 15px !important;
@@ -123,6 +129,7 @@
   float: left;
   margin: -148px 0 0 1px;
   max-width: 128px;
+  cursor: pointer;
 }
 
 .uwp-profile-header-img i {
@@ -210,6 +217,7 @@
   border: 1px solid #ccc;
   height: 300px;
   width: 100%;
+  cursor: pointer;
 }
 
 .uwp-profile-entries h3 {
