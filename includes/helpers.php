@@ -697,15 +697,3 @@ function uwp_resizeThumbnailImage($thumb_image_name, $image, $width, $height, $s
     chmod($thumb_image_name, 0777);
     return $thumb_image_name;
 }
-
-function uwp_getImageHeight($image) {
-    $size = getimagesize($image);
-    $height = $size[1];
-    return $height;
-}
-
-function uwp_getImageWidth($image) {
-    $size = getimagesize($image);
-    $width = $size[0];
-    return $width;
-}

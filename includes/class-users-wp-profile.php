@@ -463,13 +463,9 @@ class Users_WP_Profile {
         return $title;
     }
 
-    public function uwp_image_crop_popup($user, $form_type = 'avatar') {
+    public function uwp_image_crop_popup($image_url, $type) {
 
-        if(isset($_GET['uwp_crop']) && isset($_GET['type']) && $_GET['uwp_crop'] != '') {
-
-            $type = $_GET['type'];
-            $image_url = $_GET['uwp_crop'];
-
+        ob_start();
             $uploads = wp_upload_dir();
             $upload_url = $uploads['baseurl'];
             $upload_path = $uploads['basedir'];
@@ -477,7 +473,7 @@ class Users_WP_Profile {
 
             $image = apply_filters( 'uwp_'.$type.'_cropper_image', getimagesize( $image_path ) );
             if ( empty( $image ) ) {
-                return;
+                return "";
             }
 
             // Get avatar full width and height.
@@ -530,10 +526,7 @@ class Users_WP_Profile {
                 $crop_top    = round( $image[1] / 4 );
                 $crop_bottom = $image[1] - $crop_top;
             }
-
             ?>
-
-
 
             <script type="text/javascript">
                 jQuery(window).load( function(){
@@ -588,82 +581,67 @@ class Users_WP_Profile {
                     </div>
                 </div>
             </div>
-        <?php } else {
-            $type = $form_type;
-            ?>
-            <form id="uwp-upload-<?php echo $type; ?>-form" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
-                <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
-                <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();">Upload <?php echo $type; ?></button>
-                <div class="uwp_upload_field" style="display: none">
-                    <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" onchange="this.form.submit()" required="required" type="file" value="">
-                    <button type="submit" id="uwp_<?php echo $type; ?>_submit_button" style="display: none"></button>
-                </div>
-            </form>
-            <?php
-        }
+        <?php
+        $output = ob_get_contents();
+        ob_end_clean();
+        return trim($output);
     }
 
     public function uwp_image_crop_init($user) {
 
-        $this->uwp_image_crop_form($user);
+        $this->uwp_image_crop_modal($user);
         $this->uwp_image_crop_js();
 
     }
 
-    public function uwp_image_crop_form($user) {
-        if (isset($_GET['uwp_crop']) && isset($_GET['type']) && $_GET['type'] == 'avatar') {
-            $avatar_style = "display: block";
+    public function uwp_image_crop_modal($user) {
+
+        if(isset($_GET['uwp_crop']) && isset($_GET['type']) && $_GET['uwp_crop'] != '' && $_GET['type'] != '') {
+            $type = sanitize_text_field($_GET['type']);
+            $image_url = esc_url_raw($_GET['uwp_crop']);
+            $style = "display: block";
+            $this->uwp_image_crop_modal_html('avatar', $style, $this->uwp_image_crop_popup($image_url, $type));
         } else {
-            $avatar_style = "display: none";
+            $style = "display: none";
+            $this->uwp_image_crop_modal_html('avatar', $style, $this->uwp_crop_submit_form('avatar'));
+            $this->uwp_image_crop_modal_html('banner', $style, $this->uwp_crop_submit_form('banner'));
         }
 
-        if (isset($_GET['uwp_crop']) && isset($_GET['type']) && $_GET['type'] == 'banner') {
-            $banner_style = "display: block";
-        } else {
-            $banner_style = "display: none";
-        }
+    }
+
+    public function uwp_image_crop_modal_html($type, $style, $content) {
         ?>
-        <?php if (isset($_GET['uwp_crop']) && isset($_GET['type'])) {
-            $type = $_GET['type'];
-            ?>
-            <div id="uwp-avatar-modal" class="uwp-modal" style="display:block;">
-                <a id="uwp-avatar-modal-close" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>
-                <div class="uwp-modal-content-wrap">
-                    <div class="uwp-modal-content">
+        <div id="uwp-<?php echo $type; ?>-modal" class="uwp-modal" style="<?php echo $style; ?>">
+            <a id="uwp-<?php echo $type; ?>-modal-close" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>
+            <div class="uwp-modal-content-wrap">
+                <div class="uwp-modal-content">
+                    <?php echo $content; ?>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
 
-                        <?php
-                        $this->uwp_image_crop_popup($user, $type);
-                        ?>
-                    </div>
-                </div>
+    public function uwp_crop_submit_form($type = 'avatar') {
+        ob_start();
+        ?>
+        <form id="uwp-upload-<?php echo $type; ?>-form" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
+            <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
+            <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();">Upload <?php echo $type; ?></button>
+            <div class="uwp_upload_field" style="display: none">
+                <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" onchange="this.form.submit()" required="required" type="file" value="">
+                <button type="submit" id="uwp_<?php echo $type; ?>_submit_button" style="display: none"></button>
             </div>
-        <?php } else { ?>
-            <div id="uwp-avatar-modal" class="uwp-modal" style="<?php echo $avatar_style; ?>">
-                <a id="uwp-avatar-modal-close" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>
-                <div class="uwp-modal-content-wrap">
-                    <div class="uwp-modal-content">
-
-                        <?php
-                        $this->uwp_image_crop_popup($user, 'avatar');
-                        ?>
-                    </div>
-                </div>
-            </div>
-            <div id="uwp-banner-modal" class="uwp-modal" style="<?php echo $banner_style; ?>">
-                <a id="uwp-banner-modal-close" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>
-                <div class="uwp-modal-content-wrap">
-                    <div class="uwp-modal-content">
-                        <?php $this->uwp_image_crop_popup($user, 'banner'); ?>
-                    </div>
-                </div>
-            </div>
-            <?php
-        }
+        </form>
+        <?php
+        $output = ob_get_contents();
+        ob_end_clean();
+        return trim($output);
     }
 
     public function uwp_image_crop_js() {
-        if (isset($_GET['uwp_crop'])) {
+        if (isset($_GET['uwp_crop']) && isset($_GET['type'])) {
             $backdrop = true;
         } else {
             $backdrop = false;
@@ -678,24 +656,6 @@ class Users_WP_Profile {
                 <?php
                 }
                 ?>
-                jQuery('.uwp-profile-avatar-modal-trigger').click(function (e) {
-                    jQuery('#uwp-avatar-modal').show();
-                    jQuery(document.body).append("<div id='uwp-modal-backdrop'></div>");
-                });
-                jQuery('#uwp-avatar-modal-close').click(function (e) {
-                    e.preventDefault();
-                    jQuery('#uwp-avatar-modal').hide();
-                    jQuery("#uwp-modal-backdrop").remove();
-                });
-                jQuery('.uwp-profile-banner-modal-trigger').click(function (e) {
-                    jQuery('#uwp-banner-modal').show();
-                    jQuery(document.body).append("<div id='uwp-modal-backdrop'></div>");
-                });
-                jQuery('#uwp-banner-modal-close').click(function (e) {
-                    e.preventDefault();
-                    jQuery('#uwp-banner-modal').hide();
-                    jQuery("#uwp-modal-backdrop").remove();
-                });
             });
         </script>
         <?php

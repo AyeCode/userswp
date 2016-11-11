@@ -370,8 +370,13 @@ class Users_WP_Forms {
 
         do_action('uwp_after_validate', 'reset');
 
+        $login = $data['uwp_reset_username'];
+        $key = $data['uwp_reset_key'];
+        $user_data = check_password_reset_key( $key, $login );
 
-        $user_data = get_user_by('login', $data['uwp_reset_username']);
+        if (is_wp_error($user_data)) {
+            return $user_data;
+        }
 
         $login_details = "";
 
@@ -389,12 +394,14 @@ class Users_WP_Forms {
         if ($errors->get_error_code())
             return $errors;
 
+        wp_set_password( $data['uwp_reset_password'], $user_data->ID );
+
         return true;
     }
 
     public function generate_forgot_message($user_data) {
 
-        global $wpdb;
+        global $wpdb, $wp_hasher;
 
         $allow = apply_filters('allow_password_reset', true, $user_data->ID);
         if ( ! $allow )
@@ -554,6 +561,14 @@ class Users_WP_Forms {
             return $errors;
         
         if ($image_url) {
+            if ($type == 'avatar') {
+                $full_height = apply_filters('uwp_avatar_image_height', 128);
+                $full_width  = apply_filters('uwp_avatar_image_width', 128);
+            } else {
+                $full_height = apply_filters('uwp_banner_image_height', 300);
+                $full_width  = apply_filters('uwp_banner_image_width', 700);
+            }
+
             $uploads = wp_upload_dir();
             $upload_url = $uploads['baseurl'];
             $upload_path = $uploads['basedir'];
@@ -567,8 +582,8 @@ class Users_WP_Forms {
             $y = $data["y"];
             $w = $data["w"];
             $h = $data["h"];
-            //Scale the image to the 100px by 100px
-            $scale = 100/$w;
+            //Scale the image based on cropped width setting
+            $scale = $full_width/$w;
             $cropped = uwp_resizeThumbnailImage($thumb_image_location, $image_url,$w,$h,$x,$y,$scale);
             $cropped = str_replace($upload_path, $upload_url, $cropped);
             if ($type == 'avatar') {
@@ -577,6 +592,7 @@ class Users_WP_Forms {
                 uwp_update_usermeta($user_id, 'uwp_account_banner_thumb', $cropped);
             }
         }
+
 
         $profile_url = uwp_build_profile_tab_url($user_id);
         return $profile_url;
@@ -711,7 +727,7 @@ class Users_WP_Forms {
             $validated_data['password'] = $data['uwp_'.$type.'_password'];
         }
 
-        if ($type == 'register' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
+        if ($type == 'register' || $type == 'reset' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
             //check password
             if ($data['uwp_'.$type.'_password'] != $data['uwp_'.$type.'_confirm_password']) {
                 $errors->add('pass_match', __('ERROR: Passwords do not match.', 'uwp'));
@@ -1096,6 +1112,48 @@ class Users_WP_Forms {
 
 
         return $uploaded_file;
+    }
+
+    public function check_password_reset_key( $key, $login ) {
+        global $wpdb, $wp_hasher;
+
+        $key = preg_replace( '/[^a-z0-9]/i', '', $key );
+
+        $errors = new WP_Error();
+
+        if ( empty( $key ) || ! is_string( $key ) ) {
+            $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Reset Key.', 'uwp'));
+            return false;
+        }
+
+        if ( empty( $login ) || ! is_string( $login ) ) {
+            $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Reset Key.', 'uwp'));
+            return false;
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        $user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_login = %s", $login ) );
+
+        if ( ! empty( $user ) ) {
+            if ( empty( $wp_hasher ) ) {
+                require_once ABSPATH . 'wp-includes/class-phpass.php';
+                $wp_hasher = new PasswordHash( 8, true );
+            }
+
+            $valid = $wp_hasher->CheckPassword( $key, $user->user_activation_key );
+        }
+
+        if ( empty( $user ) || empty( $valid ) ) {
+            $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Reset Key.', 'uwp'));
+            return false;
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        return get_userdata( $user->ID );
     }
 
 

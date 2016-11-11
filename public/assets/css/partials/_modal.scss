@@ -21,6 +21,8 @@
   overflow: hidden;
   background: #fff;
   border-radius: 6px;
+  max-height: 400px;
+  overflow-y: scroll;
 }
 
 .uwp-modal-title {
@@ -85,4 +87,12 @@
   z-index: 1040;
   background-color: #000;
   opacity: 0.5;
+}
+#uwp-avatar-crop-pane,
+#uwp-banner-crop-pane {
+  overflow: hidden;
+  img {
+    max-width: none !important;
+    max-height: none !important
+  }
 }
