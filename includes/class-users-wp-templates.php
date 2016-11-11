@@ -100,13 +100,13 @@ class Users_WP_Templates {
     }
 
     public function access_checks() {
-        global $wp_query;
+        global $wp_query, $post;
 
         if (!is_page()) {
             return false;
         }
 
-        $current_page_id = $wp_query->query_vars['page_id'];
+        $current_page_id = $post->ID;
         $condition = "";
 
         $register_page = uwp_get_option('register_page', false);
@@ -160,8 +160,8 @@ class Users_WP_Templates {
 
     public function profile_redirect() {
         if (is_page()) {
-            global $wp_query;
-            $current_page_id = $wp_query->query_vars['page_id'];
+            global $wp_query, $post;
+            $current_page_id = $post->ID;
             $account_page = uwp_get_option('user_profile_page', false);
             if ( $account_page && ((int) $account_page ==  $current_page_id ) ) {
 
