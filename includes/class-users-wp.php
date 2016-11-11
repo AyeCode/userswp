@@ -233,6 +233,7 @@ class Users_WP {
         $this->loader->add_filter( 'the_content', $templates, 'uwp_author_page_content', 10, 1 );
         $this->loader->add_filter( 'uwp_form_input_html_datepicker', $templates, 'uwp_form_input_datepicker', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_select', $templates, 'uwp_form_input_select', 10, 4 );
+        $this->loader->add_filter( 'uwp_form_input_html_textarea', $templates, 'uwp_form_input_textarea', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_file', $templates, 'uwp_form_input_file', 10, 4 );
 
         $this->loader->add_action( 'admin_init', $templates, 'uwp_activation_redirect');
