@@ -648,7 +648,7 @@ class Users_WP_Forms {
 
                 }
 
-                if (!$sanitized) {
+                if (!$sanitized && !empty($value)) {
                     // sanitize by field type
                     switch($field->field_type) {
 
@@ -658,6 +658,10 @@ class Users_WP_Forms {
 
                         case 'email':
                             $sanitized_value = sanitize_email($value);
+                            break;
+
+                        case 'multiselect':
+                            $sanitized_value = array_map( 'sanitize_text_field', $value );
                             break;
 
                         default:

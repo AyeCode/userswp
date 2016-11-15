@@ -50,6 +50,8 @@
   textarea,
   input[type="password"],
   input[type="button"],
+  input[type="phone"],
+  input[type="time"],
   input[type="submit"],
   input[type="url"],
   input[type="email"],
@@ -64,6 +66,9 @@
   select {
     height: 45px !important;
     width: 99% !important;
+  }
+  select[multiple="multiple"] {
+    width: 90% !important;
   }
 
   .uwp_form_file_row {
@@ -129,7 +134,6 @@
   float: left;
   margin: -148px 0 0 1px;
   max-width: 128px;
-  cursor: pointer;
 }
 
 .uwp-profile-header-img i {
@@ -142,7 +146,7 @@
 
 .uwp-profile-name > h2 {
   color: #717171;
-  margin: 10px;
+  margin: 10px 0;
 }
 
 .uwp-profile {
@@ -217,7 +221,6 @@
   border: 1px solid #ccc;
   height: 300px;
   width: 100%;
-  cursor: pointer;
 }
 
 .uwp-profile-entries h3 {
@@ -248,4 +251,9 @@
 .uwp-edit-account {
   float: right;
   margin: 3px 0 0;
+}
+
+.uwp-profile-avatar-modal-trigger,
+.uwp-profile-banner-modal-trigger {
+  cursor: pointer;
 }

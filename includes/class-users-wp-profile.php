@@ -30,14 +30,21 @@ class Users_WP_Profile {
     public function get_profile_header($user) {
         $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
         $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar_thumb', '');
-        if (empty($avatar)) {
-            $avatar = get_avatar($user->user_email, 128, null, null, array('class' => array('uwp-profile-avatar-modal-trigger') ));
+        if (is_user_logged_in() && get_current_user_id() == $user->ID) {
+            $avatar_class = "uwp-profile-avatar-modal-trigger";
+            $banner_class = "uwp-profile-banner-modal-trigger";
         } else {
-            $avatar = '<img src="'.$avatar.'" class="avatar uwp-profile-avatar-modal-trigger avatar-128 photo" width="128" height="128">';
+            $avatar_class = "";
+            $banner_class = "";
+        }
+        if (empty($avatar)) {
+            $avatar = get_avatar($user->user_email, 128, null, null, array('class' => array($avatar_class) ));
+        } else {
+            $avatar = '<img src="'.$avatar.'" class="avatar '.$avatar_class.' avatar-128 photo" width="128" height="128">';
         }
         ?>
         <div class="uwp-profile-header">
-            <div class="uwp-profile-header-img uwp-profile-banner-modal-trigger" style="background-image: url('<?php echo $banner; ?>')"></div>
+            <div class="uwp-profile-header-img <?php echo $banner_class; ?>" style="background-image: url('<?php echo $banner; ?>')"></div>
             <div class="uwp-profile-avatar"><?php echo $avatar; ?></div>
         </div>
         <?php
@@ -63,20 +70,26 @@ class Users_WP_Profile {
     }
 
     public function get_profile_social($user) {
-        $social = array(
-            'facebook',
-            'twitter',
-            'youtube'
-        );
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_custom_fields';
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND field_type = 'url' AND css_class LIKE '%uwp_social%' ORDER BY sort_order ASC");
+
         ?>
         <div class="uwp-profile-social">
             <ul class="uwp-profile-social-ul">
-                <?php
-                foreach ($social as $value) {
-                    $link = uwp_get_usermeta($user->ID, 'uwp_account_social_'.$value, '');
-                    echo '<li><a href="'.$link.'"><i class="fa fa-'.$value.'"></i></a></li>';
-                }
-                ?>
+        <?php
+        foreach($fields as $field) {
+            $key = $field->htmlvar_name;
+            // see Users_WP_Forms -> uwp_save_user_extra_fields reason for replacing key
+            $key = str_replace('uwp_register_', 'uwp_account_', $key);
+            $value = uwp_get_usermeta($user->ID, $key, false);
+
+            if ($value) {
+                echo '<li><a target="_blank" rel="nofollow" href="'.$value.'"><i class="'.$field->field_icon.'"></i></a></li>';
+            }
+        }
+        ?>
             </ul>
         </div>
         <?php
@@ -187,7 +200,7 @@ class Users_WP_Profile {
             return;
         }
         ?>
-        <h3><?php echo $user->display_name; ?>’s Posts</h3>
+        <h3><?php echo __('Posts', 'uwp') ?></h3>
 
         <div class="uwp-profile-item-block">
             <?php
@@ -246,6 +259,7 @@ class Users_WP_Profile {
                 wp_reset_postdata();
             } else {
                 // no posts found
+                echo "<p>".__('No Posts Found', 'uwp')."</p>";
             }
             do_action('uwp_profile_pagination', $the_query->max_num_pages);
             ?>
@@ -255,11 +269,11 @@ class Users_WP_Profile {
 
     public function get_profile_comments($user) {
         $enable_profile_comments_tab = uwp_get_option('enable_profile_comments_tab', false);
-        if ($enable_profile_comments_tab == '1') {
+        if ($enable_profile_comments_tab != '1') {
             return;
         }
         ?>
-        <h3><?php echo $user->display_name; ?>’s Comments</h3>
+        <h3><?php echo __('Comments', 'uwp') ?></h3>
 
         <div class="uwp-profile-item-block">
             <?php
@@ -589,8 +603,10 @@ class Users_WP_Profile {
 
     public function uwp_image_crop_init($user) {
 
-        $this->uwp_image_crop_modal($user);
-        $this->uwp_image_crop_js();
+        if (is_user_logged_in()) {
+            $this->uwp_image_crop_modal($user);
+            $this->uwp_image_crop_js();
+        }
 
     }
 
@@ -659,6 +675,77 @@ class Users_WP_Profile {
             });
         </script>
         <?php
+    }
+
+    public function uwp_extra_user_profile_fields_in_admin( $user ) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_custom_fields';
+        $excluded_fields = array('uwp_account_email', 'uwp_account_password', 'uwp_account_confirm_password', 'uwp_account_first_name', 'uwp_account_last_name');
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array('account')));
+        if (!empty($fields)) {
+            ?>
+            <h3><?php _e("UsersWP", "uwp"); ?></h3>
+            <table class="form-table">
+            <?php
+            foreach ($fields as $field) {
+                if (in_array($field->htmlvar_name, $excluded_fields)) {
+                    continue;
+                }
+                $option_values_arr = geodir_string_values_to_options($field->option_values, true);
+                ?>
+                    <tr>
+                        <th><?php echo $field->site_title; ?></th>
+                        <td>
+                            <?php
+                            $value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
+                            if ($field->field_type == 'select') {
+                                if (!empty($value)) {
+                                    $data = $this->uwp_array_search($option_values_arr, 'value', $value);
+                                    $value = $data[0]['label'];
+                                } else {
+                                    $value = '';
+                                }
+
+                            }
+                            if ($field->field_type == 'multiselect' && !empty($value)) {
+                                if (!empty($value) && is_array($value)) {
+                                    $array_value = array();
+                                    foreach ($value as $v) {
+                                        $data = $this->uwp_array_search($option_values_arr, 'value', $v);
+                                        $array_value[] = $data[0]['label'];
+                                    }
+                                    $value = implode(', ', $array_value);
+                                } else {
+                                    $value = '';
+                                }
+                            }
+                            echo $value;
+                            ?>
+                        </td>
+                    </tr>
+                <?php
+            }
+            ?>
+            </table>
+            <?php
+        }
+    }
+
+    public function uwp_array_search($array, $key, $value)
+    {
+        $results = array();
+
+        if (is_array($array)) {
+            if (isset($array[$key]) && $array[$key] == $value) {
+                $results[] = $array;
+            }
+
+            foreach ($array as $subarray) {
+                $results = array_merge($results, $this->uwp_array_search($subarray, $key, $value));
+            }
+        }
+
+        return $results;
     }
 
 }

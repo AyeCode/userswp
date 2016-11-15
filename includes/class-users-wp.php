@@ -233,6 +233,7 @@ class Users_WP {
         $this->loader->add_filter( 'the_content', $templates, 'uwp_author_page_content', 10, 1 );
         $this->loader->add_filter( 'uwp_form_input_html_datepicker', $templates, 'uwp_form_input_datepicker', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_select', $templates, 'uwp_form_input_select', 10, 4 );
+        $this->loader->add_filter( 'uwp_form_input_html_multiselect', $templates, 'uwp_form_input_multiselect', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_textarea', $templates, 'uwp_form_input_textarea', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_file', $templates, 'uwp_form_input_file', 10, 4 );
 
@@ -254,6 +255,8 @@ class Users_WP {
         $this->loader->add_action( 'uwp_profile_pagination', $profile, 'get_profile_pagination');
         $this->loader->add_action( 'uwp_profile_posts_tab_content', $profile, 'get_profile_posts', 10, 1);
         $this->loader->add_action( 'uwp_profile_comments_tab_content', $profile, 'get_profile_comments', 10, 1);
+
+        $this->loader->add_action( 'show_user_profile', $profile, 'uwp_extra_user_profile_fields_in_admin', 10, 1 );
 
 
     }
