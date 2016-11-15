@@ -167,6 +167,13 @@ class Users_WP_Templates {
 
                 if (isset($wp_query->query_vars['uwp_profile'])) {
                     //must be profile page
+                    $username = $wp_query->query_vars['uwp_profile'];
+                    if ( !username_exists( $username ) ) {
+                        global $wp_query;
+                        $wp_query->set_404();
+                        status_header( 404 );
+                        get_template_part( 404 ); exit();
+                    }
                 } else {
                     if (is_user_logged_in()) {
                         $user_id = get_current_user_id();
@@ -395,6 +402,103 @@ class Users_WP_Templates {
                 <?php } ?>
             </div>
 
+            <?php
+            $html = ob_get_clean();
+        }
+
+        return $html;
+    }
+
+    public function uwp_form_input_multiselect($html, $field, $value, $form_type){
+
+        // Check if there is a field specific filter.
+        if(has_filter("uwp_form_input_html_multiselect_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_html_multiselect_{$field->htmlvar_name}", $html, $field, $value, $form_type);
+        }
+
+
+        if(empty($html)) {
+
+            ob_start(); // Start  buffering;
+
+            $multi_display = 'select';
+            if (!empty($field->extra_fields)) {
+                $multi_display = unserialize($field->extra_fields);
+            }
+            ?>
+            <div id="<?php echo $field->htmlvar_name;?>_row"
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row">
+                <label>
+                    <?php $site_title = __($field->site_title, 'uwp');
+                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                    <?php if ($field->is_required) echo '<span>*</span>';?>
+                </label>
+                <input type="hidden" name="uwp_field_<?php echo $field->htmlvar_name;?>" value="1"/>
+                <?php if ($multi_display == 'select') { ?>
+                <div class="uwp_multiselect_list">
+                    <select name="<?php echo $field->htmlvar_name;?>[]" id="<?php echo $field->htmlvar_name;?>"
+                            multiple="multiple" class="uwp_chosen_select"
+                            data-placeholder="<?php _e('Select', 'uwp'); ?>"
+                            >
+                        <?php
+                        } else {
+                            ?>
+                            <ul class="uwp_multi_choice">
+                            <?php
+                        }
+
+                        $option_values_arr = geodir_string_values_to_options($field->option_values, true);
+                        $select_options = '';
+                        if (!empty($option_values_arr)) {
+                            foreach ($option_values_arr as $option_row) {
+                                if (isset($option_row['optgroup']) && ($option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end')) {
+                                    $option_label = isset($option_row['label']) ? $option_row['label'] : '';
+
+                                    if ($multi_display == 'select') {
+                                        $select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr($option_label) . '">' : '</optgroup>';
+                                    } else {
+                                        $select_options .= $option_row['optgroup'] == 'start' ? '<li>' . $option_label . '</li>' : '';
+                                    }
+                                } else {
+                                    $option_label = isset($option_row['label']) ? $option_row['label'] : '';
+                                    $option_value = isset($option_row['value']) ? $option_row['value'] : '';
+                                    $selected = $option_value == $value ? 'selected="selected"' : '';
+                                    $selected = '';
+                                    $checked = '';
+
+                                    if ((!is_array($value) && trim($value) != '') || (is_array($value) && !empty($value))) {
+                                        if (!is_array($value)) {
+                                            $value_array = explode(',', $value);
+                                        } else {
+                                            $value_array = $value;
+                                        }
+
+                                        if (is_array($value_array)) {
+                                            if (in_array($option_value, $value_array)) {
+                                                $selected = 'selected="selected"';
+                                                $checked = 'checked="checked"';
+                                            }
+                                        }
+                                    }
+
+                                    if ($multi_display == 'select') {
+                                        $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
+                                    } else {
+                                        $select_options .= '<li><input name="' . $field->name . '[]" ' . $checked . ' value="' . esc_attr($option_value) . '" class="uwp-' . $multi_display . '" type="' . $multi_display . '" />&nbsp;' . $option_label . ' </li>';
+                                    }
+                                }
+                            }
+                        }
+                        echo $select_options;
+
+                        if ($multi_display == 'select') { ?></select></div>
+            <?php } else { ?>
+                </ul>
+            <?php } ?>
+                <?php if ($field->is_required) { ?>
+                    <span class="geodir_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>
+                <?php } ?>
+            </div>
             <?php
             $html = ob_get_clean();
         }
