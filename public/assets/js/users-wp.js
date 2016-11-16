@@ -20,3 +20,13 @@
         });
     });
 }( jQuery, window ));
+
+jQuery(window).load(function() {
+    // Chosen selects
+    if (jQuery("select.uwp_chosen_select").length > 0) {
+        jQuery("select.uwp_chosen_select").chosen();
+        jQuery("select.uwp_chosen_select_nostd").chosen({
+            allow_single_deselect: 'true'
+        });
+    }
+});

@@ -124,7 +124,7 @@ function uwp_select_callback($args) {
     }
 
     if ( isset( $args['chosen'] ) ) {
-        $chosen = ($args['multiple'] ? '[]" multiple="multiple" class="uwp-chosen" style="height:auto"' : "'");
+        $chosen = ($args['multiple'] ? '[]" multiple="multiple" class="uwp_chosen_select" style="height:auto"' : "'");
     } else {
         $chosen = '';
     }

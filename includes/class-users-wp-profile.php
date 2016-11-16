@@ -302,12 +302,10 @@ class Users_WP_Profile {
                     <li class="uwp-profile-item-li uwp-profile-item-clearfix">
                         <a class="uwp-profile-item-img" href="<?php echo get_comment_link($comment->comment_ID); ?>">
                             <?php
-                            $args = array(
-                                'size' => 80
-                            );
-                            $thumb_url = get_avatar_url($comment->comment_author_email, $args);
+                            $avatar_class = "uwp-profile-item-alignleft uwp-profile-item-thumb";
+                            $avatar = get_avatar($user->user_email, 80, null, null, array('class' => array($avatar_class) ));
+                            echo $avatar;
                             ?>
-                            <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>" />
                         </a>
 
                         <h3 class="uwp-profile-item-title">
@@ -746,6 +744,49 @@ class Users_WP_Profile {
         }
 
         return $results;
+    }
+
+    public function uwp_modify_get_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
+        $user = false;
+
+        if ( is_numeric( $id_or_email ) ) {
+
+            $id = (int) $id_or_email;
+            $user = get_user_by( 'id' , $id );
+
+        } elseif ( is_object( $id_or_email ) ) {
+
+            if ( ! empty( $id_or_email->user_id ) ) {
+                $id = (int) $id_or_email->user_id;
+                $user = get_user_by( 'id' , $id );
+            }
+
+        } else {
+            $user = get_user_by( 'email', $id_or_email );
+        }
+
+        if ( $user && is_object( $user ) ) {
+            $avatar_thumb = uwp_get_usermeta($user->data->ID, 'uwp_account_avatar_thumb', '');
+            if ( !empty($avatar_thumb) ) {
+                $avatar = "<img alt='{$alt}' src='{$avatar_thumb}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
+            }
+
+        }
+
+        return $avatar;
+    }
+
+    public function uwp_get_comment_author_link($link) {
+        global $comment;
+        if ( !empty( $comment->user_id ) && !empty( get_userdata( $comment->user_id )->ID ) ) {
+            $user = get_userdata( $comment->user_id );
+            $link = sprintf(
+                '<a href="%s" rel="external nofollow" class="url">%s</a>',
+                uwp_build_profile_tab_url( $comment->user_id ),
+                strip_tags( $user->display_name )
+            );
+        }
+        return $link;
     }
 
 }
