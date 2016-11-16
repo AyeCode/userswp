@@ -85,6 +85,7 @@ class Users_WP_Admin {
          */
 
         wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp-admin.css', array(), $this->version, 'all' );
+        wp_enqueue_style( "uwp_chosen_css", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/chosen.css', array(), $this->version, 'all' );
 
     }
 
@@ -107,6 +108,7 @@ class Users_WP_Admin {
 
         wp_enqueue_script('jquery-ui-sortable');
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( "uwp_chosen", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/chosen.jquery.js', array( 'jquery' ), $this->version, false );
 
         $ajax_cons_data = array(
             'url' => admin_url('admin-ajax.php'),

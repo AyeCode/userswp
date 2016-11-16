@@ -393,9 +393,10 @@ class Users_WP_Templates {
                 }
                 ?>
                 <select name="<?php echo $field->htmlvar_name;?>" id="<?php echo $field->htmlvar_name;?>"
-                        class="uwp_textfield uwp_chosen_select"
+                        class="uwp_textfield"
                         data-placeholder="<?php echo __('Choose', 'uwp') . ' ' . $site_title . '&hellip;';?>"
-                        option-ajaxchosen="false"><?php echo $select_options;?></select>
+                        ><?php echo $select_options;?>
+                </select>
                 <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
                 <?php if ($field->is_required) { ?>
                     <span class="uwp_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>

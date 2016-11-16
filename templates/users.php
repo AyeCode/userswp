@@ -16,6 +16,7 @@
             $users = uwp_get_users();
 
             foreach ($users as $user) {
+                $user_obj = get_user_by('id', $user['id']);
                 ?>
                 <li class="uwp-users-list-user">
                     <div class="uwp-users-list-user-left">
@@ -25,7 +26,9 @@
                         <div class="uwp-users-list-user-name">
                             <h3><a href="<?php echo apply_filters('uwp_profile_link', $user['link'], $user['id']); ?>"><?php echo $user['name']; ?></a></h3>
                         </div>
-                        <div class="uwp-users-list-user-social"><i class="fa fa-facebook-official"></i> &nbsp; <i class="fa fa-twitter-square"></i> </div>
+                        <div class="uwp-users-list-user-social">
+                            <?php do_action('uwp_profile_social', $user_obj ); ?>
+                        </div>
                         <div class="uwp-users-list-user-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua… <a href="#">More</a></div>
                         <div class="clfx"></div>
                     </div>

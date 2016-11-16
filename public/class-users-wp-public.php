@@ -73,6 +73,22 @@ class Users_WP_Public {
         wp_enqueue_style( 'jcrop' );
         wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp.css', array(), $this->version, 'all' );
 
+        if (is_page()) {
+            global $post;
+            $current_page_id = $post->ID;
+            $register_page = uwp_get_option('register_page', false);
+            $account_page = uwp_get_option('account_page', false);
+            if ( $register_page && ((int) $register_page ==  $current_page_id ) ) {
+
+            }
+
+            if (( $register_page && ((int) $register_page ==  $current_page_id ) ) ||
+                ( $account_page && ((int) $account_page ==  $current_page_id ) )) {
+                wp_enqueue_style( "uwp_chosen_css", plugin_dir_url( __FILE__ ) . 'assets/css/chosen.css', array(), $this->version, 'all' );
+            }
+        }
+
+
     }
 
     /**
@@ -93,6 +109,23 @@ class Users_WP_Public {
          */
         wp_enqueue_script( 'jcrop', array( 'jquery' ) );
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), $this->version, false );
+
+        if (is_page()) {
+            global $post;
+            $current_page_id = $post->ID;
+            $register_page = uwp_get_option('register_page', false);
+            $account_page = uwp_get_option('account_page', false);
+            if ( $register_page && ((int) $register_page ==  $current_page_id ) ) {
+
+            }
+
+            if (( $register_page && ((int) $register_page ==  $current_page_id ) ) ||
+                ( $account_page && ((int) $account_page ==  $current_page_id ) )) {
+                wp_dequeue_script('chosen');
+                wp_enqueue_script( "uwp_chosen", plugin_dir_url( __FILE__ ) . 'assets/js/chosen.jquery.js', array( 'jquery' ), $this->version, false );
+            }
+        }
+
 
     }
 

@@ -257,3 +257,12 @@
 .uwp-profile-banner-modal-trigger {
   cursor: pointer;
 }
+.uwp-users-list-user-social {
+  display: block;
+  overflow: hidden;
+}
+.uwp-profile-social-ul {
+  a, a:visited {
+    color: #757575
+  }
+}
