@@ -42,10 +42,10 @@ class Users_WP_Activator {
         self::uwp_create_page(esc_sql(_x('register', 'page_slug', 'uwp')), 'register_page', __('Register', 'uwp'), '[uwp_register]');
         self::uwp_create_page(esc_sql(_x('login', 'page_slug', 'uwp')), 'login_page', __('Login', 'uwp'), '[uwp_login]');
         self::uwp_create_page(esc_sql(_x('account', 'page_slug', 'uwp')), 'account_page', __('Account', 'uwp'), '[uwp_account]');
-        self::uwp_create_page(esc_sql(_x('forgot', 'page_slug', 'uwp')), 'forgot_pass_page', __('Forgot Password?', 'uwp'), '[uwp_forgot]');
-        self::uwp_create_page(esc_sql(_x('reset', 'page_slug', 'uwp')), 'reset_pass_page', __('Reset Password', 'uwp'), '[uwp_reset]');
-        self::uwp_create_page(esc_sql(_x('profile', 'page_slug', 'uwp')), 'user_profile_page', __('Profile', 'uwp'), '[uwp_profile]');
-        self::uwp_create_page(esc_sql(_x('users', 'page_slug', 'uwp')), 'users_list_page', __('Users', 'uwp'), '[uwp_users]');
+        self::uwp_create_page(esc_sql(_x('forgot', 'page_slug', 'uwp')), 'forgot_page', __('Forgot Password?', 'uwp'), '[uwp_forgot]');
+        self::uwp_create_page(esc_sql(_x('reset', 'page_slug', 'uwp')), 'reset_page', __('Reset Password', 'uwp'), '[uwp_reset]');
+        self::uwp_create_page(esc_sql(_x('profile', 'page_slug', 'uwp')), 'profile_page', __('Profile', 'uwp'), '[uwp_profile]');
+        self::uwp_create_page(esc_sql(_x('users', 'page_slug', 'uwp')), 'users_page', __('Users', 'uwp'), '[uwp_users]');
     }
 
     public static function add_default_options() {

@@ -434,8 +434,8 @@ class Users_WP_Admin_Settings {
             'uwp' => array(
                 'main' => apply_filters( 'uwp_settings_general_main',
                     array(
-                        'user_profile_page' => array(
-                            'id' => 'user_profile_page',
+                        'profile_page' => array(
+                            'id' => 'profile_page',
                             'name' => __( 'User Profile Page', 'uwp' ),
                             'desc' => __( 'This is the front end user\'s profile page. This page automatically override the default WordPress author page.', 'uwp' ),
                             'type' => 'select',
@@ -474,8 +474,8 @@ class Users_WP_Admin_Settings {
                             'placeholder' => __( 'Select a page', 'uwp' ),
                             'class' => 'uwp_label_block',
                         ),
-                        'forgot_pass_page' => array(
-                            'id' => 'forgot_pass_page',
+                        'forgot_page' => array(
+                            'id' => 'forgot_page',
                             'name' => __( 'Forgot Password Page', 'uwp' ),
                             'desc' => __( 'This is the front end Forgot Password page. This is the page where users are sent to reset their password when they lose it.', 'uwp' ),
                             'type' => 'select',
@@ -484,8 +484,8 @@ class Users_WP_Admin_Settings {
                             'placeholder' => __( 'Select a page', 'uwp' ),
                             'class' => 'uwp_label_block',
                         ),
-                        'reset_pass_page' => array(
-                            'id' => 'reset_pass_page',
+                        'reset_page' => array(
+                            'id' => 'reset_page',
                             'name' => __( 'Reset Password Page', 'uwp' ),
                             'desc' => __( 'This is the front end Reset Password page. This is the page where users can reset their password when they lose it.', 'uwp' ),
                             'type' => 'select',
@@ -494,8 +494,8 @@ class Users_WP_Admin_Settings {
                             'placeholder' => __( 'Select a page', 'uwp' ),
                             'class' => 'uwp_label_block',
                         ),
-                        'users_list_page' => array(
-                            'id' => 'users_list_page',
+                        'users_page' => array(
+                            'id' => 'users_page',
                             'name' => __( 'Users List Page', 'uwp' ),
                             'desc' => __( 'This is the front end Users List page. This is the page where all registered users of the websites are listed.', 'uwp' ),
                             'type' => 'select',

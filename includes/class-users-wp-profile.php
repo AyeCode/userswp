@@ -60,10 +60,17 @@ class Users_WP_Profile {
 
     public function get_profile_bio($user) {
         $bio = uwp_get_usermeta($user->ID, 'uwp_account_bio', '');
+        $is_profile_page = is_uwp_profile_page();
         if ($bio) {
             ?>
-            <div class="uwp-profile-bio">
-                <?php echo $bio; ?>
+            <div class="uwp-profile-bio <?php if ($is_profile_page) { echo "uwp_more"; } ?>">
+                <?php
+                if ($is_profile_page) {
+                    echo $bio;
+                } else {
+                    echo wp_trim_words( $bio, 20, '...' );
+                }
+                ?>
             </div>
             <?php
         }
@@ -199,72 +206,7 @@ class Users_WP_Profile {
         if ($enable_profile_posts_tab != '1') {
             return;
         }
-        ?>
-        <h3><?php echo __('Posts', 'uwp') ?></h3>
-
-        <div class="uwp-profile-item-block">
-            <?php
-            $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
-
-            $args = array(
-                'post_type' => 'post',
-                'post_status' => 'publish',
-                'posts_per_page' => uwp_get_option('profile_no_of_items', 10),
-                'author' => $user->ID,
-                'paged' => $paged,
-            );
-            // The Query
-            $the_query = new WP_Query($args);
-
-            // The Loop
-            if ($the_query->have_posts()) {
-                echo '<ul class="uwp-profile-item-ul">';
-                while ($the_query->have_posts()) {
-                    $the_query->the_post();
-                    ?>
-                    <li class="uwp-profile-item-li uwp-profile-item-clearfix">
-                        <a class="uwp-profile-item-img" href="<?php echo get_the_permalink(); ?>">
-                            <?php
-                            if ( has_post_thumbnail() ) {
-                                $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
-                            } else {
-                                $thumb_url = plugins_url()."/userswp/public/assets/images/no_thumb.png";
-                            }
-                            ?>
-                            <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
-                        </a>
-
-                        <h3 class="uwp-profile-item-title">
-                            <a href="<?php echo get_the_permalink(); ?>"><?php echo get_the_title(); ?></a>
-                        </h3>
-                        <time class="uwp-profile-item-time published" datetime="<?php echo get_the_time('c'); ?>">
-                            <?php echo get_the_date(); ?>
-                        </time>
-                        <div class="uwp-profile-item-summary">
-                            <?php
-                            $excerpt = strip_shortcodes(wp_trim_words( get_the_excerpt(), 15, '...' ));
-                            echo $excerpt;
-                            if ($excerpt) {
-                                ?>
-                                <a href="<?php echo get_the_permalink(); ?>" class="more-link">Read More »</a>
-                                <?php
-                            }
-                            ?>
-                        </div>
-                    </li>
-                    <?php
-                }
-                echo '</ul>';
-                /* Restore original Post Data */
-                wp_reset_postdata();
-            } else {
-                // no posts found
-                echo "<p>".__('No Posts Found', 'uwp')."</p>";
-            }
-            do_action('uwp_profile_pagination', $the_query->max_num_pages);
-            ?>
-        </div>
-        <?php
+        uwp_generic_tab_content($user, 'post', __('Posts', 'uwp'));
     }
 
     public function get_profile_comments($user) {
@@ -341,7 +283,7 @@ class Users_WP_Profile {
 
     public function rewrite_profile_link() {
 
-        $page_id = uwp_get_option('user_profile_page', false);
+        $page_id = uwp_get_option('profile_page', false);
 
         if ($page_id && !isset($_REQUEST['page_id'])) {
             $link = get_page_link($page_id);
@@ -412,7 +354,7 @@ class Users_WP_Profile {
 
     public function get_profile_link($link, $user_id) {
 
-        $page_id = uwp_get_option('user_profile_page', false);
+        $page_id = uwp_get_option('profile_page', false);
 
         if ($page_id) {
             $link = get_permalink($page_id);
@@ -456,7 +398,7 @@ class Users_WP_Profile {
     public function modify_profile_page_title( $title, $id = null ) {
 
         global $wp_query;
-        $page_id = uwp_get_option('user_profile_page', false);
+        $page_id = uwp_get_option('profile_page', false);
 
         if ($page_id == $id && isset($wp_query->query_vars['uwp_profile'])) {
 

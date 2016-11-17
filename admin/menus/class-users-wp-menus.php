@@ -133,13 +133,13 @@ class Users_WP_Menus {
      */
     public function users_wp_nav_menu_get_common_pages() {
 
-        $user_profile_page = uwp_get_option('user_profile_page', false);
-        $users_list_page = uwp_get_option('users_list_page', false);
+        $profile_page = uwp_get_option('profile_page', false);
+        $users_page = uwp_get_option('users_page', false);
 
         $users_wp_menu_items = array();
 
-        if ($user_profile_page) {
-            $page = get_post( $user_profile_page );
+        if ($profile_page) {
+            $page = get_post( $profile_page );
             $users_wp_menu_items[] = array(
                 'name' => $page->post_title,
                 'slug' => $page->post_name,
@@ -147,8 +147,8 @@ class Users_WP_Menus {
             );
         }
 
-        if ($users_list_page) {
-            $page = get_post( $users_list_page );
+        if ($users_page) {
+            $page = get_post( $users_page );
             $users_wp_menu_items[] = array(
                 'name' => $page->post_title,
                 'slug' => $page->post_name,
@@ -252,7 +252,7 @@ class Users_WP_Menus {
 
         $register_page = uwp_get_option('register_page', false);
         $login_page = uwp_get_option('login_page', false);
-        $forgot_pass_page = uwp_get_option('forgot_pass_page', false);
+        $forgot_page = uwp_get_option('forgot_page', false);
 
         $users_wp_menu_items = array();
 
@@ -274,8 +274,8 @@ class Users_WP_Menus {
             );
         }
 
-        if ($forgot_pass_page) {
-            $page = get_post( $forgot_pass_page );
+        if ($forgot_page) {
+            $page = get_post( $forgot_page );
             $users_wp_menu_items[] = array(
                 'name' => $page->post_title,
                 'slug' => $page->post_name,
