@@ -119,13 +119,13 @@ class Users_WP_Templates {
             $condition = "non_logged_in";
         }
 
-        $forgot_pass_page = uwp_get_option('forgot_pass_page', false);
-        if ( $forgot_pass_page && ((int) $forgot_pass_page ==  $current_page_id ) ) {
+        $forgot_page = uwp_get_option('forgot_page', false);
+        if ( $forgot_page && ((int) $forgot_page ==  $current_page_id ) ) {
             $condition = "non_logged_in";
         }
 
-        $reset_pass_page = uwp_get_option('reset_pass_page', false);
-        if ( $reset_pass_page && ((int) $reset_pass_page ==  $current_page_id ) ) {
+        $reset_page = uwp_get_option('reset_page', false);
+        if ( $reset_page && ((int) $reset_page ==  $current_page_id ) ) {
             $condition = "non_logged_in";
         }
 
@@ -162,7 +162,7 @@ class Users_WP_Templates {
         if (is_page()) {
             global $wp_query, $post;
             $current_page_id = $post->ID;
-            $account_page = uwp_get_option('user_profile_page', false);
+            $account_page = uwp_get_option('profile_page', false);
             if ( $account_page && ((int) $account_page ==  $current_page_id ) ) {
 
                 if (isset($wp_query->query_vars['uwp_profile'])) {
@@ -605,7 +605,7 @@ class Users_WP_Templates {
         $register_slug = $this->uwp_get_page_slug('register_page');
         $login_slug = $this->uwp_get_page_slug('login_page');
         $account_slug = $this->uwp_get_page_slug('account_page');
-        $forgot_slug = $this->uwp_get_page_slug('forgot_pass_page');
+        $forgot_slug = $this->uwp_get_page_slug('forgot_page');
         $logout_slug = "logout";
 
         $register_class = "users-wp-{$register_slug}-nav";
@@ -640,7 +640,7 @@ class Users_WP_Templates {
                 if ( is_user_logged_in() ) {
                     $menu_item->_invalid = true;
                 } else {
-                    $menu_item->url = get_permalink(uwp_get_option('forgot_pass_page', 0));
+                    $menu_item->url = get_permalink(uwp_get_option('forgot_page', 0));
                 }
                 break;
             case $logout_class:

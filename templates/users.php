@@ -29,7 +29,9 @@
                         <div class="uwp-users-list-user-social">
                             <?php do_action('uwp_profile_social', $user_obj ); ?>
                         </div>
-                        <div class="uwp-users-list-user-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua… <a href="#">More</a></div>
+                        <div class="uwp-users-list-user-bio">
+                            <?php do_action('uwp_profile_bio', $user_obj ); ?>
+                        </div>
                         <div class="clfx"></div>
                     </div>
                 </li>
