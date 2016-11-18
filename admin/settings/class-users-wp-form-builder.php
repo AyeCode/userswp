@@ -67,17 +67,7 @@ class Users_WP_Form_Builder {
                             <?php do_action('uwp_manage_available_fields_predefined'); ?>
                         </div>
                     </div>
-
-<!--                    <h3>-->
-<!--                        --><?php //_e('Custom Fields' ,'uwp'); ?>
-<!--                    </h3>-->
-<!---->
-<!--                    <div class="inside">-->
-<!--                        <div id="uwp-form-builder-tab-custom" class="uwp-tabs-panel">-->
-<!--                            --><?php //do_action('uwp_manage_available_fields_custom'); ?>
-<!--                        </div>-->
-<!--                    </div>-->
-
+                    
                 </div>
 
 
@@ -1335,7 +1325,7 @@ class Users_WP_Form_Builder {
 
 
         } else {
-            return 'HTML Variable Name should be a unique name';
+            return __('HTML Variable Name should be a unique name', 'uwp');
         }
 
     }

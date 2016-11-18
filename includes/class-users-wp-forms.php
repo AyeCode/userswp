@@ -214,7 +214,7 @@ class Users_WP_Forms {
         if ($generated_password) {
             $message_pass = $password;
         } else {
-            $message_pass = "Password you entered";
+            $message_pass = __("Password you entered", 'uwp');
         }
 
         $login_details = __('<p><b>' . __('Your login Information :', 'uwp') . '</b></p>
@@ -429,11 +429,11 @@ class Users_WP_Forms {
             }
             $hashed = $wp_hasher->HashPassword( $key );
             $wpdb->update( $wpdb->users, array( 'user_activation_key' => time().":".$hashed ), array( 'user_login' => $user_data->user_login ) );
-            $message = __('Someone requested that the password be reset for the following account:') . "\r\n\r\n";
+            $message = __('Someone requested that the password be reset for the following account:', 'uwp') . "\r\n\r\n";
             $message .= home_url( '/' ) . "\r\n\r\n";
-            $message .= sprintf(__('Username: %s'), $user_data->user_login) . "\r\n\r\n";
-            $message .= __('If this was a mistake, just ignore this email and nothing will happen.') . "\r\n\r\n";
-            $message .= __('To reset your password, visit the following address:') . "\r\n\r\n";
+            $message .= sprintf(__('Username: %s', 'uwp'), $user_data->user_login) . "\r\n\r\n";
+            $message .= __('If this was a mistake, just ignore this email and nothing will happen.', 'uwp') . "\r\n\r\n";
+            $message .= __('To reset your password, visit the following address:', 'uwp') . "\r\n\r\n";
             $message .= site_url("reset?key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
 
         }
@@ -1047,11 +1047,7 @@ class Users_WP_Forms {
 
             }
 
-//            if ( ! empty( $field['multiple'] ) ) {
-//                return $file_urls;
-//            } else {
-                return current( $file_urls );
-//            }
+            return current( $file_urls );
 
         }
         return true;

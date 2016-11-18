@@ -262,7 +262,7 @@ class Users_WP_Profile {
                             echo $excerpt;
                             if ($excerpt) {
                                 ?>
-                                <a href="<?php echo get_comment_link($comment->comment_ID); ?>" class="more-link">Read More »</a>
+                                <a href="<?php echo get_comment_link($comment->comment_ID); ?>" class="more-link"><?php echo __('Read More »', 'uwp'); ?></a>
                                 <?php
                             }
                             ?>
@@ -272,7 +272,8 @@ class Users_WP_Profile {
                 }
                 echo '</ul>';
             } else {
-                // no posts found
+                // no comments found
+                echo "<p>".__('No Comments Found', 'uwp')."</p>";
             }
 
             do_action('uwp_profile_pagination', $maximum_pages);
@@ -292,55 +293,54 @@ class Users_WP_Profile {
             $uwp_profile_page_id = url_to_postid($link);
 
 
-            // example.com/profile/1
+            // {home_url}/profile/1
             $uwp_profile_link_empty_slash = '^' . $uwp_profile_link . '([^/]+)?$';
             add_rewrite_rule($uwp_profile_link_empty_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]', 'top');
 
-            // example.com/profile/1/
+            // {home_url}/profile/1/
             $uwp_profile_link_with_slash = '^' . $uwp_profile_link . '([^/]+)/?$';
             add_rewrite_rule($uwp_profile_link_with_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]', 'top');
 
-            // example.com/profile/1/page/1
+            // {home_url}/profile/1/page/1
             $uwp_profile_link_empty_slash_paged = '^' . $uwp_profile_link . '([^/]+)/page/([0-9]+)?$';
             add_rewrite_rule($uwp_profile_link_empty_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&paged=$matches[2]', 'top');
 
-            // example.com/profile/1/page/1/
+            // {home_url}/profile/1/page/1/
             $uwp_profile_link_with_slash_paged = '^' . $uwp_profile_link . '([^/]+)/page/([0-9]+)/?$';
             add_rewrite_rule($uwp_profile_link_with_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&paged=$matches[2]', 'top');
 
-            // example.com/profile/1/tab-slug
+            // {home_url}/profile/1/tab-slug
             $uwp_profile_tab_empty_slash = '^' . $uwp_profile_link . '([^/]+)/([^/]+)?$';
             add_rewrite_rule($uwp_profile_tab_empty_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]', 'top');
 
-            // example.com/profile/1/tab-slug/
+            // {home_url}/profile/1/tab-slug/
             $uwp_profile_tab_with_slash = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/?$';
             add_rewrite_rule($uwp_profile_tab_with_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]', 'top');
 
-            // example.com/profile/1/tab-slug/page/1
+            // {home_url}/profile/1/tab-slug/page/1
             $uwp_profile_tab_empty_slash_paged = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/page/([0-9]+)?$';
             add_rewrite_rule($uwp_profile_tab_empty_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&paged=$matches[3]', 'top');
 
-            // example.com/profile/1/tab-slug/page/1/
+            // {home_url}/profile/1/tab-slug/page/1/
             $uwp_profile_tab_with_slash_paged = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/page/([0-9]+)/?$';
             add_rewrite_rule($uwp_profile_tab_with_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&paged=$matches[3]', 'top');
 
-            // example.com/profile/1/tab-slug/subtab-slug
+            // {home_url}/profile/1/tab-slug/subtab-slug
             $uwp_profile_tab_empty_slash = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/([^/]+)?$';
             add_rewrite_rule($uwp_profile_tab_empty_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&uwp_subtab=$matches[3]', 'top');
 
-            // example.com/profile/1/tab-slug/subtab-slug/
+            // {home_url}/profile/1/tab-slug/subtab-slug/
             $uwp_profile_tab_with_slash = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/([^/]+)/?$';
             add_rewrite_rule($uwp_profile_tab_with_slash, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&uwp_subtab=$matches[3]', 'top');
 
-            // example.com/profile/1/tab-slug/subtab-slug/page/1
+            // {home_url}/profile/1/tab-slug/subtab-slug/page/1
             $uwp_profile_tab_empty_slash_paged = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/([^/]+)/page/([0-9]+)?$';
             add_rewrite_rule($uwp_profile_tab_empty_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&uwp_subtab=$matches[3]&paged=$matches[4]', 'top');
 
-            // example.com/profile/1/tab-slug/subtab-slug/page/1/
+            // {home_url}/profile/1/tab-slug/subtab-slug/page/1/
             $uwp_profile_tab_with_slash_paged = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/([^/]+)/page/([0-9]+)/?$';
             add_rewrite_rule($uwp_profile_tab_with_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&uwp_subtab=$matches[3]&paged=$matches[4]', 'top');
-
-
+            
 
         }
     }
@@ -530,7 +530,7 @@ class Users_WP_Profile {
                             <input type="hidden" name="h" value="" id="<?php echo $type; ?>-h" />
                             <input type="hidden" name="uwp_crop" value="<?php echo $image_url; ?>" />
                             <input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp-crop-nonce' ); ?>" />
-                            <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="Crop Image" id="save_uwp_<?php echo $type; ?>" />
+                            <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="<?php echo __('Crop Image', 'uwp'); ?>" id="save_uwp_<?php echo $type; ?>" />
                         </form>
                     </div>
                 </div>
