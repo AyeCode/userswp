@@ -46,85 +46,35 @@ class Users_WP_Shortcodes {
 
 
     public function register() {
-        $template = $this->templates->uwp_locate_template('register');
-
-        ob_start();
-        if ($template) {
-            include($template);
-        }
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        return trim($output);
+        return $this->uwp_generate_shortcode('register');
     }
 
     public function login() {
-        $template = $this->templates->uwp_locate_template('login');
-
-        ob_start();
-        if ($template) {
-            include($template);
-        }
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        return trim($output);
+        return $this->uwp_generate_shortcode('login');
     }
 
     public function forgot() {
-        $template = $this->templates->uwp_locate_template('forgot');
-
-        ob_start();
-        if ($template) {
-            include($template);
-        }
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        return trim($output);
+        return $this->uwp_generate_shortcode('forgot');
     }
 
-    public function reset_pass() {
-        $template = $this->templates->uwp_locate_template('reset');
-
-        ob_start();
-        if ($template) {
-            include($template);
-        }
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        return trim($output);
+    public function reset() {
+        return $this->uwp_generate_shortcode('reset');
     }
 
     public function account() {
-        $template = $this->templates->uwp_locate_template('account');
-
-        ob_start();
-        if ($template) {
-            include($template);
-        }
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        return trim($output);
+        return $this->uwp_generate_shortcode('account');
     }
 
     public function profile() {
-        $template = $this->templates->uwp_locate_template('profile');
-
-        ob_start();
-        if ($template) {
-            include($template);
-        }
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        return trim($output);
+        return $this->uwp_generate_shortcode('profile');
     }
 
     public function users() {
-        $template = $this->templates->uwp_locate_template('users');
+        return $this->uwp_generate_shortcode('users');
+    }
+    
+    public function uwp_generate_shortcode($type = 'register') {
+        $template = $this->templates->uwp_locate_template($type);
 
         ob_start();
         if ($template) {

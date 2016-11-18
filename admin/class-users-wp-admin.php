@@ -86,6 +86,14 @@ class Users_WP_Admin {
 
         wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp-admin.css', array(), $this->version, 'all' );
         wp_enqueue_style( "uwp_chosen_css", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/chosen.css', array(), $this->version, 'all' );
+        global $wp_styles;
+        $srcs = array_map('basename', (array) wp_list_pluck($wp_styles->registered, 'src') );
+        if ( in_array('font-awesome.css', $srcs) || in_array('font-awesome.min.css', $srcs)  ) {
+            /* echo 'font-awesome.css registered'; */
+        } else {
+            wp_register_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), $this->version);
+            wp_enqueue_style('font-awesome');
+        }
 
     }
 

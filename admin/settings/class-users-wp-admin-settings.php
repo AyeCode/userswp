@@ -96,6 +96,7 @@ class Users_WP_Admin_Settings {
             'register' => __( 'Register', 'uwp' ),
             'login' => __( 'Login', 'uwp' ),
             'profile' => __( 'Profile', 'uwp' ),
+            'uninstall' => __( 'Uninstall', 'uwp' ),
         );
 
         // wp-admin/admin.php?page=uwp_form_builder
@@ -122,13 +123,13 @@ class Users_WP_Admin_Settings {
         <div class="item-list-sub-tabs">
             <ul class="item-list-sub-tabs-ul">
                 <li class="<?php if ($subtab == 'general') { echo "current selected"; } ?>">
-                    <a href="<?php echo add_query_arg(array('tab' => 'main', 'subtab' => 'general')); ?>">General Settings</a>
+                    <a href="<?php echo add_query_arg(array('tab' => 'main', 'subtab' => 'general')); ?>"><?php echo __( 'General Settings', 'uwp' ); ?></a>
                 </li>
                 <li class="<?php if ($subtab == 'shortcodes') { echo "current selected"; } ?>">
-                    <a href="<?php echo add_query_arg(array('tab' => 'main', 'subtab' => 'shortcodes')); ?>">Shortcodes</a>
+                    <a href="<?php echo add_query_arg(array('tab' => 'main', 'subtab' => 'shortcodes')); ?>"><?php echo __( 'Shortcodes', 'uwp' ); ?></a>
                 </li>
                 <li class="<?php if ($subtab == 'info') { echo "current selected"; } ?>">
-                    <a href="<?php echo add_query_arg(array('tab' => 'main', 'subtab' => 'info')); ?>">Info</a>
+                    <a href="<?php echo add_query_arg(array('tab' => 'main', 'subtab' => 'info')); ?>"><?php echo __( 'Info', 'uwp' ); ?></a>
                 </li>
             </ul>
         </div>
@@ -159,15 +160,12 @@ class Users_WP_Admin_Settings {
             <?php } ?>
 
             <table class="uwp-form-table">
-                <?php settings_fields( 'uwp_settings' ); ?>
                 <?php
-                //global $wp_settings_fields;
-                //var_dump($wp_settings_fields);
+                settings_fields( 'uwp_settings' );
+                do_settings_fields( 'uwp_settings_' . $page .'_'.$active_tab, 'uwp_settings_' . $page .'_'.$active_tab );
                 ?>
-				<?php do_settings_fields( 'uwp_settings_' . $page .'_'.$active_tab, 'uwp_settings_' . $page .'_'.$active_tab ); ?>
 			</table>
 			<?php submit_button(); ?>
-
         </form>
 
         <?php
@@ -187,7 +185,7 @@ class Users_WP_Admin_Settings {
     }
 
     public function uwp_get_pages() {
-        $pages_options = array( '' => 'Select a Page' ); // Blank option
+        $pages_options = array( '' => __( 'Select a Page', 'uwp' ) ); // Blank option
 
         $pages = get_pages();
         if ( $pages ) {
@@ -206,8 +204,8 @@ class Users_WP_Admin_Settings {
                 <th scope="row"><?php echo __( 'User Profile Shortcode', 'uwp' ); ?></th>
                 <td>
                     <span class="short_code">[uwp_profile]</span>
-                    <span class="description">This is the shortcode for the front end user's profile.</span>
-                    <span class="description">Parameters: header=yes or no (default yes) body=yes or no (default yes) posts=yes or no (default yes) comments=yes or no (default yes)</span>
+                    <span class="description"><?php echo __( 'This is the shortcode for the front end user\'s profile.', 'uwp' ); ?></span>
+                    <span class="description"><?php echo __( 'Parameters: header=yes or no (default yes) body=yes or no (default yes) posts=yes or no (default yes) comments=yes or no (default yes)', 'uwp' ); ?></span>
                 </td>
             </tr>
 
@@ -215,8 +213,8 @@ class Users_WP_Admin_Settings {
                 <th scope="row"><?php echo __( 'Register Form Shortcode', 'uwp' ); ?></th>
                 <td>
                     <span class="short_code">[uwp_register]</span>
-                    <span class="description">This is the shortcode for the front end register form.</span>
-                    <span class="description">Parameters: set_password=yes or no (default yes) captcha=yes or no (default yes)</span>
+                    <span class="description"><?php echo __( 'This is the shortcode for the front end register form.', 'uwp' ); ?></span>
+                    <span class="description"><?php echo __( 'Parameters: set_password=yes or no (default yes) captcha=yes or no (default yes)', 'uwp' ); ?></span>
                 </td>
             </tr>
 
@@ -224,8 +222,8 @@ class Users_WP_Admin_Settings {
                 <th scope="row"><?php echo __( 'Login Form Shortcode', 'uwp' ); ?></th>
                 <td>
                     <span class="short_code">[uwp_login]</span>
-                    <span class="description">This is the shortcode for the front end login form.</span>
-                    <span class="description">Parameters: captcha=yes or no (default yes) redirect_to=home or profile or page id (default home)</span>
+                    <span class="description"><?php echo __( 'This is the shortcode for the front end login form.', 'uwp' ); ?></span>
+                    <span class="description"><?php echo __( 'Parameters: captcha=yes or no (default yes) redirect_to=home or profile or page id (default home)', 'uwp' ); ?></span>
                 </td>
             </tr>
 
@@ -233,8 +231,8 @@ class Users_WP_Admin_Settings {
                 <th scope="row"><?php echo __( 'Account Form Shortcode', 'uwp' ); ?></th>
                 <td>
                     <span class="short_code">[uwp_account]</span>
-                    <span class="description">This is the shortcode for the front end account form.</span>
-                    <span class="description">Parameters: none</span>
+                    <span class="description"><?php echo __( 'This is the shortcode for the front end account form.', 'uwp' ); ?></span>
+                    <span class="description"><?php echo __( 'Parameters: none', 'uwp' ); ?></span>
                 </td>
             </tr>
 
@@ -242,8 +240,17 @@ class Users_WP_Admin_Settings {
                 <th scope="row"><?php echo __( 'Forgot Password Form Shortcode', 'uwp' ); ?></th>
                 <td>
                     <span class="short_code">[uwp_forgot]</span>
-                    <span class="description">This is the shortcode for the front end reset password form.</span>
-                    <span class="description">Parameters: none</span>
+                    <span class="description"><?php echo __( 'This is the shortcode for the front end forgot password form.', 'uwp' ); ?></span>
+                    <span class="description"><?php echo __( 'Parameters: none', 'uwp' ); ?></span>
+                </td>
+            </tr>
+
+            <tr valign="top">
+                <th scope="row"><?php echo __( 'Reset Password Form Shortcode', 'uwp' ); ?></th>
+                <td>
+                    <span class="short_code">[uwp_forgot]</span>
+                    <span class="description"><?php echo __( 'This is the shortcode for the front end reset password form.', 'uwp' ); ?></span>
+                    <span class="description"><?php echo __( 'Parameters: none', 'uwp' ); ?></span>
                 </td>
             </tr>
 
@@ -251,8 +258,8 @@ class Users_WP_Admin_Settings {
                 <th scope="row"><?php echo __( 'Users List Shortcode', 'uwp' ); ?></th>
                 <td>
                     <span class="short_code">[uwp_users]</span>
-                    <span class="description">This is the shortcode for the front end users list.</span>
-                    <span class="description">Parameters: none</span>
+                    <span class="description"><?php echo __( 'This is the shortcode for the front end users list.', 'uwp' ); ?></span>
+                    <span class="description"><?php echo __( 'Parameters: none', 'uwp' ); ?></span>
                 </td>
             </tr>
 
@@ -261,7 +268,6 @@ class Users_WP_Admin_Settings {
     }
 
     //subtabs
-
     public function get_general_general_content() {
         echo $this->display_form();
     }
@@ -275,31 +281,31 @@ class Users_WP_Admin_Settings {
 
     public function get_general_info_content() {
         ?>
-        <h3>Welcome to UsersWP</h3>
-        <h4>version 1.0.0</h4>
+        <h3><?php echo __( 'Welcome to UsersWP', 'uwp' ); ?></h3>
+        <h4><?php echo __( 'Version 1.0.0', 'uwp' ); ?></h4>
 
-        <h3>Flexible, Lightweight and Fast</h3>
-        <p>UsersWP allows you to add a customizable register and login form to your website.
+        <h3><?php echo __( 'Flexible, Lightweight and Fast', 'uwp' ); ?></h3>
+        <p><?php echo __( 'UsersWP allows you to add a customizable register and login form to your website.
         It also adds an extended profile page that override the default author page.
-        UsersWP has been built to be lightweight and fast</p>
+        UsersWP has been built to be lightweight and fast', 'uwp' ); ?></p>
 
-        <h3>Less options, more hooks</h3>
-        <p>We cut down the options to the bare minimum and you will not find any fancy
+        <h3><?php echo __( 'Less options, more hooks', 'uwp' ); ?></h3>
+        <p><?php echo __( 'We cut down the options to the bare minimum and you will not find any fancy
         styling options in this plugin as we believe they belong in your theme.
-        This doesn't mean that you cannot customize the plugin behaviour.
+        This doesn\'t mean that you cannot customize the plugin behaviour.
         To do this we provided a long list of Filters and Actions for any developer
-        to extend UsersWP to fit their needs. <a href="">Click here for the list of available hooks</a></p>
+        to extend UsersWP to fit their needs. <a href="">Click here for the list of available hooks</a>', 'uwp' ); ?></p>
 
-        <h3>Override Templates</h3>
-        <p>If you need to change the look and feel of any UsersWP templates,
+        <h3><?php echo __( 'Override Templates', 'uwp' ); ?></h3>
+        <p><?php echo __( 'If you need to change the look and feel of any UsersWP templates,
         simply create a folder named userswp inside your active child theme
         and copy the template you wish to modify in it. You can now modify the template.
-        The plugin will use your modified version and you don't hve to worry about plugin or theme updates.
-        <a href="">Click here for examples</a></p>
+        The plugin will use your modified version and you don\'t hve to worry about plugin or theme updates.
+        <a href="">Click here for examples</a>', 'uwp' ); ?></p>
 
-        <h3>Add-ons</h3>
-        <p>We have a long list of free and premium add-ons that will help you extend users management on your wesbsite.
-        <a href="">Click here for our official free and premium add-ons</a></p>
+        <h3><?php echo __( 'Add-ons', 'uwp' ); ?></h3>
+        <p><?php echo __( 'We have a long list of free and premium add-ons that will help you extend users management on your wesbsite.
+        <a href="">Click here for our official free and premium add-ons</a>', 'uwp' ); ?></p>
         <?php
     }
 
@@ -316,22 +322,22 @@ class Users_WP_Admin_Settings {
         <div class="item-list-sub-tabs">
             <ul class="item-list-tabs-ul">
                 <li id="uwp-form-builder-register-li" class="<?php if ($subtab == 'register') { echo "current selected"; } ?>">
-                    <a id="uwp-form-builder-register" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'register')); ?>">Register</a>
+                    <a id="uwp-form-builder-register" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'register')); ?>"><?php echo __( 'Register', 'uwp' ); ?></a>
                 </li>
                 <li id="uwp-form-builder-account-li" class="<?php if ($subtab == 'account') { echo "current selected"; } ?>">
-                    <a id="uwp-form-builder-account" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'account')); ?>">Account</a>
+                    <a id="uwp-form-builder-account" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'account')); ?>"><?php echo __( 'Account', 'uwp' ); ?></a>
                 </li>
             </ul>
         </div>
         <?php
         if ($subtab == 'register') {
             ?>
-            <h3 class="">Manage Register Form Fields</h3>
+            <h3 class=""><?php echo __( 'Manage Register Form Fields', 'uwp' ); ?></h3>
             <?php
             $form_builder->uwp_form_builder();
         } elseif ($subtab == 'account') {
             ?>
-            <h3 class="">Manage Account Form Fields</h3>
+            <h3 class=""><?php echo __( 'Manage Account Form Fields', 'uwp' ); ?></h3>
             <?php
             $form_builder->uwp_form_builder();
         }
@@ -351,12 +357,12 @@ class Users_WP_Admin_Settings {
 
     public function get_notifications_content() {
         ?>
-        <h3 class="">Email Notifications</h3>
+        <h3 class=""><?php echo __( 'Email Notifications', 'uwp' ); ?></h3>
 
             <table class="uwp-form-table">
                <tbody>
                <tr valign="top">
-                    <th scope="row" class="titledesc">List of usable shortcodes</th>
+                    <th scope="row" class="titledesc"><?php echo __( 'List of usable shortcodes', 'uwp' ); ?></th>
                     <td class="forminp">
                         <span class="description">[#site_name_url#],[#site_name#],[#to_name#],[#from_name#],[#login_url#],[#user_name#],[#from_email#],[#user_login#],[#username#],[#current_date#],[#login_details#]</span>
                     </td>
@@ -506,10 +512,10 @@ class Users_WP_Admin_Settings {
                         ),
                         'profile_no_of_items' => array(
                             'id' => 'profile_no_of_items',
-                            'name' => __( 'Number of Items', 'uwp-gd' ),
+                            'name' => __( 'Number of Items', 'uwp' ),
                             'type' => 'text',
                             'std' => '',
-                            'desc' 	=> __( 'Enter number of items to display in profile tabs.', 'uwp-gd' ),
+                            'desc' 	=> __( 'Enter number of items to display in profile tabs.', 'uwp' ),
                         ),
                     )
                 ),
@@ -517,7 +523,7 @@ class Users_WP_Admin_Settings {
                     array(
                         'enable_register_password' => array(
                             'id'   => 'enable_register_password',
-                            'name' => 'Display Password field in Regsiter Form',
+                            'name' => __( 'Display Password field in Regsiter Form', 'uwp' ),
                             'desc' => '',
                             'type' => 'checkbox',
                             'std'  => '1',
@@ -553,7 +559,7 @@ class Users_WP_Admin_Settings {
                     array(
                         'enable_profile_header' => array(
                             'id'   => 'enable_profile_header',
-                            'name' => 'Display Header in Profile',
+                            'name' => __( 'Display Header in Profile', 'uwp' ),
                             'desc' => '',
                             'type' => 'checkbox',
                             'std'  => '1',
@@ -561,7 +567,7 @@ class Users_WP_Admin_Settings {
                         ),
                         'enable_profile_body' => array(
                             'id'   => 'enable_profile_body',
-                            'name' => 'Display Body in Profile',
+                            'name' => __( 'Display Body in Profile', 'uwp' ),
                             'desc' => '',
                             'type' => 'checkbox',
                             'std'  => '1',
@@ -569,7 +575,7 @@ class Users_WP_Admin_Settings {
                         ),
                         'enable_profile_posts_tab' => array(
                             'id'   => 'enable_profile_posts_tab',
-                            'name' => 'Display Posts Tab in Profile',
+                            'name' => __( 'Display Posts Tab in Profile', 'uwp' ),
                             'desc' => '',
                             'type' => 'checkbox',
                             'std'  => '1',
@@ -577,7 +583,7 @@ class Users_WP_Admin_Settings {
                         ),
                         'enable_profile_comments_tab' => array(
                             'id'   => 'enable_profile_comments_tab',
-                            'name' => 'Display Comments Tab in Profile',
+                            'name' => __( 'Display Comments Tab in Profile', 'uwp' ),
                             'desc' => '',
                             'type' => 'checkbox',
                             'std'  => '1',
@@ -590,6 +596,18 @@ class Users_WP_Admin_Settings {
                             'type' => 'text',
                             'size' => 'regular',
                             'placeholder' => __( 'Enter Registration success email Subject', 'uwp' )
+                        ),
+                    )
+                ),
+                'uninstall' => apply_filters( 'uwp_settings_general_uninstall',
+                    array(
+                        'uninstall_erase_data' => array(
+                            'id'   => 'uninstall_erase_data',
+                            'name' => __( 'Remove Data on Uninstall?', 'uwp' ),
+                            'desc' => '',
+                            'type' => 'checkbox',
+                            'std'  => '1',
+                            'class' => 'uwp_label_inline',
                         ),
                     )
                 ),

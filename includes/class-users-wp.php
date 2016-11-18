@@ -196,6 +196,7 @@ class Users_WP {
         $this->loader->add_action( 'uwp_settings_register_tab_content', $plugin_admin_settings, 'generic_display_form' );
         $this->loader->add_action( 'uwp_settings_login_tab_content', $plugin_admin_settings, 'generic_display_form' );
         $this->loader->add_action( 'uwp_settings_profile_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'uwp_settings_uninstall_tab_content', $plugin_admin_settings, 'generic_display_form' );
 
         $this->loader->add_action( 'uwp_form_builder_settings_main_tab_content', $plugin_admin_settings, 'get_form_builder_content' );
         $this->loader->add_action( 'uwp_display_form_title', $plugin_admin_settings, 'display_form_title', 10, 3 );
@@ -270,7 +271,7 @@ class Users_WP {
         add_shortcode( 'uwp_register', array($shortcodes,'register'));
         add_shortcode( 'uwp_login', array($shortcodes,'login'));
         add_shortcode( 'uwp_forgot', array($shortcodes,'forgot'));
-        add_shortcode( 'uwp_reset', array($shortcodes,'reset_pass'));
+        add_shortcode( 'uwp_reset', array($shortcodes,'reset'));
         add_shortcode( 'uwp_account', array($shortcodes,'account'));
         add_shortcode( 'uwp_profile', array($shortcodes,'profile'));
         add_shortcode( 'uwp_users', array($shortcodes,'users'));

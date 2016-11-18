@@ -28,113 +28,72 @@ class Users_WP_Templates {
     }
 
     public function uwp_locate_template( $template ) {
-
-        $plugin_path = dirname( dirname( __FILE__ ) );
-
+        
         switch ($template) {
             case 'register':
-                $template = locate_template(array("userswp/register.php"));
-                if (!$template) {
-                    $template = $plugin_path . '/templates/register.php';
-                }
-                $template = apply_filters('uwp_template_register', $template);
-                return $template;
+                return $this->uwp_generic_locate_template('register');
                 break;
 
             case 'login':
-                $template = locate_template(array("userswp/login.php"));
-                if (!$template) {
-                    $template = $plugin_path . '/templates/login.php';
-                }
-                $template = apply_filters('uwp_template_login', $template);
-                return $template;
+                return $this->uwp_generic_locate_template('login');
                 break;
 
             case 'forgot':
-                $template = locate_template(array("userswp/forgot.php"));
-                if (!$template) {
-                    $template = $plugin_path . '/templates/forgot.php';
-                }
-                $template = apply_filters('uwp_template_forgot', $template);
-                return $template;
+                return $this->uwp_generic_locate_template('forgot');
                 break;
 
             case 'reset':
-                $template = locate_template(array("userswp/reset.php"));
-                if (!$template) {
-                    $template = $plugin_path . '/templates/reset.php';
-                }
-                $template = apply_filters('uwp_template_reset', $template);
-                return $template;
+                return $this->uwp_generic_locate_template('reset');
                 break;
 
             case 'account':
-                $template = locate_template(array("userswp/account.php"));
-                if (!$template) {
-                    $template = $plugin_path . '/templates/account.php';
-                }
-                $template = apply_filters('uwp_template_account', $template);
-                return $template;
+                return $this->uwp_generic_locate_template('account');
                 break;
 
             case 'profile':
-                $template = locate_template(array("userswp/profile.php"));
-                if (!$template) {
-                    $template = $plugin_path . '/templates/profile.php';
-                }
-                $template = apply_filters('uwp_template_profile', $template);
-                return $template;
+                return $this->uwp_generic_locate_template('profile');
                 break;
 
             case 'users':
-                $template = locate_template(array("userswp/users.php"));
-                if (!$template) {
-                    $template = $plugin_path . '/templates/users.php';
-                }
-                $template = apply_filters('uwp_template_users', $template);
-                return $template;
+                return $this->uwp_generic_locate_template('users');
                 break;
         }
 
         return false;
     }
+    
+    public function uwp_generic_locate_template($type = 'register') {
+        
+        $plugin_path = dirname( dirname( __FILE__ ) );
+        
+        $template = locate_template(array("userswp/".$type.".php"));
+        if (!$template) {
+            $template = $plugin_path . '/templates/'.$type.'.php';
+        }
+        $template = apply_filters('uwp_template_'.$type, $template);
+        return $template;
+    }
 
     public function access_checks() {
-        global $wp_query, $post;
+        global $post;
 
         if (!is_page()) {
             return false;
         }
 
         $current_page_id = $post->ID;
-        $condition = "";
-
+        
         $register_page = uwp_get_option('register_page', false);
-        if ( $register_page && ((int) $register_page ==  $current_page_id ) ) {
-            $condition = "non_logged_in";
-        }
-
         $login_page = uwp_get_option('login_page', false);
-        if ( $login_page && ((int) $login_page ==  $current_page_id ) ) {
-            $condition = "non_logged_in";
-        }
-
         $forgot_page = uwp_get_option('forgot_page', false);
-        if ( $forgot_page && ((int) $forgot_page ==  $current_page_id ) ) {
-            $condition = "non_logged_in";
-        }
-
         $reset_page = uwp_get_option('reset_page', false);
-        if ( $reset_page && ((int) $reset_page ==  $current_page_id ) ) {
-            $condition = "non_logged_in";
-        }
 
         $account_page = uwp_get_option('account_page', false);
-        if ( $account_page && ((int) $account_page ==  $current_page_id ) ) {
-            $condition = "logged_in";
-        }
-
-        if ($condition == "non_logged_in") {
+        
+        if (( $register_page && ((int) $register_page ==  $current_page_id )) ||
+        ( $login_page && ((int) $login_page ==  $current_page_id ) ) ||
+        ( $forgot_page && ((int) $forgot_page ==  $current_page_id ) ) ||
+        ( $reset_page && ((int) $reset_page ==  $current_page_id ) )) {
             if (is_user_logged_in()) {
                 $redirect_page_id = uwp_get_option('account_page', '');
                 if (empty($redirect_page_id)) {
@@ -146,7 +105,7 @@ class Users_WP_Templates {
                 wp_redirect($redirect_to);
                 exit();
             }
-        } elseif ($condition == "logged_in") {
+        } elseif ( $account_page && ((int) $account_page ==  $current_page_id ) ) {
             if (!is_user_logged_in()) {
                 wp_redirect(get_permalink($login_page));
                 exit();
@@ -154,7 +113,7 @@ class Users_WP_Templates {
         } else {
             return false;
         }
-
+        
         return false;
     }
 

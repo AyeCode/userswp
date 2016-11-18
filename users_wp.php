@@ -58,5 +58,3 @@ function run_users_wp() {
     $plugin->run();
 }
 run_users_wp();
-
-// todo: include font awesome

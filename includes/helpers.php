@@ -2,49 +2,36 @@
 function uwp_get_page_link($page) {
 
     $link = "";
+    $page_id = false;
 
     switch ($page) {
         case 'register':
             $page_id = uwp_get_option('register_page', false);
-            if ($page_id) {
-                $link = get_permalink($page_id);
-            }
             break;
 
         case 'login':
             $page_id = uwp_get_option('login_page', false);
-            if ($page_id) {
-                $link = get_permalink($page_id);
-            }
             break;
 
         case 'forgot':
             $page_id = uwp_get_option('forgot_page', false);
-            if ($page_id) {
-                $link = get_permalink($page_id);
-            }
             break;
 
         case 'account':
             $page_id = uwp_get_option('account_page', false);
-            if ($page_id) {
-                $link = get_permalink($page_id);
-            }
             break;
 
         case 'profile':
             $page_id = uwp_get_option('profile_page', false);
-            if ($page_id) {
-                $link = get_permalink($page_id);
-            }
             break;
 
         case 'users':
             $page_id = uwp_get_option('users_page', false);
-            if ($page_id) {
-                $link = get_permalink($page_id);
-            }
             break;
+    }
+
+    if ($page_id) {
+        $link = get_permalink($page_id);
     }
 
     return $link;
