@@ -4,7 +4,7 @@
             <div class="uwp-lf-icon"><i class="fa fa-user fa-fw"></i></div>
             <?php do_action('uwp_template_form_title_before', 'reset'); ?>
             <h2><?php echo __( 'Reset Password', 'uwp' ); ?></h2>
-            <?php do_action('uwp_template_form_title_after', 'reset'); ?>
+            <?php do_action('uwp_template_display_notices', 'reset'); ?>
             <?php if (isset($_GET['key']) && isset($_GET['login'])) { ?>
                 <form class="uwp-login-form" method="post">
                     <?php do_action('uwp_template_fields', 'reset'); ?>

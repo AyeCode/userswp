@@ -1,6 +1,13 @@
 @import "partials/variables";
-@import "partials/alerts";
-@import "partials/templates";
-@import "partials/users";
 @import "partials/imageselect";
 @import "partials/modal";
+@import "partials/alerts";
+@import "partials/forms";
+//templates
+@import "partials/register";
+@import "partials/login";
+@import "partials/forgot";
+@import "partials/reset";
+@import "partials/account";
+@import "partials/users";
+@import "partials/profile";

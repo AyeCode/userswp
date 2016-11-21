@@ -4,7 +4,7 @@
         <div class="uwp-rf-icon"><i class="fa fa-pencil fa-fw"></i></div>
         <?php do_action('uwp_template_form_title_before', 'account'); ?>
         <h2><?php echo __( 'Edit Account', 'uwp' ); ?></h2>
-        <?php do_action('uwp_template_form_title_after', 'account'); ?>
+        <?php do_action('uwp_template_display_notices', 'account'); ?>
         <form class="uwp-account-form" method="post" enctype="multipart/form-data">
             <?php do_action('uwp_template_fields', 'account'); ?>
             <input type="hidden" name="uwp_account_nonce" value="<?php echo wp_create_nonce( 'uwp-account-nonce' ); ?>" />

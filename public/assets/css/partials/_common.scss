@@ -1,0 +1,37 @@
+.uwp-content-wrap * {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box
+}
+
+.uwp-login,
+.uwp-registration,
+.uwp-forgot,
+.uwp-account {
+  background: #f1f1f1 none repeat scroll 0 0;
+  margin: 0 auto;
+  max-width: 340px;
+  padding: 40px;
+  width: 100%;
+  .uwp-lf-icon,
+  .uwp-rf-icon {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    height: auto;
+    margin: 0 auto;
+    padding: 22px;
+    width: 36px;
+    .fa {
+      color: #ccc;
+      font-size: 30px;
+    }
+  }
+
+  > h2 {
+    color: #717171;
+    font-size: 24px;
+    margin: 10px 0 30px;
+    text-align: center;
+  }
+}

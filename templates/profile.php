@@ -13,6 +13,7 @@ if ($url_type == 'id') {
 }
 ?>
 <div class="uwp-content-wrap">
+<?php do_action('uwp_template_display_notices', 'profile'); ?>
 <?php
 if ($enable_profile_header == '1') {
     do_action('uwp_profile_header', $user );

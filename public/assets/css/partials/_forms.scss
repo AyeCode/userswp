@@ -1,0 +1,81 @@
+.uwp-login-form,
+.uwp-registration-form,
+.uwp-forgot-form,
+.uwp-account-form {
+
+  label {
+    display: none;
+  }
+
+  input[type="text"],
+  textarea,
+  input[type="password"],
+  input[type="button"],
+  input[type="phone"],
+  input[type="time"],
+  input[type="submit"],
+  input[type="url"],
+  input[type="email"],
+  select {
+    margin: 0 0 20px;
+    padding: 12px 15px !important;
+    height: auto !important;
+    line-height: normal !important;
+    width: 90% !important;
+  }
+
+  select {
+    height: 45px !important;
+    width: 99% !important;
+  }
+  select[multiple="multiple"] {
+    width: 90% !important;
+  }
+
+  .uwp_form_file_row {
+    label {
+      display: block;
+    }
+    input {
+      padding-left: 0 !important;
+    }
+  }
+
+  input.uwp-half {
+    margin: 0 5px 20px 0;
+    padding: 12px 15px !important;
+    width: 39.5% !important;
+    float: left !important;
+  }
+
+  input.uwp-half.uwp-half-right {
+    margin-right: 0;
+  }
+
+  input.uwp-half:nth-child(4) {
+    margin-right: 0;
+  }
+
+  input[type="submit"] {
+    background: #717171 none repeat scroll 0 0;
+    border: 0 none;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100%;
+  }
+}
+
+.uwp-remember-me {
+  float: left;
+}
+
+.uwp-forgotpsw {
+  float: right;
+}
+
+.uwp-register-now, .uwp-login-now {
+  display: block;
+  margin: 30px 0 0;
+  text-align: center;
+}
