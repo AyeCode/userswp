@@ -224,7 +224,7 @@ class Users_WP {
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
         $this->loader->add_action( 'init', $forms, 'handler' );
-        $this->loader->add_action( 'uwp_template_form_title_after', $forms, 'display_notices' );
+        $this->loader->add_action( 'uwp_template_display_notices', $forms, 'display_notices' );
         $this->loader->add_action( 'template_redirect', $templates, 'profile_redirect', 10);
         $this->loader->add_action( 'template_redirect', $templates, 'access_checks', 20);
         $this->loader->add_action( 'wp_logout', $templates, 'logout_redirect');

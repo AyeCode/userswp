@@ -1024,9 +1024,9 @@ class Users_WP_Forms {
                         return new WP_Error( 'validation-error', sprintf( __( 'Allowed files types are: %s', 'uwp' ),  $allowed_error_text) );
                 }
 
-
-                if ( $file_to_upload['size'] > uwp_get_option('profile_avatar_max_size', 1048576) )
-                    return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big.', 'uwp' ) );
+                $allowed_size = uwp_get_option('profile_avatar_max_size', 1048576);
+                if ( $file_to_upload['size'] >  $allowed_size)
+                    return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. $this->formatSizeUnits($allowed_size), 'uwp' ) );
 
 
                 $uploaded_file = $this->uwp_upload_file( $file_to_upload, array( 'file_key' => $file_key ) );
@@ -1052,6 +1052,36 @@ class Users_WP_Forms {
         }
         return true;
 
+    }
+
+    public function formatSizeUnits($bytes)
+    {
+        if ($bytes >= 1073741824)
+        {
+            $bytes = number_format($bytes / 1073741824, 2) . ' GB';
+        }
+        elseif ($bytes >= 1048576)
+        {
+            $bytes = number_format($bytes / 1048576, 2) . ' MB';
+        }
+        elseif ($bytes >= 1024)
+        {
+            $bytes = number_format($bytes / 1024, 2) . ' kB';
+        }
+        elseif ($bytes > 1)
+        {
+            $bytes = $bytes . ' bytes';
+        }
+        elseif ($bytes == 1)
+        {
+            $bytes = $bytes . ' byte';
+        }
+        else
+        {
+            $bytes = '0 bytes';
+        }
+
+        return $bytes;
     }
 
     public function uwp_prepare_files( $file_data ) {

@@ -121,8 +121,8 @@ class Users_WP_Templates {
         if (is_page()) {
             global $wp_query, $post;
             $current_page_id = $post->ID;
-            $account_page = uwp_get_option('profile_page', false);
-            if ( $account_page && ((int) $account_page ==  $current_page_id ) ) {
+            $profile_page = uwp_get_option('profile_page', false);
+            if ( $profile_page && ((int) $profile_page ==  $current_page_id ) ) {
 
                 if (isset($wp_query->query_vars['uwp_profile'])) {
                     //must be profile page
