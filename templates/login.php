@@ -8,6 +8,14 @@
         <form class="uwp-login-form" method="post">
             <?php do_action('uwp_template_fields', 'login'); ?>
             <input type="hidden" name="uwp_login_nonce" value="<?php echo wp_create_nonce( 'uwp-login-nonce' ); ?>" />
+            <?php
+            if (isset($_GET['redirect_to'])) {
+                $redirect_to = strip_tags(esc_sql($_GET['redirect_to']));
+                ?>
+                <input type="hidden" name="redirect_to" value="<?php echo $redirect_to; ?>" />
+                <?php
+            }
+            ?>
             <div class="uwp-remember-me">
                 <label style="display: inline-block;" for="remember_me"><input name="remember_me" id="remember_me" value="forever" type="checkbox">
                     <?php echo __( 'Remember Me', 'uwp' ); ?>
