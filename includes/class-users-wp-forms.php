@@ -55,6 +55,9 @@ class Users_WP_Forms {
             $processed = true;
         } elseif (isset($_POST['uwp_login_submit'])) {
             $errors = $this->process_login($_POST);
+            if (isset($_POST['redirect_to'])) {
+                $redirect_to = strip_tags(esc_sql($_POST['redirect_to']));
+            }
             $redirect = $redirect_to;
             $processed = true;
         } elseif (isset($_POST['uwp_forgot_submit'])) {
@@ -302,6 +305,11 @@ class Users_WP_Forms {
             } else {
                 $redirect_to = get_permalink($redirect_page_id);
             }
+
+            if (isset($data['redirect_to'])) {
+                $redirect_to = strip_tags(esc_sql($data['redirect_to']));
+            }
+
             $redirect_to = apply_filters('uwp_login_redirect', $redirect_to);
             wp_redirect($redirect_to);
             exit();
