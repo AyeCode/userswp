@@ -175,6 +175,17 @@ class Users_WP_Templates {
             }
         }
     }
+    
+    public function uwp_account_edit_form_display($type) {
+        if ($type == 'account') {
+            ?>
+            <form class="uwp-account-form" method="post" enctype="multipart/form-data">
+                <?php do_action('uwp_template_fields', 'account'); ?>
+                <input type="hidden" name="uwp_account_nonce" value="<?php echo wp_create_nonce( 'uwp-account-nonce' ); ?>" />
+                <input name="uwp_account_submit" value="<?php echo __( 'Update Account', 'uwp' ); ?>" type="submit">
+            </form>
+        <?php }
+    }
 
     public function uwp_template_fields_html($field, $form_type) {
 

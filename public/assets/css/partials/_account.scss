@@ -1,0 +1,34 @@
+.uwp-content-wrap {
+  .uwp-account {
+    .uwp-account-avatar {
+      text-align: center;
+      img {
+        -webkit-border-radius: 100px;
+        -moz-border-radius: 100px;
+        border-radius: 100px;
+      }
+    }
+  }
+  .uwp_account_menu {
+    padding: 0;
+    list-style: none;
+    margin: 20px 0;
+    overflow: hidden;
+    li {
+      list-style-type: none;
+      width: 50%;
+      float: left;
+      font-size: 16px;
+      padding: 5px 0;
+      i {
+        margin-right: 5px;
+      }
+      a {
+        color: #a2a0a0;
+      }
+      a:hover, a.active {
+        color: #757575;
+      }
+    }
+  }
+}

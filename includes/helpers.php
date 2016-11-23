@@ -57,12 +57,16 @@ function uwp_get_users() {
     return $uwp_users;
 }
 
-function uwp_post_count($user_id, $post_type) {
+function uwp_post_count($user_id, $post_type, $extra_post_status = '') {
     global $wpdb;
 
     $post_status = "";
     if ($user_id == get_current_user_id()) {
         $post_status = ' OR post_status = "draft" OR post_status = "private"';
+    }
+    
+    if (!empty($extra_post_status)) {
+        $post_status .= $extra_post_status;
     }
 
     $post_status_where = ' AND ( post_status = "publish" ' . $post_status . ' )';

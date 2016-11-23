@@ -67,6 +67,7 @@
       margin: 0;
       padding: 0;
       li.uwp-profile-item-li {
+        position: relative;
         clear: both;
         padding-top: 10px;
         margin: 10px 0 0;
@@ -114,6 +115,7 @@
     float: left;
     margin: 0 0 0 5%;
     width: 70%;
+    position: relative;
   }
   .uwp-profile-subcontent {
     margin: 0;
@@ -173,6 +175,9 @@
   .uwp-edit-account {
     float: right;
     margin: 3px 0 0;
+    position: absolute;
+    top: 15px;
+    right: 0;
   }
 
   .uwp-profile-avatar-modal-trigger,
