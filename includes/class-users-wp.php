@@ -229,6 +229,7 @@ class Users_WP {
         $this->loader->add_action( 'template_redirect', $templates, 'access_checks', 20);
         $this->loader->add_action( 'wp_logout', $templates, 'logout_redirect');
         $this->loader->add_action( 'uwp_template_fields', $templates, 'uwp_template_fields', 10, 1 );
+        $this->loader->add_action( 'uwp_account_form_display', $templates, 'uwp_account_edit_form_display', 10, 1 );
         $this->loader->add_filter( 'wp_setup_nav_menu_item', $templates, 'uwp_setup_nav_menu_item', 10, 1 );
 
         $this->loader->add_filter( 'the_content', $templates, 'uwp_author_page_content', 10, 1 );

@@ -12,6 +12,7 @@
   input[type="password"],
   input[type="button"],
   input[type="phone"],
+  input[type="tel"],
   input[type="time"],
   input[type="submit"],
   input[type="url"],
@@ -63,6 +64,14 @@
     font-weight: bold;
     text-transform: uppercase;
     width: 100%;
+  }
+}
+.uwp_wc_form {
+  label {
+    display: inline !important;
+  }
+  h3 {
+    display: none;
   }
 }
 

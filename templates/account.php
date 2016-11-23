@@ -1,15 +1,18 @@
 <?php do_action('uwp_template_before', 'account'); ?>
 <div class="uwp-content-wrap">
     <div class="uwp-account">
-        <div class="uwp-rf-icon"><i class="fa fa-pencil fa-fw"></i></div>
+        <?php
+        if (isset($_GET['type'])) {
+            $type = strip_tags(esc_sql($_GET['type']));
+        } else {
+            $type = 'account';
+        }
+        ?>
+        <div class="uwp-account-avatar"><?php echo get_avatar( get_current_user_id(), 100 ); ?></div>
         <?php do_action('uwp_template_form_title_before', 'account'); ?>
-        <h2><?php echo __( 'Edit Account', 'uwp' ); ?></h2>
+        <h2><?php echo apply_filters('uwp_account_page_title', __( 'Edit Account', 'uwp' ), $type); ?></h2>
         <?php do_action('uwp_template_display_notices', 'account'); ?>
-        <form class="uwp-account-form" method="post" enctype="multipart/form-data">
-            <?php do_action('uwp_template_fields', 'account'); ?>
-            <input type="hidden" name="uwp_account_nonce" value="<?php echo wp_create_nonce( 'uwp-account-nonce' ); ?>" />
-            <input name="uwp_account_submit" value="<?php echo __( 'Update Account', 'uwp' ); ?>" type="submit">
-        </form>
+        <?php do_action('uwp_account_form_display', $type); ?>
     </div>
 </div>
 <?php do_action('uwp_template_after', 'account'); ?>
