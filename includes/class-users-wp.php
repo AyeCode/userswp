@@ -238,6 +238,8 @@ class Users_WP {
         $this->loader->add_filter( 'uwp_form_input_html_multiselect', $templates, 'uwp_form_input_multiselect', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_textarea', $templates, 'uwp_form_input_textarea', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_file', $templates, 'uwp_form_input_file', 10, 4 );
+        $this->loader->add_filter( 'uwp_form_input_html_checkbox', $templates, 'uwp_form_input_checkbox', 10, 4 );
+        $this->loader->add_filter( 'uwp_form_input_html_radio', $templates, 'uwp_form_input_radio', 10, 4 );
 
         $this->loader->add_action( 'admin_init', $templates, 'uwp_activation_redirect');
 

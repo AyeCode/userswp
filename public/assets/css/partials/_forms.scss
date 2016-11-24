@@ -25,6 +25,11 @@
     width: 90% !important;
   }
 
+  input[type="checkbox"],
+  input[type="radio"] {
+    margin-bottom: 20px;
+  }
+
   select {
     height: 45px !important;
     width: 99% !important;

@@ -800,3 +800,34 @@ function uwp_generic_tab_content($user, $post_type, $title) {
     </div>
     <?php
 }
+
+function uwp_error_log($log){
+    /*
+     * A filter to override the WP_DEBUG setting for function uwp_error_log().
+     */
+    $should_log = apply_filters( 'uwp_log_errors', WP_DEBUG);
+    if ( true === $should_log ) {
+        if ( is_array( $log ) || is_object( $log ) ) {
+            error_log( print_r( $log, true ) );
+        } else {
+            error_log( $log );
+        }
+    }
+}
+
+function uwp_admin_notices() {
+    $errors = get_option( 'uwp_admin_notices' );
+
+    if ( ! empty( $errors ) ) {
+
+        echo '<div id="uwp_admin_errors" class="notice-error notice is-dismissible">';
+        
+        echo '<p>' . $errors . '</p>';
+
+        echo '</div>';
+
+        // Clear
+        delete_option( 'uwp_admin_notices' );
+    }
+}
+add_action( 'admin_notices', 'uwp_admin_notices' );
