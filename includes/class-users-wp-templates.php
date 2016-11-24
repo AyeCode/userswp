@@ -516,6 +516,98 @@ class Users_WP_Templates {
         return $html;
     }
 
+    public function uwp_form_input_checkbox($html, $field, $value, $form_type){
+
+        // Check if there is a field specific filter.
+        if(has_filter("uwp_form_input_html_checkbox_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_html_checkbox_{$field->htmlvar_name}", $html, $field, $value, $form_type);
+        }
+
+        // If no html then we run the standard output.
+        if(empty($html)) {
+
+            ob_start(); // Start  buffering;
+
+            ?>
+            <div id="<?php echo $field->htmlvar_name;?>_row"
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+                <input name="<?php echo $field->htmlvar_name; ?>"
+                       class="<?php echo $field->css_class; ?>"
+                       placeholder="<?php echo $field->site_title; ?>"
+                    <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                    <?php if ($value == '1') { echo 'checked="checked"'; } ?>
+                       type="<?php echo $field->field_type; ?>"
+                       value="1">
+                <?php
+                $site_title = __($field->site_title, 'uwp');
+                echo (trim($site_title)) ? $site_title : '&nbsp;';
+                ?>
+                <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
+                <?php if ($field->is_required) { ?>
+                    <span class="uwp_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>
+                <?php } ?>
+            </div>
+
+            <?php
+            $html = ob_get_clean();
+        }
+
+        return $html;
+    }
+
+    public function uwp_form_input_radio($html, $field, $value, $form_type){
+
+        // Check if there is a field specific filter.
+        if(has_filter("uwp_form_input_html_radio_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_html_radio_{$field->htmlvar_name}", $html, $field, $value, $form_type);
+        }
+
+        // If no html then we run the standard output.
+        if(empty($html)) {
+
+            ob_start(); // Start  buffering;
+
+            ?>
+            <div id="<?php echo $field->htmlvar_name;?>_row"
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+                <label>
+                    <?php $site_title = __($field->site_title, 'uwp');
+                    echo (trim($site_title)) ? $site_title : '&nbsp;';?>
+                    <?php if ($field->is_required) echo '<span>*</span>';?>
+                </label>
+                <?php if ($field->option_values) {
+                    $option_values = uwp_string_values_to_options($field->option_values, true);
+
+                    if (!empty($option_values)) {
+                        foreach ($option_values as $option_value) {
+                            if (empty($option_value['optgroup'])) {
+                                ?>
+                                <span class="uwp-radios">
+                                    <input name="<?php echo $field->htmlvar_name; ?>" 
+                                           id="<?php echo $field->htmlvar_name; ?>" 
+                                        <?php checked($value, $option_value['value']);?>
+                                        <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                                           value="<?php echo esc_attr($option_value['value']); ?>" class="uwp-radio" type="radio" />
+                                    <?php echo $option_value['label']; ?>
+                                </span>
+                                <?php
+                            }
+                        }
+                    }
+                }
+                ?>
+                <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
+                <?php if ($field->is_required) { ?>
+                    <span class="uwp_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>
+                <?php } ?>
+            </div>
+            <?php
+            $html = ob_get_clean();
+        }
+
+        return $html;
+    }
+
     public function uwp_form_input_textarea($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
