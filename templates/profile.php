@@ -24,6 +24,7 @@ if ($url_type == 'id') {
                 <?php do_action('uwp_profile_title', $user ); ?>
                 <?php do_action('uwp_profile_bio', $user ); ?>
                 <?php do_action('uwp_profile_social', $user ); ?>
+                <?php do_action('uwp_profile_buttons', $user ); ?>
             </div>
             <?php do_action('uwp_profile_content', $user); ?>
         </div>
