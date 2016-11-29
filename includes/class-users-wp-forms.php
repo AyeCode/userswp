@@ -1006,7 +1006,7 @@ class Users_WP_Forms {
 
     }
 
-    public function uwp_error_log($log){
+    public static function uwp_error_log($log){
 
         $should_log = apply_filters( 'uwp_log_errors', WP_DEBUG);
         if ( true === $should_log ) {
