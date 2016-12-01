@@ -59,7 +59,7 @@ class Users_WP_Templates {
                 break;
         }
 
-        return false;
+        return apply_filters('uwp_locate_template', false, $template);
     }
     
     public function uwp_generic_locate_template($type = 'register') {
