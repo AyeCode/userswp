@@ -120,9 +120,7 @@ class Users_WP_Public {
             $current_page_id = $post->ID;
             $register_page = uwp_get_option('register_page', false);
             $account_page = uwp_get_option('account_page', false);
-            if ( $register_page && ((int) $register_page ==  $current_page_id ) ) {
 
-            }
 
             if (( $register_page && ((int) $register_page ==  $current_page_id ) ) ||
                 ( $account_page && ((int) $account_page ==  $current_page_id ) )) {
@@ -130,8 +128,7 @@ class Users_WP_Public {
                 wp_enqueue_script( "uwp_chosen", plugin_dir_url( __FILE__ ) . 'assets/js/chosen.jquery.js', array( 'jquery' ), $this->version, false );
             }
         }
-
-
+        
     }
 
 }

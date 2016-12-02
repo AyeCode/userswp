@@ -2,7 +2,7 @@
 /**
  * The form builder functionality of the plugin.
  *
- * @link       http://wpuwpectory.com
+ * @link       http://wpgeodirectory.com
  * @since      1.0.0
  *
  * @package    Users_WP
@@ -14,7 +14,7 @@
  *
  * @package    Users_WP
  * @subpackage Users_WP/admin/settings
- * @author     GeoDirectory Team <info@wpuwpectory.com>
+ * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Form_Builder {
 
@@ -24,9 +24,9 @@ class Users_WP_Form_Builder {
 
     }
 
-    public function uwp_form_builder()
+    public function uwp_form_builder($default_tab = 'register')
     {
-        $form_type = (isset($_REQUEST['subtab']) && $_REQUEST['subtab'] != '') ? sanitize_text_field($_REQUEST['subtab']) : 'register';
+        $form_type = (isset($_REQUEST['subtab']) && $_REQUEST['subtab'] != '') ? sanitize_text_field($_REQUEST['subtab']) : $default_tab;
         ?>
         <div class="uwp-panel-heading">
             <h3><?php echo apply_filters('uwp_form_builder_panel_head', '');?></h3>
@@ -54,7 +54,7 @@ class Users_WP_Form_Builder {
 
                     <div class="inside">
                         <div id="uwp-form-builder-tab" class="uwp-tabs-panel">
-                            <?php do_action('uwp_manage_available_fields'); ?>
+                            <?php do_action('uwp_manage_available_fields', $form_type); ?>
                         </div>
                     </div>
 
@@ -64,7 +64,7 @@ class Users_WP_Form_Builder {
 
                     <div class="inside">
                         <div id="uwp-form-builder-tab-predefined" class="uwp-tabs-panel">
-                            <?php do_action('uwp_manage_available_fields_predefined'); ?>
+                            <?php do_action('uwp_manage_available_fields_predefined', $form_type); ?>
                         </div>
                     </div>
                     
@@ -90,7 +90,7 @@ class Users_WP_Form_Builder {
                     <div class="inside">
                         <div id="uwp-form-builder-tab-selected" class="uwp-tabs-panel">
                             <div class="field_row_main">
-                                <?php do_action('uwp_manage_selected_fields'); ?>
+                                <?php do_action('uwp_manage_selected_fields', $form_type); ?>
                             </div>
                         </div>
                     </div>
@@ -103,9 +103,8 @@ class Users_WP_Form_Builder {
         <?php
     }
 
-    public function uwp_custom_available_fields($type='')
+    public function uwp_custom_available_fields($type='', $form_type)
     {
-        $form_type = (isset($_REQUEST['subtab']) && $_REQUEST['subtab'] != '') ? sanitize_text_field($_REQUEST['subtab']) : 'register';
         ?>
         <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type;?>"/>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">
@@ -591,29 +590,28 @@ class Users_WP_Form_Builder {
     }
 
 
-    public function uwp_manage_available_fields_predefined(){
-        $this->uwp_custom_available_fields('predefined');
+    public function uwp_manage_available_fields_predefined($form_type){
+        $this->uwp_custom_available_fields('predefined', $form_type);
     }
 
-    public function uwp_manage_available_fields_custom(){
-        $this->uwp_custom_available_fields('custom');
+    public function uwp_manage_available_fields_custom($form_type){
+        $this->uwp_custom_available_fields('custom', $form_type);
     }
 
-    public function uwp_manage_available_fields() {
-        $this->uwp_custom_available_fields();
+    public function uwp_manage_available_fields($form_type) {
+        $this->uwp_custom_available_fields('', $form_type);
     }
 
-    public function uwp_manage_selected_fields()
+    public function uwp_manage_selected_fields($form_type)
     {
-        $this->uwp_custom_selected_fields();
+        $this->uwp_custom_selected_fields($form_type);
     }
 
-    function uwp_custom_selected_fields()
+    function uwp_custom_selected_fields($form_type)
     {
 
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_custom_fields';
-        $form_type = (isset($_REQUEST['subtab']) && $_REQUEST['subtab'] != '') ? sanitize_text_field($_REQUEST['subtab']) : 'register';
         ?>
         <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type;?>"/>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">

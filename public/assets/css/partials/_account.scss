@@ -20,11 +20,13 @@
       float: left;
       font-size: 16px;
       padding: 5px 0;
+      margin: 0;
       i {
         margin-right: 5px;
       }
       a {
         color: #a2a0a0;
+        text-decoration: none;
       }
       a:hover, a.active {
         color: #757575;
