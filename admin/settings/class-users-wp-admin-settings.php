@@ -591,11 +591,11 @@ class Users_WP_Admin_Settings {
                         ),
                         'profile_avatar_max_size' => array(
                             'id' => 'profile_avatar_max_size',
-                            'name' => __( 'Profile Avatar Max File Size', 'uwp' ),
-                            'desc' => "",
-                            'type' => 'text',
+                            'name' => __( 'Profile Max upload file size(in mb)', 'uwp' ),
+                            'desc' => "Maximum upload file size in MB, 1 MB = 1024 KB. Must be greater then 0(ZERO), Example: 5. This setting will be used for Avatar and Banner image uploads",
+                            'type' => 'number',
                             'size' => 'regular',
-                            'placeholder' => __( 'Enter Registration success email Subject', 'uwp' )
+                            'placeholder' => __( 'Profile Max upload file size(in mb)', 'uwp' )
                         ),
                     )
                 ),

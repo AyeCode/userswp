@@ -150,6 +150,8 @@ class Users_WP {
 
         require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-users-wp-form-builder.php';
 
+        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-uwp-notices.php';
+
 
         $this->loader = new Users_WP_Loader();
 
@@ -237,6 +239,7 @@ class Users_WP {
         $this->loader->add_filter( 'uwp_form_input_html_select', $templates, 'uwp_form_input_select', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_multiselect', $templates, 'uwp_form_input_multiselect', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_textarea', $templates, 'uwp_form_input_textarea', 10, 4 );
+        $this->loader->add_filter( 'uwp_form_input_html_fieldset', $templates, 'uwp_form_input_fieldset', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_file', $templates, 'uwp_form_input_file', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_checkbox', $templates, 'uwp_form_input_checkbox', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_radio', $templates, 'uwp_form_input_radio', 10, 4 );

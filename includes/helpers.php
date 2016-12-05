@@ -41,7 +41,47 @@ function uwp_get_users() {
 
     $uwp_users = array();
 
-    $users = get_users( array( 'number' => '20' ) );
+    $keyword = false;
+    if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
+        $keyword = sanitize_title($_GET['uwps']);
+    }
+
+    $sort_by = false;
+    if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
+        $sort_by = sanitize_title($_GET['uwp_sort_by']);
+    }
+
+    $args = array(
+        'number' => '20'
+    );
+
+    if ($keyword) {
+        $args['search'] = $keyword;
+    }
+
+    if ($sort_by) {
+        switch ($sort_by) {
+            case "newer":
+                $args['orderby'] = 'registered';
+                $args['order'] = 'desc';
+                break;
+            case "older":
+                $args['orderby'] = 'registered';
+                $args['order'] = 'asc';
+                break;
+            case "alpha_asc":
+                $args['orderby'] = 'display_name';
+                $args['order'] = 'asc';
+                break;
+            case "alpha_desc":
+                $args['orderby'] = 'display_name';
+                $args['order'] = 'desc';
+                break;
+
+        }
+    }
+
+    $users = get_users($args);
     foreach ( $users as $user ) {
         $uwp_users[] = array(
             'id' => $user->ID,
@@ -192,6 +232,34 @@ function uwp_checkbox_callback( $args ) {
 
     $checked = isset( $uwp_options[ $args['id'] ] ) ? checked( 1, $uwp_options[ $args['id'] ], false ) : '';
     $html = '<input type="checkbox" id="uwp_settings[' . $args['id'] . ']"' . $name . ' value="1" ' . $checked . '/>';
+    $html .= '<label for="uwp_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+    echo $html;
+}
+
+function uwp_number_callback( $args ) {
+    global $uwp_options;
+
+    if ( isset( $uwp_options[ $args['id'] ] ) ) {
+        $value = $uwp_options[ $args['id'] ];
+    } else {
+        $value = isset( $args['std'] ) ? $args['std'] : '';
+    }
+
+    if ( isset( $args['faux'] ) && true === $args['faux'] ) {
+        $args['readonly'] = true;
+        $value = isset( $args['std'] ) ? $args['std'] : '';
+        $name  = '';
+    } else {
+        $name = 'name="uwp_settings[' . $args['id'] . ']"';
+    }
+
+    $max  = isset( $args['max'] ) ? $args['max'] : 999999;
+    $min  = isset( $args['min'] ) ? $args['min'] : 0;
+    $step = isset( $args['step'] ) ? $args['step'] : 1;
+
+    $size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+    $html = '<input type="number" step="' . esc_attr( $step ) . '" max="' . esc_attr( $max ) . '" min="' . esc_attr( $min ) . '" class="' . $size . '-text" id="uwp_settings[' . $args['id'] . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"/>';
     $html .= '<label for="uwp_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
 
     echo $html;
@@ -859,7 +927,8 @@ function handle_file_upload( $field, $files ) {
                     return new WP_Error( 'validation-error', sprintf( __( 'Allowed files types are: %s', 'uwp' ),  $allowed_error_text) );
             }
 
-            $allowed_size = uwp_get_option('profile_avatar_max_size', 1048576);
+            $max_size = uwp_get_option('profile_avatar_max_size', 5);
+            $allowed_size = $max_size*pow(1024,2);
             if ( $file_to_upload['size'] >  $allowed_size)
                 return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. uwp_formatSizeUnits($allowed_size), 'uwp' ) );
 

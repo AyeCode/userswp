@@ -1255,7 +1255,7 @@ class Users_WP_Form_Builder {
                 $lastid = trim($cf);
 
 
-                do_action('geodir_after_custom_fields_updated', $lastid);
+                do_action('uwp_after_custom_fields_updated', $lastid);
 
             } else {
 

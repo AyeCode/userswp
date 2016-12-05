@@ -30,8 +30,10 @@ class Users_WP_Activator {
         self::add_default_options();
         self::uwp_create_tables();
         self::uwp_create_default_fields();
+        self::uwp_flush_rewrite_rules();
 
         add_option('uwp_activation_redirect', 1);
+        add_option('uwp_flush_rewrite', 1);
     }
 
     public static function load_dependencies() {
@@ -66,6 +68,7 @@ class Users_WP_Activator {
         $settings['enable_profile_body'] = '1';
         $settings['enable_profile_posts_tab'] = '1';
         $settings['enable_profile_comments_tab'] = '1';
+        $settings['profile_avatar_max_size'] = '5';
 
         //notifications
 
@@ -518,6 +521,10 @@ class Users_WP_Activator {
         $fields = apply_filters('uwp_default_custom_fields_account', $fields);
 
         return  $fields;
+    }
+
+    public static function uwp_flush_rewrite_rules() {
+        flush_rewrite_rules();
     }
 
 }

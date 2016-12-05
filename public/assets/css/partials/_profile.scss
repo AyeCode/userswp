@@ -92,14 +92,31 @@
     }
   }
 
-  .uwp-profile-avatar > img {
-    border: 10px solid #fff;
-    border-radius: 0;
-    box-shadow: none;
-    float: left;
-    margin: -149px 0 0 1px;
-    max-width: 128px;
+  .uwp-profile-avatar {
+    display: inline-block;
+    position: relative;
+    .uwp-profile-avatar-hover {
+      text-align: center;
+      font-size: 30px;
+      color: #fff;
+      position: relative;
+      top: -60px;
+      display: none;
+    }
+    > img {
+      border: 10px solid #fff;
+      border-radius: 0;
+      box-shadow: none;
+      float: left;
+      margin: -149px 0 0 1px;
+      max-width: 128px;
+      &:hover + .uwp-profile-avatar-hover {
+        display: block;
+      }
+    }
+
   }
+
 
   .uwp-profile-name > h2 {
     color: #717171;

@@ -45,7 +45,12 @@ class Users_WP_Profile {
         ?>
         <div class="uwp-profile-header">
             <div class="uwp-profile-header-img <?php echo $banner_class; ?>" style="background-image: url('<?php echo $banner; ?>')"></div>
-            <div class="uwp-profile-avatar"><?php echo $avatar; ?></div>
+            <div class="uwp-profile-avatar">
+                <?php echo $avatar; ?>
+<!--                <div class="uwp-profile-avatar-hover">-->
+<!--                    <i class="fa fa-picture-o" aria-hidden="true"></i>-->
+<!--                </div>-->
+            </div>
         </div>
         <?php
     }
@@ -341,7 +346,13 @@ class Users_WP_Profile {
             $uwp_profile_tab_with_slash_paged = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/([^/]+)/page/([0-9]+)/?$';
             add_rewrite_rule($uwp_profile_tab_with_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&uwp_subtab=$matches[3]&paged=$matches[4]', 'top');
             
-
+            if (get_option('uwp_flush_rewrite')) {
+                //Ensure the $wp_rewrite global is loaded
+                global $wp_rewrite;
+                //Call flush_rules() as a method of the $wp_rewrite object
+                $wp_rewrite->flush_rules( false );
+                delete_option('uwp_flush_rewrite');
+            }
         }
     }
 
@@ -400,7 +411,7 @@ class Users_WP_Profile {
         global $wp_query;
         $page_id = uwp_get_option('profile_page', false);
 
-        if ($page_id == $id && isset($wp_query->query_vars['uwp_profile'])) {
+        if ($page_id == $id && isset($wp_query->query_vars['uwp_profile']) && in_the_loop()) {
 
             $url_type = apply_filters('uwp_profile_url_type', 'login');
 
@@ -585,6 +596,7 @@ class Users_WP_Profile {
             <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
             <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
             <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();">Upload <?php echo $type; ?></button>
+            <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'uwp').uwp_get_option('profile_avatar_max_size', 5); ?> MB</p>
             <div class="uwp_upload_field" style="display: none">
                 <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" onchange="this.form.submit()" required="required" type="file" value="">
                 <button type="submit" id="uwp_<?php echo $type; ?>_submit_button" style="display: none"></button>
@@ -631,7 +643,7 @@ class Users_WP_Profile {
                 if (in_array($field->htmlvar_name, $excluded_fields)) {
                     continue;
                 }
-                $option_values_arr = geodir_string_values_to_options($field->option_values, true);
+                $option_values_arr = uwp_string_values_to_options($field->option_values, true);
                 ?>
                     <tr>
                         <th><?php echo $field->site_title; ?></th>
