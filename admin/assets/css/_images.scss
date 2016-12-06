@@ -1,0 +1,35 @@
+#uwp_form_builder_container {
+  .uwp-draggable-form-items {
+    b {
+      background: transparent url(../images/sprite.png);
+    }
+  }
+
+  .uwp-side-sortables {
+    .handlediv:hover {
+      background: url(../images/arrows.png) no-repeat 6px 7px;
+    }
+  }
+
+  .field_row_main {
+    .title {
+      .handlediv {
+        background: url(../images/arrows_down.png) no-repeat center center;
+      }
+    }
+  }
+
+  .field_row_main_sort {
+    .title {
+      .handlediv {
+        background: url(../images/arrows_down.png) no-repeat center center;
+      }
+      .handlediv.close {
+        background: url(../images/cross-img.png) no-repeat center center;
+      }
+      .handlediv.move {
+        background: url(../images/move.png) no-repeat center center;
+      }
+    }
+  }
+}

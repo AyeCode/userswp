@@ -93,6 +93,9 @@ class Users_WP_Public {
             wp_enqueue_style('font-awesome');
         }
 
+        wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
+        wp_enqueue_style( 'jquery-ui' );
+
 
     }
 
@@ -112,7 +115,9 @@ class Users_WP_Public {
          * between the defined hooks and the functions defined in this
          * class.
          */
+        wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
         wp_enqueue_script( 'jcrop', array( 'jquery' ) );
+        wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), $this->version, false );
 
         if (is_page()) {

@@ -621,13 +621,12 @@ class Users_WP_Forms {
 
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_custom_fields';
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
 
         $validated_data = array();
 
         if (!empty($fields)) {
             foreach ($fields as $field) {
-
                 $value = $data[$field->htmlvar_name];
                 $sanitized_value = $value;
 
@@ -821,7 +820,9 @@ class Users_WP_Forms {
                 // So it can be created and updated on the same meta.
                 // For this reason, lets replace all register meta keys with account meta keys
                 $key = str_replace('uwp_register_', 'uwp_account_', $key);
-                uwp_update_usermeta($user_id, $key, $value);
+                if (!empty($value)) {
+                    uwp_update_usermeta($user_id, $key, $value);
+                }
             }
             return true;
         }

@@ -208,7 +208,10 @@ class Users_WP_Templates {
             } elseif ($field->htmlvar_name == 'uwp_account_last_name') {
                 $value = $user_data->last_name;
             } else {
-                $value = uwp_get_usermeta($user_id, $field->htmlvar_name, '');
+                $value = uwp_get_usermeta($user_id, $field->htmlvar_name, false);
+                if (!$value) {
+                    $value = $field->default_value;
+                }
             }
 
 
@@ -225,6 +228,7 @@ class Users_WP_Templates {
             <input name="<?php echo $field->htmlvar_name; ?>"
                    class="<?php echo $field->css_class; ?>"
                    placeholder="<?php echo $field->site_title; ?>"
+                   title="<?php echo $field->site_title; ?>"
                 <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                    type="<?php echo $field->field_type; ?>"
                    value="<?php echo $value; ?>">
@@ -275,7 +279,6 @@ class Users_WP_Templates {
             }else{
                 $jquery_date_format = uwp_date_format_php_to_jqueryui( $jquery_date_format );
             }
-
             if($value=='0000-00-00'){$value='';}//if date not set, then mark it empty
             $value = uwp_date($value, 'Y-m-d', $date_format);
 
@@ -306,7 +309,9 @@ class Users_WP_Templates {
                     <?php if ($field->is_required) echo '<span>*</span>';?>
                 </label>
 
-                <input name="<?php echo $field->htmlvar_name;?>" id="<?php echo $field->htmlvar_name;?>"
+                <input name="<?php echo $field->htmlvar_name;?>"
+                       id="<?php echo $field->htmlvar_name;?>"
+                       title="<?php echo $field->site_title; ?>"
                        value="<?php echo esc_attr($value);?>" type="text" class="uwp_textfield"/>
 
                 <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
@@ -364,6 +369,7 @@ class Users_WP_Templates {
                 ?>
                 <select name="<?php echo $field->htmlvar_name;?>" id="<?php echo $field->htmlvar_name;?>"
                         class="uwp_textfield"
+                        title="<?php echo $field->site_title; ?>"
                         data-placeholder="<?php echo __('Choose', 'uwp') . ' ' . $site_title . '&hellip;';?>"
                         ><?php echo $select_options;?>
                 </select>
@@ -407,7 +413,9 @@ class Users_WP_Templates {
                 <input type="hidden" name="uwp_field_<?php echo $field->htmlvar_name;?>" value="1"/>
                 <?php if ($multi_display == 'select') { ?>
                 <div class="uwp_multiselect_list">
-                    <select name="<?php echo $field->htmlvar_name;?>[]" id="<?php echo $field->htmlvar_name;?>"
+                    <select name="<?php echo $field->htmlvar_name;?>[]"
+                            id="<?php echo $field->htmlvar_name;?>"
+                            title="<?php echo $field->site_title; ?>"
                             multiple="multiple" class="uwp_chosen_select"
                             data-placeholder="<?php _e('Select', 'uwp'); ?>"
                             >
@@ -418,7 +426,7 @@ class Users_WP_Templates {
                             <?php
                         }
 
-                        $option_values_arr = geodir_string_values_to_options($field->option_values, true);
+                        $option_values_arr = uwp_string_values_to_options($field->option_values, true);
                         $select_options = '';
                         if (!empty($option_values_arr)) {
                             foreach ($option_values_arr as $option_row) {
@@ -467,7 +475,7 @@ class Users_WP_Templates {
                 </ul>
             <?php } ?>
                 <?php if ($field->is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>
+                    <span class="uwp_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>
                 <?php } ?>
             </div>
             <?php
@@ -497,12 +505,16 @@ class Users_WP_Templates {
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
                     <?php if ($field->is_required) echo '<span>*</span>';?>
                 </label>
+                <?php if ($value) {
+                    echo '<a href="'.$value.'">'.basename( $value ).'</a>'; 
+                } ?>
                 <input name="<?php echo $field->htmlvar_name; ?>"
                        class="<?php echo $field->css_class; ?>"
                        placeholder="<?php echo $field->site_title; ?>"
+                       title="<?php echo $field->site_title; ?>"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                        type="<?php echo $field->field_type; ?>"
-                       value="<?php echo $value; ?>">
+                       value="">
                 <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
                 <?php if ($field->is_required) { ?>
                     <span class="uwp_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>
@@ -534,6 +546,7 @@ class Users_WP_Templates {
                 <input name="<?php echo $field->htmlvar_name; ?>"
                        class="<?php echo $field->css_class; ?>"
                        placeholder="<?php echo $field->site_title; ?>"
+                       title="<?php echo $field->site_title; ?>"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                     <?php if ($value == '1') { echo 'checked="checked"'; } ?>
                        type="<?php echo $field->field_type; ?>"
@@ -584,10 +597,12 @@ class Users_WP_Templates {
                                 ?>
                                 <span class="uwp-radios">
                                     <input name="<?php echo $field->htmlvar_name; ?>" 
-                                           id="<?php echo $field->htmlvar_name; ?>" 
+                                           id="<?php echo $field->htmlvar_name; ?>"
+                                           title="<?php echo esc_attr($option_value['label']); ?>"
                                         <?php checked($value, $option_value['value']);?>
                                         <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
-                                           value="<?php echo esc_attr($option_value['value']); ?>" class="uwp-radio" type="radio" />
+                                           value="<?php echo esc_attr($option_value['value']); ?>"
+                                           class="uwp-radio" type="radio" />
                                     <?php echo $option_value['label']; ?>
                                 </span>
                                 <?php
@@ -631,6 +646,7 @@ class Users_WP_Templates {
                 <textarea name="<?php echo $field->htmlvar_name; ?>"
                           class="<?php echo $field->css_class; ?>"
                           placeholder="<?php echo $field->site_title; ?>"
+                          title="<?php echo $field->site_title; ?>"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                           type="<?php echo $field->field_type; ?>"
                           rows="4"><?php echo $value; ?></textarea>
@@ -640,6 +656,29 @@ class Users_WP_Templates {
                 <?php } ?>
             </div>
 
+            <?php
+            $html = ob_get_clean();
+        }
+
+        return $html;
+    }
+
+    public function uwp_form_input_fieldset($html, $field, $value, $form_type) {
+        // Check if there is a custom field specific filter.
+        if(has_filter("uwp_form_input_fieldset_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_fieldset_{$field->htmlvar_name}",$html, $field, $value, $form_type);
+        }
+
+        // If no html then we run the standard output.
+        if(empty($html)) {
+
+            ob_start(); // Start  buffering;
+            ?>
+            <h5 class="uwp_input_fieldset <?php echo $field->css_class; ?>">
+                <?php echo $field->site_title;; ?>
+                <?php if ( $field->help_text != '' ) {
+                    echo '<small>( ' . $field->help_text . ' )</small>';
+                } ?></h5>
             <?php
             $html = ob_get_clean();
         }

@@ -78,17 +78,17 @@ function validate_field(field) {
 
 
     if (is_error) {
-        if (jQuery(field).closest('.required_field').find('span.geodir_message_error').html() == '') {
-            jQuery(field).closest('.required_field').find('span.geodir_message_error').html(uwp_admin_ajax.custom_field_id_required)
+        if (jQuery(field).closest('.required_field').find('span.uwp_message_error').html() == '') {
+            jQuery(field).closest('.required_field').find('span.uwp_message_error').html(uwp_admin_ajax.custom_field_id_required)
         }
 
-        jQuery(field).closest('.required_field').find('span.geodir_message_error').fadeIn();
+        jQuery(field).closest('.required_field').find('span.uwp_message_error').fadeIn();
 
         return false;
     } else {
 
-        jQuery(field).closest('.required_field').find('span.geodir_message_error').html('');
-        jQuery(field).closest('.required_field').find('span.geodir_message_error').fadeOut();
+        jQuery(field).closest('.required_field').find('span.uwp_message_error').html('');
+        jQuery(field).closest('.required_field').find('span.uwp_message_error').fadeOut();
 
         return true;
     }

@@ -40,12 +40,29 @@ class Users_WP_Profile {
         if (empty($avatar)) {
             $avatar = get_avatar($user->user_email, 128, null, null, array('class' => array($avatar_class) ));
         } else {
-            $avatar = '<img src="'.$avatar.'" class="avatar '.$avatar_class.' avatar-128 photo" width="128" height="128">';
+            $avatar = '<img src="'.$avatar.'" class="avatar avatar-128 photo" width="128" height="128">';
         }
         ?>
         <div class="uwp-profile-header">
-            <div class="uwp-profile-header-img <?php echo $banner_class; ?>" style="background-image: url('<?php echo $banner; ?>')"></div>
-            <div class="uwp-profile-avatar"><?php echo $avatar; ?></div>
+            <div class="uwp-profile-header-img" style="background-image: url('<?php echo $banner; ?>')">
+                <div class="uwp-banner-change-icon">
+                    <i class="fa fa-camera" aria-hidden="true"></i>
+                    <div class="uwp-profile-banner-change <?php echo $banner_class; ?>">
+                    <span class="uwp-profile-banner-change-inner">
+                        Update Cover Photo
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <div class="uwp-profile-avatar">
+                <?php echo $avatar; ?>
+                <div class="uwp-profile-avatar-change">
+                    <div class="uwp-profile-avatar-change-inner">
+                        <i class="fa fa-camera" aria-hidden="true"></i>
+                        <a id="uwp-profile-picture-change" class="<?php echo $avatar_class; ?>" href="#">Update Profile Picture</a>
+                    </div>
+                </div>
+            </div>
         </div>
         <?php
     }
@@ -102,9 +119,53 @@ class Users_WP_Profile {
         <?php
     }
 
+    public function get_profile_extra($user) {
+
+        ob_start();
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_custom_fields';
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND is_default = '0' ORDER BY sort_order ASC");
+        if ($fields) {
+            ?>
+            <div class="uwp-profile-extra">
+                <table class="uwp-profile-extra-table">
+                    <?php
+                    foreach ($fields as $field) {
+                        $key = $field->htmlvar_name;
+                        // see Users_WP_Forms -> uwp_save_user_extra_fields reason for replacing key
+                        $key = str_replace('uwp_register_', 'uwp_account_', $key);
+                        $value = uwp_get_usermeta($user->ID, $key, false);
+
+                        if ($value) {
+                            ?>
+                            <tr>
+                                <td class="uwp-profile-extra-key"><?php echo $field->site_title; ?></td>
+                                <td class="uwp-profile-extra-value"><?php echo $value; ?></td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+                </table>
+            </div>
+            <?php
+        }
+        $output = ob_get_contents();
+        ob_end_clean();
+        return trim($output);
+    }
+
     public function get_profile_tabs($user) {
 
         $tabs = array();
+        
+        $extra = $this->get_profile_extra($user);
+        if ($extra) {
+            $tabs['about']  = array(
+                'title' => __( 'About', 'uwp' ),
+                'count' => 0
+            );
+        }
 
         $enable_profile_posts_tab = uwp_get_option('enable_profile_posts_tab', false);
         if ($enable_profile_posts_tab == '1') {
@@ -201,6 +262,11 @@ class Users_WP_Profile {
         <?php
     }
 
+    public function get_profile_about($user) {
+        $extra = $this->get_profile_extra($user);
+        echo $extra;
+    }
+    
     public function get_profile_posts($user) {
         $enable_profile_posts_tab = uwp_get_option('enable_profile_posts_tab', false);
         if ($enable_profile_posts_tab != '1') {
@@ -341,7 +407,13 @@ class Users_WP_Profile {
             $uwp_profile_tab_with_slash_paged = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/([^/]+)/page/([0-9]+)/?$';
             add_rewrite_rule($uwp_profile_tab_with_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&uwp_subtab=$matches[3]&paged=$matches[4]', 'top');
             
-
+            if (get_option('uwp_flush_rewrite')) {
+                //Ensure the $wp_rewrite global is loaded
+                global $wp_rewrite;
+                //Call flush_rules() as a method of the $wp_rewrite object
+                $wp_rewrite->flush_rules( false );
+                delete_option('uwp_flush_rewrite');
+            }
         }
     }
 
@@ -400,7 +472,7 @@ class Users_WP_Profile {
         global $wp_query;
         $page_id = uwp_get_option('profile_page', false);
 
-        if ($page_id == $id && isset($wp_query->query_vars['uwp_profile'])) {
+        if ($page_id == $id && isset($wp_query->query_vars['uwp_profile']) && in_the_loop()) {
 
             $url_type = apply_filters('uwp_profile_url_type', 'login');
 
@@ -585,6 +657,7 @@ class Users_WP_Profile {
             <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
             <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
             <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();">Upload <?php echo $type; ?></button>
+            <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'uwp').uwp_get_option('profile_avatar_max_size', 5); ?> MB</p>
             <div class="uwp_upload_field" style="display: none">
                 <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" onchange="this.form.submit()" required="required" type="file" value="">
                 <button type="submit" id="uwp_<?php echo $type; ?>_submit_button" style="display: none"></button>
@@ -631,7 +704,7 @@ class Users_WP_Profile {
                 if (in_array($field->htmlvar_name, $excluded_fields)) {
                     continue;
                 }
-                $option_values_arr = geodir_string_values_to_options($field->option_values, true);
+                $option_values_arr = uwp_string_values_to_options($field->option_values, true);
                 ?>
                     <tr>
                         <th><?php echo $field->site_title; ?></th>

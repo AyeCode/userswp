@@ -22,10 +22,13 @@
     }
     .uwp-tabs-panel {
       height: auto;
-      overflow: hidden;
+      overflow: visible;
       padding: 0.5em 0 0.5em 4px;
       background-color: #FFFFFF;
       border: 1px #DFDFDF solid;
+      ul {
+        margin: 0;
+      }
     }
     h3 {
       font-size: 15px;
@@ -81,7 +84,6 @@
     text-align: left;
     text-decoration: none;
     b {
-      background: transparent url(../../images/sprite.png);
       display: inline-block;
       height: 16px;
       left: 8px;
@@ -240,7 +242,6 @@
         width: 26px;
         margin: 2px;
         cursor: pointer;
-        background: url(../../images/arrows_down.png) no-repeat center center;
         vertical-align: middle;
       }
       .handlediv.close {
@@ -293,14 +294,7 @@
         width: 26px;
         margin: 2px;
         cursor: pointer;
-        background: url(../../images/arrows_down.png) no-repeat center center;
         vertical-align: middle;
-      }
-      .handlediv.close {
-        background: url(../../images/cross-img.png) no-repeat center center;
-      }
-      .handlediv.move {
-        background: url(../../images/move.png) no-repeat center center;
       }
     }
     .uwp-fieldset {
