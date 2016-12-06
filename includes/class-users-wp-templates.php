@@ -505,13 +505,16 @@ class Users_WP_Templates {
                     echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
                     <?php if ($field->is_required) echo '<span>*</span>';?>
                 </label>
+                <?php if ($value) {
+                    echo '<a href="'.$value.'">'.basename( $value ).'</a>'; 
+                } ?>
                 <input name="<?php echo $field->htmlvar_name; ?>"
                        class="<?php echo $field->css_class; ?>"
                        placeholder="<?php echo $field->site_title; ?>"
                        title="<?php echo $field->site_title; ?>"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                        type="<?php echo $field->field_type; ?>"
-                       value="<?php echo $value; ?>">
+                       value="">
                 <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
                 <?php if ($field->is_required) { ?>
                     <span class="uwp_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>

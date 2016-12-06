@@ -262,6 +262,7 @@ class Users_WP {
 
         $this->loader->add_action( 'uwp_profile_content', $profile, 'get_profile_tabs_content', 10, 1 );
         $this->loader->add_action( 'uwp_profile_pagination', $profile, 'get_profile_pagination');
+        $this->loader->add_action( 'uwp_profile_about_tab_content', $profile, 'get_profile_about', 10, 1);
         $this->loader->add_action( 'uwp_profile_posts_tab_content', $profile, 'get_profile_posts', 10, 1);
         $this->loader->add_action( 'uwp_profile_comments_tab_content', $profile, 'get_profile_comments', 10, 1);
 
@@ -307,6 +308,7 @@ class Users_WP {
         $this->loader->add_filter('uwp_cfa_extra_fields_radio', $form_builder, 'uwp_cfa_extra_fields_smr', 10, 4);
 
         $this->loader->add_filter('uwp_cfa_extra_fields_datepicker', $form_builder, 'uwp_cfa_extra_fields_datepicker', 10, 4);
+        $this->loader->add_filter('uwp_advance_custom_fields', $form_builder, 'uwp_advance_admin_custom_fields', 10, 2);
 
         // htmlvar not needed for fieldset and taxonomy
         $this->loader->add_filter('uwp_cfa_htmlvar_name_fieldset',$form_builder, 'return_empty_string',10,4);

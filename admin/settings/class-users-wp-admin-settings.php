@@ -312,7 +312,7 @@ class Users_WP_Admin_Settings {
     public function get_form_builder_content() {
         $form_builder = new Users_WP_Form_Builder();
 
-        $subtab = 'register';
+        $subtab = 'account';
 
         if (isset($_GET['subtab'])) {
             $subtab = $_GET['subtab'];
@@ -321,25 +321,25 @@ class Users_WP_Admin_Settings {
         ?>
         <div class="item-list-sub-tabs">
             <ul class="item-list-tabs-ul">
-                <li id="uwp-form-builder-register-li" class="<?php if ($subtab == 'register') { echo "current selected"; } ?>">
-                    <a id="uwp-form-builder-register" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'register')); ?>"><?php echo __( 'Register', 'uwp' ); ?></a>
-                </li>
                 <li id="uwp-form-builder-account-li" class="<?php if ($subtab == 'account') { echo "current selected"; } ?>">
                     <a id="uwp-form-builder-account" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'account')); ?>"><?php echo __( 'Account', 'uwp' ); ?></a>
+                </li>
+                <li id="uwp-form-builder-register-li" class="<?php if ($subtab == 'register') { echo "current selected"; } ?>">
+                    <a id="uwp-form-builder-register" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'register')); ?>"><?php echo __( 'Register', 'uwp' ); ?></a>
                 </li>
             </ul>
         </div>
         <?php
-        if ($subtab == 'register') {
-            ?>
-            <h3 class=""><?php echo __( 'Manage Register Form Fields', 'uwp' ); ?></h3>
-            <?php
-            $form_builder->uwp_form_builder();
-        } elseif ($subtab == 'account') {
+        if ($subtab == 'account') {
             ?>
             <h3 class=""><?php echo __( 'Manage Account Form Fields', 'uwp' ); ?></h3>
             <?php
-            $form_builder->uwp_form_builder();
+            $form_builder->uwp_form_builder($subtab);
+        } elseif ($subtab == 'register') {
+            ?>
+            <h3 class=""><?php echo __( 'Manage Register Form Fields', 'uwp' ); ?></h3>
+            <?php
+            $form_builder->uwp_form_builder($subtab);
         }
     }
 

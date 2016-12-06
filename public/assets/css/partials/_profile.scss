@@ -1,16 +1,10 @@
 .uwp-content-wrap {
   .uwp-profile-header-img {
+    position: relative;
     background: #fff none repeat scroll 0 0;
     border: 1px solid #ccc;
     height: 300px;
     width: 100%;
-    i {
-      color: #ccc;
-      font-size: 30px;
-      margin: 120px 0 0;
-      text-align: center;
-      width: 100%;
-    }
   }
 
   .uwp-profile-social-ul {
@@ -95,14 +89,6 @@
   .uwp-profile-avatar {
     display: inline-block;
     position: relative;
-    .uwp-profile-avatar-hover {
-      text-align: center;
-      font-size: 30px;
-      color: #fff;
-      position: relative;
-      top: -60px;
-      display: none;
-    }
     > img {
       border: 10px solid #fff;
       border-radius: 0;
@@ -110,13 +96,107 @@
       float: left;
       margin: -149px 0 0 1px;
       max-width: 128px;
-      &:hover + .uwp-profile-avatar-hover {
+    }
+    .uwp-profile-avatar-change {
+      position: absolute;
+      z-index: 5;
+      text-align: center;
+      top: auto;
+      bottom: 0;
+      left: 0;
+      overflow: hidden;
+      width: 100%;
+      .uwp-profile-avatar-change-inner {
         display: block;
+        overflow: hidden;
+        position: relative;
+        text-align: left;
+        height: 60px;
+        i {
+          position: absolute;
+          color: #fff;
+          left: 15px;
+          margin-bottom: 0;
+          bottom: 20px;
+          opacity: 1;
+          transform: none;
+        }
+        &:before, &:after {
+          background: #000;
+          background: rgba(0, 0, 0, .6);
+          background: linear-gradient(transparent, rgba(0, 0, 0, .6) 50%, rgba(0, 0, 0, .6) 100%);
+          content: '';
+          height: 200%;
+          left: 0;
+          position: absolute;
+          right: 0;
+          top: 100%;
+          transition: top .13s ease-out;
+          z-index: -1;
+        }
+        &:hover:before {
+          top: -100%;
+        }
+        a {
+          color: #fff;
+          padding: 10px 12px 10px 40px;
+          display: none;
+        }
+        &:hover a {
+          display: block;
+        }
       }
     }
 
   }
 
+  .uwp-banner-change-icon {
+    left: 20px;
+    position: absolute;
+    top: 15px;
+    i {
+      position: absolute;
+      left: 13px;
+      top: 15px;
+      z-index: 999;
+    }
+  }
+  .uwp-profile-header-img:hover i {
+    color: #fff;
+  }
+  .uwp-profile-banner-change {
+    background-clip: padding-box;
+    background-color: #000;
+    border: 1px solid #fff;
+    border-color: rgba(255, 255, 255, .8);
+    border-radius: 2px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, .6);
+    box-sizing: border-box;
+    color: #fff;
+    display: inline-block;
+    opacity: 0;
+    overflow: hidden;
+    padding: 6px 12px;
+    transition: opacity .3s cubic-bezier(.175, .885, .32, 1.275), width .3s step-end;
+    white-space: nowrap;
+    width: 34px;
+    position: relative;
+    top: 3px;
+    word-wrap: normal;
+    .uwp-profile-banner-change-inner {
+      -webkit-font-smoothing: antialiased;
+      padding-left: 26px;
+      position: relative;
+      top: 1px;
+      z-index: 2;
+    }
+  }
+
+  .uwp-profile-header-img:hover .uwp-profile-banner-change {
+    opacity: .8;
+    width: auto;
+    display: inline-block;
+  }
 
   .uwp-profile-name > h2 {
     color: #717171;

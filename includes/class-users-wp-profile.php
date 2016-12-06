@@ -40,16 +40,28 @@ class Users_WP_Profile {
         if (empty($avatar)) {
             $avatar = get_avatar($user->user_email, 128, null, null, array('class' => array($avatar_class) ));
         } else {
-            $avatar = '<img src="'.$avatar.'" class="avatar '.$avatar_class.' avatar-128 photo" width="128" height="128">';
+            $avatar = '<img src="'.$avatar.'" class="avatar avatar-128 photo" width="128" height="128">';
         }
         ?>
         <div class="uwp-profile-header">
-            <div class="uwp-profile-header-img <?php echo $banner_class; ?>" style="background-image: url('<?php echo $banner; ?>')"></div>
+            <div class="uwp-profile-header-img" style="background-image: url('<?php echo $banner; ?>')">
+                <div class="uwp-banner-change-icon">
+                    <i class="fa fa-camera" aria-hidden="true"></i>
+                    <div class="uwp-profile-banner-change <?php echo $banner_class; ?>">
+                    <span class="uwp-profile-banner-change-inner">
+                        Update Cover Photo
+                    </span>
+                    </div>
+                </div>
+            </div>
             <div class="uwp-profile-avatar">
                 <?php echo $avatar; ?>
-<!--                <div class="uwp-profile-avatar-hover">-->
-<!--                    <i class="fa fa-picture-o" aria-hidden="true"></i>-->
-<!--                </div>-->
+                <div class="uwp-profile-avatar-change">
+                    <div class="uwp-profile-avatar-change-inner">
+                        <i class="fa fa-camera" aria-hidden="true"></i>
+                        <a id="uwp-profile-picture-change" class="<?php echo $avatar_class; ?>" href="#">Update Profile Picture</a>
+                    </div>
+                </div>
             </div>
         </div>
         <?php
@@ -107,9 +119,53 @@ class Users_WP_Profile {
         <?php
     }
 
+    public function get_profile_extra($user) {
+
+        ob_start();
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_custom_fields';
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND is_default = '0' ORDER BY sort_order ASC");
+        if ($fields) {
+            ?>
+            <div class="uwp-profile-extra">
+                <table class="uwp-profile-extra-table">
+                    <?php
+                    foreach ($fields as $field) {
+                        $key = $field->htmlvar_name;
+                        // see Users_WP_Forms -> uwp_save_user_extra_fields reason for replacing key
+                        $key = str_replace('uwp_register_', 'uwp_account_', $key);
+                        $value = uwp_get_usermeta($user->ID, $key, false);
+
+                        if ($value) {
+                            ?>
+                            <tr>
+                                <td class="uwp-profile-extra-key"><?php echo $field->site_title; ?></td>
+                                <td class="uwp-profile-extra-value"><?php echo $value; ?></td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+                </table>
+            </div>
+            <?php
+        }
+        $output = ob_get_contents();
+        ob_end_clean();
+        return trim($output);
+    }
+
     public function get_profile_tabs($user) {
 
         $tabs = array();
+        
+        $extra = $this->get_profile_extra($user);
+        if ($extra) {
+            $tabs['about']  = array(
+                'title' => __( 'About', 'uwp' ),
+                'count' => 0
+            );
+        }
 
         $enable_profile_posts_tab = uwp_get_option('enable_profile_posts_tab', false);
         if ($enable_profile_posts_tab == '1') {
@@ -206,6 +262,11 @@ class Users_WP_Profile {
         <?php
     }
 
+    public function get_profile_about($user) {
+        $extra = $this->get_profile_extra($user);
+        echo $extra;
+    }
+    
     public function get_profile_posts($user) {
         $enable_profile_posts_tab = uwp_get_option('enable_profile_posts_tab', false);
         if ($enable_profile_posts_tab != '1') {

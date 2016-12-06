@@ -820,7 +820,9 @@ class Users_WP_Forms {
                 // So it can be created and updated on the same meta.
                 // For this reason, lets replace all register meta keys with account meta keys
                 $key = str_replace('uwp_register_', 'uwp_account_', $key);
-                uwp_update_usermeta($user_id, $key, $value);
+                if (!empty($value)) {
+                    uwp_update_usermeta($user_id, $key, $value);
+                }
             }
             return true;
         }

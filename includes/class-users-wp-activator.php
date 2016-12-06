@@ -180,6 +180,7 @@ class Users_WP_Activator {
 							  is_active enum( '0', '1' ) NOT NULL DEFAULT '1',
 							  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_required enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_register_field enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  required_msg varchar(255) NULL DEFAULT NULL,
 							  show_in text NULL DEFAULT NULL,
 							  extra_fields text NULL DEFAULT NULL,
@@ -212,7 +213,6 @@ class Users_WP_Activator {
 
     public static function uwp_default_custom_fields(){
 
-        $register = self::uwp_default_custom_fields_register();
         $login = self::uwp_default_custom_fields_login();
         $forgot = self::uwp_default_custom_fields_forgot();
         $avatar = self::uwp_default_custom_fields_avatar();
@@ -220,90 +220,12 @@ class Users_WP_Activator {
         $reset = self::uwp_default_custom_fields_reset();
         $account = self::uwp_default_custom_fields_account();
 
-        $fields = array_merge($register, $login, $forgot, $account, $avatar, $banner, $reset);
+        $fields = array_merge($login, $forgot, $account, $avatar, $banner, $reset);
 
         $fields = apply_filters('uwp_default_custom_fields', $fields);
 
         return $fields;
 
-    }
-
-    public static function uwp_default_custom_fields_register(){
-
-        $fields = array();
-
-        $fields[] = array(
-            'form_type' => 'register',
-            'field_type' => 'text',
-            'site_title' => __('Username', 'uwp'),
-            'htmlvar_name' => 'username',
-            'default_value' => '',
-            'option_values' => '',
-            'is_default' => '1',
-            'is_required' => '1'
-        );
-
-        $fields[] = array(
-            'form_type' => 'register',
-            'field_type' => 'text',
-            'site_title' => __('First Name', 'uwp'),
-            'htmlvar_name' => 'first_name',
-            'default_value' => '',
-            'option_values' => '',
-            'is_default' => '1',
-            'is_required' => '1',
-            'css_class' => 'uwp-half uwp-half-left',
-        );
-
-        $fields[] = array(
-            'form_type' => 'register',
-            'field_type' => 'text',
-            'site_title' => __('Last Name', 'uwp'),
-            'htmlvar_name' => 'last_name',
-            'default_value' => '',
-            'option_values' => '',
-            'is_default' => '1',
-            'is_required' => '1',
-            'css_class' => 'uwp-half uwp-half-right',
-        );
-
-        $fields[] = array(
-            'form_type' => 'register',
-            'field_type' => 'email',
-            'site_title' => __('Email', 'uwp'),
-            'htmlvar_name' => 'email',
-            'default_value' => '',
-            'option_values' => '',
-            'is_default' => '1',
-            'is_required' => '1'
-        );
-
-        $fields[] = array(
-            'form_type' => 'register',
-            'field_type' => 'password',
-            'site_title' => __('Password', 'uwp'),
-            'htmlvar_name' => 'password',
-            'default_value' => '',
-            'option_values' => '',
-            'is_default' => '1',
-            'is_required' => '1'
-        );
-
-        $fields[] = array(
-            'form_type' => 'register',
-            'field_type' => 'password',
-            'site_title' => __('Confirm Password', 'uwp'),
-            'htmlvar_name' => 'confirm_password',
-            'default_value' => '',
-            'option_values' => '',
-            'is_default' => '1',
-            'is_required' => '1'
-        );
-
-
-        $fields = apply_filters('uwp_default_custom_fields_register', $fields);
-
-        return  $fields;
     }
 
     public static function uwp_default_custom_fields_login(){
@@ -459,6 +381,7 @@ class Users_WP_Activator {
             'option_values' => '',
             'is_default' => '1',
             'is_required' => '1',
+            'is_register_field' => '1',
             'css_class' => 'uwp-half uwp-half-left',
         );
 
@@ -471,6 +394,7 @@ class Users_WP_Activator {
             'option_values' => '',
             'is_default' => '1',
             'is_required' => '1',
+            'is_register_field' => '1',
             'css_class' => 'uwp-half uwp-half-right',
         );
 
@@ -482,7 +406,8 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
-            'is_required' => '1'
+            'is_required' => '1',
+            'is_register_field' => '1',
         );
 
         $fields[] = array(
@@ -504,7 +429,8 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
-            'is_required' => '1'
+            'is_required' => '1',
+            'is_register_field' => '1'
         );
 
         $fields[] = array(
@@ -515,7 +441,8 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
-            'is_required' => '1'
+            'is_required' => '1',
+            'is_register_field' => '1'
         );
 
         $fields = apply_filters('uwp_default_custom_fields_account', $fields);

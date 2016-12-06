@@ -22,10 +22,13 @@
     }
     .uwp-tabs-panel {
       height: auto;
-      overflow: hidden;
+      overflow: visible;
       padding: 0.5em 0 0.5em 4px;
       background-color: #FFFFFF;
       border: 1px #DFDFDF solid;
+      ul {
+        margin: 0;
+      }
     }
     h3 {
       font-size: 15px;
