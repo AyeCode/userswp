@@ -174,24 +174,24 @@ class Users_WP_Forms {
         }
 
         $first_name = "";
-        if (isset($result['uwp_register_first_name']) && !empty($result['uwp_register_first_name'])) {
-            $first_name = $result['uwp_register_first_name'];
+        if (isset($result['uwp_account_first_name']) && !empty($result['uwp_account_first_name'])) {
+            $first_name = $result['uwp_account_first_name'];
         }
 
         $last_name = "";
-        if (isset($result['uwp_register_last_name']) && !empty($result['uwp_register_last_name'])) {
-            $last_name = $result['uwp_register_last_name'];
+        if (isset($result['uwp_account_last_name']) && !empty($result['uwp_account_last_name'])) {
+            $last_name = $result['uwp_account_last_name'];
         }
 
         if (!empty($first_name) || !empty($last_name)) {
             $display_name = $first_name . ' ' . $last_name;
         } else {
-            $display_name = $result['uwp_register_username'];
+            $display_name = $result['uwp_account_username'];
         }
 
         $args = array(
-            'user_login'   => $result['uwp_register_username'],
-            'user_email'   => $result['uwp_register_email'],
+            'user_login'   => $result['uwp_account_username'],
+            'user_email'   => $result['uwp_account_email'],
             'user_pass'    => $password,
             'display_name' => $display_name,
             'first_name'   => $first_name,
@@ -229,7 +229,7 @@ class Users_WP_Forms {
         }
 
         $login_details = __('<p><b>' . __('Your login Information :', 'uwp') . '</b></p>
-        <p>' . __('Username:', 'uwp') . ' ' . $result['uwp_register_username'] . '</p>
+        <p>' . __('Username:', 'uwp') . ' ' . $result['uwp_account_username'] . '</p>
         <p>' . __('Password:', 'uwp') . ' ' . $message_pass . '</p>');
 
         $send_result = $this->uwp_send_email( 'register', $user_id, $login_details );
@@ -247,7 +247,7 @@ class Users_WP_Forms {
         if ($data['auto_login']) {
             $res = wp_signon(
                 array(
-                    'user_login' => $result['uwp_register_username'],
+                    'user_login' => $result['uwp_account_username'],
                     'user_password' => $password,
                     'remember' => false
                 ),
@@ -620,8 +620,15 @@ class Users_WP_Forms {
         $errors = new WP_Error();
 
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_custom_fields';
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
+
+        if ($type == 'register') {
+            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' AND is_register_field = '1' ORDER BY sort_order ASC", array('account')));
+        } else {
+            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
+        }
+
 
         $validated_data = array();
 
@@ -715,7 +722,7 @@ class Users_WP_Forms {
                 }
 
                 // Check the username for register
-                if ($field->htmlvar_name == 'uwp_register_username') {
+                if ($field->htmlvar_name == 'uwp_account_username') {
                     if (!validate_username($sanitized_value)) {
                         $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'uwp'));
                     }
@@ -737,26 +744,32 @@ class Users_WP_Forms {
             }
         }
 
+        if ($type == 'login') {
+            $password_type = 'login';
+        } else {
+            $password_type = 'account';
+        }
+
         if ($type == 'login' || $type == 'register' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
             //check password
-            if( empty( $data['uwp_'.$type.'_password'] ) ) {
+            if( empty( $data['uwp_'.$password_type.'_password'] ) ) {
                 $errors->add( 'empty_password', __( 'Please enter a password', 'uwp' ) );
             }
 
-            if (strlen($data['uwp_'.$type.'_password']) < 7) {
+            if (strlen($data['uwp_'.$password_type.'_password']) < 7) {
                 $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', 'uwp'));
             }
 
-            $validated_data['password'] = $data['uwp_'.$type.'_password'];
+            $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
         }
 
         if ($type == 'register' || $type == 'reset' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
             //check password
-            if ($data['uwp_'.$type.'_password'] != $data['uwp_'.$type.'_confirm_password']) {
+            if ($data['uwp_'.$password_type.'_password'] != $data['uwp_'.$password_type.'_confirm_password']) {
                 $errors->add('pass_match', __('ERROR: Passwords do not match.', 'uwp'));
             }
 
-            $validated_data['password'] = $data['uwp_'.$type.'_password'];
+            $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
         }
 
 

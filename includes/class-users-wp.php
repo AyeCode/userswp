@@ -310,6 +310,18 @@ class Users_WP {
         $this->loader->add_filter('uwp_cfa_extra_fields_datepicker', $form_builder, 'uwp_cfa_extra_fields_datepicker', 10, 4);
         $this->loader->add_filter('uwp_advance_custom_fields', $form_builder, 'uwp_advance_admin_custom_fields', 10, 2);
 
+        $this->loader->add_filter('uwp_form_builder_available_fields_head', $form_builder, 'uwp_register_available_fields_head', 10, 2);
+        $this->loader->add_filter('uwp_form_builder_available_fields_note', $form_builder, 'uwp_register_available_fields_note', 10, 2);
+        $this->loader->add_filter('uwp_form_builder_selected_fields_head', $form_builder, 'uwp_register_selected_fields_head', 10, 2);
+        $this->loader->add_filter('uwp_form_builder_selected_fields_note', $form_builder, 'uwp_register_selected_fields_note', 10, 2);
+
+        $this->loader->add_action('uwp_manage_available_fields', $form_builder, 'uwp_manage_register_available_fields', 10, 1);
+        $this->loader->add_action('uwp_manage_selected_fields', $form_builder, 'uwp_manage_register_selected_fields', 10, 1);
+
+        $this->loader->add_filter('uwp_register_fields', $form_builder, 'uwp_register_extra_fields', 10, 2);
+
+        $this->loader->add_action('wp_ajax_uwp_ajax_register_action', $form_builder, 'uwp_register_ajax_handler');
+
         // htmlvar not needed for fieldset and taxonomy
         $this->loader->add_filter('uwp_cfa_htmlvar_name_fieldset',$form_builder, 'return_empty_string',10,4);
         $this->loader->add_filter('uwp_cfa_htmlvar_name_taxonomy',$form_builder, 'return_empty_string',10,4);

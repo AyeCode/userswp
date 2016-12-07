@@ -96,7 +96,7 @@ class Users_WP_Profile {
     public function get_profile_social($user) {
 
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_custom_fields';
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND field_type = 'url' AND css_class LIKE '%uwp_social%' ORDER BY sort_order ASC");
 
         ?>
@@ -123,7 +123,7 @@ class Users_WP_Profile {
 
         ob_start();
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_custom_fields';
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND is_default = '0' ORDER BY sort_order ASC");
         if ($fields) {
             ?>
@@ -692,7 +692,7 @@ class Users_WP_Profile {
 
     public function uwp_extra_user_profile_fields_in_admin( $user ) {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_custom_fields';
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
         $excluded_fields = array('uwp_account_email', 'uwp_account_password', 'uwp_account_confirm_password', 'uwp_account_first_name', 'uwp_account_last_name');
         $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array('account')));
         if (!empty($fields)) {
