@@ -1865,13 +1865,7 @@ class Users_WP_Form_Builder {
                         <input type="hidden" name="site_htmlvar_name" value="<?php echo $htmlvar_name ?>"/>
                         <li>
                             <?php //$value = isset($field_info->sort_order) ? $field_info->sort_order: 0;?>
-
-                            <label for="site_title" class="uwp-tooltip-wrap">
-                                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Sort Order', 'uwp'); ?>
-                                <div class="uwp-tooltip">
-                                    <?php _e('This is the text used for the advanced search field.', 'uwp'); ?>
-                                </div>
-                            </label>
+                            
                             <div class="uwp-input-wrap">
                                 <p>No options available</p>
                             </div>
