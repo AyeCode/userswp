@@ -145,7 +145,7 @@ class Users_WP_Forms {
         do_action('uwp_before_validate', 'register');
 
         $result = $this->validate_fields($data, 'register');
-
+        
         $result = apply_filters('uwp_validate_result', $result, 'register');
 
         if (is_wp_error($result)) {
@@ -712,7 +712,7 @@ class Users_WP_Forms {
                 }
 
                 //register email
-                if ($field->htmlvar_name == 'uwp_register_email' && email_exists($sanitized_value)) {
+                if ($type == 'register' && $field->htmlvar_name == 'uwp_account_email' && email_exists($sanitized_value)) {
                     $errors->add('email_exists', __('<strong>Error</strong>: This email is already registered, please choose another one.', 'uwp'));
                 }
 
@@ -842,7 +842,6 @@ class Users_WP_Forms {
     }
 
     public function uwp_send_email( $message_type, $user_id, $login_details ) {
-
         $user_data = get_userdata($user_id);
 
         $login_page_id = uwp_get_option('login_page', false);
@@ -1038,6 +1037,12 @@ class Users_WP_Forms {
             return $errors;
 
         return get_userdata( $user->ID );
+    }
+
+    public function uwp_ajax_upload_file(){
+
+        var_dump($_FILES);
+        exit();
     }
 
 

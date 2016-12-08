@@ -204,6 +204,7 @@ class Users_WP_Activator {
 									  form_type varchar(255) NOT NULL,
 									  site_htmlvar_name varchar(255) NOT NULL,
 									  sort_order int(11) NOT NULL,
+									  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
 									  PRIMARY KEY  (id)
 									) $collate AUTO_INCREMENT=1 ;";
 

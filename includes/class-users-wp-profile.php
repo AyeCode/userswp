@@ -47,7 +47,7 @@ class Users_WP_Profile {
             <div class="uwp-profile-header-img" style="background-image: url('<?php echo $banner; ?>')">
                 <div class="uwp-banner-change-icon">
                     <i class="fa fa-camera" aria-hidden="true"></i>
-                    <div class="uwp-profile-banner-change <?php echo $banner_class; ?>">
+                    <div data-type="banner" class="uwp-profile-banner-change <?php echo $banner_class; ?>">
                     <span class="uwp-profile-banner-change-inner">
                         Update Cover Photo
                     </span>
@@ -617,83 +617,42 @@ class Users_WP_Profile {
 
         if (is_user_logged_in()) {
             $this->uwp_image_crop_modal($user);
-            $this->uwp_image_crop_js();
         }
 
     }
 
     public function uwp_image_crop_modal($user) {
 
-        if(isset($_GET['uwp_crop']) && isset($_GET['type']) && $_GET['uwp_crop'] != '' && $_GET['type'] != '') {
-            $type = sanitize_text_field($_GET['type']);
-            $image_url = esc_url_raw($_GET['uwp_crop']);
-            $style = "display: block";
-            $this->uwp_image_crop_modal_html('avatar', $style, $this->uwp_image_crop_popup($image_url, $type));
-        } else {
-            $style = "display: none";
-            $this->uwp_image_crop_modal_html('avatar', $style, $this->uwp_crop_submit_form('avatar'));
-            $this->uwp_image_crop_modal_html('banner', $style, $this->uwp_crop_submit_form('banner'));
-        }
+        $style = "display: none";
+        $this->uwp_image_crop_modal_html('avatar', $style);
+        $this->uwp_image_crop_modal_html('banner', $style);
 
     }
 
-    public function uwp_image_crop_modal_html($type, $style, $content) {
+    public function uwp_image_crop_modal_html($type, $style) {
         ?>
         <div id="uwp-<?php echo $type; ?>-modal" class="uwp-modal" style="<?php echo $style; ?>">
             <a id="uwp-<?php echo $type; ?>-modal-close" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>
             <div class="uwp-modal-content-wrap">
-                <div class="uwp-modal-content">
-                    <?php echo $content; ?>
+                <div class="uwp-modal-content" id="uwp-<?php echo $type; ?>-modal-content">
+
                 </div>
             </div>
         </div>
         <?php
     }
 
-    public function uwp_crop_submit_form($type = 'avatar') {
-        ob_start();
-        ?>
-        <form id="uwp-upload-<?php echo $type; ?>-form" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
-            <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
-            <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();">Upload <?php echo $type; ?></button>
-            <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'uwp').uwp_get_option('profile_avatar_max_size', 5); ?> MB</p>
-            <div class="uwp_upload_field" style="display: none">
-                <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" onchange="this.form.submit()" required="required" type="file" value="">
-                <button type="submit" id="uwp_<?php echo $type; ?>_submit_button" style="display: none"></button>
-            </div>
-        </form>
-        <?php
-        $output = ob_get_contents();
-        ob_end_clean();
-        return trim($output);
-    }
-
-    public function uwp_image_crop_js() {
-        if (isset($_GET['uwp_crop']) && isset($_GET['type'])) {
-            $backdrop = true;
-        } else {
-            $backdrop = false;
-        }
-        ?>
-        <script type="text/javascript">
-            jQuery(document).ready(function() {
-                <?php
-                if ($backdrop) {
-                ?>
-                jQuery(document.body).append("<div id='uwp-modal-backdrop'></div>");
-                <?php
-                }
-                ?>
-            });
-        </script>
-        <?php
-    }
 
     public function uwp_extra_user_profile_fields_in_admin( $user ) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $excluded_fields = array('uwp_account_email', 'uwp_account_password', 'uwp_account_confirm_password', 'uwp_account_first_name', 'uwp_account_last_name');
+        $excluded_fields = array(
+            'uwp_account_email',
+            'uwp_account_password',
+            'uwp_account_confirm_password',
+            'uwp_account_first_name',
+            'uwp_account_last_name'
+        );
         $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array('account')));
         if (!empty($fields)) {
             ?>
@@ -802,6 +761,71 @@ class Users_WP_Profile {
             );
         }
         return $link;
+    }
+    
+    //modify edit my profile link in admin bar
+    public function uwp_modify_admin_bar_edit_profile_url( $url, $user_id, $scheme )
+    {
+        // Makes the link to http://example.com/account
+        if (!is_admin()) {
+            $account_page = uwp_get_option('account_page', false);
+            if ($account_page) {
+                $account_page_link = get_permalink($account_page);
+                $url = $account_page_link;
+            }
+        }
+        return $url;
+    }
+
+    public function uwp_restrict_attachment_display($query) {
+        if (!is_admin()) {
+            if ( ! current_user_can( 'manage_options' ) ) {
+                $query['author'] = get_current_user_id();
+            }    
+        }
+        return $query;    
+    }
+
+    public function uwp_wp_media_restrict_file_types($file) {
+        // This bit is for the flash uploader
+        if ($file['type']=='application/octet-stream' && isset($file['tmp_name'])) {
+            $file_size = getimagesize($file['tmp_name']);
+            if (isset($file_size['error']) && $file_size['error']!=0) {
+                $file['error'] = "Unexpected Error: {$file_size['error']}";
+                return $file;
+            } else {
+                $file['type'] = $file_size['mime'];
+            }
+        }
+        list($category,$type) = explode('/',$file['type']);
+        if ('image'!=$category || !in_array($type,array('jpg','jpeg','gif','png'))) {
+            $file['error'] = "Sorry, you can only upload a .GIF, a .JPG, or a .PNG image file.";
+        } else if ($post_id = (isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : false)) {
+            if (count(get_posts("post_type=attachment&post_parent={$post_id}"))>0)
+                $file['error'] = "Sorry, you cannot upload more than one (1) image.";
+        }
+        return $file;
+    }
+
+    public function uwp_ajax_image_crop_popup(){
+        wp_enqueue_style( 'jcrop' );
+        wp_enqueue_script( 'jcrop', array( 'jquery' ) );
+        $imge_url = strip_tags(esc_sql($_POST['image_url']));
+        $type = strip_tags(esc_sql($_POST['type']));
+        
+        $output = '';
+        if ($imge_url && $type ) {
+            $output = $this->uwp_image_crop_popup($imge_url, $type);
+        }
+        echo $output;
+        exit();
+    }
+
+    public function uwp_define_ajaxurl() {
+
+        echo '<script type="text/javascript">
+           var ajaxurl = "' . admin_url('admin-ajax.php') . '";
+         </script>';
     }
 
 }

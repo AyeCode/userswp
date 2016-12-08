@@ -1786,6 +1786,10 @@ class Users_WP_Form_Builder {
         } else
             $form_type = $field_info->form_type;
 
+        if (isset($field_info->is_default)) {
+            $default = $field_info->is_default;
+        }
+
 
         if (isset($account_field_info->site_title)){
             if($account_field_info->field_type=='fieldset'){
@@ -1793,7 +1797,6 @@ class Users_WP_Form_Builder {
             }else{
                 $field_site_name = $account_field_info->site_title;
             }
-
         }
         else
             $field_site_name = $_REQUEST['site_field_title'];
@@ -1835,9 +1838,7 @@ class Users_WP_Form_Builder {
                     ?>
 
                     <?php if ($default): ?>
-                        <div title="<?php _e('Drag and drop to sort', 'uwp'); ?>"
-                             onclick="delete_register_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>','<?php echo $htmlvar_name; ?>')"
-                             class="handlediv close"><i class="fa fa-times" aria-hidden="true"></i></div>
+                        <div title="<?php _e('Default field, should not be removed.', 'uwp'); ?>" class="handlediv move uwp-default-remove"><i class="fa fa-times" aria-hidden="true"></i></div>
                     <?php else: ?>
                         <div title="<?php _e('Click to remove field', 'uwp'); ?>"
                              onclick="delete_register_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>','<?php echo $htmlvar_name; ?>')"
@@ -1864,12 +1865,9 @@ class Users_WP_Form_Builder {
 
                         <input type="hidden" name="site_htmlvar_name" value="<?php echo $htmlvar_name ?>"/>
                         <li>
-                            <?php //$value = isset($field_info->sort_order) ? $field_info->sort_order: 0;?>
-                            
                             <div class="uwp-input-wrap">
                                 <p>No options available</p>
                             </div>
-
                         </li>
 
 

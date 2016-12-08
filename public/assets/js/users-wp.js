@@ -69,3 +69,85 @@ jQuery(window).load(function() {
         });
     });
 }( jQuery, window ));
+
+(function( $, window, undefined ) {
+    jQuery(document).on('click', '#submit', function(e){
+        e.preventDefault();
+
+        var fd = new FormData();
+        var file = jQuery(document).find('input[type="file"]');
+        var caption = jQuery(this).find('input[name=img_caption]');
+        var individual_file = file[0].files[0];
+        fd.append("file", individual_file);
+        var individual_capt = caption.val();
+        fd.append("caption", individual_capt);
+        fd.append('action', 'uwp_ajax_upload_file');
+
+        jQuery.ajax({
+            type: 'POST',
+            url: fiuajax.ajaxurl,
+            data: fd,
+            contentType: false,
+            processData: false,
+            success: function(response){
+
+                console.log(response);
+            }
+        });
+    });
+}( jQuery, window ));
+
+(function( $, window, undefined ) {
+
+    $(document).ready( function() {
+        var file_frame; // variable for the wp.media file_frame
+
+        // attach a click event (or whatever you want) to some element on your page
+        $( '.uwp-profile-banner-modal-trigger' ).on( 'click', function( event ) {
+            event.preventDefault();
+
+            // if the file_frame has already been created, just reuse it
+            if ( file_frame ) {
+                file_frame.open();
+                return;
+            }
+
+            file_frame = wp.media.frames.file_frame = wp.media({
+                title: $( this ).data( 'uploader_title' ),
+                button: {
+                    text: $( this ).data( 'uploader_button_text' )
+                },
+                multiple: false, // set this to true for multiple file selection
+                /*
+                 * Here is where the main magic happens.
+                 *
+                 * We take the type, e.g. video, image, audio,
+                 * and we send it to library.type which only
+                 * shows the files of that type.
+                 */
+                library: { type : "image" }
+            });
+
+            file_frame.on( 'select', function() {
+                attachment = file_frame.state().get('selection').first().toJSON();
+
+                // do something with the file here
+                $( '.uwp-profile-banner-modal-trigger' ).hide();
+
+                var data = {
+                    'action': 'uwp_ajax_image_crop_popup',
+                    'image_url': attachment.url,
+                    'type': 'banner'
+                };
+
+                jQuery.post(ajaxurl, data, function(response) {
+                    $('#uwp-banner-modal-content').html(response);
+                });
+
+            });
+
+            file_frame.open();
+        });
+    });
+
+}( jQuery, window ));
