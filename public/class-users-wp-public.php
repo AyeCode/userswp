@@ -78,10 +78,15 @@ class Users_WP_Public {
             $current_page_id = $post->ID;
             $register_page = uwp_get_option('register_page', false);
             $account_page = uwp_get_option('account_page', false);
+            $profile_page = uwp_get_option('profile_page', false);
             
             if (( $register_page && ((int) $register_page ==  $current_page_id ) ) ||
                 ( $account_page && ((int) $account_page ==  $current_page_id ) )) {
                 wp_enqueue_style( "uwp_chosen_css", plugin_dir_url( __FILE__ ) . 'assets/css/chosen.css', array(), $this->version, 'all' );
+            }
+
+            if ($profile_page && is_user_logged_in() && ((int) $profile_page ==  $current_page_id )) {
+                wp_enqueue_media();
             }
         }
         global $wp_styles;
@@ -118,7 +123,7 @@ class Users_WP_Public {
         wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
         wp_enqueue_script( 'jcrop', array( 'jquery' ) );
         wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), null, false );
 
         if (is_page()) {
             global $post;

@@ -226,6 +226,15 @@ class Users_WP {
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
         $this->loader->add_action( 'init', $forms, 'handler' );
+        $this->loader->add_action( 'wp_ajax_uwp_ajax_upload_file', $forms, 'uwp_ajax_upload_file' );
+        $this->loader->add_action( 'wp_ajax_nopriv_uwp_ajax_upload_file', $forms, 'uwp_ajax_upload_file' );
+
+        $this->loader->add_filter( 'ajax_query_attachments_args', $profile, 'uwp_restrict_attachment_display' );
+        $this->loader->add_filter( 'wp_handle_upload_prefilter', $profile, 'uwp_wp_media_restrict_file_types' );
+
+        $this->loader->add_action( 'wp_ajax_uwp_ajax_image_crop_popup', $profile, 'uwp_ajax_image_crop_popup' );
+        $this->loader->add_action( 'wp_head', $profile, 'uwp_define_ajaxurl' );
+
         $this->loader->add_action( 'uwp_template_display_notices', $forms, 'display_notices' );
         $this->loader->add_action( 'template_redirect', $templates, 'profile_redirect', 10);
         $this->loader->add_action( 'template_redirect', $templates, 'access_checks', 20);
@@ -245,6 +254,7 @@ class Users_WP {
         $this->loader->add_filter( 'uwp_form_input_html_radio', $templates, 'uwp_form_input_radio', 10, 4 );
 
         $this->loader->add_action( 'admin_init', $templates, 'uwp_activation_redirect');
+        $this->loader->add_filter( 'edit_profile_url', $profile, 'uwp_modify_admin_bar_edit_profile_url', 10, 3);
 
         //profile page
         $this->loader->add_filter('query_vars', $profile, 'profile_query_vars', 10, 1 );
@@ -309,6 +319,18 @@ class Users_WP {
 
         $this->loader->add_filter('uwp_cfa_extra_fields_datepicker', $form_builder, 'uwp_cfa_extra_fields_datepicker', 10, 4);
         $this->loader->add_filter('uwp_advance_custom_fields', $form_builder, 'uwp_advance_admin_custom_fields', 10, 2);
+
+        $this->loader->add_filter('uwp_form_builder_available_fields_head', $form_builder, 'uwp_register_available_fields_head', 10, 2);
+        $this->loader->add_filter('uwp_form_builder_available_fields_note', $form_builder, 'uwp_register_available_fields_note', 10, 2);
+        $this->loader->add_filter('uwp_form_builder_selected_fields_head', $form_builder, 'uwp_register_selected_fields_head', 10, 2);
+        $this->loader->add_filter('uwp_form_builder_selected_fields_note', $form_builder, 'uwp_register_selected_fields_note', 10, 2);
+
+        $this->loader->add_action('uwp_manage_available_fields', $form_builder, 'uwp_manage_register_available_fields', 10, 1);
+        $this->loader->add_action('uwp_manage_selected_fields', $form_builder, 'uwp_manage_register_selected_fields', 10, 1);
+
+        $this->loader->add_filter('uwp_register_fields', $form_builder, 'uwp_register_extra_fields', 10, 2);
+
+        $this->loader->add_action('wp_ajax_uwp_ajax_register_action', $form_builder, 'uwp_register_ajax_handler');
 
         // htmlvar not needed for fieldset and taxonomy
         $this->loader->add_filter('uwp_cfa_htmlvar_name_fieldset',$form_builder, 'return_empty_string',10,4);

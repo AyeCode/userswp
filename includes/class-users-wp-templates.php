@@ -165,13 +165,21 @@ class Users_WP_Templates {
     public function uwp_template_fields($form_type) {
 
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_custom_fields';
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
 
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array($form_type)));
+        if ($form_type == 'register') {
+            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_field = '1' ORDER BY sort_order ASC", array('account')));
+        } else {
+            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array($form_type)));
+        }
 
         if (!empty($fields)) {
             foreach ($fields as $field) {
-                $this->uwp_template_fields_html($field, $form_type);
+                $count = $wpdb->get_var($wpdb->prepare("select count(*) from ".$extras_table_name." where site_htmlvar_name=%s", array($field->htmlvar_name)));
+                if ($count == 1) {
+                    $this->uwp_template_fields_html($field, $form_type);
+                }
             }
         }
     }

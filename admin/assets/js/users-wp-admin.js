@@ -138,6 +138,52 @@ jQuery(document).ready(function () {
             }
         }
     });
+
+    jQuery(".field_row_main ul.uwp_form_extras").sortable({ opacity: 0.8, placeholder: "ui-state-highlight",
+        cancel: "input,label,select",cursor: 'move', update: function() {
+
+            var order = jQuery(this).sortable("serialize") + '&update=update';
+
+            jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_register_action&create_field=true', order, function(theResponse){
+
+            });
+        }
+    });
+
+    jQuery("#uwp-form-builder-tab").find("ul li a").click(function() {
+        if(!jQuery(this).attr('id')){return;}
+        var htmlvar_name = jQuery(this).attr('id').replace('uwp-','');
+
+        var form_type = jQuery(this).closest('#uwp-form-builder-tab').find('#form_type').val();
+
+        var id = 'new'+jQuery(".field_row_main ul.uwp_form_extras li:last").index();
+
+        var manage_field_type = jQuery(this).closest('#uwp-available-fields').find(".manage_field_type").val();
+
+        if(manage_field_type == 'register'){
+
+            jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_register_action&create_field=true',{ htmlvar_name: htmlvar_name,form_type:form_type, field_id: id, field_ins_upd: 'new' },
+                function(data)
+                {
+                    console.log(id);
+                    jQuery('.field_row_main ul.uwp_form_extras').append(data);
+
+                    jQuery('#licontainer_'+htmlvar_name).find('#sort_order').val( parseInt(jQuery('#licontainer_'+htmlvar_name).index()) + 1 );
+
+                    show_hide('field_frm'+htmlvar_name);
+                    jQuery('html, body').animate({
+                        scrollTop: jQuery("#licontainer_"+htmlvar_name).offset().top
+                    }, 1000);
+
+                });
+
+            if(htmlvar_name!='fieldset'){
+                jQuery(this).closest('li').hide();
+            }
+
+        }
+
+    });
 });
 
 function save_field(id) {
@@ -223,5 +269,87 @@ function delete_field(id, nonce) {
             });
 
     }
+
+}
+
+function show_hide_register(id)
+{
+    jQuery('#'+id).toggle();
+}
+
+function delete_register_field(id, nonce,deleteid)
+{
+
+    var restore_id = id.replace('new','');
+
+    var confirmation = confirm(uwp_admin_ajax.custom_field_delete);
+
+    if(confirmation == true)
+    {
+        jQuery('#create_advance_search_li_'+deleteid).show();
+        jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_register_action&create_field=true', { field_id: id, field_ins_upd: 'delete', _wpnonce:nonce },
+            function(data)
+            {
+                jQuery('#licontainer_'+id).remove();
+
+            });
+
+        jQuery('#uwp-'+deleteid).closest('li').show();
+
+    }
+
+}
+
+function save_register_field(id)
+{
+    if(jQuery('#licontainer_'+id+' #field_title').length > 0){
+
+        var htmlvar_name = jQuery('#licontainer_'+id+' #field_title').val();
+
+        if(htmlvar_name == '')
+        {
+            alert(uwp_admin_ajax.custom_field_not_blank_var);
+
+            return false;
+        }
+    }
+
+
+
+    var fieldrequest = jQuery('#licontainer_'+id).find("select, textarea, input").serialize();
+
+    var request_data = 'create_field=true&field_ins_upd=submit&' + fieldrequest ;
+
+    jQuery.ajax({
+        'url': uwp_admin_ajax.url+'?action=uwp_ajax_register_action',
+        'type': 'POST',
+        'data':  request_data ,
+        'success': function(result){
+
+
+            if(jQuery.trim( result ) == 'HTML Variable Name should be a unique name')
+            {
+
+                alert(uwp_admin_ajax.custom_field_unique_name);
+
+            }
+            else
+            {
+                jQuery('#licontainer_'+id).replaceWith(jQuery.trim( result ));
+
+                var order = jQuery(".field_row_main ul.uwp_form_extras").sortable("serialize") + '&update=update';
+
+                jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_register_action&create_field=true', order,
+                    function(theResponse){
+                        //alert(theResponse);
+                    });
+
+                jQuery('.field_frm').hide();
+            }
+
+
+        }
+    });
+
 
 }

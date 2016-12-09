@@ -35,7 +35,7 @@ class Users_WP_Deactivator {
 
     public function delete_uwp_tables() {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_custom_fields';
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
         $sql = "DROP TABLE IF EXISTS $table_name";
         $wpdb->query($sql);
         delete_option('uwp_db_version');

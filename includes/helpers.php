@@ -1062,7 +1062,7 @@ function uwp_validate_uploads($files, $type, $url_only = true) {
     }
 
     global $wpdb;
-    $table_name = $wpdb->prefix . 'uwp_custom_fields';
+    $table_name = $wpdb->prefix . 'uwp_form_fields';
     $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
 
 

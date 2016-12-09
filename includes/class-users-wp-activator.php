@@ -30,6 +30,7 @@ class Users_WP_Activator {
         self::add_default_options();
         self::uwp_create_tables();
         self::uwp_create_default_fields();
+        self::uwp_insert_form_extras();
         self::uwp_flush_rewrite_rules();
 
         add_option('uwp_activation_redirect', 1);
@@ -149,7 +150,7 @@ class Users_WP_Activator {
 
         global $wpdb;
 
-        $table_name = $wpdb->prefix . 'uwp_custom_fields';
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
 
         $wpdb->hide_errors();
 
@@ -166,7 +167,7 @@ class Users_WP_Activator {
          */
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-        $custom_fields = "CREATE TABLE " . $table_name . " (
+        $form_fields = "CREATE TABLE " . $table_name . " (
 							  id int(11) NOT NULL AUTO_INCREMENT,
 							  form_type varchar(100) NULL,
 							  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
@@ -192,9 +193,24 @@ class Users_WP_Activator {
 							  PRIMARY KEY  (id)
 							  ) $collate";
 
-        $custom_fields = apply_filters('uwp_before_custom_field_table_create', $custom_fields);
+        $form_fields = apply_filters('uwp_before_form_field_table_create', $form_fields);
 
-        dbDelta($custom_fields);
+        dbDelta($form_fields);
+
+        $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
+
+        $form_extras = "CREATE TABLE " . $extras_table_name . " (
+									  id int(11) NOT NULL AUTO_INCREMENT,
+									  form_type varchar(255) NOT NULL,
+									  site_htmlvar_name varchar(255) NOT NULL,
+									  sort_order int(11) NOT NULL,
+									  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
+									  PRIMARY KEY  (id)
+									) $collate AUTO_INCREMENT=1 ;";
+
+        $form_extras = apply_filters('uwp_before_form_extras_table_create', $form_extras);
+
+        dbDelta($form_extras);
 
     }
 
@@ -400,6 +416,18 @@ class Users_WP_Activator {
 
         $fields[] = array(
             'form_type' => 'account',
+            'field_type' => 'text',
+            'site_title' => __('Username', 'uwp'),
+            'htmlvar_name' => 'username',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_required' => '1',
+            'is_register_field' => '1',
+        );
+
+        $fields[] = array(
+            'form_type' => 'account',
             'field_type' => 'email',
             'site_title' => __('Email', 'uwp'),
             'htmlvar_name' => 'email',
@@ -452,6 +480,61 @@ class Users_WP_Activator {
 
     public static function uwp_flush_rewrite_rules() {
         flush_rewrite_rules();
+    }
+
+    public static function uwp_insert_form_extras() {
+        global $wpdb;
+        $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
+
+        $fields = array();
+
+        $fields[] = array(
+            'form_type' => 'register',
+            'htmlvar_name' => 'uwp_account_first_name'
+        );
+
+        $fields[] = array(
+            'form_type' => 'register',
+            'htmlvar_name' => 'uwp_account_last_name'
+        );
+
+        $fields[] = array(
+            'form_type' => 'register',
+            'htmlvar_name' => 'uwp_account_username'
+        );
+
+        $fields[] = array(
+            'form_type' => 'register',
+            'htmlvar_name' => 'uwp_account_email'
+        );
+
+        $fields[] = array(
+            'form_type' => 'register',
+            'htmlvar_name' => 'uwp_account_password'
+        );
+
+        $fields[] = array(
+            'form_type' => 'register',
+            'htmlvar_name' => 'uwp_account_confirm_password'
+        );
+
+        foreach ($fields as $field) {
+            $last_order = $wpdb->get_var("SELECT MAX(sort_order) as last_order FROM " . $extras_table_name);
+            $sort_order = (int)$last_order + 1;
+            $wpdb->query(
+                $wpdb->prepare(
+
+                    "insert into " . $extras_table_name . " set
+					form_type = %s,
+					site_htmlvar_name = %s,
+					sort_order = %s",
+                    array($field['form_type'],
+                        $field['htmlvar_name'],
+                        $sort_order
+                    )
+                )
+            );
+        }
     }
 
 }
