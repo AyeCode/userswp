@@ -112,6 +112,7 @@
         position: relative;
         text-align: left;
         height: 60px;
+        font-size: 13px;
         i {
           position: absolute;
           color: #fff;
@@ -183,6 +184,7 @@
     position: relative;
     top: 3px;
     word-wrap: normal;
+    cursor: pointer;
     .uwp-profile-banner-change-inner {
       -webkit-font-smoothing: antialiased;
       padding-left: 26px;

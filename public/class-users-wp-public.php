@@ -123,7 +123,7 @@ class Users_WP_Public {
         wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
         wp_enqueue_script( 'jcrop', array( 'jquery' ) );
         wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), null, false );
 
         if (is_page()) {
             global $post;

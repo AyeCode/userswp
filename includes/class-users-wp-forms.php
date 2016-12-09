@@ -591,7 +591,7 @@ class Users_WP_Forms {
             $image_url = str_replace($upload_url, $upload_path, $image_url);
             $ext = pathinfo($image_url, PATHINFO_EXTENSION); // to get extension
             $name =pathinfo($image_url, PATHINFO_FILENAME); //file name without extension
-            $thumb_image_name = $name.'_uwp_thumb'.'.'.$ext;
+            $thumb_image_name = $name.'_uwp_'.$type.'_thumb'.'.'.$ext;
             $thumb_image_location = str_replace($name.'.'.$ext, $thumb_image_name, $image_url);
             //Get the new coordinates to crop the image.
             $x = $data["x"];
