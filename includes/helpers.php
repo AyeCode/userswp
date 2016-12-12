@@ -733,6 +733,8 @@ function uwp_resizeImage($image,$width,$height,$scale) {
 }
 
 function uwp_resizeThumbnailImage($thumb_image_name, $image, $width, $height, $start_width, $start_height, $scale){
+    // ignore image createion warnings
+    @ini_set('gd.jpeg_ignore_warning', 1);
     list($imagewidth, $imageheight, $imageType) = getimagesize($image);
     $imageType = image_type_to_mime_type($imageType);
 

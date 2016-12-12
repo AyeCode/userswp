@@ -112,6 +112,7 @@ jQuery(window).load(function() {
                 };
 
                 jQuery.post(ajaxurl, data, function(response) {
+                    console.log(response);
                     resp = JSON.parse(response);
                     uwp_full_width = resp['uwp_full_width'];
                     uwp_full_height = resp['uwp_full_height'];
@@ -128,7 +129,8 @@ jQuery(window).load(function() {
                         onChange: showPreview,
                         onSelect: updateCoords,
                         aspectRatio: uwp_aspect_ratio,
-                        setSelect: [ uwp_crop_left, uwp_crop_top, uwp_crop_right, uwp_crop_bottom ]
+                        setSelect: [ uwp_crop_left, uwp_crop_top, uwp_crop_right, uwp_crop_bottom ],
+                        trueSize: [uwp_thumb_width,uwp_thumb_height]
                     });
                 });
 
