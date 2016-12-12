@@ -52,12 +52,27 @@ function uwp_get_users() {
     }
 
     $args = array(
-        'number' => '20'
+        'number' => 20,
+        'search'         => "*{$keyword}*",
+        'search_columns' => array(
+            'user_login',
+            'user_nicename',
+            'user_email',
+        ),
+        'meta_query' => array(
+            'relation' => 'OR',
+            array(
+                'key'     => 'first_name',
+                'value'   => $keyword,
+                'compare' => 'LIKE'
+            ),
+            array(
+                'key'     => 'last_name',
+                'value'   => $keyword,
+                'compare' => 'LIKE'
+            )
+        )
     );
-
-    if ($keyword) {
-        $args['search'] = $keyword;
-    }
 
     if ($sort_by) {
         switch ($sort_by) {
@@ -81,7 +96,9 @@ function uwp_get_users() {
         }
     }
 
-    $users = get_users($args);
+    $users_query = new WP_User_Query($args);
+    $users = $users_query->get_results();
+
     foreach ( $users as $user ) {
         $uwp_users[] = array(
             'id' => $user->ID,
@@ -927,10 +944,12 @@ function handle_file_upload( $field, $files ) {
                     return new WP_Error( 'validation-error', sprintf( __( 'Allowed files types are: %s', 'uwp' ),  $allowed_error_text) );
             }
 
-            $max_size = uwp_get_option('profile_avatar_max_size', 5);
-            $allowed_size = $max_size*pow(1024,2);
-            if ( $file_to_upload['size'] >  $allowed_size)
-                return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. uwp_formatSizeUnits($allowed_size), 'uwp' ) );
+            $max_upload_size = wp_max_upload_size();
+            if ( ! $max_upload_size ) {
+                $max_upload_size = 0;
+            }
+            if ( $file_to_upload['size'] >  $max_upload_size)
+                return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. uwp_formatSizeUnits($max_upload_size), 'uwp' ) );
 
 
             $uploaded_file = uwp_upload_file( $file_to_upload, array( 'file_key' => $file_key ) );

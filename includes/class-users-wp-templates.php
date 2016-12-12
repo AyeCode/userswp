@@ -169,15 +169,28 @@ class Users_WP_Templates {
         $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
 
         if ($form_type == 'register') {
-            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_field = '1' ORDER BY sort_order ASC", array('account')));
+            $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.is_active = '1' AND fields.is_register_field = '1' ORDER BY extras.sort_order ASC", array('account')));
+            //$fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_field = '1' ORDER BY sort_order ASC", array('account')));
+        } elseif ($form_type == 'account') {
+            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_only_field = '0' ORDER BY sort_order ASC", array('account')));
         } else {
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array($form_type)));
         }
 
         if (!empty($fields)) {
             foreach ($fields as $field) {
-                $count = $wpdb->get_var($wpdb->prepare("select count(*) from ".$extras_table_name." where site_htmlvar_name=%s", array($field->htmlvar_name)));
-                if ($count == 1) {
+                if ($form_type == 'register') {
+                    $enable_password = uwp_get_option('enable_register_password', false);
+                    if ($enable_password != '1') {
+                        if ( ($field->htmlvar_name == 'uwp_account_password') OR ($field->htmlvar_name == 'uwp_account_confirm_password') ) {
+                            continue;
+                        }
+                    }
+                    $count = $wpdb->get_var($wpdb->prepare("select count(*) from ".$extras_table_name." where site_htmlvar_name=%s", array($field->htmlvar_name)));
+                    if ($count == 1) {
+                        $this->uwp_template_fields_html($field, $form_type);
+                    }
+                } else {
                     $this->uwp_template_fields_html($field, $form_type);
                 }
             }

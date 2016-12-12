@@ -46,10 +46,12 @@ class Users_WP_Forms {
         $redirect_to = apply_filters('uwp_login_redirect', $redirect_to);
 
         if (isset($_POST['uwp_register_submit'])) {
-            $_POST['auto_login'] = apply_filters('uwp_register_auto_login', true);
+            $auto_login = uwp_get_option('enable_auto_login', false);
             $errors = $this->process_register($_POST, $_FILES);
-            $message = __('Account registered successfully.', 'uwp');
-            if ($_POST['auto_login']) {
+            if (!is_wp_error($errors)) {
+                $message = $errors;
+            }
+            if ($auto_login == '1') {
                 $redirect = $redirect_to;
             }
             $processed = true;
@@ -242,9 +244,9 @@ class Users_WP_Forms {
             return $errors;
 
 
+        $auto_login = uwp_get_option('enable_auto_login', false);
 
-
-        if ($data['auto_login']) {
+        if ($auto_login == '1') {
             $res = wp_signon(
                 array(
                     'user_login' => $result['uwp_account_username'],
@@ -262,7 +264,17 @@ class Users_WP_Forms {
                 exit();
             }
         } else {
-            return true;
+            $login_page = uwp_get_option('login_page', false);
+            if ($login_page) {
+                $login_page_url = get_permalink($login_page);
+            } else {
+                $login_page_url = wp_login_url();
+            }
+            if ($generated_password) {
+                return sprintf(__('Account registered successfully. A password has been generated and mailed to your registered Email ID. Please login <a href="%s">here</a>.', 'uwp'), $login_page_url);
+            } else {
+                return sprintf(__('Account registered successfully. Please login <a href="%s">here</a>', 'uwp'), $login_page_url);
+            }
         }
 
 
@@ -492,13 +504,26 @@ class Users_WP_Forms {
 
         $result = array_merge( $result, $uploads_result );
 
+
         $args = array(
-            'ID' => $current_user_id,
-            'user_email'   => $result['uwp_account_email'],
-            'display_name' => $result['uwp_account_first_name'] . ' ' . $result['uwp_account_last_name'],
-            'first_name'   => $result['uwp_account_first_name'],
-            'last_name'    => $result['uwp_account_last_name']
+            'ID' => $current_user_id
         );
+
+        if (isset($result['uwp_account_email'])) {
+            $args['user_email'] = $result['uwp_account_email'];
+        }
+
+        if (isset($result['uwp_account_first_name']) && isset($result['uwp_account_last_name'])) {
+            $args['display_name'] = $result['uwp_account_first_name'] . ' ' . $result['uwp_account_last_name'];
+        }
+
+        if (isset($result['uwp_account_first_name'])) {
+            $args['first_name'] = $result['uwp_account_first_name'];
+        }
+
+        if (isset($result['uwp_account_last_name'])) {
+            $args['last_name'] = $result['uwp_account_last_name'];
+        }
 
         if (isset($result['password'])) {
             $args['user_pass'] = $result['password'];
@@ -625,15 +650,27 @@ class Users_WP_Forms {
 
         if ($type == 'register') {
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' AND is_register_field = '1' ORDER BY sort_order ASC", array('account')));
+        } elseif ($type == 'account') {
+            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' AND is_register_only_field = '0' ORDER BY sort_order ASC", array('account')));
         } else {
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
         }
 
 
         $validated_data = array();
+        $enable_password = uwp_get_option('enable_register_password', false);
 
         if (!empty($fields)) {
             foreach ($fields as $field) {
+
+                if ($type == 'register') {
+                    if ($enable_password != '1') {
+                        if ( ($field->htmlvar_name == 'uwp_account_password') OR ($field->htmlvar_name == 'uwp_account_confirm_password') ) {
+                            continue;
+                        }
+                    }
+                }
+
                 $value = $data[$field->htmlvar_name];
                 $sanitized_value = $value;
 
@@ -704,7 +741,12 @@ class Users_WP_Forms {
 
 
                 if ($field->is_required == 1 && $sanitized_value == '') {
-                    $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'uwp'));
+                    if ($field->required_msg) {
+                        $errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->site_title.' '.$field->required_msg, 'uwp'));
+                    } else {
+                        $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'uwp'));
+                    }
+
                 }
 
                 if ($field->field_type == 'email' && !is_email($sanitized_value)) {
@@ -750,7 +792,7 @@ class Users_WP_Forms {
             $password_type = 'account';
         }
 
-        if ($type == 'login' || $type == 'register' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
+        if ($type == 'login' || ($type == 'register' && $enable_password == '1') || ($type == 'account' && !empty( $data['uwp_account_password']))) {
             //check password
             if( empty( $data['uwp_'.$password_type.'_password'] ) ) {
                 $errors->add( 'empty_password', __( 'Please enter a password', 'uwp' ) );
@@ -763,7 +805,7 @@ class Users_WP_Forms {
             $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
         }
 
-        if ($type == 'register' || $type == 'reset' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
+        if (($type == 'register' && $enable_password == '1') || $type == 'reset' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
             //check password
             if ($data['uwp_'.$password_type.'_password'] != $data['uwp_'.$password_type.'_confirm_password']) {
                 $errors->add('pass_match', __('ERROR: Passwords do not match.', 'uwp'));
@@ -1039,11 +1081,11 @@ class Users_WP_Forms {
         return get_userdata( $user->ID );
     }
 
-    public function uwp_ajax_upload_file(){
-
-        var_dump($_FILES);
-        exit();
-    }
+//    public function uwp_ajax_upload_file(){
+//
+//        var_dump($_FILES);
+//        exit();
+//    }
 
 
 }

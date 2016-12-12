@@ -69,7 +69,6 @@ class Users_WP_Activator {
         $settings['enable_profile_body'] = '1';
         $settings['enable_profile_posts_tab'] = '1';
         $settings['enable_profile_comments_tab'] = '1';
-        $settings['profile_avatar_max_size'] = '5';
 
         //notifications
 
@@ -182,6 +181,7 @@ class Users_WP_Activator {
 							  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_required enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_register_field enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_register_only_field enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  required_msg varchar(255) NULL DEFAULT NULL,
 							  show_in text NULL DEFAULT NULL,
 							  extra_fields text NULL DEFAULT NULL,
@@ -202,6 +202,7 @@ class Users_WP_Activator {
         $form_extras = "CREATE TABLE " . $extras_table_name . " (
 									  id int(11) NOT NULL AUTO_INCREMENT,
 									  form_type varchar(255) NOT NULL,
+									  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
 									  site_htmlvar_name varchar(255) NOT NULL,
 									  sort_order int(11) NOT NULL,
 									  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
@@ -223,7 +224,7 @@ class Users_WP_Activator {
         $fields = apply_filters('uwp_before_default_custom_fields_saved', $fields);
 
         foreach ($fields as $field_index => $field) {
-            $form_builder->uwp_custom_field_save($field);
+            $form_builder->uwp_admin_form_field_save($field);
         }
     }
 
@@ -424,6 +425,7 @@ class Users_WP_Activator {
             'is_default' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
+            'is_register_only_field' => '1',
         );
 
         $fields[] = array(
@@ -490,31 +492,43 @@ class Users_WP_Activator {
 
         $fields[] = array(
             'form_type' => 'register',
+            'field_type' => 'text',
+            'is_default' => '1',
             'htmlvar_name' => 'uwp_account_first_name'
         );
 
         $fields[] = array(
             'form_type' => 'register',
+            'field_type' => 'text',
+            'is_default' => '1',
             'htmlvar_name' => 'uwp_account_last_name'
         );
 
         $fields[] = array(
             'form_type' => 'register',
+            'field_type' => 'text',
+            'is_default' => '1',
             'htmlvar_name' => 'uwp_account_username'
         );
 
         $fields[] = array(
             'form_type' => 'register',
+            'field_type' => 'email',
+            'is_default' => '1',
             'htmlvar_name' => 'uwp_account_email'
         );
 
         $fields[] = array(
             'form_type' => 'register',
+            'field_type' => 'password',
+            'is_default' => '1',
             'htmlvar_name' => 'uwp_account_password'
         );
 
         $fields[] = array(
             'form_type' => 'register',
+            'field_type' => 'password',
+            'is_default' => '1',
             'htmlvar_name' => 'uwp_account_confirm_password'
         );
 
@@ -525,10 +539,15 @@ class Users_WP_Activator {
                 $wpdb->prepare(
 
                     "insert into " . $extras_table_name . " set
-					form_type = %s,
-					site_htmlvar_name = %s,
-					sort_order = %s",
-                    array($field['form_type'],
+                        form_type = %s,
+                        field_type = %s,
+                        is_default = %s,
+                        site_htmlvar_name = %s,
+                        sort_order = %s",
+                    array(
+                        $field['form_type'],
+                        $field['field_type'],
+                        $field['is_default'],
                         $field['htmlvar_name'],
                         $sort_order
                     )

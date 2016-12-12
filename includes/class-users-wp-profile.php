@@ -43,6 +43,7 @@ class Users_WP_Profile {
         ?>
         <div class="uwp-profile-header">
             <div class="uwp-profile-header-img" style="background-image: url('<?php echo $banner; ?>')">
+            <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID)) { ?>
                 <div class="uwp-banner-change-icon">
                     <i class="fa fa-camera" aria-hidden="true"></i>
                     <div data-type="banner" class="uwp-profile-banner-change <?php echo $trigger_class; ?>">
@@ -51,15 +52,18 @@ class Users_WP_Profile {
                     </span>
                     </div>
                 </div>
+            <?php } ?>
             </div>
             <div class="uwp-profile-avatar">
                 <?php echo $avatar; ?>
-                <div class="uwp-profile-avatar-change">
-                    <div class="uwp-profile-avatar-change-inner">
-                        <i class="fa fa-camera" aria-hidden="true"></i>
-                        <a id="uwp-profile-picture-change" data-type="avatar" class="<?php echo $trigger_class; ?>" href="#">Update Profile Picture</a>
+                <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID)) { ?>
+                    <div class="uwp-profile-avatar-change">
+                        <div class="uwp-profile-avatar-change-inner">
+                            <i class="fa fa-camera" aria-hidden="true"></i>
+                            <a id="uwp-profile-picture-change" data-type="avatar" class="<?php echo $trigger_class; ?>" href="#">Update Profile Picture</a>
+                        </div>
                     </div>
-                </div>
+                <?php } ?>
             </div>
         </div>
         <?php
@@ -133,11 +137,16 @@ class Users_WP_Profile {
                         // see Users_WP_Forms -> uwp_save_user_extra_fields reason for replacing key
                         $key = str_replace('uwp_register_', 'uwp_account_', $key);
                         $value = uwp_get_usermeta($user->ID, $key, false);
+                        if ($field->field_icon) {
+                            $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
+                        } else {
+                            $icon = '';
+                        }
 
                         if ($value) {
                             ?>
                             <tr>
-                                <td class="uwp-profile-extra-key"><?php echo $field->site_title; ?></td>
+                                <td class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?></td>
                                 <td class="uwp-profile-extra-value"><?php echo $value; ?></td>
                             </tr>
                             <?php
@@ -156,25 +165,30 @@ class Users_WP_Profile {
     public function get_profile_tabs($user) {
 
         $tabs = array();
-        
+
+        // allowed tabs
+        $allowed_tabs = uwp_get_option('enable_profile_tabs', array());
+
+        if (!is_array($allowed_tabs)) {
+            $allowed_tabs = array();
+        }
+
         $extra = $this->get_profile_extra($user);
-        if ($extra) {
-            $tabs['about']  = array(
-                'title' => __( 'About', 'uwp' ),
+        if (in_array('more_info', $allowed_tabs) && $extra) {
+            $tabs['more_info']  = array(
+                'title' => __( 'More Info', 'uwp' ),
                 'count' => 0
             );
         }
 
-        $enable_profile_posts_tab = uwp_get_option('enable_profile_posts_tab', false);
-        if ($enable_profile_posts_tab == '1') {
+        if (in_array('posts', $allowed_tabs)) {
             $tabs['posts']  = array(
                 'title' => __( 'Posts', 'uwp' ),
                 'count' => uwp_post_count($user->ID, 'post')
             );
         }
 
-        $enable_profile_comments_tab = uwp_get_option('enable_profile_comments_tab', false);
-        if ($enable_profile_comments_tab == '1') {
+        if (in_array('comments', $allowed_tabs)) {
             $tabs['comments'] = array(
                 'title' => __( 'Comments', 'uwp' ),
                 'count' => uwp_comment_count($user->ID)
@@ -260,22 +274,41 @@ class Users_WP_Profile {
         <?php
     }
 
-    public function get_profile_about($user) {
+    public function get_profile_more_info($user) {
+        $allowed_tabs = uwp_get_option('enable_profile_tabs', array());
+
+        if (!is_array($allowed_tabs)) {
+            $allowed_tabs = array();
+        }
+        if (!in_array('more_info', $allowed_tabs)) {
+            return;
+        }
+        
         $extra = $this->get_profile_extra($user);
         echo $extra;
     }
     
     public function get_profile_posts($user) {
-        $enable_profile_posts_tab = uwp_get_option('enable_profile_posts_tab', false);
-        if ($enable_profile_posts_tab != '1') {
-            return;
+        
+        $allowed_tabs = uwp_get_option('enable_profile_tabs', array());
+
+        if (!is_array($allowed_tabs)) {
+            $allowed_tabs = array();
         }
+        if (!in_array('posts', $allowed_tabs)) {
+             return;   
+        }
+
         uwp_generic_tab_content($user, 'post', __('Posts', 'uwp'));
     }
 
     public function get_profile_comments($user) {
-        $enable_profile_comments_tab = uwp_get_option('enable_profile_comments_tab', false);
-        if ($enable_profile_comments_tab != '1') {
+        $allowed_tabs = uwp_get_option('enable_profile_tabs', array());
+
+        if (!is_array($allowed_tabs)) {
+            $allowed_tabs = array();
+        }
+        if (!in_array('comments', $allowed_tabs)) {
             return;
         }
         ?>
@@ -622,6 +655,7 @@ class Users_WP_Profile {
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
         $excluded_fields = array(
+            'uwp_account_username',
             'uwp_account_email',
             'uwp_account_password',
             'uwp_account_confirm_password',
@@ -635,7 +669,7 @@ class Users_WP_Profile {
             <table class="form-table">
             <?php
             foreach ($fields as $field) {
-                if (in_array($field->htmlvar_name, $excluded_fields)) {
+                if (in_array($field->htmlvar_name, $excluded_fields) || $field->field_type == 'fieldset') {
                     continue;
                 }
                 $option_values_arr = uwp_string_values_to_options($field->option_values, true);

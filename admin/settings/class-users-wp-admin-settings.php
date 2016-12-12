@@ -524,7 +524,15 @@ class Users_WP_Admin_Settings {
                         'enable_register_password' => array(
                             'id'   => 'enable_register_password',
                             'name' => __( 'Display Password field in Regsiter Form', 'uwp' ),
-                            'desc' => '',
+                            'desc' => 'If Password field not enabled a random password will be generated and emailed.',
+                            'type' => 'checkbox',
+                            'std'  => '1',
+                            'class' => 'uwp_label_inline',
+                        ),
+                        'enable_auto_login' => array(
+                            'id'   => 'enable_auto_login',
+                            'name' => __( 'Enable auto login', 'uwp' ),
+                            'desc' => 'If enabled user will be logged in automatically after registration.',
                             'type' => 'checkbox',
                             'std'  => '1',
                             'class' => 'uwp_label_inline',
@@ -573,29 +581,15 @@ class Users_WP_Admin_Settings {
                             'std'  => '1',
                             'class' => 'uwp_label_inline',
                         ),
-                        'enable_profile_posts_tab' => array(
-                            'id'   => 'enable_profile_posts_tab',
-                            'name' => __( 'Display Posts Tab in Profile', 'uwp' ),
-                            'desc' => '',
-                            'type' => 'checkbox',
-                            'std'  => '1',
-                            'class' => 'uwp_label_inline',
-                        ),
-                        'enable_profile_comments_tab' => array(
-                            'id'   => 'enable_profile_comments_tab',
-                            'name' => __( 'Display Comments Tab in Profile', 'uwp' ),
-                            'desc' => '',
-                            'type' => 'checkbox',
-                            'std'  => '1',
-                            'class' => 'uwp_label_inline',
-                        ),
-                        'profile_avatar_max_size' => array(
-                            'id' => 'profile_avatar_max_size',
-                            'name' => __( 'Profile Max upload file size(in mb)', 'uwp' ),
-                            'desc' => "Maximum upload file size in MB, 1 MB = 1024 KB. Must be greater then 0(ZERO), Example: 5. This setting will be used for Avatar and Banner image uploads",
-                            'type' => 'number',
-                            'size' => 'regular',
-                            'placeholder' => __( 'Profile Max upload file size(in mb)', 'uwp' )
+                        'enable_profile_tabs' => array(
+                            'id' => 'enable_profile_tabs',
+                            'name' => __( 'Choose the tabs to display in Profile', 'uwp' ),
+                            'desc' => __( 'Choose the tabs to display in UsersWP Profile', 'uwp' ),
+                            'multiple'    => true,
+                            'chosen'      => true,
+                            'type'        => 'select',
+                            'options' =>   $this->uwp_availble_tab_items(),
+                            'placeholder' => __( 'Select Tabs', 'uwp' )
                         ),
                     )
                 ),
@@ -748,6 +742,18 @@ class Users_WP_Admin_Settings {
         add_settings_error( 'uwp-notices', '', __( 'Settings updated.', 'uwp' ), 'updated' );
 
         return $output;
+    }
+
+    public function uwp_availble_tab_items() {
+        $tabs_arr = array(
+            'more_info' => __( 'More Info', 'uwp' ),
+            'posts' => __( 'Posts', 'uwp' ),
+            'comments' => __( 'Comments', 'uwp' ),
+        );
+
+        $tabs_arr = apply_filters('uwp_availble_tab_items', $tabs_arr);
+
+        return $tabs_arr;
     }
 
 }
