@@ -133,10 +133,39 @@ class Users_WP_Profile {
                 <table class="uwp-profile-extra-table">
                     <?php
                     foreach ($fields as $field) {
-                        $key = $field->htmlvar_name;
-                        // see Users_WP_Forms -> uwp_save_user_extra_fields reason for replacing key
-                        $key = str_replace('uwp_register_', 'uwp_account_', $key);
-                        $value = uwp_get_usermeta($user->ID, $key, false);
+                        $option_values_arr = array();
+                        if ($field->field_type == 'select' || $field->field_type == 'multiselect') {
+                            $option_values_arr = uwp_string_values_to_options($field->option_values, true);
+                        }
+
+                        $value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
+                        if ($field->field_type == 'select') {
+                            if (!empty($value)) {
+                                $data = $this->uwp_array_search($option_values_arr, 'value', $value);
+                                $value = $data[0]['label'];
+                            } else {
+                                $value = '';
+                            }
+
+                        }
+                        if ($field->field_type == 'multiselect' && !empty($value)) {
+                            if (!empty($value) && is_array($value)) {
+                                $array_value = array();
+                                foreach ($value as $v) {
+                                    $data = $this->uwp_array_search($option_values_arr, 'value', $v);
+                                    $array_value[] = $data[0]['label'];
+                                }
+                                $value = implode(', ', $array_value);
+                            } else {
+                                $value = '';
+                            }
+                        }
+
+                        if ($field->field_type == 'file' && !empty($value)) {
+                            $value = '<a href="'.$value.'">'.basename( $value ).'</a>';
+                        }
+
+
                         if ($field->field_icon) {
                             $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
                         } else {
@@ -672,7 +701,10 @@ class Users_WP_Profile {
                 if (in_array($field->htmlvar_name, $excluded_fields) || $field->field_type == 'fieldset') {
                     continue;
                 }
-                $option_values_arr = uwp_string_values_to_options($field->option_values, true);
+                $option_values_arr = array();
+                if ($field->field_type == 'select' || $field->field_type == 'select') {
+                    $option_values_arr = uwp_string_values_to_options($field->option_values, true);    
+                }
                 ?>
                     <tr>
                         <th><?php echo $field->site_title; ?></th>

@@ -169,10 +169,9 @@ class Users_WP_Templates {
         $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
 
         if ($form_type == 'register') {
-            $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.is_active = '1' AND fields.is_register_field = '1' ORDER BY extras.sort_order ASC", array('account')));
-            //$fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_field = '1' ORDER BY sort_order ASC", array('account')));
+            $fields = get_register_form_fields();
         } elseif ($form_type == 'account') {
-            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_only_field = '0' ORDER BY sort_order ASC", array('account')));
+            $fields = get_account_form_fields();
         } else {
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array($form_type)));
         }
@@ -332,8 +331,11 @@ class Users_WP_Templates {
 
                 <input name="<?php echo $field->htmlvar_name;?>"
                        id="<?php echo $field->htmlvar_name;?>"
+                       placeholder="<?php echo $field->site_title; ?>"
                        title="<?php echo $field->site_title; ?>"
-                       value="<?php echo esc_attr($value);?>" type="text" class="uwp_textfield"/>
+                       type="text"
+                    <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                       value="<?php echo esc_attr($value);?>" class="uwp_textfield"/>
 
                 <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
                 <?php if ($field->is_required) { ?>
@@ -341,6 +343,56 @@ class Users_WP_Templates {
                 <?php } ?>
             </div>
 
+            <?php
+            $html = ob_get_clean();
+        }
+
+        return $html;
+    }
+    
+    public function uwp_form_input_time($html, $field, $value, $form_type){
+
+        if(has_filter("uwp_form_input_html_time_{$field->htmlvar_name}")){
+            
+            $html = apply_filters("uwp_form_input_html_time_{$field->htmlvar_name}",$html, $field, $value, $form_type);
+        }
+
+        // If no html then we run the standard output.
+        if(empty($html)) {
+
+            ob_start(); // Start  buffering;
+            
+            if ($value != '')
+                $value = date('H:i', strtotime($value));
+            ?>
+            <script type="text/javascript">
+                jQuery(document).ready(function () {
+
+                    jQuery('#<?php echo $field->htmlvar_name;?>').timepicker({
+                        showPeriod: true,
+                        showLeadingZero: true
+                    });
+                });
+            </script>
+            <div id="<?php echo $field->htmlvar_name;?>_row"
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp-fieldset-details">
+                <label>
+                    <?php $site_title = __($field->site_title, 'uwp');
+                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                    <?php if ($field->is_required) echo '<span>*</span>';?>
+                </label>
+                <input readonly="readonly" name="<?php echo $field->htmlvar_name;?>"
+                       id="<?php echo $field->htmlvar_name;?>" 
+                       value="<?php echo esc_attr($value);?>"
+                       placeholder="<?php echo $field->site_title; ?>"
+                       type="text" 
+                       class="uwp_textfield"/>
+
+                <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
+                <?php if ($field->is_required) { ?>
+                    <span class="uwp_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>
+                <?php } ?>
+            </div>
             <?php
             $html = ob_get_clean();
         }

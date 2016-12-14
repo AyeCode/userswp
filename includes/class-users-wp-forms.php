@@ -300,7 +300,7 @@ class Users_WP_Forms {
 
         do_action('uwp_after_validate', 'login');
 
-        if ($data['remember_me'] == 'forever') {
+        if (isset($data['remember_me']) && $data['remember_me'] == 'forever') {
             $remember_me = true;
         } else {
             $remember_me = false;

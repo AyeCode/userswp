@@ -1703,7 +1703,7 @@ class Users_WP_Form_Builder {
 
                         <a id="uwp-<?php echo $field['htmlvar_name'];?>"
                            class="uwp-draggable-form-items uwp-<?php echo $field['field_type'];?>"
-                           href="javascript:void(0);">
+                           href="javascript:void(0);" data-type="<?php echo $field['field_type'];?>">
 
                             <?php if (isset($field['field_icon']) && strpos($field['field_icon'], 'fa fa-') !== false) {
                                 echo '<i class="'.$field['field_icon'].'" aria-hidden="true"></i>';
@@ -1788,16 +1788,19 @@ class Users_WP_Form_Builder {
         global $wpdb;
 
         $table_name = $wpdb->prefix . 'uwp_form_fields';
-
         $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
 
         $cf = $result_str;
-        if (!is_object($cf)) {
+        if (!is_object($cf) && (is_int($cf) || ctype_digit($cf))) {
             $field_info = $wpdb->get_row($wpdb->prepare("select * from " . $extras_table_name . " where id= %d", array($cf)));
-        } else {
-            $field_info = $cf;
+        } elseif(is_object($cf)) {
+            //$field_info = $cf;
             $result_str = $cf->id;
+            $field_info = $wpdb->get_row($wpdb->prepare("select * from " . $extras_table_name . " where id= %d", array((int) $cf->id)));
+        } else {
+            $field_info = false;
         }
+
 
         if (isset($request['field_type']) && $request['field_type'] != '')
             $field_type = esc_attr($request['field_type']);
@@ -1805,36 +1808,40 @@ class Users_WP_Form_Builder {
             $field_type = $field_info->field_type;
 
 
-        $account_field_info = $wpdb->get_row($wpdb->prepare("select * from " . $table_name . " where htmlvar_name= %s", array($field_info->site_htmlvar_name)));
+        $field_site_name = '';
+        if (isset($request['site_title'])) {
+            $field_site_name = $request['site_title'];
+        }
 
-        $field_info = stripslashes_deep($field_info); // strip slashes
+        if ($field_info) {
+            $account_field_info = $wpdb->get_row($wpdb->prepare("select * from " . $table_name . " where htmlvar_name= %s", array($field_info->site_htmlvar_name)));
+            if (isset($account_field_info->site_title)) {
+                if ($account_field_info->field_type == 'fieldset') {
+                    $field_site_name = __('Fieldset:', 'uwp') . ' ' . $account_field_info->site_title;
+                } else {
+                    $field_site_name = $account_field_info->site_title;
+                }
+            }
+            $field_info = stripslashes_deep($field_info); // strip slashes
+        }
 
-        if (!isset($field_info->form_type)) {
+        if (isset($request['form_type'])) {
             $form_type = esc_attr($request['form_type']);
-        } else
+        } else {
             $form_type = $field_info->form_type;
+        }
 
-        if (isset($field_info->is_default)) {
+        if (isset($request['is_default']) && $request['is_default'] != '') {
+            $default = esc_attr($request['is_default']);
+        } else {
             $default = $field_info->is_default;
         }
 
-
-        if (isset($account_field_info->site_title)){
-            if($account_field_info->field_type=='fieldset'){
-                $field_site_name = __('Fieldset:', 'uwp').' '. $account_field_info->site_title;
-            }else{
-                $field_site_name = $account_field_info->site_title;
-            }
-        }
-        else
-            $field_site_name = $request['site_title'];
-
-
-        if (isset($request['htmlvar_name']) && $request['htmlvar_name'] != '')
+        if (isset($request['htmlvar_name']) && $request['htmlvar_name'] != '') {
             $htmlvar_name = esc_attr($request['htmlvar_name']);
-        else
+        } else {
             $htmlvar_name = $field_info->site_htmlvar_name;
-
+        }
 
         if(isset($htmlvar_name)){
             if(!is_object($field_info)){$field_info = new stdClass();}
@@ -1893,31 +1900,12 @@ class Users_WP_Form_Builder {
                     <ul class="widefat post fixed" style="width:100%;">
 
                         <input type="hidden" name="site_htmlvar_name" value="<?php echo $htmlvar_name ?>"/>
-<!--                        --><?php //if ($field_type == 'fieldset') { ?>
-<!--                        <li>-->
-<!--                            --><?php //$value = isset($field_info->site_title) ? $field_info->site_title: '';?>
-<!---->
-<!--                            <label for="site_title" class="uwp-tooltip-wrap">-->
-<!--                                <i class="fa fa-info-circle" aria-hidden="true"></i> --><?php //_e('Frontend  title', 'uwp'); ?>
-<!--                                <div class="uwp-tooltip">-->
-<!--                                    --><?php //_e('This is the Frontend title.', 'uwp'); ?>
-<!--                                </div>-->
-<!--                            </label>-->
-<!--                            <div class="uwp-input-wrap">-->
-<!---->
-<!--                                <input type="text"-->
-<!--                                       name="site_title" id="site_title"-->
-<!--                                       value="--><?php //echo esc_attr( $value );?><!--"/>-->
-<!--                            </div>-->
-<!---->
-<!--                        </li>-->
-<!--                        --><?php //} else { ?>
+
                         <li>
                             <div class="uwp-input-wrap">
                                 <p>No options available</p>
                             </div>
                         </li>
-<!--                        --><?php //} ?>
 
                         <li>
                             <div class="uwp-input-wrap">
@@ -1970,6 +1958,7 @@ class Users_WP_Form_Builder {
 
 
                 $_REQUEST['site_field_id'] = isset($_REQUEST['field_id']) ? sanitize_text_field($_REQUEST['field_id']) : '';
+                $_REQUEST['is_default'] = '0';
 
                 if (!empty($fields)){
                     foreach ($fields as $val) {
@@ -1981,6 +1970,7 @@ class Users_WP_Form_Builder {
                         }
                     }
                 }
+
 
                 $htmlvar_name = isset($_REQUEST['htmlvar_name']) ? sanitize_text_field($_REQUEST['htmlvar_name']) : '';
 
@@ -2025,7 +2015,6 @@ class Users_WP_Form_Builder {
 
     public function uwp_register_field_save($request_field = array())
     {
-
         global $wpdb;
         $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
 
@@ -2096,9 +2085,11 @@ class Users_WP_Form_Builder {
 
                         "insert into " . $extras_table_name . " set
 					form_type = %s,
+					field_type = %s,
 					site_htmlvar_name = %s,
 					sort_order = %s",
                         array($form_type,
+                            $field_type,
                             $site_htmlvar_name,
                             $field_id
                         )

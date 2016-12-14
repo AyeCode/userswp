@@ -248,7 +248,7 @@ class Users_WP_Admin_Settings {
             <tr valign="top">
                 <th scope="row"><?php echo __( 'Reset Password Form Shortcode', 'uwp' ); ?></th>
                 <td>
-                    <span class="short_code">[uwp_forgot]</span>
+                    <span class="short_code">[uwp_reset]</span>
                     <span class="description"><?php echo __( 'This is the shortcode for the front end reset password form.', 'uwp' ); ?></span>
                     <span class="description"><?php echo __( 'Parameters: none', 'uwp' ); ?></span>
                 </td>
@@ -524,7 +524,7 @@ class Users_WP_Admin_Settings {
                         'enable_register_password' => array(
                             'id'   => 'enable_register_password',
                             'name' => __( 'Display Password field in Regsiter Form', 'uwp' ),
-                            'desc' => 'If Password field not enabled a random password will be generated and emailed.',
+                            'desc' => 'If disabled a random password will be generated and emailed.',
                             'type' => 'checkbox',
                             'std'  => '1',
                             'class' => 'uwp_label_inline',
