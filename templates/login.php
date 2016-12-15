@@ -17,7 +17,8 @@
             }
             ?>
             <div class="uwp-remember-me">
-                <label style="display: inline-block;" for="remember_me"><input name="remember_me" id="remember_me" value="forever" type="checkbox">
+                <label style="display: inline-block;" for="remember_me">
+                    <input name="remember_me" id="remember_me" value="forever" type="checkbox">
                     <?php echo __( 'Remember Me', 'uwp' ); ?>
                 </label>
             </div>

@@ -57,7 +57,7 @@ class Users_WP_Ajax {
 
         /* ---- Show field form in admin ---- */
         if ($field_type != '' && $field_id != '' && $field_action == 'new' && isset($data['create_field']) && isset($data['manage_field_type']) && $data['manage_field_type'] == 'custom_fields') {
-            $this->form_builder->uwp_custom_field_adminhtml($field_type, $field_id, $field_action,$field_type_key, $form_type);
+            $this->form_builder->uwp_form_field_adminhtml($field_type, $field_id, $field_action,$field_type_key, $form_type);
         }
 
 
@@ -66,7 +66,7 @@ class Users_WP_Ajax {
             if (!wp_verify_nonce($data['_wpnonce'], 'custom_fields_' . $field_id))
                 return;
 
-            echo $this->form_builder->uwp_custom_field_delete($field_id);
+            echo $this->form_builder->uwp_admin_form_field_delete($field_id);
         }
 
         /* ---- Save field  ---- */
@@ -86,11 +86,11 @@ class Users_WP_Ajax {
                 }
             }
 
-            $return = $this->form_builder->uwp_custom_field_save($data);
+            $return = $this->form_builder->uwp_admin_form_field_save($data);
 
             if (is_int($return)) {
                 $lastid = $return;
-                $this->form_builder->uwp_custom_field_adminhtml($field_type, $lastid, 'submit',$field_type_key, $form_type);
+                $this->form_builder->uwp_form_field_adminhtml($field_type, $lastid, 'submit',$field_type_key, $form_type);
             } else {
                 echo $return;
             }

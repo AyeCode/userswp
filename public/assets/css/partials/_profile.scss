@@ -27,6 +27,7 @@
       a:visited {
         color: #717171;
         text-decoration: none;
+        box-shadow: none;
       }
 
       a:hover {
@@ -351,4 +352,7 @@
       }
     }
   }
+}
+.uwp_field_icon {
+  margin-right: 5px;
 }

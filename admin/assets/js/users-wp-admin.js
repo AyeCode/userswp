@@ -153,6 +153,7 @@ jQuery(document).ready(function () {
     jQuery("#uwp-form-builder-tab").find("ul li a").click(function() {
         if(!jQuery(this).attr('id')){return;}
         var htmlvar_name = jQuery(this).attr('id').replace('uwp-','');
+        var field_type = jQuery(this).data('type');
 
         var form_type = jQuery(this).closest('#uwp-form-builder-tab').find('#form_type').val();
 
@@ -162,7 +163,7 @@ jQuery(document).ready(function () {
 
         if(manage_field_type == 'register'){
 
-            jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_register_action&create_field=true',{ htmlvar_name: htmlvar_name,form_type:form_type, field_id: id, field_ins_upd: 'new' },
+            jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_register_action&create_field=true',{ htmlvar_name: htmlvar_name,form_type:form_type, field_type:field_type, field_id: id, field_ins_upd: 'new' },
                 function(data)
                 {
                     console.log(id);

@@ -226,8 +226,8 @@ class Users_WP {
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
         $this->loader->add_action( 'init', $forms, 'handler' );
-        $this->loader->add_action( 'wp_ajax_uwp_ajax_upload_file', $forms, 'uwp_ajax_upload_file' );
-        $this->loader->add_action( 'wp_ajax_nopriv_uwp_ajax_upload_file', $forms, 'uwp_ajax_upload_file' );
+//        $this->loader->add_action( 'wp_ajax_uwp_ajax_upload_file', $forms, 'uwp_ajax_upload_file' );
+//        $this->loader->add_action( 'wp_ajax_nopriv_uwp_ajax_upload_file', $forms, 'uwp_ajax_upload_file' );
 
         $this->loader->add_filter( 'ajax_query_attachments_args', $profile, 'uwp_restrict_attachment_display' );
         $this->loader->add_filter( 'wp_handle_upload_prefilter', $profile, 'uwp_wp_media_restrict_file_types' );
@@ -245,6 +245,7 @@ class Users_WP {
 
         $this->loader->add_filter( 'the_content', $templates, 'uwp_author_page_content', 10, 1 );
         $this->loader->add_filter( 'uwp_form_input_html_datepicker', $templates, 'uwp_form_input_datepicker', 10, 4 );
+        $this->loader->add_filter( 'uwp_form_input_html_time', $templates, 'uwp_form_input_time', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_select', $templates, 'uwp_form_input_select', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_multiselect', $templates, 'uwp_form_input_multiselect', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_textarea', $templates, 'uwp_form_input_textarea', 10, 4 );
@@ -264,6 +265,7 @@ class Users_WP {
         remove_all_filters('get_avatar');
         $this->loader->add_filter( 'get_avatar', $profile, 'uwp_modify_get_avatar' , 1 , 5 );
         $this->loader->add_filter( 'get_comment_author_link', $profile, 'uwp_get_comment_author_link' , 10 , 2 );
+        $this->loader->add_action( 'template_redirect', $profile, 'uwp_redirect_author_page' , 10 , 2 );
         $this->loader->add_action( 'uwp_profile_header', $profile, 'get_profile_header', 10, 1 );
         $this->loader->add_action( 'uwp_profile_header', $profile, 'uwp_image_crop_init', 10, 1 );
         $this->loader->add_action( 'uwp_profile_title', $profile, 'get_profile_title', 10, 1 );
@@ -272,10 +274,11 @@ class Users_WP {
 
         $this->loader->add_action( 'uwp_profile_content', $profile, 'get_profile_tabs_content', 10, 1 );
         $this->loader->add_action( 'uwp_profile_pagination', $profile, 'get_profile_pagination');
-        $this->loader->add_action( 'uwp_profile_about_tab_content', $profile, 'get_profile_about', 10, 1);
+        $this->loader->add_action( 'uwp_profile_more_info_tab_content', $profile, 'get_profile_more_info', 10, 1);
         $this->loader->add_action( 'uwp_profile_posts_tab_content', $profile, 'get_profile_posts', 10, 1);
         $this->loader->add_action( 'uwp_profile_comments_tab_content', $profile, 'get_profile_comments', 10, 1);
 
+        $this->loader->add_action( 'edit_user_profile', $profile, 'uwp_extra_user_profile_fields_in_admin', 10, 1 );
         $this->loader->add_action( 'show_user_profile', $profile, 'uwp_extra_user_profile_fields_in_admin', 10, 1 );
 
 
@@ -332,8 +335,7 @@ class Users_WP {
 
         $this->loader->add_action('wp_ajax_uwp_ajax_register_action', $form_builder, 'uwp_register_ajax_handler');
 
-        // htmlvar not needed for fieldset and taxonomy
-        $this->loader->add_filter('uwp_cfa_htmlvar_name_fieldset',$form_builder, 'return_empty_string',10,4);
+        // htmlvar not needed for taxonomy
         $this->loader->add_filter('uwp_cfa_htmlvar_name_taxonomy',$form_builder, 'return_empty_string',10,4);
 
 

@@ -70,37 +70,80 @@ class Users_WP_Public {
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_style( 'jcrop' );
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp.css', array(), $this->version, 'all' );
+        if (is_uwp_page()) {
+            // include only in uwp pages
+            wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
+            wp_enqueue_style( 'jquery-ui' );
+        }
 
-        if (is_page()) {
-            global $post;
-            $current_page_id = $post->ID;
-            $register_page = uwp_get_option('register_page', false);
-            $account_page = uwp_get_option('account_page', false);
-            $profile_page = uwp_get_option('profile_page', false);
-            
-            if (( $register_page && ((int) $register_page ==  $current_page_id ) ) ||
-                ( $account_page && ((int) $account_page ==  $current_page_id ) )) {
-                wp_enqueue_style( "uwp_chosen_css", plugin_dir_url( __FILE__ ) . 'assets/css/chosen.css', array(), $this->version, 'all' );
-            }
+        if (is_uwp_profile_page()) {
+            // include only profile pages
+            wp_enqueue_style( 'jcrop' );
 
-            if ($profile_page && is_user_logged_in() && ((int) $profile_page ==  $current_page_id )) {
+            if (is_user_logged_in()) {
                 wp_enqueue_media();
             }
         }
-        global $wp_styles;
-        $srcs = array_map('basename', (array) wp_list_pluck($wp_styles->registered, 'src') );
-        if ( in_array('font-awesome.css', $srcs) || in_array('font-awesome.min.css', $srcs)  ) {
-            /* echo 'font-awesome.css registered'; */
-        } else {
-            wp_register_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), $this->version);
-            wp_enqueue_style('font-awesome');
+
+        $enable_timepicker_in_register = false;
+        $enable_timepicker_in_account = false;
+
+        $enable_chosen_in_register = false;
+        $enable_chosen_in_account = false;
+
+        if (is_uwp_register_page() ) {
+            $fields = get_register_form_fields();
+            if (!empty($fields)) {
+                foreach ($fields as $field) {
+                    if ($field->field_type == 'time') {
+                        $enable_timepicker_in_register = true;
+                    }
+
+                    if ($field->field_type == 'multiselect') {
+                        $enable_chosen_in_register = true;
+                    }
+                }
+            }
         }
 
-        wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
-        wp_enqueue_style( 'jquery-ui' );
+        if (is_uwp_account_page() ) {
+            $fields = get_account_form_fields();
+            if (!empty($fields)) {
+                foreach ($fields as $field) {
+                    if ($field->field_type == 'time') {
+                        $enable_timepicker_in_account = true;
+                    }
 
+                    if ($field->field_type == 'multiselect') {
+                        $enable_chosen_in_account = true;
+                    }
+                }
+            }
+        }
+
+        if ($enable_timepicker_in_register || $enable_timepicker_in_account) {
+            // time fields available only in register and account pages
+            wp_enqueue_style( "uwp_timepicker_css", plugin_dir_url( __FILE__ ) . 'assets/css/jquery.ui.timepicker.css', array(), null, 'all' );
+        }
+
+
+        if ($enable_chosen_in_register || $enable_chosen_in_account) {
+            // chosen fields (multiselect) available only in register and account pages
+            wp_enqueue_style( "uwp_chosen_css", plugin_dir_url( __FILE__ ) . 'assets/css/chosen.css', array(), null, 'all' );
+        }
+
+        if (is_uwp_page()) {
+            // include only in uwp pages
+            global $wp_styles;
+            $srcs = array_map('basename', (array) wp_list_pluck($wp_styles->registered, 'src') );
+            if ( in_array('font-awesome.css', $srcs) || in_array('font-awesome.min.css', $srcs)  ) {
+                /* echo 'font-awesome.css registered'; */
+            } else {
+                wp_register_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), $this->version);
+                wp_enqueue_style('font-awesome');
+            }
+            wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp.css', array(), null, 'all' );
+        }
 
     }
 
@@ -120,23 +163,84 @@ class Users_WP_Public {
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
-        wp_enqueue_script( 'jcrop', array( 'jquery' ) );
-        wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), null, false );
+        if (is_uwp_page()) {
+            // include only in uwp pages
+            wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );    
+        }
 
-        if (is_page()) {
-            global $post;
-            $current_page_id = $post->ID;
-            $register_page = uwp_get_option('register_page', false);
-            $account_page = uwp_get_option('account_page', false);
+        if (is_uwp_profile_page()) {
+            // include only profile pages
+            wp_enqueue_script( 'jcrop', array( 'jquery' ) );
+        }
+        
+        $enable_timepicker_in_register = false;
+        $enable_timepicker_in_account = false;
 
+        $enable_datepicker_in_register = false;
+        $enable_datepicker_in_account = false;
 
-            if (( $register_page && ((int) $register_page ==  $current_page_id ) ) ||
-                ( $account_page && ((int) $account_page ==  $current_page_id ) )) {
-                wp_dequeue_script('chosen');
-                wp_enqueue_script( "uwp_chosen", plugin_dir_url( __FILE__ ) . 'assets/js/chosen.jquery.js', array( 'jquery' ), $this->version, false );
+        $enable_chosen_in_register = false;
+        $enable_chosen_in_account = false;
+        
+        if (is_uwp_register_page() ) {
+            $fields = get_register_form_fields();
+            if (!empty($fields)) {
+                foreach ($fields as $field) {
+                    if ($field->field_type == 'time') {
+                        $enable_timepicker_in_register = true;
+                    }
+
+                    if ($field->field_type == 'datepicker') {
+                        $enable_datepicker_in_register = true;
+                    }
+
+                    if ($field->field_type == 'multiselect') {
+                        $enable_chosen_in_register = true;
+                    }
+                }
             }
+        }
+
+        if (is_uwp_account_page() ) {
+            $fields = get_account_form_fields();
+            if (!empty($fields)) {
+                foreach ($fields as $field) {
+                    if ($field->field_type == 'time') {
+                        $enable_timepicker_in_account = true;
+                    }
+
+                    if ($field->field_type == 'datepicker') {
+                        $enable_datepicker_in_account = true;
+                    }
+
+                    if ($field->field_type == 'multiselect') {
+                        $enable_chosen_in_account = true;
+                    }
+                }
+            }
+        }
+
+        if ($enable_timepicker_in_register || $enable_timepicker_in_account) {
+            // time fields available only in register and account pages
+            wp_enqueue_script( "uwp_timepicker", plugin_dir_url( __FILE__ ) . 'assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
+        }
+
+
+        if ($enable_datepicker_in_register || $enable_datepicker_in_account) {
+            // date fields available only in register and account pages
+            wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
+        }
+
+
+        if ($enable_chosen_in_register || $enable_chosen_in_account) {
+            // chosen fields (multiselect) available only in register and account pages
+            wp_dequeue_script('chosen');
+            wp_enqueue_script( "uwp_chosen", plugin_dir_url( __FILE__ ) . 'assets/js/chosen.jquery.js', array( 'jquery' ), null, false );
+        }
+
+        if (is_uwp_page()) {
+            // include only in uwp pages
+            wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), null, false );
         }
         
     }

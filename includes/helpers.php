@@ -52,12 +52,27 @@ function uwp_get_users() {
     }
 
     $args = array(
-        'number' => '20'
+        'number' => 20,
+        'search'         => "*{$keyword}*",
+        'search_columns' => array(
+            'user_login',
+            'user_nicename',
+            'user_email',
+        ),
+        'meta_query' => array(
+            'relation' => 'OR',
+            array(
+                'key'     => 'first_name',
+                'value'   => $keyword,
+                'compare' => 'LIKE'
+            ),
+            array(
+                'key'     => 'last_name',
+                'value'   => $keyword,
+                'compare' => 'LIKE'
+            )
+        )
     );
-
-    if ($keyword) {
-        $args['search'] = $keyword;
-    }
 
     if ($sort_by) {
         switch ($sort_by) {
@@ -81,7 +96,9 @@ function uwp_get_users() {
         }
     }
 
-    $users = get_users($args);
+    $users_query = new WP_User_Query($args);
+    $users = $users_query->get_results();
+
     foreach ( $users as $user ) {
         $uwp_users[] = array(
             'id' => $user->ID,
@@ -759,15 +776,35 @@ function uwp_resizeThumbnailImage($thumb_image_name, $image, $width, $height, $s
     return $thumb_image_name;
 }
 
-function is_uwp_page($type = 'register_page') {
+function is_uwp_page($type = false) {
     if (is_page()) {
         global $post;
         $current_page_id = $post->ID;
-        $uwp_page = uwp_get_option($type, false);
-        if ( $uwp_page && ((int) $uwp_page ==  $current_page_id ) ) {
-            return true;
+        if ($type) {
+            $uwp_page = uwp_get_option($type, false);
+            if ( $uwp_page && ((int) $uwp_page ==  $current_page_id ) ) {
+                return true;
+            } else {
+                return false;
+            }    
         } else {
-            return false;
+            if (is_uwp_register_page()) {
+                return true;
+            } elseif (is_uwp_login_page()) {
+                return true;
+            } elseif (is_uwp_forgot_page()) {
+                return true;
+            } elseif (is_uwp_reset_page()) {
+                return true;
+            } elseif (is_uwp_account_page()) {
+                return true;
+            } elseif (is_uwp_profile_page()) {
+                return true;
+            } elseif (is_uwp_users_page()) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
     } else {
@@ -929,10 +966,12 @@ function handle_file_upload( $field, $files ) {
                     return new WP_Error( 'validation-error', sprintf( __( 'Allowed files types are: %s', 'uwp' ),  $allowed_error_text) );
             }
 
-            $max_size = uwp_get_option('profile_avatar_max_size', 5);
-            $allowed_size = $max_size*pow(1024,2);
-            if ( $file_to_upload['size'] >  $allowed_size)
-                return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. uwp_formatSizeUnits($allowed_size), 'uwp' ) );
+            $max_upload_size = wp_max_upload_size();
+            if ( ! $max_upload_size ) {
+                $max_upload_size = 0;
+            }
+            if ( $file_to_upload['size'] >  $max_upload_size)
+                return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. uwp_formatSizeUnits($max_upload_size), 'uwp' ) );
 
 
             $uploaded_file = uwp_upload_file( $file_to_upload, array( 'file_key' => $file_key ) );
@@ -1065,8 +1104,14 @@ function uwp_validate_uploads($files, $type, $url_only = true) {
 
     global $wpdb;
     $table_name = $wpdb->prefix . 'uwp_form_fields';
-    $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
 
+    if ($type == 'register') {
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' AND is_register_field = '1' ORDER BY sort_order ASC", array('account')));
+    } elseif ($type == 'account') {
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' AND is_register_only_field = '0' ORDER BY sort_order ASC", array('account')));
+    } else {
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
+    }
 
 
     if (!empty($fields)) {
@@ -1091,4 +1136,19 @@ function uwp_validate_uploads($files, $type, $url_only = true) {
     }
 
     return $validated_data;
+}
+
+function get_register_form_fields() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
+    $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.is_active = '1' AND fields.is_register_field = '1' ORDER BY extras.sort_order ASC", array('account')));
+    return $fields;
+}
+
+function get_account_form_fields() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_only_field = '0' ORDER BY sort_order ASC", array('account')));
+    return $fields;
 }

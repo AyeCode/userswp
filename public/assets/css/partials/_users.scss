@@ -46,10 +46,19 @@ ul.uwp-users-list-wrap {
   overflow: hidden;
 }
 .uwp-user-search {
-  float: left
+  float: left;
+  input[type="text"] {
+    padding: 9px;
+  }
+  input {
+    display: inline-block !important;
+  }
 }
 .uwp-user-sort {
   float: right;
+  #uwp_sort_by {
+    height: 35px;
+  }
 }
 
 //grid
