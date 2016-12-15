@@ -37,83 +37,6 @@ function uwp_get_page_link($page) {
     return $link;
 }
 
-function uwp_get_users() {
-
-    $uwp_users = array();
-
-    $keyword = false;
-    if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
-        $keyword = sanitize_title($_GET['uwps']);
-    }
-
-    $sort_by = false;
-    if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
-        $sort_by = sanitize_title($_GET['uwp_sort_by']);
-    }
-
-    $args = array(
-        'number' => 20,
-        'search'         => "*{$keyword}*",
-        'search_columns' => array(
-            'user_login',
-            'user_nicename',
-            'user_email',
-        ),
-        'meta_query' => array(
-            'relation' => 'OR',
-            array(
-                'key'     => 'first_name',
-                'value'   => $keyword,
-                'compare' => 'LIKE'
-            ),
-            array(
-                'key'     => 'last_name',
-                'value'   => $keyword,
-                'compare' => 'LIKE'
-            )
-        )
-    );
-
-    if ($sort_by) {
-        switch ($sort_by) {
-            case "newer":
-                $args['orderby'] = 'registered';
-                $args['order'] = 'desc';
-                break;
-            case "older":
-                $args['orderby'] = 'registered';
-                $args['order'] = 'asc';
-                break;
-            case "alpha_asc":
-                $args['orderby'] = 'display_name';
-                $args['order'] = 'asc';
-                break;
-            case "alpha_desc":
-                $args['orderby'] = 'display_name';
-                $args['order'] = 'desc';
-                break;
-
-        }
-    }
-
-    $users_query = new WP_User_Query($args);
-    $users = $users_query->get_results();
-
-    foreach ( $users as $user ) {
-        $uwp_users[] = array(
-            'id' => $user->ID,
-            'name' => $user->display_name,
-            'avatar' => get_avatar( $user->user_email, 128 ),
-            'link'  => get_author_posts_url($user->ID),
-            'facebook' => '',
-            'twitter'  => '',
-            'description'  => ''
-        );
-    }
-
-    return $uwp_users;
-}
-
 function uwp_post_count($user_id, $post_type, $extra_post_status = '') {
     global $wpdb;
 
@@ -788,19 +711,13 @@ function is_uwp_page($type = false) {
                 return false;
             }    
         } else {
-            if (is_uwp_register_page()) {
-                return true;
-            } elseif (is_uwp_login_page()) {
-                return true;
-            } elseif (is_uwp_forgot_page()) {
-                return true;
-            } elseif (is_uwp_reset_page()) {
-                return true;
-            } elseif (is_uwp_account_page()) {
-                return true;
-            } elseif (is_uwp_profile_page()) {
-                return true;
-            } elseif (is_uwp_users_page()) {
+            if (is_uwp_register_page() ||
+                is_uwp_login_page() ||
+                is_uwp_forgot_page() ||
+                is_uwp_reset_page() ||
+                is_uwp_account_page() ||
+                is_uwp_profile_page() ||
+                is_uwp_users_page()) {
                 return true;
             } else {
                 return false;
@@ -1151,4 +1068,114 @@ function get_account_form_fields() {
     $table_name = $wpdb->prefix . 'uwp_form_fields';
     $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_only_field = '0' ORDER BY sort_order ASC", array('account')));
     return $fields;
+}
+
+function get_uwp_users_list() {
+
+    $keyword = false;
+    if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
+        $keyword = sanitize_title($_GET['uwps']);
+    }
+
+    $sort_by = false;
+    if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
+        $sort_by = sanitize_title($_GET['uwp_sort_by']);
+    }
+
+    $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+
+    $number = uwp_get_option('profile_no_of_items', 10);
+
+    $args = array(
+        'number' => $number,
+        'search' => "*{$keyword}*",
+        'search_columns' => array(
+            'user_login',
+            'user_nicename',
+            'user_email',
+        ),
+        'meta_query' => array(
+            'relation' => 'OR',
+            array(
+                'key'     => 'first_name',
+                'value'   => $keyword,
+                'compare' => 'LIKE'
+            ),
+            array(
+                'key'     => 'last_name',
+                'value'   => $keyword,
+                'compare' => 'LIKE'
+            )
+        )
+    );
+
+    if (!$keyword) {
+        $args['paged'] = $paged;
+    }
+
+    if ($sort_by) {
+        switch ($sort_by) {
+            case "newer":
+                $args['orderby'] = 'registered';
+                $args['order'] = 'desc';
+                break;
+            case "older":
+                $args['orderby'] = 'registered';
+                $args['order'] = 'asc';
+                break;
+            case "alpha_asc":
+                $args['orderby'] = 'display_name';
+                $args['order'] = 'asc';
+                break;
+            case "alpha_desc":
+                $args['orderby'] = 'display_name';
+                $args['order'] = 'desc';
+                break;
+
+        }
+    }
+    
+    $users_query = new WP_User_Query($args);
+    $users = $users_query->get_results();
+
+    $result = count_users();
+    $total_user = $result['total_users'];
+    $total_pages=ceil($total_user/$number);
+    ?>
+    <ul class="uwp-users-list-wrap">
+        <?php
+        if ($users) {
+            foreach ($users as $user) {
+                $user_obj = get_user_by('id', $user->ID);
+                ?>
+                <li class="uwp-users-list-user">
+                    <div class="uwp-users-list-user-left">
+                        <div class="uwp-users-list-user-avatar"><a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>"><?php echo get_avatar( $user->user_email, 128 ); ?></a></div>
+                    </div>
+                    <div class="uwp-users-list-user-right">
+                        <div class="uwp-users-list-user-name">
+                            <h3><a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>"><?php echo $user->display_name; ?></a></h3>
+                        </div>
+                        <div class="uwp-users-list-user-social">
+                            <?php do_action('uwp_profile_social', $user_obj ); ?>
+                        </div>
+                        <div class="uwp-users-list-user-bio">
+                            <?php do_action('uwp_profile_bio', $user_obj ); ?>
+                        </div>
+                        <div class="clfx"></div>
+                    </div>
+                </li>
+                <?php
+            }
+        } else {
+            // no users found
+            echo '<div class="uwp-alert-error text-center">';
+            echo __('No Users Found', 'uwp');
+            echo '</div>';
+        }
+        ?>
+    </ul>
+    
+    <?php do_action('uwp_profile_pagination', $total_pages); ?>
+    <?php
 }
