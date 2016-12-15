@@ -8,6 +8,12 @@
   }
 }
 
+.uwp-users-list-user-name > h3 {
+  a {
+    text-decoration: none !important;
+    box-shadow: none !important;
+  }
+}
 
 ul.uwp-users-list-wrap {
   clear: both;

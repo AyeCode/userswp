@@ -751,9 +751,9 @@ class Users_WP_Form_Builder {
 
                         <?php
                         // site_title
-                        if(has_filter("uwp_cfa_site_title_{$field_type}")){
+                        if(has_filter("uwp_builder_site_title_{$field_type}")){
 
-                            echo apply_filters("uwp_cfa_site_title_{$field_type}",'',$result_str,$cf,$field_info);
+                            echo apply_filters("uwp_builder_site_title_{$field_type}",'',$result_str,$cf,$field_info);
 
                         }else{
                             $value = '';
@@ -779,9 +779,9 @@ class Users_WP_Form_Builder {
 
 
                         // htmlvar_name
-                        if(has_filter("uwp_cfa_htmlvar_name_{$field_type}")){
+                        if(has_filter("uwp_builder_htmlvar_name_{$field_type}")){
 
-                            echo apply_filters("uwp_cfa_htmlvar_name_{$field_type}",'',$result_str,$cf,$field_info);
+                            echo apply_filters("uwp_builder_htmlvar_name_{$field_type}",'',$result_str,$cf,$field_info);
 
                         }else{
                             $value = '';
@@ -811,9 +811,9 @@ class Users_WP_Form_Builder {
 
 
                         // is_active
-                        if(has_filter("uwp_cfa_is_active_{$field_type}")){
+                        if(has_filter("uwp_builder_is_active_{$field_type}")){
 
-                            echo apply_filters("uwp_cfa_is_active_{$field_type}",'',$result_str,$cf,$field_info);
+                            echo apply_filters("uwp_builder_is_active_{$field_type}",'',$result_str,$cf,$field_info);
 
                         }else{
                             $value = '';
@@ -850,9 +850,9 @@ class Users_WP_Form_Builder {
 
 
                         // default_value
-                        if(has_filter("uwp_cfa_default_value_{$field_type}")){
+                        if(has_filter("uwp_builder_default_value_{$field_type}")){
 
-                            echo apply_filters("uwp_cfa_default_value_{$field_type}",'',$result_str,$cf,$field_info);
+                            echo apply_filters("uwp_builder_default_value_{$field_type}",'',$result_str,$cf,$field_info);
 
                         }else{
                             $value = '';
@@ -894,9 +894,9 @@ class Users_WP_Form_Builder {
 
 
                         // advanced_editor
-                        if(has_filter("uwp_cfa_advanced_editor_{$field_type}")){
+                        if(has_filter("uwp_builder_advanced_editor_{$field_type}")){
 
-                            echo apply_filters("uwp_cfa_advanced_editor_{$field_type}",'',$result_str,$cf,$field_info);
+                            echo apply_filters("uwp_builder_advanced_editor_{$field_type}",'',$result_str,$cf,$field_info);
 
                         }
 
@@ -911,9 +911,9 @@ class Users_WP_Form_Builder {
                         <?php
 
                         // is_required
-                        if(has_filter("uwp_cfa_is_required_{$field_type}")){
+                        if(has_filter("uwp_builder_is_required_{$field_type}")){
 
-                            echo apply_filters("uwp_cfa_is_required_{$field_type}",'',$result_str,$cf,$field_info);
+                            echo apply_filters("uwp_builder_is_required_{$field_type}",'',$result_str,$cf,$field_info);
 
                         }else{
                             $value = '';
@@ -952,9 +952,9 @@ class Users_WP_Form_Builder {
                         }
 
                         // required_msg
-                        if(has_filter("uwp_cfa_required_msg_{$field_type}")){
+                        if(has_filter("uwp_builder_required_msg_{$field_type}")){
 
-                            echo apply_filters("uwp_cfa_required_msg_{$field_type}",'',$result_str,$cf,$field_info);
+                            echo apply_filters("uwp_builder_required_msg_{$field_type}",'',$result_str,$cf,$field_info);
 
                         }else{
                             $value = '';
@@ -981,25 +981,25 @@ class Users_WP_Form_Builder {
 
 
                         // required_msg
-                        if(has_filter("uwp_cfa_validation_pattern_{$field_type}")){
+                        if(has_filter("uwp_builder_validation_pattern_{$field_type}")){
 
-                            echo apply_filters("uwp_cfa_validation_pattern_{$field_type}",'',$result_str,$cf,$field_info);
+                            echo apply_filters("uwp_builder_validation_pattern_{$field_type}",'',$result_str,$cf,$field_info);
 
                         }
 
 
                         // extra_fields
-                        if(has_filter("uwp_cfa_extra_fields_{$field_type}")){
+                        if(has_filter("uwp_builder_extra_fields_{$field_type}")){
 
-                            echo apply_filters("uwp_cfa_extra_fields_{$field_type}",'',$result_str,$cf,$field_info);
+                            echo apply_filters("uwp_builder_extra_fields_{$field_type}",'',$result_str,$cf,$field_info);
 
                         }
 
 
                         // field_icon
-                        if(has_filter("uwp_cfa_field_icon_{$field_type}")){
+                        if(has_filter("uwp_builder_field_icon_{$field_type}")){
 
-                            echo apply_filters("uwp_cfa_field_icon_{$field_type}",'',$result_str,$cf,$field_info);
+                            echo apply_filters("uwp_builder_field_icon_{$field_type}",'',$result_str,$cf,$field_info);
 
                         }else{
                             $value = '';
@@ -1028,9 +1028,9 @@ class Users_WP_Form_Builder {
 
 
                         // css_class
-                        if(has_filter("uwp_cfa_css_class_{$field_type}")){
+                        if(has_filter("uwp_builder_css_class_{$field_type}")){
 
-                            echo apply_filters("uwp_cfa_css_class_{$field_type}",'',$result_str,$cf,$field_info);
+                            echo apply_filters("uwp_builder_css_class_{$field_type}",'',$result_str,$cf,$field_info);
 
                         }else{
                             $value = '';
@@ -1412,7 +1412,7 @@ class Users_WP_Form_Builder {
             return 0;
     }
 
-    public function uwp_cfa_extra_fields_smr($output,$result_str,$cf,$field_info){
+    public function uwp_builder_extra_fields_smr($output,$result_str,$cf,$field_info){
 
         ob_start();
 
@@ -1455,7 +1455,7 @@ class Users_WP_Form_Builder {
         return $output.$html;
     }
 
-    public function uwp_cfa_extra_fields_datepicker($output,$result_str,$cf,$field_info){
+    public function uwp_builder_extra_fields_datepicker($output,$result_str,$cf,$field_info){
         ob_start();
         $extra = array();
         if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
@@ -1503,7 +1503,7 @@ class Users_WP_Form_Builder {
         return $output.$html;
     }
 
-    public function uwp_cfa_extra_fields_file($output,$result_str,$cf,$field_info){
+    public function uwp_builder_extra_fields_file($output,$result_str,$cf,$field_info){
         ob_start();
         $allowed_file_types = uwp_allowed_mime_types();
 
