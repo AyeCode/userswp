@@ -37,6 +37,13 @@ class Users_WP_Forms {
         $redirect = false;
         $processed = false;
 
+        $login_page = uwp_get_option('login_page', false);
+        if ($login_page) {
+            $login_page_url = get_permalink($login_page);
+        } else {
+            $login_page_url = wp_login_url();
+        }
+
         $redirect_page_id = uwp_get_option('login_redirect_to', '');
         if (empty($redirect_page_id)) {
             $redirect_to = home_url('/');
@@ -68,7 +75,7 @@ class Users_WP_Forms {
             $processed = true;
         } elseif (isset($_POST['uwp_reset_submit'])) {
             $errors = $this->process_reset($_POST);
-            $message = __('Password updated successfully. Please login with your new password', 'uwp');
+            $message = sprintf(__('Password updated successfully. Please <a href="%s">login</a> with your new password', 'uwp'), $login_page_url);
             $processed = true;
         } elseif (isset($_POST['uwp_account_submit'])) {
             $errors = $this->process_account($_POST, $_FILES);
@@ -545,8 +552,27 @@ class Users_WP_Forms {
         if ($errors->get_error_code())
             return $errors;
 
-        //todo: update account notification. some users maybe interested in that
 
+        if (uwp_get_option('enable_account_update_notification') == '1') {
+            $user_data = get_user_by('id', $user_id);
+
+            $login_details = "";
+
+            $res = $this->uwp_send_email( 'account', $user_data->ID, $login_details );
+
+            if (!$res) {
+                if (get_option('admin_email') == $user_data->user_email) {
+                    $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please check your site error log for more details.', 'uwp'));
+                } else {
+                    $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'uwp'));
+                }
+
+            }
+
+            if ($errors->get_error_code())
+                return $errors;
+        }
+        
         return true;
 
     }
@@ -788,11 +814,13 @@ class Users_WP_Forms {
 
         if ($type == 'login') {
             $password_type = 'login';
+        } elseif ($type == 'reset') {
+            $password_type = 'reset';
         } else {
             $password_type = 'account';
         }
 
-        if ($type == 'login' || ($type == 'register' && $enable_password == '1') || ($type == 'account' && !empty( $data['uwp_account_password']))) {
+        if ($type == 'reset' || $type == 'login' || ($type == 'register' && $enable_password == '1') || ($type == 'account' && !empty( $data['uwp_account_password']))) {
             //check password
             if( empty( $data['uwp_'.$password_type.'_password'] ) ) {
                 $errors->add( 'empty_password', __( 'Please enter a password', 'uwp' ) );
@@ -905,6 +933,9 @@ class Users_WP_Forms {
         } elseif ( $message_type == 'reset' ) {
             $subject = uwp_get_option('reset_password_email_subject', '');
             $message = uwp_get_option('reset_password_email_content', '');
+        } elseif ( $message_type == 'account' ) {
+            $subject = uwp_get_option('account_update_email_subject', '');
+            $message = uwp_get_option('account_update_email_content', '');
         }
 
         if ( ! empty( $subject ) ) {

@@ -654,6 +654,29 @@ class Users_WP_Admin_Settings {
                             'type' => 'textarea',
                             'placeholder' => __( 'Enter reset password email Content', 'uwp' )
                         ),
+                        'enable_account_update_notification' => array(
+                            'id'   => 'enable_account_update_notification',
+                            'name' => __( 'Account update email', 'uwp' ),
+                            'desc' => 'Enable account update notification',
+                            'type' => 'checkbox',
+                            'std'  => '0',
+                            'class' => 'uwp_label_inline',
+                        ),
+                        'account_update_email_subject' => array(
+                            'id' => 'account_update_email_subject',
+                            'name' => "",
+                            'desc' => "",
+                            'type' => 'text',
+                            'size' => 'regular',
+                            'placeholder' => __( 'Enter account update email Subject', 'uwp' )
+                        ),
+                        'account_update_email_content' => array(
+                            'id' => 'account_update_email_content',
+                            'name' => "",
+                            'desc' => "",
+                            'type' => 'textarea',
+                            'placeholder' => __( 'Enter account update email Content', 'uwp' )
+                        ),
                     )
                 ),
             ),

@@ -803,6 +803,15 @@ class Users_WP_Profile {
         }
         return $link;
     }
+
+    public function uwp_redirect_author_page() {
+        if ( is_author() ) {
+            $id = get_query_var( 'author' );
+            $link = uwp_build_profile_tab_url( $id );
+            wp_redirect($link);
+            exit;
+        }
+    }
     
     //modify edit my profile link in admin bar
     public function uwp_modify_admin_bar_edit_profile_url( $url, $user_id, $scheme )

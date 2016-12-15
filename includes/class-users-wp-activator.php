@@ -76,10 +76,13 @@ class Users_WP_Activator {
         $register_success_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
 
         $forgot_password_subject = __('[#site_name#] - Your new password', 'uwp');
-        $forgot_password_content = __("<p>Dear [#user_name#],<p><p>You requested a new password for [#site_name_url#]</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
+        $forgot_password_content = __("<p>Dear [#user_name#],<p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
 
         $reset_password_subject = __('[#site_name#] - Password has been reset', 'uwp');
         $reset_password_content = __("<p>Dear [#user_name#],<p><p>Your password has been reset</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
+
+        $account_update_subject = __('[#site_name#] - Account has been updated', 'uwp');
+        $account_update_content = __("<p>Dear [#user_name#],<p><p>Your account has been updated successfully</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
 
         $settings['registration_success_email_subject'] = $register_success_subject;
         $settings['registration_success_email_content'] = $register_success_content;
@@ -89,6 +92,11 @@ class Users_WP_Activator {
 
         $settings['reset_password_email_subject'] = $reset_password_subject;
         $settings['reset_password_email_content'] = $reset_password_content;
+
+        // $settings['enable_account_update_notification'] = '0'; // no need to set this
+
+        $settings['account_update_email_subject'] = $account_update_subject;
+        $settings['account_update_email_content'] = $account_update_content;
 
         update_option( 'uwp_settings', $settings );
 

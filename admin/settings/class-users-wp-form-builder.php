@@ -1389,17 +1389,20 @@ class Users_WP_Form_Builder {
         global $wpdb;
 
         $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
 
         if ($field_id != '') {
             $cf = trim($field_id, '_');
 
-            if ($field = $wpdb->get_row($wpdb->prepare("select htmlvar_name from " . $table_name . " where id= %d", array($cf)))) {
+            if ($field = $wpdb->get_row($wpdb->prepare("select * from " . $table_name . " where id= %d", array($cf)))) {
 
                 $wpdb->query($wpdb->prepare("delete from " . $table_name . " where id= %d ", array($cf)));
 
                 $form_type = $field->form_type;
 
-                //todo: add option to delete data
+                // Also delete register form field
+                $wpdb->query($wpdb->prepare("delete from " . $extras_table_name . " where site_htmlvar_name= %s ", array($field->htmlvar_name)));
+
                 do_action('uwp_after_custom_field_deleted', $cf, $field->htmlvar_name, $form_type);
 
                 return $field_id;

@@ -10,7 +10,8 @@
                 }
                 ?>
                 <form method="get" class="searchform search-form" action="">
-                    <input placeholder="Search For" name="uwps" value="<?php echo $keyword; ?>" class="s search-input" type="text"><input class="searchsubmit search-submit" value="Search" type="submit"><br>
+                    <input placeholder="Search For" name="uwps" value="<?php echo $keyword; ?>" class="s search-input" type="text">
+                    <input class="uwp-searchsubmit uwp-search-submit" value="Search" type="submit"><br>
                 </form>
             </div>
             <div class="uwp-user-sort">

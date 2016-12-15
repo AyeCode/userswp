@@ -17,7 +17,7 @@
                 echo sprintf(__('You cannot access this page directly. Follow the password reset link you received in your email. To request new password reset link <a href="%s">visit here</a>.', 'uwp'), uwp_get_page_link('forgot'));
             } ?>
 
-            <div class="uwp-resetpsw"><a href="<?php echo uwp_get_page_link('login'); ?>"><?php echo __( 'Login?', 'uwp' ); ?></a></div>
+            <div class="uwp-resetpsw"><a href="<?php echo uwp_get_page_link('login'); ?>"><?php echo __( 'Login?', 'uwp' ); ?></a> <a style="float: right" href="<?php echo uwp_get_page_link('forgot'); ?>"><?php echo __( 'Request reset link', 'uwp' ); ?></a></div>
             <div class="clfx"></div>
             <div class="uwp-register-now"><?php echo __( 'Not a Member?', 'uwp' ); ?> <a rel="nofollow" href="<?php echo uwp_get_page_link('register'); ?>"><?php echo __( 'Create Account', 'uwp' ); ?></a></div>
         </div>
