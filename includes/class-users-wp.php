@@ -258,6 +258,9 @@ class Users_WP {
         $this->loader->add_filter( 'uwp_form_input_html_file', $forms, 'uwp_form_input_file', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_checkbox', $forms, 'uwp_form_input_checkbox', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_radio', $forms, 'uwp_form_input_radio', 10, 4 );
+        $this->loader->add_filter( 'uwp_form_input_html_url', $forms, 'uwp_form_input_url', 10, 4 );
+
+        $this->loader->add_action( 'wp_ajax_uwp_upload_file_remove', $forms, 'uwp_upload_file_remove' );
 
 
         //profile page
@@ -276,6 +279,7 @@ class Users_WP {
         
         // Popup and crop functions
         $this->loader->add_filter( 'ajax_query_attachments_args', $profile, 'uwp_restrict_attachment_display' );
+        //todo: fix this one
         $this->loader->add_filter( 'wp_handle_upload_prefilter', $profile, 'uwp_wp_media_restrict_file_types' );
         $this->loader->add_action( 'wp_ajax_uwp_ajax_image_crop_popup', $profile, 'uwp_ajax_image_crop_popup' );
         $this->loader->add_action( 'wp_head', $profile, 'uwp_define_ajaxurl' );

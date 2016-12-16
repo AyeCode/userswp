@@ -163,4 +163,22 @@ jQuery(window).load(function() {
         }
     }
 
+    $(document).ready(function() {
+        $("#uwp_upload_file_remove").click(function(event){
+            event.preventDefault();
+
+            var htmlvar =  $( this ).data( 'htmlvar' );
+            
+            var data = {
+                'action': 'uwp_upload_file_remove',
+                'htmlvar': htmlvar
+            };
+
+            jQuery.post(ajaxurl, data, function(response) {
+                $(".uwp_upload_file_preview").remove();
+                $("#uwp_upload_file_remove").remove();
+            });
+        });
+    });
+
 }( jQuery, window ));

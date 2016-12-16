@@ -76,7 +76,7 @@ class Users_WP_Public {
             wp_enqueue_style( 'jquery-ui' );
         }
 
-        if (is_uwp_profile_page()) {
+        if (is_uwp_current_user_profile_page()) {
             // include only profile pages
             wp_enqueue_style( 'jcrop' );
 
@@ -168,7 +168,7 @@ class Users_WP_Public {
             wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );    
         }
 
-        if (is_uwp_profile_page()) {
+        if (is_uwp_current_user_profile_page()) {
             // include only profile pages
             wp_enqueue_script( 'jcrop', array( 'jquery' ) );
         }

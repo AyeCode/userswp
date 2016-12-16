@@ -282,7 +282,7 @@ function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
         $usermeta = array();
     }
 
-    $value = ! empty( $usermeta[ $key ] ) ? $usermeta[ $key ] : $default;
+    $value = isset( $usermeta[ $key ] ) ? $usermeta[ $key ] : $default;
     $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
     return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
 }
@@ -757,6 +757,32 @@ function is_uwp_users_page() {
     return is_uwp_page('users_page');
 }
 
+function is_uwp_current_user_profile_page() {
+    if (is_user_logged_in() && 
+        is_uwp_profile_page()
+    ) {
+        $author_slug = get_query_var('uwp_profile');
+        if ($author_slug) {
+            $url_type = apply_filters('uwp_profile_url_type', 'login');
+            if ($url_type == 'id') {
+                $user = get_user_by('id', $author_slug);
+            } else {
+                $user = get_user_by('login', $author_slug);
+            }
+
+            if ($user && $user->ID == get_current_user_id()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
 function uwp_generic_tab_content($user, $post_type, $title) {
     ?>
     <h3><?php echo $title; ?></h3>
@@ -1063,6 +1089,14 @@ function get_register_form_fields() {
     return $fields;
 }
 
+function get_register_validate_form_fields() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
+    $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.is_register_field = '1' ORDER BY extras.sort_order ASC", array('account')));
+    return $fields;
+}
+
 function get_account_form_fields() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'uwp_form_fields';
@@ -1072,71 +1106,90 @@ function get_account_form_fields() {
 
 function get_uwp_users_list() {
 
+    global $wpdb;
+
     $keyword = false;
     if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
-        $keyword = sanitize_title($_GET['uwps']);
+        $keyword = strip_tags(esc_sql($_GET['uwps']));
     }
 
     $sort_by = false;
     if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
-        $sort_by = sanitize_title($_GET['uwp_sort_by']);
+        $sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
     }
 
     $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
     $number = uwp_get_option('profile_no_of_items', 10);
 
-    $args = array(
-        'number' => $number,
-        'search' => "*{$keyword}*",
-        'search_columns' => array(
-            'user_login',
-            'user_nicename',
-            'user_email',
-        ),
-        'meta_query' => array(
-            'relation' => 'OR',
-            array(
-                'key'     => 'first_name',
-                'value'   => $keyword,
-                'compare' => 'LIKE'
-            ),
-            array(
-                'key'     => 'last_name',
-                'value'   => $keyword,
-                'compare' => 'LIKE'
+
+    if ($keyword) {
+        $users = $wpdb->get_results($wpdb->prepare(
+            "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
+            FROM $wpdb->users
+            INNER JOIN $wpdb->usermeta
+            ON ( $wpdb->users.ID = $wpdb->usermeta.user_id )
+            WHERE 1=1
+            AND ( 
+            ( $wpdb->usermeta.meta_key = 'first_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
+            OR 
+            ( $wpdb->usermeta.meta_key = 'last_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
+            OR 
+            user_login LIKE %s 
+            OR 
+            user_nicename LIKE %s 
+            OR 
+            display_name LIKE %s 
+            OR 
+            user_email LIKE %s
             )
-        )
-    );
+            ORDER BY display_name ASC
+            LIMIT 0, 20",
+            array(
+                '%' . $keyword . '%',
+                '%' . $keyword . '%',
+                '%' . $keyword . '%',
+                '%' . $keyword . '%',
+                '%' . $keyword . '%',
+                '%' . $keyword . '%'
+            )
+        ));
 
-    if (!$keyword) {
-        $args['paged'] = $paged;
-    }
+    } else {
 
-    if ($sort_by) {
-        switch ($sort_by) {
-            case "newer":
-                $args['orderby'] = 'registered';
-                $args['order'] = 'desc';
-                break;
-            case "older":
-                $args['orderby'] = 'registered';
-                $args['order'] = 'asc';
-                break;
-            case "alpha_asc":
-                $args['orderby'] = 'display_name';
-                $args['order'] = 'asc';
-                break;
-            case "alpha_desc":
-                $args['orderby'] = 'display_name';
-                $args['order'] = 'desc';
-                break;
+        $args = array(
+            'number' => (int) $number,
+            'paged' => $paged
+        );
 
+
+        if ($sort_by) {
+            switch ($sort_by) {
+                case "newer":
+                    $args['orderby'] = 'registered';
+                    $args['order'] = 'desc';
+                    break;
+                case "older":
+                    $args['orderby'] = 'registered';
+                    $args['order'] = 'asc';
+                    break;
+                case "alpha_asc":
+                    $args['orderby'] = 'display_name';
+                    $args['order'] = 'asc';
+                    break;
+                case "alpha_desc":
+                    $args['orderby'] = 'display_name';
+                    $args['order'] = 'desc';
+                    break;
+
+            }
         }
+
+        $users_query = new WP_User_Query($args);
+        $users = $users_query->get_results();
+
     }
-    
-    $users_query = new WP_User_Query($args);
-    $users = $users_query->get_results();
+
 
     $result = count_users();
     $total_user = $result['total_users'];
@@ -1176,6 +1229,31 @@ function get_uwp_users_list() {
         ?>
     </ul>
     
-    <?php do_action('uwp_profile_pagination', $total_pages); ?>
     <?php
+    if (!$keyword) {
+        do_action('uwp_profile_pagination', $total_pages);
+    }
+    ?>
+    <?php
+}
+
+function uwp_file_upload_preview($field, $value) {
+    $output = '';
+    if ($value) {
+        $file = basename( $value );
+        $filetype = wp_check_filetype($file);
+        $image_types = array('png', 'jpg', 'jpeg', 'gif');
+        if (in_array($filetype['ext'], $image_types)) {
+            $output .= '<a href="'.$value.'" class="uwp_upload_file_preview"><img src="'.$value.'" /></a>';
+            $output .= '<a id="uwp_upload_file_remove" href="#" data-htmlvar="'.$field->htmlvar_name.'" class="uwp_upload_file_remove">'. __( 'Remove Image' , 'uwp' ).'</a>';
+            ?>
+            <?php
+        } else {
+            $output .= '<a href="'.$value.'" class="uwp_upload_file_preview">'.$file.'</a>';
+            $output .= '<a id="uwp_upload_file_remove" href="#" data-htmlvar="'.$field->htmlvar_name.'" class="uwp_upload_file_remove">'. __( 'Remove File' , 'uwp' ).'</a>';
+            ?>
+            <?php
+        }
+    }
+    return $output;
 }

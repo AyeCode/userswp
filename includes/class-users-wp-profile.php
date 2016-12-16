@@ -160,9 +160,18 @@ class Users_WP_Profile {
                                 $value = '';
                             }
                         }
+                        
 
-                        if ($field->field_type == 'file' && !empty($value)) {
-                            $value = '<a href="'.$value.'">'.basename( $value ).'</a>';
+                        if ($field->field_type == 'url' && !empty($value)) {
+                            $value = '<a href="'.$value.'">'.$value.'</a>';
+                        }
+
+                        if ($field->field_type == 'checkbox') {
+                            if ($value == '1') {
+                                $value = 'yes';
+                            } else {
+                                $value = 'no';
+                            }
                         }
 
 
@@ -176,7 +185,15 @@ class Users_WP_Profile {
                             ?>
                             <tr>
                                 <td class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?></td>
-                                <td class="uwp-profile-extra-value"><?php echo $value; ?></td>
+                                <td class="uwp-profile-extra-value">
+                                    <?php
+                                    if ($field->field_type == 'file') {
+                                        echo uwp_file_upload_preview($field, $value);
+                                    } else {
+                                        echo $value;
+                                    }
+                                    ?>
+                                </td>
                             </tr>
                             <?php
                         }
@@ -686,6 +703,7 @@ class Users_WP_Profile {
         $excluded_fields = array(
             'uwp_account_username',
             'uwp_account_email',
+            'uwp_account_bio',
             'uwp_account_password',
             'uwp_account_confirm_password',
             'uwp_account_first_name',
@@ -702,7 +720,7 @@ class Users_WP_Profile {
                     continue;
                 }
                 $option_values_arr = array();
-                if ($field->field_type == 'select' || $field->field_type == 'select') {
+                if ($field->field_type == 'select' || $field->field_type == 'multiselect') {
                     $option_values_arr = uwp_string_values_to_options($field->option_values, true);    
                 }
                 ?>
@@ -885,7 +903,7 @@ class Users_WP_Profile {
                 <?php
                 $keyword = "";
                 if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
-                    $keyword = sanitize_title($_GET['uwps']);
+                    $keyword = strip_tags(esc_sql($_GET['uwps']));
                 }
                 ?>
                 <form method="get" class="searchform search-form" action="">
@@ -898,7 +916,7 @@ class Users_WP_Profile {
                     <?php
                     $sort_by = "";
                     if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
-                        $sort_by = sanitize_title($_GET['uwp_sort_by']);
+                        $sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
                     }
                     ?>
                     <select name="uwp_sort_by" id="uwp_sort_by" onchange="this.form.submit()">

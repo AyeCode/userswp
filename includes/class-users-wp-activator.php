@@ -461,7 +461,7 @@ class Users_WP_Activator {
 
         $fields[] = array(
             'form_type' => 'account',
-            'field_type' => 'text',
+            'field_type' => 'password',
             'site_title' => __('Password', 'uwp'),
             'htmlvar_name' => 'password',
             'default_value' => '',
@@ -473,7 +473,7 @@ class Users_WP_Activator {
 
         $fields[] = array(
             'form_type' => 'account',
-            'field_type' => 'text',
+            'field_type' => 'password',
             'site_title' => __('Confirm Password', 'uwp'),
             'htmlvar_name' => 'confirm_password',
             'default_value' => '',
