@@ -25,16 +25,20 @@ class Users_WP_Activator {
      * @since    1.0.0
      */
     public static function activate() {
-        self::load_dependencies();
-        self::generate_pages();
-        self::add_default_options();
-        self::uwp_create_tables();
-        self::uwp_create_default_fields();
-        self::uwp_insert_form_extras();
-        self::uwp_flush_rewrite_rules();
-
-        add_option('uwp_activation_redirect', 1);
-        add_option('uwp_flush_rewrite', 1);
+        
+        if (!get_option('uwp_default_data_installed')) {
+            self::load_dependencies();
+            self::generate_pages();
+            self::add_default_options();
+            self::uwp_create_tables();
+            self::uwp_create_default_fields();
+            self::uwp_insert_form_extras();
+            self::uwp_flush_rewrite_rules();
+            add_option('uwp_activation_redirect', 1);
+            add_option('uwp_flush_rewrite', 1);
+            add_option('uwp_default_data_installed', 1);
+        }
+        
     }
 
     public static function load_dependencies() {

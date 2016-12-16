@@ -27,6 +27,7 @@ if ( uwp_get_option('uninstall_erase_data') == '1' ) {
     delete_option('uwp_settings');
     delete_option('uwp_activation_redirect');
     delete_option('uwp_flush_rewrite');
+    delete_option('uwp_default_data_installed');
     //delete_option('uwp_db_version');
 
     // Drop tables.
