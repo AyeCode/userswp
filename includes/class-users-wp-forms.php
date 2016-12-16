@@ -792,7 +792,7 @@ class Users_WP_Forms {
 
                 }
 
-                if ($field->field_type == 'email' && !is_email($sanitized_value)) {
+                if ($field->field_type == 'email' && !empty($sanitized_value) && !is_email($sanitized_value)) {
                     $errors->add('invalid_email', __('<strong>Error</strong>: The email address isn&#8217;t correct.', 'uwp'));
                 }
 
