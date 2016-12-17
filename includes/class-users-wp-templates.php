@@ -206,10 +206,12 @@ class Users_WP_Templates {
             </form>
         <?php }
     }
+    
+    public function uwp_template_fields_html($field, $form_type, $user_id = false) {
 
-    public function uwp_template_fields_html($field, $form_type) {
-
-        $user_id = get_current_user_id();
+        if (!$user_id) {
+            $user_id = get_current_user_id();    
+        }
 
         $value = $field->default_value;
         if ($form_type == 'account') {
@@ -372,9 +374,60 @@ class Users_WP_Templates {
             delete_option('uwp_activation_redirect');
 
             wp_redirect(admin_url('admin.php?page=uwp&tab=main&subtab=info'));
+            exit;
 
         }
 
+    }
+
+    public function get_profile_extra_admin_edit($user) {
+        echo $this->get_profile_extra_edit($user);
+    }
+
+    public function get_profile_extra_edit($user) {
+        ob_start();
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' ORDER BY sort_order ASC");
+        if ($fields) {
+            ?>
+            <div class="uwp-profile-extra">
+                <table class="uwp-profile-extra-table form-table">
+                    <?php
+                    foreach ($fields as $field) {
+
+                        // Icon
+                        if ($field->field_icon) {
+                            $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
+                        } else {
+                            $icon = '';
+                        }
+
+                        if ($field->field_type == 'fieldset') {
+                            ?>
+                            <tr style="margin: 0; padding: 0">
+                                <th class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></th>
+                                <td></td>
+                            </tr>
+                            <?php
+                        } else { ?>
+                            <tr>
+                                <th class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?></th>
+                                <td class="uwp-profile-extra-value">
+                                    <?php $this->uwp_template_fields_html($field, 'account', $user->ID); ?>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+                </table>
+            </div>
+            <?php
+        }
+        $output = ob_get_contents();
+        ob_end_clean();
+        return trim($output);
     }
 
 }

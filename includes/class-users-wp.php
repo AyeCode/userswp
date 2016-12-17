@@ -300,8 +300,11 @@ class Users_WP {
 
 
         // Admin user edit page
-        $this->loader->add_action( 'edit_user_profile', $profile, 'uwp_extra_user_profile_fields_in_admin', 10, 1 );
-        $this->loader->add_action( 'show_user_profile', $profile, 'uwp_extra_user_profile_fields_in_admin', 10, 1 );
+        $this->loader->add_action( 'edit_user_profile', $templates, 'get_profile_extra_admin_edit', 10, 1 );
+        $this->loader->add_action( 'show_user_profile', $templates, 'get_profile_extra_admin_edit', 10, 1 );
+
+        $this->loader->add_action( 'personal_options_update', $forms, 'update_profile_extra_admin_edit', 10, 1 );
+        $this->loader->add_action( 'edit_user_profile_update', $forms, 'update_profile_extra_admin_edit', 10, 1 );
 
 
     }
@@ -333,6 +336,8 @@ class Users_WP {
     public function init_form_builder() {
 
         $form_builder = new Users_WP_Form_Builder();
+
+        $this->loader->add_action('admin_init', $form_builder, 'uwp_form_builder_dummy_fields');
 
         $this->loader->add_action('uwp_manage_available_fields_predefined', $form_builder, 'uwp_manage_available_fields_predefined');
         $this->loader->add_action('uwp_manage_available_fields_custom', $form_builder, 'uwp_manage_available_fields_custom');

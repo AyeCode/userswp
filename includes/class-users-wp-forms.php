@@ -767,7 +767,9 @@ class Users_WP_Forms {
 
                             $date_format = $extra_fields['date_format'];
                             $obj_date = DateTime::createFromFormat($date_format, $sanitized_value);
-                            $sanitized_value = $obj_date->getTimestamp();
+                            if ($obj_date) {
+                                $sanitized_value = $obj_date->getTimestamp();
+                            }
                             break;
 
                         default:
@@ -1147,7 +1149,10 @@ class Users_WP_Forms {
             $date_format = $extra_fields['date_format'];
             $jquery_date_format  = $date_format;
 
-            $value = date_i18n($date_format, $value);
+            //todo: get kiran help and fix this
+//            if (!empty($value)) {
+//                $value = date_i18n($date_format, $value);
+//            }
 
             // check if we need to change the format or not
             $date_format_len = strlen(str_replace(' ', '', $date_format));
@@ -1162,7 +1167,7 @@ class Users_WP_Forms {
             }
             if($value=='0000-00-00'){$value='';}//if date not set, then mark it empty
             $value = uwp_date($value, 'Y-m-d', $date_format);
-            var_dump($value);
+            //var_dump($value);
             ?>
             <script type="text/javascript">
 
@@ -1183,12 +1188,15 @@ class Users_WP_Forms {
             </script>
             <div id="<?php echo $field->htmlvar_name;?>_row"
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp-fieldset-details">
-                <label>
 
-                    <?php $site_title = __($field->site_title, 'uwp');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($field->is_required) echo '<span>*</span>';?>
-                </label>
+                <?php
+                $site_title = __($field->site_title, 'uwp');
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php if ($field->is_required) echo '<span>*</span>';?>
+                    </label>
+                <?php } ?>
 
                 <input name="<?php echo $field->htmlvar_name;?>"
                        id="<?php echo $field->htmlvar_name;?>"
@@ -1237,11 +1245,16 @@ class Users_WP_Forms {
             </script>
             <div id="<?php echo $field->htmlvar_name;?>_row"
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp-fieldset-details">
-                <label>
-                    <?php $site_title = __($field->site_title, 'uwp');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($field->is_required) echo '<span>*</span>';?>
-                </label>
+
+                <?php
+                $site_title = __($field->site_title, 'uwp');
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php if ($field->is_required) echo '<span>*</span>';?>
+                    </label>
+                <?php } ?>
+
                 <input readonly="readonly" name="<?php echo $field->htmlvar_name;?>"
                        id="<?php echo $field->htmlvar_name;?>"
                        value="<?php echo esc_attr($value);?>"
@@ -1276,11 +1289,16 @@ class Users_WP_Forms {
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row">
-                <label>
-                    <?php $site_title = __($field->site_title, 'uwp');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($field->is_required) echo '<span>*</span>';?>
-                </label>
+
+                <?php
+                $site_title = __($field->site_title, 'uwp');
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php if ($field->is_required) echo '<span>*</span>';?>
+                    </label>
+                <?php } ?>
+
                 <?php
                 $option_values_arr = uwp_string_values_to_options($field->option_values, true);
                 $select_options = '';
@@ -1338,11 +1356,16 @@ class Users_WP_Forms {
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row">
-                <label>
-                    <?php $site_title = __($field->site_title, 'uwp');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($field->is_required) echo '<span>*</span>';?>
-                </label>
+
+                <?php
+                $site_title = __($field->site_title, 'uwp');
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php if ($field->is_required) echo '<span>*</span>';?>
+                    </label>
+                <?php } ?>
+
                 <input type="hidden" name="<?php echo $field->htmlvar_name;?>" value=""/>
                 <?php if ($multi_display == 'select') { ?>
                 <div class="uwp_multiselect_list">
@@ -1433,11 +1456,16 @@ class Users_WP_Forms {
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
-                <label>
-                    <?php $site_title = __($field->site_title, 'uwp');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($field->is_required) echo '<span>*</span>';?>
-                </label>
+
+                <?php
+                $site_title = __($field->site_title, 'uwp');
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php if ($field->is_required) echo '<span>*</span>';?>
+                    </label>
+                <?php } ?>
+
                 <?php echo uwp_file_upload_preview($field, $value); ?>
                 <input name="<?php echo $field->htmlvar_name; ?>"
                        class="<?php echo $field->css_class; ?>"
@@ -1514,19 +1542,32 @@ class Users_WP_Forms {
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
-                <label>
-                    <?php $site_title = __($field->site_title, 'uwp');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;';?>
-                    <?php if ($field->is_required) echo '<span>*</span>';?>
-                </label>
+
+                <?php
+                $site_title = __($field->site_title, 'uwp');
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php if ($field->is_required) echo '<span>*</span>';?>
+                    </label>
+                <?php } ?>
+
+
                 <?php if ($field->option_values) {
                     $option_values = uwp_string_values_to_options($field->option_values, true);
 
                     if (!empty($option_values)) {
+                        $count = 0;
                         foreach ($option_values as $option_value) {
                             if (empty($option_value['optgroup'])) {
+                                $count++;
+                                if ($count == 1) {
+                                    $class = "uwp-radio-first";
+                                } else {
+                                    $class = "";
+                                }
                                 ?>
-                                <span class="uwp-radios">
+                                <span class="uwp-radios <?php echo $class; ?>">
                                     <input name="<?php echo $field->htmlvar_name; ?>"
                                            id="<?php echo $field->htmlvar_name; ?>"
                                            title="<?php echo esc_attr($option_value['label']); ?>"
@@ -1569,11 +1610,16 @@ class Users_WP_Forms {
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
-                <label>
-                    <?php $site_title = __($field->site_title, 'uwp');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($field->is_required) echo '<span>*</span>';?>
-                </label>
+
+                <?php
+                $site_title = __($field->site_title, 'uwp');
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php if ($field->is_required) echo '<span>*</span>';?>
+                    </label>
+                <?php } ?>
+
                 <textarea name="<?php echo $field->htmlvar_name; ?>"
                           class="<?php echo $field->css_class; ?>"
                           placeholder="<?php echo $field->site_title; ?>"
@@ -1632,11 +1678,16 @@ class Users_WP_Forms {
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
-                <label>
-                    <?php $site_title = __($field->site_title, 'uwp');
-                    echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                    <?php if ($field->is_required) echo '<span>*</span>';?>
-                </label>
+
+                <?php
+                $site_title = __($field->site_title, 'uwp');
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php if ($field->is_required) echo '<span>*</span>';?>
+                    </label>
+                <?php } ?>
+
                 <input name="<?php echo $field->htmlvar_name;?>"
                        class="<?php echo $field->css_class; ?> uwp_textfield"
                        id="<?php echo $field->htmlvar_name;?>"
@@ -1659,6 +1710,23 @@ class Users_WP_Forms {
         }
 
         return $html;
+    }
+
+
+    // Update admin edit
+    public function update_profile_extra_admin_edit($user_id) {
+        ob_start();
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' ORDER BY sort_order ASC");
+        if ($fields) {
+            foreach ($fields as $field) {
+                $value = strip_tags(esc_sql($_POST[$field->htmlvar_name]));
+                if ($value == '0' || !empty($value)) {
+                    uwp_update_usermeta($user_id, $field->htmlvar_name, $value);
+                }
+            }
+        }
     }
 
 }

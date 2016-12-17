@@ -191,6 +191,7 @@ class Users_WP_Activator {
 							  option_values text NULL DEFAULT NULL,
 							  is_active enum( '0', '1' ) NOT NULL DEFAULT '1',
 							  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_dummy enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_required enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_register_field enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_register_only_field enum( '0', '1' ) NOT NULL DEFAULT '0',
@@ -218,6 +219,7 @@ class Users_WP_Activator {
 									  site_htmlvar_name varchar(255) NOT NULL,
 									  sort_order int(11) NOT NULL,
 									  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
+									  is_dummy enum( '0', '1' ) NOT NULL DEFAULT '0',
 									  PRIMARY KEY  (id)
 									) $collate AUTO_INCREMENT=1 ;";
 
@@ -269,6 +271,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1'
         );
 
@@ -280,6 +283,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1'
         );
 
@@ -300,6 +304,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1'
         );
 
@@ -320,6 +325,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'extra_fields'        =>  array(
                 'uwp_file_types'  =>  array(
@@ -349,6 +355,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'extra_fields'        =>  array(
                 'uwp_file_types'  =>  array(
@@ -378,6 +385,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1'
         );
 
@@ -389,6 +397,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1'
         );
 
@@ -409,6 +418,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
             'css_class' => 'uwp-half uwp-half-left',
@@ -422,6 +432,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
             'css_class' => 'uwp-half uwp-half-right',
@@ -435,6 +446,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
             'is_register_only_field' => '1',
@@ -448,6 +460,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
         );
@@ -460,6 +473,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1'
         );
 
@@ -471,6 +485,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1'
         );
@@ -483,6 +498,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1'
         );

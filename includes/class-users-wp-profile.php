@@ -126,46 +126,54 @@ class Users_WP_Profile {
         ob_start();
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND is_default = '0' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' ORDER BY sort_order ASC");
         if ($fields) {
             ?>
             <div class="uwp-profile-extra">
-                <table class="uwp-profile-extra-table">
+                <table class="uwp-profile-extra-table form-table">
                     <?php
                     foreach ($fields as $field) {
-                        $option_values_arr = array();
-                        if ($field->field_type == 'select' || $field->field_type == 'multiselect') {
-                            $option_values_arr = uwp_string_values_to_options($field->option_values, true);
-                        }
 
                         $value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
-                        if ($field->field_type == 'select') {
-                            if (!empty($value)) {
-                                $data = $this->uwp_array_search($option_values_arr, 'value', $value);
-                                $value = $data[0]['label'];
-                            } else {
-                                $value = '';
-                            }
 
-                        }
-                        if ($field->field_type == 'multiselect' && !empty($value)) {
-                            if (!empty($value) && is_array($value)) {
-                                $array_value = array();
-                                foreach ($value as $v) {
-                                    $data = $this->uwp_array_search($option_values_arr, 'value', $v);
-                                    $array_value[] = $data[0]['label'];
+                        // Select and Multiselect needs Value to be converted
+                        if ($field->field_type == 'select' || $field->field_type == 'multiselect') {
+                            $option_values_arr = array();
+                            $option_values_arr = uwp_string_values_to_options($field->option_values, true);
+
+                            // Select
+                            if ($field->field_type == 'select') {
+                                if (!empty($value)) {
+                                    $data = $this->uwp_array_search($option_values_arr, 'value', $value);
+                                    $value = $data[0]['label'];
+                                } else {
+                                    $value = '';
                                 }
-                                $value = implode(', ', $array_value);
-                            } else {
-                                $value = '';
+                            }
+
+                            //Multiselect
+                            if ($field->field_type == 'multiselect' && !empty($value)) {
+                                if (!empty($value) && is_array($value)) {
+                                    $array_value = array();
+                                    foreach ($value as $v) {
+                                        $data = $this->uwp_array_search($option_values_arr, 'value', $v);
+                                        $array_value[] = $data[0]['label'];
+                                    }
+                                    $value = implode(', ', $array_value);
+                                } else {
+                                    $value = '';
+                                }
                             }
                         }
-                        
 
+
+                        
+                        // URL
                         if ($field->field_type == 'url' && !empty($value)) {
                             $value = '<a href="'.$value.'">'.$value.'</a>';
                         }
 
+                        // Checkbox
                         if ($field->field_type == 'checkbox') {
                             if ($value == '1') {
                                 $value = 'yes';
@@ -174,28 +182,35 @@ class Users_WP_Profile {
                             }
                         }
 
+                        // File
+                        if ($field->field_type == 'file') {
+                            $value = uwp_file_upload_preview($field, $value);
+                        }
 
+                        // Icon
                         if ($field->field_icon) {
                             $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
                         } else {
                             $icon = '';
                         }
 
-                        if ($value) {
+                        if ($field->field_type == 'fieldset') {
                             ?>
-                            <tr>
-                                <td class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?></td>
-                                <td class="uwp-profile-extra-value">
-                                    <?php
-                                    if ($field->field_type == 'file') {
-                                        echo uwp_file_upload_preview($field, $value);
-                                    } else {
-                                        echo $value;
-                                    }
-                                    ?>
-                                </td>
+                            <tr style="margin: 0; padding: 0">
+                                <th colspan="2" class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></th>
                             </tr>
                             <?php
+                        } else {
+                            if ($value) {
+                                ?>
+                                <tr>
+                                    <th class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?></th>
+                                    <td class="uwp-profile-extra-value">
+                                        <?php echo $value; ?>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
                         }
                     }
                     ?>
@@ -207,6 +222,7 @@ class Users_WP_Profile {
         ob_end_clean();
         return trim($output);
     }
+    
 
     public function get_profile_tabs($user) {
 
@@ -697,69 +713,11 @@ class Users_WP_Profile {
     }
 
 
-    public function uwp_extra_user_profile_fields_in_admin( $user ) {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $excluded_fields = array(
-            'uwp_account_username',
-            'uwp_account_email',
-            'uwp_account_bio',
-            'uwp_account_password',
-            'uwp_account_confirm_password',
-            'uwp_account_first_name',
-            'uwp_account_last_name'
-        );
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array('account')));
-        if (!empty($fields)) {
-            ?>
-            <h3><?php _e("UsersWP", "uwp"); ?></h3>
-            <table class="form-table">
-            <?php
-            foreach ($fields as $field) {
-                if (in_array($field->htmlvar_name, $excluded_fields) || $field->field_type == 'fieldset') {
-                    continue;
-                }
-                $option_values_arr = array();
-                if ($field->field_type == 'select' || $field->field_type == 'multiselect') {
-                    $option_values_arr = uwp_string_values_to_options($field->option_values, true);    
-                }
-                ?>
-                    <tr>
-                        <th><?php echo $field->site_title; ?></th>
-                        <td>
-                            <?php
-                            $value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
-                            if ($field->field_type == 'select') {
-                                if (!empty($value)) {
-                                    $data = $this->uwp_array_search($option_values_arr, 'value', $value);
-                                    $value = $data[0]['label'];
-                                } else {
-                                    $value = '';
-                                }
-
-                            }
-                            if ($field->field_type == 'multiselect' && !empty($value)) {
-                                if (!empty($value) && is_array($value)) {
-                                    $array_value = array();
-                                    foreach ($value as $v) {
-                                        $data = $this->uwp_array_search($option_values_arr, 'value', $v);
-                                        $array_value[] = $data[0]['label'];
-                                    }
-                                    $value = implode(', ', $array_value);
-                                } else {
-                                    $value = '';
-                                }
-                            }
-                            echo $value;
-                            ?>
-                        </td>
-                    </tr>
-                <?php
-            }
-            ?>
-            </table>
-            <?php
-        }
+    public function uwp_extra_user_profile_fields( $user ) {
+        ?>
+        <h3><?php _e("UsersWP", "uwp"); ?></h3>
+        <?php echo $this->get_profile_extra($user); ?>
+        <?php
     }
 
     public function uwp_array_search($array, $key, $value)

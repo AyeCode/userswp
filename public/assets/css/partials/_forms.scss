@@ -119,3 +119,12 @@
   width: auto !important;
   margin-left: 10px;
 }
+.uwp_form_radio_row {
+  .uwp-radios {
+    padding: 0;
+    padding-left: 10px;
+  }
+  .uwp-radio-first {
+    padding-left: 0;
+  }
+}
