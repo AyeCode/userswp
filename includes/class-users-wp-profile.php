@@ -191,7 +191,7 @@ class Users_WP_Profile {
 
                         // File
                         if ($field->field_type == 'file') {
-                            $value = uwp_file_upload_preview($field, $value);
+                            $value = uwp_file_upload_preview($field, $value, false);
                         }
 
                         // Icon

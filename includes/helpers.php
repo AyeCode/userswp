@@ -1276,7 +1276,7 @@ function get_uwp_users_list() {
     <?php
 }
 
-function uwp_file_upload_preview($field, $value) {
+function uwp_file_upload_preview($field, $value, $removable = true) {
     $output = '';
     if ($value) {
         $file = basename( $value );
@@ -1284,12 +1284,16 @@ function uwp_file_upload_preview($field, $value) {
         $image_types = array('png', 'jpg', 'jpeg', 'gif');
         if (in_array($filetype['ext'], $image_types)) {
             $output .= '<a href="'.$value.'" class="uwp_upload_file_preview"><img style="max-width:100px;" src="'.$value.'" /></a>';
-            $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$field->htmlvar_name.'" class="uwp_upload_file_remove">'. __( 'Remove Image' , 'uwp' ).'</a>';
+            if ($removable) {
+                $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$field->htmlvar_name.'" class="uwp_upload_file_remove">'. __( 'Remove Image' , 'uwp' ).'</a>';    
+            }
             ?>
             <?php
         } else {
             $output .= '<a href="'.$value.'" class="uwp_upload_file_preview">'.$file.'</a>';
-            $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$field->htmlvar_name.'" class="uwp_upload_file_remove">'. __( 'Remove File' , 'uwp' ).'</a>';
+            if ($removable) {
+                $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$field->htmlvar_name.'" class="uwp_upload_file_remove">'. __( 'Remove File' , 'uwp' ).'</a>';    
+            }
             ?>
             <?php
         }
