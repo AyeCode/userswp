@@ -864,7 +864,7 @@ class Users_WP_Profile {
                     $keyword = strip_tags(esc_sql($_GET['uwps']));
                 }
                 ?>
-                <form method="get" class="searchform search-form" action="">
+                <form method="get" class="searchform search-form" action="<?php echo get_uwp_users_permalink(); ?>">
                     <input placeholder="Search For" name="uwps" value="<?php echo $keyword; ?>" class="s search-input" type="text">
                     <input class="uwp-searchsubmit uwp-search-submit" value="Search" type="submit"><br>
                 </form>

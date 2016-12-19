@@ -783,6 +783,43 @@ function is_uwp_current_user_profile_page() {
     }
 }
 
+function get_uwp_register_permalink() {
+    return get_uwp_page_permalink('register_page');
+}
+
+function get_uwp_login_permalink() {
+    return get_uwp_page_permalink('login_page');
+}
+
+function get_uwp_forgot_permalink() {
+    return get_uwp_page_permalink('forgot_page');
+}
+
+function get_uwp_reset_permalink() {
+    return get_uwp_page_permalink('reset_page');
+}
+
+function get_uwp_account_permalink() {
+    return get_uwp_page_permalink('account_page');
+}
+
+function get_uwp_profile_permalink() {
+    return get_uwp_page_permalink('profile_page');
+}
+
+function get_uwp_users_permalink() {
+    return get_uwp_page_permalink('users_page');
+}
+
+function get_uwp_page_permalink($type) {
+    $link = false;
+    $page_id = uwp_get_option($type, false);
+    if ($page_id) {
+        $link = get_permalink($page_id);
+    }
+    return $link;
+}
+
 function uwp_generic_tab_content($user, $post_type, $title) {
     ?>
     <h3><?php echo $title; ?></h3>
