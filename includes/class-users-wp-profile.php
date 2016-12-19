@@ -124,7 +124,7 @@ class Users_WP_Profile {
     public function get_profile_extra_count($user) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_default = '0' ORDER BY sort_order ASC");
         return count($fields);
     }
 
