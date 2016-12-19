@@ -1531,13 +1531,12 @@ class Users_WP_Forms {
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
         //Normal fields
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND is_default = '0' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND field_type != 'fieldset' AND is_default = '0' ORDER BY sort_order ASC");
         if ($fields) {
             $result = uwp_validate_fields($_POST, 'account', $fields);
             if (!is_wp_error($result)) {
                 foreach ($fields as $field) {
                     $value = $result[$field->htmlvar_name];
-                    var_dump($value);
                     if ($value == '0' || !empty($value)) {
                         uwp_update_usermeta($user_id, $field->htmlvar_name, $value);
                     }
