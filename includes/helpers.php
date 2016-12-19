@@ -1285,6 +1285,21 @@ function uwp_validate_fields($data, $type, $fields = false) {
     if (!empty($fields)) {
         foreach ($fields as $field) {
 
+            if (!isset($data[$field->htmlvar_name]) && $field->is_required != 1) {
+                continue;
+            }
+
+            if (!isset($data[$field->htmlvar_name]) && $field->is_required == 1) {
+                if ($field->required_msg) {
+                    $errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->site_title.' '.$field->required_msg, 'uwp'));
+                } else {
+                    $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'uwp'));
+                }
+            }
+
+            if ($errors->get_error_code())
+                return $errors;
+
             if ($type == 'register') {
                 if ($enable_password != '1') {
                     if ( ($field->htmlvar_name == 'uwp_account_password') OR ($field->htmlvar_name == 'uwp_account_confirm_password') ) {
