@@ -78,7 +78,7 @@ class Users_WP_Profile {
     }
 
     public function get_profile_bio($user) {
-        $bio = uwp_get_usermeta($user->ID, 'uwp_account_bio', '');
+        $bio = get_user_meta( $user->ID, 'description', true );
         $is_profile_page = is_uwp_profile_page();
         if ($bio) {
             ?>
