@@ -2194,7 +2194,7 @@ class Users_WP_Form_Builder {
                         site_htmlvar_name = %s,
                         sort_order = %s",
                             array(
-                                $field['form_type'],
+                                'register',
                                 $field['field_type'],
                                 $field['is_dummy'],
                                 'uwp_account_'.$field['htmlvar_name'],
