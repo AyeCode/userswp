@@ -121,6 +121,13 @@ class Users_WP_Profile {
         <?php
     }
 
+    public function get_profile_extra_count($user) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' ORDER BY sort_order ASC");
+        return count($fields);
+    }
+
     public function get_profile_extra($user) {
 
         ob_start();
@@ -239,7 +246,7 @@ class Users_WP_Profile {
         if (in_array('more_info', $allowed_tabs) && $extra) {
             $tabs['more_info']  = array(
                 'title' => __( 'More Info', 'uwp' ),
-                'count' => 0
+                'count' => $this->get_profile_extra_count($user)
             );
         }
 
