@@ -306,6 +306,8 @@ class Users_WP {
         $this->loader->add_action( 'personal_options_update', $forms, 'update_profile_extra_admin_edit', 10, 1 );
         $this->loader->add_action( 'edit_user_profile_update', $forms, 'update_profile_extra_admin_edit', 10, 1 );
 
+        $this->loader->add_action( 'user_edit_form_tag', $forms, 'add_multipart_to_admin_edit_form');
+
 
     }
 

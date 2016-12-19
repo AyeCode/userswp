@@ -72,7 +72,7 @@ class Users_WP_Admin {
      *
      * @since    1.0.0
      */
-    public function enqueue_styles() {
+    public function enqueue_styles($hook_suffix) {
 
         /**
          * An instance of this class should be passed to the run() function
@@ -84,11 +84,13 @@ class Users_WP_Admin {
          * class.
          */
 
-        wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
-        wp_enqueue_style( 'jquery-ui' );
+        if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
+            wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
+            wp_enqueue_style( 'jquery-ui' );
+            wp_enqueue_style( "uwp_timepicker_css", plugin_dir_url( dirname(__FILE__) ) . 'public/assets/css/jquery.ui.timepicker.css', array(), null, 'all' );
+        }
         wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp-admin.css', array(), $this->version, 'all' );
         wp_enqueue_style( "uwp_chosen_css", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/chosen.css', array(), $this->version, 'all' );
-        wp_enqueue_style( "uwp_timepicker_css", plugin_dir_url( dirname(__FILE__) ) . 'assets/css/jquery.ui.timepicker.css', array(), null, 'all' );
         global $wp_styles;
         $srcs = array_map('basename', (array) wp_list_pluck($wp_styles->registered, 'src') );
         if ( in_array('font-awesome.css', $srcs) || in_array('font-awesome.min.css', $srcs)  ) {
@@ -105,7 +107,7 @@ class Users_WP_Admin {
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts() {
+    public function enqueue_scripts($hook_suffix) {
 
         /**
          * An instance of this class should be passed to the run() function
@@ -117,12 +119,14 @@ class Users_WP_Admin {
          * class.
          */
 
+        if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
+            wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
+            wp_enqueue_script( "uwp_timepicker", plugin_dir_url( dirname(__FILE__) ) . 'public/assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
+            wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.js', array( 'jquery' ), $this->version, false );
+        }
         wp_enqueue_script('jquery-ui-sortable');
-        wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
-        wp_enqueue_script( "uwp_timepicker", plugin_dir_url( dirname(__FILE__) ) . 'assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.js', array( 'jquery' ), $this->version, false );
         wp_enqueue_script( "uwp_chosen", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/chosen.jquery.js', array( 'jquery' ), $this->version, false );
-        wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.js', array( 'jquery' ), $this->version, false );
 
         $ajax_cons_data = array(
             'url' => admin_url('admin-ajax.php'),

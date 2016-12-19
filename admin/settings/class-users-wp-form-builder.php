@@ -2329,7 +2329,7 @@ class Users_WP_Form_Builder {
             'is_active' => '1',
             'is_register_field' => '1',
             'extra' => array(
-                'date_format' => 'mm/dd/yy'
+                'date_format' => 'F j, Y'
             )
         );
 

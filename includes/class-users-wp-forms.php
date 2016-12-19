@@ -148,7 +148,7 @@ class Users_WP_Forms {
 
         do_action('uwp_before_validate', 'register');
 
-        $result = $this->validate_fields($data, 'register');
+        $result = uwp_validate_fields($data, 'register');
         
         $result = apply_filters('uwp_validate_result', $result, 'register');
 
@@ -298,7 +298,7 @@ class Users_WP_Forms {
 
         do_action('uwp_before_validate', 'login');
 
-        $result = $this->validate_fields($data, 'login');
+        $result = uwp_validate_fields($data, 'login');
 
         $result = apply_filters('uwp_validate_result', $result, 'login');
 
@@ -354,7 +354,7 @@ class Users_WP_Forms {
 
         do_action('uwp_before_validate', 'forgot');
 
-        $result = $this->validate_fields($data, 'forgot');
+        $result = uwp_validate_fields($data, 'forgot');
 
         $result = apply_filters('uwp_validate_result', $result, 'forgot');
 
@@ -396,7 +396,7 @@ class Users_WP_Forms {
 
         do_action('uwp_before_validate', 'reset');
 
-        $result = $this->validate_fields($data, 'reset');
+        $result = uwp_validate_fields($data, 'reset');
 
         $result = apply_filters('uwp_validate_result', $result, 'reset');
 
@@ -494,7 +494,7 @@ class Users_WP_Forms {
 
         do_action('uwp_before_validate', 'account');
 
-        $result = $this->validate_fields($data, 'account');
+        $result = uwp_validate_fields($data, 'account');
 
         $result = apply_filters('uwp_validate_result', $result, 'account');
 
@@ -671,203 +671,6 @@ class Users_WP_Forms {
 
     }
 
-    public function validate_fields($data, $type) {
-
-        $errors = new WP_Error();
-
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
-
-        if ($type == 'register') {
-            $fields = get_register_validate_form_fields();
-        } elseif ($type == 'account') {
-            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' AND is_register_only_field = '0' ORDER BY sort_order ASC", array('account')));
-        } else {
-            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
-        }
-
-
-        $validated_data = array();
-        $enable_password = uwp_get_option('enable_register_password', false);
-
-        if (!empty($fields)) {
-            foreach ($fields as $field) {
-
-                if ($type == 'register') {
-                    if ($enable_password != '1') {
-                        if ( ($field->htmlvar_name == 'uwp_account_password') OR ($field->htmlvar_name == 'uwp_account_confirm_password') ) {
-                            continue;
-                        }
-                    }
-                }
-
-                $value = $data[$field->htmlvar_name];
-                $sanitized_value = $value;
-
-                if ($field->field_type == 'password') {
-                    continue;
-                }
-
-                $sanitized = false;
-
-                // sanitize our default fields
-                switch($field->htmlvar_name) {
-
-                    case 'uwp_register_username':
-                    case 'uwp_login_username':
-                    case 'uwp_reset_username':
-                        $sanitized_value = sanitize_user($value);
-                        $sanitized = true;
-                        break;
-
-                    case 'uwp_register_first_name':
-                    case 'uwp_register_last_name':
-                    case 'uwp_account_first_name':
-                    case 'uwp_account_last_name':
-                        $sanitized_value = sanitize_text_field($value);
-                        $sanitized = true;
-                        break;
-
-                    case 'uwp_register_email':
-                    case 'uwp_forgot_email':
-                    case 'uwp_account_email':
-                        $sanitized_value = sanitize_email($value);
-                        $sanitized = true;
-                        break;
-
-                }
-
-                if (!$sanitized && !empty($value)) {
-                    // sanitize by field type
-                    switch($field->field_type) {
-
-                        case 'text':
-                            $sanitized_value = sanitize_text_field($value);
-                            break;
-
-                        case 'checkbox':
-                            $sanitized_value = sanitize_text_field($value);
-                            break;
-
-                        case 'email':
-                            $sanitized_value = sanitize_email($value);
-                            break;
-
-                        case 'multiselect':
-                            $sanitized_value = array_map( 'sanitize_text_field', $value );
-                            break;
-
-                        case 'datepicker':
-                            $sanitized_value = sanitize_text_field($value);
-                            $extra_fields = unserialize($field->extra_fields);
-
-                            if ($extra_fields['date_format'] == '')
-                                $extra_fields['date_format'] = 'yy-mm-dd';
-
-                            $date_format = $extra_fields['date_format'];
-                            $obj_date = DateTime::createFromFormat($date_format, $sanitized_value);
-                            if ($obj_date) {
-                                $sanitized_value = $obj_date->getTimestamp();
-                            }
-                            break;
-
-                        default:
-                            $sanitized_value = sanitize_text_field($value);
-
-                    }
-                }
-
-
-
-                if (($field->htmlvar_name == 'uwp_account_password' || $field->htmlvar_name == 'uwp_account_confirm_password') && empty($value)) {
-                    $field->is_required = 0;
-                }
-
-
-                if ($field->is_required == 1 && $sanitized_value == '') {
-                    if ($field->required_msg) {
-                        $errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->site_title.' '.$field->required_msg, 'uwp'));
-                    } else {
-                        $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'uwp'));
-                    }
-
-                }
-
-                if ($field->field_type == 'email' && !empty($sanitized_value) && !is_email($sanitized_value)) {
-                    $errors->add('invalid_email', __('<strong>Error</strong>: The email address isn&#8217;t correct.', 'uwp'));
-                }
-
-                //register email
-                if ($type == 'register' && $field->htmlvar_name == 'uwp_account_email' && email_exists($sanitized_value)) {
-                    $errors->add('email_exists', __('<strong>Error</strong>: This email is already registered, please choose another one.', 'uwp'));
-                }
-
-                //forgot email
-                if ($field->htmlvar_name == 'uwp_forgot_email' && !email_exists($sanitized_value)) {
-                    $errors->add('email_exists', __('<strong>Error</strong>: This email doesn\'t exists.', 'uwp'));
-                }
-
-                // Check the username for register
-                if ($field->htmlvar_name == 'uwp_account_username') {
-                    if (!validate_username($sanitized_value)) {
-                        $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'uwp'));
-                    }
-                    if (username_exists($sanitized_value)) {
-                        $errors->add('username_exists', __('<strong>Error</strong>: This username is already registered. Please choose another one.', 'uwp'));
-                    }
-                }
-
-                // Check the username for login
-                if ($field->htmlvar_name == 'uwp_login_username') {
-                    if (!validate_username($sanitized_value)) {
-                        $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'uwp'));
-                    }
-                }
-
-
-                $validated_data[$field->htmlvar_name] = $sanitized_value;
-
-            }
-        }
-
-        if ($type == 'login') {
-            $password_type = 'login';
-        } elseif ($type == 'reset') {
-            $password_type = 'reset';
-        } else {
-            $password_type = 'account';
-        }
-
-        if ($type == 'reset' || $type == 'login' || ($type == 'register' && $enable_password == '1') || ($type == 'account' && !empty( $data['uwp_account_password']))) {
-            //check password
-            if( empty( $data['uwp_'.$password_type.'_password'] ) ) {
-                $errors->add( 'empty_password', __( 'Please enter a password', 'uwp' ) );
-            }
-
-            if (strlen($data['uwp_'.$password_type.'_password']) < 7) {
-                $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', 'uwp'));
-            }
-
-            $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
-        }
-
-        if (($type == 'register' && $enable_password == '1') || $type == 'reset' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
-            //check password
-            if ($data['uwp_'.$password_type.'_password'] != $data['uwp_'.$password_type.'_confirm_password']) {
-                $errors->add('pass_match', __('ERROR: Passwords do not match.', 'uwp'));
-            }
-
-            $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
-        }
-
-
-        if ($errors->get_error_code())
-            return $errors;
-
-        return $validated_data;
-    }
-    
     public function uwp_save_user_extra_fields($user_id, $data, $type) {
 
         if (empty($user_id) || empty($data) || empty($type)) {
@@ -1149,10 +952,10 @@ class Users_WP_Forms {
             $date_format = $extra_fields['date_format'];
             $jquery_date_format  = $date_format;
 
-            //todo: get kiran help and fix this
-//            if (!empty($value)) {
-//                $value = date_i18n($date_format, $value);
-//            }
+            if (!empty($value)) {
+                $value = date('Y-m-d', $value);
+            }
+
 
             // check if we need to change the format or not
             $date_format_len = strlen(str_replace(' ', '', $date_format));
@@ -1167,7 +970,6 @@ class Users_WP_Forms {
             }
             if($value=='0000-00-00'){$value='';}//if date not set, then mark it empty
             $value = uwp_date($value, 'Y-m-d', $date_format);
-            //var_dump($value);
             ?>
             <script type="text/javascript">
 
@@ -1713,17 +1515,46 @@ class Users_WP_Forms {
     }
 
 
+    // Add multipart/form-data to edit form
+    function add_multipart_to_admin_edit_form() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type = 'file' AND is_default = '0' ORDER BY sort_order ASC");
+        if ($fields) {
+            echo 'enctype="multipart/form-data"';
+        }
+    }
+
     // Update admin edit
     public function update_profile_extra_admin_edit($user_id) {
         ob_start();
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' ORDER BY sort_order ASC");
+        //Normal fields
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND is_default = '0' ORDER BY sort_order ASC");
         if ($fields) {
-            foreach ($fields as $field) {
-                $value = strip_tags(esc_sql($_POST[$field->htmlvar_name]));
-                if ($value == '0' || !empty($value)) {
-                    uwp_update_usermeta($user_id, $field->htmlvar_name, $value);
+            $result = uwp_validate_fields($_POST, 'account', $fields);
+            if (!is_wp_error($result)) {
+                foreach ($fields as $field) {
+                    $value = $result[$field->htmlvar_name];
+                    var_dump($value);
+                    if ($value == '0' || !empty($value)) {
+                        uwp_update_usermeta($user_id, $field->htmlvar_name, $value);
+                    }
+                }
+            }
+        }
+
+        //File fields
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type = 'file' AND is_default = '0' ORDER BY sort_order ASC");
+        if ($fields) {
+            $result = uwp_validate_uploads($_FILES, 'account', true, $fields);
+            if (!is_wp_error($result)) {
+                foreach ($fields as $field) {
+                    $value = $result[$field->htmlvar_name];
+                    if ($value == '0' || !empty($value)) {
+                        uwp_update_usermeta($user_id, $field->htmlvar_name, $value);
+                    }
                 }
             }
         }
