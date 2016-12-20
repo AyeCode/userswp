@@ -214,6 +214,16 @@ function save_field(id) {
                 }
             }
         }
+
+        var option_val_input = jQuery('#licontainer_' + id + ' #option_values');
+        if (option_val_input.length == 1) {
+            var option_values = option_val_input.val();
+            if (option_values == '') {
+                alert(uwp_admin_ajax.custom_field_options_not_blank_var);
+                return false;
+            }
+
+        }
     }
 
     var fieldrequest = jQuery('#licontainer_' + id).find("select, textarea, input").serialize();

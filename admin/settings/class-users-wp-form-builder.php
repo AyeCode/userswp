@@ -848,6 +848,45 @@ class Users_WP_Form_Builder {
                             <?php
                         }
 
+                        
+                        // is_public
+                        if(has_filter("uwp_builder_is_public_{$field_type}")){
+
+                            echo apply_filters("uwp_builder_is_public_{$field_type}",'',$result_str,$cf,$field_info);
+
+                        }else{
+                            $value = '';
+                            if (isset($field_info->is_public)) {
+                                $value = esc_attr($field_info->is_public);
+                            }elseif(isset($cf['defaults']['is_public']) && $cf['defaults']['is_public']){
+                                $value = $cf['defaults']['is_public'];
+                            }
+                            ?>
+                            <li <?php echo $field_display; ?>>
+                                <label for="is_public" class="uwp-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Is Public :', 'uwp'); ?>
+                                    <div class="uwp-tooltip">
+                                        <?php _e('If no is selected then the field will not be visible to other users.', 'uwp'); ?>
+                                    </div>
+                                </label>
+                                <div class="uwp-input-wrap uwp-switch">
+
+                                    <input type="radio" id="is_public_yes<?php echo $radio_id;?>" name="is_public" class="uwp-ri-enabled"  value="1"
+                                        <?php if ($value == '1') {
+                                            echo 'checked';
+                                        } ?>/>
+                                    <label for="is_public_yes<?php echo $radio_id;?>" class="uwp-cb-enable"><span><?php _e('Yes', 'uwp'); ?></span></label>
+
+                                    <input type="radio" id="is_public_no<?php echo $radio_id;?>" name="is_public" class="uwp-ri-disabled" value="0"
+                                        <?php if ($value == '0' || !$value) {
+                                            echo 'checked';
+                                        } ?>/>
+                                    <label for="is_public_no<?php echo $radio_id;?>" class="uwp-cb-disable"><span><?php _e('No', 'uwp'); ?></span></label>
+
+                                </div>
+                            </li>
+                            <?php
+                        }
+
 
                         // default_value
                         if(has_filter("uwp_builder_default_value_{$field_type}")){
@@ -1167,6 +1206,7 @@ class Users_WP_Form_Builder {
             $is_active = isset($request_field['is_active']) ? $request_field['is_active'] : '';
             $is_required = isset($request_field['is_required']) ? $request_field['is_required'] : '';
             $is_dummy = isset($request_field['is_dummy']) ? $request_field['is_dummy'] : '';
+            $is_public = isset($request_field['is_public']) ? $request_field['is_public'] : '';
             $is_register_field = isset($request_field['is_register_field']) ? $request_field['is_register_field'] : '';
             $is_register_only_field = isset($request_field['is_register_only_field']) ? $request_field['is_register_only_field'] : '';
             $required_msg = isset($request_field['required_msg']) ? $request_field['required_msg'] : '';
@@ -1201,6 +1241,7 @@ class Users_WP_Form_Builder {
             if ($is_active == '') $is_active = 1;
             if ($is_required == '') $is_required = 0;
             if ($is_dummy == '') $is_dummy = 0;
+            if ($is_public == '') $is_public = 0;
             if ($is_register_field == '') $is_register_field = 0;
             if ($is_register_only_field == '') $is_register_only_field = 0;
 
@@ -1236,6 +1277,7 @@ class Users_WP_Form_Builder {
                             is_default  = %s,
                             is_required = %s,
                             is_dummy = %s,
+                            is_public = %s,
                             is_register_field = %s,
                             is_register_only_field = %s,
                             required_msg = %s,
@@ -1261,6 +1303,7 @@ class Users_WP_Form_Builder {
                             $is_default,
                             $is_required,
                             $is_dummy,
+                            $is_public,
                             $is_register_field,
                             $is_register_only_field,
                             $required_msg,
@@ -1306,6 +1349,7 @@ class Users_WP_Form_Builder {
                             is_default  = %s,
                             is_required = %s,
                             is_dummy = %s,
+                            is_public = %s,
                             is_register_field = %s,
                             is_register_only_field = %s,
                             required_msg = %s,
@@ -1329,6 +1373,7 @@ class Users_WP_Form_Builder {
                             $is_default,
                             $is_required,
                             $is_dummy,
+                            $is_public,
                             $is_register_field,
                             $is_register_only_field,
                             $required_msg,
@@ -1703,7 +1748,7 @@ class Users_WP_Form_Builder {
                     }
 
                     $display = '';
-                    if (in_array($field['htmlvar_name'], $existing_field_ids) && $field['field_type']!='fieldset')
+                    if (in_array($field['htmlvar_name'], $existing_field_ids))
                         $display = 'display:none;';
 
                     $style = 'style="'.$display .$fieldset_width.'"';

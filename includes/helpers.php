@@ -610,6 +610,7 @@ function uwp_get_file_type($ext) {
         $file_types = array_merge($file_types, $types);
     }
     $file_types = array_flip($file_types);
+    //todo: zip file seems like having problems with size and type. Fix this
     return $file_types[$ext];
 }
 
@@ -927,7 +928,7 @@ function handle_file_upload( $field, $files ) {
         $extra_fields = unserialize($field->extra_fields);
 
         $allowed_mime_types = array();
-        if (isset($extra_fields['uwp_file_types'])) {
+        if (isset($extra_fields['uwp_file_types']) && !in_array("*", $extra_fields['uwp_file_types'])) {
             $allowed_mime_types = $extra_fields['uwp_file_types'];
         }
 
@@ -954,7 +955,9 @@ function handle_file_upload( $field, $files ) {
                 return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. uwp_formatSizeUnits($max_upload_size), 'uwp' ) );
 
 
+            remove_filter( 'wp_handle_upload_prefilter', 'uwp_wp_media_restrict_file_types' );
             $uploaded_file = uwp_upload_file( $file_to_upload, array( 'file_key' => $file_key ) );
+            add_filter( 'wp_handle_upload_prefilter', 'uwp_wp_media_restrict_file_types' );
 
             if ( is_wp_error( $uploaded_file ) ) {
 
@@ -1514,4 +1517,26 @@ function uwp_validate_fields($data, $type, $fields = false) {
         return $errors;
 
     return $validated_data;
+}
+
+
+function uwp_wp_media_restrict_file_types($file) {
+    // This bit is for the flash uploader
+    if ($file['type']=='application/octet-stream' && isset($file['tmp_name'])) {
+        $file_size = getimagesize($file['tmp_name']);
+        if (isset($file_size['error']) && $file_size['error']!=0) {
+            $file['error'] = "Unexpected Error: {$file_size['error']}";
+            return $file;
+        } else {
+            $file['type'] = $file_size['mime'];
+        }
+    }
+    list($category,$type) = explode('/',$file['type']);
+    if ('image'!=$category || !in_array($type,array('jpg','jpeg','gif','png'))) {
+        $file['error'] = "Sorry, you can only upload a .GIF, a .JPG, or a .PNG image file.";
+    } else if ($post_id = (isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : false)) {
+        if (count(get_posts("post_type=attachment&post_parent={$post_id}"))>0)
+            $file['error'] = "Sorry, you cannot upload more than one (1) image.";
+    }
+    return $file;
 }

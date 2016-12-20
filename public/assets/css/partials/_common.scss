@@ -1,7 +1,10 @@
 .uwp-content-wrap * {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
-  box-sizing: content-box
+  box-sizing: content-box;
+  a {
+    box-shadow: none !important;
+  }
 }
 
 .uwp-login,

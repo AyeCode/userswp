@@ -356,3 +356,9 @@
 .uwp_field_icon {
   margin-right: 5px;
 }
+.uwp-profile-extra-table th,
+.uwp-profile-extra-table td {
+  vertical-align: middle;
+  border-top: 1px solid #ededed;
+  padding: 6px 10px 6px 0;
+}

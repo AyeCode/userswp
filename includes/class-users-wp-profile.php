@@ -140,6 +140,9 @@ class Users_WP_Profile {
                 <table class="uwp-profile-extra-table form-table">
                     <?php
                     foreach ($fields as $field) {
+                        if ($field->is_public != '1') {
+                            continue;
+                        }
 
                         $value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
 
@@ -173,6 +176,21 @@ class Users_WP_Profile {
                             }
                         }
 
+                        if ($field->field_type == 'datepicker') {
+                            $extra_fields = unserialize($field->extra_fields);
+
+                            if ($extra_fields['date_format'] == '')
+                                $extra_fields['date_format'] = 'yy-mm-dd';
+
+                            $date_format = $extra_fields['date_format'];
+
+                            if (!empty($value)) {
+                                $value = date('Y-m-d', $value);
+                            }
+
+                            $value = uwp_date($value, 'Y-m-d', $date_format);
+                        }
+
 
                         
                         // URL
@@ -183,9 +201,9 @@ class Users_WP_Profile {
                         // Checkbox
                         if ($field->field_type == 'checkbox') {
                             if ($value == '1') {
-                                $value = 'yes';
+                                $value = 'Yes';
                             } else {
-                                $value = 'no';
+                                $value = 'No';
                             }
                         }
 
@@ -818,28 +836,7 @@ class Users_WP_Profile {
         }
         return $query;    
     }
-
-    public function uwp_wp_media_restrict_file_types($file) {
-        // This bit is for the flash uploader
-        if ($file['type']=='application/octet-stream' && isset($file['tmp_name'])) {
-            $file_size = getimagesize($file['tmp_name']);
-            if (isset($file_size['error']) && $file_size['error']!=0) {
-                $file['error'] = "Unexpected Error: {$file_size['error']}";
-                return $file;
-            } else {
-                $file['type'] = $file_size['mime'];
-            }
-        }
-        list($category,$type) = explode('/',$file['type']);
-        if ('image'!=$category || !in_array($type,array('jpg','jpeg','gif','png'))) {
-            $file['error'] = "Sorry, you can only upload a .GIF, a .JPG, or a .PNG image file.";
-        } else if ($post_id = (isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : false)) {
-            if (count(get_posts("post_type=attachment&post_parent={$post_id}"))>0)
-                $file['error'] = "Sorry, you cannot upload more than one (1) image.";
-        }
-        return $file;
-    }
-
+    
     public function uwp_ajax_image_crop_popup(){
         wp_enqueue_style( 'jcrop' );
         wp_enqueue_script( 'jcrop', array( 'jquery' ) );

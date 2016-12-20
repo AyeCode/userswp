@@ -279,8 +279,8 @@ class Users_WP {
         
         // Popup and crop functions
         $this->loader->add_filter( 'ajax_query_attachments_args', $profile, 'uwp_restrict_attachment_display' );
-        //todo: fix this one
-        $this->loader->add_filter( 'wp_handle_upload_prefilter', $profile, 'uwp_wp_media_restrict_file_types' );
+
+        add_filter( 'wp_handle_upload_prefilter', 'uwp_wp_media_restrict_file_types' );
         $this->loader->add_action( 'wp_ajax_uwp_ajax_image_crop_popup', $profile, 'uwp_ajax_image_crop_popup' );
         $this->loader->add_action( 'wp_head', $profile, 'uwp_define_ajaxurl' );
         $this->loader->add_action( 'uwp_profile_header', $profile, 'uwp_image_crop_init', 10, 1 );
@@ -349,8 +349,9 @@ class Users_WP {
         $this->loader->add_filter('uwp_builder_extra_fields_multiselect', $form_builder, 'uwp_builder_extra_fields_smr', 10, 4);
         $this->loader->add_filter('uwp_builder_extra_fields_select', $form_builder, 'uwp_builder_extra_fields_smr', 10, 4);
         $this->loader->add_filter('uwp_builder_extra_fields_radio', $form_builder, 'uwp_builder_extra_fields_smr', 10, 4);
-
         $this->loader->add_filter('uwp_builder_extra_fields_datepicker', $form_builder, 'uwp_builder_extra_fields_datepicker', 10, 4);
+        $this->loader->add_filter('uwp_builder_extra_fields_file', $form_builder, 'uwp_builder_extra_fields_file', 10, 4);
+
         $this->loader->add_filter('uwp_advance_custom_fields', $form_builder, 'uwp_advance_admin_custom_fields', 10, 2);
 
         $this->loader->add_filter('uwp_form_builder_available_fields_head', $form_builder, 'uwp_register_available_fields_head', 10, 2);

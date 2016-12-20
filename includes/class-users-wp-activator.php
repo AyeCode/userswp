@@ -192,6 +192,7 @@ class Users_WP_Activator {
 							  is_active enum( '0', '1' ) NOT NULL DEFAULT '1',
 							  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_dummy enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_public enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_required enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_register_field enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_register_only_field enum( '0', '1' ) NOT NULL DEFAULT '0',
