@@ -848,7 +848,7 @@ class Users_WP_Form_Builder {
                             <?php
                         }
 
-                        
+
                         // is_public
                         if(has_filter("uwp_builder_is_public_{$field_type}")){
 
@@ -2280,6 +2280,7 @@ class Users_WP_Form_Builder {
             'default_value' => '',
             'option_values' => '',
             'is_dummy' => '1',
+            'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
         );
@@ -2293,6 +2294,7 @@ class Users_WP_Form_Builder {
             'default_value' => '',
             'option_values' => '',
             'is_dummy' => '1',
+            'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
         );
@@ -2306,6 +2308,7 @@ class Users_WP_Form_Builder {
             'default_value' => '',
             'option_values' => '',
             'is_dummy' => '1',
+            'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
         );
@@ -2319,6 +2322,7 @@ class Users_WP_Form_Builder {
             'default_value' => '',
             'option_values' => '',
             'is_dummy' => '1',
+            'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
         );
@@ -2332,6 +2336,7 @@ class Users_WP_Form_Builder {
             'default_value' => '',
             'option_values' => __('Value1,Value2,Value3' ,'uwp'),
             'is_dummy' => '1',
+            'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
         );
@@ -2345,6 +2350,7 @@ class Users_WP_Form_Builder {
             'default_value' => '',
             'option_values' => __('Select Option/,Value1,Value2,Value3' ,'uwp'),
             'is_dummy' => '1',
+            'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
         );
@@ -2358,6 +2364,7 @@ class Users_WP_Form_Builder {
             'default_value' => '',
             'option_values' => '',
             'is_dummy' => '1',
+            'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
         );
@@ -2371,6 +2378,7 @@ class Users_WP_Form_Builder {
             'default_value' => '',
             'option_values' => '',
             'is_dummy' => '1',
+            'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
             'extra' => array(
@@ -2387,6 +2395,7 @@ class Users_WP_Form_Builder {
             'default_value' => '',
             'option_values' => '',
             'is_dummy' => '1',
+            'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
         );
@@ -2400,6 +2409,7 @@ class Users_WP_Form_Builder {
             'default_value' => '',
             'option_values' => '',
             'is_dummy' => '1',
+            'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
         );
@@ -2413,6 +2423,7 @@ class Users_WP_Form_Builder {
             'default_value' => '',
             'option_values' => '',
             'is_dummy' => '1',
+            'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
         );
@@ -2426,6 +2437,7 @@ class Users_WP_Form_Builder {
             'default_value' => '',
             'option_values' => __('Select Option/,Value1,Value2,Value3' ,'uwp'),
             'is_dummy' => '1',
+            'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
         );
@@ -2439,6 +2451,7 @@ class Users_WP_Form_Builder {
             'default_value' => '',
             'option_values' => '',
             'is_dummy' => '1',
+            'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
         );

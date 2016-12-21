@@ -5,7 +5,7 @@
         <?php do_action('uwp_template_form_title_before', 'login'); ?>
         <h2><?php echo __( 'Sign In', 'uwp' ); ?></h2>
         <?php do_action('uwp_template_display_notices', 'login'); ?>
-        <form class="uwp-login-form" method="post">
+        <form class="uwp-login-form uwp_form" method="post">
             <?php do_action('uwp_template_fields', 'login'); ?>
             <input type="hidden" name="uwp_login_nonce" value="<?php echo wp_create_nonce( 'uwp-login-nonce' ); ?>" />
             <?php

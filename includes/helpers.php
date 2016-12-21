@@ -1286,17 +1286,21 @@ function uwp_file_upload_preview($field, $value, $removable = true) {
         $filetype = wp_check_filetype($file);
         $image_types = array('png', 'jpg', 'jpeg', 'gif');
         if (in_array($filetype['ext'], $image_types)) {
+            $output .= '<div class="uwp_file_preview_wrap">';
             $output .= '<a href="'.$value.'" class="uwp_upload_file_preview"><img style="max-width:100px;" src="'.$value.'" /></a>';
             if ($removable) {
                 $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$field->htmlvar_name.'" class="uwp_upload_file_remove">'. __( 'Remove Image' , 'uwp' ).'</a>';    
             }
+            $output .= '</div>';
             ?>
             <?php
         } else {
+            $output .= '<div class="uwp_file_preview_wrap">';
             $output .= '<a href="'.$value.'" class="uwp_upload_file_preview">'.$file.'</a>';
             if ($removable) {
                 $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$field->htmlvar_name.'" class="uwp_upload_file_remove">'. __( 'Remove File' , 'uwp' ).'</a>';    
             }
+            $output .= '</div>';
             ?>
             <?php
         }

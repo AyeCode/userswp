@@ -24,6 +24,7 @@ ul.uwp-users-list-wrap {
     margin: 0 0 20px;
     padding-bottom: 20px;
     overflow: hidden;
+    list-style: none;
     .uwp-users-list-user-name > h3 {
       display: inline;
     }
@@ -55,6 +56,9 @@ ul.uwp-users-list-wrap {
   float: left;
   input[type="text"] {
     padding: 9px;
+  }
+  .uwp-search-submit {
+    padding: 9px 15px;
   }
   input {
     display: inline-block !important;

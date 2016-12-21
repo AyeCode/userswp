@@ -239,6 +239,9 @@ class Users_WP {
 
         $this->loader->add_filter( 'the_content', $templates, 'uwp_author_page_content', 10, 1 );
 
+        $this->loader->add_filter('body_class', $templates, 'uwp_add_body_class', 10, 1 );
+        $this->loader->add_action('wp_head', $templates, 'uwp_theme_compat_styles', 10, 1 );
+
 
         // Redirect functions
         $this->loader->add_action( 'template_redirect', $templates, 'profile_redirect', 10);

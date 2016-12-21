@@ -1,9 +1,19 @@
-.uwp-content-wrap * {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-  a {
-    box-shadow: none !important;
+.uwp_page {
+  .uwp-content-wrap * {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+  }
+  .uwp-content-wrap {
+    a {
+      box-shadow: none !important;
+      border-bottom: none !important;
+    }
+    a:focus,
+    input:focus,
+    select:focus {
+      outline: 0;
+    }
   }
 }
 
@@ -43,4 +53,7 @@
 }
 .uwp_message_error {
   display: none;
+}
+.uwp_file_preview_wrap {
+  overflow: hidden;
 }

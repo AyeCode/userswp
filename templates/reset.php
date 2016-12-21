@@ -6,7 +6,7 @@
             <h2><?php echo __( 'Reset Password', 'uwp' ); ?></h2>
             <?php do_action('uwp_template_display_notices', 'reset'); ?>
             <?php if (isset($_GET['key']) && isset($_GET['login'])) { ?>
-                <form class="uwp-login-form" method="post">
+                <form class="uwp-login-form uwp_form" method="post">
                     <?php do_action('uwp_template_fields', 'reset'); ?>
                     <input type="hidden" name="uwp_reset_username" value="<?php echo $_GET['login']; ?>" />
                     <input type="hidden" name="uwp_reset_key" value="<?php echo $_GET['key']; ?>" />

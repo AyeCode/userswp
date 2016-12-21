@@ -5,7 +5,7 @@
         <?php do_action('uwp_template_form_title_before', 'forgot'); ?>
         <h2><?php echo __( 'Forgot Password?', 'uwp' ); ?></h2>
         <?php do_action('uwp_template_display_notices', 'forgot'); ?>
-        <form class="uwp-login-form" method="post">
+        <form class="uwp-login-form uwp_form" method="post">
             <?php do_action('uwp_template_fields', 'forgot'); ?>
             <input type="hidden" name="uwp_forgot_nonce" value="<?php echo wp_create_nonce( 'uwp-forgot-nonce' ); ?>" />
             <input name="uwp_forgot_submit" value="<?php echo __( 'Submit', 'uwp' ); ?>" type="submit"><br>

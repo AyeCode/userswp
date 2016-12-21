@@ -22,7 +22,8 @@
     padding: 12px 15px !important;
     height: auto !important;
     line-height: normal !important;
-    width: 90% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   input[type="checkbox"],
@@ -49,10 +50,11 @@
   }
 
   input.uwp-half {
-    margin: 0 5px 20px 0;
+    margin: 0 2% 20px 0;
     padding: 12px 15px !important;
-    width: 39.5% !important;
+    width: 49% !important;
     float: left !important;
+    box-sizing: border-box;
   }
 
   input.uwp-half.uwp-half-right {
