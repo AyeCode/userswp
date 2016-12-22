@@ -1367,6 +1367,7 @@ function uwp_validate_fields($data, $type, $fields = false) {
             switch($field->htmlvar_name) {
 
                 case 'uwp_register_username':
+                case 'uwp_account_username':
                 case 'uwp_login_username':
                 case 'uwp_reset_username':
                     $sanitized_value = sanitize_user($value);
