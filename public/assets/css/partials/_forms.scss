@@ -36,7 +36,11 @@
     select {
       height: 45px !important;
     }
-
+    .uwp_form_radio_row {
+      label {
+        display: block;
+      }
+    }
     .uwp_form_file_row {
       label {
         display: block;
