@@ -764,13 +764,40 @@ class Users_WP_Form_Builder {
                             }
                             ?>
                             <li>
-                                <label for="site_title" class="uwp-tooltip-wrap"> <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Form Label :', 'uwp'); ?>
+                                <label for="site_title" class="uwp-tooltip-wrap"> <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Label :', 'uwp'); ?>
                                     <div class="uwp-tooltip">
-                                        <?php _e('This will be the label for the field on the form.', 'uwp'); ?>
+                                        <?php _e('This will be the label for the field.', 'uwp'); ?>
                                     </div>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="site_title" id="site_title"
+                                           value="<?php echo $value; ?>"/>
+                                </div>
+                            </li>
+                            <?php
+                        }
+
+                        // Input Label
+                        if(has_filter("uwp_builder_form_label_{$field_type}")){
+
+                            echo apply_filters("uwp_builder_form_label_{$field_type}",'',$result_str,$cf,$field_info);
+
+                        }else{
+                            $value = '';
+                            if (isset($field_info->form_label)) {
+                                $value = esc_attr($field_info->form_label);
+                            }elseif(isset($cf['defaults']['form_label']) && $cf['defaults']['form_label']){
+                                $value = $cf['defaults']['form_label'];
+                            }
+                            ?>
+                            <li>
+                                <label for="form_label" class="uwp-tooltip-wrap"> <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Form Label: (Optional)', 'uwp'); ?>
+                                    <div class="uwp-tooltip">
+                                        <?php _e('If your form label is different, then you can fill this field. Ex: You would like to display "What is your age?" in Form Field but would like to display "DOB" in site. In such cases "What is your age?" should be entered here and "DOB" should be entered in previous field. Note: If this field not field, then the previous field will be used in Form. ', 'uwp'); ?>
+                                    </div>
+                                </label>
+                                <div class="uwp-input-wrap">
+                                    <input type="text" name="form_label" id="form_label"
                                            value="<?php echo $value; ?>"/>
                                 </div>
                             </li>
@@ -1198,6 +1225,7 @@ class Users_WP_Form_Builder {
 
 
             $site_title = $request_field['site_title'];
+            $form_label = isset($request_field['form_label']) ? $request_field['form_label'] : '';
             $field_type = $request_field['field_type'];
             $field_type_key = isset($request_field['field_type_key']) ? $request_field['field_type_key'] : $field_type;
             $htmlvar_name = isset($request_field['htmlvar_name']) ? $request_field['htmlvar_name'] : '';
@@ -1268,6 +1296,7 @@ class Users_WP_Form_Builder {
                         "update " . $table_name . " set
                             form_type = %s,
                             site_title = %s,
+                            form_label = %s,
                             field_type = %s,
                             field_type_key = %s,
                             htmlvar_name = %s,
@@ -1294,6 +1323,7 @@ class Users_WP_Form_Builder {
                         array(
                             $form_type,
                             $site_title,
+                            $form_label,
                             $field_type,
                             $field_type_key,
                             $htmlvar_name,
@@ -1340,6 +1370,7 @@ class Users_WP_Form_Builder {
                         "insert into " . $table_name . " set
                             form_type = %s,
                             site_title = %s,
+                            form_label = %s,
                             field_type = %s,
                             field_type_key = %s,
                             htmlvar_name = %s,
@@ -1364,6 +1395,7 @@ class Users_WP_Form_Builder {
                         array(
                             $form_type,
                             $site_title,
+                            $form_label,
                             $field_type,
                             $field_type_key,
                             $htmlvar_name,
@@ -2216,7 +2248,7 @@ class Users_WP_Form_Builder {
         $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
         // This function is intended for testing purpose
         if (isset($_GET['uwp_dummy'])
-            && is_admin() 
+            && is_admin()
             && is_user_logged_in()
             && current_user_can('manage_options')) {
 

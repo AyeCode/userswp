@@ -246,11 +246,12 @@ class Users_WP_Templates {
         $html = apply_filters("uwp_form_input_html_{$field->field_type}", "", $field, $value, $form_type);
 
         if (empty($html)) {
+            $label = $site_title = uwp_get_form_label($field);
             ?>
             <input name="<?php echo $field->htmlvar_name; ?>"
                    class="<?php echo $field->css_class; ?>"
-                   placeholder="<?php echo $field->site_title; ?>"
-                   title="<?php echo $field->site_title; ?>"
+                   placeholder="<?php echo $label; ?>"
+                   title="<?php echo $label; ?>"
                 <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                    type="<?php echo $field->field_type; ?>"
                    value="<?php echo $value; ?>">

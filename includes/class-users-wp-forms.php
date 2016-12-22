@@ -992,7 +992,7 @@ class Users_WP_Forms {
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp-fieldset-details">
 
                 <?php
-                $site_title = __($field->site_title, 'uwp');
+                $site_title = uwp_get_form_label($field);
                 if (!is_admin()) { ?>
                     <label>
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1002,8 +1002,8 @@ class Users_WP_Forms {
 
                 <input name="<?php echo $field->htmlvar_name;?>"
                        id="<?php echo $field->htmlvar_name;?>"
-                       placeholder="<?php echo $field->site_title; ?>"
-                       title="<?php echo $field->site_title; ?>"
+                       placeholder="<?php echo $site_title; ?>"
+                       title="<?php echo $site_title; ?>"
                        type="text"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                        value="<?php echo esc_attr($value);?>" class="uwp_textfield"/>
@@ -1049,7 +1049,7 @@ class Users_WP_Forms {
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp-fieldset-details">
 
                 <?php
-                $site_title = __($field->site_title, 'uwp');
+                $site_title = uwp_get_form_label($field);
                 if (!is_admin()) { ?>
                     <label>
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1060,7 +1060,7 @@ class Users_WP_Forms {
                 <input readonly="readonly" name="<?php echo $field->htmlvar_name;?>"
                        id="<?php echo $field->htmlvar_name;?>"
                        value="<?php echo esc_attr($value);?>"
-                       placeholder="<?php echo $field->site_title; ?>"
+                       placeholder="<?php echo $site_title; ?>"
                        type="text"
                        class="uwp_textfield"/>
 
@@ -1093,7 +1093,7 @@ class Users_WP_Forms {
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row">
 
                 <?php
-                $site_title = __($field->site_title, 'uwp');
+                $site_title = uwp_get_form_label($field);
                 if (!is_admin()) { ?>
                     <label>
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1122,7 +1122,7 @@ class Users_WP_Forms {
                 ?>
                 <select name="<?php echo $field->htmlvar_name;?>" id="<?php echo $field->htmlvar_name;?>"
                         class="uwp_textfield"
-                        title="<?php echo $field->site_title; ?>"
+                        title="<?php echo $site_title; ?>"
                         data-placeholder="<?php echo __('Choose', 'uwp') . ' ' . $site_title . '&hellip;';?>"
                 ><?php echo $select_options;?>
                 </select>
@@ -1160,7 +1160,7 @@ class Users_WP_Forms {
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row">
 
                 <?php
-                $site_title = __($field->site_title, 'uwp');
+                $site_title = uwp_get_form_label($field);
                 if (!is_admin()) { ?>
                     <label>
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1173,9 +1173,9 @@ class Users_WP_Forms {
                 <div class="uwp_multiselect_list">
                     <select name="<?php echo $field->htmlvar_name;?>[]"
                             id="<?php echo $field->htmlvar_name;?>"
-                            title="<?php echo $field->site_title; ?>"
+                            title="<?php echo $site_title; ?>"
                             multiple="multiple" class="uwp_chosen_select"
-                            data-placeholder="<?php echo $field->site_title; ?>"
+                            data-placeholder="<?php echo $site_title; ?>"
                     >
                         <?php
                         } else {
@@ -1260,7 +1260,7 @@ class Users_WP_Forms {
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
 
                 <?php
-                $site_title = __($field->site_title, 'uwp');
+                $site_title = uwp_get_form_label($field);
                 if (!is_admin()) { ?>
                     <label>
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1271,8 +1271,8 @@ class Users_WP_Forms {
                 <?php echo uwp_file_upload_preview($field, $value); ?>
                 <input name="<?php echo $field->htmlvar_name; ?>"
                        class="<?php echo $field->css_class; ?>"
-                       placeholder="<?php echo $field->site_title; ?>"
-                       title="<?php echo $field->site_title; ?>"
+                       placeholder="<?php echo $site_title; ?>"
+                       title="<?php echo $site_title; ?>"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                        type="<?php echo $field->field_type; ?>">
                 <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
@@ -1299,20 +1299,20 @@ class Users_WP_Forms {
         if(empty($html)) {
 
             ob_start(); // Start  buffering;
+            $site_title = uwp_get_form_label($field);
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
                 <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value="0" />
                 <input name="<?php echo $field->htmlvar_name; ?>"
                        class="<?php echo $field->css_class; ?>"
-                       placeholder="<?php echo $field->site_title; ?>"
-                       title="<?php echo $field->site_title; ?>"
+                       placeholder="<?php echo $site_title; ?>"
+                       title="<?php echo $site_title; ?>"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                     <?php if ($value == '1') { echo 'checked="checked"'; } ?>
                        type="<?php echo $field->field_type; ?>"
                        value="1">
                 <?php
-                $site_title = __($field->site_title, 'uwp');
                 echo (trim($site_title)) ? $site_title : '&nbsp;';
                 ?>
                 <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
@@ -1345,7 +1345,7 @@ class Users_WP_Forms {
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
 
                 <?php
-                $site_title = __($field->site_title, 'uwp');
+                $site_title = uwp_get_form_label($field);
                 if (!is_admin()) { ?>
                     <label>
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1413,7 +1413,7 @@ class Users_WP_Forms {
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
 
                 <?php
-                $site_title = __($field->site_title, 'uwp');
+                $site_title = uwp_get_form_label($field);
                 if (!is_admin()) { ?>
                     <label>
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1423,8 +1423,8 @@ class Users_WP_Forms {
 
                 <textarea name="<?php echo $field->htmlvar_name; ?>"
                           class="<?php echo $field->css_class; ?>"
-                          placeholder="<?php echo $field->site_title; ?>"
-                          title="<?php echo $field->site_title; ?>"
+                          placeholder="<?php echo $$site_title; ?>"
+                          title="<?php echo $$site_title; ?>"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                           type="<?php echo $field->field_type; ?>"
                           rows="4"><?php echo $value; ?></textarea>
@@ -1481,7 +1481,7 @@ class Users_WP_Forms {
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
 
                 <?php
-                $site_title = __($field->site_title, 'uwp');
+                $site_title = uwp_get_form_label($field);
                 if (!is_admin()) { ?>
                     <label>
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1492,9 +1492,9 @@ class Users_WP_Forms {
                 <input name="<?php echo $field->htmlvar_name;?>"
                        class="<?php echo $field->css_class; ?> uwp_textfield"
                        id="<?php echo $field->htmlvar_name;?>"
-                       placeholder="<?php echo $field->site_title; ?>"
+                       placeholder="<?php echo $site_title; ?>"
                        value="<?php echo esc_attr(stripslashes($value));?>"
-                       title="<?php echo $field->site_title; ?>"
+                       title="<?php echo $site_title; ?>"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                        type="url"
                        oninvalid="setCustomValidity('<?php _e('Please enter a valid URL including http://', 'uwp'); ?>')"
@@ -1512,7 +1512,6 @@ class Users_WP_Forms {
 
         return $html;
     }
-
 
     // Add multipart/form-data to edit form
     function add_multipart_to_admin_edit_form() {

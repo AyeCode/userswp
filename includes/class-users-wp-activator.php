@@ -184,6 +184,7 @@ class Users_WP_Activator {
 							  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
 							  field_type_key varchar(255) NOT NULL,
 							  site_title varchar(255) NULL DEFAULT NULL,
+							  form_label varchar(255) NULL DEFAULT NULL,
 							  help_text varchar(255) NULL DEFAULT NULL,
 							  htmlvar_name varchar(255) NULL DEFAULT NULL,
 							  default_value text NULL DEFAULT NULL,

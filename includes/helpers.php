@@ -1543,3 +1543,12 @@ function uwp_wp_media_restrict_file_types($file) {
     }
     return $file;
 }
+
+function uwp_get_form_label($field) {
+    if (isset($field->form_label) && !empty($field->form_label)) {
+        $label = __($field->form_label, 'uwp');
+    } else {
+        $label = __($field->site_title, 'uwp');
+    }
+    return $label;
+}
