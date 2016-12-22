@@ -1274,8 +1274,7 @@ class Users_WP_Forms {
                        placeholder="<?php echo $field->site_title; ?>"
                        title="<?php echo $field->site_title; ?>"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
-                       type="<?php echo $field->field_type; ?>"
-                       value="">
+                       type="<?php echo $field->field_type; ?>">
                 <span class="uwp_message_note"><?php _e($field->help_text, 'uwp');?></span>
                 <?php if ($field->is_required) { ?>
                     <span class="uwp_message_error"><?php _e($field->required_msg, 'uwp'); ?></span>

@@ -6,13 +6,59 @@
   }
   .uwp-content-wrap {
     a {
-      box-shadow: none !important;
-      border-bottom: none !important;
+      box-shadow: none;
+      border-bottom: none;
     }
     a:focus,
     input:focus,
     select:focus {
       outline: 0;
+    }
+
+    .uwp_form input[type="text"],
+    .uwp_form input[type="password"],
+    .uwp_form input[type="datetime"],
+    .uwp_form input[type="datetime-local"],
+    .uwp_form input[type="date"],
+    .uwp_form input[type="month"],
+    .uwp_form input[type="time"],
+    .uwp_form input[type="week"],
+    .uwp_form input[type="number"],
+    .uwp_form input[type="email"],
+    .uwp_form input[type="url"],
+    .uwp_form input[type="search"],
+    .uwp_form input[type="tel"],
+    .uwp_form input[type="color"],
+    .uwp_form select,
+    .uwp_form textarea {
+      background-color: #ffffff;
+    }
+
+    .uwp-profile-extra-table,
+    .uwp-profile-extra-table th,
+    .uwp-profile-extra-table td {
+      border: 1px solid #ededed;
+    }
+    .uwp-profile-extra-table tr,
+    .uwp-profile-extra-table th,
+    .uwp-profile-extra-table td {
+      background-color: transparent;
+      text-align: left;
+    }
+    .uwp-profile-extra-table tr {
+      border-bottom: 1px solid #ededed;
+    }
+    .uwp-profile-extra-table th,
+    .uwp-profile-extra-table td {
+      padding: 5px 10px;
+      border-top: 1px solid #ededed;
+    }
+    .uwp-profile-extra-table th {
+      border-right: 1px solid #ededed;
+    }
+    .uwp-profile-extra-table h3 {
+      padding-left: 10px;
+      text-align: center;
     }
   }
 }

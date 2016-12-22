@@ -610,7 +610,6 @@ function uwp_get_file_type($ext) {
         $file_types = array_merge($file_types, $types);
     }
     $file_types = array_flip($file_types);
-    //todo: zip file seems like having problems with size and type. Fix this
     return $file_types[$ext];
 }
 
@@ -1101,7 +1100,6 @@ function uwp_validate_uploads($files, $type, $url_only = true, $fields = false) 
 
     if (!empty($fields)) {
         foreach ($fields as $field) {
-
             if(isset($files[$field->htmlvar_name])) {
 
                 $file_urls = handle_file_upload($field, $files);
