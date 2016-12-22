@@ -187,8 +187,8 @@ class Users_WP_Profile {
                             if (!empty($value)) {
                                 $value = date('Y-m-d', $value);
                             }
-
-                            $value = uwp_date($value, 'Y-m-d', $date_format);
+                            
+                            $value = uwp_date($value, $date_format, 'Y-m-d');
                         }
 
 

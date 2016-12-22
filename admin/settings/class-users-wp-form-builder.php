@@ -2215,7 +2215,10 @@ class Users_WP_Form_Builder {
         $table_name = $wpdb->prefix . 'uwp_form_fields';
         $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
         // This function is intended for testing purpose
-        if (isset($_GET['uwp_dummy'])) {
+        if (isset($_GET['uwp_dummy'])
+            && is_admin() 
+            && is_user_logged_in()
+            && current_user_can('manage_options')) {
 
             if ($_GET['uwp_dummy'] == 'create') {
                 // Account
