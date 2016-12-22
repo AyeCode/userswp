@@ -208,12 +208,11 @@ class Users_WP_Templates {
     }
     
     public function uwp_template_fields_html($field, $form_type, $user_id = false) {
-
         if (!$user_id) {
             $user_id = get_current_user_id();    
         }
 
-        $value = $field->default_value;
+        $value = $this->uwp_get_default_form_value($field);
         if ($form_type == 'account') {
             $user_data = get_userdata($user_id);
 
@@ -234,10 +233,9 @@ class Users_WP_Templates {
             } else {
                 $value = uwp_get_usermeta($user_id, $field->htmlvar_name, false);
                 if ($value != '0' && !$value) {
-                    $value = $field->default_value;
+                    $value = $this->uwp_get_default_form_value($field);
                 }
             }
-
 
         }
 
@@ -260,6 +258,20 @@ class Users_WP_Templates {
         } else {
             echo $html;
         }
+    }
+
+    public function uwp_get_default_form_value($field) {
+        if ($field->field_type == 'url') {
+            if (substr( $field->default_value, 0, 4 ) === "http") {
+                $value = $field->default_value;
+            } else {
+                $value = "";
+            }
+        } else {
+            $value = $field->default_value;
+        }
+
+        return $value;
     }
 
     public function uwp_author_page_content($content) {

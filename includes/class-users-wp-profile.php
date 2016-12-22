@@ -187,7 +187,7 @@ class Users_WP_Profile {
                             if (!empty($value)) {
                                 $value = date('Y-m-d', $value);
                             }
-                            
+
                             $value = uwp_date($value, $date_format, 'Y-m-d');
                         }
 
@@ -195,7 +195,15 @@ class Users_WP_Profile {
                         
                         // URL
                         if ($field->field_type == 'url' && !empty($value)) {
-                            $value = '<a href="'.$value.'">'.$value.'</a>';
+                            $link_text = $value;
+                            if ($field->default_value && !empty($field->default_value) ) {
+                                if (substr( $field->default_value, 0, 4 ) === "http") {
+                                    $link_text = $value;
+                                } else {
+                                    $link_text = $field->default_value;
+                                }
+                            }
+                            $value = '<a href="'.$value.'">'.$link_text.'</a>';
                         }
 
                         // Checkbox
