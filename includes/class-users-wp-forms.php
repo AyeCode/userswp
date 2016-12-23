@@ -1423,8 +1423,8 @@ class Users_WP_Forms {
 
                 <textarea name="<?php echo $field->htmlvar_name; ?>"
                           class="<?php echo $field->css_class; ?>"
-                          placeholder="<?php echo $$site_title; ?>"
-                          title="<?php echo $$site_title; ?>"
+                          placeholder="<?php echo $site_title; ?>"
+                          title="<?php echo $site_title; ?>"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                           type="<?php echo $field->field_type; ?>"
                           rows="4"><?php echo $value; ?></textarea>

@@ -1255,6 +1255,9 @@ function get_uwp_users_list() {
                         <div class="uwp-users-list-user-bio">
                             <?php do_action('uwp_profile_bio', $user_obj ); ?>
                         </div>
+                        <div class="uwp-users-list-extra">
+                            <?php do_action('uwp_users_extra', $user_obj ); ?>
+                        </div>
                         <div class="clfx"></div>
                     </div>
                 </li>

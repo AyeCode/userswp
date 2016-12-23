@@ -1125,6 +1125,73 @@ class Users_WP_Form_Builder {
                             <?php
                         }
 
+                        // show_in
+                        if(has_filter("uwp_builder_show_in_{$field_type}")){
+
+                            echo apply_filters("uwp_builder_show_in_{$field_type}",'',$result_str,$cf,$field_info);
+
+                        }else{
+                            $value = '';
+                            if (isset($field_info->show_in)) {
+                                $value = esc_attr($field_info->show_in);
+                            }elseif(isset($cf['defaults']['show_in']) && $cf['defaults']['show_in']){
+                                $value = esc_attr($cf['defaults']['show_in']);
+                            }
+                            ?>
+                            <li>
+                                <label for="show_in" class="uwp-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Show in what locations?:', 'uwp'); ?>
+                                    <div class="uwp-tooltip">
+                                        <?php _e('Select in what locations you want to display this field.', 'uwp'); ?>
+                                    </div>
+                                </label>
+                                <div class="uwp-input-wrap">
+
+                                    <?php
+
+                                    $show_in_locations = array(
+                                        "[users]" => __("Users Page", 'uwp'),
+                                        "[more_info]" => __("More info tab", 'uwp'),
+                                        "[own_tab]" => __("Profile page own tab", 'uwp'),
+                                        "[profile_side]" => __("Profile Side", 'uwp'),
+                                    );
+
+                                    $show_in_locations = apply_filters('uwp_show_in_locations',$show_in_locations,$field_info,$field_type);
+
+                                    
+                                    if (in_array($field_type, array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
+                                    }else{
+                                        unset($show_in_locations['[own_tab]']);
+                                    }
+                                    
+                                    ?>
+
+                                    <select multiple="multiple" name="show_in[]"
+                                            id="show_in"
+                                            style="min-width:300px;"
+                                            class="uwp_chosen_select"
+                                            data-placeholder="<?php _e('Select locations', 'uwp'); ?>">
+                                        <?php
+
+                                        $show_in_values = explode(',',$value);
+
+                                        foreach( $show_in_locations as $key => $val){
+                                            $selected = '';
+
+                                            if(is_array($show_in_values) && in_array($key,$show_in_values ) ){
+                                                $selected = 'selected';
+                                            }
+
+                                            ?>
+                                            <option  value="<?php echo $key;?>" <?php echo $selected;?>><?php echo $val;?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </li>
+                            <?php
+                        }
+
 
 
                         switch ($field_type):

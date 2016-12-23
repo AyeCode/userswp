@@ -278,7 +278,10 @@ class Users_WP {
         $this->loader->add_action( 'uwp_profile_title', $profile, 'get_profile_title', 10, 1 );
         $this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_bio', 10, 1 );
         $this->loader->add_action( 'uwp_profile_social', $profile, 'get_profile_social', 10, 1 );
-        
+
+        //Fields as tabs
+        $this->loader->add_action( 'uwp_profile_tabs', $profile, 'uwp_extra_fields_as_tabs', 10, 2 );
+
         // Popup and crop functions
         $this->loader->add_filter( 'ajax_query_attachments_args', $profile, 'uwp_restrict_attachment_display' );
 
@@ -292,6 +295,7 @@ class Users_WP {
         $this->loader->add_action( 'uwp_profile_more_info_tab_content', $profile, 'get_profile_more_info', 10, 1);
         $this->loader->add_action( 'uwp_profile_posts_tab_content', $profile, 'get_profile_posts', 10, 1);
         $this->loader->add_action( 'uwp_profile_comments_tab_content', $profile, 'get_profile_comments', 10, 1);
+        $this->loader->add_action( 'uwp_profile_tab_content', $profile, 'uwp_extra_fields_as_tab_values', 10, 2 );
 
         // Profile Pagination
         $this->loader->add_action( 'uwp_profile_pagination', $profile, 'get_profile_pagination');
@@ -299,6 +303,7 @@ class Users_WP {
         // Users
         $this->loader->add_action( 'uwp_users_search', $profile, 'uwp_users_search');
         $this->loader->add_action( 'uwp_users_list', $profile, 'uwp_users_list');
+        $this->loader->add_action( 'uwp_users_extra', $profile, 'get_users_extra');
 
 
         // Admin user edit page

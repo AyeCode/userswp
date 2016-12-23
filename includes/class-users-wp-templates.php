@@ -127,6 +127,7 @@ class Users_WP_Templates {
                 if (isset($wp_query->query_vars['uwp_profile'])) {
                     //must be profile page
                     $username = $wp_query->query_vars['uwp_profile'];
+                    $username = str_replace('-', ' ', $username);
                     if ( !username_exists( $username ) ) {
                         global $wp_query;
                         $wp_query->set_404();

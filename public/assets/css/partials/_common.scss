@@ -94,6 +94,7 @@
     text-align: center
   }
 }
+
 .uwp_form_file_row {
   margin-bottom: 20px;
 }
@@ -102,4 +103,68 @@
 }
 .uwp_file_preview_wrap {
   overflow: hidden;
+}
+
+.uwp-profile-extra-div {
+  overflow: hidden;
+}
+.uwp-profile-extra-sep {
+  display: none;
+}
+.uwp-profile-extra-wrap {
+  width: 100%;
+  background-color: transparent;
+  text-align: left;
+  overflow: hidden;
+  .uwp-profile-extra-key {
+    width: 50%;
+    float: left;
+    padding: 7px;
+    box-sizing: border-box;
+    border: 1px solid #ededed;
+    border-bottom: none;
+  }
+  .uwp-profile-extra-value {
+    width: 50%;
+    float: right;
+    padding: 7px;
+    box-sizing: border-box;
+    border: 1px solid #ededed;
+    border-bottom: none;
+    border-left: none;
+  }
+}
+.uwp-profile-extra-wrap:last-child {
+  .uwp-profile-extra-key {
+    border-bottom: 1px solid #ededed;
+  }
+
+  .uwp-profile-extra-value {
+    border-bottom: 1px solid #ededed;
+  }
+}
+.uwp-users-list {
+  .uwp-users-list-user {
+    display: block;
+  }
+  .uwp-profile-extra-sep {
+    display: inline-block;
+    margin-left: 3px;
+  }
+  .uwp-profile-extra-key {
+    margin-right: 5px;
+  }
+  .uwp-profile-extra-key,
+  .uwp-profile-extra-value {
+    border: none;
+    width: auto;
+    float: left;
+    padding: 0;
+  }
+  .uwp-profile-extra-wrap:last-child {
+    .uwp-profile-extra-key,
+    .uwp-profile-extra-value {
+      border-bottom: none;
+    }
+  }
 }
