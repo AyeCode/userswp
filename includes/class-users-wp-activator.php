@@ -25,16 +25,20 @@ class Users_WP_Activator {
      * @since    1.0.0
      */
     public static function activate() {
-        self::load_dependencies();
-        self::generate_pages();
-        self::add_default_options();
-        self::uwp_create_tables();
-        self::uwp_create_default_fields();
-        self::uwp_insert_form_extras();
-        self::uwp_flush_rewrite_rules();
-
-        add_option('uwp_activation_redirect', 1);
-        add_option('uwp_flush_rewrite', 1);
+        
+        if (!get_option('uwp_default_data_installed')) {
+            self::load_dependencies();
+            self::generate_pages();
+            self::add_default_options();
+            self::uwp_create_tables();
+            self::uwp_create_default_fields();
+            self::uwp_insert_form_extras();
+            self::uwp_flush_rewrite_rules();
+            add_option('uwp_activation_redirect', 1);
+            add_option('uwp_flush_rewrite', 1);
+            add_option('uwp_default_data_installed', 1);
+        }
+        
     }
 
     public static function load_dependencies() {
@@ -180,6 +184,7 @@ class Users_WP_Activator {
 							  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
 							  field_type_key varchar(255) NOT NULL,
 							  site_title varchar(255) NULL DEFAULT NULL,
+							  form_label varchar(255) NULL DEFAULT NULL,
 							  help_text varchar(255) NULL DEFAULT NULL,
 							  htmlvar_name varchar(255) NULL DEFAULT NULL,
 							  default_value text NULL DEFAULT NULL,
@@ -187,6 +192,8 @@ class Users_WP_Activator {
 							  option_values text NULL DEFAULT NULL,
 							  is_active enum( '0', '1' ) NOT NULL DEFAULT '1',
 							  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_dummy enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_public enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_required enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_register_field enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_register_only_field enum( '0', '1' ) NOT NULL DEFAULT '0',
@@ -214,6 +221,7 @@ class Users_WP_Activator {
 									  site_htmlvar_name varchar(255) NOT NULL,
 									  sort_order int(11) NOT NULL,
 									  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
+									  is_dummy enum( '0', '1' ) NOT NULL DEFAULT '0',
 									  PRIMARY KEY  (id)
 									) $collate AUTO_INCREMENT=1 ;";
 
@@ -265,6 +273,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1'
         );
 
@@ -276,6 +285,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1'
         );
 
@@ -296,6 +306,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1'
         );
 
@@ -316,6 +327,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'extra_fields'        =>  array(
                 'uwp_file_types'  =>  array(
@@ -345,6 +357,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'extra_fields'        =>  array(
                 'uwp_file_types'  =>  array(
@@ -374,6 +387,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1'
         );
 
@@ -385,6 +399,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1'
         );
 
@@ -405,6 +420,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
             'css_class' => 'uwp-half uwp-half-left',
@@ -418,6 +434,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
             'css_class' => 'uwp-half uwp-half-right',
@@ -431,6 +448,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
             'is_register_only_field' => '1',
@@ -444,6 +462,7 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
         );
@@ -456,29 +475,32 @@ class Users_WP_Activator {
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1'
         );
 
         $fields[] = array(
             'form_type' => 'account',
-            'field_type' => 'text',
+            'field_type' => 'password',
             'site_title' => __('Password', 'uwp'),
             'htmlvar_name' => 'password',
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1'
         );
 
         $fields[] = array(
             'form_type' => 'account',
-            'field_type' => 'text',
+            'field_type' => 'password',
             'site_title' => __('Confirm Password', 'uwp'),
             'htmlvar_name' => 'confirm_password',
             'default_value' => '',
             'option_values' => '',
             'is_default' => '1',
+            'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1'
         );

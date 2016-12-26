@@ -127,6 +127,7 @@ class Users_WP_Templates {
                 if (isset($wp_query->query_vars['uwp_profile'])) {
                     //must be profile page
                     $username = $wp_query->query_vars['uwp_profile'];
+                    $username = str_replace('-', ' ', $username);
                     if ( !username_exists( $username ) ) {
                         global $wp_query;
                         $wp_query->set_404();
@@ -199,19 +200,20 @@ class Users_WP_Templates {
     public function uwp_account_edit_form_display($type) {
         if ($type == 'account') {
             ?>
-            <form class="uwp-account-form" method="post" enctype="multipart/form-data">
+            <form class="uwp-account-form uwp_form" method="post" enctype="multipart/form-data">
                 <?php do_action('uwp_template_fields', 'account'); ?>
                 <input type="hidden" name="uwp_account_nonce" value="<?php echo wp_create_nonce( 'uwp-account-nonce' ); ?>" />
                 <input name="uwp_account_submit" value="<?php echo __( 'Update Account', 'uwp' ); ?>" type="submit">
             </form>
         <?php }
     }
+    
+    public function uwp_template_fields_html($field, $form_type, $user_id = false) {
+        if (!$user_id) {
+            $user_id = get_current_user_id();    
+        }
 
-    public function uwp_template_fields_html($field, $form_type) {
-
-        $user_id = get_current_user_id();
-
-        $value = $field->default_value;
+        $value = $this->uwp_get_default_form_value($field);
         if ($form_type == 'account') {
             $user_data = get_userdata($user_id);
 
@@ -227,13 +229,14 @@ class Users_WP_Templates {
                 $value = $user_data->first_name;
             } elseif ($field->htmlvar_name == 'uwp_account_last_name') {
                 $value = $user_data->last_name;
+            } elseif ($field->htmlvar_name == 'uwp_account_bio') {
+                $value = $user_data->description;
             } else {
                 $value = uwp_get_usermeta($user_id, $field->htmlvar_name, false);
-                if (!$value) {
-                    $value = $field->default_value;
+                if ($value != '0' && !$value) {
+                    $value = $this->uwp_get_default_form_value($field);
                 }
             }
-
 
         }
 
@@ -244,11 +247,12 @@ class Users_WP_Templates {
         $html = apply_filters("uwp_form_input_html_{$field->field_type}", "", $field, $value, $form_type);
 
         if (empty($html)) {
+            $label = $site_title = uwp_get_form_label($field);
             ?>
             <input name="<?php echo $field->htmlvar_name; ?>"
                    class="<?php echo $field->css_class; ?>"
-                   placeholder="<?php echo $field->site_title; ?>"
-                   title="<?php echo $field->site_title; ?>"
+                   placeholder="<?php echo $label; ?>"
+                   title="<?php echo $label; ?>"
                 <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                    type="<?php echo $field->field_type; ?>"
                    value="<?php echo $value; ?>">
@@ -256,6 +260,20 @@ class Users_WP_Templates {
         } else {
             echo $html;
         }
+    }
+
+    public function uwp_get_default_form_value($field) {
+        if ($field->field_type == 'url') {
+            if (substr( $field->default_value, 0, 4 ) === "http") {
+                $value = $field->default_value;
+            } else {
+                $value = "";
+            }
+        } else {
+            $value = $field->default_value;
+        }
+
+        return $value;
     }
 
     public function uwp_author_page_content($content) {
@@ -370,9 +388,68 @@ class Users_WP_Templates {
             delete_option('uwp_activation_redirect');
 
             wp_redirect(admin_url('admin.php?page=uwp&tab=main&subtab=info'));
+            exit;
 
         }
 
     }
 
+    public function get_profile_extra_admin_edit($user) {
+        echo $this->get_profile_extra_edit($user);
+    }
+
+    public function get_profile_extra_edit($user) {
+        ob_start();
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' ORDER BY sort_order ASC");
+        if ($fields) {
+            ?>
+            <div class="uwp-profile-extra">
+                <table class="uwp-profile-extra-table form-table">
+                    <?php
+                    foreach ($fields as $field) {
+
+                        // Icon
+                        if ($field->field_icon) {
+                            $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
+                        } else {
+                            $icon = '';
+                        }
+
+                        if ($field->field_type == 'fieldset') {
+                            ?>
+                            <tr style="margin: 0; padding: 0">
+                                <th class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></th>
+                                <td></td>
+                            </tr>
+                            <?php
+                        } else { ?>
+                            <tr>
+                                <th class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?></th>
+                                <td class="uwp-profile-extra-value">
+                                    <?php $this->uwp_template_fields_html($field, 'account', $user->ID); ?>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+                </table>
+            </div>
+            <?php
+        }
+        $output = ob_get_contents();
+        ob_end_clean();
+        return trim($output);
+    }
+
+    public function uwp_add_body_class( $classes ) {
+
+        if ( is_uwp_page() ) {
+            $classes[] = 'uwp_page';
+        }
+
+        return $classes;
+    }
 }

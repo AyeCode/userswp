@@ -239,6 +239,8 @@ class Users_WP {
 
         $this->loader->add_filter( 'the_content', $templates, 'uwp_author_page_content', 10, 1 );
 
+        $this->loader->add_filter('body_class', $templates, 'uwp_add_body_class', 10, 1 );
+
 
         // Redirect functions
         $this->loader->add_action( 'template_redirect', $templates, 'profile_redirect', 10);
@@ -258,6 +260,9 @@ class Users_WP {
         $this->loader->add_filter( 'uwp_form_input_html_file', $forms, 'uwp_form_input_file', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_checkbox', $forms, 'uwp_form_input_checkbox', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_radio', $forms, 'uwp_form_input_radio', 10, 4 );
+        $this->loader->add_filter( 'uwp_form_input_html_url', $forms, 'uwp_form_input_url', 10, 4 );
+
+        $this->loader->add_action( 'wp_ajax_uwp_upload_file_remove', $forms, 'uwp_upload_file_remove' );
 
 
         //profile page
@@ -273,10 +278,14 @@ class Users_WP {
         $this->loader->add_action( 'uwp_profile_title', $profile, 'get_profile_title', 10, 1 );
         $this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_bio', 10, 1 );
         $this->loader->add_action( 'uwp_profile_social', $profile, 'get_profile_social', 10, 1 );
-        
+
+        //Fields as tabs
+        $this->loader->add_action( 'uwp_profile_tabs', $profile, 'uwp_extra_fields_as_tabs', 10, 2 );
+
         // Popup and crop functions
         $this->loader->add_filter( 'ajax_query_attachments_args', $profile, 'uwp_restrict_attachment_display' );
-        $this->loader->add_filter( 'wp_handle_upload_prefilter', $profile, 'uwp_wp_media_restrict_file_types' );
+
+        add_filter( 'wp_handle_upload_prefilter', 'uwp_wp_media_restrict_file_types' );
         $this->loader->add_action( 'wp_ajax_uwp_ajax_image_crop_popup', $profile, 'uwp_ajax_image_crop_popup' );
         $this->loader->add_action( 'wp_head', $profile, 'uwp_define_ajaxurl' );
         $this->loader->add_action( 'uwp_profile_header', $profile, 'uwp_image_crop_init', 10, 1 );
@@ -286,6 +295,7 @@ class Users_WP {
         $this->loader->add_action( 'uwp_profile_more_info_tab_content', $profile, 'get_profile_more_info', 10, 1);
         $this->loader->add_action( 'uwp_profile_posts_tab_content', $profile, 'get_profile_posts', 10, 1);
         $this->loader->add_action( 'uwp_profile_comments_tab_content', $profile, 'get_profile_comments', 10, 1);
+        $this->loader->add_action( 'uwp_profile_tab_content', $profile, 'uwp_extra_fields_as_tab_values', 10, 2 );
 
         // Profile Pagination
         $this->loader->add_action( 'uwp_profile_pagination', $profile, 'get_profile_pagination');
@@ -293,11 +303,17 @@ class Users_WP {
         // Users
         $this->loader->add_action( 'uwp_users_search', $profile, 'uwp_users_search');
         $this->loader->add_action( 'uwp_users_list', $profile, 'uwp_users_list');
+        $this->loader->add_action( 'uwp_users_extra', $profile, 'get_users_extra');
 
 
         // Admin user edit page
-        $this->loader->add_action( 'edit_user_profile', $profile, 'uwp_extra_user_profile_fields_in_admin', 10, 1 );
-        $this->loader->add_action( 'show_user_profile', $profile, 'uwp_extra_user_profile_fields_in_admin', 10, 1 );
+        $this->loader->add_action( 'edit_user_profile', $templates, 'get_profile_extra_admin_edit', 10, 1 );
+        $this->loader->add_action( 'show_user_profile', $templates, 'get_profile_extra_admin_edit', 10, 1 );
+
+        $this->loader->add_action( 'personal_options_update', $forms, 'update_profile_extra_admin_edit', 10, 1 );
+        $this->loader->add_action( 'edit_user_profile_update', $forms, 'update_profile_extra_admin_edit', 10, 1 );
+
+        $this->loader->add_action( 'user_edit_form_tag', $forms, 'add_multipart_to_admin_edit_form');
 
 
     }
@@ -330,6 +346,8 @@ class Users_WP {
 
         $form_builder = new Users_WP_Form_Builder();
 
+        $this->loader->add_action('admin_init', $form_builder, 'uwp_form_builder_dummy_fields');
+
         $this->loader->add_action('uwp_manage_available_fields_predefined', $form_builder, 'uwp_manage_available_fields_predefined');
         $this->loader->add_action('uwp_manage_available_fields_custom', $form_builder, 'uwp_manage_available_fields_custom');
         $this->loader->add_action('uwp_manage_available_fields', $form_builder, 'uwp_manage_available_fields');
@@ -338,8 +356,9 @@ class Users_WP {
         $this->loader->add_filter('uwp_builder_extra_fields_multiselect', $form_builder, 'uwp_builder_extra_fields_smr', 10, 4);
         $this->loader->add_filter('uwp_builder_extra_fields_select', $form_builder, 'uwp_builder_extra_fields_smr', 10, 4);
         $this->loader->add_filter('uwp_builder_extra_fields_radio', $form_builder, 'uwp_builder_extra_fields_smr', 10, 4);
-
         $this->loader->add_filter('uwp_builder_extra_fields_datepicker', $form_builder, 'uwp_builder_extra_fields_datepicker', 10, 4);
+        $this->loader->add_filter('uwp_builder_extra_fields_file', $form_builder, 'uwp_builder_extra_fields_file', 10, 4);
+
         $this->loader->add_filter('uwp_advance_custom_fields', $form_builder, 'uwp_advance_admin_custom_fields', 10, 2);
 
         $this->loader->add_filter('uwp_form_builder_available_fields_head', $form_builder, 'uwp_register_available_fields_head', 10, 2);

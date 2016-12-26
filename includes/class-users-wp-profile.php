@@ -78,7 +78,7 @@ class Users_WP_Profile {
     }
 
     public function get_profile_bio($user) {
-        $bio = uwp_get_usermeta($user->ID, 'uwp_account_bio', '');
+        $bio = get_user_meta( $user->ID, 'description', true );
         $is_profile_page = is_uwp_profile_page();
         if ($bio) {
             ?>
@@ -101,11 +101,27 @@ class Users_WP_Profile {
         $table_name = $wpdb->prefix . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND field_type = 'url' AND css_class LIKE '%uwp_social%' ORDER BY sort_order ASC");
 
+        if (is_uwp_profile_page()) {
+            $show_type = '[profile_side]';
+        } elseif (is_uwp_users_page()) {
+            $show_type = '[users]';
+        } else {
+            $show_type = false;
+        }
+
+        if (!$show_type) {
+            return;
+        }
         ?>
         <div class="uwp-profile-social">
             <ul class="uwp-profile-social-ul">
         <?php
         foreach($fields as $field) {
+            $show_in = explode(',',$field->show_in);
+
+            if (!in_array($show_type, $show_in)) {
+                continue;
+            }
             $key = $field->htmlvar_name;
             // see Users_WP_Forms -> uwp_save_user_extra_fields reason for replacing key
             $key = str_replace('uwp_register_', 'uwp_account_', $key);
@@ -121,68 +137,71 @@ class Users_WP_Profile {
         <?php
     }
 
+    public function get_profile_extra_count($user) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public = '1' AND is_default = '0' AND show_in LIKE '%[more_info]%' ORDER BY sort_order ASC");
+        return count($fields);
+    }
+
     public function get_profile_extra($user) {
+        return $this->uwp_get_extra_fields($user, '[more_info]');
+    }
+
+    public function get_users_extra($user) {
+        echo $this->uwp_get_extra_fields($user, '[users]');
+    }
+
+    public function uwp_get_extra_fields($user, $show_type) {
 
         ob_start();
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND is_default = '0' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' AND css_class NOT LIKE '%uwp_social%' ORDER BY sort_order ASC");
         if ($fields) {
             ?>
             <div class="uwp-profile-extra">
-                <table class="uwp-profile-extra-table">
+                <div class="uwp-profile-extra-div form-table">
                     <?php
                     foreach ($fields as $field) {
-                        $option_values_arr = array();
-                        if ($field->field_type == 'select' || $field->field_type == 'multiselect') {
-                            $option_values_arr = uwp_string_values_to_options($field->option_values, true);
+                        $show_in = explode(',',$field->show_in);
+                        if (!in_array($show_type, $show_in)) {
+                            continue;
+                        }
+                        if ($field->is_public != '1') {
+                            continue;
                         }
 
-                        $value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
-                        if ($field->field_type == 'select') {
-                            if (!empty($value)) {
-                                $data = $this->uwp_array_search($option_values_arr, 'value', $value);
-                                $value = $data[0]['label'];
-                            } else {
-                                $value = '';
-                            }
+                        $value = $this->uwp_get_field_value($field, $user);
 
-                        }
-                        if ($field->field_type == 'multiselect' && !empty($value)) {
-                            if (!empty($value) && is_array($value)) {
-                                $array_value = array();
-                                foreach ($value as $v) {
-                                    $data = $this->uwp_array_search($option_values_arr, 'value', $v);
-                                    $array_value[] = $data[0]['label'];
-                                }
-                                $value = implode(', ', $array_value);
-                            } else {
-                                $value = '';
-                            }
-                        }
-
-                        if ($field->field_type == 'file' && !empty($value)) {
-                            $value = '<a href="'.$value.'">'.basename( $value ).'</a>';
-                        }
-
-
+                        // Icon
                         if ($field->field_icon) {
                             $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
                         } else {
                             $icon = '';
                         }
 
-                        if ($value) {
+                        if ($field->field_type == 'fieldset') {
                             ?>
-                            <tr>
-                                <td class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?></td>
-                                <td class="uwp-profile-extra-value"><?php echo $value; ?></td>
-                            </tr>
+                            <div class="uwp-profile-extra-wrap" style="margin: 0; padding: 0">
+                                <div class="uwp-profile-extra-key uwp-profile-extra-full" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></div>
+                            </div>
                             <?php
+                        } else {
+                            if ($value) {
+                                ?>
+                                <div class="uwp-profile-extra-wrap">
+                                    <div class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
+                                    <div class="uwp-profile-extra-value">
+                                        <?php echo $value; ?>
+                                    </div>
+                                </div>
+                                <?php
+                            }
                         }
                     }
                     ?>
-                </table>
+                </div>
             </div>
             <?php
         }
@@ -190,6 +209,7 @@ class Users_WP_Profile {
         ob_end_clean();
         return trim($output);
     }
+    
 
     public function get_profile_tabs($user) {
 
@@ -206,7 +226,7 @@ class Users_WP_Profile {
         if (in_array('more_info', $allowed_tabs) && $extra) {
             $tabs['more_info']  = array(
                 'title' => __( 'More Info', 'uwp' ),
-                'count' => 0
+                'count' => $this->get_profile_extra_count($user)
             );
         }
 
@@ -277,6 +297,7 @@ class Users_WP_Profile {
 
             <div class="uwp-profile-entries">
                 <?php
+                do_action('uwp_profile_tab_content', $user, $active_tab);
                 do_action('uwp_profile_'.$active_tab.'_tab_content', $user);
                 ?>
             </div>
@@ -515,6 +536,7 @@ class Users_WP_Profile {
                 }
             } else {
                 $username = get_the_author_meta('user_login', $user_id);
+                $username = sanitize_title_with_dashes($username);
                 if ('DEFAULT' == $permalink_structure) {
                     return add_query_arg(array('username' => $username), $link);
                 } else {
@@ -541,6 +563,7 @@ class Users_WP_Profile {
             if ($url_type == 'id') {
                 $user = get_user_by('id', $author_slug);
             } else {
+                $author_slug = str_replace('-', ' ', $author_slug);
                 $user = get_user_by('login', $author_slug);
             }
             $title = $user->display_name;
@@ -680,68 +703,11 @@ class Users_WP_Profile {
     }
 
 
-    public function uwp_extra_user_profile_fields_in_admin( $user ) {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $excluded_fields = array(
-            'uwp_account_username',
-            'uwp_account_email',
-            'uwp_account_password',
-            'uwp_account_confirm_password',
-            'uwp_account_first_name',
-            'uwp_account_last_name'
-        );
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array('account')));
-        if (!empty($fields)) {
-            ?>
-            <h3><?php _e("UsersWP", "uwp"); ?></h3>
-            <table class="form-table">
-            <?php
-            foreach ($fields as $field) {
-                if (in_array($field->htmlvar_name, $excluded_fields) || $field->field_type == 'fieldset') {
-                    continue;
-                }
-                $option_values_arr = array();
-                if ($field->field_type == 'select' || $field->field_type == 'select') {
-                    $option_values_arr = uwp_string_values_to_options($field->option_values, true);    
-                }
-                ?>
-                    <tr>
-                        <th><?php echo $field->site_title; ?></th>
-                        <td>
-                            <?php
-                            $value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
-                            if ($field->field_type == 'select') {
-                                if (!empty($value)) {
-                                    $data = $this->uwp_array_search($option_values_arr, 'value', $value);
-                                    $value = $data[0]['label'];
-                                } else {
-                                    $value = '';
-                                }
-
-                            }
-                            if ($field->field_type == 'multiselect' && !empty($value)) {
-                                if (!empty($value) && is_array($value)) {
-                                    $array_value = array();
-                                    foreach ($value as $v) {
-                                        $data = $this->uwp_array_search($option_values_arr, 'value', $v);
-                                        $array_value[] = $data[0]['label'];
-                                    }
-                                    $value = implode(', ', $array_value);
-                                } else {
-                                    $value = '';
-                                }
-                            }
-                            echo $value;
-                            ?>
-                        </td>
-                    </tr>
-                <?php
-            }
-            ?>
-            </table>
-            <?php
-        }
+    public function uwp_extra_user_profile_fields( $user ) {
+        ?>
+        <h3><?php _e("UsersWP", "uwp"); ?></h3>
+        <?php echo $this->get_profile_extra($user); ?>
+        <?php
     }
 
     public function uwp_array_search($array, $key, $value)
@@ -835,28 +801,7 @@ class Users_WP_Profile {
         }
         return $query;    
     }
-
-    public function uwp_wp_media_restrict_file_types($file) {
-        // This bit is for the flash uploader
-        if ($file['type']=='application/octet-stream' && isset($file['tmp_name'])) {
-            $file_size = getimagesize($file['tmp_name']);
-            if (isset($file_size['error']) && $file_size['error']!=0) {
-                $file['error'] = "Unexpected Error: {$file_size['error']}";
-                return $file;
-            } else {
-                $file['type'] = $file_size['mime'];
-            }
-        }
-        list($category,$type) = explode('/',$file['type']);
-        if ('image'!=$category || !in_array($type,array('jpg','jpeg','gif','png'))) {
-            $file['error'] = "Sorry, you can only upload a .GIF, a .JPG, or a .PNG image file.";
-        } else if ($post_id = (isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : false)) {
-            if (count(get_posts("post_type=attachment&post_parent={$post_id}"))>0)
-                $file['error'] = "Sorry, you cannot upload more than one (1) image.";
-        }
-        return $file;
-    }
-
+    
     public function uwp_ajax_image_crop_popup(){
         wp_enqueue_style( 'jcrop' );
         wp_enqueue_script( 'jcrop', array( 'jquery' ) );
@@ -885,10 +830,10 @@ class Users_WP_Profile {
                 <?php
                 $keyword = "";
                 if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
-                    $keyword = sanitize_title($_GET['uwps']);
+                    $keyword = strip_tags(esc_sql($_GET['uwps']));
                 }
                 ?>
-                <form method="get" class="searchform search-form" action="">
+                <form method="get" class="searchform search-form" action="<?php echo get_uwp_users_permalink(); ?>">
                     <input placeholder="Search For" name="uwps" value="<?php echo $keyword; ?>" class="s search-input" type="text">
                     <input class="uwp-searchsubmit uwp-search-submit" value="Search" type="submit"><br>
                 </form>
@@ -898,7 +843,7 @@ class Users_WP_Profile {
                     <?php
                     $sort_by = "";
                     if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
-                        $sort_by = sanitize_title($_GET['uwp_sort_by']);
+                        $sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
                     }
                     ?>
                     <select name="uwp_sort_by" id="uwp_sort_by" onchange="this.form.submit()">
@@ -913,8 +858,126 @@ class Users_WP_Profile {
         </div>
         <?php
     }
+
     public function uwp_users_list() {
         get_uwp_users_list();
+    }
+
+    public function uwp_extra_fields_as_tabs($tabs, $user)
+    {
+        
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public = '1' AND is_default = '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+
+        foreach ($fields as $field) {
+            $key = str_replace('uwp_account_', '', $field->htmlvar_name);
+            $tabs[$key] = array(
+                'title' => __($field->site_title, 'uwp'),
+                'count' => 1
+            );
+        }
+
+        return $tabs;
+    }
+
+    public function uwp_extra_fields_as_tab_values($user, $active_tab)
+    {
+
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public = '1' AND is_default = '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+
+        foreach ($fields as $field) {
+            $key = str_replace('uwp_account_', '', $field->htmlvar_name);
+            if ($key == $active_tab) {
+                echo '<div class="uwp_profile_tab_field_content">';
+                echo $this->uwp_get_field_value($field, $user);
+                echo '</div>';
+            }
+        }
+    }
+
+    public function uwp_get_field_value($field, $user) {
+
+        $value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
+
+        // Select and Multiselect needs Value to be converted
+        if ($field->field_type == 'select' || $field->field_type == 'multiselect') {
+            $option_values_arr = array();
+            $option_values_arr = uwp_string_values_to_options($field->option_values, true);
+
+            // Select
+            if ($field->field_type == 'select') {
+                if (!empty($value)) {
+                    $data = $this->uwp_array_search($option_values_arr, 'value', $value);
+                    $value = $data[0]['label'];
+                } else {
+                    $value = '';
+                }
+            }
+
+            //Multiselect
+            if ($field->field_type == 'multiselect' && !empty($value)) {
+                if (!empty($value) && is_array($value)) {
+                    $array_value = array();
+                    foreach ($value as $v) {
+                        $data = $this->uwp_array_search($option_values_arr, 'value', $v);
+                        $array_value[] = $data[0]['label'];
+                    }
+                    $value = implode(', ', $array_value);
+                } else {
+                    $value = '';
+                }
+            }
+        }
+
+        if ($field->field_type == 'datepicker') {
+            $extra_fields = unserialize($field->extra_fields);
+
+            if ($extra_fields['date_format'] == '')
+                $extra_fields['date_format'] = 'yy-mm-dd';
+
+            $date_format = $extra_fields['date_format'];
+
+            if (!empty($value)) {
+                $value = date('Y-m-d', $value);
+            }
+
+            $value = uwp_date($value, $date_format, 'Y-m-d');
+        }
+
+
+
+        // URL
+        if ($field->field_type == 'url' && !empty($value)) {
+            $link_text = $value;
+            if ($field->default_value && !empty($field->default_value) ) {
+                if (substr( $field->default_value, 0, 4 ) === "http") {
+                    $link_text = $value;
+                } else {
+                    $link_text = $field->default_value;
+                }
+            }
+            $value = '<a href="'.$value.'">'.$link_text.'</a>';
+        }
+
+        // Checkbox
+        if ($field->field_type == 'checkbox') {
+            if ($value == '1') {
+                $value = 'Yes';
+            } else {
+                $value = 'No';
+            }
+        }
+
+        // File
+        if ($field->field_type == 'file') {
+            $value = uwp_file_upload_preview($field, $value, false);
+        }
+
+        return $value;
     }
 
 }

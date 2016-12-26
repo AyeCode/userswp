@@ -282,7 +282,7 @@ function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
         $usermeta = array();
     }
 
-    $value = ! empty( $usermeta[ $key ] ) ? $usermeta[ $key ] : $default;
+    $value = isset( $usermeta[ $key ] ) ? $usermeta[ $key ] : $default;
     $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
     return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
 }
@@ -757,6 +757,69 @@ function is_uwp_users_page() {
     return is_uwp_page('users_page');
 }
 
+function is_uwp_current_user_profile_page() {
+    if (is_user_logged_in() && 
+        is_uwp_profile_page()
+    ) {
+        $author_slug = get_query_var('uwp_profile');
+        if ($author_slug) {
+            $url_type = apply_filters('uwp_profile_url_type', 'login');
+            if ($url_type == 'id') {
+                $user = get_user_by('id', $author_slug);
+            } else {
+                $user = get_user_by('login', $author_slug);
+            }
+
+            if ($user && $user->ID == get_current_user_id()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+function get_uwp_register_permalink() {
+    return get_uwp_page_permalink('register_page');
+}
+
+function get_uwp_login_permalink() {
+    return get_uwp_page_permalink('login_page');
+}
+
+function get_uwp_forgot_permalink() {
+    return get_uwp_page_permalink('forgot_page');
+}
+
+function get_uwp_reset_permalink() {
+    return get_uwp_page_permalink('reset_page');
+}
+
+function get_uwp_account_permalink() {
+    return get_uwp_page_permalink('account_page');
+}
+
+function get_uwp_profile_permalink() {
+    return get_uwp_page_permalink('profile_page');
+}
+
+function get_uwp_users_permalink() {
+    return get_uwp_page_permalink('users_page');
+}
+
+function get_uwp_page_permalink($type) {
+    $link = false;
+    $page_id = uwp_get_option($type, false);
+    if ($page_id) {
+        $link = get_permalink($page_id);
+    }
+    return $link;
+}
+
 function uwp_generic_tab_content($user, $post_type, $title) {
     ?>
     <h3><?php echo $title; ?></h3>
@@ -864,7 +927,7 @@ function handle_file_upload( $field, $files ) {
         $extra_fields = unserialize($field->extra_fields);
 
         $allowed_mime_types = array();
-        if (isset($extra_fields['uwp_file_types'])) {
+        if (isset($extra_fields['uwp_file_types']) && !in_array("*", $extra_fields['uwp_file_types'])) {
             $allowed_mime_types = $extra_fields['uwp_file_types'];
         }
 
@@ -891,7 +954,9 @@ function handle_file_upload( $field, $files ) {
                 return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. uwp_formatSizeUnits($max_upload_size), 'uwp' ) );
 
 
+            remove_filter( 'wp_handle_upload_prefilter', 'uwp_wp_media_restrict_file_types' );
             $uploaded_file = uwp_upload_file( $file_to_upload, array( 'file_key' => $file_key ) );
+            add_filter( 'wp_handle_upload_prefilter', 'uwp_wp_media_restrict_file_types' );
 
             if ( is_wp_error( $uploaded_file ) ) {
 
@@ -1011,7 +1076,7 @@ function uwp_prepare_files( $file_data ) {
 }
 
 
-function uwp_validate_uploads($files, $type, $url_only = true) {
+function uwp_validate_uploads($files, $type, $url_only = true, $fields = false) {
 
     $validated_data = array();
 
@@ -1019,21 +1084,22 @@ function uwp_validate_uploads($files, $type, $url_only = true) {
         return $validated_data;
     }
 
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    if (!$fields) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
 
-    if ($type == 'register') {
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' AND is_register_field = '1' ORDER BY sort_order ASC", array('account')));
-    } elseif ($type == 'account') {
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' AND is_register_only_field = '0' ORDER BY sort_order ASC", array('account')));
-    } else {
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
+        if ($type == 'register') {
+            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' AND is_register_field = '1' ORDER BY sort_order ASC", array('account')));
+        } elseif ($type == 'account') {
+            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' AND is_register_only_field = '0' ORDER BY sort_order ASC", array('account')));
+        } else {
+            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
+        }    
     }
 
 
     if (!empty($fields)) {
         foreach ($fields as $field) {
-
             if(isset($files[$field->htmlvar_name])) {
 
                 $file_urls = handle_file_upload($field, $files);
@@ -1063,6 +1129,14 @@ function get_register_form_fields() {
     return $fields;
 }
 
+function get_register_validate_form_fields() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
+    $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.is_register_field = '1' ORDER BY extras.sort_order ASC", array('account')));
+    return $fields;
+}
+
 function get_account_form_fields() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'uwp_form_fields';
@@ -1072,71 +1146,90 @@ function get_account_form_fields() {
 
 function get_uwp_users_list() {
 
+    global $wpdb;
+
     $keyword = false;
     if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
-        $keyword = sanitize_title($_GET['uwps']);
+        $keyword = strip_tags(esc_sql($_GET['uwps']));
     }
 
     $sort_by = false;
     if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
-        $sort_by = sanitize_title($_GET['uwp_sort_by']);
+        $sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
     }
 
     $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
     $number = uwp_get_option('profile_no_of_items', 10);
 
-    $args = array(
-        'number' => $number,
-        'search' => "*{$keyword}*",
-        'search_columns' => array(
-            'user_login',
-            'user_nicename',
-            'user_email',
-        ),
-        'meta_query' => array(
-            'relation' => 'OR',
-            array(
-                'key'     => 'first_name',
-                'value'   => $keyword,
-                'compare' => 'LIKE'
-            ),
-            array(
-                'key'     => 'last_name',
-                'value'   => $keyword,
-                'compare' => 'LIKE'
+
+    if ($keyword) {
+        $users = $wpdb->get_results($wpdb->prepare(
+            "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
+            FROM $wpdb->users
+            INNER JOIN $wpdb->usermeta
+            ON ( $wpdb->users.ID = $wpdb->usermeta.user_id )
+            WHERE 1=1
+            AND ( 
+            ( $wpdb->usermeta.meta_key = 'first_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
+            OR 
+            ( $wpdb->usermeta.meta_key = 'last_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
+            OR 
+            user_login LIKE %s 
+            OR 
+            user_nicename LIKE %s 
+            OR 
+            display_name LIKE %s 
+            OR 
+            user_email LIKE %s
             )
-        )
-    );
+            ORDER BY display_name ASC
+            LIMIT 0, 20",
+            array(
+                '%' . $keyword . '%',
+                '%' . $keyword . '%',
+                '%' . $keyword . '%',
+                '%' . $keyword . '%',
+                '%' . $keyword . '%',
+                '%' . $keyword . '%'
+            )
+        ));
 
-    if (!$keyword) {
-        $args['paged'] = $paged;
-    }
+    } else {
 
-    if ($sort_by) {
-        switch ($sort_by) {
-            case "newer":
-                $args['orderby'] = 'registered';
-                $args['order'] = 'desc';
-                break;
-            case "older":
-                $args['orderby'] = 'registered';
-                $args['order'] = 'asc';
-                break;
-            case "alpha_asc":
-                $args['orderby'] = 'display_name';
-                $args['order'] = 'asc';
-                break;
-            case "alpha_desc":
-                $args['orderby'] = 'display_name';
-                $args['order'] = 'desc';
-                break;
+        $args = array(
+            'number' => (int) $number,
+            'paged' => $paged
+        );
 
+
+        if ($sort_by) {
+            switch ($sort_by) {
+                case "newer":
+                    $args['orderby'] = 'registered';
+                    $args['order'] = 'desc';
+                    break;
+                case "older":
+                    $args['orderby'] = 'registered';
+                    $args['order'] = 'asc';
+                    break;
+                case "alpha_asc":
+                    $args['orderby'] = 'display_name';
+                    $args['order'] = 'asc';
+                    break;
+                case "alpha_desc":
+                    $args['orderby'] = 'display_name';
+                    $args['order'] = 'desc';
+                    break;
+
+            }
         }
+
+        $users_query = new WP_User_Query($args);
+        $users = $users_query->get_results();
+
     }
-    
-    $users_query = new WP_User_Query($args);
-    $users = $users_query->get_results();
+
 
     $result = count_users();
     $total_user = $result['total_users'];
@@ -1162,6 +1255,9 @@ function get_uwp_users_list() {
                         <div class="uwp-users-list-user-bio">
                             <?php do_action('uwp_profile_bio', $user_obj ); ?>
                         </div>
+                        <div class="uwp-users-list-extra">
+                            <?php do_action('uwp_users_extra', $user_obj ); ?>
+                        </div>
                         <div class="clfx"></div>
                     </div>
                 </li>
@@ -1176,6 +1272,286 @@ function get_uwp_users_list() {
         ?>
     </ul>
     
-    <?php do_action('uwp_profile_pagination', $total_pages); ?>
     <?php
+    if (!$keyword) {
+        do_action('uwp_profile_pagination', $total_pages);
+    }
+    ?>
+    <?php
+}
+
+function uwp_file_upload_preview($field, $value, $removable = true) {
+    $output = '';
+    if ($value) {
+        $file = basename( $value );
+        $filetype = wp_check_filetype($file);
+        $image_types = array('png', 'jpg', 'jpeg', 'gif');
+        if (in_array($filetype['ext'], $image_types)) {
+            $output .= '<div class="uwp_file_preview_wrap">';
+            $output .= '<a href="'.$value.'" class="uwp_upload_file_preview"><img style="max-width:100px;" src="'.$value.'" /></a>';
+            if ($removable) {
+                $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$field->htmlvar_name.'" class="uwp_upload_file_remove">'. __( 'Remove Image' , 'uwp' ).'</a>';    
+            }
+            $output .= '</div>';
+            ?>
+            <?php
+        } else {
+            $output .= '<div class="uwp_file_preview_wrap">';
+            $output .= '<a href="'.$value.'" class="uwp_upload_file_preview">'.$file.'</a>';
+            if ($removable) {
+                $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$field->htmlvar_name.'" class="uwp_upload_file_remove">'. __( 'Remove File' , 'uwp' ).'</a>';    
+            }
+            $output .= '</div>';
+            ?>
+            <?php
+        }
+    }
+    return $output;
+}
+
+function uwp_validate_fields($data, $type, $fields = false) {
+
+    $errors = new WP_Error();
+
+    if (!$fields) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
+        if ($type == 'register') {
+            $fields = get_register_validate_form_fields();
+        } elseif ($type == 'account') {
+            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' AND is_register_only_field = '0' ORDER BY sort_order ASC", array('account')));
+        } else {
+            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
+        }
+    }
+
+
+
+    $validated_data = array();
+    $enable_password = uwp_get_option('enable_register_password', false);
+
+    if (!empty($fields)) {
+        foreach ($fields as $field) {
+
+            if (!isset($data[$field->htmlvar_name]) && $field->is_required != 1) {
+                continue;
+            }
+
+            if (!isset($data[$field->htmlvar_name]) && $field->is_required == 1) {
+                if ($field->required_msg) {
+                    $errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->site_title.' '.$field->required_msg, 'uwp'));
+                } else {
+                    $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'uwp'));
+                }
+            }
+
+            if ($errors->get_error_code())
+                return $errors;
+
+            if ($type == 'register') {
+                if ($enable_password != '1') {
+                    if ( ($field->htmlvar_name == 'uwp_account_password') OR ($field->htmlvar_name == 'uwp_account_confirm_password') ) {
+                        continue;
+                    }
+                }
+            }
+
+            $value = $data[$field->htmlvar_name];
+            $sanitized_value = $value;
+
+            if ($field->field_type == 'password') {
+                continue;
+            }
+
+            $sanitized = false;
+
+            // sanitize our default fields
+            switch($field->htmlvar_name) {
+
+                case 'uwp_register_username':
+                case 'uwp_account_username':
+                case 'uwp_login_username':
+                case 'uwp_reset_username':
+                    $sanitized_value = sanitize_user($value);
+                    $sanitized = true;
+                    break;
+
+                case 'uwp_register_first_name':
+                case 'uwp_register_last_name':
+                case 'uwp_account_first_name':
+                case 'uwp_account_last_name':
+                    $sanitized_value = sanitize_text_field($value);
+                    $sanitized = true;
+                    break;
+
+                case 'uwp_register_email':
+                case 'uwp_forgot_email':
+                case 'uwp_account_email':
+                    $sanitized_value = sanitize_email($value);
+                    $sanitized = true;
+                    break;
+
+            }
+
+            if (!$sanitized && !empty($value)) {
+                // sanitize by field type
+                switch($field->field_type) {
+
+                    case 'text':
+                        $sanitized_value = sanitize_text_field($value);
+                        break;
+
+                    case 'checkbox':
+                        $sanitized_value = sanitize_text_field($value);
+                        break;
+
+                    case 'email':
+                        $sanitized_value = sanitize_email($value);
+                        break;
+
+                    case 'multiselect':
+                        $sanitized_value = array_map( 'sanitize_text_field', $value );
+                        break;
+
+                    case 'datepicker':
+                        $sanitized_value = sanitize_text_field($value);
+                        $extra_fields = unserialize($field->extra_fields);
+
+                        if ($extra_fields['date_format'] == '')
+                            $extra_fields['date_format'] = 'yy-mm-dd';
+
+                        $date_format = $extra_fields['date_format'];
+
+                        if (!empty($sanitized_value)) {
+                            $date_value = uwp_date($sanitized_value, 'Y-m-d', $date_format);
+                            $sanitized_value = strtotime($date_value);
+                        }
+                        break;
+
+                    default:
+                        $sanitized_value = sanitize_text_field($value);
+
+                }
+            }
+
+
+
+            if (($field->htmlvar_name == 'uwp_account_password' || $field->htmlvar_name == 'uwp_account_confirm_password') && empty($value)) {
+                $field->is_required = 0;
+            }
+
+
+            if ($field->is_required == 1 && $sanitized_value == '') {
+                if ($field->required_msg) {
+                    $errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->site_title.' '.$field->required_msg, 'uwp'));
+                } else {
+                    $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'uwp'));
+                }
+
+            }
+
+            if ($field->field_type == 'email' && !empty($sanitized_value) && !is_email($sanitized_value)) {
+                $errors->add('invalid_email', __('<strong>Error</strong>: The email address isn&#8217;t correct.', 'uwp'));
+            }
+
+            //register email
+            if ($type == 'register' && $field->htmlvar_name == 'uwp_account_email' && email_exists($sanitized_value)) {
+                $errors->add('email_exists', __('<strong>Error</strong>: This email is already registered, please choose another one.', 'uwp'));
+            }
+
+            //forgot email
+            if ($field->htmlvar_name == 'uwp_forgot_email' && !email_exists($sanitized_value)) {
+                $errors->add('email_exists', __('<strong>Error</strong>: This email doesn\'t exists.', 'uwp'));
+            }
+
+            // Check the username for register
+            if ($field->htmlvar_name == 'uwp_account_username') {
+                if (!validate_username($sanitized_value)) {
+                    $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'uwp'));
+                }
+                if (username_exists($sanitized_value)) {
+                    $errors->add('username_exists', __('<strong>Error</strong>: This username is already registered. Please choose another one.', 'uwp'));
+                }
+            }
+
+            // Check the username for login
+            if ($field->htmlvar_name == 'uwp_login_username') {
+                if (!validate_username($sanitized_value)) {
+                    $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'uwp'));
+                }
+            }
+
+
+            $validated_data[$field->htmlvar_name] = $sanitized_value;
+
+        }
+    }
+
+    if ($type == 'login') {
+        $password_type = 'login';
+    } elseif ($type == 'reset') {
+        $password_type = 'reset';
+    } else {
+        $password_type = 'account';
+    }
+
+    if ($type == 'reset' || $type == 'login' || ($type == 'register' && $enable_password == '1') || ($type == 'account' && !empty( $data['uwp_account_password']))) {
+        //check password
+        if( empty( $data['uwp_'.$password_type.'_password'] ) ) {
+            $errors->add( 'empty_password', __( 'Please enter a password', 'uwp' ) );
+        }
+
+        if (strlen($data['uwp_'.$password_type.'_password']) < 7) {
+            $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', 'uwp'));
+        }
+
+        $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
+    }
+
+    if (($type == 'register' && $enable_password == '1') || $type == 'reset' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
+        //check password
+        if ($data['uwp_'.$password_type.'_password'] != $data['uwp_'.$password_type.'_confirm_password']) {
+            $errors->add('pass_match', __('ERROR: Passwords do not match.', 'uwp'));
+        }
+
+        $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
+    }
+
+
+    if ($errors->get_error_code())
+        return $errors;
+
+    return $validated_data;
+}
+
+
+function uwp_wp_media_restrict_file_types($file) {
+    // This bit is for the flash uploader
+    if ($file['type']=='application/octet-stream' && isset($file['tmp_name'])) {
+        $file_size = getimagesize($file['tmp_name']);
+        if (isset($file_size['error']) && $file_size['error']!=0) {
+            $file['error'] = "Unexpected Error: {$file_size['error']}";
+            return $file;
+        } else {
+            $file['type'] = $file_size['mime'];
+        }
+    }
+    list($category,$type) = explode('/',$file['type']);
+    if ('image'!=$category || !in_array($type,array('jpg','jpeg','gif','png'))) {
+        $file['error'] = "Sorry, you can only upload a .GIF, a .JPG, or a .PNG image file.";
+    } else if ($post_id = (isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : false)) {
+        if (count(get_posts("post_type=attachment&post_parent={$post_id}"))>0)
+            $file['error'] = "Sorry, you cannot upload more than one (1) image.";
+    }
+    return $file;
+}
+
+function uwp_get_form_label($field) {
+    if (isset($field->form_label) && !empty($field->form_label)) {
+        $label = __($field->form_label, 'uwp');
+    } else {
+        $label = __($field->site_title, 'uwp');
+    }
+    return $label;
 }

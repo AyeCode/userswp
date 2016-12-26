@@ -8,6 +8,7 @@ $author_slug = get_query_var('uwp_profile');
 if ($url_type == 'id') {
     $user = get_user_by('id', $author_slug);
 } else {
+    $author_slug = str_replace('-', ' ', $author_slug);
     $user = get_user_by('login', $author_slug);
 }
 ?>

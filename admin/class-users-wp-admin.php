@@ -72,7 +72,7 @@ class Users_WP_Admin {
      *
      * @since    1.0.0
      */
-    public function enqueue_styles() {
+    public function enqueue_styles($hook_suffix) {
 
         /**
          * An instance of this class should be passed to the run() function
@@ -84,6 +84,11 @@ class Users_WP_Admin {
          * class.
          */
 
+        if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
+            wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
+            wp_enqueue_style( 'jquery-ui' );
+            wp_enqueue_style( "uwp_timepicker_css", plugin_dir_url( dirname(__FILE__) ) . 'public/assets/css/jquery.ui.timepicker.css', array(), null, 'all' );
+        }
         wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp-admin.css', array(), $this->version, 'all' );
         wp_enqueue_style( "uwp_chosen_css", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/chosen.css', array(), $this->version, 'all' );
         global $wp_styles;
@@ -102,7 +107,7 @@ class Users_WP_Admin {
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts() {
+    public function enqueue_scripts($hook_suffix) {
 
         /**
          * An instance of this class should be passed to the run() function
@@ -114,13 +119,19 @@ class Users_WP_Admin {
          * class.
          */
 
+        if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
+            wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
+            wp_enqueue_script( "uwp_timepicker", plugin_dir_url( dirname(__FILE__) ) . 'public/assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
+            wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.js', array( 'jquery' ), null, false );
+        }
         wp_enqueue_script('jquery-ui-sortable');
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.js', array( 'jquery' ), null, false );
         wp_enqueue_script( "uwp_chosen", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/chosen.jquery.js', array( 'jquery' ), $this->version, false );
 
         $ajax_cons_data = array(
             'url' => admin_url('admin-ajax.php'),
             'custom_field_not_blank_var' => __('HTML Variable Name must not be blank', 'uwp'),
+            'custom_field_options_not_blank_var' => __('Option Values must not be blank', 'uwp'),
             'custom_field_not_special_char' => __('Please do not use special character and spaces in HTML Variable Name.', 'uwp'),
             'custom_field_unique_name' => __('HTML Variable Name should be a unique name.', 'uwp'),
             'custom_field_delete' => __('Are you wish to delete this field?', 'uwp'),
