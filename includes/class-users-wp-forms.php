@@ -68,6 +68,10 @@ class Users_WP_Forms {
             $errors = $this->process_forgot($_POST);
             $message = __('Please check your email.', 'uwp');
             $processed = true;
+        } elseif (isset($_POST['uwp_change_submit'])) {
+            $errors = $this->process_change($_POST);
+            $message = sprintf(__('Password changed successfully. Please <a href="%s">login</a> with your new password', 'uwp'), $login_page_url);
+            $processed = true;
         } elseif (isset($_POST['uwp_reset_submit'])) {
             $errors = $this->process_reset($_POST);
             $message = sprintf(__('Password updated successfully. Please <a href="%s">login</a> with your new password', 'uwp'), $login_page_url);
@@ -131,6 +135,34 @@ class Users_WP_Forms {
     public function display_notices() {
         global $uwp_notices;
         echo $uwp_notices;
+    }
+
+    public function display_default_password_notice($type) {
+        if (!is_user_logged_in()) {
+            return;
+        }
+        if ($type == 'change') {
+            $user_id = get_current_user_id();
+            $password_nag = get_user_option('default_password_nag', $user_id);
+
+            if ($password_nag) {
+                $change_page = uwp_get_option('change_page', false);
+                $remove_nag_url = add_query_arg('uwp_remove_nag', 'yes', get_permalink($change_page));
+
+                if (isset($_GET['uwp_remove_nag']) && $_GET['uwp_remove_nag'] == 'yes') {
+                    delete_user_meta( $user_id, 'default_password_nag' );
+                    $message = sprintf(__('We have removed the system generated password warning for you. From this point forward you can continue to access our site as usual. To go to home page, <a href="%s">click here</a>.', 'uwp'), home_url('/'));
+                    echo '<div class="uwp-alert-success text-center">';
+                    echo $message;
+                    echo '</div>';
+                } else {
+                    $message = sprintf(__('<strong>Warning</strong>: You seems like you are using a system generated password. Please change the password in this page. If this is not a problem for you, you can remove this warning by <a href="%s">clicking here</a>.', 'uwp'), $remove_nag_url);
+                    echo '<div class="uwp-alert-warning text-center">';
+                    echo $message;
+                    echo '</div>';
+                }
+            }
+        }
     }
 
     public function process_register($data = array(), $files = array()) {
@@ -233,6 +265,7 @@ class Users_WP_Forms {
             return $errors;
 
         if ($generated_password) {
+            update_user_meta($user_id, 'default_password_nag', true); //Set up the Password change nag.
             $message_pass = $password;
         } else {
             $message_pass = __("Password you entered", 'uwp');
@@ -386,6 +419,50 @@ class Users_WP_Forms {
         return true;
     }
 
+    public function process_change($data) {
+
+        $errors = new WP_Error();
+
+        if( ! isset( $data['uwp_change_nonce'] ) || ! wp_verify_nonce( $data['uwp_change_nonce'], 'uwp-change-nonce' ) ) {
+            return false;
+        }
+
+        do_action('uwp_before_validate', 'change');
+
+        $result = uwp_validate_fields($data, 'change');
+
+        $result = apply_filters('uwp_validate_result', $result, 'change');
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        do_action('uwp_after_validate', 'change');
+
+        $user_data = get_user_by('id', get_current_user_id());
+
+        if (is_wp_error($user_data)) {
+            return $user_data;
+        }
+        
+        $res = $this->uwp_send_email( 'change', $user_data->ID );
+
+        if (!$res) {
+            if (get_option('admin_email') == $user_data->user_email) {
+                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please check your site error log for more details.', 'uwp'));
+            } else {
+                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'uwp'));
+            }
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        wp_set_password( $data['uwp_change_password'], $user_data->ID );
+
+        return true;
+    }
+    
     public function process_reset($data) {
 
         $errors = new WP_Error();
@@ -413,10 +490,8 @@ class Users_WP_Forms {
         if (is_wp_error($user_data)) {
             return $user_data;
         }
-
-        $login_details = "";
-
-        $res = $this->uwp_send_email( 'reset', $user_data->ID, $login_details );
+        
+        $res = $this->uwp_send_email( 'reset', $user_data->ID );
 
         if (!$res) {
             if (get_option('admin_email') == $user_data->user_email) {
@@ -560,10 +635,8 @@ class Users_WP_Forms {
 
         if (uwp_get_option('enable_account_update_notification') == '1') {
             $user_data = get_user_by('id', $user_id);
-
-            $login_details = "";
-
-            $res = $this->uwp_send_email( 'account', $user_data->ID, $login_details );
+            
+            $res = $this->uwp_send_email( 'account', $user_data->ID );
 
             if (!$res) {
                 if (get_option('admin_email') == $user_data->user_email) {
@@ -720,7 +793,7 @@ class Users_WP_Forms {
         }
     }
 
-    public function uwp_send_email( $message_type, $user_id, $login_details ) {
+    public function uwp_send_email( $message_type, $user_id, $login_details = "" ) {
         $user_data = get_userdata($user_id);
 
         $login_page_id = uwp_get_option('login_page', false);
@@ -742,6 +815,9 @@ class Users_WP_Forms {
         } elseif ( $message_type == 'reset' ) {
             $subject = uwp_get_option('reset_password_email_subject', '');
             $message = uwp_get_option('reset_password_email_content', '');
+        } elseif ( $message_type == 'change' ) {
+            $subject = uwp_get_option('change_password_email_subject', '');
+            $message = uwp_get_option('change_password_email_content', '');
         } elseif ( $message_type == 'account' ) {
             $subject = uwp_get_option('account_update_email_subject', '');
             $message = uwp_get_option('account_update_email_content', '');

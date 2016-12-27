@@ -714,6 +714,7 @@ function is_uwp_page($type = false) {
             if (is_uwp_register_page() ||
                 is_uwp_login_page() ||
                 is_uwp_forgot_page() ||
+                is_uwp_change_page() ||
                 is_uwp_reset_page() ||
                 is_uwp_account_page() ||
                 is_uwp_profile_page() ||
@@ -739,6 +740,10 @@ function is_uwp_login_page() {
 
 function is_uwp_forgot_page() {
     return is_uwp_page('forgot_page');
+}
+
+function is_uwp_change_page() {
+    return is_uwp_page('change_page');
 }
 
 function is_uwp_reset_page() {
@@ -1137,10 +1142,35 @@ function get_register_validate_form_fields() {
     return $fields;
 }
 
+
+function get_change_validate_form_fields() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $enable_old_password = uwp_get_option('change_enable_old_password', false);
+    if ($enable_old_password == '1') {
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array('change')));
+    } else {
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' AND htmlvar_name != 'uwp_change_old_password' ORDER BY sort_order ASC", array('change')));
+    }
+    return $fields;
+}
+
 function get_account_form_fields() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'uwp_form_fields';
     $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_only_field = '0' ORDER BY sort_order ASC", array('account')));
+    return $fields;
+}
+
+function get_change_form_fields() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $enable_old_password = uwp_get_option('change_enable_old_password', false);
+    if ($enable_old_password == '1') {
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array('change')));
+    } else {
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND htmlvar_name != 'uwp_change_old_password' ORDER BY sort_order ASC", array('change')));
+    }
     return $fields;
 }
 
@@ -1319,17 +1349,25 @@ function uwp_validate_fields($data, $type, $fields = false) {
         $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
         if ($type == 'register') {
             $fields = get_register_validate_form_fields();
+        } elseif ($type == 'change') {
+            $fields = get_change_validate_form_fields();
         } elseif ($type == 'account') {
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' AND is_register_only_field = '0' ORDER BY sort_order ASC", array('account')));
         } else {
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
         }
     }
-
-
+    
 
     $validated_data = array();
     $enable_password = uwp_get_option('enable_register_password', false);
+    $enable_old_password = uwp_get_option('change_enable_old_password', false);
+
+    if ($type == 'account' || $type == 'change') {
+        if (!is_user_logged_in()) {
+            $errors->add('not_logged_in', __('<strong>Error</strong>: Permission denied.', 'uwp'));
+        }
+    }
 
     if (!empty($fields)) {
         foreach ($fields as $field) {
@@ -1337,6 +1375,15 @@ function uwp_validate_fields($data, $type, $fields = false) {
             if (!isset($data[$field->htmlvar_name]) && $field->is_required != 1) {
                 continue;
             }
+
+            if ($type == 'register') {
+                if ($enable_password != '1') {
+                    if ( ($field->htmlvar_name == 'uwp_account_password') OR ($field->htmlvar_name == 'uwp_account_confirm_password') ) {
+                        continue;
+                    }
+                }
+            }
+
 
             if (!isset($data[$field->htmlvar_name]) && $field->is_required == 1) {
                 if ($field->required_msg) {
@@ -1349,13 +1396,6 @@ function uwp_validate_fields($data, $type, $fields = false) {
             if ($errors->get_error_code())
                 return $errors;
 
-            if ($type == 'register') {
-                if ($enable_password != '1') {
-                    if ( ($field->htmlvar_name == 'uwp_account_password') OR ($field->htmlvar_name == 'uwp_account_confirm_password') ) {
-                        continue;
-                    }
-                }
-            }
 
             $value = $data[$field->htmlvar_name];
             $sanitized_value = $value;
@@ -1436,12 +1476,6 @@ function uwp_validate_fields($data, $type, $fields = false) {
             }
 
 
-
-            if (($field->htmlvar_name == 'uwp_account_password' || $field->htmlvar_name == 'uwp_account_confirm_password') && empty($value)) {
-                $field->is_required = 0;
-            }
-
-
             if ($field->is_required == 1 && $sanitized_value == '') {
                 if ($field->required_msg) {
                     $errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->site_title.' '.$field->required_msg, 'uwp'));
@@ -1488,15 +1522,48 @@ function uwp_validate_fields($data, $type, $fields = false) {
         }
     }
 
+    if ($errors->get_error_code())
+        return $errors;
+
     if ($type == 'login') {
         $password_type = 'login';
     } elseif ($type == 'reset') {
         $password_type = 'reset';
+    } elseif ($type == 'change') {
+        $password_type = 'change';
     } else {
         $password_type = 'account';
     }
 
-    if ($type == 'reset' || $type == 'login' || ($type == 'register' && $enable_password == '1') || ($type == 'account' && !empty( $data['uwp_account_password']))) {
+    if (($type == 'change' && $enable_old_password == '1')) {
+        //check old password
+        if( empty( $data['uwp_'.$password_type.'_old_password'] ) ) {
+            $errors->add( 'empty_password', __( '<strong>Error</strong>: Please enter your old password', 'uwp' ) );
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        $pass = $data['uwp_'.$password_type.'_old_password'];
+        $user = get_user_by( 'id', get_current_user_id() );
+        if ( !wp_check_password( $pass, $user->data->user_pass, $user->ID) ) {
+            $errors->add( 'invalid_password', __( '<strong>Error</strong>: Incorrect old password', 'uwp' ) );
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        if( $data['uwp_'.$password_type.'_old_password'] == $data['uwp_'.$password_type.'_password'] ) {
+            $errors->add( 'invalid_password', __( '<strong>Error</strong>: Old password and new password are same', 'uwp' ) );
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+    }
+
+
+    if ($type == 'change' || $type == 'reset' || $type == 'login' || ($type == 'register' && $enable_password == '1')) {
         //check password
         if( empty( $data['uwp_'.$password_type.'_password'] ) ) {
             $errors->add( 'empty_password', __( 'Please enter a password', 'uwp' ) );
@@ -1509,7 +1576,10 @@ function uwp_validate_fields($data, $type, $fields = false) {
         $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
     }
 
-    if (($type == 'register' && $enable_password == '1') || $type == 'reset' || ($type == 'account' && !empty( $data['uwp_account_password']))) {
+    if ($errors->get_error_code())
+        return $errors;
+
+    if (($type == 'register' && $enable_password == '1') || $type == 'reset' || $type == 'change') {
         //check password
         if ($data['uwp_'.$password_type.'_password'] != $data['uwp_'.$password_type.'_confirm_password']) {
             $errors->add('pass_match', __('ERROR: Passwords do not match.', 'uwp'));
