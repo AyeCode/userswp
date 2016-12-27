@@ -204,6 +204,7 @@ class Users_WP {
         $this->loader->add_action( 'uwp_settings_register_tab_content', $plugin_admin_settings, 'generic_display_form' );
         $this->loader->add_action( 'uwp_settings_login_tab_content', $plugin_admin_settings, 'generic_display_form' );
         $this->loader->add_action( 'uwp_settings_profile_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'uwp_settings_change_tab_content', $plugin_admin_settings, 'generic_display_form' );
         $this->loader->add_action( 'uwp_settings_uninstall_tab_content', $plugin_admin_settings, 'generic_display_form' );
 
         $this->loader->add_action( 'uwp_form_builder_settings_main_tab_content', $plugin_admin_settings, 'get_form_builder_content' );
@@ -231,8 +232,10 @@ class Users_WP {
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
         $this->loader->add_action( 'init', $forms, 'handler' );
+        $this->loader->add_action( 'template_redirect', $templates, 'change_default_password_redirect' );
 
         $this->loader->add_action( 'uwp_template_display_notices', $forms, 'display_notices' );
+        $this->loader->add_action( 'uwp_template_display_notices', $forms, 'display_default_password_notice' );
         $this->loader->add_action( 'uwp_template_fields', $templates, 'uwp_template_fields', 10, 1 );
         $this->loader->add_action( 'uwp_account_form_display', $templates, 'uwp_account_edit_form_display', 10, 1 );
         $this->loader->add_filter( 'wp_setup_nav_menu_item', $templates, 'uwp_setup_nav_menu_item', 10, 1 );
@@ -325,6 +328,7 @@ class Users_WP {
         add_shortcode( 'uwp_register', array($shortcodes,'register'));
         add_shortcode( 'uwp_login', array($shortcodes,'login'));
         add_shortcode( 'uwp_forgot', array($shortcodes,'forgot'));
+        add_shortcode( 'uwp_change', array($shortcodes,'change'));
         add_shortcode( 'uwp_reset', array($shortcodes,'reset'));
         add_shortcode( 'uwp_account', array($shortcodes,'account'));
         add_shortcode( 'uwp_profile', array($shortcodes,'profile'));

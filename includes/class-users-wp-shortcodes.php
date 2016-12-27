@@ -57,6 +57,10 @@ class Users_WP_Shortcodes {
         return $this->uwp_generate_shortcode('forgot');
     }
 
+    public function change() {
+        return $this->uwp_generate_shortcode('change');
+    }
+
     public function reset() {
         return $this->uwp_generate_shortcode('reset');
     }

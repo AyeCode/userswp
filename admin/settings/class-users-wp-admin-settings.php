@@ -95,6 +95,7 @@ class Users_WP_Admin_Settings {
             'main' => __( 'General', 'uwp' ),
             'register' => __( 'Register', 'uwp' ),
             'login' => __( 'Login', 'uwp' ),
+            'change' => __( 'Change Password', 'uwp' ),
             'profile' => __( 'Profile', 'uwp' ),
             'uninstall' => __( 'Uninstall', 'uwp' ),
         );
@@ -205,7 +206,6 @@ class Users_WP_Admin_Settings {
                 <td>
                     <span class="short_code">[uwp_profile]</span>
                     <span class="description"><?php echo __( 'This is the shortcode for the front end user\'s profile.', 'uwp' ); ?></span>
-                    <span class="description"><?php echo __( 'Parameters: header=yes or no (default yes) body=yes or no (default yes) posts=yes or no (default yes) comments=yes or no (default yes)', 'uwp' ); ?></span>
                 </td>
             </tr>
 
@@ -214,7 +214,6 @@ class Users_WP_Admin_Settings {
                 <td>
                     <span class="short_code">[uwp_register]</span>
                     <span class="description"><?php echo __( 'This is the shortcode for the front end register form.', 'uwp' ); ?></span>
-                    <span class="description"><?php echo __( 'Parameters: set_password=yes or no (default yes) captcha=yes or no (default yes)', 'uwp' ); ?></span>
                 </td>
             </tr>
 
@@ -223,7 +222,6 @@ class Users_WP_Admin_Settings {
                 <td>
                     <span class="short_code">[uwp_login]</span>
                     <span class="description"><?php echo __( 'This is the shortcode for the front end login form.', 'uwp' ); ?></span>
-                    <span class="description"><?php echo __( 'Parameters: captcha=yes or no (default yes) redirect_to=home or profile or page id (default home)', 'uwp' ); ?></span>
                 </td>
             </tr>
 
@@ -232,7 +230,6 @@ class Users_WP_Admin_Settings {
                 <td>
                     <span class="short_code">[uwp_account]</span>
                     <span class="description"><?php echo __( 'This is the shortcode for the front end account form.', 'uwp' ); ?></span>
-                    <span class="description"><?php echo __( 'Parameters: none', 'uwp' ); ?></span>
                 </td>
             </tr>
 
@@ -241,7 +238,14 @@ class Users_WP_Admin_Settings {
                 <td>
                     <span class="short_code">[uwp_forgot]</span>
                     <span class="description"><?php echo __( 'This is the shortcode for the front end forgot password form.', 'uwp' ); ?></span>
-                    <span class="description"><?php echo __( 'Parameters: none', 'uwp' ); ?></span>
+                </td>
+            </tr>
+
+            <tr valign="top">
+                <th scope="row"><?php echo __( 'Change Password Form Shortcode', 'uwp' ); ?></th>
+                <td>
+                    <span class="short_code">[uwp_change]</span>
+                    <span class="description"><?php echo __( 'This is the shortcode for the front end change password form.', 'uwp' ); ?></span>
                 </td>
             </tr>
 
@@ -250,7 +254,6 @@ class Users_WP_Admin_Settings {
                 <td>
                     <span class="short_code">[uwp_reset]</span>
                     <span class="description"><?php echo __( 'This is the shortcode for the front end reset password form.', 'uwp' ); ?></span>
-                    <span class="description"><?php echo __( 'Parameters: none', 'uwp' ); ?></span>
                 </td>
             </tr>
 
@@ -259,7 +262,6 @@ class Users_WP_Admin_Settings {
                 <td>
                     <span class="short_code">[uwp_users]</span>
                     <span class="description"><?php echo __( 'This is the shortcode for the front end users list.', 'uwp' ); ?></span>
-                    <span class="description"><?php echo __( 'Parameters: none', 'uwp' ); ?></span>
                 </td>
             </tr>
 
@@ -524,7 +526,7 @@ class Users_WP_Admin_Settings {
                         'enable_register_password' => array(
                             'id'   => 'enable_register_password',
                             'name' => __( 'Display Password field in Regsiter Form', 'uwp' ),
-                            'desc' => 'If disabled a random password will be generated and emailed.',
+                            'desc' => 'If not checked a random password will be generated and emailed. User will be redirected to change password page upon first login.',
                             'type' => 'checkbox',
                             'std'  => '1',
                             'class' => 'uwp_label_inline',
@@ -590,6 +592,18 @@ class Users_WP_Admin_Settings {
                             'type'        => 'select',
                             'options' =>   $this->uwp_availble_tab_items(),
                             'placeholder' => __( 'Select Tabs', 'uwp' )
+                        ),
+                    )
+                ),
+                'change' => apply_filters( 'uwp_settings_general_change',
+                    array(
+                        'change_enable_old_password' => array(
+                            'id'   => 'change_enable_old_password',
+                            'name' => __( 'Enabled Old Password?', 'uwp' ),
+                            'desc' => 'This option adds an extra layer of security. User need to enter their old password before changing the password.',
+                            'type' => 'checkbox',
+                            'std'  => '1',
+                            'class' => 'uwp_label_inline',
                         ),
                     )
                 ),

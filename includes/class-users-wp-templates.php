@@ -42,6 +42,10 @@ class Users_WP_Templates {
                 return $this->uwp_generic_locate_template('forgot');
                 break;
 
+            case 'change':
+                return $this->uwp_generic_locate_template('change');
+                break;
+
             case 'reset':
                 return $this->uwp_generic_locate_template('reset');
                 break;
@@ -88,6 +92,7 @@ class Users_WP_Templates {
         $forgot_page = uwp_get_option('forgot_page', false);
         $reset_page = uwp_get_option('reset_page', false);
 
+        $change_page = uwp_get_option('change_page', false);
         $account_page = uwp_get_option('account_page', false);
         
         if (( $register_page && ((int) $register_page ==  $current_page_id )) ||
@@ -105,7 +110,8 @@ class Users_WP_Templates {
                 wp_redirect($redirect_to);
                 exit();
             }
-        } elseif ( $account_page && ((int) $account_page ==  $current_page_id ) ) {
+        } elseif ( $account_page && ((int) $account_page ==  $current_page_id ) ||
+            ( $change_page && ((int) $change_page ==  $current_page_id ) )) {
             if (!is_user_logged_in()) {
                 wp_redirect(get_permalink($login_page));
                 exit();
@@ -115,6 +121,28 @@ class Users_WP_Templates {
         }
         
         return false;
+    }
+
+    public function change_default_password_redirect() {
+        if (!is_user_logged_in()) {
+            return;
+        }
+        $change_page = uwp_get_option('change_page', false);
+        $password_nag = get_user_option('default_password_nag', get_current_user_id());
+        
+        if ($password_nag) {
+            if (is_page()) {
+                global $post;
+                $current_page_id = $post->ID;
+                if ( $change_page && ((int) $change_page ==  $current_page_id ) ) {
+                    return;
+                }
+            }
+            if ($change_page) {
+                wp_redirect( get_permalink($change_page) );
+                exit();   
+            }
+        }
     }
 
     public function profile_redirect() {
@@ -164,7 +192,7 @@ class Users_WP_Templates {
     }
 
     public function uwp_template_fields($form_type) {
-
+        
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
         $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
@@ -173,6 +201,8 @@ class Users_WP_Templates {
             $fields = get_register_form_fields();
         } elseif ($form_type == 'account') {
             $fields = get_account_form_fields();
+        } elseif ($form_type == 'change') {
+            $fields = get_change_form_fields();
         } else {
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array($form_type)));
         }
@@ -304,12 +334,14 @@ class Users_WP_Templates {
 
         $register_slug = $this->uwp_get_page_slug('register_page');
         $login_slug = $this->uwp_get_page_slug('login_page');
+        $change_slug = $this->uwp_get_page_slug('change_page');
         $account_slug = $this->uwp_get_page_slug('account_page');
         $forgot_slug = $this->uwp_get_page_slug('forgot_page');
         $logout_slug = "logout";
 
         $register_class = "users-wp-{$register_slug}-nav";
         $login_class = "users-wp-{$login_slug}-nav";
+        $change_class = "users-wp-{$change_slug}-nav";
         $account_class = "users-wp-{$account_slug}-nav";
         $forgot_class = "users-wp-{$forgot_slug}-nav";
         $logout_class = "users-wp-{$logout_slug}-nav";
@@ -334,6 +366,13 @@ class Users_WP_Templates {
                     $menu_item->_invalid = true;
                 } else {
                     $menu_item->url = get_permalink(uwp_get_option('account_page', 0));
+                }
+                break;
+            case $change_class:
+                if ( ! is_user_logged_in() ) {
+                    $menu_item->_invalid = true;
+                } else {
+                    $menu_item->url = get_permalink(uwp_get_option('change_page', 0));
                 }
                 break;
             case $forgot_class:
