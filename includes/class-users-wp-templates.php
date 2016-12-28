@@ -155,6 +155,7 @@ class Users_WP_Templates {
                 if (isset($wp_query->query_vars['uwp_profile'])) {
                     //must be profile page
                     $username = $wp_query->query_vars['uwp_profile'];
+                    //todo: find a way to support both dot and spaces in username
                     $username = str_replace('-', ' ', $username);
                     if ( !username_exists( $username ) ) {
                         global $wp_query;
