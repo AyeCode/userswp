@@ -20,6 +20,11 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Forms {
+
+    public function init_notices() {
+        global $uwp_notices;
+        $uwp_notices = array();
+    }
     
     public function handler()
     {
@@ -127,20 +132,23 @@ class Users_WP_Forms {
             }
         }
 
-        $uwp_notices = ob_get_contents();
+        $uwp_notices[] = ob_get_contents();
         ob_end_clean();
 
     }
 
-    public function display_notices() {
+    public function display_notices($type) {
         global $uwp_notices;
-        echo $uwp_notices;
-    }
 
-    public function display_default_password_notice($type) {
-        if (!is_user_logged_in()) {
-            return;
+        if (is_array($uwp_notices)) {
+            foreach ($uwp_notices as $notice) {
+                if (!empty($notice)) {
+                    echo $notice;
+                }
+            }
+
         }
+
         if ($type == 'change') {
             $user_id = get_current_user_id();
             $password_nag = get_user_option('default_password_nag', $user_id);
@@ -164,6 +172,7 @@ class Users_WP_Forms {
             }
         }
     }
+
 
     public function process_register($data = array(), $files = array()) {
 
