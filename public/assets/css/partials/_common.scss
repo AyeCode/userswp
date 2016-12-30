@@ -143,7 +143,8 @@
     border-bottom: 1px solid #ededed;
   }
 }
-.uwp-users-list {
+.uwp-users-list,
+.uwp-profile-side {
   .uwp-users-list-user {
     display: block;
   }
@@ -166,5 +167,18 @@
     .uwp-profile-extra-value {
       border-bottom: none;
     }
+  }
+}
+.uwp-profile-side {
+  .uwp-profile-extra-sep {
+    display: none;
+  }
+  .uwp-profile-extra-key,
+  .uwp-profile-extra-value {
+    display: block;
+    clear: both;
+  }
+  .uwp-profile-extra-key {
+    font-weight: bold;
   }
 }

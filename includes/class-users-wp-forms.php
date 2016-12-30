@@ -75,7 +75,7 @@ class Users_WP_Forms {
             $processed = true;
         } elseif (isset($_POST['uwp_change_submit'])) {
             $errors = $this->process_change($_POST);
-            $message = sprintf(__('Password changed successfully. Please <a href="%s">login</a> with your new password', 'uwp'), $login_page_url);
+            $message = __('Password changed successfully', 'uwp');
             $processed = true;
         } elseif (isset($_POST['uwp_reset_submit'])) {
             $errors = $this->process_reset($_POST);
@@ -468,6 +468,7 @@ class Users_WP_Forms {
             return $errors;
 
         wp_set_password( $data['uwp_change_password'], $user_data->ID );
+        wp_set_auth_cookie( $user_data->ID, false);
 
         return true;
     }

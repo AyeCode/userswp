@@ -772,7 +772,7 @@ function is_uwp_current_user_profile_page() {
             if ($url_type == 'id') {
                 $user = get_user_by('id', $author_slug);
             } else {
-                $author_slug = str_replace('-', ' ', $author_slug);
+                $author_slug = str_replace('_', ' ', $author_slug);
                 $user = get_user_by('login', $author_slug);
             }
 

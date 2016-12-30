@@ -8,7 +8,7 @@ $author_slug = get_query_var('uwp_profile');
 if ($url_type == 'id') {
     $user = get_user_by('id', $author_slug);
 } else {
-    $author_slug = str_replace('-', ' ', $author_slug);
+    $author_slug = str_replace('_', ' ', $author_slug);
     $user = get_user_by('login', $author_slug);
 }
 ?>
@@ -21,10 +21,10 @@ if ($url_type == 'id') {
     ?>
     <?php if ($enable_profile_body == '1') { ?>
         <div class="uwp-profile-main">
-            <div class="uwp-profile">
+            <div class="uwp-profile uwp-profile-side">
                 <?php do_action('uwp_profile_title', $user ); ?>
-                <?php do_action('uwp_profile_bio', $user ); ?>
                 <?php do_action('uwp_profile_social', $user ); ?>
+                <?php do_action('uwp_profile_bio', $user ); ?>
                 <?php do_action('uwp_profile_buttons', $user ); ?>
             </div>
             <?php do_action('uwp_profile_content', $user); ?>
