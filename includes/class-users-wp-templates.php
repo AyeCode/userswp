@@ -162,7 +162,7 @@ class Users_WP_Templates {
                         $user = get_user_by('slug', $author_slug);
                     }
 
-                    if (!$user->ID) {
+                    if (!isset($user->ID)) {
                         global $wp_query;
                         $wp_query->set_404();
                         status_header( 404 );
