@@ -306,7 +306,7 @@ class Users_WP {
         // Users
         $this->loader->add_action( 'uwp_users_search', $profile, 'uwp_users_search');
         $this->loader->add_action( 'uwp_users_list', $profile, 'uwp_users_list');
-        $this->loader->add_action( 'uwp_users_extra', $profile, 'get_users_extra');
+        //$this->loader->add_action( 'uwp_users_extra', $profile, 'get_users_extra');
         $this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_side_extra');
 
 

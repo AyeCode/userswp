@@ -106,6 +106,7 @@
 }
 
 .uwp-profile-extra-div {
+  border: 1px solid #ededed;
   overflow: hidden;
 }
 .uwp-profile-extra-sep {
@@ -116,32 +117,23 @@
   background-color: transparent;
   text-align: left;
   overflow: hidden;
+  border-bottom: 1px solid #ededed;
   .uwp-profile-extra-key {
     width: 50%;
     float: left;
     padding: 7px;
     box-sizing: border-box;
-    border: 1px solid #ededed;
-    border-bottom: none;
   }
   .uwp-profile-extra-value {
     width: 50%;
     float: right;
     padding: 7px;
     box-sizing: border-box;
-    border: 1px solid #ededed;
-    border-bottom: none;
-    border-left: none;
+    border-left: 1px solid #ededed;
   }
 }
 .uwp-profile-extra-wrap:last-child {
-  .uwp-profile-extra-key {
-    border-bottom: 1px solid #ededed;
-  }
-
-  .uwp-profile-extra-value {
-    border-bottom: 1px solid #ededed;
-  }
+  border-bottom: none;
 }
 .uwp-users-list,
 .uwp-profile-side {
@@ -173,6 +165,12 @@
   .uwp-profile-extra-sep {
     display: none;
   }
+  .uwp-profile-extra-div,
+  .uwp-profile-extra-wrap,
+  .uwp-profile-extra-key,
+  .uwp-profile-extra-value {
+    border: none;
+  }
   .uwp-profile-extra-key,
   .uwp-profile-extra-value {
     display: block;
@@ -180,5 +178,13 @@
   }
   .uwp-profile-extra-key {
     font-weight: bold;
+  }
+}
+.uwp-users-list {
+  .uwp-profile-extra-div,
+  .uwp-profile-extra-wrap,
+  .uwp-profile-extra-key,
+  .uwp-profile-extra-value {
+    border: none;
   }
 }
