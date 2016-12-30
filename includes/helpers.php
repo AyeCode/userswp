@@ -768,12 +768,11 @@ function is_uwp_current_user_profile_page() {
     ) {
         $author_slug = get_query_var('uwp_profile');
         if ($author_slug) {
-            $url_type = apply_filters('uwp_profile_url_type', 'login');
+            $url_type = apply_filters('uwp_profile_url_type', 'slug');
             if ($url_type == 'id') {
                 $user = get_user_by('id', $author_slug);
             } else {
-                $author_slug = str_replace('_', ' ', $author_slug);
-                $user = get_user_by('login', $author_slug);
+                $user = get_user_by('slug', $author_slug);
             }
 
             if ($user && $user->ID == get_current_user_id()) {

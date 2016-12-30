@@ -1,6 +1,6 @@
 <?php do_action('uwp_template_before', 'profile'); ?>
 <?php
-$url_type = apply_filters('uwp_profile_url_type', 'login');
+$url_type = apply_filters('uwp_profile_url_type', 'slug');
 $enable_profile_header = uwp_get_option('enable_profile_header', false);
 $enable_profile_body = uwp_get_option('enable_profile_body', false);
 
@@ -8,8 +8,7 @@ $author_slug = get_query_var('uwp_profile');
 if ($url_type == 'id') {
     $user = get_user_by('id', $author_slug);
 } else {
-    $author_slug = str_replace('_', ' ', $author_slug);
-    $user = get_user_by('login', $author_slug);
+    $user = get_user_by('slug', $author_slug);
 }
 ?>
 <div class="uwp-content-wrap">

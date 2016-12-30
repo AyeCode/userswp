@@ -154,15 +154,21 @@ class Users_WP_Templates {
 
                 if (isset($wp_query->query_vars['uwp_profile'])) {
                     //must be profile page
-                    $username = $wp_query->query_vars['uwp_profile'];
-                    //todo: find a way to support both dot and spaces in username
-                    $username = str_replace('_', ' ', $username);
-                    if ( !username_exists( $username ) ) {
+                    $url_type = apply_filters('uwp_profile_url_type', 'slug');
+                    $author_slug = $wp_query->query_vars['uwp_profile'];
+                    if ($url_type == 'id') {
+                        $user = get_user_by('id', $author_slug);
+                    } else {
+                        $user = get_user_by('slug', $author_slug);
+                    }
+
+                    if (!$user->ID) {
                         global $wp_query;
                         $wp_query->set_404();
                         status_header( 404 );
                         get_template_part( 404 ); exit();
                     }
+
                 } else {
                     if (is_user_logged_in()) {
                         $user_id = get_current_user_id();
