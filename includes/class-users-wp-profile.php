@@ -793,14 +793,35 @@ class Users_WP_Profile {
         return $url;
     }
 
-    public function uwp_restrict_attachment_display($query) {
+    public function uwp_restrict_attachment_display($wp_query) {
         if (!is_admin()) {
             if ( ! current_user_can( 'manage_options' ) ) {
-                $query['author'] = get_current_user_id();
-            }    
+                //$wp_query['author'] = get_current_user_id();
+                $wp_query->set( 'author', get_current_user_id() );
+            }
         }
-        return $query;    
+        return $wp_query;
     }
+
+    public function allow_all_users_profile_uploads($llcaps, $caps, $args, $user) {
+
+        
+        if(isset($caps[0]) && $caps[0] =='upload_files' && uwp_doing_upload() ){
+            $llcaps['upload_files'] = true;
+        }
+
+        return $llcaps;
+    }
+
+    public function add_uwp_plupload_param($params) {
+
+        if(!is_admin() && get_the_ID()==uwp_get_option('profile_page', false)){
+            $params['uwp_profile_upload'] = true;
+        }
+
+        return $params;
+    }
+
     
     public function uwp_ajax_image_crop_popup(){
         wp_enqueue_style( 'jcrop' );
