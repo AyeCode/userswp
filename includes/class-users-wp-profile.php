@@ -140,12 +140,16 @@ class Users_WP_Profile {
     public function get_profile_extra_count($user) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public = '1' AND is_default = '0' AND show_in LIKE '%[more_info]%' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' AND field_type != 'fieldset' AND is_public = '1' AND is_default = '0' AND show_in LIKE '%[more_info]%' ORDER BY sort_order ASC");
         return count($fields);
     }
 
     public function get_profile_extra($user) {
         return $this->uwp_get_extra_fields($user, '[more_info]');
+    }
+
+    public function get_profile_side_extra($user) {
+        echo $this->uwp_get_extra_fields($user, '[profile_side]');
     }
 
     public function get_users_extra($user) {
@@ -157,7 +161,7 @@ class Users_WP_Profile {
         ob_start();
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' AND css_class NOT LIKE '%uwp_social%' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' ORDER BY sort_order ASC");
         if ($fields) {
             ?>
             <div class="uwp-profile-extra">
@@ -563,7 +567,7 @@ class Users_WP_Profile {
             if ($url_type == 'id') {
                 $user = get_user_by('id', $author_slug);
             } else {
-                $author_slug = str_replace('-', ' ', $author_slug);
+                $author_slug = str_replace('_', ' ', $author_slug);
                 $user = get_user_by('login', $author_slug);
             }
             $title = $user->display_name;
@@ -889,7 +893,7 @@ class Users_WP_Profile {
         
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public = '1' AND is_default = '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public = '1' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
 
         foreach ($fields as $field) {
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);
@@ -908,7 +912,7 @@ class Users_WP_Profile {
 
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public = '1' AND is_default = '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public = '1' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
 
         foreach ($fields as $field) {
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);
@@ -922,7 +926,26 @@ class Users_WP_Profile {
 
     public function uwp_get_field_value($field, $user) {
 
-        $value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
+        $user_data = get_userdata($user->ID);
+
+        if ($field->htmlvar_name == 'uwp_account_email') {
+            $value = $user_data->user_email;
+        } elseif ($field->htmlvar_name == 'uwp_account_password') {
+            $value = '';
+            $field->is_required = 0;
+        } elseif ($field->htmlvar_name == 'uwp_account_confirm_password') {
+            $value = '';
+            $field->is_required = 0;
+        } elseif ($field->htmlvar_name == 'uwp_account_first_name') {
+            $value = $user_data->first_name;
+        } elseif ($field->htmlvar_name == 'uwp_account_last_name') {
+            $value = $user_data->last_name;
+        } elseif ($field->htmlvar_name == 'uwp_account_bio') {
+            $value = $user_data->description;
+        } else {
+            $value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
+        }
+
 
         // Select and Multiselect needs Value to be converted
         if ($field->field_type == 'select' || $field->field_type == 'multiselect') {

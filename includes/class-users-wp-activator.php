@@ -75,6 +75,8 @@ class Users_WP_Activator {
         $settings['enable_profile_posts_tab'] = '1';
         $settings['enable_profile_comments_tab'] = '1';
 
+        $settings['enable_profile_tabs'] = array('more_info', 'posts', 'comments');
+
         //notifications
 
         $register_success_subject = __('Your Log In Details', 'uwp');

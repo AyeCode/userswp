@@ -279,7 +279,7 @@ class Users_WP {
         $this->loader->add_filter( 'get_comment_author_link', $profile, 'uwp_get_comment_author_link' , 10 , 2 );
         $this->loader->add_action( 'uwp_profile_header', $profile, 'get_profile_header', 10, 1 );
         $this->loader->add_action( 'uwp_profile_title', $profile, 'get_profile_title', 10, 1 );
-        $this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_bio', 10, 1 );
+        //$this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_bio', 10, 1 );
         $this->loader->add_action( 'uwp_profile_social', $profile, 'get_profile_social', 10, 1 );
 
         //Fields as tabs
@@ -310,6 +310,7 @@ class Users_WP {
         $this->loader->add_action( 'uwp_users_search', $profile, 'uwp_users_search');
         $this->loader->add_action( 'uwp_users_list', $profile, 'uwp_users_list');
         $this->loader->add_action( 'uwp_users_extra', $profile, 'get_users_extra');
+        $this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_side_extra');
 
         // User, allow subscribers to upload profile and banner pictures
         $this->loader->add_filter( 'plupload_default_params', $profile, 'add_uwp_plupload_param', 10, 1 );

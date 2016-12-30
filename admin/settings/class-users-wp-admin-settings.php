@@ -482,6 +482,16 @@ class Users_WP_Admin_Settings {
                             'placeholder' => __( 'Select a page', 'uwp' ),
                             'class' => 'uwp_label_block',
                         ),
+                        'change_page' => array(
+                            'id' => 'change_page',
+                            'name' => __( 'Change Password Page', 'uwp' ),
+                            'desc' => __( 'This is the front end Change Password page.', 'uwp' ),
+                            'type' => 'select',
+                            'options' => $this->uwp_get_pages(),
+                            'chosen' => true,
+                            'placeholder' => __( 'Select a page', 'uwp' ),
+                            'class' => 'uwp_label_block',
+                        ),
                         'forgot_page' => array(
                             'id' => 'forgot_page',
                             'name' => __( 'Forgot Password Page', 'uwp' ),
