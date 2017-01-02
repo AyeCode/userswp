@@ -288,7 +288,10 @@ class Users_WP {
         // Popup and crop functions
         $this->loader->add_filter( 'ajax_query_attachments_args', $profile, 'uwp_restrict_attachment_display' );
 
-        add_filter( 'wp_handle_upload_prefilter', 'uwp_wp_media_restrict_file_types' );
+        if(uwp_doing_upload()){
+            add_filter( 'wp_handle_upload_prefilter', 'uwp_wp_media_restrict_file_types' );
+        }
+
         $this->loader->add_action( 'wp_ajax_uwp_ajax_image_crop_popup', $profile, 'uwp_ajax_image_crop_popup' );
         $this->loader->add_action( 'wp_head', $profile, 'uwp_define_ajaxurl' );
         $this->loader->add_action( 'uwp_profile_header', $profile, 'uwp_image_crop_init', 10, 1 );
@@ -309,6 +312,9 @@ class Users_WP {
         //$this->loader->add_action( 'uwp_users_extra', $profile, 'get_users_extra');
         $this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_side_extra');
 
+        // User, allow subscribers to upload profile and banner pictures
+        $this->loader->add_filter( 'plupload_default_params', $profile, 'add_uwp_plupload_param', 10, 1 );
+        $this->loader->add_filter( 'user_has_cap', $profile, 'allow_all_users_profile_uploads', 10, 4 );
 
         // Admin user edit page
         $this->loader->add_action( 'edit_user_profile', $templates, 'get_profile_extra_admin_edit', 10, 1 );
@@ -318,7 +324,6 @@ class Users_WP {
         $this->loader->add_action( 'edit_user_profile_update', $forms, 'update_profile_extra_admin_edit', 10, 1 );
 
         $this->loader->add_action( 'user_edit_form_tag', $forms, 'add_multipart_to_admin_edit_form');
-
 
     }
 

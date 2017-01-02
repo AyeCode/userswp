@@ -1625,3 +1625,7 @@ function uwp_get_form_label($field) {
     }
     return $label;
 }
+
+function uwp_doing_upload(){
+    return isset($_POST['uwp_profile_upload']) ? true : false;
+}
