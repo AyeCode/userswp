@@ -247,6 +247,55 @@ function uwp_get_option( $key = '', $default = false ) {
     return apply_filters( 'uwp_get_option_' . $key, $value, $key, $default );
 }
 
+function uwp_update_option( $key = false, $value = '') {
+
+    if (!$key ) {
+        return false;
+    }
+
+    $settings = get_option( 'uwp_settings', array());
+
+    if( !is_array( $settings ) ) {
+        $settings = array();
+    }
+
+    $settings[ $key ] = $value;
+
+    $settings = apply_filters( 'uwp_update_option', $settings, $key, $value );
+    $settings =  apply_filters( 'uwp_update_option_' . $key, $settings, $key, $value );
+
+    update_option( 'uwp_settings', $settings );
+
+    return true;
+}
+
+function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
+
+    if (!$user_id) {
+        return $default;
+    }
+
+    $user_data = get_userdata($user_id);
+    $usermeta = get_user_meta( $user_id, 'uwp_usermeta', true );
+
+    if ($key == 'uwp_account_email') {
+        $value = $user_data->user_email;
+    } elseif ($key == 'uwp_account_first_name') {
+        $value = $user_data->first_name;
+    } elseif ($key == 'uwp_account_last_name') {
+        $value = $user_data->last_name;
+    } elseif ($key == 'uwp_account_bio') {
+        $value = $user_data->description;
+    } else {
+        if( !is_array( $usermeta ) ) {
+            $usermeta = array();
+        }
+        $value = isset( $usermeta[ $key ] ) ? $usermeta[ $key ] : $default;
+    }
+    $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
+    return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
+}
+
 function uwp_update_usermeta( $user_id = false, $key, $value ) {
 
     if (!$user_id || !$key ) {
@@ -267,24 +316,6 @@ function uwp_update_usermeta( $user_id = false, $key, $value ) {
     update_user_meta($user_id, 'uwp_usermeta', $usermeta);
 
     return true;
-}
-
-
-function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
-
-    if (!$user_id) {
-        return $default;
-    }
-
-    $usermeta = get_user_meta( $user_id, 'uwp_usermeta', true );
-
-    if( !is_array( $usermeta ) ) {
-        $usermeta = array();
-    }
-
-    $value = isset( $usermeta[ $key ] ) ? $usermeta[ $key ] : $default;
-    $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
-    return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
 }
 
 function uwp_date_format_php_to_jqueryui( $php_format ) {
@@ -768,12 +799,11 @@ function is_uwp_current_user_profile_page() {
     ) {
         $author_slug = get_query_var('uwp_profile');
         if ($author_slug) {
-            $url_type = apply_filters('uwp_profile_url_type', 'login');
+            $url_type = apply_filters('uwp_profile_url_type', 'slug');
             if ($url_type == 'id') {
                 $user = get_user_by('id', $author_slug);
             } else {
-                $author_slug = str_replace('_', ' ', $author_slug);
-                $user = get_user_by('login', $author_slug);
+                $user = get_user_by('slug', $author_slug);
             }
 
             if ($user && $user->ID == get_current_user_id()) {
@@ -826,7 +856,7 @@ function get_uwp_page_permalink($type) {
     return $link;
 }
 
-function uwp_generic_tab_content($user, $post_type, $title) {
+function uwp_generic_tab_content($user, $post_type = false, $title, $post_ids = false) {
     ?>
     <h3><?php echo $title; ?></h3>
     <div class="uwp-profile-item-block">
@@ -834,12 +864,25 @@ function uwp_generic_tab_content($user, $post_type, $title) {
         $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
         $args = array(
-            'post_type' => $post_type,
             'post_status' => 'publish',
             'posts_per_page' => uwp_get_option('profile_no_of_items', 10),
             'author' => $user->ID,
             'paged' => $paged,
         );
+
+        if ($post_type) {
+            $args['post_type'] = $post_type;
+        }
+
+        if (is_array($post_ids)) {
+            if (!empty($post_ids)) {
+                $args['post__in'] = $post_ids;
+            } else {
+                // no posts found
+                echo "<p>".__('No '.$title.' Found', 'uwp')."</p>";
+                return;
+            }
+        }
         // The Query
         $the_query = new WP_Query($args);
 
@@ -850,16 +893,18 @@ function uwp_generic_tab_content($user, $post_type, $title) {
                 $the_query->the_post();
                 ?>
                 <li class="uwp-profile-item-li uwp-profile-item-clearfix">
-                    <a class="uwp-profile-item-img" href="<?php echo get_the_permalink(); ?>">
-                        <?php
-                        if ( has_post_thumbnail() ) {
-                            $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
-                        } else {
-                            $thumb_url = plugins_url()."/userswp/public/assets/images/no_thumb.png";
-                        }
-                        ?>
-                        <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
-                    </a>
+                    <div class="uwp_generic_thumb_wrap">
+                        <a class="uwp-profile-item-img" href="<?php echo get_the_permalink(); ?>">
+                            <?php
+                            if ( has_post_thumbnail() ) {
+                                $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
+                            } else {
+                                $thumb_url = plugins_url()."/userswp/public/assets/images/no_thumb.png";
+                            }
+                            ?>
+                            <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
+                        </a>
+                    </div>
 
                     <h3 class="uwp-profile-item-title">
                         <a href="<?php echo get_the_permalink(); ?>"><?php echo get_the_title(); ?></a>
@@ -1278,13 +1323,13 @@ function get_uwp_users_list() {
                     </div>
                     <div class="uwp-users-list-user-right">
                         <div class="uwp-users-list-user-name">
-                            <h3><a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>"><?php echo $user->display_name; ?></a></h3>
+                            <h3>
+                                <a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>"><?php echo $user->display_name; ?></a>
+                                <?php do_action('uwp_users_after_title', $user_obj ); ?>
+                            </h3>
                         </div>
                         <div class="uwp-users-list-user-social">
                             <?php do_action('uwp_profile_social', $user_obj ); ?>
-                        </div>
-                        <div class="uwp-users-list-user-bio">
-                            <?php do_action('uwp_profile_bio', $user_obj ); ?>
                         </div>
                         <div class="uwp-users-list-extra">
                             <?php do_action('uwp_users_extra', $user_obj ); ?>
@@ -1629,4 +1674,50 @@ function uwp_get_form_label($field) {
 
 function uwp_doing_upload(){
     return isset($_POST['uwp_profile_upload']) ? true : false;
+}
+
+function is_uwp_profile_tab($tab = false) {
+    global $wp_query;
+    if (is_uwp_profile_page()) {
+        if (isset($wp_query->query_vars['uwp_tab']) && !empty($wp_query->query_vars['uwp_tab'])) {
+            if ($wp_query->query_vars['uwp_tab'] == $tab) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+function is_uwp_profile_subtab($subtab = false) {
+    global $wp_query;
+    if (is_uwp_profile_page()) {
+        if (isset($wp_query->query_vars['uwp_subtab']) && !empty($wp_query->query_vars['uwp_subtab'])) {
+            if ($wp_query->query_vars['uwp_subtab'] == $subtab) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+function uwp_load_font_awesome() {
+    //load font awesome
+    global $wp_styles;
+    $srcs = array_map('basename', (array) wp_list_pluck($wp_styles->registered, 'src') );
+    if ( in_array('font-awesome.css', $srcs) || in_array('font-awesome.min.css', $srcs)  ) {
+        /* echo 'font-awesome.css registered'; */
+    } else {
+        wp_register_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), null);
+        wp_enqueue_style('font-awesome');
+    }
 }

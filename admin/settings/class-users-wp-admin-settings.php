@@ -600,7 +600,7 @@ class Users_WP_Admin_Settings {
                             'multiple'    => true,
                             'chosen'      => true,
                             'type'        => 'select',
-                            'options' =>   $this->uwp_availble_tab_items(),
+                            'options' =>   $this->uwp_available_tab_items(),
                             'placeholder' => __( 'Select Tabs', 'uwp' )
                         ),
                     )
@@ -791,14 +791,14 @@ class Users_WP_Admin_Settings {
         return $output;
     }
 
-    public function uwp_availble_tab_items() {
+    public function uwp_available_tab_items() {
         $tabs_arr = array(
             'more_info' => __( 'More Info', 'uwp' ),
             'posts' => __( 'Posts', 'uwp' ),
             'comments' => __( 'Comments', 'uwp' ),
         );
 
-        $tabs_arr = apply_filters('uwp_availble_tab_items', $tabs_arr);
+        $tabs_arr = apply_filters('uwp_available_tab_items', $tabs_arr);
 
         return $tabs_arr;
     }

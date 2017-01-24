@@ -195,11 +195,21 @@ class Users_WP_Menus {
     public function users_wp_nav_menu_get_loggedin_pages() {
 
         $account_page = uwp_get_option('account_page', false);
+        $change_page = uwp_get_option('change_page', false);
 
         $users_wp_menu_items = array();
 
         if ($account_page) {
             $page = get_post( $account_page );
+            $users_wp_menu_items[] = array(
+                'name' => $page->post_title,
+                'slug' => $page->post_name,
+                'link' => get_permalink( $page->ID ),
+            );
+        }
+
+        if ($change_page) {
+            $page = get_post( $change_page );
             $users_wp_menu_items[] = array(
                 'name' => $page->post_title,
                 'slug' => $page->post_name,

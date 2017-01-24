@@ -140,7 +140,7 @@ class Users_WP_Profile {
     public function get_profile_extra_count($user) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' AND field_type != 'fieldset' AND is_public = '1' AND is_default = '0' AND show_in LIKE '%[more_info]%' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' AND field_type != 'fieldset' AND is_public = '1' AND show_in LIKE '%[more_info]%' ORDER BY sort_order ASC");
         return count($fields);
     }
 
@@ -197,7 +197,26 @@ class Users_WP_Profile {
                                 <div class="uwp-profile-extra-wrap">
                                     <div class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
                                     <div class="uwp-profile-extra-value">
-                                        <?php echo $value; ?>
+                                        <?php
+                                        if ($field->htmlvar_name == 'uwp_account_bio') {
+                                            $is_profile_page = is_uwp_profile_page();
+                                            if ($value) {
+                                                ?>
+                                                <div class="uwp-profile-bio <?php if ($is_profile_page) { echo "uwp_more"; } ?>">
+                                                    <?php
+                                                    if ($is_profile_page) {
+                                                        echo $value;
+                                                    } else {
+                                                        echo wp_trim_words( $value, 20, '...' );
+                                                    }
+                                                    ?>
+                                                </div>
+                                                <?php
+                                            }
+                                        } else {
+                                            echo $value;
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                                 <?php
@@ -248,7 +267,7 @@ class Users_WP_Profile {
             );
         }
 
-        return apply_filters( 'uwp_profile_tabs', $tabs, $user );
+        return apply_filters( 'uwp_profile_tabs', $tabs, $user, $allowed_tabs );
     }
 
     public function get_profile_tabs_content($user) {
@@ -530,7 +549,7 @@ class Users_WP_Profile {
             }
 
 
-            $url_type = apply_filters('uwp_profile_url_type', 'login');
+            $url_type = apply_filters('uwp_profile_url_type', 'slug');
 
             if ($url_type && 'id' == $url_type) {
                 if ('DEFAULT' == $permalink_structure) {
@@ -539,8 +558,13 @@ class Users_WP_Profile {
                     return $link . $user_id;
                 }
             } else {
-                $username = get_the_author_meta('user_login', $user_id);
-                $username = sanitize_title_with_dashes($username);
+                $user = get_userdata($user_id);
+                if ( !empty($user->user_nicename) ) {
+                    $username = $user->user_nicename;
+                } else {
+                    $username = $user->user_login;
+                }
+
                 if ('DEFAULT' == $permalink_structure) {
                     return add_query_arg(array('username' => $username), $link);
                 } else {
@@ -560,15 +584,14 @@ class Users_WP_Profile {
 
         if ($page_id == $id && isset($wp_query->query_vars['uwp_profile']) && in_the_loop()) {
 
-            $url_type = apply_filters('uwp_profile_url_type', 'login');
+            $url_type = apply_filters('uwp_profile_url_type', 'slug');
 
             $author_slug = $wp_query->query_vars['uwp_profile'];
 
             if ($url_type == 'id') {
                 $user = get_user_by('id', $author_slug);
             } else {
-                $author_slug = str_replace('_', ' ', $author_slug);
-                $user = get_user_by('login', $author_slug);
+                $user = get_user_by('slug', $author_slug);
             }
             $title = $user->display_name;
         }

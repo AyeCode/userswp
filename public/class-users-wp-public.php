@@ -134,14 +134,7 @@ class Users_WP_Public {
 
         if (is_uwp_page()) {
             // include only in uwp pages
-            global $wp_styles;
-            $srcs = array_map('basename', (array) wp_list_pluck($wp_styles->registered, 'src') );
-            if ( in_array('font-awesome.css', $srcs) || in_array('font-awesome.min.css', $srcs)  ) {
-                /* echo 'font-awesome.css registered'; */
-            } else {
-                wp_register_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), $this->version);
-                wp_enqueue_style('font-awesome');
-            }
+            uwp_load_font_awesome();
             wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp.css', array(), null, 'all' );
         }
 

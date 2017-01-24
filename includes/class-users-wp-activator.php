@@ -531,7 +531,9 @@ class Users_WP_Activator {
             'option_values' => '',
             'is_default' => '1',
             'is_active' => '1',
-            'is_required' => '1'
+            'is_public' => '1',
+            'is_required' => '1',
+            'show_in' => array('[profile_side]', '[users]')
         );
 
         $fields[] = array(
