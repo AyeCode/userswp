@@ -795,9 +795,9 @@ class Users_WP_Forms {
             return true;
         } else {
             foreach($data as $key => $value) {
-                if ($value == '0' || !empty($value)) {
+//                if ($value == '0' || !empty($value)) {
                     uwp_update_usermeta($user_id, $key, $value);
-                }
+//                }
             }
             return true;
         }

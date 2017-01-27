@@ -313,6 +313,8 @@ function uwp_update_usermeta( $user_id = false, $key, $value ) {
     $usermeta = apply_filters( 'uwp_update_usermeta', $usermeta, $user_id, $key, $value );
     $usermeta =  apply_filters( 'uwp_update_usermeta_' . $key, $usermeta, $user_id, $key, $value );
 
+    do_action( 'uwp_before_update_usermeta', $usermeta, $user_id, $key, $value );
+
     update_user_meta($user_id, 'uwp_usermeta', $usermeta);
 
     return true;
@@ -1720,4 +1722,11 @@ function uwp_load_font_awesome() {
         wp_register_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), null);
         wp_enqueue_style('font-awesome');
     }
+}
+
+function uwp_get_custom_field_info($htmlvar_name) {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $field = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s", array($htmlvar_name)));
+    return $field;
 }
