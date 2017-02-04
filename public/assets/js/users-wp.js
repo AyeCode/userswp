@@ -112,7 +112,6 @@ jQuery(window).load(function() {
                 };
 
                 jQuery.post(ajaxurl, data, function(response) {
-                    console.log(response);
                     resp = JSON.parse(response);
                     uwp_full_width = resp['uwp_full_width'];
                     uwp_full_height = resp['uwp_full_height'];
@@ -126,7 +125,7 @@ jQuery(window).load(function() {
 
                     $(document.body).append("<div id='uwp-modal-backdrop'></div>");
                     jQuery('#uwp-popup-modal-wrap').html(resp['uwp_popup_content']).find('#uwp-'+uwp_popup_type+'-to-crop').Jcrop({
-                        onChange: showPreview,
+                        // onChange: showPreview,
                         onSelect: updateCoords,
                         aspectRatio: uwp_aspect_ratio,
                         setSelect: [ uwp_crop_left, uwp_crop_top, uwp_crop_right, uwp_crop_bottom ],

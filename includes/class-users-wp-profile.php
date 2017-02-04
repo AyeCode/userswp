@@ -697,16 +697,28 @@ class Users_WP_Profile {
     public function uwp_image_crop_modal_html($type, $image_url, $full_width, $full_height) {
         ob_start();
         ?>
-        <div id="uwp-<?php echo $type; ?>-modal" class="uwp-modal">
-            <a id="uwp-modal-close" data-type="<?php echo $type; ?>" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>
-            <div class="uwp-modal-content-wrap">
-                <div class="uwp-modal-content" id="uwp-<?php echo $type; ?>-modal-content">
-                    <div align="center">
-                        <img src="<?php echo $image_url; ?>" id="uwp-<?php echo $type; ?>-to-crop" />
+        <div class="uwp-bs-modal fade show" id="uwp-<?php echo $type; ?>-modal">
+            <div class="uwp-bs-modal-dialog">
+                <div class="uwp-bs-modal-content">
+                    <div class="uwp-bs-modal-header">
+                        <h4 class="uwp-bs-modal-title">
+                            <?php
+                            if ($type == 'avatar') {
+                                echo "Change your profile photo";
+                            } else {
+                                echo "Change your cover photo";
+                            }
+                            ?>
+                        </h4>
+                        <button type="button" class="close uwp-modal-close" data-type="<?php echo $type; ?>" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="uwp-bs-modal-body">
+                        <div align="center">
+                            <img src="<?php echo $image_url; ?>" id="uwp-<?php echo $type; ?>-to-crop" />
+                        </div>
+                    </div>
+                    <div class="uwp-bs-modal-footer">
                         <div class="uwp-<?php echo $type; ?>-crop-p-wrap">
-                            <div id="uwp-<?php echo $type; ?>-crop-pane" style="width:<?php echo $full_width; ?>px; height:<?php echo $full_height; ?>px">
-                                <img src="<?php echo $image_url; ?>" id="uwp-<?php echo $type; ?>-crop-preview" />
-                            </div>
                             <div id="<?php echo $type; ?>-crop-actions">
                                 <form class="uwp-crop-form" method="post">
                                     <input type="hidden" name="x" value="" id="<?php echo $type; ?>-x" />
@@ -715,14 +727,40 @@ class Users_WP_Profile {
                                     <input type="hidden" name="h" value="" id="<?php echo $type; ?>-h" />
                                     <input type="hidden" id="uwp-<?php echo $type; ?>-crop-image" name="uwp_crop" value="<?php echo $image_url; ?>" />
                                     <input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp-crop-nonce' ); ?>" />
-                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="<?php echo __('Crop Image', 'uwp'); ?>" id="save_uwp_<?php echo $type; ?>" />
+                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="<?php echo __('Apply', 'uwp'); ?>" id="save_uwp_<?php echo $type; ?>" />
                                 </form>
                             </div>
                         </div>
+                        <button type="button" data-type="<?php echo $type; ?>" class="uwp_modal_btn uwp-modal-close" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
+        <script type="text/javascript">
+            (function( $, window, undefined ) {
+                $(document).ready(function () {
+                    $('.uwp-modal-close').click(function(e) {
+                        e.preventDefault();
+                        var uwp_popup_type = $( this ).data( 'type' );
+                        $('#uwp-'+uwp_popup_type+'-modal').hide();
+                        $("#uwp-modal-backdrop").remove();
+                    });
+                });
+            }( jQuery, window ));
+        </script>
+
+
+<!--        <div id="uwp---><?php //echo $type; ?><!---modal" class="uwp-modal">-->
+<!--            <a id="uwp-modal-close" data-type="--><?php //echo $type; ?><!--" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>-->
+<!--            -->
+<!--            <div class="uwp-modal-content-wrap">-->
+<!--                <div class="uwp-bs-modal-content" id="uwp---><?php //echo $type; ?><!---modal-content">-->
+<!--                    <div align="center">-->
+<!--                        <img src="--><?php //echo $image_url; ?><!--" id="uwp---><?php //echo $type; ?><!---to-crop" />-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
         <?php
         $output = ob_get_contents();
         ob_end_clean();

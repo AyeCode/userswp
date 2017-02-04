@@ -58,8 +58,6 @@
   #save_uwp_avatar,
   #save_uwp_banner {
     float: left;
-    margin-top: 10px;
-    margin-bottom: 10px;
   }
   #uwp-avatar-to-crop {
     float: left;
@@ -98,5 +96,157 @@
   }
   .uwp-modal-content .jcrop-holder img {
     max-width: none;
+  }
+}
+
+.uwp_page {
+  .uwp-bs-modal-open {
+    overflow: hidden;
+  }
+
+  .uwp-bs-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    display: block;
+    //overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+    &.fade .uwp-bs-modal-dialog {
+      -webkit-transition: -webkit-transform .3s ease-out;
+      -o-transition: -o-transform .3s ease-out;
+      transition: transform .3s ease-out;
+      -webkit-transform: translate(0,-25%);
+      -ms-transform: translate(0,-25%);
+      -o-transform: translate(0,-25%);
+      transform: translate(0,-25%);
+    }
+    &.show .uwp-bs-modal-dialog {
+      -webkit-transform: translate(0,0);
+      -ms-transform: translate(0,0);
+      -o-transform: translate(0,0);
+      transform: translate(0,0);
+    }
+    input[type="submit"],
+    button.uwp_modal_btn {
+      padding: 0.75em 2em;
+      line-height:1;
+      font-size: 14px;
+    }
+  }
+  .uwp-bs-modal-open .uwp-bs-modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .uwp-bs-modal-dialog {
+    position: relative;
+    width: auto;
+    margin: 10px;
+  }
+
+  .close {
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+    padding: 0;
+  }
+  button.close {
+    -webkit-appearance: none;
+    padding: 0;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
+  }
+  .modal-header .close {
+    margin-top: -2px;
+  }
+
+  .uwp-bs-modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    outline: 0;
+  }
+
+  .uwp-bs-modal-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #000;
+
+    &.fade { opacity: 0; }
+    &.show { opacity: .5; }
+  }
+
+  .uwp-bs-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .uwp-bs-modal-title {
+    margin-bottom: 0;
+    padding: 0;
+    line-height: 1.42857143;
+  }
+
+  .uwp-bs-modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    padding: 15px;
+  }
+
+  .uwp-bs-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 15px;
+    border-top: 1px solid #e5e5e5;
+
+    > :not(:first-child) { margin-left: .25rem; }
+    > :not(:last-child) { margin-right: .25rem; }
+  }
+
+  .uwp-bs-modal-scrollbar-measure {
+    position: absolute;
+    top: -9999px;
+    width: 50px;
+    height: 50px;
+    overflow: scroll;
+  }
+
+  @media (min-width: 768px) {
+    .uwp-bs-modal-dialog {
+      width: 600px;
+      margin: 50px auto;
+    }
+  }
+  @media (min-width: 1024px) {
+    .uwp-bs-modal-dialog {
+      width: 700px;
+      margin: 50px auto;
+    }
   }
 }

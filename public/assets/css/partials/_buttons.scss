@@ -19,4 +19,12 @@
       border-radius: 4px;
     }
   }
+  .uwp_gridview {
+    .uwp-button-wrap {
+      .uwp_button {
+        width: 50%;
+        margin-bottom: 0;
+      }
+    }
+  }
 }
