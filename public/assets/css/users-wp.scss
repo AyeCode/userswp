@@ -11,3 +11,7 @@
 @import "partials/profile";
 //addons
 @import "partials/orders";
+//bg images
+.uwp-bs-modal-loading-icon {
+  background-image: url("../images/loading.gif");
+}

@@ -31,7 +31,7 @@ class Users_WP_Profile {
         $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
         $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar_thumb', '');
         if (is_user_logged_in() && get_current_user_id() == $user->ID) {
-            $trigger_class = "uwp-profile-modal-trigger";
+            $trigger_class = "uwp-profile-modal-form-trigger";
         } else {
             $trigger_class = "";
         }
@@ -686,8 +686,23 @@ class Users_WP_Profile {
     public function uwp_image_crop_init($user) {
         if (is_user_logged_in()) {
             ?>
-            <div id="uwp-popup-modal-wrap">
-                
+            <div id="uwp-popup-modal-wrap" style="display: none;">
+                <div class="uwp-bs-modal fade show">
+                    <div class="uwp-bs-modal-dialog">
+                        <div class="uwp-bs-modal-content">
+                            <div class="uwp-bs-modal-header">
+                                <h4 class="uwp-bs-modal-title">
+                                    Loading Form ...
+                                </h4>
+                            </div>
+                            <div class="uwp-bs-modal-body">
+                                <div class="uwp-bs-modal-loading-icon-wrap">
+                                    <div class="uwp-bs-modal-loading-icon"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <?php
         }
@@ -742,30 +757,194 @@ class Users_WP_Profile {
                     $('.uwp-modal-close').click(function(e) {
                         e.preventDefault();
                         var uwp_popup_type = $( this ).data( 'type' );
-                        $('#uwp-'+uwp_popup_type+'-modal').hide();
-                        $("#uwp-modal-backdrop").remove();
+                        // $('#uwp-'+uwp_popup_type+'-modal').hide();
+                        var mod_shadow = jQuery('#uwp-modal-backdrop');
+                        var container = jQuery('#uwp-popup-modal-wrap');
+                        container.hide();
+                        container.replaceWith('<div id="uwp-popup-modal-wrap" style="display: none;">\
+                <div class="uwp-bs-modal fade show">\
+                <div class="uwp-bs-modal-dialog">\
+                <div class="uwp-bs-modal-content">\
+                <div class="uwp-bs-modal-header">\
+                            <h4 class="uwp-bs-modal-title">\
+                            Loading Form ...\
+                        </h4>\
+                        </div>\
+                <div class="uwp-bs-modal-body">\
+                <div class="uwp-bs-modal-loading-icon-wrap">\
+                <div class="uwp-bs-modal-loading-icon"></div>\
+                </div>\
+                </div>\
+                </div>\
+                </div>\
+                </div>\
+                </div>');
+                        mod_shadow.remove();
                     });
                 });
             }( jQuery, window ));
         </script>
-
-
-<!--        <div id="uwp---><?php //echo $type; ?><!---modal" class="uwp-modal">-->
-<!--            <a id="uwp-modal-close" data-type="--><?php //echo $type; ?><!--" href="#" class="uwp-modal-close-x"><i class="fa fa-times"></i></a>-->
-<!--            -->
-<!--            <div class="uwp-modal-content-wrap">-->
-<!--                <div class="uwp-bs-modal-content" id="uwp---><?php //echo $type; ?><!---modal-content">-->
-<!--                    <div align="center">-->
-<!--                        <img src="--><?php //echo $image_url; ?><!--" id="uwp---><?php //echo $type; ?><!---to-crop" />-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
         <?php
         $output = ob_get_contents();
         ob_end_clean();
         return trim($output);
     }
+
+    public function uwp_crop_submit_form($type = 'avatar') {
+        ob_start();
+        ?>
+        <div class="uwp-bs-modal fade show" id="uwp-popup-modal-wrap">
+            <div class="uwp-bs-modal-dialog">
+                <div class="uwp-bs-modal-content">
+                    <div class="uwp-bs-modal-header">
+                        <h4 class="uwp-bs-modal-title">
+                            <?php
+                            if ($type == 'avatar') {
+                                echo "Change your profile photo";
+                            } else {
+                                echo "Change your cover photo";
+                            }
+                            ?>
+                        </h4>
+                        <button type="button" class="close uwp-modal-close" data-type="<?php echo $type; ?>" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="uwp-bs-modal-body">
+                        <form id="uwp-upload-<?php echo $type; ?>-form" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
+                            <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
+                            <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();">Upload <?php echo $type; ?></button>
+                            <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'uwp').uwp_get_option('profile_avatar_max_size', 5); ?> MB</p>
+                            <div class="uwp_upload_field" style="display: none">
+                                <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" required="required" type="file" value="">
+                            </div>
+                         </form>
+                        <progress></progress>
+                    </div>
+                    <div class="uwp-bs-modal-footer">
+                        <div class="uwp-<?php echo $type; ?>-crop-p-wrap">
+                            <div id="<?php echo $type; ?>-crop-actions">
+                                <form class="uwp-crop-form" method="post">
+                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" disabled="disabled" value="<?php echo __('Apply', 'uwp'); ?>" id="save_uwp_<?php echo $type; ?>" />
+                                </form>
+                            </div>
+                        </div>
+                        <button type="button" data-type="<?php echo $type; ?>" class="uwp_modal_btn uwp-modal-close" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            (function( $, window, undefined ) {
+                $(document).ready(function () {
+                    $('.uwp-modal-close').click(function(e) {
+                        e.preventDefault();
+                        var uwp_popup_type = $( this ).data( 'type' );
+                        // $('#uwp-'+uwp_popup_type+'-modal').hide();
+                        var mod_shadow = jQuery('#uwp-modal-backdrop');
+                        var container = jQuery('#uwp-popup-modal-wrap');
+                        container.hide();
+                        container.replaceWith('<div id="uwp-popup-modal-wrap" style="display: none;">\
+                <div class="uwp-bs-modal fade show">\
+                <div class="uwp-bs-modal-dialog">\
+                <div class="uwp-bs-modal-content">\
+                <div class="uwp-bs-modal-header">\
+                            <h4 class="uwp-bs-modal-title">\
+                            Loading Form ...\
+                        </h4>\
+                        </div>\
+                <div class="uwp-bs-modal-body">\
+                <div class="uwp-bs-modal-loading-icon-wrap">\
+                <div class="uwp-bs-modal-loading-icon"></div>\
+                </div>\
+                </div>\
+                </div>\
+                </div>\
+                </div>\
+                </div>');
+                        mod_shadow.remove();
+                    });
+
+                    $('#uwp_upload_<?php echo $type; ?>').on('change', function(e) {
+                        e.preventDefault();
+
+                        var container = jQuery('#uwp-popup-modal-wrap');
+
+                        var fd = new FormData();
+                        var files_data = $(this); // The <input type="file" /> field
+                        var file = files_data[0].files[0];
+
+                        fd.append('uwp_<?php echo $type; ?>_file', file);
+                        // our AJAX identifier
+                        fd.append('action', 'uwp_avatar_banner_upload');
+
+                        $.ajax({
+                            // Your server script to process the upload
+                            url: '<?php echo admin_url( 'admin-ajax.php' ); ?>',
+                            type: 'POST',
+
+                            // Form data
+                            data: fd,
+
+                            // Tell jQuery not to process data or worry about content-type
+                            // You *must* include these options!
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+
+                            // Custom XMLHttpRequest
+                            xhr: function() {
+                                var myXhr = $.ajaxSettings.xhr();
+                                if (myXhr.upload) {
+                                    // For handling the progress of the upload
+                                    myXhr.upload.addEventListener('progress', function(e) {
+                                        if (e.lengthComputable) {
+                                            $('progress').attr({
+                                                value: e.loaded,
+                                                max: e.total
+                                            });
+                                        }
+                                    } , false);
+                                }
+                                return myXhr;
+                            },
+
+                            success:function(response) {
+                                resp = JSON.parse(response);
+                                if (resp['error'] == false) {
+                                    container.replaceWith(response['content']);
+                                } else {
+                                    resp = JSON.parse(response);
+                                    uwp_full_width = resp['uwp_full_width'];
+                                    uwp_full_height = resp['uwp_full_height'];
+                                    uwp_thumb_width = resp['uwp_thumb_width'];
+                                    uwp_thumb_height = resp['uwp_thumb_height'];
+                                    uwp_aspect_ratio = resp['uwp_aspect_ratio'];
+                                    uwp_crop_left = resp['uwp_crop_left'];
+                                    uwp_crop_top = resp['uwp_crop_top'];
+                                    uwp_crop_right = resp['uwp_crop_right'];
+                                    uwp_crop_bottom = resp['uwp_crop_bottom'];
+
+                                    jQuery('#uwp-popup-modal-wrap').html(resp['uwp_popup_content']).find('#uwp-'+uwp_popup_type+'-to-crop').Jcrop({
+                                        // onChange: showPreview,
+                                        onSelect: updateCoords,
+                                        aspectRatio: uwp_aspect_ratio,
+                                        setSelect: [ uwp_crop_left, uwp_crop_top, uwp_crop_right, uwp_crop_bottom ],
+                                        trueSize: [uwp_thumb_width,uwp_thumb_height]
+                                    });
+                                }
+                            }
+                        });
+                    });
+
+                });
+            }( jQuery, window ));
+        </script>
+
+        <?php
+        $output = ob_get_contents();
+        ob_end_clean();
+        return trim($output);
+ }
 
 
     public function uwp_extra_user_profile_fields( $user ) {
@@ -887,16 +1066,62 @@ class Users_WP_Profile {
         return $params;
     }
 
+    public function uwp_ajax_avatar_banner_upload() {
+        // Image upload handler
+        $type = 'banner';
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
+
+        $field = false;
+        if ($fields) {
+            $field = $fields[0];
+        }
+
+        $result = array();
+
+        if (!$field) {
+            $result['error'] = "No fields available";
+            $return = json_encode($result);
+            echo $return;
+            die();
+        }
+
+        $errors = handle_file_upload($field, $_FILES);
+
+        if (is_wp_error($errors)) {
+            $result['error'] = "Upload error";
+            $return = json_encode($result);
+            echo $return;
+        } else {
+            $return = $this->uwp_ajax_image_crop_popup($errors['url'], $type);
+            echo $return;
+        }
+
+        die();
+    }
+
     
-    public function uwp_ajax_image_crop_popup(){
+    public function uwp_ajax_image_crop_popup($image_url, $type){
         wp_enqueue_style( 'jcrop' );
         wp_enqueue_script( 'jcrop', array( 'jquery' ) );
-        $imge_url = strip_tags(esc_sql($_POST['image_url']));
-        $type = strip_tags(esc_sql($_POST['type']));
-        
+
         $output = null;
-        if ($imge_url && $type ) {
-            $output = $this->uwp_image_crop_popup($imge_url, $type);
+        if ($image_url && $type ) {
+            $output = $this->uwp_image_crop_popup($image_url, $type);
+        }
+        return $output;
+    }
+
+    public function uwp_ajax_image_crop_popup_form(){
+        $type = strip_tags(esc_sql($_POST['type']));
+
+        $output = null;
+
+
+        if ($type && in_array($type, array('banner', 'avatar'))) {
+            $output = $this->uwp_crop_submit_form($type);
         }
         echo $output;
         exit();

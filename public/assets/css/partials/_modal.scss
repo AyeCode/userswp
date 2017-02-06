@@ -250,3 +250,15 @@
     }
   }
 }
+.uwp-bs-modal-loading-icon-wrap {
+  text-align: center;
+  padding: 70px 0;
+}
+.uwp-bs-modal-loading-icon {
+  width: 32px;
+  height: 32px;
+  margin: 0 auto;
+}
+.uwp-crop-form input[type="submit"]:disabled {
+  opacity: .5;
+}
