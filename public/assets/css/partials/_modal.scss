@@ -262,3 +262,53 @@
 .uwp-crop-form input[type="submit"]:disabled {
   opacity: .5;
 }
+.uwp-bs-modal {
+  #progressBar {
+    height: 5px;
+    width: 100%;
+    border: 1px solid #111;
+    background-color: #292929;
+  }
+
+  #progressBar div {
+    height: 100%;
+    color: #fff;
+    text-align: right;
+    line-height: 22px; /* same as #progressBar height if we want text middle aligned */
+    width: 0;
+    background-color: #0099ff;
+  }
+  .tiny-green {
+    position: relative;
+    padding: 3px;
+
+    background-image:-moz-linear-gradient(53% 13% -90deg,rgb(58,64,80) 0%,rgb(58,64,80) 47%,rgb(46,50,62) 48%,rgb(46,50,62) 100%);
+    background-image:-webkit-gradient(linear,53% 13%,53% 79%,color-stop(0, rgb(58,64,80)),color-stop(0.47, rgb(58,64,80)),color-stop(0.48, rgb(46,50,62)),color-stop(1, rgb(46,50,62)));
+    background-image:-webkit-linear-gradient(-90deg,rgb(58,64,80) 0%,rgb(58,64,80) 47%,rgb(46,50,62) 48%,rgb(46,50,62) 100%);
+    background-image:linear-gradient(-180deg,rgb(58,64,80) 0%,rgb(58,64,80) 47%,rgb(46,50,62) 48%,rgb(46,50,62) 100%);
+
+    -moz-border-radius: 10px; /* Firefox */
+    -webkit-border-radius: 10px; /* Webkit */
+    border-radius: 10px;
+  }
+
+  .tiny-green div {
+
+    font-family: arial;
+    font-size: 3px;
+    color: white;
+    text-align: right;
+    text-shadow: 0px 0px 2px #000;
+    text-indent: 9999px;
+    overflow: hidden;
+
+    background-image:-webkit-gradient(linear,71% 25%,71% 69%,color-stop(0, rgb(118,177,1)),color-stop(0.47, rgb(118,177,1)),color-stop(0.48, rgb(102,153,0)),color-stop(1, rgb(102,153,0)));
+    background-image:-webkit-linear-gradient(-90deg,rgb(118,177,1) 0%,rgb(118,177,1) 47%,rgb(102,153,0) 48%,rgb(102,153,0) 100%);
+    background-image:-moz-linear-gradient(71% 25% -180deg,rgb(118,177,1) 0%,rgb(118,177,1) 47%,rgb(102,153,0) 48%,rgb(102,153,0) 100%);
+    background-image:linear-gradient(-180deg,rgb(118,177,1) 0%,rgb(118,177,1) 47%,rgb(102,153,0) 48%,rgb(102,153,0) 100%);
+
+    -moz-border-radius: 10px; /* Firefox */
+    -webkit-border-radius: 10px; /* Webkit */
+    border-radius: 10px;
+  }
+}
