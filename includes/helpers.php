@@ -1313,13 +1313,28 @@ function get_uwp_users_list() {
     $total_user = $result['total_users'];
     $total_pages=ceil($total_user/$number);
     ?>
-    <ul class="uwp-users-list-wrap">
+    <ul class="uwp-users-list-wrap uwp_gridview uwp_gridview_2col">
         <?php
         if ($users) {
             foreach ($users as $user) {
                 $user_obj = get_user_by('id', $user->ID);
+
+                // exclude logged in user
+                if ($user->ID == get_current_user_id()) {
+                    continue;
+                }
+
+                $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
+                if (empty($banner)) {
+                    $banner = plugins_url()."/userswp/public/assets/images/banner.png";
+                }
                 ?>
                 <li class="uwp-users-list-user">
+                    <div class="uwp-users-list-user-cover">
+                        <a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>" title="<?php echo $user->display_name; ?>">
+                            <img src="<?php echo $banner; ?>" alt="">
+                        </a>
+                    </div>
                     <div class="uwp-users-list-user-left">
                         <div class="uwp-users-list-user-avatar"><a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>"><?php echo get_avatar( $user->user_email, 128 ); ?></a></div>
                     </div>
@@ -1329,6 +1344,9 @@ function get_uwp_users_list() {
                                 <a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>"><?php echo $user->display_name; ?></a>
                                 <?php do_action('uwp_users_after_title', $user_obj ); ?>
                             </h3>
+                        </div>
+                        <div class="uwp-users-list-user-btns">
+                            <?php do_action('uwp_profile_buttons', $user_obj ); ?>
                         </div>
                         <div class="uwp-users-list-user-social">
                             <?php do_action('uwp_profile_social', $user_obj ); ?>

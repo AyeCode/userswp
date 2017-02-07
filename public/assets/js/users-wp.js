@@ -1,10 +1,31 @@
 (function( $, window, undefined ) {
     $(document).ready(function () {
-        $('#uwp-modal-close').click(function(e) {
+        $('.uwp-modal-close').click(function(e) {
             e.preventDefault();
             var uwp_popup_type = $( this ).data( 'type' );
-            $('#uwp-'+uwp_popup_type+'-modal').hide();
-            $("#uwp-modal-backdrop").remove();
+            // $('#uwp-'+uwp_popup_type+'-modal').hide();
+            var mod_shadow = jQuery('#uwp-modal-backdrop');
+            var container = jQuery('#uwp-popup-modal-wrap');
+            container.hide();
+            container.replaceWith('<div id="uwp-popup-modal-wrap" style="display: none;">\
+                <div class="uwp-bs-modal fade show">\
+                <div class="uwp-bs-modal-dialog">\
+                <div class="uwp-bs-modal-content">\
+                <div class="uwp-bs-modal-header">\
+                            <h4 class="uwp-bs-modal-title">\
+                            Loading Form ...\
+                        </h4>\
+                        </div>\
+                <div class="uwp-bs-modal-body">\
+                <div class="uwp-bs-modal-loading-icon-wrap">\
+                <div class="uwp-bs-modal-loading-icon"></div>\
+                </div>\
+                </div>\
+                </div>\
+                </div>\
+                </div>\
+                </div>');
+            mod_shadow.remove();
         });
     });
 }( jQuery, window ));
@@ -71,6 +92,28 @@ jQuery(window).load(function() {
     var uwp_crop_bottom;
 
     $(document).ready( function() {
+        $( '.uwp-profile-modal-form-trigger' ).on( 'click', function( event ) {
+            event.preventDefault();
+
+            uwp_popup_type = $( this ).data( 'type' );
+
+            // do something with the file here
+            var data = {
+                'action': 'uwp_ajax_image_crop_popup_form',
+                'type': uwp_popup_type
+            };
+
+            var container = jQuery('#uwp-popup-modal-wrap');
+            container.show();
+
+            jQuery.post(ajaxurl, data, function(response) {
+                $(document.body).append("<div id='uwp-modal-backdrop'></div>");
+                container.replaceWith(response);
+            });
+        }); 
+    });
+
+    $(document).ready( function() {
         var file_frame; // variable for the wp.media file_frame
 
         // attach a click event (or whatever you want) to some element on your page
@@ -112,7 +155,6 @@ jQuery(window).load(function() {
                 };
 
                 jQuery.post(ajaxurl, data, function(response) {
-                    console.log(response);
                     resp = JSON.parse(response);
                     uwp_full_width = resp['uwp_full_width'];
                     uwp_full_height = resp['uwp_full_height'];
@@ -126,7 +168,7 @@ jQuery(window).load(function() {
 
                     $(document.body).append("<div id='uwp-modal-backdrop'></div>");
                     jQuery('#uwp-popup-modal-wrap').html(resp['uwp_popup_content']).find('#uwp-'+uwp_popup_type+'-to-crop').Jcrop({
-                        onChange: showPreview,
+                        // onChange: showPreview,
                         onSelect: updateCoords,
                         aspectRatio: uwp_aspect_ratio,
                         setSelect: [ uwp_crop_left, uwp_crop_top, uwp_crop_right, uwp_crop_bottom ],

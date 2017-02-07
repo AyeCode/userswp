@@ -292,7 +292,9 @@ class Users_WP {
             add_filter( 'wp_handle_upload_prefilter', 'uwp_wp_media_restrict_file_types' );
         }
 
-        $this->loader->add_action( 'wp_ajax_uwp_ajax_image_crop_popup', $profile, 'uwp_ajax_image_crop_popup' );
+        $this->loader->add_action( 'wp_ajax_uwp_avatar_banner_upload', $profile, 'uwp_ajax_avatar_banner_upload' );
+        //$this->loader->add_action( 'wp_ajax_uwp_ajax_image_crop_popup', $profile, 'uwp_ajax_image_crop_popup' );
+        $this->loader->add_action( 'wp_ajax_uwp_ajax_image_crop_popup_form', $profile, 'uwp_ajax_image_crop_popup_form' );
         $this->loader->add_action( 'wp_head', $profile, 'uwp_define_ajaxurl' );
         $this->loader->add_action( 'uwp_profile_header', $profile, 'uwp_image_crop_init', 10, 1 );
 
