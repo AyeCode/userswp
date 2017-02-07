@@ -224,6 +224,9 @@ class Users_WP_Public {
             wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
         }
 
+        if (is_uwp_profile_page() ) {
+            wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
+        }
 
         if ($enable_chosen_in_register || $enable_chosen_in_account) {
             // chosen fields (multiselect) available only in register and account pages

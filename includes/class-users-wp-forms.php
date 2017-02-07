@@ -717,11 +717,11 @@ class Users_WP_Forms {
         
         if ($image_url) {
             if ($type == 'avatar') {
-                $full_height = apply_filters('uwp_avatar_image_height', 128);
-                $full_width  = apply_filters('uwp_avatar_image_width', 128);
+                $full_width  = apply_filters('uwp_avatar_image_width', 150);
+                $full_height = apply_filters('uwp_avatar_image_height', 150);
             } else {
+                $full_width  = apply_filters('uwp_banner_image_width', 1000);
                 $full_height = apply_filters('uwp_banner_image_height', 300);
-                $full_width  = apply_filters('uwp_banner_image_width', 700);
             }
 
             $uploads = wp_upload_dir();
@@ -738,8 +738,9 @@ class Users_WP_Forms {
             $w = $data["w"];
             $h = $data["h"];
             //Scale the image based on cropped width setting
-            $scale = $full_width/$w;
-            $cropped = uwp_resizeThumbnailImage($thumb_image_location, $image_url,$w,$h,$x,$y,$scale);
+            //$scale = $full_width/$w;
+            $scale = 1; // no scaling
+            $cropped = uwp_resizeThumbnailImage($thumb_image_location, $image_url,$x, $y, $full_width, $full_height,$scale);
             $cropped = str_replace($upload_path, $upload_url, $cropped);
             if ($type == 'avatar') {
                 uwp_update_usermeta($user_id, 'uwp_account_avatar_thumb', $cropped);

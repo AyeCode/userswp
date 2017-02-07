@@ -43,6 +43,7 @@ class Users_WP_Profile {
         ?>
         <div class="uwp-profile-header">
             <div class="uwp-profile-header-img" style="background-image: url('<?php echo $banner; ?>')">
+<!--                <img src="--><?php //echo $banner; ?><!--" alt="" class="uwp-profile-header-img-src">-->
             <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID)) { ?>
                 <div class="uwp-banner-change-icon">
                     <i class="fa fa-camera" aria-hidden="true"></i>
@@ -613,11 +614,11 @@ class Users_WP_Profile {
 
         // Get avatar full width and height.
         if ($type == 'avatar') {
-            $full_height = apply_filters('uwp_avatar_image_height', 128);
-            $full_width  = apply_filters('uwp_avatar_image_width', 128);
+            $full_width  = apply_filters('uwp_avatar_image_width', 150);
+            $full_height = apply_filters('uwp_avatar_image_height', 150);
         } else {
+            $full_width  = apply_filters('uwp_banner_image_width', 1000);
             $full_height = apply_filters('uwp_banner_image_height', 300);
-            $full_width  = apply_filters('uwp_banner_image_width', 700);
         }
 
         // Calculate Aspect Ratio.
@@ -663,17 +664,11 @@ class Users_WP_Profile {
         }
 
         $values = array(
+            'error' => '',
             'image_url' => $image_url,
             'uwp_popup_type' => $type,
             'uwp_full_width' => $full_width,
             'uwp_full_height' => $full_height,
-            'uwp_thumb_width' => $image[0],
-            'uwp_thumb_height' => $image[1],
-            'uwp_aspect_ratio' => $aspect_ratio,
-            'uwp_crop_left' => $crop_left,
-            'uwp_crop_top' => $crop_top,
-            'uwp_crop_right' => $crop_right,
-            'uwp_crop_bottom' => $crop_bottom,
             'uwp_popup_content' => $this->uwp_image_crop_modal_html($type, $image_url, $full_width, $full_height),
         );
         
@@ -685,27 +680,57 @@ class Users_WP_Profile {
     
     public function uwp_image_crop_init($user) {
         if (is_user_logged_in()) {
-            ?>
-            <div id="uwp-popup-modal-wrap" style="display: none;">
-                <div class="uwp-bs-modal fade show">
-                    <div class="uwp-bs-modal-dialog">
-                        <div class="uwp-bs-modal-content">
-                            <div class="uwp-bs-modal-header">
-                                <h4 class="uwp-bs-modal-title">
-                                    Loading Form ...
-                                </h4>
-                            </div>
-                            <div class="uwp-bs-modal-body">
-                                <div class="uwp-bs-modal-loading-icon-wrap">
-                                    <div class="uwp-bs-modal-loading-icon"></div>
-                                </div>
+            echo $this->uwp_modal_loading_html();
+            $this->uwp_modal_close_js();
+        }
+    }
+
+    public function uwp_modal_loading_html() {
+        ob_start();
+        ?>
+        <div id="uwp-popup-modal-wrap" style="display: none;">
+            <div class="uwp-bs-modal fade show">
+                <div class="uwp-bs-modal-dialog">
+                    <div class="uwp-bs-modal-content">
+                        <div class="uwp-bs-modal-header">
+                            <h4 class="uwp-bs-modal-title">
+                                Loading Form ...
+                            </h4>
+                        </div>
+                        <div class="uwp-bs-modal-body">
+                            <div class="uwp-bs-modal-loading-icon-wrap">
+                                <div class="uwp-bs-modal-loading-icon"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <?php
-        }
+        </div>
+        <?php
+        $output = ob_get_contents();
+        ob_end_clean();
+        return trim(preg_replace("/\s+|\n+|\r/", ' ', $output));
+    }
+
+    public function uwp_modal_close_js() {
+        ?>
+        <script type="text/javascript">
+            (function( $, window, undefined ) {
+                $(document).ready(function () {
+                    $('.uwp-modal-close').click(function(e) {
+                        e.preventDefault();
+                        var uwp_popup_type = $( this ).data( 'type' );
+                        // $('#uwp-'+uwp_popup_type+'-modal').hide();
+                        var mod_shadow = jQuery('#uwp-modal-backdrop');
+                        var container = jQuery('#uwp-popup-modal-wrap');
+                        container.hide();
+                        container.replaceWith('<?php echo $this->uwp_modal_loading_html(); ?>');
+                        mod_shadow.remove();
+                    });
+                });
+            }( jQuery, window ));
+        </script>
+        <?php
     }
     
 
@@ -728,6 +753,7 @@ class Users_WP_Profile {
                         <button type="button" class="close uwp-modal-close" data-type="<?php echo $type; ?>" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="uwp-bs-modal-body">
+                        <div id="uwp-bs-modal-notice"></div>
                         <div align="center">
                             <img src="<?php echo $image_url; ?>" id="uwp-<?php echo $type; ?>-to-crop" />
                         </div>
@@ -761,24 +787,7 @@ class Users_WP_Profile {
                         var mod_shadow = jQuery('#uwp-modal-backdrop');
                         var container = jQuery('#uwp-popup-modal-wrap');
                         container.hide();
-                        container.replaceWith('<div id="uwp-popup-modal-wrap" style="display: none;">\
-                <div class="uwp-bs-modal fade show">\
-                <div class="uwp-bs-modal-dialog">\
-                <div class="uwp-bs-modal-content">\
-                <div class="uwp-bs-modal-header">\
-                            <h4 class="uwp-bs-modal-title">\
-                            Loading Form ...\
-                        </h4>\
-                        </div>\
-                <div class="uwp-bs-modal-body">\
-                <div class="uwp-bs-modal-loading-icon-wrap">\
-                <div class="uwp-bs-modal-loading-icon"></div>\
-                </div>\
-                </div>\
-                </div>\
-                </div>\
-                </div>\
-                </div>');
+                        container.replaceWith('<?php echo $this->uwp_modal_loading_html(); ?>');
                         mod_shadow.remove();
                     });
                 });
@@ -809,6 +818,7 @@ class Users_WP_Profile {
                         <button type="button" class="close uwp-modal-close" data-type="<?php echo $type; ?>" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="uwp-bs-modal-body">
+                        <div id="uwp-bs-modal-notice"></div>
                         <form id="uwp-upload-<?php echo $type; ?>-form" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
                             <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
@@ -818,7 +828,7 @@ class Users_WP_Profile {
                                 <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" required="required" type="file" value="">
                             </div>
                          </form>
-                        <progress></progress>
+                        <div id="progressBar" class="tiny-green" style="display: none;"><div></div></div>
                     </div>
                     <div class="uwp-bs-modal-footer">
                         <div class="uwp-<?php echo $type; ?>-crop-p-wrap">
@@ -835,7 +845,11 @@ class Users_WP_Profile {
         </div>
         <script type="text/javascript">
             (function( $, window, undefined ) {
+
+                var uwp_popup_type = '<?php echo $type; ?>';
+
                 $(document).ready(function () {
+                    $("#progressbar").progressbar();
                     $('.uwp-modal-close').click(function(e) {
                         e.preventDefault();
                         var uwp_popup_type = $( this ).data( 'type' );
@@ -843,24 +857,7 @@ class Users_WP_Profile {
                         var mod_shadow = jQuery('#uwp-modal-backdrop');
                         var container = jQuery('#uwp-popup-modal-wrap');
                         container.hide();
-                        container.replaceWith('<div id="uwp-popup-modal-wrap" style="display: none;">\
-                <div class="uwp-bs-modal fade show">\
-                <div class="uwp-bs-modal-dialog">\
-                <div class="uwp-bs-modal-content">\
-                <div class="uwp-bs-modal-header">\
-                            <h4 class="uwp-bs-modal-title">\
-                            Loading Form ...\
-                        </h4>\
-                        </div>\
-                <div class="uwp-bs-modal-body">\
-                <div class="uwp-bs-modal-loading-icon-wrap">\
-                <div class="uwp-bs-modal-loading-icon"></div>\
-                </div>\
-                </div>\
-                </div>\
-                </div>\
-                </div>\
-                </div>');
+                        container.replaceWith('<?php echo $this->uwp_modal_loading_html(); ?>');
                         mod_shadow.remove();
                     });
 
@@ -868,6 +865,7 @@ class Users_WP_Profile {
                         e.preventDefault();
 
                         var container = jQuery('#uwp-popup-modal-wrap');
+                        var err_container = jQuery('#uwp-bs-modal-notice');
 
                         var fd = new FormData();
                         var files_data = $(this); // The <input type="file" /> field
@@ -876,6 +874,9 @@ class Users_WP_Profile {
                         fd.append('uwp_<?php echo $type; ?>_file', file);
                         // our AJAX identifier
                         fd.append('action', 'uwp_avatar_banner_upload');
+                        fd.append('uwp_popup_type', '<?php echo $type; ?>');
+
+                        $("#progressBar").show();
 
                         $.ajax({
                             // Your server script to process the upload
@@ -893,48 +894,57 @@ class Users_WP_Profile {
 
                             // Custom XMLHttpRequest
                             xhr: function() {
-                                var myXhr = $.ajaxSettings.xhr();
-                                if (myXhr.upload) {
-                                    // For handling the progress of the upload
-                                    myXhr.upload.addEventListener('progress', function(e) {
-                                        if (e.lengthComputable) {
-                                            $('progress').attr({
-                                                value: e.loaded,
-                                                max: e.total
-                                            });
-                                        }
-                                    } , false);
+                                myXhr = $.ajaxSettings.xhr();
+                                if(myXhr.upload){
+                                    myXhr.upload.addEventListener('progress',showProgress, false);
+                                } else {
+                                    console.log("Upload progress is not supported.");
                                 }
                                 return myXhr;
                             },
 
                             success:function(response) {
+                                $("#progressBar").hide();
                                 resp = JSON.parse(response);
-                                if (resp['error'] == false) {
-                                    container.replaceWith(response['content']);
+                                if (resp['error'] != "") {
+                                    err_container.html(resp['error']);
                                 } else {
                                     resp = JSON.parse(response);
                                     uwp_full_width = resp['uwp_full_width'];
                                     uwp_full_height = resp['uwp_full_height'];
-                                    uwp_thumb_width = resp['uwp_thumb_width'];
-                                    uwp_thumb_height = resp['uwp_thumb_height'];
-                                    uwp_aspect_ratio = resp['uwp_aspect_ratio'];
-                                    uwp_crop_left = resp['uwp_crop_left'];
-                                    uwp_crop_top = resp['uwp_crop_top'];
-                                    uwp_crop_right = resp['uwp_crop_right'];
-                                    uwp_crop_bottom = resp['uwp_crop_bottom'];
 
                                     jQuery('#uwp-popup-modal-wrap').html(resp['uwp_popup_content']).find('#uwp-'+uwp_popup_type+'-to-crop').Jcrop({
                                         // onChange: showPreview,
                                         onSelect: updateCoords,
-                                        aspectRatio: uwp_aspect_ratio,
-                                        setSelect: [ uwp_crop_left, uwp_crop_top, uwp_crop_right, uwp_crop_bottom ],
-                                        trueSize: [uwp_thumb_width,uwp_thumb_height]
+                                        allowResize: false,
+                                        allowSelect: false,
+                                        setSelect: [ 0, 0, uwp_full_width, uwp_full_height ],
+                                        aspectRatio: uwp_full_width/uwp_full_height
                                     });
                                 }
                             }
                         });
                     });
+
+                    function showProgress(evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = (evt.loaded / evt.total) * 100;
+//                            $('#progressbar').progressbar("option", "value", percentComplete );
+                            progress(percentComplete, $('#progressBar'));
+                        }
+                    }
+
+                    function progress(percent, $element) {
+                        var progressBarWidth = percent * $element.width() / 100;
+                        $element.find('div').animate({ width: progressBarWidth }, 500).html(percent + "% ");
+                    }
+
+                    function updateCoords(c) {
+                        jQuery('#'+uwp_popup_type+'-x').val(c.x);
+                        jQuery('#'+uwp_popup_type+'-y').val(c.y);
+                        jQuery('#'+uwp_popup_type+'-w').val(c.w);
+                        jQuery('#'+uwp_popup_type+'-h').val(c.h);
+                    }
 
                 });
             }( jQuery, window ));
@@ -1057,6 +1067,34 @@ class Users_WP_Profile {
         return $llcaps;
     }
 
+    public function uwp_handle_file_upload_error_checks($value, $field, $file_key, $file_to_upload) {
+        
+        if (in_array($field->htmlvar_name, array('uwp_avatar_file', 'uwp_banner_file'))) {
+
+            if ($field->htmlvar_name == 'uwp_avatar_file') {
+                $min_width  = apply_filters('uwp_avatar_image_width', 150);
+                $min_height = apply_filters('uwp_avatar_image_height', 150);
+            } else {
+                $min_width  = apply_filters('uwp_banner_image_width', 1000);
+                $min_height = apply_filters('uwp_banner_image_height', 300);
+            }
+
+            $imagedetails = getimagesize( $file_to_upload['tmp_name'] );
+            $width = $imagedetails[0];
+            $height = $imagedetails[1];
+
+            if ( $width < $min_width) {
+                return new WP_Error( 'image-too-small', __( 'The uploaded file is too small. Minimum image width should be '.$min_width.'px', 'uwp' ) );
+            }
+            if ( $height < $min_height) {
+                return new WP_Error( 'image-too-small', __( 'The uploaded file is too small. Minimum image height should be '.$min_height.'px', 'uwp' ) );
+            }
+        }
+
+        return $value;
+        
+    }
+
     public function add_uwp_plupload_param($params) {
 
         if(!is_admin() && get_the_ID()==uwp_get_option('profile_page', false)){
@@ -1068,7 +1106,15 @@ class Users_WP_Profile {
 
     public function uwp_ajax_avatar_banner_upload() {
         // Image upload handler
-        $type = 'banner';
+        // todo: security checks
+        $type = strip_tags(esc_sql($_POST['uwp_popup_type']));
+
+        if (!in_array($type, array('banner', 'avatar'))) {
+            $result['error'] = uwp_wrap_notice("Invalid modal type", 'error');
+            $return = json_encode($result);
+            echo $return;
+            die();
+        }
 
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
@@ -1082,7 +1128,7 @@ class Users_WP_Profile {
         $result = array();
 
         if (!$field) {
-            $result['error'] = "No fields available";
+            $result['error'] = uwp_wrap_notice("No fields available", 'error');
             $return = json_encode($result);
             echo $return;
             die();
@@ -1091,7 +1137,7 @@ class Users_WP_Profile {
         $errors = handle_file_upload($field, $_FILES);
 
         if (is_wp_error($errors)) {
-            $result['error'] = "Upload error";
+            $result['error'] = uwp_wrap_notice($errors->get_error_message(), 'error');
             $return = json_encode($result);
             echo $return;
         } else {

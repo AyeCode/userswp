@@ -688,15 +688,15 @@ function uwp_resizeImage($image,$width,$height,$scale) {
     return $image;
 }
 
-function uwp_resizeThumbnailImage($thumb_image_name, $image, $width, $height, $start_width, $start_height, $scale){
+function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $src_h, $scale){
     // ignore image createion warnings
     @ini_set('gd.jpeg_ignore_warning', 1);
     list($imagewidth, $imageheight, $imageType) = getimagesize($image);
     $imageType = image_type_to_mime_type($imageType);
 
-    $newImageWidth = ceil($width * $scale);
-    $newImageHeight = ceil($height * $scale);
-    $newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
+    $dst_w = $src_w;
+    $dst_h = $src_h;
+    $newImage = imagecreatetruecolor($dst_w,$dst_h);
     $source = false;
     switch($imageType) {
         case "image/gif":
@@ -712,19 +712,19 @@ function uwp_resizeThumbnailImage($thumb_image_name, $image, $width, $height, $s
             $source=imagecreatefrompng($image);
             break;
     }
-    imagecopyresampled($newImage,$source,0,0,$start_width,$start_height,$newImageWidth,$newImageHeight,$width,$height);
+    imagecopyresampled($newImage,$source,0,0,$x,$y,$dst_w, $dst_h, $src_w, $src_h);
     switch($imageType) {
         case "image/gif":
-            imagegif($newImage,$thumb_image_name);
+            imagegif($newImage, $thumb_image_name);
             break;
         case "image/pjpeg":
         case "image/jpeg":
         case "image/jpg":
-            imagejpeg($newImage,$thumb_image_name,90);
+            imagejpeg($newImage, $thumb_image_name, 100);
             break;
         case "image/png":
         case "image/x-png":
-            imagepng($newImage,$thumb_image_name);
+            imagepng($newImage, $thumb_image_name);
             break;
     }
 
@@ -1003,9 +1003,15 @@ function handle_file_upload( $field, $files ) {
             if ( ! $max_upload_size ) {
                 $max_upload_size = 0;
             }
-            if ( $file_to_upload['size'] >  $max_upload_size)
+            
+            if ( $file_to_upload['size'] >  $max_upload_size) {
                 return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. uwp_formatSizeUnits($max_upload_size), 'uwp' ) );
-
+            }
+            
+            $error_result = apply_filters('uwp_handle_file_upload_error_checks', true, $field, $file_key, $file_to_upload);
+            if (is_wp_error($error_result)) {
+                return $error_result;
+            }
 
             remove_filter( 'wp_handle_upload_prefilter', 'uwp_wp_media_restrict_file_types' );
             $uploaded_file = uwp_upload_file( $file_to_upload, array( 'file_key' => $file_key ) );
@@ -1747,4 +1753,12 @@ function uwp_get_custom_field_info($htmlvar_name) {
     $table_name = $wpdb->prefix . 'uwp_form_fields';
     $field = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s", array($htmlvar_name)));
     return $field;
+}
+
+function uwp_wrap_notice($message, $type) {
+    $output = '<div class="uwp-alert-'.$type.' text-center">';
+    $output .= $message;
+    $output .= '</div>';
+    return $output;    
+    
 }
