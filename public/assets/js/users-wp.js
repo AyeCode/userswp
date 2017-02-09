@@ -91,3 +91,19 @@ jQuery(window).load(function() {
     });
 
 }( jQuery, window ));
+
+(function( $, window, undefined ) {
+    $(document).ready(function() {
+        $("#uwp_layout").change(function(){
+            var layout = $(this).val();
+            var container = $('#uwp_user_items_layout');
+            if (layout == 'grid') {
+                container.removeClass('uwp_listview');
+                container.addClass('uwp_gridview uwp_gridview_2col');
+            } else {
+                container.removeClass('uwp_gridview uwp_gridview_2col');
+                container.addClass('uwp_listview');
+            }
+        });
+    });
+}( jQuery, window ));

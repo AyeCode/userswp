@@ -278,6 +278,7 @@ class Users_WP {
         $this->loader->add_filter( 'get_avatar', $profile, 'uwp_modify_get_avatar' , 1 , 5 );
         $this->loader->add_filter( 'get_comment_author_link', $profile, 'uwp_get_comment_author_link' , 10 , 2 );
         $this->loader->add_action( 'uwp_profile_header', $profile, 'get_profile_header', 10, 1 );
+        $this->loader->add_action( 'uwp_users_profile_header', $profile, 'get_profile_header', 10, 1 );
         $this->loader->add_action( 'uwp_profile_title', $profile, 'get_profile_title', 10, 1 );
         //$this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_bio', 10, 1 );
         $this->loader->add_action( 'uwp_profile_social', $profile, 'get_profile_social', 10, 1 );

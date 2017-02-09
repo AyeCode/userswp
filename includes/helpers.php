@@ -694,9 +694,9 @@ function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $sr
     list($imagewidth, $imageheight, $imageType) = getimagesize($image);
     $imageType = image_type_to_mime_type($imageType);
 
-    $dst_w = $src_w;
-    $dst_h = $src_h;
-    $newImage = imagecreatetruecolor($dst_w,$dst_h);
+    $newImageWidth = ceil($src_w * $scale);
+    $newImageHeight = ceil($src_h * $scale);
+    $newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
     $source = false;
     switch($imageType) {
         case "image/gif":
@@ -712,7 +712,7 @@ function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $sr
             $source=imagecreatefrompng($image);
             break;
     }
-    imagecopyresampled($newImage,$source,0,0,$x,$y,$dst_w, $dst_h, $src_w, $src_h);
+    imagecopyresampled($newImage,$source,0,0,$x,$y,$newImageWidth, $newImageHeight, $src_w, $src_h);
     switch($imageType) {
         case "image/gif":
             imagegif($newImage, $thumb_image_name);
@@ -999,14 +999,25 @@ function handle_file_upload( $field, $files ) {
                     return new WP_Error( 'validation-error', sprintf( __( 'Allowed files types are: %s', 'uwp' ),  $allowed_error_text) );
             }
 
-            $max_upload_size = wp_max_upload_size();
+
+            $max_upload_size = uwp_get_max_upload_size();
+
+
             if ( ! $max_upload_size ) {
                 $max_upload_size = 0;
             }
-            
+
             if ( $file_to_upload['size'] >  $max_upload_size) {
-                return new WP_Error( 'avatar-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. uwp_formatSizeUnits($max_upload_size), 'uwp' ) );
+                return new WP_Error( 'file-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. uwp_formatSizeUnits($max_upload_size), 'uwp' ) );
             }
+
+
+
+//            $upload_max_ini_size = uwp_get_size_in_bytes(ini_get('upload_max_filesize'));
+//            if ($upload_max_ini_size && $file_to_upload['size'] > $upload_max_ini_size) {
+//                return new WP_Error( 'file-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. uwp_formatSizeUnits($max_upload_size), 'uwp' ) );
+//            }
+
             
             $error_result = apply_filters('uwp_handle_file_upload_error_checks', true, $field, $file_key, $file_to_upload);
             if (is_wp_error($error_result)) {
@@ -1070,7 +1081,27 @@ function uwp_formatSizeUnits($bytes)
     }
 
     return $bytes;
-}    
+}
+
+function uwp_get_size_in_bytes($val) {
+    $val = trim($val);
+    $last = strtolower($val[strlen($val)-1]);
+    switch($last) {
+        // The 'G' modifier is available since PHP 5.1.0
+        case 'g':
+            $val *= (1024 * 1024 * 1024); //1073741824
+            break;
+        case 'm':
+            $val *= (1024 * 1024); //1048576
+            break;
+        case 'k':
+            $val *= 1024;
+            break;
+    }
+
+    return $val;
+}
+
 
 
 function uwp_upload_file( $file, $args = array() ) {
@@ -1319,7 +1350,7 @@ function get_uwp_users_list() {
     $total_user = $result['total_users'];
     $total_pages=ceil($total_user/$number);
     ?>
-    <ul class="uwp-users-list-wrap uwp_gridview uwp_gridview_2col">
+    <ul class="uwp-users-list-wrap uwp_listview" id="uwp_user_items_layout">
         <?php
         if ($users) {
             foreach ($users as $user) {
@@ -1329,20 +1360,10 @@ function get_uwp_users_list() {
                 if ($user->ID == get_current_user_id()) {
                     continue;
                 }
-
-                $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
-                if (empty($banner)) {
-                    $banner = plugins_url()."/userswp/public/assets/images/banner.png";
-                }
                 ?>
                 <li class="uwp-users-list-user">
-                    <div class="uwp-users-list-user-cover">
-                        <a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>" title="<?php echo $user->display_name; ?>">
-                            <img src="<?php echo $banner; ?>" alt="">
-                        </a>
-                    </div>
                     <div class="uwp-users-list-user-left">
-                        <div class="uwp-users-list-user-avatar"><a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>"><?php echo get_avatar( $user->user_email, 128 ); ?></a></div>
+                        <?php do_action('uwp_users_profile_header', $user); ?>
                     </div>
                     <div class="uwp-users-list-user-right">
                         <div class="uwp-users-list-user-name">
@@ -1761,4 +1782,17 @@ function uwp_wrap_notice($message, $type) {
     $output .= '</div>';
     return $output;    
     
+}
+
+function uwp_get_max_upload_size() {
+    if (is_multisite()) {
+        $network_setting_size = esc_attr( get_site_option( 'fileupload_maxk', 300 ) );
+        $max_upload_size = uwp_get_size_in_bytes($network_setting_size.'k');
+        if ($max_upload_size > wp_max_upload_size()) {
+            $max_upload_size = wp_max_upload_size();
+        }
+    } else {
+        $max_upload_size = wp_max_upload_size();
+    }
+    return $max_upload_size;
 }

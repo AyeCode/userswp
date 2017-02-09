@@ -738,9 +738,9 @@ class Users_WP_Forms {
             $w = $data["w"];
             $h = $data["h"];
             //Scale the image based on cropped width setting
-            //$scale = $full_width/$w;
-            $scale = 1; // no scaling
-            $cropped = uwp_resizeThumbnailImage($thumb_image_location, $image_url,$x, $y, $full_width, $full_height,$scale);
+            $scale = $full_width/$w;
+            //$scale = 1; // no scaling
+            $cropped = uwp_resizeThumbnailImage($thumb_image_location, $image_url,$x, $y, $w, $h,$scale);
             $cropped = str_replace($upload_path, $upload_url, $cropped);
             if ($type == 'avatar') {
                 uwp_update_usermeta($user_id, 'uwp_account_avatar_thumb', $cropped);
