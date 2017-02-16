@@ -38,7 +38,7 @@ class Users_WP_Admin_Settings {
 
         $page = isset( $_GET['page'] ) ? $_GET['page'] : 'uwp';
 
-        $settings_array = $this->get_settings_tabs();
+        $settings_array = uwp_get_settings_tabs();
         $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $settings_array[$page] ) ? $_GET['tab'] : 'main';
         ?>
         <div class="wrap">
@@ -76,7 +76,7 @@ class Users_WP_Admin_Settings {
                         <?php
                         // {current page}_settings_{active tab}_tab_content
                         // ex: uwp_settings_main_tab_content
-                        do_action($page.'_settings_'.$active_tab.'_tab_content', $this->display_form());
+                        do_action($page.'_settings_'.$active_tab.'_tab_content', uwp_display_form());
                         ?>
                     </div>
                 </div>
@@ -85,34 +85,7 @@ class Users_WP_Admin_Settings {
 
         </div>
     <?php }
-
-    public function get_settings_tabs() {
-
-        $tabs = array();
-
-        // wp-admin/admin.php?page=uwp
-        $tabs['uwp']  = array(
-            'main' => __( 'General', 'uwp' ),
-            'register' => __( 'Register', 'uwp' ),
-            'login' => __( 'Login', 'uwp' ),
-            'change' => __( 'Change Password', 'uwp' ),
-            'profile' => __( 'Profile', 'uwp' ),
-            'uninstall' => __( 'Uninstall', 'uwp' ),
-        );
-
-        // wp-admin/admin.php?page=uwp_form_builder
-        $tabs['uwp_form_builder'] = array(
-            'main' => __( 'Form Builder', 'uwp' ),
-        );
-
-        // wp-admin/admin.php?page=uwp_notifications
-        $tabs['uwp_notifications'] = array(
-            'main' => __( 'Notifications', 'uwp' ),
-        );
-
-        return apply_filters( 'uwp_settings_tabs', $tabs );
-    }
-
+    
     public function get_general_content() {
 
         $subtab = 'general';
@@ -145,36 +118,6 @@ class Users_WP_Admin_Settings {
     }
 
     //main tabs
-    public function display_form() {
-
-        $page = isset( $_GET['page'] ) ? $_GET['page'] : 'uwp';
-        $settings_array = $this->get_settings_tabs();
-
-        $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $settings_array[$page] ) ? $_GET['tab'] : 'main';
-        ob_start();
-        ?>
-        <form method="post" action="options.php">
-            <?php
-            $title = apply_filters('uwp_display_form_title', false, $page, $active_tab);
-            if ($title) { ?>
-                <h2 class="title"><?php echo $title; ?></h2>
-            <?php } ?>
-
-            <table class="uwp-form-table">
-                <?php
-                settings_fields( 'uwp_settings' );
-                do_settings_fields( 'uwp_settings_' . $page .'_'.$active_tab, 'uwp_settings_' . $page .'_'.$active_tab );
-                ?>
-			</table>
-			<?php submit_button(); ?>
-        </form>
-
-        <?php
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        return $output;
-    }
 
     public function uwp_get_pages_as_option($selected) {
         $page_options = $this->uwp_get_pages();
@@ -271,7 +214,7 @@ class Users_WP_Admin_Settings {
 
     //subtabs
     public function get_general_general_content() {
-        echo $this->display_form();
+        echo uwp_display_form();
     }
 
     public function display_form_title($title, $page, $active_tab) {
@@ -346,15 +289,15 @@ class Users_WP_Admin_Settings {
     }
 
     public function generic_display_form() {
-        echo $this->display_form();
+        echo uwp_display_form();
     }
 
     public function get_recaptcha_content() {
-        echo $this->display_form();
+        echo uwp_display_form();
     }
 
     public function get_geodirectory_content() {
-        echo $this->display_form();
+        echo uwp_display_form();
     }
 
     public function get_notifications_content() {
@@ -373,7 +316,7 @@ class Users_WP_Admin_Settings {
             </table>
 
         <?php
-        echo $this->display_form();
+        echo uwp_display_form();
     }
 
     public function uwp_register_settings() {

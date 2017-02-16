@@ -37,7 +37,7 @@ class Users_WP_Profile {
         }
 
         if (empty($banner)) {
-            $banner = plugins_url()."/userswp/public/assets/images/banner.png";
+            $banner = USERSWP_PLUGIN_URL."/public/assets/images/banner.png";
         }
         if (empty($avatar)) {
             $avatar = get_avatar($user->user_email, 150);

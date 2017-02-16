@@ -19,6 +19,10 @@ if (!defined('WPINC')) {
     die;
 }
 
+define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
+
+define( 'USERSWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-users-wp-activator.php
