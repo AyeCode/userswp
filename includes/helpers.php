@@ -1349,8 +1349,10 @@ function get_uwp_users_list() {
     $result = count_users();
     $total_user = $result['total_users'];
     $total_pages=ceil($total_user/$number);
+    
+    $layout_class = uwp_get_layout_class();
     ?>
-    <ul class="uwp-users-list-wrap uwp_listview" id="uwp_user_items_layout">
+    <ul class="uwp-users-list-wrap <?php echo $layout_class; ?>" id="uwp_user_items_layout">
         <?php
         if ($users) {
             foreach ($users as $user) {
@@ -1840,6 +1842,7 @@ function uwp_get_settings_tabs() {
         'login' => __( 'Login', 'uwp' ),
         'change' => __( 'Change Password', 'uwp' ),
         'profile' => __( 'Profile', 'uwp' ),
+        'users' => __( 'Users', 'uwp' ),
         'uninstall' => __( 'Uninstall', 'uwp' ),
     );
 
@@ -1854,4 +1857,40 @@ function uwp_get_settings_tabs() {
     );
 
     return apply_filters( 'uwp_settings_tabs', $tabs );
+}
+
+function uwp_get_layout_class() {
+    $default_layout = uwp_get_option('users_default_layout', 'list');
+    switch ($default_layout) {
+        case "list":
+            $class = "uwp_listview";
+            break;
+        case "2col":
+            $class = "uwp_gridview uwp_gridview_2col";
+            break;
+        case "3col":
+            $class = "uwp_gridview uwp_gridview_3col";
+            break;
+        case "4col":
+            $class = "uwp_gridview uwp_gridview_4col";
+            break;
+        case "5col":
+            $class = "uwp_gridview uwp_gridview_5col";
+            break;
+        default:
+            $class = "uwp_listview";
+    }
+
+    return $class;
+}
+
+add_filter( 'get_user_option_metaboxhidden_nav-menus', 'uwp_always_nav_menu_visibility', 10, 3 );
+
+function uwp_always_nav_menu_visibility( $result, $option, $user )
+{
+    if( in_array( 'add-users-wp-nav-menu', $result ) ) {
+        $result = array_diff( $result, array( 'add-users-wp-nav-menu' ) );
+    }
+
+    return $result;
 }

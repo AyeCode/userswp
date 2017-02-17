@@ -548,6 +548,18 @@ class Users_WP_Admin_Settings {
                         ),
                     )
                 ),
+                'users' => apply_filters( 'uwp_settings_general_profile',
+                    array(
+                        'users_default_layout' => array(
+                            'id' => 'users_default_layout',
+                            'name' => __( 'Users default layout', 'uwp' ),
+                            'desc' => __( 'Choose the default layout for Users Page - Users List', 'uwp' ),
+                            'type'        => 'select',
+                            'options' =>   $this->uwp_available_users_layout(),
+                            'placeholder' => __( 'Select Layout', 'uwp' )
+                        ),
+                    )
+                ),
                 'change' => apply_filters( 'uwp_settings_general_change',
                     array(
                         'change_enable_old_password' => array(
@@ -742,6 +754,20 @@ class Users_WP_Admin_Settings {
         );
 
         $tabs_arr = apply_filters('uwp_available_tab_items', $tabs_arr);
+
+        return $tabs_arr;
+    }
+
+    public function uwp_available_users_layout() {
+        $tabs_arr = array(
+            'list' => __( 'List View', 'uwp' ),
+            '2col' => __( 'Grid View - 2 Column', 'uwp' ),
+            '3col' => __( 'Grid View - 3 Column', 'uwp' ),
+            '4col' => __( 'Grid View - 4 Column', 'uwp' ),
+            '5col' => __( 'Grid View - 5 Column', 'uwp' ),
+        );
+
+        $tabs_arr = apply_filters('uwp_available_users_layout', $tabs_arr);
 
         return $tabs_arr;
     }

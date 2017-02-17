@@ -204,6 +204,7 @@ class Users_WP {
         $this->loader->add_action( 'uwp_settings_register_tab_content', $plugin_admin_settings, 'generic_display_form' );
         $this->loader->add_action( 'uwp_settings_login_tab_content', $plugin_admin_settings, 'generic_display_form' );
         $this->loader->add_action( 'uwp_settings_profile_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'uwp_settings_users_tab_content', $plugin_admin_settings, 'generic_display_form' );
         $this->loader->add_action( 'uwp_settings_change_tab_content', $plugin_admin_settings, 'generic_display_form' );
         $this->loader->add_action( 'uwp_settings_uninstall_tab_content', $plugin_admin_settings, 'generic_display_form' );
 
