@@ -37,7 +37,7 @@ class Users_WP_Profile {
         }
 
         if (empty($banner)) {
-            $banner = plugins_url()."/userswp/public/assets/images/banner.png";
+            $banner = USERSWP_PLUGIN_URL."/public/assets/images/banner.png";
         }
         if (empty($avatar)) {
             $avatar = get_avatar($user->user_email, 150);
@@ -1228,10 +1228,18 @@ class Users_WP_Profile {
                 </form>
             </div>
             <div class="uwp-user-sort">
+                <?php
+                $default_layout = uwp_get_option('users_default_layout', 'list');
+                if ($default_layout == 'list') {
+                    $layout = 'list';
+                } else {
+                    $layout = 'grid';
+                }
+                ?>
                 <form method="get" action="">
                     <select name="uwp_layout" id="uwp_layout">
-                        <option selected="selected" value="list">List View</option>
-                        <option value="grid">Grid View</option>
+                        <option <?php selected( $layout, "list" ); ?> value="list">List View</option>
+                        <option <?php selected( $layout, "grid" ); ?> value="grid">Grid View</option>
                     </select>
                     <?php
                     $sort_by = "";

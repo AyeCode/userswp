@@ -380,3 +380,7 @@
 .uwp-profile-item-li h3 {
   clear: none;
 }
+
+.jcrop-holder img, img.jcrop-preview {
+  max-width: none !important;
+}

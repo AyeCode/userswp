@@ -281,6 +281,10 @@ class Users_WP_Templates {
             $value = "";
         }
 
+        if (isset($_POST[$field->htmlvar_name]) && $field->field_type != 'password') {
+            $value = $_POST[$field->htmlvar_name];
+        }
+
         $html = apply_filters("uwp_form_input_html_{$field->field_type}", "", $field, $value, $form_type);
 
         if (empty($html)) {

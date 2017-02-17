@@ -8,6 +8,15 @@ jQuery(window).load(function() {
     }
 });
 
+function uwp_chosen() {
+    if (jQuery("select.uwp_chosen_select").length > 0) {
+        jQuery("select.uwp_chosen_select").chosen();
+        jQuery("select.uwp_chosen_select_nostd").chosen({
+            allow_single_deselect: 'true'
+        });
+    }
+}
+
 function show_hide(id) {
     jQuery('#' + id).toggle();
 }
@@ -114,6 +123,7 @@ jQuery(document).ready(function () {
                 custom_type: custom_type
             }, function (data) {
                 jQuery('.field_row_main ul.core').append(data);
+                uwp_chosen();
                 jQuery('#licontainer_' + id).find('#sort_order').val(parseInt(jQuery('#licontainer_' + id).index()) + 1);
                 show_hide('field_frm'+id);
                 jQuery('html, body').animate({

@@ -901,7 +901,7 @@ function uwp_generic_tab_content($user, $post_type = false, $title, $post_ids = 
                             if ( has_post_thumbnail() ) {
                                 $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
                             } else {
-                                $thumb_url = plugins_url()."/userswp/public/assets/images/no_thumb.png";
+                                $thumb_url = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
                             }
                             ?>
                             <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
@@ -1349,8 +1349,10 @@ function get_uwp_users_list() {
     $result = count_users();
     $total_user = $result['total_users'];
     $total_pages=ceil($total_user/$number);
+    
+    $layout_class = uwp_get_layout_class();
     ?>
-    <ul class="uwp-users-list-wrap uwp_listview" id="uwp_user_items_layout">
+    <ul class="uwp-users-list-wrap <?php echo $layout_class; ?>" id="uwp_user_items_layout">
         <?php
         if ($users) {
             foreach ($users as $user) {
@@ -1795,4 +1797,100 @@ function uwp_get_max_upload_size() {
         $max_upload_size = wp_max_upload_size();
     }
     return $max_upload_size;
+}
+
+
+function uwp_display_form() {
+
+    $page = isset( $_GET['page'] ) ? $_GET['page'] : 'uwp';
+    $settings_array = uwp_get_settings_tabs();
+
+    $active_tab = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $settings_array[$page] ) ? $_GET['tab'] : 'main';
+    ob_start();
+    ?>
+    <form method="post" action="options.php">
+        <?php
+        $title = apply_filters('uwp_display_form_title', false, $page, $active_tab);
+        if ($title) { ?>
+            <h2 class="title"><?php echo $title; ?></h2>
+        <?php } ?>
+
+        <table class="uwp-form-table">
+            <?php
+            settings_fields( 'uwp_settings' );
+            do_settings_fields( 'uwp_settings_' . $page .'_'.$active_tab, 'uwp_settings_' . $page .'_'.$active_tab );
+            ?>
+        </table>
+        <?php submit_button(); ?>
+    </form>
+
+    <?php
+    $output = ob_get_contents();
+    ob_end_clean();
+
+    return $output;
+}
+
+function uwp_get_settings_tabs() {
+
+    $tabs = array();
+
+    // wp-admin/admin.php?page=uwp
+    $tabs['uwp']  = array(
+        'main' => __( 'General', 'uwp' ),
+        'register' => __( 'Register', 'uwp' ),
+        'login' => __( 'Login', 'uwp' ),
+        'change' => __( 'Change Password', 'uwp' ),
+        'profile' => __( 'Profile', 'uwp' ),
+        'users' => __( 'Users', 'uwp' ),
+        'uninstall' => __( 'Uninstall', 'uwp' ),
+    );
+
+    // wp-admin/admin.php?page=uwp_form_builder
+    $tabs['uwp_form_builder'] = array(
+        'main' => __( 'Form Builder', 'uwp' ),
+    );
+
+    // wp-admin/admin.php?page=uwp_notifications
+    $tabs['uwp_notifications'] = array(
+        'main' => __( 'Notifications', 'uwp' ),
+    );
+
+    return apply_filters( 'uwp_settings_tabs', $tabs );
+}
+
+function uwp_get_layout_class() {
+    $default_layout = uwp_get_option('users_default_layout', 'list');
+    switch ($default_layout) {
+        case "list":
+            $class = "uwp_listview";
+            break;
+        case "2col":
+            $class = "uwp_gridview uwp_gridview_2col";
+            break;
+        case "3col":
+            $class = "uwp_gridview uwp_gridview_3col";
+            break;
+        case "4col":
+            $class = "uwp_gridview uwp_gridview_4col";
+            break;
+        case "5col":
+            $class = "uwp_gridview uwp_gridview_5col";
+            break;
+        default:
+            $class = "uwp_listview";
+    }
+
+    return $class;
+}
+
+add_filter( 'get_user_option_metaboxhidden_nav-menus', 'uwp_always_nav_menu_visibility', 10, 3 );
+
+function uwp_always_nav_menu_visibility( $result, $option, $user )
+{
+    if( in_array( 'add-users-wp-nav-menu', $result ) ) {
+        $result = array_diff( $result, array( 'add-users-wp-nav-menu' ) );
+    }
+
+    return $result;
 }
