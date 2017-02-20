@@ -133,19 +133,10 @@ class Users_WP_Menus {
      */
     public function users_wp_nav_menu_get_common_pages() {
 
-        $profile_page = uwp_get_option('profile_page', false);
         $users_page = uwp_get_option('users_page', false);
 
         $users_wp_menu_items = array();
 
-        if ($profile_page) {
-            $page = get_post( $profile_page );
-            $users_wp_menu_items[] = array(
-                'name' => $page->post_title,
-                'slug' => $page->post_name,
-                'link' => get_permalink( $page->ID ),
-            );
-        }
 
         if ($users_page) {
             $page = get_post( $users_page );
@@ -196,11 +187,21 @@ class Users_WP_Menus {
 
         $account_page = uwp_get_option('account_page', false);
         $change_page = uwp_get_option('change_page', false);
+        $profile_page = uwp_get_option('profile_page', false);
 
         $users_wp_menu_items = array();
 
         if ($account_page) {
             $page = get_post( $account_page );
+            $users_wp_menu_items[] = array(
+                'name' => $page->post_title,
+                'slug' => $page->post_name,
+                'link' => get_permalink( $page->ID ),
+            );
+        }
+
+        if ($profile_page) {
+            $page = get_post( $profile_page );
             $users_wp_menu_items[] = array(
                 'name' => $page->post_title,
                 'slug' => $page->post_name,

@@ -347,6 +347,7 @@ class Users_WP_Templates {
         $login_slug = $this->uwp_get_page_slug('login_page');
         $change_slug = $this->uwp_get_page_slug('change_page');
         $account_slug = $this->uwp_get_page_slug('account_page');
+        $profile_slug = $this->uwp_get_page_slug('profile_page');
         $forgot_slug = $this->uwp_get_page_slug('forgot_page');
         $logout_slug = "logout";
 
@@ -354,6 +355,7 @@ class Users_WP_Templates {
         $login_class = "users-wp-{$login_slug}-nav";
         $change_class = "users-wp-{$change_slug}-nav";
         $account_class = "users-wp-{$account_slug}-nav";
+        $profile_class = "users-wp-{$profile_slug}-nav";
         $forgot_class = "users-wp-{$forgot_slug}-nav";
         $logout_class = "users-wp-{$logout_slug}-nav";
 
@@ -377,6 +379,13 @@ class Users_WP_Templates {
                     $menu_item->_invalid = true;
                 } else {
                     $menu_item->url = get_permalink(uwp_get_option('account_page', 0));
+                }
+                break;
+            case $profile_class:
+                if ( ! is_user_logged_in() ) {
+                    $menu_item->_invalid = true;
+                } else {
+                    $menu_item->url = get_permalink(uwp_get_option('profile_page', 0));
                 }
                 break;
             case $change_class:

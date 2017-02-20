@@ -73,7 +73,7 @@ jQuery(window).load(function() {
     });
 
     $(document).ready(function() {
-        $("#uwp_upload_file_remove").click(function(event){
+        $(".uwp_upload_file_remove").click(function(event){
             event.preventDefault();
 
             var htmlvar =  $( this ).data( 'htmlvar' );
@@ -85,7 +85,7 @@ jQuery(window).load(function() {
 
             jQuery.post(ajaxurl, data, function(response) {
                 $(".uwp_upload_file_preview").remove();
-                $("#uwp_upload_file_remove").remove();
+                $(this).remove();
             });
         });
     });
@@ -97,12 +97,19 @@ jQuery(window).load(function() {
         $("#uwp_layout").change(function(){
             var layout = $(this).val();
             var container = $('#uwp_user_items_layout');
-            if (layout == 'grid') {
-                container.removeClass('uwp_listview');
-                container.addClass('uwp_gridview uwp_gridview_2col');
+            container.removeClass();
+            if (layout == 'list') {
+                container.addClass('uwp-users-list-wrap uwp_listview');
+            } else if (layout == '2col') {
+                container.addClass('uwp-users-list-wrap uwp_gridview uwp_gridview_2col');
+            } else if (layout == '3col') {
+                container.addClass('uwp-users-list-wrap uwp_gridview uwp_gridview_3col');
+            } else if (layout == '4col') {
+                container.addClass('uwp-users-list-wrap uwp_gridview uwp_gridview_4col');
+            } else if (layout == '5col') {
+                container.addClass('uwp-users-list-wrap uwp_gridview uwp_gridview_5col');
             } else {
-                container.removeClass('uwp_gridview uwp_gridview_2col');
-                container.addClass('uwp_listview');
+                container.addClass('uwp-users-list-wrap uwp_listview');
             }
         });
     });

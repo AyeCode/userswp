@@ -1,4 +1,5 @@
-.uwp_page {
+.uwp_page,
+.uwp_widgets {
   .uwp-login-form,
   .uwp-registration-form,
   .uwp-forgot-form,
@@ -155,5 +156,10 @@
   .uwp_multiselect_list .uwp-chosen-container-multi .chosen-choices li.search-choice {
     margin-top: 5px;
     margin-bottom: 5px;
+  }
+}
+.uwp_widgets {
+  h2 {
+    display: none;
   }
 }
