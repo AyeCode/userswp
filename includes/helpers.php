@@ -1407,6 +1407,15 @@ function get_uwp_users_list() {
 
 function uwp_file_upload_preview($field, $value, $removable = true) {
     $output = '';
+
+    if ($field->htmlvar_name == "uwp_banner_file") {
+        $htmlvar = "uwp_account_banner_thumb";
+    } elseif ($field->htmlvar_name == "uwp_avatar_file") {
+        $htmlvar = "uwp_account_avatar_thumb";
+    } else {
+        $htmlvar = $field->htmlvar_name;
+    }
+
     if ($value) {
         $file = basename( $value );
         $filetype = wp_check_filetype($file);
@@ -1415,7 +1424,7 @@ function uwp_file_upload_preview($field, $value, $removable = true) {
             $output .= '<div class="uwp_file_preview_wrap">';
             $output .= '<a href="'.$value.'" class="uwp_upload_file_preview"><img style="max-width:100px;" src="'.$value.'" /></a>';
             if ($removable) {
-                $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$field->htmlvar_name.'" class="uwp_upload_file_remove">'. __( 'Remove Image' , 'uwp' ).'</a>';    
+                $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$htmlvar.'" class="uwp_upload_file_remove">'. __( 'Remove Image' , 'uwp' ).'</a>';
             }
             $output .= '</div>';
             ?>
@@ -1424,7 +1433,7 @@ function uwp_file_upload_preview($field, $value, $removable = true) {
             $output .= '<div class="uwp_file_preview_wrap">';
             $output .= '<a href="'.$value.'" class="uwp_upload_file_preview">'.$file.'</a>';
             if ($removable) {
-                $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$field->htmlvar_name.'" class="uwp_upload_file_remove">'. __( 'Remove File' , 'uwp' ).'</a>';    
+                $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$htmlvar.'" class="uwp_upload_file_remove">'. __( 'Remove File' , 'uwp' ).'</a>';
             }
             $output .= '</div>';
             ?>
@@ -1762,9 +1771,14 @@ function is_uwp_profile_subtab($subtab = false) {
 function uwp_load_font_awesome() {
     //load font awesome
     global $wp_styles;
-    $srcs = array_map('basename', (array) wp_list_pluck($wp_styles->registered, 'src') );
-    if ( in_array('font-awesome.css', $srcs) || in_array('font-awesome.min.css', $srcs)  ) {
-        /* echo 'font-awesome.css registered'; */
+    if ($wp_styles) {
+        $srcs = array_map('basename', (array) wp_list_pluck($wp_styles->registered, 'src') );
+        if ( in_array('font-awesome.css', $srcs) || in_array('font-awesome.min.css', $srcs)  ) {
+            /* echo 'font-awesome.css registered'; */
+        } else {
+            wp_register_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), null);
+            wp_enqueue_style('font-awesome');
+        }
     } else {
         wp_register_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), null);
         wp_enqueue_style('font-awesome');
@@ -1893,4 +1907,126 @@ function uwp_always_nav_menu_visibility( $result, $option, $user )
     }
 
     return $result;
+}
+
+add_filter('user_profile_picture_description', 'uwp_admin_user_profile_picture_description');
+function uwp_admin_user_profile_picture_description($description) {
+    if (is_admin() && IS_PROFILE_PAGE) {
+        $user_id = get_current_user_id();
+        $avatar = uwp_get_usermeta($user_id, 'uwp_account_avatar_thumb', '');
+
+        if (!empty($avatar)) {
+            $description = sprintf( __( 'You can change your profile picture on your <a href="%s">Profile Page</a>.', 'uwp' ),
+                uwp_build_profile_tab_url( $user_id ));
+        }
+
+    }
+    return $description;
+}
+
+function uwp_admin_edit_banner_fields($user) {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE (form_type = 'avatar' OR form_type = 'banner') ORDER BY sort_order ASC");
+    if ($fields) {
+        ?>
+        <div class="uwp-profile-extra">
+            <table class="uwp-profile-extra-table form-table">
+                <?php
+                foreach ($fields as $field) {
+
+                    // Icon
+                    if ($field->field_icon) {
+                        $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
+                    } else {
+                        $icon = '';
+                    }
+
+                    if ($field->field_type == 'fieldset') {
+                        ?>
+                        <tr style="margin: 0; padding: 0">
+                            <th class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;">
+                                    <?php echo $icon.$field->site_title; ?></h3></th>
+                            <td></td>
+                        </tr>
+                        <?php
+                    } else { ?>
+                        <tr>
+                            <th class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?></th>
+                            <td class="uwp-profile-extra-value">
+                                <?php
+                                if ($field->htmlvar_name == "uwp_avatar_file") {
+                                    $value = uwp_get_usermeta($user->ID, "uwp_account_avatar_thumb", "");
+                                } elseif ($field->htmlvar_name == "uwp_banner_file") {
+                                    $value = uwp_get_usermeta($user->ID, "uwp_account_banner_thumb", "");
+                                } else {
+                                    $value = "";
+                                }
+                                ?>
+                                <?php echo uwp_file_upload_preview($field, $value); ?>
+                                <?php echo apply_filters("uwp_form_input_html_{$field->field_type}", "", $field, "", "banner"); ?>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                }
+                ?>
+            </table>
+        </div>
+        <?php
+    }
+}
+add_action('show_user_profile', 'uwp_admin_edit_banner_fields');
+add_action('edit_user_profile', 'uwp_admin_edit_banner_fields');
+
+function uwp_admin_edit_banner_fields_update($user_id) {
+    global $wpdb, $uwp_update_errors;
+    $table_name = $wpdb->prefix . 'uwp_form_fields';
+
+    $avatar_fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'avatar' ORDER BY sort_order ASC");
+    if ($avatar_fields) {
+        $result = uwp_validate_uploads($_FILES, 'avatar', true, $avatar_fields);
+        if (!is_wp_error($result)) {
+            foreach ($avatar_fields as $field) {
+                $value = $result[$field->htmlvar_name];
+                if ($value == '0' || !empty($value)) {
+                    if ($field->htmlvar_name == "uwp_avatar_file") {
+                        uwp_update_usermeta($user_id, "uwp_account_avatar_thumb", $value);
+                    }
+                }
+            }
+        } else {
+            $uwp_update_errors = $result->get_error_message();
+        }
+    }
+
+    $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'banner' ORDER BY sort_order ASC");
+    if ($fields) {
+        $result = uwp_validate_uploads($_FILES, 'banner', true, $fields);
+        if (!is_wp_error($result)) {
+            foreach ($fields as $field) {
+                $value = $result[$field->htmlvar_name];
+                if ($value == '0' || !empty($value)) {
+                    if ($field->htmlvar_name == "uwp_banner_file") {
+                        uwp_update_usermeta($user_id, "uwp_account_banner_thumb", $value);
+                    }
+                }
+            }
+        } else {
+            $uwp_update_errors = $result->get_error_message();
+        }
+    }
+}
+add_action('personal_options_update', 'uwp_admin_edit_banner_fields_update');
+add_action('edit_user_profile_update', 'uwp_admin_edit_banner_fields_update');
+
+add_action( 'user_profile_update_errors', 'uwp_admin_edit_banner_fields_validate', 20 );
+function uwp_admin_edit_banner_fields_validate(&$errors, $update = null, &$user  = null)
+{
+    global $uwp_update_errors;
+    if ($uwp_update_errors)
+    {
+        $errors->add('invalid_file', $uwp_update_errors);
+
+    }
 }

@@ -165,10 +165,11 @@ class Users_WP_Profile {
     }
 
     public function get_profile_extra_count($user) {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' AND field_type != 'fieldset' AND is_public = '1' AND show_in LIKE '%[more_info]%' ORDER BY sort_order ASC");
-        return count($fields);
+//        global $wpdb;
+//        $table_name = $wpdb->prefix . 'uwp_form_fields';
+//        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' AND field_type != 'fieldset' AND is_public = '1' AND show_in LIKE '%[more_info]%' ORDER BY sort_order ASC");
+//        return count($fields);
+        return '<i class="fa fa-user"></i>';
     }
 
     public function get_profile_extra($user) {
@@ -1230,16 +1231,14 @@ class Users_WP_Profile {
             <div class="uwp-user-sort">
                 <?php
                 $default_layout = uwp_get_option('users_default_layout', 'list');
-                if ($default_layout == 'list') {
-                    $layout = 'list';
-                } else {
-                    $layout = 'grid';
-                }
                 ?>
                 <form method="get" action="">
                     <select name="uwp_layout" id="uwp_layout">
-                        <option <?php selected( $layout, "list" ); ?> value="list">List View</option>
-                        <option <?php selected( $layout, "grid" ); ?> value="grid">Grid View</option>
+                        <option <?php selected( $default_layout, "list" ); ?> value="list">List View</option>
+                        <option <?php selected( $default_layout, "2col" ); ?> value="2col">Grid 2 Col</option>
+                        <option <?php selected( $default_layout, "3col" ); ?> value="3col">Grid 3 Col</option>
+                        <option <?php selected( $default_layout, "4col" ); ?> value="4col">Grid 4 Col</option>
+                        <option <?php selected( $default_layout, "5col" ); ?> value="5col">Grid 5 Col</option>
                     </select>
                     <?php
                     $sort_by = "";
