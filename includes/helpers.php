@@ -1416,6 +1416,17 @@ function uwp_file_upload_preview($field, $value, $removable = true) {
         $htmlvar = $field->htmlvar_name;
     }
 
+    // If is current user's profile (profile.php)
+    if ( is_admin() && defined('IS_PROFILE_PAGE') && IS_PROFILE_PAGE ) {
+        $user_id = get_current_user_id();
+        // If is another user's profile page
+    } elseif (is_admin() && ! empty($_GET['user_id']) && is_numeric($_GET['user_id']) ) {
+        $user_id = $_GET['user_id'];
+        // Otherwise something is wrong.
+    } else {
+        $user_id = get_current_user_id();
+    }
+
     if ($value) {
         $file = basename( $value );
         $filetype = wp_check_filetype($file);
@@ -1424,7 +1435,7 @@ function uwp_file_upload_preview($field, $value, $removable = true) {
             $output .= '<div class="uwp_file_preview_wrap">';
             $output .= '<a href="'.$value.'" class="uwp_upload_file_preview"><img style="max-width:100px;" src="'.$value.'" /></a>';
             if ($removable) {
-                $output .= '<a id="uwp_upload_file_remove" onclick="return confirm(\'are you sure?\')" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$htmlvar.'" class="uwp_upload_file_remove">'. __( 'Remove Image' , 'uwp' ).'</a>';
+                $output .= '<a id="uwp_upload_file_remove" onclick="return confirm(\'are you sure?\')" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$htmlvar.'" data-uid="'.$user_id.'" class="uwp_upload_file_remove">'. __( 'Remove Image' , 'uwp' ).'</a>';
             }
             $output .= '</div>';
             ?>
@@ -1433,7 +1444,7 @@ function uwp_file_upload_preview($field, $value, $removable = true) {
             $output .= '<div class="uwp_file_preview_wrap">';
             $output .= '<a href="'.$value.'" class="uwp_upload_file_preview">'.$file.'</a>';
             if ($removable) {
-                $output .= '<a id="uwp_upload_file_remove" onclick="return confirm(\'are you sure?\')" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$htmlvar.'" class="uwp_upload_file_remove">'. __( 'Remove File' , 'uwp' ).'</a>';
+                $output .= '<a id="uwp_upload_file_remove" onclick="return confirm(\'are you sure?\')" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$htmlvar.'" data-uid="'.$user_id.'" class="uwp_upload_file_remove">'. __( 'Remove File' , 'uwp' ).'</a>';
             }
             $output .= '</div>';
             ?>

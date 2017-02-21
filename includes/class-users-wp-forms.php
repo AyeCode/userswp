@@ -1029,7 +1029,18 @@ class Users_WP_Forms {
     public function uwp_upload_file_remove() {
 
         $htmlvar = strip_tags(esc_sql($_POST['htmlvar']));
-        uwp_update_usermeta(get_current_user_id(), $htmlvar, '');
+        $user_id = (int) strip_tags(esc_sql($_POST['uid']));
+        $permission = false;
+        if ($user_id == get_current_user_id()) {
+            $permission = true;
+        } else {
+            if (current_user_can('manage_options')) {
+                $permission = true;
+            }
+        }
+        if ($permission) {
+            uwp_update_usermeta($user_id, $htmlvar, '');
+        }
         die();
     }
     
