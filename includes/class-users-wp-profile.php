@@ -200,8 +200,16 @@ class Users_WP_Profile {
                         if (!in_array($show_type, $show_in)) {
                             continue;
                         }
-                        if ($field->is_public != '1') {
+                        if ($field->is_public == '0') {
                             continue;
+                        }
+
+                        if ($field->is_public == '2') {
+                            $field_name = $field->htmlvar_name.'_privacy';
+                            $val = uwp_get_usermeta($user->ID, $field_name, false);
+                            if ($val === '0') {
+                                continue;
+                            }
                         }
 
                         $value = $this->uwp_get_field_value($field, $user);
@@ -949,6 +957,8 @@ class Users_WP_Profile {
                                         onSelect: updateCoords,
                                         allowResize: true,
                                         allowSelect: false,
+                                        boxWidth: 650,   //Maximum width you want for your bigger images
+                                        boxHeight: 400,  //Maximum Height for your bigger images
                                         setSelect: [ 0, 0, uwp_full_width, uwp_full_height ],
                                         aspectRatio: uwp_full_width/uwp_full_height,
                                         trueSize: [uwp_true_width,uwp_true_height],

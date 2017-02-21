@@ -1240,10 +1240,10 @@ function get_change_validate_form_fields() {
     return $fields;
 }
 
-function get_account_form_fields() {
+function get_account_form_fields($extra_where = '') {
     global $wpdb;
     $table_name = $wpdb->prefix . 'uwp_form_fields';
-    $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_only_field = '0' ORDER BY sort_order ASC", array('account')));
+    $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_only_field = '0' " . $extra_where . " ORDER BY sort_order ASC", array('account', $extra_where)));
     return $fields;
 }
 
@@ -1424,7 +1424,7 @@ function uwp_file_upload_preview($field, $value, $removable = true) {
             $output .= '<div class="uwp_file_preview_wrap">';
             $output .= '<a href="'.$value.'" class="uwp_upload_file_preview"><img style="max-width:100px;" src="'.$value.'" /></a>';
             if ($removable) {
-                $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$htmlvar.'" class="uwp_upload_file_remove">'. __( 'Remove Image' , 'uwp' ).'</a>';
+                $output .= '<a id="uwp_upload_file_remove" onclick="return confirm(\'are you sure?\')" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$htmlvar.'" class="uwp_upload_file_remove">'. __( 'Remove Image' , 'uwp' ).'</a>';
             }
             $output .= '</div>';
             ?>
@@ -1433,7 +1433,7 @@ function uwp_file_upload_preview($field, $value, $removable = true) {
             $output .= '<div class="uwp_file_preview_wrap">';
             $output .= '<a href="'.$value.'" class="uwp_upload_file_preview">'.$file.'</a>';
             if ($removable) {
-                $output .= '<a id="uwp_upload_file_remove" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$htmlvar.'" class="uwp_upload_file_remove">'. __( 'Remove File' , 'uwp' ).'</a>';
+                $output .= '<a id="uwp_upload_file_remove" onclick="return confirm(\'are you sure?\')" style="display: block;margin: 5px 0;" href="#" data-htmlvar="'.$htmlvar.'" class="uwp_upload_file_remove">'. __( 'Remove File' , 'uwp' ).'</a>';
             }
             $output .= '</div>';
             ?>
@@ -1930,7 +1930,8 @@ function uwp_admin_edit_banner_fields($user) {
     $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE (form_type = 'avatar' OR form_type = 'banner') ORDER BY sort_order ASC");
     if ($fields) {
         ?>
-        <div class="uwp-profile-extra">
+        <div class="uwp-profile-extra uwp_page">
+            <?php do_action('uwp_admin_profile_edit', $user ); ?>
             <table class="uwp-profile-extra-table form-table">
                 <?php
                 foreach ($fields as $field) {
@@ -1964,7 +1965,37 @@ function uwp_admin_edit_banner_fields($user) {
                                 }
                                 ?>
                                 <?php echo uwp_file_upload_preview($field, $value); ?>
-                                <?php echo apply_filters("uwp_form_input_html_{$field->field_type}", "", $field, "", "banner"); ?>
+                                <?php
+                                if ($field->htmlvar_name == "uwp_avatar_file") {
+                                    if (!empty($value)) {
+                                        ?>
+                                        <a class="uwp-profile-modal-form-trigger" data-type="avatar" href="#">
+                                            <?php echo __("Change Avatar", "uwp"); ?>
+                                        </a>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <a class="uwp-profile-modal-form-trigger" data-type="avatar" href="#">
+                                            <?php echo __("Upload Avatar", "uwp"); ?>
+                                        </a>
+                                        <?php
+                                    }
+                                } elseif ($field->htmlvar_name == "uwp_banner_file") {
+                                    if (!empty($value)) {
+                                        ?>
+                                        <a class="uwp-profile-modal-form-trigger" data-type="banner" href="#">
+                                            <?php echo __("Change Banner", "uwp"); ?>
+                                        </a>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <a class="uwp-profile-modal-form-trigger" data-type="banner" href="#">
+                                            <?php echo __("Upload Banner", "uwp"); ?>
+                                        </a>
+                                        <?php
+                                    }
+                                }
+                                ?>
                             </td>
                         </tr>
                         <?php
@@ -1979,54 +2010,147 @@ function uwp_admin_edit_banner_fields($user) {
 add_action('show_user_profile', 'uwp_admin_edit_banner_fields');
 add_action('edit_user_profile', 'uwp_admin_edit_banner_fields');
 
-function uwp_admin_edit_banner_fields_update($user_id) {
-    global $wpdb, $uwp_update_errors;
-    $table_name = $wpdb->prefix . 'uwp_form_fields';
 
-    $avatar_fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'avatar' ORDER BY sort_order ASC");
-    if ($avatar_fields) {
-        $result = uwp_validate_uploads($_FILES, 'avatar', true, $avatar_fields);
-        if (!is_wp_error($result)) {
-            foreach ($avatar_fields as $field) {
-                $value = $result[$field->htmlvar_name];
-                if ($value == '0' || !empty($value)) {
-                    if ($field->htmlvar_name == "uwp_avatar_file") {
-                        uwp_update_usermeta($user_id, "uwp_account_avatar_thumb", $value);
-                    }
-                }
-            }
-        } else {
-            $uwp_update_errors = $result->get_error_message();
-        }
+
+// Privacy
+add_filter('uwp_account_page_title', 'uwp_account_privacy_page_title', 10, 2);
+function uwp_account_privacy_page_title($title, $type) {
+    if ($type == 'privacy') {
+        $title = __( 'Privacy', 'uwp' );
     }
 
-    $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'banner' ORDER BY sort_order ASC");
-    if ($fields) {
-        $result = uwp_validate_uploads($_FILES, 'banner', true, $fields);
-        if (!is_wp_error($result)) {
-            foreach ($fields as $field) {
-                $value = $result[$field->htmlvar_name];
-                if ($value == '0' || !empty($value)) {
-                    if ($field->htmlvar_name == "uwp_banner_file") {
-                        uwp_update_usermeta($user_id, "uwp_account_banner_thumb", $value);
-                    }
-                }
-            }
-        } else {
-            $uwp_update_errors = $result->get_error_message();
+    return $title;
+}
+
+add_action('uwp_account_form_display', 'uwp_account_privacy_edit_form_display');
+function uwp_account_privacy_edit_form_display($type) {
+    if ($type == 'privacy') {
+        echo '<div class="uwp-account-form uwp_wc_form">';
+        $extra_where = "AND is_public='2'";
+        $fields = get_account_form_fields($extra_where);
+        if ($fields) {
+            ?>
+            <div class="uwp-profile-extra">
+                <div class="uwp-profile-extra-div form-table">
+                    <form class="uwp-account-form uwp_form" method="post">
+                        <div class="uwp-profile-extra-wrap">
+                            <div class="uwp-profile-extra-key" style="font-weight: bold;">
+                                <?php echo __("Field", "uwp") ?>
+                            </div>
+                            <div class="uwp-profile-extra-value" style="font-weight: bold;">
+                                <?php echo __("Is Public?", "uwp") ?>
+                            </div>
+                        </div>
+                <?php foreach ($fields as $field) { ?>
+                        <div class="uwp-profile-extra-wrap">
+                            <div class="uwp-profile-extra-key"><?php echo $field->site_title; ?>
+                                <span class="uwp-profile-extra-sep">:</span></div>
+                            <div class="uwp-profile-extra-value">
+                                <?php
+                                $user_id = get_current_user_id();
+                                $field_name = $field->htmlvar_name.'_privacy';
+                                $value = uwp_get_usermeta($user_id, $field_name, false);
+                                if ($value === false) {
+                                    $value = '1';
+                                }
+                                ?>
+                                <select name="<?php echo $field_name; ?>" class="uwp_privacy_field" style="margin: 0;">
+                                    <option value="0" <?php selected( $value, "0" ); ?>><?php echo __("No", "uwp") ?></option>
+                                    <option value="1" <?php selected( $value, "1" ); ?>><?php echo __("Yes", "uwp") ?></option>
+                                </select>
+                            </div>
+                        </div>
+                <?php } ?>
+                        <input type="hidden" name="uwp_privacy_nonce" value="<?php echo wp_create_nonce( 'uwp-privacy-nonce' ); ?>" />
+                        <input name="uwp_privacy_submit" value="<?php echo __( 'Submit', 'uwp' ); ?>" type="submit">
+                    </form>
+                </div>
+            </div>
+            <?php
         }
+        echo '</div>';
     }
 }
-add_action('personal_options_update', 'uwp_admin_edit_banner_fields_update');
-add_action('edit_user_profile_update', 'uwp_admin_edit_banner_fields_update');
 
-add_action( 'user_profile_update_errors', 'uwp_admin_edit_banner_fields_validate', 20 );
-function uwp_admin_edit_banner_fields_validate(&$errors, $update = null, &$user  = null)
-{
-    global $uwp_update_errors;
-    if ($uwp_update_errors)
-    {
-        $errors->add('invalid_file', $uwp_update_errors);
+add_action('uwp_account_menu_display', 'uwp_add_account_menu_links');
+function uwp_add_account_menu_links() {
+
+    if (isset($_GET['type'])) {
+        $type = strip_tags(esc_sql($_GET['type']));
+    } else {
+        $type = 'account';
+    }
+
+    $account_page = uwp_get_option('account_page', false);
+    $account_page_link = get_permalink($account_page);
+
+    $account_available_tabs = uwp_account_get_available_tabs();
+
+    if (!is_array($account_available_tabs) || count($account_available_tabs) <= 1) {
+        return;
+    }
+
+    echo '<ul class="uwp_account_menu">';
+
+    foreach( $account_available_tabs as $tab_id => $tab ) {
+
+        if ($tab_id == 'account') {
+            $tab_url = $account_page_link;
+        } else {
+            $tab_url = add_query_arg(array(
+                'type' => $tab_id,
+            ), $account_page_link);
+        }
+
+        $active = $type == $tab_id ? ' active' : '';
+        ?>
+        <li id="uwp-account-<?php echo $tab_id; ?>">
+            <a class="<?php echo $active; ?>" href="<?php echo esc_url( $tab_url ); ?>">
+                <i class="<?php echo $tab['icon']; ?>"></i> <?php echo $tab['title']; ?>
+            </a>
+        </li>
+        <?php
+    }
+
+    echo '</ul>';
+}
+
+function uwp_account_get_available_tabs() {
+
+    $tabs = array();
+
+    $tabs['account']  = array(
+        'title' => __( 'Edit Account', 'uwp' ),
+        'icon' => 'fa fa-user',
+    );
+
+    $tabs['privacy']  = array(
+        'title' => __( 'Privacy', 'uwp' ),
+        'icon' => 'fa fa-lock',
+    );
+
+    return apply_filters( 'uwp_account_available_tabs', $tabs );
+}
+
+add_action('init', 'uwp_privacy_submit_handler');
+function uwp_privacy_submit_handler() {
+    if (isset($_POST['uwp_privacy_submit'])) {
+        if( ! isset( $_POST['uwp_privacy_nonce'] ) || ! wp_verify_nonce( $_POST['uwp_privacy_nonce'], 'uwp-privacy-nonce' ) ) {
+            return;
+        }
+
+        $extra_where = "AND is_public='2'";
+        $fields = get_account_form_fields($extra_where);
+        if ($fields) {
+            foreach ($fields as $field) {
+                $field_name = $field->htmlvar_name.'_privacy';
+                if (isset($_POST[$field_name])) {
+                    $value = strip_tags(esc_sql($_POST[$field_name]));
+                    $user_id = get_current_user_id();
+                    uwp_update_usermeta($user_id, $field_name, $value);
+                }
+            }
+        }
 
     }
 }

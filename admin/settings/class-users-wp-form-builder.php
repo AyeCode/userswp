@@ -896,18 +896,17 @@ class Users_WP_Form_Builder {
                                     </div>
                                 </label>
                                 <div class="uwp-input-wrap uwp-switch">
+                                    <?php
+                                    if (!$value) {
+                                        $value = "0";
+                                    }
+                                    ?>
 
-                                    <input type="radio" id="is_public_yes<?php echo $radio_id;?>" name="is_public" class="uwp-ri-enabled"  value="1"
-                                        <?php if ($value == '1') {
-                                            echo 'checked';
-                                        } ?>/>
-                                    <label for="is_public_yes<?php echo $radio_id;?>" class="uwp-cb-enable"><span><?php _e('Yes', 'uwp'); ?></span></label>
-
-                                    <input type="radio" id="is_public_no<?php echo $radio_id;?>" name="is_public" class="uwp-ri-disabled" value="0"
-                                        <?php if ($value == '0' || !$value) {
-                                            echo 'checked';
-                                        } ?>/>
-                                    <label for="is_public_no<?php echo $radio_id;?>" class="uwp-cb-disable"><span><?php _e('No', 'uwp'); ?></span></label>
+                                    <select name="is_public" id="is_public">
+                                        <option value="0" <?php selected( $value, "0" ); ?>><?php echo __("No", "uwp") ?></option>
+                                        <option value="1" <?php selected( $value, "1" ); ?>><?php echo __("Yes", "uwp") ?></option>
+                                        <option value="2" <?php selected( $value, "2" ); ?>><?php echo __("Let User Decide", "uwp") ?></option>
+                                    </select>
 
                                 </div>
                             </li>
