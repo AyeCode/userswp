@@ -12,6 +12,7 @@
         <?php do_action('uwp_template_form_title_before', 'account'); ?>
         <h2><?php echo apply_filters('uwp_account_page_title', __( 'Edit Account', 'uwp' ), $type); ?></h2>
         <?php do_action('uwp_template_display_notices', 'account'); ?>
+        <?php do_action('uwp_account_menu_display'); ?>
         <?php do_action('uwp_account_form_display', $type); ?>
     </div>
 </div>

@@ -87,6 +87,8 @@ class Users_WP_Admin {
         if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
             wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
             wp_enqueue_style( 'jquery-ui' );
+            wp_enqueue_style( 'jcrop' );
+            wp_enqueue_style( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/users-wp.css', array(), null, 'all' );
             wp_enqueue_style( "uwp_timepicker_css", plugin_dir_url( dirname(__FILE__) ) . 'public/assets/css/jquery.ui.timepicker.css', array(), null, 'all' );
         }
         wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp-admin.css', array(), $this->version, 'all' );
@@ -116,6 +118,8 @@ class Users_WP_Admin {
             wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
             wp_enqueue_script( "uwp_timepicker", plugin_dir_url( dirname(__FILE__) ) . 'public/assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
             wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.js', array( 'jquery' ), null, false );
+            wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
+            wp_enqueue_script( 'jcrop', array( 'jquery' ) );
         }
         wp_enqueue_script('jquery-ui-sortable');
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.js', array( 'jquery' ), null, false );

@@ -704,7 +704,17 @@ class Users_WP_Forms {
         if (!is_user_logged_in()) {
             return false;
         }
-        $user_id = get_current_user_id();
+
+        // If is current user's profile (profile.php)
+        if ( is_admin() && defined('IS_PROFILE_PAGE') && IS_PROFILE_PAGE ) {
+            $user_id = get_current_user_id();
+            // If is another user's profile page
+        } elseif (is_admin() && ! empty($_GET['user_id']) && is_numeric($_GET['user_id']) ) {
+            $user_id = $_GET['user_id'];
+            // Otherwise something is wrong.
+        } else {
+            $user_id = get_current_user_id();
+        }
         $image_url = $data['uwp_crop'];
         
         $errors = new WP_Error();
@@ -749,8 +759,15 @@ class Users_WP_Forms {
             }
         }
 
-
-        $profile_url = uwp_build_profile_tab_url($user_id);
+        if (is_admin()) {
+            if ($user_id == get_current_user_id()) {
+                $profile_url = admin_url( 'profile.php' );
+            } else {
+                $profile_url = admin_url( 'user-edit.php?user_id='.$user_id );
+            }
+        } else {
+            $profile_url = uwp_build_profile_tab_url($user_id);
+        }
         return $profile_url;
 
     }
@@ -1012,7 +1029,18 @@ class Users_WP_Forms {
     public function uwp_upload_file_remove() {
 
         $htmlvar = strip_tags(esc_sql($_POST['htmlvar']));
-        uwp_update_usermeta(get_current_user_id(), $htmlvar, '');
+        $user_id = (int) strip_tags(esc_sql($_POST['uid']));
+        $permission = false;
+        if ($user_id == get_current_user_id()) {
+            $permission = true;
+        } else {
+            if (current_user_can('manage_options')) {
+                $permission = true;
+            }
+        }
+        if ($permission) {
+            uwp_update_usermeta($user_id, $htmlvar, '');
+        }
         die();
     }
     

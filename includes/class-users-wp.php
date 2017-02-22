@@ -300,6 +300,7 @@ class Users_WP {
         $this->loader->add_action( 'wp_ajax_uwp_ajax_image_crop_popup_form', $profile, 'uwp_ajax_image_crop_popup_form' );
         $this->loader->add_action( 'wp_head', $profile, 'uwp_define_ajaxurl' );
         $this->loader->add_action( 'uwp_profile_header', $profile, 'uwp_image_crop_init', 10, 1 );
+        $this->loader->add_action( 'uwp_admin_profile_edit', $profile, 'uwp_image_crop_init', 10, 1 );
 
         // Profile Tabs
         $this->loader->add_action( 'uwp_profile_content', $profile, 'get_profile_tabs_content', 10, 1 );

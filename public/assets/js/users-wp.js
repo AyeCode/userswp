@@ -77,15 +77,16 @@ jQuery(window).load(function() {
             event.preventDefault();
 
             var htmlvar =  $( this ).data( 'htmlvar' );
+            var uid =  $( this ).data( 'uid' );
             
             var data = {
                 'action': 'uwp_upload_file_remove',
-                'htmlvar': htmlvar
+                'htmlvar': htmlvar,
+                'uid': uid
             };
 
             jQuery.post(ajaxurl, data, function(response) {
-                $(".uwp_upload_file_preview").remove();
-                $(this).remove();
+                $(this).parent(".uwp_file_preview_wrap").remove();
             });
         });
     });
