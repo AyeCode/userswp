@@ -86,7 +86,7 @@ jQuery(window).load(function() {
             };
 
             jQuery.post(ajaxurl, data, function(response) {
-                $(this).parent(".uwp_file_preview_wrap").remove();
+                $("#"+htmlvar).closest("td").find(".uwp_file_preview_wrap").remove();
             });
         });
     });
