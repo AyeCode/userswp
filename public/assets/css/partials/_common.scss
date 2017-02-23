@@ -188,3 +188,14 @@
     border: none;
   }
 }
+.uwp_widgets {
+  .uwp-login,
+  .uwp-registration,
+  .uwp-forgot,
+  .uwp-account {
+    background: transparent;
+    max-width: none;
+    padding: 0;
+    width: auto;
+  }
+}

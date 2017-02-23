@@ -50,7 +50,8 @@ class Users_WP_Admin_Settings {
 
                     <?php if (count($settings_array[$page]) > 1) { ?>
 
-                        <ul class="item-list-tabs-ul">
+                        <div class="wp-filter" style="margin-bottom: 5px">
+                        <ul class="filter-links">
                         <?php
                         foreach( $settings_array[$page] as $tab_id => $tab_name ) {
 
@@ -62,22 +63,25 @@ class Users_WP_Admin_Settings {
 
                             $active = $active_tab == $tab_id ? ' current selected' : '';
                             ?>
-                            <li id="uwp-<?php echo $tab_id; ?>-li" class="<?php echo $active; ?>">
-                                <a id="uwp-<?php echo $tab_id; ?>" href="<?php echo esc_url( $tab_url ); ?>"><?php echo esc_html( $tab_name ); ?></a>
+                            <li id="uwp-<?php echo $tab_id; ?>-li">
+                                <a class="<?php echo $active; ?>" id="uwp-<?php echo $tab_id; ?>" href="<?php echo esc_url( $tab_url ); ?>"><?php echo esc_html( $tab_name ); ?></a>
                             </li>
                             <?php
                         }
                         ?>
                         </ul>
+                        </div>
 
                     <?php } ?>
 
-                    <div class="tab-content">
-                        <?php
-                        // {current page}_settings_{active tab}_tab_content
-                        // ex: uwp_settings_main_tab_content
-                        do_action($page.'_settings_'.$active_tab.'_tab_content', uwp_display_form());
-                        ?>
+                    <div class="postbox">
+                        <div class="tab-content inside">
+                            <?php
+                            // {current page}_settings_{active tab}_tab_content
+                            // ex: uwp_settings_main_tab_content
+                            do_action($page.'_settings_'.$active_tab.'_tab_content', uwp_display_form());
+                            ?>
+                        </div>
                     </div>
                 </div>
 
