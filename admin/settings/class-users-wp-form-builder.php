@@ -26,7 +26,7 @@ class Users_WP_Form_Builder {
 
     public function uwp_form_builder($default_tab = 'account')
     {
-        $form_type = (isset($_REQUEST['subtab']) && $_REQUEST['subtab'] != '') ? sanitize_text_field($_REQUEST['subtab']) : $default_tab;
+        $form_type = (isset($_REQUEST['tab']) && $_REQUEST['tab'] != '') ? sanitize_text_field($_REQUEST['tab']) : $default_tab;
         ?>
         <div class="uwp-panel-heading">
             <h3><?php echo apply_filters('uwp_form_builder_panel_head', '');?></h3>
@@ -657,7 +657,7 @@ class Users_WP_Form_Builder {
 
         if (!$form_type) {
             if (!isset($field_info->form_type)) {
-                $form_type = sanitize_text_field($_REQUEST['subtab']);
+                $form_type = sanitize_text_field($_REQUEST['tab']);
             } else {
                 $form_type = $field_info->form_type;
             }

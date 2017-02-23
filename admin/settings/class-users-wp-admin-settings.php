@@ -73,6 +73,8 @@ class Users_WP_Admin_Settings {
                         </div>
 
                     <?php } ?>
+                    
+                    <?php do_action($page.'_settings_'.$active_tab.'_tab_content_before'); ?>
 
                     <div class="postbox">
                         <div class="tab-content inside">
@@ -258,37 +260,47 @@ class Users_WP_Admin_Settings {
         <?php
     }
 
-    public function get_form_builder_content() {
-        $form_builder = new Users_WP_Form_Builder();
+    public function get_form_builder_tabs() {
+        $tab = 'account';
 
-        $subtab = 'account';
-
-        if (isset($_GET['subtab'])) {
-            $subtab = $_GET['subtab'];
+        if (isset($_GET['tab'])) {
+            $tab = $_GET['tab'];
         }
 
         ?>
-        <div class="item-list-sub-tabs">
-            <ul class="item-list-tabs-ul">
-                <li id="uwp-form-builder-account-li" class="<?php if ($subtab == 'account') { echo "current selected"; } ?>">
-                    <a id="uwp-form-builder-account" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'account')); ?>"><?php echo __( 'Account', 'uwp' ); ?></a>
+
+        <div class="wp-filter" style="margin-bottom: 5px">
+            <ul class="filter-links">
+                <li id="uwp-form-builder-account-li">
+                    <a id="uwp-form-builder-account" class="<?php if ($tab == 'account') { echo "current selected"; } ?>" href="<?php echo add_query_arg(array('tab' => 'account')); ?>"><?php echo __( 'Account', 'uwp' ); ?></a>
                 </li>
-                <li id="uwp-form-builder-register-li" class="<?php if ($subtab == 'register') { echo "current selected"; } ?>">
-                    <a id="uwp-form-builder-register" href="<?php echo add_query_arg(array('tab' => 'form_builder', 'subtab' => 'register')); ?>"><?php echo __( 'Register', 'uwp' ); ?></a>
+                <li id="uwp-form-builder-register-li">
+                    <a id="uwp-form-builder-register" class="<?php if ($tab == 'register') { echo "current selected"; } ?>" href="<?php echo add_query_arg(array('tab' => 'register')); ?>"><?php echo __( 'Register', 'uwp' ); ?></a>
                 </li>
             </ul>
         </div>
         <?php
-        if ($subtab == 'account') {
+    }
+
+    public function get_form_builder_content() {
+        $form_builder = new Users_WP_Form_Builder();
+
+        $tab = 'account';
+
+        if (isset($_GET['tab'])) {
+            $tab = $_GET['tab'];
+        }
+
+        if ($tab == 'account') {
             ?>
             <h3 class=""><?php echo __( 'Manage Account Form Fields', 'uwp' ); ?></h3>
             <?php
-            $form_builder->uwp_form_builder($subtab);
-        } elseif ($subtab == 'register') {
+            $form_builder->uwp_form_builder($tab);
+        } elseif ($tab == 'register') {
             ?>
             <h3 class=""><?php echo __( 'Manage Register Form Fields', 'uwp' ); ?></h3>
             <?php
-            $form_builder->uwp_form_builder($subtab);
+            $form_builder->uwp_form_builder($tab);
         }
     }
 
