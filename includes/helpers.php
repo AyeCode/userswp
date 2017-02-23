@@ -2135,10 +2135,15 @@ function uwp_account_get_available_tabs() {
         'icon' => 'fa fa-user',
     );
 
-    $tabs['privacy']  = array(
-        'title' => __( 'Privacy', 'uwp' ),
-        'icon' => 'fa fa-lock',
-    );
+    $extra_where = "AND is_public='2'";
+    $fields = get_account_form_fields($extra_where);
+
+    if (is_array($fields) && count($fields) > 0) {
+        $tabs['privacy']  = array(
+            'title' => __( 'Privacy', 'uwp' ),
+            'icon' => 'fa fa-lock',
+        );
+    }
 
     return apply_filters( 'uwp_account_available_tabs', $tabs );
 }

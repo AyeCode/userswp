@@ -254,6 +254,7 @@ function save_field(id) {
             }
             else {
                 jQuery('#licontainer_' + id).replaceWith(jQuery.trim(result));
+                uwp_chosen();
 
                 var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type=custom_fields';
 
