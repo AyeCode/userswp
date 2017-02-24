@@ -190,83 +190,83 @@ class Users_WP_Profile {
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' ORDER BY sort_order ASC");
+        $wrap_html = false;
         if ($fields) {
-            ?>
-            <div class="uwp-profile-extra">
-                <div class="uwp-profile-extra-div form-table">
-                    <?php
-                    foreach ($fields as $field) {
-                        $show_in = explode(',',$field->show_in);
-                        if (!in_array($show_type, $show_in)) {
-                            continue;
-                        }
-                        if ($field->is_public == '0') {
-                            continue;
-                        }
+            foreach ($fields as $field) {
+                $show_in = explode(',',$field->show_in);
+                if (!in_array($show_type, $show_in)) {
+                    continue;
+                }
+                if ($field->is_public == '0') {
+                    continue;
+                }
 
-                        if ($field->is_public == '2') {
-                            $field_name = $field->htmlvar_name.'_privacy';
-                            $val = uwp_get_usermeta($user->ID, $field_name, false);
-                            if ($val === '0') {
-                                continue;
-                            }
-                        }
-
-                        $value = $this->uwp_get_field_value($field, $user);
-
-                        // Icon
-                        if ($field->field_icon) {
-                            $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
-                        } else {
-                            $icon = '';
-                        }
-
-                        if ($field->field_type == 'fieldset') {
-                            ?>
-                            <div class="uwp-profile-extra-wrap" style="margin: 0; padding: 0">
-                                <div class="uwp-profile-extra-key uwp-profile-extra-full" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></div>
-                            </div>
-                            <?php
-                        } else {
-                            if ($value) {
-                                ?>
-                                <div class="uwp-profile-extra-wrap">
-                                    <div class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
-                                    <div class="uwp-profile-extra-value">
-                                        <?php
-                                        if ($field->htmlvar_name == 'uwp_account_bio') {
-                                            $is_profile_page = is_uwp_profile_page();
-                                            if ($value) {
-                                                ?>
-                                                <div class="uwp-profile-bio <?php if ($is_profile_page) { echo "uwp_more"; } ?>">
-                                                    <?php
-                                                    if ($is_profile_page) {
-                                                        echo $value;
-                                                    } else {
-                                                        echo wp_trim_words( $value, 20, '...' );
-                                                    }
-                                                    ?>
-                                                </div>
-                                                <?php
-                                            }
-                                        } else {
-                                            echo $value;
-                                        }
-                                        ?>
-                                    </div>
-                                </div>
-                                <?php
-                            }
-                        }
+                if ($field->is_public == '2') {
+                    $field_name = $field->htmlvar_name.'_privacy';
+                    $val = uwp_get_usermeta($user->ID, $field_name, false);
+                    if ($val === '0') {
+                        continue;
                     }
+                }
+
+                $value = $this->uwp_get_field_value($field, $user);
+
+                // Icon
+                if ($field->field_icon) {
+                    $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
+                } else {
+                    $icon = '';
+                }
+
+                if ($field->field_type == 'fieldset') {
                     ?>
-                </div>
-            </div>
-            <?php
+                    <div class="uwp-profile-extra-wrap" style="margin: 0; padding: 0">
+                        <div class="uwp-profile-extra-key uwp-profile-extra-full" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></div>
+                    </div>
+                    <?php
+                } else {
+                    if ($value) {
+                        $wrap_html = true;
+                        ?>
+                        <div class="uwp-profile-extra-wrap">
+                            <div class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
+                            <div class="uwp-profile-extra-value">
+                                <?php
+                                if ($field->htmlvar_name == 'uwp_account_bio') {
+                                    $is_profile_page = is_uwp_profile_page();
+                                    if ($value) {
+                                        ?>
+                                        <div class="uwp-profile-bio <?php if ($is_profile_page) { echo "uwp_more"; } ?>">
+                                            <?php
+                                            if ($is_profile_page) {
+                                                echo $value;
+                                            } else {
+                                                echo wp_trim_words( $value, 20, '...' );
+                                            }
+                                            ?>
+                                        </div>
+                                        <?php
+                                    }
+                                } else {
+                                    echo $value;
+                                }
+                                ?>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                }
+            }
         }
         $output = ob_get_contents();
+        $wrapped_output = '';
+        if ($wrap_html) {
+            $wrapped_output .= '<div class="uwp-profile-extra"><div class="uwp-profile-extra-div form-table">';
+            $wrapped_output .= $output;
+            $wrapped_output .= '</div></div>';
+        }
         ob_end_clean();
-        return trim($output);
+        return trim($wrapped_output);
     }
     
 
