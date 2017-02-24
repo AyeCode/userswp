@@ -208,6 +208,7 @@ class Users_WP {
         $this->loader->add_action( 'uwp_settings_change_tab_content', $plugin_admin_settings, 'generic_display_form' );
         $this->loader->add_action( 'uwp_settings_uninstall_tab_content', $plugin_admin_settings, 'generic_display_form' );
 
+        $this->loader->add_action( 'uwp_form_builder_settings_main_tab_content_before', $plugin_admin_settings, 'get_form_builder_tabs' );
         $this->loader->add_action( 'uwp_form_builder_settings_main_tab_content', $plugin_admin_settings, 'get_form_builder_content' );
         $this->loader->add_filter( 'uwp_display_form_title', $plugin_admin_settings, 'display_form_title', 10, 3 );
         $this->loader->add_action( 'uwp_notifications_settings_main_tab_content', $plugin_admin_settings, 'get_notifications_content' );

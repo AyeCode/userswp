@@ -805,11 +805,11 @@ class Users_WP_Profile {
                                     <input type="hidden" name="h" value="" id="<?php echo $type; ?>-h" />
                                     <input type="hidden" id="uwp-<?php echo $type; ?>-crop-image" name="uwp_crop" value="<?php echo $image_url; ?>" />
                                     <input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp-crop-nonce' ); ?>" />
-                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="<?php echo __('Apply', 'uwp'); ?>" id="save_uwp_<?php echo $type; ?>" />
+                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="<?php echo __('Apply', 'uwp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
                                 </form>
                             </div>
                         </div>
-                        <button type="button" data-type="<?php echo $type; ?>" class="uwp_modal_btn uwp-modal-close" data-dismiss="modal">Cancel</button>
+                        <button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -871,11 +871,11 @@ class Users_WP_Profile {
                         <div class="uwp-<?php echo $type; ?>-crop-p-wrap">
                             <div id="<?php echo $type; ?>-crop-actions">
                                 <form class="uwp-crop-form" method="post">
-                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" disabled="disabled" value="<?php echo __('Apply', 'uwp'); ?>" id="save_uwp_<?php echo $type; ?>" />
+                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" disabled="disabled" value="<?php echo __('Apply', 'uwp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
                                 </form>
                             </div>
                         </div>
-                        <button type="button" data-type="<?php echo $type; ?>" class="uwp_modal_btn uwp-modal-close" data-dismiss="modal">Cancel</button>
+                        <button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>

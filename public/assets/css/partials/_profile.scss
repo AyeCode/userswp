@@ -301,6 +301,7 @@
     }
     .uwp-item-actions {
       margin-top: 2px;
+      overflow: hidden;
       .geodir-addtofav {
         float: left;
       }
@@ -324,6 +325,9 @@
       }
       .gd-star-rating {
         float: left;
+      }
+      .geodir-addtofav {
+        margin-left: 10px;
       }
     }
     .uwp_more_content span {

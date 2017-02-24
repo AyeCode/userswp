@@ -97,6 +97,9 @@
   .uwp-modal-content .jcrop-holder img {
     max-width: none;
   }
+  .jcrop-keymgr {
+    opacity: 0;
+  }
 }
 
 .uwp_page {
@@ -207,7 +210,7 @@
   }
 
   .uwp-bs-modal-title {
-    margin-bottom: 0;
+    margin: 0;
     padding: 0;
     line-height: 1.42857143;
   }

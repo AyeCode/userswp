@@ -56,3 +56,12 @@ h3.users_wp_section_heading {
   padding-top: 5px;
   display: block;
 }
+.item-list-tabs {
+  .filter-links {
+    a, a:hover, a:active, a:focus {
+      outline: 0;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+    }
+  }
+}
