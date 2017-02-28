@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UsersWP 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-27 17:05+0530\n"
-"PO-Revision-Date: 2017-02-27 17:05+0530\n"
+"POT-Creation-Date: 2017-02-28 15:59+0530\n"
+"PO-Revision-Date: 2017-02-28 15:59+0530\n"
 "Last-Translator: \n"
 "Language-Team: GeoDirectory <info@wpgeodirectory.com>\n"
 "Language: en_US\n"
@@ -219,475 +219,475 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:296
+#: admin/settings/class-users-wp-admin-settings.php:298
 msgid "Manage Account Form Fields"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:301
+#: admin/settings/class-users-wp-admin-settings.php:303
 msgid "Manage Register Form Fields"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:321
+#: admin/settings/class-users-wp-admin-settings.php:325
 msgid "Email Notifications"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:326
+#: admin/settings/class-users-wp-admin-settings.php:330
 msgid "List of usable shortcodes"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:406
+#: admin/settings/class-users-wp-admin-settings.php:410
 msgid "User Profile Page"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:407
+#: admin/settings/class-users-wp-admin-settings.php:411
 msgid ""
 "This is the front end user's profile page. This page automatically override "
 "the default WordPress author page."
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:411
-#: admin/settings/class-users-wp-admin-settings.php:421
-#: admin/settings/class-users-wp-admin-settings.php:431
-#: admin/settings/class-users-wp-admin-settings.php:441
-#: admin/settings/class-users-wp-admin-settings.php:451
-#: admin/settings/class-users-wp-admin-settings.php:461
-#: admin/settings/class-users-wp-admin-settings.php:471
-#: admin/settings/class-users-wp-admin-settings.php:481
-#: admin/settings/class-users-wp-admin-settings.php:522
-#: admin/settings/class-users-wp-admin-settings.php:532
+#: admin/settings/class-users-wp-admin-settings.php:415
+#: admin/settings/class-users-wp-admin-settings.php:425
+#: admin/settings/class-users-wp-admin-settings.php:435
+#: admin/settings/class-users-wp-admin-settings.php:445
+#: admin/settings/class-users-wp-admin-settings.php:455
+#: admin/settings/class-users-wp-admin-settings.php:465
+#: admin/settings/class-users-wp-admin-settings.php:475
+#: admin/settings/class-users-wp-admin-settings.php:485
+#: admin/settings/class-users-wp-admin-settings.php:526
+#: admin/settings/class-users-wp-admin-settings.php:536
 msgid "Select a page"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:416
+#: admin/settings/class-users-wp-admin-settings.php:420
 msgid "Register Page"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:417
+#: admin/settings/class-users-wp-admin-settings.php:421
 msgid ""
 "This is the front end register page. This is where users creates their "
 "account."
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:426
+#: admin/settings/class-users-wp-admin-settings.php:430
 msgid "Login Page"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:427
+#: admin/settings/class-users-wp-admin-settings.php:431
 msgid ""
 "This is the front end login page. This is where users will login after "
 "creating their account."
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:436
+#: admin/settings/class-users-wp-admin-settings.php:440
 msgid "Account Page"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:437
+#: admin/settings/class-users-wp-admin-settings.php:441
 msgid ""
 "This is the front end account page. This is where users can edit their "
 "account."
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:446
+#: admin/settings/class-users-wp-admin-settings.php:450
 msgid "Change Password Page"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:447
+#: admin/settings/class-users-wp-admin-settings.php:451
 msgid "This is the front end Change Password page."
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:456
+#: admin/settings/class-users-wp-admin-settings.php:460
 msgid "Forgot Password Page"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:457
+#: admin/settings/class-users-wp-admin-settings.php:461
 msgid ""
 "This is the front end Forgot Password page. This is the page where users are "
 "sent to reset their password when they lose it."
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:466
+#: admin/settings/class-users-wp-admin-settings.php:470
 msgid "Reset Password Page"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:467
+#: admin/settings/class-users-wp-admin-settings.php:471
 msgid ""
 "This is the front end Reset Password page. This is the page where users can "
 "reset their password when they lose it."
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:476
+#: admin/settings/class-users-wp-admin-settings.php:480
 msgid "Users List Page"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:477
+#: admin/settings/class-users-wp-admin-settings.php:481
 msgid ""
 "This is the front end Users List page. This is the page where all registered "
 "users of the websites are listed."
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:486
+#: admin/settings/class-users-wp-admin-settings.php:490
 msgid "Number of Items"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:489
+#: admin/settings/class-users-wp-admin-settings.php:493
 msgid "Enter number of items to display in profile tabs."
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:497
+#: admin/settings/class-users-wp-admin-settings.php:501
 msgid "Display Password field in Regsiter Form"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:505
+#: admin/settings/class-users-wp-admin-settings.php:509
 msgid "Enable auto login"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:517
+#: admin/settings/class-users-wp-admin-settings.php:521
 msgid "Login Redirect Page"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:518
+#: admin/settings/class-users-wp-admin-settings.php:522
 msgid ""
 "Set the page to redirect the user after logging in. If no page set it will "
 "user WordPress default."
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:527
+#: admin/settings/class-users-wp-admin-settings.php:531
 msgid "Logout Redirect Page"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:528
+#: admin/settings/class-users-wp-admin-settings.php:532
 msgid ""
 "Set the page to redirect the user after logging out. If no page set it will "
 "user WordPress default"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:541
+#: admin/settings/class-users-wp-admin-settings.php:545
 msgid "Display Header in Profile"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:549
+#: admin/settings/class-users-wp-admin-settings.php:553
 msgid "Display Body in Profile"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:557
+#: admin/settings/class-users-wp-admin-settings.php:561
 msgid "Choose the tabs to display in Profile"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:558
+#: admin/settings/class-users-wp-admin-settings.php:562
 msgid "Choose the tabs to display in UsersWP Profile"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:563
+#: admin/settings/class-users-wp-admin-settings.php:567
 msgid "Select Tabs"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:571
+#: admin/settings/class-users-wp-admin-settings.php:575
 msgid "Users default layout"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:572
+#: admin/settings/class-users-wp-admin-settings.php:576
 msgid "Choose the default layout for Users Page - Users List"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:575
+#: admin/settings/class-users-wp-admin-settings.php:579
 msgid "Select Layout"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:583
+#: admin/settings/class-users-wp-admin-settings.php:587
 msgid "Enabled Old Password?"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:595
+#: admin/settings/class-users-wp-admin-settings.php:599
 msgid "Remove Data on Uninstall?"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:609
+#: admin/settings/class-users-wp-admin-settings.php:613
 msgid "Registration success email"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:613
+#: admin/settings/class-users-wp-admin-settings.php:617
 msgid "Enter Registration success email Subject"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:620
+#: admin/settings/class-users-wp-admin-settings.php:624
 msgid "Enter Registration success email Content"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:624
+#: admin/settings/class-users-wp-admin-settings.php:628
 msgid "Forgot password email"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:628
+#: admin/settings/class-users-wp-admin-settings.php:632
 msgid "Enter forgot password email Subject"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:635
+#: admin/settings/class-users-wp-admin-settings.php:639
 msgid "Enter forgot password email Content"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:639
+#: admin/settings/class-users-wp-admin-settings.php:643
 msgid "Reset password email"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:643
+#: admin/settings/class-users-wp-admin-settings.php:647
 msgid "Enter reset password email Subject"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:650
+#: admin/settings/class-users-wp-admin-settings.php:654
 msgid "Enter reset password email Content"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:654
+#: admin/settings/class-users-wp-admin-settings.php:658
 msgid "Account update email"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:666
+#: admin/settings/class-users-wp-admin-settings.php:670
 msgid "Enter account update email Subject"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:673
+#: admin/settings/class-users-wp-admin-settings.php:677
 msgid "Enter account update email Content"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:760
+#: admin/settings/class-users-wp-admin-settings.php:764
 msgid "Settings updated."
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:767
+#: admin/settings/class-users-wp-admin-settings.php:771
 #: includes/class-users-wp-profile.php:287
 msgid "More Info"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:768
+#: admin/settings/class-users-wp-admin-settings.php:772
 #: includes/class-users-wp-profile.php:294
 #: includes/class-users-wp-profile.php:411
 msgid "Posts"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:769
+#: admin/settings/class-users-wp-admin-settings.php:773
 #: includes/class-users-wp-profile.php:301
 #: includes/class-users-wp-profile.php:424
 msgid "Comments"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:779
+#: admin/settings/class-users-wp-admin-settings.php:783
 msgid "List View"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:780
+#: admin/settings/class-users-wp-admin-settings.php:784
 msgid "Grid View - 2 Column"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:781
+#: admin/settings/class-users-wp-admin-settings.php:785
 msgid "Grid View - 3 Column"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:782
+#: admin/settings/class-users-wp-admin-settings.php:786
 msgid "Grid View - 4 Column"
 msgstr ""
 
-#: admin/settings/class-users-wp-admin-settings.php:783
+#: admin/settings/class-users-wp-admin-settings.php:787
 msgid "Grid View - 5 Column"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:40
+#: admin/settings/class-users-wp-form-builder.php:41
 msgid "Add new form field"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:46
+#: admin/settings/class-users-wp-form-builder.php:47
 msgid "Click on any box below to add a field of that type on "
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:52
+#: admin/settings/class-users-wp-form-builder.php:53
 msgid "Setup New Field"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:63
+#: admin/settings/class-users-wp-form-builder.php:64
 msgid "Predefined Fields"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:81
+#: admin/settings/class-users-wp-form-builder.php:82
 msgid "List of fields those will appear on add new listing form"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:88
+#: admin/settings/class-users-wp-form-builder.php:89
 msgid ""
 "Click to expand and view field related settings. You may drag and drop to "
 "arrange fields order on "
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:124
+#: admin/settings/class-users-wp-form-builder.php:128
 msgid "This adds a section separator with a title."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:135
+#: admin/settings/class-users-wp-form-builder.php:139
 msgid "Fieldset (section separator)"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:175
+#: admin/settings/class-users-wp-form-builder.php:179
 msgid "There are no custom fields here yet."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:437
+#: admin/settings/class-users-wp-form-builder.php:441
 msgid "Country"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:438
+#: admin/settings/class-users-wp-form-builder.php:442
 msgid "Adds a input for Country field."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:458
+#: admin/settings/class-users-wp-form-builder.php:462
 msgid "Gender"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:459
+#: admin/settings/class-users-wp-form-builder.php:463
 msgid "Adds a input for Gender field."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:467
+#: admin/settings/class-users-wp-form-builder.php:471
 msgid "Select Gender/,Male,Female,Other"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:479
+#: admin/settings/class-users-wp-form-builder.php:483
 msgid "Mobile"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:480
+#: admin/settings/class-users-wp-form-builder.php:484
 msgid "Adds a input for Mobile field."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:510
+#: admin/settings/class-users-wp-form-builder.php:514
 msgid "Text"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:511
+#: admin/settings/class-users-wp-form-builder.php:515
 msgid "Add any sort of text field, text or numbers"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:517
+#: admin/settings/class-users-wp-form-builder.php:521
 msgid "Date"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:518
+#: admin/settings/class-users-wp-form-builder.php:522
 msgid "Adds a date picker."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:524
+#: admin/settings/class-users-wp-form-builder.php:528
 msgid "Textarea"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:525
+#: admin/settings/class-users-wp-form-builder.php:529
 msgid "Adds a textarea"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:531
+#: admin/settings/class-users-wp-form-builder.php:535
 msgid "Time"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:532
+#: admin/settings/class-users-wp-form-builder.php:536
 msgid "Adds a time picker"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:538
+#: admin/settings/class-users-wp-form-builder.php:542
 msgid "Checkbox"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:539
+#: admin/settings/class-users-wp-form-builder.php:543
 msgid "Adds a checkbox"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:545
+#: admin/settings/class-users-wp-form-builder.php:549
 msgid "Phone"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:546
+#: admin/settings/class-users-wp-form-builder.php:550
 msgid "Adds a phone input"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:552
+#: admin/settings/class-users-wp-form-builder.php:556
 msgid "Radio"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:553
+#: admin/settings/class-users-wp-form-builder.php:557
 msgid "Adds a radio input"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:559
-#: includes/class-users-wp-activator.php:314
-#: includes/class-users-wp-activator.php:515
+#: admin/settings/class-users-wp-form-builder.php:563
+#: includes/class-users-wp-activator.php:315
+#: includes/class-users-wp-activator.php:516
 msgid "Email"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:560
+#: admin/settings/class-users-wp-form-builder.php:564
 msgid "Adds a email input"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:566
+#: admin/settings/class-users-wp-form-builder.php:570
 msgid "Select"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:567
+#: admin/settings/class-users-wp-form-builder.php:571
 msgid "Adds a select input"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:573
+#: admin/settings/class-users-wp-form-builder.php:577
 msgid "Multi Select"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:574
+#: admin/settings/class-users-wp-form-builder.php:578
 msgid "Adds a multiselect input"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:580
+#: admin/settings/class-users-wp-form-builder.php:584
 msgid "URL"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:581
+#: admin/settings/class-users-wp-form-builder.php:585
 msgid "Adds a url input"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:587
+#: admin/settings/class-users-wp-form-builder.php:591
 msgid "File Upload"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:588
+#: admin/settings/class-users-wp-form-builder.php:592
 msgid "Adds a file input"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:704
-#: admin/settings/class-users-wp-form-builder.php:2020
+#: admin/settings/class-users-wp-form-builder.php:708
+#: admin/settings/class-users-wp-form-builder.php:2030
 msgid "Double Click to toggle and drag-drop to sort"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:712
-#: admin/settings/class-users-wp-form-builder.php:2028
+#: admin/settings/class-users-wp-form-builder.php:716
+#: admin/settings/class-users-wp-form-builder.php:2038
 msgid "Default field, should not be removed."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:714
-#: admin/settings/class-users-wp-form-builder.php:2030
+#: admin/settings/class-users-wp-form-builder.php:718
+#: admin/settings/class-users-wp-form-builder.php:2040
 msgid "Click to remove field"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:723
-#: admin/settings/class-users-wp-form-builder.php:1972
+#: admin/settings/class-users-wp-form-builder.php:727
+#: admin/settings/class-users-wp-form-builder.php:1982
 msgid "Fieldset:"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:767
+#: admin/settings/class-users-wp-form-builder.php:771
 msgid "Label :"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:769
+#: admin/settings/class-users-wp-form-builder.php:773
 msgid "This will be the label for the field."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:794
+#: admin/settings/class-users-wp-form-builder.php:798
 msgid "Form Label: (Optional)"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:796
+#: admin/settings/class-users-wp-form-builder.php:800
 msgid ""
 "If your form label is different, then you can fill this field. Ex: You would "
 "like to display \"What is your age?\" in Form Field but would like to "
@@ -696,324 +696,324 @@ msgid ""
 "field not field, then the previous field will be used in Form. "
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:822
+#: admin/settings/class-users-wp-form-builder.php:826
 msgid "HTML variable name :"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:824
+#: admin/settings/class-users-wp-form-builder.php:828
 msgid ""
 "This is a unique identifier used in the HTML, it MUST NOT contain spaces or "
 "special characters."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:828
+#: admin/settings/class-users-wp-form-builder.php:832
 msgid "Must not contain spaces or special characters"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:854
+#: admin/settings/class-users-wp-form-builder.php:858
 msgid "Is active :"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:856
+#: admin/settings/class-users-wp-form-builder.php:860
 msgid "If no is selected then the field will not be displayed anywhere."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:865
-#: admin/settings/class-users-wp-form-builder.php:907
-#: admin/settings/class-users-wp-form-builder.php:1004
-#: admin/settings/class-users-wp-form-builder.php:1718
-#: admin/settings/class-users-wp-form-builder.php:1735
+#: admin/settings/class-users-wp-form-builder.php:869
+#: admin/settings/class-users-wp-form-builder.php:911
+#: admin/settings/class-users-wp-form-builder.php:1008
+#: admin/settings/class-users-wp-form-builder.php:1728
+#: admin/settings/class-users-wp-form-builder.php:1745
 #: includes/helpers.php:2070
 msgid "Yes"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:871
-#: admin/settings/class-users-wp-form-builder.php:906
-#: admin/settings/class-users-wp-form-builder.php:1010
-#: admin/settings/class-users-wp-form-builder.php:1721
-#: admin/settings/class-users-wp-form-builder.php:1738
+#: admin/settings/class-users-wp-form-builder.php:875
+#: admin/settings/class-users-wp-form-builder.php:910
+#: admin/settings/class-users-wp-form-builder.php:1014
+#: admin/settings/class-users-wp-form-builder.php:1731
+#: admin/settings/class-users-wp-form-builder.php:1748
 #: includes/helpers.php:2069
 msgid "No"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:893
+#: admin/settings/class-users-wp-form-builder.php:897
 msgid "Is Public :"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:895
+#: admin/settings/class-users-wp-form-builder.php:899
 msgid "If no is selected then the field will not be visible to other users."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:908
+#: admin/settings/class-users-wp-form-builder.php:912
 msgid "Let User Decide"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:931
+#: admin/settings/class-users-wp-form-builder.php:935
 msgid "Default value :"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:935
+#: admin/settings/class-users-wp-form-builder.php:939
 msgid "Should the checkbox be checked by default?"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:937
+#: admin/settings/class-users-wp-form-builder.php:941
 msgid "A default value for the field, usually blank. Ex: info@mysite.com"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:939
+#: admin/settings/class-users-wp-form-builder.php:943
 msgid ""
 "A default value for the field, usually blank. (for \"link\" this will be "
 "used as the link text)"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:947
+#: admin/settings/class-users-wp-form-builder.php:951
 msgid "Unchecked"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:948
+#: admin/settings/class-users-wp-form-builder.php:952
 msgid "Checked"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:951
+#: admin/settings/class-users-wp-form-builder.php:955
 msgid "info@mysite.com"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:992
+#: admin/settings/class-users-wp-form-builder.php:996
 msgid "Is required :"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:994
+#: admin/settings/class-users-wp-form-builder.php:998
 msgid "Select yes to set field as required"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1034
+#: admin/settings/class-users-wp-form-builder.php:1038
 msgid "Required message:"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1036
+#: admin/settings/class-users-wp-form-builder.php:1040
 msgid ""
 "Enter text for the error message if the field is required and has not "
 "fulfilled the requirements."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1080
+#: admin/settings/class-users-wp-form-builder.php:1084
 msgid "Upload icon :"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1082
+#: admin/settings/class-users-wp-form-builder.php:1086
 msgid ""
 "Upload icon using media and enter its url path, or enter <a href=\"http://"
 "fortawesome.github.io/Font-Awesome/icons/\" target=\"_blank\" >font awesome "
 "</a>class eg:\"fa fa-home\""
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1111
+#: admin/settings/class-users-wp-form-builder.php:1115
 msgid "Css class :"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1113
+#: admin/settings/class-users-wp-form-builder.php:1117
 msgid "Enter custom css class for field custom style."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1114
+#: admin/settings/class-users-wp-form-builder.php:1118
 msgid "(Enter class `uwp-comma-list` to show list as comma separated)"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1141
+#: admin/settings/class-users-wp-form-builder.php:1145
 msgid "Show in what locations?:"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1143
+#: admin/settings/class-users-wp-form-builder.php:1147
 msgid "Select in what locations you want to display this field."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1151
+#: admin/settings/class-users-wp-form-builder.php:1155
 msgid "Users Page"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1152
+#: admin/settings/class-users-wp-form-builder.php:1156
 msgid "More info tab"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1153
+#: admin/settings/class-users-wp-form-builder.php:1157
 msgid "Profile page own tab"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1154
+#: admin/settings/class-users-wp-form-builder.php:1158
 msgid "Profile Side"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1171
+#: admin/settings/class-users-wp-form-builder.php:1175
 msgid "Select locations"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1209
-#: admin/settings/class-users-wp-form-builder.php:2066
+#: admin/settings/class-users-wp-form-builder.php:1213
+#: admin/settings/class-users-wp-form-builder.php:2076
 msgid "Save"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1212
-#: admin/settings/class-users-wp-form-builder.php:2068
+#: admin/settings/class-users-wp-form-builder.php:1216
+#: admin/settings/class-users-wp-form-builder.php:2078
 msgid "Delete"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1501
+#: admin/settings/class-users-wp-form-builder.php:1511
 msgid "HTML Variable Name should be a unique name"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1579
+#: admin/settings/class-users-wp-form-builder.php:1589
 msgid "Option Values :"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1581
+#: admin/settings/class-users-wp-form-builder.php:1591
 msgid "Option Values should be separated by comma."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1583
+#: admin/settings/class-users-wp-form-builder.php:1593
 msgid ""
 "If using for a \"tick filter\" place a / and then either a 1 for true or 0 "
 "for false"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1585
+#: admin/settings/class-users-wp-form-builder.php:1595
 msgid "eg: \"No Dogs Allowed/0,Dogs Allowed/1\" (Select only, not multiselect)"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1588
+#: admin/settings/class-users-wp-form-builder.php:1598
 msgid ""
 "- If using OPTGROUP tag to grouping options, use \"{optgroup}OPTGROUP-LABEL|"
 "OPTION-1,OPTION-2{/optgroup}\""
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1590
+#: admin/settings/class-users-wp-form-builder.php:1600
 msgid ""
 "eg: \"{optgroup}Pets Allowed|No Dogs Allowed/0,Dogs Allowed/1{/optgroup},"
 "{optgroup}Sports|Cricket/Cricket,Football/Football,Hockey{/optgroup}\""
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1616
+#: admin/settings/class-users-wp-form-builder.php:1626
 msgid "Date Format :"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1618
+#: admin/settings/class-users-wp-form-builder.php:1628
 msgid "Select the date format."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1664
+#: admin/settings/class-users-wp-form-builder.php:1674
 msgid "Allowed file types :"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1666
+#: admin/settings/class-users-wp-form-builder.php:1676
 msgid ""
 "Select file types to allowed for file uploading. (Select multiple file types "
 "by holding down \"Ctrl\" key.)"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1671
+#: admin/settings/class-users-wp-form-builder.php:1681
 msgid "All types"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1673
+#: admin/settings/class-users-wp-form-builder.php:1683
 #, php-format
 msgid "%s formats"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1710
+#: admin/settings/class-users-wp-form-builder.php:1720
 msgid "Include this field in register form:"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1712
+#: admin/settings/class-users-wp-form-builder.php:1722
 msgid ""
 "Lets you use this field as register form field, set from register tab above."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1727
+#: admin/settings/class-users-wp-form-builder.php:1737
 msgid "Include this field ONLY in register form:"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1729
+#: admin/settings/class-users-wp-form-builder.php:1739
 msgid "Lets you use this field as register ONLY form field."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1753
+#: admin/settings/class-users-wp-form-builder.php:1763
 msgid "Available regsiter form fields."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1765
+#: admin/settings/class-users-wp-form-builder.php:1775
 msgid ""
 "Click on any box below to make it appear in register form. To make a field "
 "available here, go to account tab and expand any field from selected fields "
 "panel and tick the checkbox saying 'Include this field in register form'."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1777
+#: admin/settings/class-users-wp-form-builder.php:1787
 msgid "List of fields those will appear in register form."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:1790
+#: admin/settings/class-users-wp-form-builder.php:1800
 msgid ""
 "Click to expand and view field related settings. You may drag and drop to "
 "arrange fields order in register form."
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2379
+#: admin/settings/class-users-wp-form-builder.php:2360
 msgid "Dummy Fieldset"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2393
+#: admin/settings/class-users-wp-form-builder.php:2374
 msgid "Dummy Text"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2407
+#: admin/settings/class-users-wp-form-builder.php:2388
 msgid "Dummy Textarea"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2421
+#: admin/settings/class-users-wp-form-builder.php:2402
 msgid "Dummy Checkbox"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2435
+#: admin/settings/class-users-wp-form-builder.php:2416
 msgid "Dummy Radio"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2438
+#: admin/settings/class-users-wp-form-builder.php:2419
 msgid "Value1,Value2,Value3"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2449
+#: admin/settings/class-users-wp-form-builder.php:2430
 msgid "Dummy Select"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2452
-#: admin/settings/class-users-wp-form-builder.php:2539
+#: admin/settings/class-users-wp-form-builder.php:2433
+#: admin/settings/class-users-wp-form-builder.php:2520
 msgid "Select Option/,Value1,Value2,Value3"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2463
+#: admin/settings/class-users-wp-form-builder.php:2444
 msgid "Dummy URL"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2477
+#: admin/settings/class-users-wp-form-builder.php:2458
 msgid "Dummy Date"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2494
+#: admin/settings/class-users-wp-form-builder.php:2475
 msgid "Dummy Time"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2508
+#: admin/settings/class-users-wp-form-builder.php:2489
 msgid "Dummy Phone"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2522
+#: admin/settings/class-users-wp-form-builder.php:2503
 msgid "Dummy Email"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2536
+#: admin/settings/class-users-wp-form-builder.php:2517
 msgid "Dummy Multiselect"
 msgstr ""
 
-#: admin/settings/class-users-wp-form-builder.php:2550
+#: admin/settings/class-users-wp-form-builder.php:2531
 msgid "Dummy File"
 msgstr ""
 
@@ -1128,48 +1128,48 @@ msgid ""
 "p><p>Thank you,<br /><br />[#site_name_url#].</p>"
 msgstr ""
 
-#: includes/class-users-wp-activator.php:281
-#: includes/class-users-wp-activator.php:501
+#: includes/class-users-wp-activator.php:282
+#: includes/class-users-wp-activator.php:502
 msgid "Username"
 msgstr ""
 
-#: includes/class-users-wp-activator.php:293
-#: includes/class-users-wp-activator.php:440
-#: includes/class-users-wp-activator.php:542
+#: includes/class-users-wp-activator.php:294
+#: includes/class-users-wp-activator.php:441
+#: includes/class-users-wp-activator.php:543
 msgid "Password"
 msgstr ""
 
-#: includes/class-users-wp-activator.php:335
+#: includes/class-users-wp-activator.php:336
 msgid "Avatar"
 msgstr ""
 
-#: includes/class-users-wp-activator.php:365
+#: includes/class-users-wp-activator.php:366
 msgid "Banner"
 msgstr ""
 
-#: includes/class-users-wp-activator.php:395
+#: includes/class-users-wp-activator.php:396
 msgid "Old Password"
 msgstr ""
 
-#: includes/class-users-wp-activator.php:407
+#: includes/class-users-wp-activator.php:408
 msgid "New Password"
 msgstr ""
 
-#: includes/class-users-wp-activator.php:419
-#: includes/class-users-wp-activator.php:452
-#: includes/class-users-wp-activator.php:556
+#: includes/class-users-wp-activator.php:420
+#: includes/class-users-wp-activator.php:453
+#: includes/class-users-wp-activator.php:557
 msgid "Confirm Password"
 msgstr ""
 
-#: includes/class-users-wp-activator.php:473
+#: includes/class-users-wp-activator.php:474
 msgid "First Name"
 msgstr ""
 
-#: includes/class-users-wp-activator.php:487
+#: includes/class-users-wp-activator.php:488
 msgid "Last Name"
 msgstr ""
 
-#: includes/class-users-wp-activator.php:528
+#: includes/class-users-wp-activator.php:529
 msgid "Bio"
 msgstr ""
 

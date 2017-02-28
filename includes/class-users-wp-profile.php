@@ -284,21 +284,21 @@ class Users_WP_Profile {
         $extra = $this->get_profile_extra($user);
         if (in_array('more_info', $allowed_tabs) && $extra) {
             $tabs['more_info']  = array(
-                'title' => __( 'More Info', 'uwp' ),
+                'title' => __( 'More Info', 'userswp' ),
                 'count' => $this->get_profile_extra_count($user)
             );
         }
 
         if (in_array('posts', $allowed_tabs)) {
             $tabs['posts']  = array(
-                'title' => __( 'Posts', 'uwp' ),
+                'title' => __( 'Posts', 'userswp' ),
                 'count' => uwp_post_count($user->ID, 'post')
             );
         }
 
         if (in_array('comments', $allowed_tabs)) {
             $tabs['comments'] = array(
-                'title' => __( 'Comments', 'uwp' ),
+                'title' => __( 'Comments', 'userswp' ),
                 'count' => uwp_comment_count($user->ID)
             );
         }
@@ -368,7 +368,7 @@ class Users_WP_Profile {
         <div class="uwp-pagination">
             <?php
             $big = 999999999; // need an unlikely integer
-            $translated = __( 'Page', 'uwp' ); // Supply translatable string
+            $translated = __( 'Page', 'userswp' ); // Supply translatable string
 
             echo paginate_links( array(
                 'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
@@ -408,7 +408,7 @@ class Users_WP_Profile {
              return;   
         }
 
-        uwp_generic_tab_content($user, 'post', __('Posts', 'uwp'));
+        uwp_generic_tab_content($user, 'post', __('Posts', 'userswp'));
     }
 
     public function get_profile_comments($user) {
@@ -421,7 +421,7 @@ class Users_WP_Profile {
             return;
         }
         ?>
-        <h3><?php echo __('Comments', 'uwp') ?></h3>
+        <h3><?php echo __('Comments', 'userswp') ?></h3>
 
         <div class="uwp-profile-item-block">
             <?php
@@ -468,7 +468,7 @@ class Users_WP_Profile {
                             echo $excerpt;
                             if ($excerpt) {
                                 ?>
-                                <a href="<?php echo get_comment_link($comment->comment_ID); ?>" class="more-link"><?php echo __('Read More »', 'uwp'); ?></a>
+                                <a href="<?php echo get_comment_link($comment->comment_ID); ?>" class="more-link"><?php echo __('Read More »', 'userswp'); ?></a>
                                 <?php
                             }
                             ?>
@@ -479,7 +479,7 @@ class Users_WP_Profile {
                 echo '</ul>';
             } else {
                 // no comments found
-                echo "<p>".__('No Comments Found', 'uwp')."</p>";
+                echo "<p>".__('No Comments Found', 'userswp')."</p>";
             }
 
             do_action('uwp_profile_pagination', $maximum_pages);
@@ -805,7 +805,7 @@ class Users_WP_Profile {
                                     <input type="hidden" name="h" value="" id="<?php echo $type; ?>-h" />
                                     <input type="hidden" id="uwp-<?php echo $type; ?>-crop-image" name="uwp_crop" value="<?php echo $image_url; ?>" />
                                     <input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp-crop-nonce' ); ?>" />
-                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="<?php echo __('Apply', 'uwp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
+                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="<?php echo __('Apply', 'userswp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
                                 </form>
                             </div>
                         </div>
@@ -860,7 +860,7 @@ class Users_WP_Profile {
                             <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
                             <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
                             <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();">Upload <?php echo $type; ?></button>
-                            <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'uwp').uwp_formatSizeUnits(uwp_get_max_upload_size()); ?></p>
+                            <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'userswp').uwp_formatSizeUnits(uwp_get_max_upload_size()); ?></p>
                             <div class="uwp_upload_field" style="display: none">
                                 <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" required="required" type="file" value="">
                             </div>
@@ -871,7 +871,7 @@ class Users_WP_Profile {
                         <div class="uwp-<?php echo $type; ?>-crop-p-wrap">
                             <div id="<?php echo $type; ?>-crop-actions">
                                 <form class="uwp-crop-form" method="post">
-                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" disabled="disabled" value="<?php echo __('Apply', 'uwp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
+                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" disabled="disabled" value="<?php echo __('Apply', 'userswp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
                                 </form>
                             </div>
                         </div>
@@ -1127,10 +1127,10 @@ class Users_WP_Profile {
             $height = $imagedetails[1];
 
             if ( $width < $min_width) {
-                return new WP_Error( 'image-too-small', __( 'The uploaded file is too small. Minimum image width should be '.$min_width.'px', 'uwp' ) );
+                return new WP_Error( 'image-too-small', __( 'The uploaded file is too small. Minimum image width should be '.$min_width.'px', 'userswp' ) );
             }
             if ( $height < $min_height) {
-                return new WP_Error( 'image-too-small', __( 'The uploaded file is too small. Minimum image height should be '.$min_height.'px', 'uwp' ) );
+                return new WP_Error( 'image-too-small', __( 'The uploaded file is too small. Minimum image height should be '.$min_height.'px', 'userswp' ) );
             }
         }
 
@@ -1283,7 +1283,7 @@ class Users_WP_Profile {
         foreach ($fields as $field) {
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);
             $tabs[$key] = array(
-                'title' => __($field->site_title, 'uwp'),
+                'title' => __($field->site_title, 'userswp'),
                 'count' => 1
             );
         }
