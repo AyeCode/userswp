@@ -785,12 +785,28 @@
 .uwp_widgets .uwp-user-search input[type="text"] {
   padding: 9px;
   font-size: 14px;
-  border-width: 1px; }
+  border-width: 1px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0; }
 .uwp_page .uwp-user-search .uwp-search-submit,
-.uwp_widgets .uwp-user-search .uwp-search-submit {
+.uwp_page .uwp-user-search .uwp_advanced_search_btn,
+.uwp_widgets .uwp-user-search .uwp-search-submit,
+.uwp_widgets .uwp-user-search .uwp_advanced_search_btn {
   padding: 9px 15px;
   font-size: 14px;
-  border: 1px solid transparent; }
+  border: 1px solid transparent;
+  border-radius: 3px;
+  margin-left: -5px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  line-height: normal; }
+.uwp_page .uwp-user-search .uwp_advanced_search_btn,
+.uwp_widgets .uwp-user-search .uwp_advanced_search_btn {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  color: #333;
+  background-color: #fff;
+  border-color: #bbb; }
 .uwp_page .uwp-chosen-container-multi .chosen-choices,
 .uwp_widgets .uwp-chosen-container-multi .chosen-choices {
   padding: 6px 15px;
@@ -851,6 +867,125 @@
       text-decoration: none; }
     .uwp_page .uwp-content-wrap .uwp_account_menu li a:hover, .uwp_page .uwp-content-wrap .uwp_account_menu li a.active {
       color: #757575; }
+
+.uwp-page .input-group {
+  position: relative;
+  display: table;
+  border-collapse: separate; }
+.uwp-page .input-group .form-control:first-child, .uwp-page .input-group-addon:first-child, .uwp-page .input-group-btn:first-child > .btn, .uwp-page .input-group-btn:first-child > .btn-group > .btn, .uwp-page .input-group-btn:first-child > .dropdown-toggle, .uwp-page .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle), .uwp-page .input-group-btn:last-child > .btn-group:not(:last-child) > .btn {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0; }
+.uwp-page .input-group-addon, .uwp-page .input-group-btn, .uwp-page .input-group .form-control {
+  display: table-cell; }
+.uwp-page .input-group .form-control {
+  position: relative;
+  z-index: 2;
+  float: left;
+  width: 100%;
+  margin-bottom: 0; }
+.uwp-page .form-control {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s; }
+.uwp-page .input-group-btn {
+  position: relative;
+  font-size: 0;
+  white-space: nowrap; }
+.uwp-page .input-group-addon, .uwp-page .input-group-btn {
+  width: 1%;
+  white-space: nowrap;
+  vertical-align: middle; }
+.uwp-page .input-group-addon, .uwp-page .input-group-btn, .uwp-page .input-group .form-control {
+  display: table-cell; }
+.uwp-page .input-group-btn:last-child > .btn, .uwp-page .input-group-btn:last-child > .btn-group {
+  margin-left: -1px; }
+.uwp-page .input-group-btn .btn-group {
+  display: flex !important; }
+.uwp-page .btn-group, .uwp-page .btn-group-vertical {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle; }
+@media screen and (min-width: 768px) {
+  .uwp-page .dropdown.dropdown-lg {
+    position: static !important; } }
+.uwp-page .btn-group .btn {
+  border-radius: 0;
+  margin-left: -1px; }
+.uwp-page .btn-default {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc; }
+.uwp-page .btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px; }
+.uwp-page .btn .caret {
+  margin-left: 0; }
+.uwp-page .caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px solid;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent; }
+.uwp-page .dropdown.dropdown-lg .dropdown-menu {
+  margin-top: -1px;
+  padding: 6px 20px; }
+.uwp-page .dropdown-menu-right {
+  right: 0;
+  left: auto; }
+.uwp-page .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  font-size: 14px;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); }
 
 .uwp_page .uwp-users-list-user-social {
   display: block;

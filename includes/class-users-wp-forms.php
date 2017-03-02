@@ -730,7 +730,7 @@ class Users_WP_Forms {
                 $full_width  = apply_filters('uwp_avatar_image_width', 150);
                 $full_height = apply_filters('uwp_avatar_image_height', 150);
             } else {
-                $full_width  = apply_filters('uwp_banner_image_width', 1000);
+                $full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('header_banner_width', 1000));
                 $full_height = apply_filters('uwp_banner_image_height', 300);
             }
 
@@ -1671,5 +1671,18 @@ class Users_WP_Forms {
             }
         }
     }
+    
+    
+    // Search form
+    public function uwp_users_search_form_text_field($keyword) {
+        ?>
+        <input placeholder="Search For" name="uwps" value="<?php echo $keyword; ?>" class="s search-input" type="text">
+        <?php
+    }
 
+    public function uwp_users_search_form_submit($keyword) {
+        ?>
+        <input class="uwp-searchsubmit uwp-search-submit" value="Search" type="submit">
+        <?php
+    }
 }

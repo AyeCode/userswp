@@ -2183,7 +2183,7 @@ function uwp_admin_only_css() {
     <?php
 }
 
-function uwp_form_extras_field_order($field_ids = array())
+function uwp_form_extras_field_order($field_ids = array(), $form_type = 'register')
 {
     global $wpdb;
     $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
@@ -2209,4 +2209,12 @@ function uwp_form_extras_field_order($field_ids = array())
     else:
         return false;
     endif;
+}
+
+function uwp_ucwords($string, $charset='UTF-8') {
+    if (function_exists('mb_convert_case')) {
+        return mb_convert_case($string, MB_CASE_TITLE, $charset);
+    } else {
+        return ucwords($string);
+    }
 }

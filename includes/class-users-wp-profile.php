@@ -652,7 +652,7 @@ class Users_WP_Profile {
             $full_width  = apply_filters('uwp_avatar_image_width', 150);
             $full_height = apply_filters('uwp_avatar_image_height', 150);
         } else {
-            $full_width  = apply_filters('uwp_banner_image_width', 1000);
+            $full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('header_banner_width', 1000));
             $full_height = apply_filters('uwp_banner_image_height', 300);
         }
 
@@ -1118,7 +1118,7 @@ class Users_WP_Profile {
                 $min_width  = apply_filters('uwp_avatar_image_width', 150);
                 $min_height = apply_filters('uwp_avatar_image_height', 150);
             } else {
-                $min_width  = apply_filters('uwp_banner_image_width', 1000);
+                $min_width  = apply_filters('uwp_banner_image_width', uwp_get_option('header_banner_width', 1000));
                 $min_height = apply_filters('uwp_banner_image_height', 300);
             }
 
@@ -1234,8 +1234,7 @@ class Users_WP_Profile {
                 }
                 ?>
                 <form method="get" class="searchform search-form" action="<?php echo get_uwp_users_permalink(); ?>">
-                    <input placeholder="Search For" name="uwps" value="<?php echo $keyword; ?>" class="s search-input" type="text">
-                    <input class="uwp-searchsubmit uwp-search-submit" value="Search" type="submit"><br>
+                    <?php do_action('uwp_users_page_search_form_inner', $keyword); ?>
                 </form>
             </div>
             <div class="uwp-user-sort">

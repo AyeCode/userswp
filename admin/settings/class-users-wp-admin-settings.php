@@ -548,6 +548,15 @@ class Users_WP_Admin_Settings {
                             'std'  => '1',
                             'class' => 'uwp_label_inline',
                         ),
+                        'header_banner_width' => array(
+                            'id'   => 'header_banner_width',
+                            'name' => __( 'Header banner width', 'userswp' ),
+                            'desc' => '',
+                            'type' => 'number',
+                            'std'  => '1000',
+                            'size' => 'regular',
+                            'placeholder' => __( 'Enter Header banner width in Pixels', 'userswp' ),
+                        ),
                         'enable_profile_body' => array(
                             'id'   => 'enable_profile_body',
                             'name' => __( 'Display Body in Profile', 'userswp' ),

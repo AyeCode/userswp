@@ -724,12 +724,12 @@ class Users_WP_Form_Builder {
                     <i class="fa fa-long-arrow-left " aria-hidden="true"></i>
                     <i class="fa fa-long-arrow-right " aria-hidden="true"></i>
                     <b style="cursor:pointer;"
-                       onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo $this->uwp_ucwords(__('Fieldset:', 'userswp') . ' ' . $field_site_title);?></b>
+                       onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo uwp_ucwords(__('Fieldset:', 'userswp') . ' ' . $field_site_title);?></b>
                     <?php
                 } else {echo $field_icon;
                     ?>
                     <b style="cursor:pointer;"
-                       onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo $this->uwp_ucwords(' ' . $field_site_title . ' (' . $field_type_name . ')');?></b>
+                       onclick="show_hide('field_frm<?php echo $result_str;?>')"><?php echo uwp_ucwords(' ' . $field_site_title . ' (' . $field_type_name . ')');?></b>
                     <?php
                 }
                 ?>
@@ -1243,14 +1243,7 @@ class Users_WP_Form_Builder {
         $this->uwp_admin_form_field_html($field_info, $field_type, $field_type_key, $field_ins_upd, $result_str, $form_type);
 
     }
-
-    public function uwp_ucwords($string, $charset='UTF-8') {
-        if (function_exists('mb_convert_case')) {
-            return mb_convert_case($string, MB_CASE_TITLE, $charset);
-        } else {
-            return ucwords($string);
-        }
-    }
+    
 
     public function uwp_admin_form_field_save($request_field = array(), $default = false)
     {
@@ -2044,7 +2037,7 @@ class Users_WP_Form_Builder {
                     echo $field_icon;
                     ?>
                     <b style="cursor:pointer;"
-                       onclick="show_hide_register('field_frm<?php echo $result_str; ?>')"><?php echo $this->uwp_ucwords( ' ' . $field_site_name); ?></b>
+                       onclick="show_hide_register('field_frm<?php echo $result_str; ?>')"><?php echo uwp_ucwords( ' ' . $field_site_name); ?></b>
 
                 </div>
 
@@ -2104,7 +2097,7 @@ class Users_WP_Form_Builder {
                     }
                 }
 
-                $return = uwp_form_extras_field_order($field_ids);
+                $return = uwp_form_extras_field_order($field_ids, "register");
 
                 if (is_array($return)) {
                     $return = json_encode($return);

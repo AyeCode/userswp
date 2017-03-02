@@ -268,6 +268,10 @@ class Users_WP {
 
         $this->loader->add_action( 'wp_ajax_uwp_upload_file_remove', $forms, 'uwp_upload_file_remove' );
 
+        //User search form
+        $this->loader->add_action( 'uwp_users_page_search_form_inner', $forms, 'uwp_users_search_form_text_field', 10, 1 );
+        $this->loader->add_action( 'uwp_users_page_search_form_inner', $forms, 'uwp_users_search_form_submit', 50, 1 );
+
 
         //profile page
         $this->loader->add_filter('query_vars', $profile, 'profile_query_vars', 10, 1 );
@@ -317,6 +321,7 @@ class Users_WP {
         $this->loader->add_action( 'uwp_users_list', $profile, 'uwp_users_list');
         $this->loader->add_action( 'uwp_users_extra', $profile, 'get_users_extra');
         $this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_side_extra');
+
 
         // User, allow subscribers to upload profile and banner pictures
         $this->loader->add_filter( 'plupload_default_params', $profile, 'add_uwp_plupload_param', 10, 1 );
