@@ -1002,7 +1002,7 @@ class Users_WP_Profile {
 
     public function uwp_extra_user_profile_fields( $user ) {
         ?>
-        <h3><?php _e("UsersWP", "uwp"); ?></h3>
+        <h3><?php _e("UsersWP", "userswp"); ?></h3>
         <?php echo $this->get_profile_extra($user); ?>
         <?php
     }

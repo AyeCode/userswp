@@ -199,13 +199,13 @@ class Users_WP {
         $this->loader->add_action( 'load-nav-menus.php', $plugin_admin_menus, 'users_wp_admin_menu_metabox' );
 
         //register settings
-        $this->loader->add_action( 'uwp_settings_main_tab_content', $plugin_admin_settings, 'get_general_content' );
-        $this->loader->add_action( 'uwp_settings_register_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'uwp_settings_login_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'uwp_settings_profile_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'uwp_settings_users_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'uwp_settings_change_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'uwp_settings_uninstall_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'userswp_settings_main_tab_content', $plugin_admin_settings, 'get_general_content' );
+        $this->loader->add_action( 'userswp_settings_register_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'userswp_settings_login_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'userswp_settings_profile_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'userswp_settings_users_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'userswp_settings_change_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'userswp_settings_uninstall_tab_content', $plugin_admin_settings, 'generic_display_form' );
 
         $this->loader->add_action( 'uwp_form_builder_settings_main_tab_content_before', $plugin_admin_settings, 'get_form_builder_tabs' );
         $this->loader->add_action( 'uwp_form_builder_settings_main_tab_content', $plugin_admin_settings, 'get_form_builder_content' );

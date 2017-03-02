@@ -50,7 +50,7 @@ class Users_WP_Admin_Settings {
 
                     <?php if (count($settings_array[$page]) > 1) { ?>
 
-                        <div class="wp-filter" style="margin-bottom: 5px">
+                        <div class="wp-filter" style="margin-top: 0;margin-bottom: 5px">
                         <ul class="filter-links">
                         <?php
                         foreach( $settings_array[$page] as $tab_id => $tab_name ) {
@@ -269,7 +269,7 @@ class Users_WP_Admin_Settings {
 
         ?>
 
-        <div class="wp-filter" style="margin-bottom: 5px">
+        <div class="wp-filter" style="margin-top: 0;margin-bottom: 5px">
             <ul class="filter-links">
                 <li id="uwp-form-builder-account-li">
                     <a id="uwp-form-builder-account" class="<?php if ($tab == 'account') { echo "current selected"; } ?>" href="<?php echo add_query_arg(array('tab' => 'account')); ?>"><?php echo __( 'Account', 'userswp' ); ?></a>

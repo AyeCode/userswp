@@ -152,7 +152,7 @@ class Users_WP_Admin {
         );
 
         add_submenu_page(
-            "uwp",
+            "userswp",
             "Form Builder",
             "Form Builder",
             'manage_options',
@@ -161,7 +161,7 @@ class Users_WP_Admin {
         );
 
         add_submenu_page(
-            "uwp",
+            "userswp",
             "Notifications",
             "Notifications",
             'manage_options',

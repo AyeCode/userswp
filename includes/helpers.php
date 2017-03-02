@@ -1981,13 +1981,13 @@ function uwp_admin_edit_banner_fields($user) {
                                     if (!empty($value)) {
                                         ?>
                                         <a class="uwp-profile-modal-form-trigger" data-type="avatar" href="#">
-                                            <?php echo __("Change Avatar", "uwp"); ?>
+                                            <?php echo __("Change Avatar", "userswp"); ?>
                                         </a>
                                         <?php
                                     } else {
                                         ?>
                                         <a class="uwp-profile-modal-form-trigger" data-type="avatar" href="#">
-                                            <?php echo __("Upload Avatar", "uwp"); ?>
+                                            <?php echo __("Upload Avatar", "userswp"); ?>
                                         </a>
                                         <?php
                                     }
@@ -1995,13 +1995,13 @@ function uwp_admin_edit_banner_fields($user) {
                                     if (!empty($value)) {
                                         ?>
                                         <a class="uwp-profile-modal-form-trigger" data-type="banner" href="#">
-                                            <?php echo __("Change Banner", "uwp"); ?>
+                                            <?php echo __("Change Banner", "userswp"); ?>
                                         </a>
                                         <?php
                                     } else {
                                         ?>
                                         <a class="uwp-profile-modal-form-trigger" data-type="banner" href="#">
-                                            <?php echo __("Upload Banner", "uwp"); ?>
+                                            <?php echo __("Upload Banner", "userswp"); ?>
                                         </a>
                                         <?php
                                     }
@@ -2046,10 +2046,10 @@ function uwp_account_privacy_edit_form_display($type) {
                     <form class="uwp-account-form uwp_form" method="post">
                         <div class="uwp-profile-extra-wrap">
                             <div class="uwp-profile-extra-key" style="font-weight: bold;">
-                                <?php echo __("Field", "uwp") ?>
+                                <?php echo __("Field", "userswp") ?>
                             </div>
                             <div class="uwp-profile-extra-value" style="font-weight: bold;">
-                                <?php echo __("Is Public?", "uwp") ?>
+                                <?php echo __("Is Public?", "userswp") ?>
                             </div>
                         </div>
                 <?php foreach ($fields as $field) { ?>
@@ -2066,8 +2066,8 @@ function uwp_account_privacy_edit_form_display($type) {
                                 }
                                 ?>
                                 <select name="<?php echo $field_name; ?>" class="uwp_privacy_field" style="margin: 0;">
-                                    <option value="0" <?php selected( $value, "0" ); ?>><?php echo __("No", "uwp") ?></option>
-                                    <option value="1" <?php selected( $value, "1" ); ?>><?php echo __("Yes", "uwp") ?></option>
+                                    <option value="0" <?php selected( $value, "0" ); ?>><?php echo __("No", "userswp") ?></option>
+                                    <option value="1" <?php selected( $value, "1" ); ?>><?php echo __("Yes", "userswp") ?></option>
                                 </select>
                             </div>
                         </div>

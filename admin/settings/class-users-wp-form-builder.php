@@ -907,9 +907,9 @@ class Users_WP_Form_Builder {
                                     ?>
 
                                     <select name="is_public" id="is_public">
-                                        <option value="0" <?php selected( $value, "0" ); ?>><?php echo __("No", "uwp") ?></option>
-                                        <option value="1" <?php selected( $value, "1" ); ?>><?php echo __("Yes", "uwp") ?></option>
-                                        <option value="2" <?php selected( $value, "2" ); ?>><?php echo __("Let User Decide", "uwp") ?></option>
+                                        <option value="0" <?php selected( $value, "0" ); ?>><?php echo __("No", "userswp") ?></option>
+                                        <option value="1" <?php selected( $value, "1" ); ?>><?php echo __("Yes", "userswp") ?></option>
+                                        <option value="2" <?php selected( $value, "2" ); ?>><?php echo __("Let User Decide", "userswp") ?></option>
                                     </select>
 
                                 </div>
