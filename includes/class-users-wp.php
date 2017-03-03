@@ -176,8 +176,7 @@ class Users_WP {
 
         $plugin_i18n = new Users_WP_i18n();
 
-        $this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
+        $this->loader->add_action( 'init', $plugin_i18n, 'load_plugin_textdomain' );
     }
 
     /**
@@ -200,13 +199,13 @@ class Users_WP {
         $this->loader->add_action( 'load-nav-menus.php', $plugin_admin_menus, 'users_wp_admin_menu_metabox' );
 
         //register settings
-        $this->loader->add_action( 'uwp_settings_main_tab_content', $plugin_admin_settings, 'get_general_content' );
-        $this->loader->add_action( 'uwp_settings_register_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'uwp_settings_login_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'uwp_settings_profile_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'uwp_settings_users_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'uwp_settings_change_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'uwp_settings_uninstall_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'userswp_settings_main_tab_content', $plugin_admin_settings, 'get_general_content' );
+        $this->loader->add_action( 'userswp_settings_register_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'userswp_settings_login_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'userswp_settings_profile_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'userswp_settings_users_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'userswp_settings_change_tab_content', $plugin_admin_settings, 'generic_display_form' );
+        $this->loader->add_action( 'userswp_settings_uninstall_tab_content', $plugin_admin_settings, 'generic_display_form' );
 
         $this->loader->add_action( 'uwp_form_builder_settings_main_tab_content_before', $plugin_admin_settings, 'get_form_builder_tabs' );
         $this->loader->add_action( 'uwp_form_builder_settings_main_tab_content', $plugin_admin_settings, 'get_form_builder_content' );
@@ -269,6 +268,10 @@ class Users_WP {
 
         $this->loader->add_action( 'wp_ajax_uwp_upload_file_remove', $forms, 'uwp_upload_file_remove' );
 
+        //User search form
+        $this->loader->add_action( 'uwp_users_page_search_form_inner', $forms, 'uwp_users_search_form_text_field', 10, 1 );
+        $this->loader->add_action( 'uwp_users_page_search_form_inner', $forms, 'uwp_users_search_form_submit', 50, 1 );
+
 
         //profile page
         $this->loader->add_filter('query_vars', $profile, 'profile_query_vars', 10, 1 );
@@ -318,6 +321,7 @@ class Users_WP {
         $this->loader->add_action( 'uwp_users_list', $profile, 'uwp_users_list');
         $this->loader->add_action( 'uwp_users_extra', $profile, 'get_users_extra');
         $this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_side_extra');
+
 
         // User, allow subscribers to upload profile and banner pictures
         $this->loader->add_filter( 'plupload_default_params', $profile, 'add_uwp_plupload_param', 10, 1 );
@@ -376,7 +380,7 @@ class Users_WP {
         $this->loader->add_filter('uwp_builder_extra_fields_datepicker', $form_builder, 'uwp_builder_extra_fields_datepicker', 10, 4);
         $this->loader->add_filter('uwp_builder_extra_fields_file', $form_builder, 'uwp_builder_extra_fields_file', 10, 4);
 
-        $this->loader->add_filter('uwp_advance_custom_fields', $form_builder, 'uwp_advance_admin_custom_fields', 10, 2);
+        $this->loader->add_action('uwp_admin_extra_custom_fields', $form_builder, 'uwp_advance_admin_custom_fields', 10, 2);
 
         $this->loader->add_filter('uwp_form_builder_available_fields_head', $form_builder, 'uwp_register_available_fields_head', 10, 2);
         $this->loader->add_filter('uwp_form_builder_available_fields_note', $form_builder, 'uwp_register_available_fields_note', 10, 2);

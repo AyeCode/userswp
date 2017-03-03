@@ -171,9 +171,32 @@ jQuery(document).ready(function () {
 
         var manage_field_type = jQuery(this).closest('#uwp-available-fields').find(".manage_field_type").val();
 
-        if(manage_field_type == 'register'){
+        if (manage_field_type == 'register'){
 
             jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_register_action&create_field=true',{ htmlvar_name: htmlvar_name,form_type:form_type, field_type:field_type, field_id: id, field_ins_upd: 'new' },
+                function(data)
+                {
+                    console.log(id);
+                    jQuery('.field_row_main ul.uwp_form_extras').append(data);
+
+                    jQuery('#licontainer_'+htmlvar_name).find('#sort_order').val( parseInt(jQuery('#licontainer_'+htmlvar_name).index()) + 1 );
+
+                    show_hide('field_frm'+htmlvar_name);
+                    jQuery('html, body').animate({
+                        scrollTop: jQuery("#licontainer_"+htmlvar_name).offset().top
+                    }, 1000);
+
+                });
+
+            if(htmlvar_name!='fieldset'){
+                jQuery(this).closest('li').hide();
+            }
+
+        }
+
+        if (manage_field_type == 'search'){
+
+            jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_search_action&create_field=true',{ htmlvar_name: htmlvar_name,form_type:form_type, field_type:field_type, field_id: id, field_ins_upd: 'new' },
                 function(data)
                 {
                     console.log(id);

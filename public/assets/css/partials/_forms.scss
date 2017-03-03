@@ -142,11 +142,28 @@
     padding: 9px;
     font-size: 14px;
     border-width: 1px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
-  .uwp-user-search .uwp-search-submit {
-    padding: 9px 15px;
-    font-size: 14px;
-    border: 1px solid transparent;
+  .uwp-user-search {
+    .uwp-search-submit,
+    .uwp_advanced_search_btn {
+      padding: 9px 15px;
+      font-size: 14px;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      margin-left: -5px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      line-height: normal;
+    }
+    .uwp_advanced_search_btn {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      color: #333;
+      background-color: #fff;
+      border-color: #bbb;
+    }
   }
 
   .uwp-chosen-container-multi .chosen-choices {

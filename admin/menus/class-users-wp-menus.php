@@ -40,7 +40,7 @@ class Users_WP_Menus {
      * @return void
      */
     public function users_wp_admin_menu_metabox() {
-        add_meta_box( 'add-users-wp-nav-menu', esc_html__( 'Users WP', 'uwp' ), array($this, 'users_wp_admin_do_wp_nav_menu_metabox'), 'nav-menus', 'side', 'default' );
+        add_meta_box( 'add-users-wp-nav-menu', esc_html__( 'Users WP', 'userswp' ), array($this, 'users_wp_admin_do_wp_nav_menu_metabox'), 'nav-menus', 'side', 'default' );
         add_action( 'admin_print_footer_scripts', array($this, 'users_wp_admin_wp_nav_menu_restrict_items') );
     }
 
@@ -61,20 +61,20 @@ class Users_WP_Menus {
 
         $tabs = array();
 
-        $tabs['common']['label']  = __( 'Common', 'uwp' );
+        $tabs['common']['label']  = __( 'Common', 'userswp' );
         $tabs['common']['pages']  = $this->users_wp_nav_menu_get_common_pages();
 
-        $tabs['loggedin']['label']  = __( 'Logged-In', 'uwp' );
+        $tabs['loggedin']['label']  = __( 'Logged-In', 'userswp' );
         $tabs['loggedin']['pages']  = $this->users_wp_nav_menu_get_loggedin_pages();
 
-        $tabs['loggedout']['label']  = __( 'Logged-Out', 'uwp' );
+        $tabs['loggedout']['label']  = __( 'Logged-Out', 'userswp' );
         $tabs['loggedout']['pages']  = $this->users_wp_nav_menu_get_loggedout_pages();
 
         ?>
 
         <div id="users-wp-menu" class="posttypediv">
-            <h4><?php esc_html_e( 'Common', 'uwp' ) ?></h4>
-            <p><?php esc_html_e( 'Common links are visible to everyone.', 'uwp' ) ?></p>
+            <h4><?php esc_html_e( 'Common', 'userswp' ) ?></h4>
+            <p><?php esc_html_e( 'Common links are visible to everyone.', 'userswp' ) ?></p>
 
             <div id="tabs-panel-posttype-<?php echo $post_type_name; ?>-common" class="tabs-panel tabs-panel-active">
                 <ul id="users_wp-menu-checklist-common" class="categorychecklist form-no-clear">
@@ -85,8 +85,8 @@ class Users_WP_Menus {
                     ?>
                 </ul>
             </div>
-            <h4><?php esc_html_e( 'Logged-In', 'uwp' ) ?></h4>
-            <p><?php esc_html_e( 'Logged-In links are not visible to visitors who are not logged in.', 'uwp' ) ?></p>
+            <h4><?php esc_html_e( 'Logged-In', 'userswp' ) ?></h4>
+            <p><?php esc_html_e( 'Logged-In links are not visible to visitors who are not logged in.', 'userswp' ) ?></p>
 
             <div id="tabs-panel-posttype-<?php echo $post_type_name; ?>-loggedin" class="tabs-panel tabs-panel-active">
                 <ul id="users_wp-menu-checklist-loggedin" class="categorychecklist form-no-clear">
@@ -98,8 +98,8 @@ class Users_WP_Menus {
                 </ul>
             </div>
 
-            <h4><?php esc_html_e( 'Logged-Out', 'uwp' ) ?></h4>
-            <p><?php esc_html_e( 'Logged-Out links are not visible to users who are logged in.', 'uwp' ) ?></p>
+            <h4><?php esc_html_e( 'Logged-Out', 'userswp' ) ?></h4>
+            <p><?php esc_html_e( 'Logged-Out links are not visible to users who are logged in.', 'userswp' ) ?></p>
 
             <div id="tabs-panel-posttype-<?php echo $post_type_name; ?>-loggedin" class="tabs-panel tabs-panel-active">
                 <ul id="users_wp-menu-checklist-loggedin" class="categorychecklist form-no-clear">
@@ -113,7 +113,7 @@ class Users_WP_Menus {
 
             <p class="button-controls">
 			<span class="add-to-menu">
-				<input type="submit"<?php if ( function_exists( 'wp_nav_menu_disabled_check' ) ) : wp_nav_menu_disabled_check( $nav_menu_selected_id ); endif; ?> class="button-secondary submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu', 'uwp' ); ?>" name="add-custom-menu-item" id="submit-users-wp-menu" />
+				<input type="submit"<?php if ( function_exists( 'wp_nav_menu_disabled_check' ) ) : wp_nav_menu_disabled_check( $nav_menu_selected_id ); endif; ?> class="button-secondary submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu', 'userswp' ); ?>" name="add-custom-menu-item" id="submit-users-wp-menu" />
 				<span class="spinner"></span>
 			</span>
             </p>
@@ -219,7 +219,7 @@ class Users_WP_Menus {
         }
 
         $users_wp_menu_items[] = array(
-            'name' => __( 'Log out', 'uwp' ),
+            'name' => __( 'Log out', 'userswp' ),
             'slug' => 'logout',
             'link' => wp_login_url(),
         );

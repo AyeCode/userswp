@@ -9,10 +9,10 @@ class UWP_Login_Widget extends WP_Widget
     function __construct()
     {
         $widget_ops = array(
-            'description' => __('Displays Login Form', 'uwp'),
+            'description' => __('Displays Login Form', 'userswp'),
             'classname' => 'uwp_progress_users',
         );
-        parent::__construct(false, $name = _x('UWP > Login', 'widget name', 'uwp'), $widget_ops);
+        parent::__construct(false, $name = _x('UWP > Login', 'widget name', 'userswp'), $widget_ops);
 
     }
 
@@ -28,7 +28,7 @@ class UWP_Login_Widget extends WP_Widget
             return;
         }
         extract($args, EXTR_SKIP);
-        $title = empty($instance['title']) ? __('Login', 'uwp') : apply_filters('uwp_login_widget_title', $instance['title']);
+        $title = empty($instance['title']) ? __('Login', 'userswp') : apply_filters('uwp_login_widget_title', $instance['title']);
 
         echo '<div class="uwp_widgets">';
         echo $before_widget;
@@ -52,11 +52,11 @@ class UWP_Login_Widget extends WP_Widget
     {
         //widgetform in backend
         $instance = wp_parse_args((array)$instance, array(
-            'title' => __('Login', 'uwp'),
+            'title' => __('Login', 'userswp'),
         ));
         $title = strip_tags($instance['title']);
         ?>
-        <p><label for="<?php echo $this->get_field_id('title'); ?>"><?php echo __("Widget Title:", 'uwp'); ?> <input class="widefat"
+        <p><label for="<?php echo $this->get_field_id('title'); ?>"><?php echo __("Widget Title:", 'userswp'); ?> <input class="widefat"
                                                                                                                      id="<?php echo $this->get_field_id('title'); ?>"
                                                                                                                      name="<?php echo $this->get_field_name('title'); ?>"
                                                                                                                      type="text"
