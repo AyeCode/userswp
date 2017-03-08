@@ -754,6 +754,23 @@ class Users_WP_Form_Builder {
                     <ul class="widefat post fixed" style="width:100%;">
 
                         <?php
+                        // data_type
+                        if(has_filter("uwp_builder_data_type_{$field_type}")){
+
+                            echo apply_filters("uwp_builder_data_type_{$field_type}",'',$result_str,$cf,$field_info);
+
+                        }else{
+                            $value = '';
+                            if (isset($field_info->data_type)) {
+                                $value = esc_attr($field_info->data_type);
+                            }elseif(isset($cf['defaults']['data_type']) && $cf['defaults']['data_type']){
+                                $value = $cf['defaults']['data_type'];
+                            }
+                            ?>
+                            <input type="hidden" name="data_type" id="data_type" value="<?php echo $value;?>"/>
+                            <?php
+                        }
+                        
                         // site_title
                         if(has_filter("uwp_builder_site_title_{$field_type}")){
 
@@ -1290,6 +1307,7 @@ class Users_WP_Form_Builder {
             $site_title = $request_field['site_title'];
             $form_label = isset($request_field['form_label']) ? $request_field['form_label'] : '';
             $field_type = $request_field['field_type'];
+            $data_type = $request_field['data_type'];
             $field_type_key = isset($request_field['field_type_key']) ? $request_field['field_type_key'] : $field_type;
             $htmlvar_name = isset($request_field['htmlvar_name']) ? $request_field['htmlvar_name'] : '';
             $default_value = isset($request_field['default_value']) ? $request_field['default_value'] : '';
@@ -1363,6 +1381,7 @@ class Users_WP_Form_Builder {
                             site_title = %s,
                             form_label = %s,
                             field_type = %s,
+                            data_type = %s,
                             field_type_key = %s,
                             htmlvar_name = %s,
                             default_value = %s,
@@ -1391,6 +1410,7 @@ class Users_WP_Form_Builder {
                             $site_title,
                             $form_label,
                             $field_type,
+                            $data_type,
                             $field_type_key,
                             $htmlvar_name,
                             $default_value,
@@ -1439,6 +1459,7 @@ class Users_WP_Form_Builder {
                             site_title = %s,
                             form_label = %s,
                             field_type = %s,
+                            data_type = %s,
                             field_type_key = %s,
                             htmlvar_name = %s,
                             default_value = %s,
@@ -1465,6 +1486,7 @@ class Users_WP_Form_Builder {
                             $site_title,
                             $form_label,
                             $field_type,
+                            $data_type,
                             $field_type_key,
                             $htmlvar_name,
                             $default_value,

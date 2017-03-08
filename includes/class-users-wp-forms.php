@@ -310,7 +310,8 @@ class Users_WP_Forms {
                 $errors->add('invalid_userorpass', __('<strong>Error</strong>: Invalid username or Password.', 'userswp'));
                 return $errors;
             } else {
-                wp_redirect(home_url('/'));
+                $regsiter_redirect = apply_filters('uwp_register_redirect_url', home_url('/'));
+                wp_redirect($regsiter_redirect);
                 exit();
             }
         } else {
@@ -1067,7 +1068,7 @@ class Users_WP_Forms {
             $date_format = $extra_fields['date_format'];
             $jquery_date_format  = $date_format;
 
-            if (!empty($value)) {
+            if (!empty($value) && !is_string($value)) {
                 $value = date('Y-m-d', $value);
             }
 
