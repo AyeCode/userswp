@@ -220,6 +220,27 @@ jQuery(document).ready(function () {
     });
 });
 
+function uwp_data_type_changed(obj, cont) {
+    if (obj && cont) {
+        jQuery('#licontainer_' + cont).find('.decimal-point-wrapper').hide();
+        if (jQuery(obj).val() == 'FLOAT') {
+            jQuery('#licontainer_' + cont).find('.decimal-point-wrapper').show();
+        }
+
+        if (jQuery(obj).val() == 'FLOAT' || jQuery(obj).val() == 'INT') {
+            jQuery('#licontainer_' + cont).find('.uwp-price-extra-set').show();
+
+            if(jQuery('#licontainer_' + cont).find(".uwp-price-extra-set input[name='extra[is_price]']:checked").val()=='1'){
+                jQuery('#licontainer_' + cont).find('.uwp-price-extra').show();
+            }
+
+        }else{
+            jQuery('#licontainer_' + cont).find('.uwp-price-extra-set').hide();
+            jQuery('#licontainer_' + cont).find('.uwp-price-extra').hide();
+        }
+    }
+}
+
 function save_field(id) {
 
     if (jQuery('#licontainer_' + id + ' #htmlvar_name').length > 0) {

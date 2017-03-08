@@ -190,6 +190,7 @@ class Users_WP_Activator {
         $form_fields = "CREATE TABLE " . $table_name . " (
 							  id int(11) NOT NULL AUTO_INCREMENT,
 							  form_type varchar(100) NULL,
+							  data_type varchar(100) NULL,
 							  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
 							  field_type_key varchar(255) NOT NULL,
 							  site_title varchar(255) NULL DEFAULT NULL,
@@ -243,6 +244,7 @@ class Users_WP_Activator {
 									  search_max_value int(11) NULL DEFAULT NULL,
 									  search_diff_value int(11) NULL DEFAULT NULL,
 									  search_condition varchar(100) NULL DEFAULT NULL,
+									  field_input_type varchar(255) NULL DEFAULT NULL,
 									  field_data_type varchar(255) NULL DEFAULT NULL,
 									  PRIMARY KEY  (id)
 									) $collate AUTO_INCREMENT=1 ;";
