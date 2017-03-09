@@ -253,6 +253,19 @@ class Users_WP_Activator {
 
         dbDelta($form_extras);
 
+
+        // Table for storing userswp usermeta
+        $usermeta_table_name = $wpdb->prefix . 'uwp_usermeta';
+        $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
+						user_id int(20) NOT NULL,
+						user_ip varchar(20) NULL DEFAULT NULL,
+						PRIMARY KEY  (user_id),
+						) $collate ";
+
+        $user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);
+
+        dbDelta($user_meta);
+
     }
 
     public static function uwp_create_default_fields()

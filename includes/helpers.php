@@ -2274,3 +2274,28 @@ function uwp_builder_data_type_text($output,$result_str,$cf,$field_info){
     return $output;
 }
 add_filter('uwp_builder_data_type_text','uwp_builder_data_type_text', 10, 4);
+
+function uwp_column_exist($db, $column)
+{
+    global $wpdb;
+    $exists = false;
+    $columns = $wpdb->get_col("show columns from $db");
+    foreach ($columns as $c) {
+        if ($c == $column) {
+            $exists = true;
+            break;
+        }
+    }
+    return $exists;
+}
+
+function uwp_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
+{
+    global $wpdb;
+    $result = 0;// no rows affected
+    if (!uwp_column_exist($db, $column)) {
+        if (!empty($db) && !empty($column))
+            $result = $wpdb->query("ALTER TABLE `$db` ADD `$column`  $column_attr");
+    }
+    return $result;
+}
