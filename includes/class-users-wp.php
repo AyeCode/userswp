@@ -379,6 +379,7 @@ class Users_WP {
         $this->loader->add_filter('uwp_builder_extra_fields_radio', $form_builder, 'uwp_builder_extra_fields_smr', 10, 4);
         $this->loader->add_filter('uwp_builder_extra_fields_datepicker', $form_builder, 'uwp_builder_extra_fields_datepicker', 10, 4);
         $this->loader->add_filter('uwp_builder_extra_fields_file', $form_builder, 'uwp_builder_extra_fields_file', 10, 4);
+        $this->loader->add_filter('uwp_builder_data_type_text', $form_builder, 'uwp_builder_data_type_text', 10, 4);
 
         $this->loader->add_action('uwp_admin_extra_custom_fields', $form_builder, 'uwp_advance_admin_custom_fields', 10, 2);
 

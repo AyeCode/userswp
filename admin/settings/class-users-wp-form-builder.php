@@ -1269,9 +1269,14 @@ class Users_WP_Form_Builder {
 
         $table_name = $wpdb->prefix . 'uwp_form_fields';
 
+        $meta_table = $wpdb->prefix . 'uwp_usermeta';
+
+        $old_html_variable = '';
+
+
         $result_str = isset($request_field['field_id']) ? trim($request_field['field_id']) : '';
 
-        $post_meta_info = null;
+        $user_meta_info = null;
         $cf = trim($result_str, '_');
 
 
@@ -1294,12 +1299,17 @@ class Users_WP_Form_Builder {
 
             if ($cf != '') {
 
-                $post_meta_info = $wpdb->get_row(
+                $user_meta_info = $wpdb->get_row(
                     $wpdb->prepare(
                         "select * from " . $table_name . " where id = %d",
                         array($cf)
                     )
                 );
+
+            }
+
+            if (!empty($user_meta_info)) {
+                $old_html_variable = $user_meta_info->htmlvar_name;
 
             }
 
@@ -1323,6 +1333,8 @@ class Users_WP_Form_Builder {
             $css_class = isset($request_field['css_class']) ? $request_field['css_class'] : '';
             $field_icon = isset($request_field['field_icon']) ? $request_field['field_icon'] : '';
             $show_in = isset($request_field['show_in']) ? $request_field['show_in'] : '';
+            $decimal_point = isset($request_field['decimal_point']) ? trim($request_field['decimal_point']) : ''; // decimal point for DECIMAL data type
+            $decimal_point = $decimal_point > 0 ? ($decimal_point > 10 ? 10 : $decimal_point) : '';
             $validation_pattern = isset($request_field['validation_pattern']) ? $request_field['validation_pattern'] : '';
             $validation_msg = isset($request_field['validation_msg']) ? $request_field['validation_msg'] : '';
 
@@ -1364,8 +1376,98 @@ class Users_WP_Form_Builder {
                 $sort_order = (int)$last_order + 1;
             }
 
+            $default_value_add = '';
 
-            if (!empty($post_meta_info)) {
+            if (!empty($user_meta_info)) {
+                
+                // Create custom columns
+                switch ($field_type):
+                    
+                    case 'checkbox':
+                    case 'multiselect':
+                    case 'select':
+                    case 'taxonomy':
+
+                        $op_size = '500';
+
+                        // only make the field as big as it needs to be.
+                        if(isset($option_values) && $option_values && $field_type=='select'){
+                            $option_values_arr = explode(',',$option_values);
+                            if(is_array($option_values_arr)){
+                                $op_max = 0;
+                                foreach($option_values_arr as $op_val){
+                                    if(strlen($op_val) && strlen($op_val)>$op_max){$op_max = strlen($op_val);}
+                                }
+                                if($op_max){$op_size =$op_max; }
+                            }
+                        }elseif(isset($option_values) && $option_values && $field_type=='multiselect'){
+                            if(strlen($option_values)){
+                                $op_size =  strlen($option_values);
+                            }
+                        }
+
+                        $meta_field_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "`VARCHAR( $op_size ) NULL";
+
+                        if ($default_value != '') {
+                            $meta_field_add .= " DEFAULT '" . $default_value . "'";
+                        }
+
+                        $alter_result = $wpdb->query($meta_field_add);
+                        if($alter_result===false){
+                            return __('Column change failed, you may have too many columns.','userswp');
+                        }
+
+                        if (isset($request_field['cat_display_type']))
+                            $extra_fields = $request_field['cat_display_type'];
+
+                        if (isset($request_field['multi_display_type']))
+                            $extra_fields = $request_field['multi_display_type'];
+
+
+                        break;
+
+                    case 'textarea':
+                    case 'html':
+                    case 'url':
+                    case 'file':
+
+                        $alter_result = $wpdb->query("ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` TEXT NULL");
+                        if($alter_result===false){
+                            return __('Column change failed, you may have too many columns.','userswp');
+                        }
+                        if (isset($request_field['advanced_editor']))
+                            $extra_fields = $request_field['advanced_editor'];
+
+                        break;
+
+                    case 'fieldset':
+                        // Nothing happened for fieldset
+                        break;
+
+                    default:
+                        if ($data_type != 'VARCHAR' && $data_type != '') {
+                            if ($data_type == 'FLOAT' && $decimal_point > 0) {
+                                $default_value_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` DECIMAL(11, " . (int)$decimal_point . ") NULL";
+                            } else {
+                                $default_value_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` " . $data_type . " NULL";
+                            }
+
+                            if (is_numeric($default_value) && $default_value != '') {
+                                $default_value_add .= " DEFAULT '" . $default_value . "'";
+                            }
+                        } else {
+                            $default_value_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` VARCHAR( 254 ) NULL";
+                            if ($default_value != '') {
+                                $default_value_add .= " DEFAULT '" . $default_value . "'";
+                            }
+                        }
+
+                        $alter_result = $wpdb->query($default_value_add);
+                        if($alter_result===false){
+                            return __('Column change failed, you may have too many columns.','userswp');
+                        }
+                        break;
+                endswitch;
 
                 $extra_field_query = '';
                 if (!empty($extra_fields)) {
@@ -1382,6 +1484,7 @@ class Users_WP_Form_Builder {
                             form_label = %s,
                             field_type = %s,
                             data_type = %s,
+                            decimal_point = %s,
                             field_type_key = %s,
                             htmlvar_name = %s,
                             default_value = %s,
@@ -1411,6 +1514,7 @@ class Users_WP_Form_Builder {
                             $form_label,
                             $field_type,
                             $data_type,
+                            $decimal_point,
                             $field_type_key,
                             $htmlvar_name,
                             $default_value,
@@ -1445,6 +1549,142 @@ class Users_WP_Form_Builder {
 
             } else {
 
+                switch ($field_type):
+
+                    case 'checkbox':
+                        $data_type = 'TINYINT';
+
+                        $meta_field_add = $data_type . "( 1 ) NOT NULL ";
+                        if ((int)$default_value === 1) {
+                            $meta_field_add .= " DEFAULT '1'";
+                        }
+
+                        $add_result = uwp_add_column_if_not_exist($meta_table, $htmlvar_name, $meta_field_add);
+                        if ($add_result === false) {
+                            return __('Column creation failed, you may have too many columns or the default value does not match with field data type.', 'userswp');
+                        }
+                        break;
+                    case 'multiselect':
+                    case 'select':
+                        $data_type = 'VARCHAR';
+                        $op_size = '500';
+
+                        // only make the field as big as it needs to be.
+                        if (isset($option_values) && $option_values && $field_type == 'select') {
+                            $option_values_arr = explode(',', $option_values);
+
+                            if (is_array($option_values_arr)) {
+                                $op_max = 0;
+
+                                foreach ($option_values_arr as $op_val) {
+                                    if (strlen($op_val) && strlen($op_val) > $op_max) {
+                                        $op_max = strlen($op_val);
+                                    }
+                                }
+
+                                if ($op_max) {
+                                    $op_size = $op_max;
+                                }
+                            }
+                        } elseif (isset($option_values) && $option_values && $field_type == 'multiselect') {
+                            if (strlen($option_values)) {
+                                $op_size =  strlen($option_values);
+                            }
+
+                            if (isset($request_field['multi_display_type'])) {
+                                $extra_fields = $request_field['multi_display_type'];
+                            }
+                        }
+
+                        $meta_field_add = $data_type . "( $op_size ) NULL ";
+                        if ($default_value != '') {
+                            $meta_field_add .= " DEFAULT '" . $default_value . "'";
+                        }
+
+                        $add_result = uwp_add_column_if_not_exist($meta_table, $htmlvar_name, $meta_field_add);
+                        if ($add_result === false) {
+                            return __('Column creation failed, you may have too many columns or the default value does not match with field data type.', 'userswp');
+                        }
+                        break;
+                    case 'textarea':
+                    case 'html':
+                    case 'url':
+                    case 'file':
+
+                        $data_type = 'TEXT';
+
+                        $default_value_add = " `" . $htmlvar_name . "` " . $data_type . " NULL ";
+
+                        $meta_field_add = $data_type . " NULL ";
+                        /*if($default_value != '')
+					{ $meta_field_add .= " DEFAULT '".$default_value."'"; }*/
+
+                        $add_result = uwp_add_column_if_not_exist($meta_table, $htmlvar_name, $meta_field_add);
+                        if ($add_result === false) {
+                            return __('Column creation failed, you may have too many columns or the default value does not match with field data type.', 'userswp');
+                        }
+
+                        break;
+
+                    case 'datepicker':
+
+                        $data_type = 'DATE';
+
+                        $default_value_add = " `" . $htmlvar_name . "` " . $data_type . " NULL ";
+
+                        $meta_field_add = $data_type . " NULL ";
+
+                        $add_result = uwp_add_column_if_not_exist($meta_table, $htmlvar_name, $meta_field_add);
+                        if ($add_result === false) {
+                            return __('Column creation failed, you may have too many columns or the default value must have in valid date format.', 'userswp');
+                        }
+
+                        break;
+
+                    case 'time':
+
+                        $data_type = 'TIME';
+
+                        $default_value_add = " `" . $htmlvar_name . "` " . $data_type . " NULL ";
+
+                        $meta_field_add = $data_type . " NULL ";
+
+                        $add_result = uwp_add_column_if_not_exist($meta_table, $htmlvar_name, $meta_field_add);
+                        if ($add_result === false) {
+                            return __('Column creation failed, you may have too many columns or the default value must have in valid time format.', 'userswp');
+                        }
+
+                        break;
+
+                    default:
+
+                        if ($data_type != 'VARCHAR' && $data_type != '') {
+                            $meta_field_add = $data_type . " NULL ";
+
+                            if ($data_type == 'FLOAT' && $decimal_point > 0) {
+                                $meta_field_add = "DECIMAL(11, " . (int)$decimal_point . ") NULL ";
+                            }
+
+                            if (is_numeric($default_value) && $default_value != '') {
+                                $default_value_add .= " DEFAULT '" . $default_value . "'";
+                                $meta_field_add .= " DEFAULT '" . $default_value . "'";
+                            }
+                        } else {
+                            $meta_field_add = " VARCHAR( 254 ) NULL ";
+
+                            if ($default_value != '') {
+                                $default_value_add .= " DEFAULT '" . $default_value . "'";
+                                $meta_field_add .= " DEFAULT '" . $default_value . "'";
+                            }
+                        }
+
+                        $add_result = uwp_add_column_if_not_exist($meta_table, $htmlvar_name, $meta_field_add);
+                        if ($add_result === false) {
+                            return __('Column creation failed, you may have too many columns or the default value does not match with field data type.', 'userswp');
+                        }
+                        break;
+                endswitch;
+
                 $extra_field_query = '';
                 if (!empty($extra_fields)) {
                     $extra_field_query = serialize($extra_fields);
@@ -1460,6 +1700,7 @@ class Users_WP_Form_Builder {
                             form_label = %s,
                             field_type = %s,
                             data_type = %s,
+                            decimal_point = %s,
                             field_type_key = %s,
                             htmlvar_name = %s,
                             default_value = %s,
@@ -1487,6 +1728,7 @@ class Users_WP_Form_Builder {
                             $form_label,
                             $field_type,
                             $data_type,
+                            $decimal_point,
                             $field_type_key,
                             $htmlvar_name,
                             $default_value,
@@ -1537,12 +1779,12 @@ class Users_WP_Form_Builder {
 
         $count = 0;
         if (!empty($field_ids)):
-            $post_meta_info = false;
+            $user_meta_info = false;
             foreach ($field_ids as $id) {
 
                 $cf = trim($id, '_');
 
-                $post_meta_info = $wpdb->query(
+                $user_meta_info = $wpdb->query(
                     $wpdb->prepare(
                         "update " . $table_name . " set
 															sort_order=%d
@@ -1553,7 +1795,7 @@ class Users_WP_Form_Builder {
                 $count++;
             }
 
-            return $post_meta_info;
+            return $user_meta_info;
         else:
             return false;
         endif;
@@ -1708,6 +1950,77 @@ class Users_WP_Form_Builder {
 
         $html = ob_get_clean();
         return $output.$html;
+    }
+    
+    public function uwp_builder_data_type_text($output,$result_str,$cf,$field_info){
+        ob_start();
+
+        $dt_value = '';
+        if (isset($field_info->data_type)) {
+            $dt_value  = esc_attr($field_info->data_type);
+        }elseif(isset($cf['defaults']['data_type']) && $cf['defaults']['data_type']){
+            $dt_value  = $cf['defaults']['data_type'];
+        }
+        ?>
+        <li>
+            <label for="data_type" class="uwp-tooltip-wrap">
+                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Field Data Type ? :', 'userswp'); ?>
+                <div class="uwp-tooltip">
+                    <?php _e('Select Custom Field type', 'userswp'); ?>
+                </div>
+            </label>
+            <div class="uwp-input-wrap">
+
+                <select name="data_type" id="data_type"
+                        onchange="javascript:uwp_data_type_changed(this, '<?php echo $result_str; ?>');">
+                    <option
+                        value="XVARCHAR" <?php if ($dt_value  == 'VARCHAR') {
+                        echo 'selected="selected"';
+                    } ?>><?php _e('Text Field', 'userswp'); ?></option>
+                    <option
+                        value="INT" <?php if ($dt_value   == 'INT') {
+                        echo 'selected="selected"';
+                    } ?>><?php _e('Number Field', 'userswp'); ?></option>
+                    <option
+                        value="FLOAT" <?php if ($dt_value   == 'FLOAT') {
+                        echo 'selected="selected"';
+                    } ?>><?php _e('Decimal Field', 'userswp'); ?></option>
+                </select>
+
+            </div>
+        </li>
+
+        <?php
+        $value = '';
+        if (isset($field_info->decimal_point)) {
+            $value = esc_attr($field_info->decimal_point);
+        }elseif(isset($cf['defaults']['decimal_point']) && $cf['defaults']['decimal_point']){
+            $value = $cf['defaults']['decimal_point'];
+        }
+        ?>
+
+        <li class="decimal-point-wrapper"
+            style="<?php echo ($dt_value  == 'FLOAT') ? '' : 'display:none' ?>">
+            <label for="decimal_point" class="uwp-tooltip-wrap">
+                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Select decimal point :', 'userswp'); ?>
+                <div class="uwp-tooltip">
+                    <?php _e('Decimal point to display after point', 'userswp'); ?>
+                </div>
+            </label>
+            <div class="uwp-input-wrap">
+                <select name="decimal_point" id="decimal_point">
+                    <option value=""><?php echo __('Select', 'userswp'); ?></option>
+                    <?php for ($i = 1; $i <= 10; $i++) {
+                        $selected = $i == $value ? 'selected="selected"' : ''; ?>
+                        <option value="<?php echo $i; ?>" <?php echo $selected; ?>><?php echo $i; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </li>
+        <?php
+
+        $output = ob_get_clean();
+        return $output;
     }
 
     public function uwp_advance_admin_custom_fields($field_info, $cf) {
@@ -2213,7 +2526,7 @@ class Users_WP_Form_Builder {
 
             if ($cf != '') {
 
-                $post_meta_info = $wpdb->get_row(
+                $user_meta_info = $wpdb->get_row(
                     $wpdb->prepare(
                         "select * from " . $extras_table_name . " where id = %d",
                         array($cf)
@@ -2229,7 +2542,7 @@ class Users_WP_Form_Builder {
             $field_id = (isset($request_field['field_id']) && $request_field['field_id']) ? str_replace('new', '', $request_field['field_id']) : '';
             
 
-            if (!empty($post_meta_info)) {
+            if (!empty($user_meta_info)) {
 
                 $wpdb->query(
                     $wpdb->prepare(

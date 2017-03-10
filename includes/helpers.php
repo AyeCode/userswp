@@ -270,13 +270,31 @@ function uwp_update_option( $key = false, $value = '') {
 }
 
 function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
-
+    global $wpdb;
     if (!$user_id) {
         return $default;
     }
 
+//    $meta_table = $wpdb->prefix . 'uwp_usermeta';
+
+//    $usermeta_table_keys = array(
+//        'uwp_account_first_name',
+//        'uwp_account_last_name',
+//        'uwp_account_bio',
+//    );
+//
+//    $users_table_keys = array(
+//        'uwp_account_username',
+//        'uwp_account_email',
+//    );
+//
+//
+//    if (in_array($key, $usermeta_table_keys)) {
+//
+//
+//    }
+
     $user_data = get_userdata($user_id);
-    $usermeta = get_user_meta( $user_id, $key, true );
 
     if ($key == 'uwp_account_email') {
         $value = $user_data->user_email;
@@ -287,7 +305,13 @@ function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
     } elseif ($key == 'uwp_account_bio') {
         $value = $user_data->description;
     } else {
-        $value = $usermeta ? $usermeta : $default;
+        $usermeta = uwp_get_usermeta_row($user_id);
+        if (!empty($usermeta)) {
+            $value = $usermeta->{$key} ? $usermeta->{$key} : $default;
+        } else {
+            $value = $default;
+        }
+
     }
     $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
     return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
@@ -299,12 +323,39 @@ function uwp_update_usermeta( $user_id = false, $key, $value ) {
         return false;
     }
 
+    global $wpdb;
+    $meta_table = $wpdb->prefix . 'uwp_usermeta';
+
     $value = apply_filters( 'uwp_update_usermeta', $value, $user_id, $key );
     $value =  apply_filters( 'uwp_update_usermeta_' . $key, $value, $user_id, $key );
 
     do_action( 'uwp_before_update_usermeta', $user_id, $key, $value );
 
-    update_user_meta($user_id, $key, $value);
+    $user_meta_info = uwp_get_usermeta_row($user_id);
+
+    if (!empty($user_meta_info)) {
+        $wpdb->query(
+            $wpdb->prepare(
+
+                "update " . $meta_table . " set {$key} = %s where user_id = %d",
+                array(
+                    $value,
+                    $user_id
+                )
+            )
+        );
+    } else {
+        $wpdb->query(
+            $wpdb->prepare(
+
+                "insert into " . $meta_table . " set {$key} = %s, user_id = %d",
+                array(
+                    $value,
+                    $user_id
+                )
+            )
+        );
+    }
 
     return true;
 }
@@ -1267,7 +1318,7 @@ function get_uwp_users_list() {
     $number = uwp_get_option('profile_no_of_items', 10);
 
     $where = '';
-    $where = apply_filters('uwp_users_search_where', $where);
+    $where = apply_filters('uwp_users_search_where', $where, $keyword);
     var_dump($where);
 
     if ($keyword) {
@@ -2211,66 +2262,57 @@ function uwp_ucwords($string, $charset='UTF-8') {
     }
 }
 
-function uwp_builder_data_type_text($output,$result_str,$cf,$field_info){
-    ob_start();
 
-    $dt_value = '';
-    if (isset($field_info->data_type)) {
-        $dt_value  = esc_attr($field_info->data_type);
-    }elseif(isset($cf['defaults']['data_type']) && $cf['defaults']['data_type']){
-        $dt_value  = $cf['defaults']['data_type'];
+function uwp_column_exist($db, $column)
+{
+    global $wpdb;
+    $exists = false;
+    $columns = $wpdb->get_col("show columns from $db");
+    foreach ($columns as $c) {
+        if ($c == $column) {
+            $exists = true;
+            break;
+        }
     }
-    ?>
-    <li>
-        <label for="data_type"><?php _e('Field Data Type ? :', 'userswp'); ?></label>
-        <div class="uwp-input-wrap">
-
-            <select name="data_type" id="data_type"
-                    onchange="javascript:uwp_data_type_changed(this, '<?php echo $result_str; ?>');">
-                <option
-                    value="XVARCHAR" <?php if ($dt_value  == 'VARCHAR') {
-                    echo 'selected="selected"';
-                } ?>><?php _e('CHARACTER', 'userswp'); ?></option>
-                <option
-                    value="INT" <?php if ($dt_value   == 'INT') {
-                    echo 'selected="selected"';
-                } ?>><?php _e('NUMBER', 'userswp'); ?></option>
-                <option
-                    value="FLOAT" <?php if ($dt_value   == 'FLOAT') {
-                    echo 'selected="selected"';
-                } ?>><?php _e('DECIMAL', 'userswp'); ?></option>
-            </select>
-            <br/> <span><?php _e('Select Custom Field type', 'userswp'); ?></span>
-
-        </div>
-    </li>
-
-    <?php
-    $value = '';
-    if (isset($field_info->decimal_point)) {
-        $value = esc_attr($field_info->decimal_point);
-    }elseif(isset($cf['defaults']['decimal_point']) && $cf['defaults']['decimal_point']){
-        $value = $cf['defaults']['decimal_point'];
-    }
-    ?>
-
-    <li class="decimal-point-wrapper"
-        style="<?php echo ($dt_value  == 'FLOAT') ? '' : 'display:none' ?>">
-        <label for="decimal_point"><?php _e('Select decimal point :', 'userswp'); ?></label>
-        <div class="uwp-input-wrap">
-            <select name="decimal_point" id="decimal_point">
-                <option value=""><?php echo __('Select', 'userswp'); ?></option>
-                <?php for ($i = 1; $i <= 10; $i++) {
-                    $selected = $i == $value ? 'selected="selected"' : ''; ?>
-                    <option value="<?php echo $i; ?>" <?php echo $selected; ?>><?php echo $i; ?></option>
-                <?php } ?>
-            </select>
-            <br/> <span><?php _e('Decimal point to display after point', 'userswp'); ?></span>
-        </div>
-    </li>
-    <?php
-
-    $output = ob_get_clean();
-    return $output;
+    return $exists;
 }
-add_filter('uwp_builder_data_type_text','uwp_builder_data_type_text', 10, 4);
+
+function uwp_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
+{
+    $excluded = array(
+        'uwp_account_first_name',
+        'uwp_account_last_name',
+        'uwp_account_username',
+        'uwp_account_email',
+        'uwp_account_bio',
+        'uwp_account_password',
+        'uwp_account_confirm_password',
+    );
+
+    $starts_with = "uwp_account_";
+
+    if ((substr($column, 0, strlen($starts_with)) === $starts_with) && !in_array($column, $excluded)) {
+        global $wpdb;
+        $result = 0;// no rows affected
+        if (!uwp_column_exist($db, $column)) {
+            if (!empty($db) && !empty($column))
+                $result = $wpdb->query("ALTER TABLE `$db` ADD `$column`  $column_attr");
+        }
+        return $result;
+    } else {
+        return true;
+    }
+}
+
+function uwp_get_usermeta_row($user_id = false) {
+    if (!$user_id) {
+        return false;
+    }
+
+    global $wpdb;
+    $meta_table = $wpdb->prefix . 'uwp_usermeta';
+
+    $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$meta_table} WHERE user_id = %d", $user_id));
+
+    return $row;
+}
