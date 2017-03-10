@@ -259,7 +259,9 @@ class Users_WP_Activator {
         $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
 						user_id int(20) NOT NULL,
 						user_ip varchar(20) NULL DEFAULT NULL,
-						PRIMARY KEY  (user_id),
+						uwp_account_avatar_thumb varchar(255) NULL DEFAULT NULL,
+						uwp_account_banner_thumb varchar(255) NULL DEFAULT NULL,
+						PRIMARY KEY  (user_id)
 						) $collate ";
 
         $user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);

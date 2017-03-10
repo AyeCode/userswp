@@ -1309,8 +1309,7 @@ class Users_WP_Form_Builder {
             }
 
             if (!empty($user_meta_info)) {
-                $post_val = $user_meta_info;
-                $old_html_variable = $post_val->htmlvar_name;
+                $old_html_variable = $user_meta_info->htmlvar_name;
 
             }
 
@@ -1485,6 +1484,7 @@ class Users_WP_Form_Builder {
                             form_label = %s,
                             field_type = %s,
                             data_type = %s,
+                            decimal_point = %s,
                             field_type_key = %s,
                             htmlvar_name = %s,
                             default_value = %s,
@@ -1514,6 +1514,7 @@ class Users_WP_Form_Builder {
                             $form_label,
                             $field_type,
                             $data_type,
+                            $decimal_point,
                             $field_type_key,
                             $htmlvar_name,
                             $default_value,
@@ -1699,6 +1700,7 @@ class Users_WP_Form_Builder {
                             form_label = %s,
                             field_type = %s,
                             data_type = %s,
+                            decimal_point = %s,
                             field_type_key = %s,
                             htmlvar_name = %s,
                             default_value = %s,
@@ -1726,6 +1728,7 @@ class Users_WP_Form_Builder {
                             $form_label,
                             $field_type,
                             $data_type,
+                            $decimal_point,
                             $field_type_key,
                             $htmlvar_name,
                             $default_value,
@@ -1947,6 +1950,77 @@ class Users_WP_Form_Builder {
 
         $html = ob_get_clean();
         return $output.$html;
+    }
+    
+    public function uwp_builder_data_type_text($output,$result_str,$cf,$field_info){
+        ob_start();
+
+        $dt_value = '';
+        if (isset($field_info->data_type)) {
+            $dt_value  = esc_attr($field_info->data_type);
+        }elseif(isset($cf['defaults']['data_type']) && $cf['defaults']['data_type']){
+            $dt_value  = $cf['defaults']['data_type'];
+        }
+        ?>
+        <li>
+            <label for="data_type" class="uwp-tooltip-wrap">
+                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Field Data Type ? :', 'userswp'); ?>
+                <div class="uwp-tooltip">
+                    <?php _e('Select Custom Field type', 'userswp'); ?>
+                </div>
+            </label>
+            <div class="uwp-input-wrap">
+
+                <select name="data_type" id="data_type"
+                        onchange="javascript:uwp_data_type_changed(this, '<?php echo $result_str; ?>');">
+                    <option
+                        value="XVARCHAR" <?php if ($dt_value  == 'VARCHAR') {
+                        echo 'selected="selected"';
+                    } ?>><?php _e('Text Field', 'userswp'); ?></option>
+                    <option
+                        value="INT" <?php if ($dt_value   == 'INT') {
+                        echo 'selected="selected"';
+                    } ?>><?php _e('Number Field', 'userswp'); ?></option>
+                    <option
+                        value="FLOAT" <?php if ($dt_value   == 'FLOAT') {
+                        echo 'selected="selected"';
+                    } ?>><?php _e('Decimal Field', 'userswp'); ?></option>
+                </select>
+
+            </div>
+        </li>
+
+        <?php
+        $value = '';
+        if (isset($field_info->decimal_point)) {
+            $value = esc_attr($field_info->decimal_point);
+        }elseif(isset($cf['defaults']['decimal_point']) && $cf['defaults']['decimal_point']){
+            $value = $cf['defaults']['decimal_point'];
+        }
+        ?>
+
+        <li class="decimal-point-wrapper"
+            style="<?php echo ($dt_value  == 'FLOAT') ? '' : 'display:none' ?>">
+            <label for="decimal_point" class="uwp-tooltip-wrap">
+                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Select decimal point :', 'userswp'); ?>
+                <div class="uwp-tooltip">
+                    <?php _e('Decimal point to display after point', 'userswp'); ?>
+                </div>
+            </label>
+            <div class="uwp-input-wrap">
+                <select name="decimal_point" id="decimal_point">
+                    <option value=""><?php echo __('Select', 'userswp'); ?></option>
+                    <?php for ($i = 1; $i <= 10; $i++) {
+                        $selected = $i == $value ? 'selected="selected"' : ''; ?>
+                        <option value="<?php echo $i; ?>" <?php echo $selected; ?>><?php echo $i; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </li>
+        <?php
+
+        $output = ob_get_clean();
+        return $output;
     }
 
     public function uwp_advance_admin_custom_fields($field_info, $cf) {

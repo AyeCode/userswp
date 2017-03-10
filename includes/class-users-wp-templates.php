@@ -213,7 +213,7 @@ class Users_WP_Templates {
         } else {
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array($form_type)));
         }
-
+        
         if (!empty($fields)) {
             foreach ($fields as $field) {
                 if ($form_type == 'register') {
@@ -446,7 +446,7 @@ class Users_WP_Templates {
 
             delete_option('uwp_activation_redirect');
 
-            wp_redirect(admin_url('admin.php?page=uwp&tab=main&subtab=info'));
+            wp_redirect(admin_url('admin.php?page=userswp&tab=main&subtab=info'));
             exit;
 
         }
