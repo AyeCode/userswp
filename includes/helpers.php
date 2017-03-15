@@ -298,12 +298,6 @@ function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
 
     if ($key == 'uwp_account_email') {
         $value = $user_data->user_email;
-    } elseif ($key == 'uwp_account_first_name') {
-        $value = $user_data->first_name;
-    } elseif ($key == 'uwp_account_last_name') {
-        $value = $user_data->last_name;
-    } elseif ($key == 'uwp_account_bio') {
-        $value = $user_data->description;
     } else {
         $usermeta = uwp_get_usermeta_row($user_id);
         if (!empty($usermeta)) {
@@ -1319,11 +1313,12 @@ function get_uwp_users_list() {
 
     $where = '';
     $where = apply_filters('uwp_users_search_where', $where, $keyword);
-    var_dump($where);
+
 
     if ($keyword) {
-        $users = $wpdb->get_results($wpdb->prepare(
-            "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
+        if (empty($where)) {
+            $users = $wpdb->get_results($wpdb->prepare(
+                "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
             FROM $wpdb->users
             INNER JOIN $wpdb->usermeta
             ON ( $wpdb->users.ID = $wpdb->usermeta.user_id )
@@ -1343,15 +1338,28 @@ function get_uwp_users_list() {
             )
             ORDER BY display_name ASC
             LIMIT 0, 20",
-            array(
-                '%' . $keyword . '%',
-                '%' . $keyword . '%',
-                '%' . $keyword . '%',
-                '%' . $keyword . '%',
-                '%' . $keyword . '%',
-                '%' . $keyword . '%'
-            )
-        ));
+                array(
+                    '%' . $keyword . '%',
+                    '%' . $keyword . '%',
+                    '%' . $keyword . '%',
+                    '%' . $keyword . '%',
+                    '%' . $keyword . '%',
+                    '%' . $keyword . '%'
+                )
+            ));
+        } else {
+            $usermeta_table = $wpdb->prefix . 'uwp_usermeta';
+
+            $users = $wpdb->get_results(
+                "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
+            FROM $wpdb->users
+            INNER JOIN $usermeta_table
+            ON ( $wpdb->users.ID = $usermeta_table.user_id )
+            WHERE 1=1
+            $where
+            ORDER BY display_name ASC
+            LIMIT 0, 20");
+        }
 
     } else {
 
@@ -1402,7 +1410,7 @@ function get_uwp_users_list() {
                 $user_obj = get_user_by('id', $user->ID);
 
                 // exclude logged in user
-                if ($user->ID == get_current_user_id()) {
+                if ($user_obj->ID == get_current_user_id()) {
                     continue;
                 }
                 ?>
@@ -1413,7 +1421,7 @@ function get_uwp_users_list() {
                     <div class="uwp-users-list-user-right">
                         <div class="uwp-users-list-user-name">
                             <h3>
-                                <a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>"><?php echo $user->display_name; ?></a>
+                                <a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user_obj->ID), $user_obj->ID); ?>"><?php echo $user_obj->display_name; ?></a>
                                 <?php do_action('uwp_users_after_title', $user_obj ); ?>
                             </h3>
                         </div>
@@ -1727,7 +1735,7 @@ function uwp_validate_fields($data, $type, $fields = false) {
             $errors->add( 'empty_password', __( 'Please enter a password', 'userswp' ) );
         }
 
-        if (strlen($data['uwp_'.$password_type.'_password']) < 7) {
+        if ($type != 'login' && strlen($data['uwp_'.$password_type.'_password']) < 7) {
             $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', 'userswp'));
         }
 
@@ -2279,15 +2287,7 @@ function uwp_column_exist($db, $column)
 
 function uwp_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
 {
-    $excluded = array(
-        'uwp_account_first_name',
-        'uwp_account_last_name',
-        'uwp_account_username',
-        'uwp_account_email',
-        'uwp_account_bio',
-        'uwp_account_password',
-        'uwp_account_confirm_password',
-    );
+    $excluded = uwp_get_excluded_fields();
 
     $starts_with = "uwp_account_";
 
@@ -2315,4 +2315,56 @@ function uwp_get_usermeta_row($user_id = false) {
     $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$meta_table} WHERE user_id = %d", $user_id));
 
     return $row;
+}
+
+function uwp_get_excluded_fields() {
+    $excluded = array(
+        'uwp_account_password',
+        'uwp_account_confirm_password',
+    );
+    return $excluded;
+}
+
+function uwp_currency_format_number($number='',$cf=''){
+
+    $cs = isset($cf['extra_fields']) ? maybe_unserialize($cf['extra_fields']) : '';
+
+    $symbol = isset($cs['currency_symbol']) ? $cs['currency_symbol'] : '$';
+    $decimals = isset($cf['decimal_point']) && $cf['decimal_point'] ? $cf['decimal_point'] : 2;
+    $decimal_display = isset($cf['decimal_display']) && $cf['decimal_display'] ? $cf['decimal_display'] : 'if';
+    $decimalpoint = '.';
+
+    if(isset($cs['decimal_separator']) && $cs['decimal_separator']=='comma'){
+        $decimalpoint = ',';
+    }
+
+    $separator = ',';
+
+    if(isset($cs['thousand_separator'])){
+        if($cs['thousand_separator']=='comma'){$separator = ',';}
+        if($cs['thousand_separator']=='slash'){$separator = '\\';}
+        if($cs['thousand_separator']=='period'){$separator = '.';}
+        if($cs['thousand_separator']=='space'){$separator = ' ';}
+        if($cs['thousand_separator']=='none'){$separator = '';}
+    }
+
+    $currency_symbol_placement = isset($cs['currency_symbol_placement']) ? $cs['currency_symbol_placement'] : 'left';
+
+    if($decimals>0 && $decimal_display=='if'){
+        if(is_int($number) || floor( $number ) == $number)
+            $decimals = 0;
+    }
+
+    $number = number_format($number,$decimals,$decimalpoint,$separator);
+
+
+
+    if($currency_symbol_placement=='left'){
+        $number = $symbol . $number;
+    }else{
+        $number = $number . $symbol;
+    }
+
+
+    return $number;
 }

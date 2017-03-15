@@ -262,12 +262,6 @@ class Users_WP_Templates {
             } elseif ($field->htmlvar_name == 'uwp_account_confirm_password') {
                 $value = '';
                 $field->is_required = 0;
-            } elseif ($field->htmlvar_name == 'uwp_account_first_name') {
-                $value = $user_data->first_name;
-            } elseif ($field->htmlvar_name == 'uwp_account_last_name') {
-                $value = $user_data->last_name;
-            } elseif ($field->htmlvar_name == 'uwp_account_bio') {
-                $value = $user_data->description;
             } else {
                 $value = uwp_get_usermeta($user_id, $field->htmlvar_name, false);
                 if ($value != '0' && !$value) {

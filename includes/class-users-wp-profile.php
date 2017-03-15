@@ -105,7 +105,7 @@ class Users_WP_Profile {
     }
 
     public function get_profile_bio($user) {
-        $bio = get_user_meta( $user->ID, 'description', true );
+        $bio = uwp_get_usermeta( $user->ID, 'uwp_account_bio', "" );
         $is_profile_page = is_uwp_profile_page();
         if ($bio) {
             ?>
@@ -1226,7 +1226,7 @@ class Users_WP_Profile {
     public function uwp_users_search() {
         ?>
         <div class="uwp-users-list-sort-search">
-            <div class="uwp-user-search">
+            <div class="uwp-user-search" id="uwp_user_search">
                 <?php
                 $keyword = "";
                 if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
@@ -1320,12 +1320,6 @@ class Users_WP_Profile {
         } elseif ($field->htmlvar_name == 'uwp_account_confirm_password') {
             $value = '';
             $field->is_required = 0;
-        } elseif ($field->htmlvar_name == 'uwp_account_first_name') {
-            $value = $user_data->first_name;
-        } elseif ($field->htmlvar_name == 'uwp_account_last_name') {
-            $value = $user_data->last_name;
-        } elseif ($field->htmlvar_name == 'uwp_account_bio') {
-            $value = $user_data->description;
         } else {
             $value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
         }

@@ -785,27 +785,15 @@ class Users_WP_Forms {
         }
 
         //unset default fields
-        if ($type == 'register') {
-            if (isset($data['uwp_account_username'])) {
-                unset($data['uwp_account_username']);
-            }
-        }
+//        if ($type == 'register') {
+//            if (isset($data['uwp_account_username'])) {
+//                unset($data['uwp_account_username']);
+//            }
+//        }
 
         if ($type == 'account' || $type == 'register') {
-            if (isset($data['uwp_account_email'])) {
-                unset($data['uwp_account_email']);
-            }
             if (isset($data['password'])) {
                 unset($data['password']);
-            }
-            if (isset($data['uwp_account_first_name'])) {
-                unset($data['uwp_account_first_name']);
-            }
-            if (isset($data['uwp_account_last_name'])) {
-                unset($data['uwp_account_last_name']);
-            }
-            if (isset($data['uwp_account_bio'])) {
-                unset($data['uwp_account_bio']);
             }
         }
 

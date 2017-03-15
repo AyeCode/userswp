@@ -1379,95 +1379,100 @@ class Users_WP_Form_Builder {
             $default_value_add = '';
 
             if (!empty($user_meta_info)) {
-                
-                // Create custom columns
-                switch ($field_type):
-                    
-                    case 'checkbox':
-                    case 'multiselect':
-                    case 'select':
-                    case 'taxonomy':
 
-                        $op_size = '500';
+                $excluded = uwp_get_excluded_fields();
 
-                        // only make the field as big as it needs to be.
-                        if(isset($option_values) && $option_values && $field_type=='select'){
-                            $option_values_arr = explode(',',$option_values);
-                            if(is_array($option_values_arr)){
-                                $op_max = 0;
-                                foreach($option_values_arr as $op_val){
-                                    if(strlen($op_val) && strlen($op_val)>$op_max){$op_max = strlen($op_val);}
+                $starts_with = "uwp_account_";
+
+                if ((substr($htmlvar_name, 0, strlen($starts_with)) === $starts_with) && !in_array($htmlvar_name, $excluded)) {
+                    // Create custom columns
+                    switch ($field_type):
+
+                        case 'checkbox':
+                        case 'multiselect':
+                        case 'select':
+
+                            $op_size = '500';
+
+                            // only make the field as big as it needs to be.
+                            if(isset($option_values) && $option_values && $field_type=='select'){
+                                $option_values_arr = explode(',',$option_values);
+                                if(is_array($option_values_arr)){
+                                    $op_max = 0;
+                                    foreach($option_values_arr as $op_val){
+                                        if(strlen($op_val) && strlen($op_val)>$op_max){$op_max = strlen($op_val);}
+                                    }
+                                    if($op_max){$op_size =$op_max; }
                                 }
-                                if($op_max){$op_size =$op_max; }
-                            }
-                        }elseif(isset($option_values) && $option_values && $field_type=='multiselect'){
-                            if(strlen($option_values)){
-                                $op_size =  strlen($option_values);
-                            }
-                        }
-
-                        $meta_field_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "`VARCHAR( $op_size ) NULL";
-
-                        if ($default_value != '') {
-                            $meta_field_add .= " DEFAULT '" . $default_value . "'";
-                        }
-
-                        $alter_result = $wpdb->query($meta_field_add);
-                        if($alter_result===false){
-                            return __('Column change failed, you may have too many columns.','userswp');
-                        }
-
-                        if (isset($request_field['cat_display_type']))
-                            $extra_fields = $request_field['cat_display_type'];
-
-                        if (isset($request_field['multi_display_type']))
-                            $extra_fields = $request_field['multi_display_type'];
-
-
-                        break;
-
-                    case 'textarea':
-                    case 'html':
-                    case 'url':
-                    case 'file':
-
-                        $alter_result = $wpdb->query("ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` TEXT NULL");
-                        if($alter_result===false){
-                            return __('Column change failed, you may have too many columns.','userswp');
-                        }
-                        if (isset($request_field['advanced_editor']))
-                            $extra_fields = $request_field['advanced_editor'];
-
-                        break;
-
-                    case 'fieldset':
-                        // Nothing happened for fieldset
-                        break;
-
-                    default:
-                        if ($data_type != 'VARCHAR' && $data_type != '') {
-                            if ($data_type == 'FLOAT' && $decimal_point > 0) {
-                                $default_value_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` DECIMAL(11, " . (int)$decimal_point . ") NULL";
-                            } else {
-                                $default_value_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` " . $data_type . " NULL";
+                            }elseif(isset($option_values) && $option_values && $field_type=='multiselect'){
+                                if(strlen($option_values)){
+                                    $op_size =  strlen($option_values);
+                                }
                             }
 
-                            if (is_numeric($default_value) && $default_value != '') {
-                                $default_value_add .= " DEFAULT '" . $default_value . "'";
-                            }
-                        } else {
-                            $default_value_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` VARCHAR( 254 ) NULL";
+                            $meta_field_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "`VARCHAR( $op_size ) NULL";
+
                             if ($default_value != '') {
-                                $default_value_add .= " DEFAULT '" . $default_value . "'";
+                                $meta_field_add .= " DEFAULT '" . $default_value . "'";
                             }
-                        }
 
-                        $alter_result = $wpdb->query($default_value_add);
-                        if($alter_result===false){
-                            return __('Column change failed, you may have too many columns.','userswp');
-                        }
-                        break;
-                endswitch;
+                            $alter_result = $wpdb->query($meta_field_add);
+                            if($alter_result===false){
+                                return __('Column change failed, you may have too many columns.','userswp');
+                            }
+
+                            if (isset($request_field['cat_display_type']))
+                                $extra_fields = $request_field['cat_display_type'];
+
+                            if (isset($request_field['multi_display_type']))
+                                $extra_fields = $request_field['multi_display_type'];
+
+
+                            break;
+
+                        case 'textarea':
+                        case 'html':
+                        case 'url':
+                        case 'file':
+
+                            $alter_result = $wpdb->query("ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` TEXT NULL");
+                            if($alter_result===false){
+                                return __('Column change failed, you may have too many columns.','userswp');
+                            }
+                            if (isset($request_field['advanced_editor']))
+                                $extra_fields = $request_field['advanced_editor'];
+
+                            break;
+
+                        case 'fieldset':
+                            // Nothing happened for fieldset
+                            break;
+
+                        default:
+                            if ($data_type != 'VARCHAR' && $data_type != '') {
+                                if ($data_type == 'FLOAT' && $decimal_point > 0) {
+                                    $default_value_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` DECIMAL(11, " . (int)$decimal_point . ") NULL";
+                                } else {
+                                    $default_value_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` " . $data_type . " NULL";
+                                }
+
+                                if (is_numeric($default_value) && $default_value != '') {
+                                    $default_value_add .= " DEFAULT '" . $default_value . "'";
+                                }
+                            } else {
+                                $default_value_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` VARCHAR( 254 ) NULL";
+                                if ($default_value != '') {
+                                    $default_value_add .= " DEFAULT '" . $default_value . "'";
+                                }
+                            }
+
+                            $alter_result = $wpdb->query($default_value_add);
+                            if($alter_result===false){
+                                return __('Column change failed, you may have too many columns.','userswp');
+                            }
+                            break;
+                    endswitch;
+                }
 
                 $extra_field_query = '';
                 if (!empty($extra_fields)) {
@@ -2658,7 +2663,7 @@ class Users_WP_Form_Builder {
                         )
                     );
                 }
-
+                
                 wp_redirect(admin_url('admin.php?page=uwp_form_builder'));
                 exit;
             }
@@ -2693,6 +2698,7 @@ class Users_WP_Form_Builder {
             'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
         );
 
         //Text
@@ -2707,6 +2713,7 @@ class Users_WP_Form_Builder {
             'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
         );
 
         //Textarea
@@ -2721,6 +2728,7 @@ class Users_WP_Form_Builder {
             'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
         );
 
         //Checkbox
@@ -2735,6 +2743,7 @@ class Users_WP_Form_Builder {
             'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
         );
 
         //Radio
@@ -2749,6 +2758,7 @@ class Users_WP_Form_Builder {
             'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
         );
 
         //Select
@@ -2763,6 +2773,7 @@ class Users_WP_Form_Builder {
             'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
         );
 
         //URL
@@ -2777,6 +2788,7 @@ class Users_WP_Form_Builder {
             'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
         );
 
         //Date
@@ -2791,6 +2803,7 @@ class Users_WP_Form_Builder {
             'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
             'extra' => array(
                 'date_format' => 'F j, Y'
             )
@@ -2808,6 +2821,7 @@ class Users_WP_Form_Builder {
             'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
         );
 
         //Phone
@@ -2822,6 +2836,7 @@ class Users_WP_Form_Builder {
             'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
         );
 
         //Email
@@ -2836,6 +2851,7 @@ class Users_WP_Form_Builder {
             'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
         );
 
         //Multiselect
@@ -2850,6 +2866,7 @@ class Users_WP_Form_Builder {
             'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
         );
 
         //File Upload
@@ -2864,6 +2881,7 @@ class Users_WP_Form_Builder {
             'is_public' => '1',
             'is_active' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
         );
 
         $fields = apply_filters('uwp_dummy_custom_fields', $fields);
