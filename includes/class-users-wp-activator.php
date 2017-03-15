@@ -31,6 +31,7 @@ class Users_WP_Activator {
             self::generate_pages();
             self::add_default_options();
             self::uwp_create_tables();
+            self::uwp_insert_usermeta();
             self::uwp_create_default_fields();
             self::uwp_insert_form_extras();
             self::uwp_flush_rewrite_rules();
@@ -259,6 +260,11 @@ class Users_WP_Activator {
         $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
 						user_id int(20) NOT NULL,
 						user_ip varchar(20) NULL DEFAULT NULL,
+						uwp_account_username varchar(255) NULL DEFAULT NULL,
+						uwp_account_email varchar(255) NULL DEFAULT NULL,
+						uwp_account_first_name varchar(255) NULL DEFAULT NULL,
+						uwp_account_last_name varchar(255) NULL DEFAULT NULL,
+						uwp_account_bio varchar(255) NULL DEFAULT NULL,
 						uwp_account_avatar_thumb varchar(255) NULL DEFAULT NULL,
 						uwp_account_banner_thumb varchar(255) NULL DEFAULT NULL,
 						PRIMARY KEY  (user_id)
@@ -268,6 +274,29 @@ class Users_WP_Activator {
 
         dbDelta($user_meta);
 
+    }
+
+    public static function uwp_insert_usermeta()
+    {
+        global $wpdb;
+        $sort= "user_registered";
+        $all_users_id = $wpdb->get_col( $wpdb->prepare(
+            "SELECT $wpdb->users.ID FROM $wpdb->users ORDER BY %s ASC"
+            , $sort ));
+
+        //we got all the IDs, now loop through them to get individual IDs
+        foreach ( $all_users_id as $user_id ) {
+            // get user info by calling get_userdata() on each id
+            $user_data = get_userdata($user_id);
+            $first_name = get_user_meta( $user_id, 'first_name', true );
+            $last_name = get_user_meta( $user_id, 'last_name', true );
+            $bio = get_user_meta( $user_id, 'description', true );
+            uwp_update_usermeta($user_id, 'uwp_account_username', $user_data->user_login);
+            uwp_update_usermeta($user_id, 'uwp_account_email', $user_data->user_email);
+            uwp_update_usermeta($user_id, 'uwp_account_first_name', $first_name);
+            uwp_update_usermeta($user_id, 'uwp_account_last_name', $last_name);
+            uwp_update_usermeta($user_id, 'uwp_account_bio', $bio);
+        }
     }
 
     public static function uwp_create_default_fields()
@@ -508,6 +537,7 @@ class Users_WP_Activator {
             'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
             'css_class' => 'uwp-half uwp-half-left',
         );
 
@@ -522,6 +552,7 @@ class Users_WP_Activator {
             'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
             'css_class' => 'uwp-half uwp-half-right',
         );
 
@@ -536,6 +567,7 @@ class Users_WP_Activator {
             'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
             'is_register_only_field' => '1',
         );
 
@@ -550,6 +582,7 @@ class Users_WP_Activator {
             'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
         );
 
         $fields[] = array(
@@ -563,6 +596,7 @@ class Users_WP_Activator {
             'is_active' => '1',
             'is_public' => '1',
             'is_required' => '1',
+            'is_search_field' => '1',
             'show_in' => array('[profile_side]', '[users]')
         );
 

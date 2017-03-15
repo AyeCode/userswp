@@ -1391,7 +1391,6 @@ class Users_WP_Form_Builder {
                         case 'checkbox':
                         case 'multiselect':
                         case 'select':
-                        case 'taxonomy':
 
                             $op_size = '500';
 
@@ -2664,31 +2663,7 @@ class Users_WP_Form_Builder {
                         )
                     );
                 }
-
-                // Search
-                foreach ($fields as $field) {
-                    $last_order = $wpdb->get_var("SELECT MAX(sort_order) as last_order FROM " . $extras_table_name);
-                    $sort_order = (int)$last_order + 1;
-                    $wpdb->query(
-                        $wpdb->prepare(
-
-                            "insert into " . $extras_table_name . " set
-                        form_type = %s,
-                        field_type = %s,
-                        is_dummy = %s,
-                        site_htmlvar_name = %s,
-                        sort_order = %s",
-                            array(
-                                'search',
-                                $field['field_type'],
-                                $field['is_dummy'],
-                                'uwp_account_'.$field['htmlvar_name'],
-                                $sort_order
-                            )
-                        )
-                    );
-                }
-
+                
                 wp_redirect(admin_url('admin.php?page=uwp_form_builder'));
                 exit;
             }

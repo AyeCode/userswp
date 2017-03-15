@@ -298,12 +298,6 @@ function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
 
     if ($key == 'uwp_account_email') {
         $value = $user_data->user_email;
-    } elseif ($key == 'uwp_account_first_name') {
-        $value = $user_data->first_name;
-    } elseif ($key == 'uwp_account_last_name') {
-        $value = $user_data->last_name;
-    } elseif ($key == 'uwp_account_bio') {
-        $value = $user_data->description;
     } else {
         $usermeta = uwp_get_usermeta_row($user_id);
         if (!empty($usermeta)) {
@@ -1319,7 +1313,7 @@ function get_uwp_users_list() {
 
     $where = '';
     $where = apply_filters('uwp_users_search_where', $where, $keyword);
-    var_dump($where);
+
 
     if ($keyword) {
         if (empty($where)) {
@@ -1355,15 +1349,14 @@ function get_uwp_users_list() {
             ));
         } else {
             $usermeta_table = $wpdb->prefix . 'uwp_usermeta';
+
             $users = $wpdb->get_results(
                 "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
             FROM $wpdb->users
-            INNER JOIN $wpdb->usermeta
-            ON ( $wpdb->users.ID = $wpdb->usermeta.user_id )
-            INNER JOIN {$usermeta_table}
-            ON ( $wpdb->usermeta.user_id = {$usermeta_table}.user_id )
+            INNER JOIN $usermeta_table
+            ON ( $wpdb->users.ID = $usermeta_table.user_id )
             WHERE 1=1
-            {$where}
+            $where
             ORDER BY display_name ASC
             LIMIT 0, 20");
         }
@@ -1417,7 +1410,7 @@ function get_uwp_users_list() {
                 $user_obj = get_user_by('id', $user->ID);
 
                 // exclude logged in user
-                if ($user->ID == get_current_user_id()) {
+                if ($user_obj->ID == get_current_user_id()) {
                     continue;
                 }
                 ?>
@@ -1428,7 +1421,7 @@ function get_uwp_users_list() {
                     <div class="uwp-users-list-user-right">
                         <div class="uwp-users-list-user-name">
                             <h3>
-                                <a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>"><?php echo $user->display_name; ?></a>
+                                <a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user_obj->ID), $user_obj->ID); ?>"><?php echo $user_obj->display_name; ?></a>
                                 <?php do_action('uwp_users_after_title', $user_obj ); ?>
                             </h3>
                         </div>
@@ -1742,7 +1735,7 @@ function uwp_validate_fields($data, $type, $fields = false) {
             $errors->add( 'empty_password', __( 'Please enter a password', 'userswp' ) );
         }
 
-        if (strlen($data['uwp_'.$password_type.'_password']) < 7) {
+        if ($type != 'login' && strlen($data['uwp_'.$password_type.'_password']) < 7) {
             $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', 'userswp'));
         }
 
@@ -2326,11 +2319,6 @@ function uwp_get_usermeta_row($user_id = false) {
 
 function uwp_get_excluded_fields() {
     $excluded = array(
-        'uwp_account_first_name',
-        'uwp_account_last_name',
-        'uwp_account_username',
-        'uwp_account_email',
-        'uwp_account_bio',
         'uwp_account_password',
         'uwp_account_confirm_password',
     );
