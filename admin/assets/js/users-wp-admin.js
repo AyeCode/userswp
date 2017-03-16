@@ -196,7 +196,9 @@ jQuery(document).ready(function () {
 
         if (manage_field_type == 'search'){
 
-            jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_search_action&create_field=true',{ htmlvar_name: htmlvar_name,form_type:form_type, field_type:field_type, field_id: id, field_ins_upd: 'new' },
+            var field_data_type = jQuery(this).data('data_type');
+
+            jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_search_action&create_field=true',{ htmlvar_name: htmlvar_name,form_type:form_type, field_type:field_type, field_data_type:field_data_type, field_id: id, field_ins_upd: 'new' },
                 function(data)
                 {
                     console.log(id);
