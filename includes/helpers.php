@@ -954,7 +954,7 @@ function uwp_generic_tab_content($user, $post_type = false, $title, $post_ids = 
                         echo $excerpt;
                         if ($excerpt) {
                             ?>
-                            <a href="<?php echo get_the_permalink(); ?>" class="more-link">Read More »</a>
+                            <a href="<?php echo get_the_permalink(); ?>" class="more-link"><?php echo  __( 'Read More »', 'userswp' ); ?></a>
                             <?php
                         }
                         ?>
