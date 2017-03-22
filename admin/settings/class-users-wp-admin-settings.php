@@ -381,6 +381,7 @@ class Users_WP_Admin_Settings {
                             'allow_blank' => isset( $option['allow_blank'] ) ? $option['allow_blank'] : true,
                             'readonly'    => isset( $option['readonly'] )    ? $option['readonly']    : false,
                             'faux'        => isset( $option['faux'] )        ? $option['faux']        : false,
+                            'global'        => isset( $setting['global'] )        ? $setting['global']        : true,
                             'multiple'        => isset( $option['multiple'] )        ? $option['multiple']        : false,
                         )
                     );

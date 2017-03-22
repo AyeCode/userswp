@@ -80,13 +80,24 @@ function uwp_missing_callback($args) {
 }
 
 function uwp_select_callback($args) {
-    global $uwp_options;
 
-    if ( isset( $uwp_options[ $args['id'] ] ) ) {
-        $value = $uwp_options[ $args['id'] ];
+    global $uwp_options;
+    
+    $global = isset( $args['global'] ) ? $args['global'] : true;
+    if ($global) {
+        if ( isset( $uwp_options[ $args['id'] ] ) ) {
+            $value = $uwp_options[ $args['id'] ];
+        } else {
+            $value = isset( $args['std'] ) ? $args['std'] : '';
+        }
     } else {
-        $value = isset( $args['std'] ) ? $args['std'] : '';
+        if ( isset( $args['value'] ) ) {
+            $value = $args['value'];
+        } else {
+            $value = isset( $args['std'] ) ? $args['std'] : '';
+        }
     }
+    
 
     if ( isset( $args['placeholder'] ) ) {
         $placeholder = $args['placeholder'];
@@ -124,10 +135,19 @@ function uwp_select_callback($args) {
 function uwp_text_callback( $args ) {
     global $uwp_options;
 
-    if ( isset( $uwp_options[ $args['id'] ] ) ) {
-        $value = $uwp_options[ $args['id'] ];
+    $global = isset( $args['global'] ) ? $args['global'] : true;
+    if ($global) {
+        if ( isset( $uwp_options[ $args['id'] ] ) ) {
+            $value = $uwp_options[ $args['id'] ];
+        } else {
+            $value = isset( $args['std'] ) ? $args['std'] : '';
+        }
     } else {
-        $value = isset( $args['std'] ) ? $args['std'] : '';
+        if ( isset( $args['value'] ) ) {
+            $value = $args['value'];
+        } else {
+            $value = isset( $args['std'] ) ? $args['std'] : '';
+        }
     }
 
     if ( isset( $args['faux'] ) && true === $args['faux'] ) {
@@ -149,10 +169,19 @@ function uwp_text_callback( $args ) {
 function uwp_textarea_callback( $args ) {
     global $uwp_options;
 
-    if ( isset( $uwp_options[ $args['id'] ] ) ) {
-        $value = $uwp_options[ $args['id'] ];
+    $global = isset( $args['global'] ) ? $args['global'] : true;
+    if ($global) {
+        if ( isset( $uwp_options[ $args['id'] ] ) ) {
+            $value = $uwp_options[ $args['id'] ];
+        } else {
+            $value = isset( $args['std'] ) ? $args['std'] : '';
+        }
     } else {
-        $value = isset( $args['std'] ) ? $args['std'] : '';
+        if ( isset( $args['value'] ) ) {
+            $value = $args['value'];
+        } else {
+            $value = isset( $args['std'] ) ? $args['std'] : '';
+        }
     }
 
     $html = '<textarea class="large-text" cols="50" rows="5" id="uwp_settings[' . $args['id'] . ']" name="uwp_settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
@@ -180,10 +209,19 @@ function uwp_checkbox_callback( $args ) {
 function uwp_number_callback( $args ) {
     global $uwp_options;
 
-    if ( isset( $uwp_options[ $args['id'] ] ) ) {
-        $value = $uwp_options[ $args['id'] ];
+    $global = isset( $args['global'] ) ? $args['global'] : true;
+    if ($global) {
+        if ( isset( $uwp_options[ $args['id'] ] ) ) {
+            $value = $uwp_options[ $args['id'] ];
+        } else {
+            $value = isset( $args['std'] ) ? $args['std'] : '';
+        }
     } else {
-        $value = isset( $args['std'] ) ? $args['std'] : '';
+        if ( isset( $args['value'] ) ) {
+            $value = $args['value'];
+        } else {
+            $value = isset( $args['std'] ) ? $args['std'] : '';
+        }
     }
 
     if ( isset( $args['faux'] ) && true === $args['faux'] ) {
@@ -274,26 +312,7 @@ function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
     if (!$user_id) {
         return $default;
     }
-
-//    $meta_table = $wpdb->prefix . 'uwp_usermeta';
-
-//    $usermeta_table_keys = array(
-//        'uwp_account_first_name',
-//        'uwp_account_last_name',
-//        'uwp_account_bio',
-//    );
-//
-//    $users_table_keys = array(
-//        'uwp_account_username',
-//        'uwp_account_email',
-//    );
-//
-//
-//    if (in_array($key, $usermeta_table_keys)) {
-//
-//
-//    }
-
+    
     $user_data = get_userdata($user_id);
 
     if ($key == 'uwp_account_email') {
