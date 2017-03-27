@@ -1268,7 +1268,7 @@ function get_register_form_fields() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'uwp_form_fields';
     $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
-    $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.is_active = '1' AND fields.is_register_field = '1' ORDER BY extras.sort_order ASC", array('account')));
+    $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.is_active = '1' AND fields.is_register_field = '1' AND extras.form_type = 'register' ORDER BY extras.sort_order ASC", array('account')));
     return $fields;
 }
 
@@ -1546,6 +1546,7 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
     $validated_data = array();
     $enable_password = uwp_get_option('enable_register_password', false);
+    $enable_confirm_email_field = uwp_get_option('enable_confirm_email_field', false);
     $enable_old_password = uwp_get_option('change_enable_old_password', false);
 
     if ($type == 'account' || $type == 'change') {
@@ -1564,6 +1565,12 @@ function uwp_validate_fields($data, $type, $fields = false) {
             if ($type == 'register') {
                 if ($enable_password != '1') {
                     if ( ($field->htmlvar_name == 'uwp_account_password') OR ($field->htmlvar_name == 'uwp_account_confirm_password') ) {
+                        continue;
+                    }
+                }
+
+                if ($enable_confirm_email_field != '1') {
+                    if ( $field->htmlvar_name == 'uwp_account_confirm_email' ) {
                         continue;
                     }
                 }
@@ -1747,6 +1754,30 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
     }
 
+    if (($type == 'register' && $enable_confirm_email_field == '1')) {
+        //check confirm email
+        if( empty( $data['uwp_account_email'] ) ) {
+            $errors->add( 'empty_email', __( '<strong>Error</strong>: Please enter your Email', 'userswp' ) );
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        if( empty( $data['uwp_account_confirm_email'] ) ) {
+            $errors->add( 'empty_email', __( '<strong>Error</strong>: Please fill Confirm Email field', 'userswp' ) );
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+        if( $data['uwp_account_email'] != $data['uwp_account_confirm_email'] ) {
+            $errors->add( 'email_mismatch', __( '<strong>Error</strong>: Email and Confirm email not match', 'userswp' ) );
+        }
+
+        if ($errors->get_error_code())
+            return $errors;
+
+    }
 
     if ($type == 'change' || $type == 'reset' || $type == 'login' || ($type == 'register' && $enable_password == '1')) {
         //check password
