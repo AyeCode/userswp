@@ -126,26 +126,14 @@ class Users_WP_Admin_Settings {
     //main tabs
 
     public function uwp_get_pages_as_option($selected) {
-        $page_options = $this->uwp_get_pages();
+        $page_options = uwp_get_pages();
         foreach ($page_options as $key => $page_title) {
             ?>
             <option value="<?php echo $key; ?>" <?php selected( $selected, $key ); ?>><?php echo $page_title; ?></option>
             <?php
         }
     }
-
-    public function uwp_get_pages() {
-        $pages_options = array( '' => __( 'Select a Page', 'userswp' ) ); // Blank option
-
-        $pages = get_pages();
-        if ( $pages ) {
-            foreach ( $pages as $page ) {
-                $pages_options[ $page->ID ] = $page->post_title;
-            }
-        }
-        return $pages_options;
-    }
-
+    
     public function get_general_shortcodes_content() {
         ?>
         <table class="uwp-form-table">
@@ -411,7 +399,7 @@ class Users_WP_Admin_Settings {
                             'name' => __( 'User Profile Page', 'userswp' ),
                             'desc' => __( 'This is the front end user\'s profile page. This page automatically override the default WordPress author page.', 'userswp' ),
                             'type' => 'select',
-                            'options' => $this->uwp_get_pages(),
+                            'options' => uwp_get_pages(),
                             'chosen' => true,
                             'placeholder' => __( 'Select a page', 'userswp' ),
                             'class' => 'uwp_label_block',
@@ -421,7 +409,7 @@ class Users_WP_Admin_Settings {
                             'name' => __( 'Register Page', 'userswp' ),
                             'desc' => __( 'This is the front end register page. This is where users creates their account.', 'userswp' ),
                             'type' => 'select',
-                            'options' => $this->uwp_get_pages(),
+                            'options' => uwp_get_pages(),
                             'chosen' => true,
                             'placeholder' => __( 'Select a page', 'userswp' ),
                             'class' => 'uwp_label_block',
@@ -431,7 +419,7 @@ class Users_WP_Admin_Settings {
                             'name' => __( 'Login Page', 'userswp' ),
                             'desc' => __( 'This is the front end login page. This is where users will login after creating their account.', 'userswp' ),
                             'type' => 'select',
-                            'options' => $this->uwp_get_pages(),
+                            'options' => uwp_get_pages(),
                             'chosen' => true,
                             'placeholder' => __( 'Select a page', 'userswp' ),
                             'class' => 'uwp_label_block',
@@ -441,7 +429,7 @@ class Users_WP_Admin_Settings {
                             'name' => __( 'Account Page', 'userswp' ),
                             'desc' => __( 'This is the front end account page. This is where users can edit their account.', 'userswp' ),
                             'type' => 'select',
-                            'options' => $this->uwp_get_pages(),
+                            'options' => uwp_get_pages(),
                             'chosen' => true,
                             'placeholder' => __( 'Select a page', 'userswp' ),
                             'class' => 'uwp_label_block',
@@ -451,7 +439,7 @@ class Users_WP_Admin_Settings {
                             'name' => __( 'Change Password Page', 'userswp' ),
                             'desc' => __( 'This is the front end Change Password page.', 'userswp' ),
                             'type' => 'select',
-                            'options' => $this->uwp_get_pages(),
+                            'options' => uwp_get_pages(),
                             'chosen' => true,
                             'placeholder' => __( 'Select a page', 'userswp' ),
                             'class' => 'uwp_label_block',
@@ -461,7 +449,7 @@ class Users_WP_Admin_Settings {
                             'name' => __( 'Forgot Password Page', 'userswp' ),
                             'desc' => __( 'This is the front end Forgot Password page. This is the page where users are sent to reset their password when they lose it.', 'userswp' ),
                             'type' => 'select',
-                            'options' => $this->uwp_get_pages(),
+                            'options' => uwp_get_pages(),
                             'chosen' => true,
                             'placeholder' => __( 'Select a page', 'userswp' ),
                             'class' => 'uwp_label_block',
@@ -471,7 +459,7 @@ class Users_WP_Admin_Settings {
                             'name' => __( 'Reset Password Page', 'userswp' ),
                             'desc' => __( 'This is the front end Reset Password page. This is the page where users can reset their password when they lose it.', 'userswp' ),
                             'type' => 'select',
-                            'options' => $this->uwp_get_pages(),
+                            'options' => uwp_get_pages(),
                             'chosen' => true,
                             'placeholder' => __( 'Select a page', 'userswp' ),
                             'class' => 'uwp_label_block',
@@ -481,7 +469,7 @@ class Users_WP_Admin_Settings {
                             'name' => __( 'Users List Page', 'userswp' ),
                             'desc' => __( 'This is the front end Users List page. This is the page where all registered users of the websites are listed.', 'userswp' ),
                             'type' => 'select',
-                            'options' => $this->uwp_get_pages(),
+                            'options' => uwp_get_pages(),
                             'chosen' => true,
                             'placeholder' => __( 'Select a page', 'userswp' ),
                             'class' => 'uwp_label_block',
@@ -495,68 +483,8 @@ class Users_WP_Admin_Settings {
                         ),
                     )
                 ),
-                'register' => apply_filters( 'uwp_settings_general_register',
-                    array(
-                        'enable_register_password' => array(
-                            'id'   => 'enable_register_password',
-                            'name' => __( 'Display Password field in Regsiter Form', 'userswp' ),
-                            'desc' => 'If not checked a random password will be generated and emailed. User will be redirected to change password page upon first login.',
-                            'type' => 'checkbox',
-                            'std'  => '1',
-                            'class' => 'uwp_label_inline',
-                        ),
-                        'enable_auto_login' => array(
-                            'id'   => 'enable_auto_login',
-                            'name' => __( 'Enable auto login', 'userswp' ),
-                            'desc' => 'If enabled user will be logged in automatically after registration.',
-                            'type' => 'checkbox',
-                            'std'  => '1',
-                            'class' => 'uwp_label_inline',
-                        ),
-                        'enable_confirm_email_field' => array(
-                            'id'   => 'enable_confirm_email_field',
-                            'name' => __( 'Enable Confirm Email Field', 'userswp' ),
-                            'desc' => 'If enabled email field will be displayed twice to make sure user not typing the wrong email.',
-                            'type' => 'checkbox',
-                            'std'  => '1',
-                            'class' => 'uwp_label_inline',
-                        ),
-                        'register_redirect_to' => array(
-                            'id' => 'register_redirect_to',
-                            'name' => __( 'Register Redirect Page', 'userswp' ),
-                            'desc' => __( 'Set the page to redirect the user after signing up. If no page set it will user WordPress default.', 'userswp' ),
-                            'type' => 'select',
-                            'options' => $this->uwp_get_pages(),
-                            'chosen' => true,
-                            'placeholder' => __( 'Select a page', 'userswp' ),
-                            'class' => 'uwp_label_block',
-                        ),
-                    )
-                ),
-                'login' => apply_filters( 'uwp_settings_general_login',
-                    array(
-                        'login_redirect_to' => array(
-                            'id' => 'login_redirect_to',
-                            'name' => __( 'Login Redirect Page', 'userswp' ),
-                            'desc' => __( 'Set the page to redirect the user after logging in. If no page set it will user WordPress default.', 'userswp' ),
-                            'type' => 'select',
-                            'options' => $this->uwp_get_pages(),
-                            'chosen' => true,
-                            'placeholder' => __( 'Select a page', 'userswp' ),
-                            'class' => 'uwp_label_block',
-                        ),
-                        'logout_redirect_to' => array(
-                            'id' => 'logout_redirect_to',
-                            'name' => __( 'Logout Redirect Page', 'userswp' ),
-                            'desc' => __( 'Set the page to redirect the user after logging out. If no page set it will user WordPress default', 'userswp' ),
-                            'type' => 'select',
-                            'options' => $this->uwp_get_pages(),
-                            'chosen' => true,
-                            'placeholder' => __( 'Select a page', 'userswp' ),
-                            'class' => 'uwp_label_block',
-                        ),
-                    )
-                ),
+                'register' => apply_filters( 'uwp_settings_general_register', uwp_settings_general_register_fields()),
+                'login' => apply_filters( 'uwp_settings_general_login', uwp_settings_general_loginout_fields()),
                 'profile' => apply_filters( 'uwp_settings_general_profile',
                     array(
                         'enable_profile_header' => array(
@@ -567,14 +495,32 @@ class Users_WP_Admin_Settings {
                             'std'  => '1',
                             'class' => 'uwp_label_inline',
                         ),
-                        'header_banner_width' => array(
-                            'id'   => 'header_banner_width',
-                            'name' => __( 'Header banner width', 'userswp' ),
+                        'profile_avatar_size' => array(
+                            'id'   => 'profile_avatar_size',
+                            'name' => __( 'Profile Avatar max file size', 'userswp' ),
+                            'desc' => __( 'Enter Profile Avatar max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>'.uwp_formatSizeinKb(uwp_get_max_upload_size()).'</b>) will be used.', 'userswp' ),
+                            'type' => 'number',
+                            'std'  => '',
+                            'size' => 'regular',
+                            'placeholder' => __( 'Enter Profile Avatar max file size.', 'userswp' ),
+                        ),
+                        'profile_banner_size' => array(
+                            'id'   => 'profile_banner_size',
+                            'name' => __( 'Profile Banner max file size', 'userswp' ),
+                            'desc' => __( 'Enter Profile Banner max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>'.uwp_formatSizeinKb(uwp_get_max_upload_size()).'</b>) will be used.', 'userswp' ),
+                            'type' => 'number',
+                            'std'  => '',
+                            'size' => 'regular',
+                            'placeholder' => __( 'Enter Profile Banner max file size.', 'userswp' ),
+                        ),
+                        'profile_banner_width' => array(
+                            'id'   => 'profile_banner_width',
+                            'name' => __( 'Profile banner width', 'userswp' ),
                             'desc' => '',
                             'type' => 'number',
                             'std'  => '1000',
                             'size' => 'regular',
-                            'placeholder' => __( 'Enter Header banner width in Pixels', 'userswp' ),
+                            'placeholder' => __( 'Enter Profile banner width in Pixels', 'userswp' ),
                         ),
                         'enable_profile_body' => array(
                             'id'   => 'enable_profile_body',

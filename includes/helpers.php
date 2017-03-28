@@ -1042,6 +1042,12 @@ function handle_file_upload( $field, $files ) {
         $file_urls       = array();
         $files_to_upload = uwp_prepare_files( $files[ $field->htmlvar_name ] );
 
+        $max_upload_size = uwp_get_max_upload_size($field->form_type, $field->htmlvar_name);
+
+        if ( ! $max_upload_size ) {
+            $max_upload_size = 0;
+        }
+
         foreach ( $files_to_upload as $file_key => $file_to_upload ) {
 
             if (!empty($allowed_mime_types)) {
@@ -1053,25 +1059,11 @@ function handle_file_upload( $field, $files ) {
             }
 
 
-            $max_upload_size = uwp_get_max_upload_size();
-
-
-            if ( ! $max_upload_size ) {
-                $max_upload_size = 0;
-            }
-
             if ( $file_to_upload['size'] >  $max_upload_size) {
                 return new WP_Error( 'file-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. uwp_formatSizeUnits($max_upload_size), 'userswp' ) );
             }
 
 
-
-//            $upload_max_ini_size = uwp_get_size_in_bytes(ini_get('upload_max_filesize'));
-//            if ($upload_max_ini_size && $file_to_upload['size'] > $upload_max_ini_size) {
-//                return new WP_Error( 'file-too-big', __( 'The uploaded file is too big. Maximum size allowed:'. uwp_formatSizeUnits($max_upload_size), 'userswp' ) );
-//            }
-
-            
             $error_result = apply_filters('uwp_handle_file_upload_error_checks', true, $field, $file_key, $file_to_upload);
             if (is_wp_error($error_result)) {
                 return $error_result;
@@ -1134,6 +1126,12 @@ function uwp_formatSizeUnits($bytes)
     }
 
     return $bytes;
+}
+
+function uwp_formatSizeinKb($bytes)
+{
+    $kb = $bytes / 1024;
+    return $kb;
 }
 
 function uwp_get_size_in_bytes($val) {
@@ -1912,7 +1910,7 @@ function uwp_wrap_notice($message, $type) {
     
 }
 
-function uwp_get_max_upload_size() {
+function uwp_get_max_upload_size($form_type = false, $field_htmlvar_name = false) {
     if (is_multisite()) {
         $network_setting_size = esc_attr( get_site_option( 'fileupload_maxk', 300 ) );
         $max_upload_size = uwp_get_size_in_bytes($network_setting_size.'k');
@@ -1922,6 +1920,8 @@ function uwp_get_max_upload_size() {
     } else {
         $max_upload_size = wp_max_upload_size();
     }
+    $max_upload_size = apply_filters('uwp_get_max_upload_size', $max_upload_size, $form_type, $field_htmlvar_name);
+
     return $max_upload_size;
 }
 
@@ -2417,4 +2417,133 @@ function uwp_currency_format_number($number='',$cf=''){
 
 
     return $number;
+}
+
+function uwp_get_pages() {
+    $pages_options = array( '' => __( 'Select a Page', 'userswp' ) ); // Blank option
+
+    $pages = get_pages();
+    if ( $pages ) {
+        foreach ( $pages as $page ) {
+            $pages_options[ $page->ID ] = $page->post_title;
+        }
+    }
+    return $pages_options;
+}
+
+function uwp_settings_general_register_fields() {
+    $fields =  array(
+        'enable_register_password' => array(
+            'id'   => 'enable_register_password',
+            'name' => __( 'Display Password field in Regsiter Form', 'userswp' ),
+            'desc' => 'If not checked a random password will be generated and emailed. User will be redirected to change password page upon first login.',
+            'type' => 'checkbox',
+            'std'  => '1',
+            'class' => 'uwp_label_inline',
+        ),
+        'enable_auto_login' => array(
+            'id'   => 'enable_auto_login',
+            'name' => __( 'Enable auto login', 'userswp' ),
+            'desc' => 'If enabled user will be logged in automatically after registration.',
+            'type' => 'checkbox',
+            'std'  => '1',
+            'class' => 'uwp_label_inline',
+        ),
+        'enable_confirm_email_field' => array(
+            'id'   => 'enable_confirm_email_field',
+            'name' => __( 'Enable Confirm Email Field', 'userswp' ),
+            'desc' => 'If enabled email field will be displayed twice to make sure user not typing the wrong email.',
+            'type' => 'checkbox',
+            'std'  => '1',
+            'class' => 'uwp_label_inline',
+        ),
+        'register_redirect_to' => array(
+            'id' => 'register_redirect_to',
+            'name' => __( 'Register Redirect Page', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user after signing up. If no page set it will user WordPress default.', 'userswp' ),
+            'type' => 'select',
+            'options' => uwp_get_pages(),
+            'chosen' => true,
+            'placeholder' => __( 'Select a page', 'userswp' ),
+            'class' => 'uwp_label_block',
+        ),
+    );
+    return $fields;
+}
+
+function uwp_settings_general_login_fields() {
+    $fields =  array(
+        'login_redirect_to' => array(
+            'id' => 'login_redirect_to',
+            'name' => __( 'Login Redirect Page', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user after logging in. If no page set it will user WordPress default.', 'userswp' ),
+            'type' => 'select',
+            'options' => uwp_get_pages(),
+            'chosen' => true,
+            'placeholder' => __( 'Select a page', 'userswp' ),
+            'class' => 'uwp_label_block',
+        ),
+    );
+    return $fields;
+}
+
+function uwp_settings_general_logout_fields() {
+    $fields =  array(
+        'logout_redirect_to' => array(
+            'id' => 'logout_redirect_to',
+            'name' => __( 'Logout Redirect Page', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user after logging out. If no page set it will user WordPress default', 'userswp' ),
+            'type' => 'select',
+            'options' => uwp_get_pages(),
+            'chosen' => true,
+            'placeholder' => __( 'Select a page', 'userswp' ),
+            'class' => 'uwp_label_block',
+        ),
+    );
+    return $fields;
+}
+
+function uwp_settings_general_delete_fields() {
+    $fields =  array(
+        'delete_redirect_to' => array(
+            'id' => 'delete_redirect_to',
+            'name' => __( 'Delete Redirect Page', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user after after they delete account. If no page set it will user WordPress default', 'userswp' ),
+            'type' => 'select',
+            'options' => uwp_get_pages(),
+            'chosen' => true,
+            'placeholder' => __( 'Select a page', 'userswp' ),
+            'class' => 'uwp_label_block',
+        ),
+    );
+    return $fields;
+}
+
+function uwp_settings_general_loginout_fields() {
+    $login = uwp_settings_general_login_fields();
+    $logout = uwp_settings_general_logout_fields();
+
+    $fields = array_merge($login, $logout);
+    return $fields;
+}
+
+add_filter('uwp_get_max_upload_size', 'uwp_modify_get_max_upload_size', 10, 2);
+function uwp_modify_get_max_upload_size($bytes, $type) {
+
+    if ($type == 'avatar') {
+        $kb = uwp_get_option('profile_avatar_size', false);
+        if ($kb) {
+            $bytes = intval($kb) * 1024;
+        }
+    }
+
+    if ($type == 'banner') {
+        $kb = uwp_get_option('profile_banner_size', false);
+        if ($kb) {
+            $bytes = intval($kb) * 1024;
+        }
+    }
+
+    return $bytes;
+
 }
