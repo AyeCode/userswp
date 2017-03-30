@@ -347,7 +347,10 @@ class Users_WP_Profile {
                     }
                     ?>
                 </ul>
-                <?php if ($account_page && is_user_logged_in() && get_current_user_id() == $user->ID) { ?>
+                <?php
+                $can_user_edit_account = apply_filters('uwp_user_can_edit_account', true, $user);
+                ?>
+                <?php if ($account_page && is_user_logged_in() && (get_current_user_id() == $user->ID) && $can_user_edit_account) { ?>
                     <div class="uwp-edit-account">
                         <a href="<?php echo get_permalink( $account_page ); ?>" title="<?php echo  __( 'Edit Account', 'userswp' ); ?>"><i class="fa fa-gear"></i></a>
                     </div>
