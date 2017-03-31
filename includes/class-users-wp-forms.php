@@ -59,7 +59,13 @@ class Users_WP_Forms {
                 $message = $errors;
             }
             if ($auto_login == '1') {
-                $redirect = $redirect_to;
+                $reg_redirect_page_id = uwp_get_option('register_redirect_to', '');
+                if (empty($reg_redirect_page_id)) {
+                    $reg_redirect_to = $redirect_to;
+                } else {
+                    $reg_redirect_to = get_permalink($reg_redirect_page_id);
+                }
+                $redirect = apply_filters('uwp_register_redirect', $reg_redirect_to);
             }
             $processed = true;
         } elseif (isset($_POST['uwp_login_submit'])) {
@@ -310,8 +316,14 @@ class Users_WP_Forms {
                 $errors->add('invalid_userorpass', __('<strong>Error</strong>: Invalid username or Password.', 'userswp'));
                 return $errors;
             } else {
-                $regsiter_redirect = apply_filters('uwp_register_redirect_url', home_url('/'));
-                wp_redirect($regsiter_redirect);
+                $reg_redirect_page_id = uwp_get_option('register_redirect_to', '');
+                if (empty($reg_redirect_page_id)) {
+                    $reg_redirect_to = home_url('/');
+                } else {
+                    $reg_redirect_to = get_permalink($reg_redirect_page_id);
+                }
+                $redirect = apply_filters('uwp_register_redirect', $reg_redirect_to);
+                wp_redirect($redirect);
                 exit();
             }
         } else {

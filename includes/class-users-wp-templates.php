@@ -223,7 +223,7 @@ class Users_WP_Templates {
                             continue;
                         }
                     }
-                    $count = $wpdb->get_var($wpdb->prepare("select count(*) from ".$extras_table_name." where site_htmlvar_name=%s", array($field->htmlvar_name)));
+                    $count = $wpdb->get_var($wpdb->prepare("select count(*) from ".$extras_table_name." where site_htmlvar_name=%s AND form_type = %s", array($field->htmlvar_name, $form_type)));
                     if ($count == 1) {
                         $this->uwp_template_fields_html($field, $form_type);
                     }

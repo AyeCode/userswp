@@ -347,9 +347,12 @@ class Users_WP_Profile {
                     }
                     ?>
                 </ul>
-                <?php if ($account_page && is_user_logged_in() && get_current_user_id() == $user->ID) { ?>
+                <?php
+                $can_user_edit_account = apply_filters('uwp_user_can_edit_own_profile', true, $user);
+                ?>
+                <?php if ($account_page && is_user_logged_in() && (get_current_user_id() == $user->ID) && $can_user_edit_account) { ?>
                     <div class="uwp-edit-account">
-                        <a href="<?php echo get_permalink( $account_page ); ?>" title="Edit Account"><i class="fa fa-gear"></i></a>
+                        <a href="<?php echo get_permalink( $account_page ); ?>" title="<?php echo  __( 'Edit Account', 'userswp' ); ?>"><i class="fa fa-gear"></i></a>
                     </div>
                 <?php } ?>
             </div>
@@ -860,7 +863,7 @@ class Users_WP_Profile {
                             <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
                             <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
                             <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();">Upload <?php echo $type; ?></button>
-                            <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'userswp').uwp_formatSizeUnits(uwp_get_max_upload_size()); ?></p>
+                            <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'userswp').uwp_formatSizeUnits(uwp_get_max_upload_size($type)); ?></p>
                             <div class="uwp_upload_field" style="display: none">
                                 <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" required="required" type="file" value="">
                             </div>
