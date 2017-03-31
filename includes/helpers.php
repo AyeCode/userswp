@@ -2137,14 +2137,17 @@ function uwp_account_privacy_page_title($title, $type) {
 add_action('uwp_account_form_display', 'uwp_account_privacy_edit_form_display');
 function uwp_account_privacy_edit_form_display($type) {
     if ($type == 'privacy') {
+        $make_profile_private = uwp_can_make_profile_private();
         echo '<div class="uwp-account-form uwp_wc_form">';
         $extra_where = "AND is_public='2'";
         $fields = get_account_form_fields($extra_where);
-        if ($fields) {
+        $user_id = get_current_user_id();
+        if ($fields || $make_profile_private) {
             ?>
             <div class="uwp-profile-extra">
                 <div class="uwp-profile-extra-div form-table">
                     <form class="uwp-account-form uwp_form" method="post">
+                        <?php if ($fields) { ?>
                         <div class="uwp-profile-extra-wrap">
                             <div class="uwp-profile-extra-key" style="font-weight: bold;">
                                 <?php echo __("Field", "userswp") ?>
@@ -2153,26 +2156,43 @@ function uwp_account_privacy_edit_form_display($type) {
                                 <?php echo __("Is Public?", "userswp") ?>
                             </div>
                         </div>
-                <?php foreach ($fields as $field) { ?>
-                        <div class="uwp-profile-extra-wrap">
-                            <div class="uwp-profile-extra-key"><?php echo $field->site_title; ?>
-                                <span class="uwp-profile-extra-sep">:</span></div>
-                            <div class="uwp-profile-extra-value">
-                                <?php
-                                $user_id = get_current_user_id();
-                                $field_name = $field->htmlvar_name.'_privacy';
-                                $value = uwp_get_usermeta($user_id, $field_name, false);
-                                if ($value === false) {
-                                    $value = '1';
-                                }
-                                ?>
-                                <select name="<?php echo $field_name; ?>" class="uwp_privacy_field" style="margin: 0;">
-                                    <option value="0" <?php selected( $value, "0" ); ?>><?php echo __("No", "userswp") ?></option>
-                                    <option value="1" <?php selected( $value, "1" ); ?>><?php echo __("Yes", "userswp") ?></option>
-                                </select>
+                        <?php } ?>
+                        <?php foreach ($fields as $field) { ?>
+                            <div class="uwp-profile-extra-wrap">
+                                <div class="uwp-profile-extra-key"><?php echo $field->site_title; ?>
+                                    <span class="uwp-profile-extra-sep">:</span></div>
+                                <div class="uwp-profile-extra-value">
+                                    <?php
+                                    $field_name = $field->htmlvar_name.'_privacy';
+                                    $value = uwp_get_usermeta($user_id, $field_name, false);
+                                    if ($value === false) {
+                                        $value = '1';
+                                    }
+                                    ?>
+                                    <select name="<?php echo $field_name; ?>" class="uwp_privacy_field" style="margin: 0;">
+                                        <option value="0" <?php selected( $value, "0" ); ?>><?php echo __("No", "userswp") ?></option>
+                                        <option value="1" <?php selected( $value, "1" ); ?>><?php echo __("Yes", "userswp") ?></option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                <?php } ?>
+                        <?php } ?>
+
+                        <?php
+                        if ($make_profile_private) {
+                            $field_name = 'uwp_make_profile_private';
+                            $value = get_user_meta($user_id, $field_name, true);
+                            if ($value === false) {
+                                $value = '0';
+                            }
+                            ?>
+                            <div id="uwp_make_profile_private" class=" uwp_make_profile_private_row">
+                                <input type="hidden" name="uwp_make_profile_private" value="0">
+                                <input name="uwp_make_profile_private" class="" <?php checked( $value, "1", true ); ?> type="checkbox" value="1">
+                                Make the whole profile Private
+                            </div>
+                            <?php
+                        }
+                        ?>
                         <input type="hidden" name="uwp_privacy_nonce" value="<?php echo wp_create_nonce( 'uwp-privacy-nonce' ); ?>" />
                         <input name="uwp_privacy_submit" value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
                     </form>
@@ -2239,7 +2259,9 @@ function uwp_account_get_available_tabs() {
     $extra_where = "AND is_public='2'";
     $fields = get_account_form_fields($extra_where);
 
-    if (is_array($fields) && count($fields) > 0) {
+    $make_profile_private = uwp_can_make_profile_private();
+
+    if ((is_array($fields) && count($fields) > 0) || $make_profile_private) {
         $tabs['privacy']  = array(
             'title' => __( 'Privacy', 'userswp' ),
             'icon' => 'fa fa-lock',
@@ -2268,6 +2290,18 @@ function uwp_privacy_submit_handler() {
                 }
             }
         }
+
+        $make_profile_private = uwp_can_make_profile_private();
+        if ($make_profile_private) {
+            $field_name = 'uwp_make_profile_private';
+            if (isset($_POST[$field_name])) {
+                $value = strip_tags(esc_sql($_POST[$field_name]));
+                $user_id = get_current_user_id();
+                update_user_meta($user_id, $field_name, $value);
+            }
+        }
+
+
 
     }
 }
@@ -2460,7 +2494,7 @@ function uwp_settings_general_register_fields() {
         'register_redirect_to' => array(
             'id' => 'register_redirect_to',
             'name' => __( 'Register Redirect Page', 'userswp' ),
-            'desc' => __( 'Set the page to redirect the user after signing up. If no page set it will user WordPress default.', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user after signing up. If no page has been set WordPress default will be used..', 'userswp' ),
             'type' => 'select',
             'options' => uwp_get_pages(),
             'chosen' => true,
@@ -2476,7 +2510,7 @@ function uwp_settings_general_login_fields() {
         'login_redirect_to' => array(
             'id' => 'login_redirect_to',
             'name' => __( 'Login Redirect Page', 'userswp' ),
-            'desc' => __( 'Set the page to redirect the user after logging in. If no page set it will user WordPress default.', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user after logging in. If no page has been set WordPress default will be used..', 'userswp' ),
             'type' => 'select',
             'options' => uwp_get_pages(),
             'chosen' => true,
@@ -2492,7 +2526,7 @@ function uwp_settings_general_logout_fields() {
         'logout_redirect_to' => array(
             'id' => 'logout_redirect_to',
             'name' => __( 'Logout Redirect Page', 'userswp' ),
-            'desc' => __( 'Set the page to redirect the user after logging out. If no page set it will user WordPress default', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user after logging out. If no page has been set WordPress default will be used.', 'userswp' ),
             'type' => 'select',
             'options' => uwp_get_pages(),
             'chosen' => true,
@@ -2508,7 +2542,7 @@ function uwp_settings_general_delete_fields() {
         'delete_redirect_to' => array(
             'id' => 'delete_redirect_to',
             'name' => __( 'Delete Redirect Page', 'userswp' ),
-            'desc' => __( 'Set the page to redirect the user after after they delete account. If no page set it will user WordPress default', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user after after they delete account. If no page has been set WordPress default will be used.', 'userswp' ),
             'type' => 'select',
             'options' => uwp_get_pages(),
             'chosen' => true,
@@ -2546,4 +2580,9 @@ function uwp_modify_get_max_upload_size($bytes, $type) {
 
     return $bytes;
 
+}
+
+function uwp_can_make_profile_private() {
+    $make_profile_private = apply_filters('uwp_user_can_make_profile_private', false);
+    return $make_profile_private;
 }
