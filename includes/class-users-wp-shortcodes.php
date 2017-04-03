@@ -45,7 +45,15 @@ class Users_WP_Shortcodes {
     }
 
 
-    public function register() {
+    public function register($atts) {
+        $args = shortcode_atts(
+            array(
+                'role_id'   => '0',
+            ),
+            $atts
+        );
+        global $uwp_register_role_id;
+        $uwp_register_role_id = (int) $args['role_id'];
         return $this->uwp_generate_shortcode('register');
     }
 

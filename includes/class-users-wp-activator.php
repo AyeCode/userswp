@@ -211,6 +211,7 @@ class Users_WP_Activator {
 							  is_register_only_field enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  required_msg varchar(255) NULL DEFAULT NULL,
 							  show_in text NULL DEFAULT NULL,
+							  user_roles text NULL DEFAULT NULL,
 							  extra_fields text NULL DEFAULT NULL,
 							  field_icon varchar(255) NULL DEFAULT NULL,
 							  css_class varchar(255) NULL DEFAULT NULL,

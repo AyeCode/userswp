@@ -1333,6 +1333,7 @@ class Users_WP_Form_Builder {
             $css_class = isset($request_field['css_class']) ? $request_field['css_class'] : '';
             $field_icon = isset($request_field['field_icon']) ? $request_field['field_icon'] : '';
             $show_in = isset($request_field['show_in']) ? $request_field['show_in'] : '';
+            $user_roles = isset($request_field['user_roles']) ? $request_field['user_roles'] : '';
             $decimal_point = isset($request_field['decimal_point']) ? trim($request_field['decimal_point']) : ''; // decimal point for DECIMAL data type
             $decimal_point = $decimal_point > 0 ? ($decimal_point > 10 ? 10 : $decimal_point) : '';
             $validation_pattern = isset($request_field['validation_pattern']) ? $request_field['validation_pattern'] : '';
@@ -1341,6 +1342,10 @@ class Users_WP_Form_Builder {
 
             if(is_array($show_in)){
                 $show_in = implode(",", $request_field['show_in']);
+            }
+
+            if(is_array($user_roles)){
+                $user_roles = implode(",", $request_field['user_roles']);
             }
 
             // fieldset need htmlvar_name for register tab
@@ -1507,6 +1512,7 @@ class Users_WP_Form_Builder {
                             field_icon = %s,
                             field_icon = %s,
                             show_in = %s,
+                            user_roles = %s,
                             option_values = %s,
                             extra_fields = %s,
                             validation_pattern = %s,
@@ -1537,6 +1543,7 @@ class Users_WP_Form_Builder {
                             $field_icon,
                             $field_icon,
                             $show_in,
+                            $user_roles,
                             $option_values,
                             $extra_field_query,
                             $validation_pattern,
@@ -1722,6 +1729,7 @@ class Users_WP_Form_Builder {
                             css_class = %s,
                             field_icon = %s,
                             show_in = %s,
+                            user_roles = %s,
                             option_values = %s,
                             extra_fields = %s,
                             validation_pattern = %s,
@@ -1750,6 +1758,7 @@ class Users_WP_Form_Builder {
                             $css_class,
                             $field_icon,
                             $show_in,
+                            $user_roles,
                             $option_values,
                             $extra_field_query,
                             $validation_pattern,

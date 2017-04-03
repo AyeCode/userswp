@@ -1267,6 +1267,7 @@ function get_register_form_fields() {
     $table_name = $wpdb->prefix . 'uwp_form_fields';
     $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
     $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.is_active = '1' AND fields.is_register_field = '1' AND extras.form_type = 'register' ORDER BY extras.sort_order ASC", array('account')));
+    $fields = apply_filters('uwp_get_register_form_fields', $fields);
     return $fields;
 }
 
