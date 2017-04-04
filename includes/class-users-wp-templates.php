@@ -498,7 +498,7 @@ class Users_WP_Templates {
     }
 
     public function uwp_add_body_class( $classes ) {
-
+        
         if ( is_uwp_page() ) {
             $classes[] = 'uwp_page';
         }

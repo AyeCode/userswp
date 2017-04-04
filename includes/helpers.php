@@ -1271,11 +1271,18 @@ function get_register_form_fields() {
     return $fields;
 }
 
-function get_register_validate_form_fields() {
+function get_register_validate_form_fields($role_id) {
     global $wpdb;
     $table_name = $wpdb->prefix . 'uwp_form_fields';
     $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
-    $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.is_register_field = '1' ORDER BY extras.sort_order ASC", array('account')));
+    if ($role_id == 0) {
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.is_register_field = '1' ORDER BY extras.sort_order ASC", array('account')));    
+    } else {
+        $slug = get_post_field( 'post_name', $role_id );
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.is_register_field = '1' AND FIND_IN_SET(%s, fields.user_roles) ORDER BY extras.sort_order ASC", array('account', $slug)));
+    }
+    
+    $fields = apply_filters('uwp_get_register_validate_form_fields', $fields, $role_id);
     return $fields;
 }
 
@@ -1527,12 +1534,24 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
     $errors = new WP_Error();
 
+    $errors = apply_filters('uwp_validate_fields_before', $errors, $data, $type);
+
+    if ($errors->get_error_code()) {
+        return $errors;
+    }
+
+
     if (!$fields) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
         $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
         if ($type == 'register') {
-            $fields = get_register_validate_form_fields();
+            if (isset($data["uwp_role_id"])) {
+                $role_id = (int) strip_tags(esc_sql($data["uwp_role_id"]));
+            } else {
+                $role_id = 0;
+            }
+            $fields = get_register_validate_form_fields($role_id);
         } elseif ($type == 'change') {
             $fields = get_change_validate_form_fields();
         } elseif ($type == 'account') {
