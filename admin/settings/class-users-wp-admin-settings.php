@@ -582,6 +582,21 @@ class Users_WP_Admin_Settings {
             'uwp_notifications' => array(
                 'main' => apply_filters( 'uwp_settings_notifications_main',
                     array(
+                        'registration_activate_email_subject' => array(
+                            'id' => 'registration_activate_email_subject',
+                            'name' => __( 'Registration activate email', 'userswp' ),
+                            'desc' => "",
+                            'type' => 'text',
+                            'size' => 'regular',
+                            'placeholder' => __( 'Enter Registration activate email Subject', 'userswp' )
+                        ),
+                        'registration_activate_email_content' => array(
+                            'id' => 'registration_activate_email_content',
+                            'name' => "",
+                            'desc' => "",
+                            'type' => 'textarea',
+                            'placeholder' => __( 'Enter Registration activate email Content', 'userswp' )
+                        ),
                         'registration_success_email_subject' => array(
                             'id' => 'registration_success_email_subject',
                             'name' => __( 'Registration success email', 'userswp' ),

@@ -286,15 +286,51 @@ class Users_WP_Forms {
             $message_pass = __("Password you entered", 'userswp');
         }
 
-        $login_details = __('<p><b>' . __('Your login Information :', 'userswp') . '</b></p>
-        <p>' . __('Username:', 'userswp') . ' ' . $result['uwp_account_username'] . '</p>
-        <p>' . __('Password:', 'userswp') . ' ' . $message_pass . '</p>');
 
-        $send_result = $this->uwp_send_email( 'register', $user_id, $login_details );
+        $reg_status = uwp_get_option('uwp_registration_status', false);
 
-        if (!$send_result) {
-            $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
+        if ($reg_status == 'require_email_activation' && !$generated_password) {
+            global $wpdb;
+            $key = wp_generate_password( 20, false );
+            $user_data = get_user_by('id', $user_id);
+            do_action( 'uwp_activation_key', $user_data->user_login, $key );
+
+            if ( empty( $wp_hasher ) ) {
+                require_once ABSPATH . 'wp-includes/class-phpass.php';
+                $wp_hasher = new PasswordHash( 8, true );
+            }
+            $hashed = $wp_hasher->HashPassword( $key );
+            $wpdb->update( $wpdb->users, array( 'user_activation_key' => time().":".$hashed ), array( 'user_login' => $user_data->user_login ) );
+            $message = __('To activate your account, visit the following address:', 'userswp') . "\r\n\r\n";
+            $act_url = add_query_arg(
+                array(
+                    'uwp_activate' => 'yes',
+                    'key' => $key,
+                    'login' => $user_data->user_login
+                ),
+                site_url()
+            );
+            
+            $message .= $act_url . "\r\n";
+            
+            $login_details = __('<p><b>' . __('Please activate your account :', 'userswp') . '</b></p>
+            <p>' . $message . '</p>');
+
+            $send_result = $this->uwp_send_email( 'activate', $user_id, $login_details );
+            if (!$send_result) {
+                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
+            }
+        } else {
+            $login_details = __('<p><b>' . __('Your login Information :', 'userswp') . '</b></p>
+            <p>' . __('Username:', 'userswp') . ' ' . $result['uwp_account_username'] . '</p>
+            <p>' . __('Password:', 'userswp') . ' ' . $message_pass . '</p>');
+
+            $send_result = $this->uwp_send_email( 'register', $user_id, $login_details );
+            if (!$send_result) {
+                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
+            }
         }
+
 
         if ($errors->get_error_code())
             return $errors;
@@ -838,6 +874,9 @@ class Users_WP_Forms {
         if ( $message_type == 'register' ) {
             $subject = uwp_get_option('registration_success_email_subject', '');
             $message = uwp_get_option('registration_success_email_content', '');
+        } elseif ( $message_type == 'activate' ) {
+            $subject = uwp_get_option('registration_activate_email_subject', '');
+            $message = uwp_get_option('registration_activate_email_subject', '');
         } elseif ( $message_type == 'forgot' ) {
             $subject = uwp_get_option('forgot_password_email_subject', '');
             $message = uwp_get_option('forgot_password_email_content', '');
@@ -885,6 +924,7 @@ class Users_WP_Forms {
         $user_email = $user_data->user_email;
 
         $search_array  = array(
+            '[#activate_url#]',
             '[#site_name_url#]',
             '[#site_name#]',
             '[#to_name#]',

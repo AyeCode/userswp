@@ -83,6 +83,9 @@ class Users_WP_Activator {
         $register_success_subject = __('Your Log In Details', 'userswp');
         $register_success_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
+        $register_activate_subject = __('Please activate your account', 'userswp');
+        $register_activate_content = __("<p>Dear [#user_name#],</p><p>Thank you for signing up with [#site_name#]</p>[#login_details#]<p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
+
         $forgot_password_subject = __('[#site_name#] - Your new password', 'userswp');
         $forgot_password_content = __("<p>Dear [#user_name#],<p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
@@ -97,6 +100,9 @@ class Users_WP_Activator {
 
         $settings['registration_success_email_subject'] = $register_success_subject;
         $settings['registration_success_email_content'] = $register_success_content;
+
+        $settings['registration_activate_email_subject'] = $register_activate_subject;
+        $settings['registration_activate_email_content'] = $register_activate_content;
 
         $settings['forgot_password_email_subject'] = $forgot_password_subject;
         $settings['forgot_password_email_content'] = $forgot_password_content;

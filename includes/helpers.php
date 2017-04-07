@@ -2487,6 +2487,17 @@ function uwp_get_pages() {
 
 function uwp_settings_general_register_fields() {
     $fields =  array(
+        'uwp_registration_status' => array(
+            'id' => 'uwp_registration_status',
+            'name' => __('Registration Status', 'userswp'),
+            'desc' => __('Select the status you would like user to have after they register on your site', 'userswp'),
+            'type' => 'select',
+            'global' => false,
+            'options' => uwp_registration_status_options(),
+            'chosen' => true,
+            'placeholder' => __( 'Select Option', 'userswp' ),
+            'class' => 'uwp_label_block',
+        ),
         'enable_register_password' => array(
             'id'   => 'enable_register_password',
             'name' => __( 'Display Password field in Regsiter Form', 'userswp' ),
@@ -2505,7 +2516,7 @@ function uwp_settings_general_register_fields() {
         ),
         'enable_confirm_email_field' => array(
             'id'   => 'enable_confirm_email_field',
-            'name' => __( 'Enable Confirm Email Field', 'userswp' ),
+            'name' => __( 'Enable "Confirm Email" Field', 'userswp' ),
             'desc' => 'If enabled email field will be displayed twice to make sure user not typing the wrong email.',
             'type' => 'checkbox',
             'std'  => '1',
@@ -2605,4 +2616,103 @@ function uwp_modify_get_max_upload_size($bytes, $type) {
 function uwp_can_make_profile_private() {
     $make_profile_private = apply_filters('uwp_user_can_make_profile_private', false);
     return $make_profile_private;
+}
+
+
+function uwp_registration_status_options() {
+    $registration_options = array(
+        '' => __( 'Select Option', 'userswp' ), // Blank option
+        'auto_approve' =>  __('Auto approve', 'userswp'),
+        'require_email_activation' =>  __('Require Email Activation', 'userswp'),
+    );
+
+    $registration_options = apply_filters('uwp_registration_status_options', $registration_options);
+
+    return $registration_options;
+}
+
+add_action('uwp_template_display_notices', 'uwp_form_err_by_key');
+function uwp_form_err_by_key() {
+    $messages = apply_filters('uwp_form_error_messages', array());
+    if (isset($_GET['uwp_err'])) {
+        $key = strip_tags(esc_sql($_GET['uwp_err']));
+        if (isset($messages[$key])) {
+            $value = $messages[$key];
+            $message = $value['message'];
+            $type = $value['type'];
+            echo '<div class="'.$type.' text-center">';
+            echo $message;
+            echo '</div>';
+        }
+    }
+}
+
+function uwp_get_page_slug($page_type = 'register_page') {
+    $page_id = uwp_get_option($page_type, 0);
+    if ($page_id) {
+        $slug = get_post_field( 'post_name', get_post($page_id) );
+    } else {
+        $slug = false;
+    }
+    return $slug;
+
+}
+
+function uwp_check_activation_key( $key, $login ) {
+    global $wpdb, $wp_hasher;
+
+    $key = preg_replace( '/[^a-z0-9]/i', '', $key );
+
+    $errors = new WP_Error();
+
+    if ( empty( $key ) || ! is_string( $key ) ) {
+        $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Activation Key.', 'userswp'));
+        return false;
+    }
+
+    if ( empty( $login ) || ! is_string( $login ) ) {
+        $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Activation Key.', 'userswp'));
+        return false;
+    }
+
+    if ($errors->get_error_code())
+        return $errors;
+
+    $user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_login = %s", $login ) );
+
+    if ( ! empty( $user ) ) {
+        if ( empty( $wp_hasher ) ) {
+            require_once ABSPATH . 'wp-includes/class-phpass.php';
+            $wp_hasher = new PasswordHash( 8, true );
+        }
+
+        $valid = $wp_hasher->CheckPassword( $key, $user->user_activation_key );
+    }
+
+    if ( empty( $user ) || empty( $valid ) ) {
+        $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Activation Key.', 'userswp'));
+        return false;
+    }
+
+    if ($errors->get_error_code())
+        return $errors;
+
+    return get_userdata( $user->ID );
+}
+
+add_action('init', 'uwp_process_activation_link');
+function uwp_process_activation_link() {
+    if (isset($_GET['uwp_activate']) && $_GET['uwp_activate'] == 'yes') {
+        $key =  strip_tags(esc_sql($_GET['key']));
+        $login =  strip_tags(esc_sql($_GET['login']));
+        
+        $result = uwp_check_activation_key($key, $login);
+        
+        if (is_wp_error($result)) {
+            echo $result->get_error_message();
+        } else {
+            //todo: account status
+            echo "Account activated successfully";
+        }
+    }
 }
