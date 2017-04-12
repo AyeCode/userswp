@@ -30,6 +30,21 @@ if ( uwp_get_option('uninstall_erase_data') == '1' ) {
     delete_option('uwp_default_data_installed');
     //delete_option('uwp_db_version');
 
+
+    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $rows = $wpdb->get_results("select * from " . $table_name . "");
+
+    // Delete user meta for all users
+    $meta_type  = 'user';
+    $user_id    = 0; // This will be ignored, since we are deleting for all users.
+    $meta_key   = 'uwp_usermeta';
+    $meta_value = ''; // Also ignored. The meta will be deleted regardless of value.
+    $delete_all = true;
+
+    foreach ($rows as $row) {
+        delete_metadata( $meta_type, $user_id, $row->htmlvar_name, $meta_value, $delete_all );
+    }
+
     // Drop tables.
     // Drop form fields table
     $table_name = $wpdb->prefix . 'uwp_form_fields';
@@ -40,13 +55,5 @@ if ( uwp_get_option('uninstall_erase_data') == '1' ) {
     $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
     $sql = "DROP TABLE IF EXISTS $extras_table_name";
     $wpdb->query($sql);
-    
-    // Delete user meta for all users
-    $meta_type  = 'user';
-    $user_id    = 0; // This will be ignored, since we are deleting for all users.
-    $meta_key   = 'uwp_usermeta';
-    $meta_value = ''; // Also ignored. The meta will be deleted regardless of value.
-    $delete_all = true;
 
-    delete_metadata( $meta_type, $user_id, $meta_key, $meta_value, $delete_all );
 }

@@ -30,21 +30,35 @@ class Users_WP_Profile {
     public function get_profile_header($user) {
         $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
         $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar_thumb', '');
-        if (is_user_logged_in() && get_current_user_id() == $user->ID) {
+        if (is_user_logged_in() && get_current_user_id() == $user->ID && is_uwp_profile_page()) {
             $trigger_class = "uwp-profile-modal-form-trigger";
         } else {
             $trigger_class = "";
         }
+
+        if (empty($banner)) {
+            $banner = USERSWP_PLUGIN_URL."/public/assets/images/banner.png";
+        }
         if (empty($avatar)) {
-            $avatar = get_avatar($user->user_email, 128);
+            $avatar = get_avatar($user->user_email, 150);
         } else {
-            $avatar = '<img src="'.$avatar.'" class="avatar avatar-128 photo" width="128" height="128">';
+            $avatar = '<img src="'.$avatar.'" class="avatar avatar-150 photo" width="150" height="150">';
         }
         ?>
         <div class="uwp-profile-header">
-            <div class="uwp-profile-header-img" style="background-image: url('<?php echo $banner; ?>')">
-<!--                <img src="--><?php //echo $banner; ?><!--" alt="" class="uwp-profile-header-img-src">-->
-            <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID)) { ?>
+            <div class="uwp-profile-header-img">
+                <?php
+                if (!is_uwp_profile_page()) {
+                    echo '<a href="'.apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID).'" title="'.$user->display_name.'">';
+                }
+                ?>
+                <img src="<?php echo $banner; ?>" alt="" class="uwp-profile-header-img-src" />
+                <?php
+                if (!is_uwp_profile_page()) {
+                    echo '</a>';
+                }
+                ?>
+            <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID) && is_uwp_profile_page()) { ?>
                 <div class="uwp-banner-change-icon">
                     <i class="fa fa-camera" aria-hidden="true"></i>
                     <div data-type="banner" class="uwp-profile-banner-change <?php echo $trigger_class; ?>">
@@ -56,15 +70,27 @@ class Users_WP_Profile {
             <?php } ?>
             </div>
             <div class="uwp-profile-avatar">
-                <?php echo $avatar; ?>
-                <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID)) { ?>
-                    <div class="uwp-profile-avatar-change">
-                        <div class="uwp-profile-avatar-change-inner">
-                            <i class="fa fa-camera" aria-hidden="true"></i>
-                            <a id="uwp-profile-picture-change" data-type="avatar" class="<?php echo $trigger_class; ?>" href="#">Update Profile Picture</a>
+                <?php
+                if (!is_uwp_profile_page()) {
+                    echo '<a href="'.apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID).'" title="'.$user->display_name.'">';
+                }
+                ?>
+                <div class="uwp-profile-avatar-inner">
+                    <?php echo $avatar; ?>
+                    <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID) && is_uwp_profile_page()) { ?>
+                        <div class="uwp-profile-avatar-change">
+                            <div class="uwp-profile-avatar-change-inner">
+                                <i class="fa fa-camera" aria-hidden="true"></i>
+                                <a id="uwp-profile-picture-change" data-type="avatar" class="<?php echo $trigger_class; ?>" href="#">Update</a>
+                            </div>
                         </div>
-                    </div>
-                <?php } ?>
+                    <?php } ?>
+                </div>
+                <?php
+                if (!is_uwp_profile_page()) {
+                    echo '</a>';
+                }
+                ?>
             </div>
         </div>
         <?php
@@ -79,7 +105,7 @@ class Users_WP_Profile {
     }
 
     public function get_profile_bio($user) {
-        $bio = get_user_meta( $user->ID, 'description', true );
+        $bio = uwp_get_usermeta( $user->ID, 'uwp_account_bio', "" );
         $is_profile_page = is_uwp_profile_page();
         if ($bio) {
             ?>
@@ -139,10 +165,11 @@ class Users_WP_Profile {
     }
 
     public function get_profile_extra_count($user) {
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' AND field_type != 'fieldset' AND is_public = '1' AND show_in LIKE '%[more_info]%' ORDER BY sort_order ASC");
-        return count($fields);
+//        global $wpdb;
+//        $table_name = $wpdb->prefix . 'uwp_form_fields';
+//        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' AND field_type != 'fieldset' AND is_public = '1' AND show_in LIKE '%[more_info]%' ORDER BY sort_order ASC");
+//        return count($fields);
+        return '<i class="fa fa-user"></i>';
     }
 
     public function get_profile_extra($user) {
@@ -163,75 +190,83 @@ class Users_WP_Profile {
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' ORDER BY sort_order ASC");
+        $wrap_html = false;
         if ($fields) {
-            ?>
-            <div class="uwp-profile-extra">
-                <div class="uwp-profile-extra-div form-table">
-                    <?php
-                    foreach ($fields as $field) {
-                        $show_in = explode(',',$field->show_in);
-                        if (!in_array($show_type, $show_in)) {
-                            continue;
-                        }
-                        if ($field->is_public != '1') {
-                            continue;
-                        }
+            foreach ($fields as $field) {
+                $show_in = explode(',',$field->show_in);
+                if (!in_array($show_type, $show_in)) {
+                    continue;
+                }
+                if ($field->is_public == '0') {
+                    continue;
+                }
 
-                        $value = $this->uwp_get_field_value($field, $user);
-
-                        // Icon
-                        if ($field->field_icon) {
-                            $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
-                        } else {
-                            $icon = '';
-                        }
-
-                        if ($field->field_type == 'fieldset') {
-                            ?>
-                            <div class="uwp-profile-extra-wrap" style="margin: 0; padding: 0">
-                                <div class="uwp-profile-extra-key uwp-profile-extra-full" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></div>
-                            </div>
-                            <?php
-                        } else {
-                            if ($value) {
-                                ?>
-                                <div class="uwp-profile-extra-wrap">
-                                    <div class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
-                                    <div class="uwp-profile-extra-value">
-                                        <?php
-                                        if ($field->htmlvar_name == 'uwp_account_bio') {
-                                            $is_profile_page = is_uwp_profile_page();
-                                            if ($value) {
-                                                ?>
-                                                <div class="uwp-profile-bio <?php if ($is_profile_page) { echo "uwp_more"; } ?>">
-                                                    <?php
-                                                    if ($is_profile_page) {
-                                                        echo $value;
-                                                    } else {
-                                                        echo wp_trim_words( $value, 20, '...' );
-                                                    }
-                                                    ?>
-                                                </div>
-                                                <?php
-                                            }
-                                        } else {
-                                            echo $value;
-                                        }
-                                        ?>
-                                    </div>
-                                </div>
-                                <?php
-                            }
-                        }
+                if ($field->is_public == '2') {
+                    $field_name = $field->htmlvar_name.'_privacy';
+                    $val = uwp_get_usermeta($user->ID, $field_name, false);
+                    if ($val === '0') {
+                        continue;
                     }
+                }
+
+                $value = $this->uwp_get_field_value($field, $user);
+
+                // Icon
+                if ($field->field_icon) {
+                    $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
+                } else {
+                    $icon = '';
+                }
+
+                if ($field->field_type == 'fieldset') {
                     ?>
-                </div>
-            </div>
-            <?php
+                    <div class="uwp-profile-extra-wrap" style="margin: 0; padding: 0">
+                        <div class="uwp-profile-extra-key uwp-profile-extra-full" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></div>
+                    </div>
+                    <?php
+                } else {
+                    if ($value) {
+                        $wrap_html = true;
+                        ?>
+                        <div class="uwp-profile-extra-wrap">
+                            <div class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
+                            <div class="uwp-profile-extra-value">
+                                <?php
+                                if ($field->htmlvar_name == 'uwp_account_bio') {
+                                    $is_profile_page = is_uwp_profile_page();
+                                    if ($value) {
+                                        ?>
+                                        <div class="uwp-profile-bio <?php if ($is_profile_page) { echo "uwp_more"; } ?>">
+                                            <?php
+                                            if ($is_profile_page) {
+                                                echo $value;
+                                            } else {
+                                                echo wp_trim_words( $value, 20, '...' );
+                                            }
+                                            ?>
+                                        </div>
+                                        <?php
+                                    }
+                                } else {
+                                    echo $value;
+                                }
+                                ?>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                }
+            }
         }
         $output = ob_get_contents();
+        $wrapped_output = '';
+        if ($wrap_html) {
+            $wrapped_output .= '<div class="uwp-profile-extra"><div class="uwp-profile-extra-div form-table">';
+            $wrapped_output .= $output;
+            $wrapped_output .= '</div></div>';
+        }
         ob_end_clean();
-        return trim($output);
+        return trim($wrapped_output);
     }
     
 
@@ -249,21 +284,21 @@ class Users_WP_Profile {
         $extra = $this->get_profile_extra($user);
         if (in_array('more_info', $allowed_tabs) && $extra) {
             $tabs['more_info']  = array(
-                'title' => __( 'More Info', 'uwp' ),
+                'title' => __( 'More Info', 'userswp' ),
                 'count' => $this->get_profile_extra_count($user)
             );
         }
 
         if (in_array('posts', $allowed_tabs)) {
             $tabs['posts']  = array(
-                'title' => __( 'Posts', 'uwp' ),
+                'title' => __( 'Posts', 'userswp' ),
                 'count' => uwp_post_count($user->ID, 'post')
             );
         }
 
         if (in_array('comments', $allowed_tabs)) {
             $tabs['comments'] = array(
-                'title' => __( 'Comments', 'uwp' ),
+                'title' => __( 'Comments', 'userswp' ),
                 'count' => uwp_comment_count($user->ID)
             );
         }
@@ -312,9 +347,12 @@ class Users_WP_Profile {
                     }
                     ?>
                 </ul>
-                <?php if ($account_page && is_user_logged_in() && get_current_user_id() == $user->ID) { ?>
+                <?php
+                $can_user_edit_account = apply_filters('uwp_user_can_edit_own_profile', true, $user);
+                ?>
+                <?php if ($account_page && is_user_logged_in() && (get_current_user_id() == $user->ID) && $can_user_edit_account) { ?>
                     <div class="uwp-edit-account">
-                        <a href="<?php echo get_permalink( $account_page ); ?>" title="Edit Account"><i class="fa fa-gear"></i></a>
+                        <a href="<?php echo get_permalink( $account_page ); ?>" title="<?php echo  __( 'Edit Account', 'userswp' ); ?>"><i class="fa fa-gear"></i></a>
                     </div>
                 <?php } ?>
             </div>
@@ -333,7 +371,7 @@ class Users_WP_Profile {
         <div class="uwp-pagination">
             <?php
             $big = 999999999; // need an unlikely integer
-            $translated = __( 'Page', 'uwp' ); // Supply translatable string
+            $translated = __( 'Page', 'userswp' ); // Supply translatable string
 
             echo paginate_links( array(
                 'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
@@ -373,7 +411,7 @@ class Users_WP_Profile {
              return;   
         }
 
-        uwp_generic_tab_content($user, 'post', __('Posts', 'uwp'));
+        uwp_generic_tab_content($user, 'post', __('Posts', 'userswp'));
     }
 
     public function get_profile_comments($user) {
@@ -386,7 +424,7 @@ class Users_WP_Profile {
             return;
         }
         ?>
-        <h3><?php echo __('Comments', 'uwp') ?></h3>
+        <h3><?php echo __('Comments', 'userswp') ?></h3>
 
         <div class="uwp-profile-item-block">
             <?php
@@ -433,7 +471,7 @@ class Users_WP_Profile {
                             echo $excerpt;
                             if ($excerpt) {
                                 ?>
-                                <a href="<?php echo get_comment_link($comment->comment_ID); ?>" class="more-link"><?php echo __('Read More »', 'uwp'); ?></a>
+                                <a href="<?php echo get_comment_link($comment->comment_ID); ?>" class="more-link"><?php echo __('Read More »', 'userswp'); ?></a>
                                 <?php
                             }
                             ?>
@@ -444,7 +482,7 @@ class Users_WP_Profile {
                 echo '</ul>';
             } else {
                 // no comments found
-                echo "<p>".__('No Comments Found', 'uwp')."</p>";
+                echo "<p>".__('No Comments Found', 'userswp')."</p>";
             }
 
             do_action('uwp_profile_pagination', $maximum_pages);
@@ -617,7 +655,7 @@ class Users_WP_Profile {
             $full_width  = apply_filters('uwp_avatar_image_width', 150);
             $full_height = apply_filters('uwp_avatar_image_height', 150);
         } else {
-            $full_width  = apply_filters('uwp_banner_image_width', 1000);
+            $full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('header_banner_width', 1000));
             $full_height = apply_filters('uwp_banner_image_height', 300);
         }
 
@@ -669,6 +707,8 @@ class Users_WP_Profile {
             'uwp_popup_type' => $type,
             'uwp_full_width' => $full_width,
             'uwp_full_height' => $full_height,
+            'uwp_true_width' => $image[0],
+            'uwp_true_height' => $image[1],
             'uwp_popup_content' => $this->uwp_image_crop_modal_html($type, $image_url, $full_width, $full_height),
         );
         
@@ -768,11 +808,11 @@ class Users_WP_Profile {
                                     <input type="hidden" name="h" value="" id="<?php echo $type; ?>-h" />
                                     <input type="hidden" id="uwp-<?php echo $type; ?>-crop-image" name="uwp_crop" value="<?php echo $image_url; ?>" />
                                     <input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp-crop-nonce' ); ?>" />
-                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="<?php echo __('Apply', 'uwp'); ?>" id="save_uwp_<?php echo $type; ?>" />
+                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="<?php echo __('Apply', 'userswp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
                                 </form>
                             </div>
                         </div>
-                        <button type="button" data-type="<?php echo $type; ?>" class="uwp_modal_btn uwp-modal-close" data-dismiss="modal">Cancel</button>
+                        <button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -823,7 +863,7 @@ class Users_WP_Profile {
                             <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
                             <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
                             <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();">Upload <?php echo $type; ?></button>
-                            <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'uwp').uwp_get_option('profile_avatar_max_size', 5); ?> MB</p>
+                            <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'userswp').uwp_formatSizeUnits(uwp_get_max_upload_size($type)); ?></p>
                             <div class="uwp_upload_field" style="display: none">
                                 <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" required="required" type="file" value="">
                             </div>
@@ -834,11 +874,11 @@ class Users_WP_Profile {
                         <div class="uwp-<?php echo $type; ?>-crop-p-wrap">
                             <div id="<?php echo $type; ?>-crop-actions">
                                 <form class="uwp-crop-form" method="post">
-                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" disabled="disabled" value="<?php echo __('Apply', 'uwp'); ?>" id="save_uwp_<?php echo $type; ?>" />
+                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" disabled="disabled" value="<?php echo __('Apply', 'userswp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
                                 </form>
                             </div>
                         </div>
-                        <button type="button" data-type="<?php echo $type; ?>" class="uwp_modal_btn uwp-modal-close" data-dismiss="modal">Cancel</button>
+                        <button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -912,14 +952,20 @@ class Users_WP_Profile {
                                     resp = JSON.parse(response);
                                     uwp_full_width = resp['uwp_full_width'];
                                     uwp_full_height = resp['uwp_full_height'];
+                                    uwp_true_width = resp['uwp_true_width'];
+                                    uwp_true_height = resp['uwp_true_height'];
 
                                     jQuery('#uwp-popup-modal-wrap').html(resp['uwp_popup_content']).find('#uwp-'+uwp_popup_type+'-to-crop').Jcrop({
                                         // onChange: showPreview,
                                         onSelect: updateCoords,
-                                        allowResize: false,
+                                        allowResize: true,
                                         allowSelect: false,
+                                        boxWidth: 650,   //Maximum width you want for your bigger images
+                                        boxHeight: 400,  //Maximum Height for your bigger images
                                         setSelect: [ 0, 0, uwp_full_width, uwp_full_height ],
-                                        aspectRatio: uwp_full_width/uwp_full_height
+                                        aspectRatio: uwp_full_width/uwp_full_height,
+                                        trueSize: [uwp_true_width,uwp_true_height],
+                                        minSize: [uwp_full_width,uwp_full_height]
                                     });
                                 }
                             }
@@ -959,7 +1005,7 @@ class Users_WP_Profile {
 
     public function uwp_extra_user_profile_fields( $user ) {
         ?>
-        <h3><?php _e("UsersWP", "uwp"); ?></h3>
+        <h3><?php _e("UsersWP", "userswp"); ?></h3>
         <?php echo $this->get_profile_extra($user); ?>
         <?php
     }
@@ -1075,7 +1121,7 @@ class Users_WP_Profile {
                 $min_width  = apply_filters('uwp_avatar_image_width', 150);
                 $min_height = apply_filters('uwp_avatar_image_height', 150);
             } else {
-                $min_width  = apply_filters('uwp_banner_image_width', 1000);
+                $min_width  = apply_filters('uwp_banner_image_width', uwp_get_option('header_banner_width', 1000));
                 $min_height = apply_filters('uwp_banner_image_height', 300);
             }
 
@@ -1084,10 +1130,10 @@ class Users_WP_Profile {
             $height = $imagedetails[1];
 
             if ( $width < $min_width) {
-                return new WP_Error( 'image-too-small', __( 'The uploaded file is too small. Minimum image width should be '.$min_width.'px', 'uwp' ) );
+                return new WP_Error( 'image-too-small', __( 'The uploaded file is too small. Minimum image width should be '.$min_width.'px', 'userswp' ) );
             }
             if ( $height < $min_height) {
-                return new WP_Error( 'image-too-small', __( 'The uploaded file is too small. Minimum image height should be '.$min_height.'px', 'uwp' ) );
+                return new WP_Error( 'image-too-small', __( 'The uploaded file is too small. Minimum image height should be '.$min_height.'px', 'userswp' ) );
             }
         }
 
@@ -1183,7 +1229,7 @@ class Users_WP_Profile {
     public function uwp_users_search() {
         ?>
         <div class="uwp-users-list-sort-search">
-            <div class="uwp-user-search">
+            <div class="uwp-user-search" id="uwp_user_search">
                 <?php
                 $keyword = "";
                 if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
@@ -1191,12 +1237,21 @@ class Users_WP_Profile {
                 }
                 ?>
                 <form method="get" class="searchform search-form" action="<?php echo get_uwp_users_permalink(); ?>">
-                    <input placeholder="Search For" name="uwps" value="<?php echo $keyword; ?>" class="s search-input" type="text">
-                    <input class="uwp-searchsubmit uwp-search-submit" value="Search" type="submit"><br>
+                    <?php do_action('uwp_users_page_search_form_inner', $keyword); ?>
                 </form>
             </div>
             <div class="uwp-user-sort">
+                <?php
+                $default_layout = uwp_get_option('users_default_layout', 'list');
+                ?>
                 <form method="get" action="">
+                    <select name="uwp_layout" id="uwp_layout">
+                        <option <?php selected( $default_layout, "list" ); ?> value="list">List View</option>
+                        <option <?php selected( $default_layout, "2col" ); ?> value="2col">Grid 2 Col</option>
+                        <option <?php selected( $default_layout, "3col" ); ?> value="3col">Grid 3 Col</option>
+                        <option <?php selected( $default_layout, "4col" ); ?> value="4col">Grid 4 Col</option>
+                        <option <?php selected( $default_layout, "5col" ); ?> value="5col">Grid 5 Col</option>
+                    </select>
                     <?php
                     $sort_by = "";
                     if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
@@ -1230,7 +1285,7 @@ class Users_WP_Profile {
         foreach ($fields as $field) {
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);
             $tabs[$key] = array(
-                'title' => __($field->site_title, 'uwp'),
+                'title' => __($field->site_title, 'userswp'),
                 'count' => 1
             );
         }
@@ -1268,12 +1323,6 @@ class Users_WP_Profile {
         } elseif ($field->htmlvar_name == 'uwp_account_confirm_password') {
             $value = '';
             $field->is_required = 0;
-        } elseif ($field->htmlvar_name == 'uwp_account_first_name') {
-            $value = $user_data->first_name;
-        } elseif ($field->htmlvar_name == 'uwp_account_last_name') {
-            $value = $user_data->last_name;
-        } elseif ($field->htmlvar_name == 'uwp_account_bio') {
-            $value = $user_data->description;
         } else {
             $value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
         }

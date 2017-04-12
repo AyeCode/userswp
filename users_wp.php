@@ -8,7 +8,7 @@ Author: GeoDirectory team
 Author URI: https://wpgeodirectory.com
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
-Text Domain: uwp
+Text Domain: userswp
 Domain Path: /languages
 Requires at least: 3.1
 Tested up to: 4.6
@@ -19,6 +19,10 @@ Update URL: https://github.com/UsersWP/userswp/
 if (!defined('WPINC')) {
     die;
 }
+
+define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
+
+define( 'USERSWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 /**
  * The code that runs during plugin activation.
@@ -45,6 +49,7 @@ register_deactivation_hook( __FILE__, 'deactivate_users_wp' );
  */
 require_once('includes/class-users-wp.php');
 require_once('includes/helpers.php');
+require_once('widgets/login.php');
 /**
  * Begins execution of the plugin.
  *

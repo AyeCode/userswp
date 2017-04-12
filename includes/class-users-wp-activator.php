@@ -31,6 +31,7 @@ class Users_WP_Activator {
             self::generate_pages();
             self::add_default_options();
             self::uwp_create_tables();
+            self::uwp_insert_usermeta();
             self::uwp_create_default_fields();
             self::uwp_insert_form_extras();
             self::uwp_flush_rewrite_rules();
@@ -46,14 +47,14 @@ class Users_WP_Activator {
     }
 
     public static function generate_pages() {
-        self::uwp_create_page(esc_sql(_x('register', 'page_slug', 'uwp')), 'register_page', __('Register', 'uwp'), '[uwp_register]');
-        self::uwp_create_page(esc_sql(_x('login', 'page_slug', 'uwp')), 'login_page', __('Login', 'uwp'), '[uwp_login]');
-        self::uwp_create_page(esc_sql(_x('account', 'page_slug', 'uwp')), 'account_page', __('Account', 'uwp'), '[uwp_account]');
-        self::uwp_create_page(esc_sql(_x('forgot', 'page_slug', 'uwp')), 'forgot_page', __('Forgot Password?', 'uwp'), '[uwp_forgot]');
-        self::uwp_create_page(esc_sql(_x('reset', 'page_slug', 'uwp')), 'reset_page', __('Reset Password', 'uwp'), '[uwp_reset]');
-        self::uwp_create_page(esc_sql(_x('change', 'page_slug', 'uwp')), 'change_page', __('Change Password', 'uwp'), '[uwp_change]');
-        self::uwp_create_page(esc_sql(_x('profile', 'page_slug', 'uwp')), 'profile_page', __('Profile', 'uwp'), '[uwp_profile]');
-        self::uwp_create_page(esc_sql(_x('users', 'page_slug', 'uwp')), 'users_page', __('Users', 'uwp'), '[uwp_users]');
+        self::uwp_create_page(esc_sql(_x('register', 'page_slug', 'userswp')), 'register_page', __('Register', 'userswp'), '[uwp_register]');
+        self::uwp_create_page(esc_sql(_x('login', 'page_slug', 'userswp')), 'login_page', __('Login', 'userswp'), '[uwp_login]');
+        self::uwp_create_page(esc_sql(_x('account', 'page_slug', 'userswp')), 'account_page', __('Account', 'userswp'), '[uwp_account]');
+        self::uwp_create_page(esc_sql(_x('forgot', 'page_slug', 'userswp')), 'forgot_page', __('Forgot Password?', 'userswp'), '[uwp_forgot]');
+        self::uwp_create_page(esc_sql(_x('reset', 'page_slug', 'userswp')), 'reset_page', __('Reset Password', 'userswp'), '[uwp_reset]');
+        self::uwp_create_page(esc_sql(_x('change', 'page_slug', 'userswp')), 'change_page', __('Change Password', 'userswp'), '[uwp_change]');
+        self::uwp_create_page(esc_sql(_x('profile', 'page_slug', 'userswp')), 'profile_page', __('Profile', 'userswp'), '[uwp_profile]');
+        self::uwp_create_page(esc_sql(_x('users', 'page_slug', 'userswp')), 'users_page', __('Users', 'userswp'), '[uwp_users]');
     }
 
     public static function add_default_options() {
@@ -79,23 +80,29 @@ class Users_WP_Activator {
 
         //notifications
 
-        $register_success_subject = __('Your Log In Details', 'uwp');
-        $register_success_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
+        $register_success_subject = __('Your Log In Details', 'userswp');
+        $register_success_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
-        $forgot_password_subject = __('[#site_name#] - Your new password', 'uwp');
-        $forgot_password_content = __("<p>Dear [#user_name#],<p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
+        $register_activate_subject = __('Please activate your account', 'userswp');
+        $register_activate_content = __("<p>Dear [#user_name#],</p><p>Thank you for signing up with [#site_name#]</p>[#login_details#]<p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
-        $change_password_subject = __('[#site_name#] - Password has been changed', 'uwp');
-        $change_password_content = __("<p>Dear [#user_name#],<p><p>Your password has been changed successfully.</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
+        $forgot_password_subject = __('[#site_name#] - Your new password', 'userswp');
+        $forgot_password_content = __("<p>Dear [#user_name#],<p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
-        $reset_password_subject = __('[#site_name#] - Password has been reset', 'uwp');
-        $reset_password_content = __("<p>Dear [#user_name#],<p><p>Your password has been reset</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
+        $change_password_subject = __('[#site_name#] - Password has been changed', 'userswp');
+        $change_password_content = __("<p>Dear [#user_name#],<p><p>Your password has been changed successfully.</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
-        $account_update_subject = __('[#site_name#] - Account has been updated', 'uwp');
-        $account_update_content = __("<p>Dear [#user_name#],<p><p>Your account has been updated successfully</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'uwp');
+        $reset_password_subject = __('[#site_name#] - Password has been reset', 'userswp');
+        $reset_password_content = __("<p>Dear [#user_name#],<p><p>Your password has been reset</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
+
+        $account_update_subject = __('[#site_name#] - Account has been updated', 'userswp');
+        $account_update_content = __("<p>Dear [#user_name#],<p><p>Your account has been updated successfully</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
         $settings['registration_success_email_subject'] = $register_success_subject;
         $settings['registration_success_email_content'] = $register_success_content;
+
+        $settings['registration_activate_email_subject'] = $register_activate_subject;
+        $settings['registration_activate_email_content'] = $register_activate_content;
 
         $settings['forgot_password_email_subject'] = $forgot_password_subject;
         $settings['forgot_password_email_content'] = $forgot_password_content;
@@ -190,6 +197,7 @@ class Users_WP_Activator {
         $form_fields = "CREATE TABLE " . $table_name . " (
 							  id int(11) NOT NULL AUTO_INCREMENT,
 							  form_type varchar(100) NULL,
+							  data_type varchar(100) NULL,
 							  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
 							  field_type_key varchar(255) NOT NULL,
 							  site_title varchar(255) NULL DEFAULT NULL,
@@ -202,12 +210,14 @@ class Users_WP_Activator {
 							  is_active enum( '0', '1' ) NOT NULL DEFAULT '1',
 							  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_dummy enum( '0', '1' ) NOT NULL DEFAULT '0',
-							  is_public enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_public enum( '0', '1', '2' ) NOT NULL DEFAULT '0',
 							  is_required enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_register_field enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_search_field enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_register_only_field enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  required_msg varchar(255) NULL DEFAULT NULL,
 							  show_in text NULL DEFAULT NULL,
+							  user_roles text NULL DEFAULT NULL,
 							  extra_fields text NULL DEFAULT NULL,
 							  field_icon varchar(255) NULL DEFAULT NULL,
 							  css_class varchar(255) NULL DEFAULT NULL,
@@ -231,6 +241,19 @@ class Users_WP_Activator {
 									  sort_order int(11) NOT NULL,
 									  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
 									  is_dummy enum( '0', '1' ) NOT NULL DEFAULT '0',
+									  expand_custom_value int(11) NULL DEFAULT NULL,
+									  searching_range_mode int(11) NULL DEFAULT NULL,
+									  expand_search int(11) NULL DEFAULT NULL,
+									  front_search_title varchar(255) CHARACTER SET utf8 NULL DEFAULT NULL,
+									  first_search_value int(11) NULL DEFAULT NULL,
+									  first_search_text varchar(255) CHARACTER SET utf8 NULL DEFAULT NULL,
+									  last_search_text varchar(255) CHARACTER SET utf8 NULL DEFAULT NULL,
+									  search_min_value int(11) NULL DEFAULT NULL,
+									  search_max_value int(11) NULL DEFAULT NULL,
+									  search_diff_value int(11) NULL DEFAULT NULL,
+									  search_condition varchar(100) NULL DEFAULT NULL,
+									  field_input_type varchar(255) NULL DEFAULT NULL,
+									  field_data_type varchar(255) NULL DEFAULT NULL,
 									  PRIMARY KEY  (id)
 									) $collate AUTO_INCREMENT=1 ;";
 
@@ -238,6 +261,49 @@ class Users_WP_Activator {
 
         dbDelta($form_extras);
 
+
+        // Table for storing userswp usermeta
+        $usermeta_table_name = $wpdb->prefix . 'uwp_usermeta';
+        $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
+						user_id int(20) NOT NULL,
+						user_ip varchar(20) NULL DEFAULT NULL,
+						uwp_account_username varchar(255) NULL DEFAULT NULL,
+						uwp_account_email varchar(255) NULL DEFAULT NULL,
+						uwp_account_first_name varchar(255) NULL DEFAULT NULL,
+						uwp_account_last_name varchar(255) NULL DEFAULT NULL,
+						uwp_account_bio varchar(255) NULL DEFAULT NULL,
+						uwp_account_avatar_thumb varchar(255) NULL DEFAULT NULL,
+						uwp_account_banner_thumb varchar(255) NULL DEFAULT NULL,
+						PRIMARY KEY  (user_id)
+						) $collate ";
+
+        $user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);
+
+        dbDelta($user_meta);
+
+    }
+
+    public static function uwp_insert_usermeta()
+    {
+        global $wpdb;
+        $sort= "user_registered";
+        $all_users_id = $wpdb->get_col( $wpdb->prepare(
+            "SELECT $wpdb->users.ID FROM $wpdb->users ORDER BY %s ASC"
+            , $sort ));
+
+        //we got all the IDs, now loop through them to get individual IDs
+        foreach ( $all_users_id as $user_id ) {
+            // get user info by calling get_userdata() on each id
+            $user_data = get_userdata($user_id);
+            $first_name = get_user_meta( $user_id, 'first_name', true );
+            $last_name = get_user_meta( $user_id, 'last_name', true );
+            $bio = get_user_meta( $user_id, 'description', true );
+            uwp_update_usermeta($user_id, 'uwp_account_username', $user_data->user_login);
+            uwp_update_usermeta($user_id, 'uwp_account_email', $user_data->user_email);
+            uwp_update_usermeta($user_id, 'uwp_account_first_name', $first_name);
+            uwp_update_usermeta($user_id, 'uwp_account_last_name', $last_name);
+            uwp_update_usermeta($user_id, 'uwp_account_bio', $bio);
+        }
     }
 
     public static function uwp_create_default_fields()
@@ -278,7 +344,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'login',
             'field_type' => 'text',
-            'site_title' => __('Username', 'uwp'),
+            'site_title' => __('Username', 'userswp'),
             'htmlvar_name' => 'username',
             'default_value' => '',
             'option_values' => '',
@@ -290,7 +356,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'login',
             'field_type' => 'password',
-            'site_title' => __('Password', 'uwp'),
+            'site_title' => __('Password', 'userswp'),
             'htmlvar_name' => 'password',
             'default_value' => '',
             'option_values' => '',
@@ -311,7 +377,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'forgot',
             'field_type' => 'email',
-            'site_title' => __('Email', 'uwp'),
+            'site_title' => __('Email', 'userswp'),
             'htmlvar_name' => 'email',
             'default_value' => '',
             'option_values' => '',
@@ -332,7 +398,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'avatar',
             'field_type' => 'file',
-            'site_title' => __('Avatar', 'uwp'),
+            'site_title' => __('Avatar', 'userswp'),
             'htmlvar_name' => 'file',
             'default_value' => '',
             'option_values' => '',
@@ -362,7 +428,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'banner',
             'field_type' => 'file',
-            'site_title' => __('Banner', 'uwp'),
+            'site_title' => __('Banner', 'userswp'),
             'htmlvar_name' => 'file',
             'default_value' => '',
             'option_values' => '',
@@ -392,7 +458,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'change',
             'field_type' => 'password',
-            'site_title' => __('Old Password', 'uwp'),
+            'site_title' => __('Old Password', 'userswp'),
             'htmlvar_name' => 'old_password',
             'default_value' => '',
             'option_values' => '',
@@ -404,7 +470,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'change',
             'field_type' => 'password',
-            'site_title' => __('New Password', 'uwp'),
+            'site_title' => __('New Password', 'userswp'),
             'htmlvar_name' => 'password',
             'default_value' => '',
             'option_values' => '',
@@ -416,7 +482,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'change',
             'field_type' => 'password',
-            'site_title' => __('Confirm Password', 'uwp'),
+            'site_title' => __('Confirm Password', 'userswp'),
             'htmlvar_name' => 'confirm_password',
             'default_value' => '',
             'option_values' => '',
@@ -437,7 +503,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'reset',
             'field_type' => 'password',
-            'site_title' => __('Password', 'uwp'),
+            'site_title' => __('Password', 'userswp'),
             'htmlvar_name' => 'password',
             'default_value' => '',
             'option_values' => '',
@@ -449,7 +515,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'reset',
             'field_type' => 'password',
-            'site_title' => __('Confirm Password', 'uwp'),
+            'site_title' => __('Confirm Password', 'userswp'),
             'htmlvar_name' => 'confirm_password',
             'default_value' => '',
             'option_values' => '',
@@ -470,7 +536,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'text',
-            'site_title' => __('First Name', 'uwp'),
+            'site_title' => __('First Name', 'userswp'),
             'htmlvar_name' => 'first_name',
             'default_value' => '',
             'option_values' => '',
@@ -478,13 +544,14 @@ class Users_WP_Activator {
             'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
             'css_class' => 'uwp-half uwp-half-left',
         );
 
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'text',
-            'site_title' => __('Last Name', 'uwp'),
+            'site_title' => __('Last Name', 'userswp'),
             'htmlvar_name' => 'last_name',
             'default_value' => '',
             'option_values' => '',
@@ -492,13 +559,14 @@ class Users_WP_Activator {
             'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
             'css_class' => 'uwp-half uwp-half-right',
         );
 
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'text',
-            'site_title' => __('Username', 'uwp'),
+            'site_title' => __('Username', 'userswp'),
             'htmlvar_name' => 'username',
             'default_value' => '',
             'option_values' => '',
@@ -506,13 +574,28 @@ class Users_WP_Activator {
             'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
             'is_register_only_field' => '1',
         );
 
         $fields[] = array(
             'form_type' => 'account',
+            'field_type' => 'text',
+            'site_title' => __('Display Name', 'userswp'),
+            'htmlvar_name' => 'display_name',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_active' => '1',
+            'is_required' => '0',
+            'is_register_field' => '0',
+            'is_search_field' => '1',
+        );
+
+        $fields[] = array(
+            'form_type' => 'account',
             'field_type' => 'email',
-            'site_title' => __('Email', 'uwp'),
+            'site_title' => __('Email', 'userswp'),
             'htmlvar_name' => 'email',
             'default_value' => '',
             'option_values' => '',
@@ -520,12 +603,28 @@ class Users_WP_Activator {
             'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
+            'is_search_field' => '1',
+        );
+
+        $fields[] = array(
+            'form_type' => 'account',
+            'field_type' => 'email',
+            'site_title' => __('Confirm Email', 'userswp'),
+            'htmlvar_name' => 'confirm_email',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_active' => '1',
+            'is_required' => '1',
+            'is_register_field' => '1',
+            'is_register_only_field' => '1',
+            'is_search_field' => '1',
         );
 
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'textarea',
-            'site_title' => __('Bio', 'uwp'),
+            'site_title' => __('Bio', 'userswp'),
             'htmlvar_name' => 'bio',
             'default_value' => '',
             'option_values' => '',
@@ -533,13 +632,14 @@ class Users_WP_Activator {
             'is_active' => '1',
             'is_public' => '1',
             'is_required' => '1',
+            'is_search_field' => '1',
             'show_in' => array('[profile_side]', '[users]')
         );
 
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'password',
-            'site_title' => __('Password', 'uwp'),
+            'site_title' => __('Password', 'userswp'),
             'htmlvar_name' => 'password',
             'default_value' => '',
             'option_values' => '',
@@ -553,7 +653,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'password',
-            'site_title' => __('Confirm Password', 'uwp'),
+            'site_title' => __('Confirm Password', 'userswp'),
             'htmlvar_name' => 'confirm_password',
             'default_value' => '',
             'option_values' => '',
@@ -605,6 +705,13 @@ class Users_WP_Activator {
             'field_type' => 'email',
             'is_default' => '1',
             'htmlvar_name' => 'uwp_account_email'
+        );
+
+        $fields[] = array(
+            'form_type' => 'register',
+            'field_type' => 'email',
+            'is_default' => '1',
+            'htmlvar_name' => 'uwp_account_confirm_email'
         );
 
         $fields[] = array(

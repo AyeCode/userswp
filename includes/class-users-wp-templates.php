@@ -213,7 +213,7 @@ class Users_WP_Templates {
         } else {
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array($form_type)));
         }
-
+        
         if (!empty($fields)) {
             foreach ($fields as $field) {
                 if ($form_type == 'register') {
@@ -223,7 +223,7 @@ class Users_WP_Templates {
                             continue;
                         }
                     }
-                    $count = $wpdb->get_var($wpdb->prepare("select count(*) from ".$extras_table_name." where site_htmlvar_name=%s", array($field->htmlvar_name)));
+                    $count = $wpdb->get_var($wpdb->prepare("select count(*) from ".$extras_table_name." where site_htmlvar_name=%s AND form_type = %s", array($field->htmlvar_name, $form_type)));
                     if ($count == 1) {
                         $this->uwp_template_fields_html($field, $form_type);
                     }
@@ -240,7 +240,7 @@ class Users_WP_Templates {
             <form class="uwp-account-form uwp_form" method="post" enctype="multipart/form-data">
                 <?php do_action('uwp_template_fields', 'account'); ?>
                 <input type="hidden" name="uwp_account_nonce" value="<?php echo wp_create_nonce( 'uwp-account-nonce' ); ?>" />
-                <input name="uwp_account_submit" value="<?php echo __( 'Update Account', 'uwp' ); ?>" type="submit">
+                <input name="uwp_account_submit" value="<?php echo __( 'Update Account', 'userswp' ); ?>" type="submit">
             </form>
         <?php }
     }
@@ -262,12 +262,6 @@ class Users_WP_Templates {
             } elseif ($field->htmlvar_name == 'uwp_account_confirm_password') {
                 $value = '';
                 $field->is_required = 0;
-            } elseif ($field->htmlvar_name == 'uwp_account_first_name') {
-                $value = $user_data->first_name;
-            } elseif ($field->htmlvar_name == 'uwp_account_last_name') {
-                $value = $user_data->last_name;
-            } elseif ($field->htmlvar_name == 'uwp_account_bio') {
-                $value = $user_data->description;
             } else {
                 $value = uwp_get_usermeta($user_id, $field->htmlvar_name, false);
                 if ($value != '0' && !$value) {
@@ -279,6 +273,10 @@ class Users_WP_Templates {
 
         if (empty($value)) {
             $value = "";
+        }
+
+        if (isset($_POST[$field->htmlvar_name]) && $field->field_type != 'password') {
+            $value = $_POST[$field->htmlvar_name];
         }
 
         $html = apply_filters("uwp_form_input_html_{$field->field_type}", "", $field, $value, $form_type);
@@ -339,17 +337,19 @@ class Users_WP_Templates {
             }
         }
 
-        $register_slug = $this->uwp_get_page_slug('register_page');
-        $login_slug = $this->uwp_get_page_slug('login_page');
-        $change_slug = $this->uwp_get_page_slug('change_page');
-        $account_slug = $this->uwp_get_page_slug('account_page');
-        $forgot_slug = $this->uwp_get_page_slug('forgot_page');
+        $register_slug = uwp_get_page_slug('register_page');
+        $login_slug = uwp_get_page_slug('login_page');
+        $change_slug = uwp_get_page_slug('change_page');
+        $account_slug = uwp_get_page_slug('account_page');
+        $profile_slug = uwp_get_page_slug('profile_page');
+        $forgot_slug = uwp_get_page_slug('forgot_page');
         $logout_slug = "logout";
 
         $register_class = "users-wp-{$register_slug}-nav";
         $login_class = "users-wp-{$login_slug}-nav";
         $change_class = "users-wp-{$change_slug}-nav";
         $account_class = "users-wp-{$account_slug}-nav";
+        $profile_class = "users-wp-{$profile_slug}-nav";
         $forgot_class = "users-wp-{$forgot_slug}-nav";
         $logout_class = "users-wp-{$logout_slug}-nav";
 
@@ -375,6 +375,13 @@ class Users_WP_Templates {
                     $menu_item->url = get_permalink(uwp_get_option('account_page', 0));
                 }
                 break;
+            case $profile_class:
+                if ( ! is_user_logged_in() ) {
+                    $menu_item->_invalid = true;
+                } else {
+                    $menu_item->url = get_permalink(uwp_get_option('profile_page', 0));
+                }
+                break;
             case $change_class:
                 if ( ! is_user_logged_in() ) {
                     $menu_item->_invalid = true;
@@ -398,20 +405,12 @@ class Users_WP_Templates {
                 break;
         }
 
+        $menu_item = apply_filters('uwp_setup_nav_menu_item', $menu_item, $menu_classes);
+
         return $menu_item;
 
     }
 
-    public function uwp_get_page_slug($page_type = 'register_page') {
-        $page_id = uwp_get_option($page_type, 0);
-        if ($page_id) {
-            $slug = get_post_field( 'post_name', get_post($page_id) );
-        } else {
-            $slug = false;
-        }
-        return $slug;
-
-    }
 
     public function uwp_logout_url( $custom_redirect = null ) {
 
@@ -433,7 +432,7 @@ class Users_WP_Templates {
 
             delete_option('uwp_activation_redirect');
 
-            wp_redirect(admin_url('admin.php?page=uwp&tab=main&subtab=info'));
+            wp_redirect(admin_url('admin.php?page=userswp&tab=main&subtab=info'));
             exit;
 
         }
@@ -491,7 +490,7 @@ class Users_WP_Templates {
     }
 
     public function uwp_add_body_class( $classes ) {
-
+        
         if ( is_uwp_page() ) {
             $classes[] = 'uwp_page';
         }

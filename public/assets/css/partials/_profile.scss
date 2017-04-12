@@ -4,8 +4,10 @@
       position: relative;
       background: #fff none repeat scroll 0 0;
       border: 1px solid #ccc;
-      height: 300px;
       width: 100%;
+      img {
+        display: block;
+      }
     }
 
     .uwp-profile-social-ul {
@@ -89,15 +91,25 @@
     }
 
     .uwp-profile-avatar {
-      display: inline-block;
+      display: block;
       position: relative;
-      > img {
-        border: 10px solid #fff;
-        border-radius: 0;
-        box-shadow: none;
-        float: left;
-        margin: -149px 0 0 1px;
-        max-width: 128px;
+      .uwp-profile-avatar-inner {
+        max-width: 150px;
+        width: 20%;
+        margin-left: 3%;
+        position: relative;
+        > img {
+          border: 5px solid #fff;
+          border-bottom: none;
+          border-radius: 0;
+          box-shadow: none;
+          //float: left;
+          margin: -100% 0 0 1px;
+          box-sizing: border-box;
+          display: block;
+          height: auto;
+          margin-top: calc( -100% + 5px);
+        }
       }
       .uwp-profile-avatar-change {
         position: absolute;
@@ -113,14 +125,14 @@
           overflow: hidden;
           position: relative;
           text-align: left;
-          height: 60px;
+          height: 30px;
           font-size: 13px;
           i {
             position: absolute;
             color: #fff;
             left: 15px;
             margin-bottom: 0;
-            bottom: 20px;
+            bottom: 10px;
             opacity: 1;
             transform: none;
           }
@@ -142,7 +154,7 @@
           }
           a {
             color: #fff;
-            padding: 10px 12px 10px 40px;
+            padding: 3px 12px 0 40px;
             display: none;
           }
           &:hover a {
@@ -241,7 +253,6 @@
     .uwp-profile-header-img {
       background-size: cover;
       border: 1px solid #ccc;
-      height: 300px;
       width: 100%;
     }
 
@@ -290,6 +301,7 @@
     }
     .uwp-item-actions {
       margin-top: 2px;
+      overflow: hidden;
       .geodir-addtofav {
         float: left;
       }
@@ -313,6 +325,9 @@
       }
       .gd-star-rating {
         float: left;
+      }
+      .geodir-addtofav {
+        margin-left: 10px;
       }
     }
     .uwp_more_content span {
@@ -368,4 +383,8 @@
 }
 .uwp-profile-item-li h3 {
   clear: none;
+}
+
+.jcrop-holder img, img.jcrop-preview {
+  max-width: none !important;
 }
