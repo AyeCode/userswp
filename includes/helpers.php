@@ -1267,14 +1267,22 @@ function get_register_form_fields() {
     $table_name = $wpdb->prefix . 'uwp_form_fields';
     $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
     $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.is_active = '1' AND fields.is_register_field = '1' AND extras.form_type = 'register' ORDER BY extras.sort_order ASC", array('account')));
+    $fields = apply_filters('uwp_get_register_form_fields', $fields);
     return $fields;
 }
 
-function get_register_validate_form_fields() {
+function get_register_validate_form_fields($role_id) {
     global $wpdb;
     $table_name = $wpdb->prefix . 'uwp_form_fields';
     $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
-    $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.is_register_field = '1' ORDER BY extras.sort_order ASC", array('account')));
+    if ($role_id == 0) {
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.is_register_field = '1' ORDER BY extras.sort_order ASC", array('account')));    
+    } else {
+        $slug = get_post_field( 'post_name', $role_id );
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.is_register_field = '1' AND FIND_IN_SET(%s, fields.user_roles) ORDER BY extras.sort_order ASC", array('account', $slug)));
+    }
+    
+    $fields = apply_filters('uwp_get_register_validate_form_fields', $fields, $role_id);
     return $fields;
 }
 
@@ -1526,12 +1534,24 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
     $errors = new WP_Error();
 
+    $errors = apply_filters('uwp_validate_fields_before', $errors, $data, $type);
+
+    if ($errors->get_error_code()) {
+        return $errors;
+    }
+
+
     if (!$fields) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'uwp_form_fields';
         $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
         if ($type == 'register') {
-            $fields = get_register_validate_form_fields();
+            if (isset($data["uwp_role_id"])) {
+                $role_id = (int) strip_tags(esc_sql($data["uwp_role_id"]));
+            } else {
+                $role_id = 0;
+            }
+            $fields = get_register_validate_form_fields($role_id);
         } elseif ($type == 'change') {
             $fields = get_change_validate_form_fields();
         } elseif ($type == 'account') {
@@ -2467,6 +2487,17 @@ function uwp_get_pages() {
 
 function uwp_settings_general_register_fields() {
     $fields =  array(
+        'uwp_registration_status' => array(
+            'id' => 'uwp_registration_status',
+            'name' => __('Registration Status', 'userswp'),
+            'desc' => __('Select the status you would like user to have after they register on your site', 'userswp'),
+            'type' => 'select',
+            'global' => false,
+            'options' => uwp_registration_status_options(),
+            'chosen' => true,
+            'placeholder' => __( 'Select Option', 'userswp' ),
+            'class' => 'uwp_label_block',
+        ),
         'enable_register_password' => array(
             'id'   => 'enable_register_password',
             'name' => __( 'Display Password field in Regsiter Form', 'userswp' ),
@@ -2485,7 +2516,7 @@ function uwp_settings_general_register_fields() {
         ),
         'enable_confirm_email_field' => array(
             'id'   => 'enable_confirm_email_field',
-            'name' => __( 'Enable Confirm Email Field', 'userswp' ),
+            'name' => __( 'Enable "Confirm Email" Field', 'userswp' ),
             'desc' => 'If enabled email field will be displayed twice to make sure user not typing the wrong email.',
             'type' => 'checkbox',
             'std'  => '1',
@@ -2494,7 +2525,17 @@ function uwp_settings_general_register_fields() {
         'register_redirect_to' => array(
             'id' => 'register_redirect_to',
             'name' => __( 'Register Redirect Page', 'userswp' ),
-            'desc' => __( 'Set the page to redirect the user after signing up. If no page has been set WordPress default will be used..', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user after signing up. If no page has been set WordPress default will be used.', 'userswp' ),
+            'type' => 'select',
+            'options' => uwp_get_pages(),
+            'chosen' => true,
+            'placeholder' => __( 'Select a page', 'userswp' ),
+            'class' => 'uwp_label_block',
+        ),
+        'register_terms_page' => array(
+            'id' => 'register_terms_page',
+            'name' => __( 'Register TOS Page', 'userswp' ),
+            'desc' => __( 'Terms of Service page. When set "Accept terms and Conditions" checkbox would appear in the register form.', 'userswp' ),
             'type' => 'select',
             'options' => uwp_get_pages(),
             'chosen' => true,
@@ -2510,7 +2551,7 @@ function uwp_settings_general_login_fields() {
         'login_redirect_to' => array(
             'id' => 'login_redirect_to',
             'name' => __( 'Login Redirect Page', 'userswp' ),
-            'desc' => __( 'Set the page to redirect the user after logging in. If no page has been set WordPress default will be used..', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user after logging in. If no page has been set WordPress default will be used.', 'userswp' ),
             'type' => 'select',
             'options' => uwp_get_pages(),
             'chosen' => true,
@@ -2585,4 +2626,125 @@ function uwp_modify_get_max_upload_size($bytes, $type) {
 function uwp_can_make_profile_private() {
     $make_profile_private = apply_filters('uwp_user_can_make_profile_private', false);
     return $make_profile_private;
+}
+
+
+function uwp_registration_status_options() {
+    $registration_options = array(
+        '' => __( 'Select Option', 'userswp' ), // Blank option
+        'auto_approve' =>  __('Auto approve', 'userswp'),
+        'require_email_activation' =>  __('Require Email Activation', 'userswp'),
+    );
+
+    $registration_options = apply_filters('uwp_registration_status_options', $registration_options);
+
+    return $registration_options;
+}
+
+add_action('uwp_template_display_notices', 'uwp_form_err_by_key');
+function uwp_form_err_by_key() {
+    $messages = apply_filters('uwp_form_error_messages', array());
+    if (isset($_GET['uwp_err'])) {
+        $key = strip_tags(esc_sql($_GET['uwp_err']));
+        if (isset($messages[$key])) {
+            $value = $messages[$key];
+            $message = $value['message'];
+            $type = $value['type'];
+            echo '<div class="'.$type.' text-center">';
+            echo $message;
+            echo '</div>';
+        }
+    }
+}
+
+function uwp_get_page_slug($page_type = 'register_page') {
+    $page_id = uwp_get_option($page_type, 0);
+    if ($page_id) {
+        $slug = get_post_field( 'post_name', get_post($page_id) );
+    } else {
+        $slug = false;
+    }
+    return $slug;
+
+}
+
+function uwp_check_activation_key( $key, $login ) {
+    global $wpdb, $wp_hasher;
+
+    $key = preg_replace( '/[^a-z0-9]/i', '', $key );
+
+    $errors = new WP_Error();
+
+    if ( empty( $key ) || ! is_string( $key ) ) {
+        $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Activation Key.', 'userswp'));
+        return false;
+    }
+
+    if ( empty( $login ) || ! is_string( $login ) ) {
+        $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Activation Key.', 'userswp'));
+        return false;
+    }
+
+    if ($errors->get_error_code())
+        return $errors;
+
+    $user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_login = %s", $login ) );
+
+    if ( ! empty( $user ) ) {
+        if ( empty( $wp_hasher ) ) {
+            require_once ABSPATH . 'wp-includes/class-phpass.php';
+            $wp_hasher = new PasswordHash( 8, true );
+        }
+
+        $valid = $wp_hasher->CheckPassword( $key, $user->user_activation_key );
+    }
+
+    if ( empty( $user ) || empty( $valid ) ) {
+        $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Activation Key.', 'userswp'));
+        return false;
+    }
+
+    if ($errors->get_error_code())
+        return $errors;
+
+    return get_userdata( $user->ID );
+}
+
+add_action('init', 'uwp_process_activation_link');
+function uwp_process_activation_link() {
+    if (isset($_GET['uwp_activate']) && $_GET['uwp_activate'] == 'yes') {
+        $key =  strip_tags(esc_sql($_GET['key']));
+        $login =  strip_tags(esc_sql($_GET['login']));
+        
+        $result = uwp_check_activation_key($key, $login);
+        
+        if (is_wp_error($result)) {
+            echo $result->get_error_message();
+        } else {
+            //todo: account status
+            echo "Account activated successfully";
+        }
+    }
+}
+
+add_action('uwp_template_fields', 'uwp_template_fields_terms_check', 100, 1);
+function uwp_template_fields_terms_check($form_type) {
+    if ($form_type == 'register') {
+        $terms_page = false;
+        $reg_terms_page_id = uwp_get_option('register_terms_page', '');
+        $reg_terms_page_id = apply_filters('uwp_reg_terms_page_id', $reg_terms_page_id);
+        if (!empty($reg_terms_page_id)) {
+            $terms_page = get_permalink($reg_terms_page_id);
+        }
+        if ($terms_page) {
+            ?>
+            <div class="uwp-remember-me">
+                <label style="display: inline-block;font-weight: normal" for="agree_terms">
+                    <input name="agree_terms" id="agree_terms" value="yes" type="checkbox">
+                    <?php echo sprintf( __( 'I Accept <a href="%s" target="_blank">Terms and Conditions</a>.', 'userswp' ), $terms_page); ?>
+                </label>
+            </div>
+            <?php
+        }
+    }
 }

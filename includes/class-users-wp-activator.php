@@ -83,6 +83,9 @@ class Users_WP_Activator {
         $register_success_subject = __('Your Log In Details', 'userswp');
         $register_success_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
+        $register_activate_subject = __('Please activate your account', 'userswp');
+        $register_activate_content = __("<p>Dear [#user_name#],</p><p>Thank you for signing up with [#site_name#]</p>[#login_details#]<p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
+
         $forgot_password_subject = __('[#site_name#] - Your new password', 'userswp');
         $forgot_password_content = __("<p>Dear [#user_name#],<p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
@@ -97,6 +100,9 @@ class Users_WP_Activator {
 
         $settings['registration_success_email_subject'] = $register_success_subject;
         $settings['registration_success_email_content'] = $register_success_content;
+
+        $settings['registration_activate_email_subject'] = $register_activate_subject;
+        $settings['registration_activate_email_content'] = $register_activate_content;
 
         $settings['forgot_password_email_subject'] = $forgot_password_subject;
         $settings['forgot_password_email_content'] = $forgot_password_content;
@@ -211,6 +217,7 @@ class Users_WP_Activator {
 							  is_register_only_field enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  required_msg varchar(255) NULL DEFAULT NULL,
 							  show_in text NULL DEFAULT NULL,
+							  user_roles text NULL DEFAULT NULL,
 							  extra_fields text NULL DEFAULT NULL,
 							  field_icon varchar(255) NULL DEFAULT NULL,
 							  css_class varchar(255) NULL DEFAULT NULL,
@@ -573,6 +580,20 @@ class Users_WP_Activator {
 
         $fields[] = array(
             'form_type' => 'account',
+            'field_type' => 'text',
+            'site_title' => __('Display Name', 'userswp'),
+            'htmlvar_name' => 'display_name',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_active' => '1',
+            'is_required' => '0',
+            'is_register_field' => '0',
+            'is_search_field' => '1',
+        );
+
+        $fields[] = array(
+            'form_type' => 'account',
             'field_type' => 'email',
             'site_title' => __('Email', 'userswp'),
             'htmlvar_name' => 'email',
@@ -588,7 +609,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'email',
-            'site_title' => __('Email', 'userswp'),
+            'site_title' => __('Confirm Email', 'userswp'),
             'htmlvar_name' => 'confirm_email',
             'default_value' => '',
             'option_values' => '',
@@ -596,6 +617,7 @@ class Users_WP_Activator {
             'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
+            'is_register_only_field' => '1',
             'is_search_field' => '1',
         );
 

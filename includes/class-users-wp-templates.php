@@ -337,12 +337,12 @@ class Users_WP_Templates {
             }
         }
 
-        $register_slug = $this->uwp_get_page_slug('register_page');
-        $login_slug = $this->uwp_get_page_slug('login_page');
-        $change_slug = $this->uwp_get_page_slug('change_page');
-        $account_slug = $this->uwp_get_page_slug('account_page');
-        $profile_slug = $this->uwp_get_page_slug('profile_page');
-        $forgot_slug = $this->uwp_get_page_slug('forgot_page');
+        $register_slug = uwp_get_page_slug('register_page');
+        $login_slug = uwp_get_page_slug('login_page');
+        $change_slug = uwp_get_page_slug('change_page');
+        $account_slug = uwp_get_page_slug('account_page');
+        $profile_slug = uwp_get_page_slug('profile_page');
+        $forgot_slug = uwp_get_page_slug('forgot_page');
         $logout_slug = "logout";
 
         $register_class = "users-wp-{$register_slug}-nav";
@@ -405,20 +405,12 @@ class Users_WP_Templates {
                 break;
         }
 
+        $menu_item = apply_filters('uwp_setup_nav_menu_item', $menu_item, $menu_classes);
+
         return $menu_item;
 
     }
 
-    public function uwp_get_page_slug($page_type = 'register_page') {
-        $page_id = uwp_get_option($page_type, 0);
-        if ($page_id) {
-            $slug = get_post_field( 'post_name', get_post($page_id) );
-        } else {
-            $slug = false;
-        }
-        return $slug;
-
-    }
 
     public function uwp_logout_url( $custom_redirect = null ) {
 
@@ -498,7 +490,7 @@ class Users_WP_Templates {
     }
 
     public function uwp_add_body_class( $classes ) {
-
+        
         if ( is_uwp_page() ) {
             $classes[] = 'uwp_page';
         }
