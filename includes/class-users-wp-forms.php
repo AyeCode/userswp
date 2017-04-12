@@ -193,6 +193,15 @@ class Users_WP_Forms {
             return $errors;
         }
 
+        $reg_terms_page_id = uwp_get_option('register_terms_page', '');
+        $reg_terms_page_id = apply_filters('uwp_reg_terms_page_id', $reg_terms_page_id);
+        if (!empty($reg_terms_page_id)) {
+            if (!isset($data['agree_terms']) || $data['agree_terms'] != 'yes') {
+                $errors->add('accept_tos', __('<strong>ERROR</strong>: You must accept our terms and conditions.', 'userswp'));
+                return $errors;
+            }
+        }
+
         do_action('uwp_before_validate', 'register');
 
         $result = uwp_validate_fields($data, 'register');
@@ -234,16 +243,21 @@ class Users_WP_Forms {
             $last_name = $result['uwp_account_last_name'];
         }
 
+        if (isset($result['uwp_account_display_name']) && !empty($result['uwp_account_display_name'])) {
+            $display_name = $result['uwp_account_display_name'];
+        } else {
+            if (!empty($first_name) || !empty($last_name)) {
+                $display_name = $first_name . ' ' . $last_name;
+            } else {
+                $display_name = $result['uwp_account_username'];
+            }
+        }
+
         $description = "";
         if (isset($result['uwp_account_bio']) && !empty($result['uwp_account_bio'])) {
             $description = $result['uwp_account_bio'];
         }
 
-        if (!empty($first_name) || !empty($last_name)) {
-            $display_name = $first_name . ' ' . $last_name;
-        } else {
-            $display_name = $result['uwp_account_username'];
-        }
 
         $args = array(
             'user_login'   => $result['uwp_account_username'],
@@ -669,6 +683,10 @@ class Users_WP_Forms {
 
         if (isset($result['uwp_account_bio'])) {
             $args['description'] = $result['uwp_account_bio'];
+        }
+
+        if (isset($result['uwp_account_display_name']) && !empty($result['uwp_account_display_name'])) {
+            $args['display_name'] = $result['uwp_account_display_name'];
         }
 
         if (isset($result['password'])) {

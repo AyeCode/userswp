@@ -2525,7 +2525,17 @@ function uwp_settings_general_register_fields() {
         'register_redirect_to' => array(
             'id' => 'register_redirect_to',
             'name' => __( 'Register Redirect Page', 'userswp' ),
-            'desc' => __( 'Set the page to redirect the user after signing up. If no page has been set WordPress default will be used..', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user after signing up. If no page has been set WordPress default will be used.', 'userswp' ),
+            'type' => 'select',
+            'options' => uwp_get_pages(),
+            'chosen' => true,
+            'placeholder' => __( 'Select a page', 'userswp' ),
+            'class' => 'uwp_label_block',
+        ),
+        'register_terms_page' => array(
+            'id' => 'register_terms_page',
+            'name' => __( 'Register TOS Page', 'userswp' ),
+            'desc' => __( 'Terms of Service page. When set "Accept terms and Conditions" checkbox would appear in the register form.', 'userswp' ),
             'type' => 'select',
             'options' => uwp_get_pages(),
             'chosen' => true,
@@ -2541,7 +2551,7 @@ function uwp_settings_general_login_fields() {
         'login_redirect_to' => array(
             'id' => 'login_redirect_to',
             'name' => __( 'Login Redirect Page', 'userswp' ),
-            'desc' => __( 'Set the page to redirect the user after logging in. If no page has been set WordPress default will be used..', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user after logging in. If no page has been set WordPress default will be used.', 'userswp' ),
             'type' => 'select',
             'options' => uwp_get_pages(),
             'chosen' => true,
@@ -2713,6 +2723,28 @@ function uwp_process_activation_link() {
         } else {
             //todo: account status
             echo "Account activated successfully";
+        }
+    }
+}
+
+add_action('uwp_template_fields', 'uwp_template_fields_terms_check', 100, 1);
+function uwp_template_fields_terms_check($form_type) {
+    if ($form_type == 'register') {
+        $terms_page = false;
+        $reg_terms_page_id = uwp_get_option('register_terms_page', '');
+        $reg_terms_page_id = apply_filters('uwp_reg_terms_page_id', $reg_terms_page_id);
+        if (!empty($reg_terms_page_id)) {
+            $terms_page = get_permalink($reg_terms_page_id);
+        }
+        if ($terms_page) {
+            ?>
+            <div class="uwp-remember-me">
+                <label style="display: inline-block;font-weight: normal" for="agree_terms">
+                    <input name="agree_terms" id="agree_terms" value="yes" type="checkbox">
+                    <?php echo sprintf( __( 'I Accept <a href="%s" target="_blank">Terms and Conditions</a>.', 'userswp' ), $terms_page); ?>
+                </label>
+            </div>
+            <?php
         }
     }
 }

@@ -580,6 +580,20 @@ class Users_WP_Activator {
 
         $fields[] = array(
             'form_type' => 'account',
+            'field_type' => 'text',
+            'site_title' => __('Display Name', 'userswp'),
+            'htmlvar_name' => 'display_name',
+            'default_value' => '',
+            'option_values' => '',
+            'is_default' => '1',
+            'is_active' => '1',
+            'is_required' => '0',
+            'is_register_field' => '0',
+            'is_search_field' => '1',
+        );
+
+        $fields[] = array(
+            'form_type' => 'account',
             'field_type' => 'email',
             'site_title' => __('Email', 'userswp'),
             'htmlvar_name' => 'email',
@@ -595,7 +609,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'email',
-            'site_title' => __('Email', 'userswp'),
+            'site_title' => __('Confirm Email', 'userswp'),
             'htmlvar_name' => 'confirm_email',
             'default_value' => '',
             'option_values' => '',
@@ -603,6 +617,7 @@ class Users_WP_Activator {
             'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
+            'is_register_only_field' => '1',
             'is_search_field' => '1',
         );
 
