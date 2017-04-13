@@ -26,7 +26,7 @@ class Users_WP_Activator {
      */
     public static function activate() {
         
-        if (!get_option('uwp_default_data_installed')) {
+        if (!get_site_option('uwp_default_data_installed')) {
             self::load_dependencies();
             self::generate_pages();
             self::add_default_options();
@@ -59,7 +59,7 @@ class Users_WP_Activator {
 
     public static function add_default_options() {
 
-        $settings = get_option( 'uwp_settings', array());
+        $settings = get_site_option( 'uwp_settings', array());
 
         //general
         $settings['profile_no_of_items'] = '10';
@@ -118,14 +118,14 @@ class Users_WP_Activator {
         $settings['account_update_email_subject'] = $account_update_subject;
         $settings['account_update_email_content'] = $account_update_content;
 
-        update_option( 'uwp_settings', $settings );
+        update_site_option( 'uwp_settings', $settings );
 
     }
 
     public static function uwp_create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish') {
         global $wpdb, $current_user;
 
-        $settings = get_option( 'uwp_settings', array());
+        $settings = get_site_option( 'uwp_settings', array());
         if (isset($settings[$option])) {
             $option_value = $settings[$option];
         } else {
@@ -150,7 +150,7 @@ class Users_WP_Activator {
             // Page exists
             if (!$option_value) {
                 $settings[$option] = $page_found;
-                update_option( 'uwp_settings', $settings );
+                update_site_option( 'uwp_settings', $settings );
             }
             return;
         endif;
@@ -168,7 +168,7 @@ class Users_WP_Activator {
         $page_id = wp_insert_post($page_data);
 
         $settings[$option] = $page_id;
-        update_option( 'uwp_settings', $settings );
+        update_site_option( 'uwp_settings', $settings );
 
     }
 
@@ -177,7 +177,7 @@ class Users_WP_Activator {
 
         global $wpdb;
 
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
 
         $wpdb->hide_errors();
 
@@ -231,7 +231,7 @@ class Users_WP_Activator {
 
         dbDelta($form_fields);
 
-        $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
+        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
 
         $form_extras = "CREATE TABLE " . $extras_table_name . " (
 									  id int(11) NOT NULL AUTO_INCREMENT,
@@ -263,7 +263,7 @@ class Users_WP_Activator {
 
 
         // Table for storing userswp usermeta
-        $usermeta_table_name = $wpdb->prefix . 'uwp_usermeta';
+        $usermeta_table_name = $wpdb->base_prefix . 'uwp_usermeta';
         $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
 						user_id int(20) NOT NULL,
 						user_ip varchar(20) NULL DEFAULT NULL,
@@ -606,20 +606,20 @@ class Users_WP_Activator {
             'is_search_field' => '1',
         );
 
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'email',
-            'site_title' => __('Confirm Email', 'userswp'),
-            'htmlvar_name' => 'confirm_email',
-            'default_value' => '',
-            'option_values' => '',
-            'is_default' => '1',
-            'is_active' => '1',
-            'is_required' => '1',
-            'is_register_field' => '1',
-            'is_register_only_field' => '1',
-            'is_search_field' => '1',
-        );
+//        $fields[] = array(
+//            'form_type' => 'account',
+//            'field_type' => 'email',
+//            'site_title' => __('Confirm Email', 'userswp'),
+//            'htmlvar_name' => 'confirm_email',
+//            'default_value' => '',
+//            'option_values' => '',
+//            'is_default' => '1',
+//            'is_active' => '1',
+//            'is_required' => '1',
+//            'is_register_field' => '1',
+//            'is_register_only_field' => '1',
+//            'is_search_field' => '1',
+//        );
 
         $fields[] = array(
             'form_type' => 'account',
@@ -675,7 +675,7 @@ class Users_WP_Activator {
 
     public static function uwp_insert_form_extras() {
         global $wpdb;
-        $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
+        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
 
         $fields = array();
 
@@ -707,12 +707,12 @@ class Users_WP_Activator {
             'htmlvar_name' => 'uwp_account_email'
         );
 
-        $fields[] = array(
-            'form_type' => 'register',
-            'field_type' => 'email',
-            'is_default' => '1',
-            'htmlvar_name' => 'uwp_account_confirm_email'
-        );
+//        $fields[] = array(
+//            'form_type' => 'register',
+//            'field_type' => 'email',
+//            'is_default' => '1',
+//            'htmlvar_name' => 'uwp_account_confirm_email'
+//        );
 
         $fields[] = array(
             'form_type' => 'register',

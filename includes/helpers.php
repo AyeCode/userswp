@@ -291,7 +291,7 @@ function uwp_update_option( $key = false, $value = '') {
         return false;
     }
 
-    $settings = get_option( 'uwp_settings', array());
+    $settings = get_site_option( 'uwp_settings', array());
 
     if( !is_array( $settings ) ) {
         $settings = array();
@@ -302,7 +302,7 @@ function uwp_update_option( $key = false, $value = '') {
     $settings = apply_filters( 'uwp_update_option', $settings, $key, $value );
     $settings =  apply_filters( 'uwp_update_option_' . $key, $settings, $key, $value );
 
-    update_option( 'uwp_settings', $settings );
+    update_site_option( 'uwp_settings', $settings );
 
     return true;
 }
@@ -337,7 +337,7 @@ function uwp_update_usermeta( $user_id = false, $key, $value ) {
     }
 
     global $wpdb;
-    $meta_table = $wpdb->prefix . 'uwp_usermeta';
+    $meta_table = $wpdb->base_prefix . 'uwp_usermeta';
 
     $value = apply_filters( 'uwp_update_usermeta', $value, $user_id, $key );
     $value =  apply_filters( 'uwp_update_usermeta_' . $key, $value, $user_id, $key );
@@ -1009,7 +1009,7 @@ function uwp_error_log($log){
 }
 
 function uwp_admin_notices() {
-    $errors = get_option( 'uwp_admin_notices' );
+    $errors = get_site_option( 'uwp_admin_notices' );
 
     if ( ! empty( $errors ) ) {
 
@@ -1020,7 +1020,7 @@ function uwp_admin_notices() {
         echo '</div>';
 
         // Clear
-        delete_option( 'uwp_admin_notices' );
+        delete_site_option( 'uwp_admin_notices' );
     }
 }
 add_action( 'admin_notices', 'uwp_admin_notices' );
@@ -1227,7 +1227,7 @@ function uwp_validate_uploads($files, $type, $url_only = true, $fields = false) 
 
     if (!$fields) {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
 
         if ($type == 'register') {
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' AND is_register_field = '1' ORDER BY sort_order ASC", array('account')));
@@ -1264,8 +1264,8 @@ function uwp_validate_uploads($files, $type, $url_only = true, $fields = false) 
 
 function get_register_form_fields() {
     global $wpdb;
-    $table_name = $wpdb->prefix . 'uwp_form_fields';
-    $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
+    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+    $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
     $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.is_active = '1' AND fields.is_register_field = '1' AND extras.form_type = 'register' ORDER BY extras.sort_order ASC", array('account')));
     $fields = apply_filters('uwp_get_register_form_fields', $fields);
     return $fields;
@@ -1273,8 +1273,8 @@ function get_register_form_fields() {
 
 function get_register_validate_form_fields($role_id) {
     global $wpdb;
-    $table_name = $wpdb->prefix . 'uwp_form_fields';
-    $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
+    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+    $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
     if ($role_id == 0) {
         $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.is_register_field = '1' ORDER BY extras.sort_order ASC", array('account')));    
     } else {
@@ -1289,7 +1289,7 @@ function get_register_validate_form_fields($role_id) {
 
 function get_change_validate_form_fields() {
     global $wpdb;
-    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
     $enable_old_password = uwp_get_option('change_enable_old_password', false);
     if ($enable_old_password == '1') {
         $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array('change')));
@@ -1301,14 +1301,14 @@ function get_change_validate_form_fields() {
 
 function get_account_form_fields($extra_where = '') {
     global $wpdb;
-    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
     $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_only_field = '0' " . $extra_where . " ORDER BY sort_order ASC", array('account', $extra_where)));
     return $fields;
 }
 
 function get_change_form_fields() {
     global $wpdb;
-    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
     $enable_old_password = uwp_get_option('change_enable_old_password', false);
     if ($enable_old_password == '1') {
         $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array('change')));
@@ -1373,7 +1373,7 @@ function get_uwp_users_list() {
                 )
             ));
         } else {
-            $usermeta_table = $wpdb->prefix . 'uwp_usermeta';
+            $usermeta_table = $wpdb->base_prefix . 'uwp_usermeta';
 
             $users = $wpdb->get_results(
                 "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
@@ -1543,8 +1543,8 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
     if (!$fields) {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
-        $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
+        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
         if ($type == 'register') {
             if (isset($data["uwp_role_id"])) {
                 $role_id = (int) strip_tags(esc_sql($data["uwp_role_id"]));
@@ -1781,8 +1781,8 @@ function uwp_validate_fields($data, $type, $fields = false) {
         if ($errors->get_error_code())
             return $errors;
 
-        if( empty( $data['uwp_account_confirm_email'] ) ) {
-            $errors->add( 'empty_email', __( '<strong>Error</strong>: Please fill Confirm Email field', 'userswp' ) );
+        if( !isset($data['uwp_account_confirm_email']) || empty( $data['uwp_account_confirm_email'] ) ) {
+            $errors->add( 'empty_confirm_email', __( '<strong>Error</strong>: Please fill Confirm Email field', 'userswp' ) );
         }
 
         if ($errors->get_error_code())
@@ -1917,7 +1917,7 @@ function uwp_load_font_awesome() {
 
 function uwp_get_custom_field_info($htmlvar_name) {
     global $wpdb;
-    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
     $field = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s", array($htmlvar_name)));
     return $field;
 }
@@ -2058,7 +2058,7 @@ function uwp_admin_user_profile_picture_description($description) {
 
 function uwp_admin_edit_banner_fields($user) {
     global $wpdb;
-    $table_name = $wpdb->prefix . 'uwp_form_fields';
+    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
     $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE (form_type = 'avatar' OR form_type = 'banner') ORDER BY sort_order ASC");
     if ($fields) {
         ?>
@@ -2341,7 +2341,7 @@ function uwp_admin_only_css() {
 function uwp_form_extras_field_order($field_ids = array(), $form_type = 'register')
 {
     global $wpdb;
-    $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
+    $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
 
     $count = 0;
     if (!empty($field_ids)):
@@ -2414,7 +2414,7 @@ function uwp_get_usermeta_row($user_id = false) {
     }
 
     global $wpdb;
-    $meta_table = $wpdb->prefix . 'uwp_usermeta';
+    $meta_table = $wpdb->base_prefix . 'uwp_usermeta';
 
     $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$meta_table} WHERE user_id = %d", $user_id));
 
@@ -2489,7 +2489,7 @@ function uwp_settings_general_register_fields() {
     $fields =  array(
         'uwp_registration_status' => array(
             'id' => 'uwp_registration_status',
-            'name' => __('Registration Status', 'userswp'),
+            'name' => __('Registration Action', 'userswp'),
             'desc' => __('Select the status you would like user to have after they register on your site', 'userswp'),
             'type' => 'select',
             'global' => false,
@@ -2500,16 +2500,8 @@ function uwp_settings_general_register_fields() {
         ),
         'enable_register_password' => array(
             'id'   => 'enable_register_password',
-            'name' => __( 'Display Password field in Regsiter Form', 'userswp' ),
+            'name' => __( 'Enable "Password" Field', 'userswp' ),
             'desc' => 'If not checked a random password will be generated and emailed. User will be redirected to change password page upon first login.',
-            'type' => 'checkbox',
-            'std'  => '1',
-            'class' => 'uwp_label_inline',
-        ),
-        'enable_auto_login' => array(
-            'id'   => 'enable_auto_login',
-            'name' => __( 'Enable auto login', 'userswp' ),
-            'desc' => 'If enabled user will be logged in automatically after registration.',
             'type' => 'checkbox',
             'std'  => '1',
             'class' => 'uwp_label_inline',
@@ -2633,6 +2625,7 @@ function uwp_registration_status_options() {
     $registration_options = array(
         '' => __( 'Select Option', 'userswp' ), // Blank option
         'auto_approve' =>  __('Auto approve', 'userswp'),
+        'auto_approve_login' =>  __('Auto approve + Auto Login', 'userswp'),
         'require_email_activation' =>  __('Require Email Activation', 'userswp'),
     );
 
@@ -2747,4 +2740,42 @@ function uwp_template_fields_terms_check($form_type) {
             <?php
         }
     }
+}
+
+add_filter('uwp_form_input_email_uwp_account_email_after', 'uwp_register_confirm_email_field', 10, 4);
+function uwp_register_confirm_email_field($html, $field, $value, $form_type) {
+    if ($form_type == 'register') {
+        $enable_confirm_email_field = uwp_get_option('enable_confirm_email_field', false);
+        if ($enable_confirm_email_field == '1') {
+            ob_start(); // Start  buffering;
+            ?>
+            <div id="uwp_account_confirm_email_row"
+                 class="<?php echo 'required_field';?> uwp_form_email_row">
+
+                <?php
+                $site_title = __("Confirm Email", 'userswp');
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php echo '<span>*</span>'; ?>
+                    </label>
+                <?php } ?>
+
+                <input name="uwp_account_confirm_email"
+                       class="uwp_textfield"
+                       id="uwp_account_confirm_email"
+                       placeholder="<?php echo $site_title; ?>"
+                       value=""
+                       title="<?php echo $site_title; ?>"
+                    <?php echo 'required="required"'; ?>
+                       type="email"
+                />
+            </div>
+
+            <?php
+            $confirm_html = ob_get_clean();
+            $html = $html.$confirm_html;
+        }
+    }
+    return $html;
 }

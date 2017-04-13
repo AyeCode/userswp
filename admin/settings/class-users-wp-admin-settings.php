@@ -329,7 +329,7 @@ class Users_WP_Admin_Settings {
 
     public function uwp_register_settings() {
 
-        if ( false == get_option( 'uwp_settings' ) ) {
+        if ( false == get_site_option( 'uwp_settings' ) ) {
             add_option( 'uwp_settings' );
         }
 
@@ -677,18 +677,18 @@ class Users_WP_Admin_Settings {
 
     public function uwp_get_settings() {
 
-        $settings = get_option( 'uwp_settings' );
+        $settings = get_site_option( 'uwp_settings' );
 
         if( empty( $settings ) ) {
 
             // Update old settings with new single option
 
-            $general_settings = is_array( get_option( 'uwp_settings_general' ) )    ? get_option( 'uwp_settings_general' )    : array();
-            $ext_settings     = is_array( get_option( 'uwp_settings_extensions' ) ) ? get_option( 'uwp_settings_extensions' ) : array();
+            $general_settings = is_array( get_site_option( 'uwp_settings_general' ) )    ? get_site_option( 'uwp_settings_general' )    : array();
+            $ext_settings     = is_array( get_site_option( 'uwp_settings_extensions' ) ) ? get_site_option( 'uwp_settings_extensions' ) : array();
 
             $settings = array_merge( $general_settings, $ext_settings );
 
-            update_option( 'uwp_settings', $settings );
+            update_site_option( 'uwp_settings', $settings );
 
         }
         return apply_filters( 'uwp_get_settings', $settings );

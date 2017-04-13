@@ -53,12 +53,12 @@ class Users_WP_Forms {
         $redirect_to = apply_filters('uwp_login_redirect', $redirect_to);
 
         if (isset($_POST['uwp_register_submit'])) {
-            $auto_login = uwp_get_option('enable_auto_login', false);
+            $auto_login = uwp_get_option('uwp_registration_status', false);
             $errors = $this->process_register($_POST, $_FILES);
             if (!is_wp_error($errors)) {
                 $message = $errors;
             }
-            if ($auto_login == '1') {
+            if ($auto_login == 'auto_approve_login') {
                 $reg_redirect_page_id = uwp_get_option('register_redirect_to', '');
                 if (empty($reg_redirect_page_id)) {
                     $reg_redirect_to = $redirect_to;
@@ -350,9 +350,9 @@ class Users_WP_Forms {
             return $errors;
 
 
-        $auto_login = uwp_get_option('enable_auto_login', false);
+        $auto_login = uwp_get_option('uwp_registration_status', false);
 
-        if ($auto_login == '1') {
+        if ($auto_login == 'auto_approve_login') {
             $res = wp_signon(
                 array(
                     'user_login' => $result['uwp_account_username'],
@@ -1570,11 +1570,106 @@ class Users_WP_Forms {
         return $html;
     }
 
+    public function uwp_form_input_text($html, $field, $value, $form_type){
+
+        // Check if there is a custom field specific filter.
+        if(has_filter("uwp_form_input_text_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_text_{$field->htmlvar_name}",$html, $field, $value, $form_type);
+        }
+
+        // If no html then we run the standard output.
+        if(empty($html)) {
+
+            ob_start(); // Start  buffering;
+
+            $type = 'text';
+            $step = false;
+            //number and float validation $validation_pattern
+            if(isset($field->data_type) && $field->data_type == 'INT'){
+                $type = 'number';
+            } elseif(isset($field->data_type) && $field->data_type == 'FLOAT'){
+                $dp = $field->decimal_point;
+                switch ($dp) {
+                    case "1":
+                        $step = "0.1";
+                        break;
+                    case "2":
+                        $step = "0.01";
+                        break;
+                    case "3":
+                        $step = "0.001";
+                        break;
+                    case "4":
+                        $step = "0.0001";
+                        break;
+                    case "5":
+                        $step = "0.00001";
+                        break;
+                    case "6":
+                        $step = "0.000001";
+                        break;
+                    case "7":
+                        $step = "0.0000001";
+                        break;
+                    case "8":
+                        $step = "0.00000001";
+                        break;
+                    case "9":
+                        $step = "0.000000001";
+                        break;
+                    case "10":
+                        $step = "0.0000000001";
+                        break;
+                    default:
+                        $step = "0.01";
+                        break;
+                }
+                $type = 'number';
+            }
+
+            ?>
+
+            <div id="<?php echo $field->htmlvar_name;?>_row"
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+
+                <?php
+                $site_title = uwp_get_form_label($field);
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php if ($field->is_required) echo '<span>*</span>';?>
+                    </label>
+                <?php } ?>
+
+                <input name="<?php echo $field->htmlvar_name;?>"
+                       class="<?php echo $field->css_class; ?> uwp_textfield"
+                       id="<?php echo $field->htmlvar_name;?>"
+                       placeholder="<?php echo $site_title; ?>"
+                       value="<?php echo esc_attr(stripslashes($value));?>"
+                       title="<?php echo $site_title; ?>"
+                    <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                       type="<?php echo $type; ?>"
+                    <?php if ($step) { echo 'step="'.$step.'"'; } ?>
+                />
+                <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
+                <?php if ($field->is_required) { ?>
+                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                <?php } ?>
+            </div>
+
+
+            <?php
+            $html = ob_get_clean();
+        }
+
+        return $html;
+    }
+
     public function uwp_form_input_textarea($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
-        if(has_filter("uwp_form_input_html_file_{$field->htmlvar_name}")){
-            $html = apply_filters("uwp_form_input_html_file_{$field->htmlvar_name}", $html, $field, $value, $form_type);
+        if(has_filter("uwp_form_input_textarea_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_textarea_{$field->htmlvar_name}", $html, $field, $value, $form_type);
         }
 
         // If no html then we run the standard output.
@@ -1642,8 +1737,8 @@ class Users_WP_Forms {
 
 
         // Check if there is a custom field specific filter.
-        if(has_filter("geodir_custom_field_input_url_{$field->htmlvar_name}")){
-            $html = apply_filters("geodir_custom_field_input_url_{$field->htmlvar_name}",$html, $field, $value, $form_type);
+        if(has_filter("uwp_form_input_url_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_url_{$field->htmlvar_name}",$html, $field, $value, $form_type);
         }
 
         // If no html then we run the standard output.
@@ -1687,10 +1782,61 @@ class Users_WP_Forms {
         return $html;
     }
 
+    public function uwp_form_input_email($html, $field, $value, $form_type){
+
+
+        // Check if there is a custom field specific filter.
+        if(has_filter("uwp_form_input_email_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_email_{$field->htmlvar_name}",$html, $field, $value, $form_type);
+        }
+
+        // If no html then we run the standard output.
+        if(empty($html)) {
+
+            ob_start(); // Start  buffering;
+            ?>
+            <div id="<?php echo $field->htmlvar_name;?>_row"
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+
+                <?php
+                $site_title = uwp_get_form_label($field);
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php if ($field->is_required) echo '<span>*</span>';?>
+                    </label>
+                <?php } ?>
+
+                <input name="<?php echo $field->htmlvar_name;?>"
+                       class="<?php echo $field->css_class; ?> uwp_textfield"
+                       id="<?php echo $field->htmlvar_name;?>"
+                       placeholder="<?php echo $site_title; ?>"
+                       value="<?php echo esc_attr(stripslashes($value));?>"
+                       title="<?php echo $site_title; ?>"
+                    <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                       type="email"
+                />
+                <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
+                <?php if ($field->is_required) { ?>
+                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                <?php } ?>
+            </div>
+
+            <?php
+            $html = ob_get_clean();
+        }
+
+        if(has_filter("uwp_form_input_email_{$field->htmlvar_name}_after")){
+            $html = apply_filters("uwp_form_input_email_{$field->htmlvar_name}_after",$html, $field, $value, $form_type);
+        }
+
+        return $html;
+    }
+
     // Add multipart/form-data to edit form
     function add_multipart_to_admin_edit_form() {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type = 'file' AND is_default = '0' ORDER BY sort_order ASC");
         if ($fields) {
             echo 'enctype="multipart/form-data"';
@@ -1701,7 +1847,7 @@ class Users_WP_Forms {
     public function update_profile_extra_admin_edit($user_id) {
         ob_start();
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
         //Normal fields
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND field_type != 'fieldset' AND is_default = '0' ORDER BY sort_order ASC");
         if ($fields) {
