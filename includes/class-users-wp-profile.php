@@ -125,7 +125,7 @@ class Users_WP_Profile {
     public function get_profile_social($user) {
 
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND field_type = 'url' AND css_class LIKE '%uwp_social%' ORDER BY sort_order ASC");
 
         if (is_uwp_profile_page()) {
@@ -166,7 +166,7 @@ class Users_WP_Profile {
 
     public function get_profile_extra_count($user) {
 //        global $wpdb;
-//        $table_name = $wpdb->prefix . 'uwp_form_fields';
+//        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
 //        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' AND field_type != 'fieldset' AND is_public = '1' AND show_in LIKE '%[more_info]%' ORDER BY sort_order ASC");
 //        return count($fields);
         return '<i class="fa fa-user"></i>';
@@ -188,7 +188,7 @@ class Users_WP_Profile {
 
         ob_start();
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' ORDER BY sort_order ASC");
         $wrap_html = false;
         if ($fields) {
@@ -550,12 +550,12 @@ class Users_WP_Profile {
             $uwp_profile_tab_with_slash_paged = '^' . $uwp_profile_link . '([^/]+)/([^/]+)/([^/]+)/page/([0-9]+)/?$';
             add_rewrite_rule($uwp_profile_tab_with_slash_paged, 'index.php?page_id=' . $uwp_profile_page_id . '&uwp_profile=$matches[1]&uwp_tab=$matches[2]&uwp_subtab=$matches[3]&paged=$matches[4]', 'top');
             
-            if (get_option('uwp_flush_rewrite')) {
+            if (get_site_option('uwp_flush_rewrite')) {
                 //Ensure the $wp_rewrite global is loaded
                 global $wp_rewrite;
                 //Call flush_rules() as a method of the $wp_rewrite object
                 $wp_rewrite->flush_rules( false );
-                delete_option('uwp_flush_rewrite');
+                delete_site_option('uwp_flush_rewrite');
             }
         }
     }
@@ -655,7 +655,7 @@ class Users_WP_Profile {
             $full_width  = apply_filters('uwp_avatar_image_width', 150);
             $full_height = apply_filters('uwp_avatar_image_height', 150);
         } else {
-            $full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('header_banner_width', 1000));
+            $full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('profile_banner_width', 1000));
             $full_height = apply_filters('uwp_banner_image_height', 300);
         }
 
@@ -1121,7 +1121,7 @@ class Users_WP_Profile {
                 $min_width  = apply_filters('uwp_avatar_image_width', 150);
                 $min_height = apply_filters('uwp_avatar_image_height', 150);
             } else {
-                $min_width  = apply_filters('uwp_banner_image_width', uwp_get_option('header_banner_width', 1000));
+                $min_width  = apply_filters('uwp_banner_image_width', uwp_get_option('profile_banner_width', 1000));
                 $min_height = apply_filters('uwp_banner_image_height', 300);
             }
 
@@ -1163,7 +1163,7 @@ class Users_WP_Profile {
         }
 
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
         $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
 
         $field = false;
@@ -1279,7 +1279,7 @@ class Users_WP_Profile {
     {
         
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public = '1' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
 
         foreach ($fields as $field) {
@@ -1298,7 +1298,7 @@ class Users_WP_Profile {
 
 
         global $wpdb;
-        $table_name = $wpdb->prefix . 'uwp_form_fields';
+        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public = '1' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
 
         foreach ($fields as $field) {

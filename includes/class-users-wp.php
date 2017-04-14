@@ -259,12 +259,14 @@ class Users_WP {
         $this->loader->add_filter( 'uwp_form_input_html_time', $forms, 'uwp_form_input_time', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_select', $forms, 'uwp_form_input_select', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_multiselect', $forms, 'uwp_form_input_multiselect', 10, 4 );
+        $this->loader->add_filter( 'uwp_form_input_html_text', $forms, 'uwp_form_input_text', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_textarea', $forms, 'uwp_form_input_textarea', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_fieldset', $forms, 'uwp_form_input_fieldset', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_file', $forms, 'uwp_form_input_file', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_checkbox', $forms, 'uwp_form_input_checkbox', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_radio', $forms, 'uwp_form_input_radio', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_url', $forms, 'uwp_form_input_url', 10, 4 );
+        $this->loader->add_filter( 'uwp_form_input_html_email', $forms, 'uwp_form_input_email', 10, 4 );
 
         $this->loader->add_action( 'wp_ajax_uwp_upload_file_remove', $forms, 'uwp_upload_file_remove' );
 

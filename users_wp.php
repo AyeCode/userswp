@@ -29,8 +29,10 @@ define( 'USERSWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
  * This action is documented in includes/class-users-wp-activator.php
  */
 function activate_users_wp() {
-    require_once('includes/class-users-wp-activator.php');
-    Users_WP_Activator::activate();
+    if (is_main_site()) {
+        require_once('includes/class-users-wp-activator.php');
+        Users_WP_Activator::activate();    
+    }
 }
 /**
  * The code that runs during plugin deactivation.
