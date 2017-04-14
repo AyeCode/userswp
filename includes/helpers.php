@@ -2487,8 +2487,8 @@ function uwp_get_pages() {
 
 function uwp_settings_general_register_fields() {
     $fields =  array(
-        'uwp_registration_status' => array(
-            'id' => 'uwp_registration_status',
+        'uwp_registration_action' => array(
+            'id' => 'uwp_registration_action',
             'name' => __('Registration Action', 'userswp'),
             'desc' => __('Select the status you would like user to have after they register on your site', 'userswp'),
             'type' => 'select',
@@ -2636,7 +2636,24 @@ function uwp_registration_status_options() {
 
 add_action('uwp_template_display_notices', 'uwp_form_err_by_key');
 function uwp_form_err_by_key() {
-    $messages = apply_filters('uwp_form_error_messages', array());
+    $messages = array();
+    $messages['act_success'] = array(
+        'message' => __('Account activated successfully. Please login to continue.', 'userswp'),
+        'type' => 'uwp-alert-success',
+    );
+    $messages['act_pending'] = array(
+        'message' => __('Your account is not activated yet. Please check your email for activation email.', 'userswp'),
+        'type' => 'uwp-alert-error',
+    );
+    $messages['act_error'] = array(
+        'message' => __('Invalid activation key or account.', 'userswp'),
+        'type' => 'uwp-alert-error',
+    );
+    $messages['act_wrong'] = array(
+        'message' => __('Something went wrong.', 'userswp'),
+        'type' => 'uwp-alert-error',
+    );
+    $messages = apply_filters('uwp_form_error_messages', $messages);
     if (isset($_GET['uwp_err'])) {
         $key = strip_tags(esc_sql($_GET['uwp_err']));
         if (isset($messages[$key])) {
@@ -2708,14 +2725,30 @@ function uwp_process_activation_link() {
     if (isset($_GET['uwp_activate']) && $_GET['uwp_activate'] == 'yes') {
         $key =  strip_tags(esc_sql($_GET['key']));
         $login =  strip_tags(esc_sql($_GET['login']));
-        
+        $login_page = uwp_get_option('login_page', false);
         $result = uwp_check_activation_key($key, $login);
-        
+
         if (is_wp_error($result)) {
-            echo $result->get_error_message();
+            if ($login_page) {
+                $redirect_to = add_query_arg(array('uwp_err' => 'act_wrong'), get_permalink($login_page));
+                wp_redirect($redirect_to);
+                exit();
+            }
         } else {
             //todo: account status
-            echo "Account activated successfully";
+            if (!$result) {
+                if ($login_page) {
+                    $redirect_to = add_query_arg(array('uwp_err' => 'act_error'), get_permalink($login_page));
+                    wp_redirect($redirect_to);
+                    exit();
+                }
+            } else {
+                if ($login_page) {
+                    $redirect_to = add_query_arg(array('uwp_err' => 'act_success'), get_permalink($login_page));
+                    wp_redirect($redirect_to);
+                    exit();
+                }
+            }
         }
     }
 }
@@ -2779,3 +2812,34 @@ function uwp_register_confirm_email_field($html, $field, $value, $form_type) {
     }
     return $html;
 }
+
+//add_filter( 'authenticate', 'uwp_login_check_for_key', 10, 3 );
+//function uwp_login_check_for_key( $user, $username, $password ){
+//    if ($username != ''){
+//        $value = get_user_meta($user->ID, 'uwp_unconfirmed', true);
+//        if($value){
+//            $user = new WP_Error( 'access_denied', __("<strong>ERROR</strong>: You need to activate your account.") );//create an error
+//            remove_action('authenticate', 'wp_authenticate_username_password', 20); //key found - don't proceed!
+//        }
+//    }
+//    return $user;
+//}
+
+function uwp_unconfirmed_login_redirect( $username, $user ) {
+    if (!is_wp_error($user)) {
+        $mod_value = get_user_meta( $user->ID, 'uwp_mod', true );
+        if ($mod_value == 'email_unconfirmed') {
+            if ( !in_array( 'administrator', $user->roles ) ) {
+                $login_page = uwp_get_option('login_page', false);
+                if ($login_page) {
+                    $redirect_to = add_query_arg(array('uwp_err' => 'act_pending'), get_permalink($login_page));
+                    wp_destroy_current_session();
+                    wp_clear_auth_cookie();
+                    wp_redirect($redirect_to);
+                    exit();
+                }
+            }
+        }
+    }
+}
+add_filter( 'wp_login', 'uwp_unconfirmed_login_redirect', 10, 2 );

@@ -655,7 +655,7 @@ class Users_WP_Profile {
             $full_width  = apply_filters('uwp_avatar_image_width', 150);
             $full_height = apply_filters('uwp_avatar_image_height', 150);
         } else {
-            $full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('header_banner_width', 1000));
+            $full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('profile_banner_width', 1000));
             $full_height = apply_filters('uwp_banner_image_height', 300);
         }
 
@@ -1121,7 +1121,7 @@ class Users_WP_Profile {
                 $min_width  = apply_filters('uwp_avatar_image_width', 150);
                 $min_height = apply_filters('uwp_avatar_image_height', 150);
             } else {
-                $min_width  = apply_filters('uwp_banner_image_width', uwp_get_option('header_banner_width', 1000));
+                $min_width  = apply_filters('uwp_banner_image_width', uwp_get_option('profile_banner_width', 1000));
                 $min_height = apply_filters('uwp_banner_image_height', 300);
             }
 
