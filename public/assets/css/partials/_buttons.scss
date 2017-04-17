@@ -5,7 +5,6 @@
       border: 0 none;
       color: #fff !important;
       font-weight: bold;
-      text-transform: uppercase;
       width: 90%;
       padding: 4px 6px;
       height: auto;
@@ -24,6 +23,13 @@
       .uwp_button {
         width: 50%;
         margin-bottom: 0;
+      }
+    }
+  }
+  .uwp_listview {
+    .uwp-button-wrap {
+      .uwp_button {
+        width: auto
       }
     }
   }
