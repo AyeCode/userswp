@@ -3,7 +3,7 @@
 Plugin Name: UsersWP
 Plugin URI: https://wpgeodirectory.com
 Description: User management plugin.
-Version: 1.0.0
+Version: 1.0.1
 Author: GeoDirectory team
 Author URI: https://wpgeodirectory.com
 License: GPL-2.0+
@@ -18,6 +18,8 @@ Tested up to: 4.6
 if (!defined('WPINC')) {
     die;
 }
+
+define( 'USERSWP_VERSION', '1.0.1' );
 
 define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
 

@@ -986,7 +986,8 @@
   width: 50%;
   margin-bottom: 0; }
 .uwp_page .uwp_listview .uwp-button-wrap .uwp_button {
-  width: auto; }
+  width: auto;
+  margin-bottom: 0; }
 
 .uwp_page .uwp-content-wrap .uwp-account .uwp-account-avatar {
   text-align: center; }
@@ -1146,7 +1147,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  display: block; }
+  display: inline; }
 .uwp_page ul.uwp-users-list-wrap {
   clear: both;
   margin: 0; }
@@ -1158,6 +1159,8 @@
     list-style: none; }
     .uwp_page ul.uwp-users-list-wrap li.uwp-users-list-user .uwp-users-list-user-name > h3 {
       display: inline; }
+  .uwp_page ul.uwp-users-list-wrap .uwp-button-disable-wrap {
+    visibility: hidden; }
 .uwp_page .uwp-users-list > ul {
   list-style: outside none none;
   padding: 0;

@@ -1435,8 +1435,11 @@ function get_uwp_users_list() {
                 $user_obj = get_user_by('id', $user->ID);
 
                 // exclude logged in user
-                if ($user_obj->ID == get_current_user_id()) {
-                    continue;
+                $exclude_loggedin_user = apply_filters('uwp_users_list_exclude_loggedin_user', false);
+                if ($exclude_loggedin_user) {
+                    if ($user_obj->ID == get_current_user_id()) {
+                        continue;
+                    }
                 }
                 ?>
                 <li class="uwp-users-list-user">
