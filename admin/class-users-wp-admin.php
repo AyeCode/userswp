@@ -83,13 +83,15 @@ class Users_WP_Admin {
          * between the defined hooks and the functions defined in this
          * class.
          */
-
         if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
             wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
             wp_enqueue_style( 'jquery-ui' );
             wp_enqueue_style( 'jcrop' );
             wp_enqueue_style( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/users-wp.css', array(), null, 'all' );
             wp_enqueue_style( "uwp_timepicker_css", plugin_dir_url( dirname(__FILE__) ) . 'public/assets/css/jquery.ui.timepicker.css', array(), null, 'all' );
+        }
+        if ($hook_suffix == 'userswp_page_uwp_tools') {
+            wp_enqueue_style( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/users-wp.css', array(), null, 'all' );
         }
         wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp-admin.css', array(), $this->version, 'all' );
         wp_enqueue_style( "uwp_chosen_css", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/chosen.css', array(), $this->version, 'all' );
@@ -120,6 +122,9 @@ class Users_WP_Admin {
             wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.js', array( 'jquery' ), null, false );
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
             wp_enqueue_script( 'jcrop', array( 'jquery' ) );
+        }
+        if ($hook_suffix == 'userswp_page_uwp_tools') {
+            wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
         }
         wp_enqueue_script('jquery-ui-sortable');
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.js', array( 'jquery' ), null, false );

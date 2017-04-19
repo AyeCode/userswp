@@ -1583,6 +1583,21 @@ function uwp_validate_fields($data, $type, $fields = false) {
                 continue;
             }
 
+            if ($type == 'account') {
+                if ($field->htmlvar_name == 'uwp_account_display_name') {
+                    $disable_display_name = uwp_get_option('disable_display_name_field', false);
+                    if ($disable_display_name == '1') {
+                        continue;
+                    }
+                }
+                if ($field->htmlvar_name == 'uwp_account_bio') {
+                    $disable_bio = uwp_get_option('disable_bio_field', false);
+                    if ($disable_bio == '1') {
+                        continue;
+                    }
+                }
+            }
+
             if ($type == 'register') {
                 if ($enable_password != '1') {
                     if ( ($field->htmlvar_name == 'uwp_account_password') OR ($field->htmlvar_name == 'uwp_account_confirm_password') ) {
@@ -1989,6 +2004,7 @@ function uwp_get_settings_tabs() {
         'main' => __( 'General', 'userswp' ),
         'register' => __( 'Register', 'userswp' ),
         'login' => __( 'Login', 'userswp' ),
+        'account' => __( 'Account', 'userswp' ),
         'change' => __( 'Change Password', 'userswp' ),
         'profile' => __( 'Profile', 'userswp' ),
         'users' => __( 'Users', 'userswp' ),
@@ -2552,6 +2568,28 @@ function uwp_settings_general_login_fields() {
             'chosen' => true,
             'placeholder' => __( 'Select a page', 'userswp' ),
             'class' => 'uwp_label_block',
+        ),
+    );
+    return $fields;
+}
+
+function uwp_settings_general_account_fields() {
+    $fields =  array(
+        'disable_display_name_field' => array(
+            'id'   => 'disable_display_name_field',
+            'name' => __( 'Disable "Display Name" Field', 'userswp' ),
+            'desc' => 'If checked "Display Name" Field will be disabled in Account Form.',
+            'type' => 'checkbox',
+            'std'  => '0',
+            'class' => 'uwp_label_inline',
+        ),
+        'disable_bio_field' => array(
+            'id'   => 'disable_bio_field',
+            'name' => __( 'Disable "Bio" Field', 'userswp' ),
+            'desc' => 'If checked "Bio" Field will be disabled in Account Form.',
+            'type' => 'checkbox',
+            'std'  => '0',
+            'class' => 'uwp_label_inline',
         ),
     );
     return $fields;
