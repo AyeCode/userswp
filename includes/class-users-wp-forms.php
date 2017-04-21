@@ -477,6 +477,16 @@ class Users_WP_Forms {
 
         $user_data = get_user_by('email', $data['uwp_forgot_email']);
 
+        // make sure user account is active before account reset
+        $mod_value = get_user_meta( $user_data->ID, 'uwp_mod', true );
+        if ($mod_value == 'email_unconfirmed') {
+            $errors->add('activate_account', __('<strong>Error</strong>: Your account is not activated yet. Please activate your account first.', 'userswp'));
+        }
+
+        if (is_wp_error($errors)) {
+            return $errors;
+        }
+
         $login_details = $this->generate_forgot_message($user_data);
 
         $res = $this->uwp_send_email( 'forgot', $user_data->ID, $login_details );
@@ -1044,48 +1054,6 @@ class Users_WP_Forms {
                 error_log( $log );
             }
         }
-    }
-    
-    public function check_password_reset_key( $key, $login ) {
-        global $wpdb, $wp_hasher;
-
-        $key = preg_replace( '/[^a-z0-9]/i', '', $key );
-
-        $errors = new WP_Error();
-
-        if ( empty( $key ) || ! is_string( $key ) ) {
-            $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Reset Key.', 'userswp'));
-            return false;
-        }
-
-        if ( empty( $login ) || ! is_string( $login ) ) {
-            $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Reset Key.', 'userswp'));
-            return false;
-        }
-
-        if ($errors->get_error_code())
-            return $errors;
-
-        $user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_login = %s", $login ) );
-
-        if ( ! empty( $user ) ) {
-            if ( empty( $wp_hasher ) ) {
-                require_once ABSPATH . 'wp-includes/class-phpass.php';
-                $wp_hasher = new PasswordHash( 8, true );
-            }
-
-            $valid = $wp_hasher->CheckPassword( $key, $user->user_activation_key );
-        }
-
-        if ( empty( $user ) || empty( $valid ) ) {
-            $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Reset Key.', 'userswp'));
-            return false;
-        }
-
-        if ($errors->get_error_code())
-            return $errors;
-
-        return get_userdata( $user->ID );
     }
     
     

@@ -20,7 +20,7 @@
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-      display: block;
+      display: inline;
     }
   }
 
@@ -37,6 +37,10 @@
       .uwp-users-list-user-name > h3 {
         display: inline;
       }
+    }
+
+    .uwp-button-disable-wrap {
+      visibility: hidden;
     }
   }
 

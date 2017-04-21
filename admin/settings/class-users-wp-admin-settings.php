@@ -485,6 +485,7 @@ class Users_WP_Admin_Settings {
                 ),
                 'register' => apply_filters( 'uwp_settings_general_register', uwp_settings_general_register_fields()),
                 'login' => apply_filters( 'uwp_settings_general_login', uwp_settings_general_loginout_fields()),
+                'account' => apply_filters( 'uwp_settings_general_account', uwp_settings_general_account_fields()),
                 'profile' => apply_filters( 'uwp_settings_general_profile',
                     array(
                         'enable_profile_header' => array(

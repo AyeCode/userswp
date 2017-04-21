@@ -1435,8 +1435,11 @@ function get_uwp_users_list() {
                 $user_obj = get_user_by('id', $user->ID);
 
                 // exclude logged in user
-                if ($user_obj->ID == get_current_user_id()) {
-                    continue;
+                $exclude_loggedin_user = apply_filters('uwp_users_list_exclude_loggedin_user', false);
+                if ($exclude_loggedin_user) {
+                    if ($user_obj->ID == get_current_user_id()) {
+                        continue;
+                    }
                 }
                 ?>
                 <li class="uwp-users-list-user">
@@ -1578,6 +1581,21 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
             if (!isset($data[$field->htmlvar_name]) && $field->is_required != 1) {
                 continue;
+            }
+
+            if ($type == 'account') {
+                if ($field->htmlvar_name == 'uwp_account_display_name') {
+                    $disable_display_name = uwp_get_option('disable_display_name_field', false);
+                    if ($disable_display_name == '1') {
+                        continue;
+                    }
+                }
+                if ($field->htmlvar_name == 'uwp_account_bio') {
+                    $disable_bio = uwp_get_option('disable_bio_field', false);
+                    if ($disable_bio == '1') {
+                        continue;
+                    }
+                }
             }
 
             if ($type == 'register') {
@@ -1986,6 +2004,7 @@ function uwp_get_settings_tabs() {
         'main' => __( 'General', 'userswp' ),
         'register' => __( 'Register', 'userswp' ),
         'login' => __( 'Login', 'userswp' ),
+        'account' => __( 'Account', 'userswp' ),
         'change' => __( 'Change Password', 'userswp' ),
         'profile' => __( 'Profile', 'userswp' ),
         'users' => __( 'Users', 'userswp' ),
@@ -2554,6 +2573,28 @@ function uwp_settings_general_login_fields() {
     return $fields;
 }
 
+function uwp_settings_general_account_fields() {
+    $fields =  array(
+        'disable_display_name_field' => array(
+            'id'   => 'disable_display_name_field',
+            'name' => __( 'Disable "Display Name" Field', 'userswp' ),
+            'desc' => 'If checked "Display Name" Field will be disabled in Account Form.',
+            'type' => 'checkbox',
+            'std'  => '0',
+            'class' => 'uwp_label_inline',
+        ),
+        'disable_bio_field' => array(
+            'id'   => 'disable_bio_field',
+            'name' => __( 'Disable "Bio" Field', 'userswp' ),
+            'desc' => 'If checked "Bio" Field will be disabled in Account Form.',
+            'type' => 'checkbox',
+            'std'  => '0',
+            'class' => 'uwp_label_inline',
+        ),
+    );
+    return $fields;
+}
+
 function uwp_settings_general_logout_fields() {
     $fields =  array(
         'logout_redirect_to' => array(
@@ -2679,45 +2720,9 @@ function uwp_get_page_slug($page_type = 'register_page') {
 }
 
 function uwp_check_activation_key( $key, $login ) {
-    global $wpdb, $wp_hasher;
+    $user_data = check_password_reset_key( $key, $login );
 
-    $key = preg_replace( '/[^a-z0-9]/i', '', $key );
-
-    $errors = new WP_Error();
-
-    if ( empty( $key ) || ! is_string( $key ) ) {
-        $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Activation Key.', 'userswp'));
-        return false;
-    }
-
-    if ( empty( $login ) || ! is_string( $login ) ) {
-        $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Activation Key.', 'userswp'));
-        return false;
-    }
-
-    if ($errors->get_error_code())
-        return $errors;
-
-    $user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_login = %s", $login ) );
-
-    if ( ! empty( $user ) ) {
-        if ( empty( $wp_hasher ) ) {
-            require_once ABSPATH . 'wp-includes/class-phpass.php';
-            $wp_hasher = new PasswordHash( 8, true );
-        }
-
-        $valid = $wp_hasher->CheckPassword( $key, $user->user_activation_key );
-    }
-
-    if ( empty( $user ) || empty( $valid ) ) {
-        $errors->add('invalid_key', __('<strong>Error</strong>: Invalid Username or Activation Key.', 'userswp'));
-        return false;
-    }
-
-    if ($errors->get_error_code())
-        return $errors;
-
-    return get_userdata( $user->ID );
+    return $user_data;
 }
 
 add_action('init', 'uwp_process_activation_link');
@@ -2735,7 +2740,6 @@ function uwp_process_activation_link() {
                 exit();
             }
         } else {
-            //todo: account status
             if (!$result) {
                 if ($login_page) {
                     $redirect_to = add_query_arg(array('uwp_err' => 'act_error'), get_permalink($login_page));
@@ -2744,6 +2748,8 @@ function uwp_process_activation_link() {
                 }
             } else {
                 if ($login_page) {
+                    $user_data = get_user_by('login', $login);
+                    update_user_meta( $user_data->ID, 'uwp_mod', '0' );
                     $redirect_to = add_query_arg(array('uwp_err' => 'act_success'), get_permalink($login_page));
                     wp_redirect($redirect_to);
                     exit();
@@ -2843,3 +2849,41 @@ function uwp_unconfirmed_login_redirect( $username, $user ) {
     }
 }
 add_filter( 'wp_login', 'uwp_unconfirmed_login_redirect', 10, 2 );
+
+function uwp_notifications_toolbar_menu() {
+    global $wp_admin_bar;
+
+    if ( ! is_user_logged_in() ) {
+        return;
+    }
+
+    $available_counts = apply_filters('uwp_notifications_available_counts', array());
+
+    if (count($available_counts) == 0) {
+        return;
+    }
+
+    $total_count = 0;
+    foreach ($available_counts as $key => $value) {
+        $total_count = $total_count + $value;
+    }
+
+
+    $alert_class   = (int) $total_count > 0 ? 'pending-count' : 'count';
+    $menu_title    = '<span id="uwp-notification-count" class="' . $alert_class . '">' 
+        . number_format_i18n( $total_count ) . '</span>';
+    $menu_link     = '';
+
+    // Add the top-level Notifications button.
+    $wp_admin_bar->add_menu( array(
+        'parent'    => 'top-secondary',
+        'id'        => 'uwp-notifications',
+        'title'     => $menu_title,
+        'href'      => $menu_link,
+    ) );
+
+    do_action('uwp_notifications_items', $wp_admin_bar);
+
+    return;
+}
+add_action( 'admin_bar_menu', 'uwp_notifications_toolbar_menu', 90 );

@@ -216,6 +216,22 @@ class Users_WP_Templates {
         
         if (!empty($fields)) {
             foreach ($fields as $field) {
+
+                if ($form_type == 'account') {
+                    if ($field->htmlvar_name == 'uwp_account_display_name') {
+                        $disable_display_name = uwp_get_option('disable_display_name_field', false);
+                        if ($disable_display_name == '1') {
+                            continue;
+                        }
+                    }
+                    if ($field->htmlvar_name == 'uwp_account_bio') {
+                        $disable_bio = uwp_get_option('disable_bio_field', false);
+                        if ($disable_bio == '1') {
+                            continue;
+                        }
+                    }
+                }
+
                 if ($form_type == 'register') {
                     $enable_password = uwp_get_option('enable_register_password', false);
                     if ($enable_password != '1') {
