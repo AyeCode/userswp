@@ -633,7 +633,7 @@ class Users_WP_Form_Builder {
     {
 
         global $wpdb;
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         ?>
         <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type;?>"/>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">
@@ -1246,7 +1246,7 @@ class Users_WP_Form_Builder {
     public function uwp_form_field_adminhtml($field_type, $result_str, $field_ins_upd = '', $field_type_key ='', $form_type = false)
     {
         global $wpdb;
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $cf = $result_str;
         if (!is_object($cf)) {
 
@@ -1267,9 +1267,9 @@ class Users_WP_Form_Builder {
 
         global $wpdb;
 
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
-        $meta_table = $wpdb->base_prefix . 'uwp_usermeta';
+        $meta_table = uwp_get_table_prefix() . 'uwp_usermeta';
 
         $old_html_variable = '';
 
@@ -1795,7 +1795,7 @@ class Users_WP_Form_Builder {
 
         global $wpdb;
 
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
         $count = 0;
         if (!empty($field_ids)):
@@ -1824,8 +1824,8 @@ class Users_WP_Form_Builder {
     public function uwp_admin_form_field_delete($field_id = '') {
         global $wpdb;
 
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
-        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
         if ($field_id != '') {
             $cf = trim($field_id, '_');
@@ -2175,7 +2175,7 @@ class Users_WP_Form_Builder {
     {
         global $wpdb;
 
-        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
         $existing_fields = $wpdb->get_results("select site_htmlvar_name from " . $extras_table_name . "     where form_type ='" . $form_type . "'");
 
@@ -2249,7 +2249,7 @@ class Users_WP_Form_Builder {
     {
         global $wpdb;
 
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $records = $wpdb->get_results($wpdb->prepare("select * from " . $table_name . " where form_type = %s and is_register_field=%s order by sort_order asc", array('account', '1')));
 
         foreach ($records as $row) {
@@ -2267,7 +2267,7 @@ class Users_WP_Form_Builder {
     public function uwp_register_selected_fields($form_type)
     {
         global $wpdb;
-        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
         ?>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="register">
         <ul class="uwp_form_extras"><?php
@@ -2297,8 +2297,8 @@ class Users_WP_Form_Builder {
     {
         global $wpdb;
 
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
-        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
         $cf = $result_str;
         if (!is_object($cf) && (is_int($cf) || ctype_digit($cf))) {
@@ -2526,7 +2526,7 @@ class Users_WP_Form_Builder {
     public function uwp_register_field_save($request_field = array())
     {
         global $wpdb;
-        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
         $result_str = isset($request_field['field_id']) ? trim($request_field['field_id']) : '';
 
@@ -2621,7 +2621,7 @@ class Users_WP_Form_Builder {
     {
 
         global $wpdb;
-        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
         if ($field_id != '') {
             $cf = trim($field_id, '_');
@@ -2639,8 +2639,8 @@ class Users_WP_Form_Builder {
     public function uwp_form_builder_dummy_fields() {
         global $wpdb;
 
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
-        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
         // This function is intended for testing purpose
         if (isset($_GET['uwp_dummy'])
             && is_admin()

@@ -201,8 +201,8 @@ class Users_WP_Templates {
     public function uwp_template_fields($form_type) {
         
         global $wpdb;
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
-        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
         if ($form_type == 'register') {
             $fields = get_register_form_fields();
@@ -444,9 +444,9 @@ class Users_WP_Templates {
 
     public function uwp_activation_redirect() {
 
-        if (get_site_option('uwp_activation_redirect', false)) {
+        if (get_option('uwp_activation_redirect', false)) {
 
-            delete_site_option('uwp_activation_redirect');
+            delete_option('uwp_activation_redirect');
 
             wp_redirect(admin_url('admin.php?page=userswp&tab=main&subtab=info'));
             exit;
@@ -462,7 +462,7 @@ class Users_WP_Templates {
     public function get_profile_extra_edit($user) {
         ob_start();
         global $wpdb;
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' ORDER BY sort_order ASC");
         if ($fields) {
             ?>

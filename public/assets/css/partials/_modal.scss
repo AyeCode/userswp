@@ -265,7 +265,8 @@
 .uwp-crop-form input[type="submit"]:disabled {
   opacity: .5;
 }
-.uwp-bs-modal {
+.uwp-bs-modal,
+.uwp-pb-wrapper {
   #progressBar {
     height: 5px;
     width: 100%;

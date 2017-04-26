@@ -26,7 +26,7 @@ class Users_WP_Activator {
      */
     public static function activate() {
         
-        if (!get_site_option('uwp_default_data_installed')) {
+        if (!get_option('uwp_default_data_installed')) {
             self::load_dependencies();
             self::generate_pages();
             self::add_default_options();
@@ -47,19 +47,12 @@ class Users_WP_Activator {
     }
 
     public static function generate_pages() {
-        self::uwp_create_page(esc_sql(_x('register', 'page_slug', 'userswp')), 'register_page', __('Register', 'userswp'), '[uwp_register]');
-        self::uwp_create_page(esc_sql(_x('login', 'page_slug', 'userswp')), 'login_page', __('Login', 'userswp'), '[uwp_login]');
-        self::uwp_create_page(esc_sql(_x('account', 'page_slug', 'userswp')), 'account_page', __('Account', 'userswp'), '[uwp_account]');
-        self::uwp_create_page(esc_sql(_x('forgot', 'page_slug', 'userswp')), 'forgot_page', __('Forgot Password?', 'userswp'), '[uwp_forgot]');
-        self::uwp_create_page(esc_sql(_x('reset', 'page_slug', 'userswp')), 'reset_page', __('Reset Password', 'userswp'), '[uwp_reset]');
-        self::uwp_create_page(esc_sql(_x('change', 'page_slug', 'userswp')), 'change_page', __('Change Password', 'userswp'), '[uwp_change]');
-        self::uwp_create_page(esc_sql(_x('profile', 'page_slug', 'userswp')), 'profile_page', __('Profile', 'userswp'), '[uwp_profile]');
-        self::uwp_create_page(esc_sql(_x('users', 'page_slug', 'userswp')), 'users_page', __('Users', 'userswp'), '[uwp_users]');
+        uwp_generate_default_pages();
     }
 
     public static function add_default_options() {
 
-        $settings = get_site_option( 'uwp_settings', array());
+        $settings = get_option( 'uwp_settings', array());
 
         //general
         $settings['profile_no_of_items'] = '10';
@@ -118,66 +111,16 @@ class Users_WP_Activator {
         $settings['account_update_email_subject'] = $account_update_subject;
         $settings['account_update_email_content'] = $account_update_content;
 
-        update_site_option( 'uwp_settings', $settings );
+        update_option( 'uwp_settings', $settings );
 
     }
-
-    public static function uwp_create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish') {
-        global $wpdb, $current_user;
-
-        $settings = get_site_option( 'uwp_settings', array());
-        if (isset($settings[$option])) {
-            $option_value = $settings[$option];
-        } else {
-            $option_value = false;
-        }
-
-        if ($option_value > 0) :
-            if (get_post($option_value)) :
-                // Page exists
-                return;
-            endif;
-        endif;
-
-        $page_found = $wpdb->get_var(
-            $wpdb->prepare(
-                "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
-                array($slug)
-            )
-        );
-
-        if ($page_found) :
-            // Page exists
-            if (!$option_value) {
-                $settings[$option] = $page_found;
-                update_site_option( 'uwp_settings', $settings );
-            }
-            return;
-        endif;
-
-        $page_data = array(
-            'post_status' => $status,
-            'post_type' => 'page',
-            'post_author' => $current_user->ID,
-            'post_name' => $slug,
-            'post_title' => $page_title,
-            'post_content' => $page_content,
-            'post_parent' => $post_parent,
-            'comment_status' => 'closed'
-        );
-        $page_id = wp_insert_post($page_data);
-
-        $settings[$option] = $page_id;
-        update_site_option( 'uwp_settings', $settings );
-
-    }
-
+    
     public static function uwp_create_tables()
     {
 
         global $wpdb;
 
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
         $wpdb->hide_errors();
 
@@ -231,7 +174,7 @@ class Users_WP_Activator {
 
         dbDelta($form_fields);
 
-        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
         $form_extras = "CREATE TABLE " . $extras_table_name . " (
 									  id int(11) NOT NULL AUTO_INCREMENT,
@@ -263,7 +206,7 @@ class Users_WP_Activator {
 
 
         // Table for storing userswp usermeta
-        $usermeta_table_name = $wpdb->base_prefix . 'uwp_usermeta';
+        $usermeta_table_name = uwp_get_table_prefix() . 'uwp_usermeta';
         $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
 						user_id int(20) NOT NULL,
 						user_ip varchar(20) NULL DEFAULT NULL,
@@ -679,7 +622,7 @@ class Users_WP_Activator {
 
     public static function uwp_insert_form_extras() {
         global $wpdb;
-        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
         $fields = array();
 
