@@ -330,6 +330,7 @@ function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
         }
 
     }
+    $value = uwp_maybe_unserialize($key, $value);
     $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
     return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
 }
@@ -349,6 +350,8 @@ function uwp_update_usermeta( $user_id = false, $key, $value ) {
     do_action( 'uwp_before_update_usermeta', $user_id, $key, $value );
 
     $user_meta_info = uwp_get_usermeta_row($user_id);
+
+    $value = uwp_maybe_serialize($key, $value);
 
     if (!empty($user_meta_info)) {
         $wpdb->query(
@@ -3020,6 +3023,16 @@ function uwp_wpmu_generate_default_pages_on_new_site( $blog_id, $user_id, $domai
 }
 add_action( 'wpmu_new_blog', 'uwp_wpmu_generate_default_pages_on_new_site', 10, 6 );
 
+// Deleting the table whenever a blog is deleted
+function uwp_drop_tables_on_delete_blog( $tables ) {
+    global $wpdb;
+    $tables[] = $wpdb->prefix . 'uwp_form_fields';
+    $tables[] = $wpdb->prefix . 'uwp_form_extras';
+    $tables[] = $wpdb->prefix . 'uwp_usermeta';
+    return $tables;
+}
+add_filter( 'wpmu_drop_tables', 'uwp_drop_tables_on_delete_blog' );
+
 
 function uwp_get_register_page_url() {
     return uwp_get_page_url_data('register_page');
@@ -3168,4 +3181,37 @@ function uwp_get_page_url_data($page_type, $output_type = 'link') {
     } else {
         return $page_data;
     }
+}
+
+
+function uwp_get_random_date( $days_from = 30, $days_to = 0 ) {
+    // 1 day in seconds is 86400
+    $from = $days_from * rand( 10000, 99999 );
+
+    // $days_from should always be less than $days_to
+    if ( $days_to > $days_from ) {
+        $days_to = $days_from - 1;
+    }
+
+    $to        = $days_to * rand( 10000, 99999 );
+    $date_from = time() - $from;
+    $date_to   = time() - $to;
+
+    return date( 'Y-m-d H:i:s', rand( $date_from, $date_to ) );
+}
+
+function uwp_maybe_serialize($key, $value) {
+    $field = uwp_get_custom_field_info($key);
+    if ($field->field_type == 'multiselect') {
+        $value = implode(",", $value);
+    }
+    return $value;
+}
+
+function uwp_maybe_unserialize($key, $value) {
+    $field = uwp_get_custom_field_info($key);
+    if ($field->field_type == 'multiselect') {
+        $value = explode(",", $value);
+    }
+    return $value;
 }

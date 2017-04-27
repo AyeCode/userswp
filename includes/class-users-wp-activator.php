@@ -25,20 +25,35 @@ class Users_WP_Activator {
      * @since    1.0.0
      */
     public static function activate() {
+
+        $installed_ver = get_option( "uwp_db_version" );
         
         if (!get_option('uwp_default_data_installed')) {
             self::load_dependencies();
             self::generate_pages();
             self::add_default_options();
             self::uwp_create_tables();
+            self::uwp101_create_tables();
             self::uwp_insert_usermeta();
             self::uwp_create_default_fields();
             self::uwp_insert_form_extras();
             self::uwp_flush_rewrite_rules();
-            add_option('uwp_activation_redirect', 1);
-            add_option('uwp_flush_rewrite', 1);
-            add_option('uwp_default_data_installed', 1);
+            update_option('uwp_activation_redirect', 1);
+            update_option('uwp_flush_rewrite', 1);
+            update_option('uwp_db_version', USERSWP_VERSION);
+            update_option('uwp_default_data_installed', 1);
+        } else {
+            // already installed
+            if (!$installed_ver) {
+                // Previous Version was beta
+                self::uwp_create_tables();
+                self::uwp101_create_tables();
+                update_option('uwp_db_version', USERSWP_VERSION);
+                update_option('uwp_default_data_installed', 1);
+            }
         }
+
+
         
     }
 
@@ -224,6 +239,41 @@ class Users_WP_Activator {
 
         dbDelta($user_meta);
 
+    }
+
+    public static function uwp101_create_tables() {
+        global $wpdb;
+
+
+        $wpdb->hide_errors();
+
+        $collate = '';
+        if ($wpdb->has_cap('collation')) {
+            if (!empty($wpdb->charset)) $collate = "DEFAULT CHARACTER SET $wpdb->charset";
+            if (!empty($wpdb->collate)) $collate .= " COLLATE $wpdb->collate";
+        }
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+
+        // Table for storing userswp usermeta
+        $usermeta_table_name = uwp_get_table_prefix() . 'uwp_usermeta';
+        $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
+						user_id int(20) NOT NULL,
+						user_ip varchar(20) NULL DEFAULT NULL,
+						uwp_account_username varchar(255) NULL DEFAULT NULL,
+						uwp_account_email varchar(255) NULL DEFAULT NULL,
+						uwp_account_first_name varchar(255) NULL DEFAULT NULL,
+						uwp_account_last_name varchar(255) NULL DEFAULT NULL,
+						uwp_account_bio varchar(255) NULL DEFAULT NULL,
+						uwp_account_avatar_thumb varchar(255) NULL DEFAULT NULL,
+						uwp_account_banner_thumb varchar(255) NULL DEFAULT NULL,
+						PRIMARY KEY  (user_id)
+						) $collate ";
+
+        $user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);
+
+        dbDelta($user_meta);
     }
 
     public static function uwp_insert_usermeta()

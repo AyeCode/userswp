@@ -865,12 +865,6 @@ class Users_WP_Forms {
             return true;
         }
 
-        //unset default fields
-//        if ($type == 'register') {
-//            if (isset($data['uwp_account_username'])) {
-//                unset($data['uwp_account_username']);
-//            }
-//        }
 
         if ($type == 'account' || $type == 'register') {
             if (isset($data['password'])) {
@@ -883,9 +877,7 @@ class Users_WP_Forms {
             return true;
         } else {
             foreach($data as $key => $value) {
-//                if ($value == '0' || !empty($value)) {
-                    uwp_update_usermeta($user_id, $key, $value);
-//                }
+                uwp_update_usermeta($user_id, $key, $value);
             }
             return true;
         }
