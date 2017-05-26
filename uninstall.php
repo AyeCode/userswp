@@ -56,4 +56,9 @@ if ( uwp_get_option('uninstall_erase_data') == '1' ) {
     $sql = "DROP TABLE IF EXISTS $extras_table_name";
     $wpdb->query($sql);
 
+    // Drop usermeta table
+    $meta_table_name = uwp_get_table_prefix() . 'uwp_usermeta';
+    $sql = "DROP TABLE IF EXISTS $meta_table_name";
+    $wpdb->query($sql);
+
 }

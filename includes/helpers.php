@@ -3202,7 +3202,7 @@ function uwp_get_random_date( $days_from = 30, $days_to = 0 ) {
 
 function uwp_maybe_serialize($key, $value) {
     $field = uwp_get_custom_field_info($key);
-    if ($field->field_type == 'multiselect') {
+    if (isset($field->field_type) && $field->field_type == 'multiselect') {
         $value = implode(",", $value);
     }
     return $value;
@@ -3210,7 +3210,7 @@ function uwp_maybe_serialize($key, $value) {
 
 function uwp_maybe_unserialize($key, $value) {
     $field = uwp_get_custom_field_info($key);
-    if ($field->field_type == 'multiselect') {
+    if (isset($field->field_type) && $field->field_type == 'multiselect') {
         $value = explode(",", $value);
     }
     return $value;
