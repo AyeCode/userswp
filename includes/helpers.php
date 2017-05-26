@@ -278,8 +278,12 @@ function uwp_build_profile_tab_url($user_id, $tab = false, $subtab = false) {
 
 }
 
-function uwp_get_option( $key = '', $default = false ) {
-    global $uwp_options;
+function uwp_get_option( $key = '', $default = false, $cache = true ) {
+    if ($cache) {
+        global $uwp_options;
+    } else {
+        $uwp_options = get_option( 'uwp_settings' );
+    }
     $value = ! empty( $uwp_options[ $key ] ) ? $uwp_options[ $key ] : $default;
     $value = apply_filters( 'uwp_get_option', $value, $key, $default );
     return apply_filters( 'uwp_get_option_' . $key, $value, $key, $default );
@@ -291,7 +295,7 @@ function uwp_update_option( $key = false, $value = '') {
         return false;
     }
 
-    $settings = get_site_option( 'uwp_settings', array());
+    $settings = get_option( 'uwp_settings', array());
 
     if( !is_array( $settings ) ) {
         $settings = array();
@@ -302,7 +306,7 @@ function uwp_update_option( $key = false, $value = '') {
     $settings = apply_filters( 'uwp_update_option', $settings, $key, $value );
     $settings =  apply_filters( 'uwp_update_option_' . $key, $settings, $key, $value );
 
-    update_site_option( 'uwp_settings', $settings );
+    update_option( 'uwp_settings', $settings );
 
     return true;
 }
@@ -326,6 +330,7 @@ function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
         }
 
     }
+    $value = uwp_maybe_unserialize($key, $value);
     $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
     return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
 }
@@ -337,7 +342,7 @@ function uwp_update_usermeta( $user_id = false, $key, $value ) {
     }
 
     global $wpdb;
-    $meta_table = $wpdb->base_prefix . 'uwp_usermeta';
+    $meta_table = uwp_get_table_prefix() . 'uwp_usermeta';
 
     $value = apply_filters( 'uwp_update_usermeta', $value, $user_id, $key );
     $value =  apply_filters( 'uwp_update_usermeta_' . $key, $value, $user_id, $key );
@@ -345,6 +350,8 @@ function uwp_update_usermeta( $user_id = false, $key, $value ) {
     do_action( 'uwp_before_update_usermeta', $user_id, $key, $value );
 
     $user_meta_info = uwp_get_usermeta_row($user_id);
+
+    $value = uwp_maybe_serialize($key, $value);
 
     if (!empty($user_meta_info)) {
         $wpdb->query(
@@ -1009,7 +1016,7 @@ function uwp_error_log($log){
 }
 
 function uwp_admin_notices() {
-    $errors = get_site_option( 'uwp_admin_notices' );
+    $errors = get_option( 'uwp_admin_notices' );
 
     if ( ! empty( $errors ) ) {
 
@@ -1020,7 +1027,7 @@ function uwp_admin_notices() {
         echo '</div>';
 
         // Clear
-        delete_site_option( 'uwp_admin_notices' );
+        delete_option( 'uwp_admin_notices' );
     }
 }
 add_action( 'admin_notices', 'uwp_admin_notices' );
@@ -1227,7 +1234,7 @@ function uwp_validate_uploads($files, $type, $url_only = true, $fields = false) 
 
     if (!$fields) {
         global $wpdb;
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
         if ($type == 'register') {
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type = 'file' AND is_active = '1' AND is_register_field = '1' ORDER BY sort_order ASC", array('account')));
@@ -1264,8 +1271,8 @@ function uwp_validate_uploads($files, $type, $url_only = true, $fields = false) 
 
 function get_register_form_fields() {
     global $wpdb;
-    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
-    $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+    $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
     $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.is_active = '1' AND fields.is_register_field = '1' AND extras.form_type = 'register' ORDER BY extras.sort_order ASC", array('account')));
     $fields = apply_filters('uwp_get_register_form_fields', $fields);
     return $fields;
@@ -1273,8 +1280,8 @@ function get_register_form_fields() {
 
 function get_register_validate_form_fields($role_id) {
     global $wpdb;
-    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
-    $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+    $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
     if ($role_id == 0) {
         $fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.is_register_field = '1' ORDER BY extras.sort_order ASC", array('account')));    
     } else {
@@ -1289,7 +1296,7 @@ function get_register_validate_form_fields($role_id) {
 
 function get_change_validate_form_fields() {
     global $wpdb;
-    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
     $enable_old_password = uwp_get_option('change_enable_old_password', false);
     if ($enable_old_password == '1') {
         $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array('change')));
@@ -1301,14 +1308,14 @@ function get_change_validate_form_fields() {
 
 function get_account_form_fields($extra_where = '') {
     global $wpdb;
-    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
     $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_only_field = '0' " . $extra_where . " ORDER BY sort_order ASC", array('account', $extra_where)));
     return $fields;
 }
 
 function get_change_form_fields() {
     global $wpdb;
-    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
     $enable_old_password = uwp_get_option('change_enable_old_password', false);
     if ($enable_old_password == '1') {
         $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array('change')));
@@ -1373,7 +1380,7 @@ function get_uwp_users_list() {
                 )
             ));
         } else {
-            $usermeta_table = $wpdb->base_prefix . 'uwp_usermeta';
+            $usermeta_table = uwp_get_table_prefix() . 'uwp_usermeta';
 
             $users = $wpdb->get_results(
                 "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
@@ -1546,8 +1553,8 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
     if (!$fields) {
         global $wpdb;
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
-        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
         if ($type == 'register') {
             if (isset($data["uwp_role_id"])) {
                 $role_id = (int) strip_tags(esc_sql($data["uwp_role_id"]));
@@ -1935,7 +1942,7 @@ function uwp_load_font_awesome() {
 
 function uwp_get_custom_field_info($htmlvar_name) {
     global $wpdb;
-    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
     $field = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s", array($htmlvar_name)));
     return $field;
 }
@@ -1950,7 +1957,7 @@ function uwp_wrap_notice($message, $type) {
 
 function uwp_get_max_upload_size($form_type = false, $field_htmlvar_name = false) {
     if (is_multisite()) {
-        $network_setting_size = esc_attr( get_site_option( 'fileupload_maxk', 300 ) );
+        $network_setting_size = esc_attr( get_option( 'fileupload_maxk', 300 ) );
         $max_upload_size = uwp_get_size_in_bytes($network_setting_size.'k');
         if ($max_upload_size > wp_max_upload_size()) {
             $max_upload_size = wp_max_upload_size();
@@ -2077,7 +2084,7 @@ function uwp_admin_user_profile_picture_description($description) {
 
 function uwp_admin_edit_banner_fields($user) {
     global $wpdb;
-    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
     $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE (form_type = 'avatar' OR form_type = 'banner') ORDER BY sort_order ASC");
     if ($fields) {
         ?>
@@ -2360,7 +2367,7 @@ function uwp_admin_only_css() {
 function uwp_form_extras_field_order($field_ids = array(), $form_type = 'register')
 {
     global $wpdb;
-    $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+    $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
     $count = 0;
     if (!empty($field_ids)):
@@ -2433,7 +2440,7 @@ function uwp_get_usermeta_row($user_id = false) {
     }
 
     global $wpdb;
-    $meta_table = $wpdb->base_prefix . 'uwp_usermeta';
+    $meta_table = uwp_get_table_prefix() . 'uwp_usermeta';
 
     $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$meta_table} WHERE user_id = %d", $user_id));
 
@@ -2887,3 +2894,472 @@ function uwp_notifications_toolbar_menu() {
     return;
 }
 add_action( 'admin_bar_menu', 'uwp_notifications_toolbar_menu', 90 );
+
+function uwp_get_installation_type() {
+    // *. Single Site
+    if (!is_multisite()) {
+        return "single";
+    } else {
+        // Multisite
+        if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+            require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+        }
+
+        // Network active.
+        if ( is_plugin_active_for_network( 'userswp/userswp.php' ) ) {
+            if (defined('UWP_ROOT_PAGES')) {
+                if (UWP_ROOT_PAGES == 'all') {
+                    // *. Multisite - Network Active - Pages on all sites
+                    return "multi_na_all";
+                } else {
+                    // *. Multisite - Network Active - Pages on specific site
+                    return "multi_na_site_id";
+                }
+            } else {
+                // Multi - network active - default
+                // *. Multisite - Network Active - Pages on main site
+                return "multi_na_default";
+            }
+        } else {
+            // * Multisite - Not network active
+            return "multi_not_na";
+        }
+    }
+}
+
+function uwp_get_table_prefix() {
+    global $wpdb;
+    $install_type = uwp_get_installation_type();
+    if ($install_type == "multi_not_na") {
+        return $wpdb->prefix;
+    } else {
+        return $wpdb->base_prefix;
+    }
+}
+
+function uwp_create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish') {
+    global $wpdb, $current_user;
+
+    $settings = get_option( 'uwp_settings', array());
+    if (isset($settings[$option])) {
+        $option_value = $settings[$option];
+    } else {
+        $option_value = false;
+    }
+
+    if ($option_value > 0) :
+        if (get_post($option_value)) :
+            // Page exists
+            return;
+        endif;
+    endif;
+
+    $page_found = $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+            array($slug)
+        )
+    );
+
+    if ($page_found) :
+        // Page exists
+        if (!$option_value) {
+            $settings[$option] = $page_found;
+            update_option( 'uwp_settings', $settings );
+        }
+        return;
+    endif;
+
+    $page_data = array(
+        'post_status' => $status,
+        'post_type' => 'page',
+        'post_author' => $current_user->ID,
+        'post_name' => $slug,
+        'post_title' => $page_title,
+        'post_content' => $page_content,
+        'post_parent' => $post_parent,
+        'comment_status' => 'closed'
+    );
+    $page_id = wp_insert_post($page_data);
+
+    $settings[$option] = $page_id;
+    update_option( 'uwp_settings', $settings );
+}
+
+function uwp_generate_default_pages() {
+    uwp_create_page(esc_sql(_x('register', 'page_slug', 'userswp')), 'register_page', __('Register', 'userswp'), '[uwp_register]');
+    uwp_create_page(esc_sql(_x('login', 'page_slug', 'userswp')), 'login_page', __('Login', 'userswp'), '[uwp_login]');
+    uwp_create_page(esc_sql(_x('account', 'page_slug', 'userswp')), 'account_page', __('Account', 'userswp'), '[uwp_account]');
+    uwp_create_page(esc_sql(_x('forgot', 'page_slug', 'userswp')), 'forgot_page', __('Forgot Password?', 'userswp'), '[uwp_forgot]');
+    uwp_create_page(esc_sql(_x('reset', 'page_slug', 'userswp')), 'reset_page', __('Reset Password', 'userswp'), '[uwp_reset]');
+    uwp_create_page(esc_sql(_x('change', 'page_slug', 'userswp')), 'change_page', __('Change Password', 'userswp'), '[uwp_change]');
+    uwp_create_page(esc_sql(_x('profile', 'page_slug', 'userswp')), 'profile_page', __('Profile', 'userswp'), '[uwp_profile]');
+    uwp_create_page(esc_sql(_x('users', 'page_slug', 'userswp')), 'users_page', __('Users', 'userswp'), '[uwp_users]');
+}
+
+
+function uwp_wpmu_generate_default_pages_on_new_site( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+
+    if (uwp_get_installation_type() != 'multi_na_all') {
+        return;
+    }
+
+    if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+        require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+    }
+
+    // Bail if plugin is not network activated.
+    if ( ! is_plugin_active_for_network( 'userswp/userswp.php' ) ) {
+        return;
+    }
+
+    // Switch to the new blog.
+    switch_to_blog( $blog_id );
+
+    uwp_generate_default_pages();
+
+    // Restore original blog.
+    restore_current_blog();
+}
+add_action( 'wpmu_new_blog', 'uwp_wpmu_generate_default_pages_on_new_site', 10, 6 );
+
+// Deleting the table whenever a blog is deleted
+function uwp_drop_tables_on_delete_blog( $tables ) {
+    global $wpdb;
+    $tables[] = $wpdb->prefix . 'uwp_form_fields';
+    $tables[] = $wpdb->prefix . 'uwp_form_extras';
+    $tables[] = $wpdb->prefix . 'uwp_usermeta';
+    return $tables;
+}
+add_filter( 'wpmu_drop_tables', 'uwp_drop_tables_on_delete_blog' );
+
+
+function uwp_get_register_page_url() {
+    return uwp_get_page_url_data('register_page');
+}
+
+function uwp_get_login_page_url() {
+    return uwp_get_page_url_data('login_page');
+}
+
+function uwp_get_forgot_page_url() {
+    return uwp_get_page_url_data('forgot_page');
+}
+
+function uwp_get_change_page_url() {
+    return uwp_get_page_url_data('change_page');
+}
+
+function uwp_get_reset_page_url() {
+    return uwp_get_page_url_data('reset_page');
+}
+
+function uwp_get_account_page_url() {
+    return uwp_get_page_url_data('account_page');
+}
+
+function uwp_get_profile_page_url() {
+    return uwp_get_page_url_data('profile_page');
+}
+
+function uwp_get_users_page_url() {
+    return uwp_get_page_url_data('users_page');
+}
+
+function uwp_get_page_url_data($page_type, $output_type = 'link') {
+
+    $install_type = uwp_get_installation_type();
+
+    $page_data = array();
+    switch ($install_type) {
+        case "single":
+            $page_id = uwp_get_option($page_type, false, false);
+            if ($page_id) {
+                $page = get_post($page_id);
+                $page_data = array(
+                    'name' => $page->post_title,
+                    'slug' => $page->post_name,
+                    'link' => get_permalink( $page->ID ),
+                );
+            }
+            break;
+        case "multi_na_all":
+            $page_id = uwp_get_option($page_type, false, false);
+            if ($page_id) {
+                $page = get_post($page_id);
+                $page_data = array(
+                    'name' => $page->post_title,
+                    'slug' => $page->post_name,
+                    'link' => get_permalink( $page->ID ),
+                );
+            }
+            break;
+        case "multi_na_site_id":
+            $blog_id = UWP_ROOT_PAGES;
+            $current_blog_id = get_current_blog_id();
+            if (!is_int($blog_id)) {
+                $page_data = array();
+            } else {
+                if ($blog_id == $current_blog_id) {
+                    $page_id = uwp_get_option($page_type, false, false);
+                    if ($page_id) {
+                        $page = get_post($page_id);
+                        $page_data = array(
+                            'name' => $page->post_title,
+                            'slug' => $page->post_name,
+                            'link' => get_permalink( $page->ID ),
+                        );
+                    }
+                } else {
+                    // Switch to the new blog.
+                    switch_to_blog( $blog_id );
+                    $page_id = uwp_get_option($page_type, false, false);
+                    if ($page_id) {
+                        $page = get_post($page_id);
+                        $page_data = array(
+                            'name' => $page->post_title,
+                            'slug' => $page->post_name,
+                            'link' => get_permalink( $page->ID ),
+                        );
+                    }
+                    // Restore original blog.
+                    restore_current_blog();
+                }
+            }
+            break;
+        case "multi_na_default":
+            $is_main_site = is_main_site();
+            if ($is_main_site) {
+                $page_id = uwp_get_option($page_type, false, false);
+                if ($page_id) {
+                    $page = get_post($page_id);
+                    $page_data = array(
+                        'name' => $page->post_title,
+                        'slug' => $page->post_name,
+                        'link' => get_permalink( $page->ID ),
+                    );
+                }
+            } else {
+                $main_blog_id = (int) get_network()->site_id;
+                // Switch to the new blog.
+                switch_to_blog( $main_blog_id );
+                $page_id = uwp_get_option($page_type, false, false);
+                if ($page_id) {
+                    $page = get_post($page_id);
+                    $page_data = array(
+                        'name' => $page->post_title,
+                        'slug' => $page->post_name,
+                        'link' => get_permalink( $page->ID ),
+                    );
+                }
+                // Restore original blog.
+                restore_current_blog();
+            }
+            break;
+        case "multi_not_na":
+            $page_id = uwp_get_option($page_type, false, false);
+            if ($page_id) {
+                $page = get_post($page_id);
+                $page_data = array(
+                    'name' => $page->post_title,
+                    'slug' => $page->post_name,
+                    'link' => get_permalink( $page->ID ),
+                );
+            }
+            break;
+        default:
+            $page_data = array();
+
+    }
+    
+    if ($output_type == 'link') {
+        if (empty($page_data)) {
+            return false;
+        } else {
+            return $page_data['link'];
+        }
+    } else {
+        return $page_data;
+    }
+}
+
+
+function uwp_get_random_date( $days_from = 30, $days_to = 0 ) {
+    // 1 day in seconds is 86400
+    $from = $days_from * rand( 10000, 99999 );
+
+    // $days_from should always be less than $days_to
+    if ( $days_to > $days_from ) {
+        $days_to = $days_from - 1;
+    }
+
+    $to        = $days_to * rand( 10000, 99999 );
+    $date_from = time() - $from;
+    $date_to   = time() - $to;
+
+    return date( 'Y-m-d H:i:s', rand( $date_from, $date_to ) );
+}
+
+function uwp_maybe_serialize($key, $value) {
+    $field = uwp_get_custom_field_info($key);
+    if (isset($field->field_type) && $field->field_type == 'multiselect') {
+        $value = implode(",", $value);
+    }
+    return $value;
+}
+
+function uwp_maybe_unserialize($key, $value) {
+    $field = uwp_get_custom_field_info($key);
+    if (isset($field->field_type) && $field->field_type == 'multiselect') {
+        $value = explode(",", $value);
+    }
+    return $value;
+}
+
+
+function uwp_create_tables()
+{
+
+    global $wpdb;
+
+    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+
+    $wpdb->hide_errors();
+
+    $collate = '';
+    if ($wpdb->has_cap('collation')) {
+        if (!empty($wpdb->charset)) $collate = "DEFAULT CHARACTER SET $wpdb->charset";
+        if (!empty($wpdb->collate)) $collate .= " COLLATE $wpdb->collate";
+    }
+
+    /**
+     * Include any functions needed for upgrades.
+     *
+     * @since 1.0.0
+     */
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+    $form_fields = "CREATE TABLE " . $table_name . " (
+							  id int(11) NOT NULL AUTO_INCREMENT,
+							  form_type varchar(100) NULL,
+							  data_type varchar(100) NULL,
+							  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
+							  field_type_key varchar(255) NOT NULL,
+							  site_title varchar(255) NULL DEFAULT NULL,
+							  form_label varchar(255) NULL DEFAULT NULL,
+							  help_text varchar(255) NULL DEFAULT NULL,
+							  htmlvar_name varchar(255) NULL DEFAULT NULL,
+							  default_value text NULL DEFAULT NULL,
+							  sort_order int(11) NOT NULL,
+							  option_values text NULL DEFAULT NULL,
+							  is_active enum( '0', '1' ) NOT NULL DEFAULT '1',
+							  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_dummy enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_public enum( '0', '1', '2' ) NOT NULL DEFAULT '0',
+							  is_required enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_register_field enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_search_field enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  is_register_only_field enum( '0', '1' ) NOT NULL DEFAULT '0',
+							  required_msg varchar(255) NULL DEFAULT NULL,
+							  show_in text NULL DEFAULT NULL,
+							  user_roles text NULL DEFAULT NULL,
+							  extra_fields text NULL DEFAULT NULL,
+							  field_icon varchar(255) NULL DEFAULT NULL,
+							  css_class varchar(255) NULL DEFAULT NULL,
+							  decimal_point varchar( 10 ) NOT NULL,
+							  validation_pattern varchar( 255 ) NOT NULL,
+							  validation_msg text NULL DEFAULT NULL,
+							  PRIMARY KEY  (id)
+							  ) $collate";
+
+    $form_fields = apply_filters('uwp_before_form_field_table_create', $form_fields);
+
+    dbDelta($form_fields);
+
+    $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
+
+    $form_extras = "CREATE TABLE " . $extras_table_name . " (
+									  id int(11) NOT NULL AUTO_INCREMENT,
+									  form_type varchar(255) NOT NULL,
+									  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
+									  site_htmlvar_name varchar(255) NOT NULL,
+									  sort_order int(11) NOT NULL,
+									  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
+									  is_dummy enum( '0', '1' ) NOT NULL DEFAULT '0',
+									  expand_custom_value int(11) NULL DEFAULT NULL,
+									  searching_range_mode int(11) NULL DEFAULT NULL,
+									  expand_search int(11) NULL DEFAULT NULL,
+									  front_search_title varchar(255) CHARACTER SET utf8 NULL DEFAULT NULL,
+									  first_search_value int(11) NULL DEFAULT NULL,
+									  first_search_text varchar(255) CHARACTER SET utf8 NULL DEFAULT NULL,
+									  last_search_text varchar(255) CHARACTER SET utf8 NULL DEFAULT NULL,
+									  search_min_value int(11) NULL DEFAULT NULL,
+									  search_max_value int(11) NULL DEFAULT NULL,
+									  search_diff_value int(11) NULL DEFAULT NULL,
+									  search_condition varchar(100) NULL DEFAULT NULL,
+									  field_input_type varchar(255) NULL DEFAULT NULL,
+									  field_data_type varchar(255) NULL DEFAULT NULL,
+									  PRIMARY KEY  (id)
+									) $collate AUTO_INCREMENT=1 ;";
+
+    $form_extras = apply_filters('uwp_before_form_extras_table_create', $form_extras);
+
+    dbDelta($form_extras);
+
+
+    // Table for storing userswp usermeta
+    $usermeta_table_name = uwp_get_table_prefix() . 'uwp_usermeta';
+    $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
+						user_id int(20) NOT NULL,
+						user_ip varchar(20) NULL DEFAULT NULL,
+						uwp_account_username varchar(255) NULL DEFAULT NULL,
+						uwp_account_email varchar(255) NULL DEFAULT NULL,
+						uwp_account_first_name varchar(255) NULL DEFAULT NULL,
+						uwp_account_last_name varchar(255) NULL DEFAULT NULL,
+						uwp_account_bio varchar(255) NULL DEFAULT NULL,
+						uwp_account_avatar_thumb varchar(255) NULL DEFAULT NULL,
+						uwp_account_banner_thumb varchar(255) NULL DEFAULT NULL,
+						PRIMARY KEY  (user_id)
+						) $collate ";
+
+    $user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);
+
+    dbDelta($user_meta);
+
+}
+
+
+function uwp101_create_tables() {
+    global $wpdb;
+
+
+    $wpdb->hide_errors();
+
+    $collate = '';
+    if ($wpdb->has_cap('collation')) {
+        if (!empty($wpdb->charset)) $collate = "DEFAULT CHARACTER SET $wpdb->charset";
+        if (!empty($wpdb->collate)) $collate .= " COLLATE $wpdb->collate";
+    }
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+
+    // Table for storing userswp usermeta
+    $usermeta_table_name = uwp_get_table_prefix() . 'uwp_usermeta';
+    $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
+						user_id int(20) NOT NULL,
+						user_ip varchar(20) NULL DEFAULT NULL,
+						uwp_account_username varchar(255) NULL DEFAULT NULL,
+						uwp_account_email varchar(255) NULL DEFAULT NULL,
+						uwp_account_first_name varchar(255) NULL DEFAULT NULL,
+						uwp_account_last_name varchar(255) NULL DEFAULT NULL,
+						uwp_account_bio varchar(255) NULL DEFAULT NULL,
+						uwp_account_avatar_thumb varchar(255) NULL DEFAULT NULL,
+						uwp_account_banner_thumb varchar(255) NULL DEFAULT NULL,
+						PRIMARY KEY  (user_id)
+						) $collate ";
+
+    $user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);
+
+    dbDelta($user_meta);
+}

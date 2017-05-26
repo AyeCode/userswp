@@ -865,12 +865,6 @@ class Users_WP_Forms {
             return true;
         }
 
-        //unset default fields
-//        if ($type == 'register') {
-//            if (isset($data['uwp_account_username'])) {
-//                unset($data['uwp_account_username']);
-//            }
-//        }
 
         if ($type == 'account' || $type == 'register') {
             if (isset($data['password'])) {
@@ -883,9 +877,7 @@ class Users_WP_Forms {
             return true;
         } else {
             foreach($data as $key => $value) {
-//                if ($value == '0' || !empty($value)) {
-                    uwp_update_usermeta($user_id, $key, $value);
-//                }
+                uwp_update_usermeta($user_id, $key, $value);
             }
             return true;
         }
@@ -1808,7 +1800,7 @@ class Users_WP_Forms {
     // Add multipart/form-data to edit form
     function add_multipart_to_admin_edit_form() {
         global $wpdb;
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type = 'file' AND is_default = '0' ORDER BY sort_order ASC");
         if ($fields) {
             echo 'enctype="multipart/form-data"';
@@ -1819,7 +1811,7 @@ class Users_WP_Forms {
     public function update_profile_extra_admin_edit($user_id) {
         ob_start();
         global $wpdb;
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         //Normal fields
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND field_type != 'fieldset' AND is_default = '0' ORDER BY sort_order ASC");
         if ($fields) {

@@ -30,11 +30,27 @@ define( 'USERSWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
  * The code that runs during plugin activation.
  * This action is documented in includes/class-users-wp-activator.php
  */
-function activate_users_wp() {
-    if (is_main_site()) {
+function activate_users_wp($network_wide) {
+    if (is_multisite()) {
+        if ($network_wide) {
+            $main_blog_id = (int) get_network()->site_id;
+            // Switch to the new blog.
+            switch_to_blog( $main_blog_id );
+
+            require_once('includes/class-users-wp-activator.php');
+            Users_WP_Activator::activate();
+
+            // Restore original blog.
+            restore_current_blog();
+        } else {
+            require_once('includes/class-users-wp-activator.php');
+            Users_WP_Activator::activate();
+        }
+    } else {
         require_once('includes/class-users-wp-activator.php');
-        Users_WP_Activator::activate();    
+        Users_WP_Activator::activate();
     }
+    
 }
 /**
  * The code that runs during plugin deactivation.

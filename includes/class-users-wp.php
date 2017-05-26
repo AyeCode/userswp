@@ -194,6 +194,11 @@ class Users_WP {
 
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+//        if (is_multisite()) {
+//            $this->loader->add_action( 'network_admin_menu', $plugin_admin, 'setup_admin_menus' );
+//        } else {
+//            $this->loader->add_action( 'admin_menu', $plugin_admin, 'setup_admin_menus' );
+//        }
         $this->loader->add_action( 'admin_menu', $plugin_admin, 'setup_admin_menus' );
         $this->loader->add_action( 'admin_init', $plugin_admin_settings, 'uwp_register_settings' );
         $this->loader->add_action( 'load-nav-menus.php', $plugin_admin_menus, 'users_wp_admin_menu_metabox' );

@@ -17,21 +17,21 @@ global $wpdb;
 
 if ( !class_exists( 'Users_WP' ) ) {
     // Load plugin file.
-    include_once( 'users_wp.php' );
+    include_once( 'userswp.php' );
 }
 
 if ( uwp_get_option('uninstall_erase_data') == '1' ) {
     $wpdb->hide_errors();
     
     // Delete options
-    delete_site_option('uwp_settings');
-    delete_site_option('uwp_activation_redirect');
-    delete_site_option('uwp_flush_rewrite');
-    delete_site_option('uwp_default_data_installed');
-    //delete_site_option('uwp_db_version');
+    delete_option('uwp_settings');
+    delete_option('uwp_activation_redirect');
+    delete_option('uwp_flush_rewrite');
+    delete_option('uwp_default_data_installed');
+    //delete_option('uwp_db_version');
 
 
-    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
     $rows = $wpdb->get_results("select * from " . $table_name . "");
 
     // Delete user meta for all users
@@ -47,13 +47,18 @@ if ( uwp_get_option('uninstall_erase_data') == '1' ) {
 
     // Drop tables.
     // Drop form fields table
-    $table_name = $wpdb->base_prefix . 'uwp_form_fields';
+    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
     $sql = "DROP TABLE IF EXISTS $table_name";
     $wpdb->query($sql);
 
     // Drop form extras table
-    $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+    $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
     $sql = "DROP TABLE IF EXISTS $extras_table_name";
+    $wpdb->query($sql);
+
+    // Drop usermeta table
+    $meta_table_name = uwp_get_table_prefix() . 'uwp_usermeta';
+    $sql = "DROP TABLE IF EXISTS $meta_table_name";
     $wpdb->query($sql);
 
 }

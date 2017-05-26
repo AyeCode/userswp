@@ -25,20 +25,35 @@ class Users_WP_Activator {
      * @since    1.0.0
      */
     public static function activate() {
+
+        $installed_ver = get_option( "uwp_db_version" );
         
-        if (!get_site_option('uwp_default_data_installed')) {
+        if (!get_option('uwp_default_data_installed')) {
             self::load_dependencies();
             self::generate_pages();
             self::add_default_options();
             self::uwp_create_tables();
+            self::uwp101_create_tables();
             self::uwp_insert_usermeta();
             self::uwp_create_default_fields();
             self::uwp_insert_form_extras();
             self::uwp_flush_rewrite_rules();
-            add_option('uwp_activation_redirect', 1);
-            add_option('uwp_flush_rewrite', 1);
-            add_option('uwp_default_data_installed', 1);
+            update_option('uwp_activation_redirect', 1);
+            update_option('uwp_flush_rewrite', 1);
+            update_option('uwp_db_version', USERSWP_VERSION);
+            update_option('uwp_default_data_installed', 1);
+        } else {
+            // already installed
+            if (!$installed_ver) {
+                // Previous Version was beta
+                self::uwp_create_tables();
+                self::uwp101_create_tables();
+                update_option('uwp_db_version', USERSWP_VERSION);
+                update_option('uwp_default_data_installed', 1);
+            }
         }
+
+
         
     }
 
@@ -47,19 +62,12 @@ class Users_WP_Activator {
     }
 
     public static function generate_pages() {
-        self::uwp_create_page(esc_sql(_x('register', 'page_slug', 'userswp')), 'register_page', __('Register', 'userswp'), '[uwp_register]');
-        self::uwp_create_page(esc_sql(_x('login', 'page_slug', 'userswp')), 'login_page', __('Login', 'userswp'), '[uwp_login]');
-        self::uwp_create_page(esc_sql(_x('account', 'page_slug', 'userswp')), 'account_page', __('Account', 'userswp'), '[uwp_account]');
-        self::uwp_create_page(esc_sql(_x('forgot', 'page_slug', 'userswp')), 'forgot_page', __('Forgot Password?', 'userswp'), '[uwp_forgot]');
-        self::uwp_create_page(esc_sql(_x('reset', 'page_slug', 'userswp')), 'reset_page', __('Reset Password', 'userswp'), '[uwp_reset]');
-        self::uwp_create_page(esc_sql(_x('change', 'page_slug', 'userswp')), 'change_page', __('Change Password', 'userswp'), '[uwp_change]');
-        self::uwp_create_page(esc_sql(_x('profile', 'page_slug', 'userswp')), 'profile_page', __('Profile', 'userswp'), '[uwp_profile]');
-        self::uwp_create_page(esc_sql(_x('users', 'page_slug', 'userswp')), 'users_page', __('Users', 'userswp'), '[uwp_users]');
+        uwp_generate_default_pages();
     }
 
     public static function add_default_options() {
 
-        $settings = get_site_option( 'uwp_settings', array());
+        $settings = get_option( 'uwp_settings', array());
 
         //general
         $settings['profile_no_of_items'] = '10';
@@ -118,169 +126,17 @@ class Users_WP_Activator {
         $settings['account_update_email_subject'] = $account_update_subject;
         $settings['account_update_email_content'] = $account_update_content;
 
-        update_site_option( 'uwp_settings', $settings );
+        update_option( 'uwp_settings', $settings );
 
     }
-
-    public static function uwp_create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish') {
-        global $wpdb, $current_user;
-
-        $settings = get_site_option( 'uwp_settings', array());
-        if (isset($settings[$option])) {
-            $option_value = $settings[$option];
-        } else {
-            $option_value = false;
-        }
-
-        if ($option_value > 0) :
-            if (get_post($option_value)) :
-                // Page exists
-                return;
-            endif;
-        endif;
-
-        $page_found = $wpdb->get_var(
-            $wpdb->prepare(
-                "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
-                array($slug)
-            )
-        );
-
-        if ($page_found) :
-            // Page exists
-            if (!$option_value) {
-                $settings[$option] = $page_found;
-                update_site_option( 'uwp_settings', $settings );
-            }
-            return;
-        endif;
-
-        $page_data = array(
-            'post_status' => $status,
-            'post_type' => 'page',
-            'post_author' => $current_user->ID,
-            'post_name' => $slug,
-            'post_title' => $page_title,
-            'post_content' => $page_content,
-            'post_parent' => $post_parent,
-            'comment_status' => 'closed'
-        );
-        $page_id = wp_insert_post($page_data);
-
-        $settings[$option] = $page_id;
-        update_site_option( 'uwp_settings', $settings );
-
-    }
-
+    
     public static function uwp_create_tables()
     {
+        uwp_create_tables();
+    }
 
-        global $wpdb;
-
-        $table_name = $wpdb->base_prefix . 'uwp_form_fields';
-
-        $wpdb->hide_errors();
-
-        $collate = '';
-        if ($wpdb->has_cap('collation')) {
-            if (!empty($wpdb->charset)) $collate = "DEFAULT CHARACTER SET $wpdb->charset";
-            if (!empty($wpdb->collate)) $collate .= " COLLATE $wpdb->collate";
-        }
-
-        /**
-         * Include any functions needed for upgrades.
-         *
-         * @since 1.0.0
-         */
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
-        $form_fields = "CREATE TABLE " . $table_name . " (
-							  id int(11) NOT NULL AUTO_INCREMENT,
-							  form_type varchar(100) NULL,
-							  data_type varchar(100) NULL,
-							  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
-							  field_type_key varchar(255) NOT NULL,
-							  site_title varchar(255) NULL DEFAULT NULL,
-							  form_label varchar(255) NULL DEFAULT NULL,
-							  help_text varchar(255) NULL DEFAULT NULL,
-							  htmlvar_name varchar(255) NULL DEFAULT NULL,
-							  default_value text NULL DEFAULT NULL,
-							  sort_order int(11) NOT NULL,
-							  option_values text NULL DEFAULT NULL,
-							  is_active enum( '0', '1' ) NOT NULL DEFAULT '1',
-							  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
-							  is_dummy enum( '0', '1' ) NOT NULL DEFAULT '0',
-							  is_public enum( '0', '1', '2' ) NOT NULL DEFAULT '0',
-							  is_required enum( '0', '1' ) NOT NULL DEFAULT '0',
-							  is_register_field enum( '0', '1' ) NOT NULL DEFAULT '0',
-							  is_search_field enum( '0', '1' ) NOT NULL DEFAULT '0',
-							  is_register_only_field enum( '0', '1' ) NOT NULL DEFAULT '0',
-							  required_msg varchar(255) NULL DEFAULT NULL,
-							  show_in text NULL DEFAULT NULL,
-							  user_roles text NULL DEFAULT NULL,
-							  extra_fields text NULL DEFAULT NULL,
-							  field_icon varchar(255) NULL DEFAULT NULL,
-							  css_class varchar(255) NULL DEFAULT NULL,
-							  decimal_point varchar( 10 ) NOT NULL,
-							  validation_pattern varchar( 255 ) NOT NULL,
-							  validation_msg text NULL DEFAULT NULL,
-							  PRIMARY KEY  (id)
-							  ) $collate";
-
-        $form_fields = apply_filters('uwp_before_form_field_table_create', $form_fields);
-
-        dbDelta($form_fields);
-
-        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
-
-        $form_extras = "CREATE TABLE " . $extras_table_name . " (
-									  id int(11) NOT NULL AUTO_INCREMENT,
-									  form_type varchar(255) NOT NULL,
-									  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
-									  site_htmlvar_name varchar(255) NOT NULL,
-									  sort_order int(11) NOT NULL,
-									  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
-									  is_dummy enum( '0', '1' ) NOT NULL DEFAULT '0',
-									  expand_custom_value int(11) NULL DEFAULT NULL,
-									  searching_range_mode int(11) NULL DEFAULT NULL,
-									  expand_search int(11) NULL DEFAULT NULL,
-									  front_search_title varchar(255) CHARACTER SET utf8 NULL DEFAULT NULL,
-									  first_search_value int(11) NULL DEFAULT NULL,
-									  first_search_text varchar(255) CHARACTER SET utf8 NULL DEFAULT NULL,
-									  last_search_text varchar(255) CHARACTER SET utf8 NULL DEFAULT NULL,
-									  search_min_value int(11) NULL DEFAULT NULL,
-									  search_max_value int(11) NULL DEFAULT NULL,
-									  search_diff_value int(11) NULL DEFAULT NULL,
-									  search_condition varchar(100) NULL DEFAULT NULL,
-									  field_input_type varchar(255) NULL DEFAULT NULL,
-									  field_data_type varchar(255) NULL DEFAULT NULL,
-									  PRIMARY KEY  (id)
-									) $collate AUTO_INCREMENT=1 ;";
-
-        $form_extras = apply_filters('uwp_before_form_extras_table_create', $form_extras);
-
-        dbDelta($form_extras);
-
-
-        // Table for storing userswp usermeta
-        $usermeta_table_name = $wpdb->base_prefix . 'uwp_usermeta';
-        $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
-						user_id int(20) NOT NULL,
-						user_ip varchar(20) NULL DEFAULT NULL,
-						uwp_account_username varchar(255) NULL DEFAULT NULL,
-						uwp_account_email varchar(255) NULL DEFAULT NULL,
-						uwp_account_first_name varchar(255) NULL DEFAULT NULL,
-						uwp_account_last_name varchar(255) NULL DEFAULT NULL,
-						uwp_account_bio varchar(255) NULL DEFAULT NULL,
-						uwp_account_avatar_thumb varchar(255) NULL DEFAULT NULL,
-						uwp_account_banner_thumb varchar(255) NULL DEFAULT NULL,
-						PRIMARY KEY  (user_id)
-						) $collate ";
-
-        $user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);
-
-        dbDelta($user_meta);
-
+    public static function uwp101_create_tables() {
+        uwp101_create_tables();
     }
 
     public static function uwp_insert_usermeta()
@@ -679,7 +535,7 @@ class Users_WP_Activator {
 
     public static function uwp_insert_form_extras() {
         global $wpdb;
-        $extras_table_name = $wpdb->base_prefix . 'uwp_form_extras';
+        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
         $fields = array();
 

@@ -144,6 +144,55 @@ class Users_WP_Admin {
     }
 
     public function setup_admin_menus() {
+
+        $install_type = uwp_get_installation_type();
+
+        // Proceed if main site or pages on all sites or specific blog id
+        $proceed = false;
+        $show_builder = false;
+        switch ($install_type) {
+            case "single":
+                $proceed = true;
+                $show_builder = true;
+                break;
+            case "multi_na_all":
+                $proceed = true;
+                break;
+            case "multi_na_site_id":
+                $blog_id = UWP_ROOT_PAGES;
+                $current_blog_id = get_current_blog_id();
+                if (!is_int($blog_id)) {
+                    $proceed = false;
+                } else {
+                    if ($blog_id == $current_blog_id) {
+                        $proceed = true;
+                        $show_builder = true;
+                    } else {
+                        $proceed = false;
+                    }
+                }
+                break;
+            case "multi_na_default":
+                $is_main_site = is_main_site();
+                if ($is_main_site) {
+                    $proceed = true;
+                    $show_builder = true;
+                }
+                break;
+            case "multi_not_na":
+                $proceed = true;
+                $show_builder = true;
+                break;
+            default:
+                $proceed = false;
+
+        }
+
+        if (!$proceed) {
+            return;
+        }
+
+
         $plugin_admin_settings = new Users_WP_Admin_Settings();
 
         add_menu_page(
@@ -156,26 +205,28 @@ class Users_WP_Admin {
             70
         );
 
-        add_submenu_page(
-            "userswp",
-            "Form Builder",
-            "Form Builder",
-            'manage_options',
-            'uwp_form_builder',
-            array( $plugin_admin_settings, 'uwp_settings_page' )
-        );
+        if ($show_builder) {
+            add_submenu_page(
+                "userswp",
+                "Form Builder",
+                "Form Builder",
+                'manage_options',
+                'uwp_form_builder',
+                array($plugin_admin_settings, 'uwp_settings_page')
+            );
 
-        add_submenu_page(
-            "userswp",
-            "Notifications",
-            "Notifications",
-            'manage_options',
-            'uwp_notifications',
-            array( $plugin_admin_settings, 'uwp_settings_page' )
-        );
+            add_submenu_page(
+                "userswp",
+                "Notifications",
+                "Notifications",
+                'manage_options',
+                'uwp_notifications',
+                array($plugin_admin_settings, 'uwp_settings_page')
+            );
 
-        $settings_page = array( $plugin_admin_settings, 'uwp_settings_page' );
-        do_action('uwp_admin_sub_menus', $settings_page, $plugin_admin_settings);
+            $settings_page = array($plugin_admin_settings, 'uwp_settings_page');
+            do_action('uwp_admin_sub_menus', $settings_page, $plugin_admin_settings);
+        }
     }
 
 }

@@ -133,18 +133,13 @@ class Users_WP_Menus {
      */
     public function users_wp_nav_menu_get_common_pages() {
 
-        $users_page = uwp_get_option('users_page', false);
+        $users_page_data = uwp_get_page_url_data('users_page', 'array');
 
         $users_wp_menu_items = array();
 
 
-        if ($users_page) {
-            $page = get_post( $users_page );
-            $users_wp_menu_items[] = array(
-                'name' => $page->post_title,
-                'slug' => $page->post_name,
-                'link' => get_permalink( $page->ID ),
-            );
+        if (!empty($users_page_data)) {
+            $users_wp_menu_items[] = $users_page_data;
         }
 
 
@@ -185,37 +180,22 @@ class Users_WP_Menus {
      */
     public function users_wp_nav_menu_get_loggedin_pages() {
 
-        $account_page = uwp_get_option('account_page', false);
-        $change_page = uwp_get_option('change_page', false);
-        $profile_page = uwp_get_option('profile_page', false);
+        $account_page_data = uwp_get_page_url_data('account_page', 'array');
+        $change_page_data = uwp_get_page_url_data('change_page', 'array');
+        $profile_page_data = uwp_get_page_url_data('profile_page', 'array');
 
         $users_wp_menu_items = array();
 
-        if ($account_page) {
-            $page = get_post( $account_page );
-            $users_wp_menu_items[] = array(
-                'name' => $page->post_title,
-                'slug' => $page->post_name,
-                'link' => get_permalink( $page->ID ),
-            );
+        if (!empty($account_page_data)) {
+            $users_wp_menu_items[] = $account_page_data;
         }
 
-        if ($profile_page) {
-            $page = get_post( $profile_page );
-            $users_wp_menu_items[] = array(
-                'name' => $page->post_title,
-                'slug' => $page->post_name,
-                'link' => get_permalink( $page->ID ),
-            );
+        if (!empty($change_page_data)) {
+            $users_wp_menu_items[] = $change_page_data;
         }
 
-        if ($change_page) {
-            $page = get_post( $change_page );
-            $users_wp_menu_items[] = array(
-                'name' => $page->post_title,
-                'slug' => $page->post_name,
-                'link' => get_permalink( $page->ID ),
-            );
+        if (!empty($profile_page_data)) {
+            $users_wp_menu_items[] = $profile_page_data;
         }
 
         $users_wp_menu_items[] = array(
@@ -261,38 +241,24 @@ class Users_WP_Menus {
      */
     public function users_wp_nav_menu_get_loggedout_pages() {
 
-        $register_page = uwp_get_option('register_page', false);
-        $login_page = uwp_get_option('login_page', false);
-        $forgot_page = uwp_get_option('forgot_page', false);
+        $register_page_data = uwp_get_page_url_data('register_page', 'array');
+        $login_page_data = uwp_get_page_url_data('login_page', 'array');
+        $forgot_page_data = uwp_get_page_url_data('forgot_page', 'array');
 
         $users_wp_menu_items = array();
 
-        if ($register_page) {
-            $page = get_post( $register_page );
-            $users_wp_menu_items[] = array(
-                'name' => $page->post_title,
-                'slug' => $page->post_name,
-                'link' => get_permalink( $page->ID ),
-            );
+        if (!empty($register_page_data)) {
+            $users_wp_menu_items[] = $register_page_data;
         }
 
-        if ($login_page) {
-            $page = get_post( $login_page );
-            $users_wp_menu_items[] = array(
-                'name' => $page->post_title,
-                'slug' => $page->post_name,
-                'link' => get_permalink( $page->ID ),
-            );
+        if (!empty($login_page_data)) {
+            $users_wp_menu_items[] = $login_page_data;
         }
 
-        if ($forgot_page) {
-            $page = get_post( $forgot_page );
-            $users_wp_menu_items[] = array(
-                'name' => $page->post_title,
-                'slug' => $page->post_name,
-                'link' => get_permalink( $page->ID ),
-            );
+        if (!empty($forgot_page_data)) {
+            $users_wp_menu_items[] = $forgot_page_data;
         }
+
 
         $users_wp_menu_items = apply_filters( 'users_wp_nav_menu_get_loggedout_pages', $users_wp_menu_items );
 
