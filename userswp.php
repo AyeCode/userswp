@@ -12,6 +12,7 @@ Text Domain: userswp
 Domain Path: /languages
 Requires at least: 3.1
 Tested up to: 4.6
+Update URL: https://github.com/UsersWP/userswp/
 */
 
 // If this file is called directly, abort.
@@ -83,3 +84,29 @@ function run_users_wp() {
     $plugin->run();
 }
 run_users_wp();
+
+
+/**
+ * Show update plugin admin notification.
+ */
+if(is_admin()){
+    if (!function_exists('ayecode_show_update_plugin_requirement')) {//only load the update file if needed
+        function ayecode_show_update_plugin_requirement() {
+            if ( !defined( 'WP_EASY_UPDATES_ACTIVE' ) ) {
+                ?>
+                <div class="notice notice-warning is-dismissible">
+                    <p>
+                        <strong>
+                            <?php
+                            echo sprintf( __( 'The plugin %sWP Easy Updates%s is required to check for and update some installed plugins, please install it now.', 'geodirectory' ), '<a href="https://wpeasyupdates.com/" target="_blank" title="WP Easy Updates">', '</a>' );
+                            ?>
+                        </strong>
+                    </p>
+                </div>
+                <?php
+            }
+        }
+
+        add_action( 'admin_notices', 'ayecode_show_update_plugin_requirement' );
+    }
+}
