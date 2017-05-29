@@ -353,6 +353,15 @@ function uwp_update_usermeta( $user_id = false, $key, $value ) {
 
     $value = uwp_maybe_serialize($key, $value);
 
+//    if ($key == 'uwp_account_display_name') {
+//        wp_update_user(
+//            array (
+//                'ID' => $user_id,
+//                'display_name' => $value
+//            )
+//        );
+//    }
+
     if (!empty($user_meta_info)) {
         $wpdb->query(
             $wpdb->prepare(
@@ -1621,10 +1630,14 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
 
             if (!isset($data[$field->htmlvar_name]) && $field->is_required == 1) {
-                if ($field->required_msg) {
-                    $errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->site_title.' '.$field->required_msg, 'userswp'));
+                if (is_admin()) {
+                    //do nothing since admin edit fields can be empty
                 } else {
-                    $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'userswp'));
+                    if ($field->required_msg) {
+                        $errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->site_title.' '.$field->required_msg, 'userswp'));
+                    } else {
+                        $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'userswp'));
+                    }
                 }
             }
 
@@ -1712,12 +1725,15 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
 
             if ($field->is_required == 1 && $sanitized_value == '') {
-                if ($field->required_msg) {
-                    $errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->site_title.' '.$field->required_msg, 'userswp'));
+                if (is_admin()) {
+                    //do nothing since admin edit fields can be empty
                 } else {
-                    $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'userswp'));
+                    if ($field->required_msg) {
+                        $errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->site_title.' '.$field->required_msg, 'userswp'));
+                    } else {
+                        $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'userswp'));
+                    }
                 }
-
             }
 
             if ($field->field_type == 'email' && !empty($sanitized_value) && !is_email($sanitized_value)) {
@@ -1736,11 +1752,13 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
             // Check the username for register
             if ($field->htmlvar_name == 'uwp_account_username') {
-                if (!validate_username($sanitized_value)) {
-                    $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'userswp'));
-                }
-                if (username_exists($sanitized_value)) {
-                    $errors->add('username_exists', __('<strong>Error</strong>: This username is already registered. Please choose another one.', 'userswp'));
+                if (!is_admin()) {
+                    if (!validate_username($sanitized_value)) {
+                        $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'userswp'));
+                    }
+                    if (username_exists($sanitized_value)) {
+                        $errors->add('username_exists', __('<strong>Error</strong>: This username is already registered. Please choose another one.', 'userswp'));
+                    }    
                 }
             }
 
