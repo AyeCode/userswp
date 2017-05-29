@@ -1809,13 +1809,28 @@ class Users_WP_Forms {
 
     // Update admin edit
     public function update_profile_extra_admin_edit($user_id) {
-        ob_start();
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         //Normal fields
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND field_type != 'fieldset' AND is_default = '0' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND field_type != 'fieldset' ORDER BY sort_order ASC");
         if ($fields) {
+            $_POST['uwp_account_first_name'] = $_POST['first_name'];
+            $_POST['uwp_account_last_name'] = $_POST['last_name'];
+            $_POST['uwp_account_display_name'] = $_POST['nickname'];
+            $_POST['uwp_account_email'] = $_POST['email'];
+            $_POST['uwp_account_bio'] = $_POST['description'];
             $result = uwp_validate_fields($_POST, 'account', $fields);
+            if (isset($result['uwp_account_display_name']) && !empty($result['uwp_account_display_name'])) {
+                $display_name = $result['uwp_account_display_name'];
+            } else {
+                if (!empty($first_name) || !empty($last_name)) {
+                    $display_name = $result['uwp_account_first_name'] . ' ' . $result['uwp_account_last_name'];
+                } else {
+                    $user_info = get_userdata($user_id);
+                    $display_name = $user_info->user_login;
+                }
+            }
+            $result['uwp_account_display_name'] = $display_name;
             if (!is_wp_error($result)) {
                 foreach ($fields as $field) {
                     $value = $result[$field->htmlvar_name];
