@@ -2338,6 +2338,7 @@ class Users_WP_Form_Builder {
             }
             $field_info = stripslashes_deep($field_info); // strip slashes
         }
+        $field_site_name = sanitize_title($field_site_name);
 
         if (isset($request['form_type'])) {
             $form_type = esc_attr($request['form_type']);

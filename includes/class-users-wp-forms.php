@@ -277,7 +277,7 @@ class Users_WP_Forms {
         }
 
         $result = apply_filters('uwp_before_extra_fields_save', $result, 'register', $user_id);
-
+        
         $save_result = $this->uwp_save_user_extra_fields($user_id, $result, 'register');
 
         $save_result = apply_filters('uwp_after_extra_fields_save', $save_result, $result, 'register', $user_id);
@@ -872,7 +872,7 @@ class Users_WP_Forms {
         if ($type == 'login' || $type == 'forgot') {
             return true;
         }
-
+        
 
         if ($type == 'account' || $type == 'register') {
             if (isset($data['password'])) {
