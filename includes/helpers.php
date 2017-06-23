@@ -1523,7 +1523,7 @@ function uwp_file_upload_preview($field, $value, $removable = true) {
     }
 
     if ($value) {
-        $file = basename( $value );
+        $file = sanitize_text_field(basename( $value ));
         $filetype = wp_check_filetype($file);
         $image_types = array('png', 'jpg', 'jpeg', 'gif');
         if (in_array($filetype['ext'], $image_types)) {
