@@ -1737,7 +1737,8 @@ function uwp_validate_fields($data, $type, $fields = false) {
             }
 
             if ($field->field_type == 'email' && !empty($sanitized_value) && !is_email($sanitized_value)) {
-                $errors->add('invalid_email', __('<strong>Error</strong>: The email address isn&#8217;t correct.', 'userswp'));
+                $incorrect_email_error_msg = apply_filters('uwp_incorrect_email_error_msg', __('<strong>Error</strong>: The email address isn&#8217;t correct.', 'userswp'));
+                $errors->add('invalid_email', $incorrect_email_error_msg);
             }
 
             //register email
@@ -1750,11 +1751,13 @@ function uwp_validate_fields($data, $type, $fields = false) {
                 $errors->add('email_exists', __('<strong>Error</strong>: This email doesn\'t exists.', 'userswp'));
             }
 
+            $incorrect_username_error_msg = apply_filters('uwp_incorrect_username_error_msg', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'userswp'));
+            
             // Check the username for register
             if ($field->htmlvar_name == 'uwp_account_username') {
                 if (!is_admin()) {
                     if (!validate_username($sanitized_value)) {
-                        $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'userswp'));
+                        $errors->add('invalid_username', $incorrect_username_error_msg);
                     }
                     if (username_exists($sanitized_value)) {
                         $errors->add('username_exists', __('<strong>Error</strong>: This username is already registered. Please choose another one.', 'userswp'));
@@ -1765,7 +1768,7 @@ function uwp_validate_fields($data, $type, $fields = false) {
             // Check the username for login
             if ($field->htmlvar_name == 'uwp_login_username') {
                 if (!validate_username($sanitized_value)) {
-                    $errors->add('invalid_username', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'userswp'));
+                    $errors->add('invalid_username', $incorrect_username_error_msg);
                 }
             }
 
