@@ -1304,8 +1304,9 @@ class Users_WP_Profile {
         foreach ($fields as $field) {
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);
             if ($key == $active_tab) {
+                $value = $this->uwp_get_field_value($field, $user);
                 echo '<div class="uwp_profile_tab_field_content">';
-                echo $this->uwp_get_field_value($field, $user);
+                echo $value;
                 echo '</div>';
             }
         }
@@ -1400,6 +1401,18 @@ class Users_WP_Profile {
         // File
         if ($field->field_type == 'file') {
             $value = uwp_file_upload_preview($field, $value, false);
+        }
+
+        // Sanitize
+        switch ($field->field_type) {
+            case 'url':
+                $value = esc_url( $value );
+                break;
+            case 'textarea':
+                $value = esc_textarea( $value );
+                break;
+            default:
+                $value = esc_html( $value );
         }
 
         return $value;
