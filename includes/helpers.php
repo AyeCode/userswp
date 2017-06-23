@@ -318,18 +318,32 @@ function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
     }
     
     $user_data = get_userdata($user_id);
-
-    if ($key == 'uwp_account_email') {
-        $value = $user_data->user_email;
-    } else {
+    if (uwp_str_ends_with($key, '_privacy')) {
+        $value = '1';
         $usermeta = uwp_get_usermeta_row($user_id);
         if (!empty($usermeta)) {
-            $value = $usermeta->{$key} ? $usermeta->{$key} : $default;
-        } else {
-            $value = $default;
+            $output = $usermeta->user_privacy ? $usermeta->user_privacy : $default;
+            if ($output) {
+                $public_fields = explode(',', $output);
+                if (in_array($key, $public_fields)) {
+                    $value = '0';
+                }
+            }
         }
+    } else {
+        if ($key == 'uwp_account_email') {
+            $value = $user_data->user_email;
+        } else {
+            $usermeta = uwp_get_usermeta_row($user_id);
+            if (!empty($usermeta)) {
+                $value = $usermeta->{$key} ? $usermeta->{$key} : $default;
+            } else {
+                $value = $default;
+            }
 
+        }
     }
+
     $value = uwp_maybe_unserialize($key, $value);
     $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
     return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
@@ -353,14 +367,44 @@ function uwp_update_usermeta( $user_id = false, $key, $value ) {
 
     $value = uwp_maybe_serialize($key, $value);
 
-//    if ($key == 'uwp_account_display_name') {
-//        wp_update_user(
-//            array (
-//                'ID' => $user_id,
-//                'display_name' => $value
-//            )
-//        );
-//    }
+    if (uwp_str_ends_with($key, '_privacy')) {
+        $public_fields = '';
+        if ($value == '0') {
+            if (!empty($user_meta_info)) {
+                $old_value = $user_meta_info->user_privacy;
+                if ($old_value) {
+                    $public_fields = explode(',', $old_value);
+                    if (!in_array($key, $public_fields)) {
+                        $public_fields[] = $key;
+                    }
+                    $public_fields = implode(',', $public_fields);
+                } else {
+                    $public_fields = array();
+                    $public_fields[] = $key;
+                    $public_fields = implode(',', $public_fields);
+                }
+
+            } else {
+                $public_fields = array();
+                $public_fields[] = $key;
+                $public_fields = implode(',', $public_fields);
+            }
+        } else {
+            if (!empty($user_meta_info)) {
+                $old_value = $user_meta_info->user_privacy;
+                if ($old_value) {
+                    $public_fields = explode(',', $old_value);
+                    if(($key = array_search($key, $public_fields)) !== false) {
+                        unset($public_fields[$key]);
+                    }
+                    $public_fields = implode(',', $public_fields);
+                }
+            }
+        }
+        $key = 'user_privacy';
+        $value = $public_fields;
+    }
+
 
     if (!empty($user_meta_info)) {
         $wpdb->query(
@@ -3333,6 +3377,7 @@ function uwp_create_tables()
     $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
 						user_id int(20) NOT NULL,
 						user_ip varchar(20) NULL DEFAULT NULL,
+						user_privacy varchar(255) NULL DEFAULT NULL,
 						uwp_account_username varchar(255) NULL DEFAULT NULL,
 						uwp_account_email varchar(255) NULL DEFAULT NULL,
 						uwp_account_first_name varchar(255) NULL DEFAULT NULL,
@@ -3383,4 +3428,42 @@ function uwp101_create_tables() {
     $user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);
 
     dbDelta($user_meta);
+}
+
+function uwp_get_ip() {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        //check ip from share internet
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        //to check ip is pass from proxy
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+
+    return apply_filters('uwp_get_ip', $ip);
+}
+
+function uwp_str_starts_with($haystack, $needle)
+{
+    $length = strlen($needle);
+    return (substr($haystack, 0, $length) === $needle);
+}
+
+function uwp_str_ends_with($haystack, $needle)
+{
+    $length = strlen($needle);
+    if ($length == 0) {
+        return true;
+    }
+
+    return (substr($haystack, -$length) === $needle);
+}
+
+add_action('uwp_before_extra_fields_save', 'uwp_save_user_ip_on_register', 10, 3);
+function uwp_save_user_ip_on_register($result, $type, $user_id) {
+    if ($type == 'register') {
+        $ip = uwp_get_ip();
+        uwp_update_usermeta($user_id, 'user_ip', $ip);
+    }
 }
