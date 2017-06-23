@@ -306,7 +306,7 @@ class Users_WP_Templates {
                    title="<?php echo $label; ?>"
                 <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                    type="<?php echo $field->field_type; ?>"
-                   value="<?php echo $value; ?>">
+                   value="<?php echo esc_html($value); ?>">
             <?php
         } else {
             echo $html;

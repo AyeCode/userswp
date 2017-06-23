@@ -1561,13 +1561,14 @@ function uwp_file_upload_preview($field, $value, $removable = true) {
         // If is another user's profile page
     } elseif (is_admin() && ! empty($_GET['user_id']) && is_numeric($_GET['user_id']) ) {
         $user_id = $_GET['user_id'];
+        $user_id = (int) sanitize_text_field($user_id);
         // Otherwise something is wrong.
     } else {
         $user_id = get_current_user_id();
     }
 
     if ($value) {
-        $file = sanitize_text_field(basename( $value ));
+        $file = basename( $value );
         $filetype = wp_check_filetype($file);
         $image_types = array('png', 'jpg', 'jpeg', 'gif');
         if (in_array($filetype['ext'], $image_types)) {
