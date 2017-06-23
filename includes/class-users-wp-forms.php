@@ -673,6 +673,13 @@ class Users_WP_Forms {
 
         do_action('uwp_after_validate', 'account');
 
+        //unset if value is empty for files
+        foreach ($uploads_result as $upload_file_key => $upload_file_value) {
+            if (empty($upload_file_value)) {
+                unset($uploads_result[$upload_file_key]);
+            }
+        }
+
         $result = array_merge( $result, $uploads_result );
 
 
