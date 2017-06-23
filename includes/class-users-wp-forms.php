@@ -823,6 +823,7 @@ class Users_WP_Forms {
                 $full_height = apply_filters('uwp_banner_image_height', 300);
             }
 
+            $image_url = esc_url($image_url);
             $uploads = wp_upload_dir();
             $upload_url = $uploads['baseurl'];
             $upload_path = $uploads['basedir'];
