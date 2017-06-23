@@ -200,6 +200,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'login',
             'field_type' => 'text',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('Username', 'userswp'),
             'htmlvar_name' => 'username',
             'default_value' => '',
@@ -212,6 +213,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'login',
             'field_type' => 'password',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('Password', 'userswp'),
             'htmlvar_name' => 'password',
             'default_value' => '',
@@ -233,6 +235,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'forgot',
             'field_type' => 'email',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('Email', 'userswp'),
             'htmlvar_name' => 'email',
             'default_value' => '',
@@ -254,6 +257,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'avatar',
             'field_type' => 'file',
+            'data_type' => 'TEXT',
             'site_title' => __('Avatar', 'userswp'),
             'htmlvar_name' => 'file',
             'default_value' => '',
@@ -284,6 +288,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'banner',
             'field_type' => 'file',
+            'data_type' => 'TEXT',
             'site_title' => __('Banner', 'userswp'),
             'htmlvar_name' => 'file',
             'default_value' => '',
@@ -314,6 +319,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'change',
             'field_type' => 'password',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('Old Password', 'userswp'),
             'htmlvar_name' => 'old_password',
             'default_value' => '',
@@ -326,6 +332,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'change',
             'field_type' => 'password',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('New Password', 'userswp'),
             'htmlvar_name' => 'password',
             'default_value' => '',
@@ -338,6 +345,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'change',
             'field_type' => 'password',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('Confirm Password', 'userswp'),
             'htmlvar_name' => 'confirm_password',
             'default_value' => '',
@@ -359,6 +367,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'reset',
             'field_type' => 'password',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('Password', 'userswp'),
             'htmlvar_name' => 'password',
             'default_value' => '',
@@ -371,6 +380,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'reset',
             'field_type' => 'password',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('Confirm Password', 'userswp'),
             'htmlvar_name' => 'confirm_password',
             'default_value' => '',
@@ -392,6 +402,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'text',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('First Name', 'userswp'),
             'htmlvar_name' => 'first_name',
             'default_value' => '',
@@ -408,6 +419,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'text',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('Last Name', 'userswp'),
             'htmlvar_name' => 'last_name',
             'default_value' => '',
@@ -424,6 +436,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'text',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('Username', 'userswp'),
             'htmlvar_name' => 'username',
             'default_value' => '',
@@ -440,6 +453,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'text',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('Display Name', 'userswp'),
             'htmlvar_name' => 'display_name',
             'default_value' => '',
@@ -455,6 +469,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'email',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('Email', 'userswp'),
             'htmlvar_name' => 'email',
             'default_value' => '',
@@ -469,6 +484,7 @@ class Users_WP_Activator {
 //        $fields[] = array(
 //            'form_type' => 'account',
 //            'field_type' => 'email',
+//            'data_type' => 'XVARCHAR',
 //            'site_title' => __('Confirm Email', 'userswp'),
 //            'htmlvar_name' => 'confirm_email',
 //            'default_value' => '',
@@ -484,6 +500,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'textarea',
+            'data_type' => 'TEXT',
             'site_title' => __('Bio', 'userswp'),
             'htmlvar_name' => 'bio',
             'default_value' => '',
@@ -499,6 +516,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'password',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('Password', 'userswp'),
             'htmlvar_name' => 'password',
             'default_value' => '',
@@ -513,6 +531,7 @@ class Users_WP_Activator {
         $fields[] = array(
             'form_type' => 'account',
             'field_type' => 'password',
+            'data_type' => 'XVARCHAR',
             'site_title' => __('Confirm Password', 'userswp'),
             'htmlvar_name' => 'confirm_password',
             'default_value' => '',
