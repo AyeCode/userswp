@@ -8,8 +8,8 @@
             <?php if (isset($_GET['key']) && isset($_GET['login'])) { ?>
                 <form class="uwp-login-form uwp_form" method="post">
                     <?php do_action('uwp_template_fields', 'reset'); ?>
-                    <input type="hidden" name="uwp_reset_username" value="<?php echo $_GET['login']; ?>" />
-                    <input type="hidden" name="uwp_reset_key" value="<?php echo $_GET['key']; ?>" />
+                    <input type="hidden" name="uwp_reset_username" value="<?php echo sanitize_text_field($_GET['login']); ?>" />
+                    <input type="hidden" name="uwp_reset_key" value="<?php echo sanitize_text_field($_GET['key']); ?>" />
                     <input type="hidden" name="uwp_reset_nonce" value="<?php echo wp_create_nonce( 'uwp-reset-nonce' ); ?>" />
                     <input name="uwp_reset_submit" value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit"><br>
                 </form>

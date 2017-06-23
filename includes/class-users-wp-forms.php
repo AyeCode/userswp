@@ -823,6 +823,7 @@ class Users_WP_Forms {
                 $full_height = apply_filters('uwp_banner_image_height', 300);
             }
 
+            $image_url = esc_url($image_url);
             $uploads = wp_upload_dir();
             $upload_url = $uploads['baseurl'];
             $upload_path = $uploads['basedir'];
@@ -890,8 +891,12 @@ class Users_WP_Forms {
         }
     }
 
-    public function uwp_send_email( $message_type, $user_id, $login_details = "" ) {
+    public function uwp_send_email( $message_type, $user_id, $login_details = false ) {
         $user_data = get_userdata($user_id);
+
+        if (!$login_details) {
+            $login_details = "";
+        }
 
         $login_page_id = uwp_get_option('login_page', false);
         if ($login_page_id) {
