@@ -273,6 +273,7 @@ class Users_WP {
         $this->loader->add_filter( 'uwp_form_input_html_radio', $forms, 'uwp_form_input_radio', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_url', $forms, 'uwp_form_input_url', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_email', $forms, 'uwp_form_input_email', 10, 4 );
+        $this->loader->add_filter( 'uwp_form_input_html_password', $forms, 'uwp_form_input_password', 10, 4 );
 
         $this->loader->add_action( 'wp_ajax_uwp_upload_file_remove', $forms, 'uwp_upload_file_remove' );
 
@@ -386,6 +387,8 @@ class Users_WP {
         $this->loader->add_filter('uwp_builder_extra_fields_select', $form_builder, 'uwp_builder_extra_fields_smr', 10, 4);
         $this->loader->add_filter('uwp_builder_extra_fields_radio', $form_builder, 'uwp_builder_extra_fields_smr', 10, 4);
         $this->loader->add_filter('uwp_builder_extra_fields_datepicker', $form_builder, 'uwp_builder_extra_fields_datepicker', 10, 4);
+        $this->loader->add_filter('uwp_builder_extra_fields_password', $form_builder, 'uwp_builder_extra_fields_password', 10, 4);
+        $this->loader->add_filter('uwp_builder_extra_fields_email', $form_builder, 'uwp_builder_extra_fields_email', 10, 4);
         $this->loader->add_filter('uwp_builder_extra_fields_file', $form_builder, 'uwp_builder_extra_fields_file', 10, 4);
         $this->loader->add_filter('uwp_builder_data_type_text', $form_builder, 'uwp_builder_data_type_text', 10, 4);
 

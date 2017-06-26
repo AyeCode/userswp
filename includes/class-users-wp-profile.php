@@ -30,6 +30,8 @@ class Users_WP_Profile {
     public function get_profile_header($user) {
         $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
         $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar_thumb', '');
+        $uploads = wp_upload_dir();
+        $upload_url = $uploads['baseurl'];
         if (is_user_logged_in() && get_current_user_id() == $user->ID && is_uwp_profile_page()) {
             $trigger_class = "uwp-profile-modal-form-trigger";
         } else {
@@ -42,8 +44,10 @@ class Users_WP_Profile {
         if (empty($avatar)) {
             $avatar = get_avatar($user->user_email, 150);
         } else {
+            $avatar = $upload_url.$avatar;
             $avatar = '<img src="'.$avatar.'" class="avatar avatar-150 photo" width="150" height="150">';
         }
+        $banner = $upload_url.$banner;
         ?>
         <div class="uwp-profile-header">
             <div class="uwp-profile-header-img">
@@ -1233,7 +1237,7 @@ class Users_WP_Profile {
                 <?php
                 $keyword = "";
                 if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
-                    $keyword = strip_tags(esc_sql($_GET['uwps']));
+                    $keyword = stripslashes(strip_tags($_GET['uwps']));
                 }
                 ?>
                 <form method="get" class="searchform search-form" action="<?php echo get_uwp_users_permalink(); ?>">
@@ -1277,19 +1281,28 @@ class Users_WP_Profile {
 
     public function uwp_extra_fields_as_tabs($tabs, $user)
     {
-        
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public = '1' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+        $usermeta = uwp_get_usermeta_row($user->ID);
+        $privacy = $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
 
         foreach ($fields as $field) {
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);
-            $tabs[$key] = array(
-                'title' => __($field->site_title, 'userswp'),
-                'count' => 1
-            );
+            if ($field->is_public == '1') {
+                $tabs[$key] = array(
+                    'title' => __($field->site_title, 'userswp'),
+                    'count' => 1
+                );
+            } else {
+                if (!in_array($field->htmlvar_name.'_privacy', $privacy)) {
+                    $tabs[$key] = array(
+                        'title' => __($field->site_title, 'userswp'),
+                        'count' => 1
+                    );
+                }
+            }
         }
-
         return $tabs;
     }
 
@@ -1299,7 +1312,7 @@ class Users_WP_Profile {
 
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public = '1' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
 
         foreach ($fields as $field) {
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);

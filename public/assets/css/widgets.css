@@ -483,6 +483,23 @@
 .uwp_widgets .uwp-lf-icon {
   display: none; }
 
+.uwp_page .ui-timepicker-div dl {
+  margin-top: 0;
+  margin-bottom: 20px; }
+.uwp_page .ui-timepicker-div dd {
+  margin-left: 180px; }
+.uwp_page .ui-timepicker-div dt {
+  float: left;
+  width: 160px;
+  overflow: hidden;
+  clear: left;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700; }
+.uwp_page .ui-timepicker-div dd, .uwp_page .ui-timepicker-div dt {
+  line-height: 1.42857143; }
+
 /*--------------------------------------------------------------
 Alerts
 --------------------------------------------------------------*/

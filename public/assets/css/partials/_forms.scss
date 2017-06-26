@@ -185,3 +185,29 @@
     display: none;
   }
 }
+
+.uwp_page {
+  .ui-timepicker-div {
+    dl {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+    dd {
+      margin-left: 180px;
+    }
+    dt {
+      float: left;
+      width: 160px;
+      overflow: hidden;
+      clear: left;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 700;
+    }
+
+    dd, dt {
+      line-height: 1.42857143;
+    }
+  }
+}

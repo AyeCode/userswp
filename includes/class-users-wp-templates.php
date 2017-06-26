@@ -219,14 +219,12 @@ class Users_WP_Templates {
 
                 if ($form_type == 'account') {
                     if ($field->htmlvar_name == 'uwp_account_display_name') {
-                        $disable_display_name = uwp_get_option('disable_display_name_field', false);
-                        if ($disable_display_name == '1') {
+                        if ($field->is_active != '1') {
                             continue;
                         }
                     }
                     if ($field->htmlvar_name == 'uwp_account_bio') {
-                        $disable_bio = uwp_get_option('disable_bio_field', false);
-                        if ($disable_bio == '1') {
+                        if ($field->is_active != '1') {
                             continue;
                         }
                     }

@@ -318,19 +318,9 @@ function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
     }
     
     $user_data = get_userdata($user_id);
-    if (uwp_str_ends_with($key, '_privacy')) {
-        $value = '1';
-        $usermeta = uwp_get_usermeta_row($user_id);
-        if (!empty($usermeta)) {
-            $output = $usermeta->user_privacy ? $usermeta->user_privacy : $default;
-            if ($output) {
-                $public_fields = explode(',', $output);
-                if (in_array($key, $public_fields)) {
-                    $value = '0';
-                }
-            }
-        }
-    } else {
+    $value = null;
+
+    if (!uwp_str_ends_with($key, '_privacy')) {
         if ($key == 'uwp_account_email') {
             $value = $user_data->user_email;
         } else {
@@ -343,6 +333,7 @@ function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
 
         }
     }
+
 
     $value = uwp_maybe_unserialize($key, $value);
     $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
@@ -357,54 +348,20 @@ function uwp_update_usermeta( $user_id = false, $key, $value ) {
 
     global $wpdb;
     $meta_table = uwp_get_table_prefix() . 'uwp_usermeta';
-
-    $value = apply_filters( 'uwp_update_usermeta', $value, $user_id, $key );
-    $value =  apply_filters( 'uwp_update_usermeta_' . $key, $value, $user_id, $key );
-
-    do_action( 'uwp_before_update_usermeta', $user_id, $key, $value );
-
     $user_meta_info = uwp_get_usermeta_row($user_id);
+
+
+    $value = apply_filters( 'uwp_update_usermeta', $value, $user_id, $key, $user_meta_info );
+    $value =  apply_filters( 'uwp_update_usermeta_' . $key, $value, $user_id, $key, $user_meta_info );
+
+    do_action( 'uwp_before_update_usermeta', $user_id, $key, $value, $user_meta_info );
+
 
     $value = uwp_maybe_serialize($key, $value);
 
     if (uwp_str_ends_with($key, '_privacy')) {
-        $public_fields = '';
-        if ($value == '0') {
-            if (!empty($user_meta_info)) {
-                $old_value = $user_meta_info->user_privacy;
-                if ($old_value) {
-                    $public_fields = explode(',', $old_value);
-                    if (!in_array($key, $public_fields)) {
-                        $public_fields[] = $key;
-                    }
-                    $public_fields = implode(',', $public_fields);
-                } else {
-                    $public_fields = array();
-                    $public_fields[] = $key;
-                    $public_fields = implode(',', $public_fields);
-                }
-
-            } else {
-                $public_fields = array();
-                $public_fields[] = $key;
-                $public_fields = implode(',', $public_fields);
-            }
-        } else {
-            if (!empty($user_meta_info)) {
-                $old_value = $user_meta_info->user_privacy;
-                if ($old_value) {
-                    $public_fields = explode(',', $old_value);
-                    if(($key = array_search($key, $public_fields)) !== false) {
-                        unset($public_fields[$key]);
-                    }
-                    $public_fields = implode(',', $public_fields);
-                }
-            }
-        }
         $key = 'user_privacy';
-        $value = $public_fields;
     }
-
 
     if (!empty($user_meta_info)) {
         $wpdb->query(
@@ -1384,7 +1341,7 @@ function get_uwp_users_list() {
 
     $keyword = false;
     if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
-        $keyword = strip_tags(esc_sql($_GET['uwps']));
+        $keyword = stripslashes(strip_tags($_GET['uwps']));
     }
 
     $sort_by = false;
@@ -1628,7 +1585,22 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
     $validated_data = array();
     $enable_password = uwp_get_option('enable_register_password', false);
-    $enable_confirm_email_field = uwp_get_option('enable_confirm_email_field', false);
+
+
+    $email_field = uwp_get_custom_field_info('uwp_account_email');
+    $email_extra = array();
+    if (isset($email_field->extra_fields) && $email_field->extra_fields != '') {
+        $email_extra = unserialize($email_field->extra_fields);
+    }
+    $enable_confirm_email_field = isset($email_extra['confirm_email']) ? $email_extra['confirm_email'] : '0';
+
+    $password_field = uwp_get_custom_field_info('uwp_account_password');
+    $password_extra = array();
+    if (isset($password_field->extra_fields) && $password_field->extra_fields != '') {
+        $password_extra = unserialize($password_field->extra_fields);
+    }
+    $enable_confirm_password_field = isset($password_extra['confirm_password']) ? $password_extra['confirm_password'] : '0';
+
     $enable_old_password = uwp_get_option('change_enable_old_password', false);
 
     if ($type == 'account' || $type == 'change') {
@@ -1644,20 +1616,6 @@ function uwp_validate_fields($data, $type, $fields = false) {
                 continue;
             }
 
-            if ($type == 'account') {
-                if ($field->htmlvar_name == 'uwp_account_display_name') {
-                    $disable_display_name = uwp_get_option('disable_display_name_field', false);
-                    if ($disable_display_name == '1') {
-                        continue;
-                    }
-                }
-                if ($field->htmlvar_name == 'uwp_account_bio') {
-                    $disable_bio = uwp_get_option('disable_bio_field', false);
-                    if ($disable_bio == '1') {
-                        continue;
-                    }
-                }
-            }
 
             if ($type == 'register') {
                 if ($enable_password != '1') {
@@ -1905,12 +1863,17 @@ function uwp_validate_fields($data, $type, $fields = false) {
         return $errors;
 
     if (($type == 'register' && $enable_password == '1') || $type == 'reset' || $type == 'change') {
-        //check password
-        if ($data['uwp_'.$password_type.'_password'] != $data['uwp_'.$password_type.'_confirm_password']) {
-            $errors->add('pass_match', __('ERROR: Passwords do not match.', 'userswp'));
-        }
 
-        $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
+        if (($type == 'register' && $enable_confirm_password_field != '1')) {
+            $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
+        } else {
+            //check password
+            if ($data['uwp_'.$password_type.'_password'] != $data['uwp_'.$password_type.'_confirm_password']) {
+                $errors->add('pass_match', __('ERROR: Passwords do not match.', 'userswp'));
+            }
+
+            $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
+        }
     }
 
 
@@ -2077,7 +2040,6 @@ function uwp_get_settings_tabs() {
         'main' => __( 'General', 'userswp' ),
         'register' => __( 'Register', 'userswp' ),
         'login' => __( 'Login', 'userswp' ),
-        'account' => __( 'Account', 'userswp' ),
         'change' => __( 'Change Password', 'userswp' ),
         'profile' => __( 'Profile', 'userswp' ),
         'users' => __( 'Users', 'userswp' ),
@@ -2598,14 +2560,6 @@ function uwp_settings_general_register_fields() {
             'std'  => '1',
             'class' => 'uwp_label_inline',
         ),
-        'enable_confirm_email_field' => array(
-            'id'   => 'enable_confirm_email_field',
-            'name' => __( 'Enable "Confirm Email" Field', 'userswp' ),
-            'desc' => 'If enabled email field will be displayed twice to make sure user not typing the wrong email.',
-            'type' => 'checkbox',
-            'std'  => '1',
-            'class' => 'uwp_label_inline',
-        ),
         'register_redirect_to' => array(
             'id' => 'register_redirect_to',
             'name' => __( 'Register Redirect Page', 'userswp' ),
@@ -2857,7 +2811,12 @@ function uwp_template_fields_terms_check($form_type) {
 add_filter('uwp_form_input_email_uwp_account_email_after', 'uwp_register_confirm_email_field', 10, 4);
 function uwp_register_confirm_email_field($html, $field, $value, $form_type) {
     if ($form_type == 'register') {
-        $enable_confirm_email_field = uwp_get_option('enable_confirm_email_field', false);
+        //confirm email field
+        $extra = array();
+        if (isset($field->extra_fields) && $field->extra_fields != '') {
+            $extra = unserialize($field->extra_fields);
+        }
+        $enable_confirm_email_field = isset($extra['confirm_email']) ? $extra['confirm_email'] : '0';
         if ($enable_confirm_email_field == '1') {
             ob_start(); // Start  buffering;
             ?>
@@ -2881,6 +2840,49 @@ function uwp_register_confirm_email_field($html, $field, $value, $form_type) {
                        title="<?php echo $site_title; ?>"
                     <?php echo 'required="required"'; ?>
                        type="email"
+                />
+            </div>
+
+            <?php
+            $confirm_html = ob_get_clean();
+            $html = $html.$confirm_html;
+        }
+    }
+    return $html;
+}
+
+add_filter('uwp_form_input_password_uwp_account_password_after', 'uwp_register_confirm_password_field', 10, 4);
+function uwp_register_confirm_password_field($html, $field, $value, $form_type) {
+    if ($form_type == 'register') {
+        //confirm password field
+        $extra = array();
+        if (isset($field->extra_fields) && $field->extra_fields != '') {
+            $extra = unserialize($field->extra_fields);
+        }
+        $enable_confirm_password_field = isset($extra['confirm_password']) ? $extra['confirm_password'] : '0';
+        if ($enable_confirm_password_field == '1') {
+            ob_start(); // Start  buffering;
+            ?>
+            <div id="uwp_account_confirm_password_row"
+                 class="<?php echo 'required_field';?> uwp_form_password_row">
+
+                <?php
+                $site_title = __("Confirm Password", 'userswp');
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php echo '<span>*</span>'; ?>
+                    </label>
+                <?php } ?>
+
+                <input name="uwp_account_confirm_password"
+                       class="uwp_textfield"
+                       id="uwp_account_confirm_password"
+                       placeholder="<?php echo $site_title; ?>"
+                       value=""
+                       title="<?php echo $site_title; ?>"
+                    <?php echo 'required="required"'; ?>
+                       type="password"
                 />
             </div>
 
@@ -3461,10 +3463,107 @@ function uwp_str_ends_with($haystack, $needle)
     return (substr($haystack, -$length) === $needle);
 }
 
-add_action('uwp_before_extra_fields_save', 'uwp_save_user_ip_on_register', 10, 3);
+add_filter('uwp_before_extra_fields_save', 'uwp_save_user_ip_on_register', 10, 3);
 function uwp_save_user_ip_on_register($result, $type, $user_id) {
     if ($type == 'register') {
         $ip = uwp_get_ip();
         uwp_update_usermeta($user_id, 'user_ip', $ip);
+    }
+    return $result;
+}
+
+add_filter('uwp_update_usermeta', 'uwp_modify_privacy_value_on_update', 10, 4);
+function uwp_modify_privacy_value_on_update($value, $user_id, $key, $user_meta_info) {
+    if (uwp_str_ends_with($key, '_privacy')) {
+        $public_fields = '';
+        if ($value == '0') {
+            if (!empty($user_meta_info)) {
+                $old_value = $user_meta_info->user_privacy;
+                if ($old_value) {
+                    $public_fields = explode(',', $old_value);
+                    if (!in_array($key, $public_fields)) {
+                        $public_fields[] = $key;
+                    }
+                    $public_fields = implode(',', $public_fields);
+                } else {
+                    $public_fields = array();
+                    $public_fields[] = $key;
+                    $public_fields = implode(',', $public_fields);
+                }
+
+            } else {
+                $public_fields = array();
+                $public_fields[] = $key;
+                $public_fields = implode(',', $public_fields);
+            }
+        } else {
+            if (!empty($user_meta_info)) {
+                $old_value = $user_meta_info->user_privacy;
+                if ($old_value) {
+                    $public_fields = explode(',', $old_value);
+                    if(($key = array_search($key, $public_fields)) !== false) {
+                        unset($public_fields[$key]);
+                    }
+                    $public_fields = implode(',', $public_fields);
+                }
+            }
+        }
+        $value = $public_fields;
+    }
+    return $value;
+}
+
+add_filter('uwp_get_usermeta', 'uwp_modify_privacy_value_on_get', 10, 4);
+function uwp_modify_privacy_value_on_get($value, $user_id, $key, $default) {
+    if (uwp_str_ends_with($key, '_privacy')) {
+        $value = '1';
+        $usermeta = uwp_get_usermeta_row($user_id);
+        if (!empty($usermeta)) {
+            $output = $usermeta->user_privacy ? $usermeta->user_privacy : $default;
+            if ($output) {
+                $public_fields = explode(',', $output);
+                if (in_array($key, $public_fields)) {
+                    $value = '0';
+                }
+            }
+        }
+    }
+    return $value;
+}
+
+add_filter('uwp_update_usermeta', 'uwp_modify_datepicker_value_on_update', 10, 3);
+function uwp_modify_datepicker_value_on_update($value, $user_id, $key) {
+    // modify timestamp to date
+    if (is_int($value)) {
+        $field_info = uwp_get_custom_field_info($key);
+        if ($field_info->field_type == 'datepicker') {
+            $value = date('Y-m-d', $value);
+        }
+    }
+    return $value;
+}
+
+add_filter('uwp_get_usermeta', 'uwp_modify_datepicker_value_on_get', 10, 3);
+function uwp_modify_datepicker_value_on_get($value, $user_id, $key) {
+    // modify date to timestamp
+    if (is_string($value) && (strpos($value, '-') !== false)) {
+        $field_info = uwp_get_custom_field_info($key);
+        if (isset($field_info->field_type) && $field_info->field_type == 'datepicker') {
+            $value = strtotime($value);
+        }
+    }
+    return $value;
+}
+
+
+add_action('uwp_template_display_notices', 'uwp_display_registration_disabled_notice');
+function uwp_display_registration_disabled_notice($type) {
+    if ($type == 'register') {
+        if (!get_option('users_can_register')) {
+            $message = __('<strong>Heads Up!</strong><br/> User registration is currently not allowed.', 'userswp');
+            echo '<div class="uwp-alert-error text-center">';
+            echo $message;
+            echo '</div>';
+        }
     }
 }
