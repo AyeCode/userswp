@@ -842,6 +842,9 @@ class Users_WP_Forms {
             //$scale = 1; // no scaling
             $cropped = uwp_resizeThumbnailImage($thumb_image_location, $image_url,$x, $y, $w, $h,$scale);
             $cropped = str_replace($upload_path, $upload_url, $cropped);
+
+            // remove the uploads path for easy migrations
+            $cropped = str_replace($upload_url, '', $cropped);
             if ($type == 'avatar') {
                 uwp_update_usermeta($user_id, 'uwp_account_avatar_thumb', $cropped);
             } else {
@@ -879,6 +882,7 @@ class Users_WP_Forms {
                 unset($data['password']);
             }
         }
+
 
         if (empty($data)) {
             // no extra fields. so just return
@@ -1798,12 +1802,65 @@ class Users_WP_Forms {
                 <?php } ?>
             </div>
 
+
             <?php
             $html = ob_get_clean();
         }
 
         if(has_filter("uwp_form_input_email_{$field->htmlvar_name}_after")){
             $html = apply_filters("uwp_form_input_email_{$field->htmlvar_name}_after",$html, $field, $value, $form_type);
+        }
+
+        return $html;
+    }
+
+    public function uwp_form_input_password($html, $field, $value, $form_type){
+
+
+        // Check if there is a custom field specific filter.
+        if(has_filter("uwp_form_input_password_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_password_{$field->htmlvar_name}",$html, $field, $value, $form_type);
+        }
+
+        // If no html then we run the standard output.
+        if(empty($html)) {
+
+            ob_start(); // Start  buffering;
+            ?>
+            <div id="<?php echo $field->htmlvar_name;?>_row"
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+
+                <?php
+                $site_title = uwp_get_form_label($field);
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php if ($field->is_required) echo '<span>*</span>';?>
+                    </label>
+                <?php } ?>
+
+                <input name="<?php echo $field->htmlvar_name;?>"
+                       class="<?php echo $field->css_class; ?> uwp_textfield"
+                       id="<?php echo $field->htmlvar_name;?>"
+                       placeholder="<?php echo $site_title; ?>"
+                       value="<?php echo esc_attr(stripslashes($value));?>"
+                       title="<?php echo $site_title; ?>"
+                    <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                       type="password"
+                />
+                <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
+                <?php if ($field->is_required) { ?>
+                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                <?php } ?>
+            </div>
+
+
+            <?php
+            $html = ob_get_clean();
+        }
+
+        if(has_filter("uwp_form_input_password_{$field->htmlvar_name}_after")){
+            $html = apply_filters("uwp_form_input_password_{$field->htmlvar_name}_after",$html, $field, $value, $form_type);
         }
 
         return $html;
