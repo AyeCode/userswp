@@ -145,26 +145,7 @@ class Users_WP_Menus {
 
         $users_wp_menu_items = apply_filters( 'users_wp_nav_menu_get_common_pages', $users_wp_menu_items );
 
-        // If there's nothing to show, we're done
-        if ( count( $users_wp_menu_items ) < 1 ) {
-            return false;
-        }
-
-        $page_args = array();
-
-        foreach ( $users_wp_menu_items as $users_wp_item ) {
-            $page_args[ $users_wp_item['slug'] ] = (object) array(
-                'ID'             => -1,
-                'post_title'     => $users_wp_item['name'],
-                'post_author'    => 0,
-                'post_date'      => 0,
-                'post_excerpt'   => $users_wp_item['slug'],
-                'post_type'      => 'page',
-                'post_status'    => 'publish',
-                'comment_status' => 'closed',
-                'guid'           => $users_wp_item['link']
-            );
-        }
+        $page_args = $this->users_wp_admin_wp_nav_menu_page_args($users_wp_menu_items);
 
         return $page_args;
 
@@ -206,26 +187,7 @@ class Users_WP_Menus {
 
         $users_wp_menu_items = apply_filters( 'users_wp_nav_menu_get_loggedin_pages', $users_wp_menu_items );
 
-        // If there's nothing to show, we're done
-        if ( count( $users_wp_menu_items ) < 1 ) {
-            return false;
-        }
-
-        $page_args = array();
-
-        foreach ( $users_wp_menu_items as $users_wp_item ) {
-            $page_args[ $users_wp_item['slug'] ] = (object) array(
-                'ID'             => -1,
-                'post_title'     => $users_wp_item['name'],
-                'post_author'    => 0,
-                'post_date'      => 0,
-                'post_excerpt'   => $users_wp_item['slug'],
-                'post_type'      => 'page',
-                'post_status'    => 'publish',
-                'comment_status' => 'closed',
-                'guid'           => $users_wp_item['link']
-            );
-        }
+        $page_args = $this->users_wp_admin_wp_nav_menu_page_args($users_wp_menu_items);
 
         return $page_args;
 
@@ -262,26 +224,7 @@ class Users_WP_Menus {
 
         $users_wp_menu_items = apply_filters( 'users_wp_nav_menu_get_loggedout_pages', $users_wp_menu_items );
 
-        // If there's nothing to show, we're done
-        if ( count( $users_wp_menu_items ) < 1 ) {
-            return false;
-        }
-
-        $page_args = array();
-
-        foreach ( $users_wp_menu_items as $users_wp_item ) {
-            $page_args[ $users_wp_item['slug'] ] = (object) array(
-                'ID'             => -1,
-                'post_title'     => $users_wp_item['name'],
-                'post_author'    => 0,
-                'post_date'      => 0,
-                'post_excerpt'   => $users_wp_item['slug'],
-                'post_type'      => 'page',
-                'post_status'    => 'publish',
-                'comment_status' => 'closed',
-                'guid'           => $users_wp_item['link']
-            );
-        }
+        $page_args = $this->users_wp_admin_wp_nav_menu_page_args($users_wp_menu_items);
 
         return $page_args;
 
@@ -307,5 +250,30 @@ class Users_WP_Menus {
             });
         </script>
         <?php
+    }
+
+    public function users_wp_admin_wp_nav_menu_page_args($users_wp_menu_items) {
+        // If there's nothing to show, we're done
+        if ( count( $users_wp_menu_items ) < 1 ) {
+            return false;
+        }
+
+        $page_args = array();
+
+        foreach ( $users_wp_menu_items as $users_wp_item ) {
+            $page_args[ $users_wp_item['slug'] ] = (object) array(
+                'ID'             => -1,
+                'post_title'     => $users_wp_item['name'],
+                'post_author'    => 0,
+                'post_date'      => 0,
+                'post_excerpt'   => $users_wp_item['slug'],
+                'post_type'      => 'page',
+                'post_status'    => 'publish',
+                'comment_status' => 'closed',
+                'guid'           => $users_wp_item['link']
+            );
+        }
+
+        return $page_args;
     }
 }

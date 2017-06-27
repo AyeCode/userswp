@@ -91,8 +91,13 @@ class Users_WP_Public {
         $enable_chosen_in_register = false;
         $enable_chosen_in_account = false;
 
-        if (is_uwp_register_page() ) {
-            $fields = get_register_form_fields();
+        if (is_uwp_register_page() || is_uwp_account_page()) {
+            if (is_uwp_register_page()) {
+                $fields = get_register_form_fields();
+            } else {
+                // account page
+                $fields = get_account_form_fields();
+            }
             if (!empty($fields)) {
                 foreach ($fields as $field) {
                     if ($field->field_type == 'time') {
@@ -105,21 +110,7 @@ class Users_WP_Public {
                 }
             }
         }
-
-        if (is_uwp_account_page() ) {
-            $fields = get_account_form_fields();
-            if (!empty($fields)) {
-                foreach ($fields as $field) {
-                    if ($field->field_type == 'time') {
-                        $enable_timepicker_in_account = true;
-                    }
-
-                    if ($field->field_type == 'multiselect') {
-                        $enable_chosen_in_account = true;
-                    }
-                }
-            }
-        }
+        
 
         if ($enable_timepicker_in_register || $enable_timepicker_in_account) {
             // time fields available only in register and account pages
@@ -180,8 +171,14 @@ class Users_WP_Public {
         $enable_chosen_in_register = false;
         $enable_chosen_in_account = false;
         
-        if (is_uwp_register_page() ) {
-            $fields = get_register_form_fields();
+        if (is_uwp_register_page() || is_uwp_account_page()) {
+            if (is_uwp_register_page()) {
+                $fields = get_register_form_fields();    
+            } else {
+                // account page
+                $fields = get_account_form_fields();
+            }
+            
             if (!empty($fields)) {
                 foreach ($fields as $field) {
                     if ($field->field_type == 'time') {
@@ -198,26 +195,7 @@ class Users_WP_Public {
                 }
             }
         }
-
-        if (is_uwp_account_page() ) {
-            $fields = get_account_form_fields();
-            if (!empty($fields)) {
-                foreach ($fields as $field) {
-                    if ($field->field_type == 'time') {
-                        $enable_timepicker_in_account = true;
-                    }
-
-                    if ($field->field_type == 'datepicker') {
-                        $enable_datepicker_in_account = true;
-                    }
-
-                    if ($field->field_type == 'multiselect') {
-                        $enable_chosen_in_account = true;
-                    }
-                }
-            }
-        }
-
+        
         if ($enable_timepicker_in_register || $enable_timepicker_in_account) {
             // time fields available only in register and account pages
             wp_enqueue_script( "uwp_timepicker", plugin_dir_url( __FILE__ ) . 'assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );

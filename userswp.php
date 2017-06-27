@@ -29,6 +29,7 @@ define( 'USERSWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-users-wp-activator.php
+ * @param $network_wide
  */
 function activate_users_wp($network_wide) {
     if (is_multisite()) {

@@ -71,6 +71,7 @@ class Users_WP_Admin {
      * Register the stylesheets for the admin area.
      *
      * @since    1.0.0
+     * @param $hook_suffix
      */
     public function enqueue_styles($hook_suffix) {
 
@@ -103,6 +104,7 @@ class Users_WP_Admin {
      * Register the JavaScript for the admin area.
      *
      * @since    1.0.0
+     * @param $hook_suffix
      */
     public function enqueue_scripts($hook_suffix) {
 

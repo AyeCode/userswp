@@ -309,6 +309,7 @@ class Users_WP_Forms {
             $user_data = get_user_by('id', $user_id);
             do_action( 'uwp_activation_key', $user_data->user_login, $key );
 
+            global $wp_hasher;
             if ( empty( $wp_hasher ) ) {
                 require_once ABSPATH . 'wp-includes/class-phpass.php';
                 $wp_hasher = new PasswordHash( 8, true );
@@ -491,17 +492,10 @@ class Users_WP_Forms {
 
         $res = $this->uwp_send_email( 'forgot', $user_data->ID, $login_details );
 
-        if (!$res) {
-            if (get_option('admin_email') == $data['uwp_forgot_email']) {
-                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please check your site error log for more details.', 'userswp'));
-            } else {
-                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
-            }
-
+        $res = apply_filters('uwp_forms_check_for_send_mail_errors', $res, $user_data, $errors);
+        if (is_wp_error($res)) {
+            return $res;
         }
-
-        if ($errors->get_error_code())
-            return $errors;
 
         return true;
     }
@@ -534,16 +528,10 @@ class Users_WP_Forms {
         
         $res = $this->uwp_send_email( 'change', $user_data->ID );
 
-        if (!$res) {
-            if (get_option('admin_email') == $user_data->user_email) {
-                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please check your site error log for more details.', 'userswp'));
-            } else {
-                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
-            }
+        $res = apply_filters('uwp_forms_check_for_send_mail_errors', $res, $user_data, $errors);
+        if (is_wp_error($res)) {
+            return $res;
         }
-
-        if ($errors->get_error_code())
-            return $errors;
 
         wp_set_password( $data['uwp_change_password'], $user_data->ID );
         wp_set_auth_cookie( $user_data->ID, false);
@@ -581,17 +569,10 @@ class Users_WP_Forms {
         
         $res = $this->uwp_send_email( 'reset', $user_data->ID );
 
-        if (!$res) {
-            if (get_option('admin_email') == $user_data->user_email) {
-                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please check your site error log for more details.', 'userswp'));
-            } else {
-                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
-            }
-
+        $res = apply_filters('uwp_forms_check_for_send_mail_errors', $res, $user_data, $errors);
+        if (is_wp_error($res)) {
+            return $res;
         }
-
-        if ($errors->get_error_code())
-            return $errors;
 
         wp_set_password( $data['uwp_reset_password'], $user_data->ID );
 
@@ -736,18 +717,12 @@ class Users_WP_Forms {
             $user_data = get_user_by('id', $user_id);
             
             $res = $this->uwp_send_email( 'account', $user_data->ID );
-
-            if (!$res) {
-                if (get_option('admin_email') == $user_data->user_email) {
-                    $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please check your site error log for more details.', 'userswp'));
-                } else {
-                    $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
-                }
-
+            
+            $res = apply_filters('uwp_forms_check_for_send_mail_errors', $res, $user_data, $errors);
+            if (is_wp_error($res)) {
+                return $res;
             }
-
-            if ($errors->get_error_code())
-                return $errors;
+            
         }
         
         return true;
@@ -817,10 +792,8 @@ class Users_WP_Forms {
         if ($image_url) {
             if ($type == 'avatar') {
                 $full_width  = apply_filters('uwp_avatar_image_width', 150);
-                $full_height = apply_filters('uwp_avatar_image_height', 150);
             } else {
                 $full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('profile_banner_width', 1000));
-                $full_height = apply_filters('uwp_banner_image_height', 300);
             }
 
             $image_url = esc_url($image_url);
@@ -1354,7 +1327,6 @@ class Users_WP_Forms {
                                     $option_label = isset($option_row['label']) ? $option_row['label'] : '';
                                     $option_value = isset($option_row['value']) ? $option_row['value'] : '';
                                     $selected = $option_value == $value ? 'selected="selected"' : '';
-                                    $selected = '';
                                     $checked = '';
 
                                     if ((!is_array($value) && trim($value) != '') || (is_array($value) && !empty($value))) {
@@ -1933,9 +1905,26 @@ class Users_WP_Forms {
         <?php
     }
 
-    public function uwp_users_search_form_submit($keyword) {
+    public function uwp_users_search_form_submit() {
         ?>
         <input class="uwp-searchsubmit uwp-search-submit" value="Search" type="submit">
         <?php
+    }
+
+    public function uwp_forms_check_for_send_mail_errors($res, $user_data, $errors) {
+        if (!$res) {
+            if (get_option('admin_email') == $user_data->user_email) {
+                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please check your site error log for more details.', 'userswp'));
+            } else {
+                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
+            }
+        }
+
+        if ($errors->get_error_code()) {
+            return $errors;
+        } else {
+            return $res;
+        }
+            
     }
 }
