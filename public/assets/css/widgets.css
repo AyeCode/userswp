@@ -400,8 +400,7 @@
 .uwp_page .uwp_input_fieldset,
 .uwp_widgets .uwp_input_fieldset,
 .uwp_adv_search_form .uwp_input_fieldset {
-  margin: 0;
-  margin-bottom: 10px;
+  margin: 0 0 10px;
   padding: 0; }
 .uwp_page .uwp_upload_file_preview,
 .uwp_widgets .uwp_upload_file_preview,
@@ -454,10 +453,8 @@
   padding: 9px 15px;
   font-size: 14px;
   border: 1px solid transparent;
-  border-radius: 3px;
   margin-left: -5px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  border-radius: 0 3px 3px 0;
   line-height: normal; }
 .uwp_page .uwp-user-search .uwp_advanced_search_btn,
 .uwp_widgets .uwp-user-search .uwp_advanced_search_btn,

@@ -275,6 +275,8 @@ class Users_WP {
         $this->loader->add_filter( 'uwp_form_input_html_email', $forms, 'uwp_form_input_email', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_password', $forms, 'uwp_form_input_password', 10, 4 );
 
+        $this->loader->add_filter( 'uwp_forms_check_for_send_mail_errors', $forms, 'uwp_forms_check_for_send_mail_errors', 10, 3 );
+
         $this->loader->add_action( 'wp_ajax_uwp_upload_file_remove', $forms, 'uwp_upload_file_remove' );
 
         //User search form
@@ -366,6 +368,7 @@ class Users_WP {
     private function init_settings() {
 
         global $uwp_options;
+        /** @noinspection PhpUnusedLocalVariableInspection */
         $plugin_admin = new Users_WP_Admin( $this->get_plugin_name(), $this->get_version()); //required to load dependencies
         $plugin_admin_settings = new Users_WP_Admin_Settings();
         $uwp_options = $plugin_admin_settings->uwp_get_settings();
@@ -407,22 +410,22 @@ class Users_WP {
         $this->loader->add_action('wp_ajax_uwp_ajax_register_action', $form_builder, 'uwp_register_ajax_handler');
 
         // htmlvar not needed for taxonomy
-        $this->loader->add_filter('uwp_builder_htmlvar_name_taxonomy',$form_builder, 'return_empty_string',10,4);
+        $this->loader->add_filter('uwp_builder_htmlvar_name_taxonomy',$form_builder, 'uwp_return_empty_string',10,4);
 
 
         // default_value not needed for textarea, html, file, fieldset
-        $this->loader->add_filter('uwp_builder_default_value_textarea',$form_builder, 'return_empty_string',10,4);
-        $this->loader->add_filter('uwp_builder_default_value_html',$form_builder, 'return_empty_string',10,4);
-        $this->loader->add_filter('uwp_builder_default_value_file',$form_builder, 'return_empty_string',10,4);
-        $this->loader->add_filter('uwp_builder_default_value_fieldset',$form_builder, 'return_empty_string',10,4);
+        $this->loader->add_filter('uwp_builder_default_value_textarea',$form_builder, 'uwp_return_empty_string',10,4);
+        $this->loader->add_filter('uwp_builder_default_value_html',$form_builder, 'uwp_return_empty_string',10,4);
+        $this->loader->add_filter('uwp_builder_default_value_file',$form_builder, 'uwp_return_empty_string',10,4);
+        $this->loader->add_filter('uwp_builder_default_value_fieldset',$form_builder, 'uwp_return_empty_string',10,4);
 
         // is_required not needed for fieldset
-        $this->loader->add_filter('uwp_builder_is_required_fieldset',$form_builder, 'return_empty_string',10,4);
-        $this->loader->add_filter('uwp_builder_required_msg_fieldset',$form_builder, 'return_empty_string',10,4);
+        $this->loader->add_filter('uwp_builder_is_required_fieldset',$form_builder, 'uwp_return_empty_string',10,4);
+        $this->loader->add_filter('uwp_builder_required_msg_fieldset',$form_builder, 'uwp_return_empty_string',10,4);
 
         // field_icon not needed for fieldset
-        $this->loader->add_filter('uwp_builder_field_icon_fieldset',$form_builder, 'return_empty_string',10,4);
-        $this->loader->add_filter('uwp_builder_css_class_fieldset',$form_builder, 'return_empty_string',10,4);
+        $this->loader->add_filter('uwp_builder_field_icon_fieldset',$form_builder, 'uwp_return_empty_string',10,4);
+        $this->loader->add_filter('uwp_builder_css_class_fieldset',$form_builder, 'uwp_return_empty_string',10,4);
 
     }
 

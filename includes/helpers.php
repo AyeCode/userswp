@@ -312,7 +312,6 @@ function uwp_update_option( $key = false, $value = '') {
 }
 
 function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
-    global $wpdb;
     if (!$user_id) {
         return $default;
     }
@@ -717,6 +716,7 @@ function uwp_get_file_type($ext) {
 }
 
 function uwp_resizeImage($image,$width,$height,$scale) {
+    /** @noinspection PhpUnusedLocalVariableInspection */
     list($imagewidth, $imageheight, $imageType) = getimagesize($image);
     $imageType = image_type_to_mime_type($imageType);
     $newImageWidth = ceil($width * $scale);
@@ -761,6 +761,7 @@ function uwp_resizeImage($image,$width,$height,$scale) {
 function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $src_h, $scale){
     // ignore image createion warnings
     @ini_set('gd.jpeg_ignore_warning', 1);
+    /** @noinspection PhpUnusedLocalVariableInspection */
     list($imagewidth, $imageheight, $imageType) = getimagesize($image);
     $imageType = image_type_to_mime_type($imageType);
 
@@ -1565,7 +1566,6 @@ function uwp_validate_fields($data, $type, $fields = false) {
     if (!$fields) {
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
         if ($type == 'register') {
             if (isset($data["uwp_role_id"])) {
                 $role_id = (int) strip_tags(esc_sql($data["uwp_role_id"]));
@@ -2894,18 +2894,6 @@ function uwp_register_confirm_password_field($html, $field, $value, $form_type) 
     return $html;
 }
 
-//add_filter( 'authenticate', 'uwp_login_check_for_key', 10, 3 );
-//function uwp_login_check_for_key( $user, $username, $password ){
-//    if ($username != ''){
-//        $value = get_user_meta($user->ID, 'uwp_unconfirmed', true);
-//        if($value){
-//            $user = new WP_Error( 'access_denied', __("<strong>ERROR</strong>: You need to activate your account.") );//create an error
-//            remove_action('authenticate', 'wp_authenticate_username_password', 20); //key found - don't proceed!
-//        }
-//    }
-//    return $user;
-//}
-
 function uwp_unconfirmed_login_redirect( $username, $user ) {
     if (!is_wp_error($user)) {
         $mod_value = get_user_meta( $user->ID, 'uwp_mod', true );
@@ -3141,26 +3129,10 @@ function uwp_get_page_url_data($page_type, $output_type = 'link') {
     $page_data = array();
     switch ($install_type) {
         case "single":
-            $page_id = uwp_get_option($page_type, false, false);
-            if ($page_id) {
-                $page = get_post($page_id);
-                $page_data = array(
-                    'name' => $page->post_title,
-                    'slug' => $page->post_name,
-                    'link' => get_permalink( $page->ID ),
-                );
-            }
+            $page_data = uwp_get_page_url_page_data($page_data, $page_type);
             break;
         case "multi_na_all":
-            $page_id = uwp_get_option($page_type, false, false);
-            if ($page_id) {
-                $page = get_post($page_id);
-                $page_data = array(
-                    'name' => $page->post_title,
-                    'slug' => $page->post_name,
-                    'link' => get_permalink( $page->ID ),
-                );
-            }
+            $page_data = uwp_get_page_url_page_data($page_data, $page_type);
             break;
         case "multi_na_site_id":
             $blog_id = UWP_ROOT_PAGES;
@@ -3169,27 +3141,11 @@ function uwp_get_page_url_data($page_type, $output_type = 'link') {
                 $page_data = array();
             } else {
                 if ($blog_id == $current_blog_id) {
-                    $page_id = uwp_get_option($page_type, false, false);
-                    if ($page_id) {
-                        $page = get_post($page_id);
-                        $page_data = array(
-                            'name' => $page->post_title,
-                            'slug' => $page->post_name,
-                            'link' => get_permalink( $page->ID ),
-                        );
-                    }
+                    $page_data = uwp_get_page_url_page_data($page_data, $page_type);
                 } else {
                     // Switch to the new blog.
                     switch_to_blog( $blog_id );
-                    $page_id = uwp_get_option($page_type, false, false);
-                    if ($page_id) {
-                        $page = get_post($page_id);
-                        $page_data = array(
-                            'name' => $page->post_title,
-                            'slug' => $page->post_name,
-                            'link' => get_permalink( $page->ID ),
-                        );
-                    }
+                    $page_data = uwp_get_page_url_page_data($page_data, $page_type);
                     // Restore original blog.
                     restore_current_blog();
                 }
@@ -3198,42 +3154,18 @@ function uwp_get_page_url_data($page_type, $output_type = 'link') {
         case "multi_na_default":
             $is_main_site = is_main_site();
             if ($is_main_site) {
-                $page_id = uwp_get_option($page_type, false, false);
-                if ($page_id) {
-                    $page = get_post($page_id);
-                    $page_data = array(
-                        'name' => $page->post_title,
-                        'slug' => $page->post_name,
-                        'link' => get_permalink( $page->ID ),
-                    );
-                }
+                $page_data = uwp_get_page_url_page_data($page_data, $page_type);
             } else {
                 $main_blog_id = (int) get_network()->site_id;
                 // Switch to the new blog.
                 switch_to_blog( $main_blog_id );
-                $page_id = uwp_get_option($page_type, false, false);
-                if ($page_id) {
-                    $page = get_post($page_id);
-                    $page_data = array(
-                        'name' => $page->post_title,
-                        'slug' => $page->post_name,
-                        'link' => get_permalink( $page->ID ),
-                    );
-                }
+                $page_data = uwp_get_page_url_page_data($page_data, $page_type);
                 // Restore original blog.
                 restore_current_blog();
             }
             break;
         case "multi_not_na":
-            $page_id = uwp_get_option($page_type, false, false);
-            if ($page_id) {
-                $page = get_post($page_id);
-                $page_data = array(
-                    'name' => $page->post_title,
-                    'slug' => $page->post_name,
-                    'link' => get_permalink( $page->ID ),
-                );
-            }
+            $page_data = uwp_get_page_url_page_data($page_data, $page_type);
             break;
         default:
             $page_data = array();
@@ -3566,4 +3498,18 @@ function uwp_display_registration_disabled_notice($type) {
             echo '</div>';
         }
     }
+}
+
+
+function uwp_get_page_url_page_data($page_data, $page_type) {
+    $page_id = uwp_get_option($page_type, false, false);
+    if ($page_id) {
+        $page = get_post($page_id);
+        $page_data = array(
+            'name' => $page->post_title,
+            'slug' => $page->post_name,
+            'link' => get_permalink( $page->ID ),
+        );
+    }
+    return $page_data;
 }

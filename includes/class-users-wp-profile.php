@@ -662,48 +662,7 @@ class Users_WP_Profile {
             $full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('profile_banner_width', 1000));
             $full_height = apply_filters('uwp_banner_image_height', 300);
         }
-
-        // Calculate Aspect Ratio.
-        if ( !empty( $full_height ) && ( $full_width != $full_height ) ) {
-            $aspect_ratio = $full_width / $full_height;
-        } else {
-            $aspect_ratio = 1;
-        }
-
-        // Default cropper coordinates.
-        // Smaller than full-width: cropper defaults to entire image.
-        if ( $image[0] < $full_width ) {
-            $crop_left  = 0;
-            $crop_right = $image[0];
-
-            // Less than 2x full-width: cropper defaults to full-width.
-        } elseif ( $image[0] < ( $full_width * 2 ) ) {
-            $padding_w  = round( ( $image[0] - $full_width ) / 2 );
-            $crop_left  = $padding_w;
-            $crop_right = $image[0] - $padding_w;
-
-            // Larger than 2x full-width: cropper defaults to 1/2 image width.
-        } else {
-            $crop_left  = round( $image[0] / 4 );
-            $crop_right = $image[0] - $crop_left;
-        }
-
-        // Smaller than full-height: cropper defaults to entire image.
-        if ( $image[1] < $full_height ) {
-            $crop_top    = 0;
-            $crop_bottom = $image[1];
-
-            // Less than double full-height: cropper defaults to full-height.
-        } elseif ( $image[1] < ( $full_height * 2 ) ) {
-            $padding_h   = round( ( $image[1] - $full_height ) / 2 );
-            $crop_top    = $padding_h;
-            $crop_bottom = $image[1] - $padding_h;
-
-            // Larger than 2x full-height: cropper defaults to 1/2 image height.
-        } else {
-            $crop_top    = round( $image[1] / 4 );
-            $crop_bottom = $image[1] - $crop_top;
-        }
+        
 
         $values = array(
             'error' => '',
@@ -1344,7 +1303,6 @@ class Users_WP_Profile {
 
         // Select and Multiselect needs Value to be converted
         if ($field->field_type == 'select' || $field->field_type == 'multiselect') {
-            $option_values_arr = array();
             $option_values_arr = uwp_string_values_to_options($field->option_values, true);
 
             // Select

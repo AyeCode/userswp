@@ -290,7 +290,7 @@
   font-size: 3px;
   color: white;
   text-align: right;
-  text-shadow: 0px 0px 2px #000;
+  text-shadow: 0 0 2px #000;
   text-indent: 9999px;
   overflow: hidden;
   background-image: -webkit-gradient(linear, 71% 25%, 71% 69%, color-stop(0, #76b101), color-stop(0.47, #76b101), color-stop(0.48, #669900), color-stop(1, #669900));
@@ -887,8 +887,7 @@
 .uwp_page .uwp_input_fieldset,
 .uwp_widgets .uwp_input_fieldset,
 .uwp_adv_search_form .uwp_input_fieldset {
-  margin: 0;
-  margin-bottom: 10px;
+  margin: 0 0 10px;
   padding: 0; }
 .uwp_page .uwp_upload_file_preview,
 .uwp_widgets .uwp_upload_file_preview,
@@ -941,10 +940,8 @@
   padding: 9px 15px;
   font-size: 14px;
   border: 1px solid transparent;
-  border-radius: 3px;
   margin-left: -5px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  border-radius: 0 3px 3px 0;
   line-height: normal; }
 .uwp_page .uwp-user-search .uwp_advanced_search_btn,
 .uwp_widgets .uwp-user-search .uwp_advanced_search_btn,
@@ -1115,8 +1112,7 @@
   font-size: 14px;
   line-height: 1.42857143;
   color: #555;
-  background-color: #fff;
-  background-image: none;
+  background: #fff none;
   border: 1px solid #ccc;
   border-radius: 4px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -1282,9 +1278,8 @@
     display: none; }
 .uwp_page ul.uwp-users-list-wrap.uwp_gridview .uwp-users-list-user-avatar {
   float: none;
-  margin: 24px auto 0;
   max-width: 100px;
-  margin-top: -50px; }
+  margin: -50px auto 0; }
 .uwp_page ul.uwp-users-list-wrap.uwp_gridview .uwp-users-list-user-name {
   margin-top: 10px; }
 .uwp_page ul.uwp-users-list-wrap.uwp_gridview .uwp-users-list-user-name > h3 {
@@ -1525,8 +1520,7 @@
 .uwp_page .uwp-content-wrap .uwp-profile-banner-change {
   background-clip: padding-box;
   background-color: #000;
-  border: 1px solid #fff;
-  border-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 2px;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
   box-sizing: border-box;
@@ -1687,11 +1681,10 @@
   border-radius: 3px;
   left: auto;
   color: #757575;
-  background-color: #ebe9eb;
   border: 0;
   white-space: nowrap;
   display: inline-block;
-  background-image: none;
+  background: #ebe9eb none;
   box-shadow: none;
   -webkit-box-shadow: none;
   text-shadow: none; }

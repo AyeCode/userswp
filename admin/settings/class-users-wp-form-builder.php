@@ -658,8 +658,12 @@ class Users_WP_Form_Builder {
     }
 
     /**
+     * @param $field_info
+     * @param $field_type
      * @param string $field_type_key
      * @param string $field_ins_upd
+     * @param $result_str
+     * @param bool $form_type
      */
     public function uwp_admin_form_field_html($field_info, $field_type, $field_type_key, $field_ins_upd, $result_str, $form_type = false) {
 
@@ -1123,12 +1127,6 @@ class Users_WP_Form_Builder {
                             echo apply_filters("uwp_builder_css_class_{$field_type}", '', $result_str, $cf, $field_info);
 
                         } else {
-                            $value = '';
-                            if (isset($field_info->css_class)) {
-                                $value = esc_attr($field_info->css_class);
-                            }elseif (isset($cf['defaults']['css_class']) && $cf['defaults']['css_class']) {
-                                $value = $cf['defaults']['css_class'];
-                            }
                             ?>
                             <li>
 
@@ -1266,7 +1264,7 @@ class Users_WP_Form_Builder {
     }
     
 
-    public function uwp_admin_form_field_save($request_field = array(), $default = false)
+    public function uwp_admin_form_field_save($request_field = array())
     {
 
         global $wpdb;
@@ -1359,9 +1357,8 @@ class Users_WP_Form_Builder {
             }
 
             // fieldset need htmlvar_name for register tab
-            //if ($field_type != 'fieldset') {
-                $htmlvar_name = 'uwp_' . $form_type . '_' . $htmlvar_name;
-            //}
+            $htmlvar_name = 'uwp_' . $form_type . '_' . $htmlvar_name;
+
 
             $option_values = '';
             if (isset($request_field['option_values']))
@@ -1390,9 +1387,7 @@ class Users_WP_Form_Builder {
 
                 $sort_order = (int) $last_order + 1;
             }
-
-            $default_value_add = '';
-
+            
             if (!empty($user_meta_info)) {
 
                 $excluded = uwp_get_excluded_fields();
@@ -1635,11 +1630,7 @@ class Users_WP_Form_Builder {
 
                         $data_type = 'TEXT';
 
-                        $default_value_add = " `" . $htmlvar_name . "` " . $data_type . " NULL ";
-
                         $meta_field_add = $data_type . " NULL ";
-                        /*if($default_value != '')
-					{ $meta_field_add .= " DEFAULT '".$default_value."'"; }*/
 
                         $add_result = uwp_add_column_if_not_exist($meta_table, $htmlvar_name, $meta_field_add);
                         if ($add_result === false) {
@@ -1651,8 +1642,6 @@ class Users_WP_Form_Builder {
                     case 'datepicker':
 
                         $data_type = 'DATE';
-
-                        $default_value_add = " `" . $htmlvar_name . "` " . $data_type . " NULL ";
 
                         $meta_field_add = $data_type . " NULL ";
 
@@ -1666,8 +1655,6 @@ class Users_WP_Form_Builder {
                     case 'time':
 
                         $data_type = 'TIME';
-
-                        $default_value_add = " `" . $htmlvar_name . "` " . $data_type . " NULL ";
 
                         $meta_field_add = $data_type . " NULL ";
 
@@ -1688,14 +1675,12 @@ class Users_WP_Form_Builder {
                             }
 
                             if (is_numeric($default_value) && $default_value != '') {
-                                $default_value_add .= " DEFAULT '" . $default_value . "'";
                                 $meta_field_add .= " DEFAULT '" . $default_value . "'";
                             }
                         } else {
                             $meta_field_add = " VARCHAR( 254 ) NULL ";
 
                             if ($default_value != '') {
-                                $default_value_add .= " DEFAULT '" . $default_value . "'";
                                 $meta_field_add .= " DEFAULT '" . $default_value . "'";
                             }
                         }
@@ -2062,7 +2047,7 @@ class Users_WP_Form_Builder {
             <div class="uwp-input-wrap">
 
                 <select name="data_type" id="data_type"
-                        onchange="javascript:uwp_data_type_changed(this, '<?php echo $result_str; ?>');">
+                        onchange="uwp_data_type_changed(this, '<?php echo $result_str; ?>');">
                     <option
                         value="XVARCHAR" <?php if ($dt_value == 'VARCHAR') {
                         echo 'selected="selected"';
@@ -2169,7 +2154,7 @@ class Users_WP_Form_Builder {
         <?php
     }
 
-    public function return_empty_string() {
+    public function uwp_return_empty_string() {
         return "";
     }
 
