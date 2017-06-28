@@ -40,6 +40,8 @@ class Users_WP_Profile {
 
         if (empty($banner)) {
             $banner = USERSWP_PLUGIN_URL."/public/assets/images/banner.png";
+        } else {
+            $banner = $upload_url.$banner;
         }
         if (empty($avatar)) {
             $avatar = get_avatar($user->user_email, 150);
@@ -47,7 +49,6 @@ class Users_WP_Profile {
             $avatar = $upload_url.$avatar;
             $avatar = '<img src="'.$avatar.'" class="avatar avatar-150 photo" width="150" height="150">';
         }
-        $banner = $upload_url.$banner;
         ?>
         <div class="uwp-profile-header">
             <div class="uwp-profile-header-img">

@@ -395,6 +395,10 @@
     margin: 10px 0 30px;
     text-align: center; }
 
+.uwp-account > h2 {
+  margin-bottom: 0;
+  padding-top: 10px; }
+
 .uwp_form_file_row {
   margin-bottom: 20px; }
 
@@ -1069,6 +1073,10 @@
     -webkit-border-radius: 100px;
     -moz-border-radius: 100px;
     border-radius: 100px; }
+.uwp_page .uwp-content-wrap .uwp-account .uwp_account_page_username {
+  display: block;
+  margin-bottom: 20px;
+  text-align: center; }
 .uwp_page .uwp-content-wrap .uwp_account_menu {
   padding: 0;
   list-style: none;
