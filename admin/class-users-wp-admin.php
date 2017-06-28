@@ -161,7 +161,11 @@ class Users_WP_Admin {
                 $proceed = true;
                 break;
             case "multi_na_site_id":
-                $blog_id = UWP_ROOT_PAGES;
+                if (defined('UWP_ROOT_PAGES')) {
+                    $blog_id = UWP_ROOT_PAGES;
+                } else {
+                    $blog_id = null;
+                }
                 $current_blog_id = get_current_blog_id();
                 if (!is_int($blog_id)) {
                     $proceed = false;

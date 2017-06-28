@@ -2215,6 +2215,7 @@ function uwp_account_privacy_edit_form_display($type) {
         echo '<div class="uwp-account-form uwp_wc_form">';
         $extra_where = "AND is_public='2'";
         $fields = get_account_form_fields($extra_where);
+        $fields = apply_filters('uwp_account_privacy_fields', $fields);
         $user_id = get_current_user_id();
         if ($fields || $make_profile_private) {
             ?>
@@ -2332,6 +2333,7 @@ function uwp_account_get_available_tabs() {
 
     $extra_where = "AND is_public='2'";
     $fields = get_account_form_fields($extra_where);
+    $fields = apply_filters('uwp_account_privacy_fields', $fields);
 
     $make_profile_private = uwp_can_make_profile_private();
 
@@ -2354,6 +2356,7 @@ function uwp_privacy_submit_handler() {
 
         $extra_where = "AND is_public='2'";
         $fields = get_account_form_fields($extra_where);
+        $fields = apply_filters('uwp_account_privacy_fields', $fields);
         if ($fields) {
             foreach ($fields as $field) {
                 $field_name = $field->htmlvar_name.'_privacy';
@@ -3135,7 +3138,11 @@ function uwp_get_page_url_data($page_type, $output_type = 'link') {
             $page_data = uwp_get_page_url_page_data($page_data, $page_type);
             break;
         case "multi_na_site_id":
-            $blog_id = UWP_ROOT_PAGES;
+            if (defined('UWP_ROOT_PAGES')) {
+                $blog_id = UWP_ROOT_PAGES;
+            } else {
+                $blog_id = (int) get_network()->site_id;
+            }
             $current_blog_id = get_current_blog_id();
             if (!is_int($blog_id)) {
                 $page_data = array();
@@ -3512,4 +3519,18 @@ function uwp_get_page_url_page_data($page_data, $page_type) {
         );
     }
     return $page_data;
+}
+
+add_action('uwp_template_form_title_after', 'uwp_display_username_in_account', 10, 1);
+function uwp_display_username_in_account($type) {
+    if ($type == 'account') {
+        $user_id = get_current_user_id();
+        $user_info = get_userdata($user_id);
+        $display_name = $user_info->user_login;
+        ?>
+        <span class="uwp_account_page_username">
+            <a href="<?php echo uwp_build_profile_tab_url($user_id); ?>">( @<?php echo $display_name; ?> )</a>
+        </span>
+        <?php
+    }
 }
