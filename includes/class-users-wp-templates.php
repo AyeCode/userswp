@@ -231,11 +231,8 @@ class Users_WP_Templates {
                 }
 
                 if ($form_type == 'register') {
-                    $enable_password = uwp_get_option('enable_register_password', false);
-                    if ($enable_password != '1') {
-                        if ( ($field->htmlvar_name == 'uwp_account_password') OR ($field->htmlvar_name == 'uwp_account_confirm_password') ) {
-                            continue;
-                        }
+                    if ($field->is_active != '1') {
+                        continue;
                     }
                     $count = $wpdb->get_var($wpdb->prepare("select count(*) from ".$extras_table_name." where site_htmlvar_name=%s AND form_type = %s", array($field->htmlvar_name, $form_type)));
                     if ($count == 1) {

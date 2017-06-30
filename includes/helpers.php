@@ -1584,7 +1584,7 @@ function uwp_validate_fields($data, $type, $fields = false) {
     
 
     $validated_data = array();
-    $enable_password = uwp_get_option('enable_register_password', false);
+
 
 
     $email_field = uwp_get_custom_field_info('uwp_account_email');
@@ -1595,6 +1595,7 @@ function uwp_validate_fields($data, $type, $fields = false) {
     $enable_confirm_email_field = isset($email_extra['confirm_email']) ? $email_extra['confirm_email'] : '0';
 
     $password_field = uwp_get_custom_field_info('uwp_account_password');
+    $enable_password = $password_field->is_active;
     $password_extra = array();
     if (isset($password_field->extra_fields) && $password_field->extra_fields != '') {
         $password_extra = unserialize($password_field->extra_fields);
@@ -1618,6 +1619,7 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
 
             if ($type == 'register') {
+
                 if ($enable_password != '1') {
                     if ( ($field->htmlvar_name == 'uwp_account_password') OR ($field->htmlvar_name == 'uwp_account_confirm_password') ) {
                         continue;
@@ -2554,14 +2556,6 @@ function uwp_settings_general_register_fields() {
             'chosen' => true,
             'placeholder' => __( 'Select Option', 'userswp' ),
             'class' => 'uwp_label_block',
-        ),
-        'enable_register_password' => array(
-            'id'   => 'enable_register_password',
-            'name' => __( 'Enable "Password" Field', 'userswp' ),
-            'desc' => 'If not checked a random password will be generated and emailed. User will be redirected to change password page upon first login.',
-            'type' => 'checkbox',
-            'std'  => '1',
-            'class' => 'uwp_label_inline',
         ),
         'register_redirect_to' => array(
             'id' => 'register_redirect_to',

@@ -1013,6 +1013,9 @@ class Users_WP_Profile {
         if ( $user && is_object( $user ) ) {
             $avatar_thumb = uwp_get_usermeta($user->data->ID, 'uwp_account_avatar_thumb', '');
             if ( !empty($avatar_thumb) ) {
+                $uploads = wp_upload_dir();
+                $upload_url = $uploads['baseurl'];
+                $avatar_thumb = $upload_url.$avatar_thumb;
                 $avatar = "<img alt='{$alt}' src='{$avatar_thumb}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
             }
 

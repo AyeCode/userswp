@@ -71,10 +71,7 @@ class Users_WP_Activator {
 
         //general
         $settings['profile_no_of_items'] = '10';
-
-        //register
-        $settings['enable_register_password'] = '1';
-
+        
         //login
         $settings['login_redirect_to'] = '';
 
@@ -557,13 +554,6 @@ class Users_WP_Activator {
             'htmlvar_name' => 'uwp_account_email'
         );
 
-//        $fields[] = array(
-//            'form_type' => 'register',
-//            'field_type' => 'email',
-//            'is_default' => '1',
-//            'htmlvar_name' => 'uwp_account_confirm_email'
-//        );
-
         $fields[] = array(
             'form_type' => 'register',
             'field_type' => 'password',
@@ -571,12 +561,6 @@ class Users_WP_Activator {
             'htmlvar_name' => 'uwp_account_password'
         );
 
-        $fields[] = array(
-            'form_type' => 'register',
-            'field_type' => 'password',
-            'is_default' => '1',
-            'htmlvar_name' => 'uwp_account_confirm_password'
-        );
 
         foreach ($fields as $field) {
             $last_order = $wpdb->get_var("SELECT MAX(sort_order) as last_order FROM " . $extras_table_name);
