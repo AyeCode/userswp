@@ -360,8 +360,7 @@ class Users_WP_Forms {
                     'user_login' => $result['uwp_account_username'],
                     'user_password' => $password,
                     'remember' => false
-                ),
-                false
+                )
             );
 
             if (is_wp_error($res)) {
@@ -430,8 +429,7 @@ class Users_WP_Forms {
                 'user_login' => $result['uwp_login_username'],
                 'user_password' => $result['password'],
                 'remember' => $remember_me
-            ),
-            false
+            )
         );
 
         if (is_wp_error($res)) {
