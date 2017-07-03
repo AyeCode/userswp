@@ -2688,7 +2688,6 @@ function uwp_can_make_profile_private() {
 
 function uwp_registration_status_options() {
     $registration_options = array(
-        '' => __( 'Select Option', 'userswp' ), // Blank option
         'auto_approve' =>  __('Auto approve', 'userswp'),
         'auto_approve_login' =>  __('Auto approve + Auto Login', 'userswp'),
         'require_email_activation' =>  __('Require Email Activation', 'userswp'),
