@@ -3404,6 +3404,20 @@ function uwp_save_user_ip_on_register($result, $type, $user_id) {
     return $result;
 }
 
+/**
+ * Save the users IP on login.
+ *
+ * @since 1.0.0
+ * @param $user_login string The users username.
+ * @param $user object The user object WP_User.
+ */
+function uwp_save_user_ip_on_login( $user_login, $user ) {
+
+    $ip = uwp_get_ip();
+    uwp_update_usermeta($user->ID, 'user_ip', $ip);
+}
+add_action('wp_login', 'uwp_save_user_ip_on_login',10,2);
+
 add_filter('uwp_update_usermeta', 'uwp_modify_privacy_value_on_update', 10, 4);
 function uwp_modify_privacy_value_on_update($value, $user_id, $key, $user_meta_info) {
     if (uwp_str_ends_with($key, '_privacy')) {
