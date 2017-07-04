@@ -1397,7 +1397,10 @@ class Users_WP_Forms {
                        class="<?php echo $field->css_class; ?>"
                        placeholder="<?php echo $site_title; ?>"
                        title="<?php echo $site_title; ?>"
-                    <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                    <?php
+                    if ($field->is_required == 1 ) { echo 'data-is-required="1"'; }
+                    if ($field->is_required == 1 && !$value) { echo 'required="required"'; }
+                    ?>
                        type="<?php echo $field->field_type; ?>">
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
