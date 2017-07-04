@@ -482,7 +482,7 @@ class Users_WP_Forms {
             $errors->add('activate_account', __('<strong>Error</strong>: Your account is not activated yet. Please activate your account first.', 'userswp'));
         }
 
-        if (is_wp_error($errors)) {
+        if (!empty($errors->get_error_code())) {
             return $errors;
         }
 
