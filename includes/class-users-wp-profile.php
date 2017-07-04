@@ -1324,10 +1324,18 @@ class Users_WP_Profile {
                 if (!empty($value) && is_array($value)) {
                     $array_value = array();
                     foreach ($value as $v) {
-                        $data = $this->uwp_array_search($option_values_arr, 'value', $v);
-                        $array_value[] = $data[0]['label'];
+                        if(!empty($v)){
+                            $data = $this->uwp_array_search($option_values_arr, 'value', $v);
+                            $array_value[] = $data[0]['label'];
+                        }
+
                     }
-                    $value = implode(', ', $array_value);
+                    if(!empty($array_value)){
+                        $value = implode(', ', $array_value);
+                    }else{
+                        $value = '';
+                    }
+
                 } else {
                     $value = '';
                 }
