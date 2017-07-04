@@ -85,7 +85,7 @@ class Users_WP_Admin {
          * class.
          */
         if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
-            wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
+            wp_register_style('jquery-ui', plugin_dir_url(dirname(__FILE__)) .  'public/assets/css/jquery-ui.css');
             wp_enqueue_style( 'jquery-ui' );
             wp_enqueue_style( 'jcrop' );
             wp_enqueue_style( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/users-wp.css', array(), null, 'all' );

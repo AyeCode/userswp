@@ -72,7 +72,7 @@ class Users_WP_Public {
          */
         if (is_uwp_page()) {
             // include only in uwp pages
-            wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
+            wp_register_style('jquery-ui', plugin_dir_url(dirname(__FILE__)) .  'public/assets/css/jquery-ui.css');
             wp_enqueue_style( 'jquery-ui' );
         }
 

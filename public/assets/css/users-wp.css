@@ -975,13 +975,12 @@
   margin-top: 0;
   margin-bottom: 20px; }
 .uwp_page .ui-timepicker-div dd {
-  margin-left: 180px; }
+  margin-left: 80px; }
 .uwp_page .ui-timepicker-div dt {
   float: left;
   width: 160px;
   overflow: hidden;
   clear: left;
-  text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 700; }
