@@ -1383,6 +1383,9 @@ class Users_WP_Profile {
             case 'url':
                 $value = esc_url( $value );
                 break;
+            case 'file':
+                $value = $value; // already escaped
+                break;
             case 'textarea':
                 $value = esc_textarea( $value );
                 break;

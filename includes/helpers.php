@@ -1505,6 +1505,8 @@ function get_uwp_users_list() {
 function uwp_file_upload_preview($field, $value, $removable = true) {
     $output = '';
 
+    $value = esc_html($value);
+
     if ($field->htmlvar_name == "uwp_banner_file") {
         $htmlvar = "uwp_account_banner_thumb";
     } elseif ($field->htmlvar_name == "uwp_avatar_file") {
