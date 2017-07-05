@@ -478,7 +478,6 @@ class Users_WP_Form_Builder {
                 ?>
 
                 <?php if ($default): ?>
-                    <div title="<?php _e('Default field, should not be removed.', 'userswp'); ?>" class="handlediv move uwp-default-remove"><i class="fa fa-times" aria-hidden="true"></i></div>
                 <?php else: ?>
                     <div title="<?php _e('Click to remove field', 'userswp'); ?>"
                          onclick="delete_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>')"
@@ -2210,7 +2209,6 @@ class Users_WP_Form_Builder {
                     ?>
 
                     <?php if ($default): ?>
-                        <div title="<?php _e('Default field, should not be removed.', 'userswp'); ?>" class="handlediv move uwp-default-remove"><i class="fa fa-times" aria-hidden="true"></i></div>
                     <?php else: ?>
                         <div title="<?php _e('Click to remove field', 'userswp'); ?>"
                              onclick="delete_register_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>','<?php echo $htmlvar_name; ?>')"
