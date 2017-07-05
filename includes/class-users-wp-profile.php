@@ -1305,18 +1305,26 @@ class Users_WP_Profile {
         }
 
 
+//        print_r($field);
+
         // Select and Multiselect needs Value to be converted
         if ($field->field_type == 'select' || $field->field_type == 'multiselect') {
             $option_values_arr = uwp_string_values_to_options($field->option_values, true);
 
             // Select
             if ($field->field_type == 'select') {
-                if (!empty($value)) {
-                    $data = $this->uwp_array_search($option_values_arr, 'value', $value);
-                    $value = $data[0]['label'];
-                } else {
-                    $value = '';
+
+                if($field->field_type_key != 'country'){
+                    if (!empty($value)) {
+                        $data = $this->uwp_array_search($option_values_arr, 'value', $value);
+                        $value = $data[0]['label'];
+                    } else {
+                        $value = '';
+                    }
                 }
+
+
+
             }
 
             //Multiselect
@@ -1399,6 +1407,10 @@ class Users_WP_Profile {
                 break;
             default:
                 $value = esc_html( $value );
+        }
+
+        if($field->field_type_key == 'country'){
+            $value = uwp_output_country_html($value);
         }
 
         return $value;
