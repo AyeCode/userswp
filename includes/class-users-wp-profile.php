@@ -353,7 +353,7 @@ class Users_WP_Profile {
                     ?>
                 </ul>
                 <?php
-                $can_user_edit_account = apply_filters('uwp_user_can_edit_own_profile', true, $user);
+                $can_user_edit_account = apply_filters('uwp_user_can_edit_own_profile', true, $user->ID);
                 ?>
                 <?php if ($account_page && is_user_logged_in() && (get_current_user_id() == $user->ID) && $can_user_edit_account) { ?>
                     <div class="uwp-edit-account">
