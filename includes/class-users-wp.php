@@ -275,6 +275,10 @@ class Users_WP {
         $this->loader->add_filter( 'uwp_form_input_html_email', $forms, 'uwp_form_input_email', 10, 4 );
         $this->loader->add_filter( 'uwp_form_input_html_password', $forms, 'uwp_form_input_password', 10, 4 );
 
+        // Country select
+        $this->loader->add_filter( 'uwp_form_input_html_select_country', $forms, 'uwp_form_input_select_country', 10, 4 );
+
+
         $this->loader->add_filter( 'uwp_forms_check_for_send_mail_errors', $forms, 'uwp_forms_check_for_send_mail_errors', 10, 3 );
 
         $this->loader->add_action( 'wp_ajax_uwp_upload_file_remove', $forms, 'uwp_upload_file_remove' );

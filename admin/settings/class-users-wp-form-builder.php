@@ -188,250 +188,7 @@ class Users_WP_Form_Builder {
     public function uwp_form_fields_predefined($type = '') {
         $custom_fields = array();
 
-        $countries = array(
-            "Afghanistan",
-            "Albania",
-            "Algeria",
-            "American Samoa",
-            "Andorra",
-            "Angola",
-            "Anguilla",
-            "Antarctica",
-            "Antigua and Barbuda",
-            "Argentina",
-            "Armenia",
-            "Aruba",
-            "Australia",
-            "Austria",
-            "Azerbaijan",
-            "Bahamas",
-            "Bahrain",
-            "Bangladesh",
-            "Barbados",
-            "Belarus",
-            "Belgium",
-            "Belize",
-            "Benin",
-            "Bermuda",
-            "Bhutan",
-            "Bolivia",
-            "Bosnia and Herzegowina",
-            "Botswana",
-            "Bouvet Island",
-            "Brazil",
-            "British Indian Ocean Territory",
-            "Brunei Darussalam",
-            "Bulgaria",
-            "Burkina Faso",
-            "Burundi",
-            "Cambodia",
-            "Cameroon",
-            "Canada",
-            "Cape Verde",
-            "Cayman Islands",
-            "Central African Republic",
-            "Chad",
-            "Chile",
-            "China",
-            "Christmas Island",
-            "Cocos (Keeling) Islands",
-            "Colombia",
-            "Comoros",
-            "Congo",
-            "Congo,
-             the Democratic Republic of the",
-            "Cook Islands",
-            "Costa Rica",
-            "Cote d'Ivoire",
-            "Croatia (Hrvatska)",
-            "Cuba",
-            "Cyprus",
-            "Czech Republic",
-            "Denmark",
-            "Djibouti",
-            "Dominica",
-            "Dominican Republic",
-            "East Timor",
-            "Ecuador",
-            "Egypt",
-            "El Salvador",
-            "Equatorial Guinea",
-            "Eritrea",
-            "Estonia",
-            "Ethiopia",
-            "Falkland Islands (Malvinas)",
-            "Faroe Islands",
-            "Fiji",
-            "Finland",
-            "France",
-            "France Metropolitan",
-            "French Guiana",
-            "French Polynesia",
-            "French Southern Territories",
-            "Gabon",
-            "Gambia",
-            "Georgia",
-            "Germany",
-            "Ghana",
-            "Gibraltar",
-            "Greece",
-            "Greenland",
-            "Grenada",
-            "Guadeloupe",
-            "Guam",
-            "Guatemala",
-            "Guinea",
-            "Guinea-Bissau",
-            "Guyana",
-            "Haiti",
-            "Heard and Mc Donald Islands",
-            "Holy See (Vatican City State)",
-            "Honduras",
-            "Hong Kong",
-            "Hungary",
-            "Iceland",
-            "India",
-            "Indonesia",
-            "Iran (Islamic Republic of)",
-            "Iraq",
-            "Ireland",
-            "Israel",
-            "Italy",
-            "Jamaica",
-            "Japan",
-            "Jordan",
-            "Kazakhstan",
-            "Kenya",
-            "Kiribati",
-            "Korea, Democratic People's Republic of",
-            "Korea, Republic of",
-            "Kuwait",
-            "Kyrgyzstan",
-            "Lao, People's Democratic Republic",
-            "Latvia",
-            "Lebanon",
-            "Lesotho",
-            "Liberia",
-            "Libyan Arab Jamahiriya",
-            "Liechtenstein",
-            "Lithuania",
-            "Luxembourg",
-            "Macau",
-            "Macedonia, The Former Yugoslav Republic of",
-            "Madagascar",
-            "Malawi",
-            "Malaysia",
-            "Maldives",
-            "Mali",
-            "Malta",
-            "Marshall Islands",
-            "Martinique",
-            "Mauritania",
-            "Mauritius",
-            "Mayotte",
-            "Mexico",
-            "Micronesia, Federated States of",
-            "Moldova, Republic of",
-            "Monaco",
-            "Mongolia",
-            "Montserrat",
-            "Morocco",
-            "Mozambique",
-            "Myanmar",
-            "Namibia",
-            "Nauru",
-            "Nepal",
-            "Netherlands",
-            "Netherlands Antilles",
-            "New Caledonia",
-            "New Zealand",
-            "Nicaragua",
-            "Niger",
-            "Nigeria",
-            "Niue",
-            "Norfolk Island",
-            "Northern Mariana Islands",
-            "Norway",
-            "Oman",
-            "Pakistan",
-            "Palau",
-            "Panama",
-            "Papua New Guinea",
-            "Paraguay",
-            "Peru",
-            "Philippines",
-            "Pitcairn",
-            "Poland",
-            "Portugal",
-            "Puerto Rico",
-            "Qatar",
-            "Reunion",
-            "Romania",
-            "Russian Federation",
-            "Rwanda",
-            "Saint Kitts and Nevis",
-            "Saint Lucia",
-            "Saint Vincent and the Grenadines",
-            "Samoa",
-            "San Marino",
-            "Sao Tome and Principe",
-            "Saudi Arabia",
-            "Senegal",
-            "Seychelles",
-            "Sierra Leone",
-            "Singapore",
-            "Slovakia (Slovak Republic)",
-            "Slovenia",
-            "Solomon Islands",
-            "Somalia",
-            "South Africa",
-            "South Georgia and the South Sandwich Islands",
-            "Spain",
-            "Sri Lanka",
-            "St. Helena",
-            "St. Pierre and Miquelon",
-            "Sudan",
-            "Suriname",
-            "Svalbard and Jan Mayen Islands",
-            "Swaziland",
-            "Sweden",
-            "Switzerland",
-            "Syrian Arab Republic",
-            "Taiwan, Province of China",
-            "Tajikistan",
-            "Tanzania, United Republic of",
-            "Thailand",
-            "Togo",
-            "Tokelau",
-            "Tonga",
-            "Trinidad and Tobago",
-            "Tunisia",
-            "Turkey",
-            "Turkmenistan",
-            "Turks and Caicos Islands",
-            "Tuvalu",
-            "Uganda",
-            "Ukraine",
-            "United Arab Emirates",
-            "United Kingdom",
-            "United States",
-            "United States Minor Outlying Islands",
-            "Uruguay",
-            "Uzbekistan",
-            "Vanuatu",
-            "Venezuela",
-            "Vietnam",
-            "Virgin Islands (British)",
-            "Virgin Islands (U.S.)",
-            "Wallis and Futuna Islands",
-            "Western Sahara",
-            "Yemen",
-            "Yugoslavia",
-            "Zambia",
-            "Zimbabwe"
-        );
-
-        $countries_string = implode(',', $countries);
+        
 
         // Country
         $custom_fields['country'] = array( // The key value should be unique and not contain any spaces.
@@ -447,7 +204,7 @@ class Users_WP_Form_Builder {
                 'is_active'           =>  1,
                 'default_value'       =>  '',
                 'is_required'         =>  0,
-                'option_values'       =>  $countries_string,
+                'option_values'       =>  '',
                 'required_msg'        =>  '',
                 'field_icon'          =>  'fa fa-map-marker',
                 'css_class'           =>  ''
@@ -721,7 +478,6 @@ class Users_WP_Form_Builder {
                 ?>
 
                 <?php if ($default): ?>
-                    <div title="<?php _e('Default field, should not be removed.', 'userswp'); ?>" class="handlediv move uwp-default-remove"><i class="fa fa-times" aria-hidden="true"></i></div>
                 <?php else: ?>
                     <div title="<?php _e('Click to remove field', 'userswp'); ?>"
                          onclick="delete_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>')"
@@ -1856,9 +1612,14 @@ class Users_WP_Form_Builder {
                 <div class="uwp-tooltip">
                     <span><?php _e('Option Values should be separated by comma.', 'userswp'); ?></span>
                     <br/>
-                    <small><span><?php _e('If using for a "tick filter" place a / and then either a 1 for true or 0 for false', 'userswp'); ?></span>
-                        <br/>
-                        <span><?php _e('eg: "No Dogs Allowed/0,Dogs Allowed/1" (Select only, not multiselect)', 'userswp'); ?></span>
+                    <small>
+
+                        <?php if($field_type != 'multiselect'){?>
+                            <span><?php _e('If using for a "tick filter" place a / and then either a 1 for true or 0 for false', 'userswp'); ?></span>
+                             <br/>
+                            <span><?php _e('eg: "No Dogs Allowed/0,Dogs Allowed/1"', 'userswp'); ?></span>
+                        <?php }?>
+
                         <?php if ($field_type == 'multiselect' || $field_type == 'select') { ?>
                             <br/>
                             <span><?php _e('- If using OPTGROUP tag to grouping options, use "{optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"', 'userswp'); ?></span>
@@ -1868,8 +1629,17 @@ class Users_WP_Form_Builder {
                 </div>
             </label>
             <div class="uwp-input-wrap">
-                <input type="text" name="option_values" id="option_values"
-                       value="<?php echo $value; ?>"/>
+
+                <?php if(isset($field_info->field_type_key) && $field_info->field_type_key == 'country' ){
+
+                    // @todo here we should show a multiselect to either include or exclude countries
+                    _e('A full country list will be shown','userswp');
+                    ?>
+
+                <?php }else{?>
+                    <input type="text" name="option_values" id="option_values" value="<?php echo $value; ?>"/>
+                <?php }?>
+
                 <br/>
 
             </div>
@@ -2439,7 +2209,6 @@ class Users_WP_Form_Builder {
                     ?>
 
                     <?php if ($default): ?>
-                        <div title="<?php _e('Default field, should not be removed.', 'userswp'); ?>" class="handlediv move uwp-default-remove"><i class="fa fa-times" aria-hidden="true"></i></div>
                     <?php else: ?>
                         <div title="<?php _e('Click to remove field', 'userswp'); ?>"
                              onclick="delete_register_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>','<?php echo $htmlvar_name; ?>')"

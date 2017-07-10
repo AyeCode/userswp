@@ -362,8 +362,7 @@ class Users_WP_Forms {
                     'user_login' => $result['uwp_account_username'],
                     'user_password' => $password,
                     'remember' => false
-                ),
-                false
+                )
             );
 
             if (is_wp_error($res)) {
@@ -436,8 +435,7 @@ class Users_WP_Forms {
                 'user_login' => $result['uwp_login_username'],
                 'user_password' => $result['password'],
                 'remember' => $remember_me
-            ),
-            false
+            )
         );
 
         if (is_wp_error($res)) {
@@ -490,7 +488,7 @@ class Users_WP_Forms {
             $errors->add('activate_account', __('<strong>Error</strong>: Your account is not activated yet. Please activate your account first.', 'userswp'));
         }
 
-        if (is_wp_error($errors)) {
+        if (!empty($errors->get_error_code())) {
             return $errors;
         }
 
@@ -1064,6 +1062,11 @@ class Users_WP_Forms {
             $html = apply_filters("uwp_form_input_html_select_{$field->htmlvar_name}", $html, $field, $value, $form_type);
         }
 
+        // Check if there is a field type specific filter.
+        if(has_filter("uwp_form_input_html_select_{$field->field_type_key}")){
+            $html = apply_filters("uwp_form_input_html_select_{$field->field_type_key}", $html, $field, $value, $form_type);
+        }
+
         // If no html then we run the standard output.
         if(empty($html)) {
 
@@ -1253,7 +1256,10 @@ class Users_WP_Forms {
                        class="<?php echo $field->css_class; ?>"
                        placeholder="<?php echo $site_title; ?>"
                        title="<?php echo $site_title; ?>"
-                    <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                    <?php
+                    if ($field->is_required == 1 ) { echo 'data-is-required="1"'; }
+                    if ($field->is_required == 1 && !$value) { echo 'required="required"'; }
+                    ?>
                        type="<?php echo $field->field_type; ?>">
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
@@ -1781,4 +1787,67 @@ class Users_WP_Forms {
         }
             
     }
+
+    /**
+     * Output a country select input.
+     *
+     * @param $html
+     * @param $field
+     * @param $value
+     * @param $form_type
+     *
+     * @return string
+     */
+    public function uwp_form_input_select_country($html, $field, $value, $form_type){
+
+        // Check if there is a field specific filter.
+        if(has_filter("uwp_form_input_html_select_{$field->htmlvar_name}")){
+            $html = apply_filters("uwp_form_input_html_select_{$field->htmlvar_name}", $html, $field, $value, $form_type);
+        }
+
+        //print_r($field);
+
+        // If no html then we run the standard output.
+        if(empty($html)) {
+
+            ob_start(); // Start  buffering;
+
+            ?>
+            <div id="<?php echo $field->htmlvar_name;?>_row"
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row">
+
+                <?php
+                $site_title = uwp_get_form_label($field);
+                if (!is_admin()) { ?>
+                    <label>
+                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                        <?php if ($field->is_required) echo '<span>*</span>';?>
+                    </label>
+                <?php } ?>
+
+                <?php
+                $select_country_options = apply_filters('uwp_form_input_select_country',"{defaultCountry: '$value'}",$field, $value, $form_type);
+                ?>
+
+                <input type="text" class="uwp_textfield" title="<?php echo $site_title; ?>" id="<?php echo $field->htmlvar_name;?>"  />
+                <input type="hidden" id="<?php echo $field->htmlvar_name;?>_code" name="<?php echo $field->htmlvar_name;?>" />
+
+                <script>
+                    jQuery("#<?php echo $field->htmlvar_name;?>").countrySelect(<?php echo $select_country_options;?>);
+                </script>
+
+
+                <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
+                <?php if ($field->is_required) { ?>
+                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                <?php } ?>
+            </div>
+
+            <?php
+            $html = ob_get_clean();
+        }
+
+        return $html;
+    }
+
 }
