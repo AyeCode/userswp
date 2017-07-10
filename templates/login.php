@@ -3,7 +3,7 @@
     <div class="uwp-login">
         <div class="uwp-lf-icon"><i class="fa fa-user fa-fw"></i></div>
         <?php do_action('uwp_template_form_title_before', 'login'); ?>
-        <h2><?php echo __( 'Sign In', 'userswp' ); ?></h2>
+        <h2><?php echo apply_filters('uwp_template_form_title', get_the_title(), 'login'); ?></h2>
         <?php do_action('uwp_template_display_notices', 'login'); ?>
         <form class="uwp-login-form uwp_form" method="post">
             <?php do_action('uwp_template_fields', 'login'); ?>

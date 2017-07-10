@@ -115,6 +115,12 @@ class Users_WP_Templates {
             if (!is_user_logged_in()) {
                 wp_redirect(get_permalink($login_page));
                 exit();
+            } else {
+                $can_user_can_edit_account = apply_filters('uwp_user_can_edit_own_profile', true, get_current_user_id());
+                if (!$can_user_can_edit_account && ((int) $account_page ==  $current_page_id )) {
+                    wp_redirect(home_url('/'));
+                    exit();
+                }
             }
         } else {
             return false;
