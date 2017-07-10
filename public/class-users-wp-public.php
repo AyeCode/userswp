@@ -72,7 +72,7 @@ class Users_WP_Public {
          */
         if (is_uwp_page()) {
             // include only in uwp pages
-            wp_register_style('jquery-ui', '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
+            wp_register_style('jquery-ui', plugin_dir_url(dirname(__FILE__)) .  'public/assets/css/jquery-ui.css');
             wp_enqueue_style( 'jquery-ui' );
         }
 
@@ -221,6 +221,15 @@ class Users_WP_Public {
             // include only in uwp pages
             wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), null, false );
         }
+
+
+        if(is_uwp_account_page() || is_uwp_register_page()){
+            //load CountrySelect
+            wp_enqueue_script( "country-select", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/countrySelect.min.js', array( 'jquery' ), null, false );
+        }
+
+        $country_data = uwp_get_country_data();
+        wp_localize_script($this->plugin_name, 'uwp_country_data', $country_data);
         
     }
 

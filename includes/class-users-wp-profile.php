@@ -1305,18 +1305,26 @@ class Users_WP_Profile {
         }
 
 
+//        print_r($field);
+
         // Select and Multiselect needs Value to be converted
         if ($field->field_type == 'select' || $field->field_type == 'multiselect') {
             $option_values_arr = uwp_string_values_to_options($field->option_values, true);
 
             // Select
             if ($field->field_type == 'select') {
-                if (!empty($value)) {
-                    $data = $this->uwp_array_search($option_values_arr, 'value', $value);
-                    $value = $data[0]['label'];
-                } else {
-                    $value = '';
+
+                if($field->field_type_key != 'country'){
+                    if (!empty($value)) {
+                        $data = $this->uwp_array_search($option_values_arr, 'value', $value);
+                        $value = $data[0]['label'];
+                    } else {
+                        $value = '';
+                    }
                 }
+
+
+
             }
 
             //Multiselect
@@ -1324,10 +1332,18 @@ class Users_WP_Profile {
                 if (!empty($value) && is_array($value)) {
                     $array_value = array();
                     foreach ($value as $v) {
-                        $data = $this->uwp_array_search($option_values_arr, 'value', $v);
-                        $array_value[] = $data[0]['label'];
+                        if(!empty($v)){
+                            $data = $this->uwp_array_search($option_values_arr, 'value', $v);
+                            $array_value[] = $data[0]['label'];
+                        }
+
                     }
-                    $value = implode(', ', $array_value);
+                    if(!empty($array_value)){
+                        $value = implode(', ', $array_value);
+                    }else{
+                        $value = '';
+                    }
+
                 } else {
                     $value = '';
                 }
@@ -1383,11 +1399,18 @@ class Users_WP_Profile {
             case 'url':
                 $value = esc_url( $value );
                 break;
+            case 'file':
+                $value = $value; // already escaped
+                break;
             case 'textarea':
                 $value = esc_textarea( $value );
                 break;
             default:
                 $value = esc_html( $value );
+        }
+
+        if($field->field_type_key == 'country'){
+            $value = uwp_output_country_html($value);
         }
 
         return $value;

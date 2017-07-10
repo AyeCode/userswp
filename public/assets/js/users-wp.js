@@ -88,6 +88,9 @@ jQuery(window).load(function() {
             jQuery.post(ajaxurl, data, function(response) {
                 $("#"+htmlvar+"_row").find(".uwp_file_preview_wrap").remove();
                 $("#"+htmlvar).closest("td").find(".uwp_file_preview_wrap").remove();
+                if($('input[name='+htmlvar+']').data( 'is-required' )){
+                    $('input[name='+htmlvar+']').prop('required',true);
+                }
             });
         });
     });

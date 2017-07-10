@@ -186,6 +186,8 @@ jQuery(document).ready(function () {
                         scrollTop: jQuery("#licontainer_"+htmlvar_name).offset().top
                     }, 1000);
 
+                    save_register_field(htmlvar_name); // save registration fields on add
+
                 });
 
             if(htmlvar_name!='fieldset'){
