@@ -1621,6 +1621,11 @@ class Users_WP_Form_Builder {
                         <?php }?>
 
                         <?php if ($field_type == 'multiselect' || $field_type == 'select') { ?>
+                            <span><?php _e('Like: Apple,Bannana,Pear,Peach', 'userswp'); ?></span>
+                            <br/>
+
+                            <span><?php _e('Or you can show Selection/Value shown: Pets Allowed/Yes,Pets not Allowed/No', 'userswp'); ?></span>
+
                             <br/>
                             <span><?php _e('- If using OPTGROUP tag to grouping options, use "{optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"', 'userswp'); ?></span>
                             <br/>

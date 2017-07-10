@@ -1858,9 +1858,11 @@
   margin-top: 0;
   margin-bottom: 20px; }
 .uwp_page .ui-timepicker-div dd {
-  margin-left: 80px; }
+  margin-left: 60%; }
+  .uwp_page .ui-timepicker-div dd select {
+    float: none; }
 .uwp_page .ui-timepicker-div dt {
-  float: left;
+  float: none;
   width: 160px;
   overflow: hidden;
   clear: left;
