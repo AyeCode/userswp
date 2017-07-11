@@ -357,3 +357,12 @@
     padding-left: 40px !important;
   }
 }
+
+.uwp-cs{
+  .flag,.uwp-country-name{
+    display: inline-block;
+  }
+  .uwp-country-name{
+    margin-left: 5px;
+  }
+}

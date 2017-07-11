@@ -881,6 +881,11 @@
     padding-right: 0;
     padding-left: 40px !important; }
 
+.uwp-cs .flag, .uwp-cs .uwp-country-name {
+  display: inline-block; }
+.uwp-cs .uwp-country-name {
+  margin-left: 5px; }
+
 .imgareaselect-border1 {
   background: url(../images/border-v.gif) repeat-y left top; }
 

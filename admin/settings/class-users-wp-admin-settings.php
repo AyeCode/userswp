@@ -397,7 +397,7 @@ class Users_WP_Admin_Settings {
                         'profile_page' => array(
                             'id' => 'profile_page',
                             'name' => __( 'User Profile Page', 'userswp' ),
-                            'desc' => __( 'This is the front end user\'s profile page. This page automatically override the default WordPress author page.', 'userswp' ),
+                            'desc' => __( 'This is the front end user\'s profile page. This page automatically overrides the default WordPress author page.', 'userswp' ),
                             'type' => 'select',
                             'options' => uwp_get_pages(),
                             'chosen' => true,
@@ -407,7 +407,7 @@ class Users_WP_Admin_Settings {
                         'register_page' => array(
                             'id' => 'register_page',
                             'name' => __( 'Register Page', 'userswp' ),
-                            'desc' => __( 'This is the front end register page. This is where users creates their account.', 'userswp' ),
+                            'desc' => __( 'This is the front end register page. This is where users create their account.', 'userswp' ),
                             'type' => 'select',
                             'options' => uwp_get_pages(),
                             'chosen' => true,
@@ -485,7 +485,6 @@ class Users_WP_Admin_Settings {
                 ),
                 'register' => apply_filters( 'uwp_settings_general_register', uwp_settings_general_register_fields()),
                 'login' => apply_filters( 'uwp_settings_general_login', uwp_settings_general_loginout_fields()),
-                'account' => apply_filters( 'uwp_settings_general_account', uwp_settings_general_account_fields()),
                 'profile' => apply_filters( 'uwp_settings_general_profile',
                     array(
                         'enable_profile_header' => array(

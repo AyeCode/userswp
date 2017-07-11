@@ -507,7 +507,10 @@ class Users_WP_Activator {
             'is_active' => '1',
             'is_required' => '1',
             'is_register_field' => '1',
-            'is_register_only_field' => '1'
+            'is_register_only_field' => '1',
+            'extra'        =>  array(
+                'confirm_password'  =>  '1'
+            )
         );
         
 

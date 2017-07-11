@@ -207,7 +207,7 @@ class Users_WP_Admin {
             'manage_options',
             'userswp',
             array( $plugin_admin_settings, 'uwp_settings_page' ),
-            'dashicons-admin-users',
+            'dashicons-groups',
             70
         );
 
