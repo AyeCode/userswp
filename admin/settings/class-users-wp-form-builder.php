@@ -1603,8 +1603,8 @@ class Users_WP_Form_Builder {
         }elseif (isset($cf['defaults']['option_values']) && $cf['defaults']['option_values']) {
             $value = esc_attr($cf['defaults']['option_values']);
         }
-        
-        $field_type = isset($field_info->field_type) ? $field_info->field_type : '';
+
+        $field_type = isset($field_info->field_type) ? $field_info->field_type : $cf['field_type'];
         $field_type_key = isset($field_info->field_type_key) ? $field_info->field_type_key : '';
         if(!$field_type_key){
             $field_type_key = isset($_REQUEST['field_type_key']) ? esc_html($_REQUEST['field_type_key']) : '';
