@@ -948,7 +948,7 @@ class Users_WP_Forms {
                 $jquery_date_format = uwp_date_format_php_to_jqueryui( $jquery_date_format );
             }
             if($value=='0000-00-00'){$value='';}//if date not set, then mark it empty
-            $value = uwp_date($value, 'Y-m-d', $date_format);
+            
             ?>
             <script type="text/javascript">
 
@@ -961,7 +961,8 @@ class Users_WP_Forms {
                     jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("option", "dateFormat", '<?php echo $jquery_date_format;?>');
 
                     <?php if(!empty($value)){?>
-                    jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("setDate", '<?php echo $value;?>');
+                    var parsedDate = jQuery.datepicker.parseDate('yy-mm-dd', '<?php echo $value;?>');
+                    jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("setDate", parsedDate);
                     <?php } ?>
 
                 });
