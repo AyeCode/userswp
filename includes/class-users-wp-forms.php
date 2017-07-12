@@ -948,7 +948,7 @@ class Users_WP_Forms {
                 $jquery_date_format = uwp_date_format_php_to_jqueryui( $jquery_date_format );
             }
             if($value=='0000-00-00'){$value='';}//if date not set, then mark it empty
-            
+            $value = uwp_date($value, 'Y-m-d', $date_format);
             ?>
             <script type="text/javascript">
 
