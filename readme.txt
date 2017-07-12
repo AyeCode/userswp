@@ -1,10 +1,10 @@
 === UsersWP ===
 Contributors: viruthagiri, stiofansisland, paoltaia
-Donate link: http://userswp.io/
+Donate link: https://userswp.io/
 Tags: buddypress, frontend, login, register, account, users
 Requires at least: 3.1
-Tested up to: 4.4
-Stable tag: 1.0.0
+Tested up to: 4.7
+Stable tag: 1.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -54,9 +54,11 @@ No questions so far, but don't hesitate to ask!
 TBA
 
 == Changelog ==
+= 1.0.1 =
+* First beta release.
 
 = 1.0.0 =
-* First release.
+* First alpha release.
 
 == Upgrade Notice ==
 
