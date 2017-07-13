@@ -54,6 +54,10 @@ No questions so far, but don't hesitate to ask!
 TBA
 
 == Changelog ==
+= 1.0.2 =
+Added callback to show info type setting - ADDED
+Profile tabs now appear in the order they are added - CHANGED
+
 = 1.0.1 =
 * First beta release.
 

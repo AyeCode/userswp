@@ -536,7 +536,7 @@ class Users_WP_Admin_Settings {
                             'desc' => __( 'Choose the tabs to display in UsersWP Profile', 'userswp' ),
                             'multiple'    => true,
                             'chosen'      => true,
-                            'type'        => 'select',
+                            'type'        => 'select_order',
                             'options' =>   $this->uwp_available_tab_items(),
                             'placeholder' => __( 'Select Tabs', 'userswp' )
                         ),

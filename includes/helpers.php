@@ -81,6 +81,8 @@ function uwp_missing_callback($args) {
 
 function uwp_select_callback($args) {
 
+
+
     global $uwp_options;
     
     $global = isset( $args['global'] ) ? $args['global'] : true;
@@ -130,6 +132,122 @@ function uwp_select_callback($args) {
     $html .= '<label for="uwp_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
 
     echo $html;
+}
+
+/**
+ * Lets the chosen select keep the order value it was given.
+ * 
+ * @param $args
+ */
+function uwp_select_order_callback($args) {
+
+
+
+    global $uwp_options;
+
+    $global = isset( $args['global'] ) ? $args['global'] : true;
+    if ($global) {
+        if ( isset( $uwp_options[ $args['id'] ] ) ) {
+            $value = $uwp_options[ $args['id'] ];
+        } else {
+            $value = isset( $args['std'] ) ? $args['std'] : '';
+        }
+    } else {
+        if ( isset( $args['value'] ) ) {
+            $value = $args['value'];
+        } else {
+            $value = isset( $args['std'] ) ? $args['std'] : '';
+        }
+    }
+
+
+    if ( isset( $args['placeholder'] ) ) {
+        $placeholder = $args['placeholder'];
+    } else {
+        $placeholder = '';
+    }
+
+    if ( isset( $args['chosen'] ) ) {
+        $chosen = ($args['multiple'] ? '[]" multiple="multiple" class="uwp_chosen_select" style="height:auto"' : "'");
+    } else {
+        $chosen = '';
+    }
+
+    //print_r($args);
+
+    $html = '<select id="uwp_dummy_' . $args['id'] . '" name="uwp_dummy_settings[' . $args['id'] . ']' . $chosen . ' data-placeholder="' . $placeholder . '" />';
+
+    foreach ( $args['options'] as $option => $name ) {
+        if (is_array($value)) {
+            if (in_array($option, $value)) {
+                $selected = 'selected="selected"';
+            } else {
+                $selected = '';
+            }
+        } else {
+            $selected = selected( $option, $value, false );
+        }
+        $html .= '<option value="' . $option . '" ' . $selected . '>' . $name . '</option>';
+    }
+
+    $html .= '</select>';
+    $html .= '<label for="uwp_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+    // The hidden select with correct orders
+    $html .= '<select style="visibility: hidden;
+    height: 0px;
+    padding: 0;
+    margin: 0;
+    float: left;" id="' . $args['id'] . '" name="uwp_settings[' . $args['id'] . '][]" multiple="multiple" data-placeholder="' . $placeholder . '" />';
+
+    if (is_array($value)) {
+        foreach ( $value as $option ) {
+            if ( in_array( $option,array_keys($args['options']) ) ) {
+                $selected = 'selected="selected"';
+                $html .= '<option value="' . $option . '" ' . $selected . '>' . $args['options'][$option] . '</option>';
+            }
+        }
+    }
+
+    $html .= '</select>';
+
+    echo $html;
+
+
+    ?>
+<script>
+    jQuery(document).ready(function() {
+        setTimeout(function(){
+
+            // Set the current order one load
+            var current_order = jQuery('#<?php echo $args['id'];?>').val();
+            if(current_order){
+                ChosenOrder.setSelectionOrder(jQuery("#uwp_dummy_<?php echo $args['id'];?>"), current_order);
+            }
+
+
+            // on order change update the hidden real values
+            jQuery("#uwp_dummy_<?php echo $args['id'];?>").chosen().change(function () {
+                console.log('changed');
+
+                setTimeout(function(){ // trigers before the item is removed so we add a slight delay
+                    var selection = ChosenOrder.getSelectionOrder(jQuery("#uwp_dummy_<?php echo $args['id'];?>"));
+                    console.log(selection);
+                    jQuery('#<?php echo $args['id'];?>').find('option').remove().end();
+
+                    jQuery.each( selection, function( key, value ) {
+                        jQuery('#<?php echo $args['id'];?>').append('<option value="'+value+'" selected>'+value+'</option>')
+                    });
+
+                }, 50);
+
+            });
+
+        }, 100);
+    });
+</script>
+
+    <?php
 }
 
 function uwp_text_callback( $args ) {
@@ -241,6 +359,10 @@ function uwp_number_callback( $args ) {
     $html .= '<label for="uwp_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
 
     echo $html;
+}
+
+function uwp_info_callback( $args ) {
+    echo $args['desc'];
 }
 
 function uwp_build_profile_tab_url($user_id, $tab = false, $subtab = false) {
