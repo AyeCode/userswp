@@ -233,18 +233,18 @@ class Users_WP_Admin_Settings {
         styling options in this plugin as we believe they belong in your theme.
         This doesn\'t mean that you cannot customize the plugin behaviour.
         To do this we provided a long list of Filters and Actions for any developer
-        to extend UsersWP to fit their needs. <a href="">Click here for the list of available hooks</a>', 'userswp' ); ?></p>
+        to extend UsersWP to fit their needs.', 'userswp' ); ?></p>
 
         <h3><?php echo __( 'Override Templates', 'userswp' ); ?></h3>
         <p><?php echo __( 'If you need to change the look and feel of any UsersWP templates,
         simply create a folder named userswp inside your active child theme
         and copy the template you wish to modify in it. You can now modify the template.
         The plugin will use your modified version and you don\'t hve to worry about plugin or theme updates.
-        <a href="">Click here for examples</a>', 'userswp' ); ?></p>
+        <a href="https://userswp.io/docs/override-templates/">Click here for examples</a>', 'userswp' ); ?></p>
 
         <h3><?php echo __( 'Add-ons', 'userswp' ); ?></h3>
         <p><?php echo __( 'We have a long list of free and premium add-ons that will help you extend users management on your wesbsite.
-        <a href="">Click here for our official free and premium add-ons</a>', 'userswp' ); ?></p>
+        <a href="https://userswp.io/downloads/category/addons/">Click here for our official free and premium add-ons</a>', 'userswp' ); ?></p>
         <?php
     }
 
