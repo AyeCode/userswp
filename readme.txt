@@ -4,7 +4,7 @@ Donate link: https://userswp.io/
 Tags: buddypress, frontend, login, register, account, users
 Requires at least: 3.1
 Tested up to: 4.7
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
