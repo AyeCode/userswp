@@ -16,6 +16,7 @@
                 <?php
             }
             ?>
+            <?php do_action('uwp_social_fields', 'login'); ?>
             <div class="uwp-remember-me">
                 <label style="display: inline-block;" for="remember_me">
                     <input name="remember_me" id="remember_me" value="forever" type="checkbox">
