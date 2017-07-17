@@ -4,7 +4,7 @@ Donate link: https://userswp.io/
 Tags: buddypress, frontend, login, register, account, users
 Requires at least: 3.1
 Tested up to: 4.7
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -54,6 +54,9 @@ No questions so far, but don't hesitate to ask!
 TBA
 
 == Changelog ==
+= 1.0.4 =
+PHP < 5.5 compatibility changes - FIXED
+
 = 1.0.3 =
 Added callback to show info type setting - ADDED
 Profile tabs now appear in the order they are added - CHANGED

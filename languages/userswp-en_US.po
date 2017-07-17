@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.0.3\n"
+"Project-Id-Version: UsersWP 1.0.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-14 18:06+0100\n"
-"PO-Revision-Date: 2017-07-14 18:07+0100\n"
+"POT-Creation-Date: 2017-07-17 15:51+0100\n"
+"PO-Revision-Date: 2017-07-17 15:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode <info@userswp.io>\n"
 "Language: en_US\n"
@@ -207,12 +207,12 @@ msgid ""
 msgstr ""
 
 #: admin/settings/class-users-wp-admin-settings.php:263
-#: includes/helpers.php:3157 templates/change.php:13
+#: includes/helpers.php:3178 templates/change.php:13
 msgid "Account"
 msgstr ""
 
 #: admin/settings/class-users-wp-admin-settings.php:266
-#: includes/helpers.php:2178 includes/helpers.php:3155
+#: includes/helpers.php:2199 includes/helpers.php:3176
 msgid "Register"
 msgstr ""
 
@@ -250,9 +250,9 @@ msgstr ""
 #: admin/settings/class-users-wp-admin-settings.php:454
 #: admin/settings/class-users-wp-admin-settings.php:464
 #: admin/settings/class-users-wp-admin-settings.php:474
-#: includes/helpers.php:2702 includes/helpers.php:2712
-#: includes/helpers.php:2728 includes/helpers.php:2744
-#: includes/helpers.php:2760
+#: includes/helpers.php:2723 includes/helpers.php:2733
+#: includes/helpers.php:2749 includes/helpers.php:2765
+#: includes/helpers.php:2781
 msgid "Select a page"
 msgstr ""
 
@@ -739,7 +739,7 @@ msgstr ""
 #: admin/settings/class-users-wp-form-builder.php:1765
 #: admin/settings/class-users-wp-form-builder.php:1910
 #: admin/settings/class-users-wp-form-builder.php:1927
-#: includes/helpers.php:2386
+#: includes/helpers.php:2407
 msgid "Yes"
 msgstr ""
 
@@ -750,7 +750,7 @@ msgstr ""
 #: admin/settings/class-users-wp-form-builder.php:1768
 #: admin/settings/class-users-wp-form-builder.php:1913
 #: admin/settings/class-users-wp-form-builder.php:1930
-#: includes/helpers.php:2385
+#: includes/helpers.php:2406
 msgid "No"
 msgstr ""
 
@@ -1209,7 +1209,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-users-wp-activator.php:346
-#: includes/class-users-wp-activator.php:381 includes/helpers.php:2979
+#: includes/class-users-wp-activator.php:381 includes/helpers.php:3000
 msgid "Confirm Password"
 msgstr ""
 
@@ -1280,120 +1280,120 @@ msgstr ""
 msgid "<strong>ERROR</strong>: You must accept our terms and conditions."
 msgstr ""
 
-#: includes/class-users-wp-forms.php:275 includes/class-users-wp-forms.php:706
+#: includes/class-users-wp-forms.php:277 includes/class-users-wp-forms.php:713
 msgid "<strong>Error</strong>: Something went wrong."
 msgstr ""
 
-#: includes/class-users-wp-forms.php:290 includes/class-users-wp-forms.php:713
-#: includes/class-users-wp-forms.php:790
+#: includes/class-users-wp-forms.php:292 includes/class-users-wp-forms.php:720
+#: includes/class-users-wp-forms.php:799
 msgid ""
 "<strong>Error</strong>: Something went wrong. Please contact site admin."
 msgstr ""
 
-#: includes/class-users-wp-forms.php:302
+#: includes/class-users-wp-forms.php:306
 msgid "Password you entered"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:322
+#: includes/class-users-wp-forms.php:326
 msgid "To activate your account, visit the following address:"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:334
+#: includes/class-users-wp-forms.php:338
 msgid "Please activate your account :"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:334 includes/class-users-wp-forms.php:342
+#: includes/class-users-wp-forms.php:338 includes/class-users-wp-forms.php:346
 msgid "<p><b>"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:339 includes/class-users-wp-forms.php:348
-#: includes/class-users-wp-forms.php:1780
+#: includes/class-users-wp-forms.php:343 includes/class-users-wp-forms.php:352
+#: includes/class-users-wp-forms.php:1791
 msgid ""
 "<strong>Error</strong>: Something went wrong when sending email. Please "
 "contact site admin."
 msgstr ""
 
-#: includes/class-users-wp-forms.php:342 includes/class-users-wp-forms.php:602
+#: includes/class-users-wp-forms.php:346 includes/class-users-wp-forms.php:609
 msgid "Your login Information :"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:343
+#: includes/class-users-wp-forms.php:347
 msgid "Username:"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:344
+#: includes/class-users-wp-forms.php:348
 msgid "Password:"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:369 includes/class-users-wp-forms.php:442
+#: includes/class-users-wp-forms.php:375 includes/class-users-wp-forms.php:448
 msgid "<strong>Error</strong>: Invalid username or Password."
 msgstr ""
 
-#: includes/class-users-wp-forms.php:384
+#: includes/class-users-wp-forms.php:390
 msgid ""
 "An email has been sent to your registered email address. Please click the "
 "activation link to proceed."
 msgstr ""
 
-#: includes/class-users-wp-forms.php:388
+#: includes/class-users-wp-forms.php:394
 msgid "Your account is under moderation. We will email you once its approved."
 msgstr ""
 
-#: includes/class-users-wp-forms.php:397
+#: includes/class-users-wp-forms.php:403
 #, php-format
 msgid ""
 "Account registered successfully. A password has been generated and mailed to "
 "your registered Email ID. Please login <a href=\"%s\">here</a>."
 msgstr ""
 
-#: includes/class-users-wp-forms.php:399
+#: includes/class-users-wp-forms.php:405
 #, php-format
 msgid "Account registered successfully. Please login <a href=\"%s\">here</a>"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:488
+#: includes/class-users-wp-forms.php:494
 msgid ""
 "<strong>Error</strong>: Your account is not activated yet. Please activate "
 "your account first."
 msgstr ""
 
-#: includes/class-users-wp-forms.php:603 includes/class-users-wp-forms.php:618
+#: includes/class-users-wp-forms.php:610 includes/class-users-wp-forms.php:625
 #, php-format
 msgid "Username: %s"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:604
+#: includes/class-users-wp-forms.php:611
 #, php-format
 msgid "Password: %s"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:616
+#: includes/class-users-wp-forms.php:623
 msgid "Someone requested that the password be reset for the following account:"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:619
+#: includes/class-users-wp-forms.php:626
 msgid "If this was a mistake, just ignore this email and nothing will happen."
 msgstr ""
 
-#: includes/class-users-wp-forms.php:620
+#: includes/class-users-wp-forms.php:627
 msgid "To reset your password, visit the following address:"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:1111
+#: includes/class-users-wp-forms.php:1122
 msgid "Choose"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:1582
+#: includes/class-users-wp-forms.php:1593
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-users-wp-forms.php:1778
+#: includes/class-users-wp-forms.php:1789
 msgid ""
 "<strong>Error</strong>: Something went wrong when sending email. Please "
 "check your site error log for more details."
 msgstr ""
 
-#: includes/class-users-wp-profile.php:373 includes/helpers.php:2467
+#: includes/class-users-wp-profile.php:373 includes/helpers.php:2488
 #: templates/account.php:13
 msgid "Edit Account"
 msgstr ""
@@ -1567,300 +1567,300 @@ msgstr ""
 msgid "Remove File"
 msgstr ""
 
-#: includes/helpers.php:1744
+#: includes/helpers.php:1745
 msgid "<strong>Error</strong>: Permission denied."
 msgstr ""
 
-#: includes/helpers.php:1777 includes/helpers.php:1779
-#: includes/helpers.php:1872 includes/helpers.php:1874
+#: includes/helpers.php:1778 includes/helpers.php:1780
+#: includes/helpers.php:1875 includes/helpers.php:1877
 msgid "<strong>Error</strong>: "
 msgstr ""
 
-#: includes/helpers.php:1880
+#: includes/helpers.php:1883
 msgid "<strong>Error</strong>: The email address isn&#8217;t correct."
 msgstr ""
 
-#: includes/helpers.php:1886
+#: includes/helpers.php:1889
 msgid ""
 "<strong>Error</strong>: This email is already registered, please choose "
 "another one."
 msgstr ""
 
-#: includes/helpers.php:1891
+#: includes/helpers.php:1894
 msgid "<strong>Error</strong>: This email doesn't exists."
 msgstr ""
 
-#: includes/helpers.php:1894
+#: includes/helpers.php:1897
 msgid ""
 "<strong>Error</strong>: This username is invalid because it uses illegal "
 "characters. Please enter a valid username."
 msgstr ""
 
-#: includes/helpers.php:1903
+#: includes/helpers.php:1906
 msgid ""
 "<strong>Error</strong>: This username is already registered. Please choose "
 "another one."
 msgstr ""
 
-#: includes/helpers.php:1937
+#: includes/helpers.php:1942
 msgid "<strong>Error</strong>: Please enter your old password"
 msgstr ""
 
-#: includes/helpers.php:1946
+#: includes/helpers.php:1953
 msgid "<strong>Error</strong>: Incorrect old password"
 msgstr ""
 
-#: includes/helpers.php:1953
+#: includes/helpers.php:1962
 msgid "<strong>Error</strong>: Old password and new password are same"
 msgstr ""
 
-#: includes/helpers.php:1964
+#: includes/helpers.php:1975
 msgid "<strong>Error</strong>: Please enter your Email"
 msgstr ""
 
-#: includes/helpers.php:1971
+#: includes/helpers.php:1984
 msgid "<strong>Error</strong>: Please fill Confirm Email field"
 msgstr ""
 
-#: includes/helpers.php:1978
+#: includes/helpers.php:1993
 msgid "<strong>Error</strong>: Email and Confirm email not match"
 msgstr ""
 
-#: includes/helpers.php:1989
+#: includes/helpers.php:2006
 msgid "Please enter a password"
 msgstr ""
 
-#: includes/helpers.php:1993
+#: includes/helpers.php:2010
 msgid "ERROR: Password must be 7 characters or more."
 msgstr ""
 
-#: includes/helpers.php:2009
+#: includes/helpers.php:2028
 msgid "ERROR: Passwords do not match."
 msgstr ""
 
-#: includes/helpers.php:2177
+#: includes/helpers.php:2198
 msgid "General"
 msgstr ""
 
-#: includes/helpers.php:2179 includes/helpers.php:3156 templates/login.php:26
+#: includes/helpers.php:2200 includes/helpers.php:3177 templates/login.php:26
 #: widgets/login.php:34 widgets/login.php:58
 msgid "Login"
 msgstr ""
 
-#: includes/helpers.php:2180 includes/helpers.php:3160
+#: includes/helpers.php:2201 includes/helpers.php:3181
 msgid "Change Password"
 msgstr ""
 
-#: includes/helpers.php:2181 includes/helpers.php:3161 templates/change.php:13
+#: includes/helpers.php:2202 includes/helpers.php:3182 templates/change.php:13
 msgid "Profile"
 msgstr ""
 
-#: includes/helpers.php:2182 includes/helpers.php:3162
+#: includes/helpers.php:2203 includes/helpers.php:3183
 msgid "Users"
 msgstr ""
 
-#: includes/helpers.php:2183
+#: includes/helpers.php:2204
 msgid "Uninstall"
 msgstr ""
 
-#: includes/helpers.php:2188
+#: includes/helpers.php:2209
 msgid "Form Builder"
 msgstr ""
 
-#: includes/helpers.php:2193
+#: includes/helpers.php:2214
 msgid "Notifications"
 msgstr ""
 
-#: includes/helpers.php:2242
+#: includes/helpers.php:2263
 #, php-format
 msgid ""
 "You can change your profile picture on your <a href=\"%s\">Profile Page</a>."
 msgstr ""
 
-#: includes/helpers.php:2296
+#: includes/helpers.php:2317
 msgid "Change Avatar"
 msgstr ""
 
-#: includes/helpers.php:2302
+#: includes/helpers.php:2323
 msgid "Upload Avatar"
 msgstr ""
 
-#: includes/helpers.php:2310
+#: includes/helpers.php:2331
 msgid "Change Banner"
 msgstr ""
 
-#: includes/helpers.php:2316
+#: includes/helpers.php:2337
 msgid "Upload Banner"
 msgstr ""
 
-#: includes/helpers.php:2342 includes/helpers.php:2479
+#: includes/helpers.php:2363 includes/helpers.php:2500
 msgid "Privacy"
 msgstr ""
 
-#: includes/helpers.php:2365
+#: includes/helpers.php:2386
 msgid "Field"
 msgstr ""
 
-#: includes/helpers.php:2368
+#: includes/helpers.php:2389
 msgid "Is Public?"
 msgstr ""
 
-#: includes/helpers.php:2409 templates/change.php:11 templates/forgot.php:11
+#: includes/helpers.php:2430 templates/change.php:11 templates/forgot.php:11
 #: templates/reset.php:14
 msgid "Submit"
 msgstr ""
 
-#: includes/helpers.php:2671
+#: includes/helpers.php:2692
 msgid "Select a Page"
 msgstr ""
 
-#: includes/helpers.php:2686
+#: includes/helpers.php:2707
 msgid "Registration Action"
 msgstr ""
 
-#: includes/helpers.php:2687
+#: includes/helpers.php:2708
 msgid "Select how registration should be handled."
 msgstr ""
 
-#: includes/helpers.php:2692
+#: includes/helpers.php:2713
 msgid "Select Option"
 msgstr ""
 
-#: includes/helpers.php:2697
+#: includes/helpers.php:2718
 msgid "Register Redirect Page"
 msgstr ""
 
-#: includes/helpers.php:2698
+#: includes/helpers.php:2719
 msgid ""
 "Set the page to redirect the user to after signing up. If no page has been "
 "set WordPress default will be used."
 msgstr ""
 
-#: includes/helpers.php:2707
+#: includes/helpers.php:2728
 msgid "Register TOS Page"
 msgstr ""
 
-#: includes/helpers.php:2708
+#: includes/helpers.php:2729
 msgid ""
 "Terms of Service page. When set \"Accept terms and Conditions\" checkbox "
 "will appear on the register form."
 msgstr ""
 
-#: includes/helpers.php:2723
+#: includes/helpers.php:2744
 msgid "Login Redirect Page"
 msgstr ""
 
-#: includes/helpers.php:2724
+#: includes/helpers.php:2745
 msgid ""
 "Set the page to redirect the user to after logging in. If no page has been "
 "set WordPress default will be used."
 msgstr ""
 
-#: includes/helpers.php:2739
+#: includes/helpers.php:2760
 msgid "Logout Redirect Page"
 msgstr ""
 
-#: includes/helpers.php:2740
+#: includes/helpers.php:2761
 msgid ""
 "Set the page to redirect the user to after logging out. If no page has been "
 "set WordPress default will be used."
 msgstr ""
 
-#: includes/helpers.php:2755
+#: includes/helpers.php:2776
 msgid "Delete Redirect Page"
 msgstr ""
 
-#: includes/helpers.php:2756
+#: includes/helpers.php:2777
 msgid ""
 "Set the page to redirect the user to after after they delete account. If no "
 "page has been set WordPress default will be used."
 msgstr ""
 
-#: includes/helpers.php:2804
+#: includes/helpers.php:2825
 msgid "Auto approve"
 msgstr ""
 
-#: includes/helpers.php:2805
+#: includes/helpers.php:2826
 msgid "Auto approve + Auto Login"
 msgstr ""
 
-#: includes/helpers.php:2806
+#: includes/helpers.php:2827
 msgid "Require Email Activation"
 msgstr ""
 
-#: includes/helpers.php:2818
+#: includes/helpers.php:2839
 msgid "Account activated successfully. Please login to continue."
 msgstr ""
 
-#: includes/helpers.php:2822
+#: includes/helpers.php:2843
 msgid ""
 "Your account is not activated yet. Please check your email for activation "
 "email."
 msgstr ""
 
-#: includes/helpers.php:2826
+#: includes/helpers.php:2847
 msgid "Invalid activation key or account."
 msgstr ""
 
-#: includes/helpers.php:2830
+#: includes/helpers.php:2851
 msgid "Something went wrong."
 msgstr ""
 
-#: includes/helpers.php:2912
+#: includes/helpers.php:2933
 #, php-format
 msgid "I Accept <a href=\"%s\" target=\"_blank\">Terms and Conditions</a>."
 msgstr ""
 
-#: includes/helpers.php:2936
+#: includes/helpers.php:2957
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/helpers.php:3155
+#: includes/helpers.php:3176
 msgid "register"
 msgstr ""
 
-#: includes/helpers.php:3156
+#: includes/helpers.php:3177
 msgid "login"
 msgstr ""
 
-#: includes/helpers.php:3157
+#: includes/helpers.php:3178
 msgid "account"
 msgstr ""
 
-#: includes/helpers.php:3158
+#: includes/helpers.php:3179
 msgid "forgot"
 msgstr ""
 
-#: includes/helpers.php:3158
+#: includes/helpers.php:3179
 msgid "Forgot Password?"
 msgstr ""
 
-#: includes/helpers.php:3159
+#: includes/helpers.php:3180
 msgid "reset"
 msgstr ""
 
-#: includes/helpers.php:3159
+#: includes/helpers.php:3180
 msgid "Reset Password"
 msgstr ""
 
-#: includes/helpers.php:3160
+#: includes/helpers.php:3181
 msgid "change"
 msgstr ""
 
-#: includes/helpers.php:3161
+#: includes/helpers.php:3182
 msgid "profile"
 msgstr ""
 
-#: includes/helpers.php:3162
+#: includes/helpers.php:3183
 msgid "users"
 msgstr ""
 
-#: includes/helpers.php:3622
+#: includes/helpers.php:3643
 msgid ""
 "<strong>Heads Up!</strong><br/> User registration is currently not allowed."
 msgstr ""
 
-#: includes/helpers.php:3805
+#: includes/helpers.php:3826
 #, php-format
 msgid ""
 "Email from UsersWP failed to send.\n"
