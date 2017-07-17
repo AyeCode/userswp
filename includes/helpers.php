@@ -136,7 +136,7 @@ function uwp_select_callback($args) {
 
 /**
  * Lets the chosen select keep the order value it was given.
- * 
+ *
  * @param $args
  */
 function uwp_select_order_callback($args) {
@@ -1693,7 +1693,8 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
     $errors = apply_filters('uwp_validate_fields_before', $errors, $data, $type);
 
-    if (!empty($errors->get_error_code())) {
+    $error_code = $errors->get_error_code();
+    if (!empty($error_code)) {
         return $errors;
     }
 
@@ -1781,8 +1782,10 @@ function uwp_validate_fields($data, $type, $fields = false) {
                 }
             }
 
-            if (!empty($errors->get_error_code()))
+            $error_code = $errors->get_error_code();
+            if (!empty($error_code)) {
                 return $errors;
+            }
 
 
             $value = $data[$field->htmlvar_name];
@@ -1918,8 +1921,10 @@ function uwp_validate_fields($data, $type, $fields = false) {
         }
     }
 
-    if (!empty($errors->get_error_code()))
+    $error_code = $errors->get_error_code();
+    if (!empty($error_code)) {
         return $errors;
+    }
 
     if ($type == 'login') {
         $password_type = 'login';
@@ -1937,8 +1942,10 @@ function uwp_validate_fields($data, $type, $fields = false) {
             $errors->add( 'empty_password', __( '<strong>Error</strong>: Please enter your old password', 'userswp' ) );
         }
 
-        if (!empty($errors->get_error_code()))
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
         $pass = $data['uwp_'.$password_type.'_old_password'];
         $user = get_user_by( 'id', get_current_user_id() );
@@ -1946,15 +1953,19 @@ function uwp_validate_fields($data, $type, $fields = false) {
             $errors->add( 'invalid_password', __( '<strong>Error</strong>: Incorrect old password', 'userswp' ) );
         }
 
-        if (!empty($errors->get_error_code()))
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
         if( $data['uwp_'.$password_type.'_old_password'] == $data['uwp_'.$password_type.'_password'] ) {
             $errors->add( 'invalid_password', __( '<strong>Error</strong>: Old password and new password are same', 'userswp' ) );
         }
 
-        if (!empty($errors->get_error_code()))
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
     }
 
@@ -1964,22 +1975,28 @@ function uwp_validate_fields($data, $type, $fields = false) {
             $errors->add( 'empty_email', __( '<strong>Error</strong>: Please enter your Email', 'userswp' ) );
         }
 
-        if (!empty($errors->get_error_code()))
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
         if( !isset($data['uwp_account_confirm_email']) || empty( $data['uwp_account_confirm_email'] ) ) {
             $errors->add( 'empty_confirm_email', __( '<strong>Error</strong>: Please fill Confirm Email field', 'userswp' ) );
         }
 
-        if (!empty($errors->get_error_code()))
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
         if( $data['uwp_account_email'] != $data['uwp_account_confirm_email'] ) {
             $errors->add( 'email_mismatch', __( '<strong>Error</strong>: Email and Confirm email not match', 'userswp' ) );
         }
 
-        if (!empty($errors->get_error_code()))
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
     }
 
@@ -1996,8 +2013,10 @@ function uwp_validate_fields($data, $type, $fields = false) {
         $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
     }
 
-    if (!empty($errors->get_error_code()))
+    $error_code = $errors->get_error_code();
+    if (!empty($error_code)) {
         return $errors;
+    }
 
     if (($type == 'register' && $enable_password == '1') || $type == 'reset' || $type == 'change') {
 
@@ -2014,8 +2033,10 @@ function uwp_validate_fields($data, $type, $fields = false) {
     }
 
 
-    if (!empty($errors->get_error_code()))
+    $error_code = $errors->get_error_code();
+    if (!empty($error_code)) {
         return $errors;
+    }
     
     return $validated_data;
 }

@@ -20,7 +20,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-define( 'USERSWP_VERSION', '1.0.2' );
+define( 'USERSWP_VERSION', '1.0.3' );
 
 define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
 
