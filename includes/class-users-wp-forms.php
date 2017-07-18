@@ -385,6 +385,7 @@ class Users_WP_Forms {
             } elseif ($reg_action == 'require_admin_review' && defined('UWP_MOD_VERSION')) {
                 update_user_meta( $user_id, 'uwp_mod', '1' );
                 $this->uwp_send_email( 'mod_pending', $user_id );
+                uwp_send_admin_email( 'mod_admin', $user_id );
                 return __('Your account is under moderation. We will email you once its approved.', 'userswp');
             } else {
                 $login_page = uwp_get_option('login_page', false);

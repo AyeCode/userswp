@@ -668,6 +668,7 @@ class Users_WP_Admin_Settings {
                         ),
                     )
                 ),
+                'admin' => apply_filters( 'uwp_settings_notifications_admin', array()),
             ),
         );
 
