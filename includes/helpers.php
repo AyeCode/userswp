@@ -1368,8 +1368,7 @@ function get_uwp_users_list() {
     $where = '';
     $where = apply_filters('uwp_users_search_where', $where, $keyword);
 
-
-    if ($keyword) {
+    if ($keyword || $where) {
         if (empty($where)) {
             $users = $wpdb->get_results($wpdb->prepare(
                 "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*

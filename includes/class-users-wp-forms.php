@@ -52,7 +52,7 @@ class Users_WP_Forms {
         }
         $redirect_to = apply_filters('uwp_login_redirect', $redirect_to);
 
-        if (isset($_POST['uwp_register_submit'])) {
+        if (isset($_POST['uwp_register_nonce'])) {
             $auto_login = uwp_get_option('uwp_registration_action', false);
             $errors = $this->process_register($_POST, $_FILES);
             if (!is_wp_error($errors)) {
@@ -68,18 +68,18 @@ class Users_WP_Forms {
                 $redirect = apply_filters('uwp_register_redirect', $reg_redirect_to);
             }
             $processed = true;
-        } elseif (isset($_POST['uwp_login_submit'])) {
+        } elseif (isset($_POST['uwp_login_nonce'])) {
             $errors = $this->process_login($_POST);
             if (isset($_POST['redirect_to'])) {
                 $redirect_to = strip_tags(esc_sql($_POST['redirect_to']));
             }
             $redirect = $redirect_to;
             $processed = true;
-        } elseif (isset($_POST['uwp_forgot_submit'])) {
+        } elseif (isset($_POST['uwp_forgot_nonce'])) {
             $errors = $this->process_forgot($_POST);
             $message = __('Please check your email.', 'userswp');
             $processed = true;
-        } elseif (isset($_POST['uwp_change_submit'])) {
+        } elseif (isset($_POST['uwp_change_nonce'])) {
             $errors = $this->process_change($_POST);
             $message = __('Password changed successfully', 'userswp');
             $processed = true;
@@ -87,7 +87,7 @@ class Users_WP_Forms {
             $errors = $this->process_reset($_POST);
             $message = sprintf(__('Password updated successfully. Please <a href="%s">login</a> with your new password', 'userswp'), $login_page_url);
             $processed = true;
-        } elseif (isset($_POST['uwp_account_submit'])) {
+        } elseif (isset($_POST['uwp_account_nonce'])) {
             $errors = $this->process_account($_POST, $_FILES);
             $message = __('Account updated successfully.', 'userswp');
             $processed = true;
