@@ -1490,8 +1490,7 @@ function get_uwp_users_list() {
     $where = '';
     $where = apply_filters('uwp_users_search_where', $where, $keyword);
 
-
-    if ($keyword) {
+    if ($keyword || $where) {
         if (empty($where)) {
             $users = $wpdb->get_results($wpdb->prepare(
                 "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
@@ -2211,7 +2210,7 @@ function uwp_get_settings_tabs() {
 
     // wp-admin/admin.php?page=uwp_notifications
     $tabs['uwp_notifications'] = array(
-        'main' => __( 'Notifications', 'userswp' ),
+        'main' => __( 'Users', 'userswp' ),
     );
 
     return apply_filters( 'uwp_settings_tabs', $tabs );
@@ -3815,6 +3814,118 @@ function uwp_send_email( $message_type, $user_id, $login_details = false )
     $message = apply_filters('uwp_send_email_message', $message, $message_type, $user_id);
 
     $headers = apply_filters('uwp_send_email_headers', $headers, $message_type, $user_id);
+
+    $sent = wp_mail($to, $subject, $message, $headers);
+
+    if (!$sent) {
+        if (is_array($to)) {
+            $to = implode(',', $to);
+        }
+        $log_message = sprintf(
+            __("Email from UsersWP failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'userswp'),
+            $message_type,
+            date_i18n('F j Y H:i:s', current_time('timestamp')),
+            $to,
+            $subject
+        );
+        uwp_error_log($log_message);
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function uwp_send_admin_email( $message_type, $user_id)
+{
+    
+    $login_page_id = uwp_get_option('login_page', false);
+    if ($login_page_id) {
+        $login_page_url = get_permalink($login_page_id);
+    } else {
+        $login_page_url = wp_login_url();
+    }
+
+
+    $extras = "";
+    $subject = "";
+    $message = "";
+
+    $extras = apply_filters('uwp_send_admin_mail_extras', $extras, $message_type, $user_id);
+    $subject = apply_filters('uwp_send_admin_mail_subject', $subject, $message_type);
+    $message = apply_filters('uwp_send_admin_mail_message', $message, $message_type);
+
+    if (!empty($subject)) {
+        $subject = __(stripslashes_deep($subject), 'userswp');
+    }
+
+    if (!empty($message)) {
+        $message = __(stripslashes_deep($message), 'userswp');
+    }
+
+    $sitefromEmail = apply_filters('uwp_send_mail_admin_email', get_option('admin_email'));
+    $sitefromEmailName = apply_filters('uwp_send_mail_admin_blogname', stripslashes(get_option('blogname')));
+    
+    $siteurl = home_url();
+    $siteurl_link = '<a href="' . $siteurl . '">' . $siteurl . '</a>';
+    $loginurl = $login_page_url;
+    $loginurl_link = '<a href="' . $loginurl . '">login</a>';
+
+    $current_date = date_i18n('Y-m-d H:i:s', current_time('timestamp'));
+
+    $site_email = get_option('admin_email');
+
+    $site_name = stripslashes(get_option('blogname'));
+    
+    $search_array = array(
+        '[#site_name_url#]',
+        '[#site_name#]',
+        '[#from_name#]',
+        '[#login_url#]',
+        '[#from_email#]',
+        '[#current_date#]',
+        '[#extras#]',
+    );
+    $replace_array = array(
+        $siteurl_link,
+        $sitefromEmailName,
+        $site_name,
+        $loginurl_link,
+        $site_email,
+        $current_date,
+        $extras
+    );
+    $message = str_replace($search_array, $replace_array, $message);
+
+    $search_array = array(
+        '[#site_name_url#]',
+        '[#site_name#]',
+        '[#from_name#]',
+        '[#from_email#]',
+        '[#current_date#]'
+    );
+    $replace_array = array(
+        $siteurl_link,
+        $sitefromEmailName,
+        $site_name,
+        $site_email,
+        $current_date
+    );
+    $subject = str_replace($search_array, $replace_array, $subject);
+
+    $headers = array();
+    $headers[] = 'Content-type: text/html; charset=UTF-8';
+    $headers[] = "Reply-To: " . $site_email;
+    $headers[] = 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>';
+
+    $to = $site_email;
+
+    $to = apply_filters('uwp_send_admin_email_to', $to, $message_type, $user_id);
+
+    $subject = apply_filters('uwp_send_admin_email_subject', $subject, $message_type, $user_id);
+
+    $message = apply_filters('uwp_send_admin_email_message', $message, $message_type, $user_id);
+
+    $headers = apply_filters('uwp_send_admin_email_headers', $headers, $message_type, $user_id);
 
     $sent = wp_mail($to, $subject, $message, $headers);
 
