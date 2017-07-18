@@ -4208,3 +4208,18 @@ function uwp_output_country_html($value){
     }
     return $value;
 }
+
+add_action( 'user_register', 'uwp_register_sync_usermeta', 10, 1);
+function uwp_register_sync_usermeta($user_id) {
+
+    $user_data = get_userdata($user_id);
+
+    uwp_update_usermeta($user_id, 'uwp_account_username', $user_data->user_login);
+    uwp_update_usermeta($user_id, 'uwp_account_email', $user_data->user_email);
+    uwp_update_usermeta($user_id, 'uwp_account_display_name', $user_data->display_name);
+    uwp_update_usermeta($user_id, 'uwp_account_first_name', $user_data->first_name);
+    uwp_update_usermeta($user_id, 'uwp_account_last_name', $user_data->last_name);
+    uwp_update_usermeta($user_id, 'uwp_account_bio', $user_data->description);
+    uwp_update_usermeta($user_id, 'uwp_account_bio', $user_data->description);
+    
+}
