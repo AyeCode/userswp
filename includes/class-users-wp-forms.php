@@ -222,8 +222,10 @@ class Users_WP_Forms {
 
         $result = array_merge( $result, $uploads_result );
 
-        if ($errors->get_error_code())
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
         if (isset($result['password']) && !empty($result['password'])) {
             $password = $result['password'];
@@ -290,8 +292,10 @@ class Users_WP_Forms {
             $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp'));
         }
 
-        if ($errors->get_error_code())
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
         do_action('uwp_after_custom_fields_save', 'register', $data, $result, $user_id);
 
@@ -350,8 +354,10 @@ class Users_WP_Forms {
         }
 
 
-        if ($errors->get_error_code())
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
 
         $reg_action = uwp_get_option('uwp_registration_action', false);
@@ -489,7 +495,8 @@ class Users_WP_Forms {
             $errors->add('activate_account', __('<strong>Error</strong>: Your account is not activated yet. Please activate your account first.', 'userswp'));
         }
 
-        if (!empty($errors->get_error_code())) {
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
         }
 
@@ -714,8 +721,10 @@ class Users_WP_Forms {
             $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp'));
         }
 
-        if ($errors->get_error_code())
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
 
         if (uwp_get_option('enable_account_update_notification') == '1') {
@@ -791,8 +800,10 @@ class Users_WP_Forms {
             $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp'));
         }
 
-        if ($errors->get_error_code())
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
         
         if ($image_url) {
             if ($type == 'avatar') {
@@ -982,7 +993,8 @@ class Users_WP_Forms {
                     jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("option", "dateFormat", '<?php echo $jquery_date_format;?>');
 
                     <?php if(!empty($value)){?>
-                    jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("setDate", '<?php echo $value;?>');
+                    var parsedDate = jQuery.datepicker.parseDate('yy-mm-dd', '<?php echo $value;?>');
+                    jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("setDate", parsedDate);
                     <?php } ?>
 
                 });
@@ -1801,7 +1813,8 @@ class Users_WP_Forms {
             }
         }
 
-        if ($errors->get_error_code()) {
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
         } else {
             return $res;

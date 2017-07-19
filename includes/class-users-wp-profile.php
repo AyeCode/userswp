@@ -308,7 +308,20 @@ class Users_WP_Profile {
             );
         }
 
-        return apply_filters( 'uwp_profile_tabs', $tabs, $user, $allowed_tabs );
+        $all_tabs = apply_filters( 'uwp_profile_tabs', $tabs, $user, $allowed_tabs );
+
+        // order tabs as per option values
+        if(!empty($allowed_tabs)){
+            $allowed_tabs = array_reverse($allowed_tabs);
+            foreach($allowed_tabs as $key => $val){
+                if(isset($all_tabs[$val])){
+                    $all_tabs = array($val => $all_tabs[$val]) + $all_tabs;
+                }
+
+            }
+        }
+
+        return $all_tabs;
     }
 
     public function get_profile_tabs_content($user) {

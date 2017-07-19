@@ -190,10 +190,13 @@
       margin-bottom: 20px;
     }
     dd {
-      margin-left: 80px;
+      margin-left: 60%;
+      select {
+        float: none;
+      }
     }
     dt {
-      float: left;
+      float: none;
       width: 160px;
       overflow: hidden;
       clear: left;

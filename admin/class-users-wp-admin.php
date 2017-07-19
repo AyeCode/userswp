@@ -129,8 +129,9 @@ class Users_WP_Admin {
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
         }
         wp_enqueue_script('jquery-ui-sortable');
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.js', array( 'jquery' ), null, false );
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.min.js', array( 'jquery' ), null, false );
         wp_enqueue_script( "uwp_chosen", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/chosen.jquery.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( "uwp_chosen_order", plugin_dir_url( __FILE__ ) . 'assets/js/chosen.order.jquery.min.js', array( 'jquery' ), $this->version, false );
 
         $ajax_cons_data = array(
             'url' => admin_url('admin-ajax.php'),
@@ -207,7 +208,7 @@ class Users_WP_Admin {
             'manage_options',
             'userswp',
             array( $plugin_admin_settings, 'uwp_settings_page' ),
-            'dashicons-admin-users',
+            'dashicons-groups',
             70
         );
 

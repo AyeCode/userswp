@@ -1604,7 +1604,11 @@ class Users_WP_Form_Builder {
             $value = esc_attr($cf['defaults']['option_values']);
         }
 
-        $field_type = isset($field_info->field_type) ? $field_info->field_type : '';
+        $field_type = isset($field_info->field_type) ? $field_info->field_type : $cf['field_type'];
+        $field_type_key = isset($field_info->field_type_key) ? $field_info->field_type_key : '';
+        if(!$field_type_key){
+            $field_type_key = isset($_REQUEST['field_type_key']) ? esc_html($_REQUEST['field_type_key']) : '';
+        }
         ?>
         <li>
             <label for="option_values" class="uwp-tooltip-wrap">
@@ -1621,6 +1625,11 @@ class Users_WP_Form_Builder {
                         <?php }?>
 
                         <?php if ($field_type == 'multiselect' || $field_type == 'select') { ?>
+                            <span><?php _e('Like: Apple,Bannana,Pear,Peach', 'userswp'); ?></span>
+                            <br/>
+
+                            <span><?php _e('Or you can show Selection/Value shown: Pets Allowed/Yes,Pets not Allowed/No', 'userswp'); ?></span>
+
                             <br/>
                             <span><?php _e('- If using OPTGROUP tag to grouping options, use "{optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"', 'userswp'); ?></span>
                             <br/>
@@ -1630,7 +1639,7 @@ class Users_WP_Form_Builder {
             </label>
             <div class="uwp-input-wrap">
 
-                <?php if(isset($field_info->field_type_key) && $field_info->field_type_key == 'country' ){
+                <?php if(isset($field_type_key) && $field_type_key == 'country' ){
 
                     // @todo here we should show a multiselect to either include or exclude countries
                     _e('A full country list will be shown','userswp');

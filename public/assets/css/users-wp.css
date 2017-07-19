@@ -881,6 +881,11 @@
     padding-right: 0;
     padding-left: 40px !important; }
 
+.uwp-cs .flag, .uwp-cs .uwp-country-name {
+  display: inline-block; }
+.uwp-cs .uwp-country-name {
+  margin-left: 5px; }
+
 .imgareaselect-border1 {
   background: url(../images/border-v.gif) repeat-y left top; }
 
@@ -1858,9 +1863,11 @@
   margin-top: 0;
   margin-bottom: 20px; }
 .uwp_page .ui-timepicker-div dd {
-  margin-left: 80px; }
+  margin-left: 60%; }
+  .uwp_page .ui-timepicker-div dd select {
+    float: none; }
 .uwp_page .ui-timepicker-div dt {
-  float: left;
+  float: none;
   width: 160px;
   overflow: hidden;
   clear: left;

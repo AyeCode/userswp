@@ -233,18 +233,18 @@ class Users_WP_Admin_Settings {
         styling options in this plugin as we believe they belong in your theme.
         This doesn\'t mean that you cannot customize the plugin behaviour.
         To do this we provided a long list of Filters and Actions for any developer
-        to extend UsersWP to fit their needs. <a href="">Click here for the list of available hooks</a>', 'userswp' ); ?></p>
+        to extend UsersWP to fit their needs.', 'userswp' ); ?></p>
 
         <h3><?php echo __( 'Override Templates', 'userswp' ); ?></h3>
         <p><?php echo __( 'If you need to change the look and feel of any UsersWP templates,
         simply create a folder named userswp inside your active child theme
         and copy the template you wish to modify in it. You can now modify the template.
         The plugin will use your modified version and you don\'t hve to worry about plugin or theme updates.
-        <a href="">Click here for examples</a>', 'userswp' ); ?></p>
+        <a href="https://userswp.io/docs/override-templates/">Click here for examples</a>', 'userswp' ); ?></p>
 
         <h3><?php echo __( 'Add-ons', 'userswp' ); ?></h3>
         <p><?php echo __( 'We have a long list of free and premium add-ons that will help you extend users management on your wesbsite.
-        <a href="">Click here for our official free and premium add-ons</a>', 'userswp' ); ?></p>
+        <a href="https://userswp.io/downloads/category/addons/">Click here for our official free and premium add-ons</a>', 'userswp' ); ?></p>
         <?php
     }
 
@@ -397,7 +397,7 @@ class Users_WP_Admin_Settings {
                         'profile_page' => array(
                             'id' => 'profile_page',
                             'name' => __( 'User Profile Page', 'userswp' ),
-                            'desc' => __( 'This is the front end user\'s profile page. This page automatically override the default WordPress author page.', 'userswp' ),
+                            'desc' => __( 'This is the front end user\'s profile page. This page automatically overrides the default WordPress author page.', 'userswp' ),
                             'type' => 'select',
                             'options' => uwp_get_pages(),
                             'chosen' => true,
@@ -407,7 +407,7 @@ class Users_WP_Admin_Settings {
                         'register_page' => array(
                             'id' => 'register_page',
                             'name' => __( 'Register Page', 'userswp' ),
-                            'desc' => __( 'This is the front end register page. This is where users creates their account.', 'userswp' ),
+                            'desc' => __( 'This is the front end register page. This is where users create their account.', 'userswp' ),
                             'type' => 'select',
                             'options' => uwp_get_pages(),
                             'chosen' => true,
@@ -485,7 +485,6 @@ class Users_WP_Admin_Settings {
                 ),
                 'register' => apply_filters( 'uwp_settings_general_register', uwp_settings_general_register_fields()),
                 'login' => apply_filters( 'uwp_settings_general_login', uwp_settings_general_loginout_fields()),
-                'account' => apply_filters( 'uwp_settings_general_account', uwp_settings_general_account_fields()),
                 'profile' => apply_filters( 'uwp_settings_general_profile',
                     array(
                         'enable_profile_header' => array(
@@ -537,7 +536,7 @@ class Users_WP_Admin_Settings {
                             'desc' => __( 'Choose the tabs to display in UsersWP Profile', 'userswp' ),
                             'multiple'    => true,
                             'chosen'      => true,
-                            'type'        => 'select',
+                            'type'        => 'select_order',
                             'options' =>   $this->uwp_available_tab_items(),
                             'placeholder' => __( 'Select Tabs', 'userswp' )
                         ),

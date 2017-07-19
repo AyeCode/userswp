@@ -81,6 +81,8 @@ function uwp_missing_callback($args) {
 
 function uwp_select_callback($args) {
 
+
+
     global $uwp_options;
     
     $global = isset( $args['global'] ) ? $args['global'] : true;
@@ -130,6 +132,122 @@ function uwp_select_callback($args) {
     $html .= '<label for="uwp_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
 
     echo $html;
+}
+
+/**
+ * Lets the chosen select keep the order value it was given.
+ *
+ * @param $args
+ */
+function uwp_select_order_callback($args) {
+
+
+
+    global $uwp_options;
+
+    $global = isset( $args['global'] ) ? $args['global'] : true;
+    if ($global) {
+        if ( isset( $uwp_options[ $args['id'] ] ) ) {
+            $value = $uwp_options[ $args['id'] ];
+        } else {
+            $value = isset( $args['std'] ) ? $args['std'] : '';
+        }
+    } else {
+        if ( isset( $args['value'] ) ) {
+            $value = $args['value'];
+        } else {
+            $value = isset( $args['std'] ) ? $args['std'] : '';
+        }
+    }
+
+
+    if ( isset( $args['placeholder'] ) ) {
+        $placeholder = $args['placeholder'];
+    } else {
+        $placeholder = '';
+    }
+
+    if ( isset( $args['chosen'] ) ) {
+        $chosen = ($args['multiple'] ? '[]" multiple="multiple" class="uwp_chosen_select" style="height:auto"' : "'");
+    } else {
+        $chosen = '';
+    }
+
+    //print_r($args);
+
+    $html = '<select id="uwp_dummy_' . $args['id'] . '" name="uwp_dummy_settings[' . $args['id'] . ']' . $chosen . ' data-placeholder="' . $placeholder . '" />';
+
+    foreach ( $args['options'] as $option => $name ) {
+        if (is_array($value)) {
+            if (in_array($option, $value)) {
+                $selected = 'selected="selected"';
+            } else {
+                $selected = '';
+            }
+        } else {
+            $selected = selected( $option, $value, false );
+        }
+        $html .= '<option value="' . $option . '" ' . $selected . '>' . $name . '</option>';
+    }
+
+    $html .= '</select>';
+    $html .= '<label for="uwp_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
+
+    // The hidden select with correct orders
+    $html .= '<select style="visibility: hidden;
+    height: 0px;
+    padding: 0;
+    margin: 0;
+    float: left;" id="' . $args['id'] . '" name="uwp_settings[' . $args['id'] . '][]" multiple="multiple" data-placeholder="' . $placeholder . '" />';
+
+    if (is_array($value)) {
+        foreach ( $value as $option ) {
+            if ( in_array( $option,array_keys($args['options']) ) ) {
+                $selected = 'selected="selected"';
+                $html .= '<option value="' . $option . '" ' . $selected . '>' . $args['options'][$option] . '</option>';
+            }
+        }
+    }
+
+    $html .= '</select>';
+
+    echo $html;
+
+
+    ?>
+<script>
+    jQuery(document).ready(function() {
+        setTimeout(function(){
+
+            // Set the current order one load
+            var current_order = jQuery('#<?php echo $args['id'];?>').val();
+            if(current_order){
+                ChosenOrder.setSelectionOrder(jQuery("#uwp_dummy_<?php echo $args['id'];?>"), current_order);
+            }
+
+
+            // on order change update the hidden real values
+            jQuery("#uwp_dummy_<?php echo $args['id'];?>").chosen().change(function () {
+                console.log('changed');
+
+                setTimeout(function(){ // trigers before the item is removed so we add a slight delay
+                    var selection = ChosenOrder.getSelectionOrder(jQuery("#uwp_dummy_<?php echo $args['id'];?>"));
+                    console.log(selection);
+                    jQuery('#<?php echo $args['id'];?>').find('option').remove().end();
+
+                    jQuery.each( selection, function( key, value ) {
+                        jQuery('#<?php echo $args['id'];?>').append('<option value="'+value+'" selected>'+value+'</option>')
+                    });
+
+                }, 50);
+
+            });
+
+        }, 100);
+    });
+</script>
+
+    <?php
 }
 
 function uwp_text_callback( $args ) {
@@ -241,6 +359,10 @@ function uwp_number_callback( $args ) {
     $html .= '<label for="uwp_settings[' . $args['id'] . ']"> '  . $args['desc'] . '</label>';
 
     echo $html;
+}
+
+function uwp_info_callback( $args ) {
+    echo $args['desc'];
 }
 
 function uwp_build_profile_tab_url($user_id, $tab = false, $subtab = false) {
@@ -1570,7 +1692,8 @@ function uwp_validate_fields($data, $type, $fields = false) {
 
     $errors = apply_filters('uwp_validate_fields_before', $errors, $data, $type);
 
-    if (!empty($errors->get_error_code())) {
+    $error_code = $errors->get_error_code();
+    if (!empty($error_code)) {
         return $errors;
     }
 
@@ -1658,8 +1781,10 @@ function uwp_validate_fields($data, $type, $fields = false) {
                 }
             }
 
-            if (!empty($errors->get_error_code()))
+            $error_code = $errors->get_error_code();
+            if (!empty($error_code)) {
                 return $errors;
+            }
 
 
             $value = $data[$field->htmlvar_name];
@@ -1795,8 +1920,10 @@ function uwp_validate_fields($data, $type, $fields = false) {
         }
     }
 
-    if (!empty($errors->get_error_code()))
+    $error_code = $errors->get_error_code();
+    if (!empty($error_code)) {
         return $errors;
+    }
 
     if ($type == 'login') {
         $password_type = 'login';
@@ -1814,8 +1941,10 @@ function uwp_validate_fields($data, $type, $fields = false) {
             $errors->add( 'empty_password', __( '<strong>Error</strong>: Please enter your old password', 'userswp' ) );
         }
 
-        if (!empty($errors->get_error_code()))
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
         $pass = $data['uwp_'.$password_type.'_old_password'];
         $user = get_user_by( 'id', get_current_user_id() );
@@ -1823,15 +1952,19 @@ function uwp_validate_fields($data, $type, $fields = false) {
             $errors->add( 'invalid_password', __( '<strong>Error</strong>: Incorrect old password', 'userswp' ) );
         }
 
-        if (!empty($errors->get_error_code()))
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
         if( $data['uwp_'.$password_type.'_old_password'] == $data['uwp_'.$password_type.'_password'] ) {
             $errors->add( 'invalid_password', __( '<strong>Error</strong>: Old password and new password are same', 'userswp' ) );
         }
 
-        if (!empty($errors->get_error_code()))
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
     }
 
@@ -1841,22 +1974,28 @@ function uwp_validate_fields($data, $type, $fields = false) {
             $errors->add( 'empty_email', __( '<strong>Error</strong>: Please enter your Email', 'userswp' ) );
         }
 
-        if (!empty($errors->get_error_code()))
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
         if( !isset($data['uwp_account_confirm_email']) || empty( $data['uwp_account_confirm_email'] ) ) {
             $errors->add( 'empty_confirm_email', __( '<strong>Error</strong>: Please fill Confirm Email field', 'userswp' ) );
         }
 
-        if (!empty($errors->get_error_code()))
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
         if( $data['uwp_account_email'] != $data['uwp_account_confirm_email'] ) {
             $errors->add( 'email_mismatch', __( '<strong>Error</strong>: Email and Confirm email not match', 'userswp' ) );
         }
 
-        if (!empty($errors->get_error_code()))
+        $error_code = $errors->get_error_code();
+        if (!empty($error_code)) {
             return $errors;
+        }
 
     }
 
@@ -1873,8 +2012,10 @@ function uwp_validate_fields($data, $type, $fields = false) {
         $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
     }
 
-    if (!empty($errors->get_error_code()))
+    $error_code = $errors->get_error_code();
+    if (!empty($error_code)) {
         return $errors;
+    }
 
     if (($type == 'register' && $enable_password == '1') || $type == 'reset' || $type == 'change') {
 
@@ -1891,8 +2032,10 @@ function uwp_validate_fields($data, $type, $fields = false) {
     }
 
 
-    if (!empty($errors->get_error_code()))
+    $error_code = $errors->get_error_code();
+    if (!empty($error_code)) {
         return $errors;
+    }
     
     return $validated_data;
 }
@@ -2561,7 +2704,7 @@ function uwp_settings_general_register_fields() {
         'uwp_registration_action' => array(
             'id' => 'uwp_registration_action',
             'name' => __('Registration Action', 'userswp'),
-            'desc' => __('Select the status you would like user to have after they register on your site', 'userswp'),
+            'desc' => __('Select how registration should be handled.', 'userswp'),
             'type' => 'select',
             'global' => false,
             'options' => uwp_registration_status_options(),
@@ -2572,7 +2715,7 @@ function uwp_settings_general_register_fields() {
         'register_redirect_to' => array(
             'id' => 'register_redirect_to',
             'name' => __( 'Register Redirect Page', 'userswp' ),
-            'desc' => __( 'Set the page to redirect the user after signing up. If no page has been set WordPress default will be used.', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user to after signing up. If no page has been set WordPress default will be used.', 'userswp' ),
             'type' => 'select',
             'options' => uwp_get_pages(),
             'chosen' => true,
@@ -2582,7 +2725,7 @@ function uwp_settings_general_register_fields() {
         'register_terms_page' => array(
             'id' => 'register_terms_page',
             'name' => __( 'Register TOS Page', 'userswp' ),
-            'desc' => __( 'Terms of Service page. When set "Accept terms and Conditions" checkbox would appear in the register form.', 'userswp' ),
+            'desc' => __( 'Terms of Service page. When set "Accept terms and Conditions" checkbox will appear on the register form.', 'userswp' ),
             'type' => 'select',
             'options' => uwp_get_pages(),
             'chosen' => true,
@@ -2598,7 +2741,7 @@ function uwp_settings_general_login_fields() {
         'login_redirect_to' => array(
             'id' => 'login_redirect_to',
             'name' => __( 'Login Redirect Page', 'userswp' ),
-            'desc' => __( 'Set the page to redirect the user after logging in. If no page has been set WordPress default will be used.', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user to after logging in. If no page has been set WordPress default will be used.', 'userswp' ),
             'type' => 'select',
             'options' => uwp_get_pages(),
             'chosen' => true,
@@ -2609,34 +2752,12 @@ function uwp_settings_general_login_fields() {
     return $fields;
 }
 
-function uwp_settings_general_account_fields() {
-    $fields =  array(
-        'disable_display_name_field' => array(
-            'id'   => 'disable_display_name_field',
-            'name' => __( 'Disable "Display Name" Field', 'userswp' ),
-            'desc' => 'If checked "Display Name" Field will be disabled in Account Form.',
-            'type' => 'checkbox',
-            'std'  => '0',
-            'class' => 'uwp_label_inline',
-        ),
-        'disable_bio_field' => array(
-            'id'   => 'disable_bio_field',
-            'name' => __( 'Disable "Bio" Field', 'userswp' ),
-            'desc' => 'If checked "Bio" Field will be disabled in Account Form.',
-            'type' => 'checkbox',
-            'std'  => '0',
-            'class' => 'uwp_label_inline',
-        ),
-    );
-    return $fields;
-}
-
 function uwp_settings_general_logout_fields() {
     $fields =  array(
         'logout_redirect_to' => array(
             'id' => 'logout_redirect_to',
             'name' => __( 'Logout Redirect Page', 'userswp' ),
-            'desc' => __( 'Set the page to redirect the user after logging out. If no page has been set WordPress default will be used.', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user to after logging out. If no page has been set WordPress default will be used.', 'userswp' ),
             'type' => 'select',
             'options' => uwp_get_pages(),
             'chosen' => true,
@@ -2652,7 +2773,7 @@ function uwp_settings_general_delete_fields() {
         'delete_redirect_to' => array(
             'id' => 'delete_redirect_to',
             'name' => __( 'Delete Redirect Page', 'userswp' ),
-            'desc' => __( 'Set the page to redirect the user after after they delete account. If no page has been set WordPress default will be used.', 'userswp' ),
+            'desc' => __( 'Set the page to redirect the user to after after they delete account. If no page has been set WordPress default will be used.', 'userswp' ),
             'type' => 'select',
             'options' => uwp_get_pages(),
             'chosen' => true,

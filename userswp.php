@@ -1,17 +1,17 @@
 <?php
 /*
 Plugin Name: UsersWP
-Plugin URI: https://wpgeodirectory.com
+Plugin URI: https://userswp.io
 Description: User management plugin.
-Version: 1.0.1
-Author: GeoDirectory team
-Author URI: https://wpgeodirectory.com
+Version: 1.0.4
+Author: AyeCode Ltd
+Author URI: https://userswp.io
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 Text Domain: userswp
 Domain Path: /languages
 Requires at least: 3.1
-Tested up to: 4.6
+Tested up to: 4.7
 Update URL: https://github.com/UsersWP/userswp/
 */
 
@@ -20,7 +20,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-define( 'USERSWP_VERSION', '1.0.1' );
+define( 'USERSWP_VERSION', '1.0.4' );
 
 define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
 
