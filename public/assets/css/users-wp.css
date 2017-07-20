@@ -1816,8 +1816,17 @@
 .uwp_adv_search_form .uwp-user-search {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
 .uwp_page .uwp-user-search input[type="text"],
+.uwp_page .uwp-user-search input[type="phone"],
+.uwp_page .uwp-user-search input[type="url"],
+.uwp_page .uwp-user-search input[type="email"],
 .uwp_widgets .uwp-user-search input[type="text"],
-.uwp_adv_search_form .uwp-user-search input[type="text"] {
+.uwp_widgets .uwp-user-search input[type="phone"],
+.uwp_widgets .uwp-user-search input[type="url"],
+.uwp_widgets .uwp-user-search input[type="email"],
+.uwp_adv_search_form .uwp-user-search input[type="text"],
+.uwp_adv_search_form .uwp-user-search input[type="phone"],
+.uwp_adv_search_form .uwp-user-search input[type="url"],
+.uwp_adv_search_form .uwp-user-search input[type="email"] {
   padding: 9px;
   font-size: 14px;
   border-width: 1px;
