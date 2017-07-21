@@ -2639,7 +2639,7 @@ function uwp_get_usermeta_row($user_id = false) {
 /**
  * Deletes a UsersWP meta row using the user ID.
  *
- * @since   1.0.4
+ * @since   1.0.5
  * @package Users_WP
  * @param int|bool $user_id The User ID.
  * @return void.
@@ -4246,7 +4246,7 @@ function uwp_register_sync_usermeta($user_id) {
 /**
  * Delete UsersWP meta when user get deleted.
  *
- * @since   1.0.4
+ * @since   1.0.5
  * @package Users_WP
  * @param int $user_id The User ID.
  * @return void.
