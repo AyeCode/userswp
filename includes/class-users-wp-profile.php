@@ -68,7 +68,7 @@ class Users_WP_Profile {
                     <i class="fa fa-camera" aria-hidden="true"></i>
                     <div data-type="banner" class="uwp-profile-banner-change <?php echo $trigger_class; ?>">
                     <span class="uwp-profile-banner-change-inner">
-                        Update Cover Photo
+                        <?php echo __( 'Update Cover Photo', 'userswp' ); ?>
                     </span>
                     </div>
                 </div>
@@ -86,7 +86,7 @@ class Users_WP_Profile {
                         <div class="uwp-profile-avatar-change">
                             <div class="uwp-profile-avatar-change-inner">
                                 <i class="fa fa-camera" aria-hidden="true"></i>
-                                <a id="uwp-profile-picture-change" data-type="avatar" class="<?php echo $trigger_class; ?>" href="#">Update</a>
+                                <a id="uwp-profile-picture-change" data-type="avatar" class="<?php echo $trigger_class; ?>" href="#"><?php echo __( 'Update', 'userswp' ); ?></a>
                             </div>
                         </div>
                     <?php } ?>
@@ -711,7 +711,7 @@ class Users_WP_Profile {
                     <div class="uwp-bs-modal-content">
                         <div class="uwp-bs-modal-header">
                             <h4 class="uwp-bs-modal-title">
-                                Loading Form ...
+                                <?php echo __( 'Loading Form ...', 'userswp' ); ?>
                             </h4>
                         </div>
                         <div class="uwp-bs-modal-body">
@@ -761,9 +761,9 @@ class Users_WP_Profile {
                         <h4 class="uwp-bs-modal-title">
                             <?php
                             if ($type == 'avatar') {
-                                echo "Change your profile photo";
+                                echo __( 'Change your profile photo', 'userswp' );
                             } else {
-                                echo "Change your cover photo";
+                                echo __( 'Change your cover photo', 'userswp' );
                             }
                             ?>
                         </h4>
@@ -789,7 +789,7 @@ class Users_WP_Profile {
                                 </form>
                             </div>
                         </div>
-                        <button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal">Cancel</button>
+                        <button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal"><?php echo __( 'Cancel', 'userswp' ); ?></button>
                     </div>
                 </div>
             </div>
@@ -826,9 +826,9 @@ class Users_WP_Profile {
                         <h4 class="uwp-bs-modal-title">
                             <?php
                             if ($type == 'avatar') {
-                                echo "Change your profile photo";
+                                echo __( 'Change your profile photo', 'userswp' );
                             } else {
-                                echo "Change your cover photo";
+                                echo __( 'Change your cover photo', 'userswp' );
                             }
                             ?>
                         </h4>
@@ -839,7 +839,7 @@ class Users_WP_Profile {
                         <form id="uwp-upload-<?php echo $type; ?>-form" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
                             <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
-                            <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();">Upload <?php echo $type; ?></button>
+                            <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();"><?php echo __( 'Upload', 'userswp' ); ?> <?php echo $type; ?></button>
                             <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'userswp').uwp_formatSizeUnits(uwp_get_max_upload_size($type)); ?></p>
                             <div class="uwp_upload_field" style="display: none">
                                 <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" required="required" type="file" value="">
@@ -855,7 +855,7 @@ class Users_WP_Profile {
                                 </form>
                             </div>
                         </div>
-                        <button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal">Cancel</button>
+                        <button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal"><?php echo __( 'Cancel', 'userswp' ); ?></button>
                     </div>
                 </div>
             </div>
@@ -1110,10 +1110,10 @@ class Users_WP_Profile {
             $height = $imagedetails[1];
 
             if ( $width < $min_width) {
-                return new WP_Error( 'image-too-small', __( 'The uploaded file is too small. Minimum image width should be '.$min_width.'px', 'userswp' ) );
+                return new WP_Error( 'image-too-small', sprintf( __( 'The uploaded file is too small. Minimum image width should be %s px', 'userswp' ),  $min_width));
             }
             if ( $height < $min_height) {
-                return new WP_Error( 'image-too-small', __( 'The uploaded file is too small. Minimum image height should be '.$min_height.'px', 'userswp' ) );
+                return new WP_Error( 'image-too-small', sprintf( __( 'The uploaded file is too small. Minimum image height should be %s px', 'userswp' ), $min_height) );
             }
         }
 
@@ -1136,7 +1136,7 @@ class Users_WP_Profile {
         $type = strip_tags(esc_sql($_POST['uwp_popup_type']));
 
         if (!in_array($type, array('banner', 'avatar'))) {
-            $result['error'] = uwp_wrap_notice("Invalid modal type", 'error');
+            $result['error'] = uwp_wrap_notice(__("Invalid modal type", "userswp"), 'error');
             $return = json_encode($result);
             echo $return;
             die();
@@ -1154,7 +1154,7 @@ class Users_WP_Profile {
         $result = array();
 
         if (!$field) {
-            $result['error'] = uwp_wrap_notice("No fields available", 'error');
+            $result['error'] = uwp_wrap_notice(__("No fields available", "userswp"), 'error');
             $return = json_encode($result);
             echo $return;
             die();
@@ -1226,11 +1226,11 @@ class Users_WP_Profile {
                 ?>
                 <form method="get" action="">
                     <select name="uwp_layout" id="uwp_layout">
-                        <option <?php selected( $default_layout, "list" ); ?> value="list">List View</option>
-                        <option <?php selected( $default_layout, "2col" ); ?> value="2col">Grid 2 Col</option>
-                        <option <?php selected( $default_layout, "3col" ); ?> value="3col">Grid 3 Col</option>
-                        <option <?php selected( $default_layout, "4col" ); ?> value="4col">Grid 4 Col</option>
-                        <option <?php selected( $default_layout, "5col" ); ?> value="5col">Grid 5 Col</option>
+                        <option <?php selected( $default_layout, "list" ); ?> value="list"><?php echo __("List View", "userswp"); ?></option>
+                        <option <?php selected( $default_layout, "2col" ); ?> value="2col"><?php echo __("Grid 2 Col", "userswp"); ?></option>
+                        <option <?php selected( $default_layout, "3col" ); ?> value="3col"><?php echo __("Grid 3 Col", "userswp"); ?></option>
+                        <option <?php selected( $default_layout, "4col" ); ?> value="4col"><?php echo __("Grid 4 Col", "userswp"); ?></option>
+                        <option <?php selected( $default_layout, "5col" ); ?> value="5col"><?php echo __("Grid 5 Col", "userswp"); ?></option>
                     </select>
                     <?php
                     $sort_by = "";
@@ -1239,11 +1239,11 @@ class Users_WP_Profile {
                     }
                     ?>
                     <select name="uwp_sort_by" id="uwp_sort_by" onchange="this.form.submit()">
-                        <option value="">Sort By:</option>
-                        <option <?php selected( $sort_by, "newer" ); ?> value="newer">Newer</option>
-                        <option <?php selected( $sort_by, "older" ); ?> value="older">Older</option>
-                        <option <?php selected( $sort_by, "alpha_asc" ); ?> value="alpha_asc">A-Z</option>
-                        <option <?php selected( $sort_by, "alpha_desc" ); ?> value="alpha_desc">Z-A</option>
+                        <option value=""><?php echo __("Sort By:", "userswp"); ?></option>
+                        <option <?php selected( $sort_by, "newer" ); ?> value="newer"><?php echo __("Newer", "userswp"); ?></option>
+                        <option <?php selected( $sort_by, "older" ); ?> value="older"><?php echo __("Older", "userswp"); ?></option>
+                        <option <?php selected( $sort_by, "alpha_asc" ); ?> value="alpha_asc"><?php echo __("A-Z", "userswp"); ?></option>
+                        <option <?php selected( $sort_by, "alpha_desc" ); ?> value="alpha_desc"><?php echo __("Z-A", "userswp"); ?></option>
                     </select>
                 </form>
             </div>
@@ -1316,10 +1316,7 @@ class Users_WP_Profile {
         } else {
             $value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
         }
-
-
-//        print_r($field);
-
+        
         // Select and Multiselect needs Value to be converted
         if ($field->field_type == 'select' || $field->field_type == 'multiselect') {
             $option_values_arr = uwp_string_values_to_options($field->option_values, true);
@@ -1335,9 +1332,6 @@ class Users_WP_Profile {
                         $value = '';
                     }
                 }
-
-
-
             }
 
             //Multiselect

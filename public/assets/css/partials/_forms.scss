@@ -139,12 +139,17 @@
   .uwp-user-search {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
-  .uwp-user-search input[type="text"] {
-    padding: 9px;
-    font-size: 14px;
-    border-width: 1px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+  .uwp-user-search {
+    input[type="text"],
+    input[type="phone"],
+    input[type="url"],
+    input[type="email"] {
+      padding: 9px;
+      font-size: 14px;
+      border-width: 1px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
   }
   .uwp-user-search {
     .uwp-search-submit,
