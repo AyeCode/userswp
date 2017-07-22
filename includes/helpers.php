@@ -2636,6 +2636,24 @@ function uwp_get_usermeta_row($user_id = false) {
     return $row;
 }
 
+/**
+ * Deletes a UsersWP meta row using the user ID.
+ *
+ * @since   1.0.5
+ * @package Users_WP
+ * @param int|bool $user_id The User ID.
+ * @return void.
+ */
+function uwp_delete_usermeta_row($user_id = false) {
+    if (!$user_id) {
+        return;
+    }
+
+    global $wpdb;
+    $meta_table = uwp_get_table_prefix() . 'uwp_usermeta';
+    $wpdb->query($wpdb->prepare("DELETE FROM {$meta_table} WHERE user_id = %d", $user_id));
+}
+
 function uwp_get_excluded_fields() {
     $excluded = array(
         'uwp_account_password',
@@ -4224,3 +4242,16 @@ function uwp_register_sync_usermeta($user_id) {
     uwp_update_usermeta($user_id, 'uwp_account_bio', $user_data->description);
     
 }
+
+/**
+ * Delete UsersWP meta when user get deleted.
+ *
+ * @since   1.0.5
+ * @package Users_WP
+ * @param int $user_id The User ID.
+ * @return void.
+ */
+function uwp_delete_usermeta_for_user($user_id) {
+    uwp_delete_usermeta_row($user_id);
+}
+add_action('delete_user', 'uwp_delete_usermeta_for_user');
