@@ -1,4 +1,4 @@
-﻿﻿=== UsersWP - User Profile & Registration ===
+﻿=== UsersWP - User Profile & Registration ===
 Contributors: viruthagiri, stiofansisland, paoltaia, ayecode
 Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
@@ -110,10 +110,14 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.7 =
+* Edit user in wp-admin does not display country input correctly - FIXED
+
 = 1.0.6 =
 * First release on WordPress.org - :)
 * Checks profile tabs array is unique before saving - ADDED
 * fade and show class renamed to avoid conflict with other themes - CHANGED
+* Chosen select inputs on form builder CSS issue, too thin - FIXED
 
 = 1.0.4 =
 * PHP < 5.5 compatibility changes - FIXED

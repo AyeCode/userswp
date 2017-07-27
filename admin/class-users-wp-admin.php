@@ -119,11 +119,15 @@ class Users_WP_Admin {
          */
 
         if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
+
             wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
             wp_enqueue_script( "uwp_timepicker", plugin_dir_url( dirname(__FILE__) ) . 'public/assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
-            wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.js', array( 'jquery' ), null, false );
+            wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.js', array( 'jquery',$this->plugin_name ), null, false );
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
             wp_enqueue_script( 'jcrop', array( 'jquery' ) );
+            wp_enqueue_script( "country-select", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/countrySelect.min.js', array( 'jquery' ), null, false );
+
+
         }
         if ($hook_suffix == 'userswp_page_uwp_tools') {
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
@@ -143,6 +147,9 @@ class Users_WP_Admin {
             'custom_field_id_required' => __('This field is required.', 'userswp'),
         );
         wp_localize_script($this->plugin_name, 'uwp_admin_ajax', $ajax_cons_data);
+
+        $country_data = uwp_get_country_data();
+        wp_localize_script($this->plugin_name, 'uwp_country_data', $country_data);
 
     }
 

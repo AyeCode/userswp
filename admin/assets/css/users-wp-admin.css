@@ -215,6 +215,10 @@ h3.users_wp_section_heading {
         #uwp_form_builder_container .uwp-side-sortables .posttype-tabs li a {
           color: #333;
           text-decoration: none; }
+    #uwp_form_builder_container .uwp-side-sortables .chosen-container {
+      width: 100% !important; }
+      #uwp_form_builder_container .uwp-side-sortables .chosen-container .chosen-search-input {
+        width: 100% !important; }
   #uwp_form_builder_container #uwp-available-fields ul li {
     float: left;
     list-style: none outside none;
