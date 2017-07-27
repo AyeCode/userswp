@@ -46,6 +46,9 @@ class Users_WP_Shortcodes {
 
 
     public function register($atts) {
+        if (is_user_logged_in()) {
+            return "";
+        }
         $args = shortcode_atts(
             array(
                 'role_id'   => '0',
@@ -58,6 +61,9 @@ class Users_WP_Shortcodes {
     }
 
     public function login() {
+        if (is_user_logged_in()) {
+            return "";
+        }
         return $this->uwp_generate_shortcode('login');
     }
 
@@ -86,6 +92,7 @@ class Users_WP_Shortcodes {
     }
     
     public function uwp_generate_shortcode($type = 'register') {
+
         $template = $this->templates->uwp_locate_template($type);
 
         ob_start();
