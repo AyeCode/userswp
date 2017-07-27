@@ -706,7 +706,7 @@ class Users_WP_Profile {
         ob_start();
         ?>
         <div id="uwp-popup-modal-wrap" style="display: none;">
-            <div class="uwp-bs-modal fade show">
+            <div class="uwp-bs-modal uwp_fade uwp_show">
                 <div class="uwp-bs-modal-dialog">
                     <div class="uwp-bs-modal-content">
                         <div class="uwp-bs-modal-header">
@@ -754,7 +754,7 @@ class Users_WP_Profile {
     public function uwp_image_crop_modal_html($type, $image_url, $full_width, $full_height) {
         ob_start();
         ?>
-        <div class="uwp-bs-modal fade show" id="uwp-<?php echo $type; ?>-modal">
+        <div class="uwp-bs-modal uwp_fade uwp_show" id="uwp-<?php echo $type; ?>-modal">
             <div class="uwp-bs-modal-dialog">
                 <div class="uwp-bs-modal-content">
                     <div class="uwp-bs-modal-header">
@@ -819,7 +819,7 @@ class Users_WP_Profile {
     public function uwp_crop_submit_form($type = 'avatar') {
         ob_start();
         ?>
-        <div class="uwp-bs-modal fade show" id="uwp-popup-modal-wrap">
+        <div class="uwp-bs-modal uwp_fade uwp_show" id="uwp-popup-modal-wrap">
             <div class="uwp-bs-modal-dialog">
                 <div class="uwp-bs-modal-content">
                     <div class="uwp-bs-modal-header">
