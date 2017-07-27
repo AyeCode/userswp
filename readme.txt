@@ -4,7 +4,7 @@ Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 3.1
 Tested up to: 4.8
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -106,12 +106,14 @@ No questions so far, but don't hesitate to ask!
 3. Registration Form.
 4. Drag and Drop Profile Builder.
 5. Login Form.
-6. Edit Accout Form.
+6. Edit Account Form.
 
 == Changelog ==
 
-= 1.0.5 =
+= 1.0.6 =
+* First release on WordPress.org - :)
 * Checks profile tabs array is unique before saving - ADDED
+* fade and show class renamed to avoid conflict with other themes - CHANGED
 
 = 1.0.4 =
 * PHP < 5.5 compatibility changes - FIXED
@@ -127,3 +129,5 @@ No questions so far, but don't hesitate to ask!
 * First alpha release.
 
 == Upgrade Notice ==
+
+TBA

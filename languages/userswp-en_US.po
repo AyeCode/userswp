@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.05\n"
+"Project-Id-Version: UsersWP 1.0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-27 12:40+0100\n"
-"PO-Revision-Date: 2017-07-27 12:40+0100\n"
+"POT-Creation-Date: 2017-07-27 13:17+0100\n"
+"PO-Revision-Date: 2017-07-27 13:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode <info@userswp.io>\n"
 "Language: en_US\n"
@@ -1985,13 +1985,6 @@ msgstr ""
 
 #: templates/reset.php:20
 msgid "Request reset link"
-msgstr ""
-
-#: userswp.php:102
-#, php-format
-msgid ""
-"The plugin %sWP Easy Updates%s is required to check for and update some "
-"installed plugins, please install it now."
 msgstr ""
 
 #: widgets/login.php:15
