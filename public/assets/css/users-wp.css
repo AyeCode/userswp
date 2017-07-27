@@ -1026,7 +1026,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   outline: 0; }
-  .uwp_page .uwp-bs-modal.fade .uwp-bs-modal-dialog {
+  .uwp_page .uwp-bs-modal.uwp_fade .uwp-bs-modal-dialog {
     -webkit-transition: -webkit-transform .3s ease-out;
     -o-transition: -o-transform .3s ease-out;
     transition: transform .3s ease-out;
@@ -1034,7 +1034,7 @@
     -ms-transform: translate(0, -25%);
     -o-transform: translate(0, -25%);
     transform: translate(0, -25%); }
-  .uwp_page .uwp-bs-modal.show .uwp-bs-modal-dialog {
+  .uwp_page .uwp-bs-modal.uwp_show .uwp-bs-modal-dialog {
     -webkit-transform: translate(0, 0);
     -ms-transform: translate(0, 0);
     -o-transform: translate(0, 0);
@@ -1089,9 +1089,9 @@
   left: 0;
   z-index: 1040;
   background-color: #000; }
-  .uwp_page .uwp-bs-modal-backdrop.fade {
+  .uwp_page .uwp-bs-modal-backdrop.uwp_fade {
     opacity: 0; }
-  .uwp_page .uwp-bs-modal-backdrop.show {
+  .uwp_page .uwp-bs-modal-backdrop.uwp_show {
     opacity: .5; }
 .uwp_page .uwp-bs-modal-header {
   display: flex;
