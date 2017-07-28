@@ -68,7 +68,7 @@ class Users_WP {
     public function __construct() {
 
         $this->plugin_name = 'users-wp';
-        $this->version = '1.0.0';
+        $this->version = USERSWP_VERSION;
 
         $this->load_dependencies();
         $this->init_settings();

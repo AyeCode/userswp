@@ -59,6 +59,13 @@
         }
       }
     }
+
+    .chosen-container{
+      width: 100% !important;
+      .chosen-search-input{
+        width: 100% !important;
+      }
+    }
   }
 
   #uwp-available-fields {

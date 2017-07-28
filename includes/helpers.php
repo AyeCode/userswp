@@ -42,7 +42,7 @@ function uwp_post_count($user_id, $post_type, $extra_post_status = '') {
 
     $post_status = "";
     if ($user_id == get_current_user_id()) {
-        $post_status = ' OR post_status = "draft" OR post_status = "private"';
+        $post_status = ' OR post_status = "draft" OR post_status = "private" ';
     }
     
     if (!empty($extra_post_status)) {
@@ -50,6 +50,10 @@ function uwp_post_count($user_id, $post_type, $extra_post_status = '') {
     }
 
     $post_status_where = ' AND ( post_status = "publish" ' . $post_status . ' )';
+
+    if($extra_post_status == 'any'){
+        $post_status_where = '';
+    }
 
     $count = $wpdb->get_var('
              SELECT COUNT(ID)
@@ -219,9 +223,11 @@ function uwp_select_order_callback($args) {
     jQuery(document).ready(function() {
         setTimeout(function(){
 
-            // Set the current order one load
+            // Set the current order on load
             var current_order = jQuery('#<?php echo $args['id'];?>').val();
+
             if(current_order){
+                current_order = jQuery.unique( current_order );
                 ChosenOrder.setSelectionOrder(jQuery("#uwp_dummy_<?php echo $args['id'];?>"), current_order);
             }
 
@@ -1661,6 +1667,10 @@ function uwp_file_upload_preview($field, $value, $removable = true) {
     }
 
     if ($value) {
+
+        $upload_dir = wp_upload_dir();
+        $value = $upload_dir['baseurl'].$value;
+
         $file = basename( $value );
         $filetype = wp_check_filetype($file);
         $image_types = array('png', 'jpg', 'jpeg', 'gif');
@@ -1788,7 +1798,7 @@ function uwp_validate_fields($data, $type, $fields = false) {
             }
 
 
-            $value = $data[$field->htmlvar_name];
+            $value = isset($data[$field->htmlvar_name]) ? $data[$field->htmlvar_name] : '';
             $sanitized_value = $value;
 
             if ($field->field_type == 'password') {
