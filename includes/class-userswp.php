@@ -111,6 +111,12 @@ class Users_WP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-i18n.php';
 
         /**
+         * The class responsible for sending emails
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-emails.php';
+
+        /**
          * The class responsible for defining form handler functionality
          * of the plugin.
          */
@@ -308,11 +314,7 @@ class Users_WP {
 
         // Popup and crop functions
         $this->loader->add_filter( 'ajax_query_attachments_args', $profile, 'uwp_restrict_attachment_display' );
-
-        if(uwp_doing_upload()){
-            add_filter( 'wp_handle_upload_prefilter', 'uwp_wp_media_restrict_file_types' );
-        }
-
+        
         $this->loader->add_action( 'uwp_handle_file_upload_error_checks', $profile, 'uwp_handle_file_upload_error_checks', 10, 4 );
         $this->loader->add_action( 'wp_ajax_uwp_avatar_banner_upload', $profile, 'uwp_ajax_avatar_banner_upload' );
         //$this->loader->add_action( 'wp_ajax_uwp_ajax_image_crop_popup', $profile, 'uwp_ajax_image_crop_popup' );

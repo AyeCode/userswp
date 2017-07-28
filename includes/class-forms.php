@@ -183,6 +183,7 @@ class Users_WP_Forms {
     public function process_register($data = array(), $files = array()) {
 
         $errors = new WP_Error();
+        $file_obj = new Users_WP_Files();
 
         if( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce' ) ) {
             return false;
@@ -212,7 +213,7 @@ class Users_WP_Forms {
             return $result;
         }
 
-        $uploads_result = uwp_validate_uploads($files, 'register');
+        $uploads_result = $file_obj->uwp_validate_uploads($files, 'register');
 
         if (is_wp_error($uploads_result)) {
             return $uploads_result;
@@ -338,7 +339,9 @@ class Users_WP_Forms {
             $login_details = __('<p><b>' . __('Please activate your account :', 'userswp') . '</b></p>
             <p>' . $message . '</p>');
 
-            $send_result = $this->uwp_send_email( 'activate', $user_id, $login_details );
+            $email = new Users_WP_Mails();
+            $send_result = $email->send( 'activate', $user_id, $login_details );
+            
             if (!$send_result) {
                 $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
             }
@@ -347,7 +350,9 @@ class Users_WP_Forms {
             <p>' . __('Username:', 'userswp') . ' ' . $result['uwp_account_username'] . '</p>
             <p>' . __('Password:', 'userswp') . ' ' . $message_pass . '</p>');
 
-            $send_result = $this->uwp_send_email( 'register', $user_id, $login_details );
+            $email = new Users_WP_Mails();
+            $send_result = $email->send( 'register', $user_id, $login_details );
+
             if (!$send_result) {
                 $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
             }
@@ -390,8 +395,20 @@ class Users_WP_Forms {
                 return __('An email has been sent to your registered email address. Please click the activation link to proceed.', 'userswp');
             } elseif ($reg_action == 'require_admin_review' && defined('UWP_MOD_VERSION')) {
                 update_user_meta( $user_id, 'uwp_mod', '1' );
-                $this->uwp_send_email( 'mod_pending', $user_id );
-                uwp_send_admin_email( 'mod_admin', $user_id );
+
+                $email = new Users_WP_Mails();
+                $send_result = $email->send( 'mod_pending', $user_id );
+
+                $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result);
+                if (is_wp_error($send_result)) {
+                    return $send_result;
+                }
+
+                $admin_send_result = $email->send_admin_email('mod_admin', $user_id);
+                if (is_wp_error($admin_send_result)) {
+                    return $admin_send_result;
+                }
+                
                 return __('Your account is under moderation. We will email you once its approved.', 'userswp');
             } else {
                 $login_page = uwp_get_option('login_page', false);
@@ -502,11 +519,12 @@ class Users_WP_Forms {
 
         $login_details = $this->generate_forgot_message($user_data);
 
-        $res = $this->uwp_send_email( 'forgot', $user_data->ID, $login_details );
-
-        $res = apply_filters('uwp_forms_check_for_send_mail_errors', $res, $user_data, $errors);
-        if (is_wp_error($res)) {
-            return $res;
+        $email = new Users_WP_Mails();
+        $send_result = $email->send( 'forgot', $user_data->ID, $login_details );
+        
+        $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
+        if (is_wp_error($send_result)) {
+            return $send_result;
         }
 
         return true;
@@ -537,12 +555,13 @@ class Users_WP_Forms {
         if (is_wp_error($user_data)) {
             return $user_data;
         }
-        
-        $res = $this->uwp_send_email( 'change', $user_data->ID );
 
-        $res = apply_filters('uwp_forms_check_for_send_mail_errors', $res, $user_data, $errors);
-        if (is_wp_error($res)) {
-            return $res;
+        $email = new Users_WP_Mails();
+        $send_result = $email->send( 'change', $user_data->ID );
+
+        $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
+        if (is_wp_error($send_result)) {
+            return $send_result;
         }
 
         wp_set_password( $data['uwp_change_password'], $user_data->ID );
@@ -578,12 +597,13 @@ class Users_WP_Forms {
         if (is_wp_error($user_data)) {
             return $user_data;
         }
-        
-        $res = $this->uwp_send_email( 'reset', $user_data->ID );
 
-        $res = apply_filters('uwp_forms_check_for_send_mail_errors', $res, $user_data, $errors);
-        if (is_wp_error($res)) {
-            return $res;
+        $email = new Users_WP_Mails();
+        $send_result = $email->send( 'reset', $user_data->ID );
+
+        $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
+        if (is_wp_error($send_result)) {
+            return $send_result;
         }
 
         wp_set_password( $data['uwp_reset_password'], $user_data->ID );
@@ -637,6 +657,8 @@ class Users_WP_Forms {
 
     public function process_account($data = array(), $files = array()) {
 
+        $file_obj = new Users_WP_Files();
+        
         $current_user_id = get_current_user_id();
         if (!$current_user_id) {
             return false;
@@ -658,7 +680,7 @@ class Users_WP_Forms {
             return $result;
         }
 
-        $uploads_result = uwp_validate_uploads($files, 'account');
+        $uploads_result = $file_obj->uwp_validate_uploads($files, 'account');
 
         if (is_wp_error($uploads_result)) {
             return $uploads_result;
@@ -729,12 +751,13 @@ class Users_WP_Forms {
 
         if (uwp_get_option('enable_account_update_notification') == '1') {
             $user_data = get_user_by('id', $user_id);
-            
-            $res = $this->uwp_send_email( 'account', $user_data->ID );
-            
-            $res = apply_filters('uwp_forms_check_for_send_mail_errors', $res, $user_data, $errors);
-            if (is_wp_error($res)) {
-                return $res;
+
+            $email = new Users_WP_Mails();
+            $send_result = $email->send( 'account', $user_data->ID );
+
+            $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
+            if (is_wp_error($send_result)) {
+                return $send_result;
             }
             
         }
@@ -745,6 +768,8 @@ class Users_WP_Forms {
 
     public function process_upload_submit($data = array(), $files = array(), $type = 'avatar') {
 
+        $file_obj = new Users_WP_Files();
+        
         $current_user_id = get_current_user_id();
         if (!$current_user_id) {
             return false;
@@ -756,7 +781,7 @@ class Users_WP_Forms {
 
         do_action('uwp_before_validate', $type);
 
-        $result = uwp_validate_uploads($files, $type);
+        $result = $file_obj->uwp_validate_uploads($files, $type);
 
         $result = apply_filters('uwp_validate_result', $result, $type);
 
@@ -903,12 +928,7 @@ class Users_WP_Forms {
             return true;
         }
     }
-
-    public function uwp_send_email( $message_type, $user_id, $login_details = false ) {
-        return uwp_send_email( $message_type, $user_id, $login_details);
-
-    }
-
+    
     public static function uwp_error_log($log){
 
         $should_log = apply_filters( 'uwp_log_errors', WP_DEBUG);
@@ -1261,6 +1281,8 @@ class Users_WP_Forms {
 
     public function uwp_form_input_file($html, $field, $value, $form_type){
 
+        $file_obj = new Users_WP_Files();
+        
         // Check if there is a field specific filter.
         if(has_filter("uwp_form_input_html_file_{$field->htmlvar_name}")){
             $html = apply_filters("uwp_form_input_html_file_{$field->htmlvar_name}", $html, $field, $value, $form_type);
@@ -1284,7 +1306,7 @@ class Users_WP_Forms {
                     </label>
                 <?php } ?>
 
-                <?php echo uwp_file_upload_preview($field, $value); ?>
+                <?php echo $file_obj->uwp_file_upload_preview($field, $value); ?>
                 <input name="<?php echo $field->htmlvar_name; ?>"
                        class="<?php echo $field->css_class; ?>"
                        placeholder="<?php echo $site_title; ?>"
@@ -1744,6 +1766,7 @@ class Users_WP_Forms {
     // Update admin edit
     public function update_profile_extra_admin_edit($user_id) {
         global $wpdb;
+        $file_obj = new Users_WP_Files();
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         //Normal fields
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND field_type != 'fieldset' ORDER BY sort_order ASC");
@@ -1778,7 +1801,7 @@ class Users_WP_Forms {
         //File fields
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type = 'file' AND is_default = '0' ORDER BY sort_order ASC");
         if ($fields) {
-            $result = uwp_validate_uploads($_FILES, 'account', true, $fields);
+            $result = $file_obj->uwp_validate_uploads($_FILES, 'account', true, $fields);
             if (!is_wp_error($result)) {
                 foreach ($fields as $field) {
                     $value = $result[$field->htmlvar_name];

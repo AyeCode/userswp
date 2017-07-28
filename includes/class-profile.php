@@ -817,6 +817,7 @@ class Users_WP_Profile {
     }
 
     public function uwp_crop_submit_form($type = 'avatar') {
+        $files = new Users_WP_Files();
         ob_start();
         ?>
         <div class="uwp-bs-modal uwp_fade uwp_show" id="uwp-popup-modal-wrap">
@@ -840,7 +841,7 @@ class Users_WP_Profile {
                             <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
                             <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
                             <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();"><?php echo __( 'Upload', 'userswp' ); ?> <?php echo $type; ?></button>
-                            <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'userswp').uwp_formatSizeUnits(uwp_get_max_upload_size($type)); ?></p>
+                            <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'userswp').$files->uwp_formatSizeUnits($files->uwp_get_max_upload_size($type)); ?></p>
                             <div class="uwp_upload_field" style="display: none">
                                 <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" required="required" type="file" value="">
                             </div>
@@ -1160,7 +1161,8 @@ class Users_WP_Profile {
             die();
         }
 
-        $errors = handle_file_upload($field, $_FILES);
+        $files = new Users_WP_Files();
+        $errors = $files->handle_file_upload($field, $_FILES);
 
         if (is_wp_error($errors)) {
             $result['error'] = uwp_wrap_notice($errors->get_error_message(), 'error');
@@ -1304,6 +1306,7 @@ class Users_WP_Profile {
     public function uwp_get_field_value($field, $user) {
 
         $user_data = get_userdata($user->ID);
+        $file_obj = new Users_WP_Files();
 
         if ($field->htmlvar_name == 'uwp_account_email') {
             $value = $user_data->user_email;
@@ -1398,7 +1401,7 @@ class Users_WP_Profile {
 
         // File
         if ($field->field_type == 'file') {
-            $value = uwp_file_upload_preview($field, $value, false);
+            $value = $file_obj->uwp_file_upload_preview($field, $value, false);
         }
 
         // Sanitize
@@ -1407,7 +1410,7 @@ class Users_WP_Profile {
                 $value = esc_url( $value );
                 break;
             case 'file':
-                $value = $value; // already escaped
+                // already escaped
                 break;
             case 'textarea':
                 $value = esc_textarea( $value );
