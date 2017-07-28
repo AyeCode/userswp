@@ -102,40 +102,40 @@ class Users_WP {
          * The class responsible for orchestrating the actions and filters of the
          * core plugin.
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-loader.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-loader.php';
 
         /**
          * The class responsible for defining internationalization functionality
          * of the plugin.
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-i18n.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-i18n.php';
 
         /**
          * The class responsible for defining form handler functionality
          * of the plugin.
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-forms.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-forms.php';
 
         /**
          * The class responsible for defining ajax handler functionality
          * of the plugin.
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-ajax.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-ajax.php';
 
         /**
          * The class responsible for defining all shortcodes
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-templates.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-templates.php';
 
         /**
          * The class responsible for defining profile content
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-profile.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-profile.php';
 
         /**
          * The class responsible for defining all shortcodes
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-shortcodes.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-shortcodes.php';
 
         /**
          * The class responsible for defining all actions that occur in the admin area.

@@ -27,7 +27,7 @@ define( 'USERSWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-users-wp-activator.php
+ * This action is documented in includes/class-activator.php
  * @param $network_wide
  */
 function activate_users_wp($network_wide) {
@@ -37,27 +37,27 @@ function activate_users_wp($network_wide) {
             // Switch to the new blog.
             switch_to_blog( $main_blog_id );
 
-            require_once('includes/class-users-wp-activator.php');
+            require_once('includes/class-activator.php');
             Users_WP_Activator::activate();
 
             // Restore original blog.
             restore_current_blog();
         } else {
-            require_once('includes/class-users-wp-activator.php');
+            require_once('includes/class-activator.php');
             Users_WP_Activator::activate();
         }
     } else {
-        require_once('includes/class-users-wp-activator.php');
+        require_once('includes/class-activator.php');
         Users_WP_Activator::activate();
     }
     
 }
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-users-wp-deactivator.php
+ * This action is documented in includes/class-deactivator.php
  */
 function deactivate_users_wp() {
-    require_once('includes/class-users-wp-deactivator.php');
+    require_once('includes/class-deactivator.php');
     Users_WP_Deactivator::deactivate();
 }
 register_activation_hook( __FILE__, 'activate_users_wp' );
@@ -67,7 +67,7 @@ register_deactivation_hook( __FILE__, 'deactivate_users_wp' );
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require_once('includes/class-users-wp.php');
+require_once('includes/class-userswp.php');
 require_once('includes/helpers.php');
 require_once('widgets/login.php');
 /**

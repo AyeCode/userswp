@@ -39,7 +39,7 @@ class Users_WP_Shortcodes {
         /**
          * The class responsible for defining all front end templates
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-templates.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-templates.php';
 
 
     }
