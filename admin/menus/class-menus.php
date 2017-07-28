@@ -29,7 +29,7 @@ class Users_WP_Menus {
     }
 
     private function load_dependencies() {
-        require_once dirname( __FILE__ ) . '/class-users-wp-menu-checklist.php';
+        require_once dirname( __FILE__ ) . '/class-checklist.php';
 
     }
 

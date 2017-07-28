@@ -58,7 +58,7 @@ class Users_WP_Activator {
     }
 
     public static function load_dependencies() {
-        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-users-wp-form-builder.php';
+        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-formbuilder.php';
     }
 
     public static function generate_pages() {

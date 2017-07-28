@@ -140,23 +140,23 @@ class Users_WP {
         /**
          * The class responsible for defining all actions that occur in the admin area.
          */
-        require_once dirname(dirname( __FILE__ )) . '/admin/class-users-wp-admin.php';
+        require_once dirname(dirname( __FILE__ )) . '/admin/class-admin.php';
 
         /**
          * The class responsible for defining all actions that occur in the public-facing
          * side of the site.
          */
-        require_once dirname(dirname( __FILE__ )) . '/public/class-users-wp-public.php';
+        require_once dirname(dirname( __FILE__ )) . '/public/class-public.php';
 
         /**
          * The class responsible for adding fields in forms
          */
-        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-users-wp-form-builder.php';
+        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-formbuilder.php';
 
         /**
          * The class responsible for displaying admin notices
          */
-        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-uwp-notices.php';
+        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-notices.php';
 
 
         $this->loader = new Users_WP_Loader();
