@@ -4,20 +4,31 @@
  *
  * This class defines all code necessary to upload files.
  *
- * @link       http://wpgeodirectory.com
  * @since      1.0.0
- *
- * @package    Users_WP
- * @subpackage Users_WP/includes
+ * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Files {
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function __construct() {
         if($this->uwp_doing_upload()){
             add_filter( 'wp_handle_upload_prefilter', array($this, 'uwp_wp_media_restrict_file_types') );
         }
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function handle_file_upload($field, $files ) {
 
         if ( isset( $files[ $field->htmlvar_name ] ) && ! empty( $files[ $field->htmlvar_name ] ) && ! empty( $files[ $field->htmlvar_name ]['name'] ) ) {
@@ -90,6 +101,13 @@ class Users_WP_Files {
 
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_formatSizeUnits($bytes)
     {
         if ($bytes >= 1073741824)
@@ -120,12 +138,26 @@ class Users_WP_Files {
         return $bytes;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_formatSizeinKb($bytes)
     {
         $kb = $bytes / 1024;
         return $kb;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_get_size_in_bytes($val) {
         $val = trim($val);
         $last = strtolower($val[strlen($val)-1]);
@@ -145,6 +177,13 @@ class Users_WP_Files {
         return $val;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_upload_file( $file, $args = array() ) {
 
         include_once ABSPATH . 'wp-admin/includes/file.php';
@@ -182,6 +221,13 @@ class Users_WP_Files {
         return $uploaded_file;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_prepare_files( $file_data ) {
         $files_to_upload = array();
 
@@ -205,6 +251,13 @@ class Users_WP_Files {
         return $files_to_upload;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_validate_uploads($files, $type, $url_only = true, $fields = false) {
 
         $validated_data = array();
@@ -250,6 +303,13 @@ class Users_WP_Files {
         return $validated_data;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_file_upload_preview($field, $value, $removable = true) {
         $output = '';
 
@@ -306,6 +366,13 @@ class Users_WP_Files {
         return $output;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_wp_media_restrict_file_types($file) {
         // This bit is for the flash uploader
         if ($file['type']=='application/octet-stream' && isset($file['tmp_name'])) {
@@ -327,10 +394,24 @@ class Users_WP_Files {
         return $file;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_doing_upload(){
         return isset($_POST['uwp_profile_upload']) ? true : false;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_get_max_upload_size($form_type = false, $field_htmlvar_name = false) {
         if (is_multisite()) {
             $network_setting_size = esc_attr( get_option( 'fileupload_maxk', 300 ) );

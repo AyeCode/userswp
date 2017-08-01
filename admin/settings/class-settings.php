@@ -31,6 +31,7 @@ class Users_WP_Admin_Settings {
     private function load_dependencies() {
 
         require_once dirname(dirname( __FILE__ )) . '/settings/class-formbuilder.php';
+        require_once dirname(dirname( __FILE__ )) . '/settings/class-callback.php';
 
     }
 

@@ -5,25 +5,7 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       http://wpgeodirectory.com
  * @since      1.0.0
- *
- * @package    Users_WP
- * @subpackage Users_WP/includes
- */
-
-/**
- * The core plugin class.
- *
- * This is used to define internationalization, admin-specific hooks, and
- * public-facing site hooks.
- *
- * Also maintains the unique identifier of this plugin as well as the current
- * version of the plugin.
- *
- * @since      1.0.0
- * @package    Users_WP
- * @subpackage Users_WP/includes
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP {
@@ -115,6 +97,30 @@ class Users_WP {
          * of the plugin.
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-emails.php';
+
+        /**
+         * The class responsible for reading and updating meta
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-meta.php';
+
+        /**
+         * The class responsible for userswp dates
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-date.php';
+
+        /**
+         * The class responsible for userswp pages
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-pages.php';
+
+        /**
+         * The class responsible for uploading files
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-files.php';
 
         /**
          * The class responsible for defining form handler functionality

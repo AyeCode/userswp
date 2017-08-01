@@ -4,19 +4,7 @@
  *
  * This class defines all code necessary for UsersWP shortcodes.
  *
- * @link       http://wpgeodirectory.com
  * @since      1.0.0
- *
- * @package    Users_WP
- * @subpackage Users_WP/includes
- */
-
-/**
- * Define the shortcodes functionality.
- *
- * @since      1.0.0
- * @package    Users_WP
- * @subpackage Users_WP/includes
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Shortcodes {
@@ -25,6 +13,13 @@ class Users_WP_Shortcodes {
 
     protected $loader;
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function __construct($loader) {
 
         $this->loader = $loader;
@@ -34,6 +29,13 @@ class Users_WP_Shortcodes {
 
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     private function load_dependencies() {
 
         /**
@@ -43,8 +45,14 @@ class Users_WP_Shortcodes {
 
 
     }
-
-
+    
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function register($atts) {
         if (is_user_logged_in()) {
             return "";
@@ -60,6 +68,13 @@ class Users_WP_Shortcodes {
         return $this->uwp_generate_shortcode('register');
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function login() {
         if (is_user_logged_in()) {
             return "";
@@ -67,30 +82,79 @@ class Users_WP_Shortcodes {
         return $this->uwp_generate_shortcode('login');
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function forgot() {
         return $this->uwp_generate_shortcode('forgot');
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function change() {
         return $this->uwp_generate_shortcode('change');
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function reset() {
         return $this->uwp_generate_shortcode('reset');
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function account() {
         return $this->uwp_generate_shortcode('account');
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function profile() {
         return $this->uwp_generate_shortcode('profile');
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function users() {
         return $this->uwp_generate_shortcode('users');
     }
-    
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_generate_shortcode($type = 'register') {
 
         $template = $this->templates->uwp_locate_template($type);

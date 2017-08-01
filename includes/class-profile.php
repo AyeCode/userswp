@@ -4,29 +4,24 @@
  *
  * This class defines all code necessary for Profile template.
  *
- * @link       http://wpgeodirectory.com
  * @since      1.0.0
- *
- * @package    Users_WP
- * @subpackage Users_WP/includes
- */
-
-/**
- * Define the templates functionality.
- *
- * @since      1.0.0
- * @package    Users_WP
- * @subpackage Users_WP/includes
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Profile {
 
     protected $loader;
-
+    
     public function __construct($loader) {
         $this->loader = $loader;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_header($user) {
         $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
         $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar_thumb', '');
@@ -101,6 +96,13 @@ class Users_WP_Profile {
         <?php
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_title($user) {
         ?>
         <div class="uwp-profile-name">
@@ -109,6 +111,13 @@ class Users_WP_Profile {
         <?php
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_bio($user) {
         $bio = uwp_get_usermeta( $user->ID, 'uwp_account_bio', "" );
         $is_profile_page = is_uwp_profile_page();
@@ -127,6 +136,13 @@ class Users_WP_Profile {
         }
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_social($user) {
 
         global $wpdb;
@@ -169,6 +185,13 @@ class Users_WP_Profile {
         <?php
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_extra_count($user) {
 //        global $wpdb;
 //        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
@@ -177,18 +200,46 @@ class Users_WP_Profile {
         return '<i class="fa fa-user"></i>';
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_extra($user) {
         return $this->uwp_get_extra_fields($user, '[more_info]');
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_side_extra($user) {
         echo $this->uwp_get_extra_fields($user, '[profile_side]');
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_users_extra($user) {
         echo $this->uwp_get_extra_fields($user, '[users]');
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_get_extra_fields($user, $show_type) {
 
         ob_start();
@@ -273,8 +324,14 @@ class Users_WP_Profile {
         ob_end_clean();
         return trim($wrapped_output);
     }
-    
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_tabs($user) {
 
         $tabs = array();
@@ -324,6 +381,13 @@ class Users_WP_Profile {
         return $all_tabs;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_tabs_content($user) {
 
         $tab = get_query_var('uwp_tab');
@@ -384,6 +448,13 @@ class Users_WP_Profile {
         </div>
     <?php }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_pagination($total) {
         ?>
         <div class="uwp-pagination">
@@ -404,6 +475,13 @@ class Users_WP_Profile {
         <?php
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_more_info($user) {
         $allowed_tabs = uwp_get_option('enable_profile_tabs', array());
 
@@ -417,7 +495,14 @@ class Users_WP_Profile {
         $extra = $this->get_profile_extra($user);
         echo $extra;
     }
-    
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_posts($user) {
         
         $allowed_tabs = uwp_get_option('enable_profile_tabs', array());
@@ -432,6 +517,13 @@ class Users_WP_Profile {
         uwp_generic_tab_content($user, 'post', __('Posts', 'userswp'));
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_comments($user) {
         $allowed_tabs = uwp_get_option('enable_profile_tabs', array());
 
@@ -509,6 +601,13 @@ class Users_WP_Profile {
         <?php
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function rewrite_profile_link() {
 
         $page_id = uwp_get_option('profile_page', false);
@@ -578,6 +677,13 @@ class Users_WP_Profile {
         }
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function profile_query_vars($query_vars) {
         $query_vars[] = 'uwp_profile';
         $query_vars[] = 'uwp_tab';
@@ -585,6 +691,13 @@ class Users_WP_Profile {
         return $query_vars;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_link($link, $user_id) {
 
         $page_id = uwp_get_option('profile_page', false);
@@ -634,6 +747,13 @@ class Users_WP_Profile {
         }
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function modify_profile_page_title( $title, $id = null ) {
 
         global $wp_query;
@@ -656,6 +776,13 @@ class Users_WP_Profile {
         return $title;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_image_crop_popup($image_url, $type) {
 
         $uploads = wp_upload_dir();
@@ -694,7 +821,14 @@ class Users_WP_Profile {
 
         return $json;
     }
-    
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_image_crop_init($user) {
         if (is_user_logged_in()) {
             echo $this->uwp_modal_loading_html();
@@ -702,6 +836,13 @@ class Users_WP_Profile {
         }
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_modal_loading_html() {
         ob_start();
         ?>
@@ -729,6 +870,13 @@ class Users_WP_Profile {
         return trim(preg_replace("/\s+|\n+|\r/", ' ', $output));
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_modal_close_js() {
         ?>
         <script type="text/javascript">
@@ -749,8 +897,14 @@ class Users_WP_Profile {
         </script>
         <?php
     }
-    
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_image_crop_modal_html($type, $image_url, $full_width, $full_height) {
         ob_start();
         ?>
@@ -816,6 +970,13 @@ class Users_WP_Profile {
         return trim($output);
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_crop_submit_form($type = 'avatar') {
         $files = new Users_WP_Files();
         ob_start();
@@ -980,7 +1141,13 @@ class Users_WP_Profile {
         return trim($output);
  }
 
-
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_extra_user_profile_fields( $user ) {
         ?>
         <h3><?php _e("UsersWP", "userswp"); ?></h3>
@@ -988,6 +1155,13 @@ class Users_WP_Profile {
         <?php
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_array_search($array, $key, $value)
     {
         $results = array();
@@ -1005,6 +1179,13 @@ class Users_WP_Profile {
         return $results;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_modify_get_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
         $user = false;
 
@@ -1038,6 +1219,13 @@ class Users_WP_Profile {
         return $avatar;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_get_comment_author_link($link) {
         global $comment;
         if ( !empty( $comment->user_id ) && !empty( get_userdata( $comment->user_id )->ID ) ) {
@@ -1051,6 +1239,13 @@ class Users_WP_Profile {
         return $link;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_redirect_author_page() {
         if ( is_author() ) {
             $id = get_query_var( 'author' );
@@ -1060,7 +1255,13 @@ class Users_WP_Profile {
         }
     }
     
-    //modify edit my profile link in admin bar
+    /**
+     * Modify edit my profile link in admin bar
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_modify_admin_bar_edit_profile_url( $url, $user_id, $scheme )
     {
         // Makes the link to http://example.com/account
@@ -1074,6 +1275,13 @@ class Users_WP_Profile {
         return $url;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_restrict_attachment_display($wp_query) {
         if (!is_admin()) {
             if ( ! current_user_can( 'manage_options' ) ) {
@@ -1084,16 +1292,31 @@ class Users_WP_Profile {
         return $wp_query;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function allow_all_users_profile_uploads($llcaps, $caps, $args, $user) {
 
+        $files = new Users_WP_Files();
         
-        if(isset($caps[0]) && $caps[0] =='upload_files' && uwp_doing_upload() ){
+        if(isset($caps[0]) && $caps[0] =='upload_files' && $files->uwp_doing_upload() ){
             $llcaps['upload_files'] = true;
         }
 
         return $llcaps;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_handle_file_upload_error_checks($value, $field, $file_key, $file_to_upload) {
         
         if (in_array($field->htmlvar_name, array('uwp_avatar_file', 'uwp_banner_file'))) {
@@ -1122,6 +1345,13 @@ class Users_WP_Profile {
         
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function add_uwp_plupload_param($params) {
 
         if(!is_admin() && get_the_ID()==uwp_get_option('profile_page', false)){
@@ -1131,6 +1361,13 @@ class Users_WP_Profile {
         return $params;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_ajax_avatar_banner_upload() {
         // Image upload handler
         // todo: security checks
@@ -1176,7 +1413,13 @@ class Users_WP_Profile {
         die();
     }
 
-    
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_ajax_image_crop_popup($image_url, $type){
         wp_enqueue_style( 'jcrop' );
         wp_enqueue_script( 'jcrop', array( 'jquery' ) );
@@ -1188,6 +1431,13 @@ class Users_WP_Profile {
         return $output;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_ajax_image_crop_popup_form(){
         $type = strip_tags(esc_sql($_POST['type']));
 
@@ -1201,13 +1451,27 @@ class Users_WP_Profile {
         exit();
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_define_ajaxurl() {
 
         echo '<script type="text/javascript">
            var ajaxurl = "' . admin_url('admin-ajax.php') . '";
          </script>';
     }
-    
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_users_search() {
         ?>
         <div class="uwp-users-list-sort-search">
@@ -1253,10 +1517,24 @@ class Users_WP_Profile {
         <?php
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_users_list() {
         get_uwp_users_list();
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_extra_fields_as_tabs($tabs, $user)
     {
         global $wpdb;
@@ -1284,6 +1562,13 @@ class Users_WP_Profile {
         return $tabs;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_extra_fields_as_tab_values($user, $active_tab)
     {
 
@@ -1303,6 +1588,13 @@ class Users_WP_Profile {
         }
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_get_field_value($field, $user) {
 
         $user_data = get_userdata($user->ID);

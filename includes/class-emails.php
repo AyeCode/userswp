@@ -4,14 +4,18 @@
  *
  * All UsersWP related mails are sent via this class.
  *
- * @link       http://wpgeodirectory.com
  * @since      1.0.0
- *
- * @package    Users_WP
- * @subpackage Users_WP/includes
+ * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Mails {
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function send( $message_type, $user_id, $login_details = false )
     {
         $user_data = get_userdata($user_id);
@@ -172,6 +176,13 @@ class Users_WP_Mails {
         }
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function send_admin_email( $message_type, $user_id)
     {
 

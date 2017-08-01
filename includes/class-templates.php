@@ -4,29 +4,31 @@
  *
  * This class defines all code necessary for UsersWP templates like login. register etc.
  *
- * @link       http://wpgeodirectory.com
  * @since      1.0.0
- *
- * @package    Users_WP
- * @subpackage Users_WP/includes
- */
-
-/**
- * Define the templates functionality.
- *
- * @since      1.0.0
- * @package    Users_WP
- * @subpackage Users_WP/includes
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Templates {
 
     protected $loader;
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function __construct($loader) {
         $this->loader = $loader;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_locate_template( $template ) {
         
         switch ($template) {
@@ -65,7 +67,14 @@ class Users_WP_Templates {
 
         return apply_filters('uwp_locate_template', false, $template);
     }
-    
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_generic_locate_template($type = 'register') {
         
         $plugin_path = dirname( dirname( __FILE__ ) );
@@ -78,6 +87,13 @@ class Users_WP_Templates {
         return $template;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function access_checks() {
         global $post;
 
@@ -129,6 +145,13 @@ class Users_WP_Templates {
         return false;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function change_default_password_redirect() {
         if (!is_user_logged_in()) {
             return;
@@ -151,6 +174,13 @@ class Users_WP_Templates {
         }
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function profile_redirect() {
         if (is_page()) {
             global $wp_query, $post;
@@ -192,6 +222,13 @@ class Users_WP_Templates {
         }
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function logout_redirect() {
         $redirect_page_id = uwp_get_option('logout_redirect_to', '');
         if (empty($redirect_page_id)) {
@@ -204,6 +241,13 @@ class Users_WP_Templates {
         exit();
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_template_fields($form_type) {
         
         global $wpdb;
@@ -250,7 +294,14 @@ class Users_WP_Templates {
             }
         }
     }
-    
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_account_edit_form_display($type) {
         if ($type == 'account') {
             ?>
@@ -261,7 +312,14 @@ class Users_WP_Templates {
             </form>
         <?php }
     }
-    
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_template_fields_html($field, $form_type, $user_id = false) {
         if (!$user_id) {
             $user_id = get_current_user_id();    
@@ -314,6 +372,13 @@ class Users_WP_Templates {
         }
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_get_default_form_value($field) {
         if ($field->field_type == 'url') {
             if (substr( $field->default_value, 0, 4 ) === "http") {
@@ -328,6 +393,13 @@ class Users_WP_Templates {
         return $value;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_author_page_content($content) {
         if (is_author()) {
             return do_shortcode('[uwp_profile]');
@@ -336,7 +408,14 @@ class Users_WP_Templates {
         }
 
     }
-    
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_setup_nav_menu_item( $menu_item ) {
 
         if ( is_admin() ) {
@@ -428,7 +507,13 @@ class Users_WP_Templates {
 
     }
 
-
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_logout_url( $custom_redirect = null ) {
 
         $redirect = null;
@@ -443,6 +528,13 @@ class Users_WP_Templates {
 
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_activation_redirect() {
 
         if (get_option('uwp_activation_redirect', false)) {
@@ -456,10 +548,24 @@ class Users_WP_Templates {
 
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_extra_admin_edit($user) {
         echo $this->get_profile_extra_edit($user);
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function get_profile_extra_edit($user) {
         ob_start();
         global $wpdb;
@@ -506,6 +612,13 @@ class Users_WP_Templates {
         return trim($output);
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_add_body_class( $classes ) {
         
         if ( is_uwp_page() ) {

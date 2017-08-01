@@ -4,28 +4,30 @@
  *
  * This class defines all code necessary to handle UsersWP forms like login. register etc.
  *
- * @link       http://wpgeodirectory.com
  * @since      1.0.0
- *
- * @package    Users_WP
- * @subpackage Users_WP/includes
- */
-
-/**
- * Define the templates functionality.
- *
- * @since      1.0.0
- * @package    Users_WP
- * @subpackage Users_WP/includes
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Forms {
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function init_notices() {
         global $uwp_notices;
         $uwp_notices = array();
     }
-    
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function handler()
     {
         global $uwp_notices;
@@ -143,6 +145,13 @@ class Users_WP_Forms {
 
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function display_notices($type) {
         global $uwp_notices;
 
@@ -179,7 +188,13 @@ class Users_WP_Forms {
         }
     }
 
-
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function process_register($data = array(), $files = array()) {
 
         $errors = new WP_Error();
@@ -428,6 +443,13 @@ class Users_WP_Forms {
 
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function process_login($data) {
 
         $errors = new WP_Error();
@@ -483,6 +505,13 @@ class Users_WP_Forms {
         }
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function process_forgot($data) {
 
         $errors = new WP_Error();
@@ -530,6 +559,13 @@ class Users_WP_Forms {
         return true;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function process_change($data) {
 
         $errors = new WP_Error();
@@ -569,7 +605,14 @@ class Users_WP_Forms {
 
         return true;
     }
-    
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function process_reset($data) {
 
         $errors = new WP_Error();
@@ -611,6 +654,13 @@ class Users_WP_Forms {
         return true;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function generate_forgot_message($user_data) {
 
         global $wpdb, $wp_hasher;
@@ -655,6 +705,13 @@ class Users_WP_Forms {
 
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function process_account($data = array(), $files = array()) {
 
         $file_obj = new Users_WP_Files();
@@ -766,6 +823,13 @@ class Users_WP_Forms {
 
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function process_upload_submit($data = array(), $files = array(), $type = 'avatar') {
 
         $file_obj = new Users_WP_Files();
@@ -802,6 +866,13 @@ class Users_WP_Forms {
 
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function process_image_crop($data = array(), $type = 'avatar') {
         
         if (!is_user_logged_in()) {
@@ -879,6 +950,13 @@ class Users_WP_Forms {
 
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_save_user_extra_fields($user_id, $data, $type) {
 
         if (empty($user_id) || empty($data) || empty($type)) {
@@ -928,7 +1006,14 @@ class Users_WP_Forms {
             return true;
         }
     }
-    
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public static function uwp_error_log($log){
 
         $should_log = apply_filters( 'uwp_log_errors', WP_DEBUG);
@@ -940,8 +1025,14 @@ class Users_WP_Forms {
             }
         }
     }
-    
-    
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_upload_file_remove() {
 
         $htmlvar = strip_tags(esc_sql($_POST['htmlvar']));
@@ -963,6 +1054,13 @@ class Users_WP_Forms {
     
     // form fields html generation
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_form_input_datepicker($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
@@ -1053,6 +1151,13 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_form_input_time($html, $field, $value, $form_type){
 
         if(has_filter("uwp_form_input_html_time_{$field->htmlvar_name}")){
@@ -1108,6 +1213,13 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_form_input_select($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
@@ -1176,6 +1288,13 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_form_input_multiselect($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
@@ -1279,6 +1398,13 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_form_input_file($html, $field, $value, $form_type){
 
         $file_obj = new Users_WP_Files();
@@ -1329,6 +1455,13 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_form_input_checkbox($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
@@ -1369,6 +1502,13 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_form_input_radio($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
@@ -1437,6 +1577,13 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_form_input_text($html, $field, $value, $form_type){
 
         // Check if there is a custom field specific filter.
@@ -1532,6 +1679,13 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_form_input_textarea($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
@@ -1577,6 +1731,13 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_form_input_fieldset($html, $field, $value, $form_type) {
         // Check if there is a custom field specific filter.
         if(has_filter("uwp_form_input_fieldset_{$field->htmlvar_name}")){
@@ -1600,6 +1761,13 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_form_input_url($html, $field, $value, $form_type){
 
 
@@ -1649,6 +1817,13 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_form_input_email($html, $field, $value, $form_type){
 
 
@@ -1701,6 +1876,13 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_form_input_password($html, $field, $value, $form_type){
 
 
@@ -1753,7 +1935,13 @@ class Users_WP_Forms {
         return $html;
     }
 
-    // Add multipart/form-data to edit form
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     function add_multipart_to_admin_edit_form() {
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
@@ -1763,7 +1951,13 @@ class Users_WP_Forms {
         }
     }
 
-    // Update admin edit
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function update_profile_extra_admin_edit($user_id) {
         global $wpdb;
         $file_obj = new Users_WP_Files();
@@ -1812,21 +2006,41 @@ class Users_WP_Forms {
             }
         }
     }
-    
-    
-    // Search form
+
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_users_search_form_text_field($keyword) {
         ?>
         <input placeholder="Search For" name="uwps" value="<?php echo $keyword; ?>" class="s search-input" type="text">
         <?php
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_users_search_form_submit() {
         ?>
         <input class="uwp-searchsubmit uwp-search-submit" value="Search" type="submit">
         <?php
     }
 
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_forms_check_for_send_mail_errors($res, $user_data, $errors) {
         if (!$res) {
             if (get_option('admin_email') == $user_data->user_email) {
