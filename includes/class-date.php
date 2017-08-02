@@ -10,11 +10,12 @@
 class Users_WP_Date {
 
     /**
+     * Converts PHP Date format to jQuery UI date format.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $php_format     Date Format.
+     * @return      string                      Formatted Date.
      */
     public function date_format_php_to_jqueryui( $php_format ) {
         $symbols = array(
@@ -88,11 +89,14 @@ class Users_WP_Date {
     }
 
     /**
+     * Converts date from one format to another. 
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $date_input         Date string to convert.
+     * @param       string      $date_to            Date format to convert to.
+     * @param       string      $date_from          Date format to convert from.
+     * @return      string                          Converted date.
      */
     public function date($date_input, $date_to, $date_from = '') {
         if (empty($date_input) || empty($date_to)) {
@@ -113,17 +117,18 @@ class Users_WP_Date {
             $date = date_i18n($date_to, strtotime($date));
         }
 
-        $date = uwp_maybe_untranslate_date($date);
+        $date = $this->maybe_untranslate_date($date);
 
         return apply_filters('uwp_date', $date, $date_input, $date_to, $date_from);
     }
 
     /**
+     * Converts non english date months to english date months.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $date   Date String.
+     * @return      string              Converted Date.
      */
     public function maybe_untranslate_date($date){
         $english_long_months = array(

@@ -1,4 +1,11 @@
 <?php
+/**
+ * This method gets fired during plugin activation.
+ *
+ * @since       1.0.0
+ * @package     UsersWP
+ * @return      void
+ */
 function is_uwp_profile_tab($tab = false) {
     global $wp_query;
     if (is_uwp_profile_page()) {
@@ -16,6 +23,13 @@ function is_uwp_profile_tab($tab = false) {
     }
 }
 
+/**
+ * This method gets fired during plugin activation.
+ *
+ * @since       1.0.0
+ * @package     UsersWP
+ * @return      void
+ */
 function is_uwp_profile_subtab($subtab = false) {
     global $wp_query;
     if (is_uwp_profile_page()) {

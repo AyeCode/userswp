@@ -10,11 +10,11 @@
 class Users_WP_Deactivator {
 
     /**
+     * This method gets fired during plugin deactivation.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public static function deactivate() {
         //nothing yet

@@ -8,14 +8,7 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Notices {
-
-    /**
-     *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
-     */
+    
     public function __construct() {
 
         add_action('uwp_template_display_notices', array($this, 'display_registration_disabled_notice'));

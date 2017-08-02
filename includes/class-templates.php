@@ -10,24 +10,19 @@
 class Users_WP_Templates {
 
     protected $loader;
-
-    /**
-     *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
-     */
+    
+    
     public function __construct($loader) {
         $this->loader = $loader;
     }
 
     /**
+     * Locates UsersWP templates based on template type.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $template       Template type.
+     * @return      string                      The template filename if one is located.
      */
     public function uwp_locate_template( $template ) {
         
@@ -69,11 +64,13 @@ class Users_WP_Templates {
     }
 
     /**
+     * Locates UsersWP templates based on template type. 
+     * Fallback to core templates when no custom templates found. 
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $type           Template type.
+     * @return      string                      The template filename if one is located.
      */
     public function uwp_generic_locate_template($type = 'register') {
         
@@ -88,11 +85,11 @@ class Users_WP_Templates {
     }
 
     /**
+     * Doing some access checks for UsersWP related pages.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      bool
      */
     public function access_checks() {
         global $post;
@@ -146,11 +143,11 @@ class Users_WP_Templates {
     }
 
     /**
+     * If auto generated password, redirects to change password page.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function change_default_password_redirect() {
         if (!is_user_logged_in()) {
@@ -175,11 +172,11 @@ class Users_WP_Templates {
     }
 
     /**
+     * Redirects /profile to /profile/{username} for loggedin users.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function profile_redirect() {
         if (is_page()) {
@@ -223,11 +220,11 @@ class Users_WP_Templates {
     }
 
     /**
+     * Redirects user to a predefined page after logging out.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function logout_redirect() {
         $redirect_page_id = uwp_get_option('logout_redirect_to', '');
@@ -242,11 +239,12 @@ class Users_WP_Templates {
     }
 
     /**
+     * Prints html for form fields of that particular form.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $form_type      Form type.
+     * @return      void
      */
     public function uwp_template_fields($form_type) {
         
@@ -296,11 +294,12 @@ class Users_WP_Templates {
     }
 
     /**
+     * Adds "Edit Account" form on account page.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $type       Template type.
+     * @return      void
      */
     public function uwp_account_edit_form_display($type) {
         if ($type == 'account') {
@@ -314,11 +313,14 @@ class Users_WP_Templates {
     }
 
     /**
+     * Prints field html based on field type.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $field      Field info.
+     * @param       string      $form_type  Form type.
+     * @param       int|bool    $user_id    User ID.
+     * @return      void
      */
     public function uwp_template_fields_html($field, $form_type, $user_id = false) {
         if (!$user_id) {
@@ -373,11 +375,12 @@ class Users_WP_Templates {
     }
 
     /**
+     * Returns default value based on field type.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $field      Field info.
+     * @return      string                  Field default value.
      */
     public function uwp_get_default_form_value($field) {
         if ($field->field_type == 'url') {
@@ -394,11 +397,12 @@ class Users_WP_Templates {
     }
 
     /**
+     * Modifies the author page content with UsersWP profile content.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $content    Original page content.
+     * @return      string                  Modified page content.
      */
     public function uwp_author_page_content($content) {
         if (is_author()) {
@@ -410,11 +414,12 @@ class Users_WP_Templates {
     }
 
     /**
+     * Modifies the menu item visibility based on UsersWP page type.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $menu_item      Menu item info.
+     * @return      object                      Modified menu item.
      */
     public function uwp_setup_nav_menu_item( $menu_item ) {
 
@@ -508,11 +513,12 @@ class Users_WP_Templates {
     }
 
     /**
+     * Returns the logout url by adding redirect page link.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       null        $custom_redirect   Redirect page link.
+     * @return      string                         Logout url.
      */
     public function uwp_logout_url( $custom_redirect = null ) {
 
@@ -529,11 +535,11 @@ class Users_WP_Templates {
     }
 
     /**
+     * Redirects to UsersWP info page after plugin activation.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function uwp_activation_redirect() {
 
@@ -549,22 +555,23 @@ class Users_WP_Templates {
     }
 
     /**
+     * Prints UsersWP fields in WP-Admin Users Edit page.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       User Object.
      */
     public function get_profile_extra_admin_edit($user) {
         echo $this->get_profile_extra_edit($user);
     }
 
     /**
+     * Gets UsersWP fields in WP-Admin Users Edit page.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       User Object.
+     * @return      string                  HTML string.
      */
     public function get_profile_extra_edit($user) {
         ob_start();
@@ -613,11 +620,12 @@ class Users_WP_Templates {
     }
 
     /**
+     * Adds the UsersWP body class to body tag.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       array       $classes     Existing class array.
+     * @return      array                    Modified class array.
      */
     public function uwp_add_body_class( $classes ) {
         

@@ -9,13 +9,7 @@
  */
 class Users_WP_Pages {
 
-    /**
-     *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
-     */
+    
     public function __construct() {
 
         add_action( 'wpmu_new_blog', array($this, 'wpmu_generate_default_pages_on_new_site'), 10, 6 );
@@ -23,11 +17,12 @@ class Users_WP_Pages {
     }
 
     /**
-     *
+     * Checks whether the current page is of given page type or not.
      *
      * @since   1.0.0
      * @package UsersWP
-     * @return void
+     * @param   string|bool $type Page type.
+     * @return bool
      */
     public function is_page($type = false) {
         if (is_page()) {
@@ -62,99 +57,99 @@ class Users_WP_Pages {
     }
 
     /**
+     * Checks whether the current page is register page or not.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      bool
      */
     public function is_register_page() {
         return $this->is_page('register_page');
     }
 
     /**
+     * Checks whether the current page is login page or not.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      bool
      */
     public function is_login_page() {
         return $this->is_page('login_page');
     }
 
     /**
+     * Checks whether the current page is forgot password page or not.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      bool
      */
     public function is_forgot_page() {
         return $this->is_page('forgot_page');
     }
 
     /**
+     * Checks whether the current page is change password page or not.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      bool
      */
     public function is_change_page() {
         return $this->is_page('change_page');
     }
 
     /**
+     * Checks whether the current page is reset password page or not.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      bool
      */
     public function is_reset_page() {
         return $this->is_page('reset_page');
     }
 
     /**
+     * Checks whether the current page is account page or not.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      bool
      */
     public function is_account_page() {
         return $this->is_page('account_page');
     }
 
     /**
+     * Checks whether the current page is profile page or not.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      bool
      */
     public function is_profile_page() {
         return $this->is_page('profile_page');
     }
 
     /**
+     * Checks whether the current page is users page or not.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      bool
      */
     public function is_users_page() {
         return $this->is_page('users_page');
     }
 
     /**
+     * Checks whether the current page is multi register page or not.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      bool
      */
     public function is_multi_register_page() {
         global $post;
@@ -167,11 +162,11 @@ class Users_WP_Pages {
     }
 
     /**
+     * Checks whether the current page is logged in user profile page or not.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      bool
      */
     public function is_current_user_profile_page() {
         if (is_user_logged_in() &&
@@ -200,11 +195,12 @@ class Users_WP_Pages {
     }
 
     /**
+     * Gets the UsersWP page permalink based on page type.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string|bool     $type       Page type.
+     * @return      string                      Page permalink.
      */
     public function get_page_permalink($type) {
         $link = false;
@@ -216,77 +212,77 @@ class Users_WP_Pages {
     }
 
     /**
+     * Gets the UsersWP register page permalink.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string      Page permalink.
      */
     public function get_register_permalink() {
         return $this->get_page_permalink('register_page');
     }
 
     /**
+     * Gets the UsersWP login page permalink.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string      Page permalink.
      */
     public function get_login_permalink() {
         return $this->get_page_permalink('login_page');
     }
 
     /**
+     * Gets the UsersWP forgot password page permalink.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string      Page permalink.
      */
     public function get_forgot_permalink() {
         return $this->get_page_permalink('forgot_page');
     }
 
     /**
+     * Gets the UsersWP reset password page permalink.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string      Page permalink.
      */
     public function get_reset_permalink() {
         return $this->get_page_permalink('reset_page');
     }
 
     /**
+     * Gets the UsersWP account page permalink.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string      Page permalink.
      */
     public function get_account_permalink() {
         return $this->get_page_permalink('account_page');
     }
 
     /**
+     * Gets the UsersWP profile page permalink.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string      Page permalink.
      */
     public function get_profile_permalink() {
         return $this->get_page_permalink('profile_page');
     }
 
     /**
+     * Gets the UsersWP users page permalink.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string      Page permalink.
      */
     public function get_users_permalink() {
         return $this->get_page_permalink('users_page');
@@ -437,11 +433,12 @@ class Users_WP_Pages {
     }
 
     /**
+     * Gets the UsersWP page permalink based on page type.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string     $page       Page type.
+     * @return      string                 Page permalink.
      */
     public function get_page_link($page) {
 

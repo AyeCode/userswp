@@ -8,14 +8,7 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Files {
-
-    /**
-     *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
-     */
+    
     public function __construct() {
         if($this->uwp_doing_upload()){
             add_filter( 'wp_handle_upload_prefilter', array($this, 'uwp_wp_media_restrict_file_types') );
@@ -23,11 +16,13 @@ class Users_WP_Files {
     }
 
     /**
+     * Handles file upload request.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object          $field      Field info object.
+     * @param       array           $files      $_FILES array.
+     * @return      bool|array                  Uploaded file url info array.
      */
     public function handle_file_upload($field, $files ) {
 
@@ -102,11 +97,12 @@ class Users_WP_Files {
     }
 
     /**
+     * Formats the file size into human readable form.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       int         $bytes      Size in Bytes.
+     * @return      string                  Size in human readable form.
      */
     public function uwp_formatSizeUnits($bytes)
     {
@@ -139,11 +135,12 @@ class Users_WP_Files {
     }
 
     /**
+     * Formats the file size in KB.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       int         $bytes      Size in Bytes.
+     * @return      int                     Size in KB.
      */
     public function uwp_formatSizeinKb($bytes)
     {
@@ -152,11 +149,12 @@ class Users_WP_Files {
     }
 
     /**
+     * Gets the size is bytes for given value.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $val    Size in human readable form.
+     * @return      int                 Value in bytes.
      */
     public function uwp_get_size_in_bytes($val) {
         $val = trim($val);
@@ -178,11 +176,13 @@ class Users_WP_Files {
     }
 
     /**
+     * Processes the file upload.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       array       $file       File info to upload.
+     * @param       array       $args       File upload helper args.
+     * @return      object                  Uploaded file info
      */
     public function uwp_upload_file( $file, $args = array() ) {
 
@@ -222,11 +222,12 @@ class Users_WP_Files {
     }
 
     /**
+     * Prepares the files for upload
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       array       $file_data      Files to upload
+     * @return      array                       Prepared files.
      */
     public function uwp_prepare_files( $file_data ) {
         $files_to_upload = array();
@@ -252,11 +253,15 @@ class Users_WP_Files {
     }
 
     /**
+     * Validates the file uploads.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       array       $files          $_FILES array
+     * @param       string      $type           Form type.
+     * @param       bool        $url_only       Return only the url or whole file info?
+     * @param       array|bool  $fields         Form fields.
+     * @return      array                       Validated data.
      */
     public function uwp_validate_uploads($files, $type, $url_only = true, $fields = false) {
 
@@ -304,11 +309,14 @@ class Users_WP_Files {
     }
 
     /**
+     * Displays the preview for images and links for other types above the field for existing uploads.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $field          Form field info.
+     * @param       string      $value          Value of the field.
+     * @param       bool        $removable      Is this value removable by user?
+     * @return      string                      HTML output.
      */
     public function uwp_file_upload_preview($field, $value, $removable = true) {
         $output = '';
@@ -367,11 +375,12 @@ class Users_WP_Files {
     }
 
     /**
-     *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * restrict files to certain types
+     * 
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       array       $file   File info.
+     * @return      array               Modified file info.
      */
     public function uwp_wp_media_restrict_file_types($file) {
         // This bit is for the flash uploader
@@ -395,22 +404,24 @@ class Users_WP_Files {
     }
 
     /**
+     * Check whether the uploads is from the profile page.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      bool    
      */
     public function uwp_doing_upload(){
         return isset($_POST['uwp_profile_upload']) ? true : false;
     }
 
     /**
+     * Gets the maximum file upload size.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string|bool        $form_type              Form type.
+     * @param       string|bool        $field_htmlvar_name     htmlvar_name key.
+     * @return      int                                         Allowed upload size.
      */
     public function uwp_get_max_upload_size($form_type = false, $field_htmlvar_name = false) {
         if (is_multisite()) {

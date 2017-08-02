@@ -19,11 +19,11 @@ class Users_WP_Ajax {
     }
 
     /**
+     * Handles the create custom field and sort custom field ajax requests.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function handler()
     {
@@ -46,11 +46,14 @@ class Users_WP_Ajax {
     }
 
     /**
+     * Kill WordPress execution and display HTML message with error message.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $message    Optional. Error message.
+     * @param       string      $title      Optional. Error title.
+     * @param       int         $status     The HTTP response code. Default 200 for Ajax requests, 500 otherwise.
+     * @return      void
      */
     public function uwp_die( $message = '', $title = '', $status = 400 ) {
         add_filter( 'wp_die_ajax_handler', '_uwp_die_handler', 10, 3 );
@@ -59,11 +62,12 @@ class Users_WP_Ajax {
     }
 
     /**
+     * Handles the create custom field ajax request.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       array       $data   Submitted $_REQUEST data.
+     * @return      void
      */
     public function create_field($data) {
 
