@@ -1,10 +1,11 @@
 <?php
 /**
- * This method gets fired during plugin activation.
+ * Checks the current page is a UsersWP profile tab page.
  *
  * @since       1.0.0
  * @package     UsersWP
- * @return      void
+ * @param       string|bool        $tab     Tab slug.
+ * @return      bool                        True when success. False when failure.
  */
 function is_uwp_profile_tab($tab = false) {
     global $wp_query;
@@ -24,11 +25,12 @@ function is_uwp_profile_tab($tab = false) {
 }
 
 /**
- * This method gets fired during plugin activation.
+ * Checks the current page is a UsersWP profile subtab page.
  *
  * @since       1.0.0
  * @package     UsersWP
- * @return      void
+ * @param       string|bool        $subtab     Subtab slug.
+ * @return      bool                           True when success. False when failure.
  */
 function is_uwp_profile_subtab($subtab = false) {
     global $wp_query;

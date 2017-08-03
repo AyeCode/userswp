@@ -57,7 +57,6 @@ class Users_WP {
         $this->set_locale();
         $this->define_admin_hooks();
         $this->define_public_hooks();
-        $this->define_shortcodes();
         $this->init_form_builder();
         $this->init_ajax();
 
@@ -360,23 +359,7 @@ class Users_WP {
         $this->loader->add_action( 'user_edit_form_tag', $forms, 'add_multipart_to_admin_edit_form');
 
     }
-
-    private function define_shortcodes() {
-
-        $shortcodes = new Users_WP_Shortcodes($this->loader);
-
-        add_shortcode( 'uwp_register', array($shortcodes,'register'));
-        add_shortcode( 'uwp_login', array($shortcodes,'login'));
-        add_shortcode( 'uwp_forgot', array($shortcodes,'forgot'));
-        add_shortcode( 'uwp_change', array($shortcodes,'change'));
-        add_shortcode( 'uwp_reset', array($shortcodes,'reset'));
-        add_shortcode( 'uwp_account', array($shortcodes,'account'));
-        add_shortcode( 'uwp_profile', array($shortcodes,'profile'));
-        add_shortcode( 'uwp_users', array($shortcodes,'users'));
-
-
-    }
-
+    
     private function init_settings() {
 
         global $uwp_options;

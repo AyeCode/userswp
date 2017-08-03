@@ -1,10 +1,10 @@
 <?php
 /**
- * This method gets fired during plugin activation.
+ * Wrap notice with a div.
  *
  * @since       1.0.0
  * @package     UsersWP
- * @return      void
+ * @return      string      Html string.
  */
 function uwp_wrap_notice($message, $type) {
     $notice = new Users_WP_Notices();

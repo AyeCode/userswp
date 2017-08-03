@@ -17,11 +17,11 @@ class Users_WP_Notices {
     }
 
     /**
+     * Wrap notice with a div.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string      Html string.
      */
     function wrap_notice($message, $type) {
         $output = '<div class="uwp-alert-'.$type.' text-center">';
@@ -32,11 +32,11 @@ class Users_WP_Notices {
     }
 
     /**
+     *  Displays notices when registration disabled.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     function display_registration_disabled_notice($type) {
         if ($type == 'register') {
@@ -50,11 +50,11 @@ class Users_WP_Notices {
     }
 
     /**
+     * Displays noticed based on notice key. 
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function form_notice_by_key() {
         $messages = array();

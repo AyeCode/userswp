@@ -108,3 +108,21 @@ function uwp_get_page_link($page_type) {
     $page = new Users_WP_Pages();
     return $page->get_page_link($page_type);
 }
+
+/**
+ * Builds the profile page url based on the tab and sub tab given
+ * yoursite.com/profile/username
+ * yoursite.com/profile/username/tab
+ * yoursite.com/profile/username/tab/subtab
+ *
+ * @since       1.0.0
+ * @package     UsersWP
+ * @param       int             $user_id            User ID.
+ * @param       string|bool     $tab                Optional. Main tab
+ * @param       string|bool     $subtab             Optional. Sub tab.
+ * @return      string                              Built profile page link.
+ */
+function uwp_build_profile_tab_url($user_id, $tab = false, $subtab = false) {
+    $page = new Users_WP_Pages();
+    return $page->build_profile_tab_url($user_id, $tab, $subtab);
+}

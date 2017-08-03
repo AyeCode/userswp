@@ -289,11 +289,11 @@ class Users_WP_Pages {
     }
 
     /**
+     * Returns all available pages as array to use in select dropdown.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      array                      Page array.
      */
     public function get_pages() {
         $pages_options = array( '' => __( 'Select a Page', 'userswp' ) ); // Blank option
@@ -308,11 +308,12 @@ class Users_WP_Pages {
     }
 
     /**
+     * Gets the page slug using the given page type.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $page_type      Page type.
+     * @return      string                      Page slug.
      */
     public function get_page_slug($page_type = 'register_page') {
         $page_id = uwp_get_option($page_type, 0);
@@ -326,11 +327,16 @@ class Users_WP_Pages {
     }
 
     /**
+     * Creates UsersWP page if not exists.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $slug           Page slug.
+     * @param       string      $option         Page setting key.
+     * @param       string      $page_title     The post title.  Default empty.
+     * @param       mixed       $page_content   The post content. Default empty.
+     * @param       int         $post_parent    Set this for the post it belongs to, if any. Default 0.
+     * @param       string      $status         The post status. Default 'draft'.
      */
     public function create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish') {
         global $wpdb, $current_user;
@@ -382,31 +388,38 @@ class Users_WP_Pages {
     }
 
     /**
+     * Generates default UsersWP pages. Usually called during plugin activation.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function generate_default_pages() {
         
-        $this->create_page(esc_sql(_x('register', 'page_slug', 'userswp')), 'register_page', __('Register', 'userswp'), '[uwp_register]');
-        $this->create_page(esc_sql(_x('login', 'page_slug', 'userswp')), 'login_page', __('Login', 'userswp'), '[uwp_login]');
-        $this->create_page(esc_sql(_x('account', 'page_slug', 'userswp')), 'account_page', __('Account', 'userswp'), '[uwp_account]');
-        $this->create_page(esc_sql(_x('forgot', 'page_slug', 'userswp')), 'forgot_page', __('Forgot Password?', 'userswp'), '[uwp_forgot]');
-        $this->create_page(esc_sql(_x('reset', 'page_slug', 'userswp')), 'reset_page', __('Reset Password', 'userswp'), '[uwp_reset]');
-        $this->create_page(esc_sql(_x('change', 'page_slug', 'userswp')), 'change_page', __('Change Password', 'userswp'), '[uwp_change]');
-        $this->create_page(esc_sql(_x('profile', 'page_slug', 'userswp')), 'profile_page', __('Profile', 'userswp'), '[uwp_profile]');
-        $this->create_page(esc_sql(_x('users', 'page_slug', 'userswp')), 'users_page', __('Users', 'userswp'), '[uwp_users]');
+        $this->create_page(esc_sql(_x('register',   'page_slug', 'userswp')), 'register_page',  __('Register',          'userswp'), '[uwp_register]');
+        $this->create_page(esc_sql(_x('login',      'page_slug', 'userswp')), 'login_page',     __('Login',             'userswp'), '[uwp_login]');
+        $this->create_page(esc_sql(_x('account',    'page_slug', 'userswp')), 'account_page',   __('Account',           'userswp'), '[uwp_account]');
+        $this->create_page(esc_sql(_x('forgot',     'page_slug', 'userswp')), 'forgot_page',    __('Forgot Password?',  'userswp'), '[uwp_forgot]');
+        $this->create_page(esc_sql(_x('reset',      'page_slug', 'userswp')), 'reset_page',     __('Reset Password',    'userswp'), '[uwp_reset]');
+        $this->create_page(esc_sql(_x('change',     'page_slug', 'userswp')), 'change_page',    __('Change Password',   'userswp'), '[uwp_change]');
+        $this->create_page(esc_sql(_x('profile',    'page_slug', 'userswp')), 'profile_page',   __('Profile',           'userswp'), '[uwp_profile]');
+        $this->create_page(esc_sql(_x('users',      'page_slug', 'userswp')), 'users_page',     __('Users',             'userswp'), '[uwp_users]');
     
     }
 
+    
     /**
+     * Generates default UsersWP pages on new wpmu blog creation.
      *
+     * @since       1.0.0
+     * @package     UsersWP
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @param       int         $blog_id        Blog ID.
+     * @param       int         $user_id        User ID.
+     * @param       string      $domain         Site domain.
+     * @param       string      $path           Site path.
+     * @param       int         $site_id        Site ID. Only relevant on multi-network installs.
+     * @param       array       $meta           Meta data. Used to set initial site options.
      */
     public function wpmu_generate_default_pages_on_new_site( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
 
@@ -477,5 +490,52 @@ class Users_WP_Pages {
 
         return $link;
     }
-    
+
+    /**
+     * Builds the profile page url based on the tab and sub tab given
+     * yoursite.com/profile/username
+     * yoursite.com/profile/username/tab
+     * yoursite.com/profile/username/tab/subtab
+     * 
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       int             $user_id            User ID.
+     * @param       string|bool     $tab                Optional. Main tab
+     * @param       string|bool     $subtab             Optional. Sub tab.
+     * @return      string                              Built profile page link.
+     */
+    public function build_profile_tab_url($user_id, $tab = false, $subtab = false) {
+
+        $link = apply_filters('uwp_profile_link', get_author_posts_url($user_id), $user_id);
+
+        if ($link != '') {
+            if (isset($_REQUEST['page_id'])) {
+                $permalink_structure = 'DEFAULT';
+            } else {
+                $permalink_structure = 'CUSTOM';
+                $link = rtrim($link, '/') . '/';
+            }
+
+            if ('DEFAULT' == $permalink_structure) {
+                $link = add_query_arg(
+                    array(
+                        'uwp_tab' => $tab,
+                        'uwp_subtab' => $subtab
+                    ),
+                    $link
+                );
+            } else {
+                if ($tab) {
+                    $link = $link . $tab;
+                }
+
+                if ($subtab) {
+                    $link = $link .'/'.$subtab;
+                }
+            }
+        }
+
+        return $link;
+    }
+
 }

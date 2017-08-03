@@ -13,16 +13,14 @@ class Users_WP_i18n {
     /**
      * Load the plugin text domain for translation.
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function load_plugin_textdomain() {
 
         load_plugin_textdomain( 'userswp', false, basename( dirname (dirname( __FILE__ ) ) ) . '/languages' );
 
     }
-
-
 
 }

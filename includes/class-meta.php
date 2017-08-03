@@ -26,12 +26,14 @@ class Users_WP_Meta {
     /**
      * Gets UsersWP setting value using key.
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param string $key Setting Key.
-     * @param bool|string $default Default value.
-     * @param bool $cache Use cache to retrieve the value?.
-     * @return string Setting Value.
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       string          $key        Setting Key.
+     * @param       bool|string     $default    Default value.
+     * @param       bool            $cache      Use cache to retrieve the value?.
+     * 
+     * @return      string                      Setting Value.
      */
     public function get_option( $key = '', $default = false, $cache = true ) {
         if ($cache) {
@@ -47,11 +49,13 @@ class Users_WP_Meta {
     /**
      * Updates UsersWP setting value using key.
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param bool $key Setting Key.
-     * @param string $value Setting Value.
-     * @return bool Update success or not?.
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       string|bool     $key        Setting Key.
+     * @param       string          $value      Setting Value.
+     * 
+     * @return      bool                        Update success or not?.
      */
     public function update_option( $key = false, $value = '') {
 
@@ -78,12 +82,14 @@ class Users_WP_Meta {
     /**
      * Gets UsersWP user meta value using key.
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param bool $user_id User ID.
-     * @param string $key user meta Key.
-     * @param bool|string $default Default value.
-     * @return string user meta Value.
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       int|bool        $user_id        User ID.
+     * @param       string          $key            User meta Key.
+     * @param       bool|string     $default        Default value.
+     * 
+     * @return      string                          User meta Value.
      */
     public function get_usermeta( $user_id = false, $key = '', $default = false ) {
         if (!$user_id) {
@@ -116,12 +122,14 @@ class Users_WP_Meta {
     /**
      * Updates UsersWP user meta value using key.
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param bool $user_id User ID.
-     * @param bool $key User meta Key.
-     * @param string $value User meta Value.
-     * @return bool Update success or not?.
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       int|bool        $user_id        User ID.
+     * @param       string|bool     $key            User meta Key.
+     * @param       string          $value          User meta Value.
+     * 
+     * @return      bool                            Update success or not?.
      */
     public function update_usermeta( $user_id = false, $key, $value ) {
 
@@ -176,10 +184,12 @@ class Users_WP_Meta {
     /**
      * Gets UsersWP user meta row using user ID.
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param bool $user_id User ID.
-     * @return object|bool user meta row object.
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       int|bool            $user_id    User ID.
+     * 
+     * @return      object|bool                     User meta row object.
      */
     public function get_usermeta_row($user_id = false) {
         if (!$user_id) {
@@ -197,10 +207,12 @@ class Users_WP_Meta {
     /**
      * Deletes a UsersWP meta row using the user ID.
      *
-     * @since   1.0.5
-     * @package Users_WP
-     * @param int|bool $user_id The User ID.
-     * @return void.
+     * @since       1.0.5
+     * @package     Users_WP
+     * 
+     * @param       int|bool            $user_id        User ID.
+     * 
+     * @return      void
      */
     public function delete_usermeta_row($user_id = false) {
         if (!$user_id) {
@@ -215,31 +227,36 @@ class Users_WP_Meta {
     /**
      * Syncs WP usermeta with UsersWP usermeta.
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       int            $user_id        User ID.
+     * 
+     * @return      void
      */
     public function sync_usermeta($user_id) {
 
         $user_data = get_userdata($user_id);
 
-        uwp_update_usermeta($user_id, 'uwp_account_username', $user_data->user_login);
-        uwp_update_usermeta($user_id, 'uwp_account_email', $user_data->user_email);
-        uwp_update_usermeta($user_id, 'uwp_account_display_name', $user_data->display_name);
-        uwp_update_usermeta($user_id, 'uwp_account_first_name', $user_data->first_name);
-        uwp_update_usermeta($user_id, 'uwp_account_last_name', $user_data->last_name);
-        uwp_update_usermeta($user_id, 'uwp_account_bio', $user_data->description);
-        uwp_update_usermeta($user_id, 'uwp_account_bio', $user_data->description);
+        uwp_update_usermeta($user_id, 'uwp_account_username',       $user_data->user_login);
+        uwp_update_usermeta($user_id, 'uwp_account_email',          $user_data->user_email);
+        uwp_update_usermeta($user_id, 'uwp_account_display_name',   $user_data->display_name);
+        uwp_update_usermeta($user_id, 'uwp_account_first_name',     $user_data->first_name);
+        uwp_update_usermeta($user_id, 'uwp_account_last_name',      $user_data->last_name);
+        uwp_update_usermeta($user_id, 'uwp_account_bio',            $user_data->description);
+        uwp_update_usermeta($user_id, 'uwp_account_bio',            $user_data->description);
 
     }
 
     /**
      * Delete UsersWP meta when user get deleted.
      *
-     * @since   1.0.5
-     * @package Users_WP
-     * @param int $user_id The User ID.
-     * @return void.
+     * @since       1.0.5
+     * @package     Users_WP
+     * 
+     * @param       int            $user_id        User ID.
+     * 
+     * @return      void
      */
     public function delete_usermeta_for_user($user_id) {
         $this->delete_usermeta_row($user_id);
@@ -248,11 +265,14 @@ class Users_WP_Meta {
     /**
      * Saves User IP during registration. 
      *
-     * @package UsersWP
-     * @param array $result Validated form result.
-     * @param string $type Form Type. 
-     * @param int $user_id The User ID.
-     * @return array Validated form result.
+     * @since       1.0.5
+     * @package     UsersWP
+     * 
+     * @param       array       $result         Validated form result.
+     * @param       string      $type           Form Type. 
+     * @param       int         $user_id        User ID.
+     * 
+     * @return      array                       Validated form result.
      */
     public function save_user_ip_on_register($result, $type, $user_id) {
         if ($type == 'register') {
@@ -265,9 +285,13 @@ class Users_WP_Meta {
     /**
      * Saves the users IP on login.
      *
-     * @since 1.0.0
-     * @param $user_login string The users username.
-     * @param $user object The user object WP_User.
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       string      $user_login     The users username.
+     * @param       object      $user           The user object WP_User.
+     * 
+     * @return      void
      */
     public function save_user_ip_on_login( $user_login, $user ) {
 
@@ -278,13 +302,15 @@ class Users_WP_Meta {
     /**
      * Modifies privacy value while updating into the db.
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param string $value Privacy value.
-     * @param int $user_id The User ID.
-     * @param string $key Custom field key.
-     * @param object $user_meta_info User meta row.
-     * @return string Modified privacy field string.
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $value          Privacy value.
+     * 
+     * @param       int         $user_id        The User ID.
+     * @param       string      $key            Custom field key.
+     * @param       object      $user_meta_info User meta row.
+     * 
+     * @return      string                      Modified privacy field string.
      */
     public function modify_privacy_value_on_update($value, $user_id, $key, $user_meta_info) {
         if (uwp_str_ends_with($key, '_privacy')) {
@@ -329,13 +355,15 @@ class Users_WP_Meta {
     /**
      * Modifies privacy value while fetching from the db.
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param string $value Privacy value.
-     * @param int $user_id The User ID.
-     * @param string $key Custom field key.
-     * @param string $default Default value.
-     * @return string Modified privacy value.
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       string      $value          Privacy value.
+     * @param       int         $user_id        The User ID.
+     * @param       string      $key            Custom field key.
+     * @param       string      $default        Default value.
+     * 
+     * @return      string                      Modified privacy value.
      */
     public function modify_privacy_value_on_get($value, $user_id, $key, $default) {
         if (uwp_str_ends_with($key, '_privacy')) {
@@ -357,12 +385,14 @@ class Users_WP_Meta {
     /**
      * Modifies date value from unix timestamp to string while updating into the db.
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param int $value Unix Timestamp.
-     * @param int $user_id The User ID.
-     * @param string $key Custom field key.
-     * @return string Date string.
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       int         $value          Unix Timestamp.
+     * @param       int         $user_id        The User ID.
+     * @param       string      $key            Custom field key.
+     * 
+     * @return      string                      Date string.
      */
     public function modify_datepicker_value_on_update($value, $user_id, $key) {
         // modify timestamp to date
@@ -378,12 +408,14 @@ class Users_WP_Meta {
     /**
      * Modifies date value from string to unix timestamp while fetching from the db.
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param string $value Date string.
-     * @param int $user_id The User ID.
-     * @param string $key Custom field key.
-     * @return int Unix Timestamp.
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       string      $value          Date string.
+     * @param       int         $user_id        The User ID.
+     * @param       string      $key            Custom field key.
+     * 
+     * @return      int                         Unix Timestamp.
      */
     public function modify_datepicker_value_on_get($value, $user_id, $key) {
         // modify date to timestamp

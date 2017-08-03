@@ -13,28 +13,21 @@ class Users_WP_Shortcodes {
 
     protected $loader;
 
-    /**
-     *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
-     */
     public function __construct($loader) {
 
         $this->loader = $loader;
         $this->load_dependencies();
         $this->templates = new Users_WP_Templates($loader);
-
+        $this->register_shortcodes();
 
     }
 
     /**
+     * Loads all dependencies for shortcodes.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     private function load_dependencies() {
 
@@ -43,15 +36,34 @@ class Users_WP_Shortcodes {
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-templates.php';
 
+    }
+
+    /**
+     * Registers all UsersWP shortcodes in WordPress.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
+     */
+    private function register_shortcodes() {
+
+        add_shortcode( 'uwp_register',  array($this, 'register'));
+        add_shortcode( 'uwp_login',     array($this, 'login'));
+        add_shortcode( 'uwp_forgot',    array($this, 'forgot'));
+        add_shortcode( 'uwp_change',    array($this, 'change'));
+        add_shortcode( 'uwp_reset',     array($this, 'reset'));
+        add_shortcode( 'uwp_account',   array($this, 'account'));
+        add_shortcode( 'uwp_profile',   array($this, 'profile'));
+        add_shortcode( 'uwp_users',     array($this, 'users'));
 
     }
-    
+
     /**
+     * Returns the UsersWP register page template content.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string     UsersWP template content.
      */
     public function register($atts) {
         if (is_user_logged_in()) {
@@ -69,11 +81,11 @@ class Users_WP_Shortcodes {
     }
 
     /**
+     * Returns the UsersWP login page template content.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string     UsersWP template content.
      */
     public function login() {
         if (is_user_logged_in()) {
@@ -83,77 +95,78 @@ class Users_WP_Shortcodes {
     }
 
     /**
+     * Returns the UsersWP forgot password page template content.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string     UsersWP template content.
      */
     public function forgot() {
         return $this->uwp_generate_shortcode('forgot');
     }
 
     /**
+     * Returns the UsersWP change password page template content.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string     UsersWP template content.
      */
     public function change() {
         return $this->uwp_generate_shortcode('change');
     }
 
     /**
+     * Returns the UsersWP reset password page template content.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string     UsersWP template content.
      */
     public function reset() {
         return $this->uwp_generate_shortcode('reset');
     }
 
     /**
+     * Returns the UsersWP account page template content.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string     UsersWP template content.
      */
     public function account() {
         return $this->uwp_generate_shortcode('account');
     }
 
     /**
+     * Returns the UsersWP profile page template content.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string     UsersWP template content.
      */
     public function profile() {
         return $this->uwp_generate_shortcode('profile');
     }
 
     /**
+     * Returns the UsersWP users page template content.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string     UsersWP template content.
      */
     public function users() {
         return $this->uwp_generate_shortcode('users');
     }
 
     /**
+     * Returns the UsersWP template content based on type.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $type       Template type.
+     * @return      string                  UsersWP template content.
      */
     public function uwp_generate_shortcode($type = 'register') {
 

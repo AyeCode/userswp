@@ -544,9 +544,7 @@ class Users_WP_Templates {
     public function uwp_activation_redirect() {
 
         if (get_option('uwp_activation_redirect', false)) {
-
             delete_option('uwp_activation_redirect');
-
             wp_redirect(admin_url('admin.php?page=userswp&tab=main&subtab=info'));
             exit;
 
