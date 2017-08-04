@@ -16,11 +16,11 @@ class Users_WP_Profile {
     }
 
     /**
+     * Prints the profile page header section.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
      */
     public function get_profile_header($user) {
         $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
@@ -97,26 +97,29 @@ class Users_WP_Profile {
     }
 
     /**
+     * Prints the profile page title section. 
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
      */
     public function get_profile_title($user) {
         ?>
         <div class="uwp-profile-name">
-            <h2><?php echo $user->display_name; ?></h2>
+            <h2 class="uwp-user-title" data-user="<?php echo $user->ID; ?>">
+                <?php echo $user->display_name; ?>
+                <?php do_action('uwp_profile_after_title', $user->ID ); ?>
+            </h2>
         </div>
         <?php
     }
 
     /**
+     * Prints the profile page bio section.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
      */
     public function get_profile_bio($user) {
         $bio = uwp_get_usermeta( $user->ID, 'uwp_account_bio', "" );
@@ -137,11 +140,11 @@ class Users_WP_Profile {
     }
 
     /**
+     * Prints the profile page social links section.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
      */
     public function get_profile_social($user) {
 
@@ -186,61 +189,61 @@ class Users_WP_Profile {
     }
 
     /**
+     * More info tab title.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
+     * @return      string                  Tab title.
      */
     public function get_profile_extra_count($user) {
-//        global $wpdb;
-//        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-//        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' AND field_type != 'fieldset' AND is_public = '1' AND show_in LIKE '%[more_info]%' ORDER BY sort_order ASC");
-//        return count($fields);
         return '<i class="fa fa-user"></i>';
     }
 
     /**
+     * Returns the custom fields content of profile page more info tab.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
+     * @return      string                  More info tab content.
      */
     public function get_profile_extra($user) {
         return $this->uwp_get_extra_fields($user, '[more_info]');
     }
 
     /**
+     * Returns the custom fields content of profile page sidebar.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
+     * @return      string                  Sidebar custom fields content.
      */
     public function get_profile_side_extra($user) {
         echo $this->uwp_get_extra_fields($user, '[profile_side]');
     }
 
     /**
+     * Returns the custom fields content of users page.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
+     * @return      string                  Users page custom fields content.
      */
     public function get_users_extra($user) {
         echo $this->uwp_get_extra_fields($user, '[users]');
     }
 
     /**
+     * Returns the custom fields content based on type.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
-     * @param $show_type
-     * @return string
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
+     * @param       string      $show_type  Filter type. 
+     * @return      string                  Custom fields content.
      */
     public function uwp_get_extra_fields($user, $show_type) {
 
@@ -328,11 +331,12 @@ class Users_WP_Profile {
     }
 
     /**
+     * Returns enabled profile tabs
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
+     * @return      array                   Profile tabs
      */
     public function get_profile_tabs($user) {
 
@@ -384,11 +388,12 @@ class Users_WP_Profile {
     }
 
     /**
+     * Prints the profile tab content template
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
+     * @return      void
      */
     public function get_profile_tabs_content($user) {
 
@@ -451,11 +456,12 @@ class Users_WP_Profile {
     <?php }
 
     /**
+     * Prints the tab content pagination section.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $total
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       int         $total       Total items.
+     * @return      void
      */
     public function get_profile_pagination($total) {
         ?>
@@ -478,11 +484,12 @@ class Users_WP_Profile {
     }
 
     /**
+     * Prints the profile page more info tab content.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
+     * @return      void
      */
     public function get_profile_more_info($user) {
         $allowed_tabs = uwp_get_option('enable_profile_tabs', array());
@@ -499,11 +506,12 @@ class Users_WP_Profile {
     }
 
     /**
+     * Prints the profile page "posts" tab content.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
+     * @return      void
      */
     public function get_profile_posts($user) {
         
@@ -520,11 +528,12 @@ class Users_WP_Profile {
     }
 
     /**
+     * Prints the profile page "comments" tab content.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
+     * @return      void
      */
     public function get_profile_comments($user) {
         $allowed_tabs = uwp_get_option('enable_profile_tabs', array());
@@ -604,11 +613,11 @@ class Users_WP_Profile {
     }
 
     /**
+     * Rewrites profile page links
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function rewrite_profile_link() {
 
@@ -680,11 +689,12 @@ class Users_WP_Profile {
     }
 
     /**
+     * Adds profile page query variables.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $query_vars
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       array       $query_vars     Query variables.
+     * @return      array                       Modified Query variables array.
      */
     public function profile_query_vars($query_vars) {
         $query_vars[] = 'uwp_profile';
@@ -694,13 +704,13 @@ class Users_WP_Profile {
     }
 
     /**
+     * Returns user profile link based on user id.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $link
-     * @param $user_id
-     * @return string
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string          $link           Unmodified link.
+     * @param       int             $user_id        User id.
+     * @return      string                          Modified link.
      */
     public function get_profile_link($link, $user_id) {
 
@@ -752,13 +762,13 @@ class Users_WP_Profile {
     }
 
     /**
+     * Modifies profile page title to include username.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $title
-     * @param null $id
-     * @return string
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string          $title          Original title
+     * @param       int|null        $id             Page id.
+     * @return      string                          Modified page title.
      */
     public function modify_profile_page_title( $title, $id = null ) {
 
@@ -783,13 +793,13 @@ class Users_WP_Profile {
     }
 
     /**
+     * Returns json content for image crop.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $image_url
-     * @param $type
-     * @return mixed|string|void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string              $image_url      Image url
+     * @param       string              $type           popup type. Avatar or Banner
+     * @return      string                              Json
      */
     public function uwp_image_crop_popup($image_url, $type) {
 
@@ -831,11 +841,11 @@ class Users_WP_Profile {
     }
 
     /**
+     * Initializes image crop js.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user       The User ID.
      */
     public function uwp_image_crop_init($user) {
         if (is_user_logged_in()) {
@@ -845,11 +855,11 @@ class Users_WP_Profile {
     }
 
     /**
+     * Returns modal content loading html.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      string      Modal loding html.
      */
     public function uwp_modal_loading_html() {
         ob_start();
@@ -860,7 +870,7 @@ class Users_WP_Profile {
                     <div class="uwp-bs-modal-content">
                         <div class="uwp-bs-modal-header">
                             <h4 class="uwp-bs-modal-title">
-                                <?php echo __( 'Loading Form ...', 'userswp' ); ?>
+                                <?php echo __( "Loading Form ...", "userswp" ); ?>
                             </h4>
                         </div>
                         <div class="uwp-bs-modal-body">
@@ -879,11 +889,11 @@ class Users_WP_Profile {
     }
 
     /**
+     * Adds modal close js.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function uwp_modal_close_js() {
         ?>
@@ -907,15 +917,15 @@ class Users_WP_Profile {
     }
 
     /**
+     * Returns avatar and banner crop modal html.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $type
-     * @param $image_url
-     * @param $full_width
-     * @param $full_height
-     * @return string
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string          $type           Avatar or Banner
+     * @param       string          $image_url      Image url to crop
+     * @param       int             $full_width     Full image width
+     * @param       int             $full_height    Full image height
+     * @return      string                          Html.
      */
     public function uwp_image_crop_modal_html($type, $image_url, $full_width, $full_height) {
         ob_start();
@@ -983,11 +993,12 @@ class Users_WP_Profile {
     }
 
     /**
+     * Returns avatar and banner crop submit form.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param string $type
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string          $type           Avatar or Banner
+     * @return      string                          Html.
      */
     public function uwp_crop_submit_form($type = 'avatar') {
         $files = new Users_WP_Files();
@@ -1153,29 +1164,16 @@ class Users_WP_Profile {
         return trim($output);
  }
 
+    
     /**
+     * Array search by value
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
-     */
-    public function uwp_extra_user_profile_fields( $user ) {
-        ?>
-        <h3><?php _e("UsersWP", "userswp"); ?></h3>
-        <?php echo $this->get_profile_extra($user); ?>
-        <?php
-    }
-
-    /**
-     *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $array
-     * @param $key
-     * @param $value
-     * @return array
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       array       $array      Original array.
+     * @param       mixed       $key        Array key
+     * @param       mixed       $value      Array value.
+     * @return      array                   Result array.
      */
     public function uwp_array_search($array, $key, $value)
     {
@@ -1195,16 +1193,19 @@ class Users_WP_Profile {
     }
 
     /**
+     * Modifies get_avatar function to use userswp avatar.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $avatar
-     * @param $id_or_email
-     * @param $size
-     * @param $default
-     * @param $alt
-     * @return string
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $avatar         img tag value for the user's avatar.
+     * @param       mixed       $id_or_email    The Gravatar to retrieve. Accepts a user_id, gravatar md5 hash,
+     *                                          user email, WP_User object, WP_Post object, or WP_Comment object.
+     * @param       int         $size           Square avatar width and height in pixels to retrieve.
+     * @param       string      $default        URL for the default image or a default type. Accepts '404', 'retro', 'monsterid',
+     *                                          'wavatar', 'indenticon','mystery' (or 'mm', or 'mysteryman'), 'blank', or 'gravatar_default'.
+     *                                          Default is the value of the 'avatar_default' option, with a fallback of 'mystery'.
+     * @param       string      $alt            Alternative text to use in the avatar image tag. Default empty.
+     * @return      string                      Modified img tag value
      */
     public function uwp_modify_get_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
         $user = false;
@@ -1240,11 +1241,12 @@ class Users_WP_Profile {
     }
 
     /**
+     * Modified the comment author url to profile page link for loggedin users.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $link
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $link       Original author link.
+     * @return      string                  Modified author link.    
      */
     public function uwp_get_comment_author_link($link) {
         global $comment;
@@ -1260,11 +1262,11 @@ class Users_WP_Profile {
     }
 
     /**
+     * Redirects /author page to /profile page.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function uwp_redirect_author_page() {
         if ( is_author() ) {
@@ -1276,14 +1278,15 @@ class Users_WP_Profile {
     }
 
     /**
-     * Modify edit my profile link in admin bar
+     * Modifies "edit my profile" link in admin bar
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $url
-     * @param $user_id
-     * @param $scheme
-     * @return false|string
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $url        The complete URL including scheme and path.
+     * @param       int         $user_id    The user ID.
+     * @param       string      $scheme     Scheme to give the URL context. Accepts 'http', 'https', 'login',
+     *                                      'login_post', 'admin', 'relative' or null.
+     * @return      false|string            Filtered url.
      */
     public function uwp_modify_admin_bar_edit_profile_url( $url, $user_id, $scheme )
     {
@@ -1299,11 +1302,12 @@ class Users_WP_Profile {
     }
 
     /**
+     * Restrict the files display only to current users in media popup.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $wp_query
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $wp_query      Unmodified wp_query. 
+     * @return      object                     Modified wp_query.
      */
     public function uwp_restrict_attachment_display($wp_query) {
         if (!is_admin()) {
@@ -1316,15 +1320,15 @@ class Users_WP_Profile {
     }
 
     /**
+     * Allow users to upload files who has upload capability.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $llcaps
-     * @param $caps
-     * @param $args
-     * @param $user
-     * @return mixed
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       array   $llcaps         An array of all the user's capabilities.
+     * @param       array   $caps           Actual capabilities for meta capability.
+     * @param       array   $args           Optional parameters passed to has_cap(), typically object ID.
+     * @param       object  $user           The user object.
+     * @return      array                   User capabilities.
      */
     public function allow_all_users_profile_uploads($llcaps, $caps, $args, $user) {
 
@@ -1338,15 +1342,15 @@ class Users_WP_Profile {
     }
 
     /**
+     * Validates file uploads and returns errors if found.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $value
-     * @param $field
-     * @param $file_key
-     * @param $file_to_upload
-     * @return WP_Error
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string|bool         $value              Original value.
+     * @param       object              $field              Field info.
+     * @param       string              $file_key           Field key.
+     * @param       array               $file_to_upload     File data to upload.
+     * @return      string|WP_Error                         Returns original value if no erros. Else returns errors.
      */
     public function uwp_handle_file_upload_error_checks($value, $field, $file_key, $file_to_upload) {
         
@@ -1377,11 +1381,12 @@ class Users_WP_Profile {
     }
 
     /**
+     * Sets uwp_profile_upload to true on profile page.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $params
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       array      $params     Plupload params
+     * @return      array                  Plupload params
      */
     public function add_uwp_plupload_param($params) {
 
@@ -1393,11 +1398,11 @@ class Users_WP_Profile {
     }
 
     /**
+     * Handles avatar and banner file upload.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function uwp_ajax_avatar_banner_upload() {
         // Image upload handler
@@ -1445,13 +1450,13 @@ class Users_WP_Profile {
     }
 
     /**
+     * Returns the avatar and banner crop popup html and js.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $image_url
-     * @param $type
-     * @return null|void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string          $image_url      Image url to crop.
+     * @param       string          $type           Crop type. Avatar or Banner
+     * @return      string|null                     Html and js content.
      */
     public function uwp_ajax_image_crop_popup($image_url, $type){
         wp_enqueue_style( 'jcrop' );
@@ -1465,11 +1470,11 @@ class Users_WP_Profile {
     }
 
     /**
+     * Handles crop popup form ajax request.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function uwp_ajax_image_crop_popup_form(){
         $type = strip_tags(esc_sql($_POST['type']));
@@ -1485,11 +1490,11 @@ class Users_WP_Profile {
     }
 
     /**
+     * Defines javascript ajaxurl variable.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function uwp_define_ajaxurl() {
 
@@ -1499,11 +1504,11 @@ class Users_WP_Profile {
     }
 
     /**
+     * Adds UsersWP serach form in Users page.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
      */
     public function uwp_users_search() {
         ?>
@@ -1551,24 +1556,25 @@ class Users_WP_Profile {
     }
 
     /**
+     * Prints the users page main content.
      *
+     * @since       1.0.0
+     * @package     UsersWP
      *
-     * @since   1.0.0
-     * @package UsersWP
-     * @return void
+     * @return      void
      */
     public function uwp_users_list() {
         get_uwp_users_list();
     }
 
     /**
+     * Displays custom fields as tabs
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $tabs
-     * @param $user
-     * @return mixed
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       $tabs
+     * @param       $user
+     * @return      mixed
      */
     public function uwp_extra_fields_as_tabs($tabs, $user)
     {
@@ -1598,12 +1604,12 @@ class Users_WP_Profile {
     }
 
     /**
+     * Prints custom field values as tab content.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $user
-     * @param $active_tab
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $user           The User ID.
+     * @param       string      $active_tab     Active tab.
      */
     public function uwp_extra_fields_as_tab_values($user, $active_tab)
     {
@@ -1625,13 +1631,13 @@ class Users_WP_Profile {
     }
 
     /**
+     * Gets custom field value based on key.
      *
-     *
-     * @since   1.0.0
-     * @package UsersWP
-     * @param $field
-     * @param $user
-     * @return string
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       object      $field      Field info object.
+     * @param       object      $user       The User ID.
+     * @return      string                  Custom field value.
      */
     public function uwp_get_field_value($field, $user) {
 

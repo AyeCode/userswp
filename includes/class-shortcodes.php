@@ -45,7 +45,7 @@ class Users_WP_Shortcodes {
      * @package     UsersWP
      * @return      void
      */
-    private function register_shortcodes() {
+    public function register_shortcodes() {
 
         add_shortcode( 'uwp_register',  array($this, 'register'));
         add_shortcode( 'uwp_login',     array($this, 'login'));
