@@ -167,6 +167,11 @@ class Users_WP {
         require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-formbuilder.php';
 
         /**
+         * The class responsible for setting field callbacks
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-callback.php';
+
+        /**
          * The class responsible for displaying admin notices
          */
         require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-notices.php';
@@ -270,6 +275,7 @@ class Users_WP {
         $this->loader->add_action( 'template_redirect', $templates, 'access_checks', 20);
         $this->loader->add_action( 'template_redirect', $profile, 'uwp_redirect_author_page' , 10 , 2 );
         $this->loader->add_action( 'wp_logout', $templates, 'logout_redirect');
+        $this->loader->add_action( 'init', $templates, 'wp_login_redirect');
         $this->loader->add_action( 'admin_init', $templates, 'uwp_activation_redirect');
 
 

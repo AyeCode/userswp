@@ -1935,6 +1935,28 @@ function uwp_settings_general_login_fields() {
 }
 
 /**
+ * Returns the General > Login tab setting fields
+ *
+ * @since       1.0.0
+ * @package     UsersWP
+ *
+ * @return      array       Setting fields
+ */
+function uwp_settings_general_wp_login_fields() {
+    $fields =  array(
+        'block_wp_login' => array(
+            'id'   => 'block_wp_login',
+            'name' => __( 'Redirect wp-login.php?', 'userswp' ),
+            'desc' => 'When enabled /wp-login.php page will be redirected to UsersWP login page.',
+            'type' => 'checkbox',
+            'std'  => '0',
+            'class' => 'uwp_label_inline',
+        ),
+    );
+    return $fields;
+}
+
+/**
  * Returns the General > Logout tab setting fields
  *
  * @since       1.0.0
@@ -1992,9 +2014,10 @@ function uwp_settings_general_delete_fields() {
  */
 function uwp_settings_general_loginout_fields() {
     $login = uwp_settings_general_login_fields();
+    $wp_login = uwp_settings_general_wp_login_fields();
     $logout = uwp_settings_general_logout_fields();
 
-    $fields = array_merge($login, $logout);
+    $fields = array_merge($login, $wp_login, $logout);
     return $fields;
 }
 

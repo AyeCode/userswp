@@ -9,15 +9,7 @@
  *
  * @package    Users_WP
  */
-
-/**
- * All UsersWP related mails are sent via this class.
- *
- * @since      1.0.0
- * @package    Users_WP
- * @author     GeoDirectory Team <info@wpgeodirectory.com>
- */
-class Users_WP_Admin_Callback {
+class Users_WP_Callback {
 
     public function uwp_missing_callback($args) {
         printf(

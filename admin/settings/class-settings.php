@@ -31,8 +31,6 @@ class Users_WP_Admin_Settings {
     private function load_dependencies() {
 
         require_once dirname(dirname( __FILE__ )) . '/settings/class-formbuilder.php';
-        require_once dirname(dirname( __FILE__ )) . '/settings/class-callback.php';
-
     }
 
     public function uwp_settings_page() {
@@ -334,7 +332,7 @@ class Users_WP_Admin_Settings {
             add_option( 'uwp_settings' );
         }
 
-        $callback = new Users_WP_Admin_Callback();
+        $callback = new Users_WP_Callback();
 
         foreach( $this->uwp_get_registered_settings() as $tab => $settings ) {
 

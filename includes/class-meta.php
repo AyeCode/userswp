@@ -17,9 +17,9 @@ class Users_WP_Meta {
         add_action('wp_login', array($this, 'save_user_ip_on_login') ,10,2);
         add_filter('uwp_before_extra_fields_save', array($this, 'save_user_ip_on_register'), 10, 3);
         add_filter('uwp_update_usermeta', array($this, 'modify_privacy_value_on_update'), 10, 4);
-        add_filter('uwp_get_usermeta', array($this, 'modify_privacy_value_on_get'), 10, 4);
+        add_filter('uwp_get_usermeta', array($this, 'modify_privacy_value_on_get'), 10, 5);
         add_filter('uwp_update_usermeta', array($this, 'modify_datepicker_value_on_update'), 10, 3);
-        add_filter('uwp_get_usermeta', array($this, 'modify_datepicker_value_on_get'), 10, 3);
+        add_filter('uwp_get_usermeta', array($this, 'modify_datepicker_value_on_get'), 10, 5);
 
     }
 
@@ -98,6 +98,7 @@ class Users_WP_Meta {
 
         $user_data = get_userdata($user_id);
         $value = null;
+        $usermeta = false;
 
         if (!uwp_str_ends_with($key, '_privacy')) {
             if ($key == 'uwp_account_email') {
@@ -115,8 +116,8 @@ class Users_WP_Meta {
 
 
         $value = uwp_maybe_unserialize($key, $value);
-        $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
-        return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
+        $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default, $usermeta );
+        return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default, $usermeta );
     }
 
     /**
@@ -365,10 +366,9 @@ class Users_WP_Meta {
      * 
      * @return      string                      Modified privacy value.
      */
-    public function modify_privacy_value_on_get($value, $user_id, $key, $default) {
+    public function modify_privacy_value_on_get($value, $user_id, $key, $default, $usermeta) {
         if (uwp_str_ends_with($key, '_privacy')) {
             $value = '1';
-            $usermeta = uwp_get_usermeta_row($user_id);
             if (!empty($usermeta)) {
                 $output = $usermeta->user_privacy ? $usermeta->user_privacy : $default;
                 if ($output) {
@@ -417,7 +417,7 @@ class Users_WP_Meta {
      * 
      * @return      int                         Unix Timestamp.
      */
-    public function modify_datepicker_value_on_get($value, $user_id, $key) {
+    public function modify_datepicker_value_on_get($value, $user_id, $key, $default, $usermeta) {
         // modify date to timestamp
         if (is_string($value) && (strpos($value, '-') !== false)) {
             $field_info = uwp_get_custom_field_info($key);

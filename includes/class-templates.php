@@ -238,6 +238,27 @@ class Users_WP_Templates {
         exit();
     }
 
+
+    /**
+     * Redirects wp-login.php to UsersWP login page.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
+     */
+    public function wp_login_redirect() {
+        $login_page_id = uwp_get_option('login_page', false);
+        $block_wp_login = uwp_get_option('block_wp_login', '');
+        if ($login_page_id && $block_wp_login == '1') {
+            global $pagenow;
+            if( 'wp-login.php' == $pagenow && !isset($_REQUEST['action']) ) {
+                $redirect_to = get_permalink($login_page_id);
+                wp_redirect( $redirect_to );
+                exit();
+            }
+        }
+    }
+
     /**
      * Prints html for form fields of that particular form.
      *
