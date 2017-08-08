@@ -5,25 +5,7 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       http://wpgeodirectory.com
  * @since      1.0.0
- *
- * @package    Users_WP
- * @subpackage Users_WP/includes
- */
-
-/**
- * The core plugin class.
- *
- * This is used to define internationalization, admin-specific hooks, and
- * public-facing site hooks.
- *
- * Also maintains the unique identifier of this plugin as well as the current
- * version of the plugin.
- *
- * @since      1.0.0
- * @package    Users_WP
- * @subpackage Users_WP/includes
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP {
@@ -55,6 +37,7 @@ class Users_WP {
      * @var      string    $version    The current version of the plugin.
      */
     protected $version;
+
 
     /**
      * Define the core functionality of the plugin.
@@ -102,61 +85,96 @@ class Users_WP {
          * The class responsible for orchestrating the actions and filters of the
          * core plugin.
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-loader.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-loader.php';
 
         /**
          * The class responsible for defining internationalization functionality
          * of the plugin.
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-i18n.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-i18n.php';
+
+        /**
+         * The class responsible for sending emails
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-emails.php';
+
+        /**
+         * The class responsible for reading and updating meta
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-meta.php';
+
+        /**
+         * The class responsible for userswp dates
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-date.php';
+
+        /**
+         * The class responsible for userswp pages
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-pages.php';
+
+        /**
+         * The class responsible for uploading files
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-files.php';
 
         /**
          * The class responsible for defining form handler functionality
          * of the plugin.
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-forms.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-forms.php';
 
         /**
          * The class responsible for defining ajax handler functionality
          * of the plugin.
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-ajax.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-ajax.php';
 
         /**
          * The class responsible for defining all shortcodes
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-templates.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-templates.php';
 
         /**
          * The class responsible for defining profile content
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-profile.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-profile.php';
 
         /**
          * The class responsible for defining all shortcodes
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-users-wp-shortcodes.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-shortcodes.php';
 
         /**
          * The class responsible for defining all actions that occur in the admin area.
          */
-        require_once dirname(dirname( __FILE__ )) . '/admin/class-users-wp-admin.php';
+        require_once dirname(dirname( __FILE__ )) . '/admin/class-admin.php';
 
         /**
          * The class responsible for defining all actions that occur in the public-facing
          * side of the site.
          */
-        require_once dirname(dirname( __FILE__ )) . '/public/class-users-wp-public.php';
+        require_once dirname(dirname( __FILE__ )) . '/public/class-public.php';
 
         /**
          * The class responsible for adding fields in forms
          */
-        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-users-wp-form-builder.php';
+        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-formbuilder.php';
+
+        /**
+         * The class responsible for setting field callbacks
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-callback.php';
 
         /**
          * The class responsible for displaying admin notices
          */
-        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-uwp-notices.php';
+        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-notices.php';
 
 
         $this->loader = new Users_WP_Loader();
@@ -257,6 +275,7 @@ class Users_WP {
         $this->loader->add_action( 'template_redirect', $templates, 'access_checks', 20);
         $this->loader->add_action( 'template_redirect', $profile, 'uwp_redirect_author_page' , 10 , 2 );
         $this->loader->add_action( 'wp_logout', $templates, 'logout_redirect');
+        $this->loader->add_action( 'init', $templates, 'wp_login_redirect');
         $this->loader->add_action( 'admin_init', $templates, 'uwp_activation_redirect');
 
 
@@ -308,11 +327,7 @@ class Users_WP {
 
         // Popup and crop functions
         $this->loader->add_filter( 'ajax_query_attachments_args', $profile, 'uwp_restrict_attachment_display' );
-
-        if(uwp_doing_upload()){
-            add_filter( 'wp_handle_upload_prefilter', 'uwp_wp_media_restrict_file_types' );
-        }
-
+        
         $this->loader->add_action( 'uwp_handle_file_upload_error_checks', $profile, 'uwp_handle_file_upload_error_checks', 10, 4 );
         $this->loader->add_action( 'wp_ajax_uwp_avatar_banner_upload', $profile, 'uwp_ajax_avatar_banner_upload' );
         //$this->loader->add_action( 'wp_ajax_uwp_ajax_image_crop_popup', $profile, 'uwp_ajax_image_crop_popup' );
@@ -353,10 +368,15 @@ class Users_WP {
 
     }
 
+    /**
+     * Registers all UsersWP shortcodes in WordPress.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
+     */
     private function define_shortcodes() {
-
         $shortcodes = new Users_WP_Shortcodes($this->loader);
-
         add_shortcode( 'uwp_register', array($shortcodes,'register'));
         add_shortcode( 'uwp_login', array($shortcodes,'login'));
         add_shortcode( 'uwp_forgot', array($shortcodes,'forgot'));
@@ -365,10 +385,8 @@ class Users_WP {
         add_shortcode( 'uwp_account', array($shortcodes,'account'));
         add_shortcode( 'uwp_profile', array($shortcodes,'profile'));
         add_shortcode( 'uwp_users', array($shortcodes,'users'));
-
-
     }
-
+    
     private function init_settings() {
 
         global $uwp_options;

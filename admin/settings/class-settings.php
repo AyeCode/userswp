@@ -30,8 +30,7 @@ class Users_WP_Admin_Settings {
 
     private function load_dependencies() {
 
-        require_once dirname(dirname( __FILE__ )) . '/settings/class-users-wp-form-builder.php';
-
+        require_once dirname(dirname( __FILE__ )) . '/settings/class-formbuilder.php';
     }
 
     public function uwp_settings_page() {
@@ -333,6 +332,8 @@ class Users_WP_Admin_Settings {
             add_option( 'uwp_settings' );
         }
 
+        $callback = new Users_WP_Callback();
+
         foreach( $this->uwp_get_registered_settings() as $tab => $settings ) {
 
             foreach ( $settings as $key => $opt ) {
@@ -349,7 +350,7 @@ class Users_WP_Admin_Settings {
                     add_settings_field(
                         'uwp_settings[' . $option['id'] . ']',
                         $name,
-                        function_exists( 'uwp_' . $option['type'] . '_callback' ) ? 'uwp_' . $option['type'] . '_callback' : 'uwp_missing_callback',
+                        method_exists($callback, 'uwp_' . $option['type'] . '_callback') ? array($callback, 'uwp_' . $option['type'] . '_callback') : array($callback, 'uwp_missing_callback'),
                         'uwp_settings_' . $tab .'_'.$key,
                         'uwp_settings_' . $tab .'_'.$key,
                         array(
@@ -384,6 +385,8 @@ class Users_WP_Admin_Settings {
     }
 
     public function uwp_get_registered_settings() {
+        
+        $file_obj = new Users_WP_Files();
 
         /**
          * 'Whitelisted' uwp settings, filters are provided for each settings
@@ -498,7 +501,7 @@ class Users_WP_Admin_Settings {
                         'profile_avatar_size' => array(
                             'id'   => 'profile_avatar_size',
                             'name' => __( 'Profile Avatar max file size', 'userswp' ),
-                            'desc' => __( 'Enter Profile Avatar max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>'.uwp_formatSizeinKb(uwp_get_max_upload_size()).'</b>) will be used.', 'userswp' ),
+                            'desc' => __( 'Enter Profile Avatar max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>) will be used.', 'userswp' ),
                             'type' => 'number',
                             'std'  => '',
                             'size' => 'regular',
@@ -507,7 +510,7 @@ class Users_WP_Admin_Settings {
                         'profile_banner_size' => array(
                             'id'   => 'profile_banner_size',
                             'name' => __( 'Profile Banner max file size', 'userswp' ),
-                            'desc' => __( 'Enter Profile Banner max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>'.uwp_formatSizeinKb(uwp_get_max_upload_size()).'</b>) will be used.', 'userswp' ),
+                            'desc' => __( 'Enter Profile Banner max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>) will be used.', 'userswp' ),
                             'type' => 'number',
                             'std'  => '',
                             'size' => 'regular',

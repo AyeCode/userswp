@@ -1,12 +1,30 @@
 <?php
+/**
+ * Ajax related functions
+ *
+ * This class defines all code necessary to handle UsersWP ajax requests.
+ *
+ * @since      1.0.0
+ * @author     GeoDirectory Team <info@wpgeodirectory.com>
+ */
 class Users_WP_Ajax {
 
     private $form_builder;
 
+    
     public function __construct($form_builder) {
+
         $this->form_builder = $form_builder;
+
     }
 
+    /**
+     * Handles the create custom field and sort custom field ajax requests.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * @return      void
+     */
     public function handler()
     {
         if ((isset($_REQUEST['uwp_ajax']) && $_REQUEST['uwp_ajax'] == 'admin_ajax') || isset($_REQUEST['create_field']) || isset($_REQUEST['sort_create_field'])) {
@@ -27,12 +45,30 @@ class Users_WP_Ajax {
         }
     }
 
+    /**
+     * Kill WordPress execution and display HTML message with error message.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       string      $message    Optional. Error message.
+     * @param       string      $title      Optional. Error title.
+     * @param       int         $status     The HTTP response code. Default 200 for Ajax requests, 500 otherwise.
+     * @return      void
+     */
     public function uwp_die( $message = '', $title = '', $status = 400 ) {
         add_filter( 'wp_die_ajax_handler', '_uwp_die_handler', 10, 3 );
         add_filter( 'wp_die_handler', '_uwp_die_handler', 10, 3 );
         wp_die( $message, $title, array( 'response' => $status ));
     }
 
+    /**
+     * Handles the create custom field ajax request.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * @param       array       $data   Submitted $_REQUEST data.
+     * @return      void
+     */
     public function create_field($data) {
 
         $form_type = isset($data['form_type']) ? sanitize_text_field($data['form_type']) : '';

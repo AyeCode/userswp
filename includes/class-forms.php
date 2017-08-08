@@ -4,28 +4,32 @@
  *
  * This class defines all code necessary to handle UsersWP forms like login. register etc.
  *
- * @link       http://wpgeodirectory.com
  * @since      1.0.0
- *
- * @package    Users_WP
- * @subpackage Users_WP/includes
- */
-
-/**
- * Define the templates functionality.
- *
- * @since      1.0.0
- * @package    Users_WP
- * @subpackage Users_WP/includes
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Forms {
 
+    /**
+     * Initialize UsersWP notices.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @return      void
+     */
     public function init_notices() {
         global $uwp_notices;
         $uwp_notices = array();
     }
-    
+
+    /**
+     * Handles all UsersWP forms.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @return      void
+     */
     public function handler()
     {
         global $uwp_notices;
@@ -143,6 +147,16 @@ class Users_WP_Forms {
 
     }
 
+    /**
+     * Displays UsersWP notices in forms.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       string      $type       Form type
+     * 
+     * @return      void
+     */
     public function display_notices($type) {
         global $uwp_notices;
 
@@ -179,10 +193,21 @@ class Users_WP_Forms {
         }
     }
 
-
+    /**
+     * Processes register form submission.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       array                   $data       Submitted $_POST data
+     * @param       array                   $files      Submitted $_FILES data
+     * 
+     * @return      bool|WP_Error|string               
+     */
     public function process_register($data = array(), $files = array()) {
 
         $errors = new WP_Error();
+        $file_obj = new Users_WP_Files();
 
         if( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce' ) ) {
             return false;
@@ -212,7 +237,7 @@ class Users_WP_Forms {
             return $result;
         }
 
-        $uploads_result = uwp_validate_uploads($files, 'register');
+        $uploads_result = $file_obj->uwp_validate_uploads($files, 'register');
 
         if (is_wp_error($uploads_result)) {
             return $uploads_result;
@@ -338,7 +363,9 @@ class Users_WP_Forms {
             $login_details = __('<p><b>' . __('Please activate your account :', 'userswp') . '</b></p>
             <p>' . $message . '</p>');
 
-            $send_result = $this->uwp_send_email( 'activate', $user_id, $login_details );
+            $email = new Users_WP_Mails();
+            $send_result = $email->send( 'activate', $user_id, $login_details );
+            
             if (!$send_result) {
                 $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
             }
@@ -347,7 +374,9 @@ class Users_WP_Forms {
             <p>' . __('Username:', 'userswp') . ' ' . $result['uwp_account_username'] . '</p>
             <p>' . __('Password:', 'userswp') . ' ' . $message_pass . '</p>');
 
-            $send_result = $this->uwp_send_email( 'register', $user_id, $login_details );
+            $email = new Users_WP_Mails();
+            $send_result = $email->send( 'register', $user_id, $login_details );
+
             if (!$send_result) {
                 $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
             }
@@ -390,8 +419,20 @@ class Users_WP_Forms {
                 return __('An email has been sent to your registered email address. Please click the activation link to proceed.', 'userswp');
             } elseif ($reg_action == 'require_admin_review' && defined('UWP_MOD_VERSION')) {
                 update_user_meta( $user_id, 'uwp_mod', '1' );
-                $this->uwp_send_email( 'mod_pending', $user_id );
-                uwp_send_admin_email( 'mod_admin', $user_id );
+
+                $email = new Users_WP_Mails();
+                $send_result = $email->send( 'mod_pending', $user_id );
+
+                $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result);
+                if (is_wp_error($send_result)) {
+                    return $send_result;
+                }
+
+                $admin_send_result = $email->send_admin_email('mod_admin', $user_id);
+                if (is_wp_error($admin_send_result)) {
+                    return $admin_send_result;
+                }
+                
                 return __('Your account is under moderation. We will email you once its approved.', 'userswp');
             } else {
                 $login_page = uwp_get_option('login_page', false);
@@ -411,6 +452,16 @@ class Users_WP_Forms {
 
     }
 
+    /**
+     * Processes login form submission.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       array                   $data       Submitted $_POST data
+     * 
+     * @return      bool|WP_Error|string
+     */
     public function process_login($data) {
 
         $errors = new WP_Error();
@@ -466,6 +517,16 @@ class Users_WP_Forms {
         }
     }
 
+    /**
+     * Processes forgot password form submission.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       array                   $data       Submitted $_POST data
+     * 
+     * @return      bool|WP_Error|string
+     */
     public function process_forgot($data) {
 
         $errors = new WP_Error();
@@ -502,16 +563,27 @@ class Users_WP_Forms {
 
         $login_details = $this->generate_forgot_message($user_data);
 
-        $res = $this->uwp_send_email( 'forgot', $user_data->ID, $login_details );
-
-        $res = apply_filters('uwp_forms_check_for_send_mail_errors', $res, $user_data, $errors);
-        if (is_wp_error($res)) {
-            return $res;
+        $email = new Users_WP_Mails();
+        $send_result = $email->send( 'forgot', $user_data->ID, $login_details );
+        
+        $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
+        if (is_wp_error($send_result)) {
+            return $send_result;
         }
 
         return true;
     }
 
+    /**
+     * Processes change password form submission.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       array                   $data       Submitted $_POST data
+     * 
+     * @return      bool|WP_Error|string
+     */
     public function process_change($data) {
 
         $errors = new WP_Error();
@@ -537,12 +609,13 @@ class Users_WP_Forms {
         if (is_wp_error($user_data)) {
             return $user_data;
         }
-        
-        $res = $this->uwp_send_email( 'change', $user_data->ID );
 
-        $res = apply_filters('uwp_forms_check_for_send_mail_errors', $res, $user_data, $errors);
-        if (is_wp_error($res)) {
-            return $res;
+        $email = new Users_WP_Mails();
+        $send_result = $email->send( 'change', $user_data->ID );
+
+        $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
+        if (is_wp_error($send_result)) {
+            return $send_result;
         }
 
         wp_set_password( $data['uwp_change_password'], $user_data->ID );
@@ -550,7 +623,17 @@ class Users_WP_Forms {
 
         return true;
     }
-    
+
+    /**
+     * Processes reset password form submission.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       array                   $data       Submitted $_POST data
+     * 
+     * @return      bool|WP_Error|string
+     */
     public function process_reset($data) {
 
         $errors = new WP_Error();
@@ -578,12 +661,13 @@ class Users_WP_Forms {
         if (is_wp_error($user_data)) {
             return $user_data;
         }
-        
-        $res = $this->uwp_send_email( 'reset', $user_data->ID );
 
-        $res = apply_filters('uwp_forms_check_for_send_mail_errors', $res, $user_data, $errors);
-        if (is_wp_error($res)) {
-            return $res;
+        $email = new Users_WP_Mails();
+        $send_result = $email->send( 'reset', $user_data->ID );
+
+        $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
+        if (is_wp_error($send_result)) {
+            return $send_result;
         }
 
         wp_set_password( $data['uwp_reset_password'], $user_data->ID );
@@ -591,6 +675,16 @@ class Users_WP_Forms {
         return true;
     }
 
+    /**
+     * Generates forgot password email message.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       object                  $user_data       User object.
+     * 
+     * @return      bool|string                              Message.
+     */
     public function generate_forgot_message($user_data) {
 
         global $wpdb, $wp_hasher;
@@ -635,8 +729,21 @@ class Users_WP_Forms {
 
     }
 
+    /**
+     * Processes account form submission.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       array                   $data       Submitted $_POST data
+     * @param       array                   $files      Submitted $_FILES data
+     * 
+     * @return      bool|WP_Error|string
+     */
     public function process_account($data = array(), $files = array()) {
 
+        $file_obj = new Users_WP_Files();
+        
         $current_user_id = get_current_user_id();
         if (!$current_user_id) {
             return false;
@@ -658,7 +765,7 @@ class Users_WP_Forms {
             return $result;
         }
 
-        $uploads_result = uwp_validate_uploads($files, 'account');
+        $uploads_result = $file_obj->uwp_validate_uploads($files, 'account');
 
         if (is_wp_error($uploads_result)) {
             return $uploads_result;
@@ -729,12 +836,13 @@ class Users_WP_Forms {
 
         if (uwp_get_option('enable_account_update_notification') == '1') {
             $user_data = get_user_by('id', $user_id);
-            
-            $res = $this->uwp_send_email( 'account', $user_data->ID );
-            
-            $res = apply_filters('uwp_forms_check_for_send_mail_errors', $res, $user_data, $errors);
-            if (is_wp_error($res)) {
-                return $res;
+
+            $email = new Users_WP_Mails();
+            $send_result = $email->send( 'account', $user_data->ID );
+
+            $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
+            if (is_wp_error($send_result)) {
+                return $send_result;
             }
             
         }
@@ -743,8 +851,21 @@ class Users_WP_Forms {
 
     }
 
+    /**
+     * Processes avatar and banner uploads form submission.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       array                   $data       Submitted $_POST data
+     * @param       array                   $files      Submitted $_FILES data
+     *
+     * @return      bool|WP_Error|string                File url to crop.
+     */
     public function process_upload_submit($data = array(), $files = array(), $type = 'avatar') {
 
+        $file_obj = new Users_WP_Files();
+        
         $current_user_id = get_current_user_id();
         if (!$current_user_id) {
             return false;
@@ -756,7 +877,7 @@ class Users_WP_Forms {
 
         do_action('uwp_before_validate', $type);
 
-        $result = uwp_validate_uploads($files, $type);
+        $result = $file_obj->uwp_validate_uploads($files, $type);
 
         $result = apply_filters('uwp_validate_result', $result, $type);
 
@@ -777,6 +898,16 @@ class Users_WP_Forms {
 
     }
 
+    /**
+     * Processes avatar and banner uploads image crop.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       array                   $data       Submitted $_POST data
+     *
+     * @return      bool|WP_Error|string                Profile url.
+     */
     public function process_image_crop($data = array(), $type = 'avatar') {
         
         if (!is_user_logged_in()) {
@@ -854,6 +985,18 @@ class Users_WP_Forms {
 
     }
 
+    /**
+     * Saves UsersWP related user custom fields.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       int         $user_id        User ID.
+     * @param       array       $data           Result array.
+     * @param       string      $type           Form type.
+     * 
+     * @return      bool                        True when success. False when failure.
+     */
     public function uwp_save_user_extra_fields($user_id, $data, $type) {
 
         if (empty($user_id) || empty($data) || empty($type)) {
@@ -904,11 +1047,16 @@ class Users_WP_Forms {
         }
     }
 
-    public function uwp_send_email( $message_type, $user_id, $login_details = false ) {
-        return uwp_send_email( $message_type, $user_id, $login_details);
-
-    }
-
+    /**
+     * Logs the error message.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       array|object|string     $log        Error message.
+     *
+     * @return      void
+     */
     public static function uwp_error_log($log){
 
         $should_log = apply_filters( 'uwp_log_errors', WP_DEBUG);
@@ -920,8 +1068,14 @@ class Users_WP_Forms {
             }
         }
     }
-    
-    
+
+    /**
+     *
+     *
+     * @since   1.0.0
+     * @package UsersWP
+     * @return void
+     */
     public function uwp_upload_file_remove() {
 
         $htmlvar = strip_tags(esc_sql($_POST['htmlvar']));
@@ -941,8 +1095,19 @@ class Users_WP_Forms {
     }
     
     
-    // form fields html generation
-
+    /**
+     * Form field template for datepicker field type.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
     public function uwp_form_input_datepicker($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
@@ -1033,6 +1198,19 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     * Form field template for time field type.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
     public function uwp_form_input_time($html, $field, $value, $form_type){
 
         if(has_filter("uwp_form_input_html_time_{$field->htmlvar_name}")){
@@ -1088,6 +1266,19 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     * Form field template for select field type.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
     public function uwp_form_input_select($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
@@ -1156,6 +1347,19 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     * Form field template for multiselect field type.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
     public function uwp_form_input_multiselect($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
@@ -1259,8 +1463,23 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     * Form field template for file field type.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
     public function uwp_form_input_file($html, $field, $value, $form_type){
 
+        $file_obj = new Users_WP_Files();
+        
         // Check if there is a field specific filter.
         if(has_filter("uwp_form_input_html_file_{$field->htmlvar_name}")){
             $html = apply_filters("uwp_form_input_html_file_{$field->htmlvar_name}", $html, $field, $value, $form_type);
@@ -1284,7 +1503,7 @@ class Users_WP_Forms {
                     </label>
                 <?php } ?>
 
-                <?php echo uwp_file_upload_preview($field, $value); ?>
+                <?php echo $file_obj->uwp_file_upload_preview($field, $value); ?>
                 <input name="<?php echo $field->htmlvar_name; ?>"
                        class="<?php echo $field->css_class; ?>"
                        placeholder="<?php echo $site_title; ?>"
@@ -1307,6 +1526,19 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     * Form field template for checkbox field type.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
     public function uwp_form_input_checkbox($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
@@ -1347,6 +1579,19 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     * Form field template for radio field type.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
     public function uwp_form_input_radio($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
@@ -1415,6 +1660,19 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     * Form field template for text field type.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
     public function uwp_form_input_text($html, $field, $value, $form_type){
 
         // Check if there is a custom field specific filter.
@@ -1510,6 +1768,19 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     * Form field template for textarea field type.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
     public function uwp_form_input_textarea($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
@@ -1555,6 +1826,19 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     * Form field template for fieldset field type.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
     public function uwp_form_input_fieldset($html, $field, $value, $form_type) {
         // Check if there is a custom field specific filter.
         if(has_filter("uwp_form_input_fieldset_{$field->htmlvar_name}")){
@@ -1578,6 +1862,19 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     * Form field template for url field type.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
     public function uwp_form_input_url($html, $field, $value, $form_type){
 
 
@@ -1627,6 +1924,19 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     * Form field template for email field type.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
     public function uwp_form_input_email($html, $field, $value, $form_type){
 
 
@@ -1679,6 +1989,19 @@ class Users_WP_Forms {
         return $html;
     }
 
+    /**
+     * Form field template for password field type.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
     public function uwp_form_input_password($html, $field, $value, $form_type){
 
 
@@ -1731,7 +2054,14 @@ class Users_WP_Forms {
         return $html;
     }
 
-    // Add multipart/form-data to edit form
+    /**
+     * Adds enctype tag in form for file fields.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @return      void
+     */
     function add_multipart_to_admin_edit_form() {
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
@@ -1741,9 +2071,19 @@ class Users_WP_Forms {
         }
     }
 
-    // Update admin edit
+    /**
+     * Handles UsersWP custom field requests from admin.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       int         $user_id        User ID.
+     * 
+     * @return      void
+     */
     public function update_profile_extra_admin_edit($user_id) {
         global $wpdb;
+        $file_obj = new Users_WP_Files();
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         //Normal fields
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND field_type != 'fieldset' ORDER BY sort_order ASC");
@@ -1778,7 +2118,7 @@ class Users_WP_Forms {
         //File fields
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type = 'file' AND is_default = '0' ORDER BY sort_order ASC");
         if ($fields) {
-            $result = uwp_validate_uploads($_FILES, 'account', true, $fields);
+            $result = $file_obj->uwp_validate_uploads($_FILES, 'account', true, $fields);
             if (!is_wp_error($result)) {
                 foreach ($fields as $field) {
                     $value = $result[$field->htmlvar_name];
@@ -1789,21 +2129,50 @@ class Users_WP_Forms {
             }
         }
     }
-    
-    
-    // Search form
+
+
+    /**
+     * Adds search form keyword input html.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string      $keyword        Search keyword.
+     * 
+     * @return      void
+     */
     public function uwp_users_search_form_text_field($keyword) {
         ?>
         <input placeholder="Search For" name="uwps" value="<?php echo $keyword; ?>" class="s search-input" type="text">
         <?php
     }
 
+    /**
+     * Adds search form submit button html.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @return      void
+     */
     public function uwp_users_search_form_submit() {
         ?>
         <input class="uwp-searchsubmit uwp-search-submit" value="Search" type="submit">
         <?php
     }
 
+    /**
+     * Checks for errors in mail submission.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     * 
+     * @param       array               $res            Result array.
+     * @param       object              $user_data      User object.
+     * @param       WP_Error            $errors         Error object
+     * 
+     * @return      WP_Error|array                      Error object when error. Result array when success.
+     */
     public function uwp_forms_check_for_send_mail_errors($res, $user_data, $errors) {
         if (!$res) {
             if (get_option('admin_email') == $user_data->user_email) {
@@ -1823,14 +2192,17 @@ class Users_WP_Forms {
     }
 
     /**
-     * Output a country select input.
+     * Form field template for country field.
      *
-     * @param $html
-     * @param $field
-     * @param $value
-     * @param $form_type
+     * @since       1.0.0
+     * @package     UsersWP
      *
-     * @return string
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
      */
     public function uwp_form_input_select_country($html, $field, $value, $form_type){
 

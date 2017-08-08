@@ -60,9 +60,9 @@ class Users_WP_Admin {
 
     private function load_dependencies() {
 
-        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-users-wp-admin-settings.php';
+        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-settings.php';
 
-        require_once dirname(dirname( __FILE__ )) . '/admin/menus/class-users-wp-menus.php';
+        require_once dirname(dirname( __FILE__ )) . '/admin/menus/class-menus.php';
 
     }
 
