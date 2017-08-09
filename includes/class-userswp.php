@@ -61,6 +61,7 @@ class Users_WP {
         $this->define_shortcodes();
         $this->init_form_builder();
         $this->init_ajax();
+        $this->init_tools();
 
     }
 
@@ -170,6 +171,11 @@ class Users_WP {
          * The class responsible for setting field callbacks
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-callback.php';
+
+        /**
+         * The class responsible for adding tools functions
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-tools.php';
 
         /**
          * The class responsible for displaying admin notices
@@ -456,6 +462,10 @@ class Users_WP {
         $ajax = new Users_WP_Ajax($form_builder);
 
         $this->loader->add_action('wp_ajax_uwp_ajax_action', $ajax, 'handler');
+    }
+
+    public function init_tools() {
+        $tools = new Users_WP_Tools();
     }
 
     /**

@@ -47,7 +47,7 @@ class Users_WP_Admin_Settings {
             <div id="users-wp">
                 <div class="item-list-tabs">
 
-                    <?php if (count($settings_array[$page]) > 1) { ?>
+                    <?php if (isset($settings_array[$page]) && count($settings_array[$page]) > 1) { ?>
 
                         <div class="wp-filter" style="margin-top: 0;margin-bottom: 5px">
                         <ul class="filter-links">
