@@ -13,6 +13,7 @@ class Users_WP_Notices {
 
         add_action('uwp_template_display_notices', array($this, 'display_registration_disabled_notice'));
         add_action('uwp_template_display_notices', array($this, 'form_notice_by_key'));
+        add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
 
     }
 
@@ -86,6 +87,10 @@ class Users_WP_Notices {
                 echo '</div>';
             }
         }
+    }
+
+    public function show_admin_notices() {
+        settings_errors( 'uwp-notices' );
     }
 
 }

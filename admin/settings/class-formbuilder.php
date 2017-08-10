@@ -17,11 +17,48 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Form_Builder {
-
-    protected $loader;
-
+    
     public function __construct() {
 
+        // Actions
+        add_action('admin_init', array($this, 'uwp_form_builder_dummy_fields'));
+        add_action('uwp_manage_available_fields_predefined', array($this, 'uwp_manage_available_fields_predefined'));
+        add_action('uwp_manage_available_fields_custom', array($this, 'uwp_manage_available_fields_custom'));
+        add_action('uwp_manage_available_fields', array($this, 'uwp_manage_available_fields'));
+        add_action('uwp_manage_selected_fields', array($this, 'uwp_manage_selected_fields'));
+        add_action('uwp_admin_extra_custom_fields', array($this, 'uwp_advance_admin_custom_fields'), 10, 2);
+        add_action('uwp_manage_available_fields', array($this, 'uwp_manage_register_available_fields'), 10, 1);
+        add_action('uwp_manage_selected_fields', array($this, 'uwp_manage_register_selected_fields'), 10, 1);
+        add_action('wp_ajax_uwp_ajax_register_action', array($this, 'uwp_register_ajax_handler'));
+
+        
+        // Filters
+        add_filter('uwp_builder_extra_fields_multiselect', array($this, 'uwp_builder_extra_fields_smr'), 10, 4);
+        add_filter('uwp_builder_extra_fields_select', array($this, 'uwp_builder_extra_fields_smr'), 10, 4);
+        add_filter('uwp_builder_extra_fields_radio', array($this, 'uwp_builder_extra_fields_smr'), 10, 4);
+        add_filter('uwp_builder_extra_fields_datepicker', array($this, 'uwp_builder_extra_fields_datepicker'), 10, 4);
+        add_filter('uwp_builder_extra_fields_password', array($this, 'uwp_builder_extra_fields_password'), 10, 4);
+        add_filter('uwp_builder_extra_fields_email', array($this, 'uwp_builder_extra_fields_email'), 10, 4);
+        add_filter('uwp_builder_extra_fields_file', array($this, 'uwp_builder_extra_fields_file'), 10, 4);
+        add_filter('uwp_builder_data_type_text', array($this, 'uwp_builder_data_type_text'), 10, 4);
+        add_filter('uwp_form_builder_available_fields_head', array($this, 'uwp_register_available_fields_head'), 10, 2);
+        add_filter('uwp_form_builder_available_fields_note', array($this, 'uwp_register_available_fields_note'), 10, 2);
+        add_filter('uwp_form_builder_selected_fields_head', array($this, 'uwp_register_selected_fields_head'), 10, 2);
+        add_filter('uwp_form_builder_selected_fields_note', array($this, 'uwp_register_selected_fields_note'), 10, 2);
+        add_filter('uwp_register_fields', array($this, 'uwp_register_extra_fields'), 10, 2);
+        // htmlvar not needed for taxonomy
+        add_filter('uwp_builder_htmlvar_name_taxonomy',array($this, 'uwp_return_empty_string'),10,4);
+        // default_value not needed for textarea, html, file, fieldset
+        add_filter('uwp_builder_default_value_textarea',array($this, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_default_value_html',array($this, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_default_value_file',array($this, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_default_value_fieldset',array($this, 'uwp_return_empty_string'),10,4);
+        // is_required not needed for fieldset
+        add_filter('uwp_builder_is_required_fieldset',array($this, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_required_msg_fieldset',array($this, 'uwp_return_empty_string'),10,4);
+        // field_icon not needed for fieldset
+        add_filter('uwp_builder_field_icon_fieldset',array($this, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_css_class_fieldset',array($this, 'uwp_return_empty_string'),10,4);
     }
 
     public function uwp_form_builder($default_tab = 'account')
@@ -2739,3 +2776,4 @@ class Users_WP_Form_Builder {
     }
     
 }
+new Users_WP_Form_Builder;

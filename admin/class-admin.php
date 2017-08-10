@@ -21,41 +21,23 @@
  */
 class Users_WP_Admin {
 
+    protected $admin_settings;
     /**
-     * The ID of this plugin.
+     * Register all of the hooks related to the admin area functionality
+     * of the plugin.
      *
      * @since    1.0.0
-     * @access   private
-     * @var      string    $users_wp    The ID of this plugin.
      */
-    private $users_wp;
+    public function __construct($admin_settings) {
 
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
-     */
-    private $version;
-
-    protected $loader;
-
-    /**
-     * Initialize the class and set its properties.
-     *
-     * @since    1.0.0
-     * @param      string    $users_wp       The name of this plugin.
-     * @param      string    $version    The version of this plugin.
-     */
-    public function __construct( $users_wp, $version ) {
-
-        $this->plugin_name = $users_wp;
-        $this->version = $version;
+        $this->admin_settings = $admin_settings;
 
         $this->load_dependencies();
 
-
+        add_action( 'admin_enqueue_scripts', array($this, 'enqueue_styles') );
+        add_action( 'admin_enqueue_scripts', array($this, 'enqueue_scripts') );
+        add_action( 'admin_menu', array($this, 'setup_admin_menus') );
+        
     }
 
     private function load_dependencies() {
@@ -94,8 +76,8 @@ class Users_WP_Admin {
         if ($hook_suffix == 'userswp_page_uwp_tools') {
             wp_enqueue_style( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/users-wp.css', array(), null, 'all' );
         }
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp-admin.css', array(), $this->version, 'all' );
-        wp_enqueue_style( "uwp_chosen_css", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/chosen.css', array(), $this->version, 'all' );
+        wp_enqueue_style( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
+        wp_enqueue_style( "uwp_chosen_css", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/chosen.css', array(), USERSWP_VERSION, 'all' );
         uwp_load_font_awesome();
 
     }
@@ -122,7 +104,7 @@ class Users_WP_Admin {
 
             wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
             wp_enqueue_script( "uwp_timepicker", plugin_dir_url( dirname(__FILE__) ) . 'public/assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
-            wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.js', array( 'jquery',$this->plugin_name ), null, false );
+            wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.js', array( 'jquery',USERSWP_NAME ), null, false );
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
             wp_enqueue_script( 'jcrop', array( 'jquery' ) );
             wp_enqueue_script( "country-select", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/countrySelect.min.js', array( 'jquery' ), null, false );
@@ -133,9 +115,9 @@ class Users_WP_Admin {
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
         }
         wp_enqueue_script('jquery-ui-sortable');
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.min.js', array( 'jquery' ), null, false );
-        wp_enqueue_script( "uwp_chosen", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/chosen.jquery.js', array( 'jquery' ), $this->version, false );
-        wp_enqueue_script( "uwp_chosen_order", plugin_dir_url( __FILE__ ) . 'assets/js/chosen.order.jquery.min.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.min.js', array( 'jquery' ), null, false );
+        wp_enqueue_script( "uwp_chosen", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/chosen.jquery.js', array( 'jquery' ), USERSWP_VERSION, false );
+        wp_enqueue_script( "uwp_chosen_order", plugin_dir_url( __FILE__ ) . 'assets/js/chosen.order.jquery.min.js', array( 'jquery' ), USERSWP_VERSION, false );
 
         $ajax_cons_data = array(
             'url' => admin_url('admin-ajax.php'),
@@ -146,10 +128,10 @@ class Users_WP_Admin {
             'custom_field_delete' => __('Are you wish to delete this field?', 'userswp'),
             'custom_field_id_required' => __('This field is required.', 'userswp'),
         );
-        wp_localize_script($this->plugin_name, 'uwp_admin_ajax', $ajax_cons_data);
+        wp_localize_script(USERSWP_NAME, 'uwp_admin_ajax', $ajax_cons_data);
 
         $country_data = uwp_get_country_data();
-        wp_localize_script($this->plugin_name, 'uwp_country_data', $country_data);
+        wp_localize_script(USERSWP_NAME, 'uwp_country_data', $country_data);
 
     }
 
@@ -207,14 +189,12 @@ class Users_WP_Admin {
         }
 
 
-        $plugin_admin_settings = new Users_WP_Admin_Settings();
-
         add_menu_page(
             'UsersWP Settings',
             'UsersWP',
             'manage_options',
             'userswp',
-            array( $plugin_admin_settings, 'uwp_settings_page' ),
+            array( $this->admin_settings, 'uwp_settings_page' ),
             'dashicons-groups',
             70
         );
@@ -226,7 +206,7 @@ class Users_WP_Admin {
                 "Form Builder",
                 'manage_options',
                 'uwp_form_builder',
-                array($plugin_admin_settings, 'uwp_settings_page')
+                array($this->admin_settings, 'uwp_settings_page')
             );
 
             add_submenu_page(
@@ -235,11 +215,11 @@ class Users_WP_Admin {
                 "Notifications",
                 'manage_options',
                 'uwp_notifications',
-                array($plugin_admin_settings, 'uwp_settings_page')
+                array($this->admin_settings, 'uwp_settings_page')
             );
 
-            $settings_page = array($plugin_admin_settings, 'uwp_settings_page');
-            do_action('uwp_admin_sub_menus', $settings_page, $plugin_admin_settings);
+            $settings_page = array($this->admin_settings, 'uwp_settings_page');
+            do_action('uwp_admin_sub_menus', $settings_page, $this->admin_settings);
         }
     }
 

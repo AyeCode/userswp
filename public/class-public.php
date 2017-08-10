@@ -22,36 +22,16 @@
  */
 class Users_WP_Public {
 
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $users_wp    The ID of this plugin.
-     */
-    private $users_wp;
 
     /**
-     * The version of this plugin.
+     * Register all of the hooks related to the public-facing functionality
+     * of the plugin.
      *
      * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
      */
-    private $version;
-
-    /**
-     * Initialize the class and set its properties.
-     *
-     * @since    1.0.0
-     * @param      string    $users_wp       The name of the plugin.
-     * @param      string    $version    The version of this plugin.
-     */
-    public function __construct( $users_wp, $version ) {
-
-        $this->plugin_name = $users_wp;
-        $this->version = $version;
-
+    public function __construct() {
+        add_action( 'wp_enqueue_scripts', array($this, 'enqueue_styles') );
+        add_action( 'wp_enqueue_scripts', array($this, 'enqueue_scripts') );
     }
 
     /**
@@ -124,11 +104,10 @@ class Users_WP_Public {
         }
 
 
-        
         if (is_uwp_page()) {
             // include only in uwp pages
             uwp_load_font_awesome();
-            wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp.css', array(), null, 'all' );
+            wp_enqueue_style( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp.css', array(), null, 'all' );
         }
 
         //widget styles for all pages
@@ -219,7 +198,7 @@ class Users_WP_Public {
 
         if (is_uwp_page()) {
             // include only in uwp pages
-            wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), null, false );
+            wp_enqueue_script( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), null, false );
         }
 
 
@@ -229,7 +208,7 @@ class Users_WP_Public {
         }
 
         $country_data = uwp_get_country_data();
-        wp_localize_script($this->plugin_name, 'uwp_country_data', $country_data);
+        wp_localize_script(USERSWP_NAME, 'uwp_country_data', $country_data);
         
     }
 

@@ -20,17 +20,40 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Admin_Settings {
-
-
-    protected $loader;
-
+    
     public function __construct() {
+        
         $this->load_dependencies();
+        $this->init_settings();
+
+        add_action( 'admin_init', array($this, 'uwp_register_settings') );
+        //register settings
+        add_action( 'userswp_settings_main_tab_content', array($this, 'get_general_content') );
+        add_action( 'userswp_settings_register_tab_content', array($this, 'generic_display_form') );
+        add_action( 'userswp_settings_login_tab_content', array($this, 'generic_display_form') );
+        add_action( 'userswp_settings_account_tab_content', array($this, 'generic_display_form') );
+        add_action( 'userswp_settings_profile_tab_content', array($this, 'generic_display_form') );
+        add_action( 'userswp_settings_users_tab_content', array($this, 'generic_display_form') );
+        add_action( 'userswp_settings_change_tab_content', array($this, 'generic_display_form') );
+        add_action( 'userswp_settings_uninstall_tab_content', array($this, 'generic_display_form') );
+
+        add_action( 'uwp_form_builder_settings_main_tab_content_before', array($this, 'get_form_builder_tabs') );
+        add_action( 'uwp_form_builder_settings_main_tab_content', array($this, 'get_form_builder_content') );
+        add_filter( 'uwp_display_form_title', array($this, 'display_form_title'), 10, 3 );
+        add_action( 'uwp_notifications_settings_main_tab_content', array($this, 'get_notifications_content') );
+        
     }
 
     private function load_dependencies() {
 
         require_once dirname(dirname( __FILE__ )) . '/settings/class-formbuilder.php';
+    }
+
+    private function init_settings() {
+
+        global $uwp_options;
+        $uwp_options = $this->uwp_get_settings();
+
     }
 
     public function uwp_settings_page() {

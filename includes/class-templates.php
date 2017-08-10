@@ -8,12 +8,27 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Templates {
+    
+    
+    public function __construct() {
+        
+        add_action( 'template_redirect', array($this, 'change_default_password_redirect') );
+        add_action( 'uwp_template_fields', array($this, 'uwp_template_fields'), 10, 1 );
+        add_action( 'uwp_account_form_display', array($this, 'uwp_account_edit_form_display'), 10, 1 );
+        add_action( 'wp_logout', array($this, 'logout_redirect'));
+        add_action( 'init', array($this, 'wp_login_redirect'));
+        add_action( 'admin_init', array($this, 'uwp_activation_redirect'));
+        // Redirect functions
+        add_action( 'template_redirect', array($this, 'profile_redirect'), 10);
+        add_action( 'template_redirect', array($this, 'access_checks'), 20);
+        // Admin user edit page
+        add_action( 'edit_user_profile', array($this, 'get_profile_extra_admin_edit'), 10, 1 );
+        add_action( 'show_user_profile', array($this, 'get_profile_extra_admin_edit'), 10, 1 );
 
-    protected $loader;
-    
-    
-    public function __construct($loader) {
-        $this->loader = $loader;
+
+        add_filter( 'wp_setup_nav_menu_item', array($this, 'uwp_setup_nav_menu_item'), 10, 1 );
+        add_filter( 'the_content', array($this, 'uwp_author_page_content'), 10, 1 );
+        add_filter('body_class', array($this, 'uwp_add_body_class'), 10, 1 );
     }
 
     /**

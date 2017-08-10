@@ -12,10 +12,17 @@ class Users_WP_Ajax {
     private $form_builder;
 
     
-    public function __construct($form_builder) {
+    public function __construct() {
 
-        $this->form_builder = $form_builder;
+        $this->load_dependencies();
+        $this->form_builder = new Users_WP_Form_Builder();
+        add_action('wp_ajax_uwp_ajax_action', array($this, 'handler'));
 
+    }
+
+    private function load_dependencies() {
+
+        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-formbuilder.php';
     }
 
     /**
@@ -136,3 +143,4 @@ class Users_WP_Ajax {
 
     }
 }
+new Users_WP_Ajax;

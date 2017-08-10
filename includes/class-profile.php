@@ -8,11 +8,59 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Profile {
-
-    protected $loader;
     
-    public function __construct($loader) {
-        $this->loader = $loader;
+    public function __construct() {
+        
+        add_action( 'template_redirect', array($this, 'uwp_redirect_author_page') , 10 , 2 );
+        //profile page
+        add_filter('query_vars', array($this, 'profile_query_vars'), 10, 1 );
+        add_action('init', array($this, 'rewrite_profile_link') , 10, 1 );
+        add_filter( 'uwp_profile_link', array($this, 'get_profile_link'), 10, 2 );
+        add_filter( 'edit_profile_url', array($this, 'uwp_modify_admin_bar_edit_profile_url'), 10, 3);
+        add_filter( 'the_title', array($this, 'modify_profile_page_title'), 10, 2 );
+        remove_all_filters('get_avatar');
+        add_filter( 'get_avatar', array($this, 'uwp_modify_get_avatar') , 1 , 5 );
+        add_filter( 'get_comment_author_link', array($this, 'uwp_get_comment_author_link') , 10 , 2 );
+        add_action( 'uwp_profile_header', array($this, 'get_profile_header'), 10, 1 );
+        add_action( 'uwp_users_profile_header', array($this, 'get_profile_header'), 10, 1 );
+        add_action( 'uwp_profile_title', array($this, 'get_profile_title'), 10, 1 );
+        //add_action( 'uwp_profile_bio', array($this, 'get_profile_bio'), 10, 1 );
+        add_action( 'uwp_profile_social', array($this, 'get_profile_social'), 10, 1 );
+
+        //Fields as tabs
+        add_action( 'uwp_profile_tabs', array($this, 'uwp_extra_fields_as_tabs'), 10, 2 );
+
+        // Popup and crop functions
+        add_filter( 'ajax_query_attachments_args', array($this, 'uwp_restrict_attachment_display') );
+
+        add_action( 'uwp_handle_file_upload_error_checks', array($this, 'uwp_handle_file_upload_error_checks'), 10, 4 );
+        add_action( 'wp_ajax_uwp_avatar_banner_upload', array($this, 'uwp_ajax_avatar_banner_upload') );
+        //add_action( 'wp_ajax_uwp_ajax_image_crop_popup', array($this, 'uwp_ajax_image_crop_popup') );
+        add_action( 'wp_ajax_uwp_ajax_image_crop_popup_form', array($this, 'uwp_ajax_image_crop_popup_form') );
+        add_action( 'wp_head', array($this, 'uwp_define_ajaxurl') );
+        add_action( 'uwp_profile_header', array($this, 'uwp_image_crop_init'), 10, 1 );
+        add_action( 'uwp_admin_profile_edit', array($this, 'uwp_image_crop_init'), 10, 1 );
+
+        // Profile Tabs
+        add_action( 'uwp_profile_content', array($this, 'get_profile_tabs_content'), 10, 1 );
+        add_action( 'uwp_profile_more_info_tab_content', array($this, 'get_profile_more_info'), 10, 1);
+        add_action( 'uwp_profile_posts_tab_content', array($this, 'get_profile_posts'), 10, 1);
+        add_action( 'uwp_profile_comments_tab_content', array($this, 'get_profile_comments'), 10, 1);
+        add_action( 'uwp_profile_tab_content', array($this, 'uwp_extra_fields_as_tab_values'), 10, 2 );
+
+        // Profile Pagination
+        add_action( 'uwp_profile_pagination', array($this, 'get_profile_pagination'));
+
+        // Users
+        add_action( 'uwp_users_search', array($this, 'uwp_users_search'));
+        add_action( 'uwp_users_list', array($this, 'uwp_users_list'));
+        add_action( 'uwp_users_extra', array($this, 'get_users_extra'));
+        add_action( 'uwp_profile_bio', array($this, 'get_profile_side_extra'));
+
+
+        // User, allow subscribers to upload profile and banner pictures
+        add_filter( 'plupload_default_params', array($this, 'add_uwp_plupload_param'), 10, 1 );
+        add_filter( 'user_has_cap', array($this, 'allow_all_users_profile_uploads'), 10, 4 );
     }
 
     /**

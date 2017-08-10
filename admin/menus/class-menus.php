@@ -26,6 +26,7 @@ class Users_WP_Menus {
     public function __construct() {
 
         $this->load_dependencies();
+        add_action( 'load-nav-menus.php', array($this, 'users_wp_admin_menu_metabox') );
     }
 
     private function load_dependencies() {
@@ -277,3 +278,4 @@ class Users_WP_Menus {
         return $page_args;
     }
 }
+new Users_WP_Menus;

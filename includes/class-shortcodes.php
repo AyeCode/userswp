@@ -10,42 +10,10 @@
 class Users_WP_Shortcodes {
 
     private $templates;
+    
+    public function __construct() {
 
-    protected $loader;
-
-    public function __construct($loader) {
-
-        $this->loader = $loader;
-        $this->load_dependencies();
-        $this->templates = new Users_WP_Templates($loader);
-        $this->register_shortcodes();
-
-    }
-
-    /**
-     * Loads all dependencies for shortcodes.
-     *
-     * @since       1.0.0
-     * @package     UsersWP
-     * @return      void
-     */
-    private function load_dependencies() {
-
-        /**
-         * The class responsible for defining all front end templates
-         */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-templates.php';
-
-    }
-
-    /**
-     * Registers all UsersWP shortcodes in WordPress.
-     *
-     * @since       1.0.0
-     * @package     UsersWP
-     * @return      void
-     */
-    public function register_shortcodes() {
+        $this->templates = new Users_WP_Templates();
 
         add_shortcode( 'uwp_register',  array($this, 'register'));
         add_shortcode( 'uwp_login',     array($this, 'login'));
@@ -55,9 +23,10 @@ class Users_WP_Shortcodes {
         add_shortcode( 'uwp_account',   array($this, 'account'));
         add_shortcode( 'uwp_profile',   array($this, 'profile'));
         add_shortcode( 'uwp_users',     array($this, 'users'));
+        
 
     }
-
+    
     /**
      * Returns the UsersWP register page template content.
      *
@@ -183,3 +152,4 @@ class Users_WP_Shortcodes {
     }
 
 }
+new Users_WP_Shortcodes;
