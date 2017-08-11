@@ -24,15 +24,9 @@ class Users_WP_Menus {
      * @since    1.0.0
      */
     public function __construct() {
-
-        $this->load_dependencies();
         add_action( 'load-nav-menus.php', array($this, 'users_wp_admin_menu_metabox') );
     }
 
-    private function load_dependencies() {
-        require_once dirname( __FILE__ ) . '/class-checklist.php';
-
-    }
 
     /**
      * Load new metabox for nav menu ui.
@@ -278,4 +272,3 @@ class Users_WP_Menus {
         return $page_args;
     }
 }
-new Users_WP_Menus;

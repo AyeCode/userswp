@@ -1062,6 +1062,7 @@ class Users_WP_Form_Builder {
 
         global $wpdb;
 
+
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
         $meta_table = uwp_get_table_prefix() . 'uwp_usermeta';
@@ -1812,7 +1813,9 @@ class Users_WP_Form_Builder {
 
     public function uwp_builder_extra_fields_file($output, $result_str, $cf, $field_info) {
         ob_start();
-        $allowed_file_types = uwp_allowed_mime_types();
+
+        $file_obj = new Users_WP_Files();
+        $allowed_file_types = $file_obj->allowed_mime_types();
 
         $extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
         $uwp_file_types = !empty($extra_fields) && !empty($extra_fields['uwp_file_types']) ? $extra_fields['uwp_file_types'] : array('*');
@@ -2441,7 +2444,7 @@ class Users_WP_Form_Builder {
 					form_type = %s,
 					field_type = %s,
 					site_htmlvar_name = %s,
-					sort_order = %s,
+					sort_order = %s
 					where id = %d",
                         array(
                             $form_type,
@@ -2776,4 +2779,3 @@ class Users_WP_Form_Builder {
     }
     
 }
-new Users_WP_Form_Builder;

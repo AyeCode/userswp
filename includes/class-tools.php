@@ -636,4 +636,3 @@ class Users_WP_Tools {
     }
 
 }
-new Users_WP_Tools;

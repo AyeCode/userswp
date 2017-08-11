@@ -14,6 +14,7 @@ class Users_WP_Notices {
         add_action('uwp_template_display_notices', array($this, 'display_registration_disabled_notice'));
         add_action('uwp_template_display_notices', array($this, 'form_notice_by_key'));
         add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
+        add_action( 'admin_notices', array($this, 'uwp_admin_notices') );
 
     }
 
@@ -93,4 +94,28 @@ class Users_WP_Notices {
         settings_errors( 'uwp-notices' );
     }
 
+    /**
+     * Displays UsersWP admin notices
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @return      void
+     */
+    function uwp_admin_notices() {
+        $errors = get_option( 'uwp_admin_notices' );
+
+        if ( ! empty( $errors ) ) {
+
+            echo '<div id="uwp_admin_errors" class="notice-error notice is-dismissible">';
+
+            echo '<p>' . $errors . '</p>';
+
+            echo '</div>';
+
+            // Clear
+            delete_option( 'uwp_admin_notices' );
+        }
+    }
+    
 }

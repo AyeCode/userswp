@@ -13,6 +13,7 @@ class Users_WP_Files {
         if($this->uwp_doing_upload()){
             add_filter( 'wp_handle_upload_prefilter', array($this, 'uwp_wp_media_restrict_file_types') );
         }
+        add_filter('uwp_get_max_upload_size', array($this, 'uwp_modify_get_max_upload_size'), 10, 2);
     }
 
     /**
@@ -49,7 +50,7 @@ class Users_WP_Files {
             foreach ( $files_to_upload as $file_key => $file_to_upload ) {
 
                 if (!empty($allowed_mime_types)) {
-                    $ext = uwp_get_file_type($file_to_upload['type']);
+                    $ext = $this->uwp_get_file_type($file_to_upload['type']);
 
                     $allowed_error_text = implode(', ', $allowed_mime_types);
                     if ( !in_array( $ext , $allowed_mime_types ) )
@@ -436,6 +437,127 @@ class Users_WP_Files {
         $max_upload_size = apply_filters('uwp_get_max_upload_size', $max_upload_size, $form_type, $field_htmlvar_name);
 
         return $max_upload_size;
+    }
+
+
+    /**
+     * Modifies the maximum file upload size based on the setting.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       int         $bytes      Size in bytes.
+     * @param       string      $type       File upload type.
+     *
+     * @return      int                     Size in bytes.
+     */
+    public function uwp_modify_get_max_upload_size($bytes, $type) {
+
+        if ($type == 'avatar') {
+            $kb = uwp_get_option('profile_avatar_size', false);
+            if ($kb) {
+                $bytes = intval($kb) * 1024;
+            }
+        }
+
+        if ($type == 'banner') {
+            $kb = uwp_get_option('profile_banner_size', false);
+            if ($kb) {
+                $bytes = intval($kb) * 1024;
+            }
+        }
+
+        return $bytes;
+
+    }
+
+    /**
+     * Gets the file type using the extension.
+     * Ex: 'jpg'  => 'image/jpeg'
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string      $ext        Extension string. Ex: png, jpg
+     *
+     * @return      string                  File type.
+     */
+    public function uwp_get_file_type($ext) {
+        $allowed_file_types = $this->allowed_mime_types();
+        $file_types = array();
+        foreach ( $allowed_file_types as $format => $types ) {
+            $file_types = array_merge($file_types, $types);
+        }
+        $file_types = array_flip($file_types);
+        return $file_types[$ext];
+    }
+
+    /**
+     * Returns allowed mime types in uploads
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @return      array       Allowed mime types.
+     */
+    public function allowed_mime_types() {
+        return apply_filters( 'uwp_allowed_mime_types', array(
+                'Image'       => array( // Image formats.
+                    'jpg'  => 'image/jpeg',
+                    'jpe'  => 'image/jpeg',
+                    'jpeg' => 'image/jpeg',
+                    'gif'  => 'image/gif',
+                    'png'  => 'image/png',
+                    'bmp'  => 'image/bmp',
+                    'ico'  => 'image/x-icon',
+                ),
+                'Video'       => array( // Video formats.
+                    'asf'  => 'video/x-ms-asf',
+                    'avi'  => 'video/avi',
+                    'flv'  => 'video/x-flv',
+                    'mkv'  => 'video/x-matroska',
+                    'mp4'  => 'video/mp4',
+                    'mpeg' => 'video/mpeg',
+                    'mpg'  => 'video/mpeg',
+                    'wmv'  => 'video/x-ms-wmv',
+                    '3gp'  => 'video/3gpp',
+                ),
+                'Audio'       => array( // Audio formats.
+                    'ogg' => 'audio/ogg',
+                    'mp3' => 'audio/mpeg',
+                    'wav' => 'audio/wav',
+                    'wma' => 'audio/x-ms-wma',
+                ),
+                'Text'        => array( // Text formats.
+                    'css'  => 'text/css',
+                    'csv'  => 'text/csv',
+                    'htm'  => 'text/html',
+                    'html' => 'text/html',
+                    'txt'  => 'text/plain',
+                    'rtx'  => 'text/richtext',
+                    'vtt'  => 'text/vtt',
+                ),
+                'Application' => array( // Application formats.
+                    'doc'  => 'application/msword',
+                    'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'exe'  => 'application/x-msdownload',
+                    'js'   => 'application/javascript',
+                    'odt'  => 'application/vnd.oasis.opendocument.text',
+                    'pdf'  => 'application/pdf',
+                    'pot'  => 'application/vnd.ms-powerpoint',
+                    'ppt'  => 'application/vnd.ms-powerpoint',
+                    'pptx' => 'application/vnd.ms-powerpoint',
+                    'psd'  => 'application/octet-stream',
+                    'rar'  => 'application/rar',
+                    'rtf'  => 'application/rtf',
+                    'swf'  => 'application/x-shockwave-flash',
+                    'tar'  => 'application/x-tar',
+                    'xls'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'zip'  => 'application/zip',
+                )
+            )
+        );
     }
 
 }

@@ -31,21 +31,11 @@ class Users_WP_Admin {
     public function __construct($admin_settings) {
 
         $this->admin_settings = $admin_settings;
-
-        $this->load_dependencies();
-
+        
         add_action( 'admin_enqueue_scripts', array($this, 'enqueue_styles') );
         add_action( 'admin_enqueue_scripts', array($this, 'enqueue_scripts') );
         add_action( 'admin_menu', array($this, 'setup_admin_menus') );
-        
-    }
-
-    private function load_dependencies() {
-
-        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-settings.php';
-
-        require_once dirname(dirname( __FILE__ )) . '/admin/menus/class-menus.php';
-
+        add_action('admin_head', array($this, 'uwp_admin_only_css'));
     }
 
 
@@ -221,6 +211,25 @@ class Users_WP_Admin {
             $settings_page = array($this->admin_settings, 'uwp_settings_page');
             do_action('uwp_admin_sub_menus', $settings_page, $this->admin_settings);
         }
+    }
+
+    /**
+     * Adds UsersWP css to admin area
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @return      void
+     */
+    function uwp_admin_only_css() {
+        ?>
+        <style type="text/css">
+            .uwp_page .uwp-bs-modal input[type="submit"].button,
+            .uwp_page .uwp-bs-modal button.button {
+                padding: 0 10px 1px;
+            }
+        </style>
+        <?php
     }
 
 }

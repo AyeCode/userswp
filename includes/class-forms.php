@@ -13,6 +13,7 @@ class Users_WP_Forms {
 
         add_action('init', array($this, 'init_notices'), 1);
         add_action('init', array($this, 'handler'));
+        add_action('init', array($this, 'uwp_privacy_submit_handler'));
         add_action('uwp_template_display_notices', array($this, 'display_notices'), 10, 1);
         add_action('wp_ajax_uwp_upload_file_remove', array($this, 'uwp_upload_file_remove'));
         //User search form
@@ -21,6 +22,7 @@ class Users_WP_Forms {
         add_action('personal_options_update', array($this, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('edit_user_profile_update', array($this, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('user_edit_form_tag', array($this, 'add_multipart_to_admin_edit_form'));
+        add_action('uwp_template_form_title_after', array($this, 'uwp_display_username_in_account'), 10, 1);
 
 
         // Forms
@@ -40,6 +42,8 @@ class Users_WP_Forms {
         // Country select
         add_filter('uwp_form_input_html_select_country', array($this, 'uwp_form_input_select_country'), 10, 4);
         add_filter('uwp_forms_check_for_send_mail_errors', array($this, 'uwp_forms_check_for_send_mail_errors'), 10, 3);
+        add_filter('uwp_form_input_email_uwp_account_email_after', array($this, 'uwp_register_confirm_email_field'), 10, 4);
+        add_filter('uwp_form_input_password_uwp_account_password_after', array($this, 'uwp_register_confirm_password_field'), 10, 4);
         
     }
 
@@ -2288,6 +2292,184 @@ class Users_WP_Forms {
         }
 
         return $html;
+    }
+
+    /**
+     * Prints the username link in "Edit Account" page
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string      $type       Page type.
+     *
+     * @return      void
+     */
+    public function uwp_display_username_in_account($type) {
+        if ($type == 'account') {
+            $user_id = get_current_user_id();
+            $user_info = get_userdata($user_id);
+            $display_name = $user_info->user_login;
+            ?>
+            <span class="uwp_account_page_username">
+            <a href="<?php echo uwp_build_profile_tab_url($user_id); ?>">( @<?php echo $display_name; ?> )</a>
+        </span>
+            <?php
+        }
+    }
+
+
+    /**
+     * Adds confirm password field in forms.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
+    public function uwp_register_confirm_password_field($html, $field, $value, $form_type) {
+        if ($form_type == 'register') {
+            //confirm password field
+            $extra = array();
+            if (isset($field->extra_fields) && $field->extra_fields != '') {
+                $extra = unserialize($field->extra_fields);
+            }
+            $enable_confirm_password_field = isset($extra['confirm_password']) ? $extra['confirm_password'] : '0';
+            if ($enable_confirm_password_field == '1') {
+                ob_start(); // Start  buffering;
+                ?>
+                <div id="uwp_account_confirm_password_row"
+                     class="<?php echo 'required_field';?> uwp_form_password_row">
+
+                    <?php
+                    $site_title = __("Confirm Password", 'userswp');
+                    if (!is_admin()) { ?>
+                        <label>
+                            <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                            <?php echo '<span>*</span>'; ?>
+                        </label>
+                    <?php } ?>
+
+                    <input name="uwp_account_confirm_password"
+                           class="uwp_textfield"
+                           id="uwp_account_confirm_password"
+                           placeholder="<?php echo $site_title; ?>"
+                           value=""
+                           title="<?php echo $site_title; ?>"
+                        <?php echo 'required="required"'; ?>
+                           type="password"
+                    />
+                </div>
+
+                <?php
+                $confirm_html = ob_get_clean();
+                $html = $html.$confirm_html;
+            }
+        }
+        return $html;
+    }
+
+    /**
+     * Adds confirm email field in forms.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @param       string          $html           Form field html
+     * @param       object          $field          Field info.
+     * @param       string          $value          Form field default value.
+     * @param       string          $form_type      Form type
+     *
+     * @return      string                          Modified form field html.
+     */
+    public function uwp_register_confirm_email_field($html, $field, $value, $form_type) {
+        if ($form_type == 'register') {
+            //confirm email field
+            $extra = array();
+            if (isset($field->extra_fields) && $field->extra_fields != '') {
+                $extra = unserialize($field->extra_fields);
+            }
+            $enable_confirm_email_field = isset($extra['confirm_email']) ? $extra['confirm_email'] : '0';
+            if ($enable_confirm_email_field == '1') {
+                ob_start(); // Start  buffering;
+                ?>
+                <div id="uwp_account_confirm_email_row"
+                     class="<?php echo 'required_field';?> uwp_form_email_row">
+
+                    <?php
+                    $site_title = __("Confirm Email", 'userswp');
+                    if (!is_admin()) { ?>
+                        <label>
+                            <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                            <?php echo '<span>*</span>'; ?>
+                        </label>
+                    <?php } ?>
+
+                    <input name="uwp_account_confirm_email"
+                           class="uwp_textfield"
+                           id="uwp_account_confirm_email"
+                           placeholder="<?php echo $site_title; ?>"
+                           value=""
+                           title="<?php echo $site_title; ?>"
+                        <?php echo 'required="required"'; ?>
+                           type="email"
+                    />
+                </div>
+
+                <?php
+                $confirm_html = ob_get_clean();
+                $html = $html.$confirm_html;
+            }
+        }
+        return $html;
+    }
+
+
+    /**
+     * Handles the privacy form submission.
+     *
+     * @since       1.0.0
+     * @package     UsersWP
+     *
+     * @return      void
+     */
+    public function uwp_privacy_submit_handler() {
+        if (isset($_POST['uwp_privacy_submit'])) {
+            if( ! isset( $_POST['uwp_privacy_nonce'] ) || ! wp_verify_nonce( $_POST['uwp_privacy_nonce'], 'uwp-privacy-nonce' ) ) {
+                return;
+            }
+
+            $extra_where = "AND is_public='2'";
+            $fields = get_account_form_fields($extra_where);
+            $fields = apply_filters('uwp_account_privacy_fields', $fields);
+            if ($fields) {
+                foreach ($fields as $field) {
+                    $field_name = $field->htmlvar_name.'_privacy';
+                    if (isset($_POST[$field_name])) {
+                        $value = strip_tags(esc_sql($_POST[$field_name]));
+                        $user_id = get_current_user_id();
+                        uwp_update_usermeta($user_id, $field_name, $value);
+                    }
+                }
+            }
+
+            $make_profile_private = uwp_can_make_profile_private();
+            if ($make_profile_private) {
+                $field_name = 'uwp_make_profile_private';
+                if (isset($_POST[$field_name])) {
+                    $value = strip_tags(esc_sql($_POST[$field_name]));
+                    $user_id = get_current_user_id();
+                    update_user_meta($user_id, $field_name, $value);
+                }
+            }
+
+
+
+        }
     }
 
 }

@@ -20,10 +20,13 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class Users_WP_Admin_Settings {
+
+    private $form_builder;
     
-    public function __construct() {
+    public function __construct($form_builder) {
+
+        $this->form_builder = $form_builder;
         
-        $this->load_dependencies();
         $this->init_settings();
 
         add_action( 'admin_init', array($this, 'uwp_register_settings') );
@@ -43,12 +46,7 @@ class Users_WP_Admin_Settings {
         add_action( 'uwp_notifications_settings_main_tab_content', array($this, 'get_notifications_content') );
         
     }
-
-    private function load_dependencies() {
-
-        require_once dirname(dirname( __FILE__ )) . '/settings/class-formbuilder.php';
-    }
-
+    
     private function init_settings() {
 
         global $uwp_options;
@@ -294,7 +292,6 @@ class Users_WP_Admin_Settings {
     }
 
     public function get_form_builder_content() {
-        $form_builder = new Users_WP_Form_Builder();
 
         $tab = 'account';
 
@@ -302,7 +299,7 @@ class Users_WP_Admin_Settings {
             $tab = $_GET['tab'];
         }
 
-        $tab_content = $form_builder->uwp_form_builder($tab);
+        $tab_content = $this->form_builder->uwp_form_builder($tab);
         if ($tab == 'account') {
             ?>
             <h3 class=""><?php echo __( 'Manage Account Form Fields', 'userswp' ); ?></h3>

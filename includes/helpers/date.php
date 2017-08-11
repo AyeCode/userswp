@@ -39,3 +39,19 @@ function uwp_maybe_untranslate_date($non_english_date){
     $date = new Users_WP_Date();
     return $date->maybe_untranslate_date($non_english_date);
 }
+
+/**
+ * Gets random date.
+ *
+ * @since       1.0.0
+ * @package     UsersWP
+ *
+ * @param       int $days_from      Random days from.
+ * @param       int $days_to        Random days to.
+ *
+ * @return      string              Formatted date string.
+ */
+function uwp_get_random_date( $days_from = 30, $days_to = 0 ) {
+    $date = new Users_WP_Date();
+    return $date->get_random_date($days_from, $days_to);
+}

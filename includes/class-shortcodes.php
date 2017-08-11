@@ -11,9 +11,9 @@ class Users_WP_Shortcodes {
 
     private $templates;
     
-    public function __construct() {
+    public function __construct($templates) {
 
-        $this->templates = new Users_WP_Templates();
+        $this->templates = $templates;
 
         add_shortcode( 'uwp_register',  array($this, 'register'));
         add_shortcode( 'uwp_login',     array($this, 'login'));
@@ -152,4 +152,3 @@ class Users_WP_Shortcodes {
     }
 
 }
-new Users_WP_Shortcodes;

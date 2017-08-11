@@ -113,6 +113,7 @@ No questions so far, but don't hesitate to ask!
 = 1.0.7 =
 * Edit user in wp-admin does not display country input correctly - FIXED
 * Tools page added - ADDED
+* Major code refactoring - CHANGED
 
 = 1.0.6 =
 * First release on WordPress.org - :)

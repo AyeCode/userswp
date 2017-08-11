@@ -29,17 +29,20 @@ class Users_WP {
      * @var      string    $version    The current version of the plugin.
      */
     protected $version;
-
-
-
+    
     protected $profile;
     protected $forms;
     protected $i18n;
     protected $notices;
-//    protected $templates;
+    protected $templates;
+    protected $shortcodes;
     protected $assets;
     protected $admin;
     protected $admin_settings;
+    protected $menus;
+    protected $form_builder;
+    protected $ajax;
+    protected $tools;
 
     /**
      * Define the core functionality of the plugin.
@@ -60,13 +63,58 @@ class Users_WP {
         $this->loader = new Users_WP_Loader();
         $this->profile = new Users_WP_Profile();
         $this->forms = new Users_WP_Forms();
+        $this->templates = new Users_WP_Templates();
         $this->i18n = new Users_WP_i18n();
         $this->notices = new Users_WP_Notices();
-//        $this->templates = new Users_WP_Templates();
         $this->assets = new Users_WP_Public();
-        $this->admin_settings = new Users_WP_Admin_Settings();
-        $this->admin = new Users_WP_Admin($this->admin_settings);
+        $this->form_builder = new Users_WP_Form_Builder();
+        $this->menus = new Users_WP_Menus();
+        $this->tools = new Users_WP_Tools();
 
+        $this->shortcodes = new Users_WP_Shortcodes($this->templates);
+        $this->admin_settings = new Users_WP_Admin_Settings($this->form_builder);
+        $this->admin = new Users_WP_Admin($this->admin_settings);
+        $this->ajax = new Users_WP_Ajax($this->form_builder);
+    }
+
+    /**
+     * Run the loader to execute all of the hooks with WordPress.
+     *
+     * @since    1.0.0
+     */
+    public function run() {
+        $this->loader->run();
+    }
+
+    /**
+     * The name of the plugin used to uniquely identify it within the context of
+     * WordPress and to define internationalization functionality.
+     *
+     * @since     1.0.0
+     * @return    string    The name of the plugin.
+     */
+    public function get_plugin_name() {
+        return $this->plugin_name;
+    }
+
+    /**
+     * The reference to the class that orchestrates the hooks with the plugin.
+     *
+     * @since     1.0.0
+     * @return    Users_WP_Loader    Orchestrates the hooks of the plugin.
+     */
+    public function get_loader() {
+        return $this->loader;
+    }
+
+    /**
+     * Retrieve the version number of the plugin.
+     *
+     * @since     1.0.0
+     * @return    string    The version number of the plugin.
+     */
+    public function get_version() {
+        return $this->version;
     }
 
     /**
@@ -125,6 +173,17 @@ class Users_WP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-forms.php';
 
         /**
+         * The class responsible for form validation
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-validation.php';
+
+        /**
+         * Country helpers
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-countries.php';
+
+        /**
          * The class responsible for defining ajax handler functionality
          * of the plugin.
          */
@@ -146,6 +205,16 @@ class Users_WP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-shortcodes.php';
 
         /**
+         * The class responsible for defining all menus items.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/admin/menus/class-checklist.php';
+
+        /**
+         * The class responsible for defining all menus in the admin area.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/admin/menus/class-menus.php';
+
+        /**
          * The class responsible for defining all actions that occur in the admin area.
          */
         require_once dirname(dirname( __FILE__ )) . '/admin/class-admin.php';
@@ -160,6 +229,11 @@ class Users_WP {
          * side of the site.
          */
         require_once dirname(dirname( __FILE__ )) . '/public/class-public.php';
+
+        /**
+         * The class responsible for table functions
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-tables.php';
 
         /**
          * The class responsible for adding fields in forms
@@ -183,47 +257,5 @@ class Users_WP {
 
 
     }
-
-
-    /**
-     * Run the loader to execute all of the hooks with WordPress.
-     *
-     * @since    1.0.0
-     */
-    public function run() {
-        $this->loader->run();
-    }
-
-    /**
-     * The name of the plugin used to uniquely identify it within the context of
-     * WordPress and to define internationalization functionality.
-     *
-     * @since     1.0.0
-     * @return    string    The name of the plugin.
-     */
-    public function get_plugin_name() {
-        return $this->plugin_name;
-    }
-
-    /**
-     * The reference to the class that orchestrates the hooks with the plugin.
-     *
-     * @since     1.0.0
-     * @return    Users_WP_Loader    Orchestrates the hooks of the plugin.
-     */
-    public function get_loader() {
-        return $this->loader;
-    }
-
-    /**
-     * Retrieve the version number of the plugin.
-     *
-     * @since     1.0.0
-     * @return    string    The version number of the plugin.
-     */
-    public function get_version() {
-        return $this->version;
-    }
-
 
 }
