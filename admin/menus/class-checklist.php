@@ -5,8 +5,8 @@
  * @link       http://wpgeodirectory.com
  * @since      1.0.0
  *
- * @package    Users_WP
- * @subpackage Users_WP/admin/menus
+ * @package    userswp
+ * @subpackage userswp/admin/menus
  */
 
 // Exit if accessed directly.
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.0.0
  */
-class Users_WP_Walker_Nav_Menu_Checklist extends Walker_Nav_Menu {
+class UsersWP_Walker_Nav_Menu_Checklist extends Walker_Nav_Menu {
 
     /**
      * Constructor.

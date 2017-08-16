@@ -3,7 +3,7 @@
  * Checks the current page is a UsersWP profile tab page.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @param       string|bool        $tab     Tab slug.
  * @return      bool                        True when success. False when failure.
  */
@@ -28,7 +28,7 @@ function is_uwp_profile_tab($tab = false) {
  * Checks the current page is a UsersWP profile subtab page.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @param       string|bool        $subtab     Subtab slug.
  * @return      bool                           True when success. False when failure.
  */
@@ -53,7 +53,7 @@ function is_uwp_profile_subtab($subtab = false) {
  * Prints the tab content based on post type.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       object          $user       User object.
  * @param       bool            $post_type  Post type.
@@ -150,7 +150,7 @@ function uwp_generic_tab_content($user, $post_type = false, $title, $post_ids = 
  * Adds Privacy tab to available account tabs if privacy enabled.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array       Account Tabs.
  */
@@ -183,7 +183,7 @@ function uwp_account_get_available_tabs() {
  * Returns the setting page tab list for each page.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array       Tabs list.
  */

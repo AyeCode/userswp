@@ -4,7 +4,7 @@
  *
  * Uninstalling UsersWP deletes tables and plugin options.
  *
- * @package UsersWP
+ * @package userswp
  * @since 1.0.0
  */
 
@@ -15,7 +15,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 global $wpdb;
 
-if ( !class_exists( 'Users_WP' ) ) {
+if ( !class_exists( 'UsersWP' ) ) {
     // Load plugin file.
     include_once( 'userswp.php' );
 }

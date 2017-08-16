@@ -7,7 +7,7 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Forms {
+class UsersWP_Forms {
 
     public function __construct() {
 
@@ -51,7 +51,7 @@ class Users_WP_Forms {
      * Initialize UsersWP notices.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * 
      * @return      void
      */
@@ -64,7 +64,7 @@ class Users_WP_Forms {
      * Handles all UsersWP forms.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * 
      * @return      void
      */
@@ -189,7 +189,7 @@ class Users_WP_Forms {
      * Displays UsersWP notices in forms.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * 
      * @param       string      $type       Form type
      * 
@@ -235,7 +235,7 @@ class Users_WP_Forms {
      * Processes register form submission.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * 
      * @param       array                   $data       Submitted $_POST data
      * @param       array                   $files      Submitted $_FILES data
@@ -245,7 +245,7 @@ class Users_WP_Forms {
     public function process_register($data = array(), $files = array()) {
 
         $errors = new WP_Error();
-        $file_obj = new Users_WP_Files();
+        $file_obj = new UsersWP_Files();
 
         if( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce' ) ) {
             return false;
@@ -401,7 +401,7 @@ class Users_WP_Forms {
             $login_details = __('<p><b>' . __('Please activate your account :', 'userswp') . '</b></p>
             <p>' . $message . '</p>');
 
-            $email = new Users_WP_Mails();
+            $email = new UsersWP_Mails();
             $send_result = $email->send( 'activate', $user_id, $login_details );
             
             if (!$send_result) {
@@ -412,7 +412,7 @@ class Users_WP_Forms {
             <p>' . __('Username:', 'userswp') . ' ' . $result['uwp_account_username'] . '</p>
             <p>' . __('Password:', 'userswp') . ' ' . $message_pass . '</p>');
 
-            $email = new Users_WP_Mails();
+            $email = new UsersWP_Mails();
             $send_result = $email->send( 'register', $user_id, $login_details );
 
             if (!$send_result) {
@@ -458,7 +458,7 @@ class Users_WP_Forms {
             } elseif ($reg_action == 'require_admin_review' && defined('UWP_MOD_VERSION')) {
                 update_user_meta( $user_id, 'uwp_mod', '1' );
 
-                $email = new Users_WP_Mails();
+                $email = new UsersWP_Mails();
                 $send_result = $email->send( 'mod_pending', $user_id );
 
                 $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result);
@@ -494,7 +494,7 @@ class Users_WP_Forms {
      * Processes login form submission.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * 
      * @param       array                   $data       Submitted $_POST data
      * 
@@ -559,7 +559,7 @@ class Users_WP_Forms {
      * Processes forgot password form submission.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * 
      * @param       array                   $data       Submitted $_POST data
      * 
@@ -601,7 +601,7 @@ class Users_WP_Forms {
 
         $login_details = $this->generate_forgot_message($user_data);
 
-        $email = new Users_WP_Mails();
+        $email = new UsersWP_Mails();
         $send_result = $email->send( 'forgot', $user_data->ID, $login_details );
         
         $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
@@ -616,7 +616,7 @@ class Users_WP_Forms {
      * Processes change password form submission.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * 
      * @param       array                   $data       Submitted $_POST data
      * 
@@ -648,7 +648,7 @@ class Users_WP_Forms {
             return $user_data;
         }
 
-        $email = new Users_WP_Mails();
+        $email = new UsersWP_Mails();
         $send_result = $email->send( 'change', $user_data->ID );
 
         $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
@@ -666,7 +666,7 @@ class Users_WP_Forms {
      * Processes reset password form submission.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * 
      * @param       array                   $data       Submitted $_POST data
      * 
@@ -700,7 +700,7 @@ class Users_WP_Forms {
             return $user_data;
         }
 
-        $email = new Users_WP_Mails();
+        $email = new UsersWP_Mails();
         $send_result = $email->send( 'reset', $user_data->ID );
 
         $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
@@ -717,7 +717,7 @@ class Users_WP_Forms {
      * Generates forgot password email message.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * 
      * @param       object                  $user_data       User object.
      * 
@@ -758,8 +758,16 @@ class Users_WP_Forms {
             $message .= sprintf(__('Username: %s', 'userswp'), $user_data->user_login) . "\r\n\r\n";
             $message .= __('If this was a mistake, just ignore this email and nothing will happen.', 'userswp') . "\r\n\r\n";
             $message .= __('To reset your password, visit the following address:', 'userswp') . "\r\n\r\n";
-            $message .= site_url("reset?key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
-
+            $reset_page = uwp_get_option('reset_page', false);
+            if ($reset_page) {
+                $reset_link = add_query_arg( array(
+                    'key' => $key,
+                    'login' => rawurlencode($user_data->user_login),
+                ), get_permalink($reset_page) );
+                $message .= $reset_link . "\r\n";
+            } else {
+                $message .= site_url("reset?key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
+            }
         }
 
 
@@ -771,7 +779,7 @@ class Users_WP_Forms {
      * Processes account form submission.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * 
      * @param       array                   $data       Submitted $_POST data
      * @param       array                   $files      Submitted $_FILES data
@@ -780,7 +788,7 @@ class Users_WP_Forms {
      */
     public function process_account($data = array(), $files = array()) {
 
-        $file_obj = new Users_WP_Files();
+        $file_obj = new UsersWP_Files();
         
         $current_user_id = get_current_user_id();
         if (!$current_user_id) {
@@ -875,7 +883,7 @@ class Users_WP_Forms {
         if (uwp_get_option('enable_account_update_notification') == '1') {
             $user_data = get_user_by('id', $user_id);
 
-            $email = new Users_WP_Mails();
+            $email = new UsersWP_Mails();
             $send_result = $email->send( 'account', $user_data->ID );
 
             $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
@@ -893,7 +901,7 @@ class Users_WP_Forms {
      * Processes avatar and banner uploads form submission.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       array                   $data       Submitted $_POST data
      * @param       array                   $files      Submitted $_FILES data
@@ -902,7 +910,7 @@ class Users_WP_Forms {
      */
     public function process_upload_submit($data = array(), $files = array(), $type = 'avatar') {
 
-        $file_obj = new Users_WP_Files();
+        $file_obj = new UsersWP_Files();
         
         $current_user_id = get_current_user_id();
         if (!$current_user_id) {
@@ -940,7 +948,7 @@ class Users_WP_Forms {
      * Processes avatar and banner uploads image crop.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       array                   $data       Submitted $_POST data
      *
@@ -1027,7 +1035,7 @@ class Users_WP_Forms {
      * Saves UsersWP related user custom fields.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       int         $user_id        User ID.
      * @param       array       $data           Result array.
@@ -1089,7 +1097,7 @@ class Users_WP_Forms {
      * Logs the error message.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       array|object|string     $log        Error message.
      *
@@ -1111,7 +1119,7 @@ class Users_WP_Forms {
      *
      *
      * @since   1.0.0
-     * @package UsersWP
+     * @package userswp
      * @return void
      */
     public function uwp_upload_file_remove() {
@@ -1137,7 +1145,7 @@ class Users_WP_Forms {
      * Form field template for datepicker field type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -1240,7 +1248,7 @@ class Users_WP_Forms {
      * Form field template for time field type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -1308,7 +1316,7 @@ class Users_WP_Forms {
      * Form field template for select field type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -1389,7 +1397,7 @@ class Users_WP_Forms {
      * Form field template for multiselect field type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -1505,7 +1513,7 @@ class Users_WP_Forms {
      * Form field template for file field type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -1516,7 +1524,7 @@ class Users_WP_Forms {
      */
     public function uwp_form_input_file($html, $field, $value, $form_type){
 
-        $file_obj = new Users_WP_Files();
+        $file_obj = new UsersWP_Files();
         
         // Check if there is a field specific filter.
         if(has_filter("uwp_form_input_html_file_{$field->htmlvar_name}")){
@@ -1568,7 +1576,7 @@ class Users_WP_Forms {
      * Form field template for checkbox field type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -1621,7 +1629,7 @@ class Users_WP_Forms {
      * Form field template for radio field type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -1702,7 +1710,7 @@ class Users_WP_Forms {
      * Form field template for text field type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -1810,7 +1818,7 @@ class Users_WP_Forms {
      * Form field template for textarea field type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -1868,7 +1876,7 @@ class Users_WP_Forms {
      * Form field template for fieldset field type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -1904,7 +1912,7 @@ class Users_WP_Forms {
      * Form field template for url field type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -1966,7 +1974,7 @@ class Users_WP_Forms {
      * Form field template for email field type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -2031,7 +2039,7 @@ class Users_WP_Forms {
      * Form field template for password field type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -2096,7 +2104,7 @@ class Users_WP_Forms {
      * Adds enctype tag in form for file fields.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @return      void
      */
@@ -2113,7 +2121,7 @@ class Users_WP_Forms {
      * Handles UsersWP custom field requests from admin.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       int         $user_id        User ID.
      * 
@@ -2121,7 +2129,7 @@ class Users_WP_Forms {
      */
     public function update_profile_extra_admin_edit($user_id) {
         global $wpdb;
-        $file_obj = new Users_WP_Files();
+        $file_obj = new UsersWP_Files();
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         //Normal fields
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND field_type != 'fieldset' ORDER BY sort_order ASC");
@@ -2173,7 +2181,7 @@ class Users_WP_Forms {
      * Adds search form keyword input html.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string      $keyword        Search keyword.
      * 
@@ -2189,7 +2197,7 @@ class Users_WP_Forms {
      * Adds search form submit button html.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * 
      * @return      void
      */
@@ -2203,7 +2211,7 @@ class Users_WP_Forms {
      * Checks for errors in mail submission.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * 
      * @param       array               $res            Result array.
      * @param       object              $user_data      User object.
@@ -2233,7 +2241,7 @@ class Users_WP_Forms {
      * Form field template for country field.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -2298,7 +2306,7 @@ class Users_WP_Forms {
      * Prints the username link in "Edit Account" page
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string      $type       Page type.
      *
@@ -2322,7 +2330,7 @@ class Users_WP_Forms {
      * Adds confirm password field in forms.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -2377,7 +2385,7 @@ class Users_WP_Forms {
      * Adds confirm email field in forms.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string          $html           Form field html
      * @param       object          $field          Field info.
@@ -2433,7 +2441,7 @@ class Users_WP_Forms {
      * Handles the privacy form submission.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @return      void
      */
@@ -2466,8 +2474,6 @@ class Users_WP_Forms {
                     update_user_meta($user_id, $field_name, $value);
                 }
             }
-
-
 
         }
     }

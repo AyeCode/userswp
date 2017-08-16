@@ -7,13 +7,13 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Activator {
+class UsersWP_Activator {
 
     /**
      * This method gets fired during plugin activation.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public static function activate() {
@@ -53,7 +53,7 @@ class Users_WP_Activator {
      * Loads all dependencies during plugin activation.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public static function load_dependencies() {
@@ -64,7 +64,7 @@ class Users_WP_Activator {
      * Generates the default pages during plugin activation.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public static function generate_pages() {
@@ -75,7 +75,7 @@ class Users_WP_Activator {
      * Adds default settings during plugin activation.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public static function add_default_options() {
@@ -144,7 +144,7 @@ class Users_WP_Activator {
      * Creates tables during plugin activation.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public static function uwp_create_tables()
@@ -156,7 +156,7 @@ class Users_WP_Activator {
      * Creates the new tables added in version 1.0.1 during plugin activation.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public static function uwp101_create_tables() {
@@ -167,7 +167,7 @@ class Users_WP_Activator {
      * Syncs WP usermeta with UsersWP usermeta during plugin activation.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public static function uwp_insert_usermeta()
@@ -197,12 +197,12 @@ class Users_WP_Activator {
      * Saves default custom fields in the database.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public static function uwp_create_default_fields()
     {
-        $form_builder = new Users_WP_Form_Builder();
+        $form_builder = new UsersWP_Form_Builder();
 
         $fields = self::uwp_default_custom_fields();
 
@@ -217,7 +217,7 @@ class Users_WP_Activator {
      * Returns merged default custom fields.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      array       Merged custom fields.
      */
     public static function uwp_default_custom_fields(){
@@ -242,7 +242,7 @@ class Users_WP_Activator {
      * Returns Login form default custom fields.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      array       Login form default custom fields.
      */
     public static function uwp_default_custom_fields_login(){
@@ -284,7 +284,7 @@ class Users_WP_Activator {
      * Returns Forgot form default custom fields.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      array       Forgot form default custom fields.
      */
     public static function uwp_default_custom_fields_forgot(){
@@ -313,7 +313,7 @@ class Users_WP_Activator {
      * Returns Avatar form default custom fields.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      array       Avatar form default custom fields.
      */
     public static function uwp_default_custom_fields_avatar(){
@@ -351,7 +351,7 @@ class Users_WP_Activator {
      * Returns Banner form default custom fields.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      array       Banner form default custom fields.
      */
     public static function uwp_default_custom_fields_banner(){
@@ -389,7 +389,7 @@ class Users_WP_Activator {
      * Returns Change Password form default custom fields.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      array       Change Password form default custom fields.
      */
     public static function uwp_default_custom_fields_change(){
@@ -444,7 +444,7 @@ class Users_WP_Activator {
      * Returns Reset Password form default custom fields.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      array       Reset Password form default custom fields.
      */
     public static function uwp_default_custom_fields_reset(){
@@ -486,7 +486,7 @@ class Users_WP_Activator {
      * Returns Account form default custom fields.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      array       Account form default custom fields.
      */
     public static function uwp_default_custom_fields_account(){
@@ -620,7 +620,7 @@ class Users_WP_Activator {
      * Flushes rewrite rules.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public static function uwp_flush_rewrite_rules() {
@@ -631,7 +631,7 @@ class Users_WP_Activator {
      * Inserts register form custom fields in form extras table.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public static function uwp_insert_form_extras() {

@@ -7,9 +7,9 @@
  * @link       http://wpgeodirectory.com
  * @since      1.0.0
  *
- * @package    Users_WP
+ * @package    userswp
  */
-class Users_WP_Callback {
+class UsersWP_Callback {
 
     public function uwp_missing_callback($args) {
         printf(

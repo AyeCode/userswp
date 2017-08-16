@@ -6,8 +6,8 @@
  * @link       http://wpgeodirectory.com
  * @since      1.0.0
  *
- * @package    Users_WP
- * @subpackage Users_WP/public
+ * @package    userswp
+ * @subpackage userswp/public
  */
 
 /**
@@ -16,11 +16,11 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Users_WP
- * @subpackage Users_WP/public
+ * @package    userswp
+ * @subpackage userswp/public
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Public {
+class UsersWP_Public {
 
 
     /**
@@ -43,10 +43,10 @@ class Users_WP_Public {
 
         /**
          * An instance of this class should be passed to the run() function
-         * defined in Users_WP_Loader as all of the hooks are defined
+         * defined in UsersWP_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Users_WP_Loader will then create the relationship
+         * The UsersWP_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */
@@ -124,10 +124,10 @@ class Users_WP_Public {
 
         /**
          * An instance of this class should be passed to the run() function
-         * defined in Users_WP_Loader as all of the hooks are defined
+         * defined in UsersWP_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Users_WP_Loader will then create the relationship
+         * The UsersWP_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */

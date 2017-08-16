@@ -7,13 +7,13 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Date {
+class UsersWP_Date {
 
     /**
      * Converts PHP Date format to jQuery UI date format.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $php_format     Date Format.
      * @return      string                      Formatted Date.
      */
@@ -92,7 +92,7 @@ class Users_WP_Date {
      * Converts date from one format to another. 
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $date_input         Date string to convert.
      * @param       string      $date_to            Date format to convert to.
      * @param       string      $date_from          Date format to convert from.
@@ -126,7 +126,7 @@ class Users_WP_Date {
      * Converts non english date months to english date months.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $date   Date String.
      * @return      string              Converted Date.
      */
@@ -203,7 +203,7 @@ class Users_WP_Date {
      * Gets random date.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       int $days_from      Random days from.
      * @param       int $days_to        Random days to.

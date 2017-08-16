@@ -5,8 +5,8 @@
  * @link       http://wpgeodirectory.com
  * @since      1.0.0
  *
- * @package    Users_WP
- * @subpackage Users_WP/admin/settings
+ * @package    userswp
+ * @subpackage userswp/admin/settings
  */
 
 /**
@@ -15,11 +15,11 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Users_WP
- * @subpackage Users_WP/admin/settings
+ * @package    userswp
+ * @subpackage userswp/admin/settings
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Admin_Settings {
+class UsersWP_Admin_Settings {
 
     private $form_builder;
     
@@ -352,7 +352,7 @@ class Users_WP_Admin_Settings {
             add_option( 'uwp_settings' );
         }
 
-        $callback = new Users_WP_Callback();
+        $callback = new UsersWP_Callback();
 
         foreach( $this->uwp_get_registered_settings() as $tab => $settings ) {
 
@@ -406,7 +406,7 @@ class Users_WP_Admin_Settings {
 
     public function uwp_get_registered_settings() {
         
-        $file_obj = new Users_WP_Files();
+        $file_obj = new UsersWP_Files();
 
         /**
          * 'Whitelisted' uwp settings, filters are provided for each settings

@@ -7,7 +7,7 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Files {
+class UsersWP_Files {
     
     public function __construct() {
         if($this->uwp_doing_upload()){
@@ -20,7 +20,7 @@ class Users_WP_Files {
      * Handles file upload request.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       object          $field      Field info object.
      * @param       array           $files      $_FILES array.
      * @return      bool|array                  Uploaded file url info array.
@@ -101,7 +101,7 @@ class Users_WP_Files {
      * Formats the file size into human readable form.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       int         $bytes      Size in Bytes.
      * @return      string                  Size in human readable form.
      */
@@ -139,7 +139,7 @@ class Users_WP_Files {
      * Formats the file size in KB.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       int         $bytes      Size in Bytes.
      * @return      int                     Size in KB.
      */
@@ -153,7 +153,7 @@ class Users_WP_Files {
      * Gets the size is bytes for given value.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $val    Size in human readable form.
      * @return      int                 Value in bytes.
      */
@@ -180,7 +180,7 @@ class Users_WP_Files {
      * Processes the file upload.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       array       $file       File info to upload.
      * @param       array       $args       File upload helper args.
      * @return      object                  Uploaded file info
@@ -226,7 +226,7 @@ class Users_WP_Files {
      * Prepares the files for upload
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       array       $file_data      Files to upload
      * @return      array                       Prepared files.
      */
@@ -257,7 +257,7 @@ class Users_WP_Files {
      * Validates the file uploads.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       array       $files          $_FILES array
      * @param       string      $type           Form type.
      * @param       bool        $url_only       Return only the url or whole file info?
@@ -313,7 +313,7 @@ class Users_WP_Files {
      * Displays the preview for images and links for other types above the field for existing uploads.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       object      $field          Form field info.
      * @param       string      $value          Value of the field.
      * @param       bool        $removable      Is this value removable by user?
@@ -379,7 +379,7 @@ class Users_WP_Files {
      * restrict files to certain types
      * 
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       array       $file   File info.
      * @return      array               Modified file info.
      */
@@ -408,7 +408,7 @@ class Users_WP_Files {
      * Check whether the uploads is from the profile page.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      bool    
      */
     public function uwp_doing_upload(){
@@ -419,7 +419,7 @@ class Users_WP_Files {
      * Gets the maximum file upload size.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string|bool        $form_type              Form type.
      * @param       string|bool        $field_htmlvar_name     htmlvar_name key.
      * @return      int                                         Allowed upload size.
@@ -444,7 +444,7 @@ class Users_WP_Files {
      * Modifies the maximum file upload size based on the setting.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       int         $bytes      Size in bytes.
      * @param       string      $type       File upload type.
@@ -476,7 +476,7 @@ class Users_WP_Files {
      * Ex: 'jpg'  => 'image/jpeg'
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string      $ext        Extension string. Ex: png, jpg
      *
@@ -496,7 +496,7 @@ class Users_WP_Files {
      * Returns allowed mime types in uploads
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @return      array       Allowed mime types.
      */

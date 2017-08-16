@@ -8,7 +8,7 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP {
+class UsersWP {
 
     /**
      * The loader that's responsible for maintaining and registering all hooks that power
@@ -16,7 +16,7 @@ class Users_WP {
      *
      * @since    1.0.0
      * @access   protected
-     * @var      Users_WP_Loader    $loader    Maintains and registers all hooks for the plugin.
+     * @var      UsersWP_Loader    $loader    Maintains and registers all hooks for the plugin.
      */
     protected $loader;
 
@@ -60,21 +60,21 @@ class Users_WP {
 
 
         $this->load_dependencies();
-        $this->loader = new Users_WP_Loader();
-        $this->profile = new Users_WP_Profile();
-        $this->forms = new Users_WP_Forms();
-        $this->templates = new Users_WP_Templates();
-        $this->i18n = new Users_WP_i18n();
-        $this->notices = new Users_WP_Notices();
-        $this->assets = new Users_WP_Public();
-        $this->form_builder = new Users_WP_Form_Builder();
-        $this->menus = new Users_WP_Menus();
-        $this->tools = new Users_WP_Tools();
+        $this->loader = new UsersWP_Loader();
+        $this->profile = new UsersWP_Profile();
+        $this->forms = new UsersWP_Forms();
+        $this->templates = new UsersWP_Templates();
+        $this->i18n = new UsersWP_i18n();
+        $this->notices = new UsersWP_Notices();
+        $this->assets = new UsersWP_Public();
+        $this->form_builder = new UsersWP_Form_Builder();
+        $this->menus = new UsersWP_Menus();
+        $this->tools = new UsersWP_Tools();
 
-        $this->shortcodes = new Users_WP_Shortcodes($this->templates);
-        $this->admin_settings = new Users_WP_Admin_Settings($this->form_builder);
-        $this->admin = new Users_WP_Admin($this->admin_settings);
-        $this->ajax = new Users_WP_Ajax($this->form_builder);
+        $this->shortcodes = new UsersWP_Shortcodes($this->templates);
+        $this->admin_settings = new UsersWP_Admin_Settings($this->form_builder);
+        $this->admin = new UsersWP_Admin($this->admin_settings);
+        $this->ajax = new UsersWP_Ajax($this->form_builder);
     }
 
     /**
@@ -101,7 +101,7 @@ class Users_WP {
      * The reference to the class that orchestrates the hooks with the plugin.
      *
      * @since     1.0.0
-     * @return    Users_WP_Loader    Orchestrates the hooks of the plugin.
+     * @return    UsersWP_Loader    Orchestrates the hooks of the plugin.
      */
     public function get_loader() {
         return $this->loader;

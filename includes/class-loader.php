@@ -5,7 +5,7 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Loader {
+class UsersWP_Loader {
 
     /**
      * The array of actions registered with WordPress.

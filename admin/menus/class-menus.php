@@ -5,18 +5,18 @@
  * @link       http://wpgeodirectory.com
  * @since      1.0.0
  *
- * @package    Users_WP
- * @subpackage Users_WP/admin/menus
+ * @package    userswp
+ * @subpackage userswp/admin/menus
  */
 
 /**
  * The Nav menu specific functionality of the plugin.
  *
- * @package    Users_WP
- * @subpackage Users_WP/admin/menus
+ * @package    userswp
+ * @subpackage userswp/admin/menus
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Menus {
+class UsersWP_Menus {
 
     /**
      * Initialize the class and set its properties.
@@ -49,7 +49,7 @@ class Users_WP_Menus {
 
         global $nav_menu_selected_id;
 
-        $walker = new Users_WP_Walker_Nav_Menu_Checklist( false );
+        $walker = new UsersWP_Walker_Nav_Menu_Checklist( false );
         $args   = array( 'walker' => $walker );
 
         $post_type_name = 'users_wp';

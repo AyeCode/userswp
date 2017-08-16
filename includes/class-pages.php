@@ -7,7 +7,7 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Pages {
+class UsersWP_Pages {
 
     
     public function __construct() {
@@ -20,7 +20,7 @@ class Users_WP_Pages {
      * Checks whether the current page is of given page type or not.
      *
      * @since   1.0.0
-     * @package UsersWP
+     * @package userswp
      * @param   string|bool $type Page type.
      * @return bool
      */
@@ -60,7 +60,7 @@ class Users_WP_Pages {
      * Checks whether the current page is register page or not.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      bool
      */
     public function is_register_page() {
@@ -71,7 +71,7 @@ class Users_WP_Pages {
      * Checks whether the current page is login page or not.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      bool
      */
     public function is_login_page() {
@@ -82,7 +82,7 @@ class Users_WP_Pages {
      * Checks whether the current page is forgot password page or not.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      bool
      */
     public function is_forgot_page() {
@@ -93,7 +93,7 @@ class Users_WP_Pages {
      * Checks whether the current page is change password page or not.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      bool
      */
     public function is_change_page() {
@@ -104,7 +104,7 @@ class Users_WP_Pages {
      * Checks whether the current page is reset password page or not.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      bool
      */
     public function is_reset_page() {
@@ -115,7 +115,7 @@ class Users_WP_Pages {
      * Checks whether the current page is account page or not.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      bool
      */
     public function is_account_page() {
@@ -126,7 +126,7 @@ class Users_WP_Pages {
      * Checks whether the current page is profile page or not.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      bool
      */
     public function is_profile_page() {
@@ -137,7 +137,7 @@ class Users_WP_Pages {
      * Checks whether the current page is users page or not.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      bool
      */
     public function is_users_page() {
@@ -148,7 +148,7 @@ class Users_WP_Pages {
      * Checks whether the current page is multi register page or not.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      bool
      */
     public function is_multi_register_page() {
@@ -165,7 +165,7 @@ class Users_WP_Pages {
      * Checks whether the current page is logged in user profile page or not.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      bool
      */
     public function is_current_user_profile_page() {
@@ -198,7 +198,7 @@ class Users_WP_Pages {
      * Gets the UsersWP page permalink based on page type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string|bool     $type       Page type.
      * @return      string                      Page permalink.
      */
@@ -215,7 +215,7 @@ class Users_WP_Pages {
      * Gets the UsersWP register page permalink.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string      Page permalink.
      */
     public function get_register_permalink() {
@@ -226,7 +226,7 @@ class Users_WP_Pages {
      * Gets the UsersWP login page permalink.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string      Page permalink.
      */
     public function get_login_permalink() {
@@ -237,7 +237,7 @@ class Users_WP_Pages {
      * Gets the UsersWP forgot password page permalink.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string      Page permalink.
      */
     public function get_forgot_permalink() {
@@ -248,7 +248,7 @@ class Users_WP_Pages {
      * Gets the UsersWP reset password page permalink.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string      Page permalink.
      */
     public function get_reset_permalink() {
@@ -259,7 +259,7 @@ class Users_WP_Pages {
      * Gets the UsersWP account page permalink.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string      Page permalink.
      */
     public function get_account_permalink() {
@@ -270,7 +270,7 @@ class Users_WP_Pages {
      * Gets the UsersWP profile page permalink.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string      Page permalink.
      */
     public function get_profile_permalink() {
@@ -281,7 +281,7 @@ class Users_WP_Pages {
      * Gets the UsersWP users page permalink.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string      Page permalink.
      */
     public function get_users_permalink() {
@@ -292,7 +292,7 @@ class Users_WP_Pages {
      * Returns all available pages as array to use in select dropdown.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      array                      Page array.
      */
     public function get_pages() {
@@ -311,7 +311,7 @@ class Users_WP_Pages {
      * Gets the page slug using the given page type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $page_type      Page type.
      * @return      string                      Page slug.
      */
@@ -330,7 +330,7 @@ class Users_WP_Pages {
      * Creates UsersWP page if not exists.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $slug           Page slug.
      * @param       string      $option         Page setting key.
      * @param       string      $page_title     The post title.  Default empty.
@@ -391,7 +391,7 @@ class Users_WP_Pages {
      * Generates default UsersWP pages. Usually called during plugin activation.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public function generate_default_pages() {
@@ -412,7 +412,7 @@ class Users_WP_Pages {
      * Generates default UsersWP pages on new wpmu blog creation.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       int         $blog_id        Blog ID.
      * @param       int         $user_id        User ID.
@@ -449,7 +449,7 @@ class Users_WP_Pages {
      * Gets the UsersWP page permalink based on page type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string     $page       Page type.
      * @return      string                 Page permalink.
      */
@@ -498,7 +498,7 @@ class Users_WP_Pages {
      * yoursite.com/profile/username/tab/subtab
      * 
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       int             $user_id            User ID.
      * @param       string|bool     $tab                Optional. Main tab
      * @param       string|bool     $subtab             Optional. Sub tab.

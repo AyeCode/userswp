@@ -114,6 +114,7 @@ No questions so far, but don't hesitate to ask!
 * Edit user in wp-admin does not display country input correctly - FIXED
 * Tools page added - ADDED
 * Major code refactoring - CHANGED
+* Class names renamed from Users_WP to UsersWP for better naming and consistency - CHANGED
 
 = 1.0.6 =
 * First release on WordPress.org - :)

@@ -5,13 +5,13 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Countries {
+class UsersWP_Countries {
 
     /**
      * Returns the country array.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @return      array       Country array.
      */
@@ -272,7 +272,7 @@ class Users_WP_Countries {
      * Outputs country html.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string      $value      Country code.
      *

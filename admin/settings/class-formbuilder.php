@@ -5,18 +5,18 @@
  * @link       http://wpgeodirectory.com
  * @since      1.0.0
  *
- * @package    Users_WP
- * @subpackage Users_WP/admin/settings
+ * @package    userswp
+ * @subpackage userswp/admin/settings
  */
 
 /**
  * The form builder functionality of the plugin.
  *
- * @package    Users_WP
- * @subpackage Users_WP/admin/settings
+ * @package    userswp
+ * @subpackage userswp/admin/settings
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Form_Builder {
+class UsersWP_Form_Builder {
     
     public function __construct() {
 
@@ -1814,7 +1814,7 @@ class Users_WP_Form_Builder {
     public function uwp_builder_extra_fields_file($output, $result_str, $cf, $field_info) {
         ob_start();
 
-        $file_obj = new Users_WP_Files();
+        $file_obj = new UsersWP_Files();
         $allowed_file_types = $file_obj->allowed_mime_types();
 
         $extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';

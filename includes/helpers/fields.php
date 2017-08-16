@@ -3,7 +3,7 @@
  * Returns the General > Regsiter tab setting fields
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array       Setting fields
  */
@@ -48,7 +48,7 @@ function uwp_settings_general_register_fields() {
  * Returns the General > Login tab setting fields
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array       Setting fields
  */
@@ -72,7 +72,7 @@ function uwp_settings_general_login_fields() {
  * Returns the General > Login tab setting fields
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array       Setting fields
  */
@@ -94,7 +94,7 @@ function uwp_settings_general_wp_login_fields() {
  * Returns the General > Logout tab setting fields
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array       Setting fields
  */
@@ -118,7 +118,7 @@ function uwp_settings_general_logout_fields() {
  * Returns the General > Delete tab setting fields
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array       Setting fields
  */
@@ -142,7 +142,7 @@ function uwp_settings_general_delete_fields() {
  * Returns merged login and logout tab setting fields
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array       Setting fields
  */

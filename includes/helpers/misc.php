@@ -5,7 +5,7 @@
  * Wraps inside optgroup if available.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string          $option_values          String option values.
  * @param       bool            $translated             Do you want to translate the output?
@@ -68,7 +68,7 @@ function uwp_string_values_to_options($option_values = '', $translated = false)
  * Used in select, multiselect and radio fields.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $input          Input String
  * @param       bool        $translated     Do you want to translate the output?
@@ -121,7 +121,7 @@ function uwp_string_to_options($input = '', $translated = false)
  * Resizes the image.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $image      Reference a local file
  * @param       int         $width      Image width      
@@ -177,7 +177,7 @@ function uwp_resizeImage($image,$width,$height,$scale) {
  * Resizes thumbnail image.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $thumb_image_name
  * @param       string      $image
@@ -239,7 +239,7 @@ function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $sr
  * Logs the error message.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       array|object|string     $log        Error message.
  *
@@ -264,7 +264,7 @@ function uwp_error_log($log){
  * Prints the users page main content.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      void
  */
@@ -440,7 +440,7 @@ function get_uwp_users_list() {
  * Loads the font-awesome css files.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      void
  */
@@ -465,7 +465,7 @@ function uwp_load_font_awesome() {
  * Gets the custom field info for given key.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $htmlvar_name       Custom field key.
  *
@@ -484,7 +484,7 @@ function uwp_get_custom_field_info($htmlvar_name) {
  * Returns the Users page layout class based on the setting.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      string      Layout class.
  */
@@ -519,7 +519,7 @@ add_filter( 'get_user_option_metaboxhidden_nav-menus', 'uwp_always_nav_menu_visi
  * Filters nav menu visibility option value.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       mixed       $result     Value for the user's option.
  * @param       string      $option     Name of the option being retrieved.
@@ -542,7 +542,7 @@ add_filter('user_profile_picture_description', 'uwp_admin_user_profile_picture_d
  * Filters the user profile picture description displayed under the Gravatar.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $description    Profile picture description.
  *
@@ -566,7 +566,7 @@ function uwp_admin_user_profile_picture_description($description) {
  * Adds avatar and banner fields in admin side.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       object      $user       User object.
  *
@@ -575,7 +575,7 @@ function uwp_admin_user_profile_picture_description($description) {
 function uwp_admin_edit_banner_fields($user) {
     global $wpdb;
 
-    $file_obj = new Users_WP_Files();
+    $file_obj = new UsersWP_Files();
 
     $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
     $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE (form_type = 'avatar' OR form_type = 'banner') ORDER BY sort_order ASC");
@@ -670,7 +670,7 @@ add_filter('uwp_account_page_title', 'uwp_account_privacy_page_title', 10, 2);
  * Adds Privacy tab title in Account page.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $title      Privacy title.
  * @param       string      $type       Tab type.
@@ -691,7 +691,7 @@ add_action('uwp_account_form_display', 'uwp_account_privacy_edit_form_display');
  * Adds form html for privacy fields in account page.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $type       Form type.
  *
@@ -773,7 +773,7 @@ add_action('uwp_account_menu_display', 'uwp_add_account_menu_links');
  * Prints "Edit account" page subtab / submenu links. Ex: Privacy
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      void
  */
@@ -826,7 +826,7 @@ function uwp_add_account_menu_links() {
  * Updates extras fields sort order.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       array       $field_ids      Form extras field ids.
  * @param       string      $form_type      Form type.
@@ -865,7 +865,7 @@ function uwp_form_extras_field_order($field_ids = array(), $form_type = 'registe
  * Uppercase the first character of each word in a string.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $string     String to convert.
  * @param       string      $charset    Charset.
@@ -884,7 +884,7 @@ function uwp_ucwords($string, $charset='UTF-8') {
  * Checks whether the column exists in the table.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $db             Table name.
  * @param       string      $column         Column name.
@@ -893,7 +893,7 @@ function uwp_ucwords($string, $charset='UTF-8') {
  */
 function uwp_column_exist($db, $column)
 {
-    $table = new Users_WP_Tables();
+    $table = new UsersWP_Tables();
     $table->column_exists($db, $column);
 }
 
@@ -901,7 +901,7 @@ function uwp_column_exist($db, $column)
  * Adds column if not exist in the table.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $db             Table name.
  * @param       string      $column         Column name.
@@ -911,7 +911,7 @@ function uwp_column_exist($db, $column)
  */
 function uwp_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
 {
-    $table = new Users_WP_Tables();
+    $table = new UsersWP_Tables();
     $table->add_column_if_not_exist($db, $column, $column_attr);
 
 }
@@ -920,7 +920,7 @@ function uwp_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 
  * Returns excluded custom fields.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array   Excluded custom fields.
  */
@@ -936,7 +936,7 @@ function uwp_get_excluded_fields() {
  * Formats the currency using currency separator.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string              $number     Currency number.
  * @param       array|string        $cf         Custom field info.
@@ -992,7 +992,7 @@ function uwp_currency_format_number($number='',$cf=''){
  * Checks whether the user can make his/her own profile private or not.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      bool
  */
@@ -1005,7 +1005,7 @@ function uwp_can_make_profile_private() {
  * Returns available registration status options.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array       Registration status options.
  */
@@ -1025,7 +1025,7 @@ function uwp_registration_status_options() {
  * Retrieves a user row based on password reset key and login
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string         $key       Hash to validate sending user's password.
  * @param       string         $login     The user login.
@@ -1045,7 +1045,7 @@ add_action('uwp_template_fields', 'uwp_template_fields_terms_check', 100, 1);
  * Adds "Accept terms and conditions" checkbox in register form.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $form_type      Form type.
  *
@@ -1078,7 +1078,7 @@ function uwp_template_fields_terms_check($form_type) {
  * Redirects the user to login page when email not confirmed.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $username       Username.
  * @param       object      $user           User object.
@@ -1108,7 +1108,7 @@ add_filter( 'wp_login', 'uwp_unconfirmed_login_redirect', 10, 2 );
  * Adds notification menu in admin toolbar.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      void
  */
@@ -1154,7 +1154,7 @@ add_action( 'admin_bar_menu', 'uwp_notifications_toolbar_menu', 90 );
  * Returns the installation type.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      string      Installation type.
  */
@@ -1194,12 +1194,12 @@ function uwp_get_installation_type() {
  * Returns the table prefix based on the installation type.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      string      Table prefix
  */
 function uwp_get_table_prefix() {
-    $tables = new Users_WP_Tables();
+    $tables = new UsersWP_Tables();
     return $tables->get_table_prefix();
 }
 
@@ -1210,7 +1210,7 @@ function uwp_get_table_prefix() {
  *
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $key        Custom field key.
  * @param       string      $value      Custom field value.
@@ -1229,7 +1229,7 @@ function uwp_maybe_serialize($key, $value) {
  * Converts comma separated string to array.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $key        Custom field key.
  * @param       string      $value      Custom field value.
@@ -1248,13 +1248,13 @@ function uwp_maybe_unserialize($key, $value) {
  * Creates UsersWP related tables.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      void
  */
 function uwp_create_tables()
 {
-    $tables = new Users_WP_Tables();
+    $tables = new UsersWP_Tables();
     $tables->uwp_create_tables();
 }
 
@@ -1262,12 +1262,12 @@ function uwp_create_tables()
  * Creates uwp_usermeta table which introduced in version 1.0.1
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      void
  */
 function uwp101_create_tables() {
-    $tables = new Users_WP_Tables();
+    $tables = new UsersWP_Tables();
     $tables->uwp101_create_tables();
 }
 
@@ -1275,7 +1275,7 @@ function uwp101_create_tables() {
  * Returns tye client IP.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      string      IP address.
  */
@@ -1297,7 +1297,7 @@ function uwp_get_ip() {
  * Checks whether the string starts with the given string.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $haystack       String to compare with.
  * @param       string      $needle         String to search for.
@@ -1314,7 +1314,7 @@ function uwp_str_starts_with($haystack, $needle)
  * Checks whether the string ends with the given string.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $haystack       String to compare with.
  * @param       string      $needle         String to search for.

@@ -5,8 +5,8 @@
  * @link       http://wpgeodirectory.com
  * @since      1.0.0
  *
- * @package    Users_WP
- * @subpackage Users_WP/admin
+ * @package    userswp
+ * @subpackage userswp/admin
  */
 
 /**
@@ -15,11 +15,11 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Users_WP
- * @subpackage Users_WP/admin
+ * @package    userswp
+ * @subpackage userswp/admin
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Admin {
+class UsersWP_Admin {
 
     protected $admin_settings;
     /**
@@ -49,10 +49,10 @@ class Users_WP_Admin {
 
         /**
          * An instance of this class should be passed to the run() function
-         * defined in Users_WP_Loader as all of the hooks are defined
+         * defined in UsersWP_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Users_WP_Loader will then create the relationship
+         * The UsersWP_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */
@@ -82,10 +82,10 @@ class Users_WP_Admin {
 
         /**
          * An instance of this class should be passed to the run() function
-         * defined in Users_WP_Loader as all of the hooks are defined
+         * defined in UsersWP_Loader as all of the hooks are defined
          * in that particular class.
          *
-         * The Users_WP_Loader will then create the relationship
+         * The UsersWP_Loader will then create the relationship
          * between the defined hooks and the functions defined in this
          * class.
          */
@@ -217,7 +217,7 @@ class Users_WP_Admin {
      * Adds UsersWP css to admin area
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @return      void
      */

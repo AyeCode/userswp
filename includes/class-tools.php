@@ -7,7 +7,7 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Tools {
+class UsersWP_Tools {
 
     public function __construct() {
         add_action('admin_init', array($this, 'uwp_tools_process_dummy_users'));
@@ -480,6 +480,16 @@ class Users_WP_Tools {
 
     }
 
+    /**
+     * Adds the tools settings page menu as submenu.
+     *
+     * @since       1.0.0
+     * @package     userswp
+     *
+     * @param       callable   $settings_page    The function to be called to output the content for this page.
+     *
+     * @return      void
+     */
     public function uwp_add_admin_tools_sub_menu($settings_page) {
 
         add_submenu_page(

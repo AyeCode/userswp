@@ -7,7 +7,7 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Shortcodes {
+class UsersWP_Shortcodes {
 
     private $templates;
     
@@ -31,7 +31,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP register page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function register($atts) {
@@ -53,7 +53,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP login page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function login() {
@@ -67,7 +67,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP forgot password page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function forgot() {
@@ -78,7 +78,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP change password page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function change() {
@@ -89,7 +89,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP reset password page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function reset() {
@@ -100,7 +100,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP account page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function account() {
@@ -111,7 +111,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP profile page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function profile() {
@@ -122,7 +122,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP users page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function users() {
@@ -133,7 +133,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP template content based on type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $type       Template type.
      * @return      string                  UsersWP template content.
      */

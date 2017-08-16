@@ -3,12 +3,12 @@
  * Gets the UsersWP page permalink based on page type.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @param       string|bool     $type       Page type.
  * @return      string                      Page permalink.
  */
 function get_uwp_page_permalink($type) {
-    $page = new Users_WP_Pages();
+    $page = new UsersWP_Pages();
     return $page->get_page_permalink($type);
 }
 
@@ -16,11 +16,11 @@ function get_uwp_page_permalink($type) {
  * Gets the UsersWP register page permalink.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @return      string      Page permalink.
  */
 function get_uwp_register_permalink() {
-    $page = new Users_WP_Pages();
+    $page = new UsersWP_Pages();
     return $page->get_register_permalink();
 }
 
@@ -28,11 +28,11 @@ function get_uwp_register_permalink() {
  * Gets the UsersWP login page permalink.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @return      string      Page permalink.
  */
 function get_uwp_login_permalink() {
-    $page = new Users_WP_Pages();
+    $page = new UsersWP_Pages();
     return $page->get_login_permalink();
 }
 
@@ -40,11 +40,11 @@ function get_uwp_login_permalink() {
  * Gets the UsersWP forgot password page permalink.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @return      string      Page permalink.
  */
 function get_uwp_forgot_permalink() {
-    $page = new Users_WP_Pages();
+    $page = new UsersWP_Pages();
     return $page->get_forgot_permalink();
 }
 
@@ -52,11 +52,11 @@ function get_uwp_forgot_permalink() {
  * Gets the UsersWP reset password page permalink.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @return      string      Page permalink.
  */
 function get_uwp_reset_permalink() {
-    $page = new Users_WP_Pages();
+    $page = new UsersWP_Pages();
     return $page->get_reset_permalink();
 }
 
@@ -64,11 +64,11 @@ function get_uwp_reset_permalink() {
  * Gets the UsersWP account page permalink.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @return      string      Page permalink.
  */
 function get_uwp_account_permalink() {
-    $page = new Users_WP_Pages();
+    $page = new UsersWP_Pages();
     return $page->get_account_permalink();
 }
 
@@ -76,11 +76,11 @@ function get_uwp_account_permalink() {
  * Gets the UsersWP profile page permalink.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @return      string      Page permalink.
  */
 function get_uwp_profile_permalink() {
-    $page = new Users_WP_Pages();
+    $page = new UsersWP_Pages();
     return $page->get_profile_permalink();
 }
 
@@ -88,11 +88,11 @@ function get_uwp_profile_permalink() {
  * Gets the UsersWP users page permalink.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @return      string      Page permalink.
  */
 function get_uwp_users_permalink() {
-    $page = new Users_WP_Pages();
+    $page = new UsersWP_Pages();
     return $page->get_users_permalink();
 }
 
@@ -100,12 +100,12 @@ function get_uwp_users_permalink() {
  * Gets the UsersWP page permalink based on page type.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @param       string     $page_type      Page type.
  * @return      string                     Page permalink.
  */
 function uwp_get_page_link($page_type) {
-    $page = new Users_WP_Pages();
+    $page = new UsersWP_Pages();
     return $page->get_page_link($page_type);
 }
 
@@ -116,14 +116,14 @@ function uwp_get_page_link($page_type) {
  * yoursite.com/profile/username/tab/subtab
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @param       int             $user_id            User ID.
  * @param       string|bool     $tab                Optional. Main tab
  * @param       string|bool     $subtab             Optional. Sub tab.
  * @return      string                              Built profile page link.
  */
 function uwp_build_profile_tab_url($user_id, $tab = false, $subtab = false) {
-    $page = new Users_WP_Pages();
+    $page = new UsersWP_Pages();
     return $page->build_profile_tab_url($user_id, $tab, $subtab);
 }
 
@@ -131,7 +131,7 @@ function uwp_build_profile_tab_url($user_id, $tab = false, $subtab = false) {
  * Returns the page link for register page.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array|bool|mixed    Page link.
  */
@@ -143,7 +143,7 @@ function uwp_get_register_page_url() {
  * Returns the page link for login page.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array|bool|mixed    Page link.
  */
@@ -155,7 +155,7 @@ function uwp_get_login_page_url() {
  * Returns the page link for forgot password page.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array|bool|mixed    Page link.
  */
@@ -167,7 +167,7 @@ function uwp_get_forgot_page_url() {
  * Returns the page link for change password page.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array|bool|mixed    Page link.
  */
@@ -179,7 +179,7 @@ function uwp_get_change_page_url() {
  * Returns the page link for reset password page.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array|bool|mixed    Page link.
  */
@@ -191,7 +191,7 @@ function uwp_get_reset_page_url() {
  * Returns the page link for account page.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array|bool|mixed    Page link.
  */
@@ -203,7 +203,7 @@ function uwp_get_account_page_url() {
  * Returns the page link for profile page.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array|bool|mixed    Page link.
  */
@@ -215,7 +215,7 @@ function uwp_get_profile_page_url() {
  * Returns the page link for users page.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array|bool|mixed    Page link.
  */
@@ -228,7 +228,7 @@ function uwp_get_users_page_url() {
  * If output type is "link", then only the link is returned.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string              $page_type      Page type.
  * @param       string              $output_type    Link or Array?
@@ -304,7 +304,7 @@ function uwp_get_page_url_data($page_type, $output_type = 'link') {
  * Returns the page info like page title, slug and link.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $page_data      Page data array.
  * @param       string      $page_type      Page type.
@@ -331,7 +331,7 @@ add_action('init', 'uwp_process_activation_link');
  * Handles the activation request coming via email activation link.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      void
  */

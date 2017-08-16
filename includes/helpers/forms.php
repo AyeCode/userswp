@@ -3,7 +3,7 @@
  * Returns the register form fields.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array       Form fields.
  */
@@ -20,7 +20,7 @@ function get_register_form_fields() {
  * Returns the register form validate-able fields.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       int         $role_id    Role ID from role addons. Default 0.
  *
@@ -45,7 +45,7 @@ function get_register_validate_form_fields($role_id) {
  * Returns the change password form validate-able fields.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array       Validate-able fields
  */
@@ -65,7 +65,7 @@ function get_change_validate_form_fields() {
  * Returns the account form fields.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       string      $extra_where    Extra where query.
  *
@@ -82,7 +82,7 @@ function get_account_form_fields($extra_where = '') {
  * Returns the change password form fields.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      array       Form fields.
  */
@@ -102,7 +102,7 @@ function get_change_form_fields() {
  * Validates the submitted form data.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       array       $data           Submitted form data
  * @param       string      $type           Form type.
@@ -111,7 +111,7 @@ function get_change_form_fields() {
  * @return      array|mixed|void|WP_Error   Validated form data.
  */
 function uwp_validate_fields($data, $type, $fields = false) {
-    $validation = new Users_WP_Validation();
+    $validation = new UsersWP_Validation();
     return $validation->validate_fields($data, $type, $fields);
 }
 
@@ -119,7 +119,7 @@ function uwp_validate_fields($data, $type, $fields = false) {
  * Returns form field label. If empty returns the field title.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @param       object      $field      Field info.
  *
@@ -138,7 +138,7 @@ function uwp_get_form_label($field) {
  * Displays admin settings form.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  *
  * @return      string      Form html.
  */

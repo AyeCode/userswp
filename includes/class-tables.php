@@ -5,7 +5,7 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Tables {
+class UsersWP_Tables {
 
     public function __construct() {
         add_filter( 'wpmu_drop_tables', array($this, 'drop_tables_on_delete_blog'));
@@ -15,7 +15,7 @@ class Users_WP_Tables {
      * Creates UsersWP related tables.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @return      void
      */
@@ -135,7 +135,7 @@ class Users_WP_Tables {
      * Creates uwp_usermeta table which introduced in version 1.0.1
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @return      void
      */
@@ -178,7 +178,7 @@ class Users_WP_Tables {
      * Deleting the table whenever a blog is deleted
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       array       $tables     Tables to delete.
      *
@@ -196,7 +196,7 @@ class Users_WP_Tables {
      * Returns the table prefix based on the installation type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @return      string      Table prefix
      */
@@ -214,7 +214,7 @@ class Users_WP_Tables {
      * Checks whether the column exists in the table.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string      $db             Table name.
      * @param       string      $column         Column name.
@@ -239,7 +239,7 @@ class Users_WP_Tables {
      * Adds column if not exist in the table.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       string      $db             Table name.
      * @param       string      $column         Column name.

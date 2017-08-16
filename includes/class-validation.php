@@ -7,13 +7,13 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Validation {
+class UsersWP_Validation {
 
     /**
      * Validates the submitted form data.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      *
      * @param       array       $data           Submitted form data
      * @param       string      $type           Form type.

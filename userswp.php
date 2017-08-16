@@ -40,17 +40,17 @@ function activate_users_wp($network_wide) {
             switch_to_blog( $main_blog_id );
 
             require_once('includes/class-activator.php');
-            Users_WP_Activator::activate();
+            UsersWP_Activator::activate();
 
             // Restore original blog.
             restore_current_blog();
         } else {
             require_once('includes/class-activator.php');
-            Users_WP_Activator::activate();
+            UsersWP_Activator::activate();
         }
     } else {
         require_once('includes/class-activator.php');
-        Users_WP_Activator::activate();
+        UsersWP_Activator::activate();
     }
     
 }
@@ -60,7 +60,7 @@ function activate_users_wp($network_wide) {
  */
 function deactivate_users_wp() {
     require_once('includes/class-deactivator.php');
-    Users_WP_Deactivator::deactivate();
+    UsersWP_Deactivator::deactivate();
 }
 register_activation_hook( __FILE__, 'activate_users_wp' );
 register_deactivation_hook( __FILE__, 'deactivate_users_wp' );
@@ -82,7 +82,7 @@ require_once('widgets/login.php');
  * @since 1.0.0
  */
 function run_users_wp() {
-    $plugin = new Users_WP();
+    $plugin = new UsersWP();
     $plugin->run();
 }
 run_users_wp();
