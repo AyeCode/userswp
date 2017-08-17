@@ -396,7 +396,7 @@ class UsersWP_Forms {
                 site_url()
             );
             
-            $message .= $act_url . "\r\n";
+            $message .= "<a href='".$act_url."' target='_blank'>".$act_url."</a>" . "\r\n";
             
             $login_details = __('<p><b>' . __('Please activate your account :', 'userswp') . '</b></p>
             <p>' . $message . '</p>');
@@ -764,7 +764,7 @@ class UsersWP_Forms {
                     'key' => $key,
                     'login' => rawurlencode($user_data->user_login),
                 ), get_permalink($reset_page) );
-                $message .= $reset_link . "\r\n";
+                $message .= "<a href='".$reset_link."' target='_blank'>".$reset_link."</a>" . "\r\n";
             } else {
                 $message .= site_url("reset?key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
             }
