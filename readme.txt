@@ -116,6 +116,7 @@ No questions so far, but don't hesitate to ask!
 * Major code refactoring - CHANGED
 * Class names renamed from Users_WP to UsersWP for better naming and consistency - CHANGED
 * Email links are dislayed as plain text - FIXED
+* Login widget redirects to current page - ADDED
 
 = 1.0.6 =
 * First release on WordPress.org - :)

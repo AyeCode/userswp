@@ -460,8 +460,8 @@ class UsersWP_Forms {
 
                 $email = new UsersWP_Mails();
                 $send_result = $email->send( 'mod_pending', $user_id );
-
-                $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result);
+                $user_data = get_user_by('id', $user_id);
+                $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
                 if (is_wp_error($send_result)) {
                     return $send_result;
                 }

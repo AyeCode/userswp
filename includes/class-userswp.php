@@ -75,6 +75,7 @@ class UsersWP {
         $this->admin_settings = new UsersWP_Admin_Settings($this->form_builder);
         $this->admin = new UsersWP_Admin($this->admin_settings);
         $this->ajax = new UsersWP_Ajax($this->form_builder);
+        
     }
 
     /**
