@@ -244,7 +244,7 @@ class UsersWP_Profile {
      * @param       object      $user       The User ID.
      * @return      string                  Tab title.
      */
-    public function get_profile_extra_count($user) {
+    public function get_profile_count_icon($user) {
         return '<i class="fa fa-user"></i>';
     }
 
@@ -401,7 +401,7 @@ class UsersWP_Profile {
         if (in_array('more_info', $allowed_tabs) && $extra) {
             $tabs['more_info']  = array(
                 'title' => __( 'More Info', 'userswp' ),
-                'count' => $this->get_profile_extra_count($user)
+                'count' => $this->get_profile_count_icon($user)
             );
         }
 
@@ -1633,17 +1633,27 @@ class UsersWP_Profile {
         $privacy = $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
 
         foreach ($fields as $field) {
+            if ($field->field_icon != '') {
+                $icon = '<i class="'.$field->field_icon.'"></i>';
+            } else {
+                $field_icon = uwp_field_type_to_fa_icon($field->field_type);
+                if ($field_icon) {
+                    $icon = '<i class="'.$field_icon.'"></i>';
+                } else {
+                    $icon = '<i class="fa fa-user"></i>';
+                }
+            }
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);
             if ($field->is_public == '1') {
                 $tabs[$key] = array(
                     'title' => __($field->site_title, 'userswp'),
-                    'count' => 1
+                    'count' => $icon
                 );
             } else {
                 if (!in_array($field->htmlvar_name.'_privacy', $privacy)) {
                     $tabs[$key] = array(
                         'title' => __($field->site_title, 'userswp'),
-                        'count' => 1
+                        'count' => $icon
                     );
                 }
             }

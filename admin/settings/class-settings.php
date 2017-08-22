@@ -44,6 +44,7 @@ class UsersWP_Admin_Settings {
         add_action( 'uwp_form_builder_settings_main_tab_content', array($this, 'get_form_builder_content') );
         add_filter( 'uwp_display_form_title', array($this, 'display_form_title'), 10, 3 );
         add_action( 'uwp_notifications_settings_main_tab_content', array($this, 'get_notifications_content') );
+        add_action( 'uwp_notifications_settings_admin_tab_content', array($this, 'generic_display_form') );
         
     }
     
@@ -690,7 +691,25 @@ class UsersWP_Admin_Settings {
                         ),
                     )
                 ),
-                'admin' => apply_filters( 'uwp_settings_notifications_admin', array()),
+                'admin' => apply_filters( 'uwp_settings_notifications_admin',
+                    array(
+                        'registration_success_email_subject_admin' => array(
+                            'id' => 'registration_success_email_subject_admin',
+                            'name' => __( 'New account registration', 'userswp' ),
+                            'desc' => "",
+                            'type' => 'text',
+                            'std' => __( 'New account registration', 'userswp' ),
+                            'size' => 'regular',
+                        ),
+                        'registration_success_email_content_admin' => array(
+                            'id' => 'registration_success_email_content_admin',
+                            'name' => "",
+                            'desc' => "",
+                            'type' => 'textarea',
+                            'std' => __("A user has been registered recently on your website. [#extras#]", "userswp"),
+                        ),
+                    )
+                ),
             ),
         );
 

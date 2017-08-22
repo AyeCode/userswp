@@ -347,7 +347,9 @@ class UsersWP_Files {
         if ($value) {
 
             $upload_dir = wp_upload_dir();
-            $value = $upload_dir['baseurl'].$value;
+            if (substr( $value, 0, 4 ) !== "http") {
+                $value = $upload_dir['baseurl'].$value;
+            }
 
             $file = basename( $value );
             $filetype = wp_check_filetype($file);

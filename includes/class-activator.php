@@ -101,6 +101,9 @@ class UsersWP_Activator {
         $register_success_subject = __('Your Log In Details', 'userswp');
         $register_success_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
+        $register_success_subject_admin = __( 'New account registration', 'userswp' );
+        $register_success_content_admin = __("A user has been registered recently on your website. [#extras#]", "userswp");
+
         $register_activate_subject = __('Please activate your account', 'userswp');
         $register_activate_content = __("<p>Dear [#user_name#],</p><p>Thank you for signing up with [#site_name#]</p>[#login_details#]<p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
@@ -116,8 +119,11 @@ class UsersWP_Activator {
         $account_update_subject = __('[#site_name#] - Account has been updated', 'userswp');
         $account_update_content = __("<p>Dear [#user_name#],<p><p>Your account has been updated successfully</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
-        $settings['registration_success_email_subject'] = $register_success_subject;
-        $settings['registration_success_email_content'] = $register_success_content;
+        $settings['registration_success_email_subject'] = $register_success_subject_admin;
+        $settings['registration_success_email_content'] = $register_success_content_admin;
+
+        $settings['registration_success_email_subject_admin'] = $register_success_subject;
+        $settings['registration_success_email_content_admin'] = $register_success_content;
 
         $settings['registration_activate_email_subject'] = $register_activate_subject;
         $settings['registration_activate_email_content'] = $register_activate_content;

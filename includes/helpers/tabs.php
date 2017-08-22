@@ -210,6 +210,7 @@ function uwp_get_settings_tabs() {
     // wp-admin/admin.php?page=uwp_notifications
     $tabs['uwp_notifications'] = array(
         'main' => __( 'Users', 'userswp' ),
+        'admin' => __( 'Admin', 'userswp' )
     );
 
     return apply_filters( 'uwp_settings_tabs', $tabs );

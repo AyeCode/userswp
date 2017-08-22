@@ -420,14 +420,22 @@ class UsersWP_Forms {
             }
         }
 
+        if ($reg_action != 'require_admin_review') {
+            $register_admin_notify = uwp_get_option('register_admin_notify', '');
+            if ($register_admin_notify == '1') {
+                $admin_register_send_result = $email->send_admin_email('register_admin', $user_id);
+                if (is_wp_error($admin_register_send_result)) {
+                    return $admin_register_send_result;
+                }
+            }
+
+        }
+
 
         $error_code = $errors->get_error_code();
         if (!empty($error_code)) {
             return $errors;
         }
-
-
-        $reg_action = uwp_get_option('uwp_registration_action', false);
 
         if ($reg_action == 'auto_approve_login') {
             $res = wp_signon(

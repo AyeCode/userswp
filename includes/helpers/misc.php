@@ -1331,3 +1331,33 @@ function uwp_str_ends_with($haystack, $needle)
     return (substr($haystack, -$length) === $needle);
 }
 
+/**
+ * Returns the font awesome icon value for field type. 
+ * Displayed in profile tabs.
+ *
+ * @since       1.0.0
+ * @package     userswp
+ *
+ * @param       string      $type       Field type.
+ *
+ * @return      string                  Font awesome icon value.
+ */
+function uwp_field_type_to_fa_icon($type) {
+    $field_types = array(
+        'text' => 'fa fa-minus',
+        'datepicker' => 'fa fa-calendar',
+        'textarea' => 'fa fa-bars',
+        'time' =>'fa fa-clock-o',
+        'checkbox' =>'fa fa-check-square-o',
+        'phone' =>'fa fa-phone',
+        'radio' =>'fa fa-dot-circle-o',
+        'email' =>'fa fa-envelope-o',
+        'select' =>'fa fa-caret-square-o-down',
+        'multiselect' =>'fa fa-caret-square-o-down',
+        'url' =>'fa fa-link',
+        'file' =>'fa fa-file'
+    );
+    
+    return $field_types[$type];
+    
+}

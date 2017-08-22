@@ -40,6 +40,14 @@ function uwp_settings_general_register_fields() {
             'placeholder' => __( 'Select a page', 'userswp' ),
             'class' => 'uwp_label_block',
         ),
+        'register_admin_notify' => array(
+            'id'   => 'register_admin_notify',
+            'name' => __( 'Enable admin email notification?', 'userswp' ),
+            'desc' => 'When enabled an email will be sent to the admin for every user registration.',
+            'type' => 'checkbox',
+            'std'  => '0',
+            'class' => 'uwp_label_inline',
+        ),
     );
     return $fields;
 }
