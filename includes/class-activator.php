@@ -19,10 +19,11 @@ class UsersWP_Activator {
     public static function activate() {
 
 //        $installed_ver = get_option( "uwp_db_version" );
-        
+
+        self::load_dependencies();
+
         if (!get_option('uwp_default_data_installed')) {
             // This is a fresh install
-            self::load_dependencies();
             self::generate_pages();
             self::add_default_options();
             self::uwp_create_tables();
@@ -54,6 +55,8 @@ class UsersWP_Activator {
      * @return      void
      */
     public static function load_dependencies() {
+        require_once dirname( __FILE__ ) . '/class-tables.php';
+        require_once dirname( __FILE__ ) . '/class-pages.php';
         require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-formbuilder.php';
     }
 
