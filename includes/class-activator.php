@@ -18,9 +18,10 @@ class UsersWP_Activator {
      */
     public static function activate() {
 
-        $installed_ver = get_option( "uwp_db_version" );
+//        $installed_ver = get_option( "uwp_db_version" );
         
         if (!get_option('uwp_default_data_installed')) {
+            // This is a fresh install
             self::load_dependencies();
             self::generate_pages();
             self::add_default_options();
@@ -36,13 +37,9 @@ class UsersWP_Activator {
             update_option('uwp_default_data_installed', 1);
         } else {
             // already installed
-            if (!$installed_ver) {
-                // Previous Version was beta
-                self::uwp_create_tables();
-                self::uwp101_create_tables();
-                update_option('uwp_db_version', USERSWP_VERSION);
-                update_option('uwp_default_data_installed', 1);
-            }
+            self::uwp_create_tables();
+            self::uwp101_create_tables();
+            update_option('uwp_db_version', USERSWP_VERSION);
         }
 
 

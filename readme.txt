@@ -120,6 +120,7 @@ No questions so far, but don't hesitate to ask!
 * Register admin notification setting - ADDED
 * File Preview Not working properly - FIXED
 * Font awesome icon displayed instead of count 1 for custom field "display as tab" - CHANGED
+* Updates not creating the new table columns - FIXED
 
 = 1.0.6 =
 * First release on WordPress.org - :)
