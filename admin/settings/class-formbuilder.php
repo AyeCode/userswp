@@ -615,7 +615,7 @@ class UsersWP_Form_Builder {
                             <li>
                                 <label for="form_label" class="uwp-tooltip-wrap"> <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Form Label: (Optional)', 'userswp'); ?>
                                     <div class="uwp-tooltip">
-                                        <?php _e('If your form label is different, then you can fill this field. Ex: You would like to display "What is your age?" in Form Field but would like to display "DOB" in site. In such cases "What is your age?" should be entered here and "DOB" should be entered in previous field. Note: If this field not field, then the previous field will be used in Form. ', 'userswp'); ?>
+                                        <?php _e('If your form label is different, then you can fill this field. Ex: You would like to display "What is your age?" in Form Field but would like to display "DOB" in site. In such cases "What is your age?" should be entered here and "DOB" should be entered in previous field. Note: If this field not filled, then the previous field will be used in Form. ', 'userswp'); ?>
                                     </div>
                                 </label>
                                 <div class="uwp-input-wrap">
@@ -970,6 +970,10 @@ class UsersWP_Form_Builder {
                                         "[profile_side]" => __("Profile Side", 'userswp'),
                                     );
 
+                                    if ($field_type != 'fieldset') {
+                                        $show_in_locations["[fieldset]"] = __("Fieldset", 'userswp');
+                                    }
+                                    
                                     $show_in_locations = apply_filters('uwp_show_in_locations', $show_in_locations, $field_info, $field_type);
 
                                     

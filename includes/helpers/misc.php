@@ -1357,7 +1357,11 @@ function uwp_field_type_to_fa_icon($type) {
         'url' =>'fa fa-link',
         'file' =>'fa fa-file'
     );
-    
-    return $field_types[$type];
+
+    if (isset($field_types[$type])) {
+        return $field_types[$type];
+    } else {
+        return "";
+    }
     
 }

@@ -1628,7 +1628,7 @@ class UsersWP_Profile {
     {
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
         $usermeta = uwp_get_usermeta_row($user->ID);
         $privacy = $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
 
@@ -1675,16 +1675,56 @@ class UsersWP_Profile {
 
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'fieldset' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' ORDER BY sort_order ASC");
 
+        $fieldsets = array();
+        $fieldset = false;
         foreach ($fields as $field) {
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);
-            if ($key == $active_tab) {
+            if ($field->field_type == 'fieldset') {
+                $fieldset = $key;
+            }
+            $show_in = explode(',',$field->show_in);
+            if (in_array("[fieldset]", $show_in)) {
+                $fieldsets[$fieldset][] = $field;
+            }
+            if ($key == $active_tab && $field->field_type != 'fieldset') {
                 $value = $this->uwp_get_field_value($field, $user);
                 echo '<div class="uwp_profile_tab_field_content">';
                 echo $value;
                 echo '</div>';
             }
+        }
+
+        if (isset($fieldsets[$active_tab])) {
+            $fieldset_fields = $fieldsets[$active_tab];
+            ?>
+            <div class="uwp-profile-extra">
+                <div class="uwp-profile-extra-div form-table">
+                <?php
+                foreach ($fieldset_fields as $field) {
+                    $value = $this->uwp_get_field_value($field, $user);
+                    // Icon
+                    if ($field->field_icon) {
+                        $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
+                    } else {
+                        $icon = '';
+                    }
+                    ?>
+                    <div class="uwp-profile-extra-wrap">
+                        <div class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
+                        <div class="uwp-profile-extra-value">
+                            <?php
+                                echo $value;
+                            ?>
+                        </div>
+                    </div>
+                    <?php
+                }
+                ?>
+                </div>
+            </div>
+            <?php
         }
     }
 
@@ -1774,6 +1814,7 @@ class UsersWP_Profile {
         // URL
         if ($field->field_type == 'url' && !empty($value)) {
             $link_text = $value;
+            // if deafult_value is not url then it will be used as link text. 
             if ($field->default_value && !empty($field->default_value) ) {
                 if (substr( $field->default_value, 0, 4 ) === "http") {
                     $link_text = $value;
@@ -1781,6 +1822,10 @@ class UsersWP_Profile {
                     $link_text = $field->default_value;
                 }
             }
+            if (substr( $link_text, 0, 4 ) === "http") {
+                $link_text = esc_url($link_text);
+            }
+
             $value = '<a href="'.$value.'">'.$link_text.'</a>';
         }
 
@@ -1801,7 +1846,7 @@ class UsersWP_Profile {
         // Sanitize
         switch ($field->field_type) {
             case 'url':
-                $value = esc_url( $value );
+                // already escaped
                 break;
             case 'file':
                 // already escaped
