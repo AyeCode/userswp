@@ -1794,6 +1794,7 @@ class UsersWP_Profile {
             }
         }
 
+        // Date
         if ($field->field_type == 'datepicker') {
             $extra_fields = unserialize($field->extra_fields);
 
@@ -1810,6 +1811,10 @@ class UsersWP_Profile {
         }
 
 
+        // Time
+        if ($field->field_type == 'time') {
+            $value = date(get_option('time_format'), strtotime($value));
+        }
 
         // URL
         if ($field->field_type == 'url' && !empty($value)) {
