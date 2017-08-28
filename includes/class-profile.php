@@ -1673,11 +1673,11 @@ class UsersWP_Profile {
      */
     public function uwp_extra_fields_as_tab_values($user, $active_tab)
     {
-
-
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' ORDER BY sort_order ASC");
+        $usermeta = uwp_get_usermeta_row($user->ID);
+        $privacy = $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
 
         $fieldsets = array();
         $fieldset = false;
@@ -1705,6 +1705,17 @@ class UsersWP_Profile {
                 <div class="uwp-profile-extra-div form-table">
                 <?php
                 foreach ($fieldset_fields as $field) {
+                    $display = false;
+                    if ($field->is_public == '1') {
+                        $display = true;
+                    } else {
+                        if (!in_array($field->htmlvar_name.'_privacy', $privacy)) {
+                            $display = true;
+                        }
+                    }
+                    if (!$display) {
+                        continue;
+                    }
                     $value = $this->uwp_get_field_value($field, $user);
                     // Icon
                     if ($field->field_icon) {
