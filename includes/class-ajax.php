@@ -10,13 +10,9 @@
 class UsersWP_Ajax {
 
     private $form_builder;
-
     
     public function __construct($form_builder) {
-
         $this->form_builder = $form_builder;
-        add_action('wp_ajax_uwp_ajax_action', array($this, 'handler'));
-
     }
     
     /**

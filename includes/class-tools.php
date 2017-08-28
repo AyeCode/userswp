@@ -8,15 +8,7 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class UsersWP_Tools {
-
-    public function __construct() {
-        add_action('admin_init', array($this, 'uwp_tools_process_dummy_users'));
-        add_action('uwp_admin_sub_menus', array($this, 'uwp_add_admin_tools_sub_menu'), 100, 1);
-        add_action('uwp_tools_settings_main_tab_content', array($this, 'uwp_tools_main_tab_content'));
-        add_action('wp_ajax_uwp_process_diagnosis', array($this, 'uwp_process_diagnosis_ajax'));
-
-    }
-
+    
     public function uwp_fix_usermeta_table() {
         // If table not available it will be created else synced
         uwp_create_tables();

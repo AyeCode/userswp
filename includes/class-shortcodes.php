@@ -12,19 +12,7 @@ class UsersWP_Shortcodes {
     private $templates;
     
     public function __construct($templates) {
-
         $this->templates = $templates;
-
-        add_shortcode( 'uwp_register',  array($this, 'register'));
-        add_shortcode( 'uwp_login',     array($this, 'login'));
-        add_shortcode( 'uwp_forgot',    array($this, 'forgot'));
-        add_shortcode( 'uwp_change',    array($this, 'change'));
-        add_shortcode( 'uwp_reset',     array($this, 'reset'));
-        add_shortcode( 'uwp_account',   array($this, 'account'));
-        add_shortcode( 'uwp_profile',   array($this, 'profile'));
-        add_shortcode( 'uwp_users',     array($this, 'users'));
-        
-
     }
     
     /**

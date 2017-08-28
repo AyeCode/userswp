@@ -6,10 +6,6 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class UsersWP_Tables {
-
-    public function __construct() {
-        add_filter( 'wpmu_drop_tables', array($this, 'drop_tables_on_delete_blog'));
-    }
     
     /**
      * Creates UsersWP related tables.

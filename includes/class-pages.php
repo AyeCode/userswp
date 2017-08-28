@@ -8,14 +8,7 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class UsersWP_Pages {
-
     
-    public function __construct() {
-
-        add_action( 'wpmu_new_blog', array($this, 'wpmu_generate_default_pages_on_new_site'), 10, 6 );
-        
-    }
-
     /**
      * Checks whether the current page is of given page type or not.
      *

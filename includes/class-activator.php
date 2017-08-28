@@ -17,9 +17,7 @@ class UsersWP_Activator {
      * @return      void
      */
     public static function activate() {
-
-//        $installed_ver = get_option( "uwp_db_version" );
-
+        
         self::load_dependencies();
 
         if (!get_option('uwp_default_data_installed')) {

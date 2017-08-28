@@ -8,45 +8,7 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class UsersWP_Forms {
-
-    public function __construct() {
-
-        add_action('init', array($this, 'init_notices'), 1);
-        add_action('init', array($this, 'handler'));
-        add_action('init', array($this, 'uwp_privacy_submit_handler'));
-        add_action('uwp_template_display_notices', array($this, 'display_notices'), 10, 1);
-        add_action('wp_ajax_uwp_upload_file_remove', array($this, 'uwp_upload_file_remove'));
-        //User search form
-        add_action('uwp_users_page_search_form_inner', array($this, 'uwp_users_search_form_text_field'), 10, 1);
-        add_action('uwp_users_page_search_form_inner', array($this, 'uwp_users_search_form_submit'), 50, 1);
-        add_action('personal_options_update', array($this, 'update_profile_extra_admin_edit'), 10, 1);
-        add_action('edit_user_profile_update', array($this, 'update_profile_extra_admin_edit'), 10, 1);
-        add_action('user_edit_form_tag', array($this, 'add_multipart_to_admin_edit_form'));
-        add_action('uwp_template_form_title_after', array($this, 'uwp_display_username_in_account'), 10, 1);
-
-
-        // Forms
-        add_filter('uwp_form_input_html_datepicker', array($this, 'uwp_form_input_datepicker'), 10, 4);
-        add_filter('uwp_form_input_html_time', array($this, 'uwp_form_input_time'), 10, 4);
-        add_filter('uwp_form_input_html_select', array($this, 'uwp_form_input_select'), 10, 4);
-        add_filter('uwp_form_input_html_multiselect', array($this, 'uwp_form_input_multiselect'), 10, 4);
-        add_filter('uwp_form_input_html_text', array($this, 'uwp_form_input_text'), 10, 4);
-        add_filter('uwp_form_input_html_textarea', array($this, 'uwp_form_input_textarea'), 10, 4);
-        add_filter('uwp_form_input_html_fieldset', array($this, 'uwp_form_input_fieldset'), 10, 4);
-        add_filter('uwp_form_input_html_file', array($this, 'uwp_form_input_file'), 10, 4);
-        add_filter('uwp_form_input_html_checkbox', array($this, 'uwp_form_input_checkbox'), 10, 4);
-        add_filter('uwp_form_input_html_radio', array($this, 'uwp_form_input_radio'), 10, 4);
-        add_filter('uwp_form_input_html_url', array($this, 'uwp_form_input_url'), 10, 4);
-        add_filter('uwp_form_input_html_email', array($this, 'uwp_form_input_email'), 10, 4);
-        add_filter('uwp_form_input_html_password', array($this, 'uwp_form_input_password'), 10, 4);
-        // Country select
-        add_filter('uwp_form_input_html_select_country', array($this, 'uwp_form_input_select_country'), 10, 4);
-        add_filter('uwp_forms_check_for_send_mail_errors', array($this, 'uwp_forms_check_for_send_mail_errors'), 10, 3);
-        add_filter('uwp_form_input_email_uwp_account_email_after', array($this, 'uwp_register_confirm_email_field'), 10, 4);
-        add_filter('uwp_form_input_password_uwp_account_password_after', array($this, 'uwp_register_confirm_password_field'), 10, 4);
-        
-    }
-
+    
     /**
      * Initialize UsersWP notices.
      *

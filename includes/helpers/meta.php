@@ -1,17 +1,4 @@
 <?php
-add_action('init', 'uwp_init_meta_filters');
-function uwp_init_meta_filters() {
-    $meta = new UsersWP_Meta();
-    add_action('user_register', array($meta, 'sync_usermeta'), 10, 1);
-    add_action('delete_user', array($meta, 'delete_usermeta_for_user'));
-
-    add_action('wp_login', array($meta, 'save_user_ip_on_login') ,10,2);
-    add_filter('uwp_before_extra_fields_save', array($meta, 'save_user_ip_on_register'), 10, 3);
-    add_filter('uwp_update_usermeta', array($meta, 'modify_privacy_value_on_update'), 10, 4);
-    add_filter('uwp_get_usermeta', array($meta, 'modify_privacy_value_on_get'), 10, 5);
-    add_filter('uwp_update_usermeta', array($meta, 'modify_datepicker_value_on_update'), 10, 3);
-    add_filter('uwp_get_usermeta', array($meta, 'modify_datepicker_value_on_get'), 10, 5);
-}
 /**
  * Gets UsersWP setting value using key.
  *

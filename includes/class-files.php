@@ -9,13 +9,6 @@
  */
 class UsersWP_Files {
     
-    public function __construct() {
-        if($this->uwp_doing_upload()){
-            add_filter( 'wp_handle_upload_prefilter', array($this, 'uwp_wp_media_restrict_file_types') );
-        }
-        add_filter('uwp_get_max_upload_size', array($this, 'uwp_modify_get_max_upload_size'), 10, 2);
-    }
-
     /**
      * Handles file upload request.
      *

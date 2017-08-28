@@ -35,6 +35,9 @@ class UsersWP {
     protected $i18n;
     protected $notices;
     protected $templates;
+    protected $meta;
+    protected $pages;
+    protected $files;
     protected $shortcodes;
     protected $assets;
     protected $admin;
@@ -43,6 +46,7 @@ class UsersWP {
     protected $form_builder;
     protected $ajax;
     protected $tools;
+    protected $tables;
 
     /**
      * Define the core functionality of the plugin.
@@ -61,6 +65,8 @@ class UsersWP {
 
         $this->load_dependencies();
         $this->loader = new UsersWP_Loader();
+        $this->meta = new UsersWP_Meta();
+        $this->pages = new UsersWP_Pages();
         $this->profile = new UsersWP_Profile();
         $this->forms = new UsersWP_Forms();
         $this->templates = new UsersWP_Templates();
@@ -70,12 +76,198 @@ class UsersWP {
         $this->form_builder = new UsersWP_Form_Builder();
         $this->menus = new UsersWP_Menus();
         $this->tools = new UsersWP_Tools();
+        $this->tables = new UsersWP_Tables();
 
         $this->shortcodes = new UsersWP_Shortcodes($this->templates);
         $this->admin_settings = new UsersWP_Admin_Settings($this->form_builder);
         $this->admin = new UsersWP_Admin($this->admin_settings);
         $this->ajax = new UsersWP_Ajax($this->form_builder);
+        $this->files = new UsersWP_Files();
         
+        
+        // actions and filters
+        $this->load_meta_actions_and_filters($this->meta);
+        $this->load_ajax_actions_and_filters($this->ajax);
+        $this->load_files_actions_and_filters($this->files);
+        $this->load_forms_actions_and_filters($this->forms);
+        $this->load_i18n_actions_and_filters($this->i18n);
+        $this->load_notices_actions_and_filters($this->notices);
+        $this->load_pages_actions_and_filters($this->pages);
+        $this->load_profile_actions_and_filters($this->profile);
+        $this->load_shortcodes_actions_and_filters($this->shortcodes);
+        $this->load_tables_actions_and_filters($this->tables);
+        $this->load_templates_actions_and_filters($this->templates);
+        $this->load_tools_actions_and_filters($this->tools);
+        
+    }
+    
+    
+    public function load_meta_actions_and_filters($instance) {
+        add_action('user_register', array($instance, 'sync_usermeta'), 10, 1);
+        add_action('delete_user', array($instance, 'delete_usermeta_for_user'));
+        add_action('wp_login', array($instance, 'save_user_ip_on_login') ,10,2);
+        add_filter('uwp_before_extra_fields_save', array($instance, 'save_user_ip_on_register'), 10, 3);
+        add_filter('uwp_update_usermeta', array($instance, 'modify_privacy_value_on_update'), 10, 4);
+        add_filter('uwp_get_usermeta', array($instance, 'modify_privacy_value_on_get'), 10, 5);
+        add_filter('uwp_update_usermeta', array($instance, 'modify_datepicker_value_on_update'), 10, 3);
+        add_filter('uwp_get_usermeta', array($instance, 'modify_datepicker_value_on_get'), 10, 5);
+    }
+    
+    public function load_ajax_actions_and_filters($instance) {
+        add_action('wp_ajax_uwp_ajax_action', array($instance, 'handler'));
+    }
+
+    public function load_files_actions_and_filters($instance) {
+        if($instance->uwp_doing_upload()){
+            add_filter( 'wp_handle_upload_prefilter', array($instance, 'uwp_wp_media_restrict_file_types') );
+        }
+        add_filter('uwp_get_max_upload_size', array($instance, 'uwp_modify_get_max_upload_size'), 10, 2);
+    }
+
+    public function load_forms_actions_and_filters($instance) {
+        add_action('init', array($instance, 'init_notices'), 1);
+        add_action('init', array($instance, 'handler'));
+        add_action('init', array($instance, 'uwp_privacy_submit_handler'));
+        add_action('uwp_template_display_notices', array($instance, 'display_notices'), 10, 1);
+        add_action('wp_ajax_uwp_upload_file_remove', array($instance, 'uwp_upload_file_remove'));
+        //User search form
+        add_action('uwp_users_page_search_form_inner', array($instance, 'uwp_users_search_form_text_field'), 10, 1);
+        add_action('uwp_users_page_search_form_inner', array($instance, 'uwp_users_search_form_submit'), 50, 1);
+        add_action('personal_options_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
+        add_action('edit_user_profile_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
+        add_action('user_edit_form_tag', array($instance, 'add_multipart_to_admin_edit_form'));
+        add_action('uwp_template_form_title_after', array($instance, 'uwp_display_username_in_account'), 10, 1);
+
+
+        // Forms
+        add_filter('uwp_form_input_html_datepicker', array($instance, 'uwp_form_input_datepicker'), 10, 4);
+        add_filter('uwp_form_input_html_time', array($instance, 'uwp_form_input_time'), 10, 4);
+        add_filter('uwp_form_input_html_select', array($instance, 'uwp_form_input_select'), 10, 4);
+        add_filter('uwp_form_input_html_multiselect', array($instance, 'uwp_form_input_multiselect'), 10, 4);
+        add_filter('uwp_form_input_html_text', array($instance, 'uwp_form_input_text'), 10, 4);
+        add_filter('uwp_form_input_html_textarea', array($instance, 'uwp_form_input_textarea'), 10, 4);
+        add_filter('uwp_form_input_html_fieldset', array($instance, 'uwp_form_input_fieldset'), 10, 4);
+        add_filter('uwp_form_input_html_file', array($instance, 'uwp_form_input_file'), 10, 4);
+        add_filter('uwp_form_input_html_checkbox', array($instance, 'uwp_form_input_checkbox'), 10, 4);
+        add_filter('uwp_form_input_html_radio', array($instance, 'uwp_form_input_radio'), 10, 4);
+        add_filter('uwp_form_input_html_url', array($instance, 'uwp_form_input_url'), 10, 4);
+        add_filter('uwp_form_input_html_email', array($instance, 'uwp_form_input_email'), 10, 4);
+        add_filter('uwp_form_input_html_password', array($instance, 'uwp_form_input_password'), 10, 4);
+        // Country select
+        add_filter('uwp_form_input_html_select_country', array($instance, 'uwp_form_input_select_country'), 10, 4);
+        add_filter('uwp_forms_check_for_send_mail_errors', array($instance, 'uwp_forms_check_for_send_mail_errors'), 10, 3);
+        add_filter('uwp_form_input_email_uwp_account_email_after', array($instance, 'uwp_register_confirm_email_field'), 10, 4);
+        add_filter('uwp_form_input_password_uwp_account_password_after', array($instance, 'uwp_register_confirm_password_field'), 10, 4);
+    }
+
+    public function load_i18n_actions_and_filters($instance) {
+        add_action( 'init', array($instance, 'load_plugin_textdomain'));
+    }
+
+    public function load_notices_actions_and_filters($instance) {
+        add_action('uwp_template_display_notices', array($instance, 'display_registration_disabled_notice'));
+        add_action('uwp_template_display_notices', array($instance, 'form_notice_by_key'));
+        add_action( 'admin_notices', array( $instance, 'show_admin_notices' ) );
+        add_action( 'admin_notices', array($instance, 'uwp_admin_notices') );
+    }
+
+    public function load_pages_actions_and_filters($instance) {
+        add_action( 'wpmu_new_blog', array($instance, 'wpmu_generate_default_pages_on_new_site'), 10, 6 );
+    }
+
+    public function load_profile_actions_and_filters($instance) {
+        add_action( 'template_redirect', array($instance, 'uwp_redirect_author_page') , 10 , 2 );
+        //profile page
+        add_filter('query_vars', array($instance, 'profile_query_vars'), 10, 1 );
+        add_action('init', array($instance, 'rewrite_profile_link') , 10, 1 );
+        add_filter( 'uwp_profile_link', array($instance, 'get_profile_link'), 10, 2 );
+        add_filter( 'edit_profile_url', array($instance, 'uwp_modify_admin_bar_edit_profile_url'), 10, 3);
+        add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
+        remove_all_filters('get_avatar');
+        add_filter( 'get_avatar', array($instance, 'uwp_modify_get_avatar') , 1 , 5 );
+        add_filter( 'get_comment_author_link', array($instance, 'uwp_get_comment_author_link') , 10 , 2 );
+        add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 1 );
+        add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
+        add_action( 'uwp_profile_title', array($instance, 'get_profile_title'), 10, 1 );
+        //add_action( 'uwp_profile_bio', array($instance, 'get_profile_bio'), 10, 1 );
+        add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 1 );
+
+        //Fields as tabs
+        add_action( 'uwp_profile_tabs', array($instance, 'uwp_extra_fields_as_tabs'), 10, 2 );
+
+        // Popup and crop functions
+        add_filter( 'ajax_query_attachments_args', array($instance, 'uwp_restrict_attachment_display') );
+
+        add_action( 'uwp_handle_file_upload_error_checks', array($instance, 'uwp_handle_file_upload_error_checks'), 10, 4 );
+        add_action( 'wp_ajax_uwp_avatar_banner_upload', array($instance, 'uwp_ajax_avatar_banner_upload') );
+        //add_action( 'wp_ajax_uwp_ajax_image_crop_popup', array($instance, 'uwp_ajax_image_crop_popup') );
+        add_action( 'wp_ajax_uwp_ajax_image_crop_popup_form', array($instance, 'uwp_ajax_image_crop_popup_form') );
+        add_action( 'wp_head', array($instance, 'uwp_define_ajaxurl') );
+        add_action( 'uwp_profile_header', array($instance, 'uwp_image_crop_init'), 10, 1 );
+        add_action( 'uwp_admin_profile_edit', array($instance, 'uwp_image_crop_init'), 10, 1 );
+
+        // Profile Tabs
+        add_action( 'uwp_profile_content', array($instance, 'get_profile_tabs_content'), 10, 1 );
+        add_action( 'uwp_profile_more_info_tab_content', array($instance, 'get_profile_more_info'), 10, 1);
+        add_action( 'uwp_profile_posts_tab_content', array($instance, 'get_profile_posts'), 10, 1);
+        add_action( 'uwp_profile_comments_tab_content', array($instance, 'get_profile_comments'), 10, 1);
+        add_action( 'uwp_profile_tab_content', array($instance, 'uwp_extra_fields_as_tab_values'), 10, 2 );
+
+        // Profile Pagination
+        add_action( 'uwp_profile_pagination', array($instance, 'get_profile_pagination'));
+
+        // Users
+        add_action( 'uwp_users_search', array($instance, 'uwp_users_search'));
+        add_action( 'uwp_users_list', array($instance, 'uwp_users_list'));
+        add_action( 'uwp_users_extra', array($instance, 'get_users_extra'));
+        add_action( 'uwp_profile_bio', array($instance, 'get_profile_side_extra'));
+
+
+        // User, allow subscribers to upload profile and banner pictures
+        add_filter( 'plupload_default_params', array($instance, 'add_uwp_plupload_param'), 10, 1 );
+        add_filter( 'user_has_cap', array($instance, 'allow_all_users_profile_uploads'), 10, 4 );
+    }
+
+    public function load_shortcodes_actions_and_filters($instance) {
+        add_shortcode( 'uwp_register',  array($instance, 'register'));
+        add_shortcode( 'uwp_login',     array($instance, 'login'));
+        add_shortcode( 'uwp_forgot',    array($instance, 'forgot'));
+        add_shortcode( 'uwp_change',    array($instance, 'change'));
+        add_shortcode( 'uwp_reset',     array($instance, 'reset'));
+        add_shortcode( 'uwp_account',   array($instance, 'account'));
+        add_shortcode( 'uwp_profile',   array($instance, 'profile'));
+        add_shortcode( 'uwp_users',     array($instance, 'users'));
+    }
+    
+    public function load_tables_actions_and_filters($instance) {
+        add_filter( 'wpmu_drop_tables', array($instance, 'drop_tables_on_delete_blog'));
+    }
+    
+    public function load_templates_actions_and_filters($instance) {
+        add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
+        add_action( 'uwp_template_fields', array($instance, 'uwp_template_fields'), 10, 1 );
+        add_action( 'uwp_account_form_display', array($instance, 'uwp_account_edit_form_display'), 10, 1 );
+        add_action( 'wp_logout', array($instance, 'logout_redirect'));
+        add_action( 'init', array($instance, 'wp_login_redirect'));
+        add_action( 'admin_init', array($instance, 'uwp_activation_redirect'));
+        // Redirect functions
+        add_action( 'template_redirect', array($instance, 'profile_redirect'), 10);
+        add_action( 'template_redirect', array($instance, 'access_checks'), 20);
+        // Admin user edit page
+        add_action( 'edit_user_profile', array($instance, 'get_profile_extra_admin_edit'), 10, 1 );
+        add_action( 'show_user_profile', array($instance, 'get_profile_extra_admin_edit'), 10, 1 );
+
+
+        add_filter( 'wp_setup_nav_menu_item', array($instance, 'uwp_setup_nav_menu_item'), 10, 1 );
+        add_filter( 'the_content', array($instance, 'uwp_author_page_content'), 10, 1 );
+        add_filter('body_class', array($instance, 'uwp_add_body_class'), 10, 1 );
+    }
+    
+    public function load_tools_actions_and_filters($instance) {
+        add_action('admin_init', array($instance, 'uwp_tools_process_dummy_users'));
+        add_action('uwp_admin_sub_menus', array($instance, 'uwp_add_admin_tools_sub_menu'), 100, 1);
+        add_action('uwp_tools_settings_main_tab_content', array($instance, 'uwp_tools_main_tab_content'));
+        add_action('wp_ajax_uwp_process_diagnosis', array($instance, 'uwp_process_diagnosis_ajax'));
     }
 
     /**

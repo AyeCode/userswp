@@ -9,15 +9,6 @@
  */
 class UsersWP_Notices {
     
-    public function __construct() {
-
-        add_action('uwp_template_display_notices', array($this, 'display_registration_disabled_notice'));
-        add_action('uwp_template_display_notices', array($this, 'form_notice_by_key'));
-        add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
-        add_action( 'admin_notices', array($this, 'uwp_admin_notices') );
-
-    }
-
     /**
      * Wrap notice with a div.
      *
