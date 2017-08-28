@@ -123,6 +123,7 @@ No questions so far, but don't hesitate to ask!
 * Updates not creating the new table columns - FIXED
 * Fieldset with its fields can be displayed in own profile tab - ADDED
 * Url field value not getting printed in more info tab - FIXED
+* Bio not displaying correctly - FIXED
 
 = 1.0.6 =
 * First release on WordPress.org - :)
