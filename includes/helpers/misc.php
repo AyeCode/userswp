@@ -288,7 +288,6 @@ function get_uwp_users_list() {
 
     $where = '';
     $where = apply_filters('uwp_users_search_where', $where, $keyword);
-    //var_dump($where);
 
     if ($keyword || $where) {
         if (empty($where)) {
@@ -728,13 +727,13 @@ function uwp_account_privacy_edit_form_display($type) {
                                     <?php
                                     $field_name = $field->htmlvar_name.'_privacy';
                                     $value = uwp_get_usermeta($user_id, $field_name, false);
-                                    if ($value === false) {
-                                        $value = '1';
+                                     if ($value === false) {
+                                        $value = 'yes';
                                     }
                                     ?>
                                     <select name="<?php echo $field_name; ?>" class="uwp_privacy_field" style="margin: 0;">
-                                        <option value="0" <?php selected( $value, "0" ); ?>><?php echo __("No", "userswp") ?></option>
-                                        <option value="1" <?php selected( $value, "1" ); ?>><?php echo __("Yes", "userswp") ?></option>
+                                        <option value="no" <?php selected( $value, "no" ); ?>><?php echo __("No", "userswp") ?></option>
+                                        <option value="yes" <?php selected( $value, "yes" ); ?>><?php echo __("Yes", "userswp") ?></option>
                                     </select>
                                 </div>
                             </div>

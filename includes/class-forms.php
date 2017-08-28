@@ -1866,7 +1866,7 @@ class UsersWP_Forms {
                           title="<?php echo $site_title; ?>"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                           type="<?php echo $field->field_type; ?>"
-                          rows="4"><?php echo $value; ?></textarea>
+                          rows="4"><?php echo stripslashes($value); ?></textarea>
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
                     <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>

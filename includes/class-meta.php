@@ -8,20 +8,6 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class UsersWP_Meta {
-    
-    public function __construct() {
-
-        add_action('user_register', array($this, 'sync_usermeta'), 10, 1);
-        add_action('delete_user', array($this, 'delete_usermeta_for_user'));
-
-        add_action('wp_login', array($this, 'save_user_ip_on_login') ,10,2);
-        add_filter('uwp_before_extra_fields_save', array($this, 'save_user_ip_on_register'), 10, 3);
-        add_filter('uwp_update_usermeta', array($this, 'modify_privacy_value_on_update'), 10, 4);
-        add_filter('uwp_get_usermeta', array($this, 'modify_privacy_value_on_get'), 10, 5);
-        add_filter('uwp_update_usermeta', array($this, 'modify_datepicker_value_on_update'), 10, 3);
-        add_filter('uwp_get_usermeta', array($this, 'modify_datepicker_value_on_get'), 10, 5);
-
-    }
 
     /**
      * Gets UsersWP setting value using key.
@@ -112,6 +98,8 @@ class UsersWP_Meta {
                 }
 
             }
+        } else {
+            $usermeta = uwp_get_usermeta_row($user_id);
         }
 
 
@@ -141,7 +129,6 @@ class UsersWP_Meta {
         global $wpdb;
         $meta_table = uwp_get_table_prefix() . 'uwp_usermeta';
         $user_meta_info = uwp_get_usermeta_row($user_id);
-
 
         $value = apply_filters( 'uwp_update_usermeta', $value, $user_id, $key, $user_meta_info );
         $value =  apply_filters( 'uwp_update_usermeta_' . $key, $value, $user_id, $key, $user_meta_info );
@@ -245,7 +232,6 @@ class UsersWP_Meta {
         uwp_update_usermeta($user_id, 'uwp_account_first_name',     $user_data->first_name);
         uwp_update_usermeta($user_id, 'uwp_account_last_name',      $user_data->last_name);
         uwp_update_usermeta($user_id, 'uwp_account_bio',            $user_data->description);
-        uwp_update_usermeta($user_id, 'uwp_account_bio',            $user_data->description);
 
     }
 
@@ -315,40 +301,36 @@ class UsersWP_Meta {
      */
     public function modify_privacy_value_on_update($value, $user_id, $key, $user_meta_info) {
         if (uwp_str_ends_with($key, '_privacy')) {
-            $public_fields = '';
-            if ($value == '0') {
-                if (!empty($user_meta_info)) {
-                    $old_value = $user_meta_info->user_privacy;
-                    if ($old_value) {
-                        $public_fields = explode(',', $old_value);
-                        if (!in_array($key, $public_fields)) {
-                            $public_fields[] = $key;
-                        }
-                        $public_fields = implode(',', $public_fields);
-                    } else {
-                        $public_fields = array();
+            $old_value = $user_meta_info->user_privacy;
+            if (!empty($old_value)) {
+                // Existing serialized value
+                if ($value == 'no') {
+                    $public_fields = explode(',', $old_value);
+                    if (!in_array($key, $public_fields)) {
                         $public_fields[] = $key;
-                        $public_fields = implode(',', $public_fields);
                     }
-
+                    $value = implode(',', $public_fields);
                 } else {
+                    // Yes value
+                    $public_fields = explode(',', $old_value);
+                    if(($key = array_search($key, $public_fields)) !== false) {
+                        unset($public_fields[$key]);
+                    }
+                    $value = implode(',', $public_fields);
+                }
+
+            } else {
+                // New Serialized value
+                if ($value == 'no') {
                     $public_fields = array();
                     $public_fields[] = $key;
-                    $public_fields = implode(',', $public_fields);
+                    $value = implode(',', $public_fields);
+                } else {
+                    // For yes values no need to update since its a public field.
+                    // We store only the private fields.
                 }
-            } else {
-                if (!empty($user_meta_info)) {
-                    $old_value = $user_meta_info->user_privacy;
-                    if ($old_value) {
-                        $public_fields = explode(',', $old_value);
-                        if(($key = array_search($key, $public_fields)) !== false) {
-                            unset($public_fields[$key]);
-                        }
-                        $public_fields = implode(',', $public_fields);
-                    }
-                }
+
             }
-            $value = $public_fields;
         }
         return $value;
     }
@@ -368,13 +350,13 @@ class UsersWP_Meta {
      */
     public function modify_privacy_value_on_get($value, $user_id, $key, $default, $usermeta) {
         if (uwp_str_ends_with($key, '_privacy')) {
-            $value = '1';
+            $value = 'yes';
             if (!empty($usermeta)) {
                 $output = $usermeta->user_privacy ? $usermeta->user_privacy : $default;
                 if ($output) {
                     $public_fields = explode(',', $output);
                     if (in_array($key, $public_fields)) {
-                        $value = '0';
+                        $value = 'no';
                     }
                 }
             }
