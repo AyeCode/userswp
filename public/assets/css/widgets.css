@@ -369,40 +369,6 @@
   font-weight: bold;
   text-transform: uppercase;
   width: 100%; }
-.uwp_page .uwp-login-form .chosen-container-multi .chosen-choices,
-.uwp_page .uwp-registration-form .chosen-container-multi .chosen-choices,
-.uwp_page .uwp-forgot-form .chosen-container-multi .chosen-choices,
-.uwp_page .uwp-change-form .chosen-container-multi .chosen-choices,
-.uwp_page .uwp-account-form .chosen-container-multi .chosen-choices,
-.uwp_widgets .uwp-login-form .chosen-container-multi .chosen-choices,
-.uwp_widgets .uwp-registration-form .chosen-container-multi .chosen-choices,
-.uwp_widgets .uwp-forgot-form .chosen-container-multi .chosen-choices,
-.uwp_widgets .uwp-change-form .chosen-container-multi .chosen-choices,
-.uwp_widgets .uwp-account-form .chosen-container-multi .chosen-choices,
-.uwp_adv_search_form .uwp-login-form .chosen-container-multi .chosen-choices,
-.uwp_adv_search_form .uwp-registration-form .chosen-container-multi .chosen-choices,
-.uwp_adv_search_form .uwp-forgot-form .chosen-container-multi .chosen-choices,
-.uwp_adv_search_form .uwp-change-form .chosen-container-multi .chosen-choices,
-.uwp_adv_search_form .uwp-account-form .chosen-container-multi .chosen-choices {
-  width: auto;
-  padding-top: 5px;
-  padding-bottom: 5px; }
-.uwp_page .uwp-login-form .uwp_multiselect_list,
-.uwp_page .uwp-registration-form .uwp_multiselect_list,
-.uwp_page .uwp-forgot-form .uwp_multiselect_list,
-.uwp_page .uwp-change-form .uwp_multiselect_list,
-.uwp_page .uwp-account-form .uwp_multiselect_list,
-.uwp_widgets .uwp-login-form .uwp_multiselect_list,
-.uwp_widgets .uwp-registration-form .uwp_multiselect_list,
-.uwp_widgets .uwp-forgot-form .uwp_multiselect_list,
-.uwp_widgets .uwp-change-form .uwp_multiselect_list,
-.uwp_widgets .uwp-account-form .uwp_multiselect_list,
-.uwp_adv_search_form .uwp-login-form .uwp_multiselect_list,
-.uwp_adv_search_form .uwp-registration-form .uwp_multiselect_list,
-.uwp_adv_search_form .uwp-forgot-form .uwp_multiselect_list,
-.uwp_adv_search_form .uwp-change-form .uwp_multiselect_list,
-.uwp_adv_search_form .uwp-account-form .uwp_multiselect_list {
-  margin-bottom: 20px; }
 .uwp_page .uwp_wc_form label,
 .uwp_widgets .uwp_wc_form label,
 .uwp_adv_search_form .uwp_wc_form label {

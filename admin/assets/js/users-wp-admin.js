@@ -351,7 +351,7 @@ function delete_field(id, nonce) {
 
 }
 
-function show_hide_register(id)
+function uwp_show_hide_register(id)
 {
     jQuery('#'+id).toggle();
 }

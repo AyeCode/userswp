@@ -465,7 +465,7 @@ class UsersWP_Form_Builder {
         <li class="text" id="licontainer_<?php echo $result_str; ?>">
             <div class="title title<?php echo $result_str; ?> uwp-fieldset"
                  title="<?php _e('Double Click to toggle and drag-drop to sort', 'userswp'); ?>"
-                 ondblclick="show_hide('field_frm<?php echo $result_str; ?>')">
+                 ondblclick="uwp_show_hide('field_frm<?php echo $result_str; ?>')">
                 <?php
 
                 $nonce = wp_create_nonce('custom_fields_' . $result_str);
@@ -482,12 +482,12 @@ class UsersWP_Form_Builder {
                     <i class="fa fa-long-arrow-left " aria-hidden="true"></i>
                     <i class="fa fa-long-arrow-right " aria-hidden="true"></i>
                     <b style="cursor:pointer;"
-                       onclick="show_hide('field_frm<?php echo $result_str; ?>')"><?php echo uwp_ucwords(__('Fieldset:', 'userswp') . ' ' . $field_site_title); ?></b>
+                       onclick="uwp_show_hide('field_frm<?php echo $result_str; ?>')"><?php echo uwp_ucwords(__('Fieldset:', 'userswp') . ' ' . $field_site_title); ?></b>
                     <?php
                 } else {echo $field_icon;
                     ?>
                     <b style="cursor:pointer;"
-                       onclick="show_hide('field_frm<?php echo $result_str; ?>')"><?php echo uwp_ucwords(' ' . $field_site_title . ' (' . $field_type_name . ')'); ?></b>
+                       onclick="uwp_show_hide('field_frm<?php echo $result_str; ?>')"><?php echo uwp_ucwords(' ' . $field_site_title . ' (' . $field_type_name . ')'); ?></b>
                     <?php
                 }
                 ?>
@@ -2212,7 +2212,7 @@ class UsersWP_Form_Builder {
             <form><!-- we need to wrap in a fom so we can use radio buttons with same name -->
                 <div class="title title<?php echo $result_str; ?> gt-fieldset"
                      title="<?php _e('Double Click to toggle and drag-drop to sort', 'userswp'); ?>"
-                     ondblclick="show_hide_register('field_frm<?php echo $result_str; ?>')">
+                     ondblclick="uwp_show_hide_register('field_frm<?php echo $result_str; ?>')">
                     <?php
 
                     $nonce = wp_create_nonce('uwp_form_extras_nonce' . $result_str);
@@ -2227,7 +2227,7 @@ class UsersWP_Form_Builder {
                     echo $field_icon;
                     ?>
                     <b style="cursor:pointer;"
-                       onclick="show_hide_register('field_frm<?php echo $result_str; ?>')"><?php echo uwp_ucwords(' ' . $field_site_name); ?></b>
+                       onclick="uwp_show_hide_register('field_frm<?php echo $result_str; ?>')"><?php echo uwp_ucwords(' ' . $field_site_name); ?></b>
 
                 </div>
 
