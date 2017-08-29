@@ -17,8 +17,17 @@ function uwp_chosen() {
     }
 }
 
-function show_hide(id) {
+function uwp_show_hide(id) {
     jQuery('#' + id).toggle();
+}
+
+function uwp_show_hide_radio(id,sh,cl) {
+    if(sh=='hide'){
+        jQuery( id ).closest( '.widefat' ).find('.'+cl).hide('fast');
+    }else{
+        jQuery( id ).closest( '.widefat' ).find('.'+cl).show('fast');
+    }
+
 }
 
 function validate_field(field) {
@@ -125,7 +134,7 @@ jQuery(document).ready(function () {
                 jQuery('.field_row_main ul.core').append(data);
                 uwp_chosen();
                 jQuery('#licontainer_' + id).find('#sort_order').val(parseInt(jQuery('#licontainer_' + id).index()) + 1);
-                show_hide('field_frm'+id);
+                uwp_show_hide('field_frm'+id);
                 jQuery('html, body').animate({
                     scrollTop: jQuery("#licontainer_"+id).offset().top
                 }, 1000);
@@ -181,7 +190,7 @@ jQuery(document).ready(function () {
 
                     jQuery('#licontainer_'+htmlvar_name).find('#sort_order').val( parseInt(jQuery('#licontainer_'+htmlvar_name).index()) + 1 );
 
-                    show_hide('field_frm'+htmlvar_name);
+                    uwp_show_hide('field_frm'+htmlvar_name);
                     jQuery('html, body').animate({
                         scrollTop: jQuery("#licontainer_"+htmlvar_name).offset().top
                     }, 1000);
@@ -208,7 +217,7 @@ jQuery(document).ready(function () {
 
                     jQuery('#licontainer_'+htmlvar_name).find('#sort_order').val( parseInt(jQuery('#licontainer_'+htmlvar_name).index()) + 1 );
 
-                    show_hide('field_frm'+htmlvar_name);
+                    uwp_show_hide('field_frm'+htmlvar_name);
                     jQuery('html, body').animate({
                         scrollTop: jQuery("#licontainer_"+htmlvar_name).offset().top
                     }, 1000);

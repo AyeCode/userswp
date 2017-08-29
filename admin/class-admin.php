@@ -31,11 +31,6 @@ class UsersWP_Admin {
     public function __construct($admin_settings) {
 
         $this->admin_settings = $admin_settings;
-        
-        add_action( 'admin_enqueue_scripts', array($this, 'enqueue_styles') );
-        add_action( 'admin_enqueue_scripts', array($this, 'enqueue_scripts') );
-        add_action( 'admin_menu', array($this, 'setup_admin_menus') );
-        add_action('admin_head', array($this, 'uwp_admin_only_css'));
     }
 
 
@@ -66,7 +61,7 @@ class UsersWP_Admin {
         if ($hook_suffix == 'userswp_page_uwp_tools') {
             wp_enqueue_style( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/users-wp.css', array(), null, 'all' );
         }
-        wp_enqueue_style( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
+        wp_enqueue_style( "userswp_admin_css", plugin_dir_url( __FILE__ ) . 'assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
         wp_enqueue_style( "uwp_chosen_css", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/chosen.css', array(), USERSWP_VERSION, 'all' );
         uwp_load_font_awesome();
 
@@ -94,7 +89,7 @@ class UsersWP_Admin {
 
             wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
             wp_enqueue_script( "uwp_timepicker", plugin_dir_url( dirname(__FILE__) ) . 'public/assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
-            wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.js', array( 'jquery',USERSWP_NAME ), null, false );
+            wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.js', array( 'jquery' ), null, false );
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
             wp_enqueue_script( 'jcrop', array( 'jquery' ) );
             wp_enqueue_script( "country-select", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/countrySelect.min.js', array( 'jquery' ), null, false );
@@ -105,7 +100,7 @@ class UsersWP_Admin {
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
         }
         wp_enqueue_script('jquery-ui-sortable');
-        wp_enqueue_script( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.min.js', array( 'jquery' ), null, false );
+        wp_enqueue_script( "userswp_admin", plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin.min.js', array( 'jquery' ), null, false );
         wp_enqueue_script( "uwp_chosen", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/chosen.jquery.js', array( 'jquery' ), USERSWP_VERSION, false );
         wp_enqueue_script( "uwp_chosen_order", plugin_dir_url( __FILE__ ) . 'assets/js/chosen.order.jquery.min.js', array( 'jquery' ), USERSWP_VERSION, false );
 
@@ -118,7 +113,7 @@ class UsersWP_Admin {
             'custom_field_delete' => __('Are you wish to delete this field?', 'userswp'),
             'custom_field_id_required' => __('This field is required.', 'userswp'),
         );
-        wp_localize_script(USERSWP_NAME, 'uwp_admin_ajax', $ajax_cons_data);
+        wp_localize_script("userswp_admin", 'uwp_admin_ajax', $ajax_cons_data);
 
         $country_data = uwp_get_country_data();
         wp_localize_script(USERSWP_NAME, 'uwp_country_data', $country_data);

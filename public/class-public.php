@@ -22,18 +22,7 @@
  */
 class UsersWP_Public {
 
-
-    /**
-     * Register all of the hooks related to the public-facing functionality
-     * of the plugin.
-     *
-     * @since    1.0.0
-     */
-    public function __construct() {
-        add_action( 'wp_enqueue_scripts', array($this, 'enqueue_styles') );
-        add_action( 'wp_enqueue_scripts', array($this, 'enqueue_scripts') );
-    }
-
+    
     /**
      * Register the stylesheets for the public-facing side of the site.
      *
@@ -205,10 +194,12 @@ class UsersWP_Public {
         if(is_uwp_account_page() || is_uwp_register_page()){
             //load CountrySelect
             wp_enqueue_script( "country-select", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/countrySelect.min.js', array( 'jquery' ), null, false );
+
+            $country_data = uwp_get_country_data();
+            wp_localize_script(USERSWP_NAME, 'uwp_country_data', $country_data);
         }
 
-        $country_data = uwp_get_country_data();
-        wp_localize_script(USERSWP_NAME, 'uwp_country_data', $country_data);
+
         
     }
 

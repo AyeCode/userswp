@@ -528,7 +528,7 @@ add_filter( 'get_user_option_metaboxhidden_nav-menus', 'uwp_always_nav_menu_visi
  */
 function uwp_always_nav_menu_visibility( $result, $option, $user )
 {
-    if( in_array( 'add-users-wp-nav-menu', $result ) ) {
+    if( is_array($result) && in_array( 'add-users-wp-nav-menu', $result ) ) {
         $result = array_diff( $result, array( 'add-users-wp-nav-menu' ) );
     }
 

@@ -81,64 +81,125 @@ class UsersWP_Activator {
         $settings = get_option( 'uwp_settings', array());
 
         //general
-        $settings['profile_no_of_items'] = '10';
+        if (!isset($settings['profile_no_of_items'])) {
+            $settings['profile_no_of_items'] = '10';
+        }
         
         //login
-        $settings['login_redirect_to'] = '';
+        if (!isset($settings['login_redirect_to'])) {
+            $settings['login_redirect_to'] = '';
+        }
 
         //profile
-        $settings['enable_profile_header'] = '1';
-        $settings['enable_profile_body'] = '1';
-        $settings['enable_profile_posts_tab'] = '1';
-        $settings['enable_profile_comments_tab'] = '1';
+        if (!isset($settings['enable_profile_header'])) {
+            $settings['enable_profile_header'] = '1';
+        }
+        if (!isset($settings['enable_profile_body'])) {
+            $settings['enable_profile_body'] = '1';
+        }
+        if (!isset($settings['enable_profile_posts_tab'])) {
+            $settings['enable_profile_posts_tab'] = '1';
+        }
+        if (!isset($settings['enable_profile_comments_tab'])) {
+            $settings['enable_profile_comments_tab'] = '1';
+        }
 
-        $settings['enable_profile_tabs'] = array('more_info', 'posts', 'comments');
+        if (isset($settings['enable_profile_tabs']) && is_array($settings['enable_profile_tabs'])) {
+            if (!isset($settings['enable_profile_tabs']['more_info'])) {
+                $settings['enable_profile_tabs'][] = 'more_info';
+            }
+            if (!isset($settings['enable_profile_tabs']['posts'])) {
+                $settings['enable_profile_tabs'][] = 'posts';
+            }
+            if (!isset($settings['enable_profile_tabs']['comments'])) {
+                $settings['enable_profile_tabs'][] = 'comments';
+            }
+        } else {
+            $settings['enable_profile_tabs'] = array('more_info', 'posts', 'comments');
+        }
+
 
         //notifications
 
-        $register_success_subject = __('Your Log In Details', 'userswp');
-        $register_success_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
+        // admin
+        $registration_success_email_subject_admin = __( 'New account registration', 'userswp' );
+        $registration_success_email_content_admin = __("A user has been registered recently on your website. [#extras#]", "userswp");
 
-        $register_success_subject_admin = __( 'New account registration', 'userswp' );
-        $register_success_content_admin = __("A user has been registered recently on your website. [#extras#]", "userswp");
+        if (!isset($settings['registration_success_email_subject_admin'])) {
+            $settings['registration_success_email_subject_admin'] = $registration_success_email_subject_admin;
+        }
+        if (!isset($settings['registration_success_email_content_admin'])) {
+            $settings['registration_success_email_content_admin'] = $registration_success_email_content_admin;
+        }
 
-        $register_activate_subject = __('Please activate your account', 'userswp');
-        $register_activate_content = __("<p>Dear [#user_name#],</p><p>Thank you for signing up with [#site_name#]</p>[#login_details#]<p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
-        $forgot_password_subject = __('[#site_name#] - Your new password', 'userswp');
-        $forgot_password_content = __("<p>Dear [#user_name#],<p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
+        // User
 
-        $change_password_subject = __('[#site_name#] - Password has been changed', 'userswp');
-        $change_password_content = __("<p>Dear [#user_name#],<p><p>Your password has been changed successfully.</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
+        // Register
+        $registration_success_email_subject = __('Your Log In Details', 'userswp');
+        $registration_success_email_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
-        $reset_password_subject = __('[#site_name#] - Password has been reset', 'userswp');
-        $reset_password_content = __("<p>Dear [#user_name#],<p><p>Your password has been reset</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
+        if (!isset($settings['registration_success_email_subject'])) {
+            $settings['registration_success_email_subject'] = $registration_success_email_subject;
+        }
+        if (!isset($settings['registration_success_email_content'])) {
+            $settings['registration_success_email_content'] = $registration_success_email_content;
+        }
 
-        $account_update_subject = __('[#site_name#] - Account has been updated', 'userswp');
-        $account_update_content = __("<p>Dear [#user_name#],<p><p>Your account has been updated successfully</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
+        // Activate
+        $registration_activate_email_subject = __('Please activate your account', 'userswp');
+        $registration_activate_email_content = __("<p>Dear [#user_name#],</p><p>Thank you for signing up with [#site_name#]</p>[#login_details#]<p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
-        $settings['registration_success_email_subject'] = $register_success_subject_admin;
-        $settings['registration_success_email_content'] = $register_success_content_admin;
+        if (!isset($settings['registration_activate_email_subject'])) {
+            $settings['registration_activate_email_subject'] = $registration_activate_email_subject;
+        }
+        if (!isset($settings['registration_activate_email_content'])) {
+            $settings['registration_activate_email_content'] = $registration_activate_email_content;
+        }
 
-        $settings['registration_success_email_subject_admin'] = $register_success_subject;
-        $settings['registration_success_email_content_admin'] = $register_success_content;
+        // Forgot
+        $forgot_password_email_subject = __('[#site_name#] - Your new password', 'userswp');
+        $forgot_password_email_content = __("<p>Dear [#user_name#],<p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
-        $settings['registration_activate_email_subject'] = $register_activate_subject;
-        $settings['registration_activate_email_content'] = $register_activate_content;
+        if (!isset($settings['forgot_password_email_subject'])) {
+            $settings['forgot_password_email_subject'] = $forgot_password_email_subject;
+        }
+        if (!isset($settings['forgot_password_email_content'])) {
+            $settings['forgot_password_email_content'] = $forgot_password_email_content;
+        }
 
-        $settings['forgot_password_email_subject'] = $forgot_password_subject;
-        $settings['forgot_password_email_content'] = $forgot_password_content;
+        // Change
+        $change_password_email_subject = __('[#site_name#] - Password has been changed', 'userswp');
+        $change_password_email_content = __("<p>Dear [#user_name#],<p><p>Your password has been changed successfully.</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
-        $settings['change_password_email_subject'] = $change_password_subject;
-        $settings['change_password_email_content'] = $change_password_content;
+        if (!isset($settings['change_password_email_subject'])) {
+            $settings['change_password_email_subject'] = $change_password_email_subject;
+        }
+        if (!isset($settings['change_password_email_content'])) {
+            $settings['change_password_email_content'] = $change_password_email_content;
+        }
 
-        $settings['reset_password_email_subject'] = $reset_password_subject;
-        $settings['reset_password_email_content'] = $reset_password_content;
+        // Reset
+        $reset_password_email_subject = __('[#site_name#] - Password has been reset', 'userswp');
+        $reset_password_email_content = __("<p>Dear [#user_name#],<p><p>Your password has been reset</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
-        // $settings['enable_account_update_notification'] = '0'; // no need to set this
+        if (!isset($settings['reset_password_email_subject'])) {
+            $settings['reset_password_email_subject'] = $reset_password_email_subject;
+        }
+        if (!isset($settings['reset_password_email_content'])) {
+            $settings['reset_password_email_content'] = $reset_password_email_content;
+        }
 
-        $settings['account_update_email_subject'] = $account_update_subject;
-        $settings['account_update_email_content'] = $account_update_content;
+        // Update
+        $account_update_email_subject = __('[#site_name#] - Account has been updated', 'userswp');
+        $account_update_email_content = __("<p>Dear [#user_name#],<p><p>Your account has been updated successfully</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
+
+        if (!isset($settings['account_update_email_subject'])) {
+            $settings['account_update_email_subject'] = $account_update_email_subject;
+        }
+        if (!isset($settings['account_update_email_content'])) {
+            $settings['account_update_email_content'] = $account_update_email_content;
+        }
 
         update_option( 'uwp_settings', $settings );
 
