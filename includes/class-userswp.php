@@ -8,7 +8,7 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP {
+class UsersWP {
 
     /**
      * The loader that's responsible for maintaining and registering all hooks that power
@@ -16,18 +16,10 @@ class Users_WP {
      *
      * @since    1.0.0
      * @access   protected
-     * @var      Users_WP_Loader    $loader    Maintains and registers all hooks for the plugin.
+     * @var      UsersWP_Loader    $loader    Maintains and registers all hooks for the plugin.
      */
     protected $loader;
 
-    /**
-     * The unique identifier of this plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      string    $users_wp    The string used to uniquely identify this plugin.
-     */
-    protected $users_wp;
 
     /**
      * The current version of the plugin.
@@ -37,7 +29,24 @@ class Users_WP {
      * @var      string    $version    The current version of the plugin.
      */
     protected $version;
-
+    
+    protected $profile;
+    protected $forms;
+    protected $i18n;
+    protected $notices;
+    protected $templates;
+    protected $meta;
+    protected $pages;
+    protected $files;
+    protected $shortcodes;
+    protected $assets;
+    protected $admin;
+    protected $admin_settings;
+    protected $menus;
+    protected $form_builder;
+    protected $ajax;
+    protected $tools;
+    protected $tables;
 
     /**
      * Define the core functionality of the plugin.
@@ -50,32 +59,259 @@ class Users_WP {
      */
     public function __construct() {
 
-        $this->plugin_name = 'users-wp';
+        $this->plugin_name = USERSWP_NAME;
         $this->version = USERSWP_VERSION;
 
-        $this->load_dependencies();
-        $this->init_settings();
-        $this->set_locale();
-        $this->define_admin_hooks();
-        $this->define_public_hooks();
-        $this->define_shortcodes();
-        $this->init_form_builder();
-        $this->init_ajax();
 
+        $this->load_dependencies();
+        $this->loader = new UsersWP_Loader();
+        $this->meta = new UsersWP_Meta();
+        $this->pages = new UsersWP_Pages();
+        $this->profile = new UsersWP_Profile();
+        $this->forms = new UsersWP_Forms();
+        $this->templates = new UsersWP_Templates();
+        $this->i18n = new UsersWP_i18n();
+        $this->notices = new UsersWP_Notices();
+        $this->assets = new UsersWP_Public();
+        $this->form_builder = new UsersWP_Form_Builder();
+        $this->menus = new UsersWP_Menus();
+        $this->tools = new UsersWP_Tools();
+        $this->tables = new UsersWP_Tables();
+
+        $this->shortcodes = new UsersWP_Shortcodes($this->templates);
+        $this->admin_settings = new UsersWP_Admin_Settings($this->form_builder);
+        $this->admin = new UsersWP_Admin($this->admin_settings);
+        $this->ajax = new UsersWP_Ajax($this->form_builder);
+        $this->files = new UsersWP_Files();
+        
+        
+        // actions and filters
+        $this->load_meta_actions_and_filters($this->meta);
+        $this->load_ajax_actions_and_filters($this->ajax);
+        $this->load_files_actions_and_filters($this->files);
+        $this->load_forms_actions_and_filters($this->forms);
+        $this->load_i18n_actions_and_filters($this->i18n);
+        $this->load_notices_actions_and_filters($this->notices);
+        $this->load_pages_actions_and_filters($this->pages);
+        $this->load_profile_actions_and_filters($this->profile);
+        $this->load_shortcodes_actions_and_filters($this->shortcodes);
+        $this->load_tables_actions_and_filters($this->tables);
+        $this->load_templates_actions_and_filters($this->templates);
+        $this->load_tools_actions_and_filters($this->tools);
+        
+    }
+    
+    
+    public function load_meta_actions_and_filters($instance) {
+        add_action('user_register', array($instance, 'sync_usermeta'), 10, 1);
+        add_action('delete_user', array($instance, 'delete_usermeta_for_user'));
+        add_action('wp_login', array($instance, 'save_user_ip_on_login') ,10,2);
+        add_filter('uwp_before_extra_fields_save', array($instance, 'save_user_ip_on_register'), 10, 3);
+        add_filter('uwp_update_usermeta', array($instance, 'modify_privacy_value_on_update'), 10, 4);
+        add_filter('uwp_get_usermeta', array($instance, 'modify_privacy_value_on_get'), 10, 5);
+        add_filter('uwp_update_usermeta', array($instance, 'modify_datepicker_value_on_update'), 10, 3);
+        add_filter('uwp_get_usermeta', array($instance, 'modify_datepicker_value_on_get'), 10, 5);
+    }
+    
+    public function load_ajax_actions_and_filters($instance) {
+        add_action('wp_ajax_uwp_ajax_action', array($instance, 'handler'));
+    }
+
+    public function load_files_actions_and_filters($instance) {
+        if($instance->uwp_doing_upload()){
+            add_filter( 'wp_handle_upload_prefilter', array($instance, 'uwp_wp_media_restrict_file_types') );
+        }
+        add_filter('uwp_get_max_upload_size', array($instance, 'uwp_modify_get_max_upload_size'), 10, 2);
+    }
+
+    public function load_forms_actions_and_filters($instance) {
+        add_action('init', array($instance, 'init_notices'), 1);
+        add_action('init', array($instance, 'handler'));
+        add_action('init', array($instance, 'uwp_privacy_submit_handler'));
+        add_action('uwp_template_display_notices', array($instance, 'display_notices'), 10, 1);
+        add_action('wp_ajax_uwp_upload_file_remove', array($instance, 'uwp_upload_file_remove'));
+        //User search form
+        add_action('uwp_users_page_search_form_inner', array($instance, 'uwp_users_search_form_text_field'), 10, 1);
+        add_action('uwp_users_page_search_form_inner', array($instance, 'uwp_users_search_form_submit'), 50, 1);
+        add_action('personal_options_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
+        add_action('edit_user_profile_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
+        add_action('user_edit_form_tag', array($instance, 'add_multipart_to_admin_edit_form'));
+        add_action('uwp_template_form_title_after', array($instance, 'uwp_display_username_in_account'), 10, 1);
+
+
+        // Forms
+        add_filter('uwp_form_input_html_datepicker', array($instance, 'uwp_form_input_datepicker'), 10, 4);
+        add_filter('uwp_form_input_html_time', array($instance, 'uwp_form_input_time'), 10, 4);
+        add_filter('uwp_form_input_html_select', array($instance, 'uwp_form_input_select'), 10, 4);
+        add_filter('uwp_form_input_html_multiselect', array($instance, 'uwp_form_input_multiselect'), 10, 4);
+        add_filter('uwp_form_input_html_text', array($instance, 'uwp_form_input_text'), 10, 4);
+        add_filter('uwp_form_input_html_textarea', array($instance, 'uwp_form_input_textarea'), 10, 4);
+        add_filter('uwp_form_input_html_fieldset', array($instance, 'uwp_form_input_fieldset'), 10, 4);
+        add_filter('uwp_form_input_html_file', array($instance, 'uwp_form_input_file'), 10, 4);
+        add_filter('uwp_form_input_html_checkbox', array($instance, 'uwp_form_input_checkbox'), 10, 4);
+        add_filter('uwp_form_input_html_radio', array($instance, 'uwp_form_input_radio'), 10, 4);
+        add_filter('uwp_form_input_html_url', array($instance, 'uwp_form_input_url'), 10, 4);
+        add_filter('uwp_form_input_html_email', array($instance, 'uwp_form_input_email'), 10, 4);
+        add_filter('uwp_form_input_html_password', array($instance, 'uwp_form_input_password'), 10, 4);
+        // Country select
+        add_filter('uwp_form_input_html_select_country', array($instance, 'uwp_form_input_select_country'), 10, 4);
+        add_filter('uwp_forms_check_for_send_mail_errors', array($instance, 'uwp_forms_check_for_send_mail_errors'), 10, 3);
+        add_filter('uwp_form_input_email_uwp_account_email_after', array($instance, 'uwp_register_confirm_email_field'), 10, 4);
+        add_filter('uwp_form_input_password_uwp_account_password_after', array($instance, 'uwp_register_confirm_password_field'), 10, 4);
+    }
+
+    public function load_i18n_actions_and_filters($instance) {
+        add_action( 'init', array($instance, 'load_plugin_textdomain'));
+    }
+
+    public function load_notices_actions_and_filters($instance) {
+        add_action('uwp_template_display_notices', array($instance, 'display_registration_disabled_notice'));
+        add_action('uwp_template_display_notices', array($instance, 'form_notice_by_key'));
+        add_action( 'admin_notices', array( $instance, 'show_admin_notices' ) );
+        add_action( 'admin_notices', array($instance, 'uwp_admin_notices') );
+    }
+
+    public function load_pages_actions_and_filters($instance) {
+        add_action( 'wpmu_new_blog', array($instance, 'wpmu_generate_default_pages_on_new_site'), 10, 6 );
+    }
+
+    public function load_profile_actions_and_filters($instance) {
+        add_action( 'template_redirect', array($instance, 'uwp_redirect_author_page') , 10 , 2 );
+        //profile page
+        add_filter('query_vars', array($instance, 'profile_query_vars'), 10, 1 );
+        add_action('init', array($instance, 'rewrite_profile_link') , 10, 1 );
+        add_filter( 'uwp_profile_link', array($instance, 'get_profile_link'), 10, 2 );
+        add_filter( 'edit_profile_url', array($instance, 'uwp_modify_admin_bar_edit_profile_url'), 10, 3);
+        add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
+        remove_all_filters('get_avatar');
+        add_filter( 'get_avatar', array($instance, 'uwp_modify_get_avatar') , 1 , 5 );
+        add_filter( 'get_comment_author_link', array($instance, 'uwp_get_comment_author_link') , 10 , 2 );
+        add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 1 );
+        add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
+        add_action( 'uwp_profile_title', array($instance, 'get_profile_title'), 10, 1 );
+        //add_action( 'uwp_profile_bio', array($instance, 'get_profile_bio'), 10, 1 );
+        add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 1 );
+
+        //Fields as tabs
+        add_action( 'uwp_profile_tabs', array($instance, 'uwp_extra_fields_as_tabs'), 10, 2 );
+
+        // Popup and crop functions
+        add_filter( 'ajax_query_attachments_args', array($instance, 'uwp_restrict_attachment_display') );
+
+        add_action( 'uwp_handle_file_upload_error_checks', array($instance, 'uwp_handle_file_upload_error_checks'), 10, 4 );
+        add_action( 'wp_ajax_uwp_avatar_banner_upload', array($instance, 'uwp_ajax_avatar_banner_upload') );
+        //add_action( 'wp_ajax_uwp_ajax_image_crop_popup', array($instance, 'uwp_ajax_image_crop_popup') );
+        add_action( 'wp_ajax_uwp_ajax_image_crop_popup_form', array($instance, 'uwp_ajax_image_crop_popup_form') );
+        add_action( 'wp_head', array($instance, 'uwp_define_ajaxurl') );
+        add_action( 'uwp_profile_header', array($instance, 'uwp_image_crop_init'), 10, 1 );
+        add_action( 'uwp_admin_profile_edit', array($instance, 'uwp_image_crop_init'), 10, 1 );
+
+        // Profile Tabs
+        add_action( 'uwp_profile_content', array($instance, 'get_profile_tabs_content'), 10, 1 );
+        add_action( 'uwp_profile_more_info_tab_content', array($instance, 'get_profile_more_info'), 10, 1);
+        add_action( 'uwp_profile_posts_tab_content', array($instance, 'get_profile_posts'), 10, 1);
+        add_action( 'uwp_profile_comments_tab_content', array($instance, 'get_profile_comments'), 10, 1);
+        add_action( 'uwp_profile_tab_content', array($instance, 'uwp_extra_fields_as_tab_values'), 10, 2 );
+
+        // Profile Pagination
+        add_action( 'uwp_profile_pagination', array($instance, 'get_profile_pagination'));
+
+        // Users
+        add_action( 'uwp_users_search', array($instance, 'uwp_users_search'));
+        add_action( 'uwp_users_list', array($instance, 'uwp_users_list'));
+        add_action( 'uwp_users_extra', array($instance, 'get_users_extra'));
+        add_action( 'uwp_profile_bio', array($instance, 'get_profile_side_extra'));
+
+
+        // User, allow subscribers to upload profile and banner pictures
+        add_filter( 'plupload_default_params', array($instance, 'add_uwp_plupload_param'), 10, 1 );
+        add_filter( 'user_has_cap', array($instance, 'allow_all_users_profile_uploads'), 10, 4 );
+    }
+
+    public function load_shortcodes_actions_and_filters($instance) {
+        add_shortcode( 'uwp_register',  array($instance, 'register'));
+        add_shortcode( 'uwp_login',     array($instance, 'login'));
+        add_shortcode( 'uwp_forgot',    array($instance, 'forgot'));
+        add_shortcode( 'uwp_change',    array($instance, 'change'));
+        add_shortcode( 'uwp_reset',     array($instance, 'reset'));
+        add_shortcode( 'uwp_account',   array($instance, 'account'));
+        add_shortcode( 'uwp_profile',   array($instance, 'profile'));
+        add_shortcode( 'uwp_users',     array($instance, 'users'));
+    }
+    
+    public function load_tables_actions_and_filters($instance) {
+        add_filter( 'wpmu_drop_tables', array($instance, 'drop_tables_on_delete_blog'));
+    }
+    
+    public function load_templates_actions_and_filters($instance) {
+        add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
+        add_action( 'uwp_template_fields', array($instance, 'uwp_template_fields'), 10, 1 );
+        add_action( 'uwp_account_form_display', array($instance, 'uwp_account_edit_form_display'), 10, 1 );
+        add_action( 'wp_logout', array($instance, 'logout_redirect'));
+        add_action( 'init', array($instance, 'wp_login_redirect'));
+        add_action( 'admin_init', array($instance, 'uwp_activation_redirect'));
+        // Redirect functions
+        add_action( 'template_redirect', array($instance, 'profile_redirect'), 10);
+        add_action( 'template_redirect', array($instance, 'access_checks'), 20);
+        // Admin user edit page
+        add_action( 'edit_user_profile', array($instance, 'get_profile_extra_admin_edit'), 10, 1 );
+        add_action( 'show_user_profile', array($instance, 'get_profile_extra_admin_edit'), 10, 1 );
+
+
+        add_filter( 'wp_setup_nav_menu_item', array($instance, 'uwp_setup_nav_menu_item'), 10, 1 );
+        add_filter( 'the_content', array($instance, 'uwp_author_page_content'), 10, 1 );
+        add_filter('body_class', array($instance, 'uwp_add_body_class'), 10, 1 );
+    }
+    
+    public function load_tools_actions_and_filters($instance) {
+        add_action('admin_init', array($instance, 'uwp_tools_process_dummy_users'));
+        add_action('uwp_admin_sub_menus', array($instance, 'uwp_add_admin_tools_sub_menu'), 100, 1);
+        add_action('uwp_tools_settings_main_tab_content', array($instance, 'uwp_tools_main_tab_content'));
+        add_action('wp_ajax_uwp_process_diagnosis', array($instance, 'uwp_process_diagnosis_ajax'));
+    }
+
+    /**
+     * Run the loader to execute all of the hooks with WordPress.
+     *
+     * @since    1.0.0
+     */
+    public function run() {
+        $this->loader->run();
+    }
+
+    /**
+     * The name of the plugin used to uniquely identify it within the context of
+     * WordPress and to define internationalization functionality.
+     *
+     * @since     1.0.0
+     * @return    string    The name of the plugin.
+     */
+    public function get_plugin_name() {
+        return $this->plugin_name;
+    }
+
+    /**
+     * The reference to the class that orchestrates the hooks with the plugin.
+     *
+     * @since     1.0.0
+     * @return    UsersWP_Loader    Orchestrates the hooks of the plugin.
+     */
+    public function get_loader() {
+        return $this->loader;
+    }
+
+    /**
+     * Retrieve the version number of the plugin.
+     *
+     * @since     1.0.0
+     * @return    string    The version number of the plugin.
+     */
+    public function get_version() {
+        return $this->version;
     }
 
     /**
      * Load the required dependencies for this plugin.
-     *
-     * Include the following files that make up the plugin:
-     *
-     * - Users_WP_Loader. Orchestrates the hooks of the plugin.
-     * - Users_WP_i18n. Defines internationalization functionality.
-     * - Users_WP_Admin. Defines all hooks for the admin area.
-     * - Users_WP_Public. Defines all hooks for the public side of the site.
-     *
-     * Create an instance of the loader which will be used to register the hooks
-     * with WordPress.
      *
      * @since    1.0.0
      * @access   private
@@ -130,6 +366,17 @@ class Users_WP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-forms.php';
 
         /**
+         * The class responsible for form validation
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-validation.php';
+
+        /**
+         * Country helpers
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-countries.php';
+
+        /**
          * The class responsible for defining ajax handler functionality
          * of the plugin.
          */
@@ -151,15 +398,35 @@ class Users_WP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-shortcodes.php';
 
         /**
+         * The class responsible for defining all menus items.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/admin/menus/class-checklist.php';
+
+        /**
+         * The class responsible for defining all menus in the admin area.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/admin/menus/class-menus.php';
+
+        /**
          * The class responsible for defining all actions that occur in the admin area.
          */
         require_once dirname(dirname( __FILE__ )) . '/admin/class-admin.php';
+
+        /**
+         * The class responsible for defining all admin area settings.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-settings.php';
 
         /**
          * The class responsible for defining all actions that occur in the public-facing
          * side of the site.
          */
         require_once dirname(dirname( __FILE__ )) . '/public/class-public.php';
+
+        /**
+         * The class responsible for table functions
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-tables.php';
 
         /**
          * The class responsible for adding fields in forms
@@ -172,331 +439,16 @@ class Users_WP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-callback.php';
 
         /**
-         * The class responsible for displaying admin notices
+         * The class responsible for adding tools functions
          */
-        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-notices.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-tools.php';
 
+        /**
+         * The class responsible for displaying notices
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-notices.php';
 
-        $this->loader = new Users_WP_Loader();
 
     }
-
-    /**
-     * Define the locale for this plugin for internationalization.
-     *
-     * Uses the Users_WP_i18n class in order to set the domain and to register the hook
-     * with WordPress.
-     *
-     * @since    1.0.0
-     * @access   private
-     */
-    private function set_locale() {
-
-        $plugin_i18n = new Users_WP_i18n();
-
-        $this->loader->add_action( 'init', $plugin_i18n, 'load_plugin_textdomain' );
-    }
-
-    /**
-     * Register all of the hooks related to the admin area functionality
-     * of the plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     */
-    private function define_admin_hooks() {
-
-        $plugin_admin = new Users_WP_Admin( $this->get_plugin_name(), $this->get_version());
-        $plugin_admin_settings = new Users_WP_Admin_Settings();
-        $plugin_admin_menus = new Users_WP_Menus();
-
-        $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-        $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-//        if (is_multisite()) {
-//            $this->loader->add_action( 'network_admin_menu', $plugin_admin, 'setup_admin_menus' );
-//        } else {
-//            $this->loader->add_action( 'admin_menu', $plugin_admin, 'setup_admin_menus' );
-//        }
-        $this->loader->add_action( 'admin_menu', $plugin_admin, 'setup_admin_menus' );
-        $this->loader->add_action( 'admin_init', $plugin_admin_settings, 'uwp_register_settings' );
-        $this->loader->add_action( 'load-nav-menus.php', $plugin_admin_menus, 'users_wp_admin_menu_metabox' );
-
-        //register settings
-        $this->loader->add_action( 'userswp_settings_main_tab_content', $plugin_admin_settings, 'get_general_content' );
-        $this->loader->add_action( 'userswp_settings_register_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'userswp_settings_login_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'userswp_settings_account_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'userswp_settings_profile_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'userswp_settings_users_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'userswp_settings_change_tab_content', $plugin_admin_settings, 'generic_display_form' );
-        $this->loader->add_action( 'userswp_settings_uninstall_tab_content', $plugin_admin_settings, 'generic_display_form' );
-
-        $this->loader->add_action( 'uwp_form_builder_settings_main_tab_content_before', $plugin_admin_settings, 'get_form_builder_tabs' );
-        $this->loader->add_action( 'uwp_form_builder_settings_main_tab_content', $plugin_admin_settings, 'get_form_builder_content' );
-        $this->loader->add_filter( 'uwp_display_form_title', $plugin_admin_settings, 'display_form_title', 10, 3 );
-        $this->loader->add_action( 'uwp_notifications_settings_main_tab_content', $plugin_admin_settings, 'get_notifications_content' );
-
-    }
-
-    /**
-     * Register all of the hooks related to the public-facing functionality
-     * of the plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     */
-    private function define_public_hooks() {
-
-        $plugin_public = new Users_WP_Public( $this->get_plugin_name(), $this->get_version() );
-
-        $forms = new Users_WP_Forms();
-        $templates = new Users_WP_Templates($this->loader);
-        $profile = new Users_WP_Profile($this->loader);
-
-        $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-        $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
-        $this->loader->add_action( 'init', $forms, 'init_notices', 1 );
-        $this->loader->add_action( 'init', $forms, 'handler' );
-        $this->loader->add_action( 'template_redirect', $templates, 'change_default_password_redirect' );
-
-        $this->loader->add_action( 'uwp_template_display_notices', $forms, 'display_notices', 10, 1 );
-        $this->loader->add_action( 'uwp_template_fields', $templates, 'uwp_template_fields', 10, 1 );
-        $this->loader->add_action( 'uwp_account_form_display', $templates, 'uwp_account_edit_form_display', 10, 1 );
-        $this->loader->add_filter( 'wp_setup_nav_menu_item', $templates, 'uwp_setup_nav_menu_item', 10, 1 );
-
-        $this->loader->add_filter( 'the_content', $templates, 'uwp_author_page_content', 10, 1 );
-
-        $this->loader->add_filter('body_class', $templates, 'uwp_add_body_class', 10, 1 );
-
-
-        // Redirect functions
-        $this->loader->add_action( 'template_redirect', $templates, 'profile_redirect', 10);
-        $this->loader->add_action( 'template_redirect', $templates, 'access_checks', 20);
-        $this->loader->add_action( 'template_redirect', $profile, 'uwp_redirect_author_page' , 10 , 2 );
-        $this->loader->add_action( 'wp_logout', $templates, 'logout_redirect');
-        $this->loader->add_action( 'init', $templates, 'wp_login_redirect');
-        $this->loader->add_action( 'admin_init', $templates, 'uwp_activation_redirect');
-
-
-        // Forms
-        $this->loader->add_filter( 'uwp_form_input_html_datepicker', $forms, 'uwp_form_input_datepicker', 10, 4 );
-        $this->loader->add_filter( 'uwp_form_input_html_time', $forms, 'uwp_form_input_time', 10, 4 );
-        $this->loader->add_filter( 'uwp_form_input_html_select', $forms, 'uwp_form_input_select', 10, 4 );
-        $this->loader->add_filter( 'uwp_form_input_html_multiselect', $forms, 'uwp_form_input_multiselect', 10, 4 );
-        $this->loader->add_filter( 'uwp_form_input_html_text', $forms, 'uwp_form_input_text', 10, 4 );
-        $this->loader->add_filter( 'uwp_form_input_html_textarea', $forms, 'uwp_form_input_textarea', 10, 4 );
-        $this->loader->add_filter( 'uwp_form_input_html_fieldset', $forms, 'uwp_form_input_fieldset', 10, 4 );
-        $this->loader->add_filter( 'uwp_form_input_html_file', $forms, 'uwp_form_input_file', 10, 4 );
-        $this->loader->add_filter( 'uwp_form_input_html_checkbox', $forms, 'uwp_form_input_checkbox', 10, 4 );
-        $this->loader->add_filter( 'uwp_form_input_html_radio', $forms, 'uwp_form_input_radio', 10, 4 );
-        $this->loader->add_filter( 'uwp_form_input_html_url', $forms, 'uwp_form_input_url', 10, 4 );
-        $this->loader->add_filter( 'uwp_form_input_html_email', $forms, 'uwp_form_input_email', 10, 4 );
-        $this->loader->add_filter( 'uwp_form_input_html_password', $forms, 'uwp_form_input_password', 10, 4 );
-
-        // Country select
-        $this->loader->add_filter( 'uwp_form_input_html_select_country', $forms, 'uwp_form_input_select_country', 10, 4 );
-
-
-        $this->loader->add_filter( 'uwp_forms_check_for_send_mail_errors', $forms, 'uwp_forms_check_for_send_mail_errors', 10, 3 );
-
-        $this->loader->add_action( 'wp_ajax_uwp_upload_file_remove', $forms, 'uwp_upload_file_remove' );
-
-        //User search form
-        $this->loader->add_action( 'uwp_users_page_search_form_inner', $forms, 'uwp_users_search_form_text_field', 10, 1 );
-        $this->loader->add_action( 'uwp_users_page_search_form_inner', $forms, 'uwp_users_search_form_submit', 50, 1 );
-
-
-        //profile page
-        $this->loader->add_filter('query_vars', $profile, 'profile_query_vars', 10, 1 );
-        $this->loader->add_action('init', $profile, 'rewrite_profile_link' , 10, 1 );
-        $this->loader->add_filter( 'uwp_profile_link', $profile, 'get_profile_link', 10, 2 );
-        $this->loader->add_filter( 'edit_profile_url', $profile, 'uwp_modify_admin_bar_edit_profile_url', 10, 3);
-        $this->loader->add_filter( 'the_title', $profile, 'modify_profile_page_title', 10, 2 );
-        remove_all_filters('get_avatar');
-        $this->loader->add_filter( 'get_avatar', $profile, 'uwp_modify_get_avatar' , 1 , 5 );
-        $this->loader->add_filter( 'get_comment_author_link', $profile, 'uwp_get_comment_author_link' , 10 , 2 );
-        $this->loader->add_action( 'uwp_profile_header', $profile, 'get_profile_header', 10, 1 );
-        $this->loader->add_action( 'uwp_users_profile_header', $profile, 'get_profile_header', 10, 1 );
-        $this->loader->add_action( 'uwp_profile_title', $profile, 'get_profile_title', 10, 1 );
-        //$this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_bio', 10, 1 );
-        $this->loader->add_action( 'uwp_profile_social', $profile, 'get_profile_social', 10, 1 );
-
-        //Fields as tabs
-        $this->loader->add_action( 'uwp_profile_tabs', $profile, 'uwp_extra_fields_as_tabs', 10, 2 );
-
-        // Popup and crop functions
-        $this->loader->add_filter( 'ajax_query_attachments_args', $profile, 'uwp_restrict_attachment_display' );
-        
-        $this->loader->add_action( 'uwp_handle_file_upload_error_checks', $profile, 'uwp_handle_file_upload_error_checks', 10, 4 );
-        $this->loader->add_action( 'wp_ajax_uwp_avatar_banner_upload', $profile, 'uwp_ajax_avatar_banner_upload' );
-        //$this->loader->add_action( 'wp_ajax_uwp_ajax_image_crop_popup', $profile, 'uwp_ajax_image_crop_popup' );
-        $this->loader->add_action( 'wp_ajax_uwp_ajax_image_crop_popup_form', $profile, 'uwp_ajax_image_crop_popup_form' );
-        $this->loader->add_action( 'wp_head', $profile, 'uwp_define_ajaxurl' );
-        $this->loader->add_action( 'uwp_profile_header', $profile, 'uwp_image_crop_init', 10, 1 );
-        $this->loader->add_action( 'uwp_admin_profile_edit', $profile, 'uwp_image_crop_init', 10, 1 );
-
-        // Profile Tabs
-        $this->loader->add_action( 'uwp_profile_content', $profile, 'get_profile_tabs_content', 10, 1 );
-        $this->loader->add_action( 'uwp_profile_more_info_tab_content', $profile, 'get_profile_more_info', 10, 1);
-        $this->loader->add_action( 'uwp_profile_posts_tab_content', $profile, 'get_profile_posts', 10, 1);
-        $this->loader->add_action( 'uwp_profile_comments_tab_content', $profile, 'get_profile_comments', 10, 1);
-        $this->loader->add_action( 'uwp_profile_tab_content', $profile, 'uwp_extra_fields_as_tab_values', 10, 2 );
-
-        // Profile Pagination
-        $this->loader->add_action( 'uwp_profile_pagination', $profile, 'get_profile_pagination');
-
-        // Users
-        $this->loader->add_action( 'uwp_users_search', $profile, 'uwp_users_search');
-        $this->loader->add_action( 'uwp_users_list', $profile, 'uwp_users_list');
-        $this->loader->add_action( 'uwp_users_extra', $profile, 'get_users_extra');
-        $this->loader->add_action( 'uwp_profile_bio', $profile, 'get_profile_side_extra');
-
-
-        // User, allow subscribers to upload profile and banner pictures
-        $this->loader->add_filter( 'plupload_default_params', $profile, 'add_uwp_plupload_param', 10, 1 );
-        $this->loader->add_filter( 'user_has_cap', $profile, 'allow_all_users_profile_uploads', 10, 4 );
-
-        // Admin user edit page
-        $this->loader->add_action( 'edit_user_profile', $templates, 'get_profile_extra_admin_edit', 10, 1 );
-        $this->loader->add_action( 'show_user_profile', $templates, 'get_profile_extra_admin_edit', 10, 1 );
-
-        $this->loader->add_action( 'personal_options_update', $forms, 'update_profile_extra_admin_edit', 10, 1 );
-        $this->loader->add_action( 'edit_user_profile_update', $forms, 'update_profile_extra_admin_edit', 10, 1 );
-
-        $this->loader->add_action( 'user_edit_form_tag', $forms, 'add_multipart_to_admin_edit_form');
-
-    }
-
-    /**
-     * Registers all UsersWP shortcodes in WordPress.
-     *
-     * @since       1.0.0
-     * @package     UsersWP
-     * @return      void
-     */
-    private function define_shortcodes() {
-        $shortcodes = new Users_WP_Shortcodes($this->loader);
-        add_shortcode( 'uwp_register', array($shortcodes,'register'));
-        add_shortcode( 'uwp_login', array($shortcodes,'login'));
-        add_shortcode( 'uwp_forgot', array($shortcodes,'forgot'));
-        add_shortcode( 'uwp_change', array($shortcodes,'change'));
-        add_shortcode( 'uwp_reset', array($shortcodes,'reset'));
-        add_shortcode( 'uwp_account', array($shortcodes,'account'));
-        add_shortcode( 'uwp_profile', array($shortcodes,'profile'));
-        add_shortcode( 'uwp_users', array($shortcodes,'users'));
-    }
-    
-    private function init_settings() {
-
-        global $uwp_options;
-        /** @noinspection PhpUnusedLocalVariableInspection */
-        $plugin_admin = new Users_WP_Admin( $this->get_plugin_name(), $this->get_version()); //required to load dependencies
-        $plugin_admin_settings = new Users_WP_Admin_Settings();
-        $uwp_options = $plugin_admin_settings->uwp_get_settings();
-
-    }
-
-    public function init_form_builder() {
-
-        $form_builder = new Users_WP_Form_Builder();
-
-        $this->loader->add_action('admin_init', $form_builder, 'uwp_form_builder_dummy_fields');
-
-        $this->loader->add_action('uwp_manage_available_fields_predefined', $form_builder, 'uwp_manage_available_fields_predefined');
-        $this->loader->add_action('uwp_manage_available_fields_custom', $form_builder, 'uwp_manage_available_fields_custom');
-        $this->loader->add_action('uwp_manage_available_fields', $form_builder, 'uwp_manage_available_fields');
-        $this->loader->add_action('uwp_manage_selected_fields', $form_builder, 'uwp_manage_selected_fields');
-
-        $this->loader->add_filter('uwp_builder_extra_fields_multiselect', $form_builder, 'uwp_builder_extra_fields_smr', 10, 4);
-        $this->loader->add_filter('uwp_builder_extra_fields_select', $form_builder, 'uwp_builder_extra_fields_smr', 10, 4);
-        $this->loader->add_filter('uwp_builder_extra_fields_radio', $form_builder, 'uwp_builder_extra_fields_smr', 10, 4);
-        $this->loader->add_filter('uwp_builder_extra_fields_datepicker', $form_builder, 'uwp_builder_extra_fields_datepicker', 10, 4);
-        $this->loader->add_filter('uwp_builder_extra_fields_password', $form_builder, 'uwp_builder_extra_fields_password', 10, 4);
-        $this->loader->add_filter('uwp_builder_extra_fields_email', $form_builder, 'uwp_builder_extra_fields_email', 10, 4);
-        $this->loader->add_filter('uwp_builder_extra_fields_file', $form_builder, 'uwp_builder_extra_fields_file', 10, 4);
-        $this->loader->add_filter('uwp_builder_data_type_text', $form_builder, 'uwp_builder_data_type_text', 10, 4);
-
-        $this->loader->add_action('uwp_admin_extra_custom_fields', $form_builder, 'uwp_advance_admin_custom_fields', 10, 2);
-
-        $this->loader->add_filter('uwp_form_builder_available_fields_head', $form_builder, 'uwp_register_available_fields_head', 10, 2);
-        $this->loader->add_filter('uwp_form_builder_available_fields_note', $form_builder, 'uwp_register_available_fields_note', 10, 2);
-        $this->loader->add_filter('uwp_form_builder_selected_fields_head', $form_builder, 'uwp_register_selected_fields_head', 10, 2);
-        $this->loader->add_filter('uwp_form_builder_selected_fields_note', $form_builder, 'uwp_register_selected_fields_note', 10, 2);
-
-        $this->loader->add_action('uwp_manage_available_fields', $form_builder, 'uwp_manage_register_available_fields', 10, 1);
-        $this->loader->add_action('uwp_manage_selected_fields', $form_builder, 'uwp_manage_register_selected_fields', 10, 1);
-
-        $this->loader->add_filter('uwp_register_fields', $form_builder, 'uwp_register_extra_fields', 10, 2);
-
-        $this->loader->add_action('wp_ajax_uwp_ajax_register_action', $form_builder, 'uwp_register_ajax_handler');
-
-        // htmlvar not needed for taxonomy
-        $this->loader->add_filter('uwp_builder_htmlvar_name_taxonomy',$form_builder, 'uwp_return_empty_string',10,4);
-
-
-        // default_value not needed for textarea, html, file, fieldset
-        $this->loader->add_filter('uwp_builder_default_value_textarea',$form_builder, 'uwp_return_empty_string',10,4);
-        $this->loader->add_filter('uwp_builder_default_value_html',$form_builder, 'uwp_return_empty_string',10,4);
-        $this->loader->add_filter('uwp_builder_default_value_file',$form_builder, 'uwp_return_empty_string',10,4);
-        $this->loader->add_filter('uwp_builder_default_value_fieldset',$form_builder, 'uwp_return_empty_string',10,4);
-
-        // is_required not needed for fieldset
-        $this->loader->add_filter('uwp_builder_is_required_fieldset',$form_builder, 'uwp_return_empty_string',10,4);
-        $this->loader->add_filter('uwp_builder_required_msg_fieldset',$form_builder, 'uwp_return_empty_string',10,4);
-
-        // field_icon not needed for fieldset
-        $this->loader->add_filter('uwp_builder_field_icon_fieldset',$form_builder, 'uwp_return_empty_string',10,4);
-        $this->loader->add_filter('uwp_builder_css_class_fieldset',$form_builder, 'uwp_return_empty_string',10,4);
-
-    }
-
-    public function init_ajax() {
-        $form_builder = new Users_WP_Form_Builder();
-        $ajax = new Users_WP_Ajax($form_builder);
-
-        $this->loader->add_action('wp_ajax_uwp_ajax_action', $ajax, 'handler');
-    }
-
-    /**
-     * Run the loader to execute all of the hooks with WordPress.
-     *
-     * @since    1.0.0
-     */
-    public function run() {
-        $this->loader->run();
-    }
-
-    /**
-     * The name of the plugin used to uniquely identify it within the context of
-     * WordPress and to define internationalization functionality.
-     *
-     * @since     1.0.0
-     * @return    string    The name of the plugin.
-     */
-    public function get_plugin_name() {
-        return $this->plugin_name;
-    }
-
-    /**
-     * The reference to the class that orchestrates the hooks with the plugin.
-     *
-     * @since     1.0.0
-     * @return    Users_WP_Loader    Orchestrates the hooks of the plugin.
-     */
-    public function get_loader() {
-        return $this->loader;
-    }
-
-    /**
-     * Retrieve the version number of the plugin.
-     *
-     * @since     1.0.0
-     * @return    string    The version number of the plugin.
-     */
-    public function get_version() {
-        return $this->version;
-    }
-
 
 }

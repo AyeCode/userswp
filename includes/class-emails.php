@@ -7,13 +7,13 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Mails {
+class UsersWP_Mails {
 
     /**
      * All UsersWP user mails happen via this method.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $message_type       Message type.
      * @param       int         $user_id            User ID.
      * @param       bool        $login_details      Login detail info. Applicable only for register form emails
@@ -183,7 +183,7 @@ class Users_WP_Mails {
      * All UsersWP admin mails happen via this method.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $message_type       Message type.
      * @param       int         $user_id            User ID. Not admin user ID.
      * @return      bool                            True when success. False when error.

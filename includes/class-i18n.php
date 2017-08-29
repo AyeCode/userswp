@@ -8,13 +8,13 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_i18n {
+class UsersWP_i18n {
     
     /**
      * Load the plugin text domain for translation.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public function load_plugin_textdomain() {

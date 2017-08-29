@@ -3,7 +3,7 @@
  * Gets the post count for a given post type.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @param       int         $user_id                   User Id.
  * @param       string      $post_type                 Post Type.
  * @param       string      $extra_post_status         Optional. Extra post status.
@@ -41,7 +41,7 @@ function uwp_post_count($user_id, $post_type, $extra_post_status = '') {
  * Gets the comment count.
  *
  * @since       1.0.0
- * @package     UsersWP
+ * @package     userswp
  * @param       int         $user_id    User ID.
  * @return      int                     Comment count.
  */

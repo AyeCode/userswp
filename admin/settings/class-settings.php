@@ -5,8 +5,8 @@
  * @link       http://wpgeodirectory.com
  * @since      1.0.0
  *
- * @package    Users_WP
- * @subpackage Users_WP/admin/settings
+ * @package    userswp
+ * @subpackage userswp/admin/settings
  */
 
 /**
@@ -15,22 +15,44 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Users_WP
- * @subpackage Users_WP/admin/settings
+ * @package    userswp
+ * @subpackage userswp/admin/settings
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Admin_Settings {
+class UsersWP_Admin_Settings {
 
+    private $form_builder;
+    
+    public function __construct($form_builder) {
 
-    protected $loader;
+        $this->form_builder = $form_builder;
+        
+        $this->init_settings();
 
-    public function __construct() {
-        $this->load_dependencies();
+        add_action( 'admin_init', array($this, 'uwp_register_settings') );
+        //register settings
+        add_action( 'userswp_settings_main_tab_content', array($this, 'get_general_content') );
+        add_action( 'userswp_settings_register_tab_content', array($this, 'generic_display_form') );
+        add_action( 'userswp_settings_login_tab_content', array($this, 'generic_display_form') );
+        add_action( 'userswp_settings_account_tab_content', array($this, 'generic_display_form') );
+        add_action( 'userswp_settings_profile_tab_content', array($this, 'generic_display_form') );
+        add_action( 'userswp_settings_users_tab_content', array($this, 'generic_display_form') );
+        add_action( 'userswp_settings_change_tab_content', array($this, 'generic_display_form') );
+        add_action( 'userswp_settings_uninstall_tab_content', array($this, 'generic_display_form') );
+
+        add_action( 'uwp_form_builder_settings_main_tab_content_before', array($this, 'get_form_builder_tabs') );
+        add_action( 'uwp_form_builder_settings_main_tab_content', array($this, 'get_form_builder_content') );
+        add_filter( 'uwp_display_form_title', array($this, 'display_form_title'), 10, 3 );
+        add_action( 'uwp_notifications_settings_main_tab_content', array($this, 'get_notifications_content') );
+        add_action( 'uwp_notifications_settings_admin_tab_content', array($this, 'generic_display_form') );
+        
     }
+    
+    private function init_settings() {
 
-    private function load_dependencies() {
+        global $uwp_options;
+        $uwp_options = $this->uwp_get_settings();
 
-        require_once dirname(dirname( __FILE__ )) . '/settings/class-formbuilder.php';
     }
 
     public function uwp_settings_page() {
@@ -47,7 +69,7 @@ class Users_WP_Admin_Settings {
             <div id="users-wp">
                 <div class="item-list-tabs">
 
-                    <?php if (count($settings_array[$page]) > 1) { ?>
+                    <?php if (isset($settings_array[$page]) && count($settings_array[$page]) > 1) { ?>
 
                         <div class="wp-filter" style="margin-top: 0;margin-bottom: 5px">
                         <ul class="filter-links">
@@ -271,7 +293,6 @@ class Users_WP_Admin_Settings {
     }
 
     public function get_form_builder_content() {
-        $form_builder = new Users_WP_Form_Builder();
 
         $tab = 'account';
 
@@ -279,7 +300,7 @@ class Users_WP_Admin_Settings {
             $tab = $_GET['tab'];
         }
 
-        $tab_content = $form_builder->uwp_form_builder($tab);
+        $tab_content = $this->form_builder->uwp_form_builder($tab);
         if ($tab == 'account') {
             ?>
             <h3 class=""><?php echo __( 'Manage Account Form Fields', 'userswp' ); ?></h3>
@@ -332,7 +353,7 @@ class Users_WP_Admin_Settings {
             add_option( 'uwp_settings' );
         }
 
-        $callback = new Users_WP_Callback();
+        $callback = new UsersWP_Callback();
 
         foreach( $this->uwp_get_registered_settings() as $tab => $settings ) {
 
@@ -386,7 +407,7 @@ class Users_WP_Admin_Settings {
 
     public function uwp_get_registered_settings() {
         
-        $file_obj = new Users_WP_Files();
+        $file_obj = new UsersWP_Files();
 
         /**
          * 'Whitelisted' uwp settings, filters are provided for each settings
@@ -670,7 +691,25 @@ class Users_WP_Admin_Settings {
                         ),
                     )
                 ),
-                'admin' => apply_filters( 'uwp_settings_notifications_admin', array()),
+                'admin' => apply_filters( 'uwp_settings_notifications_admin',
+                    array(
+                        'registration_success_email_subject_admin' => array(
+                            'id' => 'registration_success_email_subject_admin',
+                            'name' => __( 'New account registration', 'userswp' ),
+                            'desc' => "",
+                            'type' => 'text',
+                            'std' => __( 'New account registration', 'userswp' ),
+                            'size' => 'regular',
+                        ),
+                        'registration_success_email_content_admin' => array(
+                            'id' => 'registration_success_email_content_admin',
+                            'name' => "",
+                            'desc' => "",
+                            'type' => 'textarea',
+                            'std' => __("A user has been registered recently on your website. [#extras#]", "userswp"),
+                        ),
+                    )
+                ),
             ),
         );
 

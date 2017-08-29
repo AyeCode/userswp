@@ -1,0 +1,139 @@
+Are the following tables created upon plugin activation?
+
+    1) wp_uwp_form_fields
+    2) wp_uwp_form_extras
+    3) wp_uwp_usermeta
+
+Are the following pages created upon plugin activation?
+
+    1) Register
+    2) Login
+    3) Account
+    4) Forgot Password?
+    5) Reset Password
+    6) Change Password
+    7) Profile
+    8) Users
+
+Are the pages contain the uwp shortcodes?
+
+Are the pages assigned properly in General settings page?
+
+Are the default form builder fields created?
+
+Are the pages displayed properly in frontend?
+
+Are the following pages not getting displayed when user LOGGED IN
+
+    1) Register
+    2) Login
+    3) Forgot Password?
+    4) Reset Password
+
+Are the following pages not getting displayed when user NOT LOGGED IN
+
+    1) Account
+    2) Change Password
+
+Are the following pages getting displayed for everyone?
+
+    1) Profile
+    2) Users
+
+Is the wordpress menu page contains uwp menu section?
+
+Are the menu items displayed properly?
+
+Register:
+
+    1) Is the default form works without any new custom fields?
+    2) Test the form for the each Registration Action and make sure email notification works properly
+          a) Auto Approve
+          b) Auto Approve + Auto Login
+          c) Require Email Activation
+    3) Is the register redirect setting working correctly?
+    4) Is the tos checkbox appears in form when page assigned and working properly?
+    5) Create new custom fields and make sure its working.
+    6) Bottom links like Login, Forgot pass linked correctly?
+    7) Make sure email notification works correctly for all notification shortcodes.
+
+Login:
+
+    1) Is the page displayed properly?
+    2) Is the login page redirect setting working correctly?
+    3) Is the login setting for wp-login.php block working correctly?
+    4) Is the Logout redirect setting working correctly?
+    5) Bottom links like Register, Forgot password linked correctly?
+
+Forgot Password?
+
+    1) Is the page displayed properly?
+    2) Is the forgot password email working properly?
+    3) Does it contain the correct reset link?
+
+Reset Password
+
+    1) Does it displays the error message when the page get loaded directly.
+    2) When clicking the reset link in forgot password email does it takes to the correct reset page and displays the reset form?
+    3) Is the reset form working correctly?
+
+Account
+
+    1) Is the account edit form working properly for default fields?
+    2) Is the form working for new custom fields?
+    3) Is the privacy tab appearing when "Let user decide" option selected for a field.
+    4) Is the privacy setting working properly
+    5) File upload field working correctly?
+    6) Is the account form syncs properly with wordpress user fields on save?
+
+Change Password
+
+    1) is the change password page displayed properly?
+    2) Is the form working correctly?
+    3) Is the old password confirmation field appearing when enabled?
+
+Users:
+
+    1) Are the users page displaying properly?
+    2) Is the search working correctly?
+    3) Are custom fields showing up when [users_page] selected in show in what locations?
+
+Profile:
+
+    1) Is the profile page setting section working correctly?
+    2) Is the page displaying correctly?
+    3) Is /profile redirect to /profile/username when loggedin
+    4) Is the /author redirect to /profile
+    5) Is the comment author links linking correctly to profile page
+    6) Is banner upload working correctly?
+    7) Is avatar upload working correctly?
+    8) Are banner and avatar uploads comply with max file upload setting?
+
+
+Check all email notifications
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

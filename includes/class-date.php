@@ -7,13 +7,13 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Date {
+class UsersWP_Date {
 
     /**
      * Converts PHP Date format to jQuery UI date format.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $php_format     Date Format.
      * @return      string                      Formatted Date.
      */
@@ -92,7 +92,7 @@ class Users_WP_Date {
      * Converts date from one format to another. 
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $date_input         Date string to convert.
      * @param       string      $date_to            Date format to convert to.
      * @param       string      $date_from          Date format to convert from.
@@ -126,7 +126,7 @@ class Users_WP_Date {
      * Converts non english date months to english date months.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $date   Date String.
      * @return      string              Converted Date.
      */
@@ -197,6 +197,33 @@ class Users_WP_Date {
 
 
         return $date;
+    }
+
+    /**
+     * Gets random date.
+     *
+     * @since       1.0.0
+     * @package     userswp
+     *
+     * @param       int $days_from      Random days from.
+     * @param       int $days_to        Random days to.
+     *
+     * @return      string              Formatted date string.
+     */
+    public function get_random_date( $days_from = 30, $days_to = 0 ) {
+        // 1 day in seconds is 86400
+        $from = $days_from * rand( 10000, 99999 );
+
+        // $days_from should always be less than $days_to
+        if ( $days_to > $days_from ) {
+            $days_to = $days_from - 1;
+        }
+
+        $to        = $days_to * rand( 10000, 99999 );
+        $date_from = time() - $from;
+        $date_to   = time() - $to;
+
+        return date( 'Y-m-d H:i:s', rand( $date_from, $date_to ) );
     }
 
 }

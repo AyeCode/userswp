@@ -7,20 +7,13 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Notices {
+class UsersWP_Notices {
     
-    public function __construct() {
-
-        add_action('uwp_template_display_notices', array($this, 'display_registration_disabled_notice'));
-        add_action('uwp_template_display_notices', array($this, 'form_notice_by_key'));
-
-    }
-
     /**
      * Wrap notice with a div.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string      Html string.
      */
     function wrap_notice($message, $type) {
@@ -35,7 +28,7 @@ class Users_WP_Notices {
      *  Displays notices when registration disabled.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     function display_registration_disabled_notice($type) {
@@ -53,7 +46,7 @@ class Users_WP_Notices {
      * Displays noticed based on notice key. 
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public function form_notice_by_key() {
@@ -88,4 +81,32 @@ class Users_WP_Notices {
         }
     }
 
+    public function show_admin_notices() {
+        settings_errors( 'uwp-notices' );
+    }
+
+    /**
+     * Displays UsersWP admin notices
+     *
+     * @since       1.0.0
+     * @package     userswp
+     *
+     * @return      void
+     */
+    function uwp_admin_notices() {
+        $errors = get_option( 'uwp_admin_notices' );
+
+        if ( ! empty( $errors ) ) {
+
+            echo '<div id="uwp_admin_errors" class="notice-error notice is-dismissible">';
+
+            echo '<p>' . $errors . '</p>';
+
+            echo '</div>';
+
+            // Clear
+            delete_option( 'uwp_admin_notices' );
+        }
+    }
+    
 }

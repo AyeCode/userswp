@@ -387,3 +387,17 @@
 .jcrop-holder img, img.jcrop-preview {
   max-width: none !important;
 }
+
+@media only screen and (max-width: 500px) {
+  .uwp_page .uwp-content-wrap {
+    .uwp-profile {
+      float: none;
+      width: 100%;
+    }
+    .uwp-profile-content {
+      float: none;
+      margin: 0;
+      width: 100%;
+    }
+  }
+}

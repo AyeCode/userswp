@@ -7,22 +7,19 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Ajax {
+class UsersWP_Ajax {
 
     private $form_builder;
-
     
     public function __construct($form_builder) {
-
         $this->form_builder = $form_builder;
-
     }
-
+    
     /**
      * Handles the create custom field and sort custom field ajax requests.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      void
      */
     public function handler()
@@ -49,7 +46,7 @@ class Users_WP_Ajax {
      * Kill WordPress execution and display HTML message with error message.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $message    Optional. Error message.
      * @param       string      $title      Optional. Error title.
      * @param       int         $status     The HTTP response code. Default 200 for Ajax requests, 500 otherwise.
@@ -65,7 +62,7 @@ class Users_WP_Ajax {
      * Handles the create custom field ajax request.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       array       $data   Submitted $_REQUEST data.
      * @return      void
      */

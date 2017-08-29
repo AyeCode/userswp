@@ -7,19 +7,13 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Files {
+class UsersWP_Files {
     
-    public function __construct() {
-        if($this->uwp_doing_upload()){
-            add_filter( 'wp_handle_upload_prefilter', array($this, 'uwp_wp_media_restrict_file_types') );
-        }
-    }
-
     /**
      * Handles file upload request.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       object          $field      Field info object.
      * @param       array           $files      $_FILES array.
      * @return      bool|array                  Uploaded file url info array.
@@ -49,7 +43,7 @@ class Users_WP_Files {
             foreach ( $files_to_upload as $file_key => $file_to_upload ) {
 
                 if (!empty($allowed_mime_types)) {
-                    $ext = uwp_get_file_type($file_to_upload['type']);
+                    $ext = $this->uwp_get_file_type($file_to_upload['type']);
 
                     $allowed_error_text = implode(', ', $allowed_mime_types);
                     if ( !in_array( $ext , $allowed_mime_types ) )
@@ -100,7 +94,7 @@ class Users_WP_Files {
      * Formats the file size into human readable form.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       int         $bytes      Size in Bytes.
      * @return      string                  Size in human readable form.
      */
@@ -138,7 +132,7 @@ class Users_WP_Files {
      * Formats the file size in KB.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       int         $bytes      Size in Bytes.
      * @return      int                     Size in KB.
      */
@@ -152,7 +146,7 @@ class Users_WP_Files {
      * Gets the size is bytes for given value.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $val    Size in human readable form.
      * @return      int                 Value in bytes.
      */
@@ -179,7 +173,7 @@ class Users_WP_Files {
      * Processes the file upload.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       array       $file       File info to upload.
      * @param       array       $args       File upload helper args.
      * @return      object                  Uploaded file info
@@ -225,7 +219,7 @@ class Users_WP_Files {
      * Prepares the files for upload
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       array       $file_data      Files to upload
      * @return      array                       Prepared files.
      */
@@ -256,7 +250,7 @@ class Users_WP_Files {
      * Validates the file uploads.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       array       $files          $_FILES array
      * @param       string      $type           Form type.
      * @param       bool        $url_only       Return only the url or whole file info?
@@ -312,7 +306,7 @@ class Users_WP_Files {
      * Displays the preview for images and links for other types above the field for existing uploads.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       object      $field          Form field info.
      * @param       string      $value          Value of the field.
      * @param       bool        $removable      Is this value removable by user?
@@ -346,7 +340,9 @@ class Users_WP_Files {
         if ($value) {
 
             $upload_dir = wp_upload_dir();
-            $value = $upload_dir['baseurl'].$value;
+            if (substr( $value, 0, 4 ) !== "http") {
+                $value = $upload_dir['baseurl'].$value;
+            }
 
             $file = basename( $value );
             $filetype = wp_check_filetype($file);
@@ -378,7 +374,7 @@ class Users_WP_Files {
      * restrict files to certain types
      * 
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       array       $file   File info.
      * @return      array               Modified file info.
      */
@@ -407,7 +403,7 @@ class Users_WP_Files {
      * Check whether the uploads is from the profile page.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      bool    
      */
     public function uwp_doing_upload(){
@@ -418,7 +414,7 @@ class Users_WP_Files {
      * Gets the maximum file upload size.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string|bool        $form_type              Form type.
      * @param       string|bool        $field_htmlvar_name     htmlvar_name key.
      * @return      int                                         Allowed upload size.
@@ -436,6 +432,127 @@ class Users_WP_Files {
         $max_upload_size = apply_filters('uwp_get_max_upload_size', $max_upload_size, $form_type, $field_htmlvar_name);
 
         return $max_upload_size;
+    }
+
+
+    /**
+     * Modifies the maximum file upload size based on the setting.
+     *
+     * @since       1.0.0
+     * @package     userswp
+     *
+     * @param       int         $bytes      Size in bytes.
+     * @param       string      $type       File upload type.
+     *
+     * @return      int                     Size in bytes.
+     */
+    public function uwp_modify_get_max_upload_size($bytes, $type) {
+
+        if ($type == 'avatar') {
+            $kb = uwp_get_option('profile_avatar_size', false);
+            if ($kb) {
+                $bytes = intval($kb) * 1024;
+            }
+        }
+
+        if ($type == 'banner') {
+            $kb = uwp_get_option('profile_banner_size', false);
+            if ($kb) {
+                $bytes = intval($kb) * 1024;
+            }
+        }
+
+        return $bytes;
+
+    }
+
+    /**
+     * Gets the file type using the extension.
+     * Ex: 'jpg'  => 'image/jpeg'
+     *
+     * @since       1.0.0
+     * @package     userswp
+     *
+     * @param       string      $ext        Extension string. Ex: png, jpg
+     *
+     * @return      string                  File type.
+     */
+    public function uwp_get_file_type($ext) {
+        $allowed_file_types = $this->allowed_mime_types();
+        $file_types = array();
+        foreach ( $allowed_file_types as $format => $types ) {
+            $file_types = array_merge($file_types, $types);
+        }
+        $file_types = array_flip($file_types);
+        return $file_types[$ext];
+    }
+
+    /**
+     * Returns allowed mime types in uploads
+     *
+     * @since       1.0.0
+     * @package     userswp
+     *
+     * @return      array       Allowed mime types.
+     */
+    public function allowed_mime_types() {
+        return apply_filters( 'uwp_allowed_mime_types', array(
+                'Image'       => array( // Image formats.
+                    'jpg'  => 'image/jpeg',
+                    'jpe'  => 'image/jpeg',
+                    'jpeg' => 'image/jpeg',
+                    'gif'  => 'image/gif',
+                    'png'  => 'image/png',
+                    'bmp'  => 'image/bmp',
+                    'ico'  => 'image/x-icon',
+                ),
+                'Video'       => array( // Video formats.
+                    'asf'  => 'video/x-ms-asf',
+                    'avi'  => 'video/avi',
+                    'flv'  => 'video/x-flv',
+                    'mkv'  => 'video/x-matroska',
+                    'mp4'  => 'video/mp4',
+                    'mpeg' => 'video/mpeg',
+                    'mpg'  => 'video/mpeg',
+                    'wmv'  => 'video/x-ms-wmv',
+                    '3gp'  => 'video/3gpp',
+                ),
+                'Audio'       => array( // Audio formats.
+                    'ogg' => 'audio/ogg',
+                    'mp3' => 'audio/mpeg',
+                    'wav' => 'audio/wav',
+                    'wma' => 'audio/x-ms-wma',
+                ),
+                'Text'        => array( // Text formats.
+                    'css'  => 'text/css',
+                    'csv'  => 'text/csv',
+                    'htm'  => 'text/html',
+                    'html' => 'text/html',
+                    'txt'  => 'text/plain',
+                    'rtx'  => 'text/richtext',
+                    'vtt'  => 'text/vtt',
+                ),
+                'Application' => array( // Application formats.
+                    'doc'  => 'application/msword',
+                    'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'exe'  => 'application/x-msdownload',
+                    'js'   => 'application/javascript',
+                    'odt'  => 'application/vnd.oasis.opendocument.text',
+                    'pdf'  => 'application/pdf',
+                    'pot'  => 'application/vnd.ms-powerpoint',
+                    'ppt'  => 'application/vnd.ms-powerpoint',
+                    'pptx' => 'application/vnd.ms-powerpoint',
+                    'psd'  => 'application/octet-stream',
+                    'rar'  => 'application/rar',
+                    'rtf'  => 'application/rtf',
+                    'swf'  => 'application/x-shockwave-flash',
+                    'tar'  => 'application/x-tar',
+                    'xls'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'zip'  => 'application/zip',
+                )
+            )
+        );
     }
 
 }

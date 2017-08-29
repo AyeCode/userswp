@@ -7,62 +7,19 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class Users_WP_Shortcodes {
+class UsersWP_Shortcodes {
 
     private $templates;
-
-    protected $loader;
-
-    public function __construct($loader) {
-
-        $this->loader = $loader;
-        $this->load_dependencies();
-        $this->templates = new Users_WP_Templates($loader);
-        $this->register_shortcodes();
-
+    
+    public function __construct($templates) {
+        $this->templates = $templates;
     }
-
-    /**
-     * Loads all dependencies for shortcodes.
-     *
-     * @since       1.0.0
-     * @package     UsersWP
-     * @return      void
-     */
-    private function load_dependencies() {
-
-        /**
-         * The class responsible for defining all front end templates
-         */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-templates.php';
-
-    }
-
-    /**
-     * Registers all UsersWP shortcodes in WordPress.
-     *
-     * @since       1.0.0
-     * @package     UsersWP
-     * @return      void
-     */
-    public function register_shortcodes() {
-
-        add_shortcode( 'uwp_register',  array($this, 'register'));
-        add_shortcode( 'uwp_login',     array($this, 'login'));
-        add_shortcode( 'uwp_forgot',    array($this, 'forgot'));
-        add_shortcode( 'uwp_change',    array($this, 'change'));
-        add_shortcode( 'uwp_reset',     array($this, 'reset'));
-        add_shortcode( 'uwp_account',   array($this, 'account'));
-        add_shortcode( 'uwp_profile',   array($this, 'profile'));
-        add_shortcode( 'uwp_users',     array($this, 'users'));
-
-    }
-
+    
     /**
      * Returns the UsersWP register page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function register($atts) {
@@ -84,7 +41,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP login page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function login() {
@@ -98,7 +55,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP forgot password page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function forgot() {
@@ -109,7 +66,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP change password page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function change() {
@@ -120,7 +77,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP reset password page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function reset() {
@@ -131,7 +88,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP account page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function account() {
@@ -142,7 +99,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP profile page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function profile() {
@@ -153,7 +110,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP users page template content.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @return      string     UsersWP template content.
      */
     public function users() {
@@ -164,7 +121,7 @@ class Users_WP_Shortcodes {
      * Returns the UsersWP template content based on type.
      *
      * @since       1.0.0
-     * @package     UsersWP
+     * @package     userswp
      * @param       string      $type       Template type.
      * @return      string                  UsersWP template content.
      */

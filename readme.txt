@@ -112,6 +112,20 @@ No questions so far, but don't hesitate to ask!
 
 = 1.0.7 =
 * Edit user in wp-admin does not display country input correctly - FIXED
+* Tools page added - ADDED
+* Major code refactoring - CHANGED
+* Class names renamed from Users_WP to UsersWP for better naming and consistency - CHANGED
+* Email links are dislayed as plain text - FIXED
+* Login widget redirects to current page - ADDED
+* Register admin notification setting - ADDED
+* File Preview Not working properly - FIXED
+* Font awesome icon displayed instead of count 1 for custom field "display as tab" - CHANGED
+* Updates not creating the new table columns - FIXED
+* Fieldset with its fields can be displayed in own profile tab - ADDED
+* Url field value not getting printed in more info tab - FIXED
+* Bio not displaying correctly - FIXED
+* User bio slashes contains duplicate slashes - FIXED
+* User privacy settings not working correctly - FIXED
 
 = 1.0.6 =
 * First release on WordPress.org - :)
