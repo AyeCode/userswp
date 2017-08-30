@@ -59,7 +59,7 @@ class UsersWP_Mails {
             $subject = apply_filters('uwp_send_mail_subject', $subject, $message_type);
             $message = apply_filters('uwp_send_mail_message', $message, $message_type);
         }
-
+        
         if (!empty($subject)) {
             $subject = __(stripslashes_deep($subject), 'userswp');
         }
@@ -161,6 +161,7 @@ class UsersWP_Mails {
 
         $sent = wp_mail($to, $subject, $message, $headers);
 
+
         if (!$sent) {
             if (is_array($to)) {
                 $to = implode(',', $to);
@@ -198,14 +199,9 @@ class UsersWP_Mails {
             $login_page_url = wp_login_url();
         }
 
-
-        $extras = "";
-        $subject = "";
-        $message = "";
-
-        $extras = apply_filters('uwp_send_admin_mail_extras', $extras, $message_type, $user_id);
-        $subject = apply_filters('uwp_send_admin_mail_subject', $subject, $message_type);
-        $message = apply_filters('uwp_send_admin_mail_message', $message, $message_type);
+        $extras = apply_filters('uwp_send_admin_mail_extras', "", $message_type, $user_id);
+        $subject = apply_filters('uwp_send_admin_mail_subject', "", $message_type);
+        $message = apply_filters('uwp_send_admin_mail_message', "", $message_type);
 
         if (!empty($subject)) {
             $subject = __(stripslashes_deep($subject), 'userswp');

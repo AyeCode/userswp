@@ -86,6 +86,7 @@ class UsersWP {
         
         
         // actions and filters
+        $this->load_assets_actions_and_filters($this->assets);
         $this->load_meta_actions_and_filters($this->meta);
         $this->load_ajax_actions_and_filters($this->ajax);
         $this->load_files_actions_and_filters($this->files);
@@ -98,10 +99,21 @@ class UsersWP {
         $this->load_tables_actions_and_filters($this->tables);
         $this->load_templates_actions_and_filters($this->templates);
         $this->load_tools_actions_and_filters($this->tools);
+
+        //admin
+        $this->load_form_builder_actions_and_filters($this->form_builder);
+        $this->load_menus_actions_and_filters($this->menus);
+        $this->load_admin_actions_and_filters($this->admin);
+        $this->load_admin_settings_actions_and_filters($this->admin_settings);
         
     }
-    
-    
+
+
+    public function load_assets_actions_and_filters($instance) {
+        add_action( 'wp_enqueue_scripts', array($instance, 'enqueue_styles') );
+        add_action( 'wp_enqueue_scripts', array($instance, 'enqueue_scripts') );
+    }
+
     public function load_meta_actions_and_filters($instance) {
         add_action('user_register', array($instance, 'sync_usermeta'), 10, 1);
         add_action('delete_user', array($instance, 'delete_usermeta_for_user'));
@@ -270,6 +282,82 @@ class UsersWP {
         add_action('wp_ajax_uwp_process_diagnosis', array($instance, 'uwp_process_diagnosis_ajax'));
     }
 
+    public function load_form_builder_actions_and_filters($instance) {
+        // Actions
+        add_action('admin_init', array($instance, 'uwp_form_builder_dummy_fields'));
+        add_action('uwp_manage_available_fields_predefined', array($instance, 'uwp_manage_available_fields_predefined'));
+        add_action('uwp_manage_available_fields_custom', array($instance, 'uwp_manage_available_fields_custom'));
+        add_action('uwp_manage_available_fields', array($instance, 'uwp_manage_available_fields'));
+        add_action('uwp_manage_selected_fields', array($instance, 'uwp_manage_selected_fields'));
+        add_action('uwp_admin_extra_custom_fields', array($instance, 'uwp_advance_admin_custom_fields'), 10, 2);
+        add_action('uwp_manage_available_fields', array($instance, 'uwp_manage_register_available_fields'), 10, 1);
+        add_action('uwp_manage_selected_fields', array($instance, 'uwp_manage_register_selected_fields'), 10, 1);
+        add_action('wp_ajax_uwp_ajax_register_action', array($instance, 'uwp_register_ajax_handler'));
+
+
+        // Filters
+        add_filter('uwp_builder_extra_fields_multiselect', array($instance, 'uwp_builder_extra_fields_smr'), 10, 4);
+        add_filter('uwp_builder_extra_fields_select', array($instance, 'uwp_builder_extra_fields_smr'), 10, 4);
+        add_filter('uwp_builder_extra_fields_radio', array($instance, 'uwp_builder_extra_fields_smr'), 10, 4);
+        add_filter('uwp_builder_extra_fields_datepicker', array($instance, 'uwp_builder_extra_fields_datepicker'), 10, 4);
+        add_filter('uwp_builder_extra_fields_password', array($instance, 'uwp_builder_extra_fields_password'), 10, 4);
+        add_filter('uwp_builder_extra_fields_email', array($instance, 'uwp_builder_extra_fields_email'), 10, 4);
+        add_filter('uwp_builder_extra_fields_file', array($instance, 'uwp_builder_extra_fields_file'), 10, 4);
+        add_filter('uwp_builder_data_type_text', array($instance, 'uwp_builder_data_type_text'), 10, 4);
+        add_filter('uwp_form_builder_available_fields_head', array($instance, 'uwp_register_available_fields_head'), 10, 2);
+        add_filter('uwp_form_builder_available_fields_note', array($instance, 'uwp_register_available_fields_note'), 10, 2);
+        add_filter('uwp_form_builder_selected_fields_head', array($instance, 'uwp_register_selected_fields_head'), 10, 2);
+        add_filter('uwp_form_builder_selected_fields_note', array($instance, 'uwp_register_selected_fields_note'), 10, 2);
+        add_filter('uwp_register_fields', array($instance, 'uwp_register_extra_fields'), 10, 2);
+        // htmlvar not needed for taxonomy
+        add_filter('uwp_builder_htmlvar_name_taxonomy',array($instance, 'uwp_return_empty_string'),10,4);
+        // default_value not needed for textarea, html, file, fieldset
+        add_filter('uwp_builder_default_value_textarea',array($instance, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_default_value_html',array($instance, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_default_value_file',array($instance, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_default_value_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
+        // is_required not needed for fieldset
+        add_filter('uwp_builder_is_required_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_required_msg_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
+        // field_icon not needed for fieldset
+        add_filter('uwp_builder_field_icon_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_css_class_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
+    }
+
+    public function load_menus_actions_and_filters($instance) {
+        add_action( 'load-nav-menus.php', array($instance, 'users_wp_admin_menu_metabox') );
+    }
+
+    public function load_admin_actions_and_filters($instance) {
+        add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_styles') );
+        add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_scripts') );
+        add_action( 'admin_menu', array($instance, 'setup_admin_menus') );
+        add_action('admin_head', array($instance, 'uwp_admin_only_css'));
+    }
+
+    public function load_admin_settings_actions_and_filters($instance) {
+        $instance->init_settings();
+
+        add_action( 'admin_init', array($instance, 'uwp_register_settings') );
+        //register settings
+        add_action( 'userswp_settings_main_tab_content', array($instance, 'get_general_content') );
+        add_action( 'userswp_settings_register_tab_content', array($instance, 'generic_display_form') );
+        add_action( 'userswp_settings_login_tab_content', array($instance, 'generic_display_form') );
+        add_action( 'userswp_settings_account_tab_content', array($instance, 'generic_display_form') );
+        add_action( 'userswp_settings_profile_tab_content', array($instance, 'generic_display_form') );
+        add_action( 'userswp_settings_users_tab_content', array($instance, 'generic_display_form') );
+        add_action( 'userswp_settings_change_tab_content', array($instance, 'generic_display_form') );
+        add_action( 'userswp_settings_uninstall_tab_content', array($instance, 'generic_display_form') );
+
+        add_action( 'uwp_form_builder_settings_main_tab_content_before', array($instance, 'get_form_builder_tabs') );
+        add_action( 'uwp_form_builder_settings_main_tab_content', array($instance, 'get_form_builder_content') );
+        add_filter( 'uwp_display_form_title', array($instance, 'display_form_title'), 10, 3 );
+        add_action( 'uwp_notifications_settings_main_tab_content', array($instance, 'get_notifications_content') );
+        add_action( 'uwp_notifications_settings_admin_tab_content', array($instance, 'generic_display_form') );
+    }
+
+
+    
     /**
      * Run the loader to execute all of the hooks with WordPress.
      *

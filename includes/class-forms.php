@@ -1766,6 +1766,8 @@ class UsersWP_Forms {
                        placeholder="<?php echo $site_title; ?>"
                        value="<?php echo esc_attr(stripslashes($value));?>"
                        title="<?php echo $site_title; ?>"
+                       oninvalid="this.setCustomValidity('<?php _e($field->required_msg, 'userswp'); ?>')"
+                       oninput="setCustomValidity('')"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                        type="<?php echo $type; ?>"
                     <?php if ($step) { echo 'step="'.$step.'"'; } ?>
@@ -1826,6 +1828,8 @@ class UsersWP_Forms {
                           class="<?php echo $field->css_class; ?>"
                           placeholder="<?php echo $site_title; ?>"
                           title="<?php echo $site_title; ?>"
+                          oninvalid="this.setCustomValidity('<?php _e($field->required_msg, 'userswp'); ?>')"
+                          oninput="setCustomValidity('')"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                           type="<?php echo $field->field_type; ?>"
                           rows="4"><?php echo stripslashes($value); ?></textarea>

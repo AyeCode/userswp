@@ -17,17 +17,7 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class UsersWP_Menus {
-
-    /**
-     * Initialize the class and set its properties.
-     *
-     * @since    1.0.0
-     */
-    public function __construct() {
-        add_action( 'load-nav-menus.php', array($this, 'users_wp_admin_menu_metabox') );
-    }
-
-
+    
     /**
      * Load new metabox for nav menu ui.
      *
