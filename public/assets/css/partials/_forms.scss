@@ -78,6 +78,15 @@
       text-transform: uppercase;
       width: 100%;
     }
+
+    .chosen-container-multi .chosen-choices {
+      width: auto;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+    .uwp_multiselect_list {
+      margin-bottom: 20px;
+    }
   }
   .uwp_wc_form {
     label {

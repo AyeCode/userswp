@@ -805,6 +805,10 @@ function uwp_add_account_menu_links() {
             ), $account_page_link);
         }
 
+        if (isset($tab['link'])) {
+            $tab_url = $tab['link'];
+        }
+
         $active = $type == $tab_id ? ' active' : '';
         ?>
         <li id="uwp-account-<?php echo $tab_id; ?>">
