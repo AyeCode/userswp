@@ -1910,7 +1910,7 @@ class UsersWP_Form_Builder {
             if ($field_info->htmlvar_name == 'uwp_account_username') {
                 ?>
                 <div>
-                    <p>This is mandatory register form field.</p>
+                    <p><?php _e('This is mandatory register form field.', 'userswp'); ?></p>
                 </div>
                 <?php
             } else {
@@ -1937,7 +1937,7 @@ class UsersWP_Form_Builder {
         if ($field_info->htmlvar_name == 'uwp_account_username') {
             ?>
             <div>
-                <p>This field is applicable only for register form.</p>
+                <p><?php _e('This field is applicable only for register form.', 'userswp'); ?></p>
             </div>
             <?php
         } else {
