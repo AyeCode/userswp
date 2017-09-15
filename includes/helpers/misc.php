@@ -1368,3 +1368,45 @@ function uwp_field_type_to_fa_icon($type) {
     }
     
 }
+
+/**
+ * Check wpml active or not.
+ *
+ * @since 1.0.7
+ *
+ * @return True if WPML is active else False.
+ */
+function uwp_is_wpml() {
+    if (class_exists('SitePress') && function_exists('icl_object_id')) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Get the element in the WPML current language.
+ *
+ * @since 1.0.7
+ *
+ * @param int         $element_id                 Use term_id for taxonomies, post_id for posts
+ * @param string      $element_type               Use post, page, {custom post type name}, nav_menu, nav_menu_item, category, tag, etc.
+ *                                                You can also pass 'any', to let WPML guess the type, but this will only work for posts.
+ * @param bool        $return_original_if_missing Optional, default is FALSE. If set to true it will always return a value (the original value, if translation is missing).
+ * @param string|NULL $ulanguage_code              Optional, default is NULL. If missing, it will use the current language.
+ *                                                If set to a language code, it will return a translation for that language code or
+ *                                                the original if the translation is missing and $return_original_if_missing is set to TRUE.
+ *
+ * @return int|NULL
+ */
+function uwp_wpml_object_id( $element_id, $element_type = 'post', $return_original_if_missing = false, $ulanguage_code = null ) {
+    if ( uwp_is_wpml() ) {
+        if ( function_exists( 'wpml_object_id_filter' ) ) {
+            return apply_filters( 'wpml_object_id', $element_id, $element_type, $return_original_if_missing, $ulanguage_code );
+        } else {
+            return icl_object_id( $element_id, $element_type, $return_original_if_missing, $ulanguage_code );
+        }
+    }
+
+    return $element_id;
+}

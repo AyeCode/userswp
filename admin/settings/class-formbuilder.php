@@ -1906,13 +1906,23 @@ class UsersWP_Form_Builder {
                 </div>
             </label>
 
-            <div class="uwp-input-wrap uwp-switch">
-                <input type="radio" id="is_register_field_yes<?php echo $radio_id; ?>" name="is_register_field" class="uwp-ri-enabled"  value="1" <?php checked(1, $value); ?> />
-                <label for="is_register_field_yes<?php echo $radio_id; ?>" class="uwp-cb-enable"><span><?php _e('Yes', 'userswp'); ?></span></label>
+            <?php
+            if ($field_info->htmlvar_name == 'uwp_account_username') {
+                ?>
+                <div>
+                    <p>This is mandatory register form field.</p>
+                </div>
+                <?php
+            } else {
+            ?>
+                <div class="uwp-input-wrap uwp-switch">
+                    <input type="radio" id="is_register_field_yes<?php echo $radio_id; ?>" name="is_register_field" class="uwp-ri-enabled"  value="1" <?php checked(1, $value); ?> />
+                    <label for="is_register_field_yes<?php echo $radio_id; ?>" class="uwp-cb-enable"><span><?php _e('Yes', 'userswp'); ?></span></label>
 
-                <input type="radio" id="is_register_field_no<?php echo $radio_id; ?>" name="is_register_field" class="uwp-ri-disabled" value="0" <?php checked(0, $value); ?> />
-                <label for="is_register_field_no<?php echo $radio_id; ?>" class="uwp-cb-disable"><span><?php _e('No', 'userswp'); ?></span></label>
-            </div>
+                    <input type="radio" id="is_register_field_no<?php echo $radio_id; ?>" name="is_register_field" class="uwp-ri-disabled" value="0" <?php checked(0, $value); ?> />
+                    <label for="is_register_field_no<?php echo $radio_id; ?>" class="uwp-cb-disable"><span><?php _e('No', 'userswp'); ?></span></label>
+                </div>
+            <?php } ?>
         </li>
 
         <li <?php echo $hide_register_only_field; ?>>
@@ -1923,6 +1933,15 @@ class UsersWP_Form_Builder {
                 </div>
             </label>
 
+        <?php
+        if ($field_info->htmlvar_name == 'uwp_account_username') {
+            ?>
+            <div>
+                <p>This field is applicable only for register form.</p>
+            </div>
+            <?php
+        } else {
+            ?>
             <div class="uwp-input-wrap uwp-switch">
                 <input type="radio" id="is_register_only_field_yes<?php echo $radio_id; ?>" name="is_register_only_field" class="uwp-ri-enabled"  value="1" <?php checked(1, $register_only_value); ?> />
                 <label for="is_register_only_field_yes<?php echo $radio_id; ?>" class="uwp-cb-enable"><span><?php _e('Yes', 'userswp'); ?></span></label>
@@ -1930,6 +1949,7 @@ class UsersWP_Form_Builder {
                 <input type="radio" id="is_register_only_field_no<?php echo $radio_id; ?>" name="is_register_only_field" class="uwp-ri-disabled" value="0" <?php checked(0, $register_only_value); ?> />
                 <label for="is_register_only_field_no<?php echo $radio_id; ?>" class="uwp-cb-disable"><span><?php _e('No', 'userswp'); ?></span></label>
             </div>
+        <?php } ?>
         </li>
         <?php
     }
@@ -2218,7 +2238,7 @@ class UsersWP_Form_Builder {
                     $nonce = wp_create_nonce('uwp_form_extras_nonce' . $result_str);
                     ?>
 
-                    <?php if ($default): ?>
+                    <?php if ($default == '1'): ?>
                     <?php else: ?>
                         <div title="<?php _e('Click to remove field', 'userswp'); ?>"
                              onclick="delete_register_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>','<?php echo $htmlvar_name; ?>')"
@@ -2254,13 +2274,14 @@ class UsersWP_Form_Builder {
 
                         <li>
                             <div class="uwp-input-wrap">
-
+                                <?php if ($default != '1' || $field_info->site_htmlvar_name == 'uwp_account_password') { ?>
                                 <input type="button" class="button button-primary" name="save" id="save"
                                        value="<?php esc_attr_e('Save', 'userswp'); ?>"
                                        onclick="save_register_field('<?php echo $result_str; ?>')"/>
                                 <input type="button" name="delete" value="<?php esc_attr_e('Delete', 'userswp'); ?>"
                                        onclick="delete_register_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>','<?php echo $htmlvar_name ?>')"
                                        class="button"/>
+                                <?php } ?>
 
                             </div>
                         </li>

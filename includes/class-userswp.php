@@ -170,6 +170,16 @@ class UsersWP {
         add_filter('uwp_forms_check_for_send_mail_errors', array($instance, 'uwp_forms_check_for_send_mail_errors'), 10, 3);
         add_filter('uwp_form_input_email_uwp_account_email_after', array($instance, 'uwp_register_confirm_email_field'), 10, 4);
         add_filter('uwp_form_input_password_uwp_account_password_after', array($instance, 'uwp_register_confirm_password_field'), 10, 4);
+        
+        // Emails
+        add_filter('uwp_send_mail_subject', array($instance, 'init_mail_subject'), 10, 2);
+        add_filter('uwp_send_mail_message', array($instance, 'init_mail_content'), 10, 2);
+        add_filter('uwp_send_mail_extras', array($instance, 'init_mail_extras'), 10, 3);
+
+        add_filter('uwp_send_admin_mail_subject', array($instance, 'init_admin_mail_subject'), 10, 2);
+        add_filter('uwp_send_admin_mail_message', array($instance, 'init_admin_mail_content'), 10, 2);
+        add_filter('uwp_send_admin_mail_extras', array($instance, 'init_admin_mail_extras'), 10, 3);
+        
     }
 
     public function load_i18n_actions_and_filters($instance) {

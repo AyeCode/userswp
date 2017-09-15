@@ -23,6 +23,13 @@ class UsersWP_Pages {
             $current_page_id = $post->ID;
             if ($type) {
                 $uwp_page = uwp_get_option($type, false);
+                if (uwp_is_wpml()) {
+                    global $sitepress;
+                    $wpml_page_id = uwp_wpml_object_id($post->ID, 'page', true, $sitepress->get_default_language());
+                    if (!empty($wpml_page_id)) {
+                        $current_page_id = $wpml_page_id;
+                    }
+                }
                 if ( $uwp_page && ((int) $uwp_page ==  $current_page_id ) ) {
                     return true;
                 } else {
@@ -478,6 +485,12 @@ class UsersWP_Pages {
         }
 
         if ($page_id) {
+            if (uwp_is_wpml()) {
+                $wpml_page_id = uwp_wpml_object_id($page_id, 'page', true, ICL_LANGUAGE_CODE);
+                if (!empty($wpml_page_id)) {
+                    $page_id = $wpml_page_id;
+                }
+            }
             $link = get_permalink($page_id);
         }
 
