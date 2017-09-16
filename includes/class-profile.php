@@ -35,7 +35,9 @@ class UsersWP_Profile {
         if (empty($avatar)) {
             $avatar = get_avatar($user->user_email, 150);
         } else {
-            $avatar = $upload_url.$avatar;
+            if (substr( $avatar, 0, 4 ) === "http") {
+                $avatar = $upload_url.$avatar;    
+            }
             $avatar = '<img src="'.$avatar.'" class="avatar avatar-150 photo" width="150" height="150">';
         }
         ?>
