@@ -1229,7 +1229,9 @@ class UsersWP_Profile {
             if ( !empty($avatar_thumb) ) {
                 $uploads = wp_upload_dir();
                 $upload_url = $uploads['baseurl'];
-                $avatar_thumb = $upload_url.$avatar_thumb;
+                if (substr( $avatar_thumb, 0, 4 ) !== "http") {
+                    $avatar_thumb = $upload_url.$avatar_thumb;
+                }
                 $avatar = "<img alt='{$alt}' src='{$avatar_thumb}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
             }
 
