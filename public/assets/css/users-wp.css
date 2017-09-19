@@ -2316,7 +2316,8 @@
   border: 1px solid #ccc;
   width: 100%; }
   .uwp_page .uwp-content-wrap .uwp-profile-header-img img {
-    display: block; }
+    display: block;
+    width: 100%; }
 .uwp_page .uwp-content-wrap .uwp-profile-social-ul {
   list-style-type: none;
   margin: 0;
@@ -2401,7 +2402,8 @@
       box-sizing: border-box;
       display: block;
       height: auto;
-      margin-top: calc( -100% + 5px); }
+      margin-top: calc( -100% + 5px);
+      width: 100%; }
   .uwp_page .uwp-content-wrap .uwp-profile-avatar .uwp-profile-avatar-change {
     position: absolute;
     z-index: 5;

@@ -35,20 +35,21 @@ class UsersWP_Profile {
         if (empty($avatar)) {
             $avatar = get_avatar($user->user_email, 150);
         } else {
-            if (substr( $avatar, 0, 4 ) !== "http") {
-                $avatar = $upload_url.$avatar;    
+            // check the image is not a full url before adding the local upload url
+            if (strpos($avatar, 'http:') === false && strpos($avatar, 'https:') === false) {
+                $avatar = $upload_url.$avatar;
             }
             $avatar = '<img src="'.$avatar.'" class="avatar avatar-150 photo" width="150" height="150">';
         }
         ?>
-        <div class="uwp-profile-header">
-            <div class="uwp-profile-header-img">
+        <div class="uwp-profile-header clearfix">
+            <div class="uwp-profile-header-img clearfix">
                 <?php
                 if (!is_uwp_profile_page()) {
                     echo '<a href="'.apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID).'" title="'.$user->display_name.'">';
                 }
                 ?>
-                <img src="<?php echo $banner; ?>" alt="" class="uwp-profile-header-img-src" />
+                <img src="<?php echo $banner; ?>" alt="" class="uwp-profile-header-img-src" data-recalc-dims="0" />
                 <?php
                 if (!is_uwp_profile_page()) {
                     echo '</a>';
@@ -65,7 +66,7 @@ class UsersWP_Profile {
                 </div>
             <?php } ?>
             </div>
-            <div class="uwp-profile-avatar">
+            <div class="uwp-profile-avatar clearfix">
                 <?php
                 if (!is_uwp_profile_page()) {
                     echo '<a href="'.apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID).'" title="'.$user->display_name.'">';

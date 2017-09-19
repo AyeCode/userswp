@@ -7,6 +7,7 @@
       width: 100%;
       img {
         display: block;
+        width: 100%;
       }
     }
 
@@ -109,6 +110,7 @@
           display: block;
           height: auto;
           margin-top: calc( -100% + 5px);
+          width: 100%;
         }
       }
       .uwp-profile-avatar-change {
