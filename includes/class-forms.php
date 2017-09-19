@@ -8,7 +8,9 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class UsersWP_Forms {
-    
+
+    protected $generated_password;
+
     /**
      * Initialize UsersWP notices.
      *
@@ -257,6 +259,7 @@ class UsersWP_Forms {
             $generated_password = false;
         } else {
             $password = wp_generate_password();
+            $this->generated_password = $password;
             $generated_password = true;
         }
 
@@ -323,59 +326,20 @@ class UsersWP_Forms {
         }
 
         do_action('uwp_after_custom_fields_save', 'register', $data, $result, $user_id);
-
-        if ($generated_password) {
-            update_user_meta($user_id, 'default_password_nag', true); //Set up the Password change nag.
-            $message_pass = $password;
-        } else {
-            $message_pass = __("Password you entered", 'userswp');
-        }
-
-
+        
         $reg_action = uwp_get_option('uwp_registration_action', false);
 
         if ($reg_action == 'require_email_activation' && !$generated_password) {
-            global $wpdb;
-            $key = wp_generate_password( 20, false );
-            $user_data = get_user_by('id', $user_id);
-            do_action( 'uwp_activation_key', $user_data->user_login, $key );
-
-            global $wp_hasher;
-            if ( empty( $wp_hasher ) ) {
-                require_once ABSPATH . 'wp-includes/class-phpass.php';
-                $wp_hasher = new PasswordHash( 8, true );
-            }
-            $hashed = $wp_hasher->HashPassword( $key );
-            $wpdb->update( $wpdb->users, array( 'user_activation_key' => time().":".$hashed ), array( 'user_login' => $user_data->user_login ) );
-            update_user_meta( $user_id, 'uwp_mod', 'email_unconfirmed' );
-            $message = __('To activate your account, visit the following address:', 'userswp') . "\r\n\r\n";
-            $act_url = add_query_arg(
-                array(
-                    'uwp_activate' => 'yes',
-                    'key' => $key,
-                    'login' => $user_data->user_login
-                ),
-                site_url()
-            );
-            
-            $message .= "<a href='".$act_url."' target='_blank'>".$act_url."</a>" . "\r\n";
-            
-            $login_details = __('<p><b>' . __('Please activate your account :', 'userswp') . '</b></p>
-            <p>' . $message . '</p>');
 
             $email = new UsersWP_Mails();
-            $send_result = $email->send( 'activate', $user_id, $login_details );
+            $send_result = $email->send( 'activate', $user_id );
             
             if (!$send_result) {
                 $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
             }
         } else {
-            $login_details = __('<p><b>' . __('Your login Information :', 'userswp') . '</b></p>
-            <p>' . __('Username:', 'userswp') . ' ' . $result['uwp_account_username'] . '</p>
-            <p>' . __('Password:', 'userswp') . ' ' . $message_pass . '</p>');
-
             $email = new UsersWP_Mails();
-            $send_result = $email->send( 'register', $user_id, $login_details );
+            $send_result = $email->send( 'register', $user_id );
 
             if (!$send_result) {
                 $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
@@ -510,7 +474,11 @@ class UsersWP_Forms {
         } else {
             $redirect_page_id = uwp_get_option('login_redirect_to', '');
             if (empty($redirect_page_id)) {
-                $redirect_to = home_url('/');
+                if ( current_user_can('manage_options') ) {
+                    $redirect_to = admin_url();
+                } else {
+                    $redirect_to = home_url('/');
+                }
             } else {
                 $redirect_to = get_permalink($redirect_page_id);
             }
@@ -568,11 +536,9 @@ class UsersWP_Forms {
         if (!empty($error_code)) {
             return $errors;
         }
-
-        $login_details = $this->generate_forgot_message($user_data);
-
+        
         $email = new UsersWP_Mails();
-        $send_result = $email->send( 'forgot', $user_data->ID, $login_details );
+        $send_result = $email->send( 'forgot', $user_data->ID );
         
         $send_result = apply_filters('uwp_forms_check_for_send_mail_errors', $send_result, $user_data, $errors);
         if (is_wp_error($send_result)) {
@@ -683,18 +649,246 @@ class UsersWP_Forms {
         return true;
     }
 
+    
+    /**
+     * Modifies the mail subject based on the admin notification type.
+     *
+     * @since   1.0.0
+     * @package    userswp
+     * @subpackage userswp/includes
+     * @param string $subject Unmodified mail subject.
+     * @param string $type Notification type.
+     * @return string Modified mail subject.
+     */
+    public function init_mail_subject($subject, $type) {
+        switch ($type) {
+            case "register":
+                $subject = uwp_get_option('registration_success_email_subject', '');
+                break;
+            case "activate":
+                $subject = uwp_get_option('registration_activate_email_subject', '');
+                break;
+            case "forgot":
+                $subject = uwp_get_option('forgot_password_email_subject', '');
+                break;
+            case "reset":
+                $subject = uwp_get_option('reset_password_email_subject', '');
+                break;
+            case "change":
+                $subject = uwp_get_option('change_password_email_subject', '');
+                break;
+            case "account":
+                $subject = uwp_get_option('account_update_email_subject', '');
+                break;
+        }
+        return $subject;
+    }
+
+    /**
+     * Modifies the mail content based on the admin notification type.
+     *
+     * @since   1.0.0
+     * @package    userswp
+     * @subpackage userswp/includes
+     * @param string $content Unmodified mail content.
+     * @param string $type Notification type.
+     * @return string Modified mail content.
+     */
+    public function init_mail_content($content, $type) {
+        switch ($type) {
+            case "register":
+                $content = uwp_get_option('registration_success_email_content', '');
+                break;
+            case "activate":
+                $content = uwp_get_option('registration_activate_email_content', '');
+                break;
+            case "forgot":
+                $content = uwp_get_option('forgot_password_email_content', '');
+                break;
+            case "reset":
+                $content = uwp_get_option('reset_password_email_content', '');
+                break;
+            case "change":
+                $content = uwp_get_option('change_password_email_content', '');
+                break;
+            case "account":
+                $content = uwp_get_option('account_update_email_content', '');
+                break;
+        }
+        return $content;
+    }
+
+    /**
+     * Modifies the mail extras based on the notification type.
+     *
+     * @since   1.0.0
+     * @package    userswp
+     * @subpackage userswp/includes
+     * @param string $extras Unmodified mail extras.
+     * @param string $type Notification type.
+     * @return string Modified mail extras.
+     */
+    public function init_mail_extras($extras, $type, $user_id) {
+        switch ($type) {
+            case "activate":
+                $extras = $this->generate_activate_message($user_id);
+                break;
+            case "register":
+                $extras = $this->generate_register_message($user_id);
+                break;
+            case "forgot":
+                $extras = $this->generate_forgot_message($user_id);
+        }
+        return $extras;
+    }
+    
+    /**
+     * Modifies the admin mail subject based on the admin notification type.
+     *
+     * @since   1.0.0
+     * @package    userswp
+     * @subpackage userswp/includes
+     * @param string $subject Unmodified admin mail subject.
+     * @param string $type Admin notification type.
+     * @return string Modified admin mail subject.
+     */
+    public function init_admin_mail_subject($subject, $type) {
+        switch ($type) {
+            case "register_admin":
+                $subject = uwp_get_option('registration_success_email_subject_admin', '');
+                break;
+        }
+        return $subject;
+    }
+
+    /**
+     * Modifies the admin mail content based on the admin notification type.
+     *
+     * @since   1.0.0
+     * @package    userswp
+     * @subpackage userswp/includes
+     * @param string $content Unmodified admin mail content.
+     * @param string $type Admin notification type.
+     * @return string Modified admin mail content.
+     */
+    public function init_admin_mail_content($content, $type) {
+        switch ($type) {
+            case "register_admin":
+                $content = uwp_get_option('registration_success_email_content_admin', '');
+                break;
+        }
+        return $content;
+    }
+
+    /**
+     * Modifies the admin mail extras based on the notification type.
+     *
+     * @since   1.0.0
+     * @package    userswp
+     * @subpackage userswp/includes
+     * @param string $extras Unmodified mail extras.
+     * @param string $type Notification type.
+     * @return string Modified mail extras.
+     */
+    public function init_admin_mail_extras($extras, $type, $user_id) {
+        switch ($type) {
+            case "register_admin":
+                $user_data = get_userdata($user_id);
+                $extras = __('<p><b>' . __('User Information :', 'userswp') . '</b></p>
+            <p>' . __('First Name:', 'userswp') . ' ' . $user_data->first_name . '</p>
+            <p>' . __('Last Name:', 'userswp') . ' ' . $user_data->last_name . '</p>
+            <p>' . __('Username:', 'userswp') . ' ' . $user_data->user_login . '</p>
+            <p>' . __('Email:', 'userswp') . ' ' . $user_data->user_email . '</p>');
+                break;
+        }
+        return $extras;
+    }
+
+    /**
+     * Generates activate email message.
+     *
+     * @since       1.0.0
+     * @package     userswp
+     *
+     * @param       int                  $user_id       User ID.
+     *
+     * @return      bool|string                         Message.
+     */
+    public function generate_activate_message($user_id) {
+
+        $user_data = get_userdata($user_id);
+        global $wpdb;
+        $key = wp_generate_password( 20, false );
+        do_action( 'uwp_activation_key', $user_data->user_login, $key );
+
+        global $wp_hasher;
+        if ( empty( $wp_hasher ) ) {
+            require_once ABSPATH . 'wp-includes/class-phpass.php';
+            $wp_hasher = new PasswordHash( 8, true );
+        }
+        $hashed = $wp_hasher->HashPassword( $key );
+        $wpdb->update( $wpdb->users, array( 'user_activation_key' => time().":".$hashed ), array( 'user_login' => $user_data->user_login ) );
+        update_user_meta( $user_id, 'uwp_mod', 'email_unconfirmed' );
+        $message = __('To activate your account, visit the following address:', 'userswp') . "\r\n\r\n";
+        $act_url = add_query_arg(
+            array(
+                'uwp_activate' => 'yes',
+                'key' => $key,
+                'login' => $user_data->user_login
+            ),
+            site_url()
+        );
+
+        $message .= "<a href='".$act_url."' target='_blank'>".$act_url."</a>" . "\r\n";
+
+        $activate_message = __('<p><b>' . __('Please activate your account :', 'userswp') . '</b></p>
+            <p>' . $message . '</p>');
+
+        return $activate_message;
+
+    }
+
+    /**
+     * Generates register email message.
+     *
+     * @since       1.0.0
+     * @package     userswp
+     *
+     * @param       int                  $user_id       User ID.
+     *
+     * @return      bool|string                         Message.
+     */
+    public function generate_register_message($user_id) {
+
+        $user_data = get_userdata($user_id);
+        if(isset($this->generated_password) && !empty($this->generated_password)) {
+            update_user_meta($user_id, 'default_password_nag', true); //Set up the Password change nag.
+            $message_pass = $this->generated_password;
+            $this->generated_password = false;
+        } else {
+            $message_pass = __("Password you entered", 'userswp');
+        }
+        $message = __('<p><b>' . __('Your login Information :', 'userswp') . '</b></p>
+            <p>' . __('Username:', 'userswp') . ' ' . $user_data->user_login . '</p>
+            <p>' . __('Password:', 'userswp') . ' ' . $message_pass . '</p>');
+
+        return $message;
+
+    }
+    
     /**
      * Generates forgot password email message.
      *
      * @since       1.0.0
      * @package     userswp
+     *
+     * @param       int                  $user_id       User ID.
      * 
-     * @param       object                  $user_data       User object.
-     * 
-     * @return      bool|string                              Message.
+     * @return      bool|string                          Message.
      */
-    public function generate_forgot_message($user_data) {
+    public function generate_forgot_message($user_id) {
 
+        $user_data = get_userdata($user_id);
         global $wpdb, $wp_hasher;
 
         $allow = apply_filters('allow_password_reset', true, $user_data->ID);

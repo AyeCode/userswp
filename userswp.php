@@ -72,6 +72,7 @@ register_deactivation_hook( __FILE__, 'deactivate_users_wp' );
 require_once('includes/class-userswp.php');
 require_once('includes/helpers.php');
 require_once('widgets/login.php');
+require_once('widgets/register.php');
 /**
  * Begins execution of the plugin.
  *

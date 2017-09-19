@@ -35,7 +35,9 @@ class UsersWP_Profile {
         if (empty($avatar)) {
             $avatar = get_avatar($user->user_email, 150);
         } else {
-            $avatar = $upload_url.$avatar;
+            if (substr( $avatar, 0, 4 ) !== "http") {
+                $avatar = $upload_url.$avatar;    
+            }
             $avatar = '<img src="'.$avatar.'" class="avatar avatar-150 photo" width="150" height="150">';
         }
         ?>
@@ -1227,7 +1229,9 @@ class UsersWP_Profile {
             if ( !empty($avatar_thumb) ) {
                 $uploads = wp_upload_dir();
                 $upload_url = $uploads['baseurl'];
-                $avatar_thumb = $upload_url.$avatar_thumb;
+                if (substr( $avatar_thumb, 0, 4 ) !== "http") {
+                    $avatar_thumb = $upload_url.$avatar_thumb;
+                }
                 $avatar = "<img alt='{$alt}' src='{$avatar_thumb}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
             }
 

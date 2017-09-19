@@ -126,6 +126,13 @@ No questions so far, but don't hesitate to ask!
 * Bio not displaying correctly - FIXED
 * User bio slashes contains duplicate slashes - FIXED
 * User privacy settings not working correctly - FIXED
+* Email notifications code refactored to override via hooks - CHANGED
+* Email error logs now contains full error in json format - ADDED
+* Extra tags added for forgot and activate mails - ADDED
+* Register widget - ADDED
+* WPML compatibility - ADDED
+* Display confirm password and confirm email fields only on register form - CHANGED
+* Avatar breaks when social login profile url used - FIXED
 
 = 1.0.6 =
 * First release on WordPress.org - :)

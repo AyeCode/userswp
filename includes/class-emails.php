@@ -16,17 +16,12 @@ class UsersWP_Mails {
      * @package     userswp
      * @param       string      $message_type       Message type.
      * @param       int         $user_id            User ID.
-     * @param       bool        $login_details      Login detail info. Applicable only for register form emails
      * @return      bool                            True when success. False when error.
      */
-    public function send( $message_type, $user_id, $login_details = false )
+    public function send( $message_type, $user_id)
     {
         $user_data = get_userdata($user_id);
-
-        if (!$login_details) {
-            $login_details = "";
-        }
-
+        
         $login_page_id = uwp_get_option('login_page', false);
         if ($login_page_id) {
             $login_page_url = get_permalink($login_page_id);
@@ -36,29 +31,11 @@ class UsersWP_Mails {
 
         $subject = "";
         $message = "";
-
-        if ($message_type == 'register') {
-            $subject = uwp_get_option('registration_success_email_subject', '');
-            $message = uwp_get_option('registration_success_email_content', '');
-        } elseif ($message_type == 'activate') {
-            $subject = uwp_get_option('registration_activate_email_subject', '');
-            $message = uwp_get_option('registration_activate_email_content', '');
-        } elseif ($message_type == 'forgot') {
-            $subject = uwp_get_option('forgot_password_email_subject', '');
-            $message = uwp_get_option('forgot_password_email_content', '');
-        } elseif ($message_type == 'reset') {
-            $subject = uwp_get_option('reset_password_email_subject', '');
-            $message = uwp_get_option('reset_password_email_content', '');
-        } elseif ($message_type == 'change') {
-            $subject = uwp_get_option('change_password_email_subject', '');
-            $message = uwp_get_option('change_password_email_content', '');
-        } elseif ($message_type == 'account') {
-            $subject = uwp_get_option('account_update_email_subject', '');
-            $message = uwp_get_option('account_update_email_content', '');
-        } else {
-            $subject = apply_filters('uwp_send_mail_subject', $subject, $message_type);
-            $message = apply_filters('uwp_send_mail_message', $message, $message_type);
-        }
+        
+        $extras = apply_filters('uwp_send_mail_extras', "", $message_type, $user_id);
+        $subject = apply_filters('uwp_send_mail_subject', $subject, $message_type);
+        $message = apply_filters('uwp_send_mail_message', $message, $message_type);
+        
         
         if (!empty($subject)) {
             $subject = __(stripslashes_deep($subject), 'userswp');
@@ -92,7 +69,7 @@ class UsersWP_Mails {
         $user_name = $user_data->display_name;
         $user_email = $user_data->user_email;
 
-        $search_array = array(
+        $message_search_array = array(
             '[#site_name_url#]',
             '[#site_name#]',
             '[#to_name#]',
@@ -105,7 +82,7 @@ class UsersWP_Mails {
             '[#current_date#]',
             '[#login_details#]',
         );
-        $replace_array = array(
+        $message_replace_array = array(
             $siteurl_link,
             $sitefromEmailName,
             $user_name,
@@ -116,11 +93,99 @@ class UsersWP_Mails {
             $user_login,
             $user_login,
             $current_date,
-            $login_details
+            $extras
         );
-        $message = str_replace($search_array, $replace_array, $message);
+        $message = str_replace($message_search_array, $message_replace_array, $message);
 
-        $search_array = array(
+
+        // Applicable only for activate mails
+        if ($message_type == 'activate') {
+            $user_data = get_userdata($user_id);
+            global $wpdb;
+            $key = wp_generate_password( 20, false );
+            do_action( 'uwp_activation_key', $user_data->user_login, $key );
+
+            global $wp_hasher;
+            if ( empty( $wp_hasher ) ) {
+                require_once ABSPATH . 'wp-includes/class-phpass.php';
+                $wp_hasher = new PasswordHash( 8, true );
+            }
+            $hashed = $wp_hasher->HashPassword( $key );
+            $wpdb->update( $wpdb->users, array( 'user_activation_key' => time().":".$hashed ), array( 'user_login' => $user_data->user_login ) );
+            update_user_meta( $user_id, 'uwp_mod', 'email_unconfirmed' );
+
+            $activation_link = add_query_arg(
+                array(
+                    'uwp_activate' => 'yes',
+                    'key' => $key,
+                    'login' => $user_data->user_login
+                ),
+                site_url()
+            );
+            
+            $activate_message_search_array = array(
+                '[#activation_link#]',
+            );
+            $activate_message_replace_array = array(
+                $activation_link
+            );
+            $message = str_replace($activate_message_search_array, $activate_message_replace_array, $message);
+        }
+
+        // Applicable only for forgot mails
+        if ($message_type == 'forgot') {
+
+            $new_pass = "";
+            $reset_link = "";
+
+            global $wpdb, $wp_hasher;
+
+            $allow = apply_filters('allow_password_reset', true, $user_data->ID);
+            if ( ! $allow )
+                return false;
+            else if ( is_wp_error($allow) )
+                return false;
+
+            $as_password = apply_filters('uwp_forgot_message_as_password', false);
+
+            if ($as_password) {
+                $new_pass = wp_generate_password(12, false);
+                wp_set_password($new_pass, $user_data->ID);
+                update_user_meta($user_data->ID, 'default_password_nag', true); //Set up the Password change nag.
+
+            } else {
+                $key = wp_generate_password(20, false);
+                do_action('retrieve_password_key', $user_data->user_login, $key);
+
+                if (empty($wp_hasher)) {
+                    require_once ABSPATH . 'wp-includes/class-phpass.php';
+                    $wp_hasher = new PasswordHash(8, true);
+                }
+                $hashed = $wp_hasher->HashPassword($key);
+                $wpdb->update($wpdb->users, array('user_activation_key' => time() . ":" . $hashed), array('user_login' => $user_data->user_login));
+                $reset_page = uwp_get_option('reset_page', false);
+                if ($reset_page) {
+                    $reset_link = add_query_arg(array(
+                        'key' => $key,
+                        'login' => rawurlencode($user_data->user_login),
+                    ), get_permalink($reset_page));
+                } else {
+                    $reset_link = site_url("reset?key=$key&login=" . rawurlencode($user_data->user_login), 'login');
+                }
+            }
+
+            $reset_message_search_array = array(
+                '[#new_password#]',
+                '[#reset_link#]',
+            );
+            $reset_message_replace_array = array(
+                $new_pass,
+                $reset_link
+            );
+            $message = str_replace($reset_message_search_array, $reset_message_replace_array, $message);
+        }
+
+        $subject_search_array = array(
             '[#site_name_url#]',
             '[#site_name#]',
             '[#to_name#]',
@@ -131,7 +196,7 @@ class UsersWP_Mails {
             '[#username#]',
             '[#current_date#]'
         );
-        $replace_array = array(
+        $subject_replace_array = array(
             $siteurl_link,
             $sitefromEmailName,
             $user_name,
@@ -142,7 +207,7 @@ class UsersWP_Mails {
             $user_login,
             $current_date
         );
-        $subject = str_replace($search_array, $replace_array, $subject);
+        $subject = str_replace($subject_search_array, $subject_replace_array, $subject);
 
         $headers = array();
         $headers[] = 'Content-type: text/html; charset=UTF-8';
@@ -166,12 +231,14 @@ class UsersWP_Mails {
             if (is_array($to)) {
                 $to = implode(',', $to);
             }
+            $err = $this->get_mail_errors();
             $log_message = sprintf(
-                __("Email from UsersWP failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'userswp'),
+                __("Email from UsersWP failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\nError: %s\n\n", 'userswp'),
                 $message_type,
                 date_i18n('F j Y H:i:s', current_time('timestamp')),
                 $to,
-                $subject
+                $subject,
+                $err
             );
             uwp_error_log($log_message);
             return false;
@@ -282,18 +349,44 @@ class UsersWP_Mails {
             if (is_array($to)) {
                 $to = implode(',', $to);
             }
+            $err = $this->get_mail_errors();
             $log_message = sprintf(
-                __("Email from UsersWP failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'userswp'),
+                __("Email from UsersWP failed to send.\nMessage type: %s\nSend time: %s\nTo: %s\nSubject: %s\nError: %s\n\n", 'userswp'),
                 $message_type,
                 date_i18n('F j Y H:i:s', current_time('timestamp')),
                 $to,
-                $subject
+                $subject,
+                $err
             );
             uwp_error_log($log_message);
             return false;
         } else {
             return true;
         }
+    }
+
+
+    /**
+     * Gets the original error message from phpmailer.
+     *
+     * @since       1.0.7
+     * @package     userswp
+     * @return      string                            Error messages.
+     */
+    public function get_mail_errors() {
+        // wp mail debugging
+        global $ts_mail_errors;
+        global $phpmailer;
+
+        if (!isset($ts_mail_errors)) $ts_mail_errors = array();
+
+        if (isset($phpmailer)) {
+            $ts_mail_errors[] = $phpmailer->ErrorInfo;
+        }
+
+        $out = json_encode($ts_mail_errors);
+
+        return $out;
     }
 
 }

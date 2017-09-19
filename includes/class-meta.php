@@ -283,7 +283,9 @@ class UsersWP_Meta {
     public function save_user_ip_on_login( $user_login, $user ) {
 
         $ip = uwp_get_ip();
-        uwp_update_usermeta($user->ID, 'user_ip', $ip);
+        if (isset($user->ID)) {
+            uwp_update_usermeta($user->ID, 'user_ip', $ip);    
+        }
     }
 
     /**

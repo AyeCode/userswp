@@ -1716,25 +1716,31 @@ class UsersWP_Form_Builder {
             $extra = unserialize($field_info->extra_fields);
         }
         $value = isset($extra['confirm_password']) ? $extra['confirm_password'] : '1';
-        ?>
-        
-        <li>
-            <label for="cat_sort" class="uwp-tooltip-wrap">
-                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Display confirm password field?:', 'userswp'); ?>
-                <div class="uwp-tooltip">
-                    <?php _e('Lets you display confirm password form field.', 'userswp'); ?>
+        if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'uwp_account_password') {
+            ?>
+            <li>
+                <label for="cat_sort" class="uwp-tooltip-wrap">
+                    <i class="fa fa-info-circle"
+                       aria-hidden="true"></i> <?php _e('Display confirm password field?:', 'userswp'); ?>
+                    <div class="uwp-tooltip">
+                        <?php _e('Lets you display confirm password form field.', 'userswp'); ?>
+                    </div>
+                </label>
+
+                <div class="uwp-input-wrap uwp-switch">
+                    <input type="radio" id="confirm_password_yes<?php echo $radio_id; ?>" name="extra[confirm_password]"
+                           class="uwp-ri-enabled" value="1" <?php checked(1, $value); ?> />
+                    <label for="confirm_password_yes<?php echo $radio_id; ?>"
+                           class="uwp-cb-enable"><span><?php _e('Yes', 'userswp'); ?></span></label>
+
+                    <input type="radio" id="confirm_password_no<?php echo $radio_id; ?>" name="extra[confirm_password]"
+                           class="uwp-ri-disabled" value="0" <?php checked(0, $value); ?> />
+                    <label for="confirm_password_no<?php echo $radio_id; ?>"
+                           class="uwp-cb-disable"><span><?php _e('No', 'userswp'); ?></span></label>
                 </div>
-            </label>
-
-            <div class="uwp-input-wrap uwp-switch">
-                <input type="radio" id="confirm_password_yes<?php echo $radio_id; ?>" name="extra[confirm_password]" class="uwp-ri-enabled"  value="1" <?php checked(1, $value); ?> />
-                <label for="confirm_password_yes<?php echo $radio_id; ?>" class="uwp-cb-enable"><span><?php _e('Yes', 'userswp'); ?></span></label>
-
-                <input type="radio" id="confirm_password_no<?php echo $radio_id; ?>" name="extra[confirm_password]" class="uwp-ri-disabled" value="0" <?php checked(0, $value); ?> />
-                <label for="confirm_password_no<?php echo $radio_id; ?>" class="uwp-cb-disable"><span><?php _e('No', 'userswp'); ?></span></label>
-            </div>
-        </li>
-        <?php
+            </li>
+            <?php
+        }
         $html = ob_get_clean();
         return $output . $html;
     }
@@ -1743,31 +1749,38 @@ class UsersWP_Form_Builder {
         ob_start();
         $radio_id = (isset($field_info->htmlvar_name)) ? $field_info->htmlvar_name : rand(5, 500);
 
-        //confirm password field
+        //confirm email field
         $extra = array();
         if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
             $extra = unserialize($field_info->extra_fields);
         }
         $value = isset($extra['confirm_email']) ? $extra['confirm_email'] : '0';
-        ?>
 
-        <li>
-            <label for="cat_sort" class="uwp-tooltip-wrap">
-                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Display confirm email field?:', 'userswp'); ?>
-                <div class="uwp-tooltip">
-                    <?php _e('Lets you display confirm email form field.', 'userswp'); ?>
+        if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'uwp_account_email') {
+            ?>
+            <li>
+                <label for="cat_sort" class="uwp-tooltip-wrap">
+                    <i class="fa fa-info-circle"
+                       aria-hidden="true"></i> <?php _e('Display confirm email field?:', 'userswp'); ?>
+                    <div class="uwp-tooltip">
+                        <?php _e('Lets you display confirm email form field.', 'userswp'); ?>
+                    </div>
+                </label>
+
+                <div class="uwp-input-wrap uwp-switch">
+                    <input type="radio" id="confirm_email_yes<?php echo $radio_id; ?>" name="extra[confirm_email]"
+                           class="uwp-ri-enabled" value="1" <?php checked(1, $value); ?> />
+                    <label for="confirm_email_yes<?php echo $radio_id; ?>"
+                           class="uwp-cb-enable"><span><?php _e('Yes', 'userswp'); ?></span></label>
+
+                    <input type="radio" id="confirm_email_no<?php echo $radio_id; ?>" name="extra[confirm_email]"
+                           class="uwp-ri-disabled" value="0" <?php checked(0, $value); ?> />
+                    <label for="confirm_email_no<?php echo $radio_id; ?>"
+                           class="uwp-cb-disable"><span><?php _e('No', 'userswp'); ?></span></label>
                 </div>
-            </label>
-
-            <div class="uwp-input-wrap uwp-switch">
-                <input type="radio" id="confirm_email_yes<?php echo $radio_id; ?>" name="extra[confirm_email]" class="uwp-ri-enabled"  value="1" <?php checked(1, $value); ?> />
-                <label for="confirm_email_yes<?php echo $radio_id; ?>" class="uwp-cb-enable"><span><?php _e('Yes', 'userswp'); ?></span></label>
-
-                <input type="radio" id="confirm_email_no<?php echo $radio_id; ?>" name="extra[confirm_email]" class="uwp-ri-disabled" value="0" <?php checked(0, $value); ?> />
-                <label for="confirm_email_no<?php echo $radio_id; ?>" class="uwp-cb-disable"><span><?php _e('No', 'userswp'); ?></span></label>
-            </div>
-        </li>
-        <?php
+            </li>
+            <?php
+        }
         $html = ob_get_clean();
         return $output . $html;
     }
@@ -1906,13 +1919,23 @@ class UsersWP_Form_Builder {
                 </div>
             </label>
 
-            <div class="uwp-input-wrap uwp-switch">
-                <input type="radio" id="is_register_field_yes<?php echo $radio_id; ?>" name="is_register_field" class="uwp-ri-enabled"  value="1" <?php checked(1, $value); ?> />
-                <label for="is_register_field_yes<?php echo $radio_id; ?>" class="uwp-cb-enable"><span><?php _e('Yes', 'userswp'); ?></span></label>
+            <?php
+            if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'uwp_account_username') {
+                ?>
+                <div>
+                    <p><?php _e('This is mandatory register form field.', 'userswp'); ?></p>
+                </div>
+                <?php
+            } else {
+            ?>
+                <div class="uwp-input-wrap uwp-switch">
+                    <input type="radio" id="is_register_field_yes<?php echo $radio_id; ?>" name="is_register_field" class="uwp-ri-enabled"  value="1" <?php checked(1, $value); ?> />
+                    <label for="is_register_field_yes<?php echo $radio_id; ?>" class="uwp-cb-enable"><span><?php _e('Yes', 'userswp'); ?></span></label>
 
-                <input type="radio" id="is_register_field_no<?php echo $radio_id; ?>" name="is_register_field" class="uwp-ri-disabled" value="0" <?php checked(0, $value); ?> />
-                <label for="is_register_field_no<?php echo $radio_id; ?>" class="uwp-cb-disable"><span><?php _e('No', 'userswp'); ?></span></label>
-            </div>
+                    <input type="radio" id="is_register_field_no<?php echo $radio_id; ?>" name="is_register_field" class="uwp-ri-disabled" value="0" <?php checked(0, $value); ?> />
+                    <label for="is_register_field_no<?php echo $radio_id; ?>" class="uwp-cb-disable"><span><?php _e('No', 'userswp'); ?></span></label>
+                </div>
+            <?php } ?>
         </li>
 
         <li <?php echo $hide_register_only_field; ?>>
@@ -1923,6 +1946,15 @@ class UsersWP_Form_Builder {
                 </div>
             </label>
 
+        <?php
+        if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'uwp_account_username') {
+            ?>
+            <div>
+                <p><?php _e('This field is applicable only for register form.', 'userswp'); ?></p>
+            </div>
+            <?php
+        } else {
+            ?>
             <div class="uwp-input-wrap uwp-switch">
                 <input type="radio" id="is_register_only_field_yes<?php echo $radio_id; ?>" name="is_register_only_field" class="uwp-ri-enabled"  value="1" <?php checked(1, $register_only_value); ?> />
                 <label for="is_register_only_field_yes<?php echo $radio_id; ?>" class="uwp-cb-enable"><span><?php _e('Yes', 'userswp'); ?></span></label>
@@ -1930,6 +1962,7 @@ class UsersWP_Form_Builder {
                 <input type="radio" id="is_register_only_field_no<?php echo $radio_id; ?>" name="is_register_only_field" class="uwp-ri-disabled" value="0" <?php checked(0, $register_only_value); ?> />
                 <label for="is_register_only_field_no<?php echo $radio_id; ?>" class="uwp-cb-disable"><span><?php _e('No', 'userswp'); ?></span></label>
             </div>
+        <?php } ?>
         </li>
         <?php
     }
@@ -2218,7 +2251,7 @@ class UsersWP_Form_Builder {
                     $nonce = wp_create_nonce('uwp_form_extras_nonce' . $result_str);
                     ?>
 
-                    <?php if ($default): ?>
+                    <?php if ($default == '1'): ?>
                     <?php else: ?>
                         <div title="<?php _e('Click to remove field', 'userswp'); ?>"
                              onclick="delete_register_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>','<?php echo $htmlvar_name; ?>')"
@@ -2254,13 +2287,14 @@ class UsersWP_Form_Builder {
 
                         <li>
                             <div class="uwp-input-wrap">
-
+                                <?php if ($default != '1' || $field_info->site_htmlvar_name == 'uwp_account_password') { ?>
                                 <input type="button" class="button button-primary" name="save" id="save"
                                        value="<?php esc_attr_e('Save', 'userswp'); ?>"
                                        onclick="save_register_field('<?php echo $result_str; ?>')"/>
                                 <input type="button" name="delete" value="<?php esc_attr_e('Delete', 'userswp'); ?>"
                                        onclick="delete_register_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>','<?php echo $htmlvar_name ?>')"
                                        class="button"/>
+                                <?php } ?>
 
                             </div>
                         </li>
