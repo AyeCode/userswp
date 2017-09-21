@@ -654,6 +654,48 @@ class UsersWP_Form_Builder {
                             <?php
                         }
 
+                        // for_admin_use
+                        if (isset($field_info->is_default) && $field_info->is_default == '1') {
+                            // do nothing for default fields
+                        } else {
+                            if (has_filter("uwp_builder_for_admin_use_{$field_type}")) {
+
+                                echo apply_filters("uwp_builder_for_admin_use_{$field_type}", '', $result_str, $cf, $field_info);
+
+                            } else {
+                                $value = '';
+                                if (isset($field_info->for_admin_use)) {
+                                    $value = esc_attr($field_info->for_admin_use);
+                                }elseif (isset($cf['defaults']['for_admin_use']) && $cf['defaults']['for_admin_use']) {
+                                    $value = $cf['defaults']['for_admin_use'];
+                                }
+                                ?>
+                                <li <?php echo $field_display; ?>>
+                                    <label for="for_admin_use" class="uwp-tooltip-wrap"><i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('For admin use only? :', 'userswp'); ?>
+                                        <div class="uwp-tooltip">
+                                            <?php _e('If yes is selected then only site admin can see and edit this field.', 'userswp'); ?>
+                                        </div>
+                                    </label>
+                                    <div class="uwp-input-wrap uwp-switch">
+
+                                        <input type="radio" id="for_admin_use_yes<?php echo $radio_id; ?>" name="for_admin_use" class="uwp-ri-enabled"  value="1"
+                                            <?php if ($value == '1') {
+                                                echo 'checked';
+                                            } ?>/>
+                                        <label for="for_admin_use_yes<?php echo $radio_id; ?>" onclick="uwp_show_hide_radio(this,'hide','cf-incin-reg-form');uwp_show_hide_radio(this,'hide','cf-inconlyin-reg-form');" class="uwp-cb-enable"><span><?php _e('Yes', 'userswp'); ?></span></label>
+
+                                        <input type="radio" id="for_admin_use_no<?php echo $radio_id; ?>" name="for_admin_use" class="uwp-ri-disabled" value="0"
+                                            <?php if ($value == '0' || !$value) {
+                                                echo 'checked';
+                                            } ?>/>
+                                        <label for="for_admin_use_no<?php echo $radio_id; ?>" onclick="uwp_show_hide_radio(this,'show','cf-incin-reg-form');uwp_show_hide_radio(this,'show','cf-inconlyin-reg-form');" class="uwp-cb-disable"><span><?php _e('No', 'userswp'); ?></span></label>
+
+                                    </div>
+                                </li>
+                                <?php
+                            }
+                        }
+
 
                         // is_public
                         if (has_filter("uwp_builder_is_public_{$field_type}")) {
@@ -1086,6 +1128,7 @@ class UsersWP_Form_Builder {
             $default_value = isset($request_field['default_value']) ? $request_field['default_value'] : '';
             $sort_order = isset($request_field['sort_order']) ? $request_field['sort_order'] : '';
             $is_active = isset($request_field['is_active']) ? $request_field['is_active'] : '';
+            $for_admin_use = isset($request_field['for_admin_use']) ? $request_field['for_admin_use'] : '';
             $is_required = isset($request_field['is_required']) ? $request_field['is_required'] : '';
             $is_dummy = isset($request_field['is_dummy']) ? $request_field['is_dummy'] : '';
             $is_public = isset($request_field['is_public']) ? $request_field['is_public'] : '';
@@ -1128,6 +1171,7 @@ class UsersWP_Form_Builder {
                 $is_default = '0';
 
             if ($is_active == '') $is_active = 1;
+            if ($for_admin_use == '') $for_admin_use = 0;
             if ($is_required == '') $is_required = 0;
             if ($is_dummy == '') $is_dummy = 0;
             if ($is_public == '') $is_public = 0;
@@ -1260,6 +1304,7 @@ class UsersWP_Form_Builder {
                             default_value = %s,
                             sort_order = %s,
                             is_active = %s,
+                            for_admin_use = %s,
                             is_default  = %s,
                             is_required = %s,
                             is_dummy = %s,
@@ -1291,6 +1336,7 @@ class UsersWP_Form_Builder {
                             $default_value,
                             $sort_order,
                             $is_active,
+                            $for_admin_use,
                             $is_default,
                             $is_required,
                             $is_dummy,
@@ -1468,6 +1514,7 @@ class UsersWP_Form_Builder {
                             default_value = %s,
                             sort_order = %d,
                             is_active = %s,
+                            for_admin_use = %s,
                             is_default  = %s,
                             is_required = %s,
                             is_dummy = %s,
@@ -1497,6 +1544,7 @@ class UsersWP_Form_Builder {
                             $default_value,
                             $sort_order,
                             $is_active,
+                            $for_admin_use,
                             $is_default,
                             $is_required,
                             $is_dummy,
@@ -1894,6 +1942,7 @@ class UsersWP_Form_Builder {
     public function uwp_advance_admin_custom_fields($field_info, $cf) {
         $radio_id = (isset($field_info->htmlvar_name)) ? $field_info->htmlvar_name : rand(5, 500);
         $hide_register_field = (isset($cf['defaults']['is_register_field']) && $cf['defaults']['is_register_field'] === false) ? "style='display:none;'" : '';
+        $hide_register_field = (isset($field_info->for_admin_use) && $field_info->for_admin_use == '1') ? "style='display:none;'" : $hide_register_field;
 
         $value = 0;
         if (isset($field_info->is_register_field)) {
@@ -1904,6 +1953,7 @@ class UsersWP_Form_Builder {
 
         //register only field
         $hide_register_only_field = (isset($cf['defaults']['is_register_only_field']) && $cf['defaults']['is_register_only_field'] === false) ? "style='display:none;'" : '';
+        $hide_register_only_field = (isset($field_info->for_admin_use) && $field_info->for_admin_use == '1') ? "style='display:none;'" : $hide_register_only_field;
         $register_only_value = 0;
         if (isset($field_info->is_register_only_field)) {
             $register_only_value = (int) $field_info->is_register_only_field;
@@ -1911,7 +1961,7 @@ class UsersWP_Form_Builder {
             $register_only_value = ($cf['defaults']['is_register_only_field']) ? 1 : 0;
         }
         ?>
-        <li <?php echo $hide_register_field; ?>>
+        <li <?php echo $hide_register_field; ?> class="cf-incin-reg-form">
             <label for="cat_sort" class="uwp-tooltip-wrap">
                 <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Include this field in register form:', 'userswp'); ?>
                 <div class="uwp-tooltip">
@@ -1938,7 +1988,7 @@ class UsersWP_Form_Builder {
             <?php } ?>
         </li>
 
-        <li <?php echo $hide_register_only_field; ?>>
+        <li <?php echo $hide_register_only_field; ?> class="cf-inconlyin-reg-form">
             <label for="cat_sort" class="uwp-tooltip-wrap">
                 <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Include this field ONLY in register form:', 'userswp'); ?>
                 <div class="uwp-tooltip">

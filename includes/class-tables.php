@@ -51,6 +51,7 @@ class UsersWP_Tables {
 							  sort_order int(11) NOT NULL,
 							  option_values text NULL DEFAULT NULL,
 							  is_active enum( '0', '1' ) NOT NULL DEFAULT '1',
+							  for_admin_use enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_default enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_dummy enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  is_public enum( '0', '1', '2' ) NOT NULL DEFAULT '0',
