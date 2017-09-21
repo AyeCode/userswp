@@ -4,7 +4,7 @@ Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 3.1
 Tested up to: 4.8
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -115,7 +115,7 @@ No questions so far, but don't hesitate to ask!
 * Tools page added - ADDED
 * Major code refactoring - CHANGED
 * Class names renamed from Users_WP to UsersWP for better naming and consistency - CHANGED
-* Email links are dislayed as plain text - FIXED
+* Email links are displayed as plain text - FIXED
 * Login widget redirects to current page - ADDED
 * Register admin notification setting - ADDED
 * File Preview Not working properly - FIXED
@@ -133,6 +133,8 @@ No questions so far, but don't hesitate to ask!
 * WPML compatibility - ADDED
 * Display confirm password and confirm email fields only on register form - CHANGED
 * Avatar breaks when social login profile url used - FIXED
+* Facebook profile image can break profile image - FIXED
+* Some profile page CSS changes - CHANGED
 
 = 1.0.6 =
 * First release on WordPress.org - :)
