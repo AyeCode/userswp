@@ -379,6 +379,7 @@ class UsersWP_Templates {
                    class="<?php echo $field->css_class; ?>"
                    placeholder="<?php echo $label; ?>"
                    title="<?php echo $label; ?>"
+                <?php if ($field->for_admin_use == 1) { echo 'readonly="readonly"'; } ?>
                 <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                    type="<?php echo $field->field_type; ?>"
                    value="<?php echo esc_html($value); ?>">
