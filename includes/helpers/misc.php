@@ -398,7 +398,9 @@ function get_uwp_users_list() {
                     <div class="uwp-users-list-user-right">
                         <div class="uwp-users-list-user-name">
                             <h3 class="uwp-user-title" data-user="<?php echo $user_obj->ID; ?>">
-                                <a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user_obj->ID), $user_obj->ID); ?>"><?php echo $user_obj->display_name; ?></a>
+                                <a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user_obj->ID), $user_obj->ID); ?>">
+                                    <?php echo apply_filters('uwp_profile_display_name', $user_obj->display_name); ?>
+                                </a>
                                 <?php do_action('uwp_users_after_title', $user_obj->ID ); ?>
                             </h3>
                         </div>

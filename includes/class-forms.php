@@ -1947,6 +1947,13 @@ class UsersWP_Forms {
 
                 <?php
                 $site_title = uwp_get_form_label($field);
+                $manual_label = apply_filters('uwp_login_username_label_manual', true);
+                if ($manual_label
+                    && isset($field->form_type)
+                    && $field->form_type == 'login'
+                    && $field->htmlvar_name == 'uwp_login_username') {
+                    $site_title = __("Username or Email", 'userswp');
+                }
                 if (!is_admin()) { ?>
                     <label>
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>

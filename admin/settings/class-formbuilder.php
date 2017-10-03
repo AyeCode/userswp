@@ -1973,6 +1973,7 @@ class UsersWP_Form_Builder {
             if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'uwp_account_username') {
                 ?>
                 <div>
+                    <input type="hidden" name="is_register_field" value="1" />
                     <p><?php _e('This is mandatory register form field.', 'userswp'); ?></p>
                 </div>
                 <?php
@@ -2000,6 +2001,7 @@ class UsersWP_Form_Builder {
         if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'uwp_account_username') {
             ?>
             <div>
+                <input type="hidden" name="is_register_only_field" value="1" />
                 <p><?php _e('This field is applicable only for register form.', 'userswp'); ?></p>
             </div>
             <?php

@@ -111,7 +111,9 @@ No questions so far, but don't hesitate to ask!
 == Changelog ==
 
 = 1.0.8 =
-For admin use option added - ADDED
+* For admin use option added - ADDED
+* Username label changed to "Username or Email" - CHANGED
+* New email notification tags breaks reset and activate keys - FIXED
 
 = 1.0.7 =
 * Edit user in wp-admin does not display country input correctly - FIXED
