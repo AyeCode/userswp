@@ -104,7 +104,7 @@ class UsersWP_Profile {
         ?>
         <div class="uwp-profile-name">
             <h2 class="uwp-user-title" data-user="<?php echo $user->ID; ?>">
-                <?php echo $user->display_name; ?>
+                <?php echo apply_filters('uwp_profile_display_name', $user->display_name); ?>
                 <?php do_action('uwp_profile_after_title', $user->ID ); ?>
             </h2>
         </div>

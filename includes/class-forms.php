@@ -1947,6 +1947,13 @@ class UsersWP_Forms {
 
                 <?php
                 $site_title = uwp_get_form_label($field);
+                $manual_label = apply_filters('uwp_login_username_label_manual', true);
+                if ($manual_label
+                    && isset($field->form_type)
+                    && $field->form_type == 'login'
+                    && $field->htmlvar_name == 'uwp_login_username') {
+                    $site_title = __("Username or Email", 'userswp');
+                }
                 if (!is_admin()) { ?>
                     <label>
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1963,6 +1970,7 @@ class UsersWP_Forms {
                        oninvalid="this.setCustomValidity('<?php _e($field->required_msg, 'userswp'); ?>')"
                        oninput="setCustomValidity('')"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                    <?php if ($field->for_admin_use == 1) { echo 'readonly="readonly"'; } ?>
                        type="<?php echo $type; ?>"
                     <?php if ($step) { echo 'step="'.$step.'"'; } ?>
                 />

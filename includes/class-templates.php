@@ -261,7 +261,7 @@ class UsersWP_Templates {
      * @return      void
      */
     public function uwp_template_fields($form_type) {
-        
+
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
@@ -273,7 +273,7 @@ class UsersWP_Templates {
         } elseif ($form_type == 'change') {
             $fields = get_change_form_fields();
         } else {
-            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' ORDER BY sort_order ASC", array($form_type)));
+            $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND for_admin_use != '1' ORDER BY sort_order ASC", array($form_type)));
         }
         
         if (!empty($fields)) {
@@ -379,6 +379,7 @@ class UsersWP_Templates {
                    class="<?php echo $field->css_class; ?>"
                    placeholder="<?php echo $label; ?>"
                    title="<?php echo $label; ?>"
+                <?php if ($field->for_admin_use == 1) { echo 'readonly="readonly"'; } ?>
                 <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                    type="<?php echo $field->field_type; ?>"
                    value="<?php echo esc_html($value); ?>">

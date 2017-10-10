@@ -35,7 +35,11 @@ class UsersWP_Mails {
         $extras = apply_filters('uwp_send_mail_extras', "", $message_type, $user_id);
         $subject = apply_filters('uwp_send_mail_subject', $subject, $message_type);
         $message = apply_filters('uwp_send_mail_message', $message, $message_type);
-        
+
+        $contains_login_details_tag = false;
+        if (strpos($message, '[#login_details#]') !== false) {
+            $contains_login_details_tag = true;
+        }
         
         if (!empty($subject)) {
             $subject = __(stripslashes_deep($subject), 'userswp');
@@ -99,7 +103,7 @@ class UsersWP_Mails {
 
 
         // Applicable only for activate mails
-        if ($message_type == 'activate') {
+        if ($message_type == 'activate' && !$contains_login_details_tag) {
             $user_data = get_userdata($user_id);
             global $wpdb;
             $key = wp_generate_password( 20, false );
@@ -133,7 +137,7 @@ class UsersWP_Mails {
         }
 
         // Applicable only for forgot mails
-        if ($message_type == 'forgot') {
+        if ($message_type == 'forgot' && !$contains_login_details_tag) {
 
             $new_pass = "";
             $reset_link = "";
