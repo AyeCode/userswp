@@ -115,6 +115,7 @@ No questions so far, but don't hesitate to ask!
 * Username label changed to "Username or Email" - CHANGED
 * New email notification tags breaks reset and activate keys - FIXED
 * Profile image change popup can sometimes be hidden or not clickable - FIXED
+* uwp_form_input_field_xxx filter added - ADDED
 
 = 1.0.7 =
 * Edit user in wp-admin does not display country input correctly - FIXED
