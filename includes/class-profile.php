@@ -848,8 +848,10 @@ class UsersWP_Profile {
      */
     public function uwp_image_crop_init($user) {
         if (is_user_logged_in()) {
-            echo $this->uwp_modal_loading_html();
-            $this->uwp_modal_close_js();
+            add_action( 'wp_footer', array($this,'uwp_modal_loading_html'));
+            add_action( 'wp_footer', array($this,'uwp_modal_close_js'));
+            //echo $this->uwp_modal_loading_html();
+            //$this->uwp_modal_close_js();
         }
     }
 
@@ -884,7 +886,7 @@ class UsersWP_Profile {
         <?php
         $output = ob_get_contents();
         ob_end_clean();
-        return trim(preg_replace("/\s+|\n+|\r/", ' ', $output));
+        echo trim(preg_replace("/\s+|\n+|\r/", ' ', $output));
     }
 
     /**
