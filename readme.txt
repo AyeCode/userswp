@@ -110,6 +110,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.9 =
+* Upgrade function changed to run on version change and not on activation hook only - FIXED
+
 = 1.0.8 =
 * For admin use option added - ADDED
 * Username label changed to "Username or Email" - CHANGED

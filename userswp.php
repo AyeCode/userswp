@@ -73,6 +73,12 @@ require_once('includes/class-userswp.php');
 require_once('includes/helpers.php');
 require_once('widgets/login.php');
 require_once('widgets/register.php');
+
+// Run upgrade on version change
+if(is_admin() && version_compare(USERSWP_VERSION, get_option('uwp_db_version'))){
+    activate_users_wp(false);
+}
+
 /**
  * Begins execution of the plugin.
  *
