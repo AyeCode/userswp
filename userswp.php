@@ -21,7 +21,7 @@ if (!defined('WPINC')) {
 
 define( 'USERSWP_NAME', 'userswp' );
 
-define( 'USERSWP_VERSION', '1.0.8' );
+define( 'USERSWP_VERSION', '1.0.10' );
 
 define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
 
