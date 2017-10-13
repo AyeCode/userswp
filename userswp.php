@@ -3,7 +3,7 @@
 Plugin Name: UsersWP
 Plugin URI: https://userswp.io/
 Description: User management plugin.
-Version: 1.0.7
+Version: 1.0.9
 Author: AyeCode Ltd
 Author URI: https://userswp.io
 License: GPL-2.0+
@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 Text Domain: userswp
 Domain Path: /languages
 Requires at least: 3.1
-Tested up to: 4.8
+Tested up to: 4.9
 */
 
 // If this file is called directly, abort.
@@ -21,7 +21,7 @@ if (!defined('WPINC')) {
 
 define( 'USERSWP_NAME', 'userswp' );
 
-define( 'USERSWP_VERSION', '1.0.7' );
+define( 'USERSWP_VERSION', '1.0.8' );
 
 define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
 
@@ -73,6 +73,12 @@ require_once('includes/class-userswp.php');
 require_once('includes/helpers.php');
 require_once('widgets/login.php');
 require_once('widgets/register.php');
+
+// Run upgrade on version change
+if(is_admin() && version_compare(USERSWP_VERSION, get_option('uwp_db_version'))){
+    activate_users_wp(false);
+}
+
 /**
  * Begins execution of the plugin.
  *

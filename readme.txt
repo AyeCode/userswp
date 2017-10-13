@@ -3,8 +3,8 @@ Contributors: viruthagiri, stiofansisland, paoltaia, ayecode
 Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 3.1
-Tested up to: 4.8
-Stable tag: 1.0.7
+Tested up to: 4.9
+Stable tag: 1.0.9
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -109,6 +109,12 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.0.10 =
+* Default value can now be used to set the default country by setting the the two letter country code, example "de" - ADDED
+
+= 1.0.9 =
+* Upgrade function changed to run on version change and not on activation hook only - FIXED
 
 = 1.0.8 =
 * For admin use option added - ADDED
