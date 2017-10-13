@@ -2454,6 +2454,10 @@ class UsersWP_Forms {
                 <?php } ?>
 
                 <?php
+                // if value empty set the default
+                if($value=='' && isset($field->default_value) && $field->default_value){
+                    $value = $field->default_value;
+                }
                 $select_country_options = apply_filters('uwp_form_input_select_country',"{defaultCountry: '$value'}",$field, $value, $form_type);
                 ?>
 
