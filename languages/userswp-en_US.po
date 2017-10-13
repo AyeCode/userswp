@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.0.8\n"
+"Project-Id-Version: UsersWP 1.0.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-10 15:05+0100\n"
-"PO-Revision-Date: 2017-10-10 15:05+0100\n"
+"POT-Creation-Date: 2017-10-13 18:41+0100\n"
+"PO-Revision-Date: 2017-10-13 18:41+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode <info@userswp.io>\n"
 "Language: en_US\n"
@@ -184,8 +184,8 @@ msgstr ""
 msgid "Adds a radio input"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:314 includes/class-activator.php:363
-#: includes/class-activator.php:632
+#: admin/settings/class-formbuilder.php:314 includes/class-activator.php:364
+#: includes/class-activator.php:633
 msgid "Email"
 msgstr ""
 
@@ -1095,11 +1095,11 @@ msgid "Enter account update email Content"
 msgstr ""
 
 #: admin/settings/class-settings.php:679 admin/settings/class-settings.php:682
-#: includes/class-activator.php:125
+#: includes/class-activator.php:126
 msgid "New account registration"
 msgstr ""
 
-#: admin/settings/class-settings.php:690 includes/class-activator.php:126
+#: admin/settings/class-settings.php:690 includes/class-activator.php:127
 msgid "A user has been registered recently on your website. [#extras#]"
 msgstr ""
 
@@ -1141,111 +1141,111 @@ msgstr ""
 msgid "Grid View - 5 Column"
 msgstr ""
 
-#: includes/class-activator.php:139
+#: includes/class-activator.php:140
 msgid "Your Log In Details"
 msgstr ""
 
-#: includes/class-activator.php:140
+#: includes/class-activator.php:141
 msgid ""
 "<p>Dear [#user_name#],</p><p>You can log in  with the following information:"
 "</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,"
 "<br /><br />[#site_name_url#].</p>"
 msgstr ""
 
-#: includes/class-activator.php:150
+#: includes/class-activator.php:151
 msgid "Please activate your account"
 msgstr ""
 
-#: includes/class-activator.php:151
+#: includes/class-activator.php:152
 msgid ""
 "<p>Dear [#user_name#],</p><p>Thank you for signing up with [#site_name#]</"
 "p>[#login_details#]<p>Thank you,<br /><br />[#site_name_url#].</p>"
 msgstr ""
 
-#: includes/class-activator.php:161
+#: includes/class-activator.php:162
 msgid "[#site_name#] - Your new password"
 msgstr ""
 
-#: includes/class-activator.php:162
+#: includes/class-activator.php:163
 msgid ""
 "<p>Dear [#user_name#],<p>[#login_details#]<p>You can login here: "
 "[#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>"
 msgstr ""
 
-#: includes/class-activator.php:172
+#: includes/class-activator.php:173
 msgid "[#site_name#] - Password has been changed"
 msgstr ""
 
-#: includes/class-activator.php:173
+#: includes/class-activator.php:174
 msgid ""
 "<p>Dear [#user_name#],<p><p>Your password has been changed successfully.</"
 "p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br /"
 ">[#site_name_url#].</p>"
 msgstr ""
 
-#: includes/class-activator.php:183
+#: includes/class-activator.php:184
 msgid "[#site_name#] - Password has been reset"
 msgstr ""
 
-#: includes/class-activator.php:184
+#: includes/class-activator.php:185
 msgid ""
 "<p>Dear [#user_name#],<p><p>Your password has been reset</p><p>You can login "
 "here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>"
 msgstr ""
 
-#: includes/class-activator.php:194
+#: includes/class-activator.php:195
 msgid "[#site_name#] - Account has been updated"
 msgstr ""
 
-#: includes/class-activator.php:195
+#: includes/class-activator.php:196
 msgid ""
 "<p>Dear [#user_name#],<p><p>Your account has been updated successfully</"
 "p><p>Thank you,<br /><br />[#site_name_url#].</p>"
 msgstr ""
 
-#: includes/class-activator.php:321 includes/class-activator.php:599
+#: includes/class-activator.php:322 includes/class-activator.php:600
 msgid "Username"
 msgstr ""
 
-#: includes/class-activator.php:334 includes/class-activator.php:523
-#: includes/class-activator.php:664
+#: includes/class-activator.php:335 includes/class-activator.php:524
+#: includes/class-activator.php:665
 msgid "Password"
 msgstr ""
 
-#: includes/class-activator.php:392
+#: includes/class-activator.php:393
 msgid "Avatar"
 msgstr ""
 
-#: includes/class-activator.php:430
+#: includes/class-activator.php:431
 msgid "Banner"
 msgstr ""
 
-#: includes/class-activator.php:468
+#: includes/class-activator.php:469
 msgid "Old Password"
 msgstr ""
 
-#: includes/class-activator.php:481
+#: includes/class-activator.php:482
 msgid "New Password"
 msgstr ""
 
-#: includes/class-activator.php:494 includes/class-activator.php:536
-#: includes/class-forms.php:2533
+#: includes/class-activator.php:495 includes/class-activator.php:537
+#: includes/class-forms.php:2537
 msgid "Confirm Password"
 msgstr ""
 
-#: includes/class-activator.php:565
+#: includes/class-activator.php:566
 msgid "First Name"
 msgstr ""
 
-#: includes/class-activator.php:582
+#: includes/class-activator.php:583
 msgid "Last Name"
 msgstr ""
 
-#: includes/class-activator.php:616
+#: includes/class-activator.php:617
 msgid "Display Name"
 msgstr ""
 
-#: includes/class-activator.php:648
+#: includes/class-activator.php:649
 msgid "Bio"
 msgstr ""
 
@@ -1570,7 +1570,7 @@ msgid ""
 "check your site error log for more details."
 msgstr ""
 
-#: includes/class-forms.php:2588
+#: includes/class-forms.php:2592
 msgid "Confirm Email"
 msgstr ""
 
