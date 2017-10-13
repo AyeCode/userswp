@@ -318,7 +318,7 @@ class UsersWP_Admin_Settings {
                <tr valign="top">
                     <th scope="row" class="titledesc"><?php echo __( 'List of usable shortcodes', 'userswp' ); ?></th>
                     <td class="forminp">
-                        <span class="description">[#site_name_url#],[#site_name#],[#to_name#],[#from_name#],[#login_url#],[#user_name#],[#from_email#],[#user_login#],[#username#],[#current_date#],[#login_details#]</span>
+                        <span class="description">[#site_name_url#],[#site_name#],[#to_name#],[#from_name#],[#login_url#],[#user_name#],[#from_email#],[#user_login#],[#username#],[#current_date#],[#login_details#],[#reset_link#],[#activation_link#]</span>
                     </td>
                </tr>
                </tbody>
