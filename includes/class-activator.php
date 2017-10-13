@@ -54,6 +54,7 @@ class UsersWP_Activator {
      */
     public static function load_dependencies() {
         require_once dirname( __FILE__ ) . '/class-tables.php';
+        require_once dirname( __FILE__ ) . '/class-meta.php';
         require_once dirname( __FILE__ ) . '/class-pages.php';
         require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-formbuilder.php';
     }
