@@ -110,6 +110,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.10 =
+* Default value can now be used to set the default country by setting the the two letter country code, example "de" - ADDED
+
 = 1.0.9 =
 * Upgrade function changed to run on version change and not on activation hook only - FIXED
 
