@@ -160,7 +160,7 @@ class UsersWP_Activator {
 
         // Forgot
         $forgot_password_email_subject = __('[#site_name#] - Your new password', 'userswp');
-        $forgot_password_email_content = __("<p>Dear [#user_name#],<p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
+        $forgot_password_email_content = __("<p>Dear [#user_name#],</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
         if (!isset($settings['forgot_password_email_subject'])) {
             $settings['forgot_password_email_subject'] = $forgot_password_email_subject;
@@ -171,7 +171,7 @@ class UsersWP_Activator {
 
         // Change
         $change_password_email_subject = __('[#site_name#] - Password has been changed', 'userswp');
-        $change_password_email_content = __("<p>Dear [#user_name#],<p><p>Your password has been changed successfully.</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
+        $change_password_email_content = __("<p>Dear [#user_name#],</p><p>Your password has been changed successfully.</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
         if (!isset($settings['change_password_email_subject'])) {
             $settings['change_password_email_subject'] = $change_password_email_subject;
@@ -182,7 +182,7 @@ class UsersWP_Activator {
 
         // Reset
         $reset_password_email_subject = __('[#site_name#] - Password has been reset', 'userswp');
-        $reset_password_email_content = __("<p>Dear [#user_name#],<p><p>Your password has been reset</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
+        $reset_password_email_content = __("<p>Dear [#user_name#],</p><p>Your password has been reset</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
         if (!isset($settings['reset_password_email_subject'])) {
             $settings['reset_password_email_subject'] = $reset_password_email_subject;
@@ -193,7 +193,7 @@ class UsersWP_Activator {
 
         // Update
         $account_update_email_subject = __('[#site_name#] - Account has been updated', 'userswp');
-        $account_update_email_content = __("<p>Dear [#user_name#],<p><p>Your account has been updated successfully</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
+        $account_update_email_content = __("<p>Dear [#user_name#],</p><p>Your account has been updated successfully</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
 
         if (!isset($settings['account_update_email_subject'])) {
             $settings['account_update_email_subject'] = $account_update_email_subject;

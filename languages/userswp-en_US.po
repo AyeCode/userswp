@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.0.10\n"
+"Project-Id-Version: UsersWP 1.0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-13 18:41+0100\n"
-"PO-Revision-Date: 2017-10-13 18:41+0100\n"
+"POT-Creation-Date: 2017-10-31 18:53+0000\n"
+"PO-Revision-Date: 2017-10-31 18:53+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode <info@userswp.io>\n"
 "Language: en_US\n"
@@ -1168,7 +1168,7 @@ msgstr ""
 
 #: includes/class-activator.php:163
 msgid ""
-"<p>Dear [#user_name#],<p>[#login_details#]<p>You can login here: "
+"<p>Dear [#user_name#],</p>[#login_details#]<p>You can login here: "
 "[#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>"
 msgstr ""
 
@@ -1178,7 +1178,7 @@ msgstr ""
 
 #: includes/class-activator.php:174
 msgid ""
-"<p>Dear [#user_name#],<p><p>Your password has been changed successfully.</"
+"<p>Dear [#user_name#],</p><p>Your password has been changed successfully.</"
 "p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br /"
 ">[#site_name_url#].</p>"
 msgstr ""
@@ -1189,8 +1189,8 @@ msgstr ""
 
 #: includes/class-activator.php:185
 msgid ""
-"<p>Dear [#user_name#],<p><p>Your password has been reset</p><p>You can login "
-"here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>"
+"<p>Dear [#user_name#],</p><p>Your password has been reset</p><p>You can "
+"login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>"
 msgstr ""
 
 #: includes/class-activator.php:195
@@ -1199,7 +1199,7 @@ msgstr ""
 
 #: includes/class-activator.php:196
 msgid ""
-"<p>Dear [#user_name#],<p><p>Your account has been updated successfully</"
+"<p>Dear [#user_name#],</p><p>Your account has been updated successfully</"
 "p><p>Thank you,<br /><br />[#site_name_url#].</p>"
 msgstr ""
 

@@ -1,10 +1,10 @@
 ﻿=== UsersWP - User Profile & Registration ===
-Contributors: viruthagiri, stiofansisland, paoltaia, ayecode
+Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 3.1
 Tested up to: 4.9
-Stable tag: 1.0.10
+Stable tag: 1.0.11
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,7 +40,7 @@ After activation all pages are created with the correct shortcodes so that you a
 The user profile features a cover image, an avatar and an optional tabbed menu showing :
 
 * User's posts
-* User's commnents
+* User's comments
 * Custom fields (if any)
 
 You can chose if you want to hide any section of it and where to show the custom fields. In a sidebar or in their own tab.
@@ -109,6 +109,10 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.0.11 =
+* Some emails have an extra opening p tag - FIXED
+* WP 4.8.3 can cause Edit profile page to not display all fields - FIXED
 
 = 1.0.10 =
 * Default value can now be used to set the default country by setting the the two letter country code, example "de" - ADDED
