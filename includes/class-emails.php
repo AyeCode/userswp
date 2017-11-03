@@ -61,7 +61,7 @@ class UsersWP_Mails {
         $siteurl = home_url();
         $siteurl_link = '<a href="' . $siteurl . '">' . $siteurl . '</a>';
         $loginurl = $login_page_url;
-        $loginurl_link = '<a href="' . $loginurl . '">login</a>';
+        $loginurl_link = '<a href="' . $loginurl . '">'.__('login', 'userswp').'</a>';
 
         $current_date = date_i18n('Y-m-d H:i:s', current_time('timestamp'));
 
@@ -288,7 +288,7 @@ class UsersWP_Mails {
         $siteurl = home_url();
         $siteurl_link = '<a href="' . $siteurl . '">' . $siteurl . '</a>';
         $loginurl = $login_page_url;
-        $loginurl_link = '<a href="' . $loginurl . '">login</a>';
+        $loginurl_link = '<a href="' . $loginurl . '">'.__('login', 'userswp').'</a>';
 
         $current_date = date_i18n('Y-m-d H:i:s', current_time('timestamp'));
 
