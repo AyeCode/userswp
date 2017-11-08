@@ -110,6 +110,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.12 =
+* Filter added to wp_login_url() to filter change all login urls to the UWP one - CHANGED
+
 = 1.0.11 =
 * Some emails have an extra opening p tag - FIXED
 * WP 4.8.3 can cause Edit profile page to not display all fields - FIXED

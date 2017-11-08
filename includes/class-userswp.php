@@ -109,6 +109,8 @@ class UsersWP {
     }
 
 
+
+
     public function load_assets_actions_and_filters($instance) {
         add_action( 'wp_enqueue_scripts', array($instance, 'enqueue_styles') );
         add_action( 'wp_enqueue_scripts', array($instance, 'enqueue_scripts') );
@@ -137,6 +139,7 @@ class UsersWP {
     }
 
     public function load_forms_actions_and_filters($instance) {
+        // general
         add_action('init', array($instance, 'init_notices'), 1);
         add_action('init', array($instance, 'handler'));
         add_action('init', array($instance, 'uwp_privacy_submit_handler'));
@@ -266,6 +269,9 @@ class UsersWP {
     }
     
     public function load_templates_actions_and_filters($instance) {
+
+
+
         add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
         add_action( 'uwp_template_fields', array($instance, 'uwp_template_fields'), 10, 1 );
         add_action( 'uwp_account_form_display', array($instance, 'uwp_account_edit_form_display'), 10, 1 );
@@ -282,7 +288,10 @@ class UsersWP {
 
         add_filter( 'wp_setup_nav_menu_item', array($instance, 'uwp_setup_nav_menu_item'), 10, 1 );
         add_filter( 'the_content', array($instance, 'uwp_author_page_content'), 10, 1 );
-        add_filter('body_class', array($instance, 'uwp_add_body_class'), 10, 1 );
+        add_filter( 'body_class', array($instance, 'uwp_add_body_class'), 10, 1 );
+
+        // filter the login url
+        add_filter( 'login_url', array($instance, 'wp_login_url'), 10, 3 );
     }
     
     public function load_tools_actions_and_filters($instance) {

@@ -22,12 +22,7 @@ class UsersWP_Mails {
     {
         $user_data = get_userdata($user_id);
         
-        $login_page_id = uwp_get_option('login_page', false);
-        if ($login_page_id) {
-            $login_page_url = get_permalink($login_page_id);
-        } else {
-            $login_page_url = wp_login_url();
-        }
+        $login_page_url = wp_login_url();
 
         $subject = "";
         $message = "";
@@ -263,12 +258,7 @@ class UsersWP_Mails {
     public function send_admin_email( $message_type, $user_id)
     {
 
-        $login_page_id = uwp_get_option('login_page', false);
-        if ($login_page_id) {
-            $login_page_url = get_permalink($login_page_id);
-        } else {
-            $login_page_url = wp_login_url();
-        }
+        $login_page_url = wp_login_url();
 
         $extras = apply_filters('uwp_send_admin_mail_extras', "", $message_type, $user_id);
         $subject = apply_filters('uwp_send_admin_mail_subject', "", $message_type);
