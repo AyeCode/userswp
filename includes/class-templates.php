@@ -253,6 +253,35 @@ class UsersWP_Templates {
     }
 
     /**
+     * Changes the login url to the UWP login page.
+     *
+     * @param $login_url string The URL for login.
+     * @param $redirect string The URL to redirect back to upon successful login.
+     * @param $force_reauth bool Whether to force reauthorization, even if a cookie is present.
+     * @since 1.0.12
+     * @package userswp
+     *
+     * @return string The login url.
+     */
+    public function wp_login_url($login_url, $redirect, $force_reauth) {
+        $login_page_id = uwp_get_option('login_page', false);
+        $redirect_page_id = uwp_get_option('login_redirect_to', '');
+        if ($login_page_id) {
+            $login_page = get_permalink($login_page_id);
+            if($redirect){
+                $login_url = add_query_arg( 'redirect_to', $redirect, $login_page );
+            }elseif($redirect_page_id){
+                $redirect_to = get_permalink($redirect_page_id);
+                $login_url = add_query_arg( 'redirect_to', $redirect_to, $login_page );
+            }else{
+                $login_url = $login_page;
+            }
+        }
+
+        return $login_url;
+    }
+
+    /**
      * Prints html for form fields of that particular form.
      *
      * @since       1.0.0

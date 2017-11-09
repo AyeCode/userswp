@@ -43,12 +43,7 @@ class UsersWP_Forms {
         $redirect = false;
         $processed = false;
 
-        $login_page = uwp_get_option('login_page', false);
-        if ($login_page) {
-            $login_page_url = get_permalink($login_page);
-        } else {
-            $login_page_url = wp_login_url();
-        }
+        $login_page_url = wp_login_url();
 
         $redirect_page_id = uwp_get_option('login_redirect_to', '');
         if (empty($redirect_page_id)) {
@@ -407,12 +402,9 @@ class UsersWP_Forms {
                 
                 return __('Your account is under moderation. We will email you once its approved.', 'userswp');
             } else {
-                $login_page = uwp_get_option('login_page', false);
-                if ($login_page) {
-                    $login_page_url = get_permalink($login_page);
-                } else {
-                    $login_page_url = wp_login_url();
-                }
+
+                $login_page_url = wp_login_url();
+
                 if ($generated_password) {
                     return sprintf(__('Account registered successfully. A password has been generated and mailed to your registered Email ID. Please login <a href="%s">here</a>.', 'userswp'), $login_page_url);
                 } else {
