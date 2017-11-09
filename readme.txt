@@ -45,7 +45,7 @@ The user profile features a cover image, an avatar and an optional tabbed menu s
 
 You can chose if you want to hide any section of it and where to show the custom fields. In a sidebar or in their own tab.
 
-Otherwise just customize the tempalates as you wish within your child theme.
+Otherwise just customize the templates as you wish within your child theme.
 
 = Free Add-ons =
 
@@ -63,7 +63,7 @@ UsersWP can be extended with several add-ons. Few examples are:
 * [Easy Digital Downloads](https://userswp.io/downloads/easy-digital-downloads/) - Display “Downloads” and “Purchases” tab in user profile pages.
 * [GeoDirectory](https://userswp.io/downloads/geodirectory/) - Create a tab for each listing type submitted, reviews and favorite listings.
 * [WP Job Manager](https://userswp.io/downloads/wp-job-manager/) - Connects WP Job Manager with UsersWP, display Jobs tab in user profile pages.
-* [Mail Chimp](https://userswp.io/downloads/mailchimp/) - Allows the user to subscribe to your newletters via Mailchimp during registration.
+* [Mail Chimp](https://userswp.io/downloads/mailchimp/) - Allows the user to subscribe to your newsletters via Mailchimp during registration.
 
 There are many others and we release new Add-ons frequently. You can see the full collection here: [UsersWP Premium Add-ons](https://userswp.io/downloads/category/addons/)
 
@@ -112,6 +112,7 @@ No questions so far, but don't hesitate to ask!
 
 = 1.0.12 =
 * Filter added to wp_login_url() to filter change all login urls to the UWP one - CHANGED
+* Settings added to change subject & content for Password change notification - CHANGED
 
 = 1.0.11 =
 * Some emails have an extra opening p tag - FIXED

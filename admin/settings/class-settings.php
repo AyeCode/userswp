@@ -241,11 +241,11 @@ class UsersWP_Admin_Settings {
         <p><?php echo __( 'If you need to change the look and feel of any UsersWP templates,
         simply create a folder named userswp inside your active child theme
         and copy the template you wish to modify in it. You can now modify the template.
-        The plugin will use your modified version and you don\'t hve to worry about plugin or theme updates.
+        The plugin will use your modified version and you don\'t have to worry about plugin or theme updates.
         <a href="https://userswp.io/docs/override-templates/">Click here for examples</a>', 'userswp' ); ?></p>
 
         <h3><?php echo __( 'Add-ons', 'userswp' ); ?></h3>
-        <p><?php echo __( 'We have a long list of free and premium add-ons that will help you extend users management on your wesbsite.
+        <p><?php echo __( 'We have a long list of free and premium add-ons that will help you extend users management on your website.
         <a href="https://userswp.io/downloads/category/addons/">Click here for our official free and premium add-ons</a>', 'userswp' ); ?></p>
         <?php
     }
@@ -631,6 +631,21 @@ class UsersWP_Admin_Settings {
                             'desc' => "",
                             'type' => 'textarea',
                             'placeholder' => __( 'Enter forgot password email Content', 'userswp' )
+                        ),
+                        'change_password_email_subject' => array(
+                            'id' => 'change_password_email_subject',
+                            'name' => __( 'Change password email', 'userswp' ),
+                            'desc' => "",
+                            'type' => 'text',
+                            'size' => 'regular',
+                            'placeholder' => __( 'Enter change password email Subject', 'userswp' )
+                        ),
+                        'change_password_email_content' => array(
+                            'id' => 'change_password_email_content',
+                            'name' => "",
+                            'desc' => "",
+                            'type' => 'textarea',
+                            'placeholder' => __( 'Enter change password email Content', 'userswp' )
                         ),
                         'reset_password_email_subject' => array(
                             'id' => 'reset_password_email_subject',
