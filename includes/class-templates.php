@@ -221,10 +221,12 @@ class UsersWP_Templates {
      */
     public function logout_redirect() {
         $redirect_page_id = uwp_get_option('logout_redirect_to', '');
-        if (empty($redirect_page_id)) {
-            $redirect_to = home_url('/');
-        } else {
+        if(isset( $_REQUEST['redirect_to'] )){
+            $redirect_to = esc_url($_REQUEST['redirect_to']);
+        } elseif ( isset($redirect_page_id) && (int)$redirect_page_id > 0) {
             $redirect_to = get_permalink($redirect_page_id);
+        } else {
+            $redirect_to = home_url('/');
         }
         $redirect_to = apply_filters('uwp_logout_redirect', $redirect_to);
         wp_redirect( $redirect_to );
