@@ -42,6 +42,7 @@ class UsersWP_Forms {
         $message = null;
         $redirect = false;
         $processed = false;
+        $type = null;
 
         $login_page_url = wp_login_url();
 
@@ -63,6 +64,7 @@ class UsersWP_Forms {
                 $redirect = apply_filters('uwp_register_redirect', $reg_redirect_to);
             }
             $processed = true;
+            $type = 'register';
         } elseif (isset($_POST['uwp_login_nonce'])) {
             $errors = $this->process_login($_POST);
             $redirect_page_id = uwp_get_option('login_redirect_to', '');
@@ -75,6 +77,7 @@ class UsersWP_Forms {
             }
             $redirect = apply_filters('uwp_login_redirect', $redirect_to);
             $processed = true;
+            $type = 'login';
         } elseif (isset($_POST['uwp_forgot_nonce'])) {
             $errors = $this->process_forgot($_POST);
             $message = __('Please check your email.', 'userswp');
@@ -128,7 +131,7 @@ class UsersWP_Forms {
                 echo '</div>';
             } else {
                 if ($redirect) {
-                    wp_redirect($redirect);
+                    wp_safe_redirect($redirect);
                     exit();
                 } else {
                     echo '<div class="uwp-alert-success text-center">';
@@ -138,7 +141,13 @@ class UsersWP_Forms {
             }
         }
 
-        $uwp_notices[] = ob_get_contents();
+        if($type){
+            $uwp_notices[] = array($type => ob_get_contents());
+        }else{
+            $uwp_notices[] = ob_get_contents();
+        }
+
+
         ob_end_clean();
 
     }
@@ -158,9 +167,18 @@ class UsersWP_Forms {
 
         if (is_array($uwp_notices)) {
             foreach ($uwp_notices as $notice) {
-                if (!empty($notice)) {
-                    echo $notice;
+
+                // If the notification is type specific then only output on that type
+                if(is_array($notice)){
+                    foreach($notice as $key => $val){
+                        if( $key == $type ){ echo $val; }
+                    }
+                }else{
+                    if (!empty($notice)) {
+                        echo $notice;
+                    }
                 }
+
             }
 
         }
