@@ -162,3 +162,26 @@ function uwp_settings_general_loginout_fields() {
     $fields = array_merge($login, $wp_login, $logout);
     return $fields;
 }
+
+/**
+ * Get the field icon.
+ *
+ * @since       1.0.12
+ * @package     userswp
+ *
+ * @param       string      Field icon value.
+ * @return      array       Field icon element.
+ */
+function uwp_get_field_icon( $value ) {
+    $field_icon = $value;
+
+    if ( ! empty( $value ) ) {
+        if ( strpos( $value, 'http' ) === 0 ) {
+            $field_icon = '<span class="uwp_field_icon" style="background: url(' . $value . ') no-repeat left center;padding-left:14px;background-size:100% auto;margin-right:5px"></span>';
+        } else if ( strpos($value, 'fa fa-') !== false ) {
+            $field_icon = '<i class="uwp_field_icon ' . $value . '"></i>';
+        }
+    }
+
+    return apply_filters( 'uwp_get_field_icon', $field_icon, $value );
+}

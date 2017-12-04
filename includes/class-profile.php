@@ -271,11 +271,7 @@ class UsersWP_Profile {
                 $value = $this->uwp_get_field_value($field, $user);
 
                 // Icon
-                if ($field->field_icon) {
-                    $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
-                } else {
-                    $icon = '';
-                }
+                $icon = uwp_get_field_icon($field->field_icon);
 
                 if ($field->field_type == 'fieldset') {
                     ?>
@@ -1589,7 +1585,7 @@ class UsersWP_Profile {
 
         foreach ($fields as $field) {
             if ($field->field_icon != '') {
-                $icon = '<i class="'.$field->field_icon.'"></i>';
+                $icon = uwp_get_field_icon($field->field_icon);
             } else {
                 $field_icon = uwp_field_type_to_fa_icon($field->field_type);
                 if ($field_icon) {
@@ -1671,11 +1667,7 @@ class UsersWP_Profile {
                     }
                     $value = $this->uwp_get_field_value($field, $user);
                     // Icon
-                    if ($field->field_icon) {
-                        $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
-                    } else {
-                        $icon = '';
-                    }
+                    $icon = uwp_get_field_icon( $field->field_icon );
                     ?>
                     <div class="uwp-profile-extra-wrap">
                         <div class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>

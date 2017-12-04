@@ -632,11 +632,7 @@ class UsersWP_Templates {
                     foreach ($fields as $field) {
 
                         // Icon
-                        if ($field->field_icon) {
-                            $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
-                        } else {
-                            $icon = '';
-                        }
+                        $icon = uwp_get_field_icon( $field->field_icon );
 
                         if ($field->field_type == 'fieldset') {
                             ?>
