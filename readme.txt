@@ -113,6 +113,8 @@ No questions so far, but don't hesitate to ask!
 = 1.0.12 =
 * Filter added to wp_login_url() to filter change all login urls to the UWP one - CHANGED
 * Settings added to change subject & content for Password change notification - CHANGED
+* redirect_to REQUEST variable will take priority over UWP page redirects - CHANGED
+* Login/register specific notices will only show on their respective locations - CHANGED
 
 = 1.0.11 =
 * Some emails have an extra opening p tag - FIXED
