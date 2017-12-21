@@ -1582,7 +1582,7 @@ class UsersWP_Profile {
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
         $usermeta = uwp_get_usermeta_row($user->ID);
-        $privacy = $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
+        $privacy = ! empty( $usermeta ) && $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
 
         foreach ($fields as $field) {
             if ($field->field_icon != '') {
@@ -1627,7 +1627,7 @@ class UsersWP_Profile {
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' ORDER BY sort_order ASC");
         $usermeta = uwp_get_usermeta_row($user->ID);
-        $privacy = $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
+        $privacy = ! empty( $usermeta ) && $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
 
         $fieldsets = array();
         $fieldset = false;
