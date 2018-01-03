@@ -245,7 +245,7 @@ class UsersWP_Forms {
 
         $result = uwp_validate_fields($data, 'register');
         
-        $result = apply_filters('uwp_validate_result', $result, 'register');
+        $result = apply_filters('uwp_validate_result', $result, 'register', $data);
 
         if (is_wp_error($result)) {
             return $result;
