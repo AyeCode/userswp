@@ -115,6 +115,7 @@ No questions so far, but don't hesitate to ask!
 * Settings added to change subject & content for Password change notification - CHANGED
 * redirect_to REQUEST variable will take priority over UWP page redirects - CHANGED
 * Login/register specific notices will only show on their respective locations - CHANGED
+* First/Last name fields breaks the design if labels are displayed in forms - FIXED
 
 = 1.0.11 =
 * Some emails have an extra opening p tag - FIXED
