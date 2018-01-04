@@ -1257,7 +1257,7 @@
   .uwp-forgot .uwp-rf-icon,
   .uwp-account .uwp-lf-icon,
   .uwp-account .uwp-rf-icon {
-    background: transparent none repeat scroll 0 0;
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
     border: 1px solid #ccc;
     border-radius: 50px;
     height: auto;
