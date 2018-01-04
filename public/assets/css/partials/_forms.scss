@@ -54,7 +54,7 @@
 
     }
 
-    input.uwp-half {
+    /*input.uwp-half {
       margin: 0 2% 20px 0;
       padding: 12px 15px !important;
       width: 49% !important;
@@ -68,7 +68,7 @@
 
     input.uwp-half:nth-child(4) {
       margin-right: 0;
-    }
+    }*/
 
     input[type="submit"] {
       background: #717171 none repeat scroll 0 0;
@@ -225,3 +225,50 @@
   }
 }
 
+.uwp_page{
+  .uwp-login-form,
+  .uwp-registration-form,
+  .uwp-account-form {
+    div#uwp_account_first_name_row {
+      width: 49%;
+      float: left;
+      margin: 0 2% 0 0;
+      padding: 0;
+      clear: none;
+    }
+
+    div#uwp_account_last_name_row {
+      width: 49%;
+      float: right;
+      margin: 0;
+      padding: 0;
+      clear: none;
+    }
+  }
+  .uwp_clear {
+    clear: both;
+  }
+}
+@media screen and (max-width: 480px) {
+  .uwp_page{
+    .uwp-login-form,
+    .uwp-registration-form,
+    .uwp-account-form {
+      div#uwp_account_first_name_row {
+        width: 100%;
+        float: none;
+        margin: 0;
+        padding: 0;
+        clear: both;
+      }
+
+      div#uwp_account_last_name_row {
+        width: 100%;
+        float: none;
+        margin: 0;
+        padding: 0;
+        clear: both;
+      }
+    }
+  }
+}
