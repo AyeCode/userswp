@@ -735,9 +735,10 @@ function uwp_account_privacy_edit_form_display($type) {
                                     </select>
                                 </div>
                             </div>
-                        <?php } ?>
+                        <?php }
 
-                        <?php
+                        do_action('uwp_after_privacy_form_fields', $fields);
+
                         if ($make_profile_private) {
                             $field_name = 'uwp_make_profile_private';
                             $value = get_user_meta($user_id, $field_name, true);
