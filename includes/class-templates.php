@@ -453,7 +453,7 @@ class UsersWP_Templates {
      * @return      string                  Modified page content.
      */
     public function uwp_author_page_content($content) {
-        if (is_author()) {
+        if (is_author() && apply_filters( 'uwp_use_author_page_content', true ) ) {
             return do_shortcode('[uwp_profile]');
         } else {
             return $content;
@@ -632,11 +632,7 @@ class UsersWP_Templates {
                     foreach ($fields as $field) {
 
                         // Icon
-                        if ($field->field_icon) {
-                            $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
-                        } else {
-                            $icon = '';
-                        }
+                        $icon = uwp_get_field_icon( $field->field_icon );
 
                         if ($field->field_type == 'fieldset') {
                             ?>

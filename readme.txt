@@ -3,7 +3,7 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 3.1
-Tested up to: 4.9
+Tested up to: 4.9.1
 Stable tag: 1.0.11
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -115,6 +115,8 @@ No questions so far, but don't hesitate to ask!
 * Settings added to change subject & content for Password change notification - CHANGED
 * redirect_to REQUEST variable will take priority over UWP page redirects - CHANGED
 * Login/register specific notices will only show on their respective locations - CHANGED
+* Icon url in custom field icon does not working - FIXED
+* Merge UWP GeoDirectory functionality into UWP core - CHANGED
 
 = 1.0.11 =
 * Some emails have an extra opening p tag - FIXED

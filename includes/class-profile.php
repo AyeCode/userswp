@@ -271,11 +271,7 @@ class UsersWP_Profile {
                 $value = $this->uwp_get_field_value($field, $user);
 
                 // Icon
-                if ($field->field_icon) {
-                    $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
-                } else {
-                    $icon = '';
-                }
+                $icon = uwp_get_field_icon($field->field_icon);
 
                 if ($field->field_type == 'fieldset') {
                     ?>
@@ -1272,9 +1268,10 @@ class UsersWP_Profile {
      * @return      void
      */
     public function uwp_redirect_author_page() {
-        if ( is_author() ) {
+        if ( is_author() && apply_filters( 'uwp_check_redirect_author_page', true ) ) {
             $id = get_query_var( 'author' );
             $link = uwp_build_profile_tab_url( $id );
+            $link = apply_filters( 'uwp_redirect_author_page', $link, $id );
             wp_redirect($link);
             exit;
         }
@@ -1585,11 +1582,11 @@ class UsersWP_Profile {
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
         $usermeta = uwp_get_usermeta_row($user->ID);
-        $privacy = $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
+        $privacy = ! empty( $usermeta ) && $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
 
         foreach ($fields as $field) {
             if ($field->field_icon != '') {
-                $icon = '<i class="'.$field->field_icon.'"></i>';
+                $icon = uwp_get_field_icon($field->field_icon);
             } else {
                 $field_icon = uwp_field_type_to_fa_icon($field->field_type);
                 if ($field_icon) {
@@ -1630,7 +1627,7 @@ class UsersWP_Profile {
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' ORDER BY sort_order ASC");
         $usermeta = uwp_get_usermeta_row($user->ID);
-        $privacy = $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
+        $privacy = ! empty( $usermeta ) && $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
 
         $fieldsets = array();
         $fieldset = false;
@@ -1671,11 +1668,7 @@ class UsersWP_Profile {
                     }
                     $value = $this->uwp_get_field_value($field, $user);
                     // Icon
-                    if ($field->field_icon) {
-                        $icon = '<i class="uwp_field_icon '.$field->field_icon.'"></i>';
-                    } else {
-                        $icon = '';
-                    }
+                    $icon = uwp_get_field_icon( $field->field_icon );
                     ?>
                     <div class="uwp-profile-extra-wrap">
                         <div class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
