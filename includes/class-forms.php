@@ -1385,7 +1385,7 @@ class UsersWP_Forms {
 
             </script>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp-fieldset-details">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp_clear uwp-fieldset-details">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -1455,7 +1455,7 @@ class UsersWP_Forms {
                 });
             </script>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp-fieldset-details">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp_clear uwp-fieldset-details">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -1517,7 +1517,7 @@ class UsersWP_Forms {
 
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row uwp_clear">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -1597,7 +1597,7 @@ class UsersWP_Forms {
             }
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row uwp_clear">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -1711,7 +1711,7 @@ class UsersWP_Forms {
 
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -1772,7 +1772,7 @@ class UsersWP_Forms {
             $site_title = uwp_get_form_label($field);
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
                 <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value="0" />
                 <input name="<?php echo $field->htmlvar_name; ?>"
                        class="<?php echo $field->css_class; ?>"
@@ -1825,7 +1825,7 @@ class UsersWP_Forms {
 
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -1952,7 +1952,7 @@ class UsersWP_Forms {
             ?>
 
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -2024,7 +2024,7 @@ class UsersWP_Forms {
 
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -2120,7 +2120,7 @@ class UsersWP_Forms {
             ob_start(); // Start  buffering;
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -2182,7 +2182,7 @@ class UsersWP_Forms {
             ob_start(); // Start  buffering;
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -2247,7 +2247,7 @@ class UsersWP_Forms {
             ob_start(); // Start  buffering;
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -2451,7 +2451,7 @@ class UsersWP_Forms {
 
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row uwp_clear">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -2540,7 +2540,7 @@ class UsersWP_Forms {
                 ob_start(); // Start  buffering;
                 ?>
                 <div id="uwp_account_confirm_password_row"
-                     class="<?php echo 'required_field';?> uwp_form_password_row">
+                     class="<?php echo 'required_field';?> uwp_form_password_row uwp_clear">
 
                     <?php
                     $site_title = __("Confirm Password", 'userswp');
@@ -2595,7 +2595,7 @@ class UsersWP_Forms {
                 ob_start(); // Start  buffering;
                 ?>
                 <div id="uwp_account_confirm_email_row"
-                     class="<?php echo 'required_field';?> uwp_form_email_row">
+                     class="<?php echo 'required_field';?> uwp_form_email_row uwp_clear">
 
                     <?php
                     $site_title = __("Confirm Email", 'userswp');

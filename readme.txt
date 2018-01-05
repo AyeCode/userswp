@@ -117,6 +117,7 @@ No questions so far, but don't hesitate to ask!
 * Login/register specific notices will only show on their respective locations - CHANGED
 * Icon url in custom field icon does not working - FIXED
 * Merge UWP GeoDirectory functionality into UWP core - CHANGED
+* First/Last name fields breaks the design if labels are displayed in forms - FIXED
 
 = 1.0.11 =
 * Some emails have an extra opening p tag - FIXED

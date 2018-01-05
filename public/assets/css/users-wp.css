@@ -1257,7 +1257,7 @@
   .uwp-forgot .uwp-rf-icon,
   .uwp-account .uwp-lf-icon,
   .uwp-account .uwp-rf-icon {
-    background: transparent none repeat scroll 0 0;
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
     border: 1px solid #ccc;
     border-radius: 50px;
     height: auto;
@@ -1675,58 +1675,6 @@
   font-size: 13px;
   border: 1px solid #bbb;
   border-radius: 3px; }
-.uwp_page .uwp-login-form input.uwp-half,
-.uwp_page .uwp-registration-form input.uwp-half,
-.uwp_page .uwp-forgot-form input.uwp-half,
-.uwp_page .uwp-change-form input.uwp-half,
-.uwp_page .uwp-account-form input.uwp-half,
-.uwp_widgets .uwp-login-form input.uwp-half,
-.uwp_widgets .uwp-registration-form input.uwp-half,
-.uwp_widgets .uwp-forgot-form input.uwp-half,
-.uwp_widgets .uwp-change-form input.uwp-half,
-.uwp_widgets .uwp-account-form input.uwp-half,
-.uwp_adv_search_form .uwp-login-form input.uwp-half,
-.uwp_adv_search_form .uwp-registration-form input.uwp-half,
-.uwp_adv_search_form .uwp-forgot-form input.uwp-half,
-.uwp_adv_search_form .uwp-change-form input.uwp-half,
-.uwp_adv_search_form .uwp-account-form input.uwp-half {
-  margin: 0 2% 20px 0;
-  padding: 12px 15px !important;
-  width: 49% !important;
-  float: left !important;
-  box-sizing: border-box; }
-.uwp_page .uwp-login-form input.uwp-half.uwp-half-right,
-.uwp_page .uwp-registration-form input.uwp-half.uwp-half-right,
-.uwp_page .uwp-forgot-form input.uwp-half.uwp-half-right,
-.uwp_page .uwp-change-form input.uwp-half.uwp-half-right,
-.uwp_page .uwp-account-form input.uwp-half.uwp-half-right,
-.uwp_widgets .uwp-login-form input.uwp-half.uwp-half-right,
-.uwp_widgets .uwp-registration-form input.uwp-half.uwp-half-right,
-.uwp_widgets .uwp-forgot-form input.uwp-half.uwp-half-right,
-.uwp_widgets .uwp-change-form input.uwp-half.uwp-half-right,
-.uwp_widgets .uwp-account-form input.uwp-half.uwp-half-right,
-.uwp_adv_search_form .uwp-login-form input.uwp-half.uwp-half-right,
-.uwp_adv_search_form .uwp-registration-form input.uwp-half.uwp-half-right,
-.uwp_adv_search_form .uwp-forgot-form input.uwp-half.uwp-half-right,
-.uwp_adv_search_form .uwp-change-form input.uwp-half.uwp-half-right,
-.uwp_adv_search_form .uwp-account-form input.uwp-half.uwp-half-right {
-  margin-right: 0; }
-.uwp_page .uwp-login-form input.uwp-half:nth-child(4),
-.uwp_page .uwp-registration-form input.uwp-half:nth-child(4),
-.uwp_page .uwp-forgot-form input.uwp-half:nth-child(4),
-.uwp_page .uwp-change-form input.uwp-half:nth-child(4),
-.uwp_page .uwp-account-form input.uwp-half:nth-child(4),
-.uwp_widgets .uwp-login-form input.uwp-half:nth-child(4),
-.uwp_widgets .uwp-registration-form input.uwp-half:nth-child(4),
-.uwp_widgets .uwp-forgot-form input.uwp-half:nth-child(4),
-.uwp_widgets .uwp-change-form input.uwp-half:nth-child(4),
-.uwp_widgets .uwp-account-form input.uwp-half:nth-child(4),
-.uwp_adv_search_form .uwp-login-form input.uwp-half:nth-child(4),
-.uwp_adv_search_form .uwp-registration-form input.uwp-half:nth-child(4),
-.uwp_adv_search_form .uwp-forgot-form input.uwp-half:nth-child(4),
-.uwp_adv_search_form .uwp-change-form input.uwp-half:nth-child(4),
-.uwp_adv_search_form .uwp-account-form input.uwp-half:nth-child(4) {
-  margin-right: 0; }
 .uwp_page .uwp-login-form input[type="submit"],
 .uwp_page .uwp-registration-form input[type="submit"],
 .uwp_page .uwp-forgot-form input[type="submit"],
@@ -1920,6 +1868,42 @@
 .uwp_page .ui-timepicker-div dd, .uwp_page .ui-timepicker-div dt {
   line-height: 1.42857143; }
 
+.uwp_page .uwp-login-form div#uwp_account_first_name_row,
+.uwp_page .uwp-registration-form div#uwp_account_first_name_row,
+.uwp_page .uwp-account-form div#uwp_account_first_name_row {
+  width: 49%;
+  float: left;
+  margin: 0 2% 0 0;
+  padding: 0;
+  clear: none; }
+.uwp_page .uwp-login-form div#uwp_account_last_name_row,
+.uwp_page .uwp-registration-form div#uwp_account_last_name_row,
+.uwp_page .uwp-account-form div#uwp_account_last_name_row {
+  width: 49%;
+  float: right;
+  margin: 0;
+  padding: 0;
+  clear: none; }
+.uwp_page .uwp_clear {
+  clear: both; }
+
+@media screen and (max-width: 480px) {
+  .uwp_page .uwp-login-form div#uwp_account_first_name_row,
+  .uwp_page .uwp-registration-form div#uwp_account_first_name_row,
+  .uwp_page .uwp-account-form div#uwp_account_first_name_row {
+    width: 100%;
+    float: none;
+    margin: 0;
+    padding: 0;
+    clear: both; }
+  .uwp_page .uwp-login-form div#uwp_account_last_name_row,
+  .uwp_page .uwp-registration-form div#uwp_account_last_name_row,
+  .uwp_page .uwp-account-form div#uwp_account_last_name_row {
+    width: 100%;
+    float: none;
+    margin: 0;
+    padding: 0;
+    clear: both; } }
 .uwp_page .uwp-button-wrap .uwp_button {
   background: #717171 none repeat scroll 0 0;
   border: 0 none;
