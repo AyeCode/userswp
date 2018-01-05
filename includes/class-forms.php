@@ -457,7 +457,7 @@ class UsersWP_Forms {
 
         $result = uwp_validate_fields($data, 'login');
 
-        $result = apply_filters('uwp_validate_result', $result, 'login');
+        $result = apply_filters('uwp_validate_result', $result, 'login', $data);
 
         if (is_wp_error($result)) {
             return $result;
@@ -524,7 +524,7 @@ class UsersWP_Forms {
 
         $result = uwp_validate_fields($data, 'forgot');
 
-        $result = apply_filters('uwp_validate_result', $result, 'forgot');
+        $result = apply_filters('uwp_validate_result', $result, 'forgot', $data);
 
         if (is_wp_error($result)) {
             return $result;
@@ -579,7 +579,7 @@ class UsersWP_Forms {
 
         $result = uwp_validate_fields($data, 'change');
 
-        $result = apply_filters('uwp_validate_result', $result, 'change');
+        $result = apply_filters('uwp_validate_result', $result, 'change', $data);
 
         if (is_wp_error($result)) {
             return $result;
@@ -629,7 +629,7 @@ class UsersWP_Forms {
 
         $result = uwp_validate_fields($data, 'reset');
 
-        $result = apply_filters('uwp_validate_result', $result, 'reset');
+        $result = apply_filters('uwp_validate_result', $result, 'reset', $data);
 
         if (is_wp_error($result)) {
             return $result;
@@ -978,7 +978,7 @@ class UsersWP_Forms {
 
         $result = uwp_validate_fields($data, 'account');
 
-        $result = apply_filters('uwp_validate_result', $result, 'account');
+        $result = apply_filters('uwp_validate_result', $result, 'account', $data);
 
         if (is_wp_error($result)) {
             return $result;
@@ -1098,7 +1098,7 @@ class UsersWP_Forms {
 
         $result = $file_obj->uwp_validate_uploads($files, $type);
 
-        $result = apply_filters('uwp_validate_result', $result, $type);
+        $result = apply_filters('uwp_validate_result', $result, $type, $data);
 
         if (is_wp_error($result)) {
             return $result;
