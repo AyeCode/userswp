@@ -2497,6 +2497,8 @@
   line-height: 18px;
   text-align: center;
   padding-top: 5px; }
+.uwp_page .uwp-content-wrap .uwp-profile-tab-count span.uwp_field_icon {
+  padding-left: 18px!important; }
 .uwp_page .uwp-content-wrap .uwp-profile-header-img {
   background-size: cover;
   border: 1px solid #ccc;

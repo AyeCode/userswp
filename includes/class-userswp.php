@@ -424,6 +424,13 @@ class UsersWP {
      * @access   private
      */
     private function load_dependencies() {
+        if ( ! function_exists( 'is_plugin_active' ) ) {
+            /**
+             * Load all plugin functions from WordPress.
+             */
+            require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+        }
+
         /**
          * The class responsible for orchestrating the actions and filters of the
          * core plugin.
@@ -555,7 +562,18 @@ class UsersWP {
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-notices.php';
 
+        if ( is_plugin_active( 'uwp_geodirectory/uwp_geodirectory.php' ) ) {
+            deactivate_plugins( 'uwp_geodirectory/uwp_geodirectory.php' );
+        }
 
+        if ( is_plugin_active( 'geodirectory/geodirectory.php' ) ) {
+            /**
+             * The class responsible for displaying notices
+             *
+             * @since 1.0.12
+             */
+            require_once dirname(dirname( __FILE__ )) . '/includes/libraries/class-geodirectory-plugin.php';
+        }
     }
 
 }
