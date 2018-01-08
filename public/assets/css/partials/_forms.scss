@@ -36,7 +36,6 @@
     input[type="radio"] {
       margin-bottom: 20px;
     }
-
     .uwp_form_radio_row {
       label {
         display: block;
@@ -52,22 +51,6 @@
         border-radius: 3px;
       }
 
-    }
-
-    input.uwp-half {
-      margin: 0 2% 20px 0;
-      padding: 12px 15px !important;
-      width: 49% !important;
-      float: left !important;
-      box-sizing: border-box;
-    }
-
-    input.uwp-half.uwp-half-right {
-      margin-right: 0;
-    }
-
-    input.uwp-half:nth-child(4) {
-      margin-right: 0;
     }
 
     input[type="submit"] {
@@ -225,3 +208,51 @@
   }
 }
 
+.uwp_page{
+  .uwp-login-form,
+  .uwp-registration-form,
+  .uwp-account-form {
+    div#uwp_account_first_name_row {
+      width: 49%;
+      float: left;
+      margin: 0 2% 0 0;
+      padding: 0;
+      clear: none;
+    }
+
+    div#uwp_account_last_name_row {
+      width: 49%;
+      float: right;
+      margin: 0;
+      padding: 0;
+      clear: none;
+    }
+  }
+  .uwp_clear {
+    clear: both;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .uwp_page{
+    .uwp-login-form,
+    .uwp-registration-form,
+    .uwp-account-form {
+      div#uwp_account_first_name_row {
+        width: 100%;
+        float: none;
+        margin: 0;
+        padding: 0;
+        clear: both;
+      }
+
+      div#uwp_account_last_name_row {
+        width: 100%;
+        float: none;
+        margin: 0;
+        padding: 0;
+        clear: both;
+      }
+    }
+  }
+}
