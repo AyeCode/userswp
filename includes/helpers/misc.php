@@ -289,6 +289,22 @@ function get_uwp_users_list() {
     $where = '';
     $where = apply_filters('uwp_users_search_where', $where, $keyword);
 
+    $arg = array(
+        'meta_key' => 'uwp_mod',
+        'meta_value' => 'email_unconfirmed',
+        'meta_compare' => '==',
+        'fields' => 'ID',
+    );
+
+    $inactive_users = new WP_User_Query($arg);
+    $exclude_users = $inactive_users->get_results();
+    if($exclude_users){
+        $exclude_users_list = implode(',', $exclude_users);
+        $exclude_query = 'AND '. $wpdb->users.'.ID NOT IN ('.$exclude_users_list.')';
+    } else {
+        $exclude_query = ' ';
+    }
+
     if ($keyword || $where) {
         if (empty($where)) {
             $users = $wpdb->get_results($wpdb->prepare(
@@ -297,6 +313,7 @@ function get_uwp_users_list() {
             INNER JOIN $wpdb->usermeta
             ON ( $wpdb->users.ID = $wpdb->usermeta.user_id )
             WHERE 1=1
+            $exclude_query
             AND ( 
             ( $wpdb->usermeta.meta_key = 'first_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
             OR 
@@ -330,6 +347,7 @@ function get_uwp_users_list() {
             INNER JOIN $usermeta_table
             ON ( $wpdb->users.ID = $usermeta_table.user_id )
             WHERE 1=1
+            $exclude_query
             $where
             ORDER BY display_name ASC
             LIMIT 0, 20");
@@ -339,7 +357,8 @@ function get_uwp_users_list() {
 
         $args = array(
             'number' => (int) $number,
-            'paged' => $paged
+            'paged' => $paged,
+            'exclude' => $exclude_users,
         );
 
 
