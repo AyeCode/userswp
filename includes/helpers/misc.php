@@ -290,10 +290,20 @@ function get_uwp_users_list() {
     $where = apply_filters('uwp_users_search_where', $where, $keyword);
 
     $arg = array(
-        'meta_key' => 'uwp_mod',
-        'meta_value' => 'email_unconfirmed',
-        'meta_compare' => '==',
         'fields' => 'ID',
+        'meta_query' => array(
+            'relation' => 'OR',
+            array(
+                'key'     => 'uwp_mod',
+                'value'   => 'email_unconfirmed',
+                'compare' => '=='
+            ),
+            array(
+                'key'     => 'uwp_hide_from_listing',
+                'value'   => 1,
+                'compare' => '=='
+            )
+        )
     );
 
     $inactive_users = new WP_User_Query($arg);
@@ -758,9 +768,14 @@ function uwp_account_privacy_edit_form_display($type) {
                                 </div>
                             </div>
                         <?php }
-
+                        $value = get_user_meta($user_id, 'uwp_hide_from_listing', true); ?>
+                        <div class="uwp-profile-extra-wrap">
+                            <div id="uwp_hide_from_listing" class="uwp_hide_from_listing">
+                                <input name="uwp_hide_from_listing" class="" <?php checked($value, "1", true); ?> type="checkbox" value="1"><?php _e('Hide profile from the users listing page.'); ?>
+                            </div>
+                        </div>
+                        <?php
                         do_action('uwp_after_privacy_form_fields', $fields);
-
                         if ($make_profile_private) {
                             $field_name = 'uwp_make_profile_private';
                             $value = get_user_meta($user_id, $field_name, true);

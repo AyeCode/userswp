@@ -2654,6 +2654,13 @@ class UsersWP_Forms {
                 }
             }
 
+            $user_id = get_current_user_id();
+            if (isset($_POST['uwp_hide_from_listing']) && 1 == $_POST['uwp_hide_from_listing']) {
+                update_user_meta($user_id, 'uwp_hide_from_listing', 1);
+            } else {
+                update_user_meta($user_id, 'uwp_hide_from_listing', 0);
+            }
+
             $make_profile_private = uwp_can_make_profile_private();
             if ($make_profile_private) {
                 $field_name = 'uwp_make_profile_private';
