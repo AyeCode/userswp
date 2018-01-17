@@ -298,6 +298,9 @@ function get_uwp_users_list() {
 
     $inactive_users = new WP_User_Query($arg);
     $exclude_users = $inactive_users->get_results();
+
+    $exclude_users = apply_filters('uwp_excluded_users_from_list', $exclude_users, $where, $keyword);
+
     if($exclude_users){
         $exclude_users_list = implode(',', $exclude_users);
         $exclude_query = 'AND '. $wpdb->users.'.ID NOT IN ('.$exclude_users_list.')';
