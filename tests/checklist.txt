@@ -55,7 +55,8 @@ Register:
     4) Is the tos checkbox appears in form when page assigned and working properly?
     5) Create new custom fields and make sure its working.
     6) Bottom links like Login, Forgot pass linked correctly?
-    7) Make sure email notification works correctly for all notification shortcodes.
+    7) Check all the validations are working with proper notice message.
+    8) Make sure email notification works correctly for all notification shortcodes.
 
 Login:
 
@@ -70,12 +71,14 @@ Forgot Password?
     1) Is the page displayed properly?
     2) Is the forgot password email working properly?
     3) Does it contain the correct reset link?
+    4) Are all notice messages displaying properly?
 
 Reset Password
 
     1) Does it displays the error message when the page get loaded directly.
     2) When clicking the reset link in forgot password email does it takes to the correct reset page and displays the reset form?
     3) Is the reset form working correctly?
+    4) Are all notice messages displaying properly?
 
 Account
 
@@ -84,19 +87,22 @@ Account
     3) Is the privacy tab appearing when "Let user decide" option selected for a field.
     4) Is the privacy setting working properly
     5) File upload field working correctly?
-    6) Is the account form syncs properly with wordpress user fields on save?
+    6) Is the account form syncs properly with WordPress user fields on save?
 
 Change Password
 
     1) is the change password page displayed properly?
     2) Is the form working correctly?
     3) Is the old password confirmation field appearing when enabled?
+    4) Are all notice messages displaying properly?
 
 Users:
 
     1) Are the users page displaying properly?
     2) Is the search working correctly?
     3) Are custom fields showing up when [users_page] selected in show in what locations?
+    4) Check sorting is working properly.
+    5) Check views are working properly.
 
 Profile:
 
@@ -108,32 +114,12 @@ Profile:
     6) Is banner upload working correctly?
     7) Is avatar upload working correctly?
     8) Are banner and avatar uploads comply with max file upload setting?
+    9) Are all info about user displaying correctly?
+    10)Check only posts and comments of current logged in users are displaying in respective tabs.
 
-
-Check all email notifications
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Check all email notifications and wildcards are displaying correct data in mail content.
+Check GD settings are working properly if Geodirectory plugin is active.
+Check all pages are responsive for all devices.
+Check if any errors displaying when debug is enabled?
+Check tools are working properly?
+Check if uninstall removes all data if enabled from settings?
