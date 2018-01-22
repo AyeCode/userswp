@@ -1247,8 +1247,7 @@
   background: #f1f1f1 none repeat scroll 0 0;
   margin: 0 auto;
   max-width: 340px;
-  padding: 40px;
-  width: 100%; }
+  padding: 40px; }
   .uwp-login .uwp-lf-icon,
   .uwp-login .uwp-rf-icon,
   .uwp-registration .uwp-lf-icon,
@@ -1845,9 +1844,11 @@
   margin-top: 5px;
   margin-bottom: 5px; }
 
-.uwp_widgets h2 {
+.uwp_widgets .uwp-content-wrap h2 {
   display: none; }
-.uwp_widgets .uwp-lf-icon {
+.uwp_widgets .uwp-content-wrap .uwp-lf-icon {
+  display: none; }
+.uwp_widgets .uwp-content-wrap .uwp-rf-icon {
   display: none; }
 
 .uwp_page .ui-timepicker-div dl {
@@ -2498,7 +2499,7 @@
   text-align: center;
   padding-top: 5px; }
 .uwp_page .uwp-content-wrap .uwp-profile-tab-count span.uwp_field_icon {
-  padding-left: 18px!important; }
+  padding-left: 18px !important; }
 .uwp_page .uwp-content-wrap .uwp-profile-header-img {
   background-size: cover;
   border: 1px solid #ccc;

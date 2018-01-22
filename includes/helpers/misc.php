@@ -748,7 +748,7 @@ function uwp_account_privacy_edit_form_display($type) {
                             <div id="uwp_make_profile_private" class=" uwp_make_profile_private_row">
                                 <input type="hidden" name="uwp_make_profile_private" value="0">
                                 <input name="uwp_make_profile_private" class="" <?php checked( $value, "1", true ); ?> type="checkbox" value="1">
-                                Make the whole profile Private
+                                <?php _e( 'Make the whole profile Private', 'userswp' ); ?>
                             </div>
                             <?php
                         }
