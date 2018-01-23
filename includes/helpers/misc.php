@@ -289,6 +289,35 @@ function get_uwp_users_list() {
     $where = '';
     $where = apply_filters('uwp_users_search_where', $where, $keyword);
 
+    $arg = array(
+        'fields' => 'ID',
+        'meta_query' => array(
+            'relation' => 'OR',
+            array(
+                'key'     => 'uwp_mod',
+                'value'   => 'email_unconfirmed',
+                'compare' => '=='
+            ),
+            array(
+                'key'     => 'uwp_hide_from_listing',
+                'value'   => 1,
+                'compare' => '=='
+            )
+        )
+    );
+
+    $inactive_users = new WP_User_Query($arg);
+    $exclude_users = $inactive_users->get_results();
+
+    $exclude_users = apply_filters('uwp_excluded_users_from_list', $exclude_users, $where, $keyword);
+
+    if($exclude_users){
+        $exclude_users_list = implode(',', $exclude_users);
+        $exclude_query = 'AND '. $wpdb->users.'.ID NOT IN ('.$exclude_users_list.')';
+    } else {
+        $exclude_query = ' ';
+    }
+
     if ($keyword || $where) {
         if (empty($where)) {
             $users = $wpdb->get_results($wpdb->prepare(
@@ -297,6 +326,7 @@ function get_uwp_users_list() {
             INNER JOIN $wpdb->usermeta
             ON ( $wpdb->users.ID = $wpdb->usermeta.user_id )
             WHERE 1=1
+            $exclude_query
             AND ( 
             ( $wpdb->usermeta.meta_key = 'first_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
             OR 
@@ -330,6 +360,7 @@ function get_uwp_users_list() {
             INNER JOIN $usermeta_table
             ON ( $wpdb->users.ID = $usermeta_table.user_id )
             WHERE 1=1
+            $exclude_query
             $where
             ORDER BY display_name ASC
             LIMIT 0, 20");
@@ -339,7 +370,8 @@ function get_uwp_users_list() {
 
         $args = array(
             'number' => (int) $number,
-            'paged' => $paged
+            'paged' => $paged,
+            'exclude' => $exclude_users,
         );
 
 
@@ -702,64 +734,69 @@ function uwp_account_privacy_edit_form_display($type) {
         $fields = get_account_form_fields($extra_where);
         $fields = apply_filters('uwp_account_privacy_fields', $fields);
         $user_id = get_current_user_id();
-        if ($fields || $make_profile_private) {
-            ?>
-            <div class="uwp-profile-extra">
-                <div class="uwp-profile-extra-div form-table">
-                    <form class="uwp-account-form uwp_form" method="post">
-                        <?php if ($fields) { ?>
-                            <div class="uwp-profile-extra-wrap">
-                                <div class="uwp-profile-extra-key" style="font-weight: bold;">
-                                    <?php echo __("Field", "userswp") ?>
-                                </div>
-                                <div class="uwp-profile-extra-value" style="font-weight: bold;">
-                                    <?php echo __("Is Public?", "userswp") ?>
-                                </div>
+        ?>
+        <div class="uwp-profile-extra">
+            <div class="uwp-profile-extra-div form-table">
+                <form class="uwp-account-form uwp_form" method="post">
+                    <?php if ($fields) { ?>
+                        <div class="uwp-profile-extra-wrap">
+                            <div class="uwp-profile-extra-key" style="font-weight: bold;">
+                                <?php echo __("Field", "userswp") ?>
                             </div>
-                        <?php } ?>
+                            <div class="uwp-profile-extra-value" style="font-weight: bold;">
+                                <?php echo __("Is Public?", "userswp") ?>
+                            </div>
+                        </div>
                         <?php foreach ($fields as $field) { ?>
                             <div class="uwp-profile-extra-wrap">
                                 <div class="uwp-profile-extra-key"><?php echo $field->site_title; ?>
                                     <span class="uwp-profile-extra-sep">:</span></div>
                                 <div class="uwp-profile-extra-value">
                                     <?php
-                                    $field_name = $field->htmlvar_name.'_privacy';
+                                    $field_name = $field->htmlvar_name . '_privacy';
                                     $value = uwp_get_usermeta($user_id, $field_name, false);
-                                     if ($value === false) {
+                                    if ($value === false) {
                                         $value = 'yes';
                                     }
                                     ?>
-                                    <select name="<?php echo $field_name; ?>" class="uwp_privacy_field" style="margin: 0;">
-                                        <option value="no" <?php selected( $value, "no" ); ?>><?php echo __("No", "userswp") ?></option>
-                                        <option value="yes" <?php selected( $value, "yes" ); ?>><?php echo __("Yes", "userswp") ?></option>
+                                    <select name="<?php echo $field_name; ?>" class="uwp_privacy_field"
+                                            style="margin: 0;">
+                                        <option value="no" <?php selected($value, "no"); ?>><?php echo __("No", "userswp") ?></option>
+                                        <option value="yes" <?php selected($value, "yes"); ?>><?php echo __("Yes", "userswp") ?></option>
                                     </select>
                                 </div>
                             </div>
-                        <?php } ?>
-
-                        <?php
-                        if ($make_profile_private) {
-                            $field_name = 'uwp_make_profile_private';
-                            $value = get_user_meta($user_id, $field_name, true);
-                            if ($value === false) {
-                                $value = '0';
-                            }
-                            ?>
-                            <div id="uwp_make_profile_private" class=" uwp_make_profile_private_row">
-                                <input type="hidden" name="uwp_make_profile_private" value="0">
-                                <input name="uwp_make_profile_private" class="" <?php checked( $value, "1", true ); ?> type="checkbox" value="1">
-                                <?php _e( 'Make the whole profile Private', 'userswp' ); ?>
-                            </div>
-                            <?php
+                        <?php }
+                    }
+                    $value = get_user_meta($user_id, 'uwp_hide_from_listing', true); ?>
+                    <div class="uwp-profile-extra-wrap">
+                        <div id="uwp_hide_from_listing" class="uwp_hide_from_listing">
+                            <input name="uwp_hide_from_listing" class="" <?php checked($value, "1", true); ?> type="checkbox" value="1"><?php _e('Hide profile from the users listing page.'); ?>
+                        </div>
+                    </div>
+                    <?php
+                    do_action('uwp_after_privacy_form_fields', $fields);
+                    if ($make_profile_private) {
+                        $field_name = 'uwp_make_profile_private';
+                        $value = get_user_meta($user_id, $field_name, true);
+                        if ($value === false) {
+                            $value = '0';
                         }
                         ?>
-                        <input type="hidden" name="uwp_privacy_nonce" value="<?php echo wp_create_nonce( 'uwp-privacy-nonce' ); ?>" />
-                        <input name="uwp_privacy_submit" value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
-                    </form>
-                </div>
+                        <div id="uwp_make_profile_private" class=" uwp_make_profile_private_row">
+                            <input type="hidden" name="uwp_make_profile_private" value="0">
+                            <input name="uwp_make_profile_private" class="" <?php checked( $value, "1", true ); ?> type="checkbox" value="1">
+                            <?php _e( 'Make the whole profile private', 'userswp' ); ?>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                    <input type="hidden" name="uwp_privacy_nonce" value="<?php echo wp_create_nonce( 'uwp-privacy-nonce' ); ?>" />
+                    <input name="uwp_privacy_submit" value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
+                </form>
             </div>
-            <?php
-        }
+        </div>
+        <?php
         echo '</div>';
     }
 }
@@ -787,7 +824,7 @@ function uwp_add_account_menu_links() {
 
     $account_available_tabs = uwp_account_get_available_tabs();
 
-    if (!is_array($account_available_tabs) || count($account_available_tabs) <= 1) {
+    if (!is_array($account_available_tabs) && count($account_available_tabs) > 0) {
         return;
     }
 
@@ -817,6 +854,9 @@ function uwp_add_account_menu_links() {
         <?php
     }
 
+    $template = new UsersWP_Templates();
+    $logout_url = $template->uwp_logout_url();
+    echo '<li id="uwp-account-logout"><a class="uwp-account-logout-link" href="'.$logout_url.'"><i class="fa fa-sign-out"></i>'.__('Logout', 'userswp').'</a></li>';
     echo '</ul>';
 }
 

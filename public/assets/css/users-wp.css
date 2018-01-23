@@ -1997,15 +1997,16 @@
 .uwp_page .uwp-content-wrap .uwp_account_menu {
   padding: 0;
   list-style: none;
-  margin: 20px 0;
-  overflow: hidden; }
+  margin: 20px auto;
+  overflow: hidden;
+  text-align: center;
+  clear: both; }
   .uwp_page .uwp-content-wrap .uwp_account_menu li {
     list-style-type: none;
-    width: 50%;
-    float: left;
     font-size: 16px;
     padding: 5px 0;
-    margin: 0; }
+    margin: 0 20px 0 0;
+    display: inline-block; }
     .uwp_page .uwp-content-wrap .uwp_account_menu li i {
       margin-right: 5px; }
     .uwp_page .uwp-content-wrap .uwp_account_menu li a {
@@ -2013,6 +2014,8 @@
       text-decoration: none; }
     .uwp_page .uwp-content-wrap .uwp_account_menu li a:hover, .uwp_page .uwp-content-wrap .uwp_account_menu li a.active {
       color: #757575; }
+    .uwp_page .uwp-content-wrap .uwp_account_menu li:last-child {
+      margin: 0; }
 
 .uwp-page .input-group {
   position: relative;

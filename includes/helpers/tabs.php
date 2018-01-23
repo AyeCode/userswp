@@ -157,21 +157,21 @@ function uwp_generic_tab_content($user, $post_type = false, $title, $post_ids = 
 function uwp_account_get_available_tabs() {
 
     $tabs = array();
+    $type = 'account';
+    if (isset($_GET['type'])) {
+        $type = strip_tags(esc_sql($_GET['type']));
+    }
 
-    $tabs['account']  = array(
-        'title' => __( 'Edit Account', 'userswp' ),
-        'icon' => 'fa fa-user',
-    );
+    if('account' != $type){
+        $tabs['account']  = array(
+            'title' => __( 'Edit Account', 'userswp' ),
+            'icon' => 'fa fa-user',
+        );
+    }
 
-    $extra_where = "AND is_public='2'";
-    $fields = get_account_form_fields($extra_where);
-    $fields = apply_filters('uwp_account_privacy_fields', $fields);
-
-    $make_profile_private = uwp_can_make_profile_private();
-
-    if ((is_array($fields) && count($fields) > 0) || $make_profile_private) {
-        $tabs['privacy']  = array(
-            'title' => __( 'Privacy', 'userswp' ),
+    if('privacy' != $type) {
+        $tabs['privacy'] = array(
+            'title' => __('Privacy', 'userswp'),
             'icon' => 'fa fa-lock',
         );
     }

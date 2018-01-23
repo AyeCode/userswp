@@ -926,11 +926,11 @@ class UsersWP_Forms {
             }
             $hashed = $wp_hasher->HashPassword( $key );
             $wpdb->update( $wpdb->users, array( 'user_activation_key' => time().":".$hashed ), array( 'user_login' => $user_data->user_login ) );
-            $message = __('Someone requested that the password be reset for the following account:', 'userswp') . "\r\n\r\n";
-            $message .= home_url( '/' ) . "\r\n\r\n";
-            $message .= sprintf(__('Username: %s', 'userswp'), $user_data->user_login) . "\r\n\r\n";
-            $message .= __('If this was a mistake, just ignore this email and nothing will happen.', 'userswp') . "\r\n\r\n";
-            $message .= __('To reset your password, visit the following address:', 'userswp') . "\r\n\r\n";
+            $message = '<p>' .__('You have requested to reset your password for the following account:', 'userswp') . "</p>";
+            $message .= home_url( '/' ) . "</p>";
+            $message .= '<p>' .sprintf(__('Username: %s', 'userswp'), $user_data->user_login) . "</p>";
+            $message .= '<p>' .__('If this was by mistake, just ignore this email and nothing will happen.', 'userswp') . "</p>";
+            $message .= '<p>' .__('To reset your password, click the following link and follow the instructions.', 'userswp') . "</p>";
             $reset_page = uwp_get_option('reset_page', false);
             if ($reset_page) {
                 $reset_link = add_query_arg( array(
@@ -2652,6 +2652,13 @@ class UsersWP_Forms {
                         uwp_update_usermeta($user_id, $field_name, $value);
                     }
                 }
+            }
+
+            $user_id = get_current_user_id();
+            if (isset($_POST['uwp_hide_from_listing']) && 1 == $_POST['uwp_hide_from_listing']) {
+                update_user_meta($user_id, 'uwp_hide_from_listing', 1);
+            } else {
+                update_user_meta($user_id, 'uwp_hide_from_listing', 0);
             }
 
             $make_profile_private = uwp_can_make_profile_private();
