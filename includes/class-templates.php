@@ -272,8 +272,8 @@ class UsersWP_Templates {
             $login_page = get_permalink($login_page_id);
             if($redirect){
                 $login_url = add_query_arg( 'redirect_to', $redirect, $login_page );
-            }elseif(isset($redirect_page_id) && (int)$redirect_page_id == -1 && isset($_SERVER['HTTP_REFERER'])) {
-                $redirect_to = esc_url($_SERVER['HTTP_REFERER']);
+            }elseif(isset($redirect_page_id) && (int)$redirect_page_id == -1 && wp_get_referer()) {
+                $redirect_to = esc_url(wp_get_referer());
                 $login_url = add_query_arg( 'redirect_to', $redirect_to, $login_page );
             }elseif($redirect_page_id){
                 $redirect_to = get_permalink($redirect_page_id);
