@@ -205,3 +205,18 @@
     width: auto;
   }
 }
+.uwp-login-widget.user-loggedin {
+  .avatar {
+    border-radius: 50%;
+    box-shadow: none;
+    vertical-align: middle;
+    margin: 0 3px;
+  }
+  a {
+    text-decoration: none;
+    box-shadow: none;
+  }
+  span {
+    margin-left: 10px;
+  }
+}

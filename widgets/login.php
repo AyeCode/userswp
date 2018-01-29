@@ -27,9 +27,6 @@ class UWP_Login_Widget extends WP_Widget
      */
     function widget($args, $instance)
     {
-        if (is_user_logged_in()) {
-            return;
-        }
         extract($args, EXTR_SKIP);
         $title = empty($instance['title']) ? __('Login', 'userswp') : apply_filters('uwp_login_widget_title', $instance['title']);
 
@@ -38,7 +35,20 @@ class UWP_Login_Widget extends WP_Widget
         if ($title) {
             echo $before_title . $title . $after_title;
         }
-        echo do_shortcode('[uwp_login]');
+        if(is_user_logged_in()){
+            global $current_user;
+            $template = new UsersWP_Templates();
+            $logout_url = $template->uwp_logout_url();
+            echo '<div class="uwp-login-widget user-loggedin">';
+            echo '<p>'.__( 'Logged in as ', 'userswp' );
+            echo '<a href="'. apply_filters('uwp_profile_link', get_author_posts_url($current_user->ID), $current_user->ID).'">' . get_avatar( $current_user->ID, 35 ). '<strong>'. apply_filters('uwp_profile_display_name', $current_user->display_name).'</strong></a>';
+            echo '<span>';
+            printf(__( '<a href="%1$s">Log out</a>', 'userswp'), esc_url( $logout_url ));
+            echo '</span></p>';
+            echo '</div>';
+        } else {
+            echo do_shortcode('[uwp_login]');
+        }
         echo $after_widget;
         echo '</div>';
     }

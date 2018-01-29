@@ -1376,6 +1376,17 @@
   padding: 0;
   width: auto; }
 
+.uwp-login-widget.user-loggedin .avatar {
+  border-radius: 50%;
+  box-shadow: none;
+  vertical-align: middle;
+  margin: 0 3px; }
+.uwp-login-widget.user-loggedin a {
+  text-decoration: none;
+  box-shadow: none; }
+.uwp-login-widget.user-loggedin span {
+  margin-left: 10px; }
+
 .uwp_page .uwp-login-form label,
 .uwp_page .uwp-registration-form label,
 .uwp_page .uwp-forgot-form label,
