@@ -267,11 +267,14 @@ class UsersWP_Templates {
      */
     public function wp_login_url($login_url, $redirect, $force_reauth) {
         $login_page_id = uwp_get_option('login_page', false);
-        $redirect_page_id = uwp_get_option('login_redirect_to', '');
+        $redirect_page_id = uwp_get_option('login_redirect_to', -1);
         if (!is_admin() && $login_page_id) {
             $login_page = get_permalink($login_page_id);
             if($redirect){
                 $login_url = add_query_arg( 'redirect_to', $redirect, $login_page );
+            }elseif(isset($redirect_page_id) && (int)$redirect_page_id == -1 && isset($_SERVER['HTTP_REFERER'])) {
+                $redirect_to = esc_url($_SERVER['HTTP_REFERER']);
+                $login_url = add_query_arg( 'redirect_to', $redirect_to, $login_page );
             }elseif($redirect_page_id){
                 $redirect_to = get_permalink($redirect_page_id);
                 $login_url = add_query_arg( 'redirect_to', $redirect_to, $login_page );

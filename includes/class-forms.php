@@ -67,9 +67,11 @@ class UsersWP_Forms {
             $type = 'register';
         } elseif (isset($_POST['uwp_login_nonce'])) {
             $errors = $this->process_login($_POST);
-            $redirect_page_id = uwp_get_option('login_redirect_to', '');
+            $redirect_page_id = uwp_get_option('login_redirect_to', -1);
             if(isset( $_REQUEST['redirect_to'] )){
                 $redirect_to = esc_url($_REQUEST['redirect_to']);
+            } elseif(isset($redirect_page_id) && (int)$redirect_page_id == -1 && isset($_SERVER['HTTP_REFERER'])) {
+                $redirect_to = esc_url($_SERVER['HTTP_REFERER']);
             } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
                 $redirect_to = get_permalink($redirect_page_id);
             } else {
@@ -157,9 +159,9 @@ class UsersWP_Forms {
      *
      * @since       1.0.0
      * @package     userswp
-     * 
+     *
      * @param       string      $type       Form type
-     * 
+     *
      * @return      void
      */
     public function display_notices($type) {
@@ -212,11 +214,11 @@ class UsersWP_Forms {
      *
      * @since       1.0.0
      * @package     userswp
-     * 
+     *
      * @param       array                   $data       Submitted $_POST data
      * @param       array                   $files      Submitted $_FILES data
-     * 
-     * @return      bool|WP_Error|string               
+     *
+     * @return      bool|WP_Error|string
      */
     public function process_register($data = array(), $files = array()) {
 
@@ -244,7 +246,7 @@ class UsersWP_Forms {
         do_action('uwp_before_validate', 'register');
 
         $result = uwp_validate_fields($data, 'register');
-        
+
         $result = apply_filters('uwp_validate_result', $result, 'register');
 
         if (is_wp_error($result)) {
@@ -319,7 +321,7 @@ class UsersWP_Forms {
         }
 
         $result = apply_filters('uwp_before_extra_fields_save', $result, 'register', $user_id);
-        
+
         $save_result = $this->uwp_save_user_extra_fields($user_id, $result, 'register');
 
         $save_result = apply_filters('uwp_after_extra_fields_save', $save_result, $result, 'register', $user_id);
@@ -338,14 +340,14 @@ class UsersWP_Forms {
         }
 
         do_action('uwp_after_custom_fields_save', 'register', $data, $result, $user_id);
-        
+
         $reg_action = uwp_get_option('uwp_registration_action', false);
 
         if ($reg_action == 'require_email_activation' && !$generated_password) {
 
             $email = new UsersWP_Mails();
             $send_result = $email->send( 'activate', $user_id );
-            
+
             if (!$send_result) {
                 $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
             }
@@ -418,7 +420,7 @@ class UsersWP_Forms {
                 if (is_wp_error($admin_send_result)) {
                     return $admin_send_result;
                 }
-                
+
                 return __('Your account is under moderation. We will email you once its approved.', 'userswp');
             } else {
 
@@ -440,9 +442,9 @@ class UsersWP_Forms {
      *
      * @since       1.0.0
      * @package     userswp
-     * 
+     *
      * @param       array                   $data       Submitted $_POST data
-     * 
+     *
      * @return      bool|WP_Error|string
      */
     public function process_login($data) {
@@ -483,9 +485,11 @@ class UsersWP_Forms {
             $errors->add('invalid_userorpass', __('<strong>Error</strong>: Invalid username or Password.', 'userswp'));
             return $errors;
         } else {
-            $redirect_page_id = uwp_get_option('login_redirect_to', '');
+            $redirect_page_id = uwp_get_option('login_redirect_to', -1);
             if (isset($data['redirect_to'])) {
                 $redirect_to = strip_tags(esc_sql($data['redirect_to']));
+            } elseif(isset($redirect_page_id) && (int)$redirect_page_id == -1 && isset($_SERVER['HTTP_REFERER'])) {
+                $redirect_to = esc_url($_SERVER['HTTP_REFERER']);
             } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
                 $redirect_to = get_permalink($redirect_page_id);
             } else {
