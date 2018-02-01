@@ -297,4 +297,34 @@ class UsersWP_Callback {
         echo $args['desc'];
     }
 
+    public function uwp_media_callback( $args ) {
+        global $uwp_options;
+
+        $global = isset( $args['global'] ) ? $args['global'] : true;
+        if ($global) {
+            if ( isset( $uwp_options[ $args['id'] ] ) ) {
+                $value = $uwp_options[ $args['id'] ];
+            } else {
+                $value = isset( $args['std'] ) ? $args['std'] : '';
+            }
+        } else {
+            if ( isset( $args['value'] ) ) {
+                $value = $args['value'];
+            } else {
+                $value = isset( $args['std'] ) ? $args['std'] : '';
+            }
+        }
+        wp_enqueue_media();
+        ?>
+        <div class="uwp_media_input">
+            <input type="text" id="uwp_settings[<?php echo $args['id']; ?>]" class="uwp_img_url" name="uwp_settings[<?php echo $args['id']; ?>]" value="<?php echo esc_url( $value ); ?>" />
+            <input id="uwp_upload_btn" type="button" class="button uwp_upload_btn" value="<?php _e( 'Upload', 'wptuts' ); ?>" />
+            <label for="uwp_settings[<?php echo $args['id']; ?>]"><?php echo $args['desc']; ?></label>
+        </div>
+        <div class="uwp_media_preview">
+            <img data-src="<?php echo $value; ?>" src="<?php echo esc_url( $value ); ?>" width="100px" height="100px" />
+        </div>
+        <?php
+    }
+
 }

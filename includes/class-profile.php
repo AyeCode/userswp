@@ -28,12 +28,14 @@ class UsersWP_Profile {
         }
 
         if (empty($banner)) {
-            $banner = USERSWP_PLUGIN_URL."/public/assets/images/banner.png";
+            $default_banner = USERSWP_PLUGIN_URL."/public/assets/images/banner.png";
+            $banner = uwp_get_option('profile_default_banner', $default_banner);
         } else {
             $banner = $upload_url.$banner;
         }
         if (empty($avatar)) {
-            $avatar = get_avatar($user->user_email, 150);
+            $default = uwp_get_option('profile_default_profile', '');
+            $avatar = get_avatar($user->user_email, 150, $default);
         } else {
             // check the image is not a full url before adding the local upload url
             if (strpos($avatar, 'http:') === false && strpos($avatar, 'https:') === false) {

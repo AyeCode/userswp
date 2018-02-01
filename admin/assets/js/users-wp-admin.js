@@ -6,6 +6,25 @@ jQuery(window).load(function() {
             allow_single_deselect: 'true'
         });
     }
+    jQuery('.uwp_upload_btn').click(function() {
+        var $this = jQuery(this);
+
+        frame = wp.media({
+            title: 'Select or Upload Media',
+            button: {
+                text: 'Use Media'
+            },
+            multiple: false
+        });
+
+        frame.on( 'select', function() {
+            var attachment = frame.state().get('selection').first().toJSON();
+            $this.parent().next().find("img").attr('src', attachment.url);
+            $this.parent().find(".uwp_img_url").val(attachment.url);
+        });
+
+        frame.open();
+    });
 });
 
 function uwp_chosen() {
