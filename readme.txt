@@ -119,6 +119,7 @@ No questions so far, but don't hesitate to ask!
 * Merge UWP GeoDirectory functionality into UWP core - CHANGED
 * First/Last name fields breaks the design if labels are displayed in forms - FIXED
 * after login it should redirect to prev page - FIXED
+* Add default image options - FIXED
 
 = 1.0.11 =
 * Some emails have an extra opening p tag - FIXED
