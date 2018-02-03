@@ -767,7 +767,7 @@ function uwp_account_privacy_edit_form_display($type) {
                                 </div>
                             </div>
                         <?php }
-                    }
+
                     $value = get_user_meta($user_id, 'uwp_hide_from_listing', true); ?>
                     <div class="uwp-profile-extra-wrap">
                         <div id="uwp_hide_from_listing" class="uwp_hide_from_listing">
