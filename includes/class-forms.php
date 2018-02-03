@@ -67,9 +67,11 @@ class UsersWP_Forms {
             $type = 'register';
         } elseif (isset($_POST['uwp_login_nonce'])) {
             $errors = $this->process_login($_POST);
-            $redirect_page_id = uwp_get_option('login_redirect_to', '');
+            $redirect_page_id = uwp_get_option('login_redirect_to', -1);
             if(isset( $_REQUEST['redirect_to'] )){
                 $redirect_to = esc_url($_REQUEST['redirect_to']);
+            } elseif(isset($redirect_page_id) && (int)$redirect_page_id == -1 && wp_get_referer()) {
+                $redirect_to = esc_url(wp_get_referer());
             } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
                 $redirect_to = get_permalink($redirect_page_id);
             } else {
@@ -109,14 +111,14 @@ class UsersWP_Forms {
             $message = __('Banner cropped successfully.', 'userswp');
             $processed = true;
         } elseif (isset($_POST['uwp_avatar_crop'])) {
-            $errors = $this->process_image_crop($_POST, 'avatar');
+            $errors = $this->process_image_crop($_POST, 'avatar', true);
             if (!is_wp_error($errors)) {
                 $redirect = $errors;
             }
             $message = __('Avatar cropped successfully.', 'userswp');
             $processed = true;
         } elseif (isset($_POST['uwp_banner_crop'])) {
-            $errors = $this->process_image_crop($_POST, 'banner');
+            $errors = $this->process_image_crop($_POST, 'banner', true);
             if (!is_wp_error($errors)) {
                 $redirect = $errors;
             }
@@ -157,9 +159,9 @@ class UsersWP_Forms {
      *
      * @since       1.0.0
      * @package     userswp
-     * 
+     *
      * @param       string      $type       Form type
-     * 
+     *
      * @return      void
      */
     public function display_notices($type) {
@@ -212,11 +214,11 @@ class UsersWP_Forms {
      *
      * @since       1.0.0
      * @package     userswp
-     * 
+     *
      * @param       array                   $data       Submitted $_POST data
      * @param       array                   $files      Submitted $_FILES data
-     * 
-     * @return      bool|WP_Error|string               
+     *
+     * @return      bool|WP_Error|string
      */
     public function process_register($data = array(), $files = array()) {
 
@@ -244,7 +246,7 @@ class UsersWP_Forms {
         do_action('uwp_before_validate', 'register');
 
         $result = uwp_validate_fields($data, 'register');
-        
+
         $result = apply_filters('uwp_validate_result', $result, 'register');
 
         if (is_wp_error($result)) {
@@ -319,7 +321,7 @@ class UsersWP_Forms {
         }
 
         $result = apply_filters('uwp_before_extra_fields_save', $result, 'register', $user_id);
-        
+
         $save_result = $this->uwp_save_user_extra_fields($user_id, $result, 'register');
 
         $save_result = apply_filters('uwp_after_extra_fields_save', $save_result, $result, 'register', $user_id);
@@ -338,14 +340,14 @@ class UsersWP_Forms {
         }
 
         do_action('uwp_after_custom_fields_save', 'register', $data, $result, $user_id);
-        
+
         $reg_action = uwp_get_option('uwp_registration_action', false);
 
         if ($reg_action == 'require_email_activation' && !$generated_password) {
 
             $email = new UsersWP_Mails();
             $send_result = $email->send( 'activate', $user_id );
-            
+
             if (!$send_result) {
                 $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
             }
@@ -418,7 +420,7 @@ class UsersWP_Forms {
                 if (is_wp_error($admin_send_result)) {
                     return $admin_send_result;
                 }
-                
+
                 return __('Your account is under moderation. We will email you once its approved.', 'userswp');
             } else {
 
@@ -440,9 +442,9 @@ class UsersWP_Forms {
      *
      * @since       1.0.0
      * @package     userswp
-     * 
+     *
      * @param       array                   $data       Submitted $_POST data
-     * 
+     *
      * @return      bool|WP_Error|string
      */
     public function process_login($data) {
@@ -483,9 +485,11 @@ class UsersWP_Forms {
             $errors->add('invalid_userorpass', __('<strong>Error</strong>: Invalid username or Password.', 'userswp'));
             return $errors;
         } else {
-            $redirect_page_id = uwp_get_option('login_redirect_to', '');
+            $redirect_page_id = uwp_get_option('login_redirect_to', -1);
             if (isset($data['redirect_to'])) {
                 $redirect_to = strip_tags(esc_sql($data['redirect_to']));
+            } elseif(isset($redirect_page_id) && (int)$redirect_page_id == -1 && wp_get_referer()) {
+                $redirect_to = esc_url(wp_get_referer());
             } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
                 $redirect_to = get_permalink($redirect_page_id);
             } else {
@@ -926,11 +930,11 @@ class UsersWP_Forms {
             }
             $hashed = $wp_hasher->HashPassword( $key );
             $wpdb->update( $wpdb->users, array( 'user_activation_key' => time().":".$hashed ), array( 'user_login' => $user_data->user_login ) );
-            $message = __('Someone requested that the password be reset for the following account:', 'userswp') . "\r\n\r\n";
-            $message .= home_url( '/' ) . "\r\n\r\n";
-            $message .= sprintf(__('Username: %s', 'userswp'), $user_data->user_login) . "\r\n\r\n";
-            $message .= __('If this was a mistake, just ignore this email and nothing will happen.', 'userswp') . "\r\n\r\n";
-            $message .= __('To reset your password, visit the following address:', 'userswp') . "\r\n\r\n";
+            $message = '<p>' .__('You have requested to reset your password for the following account:', 'userswp') . "</p>";
+            $message .= home_url( '/' ) . "</p>";
+            $message .= '<p>' .sprintf(__('Username: %s', 'userswp'), $user_data->user_login) . "</p>";
+            $message .= '<p>' .__('If this was by mistake, just ignore this email and nothing will happen.', 'userswp') . "</p>";
+            $message .= '<p>' .__('To reset your password, click the following link and follow the instructions.', 'userswp') . "</p>";
             $reset_page = uwp_get_option('reset_page', false);
             if ($reset_page) {
                 $reset_link = add_query_arg( array(
@@ -1121,13 +1125,16 @@ class UsersWP_Forms {
      * Processes avatar and banner uploads image crop.
      *
      * @since       1.0.0
+     * @since       1.0.12 New param $unlink_prev_img introduced.
      * @package     userswp
      *
      * @param       array                   $data       Submitted $_POST data
+     * @param       string                  $type       Image type. Default 'avatar'.
+     * @param       bool         			$unlink_prev_img True to remove previous image. Default false;
      *
      * @return      bool|WP_Error|string                Profile url.
      */
-    public function process_image_crop($data = array(), $type = 'avatar') {
+    public function process_image_crop($data = array(), $type = 'avatar', $unlink_prev_img = false) {
         
         if (!is_user_logged_in()) {
             return false;
@@ -1156,7 +1163,7 @@ class UsersWP_Forms {
         }
         
         if ($image_url) {
-            if ($type == 'avatar') {
+			if ($type == 'avatar') {
                 $full_width  = apply_filters('uwp_avatar_image_width', 150);
             } else {
                 $full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('profile_banner_width', 1000));
@@ -1182,6 +1189,22 @@ class UsersWP_Forms {
             $cropped = uwp_resizeThumbnailImage($thumb_image_location, $image_url,$x, $y, $w, $h,$scale);
             $cropped = str_replace($upload_path, $upload_url, $cropped);
 
+			// Remove previous avatar/banner
+			$unlink_img = '';
+			if ($unlink_prev_img) {
+				if ($type == 'avatar') {
+					$previous_img = uwp_get_usermeta($user_id, 'uwp_account_avatar_thumb');
+				} else if ($type == 'banner') {
+					$previous_img = uwp_get_usermeta($user_id, 'uwp_account_banner_thumb');
+				} else {
+					$previous_img = '';
+				}
+				
+				if ($previous_img) {
+					$unlink_img = untrailingslashit($upload_path) . '/' . ltrim($previous_img, '/');
+				}
+			}
+
             // remove the uploads path for easy migrations
             $cropped = str_replace($upload_url, '', $cropped);
             if ($type == 'avatar') {
@@ -1189,6 +1212,14 @@ class UsersWP_Forms {
             } else {
                 uwp_update_usermeta($user_id, 'uwp_account_banner_thumb', $cropped);
             }
+			
+			if ($unlink_img && $unlink_img != $thumb_image_location && is_file($unlink_img) && file_exists($unlink_img)) {
+				@unlink($unlink_img);
+				$unlink_ori_img = str_replace('_uwp_'.$type.'_thumb'.'.', '.', $unlink_img);
+				if (is_file($unlink_ori_img) && file_exists($unlink_ori_img)) {
+					@unlink($unlink_ori_img);
+				}
+			}
         }
 
         if (is_admin()) {
@@ -1292,6 +1323,7 @@ class UsersWP_Forms {
      *
      *
      * @since   1.0.0
+     * @since   1.0.12 Unlink file.
      * @package userswp
      * @return void
      */
@@ -1308,7 +1340,33 @@ class UsersWP_Forms {
             }
         }
         if ($permission) {
-            uwp_update_usermeta($user_id, $htmlvar, '');
+            // Remove file
+			if ($htmlvar == "uwp_account_banner_thumb") {
+				$file = uwp_get_usermeta($user_id, 'uwp_account_banner_thumb');
+				$type = 'banner';
+			} elseif ($htmlvar == "uwp_account_avatar_thumb") {
+				$file = uwp_get_usermeta($user_id, 'uwp_account_avatar_thumb');
+				$type = 'avatar';
+			} else {
+				$file = '';
+				$type = '';
+			}
+
+			uwp_update_usermeta($user_id, $htmlvar, '');
+
+			if ($file) {
+				$uploads = wp_upload_dir();
+				$upload_path = $uploads['basedir'];
+				$unlink_file = untrailingslashit($upload_path) . '/' . ltrim($file, '/');
+
+				if (is_file($unlink_file) && file_exists($unlink_file)) {
+					@unlink($unlink_file);
+					$unlink_ori_file = str_replace('_uwp_'.$type.'_thumb'.'.', '.', $unlink_file);
+					if (is_file($unlink_ori_file) && file_exists($unlink_ori_file)) {
+						@unlink($unlink_ori_file);
+					}
+				}
+			}
         }
         die();
     }
