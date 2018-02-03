@@ -28,12 +28,23 @@ class UsersWP_Profile {
         }
 
         if (empty($banner)) {
-            $banner = USERSWP_PLUGIN_URL."/public/assets/images/banner.png";
+            $banner = uwp_get_option('profile_default_banner', '');
+            if(empty($banner)){
+                $banner = USERSWP_PLUGIN_URL."/public/assets/images/banner.png";
+            } else {
+                $banner = wp_get_attachment_url($banner);
+            }
         } else {
             $banner = $upload_url.$banner;
         }
         if (empty($avatar)) {
-            $avatar = get_avatar($user->user_email, 150);
+            $default = uwp_get_option('profile_default_profile', '');
+            if(empty($default)){
+                $default = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
+            } else {
+                $default = wp_get_attachment_url($default);
+            }
+            $avatar = get_avatar($user->user_email, 150, $default);
         } else {
             // check the image is not a full url before adding the local upload url
             if (strpos($avatar, 'http:') === false && strpos($avatar, 'https:') === false) {
