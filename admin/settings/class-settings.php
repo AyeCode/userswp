@@ -140,6 +140,8 @@ class UsersWP_Admin_Settings {
         ?>
         <table class="uwp-form-table">
 
+            <?php do_action('uwp_before_general_shortcodes_content'); ?>
+
             <tr valign="top">
                 <th scope="row"><?php echo __( 'User Profile Shortcode', 'userswp' ); ?></th>
                 <td>
@@ -203,6 +205,8 @@ class UsersWP_Admin_Settings {
                     <span class="description"><?php echo __( 'This is the shortcode for the front end users list.', 'userswp' ); ?></span>
                 </td>
             </tr>
+
+            <?php do_action('uwp_after_general_shortcodes_content'); ?>
 
         </table>
         <?php
