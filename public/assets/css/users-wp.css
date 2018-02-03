@@ -1247,8 +1247,7 @@
   background: #f1f1f1 none repeat scroll 0 0;
   margin: 0 auto;
   max-width: 340px;
-  padding: 40px;
-  width: 100%; }
+  padding: 40px; }
   .uwp-login .uwp-lf-icon,
   .uwp-login .uwp-rf-icon,
   .uwp-registration .uwp-lf-icon,
@@ -1376,6 +1375,17 @@
   max-width: none;
   padding: 0;
   width: auto; }
+
+.uwp-login-widget.user-loggedin .avatar {
+  border-radius: 50%;
+  box-shadow: none;
+  vertical-align: middle;
+  margin: 0 3px; }
+.uwp-login-widget.user-loggedin a {
+  text-decoration: none;
+  box-shadow: none; }
+.uwp-login-widget.user-loggedin span {
+  margin-left: 10px; }
 
 .uwp_page .uwp-login-form label,
 .uwp_page .uwp-registration-form label,
@@ -1845,9 +1855,11 @@
   margin-top: 5px;
   margin-bottom: 5px; }
 
-.uwp_widgets h2 {
+.uwp_widgets .uwp-content-wrap h2 {
   display: none; }
-.uwp_widgets .uwp-lf-icon {
+.uwp_widgets .uwp-content-wrap .uwp-lf-icon {
+  display: none; }
+.uwp_widgets .uwp-content-wrap .uwp-rf-icon {
   display: none; }
 
 .uwp_page .ui-timepicker-div dl {
@@ -1996,15 +2008,16 @@
 .uwp_page .uwp-content-wrap .uwp_account_menu {
   padding: 0;
   list-style: none;
-  margin: 20px 0;
-  overflow: hidden; }
+  margin: 20px auto;
+  overflow: hidden;
+  text-align: center;
+  clear: both; }
   .uwp_page .uwp-content-wrap .uwp_account_menu li {
     list-style-type: none;
-    width: 50%;
-    float: left;
     font-size: 16px;
     padding: 5px 0;
-    margin: 0; }
+    margin: 0 20px 0 0;
+    display: inline-block; }
     .uwp_page .uwp-content-wrap .uwp_account_menu li i {
       margin-right: 5px; }
     .uwp_page .uwp-content-wrap .uwp_account_menu li a {
@@ -2012,6 +2025,8 @@
       text-decoration: none; }
     .uwp_page .uwp-content-wrap .uwp_account_menu li a:hover, .uwp_page .uwp-content-wrap .uwp_account_menu li a.active {
       color: #757575; }
+    .uwp_page .uwp-content-wrap .uwp_account_menu li:last-child {
+      margin: 0; }
 
 .uwp-page .input-group {
   position: relative;
@@ -2498,7 +2513,7 @@
   text-align: center;
   padding-top: 5px; }
 .uwp_page .uwp-content-wrap .uwp-profile-tab-count span.uwp_field_icon {
-  padding-left: 18px!important; }
+  padding-left: 18px !important; }
 .uwp_page .uwp-content-wrap .uwp-profile-header-img {
   background-size: cover;
   border: 1px solid #ccc;

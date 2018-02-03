@@ -267,11 +267,14 @@ class UsersWP_Templates {
      */
     public function wp_login_url($login_url, $redirect, $force_reauth) {
         $login_page_id = uwp_get_option('login_page', false);
-        $redirect_page_id = uwp_get_option('login_redirect_to', '');
+        $redirect_page_id = uwp_get_option('login_redirect_to', -1);
         if (!is_admin() && $login_page_id) {
             $login_page = get_permalink($login_page_id);
             if($redirect){
                 $login_url = add_query_arg( 'redirect_to', $redirect, $login_page );
+            }elseif(isset($redirect_page_id) && (int)$redirect_page_id == -1 && wp_get_referer()) {
+                $redirect_to = esc_url(wp_get_referer());
+                $login_url = add_query_arg( 'redirect_to', $redirect_to, $login_page );
             }elseif($redirect_page_id){
                 $redirect_to = get_permalink($redirect_page_id);
                 $login_url = add_query_arg( 'redirect_to', $redirect_to, $login_page );
@@ -407,6 +410,12 @@ class UsersWP_Templates {
 
         if (empty($html)) {
             $label = $site_title = uwp_get_form_label($field);
+            if (!is_admin()) { ?>
+                <label>
+                    <?php echo (trim($label)) ? $label : '&nbsp;'; ?>
+                    <?php if ($field->is_required == 1) echo '<span>*</span>';?>
+                </label>
+            <?php }
             ?>
             <input name="<?php echo $field->htmlvar_name; ?>"
                    class="<?php echo $field->css_class; ?>"
