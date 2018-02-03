@@ -111,14 +111,14 @@ class UsersWP_Forms {
             $message = __('Banner cropped successfully.', 'userswp');
             $processed = true;
         } elseif (isset($_POST['uwp_avatar_crop'])) {
-            $errors = $this->process_image_crop($_POST, 'avatar');
+            $errors = $this->process_image_crop($_POST, 'avatar', true);
             if (!is_wp_error($errors)) {
                 $redirect = $errors;
             }
             $message = __('Avatar cropped successfully.', 'userswp');
             $processed = true;
         } elseif (isset($_POST['uwp_banner_crop'])) {
-            $errors = $this->process_image_crop($_POST, 'banner');
+            $errors = $this->process_image_crop($_POST, 'banner', true);
             if (!is_wp_error($errors)) {
                 $redirect = $errors;
             }
@@ -1125,13 +1125,16 @@ class UsersWP_Forms {
      * Processes avatar and banner uploads image crop.
      *
      * @since       1.0.0
+     * @since       1.0.12 New param $unlink_prev_img introduced.
      * @package     userswp
      *
      * @param       array                   $data       Submitted $_POST data
+     * @param       string                  $type       Image type. Default 'avatar'.
+     * @param       bool         			$unlink_prev_img True to remove previous image. Default false;
      *
      * @return      bool|WP_Error|string                Profile url.
      */
-    public function process_image_crop($data = array(), $type = 'avatar') {
+    public function process_image_crop($data = array(), $type = 'avatar', $unlink_prev_img = false) {
         
         if (!is_user_logged_in()) {
             return false;
@@ -1160,7 +1163,7 @@ class UsersWP_Forms {
         }
         
         if ($image_url) {
-            if ($type == 'avatar') {
+			if ($type == 'avatar') {
                 $full_width  = apply_filters('uwp_avatar_image_width', 150);
             } else {
                 $full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('profile_banner_width', 1000));
@@ -1186,6 +1189,22 @@ class UsersWP_Forms {
             $cropped = uwp_resizeThumbnailImage($thumb_image_location, $image_url,$x, $y, $w, $h,$scale);
             $cropped = str_replace($upload_path, $upload_url, $cropped);
 
+			// Remove previous avatar/banner
+			$unlink_img = '';
+			if ($unlink_prev_img) {
+				if ($type == 'avatar') {
+					$previous_img = uwp_get_usermeta($user_id, 'uwp_account_avatar_thumb');
+				} else if ($type == 'banner') {
+					$previous_img = uwp_get_usermeta($user_id, 'uwp_account_banner_thumb');
+				} else {
+					$previous_img = '';
+				}
+				
+				if ($previous_img) {
+					$unlink_img = untrailingslashit($upload_path) . '/' . ltrim($previous_img, '/');
+				}
+			}
+
             // remove the uploads path for easy migrations
             $cropped = str_replace($upload_url, '', $cropped);
             if ($type == 'avatar') {
@@ -1193,6 +1212,14 @@ class UsersWP_Forms {
             } else {
                 uwp_update_usermeta($user_id, 'uwp_account_banner_thumb', $cropped);
             }
+			
+			if ($unlink_img && $unlink_img != $thumb_image_location && is_file($unlink_img) && file_exists($unlink_img)) {
+				@unlink($unlink_img);
+				$unlink_ori_img = str_replace('_uwp_'.$type.'_thumb'.'.', '.', $unlink_img);
+				if (is_file($unlink_ori_img) && file_exists($unlink_ori_img)) {
+					@unlink($unlink_ori_img);
+				}
+			}
         }
 
         if (is_admin()) {
@@ -1296,6 +1323,7 @@ class UsersWP_Forms {
      *
      *
      * @since   1.0.0
+     * @since   1.0.12 Unlink file.
      * @package userswp
      * @return void
      */
@@ -1312,7 +1340,33 @@ class UsersWP_Forms {
             }
         }
         if ($permission) {
-            uwp_update_usermeta($user_id, $htmlvar, '');
+            // Remove file
+			if ($htmlvar == "uwp_account_banner_thumb") {
+				$file = uwp_get_usermeta($user_id, 'uwp_account_banner_thumb');
+				$type = 'banner';
+			} elseif ($htmlvar == "uwp_account_avatar_thumb") {
+				$file = uwp_get_usermeta($user_id, 'uwp_account_avatar_thumb');
+				$type = 'avatar';
+			} else {
+				$file = '';
+				$type = '';
+			}
+
+			uwp_update_usermeta($user_id, $htmlvar, '');
+
+			if ($file) {
+				$uploads = wp_upload_dir();
+				$upload_path = $uploads['basedir'];
+				$unlink_file = untrailingslashit($upload_path) . '/' . ltrim($file, '/');
+
+				if (is_file($unlink_file) && file_exists($unlink_file)) {
+					@unlink($unlink_file);
+					$unlink_ori_file = str_replace('_uwp_'.$type.'_thumb'.'.', '.', $unlink_file);
+					if (is_file($unlink_ori_file) && file_exists($unlink_ori_file)) {
+						@unlink($unlink_ori_file);
+					}
+				}
+			}
         }
         die();
     }

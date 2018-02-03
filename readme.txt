@@ -118,6 +118,7 @@ No questions so far, but don't hesitate to ask!
 * Icon url in custom field icon does not working - FIXED
 * Merge UWP GeoDirectory functionality into UWP core - CHANGED
 * First/Last name fields breaks the design if labels are displayed in forms - FIXED
+* Old avatar/banner file should be removed on a new avatar/banner upload - CHANGED
 * after login it should redirect to prev page - FIXED
 
 = 1.0.11 =
