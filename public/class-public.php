@@ -96,9 +96,9 @@ class UsersWP_Public {
         if (is_uwp_page()) {
             // include only in uwp pages
             uwp_load_font_awesome();
-            wp_enqueue_style( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp.css', array(), null, 'all' );
         }
 
+        wp_enqueue_style( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp.css', array(), null, 'all' );
         //widget styles for all pages
         wp_enqueue_style( "uwp_widget_css", plugin_dir_url( __FILE__ ) . 'assets/css/widgets.css', array(), null, 'all' );
 
@@ -185,21 +185,14 @@ class UsersWP_Public {
             wp_enqueue_script( "uwp_chosen", plugin_dir_url( __FILE__ ) . 'assets/js/chosen.jquery.js', array( 'jquery' ), null, false );
         }
 
-        if (is_uwp_page()) {
-            // include only in uwp pages
-            wp_enqueue_script( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), null, false );
-        }
+        // include only in uwp pages
+        wp_enqueue_script( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), null, false );
 
+        //load CountrySelect
+        wp_enqueue_script( "country-select", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/countrySelect.min.js', array( 'jquery' ), null, false );
 
-        if(is_uwp_account_page() || is_uwp_register_page()){
-            //load CountrySelect
-            wp_enqueue_script( "country-select", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/countrySelect.min.js', array( 'jquery' ), null, false );
-
-            $country_data = uwp_get_country_data();
-            wp_localize_script(USERSWP_NAME, 'uwp_country_data', $country_data);
-        }
-
-
+        $country_data = uwp_get_country_data();
+        wp_localize_script(USERSWP_NAME, 'uwp_country_data', $country_data);
         
     }
 

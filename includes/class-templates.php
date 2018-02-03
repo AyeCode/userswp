@@ -410,6 +410,12 @@ class UsersWP_Templates {
 
         if (empty($html)) {
             $label = $site_title = uwp_get_form_label($field);
+            if (!is_admin()) { ?>
+                <label>
+                    <?php echo (trim($label)) ? $label : '&nbsp;'; ?>
+                    <?php if ($field->is_required == 1) echo '<span>*</span>';?>
+                </label>
+            <?php }
             ?>
             <input name="<?php echo $field->htmlvar_name; ?>"
                    class="<?php echo $field->css_class; ?>"

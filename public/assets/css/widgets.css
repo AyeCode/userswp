@@ -466,9 +466,11 @@
   margin-top: 5px;
   margin-bottom: 5px; }
 
-.uwp_widgets h2 {
+.uwp_widgets .uwp-content-wrap h2 {
   display: none; }
-.uwp_widgets .uwp-lf-icon {
+.uwp_widgets .uwp-content-wrap .uwp-lf-icon {
+  display: none; }
+.uwp_widgets .uwp-content-wrap .uwp-rf-icon {
   display: none; }
 
 .uwp_page .ui-timepicker-div dl {

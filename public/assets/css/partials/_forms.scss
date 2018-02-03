@@ -172,11 +172,16 @@
   }
 }
 .uwp_widgets {
-  h2 {
-    display: none;
-  }
-  .uwp-lf-icon {
-    display: none;
+  .uwp-content-wrap {
+    h2 {
+      display: none;
+    }
+    .uwp-lf-icon {
+      display: none;
+    }
+    .uwp-rf-icon {
+      display: none;
+    }
   }
 }
 
