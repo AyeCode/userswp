@@ -6,6 +6,39 @@ jQuery(window).load(function() {
             allow_single_deselect: 'true'
         });
     }
+    jQuery('.uwp_upload_btn').click(function() {
+        var $this = jQuery(this);
+
+        frame = wp.media({
+            title: 'Select or Upload Media',
+            button: {
+                text: 'Use Media'
+            },
+            multiple: false
+        });
+
+        frame.on( 'select', function() {
+            var attachment = frame.state().get('selection').first().toJSON();
+            $this.parent().next().find("img").attr('src', attachment.url);
+            $this.parent().next().find("img").show();
+            $this.parent().find(".uwp_remove_btn").show();
+            $this.parent().find(".uwp_img_url").val(attachment.id);
+        });
+
+        frame.open();
+    });
+
+    $('.uwp_remove_btn').click(function() {
+        var answer = confirm('Are you sure?');
+        if (answer == true) {
+            /*var src = $(this).parent().next().find("img").attr('data-src');*/
+            $(this).parent().next().find("img").attr('src', '');
+            $(this).parent().find('input.uwp_img_url').val('');
+            $(this).parent().next().find("img").hide();
+            $(this).hide();
+        }
+        return false;
+    });
 });
 
 function uwp_chosen() {

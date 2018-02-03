@@ -531,6 +531,20 @@ class UsersWP_Admin_Settings {
                             'size' => 'regular',
                             'placeholder' => __( 'Enter Profile banner width in Pixels', 'userswp' ),
                         ),
+                        'profile_default_banner' => array(
+                            'id' => 'profile_default_banner',
+                            'name' => __( 'Default banner image', 'userswp' ),
+                            'desc' => "Recommended image size: 1000x300",
+                            'type' => 'media',
+                            'std' => ''
+                        ),
+                        'profile_default_profile' => array(
+                            'id' => 'profile_default_profile',
+                            'name' => __( 'Default profile image', 'userswp' ),
+                            'desc' => "Recommended image size: 150x150",
+                            'type' => 'media',
+                            'std' => ''
+                        ),
                         'enable_profile_body' => array(
                             'id'   => 'enable_profile_body',
                             'name' => __( 'Display Body in Profile', 'userswp' ),
