@@ -315,15 +315,23 @@ class UsersWP_Callback {
             }
         }
         wp_enqueue_media();
+        if(isset($value) && $value > 0){
+            $image = wp_get_attachment_url($value);
+            $is_default = false;
+        } else {
+            $image = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
+            $is_default = true;
+        }
         ?>
         <div class="uwp_media_input">
-            <input type="text" id="uwp_settings[<?php echo $args['id']; ?>]" class="uwp_img_url" name="uwp_settings[<?php echo $args['id']; ?>]" value="<?php echo esc_url( $value ); ?>" />
-            <input id="uwp_upload_btn" type="button" class="button uwp_upload_btn" value="<?php _e( 'Upload', 'wptuts' ); ?>" />
-            <label for="uwp_settings[<?php echo $args['id']; ?>]"><?php echo $args['desc']; ?></label>
+            <input type="hidden" id="uwp_settings[<?php echo $args['id']; ?>]" class="uwp_img_url" name="uwp_settings[<?php echo $args['id']; ?>]" value="<?php echo $value; ?>" />
+            <input id="uwp_upload_btn" type="button" class="button uwp_upload_btn" value="<?php _e( 'Upload', 'wptuts' ); ?>" /><br><br>
+            <input id="uwp_remove_btn" type="button" class="button uwp_remove_btn" value="<?php _e( 'Remove', 'wptuts' ); ?>" style="<?php if($is_default){ echo "display:none;"; } ?>" />
         </div>
         <div class="uwp_media_preview">
-            <img data-src="<?php echo $value; ?>" src="<?php echo esc_url( $value ); ?>" width="100px" height="100px" />
+            <img data-src="<?php echo USERSWP_PLUGIN_URL."public/assets/images/banner.png"; ?>" src="<?php echo $image; ?>" width="100px" height="100px" />
         </div>
+        <label for="uwp_settings[<?php echo $args['id']; ?>]"><?php echo $args['desc']; ?></label>
         <?php
     }
 
