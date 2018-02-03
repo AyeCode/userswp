@@ -562,7 +562,7 @@ class UsersWP_GeoDirectory_Plugin {
             }
         }
 
-        return apply_filters('uwp_profile_gd_tabs', $tabs, $user);
+        return apply_filters('uwp_profile_gd_tabs', $tabs, $user, $type);
     }
 
     public function profile_gd_subtabs_content($user, $type = 'listings') {
