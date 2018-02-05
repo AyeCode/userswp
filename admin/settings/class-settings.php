@@ -140,6 +140,8 @@ class UsersWP_Admin_Settings {
         ?>
         <table class="uwp-form-table">
 
+            <?php do_action('uwp_before_general_shortcodes_content'); ?>
+
             <tr valign="top">
                 <th scope="row"><?php echo __( 'User Profile Shortcode', 'userswp' ); ?></th>
                 <td>
@@ -203,6 +205,8 @@ class UsersWP_Admin_Settings {
                     <span class="description"><?php echo __( 'This is the shortcode for the front end users list.', 'userswp' ); ?></span>
                 </td>
             </tr>
+
+            <?php do_action('uwp_after_general_shortcodes_content'); ?>
 
         </table>
         <?php
@@ -526,6 +530,20 @@ class UsersWP_Admin_Settings {
                             'std'  => '1000',
                             'size' => 'regular',
                             'placeholder' => __( 'Enter Profile banner width in Pixels', 'userswp' ),
+                        ),
+                        'profile_default_banner' => array(
+                            'id' => 'profile_default_banner',
+                            'name' => __( 'Default banner image', 'userswp' ),
+                            'desc' => "Recommended image size: 1000x300",
+                            'type' => 'media',
+                            'std' => ''
+                        ),
+                        'profile_default_profile' => array(
+                            'id' => 'profile_default_profile',
+                            'name' => __( 'Default profile image', 'userswp' ),
+                            'desc' => "Recommended image size: 150x150",
+                            'type' => 'media',
+                            'std' => ''
                         ),
                         'enable_profile_body' => array(
                             'id'   => 'enable_profile_body',

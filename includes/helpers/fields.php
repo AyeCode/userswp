@@ -61,13 +61,20 @@ function uwp_settings_general_register_fields() {
  * @return      array       Setting fields
  */
 function uwp_settings_general_login_fields() {
+    $pages = get_pages();
+    $pages_options = array( '-1' => __( 'Last User Page', 'userswp' ) );
+    if ( $pages ) {
+        foreach ( $pages as $page ) {
+            $pages_options[ $page->ID ] = $page->post_title;
+        }
+    }
     $fields =  array(
         'login_redirect_to' => array(
             'id' => 'login_redirect_to',
             'name' => __( 'Login Redirect Page', 'userswp' ),
             'desc' => __( 'Set the page to redirect the user to after logging in. If no page has been set WordPress default will be used.', 'userswp' ),
             'type' => 'select',
-            'options' => uwp_get_pages(),
+            'options' => $pages_options,
             'chosen' => true,
             'placeholder' => __( 'Select a page', 'userswp' ),
             'class' => 'uwp_label_block',
@@ -161,4 +168,27 @@ function uwp_settings_general_loginout_fields() {
 
     $fields = array_merge($login, $wp_login, $logout);
     return $fields;
+}
+
+/**
+ * Get the field icon.
+ *
+ * @since       1.0.12
+ * @package     userswp
+ *
+ * @param       string      Field icon value.
+ * @return      array       Field icon element.
+ */
+function uwp_get_field_icon( $value ) {
+    $field_icon = $value;
+
+    if ( ! empty( $value ) ) {
+        if ( strpos( $value, 'http' ) === 0 ) {
+            $field_icon = '<span class="uwp_field_icon" style="background: url(' . $value . ') no-repeat left center;padding-left:14px;background-size:100% auto;margin-right:5px"></span>';
+        } else if ( strpos($value, 'fa fa-') !== false ) {
+            $field_icon = '<i class="uwp_field_icon ' . $value . '"></i>';
+        }
+    }
+
+    return apply_filters( 'uwp_get_field_icon', $field_icon, $value );
 }

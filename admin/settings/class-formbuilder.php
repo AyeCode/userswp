@@ -2135,10 +2135,8 @@ class UsersWP_Form_Builder {
                            class="uwp-draggable-form-items uwp-<?php echo $field['field_type']; ?>"
                            href="javascript:void(0);" data-type="<?php echo $field['field_type']; ?>">
 
-                            <?php if (isset($field['field_icon']) && strpos($field['field_icon'], 'fa fa-') !== false) {
-                                echo '<i class="' . $field['field_icon'] . '" aria-hidden="true"></i>';
-                            }elseif (isset($field['field_icon']) && $field['field_icon']) {
-                                echo '<b style="background-image: url("' . $field['field_icon'] . '")"></b>';
+                            <?php if ($icon = uwp_get_field_icon($field['field_icon'])) {
+                                echo $icon;
                             } else {
                                 echo '<i class="fa fa-cog" aria-hidden="true"></i>';
                             }?>

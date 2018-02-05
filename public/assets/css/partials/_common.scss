@@ -71,7 +71,6 @@
   margin: 0 auto;
   max-width: 340px;
   padding: 40px;
-  width: 100%;
   .uwp-lf-icon,
   .uwp-rf-icon {
     background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
@@ -204,5 +203,20 @@
     max-width: none;
     padding: 0;
     width: auto;
+  }
+}
+.uwp-login-widget.user-loggedin {
+  .avatar {
+    border-radius: 50%;
+    box-shadow: none;
+    vertical-align: middle;
+    margin: 0 3px;
+  }
+  a {
+    text-decoration: none;
+    box-shadow: none;
+  }
+  span {
+    margin-left: 10px;
   }
 }
