@@ -28,14 +28,13 @@ jQuery(window).load(function() {
         frame.open();
     });
 
-    $('.uwp_remove_btn').click(function() {
+    jQuery('.uwp_remove_btn').click(function() {
         var answer = confirm('Are you sure?');
         if (answer == true) {
-            /*var src = $(this).parent().next().find("img").attr('data-src');*/
-            $(this).parent().next().find("img").attr('src', '');
-            $(this).parent().find('input.uwp_img_url').val('');
-            $(this).parent().next().find("img").hide();
-            $(this).hide();
+            jQuery(this).parent().next().find("img").attr('src', '');
+            jQuery(this).parent().find('input.uwp_img_url').val('');
+            jQuery(this).parent().next().find("img").hide();
+            jQuery(this).hide();
         }
         return false;
     });
