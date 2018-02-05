@@ -545,7 +545,7 @@ class UsersWP_Admin_Settings {
                             'desc' => __( 'Recommended image size: 150x150', 'userwp'),
                             'type' => 'media',
                             'std' => '',
-                            'placeholder' => USERSWP_PLUGIN_URL."public/assets/images/no_thumb.png"
+                            'placeholder' => USERSWP_PLUGIN_URL."public/assets/images/no_profile.png"
                         ),
                         'enable_profile_body' => array(
                             'id'   => 'enable_profile_body',
