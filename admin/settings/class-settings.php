@@ -536,14 +536,16 @@ class UsersWP_Admin_Settings {
                             'name' => __( 'Default banner image', 'userswp' ),
                             'desc' => "Recommended image size: 1000x300",
                             'type' => 'media',
-                            'std' => ''
+                            'std' => '',
+                            'placeholder' => USERSWP_PLUGIN_URL."public/assets/images/banner.png"
                         ),
                         'profile_default_profile' => array(
                             'id' => 'profile_default_profile',
                             'name' => __( 'Default profile image', 'userswp' ),
                             'desc' => "Recommended image size: 150x150",
                             'type' => 'media',
-                            'std' => ''
+                            'std' => '',
+                            'placeholder' => USERSWP_PLUGIN_URL."public/assets/images/no_thumb.png"
                         ),
                         'enable_profile_body' => array(
                             'id'   => 'enable_profile_body',
