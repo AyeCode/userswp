@@ -45,7 +45,7 @@ class UsersWP_Callback {
         }
 
         if ( isset( $args['chosen'] ) ) {
-            $chosen = ($args['multiple'] ? '[]" multiple="multiple" class="uwp_chosen_select" style="height:auto"' : "'");
+            $chosen = ($args['multiple'] ? '[]" multiple="multiple" class="uwp_chosen_select" style="height:auto"' : '"');
         } else {
             $chosen = '';
         }
