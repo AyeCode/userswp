@@ -332,7 +332,7 @@ class UsersWP_Callback {
             <input id="uwp_remove_btn" type="button" class="button uwp_remove_btn" value="<?php _e( 'Remove', 'wptuts' ); ?>" style="<?php if($is_default){ echo "display:none;"; } ?>" />
         </div>
         <div class="uwp_media_preview">
-            <img data-src="<?php echo USERSWP_PLUGIN_URL."public/assets/images/banner.png"; ?>" src="<?php echo $image; ?>" style="max-height: 100px;" />
+            <img src="<?php echo $image; ?>" style="max-height: 100px;" />
         </div>
         <label for="uwp_settings[<?php echo $args['id']; ?>]"><?php echo $args['desc']; ?></label>
         <?php
