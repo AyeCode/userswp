@@ -121,6 +121,7 @@ No questions so far, but don't hesitate to ask!
 * Old avatar/banner file should be removed on a new avatar/banner upload - CHANGED
 * after login it should redirect to prev page - FIXED
 * Add default image options - FIXED
+* Conflict with Google Captcha plugin. - FIXED
 
 = 1.0.11 =
 * Some emails have an extra opening p tag - FIXED

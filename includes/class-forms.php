@@ -473,6 +473,8 @@ class UsersWP_Forms {
             $remember_me = false;
         }
 
+        remove_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
+
         $res = wp_signon(
             array(
                 'user_login' => $result['uwp_login_username'],
@@ -480,6 +482,8 @@ class UsersWP_Forms {
                 'remember' => $remember_me
             )
         );
+
+        add_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
 
         if (is_wp_error($res)) {
             $errors->add('invalid_userorpass', __('<strong>Error</strong>: Invalid username or Password.', 'userswp'));
