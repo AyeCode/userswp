@@ -8,7 +8,7 @@
             $type = 'account';
         }
         ?>
-        <div class="uwp-account-avatar"><?php echo get_avatar( get_current_user_id(), 100 ); ?></div>
+        <div class="uwp-account-avatar"><?php echo get_avatar( get_current_user_id(), 100, uwp_get_default_avatar_uri() ); ?></div>
         <?php do_action('uwp_template_form_title_before', 'account'); ?>
         <h2><?php echo apply_filters('uwp_account_page_title', __( 'Edit Account', 'userswp' ), $type); ?></h2>
         <?php do_action('uwp_template_form_title_after', 'account'); ?>
