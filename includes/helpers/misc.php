@@ -366,6 +366,8 @@ function get_uwp_users_list() {
             LIMIT 0, 20");
         }
 
+        $total_user = count($users);
+
     } else {
 
         $args = array(
@@ -399,12 +401,10 @@ function get_uwp_users_list() {
 
         $users_query = new WP_User_Query($args);
         $users = $users_query->get_results();
+        $total_user = $users_query->get_total();
 
     }
 
-
-    $result = count_users();
-    $total_user = $result['total_users'];
     $total_pages=ceil($total_user/$number);
 
     $layout_class = uwp_get_layout_class();
@@ -460,7 +460,7 @@ function get_uwp_users_list() {
     </ul>
 
     <?php
-    if (!$keyword) {
+    if ($total_pages > 1) {
         do_action('uwp_profile_pagination', $total_pages);
     }
     ?>
