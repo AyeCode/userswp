@@ -1,10 +1,10 @@
 ﻿=== UsersWP - User Profile & Registration ===
-Contributors: stiofansisland, paoltaia, ayecode
+Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 3.1
-Tested up to: 4.9.1
-Stable tag: 1.0.11
+Tested up to: 4.9
+Stable tag: 1.0.12
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -122,6 +122,7 @@ No questions so far, but don't hesitate to ask!
 * after login it should redirect to prev page - FIXED
 * Add default image options - FIXED
 * Conflict with Google Captcha plugin. - FIXED
+* Use site specific dummy user passwords - CHANGED
 
 = 1.0.11 =
 * Some emails have an extra opening p tag - FIXED

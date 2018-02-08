@@ -89,7 +89,7 @@ class UsersWP_Admin {
 
             wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
             wp_enqueue_script( "uwp_timepicker", plugin_dir_url( dirname(__FILE__) ) . 'public/assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
-            wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.js', array( 'jquery' ), null, false );
+            wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.min.js', array( 'jquery' ), null, false );
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
             wp_enqueue_script( 'jcrop', array( 'jquery' ) );
             wp_enqueue_script( "country-select", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/countrySelect.min.js', array( 'jquery' ), null, false );
