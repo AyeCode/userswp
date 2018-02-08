@@ -68,12 +68,10 @@ class UsersWP_Forms {
         } elseif (isset($_POST['uwp_login_nonce'])) {
             $errors = $this->process_login($_POST);
             $redirect_page_id = uwp_get_option('login_redirect_to', -1);
-            if(isset( $_REQUEST['redirect_to'] )){
-                $redirect_to = esc_url($_REQUEST['redirect_to']);
-            } elseif(isset($redirect_page_id) && (int)$redirect_page_id == -1 && wp_get_referer()) {
-                $redirect_to = esc_url(wp_get_referer());
-            } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
+            if (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
                 $redirect_to = get_permalink($redirect_page_id);
+            } elseif(isset( $_REQUEST['redirect_to'] )){
+                $redirect_to = esc_url($_REQUEST['redirect_to']);
             } else {
                 $redirect_to = home_url('/');
             }
@@ -490,12 +488,10 @@ class UsersWP_Forms {
             return $errors;
         } else {
             $redirect_page_id = uwp_get_option('login_redirect_to', -1);
-            if (isset($data['redirect_to'])) {
-                $redirect_to = strip_tags(esc_sql($data['redirect_to']));
-            } elseif(isset($redirect_page_id) && (int)$redirect_page_id == -1 && wp_get_referer()) {
-                $redirect_to = esc_url(wp_get_referer());
-            } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
+            if (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
                 $redirect_to = get_permalink($redirect_page_id);
+            } elseif (isset($data['redirect_to'])) {
+                $redirect_to = strip_tags(esc_sql($data['redirect_to']));
             } else {
                 if ( current_user_can('manage_options') ) {
                     $redirect_to = admin_url();
