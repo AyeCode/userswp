@@ -38,13 +38,7 @@ class UsersWP_Profile {
             $banner = $upload_url.$banner;
         }
         if (empty($avatar)) {
-            $default = uwp_get_option('profile_default_profile', '');
-            if(empty($default)){
-                $default = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
-            } else {
-                $default = wp_get_attachment_url($default);
-            }
-            $avatar = get_avatar($user->user_email, 150, $default);
+            $avatar = get_avatar($user->user_email, 150, uwp_get_default_avatar_uri());
         } else {
             // check the image is not a full url before adding the local upload url
             if (strpos($avatar, 'http:') === false && strpos($avatar, 'https:') === false) {
@@ -581,7 +575,7 @@ class UsersWP_Profile {
                         <a class="uwp-profile-item-img" href="<?php echo get_comment_link($comment->comment_ID); ?>">
                             <?php
                             $avatar_class = "uwp-profile-item-alignleft uwp-profile-item-thumb";
-                            $avatar = get_avatar($user->user_email, 80, null, null, array('class' => array($avatar_class) ));
+                            $avatar = get_avatar($user->user_email, 80, uwp_get_default_avatar_uri(), null, array('class' => array($avatar_class) ));
                             echo $avatar;
                             ?>
                         </a>

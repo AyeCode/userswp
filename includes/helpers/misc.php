@@ -1448,3 +1448,14 @@ function uwp_wpml_object_id( $element_id, $element_type = 'post', $return_origin
 
     return $element_id;
 }
+
+function uwp_get_default_avatar_uri(){
+    $default = uwp_get_option('profile_default_profile', '');
+    if(empty($default)){
+        $default = USERSWP_PLUGIN_URL."public/assets/images/no_profile.png";
+    } else {
+        $default = wp_get_attachment_url($default);
+    }
+
+    return $default;
+}
