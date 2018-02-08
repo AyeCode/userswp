@@ -687,8 +687,8 @@ function uwp_admin_edit_banner_fields($user) {
         <?php
     }
 }
-add_action('show_user_profile', 'uwp_admin_edit_banner_fields');
-add_action('edit_user_profile', 'uwp_admin_edit_banner_fields');
+//add_action('show_user_profile', 'uwp_admin_edit_banner_fields');
+//add_action('edit_user_profile', 'uwp_admin_edit_banner_fields');
 
 
 
