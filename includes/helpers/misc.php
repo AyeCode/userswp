@@ -309,10 +309,17 @@ function get_uwp_users_list() {
     $inactive_users = new WP_User_Query($arg);
     $exclude_users = $inactive_users->get_results();
 
+    $excluded_globally = uwp_get_option('users_excluded_from_list');
+    if ( $excluded_globally ) {
+        $users = str_replace(' ', '', $excluded_globally );
+        $users_array = explode(',', $users );
+        $exclude_users = array_merge($exclude_users, $users_array);
+    }
+
     $exclude_users = apply_filters('uwp_excluded_users_from_list', $exclude_users, $where, $keyword);
 
     if($exclude_users){
-        $exclude_users_list = implode(',', $exclude_users);
+        $exclude_users_list = implode(',', array_unique($exclude_users));
         $exclude_query = 'AND '. $wpdb->users.'.ID NOT IN ('.$exclude_users_list.')';
     } else {
         $exclude_query = ' ';
