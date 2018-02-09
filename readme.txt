@@ -1,4 +1,4 @@
-﻿=== UsersWP - User Profile & Registration ===
+=== UsersWP - User Profile & Registration ===
 Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
@@ -109,6 +109,9 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.0.13 =
+* Allow to change icon for fieldset while displaying as a profile tab - CHANGED
 
 = 1.0.12 =
 * Filter added to wp_login_url() to filter change all login urls to the UWP one - CHANGED
