@@ -577,6 +577,13 @@ class UsersWP_Admin_Settings {
                             'options' =>   $this->uwp_available_users_layout(),
                             'placeholder' => __( 'Select Layout', 'userswp' )
                         ),
+                        'users_excluded_from_list' => array(
+                            'id' => 'users_excluded_from_list',
+                            'name' => __( 'Users to exclude', 'userswp' ),
+                            'type' => 'text',
+                            'std' => '',
+                            'desc' 	=> __( 'Enter comma separated ids of users to exclude from users listing.', 'userswp' ),
+                        ),
                     )
                 ),
                 'change' => apply_filters( 'uwp_settings_general_change',

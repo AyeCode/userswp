@@ -110,6 +110,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.13 =
+* Option to exclude user from lists is missing from wp-admin - FIXED
+
 = 1.0.12 =
 * Filter added to wp_login_url() to filter change all login urls to the UWP one - CHANGED
 * Settings added to change subject & content for Password change notification - CHANGED
