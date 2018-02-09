@@ -1,4 +1,4 @@
-﻿=== UsersWP - User Profile & Registration ===
+=== UsersWP - User Profile & Registration ===
 Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
@@ -111,6 +111,7 @@ No questions so far, but don't hesitate to ask!
 == Changelog ==
 
 = 1.0.13 =
+* Allow to change icon for fieldset while displaying as a profile tab - CHANGED
 * Option to exclude user from lists is missing from wp-admin - FIXED
 
 = 1.0.12 =

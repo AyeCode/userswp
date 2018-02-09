@@ -279,6 +279,7 @@ class UsersWP_Profile {
                 $icon = uwp_get_field_icon($field->field_icon);
 
                 if ($field->field_type == 'fieldset') {
+                    $icon = '';
                     ?>
                     <div class="uwp-profile-extra-wrap" style="margin: 0; padding: 0">
                         <div class="uwp-profile-extra-key uwp-profile-extra-full" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></div>
