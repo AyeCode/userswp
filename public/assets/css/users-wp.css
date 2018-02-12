@@ -1195,7 +1195,7 @@
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box; }
-.uwp_page .uwp-content-wrap a {
+.uwp_page .uwp-content-wrap a, .uwp_page .uwp-content-wrap img {
   box-shadow: none;
   border-bottom: none; }
 .uwp_page .uwp-content-wrap a:focus,

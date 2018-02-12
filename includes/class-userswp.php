@@ -339,7 +339,6 @@ class UsersWP {
         add_filter('uwp_builder_is_required_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
         add_filter('uwp_builder_required_msg_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
         // field_icon not needed for fieldset
-        add_filter('uwp_builder_field_icon_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
         add_filter('uwp_builder_css_class_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
     }
 

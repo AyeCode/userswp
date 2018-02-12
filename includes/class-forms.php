@@ -68,12 +68,10 @@ class UsersWP_Forms {
         } elseif (isset($_POST['uwp_login_nonce'])) {
             $errors = $this->process_login($_POST);
             $redirect_page_id = uwp_get_option('login_redirect_to', -1);
-            if(isset( $_REQUEST['redirect_to'] )){
-                $redirect_to = esc_url($_REQUEST['redirect_to']);
-            } elseif(isset($redirect_page_id) && (int)$redirect_page_id == -1 && wp_get_referer()) {
-                $redirect_to = esc_url(wp_get_referer());
-            } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
+            if (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
                 $redirect_to = get_permalink($redirect_page_id);
+            } elseif(isset( $_REQUEST['redirect_to'] )){
+                $redirect_to = esc_url($_REQUEST['redirect_to']);
             } else {
                 $redirect_to = home_url('/');
             }
@@ -246,8 +244,8 @@ class UsersWP_Forms {
         do_action('uwp_before_validate', 'register');
 
         $result = uwp_validate_fields($data, 'register');
-
-        $result = apply_filters('uwp_validate_result', $result, 'register');
+      
+        $result = apply_filters('uwp_validate_result', $result, 'register', $data);
 
         if (is_wp_error($result)) {
             return $result;
@@ -459,7 +457,7 @@ class UsersWP_Forms {
 
         $result = uwp_validate_fields($data, 'login');
 
-        $result = apply_filters('uwp_validate_result', $result, 'login');
+        $result = apply_filters('uwp_validate_result', $result, 'login', $data);
 
         if (is_wp_error($result)) {
             return $result;
@@ -473,6 +471,8 @@ class UsersWP_Forms {
             $remember_me = false;
         }
 
+        remove_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
+
         $res = wp_signon(
             array(
                 'user_login' => $result['uwp_login_username'],
@@ -481,17 +481,17 @@ class UsersWP_Forms {
             )
         );
 
+        add_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
+
         if (is_wp_error($res)) {
             $errors->add('invalid_userorpass', __('<strong>Error</strong>: Invalid username or Password.', 'userswp'));
             return $errors;
         } else {
             $redirect_page_id = uwp_get_option('login_redirect_to', -1);
-            if (isset($data['redirect_to'])) {
-                $redirect_to = strip_tags(esc_sql($data['redirect_to']));
-            } elseif(isset($redirect_page_id) && (int)$redirect_page_id == -1 && wp_get_referer()) {
-                $redirect_to = esc_url(wp_get_referer());
-            } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
+            if (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
                 $redirect_to = get_permalink($redirect_page_id);
+            } elseif (isset($data['redirect_to'])) {
+                $redirect_to = strip_tags(esc_sql($data['redirect_to']));
             } else {
                 if ( current_user_can('manage_options') ) {
                     $redirect_to = admin_url();
@@ -528,7 +528,7 @@ class UsersWP_Forms {
 
         $result = uwp_validate_fields($data, 'forgot');
 
-        $result = apply_filters('uwp_validate_result', $result, 'forgot');
+        $result = apply_filters('uwp_validate_result', $result, 'forgot', $data);
 
         if (is_wp_error($result)) {
             return $result;
@@ -583,7 +583,7 @@ class UsersWP_Forms {
 
         $result = uwp_validate_fields($data, 'change');
 
-        $result = apply_filters('uwp_validate_result', $result, 'change');
+        $result = apply_filters('uwp_validate_result', $result, 'change', $data);
 
         if (is_wp_error($result)) {
             return $result;
@@ -633,7 +633,7 @@ class UsersWP_Forms {
 
         $result = uwp_validate_fields($data, 'reset');
 
-        $result = apply_filters('uwp_validate_result', $result, 'reset');
+        $result = apply_filters('uwp_validate_result', $result, 'reset', $data);
 
         if (is_wp_error($result)) {
             return $result;
@@ -982,7 +982,7 @@ class UsersWP_Forms {
 
         $result = uwp_validate_fields($data, 'account');
 
-        $result = apply_filters('uwp_validate_result', $result, 'account');
+        $result = apply_filters('uwp_validate_result', $result, 'account', $data);
 
         if (is_wp_error($result)) {
             return $result;
@@ -1102,7 +1102,7 @@ class UsersWP_Forms {
 
         $result = $file_obj->uwp_validate_uploads($files, $type);
 
-        $result = apply_filters('uwp_validate_result', $result, $type);
+        $result = apply_filters('uwp_validate_result', $result, $type, $data);
 
         if (is_wp_error($result)) {
             return $result;

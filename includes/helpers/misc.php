@@ -309,10 +309,17 @@ function get_uwp_users_list() {
     $inactive_users = new WP_User_Query($arg);
     $exclude_users = $inactive_users->get_results();
 
+    $excluded_globally = uwp_get_option('users_excluded_from_list');
+    if ( $excluded_globally ) {
+        $users = str_replace(' ', '', $excluded_globally );
+        $users_array = explode(',', $users );
+        $exclude_users = array_merge($exclude_users, $users_array);
+    }
+
     $exclude_users = apply_filters('uwp_excluded_users_from_list', $exclude_users, $where, $keyword);
 
     if($exclude_users){
-        $exclude_users_list = implode(',', $exclude_users);
+        $exclude_users_list = implode(',', array_unique($exclude_users));
         $exclude_query = 'AND '. $wpdb->users.'.ID NOT IN ('.$exclude_users_list.')';
     } else {
         $exclude_query = ' ';
@@ -366,6 +373,8 @@ function get_uwp_users_list() {
             LIMIT 0, 20");
         }
 
+        $total_user = count($users);
+
     } else {
 
         $args = array(
@@ -399,12 +408,10 @@ function get_uwp_users_list() {
 
         $users_query = new WP_User_Query($args);
         $users = $users_query->get_results();
+        $total_user = $users_query->get_total();
 
     }
 
-
-    $result = count_users();
-    $total_user = $result['total_users'];
     $total_pages=ceil($total_user/$number);
 
     $layout_class = uwp_get_layout_class();
@@ -460,7 +467,7 @@ function get_uwp_users_list() {
     </ul>
 
     <?php
-    if (!$keyword) {
+    if ($total_pages > 1) {
         do_action('uwp_profile_pagination', $total_pages);
     }
     ?>
@@ -687,8 +694,8 @@ function uwp_admin_edit_banner_fields($user) {
         <?php
     }
 }
-add_action('show_user_profile', 'uwp_admin_edit_banner_fields');
-add_action('edit_user_profile', 'uwp_admin_edit_banner_fields');
+//add_action('show_user_profile', 'uwp_admin_edit_banner_fields');
+//add_action('edit_user_profile', 'uwp_admin_edit_banner_fields');
 
 
 
@@ -1447,4 +1454,15 @@ function uwp_wpml_object_id( $element_id, $element_type = 'post', $return_origin
     }
 
     return $element_id;
+}
+
+function uwp_get_default_avatar_uri(){
+    $default = uwp_get_option('profile_default_profile', '');
+    if(empty($default)){
+        $default = USERSWP_PLUGIN_URL."public/assets/images/no_profile.png";
+    } else {
+        $default = wp_get_attachment_url($default);
+    }
+
+    return $default;
 }

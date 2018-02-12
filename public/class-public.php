@@ -186,7 +186,7 @@ class UsersWP_Public {
         }
 
         // include only in uwp pages
-        wp_enqueue_script( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.js', array( 'jquery' ), null, false );
+        wp_enqueue_script( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.min.js', array( 'jquery' ), null, false );
 
         //load CountrySelect
         wp_enqueue_script( "country-select", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/countrySelect.min.js', array( 'jquery' ), null, false );

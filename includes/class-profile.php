@@ -28,12 +28,17 @@ class UsersWP_Profile {
         }
 
         if (empty($banner)) {
-            $banner = USERSWP_PLUGIN_URL."/public/assets/images/banner.png";
+            $banner = uwp_get_option('profile_default_banner', '');
+            if(empty($banner)){
+                $banner = USERSWP_PLUGIN_URL."/public/assets/images/banner.png";
+            } else {
+                $banner = wp_get_attachment_url($banner);
+            }
         } else {
             $banner = $upload_url.$banner;
         }
         if (empty($avatar)) {
-            $avatar = get_avatar($user->user_email, 150);
+            $avatar = get_avatar($user->user_email, 150, uwp_get_default_avatar_uri());
         } else {
             // check the image is not a full url before adding the local upload url
             if (strpos($avatar, 'http:') === false && strpos($avatar, 'https:') === false) {
@@ -274,6 +279,7 @@ class UsersWP_Profile {
                 $icon = uwp_get_field_icon($field->field_icon);
 
                 if ($field->field_type == 'fieldset') {
+                    $icon = '';
                     ?>
                     <div class="uwp-profile-extra-wrap" style="margin: 0; padding: 0">
                         <div class="uwp-profile-extra-key uwp-profile-extra-full" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></div>
@@ -570,7 +576,7 @@ class UsersWP_Profile {
                         <a class="uwp-profile-item-img" href="<?php echo get_comment_link($comment->comment_ID); ?>">
                             <?php
                             $avatar_class = "uwp-profile-item-alignleft uwp-profile-item-thumb";
-                            $avatar = get_avatar($user->user_email, 80, null, null, array('class' => array($avatar_class) ));
+                            $avatar = get_avatar($user->user_email, 80, uwp_get_default_avatar_uri(), null, array('class' => array($avatar_class) ));
                             echo $avatar;
                             ?>
                         </a>

@@ -140,6 +140,8 @@ class UsersWP_Admin_Settings {
         ?>
         <table class="uwp-form-table">
 
+            <?php do_action('uwp_before_general_shortcodes_content'); ?>
+
             <tr valign="top">
                 <th scope="row"><?php echo __( 'User Profile Shortcode', 'userswp' ); ?></th>
                 <td>
@@ -203,6 +205,8 @@ class UsersWP_Admin_Settings {
                     <span class="description"><?php echo __( 'This is the shortcode for the front end users list.', 'userswp' ); ?></span>
                 </td>
             </tr>
+
+            <?php do_action('uwp_after_general_shortcodes_content'); ?>
 
         </table>
         <?php
@@ -527,6 +531,22 @@ class UsersWP_Admin_Settings {
                             'size' => 'regular',
                             'placeholder' => __( 'Enter Profile banner width in Pixels', 'userswp' ),
                         ),
+                        'profile_default_banner' => array(
+                            'id' => 'profile_default_banner',
+                            'name' => __( 'Default banner image', 'userswp' ),
+                            'desc' => __( 'Recommended image size: 1000x300', 'userswp'),
+                            'type' => 'media',
+                            'std' => '',
+                            'placeholder' => USERSWP_PLUGIN_URL."public/assets/images/banner.png"
+                        ),
+                        'profile_default_profile' => array(
+                            'id' => 'profile_default_profile',
+                            'name' => __( 'Default profile image', 'userswp' ),
+                            'desc' => __( 'Recommended image size: 150x150', 'userwp'),
+                            'type' => 'media',
+                            'std' => '',
+                            'placeholder' => USERSWP_PLUGIN_URL."public/assets/images/no_profile.png"
+                        ),
                         'enable_profile_body' => array(
                             'id'   => 'enable_profile_body',
                             'name' => __( 'Display Body in Profile', 'userswp' ),
@@ -556,6 +576,13 @@ class UsersWP_Admin_Settings {
                             'type'        => 'select',
                             'options' =>   $this->uwp_available_users_layout(),
                             'placeholder' => __( 'Select Layout', 'userswp' )
+                        ),
+                        'users_excluded_from_list' => array(
+                            'id' => 'users_excluded_from_list',
+                            'name' => __( 'Users to exclude', 'userswp' ),
+                            'type' => 'text',
+                            'std' => '',
+                            'desc' 	=> __( 'Enter comma separated ids of users to exclude from users listing.', 'userswp' ),
                         ),
                     )
                 ),

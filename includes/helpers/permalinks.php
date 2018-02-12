@@ -360,6 +360,7 @@ function uwp_process_activation_link() {
                     $user_data = get_user_by('login', $login);
                     update_user_meta( $user_data->ID, 'uwp_mod', '0' );
                     $redirect_to = add_query_arg(array('uwp_err' => 'act_success'), get_permalink($login_page));
+                    do_action('uwp_email_activation_success', $user_data->ID, $key);
                     wp_redirect($redirect_to);
                     exit();
                 }

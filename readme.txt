@@ -1,10 +1,10 @@
-﻿=== UsersWP - User Profile & Registration ===
-Contributors: stiofansisland, paoltaia, ayecode
+=== UsersWP - User Profile & Registration ===
+Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 3.1
-Tested up to: 4.9.1
-Stable tag: 1.0.11
+Tested up to: 4.9
+Stable tag: 1.0.12
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -110,6 +110,10 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.13 =
+* Allow to change icon for fieldset while displaying as a profile tab - CHANGED
+* Option to exclude user from lists is missing from wp-admin - FIXED
+
 = 1.0.12 =
 * Filter added to wp_login_url() to filter change all login urls to the UWP one - CHANGED
 * Settings added to change subject & content for Password change notification - CHANGED
@@ -120,6 +124,9 @@ No questions so far, but don't hesitate to ask!
 * First/Last name fields breaks the design if labels are displayed in forms - FIXED
 * Old avatar/banner file should be removed on a new avatar/banner upload - CHANGED
 * after login it should redirect to prev page - FIXED
+* Add default image options - FIXED
+* Conflict with Google Captcha plugin. - FIXED
+* Use site specific dummy user passwords - CHANGED
 
 = 1.0.11 =
 * Some emails have an extra opening p tag - FIXED

@@ -315,156 +315,165 @@ class UsersWP_Tools {
         }
     }
 
+    /**
+     * Get a site specific password for dummy users.
+     *
+     * @return string
+     */
+    private static function get_dummy_user_passowrd(){
+        return substr(hash( 'SHA256', AUTH_KEY . site_url() ), 0, 15);
+    }
+
     public function uwp_dummy_users_data() {
 
         return array(
             0  => array(
                 'login' => 'antawn',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Antawn Jamison',
                 'email' => 'uwp.dummy.user+1@gmail.com',
             ),
             1  => array(
                 'login' => 'chynna',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Chynna Phillips',
                 'email' => 'uwp.dummy.user+2@gmail.com',
             ),
             2  => array(
                 'login' => 'kiki',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Kiki Cuyler',
                 'email' => 'uwp.dummy.user+3@gmail.com',
             ),
             3  => array(
                 'login' => 'malivai',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'MaliVai Washington',
                 'email' => 'uwp.dummy.user+4@gmail.com',
             ),
             4  => array(
                 'login' => 'matraca',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Matraca Berg',
                 'email' => 'uwp.dummy.user+5@gmail.com',
             ),
             5  => array(
                 'login' => 'ron',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Ron Faucheux',
                 'email' => 'uwp.dummy.user+6@gmail.com',
             ),
             6  => array(
                 'login' => 'michellie',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Michellie Jones',
                 'email' => 'uwp.dummy.user+7@gmail.com',
             ),
             7  => array(
                 'login' => 'monta',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Monta Ellis',
                 'email' => 'uwp.dummy.user+8@gmail.com',
             ),
             8  => array(
                 'login' => 'picabo',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Picabo Street',
                 'email' => 'uwp.dummy.user+9@gmail.com',
             ),
             9  => array(
                 'login' => 'ralph',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Ralph Fiennes',
                 'email' => 'uwp.dummy.user+10@gmail.com',
             ),
             10 => array(
                 'login' => 'seamus',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Seamus',
                 'email' => 'uwp.dummy.user+11@gmail.com',
             ),
             11 => array(
                 'login' => 'shan',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Shan Foster',
                 'email' => 'uwp.dummy.user+12@gmail.com',
             ),
             12 => array(
                 'login' => 'siobhan',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Siobhan',
                 'email' => 'uwp.dummy.user+13@gmail.com',
             ),
             13 => array(
                 'login' => 'stephen',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Stephen Curry',
                 'email' => 'uwp.dummy.user+14@gmail.com',
             ),
             14 => array(
                 'login' => 'wynonna',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Wynonna Judd',
                 'email' => 'uwp.dummy.user+15@gmail.com',
             ),
             15 => array(
                 'login' => 'john',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'John Caius',
                 'email' => 'uwp.dummy.user+16@gmail.com',
             ),
             16 => array(
                 'login' => 'thomas',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Thomas Carew',
                 'email' => 'uwp.dummy.user+17@gmail.com',
             ),
             17 => array(
                 'login' => 'jason',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Jason Chaffetz',
                 'email' => 'uwp.dummy.user+18@gmail.com',
             ),
             18 => array(
                 'login' => 'mamah',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Mamah Cheney',
                 'email' => 'uwp.dummy.user+19@gmail.com',
             ),
             19 => array(
                 'login' => 'cecelia',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Cecelia Cichan ',
                 'email' => 'uwp.dummy.user+20@gmail.com',
             ),
             20 => array(
                 'login' => 'dan',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Dan Cortese ',
                 'email' => 'uwp.dummy.user+21@gmail.com',
             ),
             21 => array(
                 'login' => 'vernon',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Vernon Dahmer',
                 'email' => 'uwp.dummy.user+22@gmail.com',
             ),
             22 => array(
                 'login' => 'andre',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Andre Dubus',
                 'email' => 'uwp.dummy.user+23@gmail.com',
             ),
             23 => array(
                 'login' => 'justin',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Justin Duchscherer',
                 'email' => 'uwp.dummy.user+24@gmail.com',
             ),
             24 => array(
                 'login' => 'keir',
-                'pass'  => '1234567890',
+                'pass'  => self::get_dummy_user_passowrd(),
                 'display_name' => 'Keir Dullea ',
                 'email' => 'uwp.dummy.user+25@gmail.com',
             ),
@@ -539,7 +548,7 @@ class UsersWP_Tools {
                 <tr>
                     <td><?php _e('Create Dummy Users', 'uwp-tools');?></td>
                     <td>
-                        <div><?php _e('Dummy Users will be created for Testing. You can delete them later. Password for all dummy users: 1234567890', 'uwp-tools');?></div>
+                        <div><?php _e('Dummy Users will be created for Testing. You can delete them later. Password for all dummy users:', 'uwp-tools'); echo " ".self::get_dummy_user_passowrd();?></div>
                     </td>
                     <td style="text-align: right">
                         <?php
