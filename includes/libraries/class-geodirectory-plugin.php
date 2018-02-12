@@ -955,10 +955,10 @@ class UsersWP_GeoDirectory_Plugin {
     }
 
     public function get_gd_login_url($url, $args) {
-        $register_page = uwp_get_option('register_page', false);
-        $login_page = uwp_get_option('login_page', false);
-        $forgot_page = uwp_get_option('forgot_page', false);
-        $reset_page = uwp_get_option('reset_page', false);
+        $register_page = uwp_get_page_id('register_page', false);
+        $login_page = uwp_get_page_id('login_page', false);
+        $forgot_page = uwp_get_page_id('forgot_page', false);
+        $reset_page = uwp_get_page_id('reset_page', false);
 
         if (!empty($args)) {
             if (isset($args['signup']) && $args['signup']) {
@@ -1031,7 +1031,7 @@ class UsersWP_GeoDirectory_Plugin {
     public function gd_is_listings_tab() {
         global $wp_query;
         if (is_page() && class_exists('UsersWP')) {
-            $profile_page = uwp_get_option('profile_page', false);
+            $profile_page = uwp_get_page_id('profile_page', false);
             if ($profile_page) {
                 if (isset($wp_query->query_vars['uwp_profile'])
                     && isset($wp_query->query_vars['uwp_tab'])

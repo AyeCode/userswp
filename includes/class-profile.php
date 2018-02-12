@@ -400,7 +400,7 @@ class UsersWP_Profile {
 
         $tab = get_query_var('uwp_tab');
 
-        $account_page = uwp_get_option('account_page', false);
+        $account_page = uwp_get_page_id('account_page', false);
 
         $all_tabs = $this->get_profile_tabs($user);
 
@@ -622,7 +622,7 @@ class UsersWP_Profile {
      */
     public function rewrite_profile_link() {
 
-        $page_id = uwp_get_option('profile_page', false);
+        $page_id = uwp_get_page_id('profile_page', false);
         if ($page_id && !isset($_REQUEST['page_id'])) {
             $link = get_page_link($page_id);
             $uwp_profile_link = rtrim(substr(str_replace(home_url(), '', $link), 1), '/') . '/';
@@ -715,7 +715,7 @@ class UsersWP_Profile {
      */
     public function get_profile_link($link, $user_id) {
 
-        $page_id = uwp_get_option('profile_page', false);
+        $page_id = uwp_get_page_id('profile_page', false);
 
         if ($page_id) {
             $link = get_permalink($page_id);
@@ -774,7 +774,7 @@ class UsersWP_Profile {
     public function modify_profile_page_title( $title, $id = null ) {
 
         global $wp_query;
-        $page_id = uwp_get_option('profile_page', false);
+        $page_id = uwp_get_page_id('profile_page', false);
 
         if ($page_id == $id && isset($wp_query->query_vars['uwp_profile']) && in_the_loop()) {
 
@@ -1298,7 +1298,7 @@ class UsersWP_Profile {
     {
         // Makes the link to http://example.com/account
         if (!is_admin()) {
-            $account_page = uwp_get_option('account_page', false);
+            $account_page = uwp_get_page_id('account_page', false);
             if ($account_page) {
                 $account_page_link = get_permalink($account_page);
                 $url = $account_page_link;
@@ -1396,7 +1396,7 @@ class UsersWP_Profile {
      */
     public function add_uwp_plupload_param($params) {
 
-        if(!is_admin() && get_the_ID()==uwp_get_option('profile_page', false)){
+        if(!is_admin() && get_the_ID()==uwp_get_page_id('profile_page', false)){
             $params['uwp_profile_upload'] = true;
         }
 

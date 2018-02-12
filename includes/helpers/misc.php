@@ -826,7 +826,7 @@ function uwp_add_account_menu_links() {
         $type = 'account';
     }
 
-    $account_page = uwp_get_option('account_page', false);
+    $account_page = uwp_get_page_id('account_page', false);
     $account_page_link = get_permalink($account_page);
 
     $account_available_tabs = uwp_account_get_available_tabs();
@@ -1102,7 +1102,7 @@ add_action('uwp_template_fields', 'uwp_template_fields_terms_check', 100, 1);
 function uwp_template_fields_terms_check($form_type) {
     if ($form_type == 'register') {
         $terms_page = false;
-        $reg_terms_page_id = uwp_get_option('register_terms_page', '');
+        $reg_terms_page_id = uwp_get_page_id('register_terms_page', false);
         $reg_terms_page_id = apply_filters('uwp_reg_terms_page_id', $reg_terms_page_id);
         if (!empty($reg_terms_page_id)) {
             $terms_page = get_permalink($reg_terms_page_id);
@@ -1138,7 +1138,7 @@ function uwp_unconfirmed_login_redirect( $username, $user ) {
         $mod_value = get_user_meta( $user->ID, 'uwp_mod', true );
         if ($mod_value == 'email_unconfirmed') {
             if ( !in_array( 'administrator', $user->roles ) ) {
-                $login_page = uwp_get_option('login_page', false);
+                $login_page = uwp_get_page_id('login_page', false);
                 if ($login_page) {
                     $redirect_to = add_query_arg(array('uwp_err' => 'act_pending'), get_permalink($login_page));
                     wp_destroy_current_session();
