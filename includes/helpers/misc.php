@@ -1466,3 +1466,27 @@ function uwp_get_default_avatar_uri(){
 
     return $default;
 }
+
+function uwp_refresh_permalinks_on_bad_404() {
+
+    global $wp;
+
+    if( ! is_404() ) {
+        return;
+    }
+
+    if( isset( $_GET['uwp-flush'] ) ) {
+        return;
+    }
+
+    if( false === get_transient( 'uwp_refresh_404_permalinks' ) ) {
+
+        flush_rewrite_rules( false );
+
+        set_transient( 'uwp_refresh_404_permalinks', 1, HOUR_IN_SECONDS * 12 );
+
+        wp_redirect( home_url( add_query_arg( array( 'uwp-flush' => 1 ), $wp->request ) ) ); exit;
+
+    }
+}
+add_action( 'template_redirect', 'uwp_refresh_permalinks_on_bad_404' );
