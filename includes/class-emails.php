@@ -150,7 +150,9 @@ class UsersWP_Mails {
             if ($as_password) {
                 $new_pass = wp_generate_password(12, false);
                 wp_set_password($new_pass, $user_data->ID);
-                update_user_meta($user_data->ID, 'default_password_nag', true); //Set up the Password change nag.
+                if(!uwp_get_option('change_disable_password_nag')) {
+                    update_user_meta($user_data->ID, 'default_password_nag', true); //Set up the Password change nag.
+                }
 
             } else {
                 $key = wp_generate_password(20, false);
