@@ -146,7 +146,7 @@ class UsersWP_Templates {
         if (!is_user_logged_in()) {
             return;
         }
-        if(!uwp_get_option('change_disable_password_nag')) {
+        if(1 == uwp_get_option('change_disable_password_nag')) {
             return;
         }
         $change_page = uwp_get_option('change_page', false);
