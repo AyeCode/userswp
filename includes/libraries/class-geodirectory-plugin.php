@@ -255,14 +255,14 @@ class UsersWP_GeoDirectory_Plugin {
         if ($count_only) {
             $results = $wpdb->get_var(
                 $wpdb->prepare(
-                    "SELECT COUNT(overall_rating) FROM " . GEODIR_REVIEW_TABLE . " WHERE user_id = %d AND post_type = %s AND status=1 AND overall_rating>0",
+                    "SELECT COUNT(reviews.overall_rating) FROM " . GEODIR_REVIEW_TABLE . " reviews JOIN " . $wpdb->posts . " posts ON reviews.post_id = posts.id WHERE reviews.user_id = %d AND reviews.post_type = %s AND reviews.status=1 AND reviews.overall_rating>0 AND posts.post_status = 'publish'",
                     array($user_id, $post_type)
                 )
             );
         } else {
             $results = $wpdb->get_results(
                 $wpdb->prepare(
-                    "SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE user_id = %d AND post_type = %s AND status=1 AND overall_rating>0 LIMIT %d OFFSET %d",
+                    "SELECT reviews.* FROM " . GEODIR_REVIEW_TABLE . " reviews JOIN " . $wpdb->posts . " posts ON reviews.post_id = posts.id WHERE reviews.user_id = %d AND reviews.post_type = %s AND reviews.status=1 AND reviews.overall_rating>0 AND posts.post_status = 'publish' LIMIT %d OFFSET %d",
                     array($user_id, $post_type, $limit, $offset )
                 )
             );

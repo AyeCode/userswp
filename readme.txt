@@ -113,6 +113,7 @@ No questions so far, but don't hesitate to ask!
 = 1.0.13 =
 * Allow to change icon for fieldset while displaying as a profile tab - CHANGED
 * Option to exclude user from lists is missing from wp-admin - FIXED
+* Reviews should not be displayed for deleted listings - FIXED
 
 = 1.0.12 =
 * Filter added to wp_login_url() to filter change all login urls to the UWP one - CHANGED
