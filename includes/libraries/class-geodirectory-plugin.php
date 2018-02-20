@@ -773,9 +773,9 @@ class UsersWP_GeoDirectory_Plugin {
                             $args = array(
                                 'size' => 80
                             );
-                            $thumb_url = get_avatar_url($review->user_id, $args);
+                            $thumb_url = get_avatar_url($review->user_id, 80);
+                            echo $thumb_url;
                             ?>
-                            <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>"/>
                         </a>
 
                         <h3 class="uwp-profile-item-title">
