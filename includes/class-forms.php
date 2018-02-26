@@ -402,7 +402,17 @@ class UsersWP_Forms {
             }
         } else {
             if ($reg_action == 'require_email_activation') {
-                return __('An email has been sent to your registered email address. Please click the activation link to proceed.', 'userswp');
+                global $wp;
+                $resend_link = uwp_current_page_url();
+                $resend_link = add_query_arg(
+                    array(
+                        'user_id' => $user_id,
+                        'action'  => 'uwp_resend',
+                        '_nonce'  => wp_create_nonce('uwp_resend'),
+                    ),
+                    $resend_link
+                );
+                return __('An email has been sent to your registered email address. Please click the activation link to proceed. <a href="'.$resend_link.'">Resend</a>', 'userswp');
             } elseif ($reg_action == 'require_admin_review' && defined('UWP_MOD_VERSION')) {
                 update_user_meta( $user_id, 'uwp_mod', '1' );
 

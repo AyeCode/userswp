@@ -125,6 +125,11 @@ class UsersWP {
         add_filter('uwp_get_usermeta', array($instance, 'modify_privacy_value_on_get'), 10, 5);
         add_filter('uwp_update_usermeta', array($instance, 'modify_datepicker_value_on_update'), 10, 3);
         add_filter('uwp_get_usermeta', array($instance, 'modify_datepicker_value_on_get'), 10, 5);
+        add_filter('user_row_actions', array($instance, 'uwp_user_row_actions'), 10, 2);
+        add_action('bulk_actions-users', array($instance, 'uwp_users_bulk_actions'));
+        add_action('handle_bulk_actions-users', array($instance, 'uwp_handle_users_bulk_actions'), 10, 3);
+        add_filter('init', array($instance, 'uwp_process_user_actions'));
+        add_action('admin_notices', array($instance, 'uwp_show_update_messages'));
     }
     
     public function load_ajax_actions_and_filters($instance) {
