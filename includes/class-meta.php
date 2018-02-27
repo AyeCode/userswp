@@ -250,6 +250,21 @@ class UsersWP_Meta {
     }
 
     /**
+     * Delete UsersWP meta when user get deleted from subsite of multisite network.
+     *
+     * @package     UsersWP
+     *
+     * @param       int            $user_id        User ID.
+     *
+     * @return      void
+     */
+    public function remove_user_from_blog($user_id, $blog_id) {
+        switch_to_blog( $blog_id );
+        $this->delete_usermeta_row($user_id);
+        restore_current_blog();
+    }
+
+    /**
      * Saves User IP during registration. 
      *
      * @since       1.0.5

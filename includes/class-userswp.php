@@ -118,7 +118,8 @@ class UsersWP {
 
     public function load_meta_actions_and_filters($instance) {
         add_action('user_register', array($instance, 'sync_usermeta'), 10, 1);
-        add_action('delete_user', array($instance, 'delete_usermeta_for_user'));
+        add_action('delete_user', array($instance, 'delete_usermeta_for_user'), 10, 1);
+        add_action('remove_user_from_blog', array($instance, 'remove_user_from_blog'), 10, 1);
         add_action('wp_login', array($instance, 'save_user_ip_on_login') ,10,2);
         add_filter('uwp_before_extra_fields_save', array($instance, 'save_user_ip_on_register'), 10, 3);
         add_filter('uwp_update_usermeta', array($instance, 'modify_privacy_value_on_update'), 10, 4);
