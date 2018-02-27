@@ -935,6 +935,7 @@ class UsersWP_Forms {
             $message .= '<p>' .sprintf(__('Username: %s', 'userswp'), $user_data->user_login) . "</p>";
             $message .= '<p>' .__('If this was by mistake, just ignore this email and nothing will happen.', 'userswp') . "</p>";
             $message .= '<p>' .__('To reset your password, click the following link and follow the instructions.', 'userswp') . "</p>";
+            $message = apply_filters('uwp_forgot_password_message', $message, $user_data);
             $reset_page = uwp_get_option('reset_page', false);
             if ($reset_page) {
                 $reset_link = add_query_arg( array(
