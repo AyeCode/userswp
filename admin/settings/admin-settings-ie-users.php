@@ -41,6 +41,9 @@ wp_enqueue_script( 'plupload' );
         position: relative;
     }
 
+    .uwp-ie-container .uwp-import-users-form input[type="submit"]{
+        display: none;
+    }
     .uwp-ie-container .uwp-import-users-form .uwp-msg-wrap{
         margin: 20px 0;
     }
@@ -72,7 +75,22 @@ wp_enqueue_script( 'plupload' );
     .uwp-export-file a, .uwp-import-file a {
         text-decoration: none;
     }
+    .uwp-import-users-form .uwp-ie-report {
+        max-height: 120px;
+        overflow-y: scroll;
+        width: auto;
+        background-color: #fffbcc;
+        padding: 0px 10px;
+        margin: 30px 0 0 0;
+    }
+
+    .uwp-import-users-form .uwp-ie-report p {
+        font-size: 12px;
+        margin: 7px 0px;
+        padding: 0;
+    }
 </style>
+
 <div class="metabox-holder uwp-ie-container">
     <div class="postbox uwp-export-users">
         <h3><span><?php _e( 'Export Users Data', 'userswp' ); ?></span></h3>
@@ -106,7 +124,6 @@ wp_enqueue_script( 'plupload' );
     </div>
 </div>
 
-
 <script type="text/javascript">
     jQuery(function($) {
         var UWP_IE = {
@@ -139,6 +156,7 @@ wp_enqueue_script( 'plupload' );
                         submitBtn.attr('disabled', true);
                         $form.find('.uwp-msg-wrap').remove();
                         $form.append('<div class="uwp-msg-wrap"><div class="uwp-progress"><div></div><span>0%</span></div><span class="uwp-import-loader"><i class="fa fa-spin fa-spinner"></i></span></div>');
+                        $form.find('.uwp-msg-wrap').append('<div class="uwp-ie-report"></div>');
                         // start the process
                         $this.imp_step(1, data, $form, $this);
                     }
@@ -216,6 +234,9 @@ wp_enqueue_script( 'plupload' );
                     success: function(res) {
                         if (res && typeof res == 'object') {
                             if (res.success) {
+                                if (res.total.msg) {
+                                    message.find('.uwp-ie-report').append('<p>' + res.total.msg + '</p>');
+                                }
                                 if ('done' == res.data.step || res.data.done >= 100) {
                                     $form.find('input[type="submit"]').removeAttr('disabled');
                                     $('.uwp-progress > span').text(parseInt(res.data.done) + '%');
@@ -223,7 +244,7 @@ wp_enqueue_script( 'plupload' );
                                         width: res.data.done + '%'
                                     }, 100, function() {});
                                     if (res.msg) {
-                                        message.html('<div id="uwp-export-success" class="updated notice is-dismissible"><p>' + msg + '<span class="notice-dismiss"></span></p></div>');
+                                        message.append('<div id="uwp-export-success" class="updated notice is-dismissible"><p>' + res.msg + '<span class="notice-dismiss"></span></p></div>');
                                     }
                                     message.find('.uwp-import-loader').html('<i class="fa fa-check-circle"></i>');
                                 } else {
@@ -232,6 +253,9 @@ wp_enqueue_script( 'plupload' );
                                     $('.uwp-progress div').animate({
                                         width: res.data.done + '%'
                                     }, 100, function() {});
+                                    if (res.data.msg) {
+                                        message.find('.uwp-ie-report').append('<p>' + res.data.msg + '</p>');
+                                    }
                                     $this.imp_step(parseInt(next), data, $form, $this);
                                 }
                             } else {
@@ -308,7 +332,6 @@ wp_enqueue_script( 'plupload' );
         UWP_IE_Uploader.prototype = {
 
             init: function (up, params) {
-                $('.uwp-import-users-form').find('.uwp-msg-wrap').remove();
                 this.showHide();
                 $('#' + this.container).prepend('<div class="uwp-file-warning"></div>');
             },
@@ -318,13 +341,13 @@ wp_enqueue_script( 'plupload' );
                 if ( this.count >= this.max) {
 
                     if ( this.count > this.max ) {
-                        $('#' + this.container + ' .uwp-file-warning').html( '<?php _e( 'Maximum number of files reached!', 'userswp' ); ?>' );
+                        $('#' + this.container + ' .uwp-file-warning').addClass('error').html( '<?php _e( 'Maximum number of files reached!', 'userswp' ); ?>' );
                         $('#' + this.container).find('.file-selector').hide();
 
                         return;
                     }
                 };
-                $('#' + this.container + ' .uwp-file-warning').html( '' );
+                $('#' + this.container + ' .uwp-file-warning').removeClass('error').html( '' );
                 $('#' + this.container).find('.file-selector').show();
             },
 
@@ -332,6 +355,7 @@ wp_enqueue_script( 'plupload' );
                 var $container = $('#' + this.container).find('.uwp-imp-uploaded-file');
 
                 this.showHide();
+                $('.uwp-import-users-form').find('.uwp-msg-wrap').remove();
 
                 $.each(files, function(i, file) {
                     $container.append(
@@ -390,7 +414,7 @@ wp_enqueue_script( 'plupload' );
                 $('#' + file.id).find('.uwp-import-loader').html('<i class="fa fa-check-circle"></i>');
 
                 if(response.response !== 'error') {
-
+                    $('#' + this.container).find('.file-selector').hide();
                     $('.uwp-import-users-form').find('input[type="submit"]').show();
                     $('.uwp-import-users-form').find('.uwp_import_users_file').val(response.response);
 
@@ -405,7 +429,6 @@ wp_enqueue_script( 'plupload' );
         };
 
         $(document).ready( function(){
-            $('.uwp-import-users-form').find('input[type="submit"]').hide();
             var uploader = new UWP_IE_Uploader('uwp-imp-browse', 'uwp-imp-container', 1, 'uwp_ie_import_file', 'csv', 2048);
         });
     });

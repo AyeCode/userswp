@@ -16,6 +16,7 @@ class UsersWP_Import_Export {
     public $path;
     public $total_rows;
     public $imp_step;
+    public $skipped;
 
     public function __construct() {
         global $wp_filesystem;
@@ -421,25 +422,31 @@ class UsersWP_Import_Export {
         setlocale( LC_ALL, $lc_all );
 
         $this->total_rows = ( ! empty( $file ) && count( $file ) > 1 ) ? count( $file ) - 1 : 0;
-        $response['total'] = $this->total_rows;
 
         $return = $this->process_import_step();
         $done   = $this->get_import_status();
 
-        if ( $return ) {
+        if ( $return['success'] ) {
+            $response['total']['msg'] = '';
+            if($this->total_rows > 0 && $this->imp_step == 1) {
+                $response['total']['msg'] = __( 'Total '.$this->total_rows. ' item(s) found.', 'userswp' );
+            }
+
             $this->imp_step += 1;
 
             $response['success']    = true;
-            $response['msg']        = '';
+            $response['msg'] = '';
 
             if ( $done >= 100 ) {
                 $this->imp_step     = 'done';
+                $response['msg']    = __( 'Users import completed.', 'userswp' );
             }
 
+            $response['data']['msg']    = $return['msg'];
             $response['data']['step']   = $this->imp_step;
             $response['data']['done']   = $done;
         } else {
-            $response['msg']    = __( 'No data found for export.', 'userswp' );
+            $response['msg']    = __( 'No valid data found for import.', 'userswp' );
         }
 
         wp_send_json( $response );
@@ -455,14 +462,14 @@ class UsersWP_Import_Export {
 
         set_time_limit(0);
 
-        $return = false;$skipped = 0;
+        $return = array('success' => false);
 
         $rows = $this->get_csv_rows($this->imp_step, 1);
 
         if ( ! empty( $rows ) ) {
             foreach ( $rows as $row ) {
                 if( empty($row) ) {
-                    $skipped++;
+                    $return['msg'] = __('Row - ' .$this->imp_step. ' Error: '. 'Skipped due to invalid/no data.','userswp');
                     continue;
                 }
 
@@ -473,7 +480,22 @@ class UsersWP_Import_Export {
                 $exclude = array('user_id');
                 $exclude = apply_filters('uwp_import_exclude_columns', $exclude, $row);
 
-                if((int)$row['user_id'] > 0){
+                if(isset($row['uwp_account_username']) && username_exists($row['uwp_account_username'])){
+                    $user = get_user_by('login', $row['uwp_account_username']);
+                    $user_id = $user->ID;
+                    $email = $row['uwp_account_email'];
+                    if( !empty( $email ) && $update_existing = apply_filters('uwp_import_update_users', false, $row, $user_id) ) {
+                        $args = array(
+                            'ID'         => $user_id,
+                            'user_email' => $email,
+                            'display_name' => $display_name
+                        );
+                        wp_update_user( $args );
+                    }
+                } elseif(isset($row['uwp_account_email']) && email_exists($row['uwp_account_email'])){
+                    $user = get_user_by('email', $row['uwp_account_email']);
+                    $user_id = $user->ID;
+                } elseif((int)$row['user_id'] > 0){
                     $user = get_user_by('ID', $row['user_id']);
                     if(false === $user){
                         $userdata = array(
@@ -486,7 +508,7 @@ class UsersWP_Import_Export {
                     } else {
                         if( $user->user_login == $row['uwp_account_username'] ) { //check id passed in csv and existing username are same
                             $user_id = $row['user_id'];
-                            if( !empty( $email ) && $email != $user->user_email) {
+                            if( !empty( $email ) && $email != $user->user_email && $update_existing = apply_filters('uwp_import_update_users', false, $row, $user_id)) {
                                 $args = array(
                                     'ID'         => $user_id,
                                     'user_email' => $email,
@@ -495,49 +517,30 @@ class UsersWP_Import_Export {
                                 wp_update_user( $args );
                             }
                         } else {
-                            $skipped++;
+                            $return['msg'] = __('Row - ' .$this->imp_step. ' Error: '. 'User could not be created.','userswp');
                             continue;
                         }
                     }
-                } elseif(isset($row['uwp_account_username']) && username_exists($row['uwp_account_username'])){
-                    $user = get_user_by('login', $row['uwp_account_username']);
-                    $user_id = $user->ID;
-                    $email = $row['uwp_account_email'];
-                    if( !empty( $email ) ) {
-                        $args = array(
-                            'ID'         => $user_id,
-                            'user_email' => $email,
-                            'display_name' => $display_name
-                        );
-                        wp_update_user( $args );
-                    }
-                } elseif(isset($row['uwp_account_email']) && email_exists($row['uwp_account_email'])){
-                    $user = get_user_by('email', $row['uwp_account_email']);
-                    $user_id = $user->ID;
                 } else {
                     $user_id = wp_create_user( $username, $password, $email );
                 }
 
                 if( !is_wp_error( $user_id ) ){
                     foreach ($row as $key => $value){
-                        if(!in_array($key, $exclude)){
+                        if(!in_array($key, $exclude) && $update_existing = apply_filters('uwp_import_update_users', false, $row, $user_id)){
                             $value = maybe_unserialize($value);
                             uwp_update_usermeta($user_id, $key, $value);
                         }
                     }
                 } else {
-                    $skipped++;
+                    $return['msg'] = __('Row - ' .$this->imp_step. ' Error: '. $user_id->get_error_message(),'userswp');
                     continue;
                 }
             }
-            $return = true;
+            $return['success'] = true;
         }
 
-        if ( $return ) {
-            return true;
-        } else {
-            return $errors;
-        }
+        return $return;
     }
 
     public function get_csv_rows( $row = 0, $count = 1 ) {
