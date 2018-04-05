@@ -31,7 +31,7 @@ class UsersWP_Ajax {
                     $this->uwp_die();
                 }
             } else {
-                $login_page = uwp_get_option('login_page', false);
+                $login_page = uwp_get_page_id('login_page', false);
                 if ($login_page) {
                     wp_redirect(get_permalink($login_page));
                 } else {
