@@ -38,7 +38,7 @@ class UsersWP_Profile {
             $banner = $upload_url.$banner;
         }
         if (empty($avatar)) {
-            $avatar = get_avatar($user->user_email, 150, uwp_get_default_avatar_uri());
+            $avatar = get_avatar($user->user_email, 150);
         } else {
             // check the image is not a full url before adding the local upload url
             if (strpos($avatar, 'http:') === false && strpos($avatar, 'https:') === false) {
@@ -576,7 +576,7 @@ class UsersWP_Profile {
                         <a class="uwp-profile-item-img" href="<?php echo get_comment_link($comment->comment_ID); ?>">
                             <?php
                             $avatar_class = "uwp-profile-item-alignleft uwp-profile-item-thumb";
-                            $avatar = get_avatar($user->user_email, 80, uwp_get_default_avatar_uri(), null, array('class' => array($avatar_class) ));
+                            $avatar = get_avatar($user->user_email, 80, '', null, array('class' => array($avatar_class) ));
                             echo $avatar;
                             ?>
                         </a>
@@ -1212,7 +1212,7 @@ class UsersWP_Profile {
      * @param       string      $alt            Alternative text to use in the avatar image tag. Default empty.
      * @return      string                      Modified img tag value
      */
-    public function uwp_modify_get_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
+    public function uwp_modify_get_avatar( $avatar, $id_or_email, $size, $default, $alt, $args ) {
         $user = false;
 
         if ( is_numeric( $id_or_email ) ) {
@@ -1240,6 +1240,16 @@ class UsersWP_Profile {
                     $avatar_thumb = $upload_url.$avatar_thumb;
                 }
                 $avatar = "<img alt='{$alt}' src='{$avatar_thumb}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
+            } else {
+                $default = uwp_get_default_avatar_uri();
+                $args = get_avatar_data( $id_or_email, $args );
+                $url = $args['url'];
+                $url = remove_query_arg('d', $url);
+                $url = add_query_arg(array('d' => $default), $url);
+                if ( ! $url || is_wp_error( $url ) ) {
+                    return $avatar;
+                }
+                $avatar = '<img src="' .$url  .'" class="gravatar avatar avatar-'.$size.' uwp-avatar" width="'.$size.'" height="'.$size.'" alt="'.$alt.'" />';
             }
 
         }
