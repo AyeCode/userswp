@@ -784,7 +784,7 @@ function uwp_account_privacy_edit_form_display($type) {
                     $value = get_user_meta($user_id, 'uwp_hide_from_listing', true); ?>
                     <div class="uwp-profile-extra-wrap">
                         <div id="uwp_hide_from_listing" class="uwp_hide_from_listing">
-                            <input name="uwp_hide_from_listing" class="" <?php checked($value, "1", true); ?> type="checkbox" value="1"><?php _e('Hide profile from the users listing page.'); ?>
+                            <input name="uwp_hide_from_listing" class="" <?php checked($value, "1", true); ?> type="checkbox" value="1"><?php _e('Hide profile from the users listing page.', 'userswp'); ?>
                         </div>
                     </div>
                     <?php
