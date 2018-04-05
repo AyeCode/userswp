@@ -427,4 +427,102 @@ class UsersWP_Meta {
         return $value;
     }
 
+    public function uwp_user_row_actions($actions, $user_object){
+        $user_id = $user_object->ID;
+        $mod_value = get_user_meta( $user_id, 'uwp_mod', true );
+        $delete_link = add_query_arg(
+            array(
+                'user_id' => $user_id,
+                'action'    => 'uwp_resend',
+                '_nonce'  => wp_create_nonce('uwp_resend'),
+            ),
+            admin_url( 'users.php' )
+        );
+        if ($mod_value == 'email_unconfirmed') {
+            $actions['uwp_resend_activation'] = "<a class='' href='" . $delete_link . "'>" . __( 'Resend Activation','ultimate-member') . "</a>";
+        }
+
+        return $actions;
+    }
+
+    public function uwp_process_user_actions(){
+        $user_id = isset($_REQUEST['user_id']) ? (int)$_REQUEST['user_id'] : 0;
+        $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : false;
+        $nonce = isset($_REQUEST['_nonce']) ? $_REQUEST['_nonce'] : false;
+
+        if($user_id && 'uwp_resend' == $action && wp_verify_nonce( $nonce,'uwp_resend')){
+            $send_result = $this->uwp_resend_activation_mail($user_id);
+            if(!is_admin()){
+                global $uwp_notices;
+
+                if($send_result) {
+                    $message = __('Activation email has been sent!', 'userswp');
+                } else {
+                    $message = __('Error while processing request. Please contact site admin.', 'userswp');
+                }
+                $uwp_notices[] = '<div class="uwp-alert-success text-center">'.$message.'</div>';
+                return;
+            }
+            if(!$send_result){
+                wp_redirect( add_query_arg( 'update', 'err_uwp_resend', admin_url('users.php') ) );
+            }
+            wp_redirect( add_query_arg( 'update', 'uwp_resend', admin_url('users.php') ) );
+            exit();
+        }
+    }
+
+    public function uwp_users_bulk_actions($bulk_actions){
+        $bulk_actions['uwp_resend'] = __( 'Resend Activation', 'userswp');
+        return $bulk_actions;
+    }
+
+    public function uwp_handle_users_bulk_actions($redirect_to, $doaction, $user_ids){
+        if ( 'uwp_resend' !== $doaction ) {
+            return $redirect_to;
+        }
+
+        foreach ( $user_ids as $user_id ) {
+            $this->uwp_resend_activation_mail($user_id);
+        }
+
+        $redirect_to = add_query_arg( 'update', 'uwp_resend', $redirect_to );
+        return $redirect_to;
+    }
+
+    public function uwp_resend_activation_mail($user_id = 0){
+        if(!$user_id){
+            return false;
+        }
+        if( 'email_unconfirmed' == get_user_meta( $user_id, 'uwp_mod', true )){
+            $email = new UsersWP_Mails();
+            $send_result = $email->send( 'activate', $user_id );
+            return $send_result;
+        }
+        return true;
+    }
+
+    public function uwp_show_update_messages(){
+        if ( !isset($_REQUEST['update']) ) return;
+
+        $update = $_REQUEST['update'];
+        $messages = array();
+
+        switch($update) {
+            case 'uwp_resend':
+                $messages['msg'] = __('Activation email has been sent!','userswp');
+                break;
+            case 'err_uwp_resend':
+                $messages['err_msg'] = __('Error while sending activation email. Please try again.','userswp');
+                break;
+        }
+
+        if ( !empty( $messages ) ) {
+            if ( isset($messages['err_content'])) {
+                echo '<div class="notice notice-error"><p>' . $messages['err_msg'] . '</p></div>';
+            } else {
+                echo '<div class="notice notice-success is-dismissible"><p>' . $messages['msg'] . '</p></div>';
+            }
+        }
+    }
+
 }
