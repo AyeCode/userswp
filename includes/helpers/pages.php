@@ -185,3 +185,8 @@ function uwp_generate_default_pages() {
     $page = new UsersWP_Pages();
     $page->generate_default_pages();
 }
+
+function uwp_get_page_id($type, $link) {
+    $page = new UsersWP_Pages();
+    return $page->get_page_id($type, $link);
+}

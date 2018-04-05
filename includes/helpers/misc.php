@@ -694,10 +694,16 @@ function uwp_admin_edit_banner_fields($user) {
         <?php
     }
 }
-//add_action('show_user_profile', 'uwp_admin_edit_banner_fields');
-//add_action('edit_user_profile', 'uwp_admin_edit_banner_fields');
+add_action('show_user_profile', 'uwp_admin_edit_banner_fields');
+add_action('edit_user_profile', 'uwp_admin_edit_banner_fields');
 
-
+add_filter('admin_body_class', 'uwp_add_admin_body_class');
+function uwp_add_admin_body_class($classes) {
+    $screen = get_current_screen();
+    if ( 'profile' == $screen->base )
+    $classes .= 'uwp_page';
+    return $classes;
+}
 
 // Privacy
 add_filter('uwp_account_page_title', 'uwp_account_privacy_page_title', 10, 2);
@@ -778,7 +784,7 @@ function uwp_account_privacy_edit_form_display($type) {
                     $value = get_user_meta($user_id, 'uwp_hide_from_listing', true); ?>
                     <div class="uwp-profile-extra-wrap">
                         <div id="uwp_hide_from_listing" class="uwp_hide_from_listing">
-                            <input name="uwp_hide_from_listing" class="" <?php checked($value, "1", true); ?> type="checkbox" value="1"><?php _e('Hide profile from the users listing page.'); ?>
+                            <input name="uwp_hide_from_listing" class="" <?php checked($value, "1", true); ?> type="checkbox" value="1"><?php _e('Hide profile from the users listing page.', 'userswp'); ?>
                         </div>
                     </div>
                     <?php
@@ -826,7 +832,7 @@ function uwp_add_account_menu_links() {
         $type = 'account';
     }
 
-    $account_page = uwp_get_option('account_page', false);
+    $account_page = uwp_get_page_id('account_page', false);
     $account_page_link = get_permalink($account_page);
 
     $account_available_tabs = uwp_account_get_available_tabs();
@@ -1102,7 +1108,7 @@ add_action('uwp_template_fields', 'uwp_template_fields_terms_check', 100, 1);
 function uwp_template_fields_terms_check($form_type) {
     if ($form_type == 'register') {
         $terms_page = false;
-        $reg_terms_page_id = uwp_get_option('register_terms_page', '');
+        $reg_terms_page_id = uwp_get_page_id('register_terms_page', false);
         $reg_terms_page_id = apply_filters('uwp_reg_terms_page_id', $reg_terms_page_id);
         if (!empty($reg_terms_page_id)) {
             $terms_page = get_permalink($reg_terms_page_id);
@@ -1138,7 +1144,7 @@ function uwp_unconfirmed_login_redirect( $username, $user ) {
         $mod_value = get_user_meta( $user->ID, 'uwp_mod', true );
         if ($mod_value == 'email_unconfirmed') {
             if ( !in_array( 'administrator', $user->roles ) ) {
-                $login_page = uwp_get_option('login_page', false);
+                $login_page = uwp_get_page_id('login_page', false);
                 if ($login_page) {
                     $redirect_to = add_query_arg(array('uwp_err' => 'act_pending'), get_permalink($login_page));
                     wp_destroy_current_session();
@@ -1466,3 +1472,27 @@ function uwp_get_default_avatar_uri(){
 
     return $default;
 }
+
+function uwp_refresh_permalinks_on_bad_404() {
+
+    global $wp;
+
+    if( ! is_404() ) {
+        return;
+    }
+
+    if( isset( $_GET['uwp-flush'] ) ) {
+        return;
+    }
+
+    if( false === get_transient( 'uwp_refresh_404_permalinks' ) ) {
+
+        flush_rewrite_rules( false );
+
+        set_transient( 'uwp_refresh_404_permalinks', 1, HOUR_IN_SECONDS * 12 );
+
+        wp_redirect( home_url( add_query_arg( array( 'uwp-flush' => 1 ), $wp->request ) ) ); exit;
+
+    }
+}
+add_action( 'template_redirect', 'uwp_refresh_permalinks_on_bad_404' );
