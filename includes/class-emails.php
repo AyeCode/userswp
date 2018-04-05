@@ -164,7 +164,7 @@ class UsersWP_Mails {
                 }
                 $hashed = $wp_hasher->HashPassword($key);
                 $wpdb->update($wpdb->users, array('user_activation_key' => time() . ":" . $hashed), array('user_login' => $user_data->user_login));
-                $reset_page = uwp_get_option('reset_page', false);
+                $reset_page = uwp_get_page_id('reset_page', false);
                 if ($reset_page) {
                     $reset_link = add_query_arg(array(
                         'key' => $key,
