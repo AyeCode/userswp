@@ -984,6 +984,12 @@ class UsersWP_GeoDirectory_Plugin {
                         ), $uwp_url );
             }
 
+            if(isset($args['redirect_to']) && !empty($args['redirect_to'])){
+                $uwp_url = add_query_arg( array(
+                    'redirect_to' => $args['redirect_to'],
+                ), $uwp_url );
+            }
+
             $url = $uwp_url;
         }
         return $url;
