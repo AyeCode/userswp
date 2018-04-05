@@ -113,6 +113,7 @@ No questions so far, but don't hesitate to ask!
 = 1.0.13 =
 * Allow to change icon for fieldset while displaying as a profile tab - CHANGED
 * Option to exclude user from lists is missing from wp-admin - FIXED
+* Delete user meta on removing from site of multisite network - FIXED
 * Add hook to modify the content of forgot password email. - ADDED
 * Add Resend Activation Email for users - ADDED
 * Reviews should not be displayed for deleted listings - FIXED
