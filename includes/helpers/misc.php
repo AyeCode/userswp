@@ -694,10 +694,16 @@ function uwp_admin_edit_banner_fields($user) {
         <?php
     }
 }
-//add_action('show_user_profile', 'uwp_admin_edit_banner_fields');
-//add_action('edit_user_profile', 'uwp_admin_edit_banner_fields');
+add_action('show_user_profile', 'uwp_admin_edit_banner_fields');
+add_action('edit_user_profile', 'uwp_admin_edit_banner_fields');
 
-
+add_filter('admin_body_class', 'uwp_add_admin_body_class');
+function uwp_add_admin_body_class($classes) {
+    $screen = get_current_screen();
+    if ( 'profile' == $screen->base )
+    $classes .= 'uwp_page';
+    return $classes;
+}
 
 // Privacy
 add_filter('uwp_account_page_title', 'uwp_account_privacy_page_title', 10, 2);

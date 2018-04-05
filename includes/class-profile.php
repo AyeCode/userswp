@@ -852,8 +852,10 @@ class UsersWP_Profile {
         if (is_user_logged_in()) {
             add_action( 'wp_footer', array($this,'uwp_modal_loading_html'));
             add_action( 'wp_footer', array($this,'uwp_modal_close_js'));
-            //echo $this->uwp_modal_loading_html();
-            //$this->uwp_modal_close_js();
+            if(is_admin()) {
+                add_action('admin_footer', array($this, 'uwp_modal_loading_html'));
+                add_action('admin_footer', array($this, 'uwp_modal_close_js'));
+            }
         }
     }
 
