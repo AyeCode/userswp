@@ -113,6 +113,7 @@ No questions so far, but don't hesitate to ask!
 = 1.0.13 =
 * Allow to change icon for fieldset while displaying as a profile tab - CHANGED
 * Option to exclude user from lists is missing from wp-admin - FIXED
+* Option to disable default password nag notice - ADDED
 * Added WPML compatibility - ADDED
 
 = 1.0.12 =

@@ -146,6 +146,9 @@ class UsersWP_Templates {
         if (!is_user_logged_in()) {
             return;
         }
+        if(1 == uwp_get_option('change_disable_password_nag')) {
+            return;
+        }
         $change_page = uwp_get_page_id('change_page', false);
         $password_nag = get_user_option('default_password_nag', get_current_user_id());
         

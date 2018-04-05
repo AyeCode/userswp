@@ -875,7 +875,9 @@ class UsersWP_Forms {
 
         $user_data = get_userdata($user_id);
         if(isset($this->generated_password) && !empty($this->generated_password)) {
-            update_user_meta($user_id, 'default_password_nag', true); //Set up the Password change nag.
+            if(!uwp_get_option('change_disable_password_nag')) {
+                update_user_meta($user_id, 'default_password_nag', true); //Set up the Password change nag.
+            }
             $message_pass = $this->generated_password;
             $this->generated_password = false;
         } else {
@@ -915,7 +917,9 @@ class UsersWP_Forms {
         if ($as_password) {
             $new_pass = wp_generate_password(12, false);
             wp_set_password($new_pass, $user_data->ID);
-            update_user_meta($user_data->ID, 'default_password_nag', true); //Set up the Password change nag.
+            if(!uwp_get_option('change_disable_password_nag')) {
+                update_user_meta($user_data->ID, 'default_password_nag', true); //Set up the Password change nag.
+            }
             $message = '<p><b>' . __('Your login Information :', 'userswp') . '</b></p>';
             $message .= '<p>' . sprintf(__('Username: %s', 'userswp'), $user_data->user_login) . "</p>";
             $message .= '<p>' . sprintf(__('Password: %s', 'userswp'), $new_pass) . "</p>";
