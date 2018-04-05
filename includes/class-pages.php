@@ -22,14 +22,7 @@ class UsersWP_Pages {
             global $post;
             $current_page_id = $post->ID;
             if ($type) {
-                $uwp_page = uwp_get_option($type, false);
-                if (uwp_is_wpml()) {
-                    global $sitepress;
-                    $wpml_page_id = uwp_wpml_object_id($post->ID, 'page', true, $sitepress->get_default_language());
-                    if (!empty($wpml_page_id)) {
-                        $current_page_id = $wpml_page_id;
-                    }
-                }
+                $uwp_page = uwp_get_page_id($type, false);
                 if ( $uwp_page && ((int) $uwp_page ==  $current_page_id ) ) {
                     return true;
                 } else {
@@ -204,7 +197,7 @@ class UsersWP_Pages {
      */
     public function get_page_permalink($type) {
         $link = false;
-        $page_id = uwp_get_option($type, false);
+        $page_id = uwp_get_page_id($type, false);
         if ($page_id) {
             $link = get_permalink($page_id);
         }
@@ -316,7 +309,7 @@ class UsersWP_Pages {
      * @return      string                      Page slug.
      */
     public function get_page_slug($page_type = 'register_page') {
-        $page_id = uwp_get_option($page_type, 0);
+        $page_id = uwp_get_page_id($page_type, 0);
         if ($page_id) {
             $slug = get_post_field( 'post_name', get_post($page_id) );
         } else {
@@ -460,37 +453,31 @@ class UsersWP_Pages {
 
         switch ($page) {
             case 'register':
-                $page_id = uwp_get_option('register_page', false);
+                $page_id = uwp_get_page_id('register_page', false);
                 break;
 
             case 'login':
-                $page_id = uwp_get_option('login_page', false);
+                $page_id = uwp_get_page_id('login_page', false);
                 break;
 
             case 'forgot':
-                $page_id = uwp_get_option('forgot_page', false);
+                $page_id = uwp_get_page_id('forgot_page', false);
                 break;
 
             case 'account':
-                $page_id = uwp_get_option('account_page', false);
+                $page_id = uwp_get_page_id('account_page', false);
                 break;
 
             case 'profile':
-                $page_id = uwp_get_option('profile_page', false);
+                $page_id = uwp_get_page_id('profile_page', false);
                 break;
 
             case 'users':
-                $page_id = uwp_get_option('users_page', false);
+                $page_id = uwp_get_page_id('users_page', false);
                 break;
         }
 
         if ($page_id) {
-            if (uwp_is_wpml()) {
-                $wpml_page_id = uwp_wpml_object_id($page_id, 'page', true, ICL_LANGUAGE_CODE);
-                if (!empty($wpml_page_id)) {
-                    $page_id = $wpml_page_id;
-                }
-            }
             $link = get_permalink($page_id);
         }
 
@@ -538,6 +525,29 @@ class UsersWP_Pages {
                 if ($subtab) {
                     $link = $link .'/'.$subtab;
                 }
+            }
+        }
+
+        return $link;
+    }
+
+
+    public function get_page_id($type, $get_link = false) {
+
+        $link = false;
+        $page_id = uwp_get_option($type, false);
+
+        if ($page_id) {
+            if (uwp_is_wpml()) {
+                $wpml_page_id = uwp_wpml_object_id($page_id, 'page', true, ICL_LANGUAGE_CODE);
+                if (!empty($wpml_page_id)) {
+                    $page_id = $wpml_page_id;
+                }
+            }
+            $link = $page_id;
+
+            if($get_link){
+                $link = get_permalink($page_id);
             }
         }
 

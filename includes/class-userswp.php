@@ -125,6 +125,11 @@ class UsersWP {
         add_filter('uwp_get_usermeta', array($instance, 'modify_privacy_value_on_get'), 10, 5);
         add_filter('uwp_update_usermeta', array($instance, 'modify_datepicker_value_on_update'), 10, 3);
         add_filter('uwp_get_usermeta', array($instance, 'modify_datepicker_value_on_get'), 10, 5);
+        add_filter('user_row_actions', array($instance, 'uwp_user_row_actions'), 10, 2);
+        add_action('bulk_actions-users', array($instance, 'uwp_users_bulk_actions'));
+        add_action('handle_bulk_actions-users', array($instance, 'uwp_handle_users_bulk_actions'), 10, 3);
+        add_filter('init', array($instance, 'uwp_process_user_actions'));
+        add_action('admin_notices', array($instance, 'uwp_show_update_messages'));
     }
     
     public function load_ajax_actions_and_filters($instance) {
@@ -209,7 +214,7 @@ class UsersWP {
         add_filter( 'edit_profile_url', array($instance, 'uwp_modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
         remove_all_filters('get_avatar');
-        add_filter( 'get_avatar', array($instance, 'uwp_modify_get_avatar') , 1 , 5 );
+        add_filter( 'get_avatar', array($instance, 'uwp_modify_get_avatar') , 1 , 6 );
         add_filter( 'get_comment_author_link', array($instance, 'uwp_get_comment_author_link') , 10 , 2 );
         add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );

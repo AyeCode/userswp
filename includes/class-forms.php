@@ -188,7 +188,7 @@ class UsersWP_Forms {
             $password_nag = get_user_option('default_password_nag', $user_id);
 
             if ($password_nag) {
-                $change_page = uwp_get_option('change_page', false);
+                $change_page = uwp_get_page_id('change_page', false);
                 $remove_nag_url = add_query_arg('uwp_remove_nag', 'yes', get_permalink($change_page));
 
                 if (isset($_GET['uwp_remove_nag']) && $_GET['uwp_remove_nag'] == 'yes') {
@@ -402,7 +402,17 @@ class UsersWP_Forms {
             }
         } else {
             if ($reg_action == 'require_email_activation') {
-                return __('An email has been sent to your registered email address. Please click the activation link to proceed.', 'userswp');
+                global $wp;
+                $resend_link = uwp_current_page_url();
+                $resend_link = add_query_arg(
+                    array(
+                        'user_id' => $user_id,
+                        'action'  => 'uwp_resend',
+                        '_nonce'  => wp_create_nonce('uwp_resend'),
+                    ),
+                    $resend_link
+                );
+                return __('An email has been sent to your registered email address. Please click the activation link to proceed. <a href="'.$resend_link.'">Resend</a>', 'userswp');
             } elseif ($reg_action == 'require_admin_review' && defined('UWP_MOD_VERSION')) {
                 update_user_meta( $user_id, 'uwp_mod', '1' );
 
@@ -875,7 +885,9 @@ class UsersWP_Forms {
 
         $user_data = get_userdata($user_id);
         if(isset($this->generated_password) && !empty($this->generated_password)) {
-            update_user_meta($user_id, 'default_password_nag', true); //Set up the Password change nag.
+            if(!uwp_get_option('change_disable_password_nag')) {
+                update_user_meta($user_id, 'default_password_nag', true); //Set up the Password change nag.
+            }
             $message_pass = $this->generated_password;
             $this->generated_password = false;
         } else {
@@ -915,7 +927,9 @@ class UsersWP_Forms {
         if ($as_password) {
             $new_pass = wp_generate_password(12, false);
             wp_set_password($new_pass, $user_data->ID);
-            update_user_meta($user_data->ID, 'default_password_nag', true); //Set up the Password change nag.
+            if(!uwp_get_option('change_disable_password_nag')) {
+                update_user_meta($user_data->ID, 'default_password_nag', true); //Set up the Password change nag.
+            }
             $message = '<p><b>' . __('Your login Information :', 'userswp') . '</b></p>';
             $message .= '<p>' . sprintf(__('Username: %s', 'userswp'), $user_data->user_login) . "</p>";
             $message .= '<p>' . sprintf(__('Password: %s', 'userswp'), $new_pass) . "</p>";
@@ -936,7 +950,7 @@ class UsersWP_Forms {
             $message .= '<p>' .__('If this was by mistake, just ignore this email and nothing will happen.', 'userswp') . "</p>";
             $message .= '<p>' .__('To reset your password, click the following link and follow the instructions.', 'userswp') . "</p>";
             $message = apply_filters('uwp_forgot_password_message', $message, $user_data);
-            $reset_page = uwp_get_option('reset_page', false);
+            $reset_page = uwp_get_page_id('reset_page', false);
             if ($reset_page) {
                 $reset_link = add_query_arg( array(
                     'key' => $key,

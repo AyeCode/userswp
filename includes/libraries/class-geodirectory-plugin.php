@@ -255,14 +255,14 @@ class UsersWP_GeoDirectory_Plugin {
         if ($count_only) {
             $results = $wpdb->get_var(
                 $wpdb->prepare(
-                    "SELECT COUNT(overall_rating) FROM " . GEODIR_REVIEW_TABLE . " WHERE user_id = %d AND post_type = %s AND status=1 AND overall_rating>0",
+                    "SELECT COUNT(reviews.overall_rating) FROM " . GEODIR_REVIEW_TABLE . " reviews JOIN " . $wpdb->posts . " posts ON reviews.post_id = posts.id WHERE reviews.user_id = %d AND reviews.post_type = %s AND reviews.status=1 AND reviews.overall_rating>0 AND posts.post_status = 'publish'",
                     array($user_id, $post_type)
                 )
             );
         } else {
             $results = $wpdb->get_results(
                 $wpdb->prepare(
-                    "SELECT * FROM " . GEODIR_REVIEW_TABLE . " WHERE user_id = %d AND post_type = %s AND status=1 AND overall_rating>0 LIMIT %d OFFSET %d",
+                    "SELECT reviews.* FROM " . GEODIR_REVIEW_TABLE . " reviews JOIN " . $wpdb->posts . " posts ON reviews.post_id = posts.id WHERE reviews.user_id = %d AND reviews.post_type = %s AND reviews.status=1 AND reviews.overall_rating>0 AND posts.post_status = 'publish' LIMIT %d OFFSET %d",
                     array($user_id, $post_type, $limit, $offset )
                 )
             );
@@ -773,9 +773,9 @@ class UsersWP_GeoDirectory_Plugin {
                             $args = array(
                                 'size' => 80
                             );
-                            $thumb_url = get_avatar_url($review->user_id, $args);
+                            $thumb_url = get_avatar_url($review->user_id, 80);
+                            echo $thumb_url;
                             ?>
-                            <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>"/>
                         </a>
 
                         <h3 class="uwp-profile-item-title">
@@ -955,10 +955,10 @@ class UsersWP_GeoDirectory_Plugin {
     }
 
     public function get_gd_login_url($url, $args) {
-        $register_page = uwp_get_option('register_page', false);
-        $login_page = uwp_get_option('login_page', false);
-        $forgot_page = uwp_get_option('forgot_page', false);
-        $reset_page = uwp_get_option('reset_page', false);
+        $register_page = uwp_get_page_id('register_page', false);
+        $login_page = uwp_get_page_id('login_page', false);
+        $forgot_page = uwp_get_page_id('forgot_page', false);
+        $reset_page = uwp_get_page_id('reset_page', false);
 
         if (!empty($args)) {
             if (isset($args['signup']) && $args['signup']) {
@@ -982,6 +982,12 @@ class UsersWP_GeoDirectory_Plugin {
                 $uwp_url = add_query_arg( array(
                             'redirect_to' => $query['redirect_add_listing'],
                         ), $uwp_url );
+            }
+
+            if(isset($args['redirect_to']) && !empty($args['redirect_to'])){
+                $uwp_url = add_query_arg( array(
+                    'redirect_to' => $args['redirect_to'],
+                ), $uwp_url );
             }
 
             $url = $uwp_url;
@@ -1031,7 +1037,7 @@ class UsersWP_GeoDirectory_Plugin {
     public function gd_is_listings_tab() {
         global $wp_query;
         if (is_page() && class_exists('UsersWP')) {
-            $profile_page = uwp_get_option('profile_page', false);
+            $profile_page = uwp_get_page_id('profile_page', false);
             if ($profile_page) {
                 if (isset($wp_query->query_vars['uwp_profile'])
                     && isset($wp_query->query_vars['uwp_tab'])

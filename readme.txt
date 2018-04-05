@@ -114,6 +114,10 @@ No questions so far, but don't hesitate to ask!
 * Allow to change icon for fieldset while displaying as a profile tab - CHANGED
 * Option to exclude user from lists is missing from wp-admin - FIXED
 * Add hook to modify the content of forgot password email. - ADDED
+* Add Resend Activation Email for users - ADDED
+* Reviews should not be displayed for deleted listings - FIXED
+* Option to disable default password nag notice - ADDED
+* Added WPML compatibility - ADDED
 
 = 1.0.12 =
 * Filter added to wp_login_url() to filter change all login urls to the UWP one - CHANGED
