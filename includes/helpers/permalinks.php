@@ -312,7 +312,7 @@ function uwp_get_page_url_data($page_type, $output_type = 'link') {
  * @return      array                       Page data array.
  */
 function uwp_get_page_url_page_data($page_data, $page_type) {
-    $page_id = uwp_get_option($page_type, false, false);
+    $page_id = uwp_get_page_id($page_type, false);
     if ($page_id) {
         $page = get_post($page_id);
         $page_data = array(
@@ -339,7 +339,7 @@ function uwp_process_activation_link() {
     if (isset($_GET['uwp_activate']) && $_GET['uwp_activate'] == 'yes') {
         $key =  strip_tags(esc_sql($_GET['key']));
         $login =  strip_tags(esc_sql($_GET['login']));
-        $login_page = uwp_get_option('login_page', false);
+        $login_page = uwp_get_page_id('login_page', false);
         $result = uwp_check_activation_key($key, $login);
 
         if (is_wp_error($result)) {
