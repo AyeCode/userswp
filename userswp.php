@@ -76,6 +76,9 @@ require_once('widgets/register.php');
 
 // Run upgrade on version change
 if(is_admin() && version_compare(USERSWP_VERSION, get_option('uwp_db_version'))){
+    add_action( 'init', 'uwp_init_hook_actions' );
+}
+function uwp_init_hook_actions(){
     activate_users_wp(false);
 }
 
