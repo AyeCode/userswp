@@ -70,7 +70,7 @@ class UsersWP_Forms {
             $redirect_page_id = uwp_get_option('login_redirect_to', -1);
             if (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
                 $redirect_to = get_permalink($redirect_page_id);
-            } elseif(isset( $_REQUEST['redirect_to'] )){
+            } elseif(isset( $_REQUEST['redirect_to'] ) && !empty($data['redirect_to'])){
                 $redirect_to = esc_url($_REQUEST['redirect_to']);
             } else {
                 $redirect_to = home_url('/');
@@ -500,7 +500,7 @@ class UsersWP_Forms {
             $redirect_page_id = uwp_get_option('login_redirect_to', -1);
             if (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
                 $redirect_to = get_permalink($redirect_page_id);
-            } elseif (isset($data['redirect_to'])) {
+            } elseif (isset($data['redirect_to']) && !empty($data['redirect_to'])) {
                 $redirect_to = strip_tags(esc_sql($data['redirect_to']));
             } else {
                 if ( current_user_can('manage_options') ) {
