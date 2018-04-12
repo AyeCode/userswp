@@ -88,7 +88,7 @@ class UsersWP_Activator {
         
         //login
         if (!isset($settings['login_redirect_to'])) {
-            $settings['login_redirect_to'] = '';
+            $settings['login_redirect_to'] = -1;
         }
 
         //profile
