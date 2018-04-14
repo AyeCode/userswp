@@ -80,7 +80,7 @@ class UsersWP_Import_Export {
     }
 
     public function uwp_ie_admin_notice(){
-        if('success' == $_GET['imp-msg']){
+        if(isset($_GET['imp-msg']) && 'success' == $_GET['imp-msg']){
             ?>
             <div class="notice notice-success is-dismissible">
                 <p><?php _e( 'Settings imported successfully!', 'userswp' ); ?></p>
