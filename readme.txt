@@ -120,6 +120,7 @@ No questions so far, but don't hesitate to ask!
 * Reviews should not be displayed for deleted listings - FIXED
 * Option to disable default password nag notice - ADDED
 * Added WPML compatibility - ADDED
+* Style is not proper on pages with shortcode but not assigned in page settings - FIXED
 
 = 1.0.12 =
 * Filter added to wp_login_url() to filter change all login urls to the UWP one - CHANGED
