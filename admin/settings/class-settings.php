@@ -610,8 +610,8 @@ class UsersWP_Admin_Settings {
                     array(
                         'uninstall_erase_data' => array(
                             'id'   => 'uninstall_erase_data',
-                            'name' => __( 'Remove Data on Uninstall?', 'userswp' ),
-                            'desc' => '',
+                            'name' => __( 'UsersWP', 'userswp' ),
+                            'desc' => __( 'Remove all data when deleted?', 'userswp' ),
                             'type' => 'checkbox',
                             'std'  => '1',
                             'class' => 'uwp_label_inline',

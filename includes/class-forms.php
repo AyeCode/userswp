@@ -52,7 +52,8 @@ class UsersWP_Forms {
             if (!is_wp_error($errors)) {
                 $message = $errors;
             }
-            if ($auto_login == 'auto_approve_login') {
+            $force_redirect = apply_filters('uwp_registration_force_redirect', false, $_POST, $_FILES);
+            if ($auto_login == 'auto_approve_login' || $force_redirect) {
                 $reg_redirect_page_id = uwp_get_option('register_redirect_to', '');
                 if(isset( $_REQUEST['redirect_to'] )){
                     $reg_redirect_to = esc_url($_REQUEST['redirect_to']);
@@ -498,10 +499,12 @@ class UsersWP_Forms {
             return $errors;
         } else {
             $redirect_page_id = uwp_get_option('login_redirect_to', -1);
-            if (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
-                $redirect_to = get_permalink($redirect_page_id);
+            if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
+                $redirect_to = esc_url($_REQUEST['redirect_to']);
             } elseif (isset($data['redirect_to']) && !empty($data['redirect_to'])) {
-                $redirect_to = strip_tags(esc_sql($data['redirect_to']));
+                $redirect_to = esc_url($data['redirect_to']);
+            } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
+                $redirect_to = get_permalink($redirect_page_id);
             } else {
                 if ( current_user_can('manage_options') ) {
                     $redirect_to = admin_url();
