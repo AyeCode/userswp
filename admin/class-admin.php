@@ -134,6 +134,7 @@ class UsersWP_Admin {
                 break;
             case "multi_na_all":
                 $proceed = true;
+                $show_builder = true;
                 break;
             case "multi_na_site_id":
                 if (defined('UWP_ROOT_PAGES')) {
