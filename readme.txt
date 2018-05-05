@@ -119,6 +119,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.14 =
+* Allows admin to change avatar and banner of other user from backend - CHANGED
+
 = 1.0.13 =
 * Allow to change icon for fieldset while displaying as a profile tab - CHANGED
 * Option to exclude user from lists is missing from wp-admin - FIXED
