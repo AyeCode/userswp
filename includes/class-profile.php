@@ -562,6 +562,7 @@ class UsersWP_Profile {
                 'offset' => $offset,
                 'author_email' => $user->user_email,
                 'paged' => $paged,
+                'post_type' => 'post',
             );
             // The Query
             $the_query = new WP_Comment_Query();
