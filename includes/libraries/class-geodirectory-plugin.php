@@ -786,12 +786,13 @@ class UsersWP_GeoDirectory_Plugin {
                     <li class="uwp-profile-item-li uwp-profile-item-clearfix">
                         <a class="uwp-profile-item-img" href="<?php echo get_comment_link($review->comment_id); ?>">
                             <?php
-                            $args = array(
-                                'size' => 80
-                            );
-                            $thumb_url = get_avatar_url($review->user_id, 80);
-                            echo $thumb_url;
+                            if ( has_post_thumbnail() ) {
+                                $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
+                            } else {
+                                $thumb_url = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
+                            }
                             ?>
+                            <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
                         </a>
 
                         <?php do_action('uwp_before_profile_reviews_title', $review->comment_id, $user, $post_type); ?>
