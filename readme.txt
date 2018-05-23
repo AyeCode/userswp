@@ -120,6 +120,7 @@ No questions so far, but don't hesitate to ask!
 == Changelog ==
 
 = 1.0.14 =
+* Comment count includes other post types as well - FIXED
 * Allows admin to change avatar and banner of other user from backend - CHANGED
 * Change settings text from "Dashboard" to "Loginbox" - CHANGED
 * Implement widget and gutenberg blocks using super duper class - CHANGED

@@ -48,12 +48,18 @@ function uwp_post_count($user_id, $post_type, $extra_post_status = '') {
 function uwp_comment_count($user_id) {
     global $wpdb;
 
-    $count = $wpdb->get_var('
-             SELECT COUNT(comment_ID)
-             FROM ' . $wpdb->comments. '
-             WHERE user_id = "' . $user_id . '"
-             AND comment_approved = "1"
-             AND comment_type NOT IN ("pingback", "trackback" )'
+    $count = $wpdb->get_var(
+        "SELECT COUNT(comment_ID)
+                FROM ".$wpdb->comments."
+                WHERE comment_post_ID in (
+                SELECT ID 
+                FROM ".$wpdb->posts." 
+                WHERE post_type = 'post' 
+                AND post_status = 'publish')
+                AND user_id = " . $user_id . "
+                AND comment_approved = '1'
+                AND comment_type NOT IN ('pingback', 'trackback' )"
     );
+    
     return $count;
 }
