@@ -70,9 +70,6 @@ register_deactivation_hook( __FILE__, 'deactivate_users_wp' );
  * admin-specific hooks, and public-facing site hooks.
  */
 require_once('includes/class-userswp.php');
-require_once('includes/helpers.php');
-require_once('widgets/login.php');
-require_once('widgets/register.php');
 
 // Run upgrade on version change
 if(is_admin() && version_compare(USERSWP_VERSION, get_option('uwp_db_version'))){
