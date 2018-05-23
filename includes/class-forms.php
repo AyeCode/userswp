@@ -413,7 +413,7 @@ class UsersWP_Forms {
                     ),
                     $resend_link
                 );
-                return __('An email has been sent to your registered email address. Please click the activation link to proceed. <a href="'.$resend_link.'">Resend</a>', 'userswp');
+                return sprintf(__('An email has been sent to your registered email address. Please click the activation link to proceed. <a href="%s">Resend</a>.', 'userswp'), $resend_link);
             } elseif ($reg_action == 'require_admin_review' && defined('UWP_MOD_VERSION')) {
                 update_user_meta( $user_id, 'uwp_mod', '1' );
 

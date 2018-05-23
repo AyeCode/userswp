@@ -568,6 +568,26 @@ class UsersWP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-notices.php';
 
         /**
+         * The class WP_Super_Duper for widgets.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/libraries/wp-super-duper.php';
+
+        /**
+         * contents helpers files and functions.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/includes/helpers.php' );
+
+        /**
+         * The class for login widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/login.php' );
+
+        /**
+         * The class for register widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/register.php' );
+
+        /**
          * The class responsible for displaying notices
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-import-export.php';
