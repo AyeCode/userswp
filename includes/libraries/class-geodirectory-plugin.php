@@ -194,16 +194,16 @@ class UsersWP_GeoDirectory_Plugin {
             ),
             'geodir_uwp_link_listing' => array(
                 'id'   => 'geodir_uwp_link_listing',
-                'name' => __( 'Redirect GD dashboard my listing link to UsersWP profile', 'userswp' ),
-                'desc' => __( 'If this option is selected, the my listing link from GD dashboard will redirect to listings tab of UsersWP profile.', 'userswp' ),
+                'name' => __( 'Redirect my listing link from GD loginbox to UsersWP profile', 'userswp' ),
+                'desc' => __( 'If this option is selected, the my listing link from GD loginbox will redirect to listings tab of UsersWP profile.', 'userswp' ),
                 'type' => 'checkbox',
                 'std'  => '0',
                 'class' => 'uwp_label_inline',
             ),
             'geodir_uwp_link_favorite' => array(
                 'id'   => 'geodir_uwp_link_favorite',
-                'name' => __( 'Redirect GD dashboard favorite link to UsersWP profile', 'userswp' ),
-                'desc' => __( 'If this option is selected, the favorite link from GD dashboard will redirect to favorites tab of UsersWP profile.', 'userswp' ),
+                'name' => __( 'Redirect favorite link from GD loginbox to UsersWP profile', 'userswp' ),
+                'desc' => __( 'If this option is selected, the favorite link from GD loginbox will redirect to favorites tab of UsersWP profile.', 'userswp' ),
                 'type' => 'checkbox',
                 'std'  => '0',
                 'class' => 'uwp_label_inline',
@@ -786,12 +786,13 @@ class UsersWP_GeoDirectory_Plugin {
                     <li class="uwp-profile-item-li uwp-profile-item-clearfix">
                         <a class="uwp-profile-item-img" href="<?php echo get_comment_link($review->comment_id); ?>">
                             <?php
-                            $args = array(
-                                'size' => 80
-                            );
-                            $thumb_url = get_avatar_url($review->user_id, 80);
-                            echo $thumb_url;
+                            if ( has_post_thumbnail() ) {
+                                $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
+                            } else {
+                                $thumb_url = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
+                            }
                             ?>
+                            <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
                         </a>
 
                         <?php do_action('uwp_before_profile_reviews_title', $review->comment_id, $user, $post_type); ?>
