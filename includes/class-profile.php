@@ -562,6 +562,7 @@ class UsersWP_Profile {
                 'offset' => $offset,
                 'author_email' => $user->user_email,
                 'paged' => $paged,
+                'post_type' => 'post',
             );
             // The Query
             $the_query = new WP_Comment_Query();
@@ -575,10 +576,13 @@ class UsersWP_Profile {
                     <li class="uwp-profile-item-li uwp-profile-item-clearfix">
                         <a class="uwp-profile-item-img" href="<?php echo get_comment_link($comment->comment_ID); ?>">
                             <?php
-                            $avatar_class = "uwp-profile-item-alignleft uwp-profile-item-thumb";
-                            $avatar = get_avatar($user->user_email, 80, '', null, array('class' => array($avatar_class) ));
-                            echo $avatar;
+                            if ( has_post_thumbnail() ) {
+                                $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
+                            } else {
+                                $thumb_url = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
+                            }
                             ?>
+                            <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
                         </a>
 
                         <h3 class="uwp-profile-item-title">

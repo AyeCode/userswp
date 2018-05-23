@@ -104,6 +104,7 @@ class UsersWP_Meta {
 
 
         $value = uwp_maybe_unserialize($key, $value);
+        $value = wp_unslash($value);
         $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default, $usermeta );
         return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default, $usermeta );
     }

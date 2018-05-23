@@ -121,6 +121,13 @@ No questions so far, but don't hesitate to ask!
 
 = 1.0.14 =
 * Added filter to change the default subtab displayed under listing tab in user profile - ADDED
+* Fix escape slashes in content of profile fields - FIXED
+* Comment count includes other post types as well - FIXED
+* Allows admin to change avatar and banner of other user from backend - CHANGED
+* Change settings text from "Dashboard" to "Loginbox" - CHANGED
+* Implement widget and gutenberg blocks using super duper class - CHANGED
+* Filter to exclude account fields from edit profile fields in admin side - ADDED
+* Reviews tab using gravatar when comments are using UsersWP profile - FIXED
 
 = 1.0.13 =
 * Allow to change icon for fieldset while displaying as a profile tab - CHANGED
