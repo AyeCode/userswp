@@ -120,6 +120,7 @@ No questions so far, but don't hesitate to ask!
 == Changelog ==
 
 = 1.0.14 =
+* Filter to exclude account fields from edit profile fields in admin side - ADDED
 * Reviews tab using gravatar when comments are using UsersWP profile - FIXED
 
 = 1.0.13 =

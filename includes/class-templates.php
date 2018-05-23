@@ -635,7 +635,13 @@ class UsersWP_Templates {
         ob_start();
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' ORDER BY sort_order ASC");
+        $excluded_fields = apply_filters('uwp_exclude_edit_profile_fields', array());
+        $query = "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0'";
+        if(is_array($excluded_fields) && count($excluded_fields) > 0){
+            $query .= 'AND htmlvar_name NOT IN ('.implode(',', $excluded_fields).')';
+        }
+        $query .= ' ORDER BY sort_order ASC';
+        $fields = $wpdb->get_results($query);
         if ($fields) {
             ?>
             <div class="uwp-profile-extra">
