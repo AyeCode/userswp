@@ -700,7 +700,7 @@ add_action('edit_user_profile', 'uwp_admin_edit_banner_fields');
 add_filter('admin_body_class', 'uwp_add_admin_body_class');
 function uwp_add_admin_body_class($classes) {
     $screen = get_current_screen();
-    if ( 'profile' == $screen->base )
+    if ( 'profile' == $screen->base || 'user-edit' == $screen->base )
     $classes .= 'uwp_page';
     return $classes;
 }
