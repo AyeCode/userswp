@@ -576,8 +576,8 @@ class UsersWP_Profile {
                     <li class="uwp-profile-item-li uwp-profile-item-clearfix">
                         <a class="uwp-profile-item-img" href="<?php echo get_comment_link($comment->comment_ID); ?>">
                             <?php
-                            if ( has_post_thumbnail() ) {
-                                $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
+                            if ( has_post_thumbnail($comment->comment_post_ID) ) {
+                                $thumb_url = get_the_post_thumbnail_url($comment->comment_post_ID, array(80, 80));
                             } else {
                                 $thumb_url = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
                             }
