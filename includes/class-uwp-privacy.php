@@ -33,12 +33,19 @@ class UsersWP_Privacy extends UsersWP_Abstract_Privacy {
      * @since 1.0.14
      */
     public function get_privacy_message() {
-        $content = '
-			<div contenteditable="false">' .
-            '<p class="wp-policy-help">' .
-            __( 'UsersWP uses the following privacy.', 'userswp' ) .
-            '</p>' .
-            '</div>';
+        $content = '<h2>' . __( 'User data/profile', 'invoicing' ) . '</h2>' .
+                   '<div contenteditable="false">' .
+                   '<p class="wp-policy-help">' . __( 'Example privacy texts.', 'invoicing' ) . '</p>' .
+                   '</div>' .
+                   '<p>' . __( 'We collect information about you during the registration and edit profile process on our site. This information may include, but is not limited to, your name, email address, phone number, address, IP and any other details that might be requested from you for the purpose of building your public profile.', 'invoicing' ) . '</p>' .
+                   '<p>' . __( 'Handling this data also allows us to:', 'invoicing' ) . '</p>' .
+                   '<ul>' .
+                   '<li>' . __( '- Send you important account/order/service information.', 'invoicing' ) . '</li>' .
+                   '<li>' . __( '- Display this information in a public facing manner (such as a web page or API request) and allow website users to search and view submitted information.', 'geodirectory' ) . '</li>' .
+                   '<li>' . __( '- Respond to your queries or complaints.', 'invoicing' ) . '</li>' .
+                   '<li>' . __( '- Set up and administer your account, provide technical and/or customer support, and to verify your identity. We do this on the basis of our legitimate business interests.', 'invoicing' ) . '</li>' .
+                   '</ul>' .
+                   '<p>' . __( 'Any profile information provided to this site may be displayed publicly.', 'invoicing' ) . '</p>';
 
         return apply_filters( 'uwp_privacy_policy_content', $content );
     }
