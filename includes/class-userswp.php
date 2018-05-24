@@ -592,6 +592,12 @@ class UsersWP {
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-import-export.php';
 
+        /**
+         * The class responsible for privacy policy functions
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/abstract-uwp-privacy.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-uwp-privacy.php';
+
         if ( is_plugin_active( 'uwp_geodirectory/uwp_geodirectory.php' ) ) {
             deactivate_plugins( 'uwp_geodirectory/uwp_geodirectory.php' );
         }

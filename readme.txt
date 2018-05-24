@@ -129,6 +129,7 @@ No questions so far, but don't hesitate to ask!
 * Filter to exclude account fields from edit profile fields in admin side - ADDED
 * Reviews tab using gravatar when comments are using UsersWP profile - FIXED
 * Default avatar showing next to review instead of listing featured image - FIXED
+* GDPR Compliance - ADDED
 
 = 1.0.13 =
 * Allow to change icon for fieldset while displaying as a profile tab - CHANGED
