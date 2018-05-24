@@ -9,17 +9,15 @@
                 <?php do_action('uwp_template_fields', 'login'); ?>
                 <input type="hidden" name="uwp_login_nonce" value="<?php echo wp_create_nonce( 'uwp-login-nonce' ); ?>" />
                 <?php
-                if (is_uwp_login_page()) {
+                if (is_uwp_login_page() && -1 == uwp_get_option('login_redirect_to', -1)) {
                     if (isset($_GET['redirect_to'])) {
                         $redirect_to = esc_url($_GET['redirect_to']);
                     } else if($referer = wp_get_referer()){
                         $redirect_to = $referer;
                     }
-                } else {
-                    $redirect_to = uwp_current_page_url();
+                    echo '<input type="hidden" name="redirect_to" value="'.$redirect_to.'"/>';
                 }
                 ?>
-                <input type="hidden" name="redirect_to" value="<?php echo $redirect_to; ?>"/>
                 <?php do_action('uwp_social_fields', 'login'); ?>
                 <div class="uwp-remember-me">
                     <label style="display: inline-block;" for="remember_me">
