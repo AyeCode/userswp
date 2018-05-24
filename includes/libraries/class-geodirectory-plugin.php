@@ -660,7 +660,7 @@ class UsersWP_GeoDirectory_Plugin {
                             if (has_post_thumbnail()) {
                                 $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
                             } else {
-                                $thumb_url = $thumb_url = plugins_url() . "/userswp/public/assets/images/no_thumb.png";
+                                $thumb_url = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
                             }
                             ?>
                             <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
@@ -787,8 +787,8 @@ class UsersWP_GeoDirectory_Plugin {
                     <li class="uwp-profile-item-li uwp-profile-item-clearfix">
                         <a class="uwp-profile-item-img" href="<?php echo get_comment_link($review->comment_id); ?>">
                             <?php
-                            if ( has_post_thumbnail() ) {
-                                $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
+                            if ( has_post_thumbnail($review->post_id) ) {
+                                $thumb_url = get_the_post_thumbnail_url($review->post_id, array(80, 80));
                             } else {
                                 $thumb_url = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
                             }
@@ -894,7 +894,7 @@ class UsersWP_GeoDirectory_Plugin {
                                 if (has_post_thumbnail()) {
                                     $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
                                 } else {
-                                    $thumb_url = $thumb_url = plugins_url() . "/userswp/public/assets/images/no_thumb.png";
+                                    $thumb_url = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
                                 }
                                 ?>
                                 <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
