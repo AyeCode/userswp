@@ -53,6 +53,13 @@ class UsersWP_Privacy_Exporters {
         if($metadata) {
             foreach ($metadata as $key => $value) {
                 if (!empty($value) && !in_array($key, $skip_keys)) {
+
+                    if(in_array($key, array('uwp_account_avatar_thumb', 'uwp_account_banner_thumb'))){
+                        $uploads = wp_upload_dir();
+                        $upload_url = $uploads['baseurl'];
+                        $value = $upload_url.$value;
+                    }
+                    
                     $key = self::get_formatted_column_name($key);
 
                     $personal_data[] = array(
