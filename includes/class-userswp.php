@@ -118,13 +118,19 @@ class UsersWP {
 
     public function load_meta_actions_and_filters($instance) {
         add_action('user_register', array($instance, 'sync_usermeta'), 10, 1);
-        add_action('delete_user', array($instance, 'delete_usermeta_for_user'));
+        add_action('delete_user', array($instance, 'delete_usermeta_for_user'), 10, 1);
+        add_action('remove_user_from_blog', array($instance, 'remove_user_from_blog'), 10, 1);
         add_action('wp_login', array($instance, 'save_user_ip_on_login') ,10,2);
         add_filter('uwp_before_extra_fields_save', array($instance, 'save_user_ip_on_register'), 10, 3);
         add_filter('uwp_update_usermeta', array($instance, 'modify_privacy_value_on_update'), 10, 4);
         add_filter('uwp_get_usermeta', array($instance, 'modify_privacy_value_on_get'), 10, 5);
         add_filter('uwp_update_usermeta', array($instance, 'modify_datepicker_value_on_update'), 10, 3);
         add_filter('uwp_get_usermeta', array($instance, 'modify_datepicker_value_on_get'), 10, 5);
+        add_filter('user_row_actions', array($instance, 'uwp_user_row_actions'), 10, 2);
+        add_action('bulk_actions-users', array($instance, 'uwp_users_bulk_actions'));
+        add_action('handle_bulk_actions-users', array($instance, 'uwp_handle_users_bulk_actions'), 10, 3);
+        add_filter('init', array($instance, 'uwp_process_user_actions'));
+        add_action('admin_notices', array($instance, 'uwp_show_update_messages'));
     }
     
     public function load_ajax_actions_and_filters($instance) {
@@ -209,7 +215,7 @@ class UsersWP {
         add_filter( 'edit_profile_url', array($instance, 'uwp_modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
         remove_all_filters('get_avatar');
-        add_filter( 'get_avatar', array($instance, 'uwp_modify_get_avatar') , 1 , 5 );
+        add_filter( 'get_avatar', array($instance, 'uwp_modify_get_avatar') , 1 , 6 );
         add_filter( 'get_comment_author_link', array($instance, 'uwp_get_comment_author_link') , 10 , 2 );
         add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
@@ -560,6 +566,37 @@ class UsersWP {
          * The class responsible for displaying notices
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-notices.php';
+
+        /**
+         * The class WP_Super_Duper for widgets.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/libraries/wp-super-duper.php';
+
+        /**
+         * contents helpers files and functions.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/includes/helpers.php' );
+
+        /**
+         * The class for login widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/login.php' );
+
+        /**
+         * The class for register widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/register.php' );
+
+        /**
+         * The class responsible for displaying notices
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-import-export.php';
+
+        /**
+         * The class responsible for privacy policy functions
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/abstract-uwp-privacy.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-uwp-privacy.php';
 
         if ( is_plugin_active( 'uwp_geodirectory/uwp_geodirectory.php' ) ) {
             deactivate_plugins( 'uwp_geodirectory/uwp_geodirectory.php' );

@@ -199,6 +199,7 @@ function uwp_get_settings_tabs() {
         'change' => __( 'Change Password', 'userswp' ),
         'profile' => __( 'Profile', 'userswp' ),
         'users' => __( 'Users', 'userswp' ),
+        'import-export' => __( 'Import/Export', 'userswp' ),
         'uninstall' => __( 'Uninstall', 'userswp' ),
     );
 

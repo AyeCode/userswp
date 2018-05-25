@@ -93,20 +93,20 @@ class UsersWP_Templates {
 
         $current_page_id = $post->ID;
         
-        $register_page = uwp_get_option('register_page', false);
-        $login_page = uwp_get_option('login_page', false);
-        $forgot_page = uwp_get_option('forgot_page', false);
-        $reset_page = uwp_get_option('reset_page', false);
+        $register_page = uwp_get_page_id('register_page', false);
+        $login_page = uwp_get_page_id('login_page', false);
+        $forgot_page = uwp_get_page_id('forgot_page', false);
+        $reset_page = uwp_get_page_id('reset_page', false);
 
-        $change_page = uwp_get_option('change_page', false);
-        $account_page = uwp_get_option('account_page', false);
+        $change_page = uwp_get_page_id('change_page', false);
+        $account_page = uwp_get_page_id('account_page', false);
         
         if (( $register_page && ((int) $register_page ==  $current_page_id )) ||
         ( $login_page && ((int) $login_page ==  $current_page_id ) ) ||
         ( $forgot_page && ((int) $forgot_page ==  $current_page_id ) ) ||
         ( $reset_page && ((int) $reset_page ==  $current_page_id ) )) {
             if (is_user_logged_in()) {
-                $redirect_page_id = uwp_get_option('account_page', '');
+                $redirect_page_id = uwp_get_page_id('account_page', false);
                 if (empty($redirect_page_id)) {
                     $redirect_to = home_url('/');
                 } else {
@@ -146,7 +146,10 @@ class UsersWP_Templates {
         if (!is_user_logged_in()) {
             return;
         }
-        $change_page = uwp_get_option('change_page', false);
+        if(1 == uwp_get_option('change_disable_password_nag')) {
+            return;
+        }
+        $change_page = uwp_get_page_id('change_page', false);
         $password_nag = get_user_option('default_password_nag', get_current_user_id());
         
         if ($password_nag) {
@@ -175,7 +178,7 @@ class UsersWP_Templates {
         if (is_page()) {
             global $wp_query, $post;
             $current_page_id = $post->ID;
-            $profile_page = uwp_get_option('profile_page', false);
+            $profile_page = uwp_get_page_id('profile_page', false);
             if ( $profile_page && ((int) $profile_page ==  $current_page_id ) ) {
 
                 if (isset($wp_query->query_vars['uwp_profile'])) {
@@ -242,7 +245,7 @@ class UsersWP_Templates {
      * @return      void
      */
     public function wp_login_redirect() {
-        $login_page_id = uwp_get_option('login_page', false);
+        $login_page_id = uwp_get_page_id('login_page', false);
         $block_wp_login = uwp_get_option('block_wp_login', '');
         if ($login_page_id && $block_wp_login == '1') {
             global $pagenow;
@@ -266,7 +269,7 @@ class UsersWP_Templates {
      * @return string The login url.
      */
     public function wp_login_url($login_url, $redirect, $force_reauth) {
-        $login_page_id = uwp_get_option('login_page', false);
+        $login_page_id = uwp_get_page_id('login_page', false);
         $redirect_page_id = uwp_get_option('login_redirect_to', -1);
         if (!is_admin() && $login_page_id) {
             $login_page = get_permalink($login_page_id);
@@ -516,42 +519,42 @@ class UsersWP_Templates {
                 if ( is_user_logged_in() ) {
                     $menu_item->_invalid = true;
                 } else {
-                    $menu_item->url = get_permalink(uwp_get_option('register_page', 0));
+                    $menu_item->url = uwp_get_page_id('register_page', true);
                 }
                 break;
             case $login_class:
                 if ( is_user_logged_in() ) {
                     $menu_item->_invalid = true;
                 } else {
-                    $menu_item->url = get_permalink(uwp_get_option('login_page', 0));
+                    $menu_item->url = uwp_get_page_id('login_page', true);
                 }
                 break;
             case $account_class:
                 if ( ! is_user_logged_in() ) {
                     $menu_item->_invalid = true;
                 } else {
-                    $menu_item->url = get_permalink(uwp_get_option('account_page', 0));
+                    $menu_item->url = uwp_get_page_id('account_page', true);
                 }
                 break;
             case $profile_class:
                 if ( ! is_user_logged_in() ) {
                     $menu_item->_invalid = true;
                 } else {
-                    $menu_item->url = get_permalink(uwp_get_option('profile_page', 0));
+                    $menu_item->url = uwp_get_page_id('profile_page', true);
                 }
                 break;
             case $change_class:
                 if ( ! is_user_logged_in() ) {
                     $menu_item->_invalid = true;
                 } else {
-                    $menu_item->url = get_permalink(uwp_get_option('change_page', 0));
+                    $menu_item->url = uwp_get_page_id('change_page', true);
                 }
                 break;
             case $forgot_class:
                 if ( is_user_logged_in() ) {
                     $menu_item->_invalid = true;
                 } else {
-                    $menu_item->url = get_permalink(uwp_get_option('forgot_page', 0));
+                    $menu_item->url = uwp_get_page_id('forgot_page', true);
                 }
                 break;
             case $logout_class:
@@ -632,7 +635,13 @@ class UsersWP_Templates {
         ob_start();
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' ORDER BY sort_order ASC");
+        $excluded_fields = apply_filters('uwp_exclude_edit_profile_fields', array());
+        $query = "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0'";
+        if(is_array($excluded_fields) && count($excluded_fields) > 0){
+            $query .= 'AND htmlvar_name NOT IN ('.implode(',', $excluded_fields).')';
+        }
+        $query .= ' ORDER BY sort_order ASC';
+        $fields = $wpdb->get_results($query);
         if ($fields) {
             ?>
             <div class="uwp-profile-extra">
@@ -679,7 +688,7 @@ class UsersWP_Templates {
      * @return      array                    Modified class array.
      */
     public function uwp_add_body_class( $classes ) {
-        
+
         if ( is_uwp_page() ) {
             $classes[] = 'uwp_page';
         }

@@ -130,9 +130,11 @@ class UsersWP_Shortcodes {
         $template = $this->templates->uwp_locate_template($type);
 
         ob_start();
+        echo '<div class="uwp_page">';
         if ($template) {
             include($template);
         }
+        echo '</div>';
         $output = ob_get_contents();
         ob_end_clean();
 

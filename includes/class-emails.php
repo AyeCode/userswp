@@ -150,7 +150,9 @@ class UsersWP_Mails {
             if ($as_password) {
                 $new_pass = wp_generate_password(12, false);
                 wp_set_password($new_pass, $user_data->ID);
-                update_user_meta($user_data->ID, 'default_password_nag', true); //Set up the Password change nag.
+                if(!uwp_get_option('change_disable_password_nag')) {
+                    update_user_meta($user_data->ID, 'default_password_nag', true); //Set up the Password change nag.
+                }
 
             } else {
                 $key = wp_generate_password(20, false);
@@ -162,7 +164,7 @@ class UsersWP_Mails {
                 }
                 $hashed = $wp_hasher->HashPassword($key);
                 $wpdb->update($wpdb->users, array('user_activation_key' => time() . ":" . $hashed), array('user_login' => $user_data->user_login));
-                $reset_page = uwp_get_option('reset_page', false);
+                $reset_page = uwp_get_page_id('reset_page', false);
                 if ($reset_page) {
                     $reset_link = add_query_arg(array(
                         'key' => $key,

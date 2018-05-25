@@ -596,14 +596,22 @@ class UsersWP_Admin_Settings {
                             'std'  => '1',
                             'class' => 'uwp_label_inline',
                         ),
+                        'change_disable_password_nag' => array(
+                            'id'   => 'change_disable_password_nag',
+                            'name' => __( 'Disable system generated password notice.', 'userswp' ),
+                            'desc' => 'This option will disable system generated password notice if user has not changed default password after registration.',
+                            'type' => 'checkbox',
+                            'std'  => '0',
+                            'class' => 'uwp_label_inline',
+                        ),
                     )
                 ),
                 'uninstall' => apply_filters( 'uwp_settings_general_uninstall',
                     array(
                         'uninstall_erase_data' => array(
                             'id'   => 'uninstall_erase_data',
-                            'name' => __( 'Remove Data on Uninstall?', 'userswp' ),
-                            'desc' => '',
+                            'name' => __( 'UsersWP', 'userswp' ),
+                            'desc' => __( 'Remove all data when deleted?', 'userswp' ),
                             'type' => 'checkbox',
                             'std'  => '1',
                             'class' => 'uwp_label_inline',

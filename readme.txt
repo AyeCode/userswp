@@ -4,7 +4,7 @@ Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 3.1
 Tested up to: 4.9
-Stable tag: 1.0.12
+Stable tag: 1.0.14
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -57,13 +57,22 @@ We provide some free extensions:
 = Premium Add-ons =
 
 UsersWP can be extended with several add-ons. Few examples are:
-
+* [~~GeoDirectory~~](https://userswp.io/downloads/geodirectory/) - NOW BUILT IN TO CORE - Create a tab for each listing type submitted, reviews and favorite listings.
 * [Woocommerce](https://userswp.io/downloads/woocommerce/) - Connect WooCommerce with UsersWP, display orders and reviews in user profile pages.
 * [bbPress](https://userswp.io/downloads/bbpress-2/) - Connect bbPress with UsersWP, display forum interactions in user profile pages.
 * [Easy Digital Downloads](https://userswp.io/downloads/easy-digital-downloads/) - Display “Downloads” and “Purchases” tab in user profile pages.
-* [GeoDirectory](https://userswp.io/downloads/geodirectory/) - Create a tab for each listing type submitted, reviews and favorite listings.
 * [WP Job Manager](https://userswp.io/downloads/wp-job-manager/) - Connects WP Job Manager with UsersWP, display Jobs tab in user profile pages.
-* [Mail Chimp](https://userswp.io/downloads/mailchimp/) - Allows the user to subscribe to your newsletters via Mailchimp during registration.
+* [MailChimp](https://userswp.io/downloads/mailchimp/) - Allows the user to subscribe to your newsletters via Mailchimp during registration.
+* [Moderation](https://userswp.io/downloads/moderation/) - Lets you manually approve or reject user signups.
+* [Restrict User Signups](https://userswp.io/downloads/restrict-user-signups/) - Restrict usernames and emails or even email domains to prevent spam.
+* [myCRED](https://userswp.io/downloads/mycred/) - myCRED add on for UsersWP, earn points and lets users send points.
+* [Profile Progress](https://userswp.io/downloads/profile-progress-2/) - Assign %'s and show profile completion progress bar via a widget.
+* [Followers](https://userswp.io/downloads/followers/) - Your users can follow each other, just like twitter with this addon.
+* [Friends](https://userswp.io/downloads/friends/) - Your users can send and accept friend requests, just like facebook with this addon.
+* [Online Users](https://userswp.io/downloads/online-users/) - This addon displays the list of users who are currently online and more.
+* [Frontend Post](https://userswp.io/downloads/frontend-post/) - Lets users submit blog post from the frontend.
+* [Multisite Creator](https://userswp.io/downloads/multisite-creator/) - Lets your users to create new site for multisite on registration.
+
 
 There are many others and we release new Add-ons frequently. You can see the full collection here: [UsersWP Premium Add-ons](https://userswp.io/downloads/category/addons/)
 
@@ -110,9 +119,31 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.14 =
+* Added filter to change the default subtab displayed under listing tab in user profile - ADDED
+* Fix escape slashes in content of profile fields - FIXED
+* Comment count includes other post types as well - FIXED
+* Allows admin to change avatar and banner of other user from backend - CHANGED
+* Change settings text from "Dashboard" to "Loginbox" - CHANGED
+* Implement widget and gutenberg blocks using super duper class - CHANGED
+* Filter to exclude account fields from edit profile fields in admin side - ADDED
+* Reviews tab using gravatar when comments are using UsersWP profile - FIXED
+* Default avatar showing next to review instead of listing featured image - FIXED
+* GDPR Compliance - ADDED
+* Login redirect issues for last user page - FIXED
+
 = 1.0.13 =
 * Allow to change icon for fieldset while displaying as a profile tab - CHANGED
 * Option to exclude user from lists is missing from wp-admin - FIXED
+* Change text domains in class geodirectory plugin - FIXED
+* Delete user meta on removing from site of multisite network - FIXED
+* Add hook to modify the content of forgot password email. - ADDED
+* Add Resend Activation Email for users - ADDED
+* Reviews should not be displayed for deleted listings - FIXED
+* Option to disable default password nag notice - ADDED
+* Added WPML compatibility - ADDED
+* Style is not proper on pages with shortcode but not assigned in page settings - FIXED
+* Filter to force redirect after registration - ADDED
 
 = 1.0.12 =
 * Filter added to wp_login_url() to filter change all login urls to the UWP one - CHANGED

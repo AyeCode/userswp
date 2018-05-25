@@ -3,7 +3,7 @@
 Plugin Name: UsersWP
 Plugin URI: https://userswp.io/
 Description: User management plugin.
-Version: 1.0.12
+Version: 1.0.14
 Author: AyeCode Ltd
 Author URI: https://userswp.io
 License: GPL-2.0+
@@ -21,7 +21,7 @@ if (!defined('WPINC')) {
 
 define( 'USERSWP_NAME', 'userswp' );
 
-define( 'USERSWP_VERSION', '1.0.12' );
+define( 'USERSWP_VERSION', '1.0.14' );
 
 define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
 
@@ -70,12 +70,12 @@ register_deactivation_hook( __FILE__, 'deactivate_users_wp' );
  * admin-specific hooks, and public-facing site hooks.
  */
 require_once('includes/class-userswp.php');
-require_once('includes/helpers.php');
-require_once('widgets/login.php');
-require_once('widgets/register.php');
 
 // Run upgrade on version change
 if(is_admin() && version_compare(USERSWP_VERSION, get_option('uwp_db_version'))){
+    add_action( 'init', 'uwp_init_hook_actions' );
+}
+function uwp_init_hook_actions(){
     activate_users_wp(false);
 }
 

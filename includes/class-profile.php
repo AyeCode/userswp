@@ -38,7 +38,7 @@ class UsersWP_Profile {
             $banner = $upload_url.$banner;
         }
         if (empty($avatar)) {
-            $avatar = get_avatar($user->user_email, 150, uwp_get_default_avatar_uri());
+            $avatar = get_avatar($user->user_email, 150);
         } else {
             // check the image is not a full url before adding the local upload url
             if (strpos($avatar, 'http:') === false && strpos($avatar, 'https:') === false) {
@@ -400,7 +400,7 @@ class UsersWP_Profile {
 
         $tab = get_query_var('uwp_tab');
 
-        $account_page = uwp_get_option('account_page', false);
+        $account_page = uwp_get_page_id('account_page', false);
 
         $all_tabs = $this->get_profile_tabs($user);
 
@@ -562,6 +562,7 @@ class UsersWP_Profile {
                 'offset' => $offset,
                 'author_email' => $user->user_email,
                 'paged' => $paged,
+                'post_type' => 'post',
             );
             // The Query
             $the_query = new WP_Comment_Query();
@@ -575,10 +576,13 @@ class UsersWP_Profile {
                     <li class="uwp-profile-item-li uwp-profile-item-clearfix">
                         <a class="uwp-profile-item-img" href="<?php echo get_comment_link($comment->comment_ID); ?>">
                             <?php
-                            $avatar_class = "uwp-profile-item-alignleft uwp-profile-item-thumb";
-                            $avatar = get_avatar($user->user_email, 80, uwp_get_default_avatar_uri(), null, array('class' => array($avatar_class) ));
-                            echo $avatar;
+                            if ( has_post_thumbnail($comment->comment_post_ID) ) {
+                                $thumb_url = get_the_post_thumbnail_url($comment->comment_post_ID, array(80, 80));
+                            } else {
+                                $thumb_url = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
+                            }
                             ?>
+                            <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
                         </a>
 
                         <h3 class="uwp-profile-item-title">
@@ -622,7 +626,7 @@ class UsersWP_Profile {
      */
     public function rewrite_profile_link() {
 
-        $page_id = uwp_get_option('profile_page', false);
+        $page_id = uwp_get_page_id('profile_page', false);
         if ($page_id && !isset($_REQUEST['page_id'])) {
             $link = get_page_link($page_id);
             $uwp_profile_link = rtrim(substr(str_replace(home_url(), '', $link), 1), '/') . '/';
@@ -715,7 +719,7 @@ class UsersWP_Profile {
      */
     public function get_profile_link($link, $user_id) {
 
-        $page_id = uwp_get_option('profile_page', false);
+        $page_id = uwp_get_page_id('profile_page', false);
 
         if ($page_id) {
             $link = get_permalink($page_id);
@@ -774,7 +778,7 @@ class UsersWP_Profile {
     public function modify_profile_page_title( $title, $id = null ) {
 
         global $wp_query;
-        $page_id = uwp_get_option('profile_page', false);
+        $page_id = uwp_get_page_id('profile_page', false);
 
         if ($page_id == $id && isset($wp_query->query_vars['uwp_profile']) && in_the_loop()) {
 
@@ -852,8 +856,10 @@ class UsersWP_Profile {
         if (is_user_logged_in()) {
             add_action( 'wp_footer', array($this,'uwp_modal_loading_html'));
             add_action( 'wp_footer', array($this,'uwp_modal_close_js'));
-            //echo $this->uwp_modal_loading_html();
-            //$this->uwp_modal_close_js();
+            if(is_admin()) {
+                add_action('admin_footer', array($this, 'uwp_modal_loading_html'));
+                add_action('admin_footer', array($this, 'uwp_modal_close_js'));
+            }
         }
     }
 
@@ -1210,7 +1216,7 @@ class UsersWP_Profile {
      * @param       string      $alt            Alternative text to use in the avatar image tag. Default empty.
      * @return      string                      Modified img tag value
      */
-    public function uwp_modify_get_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
+    public function uwp_modify_get_avatar( $avatar, $id_or_email, $size, $default, $alt, $args ) {
         $user = false;
 
         if ( is_numeric( $id_or_email ) ) {
@@ -1238,6 +1244,16 @@ class UsersWP_Profile {
                     $avatar_thumb = $upload_url.$avatar_thumb;
                 }
                 $avatar = "<img alt='{$alt}' src='{$avatar_thumb}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
+            } else {
+                $default = uwp_get_default_avatar_uri();
+                $args = get_avatar_data( $id_or_email, $args );
+                $url = $args['url'];
+                $url = remove_query_arg('d', $url);
+                $url = add_query_arg(array('d' => $default), $url);
+                if ( ! $url || is_wp_error( $url ) ) {
+                    return $avatar;
+                }
+                $avatar = '<img src="' .$url  .'" class="gravatar avatar avatar-'.$size.' uwp-avatar" width="'.$size.'" height="'.$size.'" alt="'.$alt.'" />';
             }
 
         }
@@ -1298,7 +1314,7 @@ class UsersWP_Profile {
     {
         // Makes the link to http://example.com/account
         if (!is_admin()) {
-            $account_page = uwp_get_option('account_page', false);
+            $account_page = uwp_get_page_id('account_page', false);
             if ($account_page) {
                 $account_page_link = get_permalink($account_page);
                 $url = $account_page_link;
@@ -1396,7 +1412,7 @@ class UsersWP_Profile {
      */
     public function add_uwp_plupload_param($params) {
 
-        if(!is_admin() && get_the_ID()==uwp_get_option('profile_page', false)){
+        if(!is_admin() && get_the_ID()==uwp_get_page_id('profile_page', false)){
             $params['uwp_profile_upload'] = true;
         }
 
