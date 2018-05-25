@@ -121,6 +121,7 @@ No questions so far, but don't hesitate to ask!
 
 = 1.0.15 =
 * Fix text domain in privacy message - FIXED
+* Fix design issues for login and register forms in widget and shortcode - FIXED
 
 = 1.0.14 =
 * Added filter to change the default subtab displayed under listing tab in user profile - ADDED
