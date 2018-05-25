@@ -119,6 +119,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.15 =
+* Fix text domain in privacy message - FIXED
+
 = 1.0.14 =
 * Added filter to change the default subtab displayed under listing tab in user profile - ADDED
 * Fix escape slashes in content of profile fields - FIXED
