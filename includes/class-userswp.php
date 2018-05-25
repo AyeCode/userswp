@@ -260,8 +260,6 @@ class UsersWP {
     }
 
     public function load_shortcodes_actions_and_filters($instance) {
-        add_shortcode( 'uwp_register',  array($instance, 'register'));
-        add_shortcode( 'uwp_login',     array($instance, 'login'));
         add_shortcode( 'uwp_forgot',    array($instance, 'forgot'));
         add_shortcode( 'uwp_change',    array($instance, 'change'));
         add_shortcode( 'uwp_reset',     array($instance, 'reset'));
