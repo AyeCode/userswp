@@ -14,6 +14,8 @@
                         $redirect_to = esc_url($_GET['redirect_to']);
                     } else if($referer = wp_get_referer()){
                         $redirect_to = $referer;
+                    } else {
+                        $redirect_to = '';
                     }
                     echo '<input type="hidden" name="redirect_to" value="'.$redirect_to.'"/>';
                 }

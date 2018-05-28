@@ -215,7 +215,7 @@ class UsersWP {
         add_filter( 'edit_profile_url', array($instance, 'uwp_modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
         remove_all_filters('get_avatar');
-        add_filter( 'get_avatar', array($instance, 'uwp_modify_get_avatar') , 1 , 6 );
+        //add_filter( 'get_avatar', array($instance, 'uwp_modify_get_avatar') , 1 , 6 );
         add_filter( 'get_comment_author_link', array($instance, 'uwp_get_comment_author_link') , 10 , 2 );
         add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
