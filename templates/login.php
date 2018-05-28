@@ -9,13 +9,15 @@
                 <?php do_action('uwp_template_fields', 'login'); ?>
                 <input type="hidden" name="uwp_login_nonce" value="<?php echo wp_create_nonce( 'uwp-login-nonce' ); ?>" />
                 <?php
-                if (is_uwp_login_page() && -1 == uwp_get_option('login_redirect_to', -1)) {
-                    if (isset($_GET['redirect_to'])) {
-                        $redirect_to = esc_url($_GET['redirect_to']);
-                    } else if($referer = wp_get_referer()){
+                if (-1 == uwp_get_option('login_redirect_to', -1)) {
+                    $redirect_to = '';
+                    $referer = wp_get_referer();
+                    if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
+                        $redirect_to = esc_url($_REQUEST['redirect_to']);
+                    } else if(isset($referer) && !empty($referer)){
                         $redirect_to = $referer;
                     } else {
-                        $redirect_to = '';
+                        $redirect_to = home_url();
                     }
                     echo '<input type="hidden" name="redirect_to" value="'.$redirect_to.'"/>';
                 }
