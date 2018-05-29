@@ -119,6 +119,11 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.16 =
+* Fix Default Avatar settings in admin - FIXED
+* Tab re-order in profile tab settings page - FIXED
+* Listing Type Tab Order as GD CPT Order - FIXED
+
 = 1.0.15 =
 * Fix text domain in privacy message - FIXED
 * Fix design issues for login and register forms in widget and shortcode - FIXED
