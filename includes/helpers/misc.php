@@ -359,7 +359,7 @@ function get_uwp_users_list() {
                 )
             ));
         } else {
-            $usermeta_table = uwp_get_table_prefix() . 'uwp_usermeta';
+            $usermeta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
             $users = $wpdb->get_results(
                 "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
@@ -1257,6 +1257,19 @@ function uwp_get_table_prefix() {
     return $tables->get_table_prefix();
 }
 
+/**
+ * Returns the table prefix based on the installation type.
+ *
+ * @since       1.0.16
+ * @package     userswp
+ *
+ * @return      string      Table prefix
+ */
+function get_usermeta_table_prefix() {
+    $tables = new UsersWP_Tables();
+    return $tables->get_usermeta_table_prefix();
+}
+
 
 
 /**
@@ -1496,3 +1509,54 @@ function uwp_refresh_permalinks_on_bad_404() {
     }
 }
 add_action( 'template_redirect', 'uwp_refresh_permalinks_on_bad_404' );
+
+/**
+ * Get upload folder path for multisite network active.
+ *
+ * @since 1.0.7
+ *
+ * @return True if WPML is active else False.
+ */
+function uwp_get_mu_upload_path(){
+    if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+        require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+    }
+
+    $uploads = wp_upload_dir();
+    $upload_url = $uploads['baseurl'];
+
+    // Network active.
+    if ( is_plugin_active_for_network( 'userswp/userswp.php' ) ) {
+        $main_site = get_network()->site_id;
+        switch_to_blog( $main_site );
+        $uploads = wp_upload_dir();
+        $upload_url = $uploads['baseurl'];
+        restore_current_blog();
+    }
+
+    return $upload_url;
+}
+
+/**
+ * Check wpml active or not.
+ *
+ * @param
+ *
+ * @return array upload variable array.
+ */
+function uwp_handle_multisite_profile_image($uploads){
+    if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+        require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+    }
+
+    // Network active.
+    if ( is_plugin_active_for_network( 'userswp/userswp.php' ) ) {
+        $main_site = get_network()->site_id;
+        switch_to_blog( $main_site );
+        remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image');
+        $uploads = wp_upload_dir();
+        restore_current_blog();
+    }
+
+    return $uploads;
+}

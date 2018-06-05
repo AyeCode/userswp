@@ -16,33 +16,80 @@ class UsersWP_Activator {
      * @package     userswp
      * @return      void
      */
-    public static function activate() {
-        
+    public static function activate($network_wide = false) {
+
         self::load_dependencies();
 
-        if (!get_option('uwp_default_data_installed')) {
-            // This is a fresh install
-            self::generate_pages();
-            self::add_default_options();
-            self::uwp_create_tables();
+        if (is_multisite()) {
+            $main_site = get_network()->site_id;
+            if($network_wide){
+                if (defined('UWP_ROOT_PAGES')) {
+                    if (UWP_ROOT_PAGES == 'all') {
+                        $blog_ids = self::uwp_get_blog_ids();
+
+                        foreach ( $blog_ids as $blog_id ) {
+                            switch_to_blog( $blog_id );
+                            self::install();
+                        }
+                        restore_current_blog();
+                    } else {
+                        $blog_id = UWP_ROOT_PAGES;
+                        switch_to_blog( $blog_id );
+                        self::install();
+                        restore_current_blog();
+                    }
+                } else {
+                    switch_to_blog( $main_site );
+                    self::install();
+                    restore_current_blog();
+                }
+
+                switch_to_blog( $main_site );
+                self::uwp101_create_tables();
+                self::uwp_insert_usermeta();
+                restore_current_blog();
+            } else {
+                self::install();
+                self::uwp101_create_tables();
+                self::uwp_insert_usermeta();
+            }
+        } else {
+            self::install();
             self::uwp101_create_tables();
             self::uwp_insert_usermeta();
-            self::uwp_create_default_fields();
-            self::uwp_insert_form_extras();
-            self::uwp_flush_rewrite_rules();
-            update_option('uwp_activation_redirect', 1);
-            update_option('uwp_flush_rewrite', 1);
-            update_option('uwp_db_version', USERSWP_VERSION);
-            update_option('uwp_default_data_installed', 1);
-        } else {
-            // already installed
-            self::uwp_create_tables();
-            self::uwp101_create_tables();
-            update_option('uwp_db_version', USERSWP_VERSION);
         }
 
+    }
 
-        
+    public static function install(){
+
+        self::generate_pages();
+        self::add_default_options();
+        self::uwp_create_tables();
+        self::uwp_create_default_fields();
+        self::uwp_insert_form_extras();
+        self::uwp_flush_rewrite_rules();
+        update_option('uwp_activation_redirect', 1);
+        update_option('uwp_flush_rewrite', 1);
+        update_option('uwp_db_version', USERSWP_VERSION);
+
+    }
+
+    /**
+     * Get all IDs of blogs that are not activated, not spam, and not deleted
+     *
+     * @global      object $wpdb
+     * @return      array|false Array of IDs or false if none are found
+     */
+    public static function uwp_get_blog_ids() {
+        global $wpdb;
+
+        // Get an array of IDs
+        $sql = "SELECT blog_id FROM $wpdb->blogs
+                    WHERE archived = '0' AND spam = '0'
+                    AND deleted = '0'";
+
+        return $wpdb->get_col( $sql );
     }
 
     /**
@@ -85,7 +132,7 @@ class UsersWP_Activator {
         if (!isset($settings['profile_no_of_items'])) {
             $settings['profile_no_of_items'] = '10';
         }
-        
+
         //login
         if (!isset($settings['login_redirect_to'])) {
             $settings['login_redirect_to'] = -1;
@@ -675,7 +722,7 @@ class UsersWP_Activator {
                 'confirm_password'  =>  '1'
             )
         );
-        
+
 
         $fields = apply_filters('uwp_default_custom_fields_account', $fields);
 

@@ -33,26 +33,8 @@ define( 'USERSWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
  * @param $network_wide
  */
 function activate_users_wp($network_wide) {
-    if (is_multisite()) {
-        if ($network_wide) {
-            $main_blog_id = (int) get_network()->site_id;
-            // Switch to the new blog.
-            switch_to_blog( $main_blog_id );
-
-            require_once('includes/class-activator.php');
-            UsersWP_Activator::activate();
-
-            // Restore original blog.
-            restore_current_blog();
-        } else {
-            require_once('includes/class-activator.php');
-            UsersWP_Activator::activate();
-        }
-    } else {
-        require_once('includes/class-activator.php');
-        UsersWP_Activator::activate();
-    }
-    
+    require_once('includes/class-activator.php');
+    UsersWP_Activator::activate($network_wide);
 }
 /**
  * The code that runs during plugin deactivation.
@@ -70,14 +52,6 @@ register_deactivation_hook( __FILE__, 'deactivate_users_wp' );
  * admin-specific hooks, and public-facing site hooks.
  */
 require_once('includes/class-userswp.php');
-
-// Run upgrade on version change
-if(is_admin() && version_compare(USERSWP_VERSION, get_option('uwp_db_version'))){
-    add_action( 'init', 'uwp_init_hook_actions' );
-}
-function uwp_init_hook_actions(){
-    activate_users_wp(false);
-}
 
 /**
  * Begins execution of the plugin.

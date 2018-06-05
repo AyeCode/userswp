@@ -128,7 +128,7 @@ class UsersWP_Meta {
         }
 
         global $wpdb;
-        $meta_table = uwp_get_table_prefix() . 'uwp_usermeta';
+        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
         $user_meta_info = uwp_get_usermeta_row($user_id);
 
         $value = apply_filters( 'uwp_update_usermeta', $value, $user_id, $key, $user_meta_info );
@@ -186,7 +186,7 @@ class UsersWP_Meta {
         }
 
         global $wpdb;
-        $meta_table = uwp_get_table_prefix() . 'uwp_usermeta';
+        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
         $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$meta_table} WHERE user_id = %d", $user_id));
 
@@ -209,7 +209,7 @@ class UsersWP_Meta {
         }
 
         global $wpdb;
-        $meta_table = uwp_get_table_prefix() . 'uwp_usermeta';
+        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
         $wpdb->query($wpdb->prepare("DELETE FROM {$meta_table} WHERE user_id = %d", $user_id));
     }
 

@@ -1188,7 +1188,9 @@ class UsersWP_Forms {
             }
 
             $image_url = esc_url($image_url);
-            $uploads = wp_upload_dir();
+            add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
+			$uploads = wp_upload_dir();
+            remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
             $upload_url = $uploads['baseurl'];
             $upload_path = $uploads['basedir'];
             $image_url = str_replace($upload_url, $upload_path, $image_url);

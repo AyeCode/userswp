@@ -105,27 +105,6 @@ class UsersWP_Tables {
 
         dbDelta($form_extras);
 
-
-        // Table for storing userswp usermeta
-        $usermeta_table_name = uwp_get_table_prefix() . 'uwp_usermeta';
-        $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
-						user_id int(20) NOT NULL,
-						user_ip varchar(20) NULL DEFAULT NULL,
-						user_privacy varchar(255) NULL DEFAULT NULL,
-						uwp_account_username varchar(255) NULL DEFAULT NULL,
-						uwp_account_email varchar(255) NULL DEFAULT NULL,
-						uwp_account_first_name varchar(255) NULL DEFAULT NULL,
-						uwp_account_last_name varchar(255) NULL DEFAULT NULL,
-						uwp_account_bio varchar(255) NULL DEFAULT NULL,
-						uwp_account_avatar_thumb varchar(255) NULL DEFAULT NULL,
-						uwp_account_banner_thumb varchar(255) NULL DEFAULT NULL,
-						PRIMARY KEY  (user_id)
-						) $collate ";
-
-        $user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);
-
-        dbDelta($user_meta);
-
     }
 
     /**
@@ -152,8 +131,8 @@ class UsersWP_Tables {
 
 
         // Table for storing userswp usermeta
-        $usermeta_table_name = uwp_get_table_prefix() . 'uwp_usermeta';
-        $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
+        $usermeta_table_name = get_usermeta_table_prefix() . 'uwp_usermeta';
+          $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
 						user_id int(20) NOT NULL,
 						user_ip varchar(20) NULL DEFAULT NULL,
 						uwp_account_username varchar(255) NULL DEFAULT NULL,
@@ -199,11 +178,29 @@ class UsersWP_Tables {
      */
     public function get_table_prefix() {
         global $wpdb;
-        $install_type = uwp_get_installation_type();
-        if ($install_type == "multi_not_na") {
-            return $wpdb->prefix;
-        } else {
+        return $wpdb->prefix;
+    }
+
+    /**
+     * Returns the user meta table prefix based on the installation type.
+     *
+     * @since       1.0.16
+     * @package     userswp
+     *
+     * @return      string      Table prefix
+     */
+    public function get_usermeta_table_prefix() {
+        global $wpdb;
+
+        if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+            require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+        }
+
+        // Network active.
+        if ( is_plugin_active_for_network( 'userswp/userswp.php' ) ) {
             return $wpdb->base_prefix;
+        } else {
+               return $wpdb->prefix;
         }
     }
 
