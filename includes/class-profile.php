@@ -22,7 +22,7 @@ class UsersWP_Profile {
         add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
         $uploads = wp_upload_dir();
         remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
-        $upload_url = uwp_get_mu_upload_path();
+        $upload_url = $uploads['baseurl'];
         if (is_user_logged_in() && get_current_user_id() == $user->ID && is_uwp_profile_page()) {
             $trigger_class = "uwp-profile-modal-form-trigger";
         } else {

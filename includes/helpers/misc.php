@@ -1511,33 +1511,6 @@ function uwp_refresh_permalinks_on_bad_404() {
 add_action( 'template_redirect', 'uwp_refresh_permalinks_on_bad_404' );
 
 /**
- * Get upload folder path for multisite network active.
- *
- * @since 1.0.7
- *
- * @return True if WPML is active else False.
- */
-function uwp_get_mu_upload_path(){
-    if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-        require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-    }
-
-    $uploads = wp_upload_dir();
-    $upload_url = $uploads['baseurl'];
-
-    // Network active.
-    if ( is_plugin_active_for_network( 'userswp/userswp.php' ) ) {
-        $main_site = get_network()->site_id;
-        switch_to_blog( $main_site );
-        $uploads = wp_upload_dir();
-        $upload_url = $uploads['baseurl'];
-        restore_current_blog();
-    }
-
-    return $upload_url;
-}
-
-/**
  * Check wpml active or not.
  *
  * @param
