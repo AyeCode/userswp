@@ -53,6 +53,19 @@ register_deactivation_hook( __FILE__, 'deactivate_users_wp' );
  */
 require_once('includes/class-userswp.php');
 
+add_action( 'admin_init', 'uwp_automatic_upgrade' );
+function uwp_automatic_upgrade(){
+    $uwp_db_version = get_option('uwp_db_version');
+
+    if ( $uwp_db_version == USERSWP_VERSION ) {
+        return;
+    }
+
+    if ( version_compare( $uwp_db_version, '1.0.1', '<' ) ) {
+        uwp101_create_tables();
+    }
+}
+
 /**
  * Begins execution of the plugin.
  *

@@ -64,14 +64,18 @@ class UsersWP_Activator {
     public static function install(){
 
         self::generate_pages();
-        self::add_default_options();
         self::uwp_create_tables();
-        self::uwp_create_default_fields();
-        self::uwp_insert_form_extras();
+
+        if (!get_option('uwp_default_data_installed')) {
+            self::add_default_options();
+            self::uwp_create_default_fields();
+            self::uwp_insert_form_extras();
+            update_option('uwp_default_data_installed', 1);
+        }
+
         self::uwp_flush_rewrite_rules();
         update_option('uwp_activation_redirect', 1);
         update_option('uwp_flush_rewrite', 1);
-        update_option('uwp_db_version', USERSWP_VERSION);
 
     }
 

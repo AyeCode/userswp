@@ -18,6 +18,8 @@ class UsersWP_Tables {
     public function uwp_create_tables()
     {
 
+        if ( get_option('uwp_db_version') == USERSWP_VERSION ) return;
+
         global $wpdb;
 
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
@@ -105,6 +107,8 @@ class UsersWP_Tables {
 
         dbDelta($form_extras);
 
+        update_option('uwp_db_version', USERSWP_VERSION);
+
     }
 
     /**
@@ -116,8 +120,10 @@ class UsersWP_Tables {
      * @return      void
      */
     public function uwp101_create_tables() {
-        global $wpdb;
 
+        if ( get_option('uwp_db_version') == USERSWP_VERSION ) return;
+
+        global $wpdb;
 
         $wpdb->hide_errors();
 
@@ -148,6 +154,8 @@ class UsersWP_Tables {
         $user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);
 
         dbDelta($user_meta);
+
+        update_option('uwp_db_version', USERSWP_VERSION);
     }
 
     /**
