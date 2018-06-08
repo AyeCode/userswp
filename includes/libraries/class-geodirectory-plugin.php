@@ -654,7 +654,7 @@ class UsersWP_GeoDirectory_Plugin {
 
                     do_action('uwp_before_profile_listing_item', $post_id, $user, $post_type);
                     ?>
-                    <li class="uwp-profile-item-li uwp-profile-item-clearfix">
+                    <li class="uwp-profile-item-li uwp-profile-item-clearfix <?php echo 'gd-post-'.$post_type; ?>">
                         <a class="uwp-profile-item-img" href="<?php echo get_the_permalink(); ?>">
                             <?php
                             if (has_post_thumbnail()) {
@@ -784,7 +784,7 @@ class UsersWP_GeoDirectory_Plugin {
 
                         do_action('uwp_before_profile_reviews_item', $review->comment_id, $user, $post_type);
                     ?>
-                    <li class="uwp-profile-item-li uwp-profile-item-clearfix">
+                    <li class="uwp-profile-item-li uwp-profile-item-clearfix <?php echo 'gd-post-'.$post_type; ?>">
                         <a class="uwp-profile-item-img" href="<?php echo get_comment_link($review->comment_id); ?>">
                             <?php
                             if ( has_post_thumbnail($review->post_id) ) {
@@ -888,7 +888,7 @@ class UsersWP_GeoDirectory_Plugin {
                         ob_end_clean();
                         do_action('uwp_before_profile_favourite_item', $post_id, $user, $post_type);
                         ?>
-                        <li class="uwp-profile-item-li uwp-profile-item-clearfix">
+                        <li class="uwp-profile-item-li uwp-profile-item-clearfix <?php echo 'gd-post-'.$post_type; ?>">
                             <a class="uwp-profile-item-img" href="<?php echo get_the_permalink(); ?>">
                                 <?php
                                 if (has_post_thumbnail()) {
