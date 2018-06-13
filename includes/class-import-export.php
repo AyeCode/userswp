@@ -31,7 +31,7 @@ class UsersWP_Import_Export {
         $this->export_dir       = $this->export_location();
         $this->export_url       = $this->export_location( true );
         $this->per_page         = 20;
-        $this->meta_table_name  = uwp_get_table_prefix() . 'uwp_usermeta';
+        $this->meta_table_name  = get_usermeta_table_prefix() . 'uwp_usermeta';
         $this->path  = '';
 
         add_action( 'userswp_settings_import-export_tab_content', array($this, 'get_ie_content') );

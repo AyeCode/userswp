@@ -19,7 +19,9 @@ class UsersWP_Profile {
     public function get_profile_header($user) {
         $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
         $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar_thumb', '');
+        add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
         $uploads = wp_upload_dir();
+        remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
         $upload_url = $uploads['baseurl'];
         if (is_user_logged_in() && get_current_user_id() == $user->ID && is_uwp_profile_page()) {
             $trigger_class = "uwp-profile-modal-form-trigger";
@@ -808,7 +810,9 @@ class UsersWP_Profile {
      */
     public function uwp_image_crop_popup($image_url, $type) {
 
+        add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
         $uploads = wp_upload_dir();
+        remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
         $upload_url = $uploads['baseurl'];
         $upload_path = $uploads['basedir'];
         $image_path = str_replace($upload_url, $upload_path, $image_url);
@@ -1238,7 +1242,9 @@ class UsersWP_Profile {
         if ( $user && is_object( $user ) ) {
             $avatar_thumb = uwp_get_usermeta($user->data->ID, 'uwp_account_avatar_thumb', '');
             if ( !empty($avatar_thumb) ) {
+                add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
                 $uploads = wp_upload_dir();
+                remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
                 $upload_url = $uploads['baseurl'];
                 if (substr( $avatar_thumb, 0, 4 ) !== "http") {
                     $avatar_thumb = $upload_url.$avatar_thumb;
