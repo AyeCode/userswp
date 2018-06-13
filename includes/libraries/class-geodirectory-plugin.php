@@ -537,16 +537,16 @@ class UsersWP_GeoDirectory_Plugin {
             $listing_post_types = array();
         }
 
-        foreach ($listing_post_types as $post_type) {
-            if (array_key_exists($post_type, $gd_post_types)) {
-                $post_type_slug = $gd_post_types[$post_type]['has_archive'];
+        foreach ($gd_post_types as $post_type_id => $post_type) {
+            if (in_array($post_type_id, $listing_post_types)) {
+                $post_type_slug = $gd_post_types[$post_type_id]['has_archive'];
 
                 if ($type == 'listings') {
-                    $count = uwp_post_count($user->ID, $post_type);
+                    $count = uwp_post_count($user->ID, $post_type_id);
                 } elseif ($type == 'reviews') {
-                    $count = $this->geodir_get_reviews_by_user_id($post_type, $user->ID, true);
+                    $count = $this->geodir_get_reviews_by_user_id($post_type_id, $user->ID, true);
                 } elseif ($type == 'favorites') {
-                    $count = $this->geodir_count_favorite($post_type, $user->ID);
+                    $count = $this->geodir_count_favorite($post_type_id, $user->ID);
                 } else {
                     $count = 0;
                 }
@@ -555,9 +555,9 @@ class UsersWP_GeoDirectory_Plugin {
                     $count = 0;
                 }
                 $tabs[$post_type_slug] = array(
-                    'title' => $gd_post_types[$post_type]['labels']['name'],
+                    'title' => $gd_post_types[$post_type_id]['labels']['name'],
                     'count' => $count,
-                    'ptype' => $post_type
+                    'ptype' => $post_type_id
                 );
             }
         }
