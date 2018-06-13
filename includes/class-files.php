@@ -62,6 +62,9 @@ class UsersWP_Files {
                 }
 
                 remove_filter( 'wp_handle_upload_prefilter', array($this, 'uwp_wp_media_restrict_file_types') );
+                if(in_array($field->htmlvar_name, array('uwp_banner_file','uwp_avatar_file'))){
+                    add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
+                }
                 $uploaded_file = $this->uwp_upload_file( $file_to_upload, array( 'file_key' => $file_key ) );
                 add_filter( 'wp_handle_upload_prefilter', array($this, 'uwp_wp_media_restrict_file_types') );
 
