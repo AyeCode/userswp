@@ -1068,7 +1068,7 @@ class UsersWP_Form_Builder {
 
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
-        $meta_table = uwp_get_table_prefix() . 'uwp_usermeta';
+        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
         $old_html_variable = '';
 

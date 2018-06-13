@@ -535,7 +535,7 @@ class UsersWP_Pages {
     public function get_page_id($type, $get_link = false) {
 
         $link = false;
-        $page_id = uwp_get_option($type, false);
+        $page_id = uwp_get_option($type, false, false);
 
         if ($page_id) {
             if (uwp_is_wpml()) {
