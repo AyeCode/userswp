@@ -562,7 +562,7 @@ class UsersWP_Admin_Settings {
                             'multiple'    => true,
                             'chosen'      => true,
                             'type'        => 'select_order',
-                            'options' =>   $this->uwp_available_tab_items(),
+                            'options' =>   $this->uwp_available_tab_items_options(),
                             'placeholder' => __( 'Select Tabs', 'userswp' )
                         ),
                     )
@@ -827,6 +827,23 @@ class UsersWP_Admin_Settings {
         add_settings_error( 'uwp-notices', '', __( 'Settings updated.', 'userswp' ), 'updated' );
 
         return $output;
+    }
+
+    public function uwp_available_tab_items_options(){
+        $all_tabs = $this->uwp_available_tab_items();
+        $allowed_tabs = array_keys($all_tabs);
+        $selected_tabs = uwp_get_option('enable_profile_tabs', array());
+        $return = array();
+
+        if(!empty($selected_tabs) && is_array($selected_tabs)) {
+            foreach ($selected_tabs as $tab) {
+                if (in_array($tab, $allowed_tabs)) {
+                    $return[$tab] = $all_tabs[$tab];
+                }
+            }
+        }
+
+        return $return;
     }
 
     public function uwp_available_tab_items() {
