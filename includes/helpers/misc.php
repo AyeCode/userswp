@@ -1539,55 +1539,58 @@ add_filter( 'get_avatar', 'uwp_modify_get_avatar' , 99999 , 6 );
  * @param       string      $alt            Alternative text to use in the avatar image tag. Default empty.
  * @return      string                      Modified img tag value
  */
-function uwp_modify_get_avatar( $avatar, $id_or_email, $size, $default, $alt, $args ) {
+function uwp_modify_get_avatar( $avatar, $id_or_email, $size, $default, $alt, $args )
+{
     $user = false;
 
-    if ( is_numeric( $id_or_email ) ) {
+    if (is_numeric($id_or_email)) {
 
-        $id = (int) $id_or_email;
-        $user = get_user_by( 'id' , $id );
+        $id = (int)$id_or_email;
+        $user = get_user_by('id', $id);
 
-    } elseif ( is_object( $id_or_email ) ) {
+    } elseif (is_object($id_or_email)) {
 
-        if ( ! empty( $id_or_email->user_id ) ) {
-            $id = (int) $id_or_email->user_id;
-            $user = get_user_by( 'id' , $id );
+        if (!empty($id_or_email->user_id)) {
+            $id = (int)$id_or_email->user_id;
+            $user = get_user_by('id', $id);
         }
 
     } else {
-        $user = get_user_by( 'email', $id_or_email );
+        $user = get_user_by('email', $id_or_email);
     }
 
-    if ( $user && is_object( $user ) ) {
+    if ($user && is_object($user)) {
         $avatar_thumb = uwp_get_usermeta($user->data->ID, 'uwp_account_avatar_thumb', '');
-        if ( !empty($avatar_thumb) ) {
+        if (!empty($avatar_thumb)) {
             $uploads = wp_upload_dir();
             $upload_url = $uploads['baseurl'];
-            if (substr( $avatar_thumb, 0, 4 ) !== "http") {
-                $avatar_thumb = $upload_url.$avatar_thumb;
+            if (substr($avatar_thumb, 0, 4) !== "http") {
+                $avatar_thumb = $upload_url . $avatar_thumb;
             }
             $avatar = "<img alt='{$alt}' src='{$avatar_thumb}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
         } else {
             $default = uwp_get_default_avatar_uri();
-            $args = get_avatar_data( $id_or_email, $args );
+            $args = get_avatar_data($id_or_email, $args);
             $url = $args['url'];
             $url = remove_query_arg('d', $url);
             $url = add_query_arg(array('d' => $default), $url);
-            if ( ! $url || is_wp_error( $url ) ) {
+            if (!$url || is_wp_error($url)) {
                 return $avatar;
             }
-            $avatar = '<img src="' .$url  .'" class="gravatar avatar avatar-'.$size.' uwp-avatar" width="'.$size.'" height="'.$size.'" alt="'.$alt.'" />';
+            $avatar = '<img src="' . $url . '" class="gravatar avatar avatar-' . $size . ' uwp-avatar" width="' . $size . '" height="' . $size . '" alt="' . $alt . '" />';
         }
 
     }
 
     return $avatar;
+}
+
 /**
- * Check wpml active or not.
+ * Handles multisite upload dir path
  *
- * @param
+ * @param $uploads array upload variable array
  *
- * @return array upload variable array.
+ * @return array updated upload variable array.
  */
 function uwp_handle_multisite_profile_image($uploads){
     if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
