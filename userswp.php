@@ -3,7 +3,7 @@
 Plugin Name: UsersWP
 Plugin URI: https://userswp.io/
 Description: User management plugin.
-Version: 1.0.16
+Version: 1.0.17
 Author: AyeCode Ltd
 Author URI: https://userswp.io
 License: GPL-2.0+
@@ -21,7 +21,7 @@ if (!defined('WPINC')) {
 
 define( 'USERSWP_NAME', 'userswp' );
 
-define( 'USERSWP_VERSION', '1.0.16' );
+define( 'USERSWP_VERSION', '1.0.17' );
 
 define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
 

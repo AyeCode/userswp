@@ -4,7 +4,7 @@ Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 3.1
 Tested up to: 4.9
-Stable tag: 1.0.16
+Stable tag: 1.0.17
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -120,7 +120,7 @@ No questions so far, but don't hesitate to ask!
 == Changelog ==
 
 = 1.0.17 =
-* Usermeta table not created on activation - FIXED
+* In some cases the usermeta table is not created on activation - FIXED
 
 = 1.0.16 =
 * Fix Default Avatar settings in admin - FIXED
