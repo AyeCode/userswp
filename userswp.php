@@ -57,12 +57,10 @@ add_action( 'admin_init', 'uwp_automatic_upgrade' );
 function uwp_automatic_upgrade(){
     $uwp_db_version = get_option('uwp_db_version');
 
-    if ( $uwp_db_version == USERSWP_VERSION ) {
-        return;
-    }
+    if ( $uwp_db_version != USERSWP_VERSION ) {
+        require_once('includes/class-activator.php');
 
-    if ( version_compare( $uwp_db_version, '1.0.1', '<' ) ) {
-        uwp101_create_tables();
+        UsersWP_Activator::activate(is_plugin_active_for_network( 'userswp/userswp.php' ));
     }
 }
 
