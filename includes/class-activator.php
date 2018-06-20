@@ -71,10 +71,10 @@ class UsersWP_Activator {
             self::uwp_create_default_fields();
             self::uwp_insert_form_extras();
             update_option('uwp_default_data_installed', 1);
+            update_option('uwp_activation_redirect', 1);
         }
 
         self::uwp_flush_rewrite_rules();
-        update_option('uwp_activation_redirect', 1);
         update_option('uwp_flush_rewrite', 1);
 
     }
