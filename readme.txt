@@ -119,6 +119,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.17 =
+* Usermeta table not created on activation - FIXED
+
 = 1.0.16 =
 * Fix Default Avatar settings in admin - FIXED
 * Tab re-order in profile tab settings page - FIXED
