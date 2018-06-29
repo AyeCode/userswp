@@ -119,6 +119,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.18 =
+* Choose tabs in profile setting not displaying tabs sometime - FIXED
+
 = 1.0.17 =
 * In some cases the usermeta table is not created on activation - FIXED
 
