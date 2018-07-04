@@ -562,7 +562,7 @@ class UsersWP_Admin_Settings {
                             'multiple'    => true,
                             'chosen'      => true,
                             'type'        => 'select_order',
-                            'options' =>   $this->uwp_available_tab_items_options(),
+                            'options' =>   $this->uwp_available_tab_items(),
                             'placeholder' => __( 'Select Tabs', 'userswp' )
                         ),
                     )
