@@ -121,6 +121,7 @@ No questions so far, but don't hesitate to ask!
 
 = 1.0.18 =
 * Choose tabs in profile setting not displaying tabs after save - FIXED
+* Fix strings typos and translations- FIXED
 
 = 1.0.17 =
 * In some cases the usermeta table is not created on activation - FIXED

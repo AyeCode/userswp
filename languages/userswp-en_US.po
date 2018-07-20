@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UsersWP 1.0.17\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-20 11:00+0100\n"
-"PO-Revision-Date: 2018-06-20 11:00+0100\n"
+"POT-Creation-Date: 2018-07-20 12:31+0530\n"
+"PO-Revision-Date: 2018-07-20 12:31+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode <info@userswp.io>\n"
 "Language: en_US\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.8\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: admin/class-admin.php:109
@@ -35,7 +35,7 @@ msgid "HTML Variable Name should be a unique name."
 msgstr ""
 
 #: admin/class-admin.php:113
-msgid "Are you wish to delete this field?"
+msgid "Are you sure you wish to delete this field?"
 msgstr ""
 
 #: admin/class-admin.php:114
@@ -314,7 +314,7 @@ msgid "Fieldset:"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:546
-msgid "Label :"
+msgid "Label:"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:548
@@ -651,11 +651,11 @@ msgid "Decimal Field"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1921
-msgid "Select decimal point :"
+msgid "Select decimal precision:"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1923
-msgid "Decimal point to display after point"
+msgid "Decimal places to display after point"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1966
@@ -684,7 +684,7 @@ msgid "This field is applicable only for register form."
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:2031
-msgid "Available regsiter form fields."
+msgid "Available register form fields."
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:2043
@@ -1225,37 +1225,37 @@ msgstr ""
 msgid "Settings updated."
 msgstr ""
 
-#: admin/settings/class-settings.php:851 includes/class-profile.php:358
+#: admin/settings/class-settings.php:847 includes/class-profile.php:358
 msgid "More Info"
 msgstr ""
 
-#: admin/settings/class-settings.php:852 includes/class-profile.php:365
+#: admin/settings/class-settings.php:848 includes/class-profile.php:365
 #: includes/class-profile.php:530
 msgid "Posts"
 msgstr ""
 
-#: admin/settings/class-settings.php:853 includes/class-profile.php:372
+#: admin/settings/class-settings.php:849 includes/class-profile.php:372
 #: includes/class-profile.php:551
 msgid "Comments"
 msgstr ""
 
-#: admin/settings/class-settings.php:863 includes/class-profile.php:1561
+#: admin/settings/class-settings.php:859 includes/class-profile.php:1561
 msgid "List View"
 msgstr ""
 
-#: admin/settings/class-settings.php:864
+#: admin/settings/class-settings.php:860
 msgid "Grid View - 2 Column"
 msgstr ""
 
-#: admin/settings/class-settings.php:865
+#: admin/settings/class-settings.php:861
 msgid "Grid View - 3 Column"
 msgstr ""
 
-#: admin/settings/class-settings.php:866
+#: admin/settings/class-settings.php:862
 msgid "Grid View - 4 Column"
 msgstr ""
 
-#: admin/settings/class-settings.php:867
+#: admin/settings/class-settings.php:863
 msgid "Grid View - 5 Column"
 msgstr ""
 
@@ -1555,7 +1555,7 @@ msgstr ""
 #: includes/class-forms.php:202
 #, php-format
 msgid ""
-"<strong>Warning</strong>: You seems like you are using a system generated "
+"<strong>Warning</strong>: It seems like you are using a system generated "
 "password. Please change the password in this page. If this is not a problem "
 "for you, you can remove this warning by <a href=\"%s\">clicking here</a>."
 msgstr ""
@@ -1593,7 +1593,7 @@ msgstr ""
 #, php-format
 msgid ""
 "An email has been sent to your registered email address. Please click the "
-"activation link to proceed. <a href=\"%s\">Resend</a>."
+"activation link to proceed. %sResend%s."
 msgstr ""
 
 #: includes/class-forms.php:433
@@ -1949,7 +1949,7 @@ msgid "The uploaded file is too small. Minimum image height should be %s px"
 msgstr ""
 
 #: includes/class-profile.php:1441
-msgid "Invalid modal type"
+msgid "Invalid request!"
 msgstr ""
 
 #: includes/class-profile.php:1459

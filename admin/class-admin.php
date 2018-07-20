@@ -110,7 +110,7 @@ class UsersWP_Admin {
             'custom_field_options_not_blank_var' => __('Option Values must not be blank', 'userswp'),
             'custom_field_not_special_char' => __('Please do not use special character and spaces in HTML Variable Name.', 'userswp'),
             'custom_field_unique_name' => __('HTML Variable Name should be a unique name.', 'userswp'),
-            'custom_field_delete' => __('Are you wish to delete this field?', 'userswp'),
+            'custom_field_delete' => __('Are you sure you wish to delete this field?', 'userswp'),
             'custom_field_id_required' => __('This field is required.', 'userswp'),
         );
         wp_localize_script("userswp_admin", 'uwp_admin_ajax', $ajax_cons_data);

@@ -199,7 +199,7 @@ class UsersWP_Forms {
                     echo $message;
                     echo '</div>';
                 } else {
-                    $message = sprintf(__('<strong>Warning</strong>: You seems like you are using a system generated password. Please change the password in this page. If this is not a problem for you, you can remove this warning by <a href="%s">clicking here</a>.', 'userswp'), $remove_nag_url);
+                    $message = sprintf(__('<strong>Warning</strong>: It seems like you are using a system generated password. Please change the password in this page. If this is not a problem for you, you can remove this warning by <a href="%s">clicking here</a>.', 'userswp'), $remove_nag_url);
                     echo '<div class="uwp-alert-warning text-center">';
                     echo $message;
                     echo '</div>';
