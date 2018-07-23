@@ -2,7 +2,7 @@
 Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
-Requires at least: 3.1
+Requires at least: 4.5
 Tested up to: 4.9
 Stable tag: 1.0.17
 License: GPLv3
@@ -122,6 +122,7 @@ No questions so far, but don't hesitate to ask!
 = 1.0.18 =
 * Choose tabs in profile setting not displaying tabs after save - FIXED
 * Fix strings typos and translations- FIXED
+* WP min version - CHANGED
 
 = 1.0.17 =
 * In some cases the usermeta table is not created on activation - FIXED
