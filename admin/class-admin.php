@@ -176,8 +176,8 @@ class UsersWP_Admin {
 
 
         add_menu_page(
-            'UsersWP Settings',
-            'UsersWP',
+            __( 'UsersWP Settings', 'userswp' ),
+            __( 'UsersWP', 'userswp' ),
             'manage_options',
             'userswp',
             array( $this->admin_settings, 'uwp_settings_page' ),
@@ -188,8 +188,8 @@ class UsersWP_Admin {
         if ($show_builder) {
             add_submenu_page(
                 "userswp",
-                "Form Builder",
-                "Form Builder",
+                __( 'Form Builder', 'userswp' ),
+                __( 'Form Builder', 'userswp' ),
                 'manage_options',
                 'uwp_form_builder',
                 array($this->admin_settings, 'uwp_settings_page')
@@ -197,8 +197,8 @@ class UsersWP_Admin {
 
             add_submenu_page(
                 "userswp",
-                "Notifications",
-                "Notifications",
+                __( 'Notifications', 'userswp' ),
+                __( 'Notifications', 'userswp' ),
                 'manage_options',
                 'uwp_notifications',
                 array($this->admin_settings, 'uwp_settings_page')

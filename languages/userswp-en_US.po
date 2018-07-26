@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UsersWP 1.0.17\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-20 12:31+0530\n"
-"PO-Revision-Date: 2018-07-20 12:31+0530\n"
+"POT-Creation-Date: 2018-07-26 15:08+0530\n"
+"PO-Revision-Date: 2018-07-26 15:08+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode <info@userswp.io>\n"
 "Language: en_US\n"
@@ -40,6 +40,24 @@ msgstr ""
 
 #: admin/class-admin.php:114
 msgid "This field is required."
+msgstr ""
+
+#: admin/class-admin.php:179
+msgid "UsersWP Settings"
+msgstr ""
+
+#: admin/class-admin.php:180 admin/settings/class-settings.php:613
+#: includes/class-uwp-privacy.php:17
+msgid "UsersWP"
+msgstr ""
+
+#: admin/class-admin.php:191 admin/class-admin.php:192
+#: includes/helpers/tabs.php:208
+msgid "Form Builder"
+msgstr ""
+
+#: admin/class-admin.php:200 admin/class-admin.php:201
+msgid "Notifications"
 msgstr ""
 
 #: admin/menus/class-menus.php:49
@@ -139,7 +157,10 @@ msgid "Add new form field"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:41
-msgid "Click on any box below to add a field of that type on "
+#, php-format
+msgid ""
+"Click on any box below to add a field of that type on %s form. You must be "
+"use a fieldset to group your fields."
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:47
@@ -155,9 +176,10 @@ msgid "List of fields those will appear on add new listing form"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:83
+#, php-format
 msgid ""
 "Click to expand and view field related settings. You may drag and drop to "
-"arrange fields order on "
+"arrange fields order on %s form too."
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:122
@@ -1041,9 +1063,10 @@ msgid "Profile Avatar max file size"
 msgstr ""
 
 #: admin/settings/class-settings.php:510
+#, php-format
 msgid ""
 "Enter Profile Avatar max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 "
-"Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>"
+"Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used."
 msgstr ""
 
 #: admin/settings/class-settings.php:514
@@ -1055,9 +1078,10 @@ msgid "Profile Banner max file size"
 msgstr ""
 
 #: admin/settings/class-settings.php:519
+#, php-format
 msgid ""
 "Enter Profile Banner max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 "
-"Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>"
+"Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used."
 msgstr ""
 
 #: admin/settings/class-settings.php:523
@@ -1130,10 +1154,6 @@ msgstr ""
 
 #: admin/settings/class-settings.php:601
 msgid "Disable system generated password notice."
-msgstr ""
-
-#: admin/settings/class-settings.php:613 includes/class-uwp-privacy.php:17
-msgid "UsersWP"
 msgstr ""
 
 #: admin/settings/class-settings.php:614
@@ -1234,28 +1254,28 @@ msgstr ""
 msgid "Posts"
 msgstr ""
 
-#: admin/settings/class-settings.php:849 includes/class-profile.php:372
-#: includes/class-profile.php:551
+#: admin/settings/class-settings.php:849 admin/settings/class-settings.php:850
+#: includes/class-profile.php:372 includes/class-profile.php:551
 msgid "Comments"
 msgstr ""
 
-#: admin/settings/class-settings.php:859 includes/class-profile.php:1561
+#: admin/settings/class-settings.php:860 includes/class-profile.php:1561
 msgid "List View"
 msgstr ""
 
-#: admin/settings/class-settings.php:860
+#: admin/settings/class-settings.php:861
 msgid "Grid View - 2 Column"
 msgstr ""
 
-#: admin/settings/class-settings.php:861
+#: admin/settings/class-settings.php:862
 msgid "Grid View - 3 Column"
 msgstr ""
 
-#: admin/settings/class-settings.php:862
+#: admin/settings/class-settings.php:863
 msgid "Grid View - 4 Column"
 msgstr ""
 
-#: admin/settings/class-settings.php:863
+#: admin/settings/class-settings.php:864
 msgid "Grid View - 5 Column"
 msgstr ""
 
@@ -2322,10 +2342,6 @@ msgstr ""
 
 #: includes/helpers/tabs.php:203
 msgid "Uninstall"
-msgstr ""
-
-#: includes/helpers/tabs.php:208
-msgid "Form Builder"
 msgstr ""
 
 #: includes/helpers/tabs.php:214

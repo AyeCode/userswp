@@ -507,7 +507,7 @@ class UsersWP_Admin_Settings {
                         'profile_avatar_size' => array(
                             'id'   => 'profile_avatar_size',
                             'name' => __( 'Profile Avatar max file size', 'userswp' ),
-                            'desc' => __( 'Enter Profile Avatar max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>) will be used.', 'userswp' ),
+                            'desc' => sprintf(__( 'Enter Profile Avatar max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used.', 'userswp' ), '<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>'),
                             'type' => 'number',
                             'std'  => '',
                             'size' => 'regular',
@@ -516,7 +516,7 @@ class UsersWP_Admin_Settings {
                         'profile_banner_size' => array(
                             'id'   => 'profile_banner_size',
                             'name' => __( 'Profile Banner max file size', 'userswp' ),
-                            'desc' => __( 'Enter Profile Banner max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>) will be used.', 'userswp' ),
+                            'desc' => sprintf(__( 'Enter Profile Banner max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used.', 'userswp' ), '<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>'),
                             'type' => 'number',
                             'std'  => '',
                             'size' => 'regular',
@@ -846,6 +846,7 @@ class UsersWP_Admin_Settings {
         $tabs_arr = array(
             'more_info' => __( 'More Info', 'userswp' ),
             'posts' => __( 'Posts', 'userswp' ),
+            'comments' => __( 'Comments', 'userswp' ),
             'comments' => __( 'Comments', 'userswp' ),
         );
 

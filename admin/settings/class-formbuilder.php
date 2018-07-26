@@ -38,7 +38,7 @@ class UsersWP_Form_Builder {
 
                     <p>
                         <?php
-                        $note = sprintf(__('Click on any box below to add a field of that type on ' . $form_type . ' form. You must be use a fieldset to group your fields.', 'userswp'));
+                        $note = sprintf(__('Click on any box below to add a field of that type on %s form. You must be use a fieldset to group your fields.', 'userswp'), $form_type);
                         echo apply_filters('uwp_form_builder_available_fields_note', $note, $form_type);
                         ?>
                     </p>
@@ -80,7 +80,7 @@ class UsersWP_Form_Builder {
 
                     <p>
                         <?php
-                        $note = __('Click to expand and view field related settings. You may drag and drop to arrange fields order on ' . $form_type . ' form too.', 'userswp');
+                        $note = sprintf(__('Click to expand and view field related settings. You may drag and drop to arrange fields order on %s form too.', 'userswp'), $form_type);
                         echo apply_filters('uwp_form_builder_selected_fields_note', $note, $form_type); ?>
                     </p>
 
