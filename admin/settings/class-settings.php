@@ -847,7 +847,6 @@ class UsersWP_Admin_Settings {
             'more_info' => __( 'More Info', 'userswp' ),
             'posts' => __( 'Posts', 'userswp' ),
             'comments' => __( 'Comments', 'userswp' ),
-            'comments' => __( 'Comments', 'userswp' ),
         );
 
         $tabs_arr = apply_filters('uwp_available_tab_items', $tabs_arr);
