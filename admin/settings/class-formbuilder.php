@@ -38,7 +38,7 @@ class UsersWP_Form_Builder {
 
                     <p>
                         <?php
-                        $note = sprintf(__('Click on any box below to add a field of that type on ' . $form_type . ' form. You must be use a fieldset to group your fields.', 'userswp'));
+                        $note = sprintf(__('Click on any box below to add a field of that type on %s form. You must be use a fieldset to group your fields.', 'userswp'), $form_type);
                         echo apply_filters('uwp_form_builder_available_fields_note', $note, $form_type);
                         ?>
                     </p>
@@ -80,7 +80,7 @@ class UsersWP_Form_Builder {
 
                     <p>
                         <?php
-                        $note = __('Click to expand and view field related settings. You may drag and drop to arrange fields order on ' . $form_type . ' form too.', 'userswp');
+                        $note = sprintf(__('Click to expand and view field related settings. You may drag and drop to arrange fields order on %s form too.', 'userswp'), $form_type);
                         echo apply_filters('uwp_form_builder_selected_fields_note', $note, $form_type); ?>
                     </p>
 
@@ -543,7 +543,7 @@ class UsersWP_Form_Builder {
                             }
                             ?>
                             <li>
-                                <label for="site_title" class="uwp-tooltip-wrap"> <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Label :', 'userswp'); ?>
+                                <label for="site_title" class="uwp-tooltip-wrap"> <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Label:', 'userswp'); ?>
                                     <div class="uwp-tooltip">
                                         <?php _e('This will be the label for the field.', 'userswp'); ?>
                                     </div>
@@ -1918,9 +1918,9 @@ class UsersWP_Form_Builder {
         <li class="decimal-point-wrapper"
             style="<?php echo ($dt_value == 'FLOAT') ? '' : 'display:none' ?>">
             <label for="decimal_point" class="uwp-tooltip-wrap">
-                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Select decimal point :', 'userswp'); ?>
+                <i class="fa fa-info-circle" aria-hidden="true"></i> <?php _e('Select decimal precision:', 'userswp'); ?>
                 <div class="uwp-tooltip">
-                    <?php _e('Decimal point to display after point', 'userswp'); ?>
+                    <?php _e('Decimal places to display after point', 'userswp'); ?>
                 </div>
             </label>
             <div class="uwp-input-wrap">
@@ -2028,7 +2028,7 @@ class UsersWP_Form_Builder {
         switch ($form_type)
         {
             case 'register':
-                $heading = __('Available regsiter form fields.', 'userswp');
+                $heading = __('Available register form fields.', 'userswp');
                 break;
         }
         return $heading;

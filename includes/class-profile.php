@@ -1438,7 +1438,7 @@ class UsersWP_Profile {
         $type = strip_tags(esc_sql($_POST['uwp_popup_type']));
 
         if (!in_array($type, array('banner', 'avatar'))) {
-            $result['error'] = uwp_wrap_notice(__("Invalid modal type", "userswp"), 'error');
+            $result['error'] = uwp_wrap_notice(__("Invalid request!", "userswp"), 'error');
             $return = json_encode($result);
             echo $return;
             die();

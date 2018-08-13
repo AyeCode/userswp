@@ -507,7 +507,7 @@ class UsersWP_Admin_Settings {
                         'profile_avatar_size' => array(
                             'id'   => 'profile_avatar_size',
                             'name' => __( 'Profile Avatar max file size', 'userswp' ),
-                            'desc' => __( 'Enter Profile Avatar max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>) will be used.', 'userswp' ),
+                            'desc' => sprintf(__( 'Enter Profile Avatar max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used.', 'userswp' ), '<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>'),
                             'type' => 'number',
                             'std'  => '',
                             'size' => 'regular',
@@ -516,7 +516,7 @@ class UsersWP_Admin_Settings {
                         'profile_banner_size' => array(
                             'id'   => 'profile_banner_size',
                             'name' => __( 'Profile Banner max file size', 'userswp' ),
-                            'desc' => __( 'Enter Profile Banner max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>) will be used.', 'userswp' ),
+                            'desc' => sprintf(__( 'Enter Profile Banner max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used.', 'userswp' ), '<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>'),
                             'type' => 'number',
                             'std'  => '',
                             'size' => 'regular',
@@ -562,7 +562,7 @@ class UsersWP_Admin_Settings {
                             'multiple'    => true,
                             'chosen'      => true,
                             'type'        => 'select_order',
-                            'options' =>   $this->uwp_available_tab_items_options(),
+                            'options' =>   $this->uwp_available_tab_items(),
                             'placeholder' => __( 'Select Tabs', 'userswp' )
                         ),
                     )
@@ -831,15 +831,11 @@ class UsersWP_Admin_Settings {
 
     public function uwp_available_tab_items_options(){
         $all_tabs = $this->uwp_available_tab_items();
-        $allowed_tabs = array_keys($all_tabs);
-        $selected_tabs = uwp_get_option('enable_profile_tabs', array());
         $return = array();
 
-        if(!empty($selected_tabs) && is_array($selected_tabs)) {
-            foreach ($selected_tabs as $tab) {
-                if (in_array($tab, $allowed_tabs)) {
-                    $return[$tab] = $all_tabs[$tab];
-                }
+        if(!empty($all_tabs) && is_array($all_tabs)) {
+            foreach ($all_tabs as $tab_key => $tab) {
+                $return[$tab_key] = $tab;
             }
         }
 
