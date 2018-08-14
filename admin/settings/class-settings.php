@@ -227,7 +227,7 @@ class UsersWP_Admin_Settings {
     public function get_general_info_content() {
         ?>
         <h3><?php echo __( 'Welcome to UsersWP', 'userswp' ); ?></h3>
-        <h4><?php echo __( 'Version 1.0.0', 'userswp' ); ?></h4>
+        <h4><?php echo sprintf(__( 'Version %s', 'userswp' ), USERSWP_VERSION); ?></h4>
 
         <h3><?php echo __( 'Flexible, Lightweight and Fast', 'userswp' ); ?></h3>
         <p><?php echo __( 'UsersWP allows you to add a customizable register and login form to your website.
@@ -242,15 +242,15 @@ class UsersWP_Admin_Settings {
         to extend UsersWP to fit their needs.', 'userswp' ); ?></p>
 
         <h3><?php echo __( 'Override Templates', 'userswp' ); ?></h3>
-        <p><?php echo __( 'If you need to change the look and feel of any UsersWP templates,
+        <p><?php echo sprintf(__( 'If you need to change the look and feel of any UsersWP templates,
         simply create a folder named userswp inside your active child theme
         and copy the template you wish to modify in it. You can now modify the template.
         The plugin will use your modified version and you don\'t have to worry about plugin or theme updates.
-        <a href="https://userswp.io/docs/override-templates/">Click here for examples</a>', 'userswp' ); ?></p>
+        %s Click here for examples %s', 'userswp' ), '<a href="https://userswp.io/docs/override-templates/">', '</a>'); ?></p>
 
         <h3><?php echo __( 'Add-ons', 'userswp' ); ?></h3>
-        <p><?php echo __( 'We have a long list of free and premium add-ons that will help you extend users management on your website.
-        <a href="https://userswp.io/downloads/category/addons/">Click here for our official free and premium add-ons</a>', 'userswp' ); ?></p>
+        <p><?php echo sprintf(__( 'We have a long list of free and premium add-ons that will help you extend users management on your website.
+        %s Click here for our official free and premium add-ons %s', 'userswp' ), '<a href="https://userswp.io/downloads/category/addons/">', '</a>'); ?></p>
         <?php
     }
 

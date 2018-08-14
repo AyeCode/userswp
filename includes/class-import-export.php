@@ -30,7 +30,7 @@ class UsersWP_Import_Export {
         $this->wp_filesystem    = $wp_filesystem;
         $this->export_dir       = $this->export_location();
         $this->export_url       = $this->export_location( true );
-        $this->per_page         = 20;
+        $this->per_page         = apply_filters('uwp_import_export_per_page', 20, $this);
         $this->meta_table_name  = get_usermeta_table_prefix() . 'uwp_usermeta';
         $this->path  = '';
 
