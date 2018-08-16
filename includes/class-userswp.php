@@ -342,6 +342,8 @@ class UsersWP {
         add_filter('uwp_builder_required_msg_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
         // field_icon not needed for fieldset
         add_filter('uwp_builder_css_class_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
+        // filters for which is_public not required
+        add_filter('uwp_builder_is_public_password',array($instance, 'uwp_return_empty_string'),10,4);
     }
 
     public function load_menus_actions_and_filters($instance) {

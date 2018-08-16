@@ -123,6 +123,7 @@ No questions so far, but don't hesitate to ask!
 * Choose tabs in profile setting not displaying tabs after save - FIXED
 * Fix strings typos and translations- FIXED
 * WP min version - CHANGED
+* Remove password field from account - FIXED
 
 = 1.0.17 =
 * In some cases the usermeta table is not created on activation - FIXED

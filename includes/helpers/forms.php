@@ -77,9 +77,9 @@ function get_account_form_fields($extra_where = '') {
     $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
     $include_admin_use = apply_filters('uwp_account_include_admin_use_only_fields', false);
     if ($include_admin_use) {
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_only_field = '0' " . $extra_where . " ORDER BY sort_order ASC", array('account')));
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_only_field = '0' AND htmlvar_name != 'uwp_account_password'" . $extra_where . " ORDER BY sort_order ASC", array('account')));
     } else {
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND for_admin_use != '1' AND is_register_only_field = '0' " . $extra_where . " ORDER BY sort_order ASC", array('account')));
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND for_admin_use != '1' AND is_register_only_field = '0' AND htmlvar_name != 'uwp_account_password'" . $extra_where . " ORDER BY sort_order ASC", array('account')));
     }
     return $fields;
 }

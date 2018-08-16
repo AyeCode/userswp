@@ -139,6 +139,7 @@ class UsersWP_Tables {
           $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
 						user_id int(20) NOT NULL,
 						user_ip varchar(20) NULL DEFAULT NULL,
+						user_privacy varchar(255) NULL DEFAULT NULL,
 						uwp_account_username varchar(255) NULL DEFAULT NULL,
 						uwp_account_email varchar(255) NULL DEFAULT NULL,
 						uwp_account_first_name varchar(255) NULL DEFAULT NULL,
