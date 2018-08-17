@@ -147,6 +147,7 @@ class UsersWP_Tables {
 						uwp_account_bio varchar(255) NULL DEFAULT NULL,
 						uwp_account_avatar_thumb varchar(255) NULL DEFAULT NULL,
 						uwp_account_banner_thumb varchar(255) NULL DEFAULT NULL,
+                        uwp_account_display_name varchar(255) NULL DEFAULT NULL,
 						PRIMARY KEY  (user_id)
 						) $collate ";
 

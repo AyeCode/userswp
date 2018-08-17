@@ -307,6 +307,7 @@ class UsersWP_Activator {
             uwp_update_usermeta($user_id, 'uwp_account_first_name', $first_name);
             uwp_update_usermeta($user_id, 'uwp_account_last_name', $last_name);
             uwp_update_usermeta($user_id, 'uwp_account_bio', $bio);
+            uwp_update_usermeta($user_id, 'uwp_account_display_name', $user_data->display_name);
         }
     }
 

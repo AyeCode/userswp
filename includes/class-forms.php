@@ -436,9 +436,9 @@ class UsersWP_Forms {
                 $login_page_url = wp_login_url();
 
                 if ($generated_password) {
-                    return sprintf(__('Account registered successfully. A password has been generated and mailed to your registered Email ID. Please login <a href="%s">here</a>.', 'userswp'), $login_page_url);
+                    return sprintf(__('Account registered successfully. A password has been generated and mailed to your registered Email ID. Please login %shere%s.', 'userswp'), '<a href="'.$login_page_url.'">', '</a>');
                 } else {
-                    return sprintf(__('Account registered successfully. Please login <a href="%s">here</a>', 'userswp'), $login_page_url);
+                    return sprintf(__('Account registered successfully. Please login %shere%s', 'userswp'), '<a href="'.$login_page_url.'">', '</a>');
                 }
             }
         }
@@ -870,7 +870,7 @@ class UsersWP_Forms {
         $activate_message = __('<p><b>' . __('Please activate your account :', 'userswp') . '</b></p>
             <p>' . $message . '</p>');
 
-        return $activate_message;
+        return apply_filters('uwp_activation_mail_message', $activate_message, $user_id);
 
     }
 
@@ -900,7 +900,7 @@ class UsersWP_Forms {
             <p>' . __('Username:', 'userswp') . ' ' . $user_data->user_login . '</p>
             <p>' . __('Password:', 'userswp') . ' ' . $message_pass . '</p>');
 
-        return $message;
+        return apply_filters('uwp_register_mail_message', $message, $user_id, $this->generated_password);
 
     }
     
