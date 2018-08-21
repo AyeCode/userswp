@@ -4,7 +4,7 @@ Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.5
 Tested up to: 4.9
-Stable tag: 1.0.17
+Stable tag: 1.0.18
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 

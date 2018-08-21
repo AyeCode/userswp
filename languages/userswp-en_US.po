@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.0.17\n"
+"Project-Id-Version: UsersWP 1.0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-26 15:08+0530\n"
-"PO-Revision-Date: 2018-07-26 15:08+0530\n"
+"POT-Creation-Date: 2018-08-21 14:00+0100\n"
+"PO-Revision-Date: 2018-08-21 14:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode <info@userswp.io>\n"
 "Language: en_US\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: admin/class-admin.php:109
@@ -278,8 +278,8 @@ msgstr ""
 msgid "Adds a radio input"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:314 includes/class-activator.php:415
-#: includes/class-activator.php:684
+#: admin/settings/class-formbuilder.php:314 includes/class-activator.php:416
+#: includes/class-activator.php:685
 msgid "Email"
 msgstr ""
 
@@ -873,7 +873,8 @@ msgid "Welcome to UsersWP"
 msgstr ""
 
 #: admin/settings/class-settings.php:230
-msgid "Version 1.0.0"
+#, php-format
+msgid "Version %s"
 msgstr ""
 
 #: admin/settings/class-settings.php:232
@@ -909,6 +910,7 @@ msgid "Override Templates"
 msgstr ""
 
 #: admin/settings/class-settings.php:245
+#, php-format
 msgid ""
 "If you need to change the look and feel of any UsersWP templates,\n"
 "        simply create a folder named userswp inside your active child theme\n"
@@ -916,8 +918,7 @@ msgid ""
 "the template.\n"
 "        The plugin will use your modified version and you don't have to "
 "worry about plugin or theme updates.\n"
-"        <a href=\"https://userswp.io/docs/override-templates/\">Click here "
-"for examples</a>"
+"        %s Click here for examples %s"
 msgstr ""
 
 #: admin/settings/class-settings.php:251
@@ -925,11 +926,11 @@ msgid "Add-ons"
 msgstr ""
 
 #: admin/settings/class-settings.php:252
+#, php-format
 msgid ""
 "We have a long list of free and premium add-ons that will help you extend "
 "users management on your website.\n"
-"        <a href=\"https://userswp.io/downloads/category/addons/\">Click here "
-"for our official free and premium add-ons</a>"
+"        %s Click here for our official free and premium add-ons %s"
 msgstr ""
 
 #: admin/settings/class-settings.php:269 includes/class-pages.php:394
@@ -1254,28 +1255,28 @@ msgstr ""
 msgid "Posts"
 msgstr ""
 
-#: admin/settings/class-settings.php:849 admin/settings/class-settings.php:850
-#: includes/class-profile.php:372 includes/class-profile.php:551
+#: admin/settings/class-settings.php:849 includes/class-profile.php:372
+#: includes/class-profile.php:551
 msgid "Comments"
 msgstr ""
 
-#: admin/settings/class-settings.php:860 includes/class-profile.php:1561
+#: admin/settings/class-settings.php:859 includes/class-profile.php:1561
 msgid "List View"
 msgstr ""
 
-#: admin/settings/class-settings.php:861
+#: admin/settings/class-settings.php:860
 msgid "Grid View - 2 Column"
 msgstr ""
 
-#: admin/settings/class-settings.php:862
+#: admin/settings/class-settings.php:861
 msgid "Grid View - 3 Column"
 msgstr ""
 
-#: admin/settings/class-settings.php:863
+#: admin/settings/class-settings.php:862
 msgid "Grid View - 4 Column"
 msgstr ""
 
-#: admin/settings/class-settings.php:864
+#: admin/settings/class-settings.php:863
 msgid "Grid View - 5 Column"
 msgstr ""
 
@@ -1341,50 +1342,50 @@ msgid ""
 "p><p>Thank you,<br /><br />[#site_name_url#].</p>"
 msgstr ""
 
-#: includes/class-activator.php:373 includes/class-activator.php:651
-#: includes/libraries/class-geodirectory-plugin.php:1211
+#: includes/class-activator.php:374 includes/class-activator.php:652
+#: includes/libraries/class-geodirectory-plugin.php:1224
 msgid "Username"
 msgstr ""
 
-#: includes/class-activator.php:386 includes/class-activator.php:575
-#: includes/class-activator.php:716
+#: includes/class-activator.php:387 includes/class-activator.php:576
+#: includes/class-activator.php:717
 msgid "Password"
 msgstr ""
 
-#: includes/class-activator.php:444
+#: includes/class-activator.php:445
 msgid "Avatar"
 msgstr ""
 
-#: includes/class-activator.php:482
+#: includes/class-activator.php:483
 msgid "Banner"
 msgstr ""
 
-#: includes/class-activator.php:520
+#: includes/class-activator.php:521
 msgid "Old Password"
 msgstr ""
 
-#: includes/class-activator.php:533
+#: includes/class-activator.php:534
 msgid "New Password"
 msgstr ""
 
-#: includes/class-activator.php:546 includes/class-activator.php:588
+#: includes/class-activator.php:547 includes/class-activator.php:589
 #: includes/class-forms.php:2624
 msgid "Confirm Password"
 msgstr ""
 
-#: includes/class-activator.php:617
+#: includes/class-activator.php:618
 msgid "First Name"
 msgstr ""
 
-#: includes/class-activator.php:634
+#: includes/class-activator.php:635
 msgid "Last Name"
 msgstr ""
 
-#: includes/class-activator.php:668
+#: includes/class-activator.php:669
 msgid "Display Name"
 msgstr ""
 
-#: includes/class-activator.php:700
+#: includes/class-activator.php:701
 msgid "Bio"
 msgstr ""
 
@@ -1624,12 +1625,12 @@ msgstr ""
 #, php-format
 msgid ""
 "Account registered successfully. A password has been generated and mailed to "
-"your registered Email ID. Please login <a href=\"%s\">here</a>."
+"your registered Email ID. Please login %shere%s."
 msgstr ""
 
 #: includes/class-forms.php:441
 #, php-format
-msgid "Account registered successfully. Please login <a href=\"%s\">here</a>"
+msgid "Account registered successfully. Please login %shere%s"
 msgstr ""
 
 #: includes/class-forms.php:558
@@ -2452,8 +2453,12 @@ msgstr ""
 
 #: includes/libraries/class-geodirectory-plugin.php:750
 #: includes/libraries/class-geodirectory-plugin.php:835
-#: includes/libraries/class-geodirectory-plugin.php:983
 #: includes/libraries/class-geodirectory-plugin.php:990
+#, php-format
+msgid "No %s found."
+msgstr ""
+
+#: includes/libraries/class-geodirectory-plugin.php:983
 #, php-format
 msgid "No %s found"
 msgstr ""
@@ -2470,24 +2475,24 @@ msgstr ""
 msgid "Status: "
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1161
+#: includes/libraries/class-geodirectory-plugin.php:1165
 msgid "Invoice"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1169
+#: includes/libraries/class-geodirectory-plugin.php:1177
 msgid "Invoice Status: "
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1169
+#: includes/libraries/class-geodirectory-plugin.php:1177
 msgid "(r)"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1174
+#: includes/libraries/class-geodirectory-plugin.php:1182
 msgid "Invoice Total: "
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1186
-msgid "No Invoices Found"
+#: includes/libraries/class-geodirectory-plugin.php:1196
+msgid "No Invoices Found."
 msgstr ""
 
 #: includes/libraries/wp-super-duper.php:138
