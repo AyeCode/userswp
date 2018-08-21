@@ -4,7 +4,7 @@ Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.5
 Tested up to: 4.9
-Stable tag: 1.0.18
+Stable tag: 1.0.19
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -118,6 +118,9 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.0.19 =
+* Activator class missing some dependency functions can make plugin update fail - FIXED
 
 = 1.0.18 =
 * Choose tabs in profile setting not displaying tabs after save - FIXED
