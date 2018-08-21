@@ -147,7 +147,7 @@ class UsersWP {
     public function load_forms_actions_and_filters($instance) {
         // general
         add_action('init', array($instance, 'init_notices'), 1);
-        add_action('init', array($instance, 'handler'));
+        add_action('uwp_loaded', array($instance, 'handler'));
         add_action('init', array($instance, 'uwp_privacy_submit_handler'));
         add_action('uwp_template_display_notices', array($instance, 'display_notices'), 10, 1);
         add_action('wp_ajax_uwp_upload_file_remove', array($instance, 'uwp_upload_file_remove'));
@@ -600,7 +600,7 @@ class UsersWP {
             deactivate_plugins( 'uwp_geodirectory/uwp_geodirectory.php' );
         }
 
-        if ( is_plugin_active( 'geodirectory/geodirectory.php' ) ) {
+        if ( is_plugin_active( 'geodirectory/geodirectory.php' ) || class_exists('GeoDirectory') ) {
             /**
              * The class responsible for displaying notices
              *
