@@ -77,4 +77,4 @@ function run_users_wp() {
     $plugin = new UsersWP();
     $plugin->run();
 }
-run_users_wp();
+add_action( 'plugins_loaded', 'run_users_wp', apply_filters( 'uwp_action_priority', 10 ) );
