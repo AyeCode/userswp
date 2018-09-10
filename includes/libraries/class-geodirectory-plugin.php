@@ -253,19 +253,37 @@ class UsersWP_GeoDirectory_Plugin {
         global $wpdb;
 
         if ($count_only) {
-            $results = $wpdb->get_var(
-                $wpdb->prepare(
-                    "SELECT COUNT(reviews.overall_rating) FROM " . GEODIR_REVIEW_TABLE . " reviews JOIN " . $wpdb->posts . " posts ON reviews.post_id = posts.id WHERE reviews.user_id = %d AND reviews.post_type = %s AND reviews.status=1 AND reviews.overall_rating>0 AND posts.post_status = 'publish'",
-                    array($user_id, $post_type)
-                )
-            );
+            if($this->uwp_is_gdv2()) {
+                $results = $wpdb->get_var(
+                    $wpdb->prepare(
+                        "SELECT COUNT(reviews.rating) FROM " . GEODIR_REVIEW_TABLE . " reviews JOIN " . $wpdb->posts . " posts ON reviews.post_id = posts.id WHERE reviews.user_id = %d AND reviews.post_type = %s AND reviews.rating > 0 AND posts.post_status = 'publish'",
+                        array($user_id, $post_type)
+                    )
+                );
+            } else {
+                $results = $wpdb->get_var(
+                    $wpdb->prepare(
+                        "SELECT COUNT(reviews.overall_rating) FROM " . GEODIR_REVIEW_TABLE . " reviews JOIN " . $wpdb->posts . " posts ON reviews.post_id = posts.id WHERE reviews.user_id = %d AND reviews.post_type = %s AND reviews.status=1 AND reviews.overall_rating>0 AND posts.post_status = 'publish'",
+                        array($user_id, $post_type)
+                    )
+                );
+            }
         } else {
-            $results = $wpdb->get_results(
-                $wpdb->prepare(
-                    "SELECT reviews.* FROM " . GEODIR_REVIEW_TABLE . " reviews JOIN " . $wpdb->posts . " posts ON reviews.post_id = posts.id WHERE reviews.user_id = %d AND reviews.post_type = %s AND reviews.status=1 AND reviews.overall_rating>0 AND posts.post_status = 'publish' LIMIT %d OFFSET %d",
-                    array($user_id, $post_type, $limit, $offset )
-                )
-            );
+            if($this->uwp_is_gdv2()) {
+                $results = $wpdb->get_results(
+                    $wpdb->prepare(
+                        "SELECT reviews.* FROM " . GEODIR_REVIEW_TABLE . " reviews JOIN " . $wpdb->posts . " posts ON reviews.post_id = posts.id WHERE reviews.user_id = %d AND reviews.post_type = %s AND reviews.rating>0 AND posts.post_status = 'publish' LIMIT %d OFFSET %d",
+                        array($user_id, $post_type, $limit, $offset )
+                    )
+                );
+            } else {
+                $results = $wpdb->get_results(
+                    $wpdb->prepare(
+                        "SELECT reviews.* FROM " . GEODIR_REVIEW_TABLE . " reviews JOIN " . $wpdb->posts . " posts ON reviews.post_id = posts.id WHERE reviews.user_id = %d AND reviews.post_type = %s AND reviews.status=1 AND reviews.overall_rating>0 AND posts.post_status = 'publish' LIMIT %d OFFSET %d",
+                        array($user_id, $post_type, $limit, $offset )
+                    )
+                );
+            }
         }
 
         if (!empty($results))
@@ -424,34 +442,40 @@ class UsersWP_GeoDirectory_Plugin {
     function add_profile_gd_tabs($tabs, $user,$allowed_tabs) {
         // allowed post types
         $listing_post_types = uwp_get_option('gd_profile_listings', array());
-        if (!empty($listing_post_types) && in_array('listings', $allowed_tabs)) {
+        $l_counts = $this->get_total_listings_count($user->ID);
+        if (!empty($listing_post_types) && in_array('listings', $allowed_tabs) && $l_counts > 0) {
             $tabs['listings'] = array(
                 'title' => __('Listings', 'userswp'),
-                'count' => $this->get_total_listings_count($user->ID)
+                'count' => $l_counts
             );
         }
 
         $listing_post_types = uwp_get_option('gd_profile_reviews', array());
-        if (!empty($listing_post_types) && in_array('reviews', $allowed_tabs)) {
+        $r_counts = $this->get_total_reviews_count($user->ID);
+        if (!empty($listing_post_types) && in_array('reviews', $allowed_tabs) && $r_counts > 0) {
             $tabs['reviews'] = array(
                 'title' => __('Reviews', 'userswp'),
-                'count' => $this->get_total_reviews_count($user->ID)
+                'count' => $r_counts
             );
         }
 
         $listing_post_types = uwp_get_option('gd_profile_favorites', array());
-        if (!empty($listing_post_types) && in_array('favorites', $allowed_tabs) && (get_current_user_id() == $user->ID)) {
+        $f_counts = $this->get_total_favorites_count($user->ID);
+        if (!empty($listing_post_types) && in_array('favorites', $allowed_tabs) && (get_current_user_id() == $user->ID) && $f_counts > 0) {
             $tabs['favorites'] = array(
                 'title' => __('Favorites', 'userswp'),
-                'count' => $this->get_total_favorites_count($user->ID)
+                'count' => $f_counts
             );
         }
 
         if (class_exists('WPInv_Invoice') && in_array('invoices', $allowed_tabs) && (get_current_user_id() == $user->ID)) {
-            $tabs['invoices'] = array(
-                'title' => __('Invoices', 'userswp'),
-                'count' => $this->invoice_count($user->ID)
-            );
+            $i_counts = $this->invoice_count($user->ID);
+            if($i_counts > 0) {
+                $tabs['invoices'] = array(
+                    'title' => __('Invoices', 'userswp'),
+                    'count' => $i_counts
+                );
+            }
         }
 
         return $tabs;
@@ -540,6 +564,14 @@ class UsersWP_GeoDirectory_Plugin {
         foreach ($gd_post_types as $post_type_id => $post_type) {
             if (in_array($post_type_id, $listing_post_types)) {
                 $post_type_slug = $gd_post_types[$post_type_id]['has_archive'];
+
+                if($this->uwp_is_gdv2()) {
+                    if ($type == 'favorites' && geodir_cpt_has_favourite_disabled($post_type_id)) {
+                        continue;
+                    } elseif ($type == 'reviews' && geodir_cpt_has_rating_disabled($post_type_id)) {
+                        continue;
+                    }
+                }
 
                 if ($type == 'listings') {
                     $count = uwp_post_count($user->ID, $post_type_id);
@@ -688,14 +720,22 @@ class UsersWP_GeoDirectory_Plugin {
                         <div class="uwp-item-actions">
                             <?php
                             if (is_user_logged_in()) {
-                                do_action( 'geodir_after_favorite_html', $post->ID, 'listing' );
+                                geodir_favourite_html( '', $post->ID );
                             }
                             if ($post->post_author == get_current_user_id()) {
-                                $addplacelink = get_permalink(geodir_add_listing_page_id());
-                                $editlink = geodir_getlink($addplacelink, array('pid' => $post->ID), false);
-
-                                $ajaxlink = geodir_get_ajax_url();
-                                $deletelink = geodir_getlink($ajaxlink, array('geodir_ajax' => 'add_listing', 'ajax_action' => 'delete', 'pid' => $post->ID), false);
+                                if($this->uwp_is_gdv2()) {
+                                    $href = 'javascript:void(0);';
+                                    $class = '';
+                                    $editlink = geodir_edit_post_link($post_id);
+                                    $extra = 'onclick="gd_delete_post('.$post_id.');"';
+                                } else {
+                                    $ajaxlink = geodir_get_ajax_url();
+                                    $href = geodir_getlink($ajaxlink, array('geodir_ajax' => 'add_listing', 'ajax_action' => 'delete', 'pid' => $post->ID), false);
+                                    $class = 'geodir-delete';
+                                    $addplacelink = get_permalink(geodir_add_listing_page_id());
+                                    $editlink = geodir_getlink($addplacelink, array('pid' => $post->ID), false);
+                                    $extra = '';
+                                }
                                 ?>
 
                                 <span class="geodir-authorlink clearfix">
@@ -710,7 +750,7 @@ class UsersWP_GeoDirectory_Plugin {
                                             ?>
                                             <?php _e('Edit', 'userswp'); ?>
                                         </a>
-                                        <a href="<?php echo esc_url($deletelink); ?>" class="geodir-delete"
+                                        <a href="<?php echo $href; ?>" <?php echo $extra; ?>class="<?php echo $class; ?>"
                                            title="<?php _e('Delete Listing', 'userswp'); ?>">
                                             <?php
                                             $geodir_listing_delete_icon = apply_filters('geodir_listing_delete_icon', 'fa fa-close', $post_id, $user, $post_type);
@@ -718,7 +758,6 @@ class UsersWP_GeoDirectory_Plugin {
                                             ?>
                                             <?php _e('Delete', 'userswp'); ?>
                                         </a>
-
                                     <?php do_action('geodir_after_edit_post_link_on_listing', $post_id, $user, $post_type); ?>
 
                                 </span>
@@ -780,8 +819,7 @@ class UsersWP_GeoDirectory_Plugin {
                 foreach ($reviews as $review) {
                     $rating = 0;
                     if (!empty($review))
-                        $rating = geodir_get_commentoverall($review->comment_id);
-
+                        $rating = geodir_get_post_rating($review->post_id);
                         do_action('uwp_before_profile_reviews_item', $review->comment_id, $user, $post_type);
                     ?>
                     <li class="uwp-profile-item-li uwp-profile-item-clearfix <?php echo 'gd-post-'.$post_type; ?>">
@@ -813,7 +851,7 @@ class UsersWP_GeoDirectory_Plugin {
                         <div class="uwp-profile-item-summary">
                             <?php
                             do_action('uwp_before_profile_reviews_summary', $review->comment_id, $user, $post_type);
-                            $excerpt = strip_shortcodes(wp_trim_words($review->comment_content, 15, '...'));
+                            $excerpt = strip_shortcodes(wp_trim_words(get_comment_excerpt($review->comment_id), 15, '...'));
                             echo $excerpt;
                             if ($excerpt) {
                                 ?>
@@ -922,14 +960,22 @@ class UsersWP_GeoDirectory_Plugin {
                             <div class="uwp-item-actions">
                                 <?php
                                 if (is_user_logged_in()) {
-                                    do_action( 'geodir_after_favorite_html', $post->ID, 'listing' );
+                                    geodir_favourite_html( '', $post->ID );
                                 }
                                 if ($post->post_author == get_current_user_id()) {
-                                    $addplacelink = get_permalink(geodir_add_listing_page_id());
-                                    $editlink = geodir_getlink($addplacelink, array('pid' => $post->ID), false);
-
-                                    $ajaxlink = geodir_get_ajax_url();
-                                    $deletelink = geodir_getlink($ajaxlink, array('geodir_ajax' => 'add_listing', 'ajax_action' => 'delete', 'pid' => $post->ID), false);
+                                    if($this->uwp_is_gdv2()) {
+                                        $href = 'javascript:void(0);';
+                                        $class = '';
+                                        $editlink = geodir_edit_post_link($post_id);
+                                        $extra = 'onclick="gd_delete_post('.$post_id.');"';
+                                    } else {
+                                        $ajaxlink = geodir_get_ajax_url();
+                                        $href = geodir_getlink($ajaxlink, array('geodir_ajax' => 'add_listing', 'ajax_action' => 'delete', 'pid' => $post->ID), false);
+                                        $class = 'geodir-delete';
+                                        $addplacelink = get_permalink(geodir_add_listing_page_id());
+                                        $editlink = geodir_getlink($addplacelink, array('pid' => $post->ID), false);
+                                        $extra = '';
+                                    }
                                     ?>
 
                                     <span class="geodir-authorlink clearfix">
@@ -944,7 +990,7 @@ class UsersWP_GeoDirectory_Plugin {
                                             ?>
                                             <?php _e('Edit', 'userswp'); ?>
                                         </a>
-                                        <a href="<?php echo esc_url($deletelink); ?>" class="geodir-delete"
+                                        <a href="<?php echo $href; ?>" <?php echo $extra; ?> class="<?php echo $class; ?>"
                                            title="<?php _e('Delete Listing', 'userswp'); ?>">
                                             <?php
                                             $geodir_listing_delete_icon = apply_filters('geodir_listing_delete_icon', 'fa fa-close');
@@ -1281,6 +1327,15 @@ class UsersWP_GeoDirectory_Plugin {
         }
         
         return $uwp_author;
+    }
+
+    public function uwp_is_gdv2(){
+
+        if(version_compare(GEODIRECTORY_VERSION,'2.0.0.0', '>=') ) {
+            return true;
+        }
+
+        return false;
     }
 }
 $userswp_geodirectory = UsersWP_GeoDirectory_Plugin::get_instance();

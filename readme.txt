@@ -119,6 +119,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.20 =
+* Compatibility with GDV2 - ADDED
+
 = 1.0.19 =
 * Activator class missing some dependency functions can make plugin update fail - FIXED
 
