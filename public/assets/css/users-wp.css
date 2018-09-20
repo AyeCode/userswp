@@ -1367,10 +1367,10 @@
 .uwp-users-list .uwp-profile-extra-value {
   border: none; }
 
-.uwp_widgets .uwp-login,
-.uwp_widgets .uwp-registration,
-.uwp_widgets .uwp-forgot,
-.uwp_widgets .uwp-account {
+.widget .uwp-login,
+.widget .uwp-registration,
+.widget .uwp-forgot,
+.widget .uwp-account {
   background: transparent;
   max-width: none;
   padding: 0;
@@ -1855,11 +1855,11 @@
   margin-top: 5px;
   margin-bottom: 5px; }
 
-.uwp_widgets .uwp-content-wrap h2 {
+.widget .uwp-content-wrap h2 {
   display: none; }
-.uwp_widgets .uwp-content-wrap .uwp-lf-icon {
+.widget .uwp-content-wrap .uwp-lf-icon {
   display: none; }
-.uwp_widgets .uwp-content-wrap .uwp-rf-icon {
+.widget .uwp-content-wrap .uwp-rf-icon {
   display: none; }
 
 .uwp_page .ui-timepicker-div dl {

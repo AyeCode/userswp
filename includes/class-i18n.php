@@ -21,6 +21,8 @@ class UsersWP_i18n {
 
         load_plugin_textdomain( 'userswp', false, basename( dirname (dirname( __FILE__ ) ) ) . '/languages' );
 
+        do_action('uwp_loaded');
+
     }
 
 }

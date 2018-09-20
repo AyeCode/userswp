@@ -227,7 +227,7 @@ class UsersWP_Admin_Settings {
     public function get_general_info_content() {
         ?>
         <h3><?php echo __( 'Welcome to UsersWP', 'userswp' ); ?></h3>
-        <h4><?php echo __( 'Version 1.0.0', 'userswp' ); ?></h4>
+        <h4><?php echo sprintf(__( 'Version %s', 'userswp' ), USERSWP_VERSION); ?></h4>
 
         <h3><?php echo __( 'Flexible, Lightweight and Fast', 'userswp' ); ?></h3>
         <p><?php echo __( 'UsersWP allows you to add a customizable register and login form to your website.
@@ -242,15 +242,15 @@ class UsersWP_Admin_Settings {
         to extend UsersWP to fit their needs.', 'userswp' ); ?></p>
 
         <h3><?php echo __( 'Override Templates', 'userswp' ); ?></h3>
-        <p><?php echo __( 'If you need to change the look and feel of any UsersWP templates,
+        <p><?php echo sprintf(__( 'If you need to change the look and feel of any UsersWP templates,
         simply create a folder named userswp inside your active child theme
         and copy the template you wish to modify in it. You can now modify the template.
         The plugin will use your modified version and you don\'t have to worry about plugin or theme updates.
-        <a href="https://userswp.io/docs/override-templates/">Click here for examples</a>', 'userswp' ); ?></p>
+        %s Click here for examples %s', 'userswp' ), '<a href="https://userswp.io/docs/override-templates/">', '</a>'); ?></p>
 
         <h3><?php echo __( 'Add-ons', 'userswp' ); ?></h3>
-        <p><?php echo __( 'We have a long list of free and premium add-ons that will help you extend users management on your website.
-        <a href="https://userswp.io/downloads/category/addons/">Click here for our official free and premium add-ons</a>', 'userswp' ); ?></p>
+        <p><?php echo sprintf(__( 'We have a long list of free and premium add-ons that will help you extend users management on your website.
+        %s Click here for our official free and premium add-ons %s', 'userswp' ), '<a href="https://userswp.io/downloads/category/addons/">', '</a>'); ?></p>
         <?php
     }
 
@@ -507,7 +507,7 @@ class UsersWP_Admin_Settings {
                         'profile_avatar_size' => array(
                             'id'   => 'profile_avatar_size',
                             'name' => __( 'Profile Avatar max file size', 'userswp' ),
-                            'desc' => __( 'Enter Profile Avatar max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>) will be used.', 'userswp' ),
+                            'desc' => sprintf(__( 'Enter Profile Avatar max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used.', 'userswp' ), '<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>'),
                             'type' => 'number',
                             'std'  => '',
                             'size' => 'regular',
@@ -516,7 +516,7 @@ class UsersWP_Admin_Settings {
                         'profile_banner_size' => array(
                             'id'   => 'profile_banner_size',
                             'name' => __( 'Profile Banner max file size', 'userswp' ),
-                            'desc' => __( 'Enter Profile Banner max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>) will be used.', 'userswp' ),
+                            'desc' => sprintf(__( 'Enter Profile Banner max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used.', 'userswp' ), '<b>'.$file_obj->uwp_formatSizeinKb($file_obj->uwp_get_max_upload_size()).'</b>'),
                             'type' => 'number',
                             'std'  => '',
                             'size' => 'regular',
@@ -827,6 +827,19 @@ class UsersWP_Admin_Settings {
         add_settings_error( 'uwp-notices', '', __( 'Settings updated.', 'userswp' ), 'updated' );
 
         return $output;
+    }
+
+    public function uwp_available_tab_items_options(){
+        $all_tabs = $this->uwp_available_tab_items();
+        $return = array();
+
+        if(!empty($all_tabs) && is_array($all_tabs)) {
+            foreach ($all_tabs as $tab_key => $tab) {
+                $return[$tab_key] = $tab;
+            }
+        }
+
+        return $return;
     }
 
     public function uwp_available_tab_items() {

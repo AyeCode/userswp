@@ -199,7 +199,7 @@ class UsersWP_Forms {
                     echo $message;
                     echo '</div>';
                 } else {
-                    $message = sprintf(__('<strong>Warning</strong>: You seems like you are using a system generated password. Please change the password in this page. If this is not a problem for you, you can remove this warning by <a href="%s">clicking here</a>.', 'userswp'), $remove_nag_url);
+                    $message = sprintf(__('<strong>Warning</strong>: It seems like you are using a system generated password. Please change the password in this page. If this is not a problem for you, you can remove this warning by <a href="%s">clicking here</a>.', 'userswp'), $remove_nag_url);
                     echo '<div class="uwp-alert-warning text-center">';
                     echo $message;
                     echo '</div>';
@@ -413,7 +413,7 @@ class UsersWP_Forms {
                     ),
                     $resend_link
                 );
-                return sprintf(__('An email has been sent to your registered email address. Please click the activation link to proceed. <a href="%s">Resend</a>.', 'userswp'), $resend_link);
+                return sprintf(__('An email has been sent to your registered email address. Please click the activation link to proceed. %sResend%s.', 'userswp'), '<a href="'.$resend_link.'"">', '</a>');
             } elseif ($reg_action == 'require_admin_review' && defined('UWP_MOD_VERSION')) {
                 update_user_meta( $user_id, 'uwp_mod', '1' );
 
@@ -436,9 +436,9 @@ class UsersWP_Forms {
                 $login_page_url = wp_login_url();
 
                 if ($generated_password) {
-                    return sprintf(__('Account registered successfully. A password has been generated and mailed to your registered Email ID. Please login <a href="%s">here</a>.', 'userswp'), $login_page_url);
+                    return sprintf(__('Account registered successfully. A password has been generated and mailed to your registered Email ID. Please login %shere%s.', 'userswp'), '<a href="'.$login_page_url.'">', '</a>');
                 } else {
-                    return sprintf(__('Account registered successfully. Please login <a href="%s">here</a>', 'userswp'), $login_page_url);
+                    return sprintf(__('Account registered successfully. Please login %shere%s', 'userswp'), '<a href="'.$login_page_url.'">', '</a>');
                 }
             }
         }
@@ -870,7 +870,7 @@ class UsersWP_Forms {
         $activate_message = __('<p><b>' . __('Please activate your account :', 'userswp') . '</b></p>
             <p>' . $message . '</p>');
 
-        return $activate_message;
+        return apply_filters('uwp_activation_mail_message', $activate_message, $user_id);
 
     }
 
@@ -900,7 +900,7 @@ class UsersWP_Forms {
             <p>' . __('Username:', 'userswp') . ' ' . $user_data->user_login . '</p>
             <p>' . __('Password:', 'userswp') . ' ' . $message_pass . '</p>');
 
-        return $message;
+        return apply_filters('uwp_register_mail_message', $message, $user_id, $this->generated_password);
 
     }
     
@@ -1188,7 +1188,9 @@ class UsersWP_Forms {
             }
 
             $image_url = esc_url($image_url);
-            $uploads = wp_upload_dir();
+            add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
+			$uploads = wp_upload_dir();
+            remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
             $upload_url = $uploads['baseurl'];
             $upload_path = $uploads['basedir'];
             $image_url = str_replace($upload_url, $upload_path, $image_url);

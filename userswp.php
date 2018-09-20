@@ -3,7 +3,7 @@
 Plugin Name: UsersWP
 Plugin URI: https://userswp.io/
 Description: User management plugin.
-Version: 1.0.14
+Version: 1.0.19
 Author: AyeCode Ltd
 Author URI: https://userswp.io
 License: GPL-2.0+
@@ -21,7 +21,7 @@ if (!defined('WPINC')) {
 
 define( 'USERSWP_NAME', 'userswp' );
 
-define( 'USERSWP_VERSION', '1.0.14' );
+define( 'USERSWP_VERSION', '1.0.18' );
 
 define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
 
@@ -33,26 +33,8 @@ define( 'USERSWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
  * @param $network_wide
  */
 function activate_users_wp($network_wide) {
-    if (is_multisite()) {
-        if ($network_wide) {
-            $main_blog_id = (int) get_network()->site_id;
-            // Switch to the new blog.
-            switch_to_blog( $main_blog_id );
-
-            require_once('includes/class-activator.php');
-            UsersWP_Activator::activate();
-
-            // Restore original blog.
-            restore_current_blog();
-        } else {
-            require_once('includes/class-activator.php');
-            UsersWP_Activator::activate();
-        }
-    } else {
-        require_once('includes/class-activator.php');
-        UsersWP_Activator::activate();
-    }
-    
+    require_once('includes/class-activator.php');
+    UsersWP_Activator::activate($network_wide);
 }
 /**
  * The code that runs during plugin deactivation.
@@ -71,12 +53,15 @@ register_deactivation_hook( __FILE__, 'deactivate_users_wp' );
  */
 require_once('includes/class-userswp.php');
 
-// Run upgrade on version change
-if(is_admin() && version_compare(USERSWP_VERSION, get_option('uwp_db_version'))){
-    add_action( 'init', 'uwp_init_hook_actions' );
-}
-function uwp_init_hook_actions(){
-    activate_users_wp(false);
+add_action( 'admin_init', 'uwp_automatic_upgrade' );
+function uwp_automatic_upgrade(){
+    $uwp_db_version = get_option('uwp_db_version');
+
+    if ( $uwp_db_version != USERSWP_VERSION ) {
+        require_once('includes/class-activator.php');
+
+        UsersWP_Activator::activate(is_plugin_active_for_network( 'userswp/userswp.php' ));
+    }
 }
 
 /**
@@ -92,4 +77,4 @@ function run_users_wp() {
     $plugin = new UsersWP();
     $plugin->run();
 }
-run_users_wp();
+add_action( 'plugins_loaded', 'run_users_wp', apply_filters( 'uwp_action_priority', 10 ) );

@@ -537,16 +537,16 @@ class UsersWP_GeoDirectory_Plugin {
             $listing_post_types = array();
         }
 
-        foreach ($listing_post_types as $post_type) {
-            if (array_key_exists($post_type, $gd_post_types)) {
-                $post_type_slug = $gd_post_types[$post_type]['has_archive'];
+        foreach ($gd_post_types as $post_type_id => $post_type) {
+            if (in_array($post_type_id, $listing_post_types)) {
+                $post_type_slug = $gd_post_types[$post_type_id]['has_archive'];
 
                 if ($type == 'listings') {
-                    $count = uwp_post_count($user->ID, $post_type);
+                    $count = uwp_post_count($user->ID, $post_type_id);
                 } elseif ($type == 'reviews') {
-                    $count = $this->geodir_get_reviews_by_user_id($post_type, $user->ID, true);
+                    $count = $this->geodir_get_reviews_by_user_id($post_type_id, $user->ID, true);
                 } elseif ($type == 'favorites') {
-                    $count = $this->geodir_count_favorite($post_type, $user->ID);
+                    $count = $this->geodir_count_favorite($post_type_id, $user->ID);
                 } else {
                     $count = 0;
                 }
@@ -555,9 +555,9 @@ class UsersWP_GeoDirectory_Plugin {
                     $count = 0;
                 }
                 $tabs[$post_type_slug] = array(
-                    'title' => $gd_post_types[$post_type]['labels']['name'],
+                    'title' => $gd_post_types[$post_type_id]['labels']['name'],
                     'count' => $count,
-                    'ptype' => $post_type
+                    'ptype' => $post_type_id
                 );
             }
         }
@@ -654,7 +654,7 @@ class UsersWP_GeoDirectory_Plugin {
 
                     do_action('uwp_before_profile_listing_item', $post_id, $user, $post_type);
                     ?>
-                    <li class="uwp-profile-item-li uwp-profile-item-clearfix">
+                    <li class="uwp-profile-item-li uwp-profile-item-clearfix <?php echo 'gd-post-'.$post_type; ?>">
                         <a class="uwp-profile-item-img" href="<?php echo get_the_permalink(); ?>">
                             <?php
                             if (has_post_thumbnail()) {
@@ -747,7 +747,7 @@ class UsersWP_GeoDirectory_Plugin {
                 /* Restore original Post Data */
                 wp_reset_postdata();
             } else {
-                echo sprintf( __( "No %s found", 'userswp' ), $gd_post_types[$post_type]['labels']['name']);
+                echo sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[$post_type]['labels']['name']);
             }
             do_action('uwp_after_profile_listing_items', $user, $post_type);
 
@@ -784,7 +784,7 @@ class UsersWP_GeoDirectory_Plugin {
 
                         do_action('uwp_before_profile_reviews_item', $review->comment_id, $user, $post_type);
                     ?>
-                    <li class="uwp-profile-item-li uwp-profile-item-clearfix">
+                    <li class="uwp-profile-item-li uwp-profile-item-clearfix <?php echo 'gd-post-'.$post_type; ?>">
                         <a class="uwp-profile-item-img" href="<?php echo get_comment_link($review->comment_id); ?>">
                             <?php
                             if ( has_post_thumbnail($review->post_id) ) {
@@ -832,7 +832,7 @@ class UsersWP_GeoDirectory_Plugin {
                 /* Restore original Post Data */
                 wp_reset_postdata();
             } else {
-                echo sprintf( __( "No %s found", 'userswp' ), $gd_post_types[$post_type]['labels']['name']);
+                echo sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[$post_type]['labels']['name']);
             }
 
             do_action('uwp_after_profile_reviews_items', $user, $post_type);
@@ -888,7 +888,7 @@ class UsersWP_GeoDirectory_Plugin {
                         ob_end_clean();
                         do_action('uwp_before_profile_favourite_item', $post_id, $user, $post_type);
                         ?>
-                        <li class="uwp-profile-item-li uwp-profile-item-clearfix">
+                        <li class="uwp-profile-item-li uwp-profile-item-clearfix <?php echo 'gd-post-'.$post_type; ?>">
                             <a class="uwp-profile-item-img" href="<?php echo get_the_permalink(); ?>">
                                 <?php
                                 if (has_post_thumbnail()) {
@@ -987,7 +987,7 @@ class UsersWP_GeoDirectory_Plugin {
 
                 do_action('uwp_profile_pagination', $the_query->max_num_pages);
             } else {
-                echo sprintf( __( "No %s found", 'userswp' ), $gd_post_types[$post_type]['labels']['name']);
+                echo sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[$post_type]['labels']['name']);
             }
             ?>
         </div>
@@ -1149,21 +1149,29 @@ class UsersWP_GeoDirectory_Plugin {
             // The Query
             $the_query = new WP_Query($args);
 
+            do_action('uwp_before_profile_invoice_items', $user);
+
             // The Loop
             if ($the_query->have_posts()) {
                 echo '<ul class="uwp-profile-item-ul">';
                 while ($the_query->have_posts()) {
                     $the_query->the_post();
                     $wpi_invoice = new WPInv_Invoice( get_the_ID() );
+                    do_action('uwp_before_profile_invoice_item', $wpi_invoice, $user);
                     ?>
                     <li class="uwp-profile-item-li uwp-profile-item-clearfix">
+                        <?php do_action('uwp_before_profile_invoice_title', $wpi_invoice, $user); ?>
                         <h3 class="uwp-profile-item-title">
                             <a href="<?php echo get_the_permalink(); ?>"><?php _e('Invoice','userswp');?> <?php echo get_the_title(); ?></a>
                         </h3>
+                        <?php do_action('uwp_after_profile_invoice_title', $wpi_invoice, $user); ?>
+                        <?php do_action('uwp_before_profile_invoice_date', $wpi_invoice, $user); ?>
                         <time class="uwp-profile-item-time published" datetime="<?php echo get_the_time('c'); ?>">
                             <?php echo get_the_date(); ?>
                         </time>
+                        <?php do_action('uwp_after_profile_invoice_date', $wpi_invoice, $user); ?>
                         <div class="uwp-profile-item-summary">
+                            <?php do_action('uwp_before_profile_invoice_summary', $wpi_invoice, $user); ?>
                             <div class="uwp-order-status">
                                 <?php
                                 echo __('Invoice Status: ', 'userswp').$wpi_invoice->get_status( true ) . ( $wpi_invoice->is_recurring() && $wpi_invoice->is_parent() ? ' <span class="wpi-suffix">' . __( '(r)', 'invoicing' ) . '</span>' : '' );
@@ -1173,18 +1181,23 @@ class UsersWP_GeoDirectory_Plugin {
                                 <?php
                                 echo __('Invoice Total: ', 'userswp'). $wpi_invoice->get_total( true );
                                 ?>
-                            </div
+                            </div>
+                            <?php do_action('uwp_after_profile_invoice_summary', $wpi_invoice, $user); ?>
                         </div>
                     </li>
                     <?php
+                    do_action('uwp_after_profile_invoice_item', $wpi_invoice, $user);
                 }
                 echo '</ul>';
                 /* Restore original Post Data */
                 wp_reset_postdata();
             } else {
                 // no posts found
-                echo "<p>".__('No Invoices Found', 'userswp')."</p>";
+                echo "<p>".__('No Invoices Found.', 'userswp')."</p>";
             }
+
+            do_action('uwp_after_profile_invoice_items', $user);
+
             do_action('uwp_profile_pagination', $the_query->max_num_pages);
             ?>
         </div>

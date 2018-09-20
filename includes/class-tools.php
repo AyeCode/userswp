@@ -37,7 +37,7 @@ class UsersWP_Tools {
         $form_type = 'account';
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s ORDER BY sort_order ASC", array($form_type)));
-        $meta_table = uwp_get_table_prefix() . 'uwp_usermeta';
+        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
         $excluded = uwp_get_excluded_fields();
 

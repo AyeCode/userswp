@@ -2,9 +2,9 @@
 Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
-Requires at least: 3.1
+Requires at least: 4.5
 Tested up to: 4.9
-Stable tag: 1.0.14
+Stable tag: 1.0.19
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -118,6 +118,28 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.0.19 =
+* Activator class missing some dependency functions can make plugin update fail - FIXED
+
+= 1.0.18 =
+* Choose tabs in profile setting not displaying tabs after save - FIXED
+* Fix strings typos and translations- FIXED
+* WP min version - CHANGED
+* Remove password field from account - FIXED
+
+= 1.0.17 =
+* In some cases the usermeta table is not created on activation - FIXED
+
+= 1.0.16 =
+* Fix Default Avatar settings in admin - FIXED
+* Tab re-order in profile tab settings page - FIXED
+* Listing Type Tab Order as GD CPT Order - FIXED
+* Multisite compatibility changes - CHANGED
+
+= 1.0.15 =
+* Fix text domain in privacy message - FIXED
+* Fix design issues for login and register forms in widget and shortcode - FIXED
 
 = 1.0.14 =
 * Added filter to change the default subtab displayed under listing tab in user profile - ADDED

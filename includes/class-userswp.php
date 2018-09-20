@@ -119,7 +119,7 @@ class UsersWP {
     public function load_meta_actions_and_filters($instance) {
         add_action('user_register', array($instance, 'sync_usermeta'), 10, 1);
         add_action('delete_user', array($instance, 'delete_usermeta_for_user'), 10, 1);
-        add_action('remove_user_from_blog', array($instance, 'remove_user_from_blog'), 10, 1);
+        add_action('remove_user_from_blog', array($instance, 'remove_user_from_blog'), 10, 2);
         add_action('wp_login', array($instance, 'save_user_ip_on_login') ,10,2);
         add_filter('uwp_before_extra_fields_save', array($instance, 'save_user_ip_on_register'), 10, 3);
         add_filter('uwp_update_usermeta', array($instance, 'modify_privacy_value_on_update'), 10, 4);
@@ -147,7 +147,7 @@ class UsersWP {
     public function load_forms_actions_and_filters($instance) {
         // general
         add_action('init', array($instance, 'init_notices'), 1);
-        add_action('init', array($instance, 'handler'));
+        add_action('uwp_loaded', array($instance, 'handler'));
         add_action('init', array($instance, 'uwp_privacy_submit_handler'));
         add_action('uwp_template_display_notices', array($instance, 'display_notices'), 10, 1);
         add_action('wp_ajax_uwp_upload_file_remove', array($instance, 'uwp_upload_file_remove'));
@@ -214,8 +214,6 @@ class UsersWP {
         add_filter( 'uwp_profile_link', array($instance, 'get_profile_link'), 10, 2 );
         add_filter( 'edit_profile_url', array($instance, 'uwp_modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
-        remove_all_filters('get_avatar');
-        add_filter( 'get_avatar', array($instance, 'uwp_modify_get_avatar') , 1 , 6 );
         add_filter( 'get_comment_author_link', array($instance, 'uwp_get_comment_author_link') , 10 , 2 );
         add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
@@ -260,8 +258,6 @@ class UsersWP {
     }
 
     public function load_shortcodes_actions_and_filters($instance) {
-        add_shortcode( 'uwp_register',  array($instance, 'register'));
-        add_shortcode( 'uwp_login',     array($instance, 'login'));
         add_shortcode( 'uwp_forgot',    array($instance, 'forgot'));
         add_shortcode( 'uwp_change',    array($instance, 'change'));
         add_shortcode( 'uwp_reset',     array($instance, 'reset'));
@@ -346,6 +342,8 @@ class UsersWP {
         add_filter('uwp_builder_required_msg_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
         // field_icon not needed for fieldset
         add_filter('uwp_builder_css_class_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
+        // filters for which is_public not required
+        add_filter('uwp_builder_is_public_password',array($instance, 'uwp_return_empty_string'),10,4);
     }
 
     public function load_menus_actions_and_filters($instance) {
@@ -602,7 +600,7 @@ class UsersWP {
             deactivate_plugins( 'uwp_geodirectory/uwp_geodirectory.php' );
         }
 
-        if ( is_plugin_active( 'geodirectory/geodirectory.php' ) ) {
+        if ( is_plugin_active( 'geodirectory/geodirectory.php' ) || class_exists('GeoDirectory') ) {
             /**
              * The class responsible for displaying notices
              *
