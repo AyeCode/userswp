@@ -122,6 +122,7 @@ No questions so far, but don't hesitate to ask!
 = 1.0.20 =
 * Compatibility with GDV2 - ADDED
 * Uninstall fails due to missing dependency functions - FIXED
+* Separate the invoicing functionality from the GD class - CHANGED
 
 = 1.0.19 =
 * Activator class missing some dependency functions can make plugin update fail - FIXED

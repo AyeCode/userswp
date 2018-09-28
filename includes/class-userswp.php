@@ -608,6 +608,15 @@ class UsersWP {
              */
             require_once dirname(dirname( __FILE__ )) . '/includes/libraries/class-geodirectory-plugin.php';
         }
+
+        if ( class_exists('WPInv_Invoice') ) {
+            /**
+             * The class responsible for displaying notices
+             *
+             * @since 1.0.12
+             */
+            require_once dirname(dirname( __FILE__ )) . '/includes/libraries/class-invoicing-plugin.php';
+        }
     }
 
 }
