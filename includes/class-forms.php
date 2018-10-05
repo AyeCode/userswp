@@ -675,75 +675,6 @@ class UsersWP_Forms {
         return true;
     }
 
-    
-    /**
-     * Modifies the mail subject based on the admin notification type.
-     *
-     * @since   1.0.0
-     * @package    userswp
-     * @subpackage userswp/includes
-     * @param string $subject Unmodified mail subject.
-     * @param string $type Notification type.
-     * @return string Modified mail subject.
-     */
-    public function init_mail_subject($subject, $type) {
-        switch ($type) {
-            case "register":
-                $subject = uwp_get_option('registration_success_email_subject', '');
-                break;
-            case "activate":
-                $subject = uwp_get_option('registration_activate_email_subject', '');
-                break;
-            case "forgot":
-                $subject = uwp_get_option('forgot_password_email_subject', '');
-                break;
-            case "reset":
-                $subject = uwp_get_option('reset_password_email_subject', '');
-                break;
-            case "change":
-                $subject = uwp_get_option('change_password_email_subject', '');
-                break;
-            case "account":
-                $subject = uwp_get_option('account_update_email_subject', '');
-                break;
-        }
-        return $subject;
-    }
-
-    /**
-     * Modifies the mail content based on the admin notification type.
-     *
-     * @since   1.0.0
-     * @package    userswp
-     * @subpackage userswp/includes
-     * @param string $content Unmodified mail content.
-     * @param string $type Notification type.
-     * @return string Modified mail content.
-     */
-    public function init_mail_content($content, $type) {
-        switch ($type) {
-            case "register":
-                $content = uwp_get_option('registration_success_email_content', '');
-                break;
-            case "activate":
-                $content = uwp_get_option('registration_activate_email_content', '');
-                break;
-            case "forgot":
-                $content = uwp_get_option('forgot_password_email_content', '');
-                break;
-            case "reset":
-                $content = uwp_get_option('reset_password_email_content', '');
-                break;
-            case "change":
-                $content = uwp_get_option('change_password_email_content', '');
-                break;
-            case "account":
-                $content = uwp_get_option('account_update_email_content', '');
-                break;
-        }
-        return $content;
-    }
-
     /**
      * Modifies the mail extras based on the notification type.
      *
@@ -766,44 +697,6 @@ class UsersWP_Forms {
                 $extras = $this->generate_forgot_message($user_id);
         }
         return $extras;
-    }
-    
-    /**
-     * Modifies the admin mail subject based on the admin notification type.
-     *
-     * @since   1.0.0
-     * @package    userswp
-     * @subpackage userswp/includes
-     * @param string $subject Unmodified admin mail subject.
-     * @param string $type Admin notification type.
-     * @return string Modified admin mail subject.
-     */
-    public function init_admin_mail_subject($subject, $type) {
-        switch ($type) {
-            case "register_admin":
-                $subject = uwp_get_option('registration_success_email_subject_admin', '');
-                break;
-        }
-        return $subject;
-    }
-
-    /**
-     * Modifies the admin mail content based on the admin notification type.
-     *
-     * @since   1.0.0
-     * @package    userswp
-     * @subpackage userswp/includes
-     * @param string $content Unmodified admin mail content.
-     * @param string $type Admin notification type.
-     * @return string Modified admin mail content.
-     */
-    public function init_admin_mail_content($content, $type) {
-        switch ($type) {
-            case "register_admin":
-                $content = uwp_get_option('registration_success_email_content_admin', '');
-                break;
-        }
-        return $content;
     }
 
     /**
@@ -2362,6 +2255,8 @@ class UsersWP_Forms {
 
         return $html;
     }
+
+
 
     /**
      * Adds enctype tag in form for file fields.

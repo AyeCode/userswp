@@ -123,6 +123,8 @@ No questions so far, but don't hesitate to ask!
 * Compatibility with GDV2 - ADDED
 * Uninstall fails due to missing dependency functions - FIXED
 * Separate the invoicing functionality from the GD class - CHANGED
+* Change wpDiscuz profile URL to UWP profile URL - FIXED
+* Users can Mute specific email notifications - ADDED
 
 = 1.0.19 =
 * Activator class missing some dependency functions can make plugin update fail - FIXED

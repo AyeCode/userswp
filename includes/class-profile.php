@@ -1857,4 +1857,14 @@ class UsersWP_Profile {
         return $value;
     }
 
+    public function uwp_wpdiscuz_profile_url($profile_url, $user){
+        $profile_page_url = uwp_get_page_id('profile_page', true);
+        $allowed = apply_filters('uwp_wpdiscuz_profile_url_change', true, $profile_url, $user);
+        if (isset($profile_page_url) && !empty($profile_page_url) && $allowed ) {
+            return $profile_page_url;
+        }
+
+        return $profile_url;
+    }
+
 }

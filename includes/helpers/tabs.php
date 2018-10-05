@@ -169,6 +169,13 @@ function uwp_account_get_available_tabs() {
         );
     }
 
+    if('notifications' != $type){
+        $tabs['notifications']  = array(
+            'title' => __( 'Notifications', 'userswp' ),
+            'icon' => 'fa fa-bell',
+        );
+    }
+
     if('privacy' != $type) {
         $tabs['privacy'] = array(
             'title' => __('Privacy', 'userswp'),
