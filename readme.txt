@@ -125,6 +125,7 @@ No questions so far, but don't hesitate to ask!
 * Separate the invoicing functionality from the GD class - CHANGED
 * Change wpDiscuz profile URL to UWP profile URL - FIXED
 * Users can Mute specific email notifications - ADDED
+* Profile tab order not working - FIXED
 
 = 1.0.19 =
 * Activator class missing some dependency functions can make plugin update fail - FIXED
