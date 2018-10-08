@@ -175,7 +175,7 @@ class UsersWP_Callback {
 
                     });
 
-                }, 100);
+                }, 300);
             });
         </script>
 
