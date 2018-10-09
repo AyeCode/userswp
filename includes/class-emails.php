@@ -22,14 +22,9 @@ class UsersWP_Mails {
     {
         $user_data = get_userdata($user_id);
         
-        $login_page_url = wp_login_url();
-
-        $subject = "";
-        $message = "";
-        
         $extras = apply_filters('uwp_send_mail_extras', "", $message_type, $user_id);
-        $subject = apply_filters('uwp_send_mail_subject', $subject, $message_type);
-        $message = apply_filters('uwp_send_mail_message', $message, $message_type);
+        $subject = $this->uwp_get_mail_subject($message_type);
+        $message = $this->uwp_get_mail_content($message_type);
 
         $contains_login_details_tag = false;
         if (strpos($message, '[#login_details#]') !== false) {
@@ -44,58 +39,17 @@ class UsersWP_Mails {
             $message = __(stripslashes_deep($message), 'userswp');
         }
 
-        $sitefromEmail = get_option('admin_email');
-        $sitefromEmailName = stripslashes(get_option('blogname'));
-
-
-        $user_login = '';
-        if ($user_id > 0 && $user_info = get_userdata($user_id)) {
-            $user_login = $user_info->user_login;
-        }
-
-        $siteurl = home_url();
-        $siteurl_link = '<a href="' . $siteurl . '">' . $siteurl . '</a>';
-        $loginurl = $login_page_url;
-        $loginurl_link = '<a href="' . $loginurl . '">'.__('login', 'userswp').'</a>';
-
-        $current_date = date_i18n('Y-m-d H:i:s', current_time('timestamp'));
-
-        $site_email = get_option('admin_email');
-
-        $site_name = stripslashes(get_option('blogname'));
-
-        //user
-        $user_name = $user_data->display_name;
         $user_email = $user_data->user_email;
 
         $message_search_array = array(
-            '[#site_name_url#]',
-            '[#site_name#]',
-            '[#to_name#]',
-            '[#from_name#]',
-            '[#login_url#]',
-            '[#user_name#]',
-            '[#from_email#]',
-            '[#user_login#]',
-            '[#username#]',
-            '[#current_date#]',
             '[#login_details#]',
         );
         $message_replace_array = array(
-            $siteurl_link,
-            $sitefromEmailName,
-            $user_name,
-            $site_name,
-            $loginurl_link,
-            $user_name,
-            $site_email,
-            $user_login,
-            $user_login,
-            $current_date,
             $extras
         );
         $message = str_replace($message_search_array, $message_replace_array, $message);
 
+        $message = $this->uwp_email_format_text($message, $user_id);
 
         // Applicable only for activate mails
         if ($message_type == 'activate' && !$contains_login_details_tag) {
@@ -186,38 +140,11 @@ class UsersWP_Mails {
             $message = str_replace($reset_message_search_array, $reset_message_replace_array, $message);
         }
 
-        $subject_search_array = array(
-            '[#site_name_url#]',
-            '[#site_name#]',
-            '[#to_name#]',
-            '[#from_name#]',
-            '[#user_name#]',
-            '[#from_email#]',
-            '[#user_login#]',
-            '[#username#]',
-            '[#current_date#]'
-        );
-        $subject_replace_array = array(
-            $siteurl_link,
-            $sitefromEmailName,
-            $user_name,
-            $site_name,
-            $user_name,
-            $site_email,
-            $user_login,
-            $user_login,
-            $current_date
-        );
-        $subject = str_replace($subject_search_array, $subject_replace_array, $subject);
+        $subject = $this->uwp_email_format_text($subject, $user_id);
 
-        $headers = array();
-        $headers[] = 'Content-type: text/html; charset=UTF-8';
-        $headers[] = "Reply-To: " . $site_email;
-        $headers[] = 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>';
+        $headers = $this->uwp_get_mail_headers($message_type, $user_id);
 
-        $to = $user_email;
-
-        $to = apply_filters('uwp_send_email_to', $to, $message_type, $user_id);
+        $to = apply_filters('uwp_send_email_to', $user_email, $message_type, $user_id);
 
         $subject = apply_filters('uwp_send_email_subject', $subject, $message_type, $user_id);
 
@@ -260,11 +187,9 @@ class UsersWP_Mails {
     public function send_admin_email( $message_type, $user_id)
     {
 
-        $login_page_url = wp_login_url();
-
         $extras = apply_filters('uwp_send_admin_mail_extras', "", $message_type, $user_id);
-        $subject = apply_filters('uwp_send_admin_mail_subject', "", $message_type);
-        $message = apply_filters('uwp_send_admin_mail_message', "", $message_type);
+        $subject = $this->uwp_get_mail_subject($message_type, true);
+        $message = $this->uwp_get_mail_content($message_type, true);
 
         if (!empty($subject)) {
             $subject = __(stripslashes_deep($subject), 'userswp');
@@ -274,64 +199,23 @@ class UsersWP_Mails {
             $message = __(stripslashes_deep($message), 'userswp');
         }
 
-        $sitefromEmail = apply_filters('uwp_send_mail_admin_email', get_option('admin_email'));
-        $sitefromEmailName = apply_filters('uwp_send_mail_admin_blogname', stripslashes(get_option('blogname')));
-
-        $siteurl = home_url();
-        $siteurl_link = '<a href="' . $siteurl . '">' . $siteurl . '</a>';
-        $loginurl = $login_page_url;
-        $loginurl_link = '<a href="' . $loginurl . '">'.__('login', 'userswp').'</a>';
-
-        $current_date = date_i18n('Y-m-d H:i:s', current_time('timestamp'));
-
         $site_email = get_option('admin_email');
 
-        $site_name = stripslashes(get_option('blogname'));
-
         $search_array = array(
-            '[#site_name_url#]',
-            '[#site_name#]',
-            '[#from_name#]',
-            '[#login_url#]',
-            '[#from_email#]',
-            '[#current_date#]',
             '[#extras#]',
         );
         $replace_array = array(
-            $siteurl_link,
-            $sitefromEmailName,
-            $site_name,
-            $loginurl_link,
-            $site_email,
-            $current_date,
             $extras
         );
         $message = str_replace($search_array, $replace_array, $message);
 
-        $search_array = array(
-            '[#site_name_url#]',
-            '[#site_name#]',
-            '[#from_name#]',
-            '[#from_email#]',
-            '[#current_date#]'
-        );
-        $replace_array = array(
-            $siteurl_link,
-            $sitefromEmailName,
-            $site_name,
-            $site_email,
-            $current_date
-        );
-        $subject = str_replace($search_array, $replace_array, $subject);
+        $message = $this->uwp_email_format_text($message, $user_id);
 
-        $headers = array();
-        $headers[] = 'Content-type: text/html; charset=UTF-8';
-        $headers[] = "Reply-To: " . $site_email;
-        $headers[] = 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>';
+        $subject = $this->uwp_email_format_text($subject, $user_id);
 
-        $to = $site_email;
+        $headers = $this->uwp_get_mail_headers($message_type, $user_id);
 
-        $to = apply_filters('uwp_send_admin_email_to', $to, $message_type, $user_id);
+        $to = apply_filters('uwp_send_admin_email_to', $site_email, $message_type, $user_id);
 
         $subject = apply_filters('uwp_send_admin_email_subject', $subject, $message_type, $user_id);
 
@@ -383,6 +267,145 @@ class UsersWP_Mails {
         $out = json_encode($ts_mail_errors);
 
         return $out;
+    }
+
+    public static function uwp_email_format_text( $content, $user_id ) {
+
+        $site_url = '<a href="' . home_url() . '">' . home_url() . '</a>';
+        $site_name = stripslashes(get_option('blogname'));
+        $login_url = '<a href="' . wp_login_url() . '">'.__('login', 'userswp').'</a>';
+
+        $replace_array = array(
+            '[#site_name_url#]' => $site_url,
+            '[#site_name#]'     => $site_name,
+            '[#from_name#]'     => $site_name,
+            '[#login_url#]'     => $login_url,
+            '[#from_email#]'    => get_option('admin_email'),
+            '[#current_date#]'  => date_i18n('Y-m-d H:i:s', current_time('timestamp')),
+        );
+
+        if ( !empty( $user_id ) && $user_id > 0 ) {
+            $user_data = get_userdata($user_id);
+            $profile_link = apply_filters('uwp_profile_link', get_author_posts_url($user_id), $user_id);
+            $replace_array = array_merge(
+                $replace_array,
+                array(
+                    '[#to_name#]'         => $user_data->display_name,
+                    '[#user_login#]'      => $user_data->user_login,
+                    '[#user_name#]'       => $user_data->display_name,
+                    '[#username#]'        => $user_data->user_login,
+                    '[#profile_link#]'    => $profile_link,
+                )
+            );
+        }
+
+        $replace_array = apply_filters( 'uwp_email_format_text', $replace_array, $content, $user_id );
+
+        foreach ( $replace_array as $key => $value ) {
+            $content = str_replace( $key, $value, $content );
+        }
+
+        return apply_filters( 'uwp_email_content_replace', $content );
+    }
+
+    /**
+     * Modifies the mail subject based on the admin notification type.
+     *
+     * @since   1.0.0
+     * @package    userswp
+     * @subpackage userswp/includes
+     * @param string $type Notification type.
+     * @param bool $is_admin Admin notification.
+     * @return string Modified mail subject.
+     */
+    public function uwp_get_mail_subject($type, $is_admin = false) {
+        $subject = '';
+        switch ($type) {
+            case "register":
+                $subject = uwp_get_option('registration_success_email_subject', '');
+                break;
+            case "activate":
+                $subject = uwp_get_option('registration_activate_email_subject', '');
+                break;
+            case "forgot":
+                $subject = uwp_get_option('forgot_password_email_subject', '');
+                break;
+            case "reset":
+                $subject = uwp_get_option('reset_password_email_subject', '');
+                break;
+            case "change":
+                $subject = uwp_get_option('change_password_email_subject', '');
+                break;
+            case "account":
+                $subject = uwp_get_option('account_update_email_subject', '');
+                break;
+            case "register_admin":
+                $subject = uwp_get_option('registration_success_email_subject_admin', '');
+                break;
+        }
+
+        if($is_admin){
+            return apply_filters('uwp_send_admin_mail_subject', $subject, $type);
+        }
+
+        return apply_filters('uwp_send_mail_subject', $subject, $type);
+    }
+
+    /**
+     * Modifies the mail content based on the admin notification type.
+     *
+     * @since   1.0.0
+     * @package    userswp
+     * @subpackage userswp/includes
+     * @param string $content Unmodified mail content.
+     * @param bool $is_admin Admin notification.
+     * @param string $type Notification type.
+     * @return string Modified mail content.
+     */
+    public function uwp_get_mail_content($type, $is_admin = false) {
+        $content = '';
+        switch ($type) {
+            case "register":
+                $content = uwp_get_option('registration_success_email_content', '');
+                break;
+            case "activate":
+                $content = uwp_get_option('registration_activate_email_content', '');
+                break;
+            case "forgot":
+                $content = uwp_get_option('forgot_password_email_content', '');
+                break;
+            case "reset":
+                $content = uwp_get_option('reset_password_email_content', '');
+                break;
+            case "change":
+                $content = uwp_get_option('change_password_email_content', '');
+                break;
+            case "account":
+                $content = uwp_get_option('account_update_email_content', '');
+                break;
+            case "register_admin":
+                $content = uwp_get_option('registration_success_email_content_admin', '');
+                break;
+        }
+
+        if($is_admin){
+            return apply_filters('uwp_send_admin_mail_message', $content, $type);
+        }
+
+        return apply_filters('uwp_send_mail_message', $content, $type);
+    }
+
+    public static function uwp_get_mail_headers( $email_type = '', $user_id ) {
+        $sitefromEmail = get_option('admin_email');
+        $sitefromEmailName = stripslashes(get_option('blogname'));
+        $site_email = get_option('admin_email');
+
+        $headers = array();
+        $headers[] = 'Content-type: text/html; charset=UTF-8';
+        $headers[] = "Reply-To: " . $site_email;
+        $headers[] = 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>';
+
+        return apply_filters( 'wpinv_email_headers', $headers, $email_type, $user_id );
     }
 
 }

@@ -15,11 +15,6 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 global $wpdb;
 
-if ( !class_exists( 'UsersWP' ) ) {
-    // Load plugin file.
-    include_once( 'userswp.php' );
-}
-
 $wpdb->hide_errors();
 
 if (is_multisite()) {
@@ -43,18 +38,11 @@ if (is_multisite()) {
 }
 
 function uwp_uninstall(){
-    if ( uwp_get_option('uninstall_erase_data') == '1' ) {
+    $uwp_options = get_option( 'uwp_settings' );
+    if ( $uwp_options['uninstall_erase_data'] == '1' ) {
         global $wpdb;
 
-        // Delete options
-        delete_option('uwp_settings');
-        delete_option('uwp_activation_redirect');
-        delete_option('uwp_flush_rewrite');
-        delete_option('uwp_default_data_installed');
-        delete_option('uwp_db_version');
-
-
-        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
         $rows = $wpdb->get_results("select * from " . $table_name . "");
 
         // Delete user meta for all users
@@ -69,23 +57,28 @@ function uwp_uninstall(){
         }
 
         // Drop form fields table
-        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+        $table_name = $wpdb->prefix . 'uwp_form_fields';
         $sql = "DROP TABLE IF EXISTS $table_name";
         $wpdb->query($sql);
 
         // Drop form extras table
-        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
+        $extras_table_name = $wpdb->prefix . 'uwp_form_extras';
         $sql = "DROP TABLE IF EXISTS $extras_table_name";
         $wpdb->query($sql);
+
+        // Delete options
+        delete_option('uwp_settings');
+        delete_option('uwp_activation_redirect');
+        delete_option('uwp_flush_rewrite');
+        delete_option('uwp_default_data_installed');
+        delete_option('uwp_db_version');
     }
 }
 
 function uwp_drop_usermeta_table(){
     global $wpdb;
-    if ( uwp_get_option('uninstall_erase_data') == '1' ) {
-        // Drop usermeta table
-        $meta_table_name = uwp_get_table_prefix() . 'uwp_usermeta';
-        $sql = "DROP TABLE IF EXISTS $meta_table_name";
-        $wpdb->query($sql);
-    }
+    // Drop usermeta table
+    $meta_table_name = $wpdb->prefix . 'uwp_usermeta';
+    $sql = "DROP TABLE IF EXISTS $meta_table_name";
+    $wpdb->query($sql);
 }

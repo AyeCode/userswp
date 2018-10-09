@@ -83,6 +83,7 @@ class UsersWP {
         $this->admin = new UsersWP_Admin($this->admin_settings);
         $this->ajax = new UsersWP_Ajax($this->form_builder);
         $this->files = new UsersWP_Files();
+        $this->notifications = new UsersWP_Notifications();
         
         
         // actions and filters
@@ -99,6 +100,7 @@ class UsersWP {
         $this->load_tables_actions_and_filters($this->tables);
         $this->load_templates_actions_and_filters($this->templates);
         $this->load_tools_actions_and_filters($this->tools);
+        $this->load_notifications_actions_and_filters($this->notifications);
 
         //admin
         $this->load_form_builder_actions_and_filters($this->form_builder);
@@ -181,12 +183,7 @@ class UsersWP {
         add_filter('uwp_form_input_password_uwp_account_password_after', array($instance, 'uwp_register_confirm_password_field'), 10, 4);
         
         // Emails
-        add_filter('uwp_send_mail_subject', array($instance, 'init_mail_subject'), 10, 2);
-        add_filter('uwp_send_mail_message', array($instance, 'init_mail_content'), 10, 2);
         add_filter('uwp_send_mail_extras', array($instance, 'init_mail_extras'), 10, 3);
-
-        add_filter('uwp_send_admin_mail_subject', array($instance, 'init_admin_mail_subject'), 10, 2);
-        add_filter('uwp_send_admin_mail_message', array($instance, 'init_admin_mail_content'), 10, 2);
         add_filter('uwp_send_admin_mail_extras', array($instance, 'init_admin_mail_extras'), 10, 3);
         
     }
@@ -250,7 +247,7 @@ class UsersWP {
         add_action( 'uwp_users_list', array($instance, 'uwp_users_list'));
         add_action( 'uwp_users_extra', array($instance, 'get_users_extra'));
         add_action( 'uwp_profile_bio', array($instance, 'get_profile_side_extra'));
-
+        add_action( 'wpdiscuz_profile_url', array($instance, 'uwp_wpdiscuz_profile_url'), 10, 2);
 
         // User, allow subscribers to upload profile and banner pictures
         add_filter( 'plupload_default_params', array($instance, 'add_uwp_plupload_param'), 10, 1 );
@@ -301,6 +298,11 @@ class UsersWP {
         add_action('uwp_admin_sub_menus', array($instance, 'uwp_add_admin_tools_sub_menu'), 100, 1);
         add_action('uwp_tools_settings_main_tab_content', array($instance, 'uwp_tools_main_tab_content'));
         add_action('wp_ajax_uwp_process_diagnosis', array($instance, 'uwp_process_diagnosis_ajax'));
+    }
+
+    public function load_notifications_actions_and_filters($instance){
+        add_action('uwp_account_form_display', array($instance, 'uwp_user_notifications_form_front'), 10, 1);
+        add_action('init', array($instance, 'uwp_notification_submit_handler'));
     }
 
     public function load_form_builder_actions_and_filters($instance) {
@@ -591,6 +593,11 @@ class UsersWP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-import-export.php';
 
         /**
+         * The class responsible for displaying notices
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-user-notifications.php';
+
+        /**
          * The class responsible for privacy policy functions
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/abstract-uwp-privacy.php';
@@ -607,6 +614,15 @@ class UsersWP {
              * @since 1.0.12
              */
             require_once dirname(dirname( __FILE__ )) . '/includes/libraries/class-geodirectory-plugin.php';
+        }
+
+        if ( class_exists('WPInv_Invoice') ) {
+            /**
+             * The class responsible for displaying notices
+             *
+             * @since 1.0.12
+             */
+            require_once dirname(dirname( __FILE__ )) . '/includes/libraries/class-invoicing-plugin.php';
         }
     }
 
