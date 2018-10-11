@@ -126,6 +126,7 @@ No questions so far, but don't hesitate to ask!
 * Change wpDiscuz profile URL to UWP profile URL - FIXED
 * Users can Mute specific email notifications - ADDED
 * Profile tab order not working - FIXED
+* Custom fields in available tab settings with ordering - ADDED
 
 = 1.0.19 =
 * Activator class missing some dependency functions can make plugin update fail - FIXED

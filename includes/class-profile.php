@@ -1596,6 +1596,27 @@ class UsersWP_Profile {
     }
 
     /**
+     * Add custom fields as an available tabs
+     *
+     * @since       1.0.20
+     * @package     userswp
+     * @param       $tabs_arr
+     * @return      mixed
+     */
+    public function uwp_extra_fields_available_tab_items($tabs_arr){
+        global $wpdb;
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+        $fields = $wpdb->get_results("SELECT htmlvar_name, site_title FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+
+        foreach ($fields as $field) {
+            $key = str_replace('uwp_account_', '', $field->htmlvar_name);
+            $tabs_arr[$key] = __($field->site_title, 'userswp');
+        }
+
+        return $tabs_arr;
+    }
+
+    /**
      * Displays custom fields as tabs
      *
      * @since       1.0.0
@@ -1608,7 +1629,7 @@ class UsersWP_Profile {
     {
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT site_title,field_icon,htmlvar_name,is_public,field_type FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
         $usermeta = uwp_get_usermeta_row($user->ID);
         $privacy = ! empty( $usermeta ) && $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
 
