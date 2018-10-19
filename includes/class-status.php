@@ -107,7 +107,7 @@ class UsersWP_Status {
             <p class="submit"><a href="javascript:void" class="button-primary debug-report"><?php _e( 'Get system report', 'userswp' ); ?></a></p>
             <div id="debug-report">
                 <textarea readonly="readonly"></textarea>
-                <p class="submit"><button id="copy-for-support" class="button-primary" href="javascript:void" data-tip="<?php esc_attr_e( 'Copied!', 'userswp' ); ?>"><?php _e( 'Select all & copy for support', 'userswp' ); ?></button></p>
+                <p class="submit"><button id="copy-for-support" class="button-primary" href="javascript:void"><?php _e( 'Copy for Support', 'userswp' ); ?></button></p>
                 <p class="copy-error hidden"><?php _e( 'Copying to clipboard failed. Please press Ctrl/Cmd+C to copy.', 'userswp' ); ?></p>
             </div>
         </div>
