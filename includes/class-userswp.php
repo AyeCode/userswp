@@ -84,7 +84,8 @@ class UsersWP {
         $this->ajax = new UsersWP_Ajax($this->form_builder);
         $this->files = new UsersWP_Files();
         $this->notifications = new UsersWP_Notifications();
-        
+        $this->status = new UsersWP_Status();
+
         
         // actions and filters
         $this->load_assets_actions_and_filters($this->assets);
@@ -101,6 +102,7 @@ class UsersWP {
         $this->load_templates_actions_and_filters($this->templates);
         $this->load_tools_actions_and_filters($this->tools);
         $this->load_notifications_actions_and_filters($this->notifications);
+        $this->load_status_actions_and_filters($this->status);
 
         //admin
         $this->load_form_builder_actions_and_filters($this->form_builder);
@@ -304,6 +306,11 @@ class UsersWP {
     public function load_notifications_actions_and_filters($instance){
         add_action('uwp_account_form_display', array($instance, 'uwp_user_notifications_form_front'), 10, 1);
         add_action('init', array($instance, 'uwp_notification_submit_handler'));
+    }
+
+    public function load_status_actions_and_filters($instance){
+        add_action('uwp_admin_sub_menus', array($instance, 'uwp_add_admin_status_sub_menu'), 100, 1);
+        add_action('uwp_status_settings_main_tab_content', array($instance, 'uwp_status_main_tab_content'));
     }
 
     public function load_form_builder_actions_and_filters($instance) {
@@ -597,6 +604,11 @@ class UsersWP {
          * The class responsible for displaying notices
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-user-notifications.php';
+
+        /**
+         * The class responsible for adding tools functions
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-status.php';
 
         /**
          * The class responsible for privacy policy functions

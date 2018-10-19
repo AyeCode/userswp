@@ -182,7 +182,7 @@ class UsersWP_Tools {
 
             if ($step >= $max_step) {
                 $done = true;
-                $message = __("Processed Successfully", 'uwp-tools');
+                $message = __("Processed Successfully", 'userswp');
                 $message = $this->uwp_tools_wrap_error_message($message, 'success');
             } else {
                 $done = false;
@@ -495,8 +495,8 @@ class UsersWP_Tools {
 
         add_submenu_page(
             "userswp",
-            __('Tools', 'uwp-tools'),
-            __('Tools', 'uwp-tools'),
+            __('Tools', 'userswp'),
+            __('Tools', 'userswp'),
             'manage_options',
             'uwp_tools',
             $settings_page
@@ -509,17 +509,17 @@ class UsersWP_Tools {
         <table class="form-table gd-tools-table">
             <tbody>
             <tr>
-                <td><strong><?php _e('Tool', 'uwp-tools');?></strong></td>
-                <td><strong><?php _e('Description', 'uwp-tools');?></strong></td>
-                <td style="text-align: right"><strong><?php _e('Action', 'uwp-tools');?></strong></td>
+                <td><strong><?php _e('Tool', 'userswp');?></strong></td>
+                <td><strong><?php _e('Description', 'userswp');?></strong></td>
+                <td style="text-align: right"><strong><?php _e('Action', 'userswp');?></strong></td>
             </tr>
 
 
             <?php if (defined('USERSWP_VERSION')) { ?>
                 <tr>
-                    <td><?php _e('Fix User Data', 'uwp-tools');?></td>
+                    <td><?php _e('Fix User Data', 'userswp');?></td>
                     <td>
-                        <div style="margin-bottom: 10px"><?php _e('Fixes User Data if you were using the Beta version.', 'uwp-tools');?></div>
+                        <div style="margin-bottom: 10px"><?php _e('Fixes User Data if you were using the Beta version.', 'userswp');?></div>
                     </td>
                     <td style="text-align: right">
                         <?php
@@ -531,7 +531,7 @@ class UsersWP_Tools {
                             $multiple = "";
                         }
                         ?>
-                        <input type="button" value="<?php _e('Run', 'uwp-tools');?>"
+                        <input type="button" value="<?php _e('Run', 'userswp');?>"
                                class="button-primary uwp_diagnosis_button" <?php echo $multiple; ?> data-diagnose="fix_user_data"/>
                     </td>
                 </tr>
@@ -546,9 +546,9 @@ class UsersWP_Tools {
                 </tr>
 
                 <tr>
-                    <td><?php _e('Create Dummy Users', 'uwp-tools');?></td>
+                    <td><?php _e('Create Dummy Users', 'userswp');?></td>
                     <td>
-                        <div><?php _e('Dummy Users will be created for Testing. You can delete them later. Password for all dummy users:', 'uwp-tools'); echo " ".self::get_dummy_user_passowrd();?></div>
+                        <div><?php _e('Dummy Users will be created for Testing. You can delete them later. Password for all dummy users:', 'userswp'); echo " ".self::get_dummy_user_passowrd();?></div>
                     </td>
                     <td style="text-align: right">
                         <?php
@@ -557,7 +557,7 @@ class UsersWP_Tools {
                         ));
 
                         ?>
-                        <a href="<?php echo $dummy_users_create_url; ?>" class="button-primary"><?php _e('Run', 'uwp-tools');?></a>
+                        <a href="<?php echo $dummy_users_create_url; ?>" class="button-primary"><?php _e('Run', 'userswp');?></a>
                     </td>
                 </tr>
             <?php } ?>

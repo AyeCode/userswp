@@ -127,6 +127,7 @@ No questions so far, but don't hesitate to ask!
 * Users can Mute specific email notifications - ADDED
 * Profile tab order not working - FIXED
 * Custom fields in available tab settings with ordering - ADDED
+* Status report for compatibility checks and plugin support - ADDED
 
 = 1.0.19 =
 * Activator class missing some dependency functions can make plugin update fail - FIXED
