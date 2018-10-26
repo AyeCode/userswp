@@ -104,8 +104,8 @@ class UsersWP_Activator {
      * @return      void
      */
     public static function load_dependencies() {
-        
-        require_once dirname( __FILE__ ) .'/helpers.php' ;
+
+        require_once dirname( __FILE__ ) . '/helpers.php';
         require_once dirname( __FILE__ ) . '/class-tables.php';
         require_once dirname( __FILE__ ) . '/class-meta.php';
         require_once dirname( __FILE__ ) . '/class-pages.php';

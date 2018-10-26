@@ -1,7 +1,7 @@
 <?php do_action('uwp_template_before', 'register'); ?>
 <div class="uwp-content-wrap">
     <div class="uwp-registration">
-        <div class="uwp-rf-icon"><i class="fa fa-pencil fa-fw"></i></div>
+        <div class="uwp-rf-icon"><i class="fas fa-pencil-alt fa-fw"></i></div>
         <?php do_action('uwp_template_form_title_before', 'register'); ?>
         <h2><?php echo apply_filters('uwp_template_form_title', get_the_title(), 'register'); ?></h2>
         <?php do_action('uwp_template_display_notices', 'register'); ?>

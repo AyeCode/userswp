@@ -716,7 +716,7 @@ class UsersWP_GeoDirectory_Plugin {
                                     <a href="<?php echo esc_url($editlink); ?>" class="geodir-edit"
                                        title="<?php _e('Edit Listing', 'userswp'); ?>">
                                             <?php
-                                            $geodir_listing_edit_icon = apply_filters('geodir_listing_edit_icon', 'fa fa-edit');
+                                            $geodir_listing_edit_icon = apply_filters('geodir_listing_edit_icon', 'fas fa-edit');
                                             echo '<i class="' . $geodir_listing_edit_icon . '"></i>';
                                             ?>
                                             <?php _e('Edit', 'userswp'); ?>
@@ -724,7 +724,7 @@ class UsersWP_GeoDirectory_Plugin {
                                         <a href="<?php echo $href; ?>" <?php echo $extra; ?>class="<?php echo $class; ?>"
                                            title="<?php _e('Delete Listing', 'userswp'); ?>">
                                             <?php
-                                            $geodir_listing_delete_icon = apply_filters('geodir_listing_delete_icon', 'fa fa-close', $post_id, $user, $post_type);
+                                            $geodir_listing_delete_icon = apply_filters('geodir_listing_delete_icon', 'fas fa-times', $post_id, $user, $post_type);
                                             echo '<i class="' . $geodir_listing_delete_icon . '"></i>';
                                             ?>
                                             <?php _e('Delete', 'userswp'); ?>
@@ -956,7 +956,7 @@ class UsersWP_GeoDirectory_Plugin {
                                         <a href="<?php echo esc_url($editlink); ?>" class="geodir-edit"
                                            title="<?php _e('Edit Listing', 'userswp'); ?>">
                                             <?php
-                                            $geodir_listing_edit_icon = apply_filters('geodir_listing_edit_icon', 'fa fa-edit');
+                                            $geodir_listing_edit_icon = apply_filters('geodir_listing_edit_icon', 'fas fa-edit');
                                             echo '<i class="' . $geodir_listing_edit_icon . '"></i>';
                                             ?>
                                             <?php _e('Edit', 'userswp'); ?>
@@ -964,7 +964,7 @@ class UsersWP_GeoDirectory_Plugin {
                                         <a href="<?php echo $href; ?>" <?php echo $extra; ?> class="<?php echo $class; ?>"
                                            title="<?php _e('Delete Listing', 'userswp'); ?>">
                                             <?php
-                                            $geodir_listing_delete_icon = apply_filters('geodir_listing_delete_icon', 'fa fa-close');
+                                            $geodir_listing_delete_icon = apply_filters('geodir_listing_delete_icon', 'fas fa-times');
                                             echo '<i class="' . $geodir_listing_delete_icon . '"></i>';
                                             ?>
                                             <?php _e('Delete', 'userswp'); ?>
@@ -1123,12 +1123,12 @@ class UsersWP_GeoDirectory_Plugin {
                 // we need to query real status direct as we dynamically change the status for author on author page so even non author status can view them.
                 $real_status = $wpdb->get_var("SELECT post_status from $wpdb->posts WHERE ID=$post->ID");
                 $status = "<strong>(";
-                $status_icon = '<i class="fa fa-play"></i>';
+                $status_icon = '<i class="fas fa-play"></i>';
                 if ($real_status == 'publish') {
                     $status .= __('Published', 'userswp');
                 } else {
                     $status .= __('Not published', 'userswp');
-                    $status_icon = '<i class="fa fa-pause"></i>';
+                    $status_icon = '<i class="fas fa-pause"></i>';
                 }
                 $status .= ")</strong>";
 

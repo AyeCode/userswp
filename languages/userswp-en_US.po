@@ -476,7 +476,7 @@ msgstr ""
 msgid ""
 "Upload icon using media and enter its url path, or enter <a href=\"http://"
 "fortawesome.github.io/Font-Awesome/icons/\" target=\"_blank\" >font awesome "
-"</a>class eg:\"fa fa-home\""
+"</a>class eg:\"fas fa-home\""
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:926

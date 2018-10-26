@@ -1,7 +1,7 @@
 <?php do_action('uwp_template_before', 'reset'); ?>
     <div class="uwp-content-wrap">
         <div class="uwp-login">
-            <div class="uwp-lf-icon"><i class="fa fa-key fa-fw"></i></div>
+            <div class="uwp-lf-icon"><i class="fas fa-key fa-fw"></i></div>
             <?php do_action('uwp_template_form_title_before', 'reset'); ?>
             <h2><?php echo apply_filters('uwp_template_form_title', get_the_title(), 'reset'); ?></h2>
             <?php do_action('uwp_template_display_notices', 'reset'); ?>

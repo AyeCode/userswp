@@ -165,21 +165,21 @@ function uwp_account_get_available_tabs() {
     if('account' != $type){
         $tabs['account']  = array(
             'title' => __( 'Edit Account', 'userswp' ),
-            'icon' => 'fa fa-user',
+            'icon' => 'fas fa-user',
         );
     }
 
     if('notifications' != $type){
         $tabs['notifications']  = array(
             'title' => __( 'Notifications', 'userswp' ),
-            'icon' => 'fa fa-bell',
+            'icon' => 'fas fa-bell',
         );
     }
 
     if('privacy' != $type) {
         $tabs['privacy'] = array(
             'title' => __('Privacy', 'userswp'),
-            'icon' => 'fa fa-lock',
+            'icon' => 'fas fa-lock',
         );
     }
 

@@ -486,19 +486,9 @@ function get_uwp_users_list() {
  */
 function uwp_load_font_awesome() {
     //load font awesome
-    global $wp_styles;
-    if ($wp_styles) {
-        $srcs = array_map('basename', (array) wp_list_pluck($wp_styles->registered, 'src') );
-        if ( in_array('font-awesome.css', $srcs) || in_array('font-awesome.min.css', $srcs)  ) {
-            /* echo 'font-awesome.css registered'; */
-        } else {
-            wp_register_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), null);
-            wp_enqueue_style('font-awesome');
-        }
-    } else {
-        wp_register_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), null);
-        wp_enqueue_style('font-awesome');
-    }
+    wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.4.1/js/all.js', array('font-awesome-shim'));
+    wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.4.1/js/v4-shims.js', array());
+    wp_enqueue_script( 'font-awesome' );
 }
 
 /**
@@ -869,7 +859,7 @@ function uwp_add_account_menu_links() {
 
     $template = new UsersWP_Templates();
     $logout_url = $template->uwp_logout_url();
-    echo '<li id="uwp-account-logout"><a class="uwp-account-logout-link" href="'.$logout_url.'"><i class="fa fa-sign-out"></i>'.__('Logout', 'userswp').'</a></li>';
+    echo '<li id="uwp-account-logout"><a class="uwp-account-logout-link" href="'.$logout_url.'"><i class="fas fa-sign-out-alt"></i>'.__('Logout', 'userswp').'</a></li>';
     echo '</ul>';
 }
 
@@ -1411,18 +1401,18 @@ function uwp_str_ends_with($haystack, $needle)
  */
 function uwp_field_type_to_fa_icon($type) {
     $field_types = array(
-        'text' => 'fa fa-minus',
-        'datepicker' => 'fa fa-calendar',
-        'textarea' => 'fa fa-bars',
-        'time' =>'fa fa-clock-o',
-        'checkbox' =>'fa fa-check-square-o',
-        'phone' =>'fa fa-phone',
-        'radio' =>'fa fa-dot-circle-o',
-        'email' =>'fa fa-envelope-o',
-        'select' =>'fa fa-caret-square-o-down',
-        'multiselect' =>'fa fa-caret-square-o-down',
-        'url' =>'fa fa-link',
-        'file' =>'fa fa-file'
+        'text' => 'fas fa-minus',
+        'datepicker' => 'fas fa-calendar-alt',
+        'textarea' => 'fas fa-bars',
+        'time' =>'far fa-clock',
+        'checkbox' =>'far fa-check-square',
+        'phone' =>'far fa-phone',
+        'radio' =>'far fa-dot-circle',
+        'email' =>'far fa-envelope',
+        'select' =>'far fa-caret-square-down',
+        'multiselect' =>'far fa-caret-square-down',
+        'url' =>'fas fa-link',
+        'file' =>'fas fa-file'
     );
 
     if (isset($field_types[$type])) {
