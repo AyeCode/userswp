@@ -129,6 +129,7 @@ No questions so far, but don't hesitate to ask!
 * Custom fields in available tab settings with ordering - ADDED
 * Status report for compatibility checks and plugin support - ADDED
 * Updated to use Font Awesome 5 JS version - CHANGED
+* Profile tab order gives error sometimes - FIXED
 
 = 1.0.19 =
 * Activator class missing some dependency functions can make plugin update fail - FIXED
