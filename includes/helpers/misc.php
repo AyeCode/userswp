@@ -486,19 +486,9 @@ function get_uwp_users_list() {
  */
 function uwp_load_font_awesome() {
     //load font awesome
-    global $wp_styles;
-    if ($wp_styles) {
-        $srcs = array_map('basename', (array) wp_list_pluck($wp_styles->registered, 'src') );
-        if ( in_array('font-awesome.css', $srcs) || in_array('font-awesome.min.css', $srcs)  ) {
-            /* echo 'font-awesome.css registered'; */
-        } else {
-            wp_register_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), null);
-            wp_enqueue_style('font-awesome');
-        }
-    } else {
-        wp_register_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', array(), null);
-        wp_enqueue_style('font-awesome');
-    }
+    wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.4.1/js/all.js', array('font-awesome-shim'));
+    wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.4.1/js/v4-shims.js', array());
+    wp_enqueue_script( 'font-awesome' );
 }
 
 /**
@@ -869,7 +859,7 @@ function uwp_add_account_menu_links() {
 
     $template = new UsersWP_Templates();
     $logout_url = $template->uwp_logout_url();
-    echo '<li id="uwp-account-logout"><a class="uwp-account-logout-link" href="'.$logout_url.'"><i class="fa fa-sign-out"></i>'.__('Logout', 'userswp').'</a></li>';
+    echo '<li id="uwp-account-logout"><a class="uwp-account-logout-link" href="'.$logout_url.'"><i class="fas fa-sign-out-alt"></i>'.__('Logout', 'userswp').'</a></li>';
     echo '</ul>';
 }
 
@@ -1411,18 +1401,18 @@ function uwp_str_ends_with($haystack, $needle)
  */
 function uwp_field_type_to_fa_icon($type) {
     $field_types = array(
-        'text' => 'fa fa-minus',
-        'datepicker' => 'fa fa-calendar',
-        'textarea' => 'fa fa-bars',
-        'time' =>'fa fa-clock-o',
-        'checkbox' =>'fa fa-check-square-o',
-        'phone' =>'fa fa-phone',
-        'radio' =>'fa fa-dot-circle-o',
-        'email' =>'fa fa-envelope-o',
-        'select' =>'fa fa-caret-square-o-down',
-        'multiselect' =>'fa fa-caret-square-o-down',
-        'url' =>'fa fa-link',
-        'file' =>'fa fa-file'
+        'text' => 'fas fa-minus',
+        'datepicker' => 'fas fa-calendar-alt',
+        'textarea' => 'fas fa-bars',
+        'time' =>'far fa-clock',
+        'checkbox' =>'far fa-check-square',
+        'phone' =>'far fa-phone',
+        'radio' =>'far fa-dot-circle',
+        'email' =>'far fa-envelope',
+        'select' =>'far fa-caret-square-down',
+        'multiselect' =>'far fa-caret-square-down',
+        'url' =>'fas fa-link',
+        'file' =>'fas fa-file'
     );
 
     if (isset($field_types[$type])) {
@@ -1607,4 +1597,102 @@ function uwp_handle_multisite_profile_image($uploads){
     }
 
     return $uploads;
+}
+
+/**
+ * let_to_num function.
+ *
+ * This function transforms the php.ini notation for numbers (like '2M') to an integer.
+ *
+ * @since 2.0.0
+ * @param $size
+ * @return int
+ */
+function uwp_let_to_num( $size ) {
+    $l   = substr( $size, -1 );
+    $ret = substr( $size, 0, -1 );
+    switch ( strtoupper( $l ) ) {
+        case 'P':
+            $ret *= 1024;
+        case 'T':
+            $ret *= 1024;
+        case 'G':
+            $ret *= 1024;
+        case 'M':
+            $ret *= 1024;
+        case 'K':
+            $ret *= 1024;
+    }
+    return $ret;
+}
+
+function uwp_format_decimal($number, $dp = false, $trim_zeros = false){
+    $locale   = localeconv();
+    $decimals = array( uwp_get_decimal_separator(), $locale['decimal_point'], $locale['mon_decimal_point'] );
+
+    // Remove locale from string.
+    if ( ! is_float( $number ) ) {
+        $number = str_replace( $decimals, '.', $number );
+        $number = preg_replace( '/[^0-9\.,-]/', '', uwp_clean( $number ) );
+    }
+
+    if ( false !== $dp ) {
+        $dp     = intval( '' == $dp ? uwp_get_decimal_separator() : $dp );
+        $number = number_format( floatval( $number ), $dp, '.', '' );
+        // DP is false - don't use number format, just return a string in our format
+    } elseif ( is_float( $number ) ) {
+        // DP is false - don't use number format, just return a string using whatever is given. Remove scientific notation using sprintf.
+        $number     = str_replace( $decimals, '.', sprintf( '%.' . uwp_get_rounding_precision() . 'f', $number ) );
+        // We already had a float, so trailing zeros are not needed.
+        $trim_zeros = true;
+    }
+
+    if ( $trim_zeros && strstr( $number, '.' ) ) {
+        $number = rtrim( rtrim( $number, '0' ), '.' );
+    }
+
+    return $number;
+}
+
+/**
+ * Return the decimal separator.
+ * @since  1.0.20
+ * @return string
+ */
+function uwp_get_decimal_separator() {
+    $separator = apply_filters( 'uwp_decimal_separator', '.' );
+    return $separator ? stripslashes( $separator ) : '.';
+}
+
+/**
+ * Get rounding precision for internal UWP calculations.
+ * Will increase the precision of uwp_get_decimal_separator by 2 decimals, unless UWP_ROUNDING_PRECISION is set to a higher number.
+ *
+ * @since 1.0.20
+ * @return int
+ */
+function uwp_get_rounding_precision() {
+    $precision = uwp_get_decimal_separator() + 2;
+    if ( absint( UWP_ROUNDING_PRECISION ) > $precision ) {
+        $precision = absint( UWP_ROUNDING_PRECISION );
+    }
+    return $precision;
+}
+
+/**
+ * Clean variables using sanitize_text_field. Arrays are cleaned recursively.
+ * Non-scalar values are ignored.
+ *
+ * @param string|array $var
+ *
+ * @return string|array
+ */
+function uwp_clean( $var ) {
+
+    if ( is_array( $var ) ) {
+        return array_map( 'uwp_clean', $var );
+    } else {
+        return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
+    }
+
 }

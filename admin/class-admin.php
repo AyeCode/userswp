@@ -104,6 +104,10 @@ class UsersWP_Admin {
         wp_enqueue_script( "uwp_chosen", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/chosen.jquery.js', array( 'jquery' ), USERSWP_VERSION, false );
         wp_enqueue_script( "uwp_chosen_order", plugin_dir_url( __FILE__ ) . 'assets/js/chosen.order.jquery.min.js', array( 'jquery' ), USERSWP_VERSION, false );
 
+        if ($hook_suffix == 'userswp_page_uwp_status') {
+            wp_enqueue_script( "uwp_status", USERSWP_PLUGIN_URL . '/admin/assets/js/system-status.js', array( 'jquery' ), USERSWP_VERSION, true );
+        }
+
         $ajax_cons_data = array(
             'url' => admin_url('admin-ajax.php'),
             'custom_field_not_blank_var' => __('HTML Variable Name must not be blank', 'userswp'),

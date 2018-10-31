@@ -72,7 +72,7 @@ class UsersWP_Callback {
     }
 
     public function uwp_select_order_callback($args) {
-        
+
         global $uwp_options;
 
         $global = isset( $args['global'] ) ? $args['global'] : true;
@@ -98,7 +98,7 @@ class UsersWP_Callback {
         }
 
         if ( isset( $args['chosen'] ) ) {
-            $chosen = ($args['multiple'] ? '[]" multiple="multiple" class="uwp_chosen_select" style="height:auto"' : "'");
+            $chosen = ($args['multiple'] ? '[]" multiple="multiple" style="height:auto;width:100%"' : "'");
         } else {
             $chosen = '';
         }
@@ -147,35 +147,34 @@ class UsersWP_Callback {
         ?>
         <script>
             jQuery(document).ready(function() {
-                setTimeout(function(){
 
-                    // Set the current order on load
-                    var current_order = jQuery('#<?php echo $args['id'];?>').val();
+                jQuery("#uwp_dummy_<?php echo $args['id'];?>").chosen();
 
-                    if(current_order){
-                        current_order = jQuery.unique( current_order );
-                        ChosenOrder.setSelectionOrder(jQuery("#uwp_dummy_<?php echo $args['id'];?>"), current_order);
-                    }
+                // Set the current order on load
+                var current_order = jQuery('#<?php echo $args['id'];?>').val();
 
+                if(current_order){
+                    current_order = jQuery.unique( current_order );
+                    ChosenOrder.setSelectionOrder(jQuery("#uwp_dummy_<?php echo $args['id'];?>"), current_order);
+                }
 
-                    // on order change update the hidden real values
-                    jQuery("#uwp_dummy_<?php echo $args['id'];?>").chosen().change(function () {
-                        console.log('changed');
+                // on order change update the hidden real values
+                jQuery("#uwp_dummy_<?php echo $args['id'];?>").chosen().change(function () {
+                    //console.log('changed');
 
-                        setTimeout(function(){ // trigers before the item is removed so we add a slight delay
-                            var selection = ChosenOrder.getSelectionOrder(jQuery("#uwp_dummy_<?php echo $args['id'];?>"));
-                            console.log(selection);
-                            jQuery('#<?php echo $args['id'];?>').find('option').remove().end();
+                    setTimeout(function(){ // trigers before the item is removed so we add a slight delay
+                        var selection = ChosenOrder.getSelectionOrder(jQuery("#uwp_dummy_<?php echo $args['id'];?>"));
+                        //console.log(selection);
+                        jQuery('#<?php echo $args['id'];?>').find('option').remove().end();
 
-                            jQuery.each( selection, function( key, value ) {
-                                jQuery('#<?php echo $args['id'];?>').append('<option value="'+value+'" selected>'+value+'</option>')
-                            });
+                        jQuery.each( selection, function( key, value ) {
+                            jQuery('#<?php echo $args['id'];?>').append('<option value="'+value+'" selected>'+value+'</option>')
+                        });
 
-                        }, 50);
+                    }, 50);
 
-                    });
+                });
 
-                }, 300);
             });
         </script>
 

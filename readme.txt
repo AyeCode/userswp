@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.5
-Tested up to: 4.9
-Stable tag: 1.0.19
+Tested up to: 5.0
+Stable tag: 1.0.20
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -126,6 +126,10 @@ No questions so far, but don't hesitate to ask!
 * Change wpDiscuz profile URL to UWP profile URL - FIXED
 * Users can Mute specific email notifications - ADDED
 * Profile tab order not working - FIXED
+* Custom fields in available tab settings with ordering - ADDED
+* Status report for compatibility checks and plugin support - ADDED
+* Updated to use Font Awesome 5 JS version - CHANGED
+* Profile tab order gives error sometimes - FIXED
 
 = 1.0.19 =
 * Activator class missing some dependency functions can make plugin update fail - FIXED

@@ -829,19 +829,6 @@ class UsersWP_Admin_Settings {
         return $output;
     }
 
-    public function uwp_available_tab_items_options(){
-        $all_tabs = $this->uwp_available_tab_items();
-        $return = array();
-
-        if(!empty($all_tabs) && is_array($all_tabs)) {
-            foreach ($all_tabs as $tab_key => $tab) {
-                $return[$tab_key] = $tab;
-            }
-        }
-
-        return $return;
-    }
-
     public function uwp_available_tab_items() {
         $tabs_arr = array(
             'more_info' => __( 'More Info', 'userswp' ),

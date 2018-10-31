@@ -49,9 +49,13 @@ class UsersWP_Notifications {
                                         </div>
                                     </div>
                                 <?php }
+                                ?>
+                                <input type="hidden" name="uwp_notification_nonce" value="<?php echo wp_create_nonce( 'uwp-notification-nonce' ); ?>" />
+                                <input name="uwp_notification_submit" value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
+                                <?php
+                            } else {
+                                echo '<p>'.__( 'You will see the options to disable the active notifications for UsersWP and it\'s add ons.', 'userswp' ).'</p>';
                             }?>
-                        <input type="hidden" name="uwp_notification_nonce" value="<?php echo wp_create_nonce( 'uwp-notification-nonce' ); ?>" />
-                        <input name="uwp_notification_submit" value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
                     </form>
                 </div>
             </div>

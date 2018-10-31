@@ -129,7 +129,7 @@
           text-align: left;
           height: 30px;
           font-size: 13px;
-          i {
+          i,svg {
             position: absolute;
             color: #fff;
             left: 15px;
@@ -171,14 +171,14 @@
       left: 20px;
       position: absolute;
       top: 15px;
-      i {
+      i,svg {
         position: absolute;
         left: 13px;
         top: 15px;
         z-index: 999;
       }
     }
-    .uwp-profile-header-img:hover i {
+    .uwp-profile-header-img:hover svg {
       color: #fff;
     }
     .uwp-profile-banner-change {

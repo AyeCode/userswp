@@ -141,7 +141,7 @@ wp_enqueue_script( 'plupload' );
                         var data = $form.serialize();
                         submitBtn.attr('disabled', true);
                         $form.find('.uwp-msg-wrap').remove();
-                        $form.append('<div class="uwp-msg-wrap"><div class="uwp-progress"><div></div><span>0%</span></div><span class="uwp-export-loader"><i class="fa fa-spin fa-spinner"></i></span></div>');
+                        $form.append('<div class="uwp-msg-wrap"><div class="uwp-progress"><div></div><span>0%</span></div><span class="uwp-export-loader"><i class="fas fa-spin fa-spinner"></i></span></div>');
                         // start the process
                         $this.step(1, data, $form, $this);
                     }
@@ -155,7 +155,7 @@ wp_enqueue_script( 'plupload' );
                         var data = $form.serialize();
                         submitBtn.attr('disabled', true);
                         $form.find('.uwp-msg-wrap').remove();
-                        $form.append('<div class="uwp-msg-wrap"><div class="uwp-progress"><div></div><span>0%</span></div><span class="uwp-import-loader"><i class="fa fa-spin fa-spinner"></i></span></div>');
+                        $form.append('<div class="uwp-msg-wrap"><div class="uwp-progress"><div></div><span>0%</span></div><span class="uwp-import-loader"><i class="fas fa-spin fa-spinner"></i></span></div>');
                         $form.find('.uwp-msg-wrap').append('<div class="uwp-ie-report"></div>');
                         // start the process
                         $this.imp_step(1, data, $form, $this);
@@ -189,9 +189,9 @@ wp_enqueue_script( 'plupload' );
                                         message.html('<div id="uwp-export-success" class="updated notice is-dismissible"><p>' + msg + '<span class="notice-dismiss"></span></p></div>');
                                     }
                                     if (res.data.file && res.data.file.u) {
-                                        message.append('<span class="uwp-export-file"><a href="' + res.data.file.u + '" target="_blank"><i class="fa fa-download"></i> ' + res.data.file.u + '</a><span> - ' + res.data.file.s + '<span><span>');
+                                        message.append('<span class="uwp-export-file"><a href="' + res.data.file.u + '" target="_blank"><i class="fas fa-download"></i> ' + res.data.file.u + '</a><span> - ' + res.data.file.s + '<span><span>');
                                     }
-                                    message.find('.uwp-export-loader').html('<i class="fa fa-check-circle"></i>');
+                                    message.find('.uwp-export-loader').html('<i class="fas fa-check-circle"></i>');
                                 } else {
                                     var next = parseInt(res.data.step) > 0 ? parseInt(res.data.step) : 1;
                                     $('.uwp-progress > span').text(parseInt(res.data.done) + '%');
@@ -246,7 +246,7 @@ wp_enqueue_script( 'plupload' );
                                     if (res.msg) {
                                         message.append('<div id="uwp-export-success" class="updated notice is-dismissible"><p>' + res.msg + '<span class="notice-dismiss"></span></p></div>');
                                     }
-                                    message.find('.uwp-import-loader').html('<i class="fa fa-check-circle"></i>');
+                                    message.find('.uwp-import-loader').html('<i class="fas fa-check-circle"></i>');
                                 } else {
                                     var next = parseInt(res.data.step) > 0 ? parseInt(res.data.step) : 1;
                                     $('.uwp-progress > span').text(parseInt(res.data.done) + '%');
@@ -359,7 +359,7 @@ wp_enqueue_script( 'plupload' );
 
                 $.each(files, function(i, file) {
                     $container.append(
-                        '<div class="upload-item uwp-msg-wrap" id="' + file.id + '"><div class="uwp-progress"><div class="bar"></div><span class="percent">0%</span></div><span class="uwp-import-loader"><i class="fa fa-spin fa-spinner"></i></span><span class="uwp-import-file filename original">' +
+                        '<div class="upload-item uwp-msg-wrap" id="' + file.id + '"><div class="uwp-progress"><div class="bar"></div><span class="percent">0%</span></div><span class="uwp-import-loader"><i class="fas fa-spin fa-spinner"></i></span><span class="uwp-import-file filename original">' +
                         file.name + '<span> - ' + plupload.formatSize(file.size) + '</span></span>' +
                         '</div></div>');
                 });
@@ -411,7 +411,7 @@ wp_enqueue_script( 'plupload' );
                 var self = this;
 
                 $('#' + file.id + " .percent").html("100%");
-                $('#' + file.id).find('.uwp-import-loader').html('<i class="fa fa-check-circle"></i>');
+                $('#' + file.id).find('.uwp-import-loader').html('<i class="fas fa-check-circle"></i>');
 
                 if(response.response !== 'error') {
                     $('#' + this.container).find('.file-selector').hide();

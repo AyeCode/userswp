@@ -64,7 +64,7 @@ class UsersWP_Profile {
                 ?>
             <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID) && is_uwp_profile_page()) { ?>
                 <div class="uwp-banner-change-icon">
-                    <i class="fa fa-camera" aria-hidden="true"></i>
+                    <i class="fas fa-camera" aria-hidden="true"></i>
                     <div data-type="banner" class="uwp-profile-banner-change <?php echo $trigger_class; ?>">
                     <span class="uwp-profile-banner-change-inner">
                         <?php echo __( 'Update Cover Photo', 'userswp' ); ?>
@@ -84,7 +84,7 @@ class UsersWP_Profile {
                     <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID) && is_uwp_profile_page()) { ?>
                         <div class="uwp-profile-avatar-change">
                             <div class="uwp-profile-avatar-change-inner">
-                                <i class="fa fa-camera" aria-hidden="true"></i>
+                                <i class="fas fa-camera" aria-hidden="true"></i>
                                 <a id="uwp-profile-picture-change" data-type="avatar" class="<?php echo $trigger_class; ?>" href="#"><?php echo __( 'Update', 'userswp' ); ?></a>
                             </div>
                         </div>
@@ -202,7 +202,7 @@ class UsersWP_Profile {
      * @return      string                  Tab title.
      */
     public function get_profile_count_icon($user) {
-        return '<i class="fa fa-user"></i>';
+        return '<i class="fas fa-user"></i>';
     }
 
     /**
@@ -444,7 +444,7 @@ class UsersWP_Profile {
                 ?>
                 <?php if ($account_page && is_user_logged_in() && (get_current_user_id() == $user->ID) && $can_user_edit_account) { ?>
                     <div class="uwp-edit-account">
-                        <a href="<?php echo get_permalink( $account_page ); ?>" title="<?php echo  __( 'Edit Account', 'userswp' ); ?>"><i class="fa fa-gear"></i></a>
+                        <a href="<?php echo get_permalink( $account_page ); ?>" title="<?php echo  __( 'Edit Account', 'userswp' ); ?>"><i class="fas fa-cog"></i></a>
                     </div>
                 <?php } ?>
             </div>
@@ -1596,6 +1596,27 @@ class UsersWP_Profile {
     }
 
     /**
+     * Add custom fields as an available tabs
+     *
+     * @since       1.0.20
+     * @package     userswp
+     * @param       $tabs_arr
+     * @return      mixed
+     */
+    public function uwp_extra_fields_available_tab_items($tabs_arr){
+        global $wpdb;
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+        $fields = $wpdb->get_results("SELECT htmlvar_name, site_title FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+
+        foreach ($fields as $field) {
+            $key = str_replace('uwp_account_', '', $field->htmlvar_name);
+            $tabs_arr[$key] = __($field->site_title, 'userswp');
+        }
+
+        return $tabs_arr;
+    }
+
+    /**
      * Displays custom fields as tabs
      *
      * @since       1.0.0
@@ -1608,7 +1629,7 @@ class UsersWP_Profile {
     {
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT site_title,field_icon,htmlvar_name,is_public,field_type FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
         $usermeta = uwp_get_usermeta_row($user->ID);
         $privacy = ! empty( $usermeta ) && $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
 
@@ -1620,7 +1641,7 @@ class UsersWP_Profile {
                 if ($field_icon) {
                     $icon = '<i class="'.$field_icon.'"></i>';
                 } else {
-                    $icon = '<i class="fa fa-user"></i>';
+                    $icon = '<i class="fas fa-user"></i>';
                 }
             }
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);
