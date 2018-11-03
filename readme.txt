@@ -119,6 +119,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.21 =
+* Update users meta from WP user data in background instead of on activation - FIXED
+
 = 1.0.20 =
 * Compatibility with GDV2 - ADDED
 * Uninstall fails due to missing dependency functions - FIXED

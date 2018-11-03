@@ -1696,3 +1696,41 @@ function uwp_clean( $var ) {
     }
 
 }
+
+/**
+ * Define a constant if it is not already defined.
+ *
+ * @since 1.0.21
+ *
+ * @param string $name Constant name.
+ * @param string $value Value.
+ */
+function uwp_maybe_define( $name, $value ) {
+    if ( ! defined( $name ) ) {
+        define( $name, $value );
+    }
+}
+
+function uwp_insert_usermeta(){
+    global $wpdb;
+    $sort= "user_registered";
+
+    $all_users_id = $wpdb->get_col( $wpdb->prepare(
+        "SELECT $wpdb->users.ID FROM $wpdb->users ORDER BY %s ASC"
+        , $sort ));
+
+    //we got all the IDs, now loop through them to get individual IDs
+    foreach ( $all_users_id as $user_id ) {
+        // get user info by calling get_userdata() on each id
+        $user_data = get_userdata($user_id);
+        $first_name = get_user_meta( $user_id, 'first_name', true );
+        $last_name = get_user_meta( $user_id, 'last_name', true );
+        $bio = get_user_meta( $user_id, 'description', true );
+        uwp_update_usermeta($user_id, 'uwp_account_username', $user_data->user_login);
+        uwp_update_usermeta($user_id, 'uwp_account_email', $user_data->user_email);
+        uwp_update_usermeta($user_id, 'uwp_account_first_name', $first_name);
+        uwp_update_usermeta($user_id, 'uwp_account_last_name', $last_name);
+        uwp_update_usermeta($user_id, 'uwp_account_bio', $bio);
+        uwp_update_usermeta($user_id, 'uwp_account_display_name', $user_data->display_name);
+    }
+}

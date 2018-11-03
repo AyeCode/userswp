@@ -46,17 +46,17 @@ class UsersWP_Activator {
 
                 switch_to_blog( $main_site );
                 self::uwp101_create_tables();
-                self::uwp_insert_usermeta();
+                self::uwp_update_usermeta();
                 restore_current_blog();
             } else {
                 self::install();
                 self::uwp101_create_tables();
-                self::uwp_insert_usermeta();
+                self::uwp_update_usermeta();
             }
         } else {
             self::install();
             self::uwp101_create_tables();
-            self::uwp_insert_usermeta();
+            self::uwp_update_usermeta();
         }
 
     }
@@ -289,28 +289,16 @@ class UsersWP_Activator {
      * @package     userswp
      * @return      void
      */
-    public static function uwp_insert_usermeta()
+    public static function uwp_update_usermeta()
     {
-        global $wpdb;
-        $sort= "user_registered";
-        $all_users_id = $wpdb->get_col( $wpdb->prepare(
-            "SELECT $wpdb->users.ID FROM $wpdb->users ORDER BY %s ASC"
-            , $sort ));
+        include_once dirname( __FILE__ ) . '/class-uwp-background-updater.php';
+        $background_updater = new UsersWP_Background_Updater();
 
-        //we got all the IDs, now loop through them to get individual IDs
-        foreach ( $all_users_id as $user_id ) {
-            // get user info by calling get_userdata() on each id
-            $user_data = get_userdata($user_id);
-            $first_name = get_user_meta( $user_id, 'first_name', true );
-            $last_name = get_user_meta( $user_id, 'last_name', true );
-            $bio = get_user_meta( $user_id, 'description', true );
-            uwp_update_usermeta($user_id, 'uwp_account_username', $user_data->user_login);
-            uwp_update_usermeta($user_id, 'uwp_account_email', $user_data->user_email);
-            uwp_update_usermeta($user_id, 'uwp_account_first_name', $first_name);
-            uwp_update_usermeta($user_id, 'uwp_account_last_name', $last_name);
-            uwp_update_usermeta($user_id, 'uwp_account_bio', $bio);
-            uwp_update_usermeta($user_id, 'uwp_account_display_name', $user_data->display_name);
-        }
+        $update_callback = 'uwp_insert_usermeta';
+
+        uwp_error_log( sprintf( 'Queuing %s - %s', USERSWP_VERSION, $update_callback ) );
+        $background_updater->push_to_queue( $update_callback );
+        $background_updater->save()->dispatch();
     }
 
     /**
