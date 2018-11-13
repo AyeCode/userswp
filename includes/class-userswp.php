@@ -286,6 +286,7 @@ class UsersWP {
 
         add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
         add_action( 'uwp_template_fields', array($instance, 'uwp_template_fields'), 10, 1 );
+        add_action( 'uwp_template_fields', array($instance, 'uwp_template_extra_fields'), 10, 1 );
         add_action( 'uwp_account_form_display', array($instance, 'uwp_account_edit_form_display'), 10, 1 );
         add_action( 'wp_logout', array($instance, 'logout_redirect'));
         add_action( 'init', array($instance, 'wp_login_redirect'));

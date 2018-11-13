@@ -345,6 +345,54 @@ class UsersWP_Templates {
     }
 
     /**
+     * Display redirect to input of that particular form.
+     *
+     * @since       1.0.21
+     * @package     userswp
+     * @param       string      $form_type      Form type.
+     * @return      void
+     */
+    public function uwp_template_extra_fields($form_type){
+        if ($form_type == 'login') {
+            if (-1 == uwp_get_option('login_redirect_to', -1)) {
+                $referer = wp_get_referer();
+                if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
+                    $redirect_to = esc_url($_REQUEST['redirect_to']);
+                } else if(isset($referer) && !empty($referer)){
+                    $redirect_to = $referer;
+                } else {
+                    $redirect_to = home_url();
+                }
+                echo '<input type="hidden" name="redirect_to" value="'.$redirect_to.'"/>';
+            }
+            echo '<input type="hidden" name="uwp_login_nonce" value="'. wp_create_nonce( 'uwp-login-nonce' ) .'" />';
+        } elseif ($form_type == 'register') {
+            if (-1 == uwp_get_option('register_redirect_to', -1)) {
+                $referer = wp_get_referer();
+                if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
+                    $redirect_to = esc_url($_REQUEST['redirect_to']);
+                } else if(isset($referer) && !empty($referer)){
+                    $redirect_to = $referer;
+                } else {
+                    $redirect_to = home_url();
+                }
+                echo '<input type="hidden" name="redirect_to" value="'.$redirect_to.'"/>';
+            }
+            echo '<input type="hidden" name="uwp_register_nonce" value="'. wp_create_nonce( 'uwp-register-nonce' ) .'" />';
+        } elseif ($form_type == 'change') {
+            echo '<input type="hidden" name="uwp_change_nonce" value="'. wp_create_nonce( 'uwp-change-nonce' ) .'" />';
+        } elseif ($form_type == 'forgot') {
+            echo '<input type="hidden" name="uwp_forgot_nonce" value="'. wp_create_nonce( 'uwp-forgot-nonce' ) .'" />';
+        } elseif ($form_type == 'reset') {
+            if (isset($_GET['key']) && isset($_GET['login'])) {
+                echo '<input type="hidden" name="uwp_reset_username" value="' . sanitize_text_field($_GET['login']) . '" />';
+                echo '<input type="hidden" name="uwp_reset_key" value="' . sanitize_text_field($_GET['key']) . '" />';
+            }
+            echo '<input type="hidden" name="uwp_reset_nonce" value="' . wp_create_nonce('uwp-reset-nonce') . '" />';
+        }
+    }
+
+    /**
      * Adds "Edit Account" form on account page.
      *
      * @since       1.0.0

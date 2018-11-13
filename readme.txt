@@ -121,6 +121,7 @@ No questions so far, but don't hesitate to ask!
 
 = 1.0.21 =
 * Update users meta from WP user data in background instead of on activation - FIXED
+* Follow redirect param for the links on the login and register forms - FIXED
 
 = 1.0.20 =
 * Compatibility with GDV2 - ADDED
