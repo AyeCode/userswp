@@ -92,7 +92,7 @@ class UsersWP_Meta {
             } else {
                 $usermeta = uwp_get_usermeta_row($user_id);
                 if (!empty($usermeta)) {
-                    $value = $usermeta->{$key} ? $usermeta->{$key} : $default;
+                    $value = !empty($usermeta->{$key}) ? $usermeta->{$key} : $default;
                 } else {
                     $value = $default;
                 }
@@ -129,13 +129,12 @@ class UsersWP_Meta {
 
         global $wpdb;
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
-        $user_meta_info = uwp_get_usermeta_row($user_id);
+        $user_meta_info = $wpdb->get_col( $wpdb->prepare( "SELECT $key FROM $meta_table WHERE user_id = %d", $user_id ) );
 
         $value = apply_filters( 'uwp_update_usermeta', $value, $user_id, $key, $user_meta_info );
         $value =  apply_filters( 'uwp_update_usermeta_' . $key, $value, $user_id, $key, $user_meta_info );
 
         do_action( 'uwp_before_update_usermeta', $user_id, $key, $value, $user_meta_info );
-
 
         $value = uwp_maybe_serialize($key, $value);
 

@@ -10,6 +10,13 @@
 class UsersWP_Activator {
 
     /**
+     * Background update class.
+     *
+     * @var object
+     */
+    private static $background_updater;
+
+    /**
      * This method gets fired during plugin activation.
      *
      * @since       1.0.0
@@ -17,8 +24,6 @@ class UsersWP_Activator {
      * @return      void
      */
     public static function activate($network_wide = false) {
-
-        self::load_dependencies();
 
         if (is_multisite()) {
             $main_site = get_network()->site_id;
@@ -94,22 +99,6 @@ class UsersWP_Activator {
                     AND deleted = '0'";
 
         return $wpdb->get_col( $sql );
-    }
-
-    /**
-     * Loads all dependencies during plugin activation.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      void
-     */
-    public static function load_dependencies() {
-
-        require_once dirname( __FILE__ ) . '/helpers.php';
-        require_once dirname( __FILE__ ) . '/class-tables.php';
-        require_once dirname( __FILE__ ) . '/class-meta.php';
-        require_once dirname( __FILE__ ) . '/class-pages.php';
-        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-formbuilder.php';
     }
 
     /**
@@ -282,6 +271,11 @@ class UsersWP_Activator {
         uwp101_create_tables();
     }
 
+    public static function init_background_updater(){
+        include_once dirname( __FILE__ ) . '/class-uwp-background-updater.php';
+        self::$background_updater = new UsersWP_Background_Updater();
+    }
+
     /**
      * Syncs WP usermeta with UsersWP usermeta during plugin activation.
      *
@@ -291,14 +285,12 @@ class UsersWP_Activator {
      */
     public static function uwp_update_usermeta()
     {
-        include_once dirname( __FILE__ ) . '/class-uwp-background-updater.php';
-        $background_updater = new UsersWP_Background_Updater();
-
         $update_callback = 'uwp_insert_usermeta';
+        self::init_background_updater();
 
         uwp_error_log( sprintf( 'Queuing %s - %s', USERSWP_VERSION, $update_callback ) );
-        $background_updater->push_to_queue( $update_callback );
-        $background_updater->save()->dispatch();
+        self::$background_updater->push_to_queue( $update_callback );
+        self::$background_updater->save()->dispatch();
     }
 
     /**
@@ -805,6 +797,14 @@ class UsersWP_Activator {
                     )
                 )
             );
+        }
+    }
+
+    public static function uwp_automatic_upgrade(){
+        $uwp_db_version = get_option('uwp_db_version');
+
+        if ( $uwp_db_version != USERSWP_VERSION ) {
+            self::activate(is_plugin_active_for_network( 'userswp/userswp.php' ));
         }
     }
 

@@ -64,6 +64,8 @@ class UsersWP {
 
 
         $this->load_dependencies();
+        $this->init_hooks();
+
         $this->loader = new UsersWP_Loader();
         $this->meta = new UsersWP_Meta();
         $this->pages = new UsersWP_Pages();
@@ -112,7 +114,15 @@ class UsersWP {
         
     }
 
-
+    /**
+     * Hook into actions and filters.
+     */
+    private function init_hooks() {
+        register_activation_hook( USERSWP_PLUGIN_FILE, array( 'UsersWP_Activator', 'activate' ) );
+        register_deactivation_hook( USERSWP_PLUGIN_FILE, array( 'UsersWP_Deactivator', 'deactivate' ) );
+        add_action( 'admin_init', array('UsersWP_Activator', 'uwp_automatic_upgrade') );
+        add_action( 'init', array( 'UsersWP_Activator', 'init_background_updater' ), 5 );
+    }
 
 
     public function load_assets_actions_and_filters($instance) {
@@ -455,6 +465,18 @@ class UsersWP {
          * of the plugin.
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-i18n.php';
+
+        /**
+         * The class responsible for activation functionality
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-activator.php';
+
+        /**
+         * The class responsible for deactivation functionality
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-deactivator.php';
 
         /**
          * The class responsible for sending emails

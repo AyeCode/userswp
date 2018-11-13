@@ -19,51 +19,33 @@ if (!defined('WPINC')) {
     die;
 }
 
-define( 'USERSWP_NAME', 'userswp' );
-
-define( 'USERSWP_VERSION', '1.0.20' );
-
-define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
-
-define( 'USERSWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-
-/**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-activator.php
- * @param $network_wide
- */
-function activate_users_wp($network_wide) {
-    require_once('includes/class-activator.php');
-    UsersWP_Activator::activate($network_wide);
+if ( ! defined( 'USERSWP_NAME' ) ) {
+    define( 'USERSWP_NAME', 'userswp' );
 }
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-deactivator.php
- */
-function deactivate_users_wp() {
-    require_once('includes/class-deactivator.php');
-    UsersWP_Deactivator::deactivate();
+
+if ( ! defined( 'USERSWP_VERSION' ) ) {
+    define('USERSWP_VERSION', '1.0.20');
 }
-register_activation_hook( __FILE__, 'activate_users_wp' );
-register_deactivation_hook( __FILE__, 'deactivate_users_wp' );
+
+if ( ! defined( 'USERSWP_PATH' ) ) {
+    define('USERSWP_PATH', plugin_dir_path(__FILE__));
+}
+
+if ( ! defined( 'USERSWP_PLUGIN_URL' ) ) {
+    define('USERSWP_PLUGIN_URL', plugin_dir_url(__FILE__));
+}
+
+if ( ! defined( 'USERSWP_PLUGIN_FILE' ) ) {
+    define( 'USERSWP_PLUGIN_FILE', __FILE__ );
+}
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require_once('includes/class-userswp.php');
-
-add_action( 'admin_init', 'uwp_automatic_upgrade' );
-function uwp_automatic_upgrade(){
-    $uwp_db_version = get_option('uwp_db_version');
-
-    if ( $uwp_db_version != USERSWP_VERSION ) {
-        require_once('includes/class-activator.php');
-
-        UsersWP_Activator::activate(is_plugin_active_for_network( 'userswp/userswp.php' ));
-    }
+if ( ! class_exists( 'UsersWP' ) ) {
+    include_once dirname( __FILE__ ) . '/includes/class-userswp.php';
 }
-
 /**
  * Begins execution of the plugin.
  *
@@ -77,4 +59,5 @@ function run_users_wp() {
     $plugin = new UsersWP();
     $plugin->run();
 }
-add_action( 'plugins_loaded', 'run_users_wp', apply_filters( 'uwp_action_priority', 10 ) );
+run_users_wp();
+//add_action( 'plugins_loaded', 'run_users_wp', apply_filters( 'uwp_action_priority', 10 ) );
