@@ -757,8 +757,11 @@ function uwp_account_privacy_edit_form_display($type) {
                                 <div class="uwp-profile-extra-value">
                                     <?php
                                     $field_name = $field->htmlvar_name . '_privacy';
-                                    $value = uwp_get_usermeta($user_id, $field_name, false);
-                                    if ($value === false) {
+                                    $value = uwp_get_usermeta($user_id, 'user_privacy', false);
+                                    $meta_value = explode(',', $value);
+                                    if (in_array($field_name, $meta_value)) {
+                                        $value = 'no';
+                                    } else {
                                         $value = 'yes';
                                     }
                                     ?>

@@ -269,8 +269,9 @@ class UsersWP_Profile {
 
                 if ($field->is_public == '2') {
                     $field_name = $field->htmlvar_name.'_privacy';
-                    $val = uwp_get_usermeta($user->ID, $field_name, false);
-                    if ($val === 'no') {
+                    $val = uwp_get_usermeta($user->ID, 'user_privacy', false);
+                    $meta_value = explode(',', $val);
+                    if (in_array($field_name, $meta_value)) {
                         continue;
                     }
                 }

@@ -136,10 +136,8 @@ class UsersWP {
         add_action('remove_user_from_blog', array($instance, 'remove_user_from_blog'), 10, 2);
         add_action('wp_login', array($instance, 'save_user_ip_on_login') ,10,2);
         add_filter('uwp_before_extra_fields_save', array($instance, 'save_user_ip_on_register'), 10, 3);
-        add_filter('uwp_update_usermeta', array($instance, 'modify_privacy_value_on_update'), 10, 4);
-        add_filter('uwp_get_usermeta', array($instance, 'modify_privacy_value_on_get'), 10, 5);
         add_filter('uwp_update_usermeta', array($instance, 'modify_datepicker_value_on_update'), 10, 3);
-        add_filter('uwp_get_usermeta', array($instance, 'modify_datepicker_value_on_get'), 10, 5);
+        add_filter('uwp_get_usermeta', array($instance, 'modify_datepicker_value_on_get'), 10, 4);
         add_filter('user_row_actions', array($instance, 'uwp_user_row_actions'), 10, 2);
         add_action('bulk_actions-users', array($instance, 'uwp_users_bulk_actions'));
         add_action('handle_bulk_actions-users', array($instance, 'uwp_handle_users_bulk_actions'), 10, 3);

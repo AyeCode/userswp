@@ -82,31 +82,27 @@ class UsersWP_Meta {
             return $default;
         }
 
-        $user_data = get_userdata($user_id);
         $value = null;
-        $usermeta = false;
+        global $wpdb;
 
-        if (!uwp_str_ends_with($key, '_privacy')) {
-            if ($key == 'uwp_account_email') {
-                $value = $user_data->user_email;
-            } else {
-                $usermeta = uwp_get_usermeta_row($user_id);
-                if (!empty($usermeta)) {
-                    $value = !empty($usermeta->{$key}) ? $usermeta->{$key} : $default;
-                } else {
-                    $value = $default;
-                }
-
-            }
+        if ($key == 'uwp_account_email') {
+            $user_data = get_userdata($user_id);
+            $value = $user_data->user_email;
         } else {
-            $usermeta = uwp_get_usermeta_row($user_id);
-        }
+            $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+            $row = $wpdb->get_row($wpdb->prepare("SELECT {$key} FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
+            if (!empty($row)) {
+                $value = !empty($row[$key]) ? $row[$key] : $default;
+            } else {
+                $value = $default;
+            }
 
+        }
 
         $value = uwp_maybe_unserialize($key, $value);
         $value = wp_unslash($value);
-        $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default, $usermeta );
-        return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default, $usermeta );
+        $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
+        return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
     }
 
     /**
@@ -138,32 +134,16 @@ class UsersWP_Meta {
 
         $value = uwp_maybe_serialize($key, $value);
 
-        if (uwp_str_ends_with($key, '_privacy')) {
-            $key = 'user_privacy';
-        }
-
         if (!empty($user_meta_info)) {
-            $wpdb->query(
-                $wpdb->prepare(
-
-                    "update " . $meta_table . " set {$key} = %s where user_id = %d",
-                    array(
-                        $value,
-                        $user_id
-                    )
-                )
+            $wpdb->update(
+                $meta_table,
+                array($key => $value),
+                array('user_id' => $user_id),
+                array('%s'),
+                array('%d')
             );
         } else {
-            $wpdb->query(
-                $wpdb->prepare(
-
-                    "insert into " . $meta_table . " set {$key} = %s, user_id = %d",
-                    array(
-                        $value,
-                        $user_id
-                    )
-                )
-            );
+            return false; // @todo: Create new column with $key?
         }
 
         return true;
@@ -304,84 +284,6 @@ class UsersWP_Meta {
     }
 
     /**
-     * Modifies privacy value while updating into the db.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       string      $value          Privacy value.
-     * 
-     * @param       int         $user_id        The User ID.
-     * @param       string      $key            Custom field key.
-     * @param       object      $user_meta_info User meta row.
-     * 
-     * @return      string                      Modified privacy field string.
-     */
-    public function modify_privacy_value_on_update($value, $user_id, $key, $user_meta_info) {
-        if (uwp_str_ends_with($key, '_privacy')) {
-            $old_value = $user_meta_info->user_privacy;
-            if (!empty($old_value)) {
-                // Existing serialized value
-                if ($value == 'no') {
-                    $public_fields = explode(',', $old_value);
-                    if (!in_array($key, $public_fields)) {
-                        $public_fields[] = $key;
-                    }
-                    $value = implode(',', $public_fields);
-                } else {
-                    // Yes value
-                    $public_fields = explode(',', $old_value);
-                    if(($key = array_search($key, $public_fields)) !== false) {
-                        unset($public_fields[$key]);
-                    }
-                    $value = implode(',', $public_fields);
-                }
-
-            } else {
-                // New Serialized value
-                if ($value == 'no') {
-                    $public_fields = array();
-                    $public_fields[] = $key;
-                    $value = implode(',', $public_fields);
-                } else {
-                    // For yes values no need to update since its a public field.
-                    // We store only the private fields.
-                }
-
-            }
-        }
-        return $value;
-    }
-
-    /**
-     * Modifies privacy value while fetching from the db.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * 
-     * @param       string      $value          Privacy value.
-     * @param       int         $user_id        The User ID.
-     * @param       string      $key            Custom field key.
-     * @param       string      $default        Default value.
-     * 
-     * @return      string                      Modified privacy value.
-     */
-    public function modify_privacy_value_on_get($value, $user_id, $key, $default, $usermeta) {
-        if (uwp_str_ends_with($key, '_privacy')) {
-            $value = 'yes';
-            if (!empty($usermeta)) {
-                $output = $usermeta->user_privacy ? $usermeta->user_privacy : $default;
-                if ($output) {
-                    $public_fields = explode(',', $output);
-                    if (in_array($key, $public_fields)) {
-                        $value = 'no';
-                    }
-                }
-            }
-        }
-        return $value;
-    }
-
-    /**
      * Modifies date value from unix timestamp to string while updating into the db.
      *
      * @since       1.0.0
@@ -416,7 +318,7 @@ class UsersWP_Meta {
      * 
      * @return      int                         Unix Timestamp.
      */
-    public function modify_datepicker_value_on_get($value, $user_id, $key, $default, $usermeta) {
+    public function modify_datepicker_value_on_get($value, $user_id, $key, $default) {
         // modify date to timestamp
         if (is_string($value) && (strpos($value, '-') !== false)) {
             $field_info = uwp_get_custom_field_info($key);
