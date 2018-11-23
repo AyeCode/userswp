@@ -2296,7 +2296,6 @@ class UsersWP_Forms {
             $_POST['uwp_account_last_name'] = $_POST['last_name'];
             $_POST['uwp_account_display_name'] = $_POST['nickname'];
             $_POST['uwp_account_email'] = $_POST['email'];
-            $_POST['uwp_account_bio'] = $_POST['description'];
             $result = uwp_validate_fields($_POST, 'account', $fields);
             if (isset($result['uwp_account_display_name']) && !empty($result['uwp_account_display_name'])) {
                 $display_name = $result['uwp_account_display_name'];

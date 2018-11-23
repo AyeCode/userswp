@@ -1736,11 +1736,10 @@ function uwp_insert_usermeta(){
             'uwp_account_email' => $user_data->user_email,
             'uwp_account_first_name' => $first_name,
             'uwp_account_last_name' => $last_name,
-            'uwp_account_bio' => $bio,
             'uwp_account_display_name' => $user_data->display_name,
         );
 
-        $user_meta_value = $wpdb->get_col( $wpdb->prepare( "SELECT uwp_account_username, uwp_account_email, uwp_account_first_name, uwp_account_last_name, uwp_account_bio, uwp_account_display_name FROM $meta_table WHERE user_id = %d", $user_id ) );
+        $user_meta_value = $wpdb->get_col( $wpdb->prepare( "SELECT uwp_account_username, uwp_account_email, uwp_account_first_name, uwp_account_last_name, uwp_account_display_name FROM $meta_table WHERE user_id = %d", $user_id ) );
 
         if(!empty($user_meta_value)) {
             foreach ($user_meta as $meta => $value) {

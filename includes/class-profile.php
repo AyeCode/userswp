@@ -119,32 +119,6 @@ class UsersWP_Profile {
     }
 
     /**
-     * Prints the profile page bio section.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       object      $user       The User ID.
-     */
-    public function get_profile_bio($user) {
-        $bio = uwp_get_usermeta( $user->ID, 'uwp_account_bio', "" );
-        $bio = stripslashes($bio);
-        $is_profile_page = is_uwp_profile_page();
-        if ($bio) {
-            ?>
-            <div class="uwp-profile-bio <?php if ($is_profile_page) { echo "uwp_more"; } ?>">
-                <?php
-                if ($is_profile_page) {
-                    echo $bio;
-                } else {
-                    echo wp_trim_words( $bio, 20, '...' );
-                }
-                ?>
-            </div>
-            <?php
-        }
-    }
-
-    /**
      * Prints the profile page social links section.
      *
      * @since       1.0.0
@@ -298,6 +272,7 @@ class UsersWP_Profile {
                                 <?php
                                 if ($field->htmlvar_name == 'uwp_account_bio') {
                                     $is_profile_page = is_uwp_profile_page();
+                                    $value = get_user_meta($user->ID, 'description', true);
                                     $value = stripslashes($value);
                                     if ($value) {
                                         ?>

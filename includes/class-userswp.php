@@ -225,7 +225,6 @@ class UsersWP {
         add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_profile_title', array($instance, 'get_profile_title'), 10, 1 );
-        //add_action( 'uwp_profile_bio', array($instance, 'get_profile_bio'), 10, 1 );
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 1 );
 
         //Fields as tabs
@@ -641,7 +640,7 @@ class UsersWP {
             deactivate_plugins( 'uwp_geodirectory/uwp_geodirectory.php' );
         }
 
-        if ( is_plugin_active( 'geodirectory/geodirectory.php' ) || class_exists('GeoDirectory') ) {
+        if ( is_plugin_active( 'geodirectory-1/geodirectory.php' ) || class_exists('GeoDirectory') ) {
             /**
              * The class responsible for displaying notices
              *

@@ -52,10 +52,7 @@ class UsersWP_Validation {
             }
         }
 
-
         $validated_data = array();
-
-
 
         $email_field = uwp_get_custom_field_info('uwp_account_email');
         $email_extra = array();

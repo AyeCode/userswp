@@ -211,7 +211,6 @@ class UsersWP_Meta {
         uwp_update_usermeta($user_id, 'uwp_account_display_name',   $user_data->display_name);
         uwp_update_usermeta($user_id, 'uwp_account_first_name',     $user_data->first_name);
         uwp_update_usermeta($user_id, 'uwp_account_last_name',      $user_data->last_name);
-        uwp_update_usermeta($user_id, 'uwp_account_bio',            $user_data->description);
 
     }
 

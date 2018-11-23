@@ -163,6 +163,42 @@ class UsersWP_Invoicing_Plugin {
                                 ?>
                             </div>
                             <?php do_action('uwp_after_profile_invoice_summary', $wpi_invoice, $user); ?>
+                            <?php
+                            $actions = array();
+
+                            if ( 'wpi-pending' == $wpi_invoice->post_status && $wpi_invoice->needs_payment() ) {
+                                $actions['pay'] = array(
+                                    'url'  => $wpi_invoice->get_checkout_payment_url(),
+                                    'name' => __( 'Pay Now', 'invoicing' ),
+                                    'class' => 'btn-uwp-pay-now'
+                                );
+                            }
+
+                            $cart_items = $wpi_invoice->get_cart_details();
+                            if ( !empty( $cart_items )) {
+                                foreach ($cart_items as $key => $cart_item) {
+                                    $item_id    = $cart_item['id'];
+                                    $wpi_item   = $item_id > 0 ? new WPInv_Item( $item_id ) : NULL;
+                                    if ( !empty( $cart_item ) && !empty( $cart_item['meta']['post_id'] ) && $wpi_item->get_type() == 'package' ) {
+                                        $post_id = $cart_item['meta']['post_id'];
+                                        $post_ink = get_permalink( $post_id );
+                                        $actions['listing'] = array(
+                                            'url'  => $post_ink,
+                                            'name' => __( 'Listing', 'invoicing' ),
+                                            'class' => 'btn-uwp-listing'
+                                        );
+                                    }
+                                }
+                            }
+
+                            $actions = apply_filters( 'wpinv_user_profile_invoice_actions', $actions, $wpi_invoice );
+                            if ( $actions ) {
+                                foreach ( $actions as $key => $action ) {
+                                    $class = !empty($action['class']) ? sanitize_html_class($action['class']) : '';
+                                    echo '<a href="' . esc_url( $action['url'] ) . '" class="btn btn-sm ' . $class . ' ' . sanitize_html_class( $key ) . '" ' . ( !empty($action['attrs']) ? $action['attrs'] : '' ) . '>' . $action['name'] . '</a>';
+                                }
+                            }
+                            ?>
                         </div>
                     </li>
                     <?php

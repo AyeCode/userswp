@@ -193,6 +193,15 @@ class UsersWP_Public {
 
         $country_data = uwp_get_country_data();
         wp_localize_script(USERSWP_NAME, 'uwp_country_data', $country_data);
+
+        $uwp_localize_data = array(
+            'uwp_more_char_limit' => '100',
+            'uwp_more_text' => __('more','userswp'),
+            'uwp_less_text' => __('less','userswp'),
+            'uwp_more_ellipses_text' => '...',
+        );
+        $uwp_localize_data = apply_filters('uwp_localize_data', $uwp_localize_data);
+        wp_localize_script(USERSWP_NAME, 'uwp_localize_data', $uwp_localize_data);
         
     }
 
