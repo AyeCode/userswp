@@ -640,7 +640,7 @@ class UsersWP {
             deactivate_plugins( 'uwp_geodirectory/uwp_geodirectory.php' );
         }
 
-        if ( is_plugin_active( 'geodirectory-1/geodirectory.php' ) || class_exists('GeoDirectory') ) {
+        if ( is_plugin_active( 'geodirectory/geodirectory.php' ) || class_exists('GeoDirectory') ) {
             /**
              * The class responsible for displaying notices
              *

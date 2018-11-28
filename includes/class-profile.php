@@ -573,11 +573,6 @@ class UsersWP_Profile {
                             <?php
                             $excerpt = strip_shortcodes(wp_trim_words( $comment->comment_content, 15, '...' ));
                             echo $excerpt;
-                            if ($excerpt) {
-                                ?>
-                                <a href="<?php echo get_comment_link($comment->comment_ID); ?>" class="more-link"><?php echo __('Read More »', 'userswp'); ?></a>
-                                <?php
-                            }
                             ?>
                         </div>
                     </li>

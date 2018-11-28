@@ -83,20 +83,22 @@ class UsersWP_Meta {
         }
 
         $value = null;
-        global $wpdb;
+        $user_data = get_userdata($user_id);
 
-        if ($key == 'uwp_account_email') {
-            $user_data = get_userdata($user_id);
-            $value = $user_data->user_email;
-        } else {
-            $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
-            $row = $wpdb->get_row($wpdb->prepare("SELECT {$key} FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
-            if (!empty($row)) {
-                $value = !empty($row[$key]) ? $row[$key] : $default;
-            } else {
-                $value = $default;
-            }
-
+        switch ($key){
+            case 'uwp_account_email': $value = $user_data->user_email; break;
+            case 'uwp_account_username': $value = $user_data->user_login; break;
+            case 'uwp_account_bio': $value = $user_data->description; break;
+            default :
+                global $wpdb;
+                $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+                $row = $wpdb->get_row($wpdb->prepare("SELECT {$key} FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
+                if (!empty($row)) {
+                    $value = !empty($row[$key]) ? $row[$key] : $default;
+                } else {
+                    $value = $default;
+                }
+                break;
         }
 
         $value = uwp_maybe_unserialize($key, $value);
@@ -143,7 +145,10 @@ class UsersWP_Meta {
                 array('%d')
             );
         } else {
-            return false; // @todo: Create new column with $key?
+            $wpdb->insert(
+                $meta_table,
+                array('user_id' => $user_id, $key => $value)
+            );
         }
 
         return true;

@@ -941,7 +941,7 @@ function uwp_ucwords($string, $charset='UTF-8') {
 function uwp_column_exist($db, $column)
 {
     $table = new UsersWP_Tables();
-    $table->column_exists($db, $column);
+    return $table->column_exists($db, $column);
 }
 
 /**
@@ -959,7 +959,7 @@ function uwp_column_exist($db, $column)
 function uwp_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
 {
     $table = new UsersWP_Tables();
-    $table->add_column_if_not_exist($db, $column, $column_attr);
+    return $table->add_column_if_not_exist($db, $column, $column_attr);
 
 }
 

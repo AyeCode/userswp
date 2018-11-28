@@ -688,6 +688,16 @@ class UsersWP_GeoDirectory_Plugin {
                             ?>
                             <?php do_action('uwp_after_profile_listing_ratings', $post_id, $user, $post_type); ?>
                         </div>
+
+                        <div class="uwp-profile-item-summary">
+                            <?php
+                            do_action('uwp_before_profile_listing_summary', $post_id, $user, $post_type);
+                            $excerpt = strip_shortcodes(wp_trim_words(get_the_excerpt(), 15, '...'));
+                            echo $excerpt;
+                            do_action('uwp_after_profile_listing_summary', $post_id, $user, $post_type);
+                            ?>
+                        </div>
+
                         <div class="uwp-item-actions">
                             <?php
                             if (is_user_logged_in()) {
@@ -734,20 +744,6 @@ class UsersWP_GeoDirectory_Plugin {
                                 </span>
 
                             <?php } ?>
-                        </div>
-
-                        <div class="uwp-profile-item-summary">
-                            <?php
-                            do_action('uwp_before_profile_listing_summary', $post_id, $user, $post_type);
-                            $excerpt = strip_shortcodes(wp_trim_words(get_the_excerpt(), 15, '...'));
-                            echo $excerpt;
-                            if ($excerpt) {
-                                ?>
-                                <a href="<?php echo get_the_permalink(); ?>" class="more-link"><?php echo __( 'Read More »', 'userswp' ); ?></a>
-                                <?php
-                            }
-                            do_action('uwp_after_profile_listing_summary', $post_id, $user, $post_type);
-                            ?>
                         </div>
                     </li>
                     <?php
@@ -824,12 +820,6 @@ class UsersWP_GeoDirectory_Plugin {
                             do_action('uwp_before_profile_reviews_summary', $review->comment_id, $user, $post_type);
                             $excerpt = strip_shortcodes(wp_trim_words(get_comment_excerpt($review->comment_id), 15, '...'));
                             echo $excerpt;
-                            if ($excerpt) {
-                                ?>
-                                <a href="<?php echo get_comment_link($review->comment_id); ?>" class="more-link">Read More
-                                    »</a>
-                                <?php
-                            }
                             do_action('uwp_after_profile_reviews_summary', $review->comment_id, $user, $post_type);
                             ?>
                         </div>
@@ -928,6 +918,16 @@ class UsersWP_GeoDirectory_Plugin {
                                 ?>
                                 <?php do_action('uwp_after_profile_favourite_ratings', $post_id, $user, $post_type); ?>
                             </div>
+
+                            <div class="uwp-profile-item-summary">
+                                <?php
+                                do_action('uwp_before_profile_favourite_summary', $post_id, $user, $post_type);
+                                $excerpt = strip_shortcodes(wp_trim_words(get_the_excerpt(), 15, '...'));
+                                echo $excerpt;
+                                do_action('uwp_after_profile_favourite_summary', $post_id, $user, $post_type);
+                                ?>
+                            </div>
+
                             <div class="uwp-item-actions">
                                 <?php
                                 if (is_user_logged_in()) {
@@ -975,19 +975,6 @@ class UsersWP_GeoDirectory_Plugin {
                                 </span>
 
                                 <?php } ?>
-                            </div>
-                            <div class="uwp-profile-item-summary">
-                                <?php
-                                do_action('uwp_before_profile_favourite_summary', $post_id, $user, $post_type);
-                                $excerpt = strip_shortcodes(wp_trim_words(get_the_excerpt(), 15, '...'));
-                                echo $excerpt;
-                                if ($excerpt) {
-                                    ?>
-                                    <a href="<?php echo get_the_permalink(); ?>" class="more-link"><?php echo __( 'Read More »', 'userswp' ); ?></a>
-                                    <?php
-                                }
-                                do_action('uwp_after_profile_favourite_summary', $post_id, $user, $post_type);
-                                ?>
                             </div>
                         </li>
                         <?php
