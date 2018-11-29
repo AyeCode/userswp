@@ -82,23 +82,36 @@ class UsersWP_Meta {
             return $default;
         }
 
-        $value = null;
-        $user_data = get_userdata($user_id);
+        global $wpdb;
+        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
-        switch ($key){
-            case 'uwp_account_email': $value = $user_data->user_email; break;
-            case 'uwp_account_username': $value = $user_data->user_login; break;
-            case 'uwp_account_bio': $value = $user_data->description; break;
-            default :
-                global $wpdb;
-                $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
-                $row = $wpdb->get_row($wpdb->prepare("SELECT {$key} FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
-                if (!empty($row)) {
-                    $value = !empty($row[$key]) ? $row[$key] : $default;
-                } else {
-                    $value = $default;
+        if (uwp_str_ends_with($key, '_privacy')) {
+            $value = 'yes';
+            $row = $wpdb->get_row($wpdb->prepare("SELECT user_privacy FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
+            if (!empty($row)) {
+                $output = isset($row['user_privacy']) ? $row['user_privacy'] : $default;
+                $public_fields = explode(',', $output);
+                if (in_array($key, $public_fields)) {
+                    $value = 'no';
                 }
-                break;
+            }
+        } else {
+            $value = null;
+            $user_data = get_userdata($user_id);
+
+            switch ($key){
+                case 'uwp_account_email': $value = $user_data->user_email; break;
+                case 'uwp_account_username': $value = $user_data->user_login; break;
+                case 'uwp_account_bio': $value = $user_data->description; break;
+                default :
+                    $row = $wpdb->get_row($wpdb->prepare("SELECT {$key} FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
+                    if (!empty($row)) {
+                        $value = !empty($row[$key]) ? $row[$key] : $default;
+                    } else {
+                        $value = $default;
+                    }
+                    break;
+            }
         }
 
         $value = uwp_maybe_unserialize($key, $value);

@@ -28,6 +28,12 @@ class UsersWP_Activator {
         if (is_multisite()) {
             $main_site = get_network()->site_id;
             if($network_wide){
+
+                switch_to_blog( $main_site );
+                self::uwp101_create_tables();
+                self::uwp_update_usermeta();
+                restore_current_blog();
+                
                 if (defined('UWP_ROOT_PAGES')) {
                     if (UWP_ROOT_PAGES == 'all') {
                         $blog_ids = self::uwp_get_blog_ids();
@@ -49,18 +55,14 @@ class UsersWP_Activator {
                     restore_current_blog();
                 }
 
-                switch_to_blog( $main_site );
-                self::uwp101_create_tables();
-                self::uwp_update_usermeta();
-                restore_current_blog();
             } else {
-                self::install();
                 self::uwp101_create_tables();
+                self::install();
                 self::uwp_update_usermeta();
             }
         } else {
-            self::install();
             self::uwp101_create_tables();
+            self::install();
             self::uwp_update_usermeta();
         }
 
