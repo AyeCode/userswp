@@ -1724,39 +1724,25 @@ function uwp_insert_usermeta(){
 
     //we got all the IDs, now loop through them to get individual IDs
     foreach ( $all_users_id as $user_id ) {
-
         $user_data = get_userdata($user_id);
-        $first_name = get_user_meta( $user_id, 'first_name', true );
-        $last_name = get_user_meta( $user_id, 'last_name', true );
-        $bio = get_user_meta( $user_id, 'description', true );
 
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
         $user_meta = array(
             'uwp_account_username' => $user_data->user_login,
             'uwp_account_email' => $user_data->user_email,
-            'uwp_account_first_name' => $first_name,
-            'uwp_account_last_name' => $last_name,
+            'uwp_account_first_name' => $user_data->first_name,
+            'uwp_account_last_name' => $user_data->last_name,
             'uwp_account_display_name' => $user_data->display_name,
         );
 
-        $user_meta_value = $wpdb->get_col( $wpdb->prepare( "SELECT uwp_account_username, uwp_account_email, uwp_account_first_name, uwp_account_last_name, uwp_account_display_name FROM $meta_table WHERE user_id = %d", $user_id ) );
+        $users = $wpdb->get_var($wpdb->prepare("SELECT COUNT(user_id) FROM {$meta_table} WHERE user_id = %d", $user_id));
 
-        if(!empty($user_meta_value)) {
-            foreach ($user_meta as $meta => $value) {
-
-                if (!empty($user_meta_value[$meta])) {
-                    $wpdb->query(
-                        $wpdb->prepare(
-
-                            "update " . $meta_table . " set {$meta} = %s where user_id = %d",
-                            array(
-                                $value,
-                                $user_id
-                            )
-                        )
-                    );
-                }
-            }
+        if(!empty($users)) {
+            $wpdb->update(
+                $meta_table,
+                $user_meta,
+                array('user_id' => $user_id)
+            );
         }  else {
             $user_meta['user_id'] = $user_id;
             $wpdb->insert(

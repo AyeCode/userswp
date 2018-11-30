@@ -222,13 +222,33 @@ class UsersWP_Meta {
      */
     public function sync_usermeta($user_id) {
 
+        global $wpdb;
         $user_data = get_userdata($user_id);
+        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
-        uwp_update_usermeta($user_id, 'uwp_account_username',       $user_data->user_login);
-        uwp_update_usermeta($user_id, 'uwp_account_email',          $user_data->user_email);
-        uwp_update_usermeta($user_id, 'uwp_account_display_name',   $user_data->display_name);
-        uwp_update_usermeta($user_id, 'uwp_account_first_name',     $user_data->first_name);
-        uwp_update_usermeta($user_id, 'uwp_account_last_name',      $user_data->last_name);
+        $user_meta = array(
+            'uwp_account_username' => $user_data->user_login,
+            'uwp_account_email' => $user_data->user_email,
+            'uwp_account_display_name' => $user_data->display_name,
+            'uwp_account_first_name' => $user_data->first_name,
+            'uwp_account_last_name' => $user_data->last_name,
+        );
+
+        $users = $wpdb->get_var($wpdb->prepare("SELECT COUNT(user_id) FROM {$meta_table} WHERE user_id = %d", $user_id));
+
+        if($users){
+            $wpdb->update(
+                $meta_table,
+                $user_meta,
+                array('user_id' => $user_id)
+            );
+        } else {
+            $user_meta['user_id'] = $user_id;
+            $wpdb->insert(
+                $meta_table,
+                $user_meta
+            );
+        }
 
     }
 

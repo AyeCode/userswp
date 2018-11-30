@@ -153,8 +153,6 @@ class UsersWP_Tables {
         $user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);
 
         dbDelta($user_meta);
-
-        update_option('uwp_db_version', USERSWP_VERSION);
     }
 
     /**
