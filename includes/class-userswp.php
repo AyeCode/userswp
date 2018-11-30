@@ -305,7 +305,6 @@ class UsersWP {
     }
     
     public function load_tools_actions_and_filters($instance) {
-        add_action('admin_init', array($instance, 'uwp_tools_process_dummy_users'));
         add_action('uwp_admin_sub_menus', array($instance, 'uwp_add_admin_tools_sub_menu'), 100, 1);
         add_action('uwp_tools_settings_main_tab_content', array($instance, 'uwp_tools_main_tab_content'));
         add_action('wp_ajax_uwp_process_diagnosis', array($instance, 'uwp_process_diagnosis_ajax'));

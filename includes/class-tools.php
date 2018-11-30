@@ -10,13 +10,8 @@
 class UsersWP_Tools {
     
     public function uwp_fix_usermeta_table() {
-        // If table not available it will be created else synced
         uwp_create_tables();
         uwp101_create_tables();
-    }
-
-    public function uwp_fix_userdata($step) {
-        $this->uwp_fix_usermeta($step);
     }
 
     public function uwp_tools_wrap_error_message($message, $class) {
@@ -90,7 +85,7 @@ class UsersWP_Tools {
         global $wpdb;
 
 
-        $items_per_page = 10;
+        $items_per_page = apply_filters('tools_process_fix_usermeta_per_page', 10, $step);
         $offset = (int) $step * $items_per_page;
 
         $user_ids = $wpdb->get_col( $wpdb->prepare(
@@ -245,23 +240,24 @@ class UsersWP_Tools {
         return $meta_field_add;
     }
 
-    public function uwp_tools_process_dummy_users() {
-        if (!current_user_can('manage_options')) {
-            return;
-        }
+    public function uwp_tools_process_dummy_users($step, $type = 'add') {
 
-        if (!isset($_GET['uwp_dummy_users']) || empty($_GET['uwp_dummy_users'])) {
-            return;
-        }
+        global $wpdb;
+        $items_per_page = apply_filters('tools_process_dummy_users_per_page', 10, $step, $type);
+        $offset = (int) $step * $items_per_page;
+        $message = '';
+        $done = false;
+        $error = false;
+        $max_step = 0;
 
-        if ( isset($_REQUEST['_wpnonce']) && !wp_verify_nonce( $_REQUEST['_wpnonce'], 'uwp_dummy_users' ) ) {
-            return;
-        }
-
-        if ($_GET['uwp_dummy_users'] == 'create') {
-
+        if ('add' == $type) {
             $users_data = $this->uwp_dummy_users_data();
-            foreach ( $users_data as $user ) {
+            $total_users = count($users_data);
+            $max_step = ceil($total_users / $items_per_page) - 1;
+            $percent = (($step + 1)/ ($max_step+1)) * 100;
+            $dummy_users = array_slice($users_data, $offset, $items_per_page, true);
+
+            foreach ( $dummy_users as $user ) {
                 if ( username_exists( $user['login'] ) ) {
                     continue;
                 }
@@ -281,17 +277,39 @@ class UsersWP_Tools {
             }
         }
 
-        if ($_GET['uwp_dummy_users'] == 'delete') {
+        if ('remove' == $type) {
 
-            $dummy_users = get_users( array( 'meta_key' => 'uwp_dummy_user', 'meta_value' => '1', 'fields' => array( 'ID' ) ) );
+            $paged = !$step ? 1 : $step;
+            $dummy_users = get_users( array( 'meta_key' => 'uwp_dummy_user', 'meta_value' => '1', 'fields' => array( 'ID' ), 'paged' => $paged, 'number' => $items_per_page ) );
+
+            $count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->users LEFT JOIN $wpdb->usermeta ON $wpdb->users.ID = $wpdb->usermeta.user_id WHERE meta_key = 'uwp_dummy_user' AND meta_value = 1;", array()));
+            $total_users = $count;
+            $max_step = ceil($total_users / $items_per_page) - 1;
+            $percent = (($step + 1)/ ($max_step+1)) * 100;
 
             foreach ( $dummy_users as $user ) {
                 wp_delete_user($user->ID);
             }
         }
 
-        wp_redirect(admin_url('users.php'));
-        exit();
+        if ($step >= $max_step) {
+            $done = true;
+            $message = __("Processed Successfully", 'userswp');
+            $message = $this->uwp_tools_wrap_error_message($message, 'success');
+        } else {
+            $done = false;
+            $step = $step + 1;
+        }
+
+        $output = array(
+            'done' => $done,
+            'error' => $error,
+            'message' => $message,
+            'step' => $step,
+            'percent' => intval($percent)
+        );
+        echo json_encode($output);
+
     }
 
     /**
@@ -535,14 +553,37 @@ class UsersWP_Tools {
                         $dummy_users = get_users( array( 'meta_key' => 'uwp_dummy_user', 'meta_value' => '1', 'fields' => array( 'ID' ) ) );
 
                         if ( count($dummy_users) > 0 ) {
-                            echo '<a href="'.$dummy_users_remove_url.'" class="button">'. __('Remove', 'userswp').'</a>';
+                            ?>
+                            <input type="button" value="<?php _e('Remove', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="remove_dummy_users"/>
+                        <?php
                         } else {
-                            echo '<a href="'.$dummy_users_create_url.'" class="button-primary">'. __('Create', 'userswp').'</a>';
+                            ?>
+                            <input type="button" value="<?php _e('Create', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="add_dummy_users"/>
+                        <?php
                         }
 
                         ?>
                     </td>
                 </tr>
+
+                <tr>
+                    <td colspan="3">
+                        <div id="uwp_diagnose_pb_add_dummy_users" class="uwp-pb-wrapper">
+                            <div id="progressBar" style="display: none;"><div></div></div>
+                        </div>
+                        <div id="uwp_diagnose_add_dummy_users"></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="3">
+                        <div id="uwp_diagnose_pb_remove_dummy_users" class="uwp-pb-wrapper">
+                            <div id="progressBar" style="display: none;"><div></div></div>
+                        </div>
+                        <div id="uwp_diagnose_remove_dummy_users"></div>
+                    </td>
+                </tr>
+
             <?php } ?>
 
             </tbody>
@@ -554,10 +595,8 @@ class UsersWP_Tools {
                     $('.uwp_diagnosis_button').click(function (e) {
                         e.preventDefault();
                         var type = $(this).data('diagnose');
-
+                        $(this).hide();
                         $("#uwp_diagnose_pb_" + type).find('#progressBar').show().progressbar({value: 0});
-
-                        // start the process
                         uwp_process_diagnose_step( 0, type );
 
                     });
@@ -572,7 +611,8 @@ class UsersWP_Tools {
                     data: {
                         action: 'uwp_process_diagnosis',
                         step: step,
-                        type: type
+                        type: type,
+                        security: '<?php echo wp_create_nonce('uwp_process_diagnosis'); ?>',
                     },
                     beforeSend: function() {},
                     success: function(response, textStatus, xhr) {
@@ -608,6 +648,8 @@ class UsersWP_Tools {
             return;
         }
 
+        check_ajax_referer( 'uwp_process_diagnosis', 'security' );
+
         $type = strip_tags(esc_sql($_POST['type']));
         $step = isset($_POST['step']) ? strip_tags(esc_sql($_POST['step'])) : 0;
 
@@ -625,7 +667,14 @@ class UsersWP_Tools {
     function uwp_process_diagnosis($type, $step) {
         switch ($type) {
             case 'fix_user_data':
-                $this->uwp_fix_userdata($step);
+                $this->uwp_fix_usermeta($step);
+                break;
+            case 'add_dummy_users':
+                $this->uwp_tools_process_dummy_users($step, 'add');
+                break;
+            case 'remove_dummy_users':
+                $this->uwp_tools_process_dummy_users($step, 'remove');
+                break;
         }
     }
 
