@@ -1596,11 +1596,11 @@ class UsersWP_Profile {
      * @param       $user
      * @return      mixed
      */
-    public function uwp_extra_fields_as_tabs($tabs, $user)
+    public function uwp_extra_fields_as_tabs($tabs, $user, $allowed_tabs)
     {
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT site_title,field_icon,htmlvar_name,is_public,field_type FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT site_title,field_icon,htmlvar_name,is_public,field_type,field_type_key FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
         $usermeta = uwp_get_usermeta_row($user->ID);
         $privacy = ! empty( $usermeta ) && $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
 
@@ -1616,6 +1616,10 @@ class UsersWP_Profile {
                 }
             }
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);
+            $value = $this->uwp_get_field_value($field, $user);
+            if (!in_array($key, $allowed_tabs) || !$value) {
+                continue;
+            }
             if ($field->is_public == '1') {
                 $tabs[$key] = array(
                     'title' => __($field->site_title, 'userswp'),

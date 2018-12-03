@@ -229,7 +229,7 @@ class UsersWP {
 
         //Fields as tabs
         add_action( 'uwp_available_tab_items', array($instance, 'uwp_extra_fields_available_tab_items'), 10, 1 );
-        add_action( 'uwp_profile_tabs', array($instance, 'uwp_extra_fields_as_tabs'), 10, 2 );
+        add_action( 'uwp_profile_tabs', array($instance, 'uwp_extra_fields_as_tabs'), 10, 3 );
 
         // Popup and crop functions
         add_filter( 'ajax_query_attachments_args', array($instance, 'uwp_restrict_attachment_display') );
