@@ -6,7 +6,7 @@
  *
  * @link https://github.com/AyeCode/wp-font-awesome-settings
  *
- * @internal This file should not be edited directly, it is best pulled in from composer.
+ * @internal This file should not be edited directly but pulled from the github repo above.
  * @version 1.0.0
  */
 
@@ -36,7 +36,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.0.1-dev';
+		public $version = '1.0.0';
 
 		/**
 		 * Latest version of Font Awesome when published.
@@ -179,9 +179,9 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			$version = $this->settings['version'];
 
 			$url = "https://use.fontawesome.com/releases/"; // CDN
-			$url .= $type=='css' ? 'css/' : 'js/'; // type
-			$url .= !empty($version) ? $version.'/' : $this->latest.'/'; // version
-			$url .= $type=='css' ? $script.'.css' : $script.'.js'; // type
+			$url .= !empty($version) ? "v".$version.'/' : "v".$this->latest.'/'; // version
+			$url .= $type=='CSS' ? 'css/' : 'js/'; // type
+			$url .= $type=='CSS' ? $script.'.css' : $script.'.js'; // type
 			$url .= "?wpfas=true"; // set our var so our version is not removed
 
 			return $url;
@@ -225,8 +225,6 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 */
 		public function register_settings() {
 			register_setting( 'wp-font-awesome-settings', 'wp-font-awesome-settings' );
-			register_setting( 'wp-font-awesome-settings', 'some_other_option' );
-			register_setting( 'wp-font-awesome-settings', 'option_etc' );
 		}
 
 		/**
@@ -347,6 +345,8 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 					submit_button();
 					?>
 				</form>
+
+				<div id="wpfas-version"><?php echo $this->version;?></div>
 			</div>
 
 			<?php
@@ -360,4 +360,3 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 	 */
 	WP_Font_Awesome_Settings::instance();
 }
-
