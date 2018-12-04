@@ -63,7 +63,6 @@ class UsersWP_Admin {
         }
         wp_enqueue_style( "userswp_admin_css", plugin_dir_url( __FILE__ ) . 'assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
         wp_enqueue_style( "uwp_chosen_css", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/chosen.css', array(), USERSWP_VERSION, 'all' );
-        uwp_load_font_awesome();
 
     }
 

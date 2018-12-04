@@ -1256,28 +1256,42 @@
   .uwp-forgot .uwp-rf-icon,
   .uwp-account .uwp-lf-icon,
   .uwp-account .uwp-rf-icon {
-    background: transparent none repeat scroll 0 0;
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
     border: 1px solid #ccc;
     border-radius: 50px;
     height: auto;
     margin: 0 auto;
     padding: 22px;
     width: 36px; }
-    .uwp-login .uwp-lf-icon .fa, .uwp-login .uwp-lf-icon svg,
+    .uwp-login .uwp-lf-icon .fa, .uwp-login .uwp-lf-icon svg, .uwp-login .uwp-lf-icon .fas, .uwp-login .uwp-lf-icon i,
     .uwp-login .uwp-rf-icon .fa,
     .uwp-login .uwp-rf-icon svg,
+    .uwp-login .uwp-rf-icon .fas,
+    .uwp-login .uwp-rf-icon i,
     .uwp-registration .uwp-lf-icon .fa,
     .uwp-registration .uwp-lf-icon svg,
+    .uwp-registration .uwp-lf-icon .fas,
+    .uwp-registration .uwp-lf-icon i,
     .uwp-registration .uwp-rf-icon .fa,
     .uwp-registration .uwp-rf-icon svg,
+    .uwp-registration .uwp-rf-icon .fas,
+    .uwp-registration .uwp-rf-icon i,
     .uwp-forgot .uwp-lf-icon .fa,
     .uwp-forgot .uwp-lf-icon svg,
+    .uwp-forgot .uwp-lf-icon .fas,
+    .uwp-forgot .uwp-lf-icon i,
     .uwp-forgot .uwp-rf-icon .fa,
     .uwp-forgot .uwp-rf-icon svg,
+    .uwp-forgot .uwp-rf-icon .fas,
+    .uwp-forgot .uwp-rf-icon i,
     .uwp-account .uwp-lf-icon .fa,
     .uwp-account .uwp-lf-icon svg,
+    .uwp-account .uwp-lf-icon .fas,
+    .uwp-account .uwp-lf-icon i,
     .uwp-account .uwp-rf-icon .fa,
-    .uwp-account .uwp-rf-icon svg {
+    .uwp-account .uwp-rf-icon svg,
+    .uwp-account .uwp-rf-icon .fas,
+    .uwp-account .uwp-rf-icon i {
       color: #ccc;
       font-size: 30px; }
   .uwp-login > h2,
@@ -2025,7 +2039,7 @@
     padding: 5px 0;
     margin: 0 20px 0 0;
     display: inline-block; }
-    .uwp_page .uwp-content-wrap .uwp_account_menu li i, .uwp_page .uwp-content-wrap .uwp_account_menu li svg {
+    .uwp_page .uwp-content-wrap .uwp_account_menu li .fa, .uwp_page .uwp-content-wrap .uwp_account_menu li svg, .uwp_page .uwp-content-wrap .uwp_account_menu li .fas, .uwp_page .uwp-content-wrap .uwp_account_menu li i {
       margin-right: 5px; }
     .uwp_page .uwp-content-wrap .uwp_account_menu li a {
       color: #a2a0a0;
@@ -2426,7 +2440,7 @@
       text-align: left;
       height: 30px;
       font-size: 13px; }
-      .uwp_page .uwp-content-wrap .uwp-profile-avatar .uwp-profile-avatar-change .uwp-profile-avatar-change-inner i, .uwp_page .uwp-content-wrap .uwp-profile-avatar .uwp-profile-avatar-change .uwp-profile-avatar-change-inner svg {
+      .uwp_page .uwp-content-wrap .uwp-profile-avatar .uwp-profile-avatar-change .uwp-profile-avatar-change-inner .fa, .uwp_page .uwp-content-wrap .uwp-profile-avatar .uwp-profile-avatar-change .uwp-profile-avatar-change-inner svg, .uwp_page .uwp-content-wrap .uwp-profile-avatar .uwp-profile-avatar-change .uwp-profile-avatar-change-inner .fas, .uwp_page .uwp-content-wrap .uwp-profile-avatar .uwp-profile-avatar-change .uwp-profile-avatar-change-inner i {
         position: absolute;
         color: #fff;
         left: 15px;
@@ -2458,12 +2472,12 @@
   left: 20px;
   position: absolute;
   top: 15px; }
-  .uwp_page .uwp-content-wrap .uwp-banner-change-icon i, .uwp_page .uwp-content-wrap .uwp-banner-change-icon svg {
+  .uwp_page .uwp-content-wrap .uwp-banner-change-icon .fa, .uwp_page .uwp-content-wrap .uwp-banner-change-icon svg, .uwp_page .uwp-content-wrap .uwp-banner-change-icon .fas, .uwp_page .uwp-content-wrap .uwp-banner-change-icon i {
     position: absolute;
     left: 13px;
     top: 15px;
     z-index: 999; }
-.uwp_page .uwp-content-wrap .uwp-profile-header-img:hover svg {
+.uwp_page .uwp-content-wrap .uwp-profile-header-img:hover .fa, .uwp_page .uwp-content-wrap .uwp-profile-header-img:hover svg, .uwp_page .uwp-content-wrap .uwp-profile-header-img:hover .fas, .uwp_page .uwp-content-wrap .uwp-profile-header-img:hover i {
   color: #fff; }
 .uwp_page .uwp-content-wrap .uwp-profile-banner-change {
   background-clip: padding-box;

@@ -405,7 +405,7 @@ class UsersWP_Mails {
         $headers[] = "Reply-To: " . $site_email;
         $headers[] = 'From: ' . $sitefromEmailName . ' <' . $sitefromEmail . '>';
 
-        return apply_filters( 'wpinv_email_headers', $headers, $email_type, $user_id );
+        return apply_filters( 'uwp_email_headers', $headers, $email_type, $user_id );
     }
 
 }

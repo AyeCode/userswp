@@ -474,23 +474,6 @@ function get_uwp_users_list() {
     <?php
 }
 
-
-
-/**
- * Loads the font-awesome css files.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @return      void
- */
-function uwp_load_font_awesome() {
-    //load font awesome
-    wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.4.1/js/all.js', array('font-awesome-shim'));
-    wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.4.1/js/v4-shims.js', array());
-    wp_enqueue_script( 'font-awesome' );
-}
-
 /**
  * Gets the custom field info for given key.
  *
