@@ -6,3 +6,4 @@ vendor/
 # Composer
 composer.phar
 composer.lock
+!/includes/libraries/wp-font-awesome-settings/
