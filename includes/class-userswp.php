@@ -634,7 +634,7 @@ class UsersWP {
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/abstract-uwp-privacy.php';
         require_once dirname(dirname( __FILE__ )) . '/includes/class-uwp-privacy.php';
-        require_once dirname(dirname( __FILE__ )) . '/includes/libraries/wp-font-awesome-settings/wp-font-awesome-settings.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/libraries/wp-font-awesome-settings/wp-font-awesome-settings.php'; // added by composer
 
         if ( is_plugin_active( 'uwp_geodirectory/uwp_geodirectory.php' ) ) {
             deactivate_plugins( 'uwp_geodirectory/uwp_geodirectory.php' );
