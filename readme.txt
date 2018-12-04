@@ -119,6 +119,19 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.21 =
+* Update users meta from WP user data in background instead of on activation - FIXED
+* Follow redirect param for the links on the login and register forms - FIXED
+* Added UWP installation mode in status page - ADDED
+* Improved field privacy settings and functionality - CHANGED
+* Invoice actions in profile invoice tab - ADDED
+* Use default description instead of bio - CHANGED
+* Allow to remove dummy users from tools - ADDED
+* Improved fix user data in tools - CHANGED
+* Improved Import Export functionality - CHANGED
+* Removed Read more link from profile tab items - CHANGED
+* Moved actions after summary in profile tab items - CHANGED
+
 = 1.0.20 =
 * Compatibility with GDV2 - ADDED
 * Uninstall fails due to missing dependency functions - FIXED

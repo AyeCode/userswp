@@ -92,12 +92,6 @@ class UsersWP_Public {
             wp_enqueue_style( "uwp_chosen_css", plugin_dir_url( __FILE__ ) . 'assets/css/chosen.css', array(), null, 'all' );
         }
 
-
-        if (is_uwp_page()) {
-            // include only in uwp pages
-            uwp_load_font_awesome();
-        }
-
         wp_enqueue_style( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp.css', array(), null, 'all' );
         //widget styles for all pages
         wp_enqueue_style( "uwp_widget_css", plugin_dir_url( __FILE__ ) . 'assets/css/widgets.css', array(), null, 'all' );
@@ -193,6 +187,9 @@ class UsersWP_Public {
 
         $country_data = uwp_get_country_data();
         wp_localize_script(USERSWP_NAME, 'uwp_country_data', $country_data);
+
+        $uwp_localize_data = uwp_get_localize_data();
+        wp_localize_script(USERSWP_NAME, 'uwp_localize_data', $uwp_localize_data);
         
     }
 

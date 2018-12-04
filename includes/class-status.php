@@ -170,7 +170,28 @@ class UsersWP_Status {
             </tr>
             <tr>
                 <td data-export-label="Language"><?php _e( 'Language', 'userswp' ); ?>:</td>
-                <td><?php echo esc_html( $environment['language'] ) ?></td>
+                <td><?php echo esc_html( $environment['language'] ); ?></td>
+            </tr>
+            <tr>
+                <td data-export-label="UWP Mode"><?php _e( 'UWP Installation Mode', 'userswp' ); ?>:</td>
+                <?php $install_type = uwp_get_installation_type();
+                    switch ($install_type) {
+                        case "multi_na_all":
+                            $mode = __('UsersWP is Network Activate for All Site', 'userswp');
+                            break;
+                        case "multi_na_site_id":
+                            $mode = __('UsersWP is Network Activate for Specific Site', 'userswp');
+                            break;
+                        case "multi_na_default":
+                            $mode = __('UsersWP is Activate for Main Site', 'userswp');
+                            break;
+                        case "multi_not_na":
+                        case "single":
+                        default:
+                            $mode = __('UsersWP is Activate for Single Site', 'userswp');
+                    }
+                ?>
+                <td><?php echo $mode; ?></td>
             </tr>
             </tbody>
         </table>

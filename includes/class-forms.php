@@ -2296,7 +2296,6 @@ class UsersWP_Forms {
             $_POST['uwp_account_last_name'] = $_POST['last_name'];
             $_POST['uwp_account_display_name'] = $_POST['nickname'];
             $_POST['uwp_account_email'] = $_POST['email'];
-            $_POST['uwp_account_bio'] = $_POST['description'];
             $result = uwp_validate_fields($_POST, 'account', $fields);
             if (isset($result['uwp_account_display_name']) && !empty($result['uwp_account_display_name'])) {
                 $display_name = $result['uwp_account_display_name'];
@@ -2347,7 +2346,7 @@ class UsersWP_Forms {
      */
     public function uwp_users_search_form_text_field($keyword) {
         ?>
-        <input placeholder="Search For" name="uwps" value="<?php echo $keyword; ?>" class="s search-input" type="text">
+        <input placeholder="<?php _e('Search For', 'userswp'); ?>" name="uwps" value="<?php echo $keyword; ?>" class="s search-input" type="text">
         <?php
     }
 
@@ -2361,7 +2360,7 @@ class UsersWP_Forms {
      */
     public function uwp_users_search_form_submit() {
         ?>
-        <input class="uwp-searchsubmit uwp-search-submit" value="Search" type="submit">
+        <input class="uwp-searchsubmit uwp-search-submit" value="<?php _e('Search', 'userswp'); ?>" type="submit">
         <?php
     }
 
@@ -2616,18 +2615,46 @@ class UsersWP_Forms {
             $extra_where = "AND is_public='2'";
             $fields = get_account_form_fields($extra_where);
             $fields = apply_filters('uwp_account_privacy_fields', $fields);
+            $user_id = get_current_user_id();
+            global $wpdb;
+            $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+
             if ($fields) {
                 foreach ($fields as $field) {
                     $field_name = $field->htmlvar_name.'_privacy';
-                    if (isset($_POST[$field_name])) {
-                        $value = strip_tags(esc_sql($_POST[$field_name]));
-                        $user_id = get_current_user_id();
-                        uwp_update_usermeta($user_id, $field_name, $value);
+
+                    $user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT user_privacy FROM $meta_table WHERE user_id = %d", $user_id ) );
+                    $field_value = strip_tags(esc_sql($_POST[$field_name]));
+                    $value = '';
+
+                    if (!empty($user_meta_info->user_privacy)) {
+                        $public_fields = explode(',', $user_meta_info->user_privacy);
+                        if ($field_value == 'no') {
+                            if (!in_array($field_name, $public_fields)) {
+                                $public_fields[] = $field_name;
+                            }
+                            $value = implode(',', $public_fields);
+                        } else {
+                            if (($field_name = array_search($field_name, $public_fields)) !== false) {
+                                unset($public_fields[$field_name]);
+                            }
+                            $value = implode(',', $public_fields);
+                        }
+                    } else {
+                        if ($field_value == 'no') {
+                            $public_fields = array($field_name);
+                            $value = implode(',', $public_fields);
+                        } else {
+                            // For yes values no need to update since its a public field.
+                            // We store only the private fields.
+                        }
+
                     }
+
+                    uwp_update_usermeta($user_id, 'user_privacy', $value);
                 }
             }
 
-            $user_id = get_current_user_id();
             if (isset($_POST['uwp_hide_from_listing']) && 1 == $_POST['uwp_hide_from_listing']) {
                 update_user_meta($user_id, 'uwp_hide_from_listing', 1);
             } else {

@@ -10,6 +10,13 @@
 class UsersWP_Activator {
 
     /**
+     * Background update class.
+     *
+     * @var object
+     */
+    private static $background_updater;
+
+    /**
      * This method gets fired during plugin activation.
      *
      * @since       1.0.0
@@ -18,11 +25,15 @@ class UsersWP_Activator {
      */
     public static function activate($network_wide = false) {
 
-        self::load_dependencies();
-
         if (is_multisite()) {
             $main_site = get_network()->site_id;
             if($network_wide){
+
+                switch_to_blog( $main_site );
+                self::uwp101_create_tables();
+                self::uwp_update_usermeta();
+                restore_current_blog();
+                
                 if (defined('UWP_ROOT_PAGES')) {
                     if (UWP_ROOT_PAGES == 'all') {
                         $blog_ids = self::uwp_get_blog_ids();
@@ -44,19 +55,15 @@ class UsersWP_Activator {
                     restore_current_blog();
                 }
 
-                switch_to_blog( $main_site );
-                self::uwp101_create_tables();
-                self::uwp_insert_usermeta();
-                restore_current_blog();
             } else {
-                self::install();
                 self::uwp101_create_tables();
-                self::uwp_insert_usermeta();
+                self::install();
+                self::uwp_update_usermeta();
             }
         } else {
-            self::install();
             self::uwp101_create_tables();
-            self::uwp_insert_usermeta();
+            self::install();
+            self::uwp_update_usermeta();
         }
 
     }
@@ -94,22 +101,6 @@ class UsersWP_Activator {
                     AND deleted = '0'";
 
         return $wpdb->get_col( $sql );
-    }
-
-    /**
-     * Loads all dependencies during plugin activation.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      void
-     */
-    public static function load_dependencies() {
-
-        require_once dirname( __FILE__ ) . '/helpers.php';
-        require_once dirname( __FILE__ ) . '/class-tables.php';
-        require_once dirname( __FILE__ ) . '/class-meta.php';
-        require_once dirname( __FILE__ ) . '/class-pages.php';
-        require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-formbuilder.php';
     }
 
     /**
@@ -282,6 +273,11 @@ class UsersWP_Activator {
         uwp101_create_tables();
     }
 
+    public static function init_background_updater(){
+        include_once dirname( __FILE__ ) . '/class-uwp-background-updater.php';
+        self::$background_updater = new UsersWP_Background_Updater();
+    }
+
     /**
      * Syncs WP usermeta with UsersWP usermeta during plugin activation.
      *
@@ -289,28 +285,14 @@ class UsersWP_Activator {
      * @package     userswp
      * @return      void
      */
-    public static function uwp_insert_usermeta()
+    public static function uwp_update_usermeta()
     {
-        global $wpdb;
-        $sort= "user_registered";
-        $all_users_id = $wpdb->get_col( $wpdb->prepare(
-            "SELECT $wpdb->users.ID FROM $wpdb->users ORDER BY %s ASC"
-            , $sort ));
+        $update_callback = 'uwp_insert_usermeta';
+        self::init_background_updater();
 
-        //we got all the IDs, now loop through them to get individual IDs
-        foreach ( $all_users_id as $user_id ) {
-            // get user info by calling get_userdata() on each id
-            $user_data = get_userdata($user_id);
-            $first_name = get_user_meta( $user_id, 'first_name', true );
-            $last_name = get_user_meta( $user_id, 'last_name', true );
-            $bio = get_user_meta( $user_id, 'description', true );
-            uwp_update_usermeta($user_id, 'uwp_account_username', $user_data->user_login);
-            uwp_update_usermeta($user_id, 'uwp_account_email', $user_data->user_email);
-            uwp_update_usermeta($user_id, 'uwp_account_first_name', $first_name);
-            uwp_update_usermeta($user_id, 'uwp_account_last_name', $last_name);
-            uwp_update_usermeta($user_id, 'uwp_account_bio', $bio);
-            uwp_update_usermeta($user_id, 'uwp_account_display_name', $user_data->display_name);
-        }
+        uwp_error_log( sprintf( 'Queuing %s - %s', USERSWP_VERSION, $update_callback ) );
+        self::$background_updater->push_to_queue( $update_callback );
+        self::$background_updater->save()->dispatch();
     }
 
     /**
@@ -817,6 +799,14 @@ class UsersWP_Activator {
                     )
                 )
             );
+        }
+    }
+
+    public static function uwp_automatic_upgrade(){
+        $uwp_db_version = get_option('uwp_db_version');
+
+        if ( $uwp_db_version != USERSWP_VERSION ) {
+            self::activate(is_plugin_active_for_network( 'userswp/userswp.php' ));
         }
     }
 
