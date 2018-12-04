@@ -5,23 +5,5 @@
   "keywords": ["user-profile"],
   "homepage": "https://userswp.io",
   "license": "GPLv3",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/UsersWP/userswp.git"
-  },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/AyeCode/wp-font-awesome-settings"
-    }
-  ],
-  "require": {
-    "AyeCode/wp-font-awesome-settings": "dev-master"
-  },
-  "extra": {
-    "installer-paths": {
-      "includes/libraries/{$name}": ["AyeCode/wp-font-awesome-settings"]
-    }
-  },
   "minimum-stability": "dev"
 }
