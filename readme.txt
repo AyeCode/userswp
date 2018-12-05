@@ -131,6 +131,7 @@ No questions so far, but don't hesitate to ask!
 * Improved Import Export functionality - CHANGED
 * Removed Read more link from profile tab items - CHANGED
 * Moved actions after summary in profile tab items - CHANGED
+* Use the new listing status for listings tab and count - CHANGED
 
 = 1.0.20 =
 * Compatibility with GDV2 - ADDED
