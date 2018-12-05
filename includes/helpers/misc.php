@@ -474,23 +474,6 @@ function get_uwp_users_list() {
     <?php
 }
 
-
-
-/**
- * Loads the font-awesome css files.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @return      void
- */
-function uwp_load_font_awesome() {
-    //load font awesome
-    wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.4.1/js/all.js', array('font-awesome-shim'));
-    wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.4.1/js/v4-shims.js', array());
-    wp_enqueue_script( 'font-awesome' );
-}
-
 /**
  * Gets the custom field info for given key.
  *
@@ -938,7 +921,7 @@ function uwp_ucwords($string, $charset='UTF-8') {
 function uwp_column_exist($db, $column)
 {
     $table = new UsersWP_Tables();
-    $table->column_exists($db, $column);
+    return $table->column_exists($db, $column);
 }
 
 /**
@@ -956,7 +939,7 @@ function uwp_column_exist($db, $column)
 function uwp_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
 {
     $table = new UsersWP_Tables();
-    $table->add_column_if_not_exist($db, $column, $column_attr);
+    return $table->add_column_if_not_exist($db, $column, $column_attr);
 
 }
 
@@ -1695,4 +1678,68 @@ function uwp_clean( $var ) {
         return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
     }
 
+}
+
+/**
+ * Define a constant if it is not already defined.
+ *
+ * @since 1.0.21
+ *
+ * @param string $name Constant name.
+ * @param string $value Value.
+ */
+function uwp_maybe_define( $name, $value ) {
+    if ( ! defined( $name ) ) {
+        define( $name, $value );
+    }
+}
+
+function uwp_insert_usermeta(){
+    global $wpdb;
+    $sort= "user_registered";
+
+    $all_users_id = $wpdb->get_col( $wpdb->prepare(
+        "SELECT $wpdb->users.ID FROM $wpdb->users ORDER BY %s ASC"
+        , $sort ));
+
+    //we got all the IDs, now loop through them to get individual IDs
+    foreach ( $all_users_id as $user_id ) {
+        $user_data = get_userdata($user_id);
+
+        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+        $user_meta = array(
+            'uwp_account_username' => $user_data->user_login,
+            'uwp_account_email' => $user_data->user_email,
+            'uwp_account_first_name' => $user_data->first_name,
+            'uwp_account_last_name' => $user_data->last_name,
+            'uwp_account_display_name' => $user_data->display_name,
+        );
+
+        $users = $wpdb->get_var($wpdb->prepare("SELECT COUNT(user_id) FROM {$meta_table} WHERE user_id = %d", $user_id));
+
+        if(!empty($users)) {
+            $wpdb->update(
+                $meta_table,
+                $user_meta,
+                array('user_id' => $user_id)
+            );
+        }  else {
+            $user_meta['user_id'] = $user_id;
+            $wpdb->insert(
+                $meta_table,
+                $user_meta
+            );
+        }
+    }
+}
+
+function uwp_get_localize_data(){
+    $uwp_localize_data = array(
+        'uwp_more_char_limit' => '100',
+        'uwp_more_text' => __('more','userswp'),
+        'uwp_less_text' => __('less','userswp'),
+        'uwp_more_ellipses_text' => '...',
+    );
+
+    return apply_filters('uwp_localize_data', $uwp_localize_data);
 }

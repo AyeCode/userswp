@@ -10,13 +10,8 @@
 class UsersWP_Tools {
     
     public function uwp_fix_usermeta_table() {
-        // If table not available it will be created else synced
         uwp_create_tables();
         uwp101_create_tables();
-    }
-
-    public function uwp_fix_userdata($step) {
-        $this->uwp_fix_usermeta($step);
     }
 
     public function uwp_tools_wrap_error_message($message, $class) {
@@ -36,7 +31,7 @@ class UsersWP_Tools {
 
         $form_type = 'account';
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s ORDER BY sort_order ASC", array($form_type)));
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT htmlvar_name FROM " . $table_name . " WHERE form_type = %s ORDER BY sort_order ASC", array($form_type)));
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
         $excluded = uwp_get_excluded_fields();
@@ -65,7 +60,7 @@ class UsersWP_Tools {
         global $wpdb;
         $form_type = 'account';
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s ORDER BY sort_order ASC", array($form_type)));
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT htmlvar_name FROM " . $table_name . " WHERE form_type = %s ORDER BY sort_order ASC", array($form_type)));
 
         $excluded = uwp_get_excluded_fields();
 
@@ -90,15 +85,15 @@ class UsersWP_Tools {
         global $wpdb;
 
 
-        $items_per_page = 10;
+        $items_per_page = apply_filters('tools_process_fix_usermeta_per_page', 10, $step);
         $offset = (int) $step * $items_per_page;
-//    $end = $offset + $items_per_page;
 
         $user_ids = $wpdb->get_col( $wpdb->prepare(
             "SELECT $wpdb->users.ID FROM $wpdb->users LIMIT %d OFFSET %d",
             $items_per_page, $offset ));
 
-        $total_users = $this->uwp_tools_total_users_count();
+        $users_count = count_users();
+        $total_users = $users_count['total_users'];
 
         $max_step = ceil($total_users / $items_per_page) - 1;
         $percent = (($step + 1)/ ($max_step+1)) * 100;
@@ -128,9 +123,6 @@ class UsersWP_Tools {
 
                 // get user info by calling get_userdata() on each id
                 $user_data = get_userdata($user_id);
-                $first_name = get_user_meta( $user_id, 'first_name', true );
-                $last_name = get_user_meta( $user_id, 'last_name', true );
-                $bio = get_user_meta( $user_id, 'description', true );
                 $usermeta = get_user_meta( $user_id, 'uwp_usermeta', true );
 
                 foreach ($columns as $column) {
@@ -142,13 +134,13 @@ class UsersWP_Tools {
                             $value = $user_data->user_email;
                             break;
                         case "uwp_account_first_name":
-                            $value = $first_name;
+                            $value = $user_data->first_name;
                             break;
                         case "uwp_account_last_name":
-                            $value = $last_name;
+                            $value = $user_data->last_name;
                             break;
                         case "uwp_account_bio":
-                            $value = $bio;
+                            $value = $user_data->description;
                             break;
                         default:
                             if ($usermeta === false) {
@@ -162,20 +154,6 @@ class UsersWP_Tools {
                         uwp_update_usermeta($user_id, $column, $value);
                     }
                 }
-
-
-                //avatar and banner
-                $avatar_url = isset( $usermeta[ 'uwp_account_avatar_thumb' ] ) ? $usermeta[ 'uwp_account_avatar_thumb' ] : false;
-                if ($avatar_url !== false) {
-                    uwp_update_usermeta($user_id, 'uwp_account_avatar_thumb', $avatar_url);
-                }
-                $banner_url = isset( $usermeta[ 'uwp_account_banner_thumb' ] ) ? $usermeta[ 'uwp_account_banner_thumb' ] : false;
-                if ($banner_url !== false) {
-                    uwp_update_usermeta($user_id, 'uwp_account_banner_thumb', $banner_url);
-                }
-
-
-
 
                 $count++;
             }
@@ -262,57 +240,76 @@ class UsersWP_Tools {
         return $meta_field_add;
     }
 
-    public function uwp_tools_total_users_count() {
-        global $wpdb;
-        $sort= "user_registered";
-        $total_users = $wpdb->get_var( $wpdb->prepare(
-            "SELECT count(*) FROM $wpdb->users ORDER BY %s ASC"
-            , $sort ));
-        return $total_users;
-    }
-
-    public function uwp_tools_process_dummy_users() {
-        if (!current_user_can('manage_options')) {
-            return;
-        }
-
-        if (!isset($_GET['uwp_dummy_users']) || empty($_GET['uwp_dummy_users'])) {
-            return;
-        }
+    public function uwp_tools_process_dummy_users($step, $type = 'add') {
 
         global $wpdb;
+        $items_per_page = apply_filters('tools_process_dummy_users_per_page', 10, $step, $type);
+        $offset = (int) $step * $items_per_page;
+        $message = '';
+        $done = false;
+        $error = false;
+        $max_step = 0;
 
-        if ($_GET['uwp_dummy_users'] == 'create') {
-
+        if ('add' == $type) {
             $users_data = $this->uwp_dummy_users_data();
-            foreach ( $users_data as $user ) {
+            $total_users = count($users_data);
+            $max_step = ceil($total_users / $items_per_page) - 1;
+            $percent = (($step + 1)/ ($max_step+1)) * 100;
+            $dummy_users = array_slice($users_data, $offset, $items_per_page, true);
+
+            foreach ( $dummy_users as $user ) {
                 if ( username_exists( $user['login'] ) ) {
                     continue;
                 }
+                $name = explode( ' ', $user['display_name'] );
+
                 $user_id = wp_insert_user( array(
                     'user_login'      => $user['login'],
                     'user_pass'       => $user['pass'],
+                    'first_name'      => isset( $name[0] ) ? $name[0] : '',
+                    'last_name'       => isset( $name[1] ) ? $name[1] : '',
                     'display_name'    => $user['display_name'],
                     'user_email'      => $user['email'],
                     'user_registered' => uwp_get_random_date( 45, 1 ),
                 ) );
-                $query[] = $wpdb->last_query;
 
-                $name = explode( ' ', $user['display_name'] );
-                update_user_meta( $user_id, 'first_name', $name[0] );
                 update_user_meta( $user_id, 'uwp_dummy_user', '1' );
-                update_user_meta( $user_id, 'last_name', isset( $name[1] ) ? $name[1] : '' );
-
-                $users[] = $user_id;
             }
-
-            wp_redirect(admin_url('users.php'));
-            exit();
         }
 
-        if ($_GET['uwp_dummy_users'] == 'delete') {
-            //todo: add this feature
+        if ('remove' == $type) {
+
+            $paged = !$step ? 1 : $step;
+            $dummy_users = get_users( array( 'meta_key' => 'uwp_dummy_user', 'meta_value' => '1', 'fields' => array( 'ID' ), 'paged' => $paged, 'number' => $items_per_page ) );
+
+            $count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->users LEFT JOIN $wpdb->usermeta ON $wpdb->users.ID = $wpdb->usermeta.user_id WHERE meta_key = 'uwp_dummy_user' AND meta_value = 1;", array()));
+            $total_users = $count;
+            $max_step = ceil($total_users / $items_per_page) - 1;
+            $percent = (($step + 1)/ ($max_step+1)) * 100;
+
+            foreach ( $dummy_users as $user ) {
+                wp_delete_user($user->ID);
+            }
         }
+
+        if ($step >= $max_step) {
+            $done = true;
+            $message = __("Processed Successfully", 'userswp');
+            $message = $this->uwp_tools_wrap_error_message($message, 'success');
+        } else {
+            $done = false;
+            $step = $step + 1;
+        }
+
+        $output = array(
+            'done' => $done,
+            'error' => $error,
+            'message' => $message,
+            'step' => $step,
+            'percent' => intval($percent)
+        );
+        echo json_encode($output);
+
     }
 
     /**
@@ -522,17 +519,7 @@ class UsersWP_Tools {
                         <div style="margin-bottom: 10px"><?php _e('Fixes User Data if you were using the Beta version.', 'userswp');?></div>
                     </td>
                     <td style="text-align: right">
-                        <?php
-                        $total_users = $this->uwp_tools_total_users_count();
-                        $items_per_page = 10;
-                        if ($total_users > $items_per_page) {
-                            $multiple = 'data-step="1"';
-                        } else {
-                            $multiple = "";
-                        }
-                        ?>
-                        <input type="button" value="<?php _e('Run', 'userswp');?>"
-                               class="button-primary uwp_diagnosis_button" <?php echo $multiple; ?> data-diagnose="fix_user_data"/>
+                        <input type="button" value="<?php _e('Run', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="fix_user_data"/>
                     </td>
                 </tr>
 
@@ -546,20 +533,57 @@ class UsersWP_Tools {
                 </tr>
 
                 <tr>
-                    <td><?php _e('Create Dummy Users', 'userswp');?></td>
+                    <td><?php _e('Dummy Users', 'userswp');?></td>
                     <td>
-                        <div><?php _e('Dummy Users will be created for Testing. You can delete them later. Password for all dummy users:', 'userswp'); echo " ".self::get_dummy_user_passowrd();?></div>
+                        <div><?php _e('Dummy Users for Testing. Password for all dummy users:', 'userswp'); echo " ".self::get_dummy_user_passowrd();?></div>
                     </td>
                     <td style="text-align: right">
                         <?php
+                        $nonce = wp_create_nonce( 'uwp_dummy_users' );
                         $dummy_users_create_url = add_query_arg( array(
                             'uwp_dummy_users' => 'create',
+                            '_wpnonce' => $nonce,
                         ));
 
+                        $dummy_users_remove_url = add_query_arg( array(
+                            'uwp_dummy_users' => 'delete',
+                            '_wpnonce' => $nonce,
+                        ));
+
+                        $dummy_users = get_users( array( 'meta_key' => 'uwp_dummy_user', 'meta_value' => '1', 'fields' => array( 'ID' ) ) );
+
+                        if ( count($dummy_users) > 0 ) {
+                            ?>
+                            <input type="button" value="<?php _e('Remove', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="remove_dummy_users"/>
+                        <?php
+                        } else {
+                            ?>
+                            <input type="button" value="<?php _e('Create', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="add_dummy_users"/>
+                        <?php
+                        }
+
                         ?>
-                        <a href="<?php echo $dummy_users_create_url; ?>" class="button-primary"><?php _e('Run', 'userswp');?></a>
                     </td>
                 </tr>
+
+                <tr>
+                    <td colspan="3">
+                        <div id="uwp_diagnose_pb_add_dummy_users" class="uwp-pb-wrapper">
+                            <div id="progressBar" style="display: none;"><div></div></div>
+                        </div>
+                        <div id="uwp_diagnose_add_dummy_users"></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="3">
+                        <div id="uwp_diagnose_pb_remove_dummy_users" class="uwp-pb-wrapper">
+                            <div id="progressBar" style="display: none;"><div></div></div>
+                        </div>
+                        <div id="uwp_diagnose_remove_dummy_users"></div>
+                    </td>
+                </tr>
+
             <?php } ?>
 
             </tbody>
@@ -571,10 +595,8 @@ class UsersWP_Tools {
                     $('.uwp_diagnosis_button').click(function (e) {
                         e.preventDefault();
                         var type = $(this).data('diagnose');
-
+                        $(this).hide();
                         $("#uwp_diagnose_pb_" + type).find('#progressBar').show().progressbar({value: 0});
-
-                        // start the process
                         uwp_process_diagnose_step( 0, type );
 
                     });
@@ -589,7 +611,8 @@ class UsersWP_Tools {
                     data: {
                         action: 'uwp_process_diagnosis',
                         step: step,
-                        type: type
+                        type: type,
+                        security: '<?php echo wp_create_nonce('uwp_process_diagnosis'); ?>',
                     },
                     beforeSend: function() {},
                     success: function(response, textStatus, xhr) {
@@ -625,6 +648,8 @@ class UsersWP_Tools {
             return;
         }
 
+        check_ajax_referer( 'uwp_process_diagnosis', 'security' );
+
         $type = strip_tags(esc_sql($_POST['type']));
         $step = isset($_POST['step']) ? strip_tags(esc_sql($_POST['step'])) : 0;
 
@@ -642,7 +667,14 @@ class UsersWP_Tools {
     function uwp_process_diagnosis($type, $step) {
         switch ($type) {
             case 'fix_user_data':
-                $this->uwp_fix_userdata($step);
+                $this->uwp_fix_usermeta($step);
+                break;
+            case 'add_dummy_users':
+                $this->uwp_tools_process_dummy_users($step, 'add');
+                break;
+            case 'remove_dummy_users':
+                $this->uwp_tools_process_dummy_users($step, 'remove');
+                break;
         }
     }
 

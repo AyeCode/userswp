@@ -279,7 +279,23 @@ class UsersWP_Import_Export {
 
     public function get_export_data() {
         global $wpdb;
-        $data = $wpdb->get_results( "SELECT * FROM $this->meta_table_name WHERE 1=1 LIMIT 0,". $this->per_page);
+        if(!$this->step){
+            $page = 1;
+        } else {
+            $page = $this->step;
+        }
+
+        $page_start = absint( ( $page - 1 ) * $this->per_page );
+        $data = $wpdb->get_results( "SELECT * FROM $this->meta_table_name WHERE 1=1 LIMIT $page_start,". $this->per_page);
+        $i = 0;
+
+        foreach ($data as $u){
+            $user = get_userdata($u->user_id);
+            $data[$i]->uwp_account_username = $user->user_login;
+            $data[$i]->uwp_account_email = $user->user_email;
+            $data[$i]->uwp_account_bio = $user->description;
+            $i++;
+        }
 
         return apply_filters( 'uwp_export_users_get_data', $data );
     }
@@ -475,6 +491,9 @@ class UsersWP_Import_Export {
 
                 $username = isset($row['uwp_account_username']) ? $row['uwp_account_username'] : '';
                 $email = isset($row['uwp_account_email']) ? $row['uwp_account_email'] : '';
+                $first_name = isset($row['uwp_account_first_name']) ? $row['uwp_account_first_name'] : '';
+                $last_name = isset($row['uwp_account_last_name']) ? $row['uwp_account_last_name'] : '';
+                $bio = isset($row['uwp_account_bio']) ? $row['uwp_account_bio'] : '';
                 $display_name = isset($row['uwp_account_display_name']) ? $row['uwp_account_display_name'] : '';
                 $password = wp_generate_password();
                 $exclude = array('user_id');
@@ -488,7 +507,10 @@ class UsersWP_Import_Export {
                         $args = array(
                             'ID'         => $user_id,
                             'user_email' => $email,
-                            'display_name' => $display_name
+                            'display_name' => $display_name,
+                            'first_name' => $first_name,
+                            'last_name' => $last_name,
+                            'description' => $bio,
                         );
                         wp_update_user( $args );
                     }
@@ -502,9 +524,13 @@ class UsersWP_Import_Export {
                             'user_login'  =>  $row['uwp_account_username'],
                             'user_email'  =>  $email,
                             'user_pass'   =>  $password,
+                            'first_name' => $first_name,
+                            'last_name' => $last_name,
+                            'description' => $bio,
                             'display_name'=>  $display_name
                         );
                         $user_id = wp_insert_user( $userdata );
+                        wp_new_user_notification($user_id,null, 'user'); //send password reset link
                     } else {
                         if( $user->user_login == $row['uwp_account_username'] ) { //check id passed in csv and existing username are same
                             $user_id = $row['user_id'];
@@ -512,6 +538,9 @@ class UsersWP_Import_Export {
                                 $args = array(
                                     'ID'         => $user_id,
                                     'user_email' => $email,
+                                    'first_name' => $first_name,
+                                    'last_name' => $last_name,
+                                    'description' => $bio,
                                     'display_name' => $display_name
                                 );
                                 wp_update_user( $args );

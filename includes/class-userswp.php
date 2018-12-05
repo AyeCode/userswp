@@ -64,6 +64,8 @@ class UsersWP {
 
 
         $this->load_dependencies();
+        $this->init_hooks();
+
         $this->loader = new UsersWP_Loader();
         $this->meta = new UsersWP_Meta();
         $this->pages = new UsersWP_Pages();
@@ -112,7 +114,15 @@ class UsersWP {
         
     }
 
-
+    /**
+     * Hook into actions and filters.
+     */
+    private function init_hooks() {
+        register_activation_hook( USERSWP_PLUGIN_FILE, array( 'UsersWP_Activator', 'activate' ) );
+        register_deactivation_hook( USERSWP_PLUGIN_FILE, array( 'UsersWP_Deactivator', 'deactivate' ) );
+        add_action( 'admin_init', array('UsersWP_Activator', 'uwp_automatic_upgrade') );
+        add_action( 'init', array( 'UsersWP_Activator', 'init_background_updater' ), 5 );
+    }
 
 
     public function load_assets_actions_and_filters($instance) {
@@ -126,10 +136,8 @@ class UsersWP {
         add_action('remove_user_from_blog', array($instance, 'remove_user_from_blog'), 10, 2);
         add_action('wp_login', array($instance, 'save_user_ip_on_login') ,10,2);
         add_filter('uwp_before_extra_fields_save', array($instance, 'save_user_ip_on_register'), 10, 3);
-        add_filter('uwp_update_usermeta', array($instance, 'modify_privacy_value_on_update'), 10, 4);
-        add_filter('uwp_get_usermeta', array($instance, 'modify_privacy_value_on_get'), 10, 5);
         add_filter('uwp_update_usermeta', array($instance, 'modify_datepicker_value_on_update'), 10, 3);
-        add_filter('uwp_get_usermeta', array($instance, 'modify_datepicker_value_on_get'), 10, 5);
+        add_filter('uwp_get_usermeta', array($instance, 'modify_datepicker_value_on_get'), 10, 4);
         add_filter('user_row_actions', array($instance, 'uwp_user_row_actions'), 10, 2);
         add_action('bulk_actions-users', array($instance, 'uwp_users_bulk_actions'));
         add_action('handle_bulk_actions-users', array($instance, 'uwp_handle_users_bulk_actions'), 10, 3);
@@ -217,12 +225,11 @@ class UsersWP {
         add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_profile_title', array($instance, 'get_profile_title'), 10, 1 );
-        //add_action( 'uwp_profile_bio', array($instance, 'get_profile_bio'), 10, 1 );
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 1 );
 
         //Fields as tabs
         add_action( 'uwp_available_tab_items', array($instance, 'uwp_extra_fields_available_tab_items'), 10, 1 );
-        add_action( 'uwp_profile_tabs', array($instance, 'uwp_extra_fields_as_tabs'), 10, 2 );
+        add_action( 'uwp_profile_tabs', array($instance, 'uwp_extra_fields_as_tabs'), 10, 3 );
 
         // Popup and crop functions
         add_filter( 'ajax_query_attachments_args', array($instance, 'uwp_restrict_attachment_display') );
@@ -276,6 +283,7 @@ class UsersWP {
 
         add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
         add_action( 'uwp_template_fields', array($instance, 'uwp_template_fields'), 10, 1 );
+        add_action( 'uwp_template_fields', array($instance, 'uwp_template_extra_fields'), 10, 1 );
         add_action( 'uwp_account_form_display', array($instance, 'uwp_account_edit_form_display'), 10, 1 );
         add_action( 'wp_logout', array($instance, 'logout_redirect'));
         add_action( 'init', array($instance, 'wp_login_redirect'));
@@ -297,7 +305,6 @@ class UsersWP {
     }
     
     public function load_tools_actions_and_filters($instance) {
-        add_action('admin_init', array($instance, 'uwp_tools_process_dummy_users'));
         add_action('uwp_admin_sub_menus', array($instance, 'uwp_add_admin_tools_sub_menu'), 100, 1);
         add_action('uwp_tools_settings_main_tab_content', array($instance, 'uwp_tools_main_tab_content'));
         add_action('wp_ajax_uwp_process_diagnosis', array($instance, 'uwp_process_diagnosis_ajax'));
@@ -455,6 +462,18 @@ class UsersWP {
          * of the plugin.
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-i18n.php';
+
+        /**
+         * The class responsible for activation functionality
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-activator.php';
+
+        /**
+         * The class responsible for deactivation functionality
+         * of the plugin.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-deactivator.php';
 
         /**
          * The class responsible for sending emails
@@ -615,6 +634,7 @@ class UsersWP {
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/abstract-uwp-privacy.php';
         require_once dirname(dirname( __FILE__ )) . '/includes/class-uwp-privacy.php';
+        require_once dirname(dirname( __FILE__ )) . '/includes/libraries/wp-font-awesome-settings.php';
 
         if ( is_plugin_active( 'uwp_geodirectory/uwp_geodirectory.php' ) ) {
             deactivate_plugins( 'uwp_geodirectory/uwp_geodirectory.php' );

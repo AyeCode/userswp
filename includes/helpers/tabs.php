@@ -120,13 +120,10 @@ function uwp_generic_tab_content($user, $post_type = false, $title, $post_ids = 
                     </time>
                     <div class="uwp-profile-item-summary">
                         <?php
+                        do_action('uwp_before_profile_summary', get_the_ID(), $user, $post_type);
                         $excerpt = strip_shortcodes(wp_trim_words( get_the_excerpt(), 15, '...' ));
                         echo $excerpt;
-                        if ($excerpt) {
-                            ?>
-                            <a href="<?php echo get_the_permalink(); ?>" class="more-link"><?php echo  __( 'Read More »', 'userswp' ); ?></a>
-                            <?php
-                        }
+                        do_action('uwp_after_profile_summary', get_the_ID(), $user, $post_type);
                         ?>
                     </div>
                 </li>

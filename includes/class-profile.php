@@ -119,32 +119,6 @@ class UsersWP_Profile {
     }
 
     /**
-     * Prints the profile page bio section.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       object      $user       The User ID.
-     */
-    public function get_profile_bio($user) {
-        $bio = uwp_get_usermeta( $user->ID, 'uwp_account_bio', "" );
-        $bio = stripslashes($bio);
-        $is_profile_page = is_uwp_profile_page();
-        if ($bio) {
-            ?>
-            <div class="uwp-profile-bio <?php if ($is_profile_page) { echo "uwp_more"; } ?>">
-                <?php
-                if ($is_profile_page) {
-                    echo $bio;
-                } else {
-                    echo wp_trim_words( $bio, 20, '...' );
-                }
-                ?>
-            </div>
-            <?php
-        }
-    }
-
-    /**
      * Prints the profile page social links section.
      *
      * @since       1.0.0
@@ -269,8 +243,9 @@ class UsersWP_Profile {
 
                 if ($field->is_public == '2') {
                     $field_name = $field->htmlvar_name.'_privacy';
-                    $val = uwp_get_usermeta($user->ID, $field_name, false);
-                    if ($val === 'no') {
+                    $val = uwp_get_usermeta($user->ID, 'user_privacy', false);
+                    $meta_value = explode(',', $val);
+                    if (in_array($field_name, $meta_value)) {
                         continue;
                     }
                 }
@@ -297,6 +272,7 @@ class UsersWP_Profile {
                                 <?php
                                 if ($field->htmlvar_name == 'uwp_account_bio') {
                                     $is_profile_page = is_uwp_profile_page();
+                                    $value = get_user_meta($user->ID, 'description', true);
                                     $value = stripslashes($value);
                                     if ($value) {
                                         ?>
@@ -597,11 +573,6 @@ class UsersWP_Profile {
                             <?php
                             $excerpt = strip_shortcodes(wp_trim_words( $comment->comment_content, 15, '...' ));
                             echo $excerpt;
-                            if ($excerpt) {
-                                ?>
-                                <a href="<?php echo get_comment_link($comment->comment_ID); ?>" class="more-link"><?php echo __('Read More »', 'userswp'); ?></a>
-                                <?php
-                            }
                             ?>
                         </div>
                     </li>
@@ -1625,11 +1596,11 @@ class UsersWP_Profile {
      * @param       $user
      * @return      mixed
      */
-    public function uwp_extra_fields_as_tabs($tabs, $user)
+    public function uwp_extra_fields_as_tabs($tabs, $user, $allowed_tabs)
     {
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT site_title,field_icon,htmlvar_name,is_public,field_type FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
+        $fields = $wpdb->get_results("SELECT site_title,field_icon,htmlvar_name,is_public,field_type,field_type_key FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
         $usermeta = uwp_get_usermeta_row($user->ID);
         $privacy = ! empty( $usermeta ) && $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
 
@@ -1645,6 +1616,10 @@ class UsersWP_Profile {
                 }
             }
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);
+            $value = $this->uwp_get_field_value($field, $user);
+            if (!in_array($key, $allowed_tabs) || !$value) {
+                continue;
+            }
             if ($field->is_public == '1') {
                 $tabs[$key] = array(
                     'title' => __($field->site_title, 'userswp'),

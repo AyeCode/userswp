@@ -11,12 +11,12 @@ jQuery(window).load(function() {
 
 (function( $, window, undefined ) {
     $(document).ready(function() {
-        var showChar = 100;
-        var ellipsestext = "...";
-        var moretext = "more";
-        var lesstext = "less";
+        var showChar = uwp_localize_data.uwp_more_char_limit;
+        var ellipsestext = uwp_localize_data.uwp_more_ellipses_text;
+        var moretext = uwp_localize_data.uwp_more_text;
+        var lesstext = uwp_localize_data.uwp_less_text;
         $('.uwp_more').each(function() {
-            var content = $(this).html();
+            var content = $.trim($(this).text());
 
             if(content.length > showChar) {
 
@@ -68,7 +68,7 @@ jQuery(window).load(function() {
                 $(document.body).append("<div id='uwp-modal-backdrop'></div>");
                 container.replaceWith(response);
             });
-        }); 
+        });
     });
 
     $(document).ready(function() {
@@ -77,7 +77,7 @@ jQuery(window).load(function() {
 
             var htmlvar =  $( this ).data( 'htmlvar' );
             var uid =  $( this ).data( 'uid' );
-            
+
             var data = {
                 'action': 'uwp_upload_file_remove',
                 'htmlvar': htmlvar,

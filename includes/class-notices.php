@@ -83,6 +83,16 @@ class UsersWP_Notices {
 
     public function show_admin_notices() {
         settings_errors( 'uwp-notices' );
+
+        include_once dirname( __FILE__ ) . '/class-uwp-background-updater.php';
+        $updater = new UsersWP_Background_Updater();
+        if ( $updater->is_updating() || ! empty( $_GET['force_sync_data'] ) ) {
+            ?>
+            <div id="message" class="updated notice notice-alt uwp-message">
+                <p><strong><?php _e( 'UsersWP data sync', 'userswp' ); ?></strong> &#8211; <?php _e( 'Users data sync is running in the background.', 'userswp' ); ?> <a href="<?php echo esc_url( add_query_arg( 'force_sync_data', 'true', admin_url( 'admin.php?page=userswp' ) ) ); ?>"><?php _e( 'Taking a while? Click here to run it now.', 'userswp' ); ?></a></p>
+            </div>
+            <?php
+        }
     }
 
     /**

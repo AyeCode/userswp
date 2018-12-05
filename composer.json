@@ -1,0 +1,9 @@
+{
+  "name": "UsersWP/userswp",
+  "type": "project",
+  "description": "Lightweight WordPress User Profile Plugin, provides a front end login form, registration form, edit account form, forgot password, searchable users directory and user profiles.",
+  "keywords": ["user-profile"],
+  "homepage": "https://userswp.io",
+  "license": "GPLv3",
+  "minimum-stability": "dev"
+}
