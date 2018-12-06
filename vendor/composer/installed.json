@@ -1,0 +1,227 @@
+[
+    {
+        "name": "ayecode/wp-font-awesome-settings",
+        "version": "1.0.7",
+        "version_normalized": "1.0.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/AyeCode/wp-font-awesome-settings.git",
+            "reference": "f2e5dab5714282a3e5ec1ed2fb227efe9a743571"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/f2e5dab5714282a3e5ec1ed2fb227efe9a743571",
+            "reference": "f2e5dab5714282a3e5ec1ed2fb227efe9a743571",
+            "shasum": ""
+        },
+        "require": {
+            "composer/installers": "~1.0",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "dealerdirect/phpcodesniffer-composer-installer": "*",
+            "squizlabs/php_codesniffer": "^3.2",
+            "wp-coding-standards/wpcs": "*"
+        },
+        "time": "2018-12-05T16:41:59+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "wp-font-awesome-settings.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "AyeCode Ltd",
+                "email": "contact@ayecode.io",
+                "homepage": "https://ayecode.io/",
+                "role": "Developer"
+            }
+        ],
+        "description": "Settings page for Font Awesome in WordPress",
+        "homepage": "https://github.com/AyeCode/wp-font-awesome-settings",
+        "keywords": [
+            "FontAwesome",
+            "font-awesome"
+        ]
+    },
+    {
+        "name": "ayecode/wp-super-duper",
+        "version": "1.0.2",
+        "version_normalized": "1.0.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/AyeCode/wp-super-duper.git",
+            "reference": "a3ca2f66c45fa3a3d331a3ce6902bd0334d54d5e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/a3ca2f66c45fa3a3d331a3ce6902bd0334d54d5e",
+            "reference": "a3ca2f66c45fa3a3d331a3ce6902bd0334d54d5e",
+            "shasum": ""
+        },
+        "require": {
+            "composer/installers": "~1.0",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "dealerdirect/phpcodesniffer-composer-installer": "*",
+            "squizlabs/php_codesniffer": "^3.2",
+            "wp-coding-standards/wpcs": "*"
+        },
+        "time": "2018-12-05T13:36:58+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "wp-super-duper.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "AyeCode Ltd",
+                "email": "contact@ayecode.io",
+                "homepage": "https://ayecode.io/",
+                "role": "Developer"
+            }
+        ],
+        "description": "Lets you create a widget, block and showrtcode all from the one file .",
+        "homepage": "https://github.com/AyeCode/wp-super-duper",
+        "keywords": [
+            "super duper",
+            "wordpress",
+            "wp"
+        ]
+    },
+    {
+        "name": "composer/installers",
+        "version": "v1.6.0",
+        "version_normalized": "1.6.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/composer/installers.git",
+            "reference": "cfcca6b1b60bc4974324efb5783c13dca6932b5b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/composer/installers/zipball/cfcca6b1b60bc4974324efb5783c13dca6932b5b",
+            "reference": "cfcca6b1b60bc4974324efb5783c13dca6932b5b",
+            "shasum": ""
+        },
+        "require": {
+            "composer-plugin-api": "^1.0"
+        },
+        "replace": {
+            "roundcube/plugin-installer": "*",
+            "shama/baton": "*"
+        },
+        "require-dev": {
+            "composer/composer": "1.0.*@dev",
+            "phpunit/phpunit": "^4.8.36"
+        },
+        "time": "2018-08-27T06:10:37+00:00",
+        "type": "composer-plugin",
+        "extra": {
+            "class": "Composer\\Installers\\Plugin",
+            "branch-alias": {
+                "dev-master": "1.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Composer\\Installers\\": "src/Composer/Installers"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Kyle Robinson Young",
+                "email": "kyle@dontkry.com",
+                "homepage": "https://github.com/shama"
+            }
+        ],
+        "description": "A multi-framework Composer library installer",
+        "homepage": "https://composer.github.io/installers/",
+        "keywords": [
+            "Craft",
+            "Dolibarr",
+            "Eliasis",
+            "Hurad",
+            "ImageCMS",
+            "Kanboard",
+            "Lan Management System",
+            "MODX Evo",
+            "Mautic",
+            "Maya",
+            "OXID",
+            "Plentymarkets",
+            "Porto",
+            "RadPHP",
+            "SMF",
+            "Thelia",
+            "WolfCMS",
+            "agl",
+            "aimeos",
+            "annotatecms",
+            "attogram",
+            "bitrix",
+            "cakephp",
+            "chef",
+            "cockpit",
+            "codeigniter",
+            "concrete5",
+            "croogo",
+            "dokuwiki",
+            "drupal",
+            "eZ Platform",
+            "elgg",
+            "expressionengine",
+            "fuelphp",
+            "grav",
+            "installer",
+            "itop",
+            "joomla",
+            "kohana",
+            "laravel",
+            "lavalite",
+            "lithium",
+            "magento",
+            "majima",
+            "mako",
+            "mediawiki",
+            "modulework",
+            "modx",
+            "moodle",
+            "osclass",
+            "phpbb",
+            "piwik",
+            "ppi",
+            "puppet",
+            "pxcms",
+            "reindex",
+            "roundcube",
+            "shopware",
+            "silverstripe",
+            "sydes",
+            "symfony",
+            "typo3",
+            "wordpress",
+            "yawik",
+            "zend",
+            "zikula"
+        ]
+    }
+]
