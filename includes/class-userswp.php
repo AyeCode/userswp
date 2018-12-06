@@ -595,9 +595,9 @@ class UsersWP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-notices.php';
 
         /**
-         * The class WP_Super_Duper for widgets.
+         * The libraries required.
          */
-        require_once dirname(dirname( __FILE__ )) . '/includes/libraries/wp-super-duper.php';
+        require_once dirname(dirname( __FILE__ )) . '/vendor/autoload.php';
 
         /**
          * contents helpers files and functions.
@@ -634,7 +634,6 @@ class UsersWP {
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/abstract-uwp-privacy.php';
         require_once dirname(dirname( __FILE__ )) . '/includes/class-uwp-privacy.php';
-        require_once dirname(dirname( __FILE__ )) . '/includes/libraries/wp-font-awesome-settings.php';
 
         if ( is_plugin_active( 'uwp_geodirectory/uwp_geodirectory.php' ) ) {
             deactivate_plugins( 'uwp_geodirectory/uwp_geodirectory.php' );

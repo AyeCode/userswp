@@ -45,7 +45,7 @@ class UsersWP_GeoDirectory_Plugin {
             add_action( 'uwp_profile_gd_listings_subtab_content', array( $this, 'gd_get_listings' ), 10, 2 );
             add_action( 'uwp_profile_gd_reviews_subtab_content', array( $this, 'gd_get_reviews' ), 10, 2 );
             add_action( 'uwp_profile_gd_favorites_subtab_content', array( $this, 'gd_get_favorites' ), 10, 2 );
-            //add_action( 'geodir_after_edit_post_link_on_listing', array( $this, 'geodir_add_post_status_author_page' ), 11 );
+            add_action( 'geodir_after_edit_post_link_on_listing', array( $this, 'geodir_add_post_status_author_page' ), 11 );
         }
         add_filter( 'geodir_login_url', array( $this, 'get_gd_login_url' ), 10, 2 );
         add_action( 'wp', array( $this, 'geodir_uwp_author_redirect' ) );
@@ -292,7 +292,7 @@ class UsersWP_GeoDirectory_Plugin {
 
         $post_status = is_super_admin() ? " OR " . $wpdb->posts . ".post_status = 'private'" : '';
         if ( $user_id && $user_id == get_current_user_id() ) {
-            $post_status .= " OR " . $wpdb->posts . ".post_status = 'draft' OR " . $wpdb->posts . ".post_status = 'private'";
+            $post_status .= " OR " . $wpdb->posts . ".post_status = 'draft' OR " . $wpdb->posts . ".post_status = 'private' OR " . $wpdb->posts . ".post_status = 'pending' OR " . $wpdb->posts . ".post_status = 'gd-closed' OR " . $wpdb->posts . ".post_status = 'gd-expired'";
         }
 
         $user_fav_posts = geodir_get_user_favourites( (int)$user_id );
@@ -311,7 +311,7 @@ class UsersWP_GeoDirectory_Plugin {
 
         $post_status = is_super_admin() ? " OR " . $wpdb->posts . ".post_status = 'private'" : '';
         if ($user_id && $user_id == get_current_user_id()) {
-            $post_status .= " OR " . $wpdb->posts . ".post_status = 'draft' OR " . $wpdb->posts . ".post_status = 'private'";
+            $post_status .= " OR " . $wpdb->posts . ".post_status = 'draft' OR " . $wpdb->posts . ".post_status = 'private' OR " . $wpdb->posts . ".post_status = 'pending' OR " . $wpdb->posts . ".post_status = 'gd-closed' OR " . $wpdb->posts . ".post_status = 'gd-expired'";
         }
 
         $count = (int)$wpdb->get_var("SELECT count( ID ) FROM " . $wpdb->prefix . "posts WHERE post_author=" . (int)$user_id . " AND post_type='" . $post_type . "' AND ( post_status = 'publish' " . $post_status . " )");
@@ -545,7 +545,8 @@ class UsersWP_GeoDirectory_Plugin {
                 }
 
                 if ($type == 'listings') {
-                    $count = uwp_post_count($user->ID, $post_type_id);
+                    $all_count = geodir_user_post_listing_count($user->ID, true);
+                    $count = $all_count[$post_type_id];
                 } elseif ($type == 'reviews') {
                     $count = $this->geodir_get_reviews_by_user_id($post_type_id, $user->ID, true);
                 } elseif ($type == 'favorites') {
@@ -633,7 +634,7 @@ class UsersWP_GeoDirectory_Plugin {
             );
 
             if (get_current_user_id() == $user->ID) {
-                $args['post_status'] = array('publish', 'draft', 'private');
+                $args['post_status'] = array('publish', 'draft', 'private', 'pending', 'gd-closed', 'gd-expired');
             }
             // The Query
             $the_query = new WP_Query($args);
@@ -863,7 +864,7 @@ class UsersWP_GeoDirectory_Plugin {
                 );
 
                 if (get_current_user_id() == $user->ID) {
-                    $args['post_status'] = array('publish', 'draft', 'private');
+                    $args['post_status'] = array('publish', 'draft', 'private', 'pending', 'gd-closed', 'gd-expired');
                 }
 
                 // The Query
@@ -1111,11 +1112,22 @@ class UsersWP_GeoDirectory_Plugin {
                 $real_status = $wpdb->get_var("SELECT post_status from $wpdb->posts WHERE ID=$post->ID");
                 $status = "<strong>(";
                 $status_icon = '<i class="fas fa-play"></i>';
-                if ($real_status == 'publish') {
-                    $status .= __('Published', 'userswp');
-                } else {
-                    $status .= __('Not published', 'userswp');
-                    $status_icon = '<i class="fas fa-pause"></i>';
+                switch ($real_status){
+                    case 'publish' :
+                        $status .= __('Published', 'userswp');
+                        break;
+                    case 'pending' :
+                        $status .= __('Pending', 'userswp');
+                        break;
+                    case 'gd-closed' :
+                        $status .= __('Closed', 'userswp');
+                        break;
+                    case 'gd-expired' :
+                        $status .= __('Expired', 'userswp');
+                        break;
+                    default :
+                        $status .= __('Not published', 'userswp');
+                        break;
                 }
                 $status .= ")</strong>";
 

@@ -4,6 +4,19 @@
   "description": "Lightweight WordPress User Profile Plugin, provides a front end login form, registration form, edit account form, forgot password, searchable users directory and user profiles.",
   "keywords": ["user-profile"],
   "homepage": "https://userswp.io",
-  "license": "GPLv3",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "AyeCode Ltd",
+      "email": "contact@ayecode.io",
+      "homepage": "https://ayecode.io/",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.0",
+    "ayecode/wp-font-awesome-settings": "^1.0",
+    "ayecode/wp-super-duper": "^1.0"
+  },
   "minimum-stability": "dev"
 }

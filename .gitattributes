@@ -9,5 +9,4 @@ CONTRIBUTING.md export-ignore
 phpunit.xml export-ignore
 README.md export-ignore
 /tests/ export-ignore
-/vendor/ export-ignore
 /.idea/ export-ignore
