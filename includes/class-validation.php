@@ -163,6 +163,10 @@ class UsersWP_Validation {
                         case 'text':
                             $sanitized_value = sanitize_text_field($value);
                             break;
+                            
+                        case 'textarea':
+                            $sanitized_value = sanitize_text_field($value);
+                            break;
 
                         case 'checkbox':
                             $sanitized_value = sanitize_text_field($value);
