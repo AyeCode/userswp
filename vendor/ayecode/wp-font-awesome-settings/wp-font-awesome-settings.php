@@ -25,7 +25,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 	 * A Class to be able to change settings for Font Awesome.
 	 *
 	 * Class WP_Font_Awesome_Settings
-	 * @ver 1.0.7
+	 * @ver 1.0.8
 	 * @todo decide how to implement textdomain
 	 */
 	class WP_Font_Awesome_Settings {
@@ -35,14 +35,14 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '1.0.7';
+		public $version = '1.0.8';
 
 		/**
 		 * Latest version of Font Awesome at time of publish published.
 		 *
 		 * @var string
 		 */
-		public $latest = "5.5.0";
+		public $latest = "5.6.0";
 
 		/**
 		 * The title.
@@ -95,27 +95,29 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 
 		/**
 		 * Initiate the settings and add the required action hooks.
+		 *
+		 * @since 1.0.8 Settings name wrong - FIXED
 		 */
 		public function init() {
 			$this->settings = $this->get_settings();
 
 			if ( $this->settings['type'] == 'CSS' ) {
 
-				if ( $this->settings['enqueue'] == '' || $this->settings['frontend'] ) {
+				if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'frontend' ) {
 					add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ), 5000 );//echo '###';exit;
 				}
 
-				if ( $this->settings['enqueue'] == '' || $this->settings['backend'] ) {
+				if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'backend' ) {
 					add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_style' ), 5000 );
 				}
 
 			} else {
 
-				if ( $this->settings['enqueue'] == '' || $this->settings['frontend'] ) {
+				if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'frontend' ) {
 					add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 5000 );//echo '###';exit;
 				}
 
-				if ( $this->settings['enqueue'] == '' || $this->settings['backend'] ) {
+				if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'backend' ) {
 					add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 5000 );
 				}
 			}
@@ -305,6 +307,9 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 								<select name="wp-font-awesome-settings[version]" id="wpfas-version">
 									<option
 										value="" <?php selected( $this->settings['version'], '' ); ?>><?php echo sprintf( __( 'Latest - %s (default)' ), $this->get_latest_version() ); ?></option>
+									<option value="5.5.0" <?php selected( $this->settings['version'], '5.6.0' ); ?>>
+										5.6.0
+									</option>
 									<option value="5.5.0" <?php selected( $this->settings['version'], '5.5.0' ); ?>>
 										5.5.0
 									</option>

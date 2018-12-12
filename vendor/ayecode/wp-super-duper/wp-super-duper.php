@@ -12,12 +12,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 * Should not be called direct but extended instead.
 	 *
 	 * Class WP_Super_Duper
-	 * @ver 1.0.2
+	 * @since 1.0.3 is_block_content_call() method added.
+	 * @since 1.0.3 Placeholder text will be shown for widget that return no block content.
+	 * @ver 1.0.3
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
 
-		public $version = "1.0.2";
+		public $version = "1.0.3";
 		public $block_code;
 		public $options;
 		public $base_id;
@@ -941,6 +943,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 									jQuery.post(ajaxurl, data, function (response) {
 										return response;
 									}).then(function (env) {
+
+										// if the content is empty then we place some placeholder text
+										if(env==''){
+											env = "<div style='background:#0185ba33;padding: 10px;'>"+"<?php _e('Placeholder for: ');?>"+props.name+"</div>";
+										}
+
 										props.setAttributes({content: env});
 										is_fetching = false;
 										prev_attributes[props.id] = props.attributes;
@@ -1651,13 +1659,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$this->get_arguments();
 			}
 
-
-//			print_r($new_instance);
-//			print_r($old_instance);
-//			print_r($instance);
-//			print_r($this->arguments);
-//			exit;
-
 			// check for checkboxes
 			if ( ! empty( $this->arguments ) ) {
 				foreach ( $this->arguments as $argument ) {
@@ -1668,6 +1669,23 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			return $instance;
+		}
+
+		/**
+		 * Checks if the current call is a ajax call to get the block content.
+		 *
+		 * This can be used in your widget to return different content as the block content.
+		 *
+		 * @since 1.0.3
+		 * @return bool
+		 */
+		public function is_block_content_call(){
+			$result = false;
+			if(wp_doing_ajax() && isset($_REQUEST['action']) && $_REQUEST['action'] =='super_duper_output_shortcode'){
+				$result = true;
+			}
+
+			return $result;
 		}
 
 	}
