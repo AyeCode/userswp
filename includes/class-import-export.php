@@ -198,6 +198,8 @@ class UsersWP_Import_Export {
         $this->step     = !empty( $request['step'] ) ? absint( $request['step'] ) : 1;
         $this->filename = 'uwp-users-export-temp.csv';
         $this->file     = $this->export_dir . $this->filename;
+        $chunk_per_page = !empty( $request['uwp_ie_chunk_size'] ) ? absint( $request['uwp_ie_chunk_size'] ) : 0;
+        $this->per_page = $chunk_per_page < 50 || $chunk_per_page > 100000 ? 5000 : $chunk_per_page;
 
         do_action( 'uwp_export_users_set_params', $request );
     }
@@ -359,6 +361,10 @@ class UsersWP_Import_Export {
         $data       = $wpdb->get_results("SELECT user_id FROM $this->meta_table_name WHERE 1=1");
         $total      = !empty( $data ) ? count( $data ) : 0;
         $status     = 100;
+
+        if ( $this->per_page > $total ) {
+            $this->per_page = $total;
+        }
 
         if ( $total > 0 ) {
             $status = ( ( $this->per_page * $this->step ) / $total ) * 100;

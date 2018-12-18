@@ -1,17 +1,17 @@
 [
     {
         "name": "ayecode/wp-font-awesome-settings",
-        "version": "1.0.7",
-        "version_normalized": "1.0.7.0",
+        "version": "1.0.10",
+        "version_normalized": "1.0.10.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-font-awesome-settings.git",
-            "reference": "f2e5dab5714282a3e5ec1ed2fb227efe9a743571"
+            "reference": "5e0c70d3081a14785f0911ba134c7068857db8d9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/f2e5dab5714282a3e5ec1ed2fb227efe9a743571",
-            "reference": "f2e5dab5714282a3e5ec1ed2fb227efe9a743571",
+            "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/5e0c70d3081a14785f0911ba134c7068857db8d9",
+            "reference": "5e0c70d3081a14785f0911ba134c7068857db8d9",
             "shasum": ""
         },
         "require": {
@@ -23,7 +23,7 @@
             "squizlabs/php_codesniffer": "^3.2",
             "wp-coding-standards/wpcs": "*"
         },
-        "time": "2018-12-05T16:41:59+00:00",
+        "time": "2018-12-14T12:33:09+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -52,17 +52,17 @@
     },
     {
         "name": "ayecode/wp-super-duper",
-        "version": "1.0.2",
-        "version_normalized": "1.0.2.0",
+        "version": "1.0.5",
+        "version_normalized": "1.0.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-super-duper.git",
-            "reference": "a3ca2f66c45fa3a3d331a3ce6902bd0334d54d5e"
+            "reference": "6782194925fb160536c72c9799ccdd2df6d5e7db"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/a3ca2f66c45fa3a3d331a3ce6902bd0334d54d5e",
-            "reference": "a3ca2f66c45fa3a3d331a3ce6902bd0334d54d5e",
+            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/6782194925fb160536c72c9799ccdd2df6d5e7db",
+            "reference": "6782194925fb160536c72c9799ccdd2df6d5e7db",
             "shasum": ""
         },
         "require": {
@@ -74,7 +74,7 @@
             "squizlabs/php_codesniffer": "^3.2",
             "wp-coding-standards/wpcs": "*"
         },
-        "time": "2018-12-05T13:36:58+00:00",
+        "time": "2018-12-15T11:53:58+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

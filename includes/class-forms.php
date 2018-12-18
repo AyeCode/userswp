@@ -760,8 +760,7 @@ class UsersWP_Forms {
 
         $message .= "<a href='".$act_url."' target='_blank'>".$act_url."</a>" . "\r\n";
 
-        $activate_message = __('<p><b>' . __('Please activate your account :', 'userswp') . '</b></p>
-            <p>' . $message . '</p>');
+        $activate_message = '<p><b>' . __('Please activate your account :', 'userswp') . '</b></p><p>' . $message . '</p>';
 
         return apply_filters('uwp_activation_mail_message', $activate_message, $user_id);
 

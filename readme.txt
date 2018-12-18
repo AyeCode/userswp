@@ -132,6 +132,7 @@ No questions so far, but don't hesitate to ask!
 * Removed Read more link from profile tab items - CHANGED
 * Moved actions after summary in profile tab items - CHANGED
 * Use the new listing status for listings tab and count - CHANGED
+* Allow to change per page limit for number of users to export csv - CHANGED
 
 = 1.0.20 =
 * Compatibility with GDV2 - ADDED
