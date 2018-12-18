@@ -90,13 +90,44 @@ wp_enqueue_script( 'plupload' );
         padding: 0;
     }
 </style>
+<?php
+$uwp_chunk_sizes = array(
+        50 => 50,
+        100 => 100,
+        200 => 200,
+        500 => 500,
+        1000 => 1000,
+        2000 => 2000,
+        5000 => 5000,
+        10000 => 10000,
+        20000 => 20000,
+        50000 => 50000,
+        100000 => 100000,
+);
 
+$uwp_chunk_sizes = apply_filters('uwp_ie_csv_chunks_options', $uwp_chunk_sizes);
+$uwp_chunk_sizes_opts = '';
+foreach ($uwp_chunk_sizes as $value => $title) {
+    $uwp_chunk_sizes_opts .= '<option value="' . $value . '" ' . selected($value, 5000, false) . '>' . $title . '</option>';
+}
+
+$users_count = count_users();
+$total_users = $users_count['total_users'];
+?>
 <div class="metabox-holder uwp-ie-container">
     <div class="postbox uwp-export-users">
         <h3><span><?php _e( 'Export Users Data', 'userswp' ); ?></span></h3>
         <div class="inside">
             <p><?php _e( 'Download a CSV of all users data for usersWP.', 'invoicing' ); ?></p>
             <form id="uwp-export-users" class="uwp-export-users-form" method="post">
+                <table class="form-table">
+                    <tbody>
+                    <tr>
+                        <th class=""><label for="uwp_ie_chunk_size"><?php _e( 'Max entries per csv file:', 'userswp' );?></label></th>
+                        <td><select name="uwp_ie_chunk_size" id="uwp_ie_chunk_size" data-ucount = "<?php echo $total_users;?>" style="min-width:140px"><?php echo $uwp_chunk_sizes_opts;?></select><p class="description"><?php _e( 'The maximum number of entries per csv file (default to 5000, you might want to lower this to prevent memory issues.)', 'userswp' );?></p></td>
+                    </tr>
+                    </tbody>
+                </table>
                 <div class="uwp-export-submit-wrap">
                     <input type="hidden" name="uwp_ie_action" value="export_users" />
                     <?php wp_nonce_field( 'uwp_export_users_nonce', 'uwp_export_users_nonce' ); ?>
