@@ -66,6 +66,16 @@ function uwp_uninstall(){
         $sql = "DROP TABLE IF EXISTS $extras_table_name";
         $wpdb->query($sql);
 
+        // Delete pages
+        wp_delete_post( $uwp_options['register_page'], true );
+        wp_delete_post( $uwp_options['login_page'], true );
+        wp_delete_post( $uwp_options['profile_page'], true );
+        wp_delete_post( $uwp_options['account_page'], true );
+        wp_delete_post( $uwp_options['change_page'], true );
+        wp_delete_post( $uwp_options['forgot_page'], true );
+        wp_delete_post( $uwp_options['reset_page'], true );
+        wp_delete_post( $uwp_options['users_page'], true );
+
         // Delete options
         delete_option('uwp_settings');
         delete_option('uwp_activation_redirect');

@@ -38,7 +38,7 @@ class UsersWP_Form_Builder {
 
                     <p>
                         <?php
-                        $note = sprintf(__('Click on any box below to add a field of that type on %s form. You must be use a fieldset to group your fields.', 'userswp'), $form_type);
+                        $note = sprintf(__('Click on any box below to add a field of that type on %s form. You must use a fieldset to group your fields.', 'userswp'), $form_type);
                         echo apply_filters('uwp_form_builder_available_fields_note', $note, $form_type);
                         ?>
                     </p>
