@@ -1743,3 +1743,11 @@ function uwp_get_localize_data(){
 
     return apply_filters('uwp_localize_data', $uwp_localize_data);
 }
+
+function uwp_is_page_builder(){
+    if( isset($_GET['elementor-preview']) && $_GET['elementor-preview'] > 0){
+        return true; // Elementor builder.
+    }
+
+    return false;
+}

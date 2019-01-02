@@ -91,6 +91,10 @@ class UsersWP_Templates {
             return false;
         }
 
+        if(uwp_is_page_builder()){
+            return false;
+        }
+
         $current_page_id = $post->ID;
         
         $register_page = uwp_get_page_id('register_page', false);
@@ -149,6 +153,11 @@ class UsersWP_Templates {
         if(1 == uwp_get_option('change_disable_password_nag')) {
             return;
         }
+
+        if(uwp_is_page_builder()){
+            return;
+        }
+
         $change_page = uwp_get_page_id('change_page', false);
         $password_nag = get_user_option('default_password_nag', get_current_user_id());
         
@@ -175,6 +184,10 @@ class UsersWP_Templates {
      * @return      void
      */
     public function profile_redirect() {
+        if(uwp_is_page_builder()){
+            return;
+        }
+
         if (is_page()) {
             global $wp_query, $post;
             $current_page_id = $post->ID;

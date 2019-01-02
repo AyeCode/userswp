@@ -30,15 +30,6 @@ class UsersWP_Public {
      */
     public function enqueue_styles() {
 
-        /**
-         * An instance of this class should be passed to the run() function
-         * defined in UsersWP_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The UsersWP_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
         if (is_uwp_page()) {
             // include only in uwp pages
             wp_register_style('jquery-ui', plugin_dir_url(dirname(__FILE__)) .  'public/assets/css/jquery-ui.css');
@@ -105,15 +96,6 @@ class UsersWP_Public {
      */
     public function enqueue_scripts() {
 
-        /**
-         * An instance of this class should be passed to the run() function
-         * defined in UsersWP_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The UsersWP_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
         if (is_uwp_page()) {
             // include only in uwp pages
             wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );    

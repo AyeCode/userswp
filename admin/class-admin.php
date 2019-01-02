@@ -42,15 +42,6 @@ class UsersWP_Admin {
      */
     public function enqueue_styles($hook_suffix) {
 
-        /**
-         * An instance of this class should be passed to the run() function
-         * defined in UsersWP_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The UsersWP_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
         if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
             wp_register_style('jquery-ui', plugin_dir_url(dirname(__FILE__)) .  'public/assets/css/jquery-ui.css');
             wp_enqueue_style( 'jquery-ui' );
@@ -73,16 +64,6 @@ class UsersWP_Admin {
      * @param $hook_suffix
      */
     public function enqueue_scripts($hook_suffix) {
-
-        /**
-         * An instance of this class should be passed to the run() function
-         * defined in UsersWP_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The UsersWP_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
 
         if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
 

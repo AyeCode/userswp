@@ -121,6 +121,8 @@ No questions so far, but don't hesitate to ask!
 
 = 1.0.22 =
 * Delete UWP pages on uninstall - FIXED
+* Elementor builder error page could not loaded while edit some UWP pages - FIXED
+* Convert shortcodes to widgets - CHANGED
 
 = 1.0.21 =
 * Update users meta from WP user data in background instead of on activation - FIXED
