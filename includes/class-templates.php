@@ -303,6 +303,35 @@ class UsersWP_Templates {
     }
 
     /**
+     * Changes the register url with the UWP register page.
+     *
+     * @param $register_url string The URL for register.
+     * @since 1.0.22
+     *
+     * @return string The register url.
+     */
+    public function wp_register_url($register_url) {
+        $register_page_id = uwp_get_page_id('register_page', false);
+        $redirect_page_id = uwp_get_option('register_redirect_to', -1);
+        $redirect_enabled = uwp_get_option('wp_register_redirect');
+
+        $redirect = isset($_REQUEST['redirect_to']) ? esc_url($_REQUEST['redirect_to']) : '';
+        if ($register_page_id && 1 == $redirect_enabled) {
+            $register_page = get_permalink($register_page_id);
+            if($register_url && isset($redirect) && !empty($redirect)){
+                $register_url = add_query_arg( 'redirect_to', $redirect, $register_page );
+            }elseif((int)$redirect_page_id > 0){
+                $redirect_to = get_permalink($redirect_page_id);
+                $register_url = add_query_arg( 'redirect_to', $redirect_to, $register_page );
+            }else{
+                $register_url = $register_page;
+            }
+        }
+
+        return $register_url;
+    }
+
+    /**
      * Prints html for form fields of that particular form.
      *
      * @since       1.0.0

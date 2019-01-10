@@ -282,8 +282,9 @@ class UsersWP {
         add_filter( 'the_content', array($instance, 'uwp_author_page_content'), 10, 1 );
         add_filter( 'body_class', array($instance, 'uwp_add_body_class'), 10, 1 );
 
-        // filter the login url
+        // filter the login and register url
         add_filter( 'login_url', array($instance, 'wp_login_url'), 10, 3 );
+        add_filter( 'register_url', array($instance, 'wp_register_url'), 10, 1 );
     }
     
     public function load_tools_actions_and_filters($instance) {
