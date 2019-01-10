@@ -313,10 +313,10 @@ class UsersWP_Templates {
     public function wp_register_url($register_url) {
         $register_page_id = uwp_get_page_id('register_page', false);
         $redirect_page_id = uwp_get_option('register_redirect_to', -1);
-        $redirect_enabled = uwp_get_option('wp_register_redirect');
+        $redirect_disabled = uwp_get_option('wp_register_redirect');
 
         $redirect = isset($_REQUEST['redirect_to']) ? esc_url($_REQUEST['redirect_to']) : '';
-        if ($register_page_id && 1 == $redirect_enabled) {
+        if ($register_page_id && 1 != $redirect_disabled) {
             $register_page = get_permalink($register_page_id);
             if($register_url && isset($redirect) && !empty($redirect)){
                 $register_url = add_query_arg( 'redirect_to', $redirect, $register_page );
