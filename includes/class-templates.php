@@ -91,6 +91,10 @@ class UsersWP_Templates {
             return false;
         }
 
+        if(uwp_is_page_builder()){
+            return false;
+        }
+
         $current_page_id = $post->ID;
         
         $register_page = uwp_get_page_id('register_page', false);
@@ -149,6 +153,11 @@ class UsersWP_Templates {
         if(1 == uwp_get_option('change_disable_password_nag')) {
             return;
         }
+
+        if(uwp_is_page_builder()){
+            return;
+        }
+
         $change_page = uwp_get_page_id('change_page', false);
         $password_nag = get_user_option('default_password_nag', get_current_user_id());
         
@@ -175,6 +184,10 @@ class UsersWP_Templates {
      * @return      void
      */
     public function profile_redirect() {
+        if(uwp_is_page_builder()){
+            return;
+        }
+
         if (is_page()) {
             global $wp_query, $post;
             $current_page_id = $post->ID;
@@ -287,6 +300,35 @@ class UsersWP_Templates {
         }
 
         return $login_url;
+    }
+
+    /**
+     * Changes the register url with the UWP register page.
+     *
+     * @param $register_url string The URL for register.
+     * @since 1.0.22
+     *
+     * @return string The register url.
+     */
+    public function wp_register_url($register_url) {
+        $register_page_id = uwp_get_page_id('register_page', false);
+        $redirect_page_id = uwp_get_option('register_redirect_to', -1);
+        $redirect_enabled = uwp_get_option('wp_register_redirect');
+
+        $redirect = isset($_REQUEST['redirect_to']) ? esc_url($_REQUEST['redirect_to']) : '';
+        if ($register_page_id && 1 == $redirect_enabled) {
+            $register_page = get_permalink($register_page_id);
+            if($register_url && isset($redirect) && !empty($redirect)){
+                $register_url = add_query_arg( 'redirect_to', $redirect, $register_page );
+            }elseif((int)$redirect_page_id > 0){
+                $redirect_to = get_permalink($redirect_page_id);
+                $register_url = add_query_arg( 'redirect_to', $redirect_to, $register_page );
+            }else{
+                $register_url = $register_page;
+            }
+        }
+
+        return $register_url;
     }
 
     /**

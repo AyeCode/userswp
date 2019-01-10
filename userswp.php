@@ -56,7 +56,7 @@ if ( ! class_exists( 'UsersWP' ) ) {
  * @since 1.0.0
  */
 function run_users_wp() {
-    $plugin = new UsersWP();
-    $plugin->run();
+    global $userswp;
+    $userswp = new UsersWP();
 }
 run_users_wp();

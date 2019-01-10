@@ -4,25 +4,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * UsersWP register widget.
+ * UsersWP reset password widget.
  *
- * @since 1.0.0
+ * @since 1.0.22
  */
-class UWP_Register_Widget extends WP_Super_Duper {
+class UWP_Reset_Widget extends WP_Super_Duper {
 
+    /**
+     * Register the reset password widget with WordPress.
+     *
+     */
     public function __construct() {
+
 
         $options = array(
             'textdomain'    => 'userswp',
             'block-icon'    => 'admin-site',
             'block-category'=> 'widgets',
-            'block-keywords'=> "['userswp','register']",
+            'block-keywords'=> "['userswp','reset']",
             'class_name'     => __CLASS__,
-            'base_id'       => 'uwp_register',
-            'name'          => __('UWP > Register','userswp'),
+            'base_id'       => 'uwp_reset',
+            'name'          => __('UWP > Reset','userswp'),
             'widget_ops'    => array(
-                'classname'   => 'uwp-register-class',
-                'description' => esc_html__('Displays register form.','userswp'),
+                'classname'   => 'uwp-reset-class',
+                'description' => esc_html__('Displays reset password form.','userswp'),
             ),
             'arguments'     => array(
                 'title'  => array(
@@ -37,6 +42,7 @@ class UWP_Register_Widget extends WP_Super_Duper {
 
         );
 
+
         parent::__construct( $options );
     }
 
@@ -48,11 +54,11 @@ class UWP_Register_Widget extends WP_Super_Duper {
 
         ob_start();
 
-        echo '<div class="uwp_widgets uwp_widget_register">';
+        echo '<div class="uwp_widgets uwp_widget_reset">';
 
         $temp_obj = new UsersWP_Templates();
 
-        $template = $temp_obj->uwp_locate_template('register');
+        $template = $temp_obj->uwp_locate_template('reset');
 
         echo '<div class="uwp_page">';
 
@@ -71,4 +77,5 @@ class UWP_Register_Widget extends WP_Super_Duper {
         return trim($output);
 
     }
+
 }

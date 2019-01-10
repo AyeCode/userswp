@@ -11,17 +11,6 @@
 class UsersWP {
 
     /**
-     * The loader that's responsible for maintaining and registering all hooks that power
-     * the plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      UsersWP_Loader    $loader    Maintains and registers all hooks for the plugin.
-     */
-    protected $loader;
-
-
-    /**
      * The current version of the plugin.
      *
      * @since    1.0.0
@@ -66,7 +55,6 @@ class UsersWP {
         $this->load_dependencies();
         $this->init_hooks();
 
-        $this->loader = new UsersWP_Loader();
         $this->meta = new UsersWP_Meta();
         $this->pages = new UsersWP_Pages();
         $this->profile = new UsersWP_Profile();
@@ -122,6 +110,7 @@ class UsersWP {
         register_deactivation_hook( USERSWP_PLUGIN_FILE, array( 'UsersWP_Deactivator', 'deactivate' ) );
         add_action( 'admin_init', array('UsersWP_Activator', 'uwp_automatic_upgrade') );
         add_action( 'init', array( 'UsersWP_Activator', 'init_background_updater' ), 5 );
+        add_action( 'widgets_init', array( $this, 'uwp_register_widgets' ) );
     }
 
 
@@ -265,21 +254,14 @@ class UsersWP {
     }
 
     public function load_shortcodes_actions_and_filters($instance) {
-        add_shortcode( 'uwp_forgot',    array($instance, 'forgot'));
-        add_shortcode( 'uwp_change',    array($instance, 'change'));
-        add_shortcode( 'uwp_reset',     array($instance, 'reset'));
-        add_shortcode( 'uwp_account',   array($instance, 'account'));
         add_shortcode( 'uwp_profile',   array($instance, 'profile'));
-        add_shortcode( 'uwp_users',     array($instance, 'users'));
     }
-    
+
     public function load_tables_actions_and_filters($instance) {
         add_filter( 'wpmu_drop_tables', array($instance, 'drop_tables_on_delete_blog'));
     }
     
     public function load_templates_actions_and_filters($instance) {
-
-
 
         add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
         add_action( 'uwp_template_fields', array($instance, 'uwp_template_fields'), 10, 1 );
@@ -300,8 +282,9 @@ class UsersWP {
         add_filter( 'the_content', array($instance, 'uwp_author_page_content'), 10, 1 );
         add_filter( 'body_class', array($instance, 'uwp_add_body_class'), 10, 1 );
 
-        // filter the login url
+        // filter the login and register url
         add_filter( 'login_url', array($instance, 'wp_login_url'), 10, 3 );
+        add_filter( 'register_url', array($instance, 'wp_register_url'), 10, 1 );
     }
     
     public function load_tools_actions_and_filters($instance) {
@@ -395,15 +378,14 @@ class UsersWP {
         add_action( 'uwp_notifications_settings_admin_tab_content', array($instance, 'generic_display_form') );
     }
 
-
-    
-    /**
-     * Run the loader to execute all of the hooks with WordPress.
-     *
-     * @since    1.0.0
-     */
-    public function run() {
-        $this->loader->run();
+    public function uwp_register_widgets(){
+        register_widget("UWP_Register_Widget");
+        register_widget("UWP_Forgot_Widget");
+        register_widget("UWP_Login_Widget");
+        register_widget("UWP_Change_Widget");
+        register_widget("UWP_Reset_Widget");
+        register_widget("UWP_Users_Widget");
+        register_widget("UWP_Account_Widget");
     }
 
     /**
@@ -415,16 +397,6 @@ class UsersWP {
      */
     public function get_plugin_name() {
         return $this->plugin_name;
-    }
-
-    /**
-     * The reference to the class that orchestrates the hooks with the plugin.
-     *
-     * @since     1.0.0
-     * @return    UsersWP_Loader    Orchestrates the hooks of the plugin.
-     */
-    public function get_loader() {
-        return $this->loader;
     }
 
     /**
@@ -450,12 +422,6 @@ class UsersWP {
              */
             require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
         }
-
-        /**
-         * The class responsible for orchestrating the actions and filters of the
-         * core plugin.
-         */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-loader.php';
 
         /**
          * The class responsible for defining internationalization functionality
@@ -613,6 +579,31 @@ class UsersWP {
          * The class for register widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/register.php' );
+
+        /**
+         * The class for forgot password widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/forgot.php' );
+
+        /**
+         * The class for reset password widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/reset.php' );
+
+        /**
+         * The class for change password widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/change.php' );
+
+        /**
+         * The class for users widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/users.php' );
+
+        /**
+         * The class for account widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/account.php' );
 
         /**
          * The class responsible for displaying notices

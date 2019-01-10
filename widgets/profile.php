@@ -4,25 +4,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * UsersWP register widget.
+ * UsersWP profile widget.
  *
- * @since 1.0.0
+ * @since 1.0.22
  */
-class UWP_Register_Widget extends WP_Super_Duper {
+class UWP_Profile_Widget extends WP_Super_Duper {
 
+    /**
+     * Register the profile widget with WordPress.
+     *
+     */
     public function __construct() {
+
 
         $options = array(
             'textdomain'    => 'userswp',
             'block-icon'    => 'admin-site',
             'block-category'=> 'widgets',
-            'block-keywords'=> "['userswp','register']",
+            'block-keywords'=> "['userswp','profile']",
             'class_name'     => __CLASS__,
-            'base_id'       => 'uwp_register',
-            'name'          => __('UWP > Register','userswp'),
+            'base_id'       => 'uwp_profile',
+            'name'          => __('UWP > Profile','userswp'),
             'widget_ops'    => array(
-                'classname'   => 'uwp-register-class',
-                'description' => esc_html__('Displays register form.','userswp'),
+                'classname'   => 'uwp-profile-class',
+                'description' => esc_html__('Displays user profile.','userswp'),
             ),
             'arguments'     => array(
                 'title'  => array(
@@ -37,22 +42,23 @@ class UWP_Register_Widget extends WP_Super_Duper {
 
         );
 
+
         parent::__construct( $options );
     }
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        if (is_user_logged_in()) {
+        if (!is_user_logged_in()) {
             return false;
         }
 
         ob_start();
 
-        echo '<div class="uwp_widgets uwp_widget_register">';
+        echo '<div class="uwp_widgets uwp_widget_profile">';
 
         $temp_obj = new UsersWP_Templates();
 
-        $template = $temp_obj->uwp_locate_template('register');
+        $template = $temp_obj->uwp_locate_template('profile');
 
         echo '<div class="uwp_page">';
 
@@ -71,4 +77,5 @@ class UWP_Register_Widget extends WP_Super_Duper {
         return trim($output);
 
     }
+
 }
