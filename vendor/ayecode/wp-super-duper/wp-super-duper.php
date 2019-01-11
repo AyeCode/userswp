@@ -17,12 +17,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 * @since 1.0.4 is_elementor_widget_output() method added.
 	 * @since 1.0.4 is_elementor_preview() method added.
 	 * @since 1.0.5 Block checkbox options are set as true by default even when set as false - FIXED
-	 * @ver 1.0.5
+	 * @since 1.0.6 Some refactoring for page builders - CHANGED
+	 * @ver 1.0.6
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-
-		public $version = "1.0.5";
+		public $version = "1.0.6";
 		public $block_code;
 		public $options;
 		public $base_id;
@@ -36,8 +36,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		public function __construct( $options ) {
 			global $sd_widgets;
 
-			$sd_widgets[ $options['base_id'] ] = array( 'name'       => $options['name'],
-			                                            'class_name' => $options['class_name']
+			$sd_widgets[ $options['base_id'] ] = array(
+				'name'       => $options['name'],
+				'class_name' => $options['class_name']
 			);
 			$this->base_id                     = $options['base_id'];
 			// lets filter the options before we do anything
@@ -75,6 +76,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 				// add shortcode insert button once
 				add_action( 'media_buttons', array( $this, 'shortcode_insert_button' ) );
+				if ( $this->is_preview() ) {
+					add_action( 'wp_footer', array( $this, 'shortcode_insert_button_script' ) );
+				}
 				add_action( 'wp_ajax_super_duper_get_widget_settings', array( __CLASS__, 'get_widget_settings' ) );
 			}
 
@@ -137,7 +141,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					<?php
 					asort( $sd_widgets );
 					if ( ! empty( $sd_widgets ) ) {
-						echo '<select onchange="sd_get_shortcode_options(this);">';
+						echo '<select class="widefat" onchange="sd_get_shortcode_options(this);">';
 						echo "<option>" . __( 'Select shortcode' ) . "</option>";
 						foreach ( $sd_widgets as $shortcode => $class ) {
 							echo "<option value='" . esc_attr( $shortcode ) . "'>" . esc_attr( $shortcode ) . " (" . esc_attr( $class['name'] ) . ")</option>";
@@ -154,7 +158,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					<textarea id='sd-shortcode-output' disabled></textarea>
 					<div id='sd-shortcode-output-actions'>
 						<button class="button"
-						        onclick="sd_insert_shortcode()"><?php _e( 'Insert shortcode' ); ?></button>
+						        onclick="sd_insert_shortcode(<?php if ( ! empty( $editor_id ) ) {
+							        echo "'" . $editor_id . "'";
+						        } ?>)"><?php _e( 'Insert shortcode' ); ?></button>
 						<button class="button"
 						        onclick="sd_copy_to_clipboard()"><?php _e( 'Copy shortcode' ); ?></button>
 					</div>
@@ -164,13 +170,126 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			<?php
 			// if Font Awesome is available then show a icon if not show a WP icon.
-			$button_string = wp_style_is( 'font-awesome', 'enqueued' ) && 1 == 2 ? '<i class="fas fa-cubes" aria-hidden="true"></i>' : '<span style="padding-top: 3px;" class="dashicons dashicons-screenoptions"></span>';
+			$button_string = wp_style_is( 'font-awesome', 'enqueued' ) && 1 == 2 ? '<i class="fas fa-cubes" aria-hidden="true"></i>' : '<span style="vertical-align: middle;line-height: 18px;font-size: 20px;" class="dashicons dashicons-screenoptions"></span>';
 			?>
 
 			<a href="#TB_inline?width=100%&height=550&inlineId=super-duper-content"
 			   class="thickbox button super-duper-content-open"
 			   title="<?php _e( 'Add Shortcode' ); ?>"><?php echo $button_string; ?></a>
 
+			<?php
+			self::shortcode_insert_button_script( $editor_id, $insert_shortcode_function );
+			$shortcode_insert_button_once = true;
+		}
+
+		/**
+		 * Makes SD work with the siteOrigin page builder.
+		 *
+		 * @since 1.0.6
+		 * @return mixed
+		 */
+		public static function siteorigin_js() {
+			ob_start();
+			?>
+			<script>
+				/**
+				 * Check a form to see what items shoudl be shown or hidden.
+				 */
+				function sd_so_show_hide(form) {
+					jQuery(form).find(".sd-argument").each(function () {
+
+						var $element_require = jQuery(this).data('element_require');
+
+						if ($element_require) {
+
+							$element_require = $element_require.replace("&#039;", "'"); // replace single quotes
+							$element_require = $element_require.replace("&quot;", '"'); // replace double quotes
+
+							if (eval($element_require)) {
+								jQuery(this).removeClass('sd-require-hide');
+							} else {
+								jQuery(this).addClass('sd-require-hide');
+							}
+						}
+					});
+				}
+
+				/**
+				 * Toggle advanced settings visibility.
+				 */
+				function sd_so_toggle_advanced($this) {
+					var form = jQuery($this).parents('form,.form,.so-content');
+					form.find('.sd-advanced-setting').toggleClass('sd-adv-show');
+					return false;// prevent form submit
+				}
+
+				/**
+				 * Initialise a individual widget.
+				 */
+				function sd_so_init_widget($this, $selector) {
+					if (!$selector) {
+						$selector = 'form';
+					}
+					// only run once.
+					if (jQuery($this).data('sd-widget-enabled')) {
+						return;
+					} else {
+						jQuery($this).data('sd-widget-enabled', true);
+					}
+
+					var $button = '<button title="<?php _e( 'Advanced Settings' );?>" class="button button-primary right sd-advanced-button" onclick="sd_so_toggle_advanced(this);return false;"><i class="fas fa-sliders-h" aria-hidden="true"></i></button>';
+					var form = jQuery($this).parents('' + $selector + '');
+
+					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length == 0) {
+						jQuery(form).append($button);
+					}
+
+					// show hide on form change
+					jQuery(form).change(function () {
+						sd_so_show_hide(form);
+					});
+
+					// show hide on load
+					sd_so_show_hide(form);
+				}
+
+				jQuery(function () {
+					jQuery(document).on('open_dialog', function (w, e) {
+						setTimeout(function () {
+							if (jQuery('.so-panels-dialog-wrapper:visible .so-content.panel-dialog .sd-show-advanced').length) {
+								console.log('exists');
+								if (jQuery('.so-panels-dialog-wrapper:visible .so-content.panel-dialog .sd-show-advanced').val() == '1') {
+									console.log('true');
+									sd_so_init_widget('.so-panels-dialog-wrapper:visible .so-content.panel-dialog .sd-show-advanced', 'div');
+								}
+							}
+						}, 200);
+					});
+				});
+			</script>
+			<?php
+			$output = ob_get_clean();
+
+			/*
+			 * We only add the <script> tags for code highlighting, so we strip them from the output.
+			 */
+
+			return str_replace( array(
+				'<script>',
+				'</script>'
+			), '', $output );
+		}
+
+		/**
+		 * Output the JS and CSS for the shortcode insert button.
+		 *
+		 * @since 1.0.6
+		 *
+		 * @param string $editor_id
+		 * @param string $insert_shortcode_function
+		 */
+		public static function shortcode_insert_button_script( $editor_id = '', $insert_shortcode_function = '' ) {
+			?>
 			<style>
 				.sd-shortcode-left-wrap {
 					float: left;
@@ -181,9 +300,106 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					float: none;
 				}
 
+				.sd-shortcode-left-wrap .widefat {
+					border-spacing: 0;
+					width: 100%;
+					clear: both;
+					margin: 0;
+					border: 1px solid #ddd;
+					box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
+					background-color: #fff;
+					color: #32373c;
+					outline: 0;
+					transition: 50ms border-color ease-in-out;
+					padding: 3px 5px;
+				}
+
+				.sd-shortcode-left-wrap input[type=checkbox].widefat {
+					border: 1px solid #b4b9be;
+					background: #fff;
+					color: #555;
+					clear: none;
+					cursor: pointer;
+					display: inline-block;
+					line-height: 0;
+					height: 16px;
+					margin: -4px 4px 0 0;
+					margin-top: 0;
+					outline: 0;
+					padding: 0 !important;
+					text-align: center;
+					vertical-align: middle;
+					width: 16px;
+					min-width: 16px;
+					-webkit-appearance: none;
+					box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+					transition: .05s border-color ease-in-out;
+				}
+
+				.sd-shortcode-left-wrap input[type=checkbox]:checked:before {
+					content: "\f147";
+					margin: -3px 0 0 -4px;
+					color: #1e8cbe;
+					float: left;
+					display: inline-block;
+					vertical-align: middle;
+					width: 16px;
+					font: normal 21px/1 dashicons;
+					speak: none;
+					-webkit-font-smoothing: antialiased;
+					-moz-osx-font-smoothing: grayscale;
+				}
+
+				#sd-shortcode-output-actions button,
+				.sd-advanced-button {
+					color: #555;
+					border-color: #ccc;
+					background: #f7f7f7;
+					box-shadow: 0 1px 0 #ccc;
+					vertical-align: top;
+					display: inline-block;
+					text-decoration: none;
+					font-size: 13px;
+					line-height: 26px;
+					height: 28px;
+					margin: 0;
+					padding: 0 10px 1px;
+					cursor: pointer;
+					border-width: 1px;
+					border-style: solid;
+					-webkit-appearance: none;
+					border-radius: 3px;
+					white-space: nowrap;
+					box-sizing: border-box;
+				}
+
+				button.sd-advanced-button {
+					background: #0073aa;
+					border-color: #006799;
+					box-shadow: inset 0 2px 0 #006799;
+					vertical-align: top;
+					color: #fff;
+					text-decoration: none;
+					text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
+					float: right;
+					margin-right: 3px !important;
+					font-size: 20px !important;
+				}
+
 				.sd-shortcode-right-wrap {
 					float: right;
 					width: 35%;
+				}
+
+				#sd-shortcode-output {
+					background: rgba(255, 255, 255, .5);
+					border-color: rgba(222, 222, 222, .75);
+					box-shadow: inset 0 1px 2px rgba(0, 0, 0, .04);
+					color: rgba(51, 51, 51, .5);
+					overflow: auto;
+					padding: 2px 6px;
+					line-height: 1.4;
+					resize: vertical;
 				}
 
 				#sd-shortcode-output {
@@ -191,8 +407,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					width: 100%;
 				}
 			</style>
+			<?php
+			if ( class_exists( 'SiteOrigin_Panels' ) ) {
+				echo "<script>" . self::siteorigin_js() . "</script>";
+			}
+			?>
 			<script>
-
 				<?php
 				if(! empty( $insert_shortcode_function )){
 					echo $insert_shortcode_function;
@@ -204,21 +424,51 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				 * @since 1.0.0
 				 */
 				?>
-				function sd_insert_shortcode() {
+				function sd_insert_shortcode($editor_id) {
 					$shortcode = jQuery('#sd-shortcode-output').val();
 					if ($shortcode) {
-						console.log(jQuery("#wp-content-editor-container textarea").attr("aria-hidden"));
-						if (tinyMCE && tinyMCE.activeEditor && jQuery("#wp-content-editor-container textarea").attr("aria-hidden") == "true") {
+
+						if (!$editor_id) {
+							$editor_id = "<?php if ( isset( $_REQUEST['et_fb'] ) ) {
+								echo "#main_content_content_vb_tiny_mce";
+							} else {
+								echo "#wp-content-editor-container textarea";
+							} ?>";
+						}
+
+						if (tinyMCE && tinyMCE.activeEditor && jQuery($editor_id).attr("aria-hidden") == "true") {
 							tinyMCE.execCommand('mceInsertContent', false, $shortcode);
 						} else {
-							var $txt = jQuery("#wp-content-editor-container textarea");
+							var $txt = jQuery($editor_id);
 							var caretPos = $txt[0].selectionStart;
 							var textAreaTxt = $txt.val();
 							var txtToAdd = $shortcode;
-							$txt.val(textAreaTxt.substring(0, caretPos) + txtToAdd + textAreaTxt.substring(caretPos));
+							var textareaValue = textAreaTxt.substring(0, caretPos) + txtToAdd + textAreaTxt.substring(caretPos);
+							$txt.val(textareaValue).change().keydown().blur().keyup().keypress();
+
+							// set Divi react input value
+							var input = document.getElementById("main_content_content_vb_tiny_mce");
+							if (input) {
+								sd_setNativeValue(input, textareaValue);
+							}
+
 						}
 						tb_remove();
 					}
+				}
+
+				function sd_setNativeValue(element, value) {
+					let lastValue = element.value;
+					element.value = value;
+					let event = new Event("input", {target: element, bubbles: true});
+					// React 15
+					event.simulated = true;
+					// React 16
+					let tracker = element._valueTracker;
+					if (tracker) {
+						tracker.setValue(lastValue);
+					}
+					element.dispatchEvent(event);
 				}
 				<?php }?>
 
@@ -249,8 +499,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							'_ajax_nonce': '<?php echo wp_create_nonce( 'super_duper_output_shortcode' );?>'
 						};
 
+						if (typeof ajaxurl === 'undefined') {
+							var ajaxurl = "<?php echo admin_url( 'admin-ajax.php' );?>";
+						}
+
 						jQuery.post(ajaxurl, data, function (response) {
-							console.log(response);
 							jQuery('.sd-shortcode-settings').html(response);
 
 							jQuery('#' + $short_code).on('change', 'select', function () {
@@ -264,7 +517,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							sd_build_shortcode($short_code);
 
 							// resize the window to fit
-							jQuery('#TB_ajaxContent').css('width', 'auto').css('height', 'calc(100% - 46px)');
+							setTimeout(function () {
+								jQuery('#TB_ajaxContent').css('width', 'auto').css('height', '75vh');
+							}, 200);
+
 
 							return response;
 						});
@@ -331,9 +587,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					$output = $output + "]";
 					jQuery('#sd-shortcode-output').html($output);
 				}
+
 			</script>
+
 			<?php
-			$shortcode_insert_button_once = true;
 		}
 
 		public function widget_css() {
@@ -364,6 +621,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			/*
 			 * We only add the <script> tags for code highlighting, so we strip them from the output.
 			 */
+
 			return str_replace( array(
 				'<style>',
 				'</style>'
@@ -432,7 +690,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						jQuery($this).data('sd-widget-enabled', true);
 					}
 
-					var $button = '<button class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><i class="fas fa-sliders-h" aria-hidden="true"></i></button>';
+					var $button = '<button title="<?php _e( 'Advanced Settings' );?>" class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><i class="fas fa-sliders-h" aria-hidden="true"></i></button>';
 					var form = jQuery($this).parents('' + $selector + '');
 
 					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length == 0) {
@@ -532,6 +790,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			/*
 			 * We only add the <script> tags for code highlighting, so we strip them from the output.
 			 */
+
 			return str_replace( array(
 				'<script>',
 				'</script>'
@@ -663,7 +922,23 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$output .= $main_content;
 			}
 
+			// if preview show a placeholder if empty
+			if ( $this->is_preview() && $output == '' ) {
+				$output = $this->preview_placeholder_text( "[{" . $this->base_id . "}]" );
+			}
+
 			return $output;
+		}
+
+		/**
+		 * Placeholder text to show if output is empty and we are on a preview/builder page.
+		 *
+		 * @param string $name
+		 *
+		 * @return string
+		 */
+		public function preview_placeholder_text( $name = '' ) {
+			return "<div style='background:#0185ba33;padding: 10px;border: 4px #ccc dashed;'>" . sprintf( __( 'Placeholder for: %s' ), $name ) . "</div>";
 		}
 
 		/**
@@ -763,6 +1038,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function register_block() {
 			wp_add_inline_script( 'wp-blocks', $this->block() );
+			if ( class_exists( 'SiteOrigin_Panels' ) ) {
+
+				wp_add_inline_script( 'wp-blocks', $this->siteorigin_js() );
+
+			}
 		}
 
 		/**
@@ -937,7 +1217,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 										// if the content is empty then we place some placeholder text
 										if (env == '') {
-											env = "<div style='background:#0185ba33;padding: 10px;'>" + "<?php _e( 'Placeholder for: ' );?>" + props.name + "</div>";
+											env = "<div style='background:#0185ba33;padding: 10px;border: 4px #ccc dashed;'>" + "<?php _e( 'Placeholder for: ' );?>" + props.name + "</div>";
 										}
 
 										props.setAttributes({content: env});
@@ -1320,6 +1600,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					echo ! empty( $this->options['widget_ops']['classname'] ) ? "</span>" : '';
 				}
 				echo $after_widget;
+			} elseif ( $this->is_preview() && $output == '' ) {// if preview show a placeholder if empty
+				$output = $this->preview_placeholder_text( "{{" . $this->base_id . "}}" );
+				echo $output;
 			}
 		}
 
@@ -1351,6 +1634,72 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			return $result;
+		}
+
+		/**
+		 * Tests if the current output is inside a Divi preview.
+		 *
+		 * @since 1.0.6
+		 * @return bool
+		 */
+		public function is_divi_preview() {
+			$result = false;
+			if ( isset( $_REQUEST['et_fb'] ) || isset( $_REQUEST['et_pb_preview'] ) || ( is_admin() && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor' ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Tests if the current output is inside a Beaver builder preview.
+		 *
+		 * @since 1.0.6
+		 * @return bool
+		 */
+		public function is_beaver_preview() {
+			$result = false;
+			if ( isset( $_REQUEST['fl_builder'] ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Tests if the current output is inside a siteorigin builder preview.
+		 *
+		 * @since 1.0.6
+		 * @return bool
+		 */
+		public function is_siteorigin_preview() {
+			$result = false;
+			if ( !empty( $_REQUEST['siteorigin_panels_live_editor'] )) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * General function to check if we are in a preview situation.
+		 *
+		 * @since 1.0.6
+		 * @return bool
+		 */
+		public function is_preview() {
+			$preview = false;
+			if ( $this->is_divi_preview() ) {
+				$preview = true;
+			} elseif ( $this->is_elementor_preview() ) {
+				$preview = true;
+			} elseif ( $this->is_beaver_preview() ) {
+				$preview = true;
+			} elseif ( $this->is_siteorigin_preview() ) {
+				$preview = true;
+			}
+
+			return $preview;
 		}
 
 		/**

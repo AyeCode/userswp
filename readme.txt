@@ -124,6 +124,7 @@ No questions so far, but don't hesitate to ask!
 * Elementor builder error page could not loaded while edit some UWP pages - FIXED
 * Convert shortcodes to widgets - CHANGED
 * Filter WP default register URL with UWP registration page URL - CHANGED
+* Super Duper updated to v1.0.6 - CHANGED
 
 = 1.0.21 =
 * Update users meta from WP user data in background instead of on activation - FIXED
