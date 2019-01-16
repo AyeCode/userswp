@@ -20,7 +20,7 @@ class UsersWP {
     protected $version;
     
     protected $profile;
-    protected $forms;
+    public $forms;
     protected $i18n;
     protected $notices;
     protected $templates;

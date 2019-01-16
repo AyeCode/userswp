@@ -153,6 +153,39 @@ class UsersWP_Forms {
 
     }
 
+    public function output_dashboard_links($options){
+        if(!empty($options)){
+            echo "<select onchange='window.location = jQuery(this).val();'>";
+            $this->output_options($options);
+            echo "<select>";
+        }
+    }
+
+    public function output_options($options){
+        if(!empty($options)){
+            foreach($options as $key => $link){
+
+                if(!isset($link['text']) && isset($link[0]) && is_array($link[0])){
+                        $this->output_options($link);
+                }else{
+                    if(!empty($link['optgroup']) && $link['optgroup']=='open'){
+                        echo "<optgroup label='".esc_attr($link['text'])."'>";
+                    }elseif(!empty($link['optgroup']) && $link['optgroup']=='close'){
+                        echo "</optgroup>";
+                    }elseif(!empty($link['text'])){
+                        $disabled  = !empty($link['disabled']) ? 'disabled' : '';
+                        $selected  = !empty($link['selected']) ? 'selected' : '';
+                        $value  = !empty($link['url']) ? esc_url($link['url']) : '';
+                        $display_none = !empty($link['display_none']) ? 'style="display:none;"' : '';
+                        echo "<option $disabled $selected value='$value' $display_none>";
+                        echo esc_attr($link['text']);
+                        echo "</option>";
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Displays UsersWP notices in forms.
      *

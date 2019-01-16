@@ -51,6 +51,10 @@ class UsersWP_Templates {
             case 'users':
                 return $this->uwp_generic_locate_template('users');
                 break;
+            
+            case 'dashboard':
+                return $this->uwp_generic_locate_template('dashboard');
+                break;
         }
 
         return apply_filters('uwp_locate_template', false, $template);

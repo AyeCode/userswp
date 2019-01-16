@@ -528,7 +528,7 @@ class UsersWP_Pages {
             }
         }
 
-        return $link;
+        return trailingslashit( $link );
     }
 
 
