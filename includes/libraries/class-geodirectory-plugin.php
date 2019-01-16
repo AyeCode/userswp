@@ -304,17 +304,33 @@ class UsersWP_GeoDirectory_Plugin {
     }
     
     public function get_listings_count($post_type, $user_id = 0) {
-        global $wpdb;
+        global $wpdb, $sitepress, $wpml_query_filter;
         if (empty($user_id)) {
             return 0;
         }
 
-        $post_status = is_super_admin() ? " OR " . $wpdb->posts . ".post_status = 'private'" : '';
+        $post_status = is_super_admin() ? " OR p.post_status = 'private'" : '';
         if ($user_id && $user_id == get_current_user_id()) {
-            $post_status .= " OR " . $wpdb->posts . ".post_status = 'draft' OR " . $wpdb->posts . ".post_status = 'private' OR " . $wpdb->posts . ".post_status = 'pending' OR " . $wpdb->posts . ".post_status = 'gd-closed' OR " . $wpdb->posts . ".post_status = 'gd-expired'";
+            $post_status .= " OR p.post_status = 'draft' OR p.post_status = 'private' OR p.post_status = 'pending' OR p.post_status = 'gd-closed' OR p.post_status = 'gd-expired'";
         }
 
-        $count = (int)$wpdb->get_var("SELECT count( ID ) FROM " . $wpdb->prefix . "posts WHERE post_author=" . (int)$user_id . " AND post_type='" . $post_type . "' AND ( post_status = 'publish' " . $post_status . " )");
+		$join = '';
+		$where = '';
+		if ( uwp_is_wpml() ) {
+			if ( ! empty( $wpml_query_filter ) && $sitepress->is_translated_post_type( $post_type ) ) {
+				$wpml_join = $wpml_query_filter->filter_single_type_join( '', $post_type );
+				$wpml_join = str_replace( " {$wpdb->posts}.", " p.", $wpml_join );
+				$join .= $wpml_join;
+	
+				$wpml_where = $wpml_query_filter->filter_single_type_where( '', $post_type );
+				$wpml_where = str_replace( array( " {$wpdb->posts} p", " p." ), array( " {$wpdb->posts} wpml_p", " wpml_p." ), $wpml_where );
+				$wpml_where = str_replace( " {$wpdb->posts}.", " p.", $wpml_where );
+
+				$where .= $wpml_where;
+			}
+		}
+
+        $count = (int)$wpdb->get_var("SELECT count( p.ID ) FROM " . $wpdb->prefix . "posts AS p {$join} WHERE p.post_author=" . (int)$user_id . " AND p.post_type='" . $post_type . "' AND ( p.post_status = 'publish' " . $post_status . " ) {$where}");
 
         return apply_filters('geodir_uwp_count_total', $count, $user_id);
     }
@@ -545,8 +561,7 @@ class UsersWP_GeoDirectory_Plugin {
                 }
 
                 if ($type == 'listings') {
-                    $all_count = geodir_user_post_listing_count($user->ID, true);
-                    $count = $all_count[$post_type_id];
+                    $count = $this->get_listings_count($post_type_id, $user->ID);
                 } elseif ($type == 'reviews') {
                     $count = $this->geodir_get_reviews_by_user_id($post_type_id, $user->ID, true);
                 } elseif ($type == 'favorites') {

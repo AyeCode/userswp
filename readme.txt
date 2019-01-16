@@ -125,6 +125,7 @@ No questions so far, but don't hesitate to ask!
 * Convert shortcodes to widgets - CHANGED
 * Filter WP default register URL with UWP registration page URL - CHANGED
 * Super Duper updated to v1.0.6 - CHANGED
+* Profile page listings tab shows incorrect count when WPML installed - FIXED
 
 = 1.0.21 =
 * Update users meta from WP user data in background instead of on activation - FIXED
