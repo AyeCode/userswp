@@ -4,7 +4,7 @@ Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.5
 Tested up to: 5.0
-Stable tag: 1.0.20
+Stable tag: 1.0.21
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -119,6 +119,13 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.22 =
+* Delete UWP pages on uninstall - FIXED
+* Elementor builder error page could not loaded while edit some UWP pages - FIXED
+* Convert shortcodes to widgets - CHANGED
+* Filter WP default register URL with UWP registration page URL - CHANGED
+* Super Duper updated to v1.0.6 - CHANGED
+
 = 1.0.21 =
 * Update users meta from WP user data in background instead of on activation - FIXED
 * Follow redirect param for the links on the login and register forms - FIXED
@@ -131,6 +138,8 @@ No questions so far, but don't hesitate to ask!
 * Improved Import Export functionality - CHANGED
 * Removed Read more link from profile tab items - CHANGED
 * Moved actions after summary in profile tab items - CHANGED
+* Use the new listing status for listings tab and count - CHANGED
+* Allow to change per page limit for number of users to export csv - CHANGED
 
 = 1.0.20 =
 * Compatibility with GDV2 - ADDED

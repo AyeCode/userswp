@@ -168,6 +168,10 @@ class UsersWP_Validation {
                             $sanitized_value = sanitize_text_field($value);
                             break;
 
+                        case 'textarea':
+                            $sanitized_value = sanitize_textarea_field($value);
+                            break;
+
                         case 'email':
                             $sanitized_value = sanitize_email($value);
                             break;

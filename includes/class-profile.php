@@ -1267,6 +1267,11 @@ class UsersWP_Profile {
      * @return      void
      */
     public function uwp_redirect_author_page() {
+        
+        if(uwp_is_page_builder()){
+            return;
+        }
+
         if ( is_author() && apply_filters( 'uwp_check_redirect_author_page', true ) ) {
             $id = get_query_var( 'author' );
             $link = uwp_build_profile_tab_url( $id );

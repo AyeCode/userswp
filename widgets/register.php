@@ -1,12 +1,13 @@
 <?php
-add_action('widgets_init', 'uwp_init_register_widget');
-
-function uwp_init_register_widget() {
-
-    register_widget("UWP_Register_Widget");
-
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
 }
 
+/**
+ * UsersWP register widget.
+ *
+ * @since 1.0.0
+ */
 class UWP_Register_Widget extends WP_Super_Duper {
 
     public function __construct() {
@@ -25,8 +26,8 @@ class UWP_Register_Widget extends WP_Super_Duper {
             ),
             'arguments'     => array(
                 'title'  => array(
-                    'title'       => __( 'Register widget title', 'userswp' ),
-                    'desc'        => __( 'Enter register widget title.', 'userswp' ),
+                    'title'       => __( 'Widget title', 'userswp' ),
+                    'desc'        => __( 'Enter widget title.', 'userswp' ),
                     'type'        => 'text',
                     'desc_tip'    => true,
                     'default'     => '',
@@ -42,7 +43,7 @@ class UWP_Register_Widget extends WP_Super_Duper {
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
         if (is_user_logged_in()) {
-            return;
+            return false;
         }
 
         ob_start();

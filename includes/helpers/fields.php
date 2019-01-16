@@ -30,6 +30,14 @@ function uwp_settings_general_register_fields() {
             'placeholder' => __( 'Select a page', 'userswp' ),
             'class' => 'uwp_label_block',
         ),
+        'wp_register_redirect' => array(
+            'id'   => 'wp_register_redirect',
+            'name' => __( 'Disable WP default register URL redirect?', 'userswp' ),
+            'desc' => 'Disable filtering WP default register URL with UsersWP register page URL.',
+            'type' => 'checkbox',
+            'std'  => '0',
+            'class' => 'uwp_label_inline',
+        ),
         'register_terms_page' => array(
             'id' => 'register_terms_page',
             'name' => __( 'Register TOS Page', 'userswp' ),

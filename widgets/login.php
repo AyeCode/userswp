@@ -1,12 +1,14 @@
 <?php
 
-add_action('widgets_init', 'uwp_init_login_widget');
-
-function uwp_init_login_widget() {
-
-    register_widget("UWP_Login_Widget");
-
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
 }
+
+/**
+ * UsersWP forgot password widget.
+ *
+ * @since 1.0.22
+ */
 
 class UWP_Login_Widget extends WP_Super_Duper {
 
@@ -26,8 +28,8 @@ class UWP_Login_Widget extends WP_Super_Duper {
             ),
             'arguments'     => array(
                 'title'  => array(
-                    'title'       => __( 'Login widget title', 'userswp' ),
-                    'desc'        => __( 'Enter login widget title', 'userswp' ),
+                    'title'       => __( 'Widget title', 'userswp' ),
+                    'desc'        => __( 'Enter widget title', 'userswp' ),
                     'type'        => 'text',
                     'desc_tip'    => true,
                     'default'     => '',
