@@ -88,13 +88,31 @@
   }
 
   .uwp-forgotpsw {
-    float: right;
+    //float: right;
+  }
+
+  .uwp-register-now{
+    //border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+  }
+
+  .uwp-login-links{
+    .uwp-logout-link{
+      text-align: right;
+    }
+  }
+
+  .uwp-dashboard-links{
+      select{
+        width: 100%;
+        box-sizing: border-box;
+      }
   }
 
   .uwp-register-now, .uwp-login-now {
-    display: block;
-    margin: 30px 0 0;
-    text-align: center
+    //display: block;
+    //margin: 30px 0 0;
+    //text-align: center
   }
   .uwp_input_fieldset {
     margin: 0 0 10px;

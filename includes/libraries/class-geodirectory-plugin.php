@@ -46,6 +46,7 @@ class UsersWP_GeoDirectory_Plugin {
             add_action( 'uwp_profile_gd_reviews_subtab_content', array( $this, 'gd_get_reviews' ), 10, 2 );
             add_action( 'uwp_profile_gd_favorites_subtab_content', array( $this, 'gd_get_favorites' ), 10, 2 );
             add_action( 'geodir_after_edit_post_link_on_listing', array( $this, 'geodir_add_post_status_author_page' ), 11 );
+            add_action( 'uwp_dashboard_links', array( $this, 'dashboard_output' ), 10, 2 );
         }
         add_filter( 'geodir_login_url', array( $this, 'get_gd_login_url' ), 10, 2 );
         add_action( 'wp', array( $this, 'geodir_uwp_author_redirect' ) );
@@ -56,8 +57,111 @@ class UsersWP_GeoDirectory_Plugin {
         add_action( 'login_form', array( $this, 'gd_login_inject_nonce' ) );
         add_filter( 'uwp_check_redirect_author_page', array( $this, 'check_redirect_author_page' ), 10, 1 );
         add_filter( 'uwp_use_author_page_content', array( $this, 'skip_uwp_author_page' ), 10, 1 );
+        add_filter( 'geodir_dashboard_link_favorite_listing', array( $this, 'dashboard_favorite_links'),10, 3);
+        add_filter( 'geodir_dashboard_link_my_listing', array( $this, 'dashboard_listing_links'),10, 3);
 
         do_action( 'uwp_gd_setup_actions', $this );
+    }
+
+    /**
+     * Change the GD listing links to point to the new profile page.
+     *
+     * @param $link
+     * @param $post_type
+     * @param $user_id
+     *
+     * @return string
+     */
+    public function dashboard_listing_links($link, $post_type, $user_id ){
+        $gd_post_types = geodir_get_posttypes('array');
+        $link = uwp_build_profile_tab_url( $user_id, 'listings', $gd_post_types[ $post_type ]['has_archive'] );
+        return $link;
+    }
+
+    /**
+     * Change the GD fav links to point to the new profile page.
+     *
+     * @param $link
+     * @param $post_type
+     * @param $user_id
+     *
+     * @return string
+     */
+    public function dashboard_favorite_links($link, $post_type, $user_id ){
+        $gd_post_types = geodir_get_posttypes('array');
+        $link = uwp_build_profile_tab_url( $user_id, 'favorites', $gd_post_types[ $post_type ]['has_archive'] );
+        return $link;
+    }
+
+    /**
+     * Add GD quick links to the logged in Dashboard.
+     * 
+     * @param $args
+     */
+    public function dashboard_output($links, $args = array()){
+
+        // check its not disabled
+        if(empty($args['disable_gd'])){
+            $user_id = get_current_user_id();
+            // Add listing links
+            $add_links = GeoDir_User::show_add_listings( 'array' );
+            if(!empty($add_links)){
+                $links['gd_add'] = array();
+                $links['gd_add'][] = array(
+                    'optgroup' => 'open',
+                    'text' => defined('ADD_LISTING_TEXT') ? ADD_LISTING_TEXT : __('Add Listing','userswp')
+                );
+                foreach($add_links as $add_link){
+                    $links['gd_add'][] = array(
+                        'url' => $add_link['url'],
+                        'text' => $add_link['text']
+                    );
+                }
+                $links['gd_add'][] = array(
+                    'optgroup' => 'close',
+                );
+            }
+
+            // My Favourites in Dashboard
+            $fav_links = GeoDir_User::show_favourites( $user_id, 'array' );
+            if(!empty($fav_links)){
+                $links['gd_favs'] = array();
+                $links['gd_favs'][] = array(
+                    'optgroup' => 'open',
+                    'text' => defined('MY_FAVOURITE_TEXT') ? MY_FAVOURITE_TEXT : __('My Favorites','userswp')
+                );
+                foreach($fav_links as $fav_link){
+                    $links['gd_favs'][] = array(
+                        'url' => $fav_link['url'],
+                        'text' => $fav_link['text']
+                    );
+                }
+                $links['gd_favs'][] = array(
+                    'optgroup' => 'close',
+                );
+            }
+
+            // My Listings
+            $listing_links = GeoDir_User::show_listings($user_id,  'array' );
+            if(!empty($listing_links)){
+                $links['gd_listings'] = array();
+                $links['gd_listings'][] = array(
+                    'optgroup' => 'open',
+                    'text' => defined('MY_LISTINGS_TEXT') ? MY_LISTINGS_TEXT : __('My Listings','userswp')
+                );
+                foreach($listing_links as $listing_link){
+                    $links['gd_listings'][] = array(
+                        'url' => $listing_link['url'],
+                        'text' => $listing_link['text']
+                    );
+                }
+                $links['gd_listings'][] = array(
+                    'optgroup' => 'close',
+                );
+            }
+        }
+        
+        return $links;
     }
 
     private function includes() {

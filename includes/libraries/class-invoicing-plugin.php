@@ -34,9 +34,45 @@ class UsersWP_Invoicing_Plugin {
         } else {
             add_filter( 'uwp_profile_tabs', array( $this, 'add_profile_tabs' ), 10, 3 );
             add_action( 'uwp_profile_invoices_tab_content', array( $this, 'add_profile_invoices_tab_content' ) );
+            add_action( 'uwp_dashboard_links', array( $this, 'dashboard_output' ),10,2 );
+
         }
 
         do_action( 'uwp_wpi_setup_actions', $this );
+    }
+
+    /**
+     * Add GD quick links to the logged in Dashboard.
+     *
+     * @param $args
+     */
+    public function dashboard_output($links, $args){
+
+        // check its not disabled
+        if(empty($args['disable_wpi'])){
+
+            // My invoices
+            //if (in_array('invoices', $allowed_tabs) && (get_current_user_id() == $user->ID)) {
+            $user_id = get_current_user_id();
+                $i_counts = $this->invoice_count($user_id);
+                if($i_counts > 0) {
+                    $links['wpi_invoicing'][] = array(
+                        'optgroup' => 'open',
+                        'text' => esc_attr( __( 'My Invoices', 'userswp' ) )
+                    );
+                    $links['wpi_invoicing'][] = array(
+                        'url' => uwp_build_profile_tab_url( $user_id, 'invoices', '' ),
+                        'text' => esc_attr( __( 'View Invoices', 'userswp' ) )
+                    );
+                    $links['wpi_invoicing'][] = array(
+                        'optgroup' => 'close',
+                    );
+                }
+            //}
+
+        }
+
+        return $links;
     }
 
     private function includes() {
@@ -182,11 +218,13 @@ class UsersWP_Invoicing_Plugin {
                                     if ( !empty( $cart_item ) && !empty( $cart_item['meta']['post_id'] ) && $wpi_item->get_type() == 'package' ) {
                                         $post_id = $cart_item['meta']['post_id'];
                                         $post_ink = get_permalink( $post_id );
-                                        $actions['listing'] = array(
-                                            'url'  => $post_ink,
-                                            'name' => __( 'Listing', 'invoicing' ),
-                                            'class' => 'btn-uwp-listing'
-                                        );
+                                        if($post_ink ){
+                                            $actions['listing'] = array(
+                                                'url'  => $post_ink,
+                                                'name' => __( 'Listing', 'invoicing' ),
+                                                'class' => 'btn-uwp-listing'
+                                            );
+                                        }
                                     }
                                 }
                             }

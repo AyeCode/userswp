@@ -1256,7 +1256,7 @@
   .uwp-forgot .uwp-rf-icon,
   .uwp-account .uwp-lf-icon,
   .uwp-account .uwp-rf-icon {
-    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    background: transparent none repeat scroll 0 0;
     border: 1px solid #ccc;
     border-radius: 50px;
     height: auto;
@@ -1777,18 +1777,19 @@
 .uwp_widgets .uwp-remember-me,
 .uwp_adv_search_form .uwp-remember-me {
   float: left; }
-.uwp_page .uwp-forgotpsw,
-.uwp_widgets .uwp-forgotpsw,
-.uwp_adv_search_form .uwp-forgotpsw {
-  float: right; }
-.uwp_page .uwp-register-now, .uwp_page .uwp-login-now,
+.uwp_page .uwp-register-now,
 .uwp_widgets .uwp-register-now,
-.uwp_widgets .uwp-login-now,
-.uwp_adv_search_form .uwp-register-now,
-.uwp_adv_search_form .uwp-login-now {
-  display: block;
-  margin: 30px 0 0;
-  text-align: center; }
+.uwp_adv_search_form .uwp-register-now {
+  padding-bottom: 5px; }
+.uwp_page .uwp-login-links .uwp-logout-link,
+.uwp_widgets .uwp-login-links .uwp-logout-link,
+.uwp_adv_search_form .uwp-login-links .uwp-logout-link {
+  text-align: right; }
+.uwp_page .uwp-dashboard-links select,
+.uwp_widgets .uwp-dashboard-links select,
+.uwp_adv_search_form .uwp-dashboard-links select {
+  width: 100%;
+  box-sizing: border-box; }
 .uwp_page .uwp_input_fieldset,
 .uwp_widgets .uwp_input_fieldset,
 .uwp_adv_search_form .uwp_input_fieldset {
