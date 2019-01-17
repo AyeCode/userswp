@@ -18,11 +18,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 * @since 1.0.4 is_elementor_preview() method added.
 	 * @since 1.0.5 Block checkbox options are set as true by default even when set as false - FIXED
 	 * @since 1.0.6 Some refactoring for page builders - CHANGED
-	 * @ver 1.0.6
+	 * @since 1.0.7 Some refactoring for page builders - CHANGED
+	 * @ver 1.0.7
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.6";
+		public $version = "1.0.7";
 		public $block_code;
 		public $options;
 		public $base_id;
@@ -78,6 +79,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				add_action( 'media_buttons', array( $this, 'shortcode_insert_button' ) );
 				if ( $this->is_preview() ) {
 					add_action( 'wp_footer', array( $this, 'shortcode_insert_button_script' ) );
+					add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'shortcode_insert_button_script' ) ); // for elementor
 				}
 				add_action( 'wp_ajax_super_duper_get_widget_settings', array( __CLASS__, 'get_widget_settings' ) );
 			}
@@ -429,11 +431,18 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					if ($shortcode) {
 
 						if (!$editor_id) {
-							$editor_id = "<?php if ( isset( $_REQUEST['et_fb'] ) ) {
-								echo "#main_content_content_vb_tiny_mce";
-							} else {
-								echo "#wp-content-editor-container textarea";
-							} ?>";
+
+							<?php
+							if ( isset( $_REQUEST['et_fb'] ) ) {
+								echo '$editor_id = "#main_content_content_vb_tiny_mce";';
+							}elseif ( isset( $_REQUEST['action'] ) &&  $_REQUEST['action']=='elementor' ) {
+								echo '$editor_id = "#elementor-controls .wp-editor-container textarea";';
+							}else{
+								echo '$editor_id = "#wp-content-editor-container textarea";';
+							}
+							?>
+						}else{
+							$editor_id = '#'+$editor_id;
 						}
 
 						if (tinyMCE && tinyMCE.activeEditor && jQuery($editor_id).attr("aria-hidden") == "true") {
@@ -1629,7 +1638,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function is_elementor_preview() {
 			$result = false;
-			if ( isset( $_REQUEST['elementor-preview'] ) || ( is_admin() && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor' ) ) {
+			if ( isset( $_REQUEST['elementor-preview'] ) || ( is_admin() && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor' ) || (isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor_ajax') ) {
 				$result = true;
 			}
 

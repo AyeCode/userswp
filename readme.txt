@@ -4,7 +4,7 @@ Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.5
 Tested up to: 5.0
-Stable tag: 1.0.21
+Stable tag: 1.0.22
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -124,7 +124,7 @@ No questions so far, but don't hesitate to ask!
 * Elementor builder error page could not loaded while edit some UWP pages - FIXED
 * Convert shortcodes to widgets - CHANGED
 * Filter WP default register URL with UWP registration page URL - CHANGED
-* Super Duper updated to v1.0.6 - CHANGED
+* Super Duper updated to v1.0.7 - CHANGED
 * Profile page listings tab shows incorrect count when WPML installed - FIXED
 * Login widget now has option to show logged in dashboard (DEFAULT BEHAVIOUR CHANGED)- ADDED
 
