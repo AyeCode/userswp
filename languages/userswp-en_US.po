@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.0.21\n"
+"Project-Id-Version: UsersWP 1.0.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-21 11:49+0000\n"
-"PO-Revision-Date: 2018-12-21 11:50+0000\n"
+"POT-Creation-Date: 2019-01-17 16:07+0000\n"
+"PO-Revision-Date: 2019-01-17 16:07+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -18,45 +18,45 @@ msgstr ""
 "X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: admin/class-admin.php:114
+#: admin/class-admin.php:95
 msgid "HTML Variable Name must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:115
+#: admin/class-admin.php:96
 msgid "Option Values must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:116
+#: admin/class-admin.php:97
 msgid "Please do not use special character and spaces in HTML Variable Name."
 msgstr ""
 
-#: admin/class-admin.php:117
+#: admin/class-admin.php:98
 msgid "HTML Variable Name should be a unique name."
 msgstr ""
 
-#: admin/class-admin.php:118
+#: admin/class-admin.php:99
 msgid "Are you sure you wish to delete this field?"
 msgstr ""
 
-#: admin/class-admin.php:119
+#: admin/class-admin.php:100
 msgid "This field is required."
 msgstr ""
 
-#: admin/class-admin.php:184
+#: admin/class-admin.php:165
 msgid "UsersWP Settings"
 msgstr ""
 
-#: admin/class-admin.php:185 admin/settings/class-settings.php:613
+#: admin/class-admin.php:166 admin/settings/class-settings.php:613
 #: includes/class-uwp-privacy.php:17
 msgid "UsersWP"
 msgstr ""
 
-#: admin/class-admin.php:196 admin/class-admin.php:197
+#: admin/class-admin.php:177 admin/class-admin.php:178
 #: includes/helpers/tabs.php:212
 msgid "Form Builder"
 msgstr ""
 
-#: admin/class-admin.php:205 admin/class-admin.php:206
+#: admin/class-admin.php:186 admin/class-admin.php:187
 #: includes/helpers/tabs.php:171
 msgid "Notifications"
 msgstr ""
@@ -541,8 +541,8 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:1031
 #: admin/settings/class-formbuilder.php:2344
-#: includes/libraries/class-geodirectory-plugin.php:741
-#: includes/libraries/class-geodirectory-plugin.php:971
+#: includes/libraries/class-geodirectory-plugin.php:860
+#: includes/libraries/class-geodirectory-plugin.php:1090
 msgid "Delete"
 msgstr ""
 
@@ -807,7 +807,7 @@ msgid "Shortcodes"
 msgstr ""
 
 #: admin/settings/class-settings.php:114
-#: includes/libraries/class-geodirectory-plugin.php:158
+#: includes/libraries/class-geodirectory-plugin.php:262
 msgid "Info"
 msgstr ""
 
@@ -984,9 +984,9 @@ msgstr ""
 #: admin/settings/class-settings.php:433 admin/settings/class-settings.php:443
 #: admin/settings/class-settings.php:453 admin/settings/class-settings.php:463
 #: admin/settings/class-settings.php:473 admin/settings/class-settings.php:483
-#: includes/helpers/fields.php:30 includes/helpers/fields.php:40
-#: includes/helpers/fields.php:79 includes/helpers/fields.php:125
-#: includes/helpers/fields.php:149
+#: includes/helpers/fields.php:30 includes/helpers/fields.php:48
+#: includes/helpers/fields.php:87 includes/helpers/fields.php:133
+#: includes/helpers/fields.php:157
 msgid "Select a page"
 msgstr ""
 
@@ -1271,7 +1271,7 @@ msgstr ""
 msgid "Comments"
 msgstr ""
 
-#: admin/settings/class-settings.php:846 includes/class-profile.php:1532
+#: admin/settings/class-settings.php:846 includes/class-profile.php:1537
 msgid "List View"
 msgstr ""
 
@@ -1354,7 +1354,7 @@ msgid ""
 msgstr ""
 
 #: includes/class-activator.php:358 includes/class-activator.php:636
-#: includes/libraries/class-geodirectory-plugin.php:1144
+#: includes/libraries/class-geodirectory-plugin.php:1263
 msgid "Username"
 msgstr ""
 
@@ -1380,7 +1380,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:531 includes/class-activator.php:573
-#: includes/class-forms.php:2517
+#: includes/class-forms.php:2550
 msgid "Confirm Password"
 msgstr ""
 
@@ -1575,7 +1575,7 @@ msgstr ""
 msgid "Banner cropped successfully."
 msgstr ""
 
-#: includes/class-forms.php:197
+#: includes/class-forms.php:230
 #, php-format
 msgid ""
 "We have removed the system generated password warning for you. From this "
@@ -1583,7 +1583,7 @@ msgid ""
 "page, <a href=\"%s\">click here</a>."
 msgstr ""
 
-#: includes/class-forms.php:202
+#: includes/class-forms.php:235
 #, php-format
 msgid ""
 "<strong>Warning</strong>: It seems like you are using a system generated "
@@ -1591,158 +1591,158 @@ msgid ""
 "for you, you can remove this warning by <a href=\"%s\">clicking here</a>."
 msgstr ""
 
-#: includes/class-forms.php:232
+#: includes/class-forms.php:265
 msgid "<strong>ERROR</strong>: User registration is currently not allowed."
 msgstr ""
 
-#: includes/class-forms.php:240
+#: includes/class-forms.php:273
 msgid "<strong>ERROR</strong>: You must accept our terms and conditions."
 msgstr ""
 
-#: includes/class-forms.php:318 includes/class-forms.php:954
+#: includes/class-forms.php:351 includes/class-forms.php:987
 msgid "<strong>Error</strong>: Something went wrong."
 msgstr ""
 
-#: includes/class-forms.php:333 includes/class-forms.php:961
-#: includes/class-forms.php:1067
+#: includes/class-forms.php:366 includes/class-forms.php:994
+#: includes/class-forms.php:1100
 msgid ""
 "<strong>Error</strong>: Something went wrong. Please contact site admin."
 msgstr ""
 
-#: includes/class-forms.php:351 includes/class-forms.php:358
-#: includes/class-forms.php:2383
+#: includes/class-forms.php:384 includes/class-forms.php:391
+#: includes/class-forms.php:2416
 msgid ""
 "<strong>Error</strong>: Something went wrong when sending email. Please "
 "contact site admin."
 msgstr ""
 
-#: includes/class-forms.php:389 includes/class-forms.php:498
+#: includes/class-forms.php:422 includes/class-forms.php:531
 msgid "<strong>Error</strong>: Invalid username or Password."
 msgstr ""
 
-#: includes/class-forms.php:416
+#: includes/class-forms.php:449
 #, php-format
 msgid ""
 "An email has been sent to your registered email address. Please click the "
 "activation link to proceed. %sResend%s."
 msgstr ""
 
-#: includes/class-forms.php:433
+#: includes/class-forms.php:466
 msgid "Your account is under moderation. We will email you once its approved."
 msgstr ""
 
-#: includes/class-forms.php:439
+#: includes/class-forms.php:472
 #, php-format
 msgid ""
 "Account registered successfully. A password has been generated and mailed to "
 "your registered Email ID. Please login %shere%s."
 msgstr ""
 
-#: includes/class-forms.php:441
+#: includes/class-forms.php:474
 #, php-format
 msgid "Account registered successfully. Please login %shere%s"
 msgstr ""
 
-#: includes/class-forms.php:558
+#: includes/class-forms.php:591
 msgid ""
 "<strong>Error</strong>: Your account is not activated yet. Please activate "
 "your account first."
 msgstr ""
 
-#: includes/class-forms.php:716
+#: includes/class-forms.php:749
 msgid "User Information :"
 msgstr ""
 
-#: includes/class-forms.php:717
+#: includes/class-forms.php:750
 msgid "First Name:"
 msgstr ""
 
-#: includes/class-forms.php:718
+#: includes/class-forms.php:751
 msgid "Last Name:"
 msgstr ""
 
-#: includes/class-forms.php:719 includes/class-forms.php:792
+#: includes/class-forms.php:752 includes/class-forms.php:825
 msgid "Username:"
 msgstr ""
 
-#: includes/class-forms.php:720
+#: includes/class-forms.php:753
 msgid "Email:"
 msgstr ""
 
-#: includes/class-forms.php:716 includes/class-forms.php:791
+#: includes/class-forms.php:749 includes/class-forms.php:824
 msgid "<p><b>"
 msgstr ""
 
-#: includes/class-forms.php:751
+#: includes/class-forms.php:784
 msgid "To activate your account, visit the following address:"
 msgstr ""
 
-#: includes/class-forms.php:763
+#: includes/class-forms.php:796
 msgid "Please activate your account :"
 msgstr ""
 
-#: includes/class-forms.php:789
+#: includes/class-forms.php:822
 msgid "Password you entered"
 msgstr ""
 
-#: includes/class-forms.php:791 includes/class-forms.php:828
+#: includes/class-forms.php:824 includes/class-forms.php:861
 msgid "Your login Information :"
 msgstr ""
 
-#: includes/class-forms.php:793
+#: includes/class-forms.php:826
 msgid "Password:"
 msgstr ""
 
-#: includes/class-forms.php:829 includes/class-forms.php:844
+#: includes/class-forms.php:862 includes/class-forms.php:877
 #, php-format
 msgid "Username: %s"
 msgstr ""
 
-#: includes/class-forms.php:830
+#: includes/class-forms.php:863
 #, php-format
 msgid "Password: %s"
 msgstr ""
 
-#: includes/class-forms.php:842
+#: includes/class-forms.php:875
 msgid "You have requested to reset your password for the following account:"
 msgstr ""
 
-#: includes/class-forms.php:845
+#: includes/class-forms.php:878
 msgid "If this was by mistake, just ignore this email and nothing will happen."
 msgstr ""
 
-#: includes/class-forms.php:846
+#: includes/class-forms.php:879
 msgid ""
 "To reset your password, click the following link and follow the instructions."
 msgstr ""
 
-#: includes/class-forms.php:1523
+#: includes/class-forms.php:1556
 msgid "Choose"
 msgstr ""
 
-#: includes/class-forms.php:1934
+#: includes/class-forms.php:1967
 msgid "Username or Email"
 msgstr ""
 
-#: includes/class-forms.php:2112
+#: includes/class-forms.php:2145
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:2348
+#: includes/class-forms.php:2381
 msgid "Search For"
 msgstr ""
 
-#: includes/class-forms.php:2362
+#: includes/class-forms.php:2395
 msgid "Search"
 msgstr ""
 
-#: includes/class-forms.php:2381
+#: includes/class-forms.php:2414
 msgid ""
 "<strong>Error</strong>: Something went wrong when sending email. Please "
 "check your site error log for more details."
 msgstr ""
 
-#: includes/class-forms.php:2572
+#: includes/class-forms.php:2605
 msgid "Confirm Email"
 msgstr ""
 
@@ -1892,7 +1892,8 @@ msgid "register"
 msgstr ""
 
 #: includes/class-pages.php:393 includes/helpers/tabs.php:202
-#: templates/login.php:17
+#: templates/login.php:7 templates/login.php:20 widgets/login.php:44
+#: widgets/login.php:110
 msgid "Login"
 msgstr ""
 
@@ -1982,57 +1983,57 @@ msgstr ""
 msgid "Note: Max upload image size: "
 msgstr ""
 
-#: includes/class-profile.php:1371
+#: includes/class-profile.php:1376
 #, php-format
 msgid "The uploaded file is too small. Minimum image width should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1374
+#: includes/class-profile.php:1379
 #, php-format
 msgid "The uploaded file is too small. Minimum image height should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1412
+#: includes/class-profile.php:1417
 msgid "Invalid request!"
 msgstr ""
 
-#: includes/class-profile.php:1430
+#: includes/class-profile.php:1435
 msgid "No fields available"
 msgstr ""
 
-#: includes/class-profile.php:1533
+#: includes/class-profile.php:1538
 msgid "Grid 2 Col"
 msgstr ""
 
-#: includes/class-profile.php:1534
+#: includes/class-profile.php:1539
 msgid "Grid 3 Col"
 msgstr ""
 
-#: includes/class-profile.php:1535
+#: includes/class-profile.php:1540
 msgid "Grid 4 Col"
 msgstr ""
 
-#: includes/class-profile.php:1536
+#: includes/class-profile.php:1541
 msgid "Grid 5 Col"
 msgstr ""
 
-#: includes/class-profile.php:1545
+#: includes/class-profile.php:1550
 msgid "Sort By:"
 msgstr ""
 
-#: includes/class-profile.php:1546
+#: includes/class-profile.php:1551
 msgid "Newer"
 msgstr ""
 
-#: includes/class-profile.php:1547
+#: includes/class-profile.php:1552
 msgid "Older"
 msgstr ""
 
-#: includes/class-profile.php:1548
+#: includes/class-profile.php:1553
 msgid "A-Z"
 msgstr ""
 
-#: includes/class-profile.php:1549
+#: includes/class-profile.php:1554
 msgid "Z-A"
 msgstr ""
 
@@ -2456,7 +2457,7 @@ msgstr ""
 msgid "Profile Page"
 msgstr ""
 
-#: includes/class-templates.php:409
+#: includes/class-templates.php:455
 msgid "Update Account"
 msgstr ""
 
@@ -2666,52 +2667,56 @@ msgid ""
 msgstr ""
 
 #: includes/helpers/fields.php:35
+msgid "Disable WP default register URL redirect?"
+msgstr ""
+
+#: includes/helpers/fields.php:43
 msgid "Register TOS Page"
 msgstr ""
 
-#: includes/helpers/fields.php:36
+#: includes/helpers/fields.php:44
 msgid ""
 "Terms of Service page. When set \"Accept terms and Conditions\" checkbox "
 "will appear on the register form."
 msgstr ""
 
-#: includes/helpers/fields.php:45
+#: includes/helpers/fields.php:53
 msgid "Enable admin email notification?"
 msgstr ""
 
-#: includes/helpers/fields.php:65
+#: includes/helpers/fields.php:73
 msgid "Last User Page"
 msgstr ""
 
-#: includes/helpers/fields.php:74
+#: includes/helpers/fields.php:82
 msgid "Login Redirect Page"
 msgstr ""
 
-#: includes/helpers/fields.php:75
+#: includes/helpers/fields.php:83
 msgid ""
 "Set the page to redirect the user to after logging in. If no page has been "
 "set WordPress default will be used."
 msgstr ""
 
-#: includes/helpers/fields.php:98
+#: includes/helpers/fields.php:106
 msgid "Redirect wp-login.php?"
 msgstr ""
 
-#: includes/helpers/fields.php:120
+#: includes/helpers/fields.php:128
 msgid "Logout Redirect Page"
 msgstr ""
 
-#: includes/helpers/fields.php:121
+#: includes/helpers/fields.php:129
 msgid ""
 "Set the page to redirect the user to after logging out. If no page has been "
 "set WordPress default will be used."
 msgstr ""
 
-#: includes/helpers/fields.php:144
+#: includes/helpers/fields.php:152
 msgid "Delete Redirect Page"
 msgstr ""
 
-#: includes/helpers/fields.php:145
+#: includes/helpers/fields.php:153
 msgid ""
 "Set the page to redirect the user to after after they delete account. If no "
 "page has been set WordPress default will be used."
@@ -2812,175 +2817,221 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:85
+#: includes/libraries/class-geodirectory-plugin.php:112
+msgid "Add Listing"
+msgstr ""
+
+#: includes/libraries/class-geodirectory-plugin.php:131
+msgid "My Favorites"
+msgstr ""
+
+#: includes/libraries/class-geodirectory-plugin.php:150
+msgid "My Listings"
+msgstr ""
+
+#: includes/libraries/class-geodirectory-plugin.php:189
 msgid "GeoDirectory Settings"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:117
-#: includes/libraries/class-geodirectory-plugin.php:118
-#: includes/libraries/class-geodirectory-plugin.php:137
+#: includes/libraries/class-geodirectory-plugin.php:221
+#: includes/libraries/class-geodirectory-plugin.php:222
+#: includes/libraries/class-geodirectory-plugin.php:241
 msgid "GeoDirectory"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:159
+#: includes/libraries/class-geodirectory-plugin.php:263
 msgid ""
 "You can now add Listings, Reviews and Favorites tabs under UsersWP > Profile "
 "> Choose the tabs to display in Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:166
+#: includes/libraries/class-geodirectory-plugin.php:270
 msgid "CPT listings in Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:167
+#: includes/libraries/class-geodirectory-plugin.php:271
 msgid "Choose the post types to show listings tab in UsersWP Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:172
-#: includes/libraries/class-geodirectory-plugin.php:182
-#: includes/libraries/class-geodirectory-plugin.php:192
+#: includes/libraries/class-geodirectory-plugin.php:276
+#: includes/libraries/class-geodirectory-plugin.php:286
+#: includes/libraries/class-geodirectory-plugin.php:296
 msgid "Select Post Types"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:176
+#: includes/libraries/class-geodirectory-plugin.php:280
 msgid "CPT reviews in Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:177
+#: includes/libraries/class-geodirectory-plugin.php:281
 msgid "Choose the post types to show reviews tab in UsersWP Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:186
+#: includes/libraries/class-geodirectory-plugin.php:290
 msgid "CPT favorites in Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:187
+#: includes/libraries/class-geodirectory-plugin.php:291
 msgid "Choose the post types to show favorites tab in UsersWP Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:196
+#: includes/libraries/class-geodirectory-plugin.php:300
 msgid "Redirect my listing link from GD loginbox to UsersWP profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:197
+#: includes/libraries/class-geodirectory-plugin.php:301
 msgid ""
 "If this option is selected, the my listing link from GD loginbox will "
 "redirect to listings tab of UsersWP profile."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:204
+#: includes/libraries/class-geodirectory-plugin.php:308
 msgid "Redirect favorite link from GD loginbox to UsersWP profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:205
+#: includes/libraries/class-geodirectory-plugin.php:309
 msgid ""
 "If this option is selected, the favorite link from GD loginbox will redirect "
 "to favorites tab of UsersWP profile."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:240
-#: includes/libraries/class-geodirectory-plugin.php:443
+#: includes/libraries/class-geodirectory-plugin.php:344
+#: includes/libraries/class-geodirectory-plugin.php:563
 msgid "Listings"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:241
-#: includes/libraries/class-geodirectory-plugin.php:452
+#: includes/libraries/class-geodirectory-plugin.php:345
+#: includes/libraries/class-geodirectory-plugin.php:572
 msgid "Reviews"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:242
-#: includes/libraries/class-geodirectory-plugin.php:461
+#: includes/libraries/class-geodirectory-plugin.php:346
+#: includes/libraries/class-geodirectory-plugin.php:581
 msgid "Favorites"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:728
-#: includes/libraries/class-geodirectory-plugin.php:958
+#: includes/libraries/class-geodirectory-plugin.php:847
+#: includes/libraries/class-geodirectory-plugin.php:1077
 msgid "Edit Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:733
-#: includes/libraries/class-geodirectory-plugin.php:963
+#: includes/libraries/class-geodirectory-plugin.php:852
+#: includes/libraries/class-geodirectory-plugin.php:1082
 msgid "Edit"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:736
-#: includes/libraries/class-geodirectory-plugin.php:966
+#: includes/libraries/class-geodirectory-plugin.php:855
+#: includes/libraries/class-geodirectory-plugin.php:1085
 msgid "Delete Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:757
-#: includes/libraries/class-geodirectory-plugin.php:835
-#: includes/libraries/class-geodirectory-plugin.php:995
+#: includes/libraries/class-geodirectory-plugin.php:876
+#: includes/libraries/class-geodirectory-plugin.php:954
+#: includes/libraries/class-geodirectory-plugin.php:1114
 #, php-format
 msgid "No %s found."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:988
+#: includes/libraries/class-geodirectory-plugin.php:1107
 #, php-format
 msgid "No %s found"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1117
+#: includes/libraries/class-geodirectory-plugin.php:1236
 msgid "Published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1120
+#: includes/libraries/class-geodirectory-plugin.php:1239
 msgid "Pending"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1123
+#: includes/libraries/class-geodirectory-plugin.php:1242
 msgid "Closed"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1126
+#: includes/libraries/class-geodirectory-plugin.php:1245
 msgid "Expired"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1129
+#: includes/libraries/class-geodirectory-plugin.php:1248
 msgid "Not published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1134
+#: includes/libraries/class-geodirectory-plugin.php:1253
 msgid "Status: "
 msgstr ""
 
 #: includes/libraries/class-invoicing-plugin.php:61
-#: includes/libraries/class-invoicing-plugin.php:84
-#: includes/libraries/class-invoicing-plugin.php:116
+msgid "My Invoices"
+msgstr ""
+
+#: includes/libraries/class-invoicing-plugin.php:65
+msgid "View Invoices"
+msgstr ""
+
+#: includes/libraries/class-invoicing-plugin.php:97
+#: includes/libraries/class-invoicing-plugin.php:120
+#: includes/libraries/class-invoicing-plugin.php:152
 msgid "Invoices"
 msgstr ""
 
-#: includes/libraries/class-invoicing-plugin.php:145
+#: includes/libraries/class-invoicing-plugin.php:181
 msgid "Invoice"
 msgstr ""
 
-#: includes/libraries/class-invoicing-plugin.php:157
+#: includes/libraries/class-invoicing-plugin.php:193
 msgid "Invoice Status: "
 msgstr ""
 
-#: includes/libraries/class-invoicing-plugin.php:157
+#: includes/libraries/class-invoicing-plugin.php:193
 msgid "(r)"
 msgstr ""
 
-#: includes/libraries/class-invoicing-plugin.php:162
+#: includes/libraries/class-invoicing-plugin.php:198
 msgid "Invoice Total: "
 msgstr ""
 
-#: includes/libraries/class-invoicing-plugin.php:172
+#: includes/libraries/class-invoicing-plugin.php:208
 msgid "Pay Now"
 msgstr ""
 
-#: includes/libraries/class-invoicing-plugin.php:187
+#: includes/libraries/class-invoicing-plugin.php:224
 msgid "Listing"
 msgstr ""
 
-#: includes/libraries/class-invoicing-plugin.php:212
+#: includes/libraries/class-invoicing-plugin.php:250
 msgid "No Invoices Found."
 msgstr ""
 
 #: includes/libraries/wp-background-process.php:423
 #, php-format
 msgid "Every %d Minutes"
+msgstr ""
+
+#: templates/dashboard.php:6
+#, php-format
+msgid "Hello, %s"
+msgstr ""
+
+#: templates/dashboard.php:26
+msgid "Select an action"
+msgstr ""
+
+#: templates/dashboard.php:35
+msgid "My Profile"
+msgstr ""
+
+#: templates/dashboard.php:39
+msgid "View Profile"
+msgstr ""
+
+#: templates/dashboard.php:46
+msgid "Edit Profile"
+msgstr ""
+
+#: templates/dashboard.php:67 widgets/login.php:196
+#, php-format
+msgid "<a href=\"%1$s\">Log out</a>"
 msgstr ""
 
 #: templates/forgot.php:12 templates/reset.php:17
@@ -2995,20 +3046,20 @@ msgstr ""
 msgid "Create Account"
 msgstr ""
 
-#: templates/login.php:14
+#: templates/login.php:17
 msgid "Remember Me"
 msgstr ""
 
-#: templates/login.php:19
-msgid "Forgot password?"
-msgstr ""
-
-#: templates/login.php:21
+#: templates/login.php:23
 msgid "Not a member?"
 msgstr ""
 
-#: templates/login.php:21
+#: templates/login.php:23
 msgid "Create account"
+msgstr ""
+
+#: templates/login.php:24
+msgid "Forgot password?"
 msgstr ""
 
 #: templates/register.php:13
@@ -3094,55 +3145,263 @@ msgid ""
 "sources if they are added with `font-awesome` or `fontawesome` in the name."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:141
+#: vendor/ayecode/wp-super-duper/hello-world.php:32
+msgid "Placeholder"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/hello-world.php:41
+msgid "Hello World"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/hello-world.php:51
+msgid "Text after hello:"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/hello-world.php:53
+msgid "This is the text that will appear after `Hello:`."
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/hello-world.php:123
+msgid "Another input:"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/hello-world.php:124
+msgid "This is an input added via filter."
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:25
+msgid ""
+"A Google API key is required to use this block, we recommend installing our "
+"plugin which makes it easy and sets it globally, or you can set a key in the "
+"block settings sidebar: "
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:31
+msgid "API KEY for Google Maps"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:48
+msgid "Placeholderx"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:61
+msgid "Click here, Settings are in the block settings sidebar"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:69
+msgid "Map"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:79
+msgid "Map Type:"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:80
+msgid "Select the map type to use."
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:83
+msgid "Static Image"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:84
+msgid "Place"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:96
+msgid "Location:"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:97
+msgid "Enter the location to show on the map, place, city, zip code or GPS."
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:105
+#: vendor/ayecode/wp-super-duper/map.php:134
+msgid "Width:"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:106
+msgid ""
+"This is the width of the map, for static maps you can only use px values."
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:119
+#: vendor/ayecode/wp-super-duper/map.php:144
+msgid "Height:"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:120
+msgid ""
+"This is the height of the map, for static maps you can only use px values."
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:135
+#, php-format
+msgid "This is the width of the map, you can use % or px here."
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:145
+#: vendor/ayecode/wp-super-duper/map.php:179
+msgid "This is the height of the map, you can use %, px or vh here."
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:154
+msgid "Mapview:"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:155
+msgid "This is the type of map view that will be used by default."
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:157
+msgid "Road Map"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:158
+msgid "Satellite Map"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:168
+msgid "Zoom level:"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:169
+msgid "This is the zoom level of the map, `auto` is recommended."
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/map.php:178
+msgid "Api Key:"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:147
 msgid "Select shortcode"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:157
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:165
 msgid "Insert shortcode"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:159
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:167
 msgid "Copy shortcode"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:172
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:180
 msgid "Add Shortcode"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:940
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:242
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:702
+msgid "Advanced Settings"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:950
+#, php-format
+msgid "Placeholder for: %s"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1229
 msgid "Placeholder for: "
 msgstr ""
 
-#: widgets/login.php:22
+#: widgets/account.php:27
+msgid "UWP > Account"
+msgstr ""
+
+#: widgets/account.php:34 widgets/change.php:34 widgets/forgot.php:34
+#: widgets/login.php:31 widgets/profile.php:34 widgets/register.php:29
+#: widgets/reset.php:34 widgets/users.php:34
+msgid "Widget title"
+msgstr ""
+
+#: widgets/account.php:35 widgets/change.php:35 widgets/forgot.php:35
+#: widgets/profile.php:35 widgets/register.php:30 widgets/reset.php:35
+#: widgets/users.php:35
+msgid "Enter widget title."
+msgstr ""
+
+#: widgets/change.php:27
+msgid "UWP > Change"
+msgstr ""
+
+#: widgets/forgot.php:27
+msgid "UWP > Forgot"
+msgstr ""
+
+#: widgets/login.php:24
 msgid "UWP > Login"
 msgstr ""
 
-#: widgets/login.php:29
-msgid "Login widget title"
+#: widgets/login.php:32
+msgid "Enter widget title"
 msgstr ""
 
-#: widgets/login.php:30
-msgid "Enter login widget title"
+#: widgets/login.php:39
+msgid "Login text"
 msgstr ""
 
-#: widgets/login.php:59
+#: widgets/login.php:40
+msgid "Enter the login text"
+msgstr ""
+
+#: widgets/login.php:48
+msgid "Form padding"
+msgstr ""
+
+#: widgets/login.php:49
+msgid ""
+"Enter the px value for the form padding, default is 40, 10 looks better in "
+"sidbars."
+msgstr ""
+
+#: widgets/login.php:53
+msgid "default 40, 10 is better in sidebars"
+msgstr ""
+
+#: widgets/login.php:57
+msgid "Logged in show"
+msgstr ""
+
+#: widgets/login.php:58
+msgid "Wha to show when logged in."
+msgstr ""
+
+#: widgets/login.php:61
+msgid "User Dashboard (default)"
+msgstr ""
+
+#: widgets/login.php:62
+msgid "Simple username and logout link"
+msgstr ""
+
+#: widgets/login.php:63
+msgid "Nothing"
+msgstr ""
+
+#: widgets/login.php:79
+msgid "Disable GeoDirectory links from the user dashboard."
+msgstr ""
+
+#: widgets/login.php:92
+msgid "Disable WP Invoicing links from the user dashboard."
+msgstr ""
+
+#: widgets/login.php:190
 msgid "Logged in as "
 msgstr ""
 
-#: widgets/login.php:65
-#, php-format
-msgid "<a href=\"%1$s\">Log out</a>"
+#: widgets/profile.php:27
+msgid "UWP > Profile"
 msgstr ""
 
-#: widgets/register.php:21
+#: widgets/register.php:22
 msgid "UWP > Register"
 msgstr ""
 
-#: widgets/register.php:28
-msgid "Register widget title"
+#: widgets/reset.php:27
+msgid "UWP > Reset"
 msgstr ""
 
-#: widgets/register.php:29
-msgid "Enter register widget title."
+#: widgets/users.php:27
+msgid "UWP > Users"
 msgstr ""
