@@ -119,6 +119,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.23 =
+* UWP Login widget breaks page for logged in users - FIXED
+
 = 1.0.22 =
 * Delete UWP pages on uninstall - FIXED
 * Elementor builder error page could not loaded while edit some UWP pages - FIXED

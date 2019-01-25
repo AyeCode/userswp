@@ -101,7 +101,7 @@ class UsersWP_GeoDirectory_Plugin {
     public function dashboard_output($links, $args = array()){
 
         // check its not disabled
-        if(empty($args['disable_gd'])){
+        if(empty($args['disable_gd']) && class_exists( 'GeoDir_User' ) ){
             $user_id = get_current_user_id();
             // Add listing links
             $add_links = GeoDir_User::show_add_listings( 'array' );
