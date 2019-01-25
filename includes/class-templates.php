@@ -275,6 +275,33 @@ class UsersWP_Templates {
     }
 
     /**
+     * Redirects wp-login.php?action=register to UsersWP registration page.
+     *
+     * @since       1.0.0
+     * @package     userswp
+     * @return      void
+     */
+    public function wp_register_redirect() {
+
+        global $pagenow;
+        if ( 'wp-login.php' == $pagenow && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'register' ) {
+            $reg_page_id  = uwp_get_page_id( 'register_page', false );
+            $block_wp_reg = uwp_get_option( 'wp_register_redirect' );
+            if ( $reg_page_id && $block_wp_reg == '1' ) {
+
+                $redirect = isset( $_REQUEST['redirect_to'] ) ? esc_url( $_REQUEST['redirect_to'] ) : '';
+                $redirect_to = get_permalink( $reg_page_id );
+
+                if ( $redirect ) {
+                    $redirect_to = add_query_arg( 'redirect_to', $redirect, $redirect_to );
+                }
+                wp_redirect( $redirect_to );
+                exit();
+            }
+        }
+    }
+
+    /**
      * Changes the login url to the UWP login page.
      *
      * @param $login_url string The URL for login.
@@ -317,10 +344,10 @@ class UsersWP_Templates {
     public function wp_register_url($register_url) {
         $register_page_id = uwp_get_page_id('register_page', false);
         $redirect_page_id = uwp_get_option('register_redirect_to', -1);
-        $redirect_disabled = uwp_get_option('wp_register_redirect');
+        $redirect_registration = uwp_get_option('wp_register_redirect');
 
         $redirect = isset($_REQUEST['redirect_to']) ? esc_url($_REQUEST['redirect_to']) : '';
-        if ($register_page_id && 1 != $redirect_disabled) {
+        if ($register_page_id && $redirect_registration) {
             $register_page = get_permalink($register_page_id);
             if($register_url && isset($redirect) && !empty($redirect)){
                 $register_url = add_query_arg( 'redirect_to', $redirect, $register_page );
