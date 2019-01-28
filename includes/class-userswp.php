@@ -269,6 +269,7 @@ class UsersWP {
         add_action( 'uwp_account_form_display', array($instance, 'uwp_account_edit_form_display'), 10, 1 );
         add_action( 'wp_logout', array($instance, 'logout_redirect'));
         add_action( 'init', array($instance, 'wp_login_redirect'));
+        add_action( 'init', array($instance, 'wp_register_redirect'));
         add_action( 'admin_init', array($instance, 'uwp_activation_redirect'));
         // Redirect functions
         add_action( 'template_redirect', array($instance, 'profile_redirect'), 10);

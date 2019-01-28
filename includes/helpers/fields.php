@@ -32,10 +32,10 @@ function uwp_settings_general_register_fields() {
         ),
         'wp_register_redirect' => array(
             'id'   => 'wp_register_redirect',
-            'name' => __( 'Disable WP default register URL redirect?', 'userswp' ),
-            'desc' => 'Disable filtering WP default register URL with UsersWP register page URL.',
+            'name' => __( 'Redirect wp-login.php?action=register', 'userswp' ),
+            'desc' => __( 'When enabled /wp-login.php?action=register page will be redirected to UsersWP register page.', 'userswp' ),
             'type' => 'checkbox',
-            'std'  => '0',
+            'std'  => '1',
             'class' => 'uwp_label_inline',
         ),
         'register_terms_page' => array(
