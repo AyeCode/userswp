@@ -122,6 +122,7 @@ No questions so far, but don't hesitate to ask!
 = 1.0.23 =
 * UWP Login widget breaks page for logged in users - FIXED
 * Default WP registration page not being redirected if set to do so - FIXED
+* Field privacy setting "Let User Decide" is not working - FIXED
 
 = 1.0.22 =
 * Delete UWP pages on uninstall - FIXED

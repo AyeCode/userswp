@@ -232,23 +232,28 @@ class UsersWP_Profile {
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' ORDER BY sort_order ASC");
         $wrap_html = false;
         if ($fields) {
+			$usermeta = isset( $user->ID ) ? uwp_get_usermeta_row( $user->ID ) : array();
+			$privacy = ! empty( $usermeta ) && ! empty( $usermeta->user_privacy ) ? explode( ',', $usermeta->user_privacy ) : array();
+
             foreach ($fields as $field) {
                 $show_in = explode(',',$field->show_in);
                 if (!in_array($show_type, $show_in)) {
                     continue;
                 }
-                if ($field->is_public == '0') {
-                    continue;
-                }
 
-                if ($field->is_public == '2') {
-                    $field_name = $field->htmlvar_name.'_privacy';
-                    $val = uwp_get_usermeta($user->ID, 'user_privacy', false);
-                    $meta_value = explode(',', $val);
-                    if (in_array($field_name, $meta_value)) {
-                        continue;
-                    }
-                }
+                $display = false;
+				if ( $field->is_public == '0' ) {
+					$display = false;
+				} else if ( $field->is_public == '1' ) {
+					$display = true;
+				} else {
+					if ( ! in_array( $field->htmlvar_name . '_privacy', $privacy ) ) {
+						$display = true;
+					}
+				}
+				if ( ! $display ) {
+					continue;
+				}
 
                 $value = $this->uwp_get_field_value($field, $user);
 
