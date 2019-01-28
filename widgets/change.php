@@ -48,7 +48,7 @@ class UWP_Change_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        if (is_user_logged_in()) {
+        if (!is_user_logged_in()) {
             return false;
         }
 
