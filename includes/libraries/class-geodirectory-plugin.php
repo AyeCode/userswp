@@ -159,6 +159,28 @@ class UsersWP_GeoDirectory_Plugin {
                     'optgroup' => 'close',
                 );
             }
+            
+            if(class_exists('GeoDir_Lists_Compatibility')){
+                $listing_links = GeoDir_Lists_Compatibility::geodirectory_dashboard('','array');
+                if(!empty($listing_links)){
+                    $links['gd_lists'] = array();
+                    $links['gd_lists'][] = array(
+                        'optgroup' => 'open',
+                        'text' => defined('MY_LISTS_TEXT') ? MY_LISTS_TEXT : __('My Lists','userswp')
+                    );
+                    foreach($listing_links as $listing_link){
+                        $links['gd_lists'][] = array(
+                            'url' => $listing_link['url'],
+                            'text' => $listing_link['text']
+                        );
+                    }
+                    $links['gd_lists'][] = array(
+                        'optgroup' => 'close',
+                    );
+                }
+            }
+            
+            
         }
         
         return $links;

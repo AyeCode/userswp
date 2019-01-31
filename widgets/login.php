@@ -71,7 +71,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
 
         );
 
-        // add intigrations by default and add option to remove
+        // add integrations by default and add option to remove
 
         // GD
         if(class_exists( 'GeoDirectory' )){

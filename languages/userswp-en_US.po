@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.0.22\n"
+"Project-Id-Version: UsersWP 1.0.23\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-17 16:07+0000\n"
-"PO-Revision-Date: 2019-01-17 16:07+0000\n"
+"POT-Creation-Date: 2019-01-31 11:16+0000\n"
+"PO-Revision-Date: 2019-01-31 11:16+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -541,8 +541,8 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:1031
 #: admin/settings/class-formbuilder.php:2344
-#: includes/libraries/class-geodirectory-plugin.php:860
-#: includes/libraries/class-geodirectory-plugin.php:1090
+#: includes/libraries/class-geodirectory-plugin.php:882
+#: includes/libraries/class-geodirectory-plugin.php:1112
 msgid "Delete"
 msgstr ""
 
@@ -807,7 +807,7 @@ msgid "Shortcodes"
 msgstr ""
 
 #: admin/settings/class-settings.php:114
-#: includes/libraries/class-geodirectory-plugin.php:262
+#: includes/libraries/class-geodirectory-plugin.php:284
 msgid "Info"
 msgstr ""
 
@@ -944,12 +944,12 @@ msgid ""
 "        %s Click here for our official free and premium add-ons %s"
 msgstr ""
 
-#: admin/settings/class-settings.php:269 includes/class-pages.php:394
+#: admin/settings/class-settings.php:269 includes/class-pages.php:397
 #: templates/change.php:12
 msgid "Account"
 msgstr ""
 
-#: admin/settings/class-settings.php:272 includes/class-pages.php:392
+#: admin/settings/class-settings.php:272 includes/class-pages.php:395
 #: includes/helpers/tabs.php:201
 msgid "Register"
 msgstr ""
@@ -1257,21 +1257,21 @@ msgstr ""
 msgid "Settings updated."
 msgstr ""
 
-#: admin/settings/class-settings.php:834 includes/class-profile.php:334
+#: admin/settings/class-settings.php:834 includes/class-profile.php:339
 msgid "More Info"
 msgstr ""
 
-#: admin/settings/class-settings.php:835 includes/class-profile.php:341
-#: includes/class-profile.php:506
+#: admin/settings/class-settings.php:835 includes/class-profile.php:346
+#: includes/class-profile.php:511
 msgid "Posts"
 msgstr ""
 
-#: admin/settings/class-settings.php:836 includes/class-profile.php:348
-#: includes/class-profile.php:527
+#: admin/settings/class-settings.php:836 includes/class-profile.php:353
+#: includes/class-profile.php:532
 msgid "Comments"
 msgstr ""
 
-#: admin/settings/class-settings.php:846 includes/class-profile.php:1537
+#: admin/settings/class-settings.php:846 includes/class-profile.php:1542
 msgid "List View"
 msgstr ""
 
@@ -1354,7 +1354,7 @@ msgid ""
 msgstr ""
 
 #: includes/class-activator.php:358 includes/class-activator.php:636
-#: includes/libraries/class-geodirectory-plugin.php:1263
+#: includes/libraries/class-geodirectory-plugin.php:1285
 msgid "Username"
 msgstr ""
 
@@ -1405,7 +1405,7 @@ msgstr ""
 msgid "The callback function used for the %s setting is missing."
 msgstr ""
 
-#: includes/class-callback.php:330 includes/class-profile.php:1011
+#: includes/class-callback.php:330 includes/class-profile.php:1016
 msgid "Upload"
 msgstr ""
 
@@ -1517,7 +1517,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: includes/class-emails.php:276 includes/class-pages.php:393
+#: includes/class-emails.php:276 includes/class-pages.php:396
 msgid "login"
 msgstr ""
 
@@ -1746,7 +1746,7 @@ msgstr ""
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/class-import-export.php:59 includes/class-pages.php:399
+#: includes/class-import-export.php:59 includes/class-pages.php:402
 #: includes/helpers/tabs.php:205 includes/helpers/tabs.php:217
 msgid "Users"
 msgstr ""
@@ -1883,58 +1883,58 @@ msgstr ""
 msgid "Taking a while? Click here to run it now."
 msgstr ""
 
-#: includes/class-pages.php:292
+#: includes/class-pages.php:295
 msgid "Select a Page"
 msgstr ""
 
-#: includes/class-pages.php:392
+#: includes/class-pages.php:395
 msgid "register"
 msgstr ""
 
-#: includes/class-pages.php:393 includes/helpers/tabs.php:202
+#: includes/class-pages.php:396 includes/helpers/tabs.php:202
 #: templates/login.php:7 templates/login.php:20 widgets/login.php:44
 #: widgets/login.php:110
 msgid "Login"
 msgstr ""
 
-#: includes/class-pages.php:394
+#: includes/class-pages.php:397
 msgid "account"
 msgstr ""
 
-#: includes/class-pages.php:395
+#: includes/class-pages.php:398
 msgid "forgot"
 msgstr ""
 
-#: includes/class-pages.php:395
+#: includes/class-pages.php:398
 msgid "Forgot Password?"
 msgstr ""
 
-#: includes/class-pages.php:396
+#: includes/class-pages.php:399
 msgid "reset"
 msgstr ""
 
-#: includes/class-pages.php:396
+#: includes/class-pages.php:399
 msgid "Reset Password"
 msgstr ""
 
-#: includes/class-pages.php:397
+#: includes/class-pages.php:400
 msgid "change"
 msgstr ""
 
-#: includes/class-pages.php:397 includes/helpers/tabs.php:203
+#: includes/class-pages.php:400 includes/helpers/tabs.php:203
 msgid "Change Password"
 msgstr ""
 
-#: includes/class-pages.php:398
+#: includes/class-pages.php:401
 msgid "profile"
 msgstr ""
 
-#: includes/class-pages.php:398 includes/helpers/tabs.php:204
+#: includes/class-pages.php:401 includes/helpers/tabs.php:204
 #: templates/change.php:12
 msgid "Profile"
 msgstr ""
 
-#: includes/class-pages.php:399
+#: includes/class-pages.php:402
 msgid "users"
 msgstr ""
 
@@ -1946,94 +1946,94 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: includes/class-profile.php:423 includes/helpers/tabs.php:164
+#: includes/class-profile.php:428 includes/helpers/tabs.php:164
 #: templates/account.php:13
 msgid "Edit Account"
 msgstr ""
 
-#: includes/class-profile.php:450
+#: includes/class-profile.php:455
 msgid "Page"
 msgstr ""
 
-#: includes/class-profile.php:584
+#: includes/class-profile.php:589
 msgid "No Comments Found"
 msgstr ""
 
-#: includes/class-profile.php:857
+#: includes/class-profile.php:862
 msgid "Loading Form ..."
 msgstr ""
 
-#: includes/class-profile.php:924 includes/class-profile.php:998
+#: includes/class-profile.php:929 includes/class-profile.php:1003
 msgid "Change your profile photo"
 msgstr ""
 
-#: includes/class-profile.php:926 includes/class-profile.php:1000
+#: includes/class-profile.php:931 includes/class-profile.php:1005
 msgid "Change your cover photo"
 msgstr ""
 
-#: includes/class-profile.php:948 includes/class-profile.php:1023
+#: includes/class-profile.php:953 includes/class-profile.php:1028
 msgid "Apply"
 msgstr ""
 
-#: includes/class-profile.php:952 includes/class-profile.php:1027
+#: includes/class-profile.php:957 includes/class-profile.php:1032
 msgid "Cancel"
 msgstr ""
 
-#: includes/class-profile.php:1012
+#: includes/class-profile.php:1017
 msgid "Note: Max upload image size: "
 msgstr ""
 
-#: includes/class-profile.php:1376
+#: includes/class-profile.php:1381
 #, php-format
 msgid "The uploaded file is too small. Minimum image width should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1379
+#: includes/class-profile.php:1384
 #, php-format
 msgid "The uploaded file is too small. Minimum image height should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1417
+#: includes/class-profile.php:1422
 msgid "Invalid request!"
 msgstr ""
 
-#: includes/class-profile.php:1435
+#: includes/class-profile.php:1440
 msgid "No fields available"
 msgstr ""
 
-#: includes/class-profile.php:1538
+#: includes/class-profile.php:1543
 msgid "Grid 2 Col"
 msgstr ""
 
-#: includes/class-profile.php:1539
+#: includes/class-profile.php:1544
 msgid "Grid 3 Col"
 msgstr ""
 
-#: includes/class-profile.php:1540
+#: includes/class-profile.php:1545
 msgid "Grid 4 Col"
 msgstr ""
 
-#: includes/class-profile.php:1541
+#: includes/class-profile.php:1546
 msgid "Grid 5 Col"
 msgstr ""
 
-#: includes/class-profile.php:1550
+#: includes/class-profile.php:1555
 msgid "Sort By:"
 msgstr ""
 
-#: includes/class-profile.php:1551
+#: includes/class-profile.php:1556
 msgid "Newer"
 msgstr ""
 
-#: includes/class-profile.php:1552
+#: includes/class-profile.php:1557
 msgid "Older"
 msgstr ""
 
-#: includes/class-profile.php:1553
+#: includes/class-profile.php:1558
 msgid "A-Z"
 msgstr ""
 
-#: includes/class-profile.php:1554
+#: includes/class-profile.php:1559
 msgid "Z-A"
 msgstr ""
 
@@ -2457,7 +2457,7 @@ msgstr ""
 msgid "Profile Page"
 msgstr ""
 
-#: includes/class-templates.php:455
+#: includes/class-templates.php:482
 msgid "Update Account"
 msgstr ""
 
@@ -2667,7 +2667,13 @@ msgid ""
 msgstr ""
 
 #: includes/helpers/fields.php:35
-msgid "Disable WP default register URL redirect?"
+msgid "Redirect wp-login.php?action=register"
+msgstr ""
+
+#: includes/helpers/fields.php:36
+msgid ""
+"When enabled /wp-login.php?action=register page will be redirected to "
+"UsersWP register page."
 msgstr ""
 
 #: includes/helpers/fields.php:43
@@ -2829,135 +2835,139 @@ msgstr ""
 msgid "My Listings"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:189
+#: includes/libraries/class-geodirectory-plugin.php:169
+msgid "My Lists"
+msgstr ""
+
+#: includes/libraries/class-geodirectory-plugin.php:211
 msgid "GeoDirectory Settings"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:221
-#: includes/libraries/class-geodirectory-plugin.php:222
-#: includes/libraries/class-geodirectory-plugin.php:241
+#: includes/libraries/class-geodirectory-plugin.php:243
+#: includes/libraries/class-geodirectory-plugin.php:244
+#: includes/libraries/class-geodirectory-plugin.php:263
 msgid "GeoDirectory"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:263
+#: includes/libraries/class-geodirectory-plugin.php:285
 msgid ""
 "You can now add Listings, Reviews and Favorites tabs under UsersWP > Profile "
 "> Choose the tabs to display in Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:270
+#: includes/libraries/class-geodirectory-plugin.php:292
 msgid "CPT listings in Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:271
+#: includes/libraries/class-geodirectory-plugin.php:293
 msgid "Choose the post types to show listings tab in UsersWP Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:276
-#: includes/libraries/class-geodirectory-plugin.php:286
-#: includes/libraries/class-geodirectory-plugin.php:296
+#: includes/libraries/class-geodirectory-plugin.php:298
+#: includes/libraries/class-geodirectory-plugin.php:308
+#: includes/libraries/class-geodirectory-plugin.php:318
 msgid "Select Post Types"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:280
+#: includes/libraries/class-geodirectory-plugin.php:302
 msgid "CPT reviews in Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:281
+#: includes/libraries/class-geodirectory-plugin.php:303
 msgid "Choose the post types to show reviews tab in UsersWP Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:290
+#: includes/libraries/class-geodirectory-plugin.php:312
 msgid "CPT favorites in Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:291
+#: includes/libraries/class-geodirectory-plugin.php:313
 msgid "Choose the post types to show favorites tab in UsersWP Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:300
+#: includes/libraries/class-geodirectory-plugin.php:322
 msgid "Redirect my listing link from GD loginbox to UsersWP profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:301
+#: includes/libraries/class-geodirectory-plugin.php:323
 msgid ""
 "If this option is selected, the my listing link from GD loginbox will "
 "redirect to listings tab of UsersWP profile."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:308
+#: includes/libraries/class-geodirectory-plugin.php:330
 msgid "Redirect favorite link from GD loginbox to UsersWP profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:309
+#: includes/libraries/class-geodirectory-plugin.php:331
 msgid ""
 "If this option is selected, the favorite link from GD loginbox will redirect "
 "to favorites tab of UsersWP profile."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:344
-#: includes/libraries/class-geodirectory-plugin.php:563
+#: includes/libraries/class-geodirectory-plugin.php:366
+#: includes/libraries/class-geodirectory-plugin.php:585
 msgid "Listings"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:345
-#: includes/libraries/class-geodirectory-plugin.php:572
+#: includes/libraries/class-geodirectory-plugin.php:367
+#: includes/libraries/class-geodirectory-plugin.php:594
 msgid "Reviews"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:346
-#: includes/libraries/class-geodirectory-plugin.php:581
+#: includes/libraries/class-geodirectory-plugin.php:368
+#: includes/libraries/class-geodirectory-plugin.php:603
 msgid "Favorites"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:847
-#: includes/libraries/class-geodirectory-plugin.php:1077
+#: includes/libraries/class-geodirectory-plugin.php:869
+#: includes/libraries/class-geodirectory-plugin.php:1099
 msgid "Edit Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:852
-#: includes/libraries/class-geodirectory-plugin.php:1082
+#: includes/libraries/class-geodirectory-plugin.php:874
+#: includes/libraries/class-geodirectory-plugin.php:1104
 msgid "Edit"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:855
-#: includes/libraries/class-geodirectory-plugin.php:1085
+#: includes/libraries/class-geodirectory-plugin.php:877
+#: includes/libraries/class-geodirectory-plugin.php:1107
 msgid "Delete Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:876
-#: includes/libraries/class-geodirectory-plugin.php:954
-#: includes/libraries/class-geodirectory-plugin.php:1114
+#: includes/libraries/class-geodirectory-plugin.php:898
+#: includes/libraries/class-geodirectory-plugin.php:976
+#: includes/libraries/class-geodirectory-plugin.php:1136
 #, php-format
 msgid "No %s found."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1107
+#: includes/libraries/class-geodirectory-plugin.php:1129
 #, php-format
 msgid "No %s found"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1236
+#: includes/libraries/class-geodirectory-plugin.php:1258
 msgid "Published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1239
+#: includes/libraries/class-geodirectory-plugin.php:1261
 msgid "Pending"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1242
+#: includes/libraries/class-geodirectory-plugin.php:1264
 msgid "Closed"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1245
+#: includes/libraries/class-geodirectory-plugin.php:1267
 msgid "Expired"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1248
+#: includes/libraries/class-geodirectory-plugin.php:1270
 msgid "Not published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1253
+#: includes/libraries/class-geodirectory-plugin.php:1275
 msgid "Status: "
 msgstr ""
 

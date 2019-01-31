@@ -20,33 +20,36 @@ class UsersWP_Pages {
     public function is_page($type = false) {
         if (is_page()) {
             global $post;
-            $current_page_id = $post->ID;
-            if ($type) {
-                $uwp_page = uwp_get_page_id($type, false);
-                if ( $uwp_page && ((int) $uwp_page ==  $current_page_id ) ) {
-                    return true;
+            $current_page_id = isset($post->ID) ? absint($post->ID) : '';
+            if($current_page_id){
+                if ($type) {
+                    $uwp_page = uwp_get_page_id($type, false);
+                    if ( $uwp_page && ((int) $uwp_page ==  $current_page_id ) ) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 } else {
-                    return false;
-                }
-            } else {
-                if ($this->is_register_page() ||
-                    $this->is_login_page() ||
-                    $this->is_forgot_page() ||
-                    $this->is_change_page() ||
-                    $this->is_reset_page() ||
-                    $this->is_account_page() ||
-                    $this->is_profile_page() ||
-                    $this->is_users_page() ||
-                    $this->is_multi_register_page()) {
-                    return true;
-                } else {
-                    return false;
+                    if ($this->is_register_page() ||
+                        $this->is_login_page() ||
+                        $this->is_forgot_page() ||
+                        $this->is_change_page() ||
+                        $this->is_reset_page() ||
+                        $this->is_account_page() ||
+                        $this->is_profile_page() ||
+                        $this->is_users_page() ||
+                        $this->is_multi_register_page()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
             }
-
         } else {
             return false;
         }
+
+        return false;
     }
 
     /**
