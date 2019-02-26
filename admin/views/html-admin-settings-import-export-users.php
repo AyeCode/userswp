@@ -1,5 +1,6 @@
 <?php
 wp_enqueue_script( 'plupload' );
+
 ?>
 <style type="text/css">
     .uwp-export-submit-wrap [type="submit"] {
@@ -41,10 +42,10 @@ wp_enqueue_script( 'plupload' );
         position: relative;
     }
 
-    .uwp-ie-container .uwp-import-users-form input[type="submit"]{
+    .uwp-ie-container #import-submit{
         display: none;
     }
-    .uwp-ie-container .uwp-import-users-form .uwp-msg-wrap{
+    .uwp-ie-container .uwp-msg-wrap{
         margin: 20px 0;
     }
     .uwp-ie-container .uwp-msg-wrap .uwp-export-loader, .uwp-ie-container .uwp-msg-wrap .uwp-import-loader {
@@ -75,7 +76,7 @@ wp_enqueue_script( 'plupload' );
     .uwp-export-file a, .uwp-import-file a {
         text-decoration: none;
     }
-    .uwp-import-users-form .uwp-ie-report {
+    .uwp-ie-report {
         max-height: 120px;
         overflow-y: scroll;
         width: auto;
@@ -84,7 +85,7 @@ wp_enqueue_script( 'plupload' );
         margin: 30px 0 0 0;
     }
 
-    .uwp-import-users-form .uwp-ie-report p {
+    .uwp-ie-report p {
         font-size: 12px;
         margin: 7px 0px;
         padding: 0;
@@ -92,17 +93,17 @@ wp_enqueue_script( 'plupload' );
 </style>
 <?php
 $uwp_chunk_sizes = array(
-        50 => 50,
-        100 => 100,
-        200 => 200,
-        500 => 500,
-        1000 => 1000,
-        2000 => 2000,
-        5000 => 5000,
-        10000 => 10000,
-        20000 => 20000,
-        50000 => 50000,
-        100000 => 100000,
+    50 => 50,
+    100 => 100,
+    200 => 200,
+    500 => 500,
+    1000 => 1000,
+    2000 => 2000,
+    5000 => 5000,
+    10000 => 10000,
+    20000 => 20000,
+    50000 => 50000,
+    100000 => 100000,
 );
 
 $uwp_chunk_sizes = apply_filters('uwp_ie_csv_chunks_options', $uwp_chunk_sizes);
@@ -117,23 +118,22 @@ $total_users = $users_count['total_users'];
 <div class="metabox-holder uwp-ie-container">
     <div class="postbox uwp-export-users">
         <h3><span><?php _e( 'Export Users Data', 'userswp' ); ?></span></h3>
-        <div class="inside">
+        <div class="inside uwp-export-users-form">
             <p><?php _e( 'Download a CSV of all users data for usersWP.', 'invoicing' ); ?></p>
-            <form id="uwp-export-users" class="uwp-export-users-form" method="post">
-                <table class="form-table">
-                    <tbody>
-                    <tr>
-                        <th class=""><label for="uwp_ie_chunk_size"><?php _e( 'Max entries per csv file:', 'userswp' );?></label></th>
-                        <td><select name="uwp_ie_chunk_size" id="uwp_ie_chunk_size" data-ucount = "<?php echo $total_users;?>" style="min-width:140px"><?php echo $uwp_chunk_sizes_opts;?></select><p class="description"><?php _e( 'The maximum number of entries per csv file (default to 5000, you might want to lower this to prevent memory issues.)', 'userswp' );?></p></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="uwp-export-submit-wrap">
-                    <input type="hidden" name="uwp_ie_action" value="export_users" />
-                    <?php wp_nonce_field( 'uwp_export_users_nonce', 'uwp_export_users_nonce' ); ?>
-                    <?php submit_button( __( 'Export CSV' ), 'primary', 'submit', false ); ?>
-                </div>
-            </form>
+            <table class="form-table">
+                <tbody>
+                <tr>
+                    <th class=""><label for="uwp_ie_chunk_size"><?php _e( 'Max entries per csv file:', 'userswp' );?></label></th>
+                    <td><select name="uwp_ie_chunk_size" id="uwp_ie_chunk_size" data-ucount = "<?php echo $total_users;?>" style="min-width:140px"><?php echo $uwp_chunk_sizes_opts;?></select><p class="description"><?php _e( 'The maximum number of entries per csv file (default to 5000, you might want to lower this to prevent memory issues.)', 'userswp' );?></p></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="uwp-export-submit-wrap">
+                <input type="hidden" name="uwp_ie_action" value="export_users" />
+                <?php wp_nonce_field( 'uwp_export_users_nonce', 'uwp_export_users_nonce' ); ?>
+                <?php submit_button( __( 'Export CSV', 'userswp' ), 'primary', 'export-submit', false ); ?>
+
+            </div>
         </div>
     </div>
 
@@ -141,16 +141,14 @@ $total_users = $users_count['total_users'];
         <h3><span><?php _e( 'Import Users' ); ?></span></h3>
         <div class="inside" id="uwp-imp-container">
             <p><?php _e( 'Import the users data from a .csv file. This file can be obtained by exporting the data on another site using the form above.' ); ?></p>
-            <form method="post" enctype="multipart/form-data" class="uwp-import-users-form">
                 <p class="uwp-imp-uploaded-file">
                     <a id="uwp-imp-browse" class="button file-selector button-primary" href="#"><?php _e( 'Select File', 'userswp' ); ?></a>
                 </p>
                 <p>
                     <input type="hidden" value="" name="uwp_import_users_file" class="uwp_import_users_file">
                     <?php wp_nonce_field( 'uwp_import_users_nonce', 'uwp_import_users_nonce' ); ?>
-                    <?php submit_button( __( 'Import', 'userswp' ), 'primary', 'submit', false ); ?>
+                    <?php submit_button( __( 'Import', 'userswp' ), 'primary', 'import-submit', false ); ?>
                 </p>
-            </form>
         </div>
     </div>
 </div>
@@ -159,34 +157,40 @@ $total_users = $users_count['total_users'];
     jQuery(function($) {
         var UWP_IE = {
             init: function() {
+                var $self = this;
                 this.submit();
                 this.clearMessage();
+                this.form = jQuery('form#mainform');
+                this.form.attr('action', 'javascript:void(0);');
+                jQuery("#save_style", this.el).on("click", function(e) {
+                    $self.saveStyle(e);
+                });
             },
             submit: function() {
                 var $this = this;
-                $('.uwp-export-users-form').submit(function(e) {
+                $('#export-submit').click(function(e) {
                     e.preventDefault();
-                    var $form = $(this);
-                    var submitBtn = $form.find('input[type="submit"]');
-                    if (!submitBtn.attr('disabled')) {
+                    var $btn = jQuery(this);
+                    var $form = jQuery('form#mainform');
+                    if (!$btn.attr('disabled')) {
                         var data = $form.serialize();
-                        submitBtn.attr('disabled', true);
-                        $form.find('.uwp-msg-wrap').remove();
-                        $form.append('<div class="uwp-msg-wrap"><div class="uwp-progress"><div></div><span>0%</span></div><span class="uwp-export-loader"><i class="fas fa-spin fa-spinner"></i></span></div>');
+                        $btn.attr('disabled', true);
+                        $btn.find('.uwp-msg-wrap').remove();
+                        $btn.after('<div class="uwp-msg-wrap"><div class="uwp-progress"><div></div><span>0%</span></div><span class="uwp-export-loader"><i class="fas fa-spin fa-spinner"></i></span></div>');
                         // start the process
                         $this.step(1, data, $form, $this);
                     }
                 });
-                $('.uwp-import-users-form').submit(function(e) {
+                $('#import-submit').click(function(e) {
                     e.preventDefault();
-                    var $form = $(this);
-                    var submitBtn = $form.find('input[type="submit"]');
-                    submitBtn.hide();
-                    if (!submitBtn.attr('disabled')) {
+                    var $btn = $(this);
+                    var $form = jQuery('form#mainform');
+                    $btn.hide();
+                    if (!$btn.attr('disabled')) {
                         var data = $form.serialize();
-                        submitBtn.attr('disabled', true);
+                        $btn.attr('disabled', true);
                         $form.find('.uwp-msg-wrap').remove();
-                        $form.append('<div class="uwp-msg-wrap"><div class="uwp-progress"><div></div><span>0%</span></div><span class="uwp-import-loader"><i class="fas fa-spin fa-spinner"></i></span></div>');
+                        $btn.after('<div class="uwp-msg-wrap"><div class="uwp-progress"><div></div><span>0%</span></div><span class="uwp-import-loader"><i class="fas fa-spin fa-spinner"></i></span></div>');
                         $form.find('.uwp-msg-wrap').append('<div class="uwp-ie-report"></div>');
                         // start the process
                         $this.imp_step(1, data, $form, $this);
@@ -318,8 +322,8 @@ $total_users = $users_count['total_users'];
         UWP_IE.init();
 
         window.UWP_IE_Uploader = function (browse_button, container, max, type, allowed_type, max_file_size) {
-            this.removed_files = [],
-                this.container = container;
+            this.removed_files = [];
+            this.container = container;
             this.browse_button = browse_button;
             this.max = max || 1;
             this.count = $('#' + container).find('.uwp-attachment-list > li').length; //count how many items are there
@@ -386,7 +390,7 @@ $total_users = $users_count['total_users'];
                 var $container = $('#' + this.container).find('.uwp-imp-uploaded-file');
 
                 this.showHide();
-                $('.uwp-import-users-form').find('.uwp-msg-wrap').remove();
+                $('form#mainform').find('.uwp-msg-wrap').remove();
 
                 $.each(files, function(i, file) {
                     $container.append(
@@ -446,11 +450,11 @@ $total_users = $users_count['total_users'];
 
                 if(response.response !== 'error') {
                     $('#' + this.container).find('.file-selector').hide();
-                    $('.uwp-import-users-form').find('input[type="submit"]').show();
-                    $('.uwp-import-users-form').find('.uwp_import_users_file').val(response.response);
+                    $('form#mainform').find('#import-submit').show();
+                    $('form#mainform').find('.uwp_import_users_file').val(response.response);
 
                 } else {
-                    alert(response.error);
+                    alert(response.response);
 
                     this.count -= 1;
                     this.showHide();

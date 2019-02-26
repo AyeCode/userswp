@@ -279,6 +279,7 @@ class UsersWP_Profile {
                                     $is_profile_page = is_uwp_profile_page();
                                     $value = get_user_meta($user->ID, 'description', true);
                                     $value = stripslashes($value);
+                                    $limit_words = apply_filters('uwp_profile_bio_content_limit', 20);
                                     if ($value) {
                                         ?>
                                         <div class="uwp-profile-bio <?php if ($is_profile_page) { echo "uwp_more"; } ?>">
@@ -286,7 +287,7 @@ class UsersWP_Profile {
                                             if ($is_profile_page) {
                                                 echo $value;
                                             } else {
-                                                echo wp_trim_words( $value, 20, '...' );
+                                                echo wp_trim_words( $value, $limit_words, '...' );
                                             }
                                             ?>
                                         </div>
@@ -348,10 +349,12 @@ class UsersWP_Profile {
             );
         }
 
-        if (in_array('comments', $allowed_tabs)) {
+        $comment_count = uwp_comment_count($user->ID);
+
+        if (in_array('comments', $allowed_tabs) && $comment_count > 0) {
             $tabs['comments'] = array(
                 'title' => __( 'Comments', 'userswp' ),
-                'count' => uwp_comment_count($user->ID)
+                'count' => $comment_count
             );
         }
 

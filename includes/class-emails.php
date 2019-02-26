@@ -272,7 +272,7 @@ class UsersWP_Mails {
     public static function uwp_email_format_text( $content, $user_id ) {
 
         $site_url = '<a href="' . home_url() . '">' . home_url() . '</a>';
-        $site_name = stripslashes(get_option('blogname'));
+        $site_name = html_entity_decode(stripslashes(get_option('blogname')) ,ENT_QUOTES);
         $login_url = '<a href="' . wp_login_url() . '">'.__('login', 'userswp').'</a>';
 
         $replace_array = array(
@@ -397,7 +397,7 @@ class UsersWP_Mails {
 
     public static function uwp_get_mail_headers( $email_type = '', $user_id ) {
         $sitefromEmail = get_option('admin_email');
-        $sitefromEmailName = stripslashes(get_option('blogname'));
+        $sitefromEmailName = html_entity_decode(stripslashes(get_option('blogname')) ,ENT_QUOTES);
         $site_email = get_option('admin_email');
 
         $headers = array();

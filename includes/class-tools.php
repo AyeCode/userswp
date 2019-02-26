@@ -8,7 +8,7 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class UsersWP_Tools {
-    
+
     public function uwp_fix_usermeta_table() {
         uwp_create_tables();
         uwp101_create_tables();
@@ -478,88 +478,50 @@ class UsersWP_Tools {
 
     }
 
-    /**
-     * Adds the tools settings page menu as submenu.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @param       callable   $settings_page    The function to be called to output the content for this page.
-     *
-     * @return      void
-     */
-    public function uwp_add_admin_tools_sub_menu($settings_page) {
-
-        add_submenu_page(
-            "userswp",
-            __('Tools', 'userswp'),
-            __('Tools', 'userswp'),
-            'manage_options',
-            'uwp_tools',
-            $settings_page
-        );
-
-    }
-
-    public function uwp_tools_main_tab_content() {
+    public static function output() {
+        ob_start();
         ?>
-        <table class="form-table gd-tools-table">
+        <table class="uwp-tools-table widefat">
             <tbody>
-            <tr>
-                <td><strong><?php _e('Tool', 'userswp');?></strong></td>
-                <td><strong><?php _e('Description', 'userswp');?></strong></td>
-                <td style="text-align: right"><strong><?php _e('Action', 'userswp');?></strong></td>
-            </tr>
-
 
             <?php if (defined('USERSWP_VERSION')) { ?>
                 <tr>
-                    <td><?php _e('Fix User Data', 'userswp');?></td>
-                    <td>
-                        <div style="margin-bottom: 10px"><?php _e('Fixes User Data if you were using the Beta version.', 'userswp');?></div>
-                    </td>
-                    <td style="text-align: right">
+                    <th>
+                        <strong class="tool-name"><?php _e('Fix User Data', 'userswp');?></strong>
+                        <p class="tool-description"><?php _e('Fixes User Data if you were using the Beta version.', 'userswp');?></p>
+                    </th>
+                    <td class="run-tool">
                         <input type="button" value="<?php _e('Run', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="fix_user_data"/>
                     </td>
                 </tr>
 
                 <tr>
-                    <td colspan="3">
+                    <td colspan="2" class="has-pbar">
                         <div id="uwp_diagnose_pb_fix_user_data" class="uwp-pb-wrapper">
-                            <div id="progressBar" style="display: none;"><div></div></div>
+                            <div class="progressBar" style="display: none;"><div></div></div>
                         </div>
                         <div id="uwp_diagnose_fix_user_data"></div>
                     </td>
                 </tr>
 
                 <tr>
-                    <td><?php _e('Dummy Users', 'userswp');?></td>
-                    <td>
-                        <div><?php _e('Dummy Users for Testing. Password for all dummy users:', 'userswp'); echo " ".self::get_dummy_user_passowrd();?></div>
-                    </td>
-                    <td style="text-align: right">
+                    <th>
+                        <strong class="tool-name"><?php _e('Dummy Users', 'userswp');?></strong>
+                        <p class="tool-description"><?php _e('Dummy Users for Testing. Password for all dummy users:', 'userswp'); echo " ".self::get_dummy_user_passowrd();?></p>
+                    </th>
+                    <td class="run-tool">
                         <?php
-                        $nonce = wp_create_nonce( 'uwp_dummy_users' );
-                        $dummy_users_create_url = add_query_arg( array(
-                            'uwp_dummy_users' => 'create',
-                            '_wpnonce' => $nonce,
-                        ));
-
-                        $dummy_users_remove_url = add_query_arg( array(
-                            'uwp_dummy_users' => 'delete',
-                            '_wpnonce' => $nonce,
-                        ));
 
                         $dummy_users = get_users( array( 'meta_key' => 'uwp_dummy_user', 'meta_value' => '1', 'fields' => array( 'ID' ) ) );
 
                         if ( count($dummy_users) > 0 ) {
                             ?>
                             <input type="button" value="<?php _e('Remove', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="remove_dummy_users"/>
-                        <?php
+                            <?php
                         } else {
                             ?>
                             <input type="button" value="<?php _e('Create', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="add_dummy_users"/>
-                        <?php
+                            <?php
                         }
 
                         ?>
@@ -567,18 +529,18 @@ class UsersWP_Tools {
                 </tr>
 
                 <tr>
-                    <td colspan="3">
+                    <td colspan="2" class="has-pbar">
                         <div id="uwp_diagnose_pb_add_dummy_users" class="uwp-pb-wrapper">
-                            <div id="progressBar" style="display: none;"><div></div></div>
+                            <div class="progressBar" style="display: none;"><div></div></div>
                         </div>
                         <div id="uwp_diagnose_add_dummy_users"></div>
                     </td>
                 </tr>
 
                 <tr>
-                    <td colspan="3">
+                    <td colspan="2" class="has-pbar">
                         <div id="uwp_diagnose_pb_remove_dummy_users" class="uwp-pb-wrapper">
-                            <div id="progressBar" style="display: none;"><div></div></div>
+                            <div class="progressBar" style="display: none;"><div></div></div>
                         </div>
                         <div id="uwp_diagnose_remove_dummy_users"></div>
                     </td>
@@ -596,7 +558,7 @@ class UsersWP_Tools {
                         e.preventDefault();
                         var type = $(this).data('diagnose');
                         $(this).hide();
-                        $("#uwp_diagnose_pb_" + type).find('#progressBar').show().progressbar({value: 0});
+                        $("#uwp_diagnose_pb_" + type).find('.progressBar').show().progressbar({value: 0});
                         uwp_process_diagnose_step( 0, type );
 
                     });
@@ -617,7 +579,7 @@ class UsersWP_Tools {
                     beforeSend: function() {},
                     success: function(response, textStatus, xhr) {
                         if(response.done === true || response.error === true ) {
-                            jQuery("#uwp_diagnose_pb_" + type).find('#progressBar').hide();
+                            jQuery("#uwp_diagnose_pb_" + type).find('.progressBar').hide();
                             jQuery("#uwp_diagnose_" + type).html(response.message);
                         } else {
                             tools_progress(response.percent, type);
@@ -633,13 +595,15 @@ class UsersWP_Tools {
 
 
                 function tools_progress(percent, type) {
-                    $element = jQuery("#uwp_diagnose_pb_" + type).find('#progressBar');
+                    $element = jQuery("#uwp_diagnose_pb_" + type).find('.progressBar');
                     var progressBarWidth = percent * $element.width() / 100;
                     $element.find('div').animate({ width: progressBarWidth }, 500).html(percent + "% ");
                 }
             }
         </script>
         <?php
+
+        echo ob_get_clean();
     }
 
     function uwp_process_diagnosis_ajax() {

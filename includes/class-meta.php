@@ -10,62 +10,6 @@
 class UsersWP_Meta {
 
     /**
-     * Gets UsersWP setting value using key.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * 
-     * @param       string          $key        Setting Key.
-     * @param       bool|string     $default    Default value.
-     * @param       bool            $cache      Use cache to retrieve the value?.
-     * 
-     * @return      string                      Setting Value.
-     */
-    public function get_option( $key = '', $default = false, $cache = true ) {
-        if ($cache) {
-            global $uwp_options;
-        } else {
-            $uwp_options = get_option( 'uwp_settings' );
-        }
-        $value = ! empty( $uwp_options[ $key ] ) ? $uwp_options[ $key ] : $default;
-        $value = apply_filters( 'uwp_get_option', $value, $key, $default );
-        return apply_filters( 'uwp_get_option_' . $key, $value, $key, $default );
-    }
-
-    /**
-     * Updates UsersWP setting value using key.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * 
-     * @param       string|bool     $key        Setting Key.
-     * @param       string          $value      Setting Value.
-     * 
-     * @return      bool                        Update success or not?.
-     */
-    public function update_option( $key = false, $value = '') {
-
-        if (!$key ) {
-            return false;
-        }
-
-        $settings = get_option( 'uwp_settings', array());
-
-        if( !is_array( $settings ) ) {
-            $settings = array();
-        }
-
-        $settings[ $key ] = $value;
-
-        $settings = apply_filters( 'uwp_update_option', $settings, $key, $value );
-        $settings =  apply_filters( 'uwp_update_option_' . $key, $settings, $key, $value );
-
-        update_option( 'uwp_settings', $settings );
-
-        return true;
-    }
-
-    /**
      * Gets UsersWP user meta value using key.
      *
      * @since       1.0.0

@@ -34,7 +34,6 @@ class UsersWP_Import_Export {
         $this->meta_table_name  = get_usermeta_table_prefix() . 'uwp_usermeta';
         $this->path  = '';
 
-        add_action( 'userswp_settings_import-export_tab_content', array($this, 'get_ie_content') );
         add_action( 'admin_init', array($this, 'uwp_process_settings_export') );
         add_action( 'admin_init', array($this, 'uwp_process_settings_import') );
         add_action( 'wp_ajax_uwp_ajax_export_users', array( $this, 'uwp_process_users_export' ) );
@@ -45,31 +44,6 @@ class UsersWP_Import_Export {
         add_filter( 'uwp_get_export_users_status', array( $this, 'uwp_get_export_users_status' ) );
         add_filter( 'uwp_get_import_users_status', array( $this, 'uwp_get_import_users_status' ) );
      }
-
-    public function get_ie_content() {
-        $subtab = 'ie-users';
-
-        if (isset($_GET['subtab'])) {
-            $subtab = $_GET['subtab'];
-        }
-        ?>
-        <div class="item-list-sub-tabs">
-            <ul class="item-list-sub-tabs-ul">
-                <li class="<?php if ($subtab == 'ie-users') { echo "current selected"; } ?>">
-                    <a href="<?php echo add_query_arg(array('tab' => 'import-export', 'subtab' => 'ie-users')); ?>"><?php echo __( 'Users', 'userswp' ); ?></a>
-                </li>
-                <li class="<?php if ($subtab == 'ie-settings') { echo "current selected"; } ?>">
-                    <a href="<?php echo add_query_arg(array('tab' => 'import-export', 'subtab' => 'ie-settings')); ?>"><?php echo __( 'Settings', 'userswp' ); ?></a>
-                </li>
-            </ul>
-        </div>
-        <?php
-        if ($subtab == 'ie-users') {
-            include_once( USERSWP_PATH . '/admin/settings/admin-settings-ie-users.php' );
-        } elseif ($subtab == 'ie-settings') {
-            include_once( USERSWP_PATH . '/admin/settings/admin-settings-ie-settings.php' );
-        }
-    }
 
     public function export_location( $relative = false ) {
         $upload_dir         = wp_upload_dir();
@@ -130,7 +104,7 @@ class UsersWP_Import_Export {
         // Retrieve the settings from the file and convert the json object to an array.
         $settings = (array) json_decode( file_get_contents( $import_file ), true );
         update_option( 'uwp_settings', $settings );
-        wp_safe_redirect( admin_url( 'admin.php?page=userswp&tab=import-export&subtab=ie-settings&imp-msg=success' ) ); exit;
+        wp_safe_redirect( admin_url( 'admin.php?page=userswp&tab=import-export&section=settings&imp-msg=success' ) ); exit;
     }
 
     public function uwp_process_users_export(){
@@ -378,6 +352,11 @@ class UsersWP_Import_Export {
     }
 
     public function uwp_ie_upload_file(){
+        $nonce = $_REQUEST['nonce'];
+        if ( ! wp_verify_nonce( $nonce, 'uwp-ie-file-upload-nonce' ) ) {
+            echo 'error';return;
+        }
+
         $upload_data = array(
             'name'     => $_FILES['import_file']['name'],
             'type'     => $_FILES['import_file']['type'],
@@ -562,7 +541,7 @@ class UsersWP_Import_Export {
 
                 if( !is_wp_error( $user_id ) ){
                     foreach ($row as $key => $value){
-                        if(!in_array($key, $exclude) && $update_existing = apply_filters('uwp_import_update_users', false, $row, $user_id)){
+                        if(!in_array($key, $exclude)){
                             $value = maybe_unserialize($value);
                             uwp_update_usermeta($user_id, $key, $value);
                         }

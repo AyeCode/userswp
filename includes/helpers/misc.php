@@ -1751,3 +1751,55 @@ function uwp_is_page_builder(){
 
     return false;
 }
+
+/**
+ * Display a help tip for settings.
+ *
+ * @param  string $tip Help tip text
+ * @param  bool $allow_html Allow sanitized HTML if true or escape
+ *
+ * @return string
+ */
+function uwp_help_tip( $tip, $allow_html = false ) {
+    if ( $allow_html ) {
+        $tip = uwp_sanitize_tooltip( $tip );
+    } else {
+        $tip = esc_attr( $tip );
+    }
+
+    return '<span class="uwp-help-tip dashicons dashicons-editor-help" title="' . $tip . '"></span>';
+}
+
+/**
+ * Sanitize a string destined to be a tooltip.
+ *
+ * Tooltips are encoded with htmlspecialchars to prevent XSS. Should not be used in conjunction with esc_attr()
+ *
+ * @param string $var
+ * @return string
+ */
+function uwp_sanitize_tooltip( $var ) {
+    return htmlspecialchars( wp_kses( html_entity_decode( $var ), array(
+        'br'     => array(),
+        'em'     => array(),
+        'strong' => array(),
+        'small'  => array(),
+        'span'   => array(),
+        'ul'     => array(),
+        'li'     => array(),
+        'ol'     => array(),
+        'p'      => array(),
+    ) ) );
+}
+
+function uwp_all_email_tags( $inline = true ){
+    $tags = array( '[#site_name#]', '[#site_name_url#]', '[#current_date#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#profile_link#]' );
+
+    $tags = apply_filters( 'uwp_all_email_tags', $tags );
+
+    if ( $inline ) {
+        $tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+    }
+
+    return $tags;
+}

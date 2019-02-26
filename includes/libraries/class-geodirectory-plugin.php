@@ -31,11 +31,8 @@ class UsersWP_GeoDirectory_Plugin {
     
     private function setup_actions() {
         if ( is_admin() ) {
-            add_filter( 'uwp_display_form_title', array( $this, 'display_form_title' ), 10, 3 );
-            add_action( 'uwp_geodirectory_settings_main_tab_content', array( $this, 'main_tab_content' ), 10, 1 );
-            add_action( 'uwp_admin_sub_menus', array( $this, 'add_admin_gd_sub_menu' ), 10, 1 );
-            add_filter( 'uwp_settings_tabs', array( $this, 'add_gd_tab' ) );
-            add_filter( 'uwp_registered_settings', array( $this, 'add_gd_settings' ) );
+            add_filter( 'uwp_get_sections_uwp-addons', array( $this, 'add_gd_tab' ) );
+            add_filter( 'uwp_get_settings_uwp-addons', array( $this, 'add_gd_settings' ), 10, 2 );
             add_filter( 'uwp_available_tab_items', array( $this, 'available_tab_items' ) );
         } else {
             add_filter( 'uwp_profile_tabs', array( $this, 'add_profile_gd_tabs' ), 10, 3 );
@@ -195,60 +192,6 @@ class UsersWP_GeoDirectory_Plugin {
     }
 
     /**
-     * Modifies the settings form title.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @param       string      $title         Original title.
-     * @param       string      $page          admin.php?page=uwp_xxx.
-     * @param       string      $active_tab    active tab in that settings page.
-     *
-     * @return      string      Form title.
-     */
-    public function display_form_title( $title, $page, $active_tab ) {
-        if ( $page == 'uwp_geodirectory' && $active_tab == 'main' ) {
-            $title = __( 'GeoDirectory Settings', 'userswp' );
-        }
-        return $title;
-    }
-    
-    /**
-     * Prints the settings form.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @param       string      $form         Setting form html.
-     *
-     * @return      void
-     */
-    public function main_tab_content( $form ) {
-        echo $form;
-    }
-    
-    /**
-     * Adds the current userswp addon settings page menu as submenu.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @param       callable   $settings_page    The function to be called to output the content for this page.
-     *
-     * @return      void
-     */
-    public function add_admin_gd_sub_menu( $settings_page ) {
-        add_submenu_page(
-            "userswp",
-            __( 'GeoDirectory', 'userswp' ),
-            __( 'GeoDirectory', 'userswp' ),
-            'manage_options',
-            'uwp_geodirectory',
-            $settings_page
-        );
-    }
-
-    /**
      * Adds settings tabs for the current userswp addon.
      *
      * @since       1.0.0
@@ -258,11 +201,11 @@ class UsersWP_GeoDirectory_Plugin {
      *
      * @return      array     Tabs array.
      */
-    public function add_gd_tab( $tabs ) {
-        $tabs['uwp_geodirectory']   = array(
-            'main' => __( 'GeoDirectory', 'userswp' ),
-        );
-        return $tabs;
+    public function add_gd_tab( $sections ) {
+
+        $sections['uwp_geodirectory']   = __( 'GeoDirectory', 'userswp' );
+
+        return $sections;
     }
 
     /**
@@ -275,71 +218,65 @@ class UsersWP_GeoDirectory_Plugin {
      *
      * @return      array     Settings array.
      */
-    public function add_gd_settings( $uwp_settings ) {
-        $gd_posttypes = $this->get_gd_posttypes();
+    public function add_gd_settings( $settings, $current_section ) {
 
-        $options = array(
-            'gd_settings_info' => array(
-                'id'   => 'woo_settings_info',
-                'name' => __( 'Info', 'userswp' ),
-                'desc' => __( 'You can now add Listings, Reviews and Favorites tabs under UsersWP > Profile > Choose the tabs to display in Profile', 'userswp' ),
-                'type' => 'info',
-                'std'  => '1',
-                'class' => 'uwp_label_inline',
-            ),
-            'gd_profile_listings' => array(
-                'id' => 'gd_profile_listings',
-                'name' => __( 'CPT listings in Profile', 'userswp' ),
-                'desc' => __( 'Choose the post types to show listings tab in UsersWP Profile', 'userswp' ),
-                'multiple'    => true,
-                'chosen'      => true,
-                'type'        => 'select',
-                'options' => $gd_posttypes,
-                'placeholder' => __( 'Select Post Types', 'userswp' )
-            ),
-            'gd_profile_reviews' => array(
-                'id' => 'gd_profile_reviews',
-                'name' => __( 'CPT reviews in Profile', 'userswp' ),
-                'desc' => __( 'Choose the post types to show reviews tab in UsersWP Profile', 'userswp' ),
-                'multiple'    => true,
-                'chosen'      => true,
-                'type'        => 'select',
-                'options' => $gd_posttypes,
-                'placeholder' => __( 'Select Post Types', 'userswp' )
-            ),
-            'gd_profile_favorites' => array(
-                'id' => 'gd_profile_favorites',
-                'name' => __( 'CPT favorites in Profile', 'userswp' ),
-                'desc' => __( 'Choose the post types to show favorites tab in UsersWP Profile', 'userswp' ),
-                'multiple'    => true,
-                'chosen'      => true,
-                'type'        => 'select',
-                'options' => $gd_posttypes,
-                'placeholder' => __( 'Select Post Types', 'userswp' )
-            ),
-            'geodir_uwp_link_listing' => array(
-                'id'   => 'geodir_uwp_link_listing',
-                'name' => __( 'Redirect my listing link from GD loginbox to UsersWP profile', 'userswp' ),
-                'desc' => __( 'If this option is selected, the my listing link from GD loginbox will redirect to listings tab of UsersWP profile.', 'userswp' ),
-                'type' => 'checkbox',
-                'std'  => '0',
-                'class' => 'uwp_label_inline',
-            ),
-            'geodir_uwp_link_favorite' => array(
-                'id'   => 'geodir_uwp_link_favorite',
-                'name' => __( 'Redirect favorite link from GD loginbox to UsersWP profile', 'userswp' ),
-                'desc' => __( 'If this option is selected, the favorite link from GD loginbox will redirect to favorites tab of UsersWP profile.', 'userswp' ),
-                'type' => 'checkbox',
-                'std'  => '0',
-                'class' => 'uwp_label_inline',
-            ),
-        );
+        if( !empty( $current_section ) && 'uwp_geodirectory' === $current_section ) {
 
-        $uwp_settings['uwp_geodirectory'] = array(
-            'main' => apply_filters( 'uwp_settings_geodirectory', $options ),
-        );
+            $gd_posttypes = $this->get_gd_posttypes();
 
-        return $uwp_settings;
+            $settings = apply_filters( 'uwp_addon_activity_options', array(
+                array(
+                    'title' => __( 'GeoDirectory Settings', 'userswp' ),
+                    'type'  => 'title',
+                    'id'    => 'addons_gd_settings_options',
+                ),
+                array(
+                    'id' => 'gd_profile_listings',
+                    'name' => __( 'CPT listings in profile', 'userswp' ),
+                    'desc' => __( 'Choose the post types to show listings tab in UsersWP Profile', 'userswp' ),
+                    'multiple'    => true,
+                    'type'        => 'multiselect',
+                    'options' => $gd_posttypes,
+                    'class' => 'uwp_chosen_select uwp-select',
+                ),
+                array(
+                    'id' => 'gd_profile_reviews',
+                    'name' => __( 'CPT reviews in profile', 'userswp' ),
+                    'desc' => __( 'Choose the post types to show reviews tab in UsersWP Profile', 'userswp' ),
+                    'multiple'    => true,
+                    'type'        => 'multiselect',
+                    'options' => $gd_posttypes,
+                    'class' => 'uwp_chosen_select uwp-select',
+                ),
+                array(
+                    'id' => 'gd_profile_favorites',
+                    'name' => __( 'CPT favorites in profile', 'userswp' ),
+                    'desc' => __( 'Choose the post types to show favorites tab in UsersWP Profile', 'userswp' ),
+                    'multiple'    => true,
+                    'type'        => 'multiselect',
+                    'options' => $gd_posttypes,
+                    'class' => 'uwp_chosen_select uwp-select',
+                ),
+                array(
+                    'id'   => 'geodir_uwp_link_listing',
+                    'name' => __( 'Redirect my listing link from GD login box to UsersWP profile', 'userswp' ),
+                    'desc' => __( 'If this option is selected, the my listing link from GD loginbox will redirect to listings tab of UsersWP profile.', 'userswp' ),
+                    'type' => 'checkbox',
+                    'default'  => '0',
+                ),
+                array(
+                    'id'   => 'geodir_uwp_link_favorite',
+                    'name' => __( 'Redirect favorite link from GD login box to UsersWP profile', 'userswp' ),
+                    'desc' => __( 'If this option is selected, the favorite link from GD loginbox will redirect to favorites tab of UsersWP profile.', 'userswp' ),
+                    'type' => 'checkbox',
+                    'default'  => '0',
+                ),
+            ));
+
+            $settings[] = array('type' => 'sectionend', 'id' => 'addons_gd_settings_options');
+        }
+
+        return $settings;
     }
 
     public function get_gd_posttypes() {

@@ -176,6 +176,84 @@ h3.users_wp_section_heading {
   vertical-align: top;
   max-width: 372px; }
 
+.button-primary.uwp-advanced-toggle {
+  float: right;
+  margin: 10px; }
+
+.uwp-ui-tooltip {
+  padding: 7px;
+  position: absolute;
+  z-index: 9999;
+  max-width: 300px;
+  background: #333 !important;
+  border-radius: 3px !important;
+  -webkit-box-shadow: 1px 1px 2px 1px rgba(214, 214, 214, 0.5);
+  box-shadow: 1px 1px 2px 1px rgba(214, 214, 214, 0.5);
+  color: #dedede !important;
+  text-rendering: optimizeLegibility;
+  text-shadow: none !important;
+  white-space: pre-line;
+  /* show line breaks */
+  word-wrap: break-word;
+  border-width: 1px; }
+
+.uwp-help-tip {
+  cursor: help;
+  float: right;
+  margin: 2px -15px 0 0; }
+
+.uwp-help-tip.uwp-help-tip-no-margin {
+  margin: 0; }
+
+.uwp-settings-title .uwp-help-tip {
+  float: none;
+  margin: 0 0 0 10px; }
+
+.uwp-upload-fields {
+  float: left;
+  margin-left: 12px; }
+
+.uwp-upload-display.thumbnail {
+  float: left;
+  min-width: 25px;
+  min-height: 25px; }
+
+.uwp-upload-img .centered {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  vertical-align: middle; }
+
+.uwp-upload-display img {
+  max-height: 100px;
+  max-width: 100px;
+  vertical-align: middle;
+  margin: auto; }
+
+.uwp-pb-wrapper .progressBar {
+  height: 20px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  border: none; }
+  .uwp-pb-wrapper .progressBar div {
+    float: left;
+    width: 0;
+    height: 100%;
+    font-size: 12px;
+    line-height: 20px;
+    color: #fff;
+    text-align: center;
+    background-color: #337ab7;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    -webkit-transition: width .6s ease;
+    -o-transition: width .6s ease;
+    transition: width .6s ease; }
+
 #uwp_form_builder_container {
   padding: 0;
   overflow: hidden;
@@ -208,7 +286,8 @@ h3.users_wp_section_heading {
       padding: 8px 10px;
       margin: 0;
       border-bottom: 1px #DFDFDF solid;
-      text-shadow: 0 1px 0 #FFFFFF; }
+      text-shadow: 0 1px 0 #FFFFFF;
+      display: inline-block; }
     #uwp_form_builder_container .uwp-side-sortables .inside {
       position: relative;
       margin: 10px 0;
@@ -243,7 +322,8 @@ h3.users_wp_section_heading {
     padding: 4px 0 4px 5px;
     position: relative;
     text-align: left;
-    text-decoration: none; }
+    text-decoration: none;
+    background: #fafafa; }
     #uwp_form_builder_container .uwp-draggable-form-items b {
       display: inline-block;
       height: 16px;
@@ -312,6 +392,15 @@ h3.users_wp_section_heading {
   background-position: -10px 35px; }
 #uwp_form_builder_container .uwp-random.uwp-sort-post_title b {
   background-position: -10px 70px; }
+#uwp_form_builder_container span.field-type {
+  float: right;
+  margin-right: 25px;
+  font-weight: initial; }
+#uwp_form_builder_container .icon-arrow {
+  position: absolute;
+  right: 0;
+  padding: 10px;
+  cursor: pointer; }
 
 /*.general-form-builder-frame{ margin-left:290px;}*/
 /*.uwp-side-sortables{ margin-left:-290px; float:left;}*/
@@ -323,7 +412,7 @@ h3.users_wp_section_heading {
   #uwp_form_builder_container .field_row_main .title {
     border: 1px #DFDFDF solid;
     background: #F1F1F1;
-    height: auto;
+    height: 37px;
     line-height: 32px;
     overflow: hidden;
     padding-left: 10px;
@@ -341,16 +430,17 @@ h3.users_wp_section_heading {
       cursor: pointer;
       vertical-align: middle; }
     #uwp_form_builder_container .field_row_main .title .handlediv.close {
-      font-size: 18px;
+      font-size: 12px;
       color: #D70000;
-      margin-top: -2px; }
+      position: absolute;
+      right: -12px;
+      top: 2px; }
     #uwp_form_builder_container .field_row_main .title .handlediv.move {
       font-size: 18px;
       color: #666;
       margin-top: -2px; }
   #uwp_form_builder_container .field_row_main .uwp-fieldset {
-    background: linear-gradient(to bottom, #E3E3E3 0px, #CCCCCC 100%) repeat scroll 0 0 #E3E3E3;
-    box-shadow: 0 1px 0 #E3E3E3 inset; }
+    background: #fafafa; }
 #uwp_form_builder_container .field_row_main_sort {
   float: left;
   margin: 0 7px;
@@ -441,6 +531,17 @@ h3.users_wp_section_heading {
     margin: 0; }
   #uwp_form_builder_container #uwp-form-builder-tab-sort ul {
     margin: 0; }
+
+.uwp-setting-name .uwp-help-tip {
+  float: none;
+  margin: 0; }
+
+.uwp-tab-actions .uwp-advanced-toggle {
+  float: left;
+  vertical-align: middle;
+  margin: 0 10px 0 0; }
+.uwp-tab-actions input#save {
+  margin-right: 7px; }
 
 /* tooltip css */
 .uwp-tooltip-wrap {

@@ -19,37 +19,21 @@ class UsersWP_Status {
         return $html;
     }
 
-    /**
-     * Adds the status settings page menu as submenu.
-     *
-     * @since       1.0.20
-     * @package     userswp
-     *
-     * @param       callable   $settings_page    The function to be called to output the content for this page.
-     *
-     * @return      void
-     */
-    public function uwp_add_admin_status_sub_menu($settings_page) {
-
-        add_submenu_page(
-            "userswp",
-            __('Status', 'userswp'),
-            __('Status', 'userswp'),
-            'manage_options',
-            'uwp_status',
-            $settings_page
-        );
-
+    public static function output() {
+        include_once( USERSWP_PATH . '/admin/views/html-admin-page-status.php' );
     }
 
-    public function uwp_status_main_tab_content() {
+    public static function status_report() {
         global $wpdb;
-        $environment      = $this->uwp_get_environment_info();
-        $database         = $this->uwp_get_database_info();
-        $active_plugins   = $this->uwp_get_active_plugins();
-        $theme            = $this->uwp_get_theme_info();
-        $security         = $this->uwp_get_security_info();
-        $pages            = $this->uwp_get_pages();
+
+        $environment      = self::uwp_get_environment_info();
+        $database         = self::uwp_get_database_info();
+        $active_plugins   = self::uwp_get_active_plugins();
+        $theme            = self::uwp_get_theme_info();
+        $security         = self::uwp_get_security_info();
+        $pages            = self::uwp_get_pages();
+
+        ob_start();
         ?>
         <style type="text/css">
             table.uwp-status-table {
@@ -695,6 +679,8 @@ class UsersWP_Status {
             </tbody>
         </table>
         <?php
+
+        echo ob_get_clean();
     }
 
     /**
@@ -703,7 +689,7 @@ class UsersWP_Status {
      *
      * @return array
      */
-    public function uwp_get_environment_info() {
+    public static function uwp_get_environment_info() {
         global $wpdb;
 
         // Figure out cURL version, if installed.
@@ -788,7 +774,7 @@ class UsersWP_Status {
         );
     }
 
-    public function uwp_get_database_info(){
+    public static function uwp_get_database_info(){
         global $wpdb;
 
         $database_table_sizes = $wpdb->get_results( $wpdb->prepare( "
@@ -817,7 +803,7 @@ class UsersWP_Status {
          *
          * If we changed the tables above to include the prefix, then any filters against that table could break.
          */
-        $core_tables = array_map( array( $this, 'uwp_add_db_table_prefix' ), $core_tables );
+        $core_tables = array_map( array( 'UsersWP_Status', 'uwp_add_db_table_prefix' ), $core_tables );
 
         /**
          * Organize UWP and non-UWP tables separately for display purposes later.
@@ -855,7 +841,7 @@ class UsersWP_Status {
         );
     }
 
-    public function uwp_get_active_plugins(){
+    public static function uwp_get_active_plugins(){
         require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
         require_once( ABSPATH . 'wp-admin/includes/update.php' );
 
@@ -892,7 +878,7 @@ class UsersWP_Status {
         return $active_plugins_data;
     }
 
-    public function uwp_get_theme_info(){
+    public static function uwp_get_theme_info(){
         $active_theme = wp_get_theme();
 
         // Get parent theme info if this theme is a child theme, otherwise
@@ -902,7 +888,7 @@ class UsersWP_Status {
             $parent_theme_info = array(
                 'parent_name'           => $parent_theme->Name,
                 'parent_version'        => $parent_theme->Version,
-                'parent_latest_verison' => $this->get_latest_theme_version( $parent_theme ),
+                'parent_latest_verison' => self::get_latest_theme_version( $parent_theme ),
                 'parent_author_url'     => $parent_theme->{'Author URI'},
             );
         } else {
@@ -915,7 +901,7 @@ class UsersWP_Status {
          */
         $override_files     = array();
         $outdated_templates = false;
-        $scan_files         = $this->scan_template_files(  USERSWP_PATH . 'templates/' );
+        $scan_files         = self::scan_template_files(  USERSWP_PATH . 'templates/' );
 
         foreach ( $scan_files as $file ) {
             if ( file_exists( get_stylesheet_directory() . '/' . $file ) ) {
@@ -931,8 +917,8 @@ class UsersWP_Status {
             }
 
             if ( ! empty( $theme_file ) ) {
-                $core_version  = $this->get_file_version( USERSWP_PATH . '/templates/' . $file );
-                $theme_version = $this->get_file_version( $theme_file );
+                $core_version  = self::get_file_version( USERSWP_PATH . '/templates/' . $file );
+                $theme_version = self::get_file_version( $theme_file );
                 if ( $core_version && ( empty( $theme_version ) || version_compare( $theme_version, $core_version, '<' ) ) ) {
                     if ( ! $outdated_templates ) {
                         $outdated_templates = true;
@@ -949,7 +935,7 @@ class UsersWP_Status {
         $active_theme_info = array(
             'name'                    => $active_theme->Name,
             'version'                 => $active_theme->Version,
-            'latest_verison'          => $this->get_latest_theme_version( $active_theme ),
+            'latest_verison'          => self::get_latest_theme_version( $active_theme ),
             'author_url'              => esc_url_raw( $active_theme->{'Author URI'} ),
             'is_child_theme'          => is_child_theme(),
             'has_outdated_templates'  => $outdated_templates,
@@ -959,7 +945,7 @@ class UsersWP_Status {
         return array_merge( $active_theme_info, $parent_theme_info );
     }
 
-    public function uwp_get_security_info(){
+    public static function uwp_get_security_info(){
         $check_page = get_home_url();
         return array(
             'secure_connection' => 'https' === substr( $check_page, 0, 5 ),
@@ -967,7 +953,7 @@ class UsersWP_Status {
         );
     }
 
-    public function uwp_get_pages(){
+    public static function uwp_get_pages(){
         $check_pages = array(
             _x( 'Profile Page', 'Page setting', 'userswp' ) => array(
                 'option'    => 'profile_page',
@@ -1052,7 +1038,7 @@ class UsersWP_Status {
      * @param string $table table name
      * @return string
      */
-    protected function uwp_add_db_table_prefix( $table ) {
+    protected static function uwp_add_db_table_prefix( $table ) {
         return uwp_get_table_prefix() . $table;
     }
 
@@ -1064,7 +1050,7 @@ class UsersWP_Status {
      * @param  object $theme WP_Theme object.
      * @return string Version number if found.
      */
-    public function get_latest_theme_version( $theme ) {
+    public static function get_latest_theme_version( $theme ) {
         include_once( ABSPATH . 'wp-admin/includes/theme.php' );
 
         $api = themes_api( 'theme_information', array(
@@ -1091,7 +1077,7 @@ class UsersWP_Status {
      * @param  string $template_path Path to the template directory.
      * @return array
      */
-    public function scan_template_files( $template_path ) {
+    public static function scan_template_files( $template_path ) {
         $files  = @scandir( $template_path ); // @codingStandardsIgnoreLine.
         $result = array();
 
@@ -1102,7 +1088,7 @@ class UsersWP_Status {
                 if ( ! in_array( $value, array( '.', '..' ), true ) ) {
 
                     if ( is_dir( $template_path . DIRECTORY_SEPARATOR . $value ) ) {
-                        $sub_files = $this->scan_template_files( $template_path . DIRECTORY_SEPARATOR . $value );
+                        $sub_files = self::scan_template_files( $template_path . DIRECTORY_SEPARATOR . $value );
                         foreach ( $sub_files as $sub_file ) {
                             $result[] = $value . DIRECTORY_SEPARATOR . $sub_file;
                         }

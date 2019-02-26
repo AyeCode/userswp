@@ -6,6 +6,14 @@ jQuery(window).load(function() {
             allow_single_deselect: 'true'
         });
     }
+
+    // Load color picker
+    var UWPColorPicker = jQuery('.uwp-color-picker');
+    console.log('uwpColorPicker');
+    if (UWPColorPicker.length) {
+        UWPColorPicker.wpColorPicker();
+    }
+
     jQuery('.uwp_upload_btn').click(function() {
         var $this = jQuery(this);
 
@@ -38,6 +46,85 @@ jQuery(window).load(function() {
         }
         return false;
     });
+
+    jQuery('.uwp-upload-img').each(function() {
+        var $wrap = jQuery(this);
+        var field = $wrap.data('field');
+        if (jQuery('[name="' + field + '[id]"]').length && !jQuery('[name="' + field + '[id]"]').val()) {
+            jQuery('.uwp_remove_image_button', $wrap).hide();
+        }
+    });
+
+    var media_frame = [];
+    jQuery(document).on('click', '.uwp_upload_image_button', function(e) {
+        e.preventDefault();
+
+        var $this = jQuery(this);
+        var $wrap = $this.closest('.uwp-upload-img');
+        var field = $wrap.data('field');
+
+        if ( !field ) {
+            return
+        }
+
+        if (media_frame && media_frame[field]) {
+            media_frame[field].open();
+            return;
+        }
+
+        media_frame[field] = wp.media.frames.downloadable_file = wp.media({
+            title: uwp_admin_ajax.txt_choose_image,
+            button: {
+                text: uwp_admin_ajax.txt_use_image
+            },
+            multiple: false
+        });
+
+        // When an image is selected, run a callback.
+        media_frame[field].on('select', function() {
+            var attachment = media_frame[field].state().get('selection').first().toJSON();
+
+            var thumbnail = attachment.sizes.medium || attachment.sizes.full;
+            if (field) {
+                if(jQuery('[name="' + field + '[id]"]').length){
+                    jQuery('[name="' + field + '[id]"]').val(attachment.id);
+                }
+                if(jQuery('[name="' + field + '[src]"]').length){
+                    jQuery('[name="' + field + '[src]"]').val(attachment.url);
+                }
+                if(jQuery('[name="' + field + '"]').length){
+                    jQuery('[name="' + field + '"]').val(attachment.id);
+                }
+
+
+            }
+            $wrap.closest('.form-field.form-invalid').removeClass('form-invalid');
+            jQuery('.uwp-upload-display', $wrap).find('img').attr('src', thumbnail.url);
+            jQuery('.uwp_remove_image_button').show();
+        });
+        // Finally, open the modal.
+        media_frame[field].open();
+    });
+
+    jQuery(document).on('click', '.uwp_remove_image_button', function() {
+        var $this = jQuery(this);
+        var $wrap = $this.closest('.uwp-upload-img');
+        var field = $wrap.data('field');
+        jQuery('.uwp-upload-display', $wrap).find('img').attr('src', uwp_admin_ajax.img_spacer).removeAttr('width height sizes alt class srcset');
+        if (field) {
+            if (jQuery('[name="' + field + '[id]"]').length > 0) {
+                jQuery('[name="' + field + '[id]"]').val('');
+                jQuery('[name="' + field + '[src]"]').val('');
+            }
+            if (jQuery('[name="' + field + '"]').length > 0) {
+                jQuery('[name="' + field + '"]').val('');
+            }
+        }
+        $this.hide();
+        return false;
+    });
+
+    uwp_init_tooltips();
 });
 
 function uwp_chosen() {
@@ -167,6 +254,7 @@ jQuery(document).ready(function () {
                 uwp_chosen();
                 jQuery('#licontainer_' + id).find('#sort_order').val(parseInt(jQuery('#licontainer_' + id).index()) + 1);
                 uwp_show_hide('field_frm'+id);
+                uwp_init_tooltips();
                 jQuery('html, body').animate({
                     scrollTop: jQuery("#licontainer_"+id).offset().top
                 }, 1000);
@@ -223,6 +311,7 @@ jQuery(document).ready(function () {
                     jQuery('#licontainer_'+htmlvar_name).find('#sort_order').val( parseInt(jQuery('#licontainer_'+htmlvar_name).index()) + 1 );
 
                     uwp_show_hide('field_frm'+htmlvar_name);
+                    uwp_init_tooltips();
                     jQuery('html, body').animate({
                         scrollTop: jQuery("#licontainer_"+htmlvar_name).offset().top
                     }, 1000);
@@ -250,6 +339,7 @@ jQuery(document).ready(function () {
                     jQuery('#licontainer_'+htmlvar_name).find('#sort_order').val( parseInt(jQuery('#licontainer_'+htmlvar_name).index()) + 1 );
 
                     uwp_show_hide('field_frm'+htmlvar_name);
+                    uwp_init_tooltips();
                     jQuery('html, body').animate({
                         scrollTop: jQuery("#licontainer_"+htmlvar_name).offset().top
                     }, 1000);
@@ -336,7 +426,7 @@ function save_field(id) {
         'success': function (result) {
 
             //alert(result);
-            if (jQuery.trim(result) == 'HTML Variable Name should be a unique name') {
+            if (jQuery.trim(result) == 'invalid_key') {
 
                 alert(uwp_admin_ajax.custom_field_unique_name);
 
@@ -352,6 +442,7 @@ function save_field(id) {
                         //alert(theResponse);
                     });
 
+                uwp_init_tooltips();
                 jQuery('.field_frm').hide();
             }
 
@@ -438,7 +529,7 @@ function save_register_field(id)
         'success': function(result){
 
 
-            if(jQuery.trim( result ) == 'HTML Variable Name should be a unique name')
+            if(jQuery.trim( result ) == 'invalid_key')
             {
 
                 alert(uwp_admin_ajax.custom_field_unique_name);
@@ -463,4 +554,45 @@ function save_register_field(id)
     });
 
 
+}
+
+function uwp_init_advanced_settings(){
+    jQuery( ".uwp-advanced-toggle" ).off("click").click(function() {
+        jQuery(".uwp-advanced-toggle").toggleClass("uwpa-hide");
+        console.log('toggle');
+        jQuery(".uwp-advanced-setting, #default_location_set_address_button").toggleClass("uwpa-show");
+    });
+}
+
+/**
+ * Init the tooltips
+ */
+function uwp_init_tooltips(){
+
+    // we create, then destroy then create so we can ajax load and then call this function with impunity.
+    jQuery('.uwp-help-tip').tooltip().tooltip('destroy').tooltip({
+        content: function () {
+            return jQuery(this).prop('title');
+        },
+        tooltipClass: 'uwp-ui-tooltip',
+        position: {
+            my: 'center top',
+            at: 'center bottom+10',
+            collision: 'flipfit',
+        },
+        show: null,
+        close: function (event, ui) {
+            ui.tooltip.hover(
+
+                function () {
+                    jQuery(this).stop(true).fadeTo(400, 1);
+                },
+
+                function () {
+                    jQuery(this).fadeOut("400", function () {
+                        jQuery(this).remove();
+                    })
+                });
+        }
+    });
 }
