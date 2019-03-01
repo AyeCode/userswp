@@ -152,6 +152,12 @@ final class UsersWP {
         add_action('edit_user_profile_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('user_edit_form_tag', array($instance, 'add_multipart_to_admin_edit_form'));
         add_action('uwp_template_form_title_after', array($instance, 'uwp_display_username_in_account'), 10, 1);
+        add_action('init', array($instance, 'process_login'));
+        add_action('init', array($instance, 'process_register'));
+        add_action('init', array($instance, 'process_account'));
+        add_action('init', array($instance, 'process_forgot'));
+        add_action('init', array($instance, 'process_change'));
+        add_action('init', array($instance, 'process_reset'));
 
 
         // Forms
@@ -170,7 +176,6 @@ final class UsersWP {
         add_filter('uwp_form_input_html_password', array($instance, 'uwp_form_input_password'), 10, 4);
         // Country select
         add_filter('uwp_form_input_html_select_country', array($instance, 'uwp_form_input_select_country'), 10, 4);
-        add_filter('uwp_forms_check_for_send_mail_errors', array($instance, 'uwp_forms_check_for_send_mail_errors'), 10, 3);
         add_filter('uwp_form_input_email_uwp_account_email_after', array($instance, 'uwp_register_confirm_email_field'), 10, 4);
         add_filter('uwp_form_input_password_uwp_account_password_after', array($instance, 'uwp_register_confirm_password_field'), 10, 4);
         

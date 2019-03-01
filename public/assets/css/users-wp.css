@@ -1256,7 +1256,7 @@
   .uwp-forgot .uwp-rf-icon,
   .uwp-account .uwp-lf-icon,
   .uwp-account .uwp-rf-icon {
-    background: transparent none repeat scroll 0 0;
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
     border: 1px solid #ccc;
     border-radius: 50px;
     height: auto;
@@ -1876,6 +1876,10 @@
 .uwp_adv_search_form .uwp_multiselect_list .uwp-chosen-container-multi .chosen-choices li.search-choice {
   margin-top: 5px;
   margin-bottom: 5px; }
+.uwp_page .uwp-remember-me input#remember_me,
+.uwp_widgets .uwp-remember-me input#remember_me,
+.uwp_adv_search_form .uwp-remember-me input#remember_me {
+  margin-bottom: 0; }
 
 .widget .uwp-content-wrap h2 {
   display: none; }
