@@ -608,6 +608,8 @@ class UsersWP_Forms {
             return;
         }
 
+        global $uwp_notices;
+
         do_action('uwp_before_validate', 'reset');
 
         $result = uwp_validate_fields($data, 'reset');
