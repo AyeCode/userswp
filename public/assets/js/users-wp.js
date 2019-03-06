@@ -1,8 +1,8 @@
 jQuery(window).load(function() {
-    // Chosen selects
-    if (jQuery("select.uwp_chosen_select").length > 0) {
-        jQuery("select.uwp_chosen_select").chosen();
-        jQuery("select.uwp_chosen_select_nostd").chosen({
+    // select2 selects
+    if (jQuery("select.uwp_select2").length > 0) {
+        jQuery("select.uwp_select2").select2();
+        jQuery("select.uwp_select2_nostd").select2({
             allow_single_deselect: 'true'
         });
     }

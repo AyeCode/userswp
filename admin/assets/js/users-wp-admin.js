@@ -1,8 +1,8 @@
 jQuery(window).load(function() {
-    // Chosen selects
-    if (jQuery("select.uwp_chosen_select").length > 0) {
-        jQuery("select.uwp_chosen_select").chosen();
-        jQuery("select.uwp_chosen_select_nostd").chosen({
+    // select2 selects
+    if (jQuery("select.uwp_select2").length > 0) {
+        jQuery("select.uwp_select2").select2();
+        jQuery("select.uwp_select2_nostd").select2({
             allow_single_deselect: 'true'
         });
     }
@@ -127,26 +127,26 @@ jQuery(window).load(function() {
     uwp_init_tooltips();
 });
 
-function uwp_chosen() {
-    if (jQuery("select.uwp_chosen_select").length > 0) {
-        jQuery("select.uwp_chosen_select").chosen();
-        jQuery("select.uwp_chosen_select_nostd").chosen({
+function uwp_select2() {
+    if (jQuery("select.uwp_select2").length > 0) {
+        jQuery("select.uwp_select2").select2();
+        jQuery("select.uwp_select2_nostd").select2({
             allow_single_deselect: 'true'
         });
     }
 }
 
-function uwp_show_hide(id) {
-    jQuery('#' + id).toggle();
-}
-
-function uwp_show_hide_radio(id,sh,cl) {
-    if(sh=='hide'){
-        jQuery( id ).closest( '.widefat' ).find('.'+cl).hide('fast');
+function uwp_show_hide($this) {
+    var is_open = !jQuery($this).parent('.li-settings').find('.field_frm').is(':hidden');
+    jQuery('.field_frm').hide();
+    jQuery('.field_frm').parent().parent().find('.toggle-arrow').addClass("fa-caret-down").removeClass( "fa-caret-up");
+    if(is_open){
+        jQuery($this).addClass("fa-caret-down").removeClass( "fa-caret-up");
+        jQuery($this).parent('.li-settings').find('.field_frm').hide().removeClass( "uwp-tab-settings-open" );
     }else{
-        jQuery( id ).closest( '.widefat' ).find('.'+cl).show('fast');
+        jQuery($this).addClass("fa-caret-up").removeClass( "fa-caret-down");
+        jQuery($this).parent('.li-settings').find('.field_frm').show().addClass( "uwp-tab-settings-open" );
     }
-
 }
 
 function validate_field(field) {
@@ -251,9 +251,9 @@ jQuery(document).ready(function () {
                 custom_type: custom_type
             }, function (data) {
                 jQuery('.field_row_main ul.core').append(data);
-                uwp_chosen();
+                uwp_select2();
                 jQuery('#licontainer_' + id).find('#sort_order').val(parseInt(jQuery('#licontainer_' + id).index()) + 1);
-                uwp_show_hide('field_frm'+id);
+                uwp_show_hide(jQuery("#licontainer_"+id).find('.toggle-arrow'));
                 uwp_init_tooltips();
                 jQuery('html, body').animate({
                     scrollTop: jQuery("#licontainer_"+id).offset().top
@@ -310,7 +310,7 @@ jQuery(document).ready(function () {
 
                     jQuery('#licontainer_'+htmlvar_name).find('#sort_order').val( parseInt(jQuery('#licontainer_'+htmlvar_name).index()) + 1 );
 
-                    uwp_show_hide('field_frm'+htmlvar_name);
+                    uwp_show_hide(jQuery("#licontainer_"+htmlvar_name).find('.toggle-arrow'));
                     uwp_init_tooltips();
                     jQuery('html, body').animate({
                         scrollTop: jQuery("#licontainer_"+htmlvar_name).offset().top
@@ -338,7 +338,7 @@ jQuery(document).ready(function () {
 
                     jQuery('#licontainer_'+htmlvar_name).find('#sort_order').val( parseInt(jQuery('#licontainer_'+htmlvar_name).index()) + 1 );
 
-                    uwp_show_hide('field_frm'+htmlvar_name);
+                    uwp_show_hide(jQuery("#licontainer_"+htmlvar_name).find('.toggle-arrow'));
                     uwp_init_tooltips();
                     jQuery('html, body').animate({
                         scrollTop: jQuery("#licontainer_"+htmlvar_name).offset().top
@@ -433,7 +433,7 @@ function save_field(id) {
             }
             else {
                 jQuery('#licontainer_' + id).replaceWith(jQuery.trim(result));
-                uwp_chosen();
+                uwp_select2();
 
                 var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type=custom_fields';
 
@@ -472,11 +472,6 @@ function delete_field(id, nonce) {
 
     }
 
-}
-
-function uwp_show_hide_register(id)
-{
-    jQuery('#'+id).toggle();
 }
 
 function delete_register_field(id, nonce,deleteid)

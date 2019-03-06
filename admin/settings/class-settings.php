@@ -275,6 +275,7 @@ class UsersWP_Admin_Settings {
                                 placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
                             <?php echo implode( ' ', $custom_attributes ); ?>
                             <?php if( !empty( $value['disabled'] ) && true == $value['disabled']){ echo 'disabled="disabled"'; } ?>
+                            <?php if( !empty( $value['readonly'] ) && true == $value['readonly']){ echo 'readonly="readonly"'; } ?>
                             <?php if($value['type']=='number'){echo "lang='EN'";} // HTML5 number input can change number format depending on browser language, we don't want that ?>
                         /> <?php echo $description; ?>
                     </td>
@@ -450,7 +451,7 @@ class UsersWP_Admin_Settings {
                                 name="<?php echo esc_attr( $value['id'] ); ?><?php echo ( 'multiselect' === $value['type'] ) ? '[]' : ''; ?>"
                                 id="<?php echo esc_attr( $value['id'] ); ?>"
                                 style="<?php echo esc_attr( $value['css'] ); ?>"
-                                class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
+                                class="regular-text uwp_select2 <?php echo esc_attr( $value['class'] ); ?>"
                             <?php echo implode( ' ', $custom_attributes ); ?>
                             <?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
                             <?php echo ! empty( $value['sortable'] ) ? ' data-sortable="true"' : ''; ?>
@@ -685,7 +686,7 @@ class UsersWP_Admin_Settings {
                         'sort_column'      => 'menu_order',
                         'sort_order'       => 'ASC',
                         'show_option_none' => ' ',
-                        'class'            => ' regular-text '.$value['class'],
+                        'class'            => ' regular-text uwp_select2 '.$value['class'],
                         'echo'             => false,
                         'selected'         => absint( $option_value ),
                     );
@@ -707,14 +708,6 @@ class UsersWP_Admin_Settings {
                             <?php }
                         }
 
-                        if(!empty($value['default_content'])){
-                            ?>
-                            <a href="#uwp_default_content_<?php echo esc_attr($value['id'])?>" data-lity class="button uwp-page-setting-view"><?php _e('View Default Content','userswp');?></a>
-                            <div id="uwp_default_content_<?php echo esc_attr($value['id'])?>" style="background:#fff;" class="lity-hide uwp-notification ">
-                                <textarea style="min-width: 50vw;min-height: 50vh;"><?php echo $value['default_content'];?></textarea>
-                            </div>
-                            <?php
-                        }
                         ?>
 
                     </td>

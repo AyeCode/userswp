@@ -121,6 +121,7 @@ No questions so far, but don't hesitate to ask!
 
 = 1.0.24 =
 * Implement new settings interface - CHANGED
+* Replace chosen with select2 - CHANGED
 
 = 1.0.23 =
 * UWP Login widget breaks page for logged in users - FIXED

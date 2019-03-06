@@ -124,7 +124,7 @@ $total_users = $users_count['total_users'];
                 <tbody>
                 <tr>
                     <th class=""><label for="uwp_ie_chunk_size"><?php _e( 'Max entries per csv file:', 'userswp' );?></label></th>
-                    <td><select name="uwp_ie_chunk_size" id="uwp_ie_chunk_size" data-ucount = "<?php echo $total_users;?>" style="min-width:140px"><?php echo $uwp_chunk_sizes_opts;?></select><p class="description"><?php _e( 'The maximum number of entries per csv file (default to 5000, you might want to lower this to prevent memory issues.)', 'userswp' );?></p></td>
+                    <td><select name="uwp_ie_chunk_size" class="uwp_select2" id="uwp_ie_chunk_size" data-ucount = "<?php echo $total_users;?>" style="min-width:140px"><?php echo $uwp_chunk_sizes_opts;?></select><p class="description"><?php _e( 'The maximum number of entries per csv file (default to 5000, you might want to lower this to prevent memory issues.)', 'userswp' );?></p></td>
                 </tr>
                 </tbody>
             </table>

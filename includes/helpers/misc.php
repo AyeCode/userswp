@@ -745,7 +745,7 @@ function uwp_account_privacy_edit_form_display($type) {
                                         $value = 'yes';
                                     }
                                     ?>
-                                    <select name="<?php echo $field_name; ?>" class="uwp_privacy_field"
+                                    <select name="<?php echo $field_name; ?>" class="uwp_privacy_field uwp_select2"
                                             style="margin: 0;">
                                         <option value="no" <?php selected($value, "no"); ?>><?php echo __("No", "userswp") ?></option>
                                         <option value="yes" <?php selected($value, "yes"); ?>><?php echo __("Yes", "userswp") ?></option>

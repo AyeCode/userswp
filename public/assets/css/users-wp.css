@@ -1625,6 +1625,22 @@
   line-height: normal;
   width: 100%;
   box-sizing: border-box; }
+.uwp_page .uwp-login-form .select2-container,
+.uwp_page .uwp-registration-form .select2-container,
+.uwp_page .uwp-forgot-form .select2-container,
+.uwp_page .uwp-change-form .select2-container,
+.uwp_page .uwp-account-form .select2-container,
+.uwp_widgets .uwp-login-form .select2-container,
+.uwp_widgets .uwp-registration-form .select2-container,
+.uwp_widgets .uwp-forgot-form .select2-container,
+.uwp_widgets .uwp-change-form .select2-container,
+.uwp_widgets .uwp-account-form .select2-container,
+.uwp_adv_search_form .uwp-login-form .select2-container,
+.uwp_adv_search_form .uwp-registration-form .select2-container,
+.uwp_adv_search_form .uwp-forgot-form .select2-container,
+.uwp_adv_search_form .uwp-change-form .select2-container,
+.uwp_adv_search_form .uwp-account-form .select2-container {
+  margin: 0 0 20px; }
 .uwp_page .uwp-login-form input[type="checkbox"],
 .uwp_page .uwp-login-form input[type="radio"],
 .uwp_page .uwp-registration-form input[type="checkbox"],
@@ -1727,40 +1743,6 @@
   font-weight: bold;
   text-transform: uppercase;
   width: 100%; }
-.uwp_page .uwp-login-form .chosen-container-multi .chosen-choices,
-.uwp_page .uwp-registration-form .chosen-container-multi .chosen-choices,
-.uwp_page .uwp-forgot-form .chosen-container-multi .chosen-choices,
-.uwp_page .uwp-change-form .chosen-container-multi .chosen-choices,
-.uwp_page .uwp-account-form .chosen-container-multi .chosen-choices,
-.uwp_widgets .uwp-login-form .chosen-container-multi .chosen-choices,
-.uwp_widgets .uwp-registration-form .chosen-container-multi .chosen-choices,
-.uwp_widgets .uwp-forgot-form .chosen-container-multi .chosen-choices,
-.uwp_widgets .uwp-change-form .chosen-container-multi .chosen-choices,
-.uwp_widgets .uwp-account-form .chosen-container-multi .chosen-choices,
-.uwp_adv_search_form .uwp-login-form .chosen-container-multi .chosen-choices,
-.uwp_adv_search_form .uwp-registration-form .chosen-container-multi .chosen-choices,
-.uwp_adv_search_form .uwp-forgot-form .chosen-container-multi .chosen-choices,
-.uwp_adv_search_form .uwp-change-form .chosen-container-multi .chosen-choices,
-.uwp_adv_search_form .uwp-account-form .chosen-container-multi .chosen-choices {
-  width: auto;
-  padding-top: 5px;
-  padding-bottom: 5px; }
-.uwp_page .uwp-login-form .uwp_multiselect_list,
-.uwp_page .uwp-registration-form .uwp_multiselect_list,
-.uwp_page .uwp-forgot-form .uwp_multiselect_list,
-.uwp_page .uwp-change-form .uwp_multiselect_list,
-.uwp_page .uwp-account-form .uwp_multiselect_list,
-.uwp_widgets .uwp-login-form .uwp_multiselect_list,
-.uwp_widgets .uwp-registration-form .uwp_multiselect_list,
-.uwp_widgets .uwp-forgot-form .uwp_multiselect_list,
-.uwp_widgets .uwp-change-form .uwp_multiselect_list,
-.uwp_widgets .uwp-account-form .uwp_multiselect_list,
-.uwp_adv_search_form .uwp-login-form .uwp_multiselect_list,
-.uwp_adv_search_form .uwp-registration-form .uwp_multiselect_list,
-.uwp_adv_search_form .uwp-forgot-form .uwp_multiselect_list,
-.uwp_adv_search_form .uwp-change-form .uwp_multiselect_list,
-.uwp_adv_search_form .uwp-account-form .uwp_multiselect_list {
-  margin-bottom: 20px; }
 .uwp_page .uwp_wc_form label,
 .uwp_widgets .uwp_wc_form label,
 .uwp_adv_search_form .uwp_wc_form label {
@@ -1866,16 +1848,6 @@
   color: #333;
   background-color: #fff;
   border-color: #bbb; }
-.uwp_page .uwp-chosen-container-multi .chosen-choices,
-.uwp_widgets .uwp-chosen-container-multi .chosen-choices,
-.uwp_adv_search_form .uwp-chosen-container-multi .chosen-choices {
-  padding: 6px 15px;
-  box-sizing: border-box; }
-.uwp_page .uwp_multiselect_list .uwp-chosen-container-multi .chosen-choices li.search-choice,
-.uwp_widgets .uwp_multiselect_list .uwp-chosen-container-multi .chosen-choices li.search-choice,
-.uwp_adv_search_form .uwp_multiselect_list .uwp-chosen-container-multi .chosen-choices li.search-choice {
-  margin-top: 5px;
-  margin-bottom: 5px; }
 .uwp_page .uwp-remember-me input#remember_me,
 .uwp_widgets .uwp-remember-me input#remember_me,
 .uwp_adv_search_form .uwp-remember-me input#remember_me {

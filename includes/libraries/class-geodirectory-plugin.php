@@ -237,7 +237,7 @@ class UsersWP_GeoDirectory_Plugin {
                     'multiple'    => true,
                     'type'        => 'multiselect',
                     'options' => $gd_posttypes,
-                    'class' => 'uwp_chosen_select uwp-select',
+                    'class' => 'uwp_select2 uwp-select',
                 ),
                 array(
                     'id' => 'gd_profile_reviews',
@@ -246,7 +246,7 @@ class UsersWP_GeoDirectory_Plugin {
                     'multiple'    => true,
                     'type'        => 'multiselect',
                     'options' => $gd_posttypes,
-                    'class' => 'uwp_chosen_select uwp-select',
+                    'class' => 'uwp_select2 uwp-select',
                 ),
                 array(
                     'id' => 'gd_profile_favorites',
@@ -255,7 +255,7 @@ class UsersWP_GeoDirectory_Plugin {
                     'multiple'    => true,
                     'type'        => 'multiselect',
                     'options' => $gd_posttypes,
-                    'class' => 'uwp_chosen_select uwp-select',
+                    'class' => 'uwp_select2 uwp-select',
                 ),
                 array(
                     'id'   => 'geodir_uwp_link_listing',

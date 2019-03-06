@@ -61,12 +61,6 @@
       }
     }
 
-    .chosen-container{
-      width: 100% !important;
-      .chosen-search-input{
-        width: 100% !important;
-      }
-    }
   }
 
   #uwp-available-fields {
@@ -332,6 +326,9 @@
   .ui-sortable-handle{
     background: #eee;
   }
+  .li-settings{
+    position: relative;
+  }
   .field_frm{
     padding: 10px;
   }
@@ -372,6 +369,14 @@
   .fa-info-circle{
     color: #3673cc;
     font-size: 16px;
+  }
+
+  .toggle-arrow {
+    position: absolute;
+    right: 0;
+    padding: 12px;
+    cursor: pointer;
+    z-index: 99;
   }
 }
 
@@ -422,6 +427,11 @@
 
   input#save {
     margin-right: 7px;
+  }
+
+  a.item-delete {
+    color: #a00;
+    vertical-align: middle;
   }
 }
 
@@ -585,9 +595,8 @@
 
     }
 
+    .select2-container{ width: 100% !important;}
   }
-
-  .uwp_chosen_select{ width: 100%;}
 
   @media screen and (max-width: 768px) {
     #uwp_form_builder_container {

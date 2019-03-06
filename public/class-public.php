@@ -48,9 +48,6 @@ class UsersWP_Public {
         $enable_timepicker_in_register = false;
         $enable_timepicker_in_account = false;
 
-        $enable_chosen_in_register = false;
-        $enable_chosen_in_account = false;
-
         if (is_uwp_register_page() || is_uwp_account_page()) {
             if (is_uwp_register_page()) {
                 $fields = get_register_form_fields();
@@ -63,10 +60,6 @@ class UsersWP_Public {
                     if ($field->field_type == 'time') {
                         $enable_timepicker_in_register = true;
                     }
-
-                    if ($field->field_type == 'multiselect') {
-                        $enable_chosen_in_register = true;
-                    }
                 }
             }
         }
@@ -75,12 +68,6 @@ class UsersWP_Public {
         if ($enable_timepicker_in_register || $enable_timepicker_in_account) {
             // time fields available only in register and account pages
             wp_enqueue_style( "uwp_timepicker_css", plugin_dir_url( __FILE__ ) . 'assets/css/jquery.ui.timepicker.css', array(), null, 'all' );
-        }
-
-
-        if ($enable_chosen_in_register || $enable_chosen_in_account) {
-            // chosen fields (multiselect) available only in register and account pages
-            wp_enqueue_style( "uwp_chosen_css", plugin_dir_url( __FILE__ ) . 'assets/css/chosen.css', array(), null, 'all' );
         }
 
         wp_enqueue_style( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp.css', array(), null, 'all' );
@@ -111,9 +98,6 @@ class UsersWP_Public {
 
         $enable_datepicker_in_register = false;
         $enable_datepicker_in_account = false;
-
-        $enable_chosen_in_register = false;
-        $enable_chosen_in_account = false;
         
         if (is_uwp_register_page() || is_uwp_account_page()) {
             if (is_uwp_register_page()) {
@@ -132,10 +116,6 @@ class UsersWP_Public {
                     if ($field->field_type == 'datepicker') {
                         $enable_datepicker_in_register = true;
                     }
-
-                    if ($field->field_type == 'multiselect') {
-                        $enable_chosen_in_register = true;
-                    }
                 }
             }
         }
@@ -153,12 +133,6 @@ class UsersWP_Public {
 
         if (is_uwp_profile_page() ) {
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
-        }
-
-        if ($enable_chosen_in_register || $enable_chosen_in_account) {
-            // chosen fields (multiselect) available only in register and account pages
-            wp_dequeue_script('chosen');
-            wp_enqueue_script( "uwp_chosen", plugin_dir_url( __FILE__ ) . 'assets/js/chosen.jquery.js', array( 'jquery' ), null, false );
         }
 
         // include only in uwp pages

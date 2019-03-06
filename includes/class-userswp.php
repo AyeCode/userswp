@@ -319,7 +319,6 @@ final class UsersWP {
         add_filter('uwp_form_builder_available_fields_note', array($instance, 'uwp_register_available_fields_note'), 10, 2);
         add_filter('uwp_form_builder_selected_fields_head', array($instance, 'uwp_register_selected_fields_head'), 10, 2);
         add_filter('uwp_form_builder_selected_fields_note', array($instance, 'uwp_register_selected_fields_note'), 10, 2);
-        add_filter('uwp_register_fields', array($instance, 'uwp_register_extra_fields'), 10, 2);
         // htmlvar not needed for taxonomy
         add_filter('uwp_builder_htmlvar_name_taxonomy',array($instance, 'uwp_return_empty_string'),10,4);
         // default_value not needed for textarea, html, file, fieldset
@@ -534,11 +533,6 @@ final class UsersWP {
          * The class responsible for adding fields in forms
          */
         require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-formbuilder.php';
-
-        /**
-         * The class responsible for setting field callbacks
-         */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-callback.php';
 
         /**
          * The class responsible for adding tools functions

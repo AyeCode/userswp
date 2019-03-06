@@ -319,7 +319,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'desc' => __( 'Choose the tabs to display in UsersWP Profile', 'userswp' ),
                     'type'  => 'multiselect',
                     'sortable' => true,
-                    'class'   => 'uwp_chosen_select uwp-select',
+                    'class'   => 'uwp_select2 uwp-select',
                     'options' =>   $this->uwp_available_tab_items(),
                     'desc_tip' => true,
                 ),

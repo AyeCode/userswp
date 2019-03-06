@@ -32,6 +32,10 @@
       box-sizing: border-box;
     }
 
+    .select2-container{
+      margin: 0 0 20px;
+    }
+
     input[type="checkbox"],
     input[type="radio"] {
       margin-bottom: 20px;
@@ -60,15 +64,6 @@
       font-weight: bold;
       text-transform: uppercase;
       width: 100%;
-    }
-
-    .chosen-container-multi .chosen-choices {
-      width: auto;
-      padding-top: 5px;
-      padding-bottom: 5px;
-    }
-    .uwp_multiselect_list {
-      margin-bottom: 20px;
     }
   }
   .uwp_wc_form {
@@ -178,15 +173,6 @@
       background-color: #fff;
       border-color: #bbb;
     }
-  }
-
-  .uwp-chosen-container-multi .chosen-choices {
-    padding: 6px 15px;
-    box-sizing: border-box;
-  }
-  .uwp_multiselect_list .uwp-chosen-container-multi .chosen-choices li.search-choice {
-    margin-top: 5px;
-    margin-bottom: 5px;
   }
 
   .uwp-remember-me input#remember_me {

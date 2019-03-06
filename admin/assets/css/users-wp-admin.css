@@ -302,10 +302,6 @@ h3.users_wp_section_heading {
         #uwp_form_builder_container .uwp-side-sortables .posttype-tabs li a {
           color: #333;
           text-decoration: none; }
-    #uwp_form_builder_container .uwp-side-sortables .chosen-container {
-      width: 100% !important; }
-      #uwp_form_builder_container .uwp-side-sortables .chosen-container .chosen-search-input {
-        width: 100% !important; }
   #uwp_form_builder_container #uwp-available-fields ul li {
     float: left;
     list-style: none outside none;
@@ -480,6 +476,8 @@ h3.users_wp_section_heading {
 
 #uwp-selected-fields .ui-sortable-handle {
   background: #eee; }
+#uwp-selected-fields .li-settings {
+  position: relative; }
 #uwp-selected-fields .field_frm {
   padding: 10px; }
 #uwp-selected-fields input[type="text"],
@@ -513,6 +511,12 @@ h3.users_wp_section_heading {
 #uwp-selected-fields .fa-info-circle {
   color: #3673cc;
   font-size: 16px; }
+#uwp-selected-fields .toggle-arrow {
+  position: absolute;
+  right: 0;
+  padding: 12px;
+  cursor: pointer;
+  z-index: 99; }
 
 #uwp_form_builder_container {
   margin-right: 0;
@@ -542,6 +546,9 @@ h3.users_wp_section_heading {
   margin: 0 10px 0 0; }
 .uwp-tab-actions input#save {
   margin-right: 7px; }
+.uwp-tab-actions a.item-delete {
+  color: #a00;
+  vertical-align: middle; }
 
 /* tooltip css */
 .uwp-tooltip-wrap {
@@ -687,9 +694,8 @@ Radio input buttons
     width: 100%;
     height: 37px;
     background: #fd9720; }
-
-.uwp_chosen_select {
-  width: 100%; }
+  #uwp_form_builder_container .select2-container {
+    width: 100% !important; }
 
 @media screen and (max-width: 768px) {
   #uwp_form_builder_container .field_row_main {
