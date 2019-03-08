@@ -46,7 +46,6 @@ class UsersWP_Public {
         }
 
         $enable_timepicker_in_register = false;
-        $enable_timepicker_in_account = false;
 
         if (is_uwp_register_page() || is_uwp_account_page()) {
             if (is_uwp_register_page()) {
@@ -65,7 +64,7 @@ class UsersWP_Public {
         }
         
 
-        if ($enable_timepicker_in_register || $enable_timepicker_in_account) {
+        if ($enable_timepicker_in_register) {
             // time fields available only in register and account pages
             wp_enqueue_style( "uwp_timepicker_css", USERSWP_PLUGIN_URL . 'assets/css/jquery.ui.timepicker.css', array(), USERSWP_VERSION, 'all' );
         }
