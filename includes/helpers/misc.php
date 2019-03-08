@@ -1451,12 +1451,26 @@ function uwp_wpml_object_id( $element_id, $element_type = 'post', $return_origin
 function uwp_get_default_avatar_uri(){
     $default = uwp_get_option('profile_default_profile', '');
     if(empty($default)){
-        $default = USERSWP_PLUGIN_URL."public/assets/images/no_profile.png";
+        $default = USERSWP_PLUGIN_URL."assets/images/no_profile.png";
     } else {
         $default = wp_get_attachment_url($default);
     }
 
+    $default = apply_filters('uwp_default_avatar_uri', $default);
+
     return $default;
+}
+
+function uwp_get_default_thumb_uri(){
+    $thumb_url = USERSWP_PLUGIN_URL."/assets/images/no_thumb.png";
+    $thumb_url = apply_filters('uwp_default_thumb_uri', $thumb_url);
+    return $thumb_url;
+}
+
+function uwp_get_default_banner_uri(){
+    $banner_url = USERSWP_PLUGIN_URL."/assets/images/banner.png";
+    $banner_url = apply_filters('uwp_default_banner_uri', $banner_url);
+    return $banner_url;
 }
 
 function uwp_refresh_permalinks_on_bad_404() {

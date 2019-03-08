@@ -32,7 +32,7 @@ class UsersWP_Public {
 
         if (is_uwp_page()) {
             // include only in uwp pages
-            wp_register_style('jquery-ui', plugin_dir_url(dirname(__FILE__)) .  'public/assets/css/jquery-ui.css');
+            wp_register_style('jquery-ui', USERSWP_PLUGIN_URL .  'assets/css/jquery-ui.css');
             wp_enqueue_style( 'jquery-ui' );
         }
 
@@ -67,12 +67,13 @@ class UsersWP_Public {
 
         if ($enable_timepicker_in_register || $enable_timepicker_in_account) {
             // time fields available only in register and account pages
-            wp_enqueue_style( "uwp_timepicker_css", plugin_dir_url( __FILE__ ) . 'assets/css/jquery.ui.timepicker.css', array(), null, 'all' );
+            wp_enqueue_style( "uwp_timepicker_css", USERSWP_PLUGIN_URL . 'assets/css/jquery.ui.timepicker.css', array(), USERSWP_VERSION, 'all' );
         }
 
-        wp_enqueue_style( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/css/users-wp.css', array(), null, 'all' );
         //widget styles for all pages
-        wp_enqueue_style( "uwp_widget_css", plugin_dir_url( __FILE__ ) . 'assets/css/widgets.css', array(), null, 'all' );
+        wp_enqueue_style( "uwp_widget_css", USERSWP_PLUGIN_URL . 'assets/css/widgets.css', array(), USERSWP_VERSION, 'all' );
+        wp_enqueue_style( "select2", USERSWP_PLUGIN_URL . 'assets/css/select2/select2.css', array(), USERSWP_VERSION, 'all' );
+        wp_enqueue_style( USERSWP_NAME, USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
 
     }
 
@@ -82,6 +83,8 @@ class UsersWP_Public {
      * @since    1.0.0
      */
     public function enqueue_scripts() {
+
+        $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
         if (is_uwp_page()) {
             // include only in uwp pages
@@ -122,7 +125,7 @@ class UsersWP_Public {
         
         if ($enable_timepicker_in_register || $enable_timepicker_in_account) {
             // time fields available only in register and account pages
-            wp_enqueue_script( "uwp_timepicker", plugin_dir_url( __FILE__ ) . 'assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
+            wp_enqueue_script( "uwp_timepicker", USERSWP_PLUGIN_URL . 'assets/js/jquery.ui.timepicker' . $suffix . '.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
         }
 
 
@@ -135,11 +138,13 @@ class UsersWP_Public {
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
         }
 
+        wp_enqueue_script('select2', USERSWP_PLUGIN_URL . 'assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION );
+
         // include only in uwp pages
-        wp_enqueue_script( USERSWP_NAME, plugin_dir_url( __FILE__ ) . 'assets/js/users-wp.min.js', array( 'jquery' ), null, false );
+        wp_enqueue_script( USERSWP_NAME, USERSWP_PLUGIN_URL . 'assets/js/users-wp' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
 
         //load CountrySelect
-        wp_enqueue_script( "country-select", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/countrySelect.min.js', array( 'jquery' ), null, false );
+        wp_enqueue_script( "country-select", USERSWP_PLUGIN_URL . 'assets/js/countrySelect' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
 
         $country_data = uwp_get_country_data();
         wp_localize_script(USERSWP_NAME, 'uwp_country_data', $country_data);

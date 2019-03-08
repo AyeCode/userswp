@@ -41,17 +41,17 @@ class UsersWP_Admin {
     public function enqueue_styles($hook_suffix) {
 
         if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
-            wp_register_style('jquery-ui', plugin_dir_url(dirname(__FILE__)) .  'public/assets/css/jquery-ui.css');
+            wp_register_style('jquery-ui', USERSWP_PLUGIN_URL .  'assets/css/jquery-ui.css');
             wp_enqueue_style( 'jquery-ui' );
             wp_enqueue_style( 'jcrop' );
-            wp_enqueue_style( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/users-wp.css', array(), null, 'all' );
-            wp_enqueue_style( "uwp_timepicker_css", plugin_dir_url( dirname(__FILE__) ) . 'public/assets/css/jquery.ui.timepicker.css', array(), null, 'all' );
+            wp_enqueue_style( "userswp", USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
+            wp_enqueue_style( "uwp_timepicker_css", USERSWP_PLUGIN_URL . 'assets/css/jquery.ui.timepicker.css', array(), USERSWP_VERSION, 'all' );
         }
         if ($hook_suffix == 'userswp_page_uwp_tools') {
-            wp_enqueue_style( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/css/users-wp.css', array(), null, 'all' );
+            wp_enqueue_style( "userswp", USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
         }
-        wp_enqueue_style( "userswp_admin_css", plugin_dir_url( __FILE__ ) . 'assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
-        wp_enqueue_style( "select2", plugin_dir_url(dirname(__FILE__)) . 'admin/assets/css/select2.css', array(), USERSWP_VERSION, 'all' );
+        wp_enqueue_style( "userswp_admin_css", USERSWP_PLUGIN_URL . 'admin/assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
+        wp_enqueue_style( "select2", USERSWP_PLUGIN_URL . 'assets/css/select2/select2.css', array(), USERSWP_VERSION, 'all' );
 
         if ($hook_suffix == 'toplevel_page_userswp') {
             wp_enqueue_style( 'wp-color-picker' );
@@ -72,29 +72,27 @@ class UsersWP_Admin {
         if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
 
             wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
-            wp_enqueue_script( "uwp_timepicker", plugin_dir_url( dirname(__FILE__) ) . 'public/assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
-            wp_enqueue_script( "userswp", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/users-wp.min.js', array( 'jquery' ), null, false );
+            wp_enqueue_script( "uwp_timepicker", USERSWP_PLUGIN_URL . 'assets/js/jquery.ui.timepicker'.$suffix.'.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), USERSWP_VERSION );
+            wp_enqueue_script( "userswp", USERSWP_PLUGIN_URL . 'assets/js/users-wp'.$suffix.'.js', array( 'jquery' ), USERSWP_VERSION, false );
             $uwp_localize_data = uwp_get_localize_data();
             wp_localize_script('userswp', 'uwp_localize_data', $uwp_localize_data);
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
             wp_enqueue_script( 'jcrop', array( 'jquery' ) );
-            wp_enqueue_script( "country-select", plugin_dir_url(dirname(__FILE__)) . 'public/assets/js/countrySelect.min.js', array( 'jquery' ), null, false );
+            wp_enqueue_script( "country-select", USERSWP_PLUGIN_URL . 'assets/js/countrySelect'.$suffix.'.js', array( 'jquery' ), USERSWP_VERSION );
 
 
         }
         if ($hook_suffix == 'userswp_page_uwp_status') {
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
-            wp_enqueue_script( "uwp_status", USERSWP_PLUGIN_URL . '/admin/assets/js/system-status.js', array( 'jquery' ), USERSWP_VERSION, true );
+            wp_enqueue_script( "uwp_status", USERSWP_PLUGIN_URL . 'admin/assets/js/system-status.js', array( 'jquery' ), USERSWP_VERSION, true );
         }
 
         wp_enqueue_script('jquery-ui-sortable');
-        wp_enqueue_script( "userswp_admin", plugin_dir_url( __FILE__ ) . 'assets/js/users-wp-admin'.$suffix.'.js', array( 'jquery' ), null, false );
-        wp_enqueue_script('select2', plugin_dir_url( __FILE__ ) . 'assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION );
+        wp_enqueue_script( "userswp_admin", USERSWP_PLUGIN_URL . 'admin/assets/js/users-wp-admin'.$suffix.'.js', array( 'jquery' ), USERSWP_VERSION, false );
+        wp_enqueue_script('select2', USERSWP_PLUGIN_URL . 'assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION );
 
-        if ($hook_suffix == 'toplevel_page_userswp') {
-            wp_enqueue_script("jquery-ui-tooltip");
-            wp_enqueue_script('wp-color-picker');
-        }
+        wp_enqueue_script("jquery-ui-tooltip");
+        wp_enqueue_script('wp-color-picker');
 
         $ajax_cons_data = array(
             'url' => admin_url('admin-ajax.php'),

@@ -32,7 +32,7 @@ class UsersWP_Profile {
         if (empty($banner)) {
             $banner = uwp_get_option('profile_default_banner', '');
             if(empty($banner)){
-                $banner = USERSWP_PLUGIN_URL."/public/assets/images/banner.png";
+                $banner = uwp_get_default_banner_uri();
             } else {
                 $banner = wp_get_attachment_url($banner);
             }
@@ -565,7 +565,7 @@ class UsersWP_Profile {
                             if ( has_post_thumbnail($comment->comment_post_ID) ) {
                                 $thumb_url = get_the_post_thumbnail_url($comment->comment_post_ID, array(80, 80));
                             } else {
-                                $thumb_url = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
+                                $thumb_url = uwp_get_default_thumb_uri();
                             }
                             ?>
                             <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
