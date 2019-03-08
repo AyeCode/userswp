@@ -48,10 +48,6 @@ class UWP_Profile_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        if (!is_user_logged_in()) {
-            return false;
-        }
-
         ob_start();
 
         echo '<div class="uwp_widgets uwp_widget_profile">';

@@ -105,7 +105,7 @@ function uwp_generic_tab_content($user, $post_type = false, $title, $post_ids = 
                             if ( has_post_thumbnail() ) {
                                 $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
                             } else {
-                                $thumb_url = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
+                                $thumb_url = uwp_get_default_thumb_uri();
                             }
                             ?>
                             <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
@@ -181,42 +181,4 @@ function uwp_account_get_available_tabs() {
     }
 
     return apply_filters( 'uwp_account_available_tabs', $tabs );
-}
-
-/**
- * Returns the setting page tab list for each page.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @return      array       Tabs list.
- */
-function uwp_get_settings_tabs() {
-
-    $tabs = array();
-
-    // wp-admin/admin.php?page=uwp
-    $tabs['userswp']  = array(
-        'main' => __( 'General', 'userswp' ),
-        'register' => __( 'Register', 'userswp' ),
-        'login' => __( 'Login', 'userswp' ),
-        'change' => __( 'Change Password', 'userswp' ),
-        'profile' => __( 'Profile', 'userswp' ),
-        'users' => __( 'Users', 'userswp' ),
-        'import-export' => __( 'Import/Export', 'userswp' ),
-        'uninstall' => __( 'Uninstall', 'userswp' ),
-    );
-
-    // wp-admin/admin.php?page=uwp_form_builder
-    $tabs['uwp_form_builder'] = array(
-        'main' => __( 'Form Builder', 'userswp' ),
-    );
-
-    // wp-admin/admin.php?page=uwp_notifications
-    $tabs['uwp_notifications'] = array(
-        'main' => __( 'Users', 'userswp' ),
-        'admin' => __( 'Admin', 'userswp' )
-    );
-
-    return apply_filters( 'uwp_settings_tabs', $tabs );
 }

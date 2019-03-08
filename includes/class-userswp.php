@@ -8,7 +8,7 @@
  * @since      1.0.0
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
-class UsersWP {
+final class UsersWP {
 
     /**
      * The current version of the plugin.
@@ -30,7 +30,6 @@ class UsersWP {
     protected $shortcodes;
     protected $assets;
     protected $admin;
-    protected $admin_settings;
     protected $menus;
     protected $form_builder;
     protected $ajax;
@@ -67,14 +66,11 @@ class UsersWP {
         $this->menus = new UsersWP_Menus();
         $this->tools = new UsersWP_Tools();
         $this->tables = new UsersWP_Tables();
-
-        $this->shortcodes = new UsersWP_Shortcodes($this->templates);
-        $this->admin_settings = new UsersWP_Admin_Settings($this->form_builder);
-        $this->admin = new UsersWP_Admin($this->admin_settings);
+        $this->admin = new UsersWP_Admin();
+        $this->admin_menus = new UsersWP_Admin_Menus();
         $this->ajax = new UsersWP_Ajax($this->form_builder);
         $this->files = new UsersWP_Files();
         $this->notifications = new UsersWP_Notifications();
-        $this->status = new UsersWP_Status();
 
         
         // actions and filters
@@ -87,18 +83,15 @@ class UsersWP {
         $this->load_notices_actions_and_filters($this->notices);
         $this->load_pages_actions_and_filters($this->pages);
         $this->load_profile_actions_and_filters($this->profile);
-        $this->load_shortcodes_actions_and_filters($this->shortcodes);
         $this->load_tables_actions_and_filters($this->tables);
         $this->load_templates_actions_and_filters($this->templates);
         $this->load_tools_actions_and_filters($this->tools);
         $this->load_notifications_actions_and_filters($this->notifications);
-        $this->load_status_actions_and_filters($this->status);
 
         //admin
         $this->load_form_builder_actions_and_filters($this->form_builder);
         $this->load_menus_actions_and_filters($this->menus);
         $this->load_admin_actions_and_filters($this->admin);
-        $this->load_admin_settings_actions_and_filters($this->admin_settings);
         
     }
 
@@ -159,6 +152,12 @@ class UsersWP {
         add_action('edit_user_profile_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('user_edit_form_tag', array($instance, 'add_multipart_to_admin_edit_form'));
         add_action('uwp_template_form_title_after', array($instance, 'uwp_display_username_in_account'), 10, 1);
+        add_action('init', array($instance, 'process_login'));
+        add_action('init', array($instance, 'process_register'));
+        add_action('init', array($instance, 'process_account'));
+        add_action('init', array($instance, 'process_forgot'));
+        add_action('init', array($instance, 'process_change'));
+        add_action('init', array($instance, 'process_reset'));
 
 
         // Forms
@@ -177,7 +176,6 @@ class UsersWP {
         add_filter('uwp_form_input_html_password', array($instance, 'uwp_form_input_password'), 10, 4);
         // Country select
         add_filter('uwp_form_input_html_select_country', array($instance, 'uwp_form_input_select_country'), 10, 4);
-        add_filter('uwp_forms_check_for_send_mail_errors', array($instance, 'uwp_forms_check_for_send_mail_errors'), 10, 3);
         add_filter('uwp_form_input_email_uwp_account_email_after', array($instance, 'uwp_register_confirm_email_field'), 10, 4);
         add_filter('uwp_form_input_password_uwp_account_password_after', array($instance, 'uwp_register_confirm_password_field'), 10, 4);
         
@@ -253,10 +251,6 @@ class UsersWP {
         add_filter( 'user_has_cap', array($instance, 'allow_all_users_profile_uploads'), 10, 4 );
     }
 
-    public function load_shortcodes_actions_and_filters($instance) {
-        add_shortcode( 'uwp_profile',   array($instance, 'profile'));
-    }
-
     public function load_tables_actions_and_filters($instance) {
         add_filter( 'wpmu_drop_tables', array($instance, 'drop_tables_on_delete_blog'));
     }
@@ -299,11 +293,6 @@ class UsersWP {
         add_action('init', array($instance, 'uwp_notification_submit_handler'));
     }
 
-    public function load_status_actions_and_filters($instance){
-        add_action('uwp_admin_sub_menus', array($instance, 'uwp_add_admin_status_sub_menu'), 100, 1);
-        add_action('uwp_status_settings_main_tab_content', array($instance, 'uwp_status_main_tab_content'));
-    }
-
     public function load_form_builder_actions_and_filters($instance) {
         // Actions
         add_action('admin_init', array($instance, 'uwp_form_builder_dummy_fields'));
@@ -315,7 +304,7 @@ class UsersWP {
         add_action('uwp_manage_available_fields', array($instance, 'uwp_manage_register_available_fields'), 10, 1);
         add_action('uwp_manage_selected_fields', array($instance, 'uwp_manage_register_selected_fields'), 10, 1);
         add_action('wp_ajax_uwp_ajax_register_action', array($instance, 'uwp_register_ajax_handler'));
-
+        add_action('uwp_form_builder_tabs_content', array($instance, 'uwp_form_builder'));
 
         // Filters
         add_filter('uwp_builder_extra_fields_multiselect', array($instance, 'uwp_builder_extra_fields_smr'), 10, 4);
@@ -330,7 +319,6 @@ class UsersWP {
         add_filter('uwp_form_builder_available_fields_note', array($instance, 'uwp_register_available_fields_note'), 10, 2);
         add_filter('uwp_form_builder_selected_fields_head', array($instance, 'uwp_register_selected_fields_head'), 10, 2);
         add_filter('uwp_form_builder_selected_fields_note', array($instance, 'uwp_register_selected_fields_note'), 10, 2);
-        add_filter('uwp_register_fields', array($instance, 'uwp_register_extra_fields'), 10, 2);
         // htmlvar not needed for taxonomy
         add_filter('uwp_builder_htmlvar_name_taxonomy',array($instance, 'uwp_return_empty_string'),10,4);
         // default_value not needed for textarea, html, file, fieldset
@@ -354,29 +342,7 @@ class UsersWP {
     public function load_admin_actions_and_filters($instance) {
         add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_styles') );
         add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_scripts') );
-        add_action( 'admin_menu', array($instance, 'setup_admin_menus') );
         add_action('admin_head', array($instance, 'uwp_admin_only_css'));
-    }
-
-    public function load_admin_settings_actions_and_filters($instance) {
-        $instance->init_settings();
-
-        add_action( 'admin_init', array($instance, 'uwp_register_settings') );
-        //register settings
-        add_action( 'userswp_settings_main_tab_content', array($instance, 'get_general_content') );
-        add_action( 'userswp_settings_register_tab_content', array($instance, 'generic_display_form') );
-        add_action( 'userswp_settings_login_tab_content', array($instance, 'generic_display_form') );
-        add_action( 'userswp_settings_account_tab_content', array($instance, 'generic_display_form') );
-        add_action( 'userswp_settings_profile_tab_content', array($instance, 'generic_display_form') );
-        add_action( 'userswp_settings_users_tab_content', array($instance, 'generic_display_form') );
-        add_action( 'userswp_settings_change_tab_content', array($instance, 'generic_display_form') );
-        add_action( 'userswp_settings_uninstall_tab_content', array($instance, 'generic_display_form') );
-
-        add_action( 'uwp_form_builder_settings_main_tab_content_before', array($instance, 'get_form_builder_tabs') );
-        add_action( 'uwp_form_builder_settings_main_tab_content', array($instance, 'get_form_builder_content') );
-        add_filter( 'uwp_display_form_title', array($instance, 'display_form_title'), 10, 3 );
-        add_action( 'uwp_notifications_settings_main_tab_content', array($instance, 'get_notifications_content') );
-        add_action( 'uwp_notifications_settings_admin_tab_content', array($instance, 'generic_display_form') );
     }
 
     public function uwp_register_widgets(){
@@ -387,6 +353,7 @@ class UsersWP {
         register_widget("UWP_Reset_Widget");
         register_widget("UWP_Users_Widget");
         register_widget("UWP_Account_Widget");
+        register_widget("UWP_Profile_Widget");
     }
 
     /**
@@ -417,6 +384,8 @@ class UsersWP {
      * @access   private
      */
     private function load_dependencies() {
+        global $uwp_options;
+
         if ( ! function_exists( 'is_plugin_active' ) ) {
             /**
              * Load all plugin functions from WordPress.
@@ -430,6 +399,10 @@ class UsersWP {
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-i18n.php';
 
+        require_once dirname(dirname( __FILE__ )) . '/admin/settings/functions.php';
+
+        $uwp_options = uwp_get_settings();
+
         /**
          * The class responsible for activation functionality
          * of the plugin.
@@ -441,6 +414,11 @@ class UsersWP {
          * of the plugin.
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-deactivator.php';
+
+        /**
+         * The libraries required.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/vendor/autoload.php';
 
         /**
          * The class responsible for sending emails
@@ -506,11 +484,6 @@ class UsersWP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-profile.php';
 
         /**
-         * The class responsible for defining all shortcodes
-         */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-shortcodes.php';
-
-        /**
          * The class responsible for defining all menus items.
          */
         require_once dirname(dirname( __FILE__ )) . '/admin/menus/class-checklist.php';
@@ -526,9 +499,19 @@ class UsersWP {
         require_once dirname(dirname( __FILE__ )) . '/admin/class-admin.php';
 
         /**
+         * The class responsible for defining all menus in the admin area.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/admin/class-uwp-admin-menus.php';
+
+        /**
          * The class responsible for defining all admin area settings.
          */
         require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-settings.php';
+
+        /**
+         * The class responsible for default content.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-uwp-defaults.php';
 
         /**
          * The class responsible for defining all actions that occur in the public-facing
@@ -542,14 +525,14 @@ class UsersWP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-tables.php';
 
         /**
+         * The class responsible for admin settings functions
+         */
+        include_once dirname(dirname( __FILE__ )) . '/admin/settings/class-uwp-settings-page.php';
+
+        /**
          * The class responsible for adding fields in forms
          */
         require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-formbuilder.php';
-
-        /**
-         * The class responsible for setting field callbacks
-         */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-callback.php';
 
         /**
          * The class responsible for adding tools functions
@@ -560,11 +543,6 @@ class UsersWP {
          * The class responsible for displaying notices
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-notices.php';
-
-        /**
-         * The libraries required.
-         */
-        require_once dirname(dirname( __FILE__ )) . '/vendor/autoload.php';
 
         /**
          * contents helpers files and functions.
@@ -605,6 +583,11 @@ class UsersWP {
          * The class for account widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/account.php' );
+
+        /**
+         * The class for register widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile.php' );
 
         /**
          * The class responsible for displaying notices

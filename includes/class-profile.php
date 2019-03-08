@@ -32,7 +32,7 @@ class UsersWP_Profile {
         if (empty($banner)) {
             $banner = uwp_get_option('profile_default_banner', '');
             if(empty($banner)){
-                $banner = USERSWP_PLUGIN_URL."/public/assets/images/banner.png";
+                $banner = uwp_get_default_banner_uri();
             } else {
                 $banner = wp_get_attachment_url($banner);
             }
@@ -279,6 +279,7 @@ class UsersWP_Profile {
                                     $is_profile_page = is_uwp_profile_page();
                                     $value = get_user_meta($user->ID, 'description', true);
                                     $value = stripslashes($value);
+                                    $limit_words = apply_filters('uwp_profile_bio_content_limit', 20);
                                     if ($value) {
                                         ?>
                                         <div class="uwp-profile-bio <?php if ($is_profile_page) { echo "uwp_more"; } ?>">
@@ -286,7 +287,7 @@ class UsersWP_Profile {
                                             if ($is_profile_page) {
                                                 echo $value;
                                             } else {
-                                                echo wp_trim_words( $value, 20, '...' );
+                                                echo wp_trim_words( $value, $limit_words, '...' );
                                             }
                                             ?>
                                         </div>
@@ -348,10 +349,12 @@ class UsersWP_Profile {
             );
         }
 
-        if (in_array('comments', $allowed_tabs)) {
+        $comment_count = uwp_comment_count($user->ID);
+
+        if (in_array('comments', $allowed_tabs) && $comment_count > 0) {
             $tabs['comments'] = array(
                 'title' => __( 'Comments', 'userswp' ),
-                'count' => uwp_comment_count($user->ID)
+                'count' => $comment_count
             );
         }
 
@@ -562,7 +565,7 @@ class UsersWP_Profile {
                             if ( has_post_thumbnail($comment->comment_post_ID) ) {
                                 $thumb_url = get_the_post_thumbnail_url($comment->comment_post_ID, array(80, 80));
                             } else {
-                                $thumb_url = USERSWP_PLUGIN_URL."/public/assets/images/no_thumb.png";
+                                $thumb_url = uwp_get_default_thumb_uri();
                             }
                             ?>
                             <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
@@ -1538,7 +1541,7 @@ class UsersWP_Profile {
                 $default_layout = uwp_get_option('users_default_layout', 'list');
                 ?>
                 <form method="get" action="">
-                    <select name="uwp_layout" id="uwp_layout">
+                    <select name="uwp_layout" id="uwp_layout" class="uwp_select2">
                         <option <?php selected( $default_layout, "list" ); ?> value="list"><?php echo __("List View", "userswp"); ?></option>
                         <option <?php selected( $default_layout, "2col" ); ?> value="2col"><?php echo __("Grid 2 Col", "userswp"); ?></option>
                         <option <?php selected( $default_layout, "3col" ); ?> value="3col"><?php echo __("Grid 3 Col", "userswp"); ?></option>
@@ -1551,7 +1554,7 @@ class UsersWP_Profile {
                         $sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
                     }
                     ?>
-                    <select name="uwp_sort_by" id="uwp_sort_by" onchange="this.form.submit()">
+                    <select name="uwp_sort_by" id="uwp_sort_by" class="uwp_select2" onchange="this.form.submit()">
                         <option value=""><?php echo __("Sort By:", "userswp"); ?></option>
                         <option <?php selected( $sort_by, "newer" ); ?> value="newer"><?php echo __("Newer", "userswp"); ?></option>
                         <option <?php selected( $sort_by, "older" ); ?> value="older"><?php echo __("Older", "userswp"); ?></option>

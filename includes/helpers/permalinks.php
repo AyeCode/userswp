@@ -420,3 +420,22 @@ function uwp_current_page_url() {
      */
     return apply_filters( 'uwp_current_page_url', $pageURL );
 }
+
+function uwp_get_redirect_url($redirect_page_id, $data){
+
+    if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
+        $redirect_to = esc_url($_REQUEST['redirect_to']);
+    } elseif (isset($data['redirect_to']) && !empty($data['redirect_to'])) {
+        $redirect_to = esc_url($data['redirect_to']);
+    } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
+        $redirect_to = get_permalink($redirect_page_id);
+    } else {
+        if ( current_user_can('manage_options') ) {
+            $redirect_to = admin_url();
+        } else {
+            $redirect_to = home_url('/');
+        }
+    }
+
+    return $redirect_to;
+}

@@ -1,36 +1,4 @@
 <?php
-/**
- * Gets UsersWP setting value using key.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @param       string          $key        Setting Key.
- * @param       bool|string     $default    Default value.
- * @param       bool            $cache      Use cache to retrieve the value?.
- *
- * @return      string                      Setting Value.
- */
-function uwp_get_option( $key = '', $default = false, $cache = true ) {
-    $meta = new UsersWP_Meta();
-    return $meta->get_option($key, $default, $cache);
-}
-
-/**
- * Updates UsersWP setting value using key.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @param       string|bool     $key        Setting Key.
- * @param       string          $value      Setting Value.
- *
- * @return      bool                        Update success or not?.
- */
-function uwp_update_option( $key = false, $value = '') {
-    $meta = new UsersWP_Meta();
-    return $meta->update_option($key, $value);
-}
 
 /**
  * Gets UsersWP user meta value using key.

@@ -119,6 +119,10 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.0.24 =
+* Implement new settings interface - CHANGED
+* Replace chosen with select2 - CHANGED
+
 = 1.0.23 =
 * UWP Login widget breaks page for logged in users - FIXED
 * Default WP registration page not being redirected if set to do so - FIXED

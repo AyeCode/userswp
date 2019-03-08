@@ -1,0 +1,411 @@
+.uwp_page {
+  .uwp-content-wrap {
+    .uwp-profile-header-img {
+      position: relative;
+      background: #fff none repeat scroll 0 0;
+      border: 1px solid #ccc;
+      width: 100%;
+      img {
+        display: block;
+        width: 100%;
+      }
+    }
+
+    .uwp-profile-social-ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      li {
+        float: left;
+        margin-right: 5px;
+        margin-bottom: 5px;
+      }
+    }
+
+    .uwp-profile-main {
+      .uwp-profile-nav,
+      .uwp-profile-subnav {
+        margin: 8px 0 0;
+        a,
+        a:active,
+        a:visited {
+          color: #717171;
+          text-decoration: none;
+          box-shadow: none;
+        }
+
+        a:hover {
+          color: #555;
+        }
+
+        > ul {
+          margin: 0;
+          padding: 0;
+        }
+        li {
+          float: left;
+          list-style: outside none none;
+          margin: 5px 10px 0 0;
+          padding-bottom: 5px;
+          border-bottom: 3px solid transparent;
+        }
+        ul {
+          display: inline-block;
+          li {
+            display: inline-block;
+            margin-bottom: 8px;
+            list-style-type: none;
+          }
+        }
+        .active {
+          border-bottom: 3px solid #ccc;
+        }
+      }
+      .uwp-profile-item-ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        li.uwp-profile-item-li {
+          position: relative;
+          clear: both;
+          padding-top: 10px;
+          margin: 10px 0 0;
+          border-top: 1px solid #ccc;
+          min-height: 80px;
+          list-style-type: none;
+          .uwp-profile-item-time {
+            color: #ccc;
+          }
+        }
+      }
+      .uwp-profile-item-img img {
+        float: left;
+        margin-right: 10px;
+        width: 80px;
+      }
+      h3.uwp-profile-item-title {
+        margin: 0;
+        a {
+          text-decoration: none;
+        }
+      }
+    }
+
+    .uwp-profile-avatar {
+      display: block;
+      position: relative;
+      .uwp-profile-avatar-inner {
+        max-width: 150px;
+        width: 20%;
+        margin-left: 3%;
+        position: relative;
+        > img {
+          border: 5px solid #fff;
+          border-bottom: none;
+          border-radius: 0;
+          box-shadow: none;
+          //float: left;
+          margin: -100% 0 0 1px;
+          box-sizing: border-box;
+          display: block;
+          height: auto;
+          margin-top: calc( -100% + 5px);
+          width: 100%;
+        }
+      }
+      .uwp-profile-avatar-change {
+        position: absolute;
+        z-index: 5;
+        text-align: center;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        overflow: hidden;
+        width: 100%;
+        .uwp-profile-avatar-change-inner {
+          display: block;
+          overflow: hidden;
+          position: relative;
+          text-align: left;
+          height: 30px;
+          font-size: 13px;
+          .fa, svg, .fas, i {
+            position: absolute;
+            color: #fff;
+            left: 15px;
+            margin-bottom: 0;
+            bottom: 10px;
+            opacity: 1;
+            transform: none;
+          }
+          &:before, &:after {
+            background: #000;
+            background: rgba(0, 0, 0, .6);
+            background: linear-gradient(transparent, rgba(0, 0, 0, .6) 50%, rgba(0, 0, 0, .6) 100%);
+            content: '';
+            height: 200%;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            transition: top .13s ease-out;
+            z-index: -1;
+          }
+          &:hover:before {
+            top: -100%;
+          }
+          a {
+            color: #fff;
+            padding: 3px 12px 0 40px;
+            display: none;
+          }
+          &:hover a {
+            display: block;
+          }
+        }
+      }
+
+    }
+
+    .uwp-banner-change-icon {
+      left: 20px;
+      position: absolute;
+      top: 15px;
+      .fa, svg, .fas, i {
+        position: absolute;
+        left: 13px;
+        top: 15px;
+        z-index: 999;
+      }
+    }
+    .uwp-profile-header-img:hover {
+      .fa, svg, .fas, i {
+        color: #fff;
+      }
+    }
+    .uwp-profile-banner-change {
+      background-clip: padding-box;
+      background-color: #000;
+      border: 1px solid rgba(255, 255, 255, .8);
+      border-radius: 2px;
+      box-shadow: 0 0 6px rgba(0, 0, 0, .6);
+      box-sizing: border-box;
+      color: #fff;
+      display: inline-block;
+      opacity: 0;
+      overflow: hidden;
+      padding: 6px 12px;
+      transition: opacity .3s cubic-bezier(.175, .885, .32, 1.275), width .3s step-end;
+      white-space: nowrap;
+      width: 34px;
+      position: relative;
+      top: 3px;
+      word-wrap: normal;
+      cursor: pointer;
+      .uwp-profile-banner-change-inner {
+        -webkit-font-smoothing: antialiased;
+        padding-left: 26px;
+        position: relative;
+        top: 1px;
+        z-index: 2;
+      }
+    }
+
+    .uwp-profile-header-img:hover .uwp-profile-banner-change {
+      opacity: .8;
+      width: auto;
+      display: inline-block;
+    }
+
+    .uwp-profile-name > h2 {
+      color: #717171;
+      margin: 10px 0;
+    }
+
+    .uwp-profile {
+      float: left;
+      width: 25%;
+    }
+
+    .uwp-profile-content {
+      float: left;
+      margin: 0 0 0 5%;
+      width: 70%;
+      position: relative;
+    }
+    .uwp-profile-subcontent {
+      margin: 0;
+    }
+
+    .uwp-profile-tab-label {
+      display: block;
+      font-size: 11px;
+      line-height: 11px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .uwp-profile-tab-count {
+      display: block;
+      font-size: 18px;
+      line-height: 18px;
+      text-align: center;
+      padding-top: 5px
+    }
+    
+    .uwp-profile-tab-count span.uwp_field_icon {
+        padding-left: 18px!important;
+    }
+
+    .uwp-profile-header-img {
+      background-size: cover;
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+
+    .uwp-profile-entries h3 {
+      color: #717171;
+      margin: 15px 0;
+      padding: 0;
+    }
+
+    .uwp-profile-item-block li {
+      margin-left: 0;
+    }
+
+    .uwp-profile-post-nav {
+      span {
+        a {
+          border: 1px solid #717171;
+          color: #717171;
+          margin-right: 5px;
+          padding: 0 7px;
+          text-decoration: none;
+        }
+
+        a.active {
+          border: 1px solid #555;
+          color: #555;
+        }
+      }
+    }
+
+    .uwp-edit-account {
+      float: right;
+      margin: 3px 0 0;
+      position: absolute;
+      top: 15px;
+      right: 0;
+    }
+
+    .uwp-profile-avatar-modal-trigger,
+    .uwp-profile-banner-modal-trigger {
+      cursor: pointer;
+    }
+
+    .uwp-content-wrap .uwp-profile-main .uwp-profile-subnav ul li {
+      margin-right: 15px;
+    }
+    .uwp-item-actions {
+      margin-top: 2px;
+      overflow: hidden;
+      .geodir-addtofav {
+        float: left;
+      }
+      a {
+        display: inline-block;
+        margin-right: 5px;
+        margin-bottom: 5px;
+      }
+    }
+
+    .uwp-time-ratings-wrap {
+      display: block;
+      overflow: hidden;
+      time,
+      .uwp-ratings {
+        display: block;
+      }
+      .uwp-num-comments {
+        display: inline-block;
+        float: left
+      }
+      .gd-star-rating {
+        float: left;
+      }
+      .geodir-addtofav {
+        margin-left: 10px;
+      }
+    }
+    .uwp_more_content span {
+      display: none;
+    }
+    .uwp-profile-tab-sub-ul-count {
+      font-weight: bold;
+      margin-right: 3px;
+    }
+    .uwp-profile-name h2 {
+      font-size: 19px;
+    }
+
+    //pagination
+    .uwp-pagination {
+      margin-top: 30px;
+      text-align: center;
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+        li {
+          list-style-type: none;
+          float: left;
+          a, span.dots, span.current {
+            border: 1px solid #555;
+            color: #555;
+            margin-right: 5px;
+            padding: 0 7px;
+            text-decoration: none;
+          }
+          span.current {
+            background-color: #ccc;
+          }
+        }
+      }
+    }
+  }
+  .uwp_field_icon {
+    margin-right: 5px;
+  }
+  .uwp-profile-extra-table th,
+  .uwp-profile-extra-table td {
+    vertical-align: middle;
+    border-top: 1px solid #ededed;
+    padding: 6px 10px 6px 0;
+  }
+}
+
+.uwp_generic_thumb_wrap {
+  float: left;
+}
+.uwp-profile-item-li h3 {
+  clear: none;
+}
+
+.jcrop-holder img, img.jcrop-preview {
+  max-width: none !important;
+}
+
+@media only screen and (max-width: 500px) {
+  .uwp_page .uwp-content-wrap {
+    .uwp-profile {
+      float: none;
+      width: 100%;
+    }
+    .uwp-profile-content {
+      float: none;
+      margin: 0;
+      width: 100%;
+    }
+  }
+}
