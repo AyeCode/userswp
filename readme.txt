@@ -122,7 +122,7 @@ No questions so far, but don't hesitate to ask!
 = 1.0.24 =
 * Implement new settings interface - CHANGED
 * Replace chosen with select2 - CHANGED
-* Update Super Duper library - CHANGED
+* Super Duper updated to v1.0.8 - CHANGED
 
 = 1.0.23 =
 * UWP Login widget breaks page for logged in users - FIXED
