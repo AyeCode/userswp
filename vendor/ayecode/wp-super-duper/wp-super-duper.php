@@ -19,11 +19,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 * @since 1.0.5 Block checkbox options are set as true by default even when set as false - FIXED
 	 * @since 1.0.6 Some refactoring for page builders - CHANGED
 	 * @since 1.0.7 Some refactoring for page builders - CHANGED
-	 * @ver 1.0.7
+	 * @since 1.0.8 Some refactoring for page builders ( cornerstone builder now supported ) - CHANGED
+	 * @ver 1.0.8
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.7";
+		public $version = "1.0.8";
 		public $block_code;
 		public $options;
 		public $base_id;
@@ -81,6 +82,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					add_action( 'wp_footer', array( $this, 'shortcode_insert_button_script' ) );
 					add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'shortcode_insert_button_script' ) ); // for elementor
 				}
+				add_action( 'cornerstone_load_builder', array( $this, 'shortcode_insert_button_script' ) ); // for cornerstone builder (this is the preview)
+
 				add_action( 'wp_ajax_super_duper_get_widget_settings', array( __CLASS__, 'get_widget_settings' ) );
 			}
 
@@ -136,6 +139,16 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				return;
 			}
 			add_thickbox();
+
+
+			/**
+			 * Cornerstone makes us play dirty tricks :/
+			 * All media_buttons are removed via JS unless they are two specific id's so we wrap our content in this ID so it is not removed.
+			 */
+			if(function_exists('cornerstone_plugin_init') && !is_admin()){
+				echo '<span id="insert-media-button">';
+			}
+
 			?>
 			<div id="super-duper-content" style="display:none;">
 
@@ -180,6 +193,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			   title="<?php _e( 'Add Shortcode' ); ?>"><?php echo $button_string; ?></a>
 
 			<?php
+
+			// see opening note
+			if(function_exists('cornerstone_plugin_init') && !is_admin()){
+				echo '</span>'; // end #insert-media-button
+			}
+
 			self::shortcode_insert_button_script( $editor_id, $insert_shortcode_function );
 			$shortcode_insert_button_once = true;
 		}
@@ -1288,10 +1307,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 									$require = '';
 									$onchange = "props.setAttributes({ $key: $key } )";
 									$value = "props.attributes.$key";
-									$text_type = array( 'text', 'password', 'number', 'email', 'tel', 'url', 'color' );
+									$text_type = array( 'text', 'password', 'number', 'email', 'tel', 'url', 'color'  );
 									if ( in_array( $args['type'], $text_type ) ) {
 										$type = 'TextControl';
-									} elseif ( $args['type'] == 'checkbox' ) {
+									}
+//									elseif ( $args['type'] == 'color' ) { //@todo ColorPicker labels are not shown yet, we may have to add our own https://github.com/WordPress/gutenberg/issues/14378
+//										$type = 'ColorPicker';
+//									}
+									elseif ( $args['type'] == 'checkbox' ) {
 										$type = 'CheckboxControl';
 										$extra .= "checked: props.attributes.$key,";
 										$onchange = "props.setAttributes({ $key: ! props.attributes.$key } )";
@@ -1691,6 +1714,21 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		}
 
 		/**
+		 * Tests if the current output is inside a cornerstone builder preview.
+		 *
+		 * @since 1.0.8
+		 * @return bool
+		 */
+		public function is_cornerstone_preview() {
+			$result = false;
+			if ( !empty( $_REQUEST['cornerstone_preview'] ) || basename($_SERVER['REQUEST_URI'])=='cornerstone-endpoint') {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
 		 * General function to check if we are in a preview situation.
 		 *
 		 * @since 1.0.6
@@ -1705,6 +1743,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			} elseif ( $this->is_beaver_preview() ) {
 				$preview = true;
 			} elseif ( $this->is_siteorigin_preview() ) {
+				$preview = true;
+			}elseif ( $this->is_cornerstone_preview() ) {
 				$preview = true;
 			}
 

@@ -23,7 +23,7 @@
             "squizlabs/php_codesniffer": "^3.2",
             "wp-coding-standards/wpcs": "*"
         },
-        "time": "2018-12-14 12:33:09",
+        "time": "2018-12-14T12:33:09+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -48,6 +48,58 @@
         "keywords": [
             "FontAwesome",
             "font-awesome"
+        ]
+    },
+    {
+        "name": "ayecode/wp-super-duper",
+        "version": "1.0.8",
+        "version_normalized": "1.0.8.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/AyeCode/wp-super-duper.git",
+            "reference": "ff0858393e0898a0eab95c383ed759f88b74e020"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/ff0858393e0898a0eab95c383ed759f88b74e020",
+            "reference": "ff0858393e0898a0eab95c383ed759f88b74e020",
+            "shasum": ""
+        },
+        "require": {
+            "composer/installers": "~1.0",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "dealerdirect/phpcodesniffer-composer-installer": "*",
+            "squizlabs/php_codesniffer": "^3.2",
+            "wp-coding-standards/wpcs": "*"
+        },
+        "time": "2019-03-15T18:50:07+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "wp-super-duper.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "AyeCode Ltd",
+                "email": "contact@ayecode.io",
+                "homepage": "https://ayecode.io/",
+                "role": "Developer"
+            }
+        ],
+        "description": "Lets you create a widget, block and shortcode all from the one file .",
+        "homepage": "https://github.com/AyeCode/wp-super-duper",
+        "keywords": [
+            "super duper",
+            "wordpress",
+            "wp"
         ]
     },
     {
@@ -76,7 +128,7 @@
             "composer/composer": "1.0.*@dev",
             "phpunit/phpunit": "^4.8.36"
         },
-        "time": "2018-08-27 06:10:37",
+        "time": "2018-08-27T06:10:37+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "Composer\\Installers\\Plugin",
@@ -170,58 +222,6 @@
             "yawik",
             "zend",
             "zikula"
-        ]
-    },
-    {
-        "name": "ayecode/wp-super-duper",
-        "version": "1.0.7",
-        "version_normalized": "1.0.7.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/AyeCode/wp-super-duper.git",
-            "reference": "ea5a387cafffb54c87612b4d122fce4199cdf05f"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/ea5a387cafffb54c87612b4d122fce4199cdf05f",
-            "reference": "ea5a387cafffb54c87612b4d122fce4199cdf05f",
-            "shasum": ""
-        },
-        "require": {
-            "composer/installers": "~1.0",
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "dealerdirect/phpcodesniffer-composer-installer": "*",
-            "squizlabs/php_codesniffer": "^3.2",
-            "wp-coding-standards/wpcs": "*"
-        },
-        "time": "2019-01-16 17:08:32",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "wp-super-duper.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-3.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "AyeCode Ltd",
-                "email": "contact@ayecode.io",
-                "homepage": "https://ayecode.io/",
-                "role": "Developer"
-            }
-        ],
-        "description": "Lets you create a widget, block and shortcode all from the one file .",
-        "homepage": "https://github.com/AyeCode/wp-super-duper",
-        "keywords": [
-            "super duper",
-            "wordpress",
-            "wp"
         ]
     }
 ]
