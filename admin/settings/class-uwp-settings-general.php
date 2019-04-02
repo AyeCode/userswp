@@ -73,6 +73,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
             'change-password' => __( 'Change Password', 'userswp' ),
             'profile' => __( 'Profile', 'userswp' ),
             'users' => __( 'Users', 'userswp' ),
+            'authorbox' => __( 'Author box', 'userswp' ),
         );
 
         return apply_filters( 'uwp_get_sections_' . $this->id, $sections );
@@ -420,6 +421,62 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 ),
 
                 array( 'type' => 'sectionend', 'id' => 'users_options' ),
+            ));
+		}else if ( 'authorbox' == $current_section ) {
+            /**
+             * Filter general settings array.
+             *
+             * @package userswp
+             */
+            $settings = apply_filters( 'uwp_authorbox_options', array(
+                array(
+                    'title' => __( 'Author Box Settings', 'userswp' ),
+                    'type'  => 'title',
+                    'id'    => 'authorbox_options',
+                ),
+                array(
+                    'id'   => 'author_box_enable_disable',
+                    'name' => __( 'Enable Author Box', 'userswp' ),
+                    'desc' => __( 'Displays author box based on settings', 'userswp' ),
+                    'type' => 'checkbox',
+                    'default'  => '1',
+                ),
+                array(
+                    'id' => 'author_box_display_content',
+                    'name' => __('Where to display?', 'userswp'),
+                    'desc' => __('Displays the author box above or below post content.', 'userswp'),
+                    'type' => 'select',
+                    'options' => array(
+                        'above_content' =>  __('Above content', 'userswp'),
+                        'below_content' =>  __('Below content', 'userswp'),
+                    ),
+                    'class' => 'uwp-select',
+                    'desc_tip' => true,
+                    'default' => 'below_content',
+                ),
+                array(
+                    'id' => 'author_box_display_post_types',
+                    'name' => __( 'Post types', 'userswp' ),
+                    'desc' => __( 'Choose post types to display author box', 'userswp' ),
+                    'type'  => 'multiselect',
+                    'sortable' => true,
+                    'class'   => 'uwp_select2 uwp-select',
+                    'options' =>  uwp_get_posttypes(),
+                    'desc_tip' => true,
+                    'default' => 'post',
+                ),
+                array(
+                    'name' => __('Author box Content', 'userswp'),
+                    'desc' => __('The author box body, this can be text or HTML.', 'userswp'),
+                    'id' => 'author_box_content',
+                    'type' => 'textarea',
+                    'class' => 'code uwp-authorbox-body',
+                    'desc_tip' => true,
+                    'placeholder' => UsersWP_Defaults::author_box_content(),
+                    'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_authbox_tags()
+                ),
+
+                array( 'type' => 'sectionend', 'id' => 'authorbox_options' ),
             ));
 		} else {
 			/**

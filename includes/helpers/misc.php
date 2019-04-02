@@ -955,8 +955,9 @@ function uwp_get_excluded_fields() {
     $excluded = array(
         'uwp_account_password',
         'uwp_account_confirm_password',
+        'user_privacy',
     );
-    return $excluded;
+    return apply_filters('uwp_excluded_fields',$excluded);
 }
 
 /**
@@ -1816,4 +1817,58 @@ function uwp_all_email_tags( $inline = true ){
     }
 
     return $tags;
+}
+
+function uwp_authbox_tags( $inline = true ){
+    global $wpdb;
+
+    $tags = array( '[#post_id#]', '[#author_id#]', '[#author_name#]', '[#author_link#]', '[#author_bio#]', '[#author_image#]' );
+
+    $tags = apply_filters('uwp_author_box_tags', $tags, $inline);
+
+    $table_name = uwp_get_table_prefix() . 'uwp_usermeta';
+
+    $excluded = uwp_get_excluded_fields();
+
+    $columns = $wpdb->get_col("show columns from $table_name");
+
+    $extra_tags = array_diff($columns,$excluded);
+
+    if( !empty( $extra_tags ) && '' != $extra_tags ) {
+
+        foreach ( $extra_tags as $tag_val ) {
+            $tags[] = '[#'.$tag_val.'#]';
+        }
+
+    }
+
+    $tags = apply_filters( 'uwp_all_authbox_tags', $tags );
+
+    if ( $inline ) {
+        $tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+    }
+
+    return $tags;
+}
+
+function uwp_get_posttypes() {
+
+    $exclude_posts = array('attachment','revision','nav_menu_item','custom_css');
+    $exclude_posttype = apply_filters('uwp_exclude_register_posttype', $exclude_posts);
+
+    $all_posttyps = get_post_types(array('public'   => true,),'objects');
+
+    $display_posttypes = array();
+
+    if( !empty( $all_posttyps ) && '' != $all_posttyps ) {
+        foreach ( $all_posttyps as $pt_keys => $pt_values ) {
+
+            if( !in_array($pt_values->name,$exclude_posttype) ) {
+                $display_posttypes[$pt_values->name] = $pt_values->label;
+            }
+
+        }
+    }
+
+    return $display_posttypes;
 }

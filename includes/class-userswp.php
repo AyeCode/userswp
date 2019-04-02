@@ -275,6 +275,7 @@ final class UsersWP {
 
         add_filter( 'wp_setup_nav_menu_item', array($instance, 'uwp_setup_nav_menu_item'), 10, 1 );
         add_filter( 'the_content', array($instance, 'uwp_author_page_content'), 10, 1 );
+        add_filter( 'the_content', array($instance, 'uwp_author_box_page_content'), 10, 1 );
         add_filter( 'body_class', array($instance, 'uwp_add_body_class'), 10, 1 );
 
         // filter the login and register url
@@ -301,8 +302,6 @@ final class UsersWP {
         add_action('uwp_manage_available_fields', array($instance, 'uwp_manage_available_fields'));
         add_action('uwp_manage_selected_fields', array($instance, 'uwp_manage_selected_fields'));
         add_action('uwp_admin_extra_custom_fields', array($instance, 'uwp_advance_admin_custom_fields'), 10, 2);
-        add_action('uwp_manage_available_fields', array($instance, 'uwp_manage_register_available_fields'), 10, 1);
-        add_action('uwp_manage_selected_fields', array($instance, 'uwp_manage_register_selected_fields'), 10, 1);
         add_action('wp_ajax_uwp_ajax_register_action', array($instance, 'uwp_register_ajax_handler'));
         add_action('uwp_form_builder_tabs_content', array($instance, 'uwp_form_builder'));
 
@@ -354,6 +353,7 @@ final class UsersWP {
         register_widget("UWP_Users_Widget");
         register_widget("UWP_Account_Widget");
         register_widget("UWP_Profile_Widget");
+        register_widget("UWP_Author_Box_Widget");
     }
 
     /**
@@ -588,6 +588,11 @@ final class UsersWP {
          * The class for register widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/profile.php' );
+
+        /**
+         * The class for author box widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/authorbox.php' );
 
         /**
          * The class responsible for displaying notices

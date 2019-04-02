@@ -407,6 +407,9 @@ class UsersWP_Form_Builder {
             case 'account':
                 $this->uwp_custom_available_fields('', $form_type);
                 break;
+            case 'register':
+                $this->uwp_register_available_fields($form_type);
+                break;
         }
     }
 
@@ -414,6 +417,9 @@ class UsersWP_Form_Builder {
         switch ($form_type) {
             case 'account':
                 $this->uwp_custom_selected_fields($form_type);
+                break;
+            case 'register':
+                $this->uwp_register_selected_fields($form_type);
                 break;
         }
     }
@@ -1996,25 +2002,6 @@ class UsersWP_Form_Builder {
         return $note;
     }
 
-
-    public function uwp_manage_register_available_fields($form_type)
-    {
-        switch ($form_type) {
-            case 'register':
-                $this->uwp_register_available_fields($form_type);
-                break;
-        }
-    }
-
-    public function uwp_manage_register_selected_fields($form_type)
-    {
-        switch ($form_type) {
-            case 'register':
-                $this->uwp_register_selected_fields($form_type);
-                break;
-        }
-    }
-
     public function uwp_register_available_fields($form_type)
     {
         global $wpdb;
@@ -2137,7 +2124,6 @@ class UsersWP_Form_Builder {
             $field_info = false;
         }
 
-
         if (isset($request['field_type']) && $request['field_type'] != '')
             $field_type = esc_attr($request['field_type']);
         else
@@ -2166,12 +2152,6 @@ class UsersWP_Form_Builder {
             $form_type = esc_attr($request['form_type']);
         } else {
             $form_type = $field_info->form_type;
-        }
-
-        if (isset($request['is_default']) && $request['is_default'] != '') {
-            $default = esc_attr($request['is_default']);
-        } else {
-            $default = $field_info->is_default;
         }
 
         if (isset($request['htmlvar_name']) && $request['htmlvar_name'] != '') {
@@ -2234,7 +2214,10 @@ class UsersWP_Form_Builder {
 
                         <li>
                             <div class="uwp-input-wrap">
-                                <?php if ($default != '1' || $field_info->site_htmlvar_name == 'uwp_account_password') { ?>
+                                <?php
+                                $no_actions = array('uwp_account_username', 'uwp_account_email');
+                                $no_actions = apply_filters('uwp_register_fields_without_actions', $no_actions);
+                                if (!in_array($field_info->site_htmlvar_name, $no_actions)) { ?>
                                 <input type="button" class="button button-primary" name="save" id="save"
                                        value="<?php esc_attr_e('Save', 'userswp'); ?>"
                                        onclick="save_register_field('<?php echo $result_str; ?>')"/>

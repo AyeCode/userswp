@@ -726,7 +726,7 @@ class UsersWP_Templates {
 
         if (get_option('uwp_activation_redirect', false)) {
             delete_option('uwp_activation_redirect');
-            wp_redirect(admin_url('admin.php?page=userswp&tab=main&subtab=info'));
+            wp_redirect(admin_url('admin.php?page=userswp&tab=general'));
             exit;
 
         }
@@ -822,5 +822,35 @@ class UsersWP_Templates {
         }
 
         return $classes;
+    }
+
+    public function uwp_author_box_page_content( $content ) {
+
+        global $post;
+
+        if( is_single() ) {
+
+            $author_box_enable_disable = uwp_get_option('author_box_enable_disable');
+
+            if( 1 == $author_box_enable_disable ) {
+
+                $author_box_display_post_types = uwp_get_option('author_box_display_post_types');
+
+                if( !empty( $post->post_type ) && in_array($post->post_type, $author_box_display_post_types) ) {
+
+                    $author_box_display_content = uwp_get_option('author_box_display_content');
+
+                    if( !empty( $author_box_display_content ) && 'above_content' === $author_box_display_content ) {
+                        $content = do_shortcode('[uwp_author_box]').$content;
+                    } else{
+                        $content = $content.do_shortcode('[uwp_author_box]');
+                    }
+                }
+
+            }
+
+        }
+
+        return $content;
     }
 }

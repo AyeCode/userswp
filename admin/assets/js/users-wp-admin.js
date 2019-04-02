@@ -124,6 +124,20 @@ jQuery(window).load(function() {
         return false;
     });
 
+    jQuery('.userswp .forminp .large-text').focus(function() {
+        var placeholder = jQuery(this).attr('placeholder');
+        var current_val = jQuery(this).val();
+        if( '' == current_val ){
+            jQuery(this).val( placeholder );
+        }
+    }).blur(function() {
+        var placeholder = jQuery(this).attr('placeholder');
+        var current_val = jQuery(this).val();
+        if( current_val == placeholder ){
+            jQuery(this).val('');
+        }
+    });
+
     uwp_init_tooltips();
 });
 

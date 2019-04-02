@@ -745,14 +745,12 @@ class UsersWP_Activator {
         $fields[] = array(
             'form_type' => 'register',
             'field_type' => 'text',
-            'is_default' => '1',
             'htmlvar_name' => 'uwp_account_first_name'
         );
 
         $fields[] = array(
             'form_type' => 'register',
             'field_type' => 'text',
-            'is_default' => '1',
             'htmlvar_name' => 'uwp_account_last_name'
         );
 
@@ -773,7 +771,6 @@ class UsersWP_Activator {
         $fields[] = array(
             'form_type' => 'register',
             'field_type' => 'password',
-            'is_default' => '1',
             'htmlvar_name' => 'uwp_account_password'
         );
 

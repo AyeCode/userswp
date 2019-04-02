@@ -123,6 +123,7 @@ No questions so far, but don't hesitate to ask!
 * Implement new settings interface - CHANGED
 * Replace chosen with select2 - CHANGED
 * Super Duper updated to v1.0.10 - CHANGED
+* Allow user to register without password field - FIXED
 
 = 1.0.23 =
 * UWP Login widget breaks page for logged in users - FIXED

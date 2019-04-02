@@ -100,6 +100,14 @@ if ( ! defined( 'ABSPATH' ) ) {
         </td>
     </tr>
 
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'Author box', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_author_box]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for displaying author box.', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
     <?php do_action('uwp_after_general_shortcodes_content'); ?>
 
 </table>

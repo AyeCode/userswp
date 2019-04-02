@@ -95,11 +95,11 @@ class UsersWP_Import_Export {
             return;
         $extension = end( explode( '.', $_FILES['import_file']['name'] ) );
         if( $extension != 'json' ) {
-            wp_die( sprintf(__( 'Please upload a valid .json file. %sGo Back%s' ), '<a href="'.admin_url( 'admin.php?page=userswp&tab=import-export&subtab=ie-settings' ).'">', '</a>' ));
+            wp_die( sprintf(__( 'Please upload a valid .json file. %sGo Back%s' ), '<a href="'.admin_url( 'admin.php?page=userswp&tab=import-export&section=settings' ).'">', '</a>' ));
         }
         $import_file = $_FILES['import_file']['tmp_name'];
         if( empty( $import_file ) ) {
-            wp_die( sprintf(__( 'Please upload a file to import. %sGo Back%s' ), '<a href="'.admin_url( 'admin.php?page=userswp&tab=import-export&subtab=ie-settings' ).'">', '</a>' ));
+            wp_die( sprintf(__( 'Please upload a file to import. %sGo Back%s' ), '<a href="'.admin_url( 'admin.php?page=userswp&tab=import-export&section=settings' ).'">', '</a>' ));
         }
         // Retrieve the settings from the file and convert the json object to an array.
         $settings = (array) json_decode( file_get_contents( $import_file ), true );

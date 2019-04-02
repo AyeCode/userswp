@@ -1,0 +1,116 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+/**
+ * UsersWP author box widget.
+ *
+ * @since 1.0.22
+ */
+class UWP_Author_Box_Widget extends WP_Super_Duper {
+
+    /**
+     * Register the profile widget with WordPress.
+     *
+     */
+    public function __construct() {
+
+
+        $options = array(
+            'textdomain'    => 'userswp',
+            'block-icon'    => 'admin-site',
+            'block-category'=> 'widgets',
+            'block-keywords'=> "['userswp','author','authorbox']",
+            'class_name'     => __CLASS__,
+            'base_id'       => 'uwp_author_box',
+            'name'          => __('UWP > Author Box','userswp'),
+            'widget_ops'    => array(
+                'classname'   => 'uwp_widgets uwp_widget_author_box',
+                'description' => esc_html__('Displays author box.','userswp'),
+            ),
+            'arguments'     => array(
+                'title'  => array(
+                    'title'       => __( 'Widget title', 'userswp' ),
+                    'desc'        => __( 'Enter widget title.', 'userswp' ),
+                    'type'        => 'text',
+                    'desc_tip'    => true,
+                    'default'     => '',
+                    'advanced'    => false
+                ),
+            )
+
+        );
+
+
+        parent::__construct( $options );
+    }
+
+    public function output( $args = array(), $widget_args = array(), $content = '' ) {
+
+        ob_start();
+
+        global $post, $wpdb;
+
+        if(!$post->ID){
+            return '';
+        }
+
+        if(!wp_style_is('uwp-authorbox')){
+            wp_enqueue_style( 'uwp-authorbox' );
+        }
+
+        $output = uwp_get_option('author_box_content');
+
+        $output = apply_filters('uwp_author_box_pre_output', $output, $args);
+
+        $author_id = $post->post_author;
+        $author_link = apply_filters('uwp_profile_link', get_author_posts_url($author_id), $author_id);
+        $user = get_user_by('id', $author_id);
+        $author_name = $user->display_name;
+        $author_bio = get_user_meta($author_id, 'description', true);
+        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+        $user_meta = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$meta_table} WHERE user_id = %d", $author_id), ARRAY_A);
+
+        $user_meta = apply_filters('uwp_author_box_user_meta_fields', $user_meta, $args);
+        $avatar_size = apply_filters('uwp_author_box_avatar_size', 100, $args);
+
+        $replace_array = array(
+            '[#post_id#]' => $post->ID,
+            '[#author_id#]' => $post->post_author,
+            '[#author_name#]' => $author_name,
+            '[#author_link#]' => $author_link,
+            '[#author_bio#]' => $author_bio,
+            '[#author_image#]' => get_avatar($post->post_author, $avatar_size),
+        );
+
+        if( !empty( $user_meta ) && '' !== $user_meta ) {
+            foreach ( $user_meta as $meta_key => $meta_val ) {
+
+                if(in_array($meta_key, array('uwp_account_avatar_thumb', 'uwp_account_banner_thumb'))){
+                    $uploads = wp_upload_dir();
+                    $upload_url = $uploads['baseurl'];
+                    $meta_val = $upload_url.$meta_val;
+                }
+
+                if( in_array($meta_key, array('user_privacy')) ) {
+                    continue;
+                }
+
+                $replace_array['[#'.$meta_key.'#]'] = $meta_val;
+            }
+        }
+
+        $replace_array = apply_filters('uwp_author_box_replace_array', $replace_array);
+
+        foreach ( $replace_array as $key => $value ) {
+            $output = str_replace( $key, $value, $output );
+        }
+
+        $output = apply_filters('uwp_author_box_output', $output, $args);
+
+        return trim($output);
+
+    }
+
+}

@@ -62,7 +62,7 @@ class UsersWP_Validation {
         $enable_confirm_email_field = isset($email_extra['confirm_email']) ? $email_extra['confirm_email'] : '0';
 
         $password_field = uwp_get_custom_field_info('uwp_account_password');
-        $enable_password = $password_field->is_active;
+        $enable_password = isset($data['uwp_account_password']) && $password_field->is_active ? 1 : 0;
         $password_extra = array();
         if (isset($password_field->extra_fields) && $password_field->extra_fields != '') {
             $password_extra = unserialize($password_field->extra_fields);
@@ -74,6 +74,7 @@ class UsersWP_Validation {
         if ($type == 'account' || $type == 'change') {
             if (!is_user_logged_in()) {
                 $errors->add('not_logged_in', __('<strong>Error</strong>: Permission denied.', 'userswp'));
+                return $errors;
             }
         }
 
@@ -106,18 +107,14 @@ class UsersWP_Validation {
                         //do nothing since admin edit fields can be empty
                     } else {
                         if ($field->required_msg) {
-                            $errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->site_title.' '.$field->required_msg, 'userswp'));
+                            $errors->add('empty_'.$field->htmlvar_name,  sprintf(__('<strong>Error</strong>: %s %s', 'userswp'), $field->site_title, $field->required_msg));
+                            return $errors;
                         } else {
-                            $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'userswp'));
+                            $errors->add('empty_'.$field->htmlvar_name, sprintf(__('<strong>Error</strong>: cannot be empty.', 'userswp'), $field->site_title));
+                            return $errors;
                         }
                     }
                 }
-
-                $error_code = $errors->get_error_code();
-                if (!empty($error_code)) {
-                    return $errors;
-                }
-
 
                 $value = isset($data[$field->htmlvar_name]) ? $data[$field->htmlvar_name] : '';
                 $sanitized_value = $value;
@@ -208,8 +205,10 @@ class UsersWP_Validation {
                     } else {
                         if ($field->required_msg) {
                             $errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->site_title.' '.$field->required_msg, 'userswp'));
+                            return $errors;
                         } else {
                             $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'userswp'));
+                            return $errors;
                         }
                     }
                 }
@@ -217,16 +216,19 @@ class UsersWP_Validation {
                 if ($field->field_type == 'email' && !empty($sanitized_value) && !is_email($sanitized_value)) {
                     $incorrect_email_error_msg = apply_filters('uwp_incorrect_email_error_msg', __('<strong>Error</strong>: The email address isn&#8217;t correct.', 'userswp'));
                     $errors->add('invalid_email', $incorrect_email_error_msg);
+                    return $errors;
                 }
 
                 //register email
                 if ($type == 'register' && $field->htmlvar_name == 'uwp_account_email' && email_exists($sanitized_value)) {
                     $errors->add('email_exists', __('<strong>Error</strong>: This email is already registered, please choose another one.', 'userswp'));
+                    return $errors;
                 }
 
                 //forgot email
                 if ($field->htmlvar_name == 'uwp_forgot_email' && !email_exists($sanitized_value)) {
                     $errors->add('email_exists', __('<strong>Error</strong>: This email doesn\'t exists.', 'userswp'));
+                    return $errors;
                 }
 
                 $incorrect_username_error_msg = apply_filters('uwp_incorrect_username_error_msg', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'userswp'));
@@ -236,9 +238,11 @@ class UsersWP_Validation {
                     if (!is_admin()) {
                         if (!validate_username($sanitized_value)) {
                             $errors->add('invalid_username', $incorrect_username_error_msg);
+                            return $errors;
                         }
                         if (username_exists($sanitized_value)) {
                             $errors->add('username_exists', __('<strong>Error</strong>: This username is already registered. Please choose another one.', 'userswp'));
+                            return $errors;
                         }
                     }
                 }
@@ -247,6 +251,7 @@ class UsersWP_Validation {
                 if ($field->htmlvar_name == 'uwp_login_username') {
                     if (!validate_username($sanitized_value)) {
                         $errors->add('invalid_username', $incorrect_username_error_msg);
+                        return $errors;
                     }
                 }
 
@@ -275,10 +280,6 @@ class UsersWP_Validation {
             //check old password
             if( empty( $data['uwp_'.$password_type.'_old_password'] ) ) {
                 $errors->add( 'empty_password', __( '<strong>Error</strong>: Please enter your old password', 'userswp' ) );
-            }
-
-            $error_code = $errors->get_error_code();
-            if (!empty($error_code)) {
                 return $errors;
             }
 
@@ -286,19 +287,11 @@ class UsersWP_Validation {
             $user = get_user_by( 'id', get_current_user_id() );
             if ( !wp_check_password( $pass, $user->data->user_pass, $user->ID) ) {
                 $errors->add( 'invalid_password', __( '<strong>Error</strong>: Incorrect old password', 'userswp' ) );
-            }
-
-            $error_code = $errors->get_error_code();
-            if (!empty($error_code)) {
                 return $errors;
             }
 
             if( $data['uwp_'.$password_type.'_old_password'] == $data['uwp_'.$password_type.'_password'] ) {
                 $errors->add( 'invalid_password', __( '<strong>Error</strong>: Old password and new password are same', 'userswp' ) );
-            }
-
-            $error_code = $errors->get_error_code();
-            if (!empty($error_code)) {
                 return $errors;
             }
 
@@ -308,28 +301,16 @@ class UsersWP_Validation {
             //check confirm email
             if( empty( $data['uwp_account_email'] ) ) {
                 $errors->add( 'empty_email', __( '<strong>Error</strong>: Please enter your Email', 'userswp' ) );
-            }
-
-            $error_code = $errors->get_error_code();
-            if (!empty($error_code)) {
                 return $errors;
             }
 
             if( !isset($data['uwp_account_confirm_email']) || empty( $data['uwp_account_confirm_email'] ) ) {
                 $errors->add( 'empty_confirm_email', __( '<strong>Error</strong>: Please fill Confirm Email field', 'userswp' ) );
-            }
-
-            $error_code = $errors->get_error_code();
-            if (!empty($error_code)) {
                 return $errors;
             }
 
             if( $data['uwp_account_email'] != $data['uwp_account_confirm_email'] ) {
                 $errors->add( 'email_mismatch', __( '<strong>Error</strong>: Email and Confirm email not match', 'userswp' ) );
-            }
-
-            $error_code = $errors->get_error_code();
-            if (!empty($error_code)) {
                 return $errors;
             }
 
