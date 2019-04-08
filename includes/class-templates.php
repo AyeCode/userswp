@@ -828,7 +828,7 @@ class UsersWP_Templates {
 
         global $post;
 
-        if( is_single() ) {
+        if( is_single() || is_page() ) {
 
             $author_box_enable_disable = uwp_get_option('author_box_enable_disable');
 

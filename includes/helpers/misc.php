@@ -1822,9 +1822,9 @@ function uwp_all_email_tags( $inline = true ){
 function uwp_authbox_tags( $inline = true ){
     global $wpdb;
 
-    $tags = array( '[#post_id#]', '[#author_id#]', '[#author_name#]', '[#author_link#]', '[#author_bio#]', '[#author_image#]' );
+    $tags = array( '[#post_id#]', '[#author_id#]', '[#author_name#]', '[#author_link#]', '[#author_bio#]', '[#author_image#]', '[#post_modified#]', '[#post_date#]', '[#author_nicename#]', '[#author_registered#]', '[#author_website#]' );
 
-    $tags = apply_filters('uwp_author_box_tags', $tags, $inline);
+    $tags = apply_filters('uwp_author_box_default_tags', $tags, $inline);
 
     $table_name = uwp_get_table_prefix() . 'uwp_usermeta';
 
@@ -1842,7 +1842,7 @@ function uwp_authbox_tags( $inline = true ){
 
     }
 
-    $tags = apply_filters( 'uwp_all_authbox_tags', $tags );
+    $tags = apply_filters( 'uwp_all_author_box_tags', $tags );
 
     if ( $inline ) {
         $tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';

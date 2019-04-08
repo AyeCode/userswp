@@ -124,6 +124,10 @@ No questions so far, but don't hesitate to ask!
 * Replace chosen with select2 - CHANGED
 * Super Duper updated to v1.0.10 - CHANGED
 * Allow user to register without password field - FIXED
+* Display Author Box for posts or custom post types - ADDED
+* Settings for Author Box - ADDED
+* Replace author link with the profile page - CHANGED
+* Setting to disable author link replaced with the profile page - ADDED
 
 = 1.0.23 =
 * UWP Login widget breaks page for logged in users - FIXED

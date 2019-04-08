@@ -205,7 +205,7 @@ final class UsersWP {
         //profile page
         add_filter('query_vars', array($instance, 'profile_query_vars'), 10, 1 );
         add_action('init', array($instance, 'rewrite_profile_link') , 10, 1 );
-        add_filter( 'uwp_profile_link', array($instance, 'get_profile_link'), 10, 2 );
+        add_filter( 'author_link', array($instance, 'get_profile_link'), 10, 2 );
         add_filter( 'edit_profile_url', array($instance, 'uwp_modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
         add_filter( 'get_comment_author_link', array($instance, 'uwp_get_comment_author_link') , 10 , 2 );

@@ -388,6 +388,13 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'desc_tip' => true,
                     'advanced'  => true,
                 ),
+                array(
+                    'id'   => 'uwp_disable_author_link',
+                    'name' => __( 'Disable author link redirect to UsersWP profile page.', 'userswp' ),
+                    'type' => 'checkbox',
+                    'default'  => '0',
+                    'advanced'  => true,
+                ),
                 array( 'type' => 'sectionend', 'id' => 'profile_options' ),
             ));
         } else if ( 'users' == $current_section ) {

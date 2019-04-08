@@ -60,7 +60,8 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
             wp_enqueue_style( 'uwp-authorbox' );
         }
 
-        $output = uwp_get_option('author_box_content');
+        $default = UsersWP_Defaults::author_box_content();
+        $output = uwp_get_option('author_box_content', $default);
 
         $output = apply_filters('uwp_author_box_pre_output', $output, $args);
 
@@ -77,11 +78,16 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
 
         $replace_array = array(
             '[#post_id#]' => $post->ID,
+            '[#post_modified#]' => $post->post_modified,
+            '[#post_date#]' => $post->post_date,
             '[#author_id#]' => $post->post_author,
             '[#author_name#]' => $author_name,
             '[#author_link#]' => $author_link,
             '[#author_bio#]' => $author_bio,
             '[#author_image#]' => get_avatar($post->post_author, $avatar_size),
+            '[#author_nicename#]' => $user->user_nicename,
+            '[#author_registered#]' => $user->user_registered,
+            '[#author_website#]' => $user->user_url,
         );
 
         if( !empty( $user_meta ) && '' !== $user_meta ) {
@@ -104,6 +110,7 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
         $replace_array = apply_filters('uwp_author_box_replace_array', $replace_array);
 
         foreach ( $replace_array as $key => $value ) {
+            $value = apply_filters('uwp_author_box_'.$key.'_value', $value, $post);
             $output = str_replace( $key, $value, $output );
         }
 

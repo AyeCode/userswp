@@ -700,13 +700,17 @@ class UsersWP_Profile {
      */
     public function get_profile_link($link, $user_id) {
 
+        if (1 == uwp_get_option('uwp_disable_author_link')) {
+            return $link;
+        }
+
         $page_id = uwp_get_page_id('profile_page', false);
 
-        if ($page_id) {
-            $link = get_permalink($page_id);
-        } else {
-            $link = '';
+        if (!$page_id) {
+            return $link;
         }
+
+        $link = get_permalink($page_id);
 
         if ($link != '') {
 
@@ -717,7 +721,6 @@ class UsersWP_Profile {
                 // Add forward slash if not available
                 $link = rtrim($link, '/') . '/';
             }
-
 
             $url_type = apply_filters('uwp_profile_url_type', 'slug');
 
@@ -740,10 +743,9 @@ class UsersWP_Profile {
                 } else {
                     return $link . $username;
                 }
-
             }
         } else {
-            return '';
+            return $link;
         }
     }
 
