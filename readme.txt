@@ -122,7 +122,7 @@ No questions so far, but don't hesitate to ask!
 = 1.0.24 =
 * Implement new settings interface - CHANGED
 * Replace chosen with select2 - CHANGED
-* Super Duper updated to v1.0.10 - CHANGED
+* Super Duper updated to v1.0.12 - CHANGED
 * Allow user to register without password field - FIXED
 * Display Author Box for posts or custom post types - ADDED
 * Settings for Author Box - ADDED

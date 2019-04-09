@@ -22,11 +22,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 * @since 1.0.8 Some refactoring for page builders ( cornerstone builder now supported ) - CHANGED
 	 * @since 1.0.9 Numbers saving as strings and not numbers which can cause block render issues on refresh - FIXED
 	 * @since 1.0.10 Some refactoring for page builders ( Avia builder for Enfold theme now supported ) - CHANGED
-	 * @ver 1.0.10
+	 * @since 1.0.11 Some refactoring for page builders - CHANGED
+	 * @since 1.0.12 A checkbox default value can make a argument true even when unchecked - FIXED
+	 * @ver 1.0.12
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.10";
+		public $version = "1.0.12";
 		public $block_code;
 		public $options;
 		public $base_id;
@@ -89,10 +91,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					) ); // for elementor
 				}
 				// this makes the insert button work for cornerstone
-				add_action( 'cornerstone_load_builder', array(
-					$this,
-					'shortcode_insert_button_script'
-				) ); // for cornerstone builder (this is the preview)
+				add_action('wp_print_footer_scripts',array( __CLASS__, 'maybe_cornerstone_builder' ));
 
 				add_action( 'wp_ajax_super_duper_get_widget_settings', array( __CLASS__, 'get_widget_settings' ) );
 				add_action( 'wp_ajax_super_duper_get_picker', array( __CLASS__, 'get_picker' ) );
@@ -102,6 +101,15 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			do_action( 'wp_super_duper_widget_init', $options, $this );
+		}
+
+		/**
+		 * Maybe insert the shortcode inserter button in the footer if we are in the cornerstone builder
+		 */
+		public static function maybe_cornerstone_builder(){
+			if(did_action('cornerstone_before_boot_app')){
+				self::shortcode_insert_button_script();
+			}
 		}
 
 		/**
@@ -577,7 +585,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 
 				/*
-				Set the value of elements controled via react.
+				 Set the value of elements controled via react.
 				 */
 				function sd_setNativeValue(element, value) {
 					let lastValue = element.value;
@@ -595,7 +603,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				<?php }?>
 
 				/*
-				Copies the shortcode to the clipboard.
+				 Copies the shortcode to the clipboard.
 				 */
 				function sd_copy_to_clipboard() {
 					/* Get the text field */
@@ -613,7 +621,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 
 				/*
-				Gets the shortcode options.
+				 Gets the shortcode options.
 				 */
 				function sd_get_shortcode_options($this) {
 
@@ -658,7 +666,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 
 				/*
-				Builds and inserts the shortcode into the viewer.
+				 Builds and inserts the shortcode into the viewer.
 				 */
 				function sd_build_shortcode($id) {
 
@@ -722,7 +730,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 
 				/*
-				Delay the init of the textareas for 1 second.
+				 Delay the init of the textareas for 1 second.
 				 */
 				(function () {
 					setTimeout(function () {
@@ -731,7 +739,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				})();
 
 				/*
-				Init the textareas to be able to show the shortcode builder button.
+				 Init the textareas to be able to show the shortcode builder button.
 				 */
 				function sd_init_textareas() {
 
@@ -785,13 +793,22 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						}
 					});
 
-					// Cornerstone
+					// Cornerstone textareas
 					jQuery(document).on('focusin', '.cs-control.cs-control-textarea', function () {
 						// insert the shortcode button to the textarea lable if not there already
 						if (!jQuery(this).find('.cs-control-header label').find('.sd-lable-shortcode-inserter').length) {
 							jQuery(this).find('.cs-control-header label').append(sd_shortcode_button());
 						}
 					});
+
+					// Cornerstone main bar
+					setTimeout(function () {
+						// insert the shortcode button to the textarea lable if not there already
+						if (!jQuery('.cs-bar-btns').find('.sd-lable-shortcode-inserter').length) {
+							jQuery('<li style="text-align: center;padding: 5px;list-style: none;">'+sd_shortcode_button()+'</li>').insertBefore('.cs-action-toggle-custom-css');
+						}
+					}, 2000);
+
 
 					// WP Bakery, code editor does not render shortcodes.
 //					jQuery(document).on('focusin', '.wpb-textarea_raw_html', function () {
@@ -850,7 +867,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 
 			</script>
-
 			<?php
 		}
 
@@ -1237,6 +1253,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 *
 		 * @param $instance
 		 *
+		 * @since 1.0.12 Don't set checkbox default value if the value is empty.
+		 *
 		 * @return array
 		 */
 		public function argument_values( $instance ) {
@@ -1255,7 +1273,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					$args['name'] = $key;
 					//
 					$argument_values[ $key ] = isset( $instance[ $key ] ) ? $instance[ $key ] : '';
-					if ( $argument_values[ $key ] == '' && isset( $args['default'] ) ) {
+					if($args['type']=='checkbox' && $argument_values[ $key ] == ''){
+						// don't set default for an empty checkbox
+					}
+					elseif ( $argument_values[ $key ] == '' && isset( $args['default'] ) ) {
 						$argument_values[ $key ] = $args['default'];
 					}
 				}
