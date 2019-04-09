@@ -725,8 +725,8 @@ class UsersWP_Form_Builder {
                                     ?>
 
                                     <select name="is_public" id="is_public" class="uwp_select2">
-                                        <option value="0" <?php selected($value, "0"); ?>><?php echo __("No", "userswp") ?></option>
                                         <option value="1" <?php selected($value, "1"); ?>><?php echo __("Yes", "userswp") ?></option>
+                                        <option value="0" <?php selected($value, "0"); ?>><?php echo __("No", "userswp") ?></option>
                                         <option value="2" <?php selected($value, "2"); ?>><?php echo __("Let User Decide", "userswp") ?></option>
                                     </select>
 

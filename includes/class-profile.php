@@ -1632,6 +1632,9 @@ class UsersWP_Profile {
             }
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);
             $value = $this->uwp_get_field_value($field, $user);
+            if('fieldset' == $field->field_type){
+                $value = true;
+            }
             if (!in_array($key, $allowed_tabs) || !$value) {
                 continue;
             }
