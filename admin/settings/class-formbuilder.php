@@ -1942,7 +1942,7 @@ class UsersWP_Form_Builder {
             ?>
             <div class="uwp-input-wrap">
                 <input type="hidden" name="is_register_only_field" value="0" />
-                <input type="checkbox" name="is_register_only_field" value="1" <?php checked( $value, 1, true );?> />
+                <input type="checkbox" name="is_register_only_field" value="1" <?php checked( $register_only_value, 1, true );?> />
             </div>
         <?php } ?>
         </li>

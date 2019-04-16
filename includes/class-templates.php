@@ -363,6 +363,32 @@ class UsersWP_Templates {
     }
 
     /**
+     * Changes the lost password url with the UWP page.
+     *
+     * @param $lostpassword_url string The URL for lost password.
+     *
+     * @return string The lost password page url.
+     */
+    public function wp_lostpassword_url($lostpassword_url) {
+        $forgot_page_url = uwp_get_forgot_page_url();
+
+        if ( is_multisite() && isset( $_GET['redirect_to'] ) && false !== strpos( wp_unslash( $_GET['redirect_to'] ), network_admin_url() ) ) {
+            return $lostpassword_url;
+        }
+
+        $redirect = isset($_REQUEST['redirect_to']) ? esc_url($_REQUEST['redirect_to']) : '';
+        if ($forgot_page_url) {
+            if($forgot_page_url && isset($redirect) && !empty($redirect)){
+                $lostpassword_url = add_query_arg( 'redirect_to', $redirect, $forgot_page_url );
+            } else {
+                $lostpassword_url = $forgot_page_url;
+            }
+        }
+
+        return $lostpassword_url;
+    }
+
+    /**
      * Prints html for form fields of that particular form.
      *
      * @since       1.0.0

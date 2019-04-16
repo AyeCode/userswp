@@ -159,7 +159,6 @@ final class UsersWP {
         add_action('init', array($instance, 'process_change'));
         add_action('init', array($instance, 'process_reset'));
 
-
         // Forms
         add_filter('uwp_form_input_html_datepicker', array($instance, 'uwp_form_input_datepicker'), 10, 4);
         add_filter('uwp_form_input_html_time', array($instance, 'uwp_form_input_time'), 10, 4);
@@ -281,6 +280,7 @@ final class UsersWP {
         // filter the login and register url
         add_filter( 'login_url', array($instance, 'wp_login_url'), 10, 3 );
         add_filter( 'register_url', array($instance, 'wp_register_url'), 10, 1 );
+        add_filter( 'lostpassword_url', array($instance, 'wp_lostpassword_url'), 10, 1 );
     }
     
     public function load_tools_actions_and_filters($instance) {
