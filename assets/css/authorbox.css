@@ -1,0 +1,16 @@
+/* Media Object */
+.media-figure {
+    margin-right: 1em;
+}
+.media-body {
+    flex: 1;
+}
+
+/* Author Box Styles */
+.uwp-author-box {
+    background: #f7f7f7;
+    padding: 20px;
+    border-radius: 2px;
+    display: flex;
+    align-items: flex-start;
+}

@@ -1078,6 +1078,10 @@ class UsersWP_GeoDirectory_Plugin {
     }
 
     public function get_gd_login_url($url, $args) {
+        if(!$this->uwp_is_gdv2()) {
+            return $url;
+        }
+
         $register_page = uwp_get_page_id('register_page', false);
         $login_page = uwp_get_page_id('login_page', false);
         $forgot_page = uwp_get_page_id('forgot_page', false);
@@ -1219,21 +1223,29 @@ class UsersWP_GeoDirectory_Plugin {
     }
 
     public function gd_login_wid_login_placeholder() {
-        return __( 'Username', 'userswp' );
+        if(!$this->uwp_is_gdv2()) {
+            return __('Username', 'userswp');
+        }
     }
 
     public function gd_login_wid_login_name() {
-        return "uwp_login_username";
+        if(!$this->uwp_is_gdv2()) {
+            return "uwp_login_username";
+        }
     }
 
     public function gd_login_wid_login_pwd() {
-        return "uwp_login_password";
+        if(!$this->uwp_is_gdv2()) {
+            return "uwp_login_password";
+        }
     }
 
     public function gd_login_inject_nonce() {
-        ?>
-        <input type="hidden" name="uwp_login_nonce" value="<?php echo wp_create_nonce( 'uwp-login-nonce' ); ?>" />
-        <?php
+        if(!$this->uwp_is_gdv2()) {
+            ?>
+            <input type="hidden" name="uwp_login_nonce" value="<?php echo wp_create_nonce('uwp-login-nonce'); ?>"/>
+            <?php
+        }
     }
     
     public function check_redirect_author_page( $redirect = false ) {

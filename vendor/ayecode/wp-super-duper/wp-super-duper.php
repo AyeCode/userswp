@@ -19,11 +19,16 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 * @since 1.0.5 Block checkbox options are set as true by default even when set as false - FIXED
 	 * @since 1.0.6 Some refactoring for page builders - CHANGED
 	 * @since 1.0.7 Some refactoring for page builders - CHANGED
-	 * @ver 1.0.7
+	 * @since 1.0.8 Some refactoring for page builders ( cornerstone builder now supported ) - CHANGED
+	 * @since 1.0.9 Numbers saving as strings and not numbers which can cause block render issues on refresh - FIXED
+	 * @since 1.0.10 Some refactoring for page builders ( Avia builder for Enfold theme now supported ) - CHANGED
+	 * @since 1.0.11 Some refactoring for page builders - CHANGED
+	 * @since 1.0.12 A checkbox default value can make a argument true even when unchecked - FIXED
+	 * @ver 1.0.12
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.7";
+		public $version = "1.0.12";
 		public $block_code;
 		public $options;
 		public $base_id;
@@ -79,12 +84,120 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				add_action( 'media_buttons', array( $this, 'shortcode_insert_button' ) );
 				if ( $this->is_preview() ) {
 					add_action( 'wp_footer', array( $this, 'shortcode_insert_button_script' ) );
-					add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'shortcode_insert_button_script' ) ); // for elementor
+					// this makes the insert button work for elementor
+					add_action( 'elementor/editor/after_enqueue_scripts', array(
+						$this,
+						'shortcode_insert_button_script'
+					) ); // for elementor
 				}
+				// this makes the insert button work for cornerstone
+				add_action('wp_print_footer_scripts',array( __CLASS__, 'maybe_cornerstone_builder' ));
+
 				add_action( 'wp_ajax_super_duper_get_widget_settings', array( __CLASS__, 'get_widget_settings' ) );
+				add_action( 'wp_ajax_super_duper_get_picker', array( __CLASS__, 'get_picker' ) );
+
+				// add generator text to admin head
+				add_action( 'admin_head', array( $this, 'generator' ) );
 			}
 
 			do_action( 'wp_super_duper_widget_init', $options, $this );
+		}
+
+		/**
+		 * Maybe insert the shortcode inserter button in the footer if we are in the cornerstone builder
+		 */
+		public static function maybe_cornerstone_builder(){
+			if(did_action('cornerstone_before_boot_app')){
+				self::shortcode_insert_button_script();
+			}
+		}
+
+		/**
+		 * A function to ge the shortcode builder picker html.
+		 *
+		 * @param string $editor_id
+		 *
+		 * @return string
+		 */
+		public static function get_picker( $editor_id = '' ) {
+
+			ob_start();
+			if ( isset( $_POST['editor_id'] ) ) {
+				$editor_id = esc_attr( $_POST['editor_id'] );
+			} elseif ( isset( $_REQUEST['et_fb'] ) ) {
+				$editor_id = 'main_content_content_vb_tiny_mce';
+			}
+
+			global $sd_widgets;
+			?>
+
+			<div class="sd-shortcode-left-wrap">
+				<?php
+				asort( $sd_widgets );
+				if ( ! empty( $sd_widgets ) ) {
+					echo '<select class="widefat" onchange="sd_get_shortcode_options(this);">';
+					echo "<option>" . __( 'Select shortcode' ) . "</option>";
+					foreach ( $sd_widgets as $shortcode => $class ) {
+						echo "<option value='" . esc_attr( $shortcode ) . "'>" . esc_attr( $shortcode ) . " (" . esc_attr( $class['name'] ) . ")</option>";
+					}
+					echo "</select>";
+
+				}
+				?>
+				<div class="sd-shortcode-settings"></div>
+
+			</div>
+
+			<div class="sd-shortcode-right-wrap">
+				<textarea id='sd-shortcode-output' disabled></textarea>
+				<div id='sd-shortcode-output-actions'>
+					<?php if ( $editor_id != '' ) { ?>
+						<button class="button sd-insert-shortcode-button"
+						        onclick="sd_insert_shortcode(<?php if ( ! empty( $editor_id ) ) {
+							        echo "'" . $editor_id . "'";
+						        } ?>)"><?php _e( 'Insert shortcode' ); ?></button>
+					<?php } ?>
+					<button class="button"
+					        onclick="sd_copy_to_clipboard()"><?php _e( 'Copy shortcode' ); ?></button>
+				</div>
+			</div>
+			<?php
+
+			$html = ob_get_clean();
+
+			if ( wp_doing_ajax() ) {
+				echo $html;
+				$should_die = true;
+
+				// some builder get the editor via ajax so we should not die on those ocasions
+				$dont_die = array(
+					'parent_tag',// WP Bakery
+					'avia_request' // enfold
+				);
+
+				foreach ( $dont_die as $request ) {
+					if ( isset( $_REQUEST[ $request ] ) ) {
+						$should_die = false;
+					}
+				}
+
+				if ( $should_die ) {
+					wp_die();
+				}
+
+			} else {
+				return $html;
+			}
+
+			return '';
+
+		}
+
+		/**
+		 * Output the version in the admin header.
+		 */
+		public function generator() {
+			echo '<meta name="generator" content="WP Super Duper v' . $this->version . '" />';
 		}
 
 		/**
@@ -136,52 +249,57 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				return;
 			}
 			add_thickbox();
-			?>
-			<div id="super-duper-content" style="display:none;">
 
-				<div class="sd-shortcode-left-wrap">
-					<?php
-					asort( $sd_widgets );
-					if ( ! empty( $sd_widgets ) ) {
-						echo '<select class="widefat" onchange="sd_get_shortcode_options(this);">';
-						echo "<option>" . __( 'Select shortcode' ) . "</option>";
-						foreach ( $sd_widgets as $shortcode => $class ) {
-							echo "<option value='" . esc_attr( $shortcode ) . "'>" . esc_attr( $shortcode ) . " (" . esc_attr( $class['name'] ) . ")</option>";
-						}
-						echo "</select>";
 
-					}
-					?>
-					<div class="sd-shortcode-settings"></div>
+			/**
+			 * Cornerstone makes us play dirty tricks :/
+			 * All media_buttons are removed via JS unless they are two specific id's so we wrap our content in this ID so it is not removed.
+			 */
+			if ( function_exists( 'cornerstone_plugin_init' ) && ! is_admin() ) {
+				echo '<span id="insert-media-button">';
+			}
 
-				</div>
+			echo self::shortcode_button( 'this', 'true' );
 
-				<div class="sd-shortcode-right-wrap">
-					<textarea id='sd-shortcode-output' disabled></textarea>
-					<div id='sd-shortcode-output-actions'>
-						<button class="button"
-						        onclick="sd_insert_shortcode(<?php if ( ! empty( $editor_id ) ) {
-							        echo "'" . $editor_id . "'";
-						        } ?>)"><?php _e( 'Insert shortcode' ); ?></button>
-						<button class="button"
-						        onclick="sd_copy_to_clipboard()"><?php _e( 'Copy shortcode' ); ?></button>
-					</div>
-				</div>
+			// see opening note
+			if ( function_exists( 'cornerstone_plugin_init' ) && ! is_admin() ) {
+				echo '</span>'; // end #insert-media-button
+			}
 
-			</div>
-
-			<?php
-			// if Font Awesome is available then show a icon if not show a WP icon.
-			$button_string = wp_style_is( 'font-awesome', 'enqueued' ) && 1 == 2 ? '<i class="fas fa-cubes" aria-hidden="true"></i>' : '<span style="vertical-align: middle;line-height: 18px;font-size: 20px;" class="dashicons dashicons-screenoptions"></span>';
-			?>
-
-			<a href="#TB_inline?width=100%&height=550&inlineId=super-duper-content"
-			   class="thickbox button super-duper-content-open"
-			   title="<?php _e( 'Add Shortcode' ); ?>"><?php echo $button_string; ?></a>
-
-			<?php
 			self::shortcode_insert_button_script( $editor_id, $insert_shortcode_function );
 			$shortcode_insert_button_once = true;
+		}
+
+		/**
+		 * Gets the shortcode insert button html.
+		 *
+		 * @param string $id
+		 * @param string $search_for_id
+		 *
+		 * @return mixed
+		 */
+		public static function shortcode_button( $id = '', $search_for_id = '' ) {
+			ob_start();
+			?>
+			<span class="sd-lable-shortcode-inserter">
+				<a onclick="sd_ajax_get_picker(<?php echo $id;
+				if ( $search_for_id ) {
+					echo "," . $search_for_id;
+				} ?>);" href="#TB_inline?width=100%&height=550&inlineId=super-duper-content-ajaxed"
+				   class="thickbox button super-duper-content-open" title="Add Shortcode">
+					<span style="vertical-align: middle;line-height: 18px;font-size: 20px;"
+					      class="dashicons dashicons-screenoptions"></span>
+				</a>
+				<div id="super-duper-content-ajaxed" style="display:none;">
+					<span>Loading</span>
+				</div>
+			</span>
+
+			<?php
+			$html = ob_get_clean();
+
+			// remove line breaks so we can use it in js
+			return preg_replace( "/\r|\n/", "", trim( $html ) );
 		}
 
 		/**
@@ -427,7 +545,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				 */
 				?>
 				function sd_insert_shortcode($editor_id) {
-					$shortcode = jQuery('#sd-shortcode-output').val();
+					$shortcode = jQuery('#TB_ajaxContent #sd-shortcode-output').val();
 					if ($shortcode) {
 
 						if (!$editor_id) {
@@ -435,14 +553,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							<?php
 							if ( isset( $_REQUEST['et_fb'] ) ) {
 								echo '$editor_id = "#main_content_content_vb_tiny_mce";';
-							}elseif ( isset( $_REQUEST['action'] ) &&  $_REQUEST['action']=='elementor' ) {
+							} elseif ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor' ) {
 								echo '$editor_id = "#elementor-controls .wp-editor-container textarea";';
-							}else{
+							} else {
 								echo '$editor_id = "#wp-content-editor-container textarea";';
 							}
 							?>
-						}else{
-							$editor_id = '#'+$editor_id;
+						} else {
+							$editor_id = '#' + $editor_id;
 						}
 
 						if (tinyMCE && tinyMCE.activeEditor && jQuery($editor_id).attr("aria-hidden") == "true") {
@@ -453,7 +571,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							var textAreaTxt = $txt.val();
 							var txtToAdd = $shortcode;
 							var textareaValue = textAreaTxt.substring(0, caretPos) + txtToAdd + textAreaTxt.substring(caretPos);
-							$txt.val(textareaValue).change().keydown().blur().keyup().keypress();
+							$txt.focus().val(textareaValue).change().keydown().blur().keyup().keypress().trigger('input').trigger('change');
 
 							// set Divi react input value
 							var input = document.getElementById("main_content_content_vb_tiny_mce");
@@ -466,6 +584,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 				}
 
+				/*
+				 Set the value of elements controled via react.
+				 */
 				function sd_setNativeValue(element, value) {
 					let lastValue = element.value;
 					element.value = value;
@@ -481,9 +602,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 				<?php }?>
 
+				/*
+				 Copies the shortcode to the clipboard.
+				 */
 				function sd_copy_to_clipboard() {
 					/* Get the text field */
-					var copyText = document.getElementById("sd-shortcode-output");
+					var copyText = document.querySelector("#TB_ajaxContent #sd-shortcode-output");
 					//un-disable the field
 					copyText.disabled = false;
 					/* Select the text field */
@@ -495,6 +619,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					/* Alert the copied text */
 					alert("Copied the text: " + copyText.value);
 				}
+
+				/*
+				 Gets the shortcode options.
+				 */
 				function sd_get_shortcode_options($this) {
 
 					$short_code = jQuery($this).val();
@@ -513,7 +641,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						}
 
 						jQuery.post(ajaxurl, data, function (response) {
-							jQuery('.sd-shortcode-settings').html(response);
+							jQuery('#TB_ajaxContent .sd-shortcode-settings').html(response);
 
 							jQuery('#' + $short_code).on('change', 'select', function () {
 								sd_build_shortcode($short_code);
@@ -537,6 +665,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 				}
 
+				/*
+				 Builds and inserts the shortcode into the viewer.
+				 */
 				function sd_build_shortcode($id) {
 
 					var multiSelects = {};
@@ -594,14 +725,156 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						});
 					}
 					$output = $output + "]";
-					jQuery('#sd-shortcode-output').html($output);
+					jQuery('#TB_ajaxContent #sd-shortcode-output').html($output);
+				}
+
+
+				/*
+				 Delay the init of the textareas for 1 second.
+				 */
+				(function () {
+					setTimeout(function () {
+						sd_init_textareas();
+					}, 1000);
+				})();
+
+				/*
+				 Init the textareas to be able to show the shortcode builder button.
+				 */
+				function sd_init_textareas() {
+
+					// General textareas
+					jQuery(document).on('focus', 'textarea', function () {
+
+						if (jQuery(this).hasClass('wp-editor-area')) {
+							// insert the shortcode button to the textarea lable if not there already
+							if (!jQuery(this).parent().find('.sd-lable-shortcode-inserter').length) {
+								jQuery(this).parent().find('.quicktags-toolbar').append(sd_shortcode_button(jQuery(this).attr('id')));
+							}
+						} else {
+							// insert the shortcode button to the textarea lable if not there already
+							if (!jQuery("label[for='" + jQuery(this).attr('id') + "']").find('.sd-lable-shortcode-inserter').length) {
+								jQuery("label[for='" + jQuery(this).attr('id') + "']").append(sd_shortcode_button(jQuery(this).attr('id')));
+							}
+						}
+					});
+
+					// The below tries to add the shorcode builder button to the builders own raw/shortcode sections.
+
+					// DIVI
+					jQuery(document).on('focusin', '.et-fb-codemirror', function () {
+						// insert the shortcode button to the textarea lable if not there already
+						if (!jQuery(this).closest('.et-fb-form__group').find('.sd-lable-shortcode-inserter').length) {
+							jQuery(this).closest('.et-fb-form__group').find('.et-fb-form__label-text').append(sd_shortcode_button());
+						}
+					});
+
+					// Beaver
+					jQuery(document).on('focusin', '.fl-code-field', function () {
+						// insert the shortcode button to the textarea lable if not there already
+						if (!jQuery(this).closest('.fl-field-control-wrapper').find('.sd-lable-shortcode-inserter').length) {
+							jQuery(this).closest('.fl-field-control-wrapper').prepend(sd_shortcode_button());
+						}
+					});
+
+					// Fushion builder (avada)
+					jQuery(document).on('focusin', '.CodeMirror.cm-s-default', function () {
+						// insert the shortcode button to the textarea lable if not there already
+						if (!jQuery(this).parent().find('.sd-lable-shortcode-inserter').length) {
+							jQuery(sd_shortcode_button()).insertBefore(this);
+						}
+					});
+
+					// Avia builder (enfold)
+					jQuery(document).on('focusin', '#aviaTBcontent', function () {
+						// insert the shortcode button to the textarea lable if not there already
+						if (!jQuery(this).parent().parent().find('.avia-name-description ').find('.sd-lable-shortcode-inserter').length) {
+							jQuery(this).parent().parent().find('.avia-name-description strong').append(sd_shortcode_button(jQuery(this).attr('id')));
+						}
+					});
+
+					// Cornerstone textareas
+					jQuery(document).on('focusin', '.cs-control.cs-control-textarea', function () {
+						// insert the shortcode button to the textarea lable if not there already
+						if (!jQuery(this).find('.cs-control-header label').find('.sd-lable-shortcode-inserter').length) {
+							jQuery(this).find('.cs-control-header label').append(sd_shortcode_button());
+						}
+					});
+
+					// Cornerstone main bar
+					setTimeout(function () {
+						// insert the shortcode button to the textarea lable if not there already
+						if (!jQuery('.cs-bar-btns').find('.sd-lable-shortcode-inserter').length) {
+							jQuery('<li style="text-align: center;padding: 5px;list-style: none;">'+sd_shortcode_button()+'</li>').insertBefore('.cs-action-toggle-custom-css');
+						}
+					}, 2000);
+
+
+					// WP Bakery, code editor does not render shortcodes.
+//					jQuery(document).on('focusin', '.wpb-textarea_raw_html', function () {
+//						// insert the shortcode button to the textarea lable if not there already
+//						if(!jQuery(this).parent().parent().find('.wpb_element_label').find('.sd-lable-shortcode-inserter').length){
+//							jQuery(this).parent().parent().find('.wpb_element_label').append(sd_shortcode_button());
+//						}
+//					});
+
+				}
+
+				/**
+				 * Gets the html for the picker via ajax and updates it on the fly.
+				 *
+				 * @param $id
+				 * @param $search
+				 */
+				function sd_ajax_get_picker($id, $search) {
+					if ($search) {
+						$this = $id;
+						$id = jQuery($this).closest('.wp-editor-wrap').find('.wp-editor-container textarea').attr('id');
+					}
+
+					var data = {
+						'action': 'super_duper_get_picker',
+						'editor_id': $id,
+						'_ajax_nonce': '<?php echo wp_create_nonce( 'super_duper_picker' );?>'
+					};
+
+					if (!ajaxurl) {
+						var ajaxurl = "<?php echo admin_url( 'admin-ajax.php' ); ?>";
+					}
+
+					jQuery.post(ajaxurl, data, function (response) {
+						jQuery('#TB_ajaxContent').html(response);
+						//return response;
+					}).then(function (env) {
+						jQuery('body').on('thickbox:removed', function () {
+							jQuery('#super-duper-content-ajaxed').html('');
+						});
+					});
+				}
+
+				/**
+				 * Get the html for the shortcode inserter button depending on if a textarea id is available.
+				 *
+				 * @param $id string The textarea id.
+				 * @returns {string}
+				 */
+				function sd_shortcode_button($id) {
+					if ($id) {
+						return '<?php echo self::shortcode_button( "\\''+\$id+'\\'" );?>';
+					} else {
+						return '<?php echo self::shortcode_button();?>';
+					}
 				}
 
 			</script>
-
 			<?php
 		}
 
+		/**
+		 * Gets some CSS for the widgets screen.
+		 *
+		 * @return mixed
+		 */
 		public function widget_css() {
 			ob_start();
 			?>
@@ -637,6 +910,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			), '', $output );
 		}
 
+		/**
+		 * Gets some JS for the widgets screen.
+		 *
+		 * @return mixed
+		 */
 		public function widget_js() {
 			ob_start();
 			?>
@@ -699,7 +977,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						jQuery($this).data('sd-widget-enabled', true);
 					}
 
-					var $button = '<button title="<?php _e( 'Advanced Settings' );?>" class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><i class="fas fa-sliders-h" aria-hidden="true"></i></button>';
+					var $button = '<button title="<?php _e( 'Advanced Settings' );?>" class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><span class="dashicons dashicons-admin-settings" style="width: 28px;font-size: 28px;"></span></button>';
 					var form = jQuery($this).parents('' + $selector + '');
 
 					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length == 0) {
@@ -975,6 +1253,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 *
 		 * @param $instance
 		 *
+		 * @since 1.0.12 Don't set checkbox default value if the value is empty.
+		 *
 		 * @return array
 		 */
 		public function argument_values( $instance ) {
@@ -993,7 +1273,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					$args['name'] = $key;
 					//
 					$argument_values[ $key ] = isset( $instance[ $key ] ) ? $instance[ $key ] : '';
-					if ( $argument_values[ $key ] == '' && isset( $args['default'] ) ) {
+					if($args['type']=='checkbox' && $argument_values[ $key ] == ''){
+						// don't set default for an empty checkbox
+					}
+					elseif ( $argument_values[ $key ] == '' && isset( $args['default'] ) ) {
 						$argument_values[ $key ] = $args['default'];
 					}
 				}
@@ -1084,6 +1367,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * Output the JS for building the dynamic Guntenberg block.
 		 *
 		 * @since 1.0.4 Added block_wrap property which will set the block wrapping output element ie: div, span, p or empty for no wrap.
+		 * @since 1.0.9 Save numbers as numbers and not strings.
 		 * @return mixed
 		 */
 		public function block() {
@@ -1291,7 +1575,15 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 									$text_type = array( 'text', 'password', 'number', 'email', 'tel', 'url', 'color' );
 									if ( in_array( $args['type'], $text_type ) ) {
 										$type = 'TextControl';
-									} elseif ( $args['type'] == 'checkbox' ) {
+										// Save numbers as numbers and not strings
+										if ( $args['type'] == 'number' ) {
+											$onchange = "props.setAttributes({ $key: Number($key) } )";
+										}
+									}
+//									elseif ( $args['type'] == 'color' ) { //@todo ColorPicker labels are not shown yet, we may have to add our own https://github.com/WordPress/gutenberg/issues/14378
+//										$type = 'ColorPicker';
+//									}
+									elseif ( $args['type'] == 'checkbox' ) {
 										$type = 'CheckboxControl';
 										$extra .= "checked: props.attributes.$key,";
 										$onchange = "props.setAttributes({ $key: ! props.attributes.$key } )";
@@ -1638,7 +1930,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function is_elementor_preview() {
 			$result = false;
-			if ( isset( $_REQUEST['elementor-preview'] ) || ( is_admin() && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor' ) || (isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor_ajax') ) {
+			if ( isset( $_REQUEST['elementor-preview'] ) || ( is_admin() && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor' ) || ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor_ajax' ) ) {
 				$result = true;
 			}
 
@@ -1683,7 +1975,22 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function is_siteorigin_preview() {
 			$result = false;
-			if ( !empty( $_REQUEST['siteorigin_panels_live_editor'] )) {
+			if ( ! empty( $_REQUEST['siteorigin_panels_live_editor'] ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Tests if the current output is inside a cornerstone builder preview.
+		 *
+		 * @since 1.0.8
+		 * @return bool
+		 */
+		public function is_cornerstone_preview() {
+			$result = false;
+			if ( ! empty( $_REQUEST['cornerstone_preview'] ) || basename( $_SERVER['REQUEST_URI'] ) == 'cornerstone-endpoint' ) {
 				$result = true;
 			}
 
@@ -1705,6 +2012,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			} elseif ( $this->is_beaver_preview() ) {
 				$preview = true;
 			} elseif ( $this->is_siteorigin_preview() ) {
+				$preview = true;
+			} elseif ( $this->is_cornerstone_preview() ) {
 				$preview = true;
 			}
 

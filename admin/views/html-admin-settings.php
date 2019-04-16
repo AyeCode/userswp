@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<div class="wrap">
+<div class="wrap userswp">
 	<form method="<?php echo esc_attr( apply_filters( 'uwp_settings_form_method_tab_' . $current_tab, 'post' ) ); ?>" id="mainform" action="" enctype="multipart/form-data">
 		<nav class="nav-tab-wrapper uwp-nav-tab-wrapper">
 			<?php

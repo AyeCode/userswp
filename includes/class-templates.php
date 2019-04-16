@@ -363,6 +363,32 @@ class UsersWP_Templates {
     }
 
     /**
+     * Changes the lost password url with the UWP page.
+     *
+     * @param $lostpassword_url string The URL for lost password.
+     *
+     * @return string The lost password page url.
+     */
+    public function wp_lostpassword_url($lostpassword_url) {
+        $forgot_page_url = uwp_get_forgot_page_url();
+
+        if ( is_multisite() && isset( $_GET['redirect_to'] ) && false !== strpos( wp_unslash( $_GET['redirect_to'] ), network_admin_url() ) ) {
+            return $lostpassword_url;
+        }
+
+        $redirect = isset($_REQUEST['redirect_to']) ? esc_url($_REQUEST['redirect_to']) : '';
+        if ($forgot_page_url) {
+            if($forgot_page_url && isset($redirect) && !empty($redirect)){
+                $lostpassword_url = add_query_arg( 'redirect_to', $redirect, $forgot_page_url );
+            } else {
+                $lostpassword_url = $forgot_page_url;
+            }
+        }
+
+        return $lostpassword_url;
+    }
+
+    /**
      * Prints html for form fields of that particular form.
      *
      * @since       1.0.0
@@ -726,7 +752,7 @@ class UsersWP_Templates {
 
         if (get_option('uwp_activation_redirect', false)) {
             delete_option('uwp_activation_redirect');
-            wp_redirect(admin_url('admin.php?page=userswp&tab=main&subtab=info'));
+            wp_redirect(admin_url('admin.php?page=userswp&tab=general'));
             exit;
 
         }
@@ -822,5 +848,35 @@ class UsersWP_Templates {
         }
 
         return $classes;
+    }
+
+    public function uwp_author_box_page_content( $content ) {
+
+        global $post;
+
+        if( is_single() || is_page() ) {
+
+            $author_box_enable_disable = uwp_get_option('author_box_enable_disable');
+
+            if( 1 == $author_box_enable_disable ) {
+
+                $author_box_display_post_types = uwp_get_option('author_box_display_post_types');
+
+                if( !empty( $post->post_type ) && in_array($post->post_type, $author_box_display_post_types) ) {
+
+                    $author_box_display_content = uwp_get_option('author_box_display_content');
+
+                    if( !empty( $author_box_display_content ) && 'above_content' === $author_box_display_content ) {
+                        $content = do_shortcode('[uwp_author_box]').$content;
+                    } else{
+                        $content = $content.do_shortcode('[uwp_author_box]');
+                    }
+                }
+
+            }
+
+        }
+
+        return $content;
     }
 }

@@ -159,7 +159,6 @@ final class UsersWP {
         add_action('init', array($instance, 'process_change'));
         add_action('init', array($instance, 'process_reset'));
 
-
         // Forms
         add_filter('uwp_form_input_html_datepicker', array($instance, 'uwp_form_input_datepicker'), 10, 4);
         add_filter('uwp_form_input_html_time', array($instance, 'uwp_form_input_time'), 10, 4);
@@ -205,7 +204,7 @@ final class UsersWP {
         //profile page
         add_filter('query_vars', array($instance, 'profile_query_vars'), 10, 1 );
         add_action('init', array($instance, 'rewrite_profile_link') , 10, 1 );
-        add_filter( 'uwp_profile_link', array($instance, 'get_profile_link'), 10, 2 );
+        add_filter( 'author_link', array($instance, 'get_profile_link'), 10, 2 );
         add_filter( 'edit_profile_url', array($instance, 'uwp_modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
         add_filter( 'get_comment_author_link', array($instance, 'uwp_get_comment_author_link') , 10 , 2 );
@@ -275,11 +274,13 @@ final class UsersWP {
 
         add_filter( 'wp_setup_nav_menu_item', array($instance, 'uwp_setup_nav_menu_item'), 10, 1 );
         add_filter( 'the_content', array($instance, 'uwp_author_page_content'), 10, 1 );
+        add_filter( 'the_content', array($instance, 'uwp_author_box_page_content'), 10, 1 );
         add_filter( 'body_class', array($instance, 'uwp_add_body_class'), 10, 1 );
 
         // filter the login and register url
         add_filter( 'login_url', array($instance, 'wp_login_url'), 10, 3 );
         add_filter( 'register_url', array($instance, 'wp_register_url'), 10, 1 );
+        add_filter( 'lostpassword_url', array($instance, 'wp_lostpassword_url'), 10, 1 );
     }
     
     public function load_tools_actions_and_filters($instance) {
@@ -301,8 +302,6 @@ final class UsersWP {
         add_action('uwp_manage_available_fields', array($instance, 'uwp_manage_available_fields'));
         add_action('uwp_manage_selected_fields', array($instance, 'uwp_manage_selected_fields'));
         add_action('uwp_admin_extra_custom_fields', array($instance, 'uwp_advance_admin_custom_fields'), 10, 2);
-        add_action('uwp_manage_available_fields', array($instance, 'uwp_manage_register_available_fields'), 10, 1);
-        add_action('uwp_manage_selected_fields', array($instance, 'uwp_manage_register_selected_fields'), 10, 1);
         add_action('wp_ajax_uwp_ajax_register_action', array($instance, 'uwp_register_ajax_handler'));
         add_action('uwp_form_builder_tabs_content', array($instance, 'uwp_form_builder'));
 
@@ -354,6 +353,7 @@ final class UsersWP {
         register_widget("UWP_Users_Widget");
         register_widget("UWP_Account_Widget");
         register_widget("UWP_Profile_Widget");
+        register_widget("UWP_Author_Box_Widget");
     }
 
     /**
@@ -588,6 +588,11 @@ final class UsersWP {
          * The class for register widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/profile.php' );
+
+        /**
+         * The class for author box widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/authorbox.php' );
 
         /**
          * The class responsible for displaying notices

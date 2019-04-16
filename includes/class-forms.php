@@ -330,17 +330,9 @@ class UsersWP_Forms {
 
             $email = new UsersWP_Mails();
             $send_result = $email->send( 'activate', $user_id );
-
-            if (!$send_result) {
-                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
-            }
         } else {
             $email = new UsersWP_Mails();
             $send_result = $email->send( 'register', $user_id );
-
-            if (!$send_result) {
-                $errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong when sending email. Please contact site admin.', 'userswp'));
-            }
         }
 
 
@@ -359,7 +351,9 @@ class UsersWP_Forms {
 
         }
 
-        if ($reg_action == 'auto_approve_login') {
+        $force_redirect = apply_filters('uwp_registration_force_redirect', true, $_POST, $_FILES);
+
+        if ($reg_action == 'auto_approve_login' || $force_redirect) {
             $res = wp_signon(
                 array(
                     'user_login' => $result['uwp_account_username'],
@@ -405,8 +399,6 @@ class UsersWP_Forms {
                 $uwp_notices[] = array('register' => $error);
             } else {
 
-                $force_redirect = apply_filters('uwp_registration_force_redirect', false, $_POST, $_FILES);
-
                 $login_page_url = wp_login_url();
 
                 if ($generated_password) {
@@ -418,9 +410,10 @@ class UsersWP_Forms {
                 $msg = '<div class="uwp-alert-success text-center">'.$msg.'</div>';
                 $uwp_notices[] = array('register' => $msg);
             }
-        }
 
-        do_action('uwp_after_process_register', $data);
+            do_action('uwp_after_process_register', $data);
+
+        }
 
     }
 

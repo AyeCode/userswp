@@ -209,6 +209,20 @@ A user has been registered recently on your website.
 		);
 	}
 
+	public static function author_box_content(){
+        return apply_filters('uwp_author_box_content',
+            '<div class="uwp-author-box">
+                <div class="media-figure">
+                    <a href="[#author_link#]">[#author_image#]</a>
+                </div>
+                <div class="media-body">
+                    <h2><a href="[#author_link#]">[#author_name#]</a></h2>
+                    <p>[#author_bio#]</p>
+                </div>
+            </div>'
+        );
+    }
+
 }
 
 

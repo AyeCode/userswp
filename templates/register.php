@@ -10,7 +10,7 @@
             <?php do_action('uwp_social_fields', 'register'); ?>
             <input name="uwp_register_submit" value="<?php echo __( 'Create Account', 'userswp' ); ?>" type="submit">
         </form>
-        <div class="uwp-login-now"><?php echo __( 'Already a Member?', 'userswp' ); ?> <a rel="nofollow" href="<?php echo uwp_get_login_page_url(); ?>"><?php echo __( 'Login Here', 'userswp' ); ?></a></div>
+        <div class="uwp-footer-link uwp-login-now"><?php echo __( 'Already a member?', 'userswp' ); ?> <a rel="nofollow" href="<?php echo uwp_get_login_page_url(); ?>"><?php echo __( 'Login here', 'userswp' ); ?></a></div>
     </div>
 </div>
 <?php do_action('uwp_template_after', 'register'); ?>
