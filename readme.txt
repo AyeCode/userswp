@@ -130,6 +130,7 @@ No questions so far, but don't hesitate to ask!
 * Setting to disable author link replaced with the profile page - ADDED
 * Allow fieldset to display in profile own tab - FIXED
 * Replace default lost password URL with UWP forgot password page URL - FIXED
+* Fieldset in profile own tab display field only if value assigned - FIXED
 
 = 1.0.23 =
 * UWP Login widget breaks page for logged in users - FIXED
