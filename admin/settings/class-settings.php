@@ -532,7 +532,7 @@ class UsersWP_Admin_Settings {
                     } else {
                         $option_value = self::get_option( $value['id'], $value['default'] );
                     }
-                    $visbility_class = array();
+                    $visibility_class = array();
 
                     if ( ! isset( $value['hide_if_checked'] ) ) {
                         $value['hide_if_checked'] = false;
@@ -541,25 +541,25 @@ class UsersWP_Admin_Settings {
                         $value['show_if_checked'] = false;
                     }
                     if ( 'yes' == $value['hide_if_checked'] || 'yes' == $value['show_if_checked'] ) {
-                        $visbility_class[] = 'hidden_option';
+                        $visibility_class[] = 'hidden_option';
                     }
                     if ( 'option' == $value['hide_if_checked'] ) {
-                        $visbility_class[] = 'hide_options_if_checked';
+                        $visibility_class[] = 'hide_options_if_checked';
                     }
                     if ( 'option' == $value['show_if_checked'] ) {
-                        $visbility_class[] = 'show_options_if_checked';
+                        $visibility_class[] = 'show_options_if_checked';
                     }
 
                     if ( ! isset( $value['checkboxgroup'] ) || 'start' == $value['checkboxgroup'] ) {
                         ?>
-                            <tr valign="top" class="<?php echo esc_attr( implode( ' ', $visbility_class ) ); ?> <?php if(isset($value['advanced']) && $value['advanced']){echo "uwp-advanced-setting";}?>" >
+                            <tr valign="top" class="<?php echo esc_attr( implode( ' ', $visibility_class ) ); ?> <?php if(isset($value['advanced']) && $value['advanced']){echo "uwp-advanced-setting";}?>" >
                                 <th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ) ?></th>
                                 <td class="forminp forminp-checkbox">
                                     <fieldset>
                         <?php
                     } else {
                         ?>
-                            <fieldset class="<?php echo esc_attr( implode( ' ', $visbility_class ) ); ?>">
+                            <fieldset class="<?php echo esc_attr( implode( ' ', $visibility_class ) ); ?>">
                         <?php
                     }
 
