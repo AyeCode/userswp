@@ -19,7 +19,7 @@ function uwp_get_option( $key = '', $default = false, $cache = true ) {
         $uwp_options = get_option( 'uwp_settings' );
     }
 
-    $value = ! empty( $uwp_options[ $key ] ) ? $uwp_options[ $key ] : $default;
+    $value = isset( $uwp_options[ $key ] ) ? $uwp_options[ $key ] : $default;
     $value = apply_filters( 'uwp_get_option', $value, $key, $default );
     return apply_filters( 'uwp_get_option_' . $key, $value, $key, $default );
 

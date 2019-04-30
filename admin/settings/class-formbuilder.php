@@ -720,7 +720,7 @@ class UsersWP_Form_Builder {
                                 <div class="uwp-input-wrap">
                                     <?php
                                     if (!$value) {
-                                        $value = "0";
+                                        $value = "1";
                                     }
                                     ?>
 

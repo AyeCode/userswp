@@ -1711,16 +1711,16 @@ class UsersWP_Profile {
                     $value = $this->uwp_get_field_value($field, $user);
                     // Icon
                     $icon = uwp_get_field_icon( $field->field_icon );
-                    ?>
-                    <div class="uwp-profile-extra-wrap">
-                        <div class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
-                        <div class="uwp-profile-extra-value">
-                            <?php
-                                echo $value;
-                            ?>
+                    if($value) {
+                        ?>
+                        <div class="uwp-profile-extra-wrap">
+                            <div class="uwp-profile-extra-key"><?php echo $icon . $field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
+                            <div class="uwp-profile-extra-value">
+                                <?php echo $value; ?>
+                            </div>
                         </div>
-                    </div>
-                    <?php
+                        <?php
+                    }
                 }
                 ?>
                 </div>
