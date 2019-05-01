@@ -93,7 +93,8 @@ class UsersWP_Import_Export {
             return;
         if( ! current_user_can( 'manage_options' ) )
             return;
-        $extension = end( explode( '.', $_FILES['import_file']['name'] ) );
+        $extension = explode( '.', $_FILES['import_file']['name'] );
+        $extension = end( $extension );
         if( $extension != 'json' ) {
             wp_die( sprintf(__( 'Please upload a valid .json file. %sGo Back%s' ), '<a href="'.admin_url( 'admin.php?page=userswp&tab=import-export&section=settings' ).'">', '</a>' ));
         }
