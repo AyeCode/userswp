@@ -71,10 +71,10 @@ class UsersWP_Activator {
     public static function install(){
 
         self::generate_pages();
+        self::add_default_options();
         self::uwp_create_tables();
 
         if (!get_option('uwp_default_data_installed')) {
-            self::add_default_options();
             self::uwp_create_default_fields();
             self::uwp_insert_form_extras();
             update_option('uwp_default_data_installed', 1);
@@ -125,125 +125,54 @@ class UsersWP_Activator {
 
         $settings = get_option( 'uwp_settings', array());
 
-        //general
-        if (!isset($settings['profile_no_of_items'])) {
-            $settings['profile_no_of_items'] = '10';
-        }
+        $options = array(
+            'uwp_registration_action' => 'auto_approve',
+            'wp_register_redirect' => 1,
+            'register_admin_notify' => 0,
+            'login_redirect_to' => -1,
+            'block_wp_login' => 0,
+            'change_enable_old_password' => 1,
+            'change_disable_password_nag' => 0,
+            'enable_profile_header' => 1,
+            'enable_profile_body' => 1,
+            'profile_avatar_size' => '',
+            'profile_banner_size' => '',
+            'profile_banner_width' => 1000,
+            'profile_no_of_items' => 10,
+            'uwp_disable_author_link' => 0,
+            'users_default_layout' => 'list',
+            'author_box_enable_disable' => 1,
+            'author_box_display_content' => 'below_content',
+            'author_box_display_post_types' => array('post'),
+            'author_box_content' => UsersWP_Defaults::author_box_content(),
+            'registration_success_email_admin' => 1,
+            'registration_success_email_subject_admin' => UsersWP_Defaults::email_user_new_account_subject(),
+            'registration_success_email_content_admin' => UsersWP_Defaults::email_user_new_account_body(),
+            'registration_activate_email' => 1,
+            'registration_activate_email_subject' => UsersWP_Defaults::email_user_activation_subject(),
+            'registration_activate_email_content' => UsersWP_Defaults::email_user_activation_body(),
+            'registration_success_email' => 1,
+            'registration_success_email_subject' => UsersWP_Defaults::registration_success_email_subject(),
+            'registration_success_email_content' => UsersWP_Defaults::registration_success_email_body(),
+            'forgot_password_email' => 1,
+            'forgot_password_email_subject' => UsersWP_Defaults::forgot_password_email_subject(),
+            'forgot_password_email_content' => UsersWP_Defaults::forgot_password_email_body(),
+            'change_password_email' => 1,
+            'change_password_email_subject' => UsersWP_Defaults::change_password_email_subject(),
+            'change_password_email_content' => UsersWP_Defaults::change_password_email_body(),
+            'reset_password_email' => 1,
+            'reset_password_email_subject' => UsersWP_Defaults::reset_password_email_subject(),
+            'reset_password_email_content' => UsersWP_Defaults::reset_password_email_body(),
+            'account_update_email' => 1,
+            'account_update_email_subject' => UsersWP_Defaults::update_account_email_subject(),
+            'account_update_email_content' => UsersWP_Defaults::update_account_email_body(),
+            'enable_profile_tabs' => array('more_info', 'posts', 'comments'),
+        );
 
-        //login
-        if (!isset($settings['login_redirect_to'])) {
-            $settings['login_redirect_to'] = -1;
-        }
-
-        //profile
-        if (!isset($settings['enable_profile_header'])) {
-            $settings['enable_profile_header'] = '1';
-        }
-        if (!isset($settings['enable_profile_body'])) {
-            $settings['enable_profile_body'] = '1';
-        }
-        if (!isset($settings['enable_profile_posts_tab'])) {
-            $settings['enable_profile_posts_tab'] = '1';
-        }
-        if (!isset($settings['enable_profile_comments_tab'])) {
-            $settings['enable_profile_comments_tab'] = '1';
-        }
-
-        if (isset($settings['enable_profile_tabs']) && is_array($settings['enable_profile_tabs'])) {
-            if (!isset($settings['enable_profile_tabs']['more_info'])) {
-                $settings['enable_profile_tabs'][] = 'more_info';
+        foreach ($options as $option => $value){
+            if (!isset($settings[$option])) {
+                $settings[$option] = $value;
             }
-            if (!isset($settings['enable_profile_tabs']['posts'])) {
-                $settings['enable_profile_tabs'][] = 'posts';
-            }
-            if (!isset($settings['enable_profile_tabs']['comments'])) {
-                $settings['enable_profile_tabs'][] = 'comments';
-            }
-        } else {
-            $settings['enable_profile_tabs'] = array('more_info', 'posts', 'comments');
-        }
-
-
-        //notifications
-
-        // admin
-        $registration_success_email_subject_admin = __( 'New account registration', 'userswp' );
-        $registration_success_email_content_admin = __("A user has been registered recently on your website. [#extras#]", "userswp");
-
-        if (!isset($settings['registration_success_email_subject_admin'])) {
-            $settings['registration_success_email_subject_admin'] = $registration_success_email_subject_admin;
-        }
-        if (!isset($settings['registration_success_email_content_admin'])) {
-            $settings['registration_success_email_content_admin'] = $registration_success_email_content_admin;
-        }
-
-
-        // User
-
-        // Register
-        $registration_success_email_subject = __('Your Log In Details', 'userswp');
-        $registration_success_email_content = __("<p>Dear [#user_name#],</p><p>You can log in  with the following information:</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
-
-        if (!isset($settings['registration_success_email_subject'])) {
-            $settings['registration_success_email_subject'] = $registration_success_email_subject;
-        }
-        if (!isset($settings['registration_success_email_content'])) {
-            $settings['registration_success_email_content'] = $registration_success_email_content;
-        }
-
-        // Activate
-        $registration_activate_email_subject = __('Please activate your account', 'userswp');
-        $registration_activate_email_content = __("<p>Dear [#user_name#],</p><p>Thank you for signing up with [#site_name#]</p>[#login_details#]<p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
-
-        if (!isset($settings['registration_activate_email_subject'])) {
-            $settings['registration_activate_email_subject'] = $registration_activate_email_subject;
-        }
-        if (!isset($settings['registration_activate_email_content'])) {
-            $settings['registration_activate_email_content'] = $registration_activate_email_content;
-        }
-
-        // Forgot
-        $forgot_password_email_subject = __('[#site_name#] - Your new password', 'userswp');
-        $forgot_password_email_content = __("<p>Dear [#user_name#],</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
-
-        if (!isset($settings['forgot_password_email_subject'])) {
-            $settings['forgot_password_email_subject'] = $forgot_password_email_subject;
-        }
-        if (!isset($settings['forgot_password_email_content'])) {
-            $settings['forgot_password_email_content'] = $forgot_password_email_content;
-        }
-
-        // Change
-        $change_password_email_subject = __('[#site_name#] - Password has been changed', 'userswp');
-        $change_password_email_content = __("<p>Dear [#user_name#],</p><p>Your password has been changed successfully.</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
-
-        if (!isset($settings['change_password_email_subject'])) {
-            $settings['change_password_email_subject'] = $change_password_email_subject;
-        }
-        if (!isset($settings['change_password_email_content'])) {
-            $settings['change_password_email_content'] = $change_password_email_content;
-        }
-
-        // Reset
-        $reset_password_email_subject = __('[#site_name#] - Password has been reset', 'userswp');
-        $reset_password_email_content = __("<p>Dear [#user_name#],</p><p>Your password has been reset</p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
-
-        if (!isset($settings['reset_password_email_subject'])) {
-            $settings['reset_password_email_subject'] = $reset_password_email_subject;
-        }
-        if (!isset($settings['reset_password_email_content'])) {
-            $settings['reset_password_email_content'] = $reset_password_email_content;
-        }
-
-        // Update
-        $account_update_email_subject = __('[#site_name#] - Account has been updated', 'userswp');
-        $account_update_email_content = __("<p>Dear [#user_name#],</p><p>Your account has been updated successfully</p><p>Thank you,<br /><br />[#site_name_url#].</p>" ,'userswp');
-
-        if (!isset($settings['account_update_email_subject'])) {
-            $settings['account_update_email_subject'] = $account_update_email_subject;
-        }
-        if (!isset($settings['account_update_email_content'])) {
-            $settings['account_update_email_content'] = $account_update_email_content;
         }
 
         update_option( 'uwp_settings', $settings );
@@ -745,12 +674,14 @@ class UsersWP_Activator {
         $fields[] = array(
             'form_type' => 'register',
             'field_type' => 'text',
+            'is_default' => '0',
             'htmlvar_name' => 'uwp_account_first_name'
         );
 
         $fields[] = array(
             'form_type' => 'register',
             'field_type' => 'text',
+            'is_default' => '0',
             'htmlvar_name' => 'uwp_account_last_name'
         );
 
@@ -771,6 +702,7 @@ class UsersWP_Activator {
         $fields[] = array(
             'form_type' => 'register',
             'field_type' => 'password',
+            'is_default' => '0',
             'htmlvar_name' => 'uwp_account_password'
         );
 

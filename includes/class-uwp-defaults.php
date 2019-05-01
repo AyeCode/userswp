@@ -216,7 +216,7 @@ A user has been registered recently on your website.
                     <a href="[#author_link#]">[#author_image#]</a>
                 </div>
                 <div class="media-body">
-                    <h2><a href="[#author_link#]">[#author_name#]</a></h2>
+                    <h3>Author: <a href="[#author_link#]">[#author_name#]</a></h3>
                     <p>[#author_bio#]</p>
                 </div>
             </div>'

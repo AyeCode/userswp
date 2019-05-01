@@ -76,12 +76,12 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
             if($current_section == 'admin_emails'){
                 $settings = apply_filters( 'uwp_admin_email_settings', array(
 
-                    array('name' => __('New account registration', 'userswp'), 'type' => 'title', 'desc' => '', 'id' => 'registration_success_email_settings'),
+                    array('name' => __('New account registration', 'userswp'), 'type' => 'title', 'desc' => '', 'id' => 'registration_success_admin_email_settings'),
 
                     array(
                         'name' => __('Enable email', 'userswp'),
                         'desc' => __('Send an email to admin when user has created account on site.', 'userswp'),
-                        'id' => 'registration_success_email',
+                        'id' => 'registration_success_email_admin',
                         'type' => 'checkbox',
                         'default' => 1,
                     ),
@@ -107,7 +107,7 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
                         'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags()
                     ),
 
-                    array('type' => 'sectionend', 'id' => 'registration_success_email_settings'),
+                    array('type' => 'sectionend', 'id' => 'registration_success_admin_email_settings'),
 
                 ));
             }else{
@@ -152,7 +152,7 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
                     array(
                         'name' => __('Enable email', 'userswp'),
                         'desc' => __('Send an email to user for when successfull registration.', 'userswp'),
-                        'id' => 'registration_activate_email',
+                        'id' => 'registration_success_email',
                         'type' => 'checkbox',
                         'default' => 1,
                     ),
