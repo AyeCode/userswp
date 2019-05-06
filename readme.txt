@@ -302,4 +302,5 @@ No questions so far, but don't hesitate to ask!
 
 == Upgrade Notice ==
 
-New settings screen, all addons will need to be updated.
+= 1.1.0 =
+* New settings screen, all addons will need to be updated - BREAKING CHANGE
