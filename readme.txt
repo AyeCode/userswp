@@ -120,7 +120,7 @@ No questions so far, but don't hesitate to ask!
 == Changelog ==
 
 = 1.0.24 =
-* Implement new settings interface - CHANGED
+* New settings screen, all addons will need to be updated - BREAKING CHANGE
 * Replace chosen with select2 - CHANGED
 * Super Duper updated to v1.0.12 - CHANGED
 * Allow user to register without password field - FIXED

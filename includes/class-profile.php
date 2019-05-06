@@ -719,7 +719,7 @@ class UsersWP_Profile {
             } else {
                 $permalink_structure = 'CUSTOM';
                 // Add forward slash if not available
-                $link = rtrim($link, '/') . '/';
+                $link = user_trailingslashit($link);
             }
 
             $url_type = apply_filters('uwp_profile_url_type', 'slug');
@@ -728,7 +728,7 @@ class UsersWP_Profile {
                 if ('DEFAULT' == $permalink_structure) {
                     return add_query_arg(array('viewuser' => $user_id), $link);
                 } else {
-                    return $link . $user_id;
+                    return user_trailingslashit($link . $user_id);
                 }
             } else {
                 $user = get_userdata($user_id);
@@ -741,7 +741,7 @@ class UsersWP_Profile {
                 if ('DEFAULT' == $permalink_structure) {
                     return add_query_arg(array('username' => $username), $link);
                 } else {
-                    return $link . $username;
+                    return user_trailingslashit($link . $username);
                 }
             }
         } else {

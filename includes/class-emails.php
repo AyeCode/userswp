@@ -322,25 +322,39 @@ class UsersWP_Mails {
         $subject = '';
         switch ($type) {
             case "register":
-                $subject = uwp_get_option('registration_success_email_subject', '');
+                $default = UsersWP_Defaults::registration_success_email_subject();
+                $subject = uwp_get_option('registration_success_email_subject');
+                $subject = isset($subject) && !empty($subject) ? $subject : $default;
                 break;
             case "activate":
-                $subject = uwp_get_option('registration_activate_email_subject', '');
+                $default = UsersWP_Defaults::email_user_activation_subject();
+                $subject = uwp_get_option('registration_activate_email_subject');
+                $subject = isset($subject) && !empty($subject) ? $subject : $default;
                 break;
             case "forgot":
-                $subject = uwp_get_option('forgot_password_email_subject', '');
+                $default = UsersWP_Defaults::forgot_password_email_subject();
+                $subject = uwp_get_option('forgot_password_email_subject');
+                $subject = isset($subject) && !empty($subject) ? $subject : $default;
                 break;
             case "reset":
-                $subject = uwp_get_option('reset_password_email_subject', '');
+                $default = UsersWP_Defaults::reset_password_email_subject();
+                $subject = uwp_get_option('reset_password_email_subject');
+                $subject = isset($subject) && !empty($subject) ? $subject : $default;
                 break;
             case "change":
-                $subject = uwp_get_option('change_password_email_subject', '');
+                $default = UsersWP_Defaults::change_password_email_subject();
+                $subject = uwp_get_option('change_password_email_subject');
+                $subject = isset($subject) && !empty($subject) ? $subject : $default;
                 break;
             case "account":
-                $subject = uwp_get_option('account_update_email_subject', '');
+                $default = UsersWP_Defaults::update_account_email_subject();
+                $subject = uwp_get_option('account_update_email_subject');
+                $subject = isset($subject) && !empty($subject) ? $subject : $default;
                 break;
             case "register_admin":
-                $subject = uwp_get_option('registration_success_email_subject_admin', '');
+                $default = UsersWP_Defaults::email_user_new_account_subject();
+                $subject = uwp_get_option('registration_success_email_subject_admin');
+                $subject = isset($subject) && !empty($subject) ? $subject : $default;
                 break;
         }
 
@@ -366,25 +380,39 @@ class UsersWP_Mails {
         $content = '';
         switch ($type) {
             case "register":
-                $content = uwp_get_option('registration_success_email_content', '');
+                $default = UsersWP_Defaults::registration_success_email_body();
+                $content = uwp_get_option('registration_success_email_content');
+                $content = isset($content) && !empty($content) ? $content : $default;
                 break;
             case "activate":
-                $content = uwp_get_option('registration_activate_email_content', '');
+                $default = UsersWP_Defaults::email_user_activation_body();
+                $content = uwp_get_option('registration_activate_email_content');
+                $content = isset($content) && !empty($content) ? $content : $default;
                 break;
             case "forgot":
-                $content = uwp_get_option('forgot_password_email_content', '');
+                $default = UsersWP_Defaults::forgot_password_email_body();
+                $content = uwp_get_option('forgot_password_email_content');
+                $content = isset($content) && !empty($content) ? $content : $default;
                 break;
             case "reset":
-                $content = uwp_get_option('reset_password_email_content', '');
+                $default = UsersWP_Defaults::reset_password_email_body();
+                $content = uwp_get_option('reset_password_email_content');
+                $content = isset($content) && !empty($content) ? $content : $default;
                 break;
             case "change":
-                $content = uwp_get_option('change_password_email_content', '');
+                $default = UsersWP_Defaults::change_password_email_body();
+                $content = uwp_get_option('change_password_email_content');
+                $content = isset($content) && !empty($content) ? $content : $default;
                 break;
             case "account":
-                $content = uwp_get_option('account_update_email_content', '');
+                $default = UsersWP_Defaults::update_account_email_body();
+                $content = uwp_get_option('account_update_email_content');
+                $content = isset($content) && !empty($content) ? $content : $default;
                 break;
             case "register_admin":
-                $content = uwp_get_option('registration_success_email_content_admin', '');
+                $default = UsersWP_Defaults::email_user_new_account_body();
+                $content = uwp_get_option('registration_success_email_content_admin');
+                $content = isset($content) && !empty($content) ? $content : $default;
                 break;
         }
 

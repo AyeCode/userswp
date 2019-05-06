@@ -856,13 +856,13 @@ class UsersWP_Templates {
 
         if( is_single() || is_page() ) {
 
-            $author_box_enable_disable = uwp_get_option('author_box_enable_disable');
+            $author_box_enable_disable = uwp_get_option('author_box_enable_disable', 1);
 
             if( 1 == $author_box_enable_disable ) {
 
                 $author_box_display_post_types = uwp_get_option('author_box_display_post_types');
 
-                if( !empty( $post->post_type ) && in_array($post->post_type, $author_box_display_post_types) ) {
+                if( !empty( $post->post_type ) && in_array($post->post_type, (array)$author_box_display_post_types) ) {
 
                     $author_box_display_content = uwp_get_option('author_box_display_content');
 

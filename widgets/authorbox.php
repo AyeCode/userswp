@@ -62,7 +62,7 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
 
         $default = UsersWP_Defaults::author_box_content();
         $output = uwp_get_option('author_box_content', $default);
-
+        $output = isset($output) && !empty($output) ? $output : $default;
         $output = apply_filters('uwp_author_box_pre_output', $output, $args);
 
         $author_id = $post->post_author;
