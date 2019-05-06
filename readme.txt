@@ -2,9 +2,9 @@
 Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://userswp.io/
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
-Requires at least: 4.5
+Requires at least: 4.9
 Tested up to: 5.2
-Stable tag: 1.0.24
+Stable tag: 1.1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -31,6 +31,7 @@ Today UsersWP is by far the simplest solution available to manage users on WordP
 * Shortcode for the Password Recovery form
 * Shortcode for the Change Password form
 * Shortcode for the Reset Password form
+* Shortcode for the Authorbox
 * Custom menu items like login/logout links and links to relevant pages.
 
 After activation all pages are created with the correct shortcodes so that you are good to go in seconds.
@@ -119,7 +120,7 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
-= 1.0.24 =
+= 1.1.0 =
 * New settings screen, all addons will need to be updated - BREAKING CHANGE
 * Replace chosen with select2 - CHANGED
 * Super Duper updated to v1.0.12 - CHANGED
@@ -301,4 +302,5 @@ No questions so far, but don't hesitate to ask!
 
 == Upgrade Notice ==
 
-TBA
+= 1.1.0 =
+* New settings screen, all addons will need to be updated - BREAKING CHANGE

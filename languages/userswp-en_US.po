@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.0.24\n"
+"Project-Id-Version: UsersWP 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-30 17:13+0530\n"
-"PO-Revision-Date: 2019-04-30 17:14+0530\n"
+"POT-Creation-Date: 2019-05-06 17:10+0530\n"
+"PO-Revision-Date: 2019-05-06 17:10+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -223,8 +223,8 @@ msgstr ""
 msgid "Adds a radio input"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:352 includes/class-activator.php:400
-#: includes/class-activator.php:669
+#: admin/settings/class-formbuilder.php:352 includes/class-activator.php:329
+#: includes/class-activator.php:598
 msgid "Email"
 msgstr ""
 
@@ -782,7 +782,6 @@ msgid "Admin Emails"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-emails.php:79
-#: includes/class-activator.php:170
 msgid "New account registration"
 msgstr ""
 
@@ -1029,34 +1028,28 @@ msgid "Register Settings"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:184
-#: includes/helpers/fields.php:14
 msgid "Registration Action"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:185
-#: includes/helpers/fields.php:15
 msgid "Select how registration should be handled."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:193
-#: includes/helpers/fields.php:24
 msgid "Register Redirect Page"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:194
-#: includes/helpers/fields.php:25
 msgid ""
 "Set the page to redirect the user to after signing up. If no page has been "
 "set WordPress default will be used."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:201
-#: includes/helpers/fields.php:41
 msgid "Register TOS Page"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:202
-#: includes/helpers/fields.php:42
 msgid ""
 "Terms of Service page. When set \"Accept terms and Conditions\" checkbox "
 "will appear on the register form."
@@ -1067,14 +1060,12 @@ msgid "Redirect admin default register page"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:210
-#: includes/helpers/fields.php:34
 msgid ""
 "When enabled /wp-login.php?action=register page will be redirected to "
 "UsersWP register page."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:216
-#: includes/helpers/fields.php:50
 msgid "Enable admin email notification?"
 msgstr ""
 
@@ -1084,7 +1075,6 @@ msgid ""
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:231
-#: includes/helpers/fields.php:70
 msgid "Last User Page"
 msgstr ""
 
@@ -1093,29 +1083,24 @@ msgid "Login Settings"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:247
-#: includes/helpers/fields.php:79
 msgid "Login Redirect Page"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:248
-#: includes/helpers/fields.php:80
 msgid ""
 "Set the page to redirect the user to after logging in. If no page has been "
 "set WordPress default will be used."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:257
-#: includes/helpers/fields.php:102
 msgid "Redirect wp-login.php?"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:265
-#: includes/helpers/fields.php:124
 msgid "Logout Redirect Page"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:266
-#: includes/helpers/fields.php:125
 msgid ""
 "Set the page to redirect the user to after logging out. If no page has been "
 "set WordPress default will be used."
@@ -1585,116 +1570,50 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: includes/class-activator.php:171
-msgid "A user has been registered recently on your website. [#extras#]"
-msgstr ""
-
-#: includes/class-activator.php:184
-msgid "Your Log In Details"
-msgstr ""
-
-#: includes/class-activator.php:185
-msgid ""
-"<p>Dear [#user_name#],</p><p>You can log in  with the following information:"
-"</p>[#login_details#]<p>You can login here: [#login_url#]</p><p>Thank you,"
-"<br /><br />[#site_name_url#].</p>"
-msgstr ""
-
-#: includes/class-activator.php:195
-msgid "Please activate your account"
-msgstr ""
-
-#: includes/class-activator.php:196
-msgid ""
-"<p>Dear [#user_name#],</p><p>Thank you for signing up with [#site_name#]</"
-"p>[#login_details#]<p>Thank you,<br /><br />[#site_name_url#].</p>"
-msgstr ""
-
-#: includes/class-activator.php:206 includes/class-uwp-defaults.php:83
-msgid "[#site_name#] - Your new password"
-msgstr ""
-
-#: includes/class-activator.php:207
-msgid ""
-"<p>Dear [#user_name#],</p>[#login_details#]<p>You can login here: "
-"[#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>"
-msgstr ""
-
-#: includes/class-activator.php:217 includes/class-uwp-defaults.php:111
-msgid "[#site_name#] - Password has been changed"
-msgstr ""
-
-#: includes/class-activator.php:218
-msgid ""
-"<p>Dear [#user_name#],</p><p>Your password has been changed successfully.</"
-"p><p>You can login here: [#login_url#]</p><p>Thank you,<br /><br /"
-">[#site_name_url#].</p>"
-msgstr ""
-
-#: includes/class-activator.php:228 includes/class-uwp-defaults.php:139
-msgid "[#site_name#] - Password has been reset"
-msgstr ""
-
-#: includes/class-activator.php:229
-msgid ""
-"<p>Dear [#user_name#],</p><p>Your password has been reset</p><p>You can "
-"login here: [#login_url#]</p><p>Thank you,<br /><br />[#site_name_url#].</p>"
-msgstr ""
-
-#: includes/class-activator.php:239 includes/class-uwp-defaults.php:167
-msgid "[#site_name#] - Account has been updated"
-msgstr ""
-
-#: includes/class-activator.php:240
-msgid ""
-"<p>Dear [#user_name#],</p><p>Your account has been updated successfully</"
-"p><p>Thank you,<br /><br />[#site_name_url#].</p>"
-msgstr ""
-
-#: includes/class-activator.php:358 includes/class-activator.php:636
+#: includes/class-activator.php:287 includes/class-activator.php:565
 #: includes/libraries/class-geodirectory-plugin.php:1227
 msgid "Username"
 msgstr ""
 
-#: includes/class-activator.php:371 includes/class-activator.php:560
-#: includes/class-activator.php:701
+#: includes/class-activator.php:300 includes/class-activator.php:489
+#: includes/class-activator.php:630
 msgid "Password"
 msgstr ""
 
-#: includes/class-activator.php:429
+#: includes/class-activator.php:358
 msgid "Avatar"
 msgstr ""
 
-#: includes/class-activator.php:467
+#: includes/class-activator.php:396
 msgid "Banner"
 msgstr ""
 
-#: includes/class-activator.php:505
+#: includes/class-activator.php:434
 msgid "Old Password"
 msgstr ""
 
-#: includes/class-activator.php:518
+#: includes/class-activator.php:447
 msgid "New Password"
 msgstr ""
 
-#: includes/class-activator.php:531 includes/class-activator.php:573
+#: includes/class-activator.php:460 includes/class-activator.php:502
 #: includes/class-forms.php:2453
 msgid "Confirm Password"
 msgstr ""
 
-#: includes/class-activator.php:602
+#: includes/class-activator.php:531
 msgid "First Name"
 msgstr ""
 
-#: includes/class-activator.php:619
+#: includes/class-activator.php:548
 msgid "Last Name"
 msgstr ""
 
-#: includes/class-activator.php:653
+#: includes/class-activator.php:582
 msgid "Display Name"
 msgstr ""
 
-#: includes/class-activator.php:685
+#: includes/class-activator.php:614
 msgid "Bio"
 msgstr ""
 
@@ -2017,76 +1936,76 @@ msgstr ""
 msgid "Settings imported successfully!"
 msgstr ""
 
-#: includes/class-import-export.php:98
+#: includes/class-import-export.php:99
 #, php-format
 msgid "Please upload a valid .json file. %sGo Back%s"
 msgstr ""
 
-#: includes/class-import-export.php:102
+#: includes/class-import-export.php:103
 #, php-format
 msgid "Please upload a file to import. %sGo Back%s"
 msgstr ""
 
-#: includes/class-import-export.php:114
+#: includes/class-import-export.php:115
 msgid "Invalid export request found."
 msgstr ""
 
-#: includes/class-import-export.php:126 includes/class-import-export.php:396
+#: includes/class-import-export.php:127 includes/class-import-export.php:397
 msgid "Security check failed."
 msgstr ""
 
-#: includes/class-import-export.php:131 includes/class-import-export.php:188
+#: includes/class-import-export.php:132 includes/class-import-export.php:189
 msgid "Filesystem ERROR: "
 msgstr ""
 
-#: includes/class-import-export.php:163
+#: includes/class-import-export.php:164
 msgid "No data found for export."
 msgstr ""
 
-#: includes/class-import-export.php:184
+#: includes/class-import-export.php:185
 msgid "Filesystem ERROR: Could not access filesystem."
 msgstr ""
 
-#: includes/class-import-export.php:198
+#: includes/class-import-export.php:199
 #, php-format
 msgid ""
 "Filesystem ERROR: Export location %s is not writable, check your file "
 "permissions."
 msgstr ""
 
-#: includes/class-import-export.php:204
+#: includes/class-import-export.php:205
 #, php-format
 msgid ""
 "Filesystem ERROR: Could not create directory %s. This is usually due to "
 "inconsistent file permissions."
 msgstr ""
 
-#: includes/class-import-export.php:384
+#: includes/class-import-export.php:385
 msgid "Invalid import request found."
 msgstr ""
 
-#: includes/class-import-export.php:409
+#: includes/class-import-export.php:410
 msgid "Invalid file type, please upload .csv file."
 msgstr ""
 
-#: includes/class-import-export.php:433
+#: includes/class-import-export.php:434
 msgid "Total "
 msgstr ""
 
-#: includes/class-import-export.php:443
+#: includes/class-import-export.php:444
 msgid "Users import completed."
 msgstr ""
 
-#: includes/class-import-export.php:450
+#: includes/class-import-export.php:451
 msgid "No valid data found for import."
 msgstr ""
 
-#: includes/class-import-export.php:461
+#: includes/class-import-export.php:462
 msgid "No csv file found."
 msgstr ""
 
-#: includes/class-import-export.php:473 includes/class-import-export.php:534
-#: includes/class-import-export.php:550
+#: includes/class-import-export.php:474 includes/class-import-export.php:535
+#: includes/class-import-export.php:551
 msgid "Row - "
 msgstr ""
 
@@ -2781,6 +2700,10 @@ msgid ""
 "[#site_name_url#]"
 msgstr ""
 
+#: includes/class-uwp-defaults.php:83
+msgid "[#site_name#] - Your new password"
+msgstr ""
+
 #: includes/class-uwp-defaults.php:93
 msgid ""
 "Dear [#user_name#],\n"
@@ -2791,6 +2714,10 @@ msgid ""
 "\n"
 "Thank you,\n"
 "[#site_name_url#]"
+msgstr ""
+
+#: includes/class-uwp-defaults.php:111
+msgid "[#site_name#] - Password has been changed"
 msgstr ""
 
 #: includes/class-uwp-defaults.php:121
@@ -2805,6 +2732,10 @@ msgid ""
 "[#site_name_url#]"
 msgstr ""
 
+#: includes/class-uwp-defaults.php:139
+msgid "[#site_name#] - Password has been reset"
+msgstr ""
+
 #: includes/class-uwp-defaults.php:149
 msgid ""
 "Dear [#user_name#],\n"
@@ -2815,6 +2746,10 @@ msgid ""
 "\n"
 "Thank you,\n"
 "[#site_name_url#]"
+msgstr ""
+
+#: includes/class-uwp-defaults.php:167
+msgid "[#site_name#] - Account has been updated"
 msgstr ""
 
 #: includes/class-uwp-defaults.php:177
@@ -2970,30 +2905,6 @@ msgstr ""
 
 #: includes/class-validation.php:344
 msgid "ERROR: Passwords do not match."
-msgstr ""
-
-#: includes/helpers/fields.php:19
-msgid "Select Option"
-msgstr ""
-
-#: includes/helpers/fields.php:28 includes/helpers/fields.php:45
-#: includes/helpers/fields.php:83 includes/helpers/fields.php:128
-#: includes/helpers/fields.php:151
-msgid "Select a page"
-msgstr ""
-
-#: includes/helpers/fields.php:33
-msgid "Redirect wp-login.php?action=register"
-msgstr ""
-
-#: includes/helpers/fields.php:147
-msgid "Delete Redirect Page"
-msgstr ""
-
-#: includes/helpers/fields.php:148
-msgid ""
-"Set the page to redirect the user to after after they delete account. If no "
-"page has been set WordPress default will be used."
 msgstr ""
 
 #: includes/helpers/misc.php:463
