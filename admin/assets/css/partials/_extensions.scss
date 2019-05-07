@@ -1,0 +1,134 @@
+
+body.userswp_page_uwp-addons{
+  .lity-container{
+    max-width: 772px !important;
+    .lity-iframe-container{
+      height: 90vh;
+    }
+  }
+}
+
+.uwp-products{
+  .uwp-product{
+    background: #fff;
+    border: 1px solid #ccc;
+    //float: left;
+    display: inline-block;
+    position: relative;
+    margin: 0 0 15px 0;
+    box-sizing: border-box;
+    width: 32%;
+    margin-left: 2%;
+
+    &:nth-child(3n+1){
+      margin-left: 0;
+    }
+
+    @media screen and (max-width: 600px)
+    {
+      width: calc(100% - 15px);
+    }
+
+
+    &:hover{
+      .uwp-product-image{
+        img{
+          opacity: 0.75;
+        }
+        .uwp-product-info{
+          display: block;
+        }
+      }
+    }
+
+    a{
+      text-decoration: none;
+    }
+
+    h3{
+      background: #f9f9f9;
+      padding: 15px;
+      margin: 0;
+      .uwp-help-tip{
+        float: none;
+        margin: 0;
+      }
+    }
+
+    .uwp-product-image{
+      max-height: 198px;
+      display: block;
+      overflow: hidden;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      position: relative;
+      box-sizing: border-box;
+
+      img{
+        float: left;
+      }
+
+      @media screen and (max-width: 600px)
+      {
+        max-height: 318px;
+      }
+
+      .uwp-product-info{
+        position: absolute;
+        top: calc(50% - 14px);
+        left: calc(50% - 39px);
+        background: #000000b5;
+        padding: 5px 10px;
+        border-radius: 4px;
+        color: #fff;
+        display: none;
+        @media screen and (max-width: 600px)
+        {
+          display: block;
+        }
+      }
+    }
+
+    .uwp-product-excerpt{
+      border-bottom: 1px solid #ddd;
+      display: block;
+      padding: 5px 10px;
+      p{
+        margin: 0;
+      }
+    }
+
+    .uwp-product-button{
+      min-height: 40px;
+      display: block;
+      background: #f9f9f9;
+      .addons-price-text{
+        margin: 10px 0 0 6px;
+        float: left;
+
+      }
+    }
+    .addons-button{
+      float: right;
+      margin: 5px 6px 0 0;
+    }
+
+    img{
+      max-width: 100%;
+    }
+
+  }
+}
+
+//popup
+#wpeu-licence-popup{
+  input{
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+  }
+  h3{
+    margin: 0 0 6px 0;
+  }
+}
