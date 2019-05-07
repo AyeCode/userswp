@@ -120,6 +120,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.1.1 =
+* Remove subtabs in GD listings, favourite and reviews tabs if no content - FIXED
+
 = 1.1.0 =
 * New settings screen, all addons will need to be updated - BREAKING CHANGE
 * Replace chosen with select2 - CHANGED

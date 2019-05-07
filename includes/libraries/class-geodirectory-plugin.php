@@ -636,11 +636,14 @@ class UsersWP_GeoDirectory_Plugin {
                 if (empty($count)) {
                     $count = 0;
                 }
-                $tabs[$post_type_slug] = array(
-                    'title' => $gd_post_types[$post_type_id]['labels']['name'],
-                    'count' => $count,
-                    'ptype' => $post_type_id
-                );
+
+                if($count > 0){
+                    $tabs[$post_type_slug] = array(
+                        'title' => $gd_post_types[$post_type_id]['labels']['name'],
+                        'count' => $count,
+                        'ptype' => $post_type_id
+                    );
+                }
             }
         }
 
