@@ -610,6 +610,11 @@ final class UsersWP {
         require_once dirname(dirname( __FILE__ )) . '/includes/class-status.php';
 
         /**
+         * The class responsible for extensions screen functions on admin side
+         */
+        require_once dirname(dirname( __FILE__ )) . '/includes/class-addons.php';
+
+        /**
          * The class responsible for privacy policy functions
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/abstract-uwp-privacy.php';

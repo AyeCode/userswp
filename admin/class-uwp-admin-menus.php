@@ -9,7 +9,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+    exit;
 }
 
 
@@ -18,20 +18,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class UsersWP_Admin_Menus {
 
-	/**
-	 * Hook in tabs.
-	 */
-	public function __construct() {
-		// Add menus
-		add_action( 'admin_menu', array( $this, 'admin_menu' ), 9 );
-		add_action( 'admin_menu', array( $this, 'status_menu' ), 90 );
-	}
+    /**
+     * Hook in tabs.
+     */
+    public function __construct() {
+        // Add menus
+        add_action( 'admin_menu', array( $this, 'admin_menu' ), 9 );
+        add_action( 'admin_menu', array( $this, 'status_menu' ), 90 );
+        add_action( 'admin_menu', array( $this, 'addons_menu' ), 99 );
+    }
 
-	/**
-	 * Add menu items.
-	 */
-	public function admin_menu() {
-		global $menu;
+    /**
+     * Add menu items.
+     */
+    public function admin_menu() {
+        global $menu;
 
         $install_type = uwp_get_installation_type();
 
@@ -110,13 +111,13 @@ class UsersWP_Admin_Menus {
             //do_action('uwp_admin_sub_menus', $settings_page, $this->admin_settings);
         }
 
-	}
+    }
 
-	/**
-	 * Add menu item.
-	 */
-	public function status_menu() {
-		add_submenu_page(
+    /**
+     * Add menu item.
+     */
+    public function status_menu() {
+        add_submenu_page(
             "userswp",
             __('Status', 'userswp'),
             __('Status', 'userswp'),
@@ -124,13 +125,38 @@ class UsersWP_Admin_Menus {
             'uwp_status',
             array( $this, 'status_page' )
         );
-	}
+    }
 
-	/**
-	 * Init the status page.
-	 */
-	public function status_page() {
+    /**
+     * Add menu item.
+     */
+    public function addons_menu() {
+        if ( !apply_filters( 'uwp_show_addons_page', true ) ) {
+            return;
+        }
+
+        add_submenu_page(
+            "userswp",
+            __('UsersWP extensions', 'userswp'),
+            __('Extensions', 'userswp'),
+            'manage_options',
+            'uwp-addons',
+            array( $this, 'addons_page' )
+        );
+    }
+
+    /**
+     * Init the status page.
+     */
+    public function status_page() {
         UsersWP_Status::output();
-	}
+    }
+
+    /**
+     * Init the status page.
+     */
+    public function addons_page() {
+        UsersWP_Admin_Addons::output();
+    }
 
 }
