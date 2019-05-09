@@ -612,6 +612,11 @@ final class UsersWP {
         /**
          * The class responsible for extensions screen functions on admin side
          */
+        require_once dirname(dirname( __FILE__ )) . '/includes/libraries/class-ayecode-addons.php';
+
+        /**
+         * The class responsible for extensions screen functions on admin side
+         */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-addons.php';
 
         /**

@@ -156,7 +156,8 @@ class UsersWP_Admin_Menus {
      * Init the status page.
      */
     public function addons_page() {
-        UsersWP_Admin_Addons::output();
+        $addon_obj = new UsersWP_Admin_Addons();
+        $addon_obj->output();
     }
 
 }

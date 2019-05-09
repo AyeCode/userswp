@@ -121,6 +121,7 @@ No questions so far, but don't hesitate to ask!
 == Changelog ==
 
 = 1.1.1 =
+* Redirect not working after registration for auto approve auto login - FIXED
 * Remove subtabs in GD listings, favourite and reviews tabs if no content - FIXED
 * Extensions screen containing all available add ons for UsersWP and recommended plugins - ADDED
 
