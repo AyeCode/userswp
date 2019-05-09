@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.1.0\n"
+"Project-Id-Version: UsersWP 1.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-06 17:10+0530\n"
-"PO-Revision-Date: 2019-05-06 17:10+0530\n"
+"POT-Creation-Date: 2019-05-09 19:22+0530\n"
+"PO-Revision-Date: 2019-05-09 19:22+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -50,20 +50,28 @@ msgstr ""
 msgid "Use image"
 msgstr ""
 
-#: admin/class-uwp-admin-menus.php:90
+#: admin/class-uwp-admin-menus.php:91
 msgid "UsersWP Settings"
 msgstr ""
 
-#: admin/class-uwp-admin-menus.php:91 includes/class-uwp-privacy.php:17
+#: admin/class-uwp-admin-menus.php:92 includes/class-uwp-privacy.php:17
 msgid "UsersWP"
 msgstr ""
 
-#: admin/class-uwp-admin-menus.php:102 admin/class-uwp-admin-menus.php:103
+#: admin/class-uwp-admin-menus.php:103 admin/class-uwp-admin-menus.php:104
 msgid "Form Builder"
 msgstr ""
 
-#: admin/class-uwp-admin-menus.php:121 admin/class-uwp-admin-menus.php:122
+#: admin/class-uwp-admin-menus.php:122 admin/class-uwp-admin-menus.php:123
 msgid "Status"
+msgstr ""
+
+#: admin/class-uwp-admin-menus.php:140
+msgid "UsersWP extensions"
+msgstr ""
+
+#: admin/class-uwp-admin-menus.php:141
+msgid "Extensions"
 msgstr ""
 
 #: admin/menus/class-menus.php:49
@@ -645,8 +653,8 @@ msgid "No options available"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:2224
-#: includes/libraries/class-geodirectory-plugin.php:819
-#: includes/libraries/class-geodirectory-plugin.php:1049
+#: includes/libraries/class-geodirectory-plugin.php:818
+#: includes/libraries/class-geodirectory-plugin.php:1048
 msgid "Delete"
 msgstr ""
 
@@ -754,7 +762,7 @@ msgid "Documentation"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-addons.php:25
-#: admin/settings/class-uwp-settings-addons.php:65
+#: admin/settings/class-uwp-settings-addons.php:65 includes/class-addons.php:26
 msgid "Addons"
 msgstr ""
 
@@ -1348,6 +1356,53 @@ msgid ""
 "data when the plugin is deleted."
 msgstr ""
 
+#: admin/views/html-admin-page-addons.php:71
+#: admin/views/html-admin-page-addons.php:85
+msgid "More info"
+msgstr ""
+
+#: admin/views/html-admin-page-addons.php:111
+#, php-format
+msgid ""
+"All of our UsersWP Addons can be found on UsersWP.io here: <a href=\"%s"
+"\">UsersWP Addons</a>"
+msgstr ""
+
+#: admin/views/html-admin-page-addons.php:114
+#, php-format
+msgid ""
+"The plugin <a href='https://wpeasyupdates.com/' target='_blank'>WP Easy "
+"Updates</a> is required to check for and update some installed plugins/"
+"themes, please <a href='%s'>activate</a> it now."
+msgstr ""
+
+#: admin/views/html-admin-page-addons.php:115
+#, php-format
+msgid ""
+"The plugin <a href='https://wpeasyupdates.com/' target='_blank'>WP Easy "
+"Updates</a> is required to check for and update some installed plugins/"
+"themes, please <a href='%s' onclick='window.open(\"https://wpeasyupdates.com/"
+"wp-easy-updates.zip\", \"_blank\");' >download</a> and install it now."
+msgstr ""
+
+#: admin/views/html-admin-page-addons.php:118
+msgid "Licence key"
+msgstr ""
+
+#: admin/views/html-admin-page-addons.php:119
+msgid "Enter your licence key"
+msgstr ""
+
+#: admin/views/html-admin-page-addons.php:119 includes/class-addons.php:193
+#: includes/class-addons.php:237
+msgid "Install"
+msgstr ""
+
+#: admin/views/html-admin-page-addons.php:122
+#, php-format
+msgid "%sFind your licence key here%s OR %sBuy one here%s"
+msgstr ""
+
 #: admin/views/html-admin-page-status.php:12
 msgid "System status"
 msgstr ""
@@ -1571,7 +1626,7 @@ msgid "Save changes"
 msgstr ""
 
 #: includes/class-activator.php:287 includes/class-activator.php:565
-#: includes/libraries/class-geodirectory-plugin.php:1227
+#: includes/libraries/class-geodirectory-plugin.php:1226
 msgid "Username"
 msgstr ""
 
@@ -1615,6 +1670,69 @@ msgstr ""
 
 #: includes/class-activator.php:614
 msgid "Bio"
+msgstr ""
+
+#: includes/class-addons.php:27
+msgid "Recommended plugins"
+msgstr ""
+
+#: includes/class-addons.php:28
+msgid "Membership"
+msgstr ""
+
+#: includes/class-addons.php:102 includes/class-addons.php:103
+msgid "Free"
+msgstr ""
+
+#: includes/class-addons.php:151
+#, php-format
+msgid "From: $%d"
+msgstr ""
+
+#: includes/class-addons.php:172
+msgid "Active"
+msgstr ""
+
+#: includes/class-addons.php:175 includes/class-addons.php:233
+msgid "Activate"
+msgstr ""
+
+#: includes/class-addons.php:195
+msgid "Get it"
+msgstr ""
+
+#: includes/class-addons.php:232
+msgid "Something went wrong!"
+msgstr ""
+
+#: includes/class-addons.php:234
+msgid "Activating"
+msgstr ""
+
+#: includes/class-addons.php:235
+msgid "Deactivate"
+msgstr ""
+
+#: includes/class-addons.php:236
+msgid "Installed"
+msgstr ""
+
+#: includes/class-addons.php:238
+msgid "Installing"
+msgstr ""
+
+#: includes/class-addons.php:239
+msgid "Error"
+msgstr ""
+
+#: includes/class-addons.php:273
+msgid "Turn any WordPress theme into a global business directory portal."
+msgstr ""
+
+#: includes/class-addons.php:280
+msgid ""
+"Create & Send Invoices, Manage Taxes & VAT. Collect One Time & Recurring "
+"Payments."
 msgstr ""
 
 #: includes/class-date.php:150
@@ -3073,54 +3191,54 @@ msgstr ""
 msgid "Favorites"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:806
-#: includes/libraries/class-geodirectory-plugin.php:1036
+#: includes/libraries/class-geodirectory-plugin.php:805
+#: includes/libraries/class-geodirectory-plugin.php:1035
 msgid "Edit Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:811
-#: includes/libraries/class-geodirectory-plugin.php:1041
+#: includes/libraries/class-geodirectory-plugin.php:810
+#: includes/libraries/class-geodirectory-plugin.php:1040
 msgid "Edit"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:814
-#: includes/libraries/class-geodirectory-plugin.php:1044
+#: includes/libraries/class-geodirectory-plugin.php:813
+#: includes/libraries/class-geodirectory-plugin.php:1043
 msgid "Delete Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:835
-#: includes/libraries/class-geodirectory-plugin.php:913
-#: includes/libraries/class-geodirectory-plugin.php:1073
+#: includes/libraries/class-geodirectory-plugin.php:834
+#: includes/libraries/class-geodirectory-plugin.php:912
+#: includes/libraries/class-geodirectory-plugin.php:1072
 #, php-format
 msgid "No %s found."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1066
+#: includes/libraries/class-geodirectory-plugin.php:1065
 #, php-format
 msgid "No %s found"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1199
+#: includes/libraries/class-geodirectory-plugin.php:1198
 msgid "Published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1202
+#: includes/libraries/class-geodirectory-plugin.php:1201
 msgid "Pending"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1205
+#: includes/libraries/class-geodirectory-plugin.php:1204
 msgid "Closed"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1208
+#: includes/libraries/class-geodirectory-plugin.php:1207
 msgid "Expired"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1211
+#: includes/libraries/class-geodirectory-plugin.php:1210
 msgid "Not published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1216
+#: includes/libraries/class-geodirectory-plugin.php:1215
 msgid "Status: "
 msgstr ""
 
