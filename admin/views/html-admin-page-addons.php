@@ -39,7 +39,7 @@ add_ThickBox();
 					<p>
 						<?php
 						$wpeu_admin = new External_Updates_Admin('userswp.io','1');
-						echo $wpeu_admin->render_licence_actions('userswp.io', 'membership',array(66235,111330,111327));
+						echo $wpeu_admin->render_licence_actions('userswp.io', 'membership',array(238,239,240));
 						?>
 					</p>
 				<?php }?>
@@ -48,7 +48,8 @@ add_ThickBox();
 			<?php
 		}else{
 			$installed_plugins = get_plugins();
-			if ($addons = UsersWP_Admin_Addons::get_section_data( $current_tab ) ) :
+            $addon_obj = new UsersWP_Admin_Addons();
+			if ($addons = $addon_obj->get_section_data( $current_tab ) ) :
 				?>
 				<ul class="uwp-products"><?php foreach ( $addons as $addon ) :
 						?><li class="uwp-product">
@@ -92,7 +93,7 @@ add_ThickBox();
 
 								<span class="uwp-product-button">
 									<?php
-									UsersWP_Admin_Addons::output_button( $addon );
+                                    $addon_obj->output_button( $addon );
 									?>
 								</span>
 

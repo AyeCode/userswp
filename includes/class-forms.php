@@ -351,7 +351,7 @@ class UsersWP_Forms {
 
         }
 
-        $force_redirect = apply_filters('uwp_registration_force_redirect', true, $_POST, $_FILES);
+        $force_redirect = apply_filters('uwp_registration_force_redirect', false, $_POST, $_FILES);
 
         if ($reg_action == 'auto_approve_login' || $force_redirect) {
             $res = wp_signon(
