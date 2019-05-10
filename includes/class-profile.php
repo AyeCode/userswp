@@ -1186,23 +1186,18 @@ class UsersWP_Profile {
         return $results;
     }
 
-    /**
-     * Modifies get_avatar function to use userswp avatar.
+    /*
+     * Modifies get_avatar_url function to use userswp avatar URL.
+     * @param array $avatar_defaults default avatars
+     * @return array $avatar_defaults default avatars
      *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       string      $avatar         img tag value for the user's avatar.
-     * @param       mixed       $id_or_email    The Gravatar to retrieve. Accepts a user_id, gravatar md5 hash,
-     *                                          user email, WP_User object, WP_Post object, or WP_Comment object.
-     * @param       int         $size           Square avatar width and height in pixels to retrieve.
-     * @param       string      $default        URL for the default image or a default type. Accepts '404', 'retro', 'monsterid',
-     *                                          'wavatar', 'indenticon','mystery' (or 'mm', or 'mysteryman'), 'blank', or 'gravatar_default'.
-     *                                          Default is the value of the 'avatar_default' option, with a fallback of 'mystery'.
-     * @param       string      $alt            Alternative text to use in the avatar image tag. Default empty.
-     * @return      string                      Modified img tag value
-     */
-    public function uwp_modify_get_avatar( $avatar, $id_or_email, $size, $default, $alt, $args ) {
+    */
+    function get_avatar_url($url, $id_or_email, $args){
         $user = false;
+
+        if(1 == uwp_get_option('disable_avatar_override')){
+            return $url;
+        }
 
         if ( is_numeric( $id_or_email ) ) {
 
@@ -1228,24 +1223,16 @@ class UsersWP_Profile {
                 remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
                 $upload_url = $uploads['baseurl'];
                 if (substr( $avatar_thumb, 0, 4 ) !== "http") {
-                    $avatar_thumb = $upload_url.$avatar_thumb;
+                    $url = $upload_url.$avatar_thumb;
                 }
-                $avatar = "<img alt='{$alt}' src='{$avatar_thumb}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
             } else {
                 $default = uwp_get_default_avatar_uri();
-                $args = get_avatar_data( $id_or_email, $args );
-                $url = $args['url'];
                 $url = remove_query_arg('d', $url);
                 $url = add_query_arg(array('d' => $default), $url);
-                if ( ! $url || is_wp_error( $url ) ) {
-                    return $avatar;
-                }
-                $avatar = '<img src="' .$url  .'" class="gravatar avatar avatar-'.$size.' uwp-avatar" width="'.$size.'" height="'.$size.'" alt="'.$alt.'" />';
             }
-
         }
 
-        return $avatar;
+        return $url;
     }
 
     /**

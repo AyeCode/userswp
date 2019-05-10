@@ -212,6 +212,7 @@ final class UsersWP {
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_profile_title', array($instance, 'get_profile_title'), 10, 1 );
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 1 );
+        add_action( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );
 
         //Fields as tabs
         add_action( 'uwp_available_tab_items', array($instance, 'uwp_extra_fields_available_tab_items'), 10, 1 );
