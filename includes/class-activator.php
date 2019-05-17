@@ -29,6 +29,7 @@ class UsersWP_Activator {
             $main_site = get_network()->site_id;
             if($network_wide){
 
+                update_network_option('', 'uwp_is_network_active', 1);
                 switch_to_blog( $main_site );
                 self::uwp101_create_tables();
                 self::uwp_update_usermeta();

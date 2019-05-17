@@ -202,10 +202,10 @@ class UsersWP_Tables {
         }
 
         // Network active.
-        if ( is_plugin_active_for_network( 'userswp/userswp.php' ) ) {
+        if ( is_plugin_active_for_network( 'userswp/userswp.php' ) || 1 == get_network_option('', 'uwp_is_network_active') ) {
             return $wpdb->base_prefix;
         } else {
-               return $wpdb->prefix;
+            return $wpdb->prefix;
         }
     }
 

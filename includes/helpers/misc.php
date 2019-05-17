@@ -1415,7 +1415,7 @@ function uwp_field_type_to_fa_icon($type) {
  * @return True if WPML is active else False.
  */
 function uwp_is_wpml() {
-    if (class_exists('SitePress') && function_exists('icl_object_id')) {
+    if (function_exists('icl_object_id')) {
         return true;
     }
 
