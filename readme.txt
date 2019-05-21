@@ -95,11 +95,11 @@ UsersWP is 100% translatable.
 
 Automatic installation is the easiest option. To do an automatic install of UsersWP, log in to your WordPress dashboard, navigate to the Plugins menu and click Add New.
 
-In the search field type UsersWP and click Search Plugins. Once you've found our plugin you install it by simply clicking Install Now. [UsersWP installation](https://userswp.io/docs/2017/02/24/userswp-overview/)
+In the search field type UsersWP and click Search Plugins. Once you've found our plugin you install it by simply clicking Install Now. [UsersWP installation](https://userswp.io/docs/userswp-overview/)
 
 = Manual installation =
 
-The manual installation method involves downloading UsersWP and uploading it to your webserver via your favourite FTP application. The WordPress codex will tell you more [here](http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
+The manual installation method involves downloading UsersWP and uploading it to your webserver via your favourite FTP application. The WordPress codex will tell you more [here](https://wordpress.org/support/article/managing-plugins/#manual-plugin-installation).
 
 = Updating =
 

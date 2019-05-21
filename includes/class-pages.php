@@ -542,7 +542,7 @@ class UsersWP_Pages {
 
         if ($page_id) {
             if (uwp_is_wpml()) {
-                $wpml_page_id = uwp_wpml_object_id($page_id, 'page', true, ICL_LANGUAGE_CODE);
+                $wpml_page_id = uwp_wpml_object_id($page_id, 'page', true);
                 if (!empty($wpml_page_id)) {
                     $page_id = $wpml_page_id;
                 }

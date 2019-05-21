@@ -1260,7 +1260,7 @@ function get_usermeta_table_prefix() {
  */
 function uwp_maybe_serialize($key, $value) {
     $field = uwp_get_custom_field_info($key);
-    if (isset($field->field_type) && $field->field_type == 'multiselect') {
+    if (isset($field->field_type) && $field->field_type == 'multiselect' && is_array($value)) {
         $value = implode(",", $value);
     }
     return $value;
