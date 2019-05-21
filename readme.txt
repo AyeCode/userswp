@@ -123,8 +123,10 @@ No questions so far, but don't hesitate to ask!
 = 1.1.2 =
 * Allow to disable avatar image override by UsersWP plugin - ADDED
 * Author box breaking the sites with elementor - FIXED
-* URL fixes for WPML and Polylang support - FIXED
+* UsersWP pages URL fixes for Polylang compatibility - FIXED
 * Missing fields in Form builder for account and register forms in multisite - FIXED
+* Add select all to add UsersWP menu items - ADDED
+* Allow admin to approve users having pending email verification - ADDED
 
 = 1.1.1 =
 * Redirect not working after registration for auto approve auto login - FIXED

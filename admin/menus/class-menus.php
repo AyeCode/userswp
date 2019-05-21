@@ -25,7 +25,7 @@ class UsersWP_Menus {
      * @return void
      */
     public function users_wp_admin_menu_metabox() {
-        add_meta_box( 'add-users-wp-nav-menu', esc_html__( 'Users WP', 'userswp' ), array($this, 'users_wp_admin_do_wp_nav_menu_metabox'), 'nav-menus', 'side', 'default' );
+        add_meta_box( 'add-users-wp-nav-menu', esc_html__( 'UsersWP Endpoints', 'userswp' ), array($this, 'users_wp_admin_do_wp_nav_menu_metabox'), 'nav-menus', 'side', 'default' );
         add_action( 'admin_print_footer_scripts', array($this, 'users_wp_admin_wp_nav_menu_restrict_items') );
     }
 
@@ -97,10 +97,13 @@ class UsersWP_Menus {
             </div>
 
             <p class="button-controls">
-			<span class="add-to-menu">
-				<input type="submit"<?php if ( function_exists( 'wp_nav_menu_disabled_check' ) ) : wp_nav_menu_disabled_check( $nav_menu_selected_id ); endif; ?> class="button-secondary submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu', 'userswp' ); ?>" name="add-custom-menu-item" id="submit-users-wp-menu" />
-				<span class="spinner"></span>
-			</span>
+			    <span class="list-controls">
+					<a href="<?php echo admin_url( 'nav-menus.php?page-tab=all&selectall=1#users-wp-menu' ); ?>" class="select-all"><?php _e( 'Select all', 'geodirectory' ); ?></a>
+				</span>
+                <span class="add-to-menu">
+                    <input type="submit"<?php if ( function_exists( 'wp_nav_menu_disabled_check' ) ) : wp_nav_menu_disabled_check( $nav_menu_selected_id ); endif; ?> class="button-secondary submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu', 'userswp' ); ?>" name="add-custom-menu-item" id="submit-users-wp-menu" />
+                    <span class="spinner"></span>
+                </span>
             </p>
         </div><!-- /#users_wp-menu -->
 
