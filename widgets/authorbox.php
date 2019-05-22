@@ -114,10 +114,10 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
             $output = str_replace( $key, $value, $output );
         }
 
-        $output = apply_filters('uwp_author_box_output', $output, $args);
+        echo $output = apply_filters('uwp_author_box_output', trim($output), $args);
+        $output = ob_end_clean();
 
-        return trim($output);
-
+        return $output;
     }
 
 }
