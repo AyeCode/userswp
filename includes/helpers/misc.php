@@ -1820,3 +1820,15 @@ function uwp_get_field_icon( $value ) {
 
     return apply_filters( 'uwp_get_field_icon', $field_icon, $value );
 }
+
+function uwp_get_user_by_author_slug(){
+    $url_type = apply_filters('uwp_profile_url_type', 'slug');
+    $author_slug = get_query_var('uwp_profile');
+    if ($url_type == 'id') {
+        $user = get_user_by('id', $author_slug);
+    } else {
+        $user = get_user_by('slug', $author_slug);
+    }
+
+    return $user;
+}

@@ -18,7 +18,7 @@ final class UsersWP {
      * @var      string    $version    The current version of the plugin.
      */
     protected $version;
-    
+
     protected $profile;
     public $forms;
     protected $i18n;
@@ -354,6 +354,13 @@ final class UsersWP {
         register_widget("UWP_Users_Widget");
         register_widget("UWP_Account_Widget");
         register_widget("UWP_Profile_Widget");
+        register_widget("UWP_Profile_Header_Widget");
+        register_widget("UWP_Profile_Title_Widget");
+        register_widget("UWP_Profile_Social_Widget");
+        register_widget("UWP_Profile_Content_Widget");
+        register_widget("UWP_Profile_Buttons_Widget");
+        register_widget("UWP_Profile_Bio_Widget");
+        register_widget("UWP_Profile_Section_Widget");
         register_widget("UWP_Author_Box_Widget");
     }
 
@@ -586,9 +593,44 @@ final class UsersWP {
         require_once( dirname(dirname( __FILE__ )) .'/widgets/account.php' );
 
         /**
-         * The class for register widget.
+         * The class for profile widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/profile.php' );
+
+        /**
+         * The class for profile sections widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-section.php' );
+
+        /**
+         * The class profile header widget
+         */
+        require_once dirname(dirname( __FILE__ )) . '/widgets/profile-header.php';
+
+        /**
+         * The class for profile title widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-title.php' );
+
+        /**
+         * The class for profile social fields widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-social.php' );
+
+        /**
+         * The class for user's bio widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-bio.php' );
+
+        /**
+         * The class for profile buttons fields widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-buttons.php' );
+
+        /**
+         * The class for profile content widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-content.php' );
 
         /**
          * The class for author box widget.

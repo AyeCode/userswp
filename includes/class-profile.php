@@ -17,6 +17,9 @@ class UsersWP_Profile {
      * @param       object      $user       The User ID.
      */
     public function get_profile_header($user) {
+        if(!$user){
+            return;
+        }
         $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
         $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar_thumb', '');
         add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
@@ -613,8 +616,6 @@ class UsersWP_Profile {
             $uwp_profile_link = rtrim(substr(str_replace(home_url(), '', $link), 1), '/') . '/';
             //$uwp_profile_page_id = url_to_postid($link);
             $uwp_profile_page_id = $page_id;
-
-
 
             // {home_url}/profile/1
             $uwp_profile_link_empty_slash = '^' . $uwp_profile_link . '([^/]+)?$';

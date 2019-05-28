@@ -127,6 +127,7 @@ No questions so far, but don't hesitate to ask!
 * Missing fields in Form builder for account and register forms in multisite - FIXED
 * Add select all to add UsersWP menu items - ADDED
 * Allow admin to approve users having pending email verification - ADDED
+* Shortcodes for profile page individual elements for preview in builder like elementor - FIXED
 
 = 1.1.1 =
 * Redirect not working after registration for auto approve auto login - FIXED

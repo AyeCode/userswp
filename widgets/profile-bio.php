@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * UsersWP profile widget.
+ * UsersWP profile user bio widget.
  *
- * @since 1.0.22
+ * @since 1.1.2
  */
-class UWP_Profile_Widget extends WP_Super_Duper {
+class UWP_Profile_Bio_Widget extends WP_Super_Duper {
 
     /**
-     * Register the profile widget with WordPress.
+     * Register the profile user bio widget with WordPress.
      *
      */
     public function __construct() {
@@ -23,16 +23,16 @@ class UWP_Profile_Widget extends WP_Super_Duper {
             'block-category'=> 'widgets',
             'block-keywords'=> "['userswp','profile']",
             'class_name'     => __CLASS__,
-            'base_id'       => 'uwp_profile',
-            'name'          => __('UWP > Profile','userswp'),
+            'base_id'       => 'uwp_profile_bio',
+            'name'          => __('UWP > Profile Bio','userswp'),
             'no_wrap'       => true,
             'widget_ops'    => array(
-                'classname'   => 'uwp-profile-class',
-                'description' => esc_html__('Displays user profile.','userswp'),
+                'classname'   => 'uwp-profile-bio',
+                'description' => esc_html__('Displays user\'s bio.','userswp'),
             ),
             'arguments'     => array(
                 'title'  => array(
-                    'title'       => __( 'Widget title', 'userswp' ),
+                    'title'       => __( 'Title', 'userswp' ),
                     'desc'        => __( 'Enter widget title.', 'userswp' ),
                     'type'        => 'text',
                     'desc_tip'    => true,
@@ -49,29 +49,19 @@ class UWP_Profile_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        ob_start();
+        $user = uwp_get_user_by_author_slug();
 
-        echo '<div class="uwp_widgets uwp_widget_profile">';
-
-        $temp_obj = new UsersWP_Templates();
-
-        $template = $temp_obj->uwp_locate_template('profile');
-
-        echo '<div class="uwp_page">';
-
-        if ($template) {
-            include($template);
+        if(!$user && is_user_logged_in()){
+            $user = get_userdata(get_current_user_id());
         }
 
-        echo '</div>';
+        ob_start();
 
-        echo '</div>';
+        do_action('uwp_profile_bio', $user);
 
-        $output = ob_get_contents();
+        $output = ob_get_clean();
 
-        ob_end_clean();
-
-        return trim($output);
+        return $output;
 
     }
 

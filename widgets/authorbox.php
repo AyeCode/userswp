@@ -48,13 +48,13 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        ob_start();
-
         global $post, $wpdb;
 
         if(!$post->ID){
             return '';
         }
+
+        ob_start();
 
         if(!wp_style_is('uwp-authorbox')){
             wp_enqueue_style( 'uwp-authorbox' );
@@ -114,10 +114,11 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
             $output = str_replace( $key, $value, $output );
         }
 
-        echo $output = apply_filters('uwp_author_box_output', trim($output), $args);
-        $output = ob_end_clean();
+        echo $output;
 
-        return $output;
+        $output = ob_get_clean();
+
+        return apply_filters('uwp_author_box_output', $output, $args);
     }
 
 }
