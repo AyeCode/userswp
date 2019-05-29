@@ -178,6 +178,10 @@ class UsersWP_Meta {
             'uwp_account_last_name' => $user_data->last_name,
         );
 
+        foreach ($user_meta as $key => $meta){
+            do_action('sync_usermeta_on_register', $user_id, $key, $meta); // for adding points via mycred add on.
+        }
+
         $users = $wpdb->get_var($wpdb->prepare("SELECT COUNT(user_id) FROM {$meta_table} WHERE user_id = %d", $user_id));
 
         if($users){

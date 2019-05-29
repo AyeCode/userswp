@@ -55,8 +55,6 @@ class UWP_Profile_Content_Widget extends WP_Super_Duper {
             $user = get_userdata(get_current_user_id());
         }
 
-        ob_start();
-
         $enable_profile_content = uwp_get_option('enable_profile_body');
 
         ob_start();

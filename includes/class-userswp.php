@@ -103,7 +103,7 @@ final class UsersWP {
         register_deactivation_hook( USERSWP_PLUGIN_FILE, array( 'UsersWP_Deactivator', 'deactivate' ) );
         add_action( 'admin_init', array('UsersWP_Activator', 'uwp_automatic_upgrade') );
         add_action( 'init', array( 'UsersWP_Activator', 'init_background_updater' ), 5 );
-        add_action( 'widgets_init', array( $this, 'uwp_register_widgets' ) );
+        add_action( 'widgets_init', array( $this, 'register_widgets' ) );
     }
 
 
@@ -230,6 +230,7 @@ final class UsersWP {
         add_action( 'uwp_admin_profile_edit', array($instance, 'uwp_image_crop_init'), 10, 1 );
 
         // Profile Tabs
+        add_action( 'uwp_profile_body', array($instance, 'get_profile_body'), 10, 1 );
         add_action( 'uwp_profile_content', array($instance, 'get_profile_tabs_content'), 10, 1 );
         add_action( 'uwp_profile_more_info_tab_content', array($instance, 'get_profile_more_info'), 10, 1);
         add_action( 'uwp_profile_posts_tab_content', array($instance, 'get_profile_posts'), 10, 1);
@@ -345,7 +346,7 @@ final class UsersWP {
         add_action('admin_head', array($instance, 'uwp_admin_only_css'));
     }
 
-    public function uwp_register_widgets(){
+    public function register_widgets(){
         register_widget("UWP_Register_Widget");
         register_widget("UWP_Forgot_Widget");
         register_widget("UWP_Login_Widget");

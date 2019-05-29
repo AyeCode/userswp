@@ -729,9 +729,12 @@ class UsersWP_GeoDirectory_Plugin {
                     $post_avgratings = geodir_get_post_rating($post->ID);
                     $post_ratings = geodir_get_rating_stars($post_avgratings, $post->ID);
                     ob_start();
-                    geodir_comments_number($post->rating_count);
-                    $n_comments = ob_get_contents();
-                    ob_end_clean();
+                    if($this->uwp_is_gdv2()) {
+                        geodir_comments_number();
+                    } else {
+                        geodir_comments_number((int)$post->rating_count);
+                    }
+                    $n_comments = ob_get_clean();
 
                     do_action('uwp_before_profile_listing_item', $post_id, $user, $post_type);
                     ?>
@@ -960,9 +963,12 @@ class UsersWP_GeoDirectory_Plugin {
                         $post_avgratings = geodir_get_post_rating($post->ID);
                         $post_ratings = geodir_get_rating_stars($post_avgratings, $post->ID);
                         ob_start();
-                        geodir_comments_number($post->rating_count);
-                        $n_comments = ob_get_contents();
-                        ob_end_clean();
+                        if($this->uwp_is_gdv2()) {
+                            geodir_comments_number();
+                        } else {
+                            geodir_comments_number((int)$post->rating_count);
+                        }
+                        $n_comments = ob_get_clean();
                         do_action('uwp_before_profile_favourite_item', $post_id, $user, $post_type);
                         ?>
                         <li class="uwp-profile-item-li uwp-profile-item-clearfix <?php echo 'gd-post-'.$post_type; ?>">
