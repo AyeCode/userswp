@@ -631,8 +631,7 @@ class UsersWP_Profile {
         $page_id = uwp_get_page_id('profile_page', false);
         if ($page_id && !isset($_REQUEST['page_id'])) {
             $link = get_page_link($page_id);
-            $uwp_profile_link = rtrim(substr(str_replace(home_url(), '', $link), 1), '/') . '/';
-            //$uwp_profile_page_id = url_to_postid($link);
+            $uwp_profile_link = trailingslashit(substr(str_replace(home_url(), '', $link), 1));
             $uwp_profile_page_id = $page_id;
 
             // {home_url}/profile/1

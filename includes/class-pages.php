@@ -557,4 +557,48 @@ class UsersWP_Pages {
         return $link;
     }
 
+    /**
+     * Add a post display state for special UWP pages in the page list table.
+     *
+     * @param array   $post_states An array of post display states.
+     * @param WP_Post $post        The current post object.
+     *
+     * @return mixed
+     */
+    public function add_display_post_states( $post_states, $post ) {
+        if ( uwp_get_page_id( 'register_page' ) == $post->ID ) {
+            $post_states['uwp_register_page'] = __( 'UWP Register Page', 'userswp' );
+        }
+
+        if ( uwp_get_page_id( 'login_page' ) == $post->ID ) {
+            $post_states['uwp_login_page'] = __( 'UWP Login Page', 'userswp' );
+        }
+
+        if ( uwp_get_page_id( 'forgot_page' ) == $post->ID ) {
+            $post_states['uwp_forgot_page'] = __( 'UWP Forgot Password Page', 'userswp' );
+        }
+
+        if ( uwp_get_page_id( 'reset_page' ) == $post->ID ) {
+            $post_states['uwp_reset_page'] = __( 'UWP Reset Password Page', 'userswp' );
+        }
+
+        if ( uwp_get_page_id( 'account_page' ) == $post->ID ) {
+            $post_states['uwp_account_page'] = __( 'UWP Account Page', 'userswp' );
+        }
+
+        if ( uwp_get_page_id( 'profile_page' ) == $post->ID ) {
+            $post_states['uwp_profile_page'] = __( 'UWP Profile Page', 'userswp' );
+        }
+
+        if ( uwp_get_page_id( 'users_page' ) == $post->ID ) {
+            $post_states['uwp_users_page'] = __( 'UWP Users Page', 'userswp' );
+        }
+
+        if ( uwp_get_page_id( 'change_page' ) == $post->ID ) {
+            $post_states['uwp_change_page'] = __( 'UWP Change Password Page', 'userswp' );
+        }
+
+        return $post_states;
+    }
+
 }

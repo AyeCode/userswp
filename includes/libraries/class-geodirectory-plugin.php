@@ -1218,7 +1218,7 @@ class UsersWP_GeoDirectory_Plugin {
                 }
                 $status .= ")</strong>";
 
-                $html = '<span class="geodir-post-status">' . $status_icon . ' <font class="geodir-status-label">' . __('Status: ', 'userswp') . '</font>' . $status . '</span>';
+                $html = '<span class="geodir-post-status">' . $status_icon . ' <span class="geodir-status-label">' . __('Status: ', 'userswp') . '</span>' . $status . '</span>';
             }
         }
 
