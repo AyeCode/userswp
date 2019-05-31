@@ -27,12 +27,12 @@ class UWP_Profile_Social_Widget extends WP_Super_Duper {
             'name'          => __('UWP > Profile Social','userswp'),
             'widget_ops'    => array(
                 'classname'   => 'uwp-profile-social',
-                'description' => esc_html__('Displays fields which are selected to display in social tab from form builder.','userswp'),
+                'description' => esc_html__('Displays fields which are selected to display in social location from form builder.','userswp'),
             ),
             'arguments'     => array(
-                'title'  => array(
-                    'title'       => __( 'Title', 'userswp' ),
-                    'desc'        => __( 'Enter widget title.', 'userswp' ),
+                'exclude'  => array(
+                    'title'       => __( 'Exclude Fields', 'userswp' ),
+                    'desc'        => __( 'Enter comma separated field keys to exclude from displaying in social location.', 'userswp' ),
                     'type'        => 'text',
                     'desc_tip'    => true,
                     'default'     => '',
@@ -54,9 +54,17 @@ class UWP_Profile_Social_Widget extends WP_Super_Duper {
             $user = get_userdata(get_current_user_id());
         }
 
+        $defaults = array(
+            'exclude' => '',
+        );
+
+        $args = wp_parse_args( $args, $defaults );
+
+        $args = apply_filters( 'uwp_widget_profile_social_args', $args, $widget_args, $this );
+
         ob_start();
 
-        do_action('uwp_profile_social', $user);
+        do_action('uwp_profile_social', $user, $args['exclude']);
 
         $output = ob_get_clean();
 

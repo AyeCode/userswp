@@ -31,14 +31,21 @@ class UWP_Profile_Title_Widget extends WP_Super_Duper {
                 'description' => esc_html__('Displays user name.','userswp'),
             ),
             'arguments'     => array(
-                'title'  => array(
-                    'title'       => __( 'Title', 'userswp' ),
-                    'desc'        => __( 'Enter widget title.', 'userswp' ),
-                    'type'        => 'text',
-                    'desc_tip'    => true,
-                    'default'     => '',
-                    'advanced'    => false
-                ),
+                'tag'  => array(
+                    'title' => __('Header Tag:', 'userswp'),
+                    'desc' => __('Header tag for the profile title.', 'userswp'),
+                    'type' => 'select',
+                    'options'   =>  array(
+                        "h1" => "h1",
+                        "h2" => "h2",
+                        "h3" => "h3",
+                        "h4" => "h4",
+                        "h5" => "h5",
+                        "h6" => "h6",
+                    ),
+                    'default'  => 'h2',
+                    'desc_tip' => true,
+                )
             )
 
         );
@@ -55,9 +62,17 @@ class UWP_Profile_Title_Widget extends WP_Super_Duper {
             $user = get_userdata(get_current_user_id());
         }
 
+        $defaults = array(
+            'tag'      => 'h2',
+        );
+
+        $args = wp_parse_args( $args, $defaults );
+
+        $title_tag = empty( $args['tag'] ) ? 'h2' : apply_filters( 'uwp_widget_profile_title_tag', $args['tag'], $args, $widget_args, $this );
+
         ob_start();
 
-        do_action('uwp_profile_title', $user);
+        do_action('uwp_profile_title', $user, $title_tag);
 
         $output = ob_get_clean();
 

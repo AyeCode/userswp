@@ -209,10 +209,10 @@ final class UsersWP {
         add_filter( 'edit_profile_url', array($instance, 'uwp_modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
         add_filter( 'get_comment_author_link', array($instance, 'uwp_get_comment_author_link') , 10 , 2 );
-        add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 1 );
+        add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 4 );
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
-        add_action( 'uwp_profile_title', array($instance, 'get_profile_title'), 10, 1 );
-        add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 1 );
+        add_action( 'uwp_profile_title', array($instance, 'get_profile_title'), 10, 2 );
+        add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 2 );
         add_action( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );
 
         //Fields as tabs

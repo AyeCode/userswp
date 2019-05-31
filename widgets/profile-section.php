@@ -20,7 +20,8 @@ class UWP_Profile_Section_Widget extends WP_Super_Duper {
         $options = array(
             'textdomain'    => 'userswp',
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-wrap'    => '',
+            'block-category'=> 'layout',
             'block-keywords'=> "['userswp','profile']",
             'class_name'     => __CLASS__,
             'base_id'       => 'uwp_profile_section',
@@ -80,6 +81,13 @@ class UWP_Profile_Section_Widget extends WP_Super_Duper {
             $output = '<div class="uwp_page uwp-section-'.$position.' '.$class.'">';
         }elseif(isset($args['type']) && $args['type']=='close'){
             $output = "</div>";
+        }
+
+        // if block demo return empty to show placeholder text
+        if($this->is_block_content_call()){
+            $output = '';
+            $section_type = $args['type']=='open' ? __('closing','userswp') : __('opening','userswp');
+            $output = '<div style="background:#0185ba33;padding: 10px;">'.sprintf( __('Archive Item Section: <b>%s : %s</b> <small>(requires %s section to work)</small>', 'geodirectory'),strtoupper($args['type']),strtoupper($args['position']),$section_type).'</div>';
         }
 
         return $output;

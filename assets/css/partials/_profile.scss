@@ -88,6 +88,17 @@
       }
     }
 
+    .uwp-avatar-only {
+      .uwp-profile-avatar{
+        .uwp-profile-avatar-inner {
+          margin-left: 0;
+          > img {
+            margin: 0;
+          }
+        }
+      }
+    }
+
     .uwp-profile-avatar {
       display: block;
       position: relative;
@@ -405,6 +416,20 @@
   max-width: none !important;
 }
 
+.uwp_page.uwp-section-left {
+  float: left;
+  width: 25%;
+}
+
+.uwp_page.uwp-section-full {
+  width: 100%;
+}
+
+.uwp_page.uwp-section-right {
+  float: left;
+  width: 70%;
+}
+
 @media only screen and (max-width: 500px) {
   .uwp_page {
     .uwp-profile,
@@ -418,5 +443,15 @@
       margin: 0;
       width: 100%;
     }
+  }
+  .uwp_page.uwp-section-left {
+    float: none;
+    width: 100%;
+  }
+
+  .uwp_page.uwp-section-right {
+    float: none;
+    margin: 0;
+    width: 100%;
   }
 }

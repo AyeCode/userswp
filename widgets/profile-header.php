@@ -31,13 +31,32 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
                 'description' => esc_html__('Displays user profile header.','userswp'),
             ),
             'arguments'     => array(
-                'title'  => array(
-                    'title'       => __( 'Title', 'userswp' ),
-                    'desc'        => __( 'Enter widget title.', 'userswp' ),
-                    'type'        => 'text',
-                    'desc_tip'    => true,
-                    'default'     => '',
-                    'advanced'    => false
+                'hide_cover'  => array(
+                    'title' => __('Hide cover image:', 'userswp'),
+                    'desc' => __('Hide cover image in user profile page.', 'userswp'),
+                    'type' => 'checkbox',
+                    'desc_tip' => true,
+                    'value'  => '1',
+                    'default'  => 0,
+                    'advanced' => true
+                ),
+                'hide_avatar'  => array(
+                    'title' => __('Hide avatar image:', 'userswp'),
+                    'desc' => __('Hide avatar image in user profile page.', 'userswp'),
+                    'type' => 'checkbox',
+                    'desc_tip' => true,
+                    'value'  => '1',
+                    'default'  => 0,
+                    'advanced' => true
+                ),
+                'allow_change'  => array(
+                    'title' => __('Allow to change cover and avatar:', 'userswp'),
+                    'desc' => __('Allow user to change cover and avatar image in profile page.', 'userswp'),
+                    'type' => 'checkbox',
+                    'desc_tip' => true,
+                    'value'  => '1',
+                    'default'  => 1,
+                    'advanced' => true
                 ),
             )
 
@@ -56,12 +75,21 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
         }
 
         $enable_profile_header = uwp_get_option('enable_profile_header');
+        $defaults = array(
+            'hide_cover'       => 0,
+            'hide_avatar'      => 0,
+            'allow_change'     => 1,
+        );
+
+        $args = wp_parse_args( $args, $defaults );
+
+        $args = apply_filters( 'uwp_widget_profile_header_args', $args, $widget_args, $this );
 
         ob_start();
 
         if ($enable_profile_header == '1') {
 
-            do_action('uwp_profile_header', $user);
+            do_action('uwp_profile_header', $user, $args['hide_cover'], $args['hide_avatar'], $args['allow_change']);
 
         }
 

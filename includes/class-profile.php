@@ -33,44 +33,41 @@ class UsersWP_Profile {
      * @since       1.0.0
      * @package     userswp
      * @param       object      $user       The User ID.
+     * @param       bool      $hide_cover   Hide cover image.
+     * @param       bool      $hide_avatar   Hide avatar image.
+     * @param       bool      $allow_change   Allow to change cover and avatar image.
      */
-    public function get_profile_header($user) {
+    public function get_profile_header($user, $hide_cover = false, $hide_avatar = false, $allow_change = true) {
         if(!$user){
             return;
         }
-        $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
-        $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar_thumb', '');
+
         add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
         $uploads = wp_upload_dir();
         remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
         $upload_url = $uploads['baseurl'];
-        if (is_user_logged_in() && get_current_user_id() == $user->ID && is_uwp_profile_page()) {
-            $trigger_class = "uwp-profile-modal-form-trigger";
-        } else {
-            $trigger_class = "";
-        }
+        $class = "";
 
-        if (empty($banner)) {
-            $banner = uwp_get_option('profile_default_banner', '');
-            if(empty($banner)){
-                $banner = uwp_get_default_banner_uri();
-            } else {
-                $banner = wp_get_attachment_url($banner);
-            }
-        } else {
-            $banner = $upload_url.$banner;
+        if($hide_cover) {
+            $class = "uwp-avatar-only";
         }
-        if (empty($avatar)) {
-            $avatar = get_avatar($user->user_email, 150);
-        } else {
-            // check the image is not a full url before adding the local upload url
-            if (strpos($avatar, 'http:') === false && strpos($avatar, 'https:') === false) {
-                $avatar = $upload_url.$avatar;
-            }
-            $avatar = '<img src="'.$avatar.'" class="avatar avatar-150 photo" width="150" height="150">';
-        }
+        
         ?>
-        <div class="uwp-profile-header clearfix">
+
+        <div class="uwp-profile-header <?php echo $class; ?> clearfix">
+            <?php if(!$hide_cover) {
+                $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
+                if (empty($banner)) {
+                    $banner = uwp_get_option('profile_default_banner', '');
+                    if(empty($banner)){
+                        $banner = uwp_get_default_banner_uri();
+                    } else {
+                        $banner = wp_get_attachment_url($banner);
+                    }
+                } else {
+                    $banner = $upload_url.$banner;
+                }
+            ?>
             <div class="uwp-profile-header-img clearfix">
                 <?php
                 if (!is_uwp_profile_page()) {
@@ -83,10 +80,10 @@ class UsersWP_Profile {
                     echo '</a>';
                 }
                 ?>
-            <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID) && is_uwp_profile_page()) { ?>
+            <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID) && is_uwp_profile_page() && $allow_change) { ?>
                 <div class="uwp-banner-change-icon">
                     <i class="fas fa-camera" aria-hidden="true"></i>
-                    <div data-type="banner" class="uwp-profile-banner-change <?php echo $trigger_class; ?>">
+                    <div data-type="banner" class="uwp-profile-banner-change uwp-profile-modal-form-trigger">
                     <span class="uwp-profile-banner-change-inner">
                         <?php echo __( 'Update Cover Photo', 'userswp' ); ?>
                     </span>
@@ -94,26 +91,44 @@ class UsersWP_Profile {
                 </div>
             <?php } ?>
             </div>
+            <?php }
+
+            // avatar of user
+            ?>
             <div class="uwp-profile-avatar clearfix">
                 <?php
-                if (!is_uwp_profile_page()) {
-                    echo '<a href="'.apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID).'" title="'.$user->display_name.'">';
-                }
-                ?>
-                <div class="uwp-profile-avatar-inner">
-                    <?php echo $avatar; ?>
-                    <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID) && is_uwp_profile_page()) { ?>
-                        <div class="uwp-profile-avatar-change">
-                            <div class="uwp-profile-avatar-change-inner">
-                                <i class="fas fa-camera" aria-hidden="true"></i>
-                                <a id="uwp-profile-picture-change" data-type="avatar" class="<?php echo $trigger_class; ?>" href="#"><?php echo __( 'Update', 'userswp' ); ?></a>
+                if(!$hide_avatar) {
+                    if (!is_uwp_profile_page()) {
+                        echo '<a href="' . apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID) . '" title="' . $user->display_name . '">';
+                    }
+                    $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar_thumb', '');
+                    if (empty($avatar)) {
+                        $avatar = get_avatar($user->user_email, 150);
+                    } else {
+                        // check the image is not a full url before adding the local upload url
+                        if (strpos($avatar, 'http:') === false && strpos($avatar, 'https:') === false) {
+                            $avatar = $upload_url . $avatar;
+                        }
+                        $avatar = '<img src="' . $avatar . '" class="avatar avatar-150 photo" width="150" height="150">';
+                    }
+                    ?>
+                    <div class="uwp-profile-avatar-inner">
+                        <?php echo $avatar; ?>
+                        <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID) && is_uwp_profile_page() && $allow_change) { ?>
+                            <div class="uwp-profile-avatar-change">
+                                <div class="uwp-profile-avatar-change-inner">
+                                    <i class="fas fa-camera" aria-hidden="true"></i>
+                                    <a id="uwp-profile-picture-change" data-type="avatar"
+                                       class="uwp-profile-modal-form-trigger"
+                                       href="#"><?php echo __('Update', 'userswp'); ?></a>
+                                </div>
                             </div>
-                        </div>
-                    <?php } ?>
-                </div>
-                <?php
-                if (!is_uwp_profile_page()) {
-                    echo '</a>';
+                        <?php } ?>
+                    </div>
+                    <?php
+                    if (!is_uwp_profile_page()) {
+                        echo '</a>';
+                    }
                 }
                 ?>
             </div>
@@ -128,13 +143,13 @@ class UsersWP_Profile {
      * @package     userswp
      * @param       object      $user       The User ID.
      */
-    public function get_profile_title($user) {
+    public function get_profile_title($user, $tag = 'h2') {
         ?>
         <div class="uwp-profile-name">
-            <h2 class="uwp-user-title" data-user="<?php echo $user->ID; ?>">
+            <<?php echo esc_attr($tag); ?> class="uwp-user-title" data-user="<?php echo $user->ID; ?>">
                 <?php echo apply_filters('uwp_profile_display_name', $user->display_name); ?>
                 <?php do_action('uwp_profile_after_title', $user->ID ); ?>
-            </h2>
+            </<?php echo esc_attr($tag); ?>>
         </div>
         <?php
     }
@@ -145,12 +160,9 @@ class UsersWP_Profile {
      * @since       1.0.0
      * @package     userswp
      * @param       object      $user       The User ID.
+     * @param       string, array  $exclude     Fields to exclude from displaying.
      */
-    public function get_profile_social($user) {
-
-        global $wpdb;
-        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND field_type = 'url' AND css_class LIKE '%uwp_social%' ORDER BY sort_order ASC");
+    public function get_profile_social($user, $exclude = '') {
 
         if (is_uwp_profile_page()) {
             $show_type = '[profile_side]';
@@ -163,26 +175,65 @@ class UsersWP_Profile {
         if (!$show_type) {
             return;
         }
+
+        global $wpdb;
+        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND field_type = 'url' AND css_class LIKE '%uwp_social%' ORDER BY sort_order ASC");
+
+        $usermeta = isset( $user->ID ) ? uwp_get_usermeta_row( $user->ID ) : array();
+        $privacy = ! empty( $usermeta ) && ! empty( $usermeta->user_privacy ) ? explode( ',', $usermeta->user_privacy ) : array();
+
+        if(!empty($exclude) && !is_array($exclude)){
+            $exclude = explode(',', $exclude);
+            $exclude = array_map('trim', $exclude);
+        }
         ?>
         <div class="uwp-profile-social">
             <ul class="uwp-profile-social-ul">
-        <?php
-        foreach($fields as $field) {
-            $show_in = explode(',',$field->show_in);
+                <?php
+                foreach($fields as $field) {
+                    $show_in = explode(',',$field->show_in);
 
-            if (!in_array($show_type, $show_in)) {
-                continue;
-            }
-            $key = $field->htmlvar_name;
-            // see UsersWP_Forms -> uwp_save_user_extra_fields reason for replacing key
-            $key = str_replace('uwp_register_', 'uwp_account_', $key);
-            $value = uwp_get_usermeta($user->ID, $key, false);
+                    if (!in_array($show_type, $show_in)) {
+                        continue;
+                    }
 
-            if ($value) {
-                echo '<li><a target="_blank" rel="nofollow" href="'.$value.'"><i class="'.$field->field_icon.'"></i></a></li>';
-            }
-        }
-        ?>
+                    $display = false;
+                    if ( $field->is_public == '0' ) {
+                        $display = false;
+                    } else if ( $field->is_public == '1' ) {
+                        $display = true;
+                    } else {
+                        if ( ! in_array( $field->htmlvar_name . '_privacy', $privacy ) ) {
+                            $display = true;
+                        }
+                    }
+                    if ( ! $display ) {
+                        continue;
+                    }
+
+                    $key = $field->htmlvar_name;
+                    // see UsersWP_Forms -> uwp_save_user_extra_fields reason for replacing key
+                    $key = str_replace('uwp_register_', 'uwp_account_', $key);
+                    $exclude_key = str_replace('uwp_account_', '', $key);
+                    $value = uwp_get_usermeta($user->ID, $key, false);
+                    $icon = uwp_get_field_icon($field->field_icon);
+
+                    if(isset($icon) && !empty($icon)){
+                        $title = $icon;
+                    } else {
+                        $title = $field->site_title;
+                    }
+
+                    if (!empty($exclude) && in_array($exclude_key, $exclude)) {
+                        continue;
+                    }
+
+                    if ($value) {
+                        echo '<li><a target="_blank" rel="nofollow" href="'.$value.'">'.$title.'</a></li>';
+                    }
+                }
+                ?>
             </ul>
         </div>
         <?php
@@ -218,7 +269,6 @@ class UsersWP_Profile {
      * @since       1.0.0
      * @package     userswp
      * @param       object      $user       The User ID.
-     * @return      string                  Sidebar custom fields content.
      */
     public function get_profile_side_extra($user) {
         echo $this->uwp_get_extra_fields($user, '[profile_side]');
@@ -230,7 +280,6 @@ class UsersWP_Profile {
      * @since       1.0.0
      * @package     userswp
      * @param       object      $user       The User ID.
-     * @return      string                  Users page custom fields content.
      */
     public function get_users_extra($user) {
         echo $this->uwp_get_extra_fields($user, '[users]');
