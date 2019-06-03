@@ -200,16 +200,16 @@ class UsersWP_Forms {
     public function process_register() {
 
         $data = $_POST;
-        $files = $_FILES;
-
-        $errors = new WP_Error();
-        $file_obj = new UsersWP_Files();
 
         if( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce' ) ) {
             return;
         }
 
         global $uwp_notices;
+
+        $files = $_FILES;
+        $errors = new WP_Error();
+        $file_obj = new UsersWP_Files();
 
         if (!get_option('users_can_register')) {
             $error = '<div class="uwp-alert-error text-center">'.__('<strong>ERROR</strong>: User registration is currently not allowed. Please check settings of your site.', 'userswp').'</div>';
@@ -335,7 +335,6 @@ class UsersWP_Forms {
             $send_result = $email->send( 'register', $user_id );
         }
 
-
         $error_code = $errors->get_error_code();
         if (!empty($error_code)) {
             $error = '<div class="uwp-alert-error text-center">'.$result->get_error_message().'</div>';
@@ -411,7 +410,7 @@ class UsersWP_Forms {
                 $uwp_notices[] = array('register' => $msg);
             }
 
-            do_action('uwp_after_process_register', $data);
+            do_action('uwp_after_process_register', $data, $user_id);
 
         }
 

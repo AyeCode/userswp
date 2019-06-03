@@ -142,7 +142,8 @@
   border-bottom: none;
 }
 .uwp-users-list,
-.uwp-profile-side {
+.uwp-profile-side,
+.uwp-section-left {
   .uwp-users-list-user {
     display: block;
   }
@@ -167,7 +168,8 @@
     }
   }
 }
-.uwp-profile-side {
+.uwp-profile-side,
+.uwp-section-left {
   .uwp-profile-extra-sep {
     display: none;
   }

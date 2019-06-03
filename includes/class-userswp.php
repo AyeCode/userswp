@@ -18,7 +18,7 @@ final class UsersWP {
      * @var      string    $version    The current version of the plugin.
      */
     protected $version;
-    
+
     protected $profile;
     public $forms;
     protected $i18n;
@@ -103,7 +103,7 @@ final class UsersWP {
         register_deactivation_hook( USERSWP_PLUGIN_FILE, array( 'UsersWP_Deactivator', 'deactivate' ) );
         add_action( 'admin_init', array('UsersWP_Activator', 'uwp_automatic_upgrade') );
         add_action( 'init', array( 'UsersWP_Activator', 'init_background_updater' ), 5 );
-        add_action( 'widgets_init', array( $this, 'uwp_register_widgets' ) );
+        add_action( 'widgets_init', array( $this, 'register_widgets' ) );
     }
 
 
@@ -197,6 +197,7 @@ final class UsersWP {
 
     public function load_pages_actions_and_filters($instance) {
         add_action( 'wpmu_new_blog', array($instance, 'wpmu_generate_default_pages_on_new_site'), 10, 6 );
+        add_filter( 'display_post_states', array( $instance, 'add_display_post_states' ), 10, 2 );
     }
 
     public function load_profile_actions_and_filters($instance) {
@@ -208,10 +209,11 @@ final class UsersWP {
         add_filter( 'edit_profile_url', array($instance, 'uwp_modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
         add_filter( 'get_comment_author_link', array($instance, 'uwp_get_comment_author_link') , 10 , 2 );
-        add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 1 );
+        add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 4 );
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
-        add_action( 'uwp_profile_title', array($instance, 'get_profile_title'), 10, 1 );
-        add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 1 );
+        add_action( 'uwp_profile_title', array($instance, 'get_profile_title'), 10, 2 );
+        add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 2 );
+        add_action( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );
 
         //Fields as tabs
         add_action( 'uwp_available_tab_items', array($instance, 'uwp_extra_fields_available_tab_items'), 10, 1 );
@@ -229,6 +231,7 @@ final class UsersWP {
         add_action( 'uwp_admin_profile_edit', array($instance, 'uwp_image_crop_init'), 10, 1 );
 
         // Profile Tabs
+        add_action( 'uwp_profile_body', array($instance, 'get_profile_body'), 10, 1 );
         add_action( 'uwp_profile_content', array($instance, 'get_profile_tabs_content'), 10, 1 );
         add_action( 'uwp_profile_more_info_tab_content', array($instance, 'get_profile_more_info'), 10, 1);
         add_action( 'uwp_profile_posts_tab_content', array($instance, 'get_profile_posts'), 10, 1);
@@ -344,7 +347,7 @@ final class UsersWP {
         add_action('admin_head', array($instance, 'uwp_admin_only_css'));
     }
 
-    public function uwp_register_widgets(){
+    public function register_widgets(){
         register_widget("UWP_Register_Widget");
         register_widget("UWP_Forgot_Widget");
         register_widget("UWP_Login_Widget");
@@ -353,6 +356,13 @@ final class UsersWP {
         register_widget("UWP_Users_Widget");
         register_widget("UWP_Account_Widget");
         register_widget("UWP_Profile_Widget");
+        register_widget("UWP_Profile_Header_Widget");
+        register_widget("UWP_Profile_Title_Widget");
+        register_widget("UWP_Profile_Social_Widget");
+        register_widget("UWP_Profile_Content_Widget");
+        register_widget("UWP_Profile_Buttons_Widget");
+        register_widget("UWP_Profile_Bio_Widget");
+        register_widget("UWP_Profile_Section_Widget");
         register_widget("UWP_Author_Box_Widget");
     }
 
@@ -585,9 +595,44 @@ final class UsersWP {
         require_once( dirname(dirname( __FILE__ )) .'/widgets/account.php' );
 
         /**
-         * The class for register widget.
+         * The class for profile widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/profile.php' );
+
+        /**
+         * The class for profile sections widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-section.php' );
+
+        /**
+         * The class profile header widget
+         */
+        require_once dirname(dirname( __FILE__ )) . '/widgets/profile-header.php';
+
+        /**
+         * The class for profile title widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-title.php' );
+
+        /**
+         * The class for profile social fields widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-social.php' );
+
+        /**
+         * The class for user's bio widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-bio.php' );
+
+        /**
+         * The class for profile buttons fields widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-buttons.php' );
+
+        /**
+         * The class for profile content widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-content.php' );
 
         /**
          * The class for author box widget.

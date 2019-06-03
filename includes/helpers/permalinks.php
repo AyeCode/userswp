@@ -316,7 +316,7 @@ function uwp_get_page_url_data($page_type, $output_type = 'link') {
  * @since       1.0.0
  * @package     userswp
  *
- * @param       string      $page_data      Page data array.
+ * @param       array      $page_data      Page data array.
  * @param       string      $page_type      Page type.
  *
  * @return      array                       Page data array.
@@ -331,7 +331,7 @@ function uwp_get_page_url_page_data($page_data, $page_type) {
             'link' => get_permalink( $page->ID ),
         );
     }
-    return $page_data;
+    return apply_filters('uwp_page_url_data', $page_data);
 }
 
 
@@ -428,6 +428,12 @@ function uwp_get_redirect_url($redirect_page_id, $data){
     } elseif (isset($data['redirect_to']) && !empty($data['redirect_to'])) {
         $redirect_to = esc_url($data['redirect_to']);
     } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
+        if (uwp_is_wpml()) {
+            $wpml_page_id = uwp_wpml_object_id($redirect_page_id, 'page', true, ICL_LANGUAGE_CODE);
+            if (!empty($wpml_page_id)) {
+                $redirect_page_id = $wpml_page_id;
+            }
+        }
         $redirect_to = get_permalink($redirect_page_id);
     } else {
         if ( current_user_can('manage_options') ) {

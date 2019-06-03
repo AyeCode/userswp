@@ -130,7 +130,7 @@ class UsersWP_Background_Updater extends WP_Background_Process {
      * @since 2.0.0
 	 */
 	protected function complete() {
-		uwp_error_log( 'Data update complete' );
+		uwp_error_log( 'UsersWP data update complete.' );
 		parent::complete();
 	}
 }

@@ -95,11 +95,11 @@ UsersWP is 100% translatable.
 
 Automatic installation is the easiest option. To do an automatic install of UsersWP, log in to your WordPress dashboard, navigate to the Plugins menu and click Add New.
 
-In the search field type UsersWP and click Search Plugins. Once you've found our plugin you install it by simply clicking Install Now. [UsersWP installation](https://userswp.io/docs/2017/02/24/userswp-overview/)
+In the search field type UsersWP and click Search Plugins. Once you've found our plugin you install it by simply clicking Install Now. [UsersWP installation](https://userswp.io/docs/userswp-overview/)
 
 = Manual installation =
 
-The manual installation method involves downloading UsersWP and uploading it to your webserver via your favourite FTP application. The WordPress codex will tell you more [here](http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
+The manual installation method involves downloading UsersWP and uploading it to your webserver via your favourite FTP application. The WordPress codex will tell you more [here](https://wordpress.org/support/article/managing-plugins/#manual-plugin-installation).
 
 = Updating =
 
@@ -119,6 +119,18 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.1.2 =
+* Allow to disable avatar image override by UsersWP plugin - ADDED
+* Author box breaking the sites with elementor - FIXED
+* UsersWP pages URL fixes for Polylang compatibility - FIXED
+* Missing fields in Form builder for account and register forms in multisite - FIXED
+* Add select all to add UsersWP menu items - ADDED
+* Allow admin to approve users having pending email verification - ADDED
+* Shortcodes for profile page individual elements for preview in builder like elementor - ADDED
+* New parameters for profile page individual shortcodes - ADDED
+* Display states for UWP pages in page list table - ADDED
+* Social icon not showing icon image if set from backend - FIXED
 
 = 1.1.1 =
 * Redirect not working after registration for auto approve auto login - FIXED

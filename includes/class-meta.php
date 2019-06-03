@@ -178,6 +178,10 @@ class UsersWP_Meta {
             'uwp_account_last_name' => $user_data->last_name,
         );
 
+        foreach ($user_meta as $key => $meta){
+            do_action('sync_usermeta_on_register', $user_id, $key, $meta); // for adding points via mycred add on.
+        }
+
         $users = $wpdb->get_var($wpdb->prepare("SELECT COUNT(user_id) FROM {$meta_table} WHERE user_id = %d", $user_id));
 
         if($users){
@@ -313,7 +317,7 @@ class UsersWP_Meta {
     public function uwp_user_row_actions($actions, $user_object){
         $user_id = $user_object->ID;
         $mod_value = get_user_meta( $user_id, 'uwp_mod', true );
-        $delete_link = add_query_arg(
+        $resend_link = add_query_arg(
             array(
                 'user_id' => $user_id,
                 'action'    => 'uwp_resend',
@@ -321,8 +325,19 @@ class UsersWP_Meta {
             ),
             admin_url( 'users.php' )
         );
+
+        $activate_link = add_query_arg(
+            array(
+                'user_id' => $user_id,
+                'action'    => 'uwp_activate_user',
+                '_nonce'  => wp_create_nonce('uwp_activate_user'),
+            ),
+            admin_url( 'users.php' )
+        );
+
         if ($mod_value == 'email_unconfirmed') {
-            $actions['uwp_resend_activation'] = "<a class='' href='" . $delete_link . "'>" . __( 'Resend Activation','ultimate-member') . "</a>";
+            $actions['uwp_resend_activation'] = "<a class='' href='" . $resend_link . "'>" . __( 'Resend Activation','userswp') . "</a>";
+            $actions['uwp_auto_activate'] = "<a class='' href='" . $activate_link . "'>" . __( 'Approve','userswp') . "</a>";
         }
 
         return $actions;
@@ -351,24 +366,34 @@ class UsersWP_Meta {
             }
             wp_redirect( add_query_arg( 'update', 'uwp_resend', admin_url('users.php') ) );
             exit();
+        } elseif($user_id && 'uwp_activate_user' == $action && wp_verify_nonce( $nonce,'uwp_activate_user')){
+            if(is_admin() && current_user_can('edit_users')){
+                $this->uwp_activate_user($user_id);
+                wp_redirect( add_query_arg( 'update', 'uwp_activate_user', admin_url('users.php') ) );
+            }
         }
     }
 
     public function uwp_users_bulk_actions($bulk_actions){
         $bulk_actions['uwp_resend'] = __( 'Resend Activation', 'userswp');
+        $bulk_actions['uwp_activate_user'] = __( 'Approve User(s)', 'userswp');
         return $bulk_actions;
     }
 
     public function uwp_handle_users_bulk_actions($redirect_to, $doaction, $user_ids){
-        if ( 'uwp_resend' !== $doaction ) {
-            return $redirect_to;
+        if ( 'uwp_resend' == $doaction ) {
+            foreach ( $user_ids as $user_id ) {
+                $this->uwp_resend_activation_mail($user_id);
+            }
+
+            $redirect_to = add_query_arg( 'update', 'uwp_resend', $redirect_to );
+        } elseif('uwp_activate_user' == $doaction){
+            foreach ( $user_ids as $user_id ) {
+                $this->uwp_activate_user($user_id);
+            }
+            $redirect_to = add_query_arg( 'update', 'uwp_activate_user', $redirect_to );
         }
 
-        foreach ( $user_ids as $user_id ) {
-            $this->uwp_resend_activation_mail($user_id);
-        }
-
-        $redirect_to = add_query_arg( 'update', 'uwp_resend', $redirect_to );
         return $redirect_to;
     }
 
@@ -384,6 +409,18 @@ class UsersWP_Meta {
         return true;
     }
 
+    public function uwp_activate_user($user_id = 0){
+        if(!$user_id){
+            return false;
+        }
+
+        if( 'email_unconfirmed' == get_user_meta( $user_id, 'uwp_mod', true )){
+            update_user_meta( $user_id, 'uwp_mod', '' );
+        }
+
+        return true;
+    }
+
     public function uwp_show_update_messages(){
         if ( !isset($_REQUEST['update']) ) return;
 
@@ -396,6 +433,9 @@ class UsersWP_Meta {
                 break;
             case 'err_uwp_resend':
                 $messages['err_msg'] = __('Error while sending activation email. Please try again.','userswp');
+                break;
+            case 'uwp_activate_user':
+                $messages['msg'] = __('User(s) has been activated!','userswp');
                 break;
         }
 

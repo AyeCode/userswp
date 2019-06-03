@@ -1260,7 +1260,7 @@ function get_usermeta_table_prefix() {
  */
 function uwp_maybe_serialize($key, $value) {
     $field = uwp_get_custom_field_info($key);
-    if (isset($field->field_type) && $field->field_type == 'multiselect') {
+    if (isset($field->field_type) && $field->field_type == 'multiselect' && is_array($value)) {
         $value = implode(",", $value);
     }
     return $value;
@@ -1415,7 +1415,7 @@ function uwp_field_type_to_fa_icon($type) {
  * @return True if WPML is active else False.
  */
 function uwp_is_wpml() {
-    if (class_exists('SitePress') && function_exists('icl_object_id')) {
+    if (function_exists('icl_object_id')) {
         return true;
     }
 
@@ -1497,81 +1497,6 @@ function uwp_refresh_permalinks_on_bad_404() {
     }
 }
 add_action( 'template_redirect', 'uwp_refresh_permalinks_on_bad_404' );
-
-add_filter( 'avatar_defaults', 'uwp_avatar_defaults' , 99999 , 6 );
-/*
- * Remove get_avatar filter applied by UWP for default avatars in settings
- * @param array $avatar_defaults default avatars
- * @return array $avatar_defaults default avatars
- *
- */
-function uwp_avatar_defaults($avatar_defaults){
-    remove_filter('get_avatar', 'uwp_modify_get_avatar', 99999, 6);
-    return $avatar_defaults;
-}
-
-remove_all_filters('get_avatar');
-add_filter( 'get_avatar', 'uwp_modify_get_avatar' , 99999 , 6 );
-/**
- * Modifies get_avatar function to use userswp avatar.
- *
- * @since       1.0.0
- * @package     userswp
- * @param       string      $avatar         img tag value for the user's avatar.
- * @param       mixed       $id_or_email    The Gravatar to retrieve. Accepts a user_id, gravatar md5 hash,
- *                                          user email, WP_User object, WP_Post object, or WP_Comment object.
- * @param       int         $size           Square avatar width and height in pixels to retrieve.
- * @param       string      $default        URL for the default image or a default type. Accepts '404', 'retro', 'monsterid',
- *                                          'wavatar', 'indenticon','mystery' (or 'mm', or 'mysteryman'), 'blank', or 'gravatar_default'.
- *                                          Default is the value of the 'avatar_default' option, with a fallback of 'mystery'.
- * @param       string      $alt            Alternative text to use in the avatar image tag. Default empty.
- * @return      string                      Modified img tag value
- */
-function uwp_modify_get_avatar( $avatar, $id_or_email, $size, $default, $alt, $args )
-{
-    $user = false;
-
-    if (is_numeric($id_or_email)) {
-
-        $id = (int)$id_or_email;
-        $user = get_user_by('id', $id);
-
-    } elseif (is_object($id_or_email)) {
-
-        if (!empty($id_or_email->user_id)) {
-            $id = (int)$id_or_email->user_id;
-            $user = get_user_by('id', $id);
-        }
-
-    } else {
-        $user = get_user_by('email', $id_or_email);
-    }
-
-    if ($user && is_object($user)) {
-        $avatar_thumb = uwp_get_usermeta($user->data->ID, 'uwp_account_avatar_thumb', '');
-        if (!empty($avatar_thumb)) {
-            $uploads = wp_upload_dir();
-            $upload_url = $uploads['baseurl'];
-            if (substr($avatar_thumb, 0, 4) !== "http") {
-                $avatar_thumb = $upload_url . $avatar_thumb;
-            }
-            $avatar = "<img alt='{$alt}' src='{$avatar_thumb}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
-        } else {
-            $default = uwp_get_default_avatar_uri();
-            $args = get_avatar_data($id_or_email, $args);
-            $url = $args['url'];
-            $url = remove_query_arg('d', $url);
-            $url = add_query_arg(array('d' => $default), $url);
-            if (!$url || is_wp_error($url)) {
-                return $avatar;
-            }
-            $avatar = '<img src="' . $url . '" class="gravatar avatar avatar-' . $size . ' uwp-avatar" width="' . $size . '" height="' . $size . '" alt="' . $alt . '" />';
-        }
-
-    }
-
-    return $avatar;
-}
 
 /**
  * Handles multisite upload dir path
@@ -1880,18 +1805,30 @@ function uwp_get_posttypes() {
  * @package     userswp
  *
  * @param       string      Field icon value.
- * @return      array       Field icon element.
+ * @return      string       Field icon element.
  */
 function uwp_get_field_icon( $value ) {
     $field_icon = $value;
 
     if ( ! empty( $value ) ) {
-        if ( strpos( $value, 'http' ) === 0 ) {
+        if (strpos($value, 'http') === 0) {
             $field_icon = '<span class="uwp_field_icon" style="background: url(' . $value . ') no-repeat left center;padding-left:14px;background-size:100% auto;margin-right:5px"></span>';
-        } else if ( strpos($value, ' fa-') !== false ) {
+        } else {
             $field_icon = '<i class="uwp_field_icon ' . $value . '"></i>';
         }
     }
 
     return apply_filters( 'uwp_get_field_icon', $field_icon, $value );
+}
+
+function uwp_get_user_by_author_slug(){
+    $url_type = apply_filters('uwp_profile_url_type', 'slug');
+    $author_slug = get_query_var('uwp_profile');
+    if ($url_type == 'id') {
+        $user = get_user_by('id', $author_slug);
+    } else {
+        $user = get_user_by('slug', $author_slug);
+    }
+
+    return $user;
 }

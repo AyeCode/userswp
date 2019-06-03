@@ -74,6 +74,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
             'profile' => __( 'Profile', 'userswp' ),
             'users' => __( 'Users', 'userswp' ),
             'authorbox' => __( 'Author box', 'userswp' ),
+            'developer' => __( 'Developer', 'userswp' ),
         );
 
         return apply_filters( 'uwp_get_sections_' . $this->id, $sections );
@@ -485,7 +486,29 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 
                 array( 'type' => 'sectionend', 'id' => 'authorbox_options' ),
             ));
-		} else {
+        }else if ( 'developer' == $current_section ) {
+            /**
+             * Filter general settings array.
+             *
+             * @package userswp
+             */
+            $settings = apply_filters( 'uwp_developer_options', array(
+                array(
+                    'title' => __( 'Developer Settings', 'userswp' ),
+                    'type'  => 'title',
+                    'id'    => 'developer_options',
+                ),
+
+                array(
+                    'id'   => 'disable_avatar_override',
+                    'name' => __( 'Disable Avatar Override?', 'userswp' ),
+                    'desc' => __( 'By default UsersWP will change the avatar to profile image. You can disable this using this option.', 'userswp' ),
+                    'type' => 'checkbox',
+                ),
+
+                array( 'type' => 'sectionend', 'id' => 'developer_options' ),
+            ));
+        } else {
 			/**
 			 * Filter general settings array.
 			 *
