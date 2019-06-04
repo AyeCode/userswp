@@ -131,6 +131,7 @@ No questions so far, but don't hesitate to ask!
 * New parameters for profile page individual shortcodes - ADDED
 * Display states for UWP pages in page list table - ADDED
 * Social icon not showing icon image if set from backend - FIXED
+* Updated Font Awesome version to 1.0.11 - CHANGED
 
 = 1.1.1 =
 * Redirect not working after registration for auto approve auto login - FIXED

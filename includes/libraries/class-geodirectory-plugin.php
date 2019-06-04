@@ -744,7 +744,7 @@ class UsersWP_GeoDirectory_Plugin {
                             if (has_post_thumbnail()) {
                                 $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
                             } else {
-                                $thumb_url = USERSWP_PLUGIN_URL."/assets/images/no_thumb.png";
+                                $thumb_url = uwp_get_default_thumb_uri();
                             }
                             ?>
                             <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">

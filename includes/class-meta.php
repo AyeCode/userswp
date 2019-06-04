@@ -337,7 +337,7 @@ class UsersWP_Meta {
 
         if ($mod_value == 'email_unconfirmed') {
             $actions['uwp_resend_activation'] = "<a class='' href='" . $resend_link . "'>" . __( 'Resend Activation','userswp') . "</a>";
-            $actions['uwp_auto_activate'] = "<a class='' href='" . $activate_link . "'>" . __( 'Approve','userswp') . "</a>";
+            $actions['uwp_auto_activate'] = "<a class='' href='" . $activate_link . "'>" . __( 'Activate User','userswp') . "</a>";
         }
 
         return $actions;
