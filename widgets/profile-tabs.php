@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * UsersWP profile user title widget.
+ * UsersWP profile tabs widget.
  *
  * @since 1.1.2
  */
-class UWP_Profile_Content_Widget extends WP_Super_Duper {
+class UWP_Profile_Tabs_Widget extends WP_Super_Duper {
 
     /**
-     * Register the profile content widget with WordPress.
+     * Register the profile tabs widget with WordPress.
      *
      */
     public function __construct() {
@@ -23,12 +23,12 @@ class UWP_Profile_Content_Widget extends WP_Super_Duper {
             'block-category'=> 'widgets',
             'block-keywords'=> "['userswp','profile']",
             'class_name'     => __CLASS__,
-            'base_id'       => 'uwp_profile_content',
-            'name'          => __('UWP > Profile Content','userswp'),
+            'base_id'       => 'uwp_profile_tabs',
+            'name'          => __('UWP > Profile Tabs','userswp'),
             'no_wrap'       => true,
             'widget_ops'    => array(
-                'classname'   => 'uwp-profile-content',
-                'description' => esc_html__('Displays profile tabs and content.','userswp'),
+                'classname'   => 'uwp-profile-tabs',
+                'description' => esc_html__('Displays profile tabs.','userswp'),
             ),
             'arguments'     => array(
                 'title'  => array(
@@ -55,11 +55,11 @@ class UWP_Profile_Content_Widget extends WP_Super_Duper {
             $user = get_userdata(get_current_user_id());
         }
 
-        $enable_profile_content = uwp_get_option('enable_profile_body');
+        $enable_profile_body = uwp_get_option('enable_profile_body');
 
         ob_start();
 
-        if ($enable_profile_content == '1') {
+        if (1 == $enable_profile_body) {
 
             do_action('uwp_profile_content', $user);
 

@@ -278,6 +278,7 @@ final class UsersWP {
         add_filter( 'wp_setup_nav_menu_item', array($instance, 'uwp_setup_nav_menu_item'), 10, 1 );
         add_filter( 'the_content', array($instance, 'uwp_author_page_content'), 10, 1 );
         add_filter( 'the_content', array($instance, 'uwp_author_box_page_content'), 10, 1 );
+        add_filter( 'the_content', array($instance, 'setup_singular_page_content'), 10, 1 );
         add_filter( 'body_class', array($instance, 'uwp_add_body_class'), 10, 1 );
 
         // filter the login and register url
@@ -359,10 +360,11 @@ final class UsersWP {
         register_widget("UWP_Profile_Header_Widget");
         register_widget("UWP_Profile_Title_Widget");
         register_widget("UWP_Profile_Social_Widget");
-        register_widget("UWP_Profile_Content_Widget");
+        register_widget("UWP_Profile_Tabs_Widget");
         register_widget("UWP_Profile_Buttons_Widget");
         register_widget("UWP_Profile_Bio_Widget");
         register_widget("UWP_Profile_Section_Widget");
+        register_widget("UWP_User_Meta_Widget");
         register_widget("UWP_Author_Box_Widget");
     }
 
@@ -632,7 +634,12 @@ final class UsersWP {
         /**
          * The class for profile content widget.
          */
-        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-content.php' );
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-tabs.php' );
+
+        /**
+         * The class for user meta widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/user-meta.php' );
 
         /**
          * The class for author box widget.

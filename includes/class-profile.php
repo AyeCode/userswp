@@ -21,7 +21,7 @@ class UsersWP_Profile {
         }
         $profile_access = apply_filters('uwp_profile_access', true, $user);
         if ($profile_access) {
-            echo do_shortcode("[uwp_profile_header][uwp_profile_section position='left' type='open'][uwp_profile_title][uwp_profile_social][uwp_profile_bio][uwp_profile_buttons][uwp_profile_section position='left' type='close'][uwp_profile_section position='right' type='open'][uwp_profile_content][uwp_profile_section position='right' type='close']");
+            echo do_shortcode("[uwp_profile_header]\n[uwp_profile_section position='left' type='open']\n[uwp_profile_title]\n[uwp_profile_social]\n[uwp_profile_bio]\n[uwp_profile_buttons]\n[uwp_profile_section position='left' type='close']\n[uwp_profile_section position='right' type='open']\n[uwp_profile_tabs]\n[uwp_profile_section position='right' type='close']");
         } else {
             do_action('uwp_profile_access_denied', $user);
         }
@@ -1918,7 +1918,7 @@ class UsersWP_Profile {
                 $value = esc_html( $value );
         }
 
-        if($field->field_type_key == 'country'){
+        if(isset($field->field_type_key) && $field->field_type_key == 'country'){
             $value = uwp_output_country_html($value);
         }
 

@@ -618,6 +618,69 @@ class UsersWP_Templates {
 
     }
 
+    public static function setup_singular_page_content($content){
+
+        global $post,$wp_query;
+
+        if(!is_uwp_page()){
+            return $content;
+        }
+
+        if ( ! ( ! empty( $wp_query ) && ! empty( $post ) && ( $post->ID == get_queried_object_id() ) ) ) {
+            return $content;
+        }
+
+        /*
+         * Some page builders need to be able to take control here so we add a filter to bypass it on the fly
+         */
+        if(apply_filters('uwp_bypass_setup_singular_page',false)){
+            return $content;
+        }
+
+        remove_filter( 'the_content', array( __CLASS__, 'setup_singular_page_content' ) );
+
+        if(in_the_loop()) {
+            $content = get_post_field( 'post_content', $post->ID );
+
+            if ( $content == '' ) {
+                if (is_uwp_profile_page()) {
+                    $content = '[uwp_profile]';
+                } elseif(is_uwp_register_page()){
+                    $content = '[uwp_register]';
+                } elseif(is_uwp_login_page()){
+                    $content = '[uwp_login]';
+                } elseif(is_uwp_forgot_page()){
+                    $content = '[uwp_forgot]';
+                } elseif(is_uwp_change_page()){
+                    $content = '[uwp_change]';
+                } elseif(is_uwp_reset_page()){
+                    $content = '[uwp_reset]';
+                } elseif(is_uwp_account_page()){
+                    $content = '[uwp_account]';
+                } elseif(is_uwp_users_page()){
+                    $content = '[uwp_users]';
+                } else{
+                    // do nothing
+                }
+
+                // run the shortcodes on the content
+                $content = do_shortcode( $content );
+
+                // run block content if its available
+                if(function_exists('do_blocks')){
+                    $content = do_blocks( $content );
+                }
+            }
+
+        }
+
+        // add our filter back
+        add_filter( 'the_content', array( __CLASS__, 'setup_singular_page_content' ) );
+
+
+        return $content;
+    }
+
     /**
      * Modifies the menu item visibility based on UsersWP page type.
      *
