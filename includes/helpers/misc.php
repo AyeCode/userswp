@@ -406,9 +406,10 @@ function get_uwp_users_list() {
             }
         }
 
-        $users_query = new WP_User_Query($args);
-        $users = $users_query->get_results();
-        $total_user = $users_query->get_total();
+        global $uwp_users_query;
+        $uwp_users_query = new WP_User_Query($args);
+        $users = $uwp_users_query->get_results();
+        $total_user = $uwp_users_query->get_total();
 
     }
 
@@ -444,7 +445,7 @@ function get_uwp_users_list() {
                             </h3>
                         </div>
                         <div class="uwp-users-list-user-btns">
-                            <?php do_action('uwp_profile_buttons', $user_obj ); ?>
+                            <?php do_action('uwp_user_actions', $user_obj ); ?>
                         </div>
                         <div class="uwp-users-list-user-social">
                             <?php do_action('uwp_profile_social', $user_obj ); ?>
@@ -465,12 +466,6 @@ function get_uwp_users_list() {
         }
         ?>
     </ul>
-
-    <?php
-    if ($total_pages > 1) {
-        do_action('uwp_profile_pagination', $total_pages);
-    }
-    ?>
     <?php
 }
 
@@ -1831,4 +1826,32 @@ function uwp_get_user_by_author_slug(){
     }
 
     return $user;
+}
+
+function uwp_get_show_in_locations(){
+    $show_in_locations = array(
+        "[users]" => __("Users Page", 'userswp'),
+        "[more_info]" => __("More info tab", 'userswp'),
+        "[own_tab]" => __("Profile page own tab", 'userswp'),
+        "[profile_side]" => __("Profile side", 'userswp'),
+        "[fieldset]" => __("Fieldset", 'userswp'),
+    );
+
+    $show_in_locations = apply_filters('uwp_show_in_locations', $show_in_locations);
+
+    return $show_in_locations;
+}
+
+function uwp_get_layout_options(){
+    $layouts = array(
+        'list' => __( 'List View', 'userswp' ),
+        '2col' => __( 'Grid View - 2 Column', 'userswp' ),
+        '3col' => __( 'Grid View - 3 Column', 'userswp' ),
+        '4col' => __( 'Grid View - 4 Column', 'userswp' ),
+        '5col' => __( 'Grid View - 5 Column', 'userswp' ),
+    );
+
+    $layouts = apply_filters('uwp_available_users_layout', $layouts);
+
+    return $layouts;
 }

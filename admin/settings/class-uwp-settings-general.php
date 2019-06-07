@@ -165,6 +165,14 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'class'      => 'uwp-select',
                     'desc_tip' => true,
                 ),
+                array(
+                    'name'     => __( 'Users List Item Page', 'userswp' ),
+                    'desc'     => __( 'This is the page/template for displaying user item in users list page. You can change the template as you want which will apply to each user item in users list page.', 'userswp' ),
+                    'id'       => 'user_list_item_page',
+                    'type'     => 'single_select_page',
+                    'class'      => 'uwp-select',
+                    'desc_tip' => true,
+                ),
 				array( 'type' => 'sectionend', 'id' => 'page_options' ),
 			));
         } else if ( 'register' == $current_section ) {

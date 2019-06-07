@@ -131,12 +131,13 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
         }
 
         $fields = $wpdb->get_results("SELECT site_title,field_icon,htmlvar_name,field_type FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = 'uwp_account_".$args['key']."'");
-        $field = $fields[0];
-        $value = $output = $label = '';
 
-        if(!$field){
+        if(!$fields){
             return '';
         }
+
+        $field = $fields[0];
+        $value = $output = $label = '';
 
         if ($field->field_icon != '') {
             $icon = uwp_get_field_icon($field->field_icon);

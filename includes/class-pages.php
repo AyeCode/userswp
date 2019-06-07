@@ -38,6 +38,7 @@ class UsersWP_Pages {
                         $this->is_account_page() ||
                         $this->is_profile_page() ||
                         $this->is_users_page() ||
+                        $this->is_user_item_page() ||
                         $this->is_multi_register_page()) {
                         return true;
                     } else {
@@ -138,6 +139,17 @@ class UsersWP_Pages {
      */
     public function is_users_page() {
         return $this->is_page('users_page');
+    }
+
+    /**
+     * Checks whether the current page is users page or not.
+     *
+     * @since       1.1.2
+     * @package     userswp
+     * @return      bool
+     */
+    public function is_user_item_page() {
+        return $this->is_page('user_list_item_page');
     }
 
     /**
@@ -400,7 +412,8 @@ class UsersWP_Pages {
         $this->create_page(esc_sql(_x('change',     'page_slug', 'userswp')), 'change_page',    __('Change Password',   'userswp'), '[uwp_change]');
         $this->create_page(esc_sql(_x('profile',    'page_slug', 'userswp')), 'profile_page',   __('Profile',           'userswp'), '[uwp_profile]');
         $this->create_page(esc_sql(_x('users',      'page_slug', 'userswp')), 'users_page',     __('Users',             'userswp'), '[uwp_users]');
-    
+        $this->create_page(esc_sql(_x('user-list-item',  'page_slug', 'userswp')), 'user_list_item_page', __('Users List Item', 'userswp'), UsersWP_Defaults::page_user_list_item_content());
+
     }
 
     

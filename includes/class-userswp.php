@@ -211,7 +211,7 @@ final class UsersWP {
         add_filter( 'get_comment_author_link', array($instance, 'uwp_get_comment_author_link') , 10 , 2 );
         add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 4 );
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
-        add_action( 'uwp_profile_title', array($instance, 'get_profile_title'), 10, 2 );
+        add_action( 'uwp_user_title', array($instance, 'get_profile_title'), 10, 2 );
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 2 );
         add_action( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );
 
@@ -240,12 +240,16 @@ final class UsersWP {
 
         // Profile Pagination
         add_action( 'uwp_profile_pagination', array($instance, 'get_profile_pagination'));
+        add_action( 'uwp_users_loop_pagination', array($instance, 'get_profile_pagination'));
 
         // Users
         add_action( 'uwp_users_search', array($instance, 'uwp_users_search'));
+        add_action( 'uwp_users_views', array($instance, 'uwp_users_views'));
+        add_action( 'uwp_users_sorting', array($instance, 'uwp_users_sortby'));
+        add_action( 'uwp_users_loop', array($instance, 'uwp_users_list'));
         add_action( 'uwp_users_list', array($instance, 'uwp_users_list'));
         add_action( 'uwp_users_extra', array($instance, 'get_users_extra'));
-        add_action( 'uwp_profile_bio', array($instance, 'get_profile_side_extra'));
+        add_action( 'uwp_output_location', array($instance, 'show_output_location_data'), 10, 2);
         add_action( 'wpdiscuz_profile_url', array($instance, 'uwp_wpdiscuz_profile_url'), 10, 2);
 
         // User, allow subscribers to upload profile and banner pictures
@@ -357,14 +361,21 @@ final class UsersWP {
         register_widget("UWP_Users_Widget");
         register_widget("UWP_Account_Widget");
         register_widget("UWP_Profile_Widget");
+
         register_widget("UWP_Profile_Header_Widget");
-        register_widget("UWP_Profile_Title_Widget");
         register_widget("UWP_Profile_Social_Widget");
         register_widget("UWP_Profile_Tabs_Widget");
-        register_widget("UWP_Profile_Buttons_Widget");
-        register_widget("UWP_Profile_Bio_Widget");
         register_widget("UWP_Profile_Section_Widget");
+
+        register_widget("UWP_User_Title_Widget");
         register_widget("UWP_User_Meta_Widget");
+        register_widget("UWP_Users_Search_Widget");
+        register_widget("UWP_User_Views_Filter_Widget");
+        register_widget("UWP_User_Sorting_Filter_Widget");
+        register_widget("UWP_Users_Loop_Widget");
+        register_widget("UWP_Users_Loop_Pagination_Widget");
+        register_widget("UWP_User_Actions_Widget");
+        register_widget("UWP_Output_Location_Widget");
         register_widget("UWP_Author_Box_Widget");
     }
 
@@ -614,7 +625,7 @@ final class UsersWP {
         /**
          * The class for profile title widget.
          */
-        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-title.php' );
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/user-title.php' );
 
         /**
          * The class for profile social fields widget.
@@ -622,14 +633,9 @@ final class UsersWP {
         require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-social.php' );
 
         /**
-         * The class for user's bio widget.
-         */
-        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-bio.php' );
-
-        /**
          * The class for profile buttons fields widget.
          */
-        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-buttons.php' );
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/user-actions.php' );
 
         /**
          * The class for profile content widget.
@@ -640,6 +646,36 @@ final class UsersWP {
          * The class for user meta widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/user-meta.php' );
+
+        /**
+         * The class for users search widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/users-search.php' );
+
+        /**
+         * The class for user list views widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/user-views-filter.php' );
+
+        /**
+         * The class for user list sorting widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/user-sorting-filter.php' );
+
+        /**
+         * The class for users list widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/users-loop.php' );
+
+        /**
+         * The class for users list widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/users-loop-pagination.php' );
+
+        /**
+         * The class for output location widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/output-location.php' );
 
         /**
          * The class for author box widget.

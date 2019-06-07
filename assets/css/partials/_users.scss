@@ -65,7 +65,6 @@
     overflow: hidden;
   }
   .uwp-user-search {
-    float: left;
     input[type="text"] {
       padding: 9px;
     }
@@ -76,8 +75,11 @@
       display: inline-block !important;
     }
   }
+  .uwp-user-views{
+    float: left;
+  }
   .uwp-user-sort {
-    float: right;
+    float: left;
     #uwp_layout,
     #uwp_sort_by {
       height: 35px;
@@ -238,21 +240,19 @@
 }
 
 .uwp_page {
-  .uwp-content-wrap {
-    .uwp-users-list {
-      .uwp_listview {
-        .uwp-profile-avatar {
-          .uwp-profile-avatar-inner>img {
-            margin: 0 !important;
-            border: 0;
-          }
-          .uwp-profile-avatar-inner {
-            max-width: 150px;
-            width: 100%;
-            position: relative;
-            float: left;
-            margin: 0 20px 0 0;
-          }
+  .uwp-users-list {
+    .uwp_listview {
+      .uwp-profile-avatar {
+        .uwp-profile-avatar-inner>img {
+          margin: 0 !important;
+          border: 0;
+        }
+        .uwp-profile-avatar-inner {
+          max-width: 150px;
+          width: 100%;
+          position: relative;
+          float: left;
+          margin: 0 20px 0 0;
         }
       }
     }

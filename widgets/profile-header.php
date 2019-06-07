@@ -83,6 +83,10 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
 
         $args = wp_parse_args( $args, $defaults );
 
+        $args['hide_cover'] = !empty($args['hide_cover']) ? $args['hide_cover'] : 0;
+        $args['hide_avatar'] = !empty($args['hide_avatar']) ? $args['hide_avatar'] : 0;
+        $args['allow_change'] = !empty($args['allow_change']) ? $args['allow_change'] : 1;
+
         $args = apply_filters( 'uwp_widget_profile_header_args', $args, $widget_args, $this );
 
         ob_start();

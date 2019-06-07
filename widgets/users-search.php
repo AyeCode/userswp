@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * UsersWP profile user bio widget.
+ * UsersWP users search widget.
  *
  * @since 1.1.2
  */
-class UWP_Profile_Bio_Widget extends WP_Super_Duper {
+class UWP_Users_Search_Widget extends WP_Super_Duper {
 
     /**
-     * Register the profile user bio widget with WordPress.
+     * Register the profile users search widget with WordPress.
      *
      */
     public function __construct() {
@@ -21,14 +21,13 @@ class UWP_Profile_Bio_Widget extends WP_Super_Duper {
             'textdomain'    => 'userswp',
             'block-icon'    => 'admin-site',
             'block-category'=> 'widgets',
-            'block-keywords'=> "['userswp','profile']",
+            'block-keywords'=> "['userswp','user', 'search']",
             'class_name'     => __CLASS__,
-            'base_id'       => 'uwp_profile_bio',
-            'name'          => __('UWP > Profile Bio','userswp'),
-            'no_wrap'       => true,
+            'base_id'       => 'uwp_users_search',
+            'name'          => __('UWP > Users Search Form','userswp'),
             'widget_ops'    => array(
-                'classname'   => 'uwp-profile-bio',
-                'description' => esc_html__('Displays user\'s bio.','userswp'),
+                'classname'   => 'uwp-user-search',
+                'description' => esc_html__('Displays users search form.','userswp'),
             ),
             'arguments'     => array(
                 'title'  => array(
@@ -49,15 +48,9 @@ class UWP_Profile_Bio_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        $user = uwp_get_user_by_author_slug();
-
-        if(!$user && is_user_logged_in()){
-            $user = get_userdata(get_current_user_id());
-        }
-
         ob_start();
 
-        do_action('uwp_profile_bio', $user);
+        do_action('uwp_users_search');
 
         $output = ob_get_clean();
 

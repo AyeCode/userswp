@@ -223,6 +223,21 @@ A user has been registered recently on your website.
         );
     }
 
+    public static function page_user_list_item_content($no_filter = false){
+        $content = "[uwp_profile_avatar]
+        [uwp_profile_cover]
+[uwp_profile_title tag= 'h4']
+[uwp_profile_actions]
+[uwp_profile_social]
+[uwp_output_location location='users']";
+
+        if($no_filter){
+            return $content;
+        }else{
+            return apply_filters("uwp_page_user_list_item_default_content",$content);
+        }
+    }
+
 }
 
 

@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * UsersWP profile buttons widget.
+ * UsersWP user actions widget.
  *
  * @since 1.1.2
  */
-class UWP_Profile_Buttons_Widget extends WP_Super_Duper {
+class UWP_User_Actions_Widget extends WP_Super_Duper {
 
     /**
-     * Register the profile buttons widget with WordPress.
+     * Register the user actions widget with WordPress.
      *
      */
     public function __construct() {
@@ -21,14 +21,14 @@ class UWP_Profile_Buttons_Widget extends WP_Super_Duper {
             'textdomain'    => 'userswp',
             'block-icon'    => 'admin-site',
             'block-category'=> 'widgets',
-            'block-keywords'=> "['userswp','profile']",
+            'block-keywords'=> "['userswp','user']",
             'class_name'     => __CLASS__,
-            'base_id'       => 'uwp_profile_buttons',
-            'name'          => __('UWP > Profile Buttons','userswp'),
+            'base_id'       => 'uwp_user_actions',
+            'name'          => __('UWP > User Actions','userswp'),
             'no_wrap'       => true,
             'widget_ops'    => array(
-                'classname'   => 'uwp-profile-buttons',
-                'description' => esc_html__('Display user profile buttons.','userswp'),
+                'classname'   => 'uwp-user-actions',
+                'description' => esc_html__('Display user actions.','userswp'),
             ),
             'arguments'     => array(
                 'title'  => array(
@@ -57,7 +57,7 @@ class UWP_Profile_Buttons_Widget extends WP_Super_Duper {
 
         ob_start();
 
-        do_action('uwp_profile_buttons', $user);
+        do_action('uwp_user_actions', $user);
 
         $output = ob_get_clean();
 
