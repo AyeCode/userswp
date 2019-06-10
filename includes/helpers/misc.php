@@ -266,7 +266,7 @@ function uwp_error_log($log){
  * @since       1.0.0
  * @package     userswp
  *
- * @return      void
+ * @return   array $users array of users
  */
 function get_uwp_users_list() {
 
@@ -414,10 +414,9 @@ function get_uwp_users_list() {
     }
 
     $total_pages=ceil($total_user/$number);
-
-    $layout_class = uwp_get_layout_class();
+    return $users;
     ?>
-    <ul class="uwp-users-list-wrap <?php echo $layout_class; ?>" id="uwp_user_items_layout">
+    <ul class="uwp-users-list-wrap <?php echo apply_filters('uwp_users_list_ul_extra_class', 'list'); ?>" id="uwp_user_items_layout">
         <?php
         if ($users) {
             foreach ($users as $user) {
@@ -433,7 +432,7 @@ function get_uwp_users_list() {
                 ?>
                 <li class="uwp-users-list-user">
                     <div class="uwp-users-list-user-left">
-                        <?php do_action('uwp_users_profile_header', $user); ?>
+                        <?php do_action('uwp_profile_header', $user); ?>
                     </div>
                     <div class="uwp-users-list-user-right">
                         <div class="uwp-users-list-user-name">
@@ -496,9 +495,12 @@ function uwp_get_custom_field_info($htmlvar_name) {
  *
  * @return      string      Layout class.
  */
-function uwp_get_layout_class() {
-    $default_layout = uwp_get_option('users_default_layout', 'list');
-    switch ($default_layout) {
+function uwp_get_layout_class($layout) {
+    if(!$layout){
+        $layout = uwp_get_option('users_default_layout', 'list');
+    }
+
+    switch ($layout) {
         case "list":
             $class = "uwp_listview";
             break;
@@ -520,6 +522,8 @@ function uwp_get_layout_class() {
 
     return $class;
 }
+
+add_filter( 'uwp_users_list_ul_extra_class', 'uwp_get_layout_class', 10, 1 );
 
 add_filter( 'get_user_option_metaboxhidden_nav-menus', 'uwp_always_nav_menu_visibility', 10, 3 );
 
@@ -1854,4 +1858,33 @@ function uwp_get_layout_options(){
     $layouts = apply_filters('uwp_available_users_layout', $layouts);
 
     return $layouts;
+}
+
+function uwp_locate_template($template){
+
+    $temp_obj = new UsersWP_Templates();
+
+    $template_path = $temp_obj->uwp_locate_template($template);
+
+    return $template_path;
+
+}
+
+function uwp_no_users_found(){
+    uwp_locate_template( 'no-users-found.php' );
+}
+
+function uwp_get_displayed_user(){
+    global $uwp_user;
+    $user = uwp_get_user_by_author_slug();
+
+    if(!$user && is_user_logged_in()){
+        $user = get_userdata(get_current_user_id());
+    }
+
+    if($uwp_user instanceof WP_User && is_uwp_users_page()){
+        $user = $uwp_user;
+    }
+
+    return $user;
 }

@@ -246,7 +246,6 @@ final class UsersWP {
         add_action( 'uwp_users_search', array($instance, 'uwp_users_search'));
         add_action( 'uwp_users_views', array($instance, 'uwp_users_views'));
         add_action( 'uwp_users_sorting', array($instance, 'uwp_users_sortby'));
-        add_action( 'uwp_users_loop', array($instance, 'uwp_users_list'));
         add_action( 'uwp_users_list', array($instance, 'uwp_users_list'));
         add_action( 'uwp_users_extra', array($instance, 'get_users_extra'));
         add_action( 'uwp_output_location', array($instance, 'show_output_location_data'), 10, 2);

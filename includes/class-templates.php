@@ -51,6 +51,10 @@ class UsersWP_Templates {
             case 'users':
                 return $this->uwp_generic_locate_template('users');
                 break;
+
+            case 'users-list':
+                return $this->uwp_generic_locate_template('users-list');
+                break;
             
             case 'dashboard':
                 return $this->uwp_generic_locate_template('dashboard');
@@ -659,6 +663,8 @@ class UsersWP_Templates {
                     $content = '[uwp_account]';
                 } elseif(is_uwp_users_page()){
                     $content = '[uwp_users]';
+                } elseif(is_uwp_users_item_page()){
+                    $content = UsersWP_Defaults::page_user_list_item_content();
                 } else{
                     // do nothing
                 }
@@ -676,6 +682,35 @@ class UsersWP_Templates {
 
         // add our filter back
         add_filter( 'the_content', array( __CLASS__, 'setup_singular_page_content' ) );
+
+
+        return $content;
+    }
+
+    public static function users_list_item_template_content(){
+
+        /*
+         * Some page builders need to be able to take control here so we add a filter to bypass it on the fly
+         */
+        $bypass_content = apply_filters('uwp_bypass_users_list_item_template_content', '');
+        if ($bypass_content) {
+            return $bypass_content;
+        }
+        $item_page = uwp_get_option('user_list_item_page', 0);
+        $content = get_post_field('post_content', $item_page);
+
+        // if the content is blank then we grab the page defaults
+        if ($content == '') {
+            $content = UsersWP_Defaults::page_user_list_item_content();
+        }
+
+        // run the shortcodes on the content
+        $content = do_shortcode($content);
+
+        // run block content if its available
+        if (function_exists('do_blocks')) {
+            $content = do_blocks($content);
+        }
 
 
         return $content;

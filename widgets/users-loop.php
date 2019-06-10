@@ -49,9 +49,52 @@ class UWP_Users_Loop_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
+        global $layout_class;
+
+        $defaults = array(
+            'layout' => 'list',
+        );
+
+        $args = wp_parse_args( $args, $defaults );
+
+        $args = apply_filters( 'uwp_widget_users_loop_args', $args, $widget_args, $this );
+
+        $layout_class = uwp_get_layout_class( $args['layout'] );
+
         ob_start();
 
-        do_action('uwp_users_loop');
+        ?>
+
+        <div class="uwp-content-wrap">
+            <div class="uwp-users-list">
+
+                <?php do_action('uwp_users_search'); ?>
+
+                <ul class="uwp-users-list-wrap <?php echo $layout_class; ?>" id="uwp_user_items_layout">
+                    <?php
+                    global $uwp_user;
+                    $users = get_uwp_users_list();
+
+                    if($users){
+                        do_action( 'uwp_before_user_list_item' );
+
+                        foreach ($users as $uwp_user){
+                            $template = uwp_locate_template( 'users-list' );
+                            if ($template) {
+                                include($template);
+                            }
+                        }
+
+                        do_action( 'uwp_after_user_list_item' );
+                    } else {
+                        uwp_no_users_found();
+                    }
+                    ?>
+                </ul>
+            </div>
+        </div>
+
+        <?php
 
         $output = ob_get_clean();
 

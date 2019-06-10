@@ -68,11 +68,7 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        $user = uwp_get_user_by_author_slug();
-
-        if(!$user && is_user_logged_in()){
-            $user = get_userdata(get_current_user_id());
-        }
+        $user = uwp_get_displayed_user();
 
         $enable_profile_header = uwp_get_option('enable_profile_header');
         $defaults = array(

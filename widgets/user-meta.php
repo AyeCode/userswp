@@ -108,20 +108,19 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
-        $user = uwp_get_user_by_author_slug();
-
-        if(!$user && is_user_logged_in()){
-            $user = get_userdata(get_current_user_id());
-        }
+        $user = uwp_get_displayed_user();
 
         $defaults = array(
-            'user_id'  => $user->ID,
+            'user_id'  => '',
             'key'      => '',
             'show'     => '',
             'css_class'     => '',
         );
 
         $args = wp_parse_args( $args, $defaults );
+
+        $args = apply_filters( 'uwp_widget_user_meta_args', $args, $widget_args, $this );
+
         if(empty($args['user_id']) && !empty($user->ID)){
             $args['user_id'] = $user->ID;
         }

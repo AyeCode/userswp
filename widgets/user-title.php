@@ -45,7 +45,15 @@ class UWP_User_Title_Widget extends WP_Super_Duper {
                     ),
                     'default'  => 'h2',
                     'desc_tip' => true,
-                )
+                ),
+                'user_id'  => array(
+                    'title' => __('User ID:', 'userswp'),
+                    'desc' => __('Leave blank to use current user ID. For profile page it will take displayed user ID', 'userswp'),
+                    'type' => 'number',
+                    'desc_tip' => true,
+                    'default'  => '',
+                    'advanced' => true
+                ),
             )
 
         );
@@ -56,11 +64,7 @@ class UWP_User_Title_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        $user = uwp_get_user_by_author_slug();
-
-        if(!$user && is_user_logged_in()){
-            $user = get_userdata(get_current_user_id());
-        }
+        $user = uwp_get_displayed_user();
 
         $defaults = array(
             'tag'      => 'h2',
@@ -68,7 +72,12 @@ class UWP_User_Title_Widget extends WP_Super_Duper {
 
         $args = wp_parse_args( $args, $defaults );
 
+        $args = apply_filters( 'uwp_widget_user_title_args', $args, $widget_args, $this );
+
         $title_tag = empty( $args['tag'] ) ? 'h2' : apply_filters( 'uwp_widget_user_title_tag', $args['tag'], $args, $widget_args, $this );
+        if(empty($args['user_id']) && !empty($user->ID)){
+            $args['user_id'] = $user->ID;
+        }
 
         ob_start();
 

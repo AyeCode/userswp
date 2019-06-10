@@ -607,6 +607,10 @@ class UsersWP_Pages {
             $post_states['uwp_users_page'] = __( 'UWP Users Page', 'userswp' );
         }
 
+        if ( uwp_get_page_id( 'user_list_item_page' ) == $post->ID ) {
+            $post_states['uwp_user_list_item_page'] = __( 'UWP User Item Page', 'userswp' );
+        }
+
         if ( uwp_get_page_id( 'change_page' ) == $post->ID ) {
             $post_states['uwp_change_page'] = __( 'UWP Change Password Page', 'userswp' );
         }
