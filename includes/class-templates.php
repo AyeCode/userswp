@@ -17,51 +17,51 @@ class UsersWP_Templates {
      * @param       string      $template       Template type.
      * @return      string                      The template filename if one is located.
      */
-    public function uwp_locate_template( $template ) {
-        
+    public function uwp_locate_template( $template, $template_path = "" ) {
+
         switch ($template) {
             case 'register':
-                return $this->uwp_generic_locate_template('register');
+                $template_path = $this->uwp_generic_locate_template('register');
                 break;
 
             case 'login':
-                return $this->uwp_generic_locate_template('login');
+                $template_path = $this->uwp_generic_locate_template('login');
                 break;
 
             case 'forgot':
-                return $this->uwp_generic_locate_template('forgot');
+                $template_path = $this->uwp_generic_locate_template('forgot');
                 break;
 
             case 'change':
-                return $this->uwp_generic_locate_template('change');
+                $template_path = $this->uwp_generic_locate_template('change');
                 break;
 
             case 'reset':
-                return $this->uwp_generic_locate_template('reset');
+                $template_path = $this->uwp_generic_locate_template('reset');
                 break;
 
             case 'account':
-                return $this->uwp_generic_locate_template('account');
+                $template_path = $this->uwp_generic_locate_template('account');
                 break;
 
             case 'profile':
-                return $this->uwp_generic_locate_template('profile');
+                $template_path = $this->uwp_generic_locate_template('profile');
                 break;
 
             case 'users':
-                return $this->uwp_generic_locate_template('users');
+                $template_path = $this->uwp_generic_locate_template('users');
                 break;
 
-            case 'users-list':
-                return $this->uwp_generic_locate_template('users-list');
+            case 'users-list-item':
+                $template_path = $this->uwp_generic_locate_template('users-list-item');
                 break;
             
             case 'dashboard':
-                return $this->uwp_generic_locate_template('dashboard');
+                $template_path = $this->uwp_generic_locate_template('dashboard');
                 break;
         }
 
-        return apply_filters('uwp_locate_template', false, $template);
+        return apply_filters('uwp_locate_template', $template_path, $template);
     }
 
     /**
@@ -216,7 +216,6 @@ class UsersWP_Templates {
                         global $wp_query;
                         $wp_query->set_404();
                         status_header( 404 );
-                        get_template_part( 404 ); exit();
                     }
 
                 } else {
@@ -967,6 +966,11 @@ class UsersWP_Templates {
                         $content = do_shortcode('[uwp_author_box]').$content;
                     } else{
                         $content = $content.do_shortcode('[uwp_author_box]');
+                    }
+
+                    // run block content if its available
+                    if(function_exists('do_blocks')){
+                        $content = do_blocks( $content );
                     }
                 }
 

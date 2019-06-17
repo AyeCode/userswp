@@ -26,7 +26,7 @@ class UWP_Profile_Social_Widget extends WP_Super_Duper {
             'base_id'       => 'uwp_profile_social',
             'name'          => __('UWP > Profile Social','userswp'),
             'widget_ops'    => array(
-                'classname'   => 'uwp-profile-social',
+                'classname'   => 'uwp-users-list-user-social',
                 'description' => esc_html__('Displays fields which are selected to display in social location from form builder.','userswp'),
             ),
             'arguments'     => array(

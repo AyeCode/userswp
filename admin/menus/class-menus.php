@@ -240,6 +240,12 @@ class UsersWP_Menus {
         <?php
     }
 
+    /**
+     * Prepare items for nav menu page arguments
+     *
+     * @since 1.0.0
+     * @return mixed
+     */
     public function users_wp_admin_wp_nav_menu_page_args($users_wp_menu_items) {
         // If there's nothing to show, we're done
         if ( count( $users_wp_menu_items ) < 1 ) {
@@ -263,5 +269,22 @@ class UsersWP_Menus {
         }
 
         return $page_args;
+    }
+
+    /**
+     * Add UsersWP setting page link to the WP admin bar.
+     *
+     * @since 1.1.2
+     * @return void
+     */
+    public function admin_bar_menu($wp_admin_bar){
+        if ( current_user_can( 'manage_options' ) ) {
+            $wp_admin_bar->add_menu( array(
+                'parent' => 'appearance',
+                'id'     => 'userswp',
+                'title'  => __( 'UsersWP', 'userswp' ),
+                'href'   => admin_url( 'admin.php?page=userswp' )
+            ) );
+        }
     }
 }

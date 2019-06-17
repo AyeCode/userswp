@@ -34,13 +34,14 @@
       padding-bottom: 20px;
       overflow: hidden;
       list-style: none;
-      .uwp-users-list-user-name > h3 {
+      .uwp-profile-name > h3 {
         display: inline;
       }
     }
 
     .uwp-button-disable-wrap {
       visibility: hidden;
+      display: none;
     }
   }
 
@@ -55,16 +56,8 @@
     margin: 0 20px 0 0;
     max-width: 128px
   }
-  .uwp-users-list-sort-search input {
-    width: auto !important;
-    height: auto !important;
-    line-height: normal !important;
-  }
-  .uwp-users-list-sort-search {
-    margin-bottom: 30px;
-    overflow: hidden;
-  }
   .uwp-user-search {
+    float: left;
     input[type="text"] {
       padding: 9px;
     }
@@ -75,6 +68,7 @@
       display: inline-block !important;
     }
   }
+
   .uwp-user-views{
     float: left;
   }

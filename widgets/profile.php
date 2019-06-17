@@ -53,15 +53,9 @@ class UWP_Profile_Widget extends WP_Super_Duper {
 
         echo '<div class="uwp_widgets uwp_widget_profile">';
 
-        $temp_obj = new UsersWP_Templates();
-
-        $template = $temp_obj->uwp_locate_template('profile');
-
         echo '<div class="uwp_page">';
 
-        if ($template) {
-            include($template);
-        }
+        uwp_locate_template('profile');
 
         echo '</div>';
 

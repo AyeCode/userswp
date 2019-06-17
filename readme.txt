@@ -132,6 +132,8 @@ No questions so far, but don't hesitate to ask!
 * Display states for UWP pages in page list table - ADDED
 * Social icon not showing icon image if set from backend - FIXED
 * Updated Font Awesome version to 1.0.11 - CHANGED
+* Use 404 redirection instead of loading the 404.php from the theme for user profile not found - FIXED
+* Individual shortcodes and widgets for profile and users page for gutenberg blocks and elementor plugin - ADDED
 
 = 1.1.1 =
 * Redirect not working after registration for auto approve auto login - FIXED

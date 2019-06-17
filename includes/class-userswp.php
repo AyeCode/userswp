@@ -240,13 +240,12 @@ final class UsersWP {
 
         // Profile Pagination
         add_action( 'uwp_profile_pagination', array($instance, 'get_profile_pagination'));
-        add_action( 'uwp_users_loop_pagination', array($instance, 'get_profile_pagination'));
 
         // Users
+        add_action( 'uwp_users_list_body', array($instance, 'get_users_list_body'));
         add_action( 'uwp_users_search', array($instance, 'uwp_users_search'));
-        add_action( 'uwp_users_views', array($instance, 'uwp_users_views'));
-        add_action( 'uwp_users_sorting', array($instance, 'uwp_users_sortby'));
-        add_action( 'uwp_users_list', array($instance, 'uwp_users_list'));
+        add_action( 'uwp_users_loop_actions', array($instance, 'uwp_users_views'));
+        add_action( 'uwp_users_loop_actions', array($instance, 'uwp_users_sortby'));
         add_action( 'uwp_users_extra', array($instance, 'get_users_extra'));
         add_action( 'uwp_output_location', array($instance, 'show_output_location_data'), 10, 2);
         add_action( 'wpdiscuz_profile_url', array($instance, 'uwp_wpdiscuz_profile_url'), 10, 2);
@@ -343,6 +342,7 @@ final class UsersWP {
 
     public function load_menus_actions_and_filters($instance) {
         add_action( 'load-nav-menus.php', array($instance, 'users_wp_admin_menu_metabox') );
+        add_action( 'admin_bar_menu', array($instance, 'admin_bar_menu'), 51 );
     }
 
     public function load_admin_actions_and_filters($instance) {
@@ -369,10 +369,8 @@ final class UsersWP {
         register_widget("UWP_User_Title_Widget");
         register_widget("UWP_User_Meta_Widget");
         register_widget("UWP_Users_Search_Widget");
-        register_widget("UWP_User_Views_Filter_Widget");
-        register_widget("UWP_User_Sorting_Filter_Widget");
+        register_widget("UWP_Users_Loop_Actions");
         register_widget("UWP_Users_Loop_Widget");
-        register_widget("UWP_Users_Loop_Pagination_Widget");
         register_widget("UWP_User_Actions_Widget");
         register_widget("UWP_Output_Location_Widget");
         register_widget("UWP_Author_Box_Widget");
@@ -652,24 +650,14 @@ final class UsersWP {
         require_once( dirname(dirname( __FILE__ )) .'/widgets/users-search.php' );
 
         /**
-         * The class for user list views widget.
-         */
-        require_once( dirname(dirname( __FILE__ )) .'/widgets/user-views-filter.php' );
-
-        /**
          * The class for user list sorting widget.
          */
-        require_once( dirname(dirname( __FILE__ )) .'/widgets/user-sorting-filter.php' );
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/users-loop-actions.php' );
 
         /**
          * The class for users list widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/users-loop.php' );
-
-        /**
-         * The class for users list widget.
-         */
-        require_once( dirname(dirname( __FILE__ )) .'/widgets/users-loop-pagination.php' );
 
         /**
          * The class for output location widget.

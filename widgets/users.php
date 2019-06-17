@@ -50,19 +50,9 @@ class UWP_Users_Widget extends WP_Super_Duper {
 
         ob_start();
 
-        echo '<div class="uwp_widgets uwp_widget_users">';
-
-        $temp_obj = new UsersWP_Templates();
-
-        $template = $temp_obj->uwp_locate_template('users');
-
         echo '<div class="uwp_page">';
 
-        if ($template) {
-            include($template);
-        }
-
-        echo '</div>';
+        do_action( 'uwp_users_list_body' );
 
         echo '</div>';
 

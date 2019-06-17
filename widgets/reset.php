@@ -56,15 +56,9 @@ class UWP_Reset_Widget extends WP_Super_Duper {
 
         echo '<div class="uwp_widgets uwp_widget_reset">';
 
-        $temp_obj = new UsersWP_Templates();
-
-        $template = $temp_obj->uwp_locate_template('reset');
-
         echo '<div class="uwp_page">';
 
-        if ($template) {
-            include($template);
-        }
+        uwp_locate_template('reset');
 
         echo '</div>';
 

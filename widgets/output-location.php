@@ -25,8 +25,8 @@ class UWP_Output_Location_Widget extends WP_Super_Duper {
             'class_name'     => __CLASS__,
             'base_id'       => 'uwp_output_location',
             'name'          => __('UWP > Output Location','userswp'),
+            'no_wrap'       => true,
             'widget_ops'    => array(
-                'classname'   => 'uwp-output-location',
                 'description' => esc_html__('Displays fields which are selected to display in selected location from form builder.','userswp'),
             ),
             'arguments'     => array(
@@ -60,7 +60,11 @@ class UWP_Output_Location_Widget extends WP_Super_Duper {
 
         ob_start();
 
+        echo '<div class="uwp-output-location uwp-output-location-'.esc_attr($args['location']).'">';
+
         do_action('uwp_output_location', $user, $args['location']);
+
+        echo '</div>';
 
         $output = ob_get_clean();
 

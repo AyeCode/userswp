@@ -140,14 +140,10 @@ class UWP_Login_Widget extends WP_Super_Duper {
             
             global $uwp_login_widget_args;
             $uwp_login_widget_args = $args;
-            $temp_obj = new UsersWP_Templates();
-            $template = $temp_obj->uwp_locate_template('login');
 
             echo '<div class="uwp_page">';
 
-            if ($template) {
-                include($template);
-            }
+            uwp_locate_template('login');
 
             echo '</div>';
 
@@ -166,14 +162,10 @@ class UWP_Login_Widget extends WP_Super_Duper {
     public static function advanced_output($args){
         global $uwp_login_widget_args;
         $uwp_login_widget_args = $args;
-        $temp_obj = new UsersWP_Templates();
-        $template = $temp_obj->uwp_locate_template('dashboard');
 
         echo '<div class="uwp_page">';
 
-        if ($template) {
-            include($template);
-        }
+        uwp_locate_template('dashboard');
 
         echo '</div>';
     }

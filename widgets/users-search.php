@@ -25,6 +25,7 @@ class UWP_Users_Search_Widget extends WP_Super_Duper {
             'class_name'     => __CLASS__,
             'base_id'       => 'uwp_users_search',
             'name'          => __('UWP > Users Search Form','userswp'),
+            'no_wrap'       => true,
             'widget_ops'    => array(
                 'classname'   => 'uwp-user-search',
                 'description' => esc_html__('Displays users search form.','userswp'),

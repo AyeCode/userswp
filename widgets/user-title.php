@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * UsersWP user user title widget.
+ * UsersWP user title widget.
  *
  * @since 1.1.2
  */
 class UWP_User_Title_Widget extends WP_Super_Duper {
 
     /**
-     * Register the user user title widget with WordPress.
+     * Register the user title widget with WordPress.
      *
      */
     public function __construct() {

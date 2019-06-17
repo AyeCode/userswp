@@ -56,15 +56,9 @@ class UWP_Account_Widget extends WP_Super_Duper {
 
         echo '<div class="uwp_widgets uwp_widget_account">';
 
-        $temp_obj = new UsersWP_Templates();
-
-        $template = $temp_obj->uwp_locate_template('account');
-
         echo '<div class="uwp_page">';
 
-        if ($template) {
-            include($template);
-        }
+        uwp_locate_template('account');
 
         echo '</div>';
 

@@ -105,7 +105,7 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        global $wpdb;
+        global $wpdb, $post;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
         $user = uwp_get_displayed_user();
@@ -120,6 +120,10 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
         $args = wp_parse_args( $args, $defaults );
 
         $args = apply_filters( 'uwp_widget_user_meta_args', $args, $widget_args, $this );
+
+        if('post_author' == $args['user_id'] && $post instanceof WP_Post){
+            $user = get_userdata($post->post_author);
+        }
 
         if(empty($args['user_id']) && !empty($user->ID)){
             $args['user_id'] = $user->ID;
@@ -169,23 +173,23 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
                 $output = $icon.$value;
                 break;
             case 'label-value':
-                $output = '<div class="uwp-profile-extra-key">'. $field->site_title . '<span class="uwp-profile-extra-sep">:</span></div><div class="uwp-profile-extra-value">'.$value.'</div>';
+                $output = '<div class="uwp-user-meta-key">'. $field->site_title . '<span class="uwp-profile-extra-sep">:</span></div><div class="uwp-user-meta-value">'.$value.'</div>';
                 break;
             case 'label':
-                $output = '<div class="uwp-profile-extra-key">'. $field->site_title . '<span class="uwp-profile-extra-sep">:</span></div>';
+                return $field->site_title;
                 break;
             case 'value':
-                $output = '<div class="uwp-profile-extra-value">'.$value.'</div>';
+                return $value;
                 break;
             case 'value-strip':
-                $output = '<div class="uwp-profile-extra-value">'.strip_tags($value).'</div>';
+                $output = '<div class="uwp-user-meta-value">'.strip_tags($value).'</div>';
                 break;
             default:
-                $output = '<div class="uwp-profile-extra-key">'. $icon . $field->site_title . '<span class="uwp-profile-extra-sep">:</span></div><div class="uwp-profile-extra-value">'. $value. '</div>';
+                $output = '<div class="uwp-user-meta-key">'. $icon . $field->site_title . '<span class="uwp-profile-extra-sep">:</span></div><div class="uwp-user-meta-value">'. $value. '</div>';
         }
 
         //wrap output in a div
-        $output = '<div class="uwp-profile-extra-wrap '.$css_class.'">'.$output.'</div>';
+        $output = '<div class="uwp-user-meta-wrap '.$css_class.'">'.$output.'</div>';
 
         return $output;
 

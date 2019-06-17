@@ -56,15 +56,9 @@ class UWP_Change_Widget extends WP_Super_Duper {
 
         echo '<div class="uwp_widgets uwp_widget_change">';
 
-        $temp_obj = new UsersWP_Templates();
-
-        $template = $temp_obj->uwp_locate_template('change');
-
         echo '<div class="uwp_page">';
 
-        if ($template) {
-            include($template);
-        }
+        uwp_locate_template('change');
 
         echo '</div>';
 
