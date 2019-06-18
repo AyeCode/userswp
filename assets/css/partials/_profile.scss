@@ -405,6 +405,18 @@
   }
 }
 
+.uwp-user-avatar-image {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 5px;
+}
+
+.uwp-user-avatar-title {
+  display: inline-block;
+  margin: 0 auto;
+  vertical-align: middle;
+}
+
 .uwp_generic_thumb_wrap {
   float: left;
 }

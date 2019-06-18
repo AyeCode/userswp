@@ -246,7 +246,6 @@ final class UsersWP {
         add_action( 'uwp_users_search', array($instance, 'uwp_users_search'));
         add_action( 'uwp_users_loop_actions', array($instance, 'uwp_users_views'));
         add_action( 'uwp_users_loop_actions', array($instance, 'uwp_users_sortby'));
-        add_action( 'uwp_users_extra', array($instance, 'get_users_extra'));
         add_action( 'uwp_output_location', array($instance, 'show_output_location_data'), 10, 2);
         add_action( 'wpdiscuz_profile_url', array($instance, 'uwp_wpdiscuz_profile_url'), 10, 2);
 
@@ -364,9 +363,11 @@ final class UsersWP {
         register_widget("UWP_Profile_Header_Widget");
         register_widget("UWP_Profile_Social_Widget");
         register_widget("UWP_Profile_Tabs_Widget");
+        register_widget("UWP_Profile_Actions_Widget");
         register_widget("UWP_Profile_Section_Widget");
 
         register_widget("UWP_User_Title_Widget");
+        register_widget("UWP_User_Avatar_Widget");
         register_widget("UWP_User_Meta_Widget");
         register_widget("UWP_Users_Search_Widget");
         register_widget("UWP_Users_Loop_Actions");
@@ -620,14 +621,24 @@ final class UsersWP {
         require_once dirname(dirname( __FILE__ )) . '/widgets/profile-header.php';
 
         /**
-         * The class for profile title widget.
+         * The class for user title widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/user-title.php' );
+
+        /**
+         * The class for user avatar widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/user-avatar.php' );
 
         /**
          * The class for profile social fields widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-social.php' );
+
+        /**
+         * The class for profile action buttons fields widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/profile-actions.php' );
 
         /**
          * The class for profile buttons fields widget.

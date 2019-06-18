@@ -133,10 +133,18 @@ if ( ! defined( 'ABSPATH' ) ) {
     </tr>
 
     <tr valign="top">
+        <th scope="row"><?php echo __( 'User Avatar Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_user_avatar tag="" link="" size="" user_id=""]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for showing user\'s avatar image and name. You can pass tag h1 to h6, div, p for user name, 1 to enable link to profile page, avatar size in px and user_id if you want to display for specific user. ', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
         <th scope="row"><?php echo __( 'User Meta Shortcode', 'userswp' ); ?></th>
         <td>
             <span class="short_code">[uwp_user_meta key="" user_id="" show="" css_class=""]</span>
-            <span class="description"><?php echo __( 'This is the shortcode for showing displayed user\'s meta value based on key provided. You can pass icon-value, label-value, label, value, value-strip for how to show value. You can user_id if you want to display for specific user ID. ', 'userswp' ); ?></span>
+            <span class="description"><?php echo __( 'This is the shortcode for showing displayed user\'s meta value based on key provided. You can pass icon-value, label-value, label, value, value-strip for how to show value. You can user_id if you want to display for specific user. ', 'userswp' ); ?></span>
         </td>
     </tr>
 
@@ -153,6 +161,14 @@ if ( ! defined( 'ABSPATH' ) ) {
         <td>
             <span class="short_code">[uwp_profile_social exclude=""]</span>
             <span class="description"><?php echo __( 'This is the shortcode for displaying user\'s social fields which are selected by adding uwp_social class while creating field via form builder. You can pass comma separated keys to exclude from displaying.', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'Profile Actions Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_profile_actions]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for user\'s profile actions like verify, transfer points etc. ', 'userswp' ); ?></span>
         </td>
     </tr>
 

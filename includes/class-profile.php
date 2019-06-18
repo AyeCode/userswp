@@ -21,7 +21,7 @@ class UsersWP_Profile {
         }
         $profile_access = apply_filters('uwp_profile_access', true, $user);
         if ($profile_access) {
-            echo do_shortcode("[uwp_profile_header]\n[uwp_profile_section position='left' type='open']\n[uwp_user_title]\n[uwp_profile_social]\n[uwp_output_location location='profile_side']\n[uwp_user_actions]\n[uwp_profile_section position='left' type='close']\n[uwp_profile_section position='right' type='open']\n[uwp_profile_tabs]\n[uwp_profile_section position='right' type='close']");
+            echo do_shortcode("[uwp_profile_header]\n[uwp_profile_section position='left' type='open']\n[uwp_user_title]\n[uwp_profile_social]\n[uwp_output_location location='profile_side']\n[uwp_profile_actions]\n[uwp_profile_section position='left' type='close']\n[uwp_profile_section position='right' type='open']\n[uwp_profile_tabs]\n[uwp_profile_section position='right' type='close']");
         } else {
             do_action('uwp_profile_access_denied', $user);
         }
