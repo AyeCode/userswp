@@ -134,6 +134,7 @@ No questions so far, but don't hesitate to ask!
 * Updated Font Awesome version to 1.0.11 - CHANGED
 * Use 404 redirection instead of loading the 404.php from the theme for user profile not found - FIXED
 * Individual shortcodes and widgets for profile and users page for gutenberg blocks and elementor plugin - ADDED
+* Page is not created on activation if the same slug is used by menu - FIXED
 
 = 1.1.1 =
 * Redirect not working after registration for auto approve auto login - FIXED
