@@ -1833,7 +1833,7 @@ function uwp_no_users_found(){
 }
 
 function uwp_get_displayed_user(){
-    global $uwp_user, $post;
+    global $uwp_user;
     $user = uwp_get_user_by_author_slug(); // for user displayed in profile
 
     if(!$user && is_user_logged_in()){
