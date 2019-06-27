@@ -311,8 +311,8 @@ function get_uwp_users_list() {
 
     $excluded_globally = uwp_get_option('users_excluded_from_list');
     if ( $excluded_globally ) {
-        $users = str_replace(' ', '', $excluded_globally );
-        $users_array = explode(',', $users );
+        $excluded_users = str_replace(' ', '', $excluded_globally );
+        $users_array = explode(',', $excluded_users );
         $exclude_users = array_merge($exclude_users, $users_array);
     }
 

@@ -120,6 +120,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.1.3 =
+* Excluding user ids can cause user loop not to show - FIXED
+
 = 1.1.2 =
 * Allow to disable avatar image override by UsersWP plugin - ADDED
 * Author box breaking the sites with elementor - FIXED
