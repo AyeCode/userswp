@@ -38,6 +38,7 @@ class UsersWP_Pages {
                         $this->is_account_page() ||
                         $this->is_profile_page() ||
                         $this->is_users_page() ||
+                        $this->is_user_item_page() ||
                         $this->is_multi_register_page()) {
                         return true;
                     } else {
@@ -138,6 +139,17 @@ class UsersWP_Pages {
      */
     public function is_users_page() {
         return $this->is_page('users_page');
+    }
+
+    /**
+     * Checks whether the current page is users page or not.
+     *
+     * @since       1.1.2
+     * @package     userswp
+     * @return      bool
+     */
+    public function is_user_item_page() {
+        return $this->is_page('user_list_item_page');
     }
 
     /**
@@ -344,43 +356,70 @@ class UsersWP_Pages {
             $option_value = false;
         }
 
-        if ($option_value > 0) :
-            if (get_post($option_value)) :
-                // Page exists
-                return;
-            endif;
-        endif;
+        if ($option_value > 0 && ( $page_object = get_post( $option_value ) )) {
+            if ('page' === $page_object->post_type && !in_array($page_object->post_status, array('pending', 'trash', 'future', 'auto-draft'))) {
+                // Valid page is already in place
+                return $page_object->ID;
+            }
+        }
 
-        $page_found = $wpdb->get_var(
-            $wpdb->prepare(
-                "SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
-                array($slug)
-            )
-        );
+        if(!empty($post_parent)){
+            $page = get_page_by_path($post_parent);
+            if ($page) {
+                $post_parent = $page->ID;
+            } else {
+                $post_parent = '';
+            }
+        }
 
-        if ($page_found) :
-            // Page exists
-            if (!$option_value) {
-                $settings[$option] = $page_found;
+        if ( strlen( $page_content ) > 0 ) {
+            // Search for an existing page with the specified page content (typically a shortcode)
+            $valid_page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_status NOT IN ( 'pending', 'trash', 'future', 'auto-draft' ) AND post_content LIKE %s LIMIT 1;", "%{$page_content}%" ) );
+            $trashed_page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_status = 'trash' AND post_content LIKE %s LIMIT 1;", "%{$page_content}%" ) );
+        } else {
+            // Search for an existing page with the specified page slug
+            $valid_page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_status NOT IN ( 'pending', 'trash', 'future', 'auto-draft' )  AND post_name = %s LIMIT 1;", $slug ) );
+            $trashed_page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_status = 'trash' AND post_name = %s LIMIT 1;", $slug ) );
+        }
+
+        $valid_page_found = apply_filters( 'uwp_create_page_id', $valid_page_found, $slug, $page_content );
+
+        if ( $valid_page_found ) {
+            if ( $option ) {
+                $settings[$option] = $valid_page_found;
                 update_option( 'uwp_settings', $settings );
             }
-            return;
-        endif;
+            return $valid_page_found;
+        }
 
-        $page_data = array(
-            'post_status' => $status,
-            'post_type' => 'page',
-            'post_author' => $current_user->ID,
-            'post_name' => $slug,
-            'post_title' => $page_title,
-            'post_content' => $page_content,
-            'post_parent' => $post_parent,
-            'comment_status' => 'closed'
-        );
-        $page_id = wp_insert_post($page_data);
+        if ( $trashed_page_found ) {
+            $page_id   = $trashed_page_found;
+            $page_data = array(
+                'ID'             => $page_id,
+                'post_status'    => 'publish',
+                'post_parent'    => $post_parent,
+            );
+            wp_update_post( $page_data );
+        } else {
+            $page_data = array(
+                'post_status'    => 'publish',
+                'post_type'      => 'page',
+                'post_author'    => $current_user->ID,
+                'post_name'      => $slug,
+                'post_title'     => $page_title,
+                'post_content'   => $page_content,
+                'post_parent'    => $post_parent,
+                'comment_status' => 'closed',
+            );
+            $page_id = wp_insert_post( $page_data );
+        }
 
-        $settings[$option] = $page_id;
-        update_option( 'uwp_settings', $settings );
+        if ( $option ) {
+            $settings[$option] = $page_id;
+            update_option('uwp_settings', $settings);
+        }
+
+        return $page_id;
     }
 
     /**
@@ -400,7 +439,8 @@ class UsersWP_Pages {
         $this->create_page(esc_sql(_x('change',     'page_slug', 'userswp')), 'change_page',    __('Change Password',   'userswp'), '[uwp_change]');
         $this->create_page(esc_sql(_x('profile',    'page_slug', 'userswp')), 'profile_page',   __('Profile',           'userswp'), '[uwp_profile]');
         $this->create_page(esc_sql(_x('users',      'page_slug', 'userswp')), 'users_page',     __('Users',             'userswp'), '[uwp_users]');
-    
+        $this->create_page(esc_sql(_x('user-list-item',  'page_slug', 'userswp')), 'user_list_item_page', __('Users List Item', 'userswp'), UsersWP_Defaults::page_user_list_item_content());
+
     }
 
     
@@ -592,6 +632,10 @@ class UsersWP_Pages {
 
         if ( uwp_get_page_id( 'users_page' ) == $post->ID ) {
             $post_states['uwp_users_page'] = __( 'UWP Users Page', 'userswp' );
+        }
+
+        if ( uwp_get_page_id( 'user_list_item_page' ) == $post->ID ) {
+            $post_states['uwp_user_list_item_page'] = __( 'UWP User Item Page', 'userswp' );
         }
 
         if ( uwp_get_page_id( 'change_page' ) == $post->ID ) {

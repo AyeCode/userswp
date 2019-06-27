@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * UsersWP profile user title widget.
+ * UsersWP users search widget.
  *
  * @since 1.1.2
  */
-class UWP_Profile_Content_Widget extends WP_Super_Duper {
+class UWP_Users_Search_Widget extends WP_Super_Duper {
 
     /**
-     * Register the profile content widget with WordPress.
+     * Register the profile users search widget with WordPress.
      *
      */
     public function __construct() {
@@ -21,14 +21,14 @@ class UWP_Profile_Content_Widget extends WP_Super_Duper {
             'textdomain'    => 'userswp',
             'block-icon'    => 'admin-site',
             'block-category'=> 'widgets',
-            'block-keywords'=> "['userswp','profile']",
+            'block-keywords'=> "['userswp','user', 'search']",
             'class_name'     => __CLASS__,
-            'base_id'       => 'uwp_profile_content',
-            'name'          => __('UWP > Profile Content','userswp'),
+            'base_id'       => 'uwp_users_search',
+            'name'          => __('UWP > Users Search Form','userswp'),
             'no_wrap'       => true,
             'widget_ops'    => array(
-                'classname'   => 'uwp-profile-content',
-                'description' => esc_html__('Displays profile tabs and content.','userswp'),
+                'classname'   => 'uwp-user-search',
+                'description' => esc_html__('Displays users search form.','userswp'),
             ),
             'arguments'     => array(
                 'title'  => array(
@@ -49,21 +49,9 @@ class UWP_Profile_Content_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        $user = uwp_get_user_by_author_slug();
-
-        if(!$user && is_user_logged_in()){
-            $user = get_userdata(get_current_user_id());
-        }
-
-        $enable_profile_content = uwp_get_option('enable_profile_body');
-
         ob_start();
 
-        if ($enable_profile_content == '1') {
-
-            do_action('uwp_profile_content', $user);
-
-        }
+        do_action('uwp_users_search');
 
         $output = ob_get_clean();
 

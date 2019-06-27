@@ -101,6 +101,110 @@ if ( ! defined( 'ABSPATH' ) ) {
     </tr>
 
     <tr valign="top">
+        <th scope="row"><?php echo __( 'Output Location Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_output_location location=""]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for displaying user data at location selected while creating field via form builder. Location can be users, profile_side, more_info', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'Profile Header Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_profile_header hide_cover="" hide_avatar="" allow_change=""]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for showing displayed user\'s profile picture and cover image . You can hide cover image, avatar with parameters and also disallow changing profile cover image and avatar with value 1. ', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'Profile Section Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_profile_section type="" position=""]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for wrapping the things left and right on profile page. Type can be open or close. Position can be left or right. Open section requires close section else it can break the layout.', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'User Title Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_user_title tag="" user_id=""]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for showing displayed user\'s name. You can pass heading tag from h1 to h6 and user_id if you want to display for specific user ID. ', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'User Avatar Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_user_avatar tag="" link="" size="" user_id=""]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for showing user\'s avatar image and name. You can pass tag h1 to h6, div, p for user name, 1 to enable link to profile page, avatar size in px and user_id if you want to display for specific user. ', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'User Meta Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_user_meta key="" user_id="" show="" css_class=""]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for showing displayed user\'s meta value based on key provided. You can pass icon-value, label-value, label, value, value-strip for how to show value. You can user_id if you want to display for specific user. ', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'Profile tabs Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_profile_tabs]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for displaying profile tabs for user\'s profile page. ', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'Profile Social Fields Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_profile_social exclude=""]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for displaying user\'s social fields which are selected by adding uwp_social class while creating field via form builder. You can pass comma separated keys to exclude from displaying.', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'Profile Actions Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_profile_actions]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for user\'s profile actions like verify, transfer points etc. ', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'User Actions Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_user_actions]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for displaying user\'s actions like add friend, follow etc. ', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'Users Search Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_users_search]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for displaying search form for searching users.', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'Users Loop Actions Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_users_loop_actions]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for displaying users loop actions like views and filters.', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><?php echo __( 'Users Loop Shortcode', 'userswp' ); ?></th>
+        <td>
+            <span class="short_code">[uwp_users_loop]</span>
+            <span class="description"><?php echo __( 'This is the shortcode for displaying users list.', 'userswp' ); ?></span>
+        </td>
+    </tr>
+
+    <tr valign="top">
         <th scope="row"><?php echo __( 'Author box', 'userswp' ); ?></th>
         <td>
             <span class="short_code">[uwp_author_box]</span>

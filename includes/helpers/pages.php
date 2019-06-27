@@ -109,6 +109,18 @@ function is_uwp_users_page() {
 }
 
 /**
+ * Checks whether the current page is users list item page or not.
+ *
+ * @since       1.0.0
+ * @package     userswp
+ * @return      bool
+ */
+function is_uwp_users_item_page() {
+    $page = new UsersWP_Pages();
+    return $page->is_user_item_page();
+}
+
+/**
  * Checks whether the current page is multi register page or not.
  *
  * @since       1.0.0

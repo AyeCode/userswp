@@ -80,7 +80,7 @@ class UsersWP_Mails {
                 '[#activation_link#]',
             );
             $activate_message_replace_array = array(
-                $activation_link
+                esc_url($activation_link)
             );
             $message = str_replace($activate_message_search_array, $activate_message_replace_array, $message);
         }

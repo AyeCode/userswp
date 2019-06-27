@@ -1007,7 +1007,7 @@ class UsersWP_Forms {
             site_url()
         );
 
-        $message .= "<a href='".$act_url."' target='_blank'>".$act_url."</a>" . "\r\n";
+        $message .= "<a href='".esc_url($act_url)."' target='_blank'>".esc_url($act_url)."</a>" . "\r\n";
 
         $activate_message = '<p><b>' . __('Please activate your account :', 'userswp') . '</b></p><p>' . $message . '</p>';
 

@@ -266,7 +266,7 @@ function uwp_error_log($log){
  * @since       1.0.0
  * @package     userswp
  *
- * @return      void
+ * @return   array $users array of users
  */
 function get_uwp_users_list() {
 
@@ -327,7 +327,7 @@ function get_uwp_users_list() {
 
     if ($keyword || $where) {
         if (empty($where)) {
-            $users = $wpdb->get_results($wpdb->prepare(
+            $user_query = $wpdb->get_results($wpdb->prepare(
                 "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
             FROM $wpdb->users
             INNER JOIN $wpdb->usermeta
@@ -358,10 +358,11 @@ function get_uwp_users_list() {
                     '%' . $keyword . '%'
                 )
             ));
+
         } else {
             $usermeta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
-            $users = $wpdb->get_results(
+            $user_query = $wpdb->get_results(
                 "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
             FROM $wpdb->users
             INNER JOIN $usermeta_table
@@ -373,7 +374,14 @@ function get_uwp_users_list() {
             LIMIT 0, 20");
         }
 
-        $total_user = count($users);
+        $get_users = wp_list_pluck($user_query, 'ID');
+        $args = array(
+            'include' => $get_users,
+        );
+
+        $uwp_users_query = new WP_User_Query($args);
+        $users['users'] = $uwp_users_query->get_results();
+        $users['total_users'] = $uwp_users_query->get_total();
 
     } else {
 
@@ -406,72 +414,14 @@ function get_uwp_users_list() {
             }
         }
 
-        $users_query = new WP_User_Query($args);
-        $users = $users_query->get_results();
-        $total_user = $users_query->get_total();
+        $uwp_users_query = new WP_User_Query($args);
+        $users['users'] = $uwp_users_query->get_results();
+        $users['total_users'] = $uwp_users_query->get_total();
 
     }
 
-    $total_pages=ceil($total_user/$number);
+    return $users;
 
-    $layout_class = uwp_get_layout_class();
-    ?>
-    <ul class="uwp-users-list-wrap <?php echo $layout_class; ?>" id="uwp_user_items_layout">
-        <?php
-        if ($users) {
-            foreach ($users as $user) {
-                $user_obj = get_user_by('id', $user->ID);
-
-                // exclude logged in user
-                $exclude_loggedin_user = apply_filters('uwp_users_list_exclude_loggedin_user', false);
-                if ($exclude_loggedin_user) {
-                    if ($user_obj->ID == get_current_user_id()) {
-                        continue;
-                    }
-                }
-                ?>
-                <li class="uwp-users-list-user">
-                    <div class="uwp-users-list-user-left">
-                        <?php do_action('uwp_users_profile_header', $user); ?>
-                    </div>
-                    <div class="uwp-users-list-user-right">
-                        <div class="uwp-users-list-user-name">
-                            <h3 class="uwp-user-title" data-user="<?php echo $user_obj->ID; ?>">
-                                <a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user_obj->ID), $user_obj->ID); ?>">
-                                    <?php echo apply_filters('uwp_profile_display_name', $user_obj->display_name); ?>
-                                </a>
-                                <?php do_action('uwp_users_after_title', $user_obj->ID ); ?>
-                            </h3>
-                        </div>
-                        <div class="uwp-users-list-user-btns">
-                            <?php do_action('uwp_profile_buttons', $user_obj ); ?>
-                        </div>
-                        <div class="uwp-users-list-user-social">
-                            <?php do_action('uwp_profile_social', $user_obj ); ?>
-                        </div>
-                        <div class="uwp-users-list-extra">
-                            <?php do_action('uwp_users_extra', $user_obj ); ?>
-                        </div>
-                        <div class="clfx"></div>
-                    </div>
-                </li>
-                <?php
-            }
-        } else {
-            // no users found
-            echo '<div class="uwp-alert-error text-center">';
-            echo __('No Users Found', 'userswp');
-            echo '</div>';
-        }
-        ?>
-    </ul>
-
-    <?php
-    if ($total_pages > 1) {
-        do_action('uwp_profile_pagination', $total_pages);
-    }
-    ?>
-    <?php
 }
 
 /**
@@ -501,9 +451,12 @@ function uwp_get_custom_field_info($htmlvar_name) {
  *
  * @return      string      Layout class.
  */
-function uwp_get_layout_class() {
-    $default_layout = uwp_get_option('users_default_layout', 'list');
-    switch ($default_layout) {
+function uwp_get_layout_class($layout) {
+    if(!$layout){
+        $layout = uwp_get_option('users_default_layout', 'list');
+    }
+
+    switch ($layout) {
         case "list":
             $class = "uwp_listview";
             break;
@@ -525,6 +478,8 @@ function uwp_get_layout_class() {
 
     return $class;
 }
+
+add_filter( 'uwp_users_list_ul_extra_class', 'uwp_get_layout_class', 10, 1 );
 
 add_filter( 'get_user_option_metaboxhidden_nav-menus', 'uwp_always_nav_menu_visibility', 10, 3 );
 
@@ -1831,4 +1786,63 @@ function uwp_get_user_by_author_slug(){
     }
 
     return $user;
+}
+
+function uwp_get_show_in_locations(){
+    $show_in_locations = array(
+        "[users]" => __("Users Page", 'userswp'),
+        "[more_info]" => __("More info tab", 'userswp'),
+        "[own_tab]" => __("Profile page own tab", 'userswp'),
+        "[profile_side]" => __("Profile side", 'userswp'),
+        "[fieldset]" => __("Fieldset", 'userswp'),
+    );
+
+    $show_in_locations = apply_filters('uwp_show_in_locations', $show_in_locations);
+
+    return $show_in_locations;
+}
+
+function uwp_get_layout_options(){
+    $layouts = array(
+        'list' => __( 'List View', 'userswp' ),
+        '2col' => __( 'Grid View - 2 Column', 'userswp' ),
+        '3col' => __( 'Grid View - 3 Column', 'userswp' ),
+        '4col' => __( 'Grid View - 4 Column', 'userswp' ),
+        '5col' => __( 'Grid View - 5 Column', 'userswp' ),
+    );
+
+    $layouts = apply_filters('uwp_available_users_layout', $layouts);
+
+    return $layouts;
+}
+
+function uwp_locate_template($template){
+
+    $temp_obj = new UsersWP_Templates();
+
+    $template_path = $temp_obj->uwp_locate_template($template);
+
+    if (file_exists($template_path)) {
+        include($template_path);
+    }
+
+}
+
+function uwp_no_users_found(){
+    uwp_locate_template( 'no-users-found.php' );
+}
+
+function uwp_get_displayed_user(){
+    global $uwp_user;
+    $user = uwp_get_user_by_author_slug(); // for user displayed in profile
+
+    if(!$user && is_user_logged_in()){
+        $user = get_userdata(get_current_user_id()); // for user currently logged in
+    }
+
+    if(isset($uwp_user) && !empty($uwp_user) && $uwp_user instanceof WP_User){ // for user displaying in loop
+        $user = $uwp_user;
+    }
+
+    return apply_filters('uwp_get_displayed_user', $user);
 }

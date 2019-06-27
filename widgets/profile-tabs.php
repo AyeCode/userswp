@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * UsersWP profile user bio widget.
+ * UsersWP profile tabs widget.
  *
  * @since 1.1.2
  */
-class UWP_Profile_Bio_Widget extends WP_Super_Duper {
+class UWP_Profile_Tabs_Widget extends WP_Super_Duper {
 
     /**
-     * Register the profile user bio widget with WordPress.
+     * Register the profile tabs widget with WordPress.
      *
      */
     public function __construct() {
@@ -23,12 +23,12 @@ class UWP_Profile_Bio_Widget extends WP_Super_Duper {
             'block-category'=> 'widgets',
             'block-keywords'=> "['userswp','profile']",
             'class_name'     => __CLASS__,
-            'base_id'       => 'uwp_profile_bio',
-            'name'          => __('UWP > Profile Bio','userswp'),
+            'base_id'       => 'uwp_profile_tabs',
+            'name'          => __('UWP > Profile Tabs','userswp'),
             'no_wrap'       => true,
             'widget_ops'    => array(
-                'classname'   => 'uwp-profile-bio',
-                'description' => esc_html__('Displays user\'s bio.','userswp'),
+                'classname'   => 'uwp-profile-tabs',
+                'description' => esc_html__('Displays profile tabs.','userswp'),
             ),
             'arguments'     => array(
                 'title'  => array(
@@ -55,9 +55,15 @@ class UWP_Profile_Bio_Widget extends WP_Super_Duper {
             $user = get_userdata(get_current_user_id());
         }
 
+        $enable_profile_body = uwp_get_option('enable_profile_body');
+
         ob_start();
 
-        do_action('uwp_profile_bio', $user);
+        if (1 == $enable_profile_body) {
+
+            do_action('uwp_profile_content', $user);
+
+        }
 
         $output = ob_get_clean();
 

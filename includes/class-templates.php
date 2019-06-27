@@ -17,47 +17,51 @@ class UsersWP_Templates {
      * @param       string      $template       Template type.
      * @return      string                      The template filename if one is located.
      */
-    public function uwp_locate_template( $template ) {
-        
+    public function uwp_locate_template( $template, $template_path = "" ) {
+
         switch ($template) {
             case 'register':
-                return $this->uwp_generic_locate_template('register');
+                $template_path = $this->uwp_generic_locate_template('register');
                 break;
 
             case 'login':
-                return $this->uwp_generic_locate_template('login');
+                $template_path = $this->uwp_generic_locate_template('login');
                 break;
 
             case 'forgot':
-                return $this->uwp_generic_locate_template('forgot');
+                $template_path = $this->uwp_generic_locate_template('forgot');
                 break;
 
             case 'change':
-                return $this->uwp_generic_locate_template('change');
+                $template_path = $this->uwp_generic_locate_template('change');
                 break;
 
             case 'reset':
-                return $this->uwp_generic_locate_template('reset');
+                $template_path = $this->uwp_generic_locate_template('reset');
                 break;
 
             case 'account':
-                return $this->uwp_generic_locate_template('account');
+                $template_path = $this->uwp_generic_locate_template('account');
                 break;
 
             case 'profile':
-                return $this->uwp_generic_locate_template('profile');
+                $template_path = $this->uwp_generic_locate_template('profile');
                 break;
 
             case 'users':
-                return $this->uwp_generic_locate_template('users');
+                $template_path = $this->uwp_generic_locate_template('users');
+                break;
+
+            case 'users-list-item':
+                $template_path = $this->uwp_generic_locate_template('users-list-item');
                 break;
             
             case 'dashboard':
-                return $this->uwp_generic_locate_template('dashboard');
+                $template_path = $this->uwp_generic_locate_template('dashboard');
                 break;
         }
 
-        return apply_filters('uwp_locate_template', false, $template);
+        return apply_filters('uwp_locate_template', $template_path, $template);
     }
 
     /**
@@ -212,7 +216,6 @@ class UsersWP_Templates {
                         global $wp_query;
                         $wp_query->set_404();
                         status_header( 404 );
-                        get_template_part( 404 ); exit();
                     }
 
                 } else {
@@ -618,6 +621,100 @@ class UsersWP_Templates {
 
     }
 
+    public static function setup_singular_page_content($content){
+
+        global $post,$wp_query;
+
+        if(!is_uwp_page()){
+            return $content;
+        }
+
+        if ( ! ( ! empty( $wp_query ) && ! empty( $post ) && ( $post->ID == get_queried_object_id() ) ) ) {
+            return $content;
+        }
+
+        /*
+         * Some page builders need to be able to take control here so we add a filter to bypass it on the fly
+         */
+        if(apply_filters('uwp_bypass_setup_singular_page',false)){
+            return $content;
+        }
+
+        remove_filter( 'the_content', array( __CLASS__, 'setup_singular_page_content' ) );
+
+        if(in_the_loop()) {
+            $content = get_post_field( 'post_content', $post->ID );
+
+            if ( $content == '' ) {
+                if (is_uwp_profile_page()) {
+                    $content = '[uwp_profile]';
+                } elseif(is_uwp_register_page()){
+                    $content = '[uwp_register]';
+                } elseif(is_uwp_login_page()){
+                    $content = '[uwp_login]';
+                } elseif(is_uwp_forgot_page()){
+                    $content = '[uwp_forgot]';
+                } elseif(is_uwp_change_page()){
+                    $content = '[uwp_change]';
+                } elseif(is_uwp_reset_page()){
+                    $content = '[uwp_reset]';
+                } elseif(is_uwp_account_page()){
+                    $content = '[uwp_account]';
+                } elseif(is_uwp_users_page()){
+                    $content = '[uwp_users]';
+                } elseif(is_uwp_users_item_page()){
+                    $content = UsersWP_Defaults::page_user_list_item_content();
+                } else{
+                    // do nothing
+                }
+
+                // run the shortcodes on the content
+                $content = do_shortcode( $content );
+
+                // run block content if its available
+                if(function_exists('do_blocks')){
+                    $content = do_blocks( $content );
+                }
+            }
+
+        }
+
+        // add our filter back
+        add_filter( 'the_content', array( __CLASS__, 'setup_singular_page_content' ) );
+
+
+        return $content;
+    }
+
+    public static function users_list_item_template_content(){
+
+        /*
+         * Some page builders need to be able to take control here so we add a filter to bypass it on the fly
+         */
+        $bypass_content = apply_filters('uwp_bypass_users_list_item_template_content', '');
+        if ($bypass_content) {
+            return $bypass_content;
+        }
+        $item_page = uwp_get_option('user_list_item_page', 0);
+        $content = get_post_field('post_content', $item_page);
+
+        // if the content is blank then we grab the page defaults
+        if ($content == '') {
+            $content = UsersWP_Defaults::page_user_list_item_content();
+        }
+
+        // run the shortcodes on the content
+        $content = do_shortcode($content);
+
+        // run block content if its available
+        if (function_exists('do_blocks')) {
+            $content = do_blocks($content);
+        }
+
+
+        return $content;
+    }
+
     /**
      * Modifies the menu item visibility based on UsersWP page type.
      *
@@ -869,6 +966,11 @@ class UsersWP_Templates {
                         $content = do_shortcode('[uwp_author_box]').$content;
                     } else{
                         $content = $content.do_shortcode('[uwp_author_box]');
+                    }
+
+                    // run block content if its available
+                    if(function_exists('do_blocks')){
+                        $content = do_blocks( $content );
                     }
                 }
 

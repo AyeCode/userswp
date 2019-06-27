@@ -944,25 +944,15 @@ class UsersWP_Form_Builder {
 
                                     <?php
 
-                                    $show_in_locations = array(
-                                        "[users]" => __("Users Page", 'userswp'),
-                                        "[more_info]" => __("More info tab", 'userswp'),
-                                        "[own_tab]" => __("Profile page own tab", 'userswp'),
-                                        "[profile_side]" => __("Profile Side", 'userswp'),
-                                    );
+                                    $show_in_locations = uwp_get_show_in_locations();
 
-                                    if ($field_type != 'fieldset') {
-                                        $show_in_locations["[fieldset]"] = __("Fieldset", 'userswp');
+                                    if ($field_type == 'fieldset') {
+                                        unset($show_in_locations['[fieldset]']);
                                     }
-                                    
-                                    $show_in_locations = apply_filters('uwp_show_in_locations', $show_in_locations, $field_info, $field_type);
-
                                     
                                     if (in_array($field_type, array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
-                                    } else {
                                         unset($show_in_locations['[own_tab]']);
                                     }
-                                    
                                     ?>
 
                                     <select multiple="multiple" name="show_in[]"

@@ -93,7 +93,7 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
         if( !empty( $user_meta ) && '' !== $user_meta ) {
             foreach ( $user_meta as $meta_key => $meta_val ) {
 
-                if(in_array($meta_key, array('uwp_account_avatar_thumb', 'uwp_account_banner_thumb'))){
+                if(in_array($meta_key, array('uwp_account_avatar_thumb', 'uwp_account_banner_thumb')) && !empty($meta_val)){
                     $uploads = wp_upload_dir();
                     $upload_url = $uploads['baseurl'];
                     $meta_val = $upload_url.$meta_val;

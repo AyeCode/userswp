@@ -21,10 +21,21 @@ class UsersWP_Profile {
         }
         $profile_access = apply_filters('uwp_profile_access', true, $user);
         if ($profile_access) {
-            echo do_shortcode("[uwp_profile_header][uwp_profile_section position='left' type='open'][uwp_profile_title][uwp_profile_social][uwp_profile_bio][uwp_profile_buttons][uwp_profile_section position='left' type='close'][uwp_profile_section position='right' type='open'][uwp_profile_content][uwp_profile_section position='right' type='close']");
+            echo do_shortcode("[uwp_profile_header]\n[uwp_profile_section position='left' type='open']\n[uwp_user_title]\n[uwp_profile_social]\n[uwp_output_location location='profile_side']\n[uwp_profile_actions]\n[uwp_profile_section position='left' type='close']\n[uwp_profile_section position='right' type='open']\n[uwp_profile_tabs]\n[uwp_profile_section position='right' type='close']");
         } else {
             do_action('uwp_profile_access_denied', $user);
         }
+    }
+
+    /**
+     * Prints the user's list.
+     *
+     * @since       1.1.2
+     * @package     userswp
+     */
+    public function get_users_list_body(){
+
+        echo do_shortcode("[uwp_users_search]\n[uwp_users_loop_actions]\n[uwp_users_loop]");
     }
     
     /**
@@ -80,7 +91,7 @@ class UsersWP_Profile {
                     echo '</a>';
                 }
                 ?>
-            <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID) && is_uwp_profile_page() && $allow_change) { ?>
+            <?php if (is_user_logged_in() && is_uwp_profile_page() && $allow_change && (get_current_user_id() == $user->ID)) { ?>
                 <div class="uwp-banner-change-icon">
                     <i class="fas fa-camera" aria-hidden="true"></i>
                     <div data-type="banner" class="uwp-profile-banner-change uwp-profile-modal-form-trigger">
@@ -147,8 +158,10 @@ class UsersWP_Profile {
         ?>
         <div class="uwp-profile-name">
             <<?php echo esc_attr($tag); ?> class="uwp-user-title" data-user="<?php echo $user->ID; ?>">
-                <?php echo apply_filters('uwp_profile_display_name', $user->display_name); ?>
-                <?php do_action('uwp_profile_after_title', $user->ID ); ?>
+                <a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>">
+                    <?php echo apply_filters('uwp_profile_display_name', $user->display_name); ?>
+                    <?php do_action('uwp_profile_after_title', $user->ID ); ?>
+                </a>
             </<?php echo esc_attr($tag); ?>>
         </div>
         <?php
@@ -249,6 +262,21 @@ class UsersWP_Profile {
      */
     public function get_profile_count_icon($user) {
         return '<i class="fas fa-user"></i>';
+    }
+
+    /**
+     * Returns the custom fields content of profile page more info tab.
+     *
+     * @since       1.0.0
+     * @package     userswp
+     * @param       object      $user       The User ID.
+     * @param       string      $show_type  Location of field to display.
+     */
+    public function show_output_location_data($user, $show_type) {
+        if(!$show_type){
+            return;
+        }
+        echo $this->uwp_get_extra_fields($user, '['.$show_type.']');
     }
 
     /**
@@ -1580,59 +1608,55 @@ class UsersWP_Profile {
      */
     public function uwp_users_search() {
         ?>
-        <div class="uwp-users-list-sort-search">
-            <div class="uwp-user-search" id="uwp_user_search">
-                <?php
-                $keyword = "";
-                if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
-                    $keyword = stripslashes(strip_tags($_GET['uwps']));
-                }
-                ?>
-                <form method="get" class="searchform search-form" action="<?php echo get_uwp_users_permalink(); ?>">
-                    <?php do_action('uwp_users_page_search_form_inner', $keyword); ?>
-                </form>
-            </div>
-            <div class="uwp-user-sort">
-                <?php
-                $default_layout = uwp_get_option('users_default_layout', 'list');
-                ?>
-                <form method="get" action="">
-                    <select name="uwp_layout" id="uwp_layout" class="uwp_select2">
-                        <option <?php selected( $default_layout, "list" ); ?> value="list"><?php echo __("List View", "userswp"); ?></option>
-                        <option <?php selected( $default_layout, "2col" ); ?> value="2col"><?php echo __("Grid 2 Col", "userswp"); ?></option>
-                        <option <?php selected( $default_layout, "3col" ); ?> value="3col"><?php echo __("Grid 3 Col", "userswp"); ?></option>
-                        <option <?php selected( $default_layout, "4col" ); ?> value="4col"><?php echo __("Grid 4 Col", "userswp"); ?></option>
-                        <option <?php selected( $default_layout, "5col" ); ?> value="5col"><?php echo __("Grid 5 Col", "userswp"); ?></option>
-                    </select>
-                    <?php
-                    $sort_by = "";
-                    if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
-                        $sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
-                    }
-                    ?>
-                    <select name="uwp_sort_by" id="uwp_sort_by" class="uwp_select2" onchange="this.form.submit()">
-                        <option value=""><?php echo __("Sort By:", "userswp"); ?></option>
-                        <option <?php selected( $sort_by, "newer" ); ?> value="newer"><?php echo __("Newer", "userswp"); ?></option>
-                        <option <?php selected( $sort_by, "older" ); ?> value="older"><?php echo __("Older", "userswp"); ?></option>
-                        <option <?php selected( $sort_by, "alpha_asc" ); ?> value="alpha_asc"><?php echo __("A-Z", "userswp"); ?></option>
-                        <option <?php selected( $sort_by, "alpha_desc" ); ?> value="alpha_desc"><?php echo __("Z-A", "userswp"); ?></option>
-                    </select>
-                </form>
-            </div>
+        <div class="uwp-user-search" id="uwp_user_search">
+            <?php
+            $keyword = "";
+            if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
+                $keyword = stripslashes(strip_tags($_GET['uwps']));
+            }
+            ?>
+            <form method="get" class="searchform search-form" action="<?php echo get_uwp_users_permalink(); ?>">
+                <?php do_action('uwp_users_page_search_form_inner', $keyword); ?>
+            </form>
         </div>
         <?php
     }
 
-    /**
-     * Prints the users page main content.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @return      void
-     */
-    public function uwp_users_list() {
-        get_uwp_users_list();
+    public function uwp_users_views(){
+        $default_layout = uwp_get_option('users_default_layout', 'list');
+        ?>
+        <div class="uwp-user-views" id="uwp_user_views">
+            <form method="get" action="">
+                <select name="uwp_layout" id="uwp_layout" class="uwp_select2">
+                    <option <?php selected( $default_layout, "list" ); ?> value="list"><?php echo __("List View", "userswp"); ?></option>
+                    <option <?php selected( $default_layout, "2col" ); ?> value="2col"><?php echo __("Grid 2 Col", "userswp"); ?></option>
+                    <option <?php selected( $default_layout, "3col" ); ?> value="3col"><?php echo __("Grid 3 Col", "userswp"); ?></option>
+                    <option <?php selected( $default_layout, "4col" ); ?> value="4col"><?php echo __("Grid 4 Col", "userswp"); ?></option>
+                    <option <?php selected( $default_layout, "5col" ); ?> value="5col"><?php echo __("Grid 5 Col", "userswp"); ?></option>
+                </select>
+            </form>
+        </div>
+        <?php
+    }
+
+    public function uwp_users_sortby(){
+        $sort_by = "";
+        if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
+            $sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
+        }
+        ?>
+        <div class="uwp-user-sort" id="uwp_user_sort">
+            <form method="get" action="">
+                <select name="uwp_sort_by" id="uwp_sort_by" class="uwp_select2" onchange="this.form.submit()">
+                    <option value=""><?php echo __("Sort By:", "userswp"); ?></option>
+                    <option <?php selected( $sort_by, "newer" ); ?> value="newer"><?php echo __("Newer", "userswp"); ?></option>
+                    <option <?php selected( $sort_by, "older" ); ?> value="older"><?php echo __("Older", "userswp"); ?></option>
+                    <option <?php selected( $sort_by, "alpha_asc" ); ?> value="alpha_asc"><?php echo __("A-Z", "userswp"); ?></option>
+                    <option <?php selected( $sort_by, "alpha_desc" ); ?> value="alpha_desc"><?php echo __("Z-A", "userswp"); ?></option>
+                </select>
+            </form>
+        </div>
+        <?php
     }
 
     /**
@@ -1789,7 +1813,7 @@ class UsersWP_Profile {
      * @since       1.0.0
      * @package     userswp
      * @param       object      $field      Field info object.
-     * @param       object      $user       The User ID.
+     * @param       object      $user       The User.
      * @return      string                  Custom field value.
      */
     public function uwp_get_field_value($field, $user) {
@@ -1918,7 +1942,7 @@ class UsersWP_Profile {
                 $value = esc_html( $value );
         }
 
-        if($field->field_type_key == 'country'){
+        if(isset($field->field_type_key) && $field->field_type_key == 'country'){
             $value = uwp_output_country_html($value);
         }
 

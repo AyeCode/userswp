@@ -15,9 +15,9 @@
       margin: 0;
       padding: 0;
       li {
-        float: left;
+        display: inline-block;
         margin-right: 5px;
-        margin-bottom: 5px;
+        width: auto;
       }
     }
 
@@ -403,6 +403,18 @@
     border-top: 1px solid #ededed;
     padding: 6px 10px 6px 0;
   }
+}
+
+.uwp-user-avatar-image {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 5px;
+}
+
+.uwp-user-avatar-title {
+  display: inline-block;
+  margin: 0 auto;
+  vertical-align: middle;
 }
 
 .uwp_generic_thumb_wrap {

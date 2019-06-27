@@ -26,7 +26,9 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 	 *
 	 * Class WP_Font_Awesome_Settings
 	 * @since 1.0.10 Now able to pass wp.org theme check.
-	 * @ver 1.0.10
+	 * @since 1.0.11 Font Awesome Pro now supported.
+	 * @since 1.0.11 Font Awesome Kits now supported.
+	 * @ver 1.0.11
 	 * @todo decide how to implement textdomain
 	 */
 	class WP_Font_Awesome_Settings {
@@ -36,7 +38,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '1.0.10';
+		public $version = '1.0.11';
 
 		/**
 		 * Class textdomain.
@@ -50,7 +52,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $latest = "5.6.1";
+		public $latest = "5.8.2";
 
 		/**
 		 * The title.
@@ -112,7 +114,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			if ( $this->settings['type'] == 'CSS' ) {
 
 				if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'frontend' ) {
-					add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ), 5000 );//echo '###';exit;
+					add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ), 5000 );
 				}
 
 				if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'backend' ) {
@@ -122,7 +124,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			} else {
 
 				if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'frontend' ) {
-					add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 5000 );//echo '###';exit;
+					add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 5000 );
 				}
 
 				if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'backend' ) {
@@ -163,7 +165,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			// build url
 			$url = $this->get_url();
 
-			$deregister_function = 'wp'.'_'.'deregister'.'_'.'script';
+			$deregister_function = 'wp' . '_' . 'deregister' . '_' . 'script';
 			call_user_func( $deregister_function, 'font-awesome' ); // deregister in case its already there
 			wp_register_script( 'font-awesome', $url, array(), null );
 			wp_enqueue_script( 'font-awesome' );
@@ -185,14 +187,26 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 */
 		public function get_url( $shims = false ) {
 			$script  = $shims ? 'v4-shims' : 'all';
+			$sub     = $this->settings['pro'] ? 'pro' : 'use';
 			$type    = $this->settings['type'];
 			$version = $this->settings['version'];
+			$kit_url = $this->settings['kit-url'] ? esc_url( $this->settings['kit-url'] ) : '';
+			$url     = '';
 
-			$url = "https://use.fontawesome.com/releases/"; // CDN
-			$url .= ! empty( $version ) ? "v" . $version . '/' : "v" . $this->get_latest_version() . '/'; // version
-			$url .= $type == 'CSS' ? 'css/' : 'js/'; // type
-			$url .= $type == 'CSS' ? $script . '.css' : $script . '.js'; // type
-			$url .= "?wpfas=true"; // set our var so our version is not removed
+			if ( $type == 'KIT' && $kit_url ) {
+				if ( $shims ) {
+					// if its a kit then we don't add shims here
+					return '';
+				}
+				$url .= $kit_url; // CDN
+				$url .= "?wpfas=true"; // set our var so our version is not removed
+			} else {
+				$url .= "https://$sub.fontawesome.com/releases/"; // CDN
+				$url .= ! empty( $version ) ? "v" . $version . '/' : "v" . $this->get_latest_version() . '/'; // version
+				$url .= $type == 'CSS' ? 'css/' : 'js/'; // type
+				$url .= $type == 'CSS' ? $script . '.css' : $script . '.js'; // type
+				$url .= "?wpfas=true"; // set our var so our version is not removed
+			}
 
 			return $url;
 		}
@@ -244,8 +258,8 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 * @since 1.0.10 Calling function name direct will fail theme check so we don't.
 		 */
 		public function menu_item() {
-			$menu_function = 'add'.'_'.'options'.'_'.'page'; // won't pass theme check if function name present in theme
-			call_user_func($menu_function, $this->name, $this->name, 'manage_options', 'wp-font-awesome-settings', array(
+			$menu_function = 'add' . '_' . 'options' . '_' . 'page'; // won't pass theme check if function name present in theme
+			call_user_func( $menu_function, $this->name, $this->name, 'manage_options', 'wp-font-awesome-settings', array(
 				$this,
 				'settings_page'
 			) );
@@ -261,12 +275,14 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			$db_settings = get_option( 'wp-font-awesome-settings' );
 
 			$defaults = array(
-				'type'      => 'CSS', // type to use, CSS or JS
+				'type'      => 'CSS', // type to use, CSS or JS or KIT
 				'version'   => '', // latest
 				'enqueue'   => '', // front and backend
 				'shims'     => '1', // default on for now, @todo maybe change to off in 2020
 				'js-pseudo' => '0', // if the pseudo elements flag should be set (CPU intensive)
 				'dequeue'   => '0', // if we should try to remove other versions added by other plugins/themes
+				'pro'       => '0', // if pro CDN url should be used
+				'kit-url'   => '', // the kit url
 			);
 
 			$settings = wp_parse_args( $db_settings, $defaults );
@@ -289,31 +305,68 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			}
 
 			// a hidden way to force the update of the verison number vai api instead of waiting the 48 hours
-			if(isset($_REQUEST['force-version-check'])){
-				$this->get_latest_version($force_api = true);
+			if ( isset( $_REQUEST['force-version-check'] ) ) {
+				$this->get_latest_version( $force_api = true );
 			}
 			?>
+			<style>
+				.wpfas-kit-show {
+					display: none;
+				}
+
+				.wpfas-kit-set .wpfas-kit-hide {
+					display: none;
+				}
+
+				.wpfas-kit-set .wpfas-kit-show {
+					display: table-row;
+				}
+			</style>
 			<div class="wrap">
 				<h1><?php echo $this->name; ?></h1>
 				<form method="post" action="options.php">
 					<?php
 					settings_fields( 'wp-font-awesome-settings' );
 					do_settings_sections( 'wp-font-awesome-settings' );
+					$kit_set = $this->settings['type'] == 'KIT' ? 'wpfas-kit-set' : '';
 					?>
-					<table class="form-table">
+					<table class="form-table wpfas-table-settings <?php echo esc_attr( $kit_set ); ?>">
 						<tr valign="top">
-							<th scope="row"><label for="wpfas-type"><?php _e( 'Type', 'font-awesome-settings' ); ?></label></th>
+							<th scope="row"><label
+									for="wpfas-type"><?php _e( 'Type', 'font-awesome-settings' ); ?></label></th>
 							<td>
-								<select name="wp-font-awesome-settings[type]" id="wpfas-type">
+								<select name="wp-font-awesome-settings[type]" id="wpfas-type"
+								        onchange="if(this.value=='KIT'){jQuery('.wpfas-table-settings').addClass('wpfas-kit-set');}else{jQuery('.wpfas-table-settings').removeClass('wpfas-kit-set');}">
 									<option
 										value="CSS" <?php selected( $this->settings['type'], 'CSS' ); ?>><?php _e( 'CSS (default)', 'font-awesome-settings' ); ?></option>
 									<option value="JS" <?php selected( $this->settings['type'], 'JS' ); ?>>JS</option>
+									<option
+										value="KIT" <?php selected( $this->settings['type'], 'KIT' ); ?>><?php _e( 'Kits (settings managed on fontawesome.com)', 'font-awesome-settings' ); ?></option>
 								</select>
 							</td>
 						</tr>
 
-						<tr valign="top">
-							<th scope="row"><label for="wpfas-version"><?php _e( 'Version', 'font-awesome-settings' ); ?></label></th>
+						<tr valign="top" class="wpfas-kit-show">
+							<th scope="row"><label
+									for="wpfas-kit-url"><?php _e( 'Kit URL', 'font-awesome-settings' ); ?></label></th>
+							<td>
+								<input class="regular-text" id="wpfas-kit-url" type="url"
+								       name="wp-font-awesome-settings[kit-url]"
+								       value="<?php echo esc_attr( $this->settings['kit-url'] ); ?>"
+								       placeholder="https://kit.fontawesome.com/123abc.js"/>
+								<span><?php
+									echo sprintf(
+										__( 'Requires a free account with Font Awesome. %sGet kit url%s', 'font-awesome-settings' ),
+										'<a rel="noopener noreferrer" target="_blank" href="https://fontawesome.com/kits"><i class="fas fa-external-link-alt"></i>',
+										'</a>'
+									);
+									?></span>
+							</td>
+						</tr>
+
+						<tr valign="top" class="wpfas-kit-hide">
+							<th scope="row"><label
+									for="wpfas-version"><?php _e( 'Version', 'font-awesome-settings' ); ?></label></th>
 							<td>
 								<select name="wp-font-awesome-settings[version]" id="wpfas-version">
 									<option
@@ -345,7 +398,8 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 						</tr>
 
 						<tr valign="top">
-							<th scope="row"><label for="wpfas-enqueue"><?php _e( 'Enqueue', 'font-awesome-settings' ); ?></label></th>
+							<th scope="row"><label
+									for="wpfas-enqueue"><?php _e( 'Enqueue', 'font-awesome-settings' ); ?></label></th>
 							<td>
 								<select name="wp-font-awesome-settings[enqueue]" id="wpfas-enqueue">
 									<option
@@ -358,9 +412,29 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 							</td>
 						</tr>
 
-						<tr valign="top">
+						<tr valign="top" class="wpfas-kit-hide">
 							<th scope="row"><label
-									for="wpfas-shims"><?php _e( 'Enable v4 shims compatibility', 'font-awesome-settings' ); ?></label></th>
+									for="wpfas-pro"><?php _e( 'Enable pro', 'font-awesome-settings' ); ?></label></th>
+							<td>
+								<input type="hidden" name="wp-font-awesome-settings[pro]" value="0"/>
+								<input type="checkbox" name="wp-font-awesome-settings[pro]"
+								       value="1" <?php checked( $this->settings['pro'], '1' ); ?> id="wpfas-pro"/>
+								<span><?php
+									echo sprintf(
+										__( 'Requires a subscription. %sLearn more%s %sManage my allowed domains%s', 'font-awesome-settings' ),
+										'<a rel="noopener noreferrer" target="_blank" href="https://fontawesome.com/pro"><i class="fas fa-external-link-alt"></i>',
+										'</a>',
+										'<a rel="noopener noreferrer" target="_blank" href="https://fontawesome.com/account/cdn"><i class="fas fa-external-link-alt"></i>',
+										'</a>'
+									);
+									?></span>
+							</td>
+						</tr>
+
+						<tr valign="top" class="wpfas-kit-hide">
+							<th scope="row"><label
+									for="wpfas-shims"><?php _e( 'Enable v4 shims compatibility', 'font-awesome-settings' ); ?></label>
+							</th>
 							<td>
 								<input type="hidden" name="wp-font-awesome-settings[shims]" value="0"/>
 								<input type="checkbox" name="wp-font-awesome-settings[shims]"
@@ -369,7 +443,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 							</td>
 						</tr>
 
-						<tr valign="top">
+						<tr valign="top" class="wpfas-kit-hide">
 							<th scope="row"><label
 									for="wpfas-js-pseudo"><?php _e( 'Enable JS pseudo elements (not recommended)', 'font-awesome-settings' ); ?></label>
 							</th>
@@ -383,7 +457,8 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 						</tr>
 
 						<tr valign="top">
-							<th scope="row"><label for="wpfas-dequeue"><?php _e( 'Dequeue', 'font-awesome-settings' ); ?></label></th>
+							<th scope="row"><label
+									for="wpfas-dequeue"><?php _e( 'Dequeue', 'font-awesome-settings' ); ?></label></th>
 							<td>
 								<input type="hidden" name="wp-font-awesome-settings[dequeue]" value="0"/>
 								<input type="checkbox" name="wp-font-awesome-settings[dequeue]"
@@ -392,7 +467,6 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 								<span><?php _e( 'This will try to dequeue any other Font Awesome versions loaded by other sources if they are added with `font-awesome` or `fontawesome` in the name.', 'font-awesome-settings' ); ?></span>
 							</td>
 						</tr>
-
 
 					</table>
 					<?php
@@ -410,6 +484,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 * Check a version number is valid and if so return it or else return an empty string.
 		 *
 		 * @param $version string The version number to check.
+		 *
 		 * @since 1.0.6
 		 *
 		 * @return string Either a valid version number or an empty string.
@@ -434,12 +509,12 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 * @since 1.0.7
 		 * @return mixed|string The latest version number found.
 		 */
-		public function get_latest_version($force_api = false) {
+		public function get_latest_version( $force_api = false ) {
 			$latest_version = $this->latest;
 
 			$cache = get_transient( 'wp-font-awesome-settings-version' );
 
-			if ( $cache === false || $force_api) { // its not set
+			if ( $cache === false || $force_api ) { // its not set
 				$api_ver = $this->get_latest_version_from_api();
 				if ( version_compare( $api_ver, $this->latest, '>=' ) >= 0 ) {
 					$latest_version = $api_ver;

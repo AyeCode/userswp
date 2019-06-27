@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * UsersWP profile user title widget.
+ * UsersWP profile social widget.
  *
  * @since 1.1.2
  */
 class UWP_Profile_Social_Widget extends WP_Super_Duper {
 
     /**
-     * Register the profile user title widget with WordPress.
+     * Register the profile social widget with WordPress.
      *
      */
     public function __construct() {
@@ -26,7 +26,7 @@ class UWP_Profile_Social_Widget extends WP_Super_Duper {
             'base_id'       => 'uwp_profile_social',
             'name'          => __('UWP > Profile Social','userswp'),
             'widget_ops'    => array(
-                'classname'   => 'uwp-profile-social',
+                'classname'   => 'uwp-users-list-user-social',
                 'description' => esc_html__('Displays fields which are selected to display in social location from form builder.','userswp'),
             ),
             'arguments'     => array(
@@ -48,11 +48,7 @@ class UWP_Profile_Social_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        $user = uwp_get_user_by_author_slug();
-
-        if(!$user && is_user_logged_in()){
-            $user = get_userdata(get_current_user_id());
-        }
+        $user = uwp_get_displayed_user();
 
         $defaults = array(
             'exclude' => '',

@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * UsersWP change password widget.
+ * UsersWP user actions widget.
  *
- * @since 1.0.22
+ * @since 1.1.2
  */
-class UWP_Change_Widget extends WP_Super_Duper {
+class UWP_User_Actions_Widget extends WP_Super_Duper {
 
     /**
-     * Register the change password widget with WordPress.
+     * Register the user actions widget with WordPress.
      *
      */
     public function __construct() {
@@ -21,17 +21,18 @@ class UWP_Change_Widget extends WP_Super_Duper {
             'textdomain'    => 'userswp',
             'block-icon'    => 'admin-site',
             'block-category'=> 'widgets',
-            'block-keywords'=> "['userswp','change']",
+            'block-keywords'=> "['userswp','user']",
             'class_name'     => __CLASS__,
-            'base_id'       => 'uwp_change',
-            'name'          => __('UWP > Change','userswp'),
+            'base_id'       => 'uwp_user_actions',
+            'name'          => __('UWP > User Actions','userswp'),
+            'no_wrap'       => true,
             'widget_ops'    => array(
-                'classname'   => 'uwp-change-class',
-                'description' => esc_html__('Displays change password form.','userswp'),
+                'classname'   => 'uwp-user-actions',
+                'description' => esc_html__('Display user actions.','userswp'),
             ),
             'arguments'     => array(
                 'title'  => array(
-                    'title'       => __( 'Widget title', 'userswp' ),
+                    'title'       => __( 'Title', 'userswp' ),
                     'desc'        => __( 'Enter widget title.', 'userswp' ),
                     'type'        => 'text',
                     'desc_tip'    => true,
@@ -48,27 +49,15 @@ class UWP_Change_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        if (!is_user_logged_in()) {
-            return false;
-        }
+        $user = uwp_get_displayed_user();
 
         ob_start();
 
-        echo '<div class="uwp_widgets uwp_widget_change">';
+        do_action('uwp_user_actions', $user);
 
-        echo '<div class="uwp_page">';
+        $output = ob_get_clean();
 
-        uwp_locate_template('change');
-
-        echo '</div>';
-
-        echo '</div>';
-
-        $output = ob_get_contents();
-
-        ob_end_clean();
-
-        return trim($output);
+        return $output;
 
     }
 
