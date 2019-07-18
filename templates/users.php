@@ -10,7 +10,7 @@
             if ($users) {
                 ?>
 
-                <ul class="uwp-users-list-wrap <?php echo apply_filters('uwp_users_list_ul_extra_class', 'list'); ?>"
+                <ul class="uwp-users-list-wrap <?php echo apply_filters('uwp_users_list_ul_extra_class', ''); ?>"
                     id="uwp_user_items_layout">
                     <?php
 

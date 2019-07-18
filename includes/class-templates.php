@@ -561,21 +561,32 @@ class UsersWP_Templates {
 
         if (empty($html)) {
             $label = $site_title = uwp_get_form_label($field);
-            if (!is_admin()) { ?>
+            /*if (!is_admin()) { ?>
                 <label>
                     <?php echo (trim($label)) ? $label : '&nbsp;'; ?>
                     <?php if ($field->is_required == 1) echo '<span>*</span>';?>
                 </label>
-            <?php }
+            <?php }*/
             ?>
-            <input name="<?php echo $field->htmlvar_name; ?>"
-                   class="<?php echo $field->css_class; ?>"
-                   placeholder="<?php echo $label; ?>"
-                   title="<?php echo $label; ?>"
-                <?php if ($field->for_admin_use == 1) { echo 'readonly="readonly"'; } ?>
-                <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
-                   type="<?php echo $field->field_type; ?>"
-                   value="<?php echo esc_html($value); ?>">
+            <div class="form-group">
+                <?php
+                if(!is_admin()) { ?>
+                <label class="sr-only">
+                    <?php echo (trim($label)) ? $label : '&nbsp;'; ?>
+                    <?php if ($field->is_required == 1) echo '<span>*</span>';?>
+                </label>
+                <?php }
+                ?>
+                <input name="<?php echo $field->htmlvar_name; ?>"
+                       class="form-control <?php echo $field->css_class; ?>"
+                       placeholder="<?php echo $label; ?>"
+                       title="<?php echo $label; ?>"
+                    <?php if ($field->for_admin_use == 1) { echo 'readonly="readonly"'; } ?>
+                    <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+                       type="<?php echo $field->field_type; ?>"
+                       value="<?php echo esc_html($value); ?>">
+            </div>
+
             <?php
         } else {
             echo $html;
@@ -643,7 +654,6 @@ class UsersWP_Templates {
         remove_filter( 'the_content', array( __CLASS__, 'setup_singular_page_content' ) );
 
         if(in_the_loop()) {
-            $content = get_post_field( 'post_content', $post->ID );
 
             if ( $content == '' ) {
                 if (is_uwp_profile_page()) {

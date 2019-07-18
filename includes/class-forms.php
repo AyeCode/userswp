@@ -285,10 +285,30 @@ class UsersWP_Forms {
             $description = $result['uwp_account_bio'];
         }
 
+        $user_login = !empty($result['uwp_account_username']) ? $result['uwp_account_username'] : '';
+        $email = !empty($result['uwp_account_email']) ? $result['uwp_account_email'] : '';
+
+        if(empty($user_login)){
+            $user_login = sanitize_user( str_replace( ' ', '', $display_name ), true );
+            if ( !( validate_username( $user_login ) && !username_exists( $user_login ) ) ) {
+                $new_user_login = strstr($email, '@', true);
+                if ( validate_username( $user_login ) && username_exists( $user_login ) ) {
+                    $user_login = sanitize_user($new_user_login, true );
+                }
+                if ( validate_username( $user_login ) && username_exists( $user_login ) ) {
+                    $user_append_text = rand(10,1000);
+                    $user_login = sanitize_user($new_user_login.$user_append_text, true );
+                }
+
+                if ( !( validate_username( $user_login ) && !username_exists( $user_login ) ) ) {
+                    $user_login = $email;
+                }
+            }
+        }
 
         $args = array(
-            'user_login'   => $result['uwp_account_username'],
-            'user_email'   => $result['uwp_account_email'],
+            'user_login'   => $user_login,
+            'user_email'   => $email,
             'user_pass'    => $password,
             'display_name' => $display_name,
             'first_name'   => $first_name,
@@ -298,7 +318,7 @@ class UsersWP_Forms {
 
         $user_id = wp_insert_user( $args );
 
-        if (!$user_id) {
+        if (!$user_id || is_wp_error($user_id)) {
             $error = '<div class="uwp-alert-error text-center">'.__('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp').'</div>';
             $uwp_notices[] = array('register' => $error);
             return;
@@ -1887,7 +1907,7 @@ class UsersWP_Forms {
             ?>
 
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
+                 class="form-group <?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -1898,15 +1918,17 @@ class UsersWP_Forms {
                     && $field->htmlvar_name == 'uwp_login_username') {
                     $site_title = __("Username or Email", 'userswp');
                 }
+
                 if (!is_admin()) { ?>
-                    <label>
+                    <label class="sr-only">
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
                         <?php if ($field->is_required) echo '<span>*</span>';?>
                     </label>
-                <?php } ?>
+                <?php }
+                ?>
 
                 <input name="<?php echo $field->htmlvar_name;?>"
-                       class="<?php echo $field->css_class; ?> uwp_textfield"
+                       class="form-control <?php echo $field->css_class; ?> uwp_textfield"
                        id="<?php echo $field->htmlvar_name;?>"
                        placeholder="<?php echo $site_title; ?>"
                        value="<?php echo esc_attr(stripslashes($value));?>"
@@ -2182,19 +2204,19 @@ class UsersWP_Forms {
             ob_start(); // Start  buffering;
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
+                 class="form-group <?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
                 if (!is_admin()) { ?>
-                    <label>
+                    <label class="sr-only">
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
                         <?php if ($field->is_required) echo '<span>*</span>';?>
                     </label>
                 <?php } ?>
 
                 <input name="<?php echo $field->htmlvar_name;?>"
-                       class="<?php echo $field->css_class; ?> uwp_textfield"
+                       class="form-control <?php echo $field->css_class; ?> uwp_textfield"
                        id="<?php echo $field->htmlvar_name;?>"
                        placeholder="<?php echo $site_title; ?>"
                        value="<?php echo esc_attr(stripslashes($value));?>"

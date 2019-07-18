@@ -120,6 +120,10 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.1.4 =
+* Generate username if username field not used for registration form - FIXED
+* Elementor template with UsersWP shortcode does not output the other content than shortcode - FIXED
+
 = 1.1.3 =
 * Excluding user ids can cause user loop not to show - FIXED
 
