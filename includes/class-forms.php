@@ -1703,14 +1703,19 @@ class UsersWP_Forms {
         // If no html then we run the standard output.
         if(empty($html)) {
 
+            $design_style = uwp_get_option("design_style","bootstrap");
+            $bs_form_group = $design_style ? "form-group form-check" : "";
+            $bs_sr_only = $design_style ? "form-check-label" : "";
+            $bs_form_control = $design_style ? "form-check-input" : "";
+
             ob_start(); // Start  buffering;
             $site_title = uwp_get_form_label($field);
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
                 <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value="0" />
                 <input name="<?php echo $field->htmlvar_name; ?>"
-                       class="<?php echo $field->css_class; ?>"
+                       class="<?php echo $field->css_class; ?> <?php echo esc_attr($bs_form_control);?>"
                        placeholder="<?php echo $site_title; ?>"
                        title="<?php echo $site_title; ?>"
                     <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
@@ -1884,10 +1889,14 @@ class UsersWP_Forms {
                 $type = 'number';
             }
 
+            $design_style = uwp_get_option("design_style","bootstrap");
+            $bs_form_group = $design_style ? "form-group" : "";
+            $bs_sr_only = $design_style ? "sr-only" : "";
+            $bs_form_control = $design_style ? "form-control" : "";
             ?>
 
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
@@ -1899,14 +1908,14 @@ class UsersWP_Forms {
                     $site_title = __("Username or Email", 'userswp');
                 }
                 if (!is_admin()) { ?>
-                    <label>
+                    <label class="<?php echo esc_attr($bs_sr_only);?>">
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
                         <?php if ($field->is_required) echo '<span>*</span>';?>
                     </label>
                 <?php } ?>
 
                 <input name="<?php echo $field->htmlvar_name;?>"
-                       class="<?php echo $field->css_class; ?> uwp_textfield"
+                       class="<?php echo $field->css_class; ?> uwp_textfield <?php echo esc_attr($bs_form_control);?>"
                        id="<?php echo $field->htmlvar_name;?>"
                        placeholder="<?php echo $site_title; ?>"
                        value="<?php echo esc_attr(stripslashes($value));?>"
@@ -2179,22 +2188,27 @@ class UsersWP_Forms {
         // If no html then we run the standard output.
         if(empty($html)) {
 
+            $design_style = uwp_get_option("design_style","bootstrap");
+            $bs_form_group = $design_style ? "form-group" : "";
+            $bs_sr_only = $design_style ? "sr-only" : "";
+            $bs_form_control = $design_style ? "form-control" : "";
+
             ob_start(); // Start  buffering;
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
 
                 <?php
                 $site_title = uwp_get_form_label($field);
                 if (!is_admin()) { ?>
-                    <label>
+                    <label class="<?php echo esc_attr($bs_sr_only);?>">
                         <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
                         <?php if ($field->is_required) echo '<span>*</span>';?>
                     </label>
                 <?php } ?>
 
                 <input name="<?php echo $field->htmlvar_name;?>"
-                       class="<?php echo $field->css_class; ?> uwp_textfield"
+                       class="<?php echo $field->css_class; ?> uwp_textfield <?php echo esc_attr($bs_form_control);?>"
                        id="<?php echo $field->htmlvar_name;?>"
                        placeholder="<?php echo $site_title; ?>"
                        value="<?php echo esc_attr(stripslashes($value));?>"

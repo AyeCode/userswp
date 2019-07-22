@@ -514,6 +514,23 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'type' => 'checkbox',
                 ),
 
+
+	            // @todo to be move to own design section
+	            array(
+		            'id' => 'design_style',
+		            'name' => __('Default Design Style', 'userswp'),
+		            'desc' => __('The default design style to use.', 'userswp'),
+		            'type' => 'select',
+		            'options' => array(
+			            'bootstrap' =>  __('Bootstrap', 'userswp'),
+			            '' =>  __('Legacy (non-bootstrap)', 'userswp'),
+		            ),
+		            'class' => 'uwp-select',
+		            'desc_tip' => true,
+		            'default' => 'bootstrap',
+	            ),
+
+
                 array( 'type' => 'sectionend', 'id' => 'developer_options' ),
             ));
         } else {

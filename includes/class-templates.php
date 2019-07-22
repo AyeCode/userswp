@@ -59,7 +59,12 @@ class UsersWP_Templates {
             case 'dashboard':
                 $template_path = $this->uwp_generic_locate_template('dashboard');
                 break;
+            
+            default:
+                $template_path = $this->uwp_generic_locate_template($template);
+                break;
         }
+        
 
         return apply_filters('uwp_locate_template', $template_path, $template);
     }

@@ -143,7 +143,11 @@ class UWP_Login_Widget extends WP_Super_Duper {
 
             echo '<div class="uwp_page">';
 
-            uwp_locate_template('login');
+            $design_style = uwp_get_option("design_style","bootstrap");
+
+            $template = $design_style ? $design_style."/login" : "login";
+            
+            uwp_locate_template($template);
 
             echo '</div>';
 
