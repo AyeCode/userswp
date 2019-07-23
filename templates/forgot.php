@@ -3,7 +3,11 @@
     <div class="uwp-login">
         <div class="uwp-lf-icon"><i class="fas fa-user fa-fw"></i></div>
         <?php do_action('uwp_template_form_title_before', 'forgot'); ?>
-        <h2><?php echo apply_filters('uwp_template_form_title', get_the_title(), 'forgot'); ?></h2>
+        <h2><?php
+            global $uwp_forgot_widget_args;
+            $form_title = !empty($uwp_forgot_widget_args['forgot_text']) ? esc_attr__($uwp_forgot_widget_args['forgot_text'], 'userswp') : __('Forgot Password?', 'userswp');
+            echo apply_filters('uwp_template_form_title', $form_title, 'forgot');
+            ?></h2>
         <?php do_action('uwp_template_display_notices', 'forgot'); ?>
         <form class="uwp-login-form uwp_form" method="post">
             <?php do_action('uwp_template_fields', 'forgot'); ?>

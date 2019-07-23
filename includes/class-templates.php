@@ -18,13 +18,20 @@ class UsersWP_Templates {
      * @return      string                      The template filename if one is located.
      */
     public function uwp_locate_template( $template, $template_path = "" ) {
+        $design_style = uwp_get_option("design_style","bootstrap");
 
         switch ($template) {
             case 'register':
-                $template_path = $this->uwp_generic_locate_template('register');
+            case 'login':
+            case 'forgot':
+            case 'change':
+            case 'reset':
+            case 'account':
+                $template = $design_style ? $design_style."/".$template : $template;
+                $template_path = $this->uwp_generic_locate_template($template);
                 break;
 
-            case 'login':
+            /*case 'login':
                 $template_path = $this->uwp_generic_locate_template('login');
                 break;
 
@@ -42,7 +49,7 @@ class UsersWP_Templates {
 
             case 'account':
                 $template_path = $this->uwp_generic_locate_template('account');
-                break;
+                break;*/
 
             case 'profile':
                 $template_path = $this->uwp_generic_locate_template('profile');
@@ -59,7 +66,12 @@ class UsersWP_Templates {
             case 'dashboard':
                 $template_path = $this->uwp_generic_locate_template('dashboard');
                 break;
+            
+            default:
+                $template_path = $this->uwp_generic_locate_template($template);
+                break;
         }
+        
 
         return apply_filters('uwp_locate_template', $template_path, $template);
     }
