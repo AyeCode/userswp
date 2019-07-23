@@ -55,7 +55,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
                 ),
                 'logged_in_show'  => array(
                     'title' => __('Logged in show', 'userswp'),
-                    'desc' => __('Wha to show when logged in.', 'userswp'),
+                    'desc' => __('What to show when logged in.', 'userswp'),
                     'type' => 'select',
                     'options'   =>  array(
                         ""        =>  __('User Dashboard (default)', 'userswp'),
@@ -65,11 +65,29 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     'default'  => '',
                     'desc_tip' => true,
                     'advanced' => true
+                ),
+                'design_style'  => array(
+                    'title' => __('Design Style', 'userswp'),
+                    'desc' => __('The design style to use.', 'userswp'),
+                    'type' => 'select',
+                    'options'   =>  array(
+                        ""        =>  __('default', 'userswp'),
+                        "bs1"        =>  __('Style 1', 'userswp'),
+                        "bs2"        =>  __('Style 2', 'userswp'),
+                        "bs3"        =>  __('Style 3', 'userswp'),
+                        "bs4"        =>  __('Style 4', 'userswp'),
+                    ),
+                    'default'  => '',
+                    'desc_tip' => true,
+                    'advanced' => true
                 )
 
             )
 
         );
+        
+        // Design style
+        
 
         // add integrations by default and add option to remove
 
@@ -139,9 +157,12 @@ class UWP_Login_Widget extends WP_Super_Duper {
             global $uwp_login_widget_args;
             $uwp_login_widget_args = $args;
 
+            $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style","bootstrap");
+            $template = $design_style ? $design_style."/login" : "login";
+
             echo '<div class="uwp_page">';
 
-            uwp_locate_template('login');
+            uwp_locate_template($template);
 
             echo '</div>';
 

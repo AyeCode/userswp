@@ -1,7 +1,7 @@
 <?php do_action( 'uwp_template_before', 'login' ); ?>
 	<div class="row">
 		<div class="mx-auto mw-100" style="width: 20rem;">
-			<div class="card card-signin rounded border rounded">
+			<div class="card card-signin rounded border-0 shadow rounded">
 				<div class="card-body">
 
 					<?php do_action( 'uwp_template_form_title_before', 'login' ); ?>
