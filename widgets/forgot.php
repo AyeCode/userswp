@@ -38,6 +38,15 @@ class UWP_Forgot_Widget extends WP_Super_Duper {
                     'default'     => '',
                     'advanced'    => false
                 ),
+                'form_title'  => array(
+                    'title'       => __( 'Form title', 'userswp' ),
+                    'desc'        => __( 'Enter the form title', 'userswp' ),
+                    'type'        => 'text',
+                    'desc_tip'    => true,
+                    'default'     => '',
+                    'placeholder' => __('Forgot Password?', 'userswp'),
+                    'advanced'    => true
+                ),
             )
 
         );
@@ -52,7 +61,19 @@ class UWP_Forgot_Widget extends WP_Super_Duper {
             return false;
         }
 
+        $defaults = array(
+            'form_title' => __('Forgot Password?','userswp'),
+        );
+
+        /**
+         * Parse incoming $args into an array and merge it with $defaults
+         */
+        $args = wp_parse_args( $args, $defaults );
+
         ob_start();
+
+        global $uwp_forgot_widget_args;
+        $uwp_forgot_widget_args = $args;
 
         echo '<div class="uwp_widgets uwp_widget_forgot">';
 

@@ -38,6 +38,15 @@ class UWP_Change_Widget extends WP_Super_Duper {
                     'default'     => '',
                     'advanced'    => false
                 ),
+                'form_title'  => array(
+                    'title'       => __( 'Form title', 'userswp' ),
+                    'desc'        => __( 'Enter the form title', 'userswp' ),
+                    'type'        => 'text',
+                    'desc_tip'    => true,
+                    'default'     => '',
+                    'placeholder' => __('Change Password','userswp'),
+                    'advanced'    => true
+                ),
             )
 
         );
@@ -51,6 +60,18 @@ class UWP_Change_Widget extends WP_Super_Duper {
         if (!is_user_logged_in()) {
             return false;
         }
+
+        $defaults = array(
+            'form_title' => __('Change Password','userswp'),
+        );
+
+        /**
+         * Parse incoming $args into an array and merge it with $defaults
+         */
+        $args = wp_parse_args( $args, $defaults );
+
+        global $uwp_change_widget_args;
+        $uwp_change_widget_args = $args;
 
         ob_start();
 

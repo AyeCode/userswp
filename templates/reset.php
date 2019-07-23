@@ -3,7 +3,11 @@
         <div class="uwp-login">
             <div class="uwp-lf-icon"><i class="fas fa-key fa-fw"></i></div>
             <?php do_action('uwp_template_form_title_before', 'reset'); ?>
-            <h2><?php echo apply_filters('uwp_template_form_title', get_the_title(), 'reset'); ?></h2>
+            <h2><?php
+                global $uwp_reset_widget_args;
+                $form_title = !empty($uwp_reset_widget_args['form_title']) ? esc_attr__($uwp_reset_widget_args['form_title'], 'userswp') : __('Reset Password', 'userswp');
+                echo apply_filters('uwp_template_form_title', $form_title, 'reset');
+                ?></h2>
             <?php do_action('uwp_template_display_notices', 'reset'); ?>
             <?php if (isset($_GET['key']) && isset($_GET['login'])) { ?>
                 <form class="uwp-login-form uwp_form" method="post">

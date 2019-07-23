@@ -62,7 +62,7 @@ class UsersWP_Public {
                 }
             }
         }
-        
+
 
         if ($enable_timepicker_in_register) {
             // time fields available only in register and account pages
@@ -79,8 +79,6 @@ class UsersWP_Public {
             wp_enqueue_style( USERSWP_NAME, USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
             wp_register_style( 'uwp-authorbox', USERSWP_PLUGIN_URL . 'assets/css/authorbox.css', array(), USERSWP_VERSION, 'all' );
         }
-
-
 
     }
 
@@ -146,6 +144,10 @@ class UsersWP_Public {
         }
 
         wp_enqueue_script('select2', USERSWP_PLUGIN_URL . 'assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION );
+
+        if(!empty(uwp_get_option("design_style","bootstrap"))) {
+            wp_enqueue_script('bootstrap-js', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle' . $suffix . '.js', array('jquery'), USERSWP_VERSION);
+        }
 
         // include only in uwp pages
         wp_enqueue_script( USERSWP_NAME, USERSWP_PLUGIN_URL . 'assets/js/users-wp' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );

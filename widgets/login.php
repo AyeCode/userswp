@@ -35,9 +35,9 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     'default'     => '',
                     'advanced'    => false
                 ),
-                'login_text'  => array(
-                    'title'       => __( 'Login text', 'userswp' ),
-                    'desc'        => __( 'Enter the login text', 'userswp' ),
+                'form_title'  => array(
+                    'title'       => __( 'Form title', 'userswp' ),
+                    'desc'        => __( 'Enter the form title', 'userswp' ),
                     'type'        => 'text',
                     'desc_tip'    => true,
                     'default'     => '',
@@ -107,7 +107,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
         $defaults = array(
-            'login_title'      => __('Login','userswp'),
+            'form_title'      => __('Login','userswp'),
             'form_padding'     => '',
             'logged_in_show'     => '',
         );
@@ -116,8 +116,6 @@ class UWP_Login_Widget extends WP_Super_Duper {
          * Parse incoming $args into an array and merge it with $defaults
          */
         $args = wp_parse_args( $args, $defaults );
-
-        //print_r($args);
 
         // if logged in and set to show nothing then bail.
         if(is_user_logged_in() && $args['logged_in_show']=='empty'){
@@ -143,11 +141,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
 
             echo '<div class="uwp_page">';
 
-            $design_style = uwp_get_option("design_style","bootstrap");
-
-            $template = $design_style ? $design_style."/login" : "login";
-            
-            uwp_locate_template($template);
+            uwp_locate_template('login');
 
             echo '</div>';
 

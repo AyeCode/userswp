@@ -3,7 +3,11 @@
         <div class="uwp-login">
             <div class="uwp-lf-icon"><i class="fas fa-sync fa-fw"></i></div>
             <?php do_action('uwp_template_form_title_before', 'change'); ?>
-            <h2><?php echo apply_filters('uwp_template_form_title', get_the_title(), 'change'); ?></h2>
+            <h2><?php
+                global $uwp_change_widget_args;
+                $form_title = !empty($uwp_change_widget_args['form_title']) ? esc_attr__($uwp_change_widget_args['form_title'], 'userswp') : __('Change', 'userswp');
+                echo apply_filters('uwp_template_form_title', $form_title, 'change');
+                ?></h2>
             <?php do_action('uwp_template_display_notices', 'change'); ?>
             <form class="uwp-change-form uwp_form" method="post">
                 <?php do_action('uwp_template_fields', 'change'); ?>

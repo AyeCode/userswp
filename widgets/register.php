@@ -33,6 +33,15 @@ class UWP_Register_Widget extends WP_Super_Duper {
                     'default'     => '',
                     'advanced'    => false
                 ),
+                'form_title'  => array(
+                    'title'       => __( 'Form Title', 'userswp' ),
+                    'desc'        => __( 'Enter the form title', 'userswp' ),
+                    'type'        => 'text',
+                    'desc_tip'    => true,
+                    'default'     => '',
+                    'placeholder' => __('Register','userswp'),
+                    'advanced'    => true
+                ),
             )
 
         );
@@ -45,6 +54,18 @@ class UWP_Register_Widget extends WP_Super_Duper {
         if (is_user_logged_in()) {
             return false;
         }
+
+        $defaults = array(
+            'form_title'      => __('Register','userswp'),
+        );
+
+        /**
+         * Parse incoming $args into an array and merge it with $defaults
+         */
+        $args = wp_parse_args( $args, $defaults );
+
+        global $uwp_register_widget_args;
+        $uwp_register_widget_args = $args;
 
         ob_start();
 
