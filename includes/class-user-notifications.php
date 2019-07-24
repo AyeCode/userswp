@@ -16,6 +16,11 @@ class UsersWP_Notifications {
     public function uwp_user_notifications_form_front($type){
         if ($type == 'notifications') {
             $user_id = get_current_user_id();
+            $design_style = uwp_get_option("design_style","bootstrap");
+            $bs_form_group = $design_style ? "form-group form-check" : "";
+            $bs_form_control = $design_style ? "form-check-input" : "";
+            $bs_sr_only = $design_style ? "form-check-label" : "";
+            $bs_btn_class = $design_style ? "btn btn-primary btn-block text-uppercase" : "";
             echo '<div class="uwp-account-form uwp_wc_form">';
             ?>
             <div class="uwp-profile-extra">
@@ -40,18 +45,24 @@ class UsersWP_Notifications {
                                         $checked = 0;
                                     }
                                     ?>
-                                    <div class="uwp-profile-extra-wrap uwp_mute_notification_items">
+                                    <div class="uwp-profile-extra-wrap uwp_mute_notification_items <?php echo $bs_form_group; ?>">
                                         <div id="uwp_mute_<?php echo $id; ?>"
                                              class="uwp_mute_notification_item uwp_mute_<?php echo $id; ?>">
+                                            <?php if(!empty($design_style)){ ?>
+                                            <label class="<?php echo $bs_sr_only; ?>">
+                                                <?php } ?>
                                             <input name="uwp_mute_notifications[<?php echo $id; ?>]"
-                                                   class="" <?php checked($checked, "1", true); ?> type="checkbox"
+                                                   class="<?php echo $bs_form_control; ?>" <?php checked($checked, "1", true); ?> type="checkbox"
                                                    value="1"><?php echo $text; ?>
+                                            <?php if(!empty($design_style)){ ?>
+                                                </label>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 <?php }
                                 ?>
                                 <input type="hidden" name="uwp_notification_nonce" value="<?php echo wp_create_nonce( 'uwp-notification-nonce' ); ?>" />
-                                <input name="uwp_notification_submit" value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
+                                <input name="uwp_notification_submit" class="<?php echo $bs_btn_class; ?>" value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
                                 <?php
                             } else {
                                 echo '<p>'.__( 'You will see the options to disable the active notifications for UsersWP and it\'s add ons.', 'userswp' ).'</p>';
@@ -87,6 +98,4 @@ class UsersWP_Notifications {
 
         }
     }
-
-
 }

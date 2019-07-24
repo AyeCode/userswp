@@ -31,26 +31,6 @@ class UsersWP_Templates {
                 $template_path = $this->uwp_generic_locate_template($template);
                 break;
 
-            /*case 'login':
-                $template_path = $this->uwp_generic_locate_template('login');
-                break;
-
-            case 'forgot':
-                $template_path = $this->uwp_generic_locate_template('forgot');
-                break;
-
-            case 'change':
-                $template_path = $this->uwp_generic_locate_template('change');
-                break;
-
-            case 'reset':
-                $template_path = $this->uwp_generic_locate_template('reset');
-                break;
-
-            case 'account':
-                $template_path = $this->uwp_generic_locate_template('account');
-                break;*/
-
             case 'profile':
                 $template_path = $this->uwp_generic_locate_template('profile');
                 break;
@@ -514,11 +494,13 @@ class UsersWP_Templates {
      */
     public function uwp_account_edit_form_display($type) {
         if ($type == 'account') {
+            $design_style = uwp_get_option("design_style","bootstrap");
+            $bs_btn_class = $design_style ? "btn btn-primary btn-block text-uppercase" : "";
             ?>
-            <form class="uwp-account-form uwp_form" method="post" enctype="multipart/form-data">
+            <form class="uwp-account-form uwp_form mt-3" method="post" enctype="multipart/form-data">
                 <?php do_action('uwp_template_fields', 'account'); ?>
                 <input type="hidden" name="uwp_account_nonce" value="<?php echo wp_create_nonce( 'uwp-account-nonce' ); ?>" />
-                <input name="uwp_account_submit" value="<?php echo __( 'Update Account', 'userswp' ); ?>" type="submit">
+                <input name="uwp_account_submit" class="<?php echo $bs_btn_class; ?>" value="<?php echo __( 'Update Account', 'userswp' ); ?>" type="submit">
             </form>
         <?php }
     }
@@ -572,22 +554,35 @@ class UsersWP_Templates {
         $html = apply_filters("uwp_form_input_html_{$field->field_type}", "", $field, $value, $form_type);
 
         if (empty($html)) {
+
+            $design_style = uwp_get_option("design_style","bootstrap");
+            $bs_form_group = $design_style ? "form-group" : "";
+            $bs_sr_only = $design_style ? "sr-only" : "";
+            $bs_form_control = $design_style ? "form-control" : "";
+
+            ?>
+            <div id="<?php echo $field->htmlvar_name;?>_row"
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp_clear <?php echo esc_attr($bs_form_group);?>">
+            <?php
+
             $label = $site_title = uwp_get_form_label($field);
             if (!is_admin()) { ?>
-                <label>
-                    <?php echo (trim($label)) ? $label : '&nbsp;'; ?>
-                    <?php if ($field->is_required == 1) echo '<span>*</span>';?>
+                <label class="<?php echo esc_attr($bs_sr_only);?>">
+                    <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
+                    <?php if ($field->is_required) echo '<span>*</span>';?>
                 </label>
-            <?php }
-            ?>
+            <?php } ?>
+
             <input name="<?php echo $field->htmlvar_name; ?>"
-                   class="<?php echo $field->css_class; ?>"
+                   class="<?php echo $field->css_class; ?> <?php echo esc_attr($bs_form_control);?>"
                    placeholder="<?php echo $label; ?>"
                    title="<?php echo $label; ?>"
                 <?php if ($field->for_admin_use == 1) { echo 'readonly="readonly"'; } ?>
                 <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
                    type="<?php echo $field->field_type; ?>"
                    value="<?php echo esc_html($value); ?>">
+
+            </div>
             <?php
         } else {
             echo $html;

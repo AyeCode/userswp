@@ -675,24 +675,28 @@ function uwp_account_privacy_edit_form_display($type) {
         $fields = get_account_form_fields($extra_where);
         $fields = apply_filters('uwp_account_privacy_fields', $fields);
         $user_id = get_current_user_id();
+        $design_style = uwp_get_option("design_style","bootstrap");
+        $bs_form_group = $design_style ? "form-group row" : "";
+        $bs_form_control = $design_style ? "form-control" : "";
+        $bs_btn_class = $design_style ? "btn btn-primary btn-block text-uppercase" : "";
         ?>
         <div class="uwp-profile-extra">
             <div class="uwp-profile-extra-div form-table">
                 <form class="uwp-account-form uwp_form" method="post">
                     <?php if ($fields) { ?>
-                        <div class="uwp-profile-extra-wrap">
-                            <div class="uwp-profile-extra-key" style="font-weight: bold;">
+                        <div class="uwp-profile-extra-wrap row">
+                            <div class="uwp-profile-extra-key col" style="font-weight: bold;">
                                 <?php echo __("Field", "userswp") ?>
                             </div>
-                            <div class="uwp-profile-extra-value" style="font-weight: bold;">
+                            <div class="uwp-profile-extra-value col" style="font-weight: bold;">
                                 <?php echo __("Is Public?", "userswp") ?>
                             </div>
                         </div>
                         <?php foreach ($fields as $field) { ?>
-                            <div class="uwp-profile-extra-wrap">
-                                <div class="uwp-profile-extra-key"><?php echo $field->site_title; ?>
+                            <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
+                                <div class="uwp-profile-extra-key col"><?php echo $field->site_title; ?>
                                     <span class="uwp-profile-extra-sep">:</span></div>
-                                <div class="uwp-profile-extra-value">
+                                <div class="uwp-profile-extra-value col">
                                     <?php
                                     $field_name = $field->htmlvar_name . '_privacy';
                                     $value = uwp_get_usermeta($user_id, $field_name, false);
@@ -700,7 +704,7 @@ function uwp_account_privacy_edit_form_display($type) {
                                         $value = 'yes';
                                     }
                                     ?>
-                                    <select name="<?php echo $field_name; ?>" class="uwp_privacy_field uwp_select2"
+                                    <select name="<?php echo $field_name; ?>" class="uwp_privacy_field uwp_select2 <?php echo $bs_form_control; ?>"
                                             style="margin: 0;">
                                         <option value="no" <?php selected($value, "no"); ?>><?php echo __("No", "userswp") ?></option>
                                         <option value="yes" <?php selected($value, "yes"); ?>><?php echo __("Yes", "userswp") ?></option>
@@ -733,7 +737,7 @@ function uwp_account_privacy_edit_form_display($type) {
                     }
                     ?>
                     <input type="hidden" name="uwp_privacy_nonce" value="<?php echo wp_create_nonce( 'uwp-privacy-nonce' ); ?>" />
-                    <input name="uwp_privacy_submit" value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
+                    <input name="uwp_privacy_submit" class="<?php echo $bs_btn_class; ?>"  value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
                 </form>
             </div>
         </div>
@@ -769,7 +773,7 @@ function uwp_add_account_menu_links() {
         return;
     }
 
-    echo '<ul class="uwp_account_menu">';
+    echo '<div class="text-center"><select class="uwp_account_menu uwp_select2" name="uwp_account_menu" onchange="window.location = jQuery(this).val();">';
 
     foreach( $account_available_tabs as $tab_id => $tab ) {
 
@@ -785,20 +789,14 @@ function uwp_add_account_menu_links() {
             $tab_url = $tab['link'];
         }
 
-        $active = $type == $tab_id ? ' active' : '';
         ?>
-        <li id="uwp-account-<?php echo $tab_id; ?>">
-            <a class="<?php echo $active; ?>" href="<?php echo esc_url( $tab_url ); ?>">
-                <i class="<?php echo $tab['icon']; ?>"></i> <?php echo $tab['title']; ?>
-            </a>
-        </li>
+        <option id="uwp-account-<?php echo $tab_id; ?>" value="<?php echo esc_url( $tab_url ); ?>" <?php selected($type, $tab_id) ?>>
+            <i class="<?php echo $tab['icon']; ?>"></i><?php echo $tab['title']; ?>
+        </option>
         <?php
     }
 
-    $template = new UsersWP_Templates();
-    $logout_url = $template->uwp_logout_url();
-    echo '<li id="uwp-account-logout"><a class="uwp-account-logout-link" href="'.$logout_url.'"><i class="fas fa-sign-out-alt"></i>'.__('Logout', 'userswp').'</a></li>';
-    echo '</ul>';
+    echo '</select></div>';
 }
 
 
