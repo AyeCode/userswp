@@ -153,32 +153,20 @@ function uwp_generic_tab_content($user, $post_type = false, $title, $post_ids = 
  */
 function uwp_account_get_available_tabs() {
 
-    $tabs = array();
-    $type = 'account';
-    if (isset($_GET['type'])) {
-        $type = strip_tags(esc_sql($_GET['type']));
-    }
-
-    if('account' != $type){
-        $tabs['account']  = array(
+    $tabs = array(
+        'account' => array(
             'title' => __( 'Edit Account', 'userswp' ),
             'icon' => 'fas fa-user',
-        );
-    }
-
-    if('notifications' != $type){
-        $tabs['notifications']  = array(
-            'title' => __( 'Notifications', 'userswp' ),
-            'icon' => 'fas fa-bell',
-        );
-    }
-
-    if('privacy' != $type) {
-        $tabs['privacy'] = array(
-            'title' => __('Privacy', 'userswp'),
-            'icon' => 'fas fa-lock',
-        );
-    }
+        ),
+        'notifications' => array(
+	        'title' => __( 'Notifications', 'userswp' ),
+	        'icon' => 'fas fa-bell',
+        ),
+        'privacy' => array(
+	        'title' => __('Privacy', 'userswp'),
+	        'icon' => 'fas fa-lock',
+        ),
+    );
 
     return apply_filters( 'uwp_account_available_tabs', $tabs );
 }

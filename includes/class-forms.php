@@ -97,7 +97,6 @@ class UsersWP_Forms {
             $uwp_notices[] = ob_get_contents();
         }
 
-
         ob_end_clean();
 
     }
@@ -2484,10 +2483,13 @@ class UsersWP_Forms {
             $user_id = get_current_user_id();
             $user_info = get_userdata($user_id);
             $display_name = $user_info->user_login;
+            $template = new UsersWP_Templates();
+            $logout_url = $template->uwp_logout_url();
             ?>
-            <span class="uwp_account_page_username">
-            <a href="<?php echo uwp_build_profile_tab_url($user_id); ?>">( @<?php echo $display_name; ?> )</a>
-        </span>
+            <div class="uwp_account_page_username text-center">
+                <?php _e('Hello, ', 'userswp'); ?><a href="<?php echo uwp_build_profile_tab_url($user_id); ?>"> @<?php echo $display_name; ?> </a>
+                <a class="uwp-account-logout-link" href="<?php echo $logout_url; ?>">(<?php _e('Logout', 'userswp'); ?>)</a>
+            </div>
             <?php
         }
     }
