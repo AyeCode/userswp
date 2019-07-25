@@ -47,6 +47,21 @@ class UWP_Change_Widget extends WP_Super_Duper {
                     'placeholder' => __('Change Password','userswp'),
                     'advanced'    => true
                 ),
+	            'design_style'  => array(
+		            'title' => __('Design Style', 'userswp'),
+		            'desc' => __('The design style to use.', 'userswp'),
+		            'type' => 'select',
+		            'options'   =>  array(
+			            ""        =>  __('default', 'userswp'),
+			            "bs1"        =>  __('Style 1', 'userswp'),
+			            "bs2"        =>  __('Style 2', 'userswp'),
+			            "bs3"        =>  __('Style 3', 'userswp'),
+			            "bs4"        =>  __('Style 4', 'userswp'),
+		            ),
+		            'default'  => '',
+		            'desc_tip' => true,
+		            'advanced' => true
+	            )
             )
 
         );
@@ -77,9 +92,12 @@ class UWP_Change_Widget extends WP_Super_Duper {
 
         echo '<div class="uwp_widgets uwp_widget_change">';
 
+	    $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
+	    $template = $design_style ? $design_style."/change" : "change";
+
         echo '<div class="uwp_page">';
 
-        uwp_locate_template('change');
+        uwp_locate_template($template);
 
         echo '</div>';
 
