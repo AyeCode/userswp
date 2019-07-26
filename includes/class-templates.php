@@ -18,7 +18,6 @@ class UsersWP_Templates {
      * @return      string                      The template filename if one is located.
      */
     public function uwp_locate_template( $template, $template_path = "" ) {
-        $design_style = uwp_get_option("design_style","bootstrap");
 
         switch ($template) {
             case 'register':
@@ -27,7 +26,6 @@ class UsersWP_Templates {
             case 'change':
             case 'reset':
             case 'account':
-                $template = $design_style ? $design_style."/".$template : $template;
                 $template_path = $this->uwp_generic_locate_template($template);
                 break;
 

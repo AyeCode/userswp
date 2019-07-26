@@ -10,13 +10,13 @@
             <?php do_action('uwp_template_display_notices', 'login'); ?>
             <form class="uwp-login-form uwp_form" method="post">
                 <?php do_action('uwp_template_fields', 'login'); ?>
-                <?php do_action('uwp_social_fields', 'login'); ?>
                 <div class="uwp-remember-me">
                     <label style="display: inline-block;" for="remember_me">
                         <input name="remember_me" id="remember_me" value="forever" type="checkbox">
                         <?php _e( 'Remember Me', 'userswp' ); ?>
                     </label>
                 </div>
+	            <?php do_action('uwp_social_fields', 'login'); ?>
                 <input type="submit" name="uwp_login_submit" value="<?php _e( 'Login', 'userswp' ); ?>">
             </form>
             <div class="uwp-login-links">

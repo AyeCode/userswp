@@ -773,30 +773,52 @@ function uwp_add_account_menu_links() {
         return;
     }
 
-    echo '<div class="text-center"><select class="uwp_account_menu uwp_select2" name="uwp_account_menu" onchange="window.location = jQuery(this).val();">';
+	$legacy = '<ul class="uwp_account_menu">';
+    ob_start();
+    ?>
+    <div class="dropdown text-center">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="account_settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <?php _e('Account Settings', 'userswp'); ?>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="account_settings">
+            <?php
+            foreach( $account_available_tabs as $tab_id => $tab ) {
 
-    foreach( $account_available_tabs as $tab_id => $tab ) {
+	            if ($tab_id == 'account') {
+		            $tab_url = $account_page_link;
+	            } else {
+		            $tab_url = add_query_arg(array(
+			            'type' => $tab_id,
+		            ), $account_page_link);
+	            }
 
-        if ($tab_id == 'account') {
-            $tab_url = $account_page_link;
-        } else {
-            $tab_url = add_query_arg(array(
-                'type' => $tab_id,
-            ), $account_page_link);
-        }
+	            if (isset($tab['link'])) {
+		            $tab_url = $tab['link'];
+	            }
 
-        if (isset($tab['link'])) {
-            $tab_url = $tab['link'];
-        }
+	            $active = $type == $tab_id ? ' active' : '';
 
-        ?>
-        <option id="uwp-account-<?php echo $tab_id; ?>" value="<?php echo esc_url( $tab_url ); ?>" <?php selected($type, $tab_id) ?>>
-            <i class="<?php echo $tab['icon']; ?>"></i><?php echo $tab['title']; ?>
-        </option>
-        <?php
+	            ?>
+                <a class="dropdown-item uwp-account-<?php echo $tab_id.' '.$active; ?>" href="<?php echo esc_url( $tab_url ); ?>"><?php echo $tab['title']; ?></a>
+	            <?php
+
+	            $legacy .= '<li id="uwp-account-'.$tab_id.'">';
+	            $legacy .= '<a class="'.$active.'" href="'.esc_url( $tab_url ).'">';
+	            $legacy .= '<i class="'.$tab["icon"].'"></i>'.$tab["title"];
+	            $legacy .= '</a></li>';
+            }
+            ?>
+        </div>
+    </div>
+    <?php
+	$legacy .=  '</ul>';
+	$bs_output = ob_get_clean();
+	$style = uwp_get_option('design_style', '');
+	if(!empty($style)){
+		echo $bs_output;
+    } else {
+		echo $legacy;
     }
-
-    echo '</select></div>';
 }
 
 
