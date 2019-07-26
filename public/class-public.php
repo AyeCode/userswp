@@ -70,9 +70,7 @@ class UsersWP_Public {
         }
 
         // maybe add bootstrap
-        if(!empty(uwp_get_option("design_style","bootstrap"))){
-            wp_enqueue_style( "ayestrap", USERSWP_PLUGIN_URL . 'assets/css/libs/bootstrap.min.css', array(), "4.3.1", 'all' );
-        }else{
+        if(empty(uwp_get_option("design_style","bootstrap"))){
             //widget styles for all pages
             wp_enqueue_style( "uwp_widget_css", USERSWP_PLUGIN_URL . 'assets/css/widgets.css', array(), USERSWP_VERSION, 'all' );
             wp_enqueue_style( "select2", USERSWP_PLUGIN_URL . 'assets/css/select2/select2.css', array(), USERSWP_VERSION, 'all' );
@@ -144,10 +142,6 @@ class UsersWP_Public {
         }
 
         wp_enqueue_script('select2', USERSWP_PLUGIN_URL . 'assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION );
-
-        if(!empty(uwp_get_option("design_style","bootstrap"))) {
-            wp_enqueue_script('bootstrap-js', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle' . $suffix . '.js', array('jquery'), USERSWP_VERSION);
-        }
 
         // include only in uwp pages
         wp_enqueue_script( USERSWP_NAME, USERSWP_PLUGIN_URL . 'assets/js/users-wp' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );

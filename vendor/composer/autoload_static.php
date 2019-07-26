@@ -7,6 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInitdb12a73f1ea855fdcb35c00228f6126f
 {
     public static $files = array (
+        'b4286f6bc1bfc36f7c4c5110db6a79d7' => __DIR__ . '/..' . '/ayecode/wp-bootstrap-settings/wp-bootstrap-loader.php',
         '24583d3588ebda5228dd453cfaa070da' => __DIR__ . '/..' . '/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php',
     );
 

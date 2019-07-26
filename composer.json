@@ -1,5 +1,5 @@
 {
-  "name": "UsersWP/userswp",
+  "name": "uswerwp/userswp",
   "type": "project",
   "description": "Lightweight WordPress User Profile Plugin, provides a front end login form, registration form, edit account form, forgot password, searchable users directory and user profiles.",
   "keywords": ["user-profile"],
@@ -16,6 +16,7 @@
   "require": {
     "php": ">=5.3.0",
     "ayecode/wp-font-awesome-settings": "^1.0",
+    "ayecode/wp-bootstrap-settings": "^0.0",
     "ayecode/wp-super-duper": "^1.0"
   },
   "minimum-stability": "dev"

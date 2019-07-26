@@ -24,11 +24,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 * @since 1.0.10 Some refactoring for page builders ( Avia builder for Enfold theme now supported ) - CHANGED
 	 * @since 1.0.11 Some refactoring for page builders - CHANGED
 	 * @since 1.0.12 A checkbox default value can make a argument true even when unchecked - FIXED
-	 * @ver 1.0.12
+	 * @since 1.0.13 Block values can break JS if contains a comma - FIXED
+	 * @ver 1.0.13
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.12";
+		public $version = "1.0.13";
 		public $block_code;
 		public $options;
 		public $base_id;
@@ -1801,7 +1802,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								if ( $new_key === 'content' || is_array( $new_value ) ) {
 
 									if ( $new_key === 'content' ) {
-										echo "'" . $this->block_props_replace( $new_value ) . "'";
+										echo "'" . $this->block_props_replace( wp_slash( $new_value ) ) . "'";
 									}
 
 									if ( is_array( $new_value ) ) {
