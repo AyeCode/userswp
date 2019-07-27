@@ -69,6 +69,8 @@ class UsersWP_Public {
             wp_enqueue_style( "uwp_timepicker_css", USERSWP_PLUGIN_URL . 'assets/css/jquery.ui.timepicker.css', array(), USERSWP_VERSION, 'all' );
         }
 
+	    wp_enqueue_style( "uwp-country-select", USERSWP_PLUGIN_URL . 'assets/css/libs/countryselect.css', array(), USERSWP_VERSION, 'all' );
+
         // maybe add bootstrap
         if(empty(uwp_get_option("design_style","bootstrap"))){
             //widget styles for all pages

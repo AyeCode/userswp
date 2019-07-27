@@ -480,6 +480,79 @@ class UsersWP_Forms {
 
     }
 
+	/**
+	 * Processes AJAX login form submission.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 */
+	public function process_login_ajax() {
+		$response = array();
+
+		if( !empty( $_POST['nonce'] ) && wp_verify_nonce($_POST['nonce'] ,'uwp-login-nonce') ) {
+
+			$username = !empty( $_POST['username'] ) ? $_POST['username'] : '';
+			$password = !empty( $_POST['password'] ) ? $_POST['password'] : '';
+			$remember_me = !empty( $_POST['remember_me'] ) ? $_POST['remember_me'] : '';
+			$data = array(
+                'uwp_login_username' => $username,
+                'uwp_login_password' => $password,
+            );
+
+			do_action('uwp_before_validate', 'login');
+
+			$result = uwp_validate_fields($data, 'login');
+
+			$result = apply_filters('uwp_validate_result', $result, 'login', $data);
+
+			if (is_wp_error($result)) {
+				$response['error'] = true;
+				$message = '<div class="uwp-login-ajax-notice alert-danger text-center">'.$result->get_error_message().'</div>';
+				$response['message'] = $message;
+
+				echo json_encode( $response );
+				wp_die();
+			}
+
+			do_action('uwp_after_validate', 'login');
+
+			$remember = false;
+			if( !empty( $remember_me ) && 'forever' == $remember_me ) {
+				$remember = true;
+			}
+
+			$login_credential = array(
+				'user_login'    => $username,
+				'user_password' => $password,
+				'remember'      => $remember
+			);
+
+			remove_action( 'authenticate', 'gglcptch_login_check', 21 );
+
+			$user_credential = wp_signon( $login_credential, false );
+
+			add_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
+
+			if ( is_wp_error( $user_credential ) ) {
+				$response['error'] = true;
+				$message = '<div class="uwp-login-ajax-notice alert-danger text-center">'.$user_credential->get_error_message().'</div>';
+			} else{
+				$response['error'] = false;
+				$message = '<div class="uwp-login-ajax-notice alert-success text-center">'.__('Login successful. Redirecting...','userswp').'</div>';
+			}
+		} else{
+			$response['error'] = true;
+			$message = '<div class="uwp-login-ajax-notice alert-danger text-center">'.__('Invalid request.','userswp').'</div>';
+		}
+
+		$response['message'] = $message;
+
+		echo json_encode( $response );
+
+		wp_die();
+	}
+
     /**
      * Processes forgot password form submission.
      *
