@@ -1,24 +1,24 @@
 [
     {
         "name": "ayecode/wp-bootstrap-settings",
-        "version": "0.0.3",
-        "version_normalized": "0.0.3.0",
+        "version": "0.0.4",
+        "version_normalized": "0.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-bootstrap-settings.git",
-            "reference": "59f0d6fdf0db3e7183acabf6452d03cd5b99b7c2"
+            "reference": "a58b119eac3885e1213ac5455d00d32fc47ca4b8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-bootstrap-settings/zipball/59f0d6fdf0db3e7183acabf6452d03cd5b99b7c2",
-            "reference": "59f0d6fdf0db3e7183acabf6452d03cd5b99b7c2",
+            "url": "https://api.github.com/repos/AyeCode/wp-bootstrap-settings/zipball/a58b119eac3885e1213ac5455d00d32fc47ca4b8",
+            "reference": "a58b119eac3885e1213ac5455d00d32fc47ca4b8",
             "shasum": ""
         },
         "require": {
             "composer/installers": "~1.0",
             "php": ">=5.3.0"
         },
-        "time": "2019-07-26T18:48:02+00:00",
+        "time": "2019-07-27T18:03:37+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
