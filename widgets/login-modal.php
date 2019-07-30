@@ -142,11 +142,15 @@ class UWP_Login_Modal_Widget extends WP_Super_Duper {
 
             $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
             $template = $design_style ? $design_style."/login" : "login";
+
             $login_text = apply_filters('uwp_ajax_login_button_text', __('Login', 'userswp'));
 	        $login_modal_title = apply_filters('uwp_ajax_login_modal_title', __('Login to your account', 'userswp'));
-            echo '<div class="uwp_page">';
 	        ?>
-	        <a href="#" class="nav-link" data-toggle="modal" data-target="#uwp_login_modal"><?php echo $login_text; ?></a>
+            <ul class="navbar-nav ml-auto d-flex">
+                <li class="nav-item">
+	                <a href="#" class="nav-link" data-toggle="modal" data-target="#uwp_login_modal"><?php echo $login_text; ?></a>
+                </li>
+            </ul>
 
 	        <div class="modal fade" id="uwp_login_modal" tabindex="-1" role="dialog" aria-hidden="true">
 		        <div class="modal-dialog" role="document">
@@ -163,46 +167,7 @@ class UWP_Login_Modal_Widget extends WP_Super_Duper {
 			        </div>
 		        </div>
 	        </div>
-
-	        <script type="text/javascript">
-                jQuery( document ).ready(function($) {
-                    $( "#uwp_login_modal form.uwp-login-form" ).submit(function( e ) {
-
-                        e.preventDefault();
-
-                        $('#uwp_login_modal .uwp-login-ajax-notice').remove();
-
-                        var username = $('#uwp_login_modal form.uwp-login-form #uwp_login_username').val(),
-                            password = $('#uwp_login_modal form.uwp-login-form #uwp_login_password').val(),
-                            remember_me = $('#uwp_login_modal form.uwp-login-form #remember_me:checked').val(),
-                            nonce = $('#uwp_login_modal form.uwp-login-form input[name=uwp_login_nonce]').val();
-
-                        var data = {
-                            'action': 'uwp_ajax_login',
-                            'username': username,
-                            'password': password,
-                            'remember_me': remember_me,
-                            'nonce': nonce,
-                        };
-
-                        jQuery.post(ajaxurl, data, function(response) {
-                            response = jQuery.parseJSON(response);
-
-                            if(response.error){
-                                $('#uwp_login_modal form.uwp-login-form').before(response.message);
-                            } else {
-                                $('#uwp_login_modal form.uwp-login-form').before(response.message);
-                                window.setTimeout(function(){location.reload()}, 3000)
-                            }
-
-                        });
-                    });
-                });
-	        </script>
 			<?php
-
-            echo '</div>';
-
         }
 
         echo '</div>';

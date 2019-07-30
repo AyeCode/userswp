@@ -64,7 +64,7 @@ jQuery(window).load(function() {
             var container = jQuery('#uwp-popup-modal-wrap');
             container.show();
 
-            jQuery.post(ajaxurl, data, function(response) {
+            jQuery.post(uwp_localize_data.ajaxurl, data, function(response) {
                 $(document.body).append("<div id='uwp-modal-backdrop'></div>");
                 container.replaceWith(response);
             });
@@ -84,7 +84,7 @@ jQuery(window).load(function() {
                 'uid': uid
             };
 
-            jQuery.post(ajaxurl, data, function(response) {
+            jQuery.post(uwp_localize_data.ajaxurl, data, function(response) {
                 $("#"+htmlvar+"_row").find(".uwp_file_preview_wrap").remove();
                 $("#"+htmlvar).closest("td").find(".uwp_file_preview_wrap").remove();
                 if($('input[name='+htmlvar+']').data( 'is-required' )){
@@ -116,5 +116,32 @@ jQuery(window).load(function() {
                 container.addClass('uwp-users-list-wrap uwp_listview');
             }
         });
+
+        jQuery( document ).ready(function($) {
+            $( "#uwp_login_modal form.uwp-login-form" ).submit(function( e ) {
+                e.preventDefault();
+                uwp_ajax_login(this);
+            });
+        });
+
+        function uwp_ajax_login($this) {
+
+            $('#uwp_login_modal .uwp-login-ajax-notice').remove();
+
+            var data = jQuery($this).serialize()+ "&action=uwp_ajax_login";
+
+            jQuery.post(uwp_localize_data.ajaxurl, data, function(response) {
+                response = jQuery.parseJSON(response);
+
+                if(response.error){
+                    $('#uwp_login_modal form.uwp-login-form').before(response.message);
+                } else {
+                    $('#uwp_login_modal form.uwp-login-form').before(response.message);
+                    setTimeout(function(){location.reload()}, 1200)
+                }
+
+            });
+        }
+
     });
 }( jQuery, window ));

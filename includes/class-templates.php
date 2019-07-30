@@ -305,6 +305,12 @@ class UsersWP_Templates {
      * @return string The login url.
      */
     public function wp_login_url($login_url, $redirect, $force_reauth) {
+	    global $pagenow;
+
+        if(class_exists( 'Jetpack' ) && 'wp-login.php' == $pagenow && Jetpack::is_module_active( 'sso' )){
+		    return $login_url; // Do not change the URL for Jetpack SSO
+	    }
+
         $login_page_id = uwp_get_page_id('login_page', false);
         $redirect_page_id = uwp_get_page_id('login_redirect_to');
         if (!is_admin() && $login_page_id) {
@@ -648,7 +654,6 @@ class UsersWP_Templates {
         remove_filter( 'the_content', array( __CLASS__, 'setup_singular_page_content' ) );
 
         if(in_the_loop()) {
-            $content = get_post_field( 'post_content', $post->ID );
 
             if ( $content == '' ) {
                 if (is_uwp_profile_page()) {

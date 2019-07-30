@@ -284,10 +284,30 @@ class UsersWP_Forms {
             $description = $result['uwp_account_bio'];
         }
 
+	    $user_login = !empty($result['uwp_account_username']) ? $result['uwp_account_username'] : '';
+	    $email = !empty($result['uwp_account_email']) ? $result['uwp_account_email'] : '';
+
+	    if(empty($user_login)){
+		    $user_login = sanitize_user( str_replace( ' ', '', $display_name ), true );
+		    if ( !( validate_username( $user_login ) && !username_exists( $user_login ) ) ) {
+			    $new_user_login = strstr($email, '@', true);
+			    if ( validate_username( $user_login ) && username_exists( $user_login ) ) {
+				    $user_login = sanitize_user($new_user_login, true );
+			    }
+			    if ( validate_username( $user_login ) && username_exists( $user_login ) ) {
+				    $user_append_text = rand(10,1000);
+				    $user_login = sanitize_user($new_user_login.$user_append_text, true );
+			    }
+
+			    if ( !( validate_username( $user_login ) && !username_exists( $user_login ) ) ) {
+				    $user_login = $email;
+			    }
+		    }
+	    }
 
         $args = array(
-            'user_login'   => $result['uwp_account_username'],
-            'user_email'   => $result['uwp_account_email'],
+            'user_login'   => $user_login,
+            'user_email'   => $email,
             'user_pass'    => $password,
             'display_name' => $display_name,
             'first_name'   => $first_name,
@@ -426,7 +446,7 @@ class UsersWP_Forms {
 
         $data = $_POST;
 
-        if( ! isset( $data['uwp_login_nonce'] ) || ! wp_verify_nonce( $data['uwp_login_nonce'], 'uwp-login-nonce' ) ) {
+        if( wp_doing_ajax() || ! isset( $data['uwp_login_nonce'] ) || ! wp_verify_nonce( $data['uwp_login_nonce'], 'uwp-login-nonce' ) ) {
             return;
         }
 
@@ -490,15 +510,9 @@ class UsersWP_Forms {
 	public function process_login_ajax() {
 		$response = array();
 
-		if( !empty( $_POST['nonce'] ) && wp_verify_nonce($_POST['nonce'] ,'uwp-login-nonce') ) {
+		if( !empty( $_POST['uwp_login_nonce'] ) && wp_verify_nonce($_POST['uwp_login_nonce'] ,'uwp-login-nonce') ) {
 
-			$username = !empty( $_POST['username'] ) ? $_POST['username'] : '';
-			$password = !empty( $_POST['password'] ) ? $_POST['password'] : '';
-			$remember_me = !empty( $_POST['remember_me'] ) ? $_POST['remember_me'] : '';
-			$data = array(
-                'uwp_login_username' => $username,
-                'uwp_login_password' => $password,
-            );
+			$data = $_POST;
 
 			do_action('uwp_before_validate', 'login');
 
@@ -523,8 +537,8 @@ class UsersWP_Forms {
 			}
 
 			$login_credential = array(
-				'user_login'    => $username,
-				'user_password' => $password,
+				'user_login'    => $result['uwp_login_username'],
+				'user_password' => $result['password'],
 				'remember'      => $remember
 			);
 
@@ -538,6 +552,8 @@ class UsersWP_Forms {
 				$response['error'] = true;
 				$message = '<div class="uwp-login-ajax-notice alert-danger text-center">'.$user_credential->get_error_message().'</div>';
 			} else{
+				do_action('uwp_after_process_login', $data);
+
 				$response['error'] = false;
 				$message = '<div class="uwp-login-ajax-notice alert-success text-center">'.__('Login successful. Redirecting...','userswp').'</div>';
 			}
