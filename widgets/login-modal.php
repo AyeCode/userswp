@@ -143,12 +143,12 @@ class UWP_Login_Modal_Widget extends WP_Super_Duper {
             $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
             $template = $design_style ? $design_style."/login" : "login";
 
-            $login_text = apply_filters('uwp_ajax_login_button_text', __('Login', 'userswp'));
+	        $button_text = apply_filters('uwp_ajax_login_button_text', __('Login', 'userswp'));
 	        $login_modal_title = apply_filters('uwp_ajax_login_modal_title', __('Login to your account', 'userswp'));
 	        ?>
             <ul class="navbar-nav ml-auto d-flex">
                 <li class="nav-item">
-	                <a href="#" class="nav-link" data-toggle="modal" data-target="#uwp_login_modal"><?php echo $login_text; ?></a>
+	                <a href="#" class="nav-link" data-toggle="modal" data-target="#uwp_login_modal"><?php echo $button_text; ?></a>
                 </li>
             </ul>
 

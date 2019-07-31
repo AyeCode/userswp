@@ -123,6 +123,7 @@ No questions so far, but don't hesitate to ask!
 = 1.1.4 =
 * Elementor template with UsersWP shortcode does not output the other content than shortcode - FIXED
 * Changing login URL breaks Jetpack SSO - FIXED
+* Redirect back to admin panel after login from UWP login page if redirect wp-admin login is enabled - FIXED
 * Login with AJAX in bootstrap modal - ADDED
 
 = 1.1.3 =

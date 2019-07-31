@@ -255,12 +255,15 @@ class UsersWP_Templates {
      * @return      void
      */
     public function wp_login_redirect() {
-        $login_page_id = uwp_get_page_id('login_page', false);
-        $block_wp_login = uwp_get_option('block_wp_login', '');
-        if ($login_page_id && $block_wp_login == '1') {
-            global $pagenow;
-            if( 'wp-login.php' == $pagenow && !isset($_REQUEST['action']) ) {
+	    global $pagenow;
+	    if( 'wp-login.php' == $pagenow && !isset($_REQUEST['action']) ) {
+		    $login_page_id = uwp_get_page_id('login_page', false);
+		    $block_wp_login = uwp_get_option('block_wp_login', '');
+            if ($login_page_id && $block_wp_login == '1') {
                 $redirect_to = get_permalink($login_page_id);
+	            if ( $redirect_to ) {
+		            $redirect_to = add_query_arg( 'redirect_to', admin_url(), $redirect_to );
+	            }
                 wp_redirect( $redirect_to );
                 exit();
             }
