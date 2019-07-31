@@ -1,4 +1,5 @@
 <?php do_action('uwp_template_before', 'dashboard');
+global $uwp_login_widget_args;
 $user_id = get_current_user_id();
 $user_info = get_userdata($user_id);
 $display_name = $user_info->data->display_name;

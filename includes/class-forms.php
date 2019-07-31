@@ -284,10 +284,30 @@ class UsersWP_Forms {
             $description = $result['uwp_account_bio'];
         }
 
+	    $user_login = !empty($result['uwp_account_username']) ? $result['uwp_account_username'] : '';
+	    $email = !empty($result['uwp_account_email']) ? $result['uwp_account_email'] : '';
+
+	    if(empty($user_login)){
+		    $user_login = sanitize_user( str_replace( ' ', '', $display_name ), true );
+		    if ( !( validate_username( $user_login ) && !username_exists( $user_login ) ) ) {
+			    $new_user_login = strstr($email, '@', true);
+			    if ( validate_username( $user_login ) && username_exists( $user_login ) ) {
+				    $user_login = sanitize_user($new_user_login, true );
+			    }
+			    if ( validate_username( $user_login ) && username_exists( $user_login ) ) {
+				    $user_append_text = rand(10,1000);
+				    $user_login = sanitize_user($new_user_login.$user_append_text, true );
+			    }
+
+			    if ( !( validate_username( $user_login ) && !username_exists( $user_login ) ) ) {
+				    $user_login = $email;
+			    }
+		    }
+	    }
 
         $args = array(
-            'user_login'   => $result['uwp_account_username'],
-            'user_email'   => $result['uwp_account_email'],
+            'user_login'   => $user_login,
+            'user_email'   => $email,
             'user_pass'    => $password,
             'display_name' => $display_name,
             'first_name'   => $first_name,
@@ -426,7 +446,7 @@ class UsersWP_Forms {
 
         $data = $_POST;
 
-        if( ! isset( $data['uwp_login_nonce'] ) || ! wp_verify_nonce( $data['uwp_login_nonce'], 'uwp-login-nonce' ) ) {
+        if( wp_doing_ajax() || ! isset( $data['uwp_login_nonce'] ) || ! wp_verify_nonce( $data['uwp_login_nonce'], 'uwp-login-nonce' ) ) {
             return;
         }
 
@@ -479,6 +499,75 @@ class UsersWP_Forms {
         }
 
     }
+
+	/**
+	 * Processes AJAX login form submission.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 */
+	public function process_login_ajax() {
+		$response = array();
+
+		if( !empty( $_POST['uwp_login_nonce'] ) && wp_verify_nonce($_POST['uwp_login_nonce'] ,'uwp-login-nonce') ) {
+
+			$data = $_POST;
+
+			do_action('uwp_before_validate', 'login');
+
+			$result = uwp_validate_fields($data, 'login');
+
+			$result = apply_filters('uwp_validate_result', $result, 'login', $data);
+
+			if (is_wp_error($result)) {
+				$response['error'] = true;
+				$message = '<div class="uwp-login-ajax-notice alert-danger text-center">'.$result->get_error_message().'</div>';
+				$response['message'] = $message;
+
+				echo json_encode( $response );
+				wp_die();
+			}
+
+			do_action('uwp_after_validate', 'login');
+
+			$remember = false;
+			if( !empty( $remember_me ) && 'forever' == $remember_me ) {
+				$remember = true;
+			}
+
+			$login_credential = array(
+				'user_login'    => $result['uwp_login_username'],
+				'user_password' => $result['password'],
+				'remember'      => $remember
+			);
+
+			remove_action( 'authenticate', 'gglcptch_login_check', 21 );
+
+			$user_credential = wp_signon( $login_credential, false );
+
+			add_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
+
+			if ( is_wp_error( $user_credential ) ) {
+				$response['error'] = true;
+				$message = '<div class="uwp-login-ajax-notice alert-danger text-center">'.$user_credential->get_error_message().'</div>';
+			} else{
+				do_action('uwp_after_process_login', $data);
+
+				$response['error'] = false;
+				$message = '<div class="uwp-login-ajax-notice alert-success text-center">'.__('Login successful. Redirecting...','userswp').'</div>';
+			}
+		} else{
+			$response['error'] = true;
+			$message = '<div class="uwp-login-ajax-notice alert-danger text-center">'.__('Invalid request.','userswp').'</div>';
+		}
+
+		$response['message'] = $message;
+
+		echo json_encode( $response );
+
+		wp_die();
+	}
 
     /**
      * Processes forgot password form submission.

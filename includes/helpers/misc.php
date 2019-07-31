@@ -1654,6 +1654,7 @@ function uwp_get_localize_data(){
         'uwp_more_text' => __('more','userswp'),
         'uwp_less_text' => __('less','userswp'),
         'uwp_more_ellipses_text' => '...',
+        'ajaxurl' => admin_url('admin-ajax.php'),
     );
 
     return apply_filters('uwp_localize_data', $uwp_localize_data);
