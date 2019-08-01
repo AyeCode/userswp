@@ -1,7 +1,14 @@
-<?php do_action( 'uwp_template_before', 'login' ); ?>
+<?php
+/**
+ * Login template (style1)
+ *
+ * @ver 1.0.0
+ */
+global $uwp_login_widget_args;
+$css_class = !empty($uwp_login_widget_args['css_class']) ? esc_attr( $uwp_login_widget_args['css_class'] ) : '';
+do_action( 'uwp_template_before', 'login' ); ?>
     <div class="row">
-        <div class="mx-auto mw-100" style="width: 20rem;">
-            <div class="card rounded border">
+            <div class="card mx-auto rounded border p-0 <?php echo $css_class;?>" style="min-width: 20rem;">
                 <div class="card-header">
 
                     <?php do_action( 'uwp_template_form_title_before', 'login' ); ?>
@@ -56,7 +63,6 @@
                     </div>
                 </div>
 
-            </div>
         </div>
     </div>
 <?php do_action( 'uwp_template_after', 'login' ); ?>

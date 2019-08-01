@@ -73,14 +73,21 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     'options'   =>  array(
                         ""        =>  __('default', 'userswp'),
                         "bs1"        =>  __('Style 1', 'userswp'),
-                        "bs2"        =>  __('Style 2', 'userswp'),
-                        "bs3"        =>  __('Style 3', 'userswp'),
-                        "bs4"        =>  __('Style 4', 'userswp'),
                     ),
                     'default'  => '',
                     'desc_tip' => true,
                     'advanced' => true
-                )
+                ),
+                'css_class'  => array(
+                    'type' => 'text',
+                    'title' => __('Extra class:', 'userswp'),
+                    'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'userswp'),
+                    'placeholder' => '',
+                    'default' => '',
+                    'desc_tip' => true,
+                    'advanced' => true,
+                ),
+
 
             )
 
@@ -128,6 +135,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
             'form_title'      => __('Login','userswp'),
             'form_padding'     => '',
             'logged_in_show'     => '',
+            'css_class'     => ''
         );
 
         /**
@@ -144,7 +152,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
 
         echo '<div class="uwp_widgets uwp_widget_login">';
 
-        if(is_user_logged_in()) {
+        if(is_user_logged_in() && !is_admin() && !$this->is_preview()) {
 
             if($args['logged_in_show']=='simple'){
                 self::simple_output($args);
