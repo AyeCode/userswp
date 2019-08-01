@@ -276,6 +276,7 @@ jQuery(document).ready(function () {
             });
         }
     });
+
     jQuery(".field_row_main ul.core").sortable({
         opacity: 0.8,
         cursor: 'move',
@@ -315,55 +316,37 @@ jQuery(document).ready(function () {
         var manage_field_type = jQuery(this).closest('#uwp-available-fields').find(".manage_field_type").val();
 
         if (manage_field_type == 'register'){
-
-            jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_register_action&create_field=true',{ htmlvar_name: htmlvar_name,form_type:form_type, field_type:field_type, field_id: id, field_ins_upd: 'new' },
-                function(data)
-                {
-                    console.log(id);
-                    jQuery('.field_row_main ul.uwp_form_extras').append(data);
-
-                    jQuery('#licontainer_'+htmlvar_name).find('#sort_order').val( parseInt(jQuery('#licontainer_'+htmlvar_name).index()) + 1 );
-
-                    uwp_show_hide(jQuery("#licontainer_"+htmlvar_name).find('.toggle-arrow'));
-                    uwp_init_tooltips();
-                    jQuery('html, body').animate({
-                        scrollTop: jQuery("#licontainer_"+htmlvar_name).offset().top
-                    }, 1000);
-
-                    save_register_field(htmlvar_name); // save registration fields on add
-
-                });
-
-            if(htmlvar_name!='fieldset'){
-                jQuery(this).closest('li').hide();
-            }
-
+            var action = "uwp_ajax_register_action";
+        } else if (manage_field_type == 'search') {
+            var action = "uwp_ajax_search_action";
+        } else if (manage_field_type == 'profile_tabs') {
+            var action = "uwp_ajax_profile_tabs_action";
         }
 
-        if (manage_field_type == 'search'){
+        var field_data_type = jQuery(this).data('data_type');
 
-            var field_data_type = jQuery(this).data('data_type');
+        jQuery.get(uwp_admin_ajax.url+'?action=' + action + '&create_field=true',{ htmlvar_name: htmlvar_name,form_type:form_type, field_type:field_type, field_data_type:field_data_type, field_id: id, field_ins_upd: 'new' },
+            function(data)
+            {
+                console.log(id);
+                jQuery('.field_row_main ul.uwp_form_extras').append(data);
 
-            jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_search_action&create_field=true',{ htmlvar_name: htmlvar_name,form_type:form_type, field_type:field_type, field_data_type:field_data_type, field_id: id, field_ins_upd: 'new' },
-                function(data)
-                {
-                    console.log(id);
-                    jQuery('.field_row_main ul.uwp_form_extras').append(data);
+                jQuery('#licontainer_'+htmlvar_name).find('#sort_order').val( parseInt(jQuery('#licontainer_'+htmlvar_name).index()) + 1 );
 
-                    jQuery('#licontainer_'+htmlvar_name).find('#sort_order').val( parseInt(jQuery('#licontainer_'+htmlvar_name).index()) + 1 );
+                uwp_show_hide(jQuery("#licontainer_"+htmlvar_name).find('.toggle-arrow'));
+                uwp_init_tooltips();
+                jQuery('html, body').animate({
+                    scrollTop: jQuery("#licontainer_"+htmlvar_name).offset().top
+                }, 1000);
 
-                    uwp_show_hide(jQuery("#licontainer_"+htmlvar_name).find('.toggle-arrow'));
-                    uwp_init_tooltips();
-                    jQuery('html, body').animate({
-                        scrollTop: jQuery("#licontainer_"+htmlvar_name).offset().top
-                    }, 1000);
+                if (manage_field_type == 'register') {
+                    save_register_field(htmlvar_name); // save registration fields on add
+                }
 
-                });
+            });
 
-            if(htmlvar_name!='fieldset'){
-                jQuery(this).closest('li').hide();
-            }
-
+        if(htmlvar_name!='fieldset'){
+            jQuery(this).closest('li').hide();
         }
 
     });
@@ -488,10 +471,14 @@ function delete_field(id, nonce) {
 
 }
 
-function delete_register_field(id, nonce,deleteid)
+function delete_register_field(id, nonce, deleteid, type)
 {
 
-    var restore_id = id.replace('new','');
+    if('profile_tab' == type){
+        var action = 'uwp_ajax_profile_tabs_action';
+    } else {
+        var action = 'uwp_ajax_register_action';
+    }
 
     var confirmation = confirm(uwp_admin_ajax.custom_field_delete);
 
@@ -511,8 +498,14 @@ function delete_register_field(id, nonce,deleteid)
 
 }
 
-function save_register_field(id)
+function save_register_field(id, type)
 {
+    if('profile_tab' == type){
+        var action = 'uwp_ajax_profile_tabs_action';
+    } else {
+        var action = 'uwp_ajax_register_action';
+    }
+
     if(jQuery('#licontainer_'+id+' #field_title').length > 0){
 
         var htmlvar_name = jQuery('#licontainer_'+id+' #field_title').val();
@@ -525,14 +518,12 @@ function save_register_field(id)
         }
     }
 
-
-
     var fieldrequest = jQuery('#licontainer_'+id).find("select, textarea, input").serialize();
 
     var request_data = 'create_field=true&field_ins_upd=submit&' + fieldrequest ;
 
     jQuery.ajax({
-        'url': uwp_admin_ajax.url+'?action=uwp_ajax_register_action',
+        'url': uwp_admin_ajax.url+'?action=' + action,
         'type': 'POST',
         'data':  request_data ,
         'success': function(result){
@@ -550,7 +541,7 @@ function save_register_field(id)
 
                 var order = jQuery(".field_row_main ul.uwp_form_extras").sortable("serialize") + '&update=update';
 
-                jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_register_action&create_field=true', order,
+                jQuery.get(uwp_admin_ajax.url+'?action=' + action + '&create_field=true', order,
                     function(theResponse){
                         //alert(theResponse);
                     });
@@ -561,7 +552,6 @@ function save_register_field(id)
 
         }
     });
-
 
 }
 

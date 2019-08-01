@@ -558,6 +558,11 @@ final class UsersWP {
          */
         require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-formbuilder.php';
 
+	    /**
+	     * The class responsible for defining all admin area settings.
+	     */
+	    require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-uwp-settings-profile-tabs.php';
+
         /**
          * The class responsible for adding tools functions
          */
