@@ -11,10 +11,11 @@ do_action( 'uwp_template_before', 'login' ); ?>
             <div class="card mx-auto rounded border p-0 <?php echo $css_class;?>" style="min-width: 20rem;">
                 <div class="card-header">
 
-                    <?php do_action( 'uwp_template_form_title_before', 'login' ); ?>
+                    <?php
 
-					<?php
-					global $uwp_login_widget_args;
+                    do_action( 'uwp_template_form_title_before', 'login' );
+
+
 					$form_title = ! empty( $uwp_login_widget_args['form_title'] ) ? esc_attr__( $uwp_login_widget_args['form_title'], 'userswp' ) : __( 'Login', 'userswp' );
 					$form_title = apply_filters( 'uwp_template_form_title', $form_title, 'login' );
 					if ( $form_title ) {

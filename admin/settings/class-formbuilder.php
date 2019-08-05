@@ -93,17 +93,15 @@ class UsersWP_Form_Builder {
                         </div>
                     </div>
 
-                    <?php if ($form_type == 'account') { ?>
-                        <h3>
-                            <?php _e('Predefined Fields', 'userswp'); ?>
-                        </h3>
+                    <h3>
+                        <?php _e('Predefined Fields', 'userswp'); ?>
+                    </h3>
 
-                        <div class="inside">
-                            <div id="uwp-form-builder-tab-predefined" class="uwp-tabs-panel">
-                                <?php do_action('uwp_manage_available_fields_predefined', $form_type); ?>
-                            </div>
+                    <div class="inside">
+                        <div id="uwp-form-builder-tab-predefined" class="uwp-tabs-panel">
+                            <?php do_action('uwp_manage_available_fields_predefined', $form_type); ?>
                         </div>
-                    <?php } ?>
+                    </div>
                     
                 </div>
 

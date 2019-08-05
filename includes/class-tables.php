@@ -153,6 +153,27 @@ class UsersWP_Tables {
         $user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);
 
         dbDelta($user_meta);
+
+	    // profile tabs layout table
+	    $profile_tabs_table_name = get_usermeta_table_prefix() . 'uwp_profile_tabs';
+	    $tabs_tbl_query = " CREATE TABLE " . $profile_tabs_table_name . " (
+							  id int(11) NOT NULL AUTO_INCREMENT,
+							  form_type varchar(100) NULL,
+							  sort_order int(11) NOT NULL,
+							  tab_layout varchar(100) NOT NULL,
+							  tab_parent varchar(100) NOT NULL,
+							  tab_type varchar(100) NOT NULL,
+							  tab_level int(11) NOT NULL,
+							  tab_name varchar(255) NOT NULL,
+							  tab_icon varchar(255) NOT NULL,
+							  tab_key varchar(255) NOT NULL,
+							  tab_content text NULL DEFAULT NULL,
+							  PRIMARY KEY  (id)
+							  ) $collate; ";
+
+	    $tabs_tbl_query = apply_filters('uwp_profile_tabs_table_create_query', $tabs_tbl_query);
+
+	    dbDelta($tabs_tbl_query);
     }
 
     /**
