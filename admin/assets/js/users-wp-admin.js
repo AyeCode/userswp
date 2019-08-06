@@ -277,40 +277,11 @@ jQuery(document).ready(function () {
         }
     });
 
-    jQuery(".field_row_main ul.core").sortable({
-        opacity: 0.8,
-        cursor: 'move',
-        placeholder: "ui-state-highlight",
-        cancel: "input,label,select",
-        update: function () {
-            var manage_field_type = jQuery(this).closest('#uwp-selected-fields').find(".manage_field_type").val();
-            var order = jQuery(this).sortable("serialize") + '&update=update&manage_field_type=' + manage_field_type;
-            if (manage_field_type == 'custom_fields' || manage_field_type == 'sorting_options') {
-                jQuery.get(uwp_admin_ajax.url + '?action=uwp_ajax_action&create_field=true', order, function (theResponse) {
-                    //alert('Fields have been ordered.');
-                });
-            }
-        }
-    });
-
-    jQuery(".field_row_main ul.uwp_form_extras").sortable({ opacity: 0.8, placeholder: "ui-state-highlight",
-        cancel: "input,label,select",cursor: 'move', update: function() {
-
-            var order = jQuery(this).sortable("serialize") + '&update=update';
-
-            jQuery.get(uwp_admin_ajax.url+'?action=uwp_ajax_register_action&create_field=true', order, function(theResponse){
-
-            });
-        }
-    });
-
-    jQuery("#uwp-form-builder-tab").find("ul li a").click(function() {
+    jQuery("#uwp-form-builder-tab, #uwp-form-builder-tab-predefined").find("ul li a").click(function() {
         if(!jQuery(this).attr('id')){return;}
         var htmlvar_name = jQuery(this).attr('id').replace('uwp-','');
         var field_type = jQuery(this).data('type');
-
-        var form_type = jQuery(this).closest('#uwp-form-builder-tab').find('#form_type').val();
-
+        var form_type = jQuery(this).closest('#uwp-form-builder-tab, #uwp-form-builder-tab-predefined').find('#form_type').val();
         var id = 'new'+jQuery(".field_row_main ul.uwp_form_extras li:last").index();
 
         var manage_field_type = jQuery(this).closest('#uwp-available-fields').find(".manage_field_type").val();
@@ -350,6 +321,32 @@ jQuery(document).ready(function () {
         }
 
     });
+
+    jQuery(".field_row_main ul.core").sortable({
+        opacity: 0.8,
+        cursor: 'move',
+        placeholder: "ui-state-highlight",
+        cancel: "input,label,select",
+        update: function () {
+            var manage_field_type = jQuery(this).closest('#uwp-selected-fields').find(".manage_field_type").val();
+            var order = jQuery(this).sortable("serialize") + '&update=update&manage_field_type=' + manage_field_type;
+
+            if (manage_field_type == 'register'){
+                var action = "uwp_ajax_register_action";
+            } else if (manage_field_type == 'search') {
+                var action = "uwp_ajax_search_action";
+            } else if (manage_field_type == 'profile_tabs') {
+                var action = "uwp_ajax_profile_tabs_action";
+            } else {
+                var action = "uwp_ajax_action";
+            }
+
+            jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true', order, function (theResponse) {
+                console.log('Fields have been ordered.');
+            });
+        }
+    });
+
 });
 
 function uwp_data_type_changed(obj, cont) {
