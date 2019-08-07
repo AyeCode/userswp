@@ -34,6 +34,7 @@ class UsersWP_GeoDirectory_Plugin {
             add_filter( 'uwp_get_sections_uwp-addons', array( $this, 'add_gd_tab' ) );
             add_filter( 'uwp_get_settings_uwp-addons', array( $this, 'add_gd_settings' ), 10, 2 );
             add_filter( 'uwp_available_tab_items', array( $this, 'available_tab_items' ) );
+	        add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
         } else {
             add_filter( 'uwp_profile_tabs', array( $this, 'add_profile_gd_tabs' ), 10, 3 );
             add_action( 'uwp_profile_listings_tab_content', array( $this, 'add_profile_listings_tab_content' ) );
@@ -44,6 +45,7 @@ class UsersWP_GeoDirectory_Plugin {
             add_action( 'uwp_profile_gd_favorites_subtab_content', array( $this, 'gd_get_favorites' ), 10, 2 );
             add_action( 'geodir_after_edit_post_link_on_listing', array( $this, 'geodir_add_post_status_author_page' ), 11 );
             add_action( 'uwp_dashboard_links', array( $this, 'dashboard_output' ), 10, 2 );
+            add_action( 'uwp_profile_tab_icon', array( $this, 'profile_tab_icon' ), 10, 3 );
         }
         add_filter( 'geodir_login_url', array( $this, 'get_gd_login_url' ), 10, 2 );
         add_action( 'wp', array( $this, 'geodir_uwp_author_redirect' ) );
@@ -306,6 +308,69 @@ class UsersWP_GeoDirectory_Plugin {
 
         return $tabs_arr;
     }
+
+	/**
+	 * Adds predefined field in for profile tabs.
+	 *
+	 * @package     userswp
+	 *
+	 * @param       array     $fields     Predefined field array.
+	 * @param       string    $form_type   Form type.
+	 *
+	 * @return      array    $fields    Predefined field array.
+	 */
+	function add_profile_tabs_predefined_fields($fields, $form_type){
+		if('profile-tabs' != $form_type){
+			return $fields;
+		}
+
+		$fields[] = array(
+			'tab_type'   => 'standard',
+			'tab_name'   => __('Listings','userswp'),
+			'tab_icon'   => '',
+			'tab_key'    => 'listings',
+			'tab_content'=> ''
+		);
+
+		$fields[] = array(
+			'tab_type'   => 'standard',
+			'tab_name'   => __('Reviews','userswp'),
+			'tab_icon'   => '',
+			'tab_key'    => 'reviews',
+			'tab_login_only' => 1,
+			'tab_content'=> ''
+		);
+
+		$fields[] = array(
+			'tab_type'   => 'standard',
+			'tab_name'   => __('Favorites','userswp'),
+			'tab_icon'   => '',
+			'tab_key'    => 'favorites',
+			'tab_login_only' => 1,
+			'tab_content'=> ''
+		);
+
+		return $fields;
+	}
+
+	function profile_tab_icon($tab_icon, $tab, $user){
+
+		switch ($tab->tab_key){
+			case 'listings' :
+				$tab_icon = $this->get_total_listings_count($user->ID);
+				break;
+			case 'reviews' :
+				$tab_icon = $this->get_total_reviews_count($user->ID);
+				break;
+            case 'favorites' :
+	            $tab_icon = $this->get_total_favorites_count($user->ID);
+				break;
+			default :
+				break;
+		}
+
+		return $tab_icon;
+	}
     
     public function geodir_get_reviews_by_user_id($post_type = 'gd_place', $user_id, $count_only = false, $offset = 0, $limit = 20) {
         global $wpdb;

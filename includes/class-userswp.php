@@ -237,6 +237,7 @@ final class UsersWP {
         add_action( 'uwp_profile_content', array($instance, 'get_profile_tabs_content'), 10, 1 );
         add_action( 'uwp_profile_more_info_tab_content', array($instance, 'get_profile_more_info'), 10, 1);
         add_action( 'uwp_profile_posts_tab_content', array($instance, 'get_profile_posts'), 10, 1);
+        add_action( 'uwp_profile_tab_icon', array($instance, 'get_profile_tab_icon'), 10, 3);
         add_action( 'uwp_profile_comments_tab_content', array($instance, 'get_profile_comments'), 10, 1);
         add_action( 'uwp_profile_tab_content', array($instance, 'uwp_extra_fields_as_tab_values'), 10, 2 );
 

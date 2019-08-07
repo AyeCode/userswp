@@ -2071,7 +2071,7 @@ class UsersWP_Form_Builder {
         $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
         ?>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="register">
-        <ul class="uwp_form_extras"><?php
+        <ul class="core uwp_form_extras"><?php
 
             $fields = $wpdb->get_results(
                 $wpdb->prepare(
