@@ -94,9 +94,10 @@ abstract class UsersWP_Settings_Page {
 	 * @return bool
 	 */
 	public function show_advanced(){
+        global $current_section;
 
 		$show = false;
-		$settings = $this->get_settings();
+		$settings = $this->get_settings($current_section);
 
 		if(!empty($settings)){
 			foreach($settings as $setting){
@@ -140,8 +141,12 @@ abstract class UsersWP_Settings_Page {
 		$text_hide = __("Hide Advanced","userswp");
 
 		if(!$show){
+			$css = "none";
+			$text = $text_show;
 			$toggle_CSS = '';
 		}else{
+			$css = "block";
+			$text = $text_hide;
 			$toggle_CSS = 'uwpa-hide';
 		}
 		?>
