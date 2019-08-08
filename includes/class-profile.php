@@ -423,53 +423,45 @@ class UsersWP_Profile {
      */
     public function get_profile_tabs($user) {
 
-        $tabs = array();
+	    global $wpdb, $uwp_profile_tabs;
 
-        // allowed tabs
-        $allowed_tabs = uwp_get_option('enable_profile_tabs', array());
+	    $tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
+	    $tabs = array();
 
-        if (!is_array($allowed_tabs)) {
-            $allowed_tabs = array();
-        }
+	    if(!isset($uwp_profile_tabs)){
+		    $uwp_profile_tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s ORDER BY sort_order ASC", 'profile-tabs'));
+	    }
 
-        $extra = $this->get_profile_extra($user);
-        if (in_array('more_info', $allowed_tabs) && $extra) {
-            $tabs['more_info']  = array(
-                'title' => __( 'More Info', 'userswp' ),
-                'count' => $this->get_profile_count_icon($user)
-            );
-        }
+	    if(!empty($uwp_profile_tabs)) {
+		    foreach ($uwp_profile_tabs as $tab) {
 
-        if (in_array('posts', $allowed_tabs)) {
-            $tabs['posts']  = array(
-                'title' => __( 'Posts', 'userswp' ),
-                'count' => uwp_post_count($user->ID, 'post')
-            );
-        }
+			    $icon = isset($tab->tab_icon) ? $tab->tab_icon : $this->get_profile_count_icon($user);
+			    if ( uwp_is_fa_icon( $icon ) ) {
+				    $tab_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
+			    } elseif ( uwp_is_icon_url( $icon ) ) {
+				    $tab_icon = '<b style="background-image: url("' . $icon . '")"></b>';
+			    } else {
+				    $tab_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
+			    }
 
-        $comment_count = uwp_comment_count($user->ID);
+			    $tab_icon = apply_filters('uwp_profile_tab_icon', $tab_icon, $tab, $user );
 
-        if (in_array('comments', $allowed_tabs) && $comment_count > 0) {
-            $tabs['comments'] = array(
-                'title' => __( 'Comments', 'userswp' ),
-                'count' => $comment_count
-            );
-        }
+			    if(isset($tab_icon) && ($tab_icon === 0 || $tab_icon === '0')){
+				    $class = 'uwp_no_counts';
+			    } else {
+				    $class = '';
+			    }
 
-        $all_tabs = apply_filters( 'uwp_profile_tabs', $tabs, $user, $allowed_tabs );
+			    $tab->count = $tab_icon;
+			    $tab->class = $class;
+			    $tabs[$tab->tab_key] = $tab;
 
-        // order tabs as per option values
-        if(!empty($allowed_tabs)){
-            $allowed_tabs = array_reverse($allowed_tabs);
-            foreach($allowed_tabs as $key => $val){
-                if(isset($all_tabs[$val])){
-                    $all_tabs = array($val => $all_tabs[$val]) + $all_tabs;
-                }
+		    }
+	    }
 
-            }
-        }
+	    $tabs = apply_filters('uwp_profile_tabs1', $tabs, $user);
 
-        return $all_tabs;
+	    return $tabs;
     }
 
     /**
@@ -482,13 +474,12 @@ class UsersWP_Profile {
      */
     public function get_profile_tabs_content($user) {
 
-        $tab = get_query_var('uwp_tab');
-
+	    $active_tab = get_query_var('uwp_tab');
         $account_page = uwp_get_page_id('account_page', false);
 
-        $all_tabs = $this->get_profile_tabs($user);
+        $tabs = $this->get_profile_tabs($user);
 
-        $tab_keys = array_keys($all_tabs);
+        $tab_keys = array_keys($tabs);
 
         if (!empty($tab_keys)) {
             $default_key = $tab_keys[0];
@@ -496,24 +487,32 @@ class UsersWP_Profile {
             $default_key = false;
         }
 
-        $active_tab = !empty( $tab ) && array_key_exists( $tab, $all_tabs ) ? $tab : $default_key;
+        $active_tab = !empty( $active_tab ) && array_key_exists( $active_tab, $tabs ) ? $active_tab : $default_key;
         if (!$active_tab) {
             return;
         }
+
         ?>
         <div class="uwp-profile-content">
             <div class="uwp-profile-nav">
                 <ul class="item-list-tabs-ul">
                     <?php
-                    foreach( $this->get_profile_tabs($user) as $tab_id => $tab ) {
+                    foreach( $tabs as $tab ) {
 
+                        $tab = (array)$tab;
+	                    $tab_id = $tab['tab_key'];
                         $tab_url = uwp_build_profile_tab_url($user->ID, $tab_id, false);
 
                         $active = $active_tab == $tab_id ? ' active' : '';
+
+                        if(1 == $tab['tab_login_only'] && !(is_user_logged_in() && get_current_user_id() == $user->ID)){
+                            continue;
+                        }
+
                         ?>
-                        <li id="uwp-profile-<?php echo $tab_id; ?>" class="<?php echo $active; ?>">
+                        <li id="uwp-profile-<?php echo $tab_id; ?>" class="<?php echo $active.' '.$tab['class']; ?>">
                             <a href="<?php echo esc_url( $tab_url ); ?>">
-                                <span class="uwp-profile-tab-label uwp-profile-<?php echo $tab_id; ?>-label "><?php echo esc_html( $tab['title'] ); ?></span>
+                                <span class="uwp-profile-tab-label uwp-profile-<?php echo $tab_id; ?>-label "><?php echo esc_html( $tab['tab_name'] ); ?></span>
                                 <span class="uwp-profile-tab-count uwp-profile-<?php echo $tab_id; ?>-count"><?php echo $tab['count']; ?></span>
                             </a>
                         </li>
@@ -539,6 +538,23 @@ class UsersWP_Profile {
             </div>
         </div>
     <?php }
+
+    public function get_profile_tab_icon($tab_icon, $tab, $user){
+
+        switch ($tab->tab_key){
+            case 'posts' :
+	            $tab_icon = uwp_post_count($user->ID, 'post');
+                break;
+            case 'comments' :
+	            $tab_icon = uwp_comment_count($user->ID);
+                break;
+	        default :
+		        break;
+        }
+
+        return $tab_icon;
+
+    }
 
     /**
      * Prints the tab content pagination section.
@@ -577,15 +593,6 @@ class UsersWP_Profile {
      * @return      void
      */
     public function get_profile_more_info($user) {
-        $allowed_tabs = uwp_get_option('enable_profile_tabs', array());
-
-        if (!is_array($allowed_tabs)) {
-            $allowed_tabs = array();
-        }
-        if (!in_array('more_info', $allowed_tabs)) {
-            return;
-        }
-        
         $extra = $this->get_profile_extra($user);
         echo $extra;
     }
@@ -599,16 +606,6 @@ class UsersWP_Profile {
      * @return      void
      */
     public function get_profile_posts($user) {
-        
-        $allowed_tabs = uwp_get_option('enable_profile_tabs', array());
-
-        if (!is_array($allowed_tabs)) {
-            $allowed_tabs = array();
-        }
-        if (!in_array('posts', $allowed_tabs)) {
-             return;   
-        }
-
         uwp_generic_tab_content($user, 'post', __('Posts', 'userswp'));
     }
 
@@ -621,14 +618,6 @@ class UsersWP_Profile {
      * @return      void
      */
     public function get_profile_comments($user) {
-        $allowed_tabs = uwp_get_option('enable_profile_tabs', array());
-
-        if (!is_array($allowed_tabs)) {
-            $allowed_tabs = array();
-        }
-        if (!in_array('comments', $allowed_tabs)) {
-            return;
-        }
         ?>
         <h3><?php echo __('Comments', 'userswp') ?></h3>
 

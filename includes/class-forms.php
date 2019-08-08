@@ -348,10 +348,10 @@ class UsersWP_Forms {
         if ($reg_action == 'require_email_activation' && !$generated_password) {
 
             $email = new UsersWP_Mails();
-            $send_result = $email->send( 'activate', $user_id );
+            $email->send( 'activate', $user_id );
         } else {
             $email = new UsersWP_Mails();
-            $send_result = $email->send( 'register', $user_id );
+            $email->send( 'register', $user_id );
         }
 
         $error_code = $errors->get_error_code();
@@ -364,7 +364,7 @@ class UsersWP_Forms {
         if ($reg_action != 'require_admin_review') {
             $register_admin_notify = uwp_get_option('register_admin_notify', '');
             if ($register_admin_notify == '1') {
-                $admin_register_send_result = $email->send_admin_email('register_admin', $user_id);
+                $email->send_admin_email('register_admin', $user_id);
             }
 
         }
@@ -410,8 +410,8 @@ class UsersWP_Forms {
                 update_user_meta( $user_id, 'uwp_mod', '1' );
 
                 $email = new UsersWP_Mails();
-                $send_result = $email->send( 'mod_pending', $user_id );
-                $admin_send_result = $email->send_admin_email('mod_admin', $user_id);
+                $email->send( 'mod_pending', $user_id );
+                $email->send_admin_email('mod_admin', $user_id);
                 $error_msg = __('Your account is under moderation. We will email you once its approved.', 'userswp');
                 $error = '<div class="uwp-alert-success text-center">'.$error_msg.'</div>';
                 $uwp_notices[] = array('register' => $error);
@@ -612,7 +612,7 @@ class UsersWP_Forms {
         }
         
         $email = new UsersWP_Mails();
-        $send_result = $email->send( 'forgot', $user_data->ID );
+        $email->send( 'forgot', $user_data->ID );
 
         $message = apply_filters('uwp_change_password_success_message', __('Please check your email.', 'userswp'), $data);
         $message = '<div class="uwp-alert-success text-center">'.$message.'</div>';
@@ -661,7 +661,7 @@ class UsersWP_Forms {
         }
 
         $email = new UsersWP_Mails();
-        $send_result = $email->send( 'change', $user_data->ID );
+        $email->send( 'change', $user_data->ID );
 
         wp_set_password( $data['uwp_change_password'], $user_data->ID );
         wp_set_auth_cookie( $user_data->ID, false);
@@ -715,7 +715,7 @@ class UsersWP_Forms {
         }
 
         $email = new UsersWP_Mails();
-        $send_result = $email->send( 'reset', $user_data->ID );
+        $email->send( 'reset', $user_data->ID );
 
         wp_set_password( $data['uwp_reset_password'], $user_data->ID );
 
@@ -837,7 +837,7 @@ class UsersWP_Forms {
             $user_data = get_user_by('id', $user_id);
 
             $email = new UsersWP_Mails();
-            $send_result = $email->send( 'account', $user_data->ID );
+            $email->send( 'account', $user_data->ID );
             
         }
 

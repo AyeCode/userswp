@@ -31,10 +31,12 @@ class UsersWP_Invoicing_Plugin {
     private function setup_actions() {
         if ( is_admin() ) {
             add_filter( 'uwp_available_tab_items', array( $this, 'available_tab_items' ) );
+	        add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
         } else {
             add_filter( 'uwp_profile_tabs', array( $this, 'add_profile_tabs' ), 10, 3 );
             add_action( 'uwp_profile_invoices_tab_content', array( $this, 'add_profile_invoices_tab_content' ) );
-            add_action( 'uwp_dashboard_links', array( $this, 'dashboard_output' ),10,2 );
+            add_action( 'uwp_dashboard_links', array( $this, 'dashboard_output' ), 10, 2 );
+            add_action( 'uwp_profile_tab_icon', array( $this, 'profile_tab_invoices_icon' ), 10, 3 );
 
         }
 
@@ -124,6 +126,41 @@ class UsersWP_Invoicing_Plugin {
         }
 
         return $tabs;
+    }
+
+	/**
+	 * Adds predefined field in for profile tabs.
+	 *
+	 * @package     userswp
+	 *
+	 * @param       array     $fields            Predefined field array.
+	 * @param       string    $form_type          Form type.
+	 *
+	 * @return      array    $fields    Predefined field array.
+	 */
+    function add_profile_tabs_predefined_fields($fields, $form_type){
+        if('profile-tabs' != $form_type){
+            return $fields;
+        }
+
+	    $fields[] = array(
+		    'tab_type'   => 'standard',
+		    'tab_name'   => __('Invoices','userswp'),
+		    'tab_icon'   => '',
+		    'tab_key'    => 'invoices',
+		    'tab_login_only' => 1,
+		    'tab_content'=> ''
+	    );
+
+        return $fields;
+    }
+
+    function profile_tab_invoices_icon($tab_icon, $tab, $user){
+        if('invoices' == $tab->tab_key){
+	        $tab_icon = $this->invoice_count($user->ID);
+        }
+
+        return $tab_icon;
     }
 
     /**
@@ -274,4 +311,4 @@ class UsersWP_Invoicing_Plugin {
         return $count;
     }
 }
-$userswp_geodirectory = UsersWP_Invoicing_Plugin::get_instance();
+$userswp_wpinv = UsersWP_Invoicing_Plugin::get_instance();

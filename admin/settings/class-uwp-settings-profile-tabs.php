@@ -134,7 +134,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    ?>
 		    <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
 		    <input type="hidden" name="manage_field_type" class="manage_field_type" value="profile_tabs">
-
+            <input type="hidden" name="uwp_new_field_nonce" id="uwp_new_field_nonce" value="<?php echo wp_create_nonce( 'uwp_new_field_nonce' );?>"/>
 		    <ul>
 			    <?php
 
@@ -155,8 +155,6 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 
 					    $style = 'style="' . $display . $fieldset_width . '"';
 
-					    $data_type = $field['tab_type'];
-
 					    $icon = $field['tab_icon'];
 					    if ( uwp_is_fa_icon( $icon ) ) {
                             $tab_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
@@ -167,15 +165,21 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
                         }
 					    ?>
 					    <li <?php echo $style; ?> >
-
 						    <a id="uwp-<?php echo $field['tab_key']; ?>"
-						       class="uwp-draggable-form-items uwp-<?php echo $field['tab_type']; ?>"
-						       href="javascript:void(0);" data-type="<?php echo $field['tab_type']; ?>" data-data_type="<?php echo $data_type; ?>">
+                                data-field-custom-type="custom"
+                               class="uwp-draggable-form-items"
+                               data-tab_layout="profile"
+                               data-tab_type="<?php echo isset($field['tab_type']) ? esc_attr($field['tab_type']) : ''; ?>"
+                               data-tab_name="<?php echo isset($field['tab_name']) ? esc_attr($field['tab_name']) : ''; ?>"
+                               data-tab_icon="<?php echo isset($field['tab_icon']) ? esc_attr($field['tab_icon']) : ''; ?>"
+                               data-tab_key="<?php echo isset($field['tab_key']) ? esc_attr($field['tab_key']) : ''; ?>"
+                               data-tab_login_only="<?php echo isset($field['tab_login_only']) ? esc_attr($field['tab_login_only']) : 0; ?>"
+                               data-tab_content="<?php echo isset($field['tab_content']) ? esc_attr($field['tab_content']) : ''; ?>"
+                               href="javascript:void(0);">
                                 <?php echo $tab_icon; ?>
 							    <?php echo $field['tab_name']; ?>
 						    </a>
 					    </li>
-
 					    <?php
 				    }
 			    }
@@ -213,6 +217,19 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 
 		    $fields = apply_filters('uwp_profile_tabs_predefined_fields', $fields, $form_type);
 
+		    global $wpdb;
+
+		    $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
+
+		    $existing_fields = $wpdb->get_results("select tab_key from " . $table_name . " where form_type ='" . $form_type . "'");
+
+		    $existing_field_ids = array();
+		    if (!empty($existing_fields)) {
+			    foreach ($existing_fields as $existing_field) {
+				    $existing_field_ids[] = $existing_field->tab_key;
+			    }
+		    }
+
 		    ?>
             <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
             <input type="hidden" name="manage_field_type" class="manage_field_type" value="profile_tabs">
@@ -222,13 +239,26 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
                 <ul>
                 <?php
                 foreach ($fields as $id => $field) {
+
+                    $display = '';
+					    if (in_array($field['tab_key'], $existing_field_ids))
+						    $display = 'display:none;';
+
+					    $style = 'style="' . $display . '"';
+
                     ?>
-                    <li class="uwp-tooltip-wrap">
-                        <a id="uwp-<?php echo $id; ?>"
+                    <li <?php echo $style; ?>>
+                        <a id="uwp-<?php echo $field['tab_key']; ?>"
                            data-field-custom-type="predefined"
-                           data-field-type-key="<?php echo $id; ?>"
-                           data-field-type="<?php echo $field['tab_type']; ?>"
                            class="uwp-draggable-form-items"
+                           data-tab_layout="profile"
+                           data-field-type-key="uwp-<?php echo $field['tab_key']; ?>"
+						   data-tab_type="<?php echo isset($field['tab_type']) ? esc_attr($field['tab_type']) : ''; ?>"
+						   data-tab_name="<?php echo isset($field['tab_name']) ? esc_attr($field['tab_name']) : ''; ?>"
+						   data-tab_icon="<?php echo isset($field['tab_icon']) ? esc_attr($field['tab_icon']) : ''; ?>"
+						   data-tab_key="<?php echo isset($field['tab_key']) ? esc_attr($field['tab_key']) : ''; ?>"
+						   data-tab_login_only="<?php echo isset($field['tab_login_only']) ? esc_attr($field['tab_login_only']) : 0; ?>"
+						   data-tab_content="<?php echo isset($field['tab_content']) ? esc_attr($field['tab_content']) : ''; ?>"
                            href="javascript:void(0);">
 
                             <?php
@@ -247,10 +277,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
                     </li>
                     <?php
                 }
-            } else {
-                _e('There are no custom fields here yet.', 'userswp');
             }
-
         }
 
 	    public function uwp_tabs_selected_fields($form_type)
@@ -265,14 +292,10 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 			    $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM  " . $table_name . " where form_type = %s order by sort_order asc", array($form_type)));
 			    if (!empty($fields)) {
 				    foreach ($fields as $field) {
-					    $result_str = $field;
 					    $field_ins_upd = 'display';
-
-					    $this->uwp_tabs_field_adminhtml($result_str, $field_ins_upd, false);
+					    $this->uwp_tabs_field_adminhtml($field, $field_ins_upd);
 				    }
-			    } else {
-                    _e('There are no custom fields here yet.', 'userswp');
-                } ?>
+			    } ?>
 		    </ul>
 		    <?php
 	    }
@@ -298,6 +321,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
                         'tab_name'   => esc_attr($row->site_title),
                         'tab_icon'   => isset($row->field_icon) && $row->field_icon ? $row->field_icon : "fas fa-cog",
                         'tab_key'    => esc_attr($row->htmlvar_name),
+                        'tab_login_only' => 0,
                         'tab_content'=> ''
                     );
                 }
@@ -306,10 +330,9 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    return $fields;
 	    }
 
-	    public function uwp_tabs_field_adminhtml($result_str, $field_ins_upd = '', $default = false, $request = array()){
+	    public function uwp_tabs_field_adminhtml($result_str, $field_ins_upd = '', $request = array()){
 		    global $wpdb;
 
-		    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 		    $tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
 
 		    $cf = $result_str;
@@ -319,43 +342,57 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 			    $result_str = $cf->id;
 			    $field_info = $wpdb->get_row($wpdb->prepare("select * from " . $tabs_table_name . " where id= %d", array((int)$cf->id)));
 		    } else {
-			    $field_info = false;
+			    $field_info = $wpdb->get_row($wpdb->prepare("select * from " . $tabs_table_name . " where tab_key= %d", array($cf)));
 		    }
 
 		    if (isset($request['tab_type']) && $request['tab_type'] != ''){
 			    $tab_type = esc_attr($request['tab_type']);
-            } else {
+            } elseif($field_info) {
 			    $tab_type = $field_info->tab_type;
+            }else {
+                $tab_type = '';
             }
 
 		    if (isset($request['tab_name'])) {
-			    $field_site_name = $request['tab_name'];
-		    } else {
+			    $field_site_name = esc_attr($request['tab_name']);
+		    } elseif($field_info) {
 			    $field_site_name = $field_info->tab_name;
+            } else {
+                $field_site_name = '';
             }
 
-		    if (isset($request['htmlvar_name']) && $request['htmlvar_name'] != '') {
-			    $tab_key = esc_attr($request['htmlvar_name']);
-		    } else {
+		    if (isset($request['tab_key']) && $request['tab_key'] != '') {
+			    $tab_key = esc_attr($request['tab_key']);
+		    } elseif($field_info) {
 			    $tab_key = $field_info->tab_key;
+		    } else {
+		        $tab_key = '';
 		    }
 
 		    if (isset($request['tab_content']) && $request['tab_content'] != '') {
 			    $tab_content = esc_attr($request['tab_content']);
-		    } else {
+		    } elseif($field_info) {
 			    $tab_content = $field_info->tab_content;
+		    } else {
+		        $tab_content = '';
 		    }
 
-		    if (isset($tab_key)) {
-			    if (!is_object($field_info)) {
-				    $field_info = new stdClass();
-			    }
-			    $field_info->field_icon = $wpdb->get_var(
-				    $wpdb->prepare("SELECT field_icon FROM " . $table_name . " WHERE htmlvar_name = %s", array($tab_key))
-			    );
+		    if (isset($request['tab_login_only']) && $request['tab_login_only'] != '') {
+			    $tab_login_only = esc_attr($request['tab_login_only']);
+		    } elseif($field_info) {
+			    $tab_login_only = $field_info->tab_login_only;
+		    } else {
+		        $tab_login_only = 0;
 		    }
 
-		    $icon = $field_info->field_icon;
+		    if (isset($request['tab_icon']) && $request['tab_icon'] != '') {
+			    $icon = esc_attr($request['tab_icon']);
+		    } elseif($field_info) {
+			    $icon = $field_info->tab_icon;
+		    } else {
+		        $icon = 'fas fa-cog';
+		    }
+
             if ( uwp_is_fa_icon( $icon ) ) {
                 $field_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
             } elseif ( uwp_is_icon_url( $icon ) ) {
@@ -384,81 +421,64 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 				         } else {
 					         echo 'none;';
 				         } ?>">
-                        <input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>"/>
+
+                        <input type="hidden" name="_wpnonce" id="uwp_form_extras_nonce" value="<?php echo $nonce; ?>"/>
                         <input type="hidden" name="field_id" id="field_id" value="<?php echo esc_attr($result_str); ?>"/>
-                        <input type="hidden" name="form_type" id="form_type" value="profile_tabs"/>
+                        <input type="hidden" name="form_type" id="form_type" value="profile-tabs"/>
                         <input type="hidden" name="tab_type" id="tab_type" value="<?php echo $tab_type; ?>"/>
+                        <input type="hidden" name="tab_key" value="<?php echo $tab_key ?>"/>
 
                         <ul class="widefat post fixed" style="width:100%;">
-                            <input type="hidden" name="tab_key" value="<?php echo $tab_key ?>"/>
+
+                            <li class="uwp-setting-name">
+                                <label for="tab_name" class="uwp-tooltip-wrap">
+                                    <?php _e('Tab Name:', 'userswp'); ?>
+                                </label>
+                                <div class="uwp-input-wrap">
+                                    <input type="text" name="tab_name" id="tab_name"
+                                           value="<?php echo $field_site_name; ?>"/>
+                                </div>
+                            </li>
+
+                            <li class="uwp-setting-name">
+
+                                <label for="tab_icon" class="uwp-tooltip-wrap">
+                                    <?php _e('Upload icon :', 'userswp'); ?>
+                                </label>
+                                <div class="uwp-input-wrap">
+                                    <input type="text" name="tab_icon" id="tab_icon"
+                                           value="<?php echo $icon; ?>"/>
+                                </div>
+
+                            </li>
+
+                            <li class="uwp-setting-name">
+
+                                <label for="tab_login_only" class="uwp-tooltip-wrap">
+                                    <?php _e('For logged in users? :', 'userswp'); ?>
+                                </label>
+                                <div class="uwp-input-wrap">
+                                    <input type="hidden" name="tab_login_only" value="0" />
+                                    <input type="checkbox" name="tab_login_only" value="1" <?php checked( $tab_login_only, 1, true );?> />
+                                </div>
+
+                            </li>
 
                             <?php
-                                if (has_filter("uwp_builder_tab_name_{$tab_type}")) {
 
-                                    echo apply_filters("uwp_builder_tab_name_{$tab_type}", '', $result_str, $cf, $field_info);
-
-                                } else {
-                                    $value = '';
-                                    if (isset($field_info->tab_name)) {
-                                        $value = esc_attr($field_info->tab_name);
-                                    }elseif (isset($cf['tab_name']) && $cf['tab_name']) {
-                                        $value = $cf['tab_name'];
+                            if($tab_type == 'shortcode'){
+                            ?>
+                            <li class="uwp-setting-name">
+                                <label for="tab_content">
+                                    <?php _e('Tab content:','userswp');
+                                    if($tab_type == 'shortcode'){
+                                        echo WP_Super_Duper::shortcode_button("'tab_content_".$result_str."'");
                                     }
-                                    ?>
-                                    <li class="uwp-setting-name">
-                                        <label for="tab_name" class="uwp-tooltip-wrap">
-                                            <span class="uwp-help-tip dashicons dashicons-editor-help" title="<?php _e('This will be the name for the tab.', 'userswp'); ?>"></span>
-                                            <?php _e('Tab Name:', 'userswp'); ?>
-                                        </label>
-                                        <div class="uwp-input-wrap">
-                                            <input type="text" name="tab_name" id="tab_name"
-                                                   value="<?php echo $value; ?>"/>
-                                        </div>
-                                    </li>
-                                    <?php
-                                }
-
-                                // field_icon
-                                if (has_filter("uwp_builder_tab_icon_{$tab_type}")) {
-
-                                    echo apply_filters("uwp_builder_tab_icon_{$tab_type}", '', $result_str, $cf, $field_info);
-
-                                } else {
-                                    $value = '';
-                                    if (isset($field_info->tab_icon)) {
-                                        $value = esc_attr($field_info->tab_icon);
-                                    }elseif (isset($cf['tab_icon']) && $cf['tab_icon']) {
-                                        $value = $cf['tab_icon'];
-                                    }
-                                    ?>
-                                    <li class="uwp-setting-name">
-
-                                        <label for="tab_icon" class="uwp-tooltip-wrap">
-                                            <span class="uwp-help-tip dashicons dashicons-editor-help" title='<?php echo sprintf(__('Upload icon using media and enter its url path, or enter %sfont awesome%s class eg:"fas fa-home"', 'userswp'), '<a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank" >', '</a>'); ?>'></span>
-                                            <?php _e('Upload icon :', 'userswp'); ?>
-                                        </label>
-                                        <div class="uwp-input-wrap">
-                                            <input type="text" name="tab_icon" id="tab_icon"
-                                                   value="<?php echo $value; ?>"/>
-                                        </div>
-
-                                    </li>
-                                    <?php
-                                }
-
-                                if($tab_type == 'shortcode'){
-                                ?>
-                                <li class="uwp-setting-name">
-                                    <label for="tab_content">
-                                        <?php _e('Tab content:','geodirectory');
-                                        if($tab_type == 'shortcode'){
-                                            echo WP_Super_Duper::shortcode_button("'tab_content_".$result_str."'");
-                                        }
-                                        ?><br>
-                                        <textarea name="tab_content" id="tab_content" placeholder="<?php _e('Add shortcode here.','userswp');?>"><?php echo stripslashes($tab_content);?></textarea>
-                                    </label>
-                                </li>
-                                <?php
+                                    ?><br>
+                                    <textarea name="tab_content" id="tab_content" placeholder="<?php _e('Add shortcode here.','userswp');?>"><?php echo stripslashes($tab_content);?></textarea>
+                                </label>
+                            </li>
+                            <?php
                             }else{
                                 echo '<input type="hidden" name="tab_content" value=\''.stripslashes($tab_content).'\'>';
                             }
@@ -508,27 +528,27 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 			    /* ---- Show field form in admin ---- */
 			    if ($field_action == 'new') {
 				    $form_type = isset($_REQUEST['form_type']) ? sanitize_text_field($_REQUEST['form_type']) : '';
-				    $fields = $this->uwp_tabs_fields($form_type);
+				    //$fields = $this->uwp_tabs_fields($form_type);
 
 
-				    $_REQUEST['field_id'] = isset($_REQUEST['field_id']) ? sanitize_text_field($_REQUEST['field_id']) : '';
-				    $_REQUEST['is_default'] = '0';
+				    //$_REQUEST['field_id'] = isset($_REQUEST['field_id']) ? sanitize_text_field($_REQUEST['field_id']) : '';
+				    //$_REQUEST['is_default'] = '0';
 
-				    if (!empty($fields)) {
+				    /*if (!empty($fields)) {
 					    foreach ($fields as $val) {
 						    $val = stripslashes_deep($val);
                             $data_type = $val['tab_type'];
-						    if ($val['tab_key'] == $_REQUEST['htmlvar_name']) {
+						    if ($val['tab_key'] == $_REQUEST['tab_key']) {
 							    $_REQUEST['field_type'] = $val['tab_type'];
 							    $_REQUEST['tab_name'] = $val['tab_name'];
-							    $_REQUEST['field_data_type'] = $data_type;
+							    $_REQUEST['tab_login_only'] = $val['tab_login_only'];
 						    }
 					    }
-				    }
+				    }*/
 
-				    $htmlvar_name = isset($_REQUEST['htmlvar_name']) ? sanitize_text_field($_REQUEST['htmlvar_name']) : '';
+				    $htmlvar_name = isset($_REQUEST['htmlvar_name']) ? sanitize_text_field($_REQUEST['htmlvar_name']) : sanitize_text_field($_REQUEST['tab_key']);
 
-				    $this->uwp_tabs_field_adminhtml($htmlvar_name, $field_action, false, $_REQUEST);
+				    $this->uwp_tabs_field_adminhtml($htmlvar_name, $field_action, $_REQUEST);
 			    }
 
 			    /* ---- Delete field ---- */
@@ -552,14 +572,12 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 					    }
 				    }
 
-				    $return = $this->uwp_tabs_field_save($_REQUEST);
+				    $lastid = $this->uwp_tabs_field_save($_REQUEST);
 
-				    if (is_int($return)) {
-					    $lastid = $return;
-
+				    if (is_int($lastid) && $lastid > 0) {
 					    $this->uwp_tabs_field_adminhtml($lastid, 'submit');
 				    } else {
-					    echo $return;
+					    echo $lastid;
 				    }
 			    }
 		    }
@@ -577,106 +595,76 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 
 		    /*-------- check duplicate validation --------*/
 
-		    $tab_key = isset($request_field['tab_key']) ? $request_field['tab_key'] : '';
+		    $tab_key = isset($request_field['tab_key']) ? sanitize_text_field($request_field['tab_key']) : '';
+		    $tab_type= isset($request_field['tab_type']) ? sanitize_text_field($request_field['tab_type']) : '';
+		    $tab_name= isset($request_field['tab_name']) ? sanitize_text_field($request_field['tab_name']) : '';
+		    $tab_icon= isset($request_field['tab_icon']) ? sanitize_text_field($request_field['tab_icon']) : '';
+		    $tab_login_only= isset($request_field['tab_login_only']) ? (int)$request_field['tab_login_only'] : 0;
 		    $form_type = $request_field['form_type'];
-		    $tab_type = $request_field['tab_type'];
 
-		    $check_html_variable = $wpdb->get_var($wpdb->prepare("select tab_key from " . $table_name . " where id <> %d and tab_key = %s and form_type = %s ",
-			    array($cf, $tab_key, $form_type)));
+		    $data = array(
+                    'tab_layout'    => 'profile',
+                    'form_type'     => 'profile-tabs',
+                    'tab_type'      => $tab_type,
+                    'tab_name'      => $tab_name,
+                    'tab_icon'      => $tab_icon,
+                    'tab_key'       => sanitize_text_field($tab_key),
+                    'tab_login_only'=> $tab_login_only,
+                    'tab_content'   => sanitize_textarea_field($request_field['tab_content']),
+                );
 
+            $format = array_fill( 0, count( $data ), '%s' );
 
-		    if (!$check_html_variable) {
-
-			    if ($cf != '') {
-
-				    $user_meta_info = $wpdb->get_row(
-					    $wpdb->prepare(
-						    "select * from " . $table_name . " where id = %d",
-						    array($cf)
-					    )
-				    );
-
-			    }
-
-			    if ($form_type == '') $form_type = 'profile_tabs';
+		    $check_html_variable = $wpdb->get_var($wpdb->prepare("select COUNT(*) from " . $table_name . " where tab_type = %s AND tab_name LIKE %s AND tab_key = %s and form_type = %s ",
+			    array($tab_type, $tab_key, $tab_name, $form_type)));
 
 
-			    $tab_key = $request_field['tab_key'];
-			    $field_id = (isset($request_field['field_id']) && $request_field['field_id']) ? str_replace('new', '', $request_field['field_id']) : '';
-
-
-			    if (!empty($user_meta_info)) {
-
-				    $wpdb->query(
-					    $wpdb->prepare(
-						    "update " . $table_name . " set
-					form_type = %s,
-					tab_type = %s,
-					tab_key = %s,
-					sort_order = %s
-					where id = %d",
-						    array(
-							    $form_type,
-							    $tab_type,
-							    $tab_key,
-							    $field_id,
-							    $cf
-						    )
-
-					    )
-
-				    );
-
-				    $lastid = trim($cf);
-
-
-			    } else {
-
-
-				    $wpdb->query(
-					    $wpdb->prepare(
-
-						    "insert into " . $table_name . " set
-					form_type = %s,
-					tab_type = %s,
-					tab_key = %s,
-					sort_order = %s",
-						    array($form_type,
-							    $tab_type,
-							    $tab_key,
-							    $field_id
-						    )
-					    )
-				    );
-				    $lastid = $wpdb->insert_id;
-				    $lastid = trim($lastid);
-			    }
-
-			    return (int) $lastid;
-
-
-		    } else {
-			    return 'invalid_key';
+		    if ((int)$check_html_variable > 0) {
+                return 'invalid_key';
 		    }
+
+		    $user_meta_info = $wpdb->get_row(
+                $wpdb->prepare(
+                    "select id from " . $table_name . " where tab_type = %s AND tab_name LIKE %s AND tab_key = %s and form_type = %s",
+                    array($tab_type, $tab_key, $tab_name, $form_type)
+                )
+            );
+
+		    if ( !empty($user_meta_info) ) {// update // update
+
+                $result = $wpdb->update(
+                    $table_name,
+                    $data,
+                    array( 'id' => $user_meta_info->id ),
+                    $format
+                );
+
+                $lastid = $user_meta_info->id;
+
+            } else { // insert
+                $result = $wpdb->insert(
+                    $table_name,
+                    $data,
+                    $format
+                );
+
+                $lastid = $wpdb->insert_id;
+            }
+
+            return (int) $lastid;
 	    }
 
 	    public function uwp_tabs_field_delete($field_id = '')
 	    {
-
 		    global $wpdb;
 		    $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
 
 		    if ($field_id != '') {
 			    $cf = trim($field_id, '_');
-
 			    $wpdb->query($wpdb->prepare("delete from " . $table_name . " where id= %d ", array($cf)));
-
 			    return $field_id;
-
 		    } else
 			    return 0;
-
-
 	    }
 
 	    /**
@@ -686,7 +674,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
          *
          * @return      array|bool                  Sorted field ids.
          */
-        function update_field_order($field_ids = array())
+        public function update_field_order($field_ids = array())
         {
             global $wpdb;
             $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
@@ -719,4 +707,4 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 endif;
 
 
-//return new UsersWP_Settings_Profile_Tabs();
+return new UsersWP_Settings_Profile_Tabs();

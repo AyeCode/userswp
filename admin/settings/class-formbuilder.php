@@ -980,15 +980,7 @@ class UsersWP_Form_Builder {
                             <?php
                         }
 
-
-
-                        switch ($field_type):
-                            default:
-                                do_action('uwp_admin_extra_custom_fields', $field_info, $cf); ?>
-
-
-                            <?php endswitch; ?>
-
+                        do_action('uwp_admin_extra_custom_fields', $field_info, $cf);?>
 
                         <li>
 
@@ -2071,7 +2063,7 @@ class UsersWP_Form_Builder {
         $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
         ?>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="register">
-        <ul class="uwp_form_extras"><?php
+        <ul class="core uwp_form_extras"><?php
 
             $fields = $wpdb->get_results(
                 $wpdb->prepare(

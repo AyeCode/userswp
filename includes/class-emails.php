@@ -369,11 +369,14 @@ class UsersWP_Mails {
      * Modifies the mail content based on the admin notification type.
      *
      * @since   1.0.0
+     *
      * @package    userswp
+     *
      * @subpackage userswp/includes
-     * @param string $content Unmodified mail content.
+     *
      * @param bool $is_admin Admin notification.
      * @param string $type Notification type.
+     *
      * @return string Modified mail content.
      */
     public function uwp_get_mail_content($type, $is_admin = false) {
