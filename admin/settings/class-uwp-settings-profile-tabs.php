@@ -293,7 +293,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 			    if (!empty($fields)) {
 				    foreach ($fields as $field) {
 					    $field_ins_upd = 'display';
-					    $this->uwp_tabs_field_adminhtml($field, $field_ins_upd, false);
+					    $this->uwp_tabs_field_adminhtml($field, $field_ins_upd);
 				    }
 			    } ?>
 		    </ul>
@@ -330,7 +330,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    return $fields;
 	    }
 
-	    public function uwp_tabs_field_adminhtml($result_str, $field_ins_upd = '', $default = false, $request = array()){
+	    public function uwp_tabs_field_adminhtml($result_str, $field_ins_upd = '', $request = array()){
 		    global $wpdb;
 
 		    $tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
@@ -354,7 +354,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
             }
 
 		    if (isset($request['tab_name'])) {
-			    $field_site_name = $request['tab_name'];
+			    $field_site_name = esc_attr($request['tab_name']);
 		    } elseif($field_info) {
 			    $field_site_name = $field_info->tab_name;
             } else {
@@ -548,7 +548,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 
 				    $htmlvar_name = isset($_REQUEST['htmlvar_name']) ? sanitize_text_field($_REQUEST['htmlvar_name']) : sanitize_text_field($_REQUEST['tab_key']);
 
-				    $this->uwp_tabs_field_adminhtml($htmlvar_name, $field_action, false, $_REQUEST);
+				    $this->uwp_tabs_field_adminhtml($htmlvar_name, $field_action, $_REQUEST);
 			    }
 
 			    /* ---- Delete field ---- */
@@ -674,7 +674,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
          *
          * @return      array|bool                  Sorted field ids.
          */
-        function update_field_order($field_ids = array())
+        public function update_field_order($field_ids = array())
         {
             global $wpdb;
             $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';

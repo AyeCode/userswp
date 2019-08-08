@@ -41,7 +41,7 @@ if ( ! class_exists( 'UsersWP_Settings_Uninstall', false ) ) :
         public function output() {
             global $current_section;
 
-            $settings = $this->get_settings( $current_section );
+            $settings = $this->get_settings();
 
             UsersWP_Admin_Settings::output_fields( $settings );
         }
@@ -50,9 +50,7 @@ if ( ! class_exists( 'UsersWP_Settings_Uninstall', false ) ) :
          * Save settings.
          */
         public function save() {
-            global $current_section;
-
-            $settings = $this->get_settings( $current_section );
+            $settings = $this->get_settings();
             UsersWP_Admin_Settings::save_fields( $settings );
         }
 
@@ -70,7 +68,7 @@ if ( ! class_exists( 'UsersWP_Settings_Uninstall', false ) ) :
             return apply_filters( 'uwp_get_sections_' . $this->id, $sections );
         }
 
-        public function get_settings( $current_section = '' ) {
+        public function get_settings() {
 
             /**
              * Filter uninstall settings array.

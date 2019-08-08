@@ -615,7 +615,6 @@ class UsersWP_Import_Export {
 
                 // A plugin may need to filter the data and meta
                 $userdata = apply_filters( 'uwp_import_userdata', $userdata, $usermeta );
-                $usermeta = apply_filters( 'uwp_import_usermeta', $usermeta, $userdata );
 
                 if ( ! empty( $userdata ) ) {
                     $file[] = $userdata;

@@ -980,15 +980,7 @@ class UsersWP_Form_Builder {
                             <?php
                         }
 
-
-
-                        switch ($field_type):
-                            default:
-                                do_action('uwp_admin_extra_custom_fields', $field_info, $cf); ?>
-
-
-                            <?php endswitch; ?>
-
+                        do_action('uwp_admin_extra_custom_fields', $field_info, $cf);?>
 
                         <li>
 
