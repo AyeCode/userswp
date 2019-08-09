@@ -61,6 +61,12 @@
       }
     }
 
+    #uwp-form-builder-tab-custom {
+      .super-duper-content-open {
+        display: none;
+      }
+    }
+
   }
 
   #uwp-available-fields {
@@ -398,7 +404,8 @@
   }
 
   #uwp-form-builder-tab,
-  #uwp-form-builder-tab-predefined {
+  #uwp-form-builder-tab-predefined,
+  #uwp-form-builder-tab-custom {
     float: left;
     width: 100%;
   }
@@ -511,7 +518,6 @@
       bottom: 100%;
     }
   }
-
 
   /* IE can just show/hide with no transition */
   .lte8 {

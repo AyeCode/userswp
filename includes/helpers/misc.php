@@ -1901,3 +1901,12 @@ function uwp_is_icon_url( $icon ) {
 	}
 	return apply_filters( 'uwp_is_icon_url', $return, $icon  );
 }
+
+function uwp_is_gdv2(){
+
+	if(defined(GEODIRECTORY_VERSION) && version_compare(GEODIRECTORY_VERSION,'2.0.0.0', '>=') ) {
+		return true;
+	}
+
+	return false;
+}
