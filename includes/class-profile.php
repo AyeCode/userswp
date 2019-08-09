@@ -253,14 +253,14 @@ class UsersWP_Profile {
     }
 
     /**
-     * More info tab title.
+     * Default user icon
      *
      * @since       1.0.0
      * @package     userswp
-     * @param       object      $user       The User ID.
-     * @return      string                  Tab title.
+     *
+     * @return      string  FA icon.
      */
-    public function get_profile_count_icon($user) {
+    public function get_profile_count_icon() {
         return '<i class="fas fa-user"></i>';
     }
 
@@ -416,12 +416,12 @@ class UsersWP_Profile {
     /**
      * Returns enabled profile tabs
      *
-     * @since       1.0.0
      * @package     userswp
-     * @param       object      $user       The User ID.
+     * @param       object      $user       The User.
+     *
      * @return      array                   Profile tabs
      */
-    public function get_profile_tabs($user) {
+    public function get_profile_tabs($user = '') {
 
 	    global $wpdb, $uwp_profile_tabs;
 
@@ -435,7 +435,7 @@ class UsersWP_Profile {
 	    if(!empty($uwp_profile_tabs)) {
 		    foreach ($uwp_profile_tabs as $tab) {
 
-			    $icon = isset($tab->tab_icon) ? $tab->tab_icon : $this->get_profile_count_icon($user);
+			    $icon = isset($tab->tab_icon) ? $tab->tab_icon : $this->get_profile_count_icon();
 			    if ( uwp_is_fa_icon( $icon ) ) {
 				    $tab_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
 			    } elseif ( uwp_is_icon_url( $icon ) ) {
@@ -464,6 +464,29 @@ class UsersWP_Profile {
 	    return $tabs;
     }
 
+	/**
+	 * Get tab content.
+	 *
+	 * @param object $tab Tab object.
+     *
+	 * @return string
+	 */
+	public function tab_content($tab, $user) {
+
+		ob_start();
+		// main content
+		if(!empty($tab->tab_content)){
+			echo do_shortcode( $tab->tab_content );
+		}elseif($tab->tab_type=='meta'){
+			echo do_shortcode('[uwp_user_meta key="'.$tab->tab_key.'" show="value"]');
+		}elseif($tab->tab_type=='standard'){
+			do_action( 'uwp_profile_tab_content', $user, $tab );
+			do_action('uwp_profile_'.$tab->tab_key.'_tab_content', $user, $tab);
+		}
+
+		return ob_get_clean();
+	}
+
     /**
      * Prints the profile tab content template
      *
@@ -476,9 +499,9 @@ class UsersWP_Profile {
 
 	    $active_tab = get_query_var('uwp_tab');
         $account_page = uwp_get_page_id('account_page', false);
-
+	    $tabs_array = array();
+	    $active_tab_content = '';
         $tabs = $this->get_profile_tabs($user);
-
         $tab_keys = array_keys($tabs);
 
         if (!empty($tab_keys)) {
@@ -487,36 +510,53 @@ class UsersWP_Profile {
             $default_key = false;
         }
 
+	    $default_key = apply_filters('uwp_profile_default_tab_display', $default_key, $user, $tabs);
+
         $active_tab = !empty( $active_tab ) && array_key_exists( $active_tab, $tabs ) ? $active_tab : $default_key;
         if (!$active_tab) {
             return;
         }
+
+	    if(!empty($tabs)) {
+		    foreach ($tabs as $tab) {
+			    $tab_content = $this->tab_content($tab, $user);
+			    if ( !empty( $tab_content ) ) {
+				    $tab->tab_content_rendered = $tab_content;
+				    $tabs_array[] = (array) $tab;
+			    }
+		    }
+	    }
 
         ?>
         <div class="uwp-profile-content">
             <div class="uwp-profile-nav">
                 <ul class="item-list-tabs-ul">
                     <?php
-                    foreach( $tabs as $tab ) {
+                    if(!empty($tabs_array)) {
+	                    foreach ($tabs_array as $tab) {
+		                    $tab_id = $tab['tab_key'];
+		                    $tab_url = uwp_build_profile_tab_url($user->ID, $tab_id, false);
 
-                        $tab = (array)$tab;
-	                    $tab_id = $tab['tab_key'];
-                        $tab_url = uwp_build_profile_tab_url($user->ID, $tab_id, false);
+		                    $active = $active_tab == $tab_id ? ' active' : '';
 
-                        $active = $active_tab == $tab_id ? ' active' : '';
+		                    if (1 == $tab['tab_login_only'] && !(is_user_logged_in() && get_current_user_id() == $user->ID)) {
+			                    continue;
+		                    }
 
-                        if(1 == $tab['tab_login_only'] && !(is_user_logged_in() && get_current_user_id() == $user->ID)){
-                            continue;
-                        }
+		                    if ($active_tab == $tab_id) {
+			                    $active_tab_content = $tab['tab_content_rendered'];
+		                    }
 
-                        ?>
-                        <li id="uwp-profile-<?php echo $tab_id; ?>" class="<?php echo $active.' '.$tab['class']; ?>">
-                            <a href="<?php echo esc_url( $tab_url ); ?>">
-                                <span class="uwp-profile-tab-label uwp-profile-<?php echo $tab_id; ?>-label "><?php echo esc_html( $tab['tab_name'] ); ?></span>
-                                <span class="uwp-profile-tab-count uwp-profile-<?php echo $tab_id; ?>-count"><?php echo $tab['count']; ?></span>
-                            </a>
-                        </li>
-                        <?php
+		                    ?>
+                            <li id="uwp-profile-<?php echo $tab_id; ?>"
+                                class="<?php echo $active . ' ' . $tab['class']; ?>">
+                                <a href="<?php echo esc_url($tab_url); ?>">
+                                    <span class="uwp-profile-tab-label uwp-profile-<?php echo $tab_id; ?>-label "><?php echo esc_html($tab['tab_name']); ?></span>
+                                    <span class="uwp-profile-tab-count uwp-profile-<?php echo $tab_id; ?>-count"><?php echo $tab['count']; ?></span>
+                                </a>
+                            </li>
+		                    <?php
+	                    }
                     }
                     ?>
                 </ul>
@@ -532,8 +572,9 @@ class UsersWP_Profile {
 
             <div class="uwp-profile-entries">
                 <?php
-                do_action('uwp_profile_tab_content', $user, $active_tab);
-                do_action('uwp_profile_'.$active_tab.'_tab_content', $user);
+                if(isset($active_tab_content) && !empty($active_tab_content)){
+                    echo $active_tab_content;
+                }
                 ?>
             </div>
         </div>

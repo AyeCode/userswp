@@ -277,7 +277,7 @@ jQuery(document).ready(function () {
         }
     });
 
-    jQuery("#uwp-form-builder-tab, #uwp-form-builder-tab-predefined").find("ul li a").click(function() {
+    jQuery("#uwp-form-builder-tab, #uwp-form-builder-tab-predefined, #uwp-form-builder-tab-custom").find("ul li a").click(function() {
         if(!jQuery(this).attr('id')){return;}
         var htmlvar_name = jQuery(this).attr('id').replace('uwp-','');
         var field_type = jQuery(this).data('type');
@@ -336,8 +336,8 @@ jQuery(document).ready(function () {
 
             });
 
-        if(htmlvar_name!='fieldset'){
-            jQuery(this).closest('li').hide();
+        if(htmlvar_name!='fieldset' || manage_field_type != 'profile_tabs'){
+            //jQuery(this).closest('li').hide();
         }
 
     });

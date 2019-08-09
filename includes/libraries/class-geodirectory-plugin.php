@@ -34,7 +34,7 @@ class UsersWP_GeoDirectory_Plugin {
             add_filter( 'uwp_get_sections_uwp-addons', array( $this, 'add_gd_tab' ) );
             add_filter( 'uwp_get_settings_uwp-addons', array( $this, 'add_gd_settings' ), 10, 2 );
             add_filter( 'uwp_available_tab_items', array( $this, 'available_tab_items' ) );
-	        add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
+	        //add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
         } else {
             add_filter( 'uwp_profile_tabs', array( $this, 'add_profile_gd_tabs' ), 10, 3 );
             add_action( 'uwp_profile_listings_tab_content', array( $this, 'add_profile_listings_tab_content' ) );
@@ -319,7 +319,7 @@ class UsersWP_GeoDirectory_Plugin {
 	 *
 	 * @return      array    $fields    Predefined field array.
 	 */
-	function add_profile_tabs_predefined_fields($fields, $form_type){
+	public function add_profile_tabs_predefined_fields($fields, $form_type){
 		if('profile-tabs' != $form_type){
 			return $fields;
 		}
@@ -353,7 +353,7 @@ class UsersWP_GeoDirectory_Plugin {
 		return $fields;
 	}
 
-	function profile_tab_icon($tab_icon, $tab, $user){
+	public function profile_tab_icon($tab_icon, $tab, $user){
 
 		switch ($tab->tab_key){
 			case 'listings' :
@@ -376,7 +376,7 @@ class UsersWP_GeoDirectory_Plugin {
         global $wpdb;
 
         if ($count_only) {
-            if($this->uwp_is_gdv2()) {
+            if(uwp_is_gdv2()) {
                 $results = $wpdb->get_var(
                     $wpdb->prepare(
                         "SELECT COUNT(reviews.rating) FROM " . GEODIR_REVIEW_TABLE . " reviews JOIN " . $wpdb->posts . " posts ON reviews.post_id = posts.id WHERE reviews.user_id = %d AND reviews.post_type = %s AND reviews.rating > 0 AND posts.post_status = 'publish'",
@@ -392,7 +392,7 @@ class UsersWP_GeoDirectory_Plugin {
                 );
             }
         } else {
-            if($this->uwp_is_gdv2()) {
+            if(uwp_is_gdv2()) {
                 $results = $wpdb->get_results(
                     $wpdb->prepare(
                         "SELECT reviews.* FROM " . GEODIR_REVIEW_TABLE . " reviews JOIN " . $wpdb->posts . " posts ON reviews.post_id = posts.id WHERE reviews.user_id = %d AND reviews.post_type = %s AND reviews.rating>0 AND posts.post_status = 'publish' LIMIT %d OFFSET %d",
@@ -680,7 +680,7 @@ class UsersWP_GeoDirectory_Plugin {
             if (in_array($post_type_id, $listing_post_types)) {
                 $post_type_slug = $gd_post_types[$post_type_id]['has_archive'];
 
-                if($this->uwp_is_gdv2()) {
+                if(uwp_is_gdv2()) {
                     if ($type == 'favorites' && geodir_cpt_has_favourite_disabled($post_type_id)) {
                         continue;
                     } elseif ($type == 'reviews' && geodir_cpt_has_rating_disabled($post_type_id)) {
@@ -720,7 +720,7 @@ class UsersWP_GeoDirectory_Plugin {
             $subtab_keys = array_keys($subtabs);
             $post_type = $subtabs[$subtab_keys[0]]['ptype'];
         } else {
-            $post_type = false;
+	        $post_type = apply_filters('uwp_default_listing_post_type', 'gd_place', $user, $type);
         }
         ?>
         <div class="uwp-profile-subcontent">
@@ -760,7 +760,7 @@ class UsersWP_GeoDirectory_Plugin {
     function gd_get_listings($user, $post_type) {
         $gd_post_types = geodir_get_posttypes('array');
         ?>
-        <h3><?php echo __($gd_post_types[$post_type]['labels']['name'], 'userswp') ?></h3>
+        <h3><?php _e($gd_post_types[$post_type]['labels']['name'], 'userswp') ?></h3>
 
         <div class="uwp-profile-item-block">
             <?php
@@ -794,7 +794,7 @@ class UsersWP_GeoDirectory_Plugin {
                     $post_avgratings = geodir_get_post_rating($post->ID);
                     $post_ratings = geodir_get_rating_stars($post_avgratings, $post->ID);
                     ob_start();
-                    if($this->uwp_is_gdv2()) {
+                    if(uwp_is_gdv2()) {
                         geodir_comments_number();
                     } else {
                         geodir_comments_number((int)$post->rating_count);
@@ -850,7 +850,7 @@ class UsersWP_GeoDirectory_Plugin {
                                 geodir_favourite_html( '', $post->ID );
                             }
                             if ($post->post_author == get_current_user_id()) {
-                                if($this->uwp_is_gdv2()) {
+                                if(uwp_is_gdv2()) {
                                     $href = 'javascript:void(0);';
                                     $class = '';
                                     $editlink = geodir_edit_post_link($post_id);
@@ -1028,7 +1028,7 @@ class UsersWP_GeoDirectory_Plugin {
                         $post_avgratings = geodir_get_post_rating($post->ID);
                         $post_ratings = geodir_get_rating_stars($post_avgratings, $post->ID);
                         ob_start();
-                        if($this->uwp_is_gdv2()) {
+                        if(uwp_is_gdv2()) {
                             geodir_comments_number();
                         } else {
                             geodir_comments_number((int)$post->rating_count);
@@ -1083,7 +1083,7 @@ class UsersWP_GeoDirectory_Plugin {
                                     geodir_favourite_html( '', $post->ID );
                                 }
                                 if ($post->post_author == get_current_user_id()) {
-                                    if($this->uwp_is_gdv2()) {
+                                    if(uwp_is_gdv2()) {
                                         $href = 'javascript:void(0);';
                                         $class = '';
                                         $editlink = geodir_edit_post_link($post_id);
@@ -1148,7 +1148,7 @@ class UsersWP_GeoDirectory_Plugin {
     }
 
     public function get_gd_login_url($url, $args) {
-        if(!$this->uwp_is_gdv2()) {
+        if(!uwp_is_gdv2()) {
             return $url;
         }
 
@@ -1293,25 +1293,25 @@ class UsersWP_GeoDirectory_Plugin {
     }
 
     public function gd_login_wid_login_placeholder() {
-        if(!$this->uwp_is_gdv2()) {
+        if(!uwp_is_gdv2()) {
             return __('Username', 'userswp');
         }
     }
 
     public function gd_login_wid_login_name() {
-        if(!$this->uwp_is_gdv2()) {
+        if(!uwp_is_gdv2()) {
             return "uwp_login_username";
         }
     }
 
     public function gd_login_wid_login_pwd() {
-        if(!$this->uwp_is_gdv2()) {
+        if(!uwp_is_gdv2()) {
             return "uwp_login_password";
         }
     }
 
     public function gd_login_inject_nonce() {
-        if(!$this->uwp_is_gdv2()) {
+        if(!uwp_is_gdv2()) {
             ?>
             <input type="hidden" name="uwp_login_nonce" value="<?php echo wp_create_nonce('uwp-login-nonce'); ?>"/>
             <?php
@@ -1361,15 +1361,6 @@ class UsersWP_GeoDirectory_Plugin {
         }
         
         return $uwp_author;
-    }
-
-    public function uwp_is_gdv2(){
-
-        if(version_compare(GEODIRECTORY_VERSION,'2.0.0.0', '>=') ) {
-            return true;
-        }
-
-        return false;
     }
 }
 $userswp_geodirectory = UsersWP_GeoDirectory_Plugin::get_instance();

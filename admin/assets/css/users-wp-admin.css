@@ -302,6 +302,8 @@ h3.users_wp_section_heading {
         #uwp_form_builder_container .uwp-side-sortables .posttype-tabs li a {
           color: #333;
           text-decoration: none; }
+    #uwp_form_builder_container .uwp-side-sortables #uwp-form-builder-tab-custom .super-duper-content-open {
+      display: none; }
   #uwp_form_builder_container #uwp-available-fields ul li {
     float: left;
     list-style: none outside none;
@@ -528,7 +530,8 @@ h3.users_wp_section_heading {
     width: 63%;
     float: left; }
   #uwp_form_builder_container #uwp-form-builder-tab,
-  #uwp_form_builder_container #uwp-form-builder-tab-predefined {
+  #uwp_form_builder_container #uwp-form-builder-tab-predefined,
+  #uwp_form_builder_container #uwp-form-builder-tab-custom {
     float: left;
     width: 100%; }
   #uwp_form_builder_container #uwp-form-builder-tab ul {

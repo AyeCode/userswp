@@ -133,7 +133,13 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
             return '';
         }
 
-        $fields = $wpdb->get_results("SELECT site_title,field_icon,htmlvar_name,field_type FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = 'uwp_account_".$args['key']."'");
+	    if ( strpos( $args['key'], 'uwp_account_' ) === 0 ) {
+			$key = $args['key'];
+        } else {
+        	$key = 'uwp_account_'.$args['key'];
+        }
+
+        $fields = $wpdb->get_results("SELECT site_title,field_icon,htmlvar_name,field_type FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = '".$key."'");
 
         if(!$fields){
             return '';

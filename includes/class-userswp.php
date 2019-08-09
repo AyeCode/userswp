@@ -239,7 +239,7 @@ final class UsersWP {
         add_action( 'uwp_profile_posts_tab_content', array($instance, 'get_profile_posts'), 10, 1);
         add_action( 'uwp_profile_tab_icon', array($instance, 'get_profile_tab_icon'), 10, 3);
         add_action( 'uwp_profile_comments_tab_content', array($instance, 'get_profile_comments'), 10, 1);
-        add_action( 'uwp_profile_tab_content', array($instance, 'uwp_extra_fields_as_tab_values'), 10, 2 );
+        //add_action( 'uwp_profile_tab_content', array($instance, 'uwp_extra_fields_as_tab_values'), 10, 2 );
 
         // Profile Pagination
         add_action( 'uwp_profile_pagination', array($instance, 'get_profile_pagination'));

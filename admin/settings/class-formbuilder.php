@@ -84,7 +84,7 @@ class UsersWP_Form_Builder {
                     </p>
 
                     <h3>
-                        <?php _e('Setup New Field', 'userswp'); ?>
+                        <?php _e('Standard Field', 'userswp'); ?>
                     </h3>
 
                     <div class="inside">
@@ -100,6 +100,16 @@ class UsersWP_Form_Builder {
                     <div class="inside">
                         <div id="uwp-form-builder-tab-predefined" class="uwp-tabs-panel">
                             <?php do_action('uwp_manage_available_fields_predefined', $form_type); ?>
+                        </div>
+                    </div>
+
+                    <h3>
+		                <?php _e('Custom Fields', 'userswp'); ?>
+                    </h3>
+
+                    <div class="inside">
+                        <div id="uwp-form-builder-tab-custom" class="uwp-tabs-panel">
+			                <?php do_action('uwp_manage_available_fields_custom', $form_type); ?>
                         </div>
                     </div>
                     
@@ -948,7 +958,7 @@ class UsersWP_Form_Builder {
                                         unset($show_in_locations['[fieldset]']);
                                     }
                                     
-                                    if (in_array($field_type, array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
+                                    if (!in_array($field_type, array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file'))) {
                                         unset($show_in_locations['[own_tab]']);
                                     }
                                     ?>
