@@ -120,6 +120,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.0 =
+* New bootstrap UI styles option - ADDED
+
 = 1.1.4 =
 * Elementor template with UsersWP shortcode does not output the other content than shortcode - FIXED
 * Changing login URL breaks Jetpack SSO - FIXED

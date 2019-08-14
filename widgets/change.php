@@ -26,7 +26,7 @@ class UWP_Change_Widget extends WP_Super_Duper {
             'base_id'       => 'uwp_change',
             'name'          => __('UWP > Change','userswp'),
             'widget_ops'    => array(
-                'classname'   => 'uwp-change-class',
+                'classname'   => 'uwp-change-class bsui',
                 'description' => esc_html__('Displays change password form.','userswp'),
             ),
             'arguments'     => array(
@@ -40,7 +40,7 @@ class UWP_Change_Widget extends WP_Super_Duper {
                 ),
                 'form_title'  => array(
                     'title'       => __( 'Form title', 'userswp' ),
-                    'desc'        => __( 'Enter the form title', 'userswp' ),
+                    'desc'        => __( 'Enter the form title (or "0" for no title)', 'userswp' ),
                     'type'        => 'text',
                     'desc_tip'    => true,
                     'default'     => '',
@@ -54,14 +54,20 @@ class UWP_Change_Widget extends WP_Super_Duper {
 		            'options'   =>  array(
 			            ""        =>  __('default', 'userswp'),
 			            "bs1"        =>  __('Style 1', 'userswp'),
-			            "bs2"        =>  __('Style 2', 'userswp'),
-			            "bs3"        =>  __('Style 3', 'userswp'),
-			            "bs4"        =>  __('Style 4', 'userswp'),
 		            ),
 		            'default'  => '',
 		            'desc_tip' => true,
 		            'advanced' => true
-	            )
+	            ),
+                'css_class'  => array(
+	                'type' => 'text',
+	                'title' => __('Extra class:', 'userswp'),
+	                'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'userswp'),
+	                'placeholder' => '',
+	                'default' => '',
+	                'desc_tip' => true,
+	                'advanced' => true,
+                ),
             )
 
         );
@@ -78,6 +84,7 @@ class UWP_Change_Widget extends WP_Super_Duper {
 
         $defaults = array(
             'form_title' => __('Change Password','userswp'),
+            'css_class'     => ''
         );
 
         /**
@@ -85,8 +92,8 @@ class UWP_Change_Widget extends WP_Super_Duper {
          */
         $args = wp_parse_args( $args, $defaults );
 
-        global $uwp_change_widget_args;
-        $uwp_change_widget_args = $args;
+        global $uwp_widget_args;
+        $uwp_widget_args = $args;
 
         ob_start();
 

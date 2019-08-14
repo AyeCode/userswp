@@ -322,9 +322,9 @@ class UsersWP_Files {
         $value = esc_html($value);
 
         if ($field->htmlvar_name == "uwp_banner_file") {
-            $htmlvar = "uwp_account_banner_thumb";
+            $htmlvar = "banner_thumb";
         } elseif ($field->htmlvar_name == "uwp_avatar_file") {
-            $htmlvar = "uwp_account_avatar_thumb";
+            $htmlvar = "avatar_thumb";
         } else {
             $htmlvar = $field->htmlvar_name;
         }

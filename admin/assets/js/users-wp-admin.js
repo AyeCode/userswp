@@ -6,7 +6,7 @@ jQuery(window).load(function() {
             allow_single_deselect: 'true'
         });
     }
-
+    
     // Load color picker
     var UWPColorPicker = jQuery('.uwp-color-picker');
     console.log('uwpColorPicker');

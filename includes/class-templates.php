@@ -416,12 +416,12 @@ class UsersWP_Templates {
             foreach ($fields as $field) {
 
                 if ($form_type == 'account') {
-                    if ($field->htmlvar_name == 'uwp_account_display_name') {
+                    if ($field->htmlvar_name == 'display_name') {
                         if ($field->is_active != '1') {
                             continue;
                         }
                     }
-                    if ($field->htmlvar_name == 'uwp_account_bio') {
+                    if ($field->htmlvar_name == 'bio') {
                         if ($field->is_active != '1') {
                             continue;
                         }
@@ -531,12 +531,12 @@ class UsersWP_Templates {
         if ($form_type == 'account') {
             $user_data = get_userdata($user_id);
 
-            if ($field->htmlvar_name == 'uwp_account_email') {
+            if ($field->htmlvar_name == 'email') {
                 $value = $user_data->user_email;
-            } elseif ($field->htmlvar_name == 'uwp_account_password') {
+            } elseif ($field->htmlvar_name == 'password') {
                 $value = '';
                 $field->is_required = 0;
-            } elseif ($field->htmlvar_name == 'uwp_account_confirm_password') {
+            } elseif ($field->htmlvar_name == 'confirm_password') {
                 $value = '';
                 $field->is_required = 0;
             } else {

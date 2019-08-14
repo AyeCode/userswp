@@ -34,10 +34,13 @@ class UsersWP_Notices {
     function display_registration_disabled_notice($type) {
         if ($type == 'register') {
             if (!get_option('users_can_register')) {
-                $message = __('<strong>Heads Up!</strong><br/> User registration is currently not allowed.', 'userswp');
-                echo '<div class="uwp-alert-error text-center">';
-                echo $message;
-                echo '</div>';
+                BSUI::alert(array(
+                        'class' => 'text-center',
+                        'type'=>'danger',
+                        'heading'  => 'Heads Up!',
+                        'content'=> __( 'User registration is currently not allowed.', 'userswp' )
+                    )
+                );
             }
         }
     }

@@ -23,7 +23,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
             'base_id'       => 'uwp_login',
             'name'          => __('UWP > Login','userswp'),
             'widget_ops'    => array(
-                'classname'   => 'uwp-login-class',
+                'classname'   => 'uwp-login-class bsui',
                 'description' => esc_html__('Displays login form or current logged in user.','userswp'),
             ),
             'arguments'     => array(
@@ -37,7 +37,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
                 ),
                 'form_title'  => array(
                     'title'       => __( 'Form title', 'userswp' ),
-                    'desc'        => __( 'Enter the form title', 'userswp' ),
+                    'desc'        => __( 'Enter the form title (or "0" for no title)', 'userswp' ),
                     'type'        => 'text',
                     'desc_tip'    => true,
                     'default'     => '',
@@ -87,8 +87,6 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     'desc_tip' => true,
                     'advanced' => true,
                 ),
-
-
             )
 
         );
@@ -135,7 +133,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
             'form_title'      => __('Login','userswp'),
             'form_padding'     => '',
             'logged_in_show'     => '',
-            'css_class'     => ''
+            'css_class'     => 'border-0'
         );
 
         /**
@@ -162,8 +160,8 @@ class UWP_Login_Widget extends WP_Super_Duper {
 
         } else {
             
-            global $uwp_login_widget_args;
-            $uwp_login_widget_args = $args;
+            global $uwp_widget_args;
+            $uwp_widget_args = $args;
 
             $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
             $template = $design_style ? $design_style."/login" : "login";
@@ -178,9 +176,8 @@ class UWP_Login_Widget extends WP_Super_Duper {
 
         echo '</div>';
 
-        $output = ob_get_contents();
+        $output = ob_get_clean();
 
-        ob_end_clean();
 
         return trim($output);
 

@@ -26,7 +26,7 @@ class UWP_Reset_Widget extends WP_Super_Duper {
             'base_id'       => 'uwp_reset',
             'name'          => __('UWP > Reset','userswp'),
             'widget_ops'    => array(
-                'classname'   => 'uwp-reset-class',
+                'classname'   => 'uwp-reset-class bsui',
                 'description' => esc_html__('Displays reset password form.','userswp'),
             ),
             'arguments'     => array(
@@ -40,7 +40,7 @@ class UWP_Reset_Widget extends WP_Super_Duper {
                 ),
                 'form_title'  => array(
                     'title'       => __( 'Form title', 'userswp' ),
-                    'desc'        => __( 'Enter the form title', 'userswp' ),
+                    'desc'        => __( 'Enter the form title (or "0" for no title)', 'userswp' ),
                     'type'        => 'text',
                     'desc_tip'    => true,
                     'default'     => '',
@@ -54,14 +54,20 @@ class UWP_Reset_Widget extends WP_Super_Duper {
 		            'options'   =>  array(
 			            ""        =>  __('default', 'userswp'),
 			            "bs1"        =>  __('Style 1', 'userswp'),
-			            "bs2"        =>  __('Style 2', 'userswp'),
-			            "bs3"        =>  __('Style 3', 'userswp'),
-			            "bs4"        =>  __('Style 4', 'userswp'),
 		            ),
 		            'default'  => '',
 		            'desc_tip' => true,
 		            'advanced' => true
-	            )
+	            ),
+                'css_class'  => array(
+	                'type' => 'text',
+	                'title' => __('Extra class:', 'userswp'),
+	                'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'userswp'),
+	                'placeholder' => '',
+	                'default' => '',
+	                'desc_tip' => true,
+	                'advanced' => true,
+                ),
             )
 
         );
@@ -72,12 +78,13 @@ class UWP_Reset_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        if (is_user_logged_in()) {
+        if (is_user_logged_in() && !is_admin()) {
             return false;
         }
 
         $defaults = array(
             'form_title'      => __('Reset Password','userswp'),
+            'css_class'     => ''
         );
 
         /**
@@ -85,8 +92,8 @@ class UWP_Reset_Widget extends WP_Super_Duper {
          */
         $args = wp_parse_args( $args, $defaults );
 
-        global $uwp_reset_widget_args;
-        $uwp_reset_widget_args = $args;
+        global $uwp_widget_args;
+        $uwp_widget_args = $args;
 
         ob_start();
 

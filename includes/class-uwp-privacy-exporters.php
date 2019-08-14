@@ -54,7 +54,7 @@ class UsersWP_Privacy_Exporters {
             foreach ($metadata as $key => $value) {
                 if (!empty($value) && !in_array($key, $skip_keys)) {
 
-                    if(in_array($key, array('uwp_account_avatar_thumb', 'uwp_account_banner_thumb'))){
+                    if(in_array($key, array('avatar_thumb', 'banner_thumb'))){
                         $uploads = wp_upload_dir();
                         $upload_url = $uploads['baseurl'];
                         $value = $upload_url.$value;

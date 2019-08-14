@@ -519,7 +519,7 @@ add_filter('user_profile_picture_description', 'uwp_admin_user_profile_picture_d
 function uwp_admin_user_profile_picture_description($description) {
     if (is_admin() && IS_PROFILE_PAGE) {
         $user_id = get_current_user_id();
-        $avatar = uwp_get_usermeta($user_id, 'uwp_account_avatar_thumb', '');
+        $avatar = uwp_get_usermeta($user_id, 'avatar_thumb', '');
 
         if (!empty($avatar)) {
             $description = sprintf( __( 'You can change your profile picture on your <a href="%s">Profile Page</a>.', 'userswp' ),
@@ -572,9 +572,9 @@ function uwp_admin_edit_banner_fields($user) {
                             <td class="uwp-profile-extra-value">
                                 <?php
                                 if ($field->htmlvar_name == "uwp_avatar_file") {
-                                    $value = uwp_get_usermeta($user->ID, "uwp_account_avatar_thumb", "");
+                                    $value = uwp_get_usermeta($user->ID, "avatar_thumb", "");
                                 } elseif ($field->htmlvar_name == "uwp_banner_file") {
-                                    $value = uwp_get_usermeta($user->ID, "uwp_account_banner_thumb", "");
+                                    $value = uwp_get_usermeta($user->ID, "banner_thumb", "");
                                 } else {
                                     $value = "";
                                 }
@@ -777,10 +777,10 @@ function uwp_add_account_menu_links() {
     ob_start();
     ?>
     <div class="dropdown text-center">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="account_settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="account_settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <?php _e('Account Settings', 'userswp'); ?>
         </button>
-        <div class="dropdown-menu" aria-labelledby="account_settings">
+        <ul class="dropdown-menu m-0 p-0 mt-3 list-unstyled" aria-labelledby="account_settings">
             <?php
             foreach( $account_available_tabs as $tab_id => $tab ) {
 
@@ -799,7 +799,7 @@ function uwp_add_account_menu_links() {
 	            $active = $type == $tab_id ? ' active' : '';
 
 	            ?>
-                <a class="dropdown-item uwp-account-<?php echo $tab_id.' '.$active; ?>" href="<?php echo esc_url( $tab_url ); ?>"><?php echo $tab['title']; ?></a>
+                <li class="m-0 p-0 list-unstyled"><a class="dropdown-item uwp-account-<?php echo $tab_id.' '.$active; ?>" href="<?php echo esc_url( $tab_url ); ?>"><?php echo $tab['title']; ?></a></li>
 	            <?php
 
 	            $legacy .= '<li id="uwp-account-'.$tab_id.'">';
@@ -808,7 +808,7 @@ function uwp_add_account_menu_links() {
 	            $legacy .= '</a></li>';
             }
             ?>
-        </div>
+        </ul>
     </div>
     <?php
 	$legacy .=  '</ul>';
@@ -928,8 +928,8 @@ function uwp_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 
  */
 function uwp_get_excluded_fields() {
     $excluded = array(
-        'uwp_account_password',
-        'uwp_account_confirm_password',
+        'password',
+        'confirm_password',
         'user_privacy',
     );
     return apply_filters('uwp_excluded_fields',$excluded);
@@ -1623,11 +1623,11 @@ function uwp_insert_usermeta(){
 
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
         $user_meta = array(
-            'uwp_account_username' => $user_data->user_login,
-            'uwp_account_email' => $user_data->user_email,
-            'uwp_account_first_name' => $user_data->first_name,
-            'uwp_account_last_name' => $user_data->last_name,
-            'uwp_account_display_name' => $user_data->display_name,
+            'username' => $user_data->user_login,
+            'email' => $user_data->user_email,
+            'first_name' => $user_data->first_name,
+            'last_name' => $user_data->last_name,
+            'display_name' => $user_data->display_name,
         );
 
         $users = $wpdb->get_var($wpdb->prepare("SELECT COUNT(user_id) FROM {$meta_table} WHERE user_id = %d", $user_id));

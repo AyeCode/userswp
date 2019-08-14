@@ -16,7 +16,7 @@
   "require": {
     "php": ">=5.3.0",
     "ayecode/wp-font-awesome-settings": "^1.0",
-    "ayecode/wp-bootstrap-settings": "^0.0",
+    "ayecode/wp-bootstrap-ui": "^0.0",
     "ayecode/wp-super-duper": "^1.0"
   },
   "minimum-stability": "dev"

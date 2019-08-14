@@ -260,32 +260,32 @@ class UsersWP_Forms {
         }
 
         $first_name = "";
-        if (isset($result['uwp_account_first_name']) && !empty($result['uwp_account_first_name'])) {
-            $first_name = $result['uwp_account_first_name'];
+        if (isset($result['first_name']) && !empty($result['first_name'])) {
+            $first_name = $result['first_name'];
         }
 
         $last_name = "";
-        if (isset($result['uwp_account_last_name']) && !empty($result['uwp_account_last_name'])) {
-            $last_name = $result['uwp_account_last_name'];
+        if (isset($result['last_name']) && !empty($result['last_name'])) {
+            $last_name = $result['last_name'];
         }
 
-        if (isset($result['uwp_account_display_name']) && !empty($result['uwp_account_display_name'])) {
-            $display_name = $result['uwp_account_display_name'];
+        if (isset($result['display_name']) && !empty($result['display_name'])) {
+            $display_name = $result['display_name'];
         } else {
             if (!empty($first_name) || !empty($last_name)) {
                 $display_name = $first_name . ' ' . $last_name;
             } else {
-                $display_name = $result['uwp_account_username'];
+                $display_name = $result['username'];
             }
         }
 
         $description = "";
-        if (isset($result['uwp_account_bio']) && !empty($result['uwp_account_bio'])) {
-            $description = $result['uwp_account_bio'];
+        if (isset($result['bio']) && !empty($result['bio'])) {
+            $description = $result['bio'];
         }
 
-	    $user_login = !empty($result['uwp_account_username']) ? $result['uwp_account_username'] : '';
-	    $email = !empty($result['uwp_account_email']) ? $result['uwp_account_email'] : '';
+	    $user_login = !empty($result['username']) ? $result['username'] : '';
+	    $email = !empty($result['email']) ? $result['email'] : '';
 
 	    if(empty($user_login)){
 		    $user_login = sanitize_user( str_replace( ' ', '', $display_name ), true );
@@ -374,14 +374,18 @@ class UsersWP_Forms {
         if ($reg_action == 'auto_approve_login' || $force_redirect) {
             $res = wp_signon(
                 array(
-                    'user_login' => $result['uwp_account_username'],
+                    'user_login' => $result['username'],
                     'user_password' => $password,
                     'remember' => false
                 )
             );
 
             if (is_wp_error($res)) {
-                $error = '<div class="uwp-alert-error text-center">'.__('<strong>Error</strong>: Invalid username or Password.', 'userswp').'</div>';
+                $error = BSUI::get_alert(array(
+                        'type'=>'error',
+                        'content'=> __( 'Invalid username or Password.', 'userswp' )
+                    )
+                );
                 $uwp_notices[] = array('register' => $error);
             } else {
                 $reg_redirect_page_id = uwp_get_option('register_redirect_to', '');
@@ -485,7 +489,11 @@ class UsersWP_Forms {
         add_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
 
         if (is_wp_error($res)) {
-            $error = '<div class="uwp-alert-error text-center">'.__('<strong>Error</strong>: Invalid username or Password.', 'userswp').'</div>';
+            $error = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> __( 'Invalid username or Password.', 'userswp' )
+                )
+            );
             $uwp_notices[] = array('login' => $error);
             return;
         } else {
@@ -654,7 +662,7 @@ class UsersWP_Forms {
 
         $user_data = get_user_by('id', get_current_user_id());
 
-        if (is_wp_error($user_data)) {
+        if (!$user_data) {
             $error = '<div class="uwp-alert-error text-center">'.$user_data->get_error_message().'</div>';
             $uwp_notices[] = array('change' => $error);
             return;
@@ -788,28 +796,28 @@ class UsersWP_Forms {
             'ID' => $current_user_id
         );
 
-        if (isset($result['uwp_account_email'])) {
-            $args['user_email'] = $result['uwp_account_email'];
+        if (isset($result['email'])) {
+            $args['user_email'] = $result['email'];
         }
 
-        if (isset($result['uwp_account_first_name']) && isset($result['uwp_account_last_name'])) {
-            $args['display_name'] = $result['uwp_account_first_name'] . ' ' . $result['uwp_account_last_name'];
+        if (isset($result['first_name']) && isset($result['last_name'])) {
+            $args['display_name'] = $result['first_name'] . ' ' . $result['last_name'];
         }
 
-        if (isset($result['uwp_account_first_name'])) {
-            $args['first_name'] = $result['uwp_account_first_name'];
+        if (isset($result['first_name'])) {
+            $args['first_name'] = $result['first_name'];
         }
 
-        if (isset($result['uwp_account_last_name'])) {
-            $args['last_name'] = $result['uwp_account_last_name'];
+        if (isset($result['last_name'])) {
+            $args['last_name'] = $result['last_name'];
         }
 
-        if (isset($result['uwp_account_bio'])) {
-            $args['description'] = $result['uwp_account_bio'];
+        if (isset($result['bio'])) {
+            $args['description'] = $result['bio'];
         }
 
-        if (isset($result['uwp_account_display_name']) && !empty($result['uwp_account_display_name'])) {
-            $args['display_name'] = $result['uwp_account_display_name'];
+        if (isset($result['display_name']) && !empty($result['display_name'])) {
+            $args['display_name'] = $result['display_name'];
         }
 
         if (isset($result['password'])) {
@@ -970,9 +978,9 @@ class UsersWP_Forms {
 			$unlink_img = '';
 			if ($unlink_prev_img) {
 				if ($type == 'avatar') {
-					$previous_img = uwp_get_usermeta($user_id, 'uwp_account_avatar_thumb');
+					$previous_img = uwp_get_usermeta($user_id, 'avatar_thumb');
 				} else if ($type == 'banner') {
-					$previous_img = uwp_get_usermeta($user_id, 'uwp_account_banner_thumb');
+					$previous_img = uwp_get_usermeta($user_id, 'banner_thumb');
 				} else {
 					$previous_img = '';
 				}
@@ -985,9 +993,9 @@ class UsersWP_Forms {
             // remove the uploads path for easy migrations
             $cropped = str_replace($upload_url, '', $cropped);
             if ($type == 'avatar') {
-                uwp_update_usermeta($user_id, 'uwp_account_avatar_thumb', $cropped);
+                uwp_update_usermeta($user_id, 'avatar_thumb', $cropped);
             } else {
-                uwp_update_usermeta($user_id, 'uwp_account_banner_thumb', $cropped);
+                uwp_update_usermeta($user_id, 'banner_thumb', $cropped);
             }
 			
 			if ($unlink_img && $unlink_img != $thumb_image_location && is_file($unlink_img) && file_exists($unlink_img)) {
@@ -1230,23 +1238,23 @@ class UsersWP_Forms {
         }
 
         if ($type == 'register') {
-            if (isset($data['uwp_account_username'])) {
-                unset($data['uwp_account_username']);
+            if (isset($data['username'])) {
+                unset($data['username']);
             }
-            if (isset($data['uwp_account_email'])) {
-                unset($data['uwp_account_email']);
+            if (isset($data['email'])) {
+                unset($data['email']);
             }
-            if (isset($data['uwp_account_display_name'])) {
-                unset($data['uwp_account_display_name']);
+            if (isset($data['display_name'])) {
+                unset($data['display_name']);
             }
-            if (isset($data['uwp_account_first_name'])) {
-                unset($data['uwp_account_first_name']);
+            if (isset($data['first_name'])) {
+                unset($data['first_name']);
             }
-            if (isset($data['uwp_account_last_name'])) {
-                unset($data['uwp_account_last_name']);
+            if (isset($data['last_name'])) {
+                unset($data['last_name']);
             }
-            if (isset($data['uwp_account_bio'])) {
-                unset($data['uwp_account_bio']);
+            if (isset($data['bio'])) {
+                unset($data['bio']);
             }
         }
 
@@ -1305,11 +1313,11 @@ class UsersWP_Forms {
         }
         if ($permission) {
             // Remove file
-			if ($htmlvar == "uwp_account_banner_thumb") {
-				$file = uwp_get_usermeta($user_id, 'uwp_account_banner_thumb');
+			if ($htmlvar == "banner_thumb") {
+				$file = uwp_get_usermeta($user_id, 'banner_thumb');
 				$type = 'banner';
-			} elseif ($htmlvar == "uwp_account_avatar_thumb") {
-				$file = uwp_get_usermeta($user_id, 'uwp_account_avatar_thumb');
+			} elseif ($htmlvar == "avatar_thumb") {
+				$file = uwp_get_usermeta($user_id, 'avatar_thumb');
 				$type = 'avatar';
 			} else {
 				$file = '';
@@ -1398,7 +1406,7 @@ class UsersWP_Forms {
                 jQuery(function () {
 
                     jQuery("#<?php echo $field->htmlvar_name;?>").datepicker({changeMonth: true, changeYear: true
-                        <?php if($field->htmlvar_name == 'uwp_account_dob'){ echo ", yearRange: '1900:+0'"; } else { echo ", yearRange: '1900:2050'"; }?>
+                        <?php if($field->htmlvar_name == 'dob'){ echo ", yearRange: '1900:+0'"; } else { echo ", yearRange: '1900:2050'"; }?>
                         <?php echo apply_filters("uwp_datepicker_extra_{$field->htmlvar_name}",'');?>});
 
                     jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("option", "dateFormat", '<?php echo $jquery_date_format;?>');
@@ -2413,22 +2421,18 @@ class UsersWP_Forms {
         //Normal fields
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND field_type != 'fieldset' ORDER BY sort_order ASC");
         if ($fields) {
-            $_POST['uwp_account_first_name'] = $_POST['first_name'];
-            $_POST['uwp_account_last_name'] = $_POST['last_name'];
-            $_POST['uwp_account_display_name'] = $_POST['nickname'];
-            $_POST['uwp_account_email'] = $_POST['email'];
             $result = uwp_validate_fields($_POST, 'account', $fields);
-            if (isset($result['uwp_account_display_name']) && !empty($result['uwp_account_display_name'])) {
-                $display_name = $result['uwp_account_display_name'];
+            if (isset($result['display_name']) && !empty($result['display_name'])) {
+                $display_name = $result['display_name'];
             } else {
                 if (!empty($first_name) || !empty($last_name)) {
-                    $display_name = $result['uwp_account_first_name'] . ' ' . $result['uwp_account_last_name'];
+                    $display_name = $result['first_name'] . ' ' . $result['last_name'];
                 } else {
                     $user_info = get_userdata($user_id);
                     $display_name = $user_info->user_login;
                 }
             }
-            $result['uwp_account_display_name'] = $display_name;
+            $result['display_name'] = $display_name;
             if (!is_wp_error($result)) {
                 foreach ($fields as $field) {
                     $value = isset($result[$field->htmlvar_name]) ? $result[$field->htmlvar_name] : '';
@@ -2626,7 +2630,7 @@ class UsersWP_Forms {
                         </label>
                     <?php } ?>
 
-                    <input name="uwp_account_confirm_password"
+                    <input name="confirm_password"
                            class="uwp_textfield <?php echo esc_attr($bs_form_control);?>"
                            id="uwp_account_confirm_password"
                            placeholder="<?php echo $site_title; ?>"
@@ -2687,7 +2691,7 @@ class UsersWP_Forms {
                         </label>
                     <?php } ?>
 
-                    <input name="uwp_account_confirm_email"
+                    <input name="confirm_email"
                            class="uwp_textfield <?php echo esc_attr($bs_form_control);?>"
                            id="uwp_account_confirm_email"
                            placeholder="<?php echo $site_title; ?>"

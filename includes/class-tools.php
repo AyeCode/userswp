@@ -127,19 +127,19 @@ class UsersWP_Tools {
 
                 foreach ($columns as $column) {
                     switch ($column) {
-                        case "uwp_account_username":
+                        case "username":
                             $value = $user_data->user_login;
                             break;
-                        case "uwp_account_email":
+                        case "email":
                             $value = $user_data->user_email;
                             break;
-                        case "uwp_account_first_name":
+                        case "first_name":
                             $value = $user_data->first_name;
                             break;
-                        case "uwp_account_last_name":
+                        case "last_name":
                             $value = $user_data->last_name;
                             break;
-                        case "uwp_account_bio":
+                        case "bio":
                             $value = $user_data->description;
                             break;
                         default:

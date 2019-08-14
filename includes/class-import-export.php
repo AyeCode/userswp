@@ -268,9 +268,9 @@ class UsersWP_Import_Export {
 
         foreach ($data as $u){
             $user = get_userdata($u->user_id);
-            $data[$i]->uwp_account_username = $user->user_login;
-            $data[$i]->uwp_account_email = $user->user_email;
-            $data[$i]->uwp_account_bio = $user->description;
+            $data[$i]->username = $user->user_login;
+            $data[$i]->email = $user->user_email;
+            $data[$i]->bio = $user->description;
             $i++;
         }
 
@@ -475,20 +475,20 @@ class UsersWP_Import_Export {
                     continue;
                 }
 
-                $username = isset($row['uwp_account_username']) ? $row['uwp_account_username'] : '';
-                $email = isset($row['uwp_account_email']) ? $row['uwp_account_email'] : '';
-                $first_name = isset($row['uwp_account_first_name']) ? $row['uwp_account_first_name'] : '';
-                $last_name = isset($row['uwp_account_last_name']) ? $row['uwp_account_last_name'] : '';
-                $bio = isset($row['uwp_account_bio']) ? $row['uwp_account_bio'] : '';
-                $display_name = isset($row['uwp_account_display_name']) ? $row['uwp_account_display_name'] : '';
+                $username = isset($row['username']) ? $row['username'] : '';
+                $email = isset($row['email']) ? $row['email'] : '';
+                $first_name = isset($row['first_name']) ? $row['first_name'] : '';
+                $last_name = isset($row['last_name']) ? $row['last_name'] : '';
+                $bio = isset($row['bio']) ? $row['bio'] : '';
+                $display_name = isset($row['display_name']) ? $row['display_name'] : '';
                 $password = wp_generate_password();
                 $exclude = array('user_id');
                 $exclude = apply_filters('uwp_import_exclude_columns', $exclude, $row);
 
-                if(isset($row['uwp_account_username']) && username_exists($row['uwp_account_username'])){
-                    $user = get_user_by('login', $row['uwp_account_username']);
+                if(isset($row['username']) && username_exists($row['username'])){
+                    $user = get_user_by('login', $row['username']);
                     $user_id = $user->ID;
-                    $email = $row['uwp_account_email'];
+                    $email = $row['email'];
                     if( !empty( $email ) && $update_existing = apply_filters('uwp_import_update_users', false, $row, $user_id) ) {
                         $args = array(
                             'ID'         => $user_id,
@@ -500,14 +500,14 @@ class UsersWP_Import_Export {
                         );
                         wp_update_user( $args );
                     }
-                } elseif(isset($row['uwp_account_email']) && email_exists($row['uwp_account_email'])){
-                    $user = get_user_by('email', $row['uwp_account_email']);
+                } elseif(isset($row['email']) && email_exists($row['email'])){
+                    $user = get_user_by('email', $row['email']);
                     $user_id = $user->ID;
                 } elseif((int)$row['user_id'] > 0){
                     $user = get_user_by('ID', $row['user_id']);
                     if(false === $user){
                         $userdata = array(
-                            'user_login'  =>  $row['uwp_account_username'],
+                            'user_login'  =>  $row['username'],
                             'user_email'  =>  $email,
                             'user_pass'   =>  $password,
                             'first_name' => $first_name,
@@ -518,7 +518,7 @@ class UsersWP_Import_Export {
                         $user_id = wp_insert_user( $userdata );
                         wp_new_user_notification($user_id,null, 'user'); //send password reset link
                     } else {
-                        if( $user->user_login == $row['uwp_account_username'] ) { //check id passed in csv and existing username are same
+                        if( $user->user_login == $row['username'] ) { //check id passed in csv and existing username are same
                             $user_id = $row['user_id'];
                             if( !empty( $email ) && $email != $user->user_email && $update_existing = apply_filters('uwp_import_update_users', false, $row, $user_id)) {
                                 $args = array(

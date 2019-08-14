@@ -44,9 +44,9 @@ class UsersWP_Meta {
             $user_data = get_userdata($user_id);
 
             switch ($key){
-                case 'uwp_account_email': $value = $user_data->user_email; break;
-                case 'uwp_account_username': $value = $user_data->user_login; break;
-                case 'uwp_account_bio': $value = $user_data->description; break;
+                case 'email': $value = $user_data->user_email; break;
+                case 'username': $value = $user_data->user_login; break;
+                case 'bio': $value = $user_data->description; break;
                 default :
                     $row = $wpdb->get_row($wpdb->prepare("SELECT {$key} FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
                     if (!empty($row)) {
@@ -171,11 +171,11 @@ class UsersWP_Meta {
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
         $user_meta = array(
-            'uwp_account_username' => $user_data->user_login,
-            'uwp_account_email' => $user_data->user_email,
-            'uwp_account_display_name' => $user_data->display_name,
-            'uwp_account_first_name' => $user_data->first_name,
-            'uwp_account_last_name' => $user_data->last_name,
+            'username' => $user_data->user_login,
+            'email' => $user_data->user_email,
+            'display_name' => $user_data->display_name,
+            'first_name' => $user_data->first_name,
+            'last_name' => $user_data->last_name,
         );
 
         foreach ($user_meta as $key => $meta){

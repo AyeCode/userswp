@@ -140,13 +140,13 @@ class UsersWP_Tables {
 						user_id int(20) NOT NULL,
 						user_ip varchar(20) NULL DEFAULT NULL,
 						user_privacy varchar(255) NULL DEFAULT NULL,
-						uwp_account_username varchar(255) NULL DEFAULT NULL,
-						uwp_account_email varchar(255) NULL DEFAULT NULL,
-						uwp_account_first_name varchar(255) NULL DEFAULT NULL,
-						uwp_account_last_name varchar(255) NULL DEFAULT NULL,
-						uwp_account_avatar_thumb varchar(255) NULL DEFAULT NULL,
-						uwp_account_banner_thumb varchar(255) NULL DEFAULT NULL,
-                        uwp_account_display_name varchar(255) NULL DEFAULT NULL,
+						username varchar(255) NULL DEFAULT NULL,
+						email varchar(255) NULL DEFAULT NULL,
+						first_name varchar(255) NULL DEFAULT NULL,
+						last_name varchar(255) NULL DEFAULT NULL,
+						avatar_thumb varchar(255) NULL DEFAULT NULL,
+						banner_thumb varchar(255) NULL DEFAULT NULL,
+                        display_name varchar(255) NULL DEFAULT NULL,
 						PRIMARY KEY  (user_id)
 						) $collate ";
 
@@ -269,10 +269,8 @@ class UsersWP_Tables {
     public function add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
     {
         $excluded = uwp_get_excluded_fields();
-
-        $starts_with = "uwp_account_";
-
-        if ((substr($column, 0, strlen($starts_with)) === $starts_with) && !in_array($column, $excluded)) {
+        
+        if (!in_array($column, $excluded)) {
             global $wpdb;
             $result = 0;// no rows affected
             if (!$this->column_exists($db, $column)) {

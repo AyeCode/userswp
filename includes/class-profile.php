@@ -47,6 +47,7 @@ class UsersWP_Profile {
      * @param       bool      $hide_cover   Hide cover image.
      * @param       bool      $hide_avatar   Hide avatar image.
      * @param       bool      $allow_change   Allow to change cover and avatar image.
+     * @deprecated 1.2.0 Use uwp_locate_template()
      */
     public function get_profile_header($user, $hide_cover = false, $hide_avatar = false, $allow_change = true) {
         if(!$user){
@@ -67,7 +68,7 @@ class UsersWP_Profile {
 
         <div class="uwp-profile-header <?php echo $class; ?> clearfix">
             <?php if(!$hide_cover) {
-                $banner = uwp_get_usermeta($user->ID, 'uwp_account_banner_thumb', '');
+                $banner = uwp_get_usermeta($user->ID, 'banner_thumb', '');
                 if (empty($banner)) {
                     $banner = uwp_get_option('profile_default_banner', '');
                     if(empty($banner)){
@@ -112,7 +113,7 @@ class UsersWP_Profile {
                     if (!is_uwp_profile_page()) {
                         echo '<a href="' . apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID) . '" title="' . $user->display_name . '">';
                     }
-                    $avatar = uwp_get_usermeta($user->ID, 'uwp_account_avatar_thumb', '');
+                    $avatar = uwp_get_usermeta($user->ID, 'avatar_thumb', '');
                     if (empty($avatar)) {
                         $avatar = get_avatar($user->user_email, 150);
                     } else {
@@ -227,7 +228,7 @@ class UsersWP_Profile {
 
                     $key = $field->htmlvar_name;
                     // see UsersWP_Forms -> uwp_save_user_extra_fields reason for replacing key
-                    $key = str_replace('uwp_register_', 'uwp_account_', $key);
+                    $key = str_replace('uwp_register_', '', $key);
                     $exclude_key = str_replace('uwp_account_', '', $key);
                     $value = uwp_get_usermeta($user->ID, $key, false);
                     $icon = uwp_get_field_icon($field->field_icon);
@@ -373,7 +374,7 @@ class UsersWP_Profile {
                             <div class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
                             <div class="uwp-profile-extra-value">
                                 <?php
-                                if ($field->htmlvar_name == 'uwp_account_bio') {
+                                if ($field->htmlvar_name == 'bio') {
                                     $is_profile_page = is_uwp_profile_page();
                                     $value = get_user_meta($user->ID, 'description', true);
                                     $value = stripslashes($value);
@@ -412,6 +413,173 @@ class UsersWP_Profile {
         ob_end_clean();
         return trim($wrapped_output);
     }
+
+	public function get_tab_settings(){
+		global $wpdb,$uwp_profile_tab_settings;
+
+		if($uwp_profile_tab_settings){
+			$tabs = $uwp_profile_tab_settings;
+		}else{
+			$tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
+			$uwp_profile_tab_settings = $tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s ORDER BY sort_order ASC", 'profile-tabs'));
+		}
+
+		/**
+		 * Get the tabs output settings.
+		 *
+		 * @param array $tabs The array of stdClass settings for the tabs output.
+		 */
+		return apply_filters('uwp_profile_tab_settings',$tabs);
+	}
+	
+	public function get_tabs(){
+
+		global $uwp_profile_tabs_array;
+		// check if we have been here before
+		$tabs_array = !empty($uwp_profile_tabs_array) ? $uwp_profile_tabs_array : array();
+
+
+
+//		$tabs = array();
+
+//		$tabs = $settings;
+
+		if(empty($tabs_array)){
+
+			// get the settings
+			$tabs = $this->get_tab_settings();
+
+			if(!empty($tabs)){
+				// get the tab contents first so we can decide to output the tab head
+				$tabs_content = array();
+				foreach($tabs as $tab){
+					$tabs_content[$tab->id."tab"] = $this->tab_content($tab);
+				}
+
+				// setup the array
+				if(!empty($tabs)){
+					foreach($tabs as $tab) {
+						if ( $tab->tab_level > 0 ) {
+							continue;
+						}
+						if ( empty( $tabs_content[ $tab->id . "tab" ] ) ) {
+							continue;
+						}
+
+						$tab->tab_content_rendered = $tabs_content[$tab->id."tab"];
+						$tabs_array[] = (array) $tab;
+					}
+				}
+
+//				echo '@@@';
+//				print_r($tabs_array);
+			}
+
+
+
+		}
+
+
+
+
+
+
+		
+		return $tabs_array;
+
+	}
+
+
+	public function tab_content($tab) {
+
+		ob_start();
+		// main content
+		if(!empty($tab->tab_content)){ // override content
+			$content = stripslashes( $tab->tab_content );
+			echo do_shortcode( $content );
+		}elseif($tab->tab_type=='meta'){ // meta info
+			echo do_shortcode('[uwp_user_meta key="'.$tab->tab_key.'" show="value"]');
+		}elseif($tab->tab_type=='standard'){ // meta info
+			$user = uwp_get_displayed_user();
+			do_action( 'uwp_profile_tab_content', $user , $tab );
+			do_action('uwp_profile_'.$tab->tab_key.'_tab_content', $user , $tab);
+		}
+
+//		echo '###';
+
+		echo self::tab_content_child($tab); // child elements
+
+		return ob_get_clean();
+	}
+
+	public function tab_content_child($tab) {
+		ob_start();
+		$tabs = self::get_tab_settings();
+		$parent_id = $tab->id;
+
+		foreach($tabs as $child_tab){
+			if($child_tab->tab_parent==$parent_id){
+				if(!empty($child_tab->tab_content)){ // override content
+					echo stripslashes( $child_tab->tab_content );
+				}elseif($child_tab->tab_type=='meta'){ // meta info
+					echo do_shortcode('[uwp_user_meta key="'.$child_tab->tab_key.'"]');
+				}elseif($child_tab->tab_type=='fieldset'){ // meta info
+					self::output_fieldset($child_tab);
+				}elseif($child_tab->tab_type=='standard'){ // meta info
+					if($child_tab->tab_key=='reviews'){
+						comments_template();
+					}
+				}
+			}
+		}
+		return ob_get_clean();
+
+	}
+
+	public function output_fieldset($tab){
+		ob_start();
+		echo '<div class="uwp_post_meta  uwp-fieldset">';
+		echo "<h4>";
+		if($tab->tab_icon){
+			echo '<i class="fas '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
+		}
+		if($tab->tab_name){
+			esc_attr_e($tab->tab_name,'geodirectory');
+		}
+		echo "</h4>";
+		echo "</div>";
+
+		return ob_get_clean();
+	}
+
+
+	public function get_user_post_counts($user_id){
+
+		$counts = array();
+
+		if($user_id){
+
+			$post_types = get_post_types( array('public'=>true), 'objects');
+//				print_r($post_types);exit;
+
+			if(!empty($post_types)){
+				foreach($post_types as $cpt => $post_type){
+					$count = count_user_posts( $user_id , $cpt);
+					if($count){
+						$counts[$cpt] = array('name'=> $post_type->labels->name,'singular_name'=> $post_type->labels->singular_name,'count'=>$count);
+					}
+
+				}
+			}
+
+		}
+
+//		print_r($counts);exit;
+
+		return $counts;
+
+	}
+
 
     /**
      * Returns enabled profile tabs
@@ -464,28 +632,6 @@ class UsersWP_Profile {
 	    return $tabs;
     }
 
-	/**
-	 * Get tab content.
-	 *
-	 * @param object $tab Tab object.
-     *
-	 * @return string
-	 */
-	public function tab_content($tab, $user) {
-
-		ob_start();
-		// main content
-		if(!empty($tab->tab_content)){
-			echo do_shortcode( $tab->tab_content );
-		}elseif($tab->tab_type=='meta'){
-			echo do_shortcode('[uwp_user_meta key="'.$tab->tab_key.'" show="value"]');
-		}elseif($tab->tab_type=='standard'){
-			do_action( 'uwp_profile_tab_content', $user, $tab );
-			do_action('uwp_profile_'.$tab->tab_key.'_tab_content', $user, $tab);
-		}
-
-		return ob_get_clean();
-	}
 
     /**
      * Prints the profile tab content template
@@ -1341,7 +1487,7 @@ class UsersWP_Profile {
         }
 
         if ( $user && is_object( $user ) ) {
-            $avatar_thumb = uwp_get_usermeta($user->data->ID, 'uwp_account_avatar_thumb', '');
+            $avatar_thumb = uwp_get_usermeta($user->data->ID, 'avatar_thumb', '');
             if ( !empty($avatar_thumb) ) {
                 add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
                 $uploads = wp_upload_dir();
@@ -1851,12 +1997,12 @@ class UsersWP_Profile {
         $user_data = get_userdata($user->ID);
         $file_obj = new UsersWP_Files();
 
-        if ($field->htmlvar_name == 'uwp_account_email') {
+        if ($field->htmlvar_name == 'email') {
             $value = $user_data->user_email;
-        } elseif ($field->htmlvar_name == 'uwp_account_password') {
+        } elseif ($field->htmlvar_name == 'password') {
             $value = '';
             $field->is_required = 0;
-        } elseif ($field->htmlvar_name == 'uwp_account_confirm_password') {
+        } elseif ($field->htmlvar_name == 'confirm_password') {
             $value = '';
             $field->is_required = 0;
         } else {

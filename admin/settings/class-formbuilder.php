@@ -272,6 +272,35 @@ class UsersWP_Form_Builder {
             )
         );
 
+        $custom_fields['dob'] = array( // The key value should be unique and not contain any spaces.
+            'field_type'  => 'datepicker',
+            'class'       => 'uwp-dob',
+            'icon'        => 'fas fa-birthday-cake',
+            'name'        => __( 'Date of birth', 'userswp' ),
+            'description' => __( 'Adds a date input for users to enter their date of birth.', 'userswp' ),
+            'defaults'    => array(
+                'data_type'          => 'DATE',
+                'admin_title'        => __( 'Date of birth', 'userswp' ),
+                'site_title'     => __( 'Date of birth', 'userswp' ),
+                'form_label'      => __( 'Enter your date of birth.', 'userswp' ),
+                'htmlvar_name'       => 'dob',
+                'is_active'          => true,
+                'for_admin_use'      => false,
+                'default_value'      => '',
+                'is_required'        => false,
+                'validation_pattern' => '',
+                'validation_msg'     => '',
+                'required_msg'       => '',
+                'field_icon'         => 'fas fa-birthday-cake',
+                'css_class'          => '',
+                'cat_sort'           => true,
+                'cat_filter'         => true,
+                'extra_fields'       => array(
+                    'date_range'        => 'c-100:c+0'
+                )
+            )
+        );
+
         // Mobile
         $custom_fields['mobile'] = array( // The key value should be unique and not contain any spaces.
             'field_type'  =>  'phone',
@@ -291,7 +320,176 @@ class UsersWP_Form_Builder {
                 'css_class'           =>  ''
             )
         );
-        
+
+        // Facebook
+        $custom_fields['facebook'] = array( // The key value should be unique and not contain any spaces.
+            'field_type'  =>  'url',
+            'class'       =>  'uwp-facebook',
+            'icon'        =>  'fab fa-facebook-square',
+            'name'        =>  __('Facebook', 'userswp'),
+            'description' =>  __('Let users enter their facebook url.', 'userswp'),
+            'defaults'    => array(
+                'admin_title'         =>  'Facebook',
+                'site_title'          =>  'Facebook',
+                'form_label'          => __( 'Facebook url', 'userswp' ),
+                'htmlvar_name'        =>  'facebook',
+                'is_active'           =>  1,
+                'default_value'       =>  '',
+                'is_required'         =>  0,
+                'required_msg'        =>  '',
+                'field_icon'          =>  'fab fa-facebook-square',
+                'css_class'           =>  ''
+            )
+        );
+
+        // Twitter
+        $custom_fields['twitter'] = array( // The key value should be unique and not contain any spaces.
+            'field_type'  =>  'url',
+            'class'       =>  'uwp-twitter',
+            'icon'        =>  'fab fa-twitter-square',
+            'name'        =>  __('Twitter', 'userswp'),
+            'description' =>  __('Let users enter their twitter url.', 'userswp'),
+            'defaults'    => array(
+                'admin_title'         =>  'Twitter',
+                'site_title'          =>  'Twitter',
+                'form_label'          => __( 'Twitter url', 'userswp' ),
+                'htmlvar_name'        =>  'twitter',
+                'is_active'           =>  1,
+                'default_value'       =>  '',
+                'is_required'         =>  0,
+                'required_msg'        =>  '',
+                'field_icon'          =>  'fab fa-twitter-square',
+                'css_class'           =>  ''
+            )
+        );
+
+        // Instagram
+        $custom_fields['instagram'] = array( // The key value should be unique and not contain any spaces.
+            'field_type'  =>  'url',
+            'class'       =>  'uwp-instagram',
+            'icon'        =>  'fab fa-instagram',
+            'name'        =>  __('Instagram', 'userswp'),
+            'description' =>  __('Let users enter their instagram url.', 'userswp'),
+            'defaults'    => array(
+                'admin_title'         =>  'Instagram',
+                'site_title'          =>  'Instagram',
+                'form_label'          => __( 'Instagram url', 'userswp' ),
+                'htmlvar_name'        =>  'instagram',
+                'is_active'           =>  1,
+                'default_value'       =>  '',
+                'is_required'         =>  0,
+                'required_msg'        =>  '',
+                'field_icon'          =>  'fab fa-instagram',
+                'css_class'           =>  ''
+            )
+        );
+
+        // Linkedin
+        $custom_fields['linkedin'] = array( // The key value should be unique and not contain any spaces.
+            'field_type'  =>  'url',
+            'class'       =>  'uwp-linkedin',
+            'icon'        =>  'fab fa-linkedin',
+            'name'        =>  __('Linkedin', 'userswp'),
+            'description' =>  __('Let users enter their linkedin url.', 'userswp'),
+            'defaults'    => array(
+                'admin_title'         =>  'Linkedin',
+                'site_title'          =>  'Linkedin',
+                'form_label'          => __( 'Linkedin url', 'userswp' ),
+                'htmlvar_name'        =>  'linkedin',
+                'is_active'           =>  1,
+                'default_value'       =>  '',
+                'is_required'         =>  0,
+                'required_msg'        =>  '',
+                'field_icon'          =>  'fab fa-linkedin',
+                'css_class'           =>  ''
+            )
+        );
+
+
+        // Flickr
+        $custom_fields['flickr'] = array( // The key value should be unique and not contain any spaces.
+            'field_type'  =>  'url',
+            'class'       =>  'uwp-flickr',
+            'icon'        =>  'fab fa-flickr',
+            'name'        =>  __('Flickr', 'userswp'),
+            'description' =>  __('Let users enter their Flickr url.', 'userswp'),
+            'defaults'    => array(
+                'admin_title'         =>  'Flickr',
+                'site_title'          =>  'Flickr',
+                'form_label'          => __( 'Flickr url', 'userswp' ),
+                'htmlvar_name'        =>  'flickr',
+                'is_active'           =>  1,
+                'default_value'       =>  '',
+                'is_required'         =>  0,
+                'required_msg'        =>  '',
+                'field_icon'          =>  'fab fa-flickr',
+                'css_class'           =>  ''
+            )
+        );
+
+        // GitHub
+        $custom_fields['github'] = array( // The key value should be unique and not contain any spaces.
+            'field_type'  =>  'url',
+            'class'       =>  'uwp-github',
+            'icon'        =>  'fab fa-github-square',
+            'name'        =>  __('GitHub', 'userswp'),
+            'description' =>  __('Let users enter their GitHub url.', 'userswp'),
+            'defaults'    => array(
+                'admin_title'         =>  'GitHub',
+                'site_title'          =>  'GitHub',
+                'form_label'          => __( 'GitHub url', 'userswp' ),
+                'htmlvar_name'        =>  'github',
+                'is_active'           =>  1,
+                'default_value'       =>  '',
+                'is_required'         =>  0,
+                'required_msg'        =>  '',
+                'field_icon'          =>  'fab fa-github-square',
+                'css_class'           =>  ''
+            )
+        );
+
+        // YouTube
+        $custom_fields['youtube'] = array( // The key value should be unique and not contain any spaces.
+            'field_type'  =>  'url',
+            'class'       =>  'uwp-youtube',
+            'icon'        =>  'fab fa-youtube-square',
+            'name'        =>  __('YouTube', 'userswp'),
+            'description' =>  __('Let users enter their YouTube url.', 'userswp'),
+            'defaults'    => array(
+                'admin_title'         =>  'YouTube',
+                'site_title'          =>  'YouTube',
+                'form_label'          => __( 'YouTube url', 'userswp' ),
+                'htmlvar_name'        =>  'youtube',
+                'is_active'           =>  1,
+                'default_value'       =>  '',
+                'is_required'         =>  0,
+                'required_msg'        =>  '',
+                'field_icon'          =>  'fab fa-youtube-square',
+                'css_class'           =>  ''
+            )
+        );
+
+        // WordPress
+        $custom_fields['wordpress'] = array( // The key value should be unique and not contain any spaces.
+            'field_type'  =>  'url',
+            'class'       =>  'uwp-wordpress',
+            'icon'        =>  'fab fa-wordpress-simple',
+            'name'        =>  __('WordPress', 'userswp'),
+            'description' =>  __('Let users enter their WordPress profile url.', 'userswp'),
+            'defaults'    => array(
+                'admin_title'         =>  'WordPress',
+                'site_title'          =>  'WordPress',
+                'form_label'          => __( 'WordPress url', 'userswp' ),
+                'htmlvar_name'        =>  'wordpress',
+                'is_active'           =>  1,
+                'default_value'       =>  '',
+                'is_required'         =>  0,
+                'required_msg'        =>  '',
+                'field_icon'          =>  'fab fa-wordpress-simple',
+                'css_class'           =>  ''
+            )
+        );
+
 
         return apply_filters('uwp_form_fields_predefined', $custom_fields, $type);
     }
@@ -1059,9 +1257,18 @@ class UsersWP_Form_Builder {
         $cehhtmlvar_name = isset($request_field['htmlvar_name']) ? $request_field['htmlvar_name'] : '';
         $form_type = $request_field['form_type'];
 
-        if ($request_field['field_type'] != 'fieldset') {
-            $cehhtmlvar_name = 'uwp_' . $form_type . '_' . $cehhtmlvar_name;
-        }
+//        if ($request_field['field_type'] != 'fieldset') {
+//            $cehhtmlvar_name = 'uwp_' . $form_type . '_' . $cehhtmlvar_name;
+//        }
+
+//        $old_html_variable_name = 'uwp_' . $form_type . '_' . $cehhtmlvar_name;
+        $old_html_variable_name = 'uwp_account_' . $cehhtmlvar_name;
+        $check_old_html_variable = $wpdb->get_var(
+            $wpdb->prepare(
+                "select htmlvar_name from " . $table_name . " where id <> %d and htmlvar_name = %s and form_type = %s ",
+                array($cf,$old_html_variable_name , $form_type)
+            )
+        );
 
         $check_html_variable = $wpdb->get_var(
             $wpdb->prepare(
@@ -1071,7 +1278,7 @@ class UsersWP_Form_Builder {
         );
 
 
-        if (!$check_html_variable || $request_field['field_type'] == 'fieldset') {
+        if ((!$check_old_html_variable && !$check_html_variable) || $request_field['field_type'] == 'fieldset') {
 
             if ($cf != '') {
 
@@ -1126,7 +1333,7 @@ class UsersWP_Form_Builder {
             }
 
             // fieldset need htmlvar_name for register tab
-            $htmlvar_name = 'uwp_' . $form_type . '_' . $htmlvar_name;
+           // $htmlvar_name = 'uwp_' . $form_type . '_' . $htmlvar_name;
 
 
             $option_values = '';
@@ -1161,10 +1368,8 @@ class UsersWP_Form_Builder {
             if (!empty($user_meta_info)) {
 
                 $excluded = uwp_get_excluded_fields();
-
-                $starts_with = "uwp_account_";
-
-                if ((substr($htmlvar_name, 0, strlen($starts_with)) === $starts_with) && !in_array($htmlvar_name, $excluded)) {
+                
+                if (!in_array($htmlvar_name, $excluded)) {
                     // Create custom columns
                     switch ($field_type):
 
@@ -1589,6 +1794,7 @@ class UsersWP_Form_Builder {
 
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
+        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
         if ($field_id != '') {
             $cf = trim($field_id, '_');
@@ -1601,6 +1807,10 @@ class UsersWP_Form_Builder {
 
                 // Also delete register form field
                 $wpdb->query($wpdb->prepare("delete from " . $extras_table_name . " where site_htmlvar_name= %s ", array($field->htmlvar_name)));
+
+                // delete the meta column
+                $col_name  = sanitize_sql_orderby($field->htmlvar_name);
+                $wpdb->query("ALTER TABLE `{$meta_table}` DROP COLUMN $col_name");
 
                 do_action('uwp_after_custom_field_deleted', $cf, $field->htmlvar_name, $form_type);
 
@@ -1723,7 +1933,7 @@ class UsersWP_Form_Builder {
             $extra = unserialize($field_info->extra_fields);
         }
         $value = isset($extra['confirm_password']) ? $extra['confirm_password'] : '1';
-        if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'uwp_account_password') {
+        if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'password') {
             ?>
             <li class="uwp-setting-name uwp-advanced-setting">
                 <label for="cat_sort" class="uwp-tooltip-wrap">
@@ -1751,7 +1961,7 @@ class UsersWP_Form_Builder {
         }
         $value = isset($extra['confirm_email']) ? $extra['confirm_email'] : '0';
 
-        if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'uwp_account_email') {
+        if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'email') {
             ?>
             <li class="uwp-setting-name uwp-advanced-setting">
                 <label for="cat_sort" class="uwp-tooltip-wrap">
@@ -1898,7 +2108,7 @@ class UsersWP_Form_Builder {
             </label>
 
             <?php
-            if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'uwp_account_username') {
+            if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'username') {
                 ?>
                 <div>
                     <input type="hidden" name="is_register_field" value="1" />
@@ -1921,7 +2131,7 @@ class UsersWP_Form_Builder {
             </label>
 
         <?php
-        if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'uwp_account_username') {
+        if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'username') {
             ?>
             <div>
                 <input type="hidden" name="is_register_only_field" value="1" />
@@ -2205,7 +2415,7 @@ class UsersWP_Form_Builder {
                         <li>
                             <div class="uwp-input-wrap">
                                 <?php
-                                $no_actions = array('uwp_account_username', 'uwp_account_email');
+                                $no_actions = array('username', 'email');
                                 $no_actions = apply_filters('uwp_register_fields_without_actions', $no_actions);
                                 if (!in_array($field_info->site_htmlvar_name, $no_actions)) { ?>
                                 <input type="button" class="button button-primary" name="save" id="save"
@@ -2461,7 +2671,7 @@ class UsersWP_Form_Builder {
                                 'register',
                                 $field['field_type'],
                                 $field['is_dummy'],
-                                'uwp_account_' . $field['htmlvar_name'],
+                                $field['htmlvar_name'],
                                 $sort_order
                             )
                         )

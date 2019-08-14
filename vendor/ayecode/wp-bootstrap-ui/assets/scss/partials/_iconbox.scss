@@ -1,0 +1,27 @@
+// Icons
+.iconbox {
+  border:1px solid;
+  text-align:center;
+  display:inline-block;
+
+  &.iconsmall {
+    width:40px;
+    height:40px;
+    line-height:40px;
+    font-size:1rem;
+  }
+
+  &.iconmedium {
+    width:60px;
+    height:60px;
+    line-height:60px;
+    font-size:1.8rem;
+  }
+
+  &.iconlarge {
+    width:80px;
+    height:80px;
+    line-height:80px;
+    font-size:2.2rem;
+  }
+}

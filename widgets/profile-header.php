@@ -25,9 +25,9 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
             'class_name'     => __CLASS__,
             'base_id'       => 'uwp_profile_header',
             'name'          => __('UWP > Profile Header','userswp'),
-            'no_wrap'       => true,
+            //'no_wrap'       => true,
             'widget_ops'    => array(
-                'classname'   => 'uwp-profile-header',
+                'classname'   => 'uwp-profile-header bsui',
                 'description' => esc_html__('Displays user profile header.','userswp'),
             ),
             'arguments'     => array(
@@ -88,6 +88,14 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
         ob_start();
 
         if ($enable_profile_header == '1') {
+
+            global $uwp_widget_args;
+            $uwp_widget_args = $args;
+
+            $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
+            $template = $design_style ? $design_style."/profile-header" : "profile-header";
+
+            uwp_locate_template($template);
 
             do_action('uwp_profile_header', $user, $args['hide_cover'], $args['hide_avatar'], $args['allow_change']);
 

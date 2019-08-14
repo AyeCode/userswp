@@ -46,7 +46,7 @@ class UsersWP_Validation {
             } elseif ($type == 'change') {
                 $fields = get_change_validate_form_fields();
             } elseif ($type == 'account') {
-                $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' AND is_register_only_field = '0' AND htmlvar_name != 'uwp_account_password' ORDER BY sort_order ASC", array('account')));
+                $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' AND is_register_only_field = '0' AND htmlvar_name != 'password' ORDER BY sort_order ASC", array('account')));
             } else {
                 $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
             }
@@ -54,15 +54,15 @@ class UsersWP_Validation {
 
         $validated_data = array();
 
-        $email_field = uwp_get_custom_field_info('uwp_account_email');
+        $email_field = uwp_get_custom_field_info('email');
         $email_extra = array();
         if (isset($email_field->extra_fields) && $email_field->extra_fields != '') {
             $email_extra = unserialize($email_field->extra_fields);
         }
         $enable_confirm_email_field = isset($email_extra['confirm_email']) ? $email_extra['confirm_email'] : '0';
 
-        $password_field = uwp_get_custom_field_info('uwp_account_password');
-        $enable_password = isset($data['uwp_account_password']) && $password_field->is_active ? 1 : 0;
+        $password_field = uwp_get_custom_field_info('password');
+        $enable_password = isset($data['password']) && $password_field->is_active ? 1 : 0;
         $password_extra = array();
         if (isset($password_field->extra_fields) && $password_field->extra_fields != '') {
             $password_extra = unserialize($password_field->extra_fields);
@@ -89,13 +89,13 @@ class UsersWP_Validation {
                 if ($type == 'register') {
 
                     if ($enable_password != '1') {
-                        if ( ($field->htmlvar_name == 'uwp_account_password') OR ($field->htmlvar_name == 'uwp_account_confirm_password') ) {
+                        if ( ($field->htmlvar_name == 'password') OR ($field->htmlvar_name == 'confirm_password') ) {
                             continue;
                         }
                     }
 
                     if ($enable_confirm_email_field != '1') {
-                        if ( $field->htmlvar_name == 'uwp_account_confirm_email' ) {
+                        if ( $field->htmlvar_name == 'confirm_email' ) {
                             continue;
                         }
                     }
@@ -129,7 +129,7 @@ class UsersWP_Validation {
                 switch($field->htmlvar_name) {
 
                     case 'uwp_register_username':
-                    case 'uwp_account_username':
+                    case 'username':
                     case 'uwp_login_username':
                     case 'uwp_reset_username':
                         $sanitized_value = sanitize_user($value);
@@ -138,15 +138,15 @@ class UsersWP_Validation {
 
                     case 'uwp_register_first_name':
                     case 'uwp_register_last_name':
-                    case 'uwp_account_first_name':
-                    case 'uwp_account_last_name':
+                    case 'first_name':
+                    case 'last_name':
                         $sanitized_value = sanitize_text_field($value);
                         $sanitized = true;
                         break;
 
                     case 'uwp_register_email':
                     case 'uwp_forgot_email':
-                    case 'uwp_account_email':
+                    case 'email':
                         $sanitized_value = sanitize_email($value);
                         $sanitized = true;
                         break;
@@ -220,7 +220,7 @@ class UsersWP_Validation {
                 }
 
                 //register email
-                if ($type == 'register' && $field->htmlvar_name == 'uwp_account_email' && email_exists($sanitized_value)) {
+                if ($type == 'register' && $field->htmlvar_name == 'email' && email_exists($sanitized_value)) {
                     $errors->add('email_exists', __('<strong>Error</strong>: This email is already registered, please choose another one.', 'userswp'));
                     return $errors;
                 }
@@ -234,7 +234,7 @@ class UsersWP_Validation {
                 $incorrect_username_error_msg = apply_filters('uwp_incorrect_username_error_msg', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'userswp'));
 
                 // Check the username for register
-                if ($field->htmlvar_name == 'uwp_account_username') {
+                if ($field->htmlvar_name == 'username') {
                     if (!is_admin()) {
                         if (!validate_username($sanitized_value)) {
                             $errors->add('invalid_username', $incorrect_username_error_msg);
@@ -299,17 +299,17 @@ class UsersWP_Validation {
 
         if (($type == 'register' && $enable_confirm_email_field == '1')) {
             //check confirm email
-            if( empty( $data['uwp_account_email'] ) ) {
+            if( empty( $data['email'] ) ) {
                 $errors->add( 'empty_email', __( '<strong>Error</strong>: Please enter your Email', 'userswp' ) );
                 return $errors;
             }
 
-            if( !isset($data['uwp_account_confirm_email']) || empty( $data['uwp_account_confirm_email'] ) ) {
+            if( !isset($data['confirm_email']) || empty( $data['confirm_email'] ) ) {
                 $errors->add( 'empty_confirm_email', __( '<strong>Error</strong>: Please fill Confirm Email field', 'userswp' ) );
                 return $errors;
             }
 
-            if( $data['uwp_account_email'] != $data['uwp_account_confirm_email'] ) {
+            if( $data['email'] != $data['confirm_email'] ) {
                 $errors->add( 'email_mismatch', __( '<strong>Error</strong>: Email and Confirm email not match', 'userswp' ) );
                 return $errors;
             }

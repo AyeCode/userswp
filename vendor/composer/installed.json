@@ -1,24 +1,24 @@
 [
     {
-        "name": "ayecode/wp-bootstrap-settings",
-        "version": "0.0.4",
-        "version_normalized": "0.0.4.0",
+        "name": "ayecode/wp-bootstrap-ui",
+        "version": "0.0.5",
+        "version_normalized": "0.0.5.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/AyeCode/wp-bootstrap-settings.git",
-            "reference": "a58b119eac3885e1213ac5455d00d32fc47ca4b8"
+            "url": "https://github.com/AyeCode/wp-bootstrap-ui.git",
+            "reference": "e6c13e9281226a85e0aa888d3d432fdc035fa60a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-bootstrap-settings/zipball/a58b119eac3885e1213ac5455d00d32fc47ca4b8",
-            "reference": "a58b119eac3885e1213ac5455d00d32fc47ca4b8",
+            "url": "https://api.github.com/repos/AyeCode/wp-bootstrap-ui/zipball/e6c13e9281226a85e0aa888d3d432fdc035fa60a",
+            "reference": "e6c13e9281226a85e0aa888d3d432fdc035fa60a",
             "shasum": ""
         },
         "require": {
             "composer/installers": "~1.0",
             "php": ">=5.3.0"
         },
-        "time": "2019-07-27T18:03:37+00:00",
+        "time": "2019-08-02T14:27:46+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -38,8 +38,8 @@
                 "homepage": "https://ayecode.io/"
             }
         ],
-        "description": "Settings page for Bootstrap in WordPress",
-        "homepage": "https://github.com/AyeCode/wp-bootstrap-settings",
+        "description": "A Bootstrap UI for WordPress plugins and themes.",
+        "homepage": "https://github.com/AyeCode/wp-bootstrap-ui",
         "keywords": [
             "boot",
             "bootstrap"

@@ -9,6 +9,14 @@
  */
 class UsersWP_Activator {
 
+    /** @var array DB updates and callbacks that need to be run per version */
+    private static $db_updates = array(
+        '1.2.0.0' => array(
+            'uwp_upgrade_1200',
+        ),
+    );
+
+
     /**
      * Background update class.
      *
@@ -74,6 +82,11 @@ class UsersWP_Activator {
         self::generate_pages();
         self::add_default_options();
         self::uwp_create_tables();
+
+        // run update functions if needed
+        if(self::needs_db_update()){
+            self::update();
+        }
 
         if (!get_option('uwp_default_data_installed')) {
             self::uwp_create_default_fields();
@@ -223,6 +236,53 @@ class UsersWP_Activator {
         uwp_error_log( sprintf( 'Queuing %s - %s', USERSWP_VERSION, $update_callback ) );
         self::$background_updater->push_to_queue( $update_callback );
         self::$background_updater->save()->dispatch();
+    }
+
+    /**
+     * Get list of DB update callbacks.
+     *
+     * @since  3.0.0
+     * @return array
+     */
+    public static function get_db_update_callbacks() {
+        return self::$db_updates;
+    }
+
+    /**
+     * Is a DB update needed?
+     *
+     * @since 2.0.0
+     * @return boolean
+     */
+    private static function needs_db_update() {
+        $current_db_version = get_option( 'uwp_db_version', null );
+        $updates            = self::get_db_update_callbacks();
+
+        return ! is_null( $current_db_version ) && ! empty( $updates ) && version_compare( $current_db_version, max( array_keys( $updates ) ), '<' );
+    }
+
+    /**
+     * Push all needed DB updates to the queue for processing.
+     *
+     * @since 2.0.0
+     */
+    private static function update() {
+        $current_db_version = get_option( 'uwp_db_version' );
+        $update_queued      = false;
+        self::init_background_updater();
+        foreach ( self::get_db_update_callbacks() as $version => $update_callbacks ) {
+            if ( version_compare( $current_db_version, $version, '<' ) ) {
+                foreach ( $update_callbacks as $update_callback ) {
+                    uwp_error_log( sprintf( 'Queuing %s - %s', $version, $update_callback ) );
+                    self::$background_updater->push_to_queue( $update_callback );
+                    $update_queued = true;
+                }
+            }
+        }
+
+        if ( $update_queued ) {
+            self::$background_updater->save()->dispatch();
+        }
     }
 
     /**
@@ -676,35 +736,35 @@ class UsersWP_Activator {
             'form_type' => 'register',
             'field_type' => 'text',
             'is_default' => '0',
-            'htmlvar_name' => 'uwp_account_first_name'
+            'htmlvar_name' => 'first_name'
         );
 
         $fields[] = array(
             'form_type' => 'register',
             'field_type' => 'text',
             'is_default' => '0',
-            'htmlvar_name' => 'uwp_account_last_name'
+            'htmlvar_name' => 'last_name'
         );
 
         $fields[] = array(
             'form_type' => 'register',
             'field_type' => 'text',
             'is_default' => '1',
-            'htmlvar_name' => 'uwp_account_username'
+            'htmlvar_name' => 'username'
         );
 
         $fields[] = array(
             'form_type' => 'register',
             'field_type' => 'email',
             'is_default' => '1',
-            'htmlvar_name' => 'uwp_account_email'
+            'htmlvar_name' => 'email'
         );
 
         $fields[] = array(
             'form_type' => 'register',
             'field_type' => 'password',
             'is_default' => '0',
-            'htmlvar_name' => 'uwp_account_password'
+            'htmlvar_name' => 'password'
         );
 
 
@@ -739,5 +799,7 @@ class UsersWP_Activator {
             self::activate(is_plugin_active_for_network( 'userswp/userswp.php' ));
         }
     }
+
+
 
 }

@@ -1,0 +1,12 @@
+// alert links might be styled the same color as the background
+.alert{
+  a{
+    color: inherit;
+    text-decoration: underline;
+    &:hover{
+      color: initial;
+      text-decoration: underline;
+    }
+  }
+
+}
