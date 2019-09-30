@@ -50,9 +50,16 @@ class UWP_Users_Widget extends WP_Super_Duper {
 
         ob_start();
 
+        $design_style = uwp_get_option("design_style",'bootstrap');
+
+
         echo '<div class="uwp_page">';
 
-        do_action( 'uwp_users_list_body' );
+        if($design_style=='bootstrap'){
+            echo do_shortcode("[uwp_users_loop_actions]\n[uwp_users_loop]");
+        }else{
+            echo do_shortcode("[uwp_users_search]\n[uwp_users_loop_actions]\n[uwp_users_loop]");
+        }
 
         echo '</div>';
 

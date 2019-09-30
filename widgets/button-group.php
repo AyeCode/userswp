@@ -39,6 +39,15 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
                     'default'     => '',
                     'advanced'    => false
                 ),
+                'css_class'  => array(
+                    'type' => 'text',
+                    'title' => __('Extra class:', 'userswp'),
+                    'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'userswp'),
+                    'placeholder' => 'btn-sm btn-circle',
+                    'default' => '',
+                    'desc_tip' => true,
+                    'advanced' => true,
+                ),
             )
 
         );
@@ -58,18 +67,22 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
 
         $defaults = array(
             'fields' => 'facebook,twitter,instagram,linkedin,flickr,github,youtube,wordpress',
+            'css_class'     => 'btn-sm btn-circle'
         );
 
         $args = wp_parse_args( $args, $defaults );
 
         if(empty($args['fields'])){$args['fields'] = $defaults['fields'];}
+        if(empty($args['css_class'])){$args['css_class'] = $defaults['css_class'];}
 
-//        $args = apply_filters( 'uwp_widget_profile_social_args', $args, $widget_args, $this );
+        $args = apply_filters( 'uwp_widget_button_group_args', $args, $widget_args, $this );
 
+        // prepare the field names
         $fields = explode(",",$args['fields']);
         $fields = array_map('trim',$fields);
         $prepare_fields = implode(",",array_fill(0, count($fields), '%s'));
 
+        // get the field settings
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $db_fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND is_public = '1' AND field_type = 'url' AND htmlvar_name IN($prepare_fields)",$fields));
         $field_info = array();
@@ -78,10 +91,9 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
                 $field_info[$db_field->htmlvar_name] = $db_field;
             }
         }
-//        print_r( $fields );
-//echo $wpdb->prepare("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND field_type = 'url' AND htmlvar_name IN($prepare_fields)",$fields);
-//        print_r($form_fields);exit;
 
+
+        // get the user meta
         $user_meta = uwp_get_usermeta_row($user->ID);
         $buttons = array();
         foreach($fields as $field){
@@ -91,17 +103,13 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
             }
         }
 
+        // set the button global or die
         if(empty($buttons)){
             return;
         }else{
             $args['buttons'] = $buttons;
         }
 
-//        print_r($fields);
-//        print_r($field_info);
-//        print_r($user_meta);
-//        print_r($valid_fields);
-//        exit;
 
         global $uwp_widget_args;
         $uwp_widget_args = $args;
@@ -110,15 +118,11 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
         $template = $design_style ? $design_style."/button-group" : "";
 
 
-
-
-
         ob_start();
 
         if($template){
             uwp_locate_template($template);
         }
-
 
         $output = ob_get_clean();
 

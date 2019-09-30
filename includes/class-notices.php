@@ -17,7 +17,14 @@ class UsersWP_Notices {
      * @return      string      Html string.
      */
     function wrap_notice($message, $type) {
-        $output = '<div class="uwp-alert-'.$type.' text-center">';
+
+        $types = array(
+            'error' => 'danger'
+        );
+
+        $alert_type = isset($types[$type]) ? $types[$type] : $type;
+
+        $output = '<div class="uwp-alert-'.esc_attr($type).' text-center alert alert-'.esc_attr($alert_type).'">';
         $output .= $message;
         $output .= '</div>';
         return $output;

@@ -26,17 +26,6 @@ class UsersWP_Profile {
             do_action('uwp_profile_access_denied', $user);
         }
     }
-
-    /**
-     * Prints the user's list.
-     *
-     * @since       1.1.2
-     * @package     userswp
-     */
-    public function get_users_list_body(){
-
-        echo do_shortcode("[uwp_users_search]\n[uwp_users_loop_actions]\n[uwp_users_loop]");
-    }
     
     /**
      * Prints the profile page header section.
@@ -155,18 +144,32 @@ class UsersWP_Profile {
      * @package     userswp
      * @param       object      $user       The User ID.
      */
-    public function get_profile_title($user, $tag = 'h2') {
+    public function get_profile_title($user, $tag = 'h2',$title_class = '',$link_class = '', $link = true) {
         ?>
         <div class="uwp-profile-name">
-            <<?php echo esc_attr($tag); ?> class="uwp-user-title" data-user="<?php echo $user->ID; ?>">
-                <a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>">
+            <<?php echo esc_attr($tag); ?> class="uwp-user-title <?php echo $title_class;?>" data-user="<?php echo $user->ID; ?>">
+               <?php if($link){?><a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>" class="<?php echo $link_class;?>"><?php }?>
                     <?php echo apply_filters('uwp_profile_display_name', $user->display_name); ?>
-                    <?php do_action('uwp_profile_after_title', $user->ID ); ?>
-                </a>
-            </<?php echo esc_attr($tag); ?>>
+	           <?php if($link){?></a><?php }?>
+	    <?php do_action('uwp_profile_after_title', $user->ID ); ?>
+	    </<?php echo esc_attr($tag); ?>>
         </div>
         <?php
     }
+	
+	public function edit_profile_button(){
+		global $uwp_in_user_loop;
+		$account_page          = uwp_get_page_id( 'account_page', false );
+		$user = uwp_get_displayed_user();
+		$can_user_edit_account = apply_filters( 'uwp_user_can_edit_own_profile', true, $user->ID );
+
+		if (!$uwp_in_user_loop && $account_page && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && $can_user_edit_account ) { ?>
+			<a href="<?php echo get_permalink( $account_page ); ?>"
+			   class="btn btn-sm btn-outline-dark btn-circle mt-n1" data-toggle="tooltip"
+			   title="<?php esc_attr_e( 'Edit Account', 'userswp' ); ?>"><i
+					class="fas fa-pencil-alt fa-fw fa-lg"></i></a>
+		<?php }
+	}
 
     /**
      * Prints the profile page social links section.
@@ -459,7 +462,7 @@ class UsersWP_Profile {
 				// setup the array
 				if(!empty($tabs)){
 					foreach($tabs as $tab) {
-						if ( $tab->tab_level > 0 ) {
+						if ( isset($tab->tab_level) && $tab->tab_level > 0 ) {
 							continue;
 						}
 						if ( empty( $tabs_content[ $tab->id . "tab" ] ) ) {
@@ -478,12 +481,6 @@ class UsersWP_Profile {
 
 
 		}
-
-
-
-
-
-
 		
 		return $tabs_array;
 
@@ -518,7 +515,7 @@ class UsersWP_Profile {
 		$parent_id = $tab->id;
 
 		foreach($tabs as $child_tab){
-			if($child_tab->tab_parent==$parent_id){
+			if(isset($child_tab->tab_parent) && $child_tab->tab_parent==$parent_id){
 				if(!empty($child_tab->tab_content)){ // override content
 					echo stripslashes( $child_tab->tab_content );
 				}elseif($child_tab->tab_type=='meta'){ // meta info
@@ -755,21 +752,86 @@ class UsersWP_Profile {
         ?>
         <div class="uwp-pagination">
             <?php
-            $big = 999999999; // need an unlikely integer
-            $translated = __( 'Page', 'userswp' ); // Supply translatable string
+            $design_style = uwp_get_option("design_style",'bootstrap');
+            if($design_style=='bootstrap'){
+	            self::get_bootstrap_pagination($total);
+            }else{
+	            $big = 999999999; // need an unlikely integer
+	            $translated = __( 'Page', 'userswp' ); // Supply translatable string
 
-            echo paginate_links( array(
-                'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
-                'format' => '?paged=%#%',
-                'current' => max( 1, get_query_var('paged') ),
-                'total' => $total,
-                'before_page_number' => '<span class="screen-reader-text">'.$translated.' </span>',
-                'type' => 'list'
-            ) );
+	            $args = array(
+		            'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+		            'format' => '?paged=%#%',
+		            'current' => max( 1, get_query_var('paged') ),
+		            'total' => $total,
+		            'before_page_number' => '<span class="screen-reader-text">'.$translated.' </span>',
+		            'type' => 'list'
+	            ) ;
+
+	            echo paginate_links( $args );
+            }
+
+
             ?>
         </div>
         <?php
     }
+
+	public function get_bootstrap_pagination($total) {
+
+		$navigation = '';
+		$args = array(
+			'mid_size'  => 2,
+			'type' => 'array',
+			'prev_text' => sprintf(
+				'%s <span class="nav-prev-text sr-only">%s</span>',
+				'<i class="fas fa-chevron-left"></i>',
+				__( 'Newer posts', 'ayetheme' )
+			),
+			'next_text' => sprintf(
+				'<span class="nav-next-text sr-only">%s</span> %s',
+				__( 'Older posts', 'ayetheme' ),
+				'<i class="fas fa-chevron-right"></i>'
+			),
+		);
+
+		// Don't print empty markup if there's only one page.
+		if ( $total > 1 ) {
+			$args = wp_parse_args( $args, array(
+				'mid_size'           => 1,
+				'prev_text'          => _x( 'Previous', 'previous set of posts' ),
+				'next_text'          => _x( 'Next', 'next set of posts' ),
+				'screen_reader_text' => __( 'Posts navigation' ),
+				'total' => $total,
+			) );
+
+			// Set up paginated links.
+			$links = paginate_links( $args );
+
+			// make the output bootstrap ready
+			$links_html = "<ul class='pagination m-0 p-0'>";
+			if(!empty($links)){
+				foreach($links as $link){
+					$active = strpos($link, 'current') !== false ? 'active' : '';
+					$links_html .= "<li class='page-item $active'>";
+					$links_html .= str_replace("page-numbers","page-link",$link);
+					$links_html .= "</li>";
+				}
+			}
+			$links_html .= "</ul>";
+
+			if ( $links ) {
+				$navigation .= '<section class="px-0 py-2 w-100">';
+				$navigation .= _navigation_markup($links_html, 'pagination', $args['screen_reader_text'] );
+				$navigation .= '</section>';
+			}
+
+			$navigation = str_replace( "nav-links", "uwp-nav-links", $navigation );
+		}
+
+		echo  $navigation;
+
+	}
 
     /**
      * Prints the profile page more info tab content.
@@ -805,71 +867,37 @@ class UsersWP_Profile {
      * @return      void
      */
     public function get_profile_comments($user) {
-        ?>
-        <h3><?php echo __('Comments', 'userswp') ?></h3>
 
-        <div class="uwp-profile-item-block">
-            <?php
-            $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
-            $number = uwp_get_option('profile_no_of_items', 10);
-            $offset = ( $paged - 1 ) * $number;
 
-            $total_comments = uwp_comment_count($user->ID);
-            $maximum_pages = ceil($total_comments / $number);
+	    global $uwp_widget_args;
+	    $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+	    $number = uwp_get_option('profile_no_of_items', 10);
+	    $offset = ( $paged - 1 ) * $number;
 
-            $args = array(
-                'number' => $number,
-                'offset' => $offset,
-                'author_email' => $user->user_email,
-                'paged' => $paged,
-                'post_type' => 'post',
-            );
-            // The Query
-            $the_query = new WP_Comment_Query();
-            $comments = $the_query->query( $args );
+	    $total_comments = uwp_comment_count($user->ID);
+	    $maximum_pages = ceil($total_comments / $number);
 
-            // The Loop
-            if ($comments) {
-                echo '<ul class="uwp-profile-item-ul">';
-                foreach ( $comments as $comment ) {
-                    ?>
-                    <li class="uwp-profile-item-li uwp-profile-item-clearfix">
-                        <a class="uwp-profile-item-img" href="<?php echo get_comment_link($comment->comment_ID); ?>">
-                            <?php
-                            if ( has_post_thumbnail($comment->comment_post_ID) ) {
-                                $thumb_url = get_the_post_thumbnail_url($comment->comment_post_ID, array(80, 80));
-                            } else {
-                                $thumb_url = uwp_get_default_thumb_uri();
-                            }
-                            ?>
-                            <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
-                        </a>
+	    $args = array(
+		    'number' => $number,
+		    'offset' => $offset,
+		    'author_email' => $user->user_email,
+		    'paged' => $paged,
+		    'post_type' => 'post',
+	    );
+	    // The Query
+	    $the_query = new WP_Comment_Query();
+	    $comments = $the_query->query( $args );
 
-                        <h3 class="uwp-profile-item-title">
-                            <a href="<?php echo get_comment_link($comment->comment_ID); ?>"><?php echo get_the_title($comment->comment_post_ID); ?></a>
-                        </h3>
-                        <time class="uwp-profile-item-time published" datetime="<?php echo get_the_time('c'); ?>">
-                            <?php echo date_i18n( get_option( 'date_format' ), strtotime( get_comment_date("", $comment->comment_ID) ) ); ?>
-                        </time>
-                        <div class="uwp-profile-item-summary">
-                            <?php
-                            $excerpt = strip_shortcodes(wp_trim_words( $comment->comment_content, 15, '...' ));
-                            echo $excerpt;
-                            ?>
-                        </div>
-                    </li>
-                    <?php
-                }
-                echo '</ul>';
-            } else {
-                // no comments found
-                echo "<p>".__('No Comments Found', 'userswp')."</p>";
-            }
+	    $uwp_widget_args['template_args']= array(
+		    'the_query' => $comments,
+		    'user'      => $user,
+		    'maximum_pages' => $maximum_pages
+	    );
 
-            do_action('uwp_profile_pagination', $maximum_pages);
-            ?>
-        </div>
-        <?php
+	    $design_style = !empty($uwp_widget_args['design_style']) ? esc_attr($uwp_widget_args['design_style']) : uwp_get_option("design_style",'bootstrap');
+	    $template = $design_style ? $design_style."/loop-comments" : "loop-comments";
+	    uwp_locate_template($template);
+
     }
 
     /**
@@ -1193,48 +1221,21 @@ class UsersWP_Profile {
      * @return      string                          Html.
      */
     public function uwp_image_crop_modal_html($type, $image_url, $full_width, $full_height) {
+	    global $uwp_template_args;
+	    $uwp_template_args = array(
+		    'type' => $type,
+		    'image_url' => $image_url,
+		    'full_width' => $full_width,
+		    'full_height' => $full_height,
+	    );
         ob_start();
+
+	    $design_style = uwp_get_option("design_style",'bootstrap');
+	    $template = $design_style ? $design_style."/modal-profile-image-crop" : "modal-profile-image-crop";
+
+	    uwp_locate_template($template);
+	    $uwp_template_args = array();
         ?>
-        <div class="uwp-bs-modal uwp_fade uwp_show" id="uwp-<?php echo $type; ?>-modal">
-            <div class="uwp-bs-modal-dialog">
-                <div class="uwp-bs-modal-content">
-                    <div class="uwp-bs-modal-header">
-                        <h4 class="uwp-bs-modal-title">
-                            <?php
-                            if ($type == 'avatar') {
-                                echo __( 'Change your profile photo', 'userswp' );
-                            } else {
-                                echo __( 'Change your cover photo', 'userswp' );
-                            }
-                            ?>
-                        </h4>
-                        <button type="button" class="close uwp-modal-close" data-type="<?php echo $type; ?>" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="uwp-bs-modal-body">
-                        <div id="uwp-bs-modal-notice"></div>
-                        <div align="center">
-                            <img src="<?php echo $image_url; ?>" id="uwp-<?php echo $type; ?>-to-crop" />
-                        </div>
-                    </div>
-                    <div class="uwp-bs-modal-footer">
-                        <div class="uwp-<?php echo $type; ?>-crop-p-wrap">
-                            <div id="<?php echo $type; ?>-crop-actions">
-                                <form class="uwp-crop-form" method="post">
-                                    <input type="hidden" name="x" value="" id="<?php echo $type; ?>-x" />
-                                    <input type="hidden" name="y" value="" id="<?php echo $type; ?>-y" />
-                                    <input type="hidden" name="w" value="" id="<?php echo $type; ?>-w" />
-                                    <input type="hidden" name="h" value="" id="<?php echo $type; ?>-h" />
-                                    <input type="hidden" id="uwp-<?php echo $type; ?>-crop-image" name="uwp_crop" value="<?php echo $image_url; ?>" />
-                                    <input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp-crop-nonce' ); ?>" />
-                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" value="<?php echo __('Apply', 'userswp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
-                                </form>
-                            </div>
-                        </div>
-                        <button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal"><?php echo __( 'Cancel', 'userswp' ); ?></button>
-                    </div>
-                </div>
-            </div>
-        </div>
         <script type="text/javascript">
             (function( $, window, undefined ) {
                 $(document).ready(function () {
@@ -1266,50 +1267,17 @@ class UsersWP_Profile {
      * @return      string                          Html.
      */
     public function uwp_crop_submit_form($type = 'avatar') {
-        $files = new UsersWP_Files();
+        
         ob_start();
+
+	    $design_style = uwp_get_option("design_style",'bootstrap');
+	    $template = $design_style ? $design_style."/modal-profile-image" : "modal-profile-image";
+
+	    uwp_locate_template($template);
+
+	    $content_wrap = $design_style == 'bootstrap' ? '.uwp-profile-image-change-modal .modal-content' : '#uwp-popup-modal-wrap';
         ?>
-        <div class="uwp-bs-modal uwp_fade uwp_show" id="uwp-popup-modal-wrap">
-            <div class="uwp-bs-modal-dialog">
-                <div class="uwp-bs-modal-content">
-                    <div class="uwp-bs-modal-header">
-                        <h4 class="uwp-bs-modal-title">
-                            <?php
-                            if ($type == 'avatar') {
-                                echo __( 'Change your profile photo', 'userswp' );
-                            } else {
-                                echo __( 'Change your cover photo', 'userswp' );
-                            }
-                            ?>
-                        </h4>
-                        <button type="button" class="close uwp-modal-close" data-type="<?php echo $type; ?>" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="uwp-bs-modal-body">
-                        <div id="uwp-bs-modal-notice"></div>
-                        <form id="uwp-upload-<?php echo $type; ?>-form" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
-                            <input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
-                            <button type="button" class="uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();"><?php echo __( 'Upload', 'userswp' ); ?> <?php echo $type; ?></button>
-                            <p style="text-align: center"><?php echo __('Note: Max upload image size: ', 'userswp').$files->uwp_formatSizeUnits($files->uwp_get_max_upload_size($type)); ?></p>
-                            <div class="uwp_upload_field" style="display: none">
-                                <input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" required="required" type="file" value="">
-                            </div>
-                         </form>
-                        <div id="progressBar" class="tiny-green" style="display: none;"><div></div></div>
-                    </div>
-                    <div class="uwp-bs-modal-footer">
-                        <div class="uwp-<?php echo $type; ?>-crop-p-wrap">
-                            <div id="<?php echo $type; ?>-crop-actions">
-                                <form class="uwp-crop-form" method="post">
-                                    <input type="submit" name="uwp_<?php echo $type; ?>_crop" disabled="disabled" value="<?php echo __('Apply', 'userswp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
-                                </form>
-                            </div>
-                        </div>
-                        <button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal"><?php echo __( 'Cancel', 'userswp' ); ?></button>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <script type="text/javascript">
             (function( $, window, undefined ) {
 
@@ -1331,14 +1299,14 @@ class UsersWP_Profile {
                     $('#uwp_upload_<?php echo $type; ?>').on('change', function(e) {
                         e.preventDefault();
 
-                        var container = jQuery('#uwp-popup-modal-wrap');
+                        var container = jQuery('<?php echo esc_attr($content_wrap);?>');
                         var err_container = jQuery('#uwp-bs-modal-notice');
 
                         var fd = new FormData();
                         var files_data = $(this); // The <input type="file" /> field
                         var file = files_data[0].files[0];
 
-                        fd.append('uwp_<?php echo $type; ?>_file', file);
+                        fd.append('<?php echo $type; ?>', file);
                         // our AJAX identifier
                         fd.append('action', 'uwp_avatar_banner_upload');
                         fd.append('uwp_popup_type', '<?php echo $type; ?>');
@@ -1382,7 +1350,7 @@ class UsersWP_Profile {
                                     uwp_true_width = resp['uwp_true_width'];
                                     uwp_true_height = resp['uwp_true_height'];
 
-                                    jQuery('#uwp-popup-modal-wrap').html(resp['uwp_popup_content']).find('#uwp-'+uwp_popup_type+'-to-crop').Jcrop({
+	                                container.html(resp['uwp_popup_content']).find('#uwp-'+uwp_popup_type+'-to-crop').Jcrop({
                                         // onChange: showPreview,
                                         onSelect: updateCoords,
                                         allowResize: true,
@@ -1774,66 +1742,7 @@ class UsersWP_Profile {
            var ajaxurl = "' . admin_url('admin-ajax.php') . '";
          </script>';
     }
-
-    /**
-     * Adds UsersWP serach form in Users page.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      void
-     */
-    public function uwp_users_search() {
-        ?>
-        <div class="uwp-user-search" id="uwp_user_search">
-            <?php
-            $keyword = "";
-            if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
-                $keyword = stripslashes(strip_tags($_GET['uwps']));
-            }
-            ?>
-            <form method="get" class="searchform search-form" action="<?php echo get_uwp_users_permalink(); ?>">
-                <?php do_action('uwp_users_page_search_form_inner', $keyword); ?>
-            </form>
-        </div>
-        <?php
-    }
-
-    public function uwp_users_views(){
-        $default_layout = uwp_get_option('users_default_layout', 'list');
-        ?>
-        <div class="uwp-user-views" id="uwp_user_views">
-            <form method="get" action="">
-                <select name="uwp_layout" id="uwp_layout" class="uwp_select2">
-                    <option <?php selected( $default_layout, "list" ); ?> value="list"><?php echo __("List View", "userswp"); ?></option>
-                    <option <?php selected( $default_layout, "2col" ); ?> value="2col"><?php echo __("Grid 2 Col", "userswp"); ?></option>
-                    <option <?php selected( $default_layout, "3col" ); ?> value="3col"><?php echo __("Grid 3 Col", "userswp"); ?></option>
-                    <option <?php selected( $default_layout, "4col" ); ?> value="4col"><?php echo __("Grid 4 Col", "userswp"); ?></option>
-                    <option <?php selected( $default_layout, "5col" ); ?> value="5col"><?php echo __("Grid 5 Col", "userswp"); ?></option>
-                </select>
-            </form>
-        </div>
-        <?php
-    }
-
-    public function uwp_users_sortby(){
-        $sort_by = "";
-        if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
-            $sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
-        }
-        ?>
-        <div class="uwp-user-sort" id="uwp_user_sort">
-            <form method="get" action="">
-                <select name="uwp_sort_by" id="uwp_sort_by" class="uwp_select2" onchange="this.form.submit()">
-                    <option value=""><?php echo __("Sort By:", "userswp"); ?></option>
-                    <option <?php selected( $sort_by, "newer" ); ?> value="newer"><?php echo __("Newer", "userswp"); ?></option>
-                    <option <?php selected( $sort_by, "older" ); ?> value="older"><?php echo __("Older", "userswp"); ?></option>
-                    <option <?php selected( $sort_by, "alpha_asc" ); ?> value="alpha_asc"><?php echo __("A-Z", "userswp"); ?></option>
-                    <option <?php selected( $sort_by, "alpha_desc" ); ?> value="alpha_desc"><?php echo __("Z-A", "userswp"); ?></option>
-                </select>
-            </form>
-        </div>
-        <?php
-    }
+	
 
     /**
      * Add custom fields as an available tabs
@@ -2135,4 +2044,76 @@ class UsersWP_Profile {
         return $profile_url;
     }
 
+	/**
+	 * This is the JS needed for the list view selector for CPTs view.
+	 */
+	public function list_view_js() {
+		?>
+		<script type="text/javascript">/* <![CDATA[ */
+
+			function uwp_list_view_select($val, $noStore) {
+
+				var $list = jQuery('.uwp-users-loop > .row');
+
+				if(!$list.length){
+					$list = jQuery('.uwp-profile-cpt-loop > .row');
+				}
+
+				var $listSelect = jQuery('.uwp-list-view-select');
+				if ($val == 0) {
+					$list.removeClass('row-cols-sm-2 row-cols-md-2 row-cols-md-3 row-cols-md-4 row-cols-md-5').addClass('row-cols-md-0');
+					$listSelect.find('button').removeClass('active');
+					$listSelect.find('button.uwp-list-view-select-list').addClass('active');
+				} else {
+					$listSelect.find('button').removeClass('active');
+					$listSelect.find('button.uwp-list-view-select-grid').addClass('active');
+					$listSelect.find('button[data-gridview="'+$val+'"]').addClass('active');
+					$list.removeClass('row-cols-md-0 row-cols-md-2 row-cols-md-3 row-cols-md-4 row-cols-md-5').addClass('row-cols-sm-2 row-cols-md-'+$val);
+				}
+
+				// only store if it was a user action
+				if (!$noStore) {
+					// store the user selection
+					localStorage.setItem("uwp_list_view", $val);
+				}
+			}
+
+			// set the current user selection if set
+			if (typeof(Storage) !== "undefined") {
+				var $noStore = false;
+				var uwp_list_view = localStorage.getItem("uwp_list_view");
+				setTimeout(function () {
+					if (!uwp_list_view) {
+						$noStore = true;
+						$container = jQuery('.uwp-profile-cpt-loop .card-deck');
+						if ($container.hasClass('card-deck-list')) {
+							uwp_list_view = 0;
+						} else {
+							uwp_list_view = 3;
+						}
+					}
+					uwp_list_view_select(uwp_list_view, $noStore);
+				}, 10); // we need to give it a very short time so the page loads the actual html
+			}
+			/* ]]> */</script>
+		<?php
+	}
+
+	public function lightbox_modals(){
+		?>
+		<div class="modal fade uwp-profile-image-change-modal" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true">
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="uwp-profile-modal-title"></h5>
+					</div>
+					<div class="modal-body">
+						<i class="fas fa-circle-notch fa-spin"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+	
 }

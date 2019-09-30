@@ -813,7 +813,7 @@ function uwp_add_account_menu_links() {
     <?php
 	$legacy .=  '</ul>';
 	$bs_output = ob_get_clean();
-	$style = uwp_get_option('design_style', '');
+	$style = uwp_get_option('design_style', 'bootstrap');
 	if(!empty($style)){
 		echo $bs_output;
     } else {

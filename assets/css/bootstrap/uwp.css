@@ -1,0 +1,38 @@
+@media (min-width: 576px) {
+  .uwp-users-loop .row > .col {
+    transition: all 0.3s ease 0s; }
+  .uwp-users-loop .row.row-cols-md-0 .card {
+    display: flex;
+    flex-direction: row; }
+    .uwp-users-loop .row.row-cols-md-0 .card .card-img-top {
+      display: none; }
+    .uwp-users-loop .row.row-cols-md-0 .card > .card-body {
+      display: none !important; }
+    .uwp-users-loop .row.row-cols-md-0 .card .uwp-profile-header {
+      width: 80%; }
+    .uwp-users-loop .row.row-cols-md-0 .card .card-footer {
+      width: 20%;
+      border-top-width: 0;
+      border-left-width: 1px !important; }
+    .uwp-users-loop .row.row-cols-md-0 .card .card-body {
+      display: inline-block;
+      vertical-align: top;
+      max-width: 100%;
+      width: 100%; }
+      .uwp-users-loop .row.row-cols-md-0 .card .card-body .row.justify-content-center {
+        display: block; }
+        .uwp-users-loop .row.row-cols-md-0 .card .card-body .row.justify-content-center > .text-center {
+          display: inline-block !important; }
+          .uwp-users-loop .row.row-cols-md-0 .card .card-body .row.justify-content-center > .text-center:nth-of-type(1) {
+            width: 15%;
+            float: left; }
+            .uwp-users-loop .row.row-cols-md-0 .card .card-body .row.justify-content-center > .text-center:nth-of-type(1) img {
+              margin-top: 0; }
+          .uwp-users-loop .row.row-cols-md-0 .card .card-body .row.justify-content-center > .text-center:nth-of-type(2) {
+            width: 44%;
+            text-align: left !important; }
+          .uwp-users-loop .row.row-cols-md-0 .card .card-body .row.justify-content-center > .text-center:nth-of-type(3) {
+            width: 40%;
+            text-align: left !important; } }
+
+/*# sourceMappingURL=uwp.css.map */

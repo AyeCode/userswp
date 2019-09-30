@@ -52,3 +52,10 @@ function uwp_upgrade_1200(){
 
 }
 //uwp_upgrade_1200();
+
+//@todo this
+function uwp_upgrade_users_page_content(){
+	/*
+	 * Update the users page shortcodes
+	 */
+}

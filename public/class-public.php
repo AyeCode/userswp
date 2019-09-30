@@ -78,6 +78,8 @@ class UsersWP_Public {
             wp_enqueue_style( "select2", USERSWP_PLUGIN_URL . 'assets/css/select2/select2.css', array(), USERSWP_VERSION, 'all' );
             wp_enqueue_style( USERSWP_NAME, USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
             wp_register_style( 'uwp-authorbox', USERSWP_PLUGIN_URL . 'assets/css/authorbox.css', array(), USERSWP_VERSION, 'all' );
+        }else{
+            wp_enqueue_style( "uwp", USERSWP_PLUGIN_URL . 'assets/css/bootstrap/uwp.css', array(), USERSWP_VERSION, 'all' );
         }
 
     }

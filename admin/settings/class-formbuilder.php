@@ -337,8 +337,8 @@ class UsersWP_Form_Builder {
                 'default_value'       =>  '',
                 'is_required'         =>  0,
                 'required_msg'        =>  '',
-                'field_icon'          =>  'fab fa-facebook-square',
-                'css_class'           =>  ''
+                'field_icon'          =>  'fab fa-facebook-f',
+                'css_class'           =>  'btn-facebook'
             )
         );
 
@@ -358,8 +358,8 @@ class UsersWP_Form_Builder {
                 'default_value'       =>  '',
                 'is_required'         =>  0,
                 'required_msg'        =>  '',
-                'field_icon'          =>  'fab fa-twitter-square',
-                'css_class'           =>  ''
+                'field_icon'          =>  'fab fa-twitter',
+                'css_class'           =>  'btn-twitter'
             )
         );
 
@@ -380,7 +380,7 @@ class UsersWP_Form_Builder {
                 'is_required'         =>  0,
                 'required_msg'        =>  '',
                 'field_icon'          =>  'fab fa-instagram',
-                'css_class'           =>  ''
+                'css_class'           =>  'btn-instagram'
             )
         );
 
@@ -400,8 +400,8 @@ class UsersWP_Form_Builder {
                 'default_value'       =>  '',
                 'is_required'         =>  0,
                 'required_msg'        =>  '',
-                'field_icon'          =>  'fab fa-linkedin',
-                'css_class'           =>  ''
+                'field_icon'          =>  'fab fa-linkedin-in',
+                'css_class'           =>  'btn-linkedin'
             )
         );
 
@@ -423,7 +423,7 @@ class UsersWP_Form_Builder {
                 'is_required'         =>  0,
                 'required_msg'        =>  '',
                 'field_icon'          =>  'fab fa-flickr',
-                'css_class'           =>  ''
+                'css_class'           =>  'btn-flickr'
             )
         );
 
@@ -443,8 +443,8 @@ class UsersWP_Form_Builder {
                 'default_value'       =>  '',
                 'is_required'         =>  0,
                 'required_msg'        =>  '',
-                'field_icon'          =>  'fab fa-github-square',
-                'css_class'           =>  ''
+                'field_icon'          =>  'fab fa-github-alt',
+                'css_class'           =>  'btn-github'
             )
         );
 
@@ -464,8 +464,8 @@ class UsersWP_Form_Builder {
                 'default_value'       =>  '',
                 'is_required'         =>  0,
                 'required_msg'        =>  '',
-                'field_icon'          =>  'fab fa-youtube-square',
-                'css_class'           =>  ''
+                'field_icon'          =>  'fab fa-youtube',
+                'css_class'           =>  'btn-youtube'
             )
         );
 
@@ -486,7 +486,7 @@ class UsersWP_Form_Builder {
                 'is_required'         =>  0,
                 'required_msg'        =>  '',
                 'field_icon'          =>  'fab fa-wordpress-simple',
-                'css_class'           =>  ''
+                'css_class'           =>  'btn-wordpress'
             )
         );
 
@@ -1109,6 +1109,12 @@ class UsersWP_Form_Builder {
                             <li class="uwp-setting-name uwp-advanced-setting">
 
                                 <?php
+                                $value = '';
+                                if (isset($field_info->field_icon)) {
+                                    $value = esc_attr($field_info->field_icon);
+                                }elseif (isset($cf['defaults']['css_class']) && $cf['defaults']['css_class']) {
+                                    $value = $cf['defaults']['css_class'];
+                                }
                                 $tip = __('Enter custom css class for field custom style.', 'userswp');
                                 if ($field_type == 'multiselect') { $tip .= __('(Enter class `uwp-comma-list` to show list as comma separated)', 'userswp'); }
                                 ?>
@@ -1119,9 +1125,7 @@ class UsersWP_Form_Builder {
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="css_class" id="css_class"
-                                           value="<?php if (isset($field_info->css_class)) {
-                                                echo esc_attr($field_info->css_class);
-                                            }?>"/>
+                                           value="<?php echo $value;?>"/>
                                 </div>
 
                             </li>

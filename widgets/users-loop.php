@@ -26,7 +26,7 @@ class UWP_Users_Loop_Widget extends WP_Super_Duper {
             'name'          => __('UWP > Users Loop','userswp'),
 
             'widget_ops'    => array(
-                'classname'   => 'uwp-users-list',
+                'classname'   => 'uwp-users-list bsui',
                 'description' => esc_html__('Displays users loop.','userswp'),
             ),
         );
@@ -35,25 +35,27 @@ class UWP_Users_Loop_Widget extends WP_Super_Duper {
     }
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
-
-        $users_list = get_uwp_users_list();
-        $users = $users_list['users'];
-
+        
         ob_start();
 
-        $temp_obj = new UsersWP_Templates();
 
-        $template_path = $temp_obj->uwp_locate_template('users');
 
-        if (file_exists($template_path)) {
-            include($template_path);
-        }
+        global $uwp_widget_args;
+        $uwp_widget_args = $args;
 
+        // get users
+        $users_list = get_uwp_users_list();
+        $uwp_widget_args['template_args']['users'] = $users_list['users'];
+        $uwp_widget_args['template_args']['total_users'] = $users_list['total_users'];
+        
+        $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
+        $template = $design_style ? $design_style."/loop-users" : "loop-users";
+        uwp_locate_template($template);
+
+        // @todo maybe move paging to template?
         $number = uwp_get_option('profile_no_of_items', 10);
         $total_users = $users_list['total_users'];
-
         $total_pages = ceil($total_users/$number);
-
         do_action('uwp_profile_pagination', $total_pages);
 
         $output = ob_get_clean();

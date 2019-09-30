@@ -26,6 +26,7 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
             'base_id'       => 'uwp_profile_header',
             'name'          => __('UWP > Profile Header','userswp'),
             //'no_wrap'       => true,
+            'block-wrap'    => '',
             'widget_ops'    => array(
                 'classname'   => 'uwp-profile-header bsui',
                 'description' => esc_html__('Displays user profile header.','userswp'),
@@ -91,6 +92,37 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
 
             global $uwp_widget_args;
             $uwp_widget_args = $args;
+            
+            // setup some args
+            add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
+            $uploads = wp_upload_dir();
+            remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
+            $upload_url = $uploads['baseurl'];
+            $banner = uwp_get_usermeta( $user->ID, 'banner_thumb', '' );
+            if ( empty( $banner ) ) {
+                $banner = uwp_get_option( 'profile_default_banner', '' );
+                if ( empty( $banner ) ) {
+                    $banner = uwp_get_default_banner_uri();
+                } else {
+                    $banner = wp_get_attachment_url( $banner );
+                }
+            } else {
+                $banner = $upload_url . $banner;
+            }
+
+
+            $avatar = uwp_get_usermeta( $user->ID, 'avatar_thumb', '' );
+            if ( empty( $avatar ) ) {
+                $avatar = get_avatar_url( $user->user_email, array( 'size' => 150 ) );
+            } else {
+                if ( strpos( $avatar, 'http:' ) === false && strpos( $avatar, 'https:' ) === false ) {
+                    $avatar = $upload_url . $avatar;
+                }
+            }
+            
+            $uwp_widget_args['avatar_url'] = $avatar;
+            $uwp_widget_args['banner_url'] = $banner;
+            
 
             $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
             $template = $design_style ? $design_style."/profile-header" : "profile-header";

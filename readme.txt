@@ -1,6 +1,6 @@
 === UsersWP - User Profile & Registration ===
 Contributors: stiofansisland, paoltaia, ayecode, ismiaini
-Donate link: https://userswp.io/
+Donate link: https://www.ko-fi.com/stiofan
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.9
 Tested up to: 5.2

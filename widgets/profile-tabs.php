@@ -25,7 +25,7 @@ class UWP_Profile_Tabs_Widget extends WP_Super_Duper {
             'class_name'     => __CLASS__,
             'base_id'       => 'uwp_profile_tabs',
             'name'          => __('UWP > Profile Tabs','userswp'),
-            'no_wrap'       => true,
+            //'no_wrap'       => true,
             'widget_ops'    => array(
                 'classname'   => 'uwp-profile-tabs bsui',
                 'description' => esc_html__('Displays profile tabs.','userswp'),

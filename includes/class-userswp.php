@@ -146,8 +146,6 @@ final class UsersWP {
         add_action('uwp_template_display_notices', array($instance, 'display_notices'), 10, 1);
         add_action('wp_ajax_uwp_upload_file_remove', array($instance, 'uwp_upload_file_remove'));
         //User search form
-        add_action('uwp_users_page_search_form_inner', array($instance, 'uwp_users_search_form_text_field'), 10, 1);
-        add_action('uwp_users_page_search_form_inner', array($instance, 'uwp_users_search_form_submit'), 50, 1);
         add_action('personal_options_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('edit_user_profile_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('user_edit_form_tag', array($instance, 'add_multipart_to_admin_edit_form'));
@@ -216,6 +214,13 @@ final class UsersWP {
         add_action( 'uwp_user_title', array($instance, 'get_profile_title'), 10, 2 );
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 2 );
         add_action( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );
+        add_action( 'uwp_profile_pagination' ,array($instance,'list_view_js'));
+
+
+        add_action( 'uwp_after_users_list' ,array($instance,'list_view_js'));
+
+
+
 
         //Fields as tabs
         add_action( 'uwp_available_tab_items', array($instance, 'uwp_extra_fields_available_tab_items'), 10, 1 );
@@ -243,12 +248,11 @@ final class UsersWP {
 
         // Profile Pagination
         add_action( 'uwp_profile_pagination', array($instance, 'get_profile_pagination'));
+        
+        // Profile title
+        add_action( 'uwp_profile_after_title',array($instance, 'edit_profile_button'));
 
         // Users
-        add_action( 'uwp_users_list_body', array($instance, 'get_users_list_body'));
-        add_action( 'uwp_users_search', array($instance, 'uwp_users_search'));
-        add_action( 'uwp_users_loop_actions', array($instance, 'uwp_users_views'));
-        add_action( 'uwp_users_loop_actions', array($instance, 'uwp_users_sortby'));
         add_action( 'uwp_output_location', array($instance, 'show_output_location_data'), 10, 2);
         add_action( 'wpdiscuz_profile_url', array($instance, 'uwp_wpdiscuz_profile_url'), 10, 2);
 

@@ -145,3 +145,26 @@ jQuery(window).load(function() {
 
     });
 }( jQuery, window ));
+
+function uwp_profile_image_change(type){
+    // remove it first
+    jQuery('.uwp-profile-image-change-modal').remove();
+
+    var $modal = '<div class="modal fade uwp-profile-image-change-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="uwp-profile-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
+    jQuery('body').append($modal);
+
+    jQuery('.uwp-profile-image-change-modal').modal({
+        backdrop: 'static'
+    });
+
+    // do something with the file here
+    var data = {
+        'action': 'uwp_ajax_image_crop_popup_form',
+        'type': type,
+        'style': 'bootstrap'
+    };
+
+    jQuery.post(uwp_localize_data.ajaxurl, data, function(response) {
+        jQuery('.uwp-profile-image-change-modal .modal-content').html(response);
+    });
+}

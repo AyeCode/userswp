@@ -224,7 +224,7 @@ A user has been registered recently on your website.
     }
 
     public static function page_user_list_item_content($no_filter = false){
-        $content = "[uwp_profile_header][uwp_user_title tag= 'h4'][uwp_profile_social][uwp_output_location location='users'][uwp_user_actions]";
+        $content = "[uwp_profile_header][uwp_output_location location='users'][uwp_user_actions]";
 
         if($no_filter){
             return $content;

@@ -63,83 +63,46 @@ function is_uwp_profile_subtab($subtab = false) {
  * @return      void
  */
 function uwp_generic_tab_content($user, $post_type = false, $title, $post_ids = false) {
-    ?>
-    <h3><?php echo $title; ?></h3>
-    <div class="uwp-profile-item-block">
-        <?php
-        $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+    global $uwp_widget_args;
 
-        $args = array(
-            'post_status' => 'publish',
-            'posts_per_page' => uwp_get_option('profile_no_of_items', 10),
-            'author' => $user->ID,
-            'paged' => $paged,
-        );
+    $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
-        if ($post_type) {
-            $args['post_type'] = $post_type;
-        }
+    $args = array(
+        'post_status' => 'publish',
+        'posts_per_page' => uwp_get_option('profile_no_of_items', 10),
+        'author' => $user->ID,
+        'paged' => $paged,
+    );
 
-        if (is_array($post_ids)) {
-            if (!empty($post_ids)) {
-                $args['post__in'] = $post_ids;
-            } else {
-                // no posts found
-                echo "<p>".__('No '.$title.' Found', 'userswp')."</p>";
-                return;
-            }
-        }
-        // The Query
-        $the_query = new WP_Query($args);
+    if ($post_type) {
+        $args['post_type'] = $post_type;
+    }
 
-        // The Loop
-        if ($the_query->have_posts()) {
-            echo '<ul class="uwp-profile-item-ul">';
-            while ($the_query->have_posts()) {
-                $the_query->the_post();
-                ?>
-                <li class="uwp-profile-item-li uwp-profile-item-clearfix">
-                    <div class="uwp_generic_thumb_wrap">
-                        <a class="uwp-profile-item-img" href="<?php echo get_the_permalink(); ?>">
-                            <?php
-                            if ( has_post_thumbnail() ) {
-                                $thumb_url = get_the_post_thumbnail_url(get_the_ID(), array(80, 80));
-                            } else {
-                                $thumb_url = uwp_get_default_thumb_uri();
-                            }
-                            ?>
-                            <img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
-                        </a>
-                    </div>
-
-                    <h3 class="uwp-profile-item-title">
-                        <a href="<?php echo get_the_permalink(); ?>"><?php echo get_the_title(); ?></a>
-                    </h3>
-                    <time class="uwp-profile-item-time published" datetime="<?php echo get_the_time('c'); ?>">
-                        <?php echo get_the_date(); ?>
-                    </time>
-                    <div class="uwp-profile-item-summary">
-                        <?php
-                        do_action('uwp_before_profile_summary', get_the_ID(), $user, $post_type);
-                        $excerpt = strip_shortcodes(wp_trim_words( get_the_excerpt(), 15, '...' ));
-                        echo $excerpt;
-                        do_action('uwp_after_profile_summary', get_the_ID(), $user, $post_type);
-                        ?>
-                    </div>
-                </li>
-                <?php
-            }
-            echo '</ul>';
-            /* Restore original Post Data */
-            wp_reset_postdata();
+    if (is_array($post_ids)) {
+        if (!empty($post_ids)) {
+            $args['post__in'] = $post_ids;
         } else {
             // no posts found
             echo "<p>".__('No '.$title.' Found', 'userswp')."</p>";
+            return;
         }
-        do_action('uwp_profile_pagination', $the_query->max_num_pages);
-        ?>
-    </div>
-    <?php
+    }
+    // The Query
+    $the_query = new WP_Query($args);
+
+    $uwp_widget_args['template_args']= array(
+        'the_query' => $the_query,
+        'user'      => $user,
+        'post_type' => $post_type,
+        'title'     => $title,
+        'post_ids'  => $post_ids,
+    );
+
+    $design_style = !empty($uwp_widget_args['design_style']) ? esc_attr($uwp_widget_args['design_style']) : uwp_get_option("design_style",'bootstrap');
+    $template = $design_style ? $design_style."/loop-posts" : "loop-posts";
+    uwp_locate_template($template);
+
+    
 }
 
 

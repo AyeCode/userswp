@@ -198,6 +198,12 @@ if ( ! class_exists( 'WP_Bootstrap_Settings' ) ) {
 				$url = $this->url.'assets/js/bootstrap.bundle.min.js';
 				wp_register_script( 'bootstrap-js-bundle', $url, array(), $this->latest );
 				wp_enqueue_script( 'bootstrap-js-bundle' );
+				$script = "
+				jQuery(document).ready(function(){
+    jQuery('[data-toggle=\"tooltip\"]').tooltip();
+});
+				";
+				wp_add_inline_script( 'bootstrap-js-bundle', $script );
 			}elseif($this->settings['js']=='popper'){
 				$url = $this->url.'assets/js/popper.min.js';
 				wp_register_script( 'bootstrap-js-popper', $url, array(), $this->latest );

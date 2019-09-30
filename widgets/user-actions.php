@@ -26,8 +26,9 @@ class UWP_User_Actions_Widget extends WP_Super_Duper {
             'base_id'       => 'uwp_user_actions',
             'name'          => __('UWP > User Actions','userswp'),
             'no_wrap'       => true,
+            'block-wrap'    => '',
             'widget_ops'    => array(
-                'classname'   => 'uwp-user-actions',
+                'classname'   => 'uwp-user-actions bsui',
                 'description' => esc_html__('Display user actions.','userswp'),
             ),
             'arguments'     => array(
@@ -49,6 +50,8 @@ class UWP_User_Actions_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
+        global $uwp_in_user_loop;
+
         $user = uwp_get_displayed_user();
 
         ob_start();
@@ -56,6 +59,10 @@ class UWP_User_Actions_Widget extends WP_Super_Duper {
         do_action('uwp_user_actions', $user);
 
         $output = ob_get_clean();
+
+        if($output && $uwp_in_user_loop){
+            $output = "<div class='card-body'></div> <div class='card-footer'>".$output."</div>";
+        }
 
         return $output;
 

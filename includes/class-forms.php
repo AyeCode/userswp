@@ -2458,37 +2458,6 @@ class UsersWP_Forms {
         }
     }
 
-
-    /**
-     * Adds search form keyword input html.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @param       string      $keyword        Search keyword.
-     * 
-     * @return      void
-     */
-    public function uwp_users_search_form_text_field($keyword) {
-        ?>
-        <input placeholder="<?php _e('Search For', 'userswp'); ?>" name="uwps" value="<?php echo $keyword; ?>" class="s search-input" type="text">
-        <?php
-    }
-
-    /**
-     * Adds search form submit button html.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * 
-     * @return      void
-     */
-    public function uwp_users_search_form_submit() {
-        ?>
-        <input class="uwp-searchsubmit uwp-search-submit" value="<?php _e('Search', 'userswp'); ?>" type="submit">
-        <?php
-    }
-
     /**
      * Form field template for country field.
      *
