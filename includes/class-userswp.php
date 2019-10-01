@@ -139,6 +139,19 @@ final class UsersWP {
     }
 
     public function load_forms_actions_and_filters($instance) {
+        
+        // login
+        add_action('wp_ajax_nopriv_uwp_ajax_login_form', array($instance, 'ajax_login_form'));
+        add_action('wp_ajax_nopriv_uwp_ajax_login', array($instance, 'process_login'));
+        
+        // register
+        add_action('wp_ajax_nopriv_uwp_ajax_register_form', array($instance, 'ajax_register_form'));
+        add_action('wp_ajax_nopriv_uwp_ajax_register', array($instance, 'process_register'));
+
+        // forgot
+        add_action('wp_ajax_nopriv_uwp_ajax_forgot_password_form', array($instance, 'ajax_forgot_password_form'));
+        add_action('wp_ajax_nopriv_uwp_ajax_forgot_password', array($instance, 'process_forgot'));
+
         // general
         add_action('init', array($instance, 'init_notices'), 1);
         add_action('uwp_loaded', array($instance, 'handler'));
@@ -150,8 +163,6 @@ final class UsersWP {
         add_action('edit_user_profile_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('user_edit_form_tag', array($instance, 'add_multipart_to_admin_edit_form'));
         add_action('uwp_template_form_title_after', array($instance, 'uwp_display_username_in_account'), 10, 1);
-        add_action('wp_ajax_uwp_ajax_login', array($instance, 'process_login_ajax'));
-        add_action('wp_ajax_nopriv_uwp_ajax_login', array($instance, 'process_login_ajax'));
         add_action('init', array($instance, 'process_login'));
         add_action('init', array($instance, 'process_register'));
         add_action('init', array($instance, 'process_account'));
@@ -293,6 +304,7 @@ final class UsersWP {
         add_filter( 'login_url', array($instance, 'wp_login_url'), 10, 3 );
         add_filter( 'register_url', array($instance, 'wp_register_url'), 10, 1 );
         add_filter( 'lostpassword_url', array($instance, 'wp_lostpassword_url'), 10, 1 );
+        
     }
     
     public function load_tools_actions_and_filters($instance) {
@@ -361,7 +373,6 @@ final class UsersWP {
         register_widget("UWP_Register_Widget");
         register_widget("UWP_Forgot_Widget");
         register_widget("UWP_Login_Widget");
-        register_widget("UWP_Login_Modal_Widget");
         register_widget("UWP_Change_Widget");
         register_widget("UWP_Reset_Widget");
         register_widget("UWP_Users_Widget");
@@ -591,11 +602,6 @@ final class UsersWP {
          * The class for login widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/login.php' );
-
-	    /**
-	     * The class for login modal widget.
-	     */
-	    require_once( dirname(dirname( __FILE__ )) .'/widgets/login-modal.php' );
 
         /**
          * The class for register widget.

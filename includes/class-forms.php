@@ -200,8 +200,13 @@ class UsersWP_Forms {
 
         $data = $_POST;
 
-        if( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce' ) ) {
+        if( ! isset( $data['uwp_register_nonce'] )){
             return;
+        }
+
+        if( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce' ) ) {
+            if(wp_doing_ajax()){wp_send_json_error();}
+            else{return;}
         }
 
         global $uwp_notices;
@@ -211,18 +216,26 @@ class UsersWP_Forms {
         $file_obj = new UsersWP_Files();
 
         if (!get_option('users_can_register')) {
-            $error = '<div class="uwp-alert-error text-center">'.__('<strong>ERROR</strong>: User registration is currently not allowed. Please check settings of your site.', 'userswp').'</div>';
-            $uwp_notices[] = array('register' => $error);
-            return;
+            $message = BSUI::get_alert(array(
+                'type'=>'error',
+                'content'=> __('<strong>ERROR</strong>: User registration is currently not allowed. Please check settings of your site.', 'userswp')
+                )
+            );
+            if(wp_doing_ajax()){wp_send_json_error($message);}
+            else{$uwp_notices[] = array('register' => $message); return;}
         }
 
         $reg_terms_page_id = uwp_get_option('register_terms_page', '');
         $reg_terms_page_id = apply_filters('uwp_reg_terms_page_id', $reg_terms_page_id);
         if (!empty($reg_terms_page_id)) {
             if (!isset($data['agree_terms']) || $data['agree_terms'] != 'yes') {
-                $error = '<div class="uwp-alert-error text-center">'.__('<strong>ERROR</strong>: You must accept our terms and conditions.', 'userswp').'</div>';
-                $uwp_notices[] = array('register' => $error);
-                return;
+                $message = BSUI::get_alert(array(
+                        'type'=>'error',
+                        'content'=> __('<strong>ERROR</strong>: You must accept our terms and conditions.', 'userswp')
+                    )
+                );
+                if(wp_doing_ajax()){wp_send_json_error($message);}
+                else{$uwp_notices[] = array('register' => $message); return;}
             }
         }
 
@@ -233,17 +246,25 @@ class UsersWP_Forms {
         $result = apply_filters('uwp_validate_result', $result, 'register', $data);
 
         if (is_wp_error($result)) {
-            $error = '<div class="uwp-alert-error text-center">'.$result->get_error_message().'</div>';
-            $uwp_notices[] = array('register' => $error);
-            return;
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> $result->get_error_message()
+                )
+            );
+            if(wp_doing_ajax()){wp_send_json_error($message);}
+            else{$uwp_notices[] = array('register' => $message); return;}
         }
 
         $uploads_result = $file_obj->uwp_validate_uploads($files, 'register');
 
         if (is_wp_error($uploads_result)) {
-            $error = '<div class="uwp-alert-error text-center">'.$uploads_result->get_error_message().'</div>';
-            $uwp_notices[] = array('register' => $error);
-            return;
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> $uploads_result->get_error_message()
+                )
+            );
+            if(wp_doing_ajax()){wp_send_json_error($message);}
+            else{$uwp_notices[] = array('register' => $message); return;}
         }
 
         do_action('uwp_after_validate', 'register');
@@ -318,9 +339,13 @@ class UsersWP_Forms {
         $user_id = wp_insert_user( $args );
 
         if (!$user_id) {
-            $error = '<div class="uwp-alert-error text-center">'.__('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp').'</div>';
-            $uwp_notices[] = array('register' => $error);
-            return;
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp')
+                )
+            );
+            if(wp_doing_ajax()){wp_send_json_error($message);}
+            else{$uwp_notices[] = array('register' => $message); return;}
         }
 
         $result = apply_filters('uwp_before_extra_fields_save', $result, 'register', $user_id);
@@ -330,15 +355,23 @@ class UsersWP_Forms {
         $save_result = apply_filters('uwp_after_extra_fields_save', $save_result, $result, 'register', $user_id);
 
         if (is_wp_error($save_result)) {
-            $error = '<div class="uwp-alert-error text-center">'.$result->get_error_message().'</div>';
-            $uwp_notices[] = array('register' => $error);
-            return;
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> $result->get_error_message()
+                )
+            );
+            if(wp_doing_ajax()){wp_send_json_error($message);}
+            else{$uwp_notices[] = array('register' => $message); return;}
         }
 
         if (!$save_result) {
-            $error = '<div class="uwp-alert-error text-center">'.__('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp').'</div>';
-            $uwp_notices[] = array('register' => $error);
-            return;
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp')
+                )
+            );
+            if(wp_doing_ajax()){wp_send_json_error($message);}
+            else{$uwp_notices[] = array('register' => $message); return;}
         }
 
         do_action('uwp_after_custom_fields_save', 'register', $data, $result, $user_id);
@@ -356,9 +389,13 @@ class UsersWP_Forms {
 
         $error_code = $errors->get_error_code();
         if (!empty($error_code)) {
-            $error = '<div class="uwp-alert-error text-center">'.$result->get_error_message().'</div>';
-            $uwp_notices[] = array('register' => $error);
-            return;
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> $result->get_error_message()
+                )
+            );
+            if(wp_doing_ajax()){wp_send_json_error($message);}
+            else{$uwp_notices[] = array('register' => $message); return;}
         }
 
         if ($reg_action != 'require_admin_review') {
@@ -407,18 +444,23 @@ class UsersWP_Forms {
                     ),
                     $resend_link
                 );
-                $error_msg = sprintf(__('An email has been sent to your registered email address. Please click the activation link to proceed. %sResend%s.', 'userswp'), '<a href="'.$resend_link.'"">', '</a>');
-                $error = '<div class="uwp-alert-success text-center">'.$error_msg.'</div>';
-                $uwp_notices[] = array('register' => $error);
+                $message = BSUI::get_alert(array(
+                        'type'=>'success',
+                        'content'=> sprintf(__('An email has been sent to your registered email address. Please click the activation link to proceed. %sResend%s.', 'userswp'), '<a href="'.$resend_link.'"">', '</a>')
+                    )
+                );
+
             } elseif ($reg_action == 'require_admin_review' && defined('UWP_MOD_VERSION')) {
                 update_user_meta( $user_id, 'uwp_mod', '1' );
 
                 $email = new UsersWP_Mails();
                 $email->send( 'mod_pending', $user_id );
                 $email->send_admin_email('mod_admin', $user_id);
-                $error_msg = __('Your account is under moderation. We will email you once its approved.', 'userswp');
-                $error = '<div class="uwp-alert-success text-center">'.$error_msg.'</div>';
-                $uwp_notices[] = array('register' => $error);
+                $message = BSUI::get_alert(array(
+                        'type'=>'success',
+                        'content'=> __('Your account is under moderation. We will email you once its approved.', 'userswp')
+                    )
+                );
             } else {
 
                 $login_page_url = wp_login_url();
@@ -429,13 +471,21 @@ class UsersWP_Forms {
                     $msg = sprintf(__('Account registered successfully. Please login %shere%s', 'userswp'), '<a href="'.$login_page_url.'">', '</a>');
                 }
 
-                $msg = '<div class="uwp-alert-success text-center">'.$msg.'</div>';
-                $uwp_notices[] = array('register' => $msg);
+                $message = BSUI::get_alert(array(
+                        'type'=>'success',
+                        'content'=> $msg
+                    )
+                );
             }
 
             do_action('uwp_after_process_register', $data, $user_id);
 
+            if(wp_doing_ajax()){wp_send_json_success($message);}
+            else{$uwp_notices[] = array('register' => $message);}
+
         }
+
+        if(wp_doing_ajax()){wp_send_json_error();} // if we got this far there is a problem
 
     }
 
@@ -450,8 +500,13 @@ class UsersWP_Forms {
 
         $data = $_POST;
 
-        if( wp_doing_ajax() || ! isset( $data['uwp_login_nonce'] ) || ! wp_verify_nonce( $data['uwp_login_nonce'], 'uwp-login-nonce' ) ) {
+        if( ! isset( $data['uwp_login_nonce'] )){
             return;
+        }
+
+        if( ! isset( $data['uwp_login_nonce'] ) || ! wp_verify_nonce( $data['uwp_login_nonce'], 'uwp-login-nonce' ) ) {
+            if(wp_doing_ajax()){wp_send_json_error();}
+            else{return;}
         }
 
         global $uwp_notices;
@@ -463,9 +518,13 @@ class UsersWP_Forms {
         $result = apply_filters('uwp_validate_result', $result, 'login', $data);
 
         if (is_wp_error($result)) {
-            $error = '<div class="uwp-alert-error text-center">'.$result->get_error_message().'</div>';
-            $uwp_notices[] = array('login' => $error);
-            return;
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> $result->get_error_message()
+                )
+            );
+            if(wp_doing_ajax()){wp_send_json_error($message);}
+            else{$uwp_notices[] = array('login' => $message); return;}
         }
 
         do_action('uwp_after_validate', 'login');
@@ -480,7 +539,7 @@ class UsersWP_Forms {
 
         $res = wp_signon(
             array(
-                'user_login' => $result['uwp_login_username'],
+                'user_login' => $result['username'],
                 'user_password' => $result['password'],
                 'remember' => $remember_me
             )
@@ -489,94 +548,33 @@ class UsersWP_Forms {
         add_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
 
         if (is_wp_error($res)) {
-            $error = BSUI::get_alert(array(
+            $message = BSUI::get_alert(array(
                     'type'=>'error',
                     'content'=> __( 'Invalid username or Password.', 'userswp' )
                 )
             );
-            $uwp_notices[] = array('login' => $error);
-            return;
+            if(wp_doing_ajax()){wp_send_json_error($message);}
+            else{$uwp_notices[] = array('login' => $message); return;}
         } else {
             do_action('uwp_after_process_login', $data);
-
-            $redirect_page_id = uwp_get_option('login_redirect_to', -1);
-            $redirect_to = uwp_get_redirect_url($redirect_page_id, $data);
-            $redirect_to = apply_filters('uwp_login_redirect', $redirect_to);
-            wp_redirect($redirect_to);
-            exit();
+            $message = BSUI::get_alert(array(
+                    'type'=>'success',
+                    'content'=> __('Login successful. Redirecting...','userswp')
+                )
+            );
+            if(wp_doing_ajax()){wp_send_json_success($message);}
+            else{
+                $redirect_page_id = uwp_get_option('login_redirect_to', -1);
+                $redirect_to = uwp_get_redirect_url($redirect_page_id, $data);
+                $redirect_to = apply_filters('uwp_login_redirect', $redirect_to);
+                wp_redirect($redirect_to);
+                exit(); 
+            }
+            
         }
 
     }
-
-	/**
-	 * Processes AJAX login form submission.
-	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 */
-	public function process_login_ajax() {
-		$response = array();
-
-		if( !empty( $_POST['uwp_login_nonce'] ) && wp_verify_nonce($_POST['uwp_login_nonce'] ,'uwp-login-nonce') ) {
-
-			$data = $_POST;
-
-			do_action('uwp_before_validate', 'login');
-
-			$result = uwp_validate_fields($data, 'login');
-
-			$result = apply_filters('uwp_validate_result', $result, 'login', $data);
-
-			if (is_wp_error($result)) {
-				$response['error'] = true;
-				$message = '<div class="uwp-login-ajax-notice alert-danger text-center">'.$result->get_error_message().'</div>';
-				$response['message'] = $message;
-
-				echo json_encode( $response );
-				wp_die();
-			}
-
-			do_action('uwp_after_validate', 'login');
-
-			$remember = false;
-			if( !empty( $remember_me ) && 'forever' == $remember_me ) {
-				$remember = true;
-			}
-
-			$login_credential = array(
-				'user_login'    => $result['uwp_login_username'],
-				'user_password' => $result['password'],
-				'remember'      => $remember
-			);
-
-			remove_action( 'authenticate', 'gglcptch_login_check', 21 );
-
-			$user_credential = wp_signon( $login_credential, false );
-
-			add_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
-
-			if ( is_wp_error( $user_credential ) ) {
-				$response['error'] = true;
-				$message = '<div class="uwp-login-ajax-notice alert-danger text-center">'.$user_credential->get_error_message().'</div>';
-			} else{
-				do_action('uwp_after_process_login', $data);
-
-				$response['error'] = false;
-				$message = '<div class="uwp-login-ajax-notice alert-success text-center">'.__('Login successful. Redirecting...','userswp').'</div>';
-			}
-		} else{
-			$response['error'] = true;
-			$message = '<div class="uwp-login-ajax-notice alert-danger text-center">'.__('Invalid request.','userswp').'</div>';
-		}
-
-		$response['message'] = $message;
-
-		echo json_encode( $response );
-
-		wp_die();
-	}
-
+    
     /**
      * Processes forgot password form submission.
      *
@@ -588,8 +586,13 @@ class UsersWP_Forms {
 
         $data = $_POST;
 
-        if( ! isset( $data['uwp_forgot_nonce'] ) || ! wp_verify_nonce( $data['uwp_forgot_nonce'], 'uwp-forgot-nonce' ) ) {
+        if( ! isset( $data['uwp_forgot_nonce'] )){
             return;
+        }
+
+        if( ! isset( $data['uwp_forgot_nonce'] ) || ! wp_verify_nonce( $data['uwp_forgot_nonce'], 'uwp-forgot-nonce' ) ) {
+            if(wp_doing_ajax()){wp_send_json_error();}
+            else{return;}
         }
 
         global $uwp_notices;
@@ -601,32 +604,55 @@ class UsersWP_Forms {
         $result = apply_filters('uwp_validate_result', $result, 'forgot', $data);
 
         if (is_wp_error($result)) {
-            $error = '<div class="uwp-alert-error text-center">'.$result->get_error_message().'</div>';
-            $uwp_notices[] = array('forgot' => $error);
-            return;
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> $result->get_error_message()
+                )
+            );
+            if(wp_doing_ajax()){wp_send_json_error($message);}
+            else{$uwp_notices[] = array('forgot' => $message); return;}
         }
 
         do_action('uwp_after_validate', 'forgot');
 
 
-        $user_data = get_user_by('email', $data['uwp_forgot_email']);
+        $user_data = get_user_by('email', $data['email']);
+
+        // if no user we fake it and bail
+        if(!$user_data->ID){
+            $message = BSUI::get_alert(array(
+                    'type'=>'success',
+                    'content'=> apply_filters('uwp_change_password_success_message', __('Please check your email.', 'userswp'), $data)
+                )
+            );
+            if(wp_doing_ajax()){wp_send_json_success($message);}
+            else{$uwp_notices[] = array('forgot' => $message);return;}
+        }
 
         // make sure user account is active before account reset
         $mod_value = get_user_meta( $user_data->ID, 'uwp_mod', true );
         if ($mod_value == 'email_unconfirmed') {
-            $error = '<div class="uwp-alert-error text-center">'.__('<strong>Error</strong>: Your account is not activated yet. Please activate your account first.', 'userswp').'</div>';
-            $uwp_notices[] = array('forgot' => $error);
-            return;
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> __('<strong>Error</strong>: Your account is not activated yet. Please activate your account first.', 'userswp')
+                )
+            );
+            if(wp_doing_ajax()){wp_send_json_error($message);}
+            else{$uwp_notices[] = array('forgot' => $message); return;}
         }
         
         $email = new UsersWP_Mails();
         $email->send( 'forgot', $user_data->ID );
 
-        $message = apply_filters('uwp_change_password_success_message', __('Please check your email.', 'userswp'), $data);
-        $message = '<div class="uwp-alert-success text-center">'.$message.'</div>';
-        $uwp_notices[] = array('forgot' => $message);
-
         do_action('uwp_after_process_forgot', $data);
+
+        $message = BSUI::get_alert(array(
+                'type'=>'success',
+                'content'=> apply_filters('uwp_change_password_success_message', __('Please check your email.', 'userswp'), $data)
+            )
+        );
+        if(wp_doing_ajax()){wp_send_json_success($message);}
+        else{$uwp_notices[] = array('forgot' => $message);}
     }
 
     /**
@@ -2754,6 +2780,73 @@ class UsersWP_Forms {
             }
 
         }
+    }
+
+    /**
+     * Get the ajax login form.
+     *
+     * @since 1.2.0
+     */
+    public function ajax_login_form(){
+
+        // add the modal error container
+        add_action('uwp_template_display_notices', array($this,'modal_error_container'));
+
+        // get the form
+        ob_start();
+        uwp_locate_template("bootstrap/login");
+        $form = ob_get_clean();
+
+        // send ajax response
+        wp_send_json_success(  $form );
+    }
+
+    /**
+     * Get the ajax register form.
+     *
+     * @since 1.2.0
+     */
+    public function ajax_register_form(){
+
+        // add the modal error container
+        add_action('uwp_template_display_notices', array($this,'modal_error_container'));
+
+        // get the form
+        ob_start();
+        uwp_locate_template("bootstrap/register");
+        $form = ob_get_clean();
+
+        // send ajax response
+        wp_send_json_success(  $form );
+    }
+
+    /**
+     * Get the ajax forgot password form.
+     *
+     * @since 1.2.0
+     */
+    public function ajax_forgot_password_form(){
+
+        // add the modal error container
+        add_action('uwp_template_display_notices', array($this,'modal_error_container'));
+
+        // get the form
+        ob_start();
+        uwp_locate_template("bootstrap/forgot");
+        $form = ob_get_clean();
+
+        // send ajax response
+        wp_send_json_success(  $form );
+    }
+
+    /**
+     * Output the modal error container.
+     *
+     * @param string $type
+     * @since 1.2.0
+     */
+    public function modal_error_container($type = ''){
+        echo '<div class="form-group"><div class="modal-error"></div></div>';
     }
 
 }

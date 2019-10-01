@@ -1,4 +1,8 @@
 jQuery(window).load(function() {
+
+    // Enable auth modals
+    uwp_init_auth_modal();
+
     // select2 selects
     if (jQuery("select.uwp_select2").length > 0) {
         jQuery("select.uwp_select2").select2();
@@ -166,5 +170,233 @@ function uwp_profile_image_change(type){
 
     jQuery.post(uwp_localize_data.ajaxurl, data, function(response) {
         jQuery('.uwp-profile-image-change-modal .modal-content').html(response);
+    });
+}
+
+function uwp_init_auth_modal(){
+    // open login form
+    if(uwp_localize_data.login_modal) {
+        jQuery(".users-wp-login-nav a, .uwp-login-link").click(function () {
+            uwp_modal_login_form();
+            return false;
+        });
+    }
+
+    // open the register form
+    if(uwp_localize_data.register_modal) {
+        jQuery(".users-wp-register-nav a, .uwp-register-link").click(function () {
+            uwp_modal_register_form();
+            return false;
+        });
+    }
+
+    // open the forgot password form
+    if(uwp_localize_data.forgot_modal) {
+        jQuery(".users-wp-forgot-nav a, .uwp-forgot-password-link").click(function () {
+            uwp_modal_forgot_password_form();
+            return false;
+        });
+    }
+}
+
+/**
+ * Get the login form via ajax and load it in a modal.
+ */
+function uwp_modal_login_form(){
+    var data = {
+        'action': 'uwp_ajax_login_form' // deliberately no nonce for caching reasons
+    };
+    jQuery.ajax({
+        type: "POST",
+        url: uwp_localize_data.ajaxurl,
+        data: data,
+        beforeSend: function() {
+            var $modal = '<div class="modal fade uwp-auth-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog "><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="uwp-profile-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
+            if(!jQuery('.uwp-auth-modal').length){
+                jQuery('body').append($modal);
+            }
+            jQuery('.uwp-auth-modal').modal();
+        },
+        success: function(data) {
+            if(data.success){
+                jQuery('.uwp-auth-modal .modal-content').html(data.data);
+                setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus();}, 300); // set focus on the first input after load animation
+
+                // process login form
+                jQuery(".uwp-auth-modal .modal-content form.uwp-login-form").submit(function(e){
+                    e.preventDefault(e);
+                    uwp_modal_login_form_process();
+                });
+            }
+            uwp_init_auth_modal();
+        }
+    });
+}
+
+/**
+ * Submit the login form via ajax.
+ */
+function uwp_modal_login_form_process(){
+    var data = jQuery(".modal-content form.uwp-login-form").serialize() + '&action=uwp_ajax_login';
+    $button_text = jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').html();
+    jQuery.ajax({
+        type: "POST",
+        url: uwp_localize_data.ajaxurl,
+        data: data,
+        beforeSend: function() {
+            jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').html('<i class="fas fa-circle-notch fa-spin"></i> ' + $button_text).prop('disabled', true);// disable submit
+            jQuery('.uwp-auth-modal .modal-content .modal-error').html(''); // clear error messages
+        },
+        success: function(data) {
+            if(data.success){
+                jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').html($button_text).prop('disabled', true);// remove spinner
+                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
+                // Show success message for 1 second before redirecting.
+                setTimeout(function(){
+                    location.reload();
+                }, 1000);
+
+            }else if(data.success===false){
+                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
+                jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').html($button_text).prop('disabled', false);// enable submit
+            }
+            uwp_init_auth_modal();
+        }
+    });
+}
+
+
+/**
+ * Get the login form via ajax and load it in a modal.
+ */
+function uwp_modal_register_form(){
+    var data = {
+        'action': 'uwp_ajax_register_form' // deliberately no nonce for caching reasons
+    };
+    jQuery.ajax({
+        type: "POST",
+        url: uwp_localize_data.ajaxurl,
+        data: data,
+        beforeSend: function() {
+            var $modal = '<div class="modal fade uwp-auth-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog "><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="uwp-profile-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
+            if(!jQuery('.uwp-auth-modal').length){
+                jQuery('body').append($modal);
+            }
+            jQuery('.uwp-auth-modal').modal();
+        },
+        success: function(data) {
+            if(data.success){
+                jQuery('.uwp-auth-modal .modal-content').html(data.data);
+                setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus();}, 300); // set focus on the first input after load animation
+
+                // process login form
+                jQuery(".uwp-auth-modal .modal-content form.uwp-registration-form").submit(function(e){
+                    e.preventDefault(e);
+                    uwp_modal_register_form_process();
+                });
+            }
+            uwp_init_auth_modal();
+        }
+    });
+}
+
+/**
+ * Submit the login form via ajax.
+ */
+function uwp_modal_register_form_process(){
+    var data = jQuery(".modal-content form.uwp-registration-form").serialize() + '&action=uwp_ajax_register';
+    $button = jQuery('.uwp-auth-modal .modal-content .uwp_register_submit');
+    $button_text = $button.html();
+    jQuery.ajax({
+        type: "POST",
+        url: uwp_localize_data.ajaxurl,
+        data: data,
+        beforeSend: function() {
+            $button.html('<i class="fas fa-circle-notch fa-spin"></i> ' + $button_text).prop('disabled', true);// disable submit
+            jQuery('.uwp-auth-modal .modal-content .modal-error').html(''); // clear error messages
+        },
+        success: function(data) {
+            if(data.success){
+                $button.html($button_text).prop('disabled', true);// remove spinner
+                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
+                // Show success message for 1 second before redirecting.
+                // setTimeout(function(){
+                //     location.reload();
+                // }, 1000);
+
+            }else if(data.success===false){
+                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
+                $button.html($button_text).prop('disabled', false);// enable submit
+            }
+            uwp_init_auth_modal();
+        }
+    });
+}
+
+
+/**
+ * Get the forgot password form via ajax and load it in a modal.
+ */
+function uwp_modal_forgot_password_form(){
+    var data = {
+        'action': 'uwp_ajax_forgot_password_form' // deliberately no nonce for caching reasons
+    };
+    jQuery.ajax({
+        type: "POST",
+        url: uwp_localize_data.ajaxurl,
+        data: data,
+        beforeSend: function() {
+            var $modal = '<div class="modal fade uwp-auth-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog "><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="uwp-profile-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
+            if(!jQuery('.uwp-auth-modal').length){
+                jQuery('body').append($modal);
+            }
+            jQuery('.uwp-auth-modal').modal();
+        },
+        success: function(data) {
+            if(data.success){
+                jQuery('.uwp-auth-modal .modal-content').html(data.data);
+                setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus();}, 300); // set focus on the first input after load animation
+
+                // process login form
+                jQuery(".uwp-auth-modal .modal-content form.uwp-forgot-form").submit(function(e){
+                    e.preventDefault(e);
+                    uwp_modal_forgot_password_form_process();
+                });
+            }
+            uwp_init_auth_modal();
+        }
+    });
+}
+
+/**
+ * Submit the forgot password form via ajax.
+ */
+function uwp_modal_forgot_password_form_process(){
+    var data = jQuery(".modal-content form.uwp-forgot-form").serialize() + '&action=uwp_ajax_register';
+    $button = jQuery('.uwp-auth-modal .modal-content .uwp_forgot_submit');
+    $button_text = $button.html();
+    jQuery.ajax({
+        type: "POST",
+        url: uwp_localize_data.ajaxurl,
+        data: data,
+        beforeSend: function() {
+            $button.html('<i class="fas fa-circle-notch fa-spin"></i> ' + $button_text).prop('disabled', true);// disable submit
+            jQuery('.uwp-auth-modal .modal-content .modal-error').html(''); // clear error messages
+        },
+        success: function(data) {
+            if(data.success){
+                $button.html($button_text).prop('disabled', true);// remove spinner
+                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
+                // Show success message for 1 second before redirecting.
+                // setTimeout(function(){
+                //     location.reload();
+                // }, 1000);
+
+            }else if(data.success===false){
+                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
+                $button.html($button_text).prop('disabled', false);// enable submit
+            }
+            uwp_init_auth_modal();
+        }
     });
 }

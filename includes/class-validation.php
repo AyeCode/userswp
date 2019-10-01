@@ -318,15 +318,15 @@ class UsersWP_Validation {
 
         if ($type == 'change' || $type == 'reset' || $type == 'login' || ($type == 'register' && $enable_password == '1')) {
             //check password
-            if( empty( $data['uwp_'.$password_type.'_password'] ) ) {
+            if( empty( $data['password'] ) ) {
                 $errors->add( 'empty_password', __( 'Please enter a password', 'userswp' ) );
             }
 
-            if ($type != 'login' && strlen($data['uwp_'.$password_type.'_password']) < 7) {
+            if ($type != 'login' && strlen($data['password']) < 7) {
                 $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', 'userswp'));
             }
 
-            $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
+            $validated_data['password'] = isset($data['password']) ? $data['password'] : '';
         }
 
         $error_code = $errors->get_error_code();
@@ -337,14 +337,14 @@ class UsersWP_Validation {
         if (($type == 'register' && $enable_password == '1') || $type == 'reset' || $type == 'change') {
 
             if (($type == 'register' && $enable_confirm_password_field != '1')) {
-                $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
+                $validated_data['password'] = $data['password'];
             } else {
                 //check password
-                if ($data['uwp_'.$password_type.'_password'] != $data['uwp_'.$password_type.'_confirm_password']) {
+                if ($data['password'] != $data['confirm_password']) {
                     $errors->add('pass_match', __('ERROR: Passwords do not match.', 'userswp'));
                 }
 
-                $validated_data['password'] = $data['uwp_'.$password_type.'_password'];
+                $validated_data['password'] = isset($data['password']) ? $data['password'] : '';
             }
         }
 

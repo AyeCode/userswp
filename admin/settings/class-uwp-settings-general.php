@@ -187,7 +187,14 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'type'  => 'title',
                     'id'    => 'register_options',
                 ),
-
+	            array(
+		            'id'   => 'register_modal',
+		            'name' => __( 'Register lightbox', 'userswp' ),
+		            'desc' => __( 'When enabled some register links will open in a lightbox instead of changing page.','userswp'),
+		            'type' => 'checkbox',
+		            'default'  => '1',
+		            'class' => 'uwp_label_inline',
+	            ),
                 array(
                     'id' => 'uwp_registration_action',
                     'name' => __('Registration Action', 'userswp'),
@@ -250,7 +257,14 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'type'  => 'title',
                     'id'    => 'login_options',
                 ),
-
+	            array(
+		            'id'   => 'login_modal',
+		            'name' => __( 'Login lightbox', 'userswp' ),
+		            'desc' => __( 'When enabled some login links will open in a lightbox instead of changing page.','userswp'),
+		            'type' => 'checkbox',
+		            'default'  => '1',
+		            'class' => 'uwp_label_inline',
+	            ),
                 array(
                     'id' => 'login_redirect_to',
                     'name' => __( 'Login Redirect Page', 'userswp' ),
@@ -264,7 +278,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 array(
                     'id'   => 'block_wp_login',
                     'name' => __( 'Redirect wp-login.php?', 'userswp' ),
-                    'desc' => 'When enabled /wp-login.php page will be redirected to UsersWP login page.',
+                    'desc' => __('When enabled /wp-login.php page will be redirected to UsersWP login page.','userswp' ),
                     'type' => 'checkbox',
                     'default'  => '0',
                     'class' => 'uwp_label_inline',
@@ -291,7 +305,14 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'type'  => 'title',
                     'id'    => 'change_password_options',
                 ),
-
+	            array(
+		            'id'   => 'forgot_modal',
+		            'name' => __( 'Forgot password lightbox', 'userswp' ),
+		            'desc' => __( 'When enabled some forgot password links will open in a lightbox instead of changing page.','userswp'),
+		            'type' => 'checkbox',
+		            'default'  => '1',
+		            'class' => 'uwp_label_inline',
+	            ),
                 array(
                     'id'   => 'change_enable_old_password',
                     'name' => __( 'Enabled Old Password?', 'userswp' ),
@@ -491,6 +512,16 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'placeholder' => UsersWP_Defaults::author_box_content(),
                     'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_authbox_tags()
                 ),
+	            array(
+		            'name' => __('Author box Content (bootstrap)', 'userswp'),
+		            'desc' => __('The author box body, this can be text or HTML.', 'userswp'),
+		            'id' => 'author_box_content_bootstrap',
+		            'type' => 'textarea',
+		            'class' => 'code uwp-authorbox-body',
+		            'desc_tip' => true,
+		            'placeholder' => UsersWP_Defaults::author_box_content_bootstrap(),
+		            'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_authbox_tags()
+	            ),
 
                 array( 'type' => 'sectionend', 'id' => 'authorbox_options' ),
             ));
