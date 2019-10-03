@@ -638,7 +638,7 @@ class UsersWP_Form_Builder {
         ?>
         <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">
-        <ul class="core">
+        <ul class="core uwp-tabs-selected">
             <?php
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s ORDER BY sort_order ASC", array($form_type)));
 
@@ -2287,7 +2287,7 @@ class UsersWP_Form_Builder {
         $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
         ?>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="register">
-        <ul class="core uwp_form_extras"><?php
+        <ul class="core uwp_form_extras uwp-tabs-selected"><?php
 
             $fields = $wpdb->get_results(
                 $wpdb->prepare(

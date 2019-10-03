@@ -87,7 +87,9 @@ class UsersWP_Admin {
             wp_enqueue_script( "uwp_status", USERSWP_PLUGIN_URL . 'admin/assets/js/system-status.js', array( 'jquery' ), USERSWP_VERSION, true );
         }
 
-        wp_enqueue_script('jquery-ui-sortable');
+	    wp_enqueue_script('jquery-ui-sortable');
+	    wp_enqueue_script('uwp-nestable-script', USERSWP_PLUGIN_URL . 'admin/assets/js/jquery.nestable'.$suffix.'.js', array('jquery-ui-sortable'), USERSWP_VERSION);
+
         wp_enqueue_script( "userswp_admin", USERSWP_PLUGIN_URL . 'admin/assets/js/users-wp-admin'.$suffix.'.js', array( 'jquery' ), USERSWP_VERSION, false );
         wp_enqueue_script('select2', USERSWP_PLUGIN_URL . 'assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION );
 

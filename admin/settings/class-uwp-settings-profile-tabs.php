@@ -151,6 +151,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
                        data-tab_name="<?php echo isset($field['tab_name']) ? esc_attr($field['tab_name']) : ''; ?>"
                        data-tab_icon="<?php echo isset($field['tab_icon']) ? esc_attr($field['tab_icon']) : ''; ?>"
                        data-tab_key="<?php echo isset($field['tab_key']) ? esc_attr($field['tab_key']) : ''; ?>"
+                       data-tab_level="<?php echo isset($field['tab_level']) ? esc_attr($field['tab_level']) : 0; ?>"
+                       data-tab_parent="<?php echo isset($field['tab_parent']) ? esc_attr($field['tab_parent']) : ''; ?>"
                        data-tab_login_only="<?php echo isset($field['tab_login_only']) ? esc_attr($field['tab_login_only']) : 0; ?>"
                        data-tab_content="<?php echo isset($field['tab_content']) ? esc_attr($field['tab_content']) : ''; ?>"
                        href="javascript:void(0);">
@@ -251,6 +253,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
                                data-tab_name="<?php echo isset($field['tab_name']) ? esc_attr($field['tab_name']) : ''; ?>"
                                data-tab_icon="<?php echo isset($field['tab_icon']) ? esc_attr($field['tab_icon']) : ''; ?>"
                                data-tab_key="<?php echo isset($field['tab_key']) ? esc_attr($field['tab_key']) : ''; ?>"
+                               data-tab_level="<?php echo isset($field['tab_level']) ? esc_attr($field['tab_level']) : 0; ?>"
+                               data-tab_parent="<?php echo isset($field['tab_parent']) ? esc_attr($field['tab_parent']) : ''; ?>"
                                data-tab_login_only="<?php echo isset($field['tab_login_only']) ? esc_attr($field['tab_login_only']) : 0; ?>"
                                data-tab_content="<?php echo isset($field['tab_content']) ? esc_attr($field['tab_content']) : ''; ?>"
                                href="javascript:void(0);">
@@ -335,6 +339,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 						   data-tab_name="<?php echo isset($field['tab_name']) ? esc_attr($field['tab_name']) : ''; ?>"
 						   data-tab_icon="<?php echo isset($field['tab_icon']) ? esc_attr($field['tab_icon']) : ''; ?>"
 						   data-tab_key="<?php echo isset($field['tab_key']) ? esc_attr($field['tab_key']) : ''; ?>"
+						   data-tab_level="<?php echo isset($field['tab_level']) ? esc_attr($field['tab_level']) : 0; ?>"
+						   data-tab_parent="<?php echo isset($field['tab_parent']) ? esc_attr($field['tab_parent']) : ''; ?>"
 						   data-tab_login_only="<?php echo isset($field['tab_login_only']) ? esc_attr($field['tab_login_only']) : 0; ?>"
 						   data-tab_content="<?php echo isset($field['tab_content']) ? esc_attr($field['tab_content']) : ''; ?>"
                            href="javascript:void(0);">
@@ -365,13 +371,39 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    ?>
 		    <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
 		    <input type="hidden" name="manage_field_type" class="manage_field_type" value="profile_tabs">
-		    <ul class="core uwp_form_extras">
+		    <ul class="uwp-profile-tabs-selected core uwp_form_extras">
 			    <?php
-			    $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM  " . $table_name . " where form_type = %s order by sort_order asc", array($form_type)));
-			    if (!empty($fields)) {
-				    foreach ($fields as $field) {
+			    $tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM  " . $table_name . " where form_type = %s order by sort_order asc", array($form_type)));
+			    if (!empty($tabs)) {
+				    foreach ($tabs as $key => $tab) {
 					    $field_ins_upd = 'display';
-					    $this->uwp_tabs_field_adminhtml($field, $field_ins_upd);
+
+					    if($tab->tab_level=='1' ){continue;}
+
+					    ob_start();
+					    $this->uwp_tabs_field_adminhtml($tab, $field_ins_upd);
+					    $tab_rendered = ob_get_clean();
+
+                        $tab_rendered = str_replace("</li>","",$tab_rendered);
+                        $child_tabs = '';
+                        foreach($tabs as $child_tab){
+                            if($child_tab->tab_parent==$tab->id){
+                                ob_start();
+                                $this->uwp_tabs_field_adminhtml($child_tab, $field_ins_upd);
+                                $child_tabs = ob_get_clean();
+                            }
+                        }
+
+                        if($child_tabs){
+                            $tab_rendered .= "<ul>";
+                            $tab_rendered .= $child_tabs;
+                            $tab_rendered .= "</ul>";
+                        }
+
+                        echo $tab_rendered;
+                        echo "</li>";
+
+                        unset($tabs[$key]);
 				    }
 			    } ?>
 		    </ul>
@@ -592,19 +624,17 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 			    /* ------- check nonce field ------- */
 			    if (isset($_REQUEST['update']) && $_REQUEST['update'] == 'update') {
 				    $field_ids = array();
-				    if (!empty($_REQUEST['licontainer']) && is_array($_REQUEST['licontainer'])) {
-					    foreach ($_REQUEST['licontainer'] as $lic_id) {
-						    $field_ids[] = sanitize_text_field($lic_id);
-					    }
+				    if (!empty($_REQUEST['tabs']) && is_array($_REQUEST['tabs'])) {
+
+					    $tabs = $_REQUEST['tabs'];
+					    $return = $this->update_field_order($tabs);
+
+                        if (is_array($return)) {
+                            $return = json_encode($return);
+                        }
+
+                        echo $return;
 				    }
-
-				    $return = $this->update_field_order($field_ids);
-
-				    if (is_array($return)) {
-					    $return = json_encode($return);
-				    }
-
-				    echo $return;
 			    }
 
 			    /* ---- Show field form in admin ---- */
@@ -656,6 +686,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    $tab_name= isset($request_field['tab_name']) ? sanitize_text_field($request_field['tab_name']) : '';
 		    $tab_icon= isset($request_field['tab_icon']) ? sanitize_text_field($request_field['tab_icon']) : '';
 		    $tab_key = !empty($request_field['tab_key']) ? sanitize_text_field($request_field['tab_key']) : sanitize_title($tab_name, 'uwp-tab-'.$tab_id);
+		    $tab_level = !empty($request_field['tab_level']) ? sanitize_text_field($request_field['tab_level']) : 0;
+		    $tab_parent = !empty($request_field['tab_parent']) ? sanitize_text_field($request_field['tab_parent']) : 0;
 		    $tab_type= isset($request_field['tab_type']) ? sanitize_text_field($request_field['tab_type']) : '';
 		    $tab_login_only= isset($request_field['tab_login_only']) ? (int)$request_field['tab_login_only'] : 0;
 		    $form_type = $request_field['form_type'];
@@ -667,6 +699,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
                     'tab_name'      => $tab_name,
                     'tab_icon'      => $tab_icon,
                     'tab_key'       => sanitize_text_field($tab_key),
+                    'tab_level'     => sanitize_text_field($tab_level),
+                    'tab_parent'    => sanitize_text_field($tab_parent),
                     'tab_login_only'=> $tab_login_only,
                     'tab_content'   => sanitize_textarea_field($request_field['tab_content']),
                 );
@@ -719,28 +753,37 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 	    }
 
 	    /**
-         * Updates extras fields sort order.
+         * Updates profile tabs sort order.
          *
-         * @param       array       $field_ids      Form extras field ids.
+         * @param       array       $tabs      Tabs array.
          *
-         * @return      array|bool                  Sorted field ids.
+         * @return      array|bool       Sorted tabs.
          */
-        public function update_field_order($field_ids = array())
+        public function update_field_order($tabs = array())
         {
             global $wpdb;
             $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
 
             $count = 0;
-            if (!empty($field_ids)):
-                foreach ($field_ids as $id) {
-                    $cf = trim($id, '_');
-                    $wpdb->query( $wpdb->prepare( "update " . $table_name . " set sort_order=%d where id= %d", array($count, $cf) ) );
-                    $count++;
-                }
-                return $field_ids;
-            else:
-                return false;
-            endif;
+			if (!empty($tabs)) {
+				$result = false;
+				foreach ( $tabs as $index => $tab ) {
+					$result = $wpdb->update(
+						$table_name,
+						array('sort_order' => $index, 'tab_level' => $tab['tab_level'], 'tab_parent' => $tab['tab_parent']),
+						array('id' => absint($tab['id'])),
+						array('%d','%d')
+					);
+					$count ++;
+				}
+				if($result !== false){
+					return $tabs;
+				}else{
+					return new WP_Error( 'failed', __( "Failed to sort tab items.", "userswp" ) );
+				}
+			} else{
+				return new WP_Error( 'failed', __( "Failed to sort tab items.", "userswp" ) );
+			}
         }
 
     }

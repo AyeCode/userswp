@@ -151,15 +151,15 @@ function uwp_select2() {
 }
 
 function uwp_show_hide($this) {
-    var is_open = !jQuery($this).parent('.li-settings').find('.field_frm').is(':hidden');
+    var is_open = !jQuery($this).parent('.li-settings').find('.field_frm').first().is(':hidden');
     jQuery('.field_frm').hide();
     jQuery('.field_frm').parent().parent().find('.toggle-arrow').addClass("fa-caret-down").removeClass( "fa-caret-up");
     if(is_open){
         jQuery($this).addClass("fa-caret-down").removeClass( "fa-caret-up");
-        jQuery($this).parent('.li-settings').find('.field_frm').hide().removeClass( "uwp-tab-settings-open" );
+        jQuery($this).parent('.li-settings').find('.field_frm').first().hide().removeClass( "uwp-tab-settings-open" );
     }else{
         jQuery($this).addClass("fa-caret-up").removeClass( "fa-caret-down");
-        jQuery($this).parent('.li-settings').find('.field_frm').show().addClass( "uwp-tab-settings-open" );
+        jQuery($this).parent('.li-settings').find('.field_frm').first().show().addClass( "uwp-tab-settings-open" );
     }
 }
 
@@ -307,6 +307,8 @@ jQuery(document).ready(function () {
                 'field_type':        field_type,
                 'field_ins_upd':     'new',
                 'tab_layout':        jQuery(this).data('tab_layout'),
+                'tab_level':        jQuery(this).data('tab_level'),
+                'tab_parent':        jQuery(this).data('tab_parent'),
                 'tab_login_only':    jQuery(this).data('tab_login_only'),
                 'tab_name':          jQuery(this).data('tab_name'),
                 'tab_type':          jQuery(this).data('tab_type'),
@@ -342,7 +344,7 @@ jQuery(document).ready(function () {
 
     });
 
-    jQuery(".field_row_main ul.core").sortable({
+    jQuery("ul.uwp-tabs-selected").sortable({
         opacity: 0.8,
         cursor: 'move',
         placeholder: "ui-state-highlight",
@@ -355,13 +357,42 @@ jQuery(document).ready(function () {
                 var action = "uwp_ajax_register_action";
             } else if (manage_field_type == 'search') {
                 var action = "uwp_ajax_search_action";
-            } else if (manage_field_type == 'profile_tabs') {
-                var action = "uwp_ajax_profile_tabs_action";
             } else {
                 var action = "uwp_ajax_action";
             }
 
             jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true', order, function (theResponse) {
+                console.log('Fields have been ordered.');
+            });
+        }
+    });
+
+    jQuery('ul.uwp-profile-tabs-selected').nestedSortable({
+        maxLevels: 2,
+        handle: '.uwp-fieldset',
+        items: 'li',
+        disableNestingClass: 'mjs-nestedSortable-no-nesting',
+        helper:	'clone',
+        placeholder: 'ui-state-highlight',
+        forcePlaceholderSize: true,
+        listType: 'ul',
+        update: function (event, ui) {
+            var manage_field_type = jQuery(this).closest('#uwp-selected-fields').find(".manage_field_type").val();
+            var $tabs = jQuery('.field_row_main ul.core').nestedSortable('toArray', {startDepthCount: 0});
+            var $order = {};
+            jQuery.each($tabs, function( index, tab ) {
+                if(tab.id){
+                    $order[index] = {id:tab.id, tab_level: tab.depth,tab_parent: tab.parent_id};
+                }
+            });
+
+            var action = "uwp_ajax_profile_tabs_action";
+
+            var data = {
+                'tabs': $order
+            };
+
+            jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true&update=update&manage_field_type=' + manage_field_type, data, function (theResponse) {
                 console.log('Fields have been ordered.');
             });
         }

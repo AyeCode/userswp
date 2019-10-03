@@ -487,6 +487,16 @@ class UsersWP_Tools {
             <?php if (defined('USERSWP_VERSION')) { ?>
                 <tr>
                     <th>
+                        <strong class="tool-name"><?php _e('Clear version numbers', 'userswp');?></strong>
+                        <p class="tool-description"><?php _e('This will force install/upgrade functions to run.', 'userswp');?></p>
+                    </th>
+                    <td class="run-tool">
+                        <input type="button" value="<?php _e('Run', 'userswp');?>" class="button-primary uwp_clear_version" data-diagnose="uwp_clear_version"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>
                         <strong class="tool-name"><?php _e('Fix User Data', 'userswp');?></strong>
                         <p class="tool-description"><?php _e('Fixes User Data if you were using the Beta version.', 'userswp');?></p>
                     </th>

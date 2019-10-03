@@ -95,6 +95,11 @@ Alerts
 .uwp-form-table .uwp_label_inline td {
   padding: 5px 10px; }
 
+ul.core.uwp_form_extras.ui-sortable ul:not(.widefat) {
+  padding-left: 25px; }
+ul.core.uwp_form_extras.ui-sortable li {
+  margin: 5px 0 !important; }
+
 h3.users_wp_section_heading {
   background-color: #e7e7e7;
   padding: 10px;
@@ -481,7 +486,8 @@ h3.users_wp_section_heading {
 #uwp-selected-fields .li-settings {
   position: relative; }
 #uwp-selected-fields .field_frm {
-  padding: 10px; }
+  padding: 10px;
+  border: 1px #DFDFDF solid; }
 #uwp-selected-fields input[type="text"],
 #uwp-selected-fields input[type="email"],
 #uwp-selected-fields select {

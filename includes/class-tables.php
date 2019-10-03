@@ -162,6 +162,8 @@ class UsersWP_Tables {
 							  sort_order int(11) NOT NULL,
 							  tab_layout varchar(100) NOT NULL,
 							  tab_type varchar(100) NOT NULL,
+							  tab_level int(11) NOT NULL,
+							  tab_parent int(11) NOT NULL,
 							  tab_login_only int(1) NOT NULL DEFAULT 0,
 							  tab_name varchar(255) NOT NULL,
 							  tab_icon varchar(255) NOT NULL,
