@@ -516,7 +516,8 @@ class UsersWP_Import_Export {
                             'display_name'=>  $display_name
                         );
                         $user_id = wp_insert_user( $userdata );
-                        wp_new_user_notification($user_id,null, 'user'); //send password reset link
+	                    $notify = apply_filters('uwp_import_user_notify', 'user', $user_id);
+	                    wp_new_user_notification($user_id,null, $notify); //send password reset link
                     } else {
                         if( $user->user_login == $row['username'] ) { //check id passed in csv and existing username are same
                             $user_id = $row['user_id'];

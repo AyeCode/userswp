@@ -103,3 +103,12 @@
     }
   }
 }
+
+ul.core.uwp_form_extras.ui-sortable {
+  ul:not(.widefat) {
+    padding-left: 25px;
+  }
+  li {
+    margin: 5px 0 !important;
+  }
+}

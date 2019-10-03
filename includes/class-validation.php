@@ -234,7 +234,7 @@ class UsersWP_Validation {
                 $incorrect_username_error_msg = apply_filters('uwp_incorrect_username_error_msg', __('<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.', 'userswp'));
 
                 // Check the username for register
-                if ($field->htmlvar_name == 'username') {
+                if ('register' == $type && $field->htmlvar_name == 'username') {
                     if (!is_admin()) {
                         if (!validate_username($sanitized_value)) {
                             $errors->add('invalid_username', $incorrect_username_error_msg);
