@@ -308,6 +308,8 @@ class UsersWP_Forms {
 	    $user_login = !empty($result['username']) ? $result['username'] : '';
 	    $email = !empty($result['email']) ? $result['email'] : '';
 
+
+
 	    if(empty($user_login)){
 		    $user_login = sanitize_user( str_replace( ' ', '', $display_name ), true );
 		    if ( !( validate_username( $user_login ) && !username_exists( $user_login ) ) ) {
@@ -324,7 +326,17 @@ class UsersWP_Forms {
 				    $user_login = $email;
 			    }
 		    }
-	    }
+	    }else{
+            if(!validate_username( $user_login )){
+                $message = BSUI::get_alert(array(
+                        'type'=>'error',
+                        'content'=> __('Sorry, that username is not allowed.', 'userswp')
+                    )
+                );
+                if(wp_doing_ajax()){wp_send_json_error($message);}
+                else{$uwp_notices[] = array('register' => $message); return;}
+            }
+        }
 
         $args = array(
             'user_login'   => $user_login,
@@ -336,12 +348,16 @@ class UsersWP_Forms {
             'description'  => $description
         );
 
+//        print_r($args);exit;
+
         $user_id = wp_insert_user( $args );
 
-        if (!$user_id) {
+//        echo '###';print_r($user_id);exit;
+
+        if (is_wp_error($user_id)) {
             $message = BSUI::get_alert(array(
                     'type'=>'error',
-                    'content'=> __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp')
+                    'content'=> $user_id->get_error_message()
                 )
             );
             if(wp_doing_ajax()){wp_send_json_error($message);}
@@ -357,7 +373,7 @@ class UsersWP_Forms {
         if (is_wp_error($save_result)) {
             $message = BSUI::get_alert(array(
                     'type'=>'error',
-                    'content'=> $result->get_error_message()
+                    'content'=> $save_result->get_error_message()
                 )
             );
             if(wp_doing_ajax()){wp_send_json_error($message);}
@@ -679,8 +695,12 @@ class UsersWP_Forms {
         $result = apply_filters('uwp_validate_result', $result, 'change', $data);
 
         if (is_wp_error($result)) {
-            $error = '<div class="uwp-alert-error text-center">'.$result->get_error_message().'</div>';
-            $uwp_notices[] = array('change' => $error);
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> $result->get_error_message()
+                )
+            );
+            $uwp_notices[] = array('change' => $message );
             return;
         }
 
@@ -689,8 +709,12 @@ class UsersWP_Forms {
         $user_data = get_user_by('id', get_current_user_id());
 
         if (!$user_data) {
-            $error = '<div class="uwp-alert-error text-center">'.$user_data->get_error_message().'</div>';
-            $uwp_notices[] = array('change' => $error);
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> $user_data->get_error_message()
+                )
+            );
+            $uwp_notices[] = array('change' => $message);
             return;
         }
 
@@ -700,8 +724,11 @@ class UsersWP_Forms {
         wp_set_password( $data['uwp_change_password'], $user_data->ID );
         wp_set_auth_cookie( $user_data->ID, false);
 
-        $message = apply_filters('uwp_change_password_success_message', __('Password changed successfully', 'userswp'), $data);
-        $message = '<div class="uwp-alert-success text-center">'.$message.'</div>';
+        $message = BSUI::get_alert(array(
+                'type'=>'success',
+                'content'=> apply_filters('uwp_change_password_success_message', __('Password changed successfully', 'userswp'), $data)
+            )
+        );
         $uwp_notices[] = array('change' => $message);
 
         do_action('uwp_after_process_change', $data);
@@ -731,8 +758,12 @@ class UsersWP_Forms {
         $result = apply_filters('uwp_validate_result', $result, 'reset', $data);
 
         if (is_wp_error($result)) {
-            $error = '<div class="uwp-alert-error text-center">'.$result->get_error_message().'</div>';
-            $uwp_notices[] = array('reset' => $error);
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> $result->get_error_message()
+                )
+            );
+            $uwp_notices[] = array('reset' => $message);
             return;
         }
 
@@ -743,20 +774,28 @@ class UsersWP_Forms {
         $user_data = check_password_reset_key( $key, $login );
 
         if (is_wp_error($user_data)) {
-            $error = '<div class="uwp-alert-error text-center">'.$user_data->get_error_message().'</div>';
-            $uwp_notices[] = array('reset' => $error);
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> $user_data->get_error_message()
+                )
+            );
+            $uwp_notices[] = array('reset' => $message);
             return;
         }
 
         $email = new UsersWP_Mails();
         $email->send( 'reset', $user_data->ID );
 
-        wp_set_password( $data['uwp_reset_password'], $user_data->ID );
+        wp_set_password( $data['password'], $user_data->ID );
 
         $login_page_url = wp_login_url();
         $message = sprintf(__('Password updated successfully. Please <a href="%s">login</a> with your new password', 'userswp'), $login_page_url);
         $message = apply_filters('uwp_reset_password_success_message', $message, $data);
-        $message = '<div class="uwp-alert-success text-center">'.$message.'</div>';
+        $message = BSUI::get_alert(array(
+                'type'=>'sucess',
+                'content'=> $message
+            )
+        );
         $uwp_notices[] = array('reset' => $message);
 
         do_action('uwp_after_process_reset', $data);
@@ -793,16 +832,24 @@ class UsersWP_Forms {
         $result = apply_filters('uwp_validate_result', $result, 'account', $data);
 
         if (is_wp_error($result)) {
-            $error = '<div class="uwp-alert-error text-center">'.$result->get_error_message().'</div>';
-            $uwp_notices[] = array('account' => $error);
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> $result->get_error_message()
+                )
+            );
+            $uwp_notices[] = array('account' => $message);
             return;
         }
 
         $uploads_result = $file_obj->uwp_validate_uploads($files, 'account');
 
         if (is_wp_error($uploads_result)) {
-            $error = '<div class="uwp-alert-error text-center">'.$uploads_result->get_error_message().'</div>';
-            $uwp_notices[] = array('account' => $error);
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> $uploads_result->get_error_message()
+                )
+            );
+            $uwp_notices[] = array('account' => $message);
             return;
         }
 
@@ -853,16 +900,24 @@ class UsersWP_Forms {
         $user_id = wp_update_user( $args );
 
         if (!$user_id) {
-            $error = '<div class="uwp-alert-error text-center">'.__('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp').'</div>';
-            $uwp_notices[] = array('account' => $error);
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp')
+                )
+            );
+            $uwp_notices[] = array('account' => $message);
             return;
         }
 
         $res = $this->uwp_save_user_extra_fields($user_id, $result, 'account');
 
         if (!$res) {
-            $error = '<div class="uwp-alert-error text-center">'.__('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp').'</div>';
-            $uwp_notices[] = array('account' => $error);
+            $message = BSUI::get_alert(array(
+                    'type'=>'error',
+                    'content'=> __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp')
+                )
+            );
+            $uwp_notices[] = array('account' => $message);
             return;
         }
 
@@ -876,7 +931,11 @@ class UsersWP_Forms {
         }
 
         $message = apply_filters('uwp_reset_password_success_message', __('Account updated successfully', 'userswp'), $data);
-        $message = '<div class="uwp-alert-success text-center">'.$message.'</div>';
+        $message = BSUI::get_alert(array(
+                'type'=>'success',
+                'content'=> $message
+            )
+        );
         $uwp_notices[] = array('account' => $message);
 
         do_action('uwp_after_process_account', $data);

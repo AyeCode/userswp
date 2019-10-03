@@ -13,6 +13,7 @@ class UsersWP_Ajax {
     
     public function __construct($form_builder) {
         $this->form_builder = $form_builder;
+        add_action( 'init', array( $this, 'handler' ), 0 );
     }
     
     /**
@@ -24,6 +25,23 @@ class UsersWP_Ajax {
      */
     public function handler()
     {
+
+
+        // EVENT => nopriv
+        $ajax_events = array(
+            'notice_clear_try_bootstrap'   => false,
+        );
+
+        foreach ( $ajax_events as $ajax_event => $nopriv ) {
+            add_action( 'wp_ajax_uwp_' . $ajax_event, array( __CLASS__, $ajax_event ) );
+
+            if ( $nopriv ) {
+                add_action( 'wp_ajax_nopriv_uwp_' . $ajax_event, array( __CLASS__, $ajax_event ) );
+            }
+        }
+
+
+        // @todo this need updated to new style above.
         if ((isset($_REQUEST['uwp_ajax']) && $_REQUEST['uwp_ajax'] == 'admin_ajax') || isset($_REQUEST['create_field']) || isset($_REQUEST['sort_create_field'])) {
             if (current_user_can('manage_options')) {
                 if (isset($_REQUEST['create_field'])) {
@@ -39,6 +57,15 @@ class UsersWP_Ajax {
                 }
                 $this->uwp_die();
             }
+        }
+    }
+
+    /**
+     * A quick delete of the try bootstrap notice option.
+     */
+    public static function notice_clear_try_bootstrap(){
+        if (current_user_can('manage_options')) {
+            delete_option("uwp_notice_try_bootstrap");
         }
     }
 

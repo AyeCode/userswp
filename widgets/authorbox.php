@@ -26,7 +26,7 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
             'base_id'       => 'uwp_author_box',
             'name'          => __('UWP > Author Box','userswp'),
             'widget_ops'    => array(
-                'classname'   => 'uwp_widgets uwp_widget_author_box',
+                'classname'   => 'uwp_widgets uwp_widget_author_box bsui',
                 'description' => esc_html__('Displays author box.','userswp'),
             ),
             'arguments'     => array(
@@ -61,9 +61,18 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
         }
 
         $default = UsersWP_Defaults::author_box_content();
-        $output = uwp_get_option('author_box_content', $default);
+        $design_style = uwp_get_option("design_style",'bootstrap');
+        if( $design_style =='bootstrap'){
+            $output = uwp_get_option('author_box_content_bootstrap', $default);
+            if(!$output){$output = UsersWP_Defaults::author_box_content_bootstrap();}
+        }else{
+            $output = uwp_get_option('author_box_content', $default);
+            if(!$output){$output = UsersWP_Defaults::author_box_content();}
+        }
         $output = isset($output) && !empty($output) ? $output : $default;
         $output = apply_filters('uwp_author_box_pre_output', $output, $args);
+
+        $output = do_shortcode($output );
 
         $author_id = $post->post_author;
         $author_link = apply_filters('uwp_profile_link', get_author_posts_url($author_id), $author_id);
@@ -85,6 +94,7 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
             '[#author_link#]' => $author_link,
             '[#author_bio#]' => $author_bio,
             '[#author_image#]' => get_avatar($post->post_author, $avatar_size),
+            '[#author_image_url#]' => get_avatar_url($post->post_author, $avatar_size),
             '[#author_nicename#]' => $user->user_nicename,
             '[#author_registered#]' => $user->user_registered,
             '[#author_website#]' => $user->user_url,

@@ -11,7 +11,6 @@ class UsersWP_Tools {
 
     public function uwp_fix_usermeta_table() {
         uwp_create_tables();
-        uwp101_create_tables();
     }
 
     public function uwp_tools_wrap_error_message($message, $class) {
@@ -487,6 +486,25 @@ class UsersWP_Tools {
             <?php if (defined('USERSWP_VERSION')) { ?>
                 <tr>
                     <th>
+                        <strong class="tool-name"><?php _e('Clear version numbers', 'userswp');?></strong>
+                        <p class="tool-description"><?php _e('This will force install/upgrade functions to run.', 'userswp');?></p>
+                    </th>
+                    <td class="run-tool">
+                        <input type="button" value="<?php _e('Run', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="clear_version_numbers"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" class="has-pbar">
+                        <div id="uwp_diagnose_pb_clear_version_numbers" class="uwp-pb-wrapper">
+                            <div class="progressBar" style="display: none;"><div></div></div>
+                        </div>
+                        <div id="uwp_diagnose_clear_version_numbers"></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>
                         <strong class="tool-name"><?php _e('Fix User Data', 'userswp');?></strong>
                         <p class="tool-description"><?php _e('Fixes User Data if you were using the Beta version.', 'userswp');?></p>
                     </th>
@@ -630,6 +648,9 @@ class UsersWP_Tools {
 
     function uwp_process_diagnosis($type, $step) {
         switch ($type) {
+            case 'clear_version_numbers':
+                $this->clear_version_numbers($step);
+                break;
             case 'fix_user_data':
                 $this->uwp_fix_usermeta($step);
                 break;
@@ -640,6 +661,27 @@ class UsersWP_Tools {
                 $this->uwp_tools_process_dummy_users($step, 'remove');
                 break;
         }
+    }
+
+
+    /**
+     * Clear version numbers so install/upgrade functions will run.
+     *
+     * @return string|void
+     */
+    public function clear_version_numbers(){
+        delete_option( 'uwp_db_version' );
+        do_action( 'uwp_clear_version_numbers'); // used by addons to clear their version numbers.
+        $message = BSUI::get_alert(array(
+                'type'=>'success',
+                'content'=> __( 'Version numbers cleared. Install/upgrade functions will run on next page load.', 'userswp' )
+            )
+        );
+        $output = array(
+            'done' => true,
+            'message' => "<div class='bsui'>".$message."</div>",
+        );
+        echo json_encode($output);
     }
 
 }

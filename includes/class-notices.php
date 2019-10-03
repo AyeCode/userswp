@@ -128,5 +128,41 @@ class UsersWP_Notices {
             delete_option( 'uwp_admin_notices' );
         }
     }
+
+    public static function try_bootstrap(){
+        $show = get_option("uwp_notice_try_bootstrap");
+        if( $show && uwp_get_option('design_style','bootstrap') != 'bootstrap'){
+            $settings_link = admin_url("admin.php?page=userswp&tab=general&section=developer&try-bootstrap=true");
+            // set the setting on the fly if set to do so
+            if(is_admin() && current_user_can( 'manage_options' )  && isset($_REQUEST['page']) && $_REQUEST['page']=='userswp' && !empty($_REQUEST['try-bootstrap']) ){
+                uwp_update_option('design_style','bootstrap');
+                ?>
+                <div class="notice notice-success">
+                    <p><strong>UsersWP - </strong><?php _e( 'Congratulations your site is now set yo use the new Bootstrap styles!', 'userswp' ); ?></p>
+                </div>
+                <?php
+            }else{
+            ?>
+            <div class="notice notice-info is-dismissible uwp-notice-try-bootstrap">
+                <p><strong>UsersWP - </strong><?php _e( 'Try our exciting new bootstrap styling for a more modern and clean look (switch back at any time).', 'userswp' ); ?>
+                    <a href="<?php echo esc_url_raw( $settings_link );?>" class="button button-primary"><?php _e( 'Try Now', 'userswp' ); ?></a>
+                </p>
+            </div>
+                <script>
+                    jQuery(function() {
+                        setTimeout(function(){
+                            jQuery('.uwp-notice-try-bootstrap .notice-dismiss').click(function(){
+                                jQuery.post("<?php echo admin_url("admin-ajax.php?action=uwp_notice_clear_try_bootstrap"); ?>", function(data, status){
+                                });
+                            });
+                        }, 300);
+                    });
+                </script>
+            <?php
+            }
+
+        }
+
+    }
     
 }

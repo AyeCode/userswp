@@ -204,6 +204,7 @@ final class UsersWP {
         add_action('uwp_template_display_notices', array($instance, 'form_notice_by_key'));
         add_action( 'admin_notices', array( $instance, 'show_admin_notices' ) );
         add_action( 'admin_notices', array($instance, 'uwp_admin_notices') );
+        add_action( 'admin_notices', array($instance, 'try_bootstrap') );
     }
 
     public function load_pages_actions_and_filters($instance) {

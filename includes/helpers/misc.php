@@ -1275,19 +1275,6 @@ function uwp_create_tables()
 }
 
 /**
- * Creates uwp_usermeta table which introduced in version 1.0.1
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @return      void
- */
-function uwp101_create_tables() {
-    $tables = new UsersWP_Tables();
-    $tables->uwp101_create_tables();
-}
-
-/**
  * Returns tye client IP.
  *
  * @since       1.0.0
@@ -1726,7 +1713,7 @@ function uwp_all_email_tags( $inline = true ){
 function uwp_authbox_tags( $inline = true ){
     global $wpdb;
 
-    $tags = array( '[#post_id#]', '[#author_id#]', '[#author_name#]', '[#author_link#]', '[#author_bio#]', '[#author_image#]', '[#post_modified#]', '[#post_date#]', '[#author_nicename#]', '[#author_registered#]', '[#author_website#]' );
+    $tags = array( '[#post_id#]', '[#author_id#]', '[#author_name#]', '[#author_link#]', '[#author_bio#]', '[#author_image#]', '[#author_image_url#]', '[#post_modified#]', '[#post_date#]', '[#author_nicename#]', '[#author_registered#]', '[#author_website#]' );
 
     $tags = apply_filters('uwp_author_box_default_tags', $tags, $inline);
 

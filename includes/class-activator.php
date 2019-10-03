@@ -39,8 +39,6 @@ class UsersWP_Activator {
 
                 update_network_option('', 'uwp_is_network_active', 1);
                 switch_to_blog( $main_site );
-                self::uwp101_create_tables();
-                self::uwp_update_usermeta();
                 restore_current_blog();
                 
                 if (defined('UWP_ROOT_PAGES')) {
@@ -65,14 +63,10 @@ class UsersWP_Activator {
                 }
 
             } else {
-                self::uwp101_create_tables();
                 self::install();
-                self::uwp_update_usermeta();
             }
         } else {
-            self::uwp101_create_tables();
             self::install();
-            self::uwp_update_usermeta();
         }
 
     }
@@ -89,14 +83,25 @@ class UsersWP_Activator {
         }
 
         if (!get_option('uwp_default_data_installed')) {
+            // new install
             self::uwp_create_default_fields();
             self::uwp_insert_form_extras();
             update_option('uwp_default_data_installed', 1);
             update_option('uwp_activation_redirect', 1);
+        }else{
+            // upgrade
+            // if updating from < 1.2.0 then add the try bootstrap notice
+            if(version_compare(get_option( 'uwp_db_version', null ),"1.2.0","<")){
+                update_option("uwp_notice_try_bootstrap",true);
+                uwp_update_option('design_style','');
+            }
         }
 
         self::uwp_flush_rewrite_rules();
         update_option('uwp_flush_rewrite', 1);
+
+        // update the version
+        update_option('uwp_db_version', USERSWP_VERSION);
 
     }
 
@@ -205,20 +210,11 @@ class UsersWP_Activator {
         uwp_create_tables();
     }
 
-    /**
-     * Creates the new tables added in version 1.0.1 during plugin activation.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      void
-     */
-    public static function uwp101_create_tables() {
-        uwp101_create_tables();
-    }
-
     public static function init_background_updater(){
-        include_once dirname( __FILE__ ) . '/class-uwp-background-updater.php';
-        self::$background_updater = new UsersWP_Background_Updater();
+        if(empty(self::$background_updater)){
+            include_once dirname( __FILE__ ) . '/class-uwp-background-updater.php';
+            self::$background_updater = new UsersWP_Background_Updater();
+        }
     }
 
     /**
@@ -228,14 +224,16 @@ class UsersWP_Activator {
      * @package     userswp
      * @return      void
      */
-    public static function uwp_update_usermeta()
+    public static function uwp_update_usermeta($dispatch = false)
     {
         $update_callback = 'uwp_insert_usermeta';
         self::init_background_updater();
 
         uwp_error_log( sprintf( 'Queuing %s - %s', USERSWP_VERSION, $update_callback ) );
         self::$background_updater->push_to_queue( $update_callback );
-        self::$background_updater->save()->dispatch();
+        if($dispatch){
+            self::$background_updater->save()->dispatch();
+        }
     }
 
     /**
@@ -280,8 +278,12 @@ class UsersWP_Activator {
             }
         }
 
+        
         if ( $update_queued ) {
+            self::uwp_update_usermeta();// make sure to sync user meta
             self::$background_updater->save()->dispatch();
+        }else{
+            self::uwp_update_usermeta(true);// make sure to sync user meta
         }
     }
 

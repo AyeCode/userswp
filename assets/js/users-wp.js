@@ -199,6 +199,16 @@ function uwp_init_auth_modal(){
     }
 }
 
+function uwp_modal_loading(){
+    var $modal = '<div class="modal fade uwp-auth-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog "><div class="modal-content"><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
+    if(!jQuery('.uwp-auth-modal').length){
+        jQuery('body').append($modal);
+    }else{
+        jQuery('.uwp-auth-modal .modal-content').html('<div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div>');
+    }
+    jQuery('.uwp-auth-modal').modal();
+}
+
 /**
  * Get the login form via ajax and load it in a modal.
  */
@@ -211,11 +221,7 @@ function uwp_modal_login_form(){
         url: uwp_localize_data.ajaxurl,
         data: data,
         beforeSend: function() {
-            var $modal = '<div class="modal fade uwp-auth-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog "><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="uwp-profile-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
-            if(!jQuery('.uwp-auth-modal').length){
-                jQuery('body').append($modal);
-            }
-            jQuery('.uwp-auth-modal').modal();
+            uwp_modal_loading();
         },
         success: function(data) {
             if(data.success){
@@ -278,11 +284,7 @@ function uwp_modal_register_form(){
         url: uwp_localize_data.ajaxurl,
         data: data,
         beforeSend: function() {
-            var $modal = '<div class="modal fade uwp-auth-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog "><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="uwp-profile-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
-            if(!jQuery('.uwp-auth-modal').length){
-                jQuery('body').append($modal);
-            }
-            jQuery('.uwp-auth-modal').modal();
+            uwp_modal_loading();
         },
         success: function(data) {
             if(data.success){
@@ -346,11 +348,7 @@ function uwp_modal_forgot_password_form(){
         url: uwp_localize_data.ajaxurl,
         data: data,
         beforeSend: function() {
-            var $modal = '<div class="modal fade uwp-auth-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog "><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="uwp-profile-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
-            if(!jQuery('.uwp-auth-modal').length){
-                jQuery('body').append($modal);
-            }
-            jQuery('.uwp-auth-modal').modal();
+            uwp_modal_loading();
         },
         success: function(data) {
             if(data.success){
