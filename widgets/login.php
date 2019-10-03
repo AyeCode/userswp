@@ -146,35 +146,71 @@ class UWP_Login_Widget extends WP_Super_Duper {
             return '';
         }
 
+        global $uwp_widget_args;
+        $uwp_widget_args = $args;
+
+        $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
+
         ob_start();
-
-        echo '<div class="uwp_widgets uwp_widget_login">';
-
+        
         if(is_user_logged_in() && !is_admin() && !$this->is_preview()) {
 
             if($args['logged_in_show']=='simple'){
-                self::simple_output($args);
+                $template = $design_style ? $design_style."/dashboard-simple" : "dashboard-simple";
             }else{
-                self::advanced_output($args);
+
+                $user_id = get_current_user_id();
+                
+                $dashboard_links = array(
+                    'placeholder' => array(
+                        'url' => '',
+                        'text' => __('Select an action','userswp'),
+                        'disabled' => true,
+                        'selected' => true,
+                        'display_none' => true
+                    )
+                );
+
+                $dashboard_links['uwp_profile'][] = array(
+                    'optgroup' => 'open',
+                    'text' => esc_attr( __( 'My Profile', 'userswp' ) )
+                );
+                $dashboard_links['uwp_profile'][] = array(
+                    'url' => uwp_build_profile_tab_url( $user_id ),
+                    'text' => esc_attr( __( 'View Profile', 'userswp' ) )
+                );
+                $account_page = uwp_get_page_id('account_page', false);
+                $account_link = get_permalink( $account_page );
+                if($account_link){
+                    $dashboard_links['uwp_profile'][] = array(
+                        'url' => $account_link,
+                        'text' => esc_attr( __( 'Edit Profile', 'userswp' ) )
+                    );
+                }
+
+                $dashboard_links['uwp_profile'][] = array(
+                    'optgroup' => 'close',
+                );
+                
+                $dashboard_links = apply_filters( 'uwp_dashboard_links',$dashboard_links,$uwp_widget_args);
+
+                $uwp_widget_args['template_args']= array(
+                    'dashboard_links' => $dashboard_links
+                );
+                
+                $template = $design_style ? $design_style."/dashboard" : "dashboard";
             }
 
         } else {
-            
-            global $uwp_widget_args;
-            $uwp_widget_args = $args;
-
-            $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
             $template = $design_style ? $design_style."/login" : "login";
-
-            echo '<div class="uwp_page">';
-
-            uwp_locate_template($template);
-
-            echo '</div>';
-
         }
 
+        echo '<div class="uwp_page">';
+
+        uwp_locate_template($template);
+
         echo '</div>';
+
 
         $output = ob_get_clean();
 
@@ -182,39 +218,5 @@ class UWP_Login_Widget extends WP_Super_Duper {
         return trim($output);
 
     }
-
-    public static function advanced_output($args){
-        global $uwp_login_widget_args;
-        $uwp_login_widget_args = $args;
-
-        echo '<div class="uwp_page">';
-
-        uwp_locate_template('dashboard');
-
-        echo '</div>';
-    }
-
-    public static function simple_output($args){
-        global $current_user;
-
-        $template = new UsersWP_Templates();
-
-        $logout_url = $template->uwp_logout_url();
-
-        echo '<div class="uwp-login-widget user-loggedin">';
-
-        echo '<p>'.__( 'Logged in as ', 'userswp' );
-
-        echo '<a href="'. apply_filters('uwp_profile_link', get_author_posts_url($current_user->ID), $current_user->ID).'">' . get_avatar( $current_user->ID, 35 ). '<strong>'. apply_filters('uwp_profile_display_name', $current_user->display_name).'</strong></a>';
-
-        echo '<span>';
-
-        printf(__( '<a href="%1$s">Log out</a>', 'userswp'), esc_url( $logout_url ));
-
-        echo '</span>';
-
-        echo '</p>';
-
-        echo '</div>';
-    }
+        
 }

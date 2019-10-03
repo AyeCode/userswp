@@ -103,7 +103,8 @@ class UsersWP_Forms {
 
     public function output_dashboard_links($options){
         if(!empty($options)){
-            echo "<select class='uwp_select2' onchange='window.location = jQuery(this).val();'>";
+            $class = uwp_get_option("design_style",'bootstrap')=='bootstrap' ? 'form-control' : 'uwp_select2';
+            echo "<select class='$class' onchange='window.location = jQuery(this).val();'>";
             $this->output_options($options);
             echo "<select>";
         }

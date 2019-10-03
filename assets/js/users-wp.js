@@ -199,12 +199,23 @@ function uwp_init_auth_modal(){
     }
 }
 
-function uwp_modal_loading(){
-    var $modal = '<div class="modal fade uwp-auth-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog "><div class="modal-content"><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
+function uwp_modal_loading(inputs){
+    $input_single = '<span class="badge badge-pill badge-light p-3 mt-3 w-100 bg-loading">&nbsp;</span>';
+    $inputs = inputs ? $input_single.repeat(inputs) : $input_single;
+
+    var $modal_content = '<div class="modal-header">' +
+        '<span class="badge badge-pill badge-light p-0 mt-2 w-25 bg-loading">&nbsp;</span></div>' +
+        '<div class="modal-body text-center">' + $inputs + '</div>';
+    var $modal = '<div class="modal fade uwp-auth-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true">' +
+        '<div class="modal-dialog modal-dialog-centered">' +
+        '<div class="modal-content">' +
+        $modal_content +
+        '</div></div></div>';
+
     if(!jQuery('.uwp-auth-modal').length){
         jQuery('body').append($modal);
     }else{
-        jQuery('.uwp-auth-modal .modal-content').html('<div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div>');
+        jQuery('.uwp-auth-modal .modal-content').html($modal_content);
     }
     jQuery('.uwp-auth-modal').modal();
 }
@@ -221,12 +232,12 @@ function uwp_modal_login_form(){
         url: uwp_localize_data.ajaxurl,
         data: data,
         beforeSend: function() {
-            uwp_modal_loading();
+            uwp_modal_loading(4);
         },
         success: function(data) {
             if(data.success){
                 jQuery('.uwp-auth-modal .modal-content').html(data.data);
-                setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus();}, 300); // set focus on the first input after load animation
+                setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus().unbind('focus');}, 300); // set focus on the first input after load animation
 
                 // process login form
                 jQuery(".uwp-auth-modal .modal-content form.uwp-login-form").submit(function(e){
@@ -284,12 +295,12 @@ function uwp_modal_register_form(){
         url: uwp_localize_data.ajaxurl,
         data: data,
         beforeSend: function() {
-            uwp_modal_loading();
+            uwp_modal_loading(6);
         },
         success: function(data) {
             if(data.success){
                 jQuery('.uwp-auth-modal .modal-content').html(data.data);
-                setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus();}, 300); // set focus on the first input after load animation
+                setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus().unbind('focus');}, 300); // set focus on the first input after load animation
 
                 // process login form
                 jQuery(".uwp-auth-modal .modal-content form.uwp-registration-form").submit(function(e){
@@ -348,12 +359,12 @@ function uwp_modal_forgot_password_form(){
         url: uwp_localize_data.ajaxurl,
         data: data,
         beforeSend: function() {
-            uwp_modal_loading();
+            uwp_modal_loading(2);
         },
         success: function(data) {
             if(data.success){
                 jQuery('.uwp-auth-modal .modal-content').html(data.data);
-                setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus();}, 300); // set focus on the first input after load animation
+                setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus().unbind('focus');}, 300); // set focus on the first input after load animation
 
                 // process login form
                 jQuery(".uwp-auth-modal .modal-content form.uwp-forgot-form").submit(function(e){
