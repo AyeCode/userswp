@@ -672,7 +672,7 @@ class UsersWP_Tools {
     public function clear_version_numbers(){
         delete_option( 'uwp_db_version' );
         do_action( 'uwp_clear_version_numbers'); // used by addons to clear their version numbers.
-        $message = BSUI::get_alert(array(
+        $message = aui()->alert(array(
                 'type'=>'success',
                 'content'=> __( 'Version numbers cleared. Install/upgrade functions will run on next page load.', 'userswp' )
             )

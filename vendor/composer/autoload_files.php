@@ -6,6 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    '027ba9b494438454c171288d8ea51934' => $vendorDir . '/ayecode/wp-bootstrap-ui/wp-bootstrap-loader.php',
+    'e8d544c98e79f913e13eae1306ab635e' => $vendorDir . '/ayecode/wp-ayecode-ui/ayecode-ui-loader.php',
     '24583d3588ebda5228dd453cfaa070da' => $vendorDir . '/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php',
 );

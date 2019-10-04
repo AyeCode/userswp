@@ -63,10 +63,10 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
         $default = UsersWP_Defaults::author_box_content();
         $design_style = uwp_get_option("design_style",'bootstrap');
         if( $design_style =='bootstrap'){
-            $output = uwp_get_option('author_box_content_bootstrap', $default);
+            $output = uwp_get_option('author_box_content_bootstrap');
             if(!$output){$output = UsersWP_Defaults::author_box_content_bootstrap();}
         }else{
-            $output = uwp_get_option('author_box_content', $default);
+            $output = uwp_get_option('author_box_content');
             if(!$output){$output = UsersWP_Defaults::author_box_content();}
         }
         $output = isset($output) && !empty($output) ? $output : $default;

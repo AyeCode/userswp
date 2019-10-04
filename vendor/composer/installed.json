@@ -1,29 +1,29 @@
 [
     {
-        "name": "ayecode/wp-bootstrap-ui",
-        "version": "0.0.5",
-        "version_normalized": "0.0.5.0",
+        "name": "ayecode/wp-ayecode-ui",
+        "version": "0.0.7",
+        "version_normalized": "0.0.7.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/AyeCode/wp-bootstrap-ui.git",
-            "reference": "e6c13e9281226a85e0aa888d3d432fdc035fa60a"
+            "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
+            "reference": "5dc31bf7c72ad2a8a799896305edbdf775187219"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-bootstrap-ui/zipball/e6c13e9281226a85e0aa888d3d432fdc035fa60a",
-            "reference": "e6c13e9281226a85e0aa888d3d432fdc035fa60a",
+            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/5dc31bf7c72ad2a8a799896305edbdf775187219",
+            "reference": "5dc31bf7c72ad2a8a799896305edbdf775187219",
             "shasum": ""
         },
         "require": {
             "composer/installers": "~1.0",
             "php": ">=5.3.0"
         },
-        "time": "2019-08-02T14:27:46+00:00",
+        "time": "2019-10-04T16:19:27+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "files": [
-                "wp-bootstrap-loader.php"
+                "ayecode-ui-loader.php"
             ]
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -33,14 +33,15 @@
         "authors": [
             {
                 "name": "AyeCode Ltd",
-                "role": "Developer",
                 "email": "contact@ayecode.io",
-                "homepage": "https://ayecode.io/"
+                "homepage": "https://ayecode.io/",
+                "role": "Developer"
             }
         ],
         "description": "A Bootstrap UI for WordPress plugins and themes.",
-        "homepage": "https://github.com/AyeCode/wp-bootstrap-ui",
+        "homepage": "https://github.com/AyeCode/wp-ayecode-ui",
         "keywords": [
+            "ayecode",
             "boot",
             "bootstrap"
         ]
@@ -150,17 +151,17 @@
     },
     {
         "name": "composer/installers",
-        "version": "v1.6.0",
-        "version_normalized": "1.6.0.0",
+        "version": "v1.7.0",
+        "version_normalized": "1.7.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/composer/installers.git",
-            "reference": "cfcca6b1b60bc4974324efb5783c13dca6932b5b"
+            "reference": "141b272484481432cda342727a427dc1e206bfa0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/installers/zipball/cfcca6b1b60bc4974324efb5783c13dca6932b5b",
-            "reference": "cfcca6b1b60bc4974324efb5783c13dca6932b5b",
+            "url": "https://api.github.com/repos/composer/installers/zipball/141b272484481432cda342727a427dc1e206bfa0",
+            "reference": "141b272484481432cda342727a427dc1e206bfa0",
             "shasum": ""
         },
         "require": {
@@ -174,7 +175,7 @@
             "composer/composer": "1.0.*@dev",
             "phpunit/phpunit": "^4.8.36"
         },
-        "time": "2018-08-27T06:10:37+00:00",
+        "time": "2019-08-12T15:00:31+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "Composer\\Installers\\Plugin",
@@ -218,6 +219,7 @@
             "RadPHP",
             "SMF",
             "Thelia",
+            "Whmcs",
             "WolfCMS",
             "agl",
             "aimeos",
@@ -240,6 +242,7 @@
             "installer",
             "itop",
             "joomla",
+            "known",
             "kohana",
             "laravel",
             "lavalite",
