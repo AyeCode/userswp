@@ -757,7 +757,7 @@ class UsersWP_GeoDirectory_Plugin {
     <?php 
     }
 
-    function gd_get_listings($user, $post_type) {
+    public function gd_get_listings($user, $post_type) {
         $gd_post_types = geodir_get_posttypes('array');
         ?>
         <h3><?php _e($gd_post_types[$post_type]['labels']['name'], 'userswp') ?></h3>

@@ -10,7 +10,7 @@
 class UsersWP_Ajax {
     
     public function __construct() {
-        add_action( 'init', array( $this, 'handler' ), 0 );
+        add_action( 'init', array( $this, 'add_ajax_events' ), 0 );
     }
     
     /**
@@ -20,11 +20,9 @@ class UsersWP_Ajax {
      * @package     userswp
      * @return      void
      */
-    public function handler()
+    public function add_ajax_events()
     {
-
-
-        // EVENT => nopriv
+        // uwp_event_name => nopriv
         $ajax_events = array(
             'notice_clear_try_bootstrap'   => false,
         );
@@ -34,26 +32,6 @@ class UsersWP_Ajax {
 
             if ( $nopriv ) {
                 add_action( 'wp_ajax_nopriv_uwp_' . $ajax_event, array( __CLASS__, $ajax_event ) );
-            }
-        }
-
-
-        // @todo this need updated to new style above.
-        //if ((isset($_REQUEST['uwp_ajax']) && $_REQUEST['uwp_ajax'] == 'admin_ajax') || isset($_REQUEST['create_field']) || isset($_REQUEST['sort_create_field'])) {
-        if ((isset($_REQUEST['uwp_ajax']) && $_REQUEST['uwp_ajax'] == 'admin_ajax')) {
-            if (current_user_can('manage_options')) {
-                if (isset($_REQUEST['create_field'])) {
-                    $this->create_field($_REQUEST);
-                    $this->uwp_die();
-                }
-            } else {
-                $login_page = uwp_get_page_id('login_page', false);
-                if ($login_page) {
-                    wp_redirect(get_permalink($login_page));
-                } else {
-                    wp_redirect(home_url('/'));
-                }
-                $this->uwp_die();
             }
         }
     }

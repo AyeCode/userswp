@@ -23,8 +23,8 @@ class UsersWP_Mails {
         $user_data = get_userdata($user_id);
         
         $extras = apply_filters('uwp_send_mail_extras', "", $message_type, $user_id);
-        $subject = $this->uwp_get_mail_subject($message_type);
-        $message = $this->uwp_get_mail_content($message_type);
+        $subject = $this->get_mail_subject($message_type);
+        $message = $this->get_mail_content($message_type);
 
         $contains_login_details_tag = false;
         if (strpos($message, '[#login_details#]') !== false) {
@@ -49,7 +49,7 @@ class UsersWP_Mails {
         );
         $message = str_replace($message_search_array, $message_replace_array, $message);
 
-        $message = $this->uwp_email_format_text($message, $user_id);
+        $message = $this->email_format_text($message, $user_id);
 
         // Applicable only for activate mails
         if ($message_type == 'activate' && !$contains_login_details_tag) {
@@ -140,9 +140,9 @@ class UsersWP_Mails {
             $message = str_replace($reset_message_search_array, $reset_message_replace_array, $message);
         }
 
-        $subject = $this->uwp_email_format_text($subject, $user_id);
+        $subject = $this->email_format_text($subject, $user_id);
 
-        $headers = $this->uwp_get_mail_headers($message_type, $user_id);
+        $headers = $this->get_mail_headers($message_type, $user_id);
 
         $to = apply_filters('uwp_send_email_to', $user_email, $message_type, $user_id);
 
@@ -188,8 +188,8 @@ class UsersWP_Mails {
     {
 
         $extras = apply_filters('uwp_send_admin_mail_extras', "", $message_type, $user_id);
-        $subject = $this->uwp_get_mail_subject($message_type, true);
-        $message = $this->uwp_get_mail_content($message_type, true);
+        $subject = $this->get_mail_subject($message_type, true);
+        $message = $this->get_mail_content($message_type, true);
 
         if (!empty($subject)) {
             $subject = __(stripslashes_deep($subject), 'userswp');
@@ -209,11 +209,11 @@ class UsersWP_Mails {
         );
         $message = str_replace($search_array, $replace_array, $message);
 
-        $message = $this->uwp_email_format_text($message, $user_id);
+        $message = $this->email_format_text($message, $user_id);
 
-        $subject = $this->uwp_email_format_text($subject, $user_id);
+        $subject = $this->email_format_text($subject, $user_id);
 
-        $headers = $this->uwp_get_mail_headers($message_type, $user_id);
+        $headers = $this->get_mail_headers($message_type, $user_id);
 
         $to = apply_filters('uwp_send_admin_email_to', $site_email, $message_type, $user_id);
 
@@ -269,7 +269,7 @@ class UsersWP_Mails {
         return $out;
     }
 
-    public static function uwp_email_format_text( $content, $user_id ) {
+    public static function email_format_text( $content, $user_id ) {
 
         $site_url = '<a href="' . home_url() . '">' . home_url() . '</a>';
         $site_name = html_entity_decode(stripslashes(get_option('blogname')) ,ENT_QUOTES);
@@ -318,7 +318,7 @@ class UsersWP_Mails {
      * @param bool $is_admin Admin notification.
      * @return string Modified mail subject.
      */
-    public function uwp_get_mail_subject($type, $is_admin = false) {
+    public function get_mail_subject($type, $is_admin = false) {
         $subject = '';
         switch ($type) {
             case "register":
@@ -379,7 +379,7 @@ class UsersWP_Mails {
      *
      * @return string Modified mail content.
      */
-    public function uwp_get_mail_content($type, $is_admin = false) {
+    public function get_mail_content($type, $is_admin = false) {
         $content = '';
         switch ($type) {
             case "register":
@@ -426,7 +426,7 @@ class UsersWP_Mails {
         return apply_filters('uwp_send_mail_message', $content, $type);
     }
 
-    public static function uwp_get_mail_headers( $email_type = '', $user_id ) {
+    public static function get_mail_headers( $email_type = '', $user_id ) {
         $sitefromEmail = get_option('admin_email');
         $sitefromEmailName = html_entity_decode(stripslashes(get_option('blogname')) ,ENT_QUOTES);
         $site_email = get_option('admin_email');

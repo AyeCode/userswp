@@ -113,7 +113,7 @@ class UsersWP_Notices {
      *
      * @return      void
      */
-    function uwp_admin_notices() {
+    function admin_notices() {
         $errors = get_option( 'uwp_admin_notices' );
 
         if ( ! empty( $errors ) ) {
@@ -138,7 +138,7 @@ class UsersWP_Notices {
                 uwp_update_option('design_style','bootstrap');
                 ?>
                 <div class="notice notice-success">
-                    <p><strong>UsersWP - </strong><?php _e( 'Congratulations your site is now set yo use the new Bootstrap styles!', 'userswp' ); ?></p>
+                    <p><strong>UsersWP - </strong><?php _e( 'Congratulations your site is now set to use the new Bootstrap styles!', 'userswp' ); ?></p>
                 </div>
                 <?php
             }else{

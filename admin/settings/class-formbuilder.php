@@ -151,18 +151,18 @@ class UsersWP_Form_Builder {
         echo $output;
     }
 
-    public function uwp_custom_available_fields($type = '', $form_type)
+    public function custom_available_fields($type = '', $form_type)
     {
         ?>
         <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">
         <?php
         if ($type == 'predefined') {
-            $fields = $this->uwp_form_fields_predefined($form_type);
+            $fields = $this->form_fields_predefined($form_type);
         }elseif ($type == 'custom') {
-            $fields = $this->uwp_form_fields_custom($form_type);
+            $fields = $this->form_fields_custom($form_type);
         } else {
-            $fields = $this->uwp_form_fields($form_type);
+            $fields = $this->form_fields($form_type);
             ?>
             <ul class="full">
                 <li class="uwp-tooltip-wrap">
@@ -225,7 +225,7 @@ class UsersWP_Form_Builder {
 
     }
 
-    public function uwp_form_fields_predefined($type = '') {
+    public function form_fields_predefined($type = '') {
         $custom_fields = array();
 
         
@@ -494,12 +494,12 @@ class UsersWP_Form_Builder {
         return apply_filters('uwp_form_fields_predefined', $custom_fields, $type);
     }
 
-    public function uwp_form_fields_custom($type = '') {
+    public function form_fields_custom($type = '') {
         $custom_fields = array();
         return apply_filters('uwp_form_fields_custom', $custom_fields, $type);
     }
 
-    public function uwp_form_fields($type = '') {
+    public function form_fields($type = '') {
 
         $custom_fields = array(
             'text' => array(
@@ -592,45 +592,45 @@ class UsersWP_Form_Builder {
     }
 
 
-    public function uwp_manage_available_fields_predefined($form_type) {
+    public function manage_available_fields_predefined($form_type) {
         switch ($form_type) {
             case 'account':
-                $this->uwp_custom_available_fields('predefined', $form_type);
+                $this->custom_available_fields('predefined', $form_type);
                 break;
         }
     }
 
-    public function uwp_manage_available_fields_custom($form_type) {
+    public function manage_available_fields_custom($form_type) {
         switch ($form_type) {
             case 'account':
-                $this->uwp_custom_available_fields('custom', $form_type);
+                $this->custom_available_fields('custom', $form_type);
                 break;
         }
     }
 
-    public function uwp_manage_available_fields($form_type) {
+    public function manage_available_fields($form_type) {
         switch ($form_type) {
             case 'account':
-                $this->uwp_custom_available_fields('', $form_type);
+                $this->custom_available_fields('', $form_type);
                 break;
             case 'register':
-                $this->uwp_register_available_fields($form_type);
+                $this->register_available_fields($form_type);
                 break;
         }
     }
 
-    public function uwp_manage_selected_fields($form_type) {
+    public function manage_selected_fields($form_type) {
         switch ($form_type) {
             case 'account':
-                $this->uwp_custom_selected_fields($form_type);
+                $this->custom_selected_fields($form_type);
                 break;
             case 'register':
-                $this->uwp_register_selected_fields($form_type);
+                $this->register_selected_fields($form_type);
                 break;
         }
     }
 
-    function uwp_custom_selected_fields($form_type)
+    function custom_selected_fields($form_type)
     {
 
         global $wpdb;
@@ -650,7 +650,7 @@ class UsersWP_Form_Builder {
                     $field_type_key = $field->field_type_key;
                     $field_ins_upd = 'display';
 
-                    $this->uwp_form_field_adminhtml($field_type, $result_str, $field_ins_upd, $field_type_key);
+                    $this->form_field_adminhtml($field_type, $result_str, $field_ins_upd, $field_type_key);
                 }
             }
             ?></ul>
@@ -666,7 +666,7 @@ class UsersWP_Form_Builder {
      * @param $result_str
      * @param bool $form_type
      */
-    public function uwp_admin_form_field_html($field_info, $field_type, $field_type_key, $field_ins_upd, $result_str, $form_type = false) {
+    public function admin_form_field_html($field_info, $field_type, $field_type_key, $field_ins_upd, $result_str, $form_type = false) {
 
         if (!$form_type) {
             if (!isset($field_info->form_type)) {
@@ -676,9 +676,9 @@ class UsersWP_Form_Builder {
             }
         }
 
-        $cf_arr1 = $this->uwp_form_fields($form_type);
-        $cf_arr2 = $this->uwp_form_fields_predefined($form_type);
-        $cf_arr3 = $this->uwp_form_fields_custom($form_type);
+        $cf_arr1 = $this->form_fields($form_type);
+        $cf_arr2 = $this->form_fields_predefined($form_type);
+        $cf_arr3 = $this->form_fields_custom($form_type);
 
         $cf_arr = $cf_arr1 + $cf_arr2 + $cf_arr3; // this way defaults can't be overwritten
 
@@ -1214,7 +1214,7 @@ class UsersWP_Form_Builder {
     <?php
     }
 
-    public function uwp_form_field_adminhtml($field_type, $result_str, $field_ins_upd = '', $field_type_key = '', $form_type = false)
+    public function form_field_adminhtml($field_type, $result_str, $field_ins_upd = '', $field_type_key = '', $form_type = false)
     {
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
@@ -1228,12 +1228,12 @@ class UsersWP_Form_Builder {
             $result_str = $cf->id;
         }
 
-        $this->uwp_admin_form_field_html($field_info, $field_type, $field_type_key, $field_ins_upd, $result_str, $form_type);
+        $this->admin_form_field_html($field_info, $field_type, $field_type_key, $field_ins_upd, $result_str, $form_type);
 
     }
     
 
-    public function uwp_admin_form_field_save($request_field = array())
+    public function admin_form_field_save($request_field = array())
     {
 
         global $wpdb;
@@ -1762,7 +1762,7 @@ class UsersWP_Form_Builder {
 
     }
 
-    public function uwp_set_field_order($field_ids = array())
+    public function set_field_order($field_ids = array())
     {
 
         global $wpdb;
@@ -1793,7 +1793,7 @@ class UsersWP_Form_Builder {
         endif;
     }
 
-    public function uwp_admin_form_field_delete($field_id = '') {
+    public function admin_form_field_delete($field_id = '') {
         global $wpdb;
 
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
@@ -1825,7 +1825,7 @@ class UsersWP_Form_Builder {
             return 0;
     }
 
-    public function uwp_builder_extra_fields_smr($output, $result_str, $cf, $field_info) {
+    public function builder_extra_fields_smr($output, $result_str, $cf, $field_info) {
 
         ob_start();
 
@@ -1882,7 +1882,7 @@ class UsersWP_Form_Builder {
         return $output . $html;
     }
 
-    public function uwp_builder_extra_fields_datepicker($output, $result_str, $cf, $field_info) {
+    public function builder_extra_fields_datepicker($output, $result_str, $cf, $field_info) {
         ob_start();
         $extra = array();
         if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
@@ -1928,7 +1928,7 @@ class UsersWP_Form_Builder {
         return $output . $html;
     }
 
-    public function uwp_builder_extra_fields_password($output, $result_str, $cf, $field_info) {
+    public function builder_extra_fields_password($output, $result_str, $cf, $field_info) {
         ob_start();
         
         //confirm password field
@@ -1956,7 +1956,7 @@ class UsersWP_Form_Builder {
         return $output . $html;
     }
 
-    public function uwp_builder_extra_fields_email($output, $result_str, $cf, $field_info) {
+    public function builder_extra_fields_email($output, $result_str, $cf, $field_info) {
         ob_start();
         //confirm email field
         $extra = array();
@@ -1984,7 +1984,7 @@ class UsersWP_Form_Builder {
         return $output . $html;
     }
 
-    public function uwp_builder_extra_fields_file($output, $result_str, $cf, $field_info) {
+    public function builder_extra_fields_file($output, $result_str, $cf, $field_info) {
         ob_start();
 
         $file_obj = new UsersWP_Files();
@@ -2017,7 +2017,7 @@ class UsersWP_Form_Builder {
         return $output . $html;
     }
     
-    public function uwp_builder_data_type_text($output, $result_str, $cf, $field_info) {
+    public function builder_data_type_text($output, $result_str, $cf, $field_info) {
         ob_start();
 
         $dt_value = '';
@@ -2084,7 +2084,7 @@ class UsersWP_Form_Builder {
         return $output;
     }
 
-    public function uwp_advance_admin_custom_fields($field_info, $cf) {
+    public function advance_admin_custom_fields($field_info, $cf) {
         $hide_register_field = (isset($cf['defaults']['is_register_field']) && $cf['defaults']['is_register_field'] === false) ? "style='display:none;'" : '';
         $hide_register_field = (isset($field_info->for_admin_use) && $field_info->for_admin_use == '1') ? "style='display:none;'" : $hide_register_field;
 
@@ -2153,11 +2153,11 @@ class UsersWP_Form_Builder {
         <?php
     }
 
-    public function uwp_return_empty_string() {
+    public function return_empty_string() {
         return "";
     }
 
-    public function uwp_register_available_fields_head($heading, $form_type)
+    public function register_available_fields_head($heading, $form_type)
     {
         switch ($form_type)
         {
@@ -2169,7 +2169,7 @@ class UsersWP_Form_Builder {
     }
 
 
-    public function uwp_register_available_fields_note($note, $form_type)
+    public function register_available_fields_note($note, $form_type)
     {
         switch ($form_type)
         {
@@ -2181,7 +2181,7 @@ class UsersWP_Form_Builder {
     }
 
 
-    public function uwp_register_selected_fields_head($heading, $form_type)
+    public function register_selected_fields_head($heading, $form_type)
     {
         switch ($form_type)
         {
@@ -2194,7 +2194,7 @@ class UsersWP_Form_Builder {
     }
 
 
-    public function uwp_register_selected_fields_note($note, $form_type)
+    public function register_selected_fields_note($note, $form_type)
     {
         switch ($form_type)
         {
@@ -2206,7 +2206,7 @@ class UsersWP_Form_Builder {
         return $note;
     }
 
-    public function uwp_register_available_fields($form_type)
+    public function register_available_fields($form_type)
     {
         global $wpdb;
 
@@ -2226,7 +2226,7 @@ class UsersWP_Form_Builder {
         <ul>
         <?php
 
-            $fields = $this->uwp_register_fields($form_type);
+            $fields = $this->register_fields($form_type);
 
             if (!empty($fields)) {
                 foreach ($fields as $field) {
@@ -2270,7 +2270,7 @@ class UsersWP_Form_Builder {
         <?php
     }
 
-    public function uwp_register_fields($form_type)
+    public function register_fields($form_type)
     {
 
         global $wpdb;
@@ -2281,7 +2281,7 @@ class UsersWP_Form_Builder {
         return apply_filters('uwp_register_fields', $fields, $form_type);
     }
 
-    public function uwp_register_selected_fields($form_type)
+    public function register_selected_fields($form_type)
     {
         global $wpdb;
         $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
@@ -2303,14 +2303,14 @@ class UsersWP_Form_Builder {
 
                     $default = false;
 
-                    $this->uwp_register_field_adminhtml($result_str, $field_ins_upd, $default);
+                    $this->register_field_adminhtml($result_str, $field_ins_upd, $default);
                 }
             }?>
         </ul>
         <?php
     }
 
-    public function uwp_register_field_adminhtml($result_str, $field_ins_upd = '', $default = false, $request = array())
+    public function register_field_adminhtml($result_str, $field_ins_upd = '', $default = false, $request = array())
     {
         global $wpdb;
 
@@ -2467,12 +2467,12 @@ class UsersWP_Form_Builder {
 
 		/* ------- check nonce field ------- */
 		if (isset($_REQUEST['update']) && $_REQUEST['update'] == "update" && isset($_REQUEST['create_field']) && isset($_REQUEST['manage_field_type']) && $_REQUEST['manage_field_type'] == 'custom_fields') {
-			echo $this->uwp_set_field_order($field_ids);
+			echo $this->set_field_order($field_ids);
 		}
 
 		/* ---- Show field form in admin ---- */
 		if ($field_type != '' && $field_id != '' && $field_action == 'new' && isset($_REQUEST['create_field']) && isset($_REQUEST['manage_field_type']) && $_REQUEST['manage_field_type'] == 'custom_fields') {
-			$this->uwp_form_field_adminhtml($field_type, $field_id, $field_action,$field_type_key, $form_type);
+			$this->form_field_adminhtml($field_type, $field_id, $field_action,$field_type_key, $form_type);
 		}
 
 
@@ -2481,7 +2481,7 @@ class UsersWP_Form_Builder {
 			if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'custom_fields_' . $field_id))
 				return;
 
-			echo $this->uwp_admin_form_field_delete($field_id);
+			echo $this->admin_form_field_delete($field_id);
 		}
 
 		/* ---- Save field  ---- */
@@ -2501,11 +2501,11 @@ class UsersWP_Form_Builder {
 				}
 			}
 
-			$return = $this->uwp_admin_form_field_save($_REQUEST);
+			$return = $this->admin_form_field_save($_REQUEST);
 
 			if (is_int($return)) {
 				$lastid = $return;
-				$this->uwp_form_field_adminhtml($field_type, $lastid, 'submit',$field_type_key, $form_type);
+				$this->form_field_adminhtml($field_type, $lastid, 'submit',$field_type_key, $form_type);
 			} else {
 				echo $return;
 			}
@@ -2515,7 +2515,7 @@ class UsersWP_Form_Builder {
 
 	}
 
-    public function uwp_register_ajax_handler()
+    public function register_ajax_handler()
     {
         if (isset($_REQUEST['create_field'])) {
             $field_id = isset($_REQUEST['field_id']) ? trim(sanitize_text_field($_REQUEST['field_id']), '_') : '';
@@ -2542,7 +2542,7 @@ class UsersWP_Form_Builder {
             /* ---- Show field form in admin ---- */
             if ($field_action == 'new') {
                 $form_type = isset($_REQUEST['form_type']) ? sanitize_text_field($_REQUEST['form_type']) : '';
-                $fields = $this->uwp_register_fields($form_type);
+                $fields = $this->register_fields($form_type);
 
 
                 $_REQUEST['site_field_id'] = isset($_REQUEST['field_id']) ? sanitize_text_field($_REQUEST['field_id']) : '';
@@ -2562,7 +2562,7 @@ class UsersWP_Form_Builder {
 
                 $htmlvar_name = isset($_REQUEST['htmlvar_name']) ? sanitize_text_field($_REQUEST['htmlvar_name']) : '';
 
-                $this->uwp_register_field_adminhtml($htmlvar_name, $field_action, false, $_REQUEST);
+                $this->register_field_adminhtml($htmlvar_name, $field_action, false, $_REQUEST);
             }
 
             /* ---- Delete field ---- */
@@ -2570,7 +2570,7 @@ class UsersWP_Form_Builder {
                 if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'uwp_form_extras_nonce' . $field_id))
                     return;
 
-                echo $this->uwp_register_field_delete($field_id);
+                echo $this->register_field_delete($field_id);
             }
 
             /* ---- Save field  ---- */
@@ -2587,12 +2587,12 @@ class UsersWP_Form_Builder {
                 }
 
 
-                $return = $this->uwp_register_field_save($_REQUEST);
+                $return = $this->register_field_save($_REQUEST);
 
                 if (is_int($return)) {
                     $lastid = $return;
 
-                    $this->uwp_register_field_adminhtml($lastid, 'submit');
+                    $this->register_field_adminhtml($lastid, 'submit');
                 } else {
                     echo $return;
                 }
@@ -2601,7 +2601,7 @@ class UsersWP_Form_Builder {
         die();
     }
 
-    public function uwp_register_field_save($request_field = array())
+    public function register_field_save($request_field = array())
     {
         global $wpdb;
         $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
@@ -2695,7 +2695,7 @@ class UsersWP_Form_Builder {
         }
     }
 
-    public function uwp_register_field_delete($field_id = '')
+    public function register_field_delete($field_id = '')
     {
 
         global $wpdb;
@@ -2714,7 +2714,7 @@ class UsersWP_Form_Builder {
 
     }
     
-    public function uwp_form_builder_dummy_fields() {
+    public function form_builder_dummy_fields() {
         global $wpdb;
 
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
@@ -2727,10 +2727,10 @@ class UsersWP_Form_Builder {
 
             if ($_GET['uwp_dummy'] == 'create') {
                 // Account
-                $fields = $this->uwp_dummy_custom_fields();
+                $fields = $this->dummy_custom_fields();
 
                 foreach ($fields as $field_index => $field) {
-                    $this->uwp_admin_form_field_save($field);
+                    $this->admin_form_field_save($field);
                 }
 
                 // Register
@@ -2775,7 +2775,7 @@ class UsersWP_Form_Builder {
 
     }
 
-    public function uwp_dummy_custom_fields() {
+    public function dummy_custom_fields() {
 
         $fields = array();
 

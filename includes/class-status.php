@@ -26,12 +26,12 @@ class UsersWP_Status {
     public static function status_report() {
         global $wpdb;
 
-        $environment      = self::uwp_get_environment_info();
-        $database         = self::uwp_get_database_info();
-        $active_plugins   = self::uwp_get_active_plugins();
-        $theme            = self::uwp_get_theme_info();
-        $security         = self::uwp_get_security_info();
-        $pages            = self::uwp_get_pages();
+        $environment      = self::get_environment_info();
+        $database         = self::get_database_info();
+        $active_plugins   = self::get_active_plugins();
+        $theme            = self::get_theme_info();
+        $security         = self::get_security_info();
+        $pages            = self::get_pages();
 
         ob_start();
         ?>
@@ -689,7 +689,7 @@ class UsersWP_Status {
      *
      * @return array
      */
-    public static function uwp_get_environment_info() {
+    public static function get_environment_info() {
         global $wpdb;
 
         // Figure out cURL version, if installed.
@@ -774,7 +774,7 @@ class UsersWP_Status {
         );
     }
 
-    public static function uwp_get_database_info(){
+    public static function get_database_info(){
         global $wpdb;
 
         $database_table_sizes = $wpdb->get_results( $wpdb->prepare( "
@@ -803,7 +803,7 @@ class UsersWP_Status {
          *
          * If we changed the tables above to include the prefix, then any filters against that table could break.
          */
-        $core_tables = array_map( array( 'UsersWP_Status', 'uwp_add_db_table_prefix' ), $core_tables );
+        $core_tables = array_map( array( 'UsersWP_Status', 'add_db_table_prefix' ), $core_tables );
 
         /**
          * Organize UWP and non-UWP tables separately for display purposes later.
@@ -841,7 +841,7 @@ class UsersWP_Status {
         );
     }
 
-    public static function uwp_get_active_plugins(){
+    public static function get_active_plugins(){
         require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
         require_once( ABSPATH . 'wp-admin/includes/update.php' );
 
@@ -878,7 +878,7 @@ class UsersWP_Status {
         return $active_plugins_data;
     }
 
-    public static function uwp_get_theme_info(){
+    public static function get_theme_info(){
         $active_theme = wp_get_theme();
 
         // Get parent theme info if this theme is a child theme, otherwise
@@ -945,7 +945,7 @@ class UsersWP_Status {
         return array_merge( $active_theme_info, $parent_theme_info );
     }
 
-    public static function uwp_get_security_info(){
+    public static function get_security_info(){
         $check_page = get_home_url();
         return array(
             'secure_connection' => 'https' === substr( $check_page, 0, 5 ),
@@ -953,7 +953,7 @@ class UsersWP_Status {
         );
     }
 
-    public static function uwp_get_pages(){
+    public static function get_pages(){
         $check_pages = array(
             _x( 'Profile Page', 'Page setting', 'userswp' ) => array(
                 'option'    => 'profile_page',
@@ -1038,7 +1038,7 @@ class UsersWP_Status {
      * @param string $table table name
      * @return string
      */
-    protected static function uwp_add_db_table_prefix( $table ) {
+    protected static function add_db_table_prefix( $table ) {
         return uwp_get_table_prefix() . $table;
     }
 

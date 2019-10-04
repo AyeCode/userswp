@@ -13,7 +13,7 @@ class UsersWP_Notifications {
 
     }
 
-    public function uwp_user_notifications_form_front($type){
+    public function user_notifications_form_front($type){
         if ($type == 'notifications') {
             $user_id = get_current_user_id();
             $design_style = uwp_get_option("design_style","bootstrap");
@@ -83,7 +83,7 @@ class UsersWP_Notifications {
      *
      * @return      void
      */
-    public function uwp_notification_submit_handler() {
+    public function notification_submit_handler() {
         if (isset($_POST['uwp_notification_submit'])) {
             if( ! isset( $_POST['uwp_notification_nonce'] ) || ! wp_verify_nonce( $_POST['uwp_notification_nonce'], 'uwp-notification-nonce' ) ) {
                 return;

@@ -43,7 +43,7 @@ class UsersWP_Activator {
                 
                 if (defined('UWP_ROOT_PAGES')) {
                     if (UWP_ROOT_PAGES == 'all') {
-                        $blog_ids = self::uwp_get_blog_ids();
+                        $blog_ids = self::get_blog_ids();
 
                         foreach ( $blog_ids as $blog_id ) {
                             switch_to_blog( $blog_id );
@@ -84,8 +84,8 @@ class UsersWP_Activator {
 
         if (!get_option('uwp_default_data_installed')) {
             // new install
-            self::uwp_create_default_fields();
-            self::uwp_insert_form_extras();
+            self::create_default_fields();
+            self::insert_form_extras();
             update_option('uwp_default_data_installed', 1);
             update_option('uwp_activation_redirect', 1);
         }else{
@@ -97,7 +97,7 @@ class UsersWP_Activator {
             }
         }
 
-        self::uwp_flush_rewrite_rules();
+        self::flush_rewrite_rules();
         update_option('uwp_flush_rewrite', 1);
 
         // update the version
@@ -111,7 +111,7 @@ class UsersWP_Activator {
      * @global      object $wpdb
      * @return      array|false Array of IDs or false if none are found
      */
-    public static function uwp_get_blog_ids() {
+    public static function get_blog_ids() {
         global $wpdb;
 
         // Get an array of IDs
@@ -294,7 +294,7 @@ class UsersWP_Activator {
      * @package     userswp
      * @return      void
      */
-    public static function uwp_create_default_fields()
+    public static function create_default_fields()
     {
         $form_builder = new UsersWP_Form_Builder();
 
@@ -303,7 +303,7 @@ class UsersWP_Activator {
         $fields = apply_filters('uwp_before_default_custom_fields_saved', $fields);
 
         foreach ($fields as $field_index => $field) {
-            $form_builder->uwp_admin_form_field_save($field);
+            $form_builder->admin_form_field_save($field);
         }
     }
 
@@ -717,7 +717,7 @@ class UsersWP_Activator {
      * @package     userswp
      * @return      void
      */
-    public static function uwp_flush_rewrite_rules() {
+    public static function flush_rewrite_rules() {
         flush_rewrite_rules();
     }
 
@@ -728,7 +728,7 @@ class UsersWP_Activator {
      * @package     userswp
      * @return      void
      */
-    public static function uwp_insert_form_extras() {
+    public static function insert_form_extras() {
         global $wpdb;
         $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
@@ -794,7 +794,7 @@ class UsersWP_Activator {
         }
     }
 
-    public static function uwp_automatic_upgrade(){
+    public static function automatic_upgrade(){
         $uwp_db_version = get_option('uwp_db_version');
 
         if ( $uwp_db_version != USERSWP_VERSION ) {

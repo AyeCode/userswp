@@ -101,7 +101,7 @@ final class UsersWP {
     private function init_hooks() {
         register_activation_hook( USERSWP_PLUGIN_FILE, array( 'UsersWP_Activator', 'activate' ) );
         register_deactivation_hook( USERSWP_PLUGIN_FILE, array( 'UsersWP_Deactivator', 'deactivate' ) );
-        add_action( 'admin_init', array('UsersWP_Activator', 'uwp_automatic_upgrade') );
+        add_action( 'admin_init', array('UsersWP_Activator', 'automatic_upgrade') );
         add_action( 'init', array( 'UsersWP_Activator', 'init_background_updater' ), 5 );
         add_action( 'widgets_init', array( $this, 'register_widgets' ) );
     }
@@ -120,11 +120,11 @@ final class UsersWP {
         add_filter('uwp_before_extra_fields_save', array($instance, 'save_user_ip_on_register'), 10, 3);
         add_filter('uwp_update_usermeta', array($instance, 'modify_datepicker_value_on_update'), 10, 3);
         add_filter('uwp_get_usermeta', array($instance, 'modify_datepicker_value_on_get'), 10, 4);
-        add_filter('user_row_actions', array($instance, 'uwp_user_row_actions'), 10, 2);
-        add_action('bulk_actions-users', array($instance, 'uwp_users_bulk_actions'));
-        add_action('handle_bulk_actions-users', array($instance, 'uwp_handle_users_bulk_actions'), 10, 3);
-        add_filter('init', array($instance, 'uwp_process_user_actions'));
-        add_action('admin_notices', array($instance, 'uwp_show_update_messages'));
+        add_filter('user_row_actions', array($instance, 'user_row_actions'), 10, 2);
+        add_action('bulk_actions-users', array($instance, 'users_bulk_actions'));
+        add_action('handle_bulk_actions-users', array($instance, 'handle_users_bulk_actions'), 10, 3);
+        add_filter('init', array($instance, 'process_user_actions'));
+        add_action('admin_notices', array($instance, 'show_update_messages'));
     }
     
     public function load_ajax_actions_and_filters($instance) {
@@ -132,8 +132,8 @@ final class UsersWP {
     }
 
     public function load_files_actions_and_filters($instance) {
-        if($instance->uwp_doing_upload()){
-            add_filter( 'wp_handle_upload_prefilter', array($instance, 'uwp_wp_media_restrict_file_types') );
+        if($instance->doing_upload()){
+            add_filter( 'wp_handle_upload_prefilter', array($instance, 'wp_media_restrict_file_types') );
         }
         add_filter('uwp_get_max_upload_size', array($instance, 'uwp_modify_get_max_upload_size'), 10, 2);
     }
@@ -155,14 +155,14 @@ final class UsersWP {
         // general
         add_action('init', array($instance, 'init_notices'), 1);
         add_action('uwp_loaded', array($instance, 'handler'));
-        add_action('init', array($instance, 'uwp_privacy_submit_handler'));
+        add_action('init', array($instance, 'privacy_submit_handler'));
         add_action('uwp_template_display_notices', array($instance, 'display_notices'), 10, 1);
-        add_action('wp_ajax_uwp_upload_file_remove', array($instance, 'uwp_upload_file_remove'));
+        add_action('wp_ajax_uwp_upload_file_remove', array($instance, 'upload_file_remove'));
         //User search form
         add_action('personal_options_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('edit_user_profile_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('user_edit_form_tag', array($instance, 'add_multipart_to_admin_edit_form'));
-        add_action('uwp_template_form_title_after', array($instance, 'uwp_display_username_in_account'), 10, 1);
+        add_action('uwp_template_form_title_after', array($instance, 'display_username_in_account'), 10, 1);
         add_action('init', array($instance, 'process_login'));
         add_action('init', array($instance, 'process_register'));
         add_action('init', array($instance, 'process_account'));
@@ -171,23 +171,23 @@ final class UsersWP {
         add_action('init', array($instance, 'process_reset'));
 
         // Forms
-        add_filter('uwp_form_input_html_datepicker', array($instance, 'uwp_form_input_datepicker'), 10, 4);
-        add_filter('uwp_form_input_html_time', array($instance, 'uwp_form_input_time'), 10, 4);
-        add_filter('uwp_form_input_html_select', array($instance, 'uwp_form_input_select'), 10, 4);
-        add_filter('uwp_form_input_html_multiselect', array($instance, 'uwp_form_input_multiselect'), 10, 4);
-        add_filter('uwp_form_input_html_text', array($instance, 'uwp_form_input_text'), 10, 4);
-        add_filter('uwp_form_input_html_textarea', array($instance, 'uwp_form_input_textarea'), 10, 4);
-        add_filter('uwp_form_input_html_fieldset', array($instance, 'uwp_form_input_fieldset'), 10, 4);
-        add_filter('uwp_form_input_html_file', array($instance, 'uwp_form_input_file'), 10, 4);
-        add_filter('uwp_form_input_html_checkbox', array($instance, 'uwp_form_input_checkbox'), 10, 4);
-        add_filter('uwp_form_input_html_radio', array($instance, 'uwp_form_input_radio'), 10, 4);
-        add_filter('uwp_form_input_html_url', array($instance, 'uwp_form_input_url'), 10, 4);
-        add_filter('uwp_form_input_html_email', array($instance, 'uwp_form_input_email'), 10, 4);
-        add_filter('uwp_form_input_html_password', array($instance, 'uwp_form_input_password'), 10, 4);
+        add_filter('uwp_form_input_html_datepicker', array($instance, 'form_input_datepicker'), 10, 4);
+        add_filter('uwp_form_input_html_time', array($instance, 'form_input_time'), 10, 4);
+        add_filter('uwp_form_input_html_select', array($instance, 'form_input_select'), 10, 4);
+        add_filter('uwp_form_input_html_multiselect', array($instance, 'form_input_multiselect'), 10, 4);
+        add_filter('uwp_form_input_html_text', array($instance, 'form_input_text'), 10, 4);
+        add_filter('uwp_form_input_html_textarea', array($instance, 'form_input_textarea'), 10, 4);
+        add_filter('uwp_form_input_html_fieldset', array($instance, 'form_input_fieldset'), 10, 4);
+        add_filter('uwp_form_input_html_file', array($instance, 'form_input_file'), 10, 4);
+        add_filter('uwp_form_input_html_checkbox', array($instance, 'form_input_checkbox'), 10, 4);
+        add_filter('uwp_form_input_html_radio', array($instance, 'form_input_radio'), 10, 4);
+        add_filter('uwp_form_input_html_url', array($instance, 'form_input_url'), 10, 4);
+        add_filter('uwp_form_input_html_email', array($instance, 'form_input_email'), 10, 4);
+        add_filter('uwp_form_input_html_password', array($instance, 'form_input_password'), 10, 4);
         // Country select
-        add_filter('uwp_form_input_html_select_country', array($instance, 'uwp_form_input_select_country'), 10, 4);
-        add_filter('uwp_form_input_email_uwp_account_email_after', array($instance, 'uwp_register_confirm_email_field'), 10, 4);
-        add_filter('uwp_form_input_password_uwp_account_password_after', array($instance, 'uwp_register_confirm_password_field'), 10, 4);
+        add_filter('uwp_form_input_html_select_country', array($instance, 'form_input_select_country'), 10, 4);
+        add_filter('uwp_form_input_email_uwp_account_email_after', array($instance, 'register_confirm_email_field'), 10, 4);
+        add_filter('uwp_form_input_password_uwp_account_password_after', array($instance, 'register_confirm_password_field'), 10, 4);
         
         // Emails
         add_filter('uwp_send_mail_extras', array($instance, 'init_mail_extras'), 10, 3);
@@ -203,7 +203,7 @@ final class UsersWP {
         add_action('uwp_template_display_notices', array($instance, 'display_registration_disabled_notice'));
         add_action('uwp_template_display_notices', array($instance, 'form_notice_by_key'));
         add_action( 'admin_notices', array( $instance, 'show_admin_notices' ) );
-        add_action( 'admin_notices', array($instance, 'uwp_admin_notices') );
+        add_action( 'admin_notices', array($instance, 'admin_notices') );
         add_action( 'admin_notices', array($instance, 'try_bootstrap') );
     }
 
@@ -213,41 +213,36 @@ final class UsersWP {
     }
 
     public function load_profile_actions_and_filters($instance) {
-        add_action( 'template_redirect', array($instance, 'uwp_redirect_author_page') , 10 , 2 );
+        add_action( 'template_redirect', array($instance, 'redirect_author_page') , 10 , 2 );
         //profile page
         add_filter('query_vars', array($instance, 'profile_query_vars'), 10, 1 );
         add_action('init', array($instance, 'rewrite_profile_link') , 10, 1 );
         add_filter( 'author_link', array($instance, 'get_profile_link'), 10, 2 );
-        add_filter( 'edit_profile_url', array($instance, 'uwp_modify_admin_bar_edit_profile_url'), 10, 3);
+        add_filter( 'edit_profile_url', array($instance, 'modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
-        add_filter( 'get_comment_author_link', array($instance, 'uwp_get_comment_author_link') , 10 , 2 );
+        add_filter( 'get_comment_author_link', array($instance, 'get_comment_author_link') , 10 , 2 );
 //        add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 4 );
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_user_title', array($instance, 'get_profile_title'), 10, 2 );
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 2 );
         add_action( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );
         add_action( 'uwp_profile_pagination' ,array($instance,'list_view_js'));
-
-
         add_action( 'uwp_after_users_list' ,array($instance,'list_view_js'));
 
-
-
-
         //Fields as tabs
-        add_action( 'uwp_available_tab_items', array($instance, 'uwp_extra_fields_available_tab_items'), 10, 1 );
-        add_action( 'uwp_profile_tabs', array($instance, 'uwp_extra_fields_as_tabs'), 10, 3 );
+        add_action( 'uwp_available_tab_items', array($instance, 'extra_fields_available_tab_items'), 10, 1 );
+        add_action( 'uwp_profile_tabs', array($instance, 'extra_fields_as_tabs'), 10, 3 );
 
         // Popup and crop functions
-        add_filter( 'ajax_query_attachments_args', array($instance, 'uwp_restrict_attachment_display') );
+        add_filter( 'ajax_query_attachments_args', array($instance, 'restrict_attachment_display') );
 
-        add_action( 'uwp_handle_file_upload_error_checks', array($instance, 'uwp_handle_file_upload_error_checks'), 10, 4 );
-        add_action( 'wp_ajax_uwp_avatar_banner_upload', array($instance, 'uwp_ajax_avatar_banner_upload') );
+        add_action( 'uwp_handle_file_upload_error_checks', array($instance, 'handle_file_upload_error_checks'), 10, 4 );
+        add_action( 'wp_ajax_uwp_avatar_banner_upload', array($instance, 'ajax_avatar_banner_upload') );
         //add_action( 'wp_ajax_uwp_ajax_image_crop_popup', array($instance, 'uwp_ajax_image_crop_popup') );
-        add_action( 'wp_ajax_uwp_ajax_image_crop_popup_form', array($instance, 'uwp_ajax_image_crop_popup_form') );
-        add_action( 'wp_head', array($instance, 'uwp_define_ajaxurl') );
-        add_action( 'uwp_profile_header', array($instance, 'uwp_image_crop_init'), 10, 1 );
-        add_action( 'uwp_admin_profile_edit', array($instance, 'uwp_image_crop_init'), 10, 1 );
+        add_action( 'wp_ajax_uwp_ajax_image_crop_popup_form', array($instance, 'ajax_image_crop_popup_form') );
+        add_action( 'wp_head', array($instance, 'define_ajaxurl') );
+        add_action( 'uwp_profile_header', array($instance, 'image_crop_init'), 10, 1 );
+        add_action( 'uwp_admin_profile_edit', array($instance, 'image_crop_init'), 10, 1 );
 
         // Profile Tabs
         add_action( 'uwp_profile_body', array($instance, 'get_profile_body'), 10, 1 );
@@ -266,7 +261,7 @@ final class UsersWP {
 
         // Users
         add_action( 'uwp_output_location', array($instance, 'show_output_location_data'), 10, 2);
-        add_action( 'wpdiscuz_profile_url', array($instance, 'uwp_wpdiscuz_profile_url'), 10, 2);
+        add_action( 'wpdiscuz_profile_url', array($instance, 'wpdiscuz_profile_url'), 10, 2);
 
         // User, allow subscribers to upload profile and banner pictures
         add_filter( 'plupload_default_params', array($instance, 'add_uwp_plupload_param'), 10, 1 );
@@ -280,13 +275,13 @@ final class UsersWP {
     public function load_templates_actions_and_filters($instance) {
 
         add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
-        add_action( 'uwp_template_fields', array($instance, 'uwp_template_fields'), 10, 1 );
-        add_action( 'uwp_template_fields', array($instance, 'uwp_template_extra_fields'), 10, 1 );
-        add_action( 'uwp_account_form_display', array($instance, 'uwp_account_edit_form_display'), 10, 1 );
+        add_action( 'uwp_template_fields', array($instance, 'template_fields'), 10, 1 );
+        add_action( 'uwp_template_fields', array($instance, 'template_extra_fields'), 10, 1 );
+        add_action( 'uwp_account_form_display', array($instance, 'account_edit_form_display'), 10, 1 );
         add_action( 'wp_logout', array($instance, 'logout_redirect'));
         add_action( 'init', array($instance, 'wp_login_redirect'));
         add_action( 'init', array($instance, 'wp_register_redirect'));
-        add_action( 'admin_init', array($instance, 'uwp_activation_redirect'));
+        add_action( 'admin_init', array($instance, 'activation_redirect'));
         // Redirect functions
         add_action( 'template_redirect', array($instance, 'profile_redirect'), 10);
         add_action( 'template_redirect', array($instance, 'access_checks'), 20);
@@ -295,11 +290,11 @@ final class UsersWP {
         add_action( 'show_user_profile', array($instance, 'get_profile_extra_admin_edit'), 10, 1 );
 
 
-        add_filter( 'wp_setup_nav_menu_item', array($instance, 'uwp_setup_nav_menu_item'), 10, 1 );
-        add_filter( 'the_content', array($instance, 'uwp_author_page_content'), 10, 1 );
-        add_filter( 'the_content', array($instance, 'uwp_author_box_page_content'), 10, 1 );
+        add_filter( 'wp_setup_nav_menu_item', array($instance, 'setup_nav_menu_item'), 10, 1 );
+        add_filter( 'the_content', array($instance, 'author_page_content'), 10, 1 );
+        add_filter( 'the_content', array($instance, 'author_box_page_content'), 10, 1 );
         add_filter( 'the_content', array($instance, 'setup_singular_page_content'), 10, 1 );
-        add_filter( 'body_class', array($instance, 'uwp_add_body_class'), 10, 1 );
+        add_filter( 'body_class', array($instance, 'add_body_class'), 10, 1 );
 
         // filter the login and register url
         add_filter( 'login_url', array($instance, 'wp_login_url'), 10, 3 );
@@ -315,49 +310,49 @@ final class UsersWP {
     }
 
     public function load_notifications_actions_and_filters($instance){
-        add_action('uwp_account_form_display', array($instance, 'uwp_user_notifications_form_front'), 10, 1);
-        add_action('init', array($instance, 'uwp_notification_submit_handler'));
+        add_action('uwp_account_form_display', array($instance, 'user_notifications_form_front'), 10, 1);
+        add_action('init', array($instance, 'notification_submit_handler'));
     }
 
     public function load_form_builder_actions_and_filters($instance) {
         // Actions
-        add_action('admin_init', array($instance, 'uwp_form_builder_dummy_fields'));
-        add_action('uwp_manage_available_fields_predefined', array($instance, 'uwp_manage_available_fields_predefined'));
-        add_action('uwp_manage_available_fields_custom', array($instance, 'uwp_manage_available_fields_custom'));
-        add_action('uwp_manage_available_fields', array($instance, 'uwp_manage_available_fields'));
-        add_action('uwp_manage_selected_fields', array($instance, 'uwp_manage_selected_fields'));
-        add_action('uwp_admin_extra_custom_fields', array($instance, 'uwp_advance_admin_custom_fields'), 10, 2);
-        add_action('wp_ajax_uwp_ajax_register_action', array($instance, 'uwp_register_ajax_handler'));
+        add_action('admin_init', array($instance, 'form_builder_dummy_fields'));
+        add_action('uwp_manage_available_fields_predefined', array($instance, 'manage_available_fields_predefined'));
+        add_action('uwp_manage_available_fields_custom', array($instance, 'manage_available_fields_custom'));
+        add_action('uwp_manage_available_fields', array($instance, 'manage_available_fields'));
+        add_action('uwp_manage_selected_fields', array($instance, 'manage_selected_fields'));
+        add_action('uwp_admin_extra_custom_fields', array($instance, 'advance_admin_custom_fields'), 10, 2);
+        add_action('wp_ajax_uwp_ajax_register_action', array($instance, 'register_ajax_handler'));
 	    add_action('wp_ajax_uwp_ajax_action', array($instance, 'create_field'));
         add_action('uwp_form_builder_tabs_content', array($instance, 'uwp_form_builder'));
 
         // Filters
-        add_filter('uwp_builder_extra_fields_multiselect', array($instance, 'uwp_builder_extra_fields_smr'), 10, 4);
-        add_filter('uwp_builder_extra_fields_select', array($instance, 'uwp_builder_extra_fields_smr'), 10, 4);
-        add_filter('uwp_builder_extra_fields_radio', array($instance, 'uwp_builder_extra_fields_smr'), 10, 4);
-        add_filter('uwp_builder_extra_fields_datepicker', array($instance, 'uwp_builder_extra_fields_datepicker'), 10, 4);
-        add_filter('uwp_builder_extra_fields_password', array($instance, 'uwp_builder_extra_fields_password'), 10, 4);
-        add_filter('uwp_builder_extra_fields_email', array($instance, 'uwp_builder_extra_fields_email'), 10, 4);
-        add_filter('uwp_builder_extra_fields_file', array($instance, 'uwp_builder_extra_fields_file'), 10, 4);
-        add_filter('uwp_builder_data_type_text', array($instance, 'uwp_builder_data_type_text'), 10, 4);
-        add_filter('uwp_form_builder_available_fields_head', array($instance, 'uwp_register_available_fields_head'), 10, 2);
-        add_filter('uwp_form_builder_available_fields_note', array($instance, 'uwp_register_available_fields_note'), 10, 2);
-        add_filter('uwp_form_builder_selected_fields_head', array($instance, 'uwp_register_selected_fields_head'), 10, 2);
-        add_filter('uwp_form_builder_selected_fields_note', array($instance, 'uwp_register_selected_fields_note'), 10, 2);
+        add_filter('uwp_builder_extra_fields_multiselect', array($instance, 'builder_extra_fields_smr'), 10, 4);
+        add_filter('uwp_builder_extra_fields_select', array($instance, 'builder_extra_fields_smr'), 10, 4);
+        add_filter('uwp_builder_extra_fields_radio', array($instance, 'builder_extra_fields_smr'), 10, 4);
+        add_filter('uwp_builder_extra_fields_datepicker', array($instance, 'builder_extra_fields_datepicker'), 10, 4);
+        add_filter('uwp_builder_extra_fields_password', array($instance, 'builder_extra_fields_password'), 10, 4);
+        add_filter('uwp_builder_extra_fields_email', array($instance, 'builder_extra_fields_email'), 10, 4);
+        add_filter('uwp_builder_extra_fields_file', array($instance, 'builder_extra_fields_file'), 10, 4);
+        add_filter('uwp_builder_data_type_text', array($instance, 'builder_data_type_text'), 10, 4);
+        add_filter('uwp_form_builder_available_fields_head', array($instance, 'register_available_fields_head'), 10, 2);
+        add_filter('uwp_form_builder_available_fields_note', array($instance, 'register_available_fields_note'), 10, 2);
+        add_filter('uwp_form_builder_selected_fields_head', array($instance, 'register_selected_fields_head'), 10, 2);
+        add_filter('uwp_form_builder_selected_fields_note', array($instance, 'register_selected_fields_note'), 10, 2);
         // htmlvar not needed for taxonomy
-        add_filter('uwp_builder_htmlvar_name_taxonomy',array($instance, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_htmlvar_name_taxonomy',array($instance, 'return_empty_string'),10,4);
         // default_value not needed for textarea, html, file, fieldset
-        add_filter('uwp_builder_default_value_textarea',array($instance, 'uwp_return_empty_string'),10,4);
-        add_filter('uwp_builder_default_value_html',array($instance, 'uwp_return_empty_string'),10,4);
-        add_filter('uwp_builder_default_value_file',array($instance, 'uwp_return_empty_string'),10,4);
-        add_filter('uwp_builder_default_value_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_default_value_textarea',array($instance, 'return_empty_string'),10,4);
+        add_filter('uwp_builder_default_value_html',array($instance, 'return_empty_string'),10,4);
+        add_filter('uwp_builder_default_value_file',array($instance, 'return_empty_string'),10,4);
+        add_filter('uwp_builder_default_value_fieldset',array($instance, 'return_empty_string'),10,4);
         // is_required not needed for fieldset
-        add_filter('uwp_builder_is_required_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
-        add_filter('uwp_builder_required_msg_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_is_required_fieldset',array($instance, 'return_empty_string'),10,4);
+        add_filter('uwp_builder_required_msg_fieldset',array($instance, 'return_empty_string'),10,4);
         // field_icon not needed for fieldset
-        add_filter('uwp_builder_css_class_fieldset',array($instance, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_css_class_fieldset',array($instance, 'return_empty_string'),10,4);
         // filters for which is_public not required
-        add_filter('uwp_builder_is_public_password',array($instance, 'uwp_return_empty_string'),10,4);
+        add_filter('uwp_builder_is_public_password',array($instance, 'return_empty_string'),10,4);
     }
 
     public function load_menus_actions_and_filters($instance) {

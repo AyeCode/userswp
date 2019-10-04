@@ -32,7 +32,7 @@ class UsersWP_Files {
             $allowed_mime_types = apply_filters('uwp_allowed_mime_types', $allowed_mime_types, $field->htmlvar_name);
 
             $file_urls       = array();
-            $files_to_upload = $this->uwp_prepare_files( $files[ $field->htmlvar_name ] );
+            $files_to_upload = $this->prepare_files( $files[ $field->htmlvar_name ] );
 
             $max_upload_size = $this->uwp_get_max_upload_size($field->form_type, $field->htmlvar_name);
 
@@ -43,7 +43,7 @@ class UsersWP_Files {
             foreach ( $files_to_upload as $file_key => $file_to_upload ) {
 
                 if (!empty($allowed_mime_types)) {
-                    $ext = $this->uwp_get_file_type($file_to_upload['type']);
+                    $ext = $this->get_file_type($file_to_upload['type']);
 
                     $allowed_error_text = implode(', ', $allowed_mime_types);
                     if ( !in_array( $ext , $allowed_mime_types ) )
@@ -61,12 +61,12 @@ class UsersWP_Files {
                     return $error_result;
                 }
 
-                remove_filter( 'wp_handle_upload_prefilter', array($this, 'uwp_wp_media_restrict_file_types') );
+                remove_filter( 'wp_handle_upload_prefilter', array($this, 'wp_media_restrict_file_types') );
                 if(in_array($field->htmlvar_name, array('uwp_banner_file','uwp_avatar_file'))){
                     add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
                 }
-                $uploaded_file = $this->uwp_upload_file( $file_to_upload, array( 'file_key' => $file_key ) );
-                add_filter( 'wp_handle_upload_prefilter', array($this, 'uwp_wp_media_restrict_file_types') );
+                $uploaded_file = $this->upload_file( $file_to_upload, array( 'file_key' => $file_key ) );
+                add_filter( 'wp_handle_upload_prefilter', array($this, 'wp_media_restrict_file_types') );
 
                 if ( is_wp_error( $uploaded_file ) ) {
 
@@ -182,7 +182,7 @@ class UsersWP_Files {
      * @param       array       $args       File upload helper args.
      * @return      object                  Uploaded file info
      */
-    public function uwp_upload_file( $file, $args = array() ) {
+    public function upload_file( $file, $args = array() ) {
 
         include_once ABSPATH . 'wp-admin/includes/file.php';
         include_once ABSPATH . 'wp-admin/includes/media.php';
@@ -227,7 +227,7 @@ class UsersWP_Files {
      * @param       array       $file_data      Files to upload
      * @return      array                       Prepared files.
      */
-    public function uwp_prepare_files( $file_data ) {
+    public function prepare_files( $file_data ) {
         $files_to_upload = array();
 
         if ( is_array( $file_data['name'] ) ) {
@@ -261,7 +261,7 @@ class UsersWP_Files {
      * @param       array|bool  $fields         Form fields.
      * @return      array                       Validated data.
      */
-    public function uwp_validate_uploads($files, $type, $url_only = true, $fields = false) {
+    public function validate_uploads($files, $type, $url_only = true, $fields = false) {
 
         $validated_data = array();
 
@@ -316,7 +316,7 @@ class UsersWP_Files {
      * @param       bool        $removable      Is this value removable by user?
      * @return      string                      HTML output.
      */
-    public function uwp_file_upload_preview($field, $value, $removable = true) {
+    public function file_upload_preview($field, $value, $removable = true) {
         $output = '';
 
         $value = esc_html($value);
@@ -382,7 +382,7 @@ class UsersWP_Files {
      * @param       array       $file   File info.
      * @return      array               Modified file info.
      */
-    public function uwp_wp_media_restrict_file_types($file) {
+    public function wp_media_restrict_file_types($file) {
         // This bit is for the flash uploader
         if ($file['type']=='application/octet-stream' && isset($file['tmp_name'])) {
             $file_size = getimagesize($file['tmp_name']);
@@ -410,7 +410,7 @@ class UsersWP_Files {
      * @package     userswp
      * @return      bool    
      */
-    public function uwp_doing_upload(){
+    public function doing_upload(){
         return isset($_POST['uwp_profile_upload']) ? true : false;
     }
 
@@ -481,7 +481,7 @@ class UsersWP_Files {
      *
      * @return      string                  File type.
      */
-    public function uwp_get_file_type($ext) {
+    public function get_file_type($ext) {
         $allowed_file_types = $this->allowed_mime_types();
         $file_types = array();
         foreach ( $allowed_file_types as $format => $types ) {
