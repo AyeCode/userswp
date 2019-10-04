@@ -68,7 +68,7 @@ final class UsersWP {
         $this->tables = new UsersWP_Tables();
         $this->admin = new UsersWP_Admin();
         $this->admin_menus = new UsersWP_Admin_Menus();
-        $this->ajax = new UsersWP_Ajax($this->form_builder);
+        $this->ajax = new UsersWP_Ajax();
         $this->files = new UsersWP_Files();
         $this->notifications = new UsersWP_Notifications();
 
@@ -128,7 +128,7 @@ final class UsersWP {
     }
     
     public function load_ajax_actions_and_filters($instance) {
-        add_action('wp_ajax_uwp_ajax_action', array($instance, 'handler'));
+
     }
 
     public function load_files_actions_and_filters($instance) {
@@ -328,6 +328,7 @@ final class UsersWP {
         add_action('uwp_manage_selected_fields', array($instance, 'uwp_manage_selected_fields'));
         add_action('uwp_admin_extra_custom_fields', array($instance, 'uwp_advance_admin_custom_fields'), 10, 2);
         add_action('wp_ajax_uwp_ajax_register_action', array($instance, 'uwp_register_ajax_handler'));
+	    add_action('wp_ajax_uwp_ajax_action', array($instance, 'create_field'));
         add_action('uwp_form_builder_tabs_content', array($instance, 'uwp_form_builder'));
 
         // Filters
