@@ -579,7 +579,7 @@ function uwp_admin_edit_banner_fields($user) {
                                     $value = "";
                                 }
                                 ?>
-                                <?php echo $file_obj->uwp_file_upload_preview($field, $value); ?>
+                                <?php echo $file_obj->file_upload_preview($field, $value); ?>
                                 <?php
                                 if ($field->htmlvar_name == "uwp_avatar_file") {
                                     if (!empty($value)) {
@@ -1271,7 +1271,7 @@ function uwp_maybe_unserialize($key, $value) {
 function uwp_create_tables()
 {
     $tables = new UsersWP_Tables();
-    $tables->uwp_create_tables();
+    $tables->create_tables();
 }
 
 /**
@@ -1831,7 +1831,7 @@ function uwp_locate_template($template){
 
     $temp_obj = new UsersWP_Templates();
 
-    $template_path = $temp_obj->uwp_locate_template($template);
+    $template_path = $temp_obj->locate_template($template);
 
     if (file_exists($template_path)) {
         include($template_path);

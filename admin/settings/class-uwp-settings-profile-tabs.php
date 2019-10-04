@@ -21,28 +21,28 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 
         public function __construct() {
 
-            add_filter( 'uwp_form_builder_tabs_array', array( $this, 'uwp_form_builder_tab_items' ), 99 );
-	        add_filter('uwp_form_builder_available_fields_head', array( $this,  'uwp_tabs_available_fields_head' ), 10, 2);
-	        add_filter('uwp_form_builder_available_fields_note', array( $this,  'uwp_tabs_available_fields_note' ), 10, 2);
-	        add_filter('uwp_form_builder_selected_fields_head', array( $this,  'uwp_tabs_selected_fields_head' ), 10, 2);
-	        add_filter('uwp_form_builder_selected_fields_note', array( $this,  'uwp_tabs_selected_fields_note' ), 10, 2);
-	        add_action('uwp_manage_available_fields', array( $this,  'uwp_manage_tabs_available_fields' ), 10, 1);
-	        add_action('uwp_manage_available_fields_predefined', array( $this,  'uwp_manage_tabs_predefined_fields' ), 10, 1);
+            add_filter( 'uwp_form_builder_tabs_array', array( $this, 'form_builder_tab_items' ), 99 );
+	        add_filter('uwp_form_builder_available_fields_head', array( $this,  'tabs_available_fields_head' ), 10, 2);
+	        add_filter('uwp_form_builder_available_fields_note', array( $this,  'tabs_available_fields_note' ), 10, 2);
+	        add_filter('uwp_form_builder_selected_fields_head', array( $this,  'tabs_selected_fields_head' ), 10, 2);
+	        add_filter('uwp_form_builder_selected_fields_note', array( $this,  'tabs_selected_fields_note' ), 10, 2);
+	        add_action('uwp_manage_available_fields', array( $this,  'manage_tabs_available_fields' ), 10, 1);
+	        add_action('uwp_manage_available_fields_predefined', array( $this,  'manage_tabs_predefined_fields' ), 10, 1);
 	        add_action('uwp_manage_available_fields_custom', array( $this,  'manage_available_fields_custom' ), 10, 1);
-	        add_action('uwp_manage_selected_fields', array( $this,  'uwp_manage_tabs_selected_fields' ), 10, 1);
-	        add_filter('uwp_tabs_fields', array( $this,  'uwp_tabs_extra_fields' ), 10, 2);
-	        add_action('wp_ajax_uwp_ajax_profile_tabs_action', array( $this,  'uwp_tabs_ajax_handler'));
+	        add_action('uwp_manage_selected_fields', array( $this,  'manage_tabs_selected_fields' ), 10, 1);
+	        add_filter('uwp_tabs_fields', array( $this,  'tabs_extra_fields' ), 10, 2);
+	        add_action('wp_ajax_uwp_ajax_profile_tabs_action', array( $this,  'tabs_ajax_handler'));
 
         }
 
-	    public function uwp_form_builder_tab_items($tabs)
+	    public function form_builder_tab_items($tabs)
 	    {
 		    $tabs['profile-tabs'] = __('Profile Tabs', 'userswp');
 		    return $tabs;
 
 	    }
 
-	    public function uwp_tabs_available_fields_head($heading, $form_type)
+	    public function tabs_available_fields_head($heading, $form_type)
 	    {
 		    switch ($form_type) {
 			    case 'profile-tabs':
@@ -54,7 +54,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 	    }
 
 
-	    public function uwp_tabs_available_fields_note($note, $form_type)
+	    public function tabs_available_fields_note($note, $form_type)
 	    {
 		    switch ($form_type) {
 			    case 'profile-tabs':
@@ -66,7 +66,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 	    }
 
 
-	    public function uwp_tabs_selected_fields_head($heading, $form_type)
+	    public function tabs_selected_fields_head($heading, $form_type)
 	    {
 		    switch ($form_type) {
 			    case 'profile-tabs':
@@ -79,7 +79,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 	    }
 
 
-	    public function uwp_tabs_selected_fields_note($note, $form_type)
+	    public function tabs_selected_fields_note($note, $form_type)
 	    {
 		    switch ($form_type) {
 			    case 'profile-tabs':
@@ -91,34 +91,34 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 	    }
 
 
-	    public function uwp_manage_tabs_available_fields($form_type)
+	    public function manage_tabs_available_fields($form_type)
 	    {
 	        if('profile-tabs' == $form_type){
-                $this->uwp_tabs_available_fields($form_type);
+                $this->tabs_available_fields($form_type);
 	        }
 	    }
 
-	    public function uwp_manage_tabs_predefined_fields($form_type)
+	    public function manage_tabs_predefined_fields($form_type)
 	    {
 		    if('profile-tabs' == $form_type){
-                $this->uwp_tabs_predefined_fields($form_type);
+                $this->tabs_predefined_fields($form_type);
 		    }
 	    }
 
 	    public function manage_available_fields_custom($form_type){
             if('profile-tabs' == $form_type){
-                $this->uwp_tabs_custom_fields($form_type);
+                $this->tabs_custom_fields($form_type);
 		    }
 	    }
 
-	    public function uwp_manage_tabs_selected_fields($form_type)
+	    public function manage_tabs_selected_fields($form_type)
 	    {
 		    if('profile-tabs' == $form_type){
-                $this->uwp_tabs_selected_fields($form_type);
+                $this->tabs_selected_fields($form_type);
 		    }
 	    }
 
-	    public function uwp_tabs_custom_fields($form_type){
+	    public function tabs_custom_fields($form_type){
             // insert the required code for the SD button.
 			$js_insert_function = $this->insert_shortcode_function();
 			WP_Super_Duper::shortcode_insert_button('',$js_insert_function);
@@ -198,7 +198,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 
 		}
 
-	    public function uwp_tabs_available_fields($form_type){
+	    public function tabs_available_fields($form_type){
 		    global $wpdb;
 
 		    $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
@@ -218,7 +218,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    <ul>
 			    <?php
 
-			    $fields = $this->uwp_tabs_fields($form_type);
+			    $fields = $this->tabs_fields($form_type);
 
 			    if (!empty($fields)) {
 				    foreach ($fields as $field) {
@@ -270,7 +270,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    <?php
 	    }
 
-	    public function uwp_tabs_predefined_fields($form_type){
+	    public function tabs_predefined_fields($form_type){
 		    $fields = array();
 
 			$fields[] = array(
@@ -364,7 +364,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
             }
         }
 
-	    public function uwp_tabs_selected_fields($form_type)
+	    public function tabs_selected_fields($form_type)
 	    {
 		    global $wpdb;
 		    $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
@@ -381,7 +381,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 					    if($tab->tab_level=='1' ){continue;}
 
 					    ob_start();
-					    $this->uwp_tabs_field_adminhtml($tab, $field_ins_upd);
+					    $this->tabs_field_adminhtml($tab, $field_ins_upd);
 					    $tab_rendered = ob_get_clean();
 
                         $tab_rendered = str_replace("</li>","",$tab_rendered);
@@ -389,7 +389,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
                         foreach($tabs as $child_tab){
                             if($child_tab->tab_parent==$tab->id){
                                 ob_start();
-                                $this->uwp_tabs_field_adminhtml($child_tab, $field_ins_upd);
+                                $this->tabs_field_adminhtml($child_tab, $field_ins_upd);
                                 $child_tabs = ob_get_clean();
                             }
                         }
@@ -410,14 +410,14 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    <?php
 	    }
 
-	    public function uwp_tabs_fields($form_type)
+	    public function tabs_fields($form_type)
 	    {
 		    $fields = array();
 
 		    return apply_filters('uwp_tabs_fields', $fields, $form_type);
 	    }
 
-	    public function uwp_tabs_extra_fields($fields, $form_type)
+	    public function tabs_extra_fields($fields, $form_type)
 	    {
 		    global $wpdb;
 
@@ -441,7 +441,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    return $fields;
 	    }
 
-	    public function uwp_tabs_field_adminhtml($result_str, $field_ins_upd = '', $request = array()){
+	    public function tabs_field_adminhtml($result_str, $field_ins_upd = '', $request = array()){
 		    global $wpdb;
 
 		    $tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
@@ -616,7 +616,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    <?php
         }
 
-	    public function uwp_tabs_ajax_handler(){
+	    public function tabs_ajax_handler(){
 		    if (isset($_REQUEST['create_field'])) {
 			    $field_id = isset($_REQUEST['field_id']) ? trim(sanitize_text_field($_REQUEST['field_id']), '_') : '';
 			    $field_action = isset($_REQUEST['field_ins_upd']) ? sanitize_text_field($_REQUEST['field_ins_upd']) : '';
@@ -641,7 +641,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 			    if ($field_action == 'new') {
 				    $htmlvar_name = isset($_REQUEST['htmlvar_name']) ? sanitize_text_field($_REQUEST['htmlvar_name']) : sanitize_text_field($_REQUEST['tab_key']);
 
-				    $this->uwp_tabs_field_adminhtml($htmlvar_name, $field_action, $_REQUEST);
+				    $this->tabs_field_adminhtml($htmlvar_name, $field_action, $_REQUEST);
 			    }
 
 			    /* ---- Delete field ---- */
@@ -649,7 +649,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 				    if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'uwp_form_extras_nonce' . $field_id))
 					    return;
 
-				    echo $this->uwp_tabs_field_delete($field_id);
+				    echo $this->tabs_field_delete($field_id);
 			    }
 
 			    /* ---- Save field  ---- */
@@ -665,10 +665,10 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 					    }
 				    }
 
-				    $lastid = $this->uwp_tabs_field_save($_REQUEST);
+				    $lastid = $this->tabs_field_save($_REQUEST);
 
 				    if (is_int($lastid) && $lastid > 0) {
-					    $this->uwp_tabs_field_adminhtml($lastid, 'submit');
+					    $this->tabs_field_adminhtml($lastid, 'submit');
 				    } else {
 					    echo $lastid;
 				    }
@@ -677,7 +677,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    die();
         }
 
-	    public function uwp_tabs_field_save($request_field = array())
+	    public function tabs_field_save($request_field = array())
 	    {
 		    global $wpdb;
 		    $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
@@ -739,7 +739,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
             return (int) $lastid;
 	    }
 
-	    public function uwp_tabs_field_delete($field_id = '')
+	    public function tabs_field_delete($field_id = '')
 	    {
 		    global $wpdb;
 		    $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
