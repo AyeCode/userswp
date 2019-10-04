@@ -15,7 +15,7 @@ class UsersWP_Tables {
      *
      * @return      void
      */
-    public function uwp_create_tables()
+    public function create_tables()
     {
 
 //        if ( get_option('uwp_db_version') == USERSWP_VERSION ) return;

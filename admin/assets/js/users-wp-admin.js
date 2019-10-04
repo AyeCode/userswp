@@ -282,9 +282,10 @@ jQuery(document).ready(function () {
         var htmlvar_name = jQuery(this).attr('id').replace('uwp-','');
         var field_type = jQuery(this).data('type');
         var form_type = jQuery(this).closest('#uwp-form-builder-tab, #uwp-form-builder-tab-predefined').find('#form_type').val();
-        var id = 'new'+jQuery(".field_row_main ul.uwp_form_extras li:last").index();
+        var id = 'new'+jQuery(".field_row_main ul.core li:last").index();
         var manage_field_type = jQuery(this).closest('#uwp-available-fields').find(".manage_field_type").val();
         var field_data_type = jQuery(this).data('data_type');
+        if (manage_field_type == 'custom_fields') {return;}
 
         var data = {
             'htmlvar_name': htmlvar_name,
@@ -307,7 +308,7 @@ jQuery(document).ready(function () {
                 'field_type':        field_type,
                 'field_ins_upd':     'new',
                 'tab_layout':        jQuery(this).data('tab_layout'),
-                'tab_level':        jQuery(this).data('tab_level'),
+                'tab_level':         jQuery(this).data('tab_level'),
                 'tab_parent':        jQuery(this).data('tab_parent'),
                 'tab_login_only':    jQuery(this).data('tab_login_only'),
                 'tab_name':          jQuery(this).data('tab_name'),
@@ -339,7 +340,7 @@ jQuery(document).ready(function () {
             });
 
         if(htmlvar_name!='fieldset' || manage_field_type != 'profile_tabs'){
-            //jQuery(this).closest('li').hide();
+            jQuery(this).closest('li').hide();
         }
 
     });

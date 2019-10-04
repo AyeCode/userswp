@@ -256,7 +256,7 @@ class UsersWP_Forms {
             else{$uwp_notices[] = array('register' => $message); return;}
         }
 
-        $uploads_result = $file_obj->uwp_validate_uploads($files, 'register');
+        $uploads_result = $file_obj->validate_uploads($files, 'register');
 
         if (is_wp_error($uploads_result)) {
             $message = aui()->alert(array(
@@ -367,7 +367,7 @@ class UsersWP_Forms {
 
         $result = apply_filters('uwp_before_extra_fields_save', $result, 'register', $user_id);
 
-        $save_result = $this->uwp_save_user_extra_fields($user_id, $result, 'register');
+        $save_result = $this->save_user_extra_fields($user_id, $result, 'register');
 
         $save_result = apply_filters('uwp_after_extra_fields_save', $save_result, $result, 'register', $user_id);
 
@@ -842,7 +842,7 @@ class UsersWP_Forms {
             return;
         }
 
-        $uploads_result = $file_obj->uwp_validate_uploads($files, 'account');
+        $uploads_result = $file_obj->validate_uploads($files, 'account');
 
         if (is_wp_error($uploads_result)) {
             $message = aui()->alert(array(
@@ -910,7 +910,7 @@ class UsersWP_Forms {
             return;
         }
 
-        $res = $this->uwp_save_user_extra_fields($user_id, $result, 'account');
+        $res = $this->save_user_extra_fields($user_id, $result, 'account');
 
         if (!$res) {
             $message = aui()->alert(array(
@@ -969,7 +969,7 @@ class UsersWP_Forms {
 
         do_action('uwp_before_validate', $type);
 
-        $result = $file_obj->uwp_validate_uploads($files, $type);
+        $result = $file_obj->validate_uploads($files, $type);
 
         $result = apply_filters('uwp_validate_result', $result, $type, $data);
 
@@ -1305,7 +1305,7 @@ class UsersWP_Forms {
      * 
      * @return      bool                        True when success. False when failure.
      */
-    public function uwp_save_user_extra_fields($user_id, $data, $type) {
+    public function save_user_extra_fields($user_id, $data, $type) {
 
         if (empty($user_id) || empty($data) || empty($type)) {
             return false;
@@ -1385,7 +1385,7 @@ class UsersWP_Forms {
      * @package userswp
      * @return void
      */
-    public function uwp_upload_file_remove() {
+    public function upload_file_remove() {
 
         $htmlvar = strip_tags(esc_sql($_POST['htmlvar']));
         $user_id = (int) strip_tags(esc_sql($_POST['uid']));
@@ -1443,7 +1443,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_datepicker($html, $field, $value, $form_type){
+    public function form_input_datepicker($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
         if(has_filter("uwp_form_input_html_datepicker_{$field->htmlvar_name}")){
@@ -1551,7 +1551,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_time($html, $field, $value, $form_type){
+    public function form_input_time($html, $field, $value, $form_type){
 
         if(has_filter("uwp_form_input_html_time_{$field->htmlvar_name}")){
 
@@ -1624,7 +1624,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_select($html, $field, $value, $form_type){
+    public function form_input_select($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
         if(has_filter("uwp_form_input_html_select_{$field->htmlvar_name}")){
@@ -1710,7 +1710,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_multiselect($html, $field, $value, $form_type){
+    public function form_input_multiselect($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
         if(has_filter("uwp_form_input_html_multiselect_{$field->htmlvar_name}")){
@@ -1831,7 +1831,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_file($html, $field, $value, $form_type){
+    public function form_input_file($html, $field, $value, $form_type){
 
         $file_obj = new UsersWP_Files();
         
@@ -1863,7 +1863,7 @@ class UsersWP_Forms {
                     </label>
                 <?php } ?>
 
-                <?php echo $file_obj->uwp_file_upload_preview($field, $value); ?>
+                <?php echo $file_obj->file_upload_preview($field, $value); ?>
                 <input name="<?php echo $field->htmlvar_name; ?>"
                        class="<?php echo $field->css_class; ?> <?php echo esc_attr($bs_form_control);?>"
                        placeholder="<?php echo $site_title; ?>"
@@ -1899,7 +1899,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_checkbox($html, $field, $value, $form_type){
+    public function form_input_checkbox($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
         if(has_filter("uwp_form_input_html_checkbox_{$field->htmlvar_name}")){
@@ -1963,7 +1963,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_radio($html, $field, $value, $form_type){
+    public function form_input_radio($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
         if(has_filter("uwp_form_input_html_radio_{$field->htmlvar_name}")){
@@ -2057,7 +2057,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_text($html, $field, $value, $form_type){
+    public function form_input_text($html, $field, $value, $form_type){
 
         // Check if there is a custom field specific filter.
         if(has_filter("uwp_form_input_text_{$field->htmlvar_name}")){
@@ -2178,7 +2178,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_textarea($html, $field, $value, $form_type){
+    public function form_input_textarea($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
         if(has_filter("uwp_form_input_textarea_{$field->htmlvar_name}")){
@@ -2243,7 +2243,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_fieldset($html, $field, $value, $form_type) {
+    public function form_input_fieldset($html, $field, $value, $form_type) {
         // Check if there is a custom field specific filter.
         if(has_filter("uwp_form_input_fieldset_{$field->htmlvar_name}")){
             $html = apply_filters("uwp_form_input_fieldset_{$field->htmlvar_name}",$html, $field, $value, $form_type);
@@ -2279,7 +2279,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_url($html, $field, $value, $form_type){
+    public function form_input_url($html, $field, $value, $form_type){
 
 
         // Check if there is a custom field specific filter.
@@ -2346,7 +2346,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_email($html, $field, $value, $form_type){
+    public function form_input_email($html, $field, $value, $form_type){
 
 
         // Check if there is a custom field specific filter.
@@ -2416,7 +2416,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_password($html, $field, $value, $form_type){
+    public function form_input_password($html, $field, $value, $form_type){
 
 
         // Check if there is a custom field specific filter.
@@ -2532,7 +2532,7 @@ class UsersWP_Forms {
         //File fields
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type = 'file' AND is_default = '0' ORDER BY sort_order ASC");
         if ($fields) {
-            $result = $file_obj->uwp_validate_uploads($_FILES, 'account', true, $fields);
+            $result = $file_obj->validate_uploads($_FILES, 'account', true, $fields);
             if (!is_wp_error($result)) {
                 foreach ($fields as $field) {
                     $value = $result[$field->htmlvar_name];
@@ -2557,7 +2557,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_form_input_select_country($html, $field, $value, $form_type){
+    public function form_input_select_country($html, $field, $value, $form_type){
 
         // Check if there is a field specific filter.
         if(has_filter("uwp_form_input_html_select_{$field->htmlvar_name}")){
@@ -2626,7 +2626,7 @@ class UsersWP_Forms {
      *
      * @return      void
      */
-    public function uwp_display_username_in_account($type) {
+    public function display_username_in_account($type) {
         if ($type == 'account') {
             $user_id = get_current_user_id();
             $user_info = get_userdata($user_id);
@@ -2656,7 +2656,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_register_confirm_password_field($html, $field, $value, $form_type) {
+    public function register_confirm_password_field($html, $field, $value, $form_type) {
         if ($form_type == 'register') {
             //confirm password field
             $extra = array();
@@ -2717,7 +2717,7 @@ class UsersWP_Forms {
      *
      * @return      string                          Modified form field html.
      */
-    public function uwp_register_confirm_email_field($html, $field, $value, $form_type) {
+    public function register_confirm_email_field($html, $field, $value, $form_type) {
         if ($form_type == 'register') {
             //confirm email field
             $extra = array();
@@ -2774,7 +2774,7 @@ class UsersWP_Forms {
      *
      * @return      void
      */
-    public function uwp_privacy_submit_handler() {
+    public function privacy_submit_handler() {
         if (isset($_POST['uwp_privacy_submit'])) {
             if( ! isset( $_POST['uwp_privacy_nonce'] ) || ! wp_verify_nonce( $_POST['uwp_privacy_nonce'], 'uwp-privacy-nonce' ) ) {
                 return;

@@ -137,6 +137,6 @@ function uwp_account_get_available_tabs() {
 function uwp_profile_add_tabs($tab_data){
 
 	$obj = new UsersWP_Settings_Profile_Tabs();
-	$obj->uwp_tabs_field_save($tab_data);
+	$obj->tabs_field_save($tab_data);
 
 }

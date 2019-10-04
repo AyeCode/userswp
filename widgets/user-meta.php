@@ -172,7 +172,7 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
         }
 
         $obj = new UsersWP_Profile();
-        $value = $obj->uwp_get_field_value($field, $user);
+        $value = $obj->get_field_value($field, $user);
 
         switch ($args['show']){
             case 'icon-value':

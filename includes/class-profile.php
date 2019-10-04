@@ -230,7 +230,7 @@ class UsersWP_Profile {
                     }
 
                     $key = $field->htmlvar_name;
-                    // see UsersWP_Forms -> uwp_save_user_extra_fields reason for replacing key
+                    // see UsersWP_Forms -> save_user_extra_fields reason for replacing key
                     $key = str_replace('uwp_register_', '', $key);
                     $exclude_key = str_replace('uwp_account_', '', $key);
                     $value = uwp_get_usermeta($user->ID, $key, false);
@@ -280,7 +280,7 @@ class UsersWP_Profile {
         if(!$show_type){
             return;
         }
-        echo $this->uwp_get_extra_fields($user, '['.$show_type.']');
+        echo $this->get_extra_fields($user, '['.$show_type.']');
     }
 
     /**
@@ -292,7 +292,7 @@ class UsersWP_Profile {
      * @return      string                  More info tab content.
      */
     public function get_profile_extra($user) {
-        return $this->uwp_get_extra_fields($user, '[more_info]');
+        return $this->get_extra_fields($user, '[more_info]');
     }
 
     /**
@@ -303,7 +303,7 @@ class UsersWP_Profile {
      * @param       object      $user       The User ID.
      */
     public function get_profile_side_extra($user) {
-        echo $this->uwp_get_extra_fields($user, '[profile_side]');
+        echo $this->get_extra_fields($user, '[profile_side]');
     }
 
     /**
@@ -314,7 +314,7 @@ class UsersWP_Profile {
      * @param       object      $user       The User ID.
      */
     public function get_users_extra($user) {
-        echo $this->uwp_get_extra_fields($user, '[users]');
+        echo $this->get_extra_fields($user, '[users]');
     }
 
     /**
@@ -326,7 +326,7 @@ class UsersWP_Profile {
      * @param       string      $show_type  Filter type. 
      * @return      string                  Custom fields content.
      */
-    public function uwp_get_extra_fields($user, $show_type) {
+    public function get_extra_fields($user, $show_type) {
 
         ob_start();
         global $wpdb;
@@ -357,7 +357,7 @@ class UsersWP_Profile {
 					continue;
 				}
 
-                $value = $this->uwp_get_field_value($field, $user);
+                $value = $this->get_field_value($field, $user);
 
                 // Icon
                 $icon = uwp_get_field_icon($field->field_icon);
@@ -1088,7 +1088,7 @@ class UsersWP_Profile {
      * @param       string              $type           popup type. Avatar or Banner
      * @return      string                              Json
      */
-    public function uwp_image_crop_popup($image_url, $type) {
+    public function image_crop_popup($image_url, $type) {
 
         add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
         $uploads = wp_upload_dir();
@@ -1120,7 +1120,7 @@ class UsersWP_Profile {
             'uwp_full_height' => $full_height,
             'uwp_true_width' => $image[0],
             'uwp_true_height' => $image[1],
-            'uwp_popup_content' => $this->uwp_image_crop_modal_html($type, $image_url, $full_width, $full_height),
+            'uwp_popup_content' => $this->image_crop_modal_html($type, $image_url, $full_width, $full_height),
         );
         
         $json = json_encode($values);
@@ -1136,13 +1136,13 @@ class UsersWP_Profile {
      * @package     userswp
      * @param       object      $user       The User ID.
      */
-    public function uwp_image_crop_init($user) {
+    public function image_crop_init($user) {
         if (is_user_logged_in()) {
-            add_action( 'wp_footer', array($this,'uwp_modal_loading_html'));
-            add_action( 'wp_footer', array($this,'uwp_modal_close_js'));
+            add_action( 'wp_footer', array($this,'modal_loading_html'));
+            add_action( 'wp_footer', array($this,'modal_close_js'));
             if(is_admin()) {
-                add_action('admin_footer', array($this, 'uwp_modal_loading_html'));
-                add_action('admin_footer', array($this, 'uwp_modal_close_js'));
+                add_action('admin_footer', array($this, 'modal_loading_html'));
+                add_action('admin_footer', array($this, 'modal_close_js'));
             }
         }
     }
@@ -1154,7 +1154,7 @@ class UsersWP_Profile {
      * @package     userswp
      * @return      string      Modal loding html.
      */
-    public function uwp_modal_loading_html() {
+    public function modal_loading_html() {
         ob_start();
         ?>
         <div id="uwp-popup-modal-wrap" style="display: none;">
@@ -1188,7 +1188,7 @@ class UsersWP_Profile {
      * @package     userswp
      * @return      void
      */
-    public function uwp_modal_close_js() {
+    public function modal_close_js() {
         ?>
         <script type="text/javascript">
             (function( $, window, undefined ) {
@@ -1200,7 +1200,7 @@ class UsersWP_Profile {
                         var mod_shadow = jQuery('#uwp-modal-backdrop');
                         var container = jQuery('#uwp-popup-modal-wrap');
                         container.hide();
-                        container.replaceWith('<?php echo $this->uwp_modal_loading_html(); ?>');
+                        container.replaceWith('<?php echo $this->modal_loading_html(); ?>');
                         mod_shadow.remove();
                     });
                 });
@@ -1220,7 +1220,7 @@ class UsersWP_Profile {
      * @param       int             $full_height    Full image height
      * @return      string                          Html.
      */
-    public function uwp_image_crop_modal_html($type, $image_url, $full_width, $full_height) {
+    public function image_crop_modal_html($type, $image_url, $full_width, $full_height) {
 	    global $uwp_template_args;
 	    $uwp_template_args = array(
 		    'type' => $type,
@@ -1246,7 +1246,7 @@ class UsersWP_Profile {
                         var mod_shadow = jQuery('#uwp-modal-backdrop');
                         var container = jQuery('#uwp-popup-modal-wrap');
                         container.hide();
-                        container.replaceWith('<?php echo $this->uwp_modal_loading_html(); ?>');
+                        container.replaceWith('<?php echo $this->modal_loading_html(); ?>');
                         mod_shadow.remove();
                     });
                 });
@@ -1266,7 +1266,7 @@ class UsersWP_Profile {
      * @param       string          $type           Avatar or Banner
      * @return      string                          Html.
      */
-    public function uwp_crop_submit_form($type = 'avatar') {
+    public function crop_submit_form($type = 'avatar') {
         
         ob_start();
 
@@ -1292,7 +1292,7 @@ class UsersWP_Profile {
                         var mod_shadow = jQuery('#uwp-modal-backdrop');
                         var container = jQuery('#uwp-popup-modal-wrap');
                         container.hide();
-                        container.replaceWith('<?php echo $this->uwp_modal_loading_html(); ?>');
+                        container.replaceWith('<?php echo $this->modal_loading_html(); ?>');
                         mod_shadow.remove();
                     });
 
@@ -1482,7 +1482,7 @@ class UsersWP_Profile {
      * @param       string      $link       Original author link.
      * @return      string                  Modified author link.    
      */
-    public function uwp_get_comment_author_link($link) {
+    public function get_comment_author_link($link) {
         global $comment;
         if ( !empty( $comment->user_id ) && !empty( get_userdata( $comment->user_id )->ID ) ) {
             $user = get_userdata( $comment->user_id );
@@ -1502,7 +1502,7 @@ class UsersWP_Profile {
      * @package     userswp
      * @return      void
      */
-    public function uwp_redirect_author_page() {
+    public function redirect_author_page() {
         
         if(uwp_is_page_builder()){
             return;
@@ -1528,7 +1528,7 @@ class UsersWP_Profile {
      *                                      'login_post', 'admin', 'relative' or null.
      * @return      false|string            Filtered url.
      */
-    public function uwp_modify_admin_bar_edit_profile_url( $url, $user_id, $scheme )
+    public function modify_admin_bar_edit_profile_url( $url, $user_id, $scheme )
     {
         // Makes the link to http://example.com/account
         if (!is_admin()) {
@@ -1549,7 +1549,7 @@ class UsersWP_Profile {
      * @param       object      $wp_query      Unmodified wp_query. 
      * @return      object                     Modified wp_query.
      */
-    public function uwp_restrict_attachment_display($wp_query) {
+    public function restrict_attachment_display($wp_query) {
         if (!is_admin()) {
             if ( ! current_user_can( 'manage_options' ) ) {
                 //$wp_query['author'] = get_current_user_id();
@@ -1574,7 +1574,7 @@ class UsersWP_Profile {
 
         $files = new UsersWP_Files();
         
-        if(isset($caps[0]) && $caps[0] =='upload_files' && $files->uwp_doing_upload() ){
+        if(isset($caps[0]) && $caps[0] =='upload_files' && $files->doing_upload() ){
             $llcaps['upload_files'] = true;
         }
 
@@ -1592,7 +1592,7 @@ class UsersWP_Profile {
      * @param       array               $file_to_upload     File data to upload.
      * @return      string|WP_Error                         Returns original value if no erros. Else returns errors.
      */
-    public function uwp_handle_file_upload_error_checks($value, $field, $file_key, $file_to_upload) {
+    public function handle_file_upload_error_checks($value, $field, $file_key, $file_to_upload) {
         
         if (in_array($field->htmlvar_name, array('uwp_avatar_file', 'uwp_banner_file'))) {
 
@@ -1644,7 +1644,7 @@ class UsersWP_Profile {
      * @package     userswp
      * @return      void
      */
-    public function uwp_ajax_avatar_banner_upload() {
+    public function ajax_avatar_banner_upload() {
         // Image upload handler
         // todo: security checks
         $type = strip_tags(esc_sql($_POST['uwp_popup_type']));
@@ -1682,7 +1682,7 @@ class UsersWP_Profile {
             $return = json_encode($result);
             echo $return;
         } else {
-            $return = $this->uwp_ajax_image_crop_popup($errors['url'], $type);
+            $return = $this->ajax_image_crop_popup($errors['url'], $type);
             echo $return;
         }
 
@@ -1698,13 +1698,13 @@ class UsersWP_Profile {
      * @param       string          $type           Crop type. Avatar or Banner
      * @return      string|null                     Html and js content.
      */
-    public function uwp_ajax_image_crop_popup($image_url, $type){
+    public function ajax_image_crop_popup($image_url, $type){
         wp_enqueue_style( 'jcrop' );
         wp_enqueue_script( 'jcrop', array( 'jquery' ) );
 
         $output = null;
         if ($image_url && $type ) {
-            $output = $this->uwp_image_crop_popup($image_url, $type);
+            $output = $this->image_crop_popup($image_url, $type);
         }
         return $output;
     }
@@ -1716,14 +1716,14 @@ class UsersWP_Profile {
      * @package     userswp
      * @return      void
      */
-    public function uwp_ajax_image_crop_popup_form(){
+    public function ajax_image_crop_popup_form(){
         $type = strip_tags(esc_sql($_POST['type']));
 
         $output = null;
 
 
         if ($type && in_array($type, array('banner', 'avatar'))) {
-            $output = $this->uwp_crop_submit_form($type);
+            $output = $this->crop_submit_form($type);
         }
         echo $output;
         exit();
@@ -1736,7 +1736,7 @@ class UsersWP_Profile {
      * @package     userswp
      * @return      void
      */
-    public function uwp_define_ajaxurl() {
+    public function define_ajaxurl() {
 
         echo '<script type="text/javascript">
            var ajaxurl = "' . admin_url('admin-ajax.php') . '";
@@ -1752,7 +1752,7 @@ class UsersWP_Profile {
      * @param       $tabs_arr
      * @return      mixed
      */
-    public function uwp_extra_fields_available_tab_items($tabs_arr){
+    public function extra_fields_available_tab_items($tabs_arr){
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         $fields = $wpdb->get_results("SELECT htmlvar_name, site_title FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
@@ -1774,7 +1774,7 @@ class UsersWP_Profile {
      * @param       $user
      * @return      mixed
      */
-    public function uwp_extra_fields_as_tabs($tabs, $user, $allowed_tabs)
+    public function extra_fields_as_tabs($tabs, $user, $allowed_tabs)
     {
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
@@ -1794,7 +1794,7 @@ class UsersWP_Profile {
                 }
             }
             $key = str_replace('uwp_account_', '', $field->htmlvar_name);
-            $value = $this->uwp_get_field_value($field, $user);
+            $value = $this->get_field_value($field, $user);
             if('fieldset' == $field->field_type){
                 $value = true;
             }
@@ -1846,7 +1846,7 @@ class UsersWP_Profile {
                 $fieldsets[$fieldset][] = $field;
             }
             if ($key == $active_tab && $field->field_type != 'fieldset') {
-                $value = $this->uwp_get_field_value($field, $user);
+                $value = $this->get_field_value($field, $user);
                 echo '<div class="uwp_profile_tab_field_content">';
                 echo $value;
                 echo '</div>';
@@ -1871,7 +1871,7 @@ class UsersWP_Profile {
                     if (!$display) {
                         continue;
                     }
-                    $value = $this->uwp_get_field_value($field, $user);
+                    $value = $this->get_field_value($field, $user);
                     // Icon
                     $icon = uwp_get_field_icon( $field->field_icon );
                     if($value) {
@@ -1901,7 +1901,7 @@ class UsersWP_Profile {
      * @param       object      $user       The User.
      * @return      string                  Custom field value.
      */
-    public function uwp_get_field_value($field, $user) {
+    public function get_field_value($field, $user) {
 
         $user_data = get_userdata($user->ID);
         $file_obj = new UsersWP_Files();
@@ -2009,7 +2009,7 @@ class UsersWP_Profile {
 
         // File
         if ($field->field_type == 'file') {
-            $value = $file_obj->uwp_file_upload_preview($field, $value, false);
+            $value = $file_obj->file_upload_preview($field, $value, false);
         }
 
         // Sanitize
@@ -2034,7 +2034,7 @@ class UsersWP_Profile {
         return $value;
     }
 
-    public function uwp_wpdiscuz_profile_url($profile_url, $user){
+    public function wpdiscuz_profile_url($profile_url, $user){
         $profile_page_url = uwp_get_page_id('profile_page', true);
         $allowed = apply_filters('uwp_wpdiscuz_profile_url_change', true, $profile_url, $user);
         if (isset($profile_page_url) && !empty($profile_page_url) && $allowed ) {

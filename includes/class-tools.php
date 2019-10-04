@@ -9,11 +9,11 @@
  */
 class UsersWP_Tools {
 
-    public function uwp_fix_usermeta_table() {
+    public function fix_usermeta_table() {
         uwp_create_tables();
     }
 
-    public function uwp_tools_wrap_error_message($message, $class) {
+    public function tools_wrap_error_message($message, $class) {
         ob_start();
         ?>
         <div class="notice inline notice-<?php echo $class; ?> notice-alt">
@@ -24,7 +24,7 @@ class UsersWP_Tools {
         return $html;
     }
 
-    public function uwp_fix_field_columns() {
+    public function fix_field_columns() {
         global $wpdb;
         $errors = new WP_Error();
 
@@ -55,7 +55,7 @@ class UsersWP_Tools {
         return true;
     }
 
-    public function uwp_get_field_columns() {
+    public function get_field_columns() {
         global $wpdb;
         $form_type = 'account';
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
@@ -79,7 +79,7 @@ class UsersWP_Tools {
 
     }
 
-    public function uwp_fix_usermeta($step) {
+    public function fix_usermeta($step) {
 
         global $wpdb;
 
@@ -97,7 +97,7 @@ class UsersWP_Tools {
         $max_step = ceil($total_users / $items_per_page) - 1;
         $percent = (($step + 1)/ ($max_step+1)) * 100;
 
-        $columns = $this->uwp_get_field_columns();
+        $columns = $this->get_field_columns();
 
         //we got all the IDs, now loop through them to get individual IDs
         $count = 0;
@@ -107,13 +107,13 @@ class UsersWP_Tools {
         $error = false;
 
         if ($step == 0) {
-            $this->uwp_fix_usermeta_table();
+            $this->fix_usermeta_table();
 
-            $output = $this->uwp_fix_field_columns();
+            $output = $this->fix_field_columns();
             if (is_wp_error($output)) {
                 $table_sync_error = true;
                 $error = true;
-                $message = $this->uwp_tools_wrap_error_message($output->get_error_message(), 'error');
+                $message = $this->tools_wrap_error_message($output->get_error_message(), 'error');
             }
         }
 
@@ -160,7 +160,7 @@ class UsersWP_Tools {
             if ($step >= $max_step) {
                 $done = true;
                 $message = __("Processed Successfully", 'userswp');
-                $message = $this->uwp_tools_wrap_error_message($message, 'success');
+                $message = $this->tools_wrap_error_message($message, 'success');
             } else {
                 $done = false;
                 $step = $step + 1;
@@ -294,7 +294,7 @@ class UsersWP_Tools {
         if ($step >= $max_step) {
             $done = true;
             $message = __("Processed Successfully", 'userswp');
-            $message = $this->uwp_tools_wrap_error_message($message, 'success');
+            $message = $this->tools_wrap_error_message($message, 'success');
         } else {
             $done = false;
             $step = $step + 1;
@@ -652,7 +652,7 @@ class UsersWP_Tools {
                 $this->clear_version_numbers($step);
                 break;
             case 'fix_user_data':
-                $this->uwp_fix_usermeta($step);
+                $this->fix_usermeta($step);
                 break;
             case 'add_dummy_users':
                 $this->uwp_tools_process_dummy_users($step, 'add');

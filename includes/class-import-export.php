@@ -34,15 +34,15 @@ class UsersWP_Import_Export {
         $this->meta_table_name  = get_usermeta_table_prefix() . 'uwp_usermeta';
         $this->path  = '';
 
-        add_action( 'admin_init', array($this, 'uwp_process_settings_export') );
-        add_action( 'admin_init', array($this, 'uwp_process_settings_import') );
-        add_action( 'wp_ajax_uwp_ajax_export_users', array( $this, 'uwp_process_users_export' ) );
-        add_action( 'wp_ajax_uwp_ajax_import_users', array( $this, 'uwp_process_users_import' ) );
-        add_action( 'wp_ajax_uwp_ie_upload_file', array( $this, 'uwp_ie_upload_file' ) );
-        add_action( 'wp_ajax_nopriv_uwp_ie_upload_file', array( $this, 'uwp_ie_upload_file' ) );
-        add_action( 'admin_notices', array($this, 'uwp_ie_admin_notice') );
-        add_filter( 'uwp_get_export_users_status', array( $this, 'uwp_get_export_users_status' ) );
-        add_filter( 'uwp_get_import_users_status', array( $this, 'uwp_get_import_users_status' ) );
+        add_action( 'admin_init', array($this, 'process_settings_export') );
+        add_action( 'admin_init', array($this, 'process_settings_import') );
+        add_action( 'wp_ajax_uwp_ajax_export_users', array( $this, 'process_users_export' ) );
+        add_action( 'wp_ajax_uwp_ajax_import_users', array( $this, 'process_users_import' ) );
+        add_action( 'wp_ajax_uwp_ie_upload_file', array( $this, 'ie_upload_file' ) );
+        add_action( 'wp_ajax_nopriv_uwp_ie_upload_file', array( $this, 'ie_upload_file' ) );
+        add_action( 'admin_notices', array($this, 'ie_admin_notice') );
+        add_filter( 'uwp_get_export_users_status', array( $this, 'get_export_users_status' ) );
+        add_filter( 'uwp_get_import_users_status', array( $this, 'get_import_users_status' ) );
      }
 
     public function export_location( $relative = false ) {
@@ -53,7 +53,7 @@ class UsersWP_Import_Export {
         return trailingslashit( $export_location );
     }
 
-    public function uwp_ie_admin_notice(){
+    public function ie_admin_notice(){
         if(isset($_GET['imp-msg']) && 'success' == $_GET['imp-msg']){
             ?>
             <div class="notice notice-success is-dismissible">
@@ -66,7 +66,7 @@ class UsersWP_Import_Export {
     /**
      * Process a settings export that generates a .json file of the settings
      */
-    public function uwp_process_settings_export() {
+    public function process_settings_export() {
         if( empty( $_POST['uwp_ie_action'] ) || 'export_settings' != $_POST['uwp_ie_action'] )
             return;
         if( ! wp_verify_nonce( $_POST['uwp_export_nonce'], 'uwp_export_nonce' ) )
@@ -86,7 +86,7 @@ class UsersWP_Import_Export {
     /**
      * Process a settings import from a json file
      */
-    public function uwp_process_settings_import() {
+    public function process_settings_import() {
         if( empty( $_POST['uwp_ie_action'] ) || 'import_settings' != $_POST['uwp_ie_action'] )
             return;
         if( ! wp_verify_nonce( $_POST['uwp_import_nonce'], 'uwp_import_nonce' ) )
@@ -108,7 +108,7 @@ class UsersWP_Import_Export {
         wp_safe_redirect( admin_url( 'admin.php?page=userswp&tab=import-export&section=settings&imp-msg=success' ) ); exit;
     }
 
-    public function uwp_process_users_export(){
+    public function process_users_export(){
 
         $response               = array();
         $response['success']    = false;
@@ -331,7 +331,7 @@ class UsersWP_Import_Export {
         $this->empty = count( $rows ) == $columns ? true : false;
     }
 
-    public function uwp_get_export_users_status() {
+    public function get_export_users_status() {
         global $wpdb;
         $data       = $wpdb->get_results("SELECT user_id FROM $this->meta_table_name WHERE 1=1");
         $total      = !empty( $data ) ? count( $data ) : 0;
@@ -352,7 +352,7 @@ class UsersWP_Import_Export {
         return $status;
     }
 
-    public function uwp_ie_upload_file(){
+    public function ie_upload_file(){
         $nonce = $_REQUEST['nonce'];
         if ( ! wp_verify_nonce( $nonce, 'uwp-ie-file-upload-nonce' ) ) {
             echo 'error';return;
@@ -378,7 +378,7 @@ class UsersWP_Import_Export {
         exit;
     }
 
-    public function uwp_process_users_import(){
+    public function process_users_import(){
 
         $response               = array();
         $response['success']    = false;
@@ -636,7 +636,7 @@ class UsersWP_Import_Export {
         return apply_filters( 'uwp_get_import_users_status', $status );
     }
 
-    public function uwp_get_import_users_status() {
+    public function get_import_users_status() {
 
         if ( $this->imp_step >= $this->total_rows ) {
             $status = 100;

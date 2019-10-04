@@ -32,7 +32,6 @@ class UsersWP_Admin_Menus {
      * Add menu items.
      */
     public function admin_menu() {
-        global $menu;
 
         $install_type = uwp_get_installation_type();
 
@@ -106,9 +105,6 @@ class UsersWP_Admin_Menus {
                 'uwp_form_builder',
                 array('UsersWP_Form_Builder', 'output')
             );
-
-            //$settings_page = array($this->admin_settings, 'uwp_settings_page');
-            //do_action('uwp_admin_sub_menus', $settings_page, $this->admin_settings);
         }
 
     }

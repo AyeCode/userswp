@@ -314,7 +314,7 @@ class UsersWP_Meta {
         return $value;
     }
 
-    public function uwp_user_row_actions($actions, $user_object){
+    public function user_row_actions($actions, $user_object){
         $user_id = $user_object->ID;
         $mod_value = get_user_meta( $user_id, 'uwp_mod', true );
         $resend_link = add_query_arg(
@@ -343,13 +343,13 @@ class UsersWP_Meta {
         return $actions;
     }
 
-    public function uwp_process_user_actions(){
+    public function process_user_actions(){
         $user_id = isset($_REQUEST['user_id']) ? (int)$_REQUEST['user_id'] : 0;
         $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : false;
         $nonce = isset($_REQUEST['_nonce']) ? $_REQUEST['_nonce'] : false;
 
         if($user_id && 'uwp_resend' == $action && wp_verify_nonce( $nonce,'uwp_resend')){
-            $send_result = $this->uwp_resend_activation_mail($user_id);
+            $send_result = $this->resend_activation_mail($user_id);
             if(!is_admin()){
                 global $uwp_notices;
 
@@ -368,28 +368,28 @@ class UsersWP_Meta {
             exit();
         } elseif($user_id && 'uwp_activate_user' == $action && wp_verify_nonce( $nonce,'uwp_activate_user')){
             if(is_admin() && current_user_can('edit_users')){
-                $this->uwp_activate_user($user_id);
+                $this->activate_user($user_id);
                 wp_redirect( add_query_arg( 'update', 'uwp_activate_user', admin_url('users.php') ) );
             }
         }
     }
 
-    public function uwp_users_bulk_actions($bulk_actions){
+    public function users_bulk_actions($bulk_actions){
         $bulk_actions['uwp_resend'] = __( 'Resend Activation', 'userswp');
         $bulk_actions['uwp_activate_user'] = __( 'Approve User(s)', 'userswp');
         return $bulk_actions;
     }
 
-    public function uwp_handle_users_bulk_actions($redirect_to, $doaction, $user_ids){
+    public function handle_users_bulk_actions($redirect_to, $doaction, $user_ids){
         if ( 'uwp_resend' == $doaction ) {
             foreach ( $user_ids as $user_id ) {
-                $this->uwp_resend_activation_mail($user_id);
+                $this->resend_activation_mail($user_id);
             }
 
             $redirect_to = add_query_arg( 'update', 'uwp_resend', $redirect_to );
         } elseif('uwp_activate_user' == $doaction){
             foreach ( $user_ids as $user_id ) {
-                $this->uwp_activate_user($user_id);
+                $this->activate_user($user_id);
             }
             $redirect_to = add_query_arg( 'update', 'uwp_activate_user', $redirect_to );
         }
@@ -397,7 +397,7 @@ class UsersWP_Meta {
         return $redirect_to;
     }
 
-    public function uwp_resend_activation_mail($user_id = 0){
+    public function resend_activation_mail($user_id = 0){
         if(!$user_id){
             return false;
         }
@@ -409,7 +409,7 @@ class UsersWP_Meta {
         return true;
     }
 
-    public function uwp_activate_user($user_id = 0){
+    public function activate_user($user_id = 0){
         if(!$user_id){
             return false;
         }
@@ -421,7 +421,7 @@ class UsersWP_Meta {
         return true;
     }
 
-    public function uwp_show_update_messages(){
+    public function show_update_messages(){
         if ( !isset($_REQUEST['update']) ) return;
 
         $update = $_REQUEST['update'];

@@ -17,7 +17,7 @@ class UsersWP_Templates {
      * @param       string      $template       Template type.
      * @return      string                      The template filename if one is located.
      */
-    public function uwp_locate_template( $template, $template_path = "" ) {
+    public function locate_template( $template, $template_path = "" ) {
 
         switch ($template) {
             case 'register':
@@ -26,27 +26,27 @@ class UsersWP_Templates {
             case 'change':
             case 'reset':
             case 'account':
-                $template_path = $this->uwp_generic_locate_template($template);
+                $template_path = $this->generic_locate_template($template);
                 break;
 
             case 'profile':
-                $template_path = $this->uwp_generic_locate_template('profile');
+                $template_path = $this->generic_locate_template('profile');
                 break;
 
             case 'users':
-                $template_path = $this->uwp_generic_locate_template('users');
+                $template_path = $this->generic_locate_template('users');
                 break;
 
             case 'users-list-item':
-                $template_path = $this->uwp_generic_locate_template('users-list-item');
+                $template_path = $this->generic_locate_template('users-list-item');
                 break;
             
             case 'dashboard':
-                $template_path = $this->uwp_generic_locate_template('dashboard');
+                $template_path = $this->generic_locate_template('dashboard');
                 break;
             
             default:
-                $template_path = $this->uwp_generic_locate_template($template);
+                $template_path = $this->generic_locate_template($template);
                 break;
         }
         
@@ -63,7 +63,7 @@ class UsersWP_Templates {
      * @param       string      $type           Template type.
      * @return      string                      The template filename if one is located.
      */
-    public function uwp_generic_locate_template($type = 'register') {
+    public function generic_locate_template($type = 'register') {
         
         $plugin_path = dirname( dirname( __FILE__ ) );
         
@@ -396,7 +396,7 @@ class UsersWP_Templates {
      * @param       string      $form_type      Form type.
      * @return      void
      */
-    public function uwp_template_fields($form_type) {
+    public function template_fields($form_type) {
 
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
@@ -434,10 +434,10 @@ class UsersWP_Templates {
                     }
                     $count = $wpdb->get_var($wpdb->prepare("select count(*) from ".$extras_table_name." where site_htmlvar_name=%s AND form_type = %s", array($field->htmlvar_name, $form_type)));
                     if ($count == 1) {
-                        $this->uwp_template_fields_html($field, $form_type);
+                        $this->template_fields_html($field, $form_type);
                     }
                 } else {
-                    $this->uwp_template_fields_html($field, $form_type);
+                    $this->template_fields_html($field, $form_type);
                 }
             }
         }
@@ -451,7 +451,7 @@ class UsersWP_Templates {
      * @param       string      $form_type      Form type.
      * @return      void
      */
-    public function uwp_template_extra_fields($form_type){
+    public function template_extra_fields($form_type){
         if ($form_type == 'login') {
             if (-1 == uwp_get_option('login_redirect_to', -1)) {
                 $referer = wp_get_referer();
@@ -499,7 +499,7 @@ class UsersWP_Templates {
      * @param       string      $type       Template type.
      * @return      void
      */
-    public function uwp_account_edit_form_display($type) {
+    public function account_edit_form_display($type) {
         if ($type == 'account') {
             $design_style = uwp_get_option("design_style","bootstrap");
             $bs_btn_class = $design_style ? "btn btn-primary btn-block text-uppercase" : "";
@@ -522,12 +522,12 @@ class UsersWP_Templates {
      * @param       int|bool    $user_id    User ID.
      * @return      void
      */
-    public function uwp_template_fields_html($field, $form_type, $user_id = false) {
+    public function template_fields_html($field, $form_type, $user_id = false) {
         if (!$user_id) {
             $user_id = get_current_user_id();    
         }
 
-        $value = $this->uwp_get_default_form_value($field);
+        $value = $this->get_default_form_value($field);
         if ($form_type == 'account') {
             $user_data = get_userdata($user_id);
 
@@ -542,7 +542,7 @@ class UsersWP_Templates {
             } else {
                 $value = uwp_get_usermeta($user_id, $field->htmlvar_name, false);
                 if ($value != '0' && !$value) {
-                    $value = $this->uwp_get_default_form_value($field);
+                    $value = $this->get_default_form_value($field);
                 }
             }
 
@@ -604,7 +604,7 @@ class UsersWP_Templates {
      * @param       object      $field      Field info.
      * @return      string                  Field default value.
      */
-    public function uwp_get_default_form_value($field) {
+    public function get_default_form_value($field) {
         if ($field->field_type == 'url') {
             if (substr( $field->default_value, 0, 4 ) === "http") {
                 $value = $field->default_value;
@@ -626,7 +626,7 @@ class UsersWP_Templates {
      * @param       string      $content    Original page content.
      * @return      string                  Modified page content.
      */
-    public function uwp_author_page_content($content) {
+    public function author_page_content($content) {
         if (is_author() && apply_filters( 'uwp_use_author_page_content', true ) ) {
             return do_shortcode('[uwp_profile]');
         } else {
@@ -736,7 +736,7 @@ class UsersWP_Templates {
      * @param       object      $menu_item      Menu item info.
      * @return      object                      Modified menu item.
      */
-    public function uwp_setup_nav_menu_item( $menu_item ) {
+    public function setup_nav_menu_item( $menu_item ) {
 
         if ( is_admin() ) {
             return $menu_item;
@@ -857,7 +857,7 @@ class UsersWP_Templates {
      * @package     userswp
      * @return      void
      */
-    public function uwp_activation_redirect() {
+    public function activation_redirect() {
 
         if (get_option('uwp_activation_redirect', false)) {
             delete_option('uwp_activation_redirect');
@@ -926,7 +926,7 @@ class UsersWP_Templates {
                             <tr>
                                 <th class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?></th>
                                 <td class="uwp-profile-extra-value">
-                                    <?php $this->uwp_template_fields_html($field, 'account', $user->ID); ?>
+                                    <?php $this->template_fields_html($field, 'account', $user->ID); ?>
                                 </td>
                             </tr>
                             <?php
@@ -950,7 +950,7 @@ class UsersWP_Templates {
      * @param       array       $classes     Existing class array.
      * @return      array                    Modified class array.
      */
-    public function uwp_add_body_class( $classes ) {
+    public function add_body_class( $classes ) {
 
         if ( is_uwp_page() ) {
             $classes[] = 'uwp_page';
@@ -959,7 +959,7 @@ class UsersWP_Templates {
         return $classes;
     }
 
-    public function uwp_author_box_page_content( $content ) {
+    public function author_box_page_content( $content ) {
 
         global $post;
 
