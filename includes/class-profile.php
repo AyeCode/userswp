@@ -2053,10 +2053,11 @@ class UsersWP_Profile {
 
 			function uwp_list_view_select($val, $noStore) {
 
+				var $storage_key = "uwp_list_view";
 				var $list = jQuery('.uwp-users-loop > .row');
-
 				if(!$list.length){
 					$list = jQuery('.uwp-profile-cpt-loop > .row');
+					$storage_key = "uwp_cpt_list_view";
 				}
 
 				var $listSelect = jQuery('.uwp-list-view-select');
@@ -2074,20 +2075,35 @@ class UsersWP_Profile {
 				// only store if it was a user action
 				if (!$noStore) {
 					// store the user selection
-					localStorage.setItem("uwp_list_view", $val);
+					localStorage.setItem($storage_key, $val);
 				}
 			}
 
 			// set the current user selection if set
 			if (typeof(Storage) !== "undefined") {
+				var $storage_key = "uwp_list_view";
+				var $list = jQuery('.uwp-users-loop > .row');
+				if(!$list.length){
+					$list = jQuery('.uwp-profile-cpt-loop > .row');
+					$storage_key = "uwp_cpt_list_view";
+				}
 				var $noStore = false;
-				var uwp_list_view = localStorage.getItem("uwp_list_view");
+				var uwp_list_view = localStorage.getItem($storage_key);
 				setTimeout(function () {
 					if (!uwp_list_view) {
 						$noStore = true;
-						$container = jQuery('.uwp-profile-cpt-loop .card-deck');
-						if ($container.hasClass('card-deck-list')) {
+						if ($list.hasClass('row-cols-md-0')) {
 							uwp_list_view = 0;
+						} else if($list.hasClass('row-cols-md-1')){
+							uwp_list_view = 1;
+						} else if($list.hasClass('row-cols-md-2')){
+							uwp_list_view = 2;
+						} else if($list.hasClass('row-cols-md-3')){
+							uwp_list_view = 3;
+						} else if($list.hasClass('row-cols-md-4')){
+							uwp_list_view = 4;
+						}else if($list.hasClass('row-cols-md-5')){
+							uwp_list_view = 5;
 						} else {
 							uwp_list_view = 3;
 						}

@@ -373,6 +373,7 @@ final class UsersWP {
         register_widget("UWP_Change_Widget");
         register_widget("UWP_Reset_Widget");
         register_widget("UWP_Users_Widget");
+        register_widget("UWP_Users_Item_Widget");
         register_widget("UWP_Account_Widget");
         register_widget("UWP_Profile_Widget");
 
@@ -624,6 +625,11 @@ final class UsersWP {
          * The class for users widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/users.php' );
+
+        /**
+         * The class for users item widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/users-item.php' );
 
         /**
          * The class for account widget.

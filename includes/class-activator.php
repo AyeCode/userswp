@@ -163,7 +163,7 @@ class UsersWP_Activator {
             'author_box_enable_disable' => 1,
             'author_box_display_content' => 'below_content',
             'author_box_display_post_types' => array('post'),
-            'author_box_content' => UsersWP_Defaults::author_box_content(),
+            'author_box_content' => '',
             'registration_success_email_admin' => 1,
             'registration_success_email_subject_admin' => UsersWP_Defaults::email_user_new_account_subject(),
             'registration_success_email_content_admin' => UsersWP_Defaults::email_user_new_account_body(),
@@ -256,7 +256,7 @@ class UsersWP_Activator {
         $current_db_version = get_option( 'uwp_db_version', null );
         $updates            = self::get_db_update_callbacks();
 
-        return ! is_null( $current_db_version ) && ! empty( $updates ) && version_compare( $current_db_version, max( array_keys( $updates ) ), '<' );
+        return ! empty( $updates ) && version_compare( $current_db_version, max( array_keys( $updates ) ), '<' );
     }
 
     /**

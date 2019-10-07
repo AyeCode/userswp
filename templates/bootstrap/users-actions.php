@@ -62,7 +62,7 @@ do_action('uwp_users_loop_actions');
 
 
 				<div class="btn-group btn-group-sm uwp-list-view-select" role="group" aria-label="First group">
-					<button type="button" class="btn btn-outline-primary uwp-list-view-select-list " onclick="uwp_list_view_select(0);"><i class="fas fa-th-list"></i></button>
+<!--					<button type="button" class="btn btn-outline-primary uwp-list-view-select-list  " onclick="uwp_list_view_select(0);"><i class="fas fa-th-list"></i></button>-->
 					<div class="btn-group btn-group-sm" role="group">
 						<button id="uwp-list-view-select-grid" type="button" class="btn btn-outline-primary rounded-right uwp-list-view-select-grid" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<i class="fas fa-th"></i>

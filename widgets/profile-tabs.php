@@ -39,6 +39,29 @@ class UWP_Profile_Tabs_Widget extends WP_Super_Duper {
                     'default'     => '',
                     'advanced'    => false
                 ),
+                'show_as_list'  => array(
+                    'title' => __('Show as list:', 'userswp'),
+                    'desc' => __('This will show the tabs as a list and not as tabs.', 'userswp'),
+                    'type' => 'checkbox',
+                    'desc_tip' => true,
+                    'value'  => '1',
+                    'default'  => '',
+                    'advanced' => true
+                ),
+                'output'  => array(
+                    'title' => __('Output Type:', 'userswp'),
+                    'desc' => __('What parts should be output.', 'userswp'),
+                    'type' => 'select',
+                    'options'   =>  array(
+                        "" => __('Default', 'userswp'),
+                        "head" => __('Head only', 'userswp'),
+                        "body" => __('Body only', 'userswp'),
+                        "json" => __('JSON Array (developer option)', 'userswp'),
+                    ),
+                    'default'  => '',
+                    'desc_tip' => true,
+                    'advanced' => true
+                )
             )
 
         );
@@ -58,9 +81,8 @@ class UWP_Profile_Tabs_Widget extends WP_Super_Duper {
 
 
         $defaults = array(
-            'hide_cover'       => 0,
-            'hide_avatar'      => 0,
-            'allow_change'     => 1,
+            'show_as_list' => '0', // 0 =  all
+            'output' => '',
         );
 
         $args = wp_parse_args( $args, $defaults );
@@ -91,28 +113,26 @@ class UWP_Profile_Tabs_Widget extends WP_Super_Duper {
 
         $args['active_tab'] = $active_tab;
 
-
-        $enable_profile_body = uwp_get_option('enable_profile_body');
+        // output JSON
+        if($args['output']=='json'){
+            return json_encode( $tabs_array );
+        }
 
         ob_start();
 
-        if (1 == $enable_profile_body) {
+        
+        global $uwp_widget_args;
+        $uwp_widget_args = $args;
 
-            
+        $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
+        $template = $design_style ? $design_style."/profile-tabs" : "profile-tabs";
 
-            global $uwp_widget_args;
-            $uwp_widget_args = $args;
+        uwp_locate_template($template);
 
-            $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
-            $template = $design_style ? $design_style."/profile-tabs" : "profile-tabs";
-
-            uwp_locate_template($template);
-
-//            do_action('uwp_profile_content', $user);
-
-        }
 
         $output = ob_get_clean();
+
+        $uwp_widget_args = array(); // clear settings
 
         return $output;
 

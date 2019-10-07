@@ -1,0 +1,25 @@
+@-webkit-keyframes bsui_shimmer {
+  0%{background-position:-400px}
+  100%{background-position:400px}
+}
+@-moz-keyframes bsui_shimmer {
+  0%{background-position:-400px}
+  100%{background-position:400px}
+}
+@keyframes bsui_shimmer {
+  0%{background-position:-400px}
+  100%{background-position:400px}
+}
+
+
+.bg-loading {
+  background: #f6f7f8;
+  background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+  background-repeat: no-repeat;
+  background-size: 800px 104px;
+  display: inline-block;
+  position: relative;
+  -webkit-animation: bsui_shimmer 1s linear infinite forwards;
+  -moz-animation: bsui_shimmer 1s linear infinite forwards;
+  animation: bsui_shimmer 1s linear infinite forwards;
+}

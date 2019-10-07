@@ -60,9 +60,9 @@ class UWP_User_Actions_Widget extends WP_Super_Duper {
 
         $output = ob_get_clean();
 
-        if($output && $uwp_in_user_loop){
-            $output = "<div class='card-body'></div> <div class='card-footer'>".$output."</div>";
-        }
+//        if($output && $uwp_in_user_loop){
+//            $output = "<div class='card-body'></div> <div class='card-footer'>".$output."</div>";
+//        }
 
         return $output;
 

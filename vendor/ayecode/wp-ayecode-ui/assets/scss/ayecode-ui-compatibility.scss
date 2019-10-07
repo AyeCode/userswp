@@ -1,0 +1,20 @@
+.bsui{
+  @import "main";
+  @import "partials/index"; // helpers
+}
+
+// admin bar
+body.admin-bar{
+  .modal{
+    padding-top: 1rem;
+  }
+}
+
+// Modal can't be inside wrapper
+@import "1-frameworks/bootstrap/functions";
+@import "1-frameworks/bootstrap/variables";
+@import "1-frameworks/bootstrap/mixins";
+@import "1-frameworks/bootstrap/root";
+@import "1-frameworks/bootstrap/modal";
+@import "1-frameworks/bootstrap/tooltip";
+@import "1-frameworks/bootstrap/popover";

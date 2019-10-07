@@ -439,7 +439,7 @@ class UsersWP_Pages {
         $this->create_page(esc_sql(_x('change',     'page_slug', 'userswp')), 'change_page',    __('Change Password',   'userswp'), '[uwp_change]');
         $this->create_page(esc_sql(_x('profile',    'page_slug', 'userswp')), 'profile_page',   __('Profile',           'userswp'), '[uwp_profile]');
         $this->create_page(esc_sql(_x('users',      'page_slug', 'userswp')), 'users_page',     __('Users',             'userswp'), '[uwp_users]');
-        $this->create_page(esc_sql(_x('user-list-item',  'page_slug', 'userswp')), 'user_list_item_page', __('Users List Item', 'userswp'), UsersWP_Defaults::page_user_list_item_content());
+        $this->create_page(esc_sql(_x('user-list-item',  'page_slug', 'userswp')), 'user_list_item_page', __('Users List Item', 'userswp'), '[uwp_users_item]');
 
     }
 
