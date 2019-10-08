@@ -36,7 +36,6 @@ class UsersWP_GeoDirectory_Plugin {
             add_filter( 'uwp_available_tab_items', array( $this, 'available_tab_items' ) );
 	        add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
         } else {
-            add_filter( 'uwp_profile_tabs', array( $this, 'add_profile_gd_tabs' ), 10, 3 );
             add_action( 'uwp_profile_listings_tab_content', array( $this, 'add_profile_listings_tab_content' ) );
             add_action( 'uwp_profile_reviews_tab_content', array( $this, 'add_profile_reviews_tab_content' ) );
             add_action( 'uwp_profile_favorites_tab_content', array( $this, 'add_profile_favorites_tab_content' ) );
@@ -45,7 +44,7 @@ class UsersWP_GeoDirectory_Plugin {
             add_action( 'uwp_profile_gd_favorites_subtab_content', array( $this, 'gd_get_favorites' ), 10, 2 );
             add_action( 'geodir_after_edit_post_link_on_listing', array( $this, 'geodir_add_post_status_author_page' ), 11 );
             add_action( 'uwp_dashboard_links', array( $this, 'dashboard_output' ), 10, 2 );
-            add_action( 'uwp_profile_tab_icon', array( $this, 'profile_tab_icon' ), 10, 3 );
+//            add_action( 'uwp_profile_tab_icon', array( $this, 'profile_tab_icon' ), 10, 3 );
         }
         add_filter( 'geodir_login_url', array( $this, 'get_gd_login_url' ), 10, 2 );
         add_action( 'wp', array( $this, 'geodir_uwp_author_redirect' ) );
@@ -58,6 +57,8 @@ class UsersWP_GeoDirectory_Plugin {
         add_filter( 'uwp_use_author_page_content', array( $this, 'skip_uwp_author_page' ), 10, 1 );
         add_filter( 'geodir_dashboard_link_favorite_listing', array( $this, 'dashboard_favorite_links'),10, 3);
         add_filter( 'geodir_dashboard_link_my_listing', array( $this, 'dashboard_listing_links'),10, 3);
+
+        add_filter('uwp_tp_posts_post_footer',array( $this, 'posts_footer'));
 
         do_action( 'uwp_gd_setup_actions', $this );
     }
@@ -327,7 +328,7 @@ class UsersWP_GeoDirectory_Plugin {
 		$fields[] = array(
 			'tab_type'   => 'standard',
 			'tab_name'   => __('Listings','userswp'),
-			'tab_icon'   => '',
+			'tab_icon'   => 'fas fa-globe-americas',
 			'tab_key'    => 'listings',
 			'tab_content'=> ''
 		);
@@ -335,18 +336,16 @@ class UsersWP_GeoDirectory_Plugin {
 		$fields[] = array(
 			'tab_type'   => 'standard',
 			'tab_name'   => __('Reviews','userswp'),
-			'tab_icon'   => '',
+			'tab_icon'   => 'fas fa-star',
 			'tab_key'    => 'reviews',
-			'tab_login_only' => 1,
 			'tab_content'=> ''
 		);
 
 		$fields[] = array(
 			'tab_type'   => 'standard',
 			'tab_name'   => __('Favorites','userswp'),
-			'tab_icon'   => '',
+			'tab_icon'   => 'fas fa-heart',
 			'tab_key'    => 'favorites',
-			'tab_login_only' => 1,
 			'tab_content'=> ''
 		);
 
@@ -567,50 +566,6 @@ class UsersWP_GeoDirectory_Plugin {
     }
 
     /**
-     * Adds tab in user profile page.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @param       array     $tabs             Existing tabs array.
-     * @param       object    $user             User object.
-     * @param       array     $allowed_tabs     Allowed tabs array.
-     *
-     * @return      array     Tabs array.
-     */
-    function add_profile_gd_tabs($tabs, $user,$allowed_tabs) {
-        // allowed post types
-        $listing_post_types = uwp_get_option('gd_profile_listings', array());
-        $l_counts = $this->get_total_listings_count($user->ID);
-        if (!empty($listing_post_types) && in_array('listings', $allowed_tabs) && $l_counts > 0) {
-            $tabs['listings'] = array(
-                'title' => __('Listings', 'userswp'),
-                'count' => $l_counts
-            );
-        }
-
-        $listing_post_types = uwp_get_option('gd_profile_reviews', array());
-        $r_counts = $this->get_total_reviews_count($user->ID);
-        if (!empty($listing_post_types) && in_array('reviews', $allowed_tabs) && $r_counts > 0) {
-            $tabs['reviews'] = array(
-                'title' => __('Reviews', 'userswp'),
-                'count' => $r_counts
-            );
-        }
-
-        $listing_post_types = uwp_get_option('gd_profile_favorites', array());
-        $f_counts = $this->get_total_favorites_count($user->ID);
-        if (!empty($listing_post_types) && in_array('favorites', $allowed_tabs) && (get_current_user_id() == $user->ID) && $f_counts > 0) {
-            $tabs['favorites'] = array(
-                'title' => __('Favorites', 'userswp'),
-                'count' => $f_counts
-            );
-        }
-
-        return $tabs;
-    }
-
-    /**
      * Adds GD listings tab content.
      *
      * @since       1.0.0
@@ -722,6 +677,31 @@ class UsersWP_GeoDirectory_Plugin {
         } else {
 	        $post_type = apply_filters('uwp_default_listing_post_type', 'gd_place', $user, $type);
         }
+
+        if(uwp_get_option("design_style",'bootstrap')){
+            if ($subtabs) {
+                ?>
+                <div class="list-group list-group-horizontal-md pb-3">
+                    <?php
+                    foreach ($this->profile_gd_subtabs($user, $type) as $tab_id => $tab) {
+
+                        $tab_url = uwp_build_profile_tab_url($user->ID, $type, $tab_id);
+
+                        $active = $active_tab == $tab_id ? ' active' : '';
+                        $post_type = $active_tab == $tab_id ? $tab['ptype'] : $post_type;
+                        ?>
+                        <a id="uwp-profile-gd-<?php echo $tab_id; ?>" href="<?php echo esc_url($tab_url); ?>" class=" list-group-item list-group-item-action p-1 d-flex justify-content-between align-items-center <?php echo $active; ?>">
+                                <?php echo esc_html($tab['title']); ?>
+                                <span class="badge badge-primary"><?php echo $tab['count']; ?></span>
+                        </a>
+                        <?php
+                    }
+                    ?>
+                </div>
+                <?php
+            }
+        }else{
+
         ?>
         <div class="uwp-profile-subcontent">
             <div class="uwp-profile-subnav">
@@ -747,24 +727,72 @@ class UsersWP_GeoDirectory_Plugin {
                     </ul>
                 <?php } ?>
             </div>
-
-            <div class="uwp-profile-subtab-entries">
+    <?php }?>
+        <div class="uwp-profile-subtab-entries">
                 <?php
                 do_action('uwp_profile_gd_' . $type . '_subtab_content', $user, $post_type);
                 ?>
             </div>
         </div>
-    <?php 
+    <?php
+    }
+
+    public function posts_footer($html){
+        global $post;
+
+        $post_avgratings = geodir_get_post_rating($post->ID);
+        $post_ratings = geodir_get_rating_stars($post_avgratings, $post->ID);
+
+        $html .= $post_ratings;
+//
+//        <div class="row">
+//    <div class="col">col</div>
+//    <div class="col">col</div>
+//    <div class="w-100"></div>
+//    <div class="col">col</div>
+//    <div class="col">col</div>
+//  </div>
+
+        return $html;
+    }
+    public function get_bootstrap_listings($user, $post_type){
+        global $uwp_widget_args;
+
+        $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
+
+        $args = array(
+            'post_type' => $post_type,
+            'post_status' => array('publish'),
+            'posts_per_page' => uwp_get_option('profile_no_of_items', 10),
+            'author' => $user->ID,
+            'paged' => $paged,
+        );
+
+        if (get_current_user_id() == $user->ID) {
+            $args['post_status'] = array('publish', 'draft', 'private', 'pending', 'gd-closed', 'gd-expired');
+        }
+        // The Query
+        $the_query = new WP_Query($args);
+        $gd_post_types = geodir_get_posttypes('array');
+
+        $uwp_widget_args['template_args']['the_query'] = $the_query;
+        $uwp_widget_args['template_args']['title'] = __($gd_post_types[$post_type]['labels']['name'], 'userswp');
+
+        uwp_locate_template("bootstrap/loop-posts");
+
     }
 
     public function gd_get_listings($user, $post_type) {
-        $gd_post_types = geodir_get_posttypes('array');
+        if(uwp_get_option("design_style",'bootstrap')){
+            self::get_bootstrap_listings($user, $post_type);
+        }else{
+            $gd_post_types = geodir_get_posttypes('array');
         ?>
         <h3><?php _e($gd_post_types[$post_type]['labels']['name'], 'userswp') ?></h3>
 
         <div class="uwp-profile-item-block">
             <?php
-            
+
             $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
 
             $args = array(
@@ -907,6 +935,7 @@ class UsersWP_GeoDirectory_Plugin {
             ?>
         </div>
         <?php
+        }
     }
 
     public function gd_get_reviews($user, $post_type) {

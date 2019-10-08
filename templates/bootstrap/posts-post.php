@@ -33,9 +33,10 @@ if ( has_post_thumbnail() ) {
 		</div>
 
 		<div class="card-footer">
-			<time class="uwp-profile-item-time published" datetime="<?php echo get_the_time( 'c' ); ?>">
-				<?php echo get_the_date(); ?>
-			</time>
+			<?php
+			$footer_html = '<time class="uwp-profile-item-time published" datetime="'.get_the_time( 'c' ).'">'.get_the_date().'</time>';
+			echo apply_filters('uwp_tp_posts_post_footer', $footer_html);
+			?>
 		</div>
 
 	</div>

@@ -105,7 +105,7 @@ class UWP_Profile_Tabs_Widget extends WP_Super_Duper {
 
         }
 
-        // bail if no active tab
+        // error/warning messages
         if (!$active_tab && isset($tabs_array[0]['tab_key']) ) {
 
             $no_tab = $tabs_array[0];
