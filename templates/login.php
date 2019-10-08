@@ -4,7 +4,7 @@
             <div class="uwp-lf-icon"><i class="fas fa-user fa-fw"></i></div>
             <?php do_action('uwp_template_form_title_before', 'login'); ?>
             <h2><?php
-                $form_title = !empty($uwp_login_widget_args['form_title']) ? esc_attr__($uwp_login_widget_args['form_title'],'userswp') : __( 'Login', 'userswp' );
+                $form_title = ! empty( $uwp_widget_args['form_title'] ) || $uwp_widget_args['form_title']=='0' ? esc_attr__( $uwp_widget_args['form_title'], 'userswp' ) : __( 'Login', 'userswp' );
                 echo apply_filters('uwp_template_form_title',  $form_title, 'login');
                 ?></h2>
             <?php do_action('uwp_template_display_notices', 'login'); ?>

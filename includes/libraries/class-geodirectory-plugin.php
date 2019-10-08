@@ -34,7 +34,7 @@ class UsersWP_GeoDirectory_Plugin {
             add_filter( 'uwp_get_sections_uwp-addons', array( $this, 'add_gd_tab' ) );
             add_filter( 'uwp_get_settings_uwp-addons', array( $this, 'add_gd_settings' ), 10, 2 );
             add_filter( 'uwp_available_tab_items', array( $this, 'available_tab_items' ) );
-	        //add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
+	        add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
         } else {
             add_filter( 'uwp_profile_tabs', array( $this, 'add_profile_gd_tabs' ), 10, 3 );
             add_action( 'uwp_profile_listings_tab_content', array( $this, 'add_profile_listings_tab_content' ) );

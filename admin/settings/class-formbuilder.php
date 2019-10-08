@@ -1110,8 +1110,8 @@ class UsersWP_Form_Builder {
 
                                 <?php
                                 $value = '';
-                                if (isset($field_info->field_icon)) {
-                                    $value = esc_attr($field_info->field_icon);
+                                if (isset($field_info->css_class)) {
+                                    $value = esc_attr($field_info->css_class);
                                 }elseif (isset($cf['defaults']['css_class']) && $cf['defaults']['css_class']) {
                                     $value = $cf['defaults']['css_class'];
                                 }
@@ -1495,7 +1495,6 @@ class UsersWP_Form_Builder {
                             required_msg = %s,
                             css_class = %s,
                             field_icon = %s,
-                            field_icon = %s,
                             show_in = %s,
                             user_roles = %s,
                             option_values = %s,
@@ -1526,7 +1525,6 @@ class UsersWP_Form_Builder {
                             $is_register_only_field,
                             $required_msg,
                             $css_class,
-                            $field_icon,
                             $field_icon,
                             $show_in,
                             $user_roles,

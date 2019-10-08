@@ -19,13 +19,6 @@ class SD_Hello_World extends WP_Super_Duper {
 			// the category for the block, 'common', 'formatting', 'layout', 'widgets', 'embed'.
 			'block-keywords' => "['hello','world']",
 			// used in the block search, MAX 3
-//			'block-output'   => array( // the block visual output elements as an array
-//				'element::p' => array(
-//					'title'   => __( 'Placeholder', 'hello-world' ),
-//					'class'   => '[%className%]',
-//					'content' => 'Hello: [%after_text%]' // block properties can be added by wrapping them in [%name%]
-//				)
-//			),
 			'block-output'   => array( // the block visual output elements as an array
 				array(
 					'element' => 'p',
@@ -34,6 +27,7 @@ class SD_Hello_World extends WP_Super_Duper {
 					'content' => 'Hello: [%after_text%]' // block properties can be added by wrapping them in [%name%]
 				)
 			),
+			'block-wrap'    => '', // You can specify the type of element to wrap the block `div` or `span` etc.. Or blank for no wrap at all.
 			'class_name'     => __CLASS__,
 			// The calling class name
 			'base_id'        => 'hello_world',
@@ -46,6 +40,7 @@ class SD_Hello_World extends WP_Super_Duper {
 				'description' => esc_html__( 'This is an example that will take a text parameter and output it after `Hello:`.', 'hello-world' ),
 				// widget description
 			),
+			'no_wrap'       => true, // This will prevent the widget being wrapped in the containing widget class div.
 			'arguments'      => array( // these are the arguments that will be used in the widget, shortcode and block settings.
 				'after_text' => array( // this is the input name=''
 					'title'       => __( 'Text after hello:', 'hello-world' ),

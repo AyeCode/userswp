@@ -71,6 +71,27 @@ class AUI {
 		return AUI_Component_Alert::get($args);
 	}
 
+	/**
+	 * Render and return a bootstrap input component.
+	 *
+	 * @since 1.0.0
+	 * @param array $args
+	 * @return string The rendered component.
+	 */
+	public function input( $args = array() ) {
+		return AUI_Component_Input::input($args);
+	}
+
+	/**
+	 * Render and return a bootstrap textarea component.
+	 *
+	 * @since 1.0.0
+	 * @param array $args
+	 * @return string The rendered component.
+	 */
+	public function textarea( $args = array() ) {
+		return AUI_Component_Input::textarea($args);
+	}
 
 
 }

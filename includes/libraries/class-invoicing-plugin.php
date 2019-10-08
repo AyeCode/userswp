@@ -30,7 +30,7 @@ class UsersWP_Invoicing_Plugin {
     
     private function setup_actions() {
         if ( is_admin() ) {
-	        //add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
+	        add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
         } else {
             add_filter( 'uwp_profile_tabs', array( $this, 'add_profile_tabs' ), 10, 3 );
             add_action( 'uwp_profile_invoices_tab_content', array( $this, 'add_profile_invoices_tab_content' ) );

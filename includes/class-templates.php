@@ -283,7 +283,7 @@ class UsersWP_Templates {
         if ( 'wp-login.php' == $pagenow && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'register' ) {
             $reg_page_id  = uwp_get_page_id( 'register_page' );
             $block_wp_reg = uwp_get_option( 'wp_register_redirect' );
-            if ( $reg_page_id && $block_wp_reg == '1' ) {
+            if ( $reg_page_id && $block_wp_reg == '1' ) {echo '###';exit;
 
                 $redirect = isset( $_REQUEST['redirect_to'] ) ? esc_url( $_REQUEST['redirect_to'] ) : '';
                 $redirect_to = get_permalink( $reg_page_id );
