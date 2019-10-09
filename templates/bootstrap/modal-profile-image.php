@@ -24,7 +24,7 @@ $type = isset($_POST['type']) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner
 		<input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
 		<button type="button" class="btn btn-primary uwp_upload_button" onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();"><i class="fas fa-upload"></i> <?php echo __( 'Upload', 'userswp' ); ?> <?php echo $type; ?></button>
 		<?php
-		BSUI::alert(array(
+		echo aui()->alert(array(
 				'class' => 'text-center text-center m-3 p-0 w-50 mx-auto',
 				'type'=>'info',
 				'content'=> sprintf( __('Note: Max upload image size: %s', 'plugin-domain'), $files->uwp_formatSizeUnits($files->uwp_get_max_upload_size($type)) )

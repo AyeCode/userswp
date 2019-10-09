@@ -27,10 +27,10 @@ if(!empty($user->display_name)) { $user_name = $user->display_name;}
 
 	<div class="card-body">
 		<div class="row justify-content-center">
-			<div class="col-5 col-md-2 mb-3 col-xl-1 ">
+			<div class="col-5 col-md-2 mb-3 col-xl-2 ">
 				<img src="<?php echo esc_url_raw( $avatar_url ); ?>" class="align-self-start img-thumbnail rounded-circle mx-auto d-block" alt="...">
 			</div>
-			<div class="col-12 col-md-10 col-xl-11 text-muted">
+			<div class="col-12 col-md-10 col-xl-10 text-muted">
 				<?php
 				do_action( 'uwp_before_comment_summary', $comment );
 				$excerpt = strip_shortcodes(wp_trim_words( $comment->comment_content, 100, '...' ));
@@ -43,10 +43,11 @@ if(!empty($user->display_name)) { $user_name = $user->display_name;}
 	</div>
 
 	<div class="card-footer bg-white">
-		<time class="uwp-profile-item-time published" datetime="<?php echo get_the_time( 'c' ); ?>">
-			<?php echo date_i18n( get_option( 'date_format' ), strtotime( get_comment_date("", $comment->comment_ID) ) ); ?>
-		</time>
-		<a href="<?php echo get_comment_link($comment->comment_ID); ?>" class="btn btn-sm btn-outline-primary float-right"><i class="fas fa-comments"></i> <?php esc_attr_e("View Comment","userswp");?></a>
+		<?php
+		$footer_html = '<time class="uwp-profile-item-time published" datetime="'.get_the_time( 'c' ).'">'.date_i18n( get_option( 'date_format' ), strtotime( get_comment_date("", $comment->comment_ID) ) ).'</time>';
+		$footer_html .= '<a href="'.get_comment_link($comment->comment_ID).'" class="btn btn-sm btn-outline-primary float-right"><i class="fas fa-comments"></i> '.esc_attr__("View Comment","userswp").'</a>';
+		echo apply_filters('uwp_tp_comments_item_footer', $footer_html,$comment);
+		?>
 	</div>
 
 </div>

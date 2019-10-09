@@ -66,6 +66,7 @@ if($output === '' || $output=='head'){
 
 <?php
 }
+
 if($output === '' || $output=='body'){
 ?>
 <div class="uwp-profile-content">

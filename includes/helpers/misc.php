@@ -1894,7 +1894,7 @@ function uwp_is_icon_url( $icon ) {
 
 function uwp_is_gdv2(){
 
-	if(defined(GEODIRECTORY_VERSION) && version_compare(GEODIRECTORY_VERSION,'2.0.0.0', '>=') ) {
+	if(defined('GEODIRECTORY_VERSION') && version_compare(GEODIRECTORY_VERSION,'2.0.0.0', '>=') ) {
 		return true;
 	}
 

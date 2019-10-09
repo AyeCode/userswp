@@ -866,7 +866,7 @@ class UsersWP_Profile {
      * @param       object      $user       The User ID.
      * @return      void
      */
-    public function get_profile_comments($user) {
+    public function get_profile_comments($user,$post_type='post') {
 
 
 	    global $uwp_widget_args;
@@ -882,17 +882,22 @@ class UsersWP_Profile {
 		    'offset' => $offset,
 		    'author_email' => $user->user_email,
 		    'paged' => $paged,
-		    'post_type' => 'post',
+		    'post_type' => $post_type,
 	    );
 	    // The Query
 	    $the_query = new WP_Comment_Query();
 	    $comments = $the_query->query( $args );
 
-	    $uwp_widget_args['template_args']= array(
-		    'the_query' => $comments,
-		    'user'      => $user,
-		    'maximum_pages' => $maximum_pages
-	    );
+	    $uwp_widget_args['template_args']['the_query'] = $comments;
+	    $uwp_widget_args['template_args']['user'] = $user;
+	    $uwp_widget_args['template_args']['maximum_pages'] = $maximum_pages;
+
+//	    $uwp_widget_args['template_args'] = array(
+//		    'the_query' => $comments,
+//		    'user'      => $user,
+//		    'maximum_pages' => $maximum_pages
+//	    );
+
 
 	    $design_style = !empty($uwp_widget_args['design_style']) ? esc_attr($uwp_widget_args['design_style']) : uwp_get_option("design_style",'bootstrap');
 	    $template = $design_style ? $design_style."/loop-comments" : "loop-comments";

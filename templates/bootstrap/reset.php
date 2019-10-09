@@ -31,7 +31,7 @@ do_action( 'uwp_template_before', 'reset' ); ?>
 						       value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
 					</form>
 				<?php } else {
-					BSUI::alert(array('type'=>'danger','content'=> sprintf( __( 'You can not access this page directly. Follow the password reset link you received in your email. To request new password reset link <a href="%s">visit here</a>.', 'userswp' ), uwp_get_page_link( 'forgot' ) ) ));
+					echo aui()->alert(array('type'=>'danger','content'=> sprintf( __( 'You can not access this page directly. Follow the password reset link you received in your email. To request new password reset link <a href="%s">visit here</a>.', 'userswp' ), uwp_get_page_link( 'forgot' ) ) ));
 				} ?>
 
 				<div class="uwp-footer-links">

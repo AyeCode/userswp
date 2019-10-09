@@ -41,7 +41,7 @@ class UsersWP_Notices {
     function display_registration_disabled_notice($type) {
         if ($type == 'register') {
             if (!get_option('users_can_register')) {
-                BSUI::alert(array(
+                echo aui()->alert(array(
                         'class' => 'text-center',
                         'type'=>'danger',
                         'heading'  => 'Heads Up!',

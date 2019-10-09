@@ -6,8 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $uwp_widget_args;
 $the_query = isset( $uwp_widget_args['template_args']['the_query'] ) ? $uwp_widget_args['template_args']['the_query'] : '';
 $maximum_pages = isset( $uwp_widget_args['template_args']['maximum_pages'] ) ? $uwp_widget_args['template_args']['maximum_pages'] : '';
+$title = isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args['template_args']['title'] : __('Comments', 'userswp');
 ?>
-<h3><?php echo __('Comments', 'userswp') ?></h3>
+<h3><?php echo $title;?></h3>
 
 <div class="uwp-profile-comments-loop">
 	<?php
