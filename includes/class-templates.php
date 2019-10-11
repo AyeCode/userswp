@@ -26,27 +26,27 @@ class UsersWP_Templates {
             case 'change':
             case 'reset':
             case 'account':
-                $template_path = $this->generic_locate_template($template);
+                $template_path = $this->generic_locate_template($template, $template_path );
                 break;
 
             case 'profile':
-                $template_path = $this->generic_locate_template('profile');
+                $template_path = $this->generic_locate_template('profile', $template_path);
                 break;
 
             case 'users':
-                $template_path = $this->generic_locate_template('users');
+                $template_path = $this->generic_locate_template('users', $template_path);
                 break;
 
             case 'users-list-item':
-                $template_path = $this->generic_locate_template('users-list-item');
+                $template_path = $this->generic_locate_template('users-list-item', $template_path);
                 break;
             
             case 'dashboard':
-                $template_path = $this->generic_locate_template('dashboard');
+                $template_path = $this->generic_locate_template('dashboard', $template_path);
                 break;
             
             default:
-                $template_path = $this->generic_locate_template($template);
+                $template_path = $this->generic_locate_template($template, $template_path);
                 break;
         }
         
@@ -63,15 +63,17 @@ class UsersWP_Templates {
      * @param       string      $type           Template type.
      * @return      string                      The template filename if one is located.
      */
-    public function generic_locate_template($type = 'register') {
-        
-        $plugin_path = dirname( dirname( __FILE__ ) );
-        
+    public function generic_locate_template($type = 'register', $template_path = '') {
+
+        if(!$template_path){
+            $template_path = dirname( dirname( __FILE__ ) );
+        }
+
         $template = locate_template(array("userswp/".$type.".php"));
         if (!$template) {
-            $template = $plugin_path . '/templates/'.$type.'.php';
+            $template = $template_path . '/templates/'.$type.'.php';
         }
-        $template = apply_filters('uwp_template_'.$type, $template);
+        $template = apply_filters('uwp_template_'.$type, $template, $template_path);
         return $template;
     }
 

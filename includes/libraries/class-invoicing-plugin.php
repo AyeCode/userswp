@@ -85,22 +85,6 @@ class UsersWP_Invoicing_Plugin {
     }
 
     /**
-     * Registers the current addon tab items in "Choose the tabs to display in UsersWP Profile" setting.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @param       array     $tabs_arr    Existing tabs array.
-     *
-     * @return      array     Tabs array.
-     */
-    public function available_tab_items( $tabs_arr ) {
-        $tabs_arr['invoices'] = __( 'Invoices', 'userswp' );
-
-        return $tabs_arr;
-    }
-
-    /**
      * Adds tab in user profile page.
      *
      * @since       1.0.0
@@ -148,8 +132,29 @@ class UsersWP_Invoicing_Plugin {
 		    'tab_icon'   => 'fas fa-file-invoice',
 		    'tab_key'    => 'invoices',
 		    'tab_login_only' => 1,
-		    'tab_content'=> ''
+		    'tab_content'=> '[wpinv_history]'
 	    );
+
+        $fields[] = array(
+            'tab_type'   => 'standard',
+            'tab_name'   => __('Subscriptions','userswp'),
+            'tab_icon'   => 'fas fa-dollar-sign',
+            'tab_key'    => 'invoice_subscriptions',
+            'tab_login_only' => 1,
+            'tab_content'=> '[wpinv_subscriptions]'
+        );
+
+        if(defined('WPINV_QUOTES_VERSION')){
+            $fields[] = array(
+                'tab_type'   => 'standard',
+                'tab_name'   => __('Quotes','userswp'),
+                'tab_icon'   => 'fas fa-file-invoice',
+                'tab_key'    => 'quotes',
+                'tab_login_only' => 1,
+                'tab_content'=> '[wpinv_quote_history]'
+            );
+        }
+
 
         return $fields;
     }
@@ -198,6 +203,9 @@ class UsersWP_Invoicing_Plugin {
         if (get_current_user_id() != $user->ID) {
             return;
         }
+        if(uwp_get_option("design_style",'bootstrap')){
+            echo do_shortcode( '[wpinv_history]' );
+        }else{
         ?>
         <h3><?php echo __('Invoices', 'userswp'); ?></h3>
 
@@ -306,6 +314,7 @@ class UsersWP_Invoicing_Plugin {
             ?>
         </div>
         <?php
+        }
     }
 
     public function invoice_count($user_id) {

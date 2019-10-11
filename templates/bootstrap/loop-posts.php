@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 global $uwp_widget_args;
 $the_query = isset( $uwp_widget_args['template_args']['the_query'] ) ? $uwp_widget_args['template_args']['the_query'] : '';
-$title= isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args['template_args']['title'] : '';
+$title = isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args['template_args']['title'] : '';
 ?>
 
 <div class="container mb-1">
@@ -25,15 +25,13 @@ $title= isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args['
 </div>
 <div class="uwp-profile-cpt-loop">
 	<?php
-
-
+	
 	// The Loop
 	if ( $the_query && $the_query->have_posts() ) {
 
 		$design_style = ! empty( $uwp_widget_args['design_style'] ) ? esc_attr( $uwp_widget_args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
 		$template     = $design_style ? $design_style . "/posts-post" : "posts-post";
 
-//		echo '<div class="card-deck card-deck-grid-3 card-deck-list">';
 		echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">';
 		while ( $the_query->have_posts() ) {
 			$the_query->the_post();

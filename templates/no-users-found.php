@@ -6,7 +6,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-
-uwp_wrap_notice(__( "No users were found matching your selection.", 'userswp' ), 'info');
-
-?>
+echo aui()->alert(array(
+	'type'=>'info',
+	'content'=> __( 'No users were found matching your selection.', 'userswp' )
+));

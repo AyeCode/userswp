@@ -5,13 +5,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 global $uwp_widget_args;
 $the_query = isset( $uwp_widget_args['template_args']['the_query'] ) ? $uwp_widget_args['template_args']['the_query'] : '';
-$title= isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args['template_args']['title'] : '';
+$title = isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args['template_args']['title'] : '';
 ?>
 <h3><?php echo $title; ?></h3>
 <div class="uwp-profile-item-block">
 	<?php
-
-
 	// The Loop
 	if ($the_query && $the_query->have_posts()) {
 

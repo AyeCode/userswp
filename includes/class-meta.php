@@ -46,6 +46,7 @@ class UsersWP_Meta {
             switch ($key){
                 case 'email': $value = $user_data->user_email; break;
                 case 'username': $value = $user_data->user_login; break;
+                case 'user_nicename': $value = $user_data->user_nicename; break;
                 case 'bio': $value = $user_data->description; break;
                 default :
                     $row = $wpdb->get_row($wpdb->prepare("SELECT {$key} FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);

@@ -556,7 +556,7 @@ class UsersWP_Profile {
 
 		if($user_id){
 
-			$post_types = get_post_types( array('public'=>true), 'objects');
+			$post_types = get_post_types( array('public'=>true,'publicly_queryable'=>true), 'objects');
 //				print_r($post_types);exit;
 
 			if(!empty($post_types)){

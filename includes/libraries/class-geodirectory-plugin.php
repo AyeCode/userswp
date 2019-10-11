@@ -682,18 +682,18 @@ class UsersWP_GeoDirectory_Plugin {
         if(uwp_get_option("design_style",'bootstrap')){
             if ($subtabs && count($subtabs)>1) {
                 ?>
-                <div class="list-group list-group-horizontal-md pb-3">
+                <div class="pb-3">
                     <?php
                     foreach ($this->profile_gd_subtabs($user, $type) as $tab_id => $tab) {
 
                         $tab_url = uwp_build_profile_tab_url($user->ID, $type, $tab_id);
 
-                        $active = $active_tab == $tab_id ? ' active' : '';
+                        $active = $active_tab == $tab_id ? 'btn-primary' : 'btn-outline-primary';
                         $post_type = $active_tab == $tab_id ? $tab['ptype'] : $post_type;
                         ?>
-                        <a id="uwp-profile-gd-<?php echo $tab_id; ?>" href="<?php echo esc_url($tab_url); ?>" class=" list-group-item list-group-item-action p-1 d-flex justify-content-between align-items-center <?php echo $active; ?>">
+                        <a id="uwp-profile-gd-<?php echo $tab_id; ?>" href="<?php echo esc_url($tab_url); ?>" class=" btn  btn-sm <?php echo $active; ?>">
                                 <?php echo esc_html($tab['title']); ?>
-                                <span class="badge badge-primary"><?php echo $tab['count']; ?></span>
+                                <span class="badge badge-light ml-1"><?php echo $tab['count']; ?></span>
                         </a>
                         <?php
                     }

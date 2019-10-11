@@ -1827,20 +1827,20 @@ function uwp_get_layout_options(){
     return $layouts;
 }
 
-function uwp_locate_template($template){
+function uwp_locate_template($template, $template_path = "" ){
 
     $temp_obj = new UsersWP_Templates();
 
-    $template_path = $temp_obj->locate_template($template);
+    $template_file = $temp_obj->locate_template($template, $template_path );
 
-    if (file_exists($template_path)) {
-        include($template_path);
+    if (file_exists($template_file)) {
+        include($template_file);
     }
 
 }
 
 function uwp_no_users_found(){
-    uwp_locate_template( 'no-users-found.php' );
+    uwp_locate_template( 'no-users-found' );
 }
 
 function uwp_get_displayed_user(){
