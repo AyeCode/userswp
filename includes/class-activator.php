@@ -145,11 +145,14 @@ class UsersWP_Activator {
         $settings = get_option( 'uwp_settings', array());
 
         $options = array(
+            'register_modal' => 1,
             'uwp_registration_action' => 'auto_approve',
             'wp_register_redirect' => 1,
             'register_admin_notify' => 0,
+            'login_modal' => 1,
             'login_redirect_to' => -1,
             'block_wp_login' => 0,
+	        'forgot_modal' => 1,
             'change_enable_old_password' => 1,
             'change_disable_password_nag' => 0,
             'enable_profile_header' => 1,

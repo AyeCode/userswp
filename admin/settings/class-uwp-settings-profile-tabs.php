@@ -453,7 +453,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 			    $result_str = $cf->id;
 			    $field_info = $wpdb->get_row($wpdb->prepare("select * from " . $tabs_table_name . " where id= %d", array((int)$cf->id)));
 		    } elseif(isset($cf) && !empty($cf)) {
-			    $field_info = $wpdb->get_row($wpdb->prepare("select * from " . $tabs_table_name . " where tab_key= %d", array($cf)));
+			    $field_info = $wpdb->get_row($wpdb->prepare("select * from " . $tabs_table_name . " where tab_key= %s", array($cf)));
 		    } else {
 		        $field_info = array();
 		    }

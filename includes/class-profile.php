@@ -418,13 +418,13 @@ class UsersWP_Profile {
     }
 
 	public function get_tab_settings(){
-		global $wpdb,$uwp_profile_tab_settings;
+		global $wpdb, $uwp_profile_tabs_array;
 
-		if($uwp_profile_tab_settings){
-			$tabs = $uwp_profile_tab_settings;
+		if($uwp_profile_tabs_array){
+			$tabs = $uwp_profile_tabs_array;
 		}else{
 			$tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
-			$uwp_profile_tab_settings = $tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s ORDER BY sort_order ASC", 'profile-tabs'));
+			$uwp_profile_tabs_array = $tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s ORDER BY sort_order ASC", 'profile-tabs'));
 		}
 
 		/**
@@ -432,7 +432,7 @@ class UsersWP_Profile {
 		 *
 		 * @param array $tabs The array of stdClass settings for the tabs output.
 		 */
-		return apply_filters('uwp_profile_tab_settings',$tabs);
+		return apply_filters('uwp_profile_tab_settings', $tabs);
 	}
 	
 	public function get_tabs(){

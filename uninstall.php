@@ -66,6 +66,11 @@ function uwp_uninstall(){
         $sql = "DROP TABLE IF EXISTS $extras_table_name";
         $wpdb->query($sql);
 
+        // Drop form profile tabs table
+        $profile_table_name = $wpdb->prefix . 'uwp_profile_tabs';
+        $sql = "DROP TABLE IF EXISTS $profile_table_name";
+        $wpdb->query($sql);
+
         // Delete pages
         wp_delete_post( $uwp_options['register_page'], true );
         wp_delete_post( $uwp_options['login_page'], true );

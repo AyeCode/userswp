@@ -339,7 +339,7 @@ jQuery(document).ready(function () {
 
             });
 
-        if(htmlvar_name!='fieldset' || manage_field_type != 'profile_tabs'){
+        if(htmlvar_name!='fieldset' && manage_field_type != 'profile_tabs'){
             jQuery(this).closest('li').hide();
         }
 

@@ -691,7 +691,7 @@ class UsersWP_GeoDirectory_Plugin {
                         $active = $active_tab == $tab_id ? 'btn-primary' : 'btn-outline-primary';
                         $post_type = $active_tab == $tab_id ? $tab['ptype'] : $post_type;
                         ?>
-                        <a id="uwp-profile-gd-<?php echo $tab_id; ?>" href="<?php echo esc_url($tab_url); ?>" class=" btn  btn-sm <?php echo $active; ?>">
+                        <a id="uwp-profile-gd-<?php echo $tab_id; ?>" href="<?php echo esc_url($tab_url); ?>" class=" btn btn-sm <?php echo $active; ?>">
                                 <?php echo esc_html($tab['title']); ?>
                                 <span class="badge badge-light ml-1"><?php echo $tab['count']; ?></span>
                         </a>
