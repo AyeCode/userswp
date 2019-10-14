@@ -43,7 +43,7 @@ class AUI_Component_Input {
 		if ( ! empty( $args['type'] ) ) {
 			$type = sanitize_html_class( $args['type'] );
 
-			// lable
+			// label
 			if(!empty($args['label']) && is_array($args['label'])){
 			}elseif(!empty($args['label'])){
 				$output .= self::label(array('title'=>$args['label'],'for'=>$args['id']));
