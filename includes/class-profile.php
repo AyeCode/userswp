@@ -662,7 +662,7 @@ class UsersWP_Profile {
 
 	    if(!empty($tabs)) {
 		    foreach ($tabs as $tab) {
-			    $tab_content = $this->tab_content($tab, $user);
+			    $tab_content = $this->tab_content($tab);
 			    if ( !empty( $tab_content ) ) {
 				    $tab->tab_content_rendered = $tab_content;
 				    $tabs_array[] = (array) $tab;

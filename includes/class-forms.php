@@ -397,11 +397,16 @@ class UsersWP_Forms {
 
         if ($reg_action == 'require_email_activation' && !$generated_password) {
 
-            $email = new UsersWP_Mails();
-            $email->send( 'activate', $user_id );
+	        if( 1 == uwp_get_option('registration_activate_email' )) {
+		        $email = new UsersWP_Mails();
+		        $email->send('activate', $user_id);
+	        }
+
         } else {
-            $email = new UsersWP_Mails();
-            $email->send( 'register', $user_id );
+	        if( 1 == uwp_get_option('registration_success_email' )) {
+		        $email = new UsersWP_Mails();
+		        $email->send('register', $user_id);
+	        }
         }
 
         $error_code = $errors->get_error_code();
@@ -418,6 +423,7 @@ class UsersWP_Forms {
         if ($reg_action != 'require_admin_review') {
             $register_admin_notify = uwp_get_option('register_admin_notify', '');
             if ($register_admin_notify == '1') {
+	            $email = new UsersWP_Mails();
                 $email->send_admin_email('register_admin', $user_id);
             }
 
@@ -451,7 +457,6 @@ class UsersWP_Forms {
             }
         } else {
             if ($reg_action == 'require_email_activation') {
-                global $wp;
                 $resend_link = uwp_current_page_url();
                 $resend_link = add_query_arg(
                     array(
@@ -471,8 +476,12 @@ class UsersWP_Forms {
                 update_user_meta( $user_id, 'uwp_mod', '1' );
 
                 $email = new UsersWP_Mails();
-                $email->send( 'mod_pending', $user_id );
-                $email->send_admin_email('mod_admin', $user_id);
+	            if( 1 == uwp_get_option('enable_moderation_notification' )) {
+		            $email->send('mod_pending', $user_id);
+	            }
+	            if( 1 == uwp_get_option('enable_moderation_notification' )) {
+		            $email->send_admin_email('mod_admin', $user_id);
+	            }
                 $message = aui()->alert(array(
                         'type'=>'success',
                         'content'=> __('Your account is under moderation. We will email you once its approved.', 'userswp')

@@ -50,6 +50,14 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
                     'default'  => 0,
                     'advanced' => true
                 ),
+	            'user_id'  => array(
+		            'title' => __('User ID:', 'userswp'),
+		            'desc' => __('Leave blank to use current user ID. For profile page it will take displayed user ID. Input specific user ID for other pages.', 'userswp'),
+		            'type' => 'number',
+		            'desc_tip' => true,
+		            'default'  => '',
+		            'advanced' => true
+	            ),
                 'allow_change'  => array(
                     'title' => __('Allow to change cover and avatar:', 'userswp'),
                     'desc' => __('Allow user to change cover and avatar image in profile page.', 'userswp'),
@@ -69,7 +77,7 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        $user = uwp_get_displayed_user();
+	    global $post;
 
         $enable_profile_header = uwp_get_option('enable_profile_header');
         $defaults = array(
@@ -83,6 +91,18 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
         $args['hide_cover'] = !empty($args['hide_cover']) ? $args['hide_cover'] : 0;
         $args['hide_avatar'] = !empty($args['hide_avatar']) ? $args['hide_avatar'] : 0;
         $args['allow_change'] = !empty($args['allow_change']) ? $args['allow_change'] : 1;
+
+	    if('post_author' == $args['user_id'] && $post instanceof WP_Post){
+		    $user = get_userdata($post->post_author);
+	    } else if(is_int($args['user_id']) && (int)$args['user_id'] > 0){
+		    $user = get_userdata($args['user_id']);
+	    } else {
+		    $user = uwp_get_displayed_user();
+	    }
+
+	    if(empty($args['user_id']) && !empty($user->ID)){
+		    $args['user_id'] = $user->ID;
+	    }
 
         $args = apply_filters( 'uwp_widget_profile_header_args', $args, $widget_args, $this );
 
