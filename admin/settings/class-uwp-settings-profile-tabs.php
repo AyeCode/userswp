@@ -299,19 +299,6 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 
 		    $fields = apply_filters('uwp_profile_tabs_predefined_fields', $fields, $form_type);
 
-		    global $wpdb;
-
-		    $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
-
-		    $existing_fields = $wpdb->get_results("select tab_key from " . $table_name . " where form_type ='" . $form_type . "'");
-
-		    $existing_field_ids = array();
-		    if (!empty($existing_fields)) {
-			    foreach ($existing_fields as $existing_field) {
-				    $existing_field_ids[] = $existing_field->tab_key;
-			    }
-		    }
-
 		    ?>
             <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
             <input type="hidden" name="manage_field_type" class="manage_field_type" value="profile_tabs">
@@ -322,14 +309,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
                 <?php
                 foreach ($fields as $id => $field) {
 
-                    $display = '';
-					    if (in_array($field['tab_key'], $existing_field_ids))
-						    $display = 'display:none;';
-
-					    $style = 'style="' . $display . '"';
-
                     ?>
-                    <li <?php echo $style; ?>>
+                    <li>
                         <a id="uwp-<?php echo $field['tab_key']; ?>"
                            data-field-custom-type="predefined"
                            class="uwp-draggable-form-items"
