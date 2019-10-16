@@ -24,7 +24,10 @@ $title = isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args[
 		echo '</div>';
 	} else {
 		// no comments found
-		echo "<p>".__('No Comments Found', 'userswp')."</p>";
+		echo aui()->alert(array(
+			'type'=>'info',
+			'content'=> sprintf(__('No %s found', 'userswp'), strtolower($title))
+		));
 	}
 
 	do_action('uwp_profile_pagination', $maximum_pages);

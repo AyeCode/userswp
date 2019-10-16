@@ -754,7 +754,7 @@ class UsersWP_GeoDirectory_Plugin {
 
             $author_actions = do_shortcode("[gd_author_actions]");
 
-
+	        $footer_html = '<time class="uwp-profile-item-time published" datetime="'.get_the_time( 'c' ).'">'.get_the_date().'</time>';
             $new_html = '<div class="row">';
             $new_html  .= '<div class="col">'.$post_ratings.'</div>';
             if($author_actions){
@@ -958,7 +958,10 @@ class UsersWP_GeoDirectory_Plugin {
                 /* Restore original Post Data */
                 wp_reset_postdata();
             } else {
-                echo sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[$post_type]['labels']['name']);
+	            echo aui()->alert(array(
+		            'type'=>'info',
+		            'content'=> sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
+	            ));
             }
             do_action('uwp_after_profile_listing_items', $user, $post_type);
 
@@ -1078,7 +1081,10 @@ class UsersWP_GeoDirectory_Plugin {
                     /* Restore original Post Data */
                     wp_reset_postdata();
                 } else {
-                    echo sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] );
+	                echo aui()->alert(array(
+		                'type'=>'info',
+		                'content'=> sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
+	                ));
                 }
 
                 do_action( 'uwp_after_profile_reviews_items', $user, $post_type );
@@ -1292,14 +1298,20 @@ class UsersWP_GeoDirectory_Plugin {
                         /* Restore original Post Data */
                         wp_reset_postdata();
                     } else {
-                        echo sprintf( __( "No %s found", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] );
+	                    echo aui()->alert(array(
+		                    'type'=>'info',
+		                    'content'=> sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
+	                    ));
                     }
 
                     do_action( 'uwp_after_profile_favourite_items', $user, $post_type );
 
                     do_action( 'uwp_profile_pagination', $the_query->max_num_pages );
                 } else {
-                    echo sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] );
+	                echo aui()->alert(array(
+		                'type'=>'info',
+		                'content'=> sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
+	                ));
                 }
                 ?>
             </div>
