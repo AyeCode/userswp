@@ -381,7 +381,7 @@ function uwp_modal_forgot_password_form(){
  * Submit the forgot password form via ajax.
  */
 function uwp_modal_forgot_password_form_process(){
-    var data = jQuery(".modal-content form.uwp-forgot-form").serialize() + '&action=uwp_ajax_register';
+    var data = jQuery(".modal-content form.uwp-forgot-form").serialize() + '&action=uwp_ajax_forgot_password';
     $button = jQuery('.uwp-auth-modal .modal-content .uwp_forgot_submit');
     $button_text = $button.html();
     jQuery.ajax({

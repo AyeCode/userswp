@@ -649,7 +649,7 @@ class UsersWP_Tools {
     function uwp_process_diagnosis($type, $step) {
         switch ($type) {
             case 'clear_version_numbers':
-                $this->clear_version_numbers($step);
+                $this->clear_version_numbers();
                 break;
             case 'fix_user_data':
                 $this->fix_usermeta($step);

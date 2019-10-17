@@ -443,5 +443,5 @@ function uwp_get_redirect_url($redirect_page_id, $data){
         }
     }
 
-    return $redirect_to;
+    return apply_filters('uwp_redirect_url', $redirect_to, $redirect_page_id, $data);
 }
