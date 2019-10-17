@@ -753,8 +753,7 @@ class UsersWP_GeoDirectory_Plugin {
             $post_ratings = geodir_get_rating_stars($post_avgratings, $post->ID);
 
             $author_actions = do_shortcode("[gd_author_actions]");
-
-	        $footer_html = '<time class="uwp-profile-item-time published" datetime="'.get_the_time( 'c' ).'">'.get_the_date().'</time>';
+            
             $new_html = '<div class="row">';
             $new_html  .= '<div class="col">'.$post_ratings.'</div>';
             if($author_actions){
