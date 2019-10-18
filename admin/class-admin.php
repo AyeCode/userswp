@@ -123,7 +123,7 @@ class UsersWP_Admin {
      *
      * @return      void
      */
-    function uwp_admin_only_css() {
+    public function uwp_admin_only_css() {
         ?>
         <style type="text/css">
             .uwp_page .uwp-bs-modal input[type="submit"].button,

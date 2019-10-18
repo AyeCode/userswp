@@ -18,6 +18,7 @@ class UsersWP_Import_Export {
     public $imp_step;
     public $skipped;
 
+
     public function __construct() {
         global $wp_filesystem;
 
@@ -45,6 +46,16 @@ class UsersWP_Import_Export {
         add_filter( 'uwp_get_import_users_status', array( $this, 'get_import_users_status' ) );
      }
 
+	/**
+	 * Returns export file location
+	 *
+	 * @package     userswp
+	 *
+	 * @param       bool     $relative
+	 *
+	 * @return      string
+     *
+	 */
     public function export_location( $relative = false ) {
         $upload_dir         = wp_upload_dir();
         $export_location    = $relative ? trailingslashit( $upload_dir['baseurl'] ) . 'cache' : trailingslashit( $upload_dir['basedir'] ) . 'cache';
@@ -53,6 +64,9 @@ class UsersWP_Import_Export {
         return trailingslashit( $export_location );
     }
 
+	/**
+	 * Displays notice
+	 */
     public function ie_admin_notice(){
         if(isset($_GET['imp-msg']) && 'success' == $_GET['imp-msg']){
             ?>
@@ -108,6 +122,9 @@ class UsersWP_Import_Export {
         wp_safe_redirect( admin_url( 'admin.php?page=userswp&tab=import-export&section=settings&imp-msg=success' ) ); exit;
     }
 
+	/**
+	 * Processes users export
+	 */
     public function process_users_export(){
 
         $response               = array();
@@ -168,6 +185,14 @@ class UsersWP_Import_Export {
 
     }
 
+	/**
+	 * Sets export params
+	 *
+	 * @package     userswp
+	 *
+	 * @param       array     $request
+	 *
+	 */
     public function set_export_params( $request ) {
         $this->empty    = false;
         $this->step     = !empty( $request['step'] ) ? absint( $request['step'] ) : 1;
@@ -179,6 +204,14 @@ class UsersWP_Import_Export {
         do_action( 'uwp_export_users_set_params', $request );
     }
 
+	/**
+	 * Returns export file location
+	 *
+	 * @package     userswp
+	 *
+	 * @return      bool
+	 *
+	 */
     public function check_export_location() {
         try {
             if ( empty( $this->wp_filesystem ) ) {
@@ -212,6 +245,12 @@ class UsersWP_Import_Export {
         }
     }
 
+	/**
+	 * Processes export step
+	 *
+	 * @return      bool
+	 *
+	 */
     public function process_export_step() {
         if ( $this->step < 2 ) {
             @unlink( $this->file );
@@ -227,6 +266,12 @@ class UsersWP_Import_Export {
         }
     }
 
+	/**
+	 * Prints columns
+	 *
+	 * @return      array
+	 *
+	 */
     public function print_columns() {
         $column_data    = '';
         $columns        = $this->get_columns();
@@ -243,6 +288,12 @@ class UsersWP_Import_Export {
         return $column_data;
     }
 
+	/**
+	 * Returns export columns
+	 *
+	 * @return      array
+	 *
+	 */
     public function get_columns() {
         global $wpdb;
         $columns = array();
@@ -254,6 +305,14 @@ class UsersWP_Import_Export {
         return apply_filters( 'uwp_export_users_get_columns', $columns );
     }
 
+	/**
+	 * Returns export data
+	 *
+	 * @package     userswp
+	 *
+	 * @return      array
+	 *
+	 */
     public function get_export_data() {
         global $wpdb;
         if(!$this->step){
@@ -277,11 +336,23 @@ class UsersWP_Import_Export {
         return apply_filters( 'uwp_export_users_get_data', $data );
     }
 
+	/**
+	 * Returns export status
+	 *
+	 * @return      int
+	 *
+	 */
     public function get_export_status() {
         $status = 100;
         return apply_filters( 'uwp_get_export_users_status', $status );
     }
 
+	/**
+	 * Prints CSV rows
+	 *
+	 * @return      string
+	 *
+	 */
     public function print_rows() {
         $row_data   = '';
         $data       = $this->get_export_data();
@@ -306,6 +377,12 @@ class UsersWP_Import_Export {
         return false;
     }
 
+	/**
+	 * Returns export file content
+	 *
+	 * @return      string
+	 *
+	 */
     protected function get_export_file() {
         $file = '';
 
@@ -318,6 +395,14 @@ class UsersWP_Import_Export {
         return $file;
     }
 
+	/**
+	 * Adds export data to CSV file
+	 *
+	 * @package     userswp
+	 *
+	 * @param       string     $data
+	 *
+	 */
     protected function attach_export_data( $data = '' ) {
         $filedata   = $this->get_export_file();
         $filedata   .= $data;
@@ -331,6 +416,12 @@ class UsersWP_Import_Export {
         $this->empty = count( $rows ) == $columns ? true : false;
     }
 
+	/**
+	 * Returns export user status
+	 *
+	 * @return      int
+	 *
+	 */
     public function get_export_users_status() {
         global $wpdb;
         $data       = $wpdb->get_results("SELECT user_id FROM $this->meta_table_name WHERE 1=1");
@@ -352,6 +443,12 @@ class UsersWP_Import_Export {
         return $status;
     }
 
+	/**
+	 * Uploaded file handling
+	 *
+	 * @return      string
+	 *
+	 */
     public function ie_upload_file(){
         $nonce = $_REQUEST['nonce'];
         if ( ! wp_verify_nonce( $nonce, 'uwp-ie-file-upload-nonce' ) ) {
@@ -378,6 +475,10 @@ class UsersWP_Import_Export {
         exit;
     }
 
+	/**
+	 * Processes users import
+	 *
+	 */
     public function process_users_import(){
 
         $response               = array();
@@ -455,6 +556,12 @@ class UsersWP_Import_Export {
 
     }
 
+	/**
+	 * Processes import step
+	 *
+	 * @return      array
+	 *
+	 */
     public function process_import_step() {
 
         $errors = new WP_Error();
@@ -559,6 +666,17 @@ class UsersWP_Import_Export {
         return $return;
     }
 
+	/**
+	 * Returns CSV row
+	 *
+	 * @package     userswp
+	 *
+	 * @param       int     $row
+	 * @param       int     $count
+	 *
+	 * @return      mixed
+	 *
+	 */
     public function get_csv_rows( $row = 0, $count = 1 ) {
 
         $lc_all = setlocale( LC_ALL, 0 ); // Fix issue of fgetcsv ignores special characters when they are at the beginning of line
@@ -631,11 +749,23 @@ class UsersWP_Import_Export {
 
     }
 
+	/**
+	 * Returns import status
+	 *
+	 * @return      int
+	 *
+	 */
     public function get_import_status() {
         $status = 100;
         return apply_filters( 'uwp_get_import_users_status', $status );
     }
 
+	/**
+	 * Returns import user status
+	 *
+	 * @return      int
+	 *
+	 */
     public function get_import_users_status() {
 
         if ( $this->imp_step >= $this->total_rows ) {

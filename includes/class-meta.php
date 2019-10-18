@@ -315,6 +315,16 @@ class UsersWP_Meta {
         return $value;
     }
 
+	/**
+	 * Returns user row actions
+	 *
+	 * @package     userswp
+	 *
+	 * @param       array      $actions          Date string.
+	 * @param       object     $user_object      The User ID.
+	 *
+	 * @return      array   Row actions.
+	 */
     public function user_row_actions($actions, $user_object){
         $user_id = $user_object->ID;
         $mod_value = get_user_meta( $user_id, 'uwp_mod', true );
@@ -344,6 +354,13 @@ class UsersWP_Meta {
         return $actions;
     }
 
+	/**
+	 * Processes user action
+	 *
+	 * @package     userswp
+	 *
+	 * @return      mixed|void.
+	 */
     public function process_user_actions(){
         $user_id = isset($_REQUEST['user_id']) ? (int)$_REQUEST['user_id'] : 0;
         $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : false;
@@ -375,12 +392,32 @@ class UsersWP_Meta {
         }
     }
 
+	/**
+	 * Returns users bulk actions
+	 *
+	 * @package     userswp
+	 *
+	 * @param       array      $bulk_actions    Bulk actions.
+	 *
+	 * @return      array   Bulk actions.
+	 */
     public function users_bulk_actions($bulk_actions){
         $bulk_actions['uwp_resend'] = __( 'Resend Activation', 'userswp');
         $bulk_actions['uwp_activate_user'] = __( 'Approve User(s)', 'userswp');
         return $bulk_actions;
     }
 
+	/**
+	 * Handles users bulk actions
+	 *
+	 * @package     userswp
+	 *
+	 * @param       string      $redirect_to    Bulk actions.
+	 * @param       string      $doaction    Current action.
+	 * @param       array      $user_ids    User IDs to process.
+	 *
+	 * @return      string   Redirect URL.
+	 */
     public function handle_users_bulk_actions($redirect_to, $doaction, $user_ids){
         if ( 'uwp_resend' == $doaction ) {
             foreach ( $user_ids as $user_id ) {
@@ -398,6 +435,15 @@ class UsersWP_Meta {
         return $redirect_to;
     }
 
+	/**
+	 * Sends activation email to user
+	 *
+	 * @package     userswp
+	 *
+	 * @param       int      $user_id    User ID.
+	 *
+	 * @return      bool
+	 */
     public function resend_activation_mail($user_id = 0){
         if(!$user_id){
             return false;
@@ -410,6 +456,13 @@ class UsersWP_Meta {
         return true;
     }
 
+	/**
+	 * Activates user
+	 *
+	 * @param int $user_id User ID
+	 *
+	 * @return bool
+	 */
     public function activate_user($user_id = 0){
         if(!$user_id){
             return false;
@@ -422,6 +475,9 @@ class UsersWP_Meta {
         return true;
     }
 
+	/**
+	 * Displays update messages
+	 */
     public function show_update_messages(){
         if ( !isset($_REQUEST['update']) ) return;
 

@@ -19,7 +19,7 @@ class UsersWP_Defaults {
 	/**
 	 * The new user account registration email subject default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function email_user_activation_subject() {
 		return apply_filters( 'uwp_email_user_activation_subject', __( "[[#site_name#]] Please activate your account", "userswp" ) );
@@ -28,7 +28,7 @@ class UsersWP_Defaults {
 	/**
 	 * The new user account registration email body default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function email_user_activation_body() {
 		return apply_filters( 'uwp_email_user_activation_body',
@@ -47,7 +47,7 @@ Thank you,
 	/**
 	 * The registration success email subject default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function registration_success_email_subject() {
 		return apply_filters( 'uwp_registration_success_email_subject', __( "[[#site_name#]] Your Log In Details", "userswp" ) );
@@ -56,7 +56,7 @@ Thank you,
 	/**
 	 * The registration success email body default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function registration_success_email_body() {
 		return apply_filters( 'uwp_registration_success_email_body',
@@ -77,7 +77,7 @@ Thank you,
 	/**
 	 * The forgot password email subject default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function forgot_password_email_subject() {
 		return apply_filters( 'uwp_forgot_password_email_subject', __( "[#site_name#] - Your new password", "userswp" ) );
@@ -86,7 +86,7 @@ Thank you,
 	/**
 	 * The forgot password email body default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function forgot_password_email_body() {
 		return apply_filters( 'uwp_forgot_password_email_body',
@@ -105,7 +105,7 @@ Thank you,
 	/**
 	 * The change password email subject default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function change_password_email_subject() {
 		return apply_filters( 'uwp_change_password_email_subject', __( "[#site_name#] - Password has been changed", "userswp" ) );
@@ -114,7 +114,7 @@ Thank you,
 	/**
 	 * The change password email body default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function change_password_email_body() {
 		return apply_filters( 'uwp_change_password_email_body',
@@ -133,7 +133,7 @@ Thank you,
 	/**
 	 * The reset password email subject default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function reset_password_email_subject() {
 		return apply_filters( 'uwp_reset_password_email_subject', __( "[#site_name#] - Password has been reset", "userswp" ) );
@@ -142,7 +142,7 @@ Thank you,
 	/**
 	 * The reset password email body default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function reset_password_email_body() {
 		return apply_filters( 'uwp_reset_password_email_body',
@@ -161,7 +161,7 @@ Thank you,
 	/**
 	 * The update account email subject default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function update_account_email_subject() {
 		return apply_filters( 'uwp_update_account_email_subject', __( "[#site_name#] - Account has been updated", "userswp" ) );
@@ -170,7 +170,7 @@ Thank you,
 	/**
 	 * The update account email body default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function update_account_email_body() {
 		return apply_filters( 'uwp_update_account_email_body',
@@ -187,7 +187,7 @@ Thank you,
 	/**
 	 * The new user account registration email subject default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function email_user_new_account_subject() {
 		return apply_filters( 'uwp_email_user_new_account_subject', __( "[[#site_name#]] New account registration", "userswp" ) );
@@ -196,7 +196,7 @@ Thank you,
 	/**
 	 * The new user account registration email body default.
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	public static function email_user_new_account_body() {
 		return apply_filters( 'uwp_email_user_new_account_body',
@@ -209,6 +209,11 @@ A user has been registered recently on your website.
 		);
 	}
 
+	/**
+	 * Returns default author box content
+	 *
+	 * @return string
+	 */
 	public static function author_box_content() {
 		return apply_filters( 'uwp_author_box_content',
 			'<div class="uwp-author-box">
@@ -223,6 +228,11 @@ A user has been registered recently on your website.
 		);
 	}
 
+	/**
+	 * Returns default author box content for bootstrap
+	 *
+	 * @return string
+	 */
 	public static function author_box_content_bootstrap() {
 		return apply_filters( 'uwp_author_box_content_bootstrap',
 			'<div class="media p-3 bg-light">
@@ -236,6 +246,12 @@ A user has been registered recently on your website.
 		);
 	}
 
+	/**
+	 * Returns default user list item content
+	 * @param bool $no_filter
+	 *
+	 * @return string
+	 */
 	public static function page_user_list_item_content( $no_filter = false ) {
 		$content = "[uwp_profile_header][uwp_output_location location='users'][uwp_user_actions]";
 

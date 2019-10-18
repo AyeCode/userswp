@@ -12,6 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class UWP_Login_Widget extends WP_Super_Duper {
 
+	/**
+	 * Register the login widget with WordPress.
+	 *
+	 */
     public function __construct() {
 
         $options = array(
@@ -90,13 +94,8 @@ class UWP_Login_Widget extends WP_Super_Duper {
             )
 
         );
-        
-        // Design style
-        
 
-        // add integrations by default and add option to remove
-
-        // GD
+        // GD options
         if(class_exists( 'GeoDirectory' )){
             $options['arguments']['disable_gd'] = array(
                 'title' => __("Disable GeoDirectory links from the user dashboard.", 'userswp'),
@@ -109,7 +108,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
             );
         }
 
-        // WPI
+        // WPI options
         if(class_exists( 'WPInv_Plugin' )){
             $options['arguments']['disable_wpi'] = array(
                 'title' => __("Disable WP Invoicing links from the user dashboard.", 'userswp'),
@@ -127,6 +126,15 @@ class UWP_Login_Widget extends WP_Super_Duper {
         parent::__construct( $options );
     }
 
+	/**
+	 * The Super block output function.
+	 *
+	 * @param array $args
+	 * @param array $widget_args
+	 * @param string $content
+	 *
+	 * @return mixed|string
+	 */
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
         $defaults = array(

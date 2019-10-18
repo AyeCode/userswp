@@ -156,7 +156,10 @@ class UsersWP_Profile {
         </div>
         <?php
     }
-	
+
+	/**
+	 * Displays edit account button
+	 */
 	public function edit_profile_button(){
 		global $uwp_in_user_loop;
 		$account_page          = uwp_get_page_id( 'account_page', false );
@@ -417,6 +420,12 @@ class UsersWP_Profile {
         return trim($wrapped_output);
     }
 
+	/**
+     *
+     * Returns profile tabs
+     *
+	 * @return array $tabs Profile tabs
+	 */
 	public function get_tab_settings(){
 		global $wpdb, $uwp_profile_tabs_array;
 
@@ -434,7 +443,13 @@ class UsersWP_Profile {
 		 */
 		return apply_filters('uwp_profile_tab_settings', $tabs);
 	}
-	
+
+	/**
+     *
+     * Returns profile page tabs
+     *
+	 * @return array
+	 */
 	public function get_tabs(){
 
 		global $uwp_profile_tabs_array;
@@ -486,7 +501,15 @@ class UsersWP_Profile {
 
 	}
 
-
+	/**
+     * Returns profile tab content
+     *
+     * @since 2.0.0
+     *
+	 * @param array $tab Tab array
+	 *
+	 * @return string
+	 */
 	public function tab_content($tab) {
 
 		ob_start();
@@ -509,6 +532,15 @@ class UsersWP_Profile {
 		return ob_get_clean();
 	}
 
+	/**
+	 * Returns profile child tab content
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $tab Child tab array
+	 *
+	 * @return string
+	 */
 	public function tab_content_child($tab) {
 		ob_start();
 		$tabs = self::get_tab_settings();
@@ -533,6 +565,14 @@ class UsersWP_Profile {
 
 	}
 
+	/**
+     *
+     * Displays fieldset content
+     *
+	 * @param array $tab Tab array
+	 *
+	 * @return string
+	 */
 	public function output_fieldset($tab){
 		ob_start();
 		echo '<div class="uwp_post_meta  uwp-fieldset">';
@@ -541,7 +581,7 @@ class UsersWP_Profile {
 			echo '<i class="fas '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
 		}
 		if($tab->tab_name){
-			esc_attr_e($tab->tab_name,'geodirectory');
+			esc_attr_e($tab->tab_name,'userswp');
 		}
 		echo "</h4>";
 		echo "</div>";
@@ -549,7 +589,13 @@ class UsersWP_Profile {
 		return ob_get_clean();
 	}
 
-
+	/**
+     * Returns counts of a user posts
+     *
+	 * @param $user_id
+	 *
+	 * @return array
+	 */
 	public function get_user_post_counts($user_id){
 
 		$counts = array();
@@ -723,6 +769,15 @@ class UsersWP_Profile {
         </div>
     <?php }
 
+	/**
+     * Returns count for a tab
+     *
+	 * @param $tab_icon
+	 * @param $tab
+	 * @param $user
+	 *
+	 * @return int
+	 */
     public function get_profile_tab_icon($tab_icon, $tab, $user){
 
         switch ($tab->tab_key){
@@ -777,6 +832,13 @@ class UsersWP_Profile {
         <?php
     }
 
+	/**
+     * Displays boostrap pagination
+     *
+     * @since       2.0.0
+     *
+	 * @param int $total Total count
+	 */
 	public function get_bootstrap_pagination($total) {
 
 		$navigation = '';
@@ -2120,6 +2182,9 @@ class UsersWP_Profile {
 		<?php
 	}
 
+	/**
+	 * Display lightbox modal
+	 */
 	public function lightbox_modals(){
 		?>
 		<div class="modal fade uwp-profile-image-change-modal" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true">

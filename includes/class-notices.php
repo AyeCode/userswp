@@ -113,7 +113,7 @@ class UsersWP_Notices {
      *
      * @return      void
      */
-    function admin_notices() {
+    public function admin_notices() {
         $errors = get_option( 'uwp_admin_notices' );
 
         if ( ! empty( $errors ) ) {
@@ -129,6 +129,14 @@ class UsersWP_Notices {
         }
     }
 
+	/**
+	 * Displays admin side notice to try Bootstrap layout
+	 *
+	 * @since       2.0.0
+	 * @package     userswp
+	 *
+	 * @return      void
+	 */
     public static function try_bootstrap(){
         $show = get_option("uwp_notice_try_bootstrap");
         if( $show && uwp_get_option('design_style','bootstrap') != 'bootstrap'){

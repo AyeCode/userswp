@@ -574,7 +574,14 @@ class UsersWP_Pages {
         return trailingslashit( $link );
     }
 
-
+	/**
+	 * To get the page ID
+	 *
+	 * @param      $type
+	 * @param bool $get_link
+	 *
+	 * @return bool|false|int|NULL|string
+	 */
     public function get_page_id($type, $get_link = false) {
 
         $link = false;

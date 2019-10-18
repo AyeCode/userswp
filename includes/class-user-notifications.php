@@ -9,10 +9,14 @@
  */
 class UsersWP_Notifications {
 
-    public function __construct() {
-
-    }
-
+	/**
+	 * Displays the notification form
+     *
+     * @since       1.0.0
+	 *
+	 * @param array $type Type of the form
+     *
+	 */
     public function user_notifications_form_front($type){
         if ($type == 'notifications') {
             $user_id = get_current_user_id();

@@ -637,6 +637,14 @@ class UsersWP_Templates {
 
     }
 
+	/**
+     *
+     * Displays default content for UWP pages
+     *
+	 * @param $content
+	 *
+	 * @return string
+	 */
     public static function setup_singular_page_content($content){
 
         global $post,$wp_query;
@@ -701,6 +709,12 @@ class UsersWP_Templates {
         return $content;
     }
 
+	/**
+     *
+     * Returns content for the users list item template
+     *
+	 * @return mixed|string|void
+	 */
     public static function users_list_item_template_content(){
 
         /*
@@ -961,6 +975,14 @@ class UsersWP_Templates {
         return $classes;
     }
 
+	/**
+     *
+     * Returns content for author box
+     *
+	 * @param $content
+	 *
+	 * @return string
+	 */
     public function author_box_page_content( $content ) {
 
         global $post;

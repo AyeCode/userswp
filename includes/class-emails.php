@@ -426,6 +426,17 @@ class UsersWP_Mails {
         return apply_filters('uwp_send_mail_message', $content, $type);
     }
 
+	/**
+	 * Returns email headers
+	 *
+	 * @since   1.0.0
+	 * @package    userswp
+	 *
+	 * @param string $email_type Notification type.
+	 * @param int $user_id User's ID.
+	 *
+	 * @return string Email headers.
+	 */
     public static function get_mail_headers( $email_type = '', $user_id ) {
         $sitefromEmail = get_option('admin_email');
         $sitefromEmailName = html_entity_decode(stripslashes(get_option('blogname')) ,ENT_QUOTES);
