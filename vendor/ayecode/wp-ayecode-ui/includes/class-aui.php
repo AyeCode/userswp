@@ -130,5 +130,16 @@ class AUI {
 		return AUI_Component_Dropdown::get($args);
 	}
 
+	/**
+	 * Render and return a bootstrap select component.
+	 *
+	 * @since 1.0.0
+	 * @param array $args
+	 * @return string The rendered component.
+	 */
+	public function select( $args = array() ) {
+		return AUI_Component_Input::select($args);
+	}
+
 
 }

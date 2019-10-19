@@ -52,6 +52,13 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		public $latest = "4.3.1";
 
 		/**
+		 * Current version of select2 being used.
+		 *
+		 * @var string
+		 */
+		public $select2_version = "4.0.11";
+
+		/**
 		 * The title.
 		 *
 		 * @var string
@@ -191,24 +198,66 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 
 		/**
+		 * Get inline script used if bootstrap enqueued
+		 *
+		 * If this remains small then its best to use this than to add another JS file.
+		 */
+		public function inline_script(){
+			ob_start();
+			?>
+			<script>
+				/**
+				 * Initiate Select2 items.
+				 */
+				function aui_init_select2(){
+					jQuery("select.aui-select2").select2();
+				}
+
+				// run on doc ready
+				jQuery(window).load(function() {
+					// init tooltips
+					jQuery('[data-toggle="tooltip"]').tooltip();
+
+					// init select2
+					aui_init_select2();
+				});
+			</script>
+			<?php
+			$output = ob_get_clean();
+
+			/*
+			 * We only add the <script> tags for code highlighting, so we strip them from the output.
+			 */
+			return str_replace( array(
+				'<script>',
+				'</script>'
+			), '', $output );
+		}
+
+		/**
 		 * Adds the Font Awesome JS.
 		 */
 		public function enqueue_scripts() {
+
+			// select2
+			$url = $this->url.'assets/js/select2.min.js';
+			wp_register_script( 'aui-select2', $url, array(), $this->select2_version );
+
+
 			if($this->settings['js']=='core-popper'){
+				// Bootstrap bundle
 				$url = $this->url.'assets/js/bootstrap.bundle.min.js';
-				wp_register_script( 'bootstrap-js-bundle', $url, array(), $this->latest );
+				wp_register_script( 'bootstrap-js-bundle', $url, array('aui-select2'), $this->latest );
 				wp_enqueue_script( 'bootstrap-js-bundle' );
-				$script = "
-				jQuery(document).ready(function(){
-    jQuery('[data-toggle=\"tooltip\"]').tooltip();
-});
-				";
+				$script = $this->inline_script();
 				wp_add_inline_script( 'bootstrap-js-bundle', $script );
 			}elseif($this->settings['js']=='popper'){
 				$url = $this->url.'assets/js/popper.min.js';
 				wp_register_script( 'bootstrap-js-popper', $url, array(), $this->latest );
 				wp_enqueue_script( 'bootstrap-js-popper' );
 			}
+
+
 		}
 
 		/**

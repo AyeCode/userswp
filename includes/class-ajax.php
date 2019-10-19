@@ -22,24 +22,29 @@ class UsersWP_Ajax {
      */
     public function add_ajax_events()
     {
-        // uwp_event_name => nopriv
-        $ajax_events = array(
-            'notice_clear_try_bootstrap'   => false,
-        );
+
+        $ajax_events = $this->get_ajax_events();
 
         foreach ( $ajax_events as $ajax_event => $nopriv ) {
-            add_action( 'wp_ajax_uwp_' . $ajax_event, array( __CLASS__, $ajax_event ) );
+            add_action( 'wp_ajax_uwp_' . $ajax_event, array( $this, $ajax_event ) );
 
             if ( $nopriv ) {
-                add_action( 'wp_ajax_nopriv_uwp_' . $ajax_event, array( __CLASS__, $ajax_event ) );
+                add_action( 'wp_ajax_nopriv_uwp_' . $ajax_event, array( $this, $ajax_event ) );
             }
         }
+    }
+
+    public function get_ajax_events(){
+        // uwp_event_name => nopriv
+        return array(
+            'notice_clear_try_bootstrap'   => false,
+        );
     }
 
     /**
      * A quick delete of the try bootstrap notice option.
      */
-    public static function notice_clear_try_bootstrap(){
+    public function notice_clear_try_bootstrap(){
         if (current_user_can('manage_options')) {
             delete_option("uwp_notice_try_bootstrap");
         }

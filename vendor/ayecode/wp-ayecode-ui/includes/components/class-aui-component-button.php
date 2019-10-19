@@ -30,6 +30,7 @@ class AUI_Component_Button {
 			'icon'       => '',
 			'hover_content' => '',
 			'hover_icon'    => '',
+			'new_line_after' => true,
 		);
 
 		/**
@@ -70,13 +71,13 @@ class AUI_Component_Button {
 			// class
 			$class = !empty($args['class']) ? $args['class'] : '';
 			$output .= AUI_Component_Helper::class_attr($class);
-			
+
 			// data-attributes
 			$output .= AUI_Component_Helper::data_attributes($args);
 
 			// aria-attributes
 			$output .= AUI_Component_Helper::aria_attributes($args);
-			
+
 
 			// close opening tag
 			$output .= ' >';
@@ -88,14 +89,14 @@ class AUI_Component_Button {
 				$output .= "<span class='hover-content'>".AUI_Component_Helper::icon($args['hover_icon'],$args['hover_content']).$args['hover_content']."</span>";
 				$hover_content = true;
 			}
-			
+
 			// content
 			if($hover_content){$output .= "<span class='hover-content-original'>";}
 			if(!empty($args['content']) || !empty($args['icon'])){
 				$output .= AUI_Component_Helper::icon($args['icon'],$args['content']).$args['content'];
 			}
 			if($hover_content){$output .= "</span>";}
-					
+
 
 
 			// close
@@ -104,6 +105,12 @@ class AUI_Component_Button {
 			}else{
 				$output .= '</button>';
 			}
+
+			// maybe new line after?  This adds better spacing between buttons.
+			if(!empty($args['new_line_after'])){
+				$output .= PHP_EOL;
+			}
+
 
 		}
 

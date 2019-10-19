@@ -152,7 +152,7 @@ class AUI_Component_Input {
 		$args   = wp_parse_args( $args, $defaults );
 		$output = '';
 
-		// lable
+		// label
 		if(!empty($args['label']) && is_array($args['label'])){
 		}elseif(!empty($args['label'])){
 			$output .= self::label(array('title'=>$args['label'],'for'=>$args['id']));
@@ -319,6 +319,140 @@ class AUI_Component_Input {
 		}else{
 			$output = $args['content'];
 		}
+
+		return $output;
+	}
+
+	/**
+	 * Build the component.
+	 *
+	 * @param array $args
+	 *
+	 * @return string The rendered component.
+	 */
+	public static function select($args = array()){
+		$defaults = array(
+			'class'      => '',
+			'id'         => '',
+			'title'      => '',
+			'value'      => '', // can be an array or a string
+			'required'   => false,
+			'label'      => '',
+			'placeholder'=> '',
+			'options'    => array(),
+			'icon'       => '',
+			'multiple'   => false,
+			'select2'    => false,
+			'no_wrap'    => false,
+		);
+
+		/**
+		 * Parse incoming $args into an array and merge it with $defaults
+		 */
+		$args   = wp_parse_args( $args, $defaults );
+		$output = '';
+
+		// Maybe setup select2
+		$is_select2 = false;
+		if(!empty($args['select2'])){
+			$args['class'] .= ' aui-select2';
+			$is_select2 = true;
+		}elseif( strpos($args['class'], 'aui-select2') !== false){
+			$is_select2 = true;
+		}
+
+		// select2 tags
+		if(!empty($args['select2']) && $args['select2'] == 'tags'){
+			$args['data-tags'] = 'true';
+			$args['data-token-separators'] = "[',']";
+
+			$args['multiple'] = true;
+		}
+
+		// select2 placeholder
+		if($is_select2 && !empty($args['placeholder']) && empty($args['data-placeholder'])){
+			$args['data-placeholder'] = esc_attr($args['placeholder']);
+		}
+
+		// label
+		if(!empty($args['label']) && is_array($args['label'])){
+		}elseif(!empty($args['label'])){
+			$output .= self::label(array('title'=>$args['label'],'for'=>$args['id']));
+		}
+
+		// open/type
+		$output .= '<select ';
+
+		// class
+		$class = !empty($args['class']) ? $args['class'] : '';
+		$output .= AUI_Component_Helper::class_attr('custom-select '.$class);
+
+		// name
+		if(!empty($args['name'])){
+			$output .= AUI_Component_Helper::name($args['name'],$args['multiple']);
+		}
+
+		// id
+		if(!empty($args['id'])){
+			$output .= AUI_Component_Helper::id($args['id']);
+		}
+
+		// title
+		if(!empty($args['title'])){
+			$output .= AUI_Component_Helper::title($args['title']);
+		}
+
+		// data-attributes
+		$output .= AUI_Component_Helper::data_attributes($args);
+
+		// aria-attributes
+		$output .= AUI_Component_Helper::aria_attributes($args);
+
+		// required
+		if(!empty($args['required'])){
+			$output .= ' required ';
+		}
+
+		// multiple
+		if(!empty($args['multiple'])){
+			$output .= ' multiple ';
+		}
+
+		// close opening tag
+		$output .= ' >';
+
+		// placeholder
+		if(!empty($args['placeholder']) && !$is_select2){
+			$output .= '<option value="" disabled selected hidden>'.esc_attr($args['placeholder']).'</option>';
+		}
+
+		// Options
+		if(!empty($args['options'])){
+			foreach($args['options'] as $val => $name){
+				$selected = '';
+				if(!empty($args['value'])){
+					if(is_array($args['value'])){
+						$selected = in_array($val,$args['value']) ? 'selected="selected"' : '';
+					}else{
+						$selected = selected( $args['value'], $val, false);
+					}
+				}
+
+				$output .= '<option value="'.esc_attr($val).'" '.$selected.'>'.esc_attr($name).'</option>';
+			}
+
+		}
+
+		// closing tag
+		$output .= '</select>';
+
+		// wrap
+		if(!$args['no_wrap']){
+			$output = self::wrap(array(
+				'content' => $output,
+			));
+		}
+
 
 		return $output;
 	}
