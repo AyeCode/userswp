@@ -12,22 +12,19 @@ class UsersWP_Invoicing_Plugin {
     public static function get_instance() {
         if ( ! isset( self::$instance ) && ! ( self::$instance instanceof UsersWP_Invoicing_Plugin ) ) {
             self::$instance = new UsersWP_Invoicing_Plugin;
-            self::$instance->setup_globals();
-            self::$instance->includes();
             self::$instance->setup_actions();
         }
 
         return self::$instance;
     }
 
-    private function __construct() {
+    public function __construct() {
         self::$instance = $this;
     }
 
-    private function setup_globals() {
-        
-    }
-    
+	/**
+	 * Setup action hooks
+	 */
     private function setup_actions() {
         if ( is_admin() ) {
 	        add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
@@ -42,11 +39,17 @@ class UsersWP_Invoicing_Plugin {
         do_action( 'uwp_wpi_setup_actions', $this );
     }
 
-    /**
-     * Add GD quick links to the logged in Dashboard.
-     *
-     * @param $args
-     */
+	/**
+	 * Add GD quick links to the logged in Dashboard.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       array     $links    Links to output
+	 * @param       string     $args    Arguments
+	 *
+	 * @return      array
+	 */
     public function dashboard_output($links, $args){
 
         // check its not disabled
@@ -74,14 +77,6 @@ class UsersWP_Invoicing_Plugin {
         }
 
         return $links;
-    }
-
-    private function includes() {
-        do_action( 'uwp_gd_include_files' );
-
-        if ( is_admin() ) {
-            do_action( 'uwp_gd_include_admin_files' );
-        }
     }
 
     /**
@@ -159,6 +154,18 @@ class UsersWP_Invoicing_Plugin {
         return $fields;
     }
 
+	/**
+	 * Returns invoice tab count
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       string     $tab_icon    Count or icon
+	 * @param       object     $tab      Tab object for invoice
+	 * @param       object     $user     User's object
+	 *
+	 * @return      string
+	 */
     public function profile_tab_invoices_icon($tab_icon, $tab, $user){
         if('invoices' == $tab->tab_key){
 	        $tab_icon = $this->invoice_count($user->ID);
@@ -167,6 +174,12 @@ class UsersWP_Invoicing_Plugin {
         return $tab_icon;
     }
 
+	/**
+	 * Adds invoice tab on plugin activation
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 */
     public function add_profile_tabs_on_activation(){
 
         $tabs = array(
@@ -317,6 +330,16 @@ class UsersWP_Invoicing_Plugin {
         }
     }
 
+	/**
+	 * Returns invoices count
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       int     $user_id    User ID
+	 *
+	 * @return      int
+	 */
     public function invoice_count($user_id) {
         global $wpdb;
 

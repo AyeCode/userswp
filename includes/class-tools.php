@@ -9,10 +9,27 @@
  */
 class UsersWP_Tools {
 
+	/**
+	 * Fixes usermeta table
+	 *
+	 * @package     userswp
+	 *
+	 */
     public function fix_usermeta_table() {
         uwp_create_tables();
     }
 
+	/**
+	 * Wraps message
+	 *
+	 * @package     userswp
+	 *
+	 * @param       string   $message   Message to wrap
+	 * @param       string   $class   Class for wrapper
+	 *
+	 * @return string
+	 *
+	 */
     public function tools_wrap_error_message($message, $class) {
         ob_start();
         ?>
@@ -24,6 +41,14 @@ class UsersWP_Tools {
         return $html;
     }
 
+	/**
+	 * Fixes field columns
+	 *
+	 * @package     userswp
+	 *
+	 * @return object|bool
+	 *
+	 */
     public function fix_field_columns() {
         global $wpdb;
         $errors = new WP_Error();
@@ -55,6 +80,14 @@ class UsersWP_Tools {
         return true;
     }
 
+	/**
+	 * Returns columns for field
+	 *
+	 * @package     userswp
+	 *
+	 * @return array
+	 *
+	 */
     public function get_field_columns() {
         global $wpdb;
         $form_type = 'account';
@@ -79,6 +112,14 @@ class UsersWP_Tools {
 
     }
 
+	/**
+	 * Fixes users meta
+	 *
+	 * @package     userswp
+	 *
+	 * @param       int   $step   Step for processing
+	 *
+	 */
     public function fix_usermeta($step) {
 
         global $wpdb;
@@ -178,6 +219,16 @@ class UsersWP_Tools {
 
     }
 
+	/**
+	 * Returns SQL data type for field
+	 *
+	 * @package     userswp
+	 *
+	 * @param       object   $field   Field object
+	 *
+	 * @return string
+	 *
+	 */
     public function uwp_sql_datatype_from_field($field) {
 
         switch ($field->field_type) {
@@ -239,6 +290,15 @@ class UsersWP_Tools {
         return $meta_field_add;
     }
 
+	/**
+	 * Process add or remove dummy users
+	 *
+	 * @package     userswp
+	 *
+	 * @param       int   $step   Current step
+	 * @param       string   $type   Action type add or remove
+	 *
+	 */
     public function uwp_tools_process_dummy_users($step, $type = 'add') {
 
         global $wpdb;
@@ -320,6 +380,14 @@ class UsersWP_Tools {
         return substr(hash( 'SHA256', AUTH_KEY . site_url() ), 0, 15);
     }
 
+	/**
+	 * Returns array of dummy users
+	 *
+	 * @package     userswp
+	 *
+	 * @return array
+	 *
+	 */
     public function uwp_dummy_users_data() {
 
         return array(
@@ -477,6 +545,12 @@ class UsersWP_Tools {
 
     }
 
+	/**
+	 * Outputs tools form
+	 *
+	 * @package     userswp
+	 *
+	 */
     public static function output() {
         ob_start();
         ?>
@@ -624,7 +698,10 @@ class UsersWP_Tools {
         echo ob_get_clean();
     }
 
-    function uwp_process_diagnosis_ajax() {
+	/**
+	 * Process diagnosis AJAX call
+	 */
+    public function uwp_process_diagnosis_ajax() {
 
         if (!is_user_logged_in()) {
             return;
@@ -646,10 +723,19 @@ class UsersWP_Tools {
 
     }
 
-    function uwp_process_diagnosis($type, $step) {
+	/**
+	 * Process diagnosis step
+	 *
+	 * @package     userswp
+	 *
+	 * @param       string   $type   Action type
+	 * @param       int   $step   Current step
+	 *
+	 */
+    public function uwp_process_diagnosis($type, $step) {
         switch ($type) {
             case 'clear_version_numbers':
-                $this->clear_version_numbers($step);
+                $this->clear_version_numbers();
                 break;
             case 'fix_user_data':
                 $this->fix_usermeta($step);
@@ -666,8 +752,6 @@ class UsersWP_Tools {
 
     /**
      * Clear version numbers so install/upgrade functions will run.
-     *
-     * @return string|void
      */
     public function clear_version_numbers(){
         delete_option( 'uwp_db_version' );

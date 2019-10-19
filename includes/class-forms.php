@@ -101,6 +101,14 @@ class UsersWP_Forms {
 
     }
 
+	/**
+     * Displays links in a dropdown
+     *
+	 * @since       1.0.0
+	 * @package     userswp
+     *
+	 * @param $options
+	 */
     public function output_dashboard_links($options){
         if(!empty($options)){
             $class = uwp_get_option("design_style",'bootstrap')=='bootstrap' ? 'form-control' : 'uwp_select2';
@@ -110,6 +118,14 @@ class UsersWP_Forms {
         }
     }
 
+	/**
+     * Displays options for the dashboard links
+     *
+     * @since       1.0.0
+	 * @package     userswp
+     *
+	 * @param $options
+	 */
     public function output_options($options){
         if(!empty($options)){
             foreach($options as $key => $link){

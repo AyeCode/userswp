@@ -36,6 +36,15 @@ class UWP_Users_Loop_Actions extends WP_Super_Duper {
         parent::__construct( $options );
     }
 
+	/**
+	 * The Super block output function.
+	 *
+	 * @param array $args
+	 * @param array $widget_args
+	 * @param string $content
+	 *
+	 * @return mixed|string|bool
+	 */
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
         ob_start();

@@ -13,8 +13,6 @@ class UsersWP_GeoDirectory_Plugin {
     public static function get_instance() {
         if ( ! isset( self::$instance ) && ! ( self::$instance instanceof UsersWP_GeoDirectory_Plugin ) ) {
             self::$instance = new UsersWP_GeoDirectory_Plugin;
-            self::$instance->setup_globals();
-            self::$instance->includes();
             self::$instance->setup_actions();
         }
 
@@ -23,10 +21,6 @@ class UsersWP_GeoDirectory_Plugin {
 
     private function __construct() {
         self::$instance = $this;
-    }
-
-    private function setup_globals() {
-        
     }
     
     private function setup_actions() {
@@ -187,14 +181,6 @@ class UsersWP_GeoDirectory_Plugin {
         return $links;
     }
 
-    private function includes() {
-        do_action( 'uwp_gd_include_files' );
-
-        if ( is_admin() ) {
-            do_action( 'uwp_gd_include_admin_files' );
-        }
-    }
-
     /**
      * Adds settings tabs for the current userswp addon.
      *
@@ -283,6 +269,14 @@ class UsersWP_GeoDirectory_Plugin {
         return $settings;
     }
 
+	/**
+	 * Returns GD posttypes
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @return      array
+	 */
     public function get_gd_posttypes() {
         $post_type_arr = array();
         $post_types = geodir_get_posttypes( 'object' );
@@ -353,6 +347,18 @@ class UsersWP_GeoDirectory_Plugin {
 		return $fields;
 	}
 
+	/**
+	 * Returns count for listings
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       int     $tab_icon    Current tab icon
+	 * @param       object     $tab    Tab object
+	 * @param       object     $user   Users object
+	 *
+	 * @return      int
+	 */
 	public function profile_tab_icon($tab_icon, $tab, $user){
 
 		switch ($tab->tab_key){
@@ -371,7 +377,20 @@ class UsersWP_GeoDirectory_Plugin {
 
 		return $tab_icon;
 	}
-    
+
+	/**
+	 * Returns reviews by user ID
+	 *
+	 * @package     userswp
+	 *
+	 * @param       string     $post_type    Post type
+	 * @param       int  $user_id    User ID
+	 * @param       bool  $count_only   Return count or object
+	 * @param       int  $offset   Offset
+	 * @param       int  $limit   Limit
+	 *
+	 * @return      mixed
+	 */
     public function geodir_get_reviews_by_user_id($post_type = 'gd_place', $user_id, $count_only = false, $offset = 0, $limit = 20) {
         global $wpdb;
 
@@ -415,6 +434,16 @@ class UsersWP_GeoDirectory_Plugin {
             return false;
     }
 
+	/**
+	 * Returns favourite listings count
+	 *
+	 * @package     userswp
+	 *
+	 * @param       string     $post_type    Post type
+	 * @param       int  $user_id    User ID
+	 *
+	 * @return      int
+	 */
     public function geodir_count_favorite( $post_type, $user_id = 0 ) {
         global $wpdb;
 
@@ -430,7 +459,18 @@ class UsersWP_GeoDirectory_Plugin {
 
         return apply_filters( 'uwp_geodir_count_favorite', $count, $user_id );
     }
-    
+
+	/**
+	 * Returns listings count
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       string     $post_type    Post type
+	 * @param       int  $user_id    User ID
+	 *
+	 * @return      mixed
+	 */
     public function get_listings_count($post_type, $user_id = 0) {
         global $wpdb, $sitepress, $wpml_query_filter;
         if (empty($user_id)) {
@@ -463,6 +503,16 @@ class UsersWP_GeoDirectory_Plugin {
         return apply_filters('geodir_uwp_count_total', $count, $user_id);
     }
 
+	/**
+	 * Returns listing count
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       int  $user_id    User ID
+	 *
+	 * @return      int
+	 */
     public function get_total_listings_count($user_id = 0) {
         if (empty($user_id)) {
             return 0;
@@ -498,6 +548,15 @@ class UsersWP_GeoDirectory_Plugin {
         return $total_count;
     }
 
+	/**
+	 * Returns reviews count
+	 *
+	 * @package     userswp
+	 *
+	 * @param       int  $user_id    User ID
+	 *
+	 * @return      int
+	 */
     public function get_total_reviews_count($user_id = 0) {
         if (empty($user_id)) {
             return 0;
@@ -532,6 +591,16 @@ class UsersWP_GeoDirectory_Plugin {
         return $total_count;
     }
 
+	/**
+	 * Returns favourite count
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       int  $user_id    User ID
+	 *
+	 * @return      mixed
+	 */
     public function get_total_favorites_count($user_id = 0) {
         if (empty($user_id)) {
             return 0;
@@ -608,6 +677,17 @@ class UsersWP_GeoDirectory_Plugin {
         $this->profile_gd_subtabs_content($user, 'favorites');
     }
 
+	/**
+	 * Returns subtab data
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       object  $user    User object
+	 * @param       string  $type    Subtab type
+	 *
+	 * @return      array
+	 */
     public function profile_gd_subtabs($user, $type = 'listings') {
         $tabs = array();
 
@@ -667,6 +747,15 @@ class UsersWP_GeoDirectory_Plugin {
         return apply_filters('uwp_profile_gd_tabs', $tabs, $user, $type);
     }
 
+	/**
+	 * Displays subtab content
+	 *
+	 * @package     userswp
+	 *
+	 * @param       object  $user    User object
+	 * @param       string  $type    Subtab type
+     *
+	 */
     public function profile_gd_subtabs_content($user, $type = 'listings') {
         $subtab = get_query_var('uwp_subtab');
         $subtabs = $this->profile_gd_subtabs($user, $type);
@@ -754,7 +843,6 @@ class UsersWP_GeoDirectory_Plugin {
 
             $author_actions = do_shortcode("[gd_author_actions]");
 
-
             $new_html = '<div class="row">';
             $new_html  .= '<div class="col">'.$post_ratings.'</div>';
             if($author_actions){
@@ -785,7 +873,16 @@ class UsersWP_GeoDirectory_Plugin {
             return $html;
         }
     }
-    
+
+	/**
+	 * Displays subtab content
+	 *
+	 * @package     userswp
+	 *
+	 * @param       object  $user    User object
+	 * @param       string  $post_type    Post type
+     *
+	 */
     public function get_bootstrap_listings($user, $post_type){
         global $uwp_widget_args;
 
@@ -813,6 +910,16 @@ class UsersWP_GeoDirectory_Plugin {
 
     }
 
+	/**
+	 * Displays listings
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       object  $user    User object
+	 * @param       string  $post_type    Post type
+	 *
+	 */
     public function gd_get_listings($user, $post_type) {
         if(uwp_get_option("design_style",'bootstrap')){
             self::get_bootstrap_listings($user, $post_type);
@@ -958,7 +1065,10 @@ class UsersWP_GeoDirectory_Plugin {
                 /* Restore original Post Data */
                 wp_reset_postdata();
             } else {
-                echo sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[$post_type]['labels']['name']);
+	            echo aui()->alert(array(
+		            'type'=>'info',
+		            'content'=> sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
+	            ));
             }
             do_action('uwp_after_profile_listing_items', $user, $post_type);
 
@@ -995,6 +1105,16 @@ class UsersWP_GeoDirectory_Plugin {
         }
     }
 
+	/**
+	 * Displays reviews in bootstrap layout
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       object  $user    User object
+	 * @param       string  $post_type    Post type
+     *
+	 */
     public function get_bootstrap_reviews($user, $post_type){
         global $userswp, $uwp_widget_args;
         
@@ -1003,6 +1123,17 @@ class UsersWP_GeoDirectory_Plugin {
         $userswp->profile->get_profile_comments($user,$post_type);
 
     }
+
+	/**
+	 * Displays reviews
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       object  $user    User object
+	 * @param       string  $post_type    Post type
+	 *
+	 */
     public function gd_get_reviews($user, $post_type) {
         if(uwp_get_option("design_style",'bootstrap')){
             self::get_bootstrap_reviews($user, $post_type);
@@ -1078,7 +1209,10 @@ class UsersWP_GeoDirectory_Plugin {
                     /* Restore original Post Data */
                     wp_reset_postdata();
                 } else {
-                    echo sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] );
+	                echo aui()->alert(array(
+		                'type'=>'info',
+		                'content'=> sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
+	                ));
                 }
 
                 do_action( 'uwp_after_profile_reviews_items', $user, $post_type );
@@ -1090,6 +1224,16 @@ class UsersWP_GeoDirectory_Plugin {
         }
     }
 
+	/**
+	 * Displays ffavourite listings in bootstrap layout
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       object  $user    User object
+	 * @param       string  $post_type    Post type
+	 *
+	 */
     public function get_bootstrap_favorites($user, $post_type){
         global $uwp_widget_args;
 
@@ -1130,6 +1274,16 @@ class UsersWP_GeoDirectory_Plugin {
 
     }
 
+	/**
+	 * Displays favourite listings
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       object  $user    User object
+	 * @param       string  $post_type    Post type
+	 *
+	 */
     public function gd_get_favorites($user, $post_type) {
         if(uwp_get_option("design_style",'bootstrap')){
             self::get_bootstrap_favorites($user, $post_type);
@@ -1292,14 +1446,20 @@ class UsersWP_GeoDirectory_Plugin {
                         /* Restore original Post Data */
                         wp_reset_postdata();
                     } else {
-                        echo sprintf( __( "No %s found", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] );
+	                    echo aui()->alert(array(
+		                    'type'=>'info',
+		                    'content'=> sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
+	                    ));
                     }
 
                     do_action( 'uwp_after_profile_favourite_items', $user, $post_type );
 
                     do_action( 'uwp_profile_pagination', $the_query->max_num_pages );
                 } else {
-                    echo sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] );
+	                echo aui()->alert(array(
+		                'type'=>'info',
+		                'content'=> sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
+	                ));
                 }
                 ?>
             </div>
@@ -1307,6 +1467,17 @@ class UsersWP_GeoDirectory_Plugin {
         }
     }
 
+	/**
+	 * Returns login URL for GD V1 login form
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       string  $url
+	 * @param       array  $args
+	 *
+	 * @return      mixed
+	 */
     public function get_gd_login_url($url, $args) {
         if(!uwp_is_gdv2()) {
             return $url;
@@ -1352,6 +1523,14 @@ class UsersWP_GeoDirectory_Plugin {
         return $url;
     }
 
+	/**
+	 * GD author redirect
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @return      mixed
+	 */
     public function geodir_uwp_author_redirect() {
         if ( ! empty( $_REQUEST['geodir_dashbord'] ) ) {
             $author = get_query_var( 'author_name' ) ? get_user_by( 'slug', get_query_var( 'author_name' ) ) : get_userdata( get_query_var( 'author' ) );
@@ -1391,6 +1570,14 @@ class UsersWP_GeoDirectory_Plugin {
         return;
     }
 
+	/**
+	 * Check if listing tab
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @return      bool
+	 */
     public function gd_is_listings_tab() {
         global $wp_query;
         if (is_page() && class_exists('UsersWP')) {
@@ -1409,10 +1596,28 @@ class UsersWP_GeoDirectory_Plugin {
         return false;
     }
 
+	/**
+	 * Checks if listing author page
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       string  $value
+	 *
+	 * @return      mixed
+	 */
     public function geodir_post_status_is_author_page($value) {
         return $value || $this->gd_is_listings_tab();
     }
 
+	/**
+	 * Displays post status
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @return      string|void
+	 */
     public function geodir_add_post_status_author_page() {
         global $wpdb, $post;
 
@@ -1452,24 +1657,55 @@ class UsersWP_GeoDirectory_Plugin {
         }
     }
 
+	/**
+	 * Returns GD login form placeholder
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @return      string
+	 */
     public function gd_login_wid_login_placeholder() {
         if(!uwp_is_gdv2()) {
             return __('Username', 'userswp');
         }
     }
 
+	/**
+	 * Returns GD login form name
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @return      string
+	 */
     public function gd_login_wid_login_name() {
         if(!uwp_is_gdv2()) {
             return "uwp_login_username";
         }
     }
 
+	/**
+	 * Returns GD login form password name
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @return      string
+	 */
     public function gd_login_wid_login_pwd() {
         if(!uwp_is_gdv2()) {
             return "uwp_login_password";
         }
     }
 
+	/**
+	 * Displays nonce field in GD login form
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+     *
+	 */
     public function gd_login_inject_nonce() {
         if(!uwp_is_gdv2()) {
             ?>
@@ -1477,7 +1713,18 @@ class UsersWP_GeoDirectory_Plugin {
             <?php
         }
     }
-    
+
+	/**
+	 * Check author page redirect
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+     *
+     * @param       bool     $redirect
+	 *
+	 * @return      bool
+     *
+	 */
     public function check_redirect_author_page( $redirect = false ) {
         if ( $redirect && ! empty( $_REQUEST['geodir_dashbord'] ) ) {
             $author = get_query_var( 'author_name' ) ? get_user_by( 'slug', get_query_var( 'author_name' ) ) : get_userdata( get_query_var( 'author' ) );
@@ -1514,7 +1761,18 @@ class UsersWP_GeoDirectory_Plugin {
 
         return $redirect;
     }
-    
+
+	/**
+	 * Check if skip author page
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       bool     $uwp_author
+	 *
+	 * @return      bool
+	 *
+	 */
     public function skip_uwp_author_page( $uwp_author = true ) {
         if ( geodir_is_page( 'author' ) ) {
             $uwp_author = false;

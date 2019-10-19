@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
+if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
     /**
      * UsersWP_Settings_Email.
@@ -30,11 +30,21 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 	        add_action('uwp_manage_available_fields_predefined', array( $this,  'manage_tabs_predefined_fields' ), 10, 1);
 	        add_action('uwp_manage_available_fields_custom', array( $this,  'manage_available_fields_custom' ), 10, 1);
 	        add_action('uwp_manage_selected_fields', array( $this,  'manage_tabs_selected_fields' ), 10, 1);
-	        add_filter('uwp_tabs_fields', array( $this,  'tabs_extra_fields' ), 10, 2);
+	        add_filter('uwp_tabs_fields', array( $this,  'tabs_extra_fields' ), 10, 1);
 	        add_action('wp_ajax_uwp_ajax_profile_tabs_action', array( $this,  'tabs_ajax_handler'));
 
         }
 
+        /**
+         * Add a tab to form builder
+         *
+         * @since       1.0.0
+         * @package     userswp
+         *
+         * @param       array   $tabs   Tabs
+         *
+         * @return      array   $tabs
+         */
 	    public function form_builder_tab_items($tabs)
 	    {
 		    $tabs['profile-tabs'] = __('Profile Tabs', 'userswp');
@@ -42,6 +52,17 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 
 	    }
 
+	    /**
+         * Add a tab to form builder
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $heading   Heading
+         * @param       string   $form_type   Form type
+         *
+         * @return      string
+         */
 	    public function tabs_available_fields_head($heading, $form_type)
 	    {
 		    switch ($form_type) {
@@ -53,7 +74,17 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    return $heading;
 	    }
 
-
+	    /**
+         * Add a note above available fields.
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $note   Note to display
+         * @param       string   $form_type   Form type
+         *
+         * @return      string
+         */
 	    public function tabs_available_fields_note($note, $form_type)
 	    {
 		    switch ($form_type) {
@@ -65,32 +96,58 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    return $note;
 	    }
 
-
+        /**
+         * Heading for the selected fields
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $heading   Heading to display
+         * @param       string   $form_type   Form type
+         *
+         * @return      string
+         */
 	    public function tabs_selected_fields_head($heading, $form_type)
 	    {
 		    switch ($form_type) {
 			    case 'profile-tabs':
 				    $heading = __('Profile Tabs', 'userswp');
 				    break;
-
 		    }
 
 		    return $heading;
 	    }
 
-
+	    /**
+         * Add a note above selected fields.
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $note   Note to display
+         * @param       string   $form_type   Form type
+         *
+         * @return      string
+         */
 	    public function tabs_selected_fields_note($note, $form_type)
 	    {
 		    switch ($form_type) {
 			    case 'profile-tabs':
 				    $note = __('Choose the items from left panel to create the profile tabs.', 'userswp');
 				    break;
-
 		    }
 		    return $note;
 	    }
 
-
+	    /**
+         * Display available fields
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $form_type   Form type
+         *
+         */
 	    public function manage_tabs_available_fields($form_type)
 	    {
 	        if('profile-tabs' == $form_type){
@@ -98,6 +155,15 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 	        }
 	    }
 
+	    /**
+         * Display predefined fields
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $form_type   Form type
+         *
+         */
 	    public function manage_tabs_predefined_fields($form_type)
 	    {
 		    if('profile-tabs' == $form_type){
@@ -105,12 +171,30 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    }
 	    }
 
+	    /**
+         * Display custom fields
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $form_type   Form type
+         *
+         */
 	    public function manage_available_fields_custom($form_type){
             if('profile-tabs' == $form_type){
                 $this->tabs_custom_fields($form_type);
 		    }
 	    }
 
+	    /**
+         * Display selected fields
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $form_type   Form type
+         *
+         */
 	    public function manage_tabs_selected_fields($form_type)
 	    {
 		    if('profile-tabs' == $form_type){
@@ -118,6 +202,15 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    }
 	    }
 
+	    /**
+         * Display custom fields
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $form_type   Form type
+         *
+         */
 	    public function tabs_custom_fields($form_type){
             // insert the required code for the SD button.
 			$js_insert_function = $this->insert_shortcode_function();
@@ -198,6 +291,15 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 
 		}
 
+		/**
+         * Display available tabs fields
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $form_type   Form type
+         *
+         */
 	    public function tabs_available_fields($form_type){
 		    global $wpdb;
 
@@ -270,6 +372,15 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    <?php
 	    }
 
+	    /**
+         * Display predefined tabs fields
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $form_type   Form type
+         *
+         */
 	    public function tabs_predefined_fields($form_type){
 		    $fields = array();
 
@@ -345,6 +456,15 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
             }
         }
 
+        /**
+         * Display selected tabs fields
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $form_type   Form type
+         *
+         */
 	    public function tabs_selected_fields($form_type)
 	    {
 		    global $wpdb;
@@ -391,6 +511,17 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    <?php
 	    }
 
+	    /**
+         * Returns tabs fields
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $form_type   Form type
+         *
+         * @return array
+         *
+         */
 	    public function tabs_fields($form_type)
 	    {
 		    $fields = array();
@@ -398,7 +529,18 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    return apply_filters('uwp_tabs_fields', $fields, $form_type);
 	    }
 
-	    public function tabs_extra_fields($fields, $form_type)
+	    /**
+         * Returns tabs fields
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       array   $fields   Extra fields
+         *
+         * @return array
+         *
+         */
+	    public function tabs_extra_fields($fields)
 	    {
 		    global $wpdb;
 
@@ -422,6 +564,17 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    return $fields;
 	    }
 
+	    /**
+         * Displays tab field HTML
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       mixed   $result_str   Field
+         * @param       string  $field_ins_upd   Field action
+         * @param       array   $request   Request data
+         *
+         */
 	    public function tabs_field_adminhtml($result_str, $field_ins_upd = '', $request = array()){
 		    global $wpdb;
 
@@ -597,6 +750,15 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    <?php
         }
 
+        /**
+         * Handles tabs fields AJAX
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @return mixed|void
+         *
+         */
 	    public function tabs_ajax_handler(){
 		    if (isset($_REQUEST['create_field'])) {
 			    $field_id = isset($_REQUEST['field_id']) ? trim(sanitize_text_field($_REQUEST['field_id']), '_') : '';
@@ -658,6 +820,17 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 		    die();
         }
 
+        /**
+         * Save tabs fields
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       array   $request_field   Request data
+         *
+         * @return string|int
+         *
+         */
 	    public function tabs_field_save($request_field = array())
 	    {
 		    global $wpdb;
@@ -720,6 +893,17 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
             return (int) $lastid;
 	    }
 
+	    /**
+         * Save tabs fields
+         *
+         * @since       2.0.0
+         * @package     userswp
+         *
+         * @param       string   $field_id   Request data
+         *
+         * @return int
+         *
+         */
 	    public function tabs_field_delete($field_id = '')
 	    {
 		    global $wpdb;
@@ -769,7 +953,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) :
 
     }
 
-endif;
+}
 
 
-return new UsersWP_Settings_Profile_Tabs();
+new UsersWP_Settings_Profile_Tabs();

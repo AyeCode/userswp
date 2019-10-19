@@ -56,13 +56,22 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
         parent::__construct( $options );
     }
 
+	/**
+	 * The Super block output function.
+	 *
+	 * @param array $args
+	 * @param array $widget_args
+	 * @param string $content
+	 *
+	 * @return mixed|string|bool
+	 */
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
         global $wpdb;
         $user = uwp_get_displayed_user();
 
         if(empty($user)){
-            return;
+            return '';
         }
 
         $defaults = array(
@@ -105,7 +114,7 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
 
         // set the button global or die
         if(empty($buttons)){
-            return;
+            return '';
         }else{
             $args['buttons'] = $buttons;
         }

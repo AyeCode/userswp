@@ -9,10 +9,14 @@
  */
 class UsersWP_Notifications {
 
-    public function __construct() {
-
-    }
-
+	/**
+	 * Displays the notification form
+     *
+     * @since       1.0.0
+	 *
+	 * @param array $type Type of the form
+     *
+	 */
     public function user_notifications_form_front($type){
         if ($type == 'notifications') {
             $user_id = get_current_user_id();
@@ -65,7 +69,11 @@ class UsersWP_Notifications {
                                 <input name="uwp_notification_submit" class="<?php echo $bs_btn_class; ?>" value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
                                 <?php
                             } else {
-                                echo '<p>'.__( 'You will see the options to disable the active notifications for UsersWP and it\'s add ons.', 'userswp' ).'</p>';
+	                            echo aui()->alert(array(
+			                            'type'=>'info',
+			                            'content'=> __( 'You will see the options to disable the active notifications for UsersWP and it\'s add ons.', 'userswp' )
+		                            )
+	                            );
                             }?>
                     </form>
                 </div>

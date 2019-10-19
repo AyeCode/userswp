@@ -797,6 +797,13 @@ class UsersWP_Activator {
         }
     }
 
+	/**
+	 * Performs automatic upgrade
+	 *
+	 * @since       2.0.0
+	 * @package     userswp
+	 * @return      void
+	 */
     public static function automatic_upgrade(){
         $uwp_db_version = get_option('uwp_db_version');
 

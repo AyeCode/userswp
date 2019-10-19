@@ -83,7 +83,10 @@ function uwp_generic_tab_content($user, $post_type = false, $title, $post_ids = 
             $args['post__in'] = $post_ids;
         } else {
             // no posts found
-            echo "<p>".__('No '.$title.' Found', 'userswp')."</p>";
+	        echo aui()->alert(array(
+		        'type'=>'info',
+		        'content'=> sprintf(__('No %s found', 'userswp'), strtolower($title))
+	        ));
             return;
         }
     }

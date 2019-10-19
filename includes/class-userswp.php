@@ -106,12 +106,21 @@ final class UsersWP {
         add_action( 'widgets_init', array( $this, 'register_widgets' ) );
     }
 
-
-    public function load_assets_actions_and_filters($instance) {
+	/**
+	 * Actions for assets
+	 *
+	 * @param $instance
+	 */
+	public function load_assets_actions_and_filters($instance) {
         add_action( 'wp_enqueue_scripts', array($instance, 'enqueue_styles') );
         add_action( 'wp_enqueue_scripts', array($instance, 'enqueue_scripts') );
     }
 
+	/**
+	 * Actions for meta data
+	 *
+	 * @param $instance
+	 */
     public function load_meta_actions_and_filters($instance) {
         add_action('user_register', array($instance, 'sync_usermeta'), 10, 1);
         add_action('delete_user', array($instance, 'delete_usermeta_for_user'), 10, 1);
@@ -126,7 +135,12 @@ final class UsersWP {
         add_filter('init', array($instance, 'process_user_actions'));
         add_action('admin_notices', array($instance, 'show_update_messages'));
     }
-    
+
+	/**
+	 * Actions for AJAX
+	 *
+	 * @param $instance
+	 */
     public function load_ajax_actions_and_filters($instance) {
 
     }
@@ -138,6 +152,11 @@ final class UsersWP {
         add_filter('uwp_get_max_upload_size', array($instance, 'uwp_modify_get_max_upload_size'), 10, 2);
     }
 
+	/**
+	 * Actions for forms
+	 *
+	 * @param $instance
+	 */
     public function load_forms_actions_and_filters($instance) {
         
         // login
@@ -163,12 +182,12 @@ final class UsersWP {
         add_action('edit_user_profile_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('user_edit_form_tag', array($instance, 'add_multipart_to_admin_edit_form'));
         add_action('uwp_template_form_title_after', array($instance, 'display_username_in_account'), 10, 1);
-        add_action('init', array($instance, 'process_login'));
-        add_action('init', array($instance, 'process_register'));
-        add_action('init', array($instance, 'process_account'));
-        add_action('init', array($instance, 'process_forgot'));
-        add_action('init', array($instance, 'process_change'));
-        add_action('init', array($instance, 'process_reset'));
+        add_action('template_redirect', array($instance, 'process_login'));
+        add_action('template_redirect', array($instance, 'process_register'));
+        add_action('template_redirect', array($instance, 'process_account'));
+        add_action('template_redirect', array($instance, 'process_forgot'));
+        add_action('template_redirect', array($instance, 'process_change'));
+        add_action('template_redirect', array($instance, 'process_reset'));
 
         // Forms
         add_filter('uwp_form_input_html_datepicker', array($instance, 'form_input_datepicker'), 10, 4);
@@ -195,10 +214,20 @@ final class UsersWP {
         
     }
 
+	/**
+	 * Actions for text domain
+	 *
+	 * @param $instance
+	 */
     public function load_i18n_actions_and_filters($instance) {
         add_action( 'init', array($instance, 'load_plugin_textdomain'));
     }
 
+	/**
+	 * Actions for notices
+	 *
+	 * @param $instance
+	 */
     public function load_notices_actions_and_filters($instance) {
         add_action('uwp_template_display_notices', array($instance, 'display_registration_disabled_notice'));
         add_action('uwp_template_display_notices', array($instance, 'form_notice_by_key'));
@@ -207,11 +236,21 @@ final class UsersWP {
         add_action( 'admin_notices', array($instance, 'try_bootstrap') );
     }
 
+	/**
+	 * Actions for pages
+	 *
+	 * @param $instance
+	 */
     public function load_pages_actions_and_filters($instance) {
         add_action( 'wpmu_new_blog', array($instance, 'wpmu_generate_default_pages_on_new_site'), 10, 6 );
         add_filter( 'display_post_states', array( $instance, 'add_display_post_states' ), 10, 2 );
     }
 
+	/**
+	 * Actions for user profile
+	 *
+	 * @param $instance
+	 */
     public function load_profile_actions_and_filters($instance) {
         add_action( 'template_redirect', array($instance, 'redirect_author_page') , 10 , 2 );
         //profile page
@@ -268,10 +307,20 @@ final class UsersWP {
         add_filter( 'user_has_cap', array($instance, 'allow_all_users_profile_uploads'), 10, 4 );
     }
 
+	/**
+	 * Actions for database tables
+	 *
+	 * @param $instance
+	 */
     public function load_tables_actions_and_filters($instance) {
         add_filter( 'wpmu_drop_tables', array($instance, 'drop_tables_on_delete_blog'));
     }
-    
+
+	/**
+	 * Actions for templates
+	 *
+	 * @param $instance
+	 */
     public function load_templates_actions_and_filters($instance) {
 
         add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
@@ -302,18 +351,33 @@ final class UsersWP {
         add_filter( 'lostpassword_url', array($instance, 'wp_lostpassword_url'), 10, 1 );
         
     }
-    
+
+	/**
+	 * Actions for tools
+	 *
+	 * @param $instance
+	 */
     public function load_tools_actions_and_filters($instance) {
         add_action('uwp_admin_sub_menus', array($instance, 'uwp_add_admin_tools_sub_menu'), 100, 1);
         add_action('uwp_tools_settings_main_tab_content', array($instance, 'uwp_tools_main_tab_content'));
         add_action('wp_ajax_uwp_process_diagnosis', array($instance, 'uwp_process_diagnosis_ajax'));
     }
 
+	/**
+	 * Actions for notifications
+	 *
+	 * @param $instance
+	 */
     public function load_notifications_actions_and_filters($instance){
         add_action('uwp_account_form_display', array($instance, 'user_notifications_form_front'), 10, 1);
         add_action('init', array($instance, 'notification_submit_handler'));
     }
 
+	/**
+	 * Actions for form builder
+	 *
+	 * @param $instance
+	 */
     public function load_form_builder_actions_and_filters($instance) {
         // Actions
         add_action('admin_init', array($instance, 'form_builder_dummy_fields'));
@@ -355,17 +419,31 @@ final class UsersWP {
         add_filter('uwp_builder_is_public_password',array($instance, 'return_empty_string'),10,4);
     }
 
+	/**
+	 * Actions for admin menus
+	 *
+	 * @param $instance
+	 */
     public function load_menus_actions_and_filters($instance) {
         add_action( 'load-nav-menus.php', array($instance, 'users_wp_admin_menu_metabox') );
         add_action( 'admin_bar_menu', array($instance, 'admin_bar_menu'), 51 );
     }
 
+	/**
+	 * Actions for admin
+	 *
+	 * @param $instance
+	 */
     public function load_admin_actions_and_filters($instance) {
         add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_styles') );
         add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_scripts') );
         add_action('admin_head', array($instance, 'uwp_admin_only_css'));
     }
 
+	/**
+	 * Register widgets
+	 *
+	 */
     public function register_widgets(){
         register_widget("UWP_Register_Widget");
         register_widget("UWP_Forgot_Widget");

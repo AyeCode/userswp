@@ -8,6 +8,17 @@
  */
 class UsersWP_Status {
 
+	/**
+	 * Wraps error message
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       string     $message    Message to wrap
+	 * @param       string     $class      Class for wrapper
+	 *
+	 * @return      string
+	 */
     public function uwp_status_wrap_error_message($message, $class) {
         ob_start();
         ?>
@@ -19,10 +30,23 @@ class UsersWP_Status {
         return $html;
     }
 
+	/**
+	 * Outputs status page content
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 */
     public static function output() {
         include_once( USERSWP_PATH . '/admin/views/html-admin-page-status.php' );
     }
 
+	/**
+	 * Displays status report
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 */
     public static function status_report() {
         global $wpdb;
 
@@ -774,6 +798,14 @@ class UsersWP_Status {
         );
     }
 
+	/**
+	 * Returns database information
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @return      array
+	 */
     public static function get_database_info(){
         global $wpdb;
 
@@ -841,6 +873,14 @@ class UsersWP_Status {
         );
     }
 
+	/**
+	 * Returns active plugins
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @return      array
+	 */
     public static function get_active_plugins(){
         require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
         require_once( ABSPATH . 'wp-admin/includes/update.php' );
@@ -878,6 +918,14 @@ class UsersWP_Status {
         return $active_plugins_data;
     }
 
+	/**
+	 * Returns theme info
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @return      array
+	 */
     public static function get_theme_info(){
         $active_theme = wp_get_theme();
 
@@ -945,6 +993,14 @@ class UsersWP_Status {
         return array_merge( $active_theme_info, $parent_theme_info );
     }
 
+	/**
+	 * Returns security info
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @return      array
+	 */
     public static function get_security_info(){
         $check_page = get_home_url();
         return array(
@@ -953,6 +1009,14 @@ class UsersWP_Status {
         );
     }
 
+	/**
+	 * Returns pages
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+     *
+	 * @return      array
+	 */
     public static function get_pages(){
         $check_pages = array(
             _x( 'Profile Page', 'Page setting', 'userswp' ) => array(

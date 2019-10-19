@@ -46,6 +46,15 @@ class UWP_Profile_Social_Widget extends WP_Super_Duper {
         parent::__construct( $options );
     }
 
+	/**
+	 * The Super block output function.
+	 *
+	 * @param array $args
+	 * @param array $widget_args
+	 * @param string $content
+	 *
+	 * @return mixed|string|bool
+	 */
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
         $user = uwp_get_displayed_user();
