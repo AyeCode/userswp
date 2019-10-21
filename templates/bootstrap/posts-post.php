@@ -25,7 +25,7 @@ if ( has_post_thumbnail() ) {
 			<div class="uwp-profile-item-summary card-text">
 				<?php
 				do_action( 'uwp_before_profile_summary', get_the_ID(), $post->post_author, $post->post_type );
-				$excerpt = strip_shortcodes( wp_trim_words( get_the_excerpt(), 15, '...' ) );
+				$excerpt = strip_shortcodes( wp_trim_words( get_the_excerpt(), 25, '...' ) );
 				echo $excerpt;
 				do_action( 'uwp_after_profile_summary', get_the_ID(), $post->post_author, $post->post_type );
 				?>
@@ -34,7 +34,20 @@ if ( has_post_thumbnail() ) {
 
 		<div class="card-footer text-muted">
 			<?php
-			$footer_html = '<time class="uwp-profile-item-time published" datetime="'.get_the_time( 'c' ).'">'.get_the_date().'</time>';
+			$footer_html = '<div class="row">';
+				$footer_html .= '<div class="col">';
+					$footer_html .= apply_filters('uwp_tp_posts_post_footer_left', '<time class="uwp-profile-item-time published timeago" datetime="'.get_the_time( 'c' ).'" title="'.get_the_date().'">'.get_the_date().'</time>'); // time
+				$footer_html .= '</div>';
+
+				$footer_html .= '<div class="col text-right">';
+					$footer_html .= apply_filters('uwp_tp_posts_post_footer_right', aui()->button( array(
+						'href'  => get_the_permalink($post->ID),
+						'class'     => 'btn btn-outline-primary  btn-sm',
+						'content' => __('View', 'uwp-frontend-post'),
+					) )); // view button
+				$footer_html .= '</div>';
+			$footer_html .= '</div>';
+
 			echo apply_filters('uwp_tp_posts_post_footer', $footer_html);
 			?>
 		</div>

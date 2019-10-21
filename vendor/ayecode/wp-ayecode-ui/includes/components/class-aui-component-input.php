@@ -29,6 +29,7 @@ class AUI_Component_Input {
 			'value'      => '',
 			'required'   => false,
 			'label'      => '',
+			'label_after'=> false,
 			'validation_text'   => '',
 			'validation_pattern' => '',
 			'no_wrap'    => false,
@@ -43,10 +44,18 @@ class AUI_Component_Input {
 		if ( ! empty( $args['type'] ) ) {
 			$type = sanitize_html_class( $args['type'] );
 
-			// label
-			if(!empty($args['label']) && is_array($args['label'])){
-			}elseif(!empty($args['label'])){
-				$output .= self::label(array('title'=>$args['label'],'for'=>$args['id']));
+			// Some special sauce for files
+			if($type=='file'){
+				$args['label_after'] = true; // if type file we need the label after
+				$args['class'] .= ' custom-file-input ';
+			}
+
+
+			// label before
+			if(!empty($args['label']) && !$args['label_after']){
+				$label_args = array('title'=>$args['label'],'for'=>$args['id']);
+				if($type == 'file'){$label_args['class'] = 'custom-file-label';}
+				$output .= self::label( $label_args, $type );
 			}
 
 			// open/type
@@ -106,8 +115,21 @@ class AUI_Component_Input {
 			// close
 			$output .= ' >';
 
+			// label after
+			if(!empty($args['label']) && $args['label_after']){
+				$label_args = array('title'=>$args['label'],'for'=>$args['id']);
+				if($type == 'file'){$label_args['class'] = 'custom-file-label';}
+				$output .= self::label( $label_args, $type );
+			}
 
 
+			// if file we need a seperate wrap
+			if($type == 'file') {
+				$output = self::wrap( array(
+					'content' => $output,
+					'class'   => 'form-group custom-file'
+				) );
+			}
 
 			// wrap
 			if(!$args['no_wrap']){
@@ -144,6 +166,7 @@ class AUI_Component_Input {
 			'validation_pattern' => '',
 			'no_wrap'    => false,
 			'rows'      => '',
+			'wysiwyg'   => false,
 		);
 
 		/**
@@ -158,68 +181,90 @@ class AUI_Component_Input {
 			$output .= self::label(array('title'=>$args['label'],'for'=>$args['id']));
 		}
 
-		// open
-		$output .= '<textarea ';
+		if(!empty($args['wysiwyg'])){
+			ob_start();
+			$content = $args['value'];
+			$editor_id = !empty($args['id']) ? sanitize_html_class($args['id']) : 'wp_editor';
+			$settings = array(
+				'textarea_rows' => !empty(absint($args['rows'])) ? absint($args['rows']) : 4,
+				'quicktags'     => false,
+				'media_buttons' => false,
+				'editor_class'  => 'form-control',
+				'textarea_name' => !empty($args['name']) ? sanitize_html_class($args['name']) : sanitize_html_class($args['id']),
+				'teeny'         => true,
+			);
 
-		// name
-		if(!empty($args['name'])){
-			$output .= ' name="'.sanitize_html_class($args['name']).'" ';
+			// maybe set settings if array
+			if(is_array($args['wysiwyg'])){
+				$settings  = wp_parse_args( $args['wysiwyg'], $settings );
+			}
+
+			wp_editor( $content, $editor_id, $settings );
+			$output .= ob_get_clean();
+		}else{
+
+			// open
+			$output .= '<textarea ';
+
+			// name
+			if(!empty($args['name'])){
+				$output .= ' name="'.sanitize_html_class($args['name']).'" ';
+			}
+
+			// id
+			if(!empty($args['id'])){
+				$output .= ' id="'.sanitize_html_class($args['id']).'" ';
+			}
+
+			// placeholder
+			if(!empty($args['placeholder'])){
+				$output .= ' placeholder="'.esc_attr($args['placeholder']).'" ';
+			}
+
+			// title
+			if(!empty($args['title'])){
+				$output .= ' title="'.esc_attr($args['title']).'" ';
+			}
+
+			// validation text
+			if(!empty($args['validation_text'])){
+				$output .= ' oninvalid="setCustomValidity(\''.esc_attr($args['validation_text']).'\')" ';
+				$output .= ' onchange="try{setCustomValidity(\'\')}catch(e){}" ';
+			}
+
+			// validation_pattern
+			if(!empty($args['validation_pattern'])){
+				$output .= ' pattern="'.$args['validation_pattern'].'" ';
+			}
+
+			// required
+			if(!empty($args['required'])){
+				$output .= ' required ';
+			}
+
+			// rows
+			if(!empty($args['rows'])){
+				$output .= ' rows="'.absint($args['rows']).'" ';
+			}
+
+
+			// class
+			$class = !empty($args['class']) ? $args['class'] : '';
+			$output .= ' class="form-control '.$class.'" ';
+
+
+			// close tag
+			$output .= ' >';
+
+			// value
+			if(!empty($args['value'])){
+				$output .= sanitize_textarea_field($args['value']);
+			}
+
+			// closing tag
+			$output .= '</textarea>';
+
 		}
-
-		// id
-		if(!empty($args['id'])){
-			$output .= ' id="'.sanitize_html_class($args['id']).'" ';
-		}
-
-		// placeholder
-		if(!empty($args['placeholder'])){
-			$output .= ' placeholder="'.esc_attr($args['placeholder']).'" ';
-		}
-
-		// title
-		if(!empty($args['title'])){
-			$output .= ' title="'.esc_attr($args['title']).'" ';
-		}
-
-		// validation text
-		if(!empty($args['validation_text'])){
-			$output .= ' oninvalid="setCustomValidity(\''.esc_attr($args['validation_text']).'\')" ';
-			$output .= ' onchange="try{setCustomValidity(\'\')}catch(e){}" ';
-		}
-
-		// validation_pattern
-		if(!empty($args['validation_pattern'])){
-			$output .= ' pattern="'.$args['validation_pattern'].'" ';
-		}
-
-		// required
-		if(!empty($args['required'])){
-			$output .= ' required ';
-		}
-
-		// rows
-		if(!empty($args['rows'])){
-			$output .= ' rows="'.absint($args['rows']).'" ';
-		}
-
-
-		// class
-		$class = !empty($args['class']) ? $args['class'] : '';
-		$output .= ' class="form-control '.$class.'" ';
-
-
-		// close tag
-		$output .= ' >';
-
-		// value
-		if(!empty($args['value'])){
-			$output .= sanitize_textarea_field($args['value']);
-		}
-
-		// closing tag
-		$output .= '</textarea>';
-
-
 
 
 		// wrap
@@ -236,7 +281,7 @@ class AUI_Component_Input {
 		return $output;
 	}
 
-	public static function label($args = array()){
+	public static function label($args = array(), $type = ''){
 		//<label for="exampleInputEmail1">Email address</label>
 		$defaults = array(
 			'title'       => 'div',
@@ -252,6 +297,9 @@ class AUI_Component_Input {
 
 		if($args['title']){
 
+			// maybe hide labels
+			$class = $type == 'file' ? $args['class'] : 'sr-only '.$args['class']; //@todo set a global option for visibility class
+
 			// open
 			$output .= '<label ';
 
@@ -261,8 +309,7 @@ class AUI_Component_Input {
 			}
 
 			// class
-			$class = !empty($args['class']) ? $args['class'] : '';
-			$output .= ' class="sr-only '.$class.'" '; //@todo set a global option for visibility class
+			$output .= ' class="'.$class.'" ';
 
 			// close
 			$output .= '>';
@@ -286,7 +333,7 @@ class AUI_Component_Input {
 	public static function wrap($args = array()){
 		$defaults = array(
 			'type'       => 'div',
-			'class'      => '',
+			'class'      => 'form-group',
 			'content'   => '',
 		);
 
@@ -302,7 +349,7 @@ class AUI_Component_Input {
 
 			// class
 			$class = !empty($args['class']) ? $args['class'] : '';
-			$output .= ' class="form-group '.$class.'" ';
+			$output .= ' class="'.$class.'" ';
 
 			// close wrap
 			$output .= ' >';

@@ -31,6 +31,8 @@ class AUI_Component_Button {
 			'hover_content' => '',
 			'hover_icon'    => '',
 			'new_line_after' => true,
+			'no_wrap'    => true,
+			'onclick'    => '',
 		);
 
 		/**
@@ -39,7 +41,7 @@ class AUI_Component_Button {
 		$args   = wp_parse_args( $args, $defaults );
 		$output = '';
 		if ( ! empty( $args['type'] ) ) {
-			$type = $args['type'] == 'button' ? 'button' : 'a';
+			$type = $args['type'] != 'a' ? esc_attr($args['type']) : 'a';
 
 			// open/type
 			if($type=='a'){
@@ -78,6 +80,10 @@ class AUI_Component_Button {
 			// aria-attributes
 			$output .= AUI_Component_Helper::aria_attributes($args);
 
+			// onclick, we don't escape this
+			if(!empty($args['onclick'])){
+				$output .= ' onclick="'.$args['onclick'].'" ';
+			}
 
 			// close opening tag
 			$output .= ' >';
@@ -109,6 +115,14 @@ class AUI_Component_Button {
 			// maybe new line after?  This adds better spacing between buttons.
 			if(!empty($args['new_line_after'])){
 				$output .= PHP_EOL;
+			}
+
+
+			// wrap
+			if(!$args['no_wrap']){
+				$output = AUI_Component_Input::wrap(array(
+					'content' => $output,
+				));
 			}
 
 

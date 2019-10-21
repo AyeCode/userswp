@@ -62,7 +62,7 @@ function is_uwp_profile_subtab($subtab = false) {
  *
  * @return      void
  */
-function uwp_generic_tab_content($user, $post_type = false, $title, $post_ids = false) {
+function uwp_generic_tab_content($user, $post_type = false, $title = '', $post_ids = false) {
     global $uwp_widget_args;
 
     $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
@@ -104,7 +104,6 @@ function uwp_generic_tab_content($user, $post_type = false, $title, $post_ids = 
     $design_style = !empty($uwp_widget_args['design_style']) ? esc_attr($uwp_widget_args['design_style']) : uwp_get_option("design_style",'bootstrap');
     $template = $design_style ? $design_style."/loop-posts" : "loop-posts";
     uwp_locate_template($template);
-
     
 }
 
