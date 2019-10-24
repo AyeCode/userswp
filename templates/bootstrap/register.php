@@ -40,10 +40,6 @@ do_action( 'uwp_template_before', 'register' ); ?>
 				<form class="uwp-registration-form uwp_form" method="post" enctype="multipart/form-data">
 					<?php do_action( 'uwp_template_fields', 'register' ); ?>
 
-					<div class="form-group">
-						<?php do_action( 'uwp_social_fields', 'login' ); ?>
-					</div>
-
 					<button name="uwp_register_submit" class="btn btn-primary btn-block text-uppercase uwp_register_submit"
 					        type="submit"><?php echo __( 'Create Account', 'userswp' ); ?></button>
 				</form>
@@ -53,6 +49,10 @@ do_action( 'uwp_template_before', 'register' ); ?>
 					                                href="<?php echo uwp_get_login_page_url(); ?>"
 					                                class="d-block text-center mt-2 small uwp-login-link"><?php _e( 'Login', 'userswp' ); ?></a>
 					</div>
+				</div>
+
+				<div class="form-group text-center mb-0 p-0">
+					<?php do_action( 'uwp_social_fields', 'login' ); ?>
 				</div>
 
 			</div>

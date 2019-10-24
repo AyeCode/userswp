@@ -34,6 +34,7 @@ class AUI_Component_Input {
 			'validation_pattern' => '',
 			'no_wrap'    => false,
 			'step'       => '',
+			'switch'     => false, // to show checkbox as a switch
 		);
 
 		/**
@@ -45,9 +46,12 @@ class AUI_Component_Input {
 			$type = sanitize_html_class( $args['type'] );
 
 			// Some special sauce for files
-			if($type=='file'){
+			if($type=='file' ){
 				$args['label_after'] = true; // if type file we need the label after
 				$args['class'] .= ' custom-file-input ';
+			}elseif($type=='checkbox'){
+				$args['label_after'] = true; // if type file we need the label after
+				$args['class'] .= ' custom-control-input ';
 			}
 
 
@@ -119,15 +123,22 @@ class AUI_Component_Input {
 			if(!empty($args['label']) && $args['label_after']){
 				$label_args = array('title'=>$args['label'],'for'=>$args['id']);
 				if($type == 'file'){$label_args['class'] = 'custom-file-label';}
+				elseif($type == 'checkbox'){$label_args['class'] = 'custom-control-label';}
 				$output .= self::label( $label_args, $type );
 			}
 
 
-			// if file we need a seperate wrap
+			// some input types need a separate wrap
 			if($type == 'file') {
 				$output = self::wrap( array(
 					'content' => $output,
 					'class'   => 'form-group custom-file'
+				) );
+			}elseif($type == 'checkbox'){
+				$checkbox_wrap_class = $args['switch'] ? 'custom-switch' : 'custom-checkbox';
+				$output = self::wrap( array(
+					'content' => $output,
+					'class'   => 'custom-control '.$checkbox_wrap_class
 				) );
 			}
 
@@ -297,8 +308,13 @@ class AUI_Component_Input {
 
 		if($args['title']){
 
-			// maybe hide labels
-			$class = $type == 'file' ? $args['class'] : 'sr-only '.$args['class']; //@todo set a global option for visibility class
+			// maybe hide labels //@todo set a global option for visibility class
+			if($type == 'file' || $type == 'checkbox'){
+				$class = $args['class'];
+			}else{
+				$class = 'sr-only '.$args['class'];
+			}
+
 
 			// open
 			$output .= '<label ';

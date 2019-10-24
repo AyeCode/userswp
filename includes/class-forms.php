@@ -468,7 +468,21 @@ class UsersWP_Forms {
                 $redirect_to = uwp_get_redirect_url($reg_redirect_page_id, $data);
                 $redirect = apply_filters('uwp_register_redirect', $redirect_to);
                 do_action('uwp_after_process_register', $data);
-                wp_redirect($redirect);
+
+                if(wp_doing_ajax()){
+                    $message = aui()->alert(array(
+                            'type'=>'success',
+                            'content'=> __('Account registered successfully. Redirecting...', 'userswp')
+                        )
+                    );
+                    $response = array(
+                        'message' => $message,
+                        'redirect'  => $redirect,
+                    );
+                    wp_send_json_success($response);
+                }else{
+                    wp_redirect($redirect);
+                }
                 exit();
             }
         } else {
@@ -1941,6 +1955,25 @@ class UsersWP_Forms {
 
             ob_start(); // Start  buffering;
             $site_title = uwp_get_form_label($field);
+
+            $design_style = uwp_get_option("design_style","bootstrap");
+
+            // bootstrap
+            if( $design_style ) {
+
+                echo aui()->input(array(
+                    'type'  =>  'checkbox',
+                    'id'    =>  $field->htmlvar_name,
+                    'name'    =>  $field->htmlvar_name,
+                    'placeholder'   => uwp_get_form_label( $field ),
+                    'title'   => uwp_get_form_label( $field ),
+                    'value' =>  $value,
+                    'required'  => $field->is_required,
+                    'validation_text' => !empty($field->is_required) ? __($field->required_msg, 'userswp') : '',
+                    'help_text' => __( $field->help_text, 'userswp' ),
+                    'label' => uwp_get_form_label( $field ),
+                ));
+            }else{
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
@@ -1969,7 +2002,10 @@ class UsersWP_Forms {
             </div>
 
             <?php
+
+            }
             $html = ob_get_clean();
+
         }
 
         return $html;

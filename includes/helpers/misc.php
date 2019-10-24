@@ -1098,7 +1098,13 @@ function uwp_unconfirmed_login_redirect( $username, $user ) {
                     $redirect_to = add_query_arg(array('uwp_err' => 'act_pending'), get_permalink($login_page));
                     wp_destroy_current_session();
                     wp_clear_auth_cookie();
-                    wp_redirect($redirect_to);
+                    if(wp_doing_ajax()){
+                        global $userswp;
+                        $message = $userswp->notices->form_notice_by_key('act_pending',false);
+                        wp_send_json_error($message);
+                    }else{
+                        wp_redirect($redirect_to);
+                    }
                     exit();
                 }
             }

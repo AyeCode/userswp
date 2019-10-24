@@ -282,10 +282,17 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 				}
 
+				/**
+				 * Initiate tooltips on the page.
+				 */
+				function aui_init_tooltips(){
+					jQuery('[data-toggle="tooltip"]').tooltip();
+				}
+
 				// run on window loaded
 				jQuery(window).load(function() {
 					// init tooltips
-					jQuery('[data-toggle="tooltip"]').tooltip();
+					aui_init_tooltips();
 
 					// init select2
 					aui_init_select2();

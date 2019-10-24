@@ -51,16 +51,19 @@ class UsersWP_Notices {
             }
         }
     }
-
+    
     /**
-     * Displays noticed based on notice key. 
+     * Displays noticed based on notice key.
+     * 
+     * @param string $type
+     * @param bool $echo
      *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      void
+     * @return string
      */
-    public function form_notice_by_key() {
+    public function form_notice_by_key($type = '', $echo = true) {
+        $key = isset($_REQUEST['uwp_err']) ? sanitize_html_class($_GET['uwp_err']) : $type;
         $messages = array();
+        $notice = '';
         $messages['act_success'] = array(
             'message' => __('Account activated successfully. Please login to continue.', 'userswp'),
             'type' => 'uwp-alert-success',
@@ -78,17 +81,33 @@ class UsersWP_Notices {
             'type' => 'uwp-alert-error',
         );
         $messages = apply_filters('uwp_form_error_messages', $messages);
-        if (isset($_GET['uwp_err'])) {
-            $key = strip_tags(esc_sql($_GET['uwp_err']));
-            if (isset($messages[$key])) {
-                $value = $messages[$key];
-                $message = $value['message'];
-                $type = $value['type'];
-                echo '<div class="'.$type.' text-center">';
-                echo $message;
-                echo '</div>';
+        if (!empty($key) && isset($messages[$key])) {
+            $value = $messages[$key];
+            $message = $value['message'];
+            $type = $value['type'];
+
+            $design_style = uwp_get_option("design_style","bootstrap");
+            if($design_style){
+                $type = str_replace("uwp-alert-","",$type);
+                $notice = aui()->alert(array(
+                        'type'=> $type,
+                        'content'=> $message
+                    )
+                );
+            }else{
+                $notice ='<div class="'.$type.' text-center">';
+                $notice .= $message;
+                $notice .= '</div>';
             }
+
         }
+
+        if($notice && $echo){
+            echo $notice;
+        }else{
+            return $notice;
+        }
+
     }
 
     public function show_admin_notices() {

@@ -318,7 +318,7 @@ class UsersWP_Templates {
 
         $login_page_id = uwp_get_page_id('login_page', false);
         $redirect_page_id = uwp_get_page_id('login_redirect_to');
-        if (!is_admin() && $login_page_id) {
+        if ((!is_admin() || wp_doing_ajax()) && $login_page_id) {
             $login_page = get_permalink($login_page_id);
             if($redirect){
                 $login_url = add_query_arg( 'redirect_to', $redirect, $login_page );

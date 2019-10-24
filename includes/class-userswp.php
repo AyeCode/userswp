@@ -22,7 +22,7 @@ final class UsersWP {
     public $profile;
     public $forms;
     protected $i18n;
-    protected $notices;
+    public $notices;
     protected $templates;
     protected $meta;
     protected $pages;

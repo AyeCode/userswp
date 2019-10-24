@@ -599,11 +599,10 @@ class UsersWP_Profile {
 	public function get_user_post_counts($user_id){
 
 		$counts = array();
-
+		$post_types = array();
 		if($user_id){
 
 			$post_types = get_post_types( array('public'=>true,'publicly_queryable'=>true), 'objects');
-//				print_r($post_types);exit;
 
 			if(!empty($post_types)){
 				foreach($post_types as $cpt => $post_type){
@@ -619,7 +618,7 @@ class UsersWP_Profile {
 
 //		print_r($counts);exit;
 
-		return $counts;
+		return apply_filters( 'uwp_get_user_post_counts', $counts, $post_types );
 
 	}
 
