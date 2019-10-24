@@ -359,7 +359,7 @@ class UsersWP_Meta {
 	 *
 	 * @package     userswp
 	 *
-	 * @return      mixed|void.
+	 * @return      mixed
 	 */
     public function process_user_actions(){
         $user_id = isset($_REQUEST['user_id']) ? (int)$_REQUEST['user_id'] : 0;

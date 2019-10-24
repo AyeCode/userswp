@@ -842,20 +842,23 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		    $tab_key = !empty($request_field['tab_key']) ? sanitize_text_field($request_field['tab_key']) : sanitize_title($tab_name, 'uwp-tab-'.$tab_id);
 		    $tab_level = !empty($request_field['tab_level']) ? sanitize_text_field($request_field['tab_level']) : 0;
 		    $tab_parent = !empty($request_field['tab_parent']) ? sanitize_text_field($request_field['tab_parent']) : 0;
-		    $tab_type= isset($request_field['tab_type']) ? sanitize_text_field($request_field['tab_type']) : '';
+		    $tab_type= isset($request_field['tab_type']) ? sanitize_text_field($request_field['tab_type']) : 'standard';
 		    $tab_login_only= isset($request_field['tab_login_only']) ? (int)$request_field['tab_login_only'] : 0;
 		    $form_type = $request_field['form_type'];
 
+		    $total_tabs = $wpdb->get_var("SELECT COUNT(id) FROM {$table_name}");
+
 		    $data = array(
-                    'tab_layout'    => 'profile',
                     'form_type'     => 'profile-tabs',
+                    'sort_order'    => $total_tabs + 1,
+                    'tab_layout'    => 'profile',
                     'tab_type'      => $tab_type,
-                    'tab_name'      => $tab_name,
-                    'tab_icon'      => $tab_icon,
-                    'tab_key'       => sanitize_text_field($tab_key),
                     'tab_level'     => sanitize_text_field($tab_level),
                     'tab_parent'    => sanitize_text_field($tab_parent),
                     'tab_login_only'=> $tab_login_only,
+                    'tab_name'      => $tab_name,
+                    'tab_icon'      => $tab_icon,
+                    'tab_key'       => sanitize_text_field($tab_key),
                     'tab_content'   => sanitize_textarea_field($request_field['tab_content']),
                 );
 

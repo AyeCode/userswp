@@ -358,7 +358,7 @@ class UsersWP_Import_Export {
         $data       = $this->get_export_data();
         $columns    = $this->get_columns();
 
-        if ( $data ) {
+        if ( is_array($data) && !empty($data) ) {
             foreach ( $data as $row ) {
                 $i = 1;
                 foreach ( $row as $key => $column ) {

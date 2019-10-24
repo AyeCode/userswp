@@ -769,11 +769,11 @@ class UsersWP_GeoDirectory_Plugin {
         }
 
         if(uwp_get_option("design_style",'bootstrap')){
-            if ($subtabs && count($subtabs)>1) {
+            if (is_array($subtabs) && count($subtabs)>1) {
                 ?>
                 <div class="pb-3">
                     <?php
-                    foreach ($this->profile_gd_subtabs($user, $type) as $tab_id => $tab) {
+                    foreach ($subtabs as $tab_id => $tab) {
 
                         $tab_url = uwp_build_profile_tab_url($user->ID, $type, $tab_id);
 
@@ -790,15 +790,15 @@ class UsersWP_GeoDirectory_Plugin {
                 </div>
                 <?php
             }
-        }else{
+        } else{
 
         ?>
         <div class="uwp-profile-subcontent">
             <div class="uwp-profile-subnav">
-                <?php if ($subtabs) { ?>
+                <?php if (!empty($subtabs)) { ?>
                     <ul class="item-list-subtabs-ul">
                         <?php
-                        foreach ($this->profile_gd_subtabs($user, $type) as $tab_id => $tab) {
+                        foreach ($subtabs as $tab_id => $tab) {
 
                             $tab_url = uwp_build_profile_tab_url($user->ID, $type, $tab_id);
 
