@@ -1613,10 +1613,10 @@ class UsersWP_Forms {
             <script type="text/javascript">
                 jQuery(document).ready(function () {
 
-                    jQuery('#<?php echo $field->htmlvar_name;?>').timepicker({
-                        showPeriod: true,
-                        showLeadingZero: true
-                    });
+//                    jQuery('#<?php //echo $field->htmlvar_name;?>//').timepicker({
+//                        showPeriod: true,
+//                        showLeadingZero: true
+//                    });
                 });
             </script>
             <div id="<?php echo $field->htmlvar_name;?>_row"

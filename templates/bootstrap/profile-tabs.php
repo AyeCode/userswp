@@ -23,8 +23,8 @@ if($output === '' || $output=='head'){
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-white  mb-4 p-xl-0">
 	<div class="w-100 justify-content-center p-xl-0 border-bottom">
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown-1" aria-controls="navbarNavDropdown-1" aria-expanded="false" aria-label="Toggle navigation" style=""><span class="navbar-toggler-icon"></span></button>
-		<div class="collapse navbar-collapse" id="navbarNavDropdown-1">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#uwp-profile-tabs-nav" aria-controls="navbarNavDropdown-1" aria-expanded="false" aria-label="Toggle navigation" style=""><span class="navbar-toggler-icon"></span></button>
+		<div class="collapse navbar-collapse" id="uwp-profile-tabs-nav">
 			<ul class="navbar-nav flex-wrap m-0">
 				<?php
 //					print_r($tabs_array);

@@ -18,3 +18,7 @@ body.admin-bar{
 @import "1-frameworks/bootstrap/modal";
 @import "1-frameworks/bootstrap/tooltip";
 @import "1-frameworks/bootstrap/popover";
+
+
+// select2 can't be inside wrapper
+@import '1-frameworks/select2/core';

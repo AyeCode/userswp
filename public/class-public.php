@@ -45,30 +45,6 @@ class UsersWP_Public {
             }
         }
 
-        $enable_timepicker_in_register = false;
-
-        if (is_uwp_register_page() || is_uwp_account_page()) {
-            if (is_uwp_register_page()) {
-                $fields = get_register_form_fields();
-            } else {
-                // account page
-                $fields = get_account_form_fields();
-            }
-            if (!empty($fields)) {
-                foreach ($fields as $field) {
-                    if ($field->field_type == 'time') {
-                        $enable_timepicker_in_register = true;
-                    }
-                }
-            }
-        }
-
-
-        if ($enable_timepicker_in_register) {
-            // time fields available only in register and account pages
-            wp_enqueue_style( "uwp_timepicker_css", USERSWP_PLUGIN_URL . 'assets/css/jquery.ui.timepicker.css', array(), USERSWP_VERSION, 'all' );
-        }
-
 	    wp_enqueue_style( "uwp-country-select", USERSWP_PLUGIN_URL . 'assets/css/libs/countryselect.css', array(), USERSWP_VERSION, 'all' );
 
         // maybe add bootstrap
@@ -102,44 +78,7 @@ class UsersWP_Public {
             // include only profile pages
             wp_enqueue_script( 'jcrop', array( 'jquery' ) );
         }
-        
-        $enable_timepicker_in_register = false;
-        $enable_timepicker_in_account = false;
-
-        $enable_datepicker_in_register = false;
-        $enable_datepicker_in_account = false;
-        
-        if (is_uwp_register_page() || is_uwp_account_page()) {
-            if (is_uwp_register_page()) {
-                $fields = get_register_form_fields();    
-            } else {
-                // account page
-                $fields = get_account_form_fields();
-            }
-            
-            if (!empty($fields)) {
-                foreach ($fields as $field) {
-                    if ($field->field_type == 'time') {
-                        $enable_timepicker_in_register = true;
-                    }
-
-                    if ($field->field_type == 'datepicker') {
-                        $enable_datepicker_in_register = true;
-                    }
-                }
-            }
-        }
-        
-        if ($enable_timepicker_in_register || $enable_timepicker_in_account) {
-            // time fields available only in register and account pages
-            wp_enqueue_script( "uwp_timepicker", USERSWP_PLUGIN_URL . 'assets/js/jquery.ui.timepicker' . $suffix . '.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
-        }
-
-
-        if ($enable_datepicker_in_register || $enable_datepicker_in_account) {
-            // date fields available only in register and account pages
-            wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
-        }
+     
 
         if (is_uwp_profile_page() ) {
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );

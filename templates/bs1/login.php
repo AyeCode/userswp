@@ -44,7 +44,7 @@ do_action( 'uwp_template_before', 'login' ); ?>
                     </form>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group text-center mb-0 p-0">
 					<?php do_action( 'uwp_social_fields', 'login' ); ?>
                 </div>
 

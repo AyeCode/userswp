@@ -127,7 +127,7 @@ class AUI_Component_Input {
 				$output .= self::label( $label_args, $type );
 			}
 
-
+			
 			// some input types need a separate wrap
 			if($type == 'file') {
 				$output = self::wrap( array(

@@ -86,11 +86,11 @@
          box-shadow: $box-shadow;
          outline: 0 !important;
     }
-    .badge {
-        position: absolute;
-        top: -.625rem;
-        right: -.3125rem;
-    }
+    //.badge {
+    //    position: absolute;
+    //    top: -.625rem;
+    //    right: -.3125rem;
+    //}
     position:relative;
 }
 
@@ -150,8 +150,25 @@
             border-top: 16px solid #fff;
             border-left: 16px solid #fff;
             transform: rotate(45deg);
+            z-index: -1;
         }
     }
+  &.dropdown-menu-right{
+    &:before {
+      @include media-breakpoint-up(md) {
+        left:unset;
+        right: 50px;
+
+      }
+    }
+  }
+
+  &.dropdown-caret-0{
+    &:before{
+      content: none;
+    }
+  }
+
 }
 
 // Dark links against a light background

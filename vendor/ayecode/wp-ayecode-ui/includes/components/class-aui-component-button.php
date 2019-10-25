@@ -73,7 +73,7 @@ class AUI_Component_Button {
 			// class
 			$class = !empty($args['class']) ? $args['class'] : '';
 			$output .= AUI_Component_Helper::class_attr($class);
-
+			
 			// data-attributes
 			$output .= AUI_Component_Helper::data_attributes($args);
 
@@ -95,14 +95,14 @@ class AUI_Component_Button {
 				$output .= "<span class='hover-content'>".AUI_Component_Helper::icon($args['hover_icon'],$args['hover_content']).$args['hover_content']."</span>";
 				$hover_content = true;
 			}
-
+			
 			// content
 			if($hover_content){$output .= "<span class='hover-content-original'>";}
 			if(!empty($args['content']) || !empty($args['icon'])){
 				$output .= AUI_Component_Helper::icon($args['icon'],$args['content']).$args['content'];
 			}
 			if($hover_content){$output .= "</span>";}
-
+					
 
 
 			// close

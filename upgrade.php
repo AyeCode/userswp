@@ -31,5 +31,178 @@ function uwp_upgrade_1200(){
 		}
 	}
 
-	//@todo convert 
+	// Convert tabs
+	uwp_upgrade_convert_tabs();
+
+}
+
+/**
+ * Convert v1.0 tabs to v1.2.
+ */
+function uwp_upgrade_convert_tabs(){
+	$old_tabs = uwp_get_option('enable_profile_tabs');
+
+	$updated = uwp_get_option("user_profile_tabs_updated");
+	$new_tabs = array();
+	if($old_tabs && !$updated){
+
+		foreach($old_tabs as $tab){
+			$tab_data = array();
+			if( $tab == 'posts' ) {
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Posts','userswp'),
+					'tab_icon'   => 'fas fa-info-circle',
+					'tab_key'    => 'posts',
+					'tab_content'=> ''
+				);
+			}elseif( $tab == 'more_info' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('More Info','userswp'),
+					'tab_icon'   => 'fas fa-info-circle',
+					'tab_key'    => 'more_info',
+					'tab_content'=> ''
+				);
+			}elseif( $tab == 'comments' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Comments','userswp'),
+					'tab_icon'   => 'fas fa-comments',
+					'tab_key'    => 'comments',
+					'tab_content'=> ''
+				);
+			}elseif( $tab == 'listings' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Listings','userswp'),
+					'tab_icon'   => 'fas fa-globe-americas',
+					'tab_key'    => 'listings',
+					'tab_content'=> ''
+				);
+			}elseif( $tab == 'reviews' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Reviews','userswp'),
+					'tab_icon'   => 'fas fa-star',
+					'tab_key'    => 'reviews',
+					'tab_content'=> ''
+				);
+			}elseif( $tab == 'favorites' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Favorites','userswp'),
+					'tab_icon'   => 'fas fa-heart',
+					'tab_key'    => 'favorites',
+					'tab_content'=> ''
+				);
+			}elseif( $tab == 'activity' ){
+				$tab_data = array(
+					'tab_type'   => 'shortcode',
+					'tab_name'   => __('Activity','userswp'),
+					'tab_icon'   => 'fas fa-cubes',
+					'tab_key'    => 'activity',
+					'tab_content'=> '[uwp_activity]'
+				);
+			}elseif( $tab == 'downloads' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Downloads','userswp'),
+					'tab_icon'   => 'fas fa-download',
+					'tab_key'    => 'downloads',
+					'tab_content'=> '[uwp_edd_downloads]'
+				);
+			}elseif( $tab == 'purchases' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Purchases','userswp'),
+					'tab_icon'   => 'fas fa-receipt',
+					'tab_key'    => 'purchases',
+					'tab_content'=> '[uwp_edd_purchases]'
+				);
+			}elseif( $tab == 'followers' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Followers','userswp'),
+					'tab_icon'   => 'fas fa-chevron-circle-left',
+					'tab_key'    => 'followers',
+					'tab_content'=> '[uwp_followers]'
+				);
+			}elseif( $tab == 'followers' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Following','userswp'),
+					'tab_icon'   => 'fas fa-chevron-circle-right',
+					'tab_key'    => 'following',
+					'tab_content'=> '[uwp_following]'
+				);
+			}elseif( $tab == 'friends' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Friends','userswp'),
+					'tab_icon'   => 'fas fa-chevron-circle-right',
+					'tab_key'    => 'friends',
+					'tab_content'=> '[uwp_friends]'
+				);
+			}elseif( $tab == 'mycred' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('MyCred','userswp'),
+					'tab_icon'   => 'fas fa-star',
+					'tab_key'    => 'mycred',
+					'tab_content'=> '[uwp_mycred]'
+				);
+			}elseif( $tab == 'products' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Products','userswp'),
+					'tab_icon'   => 'fas fa-info-circle',
+					'tab_key'    => 'products',
+					'tab_content'=> ''
+				);
+			}elseif( $tab == 'orders' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Orders','userswp'),
+					'tab_icon'   => 'fas fa-info-circle',
+					'tab_key'    => 'orders',
+					'tab_content'=> ''
+				);
+			}elseif( $tab == 'jobs' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Jobs','userswp'),
+					'tab_icon'   => 'fas fa-briefcase',
+					'tab_key'    => 'jobs',
+					'tab_content'=> ''
+				);
+			}elseif( $tab == 'forums' ){
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Topics','userswp'),
+					'tab_icon'   => 'fas fa-info-circle',
+					'tab_key'    => 'topics',
+					'tab_content'=> ''
+				);
+				uwp_profile_add_tabs($tab_data); // we are adding two here
+
+				$tab_data = array(
+					'tab_type'   => 'standard',
+					'tab_name'   => __('Replies','userswp'),
+					'tab_icon'   => 'fas fa-reply-all',
+					'tab_key'    => 'replies',
+					'tab_content'=> ''
+				);
+			}
+
+
+			if(!empty($tab_data)){
+				uwp_profile_add_tabs($tab_data);
+			}
+		}
+
+		// set as updated
+		uwp_update_option("user_profile_tabs_updated","1200");
+	}
+
 }

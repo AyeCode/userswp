@@ -165,7 +165,7 @@ class AUI_Component_Helper {
 
 	/**
 	 * Build a font awesome icon from a class.
-	 *
+	 * 
 	 * @param $class
 	 * @param bool $space_after
 	 *
