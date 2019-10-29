@@ -575,7 +575,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 		public function customizer_settings($wp_customize){
 			$wp_customize->add_section('aui_settings', array(
-				'title'    => __('AyeCode UI', 'themename'),
+				'title'    => __('AyeCode UI'),
 				'priority' => 120,
 			));
 
@@ -583,30 +583,46 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			//  = Color Picker              =
 			//  =============================
 			$wp_customize->add_setting('aui_options[color_primary]', array(
-				'default'           => '#1927eb',
+				'default'           => '#1e73be',
 				'sanitize_callback' => 'sanitize_hex_color',
 				'capability'        => 'edit_theme_options',
 				'type'              => 'option',
 				'transport'         => 'refresh',
 			));
 			$wp_customize->add_control( new WP_Customize_Color_Control($wp_customize, 'color_primary', array(
-				'label'    => __('Primary Color', 'themename'),
+				'label'    => __('Primary Color'),
 				'section'  => 'aui_settings',
 				'settings' => 'aui_options[color_primary]',
+			)));
+
+			$wp_customize->add_setting('aui_options[color_secondary]', array(
+				'default'           => '#6c757d',
+				'sanitize_callback' => 'sanitize_hex_color',
+				'capability'        => 'edit_theme_options',
+				'type'              => 'option',
+				'transport'         => 'refresh',
+			));
+			$wp_customize->add_control( new WP_Customize_Color_Control($wp_customize, 'color_secondary', array(
+				'label'    => __('Secondary Color'),
+				'section'  => 'aui_settings',
+				'settings' => 'aui_options[color_secondary]',
 			)));
 		}
 
 
 		public static function custom_css($compatibility = true) {
 			$settings = get_option('aui_options');
-//			print_r($settings);echo '###';
 
 			ob_start();
 			?>
 			<style>
 				<?php
-					if(!empty($settings['color_primary'])){
+					if(!empty($settings['color_primary']) && $settings['color_primary'] != "#1e73be"){
 						echo self::css_primary($settings['color_primary'],$compatibility);
+					}
+
+					if(!empty($settings['color_secondary']) && $settings['color_secondary'] != "#6c757d"){
+						echo self::css_secondary($settings['color_secondary'],$compatibility);
 					}
                 ?>
 			</style>
@@ -758,6 +774,122 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 			// page link
 			$output .= $prefix ." .page-link:focus{box-shadow: 0 0 0 0.2rem $op_25;} ";
+
+			return $output;
+		}
+
+		public static function css_secondary($color_code,$compatibility){;
+			$color_code = sanitize_hex_color($color_code);
+			if(!$color_code){return '';}
+			/**
+			 * c = color, b = background color, o = border-color, f = fill
+			 */
+			$selectors = array(
+				'.btn-secondary' => array('b','o'),
+				'.btn-secondary.disabled' => array('b','o'),
+				'.btn-secondary:disabled' => array('b','o'),
+				'.btn-outline-secondary' => array('c','o'),
+				'.btn-outline-secondary:hover' => array('b','o'),
+				'.btn-outline-secondary.disabled' => array('c'),
+				'.btn-outline-secondary:disabled' => array('c'),
+				'.btn-outline-secondary:not(:disabled):not(.disabled):active' => array('b','o'),
+				'.btn-outline-secondary:not(:disabled):not(.disabled).active' => array('b','o'),
+				'.btn-outline-secondary.dropdown-toggle' => array('b','o'),
+				'.badge-secondary' => array('b'),
+				'.alert-secondary' => array('b','o'),
+				'.btn-link.btn-secondary' => array('c'),
+				);
+
+			$important_selectors = array(
+				'.bg-secondary' => array('b','f'),
+				'.border-secondary' => array('o'),
+				'.text-secondary' => array('c'),
+			);
+
+			$color = array();
+			$color_i = array();
+			$background = array();
+			$background_i = array();
+			$border = array();
+			$border_i = array();
+			$fill = array();
+			$fill_i = array();
+
+			$output = '';
+
+			// build rules into each type
+			foreach($selectors as $selector => $types){
+				$selector = $compatibility ? ".bsui ".$selector : $selector;
+				$types = array_combine($types,$types);
+				if(isset($types['c'])){$color[] = $selector;}
+				if(isset($types['b'])){$background[] = $selector;}
+				if(isset($types['o'])){$border[] = $selector;}
+				if(isset($types['f'])){$fill[] = $selector;}
+			}
+
+			// build rules into each type
+			foreach($important_selectors as $selector => $types){
+				$selector = $compatibility ? ".bsui ".$selector : $selector;
+				$types = array_combine($types,$types);
+				if(isset($types['c'])){$color_i[] = $selector;}
+				if(isset($types['b'])){$background_i[] = $selector;}
+				if(isset($types['o'])){$border_i[] = $selector;}
+				if(isset($types['f'])){$fill_i[] = $selector;}
+			}
+
+			// add any color rules
+			if(!empty($color)){
+				$output .= implode(",",$color) . "{color: $color_code;} ";
+			}
+			if(!empty($color_i)){
+				$output .= implode(",",$color_i) . "{color: $color_code !important;} ";
+			}
+
+			// add any background color rules
+			if(!empty($background)){
+				$output .= implode(",",$background) . "{background-color: $color_code;} ";
+			}
+			if(!empty($background_i)){
+				$output .= implode(",",$background_i) . "{background-color: $color_code !important;} ";
+			}
+
+			// add any border color rules
+			if(!empty($border)){
+				$output .= implode(",",$border) . "{border-color: $color_code;} ";
+			}
+			if(!empty($border_i)){
+				$output .= implode(",",$border_i) . "{border-color: $color_code !important;} ";
+			}
+
+			// add any fill color rules
+			if(!empty($fill)){
+				$output .= implode(",",$fill) . "{fill: $color_code;} ";
+			}
+			if(!empty($fill_i)){
+				$output .= implode(",",$fill_i) . "{fill: $color_code !important;} ";
+			}
+
+
+			$prefix = $compatibility ? ".bsui " : "";
+
+			// darken
+			$darker_075 = self::css_hex_lighten_darken($color_code,"-0.075");
+			$darker_10 = self::css_hex_lighten_darken($color_code,"-0.10");
+			$darker_125 = self::css_hex_lighten_darken($color_code,"-0.125");
+
+			// lighten
+			$lighten_25 = self::css_hex_lighten_darken($color_code,"0.25");
+
+			// opacity see https://css-tricks.com/8-digit-hex-codes/
+			$op_25 = $color_code."40"; // 25% opacity
+
+
+			// button states
+			$output .= $prefix ." .btn-secondary:hover{background-color: ".$darker_075.";    border-color: ".$darker_10.";} ";
+			$output .= $prefix ." .btn-outline-secondary:not(:disabled):not(.disabled):active:focus, $prefix .btn-outline-secondary:not(:disabled):not(.disabled).active:focus, .show>$prefix .btn-outline-secondary.dropdown-toggle:focus{box-shadow: 0 0 0 0.2rem $op_25;} ";
+			$output .= $prefix ." .btn-secondary:not(:disabled):not(.disabled):active, $prefix .btn-secondary:not(:disabled):not(.disabled).active, .show>$prefix .btn-secondary.dropdown-toggle{background-color: ".$darker_10.";    border-color: ".$darker_125.";} ";
+			$output .= $prefix ." .btn-secondary:not(:disabled):not(.disabled):active:focus, $prefix .btn-secondary:not(:disabled):not(.disabled).active:focus, .show>$prefix .btn-secondary.dropdown-toggle:focus {box-shadow: 0 0 0 0.2rem $op_25;} ";
+
 
 			return $output;
 		}

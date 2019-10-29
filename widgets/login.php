@@ -55,7 +55,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     'desc_tip'    => true,
                     'default'     => '',
                     'placeholder' => __('default 40, 10 is better in sidebars','userswp'),
-                    'advanced'    => true
+                    'group'     => __("Design","geodirectory")
                 ),
                 'logged_in_show'  => array(
                     'title' => __('Logged in show', 'userswp'),
@@ -80,7 +80,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     ),
                     'default'  => '',
                     'desc_tip' => true,
-                    'advanced' => true
+                    'group'     => __("Design","geodirectory")
                 ),
                 'css_class'  => array(
                     'type' => 'text',
@@ -89,7 +89,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     'placeholder' => '',
                     'default' => '',
                     'desc_tip' => true,
-                    'advanced' => true,
+                    'group'     => __("Design","geodirectory")
                 ),
             )
 

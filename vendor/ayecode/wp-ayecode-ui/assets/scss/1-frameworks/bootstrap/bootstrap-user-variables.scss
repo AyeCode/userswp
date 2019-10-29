@@ -79,12 +79,22 @@ $colors: map-merge(
 $colors
 );
 
-$primary:       $indigo !default;
-$secondary:     $blue !default;
+//$primary:       $indigo !default;
+//$secondary:     $blue !default;
+//$success:       $green !default;
+//$info:          $teal !default;
+//$warning:       $yellow !default;
+//$danger:        $red !default;
+//$light:         $gray-100 !default;
+//$dark:          $gray-800 !default;
+//$white:         $white !default;
+
+$primary:       #1e73be !default;
+$secondary:     #6c757d !default;
 $success:       $green !default;
-$info:          $teal !default;
-$warning:       $yellow !default;
-$danger:        $red !default;
+$info:          #17a2b8 !default;
+$warning:       #ffc107 !default;
+$danger:        #dc3545 !default;
 $light:         $gray-100 !default;
 $dark:          $gray-800 !default;
 $white:         $white !default;

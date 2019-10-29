@@ -1,24 +1,24 @@
 [
     {
         "name": "ayecode/wp-ayecode-ui",
-        "version": "0.0.8",
-        "version_normalized": "0.0.8.0",
+        "version": "0.0.9",
+        "version_normalized": "0.0.9.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
-            "reference": "bfb4786d04d024e7829a8d084d963b3d0077076c"
+            "reference": "b3d87c4c9657228eeb463b044f806e27a88e6d1a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/bfb4786d04d024e7829a8d084d963b3d0077076c",
-            "reference": "bfb4786d04d024e7829a8d084d963b3d0077076c",
+            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/b3d87c4c9657228eeb463b044f806e27a88e6d1a",
+            "reference": "b3d87c4c9657228eeb463b044f806e27a88e6d1a",
             "shasum": ""
         },
         "require": {
             "composer/installers": "~1.0",
             "php": ">=5.3.0"
         },
-        "time": "2019-10-25T10:54:28+00:00",
+        "time": "2019-10-29T19:57:46+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -99,17 +99,17 @@
     },
     {
         "name": "ayecode/wp-super-duper",
-        "version": "1.0.14",
-        "version_normalized": "1.0.14.0",
+        "version": "1.0.15",
+        "version_normalized": "1.0.15.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-super-duper.git",
-            "reference": "e9a0f302bb940fec6d7151680e87fed0ec95d89f"
+            "reference": "f2ad18b34e9f1754be24dd48b2399861d9ddf397"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/e9a0f302bb940fec6d7151680e87fed0ec95d89f",
-            "reference": "e9a0f302bb940fec6d7151680e87fed0ec95d89f",
+            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/f2ad18b34e9f1754be24dd48b2399861d9ddf397",
+            "reference": "f2ad18b34e9f1754be24dd48b2399861d9ddf397",
             "shasum": ""
         },
         "require": {
@@ -121,7 +121,7 @@
             "squizlabs/php_codesniffer": "^3.2",
             "wp-coding-standards/wpcs": "*"
         },
-        "time": "2019-10-07T12:01:56+00:00",
+        "time": "2019-10-29T18:28:08+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

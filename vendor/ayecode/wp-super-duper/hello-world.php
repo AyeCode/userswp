@@ -13,8 +13,9 @@ class SD_Hello_World extends WP_Super_Duper {
 		$options = array(
 			'textdomain'     => 'super-duper',
 			// textdomain of the plugin/theme (used to prefix the Gutenberg block)
-			'block-icon'     => 'admin-site',
+			'block-icon'     => 'fas fa-globe-americas',
 			// Dash icon name for the block: https://developer.wordpress.org/resource/dashicons/#arrow-right
+			// OR font-awesome 5 class name: fas fa-globe-americas
 			'block-category' => 'widgets',
 			// the category for the block, 'common', 'formatting', 'layout', 'widgets', 'embed'.
 			'block-keywords' => "['hello','world']",
@@ -85,7 +86,7 @@ class SD_Hello_World extends WP_Super_Duper {
 		/*
 		 * This value is added by filter so might not exist if filter is removed so we check.
 		 */
-		if ( ! $another_input ) {
+		if ( ! isset( $another_input ) ) {
 			$another_input = '';
 		}
 

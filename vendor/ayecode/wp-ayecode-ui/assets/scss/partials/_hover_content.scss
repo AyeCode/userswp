@@ -1,0 +1,15 @@
+// buttons
+.hover-content{
+  display: none;
+}
+
+.btn{
+  &:hover{
+    .hover-content{
+      display: block;
+    }
+    .hover-content-original{
+      display: none;
+    }
+  }
+}

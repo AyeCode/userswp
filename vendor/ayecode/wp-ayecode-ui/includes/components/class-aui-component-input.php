@@ -48,7 +48,7 @@ class AUI_Component_Input {
 		if ( ! empty( $args['type'] ) ) {
 			$type = sanitize_html_class( $args['type'] );
 			$label_args = array('title'=>$args['label'],'for'=>$args['id']);
-
+			
 			// Some special sauce for files
 			if($type=='file' ){
 				$args['label_after'] = true; // if type file we need the label after
@@ -129,7 +129,7 @@ class AUI_Component_Input {
 				$output .= self::label( $label_args, $type );
 			}
 
-
+			
 			// some input types need a separate wrap
 			if($type == 'file') {
 				$output = self::wrap( array(
@@ -561,7 +561,7 @@ else{$eli.attr(\'type\',\'password\');}"
 							$selected = selected( $args['value'], $val, false);
 						}
 					}
-					$output .= '<option value="'.esc_attr($val).'" '.$selected.'>'.esc_attr($name).'</option>';
+					$output .= '<option value="'.esc_attr($val).'" '.$selected.'>'.esc_attr($name).'</option>';	
 				}
 			}
 
