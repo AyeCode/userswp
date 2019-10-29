@@ -377,8 +377,8 @@ class UsersWP_Profile {
                         $wrap_html = true;
                         ?>
                         <div class="uwp-profile-extra-wrap">
-                            <div class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
-                            <div class="uwp-profile-extra-value">
+                            <div class="uwp-profile-extra-key d-inline-block"><?php echo $icon." ".$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
+                            <div class="uwp-profile-extra-value d-inline-block">
                                 <?php
                                 if ($field->htmlvar_name == 'bio') {
                                     $is_profile_page = is_uwp_profile_page();
@@ -727,7 +727,7 @@ class UsersWP_Profile {
 
 		                    $active = $active_tab == $tab_id ? ' active' : '';
 
-		                    if (1 == $tab['tab_login_only'] && !(is_user_logged_in() && get_current_user_id() == $user->ID)) {
+		                    if (!(is_user_logged_in() && get_current_user_id() == $user->ID)) {
 			                    continue;
 		                    }
 
@@ -951,6 +951,7 @@ class UsersWP_Profile {
 
 	    $uwp_widget_args['template_args']['the_query'] = $comments;
 	    $uwp_widget_args['template_args']['user'] = $user;
+	    $uwp_widget_args['template_args']['title'] = __("Comments","userswp");
 	    $uwp_widget_args['template_args']['maximum_pages'] = $maximum_pages;
 
 //	    $uwp_widget_args['template_args'] = array(

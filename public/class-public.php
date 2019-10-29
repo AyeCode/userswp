@@ -30,12 +30,8 @@ class UsersWP_Public {
      */
     public function enqueue_styles() {
 
-        if (is_uwp_page()) {
-            // include only in uwp pages
-            wp_register_style('jquery-ui', USERSWP_PLUGIN_URL .  'assets/css/jquery-ui.css');
-            wp_enqueue_style( 'jquery-ui' );
-        }
 
+        // Scripts if user on own profile page.
         if (is_uwp_current_user_profile_page()) {
             // include only profile pages
             wp_enqueue_style( 'jcrop' );
@@ -45,6 +41,8 @@ class UsersWP_Public {
             }
         }
 
+
+        //@todo lets find a better solution for this and put it in AUI, maybe SVG files?
 	    wp_enqueue_style( "uwp-country-select", USERSWP_PLUGIN_URL . 'assets/css/libs/countryselect.css', array(), USERSWP_VERSION, 'all' );
 
         // maybe add bootstrap
@@ -55,7 +53,8 @@ class UsersWP_Public {
             wp_enqueue_style( USERSWP_NAME, USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
             wp_register_style( 'uwp-authorbox', USERSWP_PLUGIN_URL . 'assets/css/authorbox.css', array(), USERSWP_VERSION, 'all' );
         }else{
-            wp_enqueue_style( "uwp", USERSWP_PLUGIN_URL . 'assets/css/bootstrap/uwp.css', array(), USERSWP_VERSION, 'all' );
+            //@todo this is not actually being used yet, enable when if it is.
+            //wp_enqueue_style( "uwp", USERSWP_PLUGIN_URL . 'assets/css/bootstrap/uwp.css', array(), USERSWP_VERSION, 'all' );
         }
 
     }
@@ -69,34 +68,65 @@ class UsersWP_Public {
 
         $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-        if (is_uwp_page()) {
-            // include only in uwp pages
-            wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );    
-        }
-
+        // Scripts if user on own profile page.
         if (is_uwp_current_user_profile_page()) {
-            // include only profile pages
             wp_enqueue_script( 'jcrop', array( 'jquery' ) );
-        }
-     
-
-        if (is_uwp_profile_page() ) {
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
         }
 
-//        wp_enqueue_script('select2', USERSWP_PLUGIN_URL . 'assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION );
-
-        // include only in uwp pages
+        // Core UWP JS
         wp_enqueue_script( USERSWP_NAME, USERSWP_PLUGIN_URL . 'assets/js/users-wp' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
 
-        //load CountrySelect
-        wp_enqueue_script( "country-select", USERSWP_PLUGIN_URL . 'assets/js/countrySelect' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
-
-        $country_data = uwp_get_country_data();
-        wp_localize_script(USERSWP_NAME, 'uwp_country_data', $country_data);
-
+        // localize
         $uwp_localize_data = uwp_get_localize_data();
         wp_localize_script(USERSWP_NAME, 'uwp_localize_data', $uwp_localize_data);
+
+
+        // date and timepicker
+        $enable_timepicker_in_register = false;
+        $enable_timepicker_in_account = false;
+        $enable_datepicker_in_register = false;
+        $enable_datepicker_in_account = false;
+
+        if (is_uwp_register_page() || is_uwp_account_page()) {
+            if (is_uwp_register_page()) {
+                $fields = get_register_form_fields();
+            } else {
+                // account page
+                $fields = get_account_form_fields();
+            }
+
+            if (!empty($fields)) {
+                foreach ($fields as $field) {
+                    if ($field->field_type == 'time') {
+                        $enable_timepicker_in_register = true;
+                    }
+                    if ($field->field_type == 'datepicker') {
+                        $enable_datepicker_in_register = true;
+                    }
+                }
+            }
+        }
+
+        if ($enable_timepicker_in_register || $enable_timepicker_in_account) {
+            // time fields available only in register and account pages
+            wp_enqueue_script( "uwp_timepicker", USERSWP_PLUGIN_URL . 'assets/js/jquery.ui.timepicker' . $suffix . '.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
+        }
+        if ($enable_datepicker_in_register || $enable_datepicker_in_account) {
+            // date fields available only in register and account pages
+            wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
+        }
+
+        // Edit account scripts
+        if(is_uwp_account_page()){
+
+            //load CountrySelect
+            wp_enqueue_script( "country-select", USERSWP_PLUGIN_URL . 'assets/js/countrySelect' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
+
+            // localize country info
+            $country_data = uwp_get_country_data();
+            wp_localize_script(USERSWP_NAME, 'uwp_country_data', $country_data);
+        }
         
     }
 

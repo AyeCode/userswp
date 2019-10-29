@@ -126,7 +126,6 @@ class UsersWP_Invoicing_Plugin {
 		    'tab_name'   => __('Invoices','userswp'),
 		    'tab_icon'   => 'fas fa-file-invoice',
 		    'tab_key'    => 'invoices',
-		    'tab_login_only' => 1,
 		    'tab_content'=> '[wpinv_history]'
 	    );
 
@@ -135,7 +134,6 @@ class UsersWP_Invoicing_Plugin {
             'tab_name'   => __('Subscriptions','userswp'),
             'tab_icon'   => 'fas fa-dollar-sign',
             'tab_key'    => 'invoice_subscriptions',
-            'tab_login_only' => 1,
             'tab_content'=> '[wpinv_subscriptions]'
         );
 
@@ -145,7 +143,6 @@ class UsersWP_Invoicing_Plugin {
                 'tab_name'   => __('Quotes','userswp'),
                 'tab_icon'   => 'fas fa-file-invoice',
                 'tab_key'    => 'quotes',
-                'tab_login_only' => 1,
                 'tab_content'=> '[wpinv_quote_history]'
             );
         }
@@ -187,7 +184,6 @@ class UsersWP_Invoicing_Plugin {
 		    'tab_name'   => __('Invoices','userswp'),
 		    'tab_icon'   => 'fas fa-file-invoice',
 		    'tab_key'    => 'invoices',
-		    'tab_login_only' => 1,
 		    'tab_content'=> ''
         );
 

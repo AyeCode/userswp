@@ -205,8 +205,8 @@ final class UsersWP {
         add_filter('uwp_form_input_html_password', array($instance, 'form_input_password'), 10, 4);
         // Country select
         add_filter('uwp_form_input_html_select_country', array($instance, 'form_input_select_country'), 10, 4);
-        add_filter('uwp_form_input_email_uwp_account_email_after', array($instance, 'register_confirm_email_field'), 10, 4);
-        add_filter('uwp_form_input_password_uwp_account_password_after', array($instance, 'register_confirm_password_field'), 10, 4);
+        add_filter('uwp_form_input_email_email_after', array($instance, 'register_confirm_email_field'), 10, 4);
+        add_filter('uwp_form_input_password_password_after', array($instance, 'register_confirm_password_field'), 10, 4);
         
         // Emails
         add_filter('uwp_send_mail_extras', array($instance, 'init_mail_extras'), 10, 3);

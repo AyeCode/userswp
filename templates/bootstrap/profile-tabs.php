@@ -21,13 +21,12 @@ if(!$user){
 
 if($output === '' || $output=='head'){
 ?>
-<nav class="navbar navbar-expand-lg navbar-light bg-white  mb-4 p-xl-0">
+<nav class="navbar navbar-expand-xl navbar-light bg-white  mb-4 p-xl-0 greedy">
 	<div class="w-100 justify-content-center p-xl-0 border-bottom">
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#uwp-profile-tabs-nav" aria-controls="navbarNavDropdown-1" aria-expanded="false" aria-label="Toggle navigation" style=""><span class="navbar-toggler-icon"></span></button>
 		<div class="collapse navbar-collapse" id="uwp-profile-tabs-nav">
-			<ul class="navbar-nav flex-wrap m-0">
+			<ul class="navbar-nav flex-wrap m-0 list-unstyled">
 				<?php
-//					print_r($tabs_array);
 				if(!empty($tabs_array)) {
 					foreach ($tabs_array as $tab) {
 						$tab_id = $tab['tab_key'];
@@ -35,7 +34,7 @@ if($output === '' || $output=='head'){
 
 						$active = $active_tab == $tab_id ? ' active border-bottom border-primary border-width-2' : '';
 
-						if (1 == $tab['tab_login_only'] && !(is_user_logged_in() && get_current_user_id() == $user->ID)) {
+						if ( !(is_user_logged_in() && get_current_user_id() == $user->ID)) {
 							continue;
 						}
 
@@ -45,7 +44,7 @@ if($output === '' || $output=='head'){
 
 						?>
 						<li id="uwp-profile-<?php echo $tab_id; ?>"
-						    class="nav-item <?php echo $active; ?>">
+						    class="nav-item <?php echo $active; ?> list-unstyled">
 							<a href="<?php echo esc_url($tab_url); ?>" class="nav-link">
 								<?php
 								if(!empty($tab['tab_icon'])){
@@ -63,7 +62,6 @@ if($output === '' || $output=='head'){
 		</div>
 	</div>
 </nav>
-
 <?php
 }
 
@@ -78,7 +76,7 @@ if($output === '' || $output=='body'){
 
 			$active = $active_tab == $tab_id ? ' active' : '';
 
-			if (1 == $tab['tab_login_only'] && !(is_user_logged_in() && get_current_user_id() == $user->ID)) {
+			if ( !(is_user_logged_in() && get_current_user_id() == $user->ID)) {
 				continue;
 			}
 

@@ -285,7 +285,7 @@ class UsersWP_Templates {
         if ( 'wp-login.php' == $pagenow && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'register' ) {
             $reg_page_id  = uwp_get_page_id( 'register_page' );
             $block_wp_reg = uwp_get_option( 'wp_register_redirect' );
-            if ( $reg_page_id && $block_wp_reg == '1' ) {echo '###';exit;
+            if ( $reg_page_id && $block_wp_reg == '1' ) {
 
                 $redirect = isset( $_REQUEST['redirect_to'] ) ? esc_url( $_REQUEST['redirect_to'] ) : '';
                 $redirect_to = get_permalink( $reg_page_id );
@@ -555,9 +555,9 @@ class UsersWP_Templates {
         }
 
         if (isset($_POST[$field->htmlvar_name]) && $field->field_type != 'password') {
-            $value = $_POST[$field->htmlvar_name];
+           // $value = $_POST[$field->htmlvar_name]; //@todo why? Patrik?
         }
-
+        
         $field = apply_filters("uwp_form_input_field_{$field->field_type}", $field, $value, $form_type);
         
         $html = apply_filters("uwp_form_input_html_{$field->field_type}", "", $field, $value, $form_type);

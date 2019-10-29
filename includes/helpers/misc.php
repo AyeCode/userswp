@@ -434,10 +434,14 @@ function get_uwp_users_list() {
  *
  * @return      object                          Field info.
  */
-function uwp_get_custom_field_info($htmlvar_name) {
+function uwp_get_custom_field_info($htmlvar_name,$form_type = 'account') {
     global $wpdb;
     $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-    $field = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s", array($htmlvar_name)));
+    if($form_type){
+        $field = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s AND form_type = %s", array($htmlvar_name,$form_type)));
+    }else{
+        $field = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s", array($htmlvar_name)));
+    }
     return $field;
 }
 
@@ -1809,8 +1813,7 @@ function uwp_get_show_in_locations(){
     $show_in_locations = array(
         "[users]" => __("Users Page", 'userswp'),
         "[more_info]" => __("More info tab", 'userswp'),
-        "[own_tab]" => __("Profile page own tab", 'userswp'),
-        "[profile_side]" => __("Profile side", 'userswp'),
+        "[profile_side]" => __("Profile side (non bootstrap)", 'userswp'),
         "[fieldset]" => __("Fieldset", 'userswp'),
     );
 

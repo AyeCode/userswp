@@ -246,7 +246,6 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                        data-tab_key="<?php echo isset($field['tab_key']) ? esc_attr($field['tab_key']) : ''; ?>"
                        data-tab_level="<?php echo isset($field['tab_level']) ? esc_attr($field['tab_level']) : 0; ?>"
                        data-tab_parent="<?php echo isset($field['tab_parent']) ? esc_attr($field['tab_parent']) : ''; ?>"
-                       data-tab_login_only="<?php echo isset($field['tab_login_only']) ? esc_attr($field['tab_login_only']) : 0; ?>"
                        data-tab_content="<?php echo isset($field['tab_content']) ? esc_attr($field['tab_content']) : ''; ?>"
                        href="javascript:void(0);">
 
@@ -357,7 +356,6 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                                data-tab_key="<?php echo isset($field['tab_key']) ? esc_attr($field['tab_key']) : ''; ?>"
                                data-tab_level="<?php echo isset($field['tab_level']) ? esc_attr($field['tab_level']) : 0; ?>"
                                data-tab_parent="<?php echo isset($field['tab_parent']) ? esc_attr($field['tab_parent']) : ''; ?>"
-                               data-tab_login_only="<?php echo isset($field['tab_login_only']) ? esc_attr($field['tab_login_only']) : 0; ?>"
                                data-tab_content="<?php echo isset($field['tab_content']) ? esc_attr($field['tab_content']) : ''; ?>"
                                href="javascript:void(0);">
                                 <?php echo $tab_icon; ?>
@@ -433,7 +431,6 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 						   data-tab_key="<?php echo isset($field['tab_key']) ? esc_attr($field['tab_key']) : ''; ?>"
 						   data-tab_level="<?php echo isset($field['tab_level']) ? esc_attr($field['tab_level']) : 0; ?>"
 						   data-tab_parent="<?php echo isset($field['tab_parent']) ? esc_attr($field['tab_parent']) : ''; ?>"
-						   data-tab_login_only="<?php echo isset($field['tab_login_only']) ? esc_attr($field['tab_login_only']) : 0; ?>"
 						   data-tab_content="<?php echo isset($field['tab_content']) ? esc_attr($field['tab_content']) : ''; ?>"
                            href="javascript:void(0);">
 
@@ -555,7 +552,6 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                         'tab_name'   => esc_attr($row->site_title),
                         'tab_icon'   => isset($row->field_icon) && $row->field_icon ? $row->field_icon : "fas fa-cog",
                         'tab_key'    => $key,
-                        'tab_login_only' => 0,
                         'tab_content'=> ''
                     );
                 }
@@ -624,14 +620,6 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		        $tab_content = '';
 		    }
 
-		    if (isset($request['tab_login_only']) && $request['tab_login_only'] != '') {
-			    $tab_login_only = esc_attr($request['tab_login_only']);
-		    } elseif($field_info) {
-			    $tab_login_only = $field_info->tab_login_only;
-		    } else {
-		        $tab_login_only = 0;
-		    }
-
 		    if (isset($request['tab_icon']) && $request['tab_icon'] != '') {
 			    $icon = esc_attr($request['tab_icon']);
 		    } elseif($field_info) {
@@ -695,17 +683,6 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="tab_icon" id="tab_icon"
                                            value="<?php echo $icon; ?>"/>
-                                </div>
-
-                            </li>
-
-                            <li class="uwp-setting-name">
-
-                                <label for="tab_login_only" class="uwp-tooltip-wrap">
-                                    <?php _e('For logged in users? :', 'userswp'); ?>
-                                </label>
-                                <div class="uwp-input-wrap">
-                                    <input type="checkbox" name="tab_login_only" value="1" <?php checked( $tab_login_only, 1, true );?> />
                                 </div>
 
                             </li>
@@ -843,7 +820,6 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		    $tab_level = !empty($request_field['tab_level']) ? sanitize_text_field($request_field['tab_level']) : 0;
 		    $tab_parent = !empty($request_field['tab_parent']) ? sanitize_text_field($request_field['tab_parent']) : 0;
 		    $tab_type = isset($request_field['tab_type']) ? sanitize_text_field($request_field['tab_type']) : 'standard';
-		    $tab_login_only= isset($request_field['tab_login_only']) ? (int)$request_field['tab_login_only'] : 0;
 		    $form_type = isset($request_field['form_type']) ? $request_field['form_type'] : $tab_type;
 
 		    $total_tabs = $wpdb->get_var("SELECT COUNT(id) FROM {$table_name}");
@@ -855,7 +831,6 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                     'tab_type'      => $tab_type,
                     'tab_level'     => sanitize_text_field($tab_level),
                     'tab_parent'    => sanitize_text_field($tab_parent),
-                    'tab_login_only'=> $tab_login_only,
                     'tab_name'      => $tab_name,
                     'tab_icon'      => $tab_icon,
                     'tab_key'       => sanitize_text_field($tab_key),

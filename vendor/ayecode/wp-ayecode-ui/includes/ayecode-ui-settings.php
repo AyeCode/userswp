@@ -212,6 +212,85 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			ob_start();
 			?>
 			<script>
+
+				/**
+				 * An AUI bootstrap adaptation of GreedyNav.js ( by Luke Jackson ).
+				 *
+				 * Simply add the class `greedy` to any <nav> menu and it will do the rest.
+				 * Licensed under the MIT license - http://opensource.org/licenses/MIT
+				 * @ver 0.0.1
+				 */
+				function aui_init_greedy_nav(){
+					jQuery('nav.greedy').each(function(i, obj) {
+
+						// Check if already initialized, if so continue.
+						if(jQuery(this).hasClass("being-greedy")){return true;}
+
+						// Make sure its always expanded
+						jQuery(this).addClass('navbar-expand');
+
+						// vars
+						var $vlinks = jQuery(this).find('.navbar-nav').addClass("being-greedy w-100");
+						jQuery($vlinks).append('<li class="nav-item list-unstyled ml-auto greedy-btn d-none ">' +
+							'<a href="javascript:void(0)" data-toggle="dropdown" class="nav-link"><i class="fas fa-ellipsis-h"></i> <span class="greedy-count badge badge-dark badge-pill"></span></a>' +
+							'<div class="dropdown"><ul class="greedy-links dropdown-menu  dropdown-menu-right"></ul></div>' +
+							'</li>');
+						var $hlinks = jQuery(this).find('.greedy-links');
+						var $btn = jQuery(this).find('.greedy-btn');
+
+						var numOfItems = 0;
+						var totalSpace = 0;
+						var closingTime = 1000;
+						var breakWidths = [];
+
+						// Get initial state
+						$vlinks.children().outerWidth(function(i, w) {
+							totalSpace += w;
+							numOfItems += 1;
+							breakWidths.push(totalSpace);
+						});
+
+						var availableSpace, numOfVisibleItems, requiredSpace, buttonSpace ,timer;
+
+						/*
+						 The check function.
+						 */
+						function check() {
+
+							// Get instant state
+							buttonSpace = $btn.width();
+							availableSpace = $vlinks.width() - 10;
+							numOfVisibleItems = $vlinks.children().length;
+							requiredSpace = breakWidths[numOfVisibleItems - 1];
+
+							// There is not enough space
+							if (numOfVisibleItems > 1 && requiredSpace > availableSpace) {
+								$vlinks.children().last().prev().prependTo($hlinks);
+								numOfVisibleItems -= 1;
+								check();
+								// There is more than enough space
+							} else if (availableSpace > breakWidths[numOfVisibleItems]) {
+								$hlinks.children().first().insertBefore($btn);
+								numOfVisibleItems += 1;
+								check();
+							}
+							// Update the button accordingly
+							jQuery($btn).find(".greedy-count").html( numOfItems - numOfVisibleItems);
+							if (numOfVisibleItems === numOfItems) {
+								$btn.addClass('d-none');
+							} else $btn.removeClass('d-none');
+						}
+
+						// Window listeners
+						jQuery(window).resize(function() {
+							check();
+						});
+
+						// do initial check
+						check();
+					});
+				}
+
 				/**
 				 * Initiate Select2 items.
 				 */
@@ -303,6 +382,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					// init select2
 					aui_init_select2();
 
+					// init Greedy nav
+					aui_init_greedy_nav();
+
 					// Set times to time ago
 					aui_time_ago('timeago');
 				});
@@ -351,7 +433,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		public function enqueue_scripts() {
 
 			// select2
-			wp_register_script( 'aui-select2', $this->url.'assets/js/select2.min.js', array(), $this->select2_version );
+			wp_register_script( 'select2', $this->url.'assets/js/select2.min.js', array(), $this->select2_version );
 
 			// Bootstrap file browser
 			wp_register_script( 'aui-custom-file-input', $url = $this->url.'assets/js/bs-custom-file-input.min.js', array('jquery'), $this->select2_version );
@@ -361,7 +443,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			if($this->settings['js']=='core-popper'){
 				// Bootstrap bundle
 				$url = $this->url.'assets/js/bootstrap.bundle.min.js';
-				wp_register_script( 'bootstrap-js-bundle', $url, array('aui-select2'), $this->latest );
+				wp_register_script( 'bootstrap-js-bundle', $url, array('select2'), $this->latest );
 				wp_enqueue_script( 'bootstrap-js-bundle' );
 				$script = $this->inline_script();
 				wp_add_inline_script( 'bootstrap-js-bundle', $script );

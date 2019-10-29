@@ -114,14 +114,36 @@ class UWP_Change_Widget extends WP_Super_Duper {
         echo '<div class="uwp_page">';
 
         uwp_locate_template($template);
+	    
 
         echo '</div>';
 
         echo '</div>';
 
-        $output = ob_get_contents();
+	    // scripts
+	    wp_enqueue_script( 'password-strength-meter' ); // add scripts
+	    ?>
+	    <script>
+		   jQuery( document ).ready( function( $ ) {
+			    // Binding to trigger uwp_checkPasswordStrength
+			    $( 'body' ).on( 'keyup', 'input[name=password], input[name=confirm_password]',
+				    function( event ) {
+					    uwp_checkPasswordStrength(
+						    $('input[name=password]'),         // First password field
+						    $('input[name=confirm_password]'), // Second password field
+						    $('#uwp-password-strength'),           // Strength meter
+						    $('input[type=submit]'),           // Submit button
+						    ['black', 'listed', 'word']        // Blacklisted words
+					    );
+				    }
+			    );
+		    });
+	    </script>
+		<?php
 
-        ob_end_clean();
+        $output = ob_get_clean();
+
+
 
         return trim($output);
 

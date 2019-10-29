@@ -447,3 +447,78 @@ function uwp_modal_forgot_password_form_process(){
         }
     });
 }
+
+/**
+ * A password strength indicator.
+ * 
+ * @param $pass1
+ * @param $pass2
+ * @param $strengthResult
+ * @param $submitButton
+ * @param blacklistArray
+ * @returns {*|number}
+ */
+function uwp_checkPasswordStrength( $pass1,
+                                    $pass2,
+                                    $strengthResult,
+                                    $submitButton,
+                                    blacklistArray ) {
+    var pass1 = $pass1.val();
+    var pass2 = $pass2.val();
+
+    // maybe insert
+    if(!jQuery('#uwp-password-strength').length && pass1){
+        if($pass2.length){
+            $container = $pass2.closest('.form-group');
+        }else{
+            $container = $pass1.closest('.form-group');
+        }
+        $container.append( '<div class="progress mt-1"><div id="uwp-password-strength" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;"></div></div>' );
+        $strengthResult = jQuery('#uwp-password-strength');
+    }else if(!pass1 && !pass2){
+        $strengthResult.parent().remove();
+    }
+
+    // Reset the form & meter
+//			    $submitButton.attr( 'disabled', 'disabled' );
+    $strengthResult.removeClass( 'short bad good strong bg-warning bg-success bg-danger' );
+
+    // Extend our blacklist array with those from the inputs & site data
+    blacklistArray = blacklistArray.concat( wp.passwordStrength.userInputBlacklist() );
+
+    // Get the password strength
+    var strength = wp.passwordStrength.meter( pass1, blacklistArray, pass2 );
+    
+    // Add the strength meter results
+    switch ( strength ) {
+
+        case 2:
+            $strengthResult.addClass( 'bad bg-warning' ).html( pwsL10n.bad ).width('50%');
+            break;
+
+        case 3:
+            $strengthResult.addClass( 'good bg-success' ).html( pwsL10n.good ).width('75%');
+            break;
+
+        case 4:
+            $strengthResult.addClass( 'strong bg-success' ).html( pwsL10n.strong ).width('100%');
+            break;
+
+        case 5:
+            $strengthResult.addClass( 'short bg-danger' ).html( pwsL10n.mismatch ).width('25%');
+            break;
+
+        default:
+            $strengthResult.addClass( 'short bg-danger' ).html( pwsL10n.short ).width('25%');
+
+    }
+
+    // The meter function returns a result even if pass2 is empty,
+    // enable only the submit button if the password is strong and
+    // both passwords are filled up
+//			    if ( 4 === strength && '' !== pass2.trim() ) {
+////				    $submitButton.removeAttr( 'disabled' );
+//			    }
+
+    return strength;
+}

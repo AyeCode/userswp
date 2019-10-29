@@ -310,7 +310,6 @@ jQuery(document).ready(function () {
                 'tab_layout':        jQuery(this).data('tab_layout'),
                 'tab_level':         jQuery(this).data('tab_level'),
                 'tab_parent':        jQuery(this).data('tab_parent'),
-                'tab_login_only':    jQuery(this).data('tab_login_only'),
                 'tab_name':          jQuery(this).data('tab_name'),
                 'tab_type':          jQuery(this).data('tab_type'),
                 'tab_icon':          jQuery(this).data('tab_icon'),

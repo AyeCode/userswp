@@ -119,7 +119,6 @@ class UWP_Profile_Tabs_Widget extends WP_Super_Duper {
 
             $no_tab = $tabs_array[0];
             $no_tab['tab_key'] = 'not_found';
-            $no_tab['tab_login_only'] = 0;
             $no_tab['tab_name'] = __("Not Found","userswp");
             $no_tab['tab_icon'] = 'fas fa-exclamation-triangle';
             $no_tab['tab_content'] = '';
@@ -139,7 +138,6 @@ class UWP_Profile_Tabs_Widget extends WP_Super_Duper {
             if(current_user_can('manage_options' )){
                 $no_tab = array();
                 $no_tab['tab_key'] = 'no_tabs';
-                $no_tab['tab_login_only'] = 0;
                 $no_tab['tab_name'] = __("No Tabs","userswp");
                 $no_tab['tab_icon'] = 'fas fa-exclamation-triangle';
                 $no_tab['tab_content'] = '';
@@ -157,7 +155,6 @@ class UWP_Profile_Tabs_Widget extends WP_Super_Duper {
             }else{
                 $no_tab = array();
                 $no_tab['tab_key'] = 'no_tabs';
-                $no_tab['tab_login_only'] = 0;
                 $no_tab['tab_name'] = __("No Tabs","userswp");
                 $no_tab['tab_icon'] = 'fas fa-exclamation-triangle';
                 $no_tab['tab_content'] = '';

@@ -306,12 +306,12 @@ class UsersWP_Meta {
      */
     public function modify_datepicker_value_on_get($value, $user_id, $key, $default) {
         // modify date to timestamp
-        if (is_string($value) && (strpos($value, '-') !== false)) {
+        if (is_string($value) && (strpos($value, '-') !== false) && $value != '0000-00-00') {
             $field_info = uwp_get_custom_field_info($key);
             if (isset($field_info->field_type) && $field_info->field_type == 'datepicker') {
                 $value = strtotime($value);
             }
-        }
+        }elseif($value == '0000-00-00'){$value = '';}
         return $value;
     }
 

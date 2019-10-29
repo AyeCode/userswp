@@ -54,19 +54,21 @@ class UsersWP_Validation {
 
         $validated_data = array();
 
-        $email_field = uwp_get_custom_field_info('email');
+        $email_field = uwp_get_custom_field_info('email','account');
         $email_extra = array();
         if (isset($email_field->extra_fields) && $email_field->extra_fields != '') {
             $email_extra = unserialize($email_field->extra_fields);
         }
+
         $enable_confirm_email_field = isset($email_extra['confirm_email']) ? $email_extra['confirm_email'] : '0';
 
-        $password_field = uwp_get_custom_field_info('password');
+        $password_field = uwp_get_custom_field_info('password','account');
         $enable_password = isset($data['password']) && $password_field->is_active ? 1 : 0;
         $password_extra = array();
         if (isset($password_field->extra_fields) && $password_field->extra_fields != '') {
             $password_extra = unserialize($password_field->extra_fields);
         }
+        
         $enable_confirm_password_field = isset($password_extra['confirm_password']) ? $password_extra['confirm_password'] : '0';
 
         $enable_old_password = uwp_get_option('change_enable_old_password', false);
@@ -119,9 +121,9 @@ class UsersWP_Validation {
                 $value = isset($data[$field->htmlvar_name]) ? $data[$field->htmlvar_name] : '';
                 $sanitized_value = $value;
 
-                if ($field->field_type == 'password') {
-                    continue;
-                }
+//                if ($field->field_type == 'password') {
+//                    continue;
+//                }
 
                 $sanitized = false;
 
@@ -147,6 +149,7 @@ class UsersWP_Validation {
                     case 'uwp_register_email':
                     case 'uwp_forgot_email':
                     case 'email':
+                    case 'confirm_email':
                         $sanitized_value = sanitize_email($value);
                         $sanitized = true;
                         break;

@@ -832,7 +832,7 @@ class UsersWP_Forms {
         $message = sprintf(__('Password updated successfully. Please <a href="%s">login</a> with your new password', 'userswp'), $login_page_url);
         $message = apply_filters('uwp_reset_password_success_message', $message, $data);
         $message = aui()->alert(array(
-                'type'=>'sucess',
+                'type'=>'success',
                 'content'=> $message
             )
         );
@@ -1603,7 +1603,7 @@ class UsersWP_Forms {
             $design_style = uwp_get_option("design_style","bootstrap");
             $bs_form_group = $design_style ? "form-group" : "";
             $bs_sr_only = $design_style ? "sr-only" : "";
-            $bs_form_control = $design_style ? "form-control" : "";
+            $bs_form_control = $design_style ? "form-control bg-white" : "";
 
             ob_start(); // Start  buffering;
 
@@ -1613,10 +1613,10 @@ class UsersWP_Forms {
             <script type="text/javascript">
                 jQuery(document).ready(function () {
 
-//                    jQuery('#<?php //echo $field->htmlvar_name;?>//').timepicker({
-//                        showPeriod: true,
-//                        showLeadingZero: true
-//                    });
+                    jQuery('#<?php echo $field->htmlvar_name;?>').timepicker({
+                        showPeriod: true,
+                        showLeadingZero: true
+                    });
                 });
             </script>
             <div id="<?php echo $field->htmlvar_name;?>_row"
@@ -1684,7 +1684,25 @@ class UsersWP_Forms {
             $bs_form_control = $design_style ? "form-control" : "";
 
             ob_start(); // Start  buffering;
+            $option_values_arr = uwp_string_values_to_options($field->option_values, true);
 
+            // bootstrap
+            if( $design_style ) {
+
+                echo aui()->select(array(
+                    'id'    =>  $field->htmlvar_name,
+                    'name'    =>  $field->htmlvar_name,
+                    'placeholder'   => uwp_get_form_label( $field ),
+                    'title'   => uwp_get_form_label( $field ),
+                    'value' =>  $value,
+                    'required'  => $field->is_required,
+                    'validation_text' => !empty($field->is_required) ? __($field->required_msg, 'userswp') : '',
+                    'help_text' => __( $field->help_text, 'userswp' ),
+                    'label' => uwp_get_form_label( $field ),
+                    'options'=>$option_values_arr,
+                    'select2' => true
+                ));
+            }else{
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
                  class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
@@ -1699,7 +1717,7 @@ class UsersWP_Forms {
                 <?php } ?>
 
                 <?php
-                $option_values_arr = uwp_string_values_to_options($field->option_values, true);
+
                 $select_options = '';
                 if (!empty($option_values_arr)) {
                     foreach ($option_values_arr as $option_row) {
@@ -1730,6 +1748,7 @@ class UsersWP_Forms {
             </div>
 
             <?php
+            }
             $html = ob_get_clean();
         }
 
@@ -2632,6 +2651,7 @@ class UsersWP_Forms {
 
                 <?php
             }
+
             $html = ob_get_clean();
         }
 
@@ -2730,16 +2750,11 @@ class UsersWP_Forms {
      */
     public function form_input_select_country($html, $field, $value, $form_type){
 
-        // Check if there is a field specific filter.
-        if(has_filter("uwp_form_input_html_select_{$field->htmlvar_name}")){
-            $html = apply_filters("uwp_form_input_html_select_{$field->htmlvar_name}", $html, $field, $value, $form_type);
-        }
-
         // If no html then we run the standard output.
         if(empty($html)) {
 
             $design_style = uwp_get_option("design_style","bootstrap");
-            $bs_form_group = $design_style ? "form-group" : "";
+            $bs_form_group = $design_style ? "form-group m-0" : ""; // country wrapper div added by JS adds marginso we remove ours
             $bs_sr_only = $design_style ? "sr-only" : "";
             $bs_form_control = $design_style ? "form-control" : "";
 
@@ -2834,6 +2849,7 @@ class UsersWP_Forms {
             if (isset($field->extra_fields) && $field->extra_fields != '') {
                 $extra = unserialize($field->extra_fields);
             }
+            
             $enable_confirm_password_field = isset($extra['confirm_password']) ? $extra['confirm_password'] : '0';
             if ($enable_confirm_password_field == '1') {
 
@@ -2841,14 +2857,28 @@ class UsersWP_Forms {
                 $bs_form_group = $design_style ? "form-group" : "";
                 $bs_sr_only = $design_style ? "sr-only" : "";
                 $bs_form_control = $design_style ? "form-control" : "";
-
+                $site_title = __("Confirm Password", 'userswp');
                 ob_start(); // Start  buffering;
+
+                if( $design_style ){
+                    echo aui()->input(array(
+                        'type'  =>  'password',
+                        'id'    =>  'confirm_password',
+                        'name'    =>  'confirm_password',
+                        'placeholder'   => $site_title,
+                        'title'   => $site_title,
+                        'value' =>  $value,
+                        'required'  => $field->is_required,
+                        'help_text' => __( $field->help_text, 'userswp' ),
+                        'label' => is_admin() ? '' : $site_title
+                    ));
+                }else{
                 ?>
                 <div id="uwp_account_confirm_password_row"
                      class="<?php echo 'required_field';?> uwp_form_password_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
 
                     <?php
-                    $site_title = __("Confirm Password", 'userswp');
+
                     if (!is_admin()) { ?>
                         <label class="<?php echo esc_attr($bs_sr_only);?>">
                             <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -2868,6 +2898,7 @@ class UsersWP_Forms {
                 </div>
 
                 <?php
+                }
                 $confirm_html = ob_get_clean();
                 $html = $html.$confirm_html;
             }
@@ -3042,9 +3073,45 @@ class UsersWP_Forms {
         // add the modal error container
         add_action('uwp_template_display_notices', array($this,'modal_error_container'));
 
-        // get the form
+        global $wp_scripts;
+        if(empty($wp_scripts)){$wp_scripts = wp_scripts();}
+
         ob_start();
         uwp_locate_template("bootstrap/register");
+
+
+        // load scripts
+        $wp_scripts->do_item( 'zxcvbn-async' );
+        $wp_scripts->do_item( 'password-strength-meter' );
+?>
+<script>
+    // Password strength indicator script
+    jQuery( document ).ready( function( $ ) {
+
+        // Load the settings like WP does.
+        var first, s;
+        s = document.createElement('script');
+        s.src = _zxcvbnSettings.src;
+        s.type = 'text/javascript';
+        s.async = true;
+        first = document.getElementsByTagName('script')[0];
+        first.parentNode.insertBefore(s, first);
+
+        // Enable any pass inputs.
+        $( 'body' ).on( 'keyup', 'input[name=password], input[name=confirm_password]',
+            function( event ) {
+                uwp_checkPasswordStrength(
+                    $('input[name=password]'),         // First password field
+                    $('input[name=confirm_password]'), // Second password field
+                    $('#uwp-password-strength'),           // Strength meter
+                    $('input[type=submit]'),           // Submit button
+                    ['black', 'listed', 'word']        // Blacklisted words
+                );
+            }
+        );
+    });
+</script>
+<?php
         $form = ob_get_clean();
 
         // send ajax response

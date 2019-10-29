@@ -32,7 +32,7 @@ if(!$user){
 
 						$active = $active_tab == $tab_id ? ' active' : '';
 
-						if (1 == $tab['tab_login_only'] && !(is_user_logged_in() && get_current_user_id() == $user->ID)) {
+						if ( !(is_user_logged_in() && get_current_user_id() == $user->ID)) {
 							continue;
 						}
 

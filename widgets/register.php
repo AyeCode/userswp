@@ -117,6 +117,27 @@ class UWP_Register_Widget extends WP_Super_Duper {
 
         echo '</div>';
 
+	    // scripts
+	    wp_enqueue_script( 'password-strength-meter' ); // add scripts
+	    ?>
+	    <script>
+		    jQuery( document ).ready( function( $ ) {
+			    // Binding to trigger uwp_checkPasswordStrength
+			    $( 'body' ).on( 'keyup', 'input[name=password], input[name=confirm_password]',
+				    function( event ) {
+					    uwp_checkPasswordStrength(
+						    $('input[name=password]'),         // First password field
+						    $('input[name=confirm_password]'), // Second password field
+						    $('#uwp-password-strength'),           // Strength meter
+						    $('input[type=submit]'),           // Submit button
+						    ['black', 'listed', 'word']        // Blacklisted words
+					    );
+				    }
+			    );
+		    });
+	    </script>
+	    <?php
+
         $output = ob_get_contents();
 
         ob_end_clean();

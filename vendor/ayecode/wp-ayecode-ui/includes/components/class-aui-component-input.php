@@ -33,8 +33,11 @@ class AUI_Component_Input {
 			'validation_text'   => '',
 			'validation_pattern' => '',
 			'no_wrap'    => false,
+			'input_group_right' => '',
+			'input_group_left' => '',
 			'step'       => '',
 			'switch'     => false, // to show checkbox as a switch
+			'password_toggle' => true, // toggle view/hide password
 		);
 
 		/**
@@ -44,6 +47,7 @@ class AUI_Component_Input {
 		$output = '';
 		if ( ! empty( $args['type'] ) ) {
 			$type = sanitize_html_class( $args['type'] );
+			$label_args = array('title'=>$args['label'],'for'=>$args['id']);
 
 			// Some special sauce for files
 			if($type=='file' ){
@@ -57,7 +61,6 @@ class AUI_Component_Input {
 
 			// label before
 			if(!empty($args['label']) && !$args['label_after']){
-				$label_args = array('title'=>$args['label'],'for'=>$args['id']);
 				if($type == 'file'){$label_args['class'] = 'custom-file-label';}
 				$output .= self::label( $label_args, $type );
 			}
@@ -121,13 +124,12 @@ class AUI_Component_Input {
 
 			// label after
 			if(!empty($args['label']) && $args['label_after']){
-				$label_args = array('title'=>$args['label'],'for'=>$args['id']);
 				if($type == 'file'){$label_args['class'] = 'custom-file-label';}
 				elseif($type == 'checkbox'){$label_args['class'] = 'custom-control-label';}
 				$output .= self::label( $label_args, $type );
 			}
 
-			
+
 			// some input types need a separate wrap
 			if($type == 'file') {
 				$output = self::wrap( array(
@@ -135,11 +137,44 @@ class AUI_Component_Input {
 					'class'   => 'form-group custom-file'
 				) );
 			}elseif($type == 'checkbox'){
-				$checkbox_wrap_class = $args['switch'] ? 'custom-switch' : 'custom-checkbox';
+				$wrap_class = $args['switch'] ? 'custom-switch' : 'custom-checkbox';
 				$output = self::wrap( array(
 					'content' => $output,
-					'class'   => 'custom-control '.$checkbox_wrap_class
+					'class'   => 'custom-control '.$wrap_class
 				) );
+			}elseif($type == 'password' && $args['password_toggle'] && !$args['input_group_right']){
+
+
+				// allow password field to toggle view
+				$args['input_group_right'] = '<span class="input-group-text c-pointer px-3" 
+onclick="var $el = jQuery(this).find(\'i\');$el.toggleClass(\'fa-eye fa-eye-slash\');
+var $eli = jQuery(this).parent().parent().find(\'input\');
+if($el.hasClass(\'fa-eye\'))
+{$eli.attr(\'type\',\'text\');}
+else{$eli.attr(\'type\',\'password\');}"
+><i class="far fa-fw fa-eye-slash"></i></span>';
+			}
+
+			// input group wraps
+			if($args['input_group_left'] || $args['input_group_right']){
+				if($args['input_group_left']){
+					$output = self::wrap( array(
+						'content' => $output,
+						'class'   => 'input-group',
+						'input_group_right' => $args['input_group_left']
+					) );
+				}
+				if($args['input_group_right']){
+					$output = self::wrap( array(
+						'content' => $output,
+						'class'   => 'input-group',
+						'input_group_right' => $args['input_group_right']
+					) );
+				}
+
+				// Labels need to be on the outside of the wrap
+				$label = self::label( $label_args, $type );
+				$output = $label . str_replace($label,"",$output);
 			}
 
 			// wrap
@@ -351,6 +386,8 @@ class AUI_Component_Input {
 			'type'       => 'div',
 			'class'      => 'form-group',
 			'content'   => '',
+			'input_group_left' => '',
+			'input_group_right' => '',
 		);
 
 		/**
@@ -370,9 +407,20 @@ class AUI_Component_Input {
 			// close wrap
 			$output .= ' >';
 
+			// Input group left
+			if(!empty($args['input_group_left'])){
+				$input_group_left = strpos($args['input_group_left'], '<') !== false ? $args['input_group_left'] : '<span class="input-group-text">'.$args['input_group_left'].'</span>';
+				$output .= '<div class="input-group-prepend">'.$input_group_left.'</div>';
+			}
+
 			// content
 			$output .= $args['content'];
 
+			// Input group right
+			if(!empty($args['input_group_right'])){
+				$input_group_right = strpos($args['input_group_right'], '<') !== false ? $args['input_group_right'] : '<span class="input-group-text">'.$args['input_group_right'].'</span>';
+				$output .= '<div class="input-group-append">'.$input_group_right.'</div>';
+			}
 
 
 			// close wrap
@@ -425,16 +473,16 @@ class AUI_Component_Input {
 		}
 
 		// select2 tags
-		if(!empty($args['select2']) && $args['select2'] == 'tags'){
+		if( !empty($args['select2']) && $args['select2'] === 'tags'){ // triple equlas needed here for some reason
 			$args['data-tags'] = 'true';
 			$args['data-token-separators'] = "[',']";
-
 			$args['multiple'] = true;
 		}
 
 		// select2 placeholder
 		if($is_select2 && !empty($args['placeholder']) && empty($args['data-placeholder'])){
 			$args['data-placeholder'] = esc_attr($args['placeholder']);
+			$args['data-allow-clear'] = empty($args['data-allow-clear']) ? true : esc_attr($args['data-allow-clear']);
 		}
 
 		// label
@@ -492,16 +540,29 @@ class AUI_Component_Input {
 		// Options
 		if(!empty($args['options'])){
 			foreach($args['options'] as $val => $name){
-				$selected = '';
-				if(!empty($args['value'])){
-					if(is_array($args['value'])){
-						$selected = in_array($val,$args['value']) ? 'selected="selected"' : '';
-					}else{
-						$selected = selected( $args['value'], $val, false);
-					}
-				}
+				if(is_array($name)){
+					if (isset($name['optgroup']) && ($name['optgroup'] == 'start' || $name['optgroup'] == 'end')) {
+						$option_label = isset($name['label']) ? $name['label'] : '';
 
-				$output .= '<option value="'.esc_attr($val).'" '.$selected.'>'.esc_attr($name).'</option>';
+						$output .= $name['optgroup'] == 'start' ? '<optgroup label="' . esc_attr($option_label) . '">' : '</optgroup>';
+					} else {
+						$option_label = isset($name['label']) ? $name['label'] : '';
+						$option_value = isset($name['value']) ? $name['value'] : '';
+						$selected = selected($option_value,stripslashes($args['value']), false);
+
+						$output .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
+					}
+				}else{
+					$selected = '';
+					if(!empty($args['value'])){
+						if(is_array($args['value'])){
+							$selected = in_array($val,$args['value']) ? 'selected="selected"' : '';
+						}else{
+							$selected = selected( $args['value'], $val, false);
+						}
+					}
+					$output .= '<option value="'.esc_attr($val).'" '.$selected.'>'.esc_attr($name).'</option>';
+				}
 			}
 
 		}
