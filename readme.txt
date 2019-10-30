@@ -85,7 +85,7 @@ UsersWP is 100% translatable.
 
 = Minimum Requirements =
 
-* WordPress 3.1 or greater
+* WordPress 4.9 or greater
 
 * PHP version 5.2.4 or greater
 
@@ -122,6 +122,9 @@ No questions so far, but don't hesitate to ask!
 
 = 1.2.0 =
 * New bootstrap UI styles option - ADDED
+* New improved tabs system introduced - ADDED
+* Login / Register lightbox option added - ADDED
+* Password strength indicator added (BS-UI only) - ADDED
 
 = 1.1.4 =
 * Elementor template with UsersWP shortcode does not output the other content than shortcode - FIXED

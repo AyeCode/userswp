@@ -20,9 +20,12 @@ class UWP_Login_Widget extends WP_Super_Duper {
 
         $options = array(
             'textdomain'    => 'userswp',
-            'block-icon'    => 'admin-site',
+            'block-icon'    => 'fas fa-user',
             'block-category'=> 'widgets',
             'block-keywords'=> "['userswp','login']",
+            'block-supports'=> array(
+                'customClassName'   => false
+            ),
             'class_name'     => __CLASS__,
             'base_id'       => 'uwp_login',
             'name'          => __('UWP > Login','userswp'),
@@ -37,25 +40,14 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     'type'        => 'text',
                     'desc_tip'    => true,
                     'default'     => '',
-                    'advanced'    => false
                 ),
                 'form_title'  => array(
                     'title'       => __( 'Form title', 'userswp' ),
-                    'desc'        => __( 'Enter the form title (or "0" for no title)', 'userswp' ),
+                    'desc'        => __( 'Enter the form title (or `0` for no title)', 'userswp' ),
                     'type'        => 'text',
                     'desc_tip'    => true,
                     'default'     => '',
                     'placeholder' => __('Login','userswp'),
-                    'advanced'    => true
-                ),
-                'form_padding'  => array(
-                    'title'       => __( 'Form padding', 'userswp' ),
-                    'desc'        => __( 'Enter the px value for the form padding, default is 40, 10 looks better in sidbars.', 'userswp' ),
-                    'type'        => 'number',
-                    'desc_tip'    => true,
-                    'default'     => '',
-                    'placeholder' => __('default 40, 10 is better in sidebars','userswp'),
-                    'group'     => __("Design","geodirectory")
                 ),
                 'logged_in_show'  => array(
                     'title' => __('Logged in show', 'userswp'),
@@ -68,7 +60,6 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     ),
                     'default'  => '',
                     'desc_tip' => true,
-                    'advanced' => true
                 ),
                 'design_style'  => array(
                     'title' => __('Design Style', 'userswp'),
@@ -103,7 +94,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
                 'desc_tip' => true,
                 'value'  => '1',
                 'default'  => '',
-                'advanced' => true,
+                'group'     => __("Addons","geodirectory"),
                 'element_require' => '[%logged_in_show%]==""',
             );
         }
@@ -116,7 +107,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
                 'desc_tip' => true,
                 'value'  => '1',
                 'default'  => '',
-                'advanced' => true,
+                'group'     => __("Addons","geodirectory"),
                 'element_require' => '[%logged_in_show%]==""',
             );
         }
@@ -139,7 +130,6 @@ class UWP_Login_Widget extends WP_Super_Duper {
 
         $defaults = array(
             'form_title'      => __('Login','userswp'),
-            'form_padding'     => '',
             'logged_in_show'     => '',
             'css_class'     => 'border-0'
         );
