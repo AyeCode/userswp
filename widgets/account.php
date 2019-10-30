@@ -119,9 +119,7 @@ class UWP_Account_Widget extends WP_Super_Duper {
 
         echo '</div>';
 
-        $output = ob_get_contents();
-
-        ob_end_clean();
+        $output = ob_get_clean();
 
         return trim($output);
 

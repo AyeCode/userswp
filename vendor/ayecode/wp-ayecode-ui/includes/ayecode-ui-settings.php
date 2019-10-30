@@ -142,7 +142,20 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 			}
 
+			// Maybe set the HTML font size
+			if ( $this->settings['html_font_size'] ) {
+				add_action( 'wp_footer', array( $this, 'html_font_size' ), 10 );
+			}
 
+
+		}
+
+		/**
+		 * Add a html font size to the footer.
+		 */
+		public function html_font_size(){
+			$this->settings = $this->get_settings();
+			echo "<style>html{font-size:".absint($this->settings['html_font_size'])."px;}</style>";
 		}
 
 		/**
@@ -508,6 +521,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			$defaults = array(
 				'css'       => 'compatibility', // core, compatibility
 				'js'        => 'core-popper', // js to load, core-popper, popper
+				'html_font_size'        => '16', // js to load, core-popper, popper
 			);
 
 			$settings = wp_parse_args( $db_settings, $defaults );
@@ -558,6 +572,15 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 									<option value="popper" <?php selected( $this->settings['js'], 'popper' ); ?>><?php _e( 'Popper', 'aui' ); ?></option>
 									<option	value="" <?php selected( $this->settings['js'], '' ); ?>><?php _e( 'Disabled', 'aui' ); ?></option>
 								</select>
+							</td>
+						</tr>
+
+						<tr valign="top">
+							<th scope="row"><label
+									for="wpbs-font_size"><?php _e( 'HTML Font Size (px)', 'aui' ); ?></label></th>
+							<td>
+								<input type="number" name="ayecode-ui-settings[html_font_size]" id="wpbs-font_size" value="<?php echo absint( $this->settings['html_font_size']); ?>" placeholder="16" />
+								<p class="description" ><?php _e("Our font sizing is rem (responsive based) here you can set the html font size in-case your theme is setting it too low.","aui");?></p>
 							</td>
 						</tr>
 

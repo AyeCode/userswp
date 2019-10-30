@@ -1982,7 +1982,7 @@ class UsersWP_Forms {
 
                 echo aui()->input(array(
                     'type'  =>  'checkbox',
-                    'id'    =>  $field->htmlvar_name,
+                    'id'    =>  wp_doing_ajax() ? $field->htmlvar_name."_ajax" : $field->htmlvar_name,
                     'name'    =>  $field->htmlvar_name,
                     'placeholder'   => uwp_get_form_label( $field ),
                     'title'   => uwp_get_form_label( $field ),

@@ -11,8 +11,8 @@
             <form class="uwp-login-form uwp_form" method="post">
                 <?php do_action('uwp_template_fields', 'login'); ?>
                 <div class="uwp-remember-me">
-                    <label style="display: inline-block;" for="remember_me">
-                        <input name="remember_me" id="remember_me" value="forever" type="checkbox">
+                    <label style="display: inline-block;" for="remember_me<?php if(wp_doing_ajax()){echo "_ajax";}?>">
+                        <input name="remember_me" id="remember_me<?php if(wp_doing_ajax()){echo "_ajax";}?>" value="forever" type="checkbox">
                         <?php _e( 'Remember Me', 'userswp' ); ?>
                     </label>
                 </div>

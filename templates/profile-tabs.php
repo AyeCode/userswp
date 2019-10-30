@@ -32,10 +32,6 @@ if(!$user){
 
 						$active = $active_tab == $tab_id ? ' active' : '';
 
-						if ( !(is_user_logged_in() && get_current_user_id() == $user->ID)) {
-							continue;
-						}
-
 						if ($active_tab == $tab_id) {
 							$active_tab_content = $tab['tab_content_rendered'];
 						}

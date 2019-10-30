@@ -40,10 +40,10 @@ do_action( 'uwp_template_before', 'login' ); ?>
 					<?php do_action( 'uwp_template_fields', 'login' ); ?>
 
 					<div class="uwp-remember-me custom-control custom-checkbox mb-3">
-						<input name="remember_me" id="remember_me" value="forever" type="checkbox"
+						<input name="remember_me" id="remember_me<?php if(wp_doing_ajax()){echo "_ajax";}?>" value="forever" type="checkbox"
 						       class="custom-control-input">
 						<label class="custom-control-label"
-						       for="remember_me"><?php _e( 'Remember Me', 'userswp' ); ?></label>
+						       for="remember_me<?php if(wp_doing_ajax()){echo "_ajax";}?>"><?php _e( 'Remember Me', 'userswp' ); ?></label>
 					</div>
 
 					<button type="submit" name="uwp_login_submit"

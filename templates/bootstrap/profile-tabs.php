@@ -34,10 +34,6 @@ if($output === '' || $output=='head'){
 
 						$active = $active_tab == $tab_id ? ' active border-bottom border-primary border-width-2' : '';
 
-						if ( !(is_user_logged_in() && get_current_user_id() == $user->ID)) {
-							continue;
-						}
-
 						if ($active_tab == $tab_id) {
 							$active_tab_content = $tab['tab_content_rendered'];
 						}
@@ -75,10 +71,6 @@ if($output === '' || $output=='body'){
 			$tab_url = uwp_build_profile_tab_url($user->ID, $tab_id, false);
 
 			$active = $active_tab == $tab_id ? ' active' : '';
-
-			if ( !(is_user_logged_in() && get_current_user_id() == $user->ID)) {
-				continue;
-			}
 
 			if ($active_tab == $tab_id) {
 				$active_tab_content = $tab['tab_content_rendered'];

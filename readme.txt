@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.0.3
+Stable tag: 1.2.0.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -119,6 +119,10 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.0.4 =
+* Tabs not showing other users tabs properly - FIXED
+* HTML font size on some themes causing small font and buttons - FIXED
 
 = 1.2.0 =
 * New bootstrap UI styles option - ADDED

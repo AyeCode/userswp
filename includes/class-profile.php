@@ -727,10 +727,6 @@ class UsersWP_Profile {
 
 		                    $active = $active_tab == $tab_id ? ' active' : '';
 
-		                    if (!(is_user_logged_in() && get_current_user_id() == $user->ID)) {
-			                    continue;
-		                    }
-
 		                    if ($active_tab == $tab_id) {
 			                    $active_tab_content = $tab['tab_content_rendered'];
 		                    }
@@ -951,7 +947,7 @@ class UsersWP_Profile {
 
 	    $uwp_widget_args['template_args']['the_query'] = $comments;
 	    $uwp_widget_args['template_args']['user'] = $user;
-	    $uwp_widget_args['template_args']['title'] = __("Comments","userswp");
+	    $uwp_widget_args['template_args']['title'] = __("Comments");
 	    $uwp_widget_args['template_args']['maximum_pages'] = $maximum_pages;
 
 //	    $uwp_widget_args['template_args'] = array(

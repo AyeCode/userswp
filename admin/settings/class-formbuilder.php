@@ -146,8 +146,8 @@ class UsersWP_Form_Builder {
         </div>
 
         <?php
-        $output = ob_get_contents();
-        ob_end_clean();
+        $output = ob_get_clean();
+        
         echo $output;
     }
 
