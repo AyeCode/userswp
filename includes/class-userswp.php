@@ -234,6 +234,7 @@ final class UsersWP {
         add_action( 'admin_notices', array( $instance, 'show_admin_notices' ) );
         add_action( 'admin_notices', array($instance, 'admin_notices') );
         add_action( 'admin_notices', array($instance, 'try_bootstrap') );
+        add_action( 'admin_notices', array($instance, 'yoast_user_archives_disabled') );
     }
 
 	/**

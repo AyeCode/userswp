@@ -191,5 +191,24 @@ class UsersWP_Notices {
         }
 
     }
+
+
+    public static function yoast_user_archives_disabled(){
+        if( class_exists('WPSEO_Options') && WPSEO_Options::get( 'disable-author', false ) ){
+            $settings_link = admin_url("admin.php?page=wpseo_titles#top#archives");
+            // set the setting on the fly if set to do so
+            if( current_user_can( 'manage_options' ) ){
+                ?>
+                <div class="notice notice-error">
+                    <p><strong>UsersWP - </strong><?php _e( 'Yoast SEO has disabled user profiles, please enable them.', 'userswp' ); ?>
+                        <a href="<?php echo esc_url_raw( $settings_link );?>" class="button button-primary"><?php _e( 'View Settings', 'userswp' ); ?></a>
+                    </p>
+                </div>
+                <?php
+            }
+        }
+
+
+    }
     
 }

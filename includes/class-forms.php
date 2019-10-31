@@ -2781,11 +2781,13 @@ class UsersWP_Forms {
                 $select_country_options = apply_filters('uwp_form_input_select_country',"{defaultCountry: '$value'}",$field, $value, $form_type);
                 ?>
 
-                <input type="text" class="uwp_textfield <?php echo esc_attr($bs_form_control);?>" title="<?php echo $site_title; ?>" id="<?php echo $field->htmlvar_name;?>"  />
-                <input type="hidden" id="<?php echo $field->htmlvar_name;?>_code" name="<?php echo $field->htmlvar_name;?>" />
+                <input type="text" class="uwp_textfield <?php echo esc_attr($bs_form_control);?>" title="<?php echo $site_title; ?>" id="<?php echo $field->htmlvar_name;if(wp_doing_ajax()){echo "_ajax";}?>"  />
+                <input type="hidden" id="<?php echo $field->htmlvar_name;if(wp_doing_ajax()){echo "_ajax";}?>_code" name="<?php echo $field->htmlvar_name;?>" />
 
                 <script>
-                    jQuery("#<?php echo $field->htmlvar_name;?>").countrySelect(<?php echo $select_country_options;?>);
+                    jQuery(function() {
+                        jQuery("#<?php echo $field->htmlvar_name; if(wp_doing_ajax()){echo "_ajax";}?>").countrySelect(<?php echo $select_country_options;?>);
+                    });
                 </script>
 
 
@@ -3076,9 +3078,28 @@ class UsersWP_Forms {
         global $wp_scripts;
         if(empty($wp_scripts)){$wp_scripts = wp_scripts();}
 
-        ob_start();
-        uwp_locate_template("bootstrap/register");
+        // do we need country code script in ajax?
+        $country_field = false;
+        $fields = get_register_form_fields();
+        if (!empty($fields)) {
+            foreach ($fields as $field) {
+                if ($field->field_type_key == 'country') {
+                    $country_field  = true;
+                }
+            }
+        }
 
+        ob_start();
+
+        // maybe add country code JS
+        if( $country_field ){
+            $country_data = uwp_get_country_data();
+            echo "<script>var uwp_country_data = ".json_encode( $country_data )."</script>";
+            echo "<script type='text/javascript' src='".USERSWP_PLUGIN_URL . 'assets/js/countrySelect.min.js'."' ></script>";
+        }
+
+        // get template
+        uwp_locate_template("bootstrap/register");
 
         // load scripts
         $wp_scripts->do_item( 'zxcvbn-async' );

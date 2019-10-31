@@ -21,7 +21,7 @@ if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
 
 do_action('uwp_users_loop_actions');
 ?>
-<div class="container mb-3">
+<div class="container mb-3 overflow-visible">
 	<div class="row">
 		<div class="col-sm p-0">
 			<?php

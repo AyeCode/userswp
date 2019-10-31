@@ -87,6 +87,7 @@ class UsersWP_Public {
         $enable_timepicker_in_account = false;
         $enable_datepicker_in_register = false;
         $enable_datepicker_in_account = false;
+        $enable_country_in_account = false;
 
         if (is_uwp_register_page() || is_uwp_account_page()) {
             if (is_uwp_register_page()) {
@@ -104,6 +105,10 @@ class UsersWP_Public {
                     if ($field->field_type == 'datepicker') {
                         $enable_datepicker_in_register = true;
                     }
+
+                    if ($field->field_type_key == 'country') {
+                        $enable_country_in_account  = true;
+                    }
                 }
             }
         }
@@ -118,7 +123,7 @@ class UsersWP_Public {
         }
 
         // Edit account scripts
-        if(is_uwp_account_page()){
+        if(is_uwp_account_page() || is_uwp_register_page()){
 
             //load CountrySelect
             wp_enqueue_script( "country-select", USERSWP_PLUGIN_URL . 'assets/js/countrySelect' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
