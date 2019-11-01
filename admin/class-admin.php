@@ -38,22 +38,22 @@ class UsersWP_Admin {
      * @since    1.0.0
      * @param $hook_suffix
      */
-    public function enqueue_styles($hook_suffix) {
+    public function enqueue_styles( $hook_suffix ) {
 
-        if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
-            wp_register_style('jquery-ui', USERSWP_PLUGIN_URL .  'assets/css/jquery-ui.css');
+        if ( $hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php' ) {
+            wp_register_style( 'jquery-ui', USERSWP_PLUGIN_URL .  'assets/css/jquery-ui.css' );
             wp_enqueue_style( 'jquery-ui' );
             wp_enqueue_style( 'jcrop' );
             wp_enqueue_style( "userswp", USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
             wp_enqueue_style( "uwp_timepicker_css", USERSWP_PLUGIN_URL . 'assets/css/jquery.ui.timepicker.css', array(), USERSWP_VERSION, 'all' );
         }
-        if ($hook_suffix == 'userswp_page_uwp_tools') {
+        if ( $hook_suffix == 'userswp_page_uwp_tools' ) {
             wp_enqueue_style( "userswp", USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
         }
         wp_enqueue_style( "userswp_admin_css", USERSWP_PLUGIN_URL . 'admin/assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
         wp_enqueue_style( "select2", USERSWP_PLUGIN_URL . 'assets/css/select2/select2.css', array(), USERSWP_VERSION, 'all' );
 
-        if ($hook_suffix == 'toplevel_page_userswp') {
+        if ( $hook_suffix == 'toplevel_page_userswp' ) {
             wp_enqueue_style( 'wp-color-picker' );
         }
 
@@ -69,49 +69,49 @@ class UsersWP_Admin {
 
         $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-        if ($hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php') {
+        if ( $hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php' ) {
 
             wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
-            wp_enqueue_script( "uwp_timepicker", USERSWP_PLUGIN_URL . 'assets/js/jquery.ui.timepicker'.$suffix.'.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), USERSWP_VERSION );
-            wp_enqueue_script( "userswp", USERSWP_PLUGIN_URL . 'assets/js/users-wp'.$suffix.'.js', array( 'jquery' ), USERSWP_VERSION, false );
+            wp_enqueue_script( "uwp_timepicker", USERSWP_PLUGIN_URL . 'assets/js/jquery.ui.timepicker' . $suffix . '.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), USERSWP_VERSION );
+            wp_enqueue_script( "userswp", USERSWP_PLUGIN_URL . 'assets/js/users-wp' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
             $uwp_localize_data = uwp_get_localize_data();
-            wp_localize_script('userswp', 'uwp_localize_data', $uwp_localize_data);
+            wp_localize_script('userswp', 'uwp_localize_data', $uwp_localize_data );
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
             wp_enqueue_script( 'jcrop', array( 'jquery' ) );
-            wp_enqueue_script( "country-select", USERSWP_PLUGIN_URL . 'assets/js/countrySelect'.$suffix.'.js', array( 'jquery' ), USERSWP_VERSION );
+            wp_enqueue_script( "country-select", USERSWP_PLUGIN_URL . 'assets/js/countrySelect' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION );
 
 
         }
-        if ($hook_suffix == 'userswp_page_uwp_status') {
+        if ( $hook_suffix == 'userswp_page_uwp_status' ) {
             wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
             wp_enqueue_script( "uwp_status", USERSWP_PLUGIN_URL . 'admin/assets/js/system-status.js', array( 'jquery' ), USERSWP_VERSION, true );
         }
 
-	    wp_enqueue_script('jquery-ui-sortable');
-	    wp_enqueue_script('uwp-nestable-script', USERSWP_PLUGIN_URL . 'admin/assets/js/jquery.nestable'.$suffix.'.js', array('jquery-ui-sortable'), USERSWP_VERSION);
+	    wp_enqueue_script( 'jquery-ui-sortable' );
+	    wp_enqueue_script( 'uwp-nestable-script', USERSWP_PLUGIN_URL . 'admin/assets/js/jquery.nestable' . $suffix . '.js', array('jquery-ui-sortable'), USERSWP_VERSION );
 
-        wp_enqueue_script( "userswp_admin", USERSWP_PLUGIN_URL . 'admin/assets/js/users-wp-admin'.$suffix.'.js', array( 'jquery' ), USERSWP_VERSION, false );
+        wp_enqueue_script( "userswp_admin", USERSWP_PLUGIN_URL . 'admin/assets/js/users-wp-admin' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
         wp_enqueue_script('select2', USERSWP_PLUGIN_URL . 'assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION );
 
-        wp_enqueue_script("jquery-ui-tooltip");
-        wp_enqueue_script('wp-color-picker');
+        wp_enqueue_script( "jquery-ui-tooltip" );
+        wp_enqueue_script( 'wp-color-picker' );
 
         $ajax_cons_data = array(
-            'url' => admin_url('admin-ajax.php'),
-            'custom_field_not_blank_var' => __('Field key must not be blank', 'userswp'),
-            'custom_field_options_not_blank_var' => __('Option Values must not be blank', 'userswp'),
-            'custom_field_not_special_char' => __('Please do not use special character and spaces in field key.', 'userswp'),
-            'custom_field_unique_name' => __('Field key should be a unique name.', 'userswp'),
-            'custom_field_delete' => __('Are you sure you wish to delete this field?', 'userswp'),
-            'custom_field_id_required' => __('This field is required.', 'userswp'),
+            'url' => admin_url( 'admin-ajax.php' ),
+            'custom_field_not_blank_var' => __( 'Field key must not be blank', 'userswp' ),
+            'custom_field_options_not_blank_var' => __( 'Option Values must not be blank', 'userswp' ),
+            'custom_field_not_special_char' => __( 'Please do not use special character and spaces in field key.', 'userswp' ),
+            'custom_field_unique_name' => __( 'Field key should be a unique name.', 'userswp' ),
+            'custom_field_delete' => __( 'Are you sure you wish to delete this field?', 'userswp' ),
+            'custom_field_id_required' => __( 'This field is required.', 'userswp' ),
             'img_spacer' => admin_url( 'images/media-button-image.gif' ),
             'txt_choose_image' => __( 'Choose an image', 'userswp' ),
             'txt_use_image' => __( 'Use image', 'userswp' ),
         );
-        wp_localize_script("userswp_admin", 'uwp_admin_ajax', $ajax_cons_data);
+        wp_localize_script( "userswp_admin", 'uwp_admin_ajax', $ajax_cons_data );
 
         $country_data = uwp_get_country_data();
-        wp_localize_script(USERSWP_NAME, 'uwp_country_data', $country_data);
+        wp_localize_script( USERSWP_NAME, 'uwp_country_data', $country_data );
 
     }
 

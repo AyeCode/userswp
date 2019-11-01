@@ -15,7 +15,7 @@ Tested up to: 5.3
 */
 
 // If this file is called directly, abort.
-if (!defined('WPINC')) {
+if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
@@ -24,15 +24,15 @@ if ( ! defined( 'USERSWP_NAME' ) ) {
 }
 
 if ( ! defined( 'USERSWP_VERSION' ) ) {
-    define('USERSWP_VERSION', '1.2.0.6');
+    define( 'USERSWP_VERSION', '1.2.0.6' );
 }
 
 if ( ! defined( 'USERSWP_PATH' ) ) {
-    define('USERSWP_PATH', plugin_dir_path(__FILE__));
+    define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
 }
 
 if ( ! defined( 'USERSWP_PLUGIN_URL' ) ) {
-    define('USERSWP_PLUGIN_URL', plugin_dir_url(__FILE__));
+    define( 'USERSWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }
 
 if ( ! defined( 'USERSWP_PLUGIN_FILE' ) ) {

@@ -38,7 +38,7 @@ class UsersWP_Admin_Menus {
         // Proceed if main site or pages on all sites or specific blog id
         $proceed = false;
         $show_builder = false;
-        switch ($install_type) {
+        switch ( $install_type ) {
             case "single":
                 $proceed = true;
                 $show_builder = true;
@@ -48,16 +48,16 @@ class UsersWP_Admin_Menus {
                 $show_builder = true;
                 break;
             case "multi_na_site_id":
-                if (defined('UWP_ROOT_PAGES')) {
+                if (defined( 'UWP_ROOT_PAGES' )) {
                     $blog_id = UWP_ROOT_PAGES;
                 } else {
                     $blog_id = null;
                 }
                 $current_blog_id = get_current_blog_id();
-                if (!is_int($blog_id)) {
+                if ( ! is_int( $blog_id ) ) {
                     $proceed = false;
                 } else {
-                    if ($blog_id == $current_blog_id) {
+                    if ( $blog_id == $current_blog_id ) {
                         $proceed = true;
                         $show_builder = true;
                     } else {
@@ -67,7 +67,7 @@ class UsersWP_Admin_Menus {
                 break;
             case "multi_na_default":
                 $is_main_site = is_main_site();
-                if ($is_main_site) {
+                if ( $is_main_site ) {
                     $proceed = true;
                     $show_builder = true;
                 }
@@ -81,7 +81,7 @@ class UsersWP_Admin_Menus {
 
         }
 
-        if (!$proceed) {
+        if ( ! $proceed ) {
             return;
         }
 
@@ -96,14 +96,14 @@ class UsersWP_Admin_Menus {
             70
         );
 
-        if ($show_builder) {
+        if ( $show_builder ) {
             add_submenu_page(
                 "userswp",
                 __( 'Form Builder', 'userswp' ),
                 __( 'Form Builder', 'userswp' ),
                 'manage_options',
                 'uwp_form_builder',
-                array('UsersWP_Form_Builder', 'output')
+                array( 'UsersWP_Form_Builder', 'output' )
             );
         }
 
@@ -133,8 +133,8 @@ class UsersWP_Admin_Menus {
 
         add_submenu_page(
             "userswp",
-            __('UsersWP extensions', 'userswp'),
-            __('Extensions', 'userswp'),
+            __( 'UsersWP extensions', 'userswp' ),
+            __( 'Extensions', 'userswp' ),
             'manage_options',
             'uwp-addons',
             array( $this, 'addons_page' )
