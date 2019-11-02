@@ -1670,7 +1670,7 @@ function uwp_get_localize_data(){
         'uwp_more_ellipses_text' => '...',
         'ajaxurl' => admin_url('admin-ajax.php'),
         'login_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("login_modal",1) ? 1 : '',
-        'register_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("tegister_modal",1) ? 1 : '',
+        'register_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("register_modal",1) ? 1 : '',
         'forgot_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("forgot_modal",1) ? 1 : '',
     );
 

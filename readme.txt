@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.0.6
+Stable tag: 1.2.0.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -125,6 +125,8 @@ No questions so far, but don't hesitate to ask!
 * Ajax undefined variable when adding new banner image - FIXED
 * Default image can sometimes be broken on localhost - FIXED
 * Registration block JS can brake the block render in backend - FIXED
+* Register can open in modal lightbox even if set not to - FIXED
+* Menus items as sub items can trigger parent modal - FIXED
 
 = 1.2.0.6 =
 * Country field not working on register lightbox - FIXED

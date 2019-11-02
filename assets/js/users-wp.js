@@ -176,7 +176,8 @@ function uwp_profile_image_change(type){
 function uwp_init_auth_modal(){
     // open login form
     if(uwp_localize_data.login_modal) {
-        jQuery(".users-wp-login-nav a, .uwp-login-link").click(function () {
+        jQuery(".users-wp-login-nav a, .uwp-login-link").click(function (e) {
+            uwp_cancelBubble(e);
             uwp_modal_login_form();
             return false;
         });
@@ -184,7 +185,8 @@ function uwp_init_auth_modal(){
 
     // open the register form
     if(uwp_localize_data.register_modal) {
-        jQuery(".users-wp-register-nav a, .uwp-register-link").click(function () {
+        jQuery(".users-wp-register-nav a, .uwp-register-link").click(function (e) {
+            uwp_cancelBubble(e);
             uwp_modal_register_form();
             return false;
         });
@@ -192,7 +194,8 @@ function uwp_init_auth_modal(){
 
     // open the forgot password form
     if(uwp_localize_data.forgot_modal) {
-        jQuery(".users-wp-forgot-nav a, .uwp-forgot-password-link").click(function () {
+        jQuery(".users-wp-forgot-nav a, .uwp-forgot-password-link").click(function (e) {
+            uwp_cancelBubble(e);
             uwp_modal_forgot_password_form();
             return false;
         });
@@ -488,7 +491,7 @@ function uwp_checkPasswordStrength( $pass1,
 
     // Get the password strength
     var strength = wp.passwordStrength.meter( pass1, blacklistArray, pass2 );
-    
+
     // Add the strength meter results
     switch ( strength ) {
 
@@ -521,4 +524,15 @@ function uwp_checkPasswordStrength( $pass1,
 //			    }
 
     return strength;
+}
+
+/**
+ * Prevent onclick affecting parent elements.
+ *
+ * @param e
+ */
+function uwp_cancelBubble(e){
+    var evt = e ? e:window.event;
+    if (evt.stopPropagation)    evt.stopPropagation();
+    if (evt.cancelBubble!=null) evt.cancelBubble = true;
 }
