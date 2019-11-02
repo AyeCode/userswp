@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.0\n"
+"Project-Id-Version: UsersWP 1.2.0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-30 12:28+0000\n"
-"PO-Revision-Date: 2019-10-30 12:30+0000\n"
+"POT-Creation-Date: 2019-11-02 16:24+0000\n"
+"PO-Revision-Date: 2019-11-02 16:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -459,12 +459,12 @@ msgstr ""
 msgid "Is Public :"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:934 includes/helpers/misc.php:714
+#: admin/settings/class-formbuilder.php:934 includes/helpers/misc.php:742
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:200
 msgid "Yes"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:935 includes/helpers/misc.php:713
+#: admin/settings/class-formbuilder.php:935 includes/helpers/misc.php:741
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:200
 msgid "No"
 msgstr ""
@@ -1482,39 +1482,39 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:613
 #: admin/settings/class-uwp-settings-profile-tabs.php:395
-#: includes/class-profile.php:919 upgrade.php:54
+#: includes/class-profile.php:915 upgrade.php:54
 msgid "Posts"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:614
 #: admin/settings/class-uwp-settings-profile-tabs.php:403
-#: includes/class-profile.php:954 templates/bootstrap/loop-comments.php:9
+#: includes/class-profile.php:950 templates/bootstrap/loop-comments.php:9
 #: templates/loop-comments.php:10 upgrade.php:70
 msgid "Comments"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:624
-#: includes/helpers/misc.php:1827 templates/users-actions.php:19
+#: includes/helpers/misc.php:1872 templates/users-actions.php:19
 msgid "List View"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:625
-#: includes/helpers/misc.php:1828
+#: includes/helpers/misc.php:1873
 msgid "Grid View - 2 Column"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:626
-#: includes/helpers/misc.php:1829
+#: includes/helpers/misc.php:1874
 msgid "Grid View - 3 Column"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:627
-#: includes/helpers/misc.php:1830
+#: includes/helpers/misc.php:1875
 msgid "Grid View - 4 Column"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:628
-#: includes/helpers/misc.php:1831
+#: includes/helpers/misc.php:1876
 msgid "Grid View - 5 Column"
 msgstr ""
 
@@ -2025,7 +2025,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:526 includes/class-activator.php:568
-#: includes/class-forms.php:2860
+#: includes/class-forms.php:2862
 msgid "Confirm Password"
 msgstr ""
 
@@ -2422,17 +2422,17 @@ msgstr ""
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:2824
+#: includes/class-forms.php:2826
 msgid "Hello, "
 msgstr ""
 
-#: includes/class-forms.php:2825 templates/bootstrap/dashboard-simple.php:17
+#: includes/class-forms.php:2827 templates/bootstrap/dashboard-simple.php:17
 #: templates/bootstrap/dashboard.php:35 templates/dashboard-simple.php:17
 #: templates/dashboard.php:33
 msgid "Logout"
 msgstr ""
 
-#: includes/class-forms.php:2943
+#: includes/class-forms.php:2945
 msgid "Confirm Email"
 msgstr ""
 
@@ -2589,6 +2589,14 @@ msgstr ""
 msgid "Try Now"
 msgstr ""
 
+#: includes/class-notices.php:203
+msgid "Yoast SEO has disabled user profiles, please enable them."
+msgstr ""
+
+#: includes/class-notices.php:204
+msgid "View Settings"
+msgstr ""
+
 #: includes/class-pages.php:307
 msgid "Select a Page"
 msgstr ""
@@ -2685,56 +2693,60 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: includes/class-profile.php:172 includes/class-profile.php:756
+#: includes/class-profile.php:172 includes/class-profile.php:752
 #: includes/helpers/tabs.php:123 templates/account.php:13
 #: templates/bootstrap/account.php:23 templates/bs1/account.php:27
-#: templates/profile-tabs.php:61 widgets/account.php:47
+#: templates/profile-tabs.php:57 widgets/account.php:47
 msgid "Edit Account"
 msgstr ""
 
-#: includes/class-profile.php:814
+#: includes/class-profile.php:810
 msgid "Page"
 msgstr ""
 
-#: includes/class-profile.php:850
+#: includes/class-profile.php:846
 msgid "Newer posts"
 msgstr ""
 
-#: includes/class-profile.php:854
+#: includes/class-profile.php:850
 msgid "Older posts"
 msgstr ""
 
-#: includes/class-profile.php:863
+#: includes/class-profile.php:859
 msgid "Previous"
 msgstr ""
 
-#: includes/class-profile.php:864
+#: includes/class-profile.php:860
 msgid "Next"
 msgstr ""
 
-#: includes/class-profile.php:865
+#: includes/class-profile.php:861
 msgid "Posts navigation"
 msgstr ""
 
-#: includes/class-profile.php:1233
+#: includes/class-profile.php:1229
 msgid "Loading Form ..."
 msgstr ""
 
-#: includes/class-profile.php:1679
+#: includes/class-profile.php:1382
+msgid "File too big."
+msgstr ""
+
+#: includes/class-profile.php:1699
 #, php-format
 msgid "The uploaded file is too small. Minimum image width should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1682
+#: includes/class-profile.php:1702
 #, php-format
 msgid "The uploaded file is too small. Minimum image height should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1720
+#: includes/class-profile.php:1740
 msgid "Invalid request!"
 msgstr ""
 
-#: includes/class-profile.php:1738
+#: includes/class-profile.php:1758
 msgid "No fields available"
 msgstr ""
 
@@ -3204,7 +3216,7 @@ msgstr ""
 msgid "Disable account update notification."
 msgstr ""
 
-#: includes/class-user-notifications.php:69 includes/helpers/misc.php:744
+#: includes/class-user-notifications.php:69 includes/helpers/misc.php:772
 #: templates/bootstrap/change.php:30 templates/bootstrap/forgot.php:46
 #: templates/bootstrap/reset.php:31 templates/bs1/change.php:33
 #: templates/bs1/forgot.php:36 templates/bs1/reset.php:34
@@ -3459,90 +3471,90 @@ msgstr ""
 msgid "ERROR: Passwords do not match."
 msgstr ""
 
-#: includes/helpers/misc.php:529
+#: includes/helpers/misc.php:557
 #, php-format
 msgid ""
 "You can change your profile picture on your <a href=\"%s\">Profile Page</a>."
 msgstr ""
 
-#: includes/helpers/misc.php:592
+#: includes/helpers/misc.php:620
 msgid "Change Avatar"
 msgstr ""
 
-#: includes/helpers/misc.php:598
+#: includes/helpers/misc.php:626
 msgid "Upload Avatar"
 msgstr ""
 
-#: includes/helpers/misc.php:606
+#: includes/helpers/misc.php:634
 msgid "Change Banner"
 msgstr ""
 
-#: includes/helpers/misc.php:612
+#: includes/helpers/misc.php:640
 msgid "Upload Banner"
 msgstr ""
 
-#: includes/helpers/misc.php:656 includes/helpers/tabs.php:131
+#: includes/helpers/misc.php:684 includes/helpers/tabs.php:131
 msgid "Privacy"
 msgstr ""
 
-#: includes/helpers/misc.php:693
+#: includes/helpers/misc.php:721
 msgid "Field"
 msgstr ""
 
-#: includes/helpers/misc.php:696
+#: includes/helpers/misc.php:724
 msgid "Is Public?"
 msgstr ""
 
-#: includes/helpers/misc.php:723
+#: includes/helpers/misc.php:751
 msgid "Hide profile from the users listing page."
 msgstr ""
 
-#: includes/helpers/misc.php:738
+#: includes/helpers/misc.php:766
 msgid "Make the whole profile private"
 msgstr ""
 
-#: includes/helpers/misc.php:785
+#: includes/helpers/misc.php:813
 msgid "Account Settings"
 msgstr ""
 
-#: includes/helpers/misc.php:1021
+#: includes/helpers/misc.php:1049
 msgid "Auto approve"
 msgstr ""
 
-#: includes/helpers/misc.php:1022
+#: includes/helpers/misc.php:1050
 msgid "Auto approve + Auto Login"
 msgstr ""
 
-#: includes/helpers/misc.php:1023
+#: includes/helpers/misc.php:1051
 msgid "Require Email Activation"
 msgstr ""
 
-#: includes/helpers/misc.php:1074
+#: includes/helpers/misc.php:1102
 #, php-format
 msgid "I Accept <a href=\"%s\" target=\"_blank\">Terms and Conditions</a>."
 msgstr ""
 
-#: includes/helpers/misc.php:1651
+#: includes/helpers/misc.php:1696
 msgid "more"
 msgstr ""
 
-#: includes/helpers/misc.php:1652
+#: includes/helpers/misc.php:1697
 msgid "less"
 msgstr ""
 
-#: includes/helpers/misc.php:1814 widgets/output-location.php:91
+#: includes/helpers/misc.php:1859 widgets/output-location.php:91
 msgid "Users Page"
 msgstr ""
 
-#: includes/helpers/misc.php:1815 widgets/output-location.php:92
+#: includes/helpers/misc.php:1860 widgets/output-location.php:92
 msgid "More info tab"
 msgstr ""
 
-#: includes/helpers/misc.php:1816
+#: includes/helpers/misc.php:1861
 msgid "Profile side (non bootstrap)"
 msgstr ""
 
-#: includes/helpers/misc.php:1817
+#: includes/helpers/misc.php:1862
 msgid "Fieldset"
 msgstr ""
 
@@ -3803,25 +3815,25 @@ msgid "Change your cover photo"
 msgstr ""
 
 #: templates/bootstrap/modal-profile-image-crop.php:28
-#: templates/bootstrap/modal-profile-image.php:42
+#: templates/bootstrap/modal-profile-image.php:48
 #: templates/modal-profile-image-crop.php:44
 #: templates/modal-profile-image.php:45
 msgid "Cancel"
 msgstr ""
 
 #: templates/bootstrap/modal-profile-image-crop.php:38
-#: templates/bootstrap/modal-profile-image.php:46
+#: templates/bootstrap/modal-profile-image.php:53
 #: templates/modal-profile-image-crop.php:40
 #: templates/modal-profile-image.php:41
 msgid "Apply"
 msgstr ""
 
-#: templates/bootstrap/modal-profile-image.php:25
+#: templates/bootstrap/modal-profile-image.php:27
 #: templates/modal-profile-image.php:29
 msgid "Upload"
 msgstr ""
 
-#: templates/bootstrap/modal-profile-image.php:30
+#: templates/bootstrap/modal-profile-image.php:32
 #, php-format
 msgid "Note: Max upload image size: %s"
 msgstr ""
@@ -4005,49 +4017,59 @@ msgstr ""
 msgid "Replies"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:529
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:543
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:304
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:542
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:556
 msgid "Load CSS"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:545
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:559
 msgid "Compatibility Mode"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:546
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:560
 msgid "Full Mode"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:547
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:559
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:561
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:573
 msgid "Disabled"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:554
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:568
 msgid "Load JS"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:557
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:571
 msgid "Core + Popper (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:558
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:572
 msgid "Popper"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:578
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:580
+msgid "HTML Font Size (px)"
+msgstr ""
+
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:583
+msgid ""
+"Our font sizing is rem (responsive based) here you can set the html font "
+"size in-case your theme is setting it too low."
+msgstr ""
+
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:601
 msgid "AyeCode UI"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:593
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:616
 msgid "Primary Color"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:606
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:629
 msgid "Secondary Color"
 msgstr ""
 

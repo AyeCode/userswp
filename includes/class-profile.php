@@ -1333,8 +1333,14 @@ class UsersWP_Profile {
         
         ob_start();
 
+	    // get file sizes
+	    $files = new UsersWP_Files();
+	    $max_file_size = $files->uwp_get_max_upload_size($type);
+
 	    $design_style = uwp_get_option("design_style",'bootstrap');
 	    $template = $design_style ? $design_style."/modal-profile-image" : "modal-profile-image";
+
+
 
 	    uwp_locate_template($template);
 
@@ -1364,17 +1370,25 @@ class UsersWP_Profile {
 
                         var container = jQuery('<?php echo esc_attr($content_wrap);?>');
                         var err_container = jQuery('#uwp-bs-modal-notice');
+	                    err_container.html('');// clear errors on retry
 
                         var fd = new FormData();
                         var files_data = $(this); // The <input type="file" /> field
-                        var file = files_data[0].files[0];
+	                    var file = files_data[0].files[0];
+	                    var file_size = file.size;
+
+	                    // file size check
+	                    if(file_size > <?php echo absint($max_file_size);?>){
+		                    err_container.html('<div class="uwp-alert-error text-center alert alert-danger"><?php _e( 'File too big.', 'userswp' );?></div>');
+		                    return;
+	                    }
 
                         fd.append('<?php echo $type; ?>', file);
                         // our AJAX identifier
                         fd.append('action', 'uwp_avatar_banner_upload');
                         fd.append('uwp_popup_type', '<?php echo $type; ?>');
 
-                        $("#progressBar").show();
+                        $("#progressBar").show().removeClass('d-none');
 
                         $.ajax({
                             // Your server script to process the upload
@@ -1438,10 +1452,11 @@ class UsersWP_Profile {
                         }
                     }
 
-                    function progress(percent, $element) {
-                        var progressBarWidth = percent * $element.width() / 100;
-                        $element.find('div').animate({ width: progressBarWidth }, 500).html(percent + "% ");
-                    }
+	                function progress(percent, $element) {
+		                percent = Math.round(percent);
+		                var progressBarWidth = percent * ( $element.width() / 100 );
+		                $element.find('div').width( progressBarWidth ).html(percent + "%");
+	                }
 
                     function updateCoords(c) {
                         jQuery('#'+uwp_popup_type+'-x').val(c.x);

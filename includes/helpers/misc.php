@@ -190,6 +190,7 @@ function uwp_resizeImage($image,$width,$height,$scale) {
  * @return      mixed                               Resized image.
  */
 function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $src_h, $scale){
+    uwp_set_php_limits();
     // ignore image createion warnings
     @ini_set('gd.jpeg_ignore_warning', 1);
     /** @noinspection PhpUnusedLocalVariableInspection */
@@ -234,6 +235,33 @@ function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $sr
     return $thumb_image_name;
 }
 
+/**
+ * Try to set higher limits on the fly
+ */
+function uwp_set_php_limits() {
+    error_reporting( 0 );
+
+    // try to set higher limits for import
+    $max_input_time     = ini_get( 'max_input_time' );
+    $max_execution_time = ini_get( 'max_execution_time' );
+    $memory_limit       = ini_get( 'memory_limit' );
+
+    if ( $max_input_time !== 0 && $max_input_time != -1 && ( ! $max_input_time || $max_input_time < 3000 ) ) {
+        ini_set( 'max_input_time', 3000 );
+    }
+
+    if ( $max_execution_time !== 0 && ( ! $max_execution_time || $max_execution_time < 3000 ) ) {
+        ini_set( 'max_execution_time', 3000 );
+    }
+
+    if ( $memory_limit && str_replace( 'M', '', $memory_limit ) ) {
+        if ( str_replace( 'M', '', $memory_limit ) < 256 ) {
+            ini_set( 'memory_limit', '256M' );
+        }
+    }
+
+    ini_set( 'auto_detect_line_endings', true );
+}
 
 /**
  * Logs the error message.
