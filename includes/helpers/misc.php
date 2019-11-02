@@ -1421,6 +1421,23 @@ function uwp_wpml_object_id( $element_id, $element_type = 'post', $return_origin
     return $element_id;
 }
 
+/**
+ * Check if we might be on localhost.
+ *
+ * @return bool
+ */
+function uwp_is_localhost(){
+    $localhost = false;
+
+    if( isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME']=='localhost' ){
+        $localhost = true;
+    }elseif(isset($_SERVER['SERVER_ADDR']) && ( $_SERVER['SERVER_ADDR'] == '127.0.0.1' || $_SERVER['SERVER_ADDR'] == '::1' )  ){
+        $localhost = true;
+    }
+
+    return $localhost;
+}
+
 function uwp_get_default_avatar_uri(){
     $default = uwp_get_option('profile_default_profile', '');
     if(empty($default)){

@@ -121,6 +121,11 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.0.7 =
+* Ajax undefined variable when adding new banner image - FIXED
+* Default image can sometimes be broken on localhost - FIXED
+* Registration block JS can brake the block render in backend - FIXED
+
 = 1.2.0.6 =
 * Country field not working on register lightbox - FIXED
 * Added admin notice if Yoast has disabled user profiles - ADDED

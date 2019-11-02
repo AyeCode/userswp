@@ -1495,6 +1495,10 @@ class UsersWP_Profile {
      *
     */
     function get_avatar_url($url, $id_or_email, $args){
+
+	    // don't filter on admin side.
+	    if(is_admin() && !wp_doing_ajax()){return $url;}
+
         $user = false;
 
         if(1 == uwp_get_option('disable_avatar_override')){
@@ -1529,8 +1533,13 @@ class UsersWP_Profile {
                 }
             } else {
                 $default = uwp_get_default_avatar_uri();
-                $url = remove_query_arg('d', $url);
-                $url = add_query_arg(array('d' => $default), $url);
+	            if(uwp_is_localhost()){ // if localhost then default gravitar won't work.
+		            $url = $default;
+	            }else{
+		            $url = remove_query_arg('d', $url);
+		            $url = add_query_arg(array('d' => $default), $url);
+	            }
+
             }
         }
 
@@ -1780,7 +1789,7 @@ class UsersWP_Profile {
      * @return      void
      */
     public function ajax_image_crop_popup_form(){
-        $type = strip_tags(esc_sql($_POST['type']));
+        $type = isset($_POST['type']) ? strip_tags(esc_sql($_POST['type'])) : '';
 
         $output = null;
 

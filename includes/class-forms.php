@@ -3101,6 +3101,11 @@ class UsersWP_Forms {
         // get template
         uwp_locate_template("bootstrap/register");
 
+
+        // only show the JS if NOT doing a block render
+        if(isset($_REQUEST['action']) && $_REQUEST['action'] != 'super_duper_output_shortcode'){
+
+
         // load scripts
         $wp_scripts->do_item( 'zxcvbn-async' );
         $wp_scripts->do_item( 'password-strength-meter' );
@@ -3133,6 +3138,7 @@ class UsersWP_Forms {
     });
 </script>
 <?php
+        }
         $form = ob_get_clean();
 
         // send ajax response

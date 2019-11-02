@@ -265,7 +265,7 @@ final class UsersWP {
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_user_title', array($instance, 'get_profile_title'), 10, 2 );
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 2 );
-        add_action( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );
+        add_filter( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );
         add_action( 'uwp_profile_pagination' ,array($instance,'list_view_js'));
         add_action( 'uwp_after_users_list' ,array($instance,'list_view_js'));
 
