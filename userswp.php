@@ -15,9 +15,7 @@ Tested up to: 5.3
 */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-    die;
-}
+defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'USERSWP_NAME' ) ) {
     define( 'USERSWP_NAME', 'userswp' );
@@ -44,8 +42,9 @@ if ( ! defined( 'USERSWP_PLUGIN_FILE' ) ) {
  * admin-specific hooks, and public-facing site hooks.
  */
 if ( ! class_exists( 'UsersWP' ) ) {
-    include_once dirname( __FILE__ ) . '/includes/class-userswp.php';
+    include_once USERSWP_PATH . 'includes/class-userswp.php';
 }
+
 /**
  * Begins execution of the plugin.
  *
