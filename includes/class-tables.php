@@ -140,6 +140,7 @@ class UsersWP_Tables {
 							  tab_type varchar(100) NOT NULL,
 							  tab_level int(11) NOT NULL,
 							  tab_parent int(11) NOT NULL,
+							  is_public int(11) NOT NULL DEFAULT '1',
 							  tab_name varchar(255) NOT NULL,
 							  tab_icon varchar(255) NOT NULL,
 							  tab_key varchar(255) NOT NULL,
@@ -150,8 +151,6 @@ class UsersWP_Tables {
         $tabs_tbl_query = apply_filters('uwp_profile_tabs_table_create_query', $tabs_tbl_query);
 
         dbDelta($tabs_tbl_query);
-
-        
 
     }
 

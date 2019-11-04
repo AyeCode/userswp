@@ -638,6 +638,14 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                 $field_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
             }
 
+            if ( isset($request['is_public']) && $request['is_public'] != '' ) {
+			    $is_public = esc_attr( $request['is_public'] );
+		    } elseif( $field_info ) {
+			    $is_public = $field_info->is_public;
+		    } else {
+		        $is_public = 1;
+		    }
+
 		    ?>
             <li class="text li-settings" id="licontainer_<?php echo $result_str; ?>">
                 <i class="fas fa-caret-down toggle-arrow" aria-hidden="true" onclick="uwp_show_hide(this);"></i>
@@ -685,6 +693,31 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                                            value="<?php echo $icon; ?>"/>
                                 </div>
 
+                            </li>
+
+                            <li class="uwp-setting-name">
+                                <label for="is_public" class="uwp-tooltip-wrap">
+                                    <span class="uwp-help-tip dashicons dashicons-editor-help" title="<?php _e('If no is selected then the tab will not be visible to other users.', 'userswp'); ?>"></span>
+                                    <?php _e('Is Public :', 'userswp'); ?>
+                                </label>
+                                <div class="uwp-input-wrap">
+                                    <?php
+                                        $is_public_options = array(
+                                            1 => __("Yes", "userswp"),
+                                            0 => __("No", "userswp"),
+                                            2 => __("Let User Decide", "userswp"),
+                                        );
+
+                                        $is_public_options = apply_filters('uwp_tab_visibility_options', $is_public_options, $result_str, $request);
+                                    ?>
+                                    <select name="is_public" id="is_public" class="uwp_select2">
+                                        <?php
+                                            foreach ($is_public_options as $key => $val){
+                                                echo '<option value="'.$key.'"'. selected($is_public, $key, false).'>'.$val.'</option>';
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
                             </li>
 
                             <?php
@@ -821,6 +854,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		    $tab_parent = !empty($request_field['tab_parent']) ? sanitize_text_field($request_field['tab_parent']) : 0;
 		    $tab_type = isset($request_field['tab_type']) ? sanitize_text_field($request_field['tab_type']) : 'standard';
 		    $form_type = isset($request_field['form_type']) ? $request_field['form_type'] : $tab_type;
+		    $is_public = isset($request_field['is_public']) ? (int)$request_field['is_public'] : 1;
 
 		    $total_tabs = $wpdb->get_var("SELECT COUNT(id) FROM {$table_name}");
 
@@ -835,6 +869,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                     'tab_icon'      => $tab_icon,
                     'tab_key'       => sanitize_text_field($tab_key),
                     'tab_content'   => sanitize_textarea_field($request_field['tab_content']),
+                    'is_public'   => $is_public,
                 );
 
             $format = array_fill( 0, count( $data ), '%s' );
