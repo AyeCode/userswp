@@ -46,7 +46,7 @@ if ( ! $hide_cover ) {
 		<div class="row justify-content-center">
 			<div class="col <?php if($uwp_in_user_loop){?>col-5<?php }?> text-center tofront  d-table  ">
 				<?php if ($uwp_in_user_loop) {echo '<a href="'.esc_url_raw(get_author_posts_url($user->ID)).'" title="'.$user->display_name.'">';} ?>
-				<img class="rounded-circle shadow w-100 border border-white border-width-4 p-0 mt-neg5"
+				<img class="rounded-circle shadow border border-white border-width-4 p-0 mt-neg5"
 				     src="<?php echo esc_url( $avatar_url ); ?>">
 				<?php if ($uwp_in_user_loop) {echo '</a>';} ?>
 
