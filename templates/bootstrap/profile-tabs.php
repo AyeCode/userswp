@@ -41,7 +41,7 @@ if($output === '' || $output=='head'){
 						?>
 						<li id="uwp-profile-<?php echo $tab_id; ?>"
 						    class="nav-item <?php echo $active; ?> list-unstyled">
-							<a href="<?php echo esc_url($tab_url); ?>" class="nav-link">
+							<a href="<?php echo esc_url($tab_url); ?>#tab-content" class="nav-link">
 								<?php
 								if(!empty($tab['tab_icon'])){
 									echo '<i class="'.esc_attr($tab['tab_icon']).'"></i>';
@@ -63,7 +63,7 @@ if($output === '' || $output=='head'){
 
 if($output === '' || $output=='body'){
 ?>
-<div class="uwp-profile-content">
+<div id="tab-content" class="uwp-profile-content">
 	<?php
 	if(!empty($tabs_array)) {
 		foreach ($tabs_array as $tab) {

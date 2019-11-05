@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.0.8
+Stable tag: 1.2.0.9
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -120,6 +120,11 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.0.9 =
+* Profile tabs now used #anchor so to take user to the content - ADDED
+* Profile image on small screens can be forced to 100% width - FIXED
+* User favourites not displaying correctly to other users in some cases - FIXED
 
 = 1.2.0.8 =
 * Profile image upload not showing upload progress - FIXED

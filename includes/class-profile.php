@@ -1378,7 +1378,7 @@ class UsersWP_Profile {
 	                    var file_size = file.size;
 
 	                    // file size check
-	                    if(file_size > <?php echo absint($max_file_size);?>){
+	                    if(file_size && <?php echo absint($max_file_size);?> && file_size > <?php echo absint($max_file_size);?>){
 		                    err_container.html('<div class="uwp-alert-error text-center alert alert-danger"><?php _e( 'File too big.', 'userswp' );?></div>');
 		                    return;
 	                    }
