@@ -433,7 +433,61 @@ class UsersWP_Profile {
 			$tabs = $uwp_profile_tabs_array;
 		}else{
 			$tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
-			$uwp_profile_tabs_array = $tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s ORDER BY sort_order ASC", 'profile-tabs'));
+			$uwp_profile_tabs_array = array();
+			$displayed_user = uwp_get_user_by_author_slug();
+
+			if($displayed_user){
+				$tabs_privacy = uwp_get_tabs_privacy_by_user($displayed_user);
+            }
+
+			$tabs_result = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s ORDER BY sort_order ASC", 'profile-tabs'));
+			foreach ($tabs_result as $tab){
+				if(isset($tab->user_decided) && 1 == $tab->user_decided && !empty($tabs_privacy)){
+
+					$field_name = $tab->tab_key . '_tab_privacy';
+					$public_fields_keys = is_array($tabs_privacy) ? array_keys($tabs_privacy) : $tabs_privacy;
+					if (in_array($field_name, $public_fields_keys)) {
+						if(1 == $tabs_privacy[$field_name] && is_user_logged_in()){ // 1 for logged in users
+							$uwp_profile_tabs_array[] = $tab;
+						} elseif( 2 == $tabs_privacy[$field_name] && isset($displayed_user->ID) && ($displayed_user->ID == get_current_user_id() || current_user_can('administrator')) ){ // 2 for author and admin only
+							$uwp_profile_tabs_array[] = $tab;
+						} elseif( 0 == $tabs_privacy[$field_name] ) { // for all users
+							$uwp_profile_tabs_array[] = $tab;
+						} else {
+							// Skip tab
+						}
+					} elseif(isset($tab->tab_privacy)){
+
+						if(1 == $tab->tab_privacy && is_user_logged_in()){ // 1 for logged in users
+							$uwp_profile_tabs_array[] = $tab;
+						} elseif( 2 == $tab->tab_privacy && isset($displayed_user->ID) && ($displayed_user->ID == get_current_user_id() || current_user_can('administrator')) ){ // 2 for author and admin only
+							$uwp_profile_tabs_array[] = $tab;
+						} elseif( 0 == $tab->tab_privacy ) { // for all users
+							$uwp_profile_tabs_array[] = $tab;
+						} else {
+							// Skip tab
+						}
+
+					}
+
+				} elseif(isset($tab->tab_privacy)){
+
+					if(1 == $tab->tab_privacy && is_user_logged_in()){ // 1 for logged in users
+						$uwp_profile_tabs_array[] = $tab;
+					} elseif( 2 == $tab->tab_privacy && isset($displayed_user->ID) && ($displayed_user->ID == get_current_user_id() || current_user_can('administrator')) ){ // 2 for author and admin only
+						$uwp_profile_tabs_array[] = $tab;
+					} elseif( 0 == $tab->tab_privacy ) { // for all users
+						$uwp_profile_tabs_array[] = $tab;
+					} else {
+					    // Skip tab
+                    }
+
+				} else {
+					// Skip tab
+				}
+			}
+
+			$tabs = $uwp_profile_tabs_array;
 		}
 
 		/**

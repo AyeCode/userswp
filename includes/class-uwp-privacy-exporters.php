@@ -47,7 +47,7 @@ class UsersWP_Privacy_Exporters {
         $metadata = uwp_get_usermeta_row($user->ID);
 
         $personal_data = array();
-        $skip_keys = array('user_id', 'user_privacy');
+        $skip_keys = array('user_id', 'user_privacy', 'tabs_privacy');
         $skip_keys = apply_filters('uwp_privacy_export_skip_user_data_columns', $skip_keys, $user);
 
         if($metadata) {

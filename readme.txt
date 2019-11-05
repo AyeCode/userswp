@@ -121,6 +121,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.0.10 =
+* Profile tabs privacy for users - ADDED
+
 = 1.2.0.9 =
 * Profile tabs now used #anchor so to take user to the content - ADDED
 * Profile image on small screens can be forced to 100% width - FIXED

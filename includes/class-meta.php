@@ -30,15 +30,27 @@ class UsersWP_Meta {
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
         if (uwp_str_ends_with($key, '_privacy')) {
-            $value = 'yes';
-            $row = $wpdb->get_row($wpdb->prepare("SELECT user_privacy FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
-            if (!empty($row)) {
-                $output = isset($row['user_privacy']) ? $row['user_privacy'] : $default;
-                $public_fields = explode(',', $output);
-                if (in_array($key, $public_fields)) {
-                    $value = 'no';
-                }
-            }
+	        if (uwp_str_ends_with($key, '_tab_privacy')) {
+		        $row = $wpdb->get_row($wpdb->prepare("SELECT tabs_privacy FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
+		        $value = false;
+		        if (!empty($row)) {
+			        $public_fields = isset($row['tabs_privacy']) ? maybe_unserialize($row['tabs_privacy']) : $default;
+			        $public_fields_keys = is_array($public_fields) ? array_keys($public_fields) : $public_fields;
+			        if (is_array($public_fields) && in_array($key, $public_fields_keys)) {
+				        $value = $public_fields[$key];
+			        }
+		        }
+	        } else {
+		        $row = $wpdb->get_row($wpdb->prepare("SELECT user_privacy FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
+		        $value = 'yes';
+		        if (!empty($row)) {
+			        $output = isset($row['user_privacy']) ? $row['user_privacy'] : $default;
+			        $public_fields = explode(',', $output);
+			        if (in_array($key, $public_fields)) {
+				        $value = 'no';
+			        }
+		        }
+	        }
         } else {
             $value = null;
             $user_data = get_userdata($user_id);

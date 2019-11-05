@@ -247,6 +247,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                        data-tab_level="<?php echo isset($field['tab_level']) ? esc_attr($field['tab_level']) : 0; ?>"
                        data-tab_parent="<?php echo isset($field['tab_parent']) ? esc_attr($field['tab_parent']) : ''; ?>"
                        data-tab_content="<?php echo isset($field['tab_content']) ? esc_attr($field['tab_content']) : ''; ?>"
+                       data-tab_privacy="<?php echo isset($field['tab_privacy']) ? esc_attr($field['tab_privacy']) : 0; ?>"
+                       data-user_decided="<?php echo isset($field['user_decided']) ? esc_attr($field['user_decided']) : 0; ?>"
                        href="javascript:void(0);">
 
                         <?php
@@ -357,6 +359,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                                data-tab_level="<?php echo isset($field['tab_level']) ? esc_attr($field['tab_level']) : 0; ?>"
                                data-tab_parent="<?php echo isset($field['tab_parent']) ? esc_attr($field['tab_parent']) : ''; ?>"
                                data-tab_content="<?php echo isset($field['tab_content']) ? esc_attr($field['tab_content']) : ''; ?>"
+                               data-tab_privacy="<?php echo isset($field['tab_privacy']) ? esc_attr($field['tab_privacy']) : 0; ?>"
+                               data-user_decided="<?php echo isset($field['user_decided']) ? esc_attr($field['user_decided']) : 0; ?>"
                                href="javascript:void(0);">
                                 <?php echo $tab_icon; ?>
 							    <?php echo $field['tab_name']; ?>
@@ -432,6 +436,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 						   data-tab_level="<?php echo isset($field['tab_level']) ? esc_attr($field['tab_level']) : 0; ?>"
 						   data-tab_parent="<?php echo isset($field['tab_parent']) ? esc_attr($field['tab_parent']) : ''; ?>"
 						   data-tab_content="<?php echo isset($field['tab_content']) ? esc_attr($field['tab_content']) : ''; ?>"
+						   data-tab_privacy="<?php echo isset($field['tab_privacy']) ? esc_attr($field['tab_privacy']) : 0; ?>"
+						   data-user_decided="<?php echo isset($field['user_decided']) ? esc_attr($field['user_decided']) : 0; ?>"
                            href="javascript:void(0);">
 
                             <?php
@@ -590,7 +596,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
 		    if (isset($request['tab_type']) && $request['tab_type'] != ''){
 			    $tab_type = esc_attr($request['tab_type']);
-            } elseif($field_info) {
+            } elseif($field_info && isset( $field_info->tab_type )) {
 			    $tab_type = $field_info->tab_type;
             }else {
                 $tab_type = '';
@@ -598,7 +604,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
 		    if (isset($request['tab_name'])) {
 			    $field_site_name = esc_attr($request['tab_name']);
-		    } elseif($field_info) {
+		    } elseif($field_info && isset( $field_info->tab_name )) {
 			    $field_site_name = $field_info->tab_name;
             } else {
                 $field_site_name = '';
@@ -606,7 +612,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
 		    if (isset($request['tab_key']) && $request['tab_key'] != '') {
 			    $tab_key = esc_attr($request['tab_key']);
-		    } elseif($field_info) {
+		    } elseif($field_info && isset( $field_info->tab_key )) {
 			    $tab_key = $field_info->tab_key;
 		    } else {
 		        $tab_key = '';
@@ -614,7 +620,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
 		    if (isset($request['tab_content']) && $request['tab_content'] != '') {
 			    $tab_content = esc_attr($request['tab_content']);
-		    } elseif($field_info) {
+		    } elseif($field_info && isset( $field_info->tab_content )) {
 			    $tab_content = $field_info->tab_content;
 		    } else {
 		        $tab_content = '';
@@ -622,7 +628,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
 		    if (isset($request['tab_icon']) && $request['tab_icon'] != '') {
 			    $icon = esc_attr($request['tab_icon']);
-		    } elseif($field_info) {
+		    } elseif( $field_info && isset($field_info->tab_icon)) {
 			    $icon = $field_info->tab_icon;
 		    } else {
 		        $icon = 'fas fa-cog';
@@ -638,12 +644,20 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                 $field_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
             }
 
-            if ( isset($request['is_public']) && $request['is_public'] != '' ) {
-			    $is_public = esc_attr( $request['is_public'] );
-		    } elseif( $field_info ) {
-			    $is_public = $field_info->is_public;
+            if ( isset($request['tab_privacy']) && $request['tab_privacy'] != '' ) {
+			    $privacy = esc_attr( $request['tab_privacy'] );
+		    } elseif( $field_info && isset($field_info->tab_privacy) ) {
+			    $privacy = $field_info->tab_privacy;
 		    } else {
-		        $is_public = 1;
+		        $privacy = 1;
+		    }
+
+		    if ( isset($request['user_decided']) && $request['user_decided'] != '' ) {
+			    $user_decided = esc_attr( $request['user_decided'] );
+		    } elseif( $field_info && isset( $field_info->user_decided )) {
+			    $user_decided = $field_info->user_decided;
+		    } else {
+		        $user_decided = 0;
 		    }
 
 		    ?>
@@ -696,27 +710,36 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                             </li>
 
                             <li class="uwp-setting-name">
-                                <label for="is_public" class="uwp-tooltip-wrap">
-                                    <span class="uwp-help-tip dashicons dashicons-editor-help" title="<?php _e('If no is selected then the tab will not be visible to other users.', 'userswp'); ?>"></span>
-                                    <?php _e('Is Public :', 'userswp'); ?>
+                                <label for="privacy" class="uwp-tooltip-wrap">
+                                    <?php _e('Privacy :', 'userswp'); ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <?php
-                                        $is_public_options = array(
-                                            1 => __("Yes", "userswp"),
-                                            0 => __("No", "userswp"),
-                                            2 => __("Let User Decide", "userswp"),
+                                        $privacy_options = array(
+                                            0 => __("Anyone", "userswp"),
+                                            1 => __("Logged in", "userswp"),
+                                            2 => __("Author only", "userswp"),
                                         );
 
-                                        $is_public_options = apply_filters('uwp_tab_visibility_options', $is_public_options, $result_str, $request);
+                                        $privacy_options = apply_filters('uwp_tab_privacy_options', $privacy_options, $result_str, $request);
                                     ?>
-                                    <select name="is_public" id="is_public" class="uwp_select2">
+                                    <select name="tab_privacy" id="tab_privacy" class="uwp_select2">
                                         <?php
-                                            foreach ($is_public_options as $key => $val){
-                                                echo '<option value="'.$key.'"'. selected($is_public, $key, false).'>'.$val.'</option>';
+                                            foreach ($privacy_options as $key => $val){
+                                                echo '<option value="'.$key.'"'. selected($privacy, $key, false).'>'.$val.'</option>';
                                             }
                                         ?>
                                     </select>
+                                </div>
+                            </li>
+
+                            <li class="uwp-setting-name">
+                                <label for="user_decided" class="uwp-tooltip-wrap">
+                                    <?php _e('Let user decide :', 'userswp'); ?>
+                                </label>
+                                <div class="uwp-input-wrap">
+                                    <input type="hidden" name="user_decided" value="0" />
+                                    <input type="checkbox" name="user_decided" value="1" <?php checked( $user_decided, 1, true );?> />
                                 </div>
                             </li>
 
@@ -854,7 +877,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		    $tab_parent = !empty($request_field['tab_parent']) ? sanitize_text_field($request_field['tab_parent']) : 0;
 		    $tab_type = isset($request_field['tab_type']) ? sanitize_text_field($request_field['tab_type']) : 'standard';
 		    $form_type = isset($request_field['form_type']) ? $request_field['form_type'] : $tab_type;
-		    $is_public = isset($request_field['is_public']) ? (int)$request_field['is_public'] : 1;
+		    $tab_privacy = isset($request_field['tab_privacy']) ? (int)$request_field['tab_privacy'] : 0;
+		    $user_decided = isset($request_field['user_decided']) ? (int)$request_field['user_decided'] : 0;
 
 		    $total_tabs = $wpdb->get_var("SELECT COUNT(id) FROM {$table_name}");
 
@@ -869,7 +893,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                     'tab_icon'      => $tab_icon,
                     'tab_key'       => sanitize_text_field($tab_key),
                     'tab_content'   => sanitize_textarea_field($request_field['tab_content']),
-                    'is_public'   => $is_public,
+                    'tab_privacy'   => $tab_privacy,
+                    'user_decided'  => $user_decided,
                 );
 
             $format = array_fill( 0, count( $data ), '%s' );
