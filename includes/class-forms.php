@@ -3016,14 +3016,14 @@ class UsersWP_Forms {
                             $value = implode(',', $public_fields);
                         }
                     } else {
-                        if ($field_value == 'no') {
-                            $public_fields = array($field_name);
-                            $value = implode(',', $public_fields);
-                        } else {
-                            // For yes values no need to update since its a public field.
-                            // We store only the private fields.
-                        }
 
+	                    if ($field_value == 'no') {
+		                    $public_fields = array($field_name);
+		                    $value = implode(',', $public_fields);
+	                    } else {
+		                    // For yes values no need to update since its a public field.
+		                    // We store only the private fields.
+	                    }
                     }
 
                     uwp_update_usermeta($user_id, 'user_privacy', $value);
@@ -3035,36 +3035,31 @@ class UsersWP_Forms {
 	        $tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s AND user_decided = 1 ORDER BY sort_order ASC", 'profile-tabs'));
 
 	        if( $tabs ){
-		        $public_fields = array();
+		        $public_fields = maybe_unserialize($user_meta_info->tabs_privacy);
 		        foreach ($tabs as $tab) {
 			        $field_name = $tab->tab_key . '_tab_privacy';
 			        $field_value = strip_tags(esc_sql($_POST[$field_name]));
 
 			        if (!empty($user_meta_info->tabs_privacy)) {
-				        $public_fields = array_keys($user_meta_info->tabs_privacy);
-				        if ($field_value != 0) {
-					        if (!in_array($field_name, $public_fields)) {
-						        $public_fields[$field_name] = $field_value;
-					        }
-				        } else {
+				        if ($field_value == 0) {
 					        if (($field_name = array_search($field_name, $public_fields)) !== false) {
 						        unset($public_fields[$field_name]);
 					        }
+				        } else {
+					        $public_fields[$field_name] = $field_value;
 				        }
 			        } else {
 				        if ($field_value != 0) {
-					        $public_fields[$field_name] = $field_value;
+					        $public_fields[ $field_name ] = $field_value;
 				        }
-
 			        }
 		        }
 
 		        if($public_fields){
-			        $public_fields = maybe_serialize($public_fields);
 			        if (!empty($user_meta_info)) {
 				        $wpdb->update(
 					        $meta_table,
-					        array('tabs_privacy' => $public_fields),
+					        array('tabs_privacy' => maybe_serialize($public_fields)),
 					        array('user_id' => $user_id),
 					        array('%s'),
 					        array('%d')
