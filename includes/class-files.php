@@ -321,9 +321,9 @@ class UsersWP_Files {
 
         $value = esc_html($value);
 
-        if ($field->htmlvar_name == "uwp_banner_file") {
+        if ($field->htmlvar_name == "banner") {
             $htmlvar = "banner_thumb";
-        } elseif ($field->htmlvar_name == "uwp_avatar_file") {
+        } elseif ($field->htmlvar_name == "avatar") {
             $htmlvar = "avatar_thumb";
         } else {
             $htmlvar = $field->htmlvar_name;
@@ -355,7 +355,7 @@ class UsersWP_Files {
                 $output .= '<div class="uwp_file_preview_wrap">';
                 $output .= '<a href="'.$value.'" class="uwp_upload_file_preview"><img style="max-width:100px;" src="'.$value.'" /></a>';
                 if ($removable) {
-                    $output .= '<a onclick="return confirm(\'are you sure?\')" style="display: block;margin: 5px 0;" href="#" id="'.$htmlvar.'" data-htmlvar="'.$htmlvar.'" data-uid="'.$user_id.'" class="uwp_upload_file_remove">'. __( 'Remove Image' , 'userswp' ).'</a>';
+                    $output .= '<a onclick="return confirm(\'Are you sure?\')" style="display: block;margin: 5px 0;" href="#" id="'.$htmlvar.'" data-htmlvar="'.$htmlvar.'" data-uid="'.$user_id.'" class="uwp_upload_file_remove">'. __( 'Remove Image' , 'userswp' ).'</a>';
                 }
                 $output .= '</div>';
                 ?>
@@ -364,7 +364,7 @@ class UsersWP_Files {
                 $output .= '<div class="uwp_file_preview_wrap">';
                 $output .= '<a href="'.$value.'" class="uwp_upload_file_preview">'.$file.'</a>';
                 if ($removable) {
-                    $output .= '<a onclick="return confirm(\'are you sure?\')" style="display: block;margin: 5px 0;" href="#" id="'.$htmlvar.'" data-htmlvar="'.$htmlvar.'" data-uid="'.$user_id.'" class="uwp_upload_file_remove">'. __( 'Remove File' , 'userswp' ).'</a>';
+                    $output .= '<a onclick="return confirm(\'Are you sure?\')" style="display: block;margin: 5px 0;" href="#" id="'.$htmlvar.'" data-htmlvar="'.$htmlvar.'" data-uid="'.$user_id.'" class="uwp_upload_file_remove">'. __( 'Remove File' , 'userswp' ).'</a>';
                 }
                 $output .= '</div>';
                 ?>

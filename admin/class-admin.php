@@ -72,7 +72,7 @@ class UsersWP_Admin {
         if ( $hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php' ) {
 
             wp_enqueue_script( 'jquery-ui-datepicker', array( 'jquery' ) );
-            wp_enqueue_script( "uwp_timepicker", USERSWP_PLUGIN_URL . 'assets/js/jquery.ui.timepicker' . $suffix . '.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), USERSWP_VERSION );
+            wp_enqueue_script( "uwp_timepicker", USERSWP_PLUGIN_URL . 'assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), USERSWP_VERSION );
             wp_enqueue_script( "userswp", USERSWP_PLUGIN_URL . 'assets/js/users-wp' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
             $uwp_localize_data = uwp_get_localize_data();
             wp_localize_script('userswp', 'uwp_localize_data', $uwp_localize_data );

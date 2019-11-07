@@ -555,7 +555,7 @@ class UsersWP_Templates {
         }
 
         if (isset($_POST[$field->htmlvar_name]) && $field->field_type != 'password') {
-           // $value = $_POST[$field->htmlvar_name]; //@todo why? Patrik?
+           $value = isset($_POST[$field->htmlvar_name]) ? $_POST[$field->htmlvar_name] : ''; //@todo: Used to pre fill form when validation fails, need to find better solution
         }
         
         $field = apply_filters("uwp_form_input_field_{$field->field_type}", $field, $value, $form_type);

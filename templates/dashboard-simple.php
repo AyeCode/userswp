@@ -14,7 +14,7 @@ echo '<a href="'. apply_filters('uwp_profile_link', get_author_posts_url($curren
 
 echo '<span>';
 
-echo '<a href="'.wp_logout_url().'" class="btn btn-sm btn-outline-primary">'._e("Logout","userswp").'</a>';
+echo '<a href="'.wp_logout_url().'" class="btn btn-sm btn-outline-primary">'.__("Logout","userswp").'</a>';
 
 echo '</span>';
 

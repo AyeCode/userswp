@@ -602,47 +602,42 @@ function uwp_admin_edit_banner_fields($user) {
                         <tr>
                             <th class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?></th>
                             <td class="uwp-profile-extra-value">
-                                <?php
-                                if ($field->htmlvar_name == "uwp_avatar_file") {
-                                    $value = uwp_get_usermeta($user->ID, "avatar_thumb", "");
-                                } elseif ($field->htmlvar_name == "uwp_banner_file") {
-                                    $value = uwp_get_usermeta($user->ID, "banner_thumb", "");
-                                } else {
-                                    $value = "";
-                                }
-                                ?>
-                                <?php echo $file_obj->file_upload_preview($field, $value); ?>
-                                <?php
-                                if ($field->htmlvar_name == "uwp_avatar_file") {
-                                    if (!empty($value)) {
-                                        ?>
-                                        <a class="uwp-profile-modal-form-trigger" data-type="avatar" href="#">
-                                            <?php echo __("Change Avatar", "userswp"); ?>
-                                        </a>
-                                        <?php
-                                    } else {
-                                        ?>
-                                        <a class="uwp-profile-modal-form-trigger" data-type="avatar" href="#">
-                                            <?php echo __("Upload Avatar", "userswp"); ?>
-                                        </a>
-                                        <?php
-                                    }
-                                } elseif ($field->htmlvar_name == "uwp_banner_file") {
-                                    if (!empty($value)) {
-                                        ?>
-                                        <a class="uwp-profile-modal-form-trigger" data-type="banner" href="#">
-                                            <?php echo __("Change Banner", "userswp"); ?>
-                                        </a>
-                                        <?php
-                                    } else {
-                                        ?>
-                                        <a class="uwp-profile-modal-form-trigger" data-type="banner" href="#">
-                                            <?php echo __("Upload Banner", "userswp"); ?>
-                                        </a>
-                                        <?php
-                                    }
-                                }
-                                ?>
+		                        <?php
+		                        if ( $field->htmlvar_name == "avatar" ) {
+			                        $value = uwp_get_usermeta( $user->ID, "avatar_thumb", "" );
+		                        } elseif ( $field->htmlvar_name == "banner" ) {
+			                        $value = uwp_get_usermeta( $user->ID, "banner_thumb", "" );
+		                        } else {
+			                        $value = "";
+		                        }
+
+		                        echo $file_obj->file_upload_preview( $field, $value );
+
+		                        if ( $field->htmlvar_name == "avatar" ) {
+			                        if ( ! empty( $value ) ) {
+				                        $label = __( "Change Avatar", "userswp" );
+			                        } else {
+				                        $label = __( "Upload Avatar", "userswp" );
+			                        }
+			                        ?>
+                                    <a onclick="uwp_profile_image_change('avatar');return false;" href="#"
+                                       class="uwp-banner-change-icon-admin">
+				                        <?php echo $label; ?>
+                                    </a>
+			                        <?php
+		                        } elseif ( $field->htmlvar_name == "banner" ) {
+			                        if ( ! empty( $value ) ) {
+				                        $label = __( "Change Banner", "userswp" );
+			                        } else {
+				                        $label = __( "Upload Banner", "userswp" );
+			                        } ?>
+                                    <a onclick="uwp_profile_image_change('banner');return false;" href="#"
+                                       class="uwp-banner-change-icon-admin">
+				                        <?php echo $label; ?>
+                                    </a>
+			                        <?php
+		                        }
+		                        ?>
                             </td>
                         </tr>
                         <?php

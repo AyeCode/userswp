@@ -456,18 +456,8 @@ class UsersWP_Profile {
 						} else {
 							// Skip tab
 						}
-					} elseif(isset($tab->tab_privacy)){
-
-						if(1 == $tab->tab_privacy && is_user_logged_in()){ // 1 for logged in users
-							$uwp_profile_tabs_array[] = $tab;
-						} elseif( 2 == $tab->tab_privacy && isset($displayed_user->ID) && ($displayed_user->ID == get_current_user_id() || current_user_can('administrator')) ){ // 2 for author and admin only
-							$uwp_profile_tabs_array[] = $tab;
-						} elseif( 0 == $tab->tab_privacy ) { // for all users
-							$uwp_profile_tabs_array[] = $tab;
-						} else {
-							// Skip tab
-						}
-
+					} else {
+						$uwp_profile_tabs_array[] = $tab;
 					}
 
 				} elseif(isset($tab->tab_privacy)){
