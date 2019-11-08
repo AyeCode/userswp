@@ -2200,7 +2200,7 @@ class UsersWP_Forms {
             if ($manual_label
                 && isset($field->form_type)
                 && $field->form_type == 'login'
-                && $field->htmlvar_name == 'uwp_login_username') {
+                && $field->htmlvar_name == 'username') {
                 $site_title = __("Username or Email", 'userswp');
             }
 

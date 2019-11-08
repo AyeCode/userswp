@@ -456,8 +456,6 @@ class UsersWP_Profile {
 						} else {
 							// Skip tab
 						}
-					} else {
-						$uwp_profile_tabs_array[] = $tab;
 					}
 
 				} elseif(isset($tab->tab_privacy)){
@@ -1639,7 +1637,7 @@ class UsersWP_Profile {
             return;
         }
 
-        if ( is_author() && apply_filters( 'uwp_check_redirect_author_page', true ) ) {
+        if ( is_author() && 1 != uwp_get_option('uwp_disable_author_link') && apply_filters( 'uwp_check_redirect_author_page', true ) ) {
             $id = get_query_var( 'author' );
             $link = uwp_build_profile_tab_url( $id );
             $link = apply_filters( 'uwp_redirect_author_page', $link, $id );

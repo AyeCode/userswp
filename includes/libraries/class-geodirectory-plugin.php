@@ -1704,7 +1704,7 @@ class UsersWP_GeoDirectory_Plugin {
 	 */
 	public function gd_login_wid_login_name() {
 		if ( ! uwp_is_gdv2() ) {
-			return "uwp_login_username";
+			return "username";
 		}
 	}
 
