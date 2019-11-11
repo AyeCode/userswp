@@ -116,6 +116,7 @@ class UsersWP_Tables {
 						user_id int(20) NOT NULL,
 						user_ip varchar(20) NULL DEFAULT NULL,
 						user_privacy varchar(255) NULL DEFAULT NULL,
+						tabs_privacy varchar(255) NULL DEFAULT NULL,
 						username varchar(255) NULL DEFAULT NULL,
 						email varchar(255) NULL DEFAULT NULL,
 						first_name varchar(255) NULL DEFAULT NULL,
@@ -140,6 +141,8 @@ class UsersWP_Tables {
 							  tab_type varchar(100) NOT NULL,
 							  tab_level int(11) NOT NULL,
 							  tab_parent int(11) NOT NULL,
+							  tab_privacy int(11) NOT NULL DEFAULT '0',
+							  user_decided int(11) NOT NULL DEFAULT '0',
 							  tab_name varchar(255) NOT NULL,
 							  tab_icon varchar(255) NOT NULL,
 							  tab_key varchar(255) NOT NULL,
@@ -150,8 +153,6 @@ class UsersWP_Tables {
         $tabs_tbl_query = apply_filters('uwp_profile_tabs_table_create_query', $tabs_tbl_query);
 
         dbDelta($tabs_tbl_query);
-
-        
 
     }
 

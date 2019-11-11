@@ -314,7 +314,9 @@ jQuery(document).ready(function () {
                 'tab_type':          jQuery(this).data('tab_type'),
                 'tab_icon':          jQuery(this).data('tab_icon'),
                 'tab_key':           jQuery(this).data('tab_key'),
-                'tab_content':       jQuery(this).data('tab_content')
+                'tab_content':       jQuery(this).data('tab_content'),
+                'tab_privacy':       jQuery(this).data('tab_privacy'),
+                'user_decided':      jQuery(this).data('user_decided')
             };
         }
 

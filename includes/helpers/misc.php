@@ -602,47 +602,42 @@ function uwp_admin_edit_banner_fields($user) {
                         <tr>
                             <th class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?></th>
                             <td class="uwp-profile-extra-value">
-                                <?php
-                                if ($field->htmlvar_name == "uwp_avatar_file") {
-                                    $value = uwp_get_usermeta($user->ID, "avatar_thumb", "");
-                                } elseif ($field->htmlvar_name == "uwp_banner_file") {
-                                    $value = uwp_get_usermeta($user->ID, "banner_thumb", "");
-                                } else {
-                                    $value = "";
-                                }
-                                ?>
-                                <?php echo $file_obj->file_upload_preview($field, $value); ?>
-                                <?php
-                                if ($field->htmlvar_name == "uwp_avatar_file") {
-                                    if (!empty($value)) {
-                                        ?>
-                                        <a class="uwp-profile-modal-form-trigger" data-type="avatar" href="#">
-                                            <?php echo __("Change Avatar", "userswp"); ?>
-                                        </a>
-                                        <?php
-                                    } else {
-                                        ?>
-                                        <a class="uwp-profile-modal-form-trigger" data-type="avatar" href="#">
-                                            <?php echo __("Upload Avatar", "userswp"); ?>
-                                        </a>
-                                        <?php
-                                    }
-                                } elseif ($field->htmlvar_name == "uwp_banner_file") {
-                                    if (!empty($value)) {
-                                        ?>
-                                        <a class="uwp-profile-modal-form-trigger" data-type="banner" href="#">
-                                            <?php echo __("Change Banner", "userswp"); ?>
-                                        </a>
-                                        <?php
-                                    } else {
-                                        ?>
-                                        <a class="uwp-profile-modal-form-trigger" data-type="banner" href="#">
-                                            <?php echo __("Upload Banner", "userswp"); ?>
-                                        </a>
-                                        <?php
-                                    }
-                                }
-                                ?>
+		                        <?php
+		                        if ( $field->htmlvar_name == "avatar" ) {
+			                        $value = uwp_get_usermeta( $user->ID, "avatar_thumb", "" );
+		                        } elseif ( $field->htmlvar_name == "banner" ) {
+			                        $value = uwp_get_usermeta( $user->ID, "banner_thumb", "" );
+		                        } else {
+			                        $value = "";
+		                        }
+
+		                        echo $file_obj->file_upload_preview( $field, $value );
+
+		                        if ( $field->htmlvar_name == "avatar" ) {
+			                        if ( ! empty( $value ) ) {
+				                        $label = __( "Change Avatar", "userswp" );
+			                        } else {
+				                        $label = __( "Upload Avatar", "userswp" );
+			                        }
+			                        ?>
+                                    <a onclick="uwp_profile_image_change('avatar');return false;" href="#"
+                                       class="uwp-banner-change-icon-admin">
+				                        <?php echo $label; ?>
+                                    </a>
+			                        <?php
+		                        } elseif ( $field->htmlvar_name == "banner" ) {
+			                        if ( ! empty( $value ) ) {
+				                        $label = __( "Change Banner", "userswp" );
+			                        } else {
+				                        $label = __( "Upload Banner", "userswp" );
+			                        } ?>
+                                    <a onclick="uwp_profile_image_change('banner');return false;" href="#"
+                                       class="uwp-banner-change-icon-admin">
+				                        <?php echo $label; ?>
+                                    </a>
+			                        <?php
+		                        }
+		                        ?>
                             </td>
                         </tr>
                         <?php
@@ -677,7 +672,7 @@ add_filter('uwp_account_page_title', 'uwp_account_privacy_page_title', 10, 2);
  * @param       string      $title      Privacy title.
  * @param       string      $type       Tab type.
  *
- * @return      string|void             Title.
+ * @return      string             Title.
  */
 function uwp_account_privacy_page_title($title, $type) {
     if ($type == 'privacy') {
@@ -745,6 +740,55 @@ function uwp_account_privacy_edit_form_display($type) {
                             </div>
                         <?php }
                     }
+
+                    global $wpdb;
+                    $tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
+                    $tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s AND user_decided = 1 ORDER BY sort_order ASC", 'profile-tabs'));
+
+                    if( $tabs ){ ?>
+                        <div class="uwp-profile-extra-wrap row">
+                            <div class="uwp-profile-extra-key col" style="font-weight: bold;">
+			                    <?php echo __("Tab Name", "userswp") ?>
+                            </div>
+                            <div class="uwp-profile-extra-value col" style="font-weight: bold;">
+			                    <?php echo __("Privacy", "userswp") ?>
+                            </div>
+                        </div>
+                    <?php }
+
+                    foreach ($tabs as $tab) { ?>
+                        <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
+                            <div class="uwp-profile-extra-key col"><?php _e($tab->tab_name, 'userswp'); ?>
+                                <span class="uwp-profile-extra-sep">:</span></div>
+                            <div class="uwp-profile-extra-value col">
+			                    <?php
+			                    $field_name = $tab->tab_key . '_tab_privacy';
+			                    $value = uwp_get_usermeta($user_id, $field_name, false);
+			                    if ($value === false) {
+				                    $value = 0;
+			                    }
+
+			                    $privacy_options = array(
+				                    0 => __("Anyone", "userswp"),
+				                    1 => __("Logged in", "userswp"),
+				                    2 => __("Author only", "userswp"),
+			                    );
+
+			                    $privacy_options = apply_filters('uwp_tab_privacy_options', $privacy_options);
+
+			                    ?>
+                                <select name="<?php echo $field_name; ?>" class="uwp_tab_privacy_field uwp_select2 <?php echo $bs_form_control; ?>"
+                                        style="margin: 0;">
+	                                <?php
+	                                foreach ($privacy_options as $key => $val){
+		                                echo '<option value="'.$key.'"'. selected($value, $key, false).'>'.$val.'</option>';
+	                                }
+	                                ?>
+                                </select>
+                            </div>
+                        </div>
+                    <?php }
+
                     $value = get_user_meta($user_id, 'uwp_hide_from_listing', true); ?>
                     <div class="uwp-profile-extra-wrap">
                         <div id="uwp_hide_from_listing" class="uwp_hide_from_listing">
@@ -1953,4 +1997,18 @@ function uwp_is_gdv2(){
 	}
 
 	return false;
+}
+
+function uwp_get_tabs_privacy_by_user($user){
+    global $wpdb;
+
+    if(is_integer($user)){
+	    $user = get_userdata($user);
+    }
+
+	$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+	$user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT tabs_privacy FROM $meta_table WHERE user_id = %d", $user->ID ) );
+	$tabs_privacy = maybe_unserialize($user_meta_info->tabs_privacy);
+
+	return $tabs_privacy;
 }

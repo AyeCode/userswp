@@ -2200,7 +2200,7 @@ class UsersWP_Forms {
             if ($manual_label
                 && isset($field->form_type)
                 && $field->form_type == 'login'
-                && $field->htmlvar_name == 'uwp_login_username') {
+                && $field->htmlvar_name == 'username') {
                 $site_title = __("Username or Email", 'userswp');
             }
 
@@ -2984,6 +2984,7 @@ class UsersWP_Forms {
                 return;
             }
 
+	        // Save fields privacy settings
             $extra_where = "AND is_public='2'";
             $fields = get_account_form_fields($extra_where);
             $fields = apply_filters('uwp_account_privacy_fields', $fields);
@@ -2991,11 +2992,13 @@ class UsersWP_Forms {
             global $wpdb;
             $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
+	        $user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT user_privacy, tabs_privacy FROM $meta_table WHERE user_id = %d", $user_id ) );
+
             if ($fields) {
+
                 foreach ($fields as $field) {
                     $field_name = $field->htmlvar_name.'_privacy';
 
-                    $user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT user_privacy FROM $meta_table WHERE user_id = %d", $user_id ) );
                     $field_value = strip_tags(esc_sql($_POST[$field_name]));
                     $value = '';
 
@@ -3013,19 +3016,62 @@ class UsersWP_Forms {
                             $value = implode(',', $public_fields);
                         }
                     } else {
-                        if ($field_value == 'no') {
-                            $public_fields = array($field_name);
-                            $value = implode(',', $public_fields);
-                        } else {
-                            // For yes values no need to update since its a public field.
-                            // We store only the private fields.
-                        }
 
+	                    if ($field_value == 'no') {
+		                    $public_fields = array($field_name);
+		                    $value = implode(',', $public_fields);
+	                    } else {
+		                    // For yes values no need to update since its a public field.
+		                    // We store only the private fields.
+	                    }
                     }
 
                     uwp_update_usermeta($user_id, 'user_privacy', $value);
                 }
             }
+
+            // Save tabs privacy settings
+	        $tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
+	        $tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s AND user_decided = 1 ORDER BY sort_order ASC", 'profile-tabs'));
+
+	        if( $tabs ){
+		        $public_fields = maybe_unserialize($user_meta_info->tabs_privacy);
+		        foreach ($tabs as $tab) {
+			        $field_name = $tab->tab_key . '_tab_privacy';
+			        $field_value = strip_tags(esc_sql($_POST[$field_name]));
+
+			        if (!empty($user_meta_info->tabs_privacy)) {
+				        if ($field_value == 0) {
+					        if (($field_name = array_search($field_name, $public_fields)) !== false) {
+						        unset($public_fields[$field_name]);
+					        }
+				        } else {
+					        $public_fields[$field_name] = $field_value;
+				        }
+			        } else {
+				        if ($field_value != 0) {
+					        $public_fields[ $field_name ] = $field_value;
+				        }
+			        }
+		        }
+
+		        if($public_fields){
+			        if (!empty($user_meta_info)) {
+				        $wpdb->update(
+					        $meta_table,
+					        array('tabs_privacy' => maybe_serialize($public_fields)),
+					        array('user_id' => $user_id),
+					        array('%s'),
+					        array('%d')
+				        );
+			        } else {
+				        $wpdb->insert(
+					        $meta_table,
+					        array('user_id' => $user_id, 'tabs_privacy' => $public_fields)
+				        );
+			        }
+                }
+	        }
 
             if (isset($_POST['uwp_hide_from_listing']) && 1 == $_POST['uwp_hide_from_listing']) {
                 update_user_meta($user_id, 'uwp_hide_from_listing', 1);
