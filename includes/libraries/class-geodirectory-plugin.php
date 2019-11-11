@@ -335,7 +335,9 @@ class UsersWP_GeoDirectory_Plugin {
 			'tab_name'    => __( 'Listings', 'userswp' ),
 			'tab_icon'    => 'fas fa-globe-americas',
 			'tab_key'     => 'listings',
-			'tab_content' => ''
+			'tab_content' => '',
+			'tab_privacy' => '0',
+			'user_decided' => '1',
 		);
 
 		$fields[] = array(
@@ -343,7 +345,9 @@ class UsersWP_GeoDirectory_Plugin {
 			'tab_name'    => __( 'Reviews', 'userswp' ),
 			'tab_icon'    => 'fas fa-star',
 			'tab_key'     => 'reviews',
-			'tab_content' => ''
+			'tab_content' => '',
+			'tab_privacy' => '0',
+			'user_decided' => '1',
 		);
 
 		$fields[] = array(
@@ -351,7 +355,9 @@ class UsersWP_GeoDirectory_Plugin {
 			'tab_name'    => __( 'Favorites', 'userswp' ),
 			'tab_icon'    => 'fas fa-heart',
 			'tab_key'     => 'favorites',
-			'tab_content' => ''
+			'tab_content' => '',
+			'tab_privacy' => '0',
+			'user_decided' => '1',
 		);
 
 		return $fields;

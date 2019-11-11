@@ -2699,6 +2699,9 @@ class UsersWP_Forms {
         $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND field_type != 'fieldset' ORDER BY sort_order ASC");
         if ($fields) {
             $result = uwp_validate_fields($_POST, 'account', $fields);
+            if(is_wp_error($result )){
+                die($result->get_error_message());
+            }
             if (isset($result['display_name']) && !empty($result['display_name'])) {
                 $display_name = $result['display_name'];
             } else {
@@ -3036,26 +3039,25 @@ class UsersWP_Forms {
 
 	        if( $tabs ){
 		        $public_fields = maybe_unserialize($user_meta_info->tabs_privacy);
+//                print_r( $public_fields );exit;
+                $do_tabs_update = false;
 		        foreach ($tabs as $tab) {
 			        $field_name = $tab->tab_key . '_tab_privacy';
-			        $field_value = strip_tags(esc_sql($_POST[$field_name]));
 
-			        if (!empty($user_meta_info->tabs_privacy)) {
-				        if ($field_value == 0) {
-					        if (($field_name = array_search($field_name, $public_fields)) !== false) {
-						        unset($public_fields[$field_name]);
-					        }
-				        } else {
-					        $public_fields[$field_name] = $field_value;
-				        }
-			        } else {
-				        if ($field_value != 0) {
-					        $public_fields[ $field_name ] = $field_value;
-				        }
-			        }
+                    if(isset($_POST[$field_name])){
+                        $do_tabs_update = true;
+                        $field_value = $_POST[$field_name] == '' ? '' : absint($_POST[$field_name]);
+
+                        if($field_value==='' && isset($public_fields[$field_name])){
+                            unset($public_fields[$field_name]);
+                        }else{
+                            $public_fields[$field_name] =  $field_value;
+                        }
+                    }
+
 		        }
 
-		        if($public_fields){
+		        if($do_tabs_update){
 			        if (!empty($user_meta_info)) {
 				        $wpdb->update(
 					        $meta_table,

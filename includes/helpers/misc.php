@@ -763,16 +763,18 @@ function uwp_account_privacy_edit_form_display($type) {
                             <div class="uwp-profile-extra-value col">
 			                    <?php
 			                    $field_name = $tab->tab_key . '_tab_privacy';
-			                    $value = uwp_get_usermeta($user_id, $field_name, false);
-			                    if ($value === false) {
-				                    $value = 0;
-			                    }
+			                    $value = uwp_get_usermeta($user_id, $field_name, '');
 
 			                    $privacy_options = array(
-				                    0 => __("Anyone", "userswp"),
+                                    0 => __("Anyone", "userswp"),
 				                    1 => __("Logged in", "userswp"),
 				                    2 => __("Author only", "userswp"),
 			                    );
+
+                                // Admin default
+                                $admin_privacy = isset($tab->tab_privacy) ? absint($tab->tab_privacy) : 0;
+                                // add default to the start of the array
+                                $privacy_options = array_merge(array('' => sprintf(__("Default (%s)", "userswp"),strtolower($privacy_options[$admin_privacy]))),$privacy_options);
 
 			                    $privacy_options = apply_filters('uwp_tab_privacy_options', $privacy_options);
 

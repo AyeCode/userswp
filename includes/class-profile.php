@@ -443,7 +443,7 @@ class UsersWP_Profile {
 			$tabs_result = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s ORDER BY sort_order ASC", 'profile-tabs'));
 			foreach ($tabs_result as $tab){
 				if(isset($tab->user_decided) && 1 == $tab->user_decided && !empty($tabs_privacy)){
-
+//echo '###';print_r($tabs_privacy);exit;
 					$field_name = $tab->tab_key . '_tab_privacy';
 					$public_fields_keys = is_array($tabs_privacy) ? array_keys($tabs_privacy) : $tabs_privacy;
 					if (in_array($field_name, $public_fields_keys)) {

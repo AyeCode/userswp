@@ -251,7 +251,7 @@ class UsersWP_Validation {
                 }
 
                 // Check the username for login
-                if ($field->htmlvar_name == 'username') {
+                if ($type != 'account' && $field->htmlvar_name == 'username') {
                     if (!validate_username($sanitized_value)) {
                         $errors->add('invalid_username', $incorrect_username_error_msg);
                         return $errors;

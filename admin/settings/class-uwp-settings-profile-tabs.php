@@ -645,7 +645,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
             }
 
             if ( isset($request['tab_privacy']) && $request['tab_privacy'] != '' ) {
-			    $privacy = esc_attr( $request['tab_privacy'] );
+			    $privacy = absint( $request['tab_privacy'] );
 		    } elseif( $field_info && isset($field_info->tab_privacy) ) {
 			    $privacy = $field_info->tab_privacy;
 		    } else {

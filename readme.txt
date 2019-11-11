@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.0.9
+Stable tag: 1.2.0.10
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -122,9 +122,10 @@ No questions so far, but don't hesitate to ask!
 == Changelog ==
 
 = 1.2.0.10 =
-* Profile tabs privacy for users - ADDED
+* Profile tabs privacy settings for users - ADDED
 * Avatar and banner fields showing blank on admin side edit user profile page - FIXED
 * Hide cover image argument in profile header shortcode not working for bootstrap layout - FIXED
+* Display table for profile image not displaying right on firefox - FIXED
 
 = 1.2.0.9 =
 * Profile tabs now used #anchor so to take user to the content - ADDED
