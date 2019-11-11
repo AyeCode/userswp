@@ -137,8 +137,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			// maybe load JS
 			if ( $this->settings['js'] ) {
 
-				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
-				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
+				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
+				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
 
 			}
 
@@ -446,27 +446,38 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		public function enqueue_scripts() {
 
 			// select2
-			wp_register_script( 'select2', $this->url.'assets/js/select2.min.js', array(), $this->select2_version );
+			wp_register_script( 'select2', $this->url.'assets/js/select2.min.js', array('jquery'), $this->select2_version );
 
 			// Bootstrap file browser
 			wp_register_script( 'aui-custom-file-input', $url = $this->url.'assets/js/bs-custom-file-input.min.js', array('jquery'), $this->select2_version );
 			wp_add_inline_script( 'aui-custom-file-input', $this->inline_script_file_browser() );
 
+			$load_inline = false;
 
 			if($this->settings['js']=='core-popper'){
 				// Bootstrap bundle
 				$url = $this->url.'assets/js/bootstrap.bundle.min.js';
-				wp_register_script( 'bootstrap-js-bundle', $url, array('select2'), $this->latest );
+				wp_register_script( 'bootstrap-js-bundle', $url, array('select2','jquery'), $this->latest );
 				wp_enqueue_script( 'bootstrap-js-bundle' );
 				$script = $this->inline_script();
 				wp_add_inline_script( 'bootstrap-js-bundle', $script );
 			}elseif($this->settings['js']=='popper'){
 				$url = $this->url.'assets/js/popper.min.js';
-				wp_register_script( 'bootstrap-js-popper', $url, array(), $this->latest );
+				wp_register_script( 'bootstrap-js-popper', $url, array('jquery'), $this->latest );
 				wp_enqueue_script( 'bootstrap-js-popper' );
+				$load_inline = true;
+			}else{
+				$load_inline = true;
 			}
 
-
+			// Load needed inline scripts by faking the loading of a script if the main script is not being loaded
+			if($load_inline){
+				wp_register_script( 'bootstrap-dummy', '',array('jquery') );
+				wp_enqueue_script( 'bootstrap-dummy' );
+				$script = $this->inline_script();
+				wp_add_inline_script( 'bootstrap-dummy', $script  );
+			}
+			
 		}
 
 		/**
@@ -478,13 +489,15 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 			$url = '';
 			// check if we are inside a plugin
-			$file_dir = str_replace("/includes","", dirname( __FILE__ ));
+			$file_dir = str_replace( "/includes","", wp_normalize_path( dirname( __FILE__ ) ) );
 
-			$dir_parts = explode("/wp-content/",$file_dir);
-			$url_parts = explode("/wp-content/",plugins_url());
+			// add check in-case user has changed wp-content dir name.
+			$wp_content_folder_name = basename(WP_CONTENT_DIR);
+			$dir_parts = explode("/$wp_content_folder_name/",$file_dir);
+			$url_parts = explode("/$wp_content_folder_name/",plugins_url());
 
 			if(!empty($url_parts[0]) && !empty($dir_parts[1])){
-				$url = trailingslashit( $url_parts[0]."/wp-content/".$dir_parts[1] );
+				$url = trailingslashit( $url_parts[0]."/$wp_content_folder_name/".$dir_parts[1] );
 			}
 
 			return $url;
@@ -510,6 +523,18 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 
 		/**
+		 * Get a list of themes and their default JS settings.
+		 * 
+		 * @return array
+		 */
+		public function theme_js_settings(){
+			return array(
+				'ayetheme' => 'popper',
+				'listimia' => 'required',
+			);
+		}
+
+		/**
 		 * Get the current Font Awesome output settings.
 		 *
 		 * @return array The array of settings.
@@ -517,10 +542,20 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		public function get_settings() {
 
 			$db_settings = get_option( 'ayecode-ui-settings' );
+			$js_default = 'core-popper';
+
+			// maybe set defaults (if no settings set)
+			if(empty($db_settings)){
+				$active_theme = get_template(); // active parent theme.
+				$theme_js_settings = self::theme_js_settings();
+				if(isset($theme_js_settings[$active_theme])){
+					$js_default = $theme_js_settings[$active_theme];
+				}
+			}
 
 			$defaults = array(
 				'css'       => 'compatibility', // core, compatibility
-				'js'        => 'core-popper', // js to load, core-popper, popper
+				'js'        => $js_default, // js to load, core-popper, popper
 				'html_font_size'        => '16', // js to load, core-popper, popper
 			);
 
@@ -570,7 +605,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 								<select name="ayecode-ui-settings[js]" id="wpbs-js">
 									<option	value="core-popper" <?php selected( $this->settings['js'], 'core-popper' ); ?>><?php _e( 'Core + Popper (default)', 'aui' ); ?></option>
 									<option value="popper" <?php selected( $this->settings['js'], 'popper' ); ?>><?php _e( 'Popper', 'aui' ); ?></option>
-									<option	value="" <?php selected( $this->settings['js'], '' ); ?>><?php _e( 'Disabled', 'aui' ); ?></option>
+									<option value="required" <?php selected( $this->settings['js'], 'required' ); ?>><?php _e( 'Required functions only', 'aui' ); ?></option>
+									<option	value="" <?php selected( $this->settings['js'], '' ); ?>><?php _e( 'Disabled (not recommended)', 'aui' ); ?></option>
 								</select>
 							</td>
 						</tr>
