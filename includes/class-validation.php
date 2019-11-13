@@ -268,17 +268,7 @@ class UsersWP_Validation {
         if (!empty($error_code)) {
             return $errors;
         }
-
-        if ($type == 'login') {
-            $password_type = 'login';
-        } elseif ($type == 'reset') {
-            $password_type = 'reset';
-        } elseif ($type == 'change') {
-            $password_type = 'change';
-        } else {
-            $password_type = 'account';
-        }
-
+        
         if ( $type == 'change' && $enable_old_password == '1' ) {
 	        $old_pass = isset($data['old_password']) ? $data['old_password'] : "";
         	//check old password
