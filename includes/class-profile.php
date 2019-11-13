@@ -1637,7 +1637,7 @@ class UsersWP_Profile {
             return;
         }
 
-        if ( is_author() && 1 != uwp_get_option('uwp_disable_author_link') && apply_filters( 'uwp_check_redirect_author_page', true ) ) {
+        if ( is_author() && apply_filters( 'uwp_check_redirect_author_page', true ) ) {
             $id = get_query_var( 'author' );
             $link = uwp_build_profile_tab_url( $id );
             $link = apply_filters( 'uwp_redirect_author_page', $link, $id );
@@ -1723,9 +1723,9 @@ class UsersWP_Profile {
      */
     public function handle_file_upload_error_checks($value, $field, $file_key, $file_to_upload) {
         
-        if (in_array($field->htmlvar_name, array('uwp_avatar_file', 'uwp_banner_file'))) {
+        if (in_array($field->htmlvar_name, array('avatar', 'banner'))) {
 
-            if ($field->htmlvar_name == 'uwp_avatar_file') {
+            if ($field->htmlvar_name == 'avatar') {
                 $min_width  = apply_filters('uwp_avatar_image_width', 150);
                 $min_height = apply_filters('uwp_avatar_image_height', 150);
             } else {

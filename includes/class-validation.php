@@ -120,11 +120,6 @@ class UsersWP_Validation {
 
                 $value = isset($data[$field->htmlvar_name]) ? $data[$field->htmlvar_name] : '';
                 $sanitized_value = $value;
-
-//                if ($field->field_type == 'password') {
-//                    continue;
-//                }
-
                 $sanitized = false;
 
                 // sanitize our default fields
@@ -268,7 +263,7 @@ class UsersWP_Validation {
         if (!empty($error_code)) {
             return $errors;
         }
-        
+
         if ( $type == 'change' && $enable_old_password == '1' ) {
 	        $old_pass = isset($data['old_password']) ? $data['old_password'] : "";
         	//check old password
