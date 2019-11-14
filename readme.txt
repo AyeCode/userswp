@@ -124,6 +124,7 @@ No questions so far, but don't hesitate to ask!
 = 1.2.0.11 =
 * Old password showing invalid always on change password form - FIXED
 * Changes to fix unknown column error for avatar and banner usermeta - FIXED
+* Changes to fix redirection issue when author redirect is disabled - FIXED
 
 = 1.2.0.10 =
 * Profile tabs privacy settings for users - ADDED

@@ -1093,6 +1093,15 @@ class UsersWP_Profile {
         return $query_vars;
     }
 
+    public function get_author_link($link, $user_id){
+
+        if (1 == uwp_get_option('uwp_disable_author_link')) {
+		    return $link;
+	    }
+
+	    return $this->get_profile_link($link, $user_id);
+    }
+
     /**
      * Returns user profile link based on user id.
      *
@@ -1103,10 +1112,6 @@ class UsersWP_Profile {
      * @return      string                          Modified link.
      */
     public function get_profile_link($link, $user_id) {
-
-        if (1 == uwp_get_option('uwp_disable_author_link')) {
-            return $link;
-        }
 
         $page_id = uwp_get_page_id('profile_page', false);
 
@@ -1637,7 +1642,7 @@ class UsersWP_Profile {
             return;
         }
 
-        if ( is_author() && apply_filters( 'uwp_check_redirect_author_page', true ) ) {
+        if ( is_author() && 1 != uwp_get_option('uwp_disable_author_link') && apply_filters( 'uwp_check_redirect_author_page', true ) ) {
             $id = get_query_var( 'author' );
             $link = uwp_build_profile_tab_url( $id );
             $link = apply_filters( 'uwp_redirect_author_page', $link, $id );

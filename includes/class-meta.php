@@ -63,7 +63,7 @@ class UsersWP_Meta {
                 default :
                     $row = $wpdb->get_row($wpdb->prepare("SELECT {$key} FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
                     if (!empty($row)) {
-                        $value = !empty($row[$key]) ? $row[$key] : $default;
+                        $value = isset($row[$key]) ? $row[$key] : $default;
                     } else {
                         $value = $default;
                     }
