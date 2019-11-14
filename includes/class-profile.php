@@ -1093,6 +1093,15 @@ class UsersWP_Profile {
         return $query_vars;
     }
 
+    public function get_author_link($link, $user_id){
+
+        if (1 == uwp_get_option('uwp_disable_author_link')) {
+		    return $link;
+	    }
+
+	    return $this->get_profile_link($link, $user_id);
+    }
+
     /**
      * Returns user profile link based on user id.
      *
@@ -1103,10 +1112,6 @@ class UsersWP_Profile {
      * @return      string                          Modified link.
      */
     public function get_profile_link($link, $user_id) {
-
-        if (1 == uwp_get_option('uwp_disable_author_link')) {
-            return $link;
-        }
 
         $page_id = uwp_get_page_id('profile_page', false);
 
@@ -1723,9 +1728,9 @@ class UsersWP_Profile {
      */
     public function handle_file_upload_error_checks($value, $field, $file_key, $file_to_upload) {
         
-        if (in_array($field->htmlvar_name, array('uwp_avatar_file', 'uwp_banner_file'))) {
+        if (in_array($field->htmlvar_name, array('avatar', 'banner'))) {
 
-            if ($field->htmlvar_name == 'uwp_avatar_file') {
+            if ($field->htmlvar_name == 'avatar') {
                 $min_width  = apply_filters('uwp_avatar_image_width', 150);
                 $min_height = apply_filters('uwp_avatar_image_height', 150);
             } else {

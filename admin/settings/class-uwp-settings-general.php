@@ -420,7 +420,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 ),
                 array(
                     'id'   => 'uwp_disable_author_link',
-                    'name' => __( 'Disable author link redirect to UsersWP profile page.', 'userswp' ),
+                    'name' => __( 'Disable author redirect to UsersWP profile page.', 'userswp' ),
                     'type' => 'checkbox',
                     'default'  => '0',
                     'advanced'  => true,

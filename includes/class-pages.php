@@ -542,7 +542,7 @@ class UsersWP_Pages {
      */
     public function build_profile_tab_url($user_id, $tab = false, $subtab = false) {
 
-        $link = apply_filters('uwp_profile_link', get_author_posts_url($user_id), $user_id);
+	    $link = apply_filters('uwp_profile_link', get_author_posts_url($user_id), $user_id);
 
         if ($link != '') {
             if (isset($_REQUEST['page_id'])) {

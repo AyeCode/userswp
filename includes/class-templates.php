@@ -213,7 +213,8 @@ class UsersWP_Templates {
                 } else {
                     if (is_user_logged_in()) {
                         $user_id = get_current_user_id();
-                        $profile_url = uwp_build_profile_tab_url($user_id);
+                        $obj = new UsersWP_Profile();
+	                    $profile_url = $obj->get_profile_link(get_author_posts_url($user_id), $user_id);
                         wp_redirect( $profile_url );
                         exit();
                     } else {
@@ -550,7 +551,7 @@ class UsersWP_Templates {
 
         }
 
-        if (empty($value)) {
+        if (!isset($value)) {
             $value = "";
         }
 

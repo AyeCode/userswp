@@ -120,11 +120,6 @@ class UsersWP_Validation {
 
                 $value = isset($data[$field->htmlvar_name]) ? $data[$field->htmlvar_name] : '';
                 $sanitized_value = $value;
-
-//                if ($field->field_type == 'password') {
-//                    continue;
-//                }
-
                 $sanitized = false;
 
                 // sanitize our default fields
@@ -269,31 +264,21 @@ class UsersWP_Validation {
             return $errors;
         }
 
-        if ($type == 'login') {
-            $password_type = 'login';
-        } elseif ($type == 'reset') {
-            $password_type = 'reset';
-        } elseif ($type == 'change') {
-            $password_type = 'change';
-        } else {
-            $password_type = 'account';
-        }
-
-        if (($type == 'change' && $enable_old_password == '1')) {
-            //check old password
-            if( empty( $data['uwp_'.$password_type.'_old_password'] ) ) {
+        if ( $type == 'change' && $enable_old_password == '1' ) {
+	        $old_pass = isset($data['old_password']) ? $data['old_password'] : "";
+        	//check old password
+            if( empty( $old_pass ) ) {
                 $errors->add( 'empty_password', __( '<strong>Error</strong>: Please enter your old password', 'userswp' ) );
                 return $errors;
             }
 
-            $pass = $data['uwp_'.$password_type.'_old_password'];
             $user = get_user_by( 'id', get_current_user_id() );
-            if ( !wp_check_password( $pass, $user->data->user_pass, $user->ID) ) {
+            if ( !wp_check_password( $old_pass, $user->data->user_pass, $user->ID) ) {
                 $errors->add( 'invalid_password', __( '<strong>Error</strong>: Incorrect old password', 'userswp' ) );
                 return $errors;
             }
 
-            if( $data['uwp_'.$password_type.'_old_password'] == $data['uwp_'.$password_type.'_password'] ) {
+            if( $old_pass == $data['password'] ) {
                 $errors->add( 'invalid_password', __( '<strong>Error</strong>: Old password and new password are same', 'userswp' ) );
                 return $errors;
             }

@@ -761,7 +761,7 @@ class UsersWP_Forms {
         $email = new UsersWP_Mails();
         $email->send( 'change', $user_data->ID );
 
-        wp_set_password( $data['uwp_change_password'], $user_data->ID );
+        wp_set_password( $result['password'], $user_data->ID );
         wp_set_auth_cookie( $user_data->ID, false);
 
         $message = aui()->alert(array(
