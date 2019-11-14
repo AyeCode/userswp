@@ -443,7 +443,7 @@ class UsersWP_Profile {
 			$tabs_result = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s ORDER BY sort_order ASC", 'profile-tabs'));
 			foreach ($tabs_result as $tab){
 				if(isset($tab->user_decided) && 1 == $tab->user_decided && !empty($tabs_privacy)){
-//echo '###';print_r($tabs_privacy);exit;
+
 					$field_name = $tab->tab_key . '_tab_privacy';
 					$public_fields_keys = is_array($tabs_privacy) ? array_keys($tabs_privacy) : $tabs_privacy;
 					if (in_array($field_name, $public_fields_keys)) {
@@ -494,50 +494,35 @@ class UsersWP_Profile {
 	 */
 	public function get_tabs(){
 
+		// get the settings
 		global $uwp_profile_tabs_array;
 		// check if we have been here before
-		$tabs_array = !empty($uwp_profile_tabs_array) ? $uwp_profile_tabs_array : array();
+		$tabs = !empty($uwp_profile_tabs_array) ? $uwp_profile_tabs_array : $this->get_tab_settings();
 
-
-
-//		$tabs = array();
-
-//		$tabs = $settings;
-
-		if(empty($tabs_array)){
-
-			// get the settings
-			$tabs = $this->get_tab_settings();
-
-			if(!empty($tabs)){
-				// get the tab contents first so we can decide to output the tab head
-				$tabs_content = array();
-				foreach($tabs as $tab){
-					$tabs_content[$tab->id."tab"] = $this->tab_content($tab);
-				}
-
-				// setup the array
-				if(!empty($tabs)){
-					foreach($tabs as $tab) {
-						if ( isset($tab->tab_level) && $tab->tab_level > 0 ) {
-							continue;
-						}
-						if ( empty( $tabs_content[ $tab->id . "tab" ] ) ) {
-							continue;
-						}
-
-						$tab->tab_content_rendered = $tabs_content[$tab->id."tab"];
-						$tabs_array[] = (array) $tab;
-					}
-				}
-
-//				echo '@@@';
-//				print_r($tabs_array);
+		$tabs_array = array();
+		
+		if(!empty($tabs)){
+			// get the tab contents first so we can decide to output the tab head
+			$tabs_content = array();
+			foreach($tabs as $tab){
+				$tabs_content[$tab->id."tab"] = $this->tab_content($tab);
 			}
 
+			// setup the array
+			foreach($tabs as $tab) {
+				if ( isset($tab->tab_level) && $tab->tab_level > 0 ) {
+					continue;
+				}
+				if ( empty( $tabs_content[ $tab->id . "tab" ] ) ) {
+					continue;
+				}
 
+				$tab->tab_content_rendered = $tabs_content[$tab->id."tab"];
+				$tabs_array[] = (array) $tab;
+			}
 
 		}
+
 		
 		return $tabs_array;
 

@@ -67,12 +67,12 @@ add_ThickBox();
 									<?php endif;
 
 									if(isset($addon->info->link) && substr( $addon->info->link, 0, 21 ) === "https://wordpress.org"){
-										echo '<a href="'.admin_url('/plugin-install.php?tab=plugin-information&plugin='.$addon->info->slug).'&TB_iframe=true&width=770&height=660" class="thickbox" >';
+										echo '<a href="'.admin_url('/plugin-install.php?tab=plugin-information&plugin='.$addon->info->slug).'&width=770&height=660&TB_iframe=true" class="thickbox" >';
 										echo '<span class="uwp-product-info">'.__('More info','userswp').'</span>';
 										echo '</a>';
 									}elseif(isset($addon->info->link) && substr( $addon->info->link, 0, 18 ) === "https://userswp.io"){
 										if(defined('WP_EASY_UPDATES_ACTIVE')){
-											$url = admin_url('/plugin-install.php?tab=plugin-information&plugin='.$addon->info->slug.'&TB_iframe=true&width=770&height=660&item_id='.$addon->info->id.'&update_url=https://userswp.io');
+											$url = admin_url('/plugin-install.php?tab=plugin-information&plugin='.$addon->info->slug.'&width=770&height=660&item_id='.$addon->info->id.'&update_url=https://userswp.io&TB_iframe=true');
 										}else{
 											// if installed show activation link
 											if(isset($installed_plugins['wp-easy-updates/external-updates.php'])){
