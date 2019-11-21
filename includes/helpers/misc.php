@@ -1904,6 +1904,7 @@ function uwp_get_show_in_locations(){
     $show_in_locations = array(
         "[users]" => __("Users Page", 'userswp'),
         "[more_info]" => __("More info tab", 'userswp'),
+        "[own_tab]" => __("Profile page own tab", 'userswp'),
         "[profile_side]" => __("Profile side (non bootstrap)", 'userswp'),
         "[fieldset]" => __("Fieldset", 'userswp'),
     );

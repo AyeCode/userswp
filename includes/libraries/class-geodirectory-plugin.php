@@ -29,23 +29,17 @@ class UsersWP_GeoDirectory_Plugin {
 			add_filter( 'uwp_get_sections_uwp-addons', array( $this, 'add_gd_tab' ) );
 			add_filter( 'uwp_get_settings_uwp-addons', array( $this, 'add_gd_settings' ), 10, 2 );
 			add_filter( 'uwp_available_tab_items', array( $this, 'available_tab_items' ) );
-			add_filter( 'uwp_profile_tabs_predefined_fields', array(
-				$this,
-				'add_profile_tabs_predefined_fields'
-			), 10, 2 );
+			add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
 		} else {
 			add_action( 'uwp_profile_listings_tab_content', array( $this, 'add_profile_listings_tab_content' ) );
 			add_action( 'uwp_profile_reviews_tab_content', array( $this, 'add_profile_reviews_tab_content' ) );
 			add_action( 'uwp_profile_favorites_tab_content', array( $this, 'add_profile_favorites_tab_content' ) );
+			add_action( 'uwp_profile_lists_tab_content', array( $this, 'add_profile_gd_lists_tab_content' ) );
 			add_action( 'uwp_profile_gd_listings_subtab_content', array( $this, 'gd_get_listings' ), 10, 2 );
 			add_action( 'uwp_profile_gd_reviews_subtab_content', array( $this, 'gd_get_reviews' ), 10, 2 );
 			add_action( 'uwp_profile_gd_favorites_subtab_content', array( $this, 'gd_get_favorites' ), 10, 2 );
-			add_action( 'geodir_after_edit_post_link_on_listing', array(
-				$this,
-				'geodir_add_post_status_author_page'
-			), 11 );
+			add_action( 'geodir_after_edit_post_link_on_listing', array( $this, 'geodir_add_post_status_author_page' ), 11 );
 			add_action( 'uwp_dashboard_links', array( $this, 'dashboard_output' ), 10, 2 );
-//            add_action( 'uwp_profile_tab_icon', array( $this, 'profile_tab_icon' ), 10, 3 );
 		}
 		add_filter( 'geodir_login_url', array( $this, 'get_gd_login_url' ), 10, 2 );
 		add_action( 'wp', array( $this, 'geodir_uwp_author_redirect' ) );
@@ -360,38 +354,19 @@ class UsersWP_GeoDirectory_Plugin {
 			'user_decided' => '1',
 		);
 
+		if(class_exists('GeoDir_Lists')){
+			$fields[] = array(
+				'tab_type'    => 'standard',
+				'tab_name'    => __( 'Lists', 'userswp' ),
+				'tab_icon'    => 'fas fa-list',
+				'tab_key'     => 'lists',
+				'tab_content' => '',
+				'tab_privacy' => '0',
+				'user_decided' => '1',
+			);
+        }
+
 		return $fields;
-	}
-
-	/**
-	 * Returns count for listings
-	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       int $tab_icon Current tab icon
-	 * @param       object $tab Tab object
-	 * @param       object $user Users object
-	 *
-	 * @return      int
-	 */
-	public function profile_tab_icon( $tab_icon, $tab, $user ) {
-
-		switch ( $tab->tab_key ) {
-			case 'listings' :
-				$tab_icon = $this->get_total_listings_count( $user->ID );
-				break;
-			case 'reviews' :
-				$tab_icon = $this->get_total_reviews_count( $user->ID );
-				break;
-			case 'favorites' :
-				$tab_icon = $this->get_total_favorites_count( $user->ID );
-				break;
-			default :
-				break;
-		}
-
-		return $tab_icon;
 	}
 
 	/**
@@ -848,6 +823,129 @@ class UsersWP_GeoDirectory_Plugin {
 	public function add_profile_favorites_tab_content( $user ) {
 		$this->profile_gd_subtabs_content( $user, 'favorites' );
 	}
+
+	/**
+	 * Adds GD Lists tab content.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       object $user User object.
+	 *
+	 * @return      void
+	 */
+	public function add_profile_gd_lists_tab_content( $user ) {
+		global $uwp_widget_args;
+
+	    $subtab  = get_query_var( 'uwp_subtab' );
+		$type = geodir_lists_slug();
+		$user_lists = GeoDir_Lists_Data::get_user_lists( $user->ID );
+		$subtabs = array();
+		if ( ! empty( $user_lists ) ) {
+			foreach ( $user_lists as $list) {
+				$subtabs[$list->post_name] = array(
+					'id' => $list->ID,
+					'title' => $list->post_title,
+					'count' => count($this->get_listings_from_list( $list->ID )),
+                );
+			}
+		}
+
+		if ( ! empty( $subtabs ) ) {
+			$subtab_keys = array_keys( $subtabs );
+			$default_tab   = $subtab_keys[0];
+		} else {
+			$default_tab   = '';
+		}
+
+		$default_tab = apply_filters( 'uwp_default_gd_lists_subtab', $default_tab, $user, $type );
+		$active_tab  = ! empty( $subtab ) && array_key_exists( $subtab, $subtabs ) ? $subtab : $default_tab;
+		$active_id  = ! empty( $active_tab ) ? $subtabs[$active_tab]['id'] : $subtabs[$default_tab]['id'];
+
+		if ( uwp_get_option( "design_style", 'bootstrap' ) ) {
+			if ( is_array( $subtabs ) && count( $subtabs ) > 0 ) {
+				?>
+                <div class="pb-3">
+					<?php
+					foreach ( $subtabs as $tab_id => $tab ) {
+						$tab_url = uwp_build_profile_tab_url( $user->ID, $type, $tab_id );
+						$active    = $active_tab == $tab_id ? 'btn-primary' : 'btn-outline-primary';
+						?>
+                        <a id="uwp-profile-gd-<?php echo $tab_id; ?>" href="<?php echo esc_url( $tab_url ); ?>"
+                           class=" btn btn-sm <?php echo $active; ?>">
+							<?php echo esc_html( $tab['title'] ); ?>
+                            <span class="badge badge-light ml-1"><?php echo $tab['count']; ?></span>
+                        </a>
+						<?php
+					}
+					?>
+                </div>
+				<?php
+			}
+		} else {
+			?>
+            <div class="uwp-profile-subcontent">
+                <div class="uwp-profile-subnav">
+					<?php if ( ! empty( $subtabs ) ) { ?>
+                        <ul class="item-list-subtabs-ul">
+							<?php
+							foreach ( $subtabs as $tab_id => $tab ) {
+								$tab_url = uwp_build_profile_tab_url( $user->ID, $type, $tab_id );
+								$active    = $active_tab == $tab_id ? ' active' : '';
+								?>
+                                <li id="uwp-profile-gd-<?php echo $tab_id; ?>" class="<?php echo $active; ?>">
+                                    <a href="<?php echo esc_url( $tab_url ); ?>">
+                                    <span
+                                            class="uwp-profile-tab-label uwp-profile-gd-<?php echo $tab_id; ?>-label "><span
+                                                class="uwp-profile-tab-sub-ul-count uwp-profile-sub-ul-gd-<?php echo $tab_id; ?>-count"><?php echo $tab['count']; ?></span> <?php echo esc_html( $tab['title'] ); ?></span>
+                                    </a>
+                                </li>
+								<?php
+							}
+							?>
+                        </ul>
+					<?php } ?>
+                </div>
+            </div>
+		<?php }
+
+        $post_ids = $this->get_listings_from_list( $active_id );
+        $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+
+        if(!empty($post_ids)){
+            ob_start();
+            echo '<div class="uwp-profile-subtab-entries">';
+            $args = array(
+                'is_geodir_loop' => true,
+                'gd_location' => false,
+                'post_type' => geodir_get_posttypes(),
+                'post__in' => $post_ids,
+                'post_status'    => array( 'publish' ),
+                'posts_per_page' => uwp_get_option( 'profile_no_of_items', 10 ),
+                'paged'          => $paged,
+            );
+
+            if ( get_current_user_id() == $user->ID ) {
+                $args['post_status'] = array( 'publish', 'draft', 'private', 'pending', 'gd-closed', 'gd-expired' );
+            }
+
+            $the_query     = new WP_Query( $args );
+
+            $uwp_widget_args['template_args']['the_query'] = $the_query;
+            $uwp_widget_args['template_args']['title']     = $subtabs[$active_tab]['title'];
+
+            uwp_locate_template( "bootstrap/loop-posts" );
+            echo '</div>';
+            echo ob_get_clean();
+        }
+	}
+
+	public function get_listings_from_list($list_id){
+	    global $wpdb;
+		$post_ids_obj = $wpdb->get_results($wpdb->prepare("SELECT p2p_from FROM $wpdb->p2p WHERE p2p_to = %d", absint($list_id)));
+		$post_ids = wp_list_pluck($post_ids_obj, 'p2p_from');
+		return $post_ids;
+    }
 
 	/**
 	 * Adjust the post footer info for GD posts.
