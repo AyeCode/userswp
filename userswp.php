@@ -3,7 +3,7 @@
 Plugin Name: UsersWP
 Plugin URI: https://userswp.io/
 Description: The only lightweight user profile plugin for WordPress. UsersWP features front end user profile, users directory, a registration and a login form.
-Version: 1.2.0.11
+Version: 1.2.0.12
 Author: AyeCode Ltd
 Author URI: https://userswp.io
 License: GPL-2.0+
@@ -16,27 +16,27 @@ Tested up to: 5.3
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
-    die;
+	die;
 }
 
 if ( ! defined( 'USERSWP_NAME' ) ) {
-    define( 'USERSWP_NAME', 'userswp' );
+	define( 'USERSWP_NAME', 'userswp' );
 }
 
 if ( ! defined( 'USERSWP_VERSION' ) ) {
-    define( 'USERSWP_VERSION', '1.2.0.11' );
+	define( 'USERSWP_VERSION', '1.2.0.12' );
 }
 
 if ( ! defined( 'USERSWP_PATH' ) ) {
-    define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
+	define( 'USERSWP_PATH', plugin_dir_path( __FILE__ ) );
 }
 
 if ( ! defined( 'USERSWP_PLUGIN_URL' ) ) {
-    define( 'USERSWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+	define( 'USERSWP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }
 
 if ( ! defined( 'USERSWP_PLUGIN_FILE' ) ) {
-    define( 'USERSWP_PLUGIN_FILE', __FILE__ );
+	define( 'USERSWP_PLUGIN_FILE', __FILE__ );
 }
 
 /**
@@ -44,7 +44,7 @@ if ( ! defined( 'USERSWP_PLUGIN_FILE' ) ) {
  * admin-specific hooks, and public-facing site hooks.
  */
 if ( ! class_exists( 'UsersWP' ) ) {
-    include_once dirname( __FILE__ ) . '/includes/class-userswp.php';
+	include_once dirname( __FILE__ ) . '/includes/class-userswp.php';
 }
 /**
  * Begins execution of the plugin.
@@ -56,7 +56,8 @@ if ( ! class_exists( 'UsersWP' ) ) {
  * @since 1.0.0
  */
 function run_users_wp() {
-    global $userswp;
-    $userswp = new UsersWP();
+	global $userswp;
+	$userswp = new UsersWP();
 }
+
 run_users_wp();

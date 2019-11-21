@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.0.11
+Stable tag: 1.2.0.12
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -124,6 +124,7 @@ No questions so far, but don't hesitate to ask!
 = 1.2.0.12 =
 * GD List Manager plugin integration in core - ADDED
 * Checking author archive enabled in Yoast plugin old version throws PHP error - FIXED
+* Bio show more/less option not working correctly - FIXED
 
 = 1.2.0.11 =
 * Old password showing invalid always on change password form - FIXED

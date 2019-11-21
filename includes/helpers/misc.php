@@ -854,7 +854,7 @@ function uwp_add_account_menu_links() {
 	$legacy = '<ul class="uwp_account_menu">';
     ob_start();
     ?>
-    <div class="dropdown text-center">
+    <div class="dropdown text-center mb-4">
         <button class="btn btn-primary dropdown-toggle" type="button" id="account_settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <?php _e('Account Settings', 'userswp'); ?>
         </button>
@@ -1904,7 +1904,7 @@ function uwp_get_show_in_locations(){
     $show_in_locations = array(
         "[users]" => __("Users Page", 'userswp'),
         "[more_info]" => __("More info tab", 'userswp'),
-        "[own_tab]" => __("Profile page own tab", 'userswp'),
+//        "[own_tab]" => __("Profile page own tab", 'userswp'), // this can be added via tab builder, we want to remove this functionality
         "[profile_side]" => __("Profile side (non bootstrap)", 'userswp'),
         "[fieldset]" => __("Fieldset", 'userswp'),
     );
