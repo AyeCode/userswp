@@ -837,6 +837,10 @@ class UsersWP_GeoDirectory_Plugin {
 	public function add_profile_gd_lists_tab_content( $user ) {
 		global $uwp_widget_args;
 
+		if(!class_exists('GeoDir_Lists')){
+		    return;
+		}
+
 	    $subtab  = get_query_var( 'uwp_subtab' );
 		$type = geodir_lists_slug();
 		$user_lists = GeoDir_Lists_Data::get_user_lists( $user->ID );
