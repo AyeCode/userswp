@@ -123,6 +123,7 @@ No questions so far, but don't hesitate to ask!
 
 = 1.2.0.12 =
 * GD List Manager plugin integration in core - ADDED
+* Checking author archive enabled in Yoast plugin old version throws PHP error - FIXED
 
 = 1.2.0.11 =
 * Old password showing invalid always on change password form - FIXED

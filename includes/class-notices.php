@@ -194,7 +194,7 @@ class UsersWP_Notices {
 
 
     public static function yoast_user_archives_disabled(){
-        if( class_exists('WPSEO_Options') && WPSEO_Options::get( 'disable-author', false ) ){
+        if( defined( 'WPSEO_VERSION' ) && version_compare( WPSEO_VERSION, '7.0', '>=' ) && class_exists('WPSEO_Options') && WPSEO_Options::get( 'disable-author', false ) ){
             $settings_link = admin_url("admin.php?page=wpseo_titles#top#archives");
             // set the setting on the fly if set to do so
             if( current_user_can( 'manage_options' ) ){
