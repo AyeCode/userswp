@@ -1738,7 +1738,7 @@ function uwp_insert_usermeta(){
 
 function uwp_get_localize_data(){
     $uwp_localize_data = array(
-        'uwp_more_char_limit' => '100',
+        'uwp_more_char_limit' => 100,
         'uwp_more_text' => __('more','userswp'),
         'uwp_less_text' => __('less','userswp'),
         'uwp_more_ellipses_text' => '...',
@@ -1904,6 +1904,7 @@ function uwp_get_show_in_locations(){
     $show_in_locations = array(
         "[users]" => __("Users Page", 'userswp'),
         "[more_info]" => __("More info tab", 'userswp'),
+        "[own_tab]" => __("Profile page own tab", 'userswp'),
         "[profile_side]" => __("Profile side (non bootstrap)", 'userswp'),
         "[fieldset]" => __("Fieldset", 'userswp'),
     );
