@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.0.10
+Stable tag: 1.2.0.11
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -125,6 +125,7 @@ No questions so far, but don't hesitate to ask!
 * Old password showing invalid always on change password form - FIXED
 * Changes to fix unknown column error for avatar and banner usermeta - FIXED
 * Changes to fix redirection issue when author redirect is disabled - FIXED
+* Using profile tabs widget twice on a page can result in a error - FIXED
 
 = 1.2.0.10 =
 * Profile tabs privacy settings for users - ADDED
