@@ -2,14 +2,6 @@ jQuery(window).load(function() {
 
     // Enable auth modals
     uwp_init_auth_modal();
-
-    // select2 selects
-    if (jQuery("select.uwp_select2").length > 0) {
-        jQuery("select.uwp_select2").select2();
-        jQuery("select.uwp_select2_nostd").select2({
-            allow_single_deselect: 'true'
-        });
-    }
 });
 
 

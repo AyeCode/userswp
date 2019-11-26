@@ -930,7 +930,7 @@ class UsersWP_Form_Builder {
                                     }
                                     ?>
 
-                                    <select name="is_public" id="is_public" class="uwp_select2">
+                                    <select name="is_public" class="aui-select2">
                                         <option value="1" <?php selected($value, "1"); ?>><?php echo __("Yes", "userswp") ?></option>
                                         <option value="0" <?php selected($value, "0"); ?>><?php echo __("No", "userswp") ?></option>
                                         <option value="2" <?php selected($value, "2"); ?>><?php echo __("Let User Decide", "userswp") ?></option>
@@ -971,7 +971,7 @@ class UsersWP_Form_Builder {
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <?php if ($field_type == 'checkbox') { ?>
-                                        <select name="default_value" id="default_value" class="uwp_select2">
+                                        <select name="default_value" id="default_value" class="aui-select2">
                                             <option value=""><?php _e('Unchecked', 'userswp'); ?></option>
                                             <option value="1" <?php selected(true, (int) $value === 1); ?>><?php _e('Checked', 'userswp'); ?></option>
                                         </select>
@@ -1166,9 +1166,8 @@ class UsersWP_Form_Builder {
                                     ?>
 
                                     <select multiple="multiple" name="show_in[]"
-                                            id="show_in"
                                             style="min-width:300px;"
-                                            class="uwp_select2"
+                                            class="aui-select2"
                                             data-placeholder="<?php _e('Select locations', 'userswp'); ?>">
                                         <?php
 
@@ -1906,7 +1905,7 @@ class UsersWP_Form_Builder {
                 
                 $date_formats = apply_filters('uwp_date_formats', $date_formats);
                 ?>
-                <select name="extra[date_format]" id="date_format" class="uwp_select2">
+                <select name="extra[date_format]" id="date_format" class="aui-select2">
                     <?php
                     foreach ($date_formats as $format) {
                         $selected = '';
@@ -1997,7 +1996,7 @@ class UsersWP_Form_Builder {
                 <?php _e('Allowed file types :', 'userswp'); ?>
             </label>
             <div class="uwp-input-wrap">
-                <select name="extra[uwp_file_types][]" id="uwp_file_types" multiple="multiple" class="uwp_select2" style="height:100px;width:90%;">
+                <select name="extra[uwp_file_types][]" id="uwp_file_types" multiple="multiple" class="aui-select2" style="height:100px;width:90%;">
                     <option value="*" <?php selected(true, in_array('*', $uwp_file_types)); ?>><?php _e('All types', 'userswp'); ?></option>
                     <?php foreach ($allowed_file_types as $format => $types) { ?>
                         <optgroup label="<?php echo esc_attr(wp_sprintf(__('%s formats', 'userswp'), __($format, 'userswp'))); ?>">
@@ -2032,7 +2031,7 @@ class UsersWP_Form_Builder {
             </label>
             <div class="uwp-input-wrap">
 
-                <select name="data_type" id="data_type" class="uwp_select2"
+                <select name="data_type" id="data_type" class="aui-select2"
                         onchange="uwp_data_type_changed(this, '<?php echo $result_str; ?>');">
                     <option
                         value="XVARCHAR" <?php if ($dt_value == 'VARCHAR') {
@@ -2067,7 +2066,7 @@ class UsersWP_Form_Builder {
                 <?php _e('Select decimal precision:', 'userswp'); ?>
             </label>
             <div class="uwp-input-wrap">
-                <select name="decimal_point" id="decimal_point" class="uwp_select2">
+                <select name="decimal_point" id="decimal_point" class="aui-select2">
                     <option value=""><?php echo __('Select', 'userswp'); ?></option>
                     <?php for ($i = 1; $i <= 10; $i++) {
                         $selected = $i == $value ? 'selected="selected"' : ''; ?>
@@ -2369,17 +2368,16 @@ class UsersWP_Form_Builder {
             );
         }
 
-        if (isset($field_info->field_icon) && strpos($field_info->field_icon, ' fa-') !== false) {
-            $field_icon = '<i class="' . $field_info->field_icon . '" aria-hidden="true"></i>';
-        }elseif (isset($field_info->field_icon) && $field_info->field_icon) {
-            $field_icon = '<b style="background-image: url("' . $field_info->field_icon . '")"></b>';
-        }
-        elseif (isset($field_info->field_type) && $field_info->field_type == 'fieldset') {
-            $field_icon = '<i class="fas fa-arrows-alt-h" aria-hidden="true"></i>';
-        } else {
-            $field_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
-        }
-
+	    $icon = isset($field_info->field_icon) ? $field_info->field_icon : '';
+	    if ( uwp_is_fa_icon( $icon ) ) {
+		    $field_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
+	    } elseif ( uwp_is_icon_url( $icon ) ) {
+		    $field_icon = '<b style="background-image: url("' . $icon . '")"></b>';
+	    } elseif (isset($field_info->field_type) && $field_info->field_type == 'fieldset') {
+		    $field_icon = '<i class="fas fa-arrows-alt-h" aria-hidden="true"></i>';
+	    } else {
+		    $field_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
+	    }
         ?>
         <li class="text li-settings" id="licontainer_<?php echo $result_str; ?>">
             <i class="fas fa-caret-down toggle-arrow" aria-hidden="true" onclick="uwp_show_hide(this);"></i>
@@ -2636,7 +2634,6 @@ class UsersWP_Form_Builder {
 
             $site_htmlvar_name = $request_field['site_htmlvar_name'];
             $field_id = (isset($request_field['field_id']) && $request_field['field_id']) ? str_replace('new', '', $request_field['field_id']) : '';
-            
 
             if (!empty($user_meta_info)) {
 

@@ -51,7 +51,6 @@ class UsersWP_Admin {
             wp_enqueue_style( "userswp", USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
         }
         wp_enqueue_style( "userswp_admin_css", USERSWP_PLUGIN_URL . 'admin/assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
-        wp_enqueue_style( "select2", USERSWP_PLUGIN_URL . 'assets/css/select2/select2.css', array(), USERSWP_VERSION, 'all' );
 
         if ( $hook_suffix == 'toplevel_page_userswp' ) {
             wp_enqueue_style( 'wp-color-picker' );
@@ -91,7 +90,6 @@ class UsersWP_Admin {
 	    wp_enqueue_script( 'uwp-nestable-script', USERSWP_PLUGIN_URL . 'admin/assets/js/jquery.nestable' . $suffix . '.js', array('jquery-ui-sortable'), USERSWP_VERSION );
 
         wp_enqueue_script( "userswp_admin", USERSWP_PLUGIN_URL . 'admin/assets/js/users-wp-admin' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
-        wp_enqueue_script('select2', USERSWP_PLUGIN_URL . 'assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION );
 
         wp_enqueue_script( "jquery-ui-tooltip" );
         wp_enqueue_script( 'wp-color-picker' );

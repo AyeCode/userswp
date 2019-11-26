@@ -731,7 +731,7 @@ function uwp_account_privacy_edit_form_display($type) {
                                         $value = 'yes';
                                     }
                                     ?>
-                                    <select name="<?php echo $field_name; ?>" class="uwp_privacy_field uwp_select2 <?php echo $bs_form_control; ?>"
+                                    <select name="<?php echo $field_name; ?>" class="uwp_privacy_field aui-select2 <?php echo $bs_form_control; ?>"
                                             style="margin: 0;">
                                         <option value="no" <?php selected($value, "no"); ?>><?php echo __("No", "userswp") ?></option>
                                         <option value="yes" <?php selected($value, "yes"); ?>><?php echo __("Yes", "userswp") ?></option>
@@ -779,7 +779,7 @@ function uwp_account_privacy_edit_form_display($type) {
 			                    $privacy_options = apply_filters('uwp_tab_privacy_options', $privacy_options);
 
 			                    ?>
-                                <select name="<?php echo $field_name; ?>" class="uwp_tab_privacy_field uwp_select2 <?php echo $bs_form_control; ?>"
+                                <select name="<?php echo $field_name; ?>" class="uwp_tab_privacy_field aui-select2 <?php echo $bs_form_control; ?>"
                                         style="margin: 0;">
 	                                <?php
 	                                foreach ($privacy_options as $key => $val){

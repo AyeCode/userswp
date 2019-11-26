@@ -111,7 +111,7 @@ class UsersWP_Forms {
 	 */
     public function output_dashboard_links($options){
         if(!empty($options)){
-            $class = uwp_get_option("design_style",'bootstrap')=='bootstrap' ? 'form-control' : 'uwp_select2';
+            $class = uwp_get_option("design_style",'bootstrap')=='bootstrap' ? 'form-control' : 'aui-select2';
             echo "<select class='$class' onchange='window.location = jQuery(this).val();'>";
             $this->output_options($options);
             echo "<select>";
@@ -1736,7 +1736,7 @@ class UsersWP_Forms {
                 }
                 ?>
                 <select name="<?php echo $field->htmlvar_name;?>" id="<?php echo $field->htmlvar_name;?>"
-                        class="uwp_textfield uwp_select2 <?php echo esc_attr($bs_form_control);?>"
+                        class="uwp_textfield aui-select2 <?php echo esc_attr($bs_form_control);?>"
                         title="<?php echo $site_title; ?>"
                         data-placeholder="<?php echo __('Choose', 'userswp') . ' ' . $site_title . '&hellip;';?>"
                 ><?php echo $select_options;?>
@@ -1807,9 +1807,9 @@ class UsersWP_Forms {
                     <select name="<?php echo $field->htmlvar_name;?>[]"
                             id="<?php echo $field->htmlvar_name;?>"
                             title="<?php echo $site_title; ?>"
-                            multiple="multiple" class="uwp_select2"
+                            multiple="multiple" class="aui-select2"
                             data-placeholder="<?php echo $site_title; ?>"
-                            class="uwp_select2 <?php echo esc_attr($bs_form_control);?>"
+                            class="aui-select2 <?php echo esc_attr($bs_form_control);?>"
                     >
                         <?php
                         } else {

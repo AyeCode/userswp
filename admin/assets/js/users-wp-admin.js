@@ -1,11 +1,4 @@
 jQuery(window).load(function() {
-    // select2 selects
-    if (jQuery("select.uwp_select2").length > 0) {
-        jQuery("select.uwp_select2").select2();
-        jQuery("select.uwp_select2_nostd").select2({
-            allow_single_deselect: 'true'
-        });
-    }
     
     // Load color picker
     var UWPColorPicker = jQuery('.uwp-color-picker');
@@ -141,15 +134,6 @@ jQuery(window).load(function() {
     uwp_init_tooltips();
 });
 
-function uwp_select2() {
-    if (jQuery("select.uwp_select2").length > 0) {
-        jQuery("select.uwp_select2").select2();
-        jQuery("select.uwp_select2_nostd").select2({
-            allow_single_deselect: 'true'
-        });
-    }
-}
-
 function uwp_show_hide($this) {
     var is_open = !jQuery($this).parent('.li-settings').find('.field_frm').first().is(':hidden');
     jQuery('.field_frm').hide();
@@ -265,7 +249,7 @@ jQuery(document).ready(function () {
                 custom_type: custom_type
             }, function (data) {
                 jQuery('.field_row_main ul.core').append(data);
-                uwp_select2();
+                aui_init_select2()
                 jQuery('#licontainer_' + id).find('#sort_order').val(parseInt(jQuery('#licontainer_' + id).index()) + 1);
                 uwp_show_hide(jQuery("#licontainer_"+id).find('.toggle-arrow'));
                 uwp_init_tooltips();
@@ -480,7 +464,7 @@ function save_field(id) {
             }
             else {
                 jQuery('#licontainer_' + id).replaceWith(jQuery.trim(result));
-                uwp_select2();
+                aui_init_select2()
 
                 var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type=custom_fields';
 
