@@ -1172,7 +1172,7 @@ class UsersWP_Status {
      * @param  string $file Path to the file.
      * @return string
      */
-    public function get_file_version( $file ) {
+    public static function get_file_version( $file ) {
 
         // Avoid notices if file does not exist.
         if ( ! file_exists( $file ) ) {
