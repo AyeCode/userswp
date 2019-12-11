@@ -18,7 +18,7 @@ jQuery(window).load(function() {
 
                 var c = content.substr(0, showChar);
                 var h = content.substr(showChar, content.length - showChar);
-                var html = c + '<span class="uwp_more_ellipses">' + ellipsestext+ '&nbsp;</span><span class="uwp_more_content"><span style="display: none;">' + h + '</span>&nbsp;&nbsp;<a href="" class="uwp_more_link">' + moretext + '</a></span>';
+                var html = uwp_nl2br(c) + '<span class="uwp_more_ellipses">' + ellipsestext+ '&nbsp;</span><span class="uwp_more_content"><span style="display: none;">' + uwp_nl2br(h) + '</span>&nbsp;&nbsp;<a href="" class="uwp_more_link">' + moretext + '</a></span>';
 
                 $(this).html(html);
             }
@@ -141,6 +141,11 @@ jQuery(window).load(function() {
 
     });
 }( jQuery, window ));
+
+function uwp_nl2br(str, is_xhtml) {
+    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
+}
 
 function uwp_profile_image_change(type){
     // remove it first

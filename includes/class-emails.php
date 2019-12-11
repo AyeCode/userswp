@@ -23,6 +23,7 @@ class UsersWP_Mails {
         $user_data = get_userdata($user_id);
         
         $extras = apply_filters('uwp_send_mail_extras', "", $message_type, $user_id);
+	    $form_fields = apply_filters('uwp_send_mail_form_fields', "", $message_type, $user_id);
         $subject = $this->get_mail_subject($message_type);
         $message = $this->get_mail_content($message_type);
 
@@ -43,9 +44,11 @@ class UsersWP_Mails {
 
         $message_search_array = array(
             '[#login_details#]',
+	        '[#form_fields#]'
         );
         $message_replace_array = array(
-            $extras
+            $extras,
+	        $form_fields
         );
         $message = str_replace($message_search_array, $message_replace_array, $message);
 

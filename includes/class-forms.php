@@ -962,7 +962,7 @@ class UsersWP_Forms {
         }
 
 
-        if (uwp_get_option('enable_account_update_notification') == '1') {
+        if (uwp_get_option('account_update_email') == '1') {
             $user_data = get_user_by('id', $user_id);
 
             $email = new UsersWP_Mails();
@@ -1183,15 +1183,53 @@ class UsersWP_Forms {
         switch ($type) {
             case "register_admin":
                 $user_data = get_userdata($user_id);
-                $extras = __('<p><b>' . __('User Information :', 'userswp') . '</b></p>
+                $extras = '<p><b>' .__('User Information :', 'userswp') . '</b></p>
             <p>' . __('First Name:', 'userswp') . ' ' . $user_data->first_name . '</p>
             <p>' . __('Last Name:', 'userswp') . ' ' . $user_data->last_name . '</p>
             <p>' . __('Username:', 'userswp') . ' ' . $user_data->user_login . '</p>
-            <p>' . __('Email:', 'userswp') . ' ' . $user_data->user_email . '</p>');
+            <p>' . __('Email:', 'userswp') . ' ' . $user_data->user_email . '</p>';
                 break;
         }
-        return $extras;
+        return apply_filters('uwp_admin_mail_extras', $extras, $type, $user_id );
     }
+
+	/**
+	 * Modifies the forms field in email based on the form type.
+	 *
+	 * @package    userswp
+	 * @subpackage userswp/includes
+	 * @param string $form_fields Form fields.
+	 * @param string $type Form type.
+	 * @param int $user_id User ID.
+	 * @return string Modified mail field.
+	 */
+	public function init_mail_form_fields( $form_fields, $type, $user_id ) {
+		switch ($type) {
+			case "account":
+				$fields = get_account_form_fields();
+				$user_data = get_userdata($user_id);
+				if( !empty( $fields ) && is_array($fields)) {
+					$form_fields .= '<p><b>'.__('User Account Information:','userswp').'</b></p>';
+					foreach ( $fields as $key => $field ) {
+						if( $field->htmlvar_name == 'email' && isset($user_data->user_email) ) {
+							$field_value = $user_data->user_email;
+						} elseif ( $field->htmlvar_name == 'display_name' && isset($user_data->user_login) ) {
+							$field_value = $user_data->user_login;
+						} elseif ( $field->htmlvar_name == 'bio' ){
+							$field_value = get_user_meta($user_id, 'description', true);
+						} else {
+							$field_value = uwp_get_usermeta($user_id, $field->htmlvar_name);
+						}
+
+						if(isset($field->site_title) && !empty($field_value)){
+							$form_fields .= '<p><b>' . $field->site_title . '</b>&nbsp;' . $field_value . '</p>';
+                        }
+					}
+				}
+				break;
+		}
+		return apply_filters('uwp_mail_form_fields', $form_fields, $type, $user_id );;
+	}
 
     /**
      * Generates activate email message.
@@ -1566,7 +1604,7 @@ class UsersWP_Forms {
 
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 
@@ -1640,7 +1678,7 @@ class UsersWP_Forms {
 
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
             <?php
@@ -1743,7 +1781,7 @@ class UsersWP_Forms {
                 </select>
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 
@@ -1866,7 +1904,7 @@ class UsersWP_Forms {
                 </ul>
             <?php } ?>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
             <?php
@@ -1933,7 +1971,7 @@ class UsersWP_Forms {
                        type="<?php echo $field->field_type; ?>">
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 
@@ -2016,7 +2054,7 @@ class UsersWP_Forms {
                 <?php } ?>
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 
@@ -2114,7 +2152,7 @@ class UsersWP_Forms {
                 ?>
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
             <?php
@@ -2251,7 +2289,7 @@ class UsersWP_Forms {
                 />
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 
@@ -2336,7 +2374,7 @@ class UsersWP_Forms {
                           rows="4"><?php echo stripslashes($value); ?></textarea>
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 
@@ -2465,7 +2503,7 @@ class UsersWP_Forms {
                     />
                     <span class="uwp_message_note"><?php _e( $field->help_text, 'userswp' ); ?></span>
                     <?php if ( $field->is_required ) { ?>
-                        <span class="uwp_message_error"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+                        <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
                     <?php } ?>
                 </div>
 
@@ -2554,7 +2592,7 @@ class UsersWP_Forms {
                     />
                     <span class="uwp_message_note"><?php _e( $field->help_text, 'userswp' ); ?></span>
                     <?php if ( $field->is_required ) { ?>
-                        <span class="uwp_message_error"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+                        <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
                     <?php } ?>
                 </div>
 
@@ -2644,7 +2682,7 @@ class UsersWP_Forms {
                     />
                     <span class="uwp_message_note"><?php _e( $field->help_text, 'userswp' ); ?></span>
                     <?php if ( $field->is_required ) { ?>
-                        <span class="uwp_message_error"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+                        <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
                     <?php } ?>
                 </div>
 
@@ -2796,7 +2834,7 @@ class UsersWP_Forms {
 
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 

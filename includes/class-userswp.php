@@ -211,7 +211,7 @@ final class UsersWP {
         // Emails
         add_filter('uwp_send_mail_extras', array($instance, 'init_mail_extras'), 10, 3);
         add_filter('uwp_send_admin_mail_extras', array($instance, 'init_admin_mail_extras'), 10, 3);
-        
+	    add_filter('uwp_send_mail_form_fields', array($instance, 'init_mail_form_fields'), 10, 3);
     }
 
 	/**

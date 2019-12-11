@@ -390,7 +390,7 @@ class UsersWP_Profile {
                                         <div class="uwp-profile-bio <?php if ($is_profile_page) { echo "uwp_more"; } ?>">
                                             <?php
                                             if ($is_profile_page) {
-                                                echo $value;
+                                                echo nl2br($value);
                                             } else {
                                                 echo wp_trim_words( $value, $limit_words, '...' );
                                             }
@@ -2141,6 +2141,7 @@ class UsersWP_Profile {
                 break;
             case 'textarea':
                 $value = esc_textarea( $value );
+                $value = nl2br($value);
                 break;
             default:
                 $value = esc_html( $value );

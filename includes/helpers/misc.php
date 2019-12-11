@@ -1800,7 +1800,7 @@ function uwp_sanitize_tooltip( $var ) {
 }
 
 function uwp_all_email_tags( $inline = true ){
-    $tags = array( '[#site_name#]', '[#site_name_url#]', '[#current_date#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#profile_link#]' );
+    $tags = array( '[#site_name#]', '[#site_name_url#]', '[#current_date#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#profile_link#]', '[#form_fields#]' );
 
     $tags = apply_filters( 'uwp_all_email_tags', $tags );
 

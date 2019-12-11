@@ -121,6 +121,10 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.0.13 =
+* Formatting textarea custom field in the tab content - FIXED
+* Short tag to send user submitted information in email for account update form - ADDED
+
 = 1.2.0.12 =
 * GD List Manager plugin integration in core - ADDED
 * Checking author archive enabled in Yoast plugin old version throws PHP error - FIXED
