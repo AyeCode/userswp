@@ -657,13 +657,16 @@ class UsersWP_GeoDirectory_Plugin {
 		$subtab      = get_query_var( 'uwp_subtab' );
 		$subtabs     = $this->profile_gd_subtabs( $user, $type );
 		$default_tab = apply_filters( 'uwp_default_listing_subtab', 'places', $user, $type );
-		$active_tab  = ! empty( $subtab ) && array_key_exists( $subtab, $subtabs ) ? $subtab : $default_tab;
-		if ( ! empty( $subtabs ) ) {
+		$post_type = apply_filters( 'uwp_default_listing_post_type', 'gd_place', $user, $type );
+		if(! empty( $subtab ) && array_key_exists( $subtab, $subtabs )){
+			$active_tab = $subtab;
+        } elseif(!empty($subtabs)) {
 			$subtab_keys = array_keys( $subtabs );
+			$active_tab = $subtab_keys[0];
 			$post_type   = $subtabs[ $subtab_keys[0] ]['ptype'];
-		} else {
-			$post_type = apply_filters( 'uwp_default_listing_post_type', 'gd_place', $user, $type );
-		}
+        } else {
+			$active_tab = $default_tab;
+        }
 
 		if ( uwp_get_option( "design_style", 'bootstrap' ) ) {
 			if ( is_array( $subtabs ) && count( $subtabs ) > 1 ) {

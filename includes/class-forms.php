@@ -193,14 +193,18 @@ class UsersWP_Forms {
                 if (isset($_GET['uwp_remove_nag']) && $_GET['uwp_remove_nag'] == 'yes') {
                     delete_user_meta( $user_id, 'default_password_nag' );
                     $message = sprintf(__('We have removed the system generated password warning for you. From this point forward you can continue to access our site as usual. To go to home page, <a href="%s">click here</a>.', 'userswp'), home_url('/'));
-                    echo '<div class="uwp-alert-success text-center">';
-                    echo $message;
-                    echo '</div>';
+	                echo aui()->alert(array(
+		                'class'=>'text-center',
+		                'type'=>'success',
+		                'content'=> $message
+	                ));
                 } else {
                     $message = sprintf(__('<strong>Warning</strong>: It seems like you are using a system generated password. Please change the password in this page. If this is not a problem for you, you can remove this warning by <a href="%s">clicking here</a>.', 'userswp'), $remove_nag_url);
-                    echo '<div class="uwp-alert-warning text-center">';
-                    echo $message;
-                    echo '</div>';
+	                echo aui()->alert(array(
+		                'class'=>'text-center',
+	                    'type'=>'warning',
+		                'content'=> $message
+	                ));
                 }
             }
         }
@@ -222,7 +226,12 @@ class UsersWP_Forms {
         }
 
         if( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce' ) ) {
-            if(wp_doing_ajax()){wp_send_json_error();}
+	        $message = aui()->alert(array(
+			        'type'=>'error',
+			        'content'=> __('Security verification failed. Try again.', 'userswp')
+		        )
+	        );
+	        if(wp_doing_ajax()){wp_send_json_error($message);}
             else{return;}
         }
 
@@ -324,8 +333,6 @@ class UsersWP_Forms {
 
 	    $user_login = !empty($result['username']) ? $result['username'] : '';
 	    $email = !empty($result['email']) ? $result['email'] : '';
-
-
 
 	    if(empty($user_login)){
 		    $user_login = sanitize_user( str_replace( ' ', '', $display_name ), true );
@@ -445,9 +452,25 @@ class UsersWP_Forms {
 
         }
 
-        $force_redirect = apply_filters('uwp_registration_force_redirect', false, $_POST, $_FILES);
-
-        if ($reg_action == 'auto_approve_login' || $force_redirect) {
+	    if ($reg_action == 'force_redirect') {
+		    $redirect_to = $this->get_register_redirect_url($data, $user_id);
+		    do_action('uwp_after_process_register', $data);
+		    if(wp_doing_ajax()){
+			    $message = aui()->alert(array(
+					    'type'=>'success',
+					    'content'=> __('Account registered successfully. Redirecting...', 'userswp')
+				    )
+			    );
+			    $response = array(
+				    'message' => $message,
+				    'redirect'  => $redirect_to,
+			    );
+			    wp_send_json_success($response);
+		    }else{
+			    wp_redirect($redirect_to);
+		    }
+		    exit();
+	    } elseif ($reg_action == 'auto_approve_login') {
             $res = wp_signon(
                 array(
                     'user_login' => $result['username'],
@@ -464,9 +487,7 @@ class UsersWP_Forms {
                 );
                 $uwp_notices[] = array('register' => $error);
             } else {
-                $reg_redirect_page_id = uwp_get_option('register_redirect_to', '');
-                $redirect_to = uwp_get_redirect_url($reg_redirect_page_id, $data);
-                $redirect = apply_filters('uwp_register_redirect', $redirect_to);
+                $redirect_to = $this->get_register_redirect_url($data, $user_id);
                 do_action('uwp_after_process_register', $data);
 
                 if(wp_doing_ajax()){
@@ -477,11 +498,11 @@ class UsersWP_Forms {
                     );
                     $response = array(
                         'message' => $message,
-                        'redirect'  => $redirect,
+                        'redirect'  => $redirect_to,
                     );
                     wp_send_json_success($response);
                 }else{
-                    wp_redirect($redirect);
+                    wp_redirect($redirect_to);
                 }
                 exit();
             }
@@ -561,7 +582,12 @@ class UsersWP_Forms {
         }
 
         if( ! isset( $data['uwp_login_nonce'] ) || ! wp_verify_nonce( $data['uwp_login_nonce'], 'uwp-login-nonce' ) ) {
-            if(wp_doing_ajax()){wp_send_json_error();}
+	        $message = aui()->alert(array(
+			        'type'=>'error',
+			        'content'=> __('Security verification failed. Try again.', 'userswp')
+		        )
+	        );
+	        if(wp_doing_ajax()){wp_send_json_error($message);}
             else{return;}
         }
 
@@ -593,7 +619,7 @@ class UsersWP_Forms {
 
         remove_action( 'authenticate', 'gglcptch_login_check', 21 );
 
-        $res = wp_signon(
+        $user = wp_signon(
             array(
                 'user_login' => $result['username'],
                 'user_password' => $result['password'],
@@ -603,7 +629,7 @@ class UsersWP_Forms {
 
         add_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
 
-        if (is_wp_error($res)) {
+        if (is_wp_error($user)) {
             $message = aui()->alert(array(
                     'type'=>'error',
                     'content'=> __( 'Invalid username or Password.', 'userswp' )
@@ -620,9 +646,7 @@ class UsersWP_Forms {
             );
             if(wp_doing_ajax()){wp_send_json_success($message);}
             else{
-                $redirect_page_id = uwp_get_option('login_redirect_to', -1);
-                $redirect_to = uwp_get_redirect_url($redirect_page_id, $data);
-                $redirect_to = apply_filters('uwp_login_redirect', $redirect_to);
+                $redirect_to = $this->get_login_redirect_url($data, $user);
                 wp_redirect($redirect_to);
                 exit(); 
             }
@@ -647,7 +671,12 @@ class UsersWP_Forms {
         }
 
         if( ! isset( $data['uwp_forgot_nonce'] ) || ! wp_verify_nonce( $data['uwp_forgot_nonce'], 'uwp-forgot-nonce' ) ) {
-            if(wp_doing_ajax()){wp_send_json_error();}
+	        $message = aui()->alert(array(
+			        'type'=>'error',
+			        'content'=> __('Security verification failed. Try again.', 'userswp')
+		        )
+	        );
+	        if(wp_doing_ajax()){wp_send_json_error($message);}
             else{return;}
         }
 
@@ -675,7 +704,7 @@ class UsersWP_Forms {
         $user_data = get_user_by('email', $data['email']);
 
         // if no user we fake it and bail
-        if(!$user_data->ID){
+        if(!$user_data){
             $message = aui()->alert(array(
                     'type'=>'success',
                     'content'=> apply_filters('uwp_change_password_success_message', __('Please check your email.', 'userswp'), $data)
@@ -762,16 +791,23 @@ class UsersWP_Forms {
         $email->send( 'change', $user_data->ID );
 
         wp_set_password( $result['password'], $user_data->ID );
-        wp_set_auth_cookie( $user_data->ID, false);
+
+	    $password_nag = get_user_option('default_password_nag', $user_data->ID);
+	    if ($password_nag) {
+		    delete_user_meta( $user_data->ID, 'default_password_nag' );
+	    }
 
         $message = aui()->alert(array(
                 'type'=>'success',
                 'content'=> apply_filters('uwp_change_password_success_message', __('Password changed successfully', 'userswp'), $data)
             )
         );
+
         $uwp_notices[] = array('change' => $message);
 
-        do_action('uwp_after_process_change', $data);
+	    do_action('uwp_after_process_change', $data);
+
+	    wp_logout();exit();
     }
 
     /**
@@ -828,7 +864,7 @@ class UsersWP_Forms {
 
         wp_set_password( $data['password'], $user_data->ID );
 
-        $login_page_url = wp_login_url();
+        $login_page_url = uwp_get_login_page_url();
         $message = sprintf(__('Password updated successfully. Please <a href="%s">login</a> with your new password', 'userswp'), $login_page_url);
         $message = apply_filters('uwp_reset_password_success_message', $message, $data);
         $message = aui()->alert(array(
@@ -1209,7 +1245,7 @@ class UsersWP_Forms {
 				$fields = get_account_form_fields();
 				$user_data = get_userdata($user_id);
 				if( !empty( $fields ) && is_array($fields)) {
-					$form_fields .= '<p><b>'.__('User Account Information:','userswp').'</b></p>';
+					$form_fields = '<p><b>'.__('User Information:','userswp').'</b></p>';
 					foreach ( $fields as $key => $field ) {
 						if( $field->htmlvar_name == 'email' && isset($user_data->user_email) ) {
 							$field_value = $user_data->user_email;
@@ -1443,15 +1479,7 @@ class UsersWP_Forms {
      * @return      void
      */
     public static function uwp_error_log($log){
-
-        $should_log = apply_filters( 'uwp_log_errors', WP_DEBUG);
-        if ( true === $should_log ) {
-            if ( is_array( $log ) || is_object( $log ) ) {
-                error_log( print_r( $log, true ) );
-            } else {
-                error_log( $log );
-            }
-        }
+	    uwp_error_log($log);
     }
 
     /**
@@ -3260,4 +3288,73 @@ class UsersWP_Forms {
         echo '<div class="form-group"><div class="modal-error"></div></div>';
     }
 
+    public function get_register_redirect_url($data, $user){
+        if(is_int($user)){
+	        $user = get_userdata($user);
+        }
+
+        $redirect_page_id = uwp_get_option('register_redirect_to', '');
+
+	    if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
+		    $redirect_to = esc_url($_REQUEST['redirect_to']);
+	    } elseif (isset($data['redirect_to']) && !empty($data['redirect_to'])) {
+		    $redirect_to = esc_url($data['redirect_to']);
+	    } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
+		    if (uwp_is_wpml()) {
+			    $wpml_page_id = uwp_wpml_object_id($redirect_page_id, 'page', true, ICL_LANGUAGE_CODE);
+			    if (!empty($wpml_page_id)) {
+				    $redirect_page_id = $wpml_page_id;
+			    }
+		    }
+		    $redirect_to = get_permalink($redirect_page_id);
+	    } elseif (isset($redirect_page_id) && (int)$redirect_page_id == -2 && uwp_get_option('register_redirect_custom_url' ) ) {
+		    $redirect_to = uwp_get_option('register_redirect_custom_url' );
+	    }  else {
+		    if ( isset($user) && $user->has_cap('manage_options') ) {
+			    $redirect_to = admin_url();
+		    } else {
+			    $redirect_to = home_url('/');
+		    }
+
+		    $redirect_to = apply_filters( 'registration_redirect', $redirect_to );
+	    }
+
+	    return apply_filters('uwp_register_redirect', $redirect_to, $redirect_page_id, $data);
+
+    }
+
+	public function get_login_redirect_url($data, $user){
+		if(is_int($user)){
+			$user = get_userdata($user);
+		}
+
+		$redirect_page_id = uwp_get_option('login_redirect_to', -1);
+
+		if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
+			$redirect_to = esc_url($_REQUEST['redirect_to']);
+		} elseif (isset($data['redirect_to']) && !empty($data['redirect_to'])) {
+			$redirect_to = esc_url($data['redirect_to']);
+		} elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
+			if (uwp_is_wpml()) {
+				$wpml_page_id = uwp_wpml_object_id($redirect_page_id, 'page', true, ICL_LANGUAGE_CODE);
+				if (!empty($wpml_page_id)) {
+					$redirect_page_id = $wpml_page_id;
+				}
+			}
+			$redirect_to = get_permalink($redirect_page_id);
+		} elseif (isset($redirect_page_id) && (int)$redirect_page_id == -2 && uwp_get_option('login_redirect_custom_url' ) ) {
+			$redirect_to = uwp_get_option('login_redirect_custom_url' );
+		}  else {
+			if ( isset($user) && $user->has_cap('manage_options') ) {
+				$redirect_to = admin_url();
+			} else {
+				$redirect_to = home_url('/');
+			}
+
+			$redirect_to = apply_filters( 'login_redirect', $redirect_to, '', $user );
+		}
+
+		return apply_filters('uwp_login_redirect', $redirect_to, $redirect_page_id, $data);
+
+	}
 }

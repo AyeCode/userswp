@@ -1080,7 +1080,7 @@ class UsersWP_Profile {
 
     public function get_author_link($link, $user_id){
 
-        if (1 == uwp_get_option('uwp_disable_author_link')) {
+        if (1 == uwp_get_option('uwp_disable_author_link') && !is_uwp_profile_page()) {
 		    return $link;
 	    }
 
@@ -1650,7 +1650,7 @@ class UsersWP_Profile {
     public function modify_admin_bar_edit_profile_url( $url, $user_id, $scheme )
     {
         // Makes the link to http://example.com/account
-        if (!is_admin()) {
+        if (!is_admin() && !user_can($user_id, 'administrator')) {
             $account_page = uwp_get_page_id('account_page', false);
             if ($account_page) {
                 $account_page_link = get_permalink($account_page);
@@ -1769,7 +1769,10 @@ class UsersWP_Profile {
         $type = strip_tags(esc_sql($_POST['uwp_popup_type']));
 
         if (!in_array($type, array('banner', 'avatar'))) {
-            $result['error'] = uwp_wrap_notice(__("Invalid request!", "userswp"), 'error');
+            $result['error'] = aui()->alert(array(
+	            'type'=> 'danger',
+	            'content'=> __("Invalid request!", "userswp")
+            ));
             $return = json_encode($result);
             echo $return;
             die();
@@ -1787,7 +1790,10 @@ class UsersWP_Profile {
         $result = array();
 
         if (!$field) {
-            $result['error'] = uwp_wrap_notice(__("No fields available", "userswp"), 'error');
+            $result['error'] = aui()->alert(array(
+	            'type'=> 'danger',
+	            'content'=> __("No fields available", "userswp")
+            ));
             $return = json_encode($result);
             echo $return;
             die();
@@ -1797,7 +1803,10 @@ class UsersWP_Profile {
         $errors = $files->handle_file_upload($field, $_FILES);
 
         if (is_wp_error($errors)) {
-            $result['error'] = uwp_wrap_notice($errors->get_error_message(), 'error');
+            $result['error'] = aui()->alert(array(
+	            'type'=> 'danger',
+	            'content'=> $errors->get_error_message()
+            ));
             $return = json_encode($result);
             echo $return;
         } else {
@@ -2225,7 +2234,7 @@ class UsersWP_Profile {
 						}else if($list.hasClass('row-cols-md-5')){
 							uwp_list_view = 5;
 						} else {
-							uwp_list_view = 3;
+							uwp_list_view = <?php echo uwp_get_layout_class('', true); ?>;
 						}
 					}
 					uwp_list_view_select(uwp_list_view, $noStore);

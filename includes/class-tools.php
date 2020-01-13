@@ -301,73 +301,59 @@ class UsersWP_Tools {
 	 */
     public function uwp_tools_process_dummy_users($step, $type = 'add') {
 
-        global $wpdb;
-        $items_per_page = apply_filters('tools_process_dummy_users_per_page', 10, $step, $type);
-        $offset = (int) $step * $items_per_page;
-        $message = '';
-        $done = false;
-        $error = false;
-        $max_step = 0;
-
-        if ('add' == $type) {
-            $users_data = $this->uwp_dummy_users_data();
-            $total_users = count($users_data);
-            $max_step = ceil($total_users / $items_per_page) - 1;
-            $percent = (($step + 1)/ ($max_step+1)) * 100;
-            $dummy_users = array_slice($users_data, $offset, $items_per_page, true);
-
-            foreach ( $dummy_users as $user ) {
-                if ( username_exists( $user['login'] ) ) {
-                    continue;
-                }
-                $name = explode( ' ', $user['display_name'] );
-
-                $user_id = wp_insert_user( array(
-                    'user_login'      => $user['login'],
-                    'user_pass'       => $user['pass'],
-                    'first_name'      => isset( $name[0] ) ? $name[0] : '',
-                    'last_name'       => isset( $name[1] ) ? $name[1] : '',
-                    'display_name'    => $user['display_name'],
-                    'user_email'      => $user['email'],
-                    'user_registered' => uwp_get_random_date( 45, 1 ),
-                ) );
-
-                update_user_meta( $user_id, 'uwp_dummy_user', '1' );
-            }
-        }
-
-        if ('remove' == $type) {
-
-            $paged = !$step ? 1 : $step;
-            $dummy_users = get_users( array( 'meta_key' => 'uwp_dummy_user', 'meta_value' => '1', 'fields' => array( 'ID' ), 'paged' => $paged, 'number' => $items_per_page ) );
-
-            $count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->users LEFT JOIN $wpdb->usermeta ON $wpdb->users.ID = $wpdb->usermeta.user_id WHERE meta_key = 'uwp_dummy_user' AND meta_value = 1;", array()));
-            $total_users = $count;
-            $max_step = ceil($total_users / $items_per_page) - 1;
-            $percent = (($step + 1)/ ($max_step+1)) * 100;
-
-            foreach ( $dummy_users as $user ) {
-                wp_delete_user($user->ID);
-            }
-        }
-
-        if ($step >= $max_step) {
-            $done = true;
-            $message = __("Processed Successfully", 'userswp');
-            $message = $this->tools_wrap_error_message($message, 'success');
-        } else {
-            $done = false;
-            $step = $step + 1;
-        }
-
-        $output = array(
-            'done' => $done,
-            'error' => $error,
-            'message' => $message,
-            'step' => $step,
-            'percent' => intval($percent)
-        );
-        echo json_encode($output);
+	    global $wpdb;
+	    $items_per_page = apply_filters('tools_process_dummy_users_per_page', 10, $step, $type);
+	    $offset = (int) $step * $items_per_page;
+	    $message = '';
+	    $error = false;
+	    $percent = 100;
+	    $max_step = 0;
+	    if ('add' == $type) {
+		    $users_data = $this->uwp_dummy_users_data();
+		    $total_users = count($users_data);
+		    $max_step = ceil($total_users / $items_per_page) - 1;
+		    $percent = (($step + 1)/ ($max_step+1)) * 100;
+		    $dummy_users = array_slice($users_data, $offset, $items_per_page, true);
+		    foreach ( $dummy_users as $user ) {
+			    if ( username_exists( $user['login'] ) ) {
+				    continue;
+			    }
+			    $name = explode( ' ', $user['display_name'] );
+			    $user_id = wp_insert_user( array(
+				    'user_login'      => $user['login'],
+				    'user_pass'       => $user['pass'],
+				    'first_name'      => isset( $name[0] ) ? $name[0] : '',
+				    'last_name'       => isset( $name[1] ) ? $name[1] : '',
+				    'display_name'    => $user['display_name'],
+				    'user_email'      => $user['email'],
+				    'user_registered' => uwp_get_random_date( 45, 1 ),
+			    ) );
+			    update_user_meta( $user_id, 'uwp_dummy_user', '1' );
+		    }
+	    }
+	    if ('remove' == $type) {
+		    $dummy_users = get_users( array( 'meta_key' => 'uwp_dummy_user', 'meta_value' => '1', 'fields' => array( 'ID' )) );
+		    $max_step = $step;
+		    foreach ( $dummy_users as $user ) {
+			    wp_delete_user($user->ID);
+		    }
+	    }
+	    if ($step >= $max_step) {
+		    $done = true;
+		    $message = __("Processed Successfully", 'userswp');
+		    $message = $this->tools_wrap_error_message($message, 'success');
+	    } else {
+		    $done = false;
+		    $step = $step + 1;
+	    }
+	    $output = array(
+		    'done' => $done,
+		    'error' => $error,
+		    'message' => $message,
+		    'step' => $step,
+		    'percent' => intval($percent)
+	    );
+	    echo json_encode($output);
 
     }
 
@@ -671,8 +657,11 @@ class UsersWP_Tools {
                     beforeSend: function() {},
                     success: function(response, textStatus, xhr) {
                         if(response.done === true || response.error === true ) {
-                            jQuery("#uwp_diagnose_pb_" + type).find('.progressBar').hide();
-                            jQuery("#uwp_diagnose_" + type).html(response.message);
+                            tools_progress(response.percent, type);
+                            setTimeout(function(){
+                                jQuery("#uwp_diagnose_pb_" + type).find('.progressBar').hide();
+                                jQuery("#uwp_diagnose_" + type).html(response.message);
+                            }, 1500);
                         } else {
                             tools_progress(response.percent, type);
                             setTimeout(function(){

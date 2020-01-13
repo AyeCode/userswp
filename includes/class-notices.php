@@ -8,28 +8,6 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class UsersWP_Notices {
-    
-    /**
-     * Wrap notice with a div.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      string      Html string.
-     */
-    function wrap_notice($message, $type) {
-
-        $types = array(
-            'error' => 'danger'
-        );
-
-        $alert_type = isset($types[$type]) ? $types[$type] : $type;
-
-        $output = '<div class="uwp-alert-'.esc_attr($type).' text-center alert alert-'.esc_attr($alert_type).'">';
-        $output .= $message;
-        $output .= '</div>';
-        return $output;
-
-    }
 
     /**
      *  Displays notices when registration disabled.
@@ -44,7 +22,7 @@ class UsersWP_Notices {
                 echo aui()->alert(array(
                         'class' => 'text-center',
                         'type'=>'danger',
-                        'heading'  => 'Heads Up!',
+                        'heading'  => __( 'Heads Up!', 'userswp' ),
                         'content'=> __( 'User registration is currently not allowed.', 'userswp' )
                     )
                 );
@@ -66,39 +44,32 @@ class UsersWP_Notices {
         $notice = '';
         $messages['act_success'] = array(
             'message' => __('Account activated successfully. Please login to continue.', 'userswp'),
-            'type' => 'uwp-alert-success',
+            'type' => 'success',
         );
         $messages['act_pending'] = array(
             'message' => __('Your account is not activated yet. Please check your email for activation email.', 'userswp'),
-            'type' => 'uwp-alert-error',
+            'type' => 'error',
         );
         $messages['act_error'] = array(
             'message' => __('Invalid activation key or account.', 'userswp'),
-            'type' => 'uwp-alert-error',
+            'type' => 'error',
         );
         $messages['act_wrong'] = array(
             'message' => __('Something went wrong.', 'userswp'),
-            'type' => 'uwp-alert-error',
+            'type' => 'error',
         );
+
         $messages = apply_filters('uwp_form_error_messages', $messages);
+
         if (!empty($key) && isset($messages[$key])) {
             $value = $messages[$key];
             $message = $value['message'];
             $type = $value['type'];
-
-            $design_style = uwp_get_option("design_style","bootstrap");
-            if($design_style){
-                $type = str_replace("uwp-alert-","",$type);
-                $notice = aui()->alert(array(
-                        'type'=> $type,
-                        'content'=> $message
-                    )
-                );
-            }else{
-                $notice ='<div class="'.$type.' text-center">';
-                $notice .= $message;
-                $notice .= '</div>';
-            }
+	        $notice = aui()->alert(array(
+			        'type'=> $type,
+			        'content'=> $message
+		        )
+	        );
 
         }
 
@@ -121,30 +92,6 @@ class UsersWP_Notices {
                 <p><strong><?php _e( 'UsersWP data sync', 'userswp' ); ?></strong> &#8211; <?php _e( 'Users data sync is running in the background.', 'userswp' ); ?> <a href="<?php echo esc_url( add_query_arg( 'force_sync_data', 'true', admin_url( 'admin.php?page=userswp' ) ) ); ?>"><?php _e( 'Taking a while? Click here to run it now.', 'userswp' ); ?></a></p>
             </div>
             <?php
-        }
-    }
-
-    /**
-     * Displays UsersWP admin notices
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @return      void
-     */
-    public function admin_notices() {
-        $errors = get_option( 'uwp_admin_notices' );
-
-        if ( ! empty( $errors ) ) {
-
-            echo '<div id="uwp_admin_errors" class="notice-error notice is-dismissible">';
-
-            echo '<p>' . $errors . '</p>';
-
-            echo '</div>';
-
-            // Clear
-            delete_option( 'uwp_admin_notices' );
         }
     }
 
@@ -191,7 +138,6 @@ class UsersWP_Notices {
         }
 
     }
-
 
     public static function yoast_user_archives_disabled(){
         if( defined( 'WPSEO_VERSION' ) && version_compare( WPSEO_VERSION, '7.0', '>=' ) && class_exists('WPSEO_Options') && WPSEO_Options::get( 'disable-author', false ) ){

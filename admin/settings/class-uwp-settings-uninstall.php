@@ -81,7 +81,7 @@ if ( ! class_exists( 'UsersWP_Settings_Uninstall', false ) ) :
                 array(
                     'title' => __( 'Uninstall Settings', 'userswp' ),
                     'type'  => 'title',
-                    'desc'  => '<b>' . __( 'NOTE: Add-ons should be deleted before core to ensure complete uninstall.', 'userswp' ) . '</b>',
+                    'desc'  => '<b style="color:#f00 ">' . __( 'NOTE: Add-ons should be deleted before core to ensure complete uninstall.', 'userswp' ) . '</b>',
                     'id'    => 'uninstall_options',
                 ),
 

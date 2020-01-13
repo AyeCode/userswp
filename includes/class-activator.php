@@ -14,6 +14,9 @@ class UsersWP_Activator {
         '1.2.0.0' => array(
             'uwp_upgrade_1200',
         ),
+        '1.2.0.13' => array(
+            'uwp_upgrade_12013',
+        ),
     );
 
 

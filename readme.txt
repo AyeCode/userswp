@@ -124,6 +124,13 @@ No questions so far, but don't hesitate to ask!
 = 1.2.0.13 =
 * Formatting textarea custom field in the tab content - FIXED
 * Short tag to send user submitted information in email for account update form - ADDED
+* Reload recaptcha after form submission error - FIXED
+* Limit the author bio content in author box which can be changed by filter - CHANGED
+* Plugin setup wizard - ADDED
+* Default and custom redirect option to register and login page - ADDED
+* Remove password neg on reset password - ADDED
+* Password strength indicator on reset password form - ADDED
+* Country field in account form conflict with the Location manager plugin - FIXED
 
 = 1.2.0.12 =
 * GD List Manager plugin integration in core - ADDED

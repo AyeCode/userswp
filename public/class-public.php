@@ -80,13 +80,14 @@ class UsersWP_Public {
         $uwp_localize_data = uwp_get_localize_data();
         wp_localize_script(USERSWP_NAME, 'uwp_localize_data', $uwp_localize_data);
 
+	    wp_register_script( "uwp_timepicker", USERSWP_PLUGIN_URL . 'assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), USERSWP_VERSION, true );
+
 
         // date and timepicker
         $enable_timepicker_in_register = false;
         $enable_timepicker_in_account = false;
         $enable_datepicker_in_register = false;
         $enable_datepicker_in_account = false;
-        $enable_country_in_account = false;
 
         if (is_uwp_register_page() || is_uwp_account_page()) {
             if (is_uwp_register_page()) {
@@ -104,17 +105,13 @@ class UsersWP_Public {
                     if ($field->field_type == 'datepicker') {
                         $enable_datepicker_in_register = true;
                     }
-
-                    if ($field->field_type_key == 'country') {
-                        $enable_country_in_account  = true;
-                    }
                 }
             }
         }
 
         if ($enable_timepicker_in_register || $enable_timepicker_in_account) {
             // time fields available only in register and account pages
-            wp_enqueue_script( "uwp_timepicker", USERSWP_PLUGIN_URL . 'assets/js/jquery.ui.timepicker' . $suffix . '.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), null, false );
+            wp_enqueue_script( "uwp_timepicker");
         }
         if ($enable_datepicker_in_register || $enable_datepicker_in_account) {
             // date fields available only in register and account pages

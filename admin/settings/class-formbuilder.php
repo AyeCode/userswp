@@ -231,7 +231,7 @@ class UsersWP_Form_Builder {
         
 
         // Country
-        $custom_fields['country'] = array( // The key value should be unique and not contain any spaces.
+        $custom_fields['uwp_country'] = array( // The key value should be unique and not contain any spaces.
             'field_type'  =>  'select',
             'class'       =>  'uwp-country',
             'icon'        =>  'fas fa-map-marker-alt',
@@ -240,7 +240,7 @@ class UsersWP_Form_Builder {
             'defaults'    => array(
                 'admin_title'         =>  'Country',
                 'site_title'          =>  'Country',
-                'htmlvar_name'        =>  'country',
+                'htmlvar_name'        =>  'uwp_country',
                 'is_active'           =>  1,
                 'default_value'       =>  '',
                 'is_required'         =>  0,
@@ -2608,7 +2608,7 @@ class UsersWP_Form_Builder {
 
         /*-------- check duplicate validation --------*/
 
-        $site_htmlvar_name = isset($request_field['htmlvar_name']) ? $request_field['htmlvar_name'] : '';
+        $site_htmlvar_name = isset($request_field['site_htmlvar_name']) ? $request_field['site_htmlvar_name'] : $request_field['htmlvar_name'];
         $form_type = $request_field['form_type'];
         $field_type = $request_field['field_type'];
 
@@ -2707,274 +2707,6 @@ class UsersWP_Form_Builder {
             return 0;
 
 
-    }
-    
-    public function form_builder_dummy_fields() {
-        global $wpdb;
-
-        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
-        // This function is intended for testing purpose
-        if (isset($_GET['uwp_dummy'])
-            && is_admin()
-            && is_user_logged_in()
-            && current_user_can('manage_options')) {
-
-            if ($_GET['uwp_dummy'] == 'create') {
-                // Account
-                $fields = $this->dummy_custom_fields();
-
-                foreach ($fields as $field_index => $field) {
-                    $this->admin_form_field_save($field);
-                }
-
-                // Register
-                foreach ($fields as $field) {
-                    $last_order = $wpdb->get_var("SELECT MAX(sort_order) as last_order FROM " . $extras_table_name);
-                    $sort_order = (int) $last_order + 1;
-                    $wpdb->query(
-                        $wpdb->prepare(
-
-                            "insert into " . $extras_table_name . " set
-                        form_type = %s,
-                        field_type = %s,
-                        is_dummy = %s,
-                        site_htmlvar_name = %s,
-                        sort_order = %s",
-                            array(
-                                'register',
-                                $field['field_type'],
-                                $field['is_dummy'],
-                                $field['htmlvar_name'],
-                                $sort_order
-                            )
-                        )
-                    );
-                }
-                
-                wp_redirect(admin_url('admin.php?page=uwp_form_builder'));
-                exit;
-            }
-
-
-            if ($_GET['uwp_dummy'] == 'delete') {
-
-                $wpdb->query($wpdb->prepare("delete from " . $table_name . " where is_dummy= %s ", array('1')));
-                $wpdb->query($wpdb->prepare("delete from " . $extras_table_name . " where is_dummy= %s ", array('1')));
-                wp_redirect(admin_url('admin.php?page=uwp_form_builder'));
-                exit;
-            }
-            
-        }
-
-
-    }
-
-    public function dummy_custom_fields() {
-
-        $fields = array();
-
-        //Fieldset
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'fieldset',
-            'site_title' => __('Dummy Fieldset', 'userswp'),
-            'htmlvar_name' => 'dummy_fieldset',
-            'default_value' => '',
-            'option_values' => '',
-            'is_dummy' => '1',
-            'is_public' => '1',
-            'is_active' => '1',
-            'is_register_field' => '1',
-            'is_search_field' => '1',
-        );
-
-        //Text
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'text',
-            'site_title' => __('Dummy Text', 'userswp'),
-            'htmlvar_name' => 'dummy_text',
-            'default_value' => '',
-            'option_values' => '',
-            'is_dummy' => '1',
-            'is_public' => '1',
-            'is_active' => '1',
-            'is_register_field' => '1',
-            'is_search_field' => '1',
-        );
-
-        //Textarea
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'textarea',
-            'site_title' => __('Dummy Textarea', 'userswp'),
-            'htmlvar_name' => 'dummy_textarea',
-            'default_value' => '',
-            'option_values' => '',
-            'is_dummy' => '1',
-            'is_public' => '1',
-            'is_active' => '1',
-            'is_register_field' => '1',
-            'is_search_field' => '1',
-        );
-
-        //Checkbox
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'checkbox',
-            'site_title' => __('Dummy Checkbox', 'userswp'),
-            'htmlvar_name' => 'dummy_checkbox',
-            'default_value' => '',
-            'option_values' => '',
-            'is_dummy' => '1',
-            'is_public' => '1',
-            'is_active' => '1',
-            'is_register_field' => '1',
-            'is_search_field' => '1',
-        );
-
-        //Radio
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'radio',
-            'site_title' => __('Dummy Radio', 'userswp'),
-            'htmlvar_name' => 'dummy_radio',
-            'default_value' => '',
-            'option_values' => __('Value1,Value2,Value3', 'userswp'),
-            'is_dummy' => '1',
-            'is_public' => '1',
-            'is_active' => '1',
-            'is_register_field' => '1',
-            'is_search_field' => '1',
-        );
-
-        //Select
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'select',
-            'site_title' => __('Dummy Select', 'userswp'),
-            'htmlvar_name' => 'dummy_select',
-            'default_value' => '',
-            'option_values' => __('Select Option/,Value1,Value2,Value3', 'userswp'),
-            'is_dummy' => '1',
-            'is_public' => '1',
-            'is_active' => '1',
-            'is_register_field' => '1',
-            'is_search_field' => '1',
-        );
-
-        //URL
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'url',
-            'site_title' => __('Dummy URL', 'userswp'),
-            'htmlvar_name' => 'dummy_url',
-            'default_value' => '',
-            'option_values' => '',
-            'is_dummy' => '1',
-            'is_public' => '1',
-            'is_active' => '1',
-            'is_register_field' => '1',
-            'is_search_field' => '1',
-        );
-
-        //Date
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'datepicker',
-            'site_title' => __('Dummy Date', 'userswp'),
-            'htmlvar_name' => 'dummy_datepicker',
-            'default_value' => '',
-            'option_values' => '',
-            'is_dummy' => '1',
-            'is_public' => '1',
-            'is_active' => '1',
-            'is_register_field' => '1',
-            'is_search_field' => '1',
-            'extra' => array(
-                'date_format' => 'F j, Y'
-            )
-        );
-
-        //Time
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'time',
-            'site_title' => __('Dummy Time', 'userswp'),
-            'htmlvar_name' => 'dummy_time',
-            'default_value' => '',
-            'option_values' => '',
-            'is_dummy' => '1',
-            'is_public' => '1',
-            'is_active' => '1',
-            'is_register_field' => '1',
-            'is_search_field' => '1',
-        );
-
-        //Phone
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'phone',
-            'site_title' => __('Dummy Phone', 'userswp'),
-            'htmlvar_name' => 'dummy_phone',
-            'default_value' => '',
-            'option_values' => '',
-            'is_dummy' => '1',
-            'is_public' => '1',
-            'is_active' => '1',
-            'is_register_field' => '1',
-            'is_search_field' => '1',
-        );
-
-        //Email
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'email',
-            'site_title' => __('Dummy Email', 'userswp'),
-            'htmlvar_name' => 'dummy_email',
-            'default_value' => '',
-            'option_values' => '',
-            'is_dummy' => '1',
-            'is_public' => '1',
-            'is_active' => '1',
-            'is_register_field' => '1',
-            'is_search_field' => '1',
-        );
-
-        //Multiselect
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'multiselect',
-            'site_title' => __('Dummy Multiselect', 'userswp'),
-            'htmlvar_name' => 'dummy_multiselect',
-            'default_value' => '',
-            'option_values' => __('Select Option/,Value1,Value2,Value3', 'userswp'),
-            'is_dummy' => '1',
-            'is_public' => '1',
-            'is_active' => '1',
-            'is_register_field' => '1',
-            'is_search_field' => '1',
-        );
-
-        //File Upload
-        $fields[] = array(
-            'form_type' => 'account',
-            'field_type' => 'file',
-            'site_title' => __('Dummy File', 'userswp'),
-            'htmlvar_name' => 'dummy_file',
-            'default_value' => '',
-            'option_values' => '',
-            'is_dummy' => '1',
-            'is_public' => '1',
-            'is_active' => '1',
-            'is_register_field' => '1',
-            'is_search_field' => '1',
-        );
-
-        $fields = apply_filters('uwp_dummy_custom_fields', $fields);
-
-        return  $fields;
     }
     
 }

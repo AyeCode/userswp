@@ -287,4 +287,44 @@ class UsersWP_Menus {
             ) );
         }
     }
+
+	/**
+	 * Returns endpoints for UWP menu in setup wizard.
+	 *
+	 * @since 1.2.0.13
+	 * @return array
+	 */
+	public function get_endpoints() {
+		$items = array();
+		$items['pages'] = array();
+		$loop_index = 999;
+		$uwp_pages = array('users_page','profile_page','register_page','login_page','account_page','forgot_page','logout');
+		if( !empty( $uwp_pages) ) {
+			foreach ( $uwp_pages as $page ) {
+				if( !empty( $page ) && 'logout' != $page ) {
+					$page_data = uwp_get_page_url_data($page, 'array');
+				} else{
+					$page_data = array(
+						'name' => __( 'Log out', 'userswp' ),
+						'slug' => 'logout',
+						'link' => wp_login_url(),
+					);
+				}
+				$page_class = !empty( $page ) ? str_replace('_page','',$page) : '';
+				$item = new stdClass();
+				$item->object =  'custom';
+				$item->menu_item_parent = 0;
+				$item->type = 'custom';
+				$item->title = $page_data['name'];
+				$item->url = $page_data['link'];
+				$item->target = '';
+				$item->attr_title = '';
+				$item->classes = array("users-wp-menu users-wp-$page_class-nav");
+				$item->xfn = '';
+				$items['pages'][] = $item;
+			}
+		}
+
+		return apply_filters( 'uwp_menu_items', $items,$loop_index );
+	}
 }
