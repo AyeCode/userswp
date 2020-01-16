@@ -950,7 +950,7 @@ function uwp_maybe_serialize($key, $value) {
  */
 function uwp_maybe_unserialize($key, $value) {
     $field = uwp_get_custom_field_info($key);
-    if (isset($field->field_type) && $field->field_type == 'multiselect') {
+    if (isset($field->field_type) && $field->field_type == 'multiselect' && $value) {
         $value = explode(",", $value);
     }
     return $value;

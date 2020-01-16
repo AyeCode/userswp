@@ -1765,7 +1765,7 @@ class UsersWP_Forms {
                     'validation_text' => !empty($field->is_required) ? __($field->required_msg, 'userswp') : '',
                     'help_text' => __( $field->help_text, 'userswp' ),
                     'label' => uwp_get_form_label( $field ),
-                    'options'=>$option_values_arr,
+                    'options'=> $option_values_arr,
                     'select2' => true
                 ));
             }else{
@@ -1854,88 +1854,113 @@ class UsersWP_Forms {
             if (!empty($field->extra_fields)) {
                 $multi_display = unserialize($field->extra_fields);
             }
-            ?>
-            <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
 
-                <?php
-                $site_title = uwp_get_form_label($field);
-                if (!is_admin()) { ?>
-                    <label class="<?php echo esc_attr($bs_sr_only);?>">
-                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                        <?php if ($field->is_required) echo '<span>*</span>';?>
-                    </label>
-                <?php } ?>
+	        $option_values_arr = uwp_string_values_to_options($field->option_values, true);
 
-                <input type="hidden" name="<?php echo $field->htmlvar_name;?>" value=""/>
-                <?php if ($multi_display == 'select') { ?>
-                <div class="uwp_multiselect_list">
-                    <select name="<?php echo $field->htmlvar_name;?>[]"
-                            id="<?php echo $field->htmlvar_name;?>"
-                            title="<?php echo $site_title; ?>"
-                            multiple="multiple" class="aui-select2"
-                            data-placeholder="<?php echo $site_title; ?>"
-                            class="aui-select2 <?php echo esc_attr($bs_form_control);?>"
-                    >
-                        <?php
-                        } else {
-                            ?>
-                            <ul class="uwp_multi_choice">
-                            <?php
-                        }
+	        // bootstrap
+	        if( $design_style ) {
 
-                        $option_values_arr = uwp_string_values_to_options($field->option_values, true);
-                        $select_options = '';
-                        if (!empty($option_values_arr)) {
-                            foreach ($option_values_arr as $option_row) {
-                                if (isset($option_row['optgroup']) && ($option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end')) {
-                                    $option_label = isset($option_row['label']) ? $option_row['label'] : '';
+		        echo aui()->select(array(
+			        'id'    =>  $field->htmlvar_name,
+			        'name'    =>  $field->htmlvar_name,
+			        'placeholder'   => uwp_get_form_label( $field ),
+			        'title'   => uwp_get_form_label( $field ),
+			        'value' =>  $value,
+			        'required'  => $field->is_required,
+			        'validation_text' => !empty($field->is_required) ? __($field->required_msg, 'userswp') : '',
+			        'help_text' => __( $field->help_text, 'userswp' ),
+			        'label' => uwp_get_form_label( $field ),
+			        'options'=> $option_values_arr,
+			        'select2' => true,
+			        'multiple' => true
+		        ));
+	        }else {
+		        ?>
+                <div id="<?php echo $field->htmlvar_name; ?>_row"
+                     class="<?php if ( $field->is_required ) {
+			             echo 'required_field';
+		             } ?> uwp_form_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 
-                                    if ($multi_display == 'select') {
-                                        $select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr($option_label) . '">' : '</optgroup>';
-                                    } else {
-                                        $select_options .= $option_row['optgroup'] == 'start' ? '<li>' . $option_label . '</li>' : '';
-                                    }
-                                } else {
-                                    $option_label = isset($option_row['label']) ? $option_row['label'] : '';
-                                    $option_value = isset($option_row['value']) ? $option_row['value'] : '';
-                                    $selected = $option_value == $value ? 'selected="selected"' : '';
-                                    $checked = '';
+			        <?php
+			        $site_title = uwp_get_form_label( $field );
+			        if ( ! is_admin() ) { ?>
+                        <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
+					        <?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+					        <?php if ( $field->is_required ) {
+						        echo '<span>*</span>';
+					        } ?>
+                        </label>
+			        <?php } ?>
 
-                                    if ((!is_array($value) && trim($value) != '') || (is_array($value) && !empty($value))) {
-                                        if (!is_array($value)) {
-                                            $value_array = explode(',', $value);
-                                        } else {
-                                            $value_array = $value;
-                                        }
+                    <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value=""/>
+			        <?php if ( $multi_display == 'select' ) { ?>
+                    <div class="uwp_multiselect_list">
+                        <select name="<?php echo $field->htmlvar_name; ?>[]"
+                                id="<?php echo $field->htmlvar_name; ?>"
+                                title="<?php echo $site_title; ?>"
+                                data-placeholder="<?php echo $site_title; ?>"
+                                class="aui-select2 <?php echo esc_attr( $bs_form_control ); ?>"
+                        >
+					        <?php
+					        } else {
+						        ?>
+                                <ul class="uwp_multi_choice">
+						        <?php
+					        }
 
-                                        if (is_array($value_array)) {
-                                            if (in_array($option_value, $value_array)) {
-                                                $selected = 'selected="selected"';
-                                                $checked = 'checked="checked"';
-                                            }
-                                        }
-                                    }
+					        $option_values_arr = uwp_string_values_to_options( $field->option_values, true );
+					        $select_options    = '';
+					        if ( ! empty( $option_values_arr ) ) {
+						        foreach ( $option_values_arr as $option_row ) {
+							        if ( isset( $option_row['optgroup'] ) && ( $option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end' ) ) {
+								        $option_label = isset( $option_row['label'] ) ? $option_row['label'] : '';
 
-                                    if ($multi_display == 'select') {
-                                        $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
-                                    } else {
-                                        $select_options .= '<li><input name="' . $field->name . '[]" ' . $checked . ' value="' . esc_attr($option_value) . '" class="uwp-' . $multi_display . '" type="' . $multi_display . '" />&nbsp;' . $option_label . ' </li>';
-                                    }
-                                }
-                            }
-                        }
-                        echo $select_options;
+								        if ( $multi_display == 'select' ) {
+									        $select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr( $option_label ) . '">' : '</optgroup>';
+								        } else {
+									        $select_options .= $option_row['optgroup'] == 'start' ? '<li>' . $option_label . '</li>' : '';
+								        }
+							        } else {
+								        $option_label = isset( $option_row['label'] ) ? $option_row['label'] : '';
+								        $option_value = isset( $option_row['value'] ) ? $option_row['value'] : '';
+								        $selected     = $option_value == $value ? 'selected="selected"' : '';
+								        $checked      = '';
 
-                        if ($multi_display == 'select') { ?></select></div>
-            <?php } else { ?>
-                </ul>
-            <?php } ?>
-                <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
-                <?php } ?>
-            </div>
-            <?php
+								        if ( ( ! is_array( $value ) && trim( $value ) != '' ) || ( is_array( $value ) && ! empty( $value ) ) ) {
+									        if ( ! is_array( $value ) ) {
+										        $value_array = explode( ',', $value );
+									        } else {
+										        $value_array = $value;
+									        }
+
+									        if ( is_array( $value_array ) ) {
+										        if ( in_array( $option_value, $value_array ) ) {
+											        $selected = 'selected="selected"';
+											        $checked  = 'checked="checked"';
+										        }
+									        }
+								        }
+
+								        if ( $multi_display == 'select' ) {
+									        $select_options .= '<option value="' . esc_attr( $option_value ) . '" ' . $selected . '>' . $option_label . '</option>';
+								        } else {
+									        $select_options .= '<li><input name="' . $field->name . '[]" ' . $checked . ' value="' . esc_attr( $option_value ) . '" class="uwp-' . $multi_display . '" type="' . $multi_display . '" />&nbsp;' . $option_label . ' </li>';
+								        }
+							        }
+						        }
+					        }
+					        echo $select_options;
+
+					        if ( $multi_display == 'select' ) { ?></select></div>
+		        <?php } else { ?>
+                    </ul>
+		        <?php } ?>
+			        <?php if ( $field->is_required ) { ?>
+                        <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+			        <?php } ?>
+                </div>
+		        <?php
+	        }
             $html = ob_get_clean();
         }
 
@@ -2728,7 +2753,73 @@ class UsersWP_Forms {
         return $html;
     }
 
+	/**
+	 * Form field template for Phone field.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $html Form field html
+	 * @param object $field Field info.
+	 * @param string $value Form field default value.
+	 * @param string $form_type Form type
+	 *
+	 * @return string $html Modified form field html.
+	 */
+	public function form_input_phone($html, $field, $value, $form_type){
+		if(empty($html)) {
+			$design_style = uwp_get_option("design_style","bootstrap");
+			$bs_form_group = $design_style ? "form-group" : "";
+			$bs_sr_only = $design_style ? "sr-only" : "";
+			$bs_form_control = $design_style ? "form-control" : "";
+			ob_start(); // Start  buffering;
 
+			if( $design_style ){
+				echo aui()->input(array(
+					'type'  =>  'tel',
+					'id'    =>  $field->htmlvar_name,
+					'name'    =>  $field->htmlvar_name,
+					'placeholder'   => uwp_get_form_label( $field ),
+					'title'   => uwp_get_form_label( $field ),
+					'value' =>  $value,
+					'required'  => $field->is_required,
+					'help_text' => __( $field->help_text, 'userswp' ),
+					'label' => is_admin() ? '' : uwp_get_form_label( $field )
+				));
+			}else {
+				?>
+                <div id="<?php echo $field->htmlvar_name; ?>_row"
+                     class="<?php if ( $field->is_required ) {
+					     echo 'required_field';
+				     } ?> uwp_form_row clearfix uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+					<?php
+					$label = $site_title = uwp_get_form_label( $field );
+					if ( ! is_admin() ) { ?>
+                        <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
+							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php if ( $field->is_required ) {
+								echo '<span>*</span>';
+							} ?>
+                        </label>
+					<?php } ?>
+                    <input name="<?php echo $field->htmlvar_name; ?>"
+                           class="<?php echo $field->css_class; ?> <?php echo esc_attr( $bs_form_control ); ?>"
+                           placeholder="<?php echo $label; ?>"
+                           title="<?php echo $label; ?>"
+						<?php if ( $field->for_admin_use == 1 ) {
+							echo 'readonly="readonly"';
+						} ?>
+						<?php if ( $field->is_required == 1 ) {
+							echo 'required="required"';
+						} ?>
+                           type="tel"
+                           value="<?php echo esc_html( $value ); ?>">
+                </div>
+				<?php
+			}
+			$html = ob_get_clean();
+		}
+		return $html;
+	}
 
     /**
      * Adds enctype tag in form for file fields.

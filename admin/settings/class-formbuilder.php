@@ -1859,7 +1859,7 @@ class UsersWP_Form_Builder {
             </label>
             <div class="uwp-input-wrap">
 
-                <?php if(isset($field_type_key) && $field_type_key == 'country' ){
+                <?php if(isset($field_type_key) && $field_type_key == 'uwp_country' ){
 
                     // @todo here we should show a multiselect to either include or exclude countries
                     _e('A full country list will be shown','userswp');

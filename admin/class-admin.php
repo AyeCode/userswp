@@ -205,7 +205,7 @@ class UsersWP_Admin {
 	 *
 	 * @return      string                      Modified description.
 	 */
-	function user_profile_picture_description($description) {
+	public function user_profile_picture_description($description) {
 		if (is_admin() && IS_PROFILE_PAGE) {
 			$user_id = get_current_user_id();
 			$avatar = uwp_get_usermeta($user_id, 'avatar_thumb', '');
@@ -229,7 +229,7 @@ class UsersWP_Admin {
 	 *
 	 * @return      void
 	 */
-	function edit_profile_banner_fields($user) {
+	public function edit_profile_banner_fields($user) {
 		global $wpdb;
 
 		$file_obj = new UsersWP_Files();
@@ -307,7 +307,7 @@ class UsersWP_Admin {
 		}
 	}
 
-	function admin_body_class($classes) {
+	public function admin_body_class($classes) {
 		$screen = get_current_screen();
 		if ( 'profile' == $screen->base || 'user-edit' == $screen->base )
 			$classes .= 'uwp_page';

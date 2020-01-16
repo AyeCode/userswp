@@ -1767,6 +1767,7 @@ class UsersWP_Profile {
         // Image upload handler
         // todo: security checks
         $type = strip_tags(esc_sql($_POST['uwp_popup_type']));
+	    $result = array();
 
         if (!in_array($type, array('banner', 'avatar'))) {
             $result['error'] = aui()->alert(array(
