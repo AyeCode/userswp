@@ -383,7 +383,7 @@ class UsersWP_Admin_Settings {
                                 placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
                                 rows="<?php echo $rows; ?>"
                             <?php echo implode( ' ', $custom_attributes ); ?>
-                        ><?php echo esc_textarea( $option_value );  ?></textarea>
+                        ><?php echo esc_textarea( stripslashes($option_value) );  ?></textarea>
                         <?php if ( ! empty( $value['custom_desc'] ) ) { ?>
                             <span class="uwp-custom-desc"><?php echo $value['custom_desc']; ?></span>
                         <?php } ?>

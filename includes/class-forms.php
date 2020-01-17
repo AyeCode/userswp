@@ -2392,7 +2392,7 @@ class UsersWP_Forms {
                     'name'    =>  $field->htmlvar_name,
                     'placeholder'   => $site_title,
                     'title'   => $site_title,
-                    'value' =>  $value,
+                    'value' =>  stripslashes($value),
                     'required'  => $field->is_required,
                     'validation_text' => __($field->required_msg, 'userswp'),
                     'help_text' => __( $field->help_text, 'userswp' ),
