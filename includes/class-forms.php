@@ -111,7 +111,7 @@ class UsersWP_Forms {
 	 */
     public function output_dashboard_links($options){
         if(!empty($options)){
-            $class = uwp_get_option("design_style",'bootstrap')=='bootstrap' ? 'form-control' : 'uwp_select2';
+            $class = uwp_get_option("design_style",'bootstrap')=='bootstrap' ? 'form-control' : 'aui-select2';
             echo "<select class='$class' onchange='window.location = jQuery(this).val();'>";
             $this->output_options($options);
             echo "<select>";
@@ -193,14 +193,18 @@ class UsersWP_Forms {
                 if (isset($_GET['uwp_remove_nag']) && $_GET['uwp_remove_nag'] == 'yes') {
                     delete_user_meta( $user_id, 'default_password_nag' );
                     $message = sprintf(__('We have removed the system generated password warning for you. From this point forward you can continue to access our site as usual. To go to home page, <a href="%s">click here</a>.', 'userswp'), home_url('/'));
-                    echo '<div class="uwp-alert-success text-center">';
-                    echo $message;
-                    echo '</div>';
+	                echo aui()->alert(array(
+		                'class'=>'text-center',
+		                'type'=>'success',
+		                'content'=> $message
+	                ));
                 } else {
                     $message = sprintf(__('<strong>Warning</strong>: It seems like you are using a system generated password. Please change the password in this page. If this is not a problem for you, you can remove this warning by <a href="%s">clicking here</a>.', 'userswp'), $remove_nag_url);
-                    echo '<div class="uwp-alert-warning text-center">';
-                    echo $message;
-                    echo '</div>';
+	                echo aui()->alert(array(
+		                'class'=>'text-center',
+	                    'type'=>'warning',
+		                'content'=> $message
+	                ));
                 }
             }
         }
@@ -222,7 +226,12 @@ class UsersWP_Forms {
         }
 
         if( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce' ) ) {
-            if(wp_doing_ajax()){wp_send_json_error();}
+	        $message = aui()->alert(array(
+			        'type'=>'error',
+			        'content'=> __('Security verification failed. Try again.', 'userswp')
+		        )
+	        );
+	        if(wp_doing_ajax()){wp_send_json_error($message);}
             else{return;}
         }
 
@@ -324,8 +333,6 @@ class UsersWP_Forms {
 
 	    $user_login = !empty($result['username']) ? $result['username'] : '';
 	    $email = !empty($result['email']) ? $result['email'] : '';
-
-
 
 	    if(empty($user_login)){
 		    $user_login = sanitize_user( str_replace( ' ', '', $display_name ), true );
@@ -445,9 +452,25 @@ class UsersWP_Forms {
 
         }
 
-        $force_redirect = apply_filters('uwp_registration_force_redirect', false, $_POST, $_FILES);
-
-        if ($reg_action == 'auto_approve_login' || $force_redirect) {
+	    if ($reg_action == 'force_redirect') {
+		    $redirect_to = $this->get_register_redirect_url($data, $user_id);
+		    do_action('uwp_after_process_register', $data);
+		    if(wp_doing_ajax()){
+			    $message = aui()->alert(array(
+					    'type'=>'success',
+					    'content'=> __('Account registered successfully. Redirecting...', 'userswp')
+				    )
+			    );
+			    $response = array(
+				    'message' => $message,
+				    'redirect'  => $redirect_to,
+			    );
+			    wp_send_json_success($response);
+		    }else{
+			    wp_redirect($redirect_to);
+		    }
+		    exit();
+	    } elseif ($reg_action == 'auto_approve_login') {
             $res = wp_signon(
                 array(
                     'user_login' => $result['username'],
@@ -464,9 +487,7 @@ class UsersWP_Forms {
                 );
                 $uwp_notices[] = array('register' => $error);
             } else {
-                $reg_redirect_page_id = uwp_get_option('register_redirect_to', '');
-                $redirect_to = uwp_get_redirect_url($reg_redirect_page_id, $data);
-                $redirect = apply_filters('uwp_register_redirect', $redirect_to);
+                $redirect_to = $this->get_register_redirect_url($data, $user_id);
                 do_action('uwp_after_process_register', $data);
 
                 if(wp_doing_ajax()){
@@ -477,11 +498,11 @@ class UsersWP_Forms {
                     );
                     $response = array(
                         'message' => $message,
-                        'redirect'  => $redirect,
+                        'redirect'  => $redirect_to,
                     );
                     wp_send_json_success($response);
                 }else{
-                    wp_redirect($redirect);
+                    wp_redirect($redirect_to);
                 }
                 exit();
             }
@@ -561,7 +582,12 @@ class UsersWP_Forms {
         }
 
         if( ! isset( $data['uwp_login_nonce'] ) || ! wp_verify_nonce( $data['uwp_login_nonce'], 'uwp-login-nonce' ) ) {
-            if(wp_doing_ajax()){wp_send_json_error();}
+	        $message = aui()->alert(array(
+			        'type'=>'error',
+			        'content'=> __('Security verification failed. Try again.', 'userswp')
+		        )
+	        );
+	        if(wp_doing_ajax()){wp_send_json_error($message);}
             else{return;}
         }
 
@@ -593,7 +619,7 @@ class UsersWP_Forms {
 
         remove_action( 'authenticate', 'gglcptch_login_check', 21 );
 
-        $res = wp_signon(
+        $user = wp_signon(
             array(
                 'user_login' => $result['username'],
                 'user_password' => $result['password'],
@@ -603,7 +629,7 @@ class UsersWP_Forms {
 
         add_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
 
-        if (is_wp_error($res)) {
+        if (is_wp_error($user)) {
             $message = aui()->alert(array(
                     'type'=>'error',
                     'content'=> __( 'Invalid username or Password.', 'userswp' )
@@ -620,9 +646,7 @@ class UsersWP_Forms {
             );
             if(wp_doing_ajax()){wp_send_json_success($message);}
             else{
-                $redirect_page_id = uwp_get_option('login_redirect_to', -1);
-                $redirect_to = uwp_get_redirect_url($redirect_page_id, $data);
-                $redirect_to = apply_filters('uwp_login_redirect', $redirect_to);
+                $redirect_to = $this->get_login_redirect_url($data, $user);
                 wp_redirect($redirect_to);
                 exit(); 
             }
@@ -647,7 +671,12 @@ class UsersWP_Forms {
         }
 
         if( ! isset( $data['uwp_forgot_nonce'] ) || ! wp_verify_nonce( $data['uwp_forgot_nonce'], 'uwp-forgot-nonce' ) ) {
-            if(wp_doing_ajax()){wp_send_json_error();}
+	        $message = aui()->alert(array(
+			        'type'=>'error',
+			        'content'=> __('Security verification failed. Try again.', 'userswp')
+		        )
+	        );
+	        if(wp_doing_ajax()){wp_send_json_error($message);}
             else{return;}
         }
 
@@ -675,7 +704,7 @@ class UsersWP_Forms {
         $user_data = get_user_by('email', $data['email']);
 
         // if no user we fake it and bail
-        if(!$user_data->ID){
+        if(!$user_data){
             $message = aui()->alert(array(
                     'type'=>'success',
                     'content'=> apply_filters('uwp_change_password_success_message', __('Please check your email.', 'userswp'), $data)
@@ -762,16 +791,23 @@ class UsersWP_Forms {
         $email->send( 'change', $user_data->ID );
 
         wp_set_password( $result['password'], $user_data->ID );
-        wp_set_auth_cookie( $user_data->ID, false);
+
+	    $password_nag = get_user_option('default_password_nag', $user_data->ID);
+	    if ($password_nag) {
+		    delete_user_meta( $user_data->ID, 'default_password_nag' );
+	    }
 
         $message = aui()->alert(array(
                 'type'=>'success',
                 'content'=> apply_filters('uwp_change_password_success_message', __('Password changed successfully', 'userswp'), $data)
             )
         );
+
         $uwp_notices[] = array('change' => $message);
 
-        do_action('uwp_after_process_change', $data);
+	    do_action('uwp_after_process_change', $data);
+
+	    wp_logout();exit();
     }
 
     /**
@@ -828,7 +864,7 @@ class UsersWP_Forms {
 
         wp_set_password( $data['password'], $user_data->ID );
 
-        $login_page_url = wp_login_url();
+        $login_page_url = uwp_get_login_page_url();
         $message = sprintf(__('Password updated successfully. Please <a href="%s">login</a> with your new password', 'userswp'), $login_page_url);
         $message = apply_filters('uwp_reset_password_success_message', $message, $data);
         $message = aui()->alert(array(
@@ -962,7 +998,7 @@ class UsersWP_Forms {
         }
 
 
-        if (uwp_get_option('enable_account_update_notification') == '1') {
+        if (uwp_get_option('account_update_email') == '1') {
             $user_data = get_user_by('id', $user_id);
 
             $email = new UsersWP_Mails();
@@ -1183,15 +1219,53 @@ class UsersWP_Forms {
         switch ($type) {
             case "register_admin":
                 $user_data = get_userdata($user_id);
-                $extras = __('<p><b>' . __('User Information :', 'userswp') . '</b></p>
+                $extras = '<p><b>' .__('User Information :', 'userswp') . '</b></p>
             <p>' . __('First Name:', 'userswp') . ' ' . $user_data->first_name . '</p>
             <p>' . __('Last Name:', 'userswp') . ' ' . $user_data->last_name . '</p>
             <p>' . __('Username:', 'userswp') . ' ' . $user_data->user_login . '</p>
-            <p>' . __('Email:', 'userswp') . ' ' . $user_data->user_email . '</p>');
+            <p>' . __('Email:', 'userswp') . ' ' . $user_data->user_email . '</p>';
                 break;
         }
-        return $extras;
+        return apply_filters('uwp_admin_mail_extras', $extras, $type, $user_id );
     }
+
+	/**
+	 * Modifies the forms field in email based on the form type.
+	 *
+	 * @package    userswp
+	 * @subpackage userswp/includes
+	 * @param string $form_fields Form fields.
+	 * @param string $type Form type.
+	 * @param int $user_id User ID.
+	 * @return string Modified mail field.
+	 */
+	public function init_mail_form_fields( $form_fields, $type, $user_id ) {
+		switch ($type) {
+			case "account":
+				$fields = get_account_form_fields();
+				$user_data = get_userdata($user_id);
+				if( !empty( $fields ) && is_array($fields)) {
+					$form_fields = '<p><b>'.__('User Information:','userswp').'</b></p>';
+					foreach ( $fields as $key => $field ) {
+						if( $field->htmlvar_name == 'email' && isset($user_data->user_email) ) {
+							$field_value = $user_data->user_email;
+						} elseif ( $field->htmlvar_name == 'display_name' && isset($user_data->user_login) ) {
+							$field_value = $user_data->user_login;
+						} elseif ( $field->htmlvar_name == 'bio' ){
+							$field_value = get_user_meta($user_id, 'description', true);
+						} else {
+							$field_value = uwp_get_usermeta($user_id, $field->htmlvar_name);
+						}
+
+						if(isset($field->site_title) && !empty($field_value)){
+							$form_fields .= '<p><b>' . $field->site_title . '</b>&nbsp;' . $field_value . '</p>';
+                        }
+					}
+				}
+				break;
+		}
+		return apply_filters('uwp_mail_form_fields', $form_fields, $type, $user_id );;
+	}
 
     /**
      * Generates activate email message.
@@ -1405,15 +1479,7 @@ class UsersWP_Forms {
      * @return      void
      */
     public static function uwp_error_log($log){
-
-        $should_log = apply_filters( 'uwp_log_errors', WP_DEBUG);
-        if ( true === $should_log ) {
-            if ( is_array( $log ) || is_object( $log ) ) {
-                error_log( print_r( $log, true ) );
-            } else {
-                error_log( $log );
-            }
-        }
+	    uwp_error_log($log);
     }
 
     /**
@@ -1566,7 +1632,7 @@ class UsersWP_Forms {
 
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 
@@ -1640,7 +1706,7 @@ class UsersWP_Forms {
 
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
             <?php
@@ -1699,7 +1765,7 @@ class UsersWP_Forms {
                     'validation_text' => !empty($field->is_required) ? __($field->required_msg, 'userswp') : '',
                     'help_text' => __( $field->help_text, 'userswp' ),
                     'label' => uwp_get_form_label( $field ),
-                    'options'=>$option_values_arr,
+                    'options'=> $option_values_arr,
                     'select2' => true
                 ));
             }else{
@@ -1736,14 +1802,14 @@ class UsersWP_Forms {
                 }
                 ?>
                 <select name="<?php echo $field->htmlvar_name;?>" id="<?php echo $field->htmlvar_name;?>"
-                        class="uwp_textfield uwp_select2 <?php echo esc_attr($bs_form_control);?>"
+                        class="uwp_textfield aui-select2 <?php echo esc_attr($bs_form_control);?>"
                         title="<?php echo $site_title; ?>"
                         data-placeholder="<?php echo __('Choose', 'userswp') . ' ' . $site_title . '&hellip;';?>"
                 ><?php echo $select_options;?>
                 </select>
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 
@@ -1788,88 +1854,113 @@ class UsersWP_Forms {
             if (!empty($field->extra_fields)) {
                 $multi_display = unserialize($field->extra_fields);
             }
-            ?>
-            <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
 
-                <?php
-                $site_title = uwp_get_form_label($field);
-                if (!is_admin()) { ?>
-                    <label class="<?php echo esc_attr($bs_sr_only);?>">
-                        <?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-                        <?php if ($field->is_required) echo '<span>*</span>';?>
-                    </label>
-                <?php } ?>
+	        $option_values_arr = uwp_string_values_to_options($field->option_values, true);
 
-                <input type="hidden" name="<?php echo $field->htmlvar_name;?>" value=""/>
-                <?php if ($multi_display == 'select') { ?>
-                <div class="uwp_multiselect_list">
-                    <select name="<?php echo $field->htmlvar_name;?>[]"
-                            id="<?php echo $field->htmlvar_name;?>"
-                            title="<?php echo $site_title; ?>"
-                            multiple="multiple" class="uwp_select2"
-                            data-placeholder="<?php echo $site_title; ?>"
-                            class="uwp_select2 <?php echo esc_attr($bs_form_control);?>"
-                    >
-                        <?php
-                        } else {
-                            ?>
-                            <ul class="uwp_multi_choice">
-                            <?php
-                        }
+	        // bootstrap
+	        if( $design_style ) {
 
-                        $option_values_arr = uwp_string_values_to_options($field->option_values, true);
-                        $select_options = '';
-                        if (!empty($option_values_arr)) {
-                            foreach ($option_values_arr as $option_row) {
-                                if (isset($option_row['optgroup']) && ($option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end')) {
-                                    $option_label = isset($option_row['label']) ? $option_row['label'] : '';
+		        echo aui()->select(array(
+			        'id'    =>  $field->htmlvar_name,
+			        'name'    =>  $field->htmlvar_name,
+			        'placeholder'   => uwp_get_form_label( $field ),
+			        'title'   => uwp_get_form_label( $field ),
+			        'value' =>  $value,
+			        'required'  => $field->is_required,
+			        'validation_text' => !empty($field->is_required) ? __($field->required_msg, 'userswp') : '',
+			        'help_text' => __( $field->help_text, 'userswp' ),
+			        'label' => uwp_get_form_label( $field ),
+			        'options'=> $option_values_arr,
+			        'select2' => true,
+			        'multiple' => true
+		        ));
+	        }else {
+		        ?>
+                <div id="<?php echo $field->htmlvar_name; ?>_row"
+                     class="<?php if ( $field->is_required ) {
+			             echo 'required_field';
+		             } ?> uwp_form_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 
-                                    if ($multi_display == 'select') {
-                                        $select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr($option_label) . '">' : '</optgroup>';
-                                    } else {
-                                        $select_options .= $option_row['optgroup'] == 'start' ? '<li>' . $option_label . '</li>' : '';
-                                    }
-                                } else {
-                                    $option_label = isset($option_row['label']) ? $option_row['label'] : '';
-                                    $option_value = isset($option_row['value']) ? $option_row['value'] : '';
-                                    $selected = $option_value == $value ? 'selected="selected"' : '';
-                                    $checked = '';
+			        <?php
+			        $site_title = uwp_get_form_label( $field );
+			        if ( ! is_admin() ) { ?>
+                        <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
+					        <?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+					        <?php if ( $field->is_required ) {
+						        echo '<span>*</span>';
+					        } ?>
+                        </label>
+			        <?php } ?>
 
-                                    if ((!is_array($value) && trim($value) != '') || (is_array($value) && !empty($value))) {
-                                        if (!is_array($value)) {
-                                            $value_array = explode(',', $value);
-                                        } else {
-                                            $value_array = $value;
-                                        }
+                    <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value=""/>
+			        <?php if ( $multi_display == 'select' ) { ?>
+                    <div class="uwp_multiselect_list">
+                        <select name="<?php echo $field->htmlvar_name; ?>[]"
+                                id="<?php echo $field->htmlvar_name; ?>"
+                                title="<?php echo $site_title; ?>"
+                                data-placeholder="<?php echo $site_title; ?>"
+                                class="aui-select2 <?php echo esc_attr( $bs_form_control ); ?>"
+                        >
+					        <?php
+					        } else {
+						        ?>
+                                <ul class="uwp_multi_choice">
+						        <?php
+					        }
 
-                                        if (is_array($value_array)) {
-                                            if (in_array($option_value, $value_array)) {
-                                                $selected = 'selected="selected"';
-                                                $checked = 'checked="checked"';
-                                            }
-                                        }
-                                    }
+					        $option_values_arr = uwp_string_values_to_options( $field->option_values, true );
+					        $select_options    = '';
+					        if ( ! empty( $option_values_arr ) ) {
+						        foreach ( $option_values_arr as $option_row ) {
+							        if ( isset( $option_row['optgroup'] ) && ( $option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end' ) ) {
+								        $option_label = isset( $option_row['label'] ) ? $option_row['label'] : '';
 
-                                    if ($multi_display == 'select') {
-                                        $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
-                                    } else {
-                                        $select_options .= '<li><input name="' . $field->name . '[]" ' . $checked . ' value="' . esc_attr($option_value) . '" class="uwp-' . $multi_display . '" type="' . $multi_display . '" />&nbsp;' . $option_label . ' </li>';
-                                    }
-                                }
-                            }
-                        }
-                        echo $select_options;
+								        if ( $multi_display == 'select' ) {
+									        $select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr( $option_label ) . '">' : '</optgroup>';
+								        } else {
+									        $select_options .= $option_row['optgroup'] == 'start' ? '<li>' . $option_label . '</li>' : '';
+								        }
+							        } else {
+								        $option_label = isset( $option_row['label'] ) ? $option_row['label'] : '';
+								        $option_value = isset( $option_row['value'] ) ? $option_row['value'] : '';
+								        $selected     = $option_value == $value ? 'selected="selected"' : '';
+								        $checked      = '';
 
-                        if ($multi_display == 'select') { ?></select></div>
-            <?php } else { ?>
-                </ul>
-            <?php } ?>
-                <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
-                <?php } ?>
-            </div>
-            <?php
+								        if ( ( ! is_array( $value ) && trim( $value ) != '' ) || ( is_array( $value ) && ! empty( $value ) ) ) {
+									        if ( ! is_array( $value ) ) {
+										        $value_array = explode( ',', $value );
+									        } else {
+										        $value_array = $value;
+									        }
+
+									        if ( is_array( $value_array ) ) {
+										        if ( in_array( $option_value, $value_array ) ) {
+											        $selected = 'selected="selected"';
+											        $checked  = 'checked="checked"';
+										        }
+									        }
+								        }
+
+								        if ( $multi_display == 'select' ) {
+									        $select_options .= '<option value="' . esc_attr( $option_value ) . '" ' . $selected . '>' . $option_label . '</option>';
+								        } else {
+									        $select_options .= '<li><input name="' . $field->name . '[]" ' . $checked . ' value="' . esc_attr( $option_value ) . '" class="uwp-' . $multi_display . '" type="' . $multi_display . '" />&nbsp;' . $option_label . ' </li>';
+								        }
+							        }
+						        }
+					        }
+					        echo $select_options;
+
+					        if ( $multi_display == 'select' ) { ?></select></div>
+		        <?php } else { ?>
+                    </ul>
+		        <?php } ?>
+			        <?php if ( $field->is_required ) { ?>
+                        <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+			        <?php } ?>
+                </div>
+		        <?php
+	        }
             $html = ob_get_clean();
         }
 
@@ -1933,7 +2024,7 @@ class UsersWP_Forms {
                        type="<?php echo $field->field_type; ?>">
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 
@@ -2016,7 +2107,7 @@ class UsersWP_Forms {
                 <?php } ?>
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 
@@ -2114,7 +2205,7 @@ class UsersWP_Forms {
                 ?>
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
             <?php
@@ -2251,7 +2342,7 @@ class UsersWP_Forms {
                 />
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 
@@ -2301,7 +2392,7 @@ class UsersWP_Forms {
                     'name'    =>  $field->htmlvar_name,
                     'placeholder'   => $site_title,
                     'title'   => $site_title,
-                    'value' =>  $value,
+                    'value' =>  stripslashes($value),
                     'required'  => $field->is_required,
                     'validation_text' => __($field->required_msg, 'userswp'),
                     'help_text' => __( $field->help_text, 'userswp' ),
@@ -2336,7 +2427,7 @@ class UsersWP_Forms {
                           rows="4"><?php echo stripslashes($value); ?></textarea>
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 
@@ -2465,7 +2556,7 @@ class UsersWP_Forms {
                     />
                     <span class="uwp_message_note"><?php _e( $field->help_text, 'userswp' ); ?></span>
                     <?php if ( $field->is_required ) { ?>
-                        <span class="uwp_message_error"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+                        <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
                     <?php } ?>
                 </div>
 
@@ -2554,7 +2645,7 @@ class UsersWP_Forms {
                     />
                     <span class="uwp_message_note"><?php _e( $field->help_text, 'userswp' ); ?></span>
                     <?php if ( $field->is_required ) { ?>
-                        <span class="uwp_message_error"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+                        <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
                     <?php } ?>
                 </div>
 
@@ -2644,7 +2735,7 @@ class UsersWP_Forms {
                     />
                     <span class="uwp_message_note"><?php _e( $field->help_text, 'userswp' ); ?></span>
                     <?php if ( $field->is_required ) { ?>
-                        <span class="uwp_message_error"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+                        <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
                     <?php } ?>
                 </div>
 
@@ -2662,7 +2753,73 @@ class UsersWP_Forms {
         return $html;
     }
 
+	/**
+	 * Form field template for Phone field.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $html Form field html
+	 * @param object $field Field info.
+	 * @param string $value Form field default value.
+	 * @param string $form_type Form type
+	 *
+	 * @return string $html Modified form field html.
+	 */
+	public function form_input_phone($html, $field, $value, $form_type){
+		if(empty($html)) {
+			$design_style = uwp_get_option("design_style","bootstrap");
+			$bs_form_group = $design_style ? "form-group" : "";
+			$bs_sr_only = $design_style ? "sr-only" : "";
+			$bs_form_control = $design_style ? "form-control" : "";
+			ob_start(); // Start  buffering;
 
+			if( $design_style ){
+				echo aui()->input(array(
+					'type'  =>  'tel',
+					'id'    =>  $field->htmlvar_name,
+					'name'    =>  $field->htmlvar_name,
+					'placeholder'   => uwp_get_form_label( $field ),
+					'title'   => uwp_get_form_label( $field ),
+					'value' =>  $value,
+					'required'  => $field->is_required,
+					'help_text' => __( $field->help_text, 'userswp' ),
+					'label' => is_admin() ? '' : uwp_get_form_label( $field )
+				));
+			}else {
+				?>
+                <div id="<?php echo $field->htmlvar_name; ?>_row"
+                     class="<?php if ( $field->is_required ) {
+					     echo 'required_field';
+				     } ?> uwp_form_row clearfix uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+					<?php
+					$label = $site_title = uwp_get_form_label( $field );
+					if ( ! is_admin() ) { ?>
+                        <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
+							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php if ( $field->is_required ) {
+								echo '<span>*</span>';
+							} ?>
+                        </label>
+					<?php } ?>
+                    <input name="<?php echo $field->htmlvar_name; ?>"
+                           class="<?php echo $field->css_class; ?> <?php echo esc_attr( $bs_form_control ); ?>"
+                           placeholder="<?php echo $label; ?>"
+                           title="<?php echo $label; ?>"
+						<?php if ( $field->for_admin_use == 1 ) {
+							echo 'readonly="readonly"';
+						} ?>
+						<?php if ( $field->is_required == 1 ) {
+							echo 'required="required"';
+						} ?>
+                           type="tel"
+                           value="<?php echo esc_html( $value ); ?>">
+                </div>
+				<?php
+			}
+			$html = ob_get_clean();
+		}
+		return $html;
+	}
 
     /**
      * Adds enctype tag in form for file fields.
@@ -2796,7 +2953,7 @@ class UsersWP_Forms {
 
                 <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
                 <?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error"><?php _e($field->required_msg, 'userswp'); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
                 <?php } ?>
             </div>
 
@@ -3222,4 +3379,73 @@ class UsersWP_Forms {
         echo '<div class="form-group"><div class="modal-error"></div></div>';
     }
 
+    public function get_register_redirect_url($data, $user){
+        if(is_int($user)){
+	        $user = get_userdata($user);
+        }
+
+        $redirect_page_id = uwp_get_option('register_redirect_to', '');
+
+	    if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
+		    $redirect_to = esc_url($_REQUEST['redirect_to']);
+	    } elseif (isset($data['redirect_to']) && !empty($data['redirect_to'])) {
+		    $redirect_to = esc_url($data['redirect_to']);
+	    } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
+		    if (uwp_is_wpml()) {
+			    $wpml_page_id = uwp_wpml_object_id($redirect_page_id, 'page', true, ICL_LANGUAGE_CODE);
+			    if (!empty($wpml_page_id)) {
+				    $redirect_page_id = $wpml_page_id;
+			    }
+		    }
+		    $redirect_to = get_permalink($redirect_page_id);
+	    } elseif (isset($redirect_page_id) && (int)$redirect_page_id == -2 && uwp_get_option('register_redirect_custom_url' ) ) {
+		    $redirect_to = uwp_get_option('register_redirect_custom_url' );
+	    }  else {
+		    if ( isset($user) && $user->has_cap('manage_options') ) {
+			    $redirect_to = admin_url();
+		    } else {
+			    $redirect_to = home_url('/');
+		    }
+
+		    $redirect_to = apply_filters( 'registration_redirect', $redirect_to );
+	    }
+
+	    return apply_filters('uwp_register_redirect', $redirect_to, $redirect_page_id, $data);
+
+    }
+
+	public function get_login_redirect_url($data, $user){
+		if(is_int($user)){
+			$user = get_userdata($user);
+		}
+
+		$redirect_page_id = uwp_get_option('login_redirect_to', -1);
+
+		if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
+			$redirect_to = esc_url($_REQUEST['redirect_to']);
+		} elseif (isset($data['redirect_to']) && !empty($data['redirect_to'])) {
+			$redirect_to = esc_url($data['redirect_to']);
+		} elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
+			if (uwp_is_wpml()) {
+				$wpml_page_id = uwp_wpml_object_id($redirect_page_id, 'page', true, ICL_LANGUAGE_CODE);
+				if (!empty($wpml_page_id)) {
+					$redirect_page_id = $wpml_page_id;
+				}
+			}
+			$redirect_to = get_permalink($redirect_page_id);
+		} elseif (isset($redirect_page_id) && (int)$redirect_page_id == -2 && uwp_get_option('login_redirect_custom_url' ) ) {
+			$redirect_to = uwp_get_option('login_redirect_custom_url' );
+		}  else {
+			if ( isset($user) && $user->has_cap('manage_options') ) {
+				$redirect_to = admin_url();
+			} else {
+				$redirect_to = home_url('/');
+			}
+
+			$redirect_to = apply_filters( 'login_redirect', $redirect_to, '', $user );
+		}
+
+		return apply_filters('uwp_login_redirect', $redirect_to, $redirect_page_id, $data);
+
+	}
 }

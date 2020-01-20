@@ -142,3 +142,17 @@ function uwp_profile_add_tabs($tab_data){
 	$obj->tabs_field_save($tab_data);
 
 }
+
+function uwp_get_tabs_privacy_by_user($user){
+	global $wpdb;
+
+	if(is_integer($user)){
+		$user = get_userdata($user);
+	}
+
+	$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+	$user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT tabs_privacy FROM $meta_table WHERE user_id = %d", $user->ID ) );
+	$tabs_privacy = maybe_unserialize($user_meta_info->tabs_privacy);
+
+	return $tabs_privacy;
+}

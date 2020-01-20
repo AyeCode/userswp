@@ -137,5 +137,27 @@ function uwp_get_form_label($field) {
     } else {
         $label = __($field->site_title, 'userswp');
     }
-    return $label;
+    return stripslashes($label);
 }
+
+/**
+ * Gets the custom field info for given key.
+ *
+ * @since       1.0.0
+ * @package     userswp
+ *
+ * @param       string      $htmlvar_name       Custom field key.
+ *
+ * @return      object                          Field info.
+ */
+function uwp_get_custom_field_info($htmlvar_name,$form_type = 'account') {
+	global $wpdb;
+	$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+	if($form_type){
+		$field = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s AND form_type = %s", array($htmlvar_name,$form_type)));
+	}else{
+		$field = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s", array($htmlvar_name)));
+	}
+	return $field;
+}
+

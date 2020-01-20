@@ -181,6 +181,27 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
              *
              * @package userswp
              */
+			$pages = get_pages();
+			$pages_options = array(
+				'-1' => __( 'Last User Page', 'userswp' ),
+				'0' => __( 'Default Redirect', 'userswp'),
+				'-2' => __( 'Custom Redirect', 'userswp'),
+			);
+			if ( $pages ) {
+				foreach ( $pages as $page ) {
+					$pages_options[ $page->ID ] = $page->post_title;
+				}
+			}
+
+			$registration_options = array(
+				'auto_approve' =>  __('Auto approve', 'userswp'),
+				'auto_approve_login' =>  __('Auto approve + Auto Login', 'userswp'),
+				'require_email_activation' =>  __('Require Email Activation', 'userswp'),
+				'force_redirect' =>  __('Force Redirect to Redirect Page', 'userswp'),
+			);
+
+			$registration_options = apply_filters('uwp_registration_status_options', $registration_options);
+
             $settings = apply_filters( 'uwp_register_options', array(
                 array(
                     'title' => __( 'Register Settings', 'userswp' ),
@@ -189,7 +210,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 ),
 	            array(
 		            'id'   => 'register_modal',
-		            'name' => __( 'Register lightbox', 'userswp' ),
+		            'name' => __( 'Register Lightbox', 'userswp' ),
 		            'desc' => __( 'When enabled some register links will open in a lightbox instead of changing page.','userswp'),
 		            'type' => 'checkbox',
 		            'default'  => '1',
@@ -200,18 +221,29 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'name' => __('Registration Action', 'userswp'),
                     'desc' => __('Select how registration should be handled.', 'userswp'),
                     'type' => 'select',
-                    'options' => uwp_registration_status_options(),
+                    'options' => $registration_options,
                     'class' => 'uwp-select',
                     'desc_tip' => true,
                 ),
                 array(
                     'id' => 'register_redirect_to',
                     'name' => __( 'Register Redirect Page', 'userswp' ),
-                    'desc' => __( 'Set the page to redirect the user to after signing up. If no page has been set WordPress default will be used.', 'userswp' ),
-                    'type' => 'single_select_page',
+                    'desc' => __( 'Set the page to redirect the user to after signing up. If default redirect has been set then WordPress default will be used.', 'userswp' ),
+                    'type' => 'select',
+                    'options' => $pages_options,
+                    'default'  => '-1',
                     'class' => 'uwp-select',
                     'desc_tip' => true,
                 ),
+	            array(
+		            'id' => 'register_redirect_custom_url',
+		            'name' => __( 'Redirect Custom URL', 'userswp' ),
+		            'desc' => __( 'Set the custom url to redirect the user to after registration. Works with Auto approve + Auto login action only.', 'userswp' ),
+		            'type' => 'text',
+		            'default'  => '',
+		            'desc_tip' => true,
+		            'class' => 'uwp-register-redirect-custom-url',
+	            ),
                 array(
                     'id' => 'register_terms_page',
                     'name' => __( 'Register TOS Page', 'userswp' ),
@@ -222,14 +254,14 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 ),
                 array(
                     'id'   => 'wp_register_redirect',
-                    'name' => __( 'Redirect admin default register page', 'userswp' ),
+                    'name' => __( 'Redirect Admin Default Register Page', 'userswp' ),
                     'desc' => __( 'When enabled /wp-login.php?action=register page will be redirected to UsersWP register page.', 'userswp' ),
                     'type' => 'checkbox',
                     'default'  => '1',
                 ),
                 array(
                     'id'   => 'register_admin_notify',
-                    'name' => __( 'Enable admin email notification?', 'userswp' ),
+                    'name' => __( 'Enable Admin Email Notification?', 'userswp' ),
                     'desc' => __( 'When enabled an email will be sent to the admin for every user registration.', 'userswp' ),
                     'type' => 'checkbox',
                     'default'  => '0',
@@ -244,7 +276,11 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
              * @package userswp
              */
             $pages = get_pages();
-            $pages_options = array( '-1' => __( 'Last User Page', 'userswp' ) );
+            $pages_options = array(
+	            '-1' => __( 'Last User Page', 'userswp' ),
+	            '0' => __( 'Default Redirect', 'userswp'),
+	            '-2' => __( 'Custom Redirect', 'userswp'),
+            );
             if ( $pages ) {
                 foreach ( $pages as $page ) {
                     $pages_options[ $page->ID ] = $page->post_title;
@@ -259,7 +295,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 ),
 	            array(
 		            'id'   => 'login_modal',
-		            'name' => __( 'Login lightbox', 'userswp' ),
+		            'name' => __( 'Login Lightbox', 'userswp' ),
 		            'desc' => __( 'When enabled some login links will open in a lightbox instead of changing page.','userswp'),
 		            'type' => 'checkbox',
 		            'default'  => '1',
@@ -268,13 +304,22 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 array(
                     'id' => 'login_redirect_to',
                     'name' => __( 'Login Redirect Page', 'userswp' ),
-                    'desc' => __( 'Set the page to redirect the user to after logging in. If no page has been set WordPress default will be used.', 'userswp' ),
+                    'desc' => __( 'Set the page to redirect the user to after logging in. If default redirect has been set then WordPress default will be used.', 'userswp' ),
                     'type' => 'select',
                     'options' => $pages_options,
                     'class' => 'uwp-select',
                     'default'  => '-1',
                     'desc_tip' => true,
                 ),
+	            array(
+		            'id' => 'login_redirect_custom_url',
+		            'name' => __( 'Redirect Custom URL', 'userswp' ),
+		            'desc' => __( 'Set the custom url to redirect the user to after logging in.', 'userswp' ),
+		            'type' => 'text',
+		            'default'  => '',
+		            'desc_tip' => true,
+		            'class' => 'uwp-login-redirect-custom-url',
+	            ),
                 array(
                     'id'   => 'block_wp_login',
                     'name' => __( 'Redirect wp-login.php?', 'userswp' ),
@@ -621,7 +666,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 
     public function uwp_available_users_layout() {
         $tabs_arr = array(
-            'list' => __( 'List View', 'userswp' ),
+            'list' => __( 'Grid View - 1 Column (List View)', 'userswp' ),
             '2col' => __( 'Grid View - 2 Column', 'userswp' ),
             '3col' => __( 'Grid View - 3 Column', 'userswp' ),
             '4col' => __( 'Grid View - 4 Column', 'userswp' ),

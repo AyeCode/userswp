@@ -15,7 +15,7 @@ do_action('uwp_users_loop_actions');
 
 <div class="uwp-user-views" id="uwp_user_views">
 	<form method="get" action="">
-		<select name="uwp_layout" id="uwp_layout" class="uwp_select2">
+		<select name="uwp_layout" id="uwp_layout" class="aui-select2">
 			<option <?php selected( $default_layout, "list" ); ?> value="list"><?php echo __("List View", "userswp"); ?></option>
 			<option <?php selected( $default_layout, "2col" ); ?> value="2col"><?php echo __("Grid 2 Col", "userswp"); ?></option>
 			<option <?php selected( $default_layout, "3col" ); ?> value="3col"><?php echo __("Grid 3 Col", "userswp"); ?></option>
@@ -27,7 +27,7 @@ do_action('uwp_users_loop_actions');
 
 <div class="uwp-user-sort" id="uwp_user_sort">
 	<form method="get" action="">
-		<select name="uwp_sort_by" id="uwp_sort_by" class="uwp_select2" onchange="this.form.submit()">
+		<select name="uwp_sort_by" id="uwp_sort_by" class="aui-select2" onchange="this.form.submit()">
 			<option value=""><?php echo __("Sort By:", "userswp"); ?></option>
 			<option <?php selected( $sort_by, "newer" ); ?> value="newer"><?php echo __("Newer", "userswp"); ?></option>
 			<option <?php selected( $sort_by, "older" ); ?> value="older"><?php echo __("Older", "userswp"); ?></option>

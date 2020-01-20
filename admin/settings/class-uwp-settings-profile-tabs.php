@@ -723,7 +723,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
                                         $privacy_options = apply_filters('uwp_tab_privacy_options', $privacy_options, $result_str, $request);
                                     ?>
-                                    <select name="tab_privacy" id="tab_privacy" class="uwp_select2">
+                                    <select name="tab_privacy" class="aui-select2">
                                         <?php
                                             foreach ($privacy_options as $key => $val){
                                                 echo '<option value="'.$key.'"'. selected($privacy, $key, false).'>'.$val.'</option>';
