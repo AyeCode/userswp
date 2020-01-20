@@ -2,14 +2,6 @@ jQuery(window).load(function() {
 
     // Enable auth modals
     uwp_init_auth_modal();
-
-    // select2 selects
-    if (jQuery("select.uwp_select2").length > 0) {
-        jQuery("select.uwp_select2").select2();
-        jQuery("select.uwp_select2_nostd").select2({
-            allow_single_deselect: 'true'
-        });
-    }
 });
 
 
@@ -26,7 +18,7 @@ jQuery(window).load(function() {
 
                 var c = content.substr(0, showChar);
                 var h = content.substr(showChar, content.length - showChar);
-                var html = c + '<span class="uwp_more_ellipses">' + ellipsestext+ '&nbsp;</span><span class="uwp_more_content"><span style="display: none;">' + h + '</span>&nbsp;&nbsp;<a href="" class="uwp_more_link">' + moretext + '</a></span>';
+                var html = uwp_nl2br(c) + '<span class="uwp_more_ellipses">' + ellipsestext+ '&nbsp;</span><span class="uwp_more_content"><span style="display: none;">' + uwp_nl2br(h) + '</span>&nbsp;&nbsp;<a href="" class="uwp_more_link">' + moretext + '</a></span>';
 
                 $(this).html(html);
             }
@@ -149,6 +141,11 @@ jQuery(window).load(function() {
 
     });
 }( jQuery, window ));
+
+function uwp_nl2br(str, is_xhtml) {
+    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
+}
 
 function uwp_profile_image_change(type){
     // remove it first
@@ -279,6 +276,20 @@ function uwp_maybe_check_recaptcha($form){
 }
 
 /**
+ * Maybe reset the recpatcha on ajax submit fail.
+ */
+function uwp_maybe_reset_recaptcha() {
+    if( jQuery('.uwp-auth-modal .modal-content .g-recaptcha-response').length ){
+        jQuery('.uwp-auth-modal .modal-content .uwp-captcha-render').html(''); // reset
+        var id = jQuery('.uwp-auth-modal .modal-content .uwp-captcha-render').attr('id');
+        jQuery('.uwp-auth-modal .modal-content .uwp-captcha-render').replaceWith("<div id='"+id+"' class='uwp-captcha-render'></div>");
+        setTimeout(function(){
+            uwp_init_recaptcha();
+        }, 50);
+    }
+}
+
+/**
  * Submit the login form via ajax.
  */
 function uwp_modal_login_form_process(){
@@ -305,6 +316,7 @@ function uwp_modal_login_form_process(){
             }else if(data.success===false){
                 jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
                 jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').html($button_text).prop('disabled', false);// enable submit
+                uwp_maybe_reset_recaptcha();
             }
             uwp_init_auth_modal();
         }
@@ -380,6 +392,7 @@ function uwp_modal_register_form_process(){
             }else if(data.success===false){
                 jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
                 $button.html($button_text).prop('disabled', false);// enable submit
+                uwp_maybe_reset_recaptcha();
             }
             uwp_init_auth_modal();
         }
@@ -445,6 +458,7 @@ function uwp_modal_forgot_password_form_process(){
             }else if(data.success===false){
                 jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
                 $button.html($button_text).prop('disabled', false);// enable submit
+                uwp_maybe_reset_recaptcha();
             }
             uwp_init_auth_modal();
         }
@@ -453,7 +467,7 @@ function uwp_modal_forgot_password_form_process(){
 
 /**
  * A password strength indicator.
- * 
+ *
  * @param $pass1
  * @param $pass2
  * @param $strengthResult
