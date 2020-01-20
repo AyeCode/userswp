@@ -1,0 +1,4 @@
+= 0.1.4 =
+* Avada theme default JS settings added for compatibility - ADDED
+* Pagination component added - ADDED
+* $ver class property added - ADDED

@@ -204,14 +204,15 @@ final class UsersWP {
         add_filter('uwp_form_input_html_email', array($instance, 'form_input_email'), 10, 4);
         add_filter('uwp_form_input_html_password', array($instance, 'form_input_password'), 10, 4);
         // Country select
-        add_filter('uwp_form_input_html_select_country', array($instance, 'form_input_select_country'), 10, 4);
-        add_filter('uwp_form_input_email_email_after', array($instance, 'register_confirm_email_field'), 10, 4);
+        add_filter('uwp_form_input_html_select_uwp_country', array($instance, 'form_input_select_country'), 10, 4);
+	    add_filter('uwp_form_input_html_phone', array($instance, 'form_input_phone'), 10, 4);
+	    add_filter('uwp_form_input_email_email_after', array($instance, 'register_confirm_email_field'), 10, 4);
         add_filter('uwp_form_input_password_password_after', array($instance, 'register_confirm_password_field'), 10, 4);
         
         // Emails
         add_filter('uwp_send_mail_extras', array($instance, 'init_mail_extras'), 10, 3);
         add_filter('uwp_send_admin_mail_extras', array($instance, 'init_admin_mail_extras'), 10, 3);
-        
+	    add_filter('uwp_send_mail_form_fields', array($instance, 'init_mail_form_fields'), 10, 3);
     }
 
 	/**
@@ -232,7 +233,6 @@ final class UsersWP {
         add_action('uwp_template_display_notices', array($instance, 'display_registration_disabled_notice'));
         add_action('uwp_template_display_notices', array($instance, 'form_notice_by_key'));
         add_action( 'admin_notices', array( $instance, 'show_admin_notices' ) );
-        add_action( 'admin_notices', array($instance, 'admin_notices') );
         add_action( 'admin_notices', array($instance, 'try_bootstrap') );
         add_action( 'admin_notices', array($instance, 'yoast_user_archives_disabled') );
     }
@@ -267,7 +267,6 @@ final class UsersWP {
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 2 );
         add_filter( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );
         add_action( 'uwp_profile_pagination' ,array($instance,'list_view_js'));
-        add_action( 'uwp_after_users_list' ,array($instance,'list_view_js'));
 
         //Fields as tabs
         add_action( 'uwp_available_tab_items', array($instance, 'extra_fields_available_tab_items'), 10, 1 );
@@ -325,9 +324,12 @@ final class UsersWP {
     public function load_templates_actions_and_filters($instance) {
 
         add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
+        add_action( 'template_redirect', array($instance, 'refresh_permalinks_on_bad_404') );
         add_action( 'uwp_template_fields', array($instance, 'template_fields'), 10, 1 );
         add_action( 'uwp_template_fields', array($instance, 'template_extra_fields'), 10, 1 );
+        add_action( 'uwp_template_fields', array($instance, 'add_template_fields_terms_check'), 100, 1 );
         add_action( 'uwp_account_form_display', array($instance, 'account_edit_form_display'), 10, 1 );
+        add_action( 'uwp_account_form_display', array($instance, 'privacy_edit_form_display'), 10, 1 );
         add_action( 'wp_logout', array($instance, 'logout_redirect'));
         add_action( 'init', array($instance, 'wp_login_redirect'));
         add_action( 'init', array($instance, 'wp_register_redirect'));
@@ -338,7 +340,7 @@ final class UsersWP {
         // Admin user edit page
         add_action( 'edit_user_profile', array($instance, 'get_profile_extra_admin_edit'), 10, 1 );
         add_action( 'show_user_profile', array($instance, 'get_profile_extra_admin_edit'), 10, 1 );
-
+	    add_action('wp_login', array($instance, 'unconfirmed_login_redirect'), 10, 2);
 
         add_filter( 'wp_setup_nav_menu_item', array($instance, 'setup_nav_menu_item'), 10, 1 );
         add_filter( 'the_content', array($instance, 'author_page_content'), 10, 1 );
@@ -381,7 +383,6 @@ final class UsersWP {
 	 */
     public function load_form_builder_actions_and_filters($instance) {
         // Actions
-        add_action('admin_init', array($instance, 'form_builder_dummy_fields'));
         add_action('uwp_manage_available_fields_predefined', array($instance, 'manage_available_fields_predefined'));
         add_action('uwp_manage_available_fields_custom', array($instance, 'manage_available_fields_custom'));
         add_action('uwp_manage_available_fields', array($instance, 'manage_available_fields'));
@@ -438,7 +439,12 @@ final class UsersWP {
     public function load_admin_actions_and_filters($instance) {
         add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_styles') );
         add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_scripts') );
-        add_action('admin_head', array($instance, 'uwp_admin_only_css'));
+        add_action('admin_head', array($instance, 'admin_only_css'));
+	    add_action('admin_footer', array($instance, 'admin_only_script'));
+	    add_action('user_profile_picture_description', array($instance, 'user_profile_picture_description'));
+	    add_action('show_user_profile', array($instance, 'edit_profile_banner_fields'));
+	    add_action('edit_user_profile', array($instance, 'edit_profile_banner_fields'));
+	    add_action('admin_body_class', array($instance, 'admin_body_class'));
     }
 
 	/**
@@ -618,6 +624,16 @@ final class UsersWP {
          * The class responsible for defining all actions that occur in the admin area.
          */
         require_once dirname(dirname( __FILE__ )) . '/admin/class-admin.php';
+
+	    /**
+	     * The class responsible for defining all actions that occur for setup wizard.
+	     */
+	    require_once dirname(dirname( __FILE__ )) . '/admin/class-admin-setup-wizard.php';
+
+        /**
+         * The class responsible for defining all actions help screen.
+         */
+        require_once dirname(dirname( __FILE__ )) . '/admin/class-uwp-admin-help.php';
 
         /**
          * The class responsible for defining all menus in the admin area.
@@ -819,6 +835,11 @@ final class UsersWP {
          * The class responsible for extensions screen functions on admin side
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-addons.php';
+
+	    /**
+	     * The file is responsible for defining deprecated functions.
+	     */
+	    require_once dirname(dirname( __FILE__ )) . '/includes/deprecated-functions.php';
 
         /**
          * The class responsible for privacy policy functions

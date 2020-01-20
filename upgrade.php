@@ -207,3 +207,30 @@ function uwp_upgrade_convert_tabs() {
 	}
 
 }
+
+/**
+ * Change country htmlvar name to uwp_country to prevent conflicts with location manager plugin.
+ */
+function uwp_upgrade_12013() {
+	global $wpdb;
+
+	$default_field = 'country';
+	$replace_field = 'uwp_country';
+	$fields_table = $wpdb->prefix . 'uwp_form_fields';
+
+	$fields_results = $wpdb->get_results($wpdb->prepare("SELECT * FROM `$fields_table` WHERE `htmlvar_name` = '%s'",$default_field));
+	if( !empty($fields_results) && count($fields_results) > 0 ) {
+		$wpdb->update( $fields_table,
+			array( 'htmlvar_name' => $replace_field ),
+			array( 'htmlvar_name' => $default_field )
+		);
+	}
+
+	$uwp_usermeta_table = $wpdb->prefix . 'uwp_usermeta';
+
+	$usermeta_columns = $wpdb->get_col("SHOW COLUMNS FROM `$uwp_usermeta_table` LIKE '$default_field'");
+
+	if( !empty( $usermeta_columns ) && count($usermeta_columns) > 0 ) {
+		$wpdb->query("ALTER TABLE $uwp_usermeta_table CHANGE COLUMN $default_field $replace_field varchar(500) NOT NULL");
+	}
+}

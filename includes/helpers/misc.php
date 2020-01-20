@@ -403,13 +403,18 @@ function get_uwp_users_list() {
         }
 
         $get_users = wp_list_pluck($user_query, 'ID');
-        $args = array(
-            'include' => $get_users,
-        );
+        if($get_users && count($get_users) > 0){
+	        $args = array(
+		        'include' => $get_users,
+	        );
 
-        $uwp_users_query = new WP_User_Query($args);
-        $users['users'] = $uwp_users_query->get_results();
-        $users['total_users'] = $uwp_users_query->get_total();
+	        $uwp_users_query = new WP_User_Query($args);
+	        $users['users'] = $uwp_users_query->get_results();
+	        $users['total_users'] = $uwp_users_query->get_total();
+        } else {
+	        $users['users'] = array();
+	        $users['total_users'] = 0;
+        }
 
     } else {
 
@@ -453,29 +458,6 @@ function get_uwp_users_list() {
 }
 
 /**
- * Gets the custom field info for given key.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @param       string      $htmlvar_name       Custom field key.
- *
- * @return      object                          Field info.
- */
-function uwp_get_custom_field_info($htmlvar_name,$form_type = 'account') {
-    global $wpdb;
-    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-    if($form_type){
-        $field = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s AND form_type = %s", array($htmlvar_name,$form_type)));
-    }else{
-        $field = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s", array($htmlvar_name)));
-    }
-    return $field;
-}
-
-
-
-/**
  * Returns the Users page layout class based on the setting.
  *
  * @since       1.0.0
@@ -483,7 +465,7 @@ function uwp_get_custom_field_info($htmlvar_name,$form_type = 'account') {
  *
  * @return      string      Layout class.
  */
-function uwp_get_layout_class($layout) {
+function uwp_get_layout_class($layout, $count_only = false) {
     if(!$layout){
         $layout = uwp_get_option('users_default_layout', 'list');
     }
@@ -491,21 +473,31 @@ function uwp_get_layout_class($layout) {
     switch ($layout) {
         case "list":
             $class = "uwp_listview";
+	        $col_count = 1;
             break;
         case "2col":
             $class = "uwp_gridview uwp_gridview_2col";
+	        $col_count = 2;
             break;
         case "3col":
             $class = "uwp_gridview uwp_gridview_3col";
+	        $col_count = 3;
             break;
         case "4col":
             $class = "uwp_gridview uwp_gridview_4col";
+	        $col_count = 4;
             break;
         case "5col":
             $class = "uwp_gridview uwp_gridview_5col";
+	        $col_count = 5;
             break;
         default:
             $class = "uwp_listview";
+	        $col_count = 1;
+    }
+
+    if($count_only){
+        return $col_count;
     }
 
     return $class;
@@ -536,130 +528,6 @@ function uwp_always_nav_menu_visibility( $result, $option, $user )
     return $result;
 }
 
-add_filter('user_profile_picture_description', 'uwp_admin_user_profile_picture_description');
-
-/**
- * Filters the user profile picture description displayed under the Gravatar.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @param       string      $description    Profile picture description.
- *
- * @return      string                      Modified description.
- */
-function uwp_admin_user_profile_picture_description($description) {
-    if (is_admin() && IS_PROFILE_PAGE) {
-        $user_id = get_current_user_id();
-        $avatar = uwp_get_usermeta($user_id, 'avatar_thumb', '');
-
-        if (!empty($avatar)) {
-            $description = sprintf( __( 'You can change your profile picture on your <a href="%s">Profile Page</a>.', 'userswp' ),
-                uwp_build_profile_tab_url( $user_id ));
-        }
-
-    }
-    return $description;
-}
-
-/**
- * Adds avatar and banner fields in admin side.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @param       object      $user       User object.
- *
- * @return      void
- */
-function uwp_admin_edit_banner_fields($user) {
-    global $wpdb;
-
-    $file_obj = new UsersWP_Files();
-
-    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-    $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE (form_type = 'avatar' OR form_type = 'banner') ORDER BY sort_order ASC");
-    if ($fields) {
-        ?>
-        <div class="uwp-profile-extra uwp_page">
-            <?php do_action('uwp_admin_profile_edit', $user ); ?>
-            <table class="uwp-profile-extra-table form-table">
-                <?php
-                foreach ($fields as $field) {
-
-                    // Icon
-                    $icon = uwp_get_field_icon( $field->field_icon );
-
-                    if ($field->field_type == 'fieldset') {
-                        ?>
-                        <tr style="margin: 0; padding: 0">
-                            <th class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;">
-                                    <?php echo $icon.$field->site_title; ?></h3></th>
-                            <td></td>
-                        </tr>
-                        <?php
-                    } else { ?>
-                        <tr>
-                            <th class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?></th>
-                            <td class="uwp-profile-extra-value">
-		                        <?php
-		                        if ( $field->htmlvar_name == "avatar" ) {
-			                        $value = uwp_get_usermeta( $user->ID, "avatar_thumb", "" );
-		                        } elseif ( $field->htmlvar_name == "banner" ) {
-			                        $value = uwp_get_usermeta( $user->ID, "banner_thumb", "" );
-		                        } else {
-			                        $value = "";
-		                        }
-
-		                        echo $file_obj->file_upload_preview( $field, $value );
-
-		                        if ( $field->htmlvar_name == "avatar" ) {
-			                        if ( ! empty( $value ) ) {
-				                        $label = __( "Change Avatar", "userswp" );
-			                        } else {
-				                        $label = __( "Upload Avatar", "userswp" );
-			                        }
-			                        ?>
-                                    <a onclick="uwp_profile_image_change('avatar');return false;" href="#"
-                                       class="uwp-banner-change-icon-admin">
-				                        <?php echo $label; ?>
-                                    </a>
-			                        <?php
-		                        } elseif ( $field->htmlvar_name == "banner" ) {
-			                        if ( ! empty( $value ) ) {
-				                        $label = __( "Change Banner", "userswp" );
-			                        } else {
-				                        $label = __( "Upload Banner", "userswp" );
-			                        } ?>
-                                    <a onclick="uwp_profile_image_change('banner');return false;" href="#"
-                                       class="uwp-banner-change-icon-admin">
-				                        <?php echo $label; ?>
-                                    </a>
-			                        <?php
-		                        }
-		                        ?>
-                            </td>
-                        </tr>
-                        <?php
-                    }
-                }
-                ?>
-            </table>
-        </div>
-        <?php
-    }
-}
-add_action('show_user_profile', 'uwp_admin_edit_banner_fields');
-add_action('edit_user_profile', 'uwp_admin_edit_banner_fields');
-
-add_filter('admin_body_class', 'uwp_add_admin_body_class');
-function uwp_add_admin_body_class($classes) {
-    $screen = get_current_screen();
-    if ( 'profile' == $screen->base || 'user-edit' == $screen->base )
-    $classes .= 'uwp_page';
-    return $classes;
-}
-
 // Privacy
 add_filter('uwp_account_page_title', 'uwp_account_privacy_page_title', 10, 2);
 
@@ -680,148 +548,6 @@ function uwp_account_privacy_page_title($title, $type) {
     }
 
     return $title;
-}
-
-add_action('uwp_account_form_display', 'uwp_account_privacy_edit_form_display');
-
-/**
- * Adds form html for privacy fields in account page.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @param       string      $type       Form type.
- *
- * @return      void
- */
-function uwp_account_privacy_edit_form_display($type) {
-    if ($type == 'privacy') {
-        $make_profile_private = uwp_can_make_profile_private();
-        echo '<div class="uwp-account-form uwp_wc_form">';
-        $extra_where = "AND is_public='2'";
-        $fields = get_account_form_fields($extra_where);
-        $fields = apply_filters('uwp_account_privacy_fields', $fields);
-        $user_id = get_current_user_id();
-        $design_style = uwp_get_option("design_style","bootstrap");
-        $bs_form_group = $design_style ? "form-group row" : "";
-        $bs_form_control = $design_style ? "form-control" : "";
-        $bs_btn_class = $design_style ? "btn btn-primary btn-block text-uppercase" : "";
-        ?>
-        <div class="uwp-profile-extra">
-            <div class="uwp-profile-extra-div form-table">
-                <form class="uwp-account-form uwp_form" method="post">
-                    <?php if ($fields) { ?>
-                        <div class="uwp-profile-extra-wrap row">
-                            <div class="uwp-profile-extra-key col" style="font-weight: bold;">
-                                <?php echo __("Field", "userswp") ?>
-                            </div>
-                            <div class="uwp-profile-extra-value col" style="font-weight: bold;">
-                                <?php echo __("Is Public?", "userswp") ?>
-                            </div>
-                        </div>
-                        <?php foreach ($fields as $field) { ?>
-                            <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
-                                <div class="uwp-profile-extra-key col"><?php echo $field->site_title; ?>
-                                    <span class="uwp-profile-extra-sep">:</span></div>
-                                <div class="uwp-profile-extra-value col">
-                                    <?php
-                                    $field_name = $field->htmlvar_name . '_privacy';
-                                    $value = uwp_get_usermeta($user_id, $field_name, false);
-                                    if ($value === false) {
-                                        $value = 'yes';
-                                    }
-                                    ?>
-                                    <select name="<?php echo $field_name; ?>" class="uwp_privacy_field uwp_select2 <?php echo $bs_form_control; ?>"
-                                            style="margin: 0;">
-                                        <option value="no" <?php selected($value, "no"); ?>><?php echo __("No", "userswp") ?></option>
-                                        <option value="yes" <?php selected($value, "yes"); ?>><?php echo __("Yes", "userswp") ?></option>
-                                    </select>
-                                </div>
-                            </div>
-                        <?php }
-                    }
-
-                    global $wpdb;
-                    $tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
-                    $tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s AND user_decided = 1 ORDER BY sort_order ASC", 'profile-tabs'));
-
-                    if( $tabs ){ ?>
-                        <div class="uwp-profile-extra-wrap row">
-                            <div class="uwp-profile-extra-key col" style="font-weight: bold;">
-			                    <?php echo __("Tab Name", "userswp") ?>
-                            </div>
-                            <div class="uwp-profile-extra-value col" style="font-weight: bold;">
-			                    <?php echo __("Privacy", "userswp") ?>
-                            </div>
-                        </div>
-                    <?php }
-
-                    foreach ($tabs as $tab) { ?>
-                        <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
-                            <div class="uwp-profile-extra-key col"><?php _e($tab->tab_name, 'userswp'); ?>
-                                <span class="uwp-profile-extra-sep">:</span></div>
-                            <div class="uwp-profile-extra-value col">
-			                    <?php
-			                    $field_name = $tab->tab_key . '_tab_privacy';
-			                    $value = uwp_get_usermeta($user_id, $field_name, '');
-
-			                    $privacy_options = array(
-                                    0 => __("Anyone", "userswp"),
-				                    1 => __("Logged in", "userswp"),
-				                    2 => __("Author only", "userswp"),
-			                    );
-
-                                // Admin default
-                                $admin_privacy = isset($tab->tab_privacy) ? absint($tab->tab_privacy) : 0;
-                                // add default to the start of the array
-                                $privacy_options = array_merge(array('' => sprintf(__("Default (%s)", "userswp"),strtolower($privacy_options[$admin_privacy]))),$privacy_options);
-
-			                    $privacy_options = apply_filters('uwp_tab_privacy_options', $privacy_options);
-
-			                    ?>
-                                <select name="<?php echo $field_name; ?>" class="uwp_tab_privacy_field uwp_select2 <?php echo $bs_form_control; ?>"
-                                        style="margin: 0;">
-	                                <?php
-	                                foreach ($privacy_options as $key => $val){
-		                                echo '<option value="'.$key.'"'. selected($value, $key, false).'>'.$val.'</option>';
-	                                }
-	                                ?>
-                                </select>
-                            </div>
-                        </div>
-                    <?php }
-
-                    $value = get_user_meta($user_id, 'uwp_hide_from_listing', true); ?>
-                    <div class="uwp-profile-extra-wrap">
-                        <div id="uwp_hide_from_listing" class="uwp_hide_from_listing">
-                            <input name="uwp_hide_from_listing" class="" <?php checked($value, "1", true); ?> type="checkbox" value="1"><?php _e('Hide profile from the users listing page.', 'userswp'); ?>
-                        </div>
-                    </div>
-                    <?php
-                    do_action('uwp_after_privacy_form_fields', $fields);
-                    if ($make_profile_private) {
-                        $field_name = 'uwp_make_profile_private';
-                        $value = get_user_meta($user_id, $field_name, true);
-                        if ($value === false) {
-                            $value = '0';
-                        }
-                        ?>
-                        <div id="uwp_make_profile_private" class=" uwp_make_profile_private_row">
-                            <input type="hidden" name="uwp_make_profile_private" value="0">
-                            <input name="uwp_make_profile_private" class="" <?php checked( $value, "1", true ); ?> type="checkbox" value="1">
-                            <?php _e( 'Make the whole profile private', 'userswp' ); ?>
-                        </div>
-                        <?php
-                    }
-                    ?>
-                    <input type="hidden" name="uwp_privacy_nonce" value="<?php echo wp_create_nonce( 'uwp-privacy-nonce' ); ?>" />
-                    <input name="uwp_privacy_submit" class="<?php echo $bs_btn_class; ?>"  value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
-                </form>
-            </div>
-        </div>
-        <?php
-        echo '</div>';
-    }
 }
 
 add_action('uwp_account_menu_display', 'uwp_add_account_menu_links');
@@ -898,9 +624,6 @@ function uwp_add_account_menu_links() {
 		echo $legacy;
     }
 }
-
-
-
 
 /**
  * Updates extras fields sort order.
@@ -1083,115 +806,6 @@ function uwp_can_make_profile_private() {
 }
 
 /**
- * Returns available registration status options.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @return      array       Registration status options.
- */
-function uwp_registration_status_options() {
-    $registration_options = array(
-        'auto_approve' =>  __('Auto approve', 'userswp'),
-        'auto_approve_login' =>  __('Auto approve + Auto Login', 'userswp'),
-        'require_email_activation' =>  __('Require Email Activation', 'userswp'),
-    );
-
-    $registration_options = apply_filters('uwp_registration_status_options', $registration_options);
-
-    return $registration_options;
-}
-
-/**
- * Retrieves a user row based on password reset key and login
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @param       string         $key       Hash to validate sending user's password.
- * @param       string         $login     The user login.
- *
- * @return      WP_Error|WP_User          User object.
- */
-function uwp_check_activation_key( $key, $login ) {
-    $user_data = check_password_reset_key( $key, $login );
-
-    return $user_data;
-}
-
-
-add_action('uwp_template_fields', 'uwp_template_fields_terms_check', 100, 1);
-
-/**
- * Adds "Accept terms and conditions" checkbox in register form.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @param       string      $form_type      Form type.
- *
- * @return      void
- */
-function uwp_template_fields_terms_check($form_type) {
-    if ($form_type == 'register') {
-        $terms_page = false;
-        $reg_terms_page_id = uwp_get_page_id('register_terms_page', false);
-        $reg_terms_page_id = apply_filters('uwp_reg_terms_page_id', $reg_terms_page_id);
-        if (!empty($reg_terms_page_id)) {
-            $terms_page = get_permalink($reg_terms_page_id);
-        }
-        if ($terms_page) {
-            ?>
-            <div class="uwp-remember-me">
-                <label style="display: inline-block;font-weight: normal" for="agree_terms">
-                    <input name="agree_terms" id="agree_terms" value="yes" type="checkbox">
-                    <?php echo sprintf( __( 'I Accept <a href="%s" target="_blank">Terms and Conditions</a>.', 'userswp' ), $terms_page); ?>
-                </label>
-            </div>
-            <?php
-        }
-    }
-}
-
-
-
-/**
- * Redirects the user to login page when email not confirmed.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @param       string      $username       Username.
- * @param       object      $user           User object.
- *
- * @return      void
- */
-function uwp_unconfirmed_login_redirect( $username, $user ) {
-    if (!is_wp_error($user)) {
-        $mod_value = get_user_meta( $user->ID, 'uwp_mod', true );
-        if ($mod_value == 'email_unconfirmed') {
-            if ( !in_array( 'administrator', $user->roles ) ) {
-                $login_page = uwp_get_page_id('login_page', false);
-                if ($login_page) {
-                    $redirect_to = add_query_arg(array('uwp_err' => 'act_pending'), get_permalink($login_page));
-                    wp_destroy_current_session();
-                    wp_clear_auth_cookie();
-                    if(wp_doing_ajax()){
-                        global $userswp;
-                        $message = $userswp->notices->form_notice_by_key('act_pending',false);
-                        wp_send_json_error($message);
-                    }else{
-                        wp_redirect($redirect_to);
-                    }
-                    exit();
-                }
-            }
-        }
-    }
-}
-add_filter( 'wp_login', 'uwp_unconfirmed_login_redirect', 10, 2 );
-
-/**
  * Adds notification menu in admin toolbar.
  *
  * @since       1.0.0
@@ -1303,8 +917,6 @@ function get_usermeta_table_prefix() {
     return $tables->get_usermeta_table_prefix();
 }
 
-
-
 /**
  * Converts array to comma separated string.
  *
@@ -1338,7 +950,7 @@ function uwp_maybe_serialize($key, $value) {
  */
 function uwp_maybe_unserialize($key, $value) {
     $field = uwp_get_custom_field_info($key);
-    if (isset($field->field_type) && $field->field_type == 'multiselect') {
+    if (isset($field->field_type) && $field->field_type == 'multiselect' && $value) {
         $value = explode(",", $value);
     }
     return $value;
@@ -1536,30 +1148,6 @@ function uwp_get_default_banner_uri(){
     $banner_url = apply_filters('uwp_default_banner_uri', $banner_url);
     return $banner_url;
 }
-
-function uwp_refresh_permalinks_on_bad_404() {
-
-    global $wp;
-
-    if( ! is_404() ) {
-        return;
-    }
-
-    if( isset( $_GET['uwp-flush'] ) ) {
-        return;
-    }
-
-    if( false === get_transient( 'uwp_refresh_404_permalinks' ) ) {
-
-        flush_rewrite_rules( false );
-
-        set_transient( 'uwp_refresh_404_permalinks', 1, HOUR_IN_SECONDS * 12 );
-
-        wp_redirect( home_url( add_query_arg( array( 'uwp-flush' => 1 ), $wp->request ) ) ); exit;
-
-    }
-}
-add_action( 'template_redirect', 'uwp_refresh_permalinks_on_bad_404' );
 
 /**
  * Handles multisite upload dir path
@@ -1800,7 +1388,7 @@ function uwp_sanitize_tooltip( $var ) {
 }
 
 function uwp_all_email_tags( $inline = true ){
-    $tags = array( '[#site_name#]', '[#site_name_url#]', '[#current_date#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#profile_link#]' );
+    $tags = array( '[#site_name#]', '[#site_name_url#]', '[#current_date#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#profile_link#]', '[#form_fields#]' );
 
     $tags = apply_filters( 'uwp_all_email_tags', $tags );
 
@@ -1904,7 +1492,6 @@ function uwp_get_show_in_locations(){
     $show_in_locations = array(
         "[users]" => __("Users Page", 'userswp'),
         "[more_info]" => __("More info tab", 'userswp'),
-//        "[own_tab]" => __("Profile page own tab", 'userswp'), // this can be added via tab builder, we want to remove this functionality
         "[profile_side]" => __("Profile side (non bootstrap)", 'userswp'),
         "[fieldset]" => __("Fieldset", 'userswp'),
     );
@@ -1912,20 +1499,6 @@ function uwp_get_show_in_locations(){
     $show_in_locations = apply_filters('uwp_show_in_locations', $show_in_locations);
 
     return $show_in_locations;
-}
-
-function uwp_get_layout_options(){
-    $layouts = array(
-        'list' => __( 'List View', 'userswp' ),
-        '2col' => __( 'Grid View - 2 Column', 'userswp' ),
-        '3col' => __( 'Grid View - 3 Column', 'userswp' ),
-        '4col' => __( 'Grid View - 4 Column', 'userswp' ),
-        '5col' => __( 'Grid View - 5 Column', 'userswp' ),
-    );
-
-    $layouts = apply_filters('uwp_available_users_layout', $layouts);
-
-    return $layouts;
 }
 
 function uwp_locate_template($template, $template_path = "" ){
@@ -1941,7 +1514,9 @@ function uwp_locate_template($template, $template_path = "" ){
 }
 
 function uwp_no_users_found(){
-    uwp_locate_template( 'no-users-found' );
+	$design_style = uwp_get_option("design_style",'bootstrap');
+	$template = $design_style ? $design_style."/no-users-found" : "no-users-found";
+    uwp_locate_template( $template );
 }
 
 function uwp_get_displayed_user(){
@@ -2000,18 +1575,4 @@ function uwp_is_gdv2(){
 	}
 
 	return false;
-}
-
-function uwp_get_tabs_privacy_by_user($user){
-    global $wpdb;
-
-    if(is_integer($user)){
-	    $user = get_userdata($user);
-    }
-
-	$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
-	$user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT tabs_privacy FROM $meta_table WHERE user_id = %d", $user->ID ) );
-	$tabs_privacy = maybe_unserialize($user_meta_info->tabs_privacy);
-
-	return $tabs_privacy;
 }

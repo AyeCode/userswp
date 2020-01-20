@@ -59,7 +59,7 @@ class UWP_User_Actions_Widget extends WP_Super_Duper {
 	 */
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        global $uwp_in_user_loop;
+        //global $uwp_in_user_loop;
 
         $user = uwp_get_displayed_user();
 

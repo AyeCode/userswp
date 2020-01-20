@@ -383,7 +383,7 @@ class UsersWP_Admin_Settings {
                                 placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
                                 rows="<?php echo $rows; ?>"
                             <?php echo implode( ' ', $custom_attributes ); ?>
-                        ><?php echo esc_textarea( $option_value );  ?></textarea>
+                        ><?php echo esc_textarea( stripslashes($option_value) );  ?></textarea>
                         <?php if ( ! empty( $value['custom_desc'] ) ) { ?>
                             <span class="uwp-custom-desc"><?php echo $value['custom_desc']; ?></span>
                         <?php } ?>
@@ -451,7 +451,7 @@ class UsersWP_Admin_Settings {
                                 name="<?php echo esc_attr( $value['id'] ); ?><?php echo ( 'multiselect' === $value['type'] ) ? '[]' : ''; ?>"
                                 id="<?php echo esc_attr( $value['id'] ); ?>"
                                 style="<?php echo esc_attr( $value['css'] ); ?>"
-                                class="regular-text uwp_select2 <?php echo esc_attr( $value['class'] ); ?>"
+                                class="regular-text aui-select2 <?php echo esc_attr( $value['class'] ); ?>"
                             <?php echo implode( ' ', $custom_attributes ); ?>
                             <?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
                             <?php echo ! empty( $value['sortable'] ) ? ' data-sortable="true"' : ''; ?>
@@ -686,7 +686,7 @@ class UsersWP_Admin_Settings {
                         'sort_column'      => 'menu_order',
                         'sort_order'       => 'ASC',
                         'show_option_none' => ' ',
-                        'class'            => ' regular-text uwp_select2 '.$value['class'],
+                        'class'            => ' regular-text aui-select2 '.$value['class'],
                         'echo'             => false,
                         'selected'         => absint( $option_value ),
                     );

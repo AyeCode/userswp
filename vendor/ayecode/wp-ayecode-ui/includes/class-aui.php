@@ -20,6 +20,13 @@ class AUI {
 	private static $instance = null;
 
 	/**
+	 * Holds the current AUI version number.
+	 * 
+	 * @var string $ver The current version number.
+	 */
+	public static $ver = '0.1.4';
+
+	/**
 	 * There can be only one.
 	 *
 	 * @since 1.0.0
@@ -115,7 +122,7 @@ class AUI {
 	 * @param array $args
 	 * @return string The rendered component.
 	 */
-	public function button( $args = array() ) {
+	public static function button( $args = array() ) {
 		return AUI_Component_Button::get($args);
 	}
 
@@ -141,5 +148,15 @@ class AUI {
 		return AUI_Component_Input::select($args);
 	}
 
+	/**
+	 * Render and return a bootstrap pagination component.
+	 *
+	 * @since 1.0.0
+	 * @param array $args
+	 * @return string The rendered component.
+	 */
+	public function pagination( $args = array() ) {
+		return AUI_Component_Pagination::get($args);
+	}
 
 }

@@ -12,30 +12,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 * Should not be called direct but extended instead.
 	 *
 	 * Class WP_Super_Duper
-	 * @since 1.0.3 is_block_content_call() method added.
-	 * @since 1.0.3 Placeholder text will be shown for widget that return no block content.
-	 * @since 1.0.4 is_elementor_widget_output() method added.
-	 * @since 1.0.4 is_elementor_preview() method added.
-	 * @since 1.0.5 Block checkbox options are set as true by default even when set as false - FIXED
-	 * @since 1.0.6 Some refactoring for page builders - CHANGED
-	 * @since 1.0.7 Some refactoring for page builders - CHANGED
-	 * @since 1.0.8 Some refactoring for page builders ( cornerstone builder now supported ) - CHANGED
-	 * @since 1.0.9 Numbers saving as strings and not numbers which can cause block render issues on refresh - FIXED
-	 * @since 1.0.10 Some refactoring for page builders ( Avia builder for Enfold theme now supported ) - CHANGED
-	 * @since 1.0.11 Some refactoring for page builders - CHANGED
-	 * @since 1.0.12 A checkbox default value can make a argument true even when unchecked - FIXED
-	 * @since 1.0.13 Block values can break JS if contains a comma - FIXED
-	 * @since 1.0.14 Use of additional css class in block editor breaks the block html - FIXED
-	 * @since 1.0.15 Fix conflicts with GeneratePress sections - FIXED
-	 * @since 1.0.15 `group` setting option added to be able to group settings - ADDED
-	 * @since 1.0.15 `block-supports` options array now supported - ADDED
-	 * @since 1.0.15 `block-icon` now supports Font Awesome class - ADDED
-	 * @since 1.0.15 Fusion builder (Avada) elements automatically created - ADDED
-	 * @ver 1.0.15
+	 * @since 1.0.16 change log moved to file change-log.txt - CHANGED
+	 * @ver 1.0.16
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.15";
+		public $version = "1.0.16";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -183,7 +165,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 					// param_name
 					$param['param_name'] = $key;
-					
+
 					// Default 
 					$param['default'] = isset($val['default']) ? $val['default'] : '';
 
@@ -245,7 +227,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			<div class="sd-shortcode-left-wrap">
 				<?php
 				ksort( $sd_widgets );
-//				print_r($sd_widgets);exit;
+				//				print_r($sd_widgets);exit;
 				if ( ! empty( $sd_widgets ) ) {
 					echo '<select class="widefat" onchange="sd_get_shortcode_options(this);">';
 					echo "<option>" . __( 'Select shortcode' ) . "</option>";
@@ -772,7 +754,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								sd_build_shortcode($short_code);
 							}); // take care of select tags
 
-							jQuery('#' + $short_code).on('change keypress keyup', 'input', function () {
+							jQuery('#' + $short_code).on('change keypress keyup', 'input,textarea', function () {
 								sd_build_shortcode($short_code);
 							});
 
@@ -839,17 +821,28 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 
 					if ($form_data) {
+						$content = '';
 						$form_data.forEach(function (element) {
 
 							if (element.value) {
 								$field_name = element.name.substr(element.name.indexOf("][") + 2);
 								$field_name = $field_name.replace("]", "");
-								$output = $output + " " + $field_name + '="' + element.value + '"';
+								if( $field_name == 'html' ){
+									$content = element.value;
+								}else{
+									$output = $output + " " + $field_name + '="' + element.value + '"';
+								}
 							}
 
 						});
 					}
 					$output = $output + "]";
+
+					// check for content field
+					if($content){
+						$output = $output + $content + "[/"+$id+"]";
+					}
+
 					jQuery('#TB_ajaxContent #sd-shortcode-output').html($output);
 				}
 
@@ -1309,22 +1302,27 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			//$args
 			$args = $this->string_to_bool( $args );
 
+			// if we have a enclosed shortcode we add it to the special `html` argument
+			if(!empty($content)){
+				$args['html'] = $content;
+			}
 
-			$calss = isset( $this->options['widget_ops']['classname'] ) ? esc_attr( $this->options['widget_ops']['classname'] ) : '';
+			$class = isset( $this->options['widget_ops']['classname'] ) ? esc_attr( $this->options['widget_ops']['classname'] ) : '';
 
-			$calss = apply_filters( 'wp_super_duper_div_classname', $calss, $args, $this );
-			$calss = apply_filters( 'wp_super_duper_div_classname_' . $this->base_id, $calss, $args, $this );
+			$class = apply_filters( 'wp_super_duper_div_classname', $class, $args, $this );
+			$class = apply_filters( 'wp_super_duper_div_classname_' . $this->base_id, $class, $args, $this );
 
 			$attrs = apply_filters( 'wp_super_duper_div_attrs', '', $args, $this );
-			$attrs = apply_filters( 'wp_super_duper_div_attrs_' . $this->base_id, '', $args, $this );
+			$attrs = apply_filters( 'wp_super_duper_div_attrs_' . $this->base_id, '', $args, $this ); //@todo this does not seem right @kiran?
 
 			$shortcode_args = array();
 			$output         = '';
 			$no_wrap        = isset( $this->options['no_wrap'] ) && $this->options['no_wrap'] ? true : false;
+			if( isset( $args['no_wrap'] ) && $args['no_wrap'] ){ $no_wrap = true; }
 			$main_content   = $this->output( $args, $shortcode_args, $content );
 			if ( $main_content && ! $no_wrap ) {
-				// wrap the shortcode in a dive with the same class as the widget
-				$output .= '<div class="' . $calss . '" ' . $attrs . '>';
+				// wrap the shortcode in a div with the same class as the widget
+				$output .= '<div class="' . $class . '" ' . $attrs . '>';
 				if ( ! empty( $args['title'] ) ) {
 					// if its a shortcode and there is a title try to grab the title wrappers
 					$shortcode_args = array( 'before_title' => '', 'after_title' => '' );
@@ -1647,6 +1645,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 						<?php
 
+						// maybe set no_wrap
+						$no_wrap        = isset( $this->options['no_wrap'] ) && $this->options['no_wrap'] ? true : false;
+						if( isset( $this->arguments['no_wrap'] ) && $this->arguments['no_wrap'] ){ $no_wrap = true; }
+						if( $no_wrap ){ $this->options['block-wrap'] = ''; }
+
 						$show_advanced = $this->block_show_advanced();
 
 						$show_alignment = false;
@@ -1667,7 +1670,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							}
 
 							// block wrap element
-							if ( isset( $this->options['block-wrap'] ) ) { //@todo we should validate this?
+							if ( !empty( $this->options['block-wrap'] ) ) { //@todo we should validate this?
 								echo "block_wrap: {";
 								echo "	type: 'string',";
 								echo "  default: '" . esc_attr( $this->options['block-wrap'] ) . "',";
@@ -1763,11 +1766,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 							return [
 
-								el(wp.editor.BlockControls, {key: 'controls'},
+								el(wp.blockEditor.BlockControls, {key: 'controls'},
 
 									<?php if($show_alignment){?>
 									el(
-										wp.editor.AlignmentToolbar,
+										wp.blockEditor.AlignmentToolbar,
 										{
 											value: props.attributes.alignment,
 											onChange: function (alignment) {
@@ -1779,53 +1782,53 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 								),
 
-								el(wp.editor.InspectorControls, {key: 'inspector'},
+								el(wp.blockEditor.InspectorControls, {key: 'inspector'},
 
 									<?php
 
 									if(! empty( $this->arguments )){
 
-										if ( $show_advanced ) {
-										?>
-										el(
-											wp.components.ToggleControl,
-											{
-												label: 'Show Advanced Settings?',
-												checked: props.attributes.show_advanced,
-												onChange: function (show_advanced) {
-													props.setAttributes({show_advanced: !props.attributes.show_advanced})
-												}
+									if ( $show_advanced ) {
+									?>
+									el(
+										wp.components.ToggleControl,
+										{
+											label: 'Show Advanced Settings?',
+											checked: props.attributes.show_advanced,
+											onChange: function (show_advanced) {
+												props.setAttributes({show_advanced: !props.attributes.show_advanced})
 											}
-										),
+										}
+									),
+									<?php
+
+									}
+
+									$arguments = $this->group_arguments($this->arguments);
+
+									// Do we have sections?
+									$has_sections = $arguments == $this->arguments ? false : true;
+
+
+									if($has_sections){
+									$panel_count = 0;
+									foreach($arguments as $key => $args){
+									?>
+									el(wp.components.PanelBody, {
+											title: '<?php esc_attr_e($key); ?>',
+											initialOpen: <?php if($panel_count){echo "false";}else{echo "true";}?>
+										},
 										<?php
 
+										foreach($args as $k => $a){
+											$this->build_block_arguments($k, $a);
 										}
-
-										$arguments = $this->group_arguments($this->arguments);
-
-										// Do we have sections?
-										$has_sections = $arguments == $this->arguments ? false : true;
-
-										
-									if($has_sections){
-										$panel_count = 0;
-										foreach($arguments as $key => $args){
-											?>
-											el(wp.components.PanelBody, {
-													title: '<?php esc_attr_e($key); ?>',
-													initialOpen: <?php if($panel_count){echo "false";}else{echo "true";}?>
-												},
-											<?php
-
-											foreach($args as $k => $a){
-												$this->build_block_arguments($k, $a);
-											}
-											?>
-											),
-											<?php
+										?>
+									),
+									<?php
 									$panel_count++;
 
-										}
+									}
 									}else{
 										foreach($this->arguments as $key => $args){
 											$this->build_block_arguments($key, $args);
@@ -1868,13 +1871,19 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 							// build the shortcode.
 							var content = "[<?php echo $this->options['base_id'];?>";
+							$html = '';
 							<?php
 
 							if(! empty( $this->arguments )){
+
 							foreach($this->arguments as $key => $args){
 							?>
 							if (attr.hasOwnProperty("<?php echo esc_attr( $key );?>")) {
-								content += " <?php echo esc_attr( $key );?>='" + attr.<?php echo esc_attr( $key );?>+ "' ";
+								if('<?php echo esc_attr( $key );?>' == 'html'){
+									$html = attr.<?php echo esc_attr( $key );?>;
+								}else{
+									content += " <?php echo esc_attr( $key );?>='" + attr.<?php echo esc_attr( $key );?>+ "' ";
+								}
 							}
 							<?php
 							}
@@ -1882,6 +1891,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 							?>
 							content += "]";
+							
+							// if has html element
+							if($html){
+								content += $html + "[/<?php echo $this->options['base_id'];?>]";
+							}
 
 
 							// @todo should we add inline style here or just css classes?
@@ -1897,12 +1911,22 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								}
 							}
 
-							//console.log(content);
+							<?php
+							if(isset( $this->options['block-wrap'] ) && $this->options['block-wrap'] == ''){
+							?>
+							return content;
+							<?php
+							}else{
+							?>
 							var block_wrap = 'div';
 							if (attr.hasOwnProperty("block_wrap")) {
 								block_wrap = attr.block_wrap;
 							}
 							return el(block_wrap, {dangerouslySetInnerHTML: {__html: content}, className: align});
+							<?php
+							}
+							?>
+
 
 						}
 					});
@@ -1926,6 +1950,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			$options = '';
 			$extra = '';
 			$require = '';
+
+			// `content` is a protected and special argument
+			if($key == 'content'){return;}
+
 			$onchange = "props.setAttributes({ $key: $key } )";
 			$value = "props.attributes.$key";
 			$text_type = array( 'text', 'password', 'number', 'email', 'tel', 'url', 'color' );
@@ -1943,6 +1971,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$type = 'CheckboxControl';
 				$extra .= "checked: props.attributes.$key,";
 				$onchange = "props.setAttributes({ $key: ! props.attributes.$key } )";
+			}elseif ( $args['type'] == 'textarea' ) {
+				$type = 'TextareaControl';
 			} elseif ( $args['type'] == 'select' || $args['type'] == 'multiselect' ) {
 				$type = 'SelectControl';
 				if ( ! empty( $args['options'] ) ) {
@@ -2149,8 +2179,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			$argument_values = $this->string_to_bool( $argument_values );
 			$output          = $this->output( $argument_values, $args );
 
+			$no_wrap = false;
+			if( isset( $argument_values['no_wrap'] ) && $argument_values['no_wrap'] ){ $no_wrap = true; }
+
 			ob_start();
-			if ( $output ) {
+			if ( $output && !$no_wrap) {
 				// Before widget
 				$before_widget = $args['before_widget'];
 				$before_widget = apply_filters( 'wp_super_duper_before_widget', $before_widget, $args, $instance, $this );
@@ -2174,6 +2207,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				echo $after_widget;
 			} elseif ( $this->is_preview() && $output == '' ) {// if preview show a placeholder if empty
 				$output = $this->preview_placeholder_text( "{{" . $this->base_id . "}}" );
+				echo $output;
+			} elseif($output && $no_wrap){
 				echo $output;
 			}
 			$output = ob_get_clean();
@@ -2362,7 +2397,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 						?>
 						<script>
-//							jQuery(this).find("i").toggleClass("fas fa-chevron-up fas fa-chevron-down");jQuery(this).next().toggle();
+							//							jQuery(this).find("i").toggleClass("fas fa-chevron-up fas fa-chevron-down");jQuery(this).next().toggle();
 						</script>
 						<?php
 
@@ -2423,7 +2458,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			$output = esc_attr( str_replace( array( "[%", "%]" ), array(
 				"jQuery(form).find('[data-argument=\"",
-				"\"]').find('input,select').val()"
+				"\"]').find('input,select,textarea').val()"
 			), $input ) );
 
 			return $output;
@@ -2552,6 +2587,18 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						<label
 							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
 						<?php
+						break;
+					case "textarea":
+						?>
+						<label
+							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+						<textarea <?php echo $placeholder; ?> class="widefat"
+							<?php echo $custom_attributes; ?>
+							                               id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+							                               name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
+							                               ><?php echo esc_attr( $value ); ?></textarea>
+						<?php
+
 						break;
 					case "hidden":
 						?>

@@ -350,7 +350,7 @@ function uwp_process_activation_link() {
         $key =  strip_tags(esc_sql($_GET['key']));
         $login =  strip_tags(esc_sql($_GET['login']));
         $login_page = uwp_get_page_id('login_page', false);
-        $result = uwp_check_activation_key($key, $login);
+        $result = check_password_reset_key($key, $login);
 
         if (is_wp_error($result)) {
             if ($login_page) {
@@ -419,29 +419,4 @@ function uwp_current_page_url() {
      * @param string $pageURL The URL of the current page.
      */
     return apply_filters( 'uwp_current_page_url', $pageURL );
-}
-
-function uwp_get_redirect_url($redirect_page_id, $data){
-
-    if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
-        $redirect_to = esc_url($_REQUEST['redirect_to']);
-    } elseif (isset($data['redirect_to']) && !empty($data['redirect_to'])) {
-        $redirect_to = esc_url($data['redirect_to']);
-    } elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
-        if (uwp_is_wpml()) {
-            $wpml_page_id = uwp_wpml_object_id($redirect_page_id, 'page', true, ICL_LANGUAGE_CODE);
-            if (!empty($wpml_page_id)) {
-                $redirect_page_id = $wpml_page_id;
-            }
-        }
-        $redirect_to = get_permalink($redirect_page_id);
-    } else {
-        if ( current_user_can('manage_options') ) {
-            $redirect_to = admin_url();
-        } else {
-            $redirect_to = home_url('/');
-        }
-    }
-
-    return apply_filters('uwp_redirect_url', $redirect_to, $redirect_page_id, $data);
 }

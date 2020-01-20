@@ -47,8 +47,6 @@ class UWP_Users_Loop_Widget extends WP_Super_Duper {
         
         ob_start();
 
-
-
         global $uwp_widget_args;
         $uwp_widget_args = $args;
 
