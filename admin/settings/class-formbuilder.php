@@ -906,39 +906,44 @@ class UsersWP_Form_Builder {
 
 
                         // is_public
-                        if (has_filter("uwp_builder_is_public_{$field_type}")) {
-
-                            echo apply_filters("uwp_builder_is_public_{$field_type}", '', $result_str, $cf, $field_info);
-
+                        if (isset($field_info->is_default) && $field_info->is_default == '1') {
+                            // do nothing for default fields
                         } else {
-                            $value = '';
-                            if (isset($field_info->is_public)) {
-                                $value = esc_attr($field_info->is_public);
-                            }elseif (isset($cf['defaults']['is_public']) && $cf['defaults']['is_public']) {
-                                $value = $cf['defaults']['is_public'];
+                            if ( has_filter( "uwp_builder_is_public_{$field_type}" ) ) {
+
+                                echo apply_filters( "uwp_builder_is_public_{$field_type}", '', $result_str, $cf, $field_info );
+
+                            } else {
+                                $value = '';
+                                if ( isset( $field_info->is_public ) ) {
+                                    $value = esc_attr( $field_info->is_public );
+                                } elseif ( isset( $cf['defaults']['is_public'] ) && $cf['defaults']['is_public'] ) {
+                                    $value = $cf['defaults']['is_public'];
+                                }
+                                ?>
+                                <li <?php echo $field_display; ?> class="uwp-setting-name uwp-advanced-setting">
+                                    <label for="is_public" class="uwp-tooltip-wrap">
+                                        <span class="uwp-help-tip dashicons dashicons-editor-help"
+                                              title="<?php _e( 'If no is selected then the field will not be visible to other users.', 'userswp' ); ?>"></span>
+                                        <?php _e( 'Is Public :', 'userswp' ); ?>
+                                    </label>
+                                    <div class="uwp-input-wrap">
+                                        <?php
+                                        if ( ! $value ) {
+                                            $value = "1";
+                                        }
+                                        ?>
+
+                                        <select name="is_public" class="aui-select2">
+                                            <option value="1" <?php selected( $value, "1" ); ?>><?php echo __( "Yes", "userswp" ) ?></option>
+                                            <option value="0" <?php selected( $value, "0" ); ?>><?php echo __( "No", "userswp" ) ?></option>
+                                            <option value="2" <?php selected( $value, "2" ); ?>><?php echo __( "Let User Decide", "userswp" ) ?></option>
+                                        </select>
+
+                                    </div>
+                                </li>
+                                <?php
                             }
-                            ?>
-                            <li <?php echo $field_display; ?> class="uwp-setting-name uwp-advanced-setting">
-                                <label for="is_public" class="uwp-tooltip-wrap">
-                                    <span class="uwp-help-tip dashicons dashicons-editor-help" title="<?php _e('If no is selected then the field will not be visible to other users.', 'userswp'); ?>"></span>
-                                    <?php _e('Is Public :', 'userswp'); ?>
-                                </label>
-                                <div class="uwp-input-wrap">
-                                    <?php
-                                    if (!$value) {
-                                        $value = "1";
-                                    }
-                                    ?>
-
-                                    <select name="is_public" class="aui-select2">
-                                        <option value="1" <?php selected($value, "1"); ?>><?php echo __("Yes", "userswp") ?></option>
-                                        <option value="0" <?php selected($value, "0"); ?>><?php echo __("No", "userswp") ?></option>
-                                        <option value="2" <?php selected($value, "2"); ?>><?php echo __("Let User Decide", "userswp") ?></option>
-                                    </select>
-
-                                </div>
-                            </li>
-                            <?php
                         }
 
 

@@ -66,8 +66,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
     public function get_sections() {
 
         $sections = array(
-            ''          	=> __( 'General', 'userswp' ),
-            'pages' 	    => __( 'Pages', 'userswp' ),
+            '' 	    => __( 'Pages', 'userswp' ),
             'register' 	    => __( 'Register', 'userswp' ),
             'login' 	    => __( 'Login', 'userswp' ),
             'change-password' => __( 'Change Password', 'userswp' ),
@@ -87,95 +86,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 	 */
 	public function get_settings( $current_section = '' ) {
 
-		if ( 'pages' == $current_section ) {
-			/**
-			 * Filter pages settings array.
-			 *
-			 * @package userswp
-			 */
-			$settings = apply_filters( 'uwp_page_options', array(
-				array(
-					'title' => __( 'Page Settings', 'userswp' ),
-					'type'  => 'title',
-					'desc'  => 'These are essential pages used by UWP, you can set the pages here and edit the title/slug of the page via WP page settings.',
-					'id'    => 'page_options',
-					'desc_tip' => true,
-				),
-				array(
-					'name'     => __( 'User Profile Page', 'userswp' ),
-					'desc'     => __( 'This is the front end user\'s profile page. This page automatically overrides the default WordPress author page.', 'userswp' ),
-					'id'       => 'profile_page',
-					'type'     => 'single_select_page',
-					'class'      => 'uwp-select',
-					'desc_tip' => true,
-				),
-                array(
-                    'name'     => __( 'Register Page', 'userswp' ),
-                    'desc'     => __( 'This is the front end register page. This is where users create their account.', 'userswp' ),
-                    'id'       => 'register_page',
-                    'type'     => 'single_select_page',
-                    'class'      => 'uwp-select',
-                    'desc_tip' => true,
-                ),
-                array(
-                    'name'     => __( 'Login Page', 'userswp' ),
-                    'desc'     => __( 'This is the front end login page. This is where users will login after creating their account.', 'userswp' ),
-                    'id'       => 'login_page',
-                    'type'     => 'single_select_page',
-                    'class'      => 'uwp-select',
-                    'desc_tip' => true,
-                ),
-                array(
-                    'name'     => __( 'Account Page', 'userswp' ),
-                    'desc'     => __( 'This is the front end account page. This is where users can edit their account.', 'userswp' ),
-                    'id'       => 'account_page',
-                    'type'     => 'single_select_page',
-                    'class'      => 'uwp-select',
-                    'desc_tip' => true,
-                ),
-                array(
-                    'name'     => __( 'Change Password Page', 'userswp' ),
-                    'desc'     => __( 'This is the front end Change Password page.', 'userswp' ),
-                    'id'       => 'change_page',
-                    'type'     => 'single_select_page',
-                    'class'      => 'uwp-select',
-                    'desc_tip' => true,
-                ),
-                array(
-                    'name'     => __( 'Forgot Password Page', 'userswp' ),
-                    'desc'     => __( 'This is the front end Forgot Password page. This is the page where users are sent to reset their password when they lose it.', 'userswp' ),
-                    'id'       => 'forgot_page',
-                    'type'     => 'single_select_page',
-                    'class'      => 'uwp-select',
-                    'desc_tip' => true,
-                ),
-                array(
-                    'name'     => __( 'Reset Password Page', 'userswp' ),
-                    'desc'     => __( 'This is the front end Reset Password page. This is the page where users can reset their password when they lose it.', 'userswp' ),
-                    'id'       => 'reset_page',
-                    'type'     => 'single_select_page',
-                    'class'      => 'uwp-select',
-                    'desc_tip' => true,
-                ),
-                array(
-                    'name'     => __( 'Users List Page', 'userswp' ),
-                    'desc'     => __( 'This is the front end Users List page. This is the page where all registered users of the websites are listed.', 'userswp' ),
-                    'id'       => 'users_page',
-                    'type'     => 'single_select_page',
-                    'class'      => 'uwp-select',
-                    'desc_tip' => true,
-                ),
-                array(
-                    'name'     => __( 'Users List Item Page', 'userswp' ),
-                    'desc'     => __( 'This is the page/template for displaying user item in users list page. You can change the template as you want which will apply to each user item in users list page.', 'userswp' ),
-                    'id'       => 'user_list_item_page',
-                    'type'     => 'single_select_page',
-                    'class'      => 'uwp-select',
-                    'desc_tip' => true,
-                ),
-				array( 'type' => 'sectionend', 'id' => 'page_options' ),
-			));
-        } else if ( 'register' == $current_section ) {
+		if ( 'register' == $current_section ) {
             /**
              * Filter registration settings array.
              *
@@ -611,27 +522,92 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
             ));
         } else {
 			/**
-			 * Filter general settings array.
+			 * Filter pages settings array.
 			 *
 			 * @package userswp
 			 */
-			$settings = apply_filters( 'uwp_settings_general_main', array(
+			$settings = apply_filters( 'uwp_page_options', array(
 				array(
-					'title' => __( 'Welcome to UsersWP', 'userswp' ),
+					'title' => __( 'Page Settings', 'userswp' ),
 					'type'  => 'title',
-					'desc'  => '',
-					'id'    => 'general_options'
+					'desc'  => 'These are essential pages used by UWP, you can set the pages here and edit the title/slug of the page via WP page settings.',
+					'id'    => 'page_options',
+					'desc_tip' => true,
 				),
-
-                array( 'type' => 'sectionend', 'id' => 'general_options' ),
-
 				array(
-					'type' => 'general_shortcodes',
+					'name'     => __( 'User Profile Page', 'userswp' ),
+					'desc'     => __( 'This is the front end user\'s profile page. This page automatically overrides the default WordPress author page.', 'userswp' ),
+					'id'       => 'profile_page',
+					'type'     => 'single_select_page',
+					'class'      => 'uwp-select',
+					'desc_tip' => true,
 				),
-
-				array( 'type' => 'sectionend', 'id' => 'general_options_add' ),
-
-			) );
+				array(
+					'name'     => __( 'Register Page', 'userswp' ),
+					'desc'     => __( 'This is the front end register page. This is where users create their account.', 'userswp' ),
+					'id'       => 'register_page',
+					'type'     => 'single_select_page',
+					'class'      => 'uwp-select',
+					'desc_tip' => true,
+				),
+				array(
+					'name'     => __( 'Login Page', 'userswp' ),
+					'desc'     => __( 'This is the front end login page. This is where users will login after creating their account.', 'userswp' ),
+					'id'       => 'login_page',
+					'type'     => 'single_select_page',
+					'class'      => 'uwp-select',
+					'desc_tip' => true,
+				),
+				array(
+					'name'     => __( 'Account Page', 'userswp' ),
+					'desc'     => __( 'This is the front end account page. This is where users can edit their account.', 'userswp' ),
+					'id'       => 'account_page',
+					'type'     => 'single_select_page',
+					'class'      => 'uwp-select',
+					'desc_tip' => true,
+				),
+				array(
+					'name'     => __( 'Change Password Page', 'userswp' ),
+					'desc'     => __( 'This is the front end Change Password page.', 'userswp' ),
+					'id'       => 'change_page',
+					'type'     => 'single_select_page',
+					'class'      => 'uwp-select',
+					'desc_tip' => true,
+				),
+				array(
+					'name'     => __( 'Forgot Password Page', 'userswp' ),
+					'desc'     => __( 'This is the front end Forgot Password page. This is the page where users are sent to reset their password when they lose it.', 'userswp' ),
+					'id'       => 'forgot_page',
+					'type'     => 'single_select_page',
+					'class'      => 'uwp-select',
+					'desc_tip' => true,
+				),
+				array(
+					'name'     => __( 'Reset Password Page', 'userswp' ),
+					'desc'     => __( 'This is the front end Reset Password page. This is the page where users can reset their password when they lose it.', 'userswp' ),
+					'id'       => 'reset_page',
+					'type'     => 'single_select_page',
+					'class'      => 'uwp-select',
+					'desc_tip' => true,
+				),
+				array(
+					'name'     => __( 'Users List Page', 'userswp' ),
+					'desc'     => __( 'This is the front end Users List page. This is the page where all registered users of the websites are listed.', 'userswp' ),
+					'id'       => 'users_page',
+					'type'     => 'single_select_page',
+					'class'      => 'uwp-select',
+					'desc_tip' => true,
+				),
+				array(
+					'name'     => __( 'Users List Item Page', 'userswp' ),
+					'desc'     => __( 'This is the page/template for displaying user item in users list page. You can change the template as you want which will apply to each user item in users list page.', 'userswp' ),
+					'id'       => 'user_list_item_page',
+					'type'     => 'single_select_page',
+					'class'      => 'uwp-select',
+					'desc_tip' => true,
+				),
+				array( 'type' => 'sectionend', 'id' => 'page_options' ),
+			));
 		}
 
 

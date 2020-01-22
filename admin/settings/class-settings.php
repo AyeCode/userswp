@@ -714,26 +714,6 @@ class UsersWP_Admin_Settings {
                     </tr><?php
                     break;
 
-                case 'general_shortcodes' :
-                    global $hide_save_button;
-                    $hide_save_button = true;
-                    ?>
-
-                    <tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "uwp-advanced-setting";}?>">
-                        <td class="forminp" colspan="2">
-                            <?php
-                            /**
-                             * Contains template for displaying available shortcodes.
-                             */
-                            include_once( USERSWP_PATH . '/admin/views/html-admin-settings-general-shortcodes.php' );
-                            ?>
-                        </td>
-                    </tr>
-
-                    <?php
-
-                    break;
-
                 case 'import_export_users' :
                     ?>
 

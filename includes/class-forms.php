@@ -1257,6 +1257,10 @@ class UsersWP_Forms {
 							$field_value = uwp_get_usermeta($user_id, $field->htmlvar_name);
 						}
 
+						if(is_array($field_value) && count($field_value) > 0){
+							$field_value = uwp_maybe_serialize($field->htmlvar_name, $field_value);
+                        }
+
 						if(isset($field->site_title) && !empty($field_value)){
 							$form_fields .= '<p><b>' . $field->site_title . '</b>&nbsp;' . $field_value . '</p>';
                         }

@@ -131,7 +131,9 @@ No questions so far, but don't hesitate to ask!
 * Remove password neg on reset password - ADDED
 * Password strength indicator on reset password form - ADDED
 * Country field in account form conflict with the Location manager plugin - FIXED
-* Status showing activity, followers and friends tables missing - FIXED
+* Status showing activity, followers and friends tables missing even no add on active - FIXED
+* Remove general shortcodes tab in settings - FIXED
+* Remove Is Public option from form builder for default fields - FIXED
 
 = 1.2.0.12 =
 * GD List Manager plugin integration in core - ADDED
