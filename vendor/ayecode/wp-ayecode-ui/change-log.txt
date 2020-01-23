@@ -1,3 +1,8 @@
+= 0.1.5 =
+* Fix stripslashes() expects parameter 1 to be string array given notice for the multiselect field - FIXED
+* Added button new window option - ADDED
+* Added badge component - ADDED
+
 = 0.1.4 =
 * Avada theme default JS settings added for compatibility - ADDED
 * Pagination component added - ADDED

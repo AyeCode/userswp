@@ -20,8 +20,9 @@ class AUI_Component_Button {
 	 */
 	public static function get($args = array()){
 		$defaults = array(
-			'type'       => 'a',
+			'type'       => 'a', // a, button, badge
 			'href'       => '#',
+			'new_window' => false,
 			'class'      => 'btn btn-primary',
 			'id'         => '',
 			'title'      => '',
@@ -33,6 +34,7 @@ class AUI_Component_Button {
 			'new_line_after' => true,
 			'no_wrap'    => true,
 			'onclick'    => '',
+			'style'  => '',
 		);
 
 		/**
@@ -45,7 +47,10 @@ class AUI_Component_Button {
 
 			// open/type
 			if($type=='a'){
-				$output .= '<a href="' . $args['href'] . '"';
+				$new_window = !empty($args['new_window']) ? ' target="_blank" ' : '';
+				$output .= '<a href="' . $args['href'] . '"'.$new_window;
+			}elseif($type=='badge'){
+				$output .= '<span ';
 			}else{
 				$output .= '<button type="' . $type . '" ';
 			}
@@ -85,6 +90,11 @@ class AUI_Component_Button {
 				$output .= ' onclick="'.$args['onclick'].'" ';
 			}
 
+			// style, we don't escape this
+			if(!empty($args['style'])){
+				$output .= ' style="'.$args['style'].'" ';
+			}
+
 			// close opening tag
 			$output .= ' >';
 
@@ -108,6 +118,8 @@ class AUI_Component_Button {
 			// close
 			if($type=='a'){
 				$output .= '</a>';
+			}elseif($type=='badge'){
+				$output .= '</span>';
 			}else{
 				$output .= '</button>';
 			}

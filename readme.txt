@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.0.12
+Stable tag: 1.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -121,7 +121,7 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
-= 1.2.0.13 =
+= 1.2.1 =
 * Formatting textarea custom field in the tab content - FIXED
 * Short tag to send user submitted information in email for account update form - ADDED
 * Reload recaptcha after form submission error - FIXED

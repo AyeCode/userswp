@@ -80,11 +80,11 @@ class UsersWP_Admin_Setup_Wizard {
 				'view'    => array( $this, 'setup_content' ),
 				'handler' => array( $this, 'setup_content_save' ),
 			),
-			'recommend'        => array(
+			/*'recommend'        => array(
 				'name'    => __( 'Recommend', 'userswp' ),
 				'view'    => array( $this, 'setup_recommend' ),
 				'handler' => array( $this, 'setup_recommend_save' ),
-			),
+			),*/
 			'next_steps'       => array(
 				'name'    => __( 'Ready!', 'userswp' ),
 				'view'    => array( $this, 'setup_ready' ),
@@ -488,7 +488,7 @@ class UsersWP_Admin_Setup_Wizard {
 
 	}
 
-	public function setup_recommend() {
+	/*public function setup_recommend() {
 		?>
         <form method="post">
             <div class="uwp-wizard-recommend">
@@ -552,7 +552,7 @@ class UsersWP_Admin_Setup_Wizard {
             </p>
         </form>
 		<?php
-	}
+	}*/
 
 	public static function get_recommend_wp_plugins(){
 
@@ -580,18 +580,18 @@ class UsersWP_Admin_Setup_Wizard {
 		return $plugins;
 	}
 
-	public function setup_recommend_save() {
+	/*public function setup_recommend_save() {
 		check_admin_referer( 'uwp-setup' );
 		wp_redirect( esc_url_raw( $this->get_next_step_link() ) );
 		exit;
-	}
+	}*/
 
 	public function setup_ready(){
 		$this->setup_ready_actions();
 		?>
         <h2><?php esc_html_e( 'Awesome, you are ready to go!', 'userswp' ); ?></h2>
         <div class="uwp-message">
-            <p><?php _e('Thank you for using UsersWP! :)','userswp'); ?></p>
+            <p><?php _e('Thank you for using UsersWP :)','userswp'); ?></p>
         </div>
         <div class="uwp-setup-next-steps-last">
             <h2><?php _e( 'Learn more', 'userswp' ); ?></h2>

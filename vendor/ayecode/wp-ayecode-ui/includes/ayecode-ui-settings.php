@@ -385,6 +385,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				 */
 				function aui_init_tooltips(){
 					jQuery('[data-toggle="tooltip"]').tooltip();
+					jQuery('[data-toggle="popover"]').popover();
+					jQuery('[data-toggle="popover-html"]').popover({
+						html: true
+					});
 				}
 
 				// run on window loaded
