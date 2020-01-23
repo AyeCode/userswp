@@ -10,3 +10,5 @@ phpunit.xml export-ignore
 README.md export-ignore
 /tests/ export-ignore
 /.idea/ export-ignore
+/.wordpress-org/ export-ignore
+/.github/ export-ignore
