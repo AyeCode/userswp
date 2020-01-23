@@ -588,21 +588,12 @@ class UsersWP_Tools {
                         <p class="tool-description"><?php _e('Dummy Users for Testing. Password for all dummy users:', 'userswp'); echo " ".self::get_dummy_user_passowrd();?></p>
                     </th>
                     <td class="run-tool">
-                        <?php
-
-                        $dummy_users = get_users( array( 'meta_key' => 'uwp_dummy_user', 'meta_value' => '1', 'fields' => array( 'ID' ) ) );
-
-                        if ( count($dummy_users) > 0 ) {
-                            ?>
-                            <input type="button" value="<?php _e('Remove', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="remove_dummy_users"/>
-                            <?php
-                        } else {
-                            ?>
-                            <input type="button" value="<?php _e('Create', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="add_dummy_users"/>
-                            <?php
-                        }
-
-                        ?>
+	                    <?php
+	                    $dummy_users = get_users( array( 'meta_key' => 'uwp_dummy_user', 'meta_value' => '1', 'fields' => array( 'ID' ) ) );
+	                    $total_dummy_users = !empty( $dummy_users ) ? count($dummy_users) : 0;
+	                    ?>
+                        <input style="display: <?php echo ( $total_dummy_users > 0 ) ? 'none' :'block'; ?>" type="button" value="<?php _e('Create', 'userswp');?>" class="button-primary uwp_diagnosis_button uwp_add_dummy_users_button" data-diagnose="add_dummy_users"/>
+                        <input style="display: <?php echo ( $total_dummy_users > 0 ) ? 'block' :'none'; ?>" type="button" value="<?php _e('Remove', 'userswp');?>" class="button-primary uwp_diagnosis_button uwp_remove_dummy_users_button" data-diagnose="remove_dummy_users"/>
                     </td>
                 </tr>
 
@@ -636,6 +627,7 @@ class UsersWP_Tools {
                         e.preventDefault();
                         var type = $(this).data('diagnose');
                         $(this).hide();
+                        jQuery("#uwp_diagnose_add_dummy_users,#uwp_diagnose_remove_dummy_users").html('');
                         $("#uwp_diagnose_pb_" + type).find('.progressBar').show().progressbar({value: 0});
                         uwp_process_diagnose_step( 0, type );
 
@@ -661,6 +653,13 @@ class UsersWP_Tools {
                             setTimeout(function(){
                                 jQuery("#uwp_diagnose_pb_" + type).find('.progressBar').hide();
                                 jQuery("#uwp_diagnose_" + type).html(response.message);
+                                if( 'add_dummy_users' === type ) {
+                                    jQuery('.uwp_remove_dummy_users_button').show();
+                                    jQuery('.uwp_add_dummy_users_button').hide();
+                                } else{
+                                    jQuery('.uwp_add_dummy_users_button').show();
+                                    jQuery('.uwp_remove_dummy_users_button').hide();
+                                }
                             }, 1500);
                         } else {
                             tools_progress(response.percent, type);

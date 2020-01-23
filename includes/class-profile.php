@@ -144,7 +144,7 @@ class UsersWP_Profile {
      * @package     userswp
      * @param       object      $user       The User ID.
      */
-    public function get_profile_title($user, $tag = 'h2',$title_class = '',$link_class = '', $link = true) {
+    public function get_profile_title($user, $tag = 'h2', $title_class = '', $link_class = '',$link = true) {
         ?>
         <div class="uwp-profile-name">
             <<?php echo esc_attr($tag); ?> class="uwp-user-title <?php echo $title_class;?>" data-user="<?php echo $user->ID; ?>">

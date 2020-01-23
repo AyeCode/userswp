@@ -2,7 +2,7 @@ html {background: #353c7c;background: linear-gradient(-225deg, #353c7c, #5c5a82)
 .uwp-setup {background: #fff;color: #444;font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;margin: 40px auto 25px;padding: 20px 20px 10px 20px;max-width: 700px;-webkit-font-smoothing: subpixel-antialiased;border-radius: 5px;box-shadow: 0 0 15px 1px rgba(0,0,0,0.4);height: auto;}
 h1#uwp-logo {text-align: center;border-bottom: 1px solid #ddd;clear: both;color: #666;font-size: 24px;padding: 0;padding-bottom: 7px;font-weight: 400;}
 ol.uwp-setup-steps {padding: 0 0 24px;margin: 0;list-style: none outside;overflow: hidden;color: #ccc;width: 100%;display: -webkit-inline-flex;display: -ms-inline-flexbox;display: inline-flex;}
-ol.uwp-setup-steps li {width: 33.33%;float: left;padding: 0 0 0.8em;margin: 0;text-align: center;position: relative;border-bottom: 4px solid #ccc;line-height: 1.4em;}
+ol.uwp-setup-steps li {width: 50%;float: left;padding: 0 0 0.8em;margin: 0;text-align: center;position: relative;border-bottom: 4px solid #ccc;line-height: 1.4em;}
 ol.uwp-setup-steps li.done,ol.uwp-setup-steps li.active {border-color: #353c7c;color: #353c7c;}
 ol.uwp-setup-steps li:before {content: '';border: 4px solid #ccc;border-radius: 100%;width: 4px;height: 4px;position: absolute;bottom: 0;left: 50%;margin-left: -6px;margin-bottom: -8px;background: #fff;}
 ol.uwp-setup-steps li.done:before {border-color: #353c7c;background: #353c7c;}

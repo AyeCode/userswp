@@ -823,9 +823,7 @@ class UsersWP_Status {
             'uwp_usermeta',
             'uwp_form_fields',
             'uwp_form_extras',
-            'uwp_activity',
-            'uwp_followers',
-            'uwp_friends',
+            'uwp_profile_tabs',
         );
 
         $core_tables = apply_filters( 'uwp_database_tables', $core_tables );
