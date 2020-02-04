@@ -257,10 +257,19 @@ function uwp_modal_login_form(){
  * @returns {boolean}
  */
 function uwp_maybe_check_recaptcha($form){
+    if(typeof uwp_recaptcha_loops === 'undefined' || !uwp_recaptcha_loops){uwp_recaptcha_loops = 1;}
     if(jQuery('.uwp-auth-modal .modal-content .g-recaptcha-response').length && jQuery('.uwp-auth-modal .modal-content .g-recaptcha-response').val() == ''){
         setTimeout(function(){
             // remove the original spinner
-            jQuery('.uwp-auth-modal .modal-content button[type="submit"] i.fa-spin').remove();
+            jQuery('.uwp-auth-modal .modal-content button[type="submit"] i.fa-spin,.uwp-auth-modal .modal-content button[type="submit"] svg.fa-spin').remove();
+
+            // bail and add warning if still no recaptcha after 5 loops
+            if(uwp_recaptcha_loops>=5){
+                jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').prop('disabled', false);
+                jQuery('.uwp-auth-modal .modal-content .uwp-captcha-render').addClass("alert alert-danger");
+                return false;
+            }
+
             if($form=='login'){
                 uwp_modal_login_form_process();
             }else if($form == 'register'){
@@ -268,10 +277,11 @@ function uwp_maybe_check_recaptcha($form){
             }else if($form == 'forgot'){
                 uwp_modal_forgot_password_form_process();
             }
-        }, 50);
+        }, 100);
+        uwp_recaptcha_loops++;
         return false;
     }
-
+    uwp_recaptcha_loops = 0;
     return true;
 }
 

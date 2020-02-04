@@ -121,6 +121,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.1.2 =
+* Changes for reCaptcha addon not showing error if not ticked - FIXED
+
 = 1.2.1.1 =
 * Formatting textarea custom field in the tab content - FIXED
 * Short tag to send user submitted information in email for account update form - ADDED
