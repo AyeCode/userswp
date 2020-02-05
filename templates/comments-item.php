@@ -3,7 +3,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-global $uwp_widget_args;
+global $uwp_widget_args,$comment;
 $comment = isset( $uwp_widget_args['template_args']['comment'] ) ? $uwp_widget_args['template_args']['comment'] : '';
 
 ?>
@@ -22,7 +22,7 @@ $comment = isset( $uwp_widget_args['template_args']['comment'] ) ? $uwp_widget_a
 	<h3 class="uwp-profile-item-title">
 		<a href="<?php echo get_comment_link($comment->comment_ID); ?>"><?php echo get_the_title($comment->comment_post_ID); ?></a>
 	</h3>
-	<time class="uwp-profile-item-time published" datetime="<?php echo get_the_time('c'); ?>">
+	<time class="uwp-profile-item-time published" datetime="<?php echo get_comment_time('c'); ?>">
 		<?php echo date_i18n( get_option( 'date_format' ), strtotime( get_comment_date("", $comment->comment_ID) ) ); ?>
 	</time>
 	<div class="uwp-profile-item-summary">
