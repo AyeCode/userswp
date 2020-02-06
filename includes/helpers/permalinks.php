@@ -347,7 +347,9 @@ add_action('init', 'uwp_process_activation_link');
  */
 function uwp_process_activation_link() {
     if (isset($_GET['uwp_activate']) && $_GET['uwp_activate'] == 'yes') {
-	    define( 'DONOTCACHEPAGE', true );
+	    if(!defined('DONOTCACHEPAGE')){
+		    define( 'DONOTCACHEPAGE', true );
+	    }
         $key =  strip_tags(esc_sql($_GET['key']));
         $login =  strip_tags(esc_sql($_GET['login']));
         $login_page = uwp_get_page_id('login_page', false);
