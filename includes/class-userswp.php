@@ -337,6 +337,7 @@ final class UsersWP {
         // Redirect functions
         add_action( 'template_redirect', array($instance, 'profile_redirect'), 10);
         add_action( 'template_redirect', array($instance, 'access_checks'), 20);
+	    add_action( 'wp', array($instance, 'redirect_templates_sub_pages'));
         // Admin user edit page
         add_action( 'edit_user_profile', array($instance, 'get_profile_extra_admin_edit'), 10, 1 );
         add_action( 'show_user_profile', array($instance, 'get_profile_extra_admin_edit'), 10, 1 );

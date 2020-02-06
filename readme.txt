@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.1.1
+Stable tag: 1.2.1.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -124,6 +124,10 @@ No questions so far, but don't hesitate to ask!
 = 1.2.1.2 =
 * Changes for reCaptcha addon not showing error if not ticked - FIXED
 * New comment template time can show wrong date in some cases - FIXED
+* Redirect sub template pages to home for non loggedin users - FIXED
+* Recommended plugins step added to setup wizard - ADDED
+* User meta shortcode for multiselect field not displaying values - FIXED
+* GDPR acceptance on registration - ADDED
 
 = 1.2.1.1 =
 * Formatting textarea custom field in the tab content - FIXED

@@ -80,25 +80,25 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		private $settings;
 
 		/**
-		 * WP_Bootstrap_Settings instance.
+		 * AyeCode_UI_Settings instance.
 		 *
 		 * @access private
 		 * @since  1.0.0
-		 * @var    WP_Bootstrap_Settings There can be only one!
+		 * @var    AyeCode_UI_Settings There can be only one!
 		 */
 		private static $instance = null;
 
 		/**
-		 * Main WP_Bootstrap_Settings Instance.
+		 * Main AyeCode_UI_Settings Instance.
 		 *
-		 * Ensures only one instance of WP_Bootstrap_Settings is loaded or can be loaded.
+		 * Ensures only one instance of AyeCode_UI_Settings is loaded or can be loaded.
 		 *
 		 * @since 1.0.0
 		 * @static
-		 * @return WP_Bootstrap_Settings - Main instance.
+		 * @return AyeCode_UI_Settings - Main instance.
 		 */
 		public static function instance() {
-			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof WP_Bootstrap_Settings ) ) {
+			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof AyeCode_UI_Settings ) ) {
 				self::$instance = new AyeCode_UI_Settings;
 
 				add_action( 'init', array( self::$instance, 'init' ) ); // set settings
@@ -123,23 +123,24 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			$this->settings = $this->get_settings();
 			$this->url = $this->get_url();
 
-			// maybe load CSS
+			/**
+			 * Maybe load CSS
+			 *
+			 * We load super early in case there is a theme version that might change the colors
+			 */
 			if ( $this->settings['css'] ) {
-
-				/**
-				 * We load super early in case there is a theme version that might change the colors
-				 */
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ), 1 );
+			}
+			if ( $this->settings['css_backend'] ) {
 				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_style' ), 1 );
-
 			}
 
 			// maybe load JS
 			if ( $this->settings['js'] ) {
-
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
+			}
+			if ( $this->settings['js_backend'] ) {
 				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
-
 			}
 
 			// Maybe set the HTML font size
@@ -162,10 +163,12 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 * Adds the Font Awesome styles.
 		 */
 		public function enqueue_style() {
+			
+			$css_setting = current_action() == 'wp_enqueue_scripts' ? 'css' : 'css_backend';
 
-			if($this->settings['css']){
-				$compatibility = $this->settings['css']=='core' ? false : true;
-				$url = $this->settings['css']=='core' ? $this->url.'assets/css/ayecode-ui.css' : $this->url.'assets/css/ayecode-ui-compatibility.css';
+			if($this->settings[$css_setting]){
+				$compatibility = $this->settings[$css_setting]=='core' ? false : true;
+				$url = $this->settings[$css_setting]=='core' ? $this->url.'assets/css/ayecode-ui.css' : $this->url.'assets/css/ayecode-ui-compatibility.css';
 				wp_register_style( 'ayecode-ui', $url, array(), $this->latest );
 				wp_enqueue_style( 'ayecode-ui' );
 
@@ -449,6 +452,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 */
 		public function enqueue_scripts() {
 
+			$js_setting = current_action() == 'wp_enqueue_scripts' ? 'js' : 'js_backend';
+			
 			// select2
 			wp_register_script( 'select2', $this->url.'assets/js/select2.min.js', array('jquery'), $this->select2_version );
 
@@ -458,14 +463,14 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 			$load_inline = false;
 
-			if($this->settings['js']=='core-popper'){
+			if($this->settings[$js_setting]=='core-popper'){
 				// Bootstrap bundle
 				$url = $this->url.'assets/js/bootstrap.bundle.min.js';
 				wp_register_script( 'bootstrap-js-bundle', $url, array('select2','jquery'), $this->latest );
 				wp_enqueue_script( 'bootstrap-js-bundle' );
 				$script = $this->inline_script();
 				wp_add_inline_script( 'bootstrap-js-bundle', $script );
-			}elseif($this->settings['js']=='popper'){
+			}elseif($this->settings[$js_setting]=='popper'){
 				$url = $this->url.'assets/js/popper.min.js';
 				wp_register_script( 'bootstrap-js-popper', $url, array('jquery'), $this->latest );
 				wp_enqueue_script( 'bootstrap-js-popper' );
@@ -535,6 +540,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			return array(
 				'ayetheme' => 'popper',
 				'listimia' => 'required',
+				'listimia_backend' => 'core-popper',
 				'avada'    => 'required',
 			);
 		}
@@ -547,7 +553,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		public function get_settings() {
 
 			$db_settings = get_option( 'ayecode-ui-settings' );
-			$js_default = 'core-popper';
+			$js_default = $js_default_backend = 'core-popper';
 
 			// maybe set defaults (if no settings set)
 			if(empty($db_settings)){
@@ -555,6 +561,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				$theme_js_settings = self::theme_js_settings();
 				if(isset($theme_js_settings[$active_theme])){
 					$js_default = $theme_js_settings[$active_theme];
+					$js_default_backend = isset($theme_js_settings[$active_theme."_backend"]) ? $theme_js_settings[$active_theme."_backend"] : $js_default;
 				}
 			}
 
@@ -562,6 +569,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				'css'       => 'compatibility', // core, compatibility
 				'js'        => $js_default, // js to load, core-popper, popper
 				'html_font_size'        => '16', // js to load, core-popper, popper
+				'css_backend'       => 'compatibility', // core, compatibility
+				'js_backend'        => $js_default_backend, // js to load, core-popper, popper
+
 			);
 
 			$settings = wp_parse_args( $db_settings, $defaults );
@@ -585,11 +595,14 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			?>
 			<div class="wrap">
 				<h1><?php echo $this->name; ?></h1>
+				<p><?php _e("Here you can adjust settings if you are having compatibility issues.","aui");?></p>
 				<form method="post" action="options.php">
 					<?php
 					settings_fields( 'ayecode-ui-settings' );
 					do_settings_sections( 'ayecode-ui-settings' );
 					?>
+
+					<h2><?php _e( 'Frontend', 'aui' ); ?></h2>
 					<table class="form-table wpbs-table-settings">
 						<tr valign="top">
 							<th scope="row"><label
@@ -626,6 +639,36 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						</tr>
 
 					</table>
+
+					<h2><?php _e( 'Backend', 'aui' ); ?> (wp-admin)</h2>
+					<table class="form-table wpbs-table-settings">
+						<tr valign="top">
+							<th scope="row"><label
+									for="wpbs-css"><?php _e( 'Load CSS', 'aui' ); ?></label></th>
+							<td>
+								<select name="ayecode-ui-settings[css_backend]" id="wpbs-css">
+									<option	value="compatibility" <?php selected( $this->settings['css_backend'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode', 'aui' ); ?></option>
+									<option value="core" <?php selected( $this->settings['css_backend'], 'core' ); ?>><?php _e( 'Full Mode', 'aui' ); ?></option>
+									<option	value="" <?php selected( $this->settings['css_backend'], '' ); ?>><?php _e( 'Disabled', 'aui' ); ?></option>
+								</select>
+							</td>
+						</tr>
+
+						<tr valign="top">
+							<th scope="row"><label
+									for="wpbs-js"><?php _e( 'Load JS', 'aui' ); ?></label></th>
+							<td>
+								<select name="ayecode-ui-settings[js_backend]" id="wpbs-js">
+									<option	value="core-popper" <?php selected( $this->settings['js_backend'], 'core-popper' ); ?>><?php _e( 'Core + Popper (default)', 'aui' ); ?></option>
+									<option value="popper" <?php selected( $this->settings['js_backend'], 'popper' ); ?>><?php _e( 'Popper', 'aui' ); ?></option>
+									<option value="required" <?php selected( $this->settings['js_backend'], 'required' ); ?>><?php _e( 'Required functions only', 'aui' ); ?></option>
+									<option	value="" <?php selected( $this->settings['js_backend'], '' ); ?>><?php _e( 'Disabled (not recommended)', 'aui' ); ?></option>
+								</select>
+							</td>
+						</tr>
+
+					</table>
+
 					<?php
 					submit_button();
 					?>
