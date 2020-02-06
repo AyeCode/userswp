@@ -127,6 +127,7 @@ No questions so far, but don't hesitate to ask!
 * Redirect sub template pages to home for non loggedin users - FIXED
 * Recommended plugins step added to setup wizard - ADDED
 * User meta shortcode for multiselect field not displaying values - FIXED
+* GDPR acceptance on registration - ADDED
 
 = 1.2.1.1 =
 * Formatting textarea custom field in the tab content - FIXED

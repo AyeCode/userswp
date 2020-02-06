@@ -163,6 +163,14 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'class' => 'uwp-select',
                     'desc_tip' => true,
                 ),
+	            array(
+		            'id' => 'register_gdpr_page',
+		            'name' => __( 'GDPR Policy Page', 'userswp' ),
+		            'desc' => __( 'When set checkbox to accept GDPR policy will appear on the register form.', 'userswp' ),
+		            'type' => 'single_select_page',
+		            'class' => 'uwp-select',
+		            'desc_tip' => true,
+	            ),
                 array(
                     'id'   => 'wp_register_redirect',
                     'name' => __( 'Redirect Admin Default Register Page', 'userswp' ),

@@ -384,10 +384,18 @@ class UsersWP_Meta {
 
                 if($send_result) {
                     $message = __('Activation email has been sent!', 'userswp');
+	                $uwp_notices[] = aui()->alert(array(
+		                'type'=>'success',
+		                'content'=> $message
+	                ));
                 } else {
                     $message = __('Error while processing request. Please contact site admin.', 'userswp');
+	                $uwp_notices[] = aui()->alert(array(
+		                'type'=>'error',
+		                'content'=> $message
+	                ));
                 }
-                $uwp_notices[] = '<div class="uwp-alert-success text-center">'.$message.'</div>';
+                //$uwp_notices[] = '<div class="uwp-alert-success text-center">'.$message.'</div>';
                 return;
             }
             if(!$send_result){

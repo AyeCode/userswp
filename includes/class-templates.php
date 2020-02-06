@@ -1190,6 +1190,25 @@ class UsersWP_Templates {
                 </div>
 				<?php
 			}
+
+			$gdpr_page = false;
+			$reg_gdpr_page_id = uwp_get_page_id('register_gdpr_page', false);
+			$reg_gdpr_page_id = apply_filters('uwp_register_gdpr_page_id', $reg_gdpr_page_id);
+			if (!empty($reg_gdpr_page_id)) {
+				$gdpr_page = get_permalink($reg_gdpr_page_id);
+			}
+			if ($gdpr_page) {
+				$content = sprintf( __( 'By using this form I agree to the storage and handling of my data by this website. View our %s GDPR Policy %s.', 'userswp' ), '<a href="'.$gdpr_page.'" target="_blank">', '</a>');
+				$content = apply_filters('uwp_register_gdpr_input_label', $content);
+				?>
+                <div class="uwp-remember-me">
+                    <label style="display: inline-block;font-weight: normal" for="uwp_accept_gdpr">
+                        <input name="uwp_accept_gdpr" id="uwp_accept_gdpr" value="yes" type="checkbox">
+						<?php echo $content; ?>
+                    </label>
+                </div>
+				<?php
+			}
 		}
 	}
 
