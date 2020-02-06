@@ -117,8 +117,6 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
         global $wpdb, $post;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
-        $user = uwp_get_displayed_user();
-
         $defaults = array(
             'user_id'  => '',
             'key'      => '',
@@ -130,21 +128,23 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
 
         $args = apply_filters( 'uwp_widget_user_meta_args', $args, $widget_args, $this );
 
-        if('post_author' == $args['user_id'] && $post instanceof WP_Post){
-            $user = get_userdata($post->post_author);
+        if(isset($args['user_id']) && !empty($args['user_id'])){
+	        if('post_author' == $args['user_id'] && $post instanceof WP_Post){
+		        $user = get_userdata($post->post_author);
+	        } else {
+		        $user = get_userdata($args['user_id']);
+	        }
+        } else {
+	        $user = uwp_get_displayed_user();
         }
 
-        if(empty($args['user_id']) && !empty($user->ID)){
-            $args['user_id'] = $user->ID;
-        }
-
-        if(empty($args['key']) || empty($args['user_id'])){
+        if(empty($args['key']) || empty($user)){
             return '';
         }
 
 	    $key = str_replace('uwp_account_', '', $args['key']);
 
-        $fields = $wpdb->get_results("SELECT site_title,field_icon,htmlvar_name,field_type FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = '".$key."'");
+        $fields = $wpdb->get_results("SELECT site_title,field_icon,htmlvar_name,field_type,option_values,field_type_key FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = '".$key."'");
 
         if(!$fields){
             return '';

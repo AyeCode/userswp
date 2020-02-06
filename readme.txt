@@ -124,6 +124,9 @@ No questions so far, but don't hesitate to ask!
 = 1.2.1.2 =
 * Changes for reCaptcha addon not showing error if not ticked - FIXED
 * New comment template time can show wrong date in some cases - FIXED
+* Redirect sub template pages to home for non loggedin users - FIXED
+* Recommended plugins step added to setup wizard - ADDED
+* User meta shortcode for multiselect field not displaying values - FIXED
 
 = 1.2.1.1 =
 * Formatting textarea custom field in the tab content - FIXED

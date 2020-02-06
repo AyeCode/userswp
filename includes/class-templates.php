@@ -1250,4 +1250,21 @@ class UsersWP_Templates {
 
 		}
 	}
+
+	/**
+	 * Disable our sub templates access from frontend.
+	 *
+	 * @global object $post WordPress Post object.
+	 *
+	 * @since 1.2.1.2
+	 */
+	public static function redirect_templates_sub_pages(){
+		global $post;
+		if(isset($post->ID) && !current_user_can('administrator') && (
+				$post->ID == uwp_get_page_id( 'user_list_item_page' )
+			)){
+			wp_redirect(home_url(), 301);
+			exit;
+		}
+	}
 }
