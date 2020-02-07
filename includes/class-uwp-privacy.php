@@ -33,10 +33,9 @@ class UsersWP_Privacy extends UsersWP_Abstract_Privacy {
      * @since 1.0.14
      */
     public function get_privacy_message() {
-        $content = '<h2>' . __( 'User data/profile', 'userswp' ) . '</h2>' .
-                   '<div contenteditable="false">' .
-                   '<p class="wp-policy-help">' . __( 'Example privacy texts.', 'userswp' ) . '</p>' .
-                   '</div>' .
+        $content = '<div class="wp-suggested-text">' .
+                   '<h2>' . __( 'User data/profile', 'userswp' ) . '</h2>' .
+                   '<p class="privacy-policy-tutorial">' . __( 'Example privacy texts.', 'userswp' ) . '</p>' .
                    '<p>' . __( 'We collect information about you during the registration and edit profile process on our site. This information may include, but is not limited to, your name, email address, phone number, address, IP and any other details that might be requested from you for the purpose of building your public profile.', 'userswp' ) . '</p>' .
                    '<p>' . __( 'Handling this data also allows us to:', 'userswp' ) . '</p>' .
                    '<ul>' .
@@ -45,7 +44,8 @@ class UsersWP_Privacy extends UsersWP_Abstract_Privacy {
                    '<li>' . __( '- Respond to your queries or complaints.', 'userswp' ) . '</li>' .
                    '<li>' . __( '- Set up and administer your account, provide technical and/or customer support, and to verify your identity. We do this on the basis of our legitimate business interests.', 'userswp' ) . '</li>' .
                    '</ul>' .
-                   '<p>' . __( 'Any profile information provided to this site may be displayed publicly.', 'userswp' ) . '</p>';
+                   '<p>' . __( 'Any profile information provided to this site may be displayed publicly.', 'userswp' ) . '</p>' .
+                   '</div>';
 
         return apply_filters( 'uwp_privacy_policy_content', $content );
     }
