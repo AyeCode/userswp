@@ -185,6 +185,9 @@ h3.users_wp_section_heading {
   float: right;
   margin: 10px; }
 
+.single_select_page .select2-container {
+  display: inline-block; }
+
 .uwp-ui-tooltip {
   padding: 7px;
   position: absolute;

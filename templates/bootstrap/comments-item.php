@@ -3,7 +3,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-global $uwp_widget_args;
+global $uwp_widget_args,$comment;
 $comment = isset( $uwp_widget_args['template_args']['comment'] ) ? $uwp_widget_args['template_args']['comment'] : '';
 
 if ( has_post_thumbnail($comment->comment_post_ID) ) {
@@ -44,7 +44,7 @@ if(!empty($user->display_name)) { $user_name = $user->display_name;}
 
 	<div class="card-footer bg-white">
 		<?php
-		$footer_html = '<time class="uwp-profile-item-time published timeago" datetime="'.get_the_time( 'c' ).'">'.date_i18n( get_option( 'date_format' ), strtotime( get_comment_date("", $comment->comment_ID) ) ).'</time>';
+		$footer_html = '<time class="uwp-profile-item-time published timeago" datetime="'.get_comment_time( 'c' ).'">'.date_i18n( get_option( 'date_format' ), strtotime( get_comment_date("", $comment->comment_ID) ) ).'</time>';
 		$footer_html .= '<a href="'.get_comment_link($comment->comment_ID).'" class="btn btn-sm btn-outline-primary float-right"><i class="fas fa-comments"></i> '.esc_attr__("View Comment","userswp").'</a>';
 		echo apply_filters('uwp_tp_comments_item_footer', $footer_html,$comment);
 		?>

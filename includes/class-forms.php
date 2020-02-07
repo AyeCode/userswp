@@ -265,6 +265,20 @@ class UsersWP_Forms {
             }
         }
 
+	    $reg_gdpr_page_id = uwp_get_option('register_gdpr_page', '');
+	    $reg_gdpr_page_id = apply_filters('uwp_register_gdpr_page_id', $reg_gdpr_page_id);
+	    if (!empty($reg_gdpr_page_id)) {
+		    if (!isset($data['uwp_accept_gdpr']) || $data['uwp_accept_gdpr'] != 'yes') {
+			    $message = aui()->alert(array(
+					    'type'=>'error',
+					    'content'=> __('<strong>ERROR</strong>: You must read and accept our GDPR policy.', 'userswp')
+				    )
+			    );
+			    if(wp_doing_ajax()){wp_send_json_error($message);}
+			    else{$uwp_notices[] = array('register' => $message); return;}
+		    }
+	    }
+
         do_action('uwp_before_validate', 'register');
 
         $result = uwp_validate_fields($data, 'register');

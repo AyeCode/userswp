@@ -80,11 +80,11 @@ class UsersWP_Admin_Setup_Wizard {
 				'view'    => array( $this, 'setup_content' ),
 				'handler' => array( $this, 'setup_content_save' ),
 			),
-			/*'recommend'        => array(
+			'recommend'        => array(
 				'name'    => __( 'Recommend', 'userswp' ),
 				'view'    => array( $this, 'setup_recommend' ),
 				'handler' => array( $this, 'setup_recommend_save' ),
-			),*/
+			),
 			'next_steps'       => array(
 				'name'    => __( 'Ready!', 'userswp' ),
 				'view'    => array( $this, 'setup_ready' ),
@@ -488,7 +488,7 @@ class UsersWP_Admin_Setup_Wizard {
 
 	}
 
-	/*public function setup_recommend() {
+	public function setup_recommend() {
 		?>
         <form method="post">
             <div class="uwp-wizard-recommend">
@@ -552,39 +552,33 @@ class UsersWP_Admin_Setup_Wizard {
             </p>
         </form>
 		<?php
-	}*/
+	}
 
 	public static function get_recommend_wp_plugins(){
 
 		$plugins = array(
-			'geodirectory' => array(
-				'url'   => 'https://wordpress.org/plugins/geodirectory/',
-				'slug'   => 'geodirectory',
-				'name'   => 'GeoDirectory',
-				'desc'   => __('Create a local directory, based on a single location, using the GeoDirectory.','userswp'),
+			'userswp-social-login' => array(
+				'url'   => 'https://wordpress.org/plugins/userswp-social-login/',
+				'slug'   => 'userswp-social-login',
+				'name'   => __('UsersWP – Social Login', 'userswp'),
+				'desc'   => __('This plugin lets your user to register and login with popular sites like Facebook, Google, Twitter, LinkedIn, Instagram, Yahoo, WordPress, vkontakte etc.','userswp'),
 			),
-			'invoicing' => array(
-				'url'   => 'https://wordpress.org/plugins/invoicing/',
-				'slug'   => 'invoicing',
-				'name'   => 'Invoicing',
-				'desc'   => __('Create & Send Invoices, Manage Taxes & VAT. Collect One Time & Recurring Payments.','userswp'),
-			),
-			'ninja-forms' => array(
-				'url'   => 'https://wordpress.org/plugins/ninja-forms/',
-				'slug'   => 'ninja-forms',
-				'name'   => 'Ninja Forms',
-				'desc'   => __('Setup forms such as contact or booking forms for your listings.','userswp'),
+			'userswp-recaptcha' => array(
+				'url'   => 'https://wordpress.org/plugins/userswp-recaptcha/',
+				'slug'   => 'userswp-recaptcha',
+				'name'   => __('UsersWP – ReCaptcha', 'userswp'),
+				'desc'   => __('This plugin allows you to implement a super security captcha into forms like registration, login forms etc.','userswp'),
 			),
 		);
 
 		return $plugins;
 	}
 
-	/*public function setup_recommend_save() {
+	public function setup_recommend_save() {
 		check_admin_referer( 'uwp-setup' );
 		wp_redirect( esc_url_raw( $this->get_next_step_link() ) );
 		exit;
-	}*/
+	}
 
 	public function setup_ready(){
 		$this->setup_ready_actions();
