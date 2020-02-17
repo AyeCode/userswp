@@ -124,13 +124,13 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
         $uwp_widget_args = $args;
 
         $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
-        $template = $design_style ? $design_style."/button-group" : "";
+        $template = $design_style ? $design_style."/button-group.php" : "";
 
 
         ob_start();
 
         if($template){
-            uwp_locate_template($template);
+	        uwp_get_template($template);
         }
 
         $output = ob_get_clean();

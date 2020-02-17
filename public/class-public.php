@@ -99,7 +99,7 @@ class UsersWP_Public {
 			    if ($field->field_type == 'datepicker') {
 				    $enable_datepicker_fields = true;
 			    }
-			    if ($field->field_type_key == 'uwp_country') {
+			    if ($field->field_type_key == 'uwp_country' || $field->field_type_key == 'country') {
 				    $enable_country_fields = true;
 			    }
 		    }

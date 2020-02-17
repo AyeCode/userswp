@@ -121,6 +121,11 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.1.3 =
+* Email templates for sending emails from UsersWP - CHANGED
+* Changes regarding including templates and removed old template functionality - CHANGED
+* Allow users to delete their account from frontend - ADDED
+
 = 1.2.1.2 =
 * Changes for reCaptcha addon not showing error if not ticked - FIXED
 * New comment template time can show wrong date in some cases - FIXED

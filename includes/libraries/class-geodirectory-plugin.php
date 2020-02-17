@@ -941,7 +941,7 @@ class UsersWP_GeoDirectory_Plugin {
             $uwp_widget_args['template_args']['the_query'] = $the_query;
             $uwp_widget_args['template_args']['title']     = $subtabs[$active_tab]['title'];
 
-            uwp_locate_template( "bootstrap/loop-posts" );
+	        uwp_get_template( "bootstrap/loop-posts.php" );
             echo '</div>';
             echo ob_get_clean();
         }
@@ -1209,7 +1209,7 @@ class UsersWP_GeoDirectory_Plugin {
 		$uwp_widget_args['template_args']['the_query'] = $the_query;
 		$uwp_widget_args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' );
 
-		uwp_locate_template( "bootstrap/loop-posts" );
+		uwp_get_template( "bootstrap/loop-posts.php" );
 
 	}
 
@@ -1587,7 +1587,7 @@ class UsersWP_GeoDirectory_Plugin {
 			$uwp_widget_args['template_args']['the_query'] = $the_query;
 			$uwp_widget_args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' );
 
-			uwp_locate_template( "bootstrap/loop-posts" );
+			uwp_get_template( "bootstrap/loop-posts.php" );
 		} else {
 			echo aui()->alert( array(
 					'type'    => 'info',

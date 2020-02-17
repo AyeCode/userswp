@@ -102,8 +102,8 @@ function uwp_generic_tab_content($user, $post_type = false, $title = '', $post_i
     );
 
     $design_style = !empty($uwp_widget_args['design_style']) ? esc_attr($uwp_widget_args['design_style']) : uwp_get_option("design_style",'bootstrap');
-    $template = $design_style ? $design_style."/loop-posts" : "loop-posts";
-    uwp_locate_template($template);
+    $template = $design_style ? $design_style."/loop-posts.php" : "loop-posts.php";
+	uwp_get_template($template);
     
 }
 
@@ -133,7 +133,17 @@ function uwp_account_get_available_tabs() {
         ),
     );
 
-    return apply_filters( 'uwp_account_available_tabs', $tabs );
+	$tabs = apply_filters( 'uwp_account_available_tabs', $tabs );
+
+	// Keep delete account last
+	if(1 != uwp_get_option('disable_account_delete') && !current_user_can('administrator')){
+		$tabs['delete-account'] = array(
+			'title' => __('Delete Account', 'userswp'),
+			'icon' => 'fas fa-lock',
+		);
+	}
+
+	return $tabs;
 }
 
 function uwp_profile_add_tabs($tab_data){

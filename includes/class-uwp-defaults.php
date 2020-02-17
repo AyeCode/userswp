@@ -21,8 +21,8 @@ class UsersWP_Defaults {
 	 *
 	 * @return string
 	 */
-	public static function email_user_activation_subject() {
-		return apply_filters( 'uwp_email_user_activation_subject', __( "[[#site_name#]] Please activate your account", "userswp" ) );
+	public static function registration_activate_email_subject() {
+		return apply_filters( 'uwp_registration_activate_email_subject', __( "[[#site_name#]] Please activate your account", "userswp" ) );
 	}
 
 	/**
@@ -30,8 +30,8 @@ class UsersWP_Defaults {
 	 *
 	 * @return string
 	 */
-	public static function email_user_activation_body() {
-		return apply_filters( 'uwp_email_user_activation_body',
+	public static function registration_activate_email_content() {
+		return apply_filters( 'uwp_registration_activate_email_content',
 			__( "Dear [#user_name#],
 
 Thank you for signing up with [#site_name#]
@@ -58,8 +58,8 @@ Thank you,
 	 *
 	 * @return string
 	 */
-	public static function registration_success_email_body() {
-		return apply_filters( 'uwp_registration_success_email_body',
+	public static function registration_success_email_content() {
+		return apply_filters( 'uwp_registration_success_email_content',
 			__( "Dear [#user_name#],
 
 You can log in  with the following information:
@@ -88,8 +88,8 @@ Thank you,
 	 *
 	 * @return string
 	 */
-	public static function forgot_password_email_body() {
-		return apply_filters( 'uwp_forgot_password_email_body',
+	public static function forgot_password_email_content() {
+		return apply_filters( 'uwp_forgot_password_email_content',
 			__( "Dear [#user_name#],
 
 [#login_details#]
@@ -116,8 +116,8 @@ Thank you,
 	 *
 	 * @return string
 	 */
-	public static function change_password_email_body() {
-		return apply_filters( 'uwp_change_password_email_body',
+	public static function change_password_email_content() {
+		return apply_filters( 'uwp_change_password_email_content',
 			__( "Dear [#user_name#],
 
 Your password has been changed successfully.
@@ -144,8 +144,8 @@ Thank you,
 	 *
 	 * @return string
 	 */
-	public static function reset_password_email_body() {
-		return apply_filters( 'uwp_reset_password_email_body',
+	public static function reset_password_email_content() {
+		return apply_filters( 'uwp_reset_password_email_content',
 			__( "Dear [#user_name#],
 
 Your password has been reset.
@@ -163,8 +163,8 @@ Thank you,
 	 *
 	 * @return string
 	 */
-	public static function update_account_email_subject() {
-		return apply_filters( 'uwp_update_account_email_subject', __( "[#site_name#] - Account has been updated", "userswp" ) );
+	public static function account_update_email_subject() {
+		return apply_filters( 'uwp_account_update_email_subject', __( "[#site_name#] - Account has been updated", "userswp" ) );
 	}
 
 	/**
@@ -172,11 +172,65 @@ Thank you,
 	 *
 	 * @return string
 	 */
-	public static function update_account_email_body() {
-		return apply_filters( 'uwp_update_account_email_body',
+	public static function account_update_email_content() {
+		return apply_filters( 'uwp_account_update_email_content',
 			__( "Dear [#user_name#],
 
 Your account has been updated successfully.
+
+Thank you,
+[#site_name_url#]", "userswp"
+			)
+		);
+	}
+
+	/**
+	 * The update account email subject default.
+	 *
+	 * @return string
+	 */
+	public static function account_delete_email_subject() {
+		return apply_filters( 'uwp_account_delete_email_subject', __( "[#site_name#] - Your account has been deleted.", "userswp" ) );
+	}
+
+	/**
+	 * The delete account email body default.
+	 *
+	 * @return string
+	 */
+	public static function account_delete_email_content() {
+		return apply_filters( 'uwp_account_delete_email_content',
+			__( "Dear [#user_name#],
+
+Your account has been deleted successfully.
+
+Thank you,
+[#site_name_url#]", "userswp"
+			)
+		);
+	}
+
+	/**
+	 * The update account email subject default.
+	 *
+	 * @return string
+	 */
+	public static function account_delete_email_subject_admin() {
+		return apply_filters( 'uwp_account_delete_email_subject_admin', __( "[#site_name#] - Account has been deleted by a user.", "userswp" ) );
+	}
+
+	/**
+	 * The delete account email body default.
+	 *
+	 * @return string
+	 */
+	public static function account_delete_email_content_admin() {
+		return apply_filters( 'uwp_account_delete_email_content_admin',
+			__( "Dear [#user_name#],
+
+User has deleted own account from the site.
+
+[#login_details#]
 
 Thank you,
 [#site_name_url#]", "userswp"
@@ -189,8 +243,8 @@ Thank you,
 	 *
 	 * @return string
 	 */
-	public static function email_user_new_account_subject() {
-		return apply_filters( 'uwp_email_user_new_account_subject', __( "[[#site_name#]] New account registration", "userswp" ) );
+	public static function registration_success_email_subject_admin() {
+		return apply_filters( 'uwp_registration_success_email_subject_admin', __( "[[#site_name#]] New account registration", "userswp" ) );
 	}
 
 	/**
@@ -198,8 +252,8 @@ Thank you,
 	 *
 	 * @return string
 	 */
-	public static function email_user_new_account_body() {
-		return apply_filters( 'uwp_email_user_new_account_body',
+	public static function registration_success_email_content_admin() {
+		return apply_filters( 'uwp_registration_success_email_content_admin',
 			__( "Dear [#user_name#],
 
 A user has been registered recently on your website.
@@ -263,5 +317,3 @@ A user has been registered recently on your website.
 	}
 
 }
-
-

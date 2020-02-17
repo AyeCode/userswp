@@ -228,8 +228,6 @@ class UsersWP_Form_Builder {
     public function form_fields_predefined($type = '') {
         $custom_fields = array();
 
-        
-
         // Country
         $custom_fields['uwp_country'] = array( // The key value should be unique and not contain any spaces.
             'field_type'  =>  'select',
@@ -320,6 +318,27 @@ class UsersWP_Form_Builder {
                 'css_class'           =>  ''
             )
         );
+
+        // Website
+	    $custom_fields['website'] = array( // The key value should be unique and not contain any spaces.
+		    'field_type'  =>  'url',
+		    'class'       =>  'uwp-website',
+		    'icon'        =>  'fas fa-link',
+		    'name'        =>  __('Website', 'userswp'),
+		    'description' =>  __('Let users enter their website url.', 'userswp'),
+		    'defaults'    => array(
+			    'admin_title'         =>  'Website',
+			    'site_title'          =>  'Website',
+			    'form_label'          => __( 'Website', 'userswp' ),
+			    'htmlvar_name'        =>  'user_url',
+			    'is_active'           =>  1,
+			    'default_value'       =>  '',
+			    'is_required'         =>  0,
+			    'required_msg'        =>  '',
+			    'field_icon'          =>  'fas fa-link',
+			    'css_class'           =>  'btn-website'
+		    )
+	    );
 
         // Facebook
         $custom_fields['facebook'] = array( // The key value should be unique and not contain any spaces.
@@ -1242,13 +1261,11 @@ class UsersWP_Form_Builder {
 
         global $wpdb;
 
-
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
         $old_html_variable = '';
-
 
         $result_str = isset($request_field['field_id']) ? trim($request_field['field_id']) : '';
 
@@ -1261,15 +1278,9 @@ class UsersWP_Form_Builder {
         
         $cf = trim($result_str, '_');
 
-
         $cehhtmlvar_name = isset($request_field['htmlvar_name']) ? $request_field['htmlvar_name'] : '';
         $form_type = $request_field['form_type'];
 
-//        if ($request_field['field_type'] != 'fieldset') {
-//            $cehhtmlvar_name = 'uwp_' . $form_type . '_' . $cehhtmlvar_name;
-//        }
-
-//        $old_html_variable_name = 'uwp_' . $form_type . '_' . $cehhtmlvar_name;
         $old_html_variable_name = 'uwp_account_' . $cehhtmlvar_name;
         $check_old_html_variable = $wpdb->get_var(
             $wpdb->prepare(
@@ -1304,45 +1315,42 @@ class UsersWP_Form_Builder {
 
             }
 
-
-            $site_title = $request_field['site_title'];
-            $form_label = isset($request_field['form_label']) ? $request_field['form_label'] : '';
-            $field_type = $request_field['field_type'];
-            $data_type = $request_field['data_type'];
-            $field_type_key = isset($request_field['field_type_key']) ? $request_field['field_type_key'] : $field_type;
-            $htmlvar_name = isset($request_field['htmlvar_name']) ? $request_field['htmlvar_name'] : '';
-            $default_value = isset($request_field['default_value']) ? $request_field['default_value'] : '';
-            $sort_order = isset($request_field['sort_order']) ? $request_field['sort_order'] : '';
-            $is_active = isset($request_field['is_active']) ? $request_field['is_active'] : '';
-            $for_admin_use = isset($request_field['for_admin_use']) ? $request_field['for_admin_use'] : '';
-            $is_required = isset($request_field['is_required']) ? $request_field['is_required'] : '';
-            $is_dummy = isset($request_field['is_dummy']) ? $request_field['is_dummy'] : '';
-            $is_public = isset($request_field['is_public']) ? $request_field['is_public'] : '';
-            $is_register_field = isset($request_field['is_register_field']) ? $request_field['is_register_field'] : '';
-            $is_search_field = isset($request_field['is_search_field']) ? $request_field['is_search_field'] : '';
-            $is_register_only_field = isset($request_field['is_register_only_field']) ? $request_field['is_register_only_field'] : '';
-            $required_msg = isset($request_field['required_msg']) ? $request_field['required_msg'] : '';
-            $css_class = isset($request_field['css_class']) ? $request_field['css_class'] : '';
-            $field_icon = isset($request_field['field_icon']) ? $request_field['field_icon'] : '';
+            $site_title = sanitize_text_field($request_field['site_title']);
+            $form_label = isset($request_field['form_label']) ? sanitize_text_field($request_field['form_label']) : '';
+            $field_type = sanitize_text_field($request_field['field_type']);
+            $data_type = sanitize_text_field($request_field['data_type']);
+            $field_type_key = isset($request_field['field_type_key']) ? sanitize_text_field($request_field['field_type_key']) : $field_type;
+            $htmlvar_name = isset($request_field['htmlvar_name']) ? sanitize_text_field($request_field['htmlvar_name']) : '';
+            $default_value = isset($request_field['default_value']) ? sanitize_text_field($request_field['default_value']) : '';
+            $sort_order = isset($request_field['sort_order']) ? absint($request_field['sort_order']) : '';
+            $is_active = isset($request_field['is_active']) ? absint($request_field['is_active']) : 1;
+            $for_admin_use = isset($request_field['for_admin_use']) ? absint($request_field['for_admin_use']) : 0;
+            $is_required = isset($request_field['is_required']) ? absint($request_field['is_required']) : 0;
+            $is_dummy = isset($request_field['is_dummy']) ? absint($request_field['is_dummy']) : 0;
+            $is_public = isset($request_field['is_public']) ? absint($request_field['is_public']) : 0;
+	        $is_default = isset($request_field['is_default']) ? absint($request_field['is_default']) : 0;
+            $is_register_field = isset($request_field['is_register_field']) ? absint($request_field['is_register_field']) : 0;
+            $is_search_field = isset($request_field['is_search_field']) ? absint($request_field['is_search_field']) : 0;
+            $is_register_only_field = isset($request_field['is_register_only_field']) ? absint($request_field['is_register_only_field']) : 0;
+            $required_msg = isset($request_field['required_msg']) ? sanitize_text_field($request_field['required_msg']) : '';
+            $css_class = isset($request_field['css_class']) ? sanitize_text_field($request_field['css_class']) : '';
+            $field_icon = isset($request_field['field_icon']) ? sanitize_text_field($request_field['field_icon']) : '';
             $show_in = isset($request_field['show_in']) ? $request_field['show_in'] : '';
             $user_roles = isset($request_field['user_roles']) ? $request_field['user_roles'] : '';
-            $decimal_point = isset($request_field['decimal_point']) ? trim($request_field['decimal_point']) : ''; // decimal point for DECIMAL data type
+            $decimal_point = isset($request_field['decimal_point']) ? absint($request_field['decimal_point']) : ''; // decimal point for DECIMAL data type
             $decimal_point = $decimal_point > 0 ? ($decimal_point > 10 ? 10 : $decimal_point) : '';
-            $validation_pattern = isset($request_field['validation_pattern']) ? $request_field['validation_pattern'] : '';
-            $validation_msg = isset($request_field['validation_msg']) ? $request_field['validation_msg'] : '';
-
+            $validation_pattern = isset($request_field['validation_pattern']) ? sanitize_text_field($request_field['validation_pattern']) : '';
+            $validation_msg = isset($request_field['validation_msg']) ? sanitize_text_field($request_field['validation_msg']) : '';
 
             if (is_array($show_in)) {
                 $show_in = implode(",", $request_field['show_in']);
+                $show_in1 = sanitize_text_field($show_in);
             }
 
             if (is_array($user_roles)) {
                 $user_roles = implode(",", $request_field['user_roles']);
+	            $user_roles1 = sanitize_text_field($user_roles);
             }
-
-            // fieldset need htmlvar_name for register tab
-           // $htmlvar_name = 'uwp_' . $form_type . '_' . $htmlvar_name;
-
 
             $option_values = '';
             if (isset($request_field['option_values']))
@@ -1350,21 +1358,6 @@ class UsersWP_Form_Builder {
 
             if (isset($request_field['extra']) && !empty($request_field['extra']))
                 $extra_fields = $request_field['extra'];
-
-            if (isset($request_field['is_default']) && $request_field['is_default'] != '')
-                $is_default = $request_field['is_default'];
-            else
-                $is_default = '0';
-
-            if ($is_active == '') $is_active = 1;
-            if ($for_admin_use == '') $for_admin_use = 0;
-            if ($is_required == '') $is_required = 0;
-            if ($is_dummy == '') $is_dummy = 0;
-            if ($is_public == '') $is_public = 0;
-            if ($is_register_field == '') $is_register_field = 0;
-            if ($is_search_field == '') $is_search_field = 0;
-            if ($is_register_only_field == '') $is_register_only_field = 0;
-
 
             if ($sort_order == '') {
 
@@ -1543,7 +1536,6 @@ class UsersWP_Form_Builder {
                 );
 
                 $lastid = trim($cf);
-
 
                 do_action('uwp_after_custom_fields_updated', $lastid);
 

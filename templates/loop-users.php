@@ -23,7 +23,7 @@ $total_users = isset( $uwp_widget_args['template_args']['total_users'] ) ? $uwp_
 
                 foreach ($users as $uwp_user){
 
-                    uwp_locate_template( 'users-item' );
+	                uwp_get_template( 'users-item.php' );
                 }
 
                 do_action( 'uwp_after_user_list_items', $users );

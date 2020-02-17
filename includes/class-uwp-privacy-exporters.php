@@ -24,7 +24,8 @@ class UsersWP_Privacy_Exporters {
         if ( $user instanceof WP_User ) {
             $data_to_export[] = array(
                 'group_id'    => 'uwp_user',
-                'group_label' => __( 'UsersWP User Data', 'userswp' ),
+                'group_label' => __( 'UsersWP user data', 'userswp' ),
+                'group_description' => __( 'The UsersWP user data', 'userswp' ),
                 'item_id'     => 'user',
                 'data'        => self::get_user_meta_data( $user ),
             );

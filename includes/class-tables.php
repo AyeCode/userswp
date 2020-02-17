@@ -18,10 +18,6 @@ class UsersWP_Tables {
     public function create_tables()
     {
 
-//        if ( get_option('uwp_db_version') == USERSWP_VERSION ) return;
-
-
-
         global $wpdb;
 
         $wpdb->hide_errors();

@@ -8,74 +8,43 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class UsersWP_Templates {
-    
-    /**
-     * Locates UsersWP templates based on template type.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       string      $template       Template type.
-     * @return      string                      The template filename if one is located.
-     */
-    public function locate_template( $template, $template_path = "" ) {
 
-        switch ($template) {
-            case 'register':
-            case 'login':
-            case 'forgot':
-            case 'change':
-            case 'reset':
-            case 'account':
-                $template_path = $this->generic_locate_template($template, $template_path );
-                break;
+	/**
+	 * The function is use for Retrieve the name of the highest
+	 * priority template file that exists.
+	 *
+	 * @param string $template_name Template files to search for, in order.
+	 * @param string $template_path Optional. Template path. Default null.
+	 * @param string $default_path Optional. Default path. Default null.
+	 *
+	 * @return string Template path.
+	 */
+	public static function locate_template( $template_name, $template_path = '', $default_path = '' ) {
 
-            case 'profile':
-                $template_path = $this->generic_locate_template('profile', $template_path);
-                break;
+		if ( ! $template_path ) {
+			$template_path = uwp_get_theme_template_dir_name();
+		}
 
-            case 'users':
-                $template_path = $this->generic_locate_template('users', $template_path);
-                break;
+		if ( ! $default_path ) {
+			$default_path = uwp_get_templates_dir();
+		}
 
-            case 'users-list-item':
-                $template_path = $this->generic_locate_template('users-list-item', $template_path);
-                break;
-            
-            case 'dashboard':
-                $template_path = $this->generic_locate_template('dashboard', $template_path);
-                break;
-            
-            default:
-                $template_path = $this->generic_locate_template($template, $template_path);
-                break;
-        }
-        
+		// Look within passed path within the theme - this is priority.
+		$template = locate_template(
+			array(
+				untrailingslashit( $template_path ) . '/' . $template_name,
+				$template_name,
+			)
+		);
 
-        return apply_filters('uwp_locate_template', $template_path, $template);
-    }
+		// Get default template
+		if ( ! $template ) {
+			$template = untrailingslashit( $default_path ) . '/' . $template_name;
+		}
 
-    /**
-     * Locates UsersWP templates based on template type. 
-     * Fallback to core templates when no custom templates found. 
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       string      $type           Template type.
-     * @return      string                      The template filename if one is located.
-     */
-    public function generic_locate_template($type = 'register', $template_path = '') {
-
-        if(!$template_path){
-            $template_path = dirname( dirname( __FILE__ ) );
-        }
-
-        $template = locate_template(array("userswp/".$type.".php"));
-        if (!$template) {
-            $template = $template_path . '/templates/'.$type.'.php';
-        }
-        $template = apply_filters('uwp_template_'.$type, $template, $template_path);
-        return $template;
-    }
+		// Return what we found.
+		return apply_filters( 'uwp_locate_template', $template, $template_name, $template_path );
+	}
 
     /**
      * Doing some access checks for UsersWP related pages.
@@ -96,7 +65,7 @@ class UsersWP_Templates {
         }
 
         $current_page_id = $post->ID;
-        
+
         $register_page = uwp_get_page_id('register_page', false);
         $login_page = uwp_get_page_id('login_page', false);
         $forgot_page = uwp_get_page_id('forgot_page', false);
@@ -104,7 +73,7 @@ class UsersWP_Templates {
 
         $change_page = uwp_get_page_id('change_page', false);
         $account_page = uwp_get_page_id('account_page', false);
-        
+
         if (( $register_page && ((int) $register_page ==  $current_page_id )) ||
         ( $login_page && ((int) $login_page ==  $current_page_id ) ) ||
         ( $forgot_page && ((int) $forgot_page ==  $current_page_id ) ) ||
@@ -135,7 +104,7 @@ class UsersWP_Templates {
         } else {
             return false;
         }
-        
+
         return false;
     }
 
@@ -160,7 +129,7 @@ class UsersWP_Templates {
 
         $change_page = uwp_get_page_id('change_page', false);
         $password_nag = get_user_option('default_password_nag', get_current_user_id());
-        
+
         if ($password_nag) {
             if (is_page()) {
                 global $post;
@@ -171,7 +140,7 @@ class UsersWP_Templates {
             }
             if ($change_page) {
                 wp_redirect( get_permalink($change_page) );
-                exit();   
+                exit();
             }
         }
     }
@@ -322,7 +291,7 @@ class UsersWP_Templates {
         if ((!is_admin() || wp_doing_ajax()) && $login_page_id) {
             $login_page = get_permalink($login_page_id);
             if($redirect){
-                $login_url = add_query_arg( 'redirect_to', $redirect, $login_page );
+                $login_url = add_query_arg( 'redirect_to', urlencode( $redirect ), $login_page );
             }elseif(isset($redirect_page_id) && (int)$redirect_page_id == -1 && wp_get_referer()) {
                 $redirect_to = esc_url(wp_get_referer());
                 $login_url = add_query_arg( 'redirect_to', $redirect_to, $login_page );
@@ -414,7 +383,7 @@ class UsersWP_Templates {
         } else {
             $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND for_admin_use != '1' ORDER BY sort_order ASC", array($form_type)));
         }
-        
+
         if (!empty($fields)) {
             foreach ($fields as $field) {
 
@@ -495,27 +464,6 @@ class UsersWP_Templates {
     }
 
     /**
-     * Adds "Edit Account" form on account page.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       string      $type       Template type.
-     * @return      void
-     */
-    public function account_edit_form_display($type) {
-        if ($type == 'account') {
-            $design_style = uwp_get_option("design_style","bootstrap");
-            $bs_btn_class = $design_style ? "btn btn-primary btn-block text-uppercase" : "";
-            ?>
-            <form class="uwp-account-form uwp_form mt-3" method="post" enctype="multipart/form-data">
-                <?php do_action('uwp_template_fields', 'account'); ?>
-                <input type="hidden" name="uwp_account_nonce" value="<?php echo wp_create_nonce( 'uwp-account-nonce' ); ?>" />
-                <input name="uwp_account_submit" class="<?php echo $bs_btn_class; ?>" value="<?php echo __( 'Update Account', 'userswp' ); ?>" type="submit">
-            </form>
-        <?php }
-    }
-
-    /**
      * Prints field html based on field type.
      *
      * @since       1.0.0
@@ -527,7 +475,7 @@ class UsersWP_Templates {
      */
     public function template_fields_html($field, $form_type, $user_id = false) {
         if (!$user_id) {
-            $user_id = get_current_user_id();    
+            $user_id = get_current_user_id();
         }
 
         $value = $this->get_default_form_value($field);
@@ -558,9 +506,9 @@ class UsersWP_Templates {
         if (isset($_POST[$field->htmlvar_name]) && $field->field_type != 'password') {
            $value = isset($_POST[$field->htmlvar_name]) ? $_POST[$field->htmlvar_name] : ''; //@todo: Used to pre fill form when validation fails, need to find better solution
         }
-        
+
         $field = apply_filters("uwp_form_input_field_{$field->field_type}", $field, $value, $form_type);
-        
+
         $html = apply_filters("uwp_form_input_html_{$field->field_type}", "", $field, $value, $form_type);
 
         if (empty($html)) {

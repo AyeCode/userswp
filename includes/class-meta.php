@@ -189,6 +189,7 @@ class UsersWP_Meta {
             'display_name' => $user_data->display_name,
             'first_name' => $user_data->first_name,
             'last_name' => $user_data->last_name,
+            'user_url' => $user_data->user_url,
         );
 
         foreach ($user_meta as $key => $meta){
@@ -468,9 +469,20 @@ class UsersWP_Meta {
             return false;
         }
         if( 'email_unconfirmed' == get_user_meta( $user_id, 'uwp_mod', true )){
-            $email = new UsersWP_Mails();
-            $send_result = $email->send( 'activate', $user_id );
-            return $send_result;
+	        $user_data = get_userdata($user_id);
+
+	        $activation_link = uwp_get_activation_link($user_id);
+
+	        if($activation_link){
+		        $email_vars = array(
+			        'user_id' => $user_id,
+			        'activation_link' => $activation_link,
+		        );
+
+		        $send_result = UsersWP_Mails::send($user_data->user_email, 'registration_activate', $email_vars);
+
+		        return $send_result;
+	        }
         }
         return true;
     }
