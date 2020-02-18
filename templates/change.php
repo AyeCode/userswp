@@ -4,8 +4,7 @@
             <div class="uwp-lf-icon"><i class="fas fa-sync fa-fw"></i></div>
             <?php do_action('uwp_template_form_title_before', 'change'); ?>
             <h2><?php
-                global $uwp_change_widget_args;
-                $form_title = !empty($uwp_change_widget_args['form_title']) ? esc_attr__($uwp_change_widget_args['form_title'], 'userswp') : __('Change', 'userswp');
+                $form_title = !empty($args['form_title']) ? esc_attr__($args['form_title'], 'userswp') : __('Change', 'userswp');
                 echo apply_filters('uwp_template_form_title', $form_title, 'change');
                 ?></h2>
             <?php do_action('uwp_template_display_notices', 'change'); ?>

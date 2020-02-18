@@ -113,7 +113,7 @@ class UWP_Reset_Widget extends WP_Super_Duper {
 
         echo '<div class="uwp_page">';
 
-	    uwp_get_template($template);
+	    uwp_get_template($template, $args);
 
         echo '</div>';
 

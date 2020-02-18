@@ -111,7 +111,7 @@ class UWP_Register_Widget extends WP_Super_Duper {
 
         echo '<div class="uwp_page wpbs ">';
 
-	    uwp_get_template($template);
+	    uwp_get_template($template, $args);
 
         echo '</div>';
 

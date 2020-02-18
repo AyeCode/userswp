@@ -147,7 +147,7 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
             $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
             $template = $design_style ? $design_style."/profile-header.php" : "profile-header.php";
 
-	        uwp_get_template($template);
+	        uwp_get_template($template, $args);
 
             do_action('uwp_profile_header', $user, $args['hide_cover'], $args['hide_avatar'], $args['allow_change']);
 

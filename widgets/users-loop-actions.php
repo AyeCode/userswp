@@ -55,7 +55,7 @@ class UWP_Users_Loop_Actions extends WP_Super_Duper {
         $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
         $template = $design_style ? $design_style."/users-actions.php" : "users-actions.php";
 
-	    uwp_get_template($template);
+	    uwp_get_template($template, $args);
         
         $output = ob_get_clean();
 

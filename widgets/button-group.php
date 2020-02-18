@@ -130,7 +130,7 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
         ob_start();
 
         if($template){
-	        uwp_get_template($template);
+	        uwp_get_template($template, $args);
         }
 
         $output = ob_get_clean();
