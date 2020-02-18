@@ -115,8 +115,9 @@ class UsersWP_Account {
                 return;
             }
 
+	        $ms_delete = apply_filters('uwp_delete_delete_from_network', true);
             $num_blogs_of_user = is_multisite() ? count( get_blogs_of_user( $user_id ) ) : 1;
-            $delete_from_network = ( is_multisite() && ( uwp_get_option('') == true || $num_blogs_of_user == 1 ) ) ? true : false;
+            $delete_from_network = ( is_multisite() && ( $ms_delete == true || $num_blogs_of_user == 1 ) ) ? true : false;
 
 	        include_once( ABSPATH . 'wp-admin/includes/user.php' );
 
@@ -179,7 +180,7 @@ class UsersWP_Account {
             wp_logout();
 
             // Redirect after deletion
-            $redirect_page = uwp_get_option('delete_account_redirect_page', home_url());
+            $redirect_page = home_url();
             wp_redirect($redirect_page);
             exit();
         }

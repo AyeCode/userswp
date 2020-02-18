@@ -190,6 +190,7 @@ class UsersWP_Meta {
             'first_name' => $user_data->first_name,
             'last_name' => $user_data->last_name,
             'user_url' => $user_data->user_url,
+            'bio' => $user_data->description,
         );
 
         foreach ($user_meta as $key => $meta){

@@ -1568,7 +1568,7 @@ function uwp_get_blogname() {
 /**
  * RGB from hex.
  *
- * @since 1.2.1.2
+ * @since 1.2.1.3
  *
  * @param string $color Color.
  * @return array $rgb.
@@ -1595,7 +1595,7 @@ function uwp_rgb_from_hex( $color ) {
 /**
  * HEX darker.
  *
- * @since 1.2.1.2
+ * @since 1.2.1.3
  *
  * @param string $color Color.
  * @param int $factor Optional. Factor. Default 30.
@@ -1626,7 +1626,7 @@ function uwp_hex_darker( $color, $factor = 30 ) {
 /**
  * Hex lighter.
  *
- * @since 1.2.1.2
+ * @since 1.2.1.3
  *
  * @param string $color Color.
  * @param int $factor Optional. factor. Default 30.
@@ -1659,7 +1659,7 @@ function uwp_hex_lighter( $color, $factor = 30 ) {
 /**
  * Get Light or dark.
  *
- * @since 1.2.1.2
+ * @since 1.2.1.3
  *
  * @param string $color color.
  * @param string $dark Optional. Dark. Default #000000.
@@ -1684,7 +1684,7 @@ function uwp_light_or_dark( $color, $dark = '#000000', $light = '#FFFFFF' ) {
 /**
  * Format hex.
  *
- * @since 1.2.1.2
+ * @since 1.2.1.3
  *
  * @param string $hex hex.
  * @return string
@@ -1705,10 +1705,11 @@ function uwp_format_hex( $hex ) {
 /**
  * Returns activation link for user.
  *
- * @since 1.2.1.2
+ * @since 1.2.1.3
  *
- * @param string $hex hex.
- * @return string
+ * @param int $user_id User ID.
+ *
+ * @return string $activation_link
  */
 function uwp_get_activation_link($user_id){
 

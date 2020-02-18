@@ -342,11 +342,11 @@ class UsersWP_Forms {
 
 		$user_url = "";
 		if (isset($result['user_url']) && !empty($result['user_url'])) {
-			$user_url = $result['user_url'];
+			$user_url = esc_url_raw($result['user_url']);
 		}
 
 		$user_login = !empty($result['username']) ? $result['username'] : '';
-		$email = !empty($result['email']) ? $result['email'] : '';
+		$email = !empty($result['email']) ? sanitize_email($result['email']) : '';
 
 		if(empty($user_login)){
 			$user_login = sanitize_user( str_replace( ' ', '', $display_name ), true );
@@ -383,7 +383,7 @@ class UsersWP_Forms {
 			'display_name' => $display_name,
 			'first_name'   => $first_name,
 			'last_name'    => $last_name,
-			'user_url'     => $user_url
+			'user_url'     => $user_url,
 		);
 
 		$user_id = wp_insert_user( $args );
@@ -404,14 +404,6 @@ class UsersWP_Forms {
 
 		$save_result = apply_filters('uwp_after_extra_fields_save', $save_result, $result, 'register', $user_id);
 
-		//updating bio field after saving extra fields to reflect the points in mycred add on.
-		if (isset($result['bio']) && !empty($result['bio'])) {
-			$args = array(
-				'description'  => $result['bio'],
-			);
-			$user_id = wp_update_user( $args );
-		}
-
 		if (is_wp_error($save_result)) {
 			$message = aui()->alert(array(
 					'type'=>'error',
@@ -430,6 +422,15 @@ class UsersWP_Forms {
 			);
 			if(wp_doing_ajax()){wp_send_json_error($message);}
 			else{$uwp_notices[] = array('register' => $message); return;}
+		}
+
+		//updating bio field after saving extra fields to reflect the points in mycred add on.
+		if (isset($result['bio']) && !empty($result['bio'])) {
+			$args = array(
+				'ID'  => $user_id,
+				'description'  => $result['bio'],
+			);
+			wp_update_user( $args );
 		}
 
 		do_action('uwp_after_custom_fields_save', 'register', $data, $result, $user_id);
@@ -787,8 +788,6 @@ class UsersWP_Forms {
 
 		$user_data = get_userdata($user_data->ID);
 
-		$reset_link = "";
-
 		$allow = apply_filters('allow_password_reset', true, $user_data->ID);
 
 		if ( !$allow )
@@ -1085,10 +1084,6 @@ class UsersWP_Forms {
 			$args['last_name'] = $result['last_name'];
 		}
 
-		if (isset($result['bio'])) {
-			$args['description'] = $result['bio'];
-		}
-
 		if (isset($result['user_url'])) {
 			$args['user_url'] = $result['user_url'];
 		}
@@ -1123,6 +1118,15 @@ class UsersWP_Forms {
 			);
 			$uwp_notices[] = array('account' => $message);
 			return;
+		}
+
+		//updating bio field after saving extra fields to reflect the points in mycred add on.
+		if (isset($result['bio']) && !empty($result['bio'])) {
+			$args = array(
+				'ID'  => $user_id,
+				'description'  => $result['bio'],
+			);
+			wp_update_user( $args );
 		}
 
 		$user_data = get_userdata($user_id);
@@ -1401,9 +1405,6 @@ class UsersWP_Forms {
 			}
 			if (isset($data['last_name'])) {
 				unset($data['last_name']);
-			}
-			if (isset($data['bio'])) {
-				unset($data['bio']);
 			}
 		}
 

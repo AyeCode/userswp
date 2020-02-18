@@ -103,6 +103,7 @@ final class UsersWP {
         add_action( 'init', array( 'UsersWP_Activator', 'init_background_updater' ), 5 );
         add_action( 'widgets_init', array( $this, 'register_widgets' ) );
 	    add_action( 'init', array($this, 'load_plugin_textdomain'));
+	    add_action( 'uwp_flush_rewrite_rules', array($this, 'flush_rewrite_rules'));
     }
 
 	/**
@@ -312,7 +313,6 @@ final class UsersWP {
     public function load_templates_actions_and_filters($instance) {
 
         add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
-        add_action( 'template_redirect', array($instance, 'refresh_permalinks_on_bad_404') );
         add_action( 'uwp_template_fields', array($instance, 'template_fields'), 10, 1 );
         add_action( 'uwp_template_fields', array($instance, 'template_extra_fields'), 10, 1 );
         add_action( 'uwp_template_fields', array($instance, 'add_template_fields_terms_check'), 100, 1 );
@@ -878,6 +878,15 @@ final class UsersWP {
 
 		do_action('uwp_loaded');
 
+	}
+
+	/**
+	 * Flush rewrite rules.
+	 *
+	 * @return      void
+	 */
+	public function flush_rewrite_rules(){
+		flush_rewrite_rules();
 	}
 
 }

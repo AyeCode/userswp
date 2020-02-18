@@ -1344,12 +1344,12 @@ class UsersWP_Form_Builder {
 
             if (is_array($show_in)) {
                 $show_in = implode(",", $request_field['show_in']);
-                $show_in1 = sanitize_text_field($show_in);
+                $show_in = sanitize_text_field($show_in);
             }
 
             if (is_array($user_roles)) {
                 $user_roles = implode(",", $request_field['user_roles']);
-	            $user_roles1 = sanitize_text_field($user_roles);
+	            $user_roles = sanitize_text_field($user_roles);
             }
 
             $option_values = '';

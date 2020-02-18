@@ -448,7 +448,7 @@ class UsersWP_Mails {
 	 * @param array $email_vars Optional. Email vars. Default array.
 	 * @param bool $is_admin Optional. Admin email. Default false.
 	 *
-	 * @return string
+	 * @return array $attachments
 	 */
 	public static function get_attachments( $email_name = '', $email_vars = array(), $is_admin = false ) {
 		$attachments = array();

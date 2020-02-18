@@ -125,6 +125,8 @@ No questions so far, but don't hesitate to ask!
 * Email templates for sending emails from UsersWP - CHANGED
 * Changes regarding including templates and removed old template functionality - CHANGED
 * Allow users to delete their account from frontend - ADDED
+* Flush rewrite rules on 404 page - REMOVED
+* Remove check for profile page for profile header shortcode so one can display it anywhere on site - CHANGED
 
 = 1.2.1.2 =
 * Changes for reCaptcha addon not showing error if not ticked - FIXED
