@@ -16,12 +16,12 @@ $base_lighter_20 = uwp_hex_lighter( $base, 20 );
 $base_lighter_40 = uwp_hex_lighter( $base, 40 );
 $text_lighter_20 = uwp_hex_lighter( $text, 20 );
 
-$header_bg       		= uwp_get_option( 'email_header_background_color', '#e46c1d' );
+$header_bg       		= uwp_get_option( 'email_header_background_color', '#555555' );
 $header_color 			= uwp_get_option( 'email_header_text_color', '#ffffff' );
 $header_bg_darker_10 	= uwp_hex_darker( $header_bg, 10 );
 
-$footer_bg      		= uwp_get_option( 'email_footer_background_color', '#333333' );
-$footer_color 			= uwp_get_option( 'email_footer_text_color', '#eeeeee' );
+$footer_bg      		= uwp_get_option( 'email_footer_background_color', '#666666' );
+$footer_color 			= uwp_get_option( 'email_footer_text_color', '#dddddd' );
 $footer_bg_darker_10  	= uwp_hex_darker( $footer_bg, 10 );
 
 if ( empty( $body ) ) { $body = 'transparent'; }
