@@ -21,15 +21,15 @@
  */
 class UsersWP_Admin {
 
-    /**
-     * Register all of the hooks related to the admin area functionality
-     * of the plugin.
-     *
-     * @since    1.0.0
-     */
-    public function __construct() {
-
-    }
+	/**
+	 * Register all of the hooks related to the admin area functionality
+	 * of the plugin.
+	 *
+	 * @since    1.0.0
+	 */
+	public function __construct() {
+		add_action( 'admin_init', array( $this, 'preview_emails' ) );
+	}
 
 
     /**
@@ -312,5 +312,39 @@ class UsersWP_Admin {
 		if ( 'profile' == $screen->base || 'user-edit' == $screen->base )
 			$classes .= 'uwp_page';
 		return $classes;
+	}
+
+	/**
+	 * Preview email template for UWP emails.
+	 */
+	public function preview_emails() {
+		if ( isset( $_GET['uwp_preview_mail'] ) ) {
+			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'uwp-preview-mail' ) ) {
+				die( 'Security check failed.' );
+			}
+
+			$email_name = 'preview_mail';
+			$email_vars = array();
+			$plain_text = UsersWP_Mails::get_email_type() != 'html' ? true : false;
+
+			// Get the preview email content.
+			ob_start();
+			include( 'views/html-email-template-preview.php' );
+			$message = ob_get_clean();
+
+			$message 	= UsersWP_Mails::email_wrap_message( $message, $email_name, $email_vars, '', $plain_text );
+			$message 	= UsersWP_Mails::style_body( $message, $email_name, $email_vars );
+			$message 	= apply_filters( 'uwp_mail_content', $message, $email_name, $email_vars );
+
+			// Print the preview email content.
+			if ( $plain_text ) {
+				echo '<div style="white-space:pre-wrap;font-family:sans-serif">';
+			}
+			echo $message;
+			if ( $plain_text ) {
+				echo '</div>';
+			}
+			exit;
+		}
 	}
 }

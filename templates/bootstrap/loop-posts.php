@@ -30,13 +30,13 @@ $title = isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args[
 	if ( $the_query && $the_query->have_posts() ) {
 
 		$design_style = ! empty( $uwp_widget_args['design_style'] ) ? esc_attr( $uwp_widget_args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
-		$template     = $design_style ? $design_style . "/posts-post" : "posts-post";
+		$template     = $design_style ? $design_style . "/posts-post.php" : "posts-post.php";
 
 		echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">';
 		while ( $the_query->have_posts() ) {
 			$the_query->the_post();
 
-			uwp_locate_template( $template );
+			uwp_get_template( $template );
 
 		}
 		echo '</div>';

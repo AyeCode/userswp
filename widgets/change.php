@@ -109,11 +109,11 @@ class UWP_Change_Widget extends WP_Super_Duper {
         echo '<div class="uwp_widgets uwp_widget_change">';
 
 	    $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
-	    $template = $design_style ? $design_style."/change" : "change";
+	    $template = $design_style ? $design_style."/change.php" : "change.php";
 
         echo '<div class="uwp_page">';
 
-        uwp_locate_template($template);
+	    uwp_get_template($template);
 	    
 
         echo '</div>';

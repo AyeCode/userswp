@@ -16,7 +16,7 @@ $maximum_pages = isset( $uwp_widget_args['template_args']['maximum_pages'] ) ? $
 		echo '<ul class="uwp-profile-item-ul">';
 		foreach ( $the_query as $comment ) {
 			$uwp_widget_args['template_args']['comment'] = $comment;
-			uwp_locate_template("comments-item");
+			uwp_get_template("comments-item.php");
 			?>
 			
 			<?php

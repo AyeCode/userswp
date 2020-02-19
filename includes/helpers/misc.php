@@ -1501,24 +1501,6 @@ function uwp_get_show_in_locations(){
     return $show_in_locations;
 }
 
-function uwp_locate_template($template, $template_path = "" ){
-
-    $temp_obj = new UsersWP_Templates();
-
-    $template_file = $temp_obj->locate_template($template, $template_path );
-
-    if (file_exists($template_file)) {
-        include($template_file);
-    }
-
-}
-
-function uwp_no_users_found(){
-	$design_style = uwp_get_option("design_style",'bootstrap');
-	$template = $design_style ? $design_style."/no-users-found" : "no-users-found";
-    uwp_locate_template( $template );
-}
-
 function uwp_get_displayed_user(){
     global $uwp_user;
     $user = uwp_get_user_by_author_slug(); // for user displayed in profile
@@ -1575,4 +1557,190 @@ function uwp_is_gdv2(){
 	}
 
 	return false;
+}
+
+function uwp_get_blogname() {
+	$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+
+	return apply_filters( 'uwp_get_blogname', $blogname );
+}
+
+/**
+ * RGB from hex.
+ *
+ * @since 1.2.1.3
+ *
+ * @param string $color Color.
+ * @return array $rgb.
+ */
+function uwp_rgb_from_hex( $color ) {
+	$color = str_replace( '#', '', $color );
+
+	// Convert shorthand colors to full format, e.g. "FFF" -> "FFFFFF"
+	$color = preg_replace( '~^(.)(.)(.)$~', '$1$1$2$2$3$3', $color );
+	if ( empty( $color ) ) {
+		return NULL;
+	}
+
+	$color = str_split( $color );
+
+	$rgb      = array();
+	$rgb['R'] = hexdec( $color[0].$color[1] );
+	$rgb['G'] = hexdec( $color[2].$color[3] );
+	$rgb['B'] = hexdec( $color[4].$color[5] );
+
+	return $rgb;
+}
+
+/**
+ * HEX darker.
+ *
+ * @since 1.2.1.3
+ *
+ * @param string $color Color.
+ * @param int $factor Optional. Factor. Default 30.
+ * @return string $color.
+ */
+function uwp_hex_darker( $color, $factor = 30 ) {
+	$base  = uwp_rgb_from_hex( $color );
+	if ( empty( $base ) ) {
+		return $color;
+	}
+
+	$color = '#';
+	foreach ( $base as $k => $v ) {
+		$amount      = $v / 100;
+		$amount      = round( $amount * $factor );
+		$new_decimal = $v - $amount;
+
+		$new_hex_component = dechex( $new_decimal );
+		if ( strlen( $new_hex_component ) < 2 ) {
+			$new_hex_component = "0" . $new_hex_component;
+		}
+		$color .= $new_hex_component;
+	}
+
+	return $color;
+}
+
+/**
+ * Hex lighter.
+ *
+ * @since 1.2.1.3
+ *
+ * @param string $color Color.
+ * @param int $factor Optional. factor. Default 30.
+ * @return string $color.
+ */
+function uwp_hex_lighter( $color, $factor = 30 ) {
+	$base  = uwp_rgb_from_hex( $color );
+	if ( empty( $base ) ) {
+		return $color;
+	}
+
+	$color = '#';
+
+	foreach ( $base as $k => $v ) {
+		$amount      = 255 - $v;
+		$amount      = $amount / 100;
+		$amount      = round( $amount * $factor );
+		$new_decimal = $v + $amount;
+
+		$new_hex_component = dechex( $new_decimal );
+		if ( strlen( $new_hex_component ) < 2 ) {
+			$new_hex_component = "0" . $new_hex_component;
+		}
+		$color .= $new_hex_component;
+	}
+
+	return $color;
+}
+
+/**
+ * Get Light or dark.
+ *
+ * @since 1.2.1.3
+ *
+ * @param string $color color.
+ * @param string $dark Optional. Dark. Default #000000.
+ * @param string $light Optional. Light. Default #FFFFFF.
+ * @return string
+ */
+function uwp_light_or_dark( $color, $dark = '#000000', $light = '#FFFFFF' ) {
+	$hex = str_replace( '#', '', $color );
+	if ( empty( $hex ) ) {
+		return $color;
+	}
+
+	$c_r = hexdec( substr( $hex, 0, 2 ) );
+	$c_g = hexdec( substr( $hex, 2, 2 ) );
+	$c_b = hexdec( substr( $hex, 4, 2 ) );
+
+	$brightness = ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
+
+	return $brightness > 155 ? $dark : $light;
+}
+
+/**
+ * Format hex.
+ *
+ * @since 1.2.1.3
+ *
+ * @param string $hex hex.
+ * @return string
+ */
+function uwp_format_hex( $hex ) {
+	$hex = trim( str_replace( '#', '', $hex ) );
+	if ( empty( $hex ) ) {
+		return NULL;
+	}
+
+	if ( strlen( $hex ) == 3 ) {
+		$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+	}
+
+	return $hex ? '#' . $hex : null;
+}
+
+/**
+ * Returns activation link for user.
+ *
+ * @since 1.2.1.3
+ *
+ * @param int $user_id User ID.
+ *
+ * @return string $activation_link
+ */
+function uwp_get_activation_link($user_id){
+
+	global $wpdb, $wp_hasher;
+
+	if(!$user_id){
+		return false;
+	}
+
+	$user_data = get_userdata($user_id);
+
+	$key = wp_generate_password( 20, false );
+
+	do_action( 'uwp_activation_key', $user_data->user_login, $key );
+
+	if ( empty( $wp_hasher ) ) {
+		require_once ABSPATH . 'wp-includes/class-phpass.php';
+		$wp_hasher = new PasswordHash( 8, true );
+	}
+	$hashed = $wp_hasher->HashPassword( $key );
+	$wpdb->update( $wpdb->users, array( 'user_activation_key' => time().":".$hashed ), array( 'user_login' => $user_data->user_login ) );
+	update_user_meta( $user_id, 'uwp_mod', 'email_unconfirmed' );
+
+	$activation_link = add_query_arg(
+		array(
+			'uwp_activate' => 'yes',
+			'key' => $key,
+			'login' => $user_data->user_login
+		),
+		site_url()
+	);
+
+	return $activation_link;
 }

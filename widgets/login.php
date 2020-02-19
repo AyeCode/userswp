@@ -154,7 +154,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
         if(is_user_logged_in() && !is_admin() && !$this->is_preview()) {
 
             if($args['logged_in_show']=='simple'){
-                $template = $design_style ? $design_style."/dashboard-simple" : "dashboard-simple";
+                $template = $design_style ? $design_style."/dashboard-simple.php" : "dashboard-simple.php";
             }else{
 
                 $user_id = get_current_user_id();
@@ -196,16 +196,16 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     'dashboard_links' => $dashboard_links
                 );
                 
-                $template = $design_style ? $design_style."/dashboard" : "dashboard";
+                $template = $design_style ? $design_style."/dashboard.php" : "dashboard.php";
             }
 
         } else {
-            $template = $design_style ? $design_style."/login" : "login";
+            $template = $design_style ? $design_style."/login.php" : "login.php";
         }
 
         echo '<div class="uwp_page">';
 
-        uwp_locate_template($template);
+	    uwp_get_template($template, $args);
 
         echo '</div>';
 

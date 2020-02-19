@@ -33,7 +33,7 @@ if( ! $hide_cover ) {
 		echo '</a>';
 	} ?>
 
-	<?php if ( ! $uwp_in_user_loop && is_user_logged_in() && is_uwp_profile_page() && $allow_change && ( get_current_user_id() == $user->ID ) ) { ?>
+	<?php if ( ! $uwp_in_user_loop && is_user_logged_in() && $allow_change && ( get_current_user_id() == $user->ID ) ) { ?>
 		<div class="card-img-overlay p-1 bg-shadow-bottom-dd">
 			<a onclick="uwp_profile_image_change('banner');return false;" href="#"
 			   class="btn btn-sm uwp-banner-change-icon btn-outline-secondary uwp-profile-modal-form-trigger border-0"
@@ -58,7 +58,7 @@ if( ! $hide_cover ) {
 			     src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php _e("User avatar","userswp");?>">
 			<?php if ($uwp_in_user_loop) {echo '</a>';} ?>
 
-			<?php if (!$uwp_in_user_loop && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && is_uwp_profile_page() && $allow_change ) { ?>
+			<?php if (!$uwp_in_user_loop && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && $allow_change ) { ?>
 				<div class="card-img-overlay d-flex p-0">
 					<a onclick="uwp_profile_image_change('avatar');return false;" href="#"
 					   class="btn btn-sm uwp-banner-change-icon btn-outline-secondary btn-circle border-0 align-self-end mx-auto "

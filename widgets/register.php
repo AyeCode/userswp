@@ -107,11 +107,11 @@ class UWP_Register_Widget extends WP_Super_Duper {
         echo '<div class="uwp_widgets uwp_widget_register">';
 
 	    $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
-	    $template = $design_style ? $design_style."/register" : "register";
+	    $template = $design_style ? $design_style."/register.php" : "register.php";
 
         echo '<div class="uwp_page wpbs ">';
 
-        uwp_locate_template($template);
+	    uwp_get_template($template, $args);
 
         echo '</div>';
 
