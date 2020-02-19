@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.1.2
+Stable tag: 1.2.1.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,6 +127,7 @@ No questions so far, but don't hesitate to ask!
 * Allow users to delete their account from frontend - ADDED
 * Flush rewrite rules on 404 page - REMOVED
 * Remove check for profile page for profile header shortcode so one can display it anywhere on site - CHANGED
+* Filter for adding #tab-content link for profile tabs - ADDED
 
 = 1.2.1.2 =
 * Changes for reCaptcha addon not showing error if not ticked - FIXED
