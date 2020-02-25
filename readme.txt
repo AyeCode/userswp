@@ -1,10 +1,10 @@
 === UsersWP - User Profile & Registration ===
 Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
-Tags: community, member, membership, user profile, user registration, login form, registration form, users directory
+Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.1.4
+Stable tag: 1.2.1.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -120,6 +120,11 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.1.5 =
+* Account success email sent to user instead of admin - FIXED
+* Register button disabled after clicking without recaptcha - FIXED
+* Listing showing default post type even if not added from settings - FIXED
 
 = 1.2.1.4 =
 * Email templates for sending emails from UsersWP - CHANGED
