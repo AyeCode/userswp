@@ -13,12 +13,12 @@ $title = isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args[
 	// The Loop
 	if ($the_query && $the_query->have_posts()) {
 
-		$template = "posts-post";
+		$template = "posts-post.php";
 
 		echo '<ul class="uwp-profile-item-ul">';
 		while ($the_query->have_posts()) {
 			$the_query->the_post();
-			uwp_locate_template($template);
+			uwp_get_template($template);
 		}
 		echo '</ul>';
 

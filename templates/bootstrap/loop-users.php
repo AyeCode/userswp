@@ -18,7 +18,7 @@ $total_users = isset( $uwp_widget_args['template_args']['total_users'] ) ? $uwp_
     if ( $users ) {
 
         $design_style = ! empty( $uwp_widget_args['design_style'] ) ? esc_attr( $uwp_widget_args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
-        $template     = $design_style ? $design_style . "/users-item" : "users-item";
+        $template     = $design_style ? $design_style . "/users-item.php" : "users-item.php";
 
         echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">';
 
@@ -26,7 +26,7 @@ $total_users = isset( $uwp_widget_args['template_args']['total_users'] ) ? $uwp_
         $original_user = $uwp_user;
         foreach ($users as $uwp_user){
 
-            uwp_locate_template( $template );
+	        uwp_get_template( $template );
 
         }
         $uwp_user = $original_user;

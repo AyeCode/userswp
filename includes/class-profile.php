@@ -36,7 +36,6 @@ class UsersWP_Profile {
      * @param       bool      $hide_cover   Hide cover image.
      * @param       bool      $hide_avatar   Hide avatar image.
      * @param       bool      $allow_change   Allow to change cover and avatar image.
-     * @deprecated 1.2.0 Use uwp_locate_template()
      */
     public function get_profile_header($user, $hide_cover = false, $hide_avatar = false, $allow_change = true) {
         if(!$user){
@@ -977,16 +976,9 @@ class UsersWP_Profile {
 	    $uwp_widget_args['template_args']['title'] = __("Comments");
 	    $uwp_widget_args['template_args']['maximum_pages'] = $maximum_pages;
 
-//	    $uwp_widget_args['template_args'] = array(
-//		    'the_query' => $comments,
-//		    'user'      => $user,
-//		    'maximum_pages' => $maximum_pages
-//	    );
-
-
 	    $design_style = !empty($uwp_widget_args['design_style']) ? esc_attr($uwp_widget_args['design_style']) : uwp_get_option("design_style",'bootstrap');
-	    $template = $design_style ? $design_style."/loop-comments" : "loop-comments";
-	    uwp_locate_template($template);
+	    $template = $design_style ? $design_style."/loop-comments.php" : "loop-comments.php";
+	    uwp_get_template($template);
 
     }
 
@@ -1326,9 +1318,9 @@ class UsersWP_Profile {
         ob_start();
 
 	    $design_style = uwp_get_option("design_style",'bootstrap');
-	    $template = $design_style ? $design_style."/modal-profile-image-crop" : "modal-profile-image-crop";
+	    $template = $design_style ? $design_style."/modal-profile-image-crop.php" : "modal-profile-image-crop.php";
 
-	    uwp_locate_template($template);
+	    uwp_get_template($template);
 	    $uwp_template_args = array();
         ?>
         <script type="text/javascript">
@@ -1370,11 +1362,8 @@ class UsersWP_Profile {
 	    $max_file_size = $files->uwp_get_max_upload_size($type);
 
 	    $design_style = uwp_get_option("design_style",'bootstrap');
-	    $template = $design_style ? $design_style."/modal-profile-image" : "modal-profile-image";
-
-
-
-	    uwp_locate_template($template);
+	    $template = $design_style ? $design_style."/modal-profile-image.php" : "modal-profile-image.php";
+	    uwp_get_template($template);
 
 	    $content_wrap = $design_style == 'bootstrap' ? '.uwp-profile-image-change-modal .modal-content' : '#uwp-popup-modal-wrap';
         ?>

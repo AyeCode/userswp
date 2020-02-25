@@ -38,6 +38,7 @@ class UsersWP_Ajax {
         // uwp_event_name => nopriv
         return array(
             'notice_clear_try_bootstrap'   => false,
+            'wizard_setup_menu'   => false,
         );
     }
 
@@ -65,4 +66,31 @@ class UsersWP_Ajax {
         add_filter( 'wp_die_handler', '_uwp_die_handler', 10, 3 );
         wp_die( $message, $title, array( 'response' => $status ));
     }
+
+	/**
+	 * Function to setup menu in the setup wizard.
+	 *
+	 * @return      void
+	 */
+	public function wizard_setup_menu() {
+
+		check_ajax_referer( 'uwp-wizard-setup-menu', 'security' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		$menu_id = isset($_REQUEST['menu_id']) ?  sanitize_title_with_dashes($_REQUEST['menu_id']) : '';
+		$menu_location = isset($_REQUEST['menu_location']) ?  sanitize_title_with_dashes($_REQUEST['menu_location']) : '';
+		$result = UsersWP_Tools::setup_menu( $menu_id, $menu_location);
+
+		if(is_wp_error( $result ) ){
+			wp_send_json_error( $result->get_error_message() );
+		}else{
+			wp_send_json_success($result);
+		}
+
+		wp_die();
+
+	}
 }

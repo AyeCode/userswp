@@ -15,11 +15,11 @@ $title = isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args[
 	// The Loop
 	if ($the_query) {
 		$design_style = ! empty( $uwp_widget_args['design_style'] ) ? esc_attr( $uwp_widget_args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
-		$template     = $design_style ? $design_style . "/comments-item" : "comments-item";
+		$template     = $design_style ? $design_style . "/comments-item.php" : "comments-item.php";
 		echo '<div class="cards">';
 		foreach ( $the_query as $comment ) {
 			$uwp_widget_args['template_args']['comment'] = $comment;
-			uwp_locate_template($template);
+			uwp_get_template($template);
 		}
 		echo '</div>';
 	} else {

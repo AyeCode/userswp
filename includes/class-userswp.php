@@ -59,7 +59,6 @@ final class UsersWP {
         $this->profile = new UsersWP_Profile();
         $this->forms = new UsersWP_Forms();
         $this->templates = new UsersWP_Templates();
-        $this->i18n = new UsersWP_i18n();
         $this->notices = new UsersWP_Notices();
         $this->assets = new UsersWP_Public();
         $this->form_builder = new UsersWP_Form_Builder();
@@ -79,7 +78,6 @@ final class UsersWP {
         $this->load_ajax_actions_and_filters($this->ajax);
         $this->load_files_actions_and_filters($this->files);
         $this->load_forms_actions_and_filters($this->forms);
-        $this->load_i18n_actions_and_filters($this->i18n);
         $this->load_notices_actions_and_filters($this->notices);
         $this->load_pages_actions_and_filters($this->pages);
         $this->load_profile_actions_and_filters($this->profile);
@@ -104,6 +102,8 @@ final class UsersWP {
         add_action( 'admin_init', array('UsersWP_Activator', 'automatic_upgrade') );
         add_action( 'init', array( 'UsersWP_Activator', 'init_background_updater' ), 5 );
         add_action( 'widgets_init', array( $this, 'register_widgets' ) );
+	    add_action( 'init', array($this, 'load_plugin_textdomain'));
+	    add_action( 'uwp_flush_rewrite_rules', array($this, 'flush_rewrite_rules'));
     }
 
 	/**
@@ -210,18 +210,7 @@ final class UsersWP {
         add_filter('uwp_form_input_password_password_after', array($instance, 'register_confirm_password_field'), 10, 4);
         
         // Emails
-        add_filter('uwp_send_mail_extras', array($instance, 'init_mail_extras'), 10, 3);
-        add_filter('uwp_send_admin_mail_extras', array($instance, 'init_admin_mail_extras'), 10, 3);
 	    add_filter('uwp_send_mail_form_fields', array($instance, 'init_mail_form_fields'), 10, 3);
-    }
-
-	/**
-	 * Actions for text domain
-	 *
-	 * @param $instance
-	 */
-    public function load_i18n_actions_and_filters($instance) {
-        add_action( 'init', array($instance, 'load_plugin_textdomain'));
     }
 
 	/**
@@ -324,11 +313,10 @@ final class UsersWP {
     public function load_templates_actions_and_filters($instance) {
 
         add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
-        add_action( 'template_redirect', array($instance, 'refresh_permalinks_on_bad_404') );
         add_action( 'uwp_template_fields', array($instance, 'template_fields'), 10, 1 );
         add_action( 'uwp_template_fields', array($instance, 'template_extra_fields'), 10, 1 );
         add_action( 'uwp_template_fields', array($instance, 'add_template_fields_terms_check'), 100, 1 );
-        add_action( 'uwp_account_form_display', array($instance, 'account_edit_form_display'), 10, 1 );
+        //add_action( 'uwp_account_form_display', array($instance, 'account_edit_form_display'), 10, 1 );
         add_action( 'uwp_account_form_display', array($instance, 'privacy_edit_form_display'), 10, 1 );
         add_action( 'wp_logout', array($instance, 'logout_redirect'));
         add_action( 'init', array($instance, 'wp_login_redirect'));
@@ -518,12 +506,6 @@ final class UsersWP {
             require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
         }
 
-        /**
-         * The class responsible for defining internationalization functionality
-         * of the plugin.
-         */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-i18n.php';
-
         require_once dirname(dirname( __FILE__ )) . '/admin/settings/functions.php';
 
         $uwp_options = uwp_get_settings();
@@ -547,6 +529,11 @@ final class UsersWP {
          * The libraries required.
          */
         require_once dirname(dirname( __FILE__ )) . '/vendor/autoload.php';
+
+	    /**
+	     * Contains functions for templates.
+	     */
+	    require_once( dirname(dirname( __FILE__ )) .'/includes/template-functions.php' );
 
         /**
          * The class responsible for sending emails
@@ -629,7 +616,9 @@ final class UsersWP {
 	    /**
 	     * The class responsible for defining all actions that occur for setup wizard.
 	     */
-	    require_once dirname(dirname( __FILE__ )) . '/admin/class-admin-setup-wizard.php';
+	    if ( isset( $_GET['page'] ) && 'uwp-setup' == $_GET['page'] ) {
+		    require_once dirname( dirname( __FILE__ ) ) . '/admin/class-admin-setup-wizard.php';
+	    }
 
         /**
          * The class responsible for defining all actions help screen.
@@ -822,6 +811,11 @@ final class UsersWP {
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-user-notifications.php';
 
+	    /**
+	     * The class responsible for account handling
+	     */
+	    require_once dirname(dirname( __FILE__ )) . '/includes/class-account.php';
+
         /**
          * The class responsible for adding tools functions
          */
@@ -870,5 +864,29 @@ final class UsersWP {
             require_once dirname(dirname( __FILE__ )) . '/includes/libraries/class-invoicing-plugin.php';
         }
     }
+
+	/**
+	 * Load the plugin text domain for translation.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 * @return      void
+	 */
+	public function load_plugin_textdomain() {
+
+		load_plugin_textdomain( 'userswp', false, basename( dirname (dirname( __FILE__ ) ) ) . '/languages' );
+
+		do_action('uwp_loaded');
+
+	}
+
+	/**
+	 * Flush rewrite rules.
+	 *
+	 * @return      void
+	 */
+	public function flush_rewrite_rules(){
+		flush_rewrite_rules();
+	}
 
 }

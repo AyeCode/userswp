@@ -56,8 +56,8 @@ class UWP_Users_Loop_Widget extends WP_Super_Duper {
         $uwp_widget_args['template_args']['total_users'] = $users_list['total_users'];
         
         $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
-        $template = $design_style ? $design_style."/loop-users" : "loop-users";
-        uwp_locate_template($template);
+        $template = $design_style ? $design_style."/loop-users.php" : "loop-users.php";
+	    uwp_get_template($template, $args);
 
         // @todo maybe move paging to template?
         $number = uwp_get_option('profile_no_of_items', 10);

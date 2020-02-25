@@ -756,4 +756,104 @@ class UsersWP_Tools {
         echo json_encode($output);
     }
 
+	public static function setup_menu( $menu_id = '',$menu_location = '' ) {
+
+		$menu_id = sanitize_title_with_dashes($menu_id);
+		$menu_location = sanitize_title_with_dashes($menu_location);
+
+		// confirm the sidebar_id is valid
+		if(!$menu_id && !$menu_location){
+			return new WP_Error( 'uwp-wizard-setup-menu', __( "The menu is not valid.", "userswp" ) );
+		}
+
+		$items_added = 0;
+		$items_exist= 0;
+
+		if($menu_id){
+
+			$menu_exists = wp_get_nav_menu_object( $menu_id );
+
+			if(!$menu_exists){
+				return new WP_Error( 'uwp-wizard-setup-menu', __( "The menu is not valid.", "userswp" ) );
+			}
+
+			$current_menu_items = wp_get_nav_menu_items( $menu_id );
+
+			$current_menu_titles = array();
+			// get a list of current slugs so we don't add things twice.
+			if(!empty($current_menu_items)){
+				foreach($current_menu_items as $current_menu_item){
+					if(!empty($current_menu_item->post_name)){
+						$current_menu_titles[] = $current_menu_item->title;
+					}
+				}
+			}
+
+			$uwp_menus = new UsersWP_Menus();
+			$uwp_menu_items = $uwp_menus->get_endpoints();
+
+			if(!empty($uwp_menu_items)){
+				foreach($uwp_menu_items as $menu_item_type){
+					if(!empty($menu_item_type)){
+
+						$menu_item_type = array_map('wp_setup_nav_menu_item', $menu_item_type);
+
+						foreach($menu_item_type as $menu_item){
+
+							if(!empty($current_menu_titles) && (in_array($menu_item->title,$current_menu_titles) || in_array(str_replace(" page",'',$menu_item->title),$current_menu_titles))){
+								$items_exist++; continue 2;
+							}
+
+							// setup standard menu stuff
+							$menu_item->{'menu-item-object-id'} = $menu_item->object_id;
+							$menu_item->{'menu-item-object'} = $menu_item->object;
+							$menu_item->{'menu-item-type'} = $menu_item->type;
+							$menu_item->{'menu-item-status'} = 'publish';
+							$menu_item->{'menu-item-classes'} = !empty($menu_item->classes) ? implode(" ",$menu_item->classes) : 'uwp-menu-item';
+							if($menu_item->type=='custom'){
+								$menu_item->{'menu-item-url'} = $menu_item->url;
+								$menu_item->{'menu-item-title'} = $menu_item->title;
+							}
+
+							wp_update_nav_menu_item($menu_id, 0, $menu_item);
+							$items_added++;
+						}
+					}
+				}
+			}
+
+		} elseif($menu_location){
+
+			$menuname = "UsersWP Menu";
+
+			$menu_exists = wp_get_nav_menu_object( $menuname );
+
+			// If it doesn't exist, let's create it.
+			if( !$menu_exists) {
+				$menu_id = wp_create_nav_menu( $menuname );
+
+				$locations = get_theme_mod( 'nav_menu_locations' );
+
+				if($menu_id){
+					$locations[$menu_location] = $menu_id;
+					set_theme_mod('nav_menu_locations', $locations);
+					return self::setup_menu($menu_id);
+				}
+
+			}else{
+				return new WP_Error( 'uwp-wizard-setup-menu', __( "Menu already exists.", "userswp" ) );
+			}
+
+		}
+
+		if($items_added == 0 && $items_exist > 0){
+			return __( 'Menu items already exist, none added.' , 'userswp' );
+		}elseif($items_added  > 0){
+			return __( 'Menu items added successfully.' , 'userswp' );
+		}else{
+			return __( 'Something went wrong, you can manually add items in Appearance > Menus' , 'userswp' );
+		}
+
+	}
+
 }

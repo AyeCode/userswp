@@ -38,10 +38,13 @@ if($output === '' || $output=='head'){
 							$active_tab_content = $tab['tab_content_rendered'];
 						}
 
+						$append_hash = apply_filters('uwp_add_tab_content_hashtag', true, $tab, $user);
+						$tab_url = $append_hash ? esc_url($tab_url).'#tab-content' : esc_url($tab_url);
+
 						?>
 						<li id="uwp-profile-<?php echo $tab_id; ?>"
 						    class="nav-item <?php echo $active; ?> list-unstyled">
-							<a href="<?php echo esc_url($tab_url); ?>#tab-content" class="nav-link">
+							<a href="<?php echo $tab_url; ?>" class="nav-link">
 								<?php
 								if(!empty($tab['tab_icon'])){
 									echo '<i class="'.esc_attr($tab['tab_icon']).'"></i>';
