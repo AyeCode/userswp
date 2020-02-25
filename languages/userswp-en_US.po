@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.1.4\n"
+"Project-Id-Version: UsersWP 1.2.1.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-19 17:20+0530\n"
-"PO-Revision-Date: 2020-02-19 17:20+0530\n"
+"POT-Creation-Date: 2020-02-25 19:11+0530\n"
+"PO-Revision-Date: 2020-02-25 19:11+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1056,8 +1056,8 @@ msgid "No options available"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:2421
-#: includes/libraries/class-geodirectory-plugin.php:1150
-#: includes/libraries/class-geodirectory-plugin.php:1516
+#: includes/libraries/class-geodirectory-plugin.php:1151
+#: includes/libraries/class-geodirectory-plugin.php:1517
 msgid "Delete"
 msgstr ""
 
@@ -2226,7 +2226,7 @@ msgid "Email:"
 msgstr ""
 
 #: includes/class-activator.php:362 includes/class-activator.php:640
-#: includes/libraries/class-geodirectory-plugin.php:1804
+#: includes/libraries/class-geodirectory-plugin.php:1805
 msgid "Username"
 msgstr ""
 
@@ -2534,7 +2534,7 @@ msgid "Account registered successfully. Redirecting..."
 msgstr ""
 
 #: includes/class-forms.php:549 includes/class-forms.php:695
-msgid "Invalid username or Password."
+msgid "Invalid Username or Password."
 msgstr ""
 
 #: includes/class-forms.php:586
@@ -3884,7 +3884,7 @@ msgstr ""
 
 #: includes/libraries/class-geodirectory-plugin.php:306
 #: includes/libraries/class-geodirectory-plugin.php:339
-#: includes/libraries/class-geodirectory-plugin.php:1355 upgrade.php:87
+#: includes/libraries/class-geodirectory-plugin.php:1356 upgrade.php:87
 msgid "Reviews"
 msgstr ""
 
@@ -3897,60 +3897,60 @@ msgstr ""
 msgid "Lists"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1136
-#: includes/libraries/class-geodirectory-plugin.php:1502
+#: includes/libraries/class-geodirectory-plugin.php:1137
+#: includes/libraries/class-geodirectory-plugin.php:1503
 msgid "Edit Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1141
-#: includes/libraries/class-geodirectory-plugin.php:1507
+#: includes/libraries/class-geodirectory-plugin.php:1142
+#: includes/libraries/class-geodirectory-plugin.php:1508
 msgid "Edit"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1145
-#: includes/libraries/class-geodirectory-plugin.php:1511
+#: includes/libraries/class-geodirectory-plugin.php:1146
+#: includes/libraries/class-geodirectory-plugin.php:1512
 msgid "Delete Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1168
-#: includes/libraries/class-geodirectory-plugin.php:1329
-#: includes/libraries/class-geodirectory-plugin.php:1535
-#: includes/libraries/class-geodirectory-plugin.php:1545
+#: includes/libraries/class-geodirectory-plugin.php:1169
+#: includes/libraries/class-geodirectory-plugin.php:1330
+#: includes/libraries/class-geodirectory-plugin.php:1536
+#: includes/libraries/class-geodirectory-plugin.php:1546
 #: templates/bootstrap/loop-posts.php:50
 #, php-format
 msgid "No %s found."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1230
+#: includes/libraries/class-geodirectory-plugin.php:1231
 #: templates/bootstrap/posts-post.php:46
 msgid "View"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1594
+#: includes/libraries/class-geodirectory-plugin.php:1595
 msgid "This user does not have any favorites yet."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1768
+#: includes/libraries/class-geodirectory-plugin.php:1769
 msgid "Published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1771
+#: includes/libraries/class-geodirectory-plugin.php:1772
 msgid "Pending"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1774
+#: includes/libraries/class-geodirectory-plugin.php:1775
 msgid "Closed"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1777
+#: includes/libraries/class-geodirectory-plugin.php:1778
 msgid "Expired"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1780
+#: includes/libraries/class-geodirectory-plugin.php:1781
 msgid "Not published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1785
+#: includes/libraries/class-geodirectory-plugin.php:1786
 msgid "Status: "
 msgstr ""
 

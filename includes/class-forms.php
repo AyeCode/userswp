@@ -512,7 +512,7 @@ class UsersWP_Forms {
 				'extras' => $extras,
 			);
 
-			UsersWP_Mails::send($user_data->user_email, 'registration_success', $email_vars, true);
+			UsersWP_Mails::send(get_option( 'admin_email' ), 'registration_success', $email_vars, true);
 
 		}
 
@@ -546,7 +546,7 @@ class UsersWP_Forms {
 			if (is_wp_error($res)) {
 				$error = aui()->alert(array(
 						'type'=>'error',
-						'content'=> __( 'Invalid username or Password.', 'userswp' )
+						'content'=> __( 'Invalid Username or Password.', 'userswp' )
 					)
 				);
 				$uwp_notices[] = array('register' => $error);
@@ -692,7 +692,7 @@ class UsersWP_Forms {
 		if (is_wp_error($user)) {
 			$message = aui()->alert(array(
 					'type'=>'error',
-					'content'=> __( 'Invalid username or Password.', 'userswp' )
+					'content'=> __( 'Invalid Username or Password.', 'userswp' )
 				)
 			);
 			if(wp_doing_ajax()){wp_send_json_error($message);}

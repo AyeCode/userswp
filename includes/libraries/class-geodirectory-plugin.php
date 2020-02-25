@@ -660,6 +660,7 @@ class UsersWP_GeoDirectory_Plugin {
 		$post_type = apply_filters( 'uwp_default_listing_post_type', 'gd_place', $user, $type );
 		if(! empty( $subtab ) && array_key_exists( $subtab, $subtabs )){
 			$active_tab = $subtab;
+			$post_type = $subtabs[ $subtab ]['ptype'];
         } elseif(!empty($subtabs)) {
 			$subtab_keys = array_keys( $subtabs );
 			$active_tab = $subtab_keys[0];
