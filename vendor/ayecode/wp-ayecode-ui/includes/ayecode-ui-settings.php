@@ -486,7 +486,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				$script = $this->inline_script();
 				wp_add_inline_script( 'bootstrap-dummy', $script  );
 			}
-			
+
 		}
 
 		/**
@@ -533,7 +533,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 		/**
 		 * Get a list of themes and their default JS settings.
-		 * 
+		 *
 		 * @return array
 		 */
 		public function theme_js_settings(){

@@ -121,6 +121,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.1.6 =
+* AyeCode Connect notice now shows on extensions pages - ADDED
+
 = 1.2.1.5 =
 * Account success email sent to user instead of admin - FIXED
 * Register button disabled after clicking without recaptcha - FIXED
