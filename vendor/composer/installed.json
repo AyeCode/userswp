@@ -1,17 +1,17 @@
 [
     {
         "name": "ayecode/ayecode-connect-helper",
-        "version": "1.0.1",
-        "version_normalized": "1.0.1.0",
+        "version": "1.0.3",
+        "version_normalized": "1.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/ayecode-connect-helper.git",
-            "reference": "ff99f6fbb8d8f0e9676053c3546e078bcfe70de0"
+            "reference": "1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/ayecode-connect-helper/zipball/ff99f6fbb8d8f0e9676053c3546e078bcfe70de0",
-            "reference": "ff99f6fbb8d8f0e9676053c3546e078bcfe70de0",
+            "url": "https://api.github.com/repos/AyeCode/ayecode-connect-helper/zipball/1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4",
+            "reference": "1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4",
             "shasum": ""
         },
         "require": {
@@ -23,7 +23,7 @@
             "squizlabs/php_codesniffer": "^3.2",
             "wp-coding-standards/wpcs": "*"
         },
-        "time": "2020-02-26T10:17:34+00:00",
+        "time": "2020-02-26T18:53:58+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

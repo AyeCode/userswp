@@ -13,7 +13,7 @@ if ( ! class_exists( "AyeCode_Connect_Helper" ) ) {
 	class AyeCode_Connect_Helper {
 
 		// Hold the version number
-		var $version = "1.0.1";
+		var $version = "1.0.3";
 
 		// Hold the default strings.
 		var $strings = array();
@@ -62,7 +62,7 @@ if ( ! class_exists( "AyeCode_Connect_Helper" ) ) {
 			}
 
 			// add ajax action if not already added
-			if ( ! has_action( 'wp_ajax_ayecode_connect_helper' ) ) {
+			if ( ! has_action( 'wp_ajax_nopriv_ayecode_connect_helper_installed' ) ) {
 				add_action( 'wp_ajax_nopriv_ayecode_connect_helper_installed', array( $this, 'ayecode_connect_helper_installed' ) );
 			}
 
@@ -73,9 +73,9 @@ if ( ! class_exists( "AyeCode_Connect_Helper" ) ) {
 		 */
 		public function ayecode_connect_helper_installed(){
 			$active = array(
-				'gd'    =>  defined('GEODIRECTORY_VERSION') ? true : false,
-				'uwp'    =>  defined('USERSWP_VERSION') ? true : false,
-				'wpi'    =>  defined('WPINV_VERSION') ? true : false,
+				'gd'    =>  defined('GEODIRECTORY_VERSION') && version_compare(GEODIRECTORY_VERSION,'2.0.0.79','>') ? 1 : 0,
+				'uwp'    =>  defined('USERSWP_VERSION') && version_compare(USERSWP_VERSION,'1.2.1.5','>') ? 1 : 0,
+				'wpi'    =>  defined('WPINV_VERSION') && version_compare(WPINV_VERSION,'1.0.14','>') ? 1 : 0,
 			);
 			wp_send_json_success( $active );
 			wp_die();
