@@ -1070,13 +1070,13 @@ class UsersWP_Profile {
         return $query_vars;
     }
 
-    public function get_author_link($link, $user_id){
+    public static function get_author_link($link, $user_id){
 
         if (1 == uwp_get_option('uwp_disable_author_link') && !is_uwp_profile_page()) {
 		    return $link;
 	    }
 
-	    return $this->get_profile_link($link, $user_id);
+	    return self::get_profile_link($link, $user_id);
     }
 
     /**
@@ -1088,7 +1088,7 @@ class UsersWP_Profile {
      * @param       int             $user_id        User id.
      * @return      string                          Modified link.
      */
-    public function get_profile_link($link, $user_id) {
+    public static function get_profile_link($link, $user_id) {
 
         $page_id = uwp_get_page_id('profile_page', false);
 
