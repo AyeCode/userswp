@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.1.5\n"
+"Project-Id-Version: UsersWP 1.2.1.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-25 19:11+0530\n"
-"PO-Revision-Date: 2020-02-25 19:11+0530\n"
+"POT-Creation-Date: 2020-02-27 16:50+0530\n"
+"PO-Revision-Date: 2020-02-27 16:51+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -198,57 +198,88 @@ msgstr ""
 msgid "Learn more"
 msgstr ""
 
-#: admin/class-admin.php:99
+#: admin/class-admin.php:43
+msgid "UsersWP - an AyeCode product!"
+msgstr ""
+
+#: admin/class-admin.php:44
+msgid "Please confirm you wish to connect your site?"
+msgstr ""
+
+#: admin/class-admin.php:45
+#, php-format
+msgid ""
+"<strong>Have a license?</strong> Forget about entering license keys or "
+"downloading zip files, connect your site for instant access. %slearn more%s"
+msgstr ""
+
+#: admin/class-admin.php:46
+msgid "Connect Site"
+msgstr ""
+
+#: admin/class-admin.php:47
+msgid "Connecting..."
+msgstr ""
+
+#: admin/class-admin.php:48
+msgid "This service will only work with a live domain, not a localhost."
+msgstr ""
+
+#: admin/class-admin.php:49
+msgid "Something went wrong, please refresh and try again."
+msgstr ""
+
+#: admin/class-admin.php:120
 msgid "Field key must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:100
+#: admin/class-admin.php:121
 msgid "Option Values must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:101
+#: admin/class-admin.php:122
 msgid "Please do not use special character and spaces in field key."
 msgstr ""
 
-#: admin/class-admin.php:102
+#: admin/class-admin.php:123
 msgid "Field key should be a unique name."
 msgstr ""
 
-#: admin/class-admin.php:103
+#: admin/class-admin.php:124
 msgid "Are you sure you wish to delete this field?"
 msgstr ""
 
-#: admin/class-admin.php:104
+#: admin/class-admin.php:125
 msgid "This field is required."
 msgstr ""
 
-#: admin/class-admin.php:106
+#: admin/class-admin.php:127
 msgid "Choose an image"
 msgstr ""
 
-#: admin/class-admin.php:107
+#: admin/class-admin.php:128
 msgid "Use image"
 msgstr ""
 
-#: admin/class-admin.php:214
+#: admin/class-admin.php:235
 #, php-format
 msgid ""
 "You can change your profile picture on your <a href=\"%s\">Profile Page</a>."
 msgstr ""
 
-#: admin/class-admin.php:275
+#: admin/class-admin.php:296
 msgid "Change Avatar"
 msgstr ""
 
-#: admin/class-admin.php:277
+#: admin/class-admin.php:298
 msgid "Upload Avatar"
 msgstr ""
 
-#: admin/class-admin.php:287
+#: admin/class-admin.php:308
 msgid "Change Banner"
 msgstr ""
 
-#: admin/class-admin.php:289
+#: admin/class-admin.php:310
 msgid "Upload Banner"
 msgstr ""
 
@@ -2510,7 +2541,7 @@ msgid "Please activate your account :"
 msgstr ""
 
 #: includes/class-forms.php:471
-msgid "Password you have entered while registration."
+msgid "Password you entered during registration."
 msgstr ""
 
 #: includes/class-forms.php:474 includes/class-forms.php:808

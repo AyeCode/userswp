@@ -468,7 +468,7 @@ class UsersWP_Forms {
 				$message_pass = $this->generated_password;
 				$this->generated_password = false;
 			} else {
-				$message_pass = __("Password you have entered while registration.", 'userswp');
+				$message_pass = __("Password you entered during registration.", 'userswp');
 			}
 
 			$message = __('<p><b>' . __('Your login Information :', 'userswp') . '</b></p>
