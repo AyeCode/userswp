@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.1.6
+Stable tag: 1.2.1.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -120,6 +120,9 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.1.7 =
+* Activation link tag not working for new registrations - FIXED
 
 = 1.2.1.6 =
 * AyeCode Connect notice now shows on extensions pages - ADDED
