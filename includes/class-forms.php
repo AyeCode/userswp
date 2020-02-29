@@ -453,6 +453,7 @@ class UsersWP_Forms {
 			$email_vars = array(
 				'user_id' => $user_id,
 				'login_details' => $activate_message,
+				'activation_link' => $activation_link,
 			);
 
 			UsersWP_Mails::send($user_data->user_email, 'registration_activate', $email_vars);
