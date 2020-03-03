@@ -453,6 +453,7 @@ class UsersWP_Forms {
 			$email_vars = array(
 				'user_id' => $user_id,
 				'login_details' => $activate_message,
+				'activation_link' => $activation_link,
 			);
 
 			UsersWP_Mails::send($user_data->user_email, 'registration_activate', $email_vars);
@@ -468,7 +469,7 @@ class UsersWP_Forms {
 				$message_pass = $this->generated_password;
 				$this->generated_password = false;
 			} else {
-				$message_pass = __("Password you have entered while registration.", 'userswp');
+				$message_pass = __("Password you entered during registration.", 'userswp');
 			}
 
 			$message = __('<p><b>' . __('Your login Information :', 'userswp') . '</b></p>
@@ -512,7 +513,7 @@ class UsersWP_Forms {
 				'extras' => $extras,
 			);
 
-			UsersWP_Mails::send($user_data->user_email, 'registration_success', $email_vars, true);
+			UsersWP_Mails::send(get_option( 'admin_email' ), 'registration_success', $email_vars, true);
 
 		}
 
@@ -546,7 +547,7 @@ class UsersWP_Forms {
 			if (is_wp_error($res)) {
 				$error = aui()->alert(array(
 						'type'=>'error',
-						'content'=> __( 'Invalid username or Password.', 'userswp' )
+						'content'=> __( 'Invalid Username or Password.', 'userswp' )
 					)
 				);
 				$uwp_notices[] = array('register' => $error);
@@ -692,7 +693,7 @@ class UsersWP_Forms {
 		if (is_wp_error($user)) {
 			$message = aui()->alert(array(
 					'type'=>'error',
-					'content'=> __( 'Invalid username or Password.', 'userswp' )
+					'content'=> __( 'Invalid Username or Password.', 'userswp' )
 				)
 			);
 			if(wp_doing_ajax()){wp_send_json_error($message);}

@@ -1,5 +1,57 @@
 [
     {
+        "name": "ayecode/ayecode-connect-helper",
+        "version": "1.0.3",
+        "version_normalized": "1.0.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/AyeCode/ayecode-connect-helper.git",
+            "reference": "1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/AyeCode/ayecode-connect-helper/zipball/1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4",
+            "reference": "1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4",
+            "shasum": ""
+        },
+        "require": {
+            "composer/installers": "~1.0",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "dealerdirect/phpcodesniffer-composer-installer": "*",
+            "squizlabs/php_codesniffer": "^3.2",
+            "wp-coding-standards/wpcs": "*"
+        },
+        "time": "2020-02-26T18:53:58+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "ayecode-connect-helper.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "AyeCode Ltd",
+                "email": "contact@ayecode.io",
+                "homepage": "https://ayecode.io/",
+                "role": "Developer"
+            }
+        ],
+        "description": "Provides helper functionality for installing AyeCode Connect.",
+        "homepage": "https://github.com/AyeCode/ayecode-connect-helper",
+        "keywords": [
+            "AyeCode Connect",
+            "ayecode",
+            "wp"
+        ]
+    },
+    {
         "name": "ayecode/wp-ayecode-ui",
         "version": "0.1.6",
         "version_normalized": "0.1.6.0",
@@ -151,17 +203,17 @@
     },
     {
         "name": "composer/installers",
-        "version": "v1.7.0",
-        "version_normalized": "1.7.0.0",
+        "version": "v1.8.0",
+        "version_normalized": "1.8.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/composer/installers.git",
-            "reference": "141b272484481432cda342727a427dc1e206bfa0"
+            "reference": "7d610d50aae61ae7ed6675e58efeabdf279bb5e3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/installers/zipball/141b272484481432cda342727a427dc1e206bfa0",
-            "reference": "141b272484481432cda342727a427dc1e206bfa0",
+            "url": "https://api.github.com/repos/composer/installers/zipball/7d610d50aae61ae7ed6675e58efeabdf279bb5e3",
+            "reference": "7d610d50aae61ae7ed6675e58efeabdf279bb5e3",
             "shasum": ""
         },
         "require": {
@@ -175,7 +227,7 @@
             "composer/composer": "1.0.*@dev",
             "phpunit/phpunit": "^4.8.36"
         },
-        "time": "2019-08-12T15:00:31+00:00",
+        "time": "2020-02-07T10:39:20+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "Composer\\Installers\\Plugin",
@@ -211,6 +263,7 @@
             "Kanboard",
             "Lan Management System",
             "MODX Evo",
+            "MantisBT",
             "Mautic",
             "Maya",
             "OXID",
@@ -265,6 +318,7 @@
             "shopware",
             "silverstripe",
             "sydes",
+            "sylius",
             "symfony",
             "typo3",
             "wordpress",

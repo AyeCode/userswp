@@ -266,6 +266,8 @@ function uwp_maybe_check_recaptcha($form){
             // bail and add warning if still no recaptcha after 5 loops
             if(uwp_recaptcha_loops>=5){
                 jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').prop('disabled', false);
+                jQuery('.uwp-auth-modal .modal-content .uwp_register_submit').prop('disabled', false);
+                jQuery('.uwp-auth-modal .modal-content .uwp_forgot_submit').prop('disabled', false);
                 jQuery('.uwp-auth-modal .modal-content .uwp-captcha-render').addClass("alert alert-danger");
                 return false;
             }
@@ -335,7 +337,7 @@ function uwp_modal_login_form_process(){
 
 
 /**
- * Get the login form via ajax and load it in a modal.
+ * Get the register form via ajax and load it in a modal.
  */
 function uwp_modal_register_form(){
     var data = {
@@ -353,7 +355,7 @@ function uwp_modal_register_form(){
                 jQuery('.uwp-auth-modal .modal-content').html(data.data);
                 setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus().unbind('focus');}, 300); // set focus on the first input after load animation
 
-                // process login form
+                // process register form
                 jQuery(".uwp-auth-modal .modal-content form.uwp-registration-form").submit(function(e){
                     e.preventDefault(e);
                     uwp_modal_register_form_process();
