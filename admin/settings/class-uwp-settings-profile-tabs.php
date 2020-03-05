@@ -494,7 +494,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                             if($child_tab->tab_parent==$tab->id){
                                 ob_start();
                                 $this->tabs_field_adminhtml($child_tab, $field_ins_upd);
-                                $child_tabs = ob_get_clean();
+                                $child_tabs .= ob_get_clean();
                             }
                         }
 
