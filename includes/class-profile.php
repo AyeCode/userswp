@@ -575,7 +575,7 @@ class UsersWP_Profile {
 		foreach($tabs as $child_tab){
 			if(isset($child_tab->tab_parent) && $child_tab->tab_parent==$parent_id){
 				if(!empty($child_tab->tab_content)){ // override content
-					echo stripslashes( $child_tab->tab_content );
+					echo do_shortcode( stripslashes( $child_tab->tab_content ) );
 				}elseif($child_tab->tab_type=='meta'){ // meta info
 					echo do_shortcode('[uwp_user_meta key="'.$child_tab->tab_key.'"]');
 				}elseif($child_tab->tab_type=='fieldset'){ // meta info
