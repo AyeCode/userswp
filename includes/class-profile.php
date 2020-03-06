@@ -543,15 +543,11 @@ class UsersWP_Profile {
 		if(!empty($tab->tab_content)){ // override content
 			$content = stripslashes( $tab->tab_content );
 			echo do_shortcode( $content );
-		}elseif($tab->tab_type=='meta'){ // meta info
-			echo do_shortcode('[uwp_user_meta key="'.$tab->tab_key.'" show="value"]');
-		}elseif($tab->tab_type=='standard'){ // meta info
+		}elseif($tab->tab_type=='standard'){
 			$user = uwp_get_displayed_user();
 			do_action( 'uwp_profile_tab_content', $user , $tab );
 			do_action('uwp_profile_'.$tab->tab_key.'_tab_content', $user , $tab);
 		}
-
-//		echo '###';
 
 		echo self::tab_content_child($tab); // child elements
 
@@ -576,11 +572,12 @@ class UsersWP_Profile {
 			if(isset($child_tab->tab_parent) && $child_tab->tab_parent==$parent_id){
 				if(!empty($child_tab->tab_content)){ // override content
 					echo do_shortcode( stripslashes( $child_tab->tab_content ) );
-				}elseif($child_tab->tab_type=='meta'){ // meta info
-					echo do_shortcode('[uwp_user_meta key="'.$child_tab->tab_key.'"]');
-				}elseif($child_tab->tab_type=='fieldset'){ // meta info
+				}elseif($child_tab->tab_type=='fieldset'){
 					self::output_fieldset($child_tab);
-				}elseif($child_tab->tab_type=='standard'){ // meta info
+				}elseif($child_tab->tab_type=='standard'){
+					$user = uwp_get_displayed_user();
+					do_action( 'uwp_profile_tab_content', $user , $child_tab );
+					do_action('uwp_profile_'.$child_tab->tab_key.'_tab_content', $user , $child_tab);
 					if($child_tab->tab_key=='reviews'){
 						comments_template();
 					}
@@ -2078,18 +2075,21 @@ class UsersWP_Profile {
 
         // Date
         if ($field->field_type == 'datepicker') {
-            $extra_fields = unserialize($field->extra_fields);
+	        $date_format = get_option( 'date_format' );
 
-            if ($extra_fields['date_format'] == '')
-                $extra_fields['date_format'] = 'yy-mm-dd';
-
-            $date_format = $extra_fields['date_format'];
-
-            if (!empty($value)) {
-                $value = date('Y-m-d', $value);
+            if(isset($field->extra_fields) && !empty($field->extra_fields)){
+	            $extra_fields = unserialize($field->extra_fields);
+	            if (isset($extra_fields['date_format']) && !empty($extra_fields['date_format'])) {
+		            $date_format = $extra_fields['date_format'];
+                }
             }
 
-            $value = uwp_date($value, $date_format, 'Y-m-d');
+            if (!empty($value)) {
+                $value = date($date_format, $value);
+            } else {
+	            $value = '';
+            }
+
         }
 
 

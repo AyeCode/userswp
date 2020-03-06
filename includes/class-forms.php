@@ -336,7 +336,7 @@ class UsersWP_Forms {
 			if (!empty($first_name) || !empty($last_name)) {
 				$display_name = $first_name . ' ' . $last_name;
 			} else {
-				$display_name = $result['username'];
+				$display_name = !empty($result['username']) ? $result['username'] : '';
 			}
 		}
 

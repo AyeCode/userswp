@@ -1320,7 +1320,7 @@ class UsersWP_Form_Builder {
             $field_type = sanitize_text_field($request_field['field_type']);
             $data_type = sanitize_text_field($request_field['data_type']);
             $field_type_key = isset($request_field['field_type_key']) ? sanitize_text_field($request_field['field_type_key']) : $field_type;
-            $htmlvar_name = isset($request_field['htmlvar_name']) ? sanitize_text_field($request_field['htmlvar_name']) : '';
+	        $htmlvar_name = isset( $request_field['htmlvar_name'] ) ? str_replace(array('-',' ','"',"'"), array('_','','',''), sanitize_title_with_dashes( $request_field['htmlvar_name'] ) ) : null;
             $default_value = isset($request_field['default_value']) ? sanitize_text_field($request_field['default_value']) : '';
             $sort_order = isset($request_field['sort_order']) ? absint($request_field['sort_order']) : '';
             $is_active = isset($request_field['is_active']) ? absint($request_field['is_active']) : 1;
@@ -1341,6 +1341,19 @@ class UsersWP_Form_Builder {
             $decimal_point = $decimal_point > 0 ? ($decimal_point > 10 ? 10 : $decimal_point) : '';
             $validation_pattern = isset($request_field['validation_pattern']) ? sanitize_text_field($request_field['validation_pattern']) : '';
             $validation_msg = isset($request_field['validation_msg']) ? sanitize_text_field($request_field['validation_msg']) : '';
+
+	        if ( empty( $htmlvar_name ) && $field_type == 'fieldset') {
+		        $htmlvar_name = $field_type_key;
+	        }
+
+	        if ( empty( $htmlvar_name ) ) {
+		        $htmlvar_name = sanitize_key( str_replace( array( '-', ' ', '"', "'" ), array( '_', '_', '', '' ), $request_field['site_title'] ) );
+		        if ( str_replace( '_', '', $htmlvar_name ) != '' ) {
+			        $htmlvar_name = substr( $htmlvar_name, 0, 50 );
+		        } else {
+			        $htmlvar_name = time();
+		        }
+	        }
 
             if (is_array($show_in)) {
                 $show_in = implode(",", $request_field['show_in']);
