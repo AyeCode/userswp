@@ -3339,9 +3339,9 @@ class UsersWP_Forms {
 		$redirect_page_id = uwp_get_option('register_redirect_to', '');
 
 		if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
-			$redirect_to = esc_url($_REQUEST['redirect_to']);
+			$redirect_to = esc_url_raw($_REQUEST['redirect_to']);
 		} elseif (isset($data['redirect_to']) && !empty($data['redirect_to'])) {
-			$redirect_to = esc_url($data['redirect_to']);
+			$redirect_to = esc_url_raw($data['redirect_to']);
 		} elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
 			if (uwp_is_wpml()) {
 				$wpml_page_id = uwp_wpml_object_id($redirect_page_id, 'page', true, ICL_LANGUAGE_CODE);
@@ -3374,9 +3374,9 @@ class UsersWP_Forms {
 		$redirect_page_id = uwp_get_option('login_redirect_to', -1);
 
 		if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
-			$redirect_to = esc_url($_REQUEST['redirect_to']);
+			$redirect_to = esc_url_raw($_REQUEST['redirect_to']);
 		} elseif (isset($data['redirect_to']) && !empty($data['redirect_to'])) {
-			$redirect_to = esc_url($data['redirect_to']);
+			$redirect_to = esc_url_raw($data['redirect_to']);
 		} elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
 			if (uwp_is_wpml()) {
 				$wpml_page_id = uwp_wpml_object_id($redirect_page_id, 'page', true, ICL_LANGUAGE_CODE);
