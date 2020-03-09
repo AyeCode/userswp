@@ -122,7 +122,7 @@ No questions so far, but don't hesitate to ask!
 == Changelog ==
 
 = 1.2.1.8 =
-* Login redirect url encoded twite causes redirect issue - FIXED
+* Login redirect url encoded twice causes redirect issue - FIXED
 
 = 1.2.1.7 =
 * Activation link tag not working for new registrations - FIXED
