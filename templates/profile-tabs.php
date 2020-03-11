@@ -40,8 +40,7 @@ if(!$user){
 						<li id="uwp-profile-<?php echo $tab_id; ?>"
 						    class="<?php echo $active; ?>">
 							<a href="<?php echo esc_url($tab_url); ?>">
-								<span class="uwp-profile-tab-label uwp-profile-<?php echo $tab_id; ?>-label "><?php echo esc_html($tab['tab_name']); ?></span>
-<!--								<span class="uwp-profile-tab-count uwp-profile---><?php //echo $tab_id; ?><!---count">--><?php //echo '0';//$tab['count']; ?><!--</span>-->
+								<span class="uwp-profile-tab-label uwp-profile-<?php echo $tab_id; ?>-label "><?php echo esc_html(__($tab['tab_name'], 'userswp')); ?></span>
 							</a>
 						</li>
 						<?php

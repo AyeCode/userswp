@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.1.7
+Stable tag: 1.2.1.8
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -125,6 +125,8 @@ No questions so far, but don't hesitate to ask!
 * Custom field should auto generate key from title if key is not provided - FIXED
 * Child tab not showing output - FIXED
 * Date format not working properly for custom field with type date - FIXED
+* Login redirect url encoded causes redirect issue - FIXED
+* Short tag to send user submitted information in email for register form - ADDED
 
 = 1.2.1.7 =
 * Activation link tag not working for new registrations - FIXED

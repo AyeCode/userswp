@@ -486,7 +486,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				$script = $this->inline_script();
 				wp_add_inline_script( 'bootstrap-dummy', $script  );
 			}
-
+			
 		}
 
 		/**
@@ -533,7 +533,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 		/**
 		 * Get a list of themes and their default JS settings.
-		 *
+		 * 
 		 * @return array
 		 */
 		public function theme_js_settings(){
@@ -553,7 +553,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		public function get_settings() {
 
 			$db_settings = get_option( 'ayecode-ui-settings' );
-			$js_default = $js_default_backend = 'core-popper';
+			$js_default = 'core-popper';
+			$js_default_backend = $js_default;
 
 			// maybe set defaults (if no settings set)
 			if(empty($db_settings)){
