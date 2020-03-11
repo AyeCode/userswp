@@ -413,13 +413,6 @@ function save_field(id) {
 
         var htmlvar_name = jQuery('#licontainer_' + id + ' #htmlvar_name').val();
 
-        if (htmlvar_name == '') {
-
-            alert(uwp_admin_ajax.custom_field_not_blank_var);
-
-            return false;
-        }
-
         if (htmlvar_name != '') {
 
             var iChars = "!`@#$%^&*()+=-[]\\\';,./{}|\":<>?~ ";

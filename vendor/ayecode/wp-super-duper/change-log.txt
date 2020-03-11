@@ -1,3 +1,7 @@
+= 1.0.17 =
+* Title & description in block editor shows escaped special characters - FIXED
+* Widget advanced settings button line-height too tall - FIXED
+
 = 1.0.16 =
 * wp.editor is deprecated, updated to wp.blockEditor - CHANGED
 * textarea field type now supported - ADDED

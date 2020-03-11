@@ -1,3 +1,6 @@
+= 0.1.7 =
+* variable $js_default_backend not defined in some cases - FIXED
+
 = 0.1.6 =
 * Separate backend settings added for JS/CSS - ADDED
 

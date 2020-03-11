@@ -120,6 +120,7 @@ class UsersWP_Tables {
 						avatar_thumb varchar(255) NULL DEFAULT NULL,
 						banner_thumb varchar(255) NULL DEFAULT NULL,
                         display_name varchar(255) NULL DEFAULT NULL,
+                        user_url text NULL DEFAULT NULL,
 						PRIMARY KEY  (user_id)
 						) $collate ";
 

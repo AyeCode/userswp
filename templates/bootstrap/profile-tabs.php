@@ -50,7 +50,7 @@ if($output === '' || $output=='head'){
 									echo '<i class="'.esc_attr($tab['tab_icon']).'"></i>';
 								}
 								?>
-								<span class="uwp-profile-tab-label uwp-profile-<?php echo $tab_id; ?>-label "><?php echo esc_html($tab['tab_name']); ?></span>
+								<span class="uwp-profile-tab-label uwp-profile-<?php echo $tab_id; ?>-label "><?php echo esc_html(__($tab['tab_name'], 'userswp')); ?></span>
 							</a>
 						</li>
 						<?php

@@ -336,7 +336,7 @@ class UsersWP_Forms {
 			if (!empty($first_name) || !empty($last_name)) {
 				$display_name = $first_name . ' ' . $last_name;
 			} else {
-				$display_name = $result['username'];
+				$display_name = !empty($result['username']) ? $result['username'] : '';
 			}
 		}
 
@@ -437,6 +437,8 @@ class UsersWP_Forms {
 
 		$reg_action = uwp_get_option('uwp_registration_action', false);
 
+		$form_fields = apply_filters('uwp_send_mail_form_fields', "", 'register', $user_id);
+
 		if ($reg_action == 'require_email_activation' && !$generated_password) {
 
 			$user_data = get_userdata($user_id);
@@ -481,6 +483,7 @@ class UsersWP_Forms {
 			$email_vars = array(
 				'user_id' => $user_id,
 				'login_details' => $message,
+				'form_fields' => $form_fields,
 			);
 
 			UsersWP_Mails::send($user_data->user_email, 'registration_success', $email_vars);
@@ -511,6 +514,7 @@ class UsersWP_Forms {
 			$email_vars = array(
 				'user_id' => $user_id,
 				'extras' => $extras,
+				'form_fields' => $form_fields,
 			);
 
 			UsersWP_Mails::send(get_option( 'admin_email' ), 'registration_success', $email_vars, true);
@@ -1328,6 +1332,36 @@ class UsersWP_Forms {
 	 */
 	public function init_mail_form_fields( $form_fields, $type, $user_id ) {
 		switch ($type) {
+			case "register":
+				$fields = get_register_form_fields();
+				$user_data = get_userdata($user_id);
+				if( !empty( $fields ) && is_array($fields)) {
+					$form_fields = '<p><b>'.__('User Information:','userswp').'</b></p>';
+					$excluded = uwp_get_excluded_fields();
+					foreach ( $fields as $key => $field ) {
+						if ($field->is_active != '1' || in_array($field->htmlvar_name, $excluded)) {
+							continue;
+						}
+						if( $field->htmlvar_name == 'email' && isset($user_data->user_email) ) {
+							$field_value = $user_data->user_email;
+						} elseif ( $field->htmlvar_name == 'display_name' && isset($user_data->user_login) ) {
+							$field_value = $user_data->user_login;
+						} elseif ( $field->htmlvar_name == 'bio' ){
+							$field_value = get_user_meta($user_id, 'description', true);
+						} else {
+							$field_value = uwp_get_usermeta($user_id, $field->htmlvar_name);
+						}
+
+						if(is_array($field_value) && count($field_value) > 0){
+							$field_value = uwp_maybe_serialize($field->htmlvar_name, $field_value);
+						}
+
+						if(isset($field->site_title) && !empty($field_value)){
+							$form_fields .= '<p><b>' . __($field->site_title, 'userswp') . '</b>:&nbsp;' . $field_value . '</p>';
+						}
+					}
+				}
+				break;
 			case "account":
 				$fields = get_account_form_fields();
 				$user_data = get_userdata($user_id);
@@ -1352,7 +1386,7 @@ class UsersWP_Forms {
 						}
 
 						if(isset($field->site_title) && !empty($field_value)){
-							$form_fields .= '<p><b>' . $field->site_title . '</b>&nbsp;' . $field_value . '</p>';
+							$form_fields .= '<p><b>' . __($field->site_title, 'userswp') . '</b>:&nbsp;' . $field_value . '</p>';
 						}
 					}
 				}
@@ -3339,9 +3373,9 @@ class UsersWP_Forms {
 		$redirect_page_id = uwp_get_option('register_redirect_to', '');
 
 		if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
-			$redirect_to = esc_url($_REQUEST['redirect_to']);
+			$redirect_to = esc_url_raw($_REQUEST['redirect_to']);
 		} elseif (isset($data['redirect_to']) && !empty($data['redirect_to'])) {
-			$redirect_to = esc_url($data['redirect_to']);
+			$redirect_to = esc_url_raw($data['redirect_to']);
 		} elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
 			if (uwp_is_wpml()) {
 				$wpml_page_id = uwp_wpml_object_id($redirect_page_id, 'page', true, ICL_LANGUAGE_CODE);
@@ -3374,9 +3408,9 @@ class UsersWP_Forms {
 		$redirect_page_id = uwp_get_option('login_redirect_to', -1);
 
 		if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
-			$redirect_to = esc_url($_REQUEST['redirect_to']);
+			$redirect_to = esc_url_raw($_REQUEST['redirect_to']);
 		} elseif (isset($data['redirect_to']) && !empty($data['redirect_to'])) {
-			$redirect_to = esc_url($data['redirect_to']);
+			$redirect_to = esc_url_raw($data['redirect_to']);
 		} elseif (isset($redirect_page_id) && (int)$redirect_page_id > 0) {
 			if (uwp_is_wpml()) {
 				$wpml_page_id = uwp_wpml_object_id($redirect_page_id, 'page', true, ICL_LANGUAGE_CODE);

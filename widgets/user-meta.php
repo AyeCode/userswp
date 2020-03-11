@@ -144,7 +144,7 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
 
 	    $key = str_replace('uwp_account_', '', $args['key']);
 
-        $fields = $wpdb->get_results("SELECT site_title,field_icon,htmlvar_name,field_type,option_values,field_type_key FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = '".$key."'");
+        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = '".$key."'");
 
         if(!$fields){
             return '';

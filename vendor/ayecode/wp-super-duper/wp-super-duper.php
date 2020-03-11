@@ -13,11 +13,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 *
 	 * Class WP_Super_Duper
 	 * @since 1.0.16 change log moved to file change-log.txt - CHANGED
-	 * @ver 1.0.16
+	 * @ver 1.0.17
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.16";
+		public $version = "1.0.17";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -1109,7 +1109,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						jQuery($this).data('sd-widget-enabled', true);
 					}
 
-					var $button = '<button title="<?php _e( 'Advanced Settings' );?>" class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><span class="dashicons dashicons-admin-settings" style="width: 28px;font-size: 28px;"></span></button>';
+					var $button = '<button title="<?php _e( 'Advanced Settings' );?>" style="line-height: 28px;" class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><span class="dashicons dashicons-admin-settings" style="width: 28px;font-size: 28px;"></span></button>';
 					var form = jQuery($this).parents('' + $selector + '');
 
 					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length == 0) {
@@ -1628,8 +1628,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					 *                             registered; otherwise `undefined`.
 					 */
 					registerBlockType('<?php echo str_replace( "_", "-", sanitize_title_with_dashes( $this->options['textdomain'] ) . '/' . sanitize_title_with_dashes( $this->options['class_name'] ) );  ?>', { // Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-						title: '<?php echo $this->options['name'];?>', // Block title.
-						description: '<?php echo esc_attr( $this->options['widget_ops']['description'] )?>', // Block title.
+						title: '<?php echo addslashes( $this->options['name'] ); ?>', // Block title.
+						description: '<?php echo addslashes( $this->options['widget_ops']['description'] )?>', // Block title.
 						icon: <?php echo $this->get_block_icon($this->options['block-icon']);?>,//'<?php echo isset( $this->options['block-icon'] ) ? esc_attr( $this->options['block-icon'] ) : 'shield-alt';?>', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 						supports: {
 							<?php
@@ -1852,7 +1852,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								el('div', {
 									dangerouslySetInnerHTML: {__html: onChangeContent()},
 									className: props.className,
-									style: {'min-height': '30px'}
+									style: {'minHeight': '30px'}
 								})
 								<?php
 								}
@@ -1976,9 +1976,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			} elseif ( $args['type'] == 'select' || $args['type'] == 'multiselect' ) {
 				$type = 'SelectControl';
 				if ( ! empty( $args['options'] ) ) {
-					$options .= "options  : [";
+					$options .= "options: [";
 					foreach ( $args['options'] as $option_val => $option_label ) {
-						$options .= "{ value : '" . esc_attr( $option_val ) . "',     label : '" . esc_attr( $option_label ) . "'     },";
+						$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
 					}
 					$options .= "],";
 				}
@@ -2002,28 +2002,25 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				echo $this->block_props_replace( $args['element_require'], true ) . " && ";
 			}
 			?>
-			el(
-			wp.components.<?php echo esc_attr( $type );?>,
-			{
-			label: '<?php echo esc_attr( $args['title'] );?>',
-			help: '<?php if ( isset( $args['desc'] ) ) {
-				echo esc_attr( $args['desc'] );
-			}?>',
-			value: <?php echo $value;?>,
-			<?php if ( $type == 'TextControl' && $args['type'] != 'text' ) {
-				echo "type: '" . esc_attr( $args['type'] ) . "',";
-			}?>
-			<?php if ( ! empty( $args['placeholder'] ) ) {
-				echo "placeholder: '" . esc_attr( $args['placeholder'] ) . "',";
-			}?>
-			<?php echo $options;?>
-			<?php echo $extra;?>
-			<?php echo $custom_attributes;?>
-			onChange: function ( <?php echo $key;?> ) {
-			<?php echo $onchange;?>
-			}
-			}
-			),
+			el( wp.components.<?php echo $type;?>, {
+				label: '<?php echo addslashes( $args['title'] );?>',
+				help: '<?php if ( isset( $args['desc'] ) ) {
+					echo addslashes( $args['desc'] );
+				}?>',
+				value: <?php echo $value;?>,
+				<?php if ( $type == 'TextControl' && $args['type'] != 'text' ) {
+				echo "type: '" . addslashes( $args['type'] ) . "',";
+				}?>
+				<?php if ( ! empty( $args['placeholder'] ) ) {
+				echo "placeholder: '" . addslashes( $args['placeholder'] ) . "',";
+				}?>
+				<?php echo $options;?>
+				<?php echo $extra;?>
+				<?php echo $custom_attributes;?>
+				onChange: function ( <?php echo $key;?> ) {
+					<?php echo $onchange;?>
+				}
+			} ),
 			<?php
 		}
 

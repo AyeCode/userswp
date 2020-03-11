@@ -30,7 +30,6 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 	        add_action('uwp_manage_available_fields_predefined', array( $this,  'manage_tabs_predefined_fields' ), 10, 1);
 	        add_action('uwp_manage_available_fields_custom', array( $this,  'manage_available_fields_custom' ), 10, 1);
 	        add_action('uwp_manage_selected_fields', array( $this,  'manage_tabs_selected_fields' ), 10, 1);
-	        add_filter('uwp_tabs_fields', array( $this,  'tabs_extra_fields' ), 10, 1);
 	        add_action('wp_ajax_uwp_ajax_profile_tabs_action', array( $this,  'tabs_ajax_handler'));
 
         }
@@ -530,40 +529,6 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		    $fields = array();
 
 		    return apply_filters('uwp_tabs_fields', $fields, $form_type);
-	    }
-
-	    /**
-         * Returns tabs fields
-         *
-         * @since       2.0.0
-         * @package     userswp
-         *
-         * @param       array   $fields   Extra fields
-         *
-         * @return array
-         *
-         */
-	    public function tabs_extra_fields($fields)
-	    {
-		    global $wpdb;
-
-		    $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-		    $cfs = $wpdb->get_results("SELECT htmlvar_name, site_title, field_type, field_icon FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
-
-		    if(!empty($cfs)){
-                foreach ($cfs as $row) {
-                    $key = str_replace('uwp_account_', '', $row->htmlvar_name);
-                    $fields[] = array(
-                        'tab_type'   => 'meta',
-                        'tab_name'   => esc_attr($row->site_title),
-                        'tab_icon'   => isset($row->field_icon) && $row->field_icon ? $row->field_icon : "fas fa-cog",
-                        'tab_key'    => $key,
-                        'tab_content'=> ''
-                    );
-                }
-		    }
-
-		    return $fields;
 	    }
 
 	    /**
