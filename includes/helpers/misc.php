@@ -1340,7 +1340,7 @@ function uwp_get_localize_data(){
 }
 
 function uwp_is_page_builder(){
-    if( isset($_GET['elementor-preview']) && $_GET['elementor-preview'] > 0){
+    if( isset($_GET['elementor-preview']) && $_GET['elementor-preview'] > 0 || isset($_GET['ct_builder'])){
         return true; // Elementor builder.
     }
 
