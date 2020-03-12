@@ -1340,11 +1340,18 @@ function uwp_get_localize_data(){
 }
 
 function uwp_is_page_builder(){
-    if( isset($_GET['elementor-preview']) && $_GET['elementor-preview'] > 0 || isset($_GET['ct_builder'])){
-        return true; // Elementor builder.
-    }
-
-    return false;
+	if(
+		isset($_GET['elementor-preview']) && $_GET['elementor-preview'] > 0 // elementor
+		|| isset( $_REQUEST['et_fb'] ) || isset( $_REQUEST['et_pb_preview'] ) // divi
+		|| isset( $_REQUEST['fl_builder'] ) // beaver
+		|| ! empty( $_REQUEST['siteorigin_panels_live_editor'] ) // siteorigin
+		|| ! empty( $_REQUEST['cornerstone_preview'] ) // cornerstone
+		|| ! empty( $_REQUEST['fb-edit'] ) || ! empty( $_REQUEST['fusion_load_nonce'] ) // fusion builder
+		|| ! empty( $_REQUEST['ct_builder'] ) // oxygen
+	){
+		return true; // builder.
+	}
+	return false;
 }
 
 /**

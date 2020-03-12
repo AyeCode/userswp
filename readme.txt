@@ -122,7 +122,7 @@ No questions so far, but don't hesitate to ask!
 == Changelog ==
 
 = 1.2.1.9 =
-* Oxygen editor compatibility - ADDED
+* Oxygen editor and other known page builder plugins compatibility - ADDED
 
 = 1.2.1.8 =
 * Custom field should auto generate key from title if key is not provided - FIXED
