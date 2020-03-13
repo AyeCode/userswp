@@ -123,6 +123,8 @@ No questions so far, but don't hesitate to ask!
 
 = 1.2.1.9 =
 * Oxygen editor and other known page builder plugins compatibility - ADDED
+* Menu pages not triggering lightbox when page name changed - FIXED
+* Sub menu items can trigger parent menu item lightbox - FIXED
 
 = 1.2.1.8 =
 * Custom field should auto generate key from title if key is not provided - FIXED
