@@ -127,7 +127,7 @@ class UsersWP_Menus {
 
 
         if (!empty($users_page_data)) {
-            $users_wp_menu_items[] = $users_page_data;
+            $users_wp_menu_items['users'] = $users_page_data;
         }
 
 
@@ -156,18 +156,18 @@ class UsersWP_Menus {
         $users_wp_menu_items = array();
 
         if (!empty($account_page_data)) {
-            $users_wp_menu_items[] = $account_page_data;
+            $users_wp_menu_items['account'] = $account_page_data;
         }
 
         if (!empty($change_page_data)) {
-            $users_wp_menu_items[] = $change_page_data;
+            $users_wp_menu_items['change'] = $change_page_data;
         }
 
         if (!empty($profile_page_data)) {
-            $users_wp_menu_items[] = $profile_page_data;
+            $users_wp_menu_items['profile'] = $profile_page_data;
         }
 
-        $users_wp_menu_items[] = array(
+        $users_wp_menu_items['logout'] = array(
             'name' => __( 'Log out', 'userswp' ),
             'slug' => 'logout',
             'link' => wp_login_url(),
@@ -198,15 +198,15 @@ class UsersWP_Menus {
         $users_wp_menu_items = array();
 
         if (!empty($register_page_data)) {
-            $users_wp_menu_items[] = $register_page_data;
+            $users_wp_menu_items['register'] = $register_page_data;
         }
 
         if (!empty($login_page_data)) {
-            $users_wp_menu_items[] = $login_page_data;
+            $users_wp_menu_items['login'] = $login_page_data;
         }
 
         if (!empty($forgot_page_data)) {
-            $users_wp_menu_items[] = $forgot_page_data;
+            $users_wp_menu_items['forgot'] = $forgot_page_data;
         }
 
 
@@ -252,9 +252,11 @@ class UsersWP_Menus {
             return false;
         }
 
+//	    print_r($users_wp_menu_items);
+
         $page_args = array();
 
-        foreach ( $users_wp_menu_items as $users_wp_item ) {
+        foreach ( $users_wp_menu_items as $type => $users_wp_item ) {
             $page_args[ $users_wp_item['slug'] ] = (object) array(
                 'ID'             => -1,
                 'post_title'     => $users_wp_item['name'],
@@ -264,8 +266,10 @@ class UsersWP_Menus {
                 'post_type'      => 'page',
                 'post_status'    => 'publish',
                 'comment_status' => 'closed',
-                'guid'           => $users_wp_item['link']
+                'guid'           => $users_wp_item['link'],
+                'lightbox_class' => "users-wp-$type-nav",
             );
+
         }
 
         return $page_args;
