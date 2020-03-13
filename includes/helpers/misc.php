@@ -1347,7 +1347,7 @@ function uwp_is_page_builder(){
 		|| ! empty( $_REQUEST['siteorigin_panels_live_editor'] ) // siteorigin
 		|| ! empty( $_REQUEST['cornerstone_preview'] ) // cornerstone
 		|| ! empty( $_REQUEST['fb-edit'] ) || ! empty( $_REQUEST['fusion_load_nonce'] ) // fusion builder
-		|| ! empty( $_REQUEST['ct_builder'] ) // oxygen
+		|| ! empty( $_REQUEST['ct_builder'] ) || ( ! empty( $_REQUEST['action'] ) && ( substr( $_REQUEST['action'], 0, 11 ) === "oxy_render_"  || substr( $_REQUEST['action'], 0, 10 ) === "ct_render_" )  ) // oxygen
 	){
 		return true; // builder.
 	}
