@@ -114,7 +114,7 @@ function get_change_form_fields() {
  * @param       string      $type           Form type.
  * @param       array|bool  $fields         Fields applicable for validation.
  *
- * @return      array|mixed|void|WP_Error   Validated form data.
+ * @return      array|mixed|WP_Error   Validated form data.
  */
 function uwp_validate_fields($data, $type, $fields = false) {
     $validation = new UsersWP_Validation();

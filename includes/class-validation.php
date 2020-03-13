@@ -19,7 +19,7 @@ class UsersWP_Validation {
      * @param       string      $type           Form type.
      * @param       array|bool  $fields         Fields applicable for validation.
      *
-     * @return      array|mixed|void|WP_Error   Validated form data.
+     * @return      array|mixed|WP_Error   Validated form data.
      */
     public function validate_fields($data, $type, $fields = false) {
 
