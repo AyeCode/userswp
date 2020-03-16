@@ -289,7 +289,7 @@ function uwp_maybe_check_recaptcha($form){
             }else if($form == 'forgot'){
                 uwp_modal_forgot_password_form_process();
             }
-        }, 50); // 6 x 500 = 3 seconds we wait for response before showing error.
+        }, 500); // 6 x 500 = 3 seconds we wait for response before showing error.
         uwp_recaptcha_loops++;
         return false;
     }
