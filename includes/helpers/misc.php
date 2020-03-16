@@ -1329,6 +1329,8 @@ function uwp_get_localize_data(){
         'uwp_more_char_limit' => 100,
         'uwp_more_text' => __('more','userswp'),
         'uwp_less_text' => __('less','userswp'),
+        'error' => __('Something went wrong.','userswp'),
+        'error_retry' => __('Something went wrong, please retry.','userswp'),
         'uwp_more_ellipses_text' => '...',
         'ajaxurl' => admin_url('admin-ajax.php'),
         'login_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("login_modal",1) ? 1 : '',
