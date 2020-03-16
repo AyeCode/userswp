@@ -143,7 +143,7 @@ class UsersWP_Forms {
 						$value  = !empty($link['url']) ? esc_url($link['url']) : '';
 						$display_none = !empty($link['display_none']) ? 'style="display:none;"' : '';
 						echo "<option $disabled $selected value='$value' $display_none>";
-						echo esc_attr($link['text']);
+						echo esc_attr__($link['text'],'userswp');
 						echo "</option>";
 					}
 				}
@@ -474,9 +474,9 @@ class UsersWP_Forms {
 				$message_pass = __("Password you entered during registration.", 'userswp');
 			}
 
-			$message = __('<p><b>' . __('Your login Information :', 'userswp') . '</b></p>
+			$message = '<p><b>' . __('Your login Information :', 'userswp') . '</b></p>
             <p>' . __('Username:', 'userswp') . ' ' . $user_data->user_login . '</p>
-            <p>' . __('Password:', 'userswp') . ' ' . $message_pass . '</p>');
+            <p>' . __('Password:', 'userswp') . ' ' . $message_pass . '</p>';
 
 			$message = apply_filters('uwp_register_mail_message', $message, $user_id, $this->generated_password);
 
@@ -712,7 +712,7 @@ class UsersWP_Forms {
 			if(wp_doing_ajax()){wp_send_json_success($message);}
 			else{
 				$redirect_to = $this->get_login_redirect_url($data, $user);
-				wp_redirect($redirect_to);
+				wp_safe_redirect($redirect_to);
 				exit();
 			}
 
@@ -1737,6 +1737,7 @@ class UsersWP_Forms {
 
 			ob_start(); // Start  buffering;
 			$option_values_arr = uwp_string_values_to_options($field->option_values, true);
+			$site_title = uwp_get_form_label($field);
 
 			// bootstrap
 			if( $design_style ) {
@@ -1744,13 +1745,13 @@ class UsersWP_Forms {
 				echo aui()->select(array(
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => uwp_get_form_label( $field ),
-					'title'   => uwp_get_form_label( $field ),
+					'placeholder'   => $site_title,
+					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
 					'validation_text' => !empty($field->is_required) ? __($field->required_msg, 'userswp') : '',
 					'help_text' => __( $field->help_text, 'userswp' ),
-					'label' => uwp_get_form_label( $field ),
+					'label' => $site_title,
 					'options'=> $option_values_arr,
 					'select2' => true
 				));
@@ -1760,7 +1761,6 @@ class UsersWP_Forms {
                      class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
 
 					<?php
-					$site_title = uwp_get_form_label($field);
 					if (!is_admin()) { ?>
                         <label class="<?php echo esc_attr($bs_sr_only);?>">
 							<?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
@@ -1842,20 +1842,20 @@ class UsersWP_Forms {
 			}
 
 			$option_values_arr = uwp_string_values_to_options($field->option_values, true);
-
+			$site_title = uwp_get_form_label($field);
 			// bootstrap
 			if( $design_style ) {
 
 				echo aui()->select(array(
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => uwp_get_form_label( $field ),
-					'title'   => uwp_get_form_label( $field ),
+					'placeholder'   => $site_title,
+					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
 					'validation_text' => !empty($field->is_required) ? __($field->required_msg, 'userswp') : '',
 					'help_text' => __( $field->help_text, 'userswp' ),
-					'label' => uwp_get_form_label( $field ),
+					'label' => $site_title,
 					'options'=> $option_values_arr,
 					'select2' => true,
 					'multiple' => true
@@ -1868,7 +1868,6 @@ class UsersWP_Forms {
 				     } ?> uwp_form_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 
 					<?php
-					$site_title = uwp_get_form_label( $field );
 					if ( ! is_admin() ) { ?>
                         <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
 							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
@@ -2061,13 +2060,13 @@ class UsersWP_Forms {
 					'type'  =>  'checkbox',
 					'id'    =>  wp_doing_ajax() ? $field->htmlvar_name."_ajax" : $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => uwp_get_form_label( $field ),
-					'title'   => uwp_get_form_label( $field ),
+					'placeholder'   => $site_title,
+					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
 					'validation_text' => !empty($field->is_required) ? __($field->required_msg, 'userswp') : '',
 					'help_text' => __( $field->help_text, 'userswp' ),
-					'label' => uwp_get_form_label( $field ),
+					'label' => $site_title,
 				));
 			}else{
 				?>
@@ -2298,7 +2297,7 @@ class UsersWP_Forms {
 					'required'  => $field->is_required,
 					'validation_text' => __($field->required_msg, 'userswp'),
 					'help_text' => __( $field->help_text, 'userswp' ),
-					'label' => is_admin() ? '' : uwp_get_form_label( $field ),
+					'label' => is_admin() ? '' : $site_title,
 					'step' => $step
 				));
 			}else{
@@ -2382,7 +2381,7 @@ class UsersWP_Forms {
 					'required'  => $field->is_required,
 					'validation_text' => __($field->required_msg, 'userswp'),
 					'help_text' => __( $field->help_text, 'userswp' ),
-					'label' => is_admin() ? '' : uwp_get_form_label( $field ),
+					'label' => is_admin() ? '' : $site_title,
 					'rows' => '4'
 				));
 			}else{
@@ -2448,9 +2447,10 @@ class UsersWP_Forms {
 		if(empty($html)) {
 
 			ob_start(); // Start  buffering;
+			$site_title = uwp_get_form_label($field);
 			?>
             <h3 class="uwp_input_fieldset <?php echo $field->css_class; ?>">
-				<?php echo $field->site_title;; ?>
+				<?php echo $site_title; ?>
 				<?php if ( $field->help_text != '' ) {
 					echo '<small>( ' . $field->help_text . ' )</small>';
 				} ?></h3>
@@ -2491,6 +2491,7 @@ class UsersWP_Forms {
 			$bs_form_control = $design_style ? "form-control" : "";
 
 			ob_start(); // Start  buffering;
+			$site_title = uwp_get_form_label( $field );
 
 			// bootstrap
 			if( $design_style ){
@@ -2498,13 +2499,13 @@ class UsersWP_Forms {
 					'type'  =>  'url',
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => uwp_get_form_label( $field ),
-					'title'   => uwp_get_form_label( $field ),
+					'placeholder'   => $site_title,
+					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
 					'validation_text' => __( 'Please enter a valid URL including http://', 'userswp' ),
 					'help_text' => __( $field->help_text, 'userswp' ),
-					'label' => is_admin() ? '' : uwp_get_form_label( $field )
+					'label' => is_admin() ? '' : $site_title
 				));
 			}else {
 
@@ -2516,7 +2517,6 @@ class UsersWP_Forms {
 				     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 
 					<?php
-					$site_title = uwp_get_form_label( $field );
 					if ( ! is_admin() ) { ?>
                         <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
 							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
@@ -2585,18 +2585,19 @@ class UsersWP_Forms {
 			$bs_form_control = $design_style ? "form-control" : "";
 
 			ob_start(); // Start  buffering;
+			$site_title = uwp_get_form_label( $field );
 
 			if( $design_style ){
 				echo aui()->input(array(
 					'type'  =>  'email',
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => uwp_get_form_label( $field ),
-					'title'   => uwp_get_form_label( $field ),
+					'placeholder'   => $site_title,
+					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
 					'help_text' => __( $field->help_text, 'userswp' ),
-					'label' => is_admin() ? '' : uwp_get_form_label( $field )
+					'label' => is_admin() ? '' : $site_title
 				));
 			}else {
 
@@ -2608,7 +2609,6 @@ class UsersWP_Forms {
 				     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 
 					<?php
-					$site_title = uwp_get_form_label( $field );
 					if ( ! is_admin() ) { ?>
                         <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
 							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
@@ -2679,18 +2679,19 @@ class UsersWP_Forms {
 			$bs_form_control = $design_style ? "form-control" : "";
 
 			ob_start(); // Start  buffering;
+			$site_title = uwp_get_form_label( $field );
 
 			if( $design_style ){
 				echo aui()->input(array(
 					'type'  =>  'password',
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => uwp_get_form_label( $field ),
-					'title'   => uwp_get_form_label( $field ),
+					'placeholder'   => $site_title,
+					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
 					'help_text' => __( $field->help_text, 'userswp' ),
-					'label' => is_admin() ? '' : uwp_get_form_label( $field )
+					'label' => is_admin() ? '' : $site_title
 				));
 			}else {
 				?>
@@ -2698,7 +2699,6 @@ class UsersWP_Forms {
 					echo 'required_field';
 				} ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 					<?php
-					$site_title = uwp_get_form_label( $field );
 					if ( ! is_admin() ) { ?>
                         <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
 							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
@@ -2758,18 +2758,19 @@ class UsersWP_Forms {
 			$bs_sr_only = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 			ob_start(); // Start  buffering;
+			$site_title = uwp_get_form_label( $field );
 
 			if( $design_style ){
 				echo aui()->input(array(
 					'type'  =>  'tel',
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => uwp_get_form_label( $field ),
-					'title'   => uwp_get_form_label( $field ),
+					'placeholder'   => $site_title,
+					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
 					'help_text' => __( $field->help_text, 'userswp' ),
-					'label' => is_admin() ? '' : uwp_get_form_label( $field )
+					'label' => is_admin() ? '' : $site_title
 				));
 			}else {
 				?>
@@ -2778,7 +2779,6 @@ class UsersWP_Forms {
 					     echo 'required_field';
 				     } ?> uwp_form_row clearfix uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 					<?php
-					$label = $site_title = uwp_get_form_label( $field );
 					if ( ! is_admin() ) { ?>
                         <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
 							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
@@ -2789,8 +2789,8 @@ class UsersWP_Forms {
 					<?php } ?>
                     <input name="<?php echo $field->htmlvar_name; ?>"
                            class="<?php echo $field->css_class; ?> <?php echo esc_attr( $bs_form_control ); ?>"
-                           placeholder="<?php echo $label; ?>"
-                           title="<?php echo $label; ?>"
+                           placeholder="<?php echo $site_title; ?>"
+                           title="<?php echo $site_title; ?>"
 						<?php if ( $field->for_admin_use == 1 ) {
 							echo 'readonly="readonly"';
 						} ?>

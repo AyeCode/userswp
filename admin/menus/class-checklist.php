@@ -76,6 +76,8 @@ class UsersWP_Walker_Nav_Menu_Checklist extends Walker_Nav_Menu {
      * @param int          $id     See {@Walker::start_el()}.
      */
     public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+//        print_r($item);
+//        print_r($args);
         global $_nav_menu_placeholder;
 
         $_nav_menu_placeholder = ( 0 > $_nav_menu_placeholder ) ? intval($_nav_menu_placeholder) - 1 : -1;
@@ -103,6 +105,11 @@ class UsersWP_Walker_Nav_Menu_Checklist extends Walker_Nav_Menu {
         if ( ! in_array( array( 'users-wp-menu', 'users-wp-'. $item->post_excerpt .'-nav' ), $item->classes ) ) {
             $item->classes[] = 'users-wp-menu';
             $item->classes[] = 'users-wp-'. $item->post_excerpt .'-nav';
+        }
+
+        // maybe add a specific lightbox class
+        if ( isset($item->lightbox_class) && ! in_array( $item->lightbox_class , $item->classes ) ) {
+            $item->classes[] = $item->lightbox_class;
         }
 
         // Menu item hidden fields.

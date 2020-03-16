@@ -190,7 +190,7 @@ class UsersWP_GeoDirectory_Plugin {
 	 * @since       1.0.0
 	 * @package     userswp
 	 *
-	 * @param       array $tabs Existing tabs array.
+	 * @param       array $sections Existing sections array.
 	 *
 	 * @return      array     Tabs array.
 	 */
@@ -207,7 +207,8 @@ class UsersWP_GeoDirectory_Plugin {
 	 * @since       1.0.0
 	 * @package     userswp
 	 *
-	 * @param       array $uwp_settings Existing settings array.
+	 * @param       array $settings Existing settings array.
+	 * @param       string $current_section Currrent setting.
 	 *
 	 * @return      array     Settings array.
 	 */
@@ -683,7 +684,7 @@ class UsersWP_GeoDirectory_Plugin {
 						?>
 						<a id="uwp-profile-gd-<?php echo $tab_id; ?>" href="<?php echo esc_url( $tab_url ); ?>"
 						   class=" btn btn-sm <?php echo $active; ?>">
-							<?php echo esc_html( $tab['title'] ); ?>
+							<?php echo esc_html__($tab['title'], 'userswp'); ?>
 							<span class="badge badge-light ml-1"><?php echo $tab['count']; ?></span>
 						</a>
 						<?php
@@ -711,7 +712,7 @@ class UsersWP_GeoDirectory_Plugin {
 									<a href="<?php echo esc_url( $tab_url ); ?>">
                                     <span
 	                                    class="uwp-profile-tab-label uwp-profile-gd-<?php echo $tab_id; ?>-label "><span
-		                                    class="uwp-profile-tab-sub-ul-count uwp-profile-sub-ul-gd-<?php echo $tab_id; ?>-count"><?php echo $tab['count']; ?></span> <?php echo esc_html( $tab['title'] ); ?></span>
+		                                    class="uwp-profile-tab-sub-ul-count uwp-profile-sub-ul-gd-<?php echo $tab_id; ?>-count"><?php echo $tab['count']; ?></span> <?php echo esc_html__($tab['title'], 'userswp'); ?></span>
 									</a>
 								</li>
 								<?php
@@ -881,7 +882,7 @@ class UsersWP_GeoDirectory_Plugin {
 						?>
                         <a id="uwp-profile-gd-<?php echo $tab_id; ?>" href="<?php echo esc_url( $tab_url ); ?>"
                            class=" btn btn-sm <?php echo $active; ?>">
-							<?php echo esc_html( $tab['title'] ); ?>
+							<?php echo esc_html__($tab['title'], 'userswp'); ?>
                             <span class="badge badge-light ml-1"><?php echo $tab['count']; ?></span>
                         </a>
 						<?php
@@ -905,7 +906,7 @@ class UsersWP_GeoDirectory_Plugin {
                                     <a href="<?php echo esc_url( $tab_url ); ?>">
                                     <span
                                             class="uwp-profile-tab-label uwp-profile-gd-<?php echo $tab_id; ?>-label "><span
-                                                class="uwp-profile-tab-sub-ul-count uwp-profile-sub-ul-gd-<?php echo $tab_id; ?>-count"><?php echo $tab['count']; ?></span> <?php echo esc_html( $tab['title'] ); ?></span>
+                                                class="uwp-profile-tab-sub-ul-count uwp-profile-sub-ul-gd-<?php echo $tab_id; ?>-count"><?php echo $tab['count']; ?></span> <?php echo esc_html__($tab['title'], 'userswp'); ?></span>
                                     </a>
                                 </li>
 								<?php
@@ -1256,7 +1257,7 @@ class UsersWP_GeoDirectory_Plugin {
 		} else {
 			$gd_post_types = geodir_get_posttypes( 'array' );
 			?>
-			<h3><?php echo __( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' ) ?></h3>
+			<h3><?php _e( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' ) ?></h3>
 
 			<div class="uwp-profile-item-block">
 				<?php
@@ -1375,7 +1376,7 @@ class UsersWP_GeoDirectory_Plugin {
 		} else {
 			$gd_post_types = geodir_get_posttypes( 'array' );
 			?>
-			<h3><?php echo __( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' ) ?></h3>
+			<h3><?php _e( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' ) ?></h3>
 
 			<div class="uwp-profile-item-block">
 				<?php
