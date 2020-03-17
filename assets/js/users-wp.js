@@ -268,11 +268,17 @@ function uwp_maybe_check_recaptcha($form){
             jQuery('.uwp-auth-modal .modal-content button[type="submit"] i.fa-spin,.uwp-auth-modal .modal-content button[type="submit"] svg.fa-spin').remove();
 
             // bail and add warning if still no recaptcha after 5 loops
-            if(uwp_recaptcha_loops>=5){
+            if(uwp_recaptcha_loops>=6){
                 jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').prop('disabled', false);
                 jQuery('.uwp-auth-modal .modal-content .uwp_register_submit').prop('disabled', false);
                 jQuery('.uwp-auth-modal .modal-content .uwp_forgot_submit').prop('disabled', false);
                 jQuery('.uwp-auth-modal .modal-content .uwp-captcha-render').addClass("alert alert-danger");
+
+                // maybe show general error
+                if(jQuery('.uwp-auth-modal .modal-content .modal-error').html()==''){
+                    jQuery('.uwp-auth-modal .modal-content .modal-error').html("<div class='alert alert-danger'>"+uwp_localize_data.error_retry+"</div>");
+                }
+
                 return false;
             }
 
@@ -283,7 +289,7 @@ function uwp_maybe_check_recaptcha($form){
             }else if($form == 'forgot'){
                 uwp_modal_forgot_password_form_process();
             }
-        }, 100);
+        }, 500); // 6 x 500 = 3 seconds we wait for response before showing error.
         uwp_recaptcha_loops++;
         return false;
     }
