@@ -13,22 +13,22 @@ Light weight frontend user registration and login plugin.
 == Description ==
 
 [Addons](https://userswp.io/downloads/category/addons/) | [Demos](https://wpgeo.directory/userswp/) | [Docs](https://userswp.io/docs/)
-= The only lightweight user profile plugin for WordPress. UsersWP features front end user profile, users directory, a registration and a login form. =
+= THE ONLY LIGHTWEIGHT USER PROFILE PLUGIN FOR WORDPRESS. CUSTOMIZE 100% OF ITS DESIGN WITH YOUR FAVORITE PAGE BUILDER. FULLY COMPATIBLE WITH ELEMENTOR, OXYGEN, DIVI, BEAVER BUILDER, GUTENBERG AND MANY OTHER PAGE BUILDERS. USERSWP FEATURES FRONT END USER PROFILE, USERS DIRECTORY, A REGISTRATION AND A LOGIN FORM. =
 
 While BuddyPress, Ultimate Member, Profile Builder and similar plugins are excellent, we wanted to create something much lighter and simpler to use.
 
-Something that could be gentle on your server resources. With less options to make it easy to setup, more hooks to make it infinitely extensible.
+Something that could be gentle on your server resources. With less options to make it easy to setup, 100% compatible with page buidlers and more hooks to make it infinitely extensible for developers.
 
 Today UsersWP is by far the simplest solution available to manage users on WordPress. It takes seconds to setup, it is super fast and it's perfect to create a community of users within your website.
 
 = FEATURES =
 
-* Drag and Drop profile builder with all kind of user profile custom fields.
+* Drag and Drop forms builder with all kind of custom fields for your user profiles.
 * Shortcode for the Login form
 * Shortcode for the Registration form
 * Shortcode for the Edit Account form
-* Shortcode for the Users Directory
-* Shortcode for the User profile
+* Shortcodes for the Users Directory
+* Shortcodes for the User profile  
 * Shortcode for the Password Recovery form
 * Shortcode for the Change Password form
 * Shortcode for the Reset Password form
@@ -36,6 +36,10 @@ Today UsersWP is by far the simplest solution available to manage users on WordP
 * Custom menu items like login/logout links and links to relevant pages.
 
 After activation all pages are created with the correct shortcodes so that you are good to go in seconds.
+
+All shortcodes are available as widgets and blocks too, so they can be used via page builders.
+
+You can customize the design of both the Users Directory and the User Profile templates using your favorite page builder. For example, you can decide where any element of the user profile appears. Elements like: the Avatar, the header banner, the name and all custom fields you created.    
 
 = User Profile =
 
@@ -47,7 +51,9 @@ The user profile features a cover image, an avatar and an optional tabbed menu s
 
 You can chose if you want to hide any section of it and where to show the custom fields. In a sidebar or in their own tab.
 
-Otherwise just customize the templates as you wish within your child theme.
+Or you can redesign the template completely just like you modify any WordPress page. Using shortcodes, blocks or widgets, through the classic editor, Gutenberg or any page builder. 
+
+Otherwise just customize the PHP mplates as you wish within your child theme.
 
 = Free Add-ons =
 
