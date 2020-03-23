@@ -53,7 +53,7 @@ You can chose if you want to hide any section of it and where to show the custom
 
 Or you can redesign the template completely just like you modify any WordPress page. Using shortcodes, blocks or widgets, through the classic editor, Gutenberg or any page builder. 
 
-Otherwise just customize the PHP mplates as you wish within your child theme.
+Otherwise just customize the PHP templates as you wish within your child theme.
 
 = Free Add-ons =
 
