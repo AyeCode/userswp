@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.1.8\n"
+"Project-Id-Version: UsersWP 1.2.1.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-11 18:42+0530\n"
-"PO-Revision-Date: 2020-03-11 18:42+0530\n"
+"POT-Creation-Date: 2020-03-23 15:23+0530\n"
+"PO-Revision-Date: 2020-03-23 15:24+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -380,7 +380,7 @@ msgstr ""
 msgid "UsersWP Settings"
 msgstr ""
 
-#: admin/class-uwp-admin-menus.php:91 admin/menus/class-menus.php:285
+#: admin/class-uwp-admin-menus.php:91 admin/menus/class-menus.php:289
 #: includes/class-uwp-privacy.php:17
 msgid "UsersWP"
 msgstr ""
@@ -421,7 +421,7 @@ msgstr ""
 msgid "Add to Menu"
 msgstr ""
 
-#: admin/menus/class-menus.php:171 admin/menus/class-menus.php:308
+#: admin/menus/class-menus.php:171 admin/menus/class-menus.php:312
 msgid "Log out"
 msgstr ""
 
@@ -1087,8 +1087,8 @@ msgid "No options available"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:2434
-#: includes/libraries/class-geodirectory-plugin.php:1151
-#: includes/libraries/class-geodirectory-plugin.php:1517
+#: includes/libraries/class-geodirectory-plugin.php:1152
+#: includes/libraries/class-geodirectory-plugin.php:1518
 msgid "Delete"
 msgstr ""
 
@@ -2257,7 +2257,7 @@ msgid "Email:"
 msgstr ""
 
 #: includes/class-activator.php:362 includes/class-activator.php:640
-#: includes/libraries/class-geodirectory-plugin.php:1805
+#: includes/libraries/class-geodirectory-plugin.php:1806
 msgid "Username"
 msgstr ""
 
@@ -2552,10 +2552,6 @@ msgstr ""
 msgid "Password:"
 msgstr ""
 
-#: includes/class-forms.php:477
-msgid "<p><b>"
-msgstr ""
-
 #: includes/class-forms.php:506
 msgid "User Information :"
 msgstr ""
@@ -2651,11 +2647,11 @@ msgstr ""
 msgid "Choose"
 msgstr ""
 
-#: includes/class-forms.php:2281
+#: includes/class-forms.php:2280
 msgid "Username or Email"
 msgstr ""
 
-#: includes/class-forms.php:2505 includes/class-forms.php:2540
+#: includes/class-forms.php:2506 includes/class-forms.php:2540
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
@@ -2800,7 +2796,7 @@ msgstr ""
 msgid "Invalid activation key or account."
 msgstr ""
 
-#: includes/class-notices.php:58
+#: includes/class-notices.php:58 includes/helpers/misc.php:1332
 msgid "Something went wrong."
 msgstr ""
 
@@ -3815,19 +3811,23 @@ msgstr ""
 msgid "less"
 msgstr ""
 
-#: includes/helpers/misc.php:1493 widgets/output-location.php:91
+#: includes/helpers/misc.php:1333
+msgid "Something went wrong, please retry."
+msgstr ""
+
+#: includes/helpers/misc.php:1503 widgets/output-location.php:91
 msgid "Users Page"
 msgstr ""
 
-#: includes/helpers/misc.php:1494 widgets/output-location.php:92
+#: includes/helpers/misc.php:1504 widgets/output-location.php:92
 msgid "More info tab"
 msgstr ""
 
-#: includes/helpers/misc.php:1495
+#: includes/helpers/misc.php:1505
 msgid "Profile side (non bootstrap)"
 msgstr ""
 
-#: includes/helpers/misc.php:1496
+#: includes/helpers/misc.php:1506
 msgid "Fieldset"
 msgstr ""
 
@@ -3860,128 +3860,128 @@ msgstr ""
 msgid "GeoDirectory"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:222
+#: includes/libraries/class-geodirectory-plugin.php:223
 msgid "GeoDirectory Settings"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:228
+#: includes/libraries/class-geodirectory-plugin.php:229
 msgid "CPT listings in profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:229
+#: includes/libraries/class-geodirectory-plugin.php:230
 msgid "Choose the post types to show listings tab in UsersWP Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:237
+#: includes/libraries/class-geodirectory-plugin.php:238
 msgid "CPT reviews in profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:238
+#: includes/libraries/class-geodirectory-plugin.php:239
 msgid "Choose the post types to show reviews tab in UsersWP Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:246
+#: includes/libraries/class-geodirectory-plugin.php:247
 msgid "CPT favorites in profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:247
+#: includes/libraries/class-geodirectory-plugin.php:248
 msgid "Choose the post types to show favorites tab in UsersWP Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:255
+#: includes/libraries/class-geodirectory-plugin.php:256
 msgid "Redirect my listing link from GD login box to UsersWP profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:256
+#: includes/libraries/class-geodirectory-plugin.php:257
 msgid ""
 "If this option is selected, the my listing link from GD loginbox will "
 "redirect to listings tab of UsersWP profile."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:262
+#: includes/libraries/class-geodirectory-plugin.php:263
 msgid "Redirect favorite link from GD login box to UsersWP profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:263
+#: includes/libraries/class-geodirectory-plugin.php:264
 msgid ""
 "If this option is selected, the favorite link from GD loginbox will redirect "
 "to favorites tab of UsersWP profile."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:305
-#: includes/libraries/class-geodirectory-plugin.php:329 upgrade.php:79
+#: includes/libraries/class-geodirectory-plugin.php:306
+#: includes/libraries/class-geodirectory-plugin.php:330 upgrade.php:79
 msgid "Listings"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:306
-#: includes/libraries/class-geodirectory-plugin.php:339
-#: includes/libraries/class-geodirectory-plugin.php:1356 upgrade.php:87
+#: includes/libraries/class-geodirectory-plugin.php:307
+#: includes/libraries/class-geodirectory-plugin.php:340
+#: includes/libraries/class-geodirectory-plugin.php:1357 upgrade.php:87
 msgid "Reviews"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:307
-#: includes/libraries/class-geodirectory-plugin.php:349 upgrade.php:95
+#: includes/libraries/class-geodirectory-plugin.php:308
+#: includes/libraries/class-geodirectory-plugin.php:350 upgrade.php:95
 msgid "Favorites"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:360
+#: includes/libraries/class-geodirectory-plugin.php:361
 msgid "Lists"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1137
-#: includes/libraries/class-geodirectory-plugin.php:1503
+#: includes/libraries/class-geodirectory-plugin.php:1138
+#: includes/libraries/class-geodirectory-plugin.php:1504
 msgid "Edit Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1142
-#: includes/libraries/class-geodirectory-plugin.php:1508
+#: includes/libraries/class-geodirectory-plugin.php:1143
+#: includes/libraries/class-geodirectory-plugin.php:1509
 msgid "Edit"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1146
-#: includes/libraries/class-geodirectory-plugin.php:1512
+#: includes/libraries/class-geodirectory-plugin.php:1147
+#: includes/libraries/class-geodirectory-plugin.php:1513
 msgid "Delete Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1169
-#: includes/libraries/class-geodirectory-plugin.php:1330
-#: includes/libraries/class-geodirectory-plugin.php:1536
-#: includes/libraries/class-geodirectory-plugin.php:1546
+#: includes/libraries/class-geodirectory-plugin.php:1170
+#: includes/libraries/class-geodirectory-plugin.php:1331
+#: includes/libraries/class-geodirectory-plugin.php:1537
+#: includes/libraries/class-geodirectory-plugin.php:1547
 #: templates/bootstrap/loop-posts.php:50
 #, php-format
 msgid "No %s found."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1231
+#: includes/libraries/class-geodirectory-plugin.php:1232
 #: templates/bootstrap/posts-post.php:46
 msgid "View"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1595
+#: includes/libraries/class-geodirectory-plugin.php:1596
 msgid "This user does not have any favorites yet."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1769
+#: includes/libraries/class-geodirectory-plugin.php:1770
 msgid "Published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1772
+#: includes/libraries/class-geodirectory-plugin.php:1773
 msgid "Pending"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1775
+#: includes/libraries/class-geodirectory-plugin.php:1776
 msgid "Closed"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1778
+#: includes/libraries/class-geodirectory-plugin.php:1779
 msgid "Expired"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1781
+#: includes/libraries/class-geodirectory-plugin.php:1782
 msgid "Not published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1786
+#: includes/libraries/class-geodirectory-plugin.php:1787
 msgid "Status: "
 msgstr ""
 

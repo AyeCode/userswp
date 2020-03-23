@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.1.8
+Stable tag: 1.2.1.9
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -59,8 +59,8 @@ Otherwise just customize the PHP mplates as you wish within your child theme.
 
 We provide some free extensions:
 
-[Social Login](https://userswp.io/downloads/social-login/)
-[ReCAPTCHA](https://userswp.io/downloads/recaptcha/)
+[Social Login](https://wordpress.org/plugins/userswp-social-login/)
+[ReCAPTCHA](https://wordpress.org/plugins/userswp-recaptcha/)
 
 = Premium Add-ons =
 
