@@ -712,7 +712,7 @@ class UsersWP_Forms {
 			if(wp_doing_ajax()){wp_send_json_success($message);}
 			else{
 				$redirect_to = $this->get_login_redirect_url($data, $user);
-				wp_safe_redirect($redirect_to);
+				wp_redirect($redirect_to);
 				exit();
 			}
 
