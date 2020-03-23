@@ -428,7 +428,7 @@ class UsersWP_Templates {
             if (-1 == uwp_get_option('login_redirect_to', -1)) {
                 $referer = wp_get_referer();
                 if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
-                    $redirect_to = esc_url($_REQUEST['redirect_to']);
+                    $redirect_to = esc_url(urldecode($_REQUEST['redirect_to']));
                 } else if(isset($referer) && !empty($referer)){
                     $redirect_to = $referer;
                 } else {
@@ -441,7 +441,7 @@ class UsersWP_Templates {
             if (-1 == uwp_get_option('register_redirect_to', -1)) {
                 $referer = wp_get_referer();
                 if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
-                    $redirect_to = esc_url($_REQUEST['redirect_to']);
+                    $redirect_to = esc_url(urldecode($_REQUEST['redirect_to']));
                 } else if(isset($referer) && !empty($referer)){
                     $redirect_to = $referer;
                 } else {

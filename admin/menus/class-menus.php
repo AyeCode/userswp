@@ -282,8 +282,8 @@ class UsersWP_Menus {
      * @return void
      */
     public function admin_bar_menu($wp_admin_bar){
-        if ( current_user_can( 'manage_options' ) ) {
-            $wp_admin_bar->add_menu( array(
+        if ( !is_admin() && current_user_can( 'manage_options' ) ) {
+            $wp_admin_bar->add_node( array(
                 'parent' => 'appearance',
                 'id'     => 'userswp',
                 'title'  => __( 'UsersWP', 'userswp' ),

@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.3
-Stable tag: 1.2.1.8
+Stable tag: 1.2.1.9
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -53,14 +53,14 @@ You can chose if you want to hide any section of it and where to show the custom
 
 Or you can redesign the template completely just like you modify any WordPress page. Using shortcodes, blocks or widgets, through the classic editor, Gutenberg or any page builder. 
 
-Otherwise just customize the PHP mplates as you wish within your child theme.
+Otherwise just customize the PHP templates as you wish within your child theme.
 
 = Free Add-ons =
 
 We provide some free extensions:
 
-[Social Login](https://userswp.io/downloads/social-login/)
-[ReCAPTCHA](https://userswp.io/downloads/recaptcha/)
+[Social Login](https://wordpress.org/plugins/userswp-social-login/)
+[ReCAPTCHA](https://wordpress.org/plugins/userswp-recaptcha/)
 
 = Premium Add-ons =
 
@@ -132,6 +132,7 @@ No questions so far, but don't hesitate to ask!
 * Menu pages not triggering lightbox when page name changed - FIXED
 * Sub menu items can trigger parent menu item lightbox - FIXED
 * Wait longer for invisible re-captcha response before showing error - FIXED
+* WP Custom Admin Interface plugin conflict - FIXED
 
 = 1.2.1.8 =
 * Custom field should auto generate key from title if key is not provided - FIXED
