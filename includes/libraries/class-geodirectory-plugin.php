@@ -977,8 +977,8 @@ class UsersWP_GeoDirectory_Plugin {
 			if ( $author_actions ) {
 				// add some bootstrap styles
 				$author_actions = str_replace(
-					array( "gd_user_action", "gd-author-actions", "href=" ),
-					array( "gd_user_action dropdown-item position-relative", "", "class='stretched-link' href=" ),
+					array( "gd_user_action", "gd-author-actions", "href=", "gd_delete_post" ),
+					array( "gd_user_action dropdown-item position-relative", "", "class='stretched-link' href=", "uwp_gd_delete_post" ),
 					$author_actions
 				);
 
@@ -1115,7 +1115,7 @@ class UsersWP_GeoDirectory_Plugin {
 										$href     = 'javascript:void(0);';
 										$class    = '';
 										$editlink = geodir_edit_post_link( $post_id );
-										$extra    = 'onclick="gd_delete_post(' . $post_id . ');"';
+										$extra    = 'onclick="uwp_gd_delete_post(' . $post_id . ');"';
 									} else {
 										$ajaxlink     = geodir_get_ajax_url();
 										$href         = geodir_getlink( $ajaxlink, array(
@@ -1318,6 +1318,59 @@ class UsersWP_GeoDirectory_Plugin {
 								do_action( 'uwp_after_profile_reviews_summary', $review->comment_id, $user, $post_type );
 								?>
 							</div>
+                            <div class="uwp-item-actions">
+								<?php
+								if ( is_user_logged_in() ) {
+									geodir_favourite_html( '', $review->post_id );
+								}
+								if ( get_post_field( 'post_author', $review->post_id ) == get_current_user_id() ) {
+									if ( uwp_is_gdv2() ) {
+										$href     = 'javascript:void(0);';
+										$class    = '';
+										$editlink = geodir_edit_post_link( $review->post_id );
+										$extra    = 'onclick="uwp_gd_delete_post(' . $review->post_id . ');"';
+									} else {
+										$ajaxlink     = geodir_get_ajax_url();
+										$href         = geodir_getlink( $ajaxlink, array(
+											'geodir_ajax' => 'add_listing',
+											'ajax_action' => 'delete',
+											'pid'         => $review->post_id
+										), false );
+										$class        = 'geodir-delete';
+										$addplacelink = get_permalink( geodir_add_listing_page_id() );
+										$editlink     = geodir_getlink( $addplacelink, array( 'pid' => $review->post_id ), false );
+										$extra        = '';
+									}
+									?>
+
+                                    <span class="geodir-authorlink clearfix">
+
+                                        <?php do_action( 'geodir_before_edit_post_link_on_listing', $review->post_id, $user, $post_type ); ?>
+
+                                        <a href="<?php echo esc_url( $editlink ); ?>" class="geodir-edit"
+                                           title="<?php _e( 'Edit Listing', 'userswp' ); ?>">
+                                            <?php
+                                            $geodir_listing_edit_icon = apply_filters( 'geodir_listing_edit_icon', 'fas fa-edit' );
+                                            echo '<i class="' . $geodir_listing_edit_icon . '"></i>';
+                                            ?>
+                                            <?php _e( 'Edit', 'userswp' ); ?>
+                                        </a>
+                                        <a href="<?php echo $href; ?>" <?php echo $extra; ?>
+                                           class="<?php echo $class; ?>"
+                                           title="<?php _e( 'Delete Listing', 'userswp' ); ?>">
+                                            <?php
+                                            $geodir_listing_delete_icon = apply_filters( 'geodir_listing_delete_icon', 'fas fa-times' );
+                                            echo '<i class="' . $geodir_listing_delete_icon . '"></i>';
+                                            ?>
+                                            <?php _e( 'Delete', 'userswp' ); ?>
+                                        </a>
+
+										<?php do_action( 'geodir_after_edit_post_link_on_listing', $review->post_id, $user, $post_type ); ?>
+
+                                </span>
+
+								<?php } ?>
+                            </div>
 						</li>
 						<?php
 						do_action( 'uwp_after_profile_reviews_item', $review->comment_id, $user, $post_type );
@@ -1481,7 +1534,7 @@ class UsersWP_GeoDirectory_Plugin {
 											$href     = 'javascript:void(0);';
 											$class    = '';
 											$editlink = geodir_edit_post_link( $post_id );
-											$extra    = 'onclick="gd_delete_post(' . $post_id . ');"';
+											$extra    = 'onclick="uwp_gd_delete_post(' . $post_id . ');"';
 										} else {
 											$ajaxlink     = geodir_get_ajax_url();
 											$href         = geodir_getlink( $ajaxlink, array(
