@@ -129,6 +129,7 @@ No questions so far, but don't hesitate to ask!
 
 = 1.2.2 =
 * Delete listing in profile page is not reloading after deleting - FIXED
+* Tool to make custom fields dynamic strings available for translation - ADDED
 
 = 1.2.1.9 =
 * Oxygen editor and other known page builder plugins compatibility - ADDED

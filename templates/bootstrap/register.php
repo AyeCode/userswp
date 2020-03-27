@@ -52,7 +52,7 @@ do_action( 'uwp_template_before', 'register' ); ?>
 				</div>
 
 				<div class="form-group text-center mb-0 p-0">
-					<?php do_action( 'uwp_social_fields', 'login' ); ?>
+					<?php do_action( 'uwp_social_fields', 'register' ); ?>
 				</div>
 
 			</div>

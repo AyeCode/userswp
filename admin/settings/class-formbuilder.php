@@ -649,7 +649,7 @@ class UsersWP_Form_Builder {
         }
     }
 
-    function custom_selected_fields($form_type)
+    public function custom_selected_fields($form_type)
     {
 
         global $wpdb;
