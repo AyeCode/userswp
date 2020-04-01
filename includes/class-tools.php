@@ -10,6 +10,14 @@
 class UsersWP_Tools {
 
 	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		add_filter('uwp_load_db_language', array($this,'load_custom_field_translation') );
+		add_filter('uwp_load_db_language', array($this,'load_uwp_options_text_translation') );
+	}
+
+	/**
 	 * Fixes usermeta table
 	 *
 	 * @package     userswp
@@ -218,6 +226,222 @@ class UsersWP_Tools {
         echo json_encode($output);
 
     }
+
+	/**
+	 * Exports DB texts for translation.
+	 *
+	 * @package     userswp
+	 *
+	 * @param       int   $step   Step for processing
+     *
+     * @return bool
+	 *
+	 */
+    public function export_db_texts($step){
+
+	    $error = false;
+	    $percent = 100;
+
+        $wp_filesystem = UsersWP_Files::uwp_init_filesystem();
+
+	    $language_file = USERSWP_PATH . 'db-language.php';
+
+	    if ( is_file( $language_file ) && ! is_writable( $language_file ) ) {
+		    return false;
+	    } // Not possible to create.
+
+	    if ( ! is_file( $language_file ) && ! is_writable( dirname( $language_file ) ) ) {
+		    return false;
+	    } // Not possible to create.
+
+	    $contents_strings = array();
+
+	    /**
+	     * Filter the language string from database to translate via po editor
+	     *
+	     * @since 1.2.2
+	     *
+	     * @param array $contents_strings Array of strings.
+	     */
+	    $contents_strings = apply_filters( 'uwp_load_db_language', $contents_strings );
+
+	    $contents_strings = array_unique( $contents_strings );
+
+	    $contents_head   = array();
+	    $contents_head[] = "<?php";
+	    $contents_head[] = "/**";
+	    $contents_head[] = " * Translate language string stored in database. Ex: Custom Fields";
+	    $contents_head[] = " *";
+	    $contents_head[] = " * @package userswp";
+	    $contents_head[] = " * @since ".USERSWP_VERSION;
+	    $contents_head[] = " */";
+	    $contents_head[] = "";
+
+	    $contents_foot   = array();
+	    $contents_foot[] = "";
+	    $contents_foot[] = "";
+
+	    $contents = implode( PHP_EOL, $contents_head );
+
+	    if ( ! empty( $contents_strings ) ) {
+		    foreach ( $contents_strings as $string ) {
+			    if ( is_scalar( $string ) && $string != '' ) {
+				    $string = str_replace( "'", "\'", $string );
+
+				    do_action( 'uwp_language_file_add_string', $string );
+
+				    $contents .= PHP_EOL . "__('" . $string . "', 'userswp');";
+			    }
+		    }
+	    }
+
+	    $contents .= implode( PHP_EOL, $contents_foot );
+
+	    if ( ! $wp_filesystem->put_contents( $language_file, $contents, FS_CHMOD_FILE ) ) {
+		    return false;
+	    } // Failure; could not write file.
+
+	    $done = true;
+	    $message = __("Processed Successfully", 'userswp');
+	    $message = $this->tools_wrap_error_message($message, 'success');
+
+	    $output = array(
+		    'done' => $done,
+		    'error' => $error,
+		    'message' => $message,
+		    'step' => $step,
+		    'percent' => intval($percent)
+	    );
+	    echo json_encode($output);
+    }
+
+	/**
+	 * Get the custom fields texts for translation
+	 *
+	 * @since   1.2.2
+	 * @package userswp
+	 *
+	 * @global object $wpdb WordPress database abstraction object.
+	 *
+	 * @param  array $translation_texts Array of text strings.
+	 *
+	 * @return array Translation texts.
+	 */
+	public function load_custom_field_translation( $translation_texts = array() ) {
+		global $wpdb;
+
+		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+		// Custom fields table
+		$sql  = "SELECT site_title, form_label, help_text, required_msg, default_value, option_values, validation_msg FROM " . $table_name . " where form_type = 'account'";
+		$rows = $wpdb->get_results( $sql );
+
+		if ( ! empty( $rows ) ) {
+			foreach ( $rows as $row ) {
+				if ( ! empty( $row->site_title ) ) {
+					$translation_texts[] = stripslashes_deep( $row->site_title );
+				}
+
+				if ( ! empty( $row->form_label ) ) {
+					$translation_texts[] = stripslashes_deep( $row->form_label );
+				}
+
+				if ( ! empty( $row->help_text ) ) {
+					$translation_texts[] = stripslashes_deep( $row->help_text );
+				}
+
+				if ( ! empty( $row->required_msg ) ) {
+					$translation_texts[] = stripslashes_deep( $row->required_msg );
+				}
+
+				if ( ! empty( $row->validation_msg ) ) {
+					$translation_texts[] = stripslashes_deep( $row->validation_msg );
+				}
+
+				if ( ! empty( $row->default_value ) ) {
+					$translation_texts[] = stripslashes_deep( $row->default_value );
+				}
+
+				if ( ! empty( $row->option_values ) ) {
+					$option_values = uwp_string_values_to_options( stripslashes_deep( $row->option_values ) );
+
+					if ( ! empty( $option_values ) ) {
+						foreach ( $option_values as $option_value ) {
+							if ( ! empty( $option_value['label'] ) ) {
+								$translation_texts[] = $option_value['label'];
+							}
+						}
+					}
+				}
+			}
+		}
+
+		$translation_texts = ! empty( $translation_texts ) ? array_unique( $translation_texts ) : $translation_texts;
+
+		return $translation_texts;
+	}
+
+	/**
+	 * Get the userswp notification subject & content texts for translation.
+	 *
+	 * @since 1.2.2
+	 * @package userswp
+	 *
+	 * @param  array $translation_texts Array of text strings.
+	 * @return array Translation texts.
+	 */
+	public function load_uwp_options_text_translation($translation_texts = array()) {
+		$translation_texts = !empty( $translation_texts ) && is_array( $translation_texts ) ? $translation_texts : array();
+
+		$uwp_options = array(
+			'email_name',
+			'email_footer_text',
+			'registration_activate_email_subject',
+			'registration_activate_email_content',
+			'registration_success_email_subject',
+			'registration_success_email_content',
+			'forgot_password_email_subject',
+			'forgot_password_email_content',
+			'change_password_email_subject',
+			'change_password_email_content',
+			'reset_password_email_subject',
+			'reset_password_email_content',
+			'account_update_email_subject',
+			'account_update_email_content',
+			'account_delete_email_subject',
+			'account_delete_email_content',
+			'registration_success_email_subject_admin',
+			'registration_success_email_content_admin',
+			'account_delete_email_subject_admin',
+			'account_delete_email_content_admin',
+		);
+
+		/**
+		 * Filters the userswp option names that requires to add for translation.
+		 *
+		 * @since 1.2.2
+		 * @package userswp
+		 *
+		 * @param  array $uwp_options Array of option names.
+		 */
+		$uwp_options = apply_filters('uwp_options_for_translation', $uwp_options);
+		$uwp_options = array_unique($uwp_options);
+
+		if (!empty($uwp_options)) {
+			foreach ($uwp_options as $uwp_option) {
+				if ($uwp_option != '' && $option_value = uwp_get_option($uwp_option)) {
+					$option_value = is_string($option_value) ? stripslashes_deep($option_value) : '';
+
+					if ($option_value != '' && !in_array($option_value, $translation_texts)) {
+						$translation_texts[] = stripslashes_deep($option_value);
+					}
+				}
+			}
+		}
+
+		$translation_texts = !empty($translation_texts) ? array_unique($translation_texts) : $translation_texts;
+
+		return $translation_texts;
+	}
 
 	/**
 	 * Returns SQL data type for field
@@ -584,6 +808,25 @@ class UsersWP_Tools {
 
                 <tr>
                     <th>
+                        <strong class="tool-name"><?php _e('DB text translation', 'userswp');?></strong>
+                        <p class="tool-description"><?php _e('This tool will collect any texts stored in the DB and put them in the file db-language.php so they can then be used to translate them by translations tools.', 'userswp');?></p>
+                    </th>
+                    <td class="run-tool">
+                        <input type="button" value="<?php _e('Run', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="export_db_texts"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" class="has-pbar">
+                        <div id="uwp_diagnose_pb_export_db_texts" class="uwp-pb-wrapper">
+                            <div class="progressBar" style="display: none;"><div></div></div>
+                        </div>
+                        <div id="uwp_diagnose_export_db_texts"></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>
                         <strong class="tool-name"><?php _e('Dummy Users', 'userswp');?></strong>
                         <p class="tool-description"><?php _e('Dummy Users for Testing. Password for all dummy users:', 'userswp'); echo " ".self::get_dummy_user_passowrd();?></p>
                     </th>
@@ -727,6 +970,9 @@ class UsersWP_Tools {
                 break;
             case 'fix_user_data':
                 $this->fix_usermeta($step);
+                break;
+            case 'export_db_texts':
+                $this->export_db_texts($step);
                 break;
             case 'add_dummy_users':
                 $this->uwp_tools_process_dummy_users($step, 'add');

@@ -559,4 +559,50 @@ class UsersWP_Files {
         );
     }
 
+	/**
+	 * Initiate the WordPress file system and provide fallback if needed.
+	 *
+	 * @since 1.2.2
+	 * @package userswp
+	 * @return bool|string Returns the file system class on success. False on failure.
+	 */
+	public static function uwp_init_filesystem() {
+
+		if ( ! function_exists( 'get_filesystem_method' ) ) {
+			require_once( ABSPATH . "/wp-admin/includes/file.php" );
+		}
+		$access_type = get_filesystem_method();
+		if ( $access_type === 'direct' ) {
+			/* you can safely run request_filesystem_credentials() without any issues and don't need to worry about passing in a URL */
+			$creds = request_filesystem_credentials( trailingslashit( site_url() ) . 'wp-admin/', '', false, false, array() );
+
+			/* initialize the API */
+			if ( ! WP_Filesystem( $creds ) ) {
+				/* any problems and we exit */
+				return false;
+			}
+
+			global $wp_filesystem;
+
+			return $wp_filesystem;
+			/* do our file manipulations below */
+		} elseif ( defined( 'FTP_USER' ) ) {
+			$creds = request_filesystem_credentials( trailingslashit( site_url() ) . 'wp-admin/', '', false, false, array() );
+
+			/* initialize the API */
+			if ( ! WP_Filesystem( $creds ) ) {
+				/* any problems and we exit */
+				return false;
+			}
+
+			global $wp_filesystem;
+
+			return $wp_filesystem;
+
+		} else {
+			return false;
+		}
+
+	}
+
 }

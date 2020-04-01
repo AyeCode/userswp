@@ -93,7 +93,7 @@ class UWP_Output_Location_Widget extends WP_Super_Duper {
             "profile_side" => __("Profile side", 'userswp'),
         );
 
-        $show_in_locations = apply_filters('uwp_ouptut_show_in_locations', $show_in_locations);
+        $show_in_locations = apply_filters('uwp_output_show_in_locations', $show_in_locations);
 
         return $show_in_locations;
     }

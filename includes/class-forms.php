@@ -225,6 +225,8 @@ class UsersWP_Forms {
 			return;
 		}
 
+		global $uwp_notices;
+
 		if( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce' ) ) {
 			$message = aui()->alert(array(
 					'type'=>'error',
@@ -232,10 +234,8 @@ class UsersWP_Forms {
 				)
 			);
 			if(wp_doing_ajax()){wp_send_json_error($message);}
-			else{return;}
+			else{$uwp_notices[] = array('register' => $message); return;}
 		}
-
-		global $uwp_notices;
 
 		$files = $_FILES;
 		$errors = new WP_Error();

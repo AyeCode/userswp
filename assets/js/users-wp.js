@@ -572,3 +572,36 @@ function uwp_cancelBubble(e){
     if (evt.stopPropagation)    evt.stopPropagation();
     if (evt.cancelBubble!=null) evt.cancelBubble = true;
 }
+
+function uwp_gd_delete_post($post_id){
+    var message = geodir_params.my_place_listing_del;
+    if (confirm(message)) {
+
+        jQuery.ajax({
+            url: geodir_params.ajax_url,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                action: 'geodir_user_delete_post',
+                security: geodir_params.basic_nonce,
+                post_id: $post_id
+            },
+            timeout: 20000,
+            success: function(data) {
+
+                if(data.success){
+                    lity('<div class="gd-notification gd-success"><i class="fas fa-check-circle"></i> '+ data.data.message +'</div>');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 3000);
+                }else{
+                    lity('<div class="gd-notification gd-error"><i class="fas fa-exclamation-circle"></i> '+ data.data.message +'</div>');
+                }
+            }
+        });
+
+        return true;
+    } else {
+        return false;
+    }
+}
