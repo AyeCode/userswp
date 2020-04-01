@@ -716,6 +716,8 @@ class UsersWP_Templates {
             if (strpos($menu_classes, 'users-wp-menu ') !== false) {
                 $menu_classes = str_replace($str, '', $menu_classes);
             }
+
+            $menu_classes = explode(" ",$menu_classes);
         }
 
         $register_slug = uwp_get_page_slug('register_page');
@@ -734,56 +736,60 @@ class UsersWP_Templates {
         $forgot_class = "users-wp-{$forgot_slug}-nav";
         $logout_class = "users-wp-{$logout_slug}-nav";
 
-        switch ( $menu_classes ) {
-            case $register_class:
-                if ( is_user_logged_in() ) {
-                    $menu_item->_invalid = true;
-                } else {
-                    $menu_item->url = uwp_get_page_id('register_page', true);
+        if(!empty($menu_classes)){
+            foreach($menu_classes as $menu_class){
+                switch ( $menu_class ) {
+                    case $register_class:
+                        if ( is_user_logged_in() ) {
+                            $menu_item->_invalid = true;
+                        } else {
+                            $menu_item->url = uwp_get_page_id('register_page', true);
+                        }
+                        break;
+                    case $login_class:
+                        if ( is_user_logged_in() ) {
+                            $menu_item->_invalid = true;
+                        } else {
+                            $menu_item->url = uwp_get_page_id('login_page', true);
+                        }
+                        break;
+                    case $account_class:
+                        if ( ! is_user_logged_in() ) {
+                            $menu_item->_invalid = true;
+                        } else {
+                            $menu_item->url = uwp_get_page_id('account_page', true);
+                        }
+                        break;
+                    case $profile_class:
+                        if ( ! is_user_logged_in() ) {
+                            $menu_item->_invalid = true;
+                        } else {
+                            $menu_item->url = uwp_get_page_id('profile_page', true);
+                        }
+                        break;
+                    case $change_class:
+                        if ( ! is_user_logged_in() ) {
+                            $menu_item->_invalid = true;
+                        } else {
+                            $menu_item->url = uwp_get_page_id('change_page', true);
+                        }
+                        break;
+                    case $forgot_class:
+                        if ( is_user_logged_in() ) {
+                            $menu_item->_invalid = true;
+                        } else {
+                            $menu_item->url = uwp_get_page_id('forgot_page', true);
+                        }
+                        break;
+                    case $logout_class:
+                        if ( ! is_user_logged_in() ) {
+                            $menu_item->_invalid = true;
+                        } else {
+                            $menu_item->url = $this->uwp_logout_url();
+                        }
+                        break;
                 }
-                break;
-            case $login_class:
-                if ( is_user_logged_in() ) {
-                    $menu_item->_invalid = true;
-                } else {
-                    $menu_item->url = uwp_get_page_id('login_page', true);
-                }
-                break;
-            case $account_class:
-                if ( ! is_user_logged_in() ) {
-                    $menu_item->_invalid = true;
-                } else {
-                    $menu_item->url = uwp_get_page_id('account_page', true);
-                }
-                break;
-            case $profile_class:
-                if ( ! is_user_logged_in() ) {
-                    $menu_item->_invalid = true;
-                } else {
-                    $menu_item->url = uwp_get_page_id('profile_page', true);
-                }
-                break;
-            case $change_class:
-                if ( ! is_user_logged_in() ) {
-                    $menu_item->_invalid = true;
-                } else {
-                    $menu_item->url = uwp_get_page_id('change_page', true);
-                }
-                break;
-            case $forgot_class:
-                if ( is_user_logged_in() ) {
-                    $menu_item->_invalid = true;
-                } else {
-                    $menu_item->url = uwp_get_page_id('forgot_page', true);
-                }
-                break;
-            case $logout_class:
-                if ( ! is_user_logged_in() ) {
-                    $menu_item->_invalid = true;
-                } else {
-                    $menu_item->url = $this->uwp_logout_url();
-                }
-                break;
+            }
         }
 
         $menu_item = apply_filters('uwp_setup_nav_menu_item', $menu_item, $menu_classes);
