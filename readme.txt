@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
-Tested up to: 5.3
-Stable tag: 1.2.1.9
+Tested up to: 5.4
+Stable tag: 1.2.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -66,7 +66,7 @@ We provide some free extensions:
 
 UsersWP can be extended with several add-ons. Few examples are:
 * [~~GeoDirectory~~](https://userswp.io/downloads/geodirectory/) - NOW BUILT IN TO CORE - Create a tab for each listing type submitted, reviews and favorite listings.
-* [Woocommerce](https://userswp.io/downloads/woocommerce/) - Connect WooCommerce with UsersWP, display orders and reviews in user profile pages.
+* [WooCommerce](https://userswp.io/downloads/woocommerce/) - Connect WooCommerce with UsersWP, display orders and reviews in user profile pages.
 * [bbPress](https://userswp.io/downloads/bbpress-2/) - Connect bbPress with UsersWP, display forum interactions in user profile pages.
 * [Easy Digital Downloads](https://userswp.io/downloads/easy-digital-downloads/) - Display “Downloads” and “Purchases” tab in user profile pages.
 * [WP Job Manager](https://userswp.io/downloads/wp-job-manager/) - Connects WP Job Manager with UsersWP, display Jobs tab in user profile pages.
@@ -130,6 +130,8 @@ No questions so far, but don't hesitate to ask!
 = 1.2.2 =
 * Delete listing in profile page is not reloading after deleting - FIXED
 * Tool to make custom fields dynamic strings available for translation - ADDED
+* Delete account displaying errors after delete - FIXED
+* Menu items might not be hidden if page slug changed or they have other classes - FIXED
 
 = 1.2.1.9 =
 * Oxygen editor and other known page builder plugins compatibility - ADDED

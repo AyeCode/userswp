@@ -128,6 +128,16 @@ class UsersWP_Account {
 
 	        }
 
+	        $message = '<p><b>' . __('Deleted user information :', 'userswp') . '</b></p>
+	            <p>' . __('First Name:', 'userswp') . ' ' . $user->first_name . '</p>
+                <p>' . __('Last Name:', 'userswp') . ' ' . $user->last_name . '</p>
+                <p>' . __('Username:', 'userswp') . ' ' . $user->user_login . '</p>
+                <p>' . __('Email:', 'userswp') . ' ' . $user->user_email . '</p>';
+
+	        $message = apply_filters('uwp_account_delete_mail_message', $message, $user_id);
+
+	        $user_email = $user->user_email;
+
             // Delete user
             if ( $delete_from_network ) {
 
@@ -136,7 +146,7 @@ class UsersWP_Account {
 	            if ( in_array( $user->user_login, $_super_admins, true ) ) {
 		            $message = aui()->alert(array(
 				            'type'=>'error',
-				            'content'=> __( '<strong>Error</strong>: Super Administrators cannot be delted.', 'userswp' )
+				            'content'=> __( '<strong>Error</strong>: Super Administrators cannot be deleted.', 'userswp' )
 			            )
 		            );
 
@@ -154,23 +164,14 @@ class UsersWP_Account {
 
             // notify on successful deletion.
             if($deleted){
-	            $email_vars = array(
-		            'user_id' => $user_id,
-	            );
 
-	            UsersWP_Mails::send($user->user_email, 'account_delete', $email_vars);
+	            $email_vars = array();
 
-	            $message = '<p><b>' . __('Deleted user information :', 'userswp') . '</b></p>
-	            <p>' . __('First Name:', 'userswp') . ' ' . $user->first_name . '</p>
-                <p>' . __('Last Name:', 'userswp') . ' ' . $user->last_name . '</p>
-                <p>' . __('Username:', 'userswp') . ' ' . $user->user_login . '</p>
-                <p>' . __('Email:', 'userswp') . ' ' . $user->user_email . '</p>';
-
-	            $message = apply_filters('uwp_account_delete_mail_message', $message, $user_id);
+	            UsersWP_Mails::send($user_email, 'account_delete');
 
 	            $email_vars['login_details'] = $message;
 
-	            UsersWP_Mails::send($user->user_email, 'account_delete', $email_vars, true);
+	            UsersWP_Mails::send(get_bloginfo('admin_email'), 'account_delete', $email_vars, true);
             }
 
 
