@@ -1236,7 +1236,6 @@ class UsersWP_Profile {
      *
      * @since       1.0.0
      * @package     userswp
-     * @return      string      Modal loding html.
      */
     public function modal_loading_html() {
         ob_start();
