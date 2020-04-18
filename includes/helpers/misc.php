@@ -1409,6 +1409,18 @@ function uwp_all_email_tags( $inline = true ){
     return $tags;
 }
 
+function uwp_delete_account_email_tags( $inline = true ){
+    $tags = array( '[#site_name#]', '[#site_name_url#]', '[#current_date#]', '[#from_name#]', '[#from_email#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#form_fields#]' );
+
+    $tags = apply_filters( 'uwp_delete_account_email_tags', $tags );
+
+    if ( $inline ) {
+        $tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+    }
+
+    return $tags;
+}
+
 function uwp_authbox_tags( $inline = true ){
     global $wpdb;
 

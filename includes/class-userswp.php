@@ -104,6 +104,7 @@ final class UsersWP {
         add_action( 'widgets_init', array( $this, 'register_widgets' ) );
 	    add_action( 'init', array($this, 'load_plugin_textdomain'));
 	    add_action( 'uwp_flush_rewrite_rules', array($this, 'flush_rewrite_rules'));
+	    add_action( 'uwp_language_file_add_string', array($this, 'register_string'), 10, 1);
     }
 
 	/**
@@ -889,4 +890,16 @@ final class UsersWP {
 		flush_rewrite_rules();
 	}
 
+	/**
+	 * Registers an individual text string for WPML translation.
+	 *
+	 * @since 1.2.2
+	 *
+	 * @param string $string The string that needs to be translated.
+	 * @param string $domain The plugin domain. Default userswp.
+	 * @param string $name The name of the string which helps to know what's being translated.
+	 */
+	public static function register_string( $string, $domain = 'userswp', $name = '' ) {
+		do_action( 'wpml_register_single_string', $domain, $name, $string );
+	}
 }

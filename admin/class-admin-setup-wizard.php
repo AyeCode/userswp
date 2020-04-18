@@ -547,7 +547,7 @@ class UsersWP_Admin_Setup_Wizard {
 				<?php wp_nonce_field( 'uwp-setup' ); ?>
                 <a href="<?php echo esc_url( $this->get_next_step_link() ); ?>" class="button button-large button-next"><?php esc_html_e( 'Skip this step', 'userswp' ); ?></a>
                 <input type="submit" class="button-primary button button-large button-next uwp-continue-recommend" value="<?php esc_attr_e( 'Continue', 'userswp' ); ?>" name="save_step"/>
-                <input type="submit" class="button-primary button button-large button-next uwp-install-recommend" value="<?php esc_attr_e( 'Install', 'userwp' ); ?>" name="install_recommend" onclick="uwp_wizard_install_plugins('<?php echo wp_create_nonce( 'updates' ); ?>');return false;"/>
+                <input type="submit" class="button-primary button button-large button-next uwp-install-recommend" value="<?php esc_attr_e( 'Install', 'userswp' ); ?>" name="install_recommend" onclick="uwp_wizard_install_plugins('<?php echo wp_create_nonce( 'updates' ); ?>');return false;"/>
             </p>
         </form>
 		<?php

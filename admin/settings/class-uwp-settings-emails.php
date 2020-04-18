@@ -138,7 +138,7 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'placeholder' => UsersWP_Defaults::account_delete_email_content_admin(),
-						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags()
+						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_delete_account_email_tags()
 					),
 
 					array('type' => 'sectionend', 'id' => 'account_delete_admin_email_settings'),
@@ -374,7 +374,7 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'placeholder' => UsersWP_Defaults::account_delete_email_content(),
-						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags()
+						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_delete_account_email_tags()
 					),
 
 					array('type' => 'sectionend', 'id' => 'account_delete_email_settings'),

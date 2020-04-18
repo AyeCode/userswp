@@ -329,7 +329,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 array(
                     'id' => 'profile_default_profile',
                     'name' => __( 'Default profile image', 'userswp' ),
-                    'desc' => __( 'Recommended image size: 150x150', 'userwp'),
+                    'desc' => __( 'Recommended image size: 150x150', 'userswp'),
                     'type' => 'image',
                     'default' => '',
                     'desc_tip' => true,
