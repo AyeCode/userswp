@@ -69,12 +69,6 @@ class UsersWP_Public {
 
         $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-        // Scripts if user on own profile page.
-        if (is_uwp_current_user_profile_page()) {
-            wp_enqueue_script( 'jcrop', array( 'jquery' ) );
-            wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
-        }
-
         // Core UWP JS
         wp_enqueue_script( USERSWP_NAME, USERSWP_PLUGIN_URL . 'assets/js/users-wp' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
 

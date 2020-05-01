@@ -3,9 +3,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-global $uwp_widget_args;
-$the_query = isset( $uwp_widget_args['template_args']['the_query'] ) ? $uwp_widget_args['template_args']['the_query'] : '';
-$title = isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args['template_args']['title'] : '';
+
+$the_query = isset( $args['template_args']['the_query'] ) ? $args['template_args']['the_query'] : '';
+$title = isset( $args['template_args']['title'] ) ? $args['template_args']['title'] : '';
 ?>
 <h3><?php echo $title; ?></h3>
 <div class="uwp-profile-item-block">
@@ -18,7 +18,7 @@ $title = isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args[
 		echo '<ul class="uwp-profile-item-ul">';
 		while ($the_query->have_posts()) {
 			$the_query->the_post();
-			uwp_get_template($template);
+			uwp_get_template($template, $args);
 		}
 		echo '</ul>';
 

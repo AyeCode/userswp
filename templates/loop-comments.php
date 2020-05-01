@@ -3,9 +3,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-global $uwp_widget_args;
-$the_query = isset( $uwp_widget_args['template_args']['the_query'] ) ? $uwp_widget_args['template_args']['the_query'] : '';
-$maximum_pages = isset( $uwp_widget_args['template_args']['maximum_pages'] ) ? $uwp_widget_args['template_args']['maximum_pages'] : '';
+
+$the_query = isset( $args['template_args']['the_query'] ) ? $args['template_args']['the_query'] : '';
+$maximum_pages = isset( $args['template_args']['maximum_pages'] ) ? $args['template_args']['maximum_pages'] : '';
 ?>
 <h3><?php echo __('Comments', 'userswp') ?></h3>
 
@@ -15,8 +15,8 @@ $maximum_pages = isset( $uwp_widget_args['template_args']['maximum_pages'] ) ? $
 	if ($the_query) {
 		echo '<ul class="uwp-profile-item-ul">';
 		foreach ( $the_query as $comment ) {
-			$uwp_widget_args['template_args']['comment'] = $comment;
-			uwp_get_template("comments-item.php");
+			$args['template_args']['comment'] = $comment;
+			uwp_get_template("comments-item.php", $args);
 			?>
 			
 			<?php

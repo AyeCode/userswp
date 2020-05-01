@@ -838,7 +838,7 @@ class UsersWP_Forms {
 				), get_permalink($reset_page) );
 				$message .= "<a href='".$reset_link."' target='_blank'>".$reset_link."</a>" . "\r\n";
 			} else {
-				$message .= site_url("reset?key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
+				$message .= home_url("reset?key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
 			}
 		}
 
@@ -924,7 +924,7 @@ class UsersWP_Forms {
 
 		$message = aui()->alert(array(
 				'type'=>'success',
-				'content'=> apply_filters('uwp_change_password_success_message', __('Password changed successfully', 'userswp'), $data)
+				'content'=> apply_filters('uwp_change_password_success_message', __('Password changed successfully.', 'userswp'), $data)
 			)
 		);
 
@@ -993,7 +993,7 @@ class UsersWP_Forms {
 		wp_set_password( $data['password'], $user_data->ID );
 
 		$login_page_url = uwp_get_login_page_url();
-		$message = sprintf(__('Password updated successfully. Please <a href="%s">login</a> with your new password', 'userswp'), $login_page_url);
+		$message = sprintf(__('Password updated successfully. Please <a href="%s">login</a> with your new password.', 'userswp'), $login_page_url);
 		$message = apply_filters('uwp_reset_password_success_message', $message, $data);
 		$message = aui()->alert(array(
 				'type'=>'success',
@@ -1017,14 +1017,13 @@ class UsersWP_Forms {
 		$data = $_POST;
 		$files = $_FILES;
 
-		$current_user_id = get_current_user_id();
-		if (!$current_user_id) {
-			return;
-		}
-
 		if( ! isset( $data['uwp_account_nonce'] ) || ! wp_verify_nonce( $data['uwp_account_nonce'], 'uwp-account-nonce' ) ) {
 			return;
 		}
+
+		if(!is_user_logged_in()){
+            return;
+        }
 
 		global $uwp_notices;
 		$file_obj = new UsersWP_Files();
@@ -1070,7 +1069,7 @@ class UsersWP_Forms {
 
 
 		$args = array(
-			'ID' => $current_user_id
+			'ID' => get_current_user_id()
 		);
 
 		if (isset($result['email'])) {
@@ -1103,10 +1102,10 @@ class UsersWP_Forms {
 
 		$user_id = wp_update_user( $args );
 
-		if (!$user_id) {
+		if (is_wp_error($user_id)) {
 			$message = aui()->alert(array(
 					'type'=>'error',
-					'content'=> __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp')
+					'content'=> sprintf(__('<strong>Error</strong>: %s', 'userswp'), $user_id->get_error_message())
 				)
 			);
 			$uwp_notices[] = array('account' => $message);
@@ -1145,7 +1144,7 @@ class UsersWP_Forms {
 
 		UsersWP_Mails::send($user_data->user_email, 'account_update', $email_vars);
 
-		$message = apply_filters('uwp_account_update_success_message', __('Account updated successfully', 'userswp'), $data);
+		$message = apply_filters('uwp_account_update_success_message', __('Account updated successfully.', 'userswp'), $data);
 		$message = aui()->alert(array(
 				'type'=>'success',
 				'content'=> $message
@@ -3135,7 +3134,7 @@ class UsersWP_Forms {
 			$fields = get_account_form_fields($extra_where);
 			$fields = apply_filters('uwp_account_privacy_fields', $fields);
 			$user_id = get_current_user_id();
-			global $wpdb;
+			global $wpdb, $uwp_notices;
 			$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
 			$user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT user_privacy, tabs_privacy FROM $meta_table WHERE user_id = %d", $user_id ) );
@@ -3234,6 +3233,14 @@ class UsersWP_Forms {
 				}
 			}
 
+			$message = apply_filters('uwp_privacy_update_success_message', __('Privacy settings updated successfully.', 'userswp'));
+			$message = aui()->alert(array(
+					'type'=>'success',
+					'content'=> $message
+				)
+			);
+			$uwp_notices[] = array('account' => $message);
+
 		}
 	}
 
@@ -3274,7 +3281,7 @@ class UsersWP_Forms {
 		$fields = get_register_form_fields();
 		if (!empty($fields)) {
 			foreach ($fields as $field) {
-				if ($field->field_type_key == 'country') {
+				if ($field->field_type_key == 'country' || $field->field_type_key == 'uwp_country') {
 					$country_field  = true;
 				}
 			}

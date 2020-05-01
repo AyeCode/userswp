@@ -217,12 +217,12 @@ class UsersWP_Mails {
 			$subject = UsersWP_Defaults::$key();
 		}
 
-		if ( $subject ) {
-			$subject = self::replace_variables( __( $subject, 'userswp' ), $email_name, $email_vars );
-		} else {
+		if ( !$subject ) {
 			// Used to override subject for specific email type
 			$subject = apply_filters( 'uwp_'.$key, $subject, $email_name, $email_vars );
 		}
+
+		$subject = self::replace_variables( __( $subject, 'userswp' ), $email_name, $email_vars );
 
 		return apply_filters( 'uwp_email_subject', $subject, $email_name, $email_vars );
 	}
@@ -257,12 +257,12 @@ class UsersWP_Mails {
 			$content = UsersWP_Defaults::$key();
 		}
 
-		if ( $content ) {
-			$content = self::replace_variables( __( $content, 'userswp' ), $email_name, $email_vars );
-		} else {
+		if ( !$content ) {
 			// Used to override content for specific email type
 			$content = apply_filters( 'uwp_'.$key, $content, $email_name, $email_vars );
 		}
+
+		$content = self::replace_variables( __( $content, 'userswp' ), $email_name, $email_vars );
 
 		return apply_filters( 'uwp_email_content', $content, $email_name, $email_vars );
 	}
@@ -389,7 +389,12 @@ class UsersWP_Mails {
 		$mail_from = uwp_get_option( 'email_address' );
 
 		if ( ! $mail_from ) {
-			$mail_from = get_bloginfo('admin_email');
+			$sitename = strtolower( $_SERVER['SERVER_NAME'] );
+			if ( substr( $sitename, 0, 4 ) == 'www.' ) {
+				$sitename = substr( $sitename, 4 );
+			}
+
+			$mail_from = 'wordpress@' . $sitename;
 		}
 
 		return apply_filters( 'uwp_get_mail_from', $mail_from );

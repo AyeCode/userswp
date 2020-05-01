@@ -1058,10 +1058,11 @@ class UsersWP_Status {
             $page_id  = uwp_get_page_id( $values['option'], '' );
             $page_set = $page_exists = $page_visible = false;
             $shortcode_present = $shortcode_required = false;
-            $page = get_post( $page_id );
+            $page = false;
             // Page checks
             if ( $page_id ) {
                 $page_set = true;
+	            $page = get_post( $page_id );
             }
             if ( $page ) {
                 $page_exists = true;

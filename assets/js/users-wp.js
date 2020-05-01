@@ -37,6 +37,19 @@ jQuery(window).load(function() {
             $(this).prev().toggle();
             return false;
         });
+
+        jQuery('.uwp_profile_banner_remove').click(function() {
+            var $this = jQuery(this);
+            var data = {
+                'action': 'uwp_ajax_profile_image_remove',
+                'type': 'banner'
+            };
+
+            jQuery.post(uwp_localize_data.ajaxurl, data, function(response) {
+                $this.parent().parent().find("img.uwp-banner-image").attr('src', uwp_localize_data.default_banner);
+            });
+            return false;
+        });
     });
 }( jQuery, window ));
 

@@ -58,12 +58,7 @@ class UsersWP_Profile {
             <?php if(!$hide_cover) {
                 $banner = uwp_get_usermeta($user->ID, 'banner_thumb', '');
                 if (empty($banner)) {
-                    $banner = uwp_get_option('profile_default_banner', '');
-                    if(empty($banner)){
-                        $banner = uwp_get_default_banner_uri();
-                    } else {
-                        $banner = wp_get_attachment_url($banner);
-                    }
+	                $banner = uwp_get_default_banner_uri();
                 } else {
                     $banner = $upload_url.$banner;
                 }
@@ -159,10 +154,15 @@ class UsersWP_Profile {
 	/**
 	 * Displays edit account button
 	 */
-	public function edit_profile_button(){
+	public function edit_profile_button($user_id){
 		global $uwp_in_user_loop;
 		$account_page          = uwp_get_page_id( 'account_page', false );
-		$user = uwp_get_displayed_user();
+		if($user_id){
+			$user = get_userdata($user_id);
+        } else {
+			$user = uwp_get_displayed_user();
+        }
+
 		$can_user_edit_account = apply_filters( 'uwp_user_can_edit_own_profile', true, $user->ID );
 
 		if (!$uwp_in_user_loop && $account_page && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && $can_user_edit_account ) { ?>
@@ -946,10 +946,8 @@ class UsersWP_Profile {
      * @param       object      $user       The User ID.
      * @return      void
      */
-    public function get_profile_comments($user,$post_type='post') {
+    public function get_profile_comments($user, $post_type='post', $args = array()) {
 
-
-	    global $uwp_widget_args;
 	    $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 	    $number = uwp_get_option('profile_no_of_items', 10);
 	    $offset = ( $paged - 1 ) * $number;
@@ -957,7 +955,7 @@ class UsersWP_Profile {
 	    $total_comments = uwp_comment_count($user->ID);
 	    $maximum_pages = ceil($total_comments / $number);
 
-	    $args = array(
+	    $query_args = array(
 		    'number' => $number,
 		    'offset' => $offset,
 		    'author_email' => $user->user_email,
@@ -966,17 +964,16 @@ class UsersWP_Profile {
 	    );
 	    // The Query
 	    $the_query = new WP_Comment_Query();
-	    $comments = $the_query->query( $args );
+	    $comments = $the_query->query( $query_args );
 
-	    $uwp_widget_args['template_args']['the_query'] = $comments;
-	    $uwp_widget_args['template_args']['user'] = $user;
-	    $uwp_widget_args['template_args']['title'] = __("Comments");
-	    $uwp_widget_args['template_args']['maximum_pages'] = $maximum_pages;
+	    $args['template_args']['the_query'] = $comments;
+	    $args['template_args']['user'] = $user;
+	    $args['template_args']['title'] = __("Comments");
+	    $args['template_args']['maximum_pages'] = $maximum_pages;
 
-	    $design_style = !empty($uwp_widget_args['design_style']) ? esc_attr($uwp_widget_args['design_style']) : uwp_get_option("design_style",'bootstrap');
+	    $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
 	    $template = $design_style ? $design_style."/loop-comments.php" : "loop-comments.php";
-	    uwp_get_template($template);
-
+	    uwp_get_template($template, $args);
     }
 
     /**
@@ -1304,8 +1301,7 @@ class UsersWP_Profile {
      * @return      string                          Html.
      */
     public function image_crop_modal_html($type, $image_url, $full_width, $full_height) {
-	    global $uwp_template_args;
-	    $uwp_template_args = array(
+	    $args = array(
 		    'type' => $type,
 		    'image_url' => $image_url,
 		    'full_width' => $full_width,
@@ -1316,8 +1312,7 @@ class UsersWP_Profile {
 	    $design_style = uwp_get_option("design_style",'bootstrap');
 	    $template = $design_style ? $design_style."/modal-profile-image-crop.php" : "modal-profile-image-crop.php";
 
-	    uwp_get_template($template);
-	    $uwp_template_args = array();
+	    uwp_get_template($template, $args);
         ?>
         <script type="text/javascript">
             (function( $, window, undefined ) {
@@ -1565,7 +1560,7 @@ class UsersWP_Profile {
                 }
             } else {
                 $default = uwp_get_default_avatar_uri();
-	            if(uwp_is_localhost()){ // if localhost then default gravitar won't work.
+	            if(uwp_is_localhost()){ // if localhost then default gravatar won't work.
 		            $url = $default;
 	            }else{
 		            $url = remove_query_arg('d', $url);
@@ -1843,6 +1838,15 @@ class UsersWP_Profile {
         exit();
     }
 
+    public function ajax_profile_image_remove(){
+	    $type = isset($_POST['type']) ? strip_tags(esc_sql($_POST['type'])) : '';
+	    if ($type && in_array($type, array('banner', 'avatar'))) {
+		    $user_id = get_current_user_id();
+		    uwp_update_usermeta($user_id, 'banner_thumb', '');
+	    }
+	    exit();
+    }
+
     /**
      * Defines javascript ajaxurl variable.
      *
@@ -2039,7 +2043,7 @@ class UsersWP_Profile {
             // Select
             if ($field->field_type == 'select') {
 
-                if($field->field_type_key != 'country'){
+                if($field->field_type_key != 'country' && $field->field_type_key != 'uwp_country' ){
                     if (!empty($value)) {
                         $data = $this->uwp_array_search($option_values_arr, 'value', $value);
                         $value = $data[0]['label'];
@@ -2145,7 +2149,7 @@ class UsersWP_Profile {
                 $value = esc_html( $value );
         }
 
-        if(isset($field->field_type_key) && $field->field_type_key == 'country'){
+        if(isset($field->field_type_key) && $field->field_type_key == 'country' || $field->field_type_key == 'uwp_country'){
             $value = uwp_output_country_html($value);
         }
 

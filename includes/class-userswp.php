@@ -269,6 +269,7 @@ final class UsersWP {
         add_action( 'wp_ajax_uwp_avatar_banner_upload', array($instance, 'ajax_avatar_banner_upload') );
         //add_action( 'wp_ajax_uwp_ajax_image_crop_popup', array($instance, 'uwp_ajax_image_crop_popup') );
         add_action( 'wp_ajax_uwp_ajax_image_crop_popup_form', array($instance, 'ajax_image_crop_popup_form') );
+        add_action( 'wp_ajax_uwp_ajax_profile_image_remove', array($instance, 'ajax_profile_image_remove') );
         add_action( 'wp_head', array($instance, 'define_ajaxurl') );
         add_action( 'uwp_profile_header', array($instance, 'image_crop_init'), 10, 1 );
         add_action( 'uwp_admin_profile_edit', array($instance, 'image_crop_init'), 10, 1 );
@@ -286,7 +287,7 @@ final class UsersWP {
         add_action( 'uwp_profile_pagination', array($instance, 'get_profile_pagination'));
         
         // Profile title
-        add_action( 'uwp_profile_after_title',array($instance, 'edit_profile_button'));
+        add_action( 'uwp_profile_after_title',array($instance, 'edit_profile_button'), 10, 1);
 
         // Users
         add_action( 'uwp_output_location', array($instance, 'show_output_location_data'), 10, 2);

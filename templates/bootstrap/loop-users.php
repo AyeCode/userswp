@@ -3,12 +3,12 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-global $uwp_widget_args,$uwp_in_user_loop;
+global $uwp_in_user_loop;
 $uwp_in_user_loop = true;
-$the_query = isset( $uwp_widget_args['template_args']['the_query'] ) ? $uwp_widget_args['template_args']['the_query'] : '';
-$maximum_pages = isset( $uwp_widget_args['template_args']['maximum_pages'] ) ? $uwp_widget_args['template_args']['maximum_pages'] : '';
-$users = isset( $uwp_widget_args['template_args']['users'] ) ? $uwp_widget_args['template_args']['users'] : '';
-$total_users = isset( $uwp_widget_args['template_args']['total_users'] ) ? $uwp_widget_args['template_args']['total_users'] : '';
+$the_query = isset( $args['template_args']['the_query'] ) ? $args['template_args']['the_query'] : '';
+$maximum_pages = isset( $args['template_args']['maximum_pages'] ) ? $args['template_args']['maximum_pages'] : '';
+$users = isset( $args['template_args']['users'] ) ? $args['template_args']['users'] : '';
+$total_users = isset( $args['template_args']['total_users'] ) ? $args['template_args']['total_users'] : '';
 ?>
 <div class="uwp-users-loop">
     <?php
@@ -17,7 +17,7 @@ $total_users = isset( $uwp_widget_args['template_args']['total_users'] ) ? $uwp_
     // The Loop
     if ( $users ) {
 
-        $design_style = ! empty( $uwp_widget_args['design_style'] ) ? esc_attr( $uwp_widget_args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
+        $design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
         $template     = $design_style ? $design_style . "/users-item.php" : "users-item.php";
 
         echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">';
@@ -26,7 +26,7 @@ $total_users = isset( $uwp_widget_args['template_args']['total_users'] ) ? $uwp_
         $original_user = $uwp_user;
         foreach ($users as $uwp_user){
 
-	        uwp_get_template( $template );
+	        uwp_get_template( $template, $args );
 
         }
         $uwp_user = $original_user;

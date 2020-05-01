@@ -345,6 +345,8 @@ class UsersWP_Pages {
      * @param       mixed       $page_content   The post content. Default empty.
      * @param       int         $post_parent    Set this for the post it belongs to, if any. Default 0.
      * @param       string      $status         The post status. Default 'draft'.
+     *
+     * @return int Page ID
      */
     public function create_page($slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish') {
         global $wpdb, $current_user;
@@ -587,7 +589,7 @@ class UsersWP_Pages {
         $link = false;
         $page_id = uwp_get_option($type, false, false);
 
-        if ($page_id) {
+        if ($page_id > 0) {
             if (uwp_is_wpml()) {
                 $wpml_page_id = uwp_wpml_object_id($page_id, 'page', true);
                 if (!empty($wpml_page_id)) {

@@ -4,8 +4,7 @@
  *
  * @ver 1.0.0
  */
-global $uwp_widget_args;
-$css_class = !empty($uwp_widget_args['css_class']) ? esc_attr( $uwp_widget_args['css_class'] ) : 'border-0';
+$css_class = !empty($args['css_class']) ? esc_attr( $args['css_class'] ) : 'border-0';
 do_action( 'uwp_template_before', 'change' ); ?>
 	<div class="row">
 		<div class="card mx-auto container-fluid p-0 <?php echo $css_class; ?>" >
@@ -13,7 +12,7 @@ do_action( 'uwp_template_before', 'change' ); ?>
 					<?php
 					do_action( 'uwp_template_form_title_before', 'change' );
 
-					$form_title = ! empty( $uwp_widget_args['form_title'] ) ? esc_attr__( $uwp_widget_args['form_title'], 'userswp' ) : __( 'Change Password', 'userswp' );
+					$form_title = ! empty( $args['form_title'] ) ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Change Password', 'userswp' );
 					$form_title = apply_filters( 'uwp_template_form_title', $form_title, 'change' );
 					if ( $form_title ) {
 						echo '<h3 class="card-title text-center mb-4">';
@@ -27,7 +26,7 @@ do_action( 'uwp_template_before', 'change' ); ?>
 					<form class="uwp-change-form uwp_form" method="post">
 						<?php do_action( 'uwp_template_fields', 'change' ); ?>
 						<input name="uwp_change_submit" class="btn btn-primary btn-block text-uppercase"
-						       value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
+						       value="<?php _e( 'Submit', 'userswp' ); ?>" type="submit">
 					</form>
 
 					<div class="uwp-footer-links">

@@ -29,7 +29,7 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 		echo aui()->alert( array(
 				'class'   => 'text-center text-center m-3 p-0 w-50 mx-auto',
 				'type'    => 'info',
-				'content' => sprintf( __( 'Note: Max upload image size: %s', 'plugin-domain' ), $files->uwp_formatSizeUnits( $files->uwp_get_max_upload_size( $type ) ) )
+				'content' => sprintf( __( 'Note: Max upload image size: %s', 'userswp' ), $files->uwp_formatSizeUnits( $files->uwp_get_max_upload_size( $type ) ) )
 			)
 		);
 		?>

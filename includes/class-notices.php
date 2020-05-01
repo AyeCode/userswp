@@ -38,16 +38,32 @@ class UsersWP_Notices {
      *
      * @return string
      */
-    public function form_notice_by_key($type = '', $echo = true) {
+    public function form_notice_by_key($type = '', $echo = true, $user_id = 0) {
         $key = isset($_REQUEST['uwp_err']) ? sanitize_html_class($_GET['uwp_err']) : $type;
+	    $user_id = isset($_REQUEST['user_id']) ? absint($_GET['$user_id']) : $user_id;
         $messages = array();
-        $notice = '';
+        $notice = $link = '';
+
         $messages['act_success'] = array(
             'message' => __('Account activated successfully. Please login to continue.', 'userswp'),
             'type' => 'success',
         );
+
+	    if(isset($user_id) && !empty($user_id)){
+		    $resend_link = uwp_current_page_url();
+		    $resend_link = add_query_arg(
+			    array(
+				    'user_id' => $user_id,
+				    'action'  => 'uwp_resend',
+				    '_nonce'  => wp_create_nonce('uwp_resend'),
+			    ),
+			    $resend_link
+		    );
+		    $link = "<a href='".esc_url($resend_link)."' target='_blank'>".__('Resend', 'userswp')."</a>";
+	    }
+
         $messages['act_pending'] = array(
-            'message' => __('Your account is not activated yet. Please check your email for activation email.', 'userswp'),
+            'message' => __('Your account is not activated yet. Please check your email for activation email.', 'userswp').$link,
             'type' => 'error',
         );
         $messages['act_error'] = array(

@@ -63,11 +63,10 @@ function is_uwp_profile_subtab($subtab = false) {
  * @return      void
  */
 function uwp_generic_tab_content($user, $post_type = false, $title = '', $post_ids = false) {
-    global $uwp_widget_args;
 
     $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
-    $args = array(
+    $query_args = array(
         'post_status' => 'publish',
         'posts_per_page' => uwp_get_option('profile_no_of_items', 10),
         'author' => $user->ID,
@@ -75,12 +74,12 @@ function uwp_generic_tab_content($user, $post_type = false, $title = '', $post_i
     );
 
     if ($post_type) {
-        $args['post_type'] = $post_type;
+	    $query_args['post_type'] = $post_type;
     }
 
     if (is_array($post_ids)) {
         if (!empty($post_ids)) {
-            $args['post__in'] = $post_ids;
+	        $query_args['post__in'] = $post_ids;
         } else {
             // no posts found
 	        echo aui()->alert(array(
@@ -91,9 +90,9 @@ function uwp_generic_tab_content($user, $post_type = false, $title = '', $post_i
         }
     }
     // The Query
-    $the_query = new WP_Query($args);
+    $the_query = new WP_Query($query_args);
 
-    $uwp_widget_args['template_args']= array(
+	$args['template_args']= array(
         'the_query' => $the_query,
         'user'      => $user,
         'post_type' => $post_type,
@@ -101,9 +100,9 @@ function uwp_generic_tab_content($user, $post_type = false, $title = '', $post_i
         'post_ids'  => $post_ids,
     );
 
-    $design_style = !empty($uwp_widget_args['design_style']) ? esc_attr($uwp_widget_args['design_style']) : uwp_get_option("design_style",'bootstrap');
+    $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
     $template = $design_style ? $design_style."/loop-posts.php" : "loop-posts.php";
-	uwp_get_template($template);
+	uwp_get_template($template, $args);
     
 }
 
@@ -160,9 +159,12 @@ function uwp_get_tabs_privacy_by_user($user){
 		$user = get_userdata($user);
 	}
 
+	$tabs_privacy = array();
 	$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 	$user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT tabs_privacy FROM $meta_table WHERE user_id = %d", $user->ID ) );
-	$tabs_privacy = maybe_unserialize($user_meta_info->tabs_privacy);
+	if(isset($user_meta_info->tabs_privacy) && !empty($user_meta_info->tabs_privacy)){
+		$tabs_privacy = maybe_unserialize($user_meta_info->tabs_privacy);
+	}
 
 	return $tabs_privacy;
 }

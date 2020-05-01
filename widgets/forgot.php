@@ -103,9 +103,6 @@ class UWP_Forgot_Widget extends WP_Super_Duper {
 
         ob_start();
 
-        global $uwp_widget_args;
-        $uwp_widget_args = $args;
-
         echo '<div class="uwp_widgets uwp_widget_forgot">';
 
 	    $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
