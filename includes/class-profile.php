@@ -139,6 +139,7 @@ class UsersWP_Profile {
      * @param       object      $user       The User ID.
      */
     public function get_profile_title($user, $tag = 'h2', $title_class = '', $link_class = '',$link = true) {
+        if(!$user){return;}
         ?>
         <div class="uwp-profile-name">
             <<?php echo esc_attr($tag); ?> class="uwp-user-title <?php echo $title_class;?>" data-user="<?php echo $user->ID; ?>">
@@ -615,16 +616,17 @@ class UsersWP_Profile {
 	/**
      * Returns counts of a user posts
      *
-	 * @param $user_id
+	 * @param int $user_id User ID.
+	 * @param bool $echo Display or Return.
 	 *
-	 * @return array
+	 * @return array|string
 	 */
-	public function get_user_post_counts($user_id){
+	public function get_user_post_counts($user_id, $echo = true){
 
 		$counts = array();
 		$post_types = array();
-		if($user_id){
 
+		if($user_id){
 			$post_types = get_post_types( array('public'=>true,'publicly_queryable'=>true), 'objects');
 
 			if(!empty($post_types)){
@@ -633,13 +635,20 @@ class UsersWP_Profile {
 					if($count){
 						$counts[$cpt] = array('name'=> $post_type->labels->name,'singular_name'=> $post_type->labels->singular_name,'count'=>$count);
 					}
-
 				}
 			}
-
 		}
 
-//		print_r($counts);exit;
+		if($echo){
+			$output = '';
+			if ( ! empty( $counts ) ) {
+				foreach ( $counts as $cpt => $post_type ) {
+					$post_count_text = $post_type['count'] > 1 ? esc_attr( $post_type['name'] ) . '<span class="badge badge-dark ml-1">' . absint( $post_type['count'] ) . '</span>' : esc_attr( $post_type['singular_name'] ) . '<span class="badge badge-dark ml-1">' . absint( $post_type['count'] ) . '</span>';
+					$output .= '<span class="badge badge-white text-muted pl-0">' . $post_count_text . '</span>' . " \n"; // needs line break for
+				}
+			}
+            echo $output;
+        }
 
 		return apply_filters( 'uwp_get_user_post_counts', $counts, $post_types );
 

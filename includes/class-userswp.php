@@ -251,7 +251,7 @@ final class UsersWP {
         add_filter( 'edit_profile_url', array($instance, 'modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
         add_filter( 'get_comment_author_link', array($instance, 'get_comment_author_link') , 10 , 2 );
-//        add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 4 );
+        add_action( 'uwp_user_post_counts', array($instance, 'get_user_post_counts'), 10, 1 );
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_user_title', array($instance, 'get_profile_title'), 10, 2 );
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 2 );
@@ -461,6 +461,8 @@ final class UsersWP {
 
         register_widget("UWP_User_Title_Widget");
         register_widget("UWP_User_Avatar_Widget");
+        register_widget("UWP_User_Cover_Widget");
+        register_widget("UWP_User_Post_Counts_Widget");
         register_widget("UWP_User_Meta_Widget");
         register_widget("UWP_Users_Search_Widget");
         register_widget("UWP_Users_Loop_Actions");
@@ -747,6 +749,16 @@ final class UsersWP {
          * The class for user avatar widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/user-avatar.php' );
+
+        /**
+         * The class for user post count widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/user-post-counts.php' );
+
+	    /**
+	     * The class for user cover widget.
+	     */
+	    require_once( dirname(dirname( __FILE__ )) .'/widgets/user-cover.php' );
 
         /**
          * The class for profile social fields widget.

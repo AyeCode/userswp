@@ -105,6 +105,10 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
 		    $args['user_id'] = $user->ID;
 	    }
 
+	    if(!$user){
+			return '';
+	    }
+
         $args = apply_filters( 'uwp_widget_profile_header_args', $args, $widget_args, $this );
 
         ob_start();

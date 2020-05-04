@@ -135,6 +135,7 @@ No questions so far, but don't hesitate to ask!
 * Allow user to remove cover image - ADDED
 * Class in frontend body tag for UsersWP pages - ADDED
 * Pass arguments to template via function parameter instead of using global variable - CHANGED
+* Separate shortcode for User Avatar image, Cover image and Post Counts - CHANGED
 
 = 1.2.2 =
 * Delete listing in profile page is not reloading after deleting - FIXED

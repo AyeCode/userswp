@@ -92,16 +92,7 @@ if( ! $hide_cover ) {
 					?>
 				</li>
 				<li class="list-group-item border-0 m-0 p-0  bg-transparent uwp-profile-post-counts">
-					<?php
-					// User post counts
-					$user_post_counts = $userswp->profile->get_user_post_counts( $user->ID );
-					if ( ! empty( $user_post_counts ) ) {
-						foreach ( $user_post_counts as $cpt => $post_type ) {
-							$post_count_text = $post_type['count'] > 1 ? esc_attr( $post_type['name'] ) . '<span class="badge badge-dark ml-1">' . absint( $post_type['count'] ) . '</span>' : esc_attr( $post_type['singular_name'] ) . '<span class="badge badge-dark ml-1">' . absint( $post_type['count'] ) . '</span>';
-							echo '<span class="badge badge-white text-muted pl-0">' . $post_count_text . '</span>' . " \n"; // needs line break for
-						}
-					}
-					?>
+					<?php do_action('uwp_user_post_counts', $user->ID); ?>
 				</li>
 			</ul>
 		</div>
