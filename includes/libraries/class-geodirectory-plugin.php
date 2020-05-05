@@ -840,7 +840,6 @@ class UsersWP_GeoDirectory_Plugin {
 	 * @return      void
 	 */
 	public function add_profile_gd_lists_tab_content( $user ) {
-		global $uwp_widget_args;
 
 		if(!class_exists('GeoDir_Lists')){
 		    return;
@@ -924,7 +923,7 @@ class UsersWP_GeoDirectory_Plugin {
         if(!empty($post_ids)){
             ob_start();
             echo '<div class="uwp-profile-subtab-entries">';
-            $args = array(
+            $query_args = array(
                 'is_geodir_loop' => true,
                 'gd_location' => false,
                 'post_type' => geodir_get_posttypes(),
@@ -935,15 +934,15 @@ class UsersWP_GeoDirectory_Plugin {
             );
 
             if ( get_current_user_id() == $user->ID ) {
-                $args['post_status'] = array( 'publish', 'draft', 'private', 'pending', 'gd-closed', 'gd-expired' );
+	            $query_args['post_status'] = array( 'publish', 'draft', 'private', 'pending', 'gd-closed', 'gd-expired' );
             }
 
-            $the_query     = new WP_Query( $args );
+            $the_query     = new WP_Query( $query_args );
 
-            $uwp_widget_args['template_args']['the_query'] = $the_query;
-            $uwp_widget_args['template_args']['title']     = $subtabs[$active_tab]['title'];
+	        $args['template_args']['the_query'] = $the_query;
+	        $args['template_args']['title']     = $subtabs[$active_tab]['title'];
 
-	        uwp_get_template( "bootstrap/loop-posts.php" );
+	        uwp_get_template( "bootstrap/loop-posts.php", $args );
             echo '</div>';
             echo ob_get_clean();
         }
@@ -1189,11 +1188,10 @@ class UsersWP_GeoDirectory_Plugin {
 	 *
 	 */
 	public function get_bootstrap_listings( $user, $post_type ) {
-		global $uwp_widget_args;
 
 		$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
-		$args = array(
+		$query_args = array(
 			'post_type'      => $post_type,
 			'post_status'    => array( 'publish' ),
 			'posts_per_page' => uwp_get_option( 'profile_no_of_items', 10 ),
@@ -1202,16 +1200,16 @@ class UsersWP_GeoDirectory_Plugin {
 		);
 
 		if ( get_current_user_id() == $user->ID ) {
-			$args['post_status'] = array( 'publish', 'draft', 'private', 'pending', 'gd-closed', 'gd-expired' );
+			$query_args['post_status'] = array( 'publish', 'draft', 'private', 'pending', 'gd-closed', 'gd-expired' );
 		}
 		// The Query
-		$the_query     = new WP_Query( $args );
+		$the_query     = new WP_Query( $query_args );
 		$gd_post_types = geodir_get_posttypes( 'array' );
 
-		$uwp_widget_args['template_args']['the_query'] = $the_query;
-		$uwp_widget_args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' );
+		$args['template_args']['the_query'] = $the_query;
+		$args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' );
 
-		uwp_get_template( "bootstrap/loop-posts.php" );
+		uwp_get_template( "bootstrap/loop-posts.php", $args );
 
 	}
 
@@ -1405,11 +1403,11 @@ class UsersWP_GeoDirectory_Plugin {
 	 *
 	 */
 	public function get_bootstrap_reviews( $user, $post_type ) {
-		global $userswp, $uwp_widget_args;
+		global $userswp;
 
-		$uwp_widget_args['template_args']['title'] = __( "Reviews", 'userswp' );
+		$args['template_args']['title'] = __( "Reviews", 'userswp' );
 
-		$userswp->profile->get_profile_comments( $user, $post_type );
+		$userswp->profile->get_profile_comments( $user, $post_type, $args );
 
 	}
 
@@ -1617,7 +1615,6 @@ class UsersWP_GeoDirectory_Plugin {
 	 *
 	 */
 	public function get_bootstrap_favorites( $user, $post_type ) {
-		global $uwp_widget_args;
 
 		$favorite_ids = geodir_get_user_favourites( $user->ID );
 		if ( $favorite_ids ) {
@@ -1639,10 +1636,10 @@ class UsersWP_GeoDirectory_Plugin {
 			$the_query     = new WP_Query( $args );
 			$gd_post_types = geodir_get_posttypes( 'array' );
 
-			$uwp_widget_args['template_args']['the_query'] = $the_query;
-			$uwp_widget_args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' );
+			$args['template_args']['the_query'] = $the_query;
+			$args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' );
 
-			uwp_get_template( "bootstrap/loop-posts.php" );
+			uwp_get_template( "bootstrap/loop-posts.php", $args );
 		} else {
 			echo aui()->alert( array(
 					'type'    => 'info',

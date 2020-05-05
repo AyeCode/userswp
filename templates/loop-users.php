@@ -1,8 +1,6 @@
 <?php
-
-global $uwp_widget_args;
-$users = isset( $uwp_widget_args['template_args']['users'] ) ? $uwp_widget_args['template_args']['users'] : '';
-$total_users = isset( $uwp_widget_args['template_args']['total_users'] ) ? $uwp_widget_args['template_args']['total_users'] : '';
+$users = isset( $args['template_args']['users'] ) ? $args['template_args']['users'] : '';
+$total_users = isset( $args['template_args']['total_users'] ) ? $args['template_args']['total_users'] : '';
 ?>
     <div class="uwp-content-wrap">
 
@@ -23,7 +21,7 @@ $total_users = isset( $uwp_widget_args['template_args']['total_users'] ) ? $uwp_
 
                 foreach ($users as $uwp_user){
 
-	                uwp_get_template( 'users-item.php' );
+	                uwp_get_template( 'users-item.php', $args );
                 }
 
                 do_action( 'uwp_after_user_list_items', $users );

@@ -94,7 +94,8 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
 
 	    if('post_author' == $args['user_id'] && $post instanceof WP_Post){
 		    $user = get_userdata($post->post_author);
-	    } else if(is_int($args['user_id']) && (int)$args['user_id'] > 0){
+		    $args['user_id'] = $post->post_author;
+	    } else if(isset($args['user_id']) && (int)$args['user_id'] > 0){
 		    $user = get_userdata($args['user_id']);
 	    } else {
 		    $user = uwp_get_displayed_user();
@@ -104,14 +105,20 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
 		    $args['user_id'] = $user->ID;
 	    }
 
+	    if(!$user){
+			return '';
+	    }
+
         $args = apply_filters( 'uwp_widget_profile_header_args', $args, $widget_args, $this );
 
         ob_start();
 
         if ($enable_profile_header == '1') {
 
-            global $uwp_widget_args;
-            $uwp_widget_args = $args;
+	        wp_enqueue_script( 'jcrop', array( 'jquery' ) );
+	        wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
+	        wp_enqueue_style( 'jcrop' );
+	        wp_enqueue_style( 'jquery-ui' );
             
             // setup some args
             add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
@@ -120,16 +127,10 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
             $upload_url = $uploads['baseurl'];
             $banner = uwp_get_usermeta( $user->ID, 'banner_thumb', '' );
             if ( empty( $banner ) ) {
-                $banner = uwp_get_option( 'profile_default_banner', '' );
-                if ( empty( $banner ) ) {
-                    $banner = uwp_get_default_banner_uri();
-                } else {
-                    $banner = wp_get_attachment_url( $banner );
-                }
+	            $banner = uwp_get_default_banner_uri();
             } else {
                 $banner = $upload_url . $banner;
             }
-
 
             $avatar = uwp_get_usermeta( $user->ID, 'avatar_thumb', '' );
             if ( empty( $avatar ) ) {
@@ -140,8 +141,8 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
                 }
             }
             
-            $uwp_widget_args['avatar_url'] = $avatar;
-            $uwp_widget_args['banner_url'] = $banner;
+            $args['avatar_url'] = $avatar;
+            $args['banner_url'] = $banner;
             
 
             $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');

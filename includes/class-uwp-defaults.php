@@ -226,7 +226,7 @@ Thank you,
 	 */
 	public static function account_delete_email_content_admin() {
 		return apply_filters( 'uwp_account_delete_email_content_admin',
-			__( "Dear [#user_name#],
+			__( "Dear Admin,
 
 User has deleted own account from the site.
 
@@ -254,7 +254,7 @@ Thank you,
 	 */
 	public static function registration_success_email_content_admin() {
 		return apply_filters( 'uwp_registration_success_email_content_admin',
-			__( "Dear [#user_name#],
+			__( "Dear Admin,
 
 A user has been registered recently on your website.
 

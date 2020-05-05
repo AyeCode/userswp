@@ -4,9 +4,8 @@
  * 
  * @ver 1.0.0
  */
-global $uwp_widget_args;
-$css_class = !empty($uwp_widget_args['css_class']) ? esc_attr( $uwp_widget_args['css_class'] ) : 'border-0';
-$buttons = $uwp_widget_args['buttons'];
+$css_class = !empty($args['css_class']) ? esc_attr( $args['css_class'] ) : 'border-0';
+$buttons = $args['buttons'];
 do_action( 'uwp_template_before', 'button-group' ); ?>
 <div class="bsui-button-group">
 	<?php

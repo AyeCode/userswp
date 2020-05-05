@@ -1,13 +1,12 @@
 <?php
-global $uwp_widget_args;
 $user_id = get_current_user_id();
 $user_info = get_userdata($user_id);
 $display_name = $user_info->data->display_name;
 $profile_link = uwp_build_profile_tab_url($user_id);
-$hello_text = !empty($uwp_widget_args['dashboard_text']) ? esc_attr__($uwp_widget_args['dashboard_text'],'userswp') : __( 'Hello, %s', 'userswp' );
+$hello_text = !empty($args['dashboard_text']) ? esc_attr__($args['dashboard_text'],'userswp') : __( 'Hello, %s', 'userswp' );
 $display_name = "<a href='$profile_link' >".esc_attr($display_name)."</a>";
 $hello_text = sprintf($hello_text,$display_name);
-$dashboard_links = !empty($uwp_widget_args['template_args']['dashboard_links']) ? $uwp_widget_args['template_args']['dashboard_links'] : '';
+$dashboard_links = !empty($args['template_args']['dashboard_links']) ? $args['template_args']['dashboard_links'] : '';
 ?>
 
 <div class="card text-center border-0">
@@ -22,12 +21,12 @@ $dashboard_links = !empty($uwp_widget_args['template_args']['dashboard_links']) 
 
         <div class="uwp-dashboard-links">
             <?php
-            do_action('uwp_dashboard_links_before',$uwp_widget_args);
+            do_action('uwp_dashboard_links_before',$args);
 
             global $userswp;
             $userswp->forms->output_dashboard_links( $dashboard_links );
 
-            do_action('uwp_dashboard_links_after',$uwp_widget_args);
+            do_action('uwp_dashboard_links_after',$args);
             ?>
         </div>
 

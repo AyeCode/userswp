@@ -3,8 +3,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-global $uwp_widget_args,$comment;
-$comment = isset( $uwp_widget_args['template_args']['comment'] ) ? $uwp_widget_args['template_args']['comment'] : '';
+global $comment;
+$comment = isset( $args['template_args']['comment'] ) ? $args['template_args']['comment'] : '';
 
 if ( has_post_thumbnail($comment->comment_post_ID) ) {
 	$thumb_url = get_the_post_thumbnail_url($comment->comment_post_ID, array(80, 80));

@@ -4,13 +4,13 @@
  *
  * @ver 0.0.1
  */
-global $uwp_widget_args;
-$css_class = ! empty( $uwp_widget_args['css_class'] ) ? esc_attr( $uwp_widget_args['css_class'] ) : 'border-0';
-$hide_cover = $uwp_widget_args['hide_cover'];
-$allow_change = $uwp_widget_args['allow_change'];
-$hide_avatar = $uwp_widget_args['hide_avatar'];
-
-
+$css_class    = ! empty( $args['css_class'] ) ? esc_attr( $args['css_class'] ) : 'border-0';
+$hide_cover   = $args['hide_cover'];
+$allow_change = $args['allow_change'];
+$hide_avatar  = $args['hide_avatar'];
+$avatar_url   = $args['avatar_url'];
+$banner_url   = $args['banner_url'];
+$user_id      = $args['user_id'];
 
 do_action( 'uwp_template_before', 'profile-header' );
 $user = uwp_get_displayed_user();
@@ -33,12 +33,7 @@ if($hide_cover) {
 	<?php if(!$hide_cover) {
 		$banner = uwp_get_usermeta($user->ID, 'banner_thumb', '');
 		if (empty($banner)) {
-			$banner = uwp_get_option('profile_default_banner', '');
-			if(empty($banner)){
-				$banner = uwp_get_default_banner_uri();
-			} else {
-				$banner = wp_get_attachment_url($banner);
-			}
+			$banner = uwp_get_default_banner_uri();
 		} else {
 			$banner = $upload_url.$banner;
 		}

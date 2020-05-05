@@ -1132,21 +1132,22 @@ function uwp_get_default_avatar_uri(){
         $default = wp_get_attachment_url($default);
     }
 
-    $default = apply_filters('uwp_default_avatar_uri', $default);
-
-    return $default;
+	return apply_filters('uwp_default_avatar_uri', $default);
 }
 
 function uwp_get_default_thumb_uri(){
     $thumb_url = USERSWP_PLUGIN_URL."/assets/images/no_thumb.png";
-    $thumb_url = apply_filters('uwp_default_thumb_uri', $thumb_url);
-    return $thumb_url;
+	return apply_filters('uwp_default_thumb_uri', $thumb_url);
 }
 
 function uwp_get_default_banner_uri(){
-    $banner_url = USERSWP_PLUGIN_URL."/assets/images/banner.png";
-    $banner_url = apply_filters('uwp_default_banner_uri', $banner_url);
-    return $banner_url;
+	$banner = uwp_get_option('profile_default_banner', '');
+	if(empty($banner)) {
+		$banner_url = USERSWP_PLUGIN_URL."/assets/images/banner.png";
+	} else {
+		$banner_url = wp_get_attachment_url($banner);
+    }
+	return apply_filters('uwp_default_banner_uri', $banner_url);
 }
 
 /**
@@ -1336,6 +1337,7 @@ function uwp_get_localize_data(){
         'login_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("login_modal",1) ? 1 : '',
         'register_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("register_modal",1) ? 1 : '',
         'forgot_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("forgot_modal",1) ? 1 : '',
+        'default_banner' => uwp_get_default_banner_uri(),
     );
 
     return apply_filters('uwp_localize_data', $uwp_localize_data);

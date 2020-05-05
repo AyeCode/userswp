@@ -112,8 +112,6 @@ class UWP_Login_Widget extends WP_Super_Duper {
             );
         }
 
-
-
         parent::__construct( $options );
     }
 
@@ -143,9 +141,6 @@ class UWP_Login_Widget extends WP_Super_Duper {
         if(is_user_logged_in() && $args['logged_in_show']=='empty'){
             return '';
         }
-
-        global $uwp_widget_args;
-        $uwp_widget_args = $args;
 
         $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
 
@@ -190,9 +185,9 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     'optgroup' => 'close',
                 );
                 
-                $dashboard_links = apply_filters( 'uwp_dashboard_links',$dashboard_links,$uwp_widget_args);
+                $dashboard_links = apply_filters( 'uwp_dashboard_links',$dashboard_links,$args);
 
-                $uwp_widget_args['template_args']= array(
+                $args['template_args']= array(
                     'dashboard_links' => $dashboard_links
                 );
                 
@@ -209,9 +204,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
 
         echo '</div>';
 
-
         $output = ob_get_clean();
-
 
         return trim($output);
 

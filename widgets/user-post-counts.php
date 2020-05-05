@@ -4,14 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * UsersWP users search widget.
- *
- * @since 1.1.2
+ * UsersWP user post counts widget.
  */
-class UWP_Users_Search_Widget extends WP_Super_Duper {
+class UWP_User_Post_Counts_Widget extends WP_Super_Duper {
 
     /**
-     * Register the profile users search widget with WordPress.
+     * Register the user post counts widget with WordPress.
      *
      */
     public function __construct() {
@@ -21,14 +19,15 @@ class UWP_Users_Search_Widget extends WP_Super_Duper {
             'textdomain'    => 'userswp',
             'block-icon'    => 'admin-site',
             'block-category'=> 'widgets',
-            'block-keywords'=> "['userswp','user', 'search']",
+            'block-keywords'=> "['userswp','user']",
             'class_name'     => __CLASS__,
-            'base_id'       => 'uwp_users_search',
-            'name'          => __('UWP > Users Search Form','userswp'),
-            //'no_wrap'       => true,
+            'base_id'       => 'uwp_user_post_counts',
+            'name'          => __('UWP > User Post Counts','userswp'),
+            'no_wrap'       => true,
+            'block-wrap'    => '',
             'widget_ops'    => array(
-                'classname'   => 'uwp-user-search bsui',
-                'description' => esc_html__('Displays users search form.','userswp'),
+                'classname'   => 'uwp-user-post-counts bsui',
+                'description' => esc_html__('Display user post, comments and other custom post type counts.','userswp'),
             ),
             'arguments'     => array(
                 'title'  => array(
@@ -58,13 +57,15 @@ class UWP_Users_Search_Widget extends WP_Super_Duper {
 	 */
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
+        $user = uwp_get_displayed_user();
+
+        if(!$user){
+        	return '';
+        }
+
         ob_start();
 
-	    $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
-        $template = $design_style ? $design_style."/search-form.php" : "search-form.php";
-
-	    uwp_get_template($template, $args);
-        
+        do_action('uwp_user_post_counts', $user->ID);
 
         $output = ob_get_clean();
 

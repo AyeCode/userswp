@@ -47,13 +47,10 @@ class UWP_Users_Loop_Widget extends WP_Super_Duper {
         
         ob_start();
 
-        global $uwp_widget_args;
-        $uwp_widget_args = $args;
-
         // get users
         $users_list = get_uwp_users_list();
-        $uwp_widget_args['template_args']['users'] = $users_list['users'];
-        $uwp_widget_args['template_args']['total_users'] = $users_list['total_users'];
+        $args['template_args']['users'] = $users_list['users'];
+        $args['template_args']['total_users'] = $users_list['total_users'];
         
         $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
         $template = $design_style ? $design_style."/loop-users.php" : "loop-users.php";
