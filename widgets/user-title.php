@@ -64,7 +64,7 @@ class UWP_User_Title_Widget extends WP_Super_Duper {
 
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        $user = uwp_get_displayed_user();
+    	global $post;
 
         $defaults = array(
             'tag'      => 'h2',
@@ -75,9 +75,23 @@ class UWP_User_Title_Widget extends WP_Super_Duper {
         $args = apply_filters( 'uwp_widget_user_title_args', $args, $widget_args, $this );
 
         $title_tag = empty( $args['tag'] ) ? 'h2' : apply_filters( 'uwp_widget_user_title_tag', $args['tag'], $args, $widget_args, $this );
-        if(empty($args['user_id']) && !empty($user->ID)){
-            $args['user_id'] = $user->ID;
-        }
+
+	    if('post_author' == $args['user_id'] && $post instanceof WP_Post){
+		    $user = get_userdata($post->post_author);
+		    $args['user_id'] = $post->post_author;
+	    } else if(isset($args['user_id']) && (int)$args['user_id'] > 0){
+		    $user = get_userdata($args['user_id']);
+	    } else {
+		    $user = uwp_get_displayed_user();
+	    }
+
+	    if(empty($args['user_id']) && !empty($user->ID)){
+		    $args['user_id'] = $user->ID;
+	    }
+
+	    if(!$user){
+		    return '';
+	    }
 
         ob_start();
 

@@ -39,13 +39,7 @@ if(!$uwp_in_user_loop){ ?><div class="card shadow-0 border-0 mw-100"><?php }
 			   data-toggle="tooltip" data-placement="right" title=""
 			   data-original-title="<?php _e( 'Update Cover Image', 'userswp' ); ?>">
 				<i class="fas fa-camera fa-fw"></i>
-			</a><br>
-            <a href="#"
-               class="btn btn-sm uwp_profile_banner_remove btn-outline-secondary border-0"
-               data-toggle="tooltip" data-placement="right" title=""
-               data-original-title="<?php _e( 'Reset Cover Image', 'userswp' ); ?>">
-                <i class="fas fa-times fa-fw"></i>
-            </a>
+			</a>
 		</div>
 	<?php } ?>
 

@@ -72,6 +72,20 @@ class UsersWP_Forms {
 			}
 			$message = __('Banner cropped successfully.', 'userswp');
 			$processed = true;
+		} elseif (isset($_POST['uwp_avatar_reset'])) {
+			$errors = $this->process_image_reset('avatar');
+			if (!is_wp_error($errors)) {
+				$redirect = $errors;
+			}
+			$message = __('Avatar reset successfully.', 'userswp');
+			$processed = true;
+		} elseif (isset($_POST['uwp_banner_reset'])) {
+			$errors = $this->process_image_reset('banner');
+			if (!is_wp_error($errors)) {
+				$redirect = $errors;
+			}
+			$message = __('Banner reset successfully.', 'userswp');
+			$processed = true;
 		}
 
 		if ($processed) {
@@ -1202,6 +1216,61 @@ class UsersWP_Forms {
 		return $url;
 
 	}
+
+	/**
+	 * Processes avatar and banner image reset.
+	 *
+	 * @package     userswp
+	 *
+	 * @param       string                  $type       Image type. Default 'avatar'.
+	 *
+	 * @return      bool|WP_Error|string                Profile url.
+	 */
+	public function process_image_reset($type){
+		if (!is_user_logged_in()) {
+			return false;
+		}
+
+		if ( is_admin() && defined('IS_PROFILE_PAGE') && IS_PROFILE_PAGE ) {
+			$user_id = get_current_user_id();
+			// If is another user's profile page
+		} elseif (is_admin() && ! empty($_GET['user_id']) && is_numeric($_GET['user_id']) ) {
+			$user_id = $_GET['user_id'];
+			// Otherwise something is wrong.
+		} else {
+			$user_id = get_current_user_id();
+		}
+
+		$errors = new WP_Error();
+		if (empty($user_id)) {
+			$errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong. Please try again.', 'userswp'));
+		}
+
+		$error_code = $errors->get_error_code();
+		if (!empty($error_code)) {
+			return $errors;
+		}
+
+		if ($type == 'avatar') {
+			uwp_update_usermeta($user_id, 'avatar_thumb', '');
+		} elseif ($type == 'banner') {
+			uwp_update_usermeta($user_id, 'banner_thumb', '');
+        } else {
+		    // Do nothing
+        }
+
+		if (is_admin()) {
+			if ($user_id == get_current_user_id()) {
+				$profile_url = admin_url( 'profile.php' );
+			} else {
+				$profile_url = admin_url( 'user-edit.php?user_id='.$user_id );
+			}
+		} else {
+			$profile_url = uwp_build_profile_tab_url($user_id);
+		}
+
+		return $profile_url;
+    }
 
 	/**
 	 * Processes avatar and banner uploads image crop.

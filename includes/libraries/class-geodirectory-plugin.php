@@ -939,6 +939,7 @@ class UsersWP_GeoDirectory_Plugin {
 
             $the_query     = new WP_Query( $query_args );
 
+	        $args = array();
 	        $args['template_args']['the_query'] = $the_query;
 	        $args['template_args']['title']     = $subtabs[$active_tab]['title'];
 
@@ -1018,7 +1019,7 @@ class UsersWP_GeoDirectory_Plugin {
 		} else {
 			$gd_post_types = geodir_get_posttypes( 'array' );
 			?>
-			<h3><?php _e( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' ) ?></h3>
+			<h3><?php _e( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' ) ?></h3>
 
 			<div class="uwp-profile-item-block">
 				<?php
@@ -1166,7 +1167,7 @@ class UsersWP_GeoDirectory_Plugin {
 				} else {
 					echo aui()->alert( array(
 						'type'    => 'info',
-						'content' => sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
+						'content' => sprintf( __( "No %s found.", 'geodirectory' ), $gd_post_types[ $post_type ]['labels']['name'] )
 					) );
 				}
 				do_action( 'uwp_after_profile_listing_items', $user, $post_type );
@@ -1206,8 +1207,9 @@ class UsersWP_GeoDirectory_Plugin {
 		$the_query     = new WP_Query( $query_args );
 		$gd_post_types = geodir_get_posttypes( 'array' );
 
+		$args = array();
 		$args['template_args']['the_query'] = $the_query;
-		$args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' );
+		$args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' );
 
 		uwp_get_template( "bootstrap/loop-posts.php", $args );
 
@@ -1255,7 +1257,7 @@ class UsersWP_GeoDirectory_Plugin {
 		} else {
 			$gd_post_types = geodir_get_posttypes( 'array' );
 			?>
-			<h3><?php _e( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' ) ?></h3>
+			<h3><?php _e( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' ) ?></h3>
 
 			<div class="uwp-profile-item-block">
 				<?php
@@ -1379,7 +1381,7 @@ class UsersWP_GeoDirectory_Plugin {
 				} else {
 					echo aui()->alert( array(
 						'type'    => 'info',
-						'content' => sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
+						'content' => sprintf( __( "No %s found.", 'geodirectory' ), $gd_post_types[ $post_type ]['labels']['name'] )
 					) );
 				}
 
@@ -1404,6 +1406,7 @@ class UsersWP_GeoDirectory_Plugin {
 	 */
 	public function get_bootstrap_reviews( $user, $post_type ) {
 		global $userswp;
+		$args = array();
 
 		$args['template_args']['title'] = __( "Reviews", 'userswp' );
 
@@ -1427,7 +1430,7 @@ class UsersWP_GeoDirectory_Plugin {
 		} else {
 			$gd_post_types = geodir_get_posttypes( 'array' );
 			?>
-			<h3><?php _e( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' ) ?></h3>
+			<h3><?php _e( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' ) ?></h3>
 
 			<div class="uwp-profile-item-block">
 				<?php
@@ -1595,7 +1598,7 @@ class UsersWP_GeoDirectory_Plugin {
 				} else {
 					echo aui()->alert( array(
 						'type'    => 'info',
-						'content' => sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
+						'content' => sprintf( __( "No %s found.", 'geodirectory' ), $gd_post_types[ $post_type ]['labels']['name'] )
 					) );
 				}
 				?>
@@ -1637,7 +1640,7 @@ class UsersWP_GeoDirectory_Plugin {
 			$gd_post_types = geodir_get_posttypes( 'array' );
 
 			$args['template_args']['the_query'] = $the_query;
-			$args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'userswp' );
+			$args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' );
 
 			uwp_get_template( "bootstrap/loop-posts.php", $args );
 		} else {

@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.4
-Stable tag: 1.2.2
+Stable tag: 1.2.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,7 +127,7 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
-= 1.2.3 =
+= 1.2.2.1 =
 * Change wp_mail_from fallback to wordpress@yourdomain.com - FIXED
 * Country field not displaying in more info tab - FIXED
 * Allow user to resend activation link on login if not activated account - FIXED

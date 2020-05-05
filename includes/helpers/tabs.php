@@ -92,6 +92,7 @@ function uwp_generic_tab_content($user, $post_type = false, $title = '', $post_i
     // The Query
     $the_query = new WP_Query($query_args);
 
+    $args = array();
 	$args['template_args']= array(
         'the_query' => $the_query,
         'user'      => $user,
