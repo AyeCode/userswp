@@ -57,7 +57,8 @@ class UWP_Users_Loop_Widget extends WP_Super_Duper {
 	    uwp_get_template($template, $args);
 
         // @todo maybe move paging to template?
-        $number = uwp_get_option('profile_no_of_items', 10);
+        $number = uwp_get_option('profile_no_of_items');
+	    $number = empty($number) ? 10 : $number;
         $total_users = $users_list['total_users'];
         $total_pages = ceil($total_users/$number);
         do_action('uwp_profile_pagination', $total_pages);

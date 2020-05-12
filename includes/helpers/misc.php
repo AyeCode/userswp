@@ -124,8 +124,8 @@ function uwp_string_to_options($input = '', $translated = false)
  * @package     userswp
  *
  * @param       string      $image      Reference a local file
- * @param       int         $width      Image width      
- * @param       int         $height     Image height    
+ * @param       int         $width      Image width
+ * @param       int         $height     Image height
  * @param       float       $scale      Image scale ratio.
  *
  * @return      mixed                   Resized image.
@@ -287,6 +287,37 @@ function uwp_error_log($log){
     }
 }
 
+function uwp_get_excluded_users_list() {
+
+	$args = array(
+		'fields' => 'ID',
+		'meta_query' => array(
+			'relation' => 'OR',
+			array(
+				'key'     => 'uwp_mod',
+				'value'   => 'email_unconfirmed',
+				'compare' => '=='
+			),
+			array(
+				'key'     => 'uwp_hide_from_listing',
+				'value'   => 1,
+				'compare' => '=='
+			)
+		)
+	);
+
+	$inactive_users = new WP_User_Query($args);
+	$exclude_users = $inactive_users->get_results();
+
+	$excluded_globally = uwp_get_option('users_excluded_from_list');
+	if ( $excluded_globally ) {
+		$excluded_users = str_replace(' ', '', $excluded_globally );
+		$users_array = explode(',', $excluded_users );
+		$exclude_users = array_merge($exclude_users, $users_array);
+	}
+
+	return $exclude_users;
+}
 
 /**
  * Prints the users page main content.
@@ -298,162 +329,144 @@ function uwp_error_log($log){
  */
 function get_uwp_users_list() {
 
-    global $wpdb;
+	global $wpdb;
 
-    $keyword = false;
-    if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
-        $keyword = stripslashes(strip_tags($_GET['uwps']));
-    }
+	$keyword = false;
+	if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
+		$keyword = stripslashes(strip_tags($_GET['uwps']));
+	}
 
-    $sort_by = false;
-    if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
-        $sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
-    }
+	$sort_by = false;
+	if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
+		$sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
+	}
 
-    $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+	$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
-    $number = uwp_get_option('profile_no_of_items', 10);
+	$default_number = 12;
+	$number = uwp_get_option('profile_no_of_items', $default_number);
+	$number = !empty($number) ? $number : $default_number;
 
-    $where = '';
-    $where = apply_filters('uwp_users_search_where', $where, $keyword);
+	$where = '';
+	$where = apply_filters('uwp_users_search_where', $where, $keyword);
 
-    $arg = array(
-        'fields' => 'ID',
-        'meta_query' => array(
-            'relation' => 'OR',
-            array(
-                'key'     => 'uwp_mod',
-                'value'   => 'email_unconfirmed',
-                'compare' => '=='
-            ),
-            array(
-                'key'     => 'uwp_hide_from_listing',
-                'value'   => 1,
-                'compare' => '=='
-            )
-        )
-    );
+	$exclude_users = uwp_get_excluded_users_list();
+	$exclude_users = apply_filters('uwp_excluded_users_from_list', $exclude_users, $where, $keyword);
+	$exclude_users = !empty($exclude_users) ? array_unique($exclude_users): array();
 
-    $inactive_users = new WP_User_Query($arg);
-    $exclude_users = $inactive_users->get_results();
+	$exclude_query = ' ';
+	if(!empty($exclude_users)) {
+		$exclude_users_list = implode(',', $exclude_users);
+		$exclude_query = 'AND '. $wpdb->users.'.ID NOT IN ('.$exclude_users_list.')';
+	}
 
-    $excluded_globally = uwp_get_option('users_excluded_from_list');
-    if ( $excluded_globally ) {
-        $excluded_users = str_replace(' ', '', $excluded_globally );
-        $users_array = explode(',', $excluded_users );
-        $exclude_users = array_merge($exclude_users, $users_array);
-    }
+	$order_by = 'display_name';
+	$order = 'ASC';
+	if ($sort_by) {
+		switch ($sort_by) {
+			case "newer":
+				$order_by = 'registered';
+				$order = 'DESC';
+				break;
+			case "older":
+				$order_by = 'registered';
+				$order = 'ASC';
+				break;
+			case "alpha_asc":
+				$order_by = 'display_name';
+				$order = 'ASC';
+				break;
+			case "alpha_desc":
+				$order_by = 'display_name';
+				$order = 'DESC';
+				break;
 
-    $exclude_users = apply_filters('uwp_excluded_users_from_list', $exclude_users, $where, $keyword);
+		}
+	}
 
-    if($exclude_users){
-        $exclude_users_list = implode(',', array_unique($exclude_users));
-        $exclude_query = 'AND '. $wpdb->users.'.ID NOT IN ('.$exclude_users_list.')';
-    } else {
-        $exclude_query = ' ';
-    }
+	$users = array();
 
-    if ($keyword || $where) {
-        if (empty($where)) {
-            $user_query = $wpdb->get_results($wpdb->prepare(
-                "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
+	if($keyword || $where ) {
+
+		if (empty($where)) {
+			$user_query = $wpdb->prepare("SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
             FROM $wpdb->users
             INNER JOIN $wpdb->usermeta
             ON ( $wpdb->users.ID = $wpdb->usermeta.user_id )
             WHERE 1=1
             $exclude_query
             AND ( 
-            ( $wpdb->usermeta.meta_key = 'first_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
-            OR 
-            ( $wpdb->usermeta.meta_key = 'last_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
-            OR 
-            user_login LIKE %s 
-            OR 
-            user_nicename LIKE %s 
-            OR 
-            display_name LIKE %s 
-            OR 
-            user_email LIKE %s
+                ( $wpdb->usermeta.meta_key = 'first_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
+                OR 
+                ( $wpdb->usermeta.meta_key = 'last_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
+                OR user_login LIKE %s OR user_nicename LIKE %s OR display_name LIKE %s
             )
-            ORDER BY display_name ASC
-            LIMIT 0, 20",
-                array(
-                    '%' . $keyword . '%',
-                    '%' . $keyword . '%',
-                    '%' . $keyword . '%',
-                    '%' . $keyword . '%',
-                    '%' . $keyword . '%',
-                    '%' . $keyword . '%'
-                )
-            ));
+            ORDER BY display_name ASC",
+				array(
+					'%' . $keyword . '%',
+					'%' . $keyword . '%',
+					'%' . $keyword . '%',
+					'%' . $keyword . '%',
+					'%' . $keyword . '%',
+				)
+			);
+		} else{
+			$usermeta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
-        } else {
-            $usermeta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+			$user_query = "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.* FROM $wpdb->users
+            INNER JOIN $usermeta_table ON ( $wpdb->users.ID = $usermeta_table.user_id )
+            WHERE 1=1 $exclude_query $where ORDER BY display_name ASC";
+		}
 
-            $user_query = $wpdb->get_results(
-                "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
-            FROM $wpdb->users
-            INNER JOIN $usermeta_table
-            ON ( $wpdb->users.ID = $usermeta_table.user_id )
-            WHERE 1=1
-            $exclude_query
-            $where
-            ORDER BY display_name ASC
-            LIMIT 0, 20");
-        }
+		$user_results = $wpdb->get_results($user_query);
+		$get_users = wp_list_pluck($user_results, 'ID');
 
-        $get_users = wp_list_pluck($user_query, 'ID');
-        if($get_users && count($get_users) > 0){
-	        $args = array(
-		        'include' => $get_users,
-	        );
+		if(!empty($get_users) && is_array($get_users) && count($get_users) > 0){
+			$args = array(
+				'include' => $get_users,
+				'number' => (int) $number,
+				'paged' => (int) $paged,
+			);
 
-	        $uwp_users_query = new WP_User_Query($args);
-	        $users['users'] = $uwp_users_query->get_results();
-	        $users['total_users'] = $uwp_users_query->get_total();
-        } else {
-	        $users['users'] = array();
-	        $users['total_users'] = 0;
-        }
+			if(!empty($exclude_users)) {
+				$args['exclude'] = $exclude_users;
+			}
 
-    } else {
+			if(!empty($order_by) && !empty($order) ) {
+				$args['orderby'] = $order_by;
+				$args['order'] = $order;
+			}
 
-        $args = array(
-            'number' => (int) $number,
-            'paged' => $paged,
-            'exclude' => $exclude_users,
-        );
+			$uwp_users_query = new WP_User_Query($args);
+			$users['users'] = $uwp_users_query->get_results();
+			$users['total_users'] = $uwp_users_query->get_total();
 
+		} else {
+			$users['users'] = array();
+			$users['total_users'] = 0;
+		}
 
-        if ($sort_by) {
-            switch ($sort_by) {
-                case "newer":
-                    $args['orderby'] = 'registered';
-                    $args['order'] = 'desc';
-                    break;
-                case "older":
-                    $args['orderby'] = 'registered';
-                    $args['order'] = 'asc';
-                    break;
-                case "alpha_asc":
-                    $args['orderby'] = 'display_name';
-                    $args['order'] = 'asc';
-                    break;
-                case "alpha_desc":
-                    $args['orderby'] = 'display_name';
-                    $args['order'] = 'desc';
-                    break;
+	} else {
+		$args = array(
+			'number' => (int) $number,
+			'paged' => (int) $paged,
+		);
 
-            }
-        }
+		if(!empty($exclude_users)) {
+			$args['exclude'] = $exclude_users;
+		}
 
-        $uwp_users_query = new WP_User_Query($args);
-        $users['users'] = $uwp_users_query->get_results();
-        $users['total_users'] = $uwp_users_query->get_total();
+		if(!empty($order_by) && !empty($order) ) {
+			$args['orderby'] = $order_by;
+			$args['order'] = $order;
+		}
 
-    }
+		$uwp_users_query = new WP_User_Query($args);
+		$users['users'] = $uwp_users_query->get_results();
+		$users['total_users'] = $uwp_users_query->get_total();
+	}
 
-    return $users;
+	return $users;
 
 }
 
@@ -1031,7 +1044,7 @@ function uwp_str_ends_with($haystack, $needle)
 }
 
 /**
- * Returns the font awesome icon value for field type. 
+ * Returns the font awesome icon value for field type.
  * Displayed in profile tabs.
  *
  * @since       1.0.0
@@ -1062,7 +1075,7 @@ function uwp_field_type_to_fa_icon($type) {
     } else {
         return "";
     }
-    
+
 }
 
 /**

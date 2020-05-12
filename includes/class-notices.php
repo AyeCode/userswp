@@ -40,7 +40,7 @@ class UsersWP_Notices {
      */
     public function form_notice_by_key($type = '', $echo = true, $user_id = 0) {
         $key = isset($_REQUEST['uwp_err']) ? sanitize_html_class($_GET['uwp_err']) : $type;
-	    $user_id = isset($_REQUEST['user_id']) ? absint($_GET['$user_id']) : $user_id;
+	    $user_id = isset($_REQUEST['user_id']) ? absint($_REQUEST['user_id']) : $user_id;
         $messages = array();
         $notice = $link = '';
 
