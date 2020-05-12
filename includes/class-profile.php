@@ -625,6 +625,8 @@ class UsersWP_Profile {
 
 		$counts = array();
 		$post_types = array();
+		$exclude = array('wpi_invoice', 'wpi_quote', 'elementor_library', 'attachment');
+		$exclude = apply_filters( 'uwp_get_user_post_counts', $exclude, $post_types );
 
 		if($user_id){
 			$post_types = get_post_types( array('public'=>true,'publicly_queryable'=>true), 'objects');
@@ -632,7 +634,7 @@ class UsersWP_Profile {
 			if(!empty($post_types)){
 				foreach($post_types as $cpt => $post_type){
 					$count = count_user_posts( $user_id , $cpt);
-					if($count){
+					if($count && !in_array($cpt, $exclude)){
 						$counts[$cpt] = array('name'=> $post_type->labels->name,'singular_name'=> $post_type->labels->singular_name,'count'=>$count);
 					}
 				}
@@ -650,7 +652,7 @@ class UsersWP_Profile {
             echo $output;
         }
 
-		return apply_filters( 'uwp_get_user_post_counts', $counts, $post_types );
+		return apply_filters( 'uwp_get_user_post_counts_output', $counts, $post_types );
 
 	}
 

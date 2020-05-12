@@ -322,6 +322,10 @@ jQuery(document).ready(function () {
                     save_register_field(htmlvar_name); // save registration fields on add
                 }
 
+                if (manage_field_type == 'search') {
+                    save_search_field(htmlvar_name); // save search fields on add
+                }
+
             });
 
         if(htmlvar_name!='fieldset' && manage_field_type != 'profile_tabs'){
