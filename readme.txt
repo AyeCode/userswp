@@ -127,6 +127,10 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.2 =
+* Exclude invoice and other CPT from the post counts in user profile - FIXED
+* Apply sorting to search result as well while sorting for search result in users listing page - FIXED
+
 = 1.2.2.1 =
 * Change wp_mail_from fallback to wordpress@yourdomain.com - FIXED
 * Country field not displaying in more info tab - FIXED
