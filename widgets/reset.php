@@ -101,9 +101,6 @@ class UWP_Reset_Widget extends WP_Super_Duper {
          */
         $args = wp_parse_args( $args, $defaults );
 
-        global $uwp_widget_args;
-        $uwp_widget_args = $args;
-
         ob_start();
 
         echo '<div class="uwp_widgets uwp_widget_reset">';

@@ -1,3 +1,11 @@
+= 1.0.19 =
+* Put non grouped block settings in to a "settings" group - CHANGED
+
+= 1.0.18 =
+* Conflicts with fusion builder elements - FIXED
+* Oxygen builder preview detection - ADDED
+* Elementor editor widget section types have no styling - FIXED
+
 = 1.0.17 =
 * Title & description in block editor shows escaped special characters - FIXED
 * Widget advanced settings button line-height too tall - FIXED

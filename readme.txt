@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.4
-Stable tag: 1.2.2
+Stable tag: 1.2.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -126,6 +126,20 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.2.2 =
+* Exclude invoice and other CPT from the post counts in user profile - FIXED
+* Apply sorting to search result as well while sorting for search result in users listing page - FIXED
+
+= 1.2.2.1 =
+* Change wp_mail_from fallback to wordpress@yourdomain.com - FIXED
+* Country field not displaying in more info tab - FIXED
+* Allow user to resend activation link on login if not activated account - FIXED
+* Allow displaying user profile header anywhere - FIXED
+* Allow user to remove cover image - ADDED
+* Class in frontend body tag for UsersWP pages - ADDED
+* Pass arguments to template via function parameter instead of using global variable - CHANGED
+* Separate shortcode for User Avatar image, Cover image and Post Counts - CHANGED
 
 = 1.2.2 =
 * Delete listing in profile page is not reloading after deleting - FIXED

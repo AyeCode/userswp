@@ -926,6 +926,24 @@ class UsersWP_Templates {
 
         if ( is_uwp_page() ) {
             $classes[] = 'uwp_page';
+
+            if(is_uwp_page('register_page')){
+	            $classes[] = 'uwp_register_page';
+            }elseif(is_uwp_page('login_page')){
+	            $classes[] = 'uwp_login_page';
+            }elseif(is_uwp_page('forgot_page')){
+	            $classes[] = 'uwp_forgot_page';
+            }elseif(is_uwp_page('change_page')){
+	            $classes[] = 'uwp_change_page';
+            }elseif(is_uwp_page('reset_page')){
+	            $classes[] = 'uwp_reset_page';
+            }elseif(is_uwp_page('account_page')){
+	            $classes[] = 'uwp_account_page';
+            }elseif(is_uwp_page('profile_page')){
+	            $classes[] = 'uwp_profile_page';
+            }elseif(is_uwp_page('users_page')){
+	            $classes[] = 'uwp_users_page';
+            }
         }
 
         return $classes;
@@ -1184,12 +1202,12 @@ class UsersWP_Templates {
 				if ( !in_array( 'administrator', $user->roles ) ) {
 					$login_page = uwp_get_page_id('login_page', false);
 					if ($login_page) {
-						$redirect_to = add_query_arg(array('uwp_err' => 'act_pending'), get_permalink($login_page));
+						$redirect_to = add_query_arg(array('uwp_err' => 'act_pending', 'user_id' => $user->ID), get_permalink($login_page));
 						wp_destroy_current_session();
 						wp_clear_auth_cookie();
 						if(wp_doing_ajax()){
 							global $userswp;
-							$message = $userswp->notices->form_notice_by_key('act_pending',false);
+							$message = $userswp->notices->form_notice_by_key('act_pending',false, $user->ID);
 							wp_send_json_error($message);
 						}else{
 							wp_redirect($redirect_to);

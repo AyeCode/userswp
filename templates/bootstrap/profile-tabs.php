@@ -4,14 +4,11 @@
  *
  * @ver 0.0.1
  */
-global $uwp_widget_args;
-$css_class = ! empty( $uwp_widget_args['css_class'] ) ? esc_attr( $uwp_widget_args['css_class'] ) : 'border-0';
-//print_r( $uwp_widget_args );
-$output = ! empty( $uwp_widget_args['output'] ) ? esc_attr( $uwp_widget_args['output'] ) : '';
+$css_class = ! empty( $args['css_class'] ) ? esc_attr( $args['css_class'] ) : 'border-0';
+$output = ! empty( $args['output'] ) ? esc_attr( $args['output'] ) : '';
 $account_page = uwp_get_page_id('account_page', false);
-$tabs_array = $uwp_widget_args['tabs_array'];
-//print_r($tabs_array);exit;
-$active_tab = $uwp_widget_args['active_tab'];
+$tabs_array = $args['tabs_array'];
+$active_tab = $args['active_tab'];
 
 do_action( 'uwp_template_before', 'profile-tabs' );
 $user = uwp_get_displayed_user();
@@ -78,7 +75,6 @@ if($output === '' || $output=='body'){
 			if ($active_tab == $tab_id) {
 				$active_tab_content = $tab['tab_content_rendered'];
 			}
-
 		}
 	}
 	?>

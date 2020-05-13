@@ -3,10 +3,10 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-global $uwp_widget_args;
-$the_query = isset( $uwp_widget_args['template_args']['the_query'] ) ? $uwp_widget_args['template_args']['the_query'] : '';
-$maximum_pages = isset( $uwp_widget_args['template_args']['maximum_pages'] ) ? $uwp_widget_args['template_args']['maximum_pages'] : '';
-$title = isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args['template_args']['title'] : __('Comments', 'userswp');
+
+$the_query = isset( $args['template_args']['the_query'] ) ? $args['template_args']['the_query'] : '';
+$maximum_pages = isset( $args['template_args']['maximum_pages'] ) ? $args['template_args']['maximum_pages'] : '';
+$title = isset( $args['template_args']['title'] ) ? $args['template_args']['title'] : __('Comments', 'userswp');
 ?>
 <h3><?php echo $title;?></h3>
 
@@ -14,12 +14,12 @@ $title = isset( $uwp_widget_args['template_args']['title'] ) ? $uwp_widget_args[
 	<?php
 	// The Loop
 	if ($the_query) {
-		$design_style = ! empty( $uwp_widget_args['design_style'] ) ? esc_attr( $uwp_widget_args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
+		$design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
 		$template     = $design_style ? $design_style . "/comments-item.php" : "comments-item.php";
 		echo '<div class="cards">';
 		foreach ( $the_query as $comment ) {
-			$uwp_widget_args['template_args']['comment'] = $comment;
-			uwp_get_template($template);
+			$args['template_args']['comment'] = $comment;
+			uwp_get_template($template, $args);
 		}
 		echo '</div>';
 	} else {

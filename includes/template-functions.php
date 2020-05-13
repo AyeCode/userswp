@@ -70,10 +70,10 @@ function uwp_locate_template($type, $template_path = "" ){
 /**
  * Function to display no user found message from template.
  */
-function uwp_no_users_found(){
+function uwp_no_users_found($args = array()){
 	$design_style = uwp_get_option("design_style",'bootstrap');
 	$template = $design_style ? $design_style."/no-users-found.php" : "no-users-found.php";
-	uwp_get_template( $template );
+	uwp_get_template( $template, $args );
 }
 
 /**

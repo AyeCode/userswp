@@ -4,21 +4,18 @@
  *
  * @ver 0.0.1
  */
-global $uwp_widget_args;
-$css_class = ! empty( $uwp_widget_args['css_class'] ) ? esc_attr( $uwp_widget_args['css_class'] ) : 'border-0';
+$css_class = ! empty( $args['css_class'] ) ? esc_attr( $args['css_class'] ) : 'border-0';
 
 $account_page = uwp_get_page_id('account_page', false);
-$tabs_array = $uwp_widget_args['tabs_array'];
+$tabs_array = $args['tabs_array'];
 //print_r($tabs_array);exit;
-$active_tab = $uwp_widget_args['active_tab'];
+$active_tab = $args['active_tab'];
 
 do_action( 'uwp_template_before', 'profile-tabs' );
 $user = uwp_get_displayed_user();
 if(!$user){
 	return;
 }
-
-
 
 ?>
 	<div class="uwp-profile-content">

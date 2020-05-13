@@ -251,7 +251,7 @@ final class UsersWP {
         add_filter( 'edit_profile_url', array($instance, 'modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
         add_filter( 'get_comment_author_link', array($instance, 'get_comment_author_link') , 10 , 2 );
-//        add_action( 'uwp_profile_header', array($instance, 'get_profile_header'), 10, 4 );
+        add_action( 'uwp_user_post_counts', array($instance, 'get_user_post_counts'), 10, 1 );
         add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_user_title', array($instance, 'get_profile_title'), 10, 2 );
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 2 );
@@ -269,6 +269,7 @@ final class UsersWP {
         add_action( 'wp_ajax_uwp_avatar_banner_upload', array($instance, 'ajax_avatar_banner_upload') );
         //add_action( 'wp_ajax_uwp_ajax_image_crop_popup', array($instance, 'uwp_ajax_image_crop_popup') );
         add_action( 'wp_ajax_uwp_ajax_image_crop_popup_form', array($instance, 'ajax_image_crop_popup_form') );
+        add_action( 'wp_ajax_uwp_ajax_profile_image_remove', array($instance, 'ajax_profile_image_remove') );
         add_action( 'wp_head', array($instance, 'define_ajaxurl') );
         add_action( 'uwp_profile_header', array($instance, 'image_crop_init'), 10, 1 );
         add_action( 'uwp_admin_profile_edit', array($instance, 'image_crop_init'), 10, 1 );
@@ -286,7 +287,7 @@ final class UsersWP {
         add_action( 'uwp_profile_pagination', array($instance, 'get_profile_pagination'));
         
         // Profile title
-        add_action( 'uwp_profile_after_title',array($instance, 'edit_profile_button'));
+        add_action( 'uwp_profile_after_title',array($instance, 'edit_profile_button'), 10, 1);
 
         // Users
         add_action( 'uwp_output_location', array($instance, 'show_output_location_data'), 10, 2);
@@ -460,6 +461,8 @@ final class UsersWP {
 
         register_widget("UWP_User_Title_Widget");
         register_widget("UWP_User_Avatar_Widget");
+        register_widget("UWP_User_Cover_Widget");
+        register_widget("UWP_User_Post_Counts_Widget");
         register_widget("UWP_User_Meta_Widget");
         register_widget("UWP_Users_Search_Widget");
         register_widget("UWP_Users_Loop_Actions");
@@ -746,6 +749,16 @@ final class UsersWP {
          * The class for user avatar widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/user-avatar.php' );
+
+        /**
+         * The class for user post count widget.
+         */
+        require_once( dirname(dirname( __FILE__ )) .'/widgets/user-post-counts.php' );
+
+	    /**
+	     * The class for user cover widget.
+	     */
+	    require_once( dirname(dirname( __FILE__ )) .'/widgets/user-cover.php' );
 
         /**
          * The class for profile social fields widget.

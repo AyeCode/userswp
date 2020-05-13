@@ -27,27 +27,10 @@ class UWP_User_Avatar_Widget extends WP_Super_Duper {
             'name'          => __('UWP > User Avatar','userswp'),
             'no_wrap'       => true,
             'widget_ops'    => array(
-                'classname'   => 'uwp-user-avatar',
-                'description' => esc_html__('Displays user name.','userswp'),
+                'classname'   => 'uwp-user-avatar bsui',
+                'description' => esc_html__('Displays user avatar image for user.','userswp'),
             ),
             'arguments'     => array(
-                'tag'  => array(
-                    'title' => __('Header Tag:', 'userswp'),
-                    'desc' => __('Header tag for the user name.', 'userswp'),
-                    'type' => 'select',
-                    'options'   =>  array(
-                        "div"=> "div",
-                        "p"  => "p",
-                        "h1" => "h1",
-                        "h2" => "h2",
-                        "h3" => "h3",
-                        "h4" => "h4",
-                        "h5" => "h5",
-                        "h6" => "h6",
-                    ),
-                    'default'  => 'p',
-                    'desc_tip' => true,
-                ),
                 'size'  => array(
                     'title' => __('Avatar size:', 'userswp'),
                     'desc' => __('Avatar image size in px. Default is 50px.', 'userswp'),
@@ -57,13 +40,22 @@ class UWP_User_Avatar_Widget extends WP_Super_Duper {
                     'advanced' => true
                 ),
                 'link'  => array(
-                    'title' => __("Link to profile?:", 'geodirectory'),
-                    'desc' => __('Link avatar image and name to user\'s profile page.', 'userswp'),
+                    'title' => __("Link to profile?:", 'userswp'),
+                    'desc' => __('Link avatar image to user\'s profile page.', 'userswp'),
                     'type' => 'checkbox',
                     'desc_tip' => true,
                     'value'  => '1',
                     'default'  => '0',
                     'advanced' => true
+                ),
+                'allow_change'  => array(
+	                'title' => __('Allow to change cover and avatar:', 'userswp'),
+	                'desc' => __('Allow user to change avatar image in profile page.', 'userswp'),
+	                'type' => 'checkbox',
+	                'desc_tip' => true,
+	                'value'  => '1',
+	                'default'  => 1,
+	                'advanced' => true
                 ),
                 'user_id'  => array(
                     'title' => __('User ID:', 'userswp'),
@@ -92,72 +84,66 @@ class UWP_User_Avatar_Widget extends WP_Super_Duper {
 	 */
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
+        global $post;
+
         $defaults = array(
-            'tag'      => 'p',
+            'size'      => 50,
+            'link'      => 0,
+            'allow_change' => 0,
         );
 
         $args = wp_parse_args( $args, $defaults );
 
-        $args = apply_filters( 'uwp_widget_user_avatar_args', $args, $widget_args, $this );
+	    $args['size'] = empty( $args['size'] ) ? 50 : $args['size'];
+	    $args['link'] = 1 == $args['link'] ? 1 : 0;
+	    $args['allow_change'] = !empty($args['allow_change']) ? $args['allow_change'] : 0;
 
-        $title_tag = empty( $args['tag'] ) ? 'p' : $args['tag'];
-        $size = empty( $args['size'] ) ? 50 : $args['size'];
-        $is_link = 1 == $args['link'] ? 1 : 0;
+	    if('post_author' == $args['user_id'] && $post instanceof WP_Post){
+		    $user = get_userdata($post->post_author);
+		    $args['user_id'] = $post->post_author;
+	    } else if(isset($args['user_id']) && (int)$args['user_id'] > 0){
+		    $user = get_userdata($args['user_id']);
+	    } else {
+		    $user = uwp_get_displayed_user();
+	    }
 
-        if(isset($args['user_id']) && $args['user_id'] > 0){
-            $user = get_userdata((int)$args['user_id']);
-            $display_name = $user->display_name;
-            $user_id = $user->ID;
-            $link = apply_filters('uwp_profile_link', get_author_posts_url($user_id), $user_id);
-        } elseif(is_user_logged_in()){
-            $user = get_userdata(get_current_user_id());
-            $display_name = $user->display_name;
-            $user_id = $user->ID;
-            $link = apply_filters('uwp_profile_link', get_author_posts_url($user_id), $user_id);
-        } else {
-            $display_name = __('Guest', 'userswp');
-            $user_id = 0;
-            $link = uwp_get_login_page_url();
-        }
+	    if(empty($args['user_id']) && !empty($user->ID)){
+		    $args['user_id'] = $user->ID;
+	    }
 
-        $output = '';
+	    if(!$user){
+		    return '';
+	    }
+
+	    wp_enqueue_script( 'jcrop', array( 'jquery' ) );
+	    wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
+	    wp_enqueue_style( 'jcrop' );
+	    wp_enqueue_style( 'jquery-ui' );
 
         ob_start();
 
-        $output .= '<div class="uwp-user-avatar-image">';
+	    add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
+	    $uploads = wp_upload_dir();
+	    remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
+	    $upload_url = $uploads['baseurl'];
 
-        if(1 == $is_link){
-            $output .= '<a href="'.$link.'" class="uwp-user-avatar-link">';
-        }
+	    $avatar = uwp_get_usermeta( $user->ID, 'avatar_thumb', '' );
+	    if ( empty( $avatar ) ) {
+		    $avatar = get_avatar_url( $user->user_email, array( 'size' => $args['size'] ) );
+	    } else {
+		    if ( strpos( $avatar, 'http:' ) === false && strpos( $avatar, 'https:' ) === false ) {
+			    $avatar = $upload_url . $avatar;
+		    }
+	    }
 
-        $output .= get_avatar( $user_id, $size );
+	    $args['avatar_url'] = $avatar;
 
-        if(1 == $is_link){
-            $output .= '</a>';
-        }
+	    $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
+	    $template = $design_style ? $design_style."/user-avatar.php" : "user-avatar.php";
 
-        $output .= '</div>';
+	    uwp_get_template($template, $args);
 
-        $output .= '<'.esc_attr($title_tag).' class="uwp-user-avatar-title" data-user="'.$user_id.'">';
-
-        if(1 == $is_link){
-            $output .= '<a href="'.$link.'" class="uwp-user-avatar-link">';
-        }
-
-        $output .= apply_filters('uwp_profile_display_name', $display_name, $args, $widget_args, $this);
-
-        if(1 == $is_link){
-            $output .= '</a>';
-        }
-
-        $output .= '</'.esc_attr($title_tag).'>';
-
-        echo $output;
-
-        $output = ob_get_clean();
-
-        return apply_filters( 'uwp_widget_user_avatar_output', $output, $args, $widget_args, $this );
-
+        return ob_get_clean();
     }
 
 }

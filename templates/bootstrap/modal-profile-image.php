@@ -29,7 +29,7 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 		echo aui()->alert( array(
 				'class'   => 'text-center text-center m-3 p-0 w-50 mx-auto',
 				'type'    => 'info',
-				'content' => sprintf( __( 'Note: Max upload image size: %s', 'plugin-domain' ), $files->uwp_formatSizeUnits( $files->uwp_get_max_upload_size( $type ) ) )
+				'content' => sprintf( __( 'Note: Max upload image size: %s', 'userswp' ), $files->uwp_formatSizeUnits( $files->uwp_get_max_upload_size( $type ) ) )
 			)
 		);
 		?>
@@ -45,12 +45,14 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 
 <div class="modal-footer">
 	<button type="button" data-type="<?php echo $type; ?>" class="btn btn-outline-primary uwp_modal_btn uwp-modal-close"
-	        data-dismiss="modal"><?php echo __( 'Cancel', 'userswp' ); ?></button>
+	        data-dismiss="modal"><?php _e( 'Cancel', 'userswp' ); ?></button>
 	<div class="uwp-<?php echo $type; ?>-crop-p-wrap">
 		<div id="<?php echo $type; ?>-crop-actions">
 			<form class="uwp-crop-form" method="post">
+                <button type="submit" name="uwp_<?php echo $type; ?>_reset" class="btn btn-primary btn-danger"
+                        id="reset_uwp_<?php echo $type; ?>"><?php _e( 'Reset to Default', 'userswp' ); ?></button>
 				<button type="submit" name="uwp_<?php echo $type; ?>_crop" disabled="disabled" class="btn btn-primary"
-				        id="save_uwp_<?php echo $type; ?>"><?php echo __( 'Apply', 'userswp' ); ?></button>
+				        id="save_uwp_<?php echo $type; ?>"><?php _e( 'Apply', 'userswp' ); ?></button>
 			</form>
 		</div>
 	</div>

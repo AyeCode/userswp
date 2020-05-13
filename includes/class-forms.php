@@ -72,6 +72,20 @@ class UsersWP_Forms {
 			}
 			$message = __('Banner cropped successfully.', 'userswp');
 			$processed = true;
+		} elseif (isset($_POST['uwp_avatar_reset'])) {
+			$errors = $this->process_image_reset('avatar');
+			if (!is_wp_error($errors)) {
+				$redirect = $errors;
+			}
+			$message = __('Avatar reset successfully.', 'userswp');
+			$processed = true;
+		} elseif (isset($_POST['uwp_banner_reset'])) {
+			$errors = $this->process_image_reset('banner');
+			if (!is_wp_error($errors)) {
+				$redirect = $errors;
+			}
+			$message = __('Banner reset successfully.', 'userswp');
+			$processed = true;
 		}
 
 		if ($processed) {
@@ -838,7 +852,7 @@ class UsersWP_Forms {
 				), get_permalink($reset_page) );
 				$message .= "<a href='".$reset_link."' target='_blank'>".$reset_link."</a>" . "\r\n";
 			} else {
-				$message .= site_url("reset?key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
+				$message .= home_url("reset?key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
 			}
 		}
 
@@ -924,7 +938,7 @@ class UsersWP_Forms {
 
 		$message = aui()->alert(array(
 				'type'=>'success',
-				'content'=> apply_filters('uwp_change_password_success_message', __('Password changed successfully', 'userswp'), $data)
+				'content'=> apply_filters('uwp_change_password_success_message', __('Password changed successfully.', 'userswp'), $data)
 			)
 		);
 
@@ -993,7 +1007,7 @@ class UsersWP_Forms {
 		wp_set_password( $data['password'], $user_data->ID );
 
 		$login_page_url = uwp_get_login_page_url();
-		$message = sprintf(__('Password updated successfully. Please <a href="%s">login</a> with your new password', 'userswp'), $login_page_url);
+		$message = sprintf(__('Password updated successfully. Please <a href="%s">login</a> with your new password.', 'userswp'), $login_page_url);
 		$message = apply_filters('uwp_reset_password_success_message', $message, $data);
 		$message = aui()->alert(array(
 				'type'=>'success',
@@ -1017,14 +1031,13 @@ class UsersWP_Forms {
 		$data = $_POST;
 		$files = $_FILES;
 
-		$current_user_id = get_current_user_id();
-		if (!$current_user_id) {
-			return;
-		}
-
 		if( ! isset( $data['uwp_account_nonce'] ) || ! wp_verify_nonce( $data['uwp_account_nonce'], 'uwp-account-nonce' ) ) {
 			return;
 		}
+
+		if(!is_user_logged_in()){
+            return;
+        }
 
 		global $uwp_notices;
 		$file_obj = new UsersWP_Files();
@@ -1070,7 +1083,7 @@ class UsersWP_Forms {
 
 
 		$args = array(
-			'ID' => $current_user_id
+			'ID' => get_current_user_id()
 		);
 
 		if (isset($result['email'])) {
@@ -1103,10 +1116,10 @@ class UsersWP_Forms {
 
 		$user_id = wp_update_user( $args );
 
-		if (!$user_id) {
+		if (is_wp_error($user_id)) {
 			$message = aui()->alert(array(
 					'type'=>'error',
-					'content'=> __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp')
+					'content'=> sprintf(__('<strong>Error</strong>: %s', 'userswp'), $user_id->get_error_message())
 				)
 			);
 			$uwp_notices[] = array('account' => $message);
@@ -1145,7 +1158,7 @@ class UsersWP_Forms {
 
 		UsersWP_Mails::send($user_data->user_email, 'account_update', $email_vars);
 
-		$message = apply_filters('uwp_account_update_success_message', __('Account updated successfully', 'userswp'), $data);
+		$message = apply_filters('uwp_account_update_success_message', __('Account updated successfully.', 'userswp'), $data);
 		$message = aui()->alert(array(
 				'type'=>'success',
 				'content'=> $message
@@ -1203,6 +1216,61 @@ class UsersWP_Forms {
 		return $url;
 
 	}
+
+	/**
+	 * Processes avatar and banner image reset.
+	 *
+	 * @package     userswp
+	 *
+	 * @param       string                  $type       Image type. Default 'avatar'.
+	 *
+	 * @return      bool|WP_Error|string                Profile url.
+	 */
+	public function process_image_reset($type){
+		if (!is_user_logged_in()) {
+			return false;
+		}
+
+		if ( is_admin() && defined('IS_PROFILE_PAGE') && IS_PROFILE_PAGE ) {
+			$user_id = get_current_user_id();
+			// If is another user's profile page
+		} elseif (is_admin() && ! empty($_GET['user_id']) && is_numeric($_GET['user_id']) ) {
+			$user_id = $_GET['user_id'];
+			// Otherwise something is wrong.
+		} else {
+			$user_id = get_current_user_id();
+		}
+
+		$errors = new WP_Error();
+		if (empty($user_id)) {
+			$errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong. Please try again.', 'userswp'));
+		}
+
+		$error_code = $errors->get_error_code();
+		if (!empty($error_code)) {
+			return $errors;
+		}
+
+		if ($type == 'avatar') {
+			uwp_update_usermeta($user_id, 'avatar_thumb', '');
+		} elseif ($type == 'banner') {
+			uwp_update_usermeta($user_id, 'banner_thumb', '');
+        } else {
+		    // Do nothing
+        }
+
+		if (is_admin()) {
+			if ($user_id == get_current_user_id()) {
+				$profile_url = admin_url( 'profile.php' );
+			} else {
+				$profile_url = admin_url( 'user-edit.php?user_id='.$user_id );
+			}
+		} else {
+			$profile_url = uwp_build_profile_tab_url($user_id);
+		}
+
+		return $profile_url;
+    }
 
 	/**
 	 * Processes avatar and banner uploads image crop.
@@ -3135,7 +3203,7 @@ class UsersWP_Forms {
 			$fields = get_account_form_fields($extra_where);
 			$fields = apply_filters('uwp_account_privacy_fields', $fields);
 			$user_id = get_current_user_id();
-			global $wpdb;
+			global $wpdb, $uwp_notices;
 			$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
 			$user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT user_privacy, tabs_privacy FROM $meta_table WHERE user_id = %d", $user_id ) );
@@ -3234,6 +3302,14 @@ class UsersWP_Forms {
 				}
 			}
 
+			$message = apply_filters('uwp_privacy_update_success_message', __('Privacy settings updated successfully.', 'userswp'));
+			$message = aui()->alert(array(
+					'type'=>'success',
+					'content'=> $message
+				)
+			);
+			$uwp_notices[] = array('account' => $message);
+
 		}
 	}
 
@@ -3274,7 +3350,7 @@ class UsersWP_Forms {
 		$fields = get_register_form_fields();
 		if (!empty($fields)) {
 			foreach ($fields as $field) {
-				if ($field->field_type_key == 'country') {
+				if ($field->field_type_key == 'country' || $field->field_type_key == 'uwp_country') {
 					$country_field  = true;
 				}
 			}

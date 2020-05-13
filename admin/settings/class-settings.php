@@ -688,7 +688,7 @@ class UsersWP_Admin_Settings {
                         'show_option_none' => ' ',
                         'class'            => ' regular-text aui-select2 '.$value['class'],
                         'echo'             => false,
-                        'selected'         => absint( $option_value ),
+                        'selected'         => (int)$option_value > 0 ? (int)$option_value : -1,
                     );
 
                     if ( isset( $value['args'] ) ) {
@@ -700,7 +700,7 @@ class UsersWP_Admin_Settings {
                     <td class="forminp">
                         <?php echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'userswp' ) . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages( $args ) ); ?> <?php echo $description; ?>
 
-                        <?php if($args['selected']){ ?>
+                        <?php if($args['selected'] > 0){ ?>
                             <a href="<?php echo get_edit_post_link( $args['selected'] ); ?>" class="button uwp-page-setting-edit"><?php _e('Edit Page','userswp');?></a>
 
                             <?php if(empty($value['is_template_page'])){ ?>

@@ -101,9 +101,6 @@ class UWP_Change_Widget extends WP_Super_Duper {
          */
         $args = wp_parse_args( $args, $defaults );
 
-        global $uwp_widget_args;
-        $uwp_widget_args = $args;
-
         ob_start();
 
         echo '<div class="uwp_widgets uwp_widget_change">';
@@ -113,8 +110,7 @@ class UWP_Change_Widget extends WP_Super_Duper {
 
         echo '<div class="uwp_page">';
 
-	    uwp_get_template($template);
-	    
+	    uwp_get_template($template, $args);
 
         echo '</div>';
 
@@ -140,11 +136,7 @@ class UWP_Change_Widget extends WP_Super_Duper {
 		    });
 	    </script>
 		<?php
-
         $output = ob_get_clean();
-
-
-
         return trim($output);
 
     }
