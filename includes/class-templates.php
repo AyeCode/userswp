@@ -533,7 +533,7 @@ class UsersWP_Templates {
 
             <input name="<?php echo $field->htmlvar_name; ?>"
                    class="<?php echo $field->css_class; ?> <?php echo esc_attr($bs_form_control);?>"
-                   placeholder="<?php echo $label; ?>"
+                   placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                    title="<?php echo $label; ?>"
                 <?php if ($field->for_admin_use == 1) { echo 'readonly="readonly"'; } ?>
                 <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>

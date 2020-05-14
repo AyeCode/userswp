@@ -141,6 +141,31 @@ function uwp_get_form_label($field) {
 }
 
 /**
+ * Returns placehoder for field.
+ *
+ * @param       object      $field      Field info.
+ *
+ * @return      string                  Label.
+ */
+function uwp_get_field_placeholder($field) {
+	$placeholder = '';
+
+	if(isset($field->field_type) && in_array($field->field_type, array('select', 'multiselect'))){
+		if (isset($field->placeholder_value) && !empty($field->placeholder_value)) {
+			$placeholder = __($field->placeholder_value, 'userswp');
+		} else {
+			$placeholder = wp_sprintf( __( 'Choose %s&hellip;', 'userswp' ), uwp_get_form_label($field) );
+		}
+	} else {
+		if (isset($field->placeholder_value) && !empty($field->placeholder_value)) {
+			$placeholder = __($field->placeholder_value, 'userswp');
+		}
+	}
+
+	return stripslashes($placeholder);
+}
+
+/**
  * Gets the custom field info for given key.
  *
  * @since       1.0.0
