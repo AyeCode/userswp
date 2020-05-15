@@ -92,7 +92,10 @@ class UsersWP_Form_Builder {
                             <?php do_action('uwp_manage_available_fields', $form_type); ?>
                         </div>
                     </div>
-
+                    <?php
+                    $predefined_fields = apply_filters('uwp_predefined_fields_tabs', array('account', 'profile-tabs'));
+                    if(in_array($form_type, $predefined_fields)){
+                    ?>
                     <h3>
                         <?php _e('Predefined Fields', 'userswp'); ?>
                     </h3>
@@ -102,7 +105,9 @@ class UsersWP_Form_Builder {
                             <?php do_action('uwp_manage_available_fields_predefined', $form_type); ?>
                         </div>
                     </div>
-
+                    <?php }
+                    $custom_fields = apply_filters('uwp_custom_fields_tabs', array('account', 'profile-tabs'));
+                    if(in_array($form_type, $custom_fields)){ ?>
                     <h3>
 		                <?php _e('Custom Fields', 'userswp'); ?>
                     </h3>
@@ -112,7 +117,7 @@ class UsersWP_Form_Builder {
 			                <?php do_action('uwp_manage_available_fields_custom', $form_type); ?>
                         </div>
                     </div>
-                    
+                    <?php } ?>
                 </div>
 
 
