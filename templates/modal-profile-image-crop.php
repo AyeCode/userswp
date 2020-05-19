@@ -3,8 +3,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-global $uwp_template_args;
-extract($uwp_template_args);
+$type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner';
+$image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
 ?>
 <div class="uwp-bs-modal uwp_fade uwp_show" id="uwp-<?php echo $type; ?>-modal">
 	<div class="uwp-bs-modal-dialog">

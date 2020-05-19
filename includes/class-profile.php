@@ -523,8 +523,12 @@ class UsersWP_Profile {
 
 		}
 
-		
-		return $tabs_array;
+		/**
+		 * Get the tabs output settings.
+		 *
+		 * @param array $tabs_array The array of tabs.
+		 */
+		return apply_filters('uwp_get_profile_tabs', $tabs_array);
 
 	}
 
