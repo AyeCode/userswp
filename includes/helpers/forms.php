@@ -148,7 +148,6 @@ function uwp_get_form_label($field) {
  * @return      string                  Label.
  */
 function uwp_get_field_placeholder($field) {
-	$placeholder = '';
 
 	if(isset($field->field_type) && in_array($field->field_type, array('select', 'multiselect'))){
 		if (isset($field->placeholder_value) && !empty($field->placeholder_value)) {
@@ -159,6 +158,8 @@ function uwp_get_field_placeholder($field) {
 	} else {
 		if (isset($field->placeholder_value) && !empty($field->placeholder_value)) {
 			$placeholder = __($field->placeholder_value, 'userswp');
+		} else {
+			$placeholder = uwp_get_form_label($field);
 		}
 	}
 
