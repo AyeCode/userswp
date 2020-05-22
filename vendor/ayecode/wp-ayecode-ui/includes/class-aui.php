@@ -24,7 +24,7 @@ class AUI {
 	 *
 	 * @var string $ver The current version number.
 	 */
-	public static $ver = '0.1.5';
+	public static $ver = '0.1.8';
 
 	/**
 	 * There can be only one.
