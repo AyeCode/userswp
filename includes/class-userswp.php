@@ -70,7 +70,7 @@ final class UsersWP {
         $this->ajax = new UsersWP_Ajax();
         $this->files = new UsersWP_Files();
         $this->notifications = new UsersWP_Notifications();
-
+        $this->seo = new UsersWP_Seo();
         
         // actions and filters
         $this->load_assets_actions_and_filters($this->assets);
@@ -85,6 +85,7 @@ final class UsersWP {
         $this->load_templates_actions_and_filters($this->templates);
         $this->load_tools_actions_and_filters($this->tools);
         $this->load_notifications_actions_and_filters($this->notifications);
+	    $this->load_seo_actions_and_filters($this->seo);
 
         //admin
         $this->load_form_builder_actions_and_filters($this->form_builder);
@@ -366,6 +367,31 @@ final class UsersWP {
         add_action('uwp_account_form_display', array($instance, 'user_notifications_form_front'), 10, 1);
         add_action('init', array($instance, 'notification_submit_handler'));
     }
+
+	/**
+	 * Actions for SEO.
+	 *
+	 * @param $instance
+	 */
+	public function load_seo_actions_and_filters($instance) {
+		add_action('pre_get_document_title', array($instance,'output_title'));
+
+		if(UsersWP_Seo::has_yoast()) {
+			if ( UsersWP_Seo::has_yoast_14() ) {
+				add_filter( 'wpseo_opengraph_title', array( $instance, 'get_title' ), 10);
+				add_filter( 'wpseo_opengraph_desc', array( $instance, 'get_description' ), 10 );
+				add_filter( 'wpseo_opengraph_url', array( $instance, 'get_opengraph_url' ), 20 );
+			}
+
+			add_filter( 'wpseo_title', array( $instance, 'get_title' ), 10);
+			add_filter( 'wpseo_metadesc', array( $instance, 'get_description' ), 10);
+		} else{
+			add_action( 'wp_head', array( $instance, 'output_description' ) );
+		}
+
+		add_action('uwp_profile_options', array($instance,'profile_options'));
+
+	}
 
 	/**
 	 * Actions for form builder
@@ -855,6 +881,11 @@ final class UsersWP {
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/abstract-uwp-privacy.php';
         require_once dirname(dirname( __FILE__ )) . '/includes/class-uwp-privacy.php';
+
+        /**
+	     * The class responsible for SEO functions
+	     */
+	    require_once dirname(dirname( __FILE__ )) . '/includes/class-uwp-seo.php';
 
         if ( is_plugin_active( 'uwp_geodirectory/uwp_geodirectory.php' ) ) {
             deactivate_plugins( 'uwp_geodirectory/uwp_geodirectory.php' );

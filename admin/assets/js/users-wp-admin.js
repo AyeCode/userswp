@@ -1,5 +1,5 @@
 jQuery(window).load(function() {
-    
+
     // Load color picker
     var UWPColorPicker = jQuery('.uwp-color-picker');
     console.log('uwpColorPicker');
@@ -130,6 +130,30 @@ jQuery(window).load(function() {
             jQuery(this).val('');
         }
     });
+
+    jQuery(document).on('click','span code',function ($) {
+        jQuery('span code').removeClass('uwp-tag-copied');
+        jQuery('span code span').remove();
+        jQuery(this).addClass('uwp-tag-copied');
+        jQuery(this).append('<span></span>');
+        var $temp = jQuery("<input>");
+        jQuery("body").append($temp);
+        $temp.val(jQuery(this).text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+
+        setTimeout(function(){
+            jQuery('span code').removeClass('uwp-tag-copied');
+            jQuery('span code span').remove();
+        }, 1000);
+    });
+
+    jQuery('input.uwp-seo-meta-separator').on( 'change', function() {
+        if (jQuery(this).attr("checked") === "checked") {
+            jQuery('input.uwp-seo-meta-separator').parent().removeClass('active');
+            jQuery(this).parent().addClass('active');
+        }
+    }).change();
 
     uwp_init_tooltips();
 });

@@ -785,8 +785,8 @@ class UsersWP_Forms {
 		// if no user we fake it and bail
 		if(!$user_data){
 			$message = aui()->alert(array(
-					'type'=>'success',
-					'content'=> apply_filters('uwp_change_password_success_message', __('Please check your email.', 'userswp'), $data)
+					'type'=>'error',
+					'content'=> __('Invalid email or user doesn\'t exists.', 'userswp')
 				)
 			);
 			if(wp_doing_ajax()){wp_send_json_success($message);}
