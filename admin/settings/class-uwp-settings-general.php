@@ -178,13 +178,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'type' => 'checkbox',
                     'default'  => '1',
                 ),
-                array(
-                    'id'   => 'register_admin_notify',
-                    'name' => __( 'Enable Admin Email Notification?', 'userswp' ),
-                    'desc' => __( 'When enabled an email will be sent to the admin for every user registration.', 'userswp' ),
-                    'type' => 'checkbox',
-                    'default'  => '0',
-                ),
 
                 array( 'type' => 'sectionend', 'id' => 'register_options' ),
             ));
@@ -308,16 +301,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'type'  => 'title',
                     'id'    => 'profile_options',
                 ),
-//                array(
-//                    'id' => 'enable_profile_tabs',
-//                    'name' => __( 'Choose the tabs to display in Profile', 'userswp' ),
-//                    'desc' => __( 'Choose the tabs to display in UsersWP Profile', 'userswp' ),
-//                    'type'  => 'multiselect',
-//                    'sortable' => true,
-//                    'class'   => 'uwp-select',
-//                    'options' =>   $this->uwp_available_tab_items(),
-//                    'desc_tip' => true,
-//                ),
                 array(
                     'id' => 'profile_default_banner',
                     'name' => __( 'Default banner image', 'userswp' ),

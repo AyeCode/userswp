@@ -276,8 +276,6 @@ final class UsersWP {
         add_action( 'uwp_admin_profile_edit', array($instance, 'image_crop_init'), 10, 1 );
 
         // Profile Tabs
-        add_action( 'uwp_profile_body', array($instance, 'get_profile_body'), 10, 1 );
-        add_action( 'uwp_profile_content', array($instance, 'get_profile_tabs_content'), 10, 1 );
         add_action( 'uwp_profile_more_info_tab_content', array($instance, 'get_profile_more_info'), 10, 1);
         add_action( 'uwp_profile_posts_tab_content', array($instance, 'get_profile_posts'), 10, 1);
         add_action( 'uwp_profile_tab_icon', array($instance, 'get_profile_tab_icon'), 10, 3);

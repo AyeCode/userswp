@@ -10,6 +10,7 @@ $allow_change = $args['allow_change'];
 $avatar_url   = $args['avatar_url'];
 $user_id      = $args['user_id'];
 $link         = $args['link'];
+$size         = isset($args['size']) ? $args['size'] : 50;
 
 if($user_id){
     $user = get_userdata($user_id);
@@ -30,7 +31,7 @@ if(!$uwp_in_user_loop){ ?><div class="card shadow-0 border-0 mw-100"><?php } ?>
 		<div class="col <?php if($uwp_in_user_loop){?>col-5<?php }?> text-center tofront ">
 			<?php if ($uwp_in_user_loop || 1==$link) { echo '<a href="'.esc_url_raw(get_author_posts_url($user->ID)).'" title="'.$user->display_name.'">';} ?>
 			<img class="rounded-circle shadow border border-white border-width-4 p-0 mt-neg5"
-			     src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php _e("User avatar","userswp");?>">
+			     src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php _e("User avatar","userswp");?>" height="<?php echo $size; ?>" width="<?php echo $size; ?>">
 			<?php if ($uwp_in_user_loop || 1==$link) {echo '</a>';} ?>
 
 			<?php if (!$uwp_in_user_loop && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && $allow_change ) { ?>

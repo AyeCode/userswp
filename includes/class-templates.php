@@ -507,6 +507,14 @@ class UsersWP_Templates {
            $value = isset($_POST[$field->htmlvar_name]) ? $_POST[$field->htmlvar_name] : ''; //@todo: Used to pre fill form when validation fails, need to find better solution
         }
 
+	    if('checkbox' == $field->field_type){
+            if(in_array($value, array('true', 'on', 1))){
+	            $value = 1;
+            } else {
+	            $value = 0;
+            }
+	    }
+
         $field = apply_filters("uwp_form_input_field_{$field->field_type}", $field, $value, $form_type);
 
         $html = apply_filters("uwp_form_input_html_{$field->field_type}", "", $field, $value, $form_type);

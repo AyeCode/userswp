@@ -68,7 +68,7 @@ class UsersWP_Seo {
     }
 
     public static function get_default_sep() {
-        return '|';
+        return apply_filters('uwp_profile_seo_default_separator', '|');
     }
 
     public static function get_seo_tags( $inline = true ) {
@@ -105,17 +105,16 @@ class UsersWP_Seo {
 
         if(is_uwp_profile_page()) {
             $displayed_user = uwp_get_displayed_user();
-            $displayed_user_id = !empty($displayed_user->ID) ? $displayed_user->ID : 0;
-
+            if(!$displayed_user){
+				return $string;
+            }
             $site_name = get_bloginfo('name');
-
             $first_name = !empty($displayed_user->first_name) ? $displayed_user->first_name :'';
             $last_name = !empty($displayed_user->last_name) ? $displayed_user->last_name :'';
             $user_name = !empty($displayed_user->user_login) ? $displayed_user->user_login :'';
             $display_name = !empty($displayed_user->display_name) ? $displayed_user->display_name :'';
             $user_email = !empty($displayed_user->user_email) ? $displayed_user->user_email :'';
-
-            $user_bio = get_user_meta($displayed_user_id, 'description', true);
+	        $user_bio = !empty($displayed_user->description) ? $displayed_user->description :'';
 
             $meta_separator = uwp_get_option('profile_seo_meta_separator');
             $sep = !empty($meta_separator) ? $meta_separator : self::get_default_sep();

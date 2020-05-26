@@ -8,24 +8,6 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class UsersWP_Profile {
-
-    /**
-     * Prints the profile page header section.
-     *
-     * @since       1.1.2
-     * @package     userswp
-     */
-    public function get_profile_body($user){
-        if(!$user){
-            $user = uwp_get_user_by_author_slug();
-        }
-        $profile_access = apply_filters('uwp_profile_access', true, $user);
-        if ($profile_access) {
-            echo do_shortcode("[uwp_profile_header]\n[uwp_profile_section position='left' type='open']\n[uwp_user_title]\n[uwp_profile_social]\n[uwp_output_location location='profile_side']\n[uwp_profile_actions]\n[uwp_profile_section position='left' type='close']\n[uwp_profile_section position='right' type='open']\n[uwp_profile_tabs]\n[uwp_profile_section position='right' type='close']");
-        } else {
-            do_action('uwp_profile_access_denied', $user);
-        }
-    }
     
     /**
      * Prints the profile page header section.
@@ -257,18 +239,6 @@ class UsersWP_Profile {
             </ul>
         </div>
         <?php
-    }
-
-    /**
-     * Default user icon
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @return      string  FA icon.
-     */
-    public function get_profile_count_icon() {
-        return '<i class="fas fa-user"></i>';
     }
 
     /**
@@ -659,148 +629,6 @@ class UsersWP_Profile {
 		return apply_filters( 'uwp_get_user_post_counts_output', $counts, $post_types );
 
 	}
-
-
-    /**
-     * Returns enabled profile tabs
-     *
-     * @package     userswp
-     * @param       object      $user       The User.
-     *
-     * @return      array                   Profile tabs
-     */
-    public function get_profile_tabs($user = '') {
-
-	    global $wpdb, $uwp_profile_tabs;
-
-	    $tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
-	    $tabs = array();
-
-	    if(!isset($uwp_profile_tabs)){
-		    $uwp_profile_tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s ORDER BY sort_order ASC", 'profile-tabs'));
-	    }
-
-	    if(!empty($uwp_profile_tabs)) {
-		    foreach ($uwp_profile_tabs as $tab) {
-
-			    $icon = isset($tab->tab_icon) ? $tab->tab_icon : $this->get_profile_count_icon();
-			    if ( uwp_is_fa_icon( $icon ) ) {
-				    $tab_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
-			    } elseif ( uwp_is_icon_url( $icon ) ) {
-				    $tab_icon = '<b style="background-image: url("' . $icon . '")"></b>';
-			    } else {
-				    $tab_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
-			    }
-
-			    $tab_icon = apply_filters('uwp_profile_tab_icon', $tab_icon, $tab, $user );
-
-			    if(isset($tab_icon) && ($tab_icon === 0 || $tab_icon === '0')){
-				    $class = 'uwp_no_counts';
-			    } else {
-				    $class = '';
-			    }
-
-			    $tab->count = $tab_icon;
-			    $tab->class = $class;
-			    $tabs[$tab->tab_key] = $tab;
-
-		    }
-	    }
-
-	    $tabs = apply_filters('uwp_profile_tabs1', $tabs, $user);
-
-	    return $tabs;
-    }
-
-
-    /**
-     * Prints the profile tab content template
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       object      $user       The User ID.
-     * @return      void
-     */
-    public function get_profile_tabs_content($user) {
-
-	    $active_tab = get_query_var('uwp_tab');
-        $account_page = uwp_get_page_id('account_page', false);
-	    $tabs_array = array();
-	    $active_tab_content = '';
-        $tabs = $this->get_profile_tabs($user);
-        $tab_keys = array_keys($tabs);
-
-        if (!empty($tab_keys)) {
-            $default_key = $tab_keys[0];
-        } else {
-            $default_key = false;
-        }
-
-	    $default_key = apply_filters('uwp_profile_default_tab_display', $default_key, $user, $tabs);
-
-        $active_tab = !empty( $active_tab ) && array_key_exists( $active_tab, $tabs ) ? $active_tab : $default_key;
-        if (!$active_tab) {
-            return;
-        }
-
-	    if(!empty($tabs)) {
-		    foreach ($tabs as $tab) {
-			    $tab_content = $this->tab_content($tab);
-			    if ( !empty( $tab_content ) ) {
-				    $tab->tab_content_rendered = $tab_content;
-				    $tabs_array[] = (array) $tab;
-			    }
-		    }
-	    }
-
-        ?>
-        <div class="uwp-profile-content">
-            <div class="uwp-profile-nav">
-                <ul class="item-list-tabs-ul">
-                    <?php
-                    if(!empty($tabs_array)) {
-	                    foreach ($tabs_array as $tab) {
-		                    $tab_id = $tab['tab_key'];
-		                    $tab_url = uwp_build_profile_tab_url($user->ID, $tab_id, false);
-
-		                    $active = $active_tab == $tab_id ? ' active' : '';
-
-		                    if ($active_tab == $tab_id) {
-			                    $active_tab_content = $tab['tab_content_rendered'];
-		                    }
-
-		                    ?>
-                            <li id="uwp-profile-<?php echo $tab_id; ?>"
-                                class="<?php echo $active . ' ' . $tab['class']; ?>">
-                                <a href="<?php echo esc_url($tab_url); ?>">
-                                    <span class="uwp-profile-tab-label uwp-profile-<?php echo $tab_id; ?>-label "><?php echo esc_html($tab['tab_name']); ?></span>
-                                    <span class="uwp-profile-tab-count uwp-profile-<?php echo $tab_id; ?>-count"><?php echo $tab['count']; ?></span>
-                                </a>
-                            </li>
-		                    <?php
-	                    }
-                    }
-                    ?>
-                </ul>
-                <?php
-                $can_user_edit_account = apply_filters('uwp_user_can_edit_own_profile', true, $user->ID);
-                ?>
-                <?php if ($account_page && is_user_logged_in() && (get_current_user_id() == $user->ID) && $can_user_edit_account) { ?>
-                    <div class="uwp-edit-account">
-                        <a href="<?php echo get_permalink( $account_page ); ?>" title="<?php echo  __( 'Edit Account', 'userswp' ); ?>"><i class="fas fa-cog"></i></a>
-                    </div>
-                <?php } ?>
-            </div>
-
-            <div class="uwp-profile-entries">
-                <?php
-                if(isset($active_tab_content) && !empty($active_tab_content)){
-                    echo $active_tab_content;
-                }
-                ?>
-            </div>
-        </div>
-    <?php }
 
 	/**
      * Returns count for a tab

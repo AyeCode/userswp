@@ -132,6 +132,7 @@ No questions so far, but don't hesitate to ask!
 * Apply sorting to search result as well while sorting for search result in users listing page - FIXED
 * Allow to add placeholder to custom fields via form builder - FIXED
 * Allow to enable registration from setup wizard if disable in WP settings - ADDED
+* User meta data on profile page for SEO - ADDED
 
 = 1.2.2.1 =
 * Change wp_mail_from fallback to wordpress@yourdomain.com - FIXED

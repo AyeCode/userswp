@@ -311,7 +311,7 @@ span.uwp-custom-desc code.uwp-tag-copied:after {
   display: inline-block;
   margin-right: 5px; }
 
-.profile_seo_meta_separator-wrap td.forminp-radio ul li input.seo-meta-separator {
+.profile_seo_meta_separator-wrap td.forminp-radio ul li label input.uwp-seo-meta-separator {
   position: absolute;
   top: -20px;
   left: 0; }
