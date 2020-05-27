@@ -599,7 +599,7 @@ class UsersWP_Profile {
 
 		$counts = array();
 		$post_types = array();
-		$exclude = array('wpi_invoice', 'wpi_quote', 'elementor_library', 'attachment');
+		$exclude = array('wpi_invoice', 'wpi_quote', 'elementor_library', 'attachment', 'product', 'shop_order', 'download');
 		$exclude = apply_filters( 'uwp_get_user_post_counts', $exclude, $post_types );
 
 		if($user_id){
@@ -608,9 +608,15 @@ class UsersWP_Profile {
 			if(!empty($post_types)){
 				foreach($post_types as $cpt => $post_type){
 					$count = count_user_posts( $user_id , $cpt);
-					if($count && !in_array($cpt, $exclude)){
-						$counts[$cpt] = array('name'=> $post_type->labels->name,'singular_name'=> $post_type->labels->singular_name,'count'=>$count);
-					}
+					if($user_id == get_current_user_id()){
+						if($count){
+							$counts[$cpt] = array('name'=> $post_type->labels->name,'singular_name'=> $post_type->labels->singular_name,'count'=>$count);
+						}
+                    } else {
+						if($count && !in_array($cpt, $exclude)){
+							$counts[$cpt] = array('name'=> $post_type->labels->name,'singular_name'=> $post_type->labels->singular_name,'count'=>$count);
+						}
+                    }
 				}
 			}
 		}
@@ -954,8 +960,8 @@ class UsersWP_Profile {
                     return user_trailingslashit($link . $user_id);
                 }
             } else {
-                if($user_id){
-	                $user = get_userdata($user_id);
+	            $user = get_userdata($user_id);
+                if($user){
 	                if ( !empty($user->user_nicename) ) {
 		                $username = $user->user_nicename;
 	                } else {
