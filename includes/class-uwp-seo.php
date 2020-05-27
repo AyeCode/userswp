@@ -17,6 +17,15 @@ class UsersWP_Seo {
            'advanced'  => true,
        );
 
+	    $settings[] = array(
+		    'id'   => 'profile_seo_disable',
+		    'name' => __( 'Disable meta tags', 'userswp' ),
+		    'desc' => __( 'This will disable adding SEO meta tags on profile page.','userswp'),
+		    'type' => 'checkbox',
+		    'default'  => 0,
+		    'advanced'  => false,
+	    );
+
         $settings[] = array(
             'id' => 'profile_seo_meta_separator',
             'name' => __( 'Title separator', 'userswp' ),
@@ -25,7 +34,7 @@ class UsersWP_Seo {
             'class' => 'uwp-seo-meta-separator',
             'desc' 	=> __('Choose the symbol to use as your title separator. This will display, for instance, between your user profile title and site name. Symbols are shown in the size they will appear in the search results.', 'uwp-groups'),
             'desc_tip' => true,
-            'advanced'  => false,
+            'advanced'  => true,
             'placeholder' => '',
             'options' => array(
                 '-' => '-',
@@ -46,7 +55,7 @@ class UsersWP_Seo {
             'class' => 'large-text',
             'desc' 	=> __('Available SEO tags:', 'uwp-groups') . ' '.self::get_seo_tags(true),
             'desc_tip' => false,
-            'advanced'  => false,
+            'advanced'  => true,
             'placeholder' => $this->get_default_meta_title(),
         );
 
@@ -57,7 +66,7 @@ class UsersWP_Seo {
             'default' => '',
             'desc' 	=> __( 'Enter the meta description to use for the page.', 'userswp' ),
             'desc_tip' => true,
-            'advanced'  => false,
+            'advanced'  => true,
             'placeholder' => $this->get_default_meta_description(),
             'custom_desc' => __('Available SEO tags:', 'uwp-groups') . ' '.self::get_seo_tags(true),
         );
@@ -120,13 +129,11 @@ class UsersWP_Seo {
             $sep = !empty($meta_separator) ? $meta_separator : self::get_default_sep();
 
             $string = str_replace('[#site_name#]', $site_name, $string);
-
             $string = str_replace('[#user_name#]', $user_name, $string);
             $string = str_replace('[#display_name#]', $display_name, $string);
             $string = str_replace('[#first_name#]', $first_name, $string);
             $string = str_replace('[#last_name#]', $last_name, $string);
             $string = str_replace('[#email#]', $user_email, $string);
-
             $string = str_replace('[#user_bio#]', $user_bio, $string);
             $string = str_replace('[#sep#]', $sep, $string);
         }
@@ -135,6 +142,7 @@ class UsersWP_Seo {
     }
 
     public function get_meta_title() {
+
         $meta_title = uwp_get_option('profile_seo_meta_title');
         $meta_title = !empty($meta_title) ? $meta_title : $this->get_default_meta_title();
         $meta_title = $this->replace_tags($meta_title);
@@ -152,6 +160,9 @@ class UsersWP_Seo {
     }
 
     public function output_title($title) {
+	    if(1 == uwp_get_option('profile_seo_disable')){
+		    return $title;
+	    }
 
         if(is_uwp_profile_page()) {
             $title = $this->get_meta_title();
@@ -177,6 +188,10 @@ class UsersWP_Seo {
     }
 
     public function get_title($title) {
+	    if(1 == uwp_get_option('profile_seo_disable')){
+		    return $title;
+	    }
+
         if(is_uwp_profile_page()) {
             $title = $this->get_meta_title();
         }
@@ -185,6 +200,10 @@ class UsersWP_Seo {
     }
 
     public function get_description($description) {
+	    if(1 == uwp_get_option('profile_seo_disable')){
+		    return $description;
+	    }
+
         if(is_uwp_profile_page()) {
             $description = $this->get_meta_description();
         }
@@ -193,6 +212,10 @@ class UsersWP_Seo {
     }
 
     public function get_opengraph_url($url) {
+	    if(1 == uwp_get_option('profile_seo_disable')){
+		    return $url;
+	    }
+
         if(is_uwp_profile_page()) {
             $displayed_user = uwp_get_displayed_user();
             $displayed_user_id = !empty($displayed_user->ID) ? $displayed_user->ID : 0;

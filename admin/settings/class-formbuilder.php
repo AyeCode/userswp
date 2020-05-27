@@ -714,8 +714,6 @@ class UsersWP_Form_Builder {
         if (isset($field_info->site_title))
             $field_site_title = $field_info->site_title;
 
-        $default = isset($field_info->is_default) ? $field_info->is_default : '';
-
         $field_display = $field_type == 'address' && $field_info->htmlvar_name == 'post' ? 'style="display:none"' : '';
 
         if (isset($cf['icon']) && strpos($cf['icon'], ' fa-') !== false) {
@@ -1046,8 +1044,6 @@ class UsersWP_Form_Builder {
                             echo apply_filters("uwp_builder_advanced_editor_{$field_type}", '', $result_str, $cf, $field_info);
 
                         }
-
-
                         ?>
                         <input type="hidden" readonly="readonly" name="sort_order" id="sort_order" value="<?php if (isset($field_info->sort_order)) { echo esc_attr($field_info->sort_order); } ?>"/>
                         <?php
@@ -1254,7 +1250,11 @@ class UsersWP_Form_Builder {
                             <div class="uwp-input-wrap uwp-tab-actions" data-setting="save_button">
                                 <input type="button" class="button button-primary" name="save" id="save" value="<?php echo esc_attr(__('Save', 'userswp')); ?>"
                                        onclick="save_field('<?php echo esc_attr($result_str); ?>')"/>
-                                <?php if (!$default): ?>
+                                <?php
+                                $default_fields = array('email', 'first_name', 'last_name', 'username', 'password');
+                                $default_fields = apply_filters('uwp_is_default_field', $default_fields, $field_info);
+
+                                if(!in_array($field_info->htmlvar_name, $default_fields)): ?>
                                     <a class="item-delete submitdelete deletion" id="delete-16" href="javascript:void(0);" onclick="delete_field('<?php echo esc_attr($result_str); ?>', '<?php echo $nonce; ?>')"><?php _e("Remove","userswp");?></a>
                                 <?php endif; ?>
                                 <?php UsersWP_Settings_Page::toggle_advanced_button();?>

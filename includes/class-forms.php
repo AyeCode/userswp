@@ -1316,7 +1316,7 @@ class UsersWP_Forms {
 
 		if ($image_url) {
 			if ($type == 'avatar') {
-				$full_width  = apply_filters('uwp_avatar_image_width', 150);
+				$full_width  = apply_filters('uwp_avatar_image_width', uwp_get_option('profile_avatar_width', 150));
 			} else {
 				$full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('profile_banner_width', 1000));
 			}

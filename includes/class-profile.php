@@ -954,11 +954,15 @@ class UsersWP_Profile {
                     return user_trailingslashit($link . $user_id);
                 }
             } else {
-                $user = get_userdata($user_id);
-                if ( !empty($user->user_nicename) ) {
-                    $username = $user->user_nicename;
+                if($user_id){
+	                $user = get_userdata($user_id);
+	                if ( !empty($user->user_nicename) ) {
+		                $username = $user->user_nicename;
+	                } else {
+		                $username = $user->user_login;
+	                }
                 } else {
-                    $username = $user->user_login;
+	                $username = '';
                 }
 
                 if ('DEFAULT' == $permalink_structure) {
@@ -1028,13 +1032,12 @@ class UsersWP_Profile {
 
         // Get avatar full width and height.
         if ($type == 'avatar') {
-            $full_width  = apply_filters('uwp_avatar_image_width', 150);
-            $full_height = apply_filters('uwp_avatar_image_height', 150);
+            $full_width  = apply_filters('uwp_avatar_image_width', uwp_get_option('profile_avatar_width', 150));
+            $full_height = apply_filters('uwp_avatar_image_height', uwp_get_option('profile_avatar_height', 150));
         } else {
             $full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('profile_banner_width', 1000));
-            $full_height = apply_filters('uwp_banner_image_height', 300);
+            $full_height = apply_filters('uwp_banner_image_height', uwp_get_option('profile_banner_height', 300));
         }
-        
 
         $values = array(
             'error' => '',
@@ -1281,6 +1284,7 @@ class UsersWP_Profile {
                                     uwp_full_height = resp['uwp_full_height'];
                                     uwp_true_width = resp['uwp_true_width'];
                                     uwp_true_height = resp['uwp_true_height'];
+                                    alert(uwp_popup_type);
 
 	                                container.html(resp['uwp_popup_content']).find('#uwp-'+uwp_popup_type+'-to-crop').Jcrop({
                                         // onChange: showPreview,
@@ -1539,11 +1543,11 @@ class UsersWP_Profile {
         if (in_array($field->htmlvar_name, array('avatar', 'banner'))) {
 
             if ($field->htmlvar_name == 'avatar') {
-                $min_width  = apply_filters('uwp_avatar_image_width', 150);
-                $min_height = apply_filters('uwp_avatar_image_height', 150);
+                $min_width  = apply_filters('uwp_avatar_image_width', uwp_get_option('profile_avatar_width', 150));
+                $min_height = apply_filters('uwp_avatar_image_height', uwp_get_option('profile_avatar_height', 150));
             } else {
                 $min_width  = apply_filters('uwp_banner_image_width', uwp_get_option('profile_banner_width', 1000));
-                $min_height = apply_filters('uwp_banner_image_height', 300);
+                $min_height = apply_filters('uwp_banner_image_height', uwp_get_option('profile_banner_height', 300));
             }
 
             $imagedetails = getimagesize( $file_to_upload['tmp_name'] );
