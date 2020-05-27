@@ -137,7 +137,7 @@ function uwp_get_form_label($field) {
     } else {
         $label = __($field->site_title, 'userswp');
     }
-    return stripslashes($label);
+    return apply_filters('uwp_get_form_label', stripslashes($label), $field);
 }
 
 /**
@@ -163,7 +163,7 @@ function uwp_get_field_placeholder($field) {
 		}
 	}
 
-	return stripslashes($placeholder);
+	return apply_filters('uwp_get_field_placeholder', stripslashes($placeholder), $field);
 }
 
 /**

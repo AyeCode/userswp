@@ -343,8 +343,7 @@ function get_uwp_users_list() {
 
 	$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
-	$default_number = 12;
-	$number = uwp_get_option('profile_no_of_items', $default_number);
+	$number = uwp_get_option('profile_no_of_items', 10);
 	$number = !empty($number) ? $number : $default_number;
 
 	$where = '';

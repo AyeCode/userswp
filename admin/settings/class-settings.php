@@ -208,6 +208,8 @@ class UsersWP_Admin_Settings {
                 }
             }
 
+            $wrap_class = $value['id'].'-wrap';
+
             // Description handling
             $field_description = self::get_field_description( $value );
             extract( $field_description );
@@ -492,7 +494,7 @@ class UsersWP_Admin_Settings {
                         $option_value = self::get_option( $value['id'], $value['default'] );
                     }
 
-                    ?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "uwp-advanced-setting";}?>">
+                    ?><tr valign="top" class="<?php echo $wrap_class; ?><?php if(isset($value['advanced']) && $value['advanced']){echo " uwp-advanced-setting";}?>">
                     <th scope="row" class="titledesc">
                         <label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
                         <?php echo $tooltip_html; ?>
@@ -819,7 +821,7 @@ class UsersWP_Admin_Settings {
         } elseif ( $description && in_array( $value['type'], array( 'checkbox' ) ) ) {
             $description = wp_kses_post( $description );
         } elseif ( $description ) {
-            $description = '<span class="description">' . wp_kses_post( $description ) . '</span>';
+            $description = '<span class="description uwp-custom-desc">' . wp_kses_post( $description ) . '</span>';
         }
 
 
