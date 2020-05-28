@@ -1971,7 +1971,7 @@ class UsersWP_GeoDirectory_Plugin {
 		return $uwp_author;
 	}
 
-	public function get_widget_post_author($post_author, $instance, $id_base){
+	public function get_widget_post_author($post_author, $instance, $id_base = ''){
 	    if(isset($id_base) && 'gd_listings' == $id_base){
             if(is_uwp_profile_page() && isset($instance['post_author']) && 'current_author' == $instance['post_author'] ){
 	            $user = uwp_get_user_by_author_slug();
