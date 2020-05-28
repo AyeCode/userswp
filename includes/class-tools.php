@@ -361,6 +361,10 @@ class UsersWP_Tools {
 					$translation_texts[] = stripslashes_deep( $row->default_value );
 				}
 
+				if ( ! empty( $row->placeholder_value ) ) {
+					$translation_texts[] = stripslashes_deep( $row->placeholder_value );
+				}
+
 				if ( ! empty( $row->option_values ) ) {
 					$option_values = uwp_string_values_to_options( stripslashes_deep( $row->option_values ) );
 

@@ -3,8 +3,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-global $uwp_template_args;
-extract($uwp_template_args);
+
+$type  = isset( $_POST['uwp_popup_type'] ) && $_POST['uwp_popup_type'] == 'avatar' ? 'avatar' : 'banner';
+$image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
 ?>
 <div class="modal-header" xmlns="http://www.w3.org/1999/html">
 	<h5 class="modal-title" id="uwp-profile-modal-title">

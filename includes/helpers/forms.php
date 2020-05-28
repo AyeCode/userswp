@@ -137,7 +137,33 @@ function uwp_get_form_label($field) {
     } else {
         $label = __($field->site_title, 'userswp');
     }
-    return stripslashes($label);
+    return apply_filters('uwp_get_form_label', stripslashes($label), $field);
+}
+
+/**
+ * Returns placehoder for field.
+ *
+ * @param       object      $field      Field info.
+ *
+ * @return      string                  Label.
+ */
+function uwp_get_field_placeholder($field) {
+
+	if(isset($field->field_type) && in_array($field->field_type, array('select', 'multiselect'))){
+		if (isset($field->placeholder_value) && !empty($field->placeholder_value)) {
+			$placeholder = __($field->placeholder_value, 'userswp');
+		} else {
+			$placeholder = wp_sprintf( __( 'Choose %s&hellip;', 'userswp' ), uwp_get_form_label($field) );
+		}
+	} else {
+		if (isset($field->placeholder_value) && !empty($field->placeholder_value)) {
+			$placeholder = __($field->placeholder_value, 'userswp');
+		} else {
+			$placeholder = uwp_get_form_label($field);
+		}
+	}
+
+	return apply_filters('uwp_get_field_placeholder', stripslashes($placeholder), $field);
 }
 
 /**

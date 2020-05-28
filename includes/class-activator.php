@@ -151,7 +151,6 @@ class UsersWP_Activator {
             'register_modal' => 1,
             'uwp_registration_action' => 'auto_approve',
             'wp_register_redirect' => 1,
-            'register_admin_notify' => 0,
             'login_modal' => 1,
             'login_redirect_to' => -1,
             'block_wp_login' => 0,

@@ -785,8 +785,8 @@ class UsersWP_Forms {
 		// if no user we fake it and bail
 		if(!$user_data){
 			$message = aui()->alert(array(
-					'type'=>'success',
-					'content'=> apply_filters('uwp_change_password_success_message', __('Please check your email.', 'userswp'), $data)
+					'type'=>'error',
+					'content'=> __('Invalid email or user doesn\'t exists.', 'userswp')
 				)
 			);
 			if(wp_doing_ajax()){wp_send_json_success($message);}
@@ -843,8 +843,8 @@ class UsersWP_Forms {
 			$message .= '<p>' .sprintf(__('Username: %s', 'userswp'), $user_data->user_login) . "</p>";
 			$message .= '<p>' .__('If this was by mistake, just ignore this email and nothing will happen.', 'userswp') . "</p>";
 			$message .= '<p>' .__('To reset your password, click the following link and follow the instructions.', 'userswp') . "</p>";
-			$message = apply_filters('uwp_forgot_password_message', $message, $user_data);
 			$reset_page = uwp_get_page_id('reset_page', false);
+			$reset_link = '';
 			if ($reset_page) {
 				$reset_link = add_query_arg( array(
 					'key' => $key,
@@ -854,6 +854,7 @@ class UsersWP_Forms {
 			} else {
 				$message .= home_url("reset?key=$key&login=" . rawurlencode($user_data->user_login), 'login') . "\r\n";
 			}
+			$message = apply_filters('uwp_forgot_password_message', $message, $user_data, $reset_link);
 		}
 
 		$message = apply_filters('uwp_forgot_mail_message', $message, $user_data->ID);
@@ -1315,7 +1316,7 @@ class UsersWP_Forms {
 
 		if ($image_url) {
 			if ($type == 'avatar') {
-				$full_width  = apply_filters('uwp_avatar_image_width', 150);
+				$full_width  = apply_filters('uwp_avatar_image_width', uwp_get_option('profile_avatar_width', 150));
 			} else {
 				$full_width  = apply_filters('uwp_banner_image_width', uwp_get_option('profile_banner_width', 1000));
 			}
@@ -1678,7 +1679,7 @@ class UsersWP_Forms {
 
                 <input name="<?php echo $field->htmlvar_name;?>"
                        id="<?php echo $field->htmlvar_name;?>"
-                       placeholder="<?php echo $site_title; ?>"
+                       placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                        title="<?php echo $site_title; ?>"
                        type="text"
 					<?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
@@ -1754,7 +1755,7 @@ class UsersWP_Forms {
                 <input readonly="readonly" name="<?php echo $field->htmlvar_name;?>"
                        id="<?php echo $field->htmlvar_name;?>"
                        value="<?php echo esc_attr($value);?>"
-                       placeholder="<?php echo $site_title; ?>"
+                       placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                        type="text"
                        class="uwp_textfield <?php echo esc_attr($bs_form_control);?>"/>
 
@@ -1813,7 +1814,7 @@ class UsersWP_Forms {
 				echo aui()->select(array(
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => $site_title,
+					'placeholder'   => uwp_get_field_placeholder($field),
 					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
@@ -1858,7 +1859,7 @@ class UsersWP_Forms {
                     <select name="<?php echo $field->htmlvar_name;?>" id="<?php echo $field->htmlvar_name;?>"
                             class="uwp_textfield aui-select2 <?php echo esc_attr($bs_form_control);?>"
                             title="<?php echo $site_title; ?>"
-                            data-placeholder="<?php echo __('Choose', 'userswp') . ' ' . $site_title . '&hellip;';?>"
+                            data-placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                     ><?php echo $select_options;?>
                     </select>
                     <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
@@ -1917,7 +1918,7 @@ class UsersWP_Forms {
 				echo aui()->select(array(
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => $site_title,
+					'placeholder'   => uwp_get_field_placeholder($field),
 					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
@@ -1951,7 +1952,7 @@ class UsersWP_Forms {
                         <select name="<?php echo $field->htmlvar_name; ?>[]"
                                 id="<?php echo $field->htmlvar_name; ?>"
                                 title="<?php echo $site_title; ?>"
-                                data-placeholder="<?php echo $site_title; ?>"
+                                data-placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                                 class="aui-select2 <?php echo esc_attr( $bs_form_control ); ?>"
                         >
 							<?php
@@ -2068,7 +2069,7 @@ class UsersWP_Forms {
 				<?php echo $file_obj->file_upload_preview($field, $value); ?>
                 <input name="<?php echo $field->htmlvar_name; ?>"
                        class="<?php echo $field->css_class; ?> <?php echo esc_attr($bs_form_control);?>"
-                       placeholder="<?php echo $site_title; ?>"
+                       placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                        title="<?php echo $site_title; ?>"
 					<?php
 					if ($field->is_required == 1 ) { echo 'data-is-required="1"'; }
@@ -2120,22 +2121,18 @@ class UsersWP_Forms {
 			$site_title = uwp_get_form_label($field);
 
 			$design_style = uwp_get_option("design_style","bootstrap");
+			$id = wp_doing_ajax() ? $field->htmlvar_name."_ajax" : $field->htmlvar_name;
 
 			// bootstrap
-			if( $design_style ) {
-
-				echo aui()->input(array(
-					'type'  =>  'checkbox',
-					'id'    =>  wp_doing_ajax() ? $field->htmlvar_name."_ajax" : $field->htmlvar_name,
-					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => $site_title,
-					'title'   => $site_title,
-					'value' =>  $value,
-					'required'  => $field->is_required,
-					'validation_text' => !empty($field->is_required) ? __($field->required_msg, 'userswp') : '',
-					'help_text' => __( $field->help_text, 'userswp' ),
-					'label' => $site_title,
-				));
+			if( $design_style ) { ?>
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $id; ?>_hidden" value="1">
+                        <input type="checkbox" name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $id; ?>" placeholder="<?php echo $field->htmlvar_name; ?>" title="<?php echo $site_title; ?>" value="1" class="form-control custom-control-input" onchange="if(this.checked){jQuery('#<?php echo $id; ?>_hidden').val('1');} else{ jQuery('#<?php echo $id; ?>_hidden').val('0');}" <?php echo checked($value, 1)?> <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>>
+                        <label for="<?php echo $field->htmlvar_name; ?>" class="custom-control-label"><?php echo $site_title; ?></label>
+                    </div>
+                </div>
+			<?php
 			}else{
 				?>
                 <div id="<?php echo $field->htmlvar_name;?>_row"
@@ -2146,7 +2143,7 @@ class UsersWP_Forms {
                         <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value="0" />
                         <input name="<?php echo $field->htmlvar_name; ?>"
                                class="<?php echo $field->css_class; ?> <?php echo esc_attr($bs_form_control);?>"
-                               placeholder="<?php echo $site_title; ?>"
+                               placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                                title="<?php echo $site_title; ?>"
 							<?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
 							<?php if ($value == '1') { echo 'checked="checked"'; } ?>
@@ -2359,7 +2356,7 @@ class UsersWP_Forms {
 					'type'  =>  $type,
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => $site_title,
+					'placeholder'   => uwp_get_field_placeholder($field),
 					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
@@ -2383,7 +2380,7 @@ class UsersWP_Forms {
 
                     <input name="<?php echo $field->htmlvar_name;?>" class="<?php echo $field->css_class; ?> uwp_textfield <?php echo esc_attr($bs_form_control);?>"
                            id="<?php echo $field->htmlvar_name;?>"
-                           placeholder="<?php echo $site_title; ?>"
+                           placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                            value="<?php echo esc_attr(stripslashes($value));?>"
                            title="<?php echo $site_title; ?>"
                            oninvalid="this.setCustomValidity('<?php _e($field->required_msg, 'userswp'); ?>')"
@@ -2443,7 +2440,7 @@ class UsersWP_Forms {
 				echo aui()->textarea(array(
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => $site_title,
+					'placeholder'   => uwp_get_field_placeholder($field),
 					'title'   => $site_title,
 					'value' =>  stripslashes($value),
 					'required'  => $field->is_required,
@@ -2471,7 +2468,7 @@ class UsersWP_Forms {
 
                     <textarea name="<?php echo $field->htmlvar_name; ?>"
                               class="<?php echo $field->css_class; ?> <?php echo esc_attr($bs_form_control);?>"
-                              placeholder="<?php echo $site_title; ?>"
+                              placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                               title="<?php echo $site_title; ?>"
                               oninvalid="this.setCustomValidity('<?php _e($field->required_msg, 'userswp'); ?>')"
                               oninput="setCustomValidity('')"
@@ -2567,7 +2564,7 @@ class UsersWP_Forms {
 					'type'  =>  'url',
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => $site_title,
+					'placeholder'   => uwp_get_field_placeholder($field),
 					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
@@ -2598,7 +2595,7 @@ class UsersWP_Forms {
                            class="<?php //echo $field->css_class;
 					       ?> uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
                            id="<?php echo $field->htmlvar_name; ?>"
-                           placeholder="<?php echo $site_title; ?>"
+                           placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                            value="<?php echo esc_attr( stripslashes( $value ) ); ?>"
                            title="<?php echo $site_title; ?>"
 						<?php if ( $field->is_required == 1 ) {
@@ -2660,7 +2657,7 @@ class UsersWP_Forms {
 					'type'  =>  'email',
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => $site_title,
+					'placeholder'   => uwp_get_field_placeholder($field),
 					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
@@ -2689,7 +2686,7 @@ class UsersWP_Forms {
                     <input name="<?php echo $field->htmlvar_name; ?>"
                            class="<?php echo $field->css_class; ?> uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
                            id="<?php echo $field->htmlvar_name; ?>"
-                           placeholder="<?php echo $site_title; ?>"
+                           placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                            value="<?php echo esc_attr( stripslashes( $value ) ); ?>"
                            title="<?php echo $site_title; ?>"
 						<?php if ( $field->is_required == 1 ) {
@@ -2754,7 +2751,7 @@ class UsersWP_Forms {
 					'type'  =>  'password',
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => $site_title,
+					'placeholder'   => uwp_get_field_placeholder($field),
 					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
@@ -2779,7 +2776,7 @@ class UsersWP_Forms {
                     <input name="<?php echo $field->htmlvar_name; ?>"
                            class="<?php echo $field->css_class; ?> uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
                            id="<?php echo $field->htmlvar_name; ?>"
-                           placeholder="<?php echo $site_title; ?>"
+                           placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                            value="<?php echo esc_attr( stripslashes( $value ) ); ?>"
                            title="<?php echo $site_title; ?>"
 						<?php if ( $field->is_required == 1 ) {
@@ -2833,7 +2830,7 @@ class UsersWP_Forms {
 					'type'  =>  'tel',
 					'id'    =>  $field->htmlvar_name,
 					'name'    =>  $field->htmlvar_name,
-					'placeholder'   => $site_title,
+					'placeholder'   => uwp_get_field_placeholder($field),
 					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
@@ -2857,7 +2854,7 @@ class UsersWP_Forms {
 					<?php } ?>
                     <input name="<?php echo $field->htmlvar_name; ?>"
                            class="<?php echo $field->css_class; ?> <?php echo esc_attr( $bs_form_control ); ?>"
-                           placeholder="<?php echo $site_title; ?>"
+                           placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                            title="<?php echo $site_title; ?>"
 						<?php if ( $field->for_admin_use == 1 ) {
 							echo 'readonly="readonly"';
@@ -3081,7 +3078,7 @@ class UsersWP_Forms {
 						'type'  =>  'password',
 						'id'    =>  'confirm_password',
 						'name'    =>  'confirm_password',
-						'placeholder'   => $site_title,
+						'placeholder'   => uwp_get_field_placeholder($field),
 						'title'   => $site_title,
 						'value' =>  $value,
 						'required'  => $field->is_required,
@@ -3105,7 +3102,7 @@ class UsersWP_Forms {
                         <input name="confirm_password"
                                class="uwp_textfield <?php echo esc_attr($bs_form_control);?>"
                                id="uwp_account_confirm_password"
-                               placeholder="<?php echo $site_title; ?>"
+                               placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                                value=""
                                title="<?php echo $site_title; ?>"
 							<?php echo 'required="required"'; ?>
@@ -3167,7 +3164,7 @@ class UsersWP_Forms {
                     <input name="confirm_email"
                            class="uwp_textfield <?php echo esc_attr($bs_form_control);?>"
                            id="uwp_account_confirm_email"
-                           placeholder="<?php echo $site_title; ?>"
+                           placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                            value=""
                            title="<?php echo $site_title; ?>"
 						<?php echo 'required="required"'; ?>

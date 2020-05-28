@@ -14,6 +14,7 @@ class UsersWP_Admin_Setup_Wizard {
 
 		add_action('admin_menu', array($this, 'admin_menus'));
 		add_action('current_screen', array($this, 'setup_wizard'));
+		add_action('uwp_wizard_content_general_settings', array($this, 'content_general_settings'));
 		add_action('uwp_wizard_content_use_userswp', array($this, 'content_use_userswp'));
 		add_action('uwp_wizard_content_menus', array($this, 'content_menus'));
 		add_action('uwp_wizard_content_dummy_users', array($this, 'content_dummy_users'));
@@ -222,11 +223,15 @@ class UsersWP_Admin_Setup_Wizard {
 
 	public function setup_content() {
 
-		$wizard_content = array(
-			'use_userswp'   => __( "How will you use UsersWP", "userswp" ),
-			'menus'   => __( "Menus", "userswp" ),
-			'dummy_users'   => __( "Dummy Users", "userswp" ),
-		);
+		$wizard_content = array();
+
+		if(!get_option('users_can_register')) {
+			$wizard_content['general_settings'] =  __( "General Settings", "userswp" );
+		}
+
+		$wizard_content['use_userswp'] = __( "How will you use UsersWP", "userswp" );
+		$wizard_content['menus'] = __( "Menus", "userswp" );
+		$wizard_content['dummy_users'] = __( "Dummy Users", "userswp" );
 
 		$wizard_content = apply_filters( 'uwp_wizard_content', $wizard_content );
 		?>
@@ -253,6 +258,27 @@ class UsersWP_Admin_Setup_Wizard {
             </p>
         </form>
 		<?php
+	}
+
+	public function content_general_settings() {
+		if(!get_option('users_can_register')) {
+			?>
+            <table class="form-table">
+                <tbody>
+                <tr>
+                    <td>
+                        <p class="description-tooltip danger" style="color: red;"><i class="fas fa-exclamation-circle"></i>
+                            <strong><?php _e( 'Heads Up!', 'userswp' ); ?></strong> <?php _e( ' User registration is currently not allowed.', 'userswp' ); ?>
+                        </p>
+                        <input type="checkbox" name="users_can_register" class="uwp-general-seetings" value="1">
+                        <strong><?php _e( " Anyone can register", "userswp" ); ?></strong>
+                    </td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+			<?php
+		}
 	}
 
 	public function content_use_userswp() {
@@ -420,6 +446,10 @@ class UsersWP_Admin_Setup_Wizard {
 		$login_register_page = !empty( $_POST['login_register_page'] ) ? $_POST['login_register_page'] : '';
 		$user_profiles_page = !empty( $_POST['user_profiles_page'] ) ? $_POST['user_profiles_page'] : '';
 		$member_directory_page = !empty( $_POST['member_directory_page'] ) ? $_POST['member_directory_page'] : '';
+
+		if(isset($_POST['users_can_register']) && 1 == absint($_POST['users_can_register'])) {
+			update_option('users_can_register',1);
+		}
 
 		$login_page = uwp_get_page_id('login_page');
 		$register_page = uwp_get_page_id('register_page');

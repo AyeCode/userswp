@@ -92,7 +92,10 @@ class UsersWP_Form_Builder {
                             <?php do_action('uwp_manage_available_fields', $form_type); ?>
                         </div>
                     </div>
-
+                    <?php
+                    $predefined_fields = apply_filters('uwp_predefined_fields_tabs', array('account', 'profile-tabs'));
+                    if(in_array($form_type, $predefined_fields)){
+                    ?>
                     <h3>
                         <?php _e('Predefined Fields', 'userswp'); ?>
                     </h3>
@@ -102,7 +105,9 @@ class UsersWP_Form_Builder {
                             <?php do_action('uwp_manage_available_fields_predefined', $form_type); ?>
                         </div>
                     </div>
-
+                    <?php }
+                    $custom_fields = apply_filters('uwp_custom_fields_tabs', array('account', 'profile-tabs'));
+                    if(in_array($form_type, $custom_fields)){ ?>
                     <h3>
 		                <?php _e('Custom Fields', 'userswp'); ?>
                     </h3>
@@ -112,7 +117,7 @@ class UsersWP_Form_Builder {
 			                <?php do_action('uwp_manage_available_fields_custom', $form_type); ?>
                         </div>
                     </div>
-                    
+                    <?php } ?>
                 </div>
 
 
@@ -709,8 +714,6 @@ class UsersWP_Form_Builder {
         if (isset($field_info->site_title))
             $field_site_title = $field_info->site_title;
 
-        $default = isset($field_info->is_default) ? $field_info->is_default : '';
-
         $field_display = $field_type == 'address' && $field_info->htmlvar_name == 'post' ? 'style="display:none"' : '';
 
         if (isset($cf['icon']) && strpos($cf['icon'], ' fa-') !== false) {
@@ -851,7 +854,7 @@ class UsersWP_Form_Builder {
                                 $value = $cf['defaults']['htmlvar_name'];
                             }
                             ?>
-                            <li class="uwp-setting-name">
+                            <li class="uwp-setting-name uwp-advanced-setting">
                                 <label for="htmlvar_name" class="uwp-tooltip-wrap">
                                     <span class="uwp-help-tip dashicons dashicons-editor-help" title="<?php _e('This is a unique identifier used in the HTML, it MUST NOT contain spaces or special characters.', 'userswp'); ?>"></span>
                                     <?php _e('Field Key :', 'userswp');?>
@@ -864,6 +867,31 @@ class UsersWP_Form_Builder {
                                 </div>
                             </li>
                             <?php
+                        }
+
+                        // Placeholder text
+                        if(has_filter("uwp_builder_placeholder_value_{$field_type}")){
+
+	                        echo apply_filters("uwp_builder_placeholder_value_{$field_type}",'',$result_str,$cf,$field_info);
+
+                        }else{
+	                        $value = '';
+	                        if (isset($field_info->placeholder_value)) {
+		                        $value = esc_attr($field_info->placeholder_value);
+	                        }elseif (isset($cf['defaults']['placeholder_value']) && $cf['defaults']['placeholder_value']) {
+		                        $value = $cf['defaults']['placeholder_value'];
+	                        }
+	                        ?>
+                            <li class="uwp-setting-name uwp-advanced-setting">
+                                <label for="placeholder_value" class="uwp-tooltip-wrap">
+                                    <span class="uwp-help-tip dashicons dashicons-editor-help" title="<?php _e('Display placeholder text for this field.', 'userswp'); ?>"></span>
+			                        <?php _e('Placeholder :', 'userswp');?>
+                                </label>
+                                <div class="uwp-input-wrap">
+                                    <input type="text" name="placeholder_value" id="placeholder_value_<?php echo $result_str;?>" title="<?php _e('Enter placeholder text for this field.', 'userswp');?>" value="<?php echo $value; ?>" />
+                                </div>
+                            </li>
+	                        <?php
                         }
 
 
@@ -1016,8 +1044,6 @@ class UsersWP_Form_Builder {
                             echo apply_filters("uwp_builder_advanced_editor_{$field_type}", '', $result_str, $cf, $field_info);
 
                         }
-
-
                         ?>
                         <input type="hidden" readonly="readonly" name="sort_order" id="sort_order" value="<?php if (isset($field_info->sort_order)) { echo esc_attr($field_info->sort_order); } ?>"/>
                         <?php
@@ -1224,7 +1250,11 @@ class UsersWP_Form_Builder {
                             <div class="uwp-input-wrap uwp-tab-actions" data-setting="save_button">
                                 <input type="button" class="button button-primary" name="save" id="save" value="<?php echo esc_attr(__('Save', 'userswp')); ?>"
                                        onclick="save_field('<?php echo esc_attr($result_str); ?>')"/>
-                                <?php if (!$default): ?>
+                                <?php
+                                $default_fields = array('email', 'first_name', 'last_name', 'username', 'password');
+                                $default_fields = apply_filters('uwp_is_default_field', $default_fields, $field_info);
+
+                                if(!in_array($field_info->htmlvar_name, $default_fields)): ?>
                                     <a class="item-delete submitdelete deletion" id="delete-16" href="javascript:void(0);" onclick="delete_field('<?php echo esc_attr($result_str); ?>', '<?php echo $nonce; ?>')"><?php _e("Remove","userswp");?></a>
                                 <?php endif; ?>
                                 <?php UsersWP_Settings_Page::toggle_advanced_button();?>
@@ -1324,6 +1354,7 @@ class UsersWP_Form_Builder {
             $default_value = isset($request_field['default_value']) ? sanitize_text_field($request_field['default_value']) : '';
             $sort_order = isset($request_field['sort_order']) ? absint($request_field['sort_order']) : '';
             $is_active = isset($request_field['is_active']) ? absint($request_field['is_active']) : 1;
+            $placeholder_value = isset($request_field['placeholder_value']) ? $request_field['placeholder_value'] : '';
             $for_admin_use = isset($request_field['for_admin_use']) ? absint($request_field['for_admin_use']) : 0;
             $is_required = isset($request_field['is_required']) ? absint($request_field['is_required']) : 0;
             $is_dummy = isset($request_field['is_dummy']) ? absint($request_field['is_dummy']) : 0;
@@ -1494,6 +1525,7 @@ class UsersWP_Form_Builder {
                             default_value = %s,
                             sort_order = %s,
                             is_active = %s,
+                            placeholder_value = %s,
                             for_admin_use = %s,
                             is_default  = %s,
                             is_required = %s,
@@ -1525,6 +1557,7 @@ class UsersWP_Form_Builder {
                             $default_value,
                             $sort_order,
                             $is_active,
+	                        $placeholder_value,
                             $for_admin_use,
                             $is_default,
                             $is_required,
@@ -1701,6 +1734,7 @@ class UsersWP_Form_Builder {
                             default_value = %s,
                             sort_order = %d,
                             is_active = %s,
+                            placeholder_value = %s,
                             for_admin_use = %s,
                             is_default  = %s,
                             is_required = %s,
@@ -1731,6 +1765,7 @@ class UsersWP_Form_Builder {
                             $default_value,
                             $sort_order,
                             $is_active,
+	                        $placeholder_value,
                             $for_admin_use,
                             $is_default,
                             $is_required,
