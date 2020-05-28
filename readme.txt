@@ -134,6 +134,7 @@ No questions so far, but don't hesitate to ask!
 * Allow to enable registration from setup wizard if disable in WP settings - ADDED
 * User meta data on profile page for SEO - ADDED
 * Allow to change height width of avatar and banner upload from backend - ADDED
+* GD Listings shortcode parameter current_author should display listing of displayed user in profile - FIXED
 
 = 1.2.2.1 =
 * Change wp_mail_from fallback to wordpress@yourdomain.com - FIXED
