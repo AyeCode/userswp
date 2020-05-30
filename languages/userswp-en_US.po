@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.2\n"
+"Project-Id-Version: UsersWP 1.2.2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-28 15:44+0530\n"
-"PO-Revision-Date: 2020-05-28 15:44+0530\n"
+"POT-Creation-Date: 2020-05-30 13:59+0530\n"
+"PO-Revision-Date: 2020-05-30 13:59+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -3023,21 +3023,21 @@ msgstr ""
 msgid "File too big."
 msgstr ""
 
-#: includes/class-profile.php:1564
+#: includes/class-profile.php:1563
 #, php-format
 msgid "The uploaded file is too small. Minimum image width should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1567
+#: includes/class-profile.php:1566
 #, php-format
 msgid "The uploaded file is too small. Minimum image height should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1608
+#: includes/class-profile.php:1607
 msgid "Invalid request!"
 msgstr ""
 
-#: includes/class-profile.php:1629
+#: includes/class-profile.php:1628
 msgid "No fields available"
 msgstr ""
 
