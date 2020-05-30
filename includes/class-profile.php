@@ -1290,7 +1290,6 @@ class UsersWP_Profile {
                                     uwp_full_height = resp['uwp_full_height'];
                                     uwp_true_width = resp['uwp_true_width'];
                                     uwp_true_height = resp['uwp_true_height'];
-                                    alert(uwp_popup_type);
 
 	                                container.html(resp['uwp_popup_content']).find('#uwp-'+uwp_popup_type+'-to-crop').Jcrop({
                                         // onChange: showPreview,

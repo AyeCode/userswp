@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.4
-Stable tag: 1.2.2.2
+Stable tag: 1.2.2.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -126,6 +126,9 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.2.3 =
+* Remove alert on profile avatar and banner image change - FIXED
 
 = 1.2.2.2 =
 * Exclude invoice and other CPT from the post counts in user profile - FIXED
