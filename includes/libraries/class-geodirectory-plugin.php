@@ -52,6 +52,7 @@ class UsersWP_GeoDirectory_Plugin {
 		add_filter( 'uwp_use_author_page_content', array( $this, 'skip_uwp_author_page' ), 10, 1 );
 		add_filter( 'geodir_dashboard_link_favorite_listing', array( $this, 'dashboard_favorite_links' ), 10, 3 );
 		add_filter( 'geodir_dashboard_link_my_listing', array( $this, 'dashboard_listing_links' ), 10, 3 );
+		add_filter( 'widget_post_author', array( $this, 'get_widget_post_author' ), 10, 3 );
 
 		add_filter( 'uwp_tp_posts_post_footer', array( $this, 'posts_footer' ) );
 		add_filter( 'uwp_tp_comments_item_footer', array( $this, 'reviews_footer' ), 10, 2 );
@@ -1969,6 +1970,19 @@ class UsersWP_GeoDirectory_Plugin {
 
 		return $uwp_author;
 	}
+
+	public function get_widget_post_author($post_author, $instance, $id_base = ''){
+	    if(isset($id_base) && 'gd_listings' == $id_base){
+            if(is_uwp_profile_page() && isset($instance['post_author']) && 'current_author' == $instance['post_author'] ){
+	            $user = uwp_get_user_by_author_slug();
+	            if($user && isset($user->ID)){
+		            $post_author = $user->ID;
+                }
+            }
+        }
+
+        return $post_author;
+    }
 }
 
 $userswp_geodirectory = UsersWP_GeoDirectory_Plugin::get_instance();
