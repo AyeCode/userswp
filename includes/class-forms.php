@@ -265,7 +265,7 @@ class UsersWP_Forms {
 			else{$uwp_notices[] = array('register' => $message); return;}
 		}
 
-		$reg_terms_page_id = uwp_get_option('register_terms_page', '');
+		$reg_terms_page_id = uwp_get_page_id('register_terms_page');
 		$reg_terms_page_id = apply_filters('uwp_reg_terms_page_id', $reg_terms_page_id);
 		if (!empty($reg_terms_page_id)) {
 			if (!isset($data['agree_terms']) || $data['agree_terms'] != 'yes') {
@@ -279,7 +279,7 @@ class UsersWP_Forms {
 			}
 		}
 
-		$reg_gdpr_page_id = uwp_get_option('register_gdpr_page', '');
+		$reg_gdpr_page_id = uwp_get_page_id('register_gdpr_page');
 		$reg_gdpr_page_id = apply_filters('uwp_register_gdpr_page_id', $reg_gdpr_page_id);
 		if (!empty($reg_gdpr_page_id)) {
 			if (!isset($data['uwp_accept_gdpr']) || $data['uwp_accept_gdpr'] != 'yes') {
@@ -556,7 +556,7 @@ class UsersWP_Forms {
 		} elseif ($reg_action == 'auto_approve_login') {
 			$res = wp_signon(
 				array(
-					'user_login' => $result['username'],
+					'user_login' => $user_login,
 					'user_password' => $password,
 					'remember' => false
 				)
