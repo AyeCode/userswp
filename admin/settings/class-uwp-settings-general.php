@@ -178,6 +178,33 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'type' => 'checkbox',
                     'default'  => '1',
                 ),
+	            array(
+		            'id'   => 'register_username_length',
+		            'name' => __( 'Username Length', 'userswp' ),
+		            'desc' => __( 'Username limit ', 'userswp' ),
+		            'desc_tip' => true,
+		            'type' => 'number',
+		            'default'  => '4',
+		            'advanced' => true,
+	            ),
+	            array(
+		            'id'   => 'register_password_min_length',
+		            'name' => __( 'Minimum Password Limit', 'userswp' ),
+		            'desc' => __( 'Minimum Password limit user should enter in the form.', 'userswp' ),
+		            'desc_tip' => true,
+		            'type' => 'number',
+		            'default'  => '8',
+		            'advanced' => true,
+	            ),
+	            array(
+		            'id'   => 'register_password_max_length',
+		            'name' => __( 'Maximum Password Limit', 'userswp' ),
+		            'desc' => __( 'Maximum Password limit user should enter in the form.', 'userswp' ),
+		            'desc_tip' => true,
+		            'type' => 'number',
+		            'default'  => '15',
+		            'advanced' => true,
+	            ),
 
                 array( 'type' => 'sectionend', 'id' => 'register_options' ),
             ));
@@ -418,11 +445,13 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'desc_tip' => true,
                 ),
                 array(
-                    'id' => 'users_excluded_from_list',
-                    'name' => __( 'Users to exclude', 'userswp' ),
-                    'type' => 'text',
-                    'desc' 	=> __( 'Enter comma separated ids of users to exclude from users listing.', 'userswp' ),
+                    'id'   => 'users_excluded_from_list',
+                    'name' => __( 'Users to exclude', 'uwp-messaging' ),
+                    'desc' => __( 'Select users to exclude from the users listing.', 'userswp' ),
                     'desc_tip' => true,
+                    'type' => 'multiselect',
+                    'size' => 'regular',
+                    'options' => $this->get_users(),
                 ),
 
                 array( 'type' => 'sectionend', 'id' => 'users_options' ),
@@ -640,18 +669,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		</div>';
 	}
 
-    public function uwp_available_tab_items() {
-        $tabs_arr = array(
-            'more_info' => __( 'More Info', 'userswp' ),
-            'posts' => __( 'Posts', 'userswp' ),
-            'comments' => __( 'Comments', 'userswp' ),
-        );
-
-        $tabs_arr = apply_filters('uwp_available_tab_items', $tabs_arr);
-
-        return $tabs_arr;
-    }
-
     public function uwp_available_users_layout() {
         $tabs_arr = array(
             'list' => __( 'Grid View - 1 Column (List View)', 'userswp' ),
@@ -666,6 +683,23 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
         return $tabs_arr;
     }
 
+	/**
+	 * Get users lists.
+	 *
+	 * @return array $users
+	 */
+	public function get_users() {
+		$get_users = get_users();
+
+		$users = array();
+		if(!empty($get_users) ) {
+			foreach ($get_users as $key => $user) {
+				$users[$user->ID] = $user->display_name;
+			}
+		}
+
+		return $users;
+	}
 }
 
 endif;
