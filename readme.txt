@@ -127,6 +127,11 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.4 =
+* Settings for minimum and maximum password length - ADDED
+* Settings for minimum length for username - ADDED
+* Users to exclude setting changed to select2 multiselect - CHANGED
+
 = 1.2.2.3 =
 * Remove alert on profile avatar and banner image change - FIXED
 

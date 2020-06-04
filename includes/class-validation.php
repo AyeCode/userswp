@@ -242,6 +242,13 @@ class UsersWP_Validation {
                             $errors->add('username_exists', __('<strong>Error</strong>: This username is already registered. Please choose another one.', 'userswp'));
                             return $errors;
                         }
+	                    $username_length = uwp_get_option( 'register_username_length');
+	                    $username_length = !empty($username_length) ? (int)$username_length : 4;
+
+	                    if(!empty($sanitized_value) && strlen($sanitized_value) < $username_length) {
+		                    $errors->add('username_length', sprintf(__('<strong>Error</strong>: Username must be %s characters or more.', 'userswp'), $username_length));
+		                    return $errors;
+	                    }
                     }
                 }
 
@@ -310,9 +317,19 @@ class UsersWP_Validation {
                 $errors->add( 'empty_password', __( 'Please enter a password', 'userswp' ) );
             }
 
-            if ($type != 'login' && strlen($data['password']) < 7) {
-                $errors->add('pass_match', __('ERROR: Password must be 7 characters or more.', 'userswp'));
-            }
+            $password_min_length = uwp_get_option( 'register_password_min_length');
+	        $password_min_length = !empty($password_min_length) ? (int)$password_min_length : 8;
+
+	        $password_max_length = uwp_get_option( 'register_password_max_length');
+	        $password_max_length = !empty($password_max_length) ? (int)$password_max_length : 15;
+
+	        if ($type != 'login' && (strlen($data['password']) < $password_min_length || strlen($data['password']) > $password_max_length )) {
+		        if(strlen($data['password']) > $password_max_length) {
+			        $errors->add('pass_match', sprintf(__('ERROR: Password must be %s characters or less.', 'userswp'),$password_max_length));
+		        } else{
+			        $errors->add('pass_match', sprintf(__('ERROR: Password must be %s characters or more.', 'userswp'),$password_min_length));
+		        }
+	        }
 
             $validated_data['password'] = isset($data['password']) ? $data['password'] : '';
         }
