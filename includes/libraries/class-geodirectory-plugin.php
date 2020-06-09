@@ -966,7 +966,7 @@ class UsersWP_GeoDirectory_Plugin {
 	public function posts_footer( $html ) {
 		global $post;
 
-		if ( ! empty( $post->post_type ) && geodir_is_gd_post_type( $post->post_type ) ) {
+		if ( ! empty( $post->post_type ) && uwp_is_gdv2() && geodir_is_gd_post_type( $post->post_type ) ) {
 			$post_avgratings = geodir_get_post_rating( $post->ID );
 			$post_ratings    = geodir_get_rating_stars( $post_avgratings, $post->ID );
 
