@@ -528,8 +528,6 @@ class UsersWP_Tools {
 	 *
 	 */
     public function uwp_tools_process_dummy_users($step, $type = 'add') {
-
-	    global $wpdb;
 	    $items_per_page = apply_filters('tools_process_dummy_users_per_page', 10, $step, $type);
 	    $offset = (int) $step * $items_per_page;
 	    $message = '';

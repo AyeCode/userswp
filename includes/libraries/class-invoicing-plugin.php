@@ -31,7 +31,6 @@ class UsersWP_Invoicing_Plugin {
         } else {
             add_action( 'uwp_profile_invoices_tab_content', array( $this, 'add_profile_invoices_tab_content' ) );
             add_action( 'uwp_dashboard_links', array( $this, 'dashboard_output' ), 10, 2 );
-            add_action( 'uwp_profile_tab_icon', array( $this, 'profile_tab_invoices_icon' ), 10, 3 );
 
         }
 
@@ -127,26 +126,6 @@ class UsersWP_Invoicing_Plugin {
 
 
         return $fields;
-    }
-
-	/**
-	 * Returns invoice tab count
-	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string     $tab_icon    Count or icon
-	 * @param       object     $tab      Tab object for invoice
-	 * @param       object     $user     User's object
-	 *
-	 * @return      string
-	 */
-    public function profile_tab_invoices_icon($tab_icon, $tab, $user){
-        if('invoices' == $tab->tab_key){
-	        $tab_icon = $this->invoice_count($user->ID);
-        }
-
-        return $tab_icon;
     }
 
 	/**

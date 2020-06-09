@@ -636,32 +636,6 @@ class UsersWP_Profile {
 
 	}
 
-	/**
-     * Returns count for a tab
-     *
-	 * @param $tab_icon
-	 * @param $tab
-	 * @param $user
-	 *
-	 * @return int
-	 */
-    public function get_profile_tab_icon($tab_icon, $tab, $user){
-
-        switch ($tab->tab_key){
-            case 'posts' :
-	            $tab_icon = uwp_post_count($user->ID, 'post');
-                break;
-            case 'comments' :
-	            $tab_icon = uwp_comment_count($user->ID);
-                break;
-	        default :
-		        break;
-        }
-
-        return $tab_icon;
-
-    }
-
     /**
      * Prints the tab content pagination section.
      *
