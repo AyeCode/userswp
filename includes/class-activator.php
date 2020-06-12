@@ -76,9 +76,9 @@ class UsersWP_Activator {
 
     public static function install(){
 
-        self::generate_pages();
+	    uwp_generate_default_pages();
         self::add_default_options();
-        self::uwp_create_tables();
+	    uwp_create_tables();
 
         // run update functions if needed
         if(self::needs_db_update()){
@@ -123,17 +123,6 @@ class UsersWP_Activator {
                     AND deleted = '0'";
 
         return $wpdb->get_col( $sql );
-    }
-
-    /**
-     * Generates the default pages during plugin activation.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      void
-     */
-    public static function generate_pages() {
-        uwp_generate_default_pages();
     }
 
     /**
@@ -196,7 +185,6 @@ class UsersWP_Activator {
             'account_delete_email_admin' => 1,
             'account_delete_email_subject_admin' => UsersWP_Defaults::account_delete_email_subject_admin(),
             'account_delete_email_content_admin' => UsersWP_Defaults::account_delete_email_content_admin(),
-            'enable_profile_tabs' => array('more_info', 'posts', 'comments'),
         );
 
         foreach ($options as $option => $value){
@@ -207,18 +195,6 @@ class UsersWP_Activator {
 
         update_option( 'uwp_settings', $settings );
 
-    }
-
-    /**
-     * Creates tables during plugin activation.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      void
-     */
-    public static function uwp_create_tables()
-    {
-        uwp_create_tables();
     }
 
     public static function init_background_updater(){
@@ -235,8 +211,7 @@ class UsersWP_Activator {
      * @package     userswp
      * @return      void
      */
-    public static function uwp_update_usermeta($dispatch = false)
-    {
+    public static function uwp_update_usermeta($dispatch = false) {
         $update_callback = 'uwp_insert_usermeta';
         self::init_background_updater();
 
@@ -612,7 +587,6 @@ class UsersWP_Activator {
             'is_required' => '1',
             'is_register_field' => '1',
             'is_search_field' => '1',
-            'css_class' => 'uwp-half uwp-half-left',
         );
 
         $fields[] = array(
@@ -629,7 +603,6 @@ class UsersWP_Activator {
             'is_required' => '1',
             'is_register_field' => '1',
             'is_search_field' => '1',
-            'css_class' => 'uwp-half uwp-half-right',
         );
 
         $fields[] = array(
@@ -694,7 +667,7 @@ class UsersWP_Activator {
             'is_public' => '1',
             'is_required' => '1',
             'is_search_field' => '1',
-            'show_in' => array('[profile_side]', '[users]')
+            'show_in' => array('[users]')
         );
 
         $fields[] = array(

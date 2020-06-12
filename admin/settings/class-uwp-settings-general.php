@@ -72,6 +72,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
             'change-password' => __( 'Change Password', 'userswp' ),
             'profile' => __( 'Profile', 'userswp' ),
             'users' => __( 'Users', 'userswp' ),
+            'account' => __( 'Account', 'userswp' ),
             'authorbox' => __( 'Author box', 'userswp' ),
             'developer' => __( 'Developer', 'userswp' ),
         );
@@ -456,6 +457,29 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 
                 array( 'type' => 'sectionend', 'id' => 'users_options' ),
             ));
+		}else if ( 'account' == $current_section ) {
+			/**
+			 * Filter general settings array.
+			 *
+			 * @package userswp
+			 */
+			$settings = apply_filters( 'uwp_users_options', array(
+				array(
+					'title' => __( 'User Account Settings', 'userswp' ),
+					'type'  => 'title',
+					'id'    => 'accounts_options',
+				),
+
+				array(
+					'id'   => 'disable_account_delete',
+					'name' => __( 'Disable Account Delete', 'userswp' ),
+					'desc' => __( 'Don\'t allow users to delete their own account. Default enabled.' , 'userswp' ),
+					'type' => 'checkbox',
+					'default'  => 0,
+				),
+
+				array( 'type' => 'sectionend', 'id' => 'accounts_options' ),
+			));
 		}else if ( 'authorbox' == $current_section ) {
             /**
              * Filter general settings array.

@@ -1265,7 +1265,7 @@ function uwp_get_decimal_separator() {
  */
 function uwp_get_rounding_precision() {
     $precision = uwp_get_decimal_separator() + 2;
-    if ( absint( UWP_ROUNDING_PRECISION ) > $precision ) {
+    if ( defined(UWP_ROUNDING_PRECISION) && absint( UWP_ROUNDING_PRECISION ) > $precision ) {
         $precision = absint( UWP_ROUNDING_PRECISION );
     }
     return $precision;

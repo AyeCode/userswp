@@ -367,23 +367,9 @@ final class UsersWP {
 	 * @param $instance
 	 */
 	public function load_seo_actions_and_filters($instance) {
+		add_action('init', array($instance,'init'));
 		add_action('pre_get_document_title', array($instance,'output_title'));
-
-		if(UsersWP_Seo::has_yoast()) {
-			if ( UsersWP_Seo::has_yoast_14() ) {
-				add_filter( 'wpseo_opengraph_title', array( $instance, 'get_title' ), 10);
-				add_filter( 'wpseo_opengraph_desc', array( $instance, 'get_description' ), 10 );
-				add_filter( 'wpseo_opengraph_url', array( $instance, 'get_opengraph_url' ), 20 );
-			}
-
-			add_filter( 'wpseo_title', array( $instance, 'get_title' ), 10);
-			add_filter( 'wpseo_metadesc', array( $instance, 'get_description' ), 10);
-		} else{
-			add_action( 'wp_head', array( $instance, 'output_description' ) );
-		}
-
 		add_action('uwp_profile_options', array($instance,'profile_options'));
-
 	}
 
 	/**
@@ -490,6 +476,7 @@ final class UsersWP {
         register_widget("UWP_Output_Location_Widget");
         register_widget("UWP_Author_Box_Widget");
         register_widget("UWP_Button_Group_Widget");
+        register_widget("UWP_User_Badge_Widget");
     }
 
     /**
@@ -828,6 +815,11 @@ final class UsersWP {
          * The class for author box widget.
          */
         require_once( dirname(dirname( __FILE__ )) .'/widgets/authorbox.php' );
+
+	    /**
+	     * The class for user badge widget.
+	     */
+	    require_once( dirname(dirname( __FILE__ )) .'/widgets/user-badge.php' );
 
         /**
          * The class for button group widget.
