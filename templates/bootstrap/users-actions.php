@@ -23,15 +23,14 @@ do_action('uwp_users_loop_actions');
 ?>
 <div class="container mb-3 overflow-visible">
     <div class="row">
-        <div class="col-sm p-0">
+        <div class="col-sm-9 p-0">
 			<?php
 			if(is_uwp_users_page() || is_admin()){
 				echo do_shortcode('[uwp_users_search]');
 			}
 			?>
         </div>
-        <div class="col p-0 d-none d-sm-block">
-
+        <div class="col-sm-3 p-0">
 
             <div class="btn-toolbar justify-content-end" role="toolbar" aria-label="Toolbar with button groups">
 

@@ -259,10 +259,6 @@ final class UsersWP {
         add_filter( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );
         add_action( 'uwp_profile_pagination' ,array($instance,'list_view_js'));
 
-        //Fields as tabs
-        add_action( 'uwp_available_tab_items', array($instance, 'extra_fields_available_tab_items'), 10, 1 );
-        add_action( 'uwp_profile_tabs', array($instance, 'extra_fields_as_tabs'), 10, 3 );
-
         // Popup and crop functions
         add_filter( 'ajax_query_attachments_args', array($instance, 'restrict_attachment_display') );
 
@@ -278,7 +274,6 @@ final class UsersWP {
         // Profile Tabs
         add_action( 'uwp_profile_more_info_tab_content', array($instance, 'get_profile_more_info'), 10, 1);
         add_action( 'uwp_profile_posts_tab_content', array($instance, 'get_profile_posts'), 10, 1);
-        add_action( 'uwp_profile_tab_icon', array($instance, 'get_profile_tab_icon'), 10, 3);
         add_action( 'uwp_profile_comments_tab_content', array($instance, 'get_profile_comments'), 10, 1);
         //add_action( 'uwp_profile_tab_content', array($instance, 'uwp_extra_fields_as_tab_values'), 10, 2 );
 

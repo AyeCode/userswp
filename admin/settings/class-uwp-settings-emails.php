@@ -399,7 +399,7 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 						'desc' => __('How the sender email appears in outgoing UsersWP emails.', 'userswp'),
 						'id' => 'email_address',
 						'type' => 'text',
-						'placeholder' => get_bloginfo('admin_email'),
+						'placeholder' => UsersWP_Mails::get_mail_from(),
 						'desc_tip' => true,
 					),
 

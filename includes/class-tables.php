@@ -91,6 +91,7 @@ class UsersWP_Tables {
 									  searching_range_mode int(11) NULL DEFAULT NULL,
 									  expand_search int(11) NULL DEFAULT NULL,
 									  front_search_title varchar(255) CHARACTER SET utf8 NULL DEFAULT NULL,
+									  front_css_class varchar(255) NULL DEFAULT NULL,
 									  first_search_value int(11) NULL DEFAULT NULL,
 									  first_search_text varchar(255) CHARACTER SET utf8 NULL DEFAULT NULL,
 									  last_search_text varchar(255) CHARACTER SET utf8 NULL DEFAULT NULL,

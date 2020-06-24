@@ -443,6 +443,11 @@ class UsersWP_Admin_Settings {
                         $option_value = self::get_option( $value['id'], $value['default'] );
                     }
 
+                    if( !empty($value['type']) && 'multiselect' == $value['type'] && !is_array($option_value)) {
+                        $option_value = str_replace(' ', '', $option_value);
+                        $option_value = explode(',', $option_value);
+                    }
+
                     ?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "uwp-advanced-setting";}?>">
                     <th scope="row" class="titledesc">
                         <label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>

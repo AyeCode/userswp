@@ -310,10 +310,15 @@ function uwp_get_excluded_users_list() {
 	$exclude_users = $inactive_users->get_results();
 
 	$excluded_globally = uwp_get_option('users_excluded_from_list');
-	if ( $excluded_globally ) {
-		$excluded_users = str_replace(' ', '', $excluded_globally );
-		$users_array = explode(',', $excluded_users );
-		$exclude_users = array_merge($exclude_users, $users_array);
+	if ( !empty($excluded_globally) ) {
+
+		if(is_array($excluded_globally)) {
+			$exclude_users = $excluded_globally;
+		} else {
+			$excluded_users = str_replace(' ', '', $excluded_globally);
+			$users_array = explode(',', $excluded_users);
+			$exclude_users = array_merge($exclude_users, $users_array);
+		}
 	}
 
 	return $exclude_users;

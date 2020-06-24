@@ -636,32 +636,6 @@ class UsersWP_Profile {
 
 	}
 
-	/**
-     * Returns count for a tab
-     *
-	 * @param $tab_icon
-	 * @param $tab
-	 * @param $user
-	 *
-	 * @return int
-	 */
-    public function get_profile_tab_icon($tab_icon, $tab, $user){
-
-        switch ($tab->tab_key){
-            case 'posts' :
-	            $tab_icon = uwp_post_count($user->ID, 'post');
-                break;
-            case 'comments' :
-	            $tab_icon = uwp_comment_count($user->ID);
-                break;
-	        default :
-		        break;
-        }
-
-        return $tab_icon;
-
-    }
-
     /**
      * Prints the tab content pagination section.
      *
@@ -1711,81 +1685,6 @@ class UsersWP_Profile {
         echo '<script type="text/javascript">
            var ajaxurl = "' . admin_url('admin-ajax.php') . '";
          </script>';
-    }
-	
-
-    /**
-     * Add custom fields as an available tabs
-     *
-     * @since       1.0.20
-     * @package     userswp
-     * @param       $tabs_arr
-     * @return      mixed
-     */
-    public function extra_fields_available_tab_items($tabs_arr){
-        global $wpdb;
-        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT htmlvar_name, site_title FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
-
-        foreach ($fields as $field) {
-            $key = str_replace('uwp_account_', '', $field->htmlvar_name);
-            $tabs_arr[$key] = __($field->site_title, 'userswp');
-        }
-
-        return $tabs_arr;
-    }
-
-    /**
-     * Displays custom fields as tabs
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       $tabs
-     * @param       $user
-     * @return      mixed
-     */
-    public function extra_fields_as_tabs($tabs, $user, $allowed_tabs)
-    {
-        global $wpdb;
-        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT site_title,field_icon,htmlvar_name,is_public,field_type,field_type_key FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' AND show_in LIKE '%[own_tab]%' ORDER BY sort_order ASC");
-        $usermeta = uwp_get_usermeta_row($user->ID);
-        $privacy = ! empty( $usermeta ) && $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
-
-        foreach ($fields as $field) {
-            if ($field->field_icon != '') {
-                $icon = uwp_get_field_icon($field->field_icon);
-            } else {
-                $field_icon = uwp_field_type_to_fa_icon($field->field_type);
-                if ($field_icon) {
-                    $icon = '<i class="'.$field_icon.'"></i>';
-                } else {
-                    $icon = '<i class="fas fa-user"></i>';
-                }
-            }
-            $key = str_replace('uwp_account_', '', $field->htmlvar_name);
-            $value = $this->get_field_value($field, $user);
-            if('fieldset' == $field->field_type){
-                $value = true;
-            }
-            if (!in_array($key, $allowed_tabs) || !$value) {
-                continue;
-            }
-            if ($field->is_public == '1') {
-                $tabs[$key] = array(
-                    'title' => __($field->site_title, 'userswp'),
-                    'count' => $icon
-                );
-            } else {
-                if (!in_array($field->htmlvar_name.'_privacy', $privacy)) {
-                    $tabs[$key] = array(
-                        'title' => __($field->site_title, 'userswp'),
-                        'count' => $icon
-                    );
-                }
-            }
-        }
-        return $tabs;
     }
 
     /**

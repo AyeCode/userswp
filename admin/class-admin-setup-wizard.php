@@ -586,6 +586,12 @@ class UsersWP_Admin_Setup_Wizard {
 	public static function get_recommend_wp_plugins(){
 
 		$plugins = array(
+			'ayecode-connect' => array(
+				'url'   => 'https://wordpress.org/plugins/ayecode-connect/',
+				'slug'   => 'ayecode-connect',
+				'name'   => 'AyeCode Connect',
+				'desc'   => __( 'Allows you to install any purchased AyeCode Ltd product add-ons without a zip file. It also installs and activates licences automatically, so there is no need to copy/paste licenses.', 'userswp' ),
+			),
 			'userswp-social-login' => array(
 				'url'   => 'https://wordpress.org/plugins/userswp-social-login/',
 				'slug'   => 'userswp-social-login',

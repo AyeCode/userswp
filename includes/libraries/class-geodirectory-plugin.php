@@ -28,7 +28,6 @@ class UsersWP_GeoDirectory_Plugin {
 		if ( is_admin() ) {
 			add_filter( 'uwp_get_sections_uwp-addons', array( $this, 'add_gd_tab' ) );
 			add_filter( 'uwp_get_settings_uwp-addons', array( $this, 'add_gd_settings' ), 10, 2 );
-			add_filter( 'uwp_available_tab_items', array( $this, 'available_tab_items' ) );
 			add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
 		} else {
 			add_action( 'uwp_profile_listings_tab_content', array( $this, 'add_profile_listings_tab_content' ) );
@@ -967,7 +966,7 @@ class UsersWP_GeoDirectory_Plugin {
 	public function posts_footer( $html ) {
 		global $post;
 
-		if ( ! empty( $post->post_type ) && geodir_is_gd_post_type( $post->post_type ) ) {
+		if ( ! empty( $post->post_type ) && uwp_is_gdv2() && geodir_is_gd_post_type( $post->post_type ) ) {
 			$post_avgratings = geodir_get_post_rating( $post->ID );
 			$post_ratings    = geodir_get_rating_stars( $post_avgratings, $post->ID );
 

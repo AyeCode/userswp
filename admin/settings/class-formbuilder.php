@@ -922,75 +922,66 @@ class UsersWP_Form_Builder {
                         }
 
                         // for_admin_use
-                        if (isset($field_info->is_default) && $field_info->is_default == '1') {
-                            // do nothing for default fields
+                        if (has_filter("uwp_builder_for_admin_use_{$field_type}")) {
+
+                            echo apply_filters("uwp_builder_for_admin_use_{$field_type}", '', $result_str, $cf, $field_info);
+
                         } else {
-                            if (has_filter("uwp_builder_for_admin_use_{$field_type}")) {
-
-                                echo apply_filters("uwp_builder_for_admin_use_{$field_type}", '', $result_str, $cf, $field_info);
-
-                            } else {
-                                $value = '';
-                                if (isset($field_info->for_admin_use)) {
-                                    $value = esc_attr($field_info->for_admin_use);
-                                }elseif (isset($cf['defaults']['for_admin_use']) && $cf['defaults']['for_admin_use']) {
-                                    $value = $cf['defaults']['for_admin_use'];
-                                }
-                                ?>
-                                <li <?php echo $field_display; ?> class="uwp-setting-name uwp-advanced-setting">
-                                    <label for="for_admin_use" class="uwp-tooltip-wrap">
-                                        <span class="uwp-help-tip dashicons dashicons-editor-help" title="<?php _e('If yes is selected then only site admin can see and edit this field.', 'userswp'); ?>"></span>
-                                        <?php _e('For admin use only? :', 'userswp'); ?>
-                                    </label>
-                                    <div class="uwp-input-wrap">
-                                        <input type="hidden" name="for_admin_use" value="0" />
-                                        <input type="checkbox" name="for_admin_use" value="1" <?php checked( $value, 1, true );?> />
-                                    </div>
-                                </li>
-                                <?php
+                            $value = '';
+                            if (isset($field_info->for_admin_use)) {
+                                $value = esc_attr($field_info->for_admin_use);
+                            }elseif (isset($cf['defaults']['for_admin_use']) && $cf['defaults']['for_admin_use']) {
+                                $value = $cf['defaults']['for_admin_use'];
                             }
+                            ?>
+                            <li <?php echo $field_display; ?> class="uwp-setting-name uwp-advanced-setting">
+                                <label for="for_admin_use" class="uwp-tooltip-wrap">
+                                    <span class="uwp-help-tip dashicons dashicons-editor-help" title="<?php _e('If yes is selected then only site admin can see and edit this field.', 'userswp'); ?>"></span>
+                                    <?php _e('For admin use only? :', 'userswp'); ?>
+                                </label>
+                                <div class="uwp-input-wrap">
+                                    <input type="hidden" name="for_admin_use" value="0" />
+                                    <input type="checkbox" name="for_admin_use" value="1" <?php checked( $value, 1, true );?> />
+                                </div>
+                            </li>
+                            <?php
                         }
 
-
                         // is_public
-                        if (isset($field_info->is_default) && $field_info->is_default == '1') {
-                            // do nothing for default fields
+                        if ( has_filter( "uwp_builder_is_public_{$field_type}" ) ) {
+
+                            echo apply_filters( "uwp_builder_is_public_{$field_type}", '', $result_str, $cf, $field_info );
+
                         } else {
-                            if ( has_filter( "uwp_builder_is_public_{$field_type}" ) ) {
-
-                                echo apply_filters( "uwp_builder_is_public_{$field_type}", '', $result_str, $cf, $field_info );
-
-                            } else {
-                                $value = '';
-                                if ( isset( $field_info->is_public ) ) {
-                                    $value = esc_attr( $field_info->is_public );
-                                } elseif ( isset( $cf['defaults']['is_public'] ) && $cf['defaults']['is_public'] ) {
-                                    $value = $cf['defaults']['is_public'];
-                                }
-                                ?>
-                                <li <?php echo $field_display; ?> class="uwp-setting-name uwp-advanced-setting">
-                                    <label for="is_public" class="uwp-tooltip-wrap">
-                                        <span class="uwp-help-tip dashicons dashicons-editor-help"
-                                              title="<?php _e( 'If no is selected then the field will not be visible to other users.', 'userswp' ); ?>"></span>
-                                        <?php _e( 'Is Public :', 'userswp' ); ?>
-                                    </label>
-                                    <div class="uwp-input-wrap">
-                                        <?php
-                                        if ( ! $value ) {
-                                            $value = "1";
-                                        }
-                                        ?>
-
-                                        <select name="is_public" class="aui-select2">
-                                            <option value="1" <?php selected( $value, "1" ); ?>><?php echo __( "Yes", "userswp" ) ?></option>
-                                            <option value="0" <?php selected( $value, "0" ); ?>><?php echo __( "No", "userswp" ) ?></option>
-                                            <option value="2" <?php selected( $value, "2" ); ?>><?php echo __( "Let User Decide", "userswp" ) ?></option>
-                                        </select>
-
-                                    </div>
-                                </li>
-                                <?php
+                            $value = '';
+                            if ( isset( $field_info->is_public ) ) {
+                                $value = esc_attr( $field_info->is_public );
+                            } elseif ( isset( $cf['defaults']['is_public'] ) && $cf['defaults']['is_public'] ) {
+                                $value = $cf['defaults']['is_public'];
                             }
+                            ?>
+                            <li <?php echo $field_display; ?> class="uwp-setting-name uwp-advanced-setting">
+                                <label for="is_public" class="uwp-tooltip-wrap">
+                                    <span class="uwp-help-tip dashicons dashicons-editor-help"
+                                          title="<?php _e( 'If no is selected then the field will not be visible to other users.', 'userswp' ); ?>"></span>
+                                    <?php _e( 'Is Public :', 'userswp' ); ?>
+                                </label>
+                                <div class="uwp-input-wrap">
+                                    <?php
+                                    if ( ! $value ) {
+                                        $value = "1";
+                                    }
+                                    ?>
+
+                                    <select name="is_public" class="aui-select2">
+                                        <option value="1" <?php selected( $value, "1" ); ?>><?php echo __( "Yes", "userswp" ) ?></option>
+                                        <option value="0" <?php selected( $value, "0" ); ?>><?php echo __( "No", "userswp" ) ?></option>
+                                        <option value="2" <?php selected( $value, "2" ); ?>><?php echo __( "Let User Decide", "userswp" ) ?></option>
+                                    </select>
+
+                                </div>
+                            </li>
+                            <?php
                         }
 
 

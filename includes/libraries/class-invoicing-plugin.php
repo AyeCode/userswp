@@ -29,10 +29,8 @@ class UsersWP_Invoicing_Plugin {
         if ( is_admin() ) {
 	        add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
         } else {
-            add_filter( 'uwp_profile_tabs', array( $this, 'add_profile_tabs' ), 10, 3 );
             add_action( 'uwp_profile_invoices_tab_content', array( $this, 'add_profile_invoices_tab_content' ) );
             add_action( 'uwp_dashboard_links', array( $this, 'dashboard_output' ), 10, 2 );
-            add_action( 'uwp_profile_tab_icon', array( $this, 'profile_tab_invoices_icon' ), 10, 3 );
 
         }
 
@@ -77,33 +75,6 @@ class UsersWP_Invoicing_Plugin {
         }
 
         return $links;
-    }
-
-    /**
-     * Adds tab in user profile page.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @param       array     $tabs             Existing tabs array.
-     * @param       object    $user             User object.
-     * @param       array     $allowed_tabs     Allowed tabs array.
-     *
-     * @return      array     Tabs array.
-     */
-    function add_profile_tabs($tabs, $user,$allowed_tabs) {
-
-        if (in_array('invoices', $allowed_tabs) && (get_current_user_id() == $user->ID)) {
-            $i_counts = $this->invoice_count($user->ID);
-            if($i_counts > 0) {
-                $tabs['invoices'] = array(
-                    'title' => __('Invoices', 'userswp'),
-                    'count' => $i_counts
-                );
-            }
-        }
-
-        return $tabs;
     }
 
 	/**
@@ -155,26 +126,6 @@ class UsersWP_Invoicing_Plugin {
 
 
         return $fields;
-    }
-
-	/**
-	 * Returns invoice tab count
-	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string     $tab_icon    Count or icon
-	 * @param       object     $tab      Tab object for invoice
-	 * @param       object     $user     User's object
-	 *
-	 * @return      string
-	 */
-    public function profile_tab_invoices_icon($tab_icon, $tab, $user){
-        if('invoices' == $tab->tab_key){
-	        $tab_icon = $this->invoice_count($user->ID);
-        }
-
-        return $tab_icon;
     }
 
 	/**
