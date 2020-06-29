@@ -9,7 +9,6 @@ $buttons = $args['buttons'];
 do_action( 'uwp_template_before', 'button-group' ); ?>
 <div class="bsui-button-group">
 	<?php
-//	print_r( $buttons );
 	foreach($buttons as $button){
 		$icon_class = !empty($button->field_icon) ? esc_attr($button->field_icon) : 'fas fa-link';
 		$button_class = !empty($button->css_class) ? " ".esc_attr($button->css_class) : 'btn-secondary';

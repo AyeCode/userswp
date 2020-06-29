@@ -3078,7 +3078,7 @@ class UsersWP_Forms {
 						'type'  =>  'password',
 						'id'    =>  'confirm_password',
 						'name'    =>  'confirm_password',
-						'placeholder'   => uwp_get_field_placeholder($field),
+						'placeholder'   => $site_title,
 						'title'   => $site_title,
 						'value' =>  $value,
 						'required'  => $field->is_required,

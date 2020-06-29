@@ -425,7 +425,7 @@ class UsersWP_Meta {
 	 */
     public function users_bulk_actions($bulk_actions){
         $bulk_actions['uwp_resend'] = __( 'Resend Activation', 'userswp');
-        $bulk_actions['uwp_activate_user'] = __( 'Approve User(s)', 'userswp');
+        $bulk_actions['uwp_activate_user'] = __( 'Activate Users', 'userswp');
         return $bulk_actions;
     }
 
@@ -511,8 +511,9 @@ class UsersWP_Meta {
             return false;
         }
 
-        if( 'email_unconfirmed' == get_user_meta( $user_id, 'uwp_mod', true )){
-            update_user_meta( $user_id, 'uwp_mod', '' );
+        $uwp_mode = get_user_meta( $user_id, 'uwp_mod', true );
+        if( 'email_unconfirmed' == $uwp_mode ){
+            delete_user_meta( $user_id, 'uwp_mod');
         }
 
         return true;
@@ -524,7 +525,7 @@ class UsersWP_Meta {
     public function show_update_messages(){
         if ( !isset($_REQUEST['update']) ) return;
 
-        $update = $_REQUEST['update'];
+        $update = sanitize_text_field($_REQUEST['update']);
         $messages = array();
 
         switch($update) {
@@ -540,7 +541,7 @@ class UsersWP_Meta {
         }
 
         if ( !empty( $messages ) ) {
-            if ( isset($messages['err_content'])) {
+            if ( isset($messages['err_msg'])) {
                 echo '<div class="notice notice-error"><p>' . $messages['err_msg'] . '</p></div>';
             } else {
                 echo '<div class="notice notice-success is-dismissible"><p>' . $messages['msg'] . '</p></div>';

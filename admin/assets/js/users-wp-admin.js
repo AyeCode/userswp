@@ -624,7 +624,7 @@ function uwp_init_advanced_settings(){
 function uwp_init_tooltips(){
 
     // we create, then destroy then create so we can ajax load and then call this function with impunity.
-    jQuery('.uwp-help-tip').tooltip().tooltip('destroy').tooltip({
+    jQuery('.uwp-help-tip').tooltip({
         content: function () {
             return jQuery(this).prop('title');
         },

@@ -4,8 +4,22 @@ defined( 'ABSPATH' ) || exit;
 
 class UsersWP_Seo {
 
-    public function __construct() {
+    public function init(){
+	    if(UsersWP_Seo::has_yoast()) {
+		    if ( UsersWP_Seo::has_yoast_14() ) {
+			    add_filter( 'wpseo_opengraph_title', array( $this, 'get_title' ), 10);
+			    add_filter( 'wpseo_opengraph_desc', array( $this, 'get_description' ), 10 );
+			    add_filter( 'wpseo_opengraph_url', array( $this, 'get_opengraph_url' ), 20 );
+		    }
 
+		    add_filter( 'wpseo_title', array( $this, 'get_title' ), 10);
+		    add_filter( 'wpseo_metadesc', array( $this, 'get_description' ), 10);
+	    }elseif ( defined( 'RANK_MATH_VERSION' ) ) {
+		    add_filter( 'rank_math/frontend/description', array( $this,'get_description' ), 10, 1 );
+		    add_filter( 'rank_math/frontend/title', array( $this, 'get_title' ), 10, 1 );
+	    } else{
+		    add_action( 'wp_head', array( $this, 'output_description' ) );
+	    }
     }
 
     public function profile_options($settings) {

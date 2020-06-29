@@ -349,7 +349,7 @@ function get_uwp_users_list() {
 	$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
 	$number = uwp_get_option('profile_no_of_items', 10);
-	$number = !empty($number) ? $number : $default_number;
+	$number = !empty($number) ? $number : 10;
 
 	$where = '';
 	$where = apply_filters('uwp_users_search_where', $where, $keyword);
@@ -1153,14 +1153,14 @@ function uwp_get_default_avatar_uri(){
 }
 
 function uwp_get_default_thumb_uri(){
-    $thumb_url = USERSWP_PLUGIN_URL."/assets/images/no_thumb.png";
+    $thumb_url = USERSWP_PLUGIN_URL."assets/images/no_thumb.png";
 	return apply_filters('uwp_default_thumb_uri', $thumb_url);
 }
 
 function uwp_get_default_banner_uri(){
 	$banner = uwp_get_option('profile_default_banner', '');
 	if(empty($banner)) {
-		$banner_url = USERSWP_PLUGIN_URL."/assets/images/banner.png";
+		$banner_url = USERSWP_PLUGIN_URL."assets/images/banner.png";
 	} else {
 		$banner_url = wp_get_attachment_url($banner);
     }
@@ -1265,7 +1265,7 @@ function uwp_get_decimal_separator() {
  */
 function uwp_get_rounding_precision() {
     $precision = uwp_get_decimal_separator() + 2;
-    if ( absint( UWP_ROUNDING_PRECISION ) > $precision ) {
+    if ( defined(UWP_ROUNDING_PRECISION) && absint( UWP_ROUNDING_PRECISION ) > $precision ) {
         $precision = absint( UWP_ROUNDING_PRECISION );
     }
     return $precision;
