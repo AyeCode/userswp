@@ -5,15 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 global $comment;
 $comment = isset( $args['template_args']['comment'] ) ? $args['template_args']['comment'] : '';
-
-if ( has_post_thumbnail($comment->comment_post_ID) ) {
-	$thumb_url = get_the_post_thumbnail_url($comment->comment_post_ID, array(80, 80));
-} else {
-	$thumb_url = uwp_get_default_thumb_uri();
-}
-
 $avatar_url = get_avatar_url( $comment->comment_author_email, array( 'size' => 500 ) );
-//print_r($comment);
 $user_name = isset($comment->comment_author) ? $comment->comment_author : '';
 $user = !empty($comment->user_id) ? get_userdata( $comment->user_id ) : '';
 if(!empty($user->display_name)) { $user_name = $user->display_name;}

@@ -43,7 +43,7 @@ if ( has_post_thumbnail() ) {
 					$footer_html .= apply_filters('uwp_tp_posts_post_footer_right', aui()->button( array(
 						'href'  => get_the_permalink($post->ID),
 						'class'     => 'btn btn-outline-primary  btn-sm',
-						'content' => __('View', 'uwp-frontend-post'),
+						'content' => __('View', 'userswp'),
 					) )); // view button
 				$footer_html .= '</div>';
 			$footer_html .= '</div>';

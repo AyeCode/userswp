@@ -1,8 +1,8 @@
 <?php
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
+
 $default_layout = uwp_get_option('users_default_layout', 'list');
 
 $sort_by = "";

@@ -331,6 +331,7 @@ class UsersWP_Profile {
 				}
 
                 $value = $this->get_field_value($field, $user);
+	            $class = isset($field->css_class) ? $field->css_class : '';
 
                 // Icon
                 $icon = uwp_get_field_icon($field->field_icon);
@@ -338,15 +339,15 @@ class UsersWP_Profile {
                 if ($field->field_type == 'fieldset') {
                     $icon = '';
                     ?>
-                    <div class="uwp-profile-extra-wrap" style="margin: 0; padding: 0">
-                        <div class="uwp-profile-extra-key uwp-profile-extra-full" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></div>
+                    <div class="uwp-profile-extra-wrap m-0 p-0">
+                        <div class="uwp-profile-extra-key uwp-profile-extra-full m-0 p-0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></div>
                     </div>
                     <?php
                 } else {
                     if ($value) {
                         $wrap_html = true;
                         ?>
-                        <div class="uwp-profile-extra-wrap">
+                        <div class="uwp-profile-extra-wrap <?php echo $class; ?>">
                             <div class="uwp-profile-extra-key d-inline-block"><?php echo $icon." ".$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
                             <div class="uwp-profile-extra-value d-inline-block">
                                 <?php
@@ -781,7 +782,7 @@ class UsersWP_Profile {
 	    $query_args = array(
 		    'number' => $number,
 		    'offset' => $offset,
-		    'author_email' => $user->user_email,
+		    'user_id' => $user->ID,
 		    'paged' => $paged,
 		    'post_type' => $post_type,
 	    );
@@ -791,7 +792,7 @@ class UsersWP_Profile {
 
 	    $args['template_args']['the_query'] = $comments;
 	    $args['template_args']['user'] = $user;
-	    $args['template_args']['title'] = __("Comments");
+	    $args['template_args']['title'] = !empty($args['template_args']['title']) ? $args['template_args']['title'] : __("Comments", 'userswp');
 	    $args['template_args']['maximum_pages'] = $maximum_pages;
 
 	    $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
@@ -1773,7 +1774,6 @@ class UsersWP_Profile {
     public function get_field_value($field, $user) {
 
         $user_data = get_userdata($user->ID);
-        $file_obj = new UsersWP_Files();
 
         if ($field->htmlvar_name == 'email') {
             $value = $user_data->user_email;
@@ -1873,14 +1873,15 @@ class UsersWP_Profile {
         // Checkbox
         if ($field->field_type == 'checkbox') {
             if ($value == '1') {
-                $value = 'Yes';
+                $value = __('Yes', 'userswp');
             } else {
-                $value = 'No';
+                $value = __('No', 'userswp');
             }
         }
 
         // File
         if ($field->field_type == 'file') {
+	        $file_obj = new UsersWP_Files();
             $value = $file_obj->file_upload_preview($field, $value, false);
         }
 

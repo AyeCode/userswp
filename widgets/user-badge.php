@@ -227,7 +227,7 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 		}
 
 		if(!$user){
-			return;
+			return '';
 		}
 
 		$output = uwp_get_user_badge( $args );

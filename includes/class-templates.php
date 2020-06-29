@@ -1181,7 +1181,7 @@ class UsersWP_Templates {
 				$content = sprintf( __( 'By using this form I agree to the storage and handling of my data by this website. View our %s GDPR Policy %s.', 'userswp' ), '<a href="'.$gdpr_page.'" target="_blank">', '</a>');
 				$content = apply_filters('uwp_register_gdpr_input_label', $content);
 				?>
-                <div class="uwp-remember-me">
+                <div class="uwp-gdpr-input">
                     <label style="display: inline-block;font-weight: normal" for="uwp_accept_gdpr">
                         <input name="uwp_accept_gdpr" id="uwp_accept_gdpr" value="yes" type="checkbox">
 						<?php echo $content; ?>

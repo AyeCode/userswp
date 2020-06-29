@@ -210,6 +210,11 @@ function uwp_get_user_badge($args){
 		return;
 	}
 
+	$user = get_userdata($args['user_id']);
+	if(!$user){
+		return;
+	}
+
 	$defaults = array(
 		'user_id'   => 0,
 		'key'       => '',
@@ -230,15 +235,11 @@ function uwp_get_user_badge($args){
 	);
 	$args     = shortcode_atts( $defaults, $args, 'uwp_user_badge' );
 
-	$user = get_userdata($args['user_id']);
-	if(!$user){
-		return;
-	}
-
 	$output = '';
 	$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 	$key = $args['key'];
 	$badge = $args['badge'];
+	$field = array();
 	$user_id = $user->ID;
 
 	// Check if there is a specific filter for field.
@@ -269,13 +270,18 @@ function uwp_get_user_badge($args){
 			return $output;
 		}
 	}
+
 	// If not then we run the standard output.
 	if ( empty( $output ) ) {
 		$search = $args['search'];
 		$match_found = $key === '' ? true : false;
 
-		$obj = new UsersWP_Profile();
-		$match_value = $obj->get_field_value($field, $user);
+		$excluded_fields = uwp_get_excluded_fields();
+		if(in_array($field->htmlvar_name, $excluded_fields)){
+			$match_value = '';
+		} else {
+			$match_value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
+		}
 
 		switch ( $args['condition'] ) {
 			case 'is_equal':
@@ -368,39 +374,15 @@ function uwp_get_user_badge($args){
 				//$badge = uwp_replace_variables($badge);
 			}
 
-			$class = '';
+			$class = 'badge badge-primary';
 			if ( ! empty( $args['size'] ) ) {
-				$class .= ' uwp-badge-' . sanitize_title( $args['size'] );
+				$class .= ' uwp-badge-size badge-' . sanitize_title( $args['size'] );
 			}
 			if ( ! empty( $args['alignment'] ) ) {
-				$class .= ' uwp-badge-align' . sanitize_title($args['alignment']);
+				$class .= ' uwp-badge-align align-' . sanitize_title($args['alignment']);
 			}
 			if ( ! empty( $args['css_class'] ) ) {
 				$class .= ' ' . esc_attr($args['css_class']);
-			}
-
-			// new window
-			$new_window = '';
-			if ( ! empty( $args['new_window'] ) ) {
-				$new_window = ' target="_blank" ';
-			}
-
-			// check if its external it should be no follow
-			$rel = '';
-			if(!empty($args['link'])){
-				$rel = strpos($args['link'], get_site_url()) !== false ? '' : 'rel="nofollow"';
-			}
-
-			// onclick
-			$onclick = '';
-			if(!empty($args['onclick'])){
-				$onclick = 'onclick="'.esc_attr($args['onclick']).'"';
-			}
-
-			// FontAwesome icon
-			$icon = '';
-			if(!empty($args['icon_class'])){
-				$icon = '<i class="'.esc_attr($args['icon_class']).'" ></i>';
 			}
 
 			// data-attributes
@@ -410,23 +392,20 @@ function uwp_get_user_badge($args){
 				$extra_attributes = str_replace("&quot;",'"',$extra_attributes);
 			}
 
-			$badge = ! empty( $badge ) ? __( wp_specialchars_decode( $badge, ENT_QUOTES ), 'userswp' ) : '';
-
 			// title
-			$title = $badge ? $badge : ( ! empty( $field->site_title ) ? __( $field->site_title, 'userswp' ) : '' );
+			$title = ! empty( $field->site_title ) ? __( $field->site_title, 'userswp' ) : '';
 			if ( ! empty( $title ) ) {
 				$title = sanitize_text_field( stripslashes( $title ) );
 			}
 
-			// Inner tag attributes
-			$inner_attributes = '';
-			if ( ! empty( $args['datetime'] ) ) {
-				$inner_attributes .= 'datetime="' . esc_attr( $args['datetime'] ) . '"';
+			$rel = '';
+			if(!empty($args['link'])){
+				$rel = strpos($args['link'], get_site_url()) !== false ? '' : 'rel="nofollow"';
 			}
 
-			// set badge text as secondary if icon is set.
-			if( $icon ){
-				$badge = " <span class='uwp-secondary'>$badge</span>";
+			$new_window = '';
+			if ( ! empty( $args['new_window'] ) ) {
+				$new_window = ' target="_blank" ';
 			}
 
 			// phone & email link
@@ -444,20 +423,46 @@ function uwp_get_user_badge($args){
 				}
 			}
 
+			$link = ! empty( $args['link'] ) ? ( $args['link'] == 'javascript:void(0);' ? $args['link'] : esc_url( $args['link'] ) ) : '';
+
+			$style = '';
+			if(!empty($args['bg_color'])){
+				$style .= "background-color:'" . esc_attr( $args['bg_color'] ) . "';";
+			}
+
+			if(!empty($args['bg_color'])){
+				$style .= "color:'" . esc_attr( $args['txt_color'] ) . "';";
+			}
+
+			$badge = aui()->badge(array(
+				'type'  =>  'badge',
+				'href'  =>  $link,
+				'class'      => $class,
+				'id'         => $title.'-'.$user_id,
+				'title'      => $title,
+				'value'      => $match_value,
+				'content'    => '',
+				'icon'       => esc_attr($args['icon_class']),
+				'onclick'    => esc_attr($args['onclick']),
+				'style'      => $style,
+			));
+
 			$badge = apply_filters( 'uwp_user_badge_output_badge', $badge, $match_value, $key, $args, $user, $field );
 
-			$link = ! empty( $args['link'] ) ? ( $args['link'] == 'javascript:void(0);' ? $args['link'] : esc_url( $args['link'] ) ) : '';
-			$tag = 'div';
+			$output = '<div class="uwp-badge-meta uwp-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'"'.$extra_attributes.' title="'.esc_attr( $title ).'">';
 
-			$output = '<div class="uwp-badge-meta ' . trim( $class ) . ' uwp-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
 			if ( ! empty( $link ) ) {
 				$output .= "<a href='" . $link . "' $new_window $rel>";
 			}
-			// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
-			$output .= '<' . $tag . ' data-id="' . $user_id . '" class="uwp-badge" data-badge="' . esc_attr($key) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';" ' . $inner_attributes . '>' . $icon . $badge . '</' . $tag . '>';
+
+			$output .= $badge;
+
 			if ( ! empty( $link ) ) {
 				$output .= "</a>";
 			}
+
+			// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
+//			$output .= '<' . $tag . ' data-id="' . $user_id . '" class="uwp-badge" data-badge="' . esc_attr($key) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';" ' . $inner_attributes . '>' . $icon . $badge . '</' . $tag . '>';
 			$output .= '</div>';
 		}
 	}
