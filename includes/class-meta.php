@@ -549,4 +549,27 @@ class UsersWP_Meta {
         }
     }
 
+	/**
+	 * Make UWP user meta available through the standard get_user_meta() function if prefixed with `user_`
+	 *
+	 * @param $metadata
+	 * @param $object_id
+	 * @param $meta_key
+	 * @param $single
+	 *
+	 * @return bool|mixed|null|string
+	 */
+	public static function dynamically_add_user_meta( $metadata, $object_id, $meta_key, $single ) {
+
+		if ( strpos( $meta_key, 'uwp_meta_' ) === 0 ) {
+			$meta_key = substr( $meta_key, 9 );
+			$maybe_meta = uwp_get_usermeta( $object_id, $meta_key, $single );
+			if ( ! empty( $maybe_meta ) ) {
+				$metadata = $maybe_meta;
+			}
+		}
+
+		return $metadata;
+	}
+
 }

@@ -136,6 +136,7 @@ final class UsersWP {
         add_action('handle_bulk_actions-users', array($instance, 'handle_users_bulk_actions'), 10, 3);
         add_filter('init', array($instance, 'process_user_actions'));
         add_action('admin_notices', array($instance, 'show_update_messages'));
+        add_action('get_user_metadata', array($instance, 'dynamically_add_user_meta'), 10, 4);
     }
 
 	/**
