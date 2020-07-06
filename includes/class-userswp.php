@@ -520,6 +520,7 @@ final class UsersWP {
 
         $uwp_options = uwp_get_settings();
 
+	    require_once dirname(dirname( __FILE__ )) . '/admin/settings/class-uwp-font-awesome-settings.php';
 
         require_once( dirname(dirname( __FILE__ )) . '/upgrade.php' );
 

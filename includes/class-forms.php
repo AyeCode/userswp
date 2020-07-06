@@ -2128,7 +2128,8 @@ class UsersWP_Forms {
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
                         <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $id; ?>_hidden" value="1">
-                        <input type="checkbox" name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $id; ?>" placeholder="<?php echo $field->htmlvar_name; ?>" title="<?php echo $site_title; ?>" value="1" class="form-control custom-control-input" onchange="if(this.checked){jQuery('#<?php echo $id; ?>_hidden').val('1');} else{ jQuery('#<?php echo $id; ?>_hidden').val('0');}" <?php echo checked($value, 1)?> <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>>
+                        <input type="checkbox" name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $id; ?>" placeholder="<?php echo $field->htmlvar_name; ?>" title="<?php echo $site_title; ?>" value="1" class="form-control custom-control-input"
+                               onchange="if(this.checked){jQuery('#<?php echo $id; ?>_hidden').val('1');} else{ jQuery('#<?php echo $id; ?>_hidden').val('0');}" <?php echo checked($value, 1)?> <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>>
                         <label for="<?php echo $field->htmlvar_name; ?>" class="custom-control-label"><?php echo $site_title; ?></label>
                     </div>
                 </div>

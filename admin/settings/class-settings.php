@@ -781,6 +781,48 @@ class UsersWP_Admin_Settings {
                     </tr><?php
                     break;
 
+                    case 'select_font_awesome':
+
+                    if ( isset( $value['value'] ) ) {
+                        $option_value = $value['value'];
+                    } else {
+                        $option_value = uwp_get_option('uwp_verified_badge_icon', 'fas fa-check-circle');
+                        if(empty($option_value)) {
+                            $option_value = 'fas fa-check-circle';
+                        }
+                    }
+
+                    $uwp_fa_obj = new UWP_Font_Awesome_Settings();
+                    $get_icons = $uwp_fa_obj->get_icons();
+                    ?>
+                    <tr valign="top" class="select_font_awesome <?php if(isset($value['advanced']) && $value['advanced']){ echo "uwp-advanced-setting"; } ?>">
+                        <th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ) ?> <?php echo $tooltip_html; ?></th>
+                        <td class="forminp">
+                            <select
+                                name="<?php echo esc_attr( $value['id'] ); ?>"
+                                id="<?php echo esc_attr( $value['id'] ); ?>"
+                                style="<?php echo esc_attr( $value['css'] ); ?>"
+                                class="regular-text aui-fa-select2 <?php echo esc_attr( $value['class'] ); ?>"
+                                <?php echo implode( ' ', $custom_attributes ); ?>
+                                <?php echo ! empty( $value['sortable'] ) ? ' data-sortable="true"' : ''; ?>
+                                <?php echo ! empty( $value['placeholder'] ) ? ' data-placeholder="' . esc_attr( $value['placeholder'] ) . '"' : ''; ?>
+                                >
+
+                                <?php
+                                if(!empty($get_icons) && is_array($get_icons)) {
+                                    foreach ($get_icons as $key => $icon ) {
+                                     ?>
+                                     <option <?php selected($option_value, $key) ?> value="<?php echo esc_attr( $key ); ?>" data-fa-icon="<?php echo esc_attr( $key ); ?>"><?php echo esc_attr( $key ); ?></option>
+                                     <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <?php
+                    break;
+
                 // Default: run an action
                 default:
                     do_action( 'uwp_admin_field_' . $value['type'], $value );
