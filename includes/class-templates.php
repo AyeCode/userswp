@@ -170,7 +170,7 @@ class UsersWP_Templates {
                     if ($url_type == 'id') {
                         $user = get_user_by('id', $author_slug);
                     } else {
-                        $user = get_user_by('slug', $author_slug);
+                        $user = get_user_by('login', $author_slug);
                     }
 
                     if (!isset($user->ID)) {
@@ -1089,17 +1089,22 @@ class UsersWP_Templates {
 
 									// Admin default
 									$admin_privacy = isset($tab->tab_privacy) ? absint($tab->tab_privacy) : 0;
-									// add default to the start of the array
-									$privacy_options = array_merge(array('' => sprintf(__("Default (%s)", "userswp"),strtolower($privacy_options[$admin_privacy]))),$privacy_options);
+									$privacy_options = apply_filters('uwp_tab_privacy_options', $privacy_options, $tab);
 
-									$privacy_options = apply_filters('uwp_tab_privacy_options', $privacy_options);
-
+									if(empty($value)){
+                                        $value = $admin_privacy;
+                                    }
 									?>
                                     <select name="<?php echo $field_name; ?>" class="uwp_tab_privacy_field aui-select2 <?php echo $bs_form_control; ?>"
                                             style="margin: 0;">
 										<?php
 										foreach ($privacy_options as $key => $val){
-											echo '<option value="'.$key.'"'. selected($value, $key, false).'>'.$val.'</option>';
+
+										    $default = '';
+										    if($admin_privacy == $key ) {
+                                                $default = __(' (Default)','userswp');
+                                            }
+											echo '<option value="'.$key.'"'. selected($value, $key, false).'>'.$val.$default.'</option>';
 										}
 										?>
                                     </select>

@@ -28,6 +28,7 @@ class UsersWP_Invoicing_Plugin {
     private function setup_actions() {
         if ( is_admin() ) {
 	        add_filter( 'uwp_profile_tabs_predefined_fields', array( $this, 'add_profile_tabs_predefined_fields' ), 10, 2 );
+	        add_filter( 'uwp_exclude_privacy_settings_tabs', array( $this, 'exclude_privacy_settings' ) );
         } else {
             add_action( 'uwp_profile_invoices_tab_content', array( $this, 'add_profile_invoices_tab_content' ) );
             add_action( 'uwp_dashboard_links', array( $this, 'dashboard_output' ), 10, 2 );
@@ -128,23 +129,13 @@ class UsersWP_Invoicing_Plugin {
         return $fields;
     }
 
-	/**
-	 * Adds invoice tab on plugin activation
-	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 */
-    public function add_profile_tabs_on_activation(){
+    public function exclude_privacy_settings($tabs) {
 
-        $tabs = array(
-		    'tab_type'   => 'standard',
-		    'tab_name'   => __('Invoices','userswp'),
-		    'tab_icon'   => 'fas fa-file-invoice',
-		    'tab_key'    => 'invoices',
-		    'tab_content'=> ''
-        );
+        $tabs[] = 'invoices';
+        $tabs[] = 'invoice_subscriptions';
+        $tabs[] = 'quotes';
 
-	    uwp_profile_add_tabs($tabs);
+        return $tabs;
     }
 
     /**
