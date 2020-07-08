@@ -170,7 +170,7 @@ class UsersWP_Templates {
                     if ($url_type == 'id') {
                         $user = get_user_by('id', $author_slug);
                     } else {
-                        $user = get_user_by('slug', $author_slug);
+                        $user = get_user_by('login', $author_slug);
                     }
 
                     if (!isset($user->ID)) {
@@ -1089,17 +1089,22 @@ class UsersWP_Templates {
 
 									// Admin default
 									$admin_privacy = isset($tab->tab_privacy) ? absint($tab->tab_privacy) : 0;
-									// add default to the start of the array
-									$privacy_options = array_merge(array('' => sprintf(__("Default (%s)", "userswp"),strtolower($privacy_options[$admin_privacy]))),$privacy_options);
+									$privacy_options = apply_filters('uwp_tab_privacy_options', $privacy_options, $tab);
 
-									$privacy_options = apply_filters('uwp_tab_privacy_options', $privacy_options);
-
+									if(empty($value)){
+                                        $value = $admin_privacy;
+                                    }
 									?>
                                     <select name="<?php echo $field_name; ?>" class="uwp_tab_privacy_field aui-select2 <?php echo $bs_form_control; ?>"
                                             style="margin: 0;">
 										<?php
 										foreach ($privacy_options as $key => $val){
-											echo '<option value="'.$key.'"'. selected($value, $key, false).'>'.$val.'</option>';
+
+										    $default = '';
+										    if($admin_privacy == $key ) {
+                                                $default = __(' (Default)','userswp');
+                                            }
+											echo '<option value="'.$key.'"'. selected($value, $key, false).'>'.$val.$default.'</option>';
 										}
 										?>
                                     </select>
@@ -1181,7 +1186,7 @@ class UsersWP_Templates {
 				$content = sprintf( __( 'By using this form I agree to the storage and handling of my data by this website. View our %s GDPR Policy %s.', 'userswp' ), '<a href="'.$gdpr_page.'" target="_blank">', '</a>');
 				$content = apply_filters('uwp_register_gdpr_input_label', $content);
 				?>
-                <div class="uwp-remember-me">
+                <div class="uwp-gdpr-input">
                     <label style="display: inline-block;font-weight: normal" for="uwp_accept_gdpr">
                         <input name="uwp_accept_gdpr" id="uwp_accept_gdpr" value="yes" type="checkbox">
 						<?php echo $content; ?>

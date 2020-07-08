@@ -133,8 +133,6 @@ function uwp_account_get_available_tabs() {
         ),
     );
 
-	$tabs = apply_filters( 'uwp_account_available_tabs', $tabs );
-
 	// Keep delete account last
 	if(1 != uwp_get_option('disable_account_delete') && !current_user_can('administrator')){
 		$tabs['delete-account'] = array(
@@ -142,6 +140,8 @@ function uwp_account_get_available_tabs() {
 			'icon' => 'fas fa-lock',
 		);
 	}
+
+	$tabs = apply_filters( 'uwp_account_available_tabs', $tabs );
 
 	return $tabs;
 }

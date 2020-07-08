@@ -1245,7 +1245,7 @@ class UsersWP_Form_Builder {
                                 $default_fields = array('email', 'first_name', 'last_name', 'username', 'password');
                                 $default_fields = apply_filters('uwp_is_default_field', $default_fields, $field_info);
 
-                                if(!in_array($field_info->htmlvar_name, $default_fields)): ?>
+                                if(isset($field_info->htmlvar_name) && !in_array($field_info->htmlvar_name, $default_fields)): ?>
                                     <a class="item-delete submitdelete deletion" id="delete-16" href="javascript:void(0);" onclick="delete_field('<?php echo esc_attr($result_str); ?>', '<?php echo $nonce; ?>')"><?php _e("Remove","userswp");?></a>
                                 <?php endif; ?>
                                 <?php UsersWP_Settings_Page::toggle_advanced_button();?>

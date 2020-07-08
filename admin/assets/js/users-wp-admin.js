@@ -412,6 +412,21 @@ jQuery(document).ready(function () {
         }
     });
 
+    jQuery(".aui-fa-select2").select2({
+        templateResult: aui_fa_select_format,
+        templateSelection: function (option) {
+            if (option.id.length > 0 ) {
+                var icon = jQuery(option.element).attr('data-fa-icon');
+                return "<i class='fa-lg "+icon+"'></i>  "+option.text;
+            } else {
+                return option.text;
+            }
+        },
+        escapeMarkup: function (m) {
+            return m;
+        }
+    });
+
 });
 
 function uwp_data_type_changed(obj, cont) {
@@ -433,6 +448,15 @@ function uwp_data_type_changed(obj, cont) {
             jQuery('#licontainer_' + cont).find('.uwp-price-extra').hide();
         }
     }
+}
+
+function aui_fa_select_format (option) {
+    if (!option.id) {
+        return option.text;
+    }
+
+    var icon = jQuery(option.element).attr('data-fa-icon');
+    return '<i class="fa-lg '+icon+'"></i>  '+option.text ;
 }
 
 function save_field(id) {
@@ -624,7 +648,7 @@ function uwp_init_advanced_settings(){
 function uwp_init_tooltips(){
 
     // we create, then destroy then create so we can ajax load and then call this function with impunity.
-    jQuery('.uwp-help-tip').tooltip().tooltip('destroy').tooltip({
+    jQuery('.uwp-help-tip').tooltip({
         content: function () {
             return jQuery(this).prop('title');
         },

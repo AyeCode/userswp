@@ -117,3 +117,13 @@ function uwp_get_settings() {
 
     return apply_filters( 'uwp_get_settings', $settings );
 }
+
+/**
+ * Exclude privacy tab settings in form builder.
+ *
+ * @return mixed|void Exclude settings tabs
+ */
+function uwp_get_exclude_privacy_tabs() {
+
+    return apply_filters('uwp_exclude_privacy_settings_tabs',array());
+}

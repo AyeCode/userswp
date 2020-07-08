@@ -625,6 +625,12 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		        $user_decided = 0;
 		    }
 
+		    $exclude_privacy_tab = uwp_get_exclude_privacy_tabs();
+		    $exclude_privacy_option = false;
+		    if(!empty($exclude_privacy_tab) && in_array($tab_key,$exclude_privacy_tab)) {
+		        $exclude_privacy_option = true;
+		    }
+
 		    ?>
             <li class="text li-settings" id="licontainer_<?php echo $result_str; ?>">
                 <i class="fas fa-caret-down toggle-arrow" aria-hidden="true" onclick="uwp_show_hide(this);"></i>
@@ -687,28 +693,44 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                                         );
 
                                         $privacy_options = apply_filters('uwp_tab_privacy_options', $privacy_options, $result_str, $request);
-                                    ?>
-                                    <select name="tab_privacy" class="aui-select2">
-                                        <?php
-                                            foreach ($privacy_options as $key => $val){
-                                                echo '<option value="'.$key.'"'. selected($privacy, $key, false).'>'.$val.'</option>';
-                                            }
-                                        ?>
-                                    </select>
+
+                                        if($exclude_privacy_option) { ?>
+                                            <input type="hidden" name="tab_privacy" value="<?php echo $privacy; ?>">
+                                            <p>
+                                                <?php
+                                                $privacy_option_val =  !empty($privacy_options[$privacy]) ? $privacy_options[$privacy] : '';
+                                                echo sprintf(__('%s (Not Changeable)','userswp'),$privacy_option_val);
+                                                ?>
+                                            </p>
+                                        <?php } else{ ?>
+                                            <select name="tab_privacy" class="aui-select2">
+                                                <?php
+                                                    foreach ($privacy_options as $key => $val){
+                                                        echo '<option value="'.$key.'"'. selected($privacy, $key, false).'>'.$val.'</option>';
+                                                    }
+                                                ?>
+                                            </select>
+                                        <?php } ?>
                                 </div>
                             </li>
 
                             <li class="uwp-setting-name">
                                 <label for="user_decided" class="uwp-tooltip-wrap">
                                     <?php _e('Let user decide :', 'userswp'); ?>
+                                    <?php echo ($exclude_privacy_option) ? __('N/A','userswp'): ''; ?>
                                 </label>
                                 <div class="uwp-input-wrap">
-                                    <input type="hidden" name="user_decided" value="0" />
-                                    <input type="checkbox" name="user_decided" value="1" <?php checked( $user_decided, 1, true );?> />
+                                    <?php if(!$exclude_privacy_option) { ?>
+                                        <input type="hidden" name="user_decided" value="0" />
+                                        <input type="checkbox" name="user_decided" value="1" <?php checked( $user_decided, 1, true );?> />
+                                    <?php } else { ?>
+                                        <input type="hidden" name="user_decided" value="<?php echo $user_decided; ?>" />
+                                    <?php } ?>
                                 </div>
                             </li>
 
                             <?php
+
 
                             do_action('uwp_profile_tab_custom_fields', $result_str);
 

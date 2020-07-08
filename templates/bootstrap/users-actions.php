@@ -17,8 +17,6 @@ if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
 	if(!isset($sort_by_options[$sort_by])){$sort_by = "";} // validate
 }
 
-
-
 do_action('uwp_users_loop_actions');
 ?>
 <div class="container mb-3 overflow-visible">
@@ -33,7 +31,6 @@ do_action('uwp_users_loop_actions');
         <div class="col-sm-3 p-0">
 
             <div class="btn-toolbar justify-content-end" role="toolbar" aria-label="Toolbar with button groups">
-
 
                 <div class="btn-group btn-group-sm mr-2 uwp-user-sort" role="group">
                     <button id="uwp-user-sort" type="button" class="btn btn-outline-primary rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -79,7 +76,6 @@ do_action('uwp_users_loop_actions');
                     </div>
                 </div>
 
-
                 <div class="btn-group btn-group-sm uwp-list-view-select" role="group" aria-label="First group">
                     <div class="btn-group btn-group-sm" role="group">
                         <button id="uwp-list-view-select-grid" type="button" class="btn btn-outline-primary rounded-right uwp-list-view-select-grid" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -94,7 +90,6 @@ do_action('uwp_users_loop_actions');
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
