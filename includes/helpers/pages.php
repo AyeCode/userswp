@@ -231,8 +231,18 @@ function uwp_get_user_badge($args){
 		'onclick'   => '',
 		'icon_class'=> '',
 		'extra_attributes'=> '',
-		'tag'       => ''
+		'tag'       => '',
+		'popover_title'=> '',
+		'popover_text'=> '',
+		'cta'=> '', // click through action
+		'tooltip_text'  => '',
+		'hover_content'  => '',
+		'hover_icon'  => '',
+		'type'=> '', // AUI only
+		'color'=> '', // AUI only
+		'shadow'=> '', // AUI only
 	);
+
 	$args     = shortcode_atts( $defaults, $args, 'uwp_user_badge' );
 
 	$output = '';
@@ -373,29 +383,33 @@ function uwp_get_user_badge($args){
 			if(!empty($badge)){
 				//$badge = uwp_replace_variables($badge);
 			}
+			if(!empty($args['popover_title'])){
+				//$args['popover_title'] = uwp_replace_variables($args['popover_title']);
+			}
+			if(!empty($args['popover_text'])){
+				//$args['popover_text'] = uwp_replace_variables($args['popover_text']);
+			}
+			if(!empty($args['tooltip_text'])){
+				//$args['tooltip_text'] = uwp_replace_variables($args['tooltip_text']);
+			}
+			if(!empty($args['hover_content'])){
+				//$args['hover_content'] = uwp_replace_variables($args['hover_content']);
+			}
 
-			$class = 'badge badge-primary';
-			if ( ! empty( $args['size'] ) ) {
-				$class .= ' uwp-badge-size badge-' . sanitize_title( $args['size'] );
-			}
-			if ( ! empty( $args['alignment'] ) ) {
-				$class .= ' uwp-badge-align align-' . sanitize_title($args['alignment']);
-			}
+			$class = '';
 			if ( ! empty( $args['css_class'] ) ) {
 				$class .= ' ' . esc_attr($args['css_class']);
 			}
 
-			// data-attributes
-			$extra_attributes = '';
-			if(!empty($args['extra_attributes'])){
-				$extra_attributes = esc_attr( $args['extra_attributes'] );
-				$extra_attributes = str_replace("&quot;",'"',$extra_attributes);
+			$onclick = '';
+			if(!empty($args['onclick'])){
+				$onclick = 'onclick="'.esc_attr($args['onclick']).'"';
 			}
 
-			// title
-			$title = ! empty( $field->site_title ) ? __( $field->site_title, 'userswp' ) : '';
-			if ( ! empty( $title ) ) {
-				$title = sanitize_text_field( stripslashes( $title ) );
+			// FontAwesome icon
+			$icon = '';
+			if(!empty($args['icon_class'])){
+				$icon = '<i class="'.esc_attr($args['icon_class']).'" ></i>';
 			}
 
 			$rel = '';
@@ -406,6 +420,26 @@ function uwp_get_user_badge($args){
 			$new_window = '';
 			if ( ! empty( $args['new_window'] ) ) {
 				$new_window = ' target="_blank" ';
+			}
+
+			// data-attributes
+			$extra_attributes = '';
+			if(!empty($args['extra_attributes'])){
+				$extra_attributes = esc_attr( $args['extra_attributes'] );
+				$extra_attributes = str_replace("&quot;",'"',$extra_attributes);
+			}
+
+			$badge = ! empty( $badge ) ? __( wp_specialchars_decode( $badge, ENT_QUOTES ), 'geodirectory' ) : '';
+
+			// title
+			$title = ! empty( $field->site_title ) ? __( $field->site_title, 'userswp' ) : '';
+			if ( ! empty( $title ) ) {
+				$title = sanitize_text_field( stripslashes( $title ) );
+			}
+
+			$inner_attributes = '';
+			if ( ! empty( $args['datetime'] ) ) {
+				$inner_attributes .= 'datetime="' . esc_attr( $args['datetime'] ) . '"';
 			}
 
 			// phone & email link
@@ -423,47 +457,113 @@ function uwp_get_user_badge($args){
 				}
 			}
 
-			$link = ! empty( $args['link'] ) ? ( $args['link'] == 'javascript:void(0);' ? $args['link'] : esc_url( $args['link'] ) ) : '';
-
-			$style = '';
-			if(!empty($args['bg_color'])){
-				$style .= "background-color:'" . esc_attr( $args['bg_color'] ) . "';";
-			}
-
-			if(!empty($args['bg_color'])){
-				$style .= "color:'" . esc_attr( $args['txt_color'] ) . "';";
-			}
-
-			$badge = aui()->badge(array(
-				'type'  =>  'badge',
-				'href'  =>  $link,
-				'class'      => $class,
-				'id'         => $title.'-'.$user_id,
-				'title'      => $title,
-				'value'      => $match_value,
-				'content'    => '',
-				'icon'       => esc_attr($args['icon_class']),
-				'onclick'    => esc_attr($args['onclick']),
-				'style'      => $style,
-			));
-
 			$badge = apply_filters( 'uwp_user_badge_output_badge', $badge, $match_value, $key, $args, $user, $field );
 
-			$output = '<div class="uwp-badge-meta uwp-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'"'.$extra_attributes.' title="'.esc_attr( $title ).'">';
-
-			if ( ! empty( $link ) ) {
-				$output .= "<a href='" . $link . "' $new_window $rel>";
+			$btn_class = 'border-0 align-middle gd-badge';
+			// color
+			$color_custom = true;
+			if( !empty( $args['color'] ) ) {
+				$btn_class .= ' badge-' . sanitize_html_class($args['color']);
+				$color_custom = false;
+			}else{
+				$btn_class .= ' badge-primary'; // custom colors will override this anyway.
 			}
 
-			$output .= $badge;
-
-			if ( ! empty( $link ) ) {
-				$output .= "</a>";
+			// shadow
+			if( !empty( $args['shadow'] ) ) {
+				if($args['shadow']=='small'){ $btn_class .= ' shadow-sm'; }
+				elseif($args['shadow']=='medium'){ $btn_class .= ' shadow'; }
+				elseif($args['shadow']=='large'){ $btn_class .= ' shadow-lg'; }
 			}
 
-			// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
-//			$output .= '<' . $tag . ' data-id="' . $user_id . '" class="uwp-badge" data-badge="' . esc_attr($key) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';" ' . $inner_attributes . '>' . $icon . $badge . '</' . $tag . '>';
-			$output .= '</div>';
+			// type
+			if( !empty( $args['type'] ) && $args['type']=='pill' ){
+				$btn_class .= ' badge badge-pill';
+			}else{
+				$btn_class .= ' badge';
+			}
+
+
+			if ( ! empty( $args['css_class'] ) ) {
+				// replace some old classes
+				$user_classes = str_replace(array("gd-ab-","gd-badge-shadow"),array("ab-","shadow"),esc_attr($args['css_class']));
+				$btn_class .= ' ' .$user_classes ;
+			}
+			$btn_args = array(
+				'class'     => $btn_class,
+				'content' => $badge,
+				'style' => $color_custom ? 'background-color:' . sanitize_hex_color( $args['bg_color'] ) . ';color:' . sanitize_hex_color( $args['txt_color'] ) . ';' : '',
+				'data-badge'    => esc_attr($key),
+				'data-badge-condition'  => esc_attr($args['condition']),
+			);
+
+			// onclick
+			if(!empty($args['onclick'])){
+				$btn_args['onclick'] = esc_attr($args['onclick']);
+			}
+
+			// CTA
+			if( $args['cta'] != '0' ){
+				$action = $args['cta'] == '' ? esc_attr($args['key']) : esc_attr($args['cta']);
+				$cta = " if(typeof ga == 'function' && !jQuery(this).hasClass('gd-event-tracked')) { ga('send', 'event', {eventCategory: 'CTA',eventAction: '$action',transport: 'beacon' });jQuery(this).addClass('gd-event-tracked');} ";
+				if(!empty($btn_args['onclick'])){
+					$btn_args['onclick'] .= $cta;
+				}else{
+					$btn_args['onclick'] = $cta;
+				}
+			}
+
+			// popover / tooltip
+			$pop_link = false;
+			if(!empty($args['popover_title']) || !empty($args['popover_text'])){
+				$btn_args['type'] = "button";
+				$btn_args['data-toggle'] = "popover-html";
+				$btn_args['data-placement'] = "top";
+				$pop_link = true;
+				if(!empty($args['popover_title'])){
+					$btn_args['title'] = !empty($args['link']) && $args['link']!='#'  ? "<a href='".esc_url($args['link'])."' $new_window $rel>".$args['popover_title']."</a>" : $args['popover_title'];
+				}
+				if(!empty($args['popover_text'])){
+					$btn_args['data-content'] = !empty($args['link']) && $args['link']!='#'  ? "<a href='".esc_url($args['link'])."' $new_window $rel>".$args['popover_text']."</a>" : $args['popover_text'];
+				}
+			}elseif(!empty($args['tooltip_text'])){
+				$btn_args['data-toggle'] = "tooltip";
+				$btn_args['data-placement'] = "top";
+				$btn_args['title'] = esc_attr($args['tooltip_text']);
+			}
+
+			// hover content
+			if(!empty($args['hover_content'])){
+				$btn_args['hover_content'] = $args['hover_content'];
+			}
+			if(!empty($args['hover_icon'])){
+				$btn_args['hover_icon'] = $args['hover_icon'];
+			}
+
+			// style
+			$btn_args['style'] = '';
+			if($color_custom && !empty($args['bg_color'])){
+				$btn_args['style'] .= 'background-color:' . sanitize_hex_color( $args['bg_color'] ) . ';border-color:' . sanitize_hex_color( $args['bg_color'] ).';';
+			}
+			if($color_custom && !empty($args['txt_color'])){
+				$btn_args['style'] .= 'color:' . sanitize_hex_color( $args['txt_color'] ) . ';';
+			}
+
+			if(!empty($args['link']) && $args['link']!='#' && !$pop_link){
+				$btn_args['href'] = $args['link'];
+			}
+
+			if(!empty($args['link']) && $new_window){
+				$btn_args['new_window'] = true;
+			}
+
+			if(!empty($args['icon_class'])) { $btn_args['icon'] = $args['icon_class'];}
+
+			$output = '<span class="bsui uwp-badge-meta">';
+			if(!empty($args['size'])){$output .= '<span class="'.esc_attr($args['size']).'">';}
+			$output .= aui()->badge( $btn_args );
+			if(!empty($args['size'])){$output .= '</span>';}
+			$output .= '</span>';
 		}
 	}
 

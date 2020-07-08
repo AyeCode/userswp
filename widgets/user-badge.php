@@ -135,8 +135,13 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 				'title' => __('Badge size:', 'userswp'),
 				'desc' => __('Size of the badge.', 'userswp'),
 				'options' =>  array(
+					"" => __('h6', 'userswp'),
+					"h5" => __('h5', 'userswp'),
+					"h4" => __('h4', 'userswp'),
+					"h3" => __('h3', 'userswp'),
+					"h2" => __('h2', 'userswp'),
+					"h1" => __('h1', 'userswp'),
 					"small" => __('Small', 'userswp'),
-					 "" => __('Normal', 'userswp'),
 					"medium" => __('Medium', 'userswp'),
 					"large" => __('Large', 'userswp'),
 					"extra-large" => __('Extra Large', 'userswp'),
@@ -230,7 +235,51 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 			return '';
 		}
 
-		$output = uwp_get_user_badge( $args );
+		$errors = array();
+		if ( empty( $args['id'] ) ) {
+			$errors[] = __('post id is missing','geodirectory');
+		}
+		if ( empty( $post_type ) ) {
+			$errors[] = __('invalid post type','geodirectory');
+		}
+		if ( empty( $args['key'] ) ) {
+			$errors[] = __('field key is missing', 'geodirectory');
+		}
+
+		$output = '';
+		if ( ! empty( $errors ) ){
+			$output .= implode( ", ", $errors );
+		}
+
+		$design_style = uwp_get_option("design_style",'bootstrap');
+		if(!empty($args['size'])){
+			switch ($args['size']) {
+				case 'small':
+					$args['size'] = $design_style ? '' : 'small';
+					break;
+				case 'medium':
+					$args['size'] = $design_style ? 'h4' : 'medium';
+					break;
+				case 'large':
+					$args['size'] = $design_style ? 'h2' : 'large';
+					break;
+				case 'extra-large':
+					$args['size'] = $design_style ? 'h1' : 'extra-large';
+					break;
+				case 'h6': $args['size'] = 'h6';break;
+				case 'h5': $args['size'] = 'h5';break;
+				case 'h4': $args['size'] = 'h4';break;
+				case 'h3': $args['size'] = 'h3';break;
+				case 'h2': $args['size'] = 'h2';break;
+				case 'h1': $args['size'] = 'h1';break;
+				default:
+					$args['size'] = '';
+
+			}
+
+		}
+
+		$output .= uwp_get_user_badge( $args );
 
 		return $output;
 	}
