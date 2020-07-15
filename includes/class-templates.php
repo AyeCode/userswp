@@ -170,7 +170,7 @@ class UsersWP_Templates {
                     if ($url_type == 'id') {
                         $user = get_user_by('id', $author_slug);
                     } else {
-                        $user = get_user_by('login', $author_slug);
+                        $user = get_user_by('slug', $author_slug);
                     }
 
                     if (!isset($user->ID)) {

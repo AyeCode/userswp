@@ -3,10 +3,10 @@
   display: none;
 }
 
-.btn,.badge{
+.btn,.badge,.hover-swap{
   &:hover{
     .hover-content{
-      display: block;
+      display: initial;
     }
     .hover-content-original{
       display: none;

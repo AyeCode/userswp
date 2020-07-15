@@ -136,6 +136,7 @@ final class UsersWP {
         add_action('handle_bulk_actions-users', array($instance, 'handle_users_bulk_actions'), 10, 3);
         add_filter('init', array($instance, 'process_user_actions'));
         add_action('admin_notices', array($instance, 'show_update_messages'));
+        add_action('get_user_metadata', array($instance, 'dynamically_add_user_meta'), 10, 4);
     }
 
 	/**
@@ -248,7 +249,7 @@ final class UsersWP {
         //profile page
         add_filter('query_vars', array($instance, 'profile_query_vars'), 10, 1 );
         add_action('init', array($instance, 'rewrite_profile_link') , 10, 1 );
-        add_filter( 'author_link', array($instance, 'get_author_link'), 10, 2 );
+        add_filter( 'author_link', array($instance, 'get_author_link'), 11, 2 );
         add_filter( 'edit_profile_url', array($instance, 'modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
         add_filter( 'get_comment_author_link', array($instance, 'get_comment_author_link') , 10 , 2 );

@@ -233,22 +233,20 @@ class UsersWP_Validation {
 
                 // Check the username for register
                 if ('register' == $type && $field->htmlvar_name == 'username') {
-                    if (!is_admin()) {
-                        if (!validate_username($sanitized_value)) {
-                            $errors->add('invalid_username', $incorrect_username_error_msg);
-                            return $errors;
-                        }
-                        if (username_exists($sanitized_value)) {
-                            $errors->add('username_exists', __('<strong>Error</strong>: This username is already registered. Please choose another one.', 'userswp'));
-                            return $errors;
-                        }
-	                    $username_length = uwp_get_option( 'register_username_length');
-	                    $username_length = !empty($username_length) ? (int)$username_length : 4;
+                    if (!validate_username($sanitized_value)) {
+                        $errors->add('invalid_username', $incorrect_username_error_msg);
+                        return $errors;
+                    }
+                    if (username_exists($sanitized_value)) {
+                        $errors->add('username_exists', __('<strong>Error</strong>: This username is already registered. Please choose another one.', 'userswp'));
+                        return $errors;
+                    }
+                    $username_length = uwp_get_option( 'register_username_length');
+                    $username_length = !empty($username_length) ? (int)$username_length : 4;
 
-	                    if(!empty($sanitized_value) && strlen($sanitized_value) < $username_length) {
-		                    $errors->add('username_length', sprintf(__('<strong>Error</strong>: Username must be %s characters or more.', 'userswp'), $username_length));
-		                    return $errors;
-	                    }
+                    if(!empty($sanitized_value) && strlen($sanitized_value) < $username_length) {
+	                    $errors->add('username_length', sprintf(__('<strong>Error</strong>: Username must be %s characters or more.', 'userswp'), $username_length));
+	                    return $errors;
                     }
                 }
 
@@ -325,9 +323,9 @@ class UsersWP_Validation {
 
 	        if ($type != 'login' && (strlen($data['password']) < $password_min_length || strlen($data['password']) > $password_max_length )) {
 		        if(strlen($data['password']) > $password_max_length) {
-			        $errors->add('pass_match', sprintf(__('ERROR: Password must be %s characters or less.', 'userswp'),$password_max_length));
+			        $errors->add('pass_match', sprintf(__('ERROR: Password must be %s characters or less.', 'userswp'), $password_max_length));
 		        } else{
-			        $errors->add('pass_match', sprintf(__('ERROR: Password must be %s characters or more.', 'userswp'),$password_min_length));
+			        $errors->add('pass_match', sprintf(__('ERROR: Password must be %s characters or more.', 'userswp'), $password_min_length));
 		        }
 	        }
 

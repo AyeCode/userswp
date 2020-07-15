@@ -236,7 +236,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 	            array(
 		            'id'   => 'login_modal',
 		            'name' => __( 'Login Lightbox', 'userswp' ),
-		            'desc' => __( 'When enabled some login links will open in a lightbox instead of changing page.','userswp'),
+		            'desc' => __( 'When enabled some login links will open in a lightbox instead of changing page. The page will reloaded after successful login instead of redirect.','userswp'),
 		            'type' => 'checkbox',
 		            'default'  => '1',
 		            'class' => 'uwp_label_inline',
@@ -408,8 +408,8 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 array(
                     'id' => 'profile_no_of_items',
                     'name' => __( 'Number of items', 'userswp' ),
-                    'type' => 'text',
-                    'default' => '',
+                    'type' => 'number',
+                    'default' => 10,
                     'desc' 	=> __( 'Enter number of items to display in profile tabs.', 'userswp' ),
                     'desc_tip' => true,
                     'advanced'  => true,
@@ -445,6 +445,15 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'class'    => 'uwp-select',
                     'desc_tip' => true,
                 ),
+	            array(
+		            'id' => 'users_no_of_items',
+		            'name' => __( 'Number of items', 'userswp' ),
+		            'type' => 'number',
+		            'default' => 10,
+		            'desc' 	=> __( 'Enter number of items to display in users list page.', 'userswp' ),
+		            'desc_tip' => true,
+		            'advanced'  => true,
+	            ),
                 array(
                     'id'   => 'users_excluded_from_list',
                     'name' => __( 'Users to exclude', 'uwp-messaging' ),

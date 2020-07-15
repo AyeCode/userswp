@@ -10,3 +10,21 @@ $brand-wordpress: #207297;
 $brand-google: #ea4335;
 $brand-yahoo: #6040d2;
 $brand-vkontakte: #4a76a8;
+
+$branding-colors: () !default;
+$branding-colors: map-merge(
+                (
+                        "facebook": $brand-facebook,
+                        "twitter": $brand-twitter,
+                        "instagram": $brand-instagram,
+                        "linkedin": $brand-linkedin,
+                        "flickr": $brand-flickr,
+                        "github": $brand-github,
+                        "youtube": $brand-youtube,
+                        "wordpress": $brand-wordpress,
+                        "google": $brand-google,
+                        "yahoo": $brand-yahoo,
+                        "vkontakte": $brand-vkontakte,
+                ),
+                $branding-colors
+);

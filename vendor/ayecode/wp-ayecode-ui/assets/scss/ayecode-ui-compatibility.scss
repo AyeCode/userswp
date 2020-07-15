@@ -3,13 +3,6 @@
   @import "partials/index"; // helpers
 }
 
-// admin bar
-body.admin-bar{
-  .modal{
-    padding-top: 1rem;
-  }
-}
-
 // Modal can't be inside wrapper
 @import "1-frameworks/bootstrap/functions";
 @import "1-frameworks/bootstrap/variables";
@@ -22,3 +15,13 @@ body.admin-bar{
 
 // select2 can't be inside wrapper
 @import '1-frameworks/select2/core';
+
+
+// Hide the WP Admin bar when modal is open.
+body{
+  &.modal-open{
+    #wpadminbar{
+      z-index: 999;
+    }
+  }
+}

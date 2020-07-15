@@ -625,7 +625,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		        $user_decided = 0;
 		    }
 
-		    $exclude_privacy_tab = uwp_get_exclude_privacy_tabs();
+		    $exclude_privacy_tab = apply_filters('uwp_exclude_privacy_settings_tabs',array());
 		    $exclude_privacy_option = false;
 		    if(!empty($exclude_privacy_tab) && in_array($tab_key,$exclude_privacy_tab)) {
 		        $exclude_privacy_option = true;

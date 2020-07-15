@@ -30,15 +30,22 @@ class AUI_Component_Input {
 			'required'   => false,
 			'label'      => '',
 			'label_after'=> false,
+			'label_class'=> '',
+			'label_show' => false, // force the lable to show even if globally hidden
+			'label_type' => '', // sets the lable type, horizontal
+			'help_text'  => '',
 			'validation_text'   => '',
 			'validation_pattern' => '',
 			'no_wrap'    => false,
 			'input_group_right' => '',
 			'input_group_left' => '',
+			'input_group_right_inside' => false, // forces the input group inside the input
+			'input_group_left_inside' => false, // forces the input group inside the input
 			'step'       => '',
 			'switch'     => false, // to show checkbox as a switch
 			'checked'   => false, // set a checkbox or radio as selected
 			'password_toggle' => true, // toggle view/hide password
+			'extra_attributes'  => array() // an array of extra attributes
 		);
 
 		/**
@@ -48,8 +55,15 @@ class AUI_Component_Input {
 		$output = '';
 		if ( ! empty( $args['type'] ) ) {
 			$type = sanitize_html_class( $args['type'] );
-			$label_args = array('title'=>$args['label'],'for'=>$args['id']);
-			
+
+			$label_args = array(
+				'title'=> $args['label'],
+				'for'=> $args['id'],
+				'class' => $args['label_class']." ",
+				'label_show'=> $args['label_show'],
+				'label_type' => $args['label_type']
+			);
+
 			// Some special sauce for files
 			if($type=='file' ){
 				$args['label_after'] = true; // if type file we need the label after
@@ -57,13 +71,24 @@ class AUI_Component_Input {
 			}elseif($type=='checkbox'){
 				$args['label_after'] = true; // if type file we need the label after
 				$args['class'] .= ' custom-control-input ';
-			}
+			}elseif($type=='datepicker' || $type=='timepicker'){
+				$type = 'text';
+				$args['class'] .= ' aui-flatpickr bg-initial ';
 
+				// enqueue the script
+				$aui_settings = AyeCode_UI_Settings::instance();
+				$aui_settings->enqueue_flatpickr();
+			}
 
 			// label before
 			if(!empty($args['label']) && !$args['label_after']){
-				if($type == 'file'){$label_args['class'] = 'custom-file-label';}
+				if($type == 'file'){$label_args['class'] .= 'custom-file-label';}
 				$output .= self::label( $label_args, $type );
+			}
+
+			// maybe horizontal label
+			if($args['label_type']=='horizontal' && $type != 'checkbox'){
+				$output .= '<div class="col-sm-10">';
 			}
 
 			// open/type
@@ -71,7 +96,7 @@ class AUI_Component_Input {
 
 			// name
 			if(!empty($args['name'])){
-				$output .= ' name="'.sanitize_html_class($args['name']).'" ';
+				$output .= ' name="'.esc_attr($args['name']).'" ';
 			}
 
 			// id
@@ -124,18 +149,36 @@ class AUI_Component_Input {
 			$class = !empty($args['class']) ? $args['class'] : '';
 			$output .= ' class="form-control '.$class.'" ';
 
+			// data-attributes
+			$output .= AUI_Component_Helper::data_attributes($args);
+
+			// extra attributes
+			if(!empty($args['extra_attributes'])){
+				$output .= AUI_Component_Helper::extra_attributes($args['extra_attributes']);
+			}
 
 			// close
 			$output .= ' >';
 
+
 			// label after
 			if(!empty($args['label']) && $args['label_after']){
-				if($type == 'file'){$label_args['class'] = 'custom-file-label';}
-				elseif($type == 'checkbox'){$label_args['class'] = 'custom-control-label';}
+				if($type == 'file'){$label_args['class'] .= 'custom-file-label';}
+				elseif($type == 'checkbox'){$label_args['class'] .= 'custom-control-label';}
 				$output .= self::label( $label_args, $type );
 			}
 
-			
+			// help text
+			if(!empty($args['help_text'])){
+				$output .= AUI_Component_Helper::help_text($args['help_text']);
+			}
+
+			// maybe horizontal label
+			if($args['label_type']=='horizontal' && $type != 'checkbox'){
+				$output .= '</div>';
+			}
+
+
 			// some input types need a separate wrap
 			if($type == 'file') {
 				$output = self::wrap( array(
@@ -148,6 +191,10 @@ class AUI_Component_Input {
 					'content' => $output,
 					'class'   => 'custom-control '.$wrap_class
 				) );
+
+				if($args['label_type']=='horizontal'){
+					$output = '<div class="col-sm-2 col-form-label"></div><div class="col-sm-10">' . $output . '</div>';
+				}
 			}elseif($type == 'password' && $args['password_toggle'] && !$args['input_group_right']){
 
 
@@ -163,18 +210,21 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// input group wraps
 			if($args['input_group_left'] || $args['input_group_right']){
+				$w100 = strpos($args['class'], 'w-100') !== false ? ' w-100' : '';
 				if($args['input_group_left']){
 					$output = self::wrap( array(
 						'content' => $output,
-						'class'   => 'input-group',
-						'input_group_right' => $args['input_group_left']
+						'class'   => $args['input_group_left_inside'] ? 'input-group-inside'.$w100  : 'input-group',
+						'input_group_left' => $args['input_group_left'],
+						'input_group_left_inside'    => $args['input_group_left_inside']
 					) );
 				}
 				if($args['input_group_right']){
 					$output = self::wrap( array(
 						'content' => $output,
-						'class'   => 'input-group',
-						'input_group_right' => $args['input_group_right']
+						'class'   => $args['input_group_right_inside'] ? 'input-group-inside'.$w100 : 'input-group',
+						'input_group_right' => $args['input_group_right'],
+						'input_group_right_inside'    => $args['input_group_right_inside']
 					) );
 				}
 
@@ -185,8 +235,10 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// wrap
 			if(!$args['no_wrap']){
+				$wrap_class = $args['label_type']=='horizontal' ? 'form-group row' : 'form-group';
 				$output = self::wrap(array(
 					'content' => $output,
+					'class'   => $wrap_class,
 				));
 			}
 
@@ -214,6 +266,10 @@ else{$eli.attr(\'type\',\'password\');}"
 			'value'      => '',
 			'required'   => false,
 			'label'      => '',
+			'label_class'      => '',
+			'label_show' => false, // force the lable to show even if globally hidden
+			'label_type' => '', // sets the lable type, horizontal
+			'help_text'  => '',
 			'validation_text'   => '',
 			'validation_pattern' => '',
 			'no_wrap'    => false,
@@ -230,7 +286,19 @@ else{$eli.attr(\'type\',\'password\');}"
 		// label
 		if(!empty($args['label']) && is_array($args['label'])){
 		}elseif(!empty($args['label'])){
-			$output .= self::label(array('title'=>$args['label'],'for'=>$args['id']));
+			$label_args = array(
+				'title'=> $args['label'],
+				'for'=> $args['id'],
+				'class' => $args['label_class']." ",
+				'label_show'=> $args['label_show'],
+				'label_type' => $args['label_type']
+			);
+			$output .= self::label( $label_args );
+		}
+
+		// maybe horizontal label
+		if($args['label_type']=='horizontal'){
+			$output .= '<div class="col-sm-10">';
 		}
 
 		if(!empty($args['wysiwyg'])){
@@ -318,16 +386,25 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		}
 
+		// help text
+		if(!empty($args['help_text'])){
+			$output .= AUI_Component_Helper::help_text($args['help_text']);
+		}
 
-		// wrap
-		if(!$args['no_wrap']){
-			$output = self::wrap(array(
-				'content' => $output,
-			));
+		// maybe horizontal label
+		if($args['label_type']=='horizontal'){
+			$output .= '</div>';
 		}
 
 
-
+		// wrap
+		if(!$args['no_wrap']){
+			$wrap_class = $args['label_type']=='horizontal' ? 'form-group row' : 'form-group';
+			$output = self::wrap(array(
+				'content' => $output,
+				'class'   => $wrap_class,
+			));
+		}
 
 
 		return $output;
@@ -339,6 +416,8 @@ else{$eli.attr(\'type\',\'password\');}"
 			'title'       => 'div',
 			'for'      => '',
 			'class'      => '',
+			'label_show'    => false, // force show a label
+			'label_type'    => '', // horizontal
 		);
 
 		/**
@@ -350,12 +429,16 @@ else{$eli.attr(\'type\',\'password\');}"
 		if($args['title']){
 
 			// maybe hide labels //@todo set a global option for visibility class
-			if($type == 'file' || $type == 'checkbox'){
+			if($type == 'file' || $type == 'checkbox' || $type == 'radio' || !empty($args['label_show']) ){
 				$class = $args['class'];
 			}else{
 				$class = 'sr-only '.$args['class'];
 			}
 
+			// maybe horizontal
+			if($args['label_type']=='horizontal' && $type != 'checkbox'){
+				$class .= ' col-sm-2 col-form-label';
+			}
 
 			// open
 			$output .= '<label ';
@@ -372,9 +455,9 @@ else{$eli.attr(\'type\',\'password\');}"
 			$output .= '>';
 
 
-			// title
+			// title, don't escape fully as can contain html
 			if(!empty($args['title'])){
-				$output .= esc_attr($args['title']);
+				$output .= wp_kses_post($args['title']);
 			}
 
 			// close wrap
@@ -394,6 +477,8 @@ else{$eli.attr(\'type\',\'password\');}"
 			'content'   => '',
 			'input_group_left' => '',
 			'input_group_right' => '',
+			'input_group_left_inside' => false,
+			'input_group_right_inside' => false,
 		);
 
 		/**
@@ -413,10 +498,12 @@ else{$eli.attr(\'type\',\'password\');}"
 			// close wrap
 			$output .= ' >';
 
+
 			// Input group left
 			if(!empty($args['input_group_left'])){
+				$position_class = !empty($args['input_group_left_inside']) ? 'position-absolute' : '';
 				$input_group_left = strpos($args['input_group_left'], '<') !== false ? $args['input_group_left'] : '<span class="input-group-text">'.$args['input_group_left'].'</span>';
-				$output .= '<div class="input-group-prepend">'.$input_group_left.'</div>';
+				$output .= '<div class="input-group-prepend '.$position_class.'">'.$input_group_left.'</div>';
 			}
 
 			// content
@@ -424,8 +511,9 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// Input group right
 			if(!empty($args['input_group_right'])){
+				$position_class = !empty($args['input_group_left_inside']) ? 'position-absolute' : '';
 				$input_group_right = strpos($args['input_group_right'], '<') !== false ? $args['input_group_right'] : '<span class="input-group-text">'.$args['input_group_right'].'</span>';
-				$output .= '<div class="input-group-append">'.$input_group_right.'</div>';
+				$output .= '<div class="input-group-append '.$position_class.'">'.$input_group_right.'</div>';
 			}
 
 
@@ -455,12 +543,17 @@ else{$eli.attr(\'type\',\'password\');}"
 			'value'      => '', // can be an array or a string
 			'required'   => false,
 			'label'      => '',
+			'label_class'      => '',
+			'label_show' => false, // force the lable to show even if globally hidden
+			'label_type' => '', // sets the lable type, horizontal
+			'help_text'  => '',
 			'placeholder'=> '',
 			'options'    => array(),
 			'icon'       => '',
 			'multiple'   => false,
 			'select2'    => false,
 			'no_wrap'    => false,
+			'extra_attributes'  => array() // an array of extra attributes
 		);
 
 		/**
@@ -494,11 +587,28 @@ else{$eli.attr(\'type\',\'password\');}"
 		// label
 		if(!empty($args['label']) && is_array($args['label'])){
 		}elseif(!empty($args['label'])){
-			$output .= self::label(array('title'=>$args['label'],'for'=>$args['id']));
+			$label_args = array(
+				'title'=> $args['label'],
+				'for'=> $args['id'],
+				'class' => $args['label_class']." ",
+				'label_show'=> $args['label_show'],
+				'label_type' => $args['label_type']
+			);
+			$output .= self::label($label_args);
+		}
+
+		// maybe horizontal label
+		if($args['label_type']=='horizontal'){
+			$output .= '<div class="col-sm-10">';
 		}
 
 		// open/type
 		$output .= '<select ';
+
+		// style
+		if($is_select2){
+			$output .= " style='width:100%;' ";
+		}
 
 		// class
 		$class = !empty($args['class']) ? $args['class'] : '';
@@ -524,6 +634,11 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		// aria-attributes
 		$output .= AUI_Component_Helper::aria_attributes($args);
+
+		// extra attributes
+		if(!empty($args['extra_attributes'])){
+			$output .= AUI_Component_Helper::extra_attributes($args['extra_attributes']);
+		}
 
 		// required
 		if(!empty($args['required'])){
@@ -572,7 +687,7 @@ else{$eli.attr(\'type\',\'password\');}"
 							$selected = selected( $args['value'], $val, false);
 						}
 					}
-					$output .= '<option value="'.esc_attr($val).'" '.$selected.'>'.esc_attr($name).'</option>';	
+					$output .= '<option value="'.esc_attr($val).'" '.$selected.'>'.esc_attr($name).'</option>';
 				}
 			}
 
@@ -581,10 +696,200 @@ else{$eli.attr(\'type\',\'password\');}"
 		// closing tag
 		$output .= '</select>';
 
+		// help text
+		if(!empty($args['help_text'])){
+			$output .= AUI_Component_Helper::help_text($args['help_text']);
+		}
+
+		// maybe horizontal label
+		if($args['label_type']=='horizontal'){
+			$output .= '</div>';
+		}
+
+
 		// wrap
 		if(!$args['no_wrap']){
+			$wrap_class = $args['label_type']=='horizontal' ? 'form-group row' : 'form-group';
 			$output = self::wrap(array(
 				'content' => $output,
+				'class'   => $wrap_class,
+			));
+		}
+
+
+		return $output;
+	}
+
+	/**
+	 * Build the component.
+	 *
+	 * @param array $args
+	 *
+	 * @return string The rendered component.
+	 */
+	public static function radio($args = array()){
+		$defaults = array(
+			'class'      => '',
+			'id'         => '',
+			'title'      => '',
+			'horizontal' => false, // sets the lable horizontal
+			'value'      => '',
+			'label'      => '',
+			'label_class'=> '',
+			'label_show' => false, // force the lable to show even if globally hidden
+			'label_type' => '', // sets the lable type, horizontal
+			'inline'     => true,
+			'required'   => false,
+			'options'    => array(),
+			'icon'       => '',
+			'no_wrap'    => false,
+			'extra_attributes'  => array() // an array of extra attributes
+		);
+
+		/**
+		 * Parse incoming $args into an array and merge it with $defaults
+		 */
+		$args   = wp_parse_args( $args, $defaults );
+
+		$label_args = array(
+			'title'=> $args['label'],
+			'class' => $args['label_class']." pt-0 ",
+			'label_show'=> true,
+			'label_type' => $args['label_type']
+		);
+
+		$output = '';
+
+
+
+		// label before
+		if(!empty($args['label'])){
+			$output .= self::label( $label_args, 'radio' );
+		}
+
+		// maybe horizontal label
+		if($args['label_type']=='horizontal'){
+			$output .= '<div class="col-sm-10">';
+		}
+
+		if(!empty($args['options'])){
+			foreach($args['options'] as $value => $label){
+				$option_args = $args;
+				$option_args['value'] = $value;
+				$option_args['label'] = $label;
+				$option_args['checked'] = $value == $args['value'] ? true : false;
+				$output .= self::radio_option($option_args);
+			}
+		}
+
+		// maybe horizontal label
+		if($args['label_type']=='horizontal'){
+			$output .= '</div>';
+		}
+
+
+		// wrap
+		$wrap_class = $args['label_type']=='horizontal' ? 'form-group row' : 'form-group';
+		$output = self::wrap(array(
+			'content' => $output,
+			'class'   => $wrap_class,
+		));
+
+
+		return $output;
+	}
+
+	/**
+	 * Build the component.
+	 *
+	 * @param array $args
+	 *
+	 * @return string The rendered component.
+	 */
+	public static function radio_option($args = array()){
+		$defaults = array(
+			'class'      => '',
+			'id'         => '',
+			'title'      => '',
+			'value'      => '',
+			'required'   => false,
+			'inline'     => true,
+			'label'      => '',
+			'options'    => array(),
+			'icon'       => '',
+			'no_wrap'    => false,
+			'extra_attributes'  => array() // an array of extra attributes
+		);
+
+		/**
+		 * Parse incoming $args into an array and merge it with $defaults
+		 */
+		$args   = wp_parse_args( $args, $defaults );
+
+		$output = '';
+
+		// open/type
+		$output .= '<input type="radio"';
+
+		// class
+		$output .= ' class="form-check-input" ';
+
+		// name
+		if(!empty($args['name'])){
+			$output .= AUI_Component_Helper::name($args['name']);
+		}
+
+		// id
+		if(!empty($args['id'])){
+			$output .= AUI_Component_Helper::id($args['id']);
+		}
+
+		// title
+		if(!empty($args['title'])){
+			$output .= AUI_Component_Helper::title($args['title']);
+		}
+
+		// value
+		if(!empty($args['value'])){
+			$output .= ' value="'.sanitize_text_field($args['value']).'" ';
+		}
+
+		// checked, for radio and checkboxes
+		if( $args['checked'] ){
+			$output .= ' checked ';
+		}
+
+		// data-attributes
+		$output .= AUI_Component_Helper::data_attributes($args);
+
+		// aria-attributes
+		$output .= AUI_Component_Helper::aria_attributes($args);
+
+		// extra attributes
+		if(!empty($args['extra_attributes'])){
+			$output .= AUI_Component_Helper::extra_attributes($args['extra_attributes']);
+		}
+
+		// required
+		if(!empty($args['required'])){
+			$output .= ' required ';
+		}
+
+		// close opening tag
+		$output .= ' >';
+
+		// label
+		if(!empty($args['label']) && is_array($args['label'])){
+		}elseif(!empty($args['label'])){
+			$output .= self::label(array('title'=>$args['label'],'for'=>$args['id'],'class'=>'form-check-label'),'radio');
+		}
+
+		// wrap
+		if(!$args['no_wrap']){
+			$wrap_class = $args['inline'] ? 'form-check form-check-inline' : 'form-check';
+			$output = self::wrap(array(
+				'content' => $output,
+				'class' => $wrap_class
 			));
 		}
 

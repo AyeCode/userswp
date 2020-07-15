@@ -24,7 +24,7 @@ class AUI {
 	 *
 	 * @var string $ver The current version number.
 	 */
-	public static $ver = '0.1.8';
+	public static $ver = '0.1.16';
 
 	/**
 	 * There can be only one.
@@ -185,6 +185,19 @@ class AUI {
 	 */
 	public function select( $args = array() ) {
 		return AUI_Component_Input::select( $args );
+	}
+
+	/**
+	 * Render and return a bootstrap radio component.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $args
+	 *
+	 * @return string The rendered component.
+	 */
+	public function radio( $args = array() ) {
+		return AUI_Component_Input::radio( $args );
 	}
 
 	/**

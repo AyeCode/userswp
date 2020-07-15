@@ -48,7 +48,6 @@ function uwp_uninstall() {
 		// Delete user meta for all users
 		$meta_type  = 'user';
 		$user_id    = 0; // This will be ignored, since we are deleting for all users.
-		$meta_key   = 'uwp_usermeta';
 		$meta_value = ''; // Also ignored. The meta will be deleted regardless of value.
 		$delete_all = true;
 
