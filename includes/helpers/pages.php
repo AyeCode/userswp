@@ -234,7 +234,6 @@ function uwp_get_user_badge($args){
 		'tag'       => '',
 		'popover_title'=> '',
 		'popover_text'=> '',
-		'cta'=> '', // click through action
 		'tooltip_text'  => '',
 		'hover_content'  => '',
 		'hover_icon'  => '',
@@ -247,24 +246,24 @@ function uwp_get_user_badge($args){
 
 	$output = '';
 	$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-	$key = $args['key'];
+	$match_field = $args['key'];
 	$badge = $args['badge'];
 	$field = array();
 	$user_id = $user->ID;
 
 	// Check if there is a specific filter for field.
-	if ( has_filter( 'uwp_output_badge_field_key_' . $key ) ) {
-		$output = apply_filters( 'uwp_output_badge_field_key_' . $key, $output, $user, $args );
+	if ( has_filter( 'uwp_output_badge_field_key_' . $match_field ) ) {
+		$output = apply_filters( 'uwp_output_badge_field_key_' . $match_field, $output, $user, $args );
 	}
 
-	if ( $key ) {
-		$fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = '".$key."'");
+	if ( $match_field ) {
+		$fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = '".$match_field."'");
 
 		if(!$fields){
-			return '';
+			return $output;
 		}
 
-		$field = $fields[0];
+		$field = isset($fields[0]) ? $fields[0] : '';
 
 		if ( ! empty( $field ) ) {
 			// Check if there is a specific filter for key type.
@@ -284,7 +283,9 @@ function uwp_get_user_badge($args){
 	// If not then we run the standard output.
 	if ( empty( $output ) ) {
 		$search = $args['search'];
-		$match_found = $key === '' ? true : false;
+		$match_found = $match_field === '' ? true : false;
+		$is_date = ( isset( $field->field_type ) && $field->field_type == 'datepicker' ) ? true : false;
+		$is_date = apply_filters( 'uwp_user_badge_is_date', $is_date, $match_field, $field, $args );
 
 		$excluded_fields = uwp_get_excluded_fields();
 		if(in_array($field->htmlvar_name, $excluded_fields)){
@@ -293,36 +294,56 @@ function uwp_get_user_badge($args){
 			$match_value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
 		}
 
-		switch ( $args['condition'] ) {
-			case 'is_equal':
-				$match_found = (bool) ( $search != '' && $match_value == $search );
-				break;
-			case 'is_not_equal':
-				$match_found = (bool) ( $search != '' && $match_value != $search );
-				break;
-			case 'is_greater_than':
-				$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value > $search );
-				break;
-			case 'is_less_than':
-				$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value < $search );
-				break;
-			case 'is_empty':
-				$match_found = (bool) ( $match_value === '' || $match_value === false || $match_value === '0' || is_null( $match_value ) );
-				break;
-			case 'is_not_empty':
-				$match_found = (bool) ( $match_value !== '' && $match_value !== false && $match_value !== '0' && ! is_null( $match_value ) );
-				break;
-			case 'is_contains':
-				$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) !== false );
-				break;
-			case 'is_not_contains':
-				$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) === false );
-				break;
+		if ( ! $match_found ) {
+			if ( $field->field_type == 'datepicker' && empty( $args['condition'] ) || $args['condition'] == 'is_greater_than' || $args['condition'] == 'is_less_than' ) {
+				if ( strpos( $search, '+' ) === false && strpos( $search, '-' ) === false ) {
+					$search = '+' . $search;
+				}
+				$the_time = get_the_time( 'Y-m-d', $match_value );
+				$until_time = strtotime( $the_time . ' ' . $search . ' days' );
+				$now_time   = strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
+				if ( ( empty( $args['condition'] ) || $args['condition'] == 'is_less_than' ) && $until_time > $now_time ) {
+					$match_found = true;
+				} elseif ( $args['condition'] == 'is_greater_than' && $until_time < $now_time ) {
+					$match_found = true;
+				}
+			} else {
+				switch ( $args['condition'] ) {
+					case 'is_equal':
+						$match_found = (bool) ( $search != '' && $match_value == $search );
+						break;
+					case 'is_not_equal':
+						$match_found = (bool) ( $search != '' && $match_value != $search );
+						break;
+					case 'is_greater_than':
+						$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value > $search );
+						break;
+					case 'is_less_than':
+						$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value < $search );
+						break;
+					case 'is_empty':
+						$match_found = (bool) ( $match_value === '' || $match_value === false || $match_value === '0' || is_null( $match_value ) );
+						break;
+					case 'is_not_empty':
+						$match_found = (bool) ( $match_value !== '' && $match_value !== false && $match_value !== '0' && ! is_null( $match_value ) );
+						break;
+					case 'is_contains':
+						$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) !== false );
+						break;
+					case 'is_not_contains':
+						$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) === false );
+						break;
+				}
+			}
 		}
 
 		$match_found = apply_filters( 'uwp_user_badge_check_match_found', $match_found, $args, $user );
 
 		if ( $match_found ) {
+			if ( $is_date && ! empty( $match_value ) && strpos( $match_value, '0000-00-00' ) === false ) {
+				$args['datetime'] = mysql2date( 'c', $match_value, false );
+			}
+
 			// Option value
 			if ( ! empty( $field->option_values ) ) {
 				$option_values = uwp_string_values_to_options( stripslashes_deep( $field->option_values ), true );
@@ -353,7 +374,7 @@ function uwp_get_user_badge($args){
 				}
 			}
 
-			$match_value = apply_filters( 'uwp_post_badge_match_value', $match_value, $key, $args, $user, $field );
+			$match_value = apply_filters( 'uwp_post_badge_match_value', $match_value, $match_field, $args, $user, $field );
 
 			// File
 			if ( ! empty( $badge ) &&  ! empty( $match_value ) && ! empty( $field->field_type ) && $field->field_type == 'file' ) {
@@ -362,7 +383,7 @@ function uwp_get_user_badge($args){
 
 			// badge text
 			if ( empty( $badge ) && empty($args['icon_class']) ) {
-				$badge = $field->site_title;
+				$badge = isset($field->site_title) ? $field->site_title : '';
 			}
 			if( !empty( $badge ) && $badge = str_replace("%%input%%", $match_value,$badge) ){
 				// will be replace in condition check
@@ -396,22 +417,6 @@ function uwp_get_user_badge($args){
 				//$args['hover_content'] = uwp_replace_variables($args['hover_content']);
 			}
 
-			$class = '';
-			if ( ! empty( $args['css_class'] ) ) {
-				$class .= ' ' . esc_attr($args['css_class']);
-			}
-
-			$onclick = '';
-			if(!empty($args['onclick'])){
-				$onclick = 'onclick="'.esc_attr($args['onclick']).'"';
-			}
-
-			// FontAwesome icon
-			$icon = '';
-			if(!empty($args['icon_class'])){
-				$icon = '<i class="'.esc_attr($args['icon_class']).'" ></i>';
-			}
-
 			$rel = '';
 			if(!empty($args['link'])){
 				$rel = strpos($args['link'], get_site_url()) !== false ? '' : 'rel="nofollow"';
@@ -422,25 +427,7 @@ function uwp_get_user_badge($args){
 				$new_window = ' target="_blank" ';
 			}
 
-			// data-attributes
-			$extra_attributes = '';
-			if(!empty($args['extra_attributes'])){
-				$extra_attributes = esc_attr( $args['extra_attributes'] );
-				$extra_attributes = str_replace("&quot;",'"',$extra_attributes);
-			}
-
-			$badge = ! empty( $badge ) ? __( wp_specialchars_decode( $badge, ENT_QUOTES ), 'geodirectory' ) : '';
-
-			// title
-			$title = ! empty( $field->site_title ) ? __( $field->site_title, 'userswp' ) : '';
-			if ( ! empty( $title ) ) {
-				$title = sanitize_text_field( stripslashes( $title ) );
-			}
-
-			$inner_attributes = '';
-			if ( ! empty( $args['datetime'] ) ) {
-				$inner_attributes .= 'datetime="' . esc_attr( $args['datetime'] ) . '"';
-			}
+			$badge = ! empty( $badge ) ? __( wp_specialchars_decode( $badge, ENT_QUOTES ), 'userswp' ) : '';
 
 			// phone & email link
 			if ( ! empty( $field ) && ! empty( $field->field_type ) && ! empty( $args['link'] ) && strpos( $args['link'], 'http' ) !== 0 ) {
@@ -457,7 +444,7 @@ function uwp_get_user_badge($args){
 				}
 			}
 
-			$badge = apply_filters( 'uwp_user_badge_output_badge', $badge, $match_value, $key, $args, $user, $field );
+			$badge = apply_filters( 'uwp_user_badge_output_badge', $badge, $match_value, $match_field, $args, $user, $field );
 
 			$btn_class = 'border-0 align-middle gd-badge';
 			// color
@@ -483,34 +470,20 @@ function uwp_get_user_badge($args){
 				$btn_class .= ' badge';
 			}
 
-
 			if ( ! empty( $args['css_class'] ) ) {
-				// replace some old classes
-				$user_classes = str_replace(array("gd-ab-","gd-badge-shadow"),array("ab-","shadow"),esc_attr($args['css_class']));
-				$btn_class .= ' ' .$user_classes ;
+				$btn_class .= ' ' .esc_attr($args['css_class']) ;
 			}
 			$btn_args = array(
 				'class'     => $btn_class,
 				'content' => $badge,
 				'style' => $color_custom ? 'background-color:' . sanitize_hex_color( $args['bg_color'] ) . ';color:' . sanitize_hex_color( $args['txt_color'] ) . ';' : '',
-				'data-badge'    => esc_attr($key),
+				'data-badge'    => esc_attr($match_field),
 				'data-badge-condition'  => esc_attr($args['condition']),
 			);
 
 			// onclick
 			if(!empty($args['onclick'])){
 				$btn_args['onclick'] = esc_attr($args['onclick']);
-			}
-
-			// CTA
-			if( $args['cta'] != '0' ){
-				$action = $args['cta'] == '' ? esc_attr($args['key']) : esc_attr($args['cta']);
-				$cta = " if(typeof ga == 'function' && !jQuery(this).hasClass('gd-event-tracked')) { ga('send', 'event', {eventCategory: 'CTA',eventAction: '$action',transport: 'beacon' });jQuery(this).addClass('gd-event-tracked');} ";
-				if(!empty($btn_args['onclick'])){
-					$btn_args['onclick'] .= $cta;
-				}else{
-					$btn_args['onclick'] = $cta;
-				}
 			}
 
 			// popover / tooltip

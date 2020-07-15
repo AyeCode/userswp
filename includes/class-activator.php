@@ -152,6 +152,7 @@ class UsersWP_Activator {
             'profile_banner_size' => '',
             'profile_banner_width' => 1000,
             'profile_no_of_items' => 10,
+            'users_no_of_items' => 10,
             'uwp_disable_author_link' => 0,
             'users_default_layout' => 'list',
             'author_box_enable_disable' => 1,

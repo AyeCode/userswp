@@ -23,7 +23,7 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 			'no_wrap'       => true,
 			'widget_ops'     => array(
 				'classname'     => 'uwp-user-badge',
-				'description'   => esc_html__( 'Displays the user badge.', 'userswp' ),	// widget description
+				'description'   => esc_html__( 'Displays the user badge.', 'userswp' ),
 				'userswp'  => true,
 			)
 		);
@@ -41,7 +41,7 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 				'type' => 'number',
 				'title' => __('User ID:', 'userswp'),
 				'desc' => __('Leave blank to use current user id.', 'userswp'),
-				'placeholder' => 'Leave blank to use current user id.',
+				'placeholder' => __('Leave blank to use current user id.', 'userswp'),
 				'default' => '',
 				'desc_tip' => true,
 				'advanced' => false
@@ -83,7 +83,7 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 				'placeholder' => 'fas fa-award',
 				'default' => '',
 				'desc_tip' => true,
-				'advanced' => true
+				'group'     => __("Design","userswp")
 			),
 			'badge'  => array(
 				'type' => 'text',
@@ -101,7 +101,7 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 				'placeholder' => '',
 				'default' => '',
 				'desc_tip' => true,
-				'advanced' => true
+				'group'     => __("Click Action","userswp")
 			),
 			'new_window'  => array(
 				'title' => __('Open link in new window:', 'userswp'),
@@ -110,7 +110,79 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 				'desc_tip' => true,
 				'value'  => '1',
 				'default'  => 0,
-				'advanced' => true
+				'group'     => __("Click Action","userswp")
+			),
+			'popover_title'  => array(
+				'type' => 'text',
+				'title' => __('Popover title:', 'userswp'),
+				'desc' => __('Reveals some title text onclick. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%.', 'userswp'),
+				'placeholder' => '',
+				'default' => '',
+				'desc_tip' => true,
+				'group'     => __("Click Action","userswp")
+			),
+			'popover_text'  => array(
+				'type' => 'text',
+				'title' => __('Popover text:', 'userswp'),
+				'desc' => __('Reveals some text onclick. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%.', 'userswp'),
+				'placeholder' => '',
+				'default' => '',
+				'desc_tip' => true,
+				'group'     => __("Click Action","userswp")
+			),
+			'tooltip_text'  => array(
+				'type' => 'text',
+				'title' => __('Tooltip text:', 'userswp'),
+				'desc' => __('Reveals some text on hover. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%. (this can NOT be used with popover text)', 'userswp'),
+				'placeholder' => '',
+				'default' => '',
+				'desc_tip' => true,
+				'group'     => __("Hover Action","userswp")
+			),
+			'hover_content'  => array(
+				'type' => 'text',
+				'title' => __('Hover content:', 'userswp'),
+				'desc' => __('Change the button text on hover. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%.', 'userswp'),
+				'placeholder' => '',
+				'default' => '',
+				'desc_tip' => true,
+				'group'     => __("Hover Action","userswp")
+			),
+			'hover_icon'  => array(
+				'type' => 'text',
+				'title' => __('Hover icon:', 'userswp'),
+				'desc' => __('Change the button icon on hover. You can show a font-awesome icon here by entering the icon class.', 'userswp'),
+				'placeholder' => 'fas fa-bacon',
+				'default' => '',
+				'desc_tip' => true,
+				'group'     => __("Hover Action","userswp")
+			),
+			'type'  => array(
+				'title' => __('Type', 'userswp'),
+				'desc' => __('Select the badge type.', 'userswp'),
+				'type' => 'select',
+				'options'   =>  array(
+					"" => __('Badge', 'userswp'),
+					"pill" => __('Pill', 'userswp'),
+				),
+				'default'  => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'     => __("Design","userswp")
+			),
+			'shadow'  => array(
+				'title' => __('Shadow', 'userswp'),
+				'desc' => __('Select the shadow badge type.', 'userswp'),
+				'type' => 'select',
+				'options'   =>  array(
+					"" => __('None', 'userswp'),
+					"small" => __('Small', 'userswp'),
+					"medium" => __('Medium', 'userswp'),
+					"large" => __('Large', 'userswp'),
+				),
+				'default'  => '',
+				'desc_tip' => true,
+				'group'     => __("Design","userswp")
 			),
 			'bg_color'  => array(
 				'type' => 'color',
@@ -119,7 +191,8 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 				'placeholder' => '',
 				'default' => '#0073aa',
 				'desc_tip' => true,
-				'advanced' => true
+				'group'     => __("Design","userswp"),
+				'element_require' => '[%color%]==""',
 			),
 			'txt_color'  => array(
 				'type' => 'color',
@@ -128,27 +201,22 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 				'placeholder' => '',
 				'desc_tip' => true,
 				'default'  => '#ffffff',
-				'advanced' => true
+				'group'     => __("Design","userswp"),
+				'element_require' => '[%color%]==""',
 			),
 			'size'  => array(
 				'type' => 'select',
 				'title' => __('Badge size:', 'userswp'),
 				'desc' => __('Size of the badge.', 'userswp'),
 				'options' =>  array(
-					"" => __('h6', 'userswp'),
-					"h5" => __('h5', 'userswp'),
-					"h4" => __('h4', 'userswp'),
-					"h3" => __('h3', 'userswp'),
-					"h2" => __('h2', 'userswp'),
-					"h1" => __('h1', 'userswp'),
+					"" => __('Medium', 'userswp'),
 					"small" => __('Small', 'userswp'),
-					"medium" => __('Medium', 'userswp'),
 					"large" => __('Large', 'userswp'),
 					"extra-large" => __('Extra Large', 'userswp'),
 				),
 				'default' => '',
 				'desc_tip' => true,
-				'advanced' => true
+				'group'     => __("Design","userswp"),
 			),
 			'alignment'  => array(
 				'type' => 'select',
@@ -161,35 +229,7 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 					"right" => __('Right', 'userswp'),
 				),
 				'desc_tip' => true,
-				'advanced' => true
-			),
-			'list_hide'  => array(
-				'title' => __('Hide item on view:', 'userswp'),
-				'desc' => __('You can set at what view the item will become hidden.', 'userswp'),
-				'type' => 'select',
-				'options'   =>  array(
-					"" => __('None', 'userswp'),
-					"2" => __('Grid view 2', 'userswp'),
-					"3" => __('Grid view 3', 'userswp'),
-					"4" => __('Grid view 4', 'userswp'),
-					"5" => __('Grid view 5', 'userswp'),
-				),
-				'desc_tip' => true,
-				'advanced' => true
-			),
-			'list_hide_secondary'  => array(
-				'title' => __('Hide secondary info on view', 'userswp'),
-				'desc' => __('You can set at what view the secondary info such as label will become hidden.', 'userswp'),
-				'type' => 'select',
-				'options'   =>  array(
-					"" => __('None', 'userswp'),
-					"2" => __('Grid view 2', 'userswp'),
-					"3" => __('Grid view 3', 'userswp'),
-					"4" => __('Grid view 4', 'userswp'),
-					"5" => __('Grid view 5', 'userswp'),
-				),
-				'desc_tip' => true,
-				'advanced' => true
+				'group'     => __("Design","userswp"),
 			),
 			'css_class'  => array(
 				'type' => 'text',
@@ -198,7 +238,7 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 				'placeholder' => '',
 				'default' => '',
 				'desc_tip' => true,
-				'advanced' => true,
+				'group'     => __("Design","userswp"),
 			),
 		);
 
@@ -236,47 +276,16 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 		}
 
 		$errors = array();
-		if ( empty( $args['id'] ) ) {
-			$errors[] = __('post id is missing','geodirectory');
-		}
-		if ( empty( $post_type ) ) {
-			$errors[] = __('invalid post type','geodirectory');
+		if ( empty( $args['user_id'] ) ) {
+			$errors[] = __('User ID is missing','userswp');
 		}
 		if ( empty( $args['key'] ) ) {
-			$errors[] = __('field key is missing', 'geodirectory');
+			$errors[] = __('Field key is missing', 'userswp');
 		}
 
 		$output = '';
 		if ( ! empty( $errors ) ){
 			$output .= implode( ", ", $errors );
-		}
-
-		$design_style = uwp_get_option("design_style",'bootstrap');
-		if(!empty($args['size'])){
-			switch ($args['size']) {
-				case 'small':
-					$args['size'] = $design_style ? '' : 'small';
-					break;
-				case 'medium':
-					$args['size'] = $design_style ? 'h4' : 'medium';
-					break;
-				case 'large':
-					$args['size'] = $design_style ? 'h2' : 'large';
-					break;
-				case 'extra-large':
-					$args['size'] = $design_style ? 'h1' : 'extra-large';
-					break;
-				case 'h6': $args['size'] = 'h6';break;
-				case 'h5': $args['size'] = 'h5';break;
-				case 'h4': $args['size'] = 'h4';break;
-				case 'h3': $args['size'] = 'h3';break;
-				case 'h2': $args['size'] = 'h2';break;
-				case 'h1': $args['size'] = 'h1';break;
-				default:
-					$args['size'] = '';
-
-			}
-
 		}
 
 		$output .= uwp_get_user_badge( $args );
@@ -327,4 +336,3 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 	}
 	
 }
-

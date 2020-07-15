@@ -1,0 +1,9 @@
+/*
+Fix badge hover actions
+*/
+File _badge.scss 18
+File /mixins/_badge.scss 5
+FROM
+  @at-root a#{&} {
+TO:
+  @at-root #{selector-unify(&, "a")} {
