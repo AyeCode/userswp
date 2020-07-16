@@ -1508,7 +1508,7 @@ function uwp_get_posttypes() {
  * @since       1.0.12
  * @package     userswp
  *
- * @param       string      Field icon value.
+ * @param       string   $value   Field icon value.
  * @return      string       Field icon element.
  */
 function uwp_get_field_icon( $value ) {
