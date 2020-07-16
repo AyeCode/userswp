@@ -348,7 +348,7 @@ function get_uwp_users_list() {
 
 	$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
-	$number = uwp_get_option('profile_no_of_items', 10);
+	$number = uwp_get_option('users_no_of_items', 10);
 	$number = !empty($number) ? $number : 10;
 
 	$where = '';
@@ -416,10 +416,18 @@ function get_uwp_users_list() {
 			);
 		} else{
 			$usermeta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+			$keyword_query = '';
+
+			if($keyword) {
+				$keyword_query = " AND (( $wpdb->usermeta.meta_key = 'first_name' AND $wpdb->usermeta.meta_value LIKE '$keyword' ) 
+                OR ( $wpdb->usermeta.meta_key = 'last_name' AND $wpdb->usermeta.meta_value LIKE '$keyword' ) 
+                OR 'user_login' LIKE '$keyword' OR 'user_nicename' LIKE '$keyword' OR 'display_name' LIKE '$keyword')";
+			}
 
 			$user_query = "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.* FROM $wpdb->users
+            INNER JOIN $wpdb->usermeta ON ( $wpdb->users.ID = $wpdb->usermeta.user_id )
             INNER JOIN $usermeta_table ON ( $wpdb->users.ID = $usermeta_table.user_id )
-            WHERE 1=1 $exclude_query $where ORDER BY display_name ASC";
+            WHERE 1=1 $keyword_query $exclude_query  $where ORDER BY display_name ASC";
 		}
 
 		$user_results = $wpdb->get_results($user_query);

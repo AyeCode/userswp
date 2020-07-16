@@ -15,7 +15,7 @@
   @include border-radius($badge-border-radius);
   @include transition($badge-transition);
 
-  @at-root a#{&} {
+  @at-root #{selector-unify(&, "a")} {
     @include hover-focus {
       text-decoration: none;
     }

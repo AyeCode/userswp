@@ -91,7 +91,7 @@ class UWP_Register_Widget extends WP_Super_Duper {
 
         $defaults = array(
             'form_title'      => __('Register','userswp'),
-            'css_class'     => 'border-0'
+            'css_class'       => 'border-0'
         );
 
         /**

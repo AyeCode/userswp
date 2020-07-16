@@ -40,30 +40,22 @@ class UsersWP_Admin_Menus {
         $show_builder = false;
         switch ( $install_type ) {
             case "single":
-                $proceed = true;
-                $show_builder = true;
-                break;
-            case "multi_na_all":
+	        case "multi_na_all":
+	        case "multi_not_na":
                 $proceed = true;
                 $show_builder = true;
                 break;
             case "multi_na_site_id":
-                if (defined( 'UWP_ROOT_PAGES' )) {
-                    $blog_id = UWP_ROOT_PAGES;
-                } else {
-                    $blog_id = null;
-                }
-                $current_blog_id = get_current_blog_id();
-                if ( ! is_int( $blog_id ) ) {
-                    $proceed = false;
-                } else {
-                    if ( $blog_id == $current_blog_id ) {
-                        $proceed = true;
-                        $show_builder = true;
-                    } else {
-                        $proceed = false;
-                    }
-                }
+	            $blog_id = null;
+	            if (defined( 'UWP_ROOT_PAGES' )) {
+		            $blog_id = UWP_ROOT_PAGES;
+	            }
+
+	            $current_blog_id = get_current_blog_id();
+	            if ( !empty($blog_id) && is_int( (int)$blog_id ) && $blog_id == $current_blog_id  ) {
+		            $proceed = true;
+		            $show_builder = true;
+	            }
                 break;
             case "multi_na_default":
                 $is_main_site = is_main_site();
@@ -71,10 +63,6 @@ class UsersWP_Admin_Menus {
                     $proceed = true;
                     $show_builder = true;
                 }
-                break;
-            case "multi_not_na":
-                $proceed = true;
-                $show_builder = true;
                 break;
             default:
                 $proceed = false;

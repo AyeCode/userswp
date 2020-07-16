@@ -130,7 +130,10 @@ No questions so far, but don't hesitate to ask!
 = 1.2.2.4 =
 * Settings for minimum and maximum password length - ADDED
 * Settings for minimum length for username - ADDED
+* Font Awesome icon setting added so that addons can use for selecting icons - ADDED
 * Users to exclude setting changed to select2 multiselect - CHANGED
+* Allow to get UWP user meta using WP default get_user_meta() function with prefix uwp_meta_ and custom field key - CHANGED
+* User Badge System - ADDED
 
 = 1.2.2.3 =
 * Remove alert on profile avatar and banner image change - FIXED
