@@ -30,6 +30,8 @@ class UsersWP_Admin {
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'preview_emails' ) );
 		add_action( 'admin_init', array( $this, 'init_ayecode_connect_helper' ) );
+		add_filter( 'views_users', array( $this, 'request_views_users' ) );
+		add_filter( 'pre_user_query', array( $this, 'request_users_filter' ) );
 	}
 
 	/**
@@ -367,5 +369,75 @@ class UsersWP_Admin {
 			}
 			exit;
 		}
+	}
+
+	/**
+	 * Returns user views filter
+	 *
+	 * @return array User views.
+	 */
+	public function request_views_users( $views ) {
+
+		$current = '';
+
+		if ( isset($_REQUEST['uwp_status']) && $_REQUEST['uwp_status'] == 'pending-email-activate' ) {
+			$views['all'] = str_replace('current','', $views['all']);
+			$current = 'current';
+		}
+
+		$views['pending-email-activate'] = '<a href="'.admin_url('users.php').'?uwp_status=pending-email-activate" class="' . $current . '">'. __('Pending Email Activation','userswp') . ' <span class="count">(' . $this->uwp_pending_email_count() . ')</span></a>';
+
+		return $views;
+	}
+
+	/**
+	 * Returns pending email activation user counts
+	 *
+	 * @return int User count
+	 */
+	public function uwp_pending_email_count() {
+
+		$args = array(
+			'fields' => 'ID',
+			'number' => 0,
+			'meta_query' => array(
+				array(
+					'key' => 'uwp_mod',
+					'value' => 'email_unconfirmed',
+					'compare' => '='
+				)
+			)
+		);
+		$users = new WP_User_Query( $args );
+		return isset($users->results) ? (int) count($users->results) : 0;
+	}
+
+	/**
+	 * Filter to modify the user query
+	 *
+	 * @return object User query.
+	 */
+	public function request_users_filter( $query ) {
+
+		global $wpdb, $pagenow;
+
+		remove_filter('pre_user_query', array(&$this, 'request_users_filter') );
+
+		if ( is_admin() && $pagenow=='users.php' && isset($_GET[ 'uwp_status' ]) && $_GET[ 'uwp_status' ] != '') {
+
+			$status = sanitize_text_field(urldecode( $_GET['uwp_status'] ));
+
+			if ( $status == 'pending-email-activate') {
+				$query->query_where = str_replace('WHERE 1=1',
+					"WHERE 1=1 AND {$wpdb->users}.ID IN (
+							 SELECT {$wpdb->usermeta}.user_id FROM $wpdb->usermeta
+								WHERE {$wpdb->usermeta}.meta_key = 'uwp_mod'
+								AND {$wpdb->usermeta}.meta_value = 'email_unconfirmed')",
+					$query->query_where
+				);
+			}
+		}
+
+		return $query;
 	}
 }

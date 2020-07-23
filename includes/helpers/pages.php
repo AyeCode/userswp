@@ -296,15 +296,22 @@ function uwp_get_user_badge($args){
 
 		if ( ! $match_found ) {
 			if ( $field->field_type == 'datepicker' && empty( $args['condition'] ) || $args['condition'] == 'is_greater_than' || $args['condition'] == 'is_less_than' ) {
-				if ( strpos( $search, '+' ) === false && strpos( $search, '-' ) === false ) {
+				if( ( empty($args['condition']) || $args['condition'] == 'is_less_than' ) && strpos( $search, '-' ) === false ) {
+					$search = str_replace('+','',$search);
+					$search = '-' . $search;
+				} elseif ( $args['condition'] == 'is_greater_than' && strpos( $search, '+' ) === false  ) {
+					$search = str_replace('-','',$search);
 					$search = '+' . $search;
 				}
-				$the_time = get_the_time( 'Y-m-d', $match_value );
-				$until_time = strtotime( $the_time . ' ' . $search . ' days' );
+
+				$the_time = strtotime(date( 'Y-m-d', $match_value ));
+				$until_time   = strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) . ' ' . $search . ' days' );
 				$now_time   = strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
-				if ( ( empty( $args['condition'] ) || $args['condition'] == 'is_less_than' ) && $until_time > $now_time ) {
+
+
+				if ( ( empty( $args['condition'] ) || $args['condition'] == 'is_less_than' ) && $the_time <= $now_time && $the_time >= $until_time ) {
 					$match_found = true;
-				} elseif ( $args['condition'] == 'is_greater_than' && $until_time < $now_time ) {
+				} elseif ( $args['condition'] == 'is_greater_than' && $the_time >= $now_time && $the_time <= $until_time ) {
 					$match_found = true;
 				}
 			} else {
@@ -402,19 +409,19 @@ function uwp_get_user_badge($args){
 
 			// replace other post variables
 			if(!empty($badge)){
-				//$badge = uwp_replace_variables($badge);
+				$badge = uwp_replace_variables($badge, $user_id);
 			}
 			if(!empty($args['popover_title'])){
-				//$args['popover_title'] = uwp_replace_variables($args['popover_title']);
+				$args['popover_title'] = uwp_replace_variables($args['popover_title'], $user_id);
 			}
 			if(!empty($args['popover_text'])){
-				//$args['popover_text'] = uwp_replace_variables($args['popover_text']);
+				$args['popover_text'] = uwp_replace_variables($args['popover_text'], $user_id);
 			}
 			if(!empty($args['tooltip_text'])){
-				//$args['tooltip_text'] = uwp_replace_variables($args['tooltip_text']);
+				$args['tooltip_text'] = uwp_replace_variables($args['tooltip_text'], $user_id);
 			}
 			if(!empty($args['hover_content'])){
-				//$args['hover_content'] = uwp_replace_variables($args['hover_content']);
+				$args['hover_content'] = uwp_replace_variables($args['hover_content'], $user_id);
 			}
 
 			$rel = '';
@@ -541,4 +548,20 @@ function uwp_get_user_badge($args){
 	}
 
 	return $output;
+}
+
+function uwp_replace_variables($text, $user_id = ''){
+	// only run if we have a user ID and the start of a var
+	if(!empty($user_id) && strpos( $text, '%%' ) !== false){
+		$excluded_fields = uwp_get_excluded_fields();
+		$user_data = uwp_get_usermeta_row($user_id);
+		foreach($user_data as $key => $val) {
+			if ( ! in_array( $key, $excluded_fields ) ) {
+				$val  = apply_filters( 'uwp_replace_variables_' . $key, $val, $text );
+				$text = str_replace( '%%' . $key . '%%', $val, $text );
+			}
+		}
+	}
+
+	return $text;
 }
