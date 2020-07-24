@@ -8,7 +8,6 @@ $css_class = ! empty( $args['css_class'] ) ? esc_attr( $args['css_class'] ) : 'b
 
 $account_page = uwp_get_page_id('account_page', false);
 $tabs_array = $args['tabs_array'];
-//print_r($tabs_array);exit;
 $active_tab = $args['active_tab'];
 
 do_action( 'uwp_template_before', 'profile-tabs' );

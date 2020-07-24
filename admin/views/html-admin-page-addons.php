@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 add_ThickBox();
+wp_enqueue_style( 'uwp-extensions-style', USERSWP_PLUGIN_URL . 'admin/assets/css/extensions.css',array(),'','' );
 ?>
 <div class="wrap uwp_addons_wrap">
 	<h1><?php echo get_admin_page_title(); ?></h1>

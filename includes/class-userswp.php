@@ -199,6 +199,7 @@ final class UsersWP {
         add_filter('uwp_form_input_html_multiselect', array($instance, 'form_input_multiselect'), 10, 4);
         add_filter('uwp_form_input_html_text', array($instance, 'form_input_text'), 10, 4);
         add_filter('uwp_form_input_html_textarea', array($instance, 'form_input_textarea'), 10, 4);
+	    add_filter('uwp_form_input_html_editor', array($instance, 'form_input_editor'), 10, 4);
         add_filter('uwp_form_input_html_fieldset', array($instance, 'form_input_fieldset'), 10, 4);
         add_filter('uwp_form_input_html_file', array($instance, 'form_input_file'), 10, 4);
         add_filter('uwp_form_input_html_checkbox', array($instance, 'form_input_checkbox'), 10, 4);
@@ -235,7 +236,7 @@ final class UsersWP {
 	 * @param $instance
 	 */
     public function load_pages_actions_and_filters($instance) {
-        add_action( 'wpmu_new_blog', array($instance, 'wpmu_generate_default_pages_on_new_site'), 10, 6 );
+        add_action( 'wpmu_new_blog', array($instance, 'wpmu_generate_default_pages_on_new_site'), 10, 1 );
         add_filter( 'display_post_states', array( $instance, 'add_display_post_states' ), 10, 2 );
     }
 
@@ -262,10 +263,8 @@ final class UsersWP {
 
         // Popup and crop functions
         add_filter( 'ajax_query_attachments_args', array($instance, 'restrict_attachment_display') );
-
         add_action( 'uwp_handle_file_upload_error_checks', array($instance, 'handle_file_upload_error_checks'), 10, 4 );
         add_action( 'wp_ajax_uwp_avatar_banner_upload', array($instance, 'ajax_avatar_banner_upload') );
-        //add_action( 'wp_ajax_uwp_ajax_image_crop_popup', array($instance, 'uwp_ajax_image_crop_popup') );
         add_action( 'wp_ajax_uwp_ajax_image_crop_popup_form', array($instance, 'ajax_image_crop_popup_form') );
         add_action( 'wp_ajax_uwp_ajax_profile_image_remove', array($instance, 'ajax_profile_image_remove') );
         add_action( 'wp_head', array($instance, 'define_ajaxurl') );
@@ -276,7 +275,6 @@ final class UsersWP {
         add_action( 'uwp_profile_more_info_tab_content', array($instance, 'get_profile_more_info'), 10, 1);
         add_action( 'uwp_profile_posts_tab_content', array($instance, 'get_profile_posts'), 10, 1);
         add_action( 'uwp_profile_comments_tab_content', array($instance, 'get_profile_comments'), 10, 1);
-        //add_action( 'uwp_profile_tab_content', array($instance, 'uwp_extra_fields_as_tab_values'), 10, 2 );
 
         // Profile Pagination
         add_action( 'uwp_profile_pagination', array($instance, 'get_profile_pagination'));
@@ -318,7 +316,6 @@ final class UsersWP {
         add_action( 'wp_logout', array($instance, 'logout_redirect'));
         add_action( 'init', array($instance, 'wp_login_redirect'));
         add_action( 'init', array($instance, 'wp_register_redirect'));
-        add_action( 'admin_init', array($instance, 'activation_redirect'));
         // Redirect functions
         add_action( 'template_redirect', array($instance, 'profile_redirect'), 10);
         add_action( 'template_redirect', array($instance, 'access_checks'), 20);
@@ -434,6 +431,7 @@ final class UsersWP {
 	 * @param $instance
 	 */
     public function load_admin_actions_and_filters($instance) {
+	    add_action( 'admin_init', array($instance, 'activation_redirect'));
         add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_styles') );
         add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_scripts') );
         add_action('admin_head', array($instance, 'admin_only_css'));
@@ -478,27 +476,6 @@ final class UsersWP {
         register_widget("UWP_Author_Box_Widget");
         register_widget("UWP_Button_Group_Widget");
         register_widget("UWP_User_Badge_Widget");
-    }
-
-    /**
-     * The name of the plugin used to uniquely identify it within the context of
-     * WordPress and to define internationalization functionality.
-     *
-     * @since     1.0.0
-     * @return    string    The name of the plugin.
-     */
-    public function get_plugin_name() {
-        return $this->plugin_name;
-    }
-
-    /**
-     * Retrieve the version number of the plugin.
-     *
-     * @since     1.0.0
-     * @return    string    The version number of the plugin.
-     */
-    public function get_version() {
-        return $this->version;
     }
 
     /**

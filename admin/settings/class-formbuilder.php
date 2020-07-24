@@ -126,7 +126,7 @@ class UsersWP_Form_Builder {
                     <h3 class="hndle">
                         <span>
                             <?php
-                            $title = __('List of fields those will appear on add new listing form', 'userswp');
+                            $title = __('List of fields those will appear in the account form', 'userswp');
                             echo apply_filters('uwp_form_builder_selected_fields_head', $title, $form_type); ?>
                         </span>
                     </h3>
@@ -182,7 +182,7 @@ class UsersWP_Form_Builder {
                         <i class="fas fa-long-arrow-alt-right " aria-hidden="true"></i>
                         <?php _e('Fieldset (section separator)', 'userswp'); ?>
 
-                        <span class="uwp-help-tip uwp-help-tip-no-margin dashicons dashicons-editor-help" title="<?php _e('This adds a section separator with a title.', 'userswp'); ?>"></span>
+                        <span class="uwp-help-tip dashicons dashicons-editor-help" title="<?php _e('This adds a section separator with a title.', 'userswp'); ?>"></span>
                     </a>
                 </li>
             </ul>
@@ -214,7 +214,7 @@ class UsersWP_Form_Builder {
                         <?php echo $field['name']; ?>
 
                         <?php if (isset($field['description']) && $field['description']) { ?>
-                            <span class="uwp-help-tip uwp-help-tip-no-margin dashicons dashicons-editor-help" title="<?php echo $field['description'] ?>"></span>
+                            <span class="uwp-help-tip dashicons dashicons-editor-help" title="<?php echo $field['description'] ?>"></span>
                         <?php } ?>
                     </a>
                 </li>
@@ -609,6 +609,13 @@ class UsersWP_Form_Builder {
                 'icon' =>  'fas fa-file',
                 'name'  =>  __('File Upload', 'userswp'),
                 'description' =>  __('Adds a file input', 'userswp')
+            ),
+            'editor' => array(
+	            'field_type'  =>  'editor',
+	            'class' =>  'uwp-html',
+	            'icon' =>  'fas fa-code',
+	            'name'  =>  __('HTML', 'userswp'),
+	            'description' =>  __('Adds a wysiwyg editor input', 'userswp')
             )
         );
 

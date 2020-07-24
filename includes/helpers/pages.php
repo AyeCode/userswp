@@ -121,18 +121,6 @@ function is_uwp_users_item_page() {
 }
 
 /**
- * Checks whether the current page is multi register page or not.
- *
- * @since       1.0.0
- * @package     userswp
- * @return      bool
- */
-function is_uwp_multi_register_page() {
-    $page = new UsersWP_Pages();
-    return $page->is_multi_register_page();
-}
-
-/**
  * Checks whether the current page is logged in user profile page or not.
  *
  * @since       1.0.0
@@ -555,10 +543,12 @@ function uwp_replace_variables($text, $user_id = ''){
 	if(!empty($user_id) && strpos( $text, '%%' ) !== false){
 		$excluded_fields = uwp_get_excluded_fields();
 		$user_data = uwp_get_usermeta_row($user_id);
-		foreach($user_data as $key => $val) {
-			if ( ! in_array( $key, $excluded_fields ) ) {
-				$val  = apply_filters( 'uwp_replace_variables_' . $key, $val, $text );
-				$text = str_replace( '%%' . $key . '%%', $val, $text );
+		if(isset($user_data)){
+			foreach($user_data as $key => $val) {
+				if ( ! in_array( $key, $excluded_fields ) ) {
+					$val  = apply_filters( 'uwp_replace_variables_' . $key, $val, $text );
+					$text = str_replace( '%%' . $key . '%%', $val, $text );
+				}
 			}
 		}
 	}

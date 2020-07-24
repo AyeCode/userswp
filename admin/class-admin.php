@@ -35,6 +35,32 @@ class UsersWP_Admin {
 	}
 
 	/**
+	 * Redirects to UsersWP info page after plugin activation.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 * @return      void
+	 */
+	public function activation_redirect() {
+
+		if (get_option('uwp_activation_redirect', false)) {
+			delete_option('uwp_activation_redirect');
+			update_option("uwp_setup_wizard_notice",1);
+			wp_redirect(admin_url('index.php?page=uwp-setup'));
+			exit;
+
+		}
+
+		if ( ! empty( $_GET['force_sync_data'] ) ) {
+			$blog_id = get_current_blog_id();
+			do_action( 'wp_' . $blog_id . '_uwp_updater_cron' );
+			wp_safe_redirect( admin_url( 'admin.php?page=userswp' ) );
+			exit;
+		}
+
+	}
+
+	/**
 	 * Maybe show the AyeCode Connect Notice.
 	 */
 	public function init_ayecode_connect_helper(){

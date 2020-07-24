@@ -465,10 +465,13 @@ class UsersWP_Import_Export {
 
         header('Content-Type: text/html; charset=' . get_option('blog_charset'));
 
+	    add_filter( 'upload_mimes', array( $this, 'allowed_upload_mimes' ) );
         $uploaded_file = wp_handle_upload( $upload_data, array('test_form' => false) );
+	    remove_filter( 'upload_mimes', array( $this, 'allowed_upload_mimes' ) );
+
         if ( isset( $uploaded_file['url'] ) ) {
             $file_loc = $uploaded_file['url'];
-            echo $file_loc;
+            echo $file_loc;exit;
         } else {
             echo 'error';
         }
@@ -775,6 +778,11 @@ class UsersWP_Import_Export {
         }
 
         return $status;
+    }
+
+    public function allowed_upload_mimes($mimes = array()) {
+	    $mimes['csv'] = "text/csv";
+	    return $mimes;
     }
 
 }

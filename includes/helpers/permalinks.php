@@ -1,66 +1,5 @@
 <?php
 /**
- * Gets the UsersWP page permalink based on page type.
- *
- * @since       1.0.0
- * @package     userswp
- * @param       string|bool     $type       Page type.
- * @return      string                      Page permalink.
- */
-function get_uwp_page_permalink($type) {
-    $page = new UsersWP_Pages();
-    return $page->get_page_permalink($type);
-}
-
-/**
- * Gets the UsersWP register page permalink.
- *
- * @since       1.0.0
- * @package     userswp
- * @return      string      Page permalink.
- */
-function get_uwp_register_permalink() {
-    $page = new UsersWP_Pages();
-    return $page->get_register_permalink();
-}
-
-/**
- * Gets the UsersWP login page permalink.
- *
- * @since       1.0.0
- * @package     userswp
- * @return      string      Page permalink.
- */
-function get_uwp_login_permalink() {
-    $page = new UsersWP_Pages();
-    return $page->get_login_permalink();
-}
-
-/**
- * Gets the UsersWP forgot password page permalink.
- *
- * @since       1.0.0
- * @package     userswp
- * @return      string      Page permalink.
- */
-function get_uwp_forgot_permalink() {
-    $page = new UsersWP_Pages();
-    return $page->get_forgot_permalink();
-}
-
-/**
- * Gets the UsersWP reset password page permalink.
- *
- * @since       1.0.0
- * @package     userswp
- * @return      string      Page permalink.
- */
-function get_uwp_reset_permalink() {
-    $page = new UsersWP_Pages();
-    return $page->get_reset_permalink();
-}
-
-/**
  * Gets the UsersWP account page permalink.
  *
  * @since       1.0.0
@@ -68,20 +7,7 @@ function get_uwp_reset_permalink() {
  * @return      string      Page permalink.
  */
 function get_uwp_account_permalink() {
-    $page = new UsersWP_Pages();
-    return $page->get_account_permalink();
-}
-
-/**
- * Gets the UsersWP profile page permalink.
- *
- * @since       1.0.0
- * @package     userswp
- * @return      string      Page permalink.
- */
-function get_uwp_profile_permalink() {
-    $page = new UsersWP_Pages();
-    return $page->get_profile_permalink();
+	return uwp_get_page_link('account_page');
 }
 
 /**
@@ -92,8 +18,7 @@ function get_uwp_profile_permalink() {
  * @return      string      Page permalink.
  */
 function get_uwp_users_permalink() {
-    $page = new UsersWP_Pages();
-    return $page->get_users_permalink();
+	return uwp_get_page_link('users_page');
 }
 
 /**

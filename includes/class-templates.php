@@ -670,7 +670,7 @@ class UsersWP_Templates {
      *
      * Returns content for the users list item template
      *
-	 * @return mixed|string|void
+	 * @return string
 	 */
     public static function users_list_item_template_content(){
 
@@ -826,32 +826,6 @@ class UsersWP_Templates {
         }
 
         return wp_logout_url( apply_filters( 'uwp_logout_url', $redirect, $custom_redirect ) );
-
-    }
-
-    /**
-     * Redirects to UsersWP info page after plugin activation.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      void
-     */
-    public function activation_redirect() {
-
-        if (get_option('uwp_activation_redirect', false)) {
-            delete_option('uwp_activation_redirect');
-	        update_option("uwp_setup_wizard_notice",1);
-	        wp_redirect(admin_url('index.php?page=uwp-setup'));
-            exit;
-
-        }
-
-        if ( ! empty( $_GET['force_sync_data'] ) ) {
-            $blog_id = get_current_blog_id();
-            do_action( 'wp_' . $blog_id . '_uwp_updater_cron' );
-            wp_safe_redirect( admin_url( 'admin.php?page=userswp' ) );
-            exit;
-        }
 
     }
 
@@ -1166,10 +1140,11 @@ class UsersWP_Templates {
 			if ($terms_page) {
 				$content = sprintf( __( 'I accept %s Terms and Conditions %s.', 'userswp' ), '<a href="'.$terms_page.'" target="_blank">', '</a>');
 				$content = apply_filters('uwp_register_terms_input_label', $content);
+				$id = wp_doing_ajax() ? 'agree_terms_ajax' : 'agree_terms';
 				?>
                 <div class="uwp-remember-me">
-                    <label style="display: inline-block;font-weight: normal" for="agree_terms">
-                        <input name="agree_terms" id="agree_terms" value="yes" type="checkbox">
+                    <label style="display: inline-block;font-weight: normal" for="<?php echo $id; ?>">
+                        <input name="agree_terms" id="<?php echo $id; ?>" value="yes" type="checkbox">
 						<?php echo $content; ?>
                     </label>
                 </div>
@@ -1185,10 +1160,11 @@ class UsersWP_Templates {
 			if ($gdpr_page) {
 				$content = sprintf( __( 'By using this form I agree to the storage and handling of my data by this website. View our %s GDPR Policy %s.', 'userswp' ), '<a href="'.$gdpr_page.'" target="_blank">', '</a>');
 				$content = apply_filters('uwp_register_gdpr_input_label', $content);
+				$id = wp_doing_ajax() ? 'uwp_accept_gdpr_ajax' : 'uwp_accept_gdpr';
 				?>
                 <div class="uwp-gdpr-input">
-                    <label style="display: inline-block;font-weight: normal" for="uwp_accept_gdpr">
-                        <input name="uwp_accept_gdpr" id="uwp_accept_gdpr" value="yes" type="checkbox">
+                    <label style="display: inline-block;font-weight: normal" for="<?php echo $id; ?>">
+                        <input name="uwp_accept_gdpr" id="<?php echo $id; ?>" value="yes" type="checkbox">
 						<?php echo $content; ?>
                     </label>
                 </div>

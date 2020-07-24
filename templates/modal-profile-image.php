@@ -22,7 +22,7 @@ $type = isset($_POST['type']) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner
 				<button type="button" class="close uwp-modal-close" data-type="<?php echo $type; ?>" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="uwp-bs-modal-body">
-				<div id="uwp-bs-modal-notice "></div>
+				<div id="uwp-bs-modal-notice"></div>
 				<form id="uwp-upload-<?php echo $type; ?>-form" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
 					<input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />
@@ -32,7 +32,7 @@ $type = isset($_POST['type']) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner
 						<input name="uwp_<?php echo $type; ?>_file" id="uwp_upload_<?php echo $type; ?>" required="required" type="file" value="">
 					</div>
 				</form>
-				<div id="progressBar" class="tiny-green" style="display: none;"><div></div></div>
+				<div id="progressBar" class="tiny-green progressBar" style="display: none;"><div></div></div>
 			</div>
 			<div class="uwp-bs-modal-footer">
 				<div class="uwp-<?php echo $type; ?>-crop-p-wrap">

@@ -3,7 +3,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-$type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner';
+$type  = isset( $_POST['uwp_popup_type'] ) && $_POST['uwp_popup_type'] == 'avatar' ? 'avatar' : 'banner';
 $image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
 ?>
 <div class="uwp-bs-modal uwp_fade uwp_show" id="uwp-<?php echo $type; ?>-modal">

@@ -776,7 +776,7 @@ class UsersWP_Profile {
 	    $number = uwp_get_option('profile_no_of_items', 10);
 	    $offset = ( $paged - 1 ) * $number;
 
-	    $total_comments = uwp_comment_count($user->ID);
+	    $total_comments = $this->get_comment_count_by_user($user->ID);
 	    $maximum_pages = ceil($total_comments / $number);
 
 	    $query_args = array(
@@ -799,6 +799,33 @@ class UsersWP_Profile {
 	    $template = $design_style ? $design_style."/loop-comments.php" : "loop-comments.php";
 	    uwp_get_template($template, $args);
     }
+
+	/**
+	 * Gets the comment count.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 * @param       int         $user_id    User ID.
+	 * @return      int                     Comment count.
+	 */
+	function get_comment_count_by_user($user_id) {
+		global $wpdb;
+
+		$count = $wpdb->get_var(
+			"SELECT COUNT(comment_ID)
+                FROM ".$wpdb->comments."
+                WHERE comment_post_ID in (
+                SELECT ID 
+                FROM ".$wpdb->posts." 
+                WHERE post_type = 'post' 
+                AND post_status = 'publish')
+                AND user_id = " . $user_id . "
+                AND comment_approved = '1'
+                AND comment_type NOT IN ('pingback', 'trackback' )"
+		);
+
+		return $count;
+	}
 
     /**
      * Rewrites profile page links
@@ -1218,7 +1245,7 @@ class UsersWP_Profile {
 
 	                    // file size check
 	                    if(file_size && <?php echo absint($max_file_size);?> && file_size > <?php echo absint($max_file_size);?>){
-		                    err_container.html('<div class="uwp-alert-error text-center alert alert-danger"><?php _e( 'File too big.', 'userswp' );?></div>');
+		                    err_container.html('<div class="text-center alert alert-danger"><?php _e( 'File too big.', 'userswp' );?></div>');
 		                    return;
 	                    }
 

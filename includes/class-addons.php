@@ -193,13 +193,6 @@ class UsersWP_Admin_Addons extends Ayecode_Addons {
 				$button_args['button_text'] = __('Install','userswp');
 			}else{
 				$button_args['button_text'] = __('Get it','userswp');
-
-				/*if($button_args['type'] == 'themes' && in_array($button_args['slug'],$wp_org_themes) ){
-					$button_args['button_text'] = __('Install','userswp');
-					$button_args['url'] = $this->get_theme_install_url($button_args['slug']);
-					$button_args['onclick'] = 'gd_set_button_installing(this);';
-				}*/
-
 			}
 		}
 		

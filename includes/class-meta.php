@@ -398,7 +398,6 @@ class UsersWP_Meta {
 		                'content'=> $message
 	                ));
                 }
-                //$uwp_notices[] = '<div class="uwp-alert-success text-center">'.$message.'</div>';
                 return;
             }
             if(!$send_result){

@@ -56,6 +56,10 @@
     margin: 0 20px 0 0;
     max-width: 128px
   }
+
+  .uwp-user-loop-action{
+    float: left;
+  }
   .uwp-user-search {
     float: left;
     input[type="text"] {
@@ -90,40 +94,10 @@
       border: 1px solid #ccc;
       display: inline-block;
       text-align: center;
-      .uwp-users-list-user-avatar {
-        a {
-          box-shadow: none;
-        }
-        img {
-          -webkit-border-radius:100px;
-          -moz-border-radius:100px;
-          border-radius:100px
-        }
-      }
       .uwp-users-list-extra {
         display: none;
       }
       margin-bottom: 0;
-    }
-
-
-    .uwp-users-list-user-avatar {
-      float: none;
-      max-width: 100px;
-      margin: -50px auto 0;
-    }
-
-    .uwp-users-list-user-name {
-      margin-top: 10px;
-    }
-    .uwp-users-list-user-name > h3 {
-      display: block;
-      margin: 0;
-      text-align: center;
-      a {
-        padding-left: 10px;
-        padding-right: 10px;
-      }
     }
 
     .uwp-users-list-user-social {
@@ -235,6 +209,7 @@
 
 .uwp_page {
   .uwp-users-list {
+    float: left;
     .uwp_listview {
       .uwp-profile-avatar {
         .uwp-profile-avatar-inner>img {

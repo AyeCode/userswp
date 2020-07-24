@@ -90,17 +90,21 @@ class UsersWP_Forms {
 
 		if ($processed) {
 			if (is_wp_error($errors)) {
-				echo '<div class="uwp-alert-error text-center">';
-				echo $errors->get_error_message();
-				echo '</div>';
+				echo aui()->alert(array(
+					'type'=>'error',
+					'class'=>'text-center',
+					'content'=> $errors->get_error_message()
+				));
 			} else {
 				if ($redirect) {
 					wp_safe_redirect($redirect);
 					exit();
 				} else {
-					echo '<div class="uwp-alert-success text-center">';
-					echo $message;
-					echo '</div>';
+					echo aui()->alert(array(
+						'type'=>'success',
+						'class'=>'text-center',
+						'content'=> $message
+					));
 				}
 			}
 		}
@@ -2130,7 +2134,7 @@ class UsersWP_Forms {
                         <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $id; ?>_hidden" value="1">
                         <input type="checkbox" name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $id; ?>" placeholder="<?php echo $field->htmlvar_name; ?>" title="<?php echo $site_title; ?>" value="1" class="form-control custom-control-input"
                                onchange="if(this.checked){jQuery('#<?php echo $id; ?>_hidden').val('1');} else{ jQuery('#<?php echo $id; ?>_hidden').val('0');}" <?php echo checked($value, 1)?> <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>>
-                        <label for="<?php echo $field->htmlvar_name; ?>" class="custom-control-label"><?php echo $site_title; ?></label>
+                        <label for="<?php echo $id; ?>" class="custom-control-label"><?php echo $site_title; ?></label>
                     </div>
                 </div>
 			<?php
@@ -2451,8 +2455,6 @@ class UsersWP_Forms {
 					'rows' => '4'
 				));
 			}else{
-
-
 				?>
 
                 <div id="<?php echo $field->htmlvar_name;?>_row"
@@ -2482,6 +2484,78 @@ class UsersWP_Forms {
 					<?php } ?>
                 </div>
 
+				<?php
+			}
+			$html = ob_get_clean();
+		}
+
+		return $html;
+	}
+
+	public function form_input_editor($html, $field, $value, $form_type) {
+
+		// Check if there is a field specific filter.
+		if(has_filter("uwp_form_input_editor_{$field->htmlvar_name}")){
+			$html = apply_filters("uwp_form_input_editor_{$field->htmlvar_name}", $html, $field, $value, $form_type);
+		}
+
+		if(empty($html)) {
+
+			ob_start();
+
+			$design_style = uwp_get_option("design_style","bootstrap");
+			$bs_form_group = $design_style ? "form-group" : "";
+			$bs_sr_only = $design_style ? "sr-only" : "";
+			$site_title = uwp_get_form_label($field);
+
+			$content = stripslashes($value);
+			$editor_id = $field->htmlvar_name;
+			$args = array(
+				'textarea_rows' => 5,
+				'media_buttons' => false,
+				'quicktags'     => false,
+			);
+
+			// bootstrap
+			if( $design_style ){
+				echo aui()->textarea(array(
+					'id'    =>  $field->htmlvar_name,
+					'name'    =>  $field->htmlvar_name,
+					'placeholder'   => uwp_get_field_placeholder($field),
+					'title'   => $site_title,
+					'value' =>  stripslashes($value),
+					'required'  => $field->is_required,
+					'validation_text' => __($field->required_msg, 'userswp'),
+					'help_text' => __( $field->help_text, 'userswp' ),
+					'label' => is_admin() ? '' : $site_title,
+					'rows' => 5,
+					'wysiwyg' => true
+				));
+			}else {
+				?>
+                <div id="<?php echo $field->htmlvar_name; ?>_row"
+                     class="<?php if ( $field->is_required ) {
+					     echo 'required_field';
+				     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+
+					<?php
+
+					if ( ! is_admin() ) { ?>
+                        <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
+							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php if ( $field->is_required ) {
+								echo '<span>*</span>';
+							} ?>
+                        </label>
+					<?php } ?>
+
+					<?php wp_editor( $content, $editor_id, $args ); ?>
+
+                    <span class="uwp_message_note"><?php _e( $field->help_text, 'userswp' ); ?></span>
+					<?php if ( $field->is_required ) { ?>
+                        <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+					<?php } ?>
+                </div>
 				<?php
 			}
 			$html = ob_get_clean();

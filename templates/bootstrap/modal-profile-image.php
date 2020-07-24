@@ -38,7 +38,7 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 			       type="file" value="">
 		</div>
 	</form>
-	<div id="progressBar" class="progress " style="display: none;">
+	<div id="progressBar" class="progress progressBar" style="display: none;">
 		<div class="progress-bar bg-success" role="progressbar" style="width: 0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 	</div>
 </div>

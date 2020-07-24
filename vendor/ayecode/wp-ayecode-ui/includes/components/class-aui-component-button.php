@@ -35,6 +35,7 @@ class AUI_Component_Button {
 			'no_wrap'    => true,
 			'onclick'    => '',
 			'style'  => '',
+			'extra_attributes'  => array() // an array of extra attributes
 		);
 
 		/**
@@ -84,6 +85,11 @@ class AUI_Component_Button {
 
 			// aria-attributes
 			$output .= AUI_Component_Helper::aria_attributes($args);
+
+			// extra attributes
+			if(!empty($args['extra_attributes'])){
+				$output .= AUI_Component_Helper::extra_attributes($args['extra_attributes']);
+			}
 
 			// onclick, we don't escape this
 			if(!empty($args['onclick'])){

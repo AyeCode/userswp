@@ -1167,7 +1167,7 @@ class UsersWP_GeoDirectory_Plugin {
 				} else {
 					echo aui()->alert( array(
 						'type'    => 'info',
-						'content' => sprintf( __( "No %s found.", 'geodirectory' ), $gd_post_types[ $post_type ]['labels']['name'] )
+						'content' => sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
 					) );
 				}
 				do_action( 'uwp_after_profile_listing_items', $user, $post_type );
@@ -1381,7 +1381,7 @@ class UsersWP_GeoDirectory_Plugin {
 				} else {
 					echo aui()->alert( array(
 						'type'    => 'info',
-						'content' => sprintf( __( "No %s found.", 'geodirectory' ), $gd_post_types[ $post_type ]['labels']['name'] )
+						'content' => sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
 					) );
 				}
 

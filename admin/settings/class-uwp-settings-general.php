@@ -126,7 +126,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'desc' => __( 'When enabled some register links will open in a lightbox instead of changing page.','userswp'),
 		            'type' => 'checkbox',
 		            'default'  => '1',
-		            'class' => 'uwp_label_inline',
 	            ),
                 array(
                     'id' => 'uwp_registration_action',
@@ -239,7 +238,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'desc' => __( 'When enabled some login links will open in a lightbox instead of changing page. The page will reloaded after successful login instead of redirect.','userswp'),
 		            'type' => 'checkbox',
 		            'default'  => '1',
-		            'class' => 'uwp_label_inline',
 	            ),
                 array(
                     'id' => 'login_redirect_to',
@@ -266,7 +264,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'desc' => __('When enabled /wp-login.php page will be redirected to UsersWP login page.','userswp' ),
                     'type' => 'checkbox',
                     'default'  => '0',
-                    'class' => 'uwp_label_inline',
                 ),
                 array(
                     'id' => 'logout_redirect_to',
@@ -296,7 +293,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'desc' => __( 'When enabled some forgot password links will open in a lightbox instead of changing page.','userswp'),
 		            'type' => 'checkbox',
 		            'default'  => '1',
-		            'class' => 'uwp_label_inline',
 	            ),
                 array(
                     'id'   => 'change_enable_old_password',

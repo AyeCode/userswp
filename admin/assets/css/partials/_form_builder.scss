@@ -2,7 +2,6 @@
   padding: 0;
   overflow: hidden;
   width: auto;
-  //margin: 20px 15px 20px 6px;
 
   .clearfix:after {
     visibility: hidden;
@@ -14,7 +13,6 @@
   }
 
   .uwp-side-sortables {
-    /* width:280px;*/
     border: 1px #DFDFDF solid;
     background: #F5F5F5;
     p {
@@ -38,7 +36,6 @@
       margin: 0;
       border-bottom: 1px #DFDFDF solid;
       text-shadow: 0 1px 0 #FFFFFF;
-      display: inline-block;
     }
 
     .inside {
@@ -67,6 +64,17 @@
       }
     }
 
+  }
+
+  #uwp-available-fields.uwp-side-sortables {
+    width: 42%;
+    margin-right: 15px;
+    margin-bottom: 15px;
+  }
+
+  #uwp-selected-fields.uwp-side-sortables {
+    width: 55%;
+    margin-bottom: 15px;
   }
 
   #uwp-available-fields {
@@ -181,18 +189,11 @@
   }
 
   .uwp-side-sortables {
-    .hndle {
-      cursor: move;
-      background: #F1F1F1
-    }
     .handlediv {
       float: right;
       height: 31px;
       width: 27px;
       cursor: pointer;
-    }
-    .handlediv:hover {
-      background: url(../../images/arrows.png) no-repeat 6px 7px;
     }
   }
 
@@ -233,10 +234,6 @@
     cursor: pointer;
   }
 }
-
-
-/*.general-form-builder-frame{ margin-left:290px;}*/
-/*.uwp-side-sortables{ margin-left:-290px; float:left;}*/
 
 #uwp_form_builder_container {
   .field_row_main {
@@ -674,17 +671,6 @@
       .field_row_main_sort {
         margin: 0;
         width: 48%;
-      }
-
-      #uwp-available-fields.uwp-side-sortables {
-        width: 42%;
-        margin-right: 15px;
-        margin-bottom: 15px;
-      }
-
-      #uwp-selected-fields.uwp-side-sortables {
-        width: 55%;
-        margin-bottom: 15px;
       }
     }
   }

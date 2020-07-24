@@ -5,7 +5,7 @@ if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
 }
 
 ?>
-<form class="uwp-user-search-form form-inline" method="get" action="<?php echo get_uwp_users_permalink(); ?>">
+<form class="uwp-user-search-form form-inline" method="get" action="<?php echo uwp_get_page_link('users_page'); ?>">
     <div class="form-group mb-2 mr-md-2">
         <label for="uwp-search-input" class="sr-only"><?php _e('Search for users...', 'userswp'); ?></label>
         <input type="search" name="uwps" class="form-control form-control-sm " id="uwp-search-input" value="<?php echo $keyword; ?>" placeholder="<?php _e('Search for users...', 'userswp'); ?>">

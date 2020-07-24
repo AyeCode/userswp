@@ -127,6 +127,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.5 =
+* Add CSV to allowed mimes while importing users - ADDED
+
 = 1.2.2.4 =
 * Settings for minimum and maximum password length - ADDED
 * Settings for minimum length for username - ADDED
