@@ -77,7 +77,6 @@ class UsersWP_Public {
 	    wp_register_script( "uwp_timepicker", USERSWP_PLUGIN_URL . 'assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), USERSWP_VERSION, true );
 
 	    $enable_timepicker_fields = false;
-	    $enable_datepicker_fields = false;
 	    $enable_country_fields = false;
 
 	    $register_fields = get_register_form_fields();
@@ -85,11 +84,8 @@ class UsersWP_Public {
 	    $fields = array_merge($register_fields,$account_fields);
 	    if (!empty($fields)) {
 		    foreach ($fields as $field) {
-			    if ($field->field_type == 'time') {
+			    if ($field->field_type == 'time' || $field->field_type == 'datepicker') {
 				    $enable_timepicker_fields = true;
-			    }
-			    if ($field->field_type == 'datepicker') {
-				    $enable_datepicker_fields = true;
 			    }
 			    if ($field->field_type_key == 'uwp_country' || $field->field_type_key == 'country') {
 				    $enable_country_fields = true;
@@ -97,7 +93,7 @@ class UsersWP_Public {
 		    }
 	    }
 
-	    if($enable_timepicker_fields || $enable_datepicker_fields) {
+	    if($enable_timepicker_fields) {
 		    wp_enqueue_style( 'jquery-ui' );
 		    wp_enqueue_script( "uwp_timepicker" );
 	    }

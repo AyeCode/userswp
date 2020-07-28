@@ -72,7 +72,7 @@ class UsersWP_Admin {
 				'connect_external'  => __( "Please confirm you wish to connect your site?","userswp" ),
 				'connect'           => sprintf( __( "<strong>Have a license?</strong> Forget about entering license keys or downloading zip files, connect your site for instant access. %slearn more%s","userswp" ),"<a href='https://ayecode.io/introducing-ayecode-connect/' target='_blank'>","</a>" ),
 				'connect_button'    => __("Connect Site","userswp"),
-				'connecting_button'    => __("Connecting...","userswp"),
+				'connecting_button' => __("Connecting...","userswp"),
 				'error_localhost'   => __( "This service will only work with a live domain, not a localhost.","userswp" ),
 				'error'             => __( "Something went wrong, please refresh and try again.","userswp" ),
 			);

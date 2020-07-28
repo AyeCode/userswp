@@ -9,6 +9,43 @@
   }
 }
 
+/* tooltip css */
+
+.uwp-tooltip-wrap {
+  position: relative;
+  text-align: left;
+  -webkit-transform: translateZ(0); /* webkit flicker fix */
+  -webkit-font-smoothing: antialiased; /* webkit text rendering fix */
+  width:100%;
+  display: block;
+}
+
+/* IE can just show/hide with no transition */
+.lte8 {
+  .uwp-tooltip-wrap {
+    .uwp-tooltip {
+      display: none;
+    }
+  }
+}
+
+.uwp-ui-tooltip {
+  padding: 7px;
+  position: absolute;
+  z-index: 9999;
+  max-width: 300px;
+  background: #333 !important;
+  border-radius: 3px !important;
+  -webkit-box-shadow: 1px 1px 2px 1px rgba(214,214,214,0.5);
+  box-shadow: 1px 1px 2px 1px rgba(214,214,214,0.5);
+  color: #dedede !important;
+  text-rendering: optimizeLegibility;
+  text-shadow: none !important;
+  white-space: pre-line; /* show line breaks */
+  word-wrap:break-word;
+  border-width: 1px;
+}
+
 .uwp-help-tip {
   cursor: help;
   float: right;

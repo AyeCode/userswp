@@ -27,7 +27,7 @@ if(!$uwp_in_user_loop){ ?><div class="card shadow-0 border-0 mw-100"><?php }
 
 if( ! $hide_cover ) {
 	if ( $uwp_in_user_loop ) {
-		echo '<a href="' . esc_url_raw( get_author_posts_url( $user->ID ) ) . '" title="' . $user->display_name . '">';
+		echo '<a href="' . esc_url_raw( uwp_build_profile_tab_url( $user->ID ) ) . '" title="' . $user->display_name . '">';
 	} ?>
 	<img class="card-img-top m-0 p-0 uwp-banner-image" src="<?php echo esc_url( $banner_url ); ?>"
 	     alt="<?php _e( "User banner image", "userswp" ); ?>">
@@ -55,7 +55,7 @@ if( ! $hide_cover ) {
 
 		<?php if( ! $hide_avatar ){ ?>
 		<div class="col <?php if($uwp_in_user_loop){?>col-5<?php }?> text-center tofront ">
-			<?php if ($uwp_in_user_loop) { echo '<a href="'.esc_url_raw(get_author_posts_url($user->ID)).'" title="'.$user->display_name.'">';} ?>
+			<?php if ($uwp_in_user_loop) { echo '<a href="'.esc_url_raw(uwp_build_profile_tab_url($user->ID)).'" title="'.$user->display_name.'">';} ?>
 			<img class="rounded-circle shadow border border-white border-width-4 p-0 <?php if(!$hide_cover){ echo "mt-neg5";}?>"
 			     src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php _e("User avatar","userswp");?>">
 			<?php if ($uwp_in_user_loop) {echo '</a>';} ?>

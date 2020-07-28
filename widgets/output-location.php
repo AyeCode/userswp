@@ -27,7 +27,7 @@ class UWP_Output_Location_Widget extends WP_Super_Duper {
             'name'          => __('UWP > Output Location','userswp'),
             'no_wrap'       => true,
             'widget_ops'    => array(
-                'description' => esc_html__('Displays fields which are selected to display in selected location from form builder.','userswp'),
+                'description' => esc_html__('Displays fields which are selected to display in selected output location from form builder.','userswp'),
             ),
             'arguments'     => array(
                 'location'  => array(

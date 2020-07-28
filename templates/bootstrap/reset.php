@@ -5,6 +5,8 @@
  * @ver 1.0.0
  */
 $css_class = ! empty( $args['css_class'] ) ? esc_attr( $args['css_class'] ) : 'border-0';
+$form_title = ! empty( $args['form_title'] ) ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Reset Password', 'userswp' );
+$form_title = apply_filters( 'uwp_template_form_title', $form_title, 'reset' );
 do_action( 'uwp_template_before', 'reset' ); ?>
 	<div class="row">
 		<div class="card mx-auto container-fluid p-0 <?php echo $css_class; ?>" >
@@ -12,8 +14,6 @@ do_action( 'uwp_template_before', 'reset' ); ?>
 				<?php
 				do_action( 'uwp_template_form_title_before', 'reset' );
 
-				$form_title = ! empty( $args['form_title'] ) ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Reset Password', 'userswp' );
-				$form_title = apply_filters( 'uwp_template_form_title', $form_title, 'reset' );
 				if ( $form_title != '0' ) {
 					echo '<h3 class="card-title text-center mb-4">';
 					echo $form_title;

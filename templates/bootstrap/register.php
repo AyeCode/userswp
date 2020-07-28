@@ -32,9 +32,8 @@ do_action( 'uwp_template_before', 'register' ); ?>
 					echo $form_title;
 					echo '</h3>';
 				}
-				?>
 
-				<?php do_action( 'uwp_template_display_notices', 'register' ); ?>
+                do_action( 'uwp_template_display_notices', 'register' ); ?>
 
 				<form class="uwp-registration-form uwp_form" method="post" enctype="multipart/form-data">
 					<?php do_action( 'uwp_template_fields', 'register' ); ?>

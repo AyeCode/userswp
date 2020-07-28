@@ -808,7 +808,7 @@ class UsersWP_Profile {
 	 * @param       int         $user_id    User ID.
 	 * @return      int                     Comment count.
 	 */
-	function get_comment_count_by_user($user_id) {
+	public function get_comment_count_by_user($user_id) {
 		global $wpdb;
 
 		$count = $wpdb->get_var(
@@ -1873,7 +1873,6 @@ class UsersWP_Profile {
 
         }
 
-
         // Time
         if ($field->field_type == 'time') {
             $value = date(get_option('time_format'), strtotime($value));
@@ -1894,7 +1893,7 @@ class UsersWP_Profile {
                 $link_text = esc_url($link_text);
             }
 
-            $value = '<a href="'.$value.'">'.$link_text.'</a>';
+            $value = '<a href="'.$value.'" target="_blank" rel="nofollow">'.$link_text.'</a>';
         }
 
         // Checkbox

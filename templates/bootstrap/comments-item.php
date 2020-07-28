@@ -9,12 +9,11 @@ $avatar_url = get_avatar_url( $comment->comment_author_email, array( 'size' => 5
 $user_name = isset($comment->comment_author) ? $comment->comment_author : '';
 $user = !empty($comment->user_id) ? get_userdata( $comment->user_id ) : '';
 if(!empty($user->display_name)) { $user_name = $user->display_name;}
-
 ?>
 <div class="card mb-5">
 
 	<div class="card-header">
-			<a href="<?php echo get_comment_link($comment->comment_ID); ?>"><?php echo get_the_title($comment->comment_post_ID); ?></a>
+        <a href="<?php echo get_comment_link($comment->comment_ID); ?>"><?php echo get_the_title($comment->comment_post_ID); ?></a>
 	</div>
 
 	<div class="card-body">

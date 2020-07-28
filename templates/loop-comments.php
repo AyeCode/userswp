@@ -6,8 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $the_query = isset( $args['template_args']['the_query'] ) ? $args['template_args']['the_query'] : '';
 $maximum_pages = isset( $args['template_args']['maximum_pages'] ) ? $args['template_args']['maximum_pages'] : '';
+$title = isset( $args['template_args']['title'] ) ? $args['template_args']['title'] : __('Comments', 'userswp');
 ?>
-<h3><?php echo __('Comments', 'userswp') ?></h3>
+<h3><?php echo $title;?></h3>
 
 <div class="uwp-profile-item-block">
 	<?php
@@ -24,7 +25,7 @@ $maximum_pages = isset( $args['template_args']['maximum_pages'] ) ? $args['templ
 		echo '</ul>';
 	} else {
 		// no comments found
-		echo "<p>".__('No Comments Found', 'userswp')."</p>";
+		echo "<p>".__('No comments found', 'userswp')."</p>";
 	}
 
 	do_action('uwp_profile_pagination', $maximum_pages);

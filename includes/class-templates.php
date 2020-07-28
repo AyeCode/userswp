@@ -1001,7 +1001,7 @@ class UsersWP_Templates {
                 <div class="uwp-profile-extra-div form-table">
                     <form class="uwp-account-form uwp_form" method="post">
 						<?php if ($fields) { ?>
-                            <div class="uwp-profile-extra-wrap row">
+                            <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
                                 <div class="uwp-profile-extra-key col" style="font-weight: bold;">
 									<?php echo __("Field", "userswp") ?>
                                 </div>
@@ -1036,7 +1036,7 @@ class UsersWP_Templates {
 						$tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s AND user_decided = 1 ORDER BY sort_order ASC", 'profile-tabs'));
 
 						if( $tabs ){ ?>
-                            <div class="uwp-profile-extra-wrap row">
+                            <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
                                 <div class="uwp-profile-extra-key col" style="font-weight: bold;">
 									<?php echo __("Tab Name", "userswp") ?>
                                 </div>

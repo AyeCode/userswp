@@ -1,8 +1,8 @@
 <?php
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
+
 $files = new UsersWP_Files();
 $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner';
 ?>
@@ -10,9 +10,9 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 	<h5 class="modal-title" id="uwp-profile-modal-title">
 		<?php
 		if ( $type == 'avatar' ) {
-			echo __( 'Change your profile photo', 'userswp' );
+			_e( 'Change your profile photo', 'userswp' );
 		} else {
-			echo __( 'Change your cover photo', 'userswp' );
+			_e( 'Change your cover photo', 'userswp' );
 		}
 		?>
 	</h5>
@@ -24,7 +24,7 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 		<input type="hidden" name="uwp_<?php echo $type; ?>_submit" value=""/>
 		<button type="button" class="btn btn-primary uwp_upload_button"
 		        onclick="document.getElementById('uwp_upload_<?php echo $type; ?>').click();"><i
-				class="fas fa-upload"></i> <?php echo __( 'Upload', 'userswp' ); ?> <?php echo $type; ?></button>
+				class="fas fa-upload"></i> <?php _e( 'Upload', 'userswp' ); ?> <?php echo $type; ?></button>
 		<?php
 		echo aui()->alert( array(
 				'class'   => 'text-center text-center m-3 p-0 w-50 mx-auto',

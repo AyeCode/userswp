@@ -13,9 +13,9 @@ $image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
 				<h4 class="uwp-bs-modal-title">
 					<?php
 					if ($type == 'avatar') {
-						echo __( 'Change your profile photo', 'userswp' );
+						_e( 'Change your profile photo', 'userswp' );
 					} else {
-						echo __( 'Change your cover photo', 'userswp' );
+						_e( 'Change your cover photo', 'userswp' );
 					}
 					?>
 				</h4>
@@ -37,11 +37,11 @@ $image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
 							<input type="hidden" name="h" value="" id="<?php echo $type; ?>-h" />
 							<input type="hidden" id="uwp-<?php echo $type; ?>-crop-image" name="uwp_crop" value="<?php echo $image_url; ?>" />
 							<input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp-crop-nonce' ); ?>" />
-							<input type="submit" name="uwp_<?php echo $type; ?>_crop" value="<?php echo __('Apply', 'userswp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
+							<input type="submit" name="uwp_<?php echo $type; ?>_crop" value="<?php _e('Apply', 'userswp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
 						</form>
 					</div>
 				</div>
-				<button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal"><?php echo __( 'Cancel', 'userswp' ); ?></button>
+				<button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal"><?php _e( 'Cancel', 'userswp' ); ?></button>
 			</div>
 		</div>
 	</div>

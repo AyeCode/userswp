@@ -45,19 +45,6 @@
       padding: 0 12px 0 10px;
     }
 
-    .posttype-tabs {
-      margin-bottom: 0;
-      li {
-        display: inline;
-        margin-bottom: 0;
-        padding: 5px 5px 1px 5px;
-        a {
-          color: #333;
-          text-decoration: none;
-        }
-      }
-    }
-
     #uwp-form-builder-tab-custom {
       .super-duper-content-open {
         display: none;
@@ -112,81 +99,6 @@
 }
 
 #uwp_form_builder_container {
-  .uwp-taxonomy b {
-    background-position: -10px -10px;
-  }
-
-  .uwp-text b {
-    background-position: -10px -91px;
-  }
-
-  .uwp-link b {
-    background-position: -10px -91px;
-  }
-
-  .uwp-textarea b {
-    background-position: -10px -176px;
-  }
-
-  .uwp-checkbox b {
-    background-position: -10px -261px;
-  }
-
-  .uwp-select b {
-    background-position: -10px -10px;
-  }
-
-  .uwp-multiselect b {
-    background-position: -10px -10px;
-  }
-
-  .uwp-datepicker b {
-    background-position: -10px -218px;
-  }
-
-  .uwp-url b {
-    background-position: -10px -360px;
-  }
-
-  .uwp-digits b, .uwp-captcha b {
-    background-position: -10px -454px;
-  }
-
-  .uwp-phone b {
-    background-position: -10px -532px;
-  }
-
-  .uwp-file b {
-    background-position: -10px -590px;
-  }
-
-  .uwp-radio b {
-    background-position: -10px -53px;
-  }
-
-  .uwp-address b {
-    background-position: -10px -132px;
-  }
-
-  .uwp-email b {
-    background-position: -10px -306px;
-  }
-
-  .uwp-currency b {
-    background-position: -10px -408px;
-  }
-
-  .uwp-time b {
-    background-position: -10px -493px;
-  }
-
-  .uwp-html b {
-    background-position: -10px -562px;
-  }
-
-  .uwp-instructions b {
-    background-position: -10px -623px;
-  }
 
   .uwp-side-sortables {
     .handlediv {
@@ -197,41 +109,10 @@
     }
   }
 
-  .uwp-datetime b {
-    background-position: -10px -218px;
-  }
-
-  .uwp-sort-uwp_timing b {
-    background-position: -10px -493px;
-  }
-
-  .uwp-enum.uwp-sort-is_featured b {
-    background-position: -10px 104px;
-  }
-
-  .uwp-float.uwp-sort-overall_rating b {
-    background-position: -10px 211px;
-  }
-
-  .uwp-bigint.uwp-sort-comment_count b {
-    background-position: -10px 35px;
-  }
-
-  .uwp-random.uwp-sort-post_title b {
-    background-position: -10px 70px;
-  }
-
   span.field-type {
     float: right;
     margin-right: 25px;
     font-weight: initial;
-  }
-
-  .icon-arrow {
-    position: absolute;
-    right: 0;
-    padding: 10px;
-    cursor: pointer;
   }
 }
 
@@ -384,7 +265,14 @@
   }
 }
 
-
+ul.core.uwp_form_extras.ui-sortable {
+  ul:not(.widefat) {
+    padding-left: 25px;
+  }
+  li {
+    margin: 5px 0 !important;
+  }
+}
 
 
 #uwp_form_builder_container {
@@ -395,7 +283,6 @@
     float: left;
   }
 
-  /*.field_row_main{ width:63%; float:left;}*/
   .field_row_main_sort {
     width: 63%;
     float: left;
@@ -440,162 +327,12 @@
   }
 }
 
-  /* tooltip css */
-
-  .uwp-tooltip-wrap {
-    position: relative;
-    text-align: left;
-    -webkit-transform: translateZ(0); /* webkit flicker fix */
-    -webkit-font-smoothing: antialiased; /* webkit text rendering fix */
-    width:100%;
-    display: block;
-
-    .uwp-tooltip {
-      text-align: center;
-      background: #1496bb;
-      color: #fff;
-      display: block;
-      left: -25px;
-      margin-bottom: 15px;
-      opacity: 0;
-      padding: 20px;
-      pointer-events: none;
-      position: absolute;
-      width: 100%;
-      -webkit-transform: translateY(10px);
-      -moz-transform: translateY(10px);
-      -ms-transform: translateY(10px);
-      -o-transform: translateY(10px);
-      transform: translateY(10px);
-      -webkit-transition: all .25s ease-out;
-      -moz-transition: all .25s ease-out;
-      -o-transition: all .25s ease-out;
-      transition: all .25s ease-out;
-      -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-      -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-      -ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-      -o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-      bottom: -200px;
-    }
-
-    /* This bridges the gap so you can mouse into the tooltip without it disappearing */
-    .uwp-tooltip:before {
-      bottom: -20px;
-      content: " ";
-      display: block;
-      height: 20px;
-      left: 0;
-      position: absolute;
-      width: 100%;
-    }
-
-    /* CSS Triangles - see Trevor's post */
-    .uwp-tooltip:after {
-      border-left: solid transparent 10px;
-      border-right: solid transparent 10px;
-      border-top: solid #1496bb 10px;
-      bottom: -10px;
-      content: " ";
-      height: 0;
-      left: 50%;
-      margin-left: -13px;
-      position: absolute;
-      width: 0;
-    }
-
-    &:hover .uwp-tooltip {
-      opacity: 1;
-      pointer-events: auto;
-      -webkit-transform: translateY(0px);
-      -moz-transform: translateY(0px);
-      -ms-transform: translateY(0px);
-      -o-transform: translateY(0px);
-      transform: translateY(0px);
-      transition-delay:0.5s;
-      bottom: 100%;
-    }
-  }
-
-  /* IE can just show/hide with no transition */
-  .lte8 {
-    .uwp-tooltip-wrap {
-      .uwp-tooltip {
-        display: none;
-      }
-      &:hover .uwp-tooltip {
-        display: block;
-        transition-delay:0.5s;
-      }
-    }
-  }
-
   #uwp_form_builder_container {
-    /*
-  Radio input buttons
-  */
-    .uwp-cb-enable, .uwp-cb-disable,
-    .uwp-cb-enable span, .uwp-cb-disable span {
-      display: block; float: left;
-    }
-    .uwp-cb-enable span, .uwp-cb-disable span { line-height: 30px; display: block; background-repeat: no-repeat; font-weight: bold; }
-    .uwp-cb-enable span { padding: 0 10px;
-
-      -webkit-border-radius: 5px 0 0 5px;
-      -moz-border-radius: 5px 0 0 5px;
-      border-radius: 5px 0 0 5px;
-
-      border: 1px solid #bbb;
-      border-right: none;
-      background: #e8e8e8;
-      background-image: -webkit-linear-gradient(top, #e8e8e8, #cccccc);
-      background-image: -moz-linear-gradient(top, #e8e8e8, #cccccc);
-      background-image: -ms-linear-gradient(top, #e8e8e8, #cccccc);
-      background-image: -o-linear-gradient(top, #e8e8e8, #cccccc);
-      background-image: linear-gradient(to bottom, #e8e8e8, #cccccc);
-    }
-    .uwp-cb-disable span { padding: 0 10px;
-      -webkit-border-radius: 0 5px 5px 0;
-      -moz-border-radius: 0 5px 5px 0;
-      border-radius: 0 5px 5px 0;
-      border: 1px solid #bbb;
-      border-left: none;
-      background: #e8e8e8;
-      background-image: -webkit-linear-gradient(top, #e8e8e8, #cccccc);
-      background-image: -moz-linear-gradient(top, #e8e8e8, #cccccc);
-      background-image: -ms-linear-gradient(top, #e8e8e8, #cccccc);
-      background-image: -o-linear-gradient(top, #e8e8e8, #cccccc);
-      background-image: linear-gradient(to bottom, #e8e8e8, #cccccc);
-    }
-
-    .uwp-ri-disabled:checked + .uwp-cb-disable span {
-      border-color: #616161;
-      background: #878787;
-      background-image: -webkit-linear-gradient(top, #878787, #616161);
-      background-image: -moz-linear-gradient(top, #878787, #616161);
-      background-image: -ms-linear-gradient(top, #878787, #616161);
-      background-image: -o-linear-gradient(top, #878787, #616161);
-      background-image: linear-gradient(to bottom, #878787, #616161);
-      color: #fff; }
-
-    .uwp-ri-enabled:checked + .uwp-cb-enable span {
-      border-color: #2980b9;
-      background: #3498db;
-      background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
-      background-image: -moz-linear-gradient(top, #3498db, #2980b9);
-      background-image: -ms-linear-gradient(top, #3498db, #2980b9);
-      background-image: -o-linear-gradient(top, #3498db, #2980b9);
-      background-image: linear-gradient(to bottom, #3498db, #2980b9);
-      color: #fff; }
-    .uwp-switch label { cursor: pointer; }
-    .uwp-switch input { display: none; }
-    .uwp-switch {height: 32px;}
-
     .advance.ui-sortable .ui-state-highlight,
     .core.ui-sortable .ui-state-highlight{
       width: 100%;
       height:37px;
-      background: #fd9720;
+      background: #2981B3;
 
     }
 

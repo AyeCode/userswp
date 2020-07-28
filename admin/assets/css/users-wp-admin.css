@@ -5,6 +5,38 @@
 .single_select_page .select2-container {
   display: inline-block; }
 
+/* tooltip css */
+.uwp-tooltip-wrap {
+  position: relative;
+  text-align: left;
+  -webkit-transform: translateZ(0);
+  /* webkit flicker fix */
+  -webkit-font-smoothing: antialiased;
+  /* webkit text rendering fix */
+  width: 100%;
+  display: block; }
+
+/* IE can just show/hide with no transition */
+.lte8 .uwp-tooltip-wrap .uwp-tooltip {
+  display: none; }
+
+.uwp-ui-tooltip {
+  padding: 7px;
+  position: absolute;
+  z-index: 9999;
+  max-width: 300px;
+  background: #333 !important;
+  border-radius: 3px !important;
+  -webkit-box-shadow: 1px 1px 2px 1px rgba(214, 214, 214, 0.5);
+  box-shadow: 1px 1px 2px 1px rgba(214, 214, 214, 0.5);
+  color: #dedede !important;
+  text-rendering: optimizeLegibility;
+  text-shadow: none !important;
+  white-space: pre-line;
+  /* show line breaks */
+  word-wrap: break-word;
+  border-width: 1px; }
+
 .uwp-help-tip {
   cursor: help;
   float: right;
@@ -163,15 +195,6 @@ span.uwp-custom-desc code.uwp-tag-copied:after {
       margin: 10px 0;
       line-height: 1.4em;
       padding: 0 12px 0 10px; }
-    #uwp_form_builder_container .uwp-side-sortables .posttype-tabs {
-      margin-bottom: 0; }
-      #uwp_form_builder_container .uwp-side-sortables .posttype-tabs li {
-        display: inline;
-        margin-bottom: 0;
-        padding: 5px 5px 1px 5px; }
-        #uwp_form_builder_container .uwp-side-sortables .posttype-tabs li a {
-          color: #333;
-          text-decoration: none; }
     #uwp_form_builder_container .uwp-side-sortables #uwp-form-builder-tab-custom .super-duper-content-open {
       display: none; }
   #uwp_form_builder_container #uwp-available-fields.uwp-side-sortables {
@@ -207,70 +230,15 @@ span.uwp-custom-desc code.uwp-tag-copied:after {
       position: absolute;
       width: 18px; }
 
-#uwp_form_builder_container .uwp-taxonomy b {
-  background-position: -10px -10px; }
-#uwp_form_builder_container .uwp-text b {
-  background-position: -10px -91px; }
-#uwp_form_builder_container .uwp-link b {
-  background-position: -10px -91px; }
-#uwp_form_builder_container .uwp-textarea b {
-  background-position: -10px -176px; }
-#uwp_form_builder_container .uwp-checkbox b {
-  background-position: -10px -261px; }
-#uwp_form_builder_container .uwp-select b {
-  background-position: -10px -10px; }
-#uwp_form_builder_container .uwp-multiselect b {
-  background-position: -10px -10px; }
-#uwp_form_builder_container .uwp-datepicker b {
-  background-position: -10px -218px; }
-#uwp_form_builder_container .uwp-url b {
-  background-position: -10px -360px; }
-#uwp_form_builder_container .uwp-digits b, #uwp_form_builder_container .uwp-captcha b {
-  background-position: -10px -454px; }
-#uwp_form_builder_container .uwp-phone b {
-  background-position: -10px -532px; }
-#uwp_form_builder_container .uwp-file b {
-  background-position: -10px -590px; }
-#uwp_form_builder_container .uwp-radio b {
-  background-position: -10px -53px; }
-#uwp_form_builder_container .uwp-address b {
-  background-position: -10px -132px; }
-#uwp_form_builder_container .uwp-email b {
-  background-position: -10px -306px; }
-#uwp_form_builder_container .uwp-currency b {
-  background-position: -10px -408px; }
-#uwp_form_builder_container .uwp-time b {
-  background-position: -10px -493px; }
-#uwp_form_builder_container .uwp-html b {
-  background-position: -10px -562px; }
-#uwp_form_builder_container .uwp-instructions b {
-  background-position: -10px -623px; }
 #uwp_form_builder_container .uwp-side-sortables .handlediv {
   float: right;
   height: 31px;
   width: 27px;
   cursor: pointer; }
-#uwp_form_builder_container .uwp-datetime b {
-  background-position: -10px -218px; }
-#uwp_form_builder_container .uwp-sort-uwp_timing b {
-  background-position: -10px -493px; }
-#uwp_form_builder_container .uwp-enum.uwp-sort-is_featured b {
-  background-position: -10px 104px; }
-#uwp_form_builder_container .uwp-float.uwp-sort-overall_rating b {
-  background-position: -10px 211px; }
-#uwp_form_builder_container .uwp-bigint.uwp-sort-comment_count b {
-  background-position: -10px 35px; }
-#uwp_form_builder_container .uwp-random.uwp-sort-post_title b {
-  background-position: -10px 70px; }
 #uwp_form_builder_container span.field-type {
   float: right;
   margin-right: 25px;
   font-weight: initial; }
-#uwp_form_builder_container .icon-arrow {
-  position: absolute;
-  right: 0;
-  padding: 10px;
-  cursor: pointer; }
 
 #uwp_form_builder_container .field_row_main {
   margin: 0 7px;
@@ -391,9 +359,13 @@ span.uwp-custom-desc code.uwp-tag-copied:after {
   cursor: pointer;
   z-index: 99; }
 
+ul.core.uwp_form_extras.ui-sortable ul:not(.widefat) {
+  padding-left: 25px; }
+ul.core.uwp_form_extras.ui-sortable li {
+  margin: 5px 0 !important; }
+
 #uwp_form_builder_container {
-  margin-right: 0;
-  /*.field_row_main{ width:63%; float:left;}*/ }
+  margin-right: 0; }
   #uwp_form_builder_container .uwp-side-sortables {
     width: 32%;
     float: left; }
@@ -424,152 +396,13 @@ span.uwp-custom-desc code.uwp-tag-copied:after {
   color: #a00;
   vertical-align: middle; }
 
-/* tooltip css */
-.uwp-tooltip-wrap {
-  position: relative;
-  text-align: left;
-  -webkit-transform: translateZ(0);
-  /* webkit flicker fix */
-  -webkit-font-smoothing: antialiased;
-  /* webkit text rendering fix */
+#uwp_form_builder_container .advance.ui-sortable .ui-state-highlight,
+#uwp_form_builder_container .core.ui-sortable .ui-state-highlight {
   width: 100%;
-  display: block;
-  /* This bridges the gap so you can mouse into the tooltip without it disappearing */
-  /* CSS Triangles - see Trevor's post */ }
-  .uwp-tooltip-wrap .uwp-tooltip {
-    text-align: center;
-    background: #1496bb;
-    color: #fff;
-    display: block;
-    left: -25px;
-    margin-bottom: 15px;
-    opacity: 0;
-    padding: 20px;
-    pointer-events: none;
-    position: absolute;
-    width: 100%;
-    -webkit-transform: translateY(10px);
-    -moz-transform: translateY(10px);
-    -ms-transform: translateY(10px);
-    -o-transform: translateY(10px);
-    transform: translateY(10px);
-    -webkit-transition: all .25s ease-out;
-    -moz-transition: all .25s ease-out;
-    -o-transition: all .25s ease-out;
-    transition: all .25s ease-out;
-    -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-    -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-    -ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-    -o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-    bottom: -200px; }
-  .uwp-tooltip-wrap .uwp-tooltip:before {
-    bottom: -20px;
-    content: " ";
-    display: block;
-    height: 20px;
-    left: 0;
-    position: absolute;
-    width: 100%; }
-  .uwp-tooltip-wrap .uwp-tooltip:after {
-    border-left: solid transparent 10px;
-    border-right: solid transparent 10px;
-    border-top: solid #1496bb 10px;
-    bottom: -10px;
-    content: " ";
-    height: 0;
-    left: 50%;
-    margin-left: -13px;
-    position: absolute;
-    width: 0; }
-  .uwp-tooltip-wrap:hover .uwp-tooltip {
-    opacity: 1;
-    pointer-events: auto;
-    -webkit-transform: translateY(0px);
-    -moz-transform: translateY(0px);
-    -ms-transform: translateY(0px);
-    -o-transform: translateY(0px);
-    transform: translateY(0px);
-    transition-delay: 0.5s;
-    bottom: 100%; }
-
-/* IE can just show/hide with no transition */
-.lte8 .uwp-tooltip-wrap .uwp-tooltip {
-  display: none; }
-.lte8 .uwp-tooltip-wrap:hover .uwp-tooltip {
-  display: block;
-  transition-delay: 0.5s; }
-
-#uwp_form_builder_container {
-  /*
-Radio input buttons
-*/ }
-  #uwp_form_builder_container .uwp-cb-enable, #uwp_form_builder_container .uwp-cb-disable,
-  #uwp_form_builder_container .uwp-cb-enable span, #uwp_form_builder_container .uwp-cb-disable span {
-    display: block;
-    float: left; }
-  #uwp_form_builder_container .uwp-cb-enable span, #uwp_form_builder_container .uwp-cb-disable span {
-    line-height: 30px;
-    display: block;
-    background-repeat: no-repeat;
-    font-weight: bold; }
-  #uwp_form_builder_container .uwp-cb-enable span {
-    padding: 0 10px;
-    -webkit-border-radius: 5px 0 0 5px;
-    -moz-border-radius: 5px 0 0 5px;
-    border-radius: 5px 0 0 5px;
-    border: 1px solid #bbb;
-    border-right: none;
-    background: #e8e8e8;
-    background-image: -webkit-linear-gradient(top, #e8e8e8, #cccccc);
-    background-image: -moz-linear-gradient(top, #e8e8e8, #cccccc);
-    background-image: -ms-linear-gradient(top, #e8e8e8, #cccccc);
-    background-image: -o-linear-gradient(top, #e8e8e8, #cccccc);
-    background-image: linear-gradient(to bottom, #e8e8e8, #cccccc); }
-  #uwp_form_builder_container .uwp-cb-disable span {
-    padding: 0 10px;
-    -webkit-border-radius: 0 5px 5px 0;
-    -moz-border-radius: 0 5px 5px 0;
-    border-radius: 0 5px 5px 0;
-    border: 1px solid #bbb;
-    border-left: none;
-    background: #e8e8e8;
-    background-image: -webkit-linear-gradient(top, #e8e8e8, #cccccc);
-    background-image: -moz-linear-gradient(top, #e8e8e8, #cccccc);
-    background-image: -ms-linear-gradient(top, #e8e8e8, #cccccc);
-    background-image: -o-linear-gradient(top, #e8e8e8, #cccccc);
-    background-image: linear-gradient(to bottom, #e8e8e8, #cccccc); }
-  #uwp_form_builder_container .uwp-ri-disabled:checked + .uwp-cb-disable span {
-    border-color: #616161;
-    background: #878787;
-    background-image: -webkit-linear-gradient(top, #878787, #616161);
-    background-image: -moz-linear-gradient(top, #878787, #616161);
-    background-image: -ms-linear-gradient(top, #878787, #616161);
-    background-image: -o-linear-gradient(top, #878787, #616161);
-    background-image: linear-gradient(to bottom, #878787, #616161);
-    color: #fff; }
-  #uwp_form_builder_container .uwp-ri-enabled:checked + .uwp-cb-enable span {
-    border-color: #2980b9;
-    background: #3498db;
-    background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
-    background-image: -moz-linear-gradient(top, #3498db, #2980b9);
-    background-image: -ms-linear-gradient(top, #3498db, #2980b9);
-    background-image: -o-linear-gradient(top, #3498db, #2980b9);
-    background-image: linear-gradient(to bottom, #3498db, #2980b9);
-    color: #fff; }
-  #uwp_form_builder_container .uwp-switch label {
-    cursor: pointer; }
-  #uwp_form_builder_container .uwp-switch input {
-    display: none; }
-  #uwp_form_builder_container .uwp-switch {
-    height: 32px; }
-  #uwp_form_builder_container .advance.ui-sortable .ui-state-highlight,
-  #uwp_form_builder_container .core.ui-sortable .ui-state-highlight {
-    width: 100%;
-    height: 37px;
-    background: #fd9720; }
-  #uwp_form_builder_container .select2-container {
-    width: 100% !important; }
+  height: 37px;
+  background: #2981B3; }
+#uwp_form_builder_container .select2-container {
+  width: 100% !important; }
 
 @media screen and (max-width: 768px) {
   #uwp_form_builder_container .field_row_main {

@@ -441,7 +441,7 @@ function uwp_get_user_badge($args){
 
 			$badge = apply_filters( 'uwp_user_badge_output_badge', $badge, $match_value, $match_field, $args, $user, $field );
 
-			$btn_class = 'border-0 align-middle gd-badge';
+			$btn_class = 'border-0 align-middle uwp-badge';
 			// color
 			$color_custom = true;
 			if( !empty( $args['color'] ) ) {
@@ -536,6 +536,48 @@ function uwp_get_user_badge($args){
 	}
 
 	return $output;
+}
+
+function uwp_aui_colors($include_branding = false){
+	$theme_colors = array(
+		"primary" => __('Primary', 'userswp'),
+		"secondary" => __('Secondary', 'userswp'),
+		"success" => __('Success', 'userswp'),
+		"danger" => __('Danger', 'userswp'),
+		"warning" => __('Warning', 'userswp'),
+		"info" => __('Info', 'userswp'),
+		"light" => __('Light', 'userswp'),
+		"dark" => __('Dark', 'userswp'),
+		"white" => __('White', 'userswp'),
+		"purple" => __('Purple', 'userswp'),
+		"salmon" => __('Salmon', 'userswp'),
+		"cyan" => __('Cyan', 'userswp'),
+		"gray" => __('Gray', 'userswp'),
+		"indigo" => __('Indigo', 'userswp'),
+		"orange" => __('Orange', 'userswp'),
+	);
+
+	if($include_branding){
+		$theme_colors = $theme_colors  + uwp_aui_branding_colors();
+	}
+
+	return $theme_colors;
+}
+
+function uwp_aui_branding_colors(){
+	return array(
+		"facebook" => __('Facebook', 'userswp'),
+		"twitter" => __('Twitter', 'userswp'),
+		"instagram" => __('Instagram', 'userswp'),
+		"linkedin" => __('Linkedin', 'userswp'),
+		"flickr" => __('Flickr', 'userswp'),
+		"github" => __('GitHub', 'userswp'),
+		"youtube" => __('YouTube', 'userswp'),
+		"wordpress" => __('WordPress', 'userswp'),
+		"google" => __('Google', 'userswp'),
+		"yahoo" => __('Yahoo', 'userswp'),
+		"vkontakte" => __('Vkontakte', 'userswp'),
+	);
 }
 
 function uwp_replace_variables($text, $user_id = ''){

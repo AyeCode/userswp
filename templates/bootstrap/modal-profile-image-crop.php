@@ -11,9 +11,9 @@ $image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
 	<h5 class="modal-title" id="uwp-profile-modal-title">
 		<?php
 		if ($type == 'avatar') {
-			echo __( 'Change your profile photo', 'userswp' );
+			_e( 'Change your profile photo', 'userswp' );
 		} else {
-			echo __( 'Change your cover photo', 'userswp' );
+			_e( 'Change your cover photo', 'userswp' );
 		}
 		?>
 	</h5>
@@ -26,7 +26,7 @@ $image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
 </div>
 
 <div class="modal-footer">
-	<button type="button" data-type="<?php echo $type; ?>" class="btn btn-outline-primary uwp_modal_btn uwp-modal-close" data-dismiss="modal"><?php echo __( 'Cancel', 'userswp' ); ?></button>
+	<button type="button" data-type="<?php echo $type; ?>" class="btn btn-outline-primary uwp_modal_btn uwp-modal-close" data-dismiss="modal"><?php _e( 'Cancel', 'userswp' ); ?></button>
 	<div class="uwp-<?php echo $type; ?>-crop-p-wrap">
 		<div id="<?php echo $type; ?>-crop-actions">
 			<form class="uwp-crop-form" method="post">
@@ -36,7 +36,7 @@ $image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
 				<input type="hidden" name="h" value="" id="<?php echo $type; ?>-h" />
 				<input type="hidden" id="uwp-<?php echo $type; ?>-crop-image" name="uwp_crop" value="<?php echo $image_url; ?>" />
 				<input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp-crop-nonce' ); ?>" />
-				<button type="submit" name="uwp_<?php echo $type; ?>_crop" class="btn btn-primary" id="save_uwp_<?php echo $type; ?>" ><?php echo __('Apply', 'userswp'); ?></button>
+				<button type="submit" name="uwp_<?php echo $type; ?>_crop" class="btn btn-primary" id="save_uwp_<?php echo $type; ?>" ><?php _e('Apply', 'userswp'); ?></button>
 			</form>
 		</div>
 	</div>

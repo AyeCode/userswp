@@ -49,7 +49,7 @@ class UWP_User_Avatar_Widget extends WP_Super_Duper {
                     'advanced' => true
                 ),
                 'allow_change'  => array(
-	                'title' => __('Allow to change cover and avatar:', 'userswp'),
+	                'title' => __('Allow to change avatar:', 'userswp'),
 	                'desc' => __('Allow user to change avatar image in profile page.', 'userswp'),
 	                'type' => 'checkbox',
 	                'desc_tip' => true,

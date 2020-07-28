@@ -3,6 +3,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
+
 $files = new UsersWP_Files();
 $type = isset($_POST['type']) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner';
 ?>
@@ -13,9 +14,9 @@ $type = isset($_POST['type']) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner
 				<h4 class="uwp-bs-modal-title">
 					<?php
 					if ($type == 'avatar') {
-						echo __( 'Change your profile photo', 'userswp' );
+						_e( 'Change your profile photo', 'userswp' );
 					} else {
-						echo __( 'Change your cover photo', 'userswp' );
+						_e( 'Change your cover photo', 'userswp' );
 					}
 					?>
 				</h4>
@@ -38,11 +39,11 @@ $type = isset($_POST['type']) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner
 				<div class="uwp-<?php echo $type; ?>-crop-p-wrap">
 					<div id="<?php echo $type; ?>-crop-actions">
 						<form class="uwp-crop-form" method="post">
-							<input type="submit" name="uwp_<?php echo $type; ?>_crop" disabled="disabled" value="<?php echo __('Apply', 'userswp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
+							<input type="submit" name="uwp_<?php echo $type; ?>_crop" disabled="disabled" value="<?php _e('Apply', 'userswp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
 						</form>
 					</div>
 				</div>
-				<button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal"><?php echo __( 'Cancel', 'userswp' ); ?></button>
+				<button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal"><?php _e( 'Cancel', 'userswp' ); ?></button>
 			</div>
 		</div>
 	</div>

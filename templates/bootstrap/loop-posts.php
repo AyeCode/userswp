@@ -29,14 +29,11 @@ $title = isset( $args['template_args']['title'] ) ? $args['template_args']['titl
 	// The Loop
 	if ( $the_query && $the_query->have_posts() ) {
 
-		$design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
-		$template     = $design_style ? $design_style . "/posts-post.php" : "posts-post.php";
-
 		echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">';
 		while ( $the_query->have_posts() ) {
 			$the_query->the_post();
 
-			uwp_get_template( $template, $args );
+			uwp_get_template( 'bootstrap/posts-post.php', $args );
 
 		}
 		echo '</div>';

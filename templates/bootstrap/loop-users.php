@@ -17,18 +17,16 @@ $total_users = isset( $args['template_args']['total_users'] ) ? $args['template_
     // The Loop
     if ( $users ) {
 
-        $design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
-        $template     = $design_style ? $design_style . "/users-item.php" : "users-item.php";
-
         echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">';
 
         global $uwp_user;
         $original_user = $uwp_user;
         foreach ($users as $uwp_user){
 
-	        uwp_get_template( $template, $args );
+	        uwp_get_template( 'bootstrap/users-item.php', $args );
 
         }
+
         $uwp_user = $original_user;
         echo '</div>';
 
@@ -43,5 +41,5 @@ $total_users = isset( $args['template_args']['total_users'] ) ? $args['template_
 </div><!-- .uwp-users-loop -->
 
 <?php
-$uwp_in_user_loop = true;
+$uwp_in_user_loop = false;
 ?>

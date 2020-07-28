@@ -62,7 +62,6 @@ class UWP_User_Cover_Widget extends WP_Super_Duper {
 
         );
 
-
 	    parent::__construct( $options );
     }
 

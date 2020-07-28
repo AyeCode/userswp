@@ -47,7 +47,7 @@ if($output === '' || $output=='head'){
 									echo '<i class="'.esc_attr($tab['tab_icon']).'"></i>';
 								}
 								?>
-								<span class="uwp-profile-tab-label uwp-profile-<?php echo $tab_id; ?>-label "><?php echo esc_html(__($tab['tab_name'], 'userswp')); ?></span>
+								<span class="uwp-profile-tab-label uwp-profile-<?php echo $tab_id; ?>-label "><?php esc_html_e($tab['tab_name'], 'userswp'); ?></span>
 							</a>
 						</li>
 						<?php
@@ -64,20 +64,6 @@ if($output === '' || $output=='head'){
 if($output === '' || $output=='body'){
 ?>
 <div id="tab-content" class="uwp-profile-content">
-	<?php
-	if(!empty($tabs_array)) {
-		foreach ($tabs_array as $tab) {
-			$tab_id = $tab['tab_key'];
-			$tab_url = uwp_build_profile_tab_url($user->ID, $tab_id, false);
-
-			$active = $active_tab == $tab_id ? ' active' : '';
-
-			if ($active_tab == $tab_id) {
-				$active_tab_content = $tab['tab_content_rendered'];
-			}
-		}
-	}
-	?>
 	<div class="uwp-profile-entries">
 		<?php
 		if(isset($active_tab_content) && !empty($active_tab_content)){
