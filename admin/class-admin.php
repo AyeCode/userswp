@@ -96,14 +96,20 @@ class UsersWP_Admin {
             wp_enqueue_style( "userswp", USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
             wp_enqueue_style( "uwp_timepicker_css", USERSWP_PLUGIN_URL . 'assets/css/jquery.ui.timepicker.css', array(), USERSWP_VERSION, 'all' );
         }
+
         if ( $hook_suffix == 'userswp_page_uwp_tools' ) {
             wp_enqueue_style( "userswp", USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
         }
-        wp_enqueue_style( "userswp_admin_css", USERSWP_PLUGIN_URL . 'admin/assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
 
-        if ( $hook_suffix == 'toplevel_page_userswp' ) {
-            wp_enqueue_style( 'wp-color-picker' );
-        }
+	    if ( $hook_suffix == 'userswp_page_uwp_form_builder' ) {
+		    wp_enqueue_style( "uwp_form_builder", USERSWP_PLUGIN_URL . 'admin/assets/css/uwp-form-builder.css', array(), USERSWP_VERSION, 'all' );
+	    }
+
+	    if ( $hook_suffix == 'toplevel_page_userswp' ) {
+		    wp_enqueue_style( 'wp-color-picker' );
+	    }
+
+        wp_enqueue_style( "userswp_admin_css", USERSWP_PLUGIN_URL . 'admin/assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
 
     }
 
@@ -223,6 +229,18 @@ class UsersWP_Admin {
 					?>
                     <script type="text/javascript">
                         jQuery( document ).ready(function() {
+                            var uwp_registration_action = jQuery('#uwp_registration_action');
+                            uwp_registration_action.on( 'change', function() {
+                                var value = jQuery( this ).val();
+                                var register_redirect_obj = jQuery('#register_redirect_to');
+
+                                if( 'auto_approve_login' === value || 'force_redirect' === value ) {
+                                    register_redirect_obj.parent().parent().show();
+                                } else{
+                                    register_redirect_obj.parent().parent().hide();
+                                }
+                            } ).change();
+
                             var register_redirect_to = jQuery('#register_redirect_to');
                             register_redirect_to.on( 'change', function() {
                                 var value = jQuery( this ).val();

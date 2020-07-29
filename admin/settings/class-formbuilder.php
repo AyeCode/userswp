@@ -70,7 +70,7 @@ class UsersWP_Form_Builder {
         <div id="uwp_form_builder_container" class="clearfix">
             <div class="uwp-form-builder-frame">
                 <div class="uwp-side-sortables" id="uwp-available-fields">
-                    <h3 class="hndle">
+                    <h3>
                     <span>
                         <?php echo apply_filters('uwp_form_builder_available_fields_head', __('Add new form field', 'userswp'), $form_type); ?>
                     </span>
@@ -123,7 +123,7 @@ class UsersWP_Form_Builder {
 
                 <div class="uwp-side-sortables" id="uwp-selected-fields">
 
-                    <h3 class="hndle">
+                    <h3>
                         <span>
                             <?php
                             $title = __('List of fields those will appear in the account form', 'userswp');
@@ -603,19 +603,19 @@ class UsersWP_Form_Builder {
                 'name'  =>  __('URL', 'userswp'),
                 'description' =>  __('Adds a url input', 'userswp')
             ),
-            'file' => array(
-                'field_type'  =>  'file',
-                'class' =>  'uwp-file',
-                'icon' =>  'fas fa-file',
-                'name'  =>  __('File Upload', 'userswp'),
-                'description' =>  __('Adds a file input', 'userswp')
-            ),
             'editor' => array(
 	            'field_type'  =>  'editor',
 	            'class' =>  'uwp-html',
 	            'icon' =>  'fas fa-code',
 	            'name'  =>  __('HTML', 'userswp'),
 	            'description' =>  __('Adds a wysiwyg editor input', 'userswp')
+            ),
+            'file' => array(
+                'field_type'  =>  'file',
+                'class' =>  'uwp-file',
+                'icon' =>  'fas fa-file',
+                'name'  =>  __('File Upload', 'userswp'),
+                'description' =>  __('Adds a file input', 'userswp')
             )
         );
 
@@ -675,7 +675,6 @@ class UsersWP_Form_Builder {
 
             if (!empty($fields)) {
                 foreach ($fields as $field) {
-                    //$result_str = $field->id;
                     $result_str = $field;
                     $field_type = $field->field_type;
                     $field_type_key = $field->field_type_key;
@@ -1013,7 +1012,7 @@ class UsersWP_Form_Builder {
                                     } else if ($field_type == 'email') {
                                         $tip = __('A default value for the field, usually blank. Ex: info@mysite.com', 'userswp');
                                     } else {
-                                        $tip = __('A default value for the field, usually blank. (for "link" this will be used as the link text)', 'userswp');
+                                        $tip = __('A default value for the field, usually blank. (for links this will be used as the link text)', 'userswp');
                                     }
                                     ?>
                                     <span class="uwp-help-tip dashicons dashicons-editor-help" title="<?php echo $tip; ?>"></span>
@@ -1034,7 +1033,6 @@ class UsersWP_Form_Builder {
                             </li>
                             <?php
                         }
-
 
                         // advanced_editor
                         if (has_filter("uwp_builder_advanced_editor_{$field_type}")) {
@@ -1101,7 +1099,6 @@ class UsersWP_Form_Builder {
                             <?php
                         }
 
-
                         // required_msg
                         if (has_filter("uwp_builder_validation_pattern_{$field_type}")) {
 
@@ -1109,14 +1106,12 @@ class UsersWP_Form_Builder {
 
                         }
 
-
                         // extra_fields
                         if (has_filter("uwp_builder_extra_fields_{$field_type}")) {
 
                             echo apply_filters("uwp_builder_extra_fields_{$field_type}", '', $result_str, $cf, $field_info);
 
                         }
-
 
                         // field_icon
                         if (has_filter("uwp_builder_field_icon_{$field_type}")) {

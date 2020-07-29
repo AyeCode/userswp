@@ -1164,7 +1164,7 @@ class UsersWP_Profile {
         ob_start();
 
 	    $design_style = uwp_get_option("design_style",'bootstrap');
-	    $template = $design_style ? $design_style."/modal-profile-image-crop.php" : "modal-profile-image-crop.php";
+	    $template = "bootstrap/modal-profile-image-crop.php";
 
 	    uwp_get_template($template, $args);
         ?>
@@ -1207,7 +1207,7 @@ class UsersWP_Profile {
 	    $max_file_size = $files->uwp_get_max_upload_size($type);
 
 	    $design_style = uwp_get_option("design_style",'bootstrap');
-	    $template = $design_style ? $design_style."/modal-profile-image.php" : "modal-profile-image.php";
+	    $template = "bootstrap/modal-profile-image.php";
 	    uwp_get_template($template);
 
 	    $content_wrap = $design_style == 'bootstrap' ? '.uwp-profile-image-change-modal .modal-content' : '#uwp-popup-modal-wrap';
@@ -1223,11 +1223,10 @@ class UsersWP_Profile {
                     $('.uwp-modal-close').click(function(e) {
                         e.preventDefault();
                         var uwp_popup_type = $( this ).data( 'type' );
-                        // $('#uwp-'+uwp_popup_type+'-modal').hide();
                         var mod_shadow = jQuery('#uwp-modal-backdrop');
                         var container = jQuery('#uwp-popup-modal-wrap');
                         container.hide();
-                        container.replaceWith('<?php echo $this->modal_loading_html(); ?>');
+                        container.replaceWith('<?php $this->modal_loading_html(); ?>');
                         mod_shadow.remove();
                     });
 
