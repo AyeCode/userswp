@@ -16,9 +16,14 @@ do_action( 'uwp_template_before', 'register' ); ?>
 				?>
 				<div class="modal-header">
 					<h5 class="modal-title"><?php echo esc_attr($form_title);?></h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="<?php _e("Close","userswp");?>">
-						<span aria-hidden="true">&times;</span>
-					</button>
+					<?php
+					echo aui()->button(array(
+						'type'       =>  'button',
+						'class'      => 'close',
+						'content'    => '<span aria-hidden="true">&times;</span>',
+						'extra_attributes'  => array('aria-label'=>__("Close","userswp"), 'data-dismiss'=>"modal")
+					));
+					?>
 				</div>
 				<?php
 			}
@@ -36,16 +41,28 @@ do_action( 'uwp_template_before', 'register' ); ?>
                 do_action( 'uwp_template_display_notices', 'register' ); ?>
 
 				<form class="uwp-registration-form uwp_form" method="post" enctype="multipart/form-data">
-					<?php do_action( 'uwp_template_fields', 'register' ); ?>
-
-					<button name="uwp_register_submit" class="btn btn-primary btn-block text-uppercase uwp_register_submit"
-					        type="submit"><?php echo __( 'Create Account', 'userswp' ); ?></button>
+					<?php
+                    do_action( 'uwp_template_fields', 'register' );
+					echo aui()->button(array(
+						'type'       => 'submit',
+						'class'      => 'btn btn-primary btn-block text-uppercase uwp_register_submit',
+						'content'    => __( 'Create Account', 'userswp' ),
+						'name'       => 'uwp_register_submit',
+					));
+					?>
 				</form>
 
 				<div class="uwp-footer-links">
-					<div class="uwp-footer-link"><a rel="nofollow"
-					                                href="<?php echo uwp_get_login_page_url(); ?>"
-					                                class="d-block text-center mt-2 small uwp-login-link"><?php _e( 'Login', 'userswp' ); ?></a>
+					<div class="uwp-footer-link">
+						<?php
+						echo aui()->button(array(
+							'type'  =>  'a',
+							'href'       => uwp_get_login_page_url(),
+							'class'      => 'd-block text-center mt-2 small uwp-login-link',
+							'content'    => __( 'Login', 'userswp' ),
+							'extra_attributes'  => array('rel'=>'nofollow')
+						));
+						?>
 					</div>
 				</div>
 

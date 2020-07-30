@@ -1174,7 +1174,6 @@ class UsersWP_Profile {
                     $('.uwp-modal-close').click(function(e) {
                         e.preventDefault();
                         var uwp_popup_type = $( this ).data( 'type' );
-                        // $('#uwp-'+uwp_popup_type+'-modal').hide();
                         var mod_shadow = jQuery('#uwp-modal-backdrop');
                         var container = jQuery('#uwp-popup-modal-wrap');
                         container.hide();
@@ -1312,7 +1311,6 @@ class UsersWP_Profile {
                     function showProgress(evt) {
                         if (evt.lengthComputable) {
                             var percentComplete = (evt.loaded / evt.total) * 100;
-//                            $('#progressbar').progressbar("option", "value", percentComplete );
                             progress(percentComplete, $('#progressBar'));
                         }
                     }

@@ -30,13 +30,29 @@ do_action( 'uwp_template_before', 'change' ); ?>
 					</form>
 
 					<div class="uwp-footer-links">
-						<div class="uwp-footer-link float-left"><a rel="nofollow"
-						                                           href="<?php echo uwp_get_account_page_url(); ?>"
-						                                           class="d-block text-center mt-2 small"><?php _e( 'Account', 'userswp' ); ?></a>
+						<div class="uwp-footer-link float-left">
+                            <?php
+                            echo aui()->button(array(
+	                            'type'  =>  'a',
+	                            'href'       => uwp_get_account_page_url(),
+	                            'class'      => 'd-block text-center mt-2 small',
+	                            'title'      => __( 'Account', 'userswp' ),
+	                            'content'    => __( 'Account', 'userswp' ),
+	                            'extra_attributes'  => array('rel'=>'nofollow')
+                            ));
+                            ?>
 						</div>
-						<div class="uwp-footer-link float-right"><a rel="nofollow"
-						                                            href="<?php echo uwp_get_profile_page_url(); ?>"
-						                                            class="d-block text-center mt-2 small"><?php _e( 'Profile', 'userswp' ); ?></a>
+						<div class="uwp-footer-link float-right">
+							<?php
+							echo aui()->button(array(
+								'type'  =>  'a',
+								'href'       => uwp_get_profile_page_url(),
+								'class'      => 'd-block text-center mt-2 small',
+								'title'      => __( 'Profile', 'userswp' ),
+								'content'    => __( 'Profile', 'userswp' ),
+								'extra_attributes'  => array('rel'=>'nofollow')
+							));
+							?>
 						</div>
 					</div>
 

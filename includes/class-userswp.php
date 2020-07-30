@@ -75,7 +75,6 @@ final class UsersWP {
         // actions and filters
         $this->load_assets_actions_and_filters($this->assets);
         $this->load_meta_actions_and_filters($this->meta);
-        $this->load_ajax_actions_and_filters($this->ajax);
         $this->load_files_actions_and_filters($this->files);
         $this->load_forms_actions_and_filters($this->forms);
         $this->load_notices_actions_and_filters($this->notices);
@@ -85,12 +84,10 @@ final class UsersWP {
         $this->load_templates_actions_and_filters($this->templates);
         $this->load_tools_actions_and_filters($this->tools);
         $this->load_notifications_actions_and_filters($this->notifications);
-	    $this->load_seo_actions_and_filters($this->seo);
 
         //admin
         $this->load_form_builder_actions_and_filters($this->form_builder);
         $this->load_menus_actions_and_filters($this->menus);
-        $this->load_admin_actions_and_filters($this->admin);
         
     }
 
@@ -131,21 +128,7 @@ final class UsersWP {
         add_filter('uwp_before_extra_fields_save', array($instance, 'save_user_ip_on_register'), 10, 3);
         add_filter('uwp_update_usermeta', array($instance, 'modify_datepicker_value_on_update'), 10, 3);
         add_filter('uwp_get_usermeta', array($instance, 'modify_datepicker_value_on_get'), 10, 4);
-        add_filter('user_row_actions', array($instance, 'user_row_actions'), 10, 2);
-        add_action('bulk_actions-users', array($instance, 'users_bulk_actions'));
-        add_action('handle_bulk_actions-users', array($instance, 'handle_users_bulk_actions'), 10, 3);
-        add_filter('init', array($instance, 'process_user_actions'));
-        add_action('admin_notices', array($instance, 'show_update_messages'));
         add_action('get_user_metadata', array($instance, 'dynamically_add_user_meta'), 10, 4);
-    }
-
-	/**
-	 * Actions for AJAX
-	 *
-	 * @param $instance
-	 */
-    public function load_ajax_actions_and_filters($instance) {
-
     }
 
     public function load_files_actions_and_filters($instance) {
@@ -320,9 +303,6 @@ final class UsersWP {
         add_action( 'template_redirect', array($instance, 'profile_redirect'), 10);
         add_action( 'template_redirect', array($instance, 'access_checks'), 20);
 	    add_action( 'wp', array($instance, 'redirect_templates_sub_pages'));
-        // Admin user edit page
-        add_action( 'edit_user_profile', array($instance, 'get_profile_extra_admin_edit'), 10, 1 );
-        add_action( 'show_user_profile', array($instance, 'get_profile_extra_admin_edit'), 10, 1 );
 	    add_action('wp_login', array($instance, 'unconfirmed_login_redirect'), 10, 2);
 
         add_filter( 'wp_setup_nav_menu_item', array($instance, 'setup_nav_menu_item'), 10, 1 );
@@ -358,17 +338,6 @@ final class UsersWP {
         add_action('uwp_account_form_display', array($instance, 'user_notifications_form_front'), 10, 1);
         add_action('init', array($instance, 'notification_submit_handler'));
     }
-
-	/**
-	 * Actions for SEO.
-	 *
-	 * @param $instance
-	 */
-	public function load_seo_actions_and_filters($instance) {
-		add_action('init', array($instance,'init'));
-		add_action('pre_get_document_title', array($instance,'output_title'));
-		add_action('uwp_profile_options', array($instance,'profile_options'));
-	}
 
 	/**
 	 * Actions for form builder
@@ -423,23 +392,6 @@ final class UsersWP {
     public function load_menus_actions_and_filters($instance) {
         add_action( 'load-nav-menus.php', array($instance, 'users_wp_admin_menu_metabox') );
         add_action( 'admin_bar_menu', array($instance, 'admin_bar_menu'), 51 );
-    }
-
-	/**
-	 * Actions for admin
-	 *
-	 * @param $instance
-	 */
-    public function load_admin_actions_and_filters($instance) {
-	    add_action( 'admin_init', array($instance, 'activation_redirect'));
-        add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_styles') );
-        add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_scripts') );
-        add_action('admin_head', array($instance, 'admin_only_css'));
-	    add_action('admin_footer', array($instance, 'admin_only_script'));
-	    add_action('user_profile_picture_description', array($instance, 'user_profile_picture_description'));
-	    add_action('show_user_profile', array($instance, 'edit_profile_banner_fields'));
-	    add_action('edit_user_profile', array($instance, 'edit_profile_banner_fields'));
-	    add_action('admin_body_class', array($instance, 'admin_body_class'));
     }
 
 	/**
@@ -507,12 +459,6 @@ final class UsersWP {
          * of the plugin.
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-activator.php';
-
-        /**
-         * The class responsible for deactivation functionality
-         * of the plugin.
-         */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-deactivator.php';
 
         /**
          * The libraries required.

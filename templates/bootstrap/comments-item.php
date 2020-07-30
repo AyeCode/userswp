@@ -36,7 +36,15 @@ if(!empty($user->display_name)) { $user_name = $user->display_name;}
 	<div class="card-footer bg-white">
 		<?php
 		$footer_html = '<time class="uwp-profile-item-time published timeago" datetime="'.get_comment_time( 'c' ).'">'.date_i18n( get_option( 'date_format' ), strtotime( get_comment_date("", $comment->comment_ID) ) ).'</time>';
-		$footer_html .= '<a href="'.get_comment_link($comment->comment_ID).'" class="btn btn-sm btn-outline-primary float-right"><i class="fas fa-comments"></i> '.esc_attr__("View Comment","userswp").'</a>';
+		$footer_html .= aui()->button(array(
+                            'type'  =>  'a',
+                            'href'       => get_comment_link($comment->comment_ID),
+                            'class'      => 'btn btn-sm btn-outline-primary float-right',
+                            'icon'       => 'fas fa-comments',
+                            'title'      => __( 'View Comment', 'userswp' ),
+                            'content'    => __( 'View Comment', 'userswp' ),
+                        ));
+
 		echo apply_filters('uwp_tp_comments_item_footer', $footer_html,$comment);
 		?>
 	</div>

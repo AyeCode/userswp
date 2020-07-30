@@ -31,7 +31,15 @@ $dashboard_links = !empty($args['template_args']['dashboard_links']) ? $args['te
         </div>
 
         <div class="uwp-logout-link pt-3">
-            <a href="<?php echo wp_logout_url();?>" class="btn btn-sm btn-outline-primary"><?php _e("Logout","userswp");?></a>
+	        <?php
+	        echo aui()->button(array(
+		        'type'  =>  'a',
+		        'href'       => wp_logout_url(),
+		        'class'      => 'btn btn-sm btn-outline-primary',
+		        'content'    => __( 'Logout', 'userswp' ),
+		        'extra_attributes'  => array('rel'=>'nofollow')
+	        ));
+	        ?>
         </div>
 
     </div>

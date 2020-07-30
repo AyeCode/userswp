@@ -13,7 +13,6 @@ $total_users = isset( $args['template_args']['total_users'] ) ? $args['template_
 <div class="uwp-users-loop">
     <?php
 
-
     // The Loop
     if ( $users ) {
 

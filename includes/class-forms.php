@@ -262,7 +262,7 @@ class UsersWP_Forms {
 		if (!get_option('users_can_register')) {
 			$message = aui()->alert(array(
 					'type'=>'error',
-					'content'=> __('<strong>ERROR</strong>: User registration is currently not allowed. Please check settings of your site.', 'userswp')
+					'content'=> __('User registration is currently not allowed. Please check settings of your site.', 'userswp')
 				)
 			);
 			if(wp_doing_ajax()){wp_send_json_error($message);}
@@ -275,7 +275,7 @@ class UsersWP_Forms {
 			if (!isset($data['agree_terms']) || $data['agree_terms'] != 'yes') {
 				$message = aui()->alert(array(
 						'type'=>'error',
-						'content'=> __('<strong>ERROR</strong>: You must accept our terms and conditions.', 'userswp')
+						'content'=> __('You must accept our terms and conditions.', 'userswp')
 					)
 				);
 				if(wp_doing_ajax()){wp_send_json_error($message);}
@@ -289,7 +289,7 @@ class UsersWP_Forms {
 			if (!isset($data['uwp_accept_gdpr']) || $data['uwp_accept_gdpr'] != 'yes') {
 				$message = aui()->alert(array(
 						'type'=>'error',
-						'content'=> __('<strong>ERROR</strong>: You must read and accept our GDPR policy.', 'userswp')
+						'content'=> __('You must read and accept our GDPR policy.', 'userswp')
 					)
 				);
 				if(wp_doing_ajax()){wp_send_json_error($message);}
@@ -435,7 +435,7 @@ class UsersWP_Forms {
 		if (!$save_result) {
 			$message = aui()->alert(array(
 					'type'=>'error',
-					'content'=> __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp')
+					'content'=> __('Something went wrong. Please contact site admin.', 'userswp')
 				)
 			);
 			if(wp_doing_ajax()){wp_send_json_error($message);}
@@ -802,7 +802,7 @@ class UsersWP_Forms {
 		if ($mod_value == 'email_unconfirmed') {
 			$message = aui()->alert(array(
 					'type'=>'error',
-					'content'=> __('<strong>Error</strong>: Your account is not activated yet. Please activate your account first.', 'userswp')
+					'content'=> __('Your account is not activated yet. Please activate your account first.', 'userswp')
 				)
 			);
 			if(wp_doing_ajax()){wp_send_json_error($message);}
@@ -1124,7 +1124,7 @@ class UsersWP_Forms {
 		if (is_wp_error($user_id)) {
 			$message = aui()->alert(array(
 					'type'=>'error',
-					'content'=> sprintf(__('<strong>Error</strong>: %s', 'userswp'), $user_id->get_error_message())
+					'content'=> sprintf(__('%s', 'userswp'), $user_id->get_error_message())
 				)
 			);
 			$uwp_notices[] = array('account' => $message);
@@ -1136,7 +1136,7 @@ class UsersWP_Forms {
 		if (!$res) {
 			$message = aui()->alert(array(
 					'type'=>'error',
-					'content'=> __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp')
+					'content'=> __('Something went wrong. Please contact site admin.', 'userswp')
 				)
 			);
 			$uwp_notices[] = array('account' => $message);
@@ -1248,7 +1248,7 @@ class UsersWP_Forms {
 
 		$errors = new WP_Error();
 		if (empty($user_id)) {
-			$errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong. Please try again.', 'userswp'));
+			$errors->add('something_wrong', __('Something went wrong. Please try again.', 'userswp'));
 		}
 
 		$error_code = $errors->get_error_code();
@@ -1310,7 +1310,7 @@ class UsersWP_Forms {
 
 		$errors = new WP_Error();
 		if (empty($image_url)) {
-			$errors->add('something_wrong', __('<strong>Error</strong>: Something went wrong. Please contact site admin.', 'userswp'));
+			$errors->add('something_wrong', __('Something went wrong. Please contact site admin.', 'userswp'));
 		}
 
 		$error_code = $errors->get_error_code();

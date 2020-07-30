@@ -1,27 +1,5 @@
 <?php
 /**
- * Gets the UsersWP account page permalink.
- *
- * @since       1.0.0
- * @package     userswp
- * @return      string      Page permalink.
- */
-function get_uwp_account_permalink() {
-	return uwp_get_page_link('account_page');
-}
-
-/**
- * Gets the UsersWP users page permalink.
- *
- * @since       1.0.0
- * @package     userswp
- * @return      string      Page permalink.
- */
-function get_uwp_users_permalink() {
-	return uwp_get_page_link('users_page');
-}
-
-/**
  * Gets the UsersWP page permalink based on page type.
  *
  * @since       1.0.0
@@ -258,7 +236,6 @@ function uwp_get_page_url_page_data($page_data, $page_type) {
     }
     return apply_filters('uwp_page_url_data', $page_data);
 }
-
 
 add_action('init', 'uwp_process_activation_link');
 

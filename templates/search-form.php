@@ -5,7 +5,7 @@
 		$keyword = esc_attr( apply_filters( 'get_search_query', $_GET['uwps']) );
 	}
 	?>
-    <form method="get" class="uwp-user-search-form form-inline" action="<?php echo get_uwp_users_permalink(); ?>">
+    <form method="get" class="uwp-user-search-form form-inline" action="<?php echo uwp_get_users_page_url(); ?>">
         <div class="form-group mb-2 mr-md-2">
             <label for="uwp-search-input" class="sr-only"><?php _e('Search for users...', 'userswp'); ?></label>
             <input type="search" name="uwps" class="form-control form-control-sm " id="uwp-search-input" value="<?php echo $keyword; ?>" placeholder="<?php _e('Search for users...', 'userswp'); ?>">
