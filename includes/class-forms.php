@@ -2947,6 +2947,140 @@ class UsersWP_Forms {
 		return $html;
 	}
 
+	public function form_input_register_gdpr( $html, $field, $value, $form_type ) {
+
+		$reg_gdpr = uwp_get_option('register_gdpr_page', false);
+
+		if(!empty($reg_gdpr)) {
+
+			$design_style = uwp_get_option("design_style","bootstrap");
+			$bs_form_group = $design_style ? "form-group form-check" : "";
+			$bs_sr_only = $design_style ? "form-check-label" : "";
+			$bs_form_control = $design_style ? "form-check-input" : "";
+
+			ob_start(); // Start  buffering;
+
+			$site_title = uwp_get_form_label($field);
+
+			$design_style = uwp_get_option("design_style","bootstrap");
+			$id = wp_doing_ajax() ? $field->htmlvar_name."_ajax" : $field->htmlvar_name;
+
+			$gdpr_page = get_permalink($reg_gdpr);
+			$content = sprintf( __( 'By using this form I agree to the storage and handling of my data by this website. View our %s %s %s.', 'userswp' ), '<a href="'.$gdpr_page.'" target="_blank">', $site_title,'</a>');
+
+			// bootstrap
+			if( $design_style ) { ?>
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $id; ?>_hidden" value="1">
+                        <input type="checkbox" name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $id; ?>" placeholder="<?php echo $field->htmlvar_name; ?>" title="<?php echo $site_title; ?>" value="1" class="form-control custom-control-input"
+                               onchange="if(this.checked){jQuery('#<?php echo $id; ?>_hidden').val('1');} else{ jQuery('#<?php echo $id; ?>_hidden').val('0');}" <?php echo checked($value, 1)?> <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>>
+                        <label for="<?php echo $id; ?>" class="custom-control-label"><?php echo $content; ?></label>
+                    </div>
+                </div>
+				<?php
+			}else{
+				?>
+                <div id="<?php echo $field->htmlvar_name;?>_row"
+                     class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
+                    <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value="0" />
+                    <input name="<?php echo $field->htmlvar_name; ?>"
+                           class="<?php echo $field->css_class; ?> <?php echo esc_attr($bs_form_control);?>"
+                           placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
+                           title="<?php echo $site_title; ?>"
+						<?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+						<?php if ($value == '1') { echo 'checked="checked"'; } ?>
+                           type="<?php echo $field->field_type; ?>"
+                           value="1">
+					<?php
+					echo (trim($content)) ? $content : '&nbsp;';
+					?>
+                    <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
+					<?php if ($field->is_required) { ?>
+                        <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
+					<?php } ?>
+                </div>
+
+				<?php
+
+			}
+
+			$html = ob_get_clean();
+
+		} else{
+			$html = '<input type="hidden" name="register_gdpr" value="0"/>';
+		}
+
+		return $html;
+	}
+
+	public function form_input_register_tos( $html, $field, $value, $form_type ) {
+
+		$reg_tos = uwp_get_option('register_terms_page', false);
+
+		if(!empty($reg_tos)) {
+
+			$design_style = uwp_get_option("design_style","bootstrap");
+			$bs_form_group = $design_style ? "form-group form-check" : "";
+			$bs_sr_only = $design_style ? "form-check-label" : "";
+			$bs_form_control = $design_style ? "form-check-input" : "";
+
+			ob_start(); // Start  buffering;
+
+			$site_title = uwp_get_form_label($field);
+
+			$design_style = uwp_get_option("design_style","bootstrap");
+			$id = wp_doing_ajax() ? $field->htmlvar_name."_ajax" : $field->htmlvar_name;
+
+			$terms_page = get_permalink($reg_tos);
+			$content = sprintf( __( 'I accept %s %s %s.', 'userswp' ), '<a href="'.$terms_page.'" target="_blank">',$site_title, '</a>');
+
+			// bootstrap
+			if( $design_style ) { ?>
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $id; ?>_hidden" value="1">
+                        <input type="checkbox" name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $id; ?>" placeholder="<?php echo $field->htmlvar_name; ?>" title="<?php echo $site_title; ?>" value="1" class="form-control custom-control-input"
+                               onchange="if(this.checked){jQuery('#<?php echo $id; ?>_hidden').val('1');} else{ jQuery('#<?php echo $id; ?>_hidden').val('0');}" <?php echo checked($value, 1)?> <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>>
+                        <label for="<?php echo $id; ?>" class="custom-control-label"><?php echo $content; ?></label>
+                    </div>
+                </div>
+				<?php
+			}else{
+				?>
+                <div id="<?php echo $field->htmlvar_name;?>_row"
+                     class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
+                    <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value="0" />
+                    <input name="<?php echo $field->htmlvar_name; ?>"
+                           class="<?php echo $field->css_class; ?> <?php echo esc_attr($bs_form_control);?>"
+                           placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
+                           title="<?php echo $site_title; ?>"
+						<?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
+						<?php if ($value == '1') { echo 'checked="checked"'; } ?>
+                           type="<?php echo $field->field_type; ?>"
+                           value="1">
+					<?php
+					echo (trim($content)) ? $content : '&nbsp;';
+					?>
+                    <span class="uwp_message_note"><?php _e($field->help_text, 'userswp');?></span>
+					<?php if ($field->is_required) { ?>
+                        <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
+					<?php } ?>
+                </div>
+
+				<?php
+
+			}
+
+			$html = ob_get_clean();
+
+		} else{
+			$html = '<input type="hidden" name="register_terms" value="0"/>';
+		}
+
+		return $html;
+	}
+
 	/**
 	 * Adds enctype tag in form for file fields.
 	 *

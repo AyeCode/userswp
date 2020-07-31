@@ -20,16 +20,25 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 <div class="modal-body text-center">
 	<div id="uwp-bs-modal-notice"></div>
 	<form id="uwp-upload-<?php echo $type; ?>-form" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>"/>
-		<input type="hidden" name="uwp_<?php echo $type; ?>_submit" value=""/>
 		<?php
+		echo aui()->input(array(
+			'type'    =>  'hidden',
+			'name'    =>  'uwp_upload_nonce',
+			'no_wrap' =>  true,
+			'value'   =>  wp_create_nonce( 'uwp-upload-nonce' ),
+		));
+		echo aui()->input(array(
+			'type'    =>  'hidden',
+			'name'    =>  'uwp_'.$type.'_submit',
+			'no_wrap' =>  true,
+			'value'   =>  '',
+		));
 		echo aui()->button(array(
 			'type'       =>  'button',
 			'class'      => 'btn btn-primary uwp_upload_button',
 			'content'    => '<i class="fas fa-upload"></i>'.sprintf(__( 'Upload %s', 'userswp' ), $type),
 			'onclick'    => "document.getElementById('uwp_upload_".$type."').click();",
 		));
-
 		echo aui()->alert( array(
 				'class'   => 'text-center text-center m-3 p-0 w-50 mx-auto',
 				'type'    => 'info',

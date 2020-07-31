@@ -190,6 +190,8 @@ final class UsersWP {
         add_filter('uwp_form_input_html_url', array($instance, 'form_input_url'), 10, 4);
         add_filter('uwp_form_input_html_email', array($instance, 'form_input_email'), 10, 4);
         add_filter('uwp_form_input_html_password', array($instance, 'form_input_password'), 10, 4);
+	    add_filter('uwp_form_input_html_checkbox_register_gdpr', array($instance, 'form_input_register_gdpr'), 10, 4);
+	    add_filter('uwp_form_input_html_checkbox_register_tos', array($instance, 'form_input_register_tos'), 10, 4);
         // Country select
         add_filter('uwp_form_input_html_select_uwp_country', array($instance, 'form_input_select_country'), 10, 4);
 	    add_filter('uwp_form_input_html_phone', array($instance, 'form_input_phone'), 10, 4);
@@ -293,8 +295,6 @@ final class UsersWP {
         add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
         add_action( 'uwp_template_fields', array($instance, 'template_fields'), 10, 1 );
         add_action( 'uwp_template_fields', array($instance, 'template_extra_fields'), 10, 1 );
-        add_action( 'uwp_template_fields', array($instance, 'add_template_fields_terms_check'), 100, 1 );
-        //add_action( 'uwp_account_form_display', array($instance, 'account_edit_form_display'), 10, 1 );
         add_action( 'uwp_account_form_display', array($instance, 'privacy_edit_form_display'), 10, 1 );
         add_action( 'wp_logout', array($instance, 'logout_redirect'));
         add_action( 'init', array($instance, 'wp_login_redirect'));

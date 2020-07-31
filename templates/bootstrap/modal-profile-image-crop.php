@@ -30,13 +30,55 @@ $image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
 	<div class="uwp-<?php echo $type; ?>-crop-p-wrap">
 		<div id="<?php echo $type; ?>-crop-actions">
 			<form class="uwp-crop-form" method="post">
-				<input type="hidden" name="x" value="" id="<?php echo $type; ?>-x" />
-				<input type="hidden" name="y" value="" id="<?php echo $type; ?>-y" />
-				<input type="hidden" name="w" value="" id="<?php echo $type; ?>-w" />
-				<input type="hidden" name="h" value="" id="<?php echo $type; ?>-h" />
-				<input type="hidden" id="uwp-<?php echo $type; ?>-crop-image" name="uwp_crop" value="<?php echo $image_url; ?>" />
-				<input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp-crop-nonce' ); ?>" />
-				<button type="submit" name="uwp_<?php echo $type; ?>_crop" class="btn btn-primary" id="save_uwp_<?php echo $type; ?>" ><?php _e('Apply', 'userswp'); ?></button>
+				<?php
+                echo aui()->input(array(
+	                'type'  =>  'hidden',
+	                'id'    =>  $type.'-x',
+	                'name'  =>  'x',
+	                'value' =>  '',
+	                'no_wrap' => true,
+                ));
+                echo aui()->input(array(
+	                'type'  =>  'hidden',
+	                'id'    =>  $type.'-y',
+	                'name'  =>  'y',
+	                'value' =>  '',
+	                'no_wrap' => true,
+                ));
+                echo aui()->input(array(
+	                'type'  =>  'hidden',
+	                'id'    =>  $type.'-w',
+	                'name'  =>  'w',
+	                'value' =>  '',
+	                'no_wrap' => true,
+                ));
+                echo aui()->input(array(
+	                'type'  =>  'hidden',
+	                'id'    =>  $type.'-h',
+	                'name'  =>  'h',
+	                'value' =>  '',
+	                'no_wrap' => true,
+                ));
+                echo aui()->input(array(
+	                'type'  =>  'hidden',
+	                'id'    =>  $type.'-h',
+	                'name'  =>  'uwp-'.$type.'-crop-image',
+	                'value' =>  $image_url,
+	                'no_wrap' => true,
+                ));
+                echo aui()->input(array(
+	                'type'  =>  'hidden',
+	                'name'  =>  'uwp_crop_nonce',
+	                'value' =>  wp_create_nonce( 'uwp-crop-nonce' ),
+	                'no_wrap' => true,
+                ));
+                echo aui()->button(array(
+	                'type'       =>  'submit',
+	                'id'         =>  'save_uwp_'.$type,
+	                'content'    => __( 'Apply', 'userswp' ),
+	                'name'       => 'uwp_'.$type.'_crop',
+                ));
+                ?>
 			</form>
 		</div>
 	</div>

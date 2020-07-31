@@ -324,6 +324,46 @@ class UsersWP_Form_Builder {
             )
         );
 
+	    $custom_fields['register_gdpr'] = array(
+		    'field_type'  =>  'checkbox',
+		    'class'       =>  'uwp-register-gdpr',
+		    'icon'        =>  'fas fa-file',
+		    'name'        =>  __('GDPR Policy Page', 'userswp'),
+		    'description' =>  __('Adds Register GDPR page.', 'userswp'),
+		    'defaults'    => array(
+			    'admin_title'         =>  'GDPR Policy',
+			    'site_title'          =>  'GDPR Policy',
+			    'form_label'          => __( 'GDPR Policy', 'userswp' ),
+			    'htmlvar_name'        =>  'register_gdpr',
+			    'is_active'           =>  1,
+			    'default_value'       =>  '',
+			    'is_required'         =>  0,
+			    'required_msg'        =>  '',
+			    'field_icon'          =>  'fas fa-file',
+			    'css_class'           =>  'btn-register-gdpr'
+		    )
+	    );
+
+	    $custom_fields['register_tos'] = array(
+		    'field_type'  =>  'checkbox',
+		    'class'       =>  'uwp-register-tos',
+		    'icon'        =>  'fas fa-file',
+		    'name'        =>  __('Terms & Conditions', 'userswp'),
+		    'description' =>  __('Adds Register TOS page.', 'userswp'),
+		    'defaults'    => array(
+			    'admin_title'         =>  'Terms & Conditions',
+			    'site_title'          =>  'Terms & Conditions',
+			    'form_label'          => __( 'Terms & Conditions', 'userswp' ),
+			    'htmlvar_name'        =>  'register_tos',
+			    'is_active'           =>  1,
+			    'default_value'       =>  '',
+			    'is_required'         =>  0,
+			    'required_msg'        =>  '',
+			    'field_icon'          =>  'fas fa-file',
+			    'css_class'           =>  'btn-register-tos'
+		    )
+	    );
+
         // Website
 	    $custom_fields['website'] = array( // The key value should be unique and not contain any spaces.
 		    'field_type'  =>  'url',

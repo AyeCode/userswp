@@ -37,17 +37,21 @@ if( ! $hide_cover ) {
 
 	<?php if ( ! $uwp_in_user_loop && is_user_logged_in() && $allow_change && ( get_current_user_id() == $user->ID ) ) { ?>
 		<div class="card-img-overlay p-1 bg-shadow-bottom-dd">
-			<a onclick="uwp_profile_image_change('banner');return false;" href="#"
-			   class="btn btn-sm uwp-banner-change-icon btn-outline-secondary uwp-profile-modal-form-trigger border-0"
-			   data-toggle="tooltip" data-placement="right" title=""
-			   data-original-title="<?php _e( 'Update Cover Image', 'userswp' ); ?>">
-				<i class="fas fa-camera fa-fw"></i>
-			</a>
+			<?php
+			echo aui()->button(array(
+				'type'  =>  'a',
+				'href'       => '#',
+				'class'      => 'btn btn-sm uwp-banner-change-icon btn-outline-secondary border-0',
+				'icon'       => 'fas fa-camera fa-fw',
+				'title'      => '',
+				'onclick'    => "uwp_profile_image_change('banner');return false;",
+				'extra_attributes'  => array('data-toggle'=>'tooltip', 'data-original-title'=>__( 'Update Profile Image', 'userswp' ))
+			));
+			?>
 		</div>
 	<?php }
 
 }?>
-
 
 <div class="card-body  <?php if(!$uwp_in_user_loop){ ?>mt-xl-0 pt-0<?php }else{?>text-center pb-0<?php }?>">
 
@@ -62,12 +66,17 @@ if( ! $hide_cover ) {
 
 			<?php if (!$uwp_in_user_loop && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && $allow_change ) { ?>
 				<div class="card-img-overlay d-flex p-0">
-					<a onclick="uwp_profile_image_change('avatar');return false;" href="#"
-					   class="btn btn-sm uwp-banner-change-icon btn-outline-secondary btn-circle border-0 align-self-end mx-auto "
-					   data-toggle="tooltip" title=""
-					   data-original-title="<?php _e( 'Update Profile Image', 'userswp' ); ?>">
-						<i class="fas fa-camera fa-fw"></i>
-					</a>
+					<?php
+					echo aui()->button(array(
+						'type'  =>  'a',
+						'href'       => '#',
+						'class'      => 'btn btn-sm uwp-banner-change-icon btn-outline-secondary btn-circle border-0 align-self-end mx-auto',
+						'icon'       => 'fas fa-camera fa-fw',
+						'title'      => '',
+						'onclick'    => "uwp_profile_image_change('avatar');return false;",
+						'extra_attributes'  => array('data-toggle'=>'tooltip', 'data-original-title'=>__( 'Update Profile Image', 'userswp' ))
+					));
+					?>
 				</div>
 			<?php } ?>
 		</div>
@@ -98,7 +107,6 @@ if( ! $hide_cover ) {
 			?>
 		</div>
 	</div>
-
 
 </div>
 
