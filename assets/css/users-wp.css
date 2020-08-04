@@ -1092,7 +1092,7 @@
   width: 32px;
   height: 32px;
   margin: 0 auto;
-  background-image: url("../../images/loading.gif"); }
+  background-image: url("../images/loading.gif"); }
 
 .uwp-crop-form input[type="submit"]:disabled {
   opacity: .5; }

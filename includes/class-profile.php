@@ -1164,7 +1164,7 @@ class UsersWP_Profile {
         ob_start();
 
 	    $design_style = uwp_get_option("design_style",'bootstrap');
-	    $template = "bootstrap/modal-profile-image-crop.php";
+	    $template = $design_style ? $design_style."/modal-profile-image-crop.php" : "modal-profile-image-crop.php";
 
 	    uwp_get_template($template, $args);
         ?>
@@ -1206,7 +1206,7 @@ class UsersWP_Profile {
 	    $max_file_size = $files->uwp_get_max_upload_size($type);
 
 	    $design_style = uwp_get_option("design_style",'bootstrap');
-	    $template = "bootstrap/modal-profile-image.php";
+	    $template = $design_style ? $design_style."/modal-profile-image.php" : "modal-profile-image.php";
 	    uwp_get_template($template);
 
 	    $content_wrap = $design_style == 'bootstrap' ? '.uwp-profile-image-change-modal .modal-content' : '#uwp-popup-modal-wrap';

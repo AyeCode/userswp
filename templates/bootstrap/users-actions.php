@@ -39,6 +39,7 @@ do_action('uwp_users_loop_actions');
                     }else{
                         $content =  __("Sort By", "userswp");
                     }
+                    
                     echo aui()->button(array(
                         'type'  =>  'button',
                         'id'    =>  'uwp-user-sort',

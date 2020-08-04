@@ -61,8 +61,8 @@ $image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
                 ));
                 echo aui()->input(array(
 	                'type'  =>  'hidden',
-	                'id'    =>  $type.'-h',
-	                'name'  =>  'uwp-'.$type.'-crop-image',
+	                'id'    =>  'uwp-'.$type.'-crop-image',
+	                'name'  =>  'uwp_crop',
 	                'value' =>  $image_url,
 	                'no_wrap' => true,
                 ));

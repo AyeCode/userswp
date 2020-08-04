@@ -155,8 +155,11 @@ class UsersWP_Admin {
             wp_enqueue_script( "uwp_status", USERSWP_PLUGIN_URL . 'admin/assets/js/system-status.js', array( 'jquery' ), USERSWP_VERSION, true );
         }
 
-	    wp_enqueue_script( 'jquery-ui-sortable' );
-	    wp_enqueue_script( 'uwp-nestable-script', USERSWP_PLUGIN_URL . 'admin/assets/js/jquery.nestable' . $suffix . '.js', array('jquery-ui-sortable'), USERSWP_VERSION );
+	    if ( $hook_suffix == 'userswp_page_uwp_form_builder' ) {
+		    wp_enqueue_script( 'jquery-ui-sortable' );
+		    wp_enqueue_script( 'uwp-nestable-script', USERSWP_PLUGIN_URL . 'admin/assets/js/jquery.nestable' . $suffix . '.js', array('jquery-ui-sortable'), USERSWP_VERSION );
+		    wp_enqueue_script( "uwp_form_builder", USERSWP_PLUGIN_URL . 'admin/assets/js/uwp-form-builder' . $suffix . '.js', array(), USERSWP_VERSION, 'all' );
+	    }
 
         wp_enqueue_script( "userswp_admin", USERSWP_PLUGIN_URL . 'admin/assets/js/users-wp-admin' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
 

@@ -947,7 +947,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
          *
          * @param       array       $tabs      Tabs array.
          *
-         * @return      array|bool       Sorted tabs.
+         * @return      array       Sorted tabs.
          */
         public function update_field_order($tabs = array())
         {

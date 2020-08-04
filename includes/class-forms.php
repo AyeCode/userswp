@@ -3050,6 +3050,7 @@ class UsersWP_Forms {
 				?>
                 <div id="<?php echo $field->htmlvar_name;?>_row"
                      class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
+                    <label class="<?php echo $bs_sr_only; ?>">
                     <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value="0" />
                     <input name="<?php echo $field->htmlvar_name; ?>"
                            class="<?php echo $field->css_class; ?> <?php echo esc_attr($bs_form_control);?>"

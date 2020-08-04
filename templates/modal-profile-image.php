@@ -23,7 +23,7 @@ $type = isset($_POST['type']) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner
 				<button type="button" class="close uwp-modal-close" data-type="<?php echo $type; ?>" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="uwp-bs-modal-body">
-				<div id="uwp-bs-modal-notice"></div>
+				<div id="uwp-bs-modal-notice" class="bsui"></div>
 				<form id="uwp-upload-<?php echo $type; ?>-form" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="uwp_upload_nonce" value="<?php echo wp_create_nonce( 'uwp-upload-nonce' ); ?>" />
 					<input type="hidden" name="uwp_<?php echo $type; ?>_submit" value="" />

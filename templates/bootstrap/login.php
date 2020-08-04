@@ -64,7 +64,6 @@ do_action( 'uwp_template_before', 'login' ); ?>
 						'class'      => 'btn btn-primary btn-block text-uppercase uwp_login_submit',
 						'content'    => __( 'Login', 'userswp' ),
 						'name'       => 'uwp_login_submit',
-						'extra_attributes'  => array('aria-label'=>__("Close","userswp"), 'data-dismiss'=>"modal")
 					));
 					?>
 

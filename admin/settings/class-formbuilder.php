@@ -201,7 +201,7 @@ class UsersWP_Form_Builder {
                        data-field-custom-type="<?php echo $type; ?>"
                        data-field-type-key="<?php echo $id; ?>"
                        data-field-type="<?php echo $field['field_type']; ?>"
-                       class="uwp-draggable-form-items <?php echo $field['class']; ?>"
+                       class="uwp-draggable-form-items"
                        href="javascript:void(0);">
 
                         <?php if (isset($field['icon']) && strpos($field['icon'], ' fa-') !== false) {
@@ -337,7 +337,7 @@ class UsersWP_Form_Builder {
 			    'htmlvar_name'        =>  'register_gdpr',
 			    'is_active'           =>  1,
 			    'default_value'       =>  '',
-			    'is_required'         =>  0,
+			    'is_required'         =>  1,
 			    'required_msg'        =>  '',
 			    'field_icon'          =>  'fas fa-file',
 			    'css_class'           =>  'btn-register-gdpr'
@@ -624,7 +624,6 @@ class UsersWP_Form_Builder {
             ),
             'select' => array(
                 'field_type'  =>  'select',
-                'class' =>  'uwp-select',
                 'icon' =>  'far fa-caret-square-down',
                 'name'  =>  __('Select', 'userswp'),
                 'description' =>  __('Adds a select input', 'userswp')
@@ -2145,7 +2144,7 @@ class UsersWP_Form_Builder {
             </label>
             <div class="uwp-input-wrap">
                 <select name="decimal_point" id="decimal_point" class="aui-select2">
-                    <option value=""><?php echo __('Select', 'userswp'); ?></option>
+                    <option value=""><?php _e('Select', 'userswp'); ?></option>
                     <?php for ($i = 1; $i <= 10; $i++) {
                         $selected = $i == $value ? 'selected="selected"' : ''; ?>
                         <option value="<?php echo $i; ?>" <?php echo $selected; ?>><?php echo $i; ?></option>
@@ -2179,6 +2178,9 @@ class UsersWP_Form_Builder {
         } else if (isset($cf['defaults']['is_register_only_field']) && $cf['defaults']['is_register_only_field']) {
             $register_only_value = ($cf['defaults']['is_register_only_field']) ? 1 : 0;
         }
+
+	    $reg_only_fields = array('username', 'register_gdpr', 'register_tos');
+	    $reg_only_fields = apply_filters('uwp_register_only_fields', $reg_only_fields);
         ?>
         <li <?php echo $hide_register_field; ?> class="cf-incin-reg-form uwp-setting-name uwp-advanced-setting">
             <label for="cat_sort" class="uwp-tooltip-wrap">
@@ -2187,7 +2189,7 @@ class UsersWP_Form_Builder {
             </label>
 
             <?php
-            if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'username') {
+            if (isset($field_info->htmlvar_name) && in_array($field_info->htmlvar_name, $reg_only_fields)) {
                 ?>
                 <div>
                     <input type="hidden" name="is_register_field" value="1" />
@@ -2210,7 +2212,7 @@ class UsersWP_Form_Builder {
             </label>
 
         <?php
-        if (isset($field_info->htmlvar_name) && $field_info->htmlvar_name == 'username') {
+        if (isset($field_info->htmlvar_name) && in_array($field_info->htmlvar_name, $reg_only_fields)) {
             ?>
             <div>
                 <input type="hidden" name="is_register_only_field" value="1" />
@@ -2708,7 +2710,6 @@ class UsersWP_Form_Builder {
             }
 
             if ($form_type == '') $form_type = 'register';
-
 
             $site_htmlvar_name = $request_field['site_htmlvar_name'];
             $field_id = (isset($request_field['field_id']) && $request_field['field_id']) ? str_replace('new', '', $request_field['field_id']) : '';
