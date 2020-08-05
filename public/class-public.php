@@ -44,9 +44,6 @@ class UsersWP_Public {
 
 	    wp_register_style( 'jquery-ui', USERSWP_PLUGIN_URL .  'assets/css/jquery-ui.css' );
 
-        //@todo lets find a better solution for this and put it in AUI, maybe SVG files?
-	    wp_enqueue_style( "uwp-country-select", USERSWP_PLUGIN_URL . 'assets/css/libs/countryselect.css', array(), USERSWP_VERSION, 'all' );
-
         // maybe add bootstrap
         if(empty(uwp_get_option("design_style","bootstrap"))){
             wp_enqueue_style( USERSWP_NAME, USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
@@ -100,7 +97,7 @@ class UsersWP_Public {
 
 	    if($enable_country_fields) {
 		    //@todo lets find a better solution for this and put it in AUI, maybe SVG files?
-		    wp_enqueue_style( "uwp-country-select", USERSWP_PLUGIN_URL . 'assets/css/libs/countryselect.css', array(), USERSWP_VERSION, 'all' );
+		    wp_enqueue_style( "uwp-country-select", USERSWP_PLUGIN_URL . 'assets/css/countryselect.css', array(), USERSWP_VERSION, 'all' );
 		    wp_enqueue_script( "country-select", USERSWP_PLUGIN_URL . 'assets/js/countrySelect' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
 		    $country_data = uwp_get_country_data();
 		    wp_localize_script( 'country-select', 'uwp_country_data', $country_data );

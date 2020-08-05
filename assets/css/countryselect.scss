@@ -1,7 +1,7 @@
 .country-select .flag {
   width: 16px;
   height: 11px;
-  background: url("../../images/flags.png")
+  background: url("../images/flags.png")
 }
 .country-select .zw{background-position:0 0}
 .country-select .zm{background-position:-16px 0}
@@ -351,19 +351,18 @@
 .country-select.inside{
   width: 100%;
   margin-bottom: 15px;
+  .uwp_textfield{
+    margin-right: 0;
+    padding-right: 0;
+    padding-left: 40px !important;
+  }
 }
 
-.country-select.inside .uwp_textfield{
-  margin-right: 0;
-  padding-right: 0;
-  padding-left: 40px !important;
-}
-
-.uwp-cs .flag,
-.uwp-country-name{
-  display: inline-block;
-}
-
-.uwp-cs .uwp-country-name{
-  margin-left: 5px;
+.uwp-cs{
+  .flag,.uwp-country-name{
+    display: inline-block;
+  }
+  .uwp-country-name{
+    margin-left: 5px;
+  }
 }
