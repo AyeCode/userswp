@@ -1,53 +1,26 @@
 jQuery(document).ready(function () {
     
-    jQuery("#uwp-form-builder-tab, #uwp-form-builder-tab-predefined").find("ul li a").click(function () {
-        if(!jQuery(this).attr('id')){return;}
-        var type = jQuery(this).data("field-type");
-        var type_key = jQuery(this).data("field-type-key");
-        var custom_type = jQuery(this).data("field-custom-type");
-        var form_type = jQuery(this).closest('#uwp-form-builder-tab, #uwp-form-builder-tab-predefined').find('#form_type').val();
-        var id = 'new' + jQuery(".field_row_main ul.core li:last").index();
-        var manage_field_type = jQuery(this).closest('#uwp-available-fields').find(".manage_field_type").val();
-        if (manage_field_type == 'custom_fields') {
-            jQuery.get(uwp_admin_ajax.url + '?action=uwp_ajax_action&create_field=true', {
-                field_type: type,
-                field_type_key: type_key,
-                form_type: form_type,
-                field_id: id,
-                field_ins_upd: 'new',
-                manage_field_type: manage_field_type,
-                custom_type: custom_type
-            }, function (data) {
-                jQuery('.field_row_main ul.core').append(data);
-                aui_init_select2()
-                jQuery('#licontainer_' + id).find('#sort_order').val(parseInt(jQuery('#licontainer_' + id).index()) + 1);
-                uwp_show_hide(jQuery("#licontainer_"+id).find('.toggle-arrow'));
-                uwp_init_tooltips();
-                jQuery('html, body').animate({
-                    scrollTop: jQuery("#licontainer_"+id).offset().top
-                }, 1000);
-
-            });
-        }
-    });
-
     jQuery("#uwp-form-builder-tab, #uwp-form-builder-tab-predefined, #uwp-form-builder-tab-custom").find("ul li a").click(function() {
         if(!jQuery(this).attr('id')){return;}
         var htmlvar_name = jQuery(this).attr('id').replace('uwp-','');
-        var field_type = jQuery(this).data('type');
+        var field_type = jQuery(this).data('field-type');
+        var type_key = jQuery(this).data("field-type-key");
         var form_type = jQuery(this).closest('#uwp-form-builder-tab, #uwp-form-builder-tab-predefined').find('#form_type').val();
         var id = 'new'+jQuery(".field_row_main ul.core li:last").index();
         var manage_field_type = jQuery(this).closest('#uwp-available-fields').find(".manage_field_type").val();
         var field_data_type = jQuery(this).data('data_type');
-        if (manage_field_type == 'custom_fields') {return;}
+        var custom_type = jQuery(this).data("field-custom-type");
 
         var data = {
             'htmlvar_name': htmlvar_name,
-            'form_type':form_type,
             'field_type':field_type,
-            'field_data_type':field_data_type,
+            'field_type_key': type_key,
+            'form_type':form_type,
             'field_id': id,
-            'field_ins_upd': 'new'
+            'field_ins_upd': 'new',
+            'manage_field_type': manage_field_type,
+            'field_data_type':field_data_type,
+            'custom_type': custom_type
         };
 
         if (manage_field_type == 'register'){
@@ -72,24 +45,26 @@ jQuery(document).ready(function () {
                 'tab_privacy':       jQuery(this).data('tab_privacy'),
                 'user_decided':      jQuery(this).data('user_decided')
             };
+        } else { //custom field
+            var action = "uwp_ajax_action";
+            htmlvar_name = id;
         }
 
         jQuery.get(uwp_admin_ajax.url+'?action=' + action + '&create_field=true', data ,
             function(data)
             {
                 console.log(id);
-                jQuery('.field_row_main ul.uwp_form_extras').append(data);
-
+                jQuery('.field_row_main ul.core').append(data);
                 jQuery('#licontainer_'+htmlvar_name).find('#sort_order').val( parseInt(jQuery('#licontainer_'+htmlvar_name).index()) + 1 );
-
                 uwp_show_hide(jQuery("#licontainer_"+htmlvar_name).find('.toggle-arrow'));
+                aui_init_select2();
                 uwp_init_tooltips();
                 jQuery('html, body').animate({
                     scrollTop: jQuery("#licontainer_"+htmlvar_name).offset().top
                 }, 1000);
 
                 if (manage_field_type == 'register') {
-                    save_register_field(htmlvar_name); // save registration fields on add
+                    save_field(htmlvar_name, 'register'); // save registration fields on add
                 }
 
                 if (manage_field_type == 'search') {
@@ -98,7 +73,7 @@ jQuery(document).ready(function () {
 
             });
 
-        if(htmlvar_name!='fieldset' && manage_field_type != 'profile_tabs'){
+        if(htmlvar_name!='fieldset' && (manage_field_type == 'register' || manage_field_type == 'search') ){
             jQuery(this).closest('li').hide();
         }
 
@@ -181,7 +156,18 @@ function uwp_data_type_changed(obj, cont) {
     }
 }
 
-function save_field(id) {
+function save_field(id, type) {
+
+    if('profile_tab' == type){
+        var action = 'uwp_ajax_profile_tabs_action';
+        var manage_field_type = 'profile_tab';
+    } else if('register' == type){
+        var action = 'uwp_ajax_register_action';
+        var manage_field_type = 'register';
+    }else {
+        var action = 'uwp_ajax_action';
+        var manage_field_type = 'custom_fields';
+    }
 
     if (jQuery('#licontainer_' + id + ' #htmlvar_name').length > 0) {
 
@@ -218,7 +204,7 @@ function save_field(id) {
 
 
     jQuery.ajax({
-        'url': uwp_admin_ajax.url + '?action=uwp_ajax_action&manage_field_type=custom_fields',
+        'url': uwp_admin_ajax.url + '?action=' + action + '&manage_field_type='+manage_field_type,
         'type': 'POST',
         'data': request_data,
         'success': function (result) {
@@ -231,16 +217,17 @@ function save_field(id) {
             }
             else {
                 jQuery('#licontainer_' + id).replaceWith(jQuery.trim(result));
-                aui_init_select2()
 
-                var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type=custom_fields';
+                aui_init_select2();
+                uwp_init_tooltips();
 
-                jQuery.get(uwp_admin_ajax.url + '?action=uwp_ajax_action&create_field=true', order,
+                var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type='+manage_field_type;
+
+                jQuery.get(uwp_admin_ajax.url+'?action=' + action + '&create_field=true', order,
                     function (theResponse) {
-                        //alert(theResponse);
+
                     });
 
-                uwp_init_tooltips();
                 jQuery('.field_frm').hide();
             }
 
@@ -248,13 +235,23 @@ function save_field(id) {
     });
 }
 
-function delete_field(id, nonce) {
+function delete_field(id, nonce, deleteid, type) {
+
+    if('profile_tab' == type){
+        var action = 'uwp_ajax_profile_tabs_action';
+        var manage_field_type = 'profile_tab';
+    } else if('register' == type){
+        var action = 'uwp_ajax_register_action';
+        var manage_field_type = 'register';
+    } else {
+        var action = 'uwp_ajax_action';
+        var manage_field_type = 'custom_fields';
+    }
 
     var confarmation = confirm(uwp_admin_ajax.custom_field_delete);
 
     if (confarmation == true) {
-
-        jQuery.get(uwp_admin_ajax.url + '?action=uwp_ajax_action&create_field=true&manage_field_type=custom_fields', {
+        jQuery.get(uwp_admin_ajax.url+'?action='+action+'&create_field=true&manage_field_type='+manage_field_type, {
                 field_id: id,
                 field_ins_upd: 'delete',
                 _wpnonce: nonce
@@ -264,88 +261,8 @@ function delete_field(id, nonce) {
 
             });
 
-    }
-
-}
-
-function delete_register_field(id, nonce, deleteid, type)
-{
-
-    if('profile_tab' == type){
-        var action = 'uwp_ajax_profile_tabs_action';
-    } else {
-        var action = 'uwp_ajax_register_action';
-    }
-
-    var confirmation = confirm(uwp_admin_ajax.custom_field_delete);
-
-    if(confirmation == true)
-    {
-        jQuery('#create_advance_search_li_'+deleteid).show();
-        jQuery.get(uwp_admin_ajax.url+'?action='+action+'&create_field=true', { field_id: id, field_ins_upd: 'delete', _wpnonce:nonce },
-            function(data)
-            {
-                jQuery('#licontainer_'+id).remove();
-
-            });
-
         jQuery('#uwp-'+deleteid).closest('li').show();
 
     }
-
-}
-
-function save_register_field(id, type)
-{
-    if('profile_tab' == type){
-        var action = 'uwp_ajax_profile_tabs_action';
-    } else {
-        var action = 'uwp_ajax_register_action';
-    }
-
-    if(jQuery('#licontainer_'+id+' #field_title').length > 0){
-
-        var htmlvar_name = jQuery('#licontainer_'+id+' #field_title').val();
-
-        if(htmlvar_name == '')
-        {
-            alert(uwp_admin_ajax.custom_field_not_blank_var);
-
-            return false;
-        }
-    }
-
-    var fieldrequest = jQuery('#licontainer_'+id).find("select, textarea, input").serialize();
-
-    var request_data = 'create_field=true&field_ins_upd=submit&' + fieldrequest ;
-
-    jQuery.ajax({
-        'url': uwp_admin_ajax.url+'?action=' + action,
-        'type': 'POST',
-        'data':  request_data ,
-        'success': function(result){
-
-            if(jQuery.trim( result ) == 'invalid_key')
-            {
-
-                alert(uwp_admin_ajax.custom_field_unique_name);
-
-            }
-            else
-            {
-                jQuery('#licontainer_'+id).replaceWith(jQuery.trim( result ));
-
-                var order = jQuery(".field_row_main ul.uwp_form_extras").sortable("serialize") + '&update=update';
-
-                jQuery.get(uwp_admin_ajax.url+'?action=' + action + '&create_field=true', order,
-                    function(theResponse){
-
-                    });
-
-                jQuery('.field_frm').hide();
-            }
-
-        }
-    });
 
 }

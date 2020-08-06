@@ -43,16 +43,11 @@ if($output === '' || $output=='head'){
 						    class="nav-item <?php echo $active; ?> list-unstyled">
 								<?php
                                 $content = '<span class="uwp-profile-tab-label uwp-profile-'.$tab_id.'-label">'.esc_html__($tab['tab_name'], 'userswp').'</span>';
-								if(!empty($tab['tab_icon'])){
-									$icon = '<i class="'.esc_attr($tab['tab_icon']).'"></i>';
-								} else {
-									$icon = '';
-                                }
                                 echo aui()->button(array(
 									'type'       =>  'a',
 									'href'       => $tab_url,
 									'class'      => 'nav-link',
-									'icon'       => $icon,
+									'icon'       => esc_attr($tab['tab_icon']),
 									'content'    => $content,
 								));
 								?>

@@ -1,3 +1,8 @@
+= 0.1.20 =
+* Button now has icon_extra_attributes option - ADDED
+* extra_attributes now available on more input types - ADDED
+* icon_extra_attributes added to buttons - ADDED
+
 = 0.1.19 =
 * Select placeholder not showing for select2 - FIXED
 * code font size too small for mobile SEO - FIXED

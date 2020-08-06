@@ -445,8 +445,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					}
 				}
 
-				// run on window loaded
-				jQuery(window).load(function() {
+				/**
+				 * Initiate all AUI JS.
+				 */
+				function aui_init(){
 					// init tooltips
 					aui_init_tooltips();
 
@@ -461,6 +463,11 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 					// Set times to time ago
 					aui_time_ago('timeago');
+				}
+
+				// run on window loaded
+				jQuery(window).load(function() {
+					aui_init();
 				});
 			</script>
 			<?php

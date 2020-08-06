@@ -209,7 +209,7 @@ else{$eli.attr(\'type\',\'password\');}"
 				if($args['input_group_left']){
 					$output = self::wrap( array(
 						'content' => $output,
-						'class'   => $args['input_group_left_inside'] ? 'input-group-inside'.$w100  : 'input-group',
+						'class'   => $args['input_group_left_inside'] ? 'input-group-inside position-relative'.$w100  : 'input-group',
 						'input_group_left' => $args['input_group_left'],
 						'input_group_left_inside'    => $args['input_group_left_inside']
 					) );
@@ -217,7 +217,7 @@ else{$eli.attr(\'type\',\'password\');}"
 				if($args['input_group_right']){
 					$output = self::wrap( array(
 						'content' => $output,
-						'class'   => $args['input_group_right_inside'] ? 'input-group-inside'.$w100 : 'input-group',
+						'class'   => $args['input_group_right_inside'] ? 'input-group-inside position-relative'.$w100 : 'input-group',
 						'input_group_right' => $args['input_group_right'],
 						'input_group_right_inside'    => $args['input_group_right_inside']
 					) );
@@ -518,7 +518,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// Input group left
 			if(!empty($args['input_group_left'])){
-				$position_class = !empty($args['input_group_left_inside']) ? 'position-absolute' : '';
+				$position_class = !empty($args['input_group_left_inside']) ? 'position-absolute h-100' : '';
 				$input_group_left = strpos($args['input_group_left'], '<') !== false ? $args['input_group_left'] : '<span class="input-group-text">'.$args['input_group_left'].'</span>';
 				$output .= '<div class="input-group-prepend '.$position_class.'">'.$input_group_left.'</div>';
 			}
@@ -528,7 +528,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// Input group right
 			if(!empty($args['input_group_right'])){
-				$position_class = !empty($args['input_group_left_inside']) ? 'position-absolute' : '';
+				$position_class = !empty($args['input_group_left_inside']) ? 'position-absolute h-100' : '';
 				$input_group_right = strpos($args['input_group_right'], '<') !== false ? $args['input_group_right'] : '<span class="input-group-text">'.$args['input_group_right'].'</span>';
 				$output .= '<div class="input-group-append '.$position_class.'">'.$input_group_right.'</div>';
 			}
@@ -677,7 +677,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		// Options
 		if(!empty($args['options'])){
-			
+
 			foreach($args['options'] as $val => $name){
 				$selected = '';
 				if(is_array($name)){

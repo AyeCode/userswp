@@ -35,7 +35,8 @@ class AUI_Component_Button {
 			'no_wrap'    => true,
 			'onclick'    => '',
 			'style'  => '',
-			'extra_attributes'  => array() // an array of extra attributes
+			'extra_attributes'  => array(), // an array of extra attributes
+			'icon_extra_attributes'  => array() // an array of icon extra attributes
 		);
 
 		/**
@@ -115,7 +116,7 @@ class AUI_Component_Button {
 			// content
 			if($hover_content){$output .= "<span class='hover-content-original'>";}
 			if(!empty($args['content']) || !empty($args['icon'])){
-				$output .= AUI_Component_Helper::icon($args['icon'],$args['content']).$args['content'];
+				$output .= AUI_Component_Helper::icon($args['icon'],$args['content'],$args['icon_extra_attributes']).$args['content'];
 			}
 			if($hover_content){$output .= "</span>";}
 					

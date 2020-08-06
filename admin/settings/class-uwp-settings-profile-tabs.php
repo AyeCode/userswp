@@ -660,7 +660,9 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
                             <li class="uwp-setting-name">
                                 <label for="tab_name" class="uwp-tooltip-wrap">
-                                    <?php _e('Tab Name:', 'userswp'); ?>
+                                    <?php
+                                    echo uwp_help_tip(__('This will be the name of profile tab.', 'userswp'));
+                                    _e('Tab Name:', 'userswp'); ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="tab_name" id="tab_name"
@@ -671,7 +673,9 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                             <li class="uwp-setting-name">
 
                                 <label for="tab_icon" class="uwp-tooltip-wrap">
-                                    <?php _e('Upload icon :', 'userswp'); ?>
+                                    <?php
+                                    echo uwp_help_tip(__('This will be the icon for profile tab.', 'userswp'));
+                                    _e('Upload icon :', 'userswp'); ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="tab_icon" id="tab_icon"
@@ -682,7 +686,9 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
                             <li class="uwp-setting-name">
                                 <label for="privacy" class="uwp-tooltip-wrap">
-                                    <?php _e('Privacy :', 'userswp'); ?>
+                                    <?php
+                                    echo uwp_help_tip(__('Select privacy for displaying profile tab and content.', 'userswp'));
+                                    _e('Privacy :', 'userswp'); ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <?php
@@ -716,7 +722,9 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
                             <li class="uwp-setting-name">
                                 <label for="user_decided" class="uwp-tooltip-wrap">
-                                    <?php _e('Let user decide :', 'userswp'); ?>
+                                    <?php
+                                    echo uwp_help_tip(__('Enable to allow user to decide privacy for displaying profile tab and content.', 'userswp'));
+                                    _e('Let user decide :', 'userswp'); ?>
                                     <?php echo ($exclude_privacy_option) ? __('N/A','userswp'): ''; ?>
                                 </label>
                                 <div class="uwp-input-wrap">
@@ -731,14 +739,15 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
                             <?php
 
-
                             do_action('uwp_profile_tab_custom_fields', $result_str);
 
                             if($tab_type == 'shortcode'){
                             ?>
                             <li class="uwp-setting-name">
                                 <label for="tab_content">
-                                    <?php _e('Tab content:','userswp');
+                                    <?php
+                                    echo uwp_help_tip(__('Content to display in profile tab. Shortcode allowed.', 'userswp'));
+                                    _e('Tab content:','userswp');
                                     if($tab_type == 'shortcode'){
                                         echo WP_Super_Duper::shortcode_button("'tab_content_".$result_str."'");
                                     }
@@ -757,8 +766,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
                                     <input type="button" class="button button-primary" name="save" id="save"
                                            value="<?php esc_attr_e('Save', 'userswp'); ?>"
-                                           onclick="save_register_field('<?php echo $result_str; ?>', 'profile_tab')"/>
-                                           <a class="item-delete submitdelete deletion" id="delete-16" href="javascript:void(0);" onclick="delete_register_field('<?php echo esc_attr($result_str); ?>', '<?php echo $nonce; ?>', '<?php echo $tab_key ?>', 'profile_tab')"><?php _e("Remove","userswp");?></a>
+                                           onclick="save_field('<?php echo $result_str; ?>', 'profile_tab')"/>
+                                           <a class="item-delete submitdelete deletion" id="delete-16" href="javascript:void(0);" onclick="delete_field('<?php echo esc_attr($result_str); ?>', '<?php echo $nonce; ?>', '<?php echo $tab_key ?>', 'profile_tab')"><?php _e("Remove","userswp");?></a>
 
                                 </div>
                             </li>

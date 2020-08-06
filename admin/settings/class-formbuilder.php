@@ -701,6 +701,7 @@ class UsersWP_Form_Builder {
 
     public function custom_selected_fields($form_type)
     {
+
         global $wpdb;
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
         ?>
@@ -2519,9 +2520,9 @@ class UsersWP_Form_Builder {
                                 if (!in_array($field_info->site_htmlvar_name, $no_actions)) { ?>
                                 <input type="button" class="button button-primary" name="save" id="save"
                                        value="<?php esc_attr_e('Save', 'userswp'); ?>"
-                                       onclick="save_register_field('<?php echo $result_str; ?>')"/>
+                                       onclick="save_field('<?php echo $result_str; ?>', 'register')"/>
                                 <input type="button" name="delete" value="<?php esc_attr_e('Delete', 'userswp'); ?>"
-                                       onclick="delete_register_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>','<?php echo $htmlvar_name ?>')"
+                                       onclick="delete_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>','<?php echo $htmlvar_name ?>', 'register')"
                                        class="button"/>
                                 <?php } ?>
 
@@ -2540,7 +2541,6 @@ class UsersWP_Form_Builder {
 	 *
 	 * @since       1.0.0
 	 * @package     userswp
-	 * @param       array       $data   Submitted $_REQUEST data.
 	 * @return      void
 	 */
 	public function create_field() {
@@ -2803,8 +2803,6 @@ class UsersWP_Form_Builder {
 
         } else
             return 0;
-
-
     }
     
 }

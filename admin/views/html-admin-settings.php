@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			do_action( 'uwp_settings_tabs_' . $current_tab );
 		?>
 		<p class="submit">
-			<?php if ( empty( $GLOBALS['hide_save_button'] ) ) : ?>
+			<?php if ( empty( $GLOBALS['uwp_hide_save_button'] ) ) : ?>
 				<input name="save" class="button-primary uwp-save-button" type="submit" value="<?php esc_attr_e( 'Save changes', 'userswp' ); ?>" />
 			<?php endif; ?>
 			<?php wp_nonce_field( 'userswp-settings' ); ?>
