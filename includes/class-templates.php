@@ -1053,6 +1053,64 @@ class UsersWP_Templates {
 	}
 
 	/**
+	 * Adds "Accept terms and conditions" checkbox in register form.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       string      $form_type      Form type.
+	 *
+	 * @return      void
+	 */
+	public function add_template_fields_terms_check($form_type) {
+		if ($form_type == 'register') {
+			$tos_field = check_register_form_field('register_tos');
+			if( empty($tos_field) ) {
+				$terms_page = false;
+				$reg_terms_page_id = uwp_get_page_id('register_terms_page', false);
+				$reg_terms_page_id = apply_filters('uwp_reg_terms_page_id', $reg_terms_page_id);
+				if (!empty($reg_terms_page_id)) {
+					$terms_page = get_permalink($reg_terms_page_id);
+				}
+				if ($terms_page) {
+					$content = sprintf( __( 'I accept %s Terms and Conditions %s.', 'userswp' ), '<a href="'.$terms_page.'" target="_blank">', '</a>');
+					$content = apply_filters('uwp_register_terms_input_label', $content);
+					?>
+                    <div class="uwp-remember-me">
+                        <label style="display: inline-block;font-weight: normal" for="agree_terms">
+                            <input name="agree_terms" id="agree_terms" value="yes" type="checkbox">
+							<?php echo $content; ?>
+                        </label>
+                    </div>
+					<?php
+				}
+			}
+
+			$gdpr_field = check_register_form_field('register_gdpr');
+			if( empty($gdpr_field) ) {
+				$gdpr_page = false;
+				$reg_gdpr_page_id = uwp_get_page_id('register_gdpr_page', false);
+				$reg_gdpr_page_id = apply_filters('uwp_register_gdpr_page_id', $reg_gdpr_page_id);
+				if (!empty($reg_gdpr_page_id)) {
+					$gdpr_page = get_permalink($reg_gdpr_page_id);
+				}
+				if ($gdpr_page) {
+					$content = sprintf( __( 'By using this form I agree to the storage and handling of my data by this website. View our %s GDPR Policy %s.', 'userswp' ), '<a href="'.$gdpr_page.'" target="_blank">', '</a>');
+					$content = apply_filters('uwp_register_gdpr_input_label', $content);
+					?>
+                    <div class="uwp-gdpr-input">
+                        <label style="display: inline-block;font-weight: normal" for="uwp_accept_gdpr">
+                            <input name="uwp_accept_gdpr" id="uwp_accept_gdpr" value="yes" type="checkbox">
+							<?php echo $content; ?>
+                        </label>
+                    </div>
+					<?php
+				}
+			}
+		}
+	}
+
+	/**
 	 * Redirects the user to login page when email not confirmed.
 	 *
 	 * @since       1.0.0

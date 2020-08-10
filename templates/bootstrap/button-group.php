@@ -23,6 +23,7 @@ do_action( 'uwp_template_before', 'button-group' ); ?>
 			'title'      => $tooltip_text,
 			'icon'       => $icon_class.' fa-fw fa-lg',
 			'style'  => '',
+			'new_window'  => true,
 			'extra_attributes'  => array('data-toggle'=>'tooltip')
 		));
 		?>

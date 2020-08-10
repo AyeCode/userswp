@@ -4,8 +4,7 @@ defined( 'ABSPATH' ) || exit;
 
 class UsersWP_Seo {
 
-    public function init(){
-	    add_action('init', array($this,'init'));
+    public function __construct(){
 	    add_action('pre_get_document_title', array($this,'output_title'));
 	    add_action('uwp_profile_options', array($this,'profile_options'));
 
@@ -243,3 +242,5 @@ class UsersWP_Seo {
         return $url;
     }
 }
+
+new UsersWP_Seo();

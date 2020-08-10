@@ -356,7 +356,7 @@ class UsersWP_Form_Builder {
 			    'htmlvar_name'        =>  'register_tos',
 			    'is_active'           =>  1,
 			    'default_value'       =>  '',
-			    'is_required'         =>  0,
+			    'is_required'         =>  1,
 			    'required_msg'        =>  '',
 			    'field_icon'          =>  'fas fa-file',
 			    'css_class'           =>  'btn-register-tos'
@@ -886,6 +886,33 @@ class UsersWP_Form_Builder {
                             <?php
                         }
 
+                        // Input Description
+                        if (has_filter("uwp_builder_field_description_{$field_type}")) {
+
+	                        echo apply_filters("uwp_builder_field_description_{$field_type}", '', $result_str, $cf, $field_info);
+
+                        } else {
+	                        $value = '';
+	                        if (isset($field_info->help_text)) {
+		                        $value = esc_attr($field_info->help_text);
+	                        }elseif (isset($cf['defaults']['help_text']) && $cf['defaults']['help_text']) {
+		                        $value = $cf['defaults']['help_text'];
+	                        }
+	                        ?>
+                            <li class="uwp-setting-name">
+                                <label for="help_text" class="uwp-tooltip-wrap">
+			                        <?php
+			                        echo uwp_help_tip(__('This will be displayed below the field in the form.', 'userswp'));
+			                        _e('Field Description:', 'userswp'); ?>
+                                </label>
+                                <div class="uwp-input-wrap">
+                                    <input type="text" name="help_text" id="help_text"
+                                           value="<?php echo $value; ?>"/>
+                                </div>
+                            </li>
+	                        <?php
+                        }
+
 
                         // htmlvar_name
                         if(has_filter("uwp_builder_htmlvar_name_{$field_type}")){
@@ -1388,6 +1415,7 @@ class UsersWP_Form_Builder {
 
             $site_title = sanitize_text_field($request_field['site_title']);
             $form_label = isset($request_field['form_label']) ? sanitize_text_field($request_field['form_label']) : '';
+            $help_text = isset($request_field['help_text']) ? sanitize_text_field($request_field['help_text']) : '';
             $field_type = sanitize_text_field($request_field['field_type']);
             $data_type = sanitize_text_field($request_field['data_type']);
             $field_type_key = isset($request_field['field_type_key']) ? sanitize_text_field($request_field['field_type_key']) : $field_type;
@@ -1558,6 +1586,7 @@ class UsersWP_Form_Builder {
                             form_type = %s,
                             site_title = %s,
                             form_label = %s,
+                            help_text = %s,
                             field_type = %s,
                             data_type = %s,
                             decimal_point = %s,
@@ -1590,6 +1619,7 @@ class UsersWP_Form_Builder {
                             $form_type,
                             $site_title,
                             $form_label,
+	                        $help_text,
                             $field_type,
                             $data_type,
                             $decimal_point,
@@ -1767,6 +1797,7 @@ class UsersWP_Form_Builder {
                             form_type = %s,
                             site_title = %s,
                             form_label = %s,
+                            help_text = %s,
                             field_type = %s,
                             data_type = %s,
                             decimal_point = %s,
@@ -1798,6 +1829,7 @@ class UsersWP_Form_Builder {
                             $form_type,
                             $site_title,
                             $form_label,
+	                        $help_text,
                             $field_type,
                             $data_type,
                             $decimal_point,
@@ -2204,7 +2236,7 @@ class UsersWP_Form_Builder {
             </label>
 
             <?php
-            $reg_only_fields = array('username');
+            $reg_only_fields = array('username', 'register_gdpr', 'register_tos');
             $reg_only_fields = apply_filters('uwp_register_mandatory_fields', $reg_only_fields);
             if (isset($field_info->htmlvar_name) && in_array($field_info->htmlvar_name, $reg_only_fields)) {
                 ?>
