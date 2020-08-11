@@ -256,7 +256,7 @@ class UsersWP_Validation {
 
 		            if($field->htmlvar_name == 'register_gdpr'){
 			            $msg = __('You must read and accept our GDPR policy.', 'userswp');
-			            $is_page = uwp_get_option('register_gdpr', false);
+			            $is_page = uwp_get_option('register_gdpr_page', false);
 		            } else {
 			            $msg = __('You must accept our terms and conditions.', 'userswp');
 			            $is_page = uwp_get_option('register_terms_page', false);
@@ -265,10 +265,10 @@ class UsersWP_Validation {
 					if(isset($sanitized_value) && 1 != $sanitized_value && $is_page){
 
 						if ($field->required_msg) {
-							$errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->required_msg, 'userswp'));
+							$errors->add('empty_'.$field->htmlvar_name,  __($field->required_msg, 'userswp'));
 							return $errors;
 						} else {
-							$errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: ' .$msg, 'userswp'));
+							$errors->add('empty_'.$field->htmlvar_name,  $msg);
 							return $errors;
 						}
 					}
