@@ -33,9 +33,22 @@ do_action('uwp_users_loop_actions');
             <div class="btn-toolbar justify-content-end" role="toolbar" aria-label="Toolbar with button groups">
 
                 <div class="btn-group btn-group-sm mr-2 uwp-user-sort" role="group">
-                    <button id="uwp-user-sort" type="button" class="btn btn-outline-primary rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<?php if(!empty($sort_by_options[$sort_by])){echo esc_attr( $sort_by_options[$sort_by] );}else{_e("Sort By", "userswp");} echo ' <i class="fas fa-sort"></i>'; ?>
-                    </button>
+                    <?php
+                    if(!empty($sort_by_options[$sort_by])){
+                        $content =  esc_attr( $sort_by_options[$sort_by] );
+                    }else{
+                        $content =  __("Sort By", "userswp");
+                    }
+                    
+                    echo aui()->button(array(
+                        'type'  =>  'button',
+                        'id'    =>  'uwp-user-sort',
+                        'icon'       => 'fas fa-sort',
+                        'class'      => 'btn btn-outline-primary rounded-right',
+                        'content'    => $content,
+                        'extra_attributes'  => array('data-toggle'=>'dropdown', 'aria-haspopup'=>'true', 'aria-expanded'=>'false')
+                    ));
+                    ?>
                     <div class="dropdown-menu mt-3" aria-labelledby="uwp-user-sort">
                         <h6 class="dropdown-header"><?php _e("Sort Options", "userswp"); ?></h6>
 						<?php
@@ -65,28 +78,75 @@ do_action('uwp_users_loop_actions');
 
 						foreach ($sort_by_options as $key => $val){
 							$active = isset($_REQUEST['uwp_sort_by']) && $_REQUEST['uwp_sort_by']==$key ? 'active' : '';
-							echo '<a class="dropdown-item '.$active.'" href="'.esc_url_raw(add_query_arg(array('uwp_sort_by'=>$key),$base_link)).'">'.esc_attr($val).'</a>';
+							echo aui()->button(array(
+								'type'  =>  'a',
+								'href'    =>  esc_url_raw(add_query_arg(array('uwp_sort_by'=>$key),$base_link)),
+								'class'      => 'dropdown-item '.$active,
+								'content'    => esc_attr($val),
+							));
 						}
 
 						if(!empty($_REQUEST['uwp_sort_by'])){
-							?>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="<?php echo esc_url_raw($base_link); ?>"><?php _e("Clear Sort", "userswp"); ?></a>
-						<?php }?>
+							echo '<div class="dropdown-divider"></div>';
+						    echo aui()->button(array(
+								'type'  =>  'a',
+								'href'    =>  esc_url_raw($base_link),
+								'class'      => 'dropdown-item',
+								'content'    => __("Clear Sort", "userswp"),
+							));
+						} ?>
                     </div>
                 </div>
 
                 <div class="btn-group btn-group-sm uwp-list-view-select" role="group" aria-label="First group">
                     <div class="btn-group btn-group-sm" role="group">
-                        <button id="uwp-list-view-select-grid" type="button" class="btn btn-outline-primary rounded-right uwp-list-view-select-grid" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-th"></i>
-                        </button>
+	                    <?php
+	                    echo aui()->button(array(
+		                    'type'  =>  'button',
+		                    'id'      => 'uwp-list-view-select-grid',
+		                    'class'      => 'btn btn-outline-primary rounded-right uwp-list-view-select-grid',
+		                    'icon'    => 'fas fa-th',
+		                    'extra_attributes'  => array('data-toggle'=>'dropdown', 'aria-haspopup'=>'true', 'aria-expanded'=>'false')
+	                    ));
+	                    ?>
                         <div class="dropdown-menu dropdown-menu-right mt-3 p-0" aria-labelledby="uwp-list-view-select-grid">
-                            <button class="dropdown-item" data-gridview="1" onclick="uwp_list_view_select(1);return false;"><?php echo sprintf(__("Grid %d","userswp"),1);?></button>
-                            <button class="dropdown-item" data-gridview="2" onclick="uwp_list_view_select(2);return false;"><?php echo sprintf(__("Grid %d","userswp"),2);?></button>
-                            <button class="dropdown-item" data-gridview="3" onclick="uwp_list_view_select(3);return false;"><?php echo sprintf(__("Grid %d","userswp"),3);?></button>
-                            <button class="dropdown-item" data-gridview="4" onclick="uwp_list_view_select(4);return false;"><?php echo sprintf(__("Grid %d","userswp"),4);?></button>
-                            <button class="dropdown-item" data-gridview="5" onclick="uwp_list_view_select(5);return false;"><?php echo sprintf(__("Grid %d","userswp"),5);?></button>
+                            <?php
+                            echo aui()->button(array(
+	                            'type'  =>  'button',
+	                            'class'      => 'dropdown-item',
+	                            'content'    => sprintf(__("Grid %d","userswp"),1),
+	                            'onclick'    => 'uwp_list_view_select(1);return false;',
+	                            'extra_attributes'  => array('data-gridview'=>'1')
+                            ));
+                            echo aui()->button(array(
+	                            'type'  =>  'button',
+	                            'class'      => 'dropdown-item',
+	                            'content'    => sprintf(__("Grid %d","userswp"),2),
+	                            'onclick'    => 'uwp_list_view_select(2);return false;',
+	                            'extra_attributes'  => array('data-gridview'=>'2')
+                            ));
+                            echo aui()->button(array(
+	                            'type'  =>  'button',
+	                            'class'      => 'dropdown-item',
+	                            'content'    => sprintf(__("Grid %d","userswp"),3),
+	                            'onclick'    => 'uwp_list_view_select(3);return false;',
+	                            'extra_attributes'  => array('data-gridview'=>'3')
+                            ));
+                            echo aui()->button(array(
+	                            'type'  =>  'button',
+	                            'class'      => 'dropdown-item',
+	                            'content'    => sprintf(__("Grid %d","userswp"),4),
+	                            'onclick'    => 'uwp_list_view_select(4);return false;',
+	                            'extra_attributes'  => array('data-gridview'=>'4')
+                            ));
+                            echo aui()->button(array(
+	                            'type'  =>  'button',
+	                            'class'      => 'dropdown-item',
+	                            'content'    => sprintf(__("Grid %d","userswp"),5),
+	                            'onclick'    => 'uwp_list_view_select(5);return false;',
+	                            'extra_attributes'  => array('data-gridview'=>'5')
+                            ));
+                            ?>
                         </div>
                     </div>
                 </div>

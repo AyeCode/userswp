@@ -519,7 +519,6 @@ function uwp_checkPasswordStrength( $pass1,
     }
 
     // Reset the form & meter
-//			    $submitButton.attr( 'disabled', 'disabled' );
     $strengthResult.removeClass( 'short bad good strong bg-warning bg-success bg-danger' );
 
     // Extend our blacklist array with those from the inputs & site data
@@ -551,13 +550,6 @@ function uwp_checkPasswordStrength( $pass1,
             $strengthResult.addClass( 'short bg-danger' ).html( pwsL10n.short ).width('25%');
 
     }
-
-    // The meter function returns a result even if pass2 is empty,
-    // enable only the submit button if the password is strong and
-    // both passwords are filled up
-//			    if ( 4 === strength && '' !== pass2.trim() ) {
-////				    $submitButton.removeAttr( 'disabled' );
-//			    }
 
     return strength;
 }

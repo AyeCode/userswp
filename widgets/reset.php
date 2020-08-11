@@ -53,7 +53,7 @@ class UWP_Reset_Widget extends WP_Super_Duper {
 		            'type' => 'select',
 		            'options'   =>  array(
 			            ""        =>  __('default', 'userswp'),
-			            "bs1"        =>  __('Style 1', 'userswp'),
+			            "bootstrap" =>  __('Style 1', 'userswp'),
 		            ),
 		            'default'  => '',
 		            'desc_tip' => true,

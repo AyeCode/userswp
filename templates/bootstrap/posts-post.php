@@ -20,13 +20,19 @@ if ( has_post_thumbnail() ) {
 
 		<div class="card-body">
 			<h3 class="card-title h5">
-				<a href="<?php echo esc_url_raw( get_the_permalink() ); ?>"><?php echo get_the_title(); ?></a>
+				<?php
+				echo aui()->button(array(
+					'type'  =>  'a',
+					'class'  =>  '',
+					'href'       => get_the_permalink(),
+					'content'    => get_the_title(),
+				));
+				?>
 			</h3>
 			<div class="uwp-profile-item-summary card-text">
 				<?php
 				do_action( 'uwp_before_profile_summary', get_the_ID(), $post->post_author, $post->post_type );
-				$excerpt = strip_shortcodes( wp_trim_words( get_the_excerpt(), 25, '...' ) );
-				echo $excerpt;
+				echo $excerpt = strip_shortcodes( wp_trim_words( get_the_excerpt(), 25, '...' ) );
 				do_action( 'uwp_after_profile_summary', get_the_ID(), $post->post_author, $post->post_type );
 				?>
 			</div>
@@ -44,7 +50,7 @@ if ( has_post_thumbnail() ) {
 						'href'  => get_the_permalink($post->ID),
 						'class'     => 'btn btn-outline-primary  btn-sm',
 						'content' => __('View', 'userswp'),
-					) )); // view button
+					) ));
 				$footer_html .= '</div>';
 			$footer_html .= '</div>';
 

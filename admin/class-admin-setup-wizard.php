@@ -328,7 +328,7 @@ class UsersWP_Admin_Setup_Wizard {
 
 					if ( ! empty( $set_menus ) ) {
 
-						echo "<select id='uwp_wizard_menu_id' data-type='add' class='uwp-select' >";
+						echo "<select id='uwp_wizard_menu_id' data-type='add' class='uwp-select'>";
 
 						foreach ( $set_menus as $menu_location => $menu_id ) {
 							$selected = '';
@@ -357,7 +357,7 @@ class UsersWP_Admin_Setup_Wizard {
 
 						if ( ! empty( $menus ) ) {
 
-							echo "<select id='uwp_wizard_menu_location' data-type='create' class='uwp-select' >";
+							echo "<select id='uwp_wizard_menu_location' data-type='create' class='uwp-select'>";
 
 							foreach ( $menus as $menu_slug => $menu_name ) {
 								$selected = '';

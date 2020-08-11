@@ -39,7 +39,7 @@ if ( is_multisite() ) {
 
 function uwp_uninstall() {
 	$uwp_options = get_option( 'uwp_settings' );
-	if ( $uwp_options['uninstall_erase_data'] == '1' ) {
+	if ( isset($uwp_options['uninstall_erase_data']) && $uwp_options['uninstall_erase_data'] == '1' ) {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'uwp_form_fields';
@@ -71,14 +71,13 @@ function uwp_uninstall() {
 		$wpdb->query( $sql );
 
 		// Delete pages
-		wp_delete_post( $uwp_options['register_page'], true );
-		wp_delete_post( $uwp_options['login_page'], true );
-		wp_delete_post( $uwp_options['profile_page'], true );
-		wp_delete_post( $uwp_options['account_page'], true );
-		wp_delete_post( $uwp_options['change_page'], true );
-		wp_delete_post( $uwp_options['forgot_page'], true );
-		wp_delete_post( $uwp_options['reset_page'], true );
-		wp_delete_post( $uwp_options['users_page'], true );
+		$pages = array( 'register_page', 'login_page', 'profile_page', 'account_page', 'change_page', 'forgot_page', 'reset_page', 'users_page', 'user_list_item_page');
+
+		foreach ($pages as $page){
+			if(isset($uwp_options[$page]) && !empty($uwp_options[$page])){
+				wp_delete_post( $uwp_options[$page], true );
+			}
+		}
 
 		// Delete options
 		delete_option( 'uwp_settings' );

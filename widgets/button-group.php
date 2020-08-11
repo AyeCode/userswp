@@ -101,7 +101,6 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
             }
         }
 
-
         // get the user meta
         $user_meta = uwp_get_usermeta_row($user->ID);
         $buttons = array();

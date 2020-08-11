@@ -412,7 +412,6 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 						'id' => 'email_type',
 						'name' => __('Email type', 'userswp'),
 						'desc' => __('Select format of the email to send.', 'userswp'),
-						'class' => 'uwp-select',
 						'options' => $this->get_email_type_options(),
 						'default' => 'html',
 						'desc_tip' => true,

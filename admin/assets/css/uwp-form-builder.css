@@ -1,0 +1,179 @@
+#uwp_form_builder_container {
+  padding: 0;
+  overflow: hidden;
+  width: auto;
+  margin-right: 0; }
+  #uwp_form_builder_container .clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0; }
+  #uwp_form_builder_container .uwp-side-sortables {
+    border: 1px #DFDFDF solid;
+    background: #F5F5F5;
+    float: left; }
+    #uwp_form_builder_container .uwp-side-sortables p {
+      padding: 0 10px; }
+    #uwp_form_builder_container .uwp-side-sortables .uwp-tabs-panel {
+      height: auto;
+      overflow: visible;
+      padding: 5px;
+      background-color: #FFFFFF;
+      border: 1px #DFDFDF solid; }
+      #uwp_form_builder_container .uwp-side-sortables .uwp-tabs-panel ul {
+        margin: 0; }
+      #uwp_form_builder_container .uwp-side-sortables .uwp-tabs-panel .uwp-setting-name .select2-selection--multiple .select2-selection__rendered {
+        padding: 5px; }
+    #uwp_form_builder_container .uwp-side-sortables h3 {
+      font-size: 15px;
+      font-weight: normal;
+      line-height: 1;
+      padding: 8px 10px;
+      margin: 0;
+      border-bottom: 1px #DFDFDF solid;
+      text-shadow: 0 1px 0 #FFFFFF; }
+    #uwp_form_builder_container .uwp-side-sortables .inside {
+      position: relative;
+      margin: 10px 0;
+      line-height: 1.4em;
+      padding: 0 12px 0 10px; }
+    #uwp_form_builder_container .uwp-side-sortables #uwp-form-builder-tab-custom .super-duper-content-open {
+      display: none; }
+  #uwp_form_builder_container #uwp-available-fields.uwp-side-sortables {
+    width: 42%;
+    margin-right: 15px;
+    margin-bottom: 15px; }
+  #uwp_form_builder_container #uwp-selected-fields.uwp-side-sortables {
+    width: 55%;
+    margin-bottom: 15px; }
+  #uwp_form_builder_container #uwp-available-fields ul li {
+    float: left;
+    list-style: none outside none;
+    width: 50%; }
+  #uwp_form_builder_container #uwp-available-fields ul.full li {
+    float: left;
+    list-style: none outside none;
+    width: 100%; }
+  #uwp_form_builder_container .uwp-draggable-form-items {
+    border: 1px solid #BBBBBB;
+    color: #464646;
+    display: block;
+    margin-right: 8px;
+    padding: 4px 0 4px 5px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    background: #fafafa; }
+  #uwp_form_builder_container .uwp-side-sortables .handlediv {
+    float: right;
+    height: 31px;
+    width: 27px;
+    cursor: pointer; }
+  #uwp_form_builder_container span.field-type {
+    float: right;
+    margin-right: 25px;
+    font-weight: initial; }
+  #uwp_form_builder_container .field_row_main {
+    margin: 0 7px;
+    background: #fff; }
+    #uwp_form_builder_container .field_row_main ul {
+      margin-top: 0; }
+    #uwp_form_builder_container .field_row_main .title {
+      border: 1px #DFDFDF solid;
+      background: #fafafa;
+      height: 37px;
+      line-height: 32px;
+      overflow: hidden;
+      padding-left: 10px;
+      position: relative;
+      text-shadow: 0 1px 0 #FFFFFF;
+      word-wrap: break-word;
+      padding-top: 3px;
+      margin-bottom: 1px;
+      cursor: move; }
+      #uwp_form_builder_container .field_row_main .title .handlediv {
+        float: right;
+        height: 26px;
+        width: 26px;
+        margin: 2px;
+        cursor: pointer;
+        vertical-align: middle; }
+  #uwp_form_builder_container #uwp-form-builder-tab,
+  #uwp_form_builder_container #uwp-form-builder-tab-predefined,
+  #uwp_form_builder_container #uwp-form-builder-tab-custom {
+    float: left;
+    width: 100%; }
+  #uwp_form_builder_container #uwp-form-builder-tab ul {
+    margin: 0; }
+  #uwp_form_builder_container .advance.ui-sortable .ui-state-highlight,
+  #uwp_form_builder_container .core.ui-sortable .ui-state-highlight {
+    width: 100%;
+    height: 37px;
+    background: #2981B3; }
+  #uwp_form_builder_container .uwp-help-tip {
+    margin: 0; }
+  #uwp_form_builder_container .select2-container {
+    width: 100% !important; }
+  #uwp_form_builder_container #uwp-selected-fields .li-settings {
+    position: relative; }
+  #uwp_form_builder_container #uwp-selected-fields .field_frm {
+    padding: 10px;
+    border: 1px #DFDFDF solid; }
+  #uwp_form_builder_container #uwp-selected-fields input[type="text"],
+  #uwp_form_builder_container #uwp-selected-fields input[type="email"],
+  #uwp_form_builder_container #uwp-selected-fields select {
+    width: 100%;
+    padding: 6px 12px;
+    height: 34px;
+    color: #555;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s; }
+  #uwp_form_builder_container #uwp-selected-fields input[type="text"]:focus,
+  #uwp_form_builder_container #uwp-selected-fields input[type="email"]:focus,
+  #uwp_form_builder_container #uwp-selected-fields select:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
+  #uwp_form_builder_container #uwp-selected-fields ul li label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #666666; }
+  #uwp_form_builder_container #uwp-selected-fields .toggle-arrow {
+    position: absolute;
+    right: 0;
+    padding: 12px;
+    cursor: pointer;
+    z-index: 99; }
+  #uwp_form_builder_container ul.core.uwp_form_extras.ui-sortable ul:not(.widefat) {
+    padding-left: 25px; }
+  #uwp_form_builder_container ul.core.uwp_form_extras.ui-sortable li {
+    margin: 5px 0 !important; }
+  #uwp_form_builder_container .uwp-setting-name .uwp-help-tip {
+    float: none; }
+  #uwp_form_builder_container .uwp-tab-actions .button-primary.uwp-advanced-toggle {
+    float: left;
+    vertical-align: middle;
+    margin: 0 10px 0 0; }
+  #uwp_form_builder_container .uwp-tab-actions input#save {
+    margin-right: 7px; }
+  #uwp_form_builder_container .uwp-tab-actions a.item-delete {
+    color: #a00;
+    vertical-align: middle; }
+
+@media screen and (max-width: 768px) {
+  #uwp_form_builder_container #uwp-available-fields.uwp-side-sortables, #uwp_form_builder_container #uwp-selected-fields.uwp-side-sortables {
+    width: auto;
+    margin-bottom: 15px; } }
+
+/*# sourceMappingURL=uwp-form-builder.css.map */

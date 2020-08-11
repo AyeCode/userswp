@@ -44,13 +44,8 @@ class UsersWP_Public {
 
 	    wp_register_style( 'jquery-ui', USERSWP_PLUGIN_URL .  'assets/css/jquery-ui.css' );
 
-        //@todo lets find a better solution for this and put it in AUI, maybe SVG files?
-	    wp_enqueue_style( "uwp-country-select", USERSWP_PLUGIN_URL . 'assets/css/libs/countryselect.css', array(), USERSWP_VERSION, 'all' );
-
         // maybe add bootstrap
         if(empty(uwp_get_option("design_style","bootstrap"))){
-            //widget styles for all pages
-            wp_enqueue_style( "uwp_widget_css", USERSWP_PLUGIN_URL . 'assets/css/widgets.css', array(), USERSWP_VERSION, 'all' );
             wp_enqueue_style( USERSWP_NAME, USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
             wp_register_style( 'uwp-authorbox', USERSWP_PLUGIN_URL . 'assets/css/authorbox.css', array(), USERSWP_VERSION, 'all' );
         }else{
@@ -79,7 +74,6 @@ class UsersWP_Public {
 	    wp_register_script( "uwp_timepicker", USERSWP_PLUGIN_URL . 'assets/js/jquery.ui.timepicker.min.js', array( 'jquery', 'jquery-ui-datepicker', 'jquery-ui-core' ), USERSWP_VERSION, true );
 
 	    $enable_timepicker_fields = false;
-	    $enable_datepicker_fields = false;
 	    $enable_country_fields = false;
 
 	    $register_fields = get_register_form_fields();
@@ -87,11 +81,8 @@ class UsersWP_Public {
 	    $fields = array_merge($register_fields,$account_fields);
 	    if (!empty($fields)) {
 		    foreach ($fields as $field) {
-			    if ($field->field_type == 'time') {
+			    if ($field->field_type == 'time' || $field->field_type == 'datepicker') {
 				    $enable_timepicker_fields = true;
-			    }
-			    if ($field->field_type == 'datepicker') {
-				    $enable_datepicker_fields = true;
 			    }
 			    if ($field->field_type_key == 'uwp_country' || $field->field_type_key == 'country') {
 				    $enable_country_fields = true;
@@ -99,14 +90,14 @@ class UsersWP_Public {
 		    }
 	    }
 
-	    if($enable_timepicker_fields || $enable_datepicker_fields) {
+	    if($enable_timepicker_fields) {
 		    wp_enqueue_style( 'jquery-ui' );
 		    wp_enqueue_script( "uwp_timepicker" );
 	    }
 
 	    if($enable_country_fields) {
 		    //@todo lets find a better solution for this and put it in AUI, maybe SVG files?
-		    wp_enqueue_style( "uwp-country-select", USERSWP_PLUGIN_URL . 'assets/css/libs/countryselect.css', array(), USERSWP_VERSION, 'all' );
+		    wp_enqueue_style( "uwp-country-select", USERSWP_PLUGIN_URL . 'assets/css/countryselect.css', array(), USERSWP_VERSION, 'all' );
 		    wp_enqueue_script( "country-select", USERSWP_PLUGIN_URL . 'assets/js/countrySelect' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
 		    $country_data = uwp_get_country_data();
 		    wp_localize_script( 'country-select', 'uwp_country_data', $country_data );

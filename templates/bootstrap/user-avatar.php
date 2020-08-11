@@ -30,18 +30,22 @@ if(!$uwp_in_user_loop){ ?><div class="card shadow-0 border-0 mw-100"><?php } ?>
 
 		<div class="col <?php if($uwp_in_user_loop){?>col-5<?php }?> text-center tofront ">
 			<?php if ($uwp_in_user_loop || 1==$link) { echo '<a href="'.esc_url_raw(get_author_posts_url($user->ID)).'" title="'.$user->display_name.'">';} ?>
-			<img class="rounded-circle shadow border border-white border-width-4 p-0 mt-neg5"
+			<img class="rounded-circle shadow border border-white border-width-4 p-0"
 			     src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php _e("User avatar","userswp");?>" height="<?php echo $size; ?>" width="<?php echo $size; ?>">
 			<?php if ($uwp_in_user_loop || 1==$link) {echo '</a>';} ?>
 
 			<?php if (!$uwp_in_user_loop && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && $allow_change ) { ?>
 				<div class="card-img-overlay d-flex p-0">
-					<a onclick="uwp_profile_image_change('avatar');return false;" href="#"
-					   class="btn btn-sm uwp-banner-change-icon btn-outline-secondary btn-circle border-0 align-self-end mx-auto "
-					   data-toggle="tooltip" title=""
-					   data-original-title="<?php _e( 'Update Profile Image', 'userswp' ); ?>">
-						<i class="fas fa-camera fa-fw"></i>
-					</a>
+					<?php
+					echo aui()->button(array(
+						'type'  =>  'a',
+						'href'       => '#',
+						'class'      => 'btn btn-sm uwp-banner-change-icon btn-outline-secondary btn-circle border-0 align-self-end mx-auto',
+						'icon'       => 'fas fa-camera fa-fw',
+						'onclick'    => "uwp_profile_image_change('avatar');return false;",
+						'extra_attributes'  => array('data-toggle'=>'tooltip', 'data-original-title'=>__( 'Update Profile Image', 'userswp' ))
+					));
+					?>
 				</div>
 			<?php } ?>
 		</div>

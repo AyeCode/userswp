@@ -94,8 +94,7 @@ abstract class UsersWP_Settings_Page {
 	 * @return bool
 	 */
 	public function show_advanced(){
-        global $current_section;
-
+		global $current_section;
 		$show = false;
 		$settings = $this->get_settings($current_section);
 

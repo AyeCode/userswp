@@ -39,15 +39,6 @@ class UWP_Profile_Tabs_Widget extends WP_Super_Duper {
                     'default'     => '',
                     'advanced'    => false
                 ),
-//                'show_as_list'  => array(
-//                    'title' => __('Show as list:', 'userswp'),
-//                    'desc' => __('This will show the tabs as a list and not as tabs.', 'userswp'),
-//                    'type' => 'checkbox',
-//                    'desc_tip' => true,
-//                    'value'  => '1',
-//                    'default'  => '',
-//                    'advanced' => true
-//                ),
                 'output'  => array(
                     'title' => __('Output Type:', 'userswp'),
                     'desc' => __('What parts should be output.', 'userswp'),
@@ -88,18 +79,14 @@ class UWP_Profile_Tabs_Widget extends WP_Super_Duper {
             return '';
         }
 
-
         $defaults = array(
-//            'show_as_list' => '0', // 0 =  all
             'output' => '',
         );
 
         $args = wp_parse_args( $args, $defaults );
 
-
         $tabs_array = $userswp->profile->get_tabs();
         $args['tabs_array'] = $tabs_array;
-//        $active_tab = get_query_var('uwp_tab');
         $active_tab = '';
         if(!empty($tabs_array)){
             if(!empty(get_query_var('uwp_tab'))){

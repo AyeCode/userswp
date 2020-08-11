@@ -168,16 +168,22 @@ class AUI_Component_Helper {
 	 *
 	 * @param $class
 	 * @param bool $space_after
+	 * @param array $extra_attributes An array of extra attributes.
 	 *
 	 * @return string
 	 */
-	public static function icon($class,$space_after = false){
+	public static function icon($class,$space_after = false, $extra_attributes = array()){
 		$output = '';
 
 		if($class){
 			$classes = self::esc_classes($class);
 			if(!empty($classes)){
-				$output = '<i class="'.$classes.'" ></i>';
+				$output = '<i class="'.$classes.'" ';
+				// extra attributes
+				if(!empty($extra_attributes)){
+					$output .= AUI_Component_Helper::extra_attributes($extra_attributes);
+				}
+				$output .= '></i>';
 				if($space_after){
 					$output .= " ";
 				}

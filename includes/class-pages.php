@@ -38,8 +38,7 @@ class UsersWP_Pages {
                         $this->is_account_page() ||
                         $this->is_profile_page() ||
                         $this->is_users_page() ||
-                        $this->is_user_item_page() ||
-                        $this->is_multi_register_page()) {
+                        $this->is_user_item_page()) {
                         return true;
                     } else {
                         return false;
@@ -153,23 +152,6 @@ class UsersWP_Pages {
     }
 
     /**
-     * Checks whether the current page is multi register page or not.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      bool
-     */
-    public function is_multi_register_page() {
-        global $post;
-        $content = $post->post_content;
-        if (strpos($content, '[uwp_register role_id') !== false) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Checks whether the current page is logged in user profile page or not.
      *
      * @since       1.0.0
@@ -200,100 +182,6 @@ class UsersWP_Pages {
         } else {
             return false;
         }
-    }
-
-    /**
-     * Gets the UsersWP page permalink based on page type.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       string|bool     $type       Page type.
-     * @return      string                      Page permalink.
-     */
-    public function get_page_permalink($type) {
-        $link = false;
-        $page_id = uwp_get_page_id($type, false);
-        if ($page_id) {
-            $link = get_permalink($page_id);
-        }
-        return $link;
-    }
-
-    /**
-     * Gets the UsersWP register page permalink.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      string      Page permalink.
-     */
-    public function get_register_permalink() {
-        return $this->get_page_permalink('register_page');
-    }
-
-    /**
-     * Gets the UsersWP login page permalink.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      string      Page permalink.
-     */
-    public function get_login_permalink() {
-        return $this->get_page_permalink('login_page');
-    }
-
-    /**
-     * Gets the UsersWP forgot password page permalink.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      string      Page permalink.
-     */
-    public function get_forgot_permalink() {
-        return $this->get_page_permalink('forgot_page');
-    }
-
-    /**
-     * Gets the UsersWP reset password page permalink.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      string      Page permalink.
-     */
-    public function get_reset_permalink() {
-        return $this->get_page_permalink('reset_page');
-    }
-
-    /**
-     * Gets the UsersWP account page permalink.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      string      Page permalink.
-     */
-    public function get_account_permalink() {
-        return $this->get_page_permalink('account_page');
-    }
-
-    /**
-     * Gets the UsersWP profile page permalink.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      string      Page permalink.
-     */
-    public function get_profile_permalink() {
-        return $this->get_page_permalink('profile_page');
-    }
-
-    /**
-     * Gets the UsersWP users page permalink.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      string      Page permalink.
-     */
-    public function get_users_permalink() {
-        return $this->get_page_permalink('users_page');
     }
 
     /**
@@ -453,13 +341,8 @@ class UsersWP_Pages {
      * @package     userswp
      *
      * @param       int         $blog_id        Blog ID.
-     * @param       int         $user_id        User ID.
-     * @param       string      $domain         Site domain.
-     * @param       string      $path           Site path.
-     * @param       int         $site_id        Site ID. Only relevant on multi-network installs.
-     * @param       array       $meta           Meta data. Used to set initial site options.
      */
-    public function wpmu_generate_default_pages_on_new_site( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+    public function wpmu_generate_default_pages_on_new_site( $blog_id ) {
 
         if (uwp_get_installation_type() != 'multi_na_all') {
             return;
@@ -477,7 +360,7 @@ class UsersWP_Pages {
         // Switch to the new blog.
         switch_to_blog( $blog_id );
 
-        uwp_generate_default_pages();
+	    $this->generate_default_pages();
 
         // Restore original blog.
         restore_current_blog();
@@ -492,10 +375,7 @@ class UsersWP_Pages {
      * @return      string                 Page permalink.
      */
     public function get_page_link($page) {
-
         $link = "";
-        $page_id = false;
-
         switch ($page) {
             case 'register':
                 $page_id = uwp_get_page_id('register_page', false);
@@ -520,6 +400,10 @@ class UsersWP_Pages {
             case 'users':
                 $page_id = uwp_get_page_id('users_page', false);
                 break;
+
+	        default:
+		        $page_id = uwp_get_page_id($page, false);
+		        break;
         }
 
         if ($page_id) {
@@ -589,7 +473,7 @@ class UsersWP_Pages {
         $link = false;
         $page_id = uwp_get_option($type, false, false);
 
-        if ($page_id > 0) {
+        if ($page_id && $page_id > 0) {
             if (uwp_is_wpml()) {
                 $wpml_page_id = uwp_wpml_object_id($page_id, 'page', true);
                 if (!empty($wpml_page_id)) {

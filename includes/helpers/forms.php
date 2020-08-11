@@ -16,6 +16,25 @@ function get_register_form_fields() {
     return $fields;
 }
 
+function check_register_form_field($var) {
+	if(!$var){
+		return false;
+	}
+
+	global $wpdb;
+	$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
+
+	$fields = $wpdb->get_results(
+		$wpdb->prepare(
+			"select * from  " . $extras_table_name . " where form_type = %s AND site_htmlvar_name = %s order by sort_order asc",
+			array('register', $var)
+		)
+	);
+
+	$fields = apply_filters('uwp_check_register_form_field', $fields);
+	return $fields;
+}
+
 /**
  * Returns the register form validate-able fields.
  *
@@ -141,7 +160,7 @@ function uwp_get_form_label($field) {
 }
 
 /**
- * Returns placehoder for field.
+ * Returns placeholder for field.
  *
  * @param       object      $field      Field info.
  *
@@ -167,16 +186,36 @@ function uwp_get_field_placeholder($field) {
 }
 
 /**
+ * Returns description for field.
+ *
+ * @param       object      $field      Field info.
+ * @param       string      $default    Default value.
+ *
+ * @return      string                  Label.
+ */
+function uwp_get_field_description($field, $default = '') {
+
+	if (isset($field->help_text) && !empty($field->help_text)) {
+		$desc = __($field->help_text, 'userswp');
+	} else {
+		$desc = $default;
+	}
+
+	return apply_filters('uwp_get_field_description', stripslashes($desc), $field);
+}
+
+/**
  * Gets the custom field info for given key.
  *
  * @since       1.0.0
  * @package     userswp
  *
- * @param       string      $htmlvar_name       Custom field key.
+ * @param       string      $htmlvar_name    Custom field key.
+ * @param       string      $form_type       Form type.
  *
  * @return      object                          Field info.
  */
-function uwp_get_custom_field_info($htmlvar_name,$form_type = 'account') {
+function uwp_get_custom_field_info($htmlvar_name, $form_type = 'account') {
 	global $wpdb;
 	$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 	if($form_type){

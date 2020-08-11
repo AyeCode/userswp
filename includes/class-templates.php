@@ -670,7 +670,7 @@ class UsersWP_Templates {
      *
      * Returns content for the users list item template
      *
-	 * @return mixed|string|void
+	 * @return string
 	 */
     public static function users_list_item_template_content(){
 
@@ -830,99 +830,6 @@ class UsersWP_Templates {
     }
 
     /**
-     * Redirects to UsersWP info page after plugin activation.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @return      void
-     */
-    public function activation_redirect() {
-
-        if (get_option('uwp_activation_redirect', false)) {
-            delete_option('uwp_activation_redirect');
-	        update_option("uwp_setup_wizard_notice",1);
-	        wp_redirect(admin_url('index.php?page=uwp-setup'));
-            exit;
-
-        }
-
-        if ( ! empty( $_GET['force_sync_data'] ) ) {
-            $blog_id = get_current_blog_id();
-            do_action( 'wp_' . $blog_id . '_uwp_updater_cron' );
-            wp_safe_redirect( admin_url( 'admin.php?page=userswp' ) );
-            exit;
-        }
-
-    }
-
-    /**
-     * Prints UsersWP fields in WP-Admin Users Edit page.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       object      $user       User Object.
-     */
-    public function get_profile_extra_admin_edit($user) {
-        echo $this->get_profile_extra_edit($user);
-    }
-
-    /**
-     * Gets UsersWP fields in WP-Admin Users Edit page.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       object      $user       User Object.
-     * @return      string                  HTML string.
-     */
-    public function get_profile_extra_edit($user) {
-        ob_start();
-        global $wpdb;
-        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $excluded_fields = apply_filters('uwp_exclude_edit_profile_fields', array());
-        $query = "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0'";
-        if(is_array($excluded_fields) && count($excluded_fields) > 0){
-            $query .= 'AND htmlvar_name NOT IN ('.implode(',', $excluded_fields).')';
-        }
-        $query .= ' ORDER BY sort_order ASC';
-        $fields = $wpdb->get_results($query);
-        if ($fields) {
-            ?>
-            <div class="uwp-profile-extra">
-                <table class="uwp-profile-extra-table form-table">
-                    <?php
-                    foreach ($fields as $field) {
-
-                        // Icon
-                        $icon = uwp_get_field_icon( $field->field_icon );
-
-                        if ($field->field_type == 'fieldset') {
-                            ?>
-                            <tr style="margin: 0; padding: 0">
-                                <th class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></th>
-                                <td></td>
-                            </tr>
-                            <?php
-                        } else { ?>
-                            <tr>
-                                <th class="uwp-profile-extra-key"><?php echo $icon.$field->site_title; ?></th>
-                                <td class="uwp-profile-extra-value">
-                                    <?php $this->template_fields_html($field, 'account', $user->ID); ?>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                    }
-                    ?>
-                </table>
-            </div>
-            <?php
-        }
-        $output = ob_get_contents();
-        ob_end_clean();
-        return trim($output);
-    }
-
-    /**
      * Adds the UsersWP body class to body tag.
      *
      * @since       1.0.0
@@ -1027,7 +934,7 @@ class UsersWP_Templates {
                 <div class="uwp-profile-extra-div form-table">
                     <form class="uwp-account-form uwp_form" method="post">
 						<?php if ($fields) { ?>
-                            <div class="uwp-profile-extra-wrap row">
+                            <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
                                 <div class="uwp-profile-extra-key col" style="font-weight: bold;">
 									<?php echo __("Field", "userswp") ?>
                                 </div>
@@ -1062,7 +969,7 @@ class UsersWP_Templates {
 						$tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".$tabs_table_name." WHERE form_type=%s AND user_decided = 1 ORDER BY sort_order ASC", 'profile-tabs'));
 
 						if( $tabs ){ ?>
-                            <div class="uwp-profile-extra-wrap row">
+                            <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
                                 <div class="uwp-profile-extra-key col" style="font-weight: bold;">
 									<?php echo __("Tab Name", "userswp") ?>
                                 </div>
@@ -1142,58 +1049,6 @@ class UsersWP_Templates {
             </div>
 			<?php
 			echo '</div>';
-		}
-	}
-
-	/**
-	 * Adds "Accept terms and conditions" checkbox in register form.
-	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string      $form_type      Form type.
-	 *
-	 * @return      void
-	 */
-	public function add_template_fields_terms_check($form_type) {
-		if ($form_type == 'register') {
-			$terms_page = false;
-			$reg_terms_page_id = uwp_get_page_id('register_terms_page', false);
-			$reg_terms_page_id = apply_filters('uwp_reg_terms_page_id', $reg_terms_page_id);
-			if (!empty($reg_terms_page_id)) {
-				$terms_page = get_permalink($reg_terms_page_id);
-			}
-			if ($terms_page) {
-				$content = sprintf( __( 'I accept %s Terms and Conditions %s.', 'userswp' ), '<a href="'.$terms_page.'" target="_blank">', '</a>');
-				$content = apply_filters('uwp_register_terms_input_label', $content);
-				?>
-                <div class="uwp-remember-me">
-                    <label style="display: inline-block;font-weight: normal" for="agree_terms">
-                        <input name="agree_terms" id="agree_terms" value="yes" type="checkbox">
-						<?php echo $content; ?>
-                    </label>
-                </div>
-				<?php
-			}
-
-			$gdpr_page = false;
-			$reg_gdpr_page_id = uwp_get_page_id('register_gdpr_page', false);
-			$reg_gdpr_page_id = apply_filters('uwp_register_gdpr_page_id', $reg_gdpr_page_id);
-			if (!empty($reg_gdpr_page_id)) {
-				$gdpr_page = get_permalink($reg_gdpr_page_id);
-			}
-			if ($gdpr_page) {
-				$content = sprintf( __( 'By using this form I agree to the storage and handling of my data by this website. View our %s GDPR Policy %s.', 'userswp' ), '<a href="'.$gdpr_page.'" target="_blank">', '</a>');
-				$content = apply_filters('uwp_register_gdpr_input_label', $content);
-				?>
-                <div class="uwp-gdpr-input">
-                    <label style="display: inline-block;font-weight: normal" for="uwp_accept_gdpr">
-                        <input name="uwp_accept_gdpr" id="uwp_accept_gdpr" value="yes" type="checkbox">
-						<?php echo $content; ?>
-                    </label>
-                </div>
-				<?php
-			}
 		}
 	}
 
