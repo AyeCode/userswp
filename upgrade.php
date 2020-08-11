@@ -239,49 +239,77 @@ function uwp_upgrade_12013() {
  * Add TOS and GDPR field in form builder if set in registration form setting.
  */
 function uwp_upgrade_1225() {
-	$form_builder = new UsersWP_Form_Builder();
+	global $wpdb;
+	$fields = array();
 
-	$reg_tos = uwp_get_option('register_terms_page', false);
-	if(isset($reg_tos) && $reg_tos > 0){
-		$field = array(
-			'form_type' => 'account',
-			'field_type' => 'checkbox',
-			'data_type' => 'TINYINT',
-			'site_title' => __('GDPR Policy', 'userswp'),
-			'htmlvar_name' => 'register_gdpr',
-			'is_public' => '1',
-			'is_active' => '1',
-			'is_required' => '1',
-			'is_register_field' => '1',
+	$reg_tos = uwp_get_option( 'register_gdpr_page', false );
+	if ( isset( $reg_tos ) && $reg_tos > 0 ) {
+		$fields[] = array(
+			'form_type'              => 'account',
+			'field_type'             => 'checkbox',
+			'data_type'              => 'TINYINT',
+			'site_title'             => __( 'GDPR Policy', 'userswp' ),
+			'htmlvar_name'           => 'register_gdpr',
+			'is_public'              => '1',
+			'is_active'              => '1',
+			'is_required'            => '1',
+			'required_msg'           => __( 'You must read and accept our GDPR policy.', 'userswp' ),
+			'is_register_field'      => '1',
 			'is_register_only_field' => '1',
-			'field_icon' => 'fas fa-file',
 		);
-		$form_builder->admin_form_field_save($field);
-		$field['form_type'] = 'register';
-		$field['field_id'] = 'register_gdpr';
-		$field['site_htmlvar_name'] = 'register_gdpr';
-		$form_builder->register_field_save($field);
 	}
 
-	$reg_gdpr = uwp_get_option('register_gdpr_page', false);
-	if(isset($reg_gdpr) && $reg_gdpr > 0){
-		$field = array(
-			'form_type' => 'account',
-			'field_type' => 'checkbox',
-			'data_type' => 'TINYINT',
-			'site_title' => __('Terms & Conditions', 'userswp'),
-			'htmlvar_name' => 'register_tos',
-			'is_public' => '1',
-			'is_active' => '1',
-			'is_required' => '1',
-			'is_register_field' => '1',
+	$reg_gdpr = uwp_get_option( 'register_terms_page', false );
+	if ( isset( $reg_gdpr ) && $reg_gdpr > 0 ) {
+		$fields[] = array(
+			'form_type'              => 'account',
+			'field_type'             => 'checkbox',
+			'data_type'              => 'TINYINT',
+			'site_title'             => __( 'Terms & Conditions', 'userswp' ),
+			'htmlvar_name'           => 'register_tos',
+			'is_public'              => '1',
+			'is_active'              => '1',
+			'is_required'            => '1',
+			'required_msg'           => __( 'You must read and accept our terms and conditions.', 'userswp' ),
+			'is_register_field'      => '1',
 			'is_register_only_field' => '1',
-			'field_icon' => 'fas fa-file',
 		);
-		$form_builder->admin_form_field_save($field);
-		$field['form_type'] = 'register';
-		$field['field_id'] = 'register_tos';
-		$field['site_htmlvar_name'] = 'register_tos';
-		$form_builder->register_field_save($field);
+	}
+
+	if($fields && count($fields) > 0){
+		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
+		$form_type         = 'register';
+		$form_builder      = new UsersWP_Form_Builder();
+
+		foreach ($fields as $field){
+			$site_htmlvar_name = $field['htmlvar_name'];
+			$field_type = $field['field_type'];
+
+			$last_order = $wpdb->get_var( "SELECT MAX(sort_order) as last_order FROM " . $extras_table_name );
+			$sort_order = (int) $last_order + 1;
+
+			$form_builder->admin_form_field_save( $field );
+
+			$check_html_variable = $wpdb->get_var($wpdb->prepare("select site_htmlvar_name from " . $extras_table_name . " where site_htmlvar_name = %s and form_type = %s ",
+				array($site_htmlvar_name, $form_type)));
+
+			if (!$check_html_variable) {
+				$wpdb->query(
+					$wpdb->prepare(
+						"insert into " . $extras_table_name . " set
+					form_type = %s,
+					field_type = %s,
+					site_htmlvar_name = %s,
+					sort_order = %s",
+						array(
+							$form_type,
+							$field_type,
+							$site_htmlvar_name,
+							$sort_order
+						)
+					)
+				);
+			}
+		}
 	}
 }

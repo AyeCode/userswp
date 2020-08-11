@@ -81,7 +81,6 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 					'name'       => 'uwp_'.$type.'_reset',
 					'class'      => 'btn btn-primary btn-danger',
 					'content'    => __( 'Reset to Default', 'userswp' ),
-					'extra_attributes'  => array('data-type'=>$type, 'data-dismiss'=>"modal")
 				));
 				echo aui()->button(array(
 					'type'       =>  'submit',

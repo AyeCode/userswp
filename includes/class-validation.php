@@ -104,6 +104,7 @@ class UsersWP_Validation {
                 }
 
 
+
                 if (!isset($data[$field->htmlvar_name]) && $field->is_required == 1) {
                     if (is_admin()) {
                         //do nothing since admin edit fields can be empty
@@ -249,6 +250,29 @@ class UsersWP_Validation {
 	                    return $errors;
                     }
                 }
+
+                // check for the TOS and GDPR validation.
+	            if ('register' == $type && ($field->htmlvar_name == 'register_gdpr' || $field->htmlvar_name == 'register_tos' )) {
+
+		            if($field->htmlvar_name == 'register_gdpr'){
+			            $msg = __('You must read and accept our GDPR policy.', 'userswp');
+			            $is_page = uwp_get_option('register_gdpr', false);
+		            } else {
+			            $msg = __('You must accept our terms and conditions.', 'userswp');
+			            $is_page = uwp_get_option('register_terms_page', false);
+		            }
+
+					if(isset($sanitized_value) && 1 != $sanitized_value && $is_page){
+
+						if ($field->required_msg) {
+							$errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->required_msg, 'userswp'));
+							return $errors;
+						} else {
+							$errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: ' .$msg, 'userswp'));
+							return $errors;
+						}
+					}
+	            }
 
                 // Check the username for login
                 if ($type != 'account' && $field->htmlvar_name == 'username') {
