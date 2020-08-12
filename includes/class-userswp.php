@@ -70,12 +70,10 @@ final class UsersWP {
         $this->ajax = new UsersWP_Ajax();
         $this->files = new UsersWP_Files();
         $this->notifications = new UsersWP_Notifications();
-        $this->seo = new UsersWP_Seo();
         
         // actions and filters
         $this->load_assets_actions_and_filters($this->assets);
         $this->load_meta_actions_and_filters($this->meta);
-        $this->load_ajax_actions_and_filters($this->ajax);
         $this->load_files_actions_and_filters($this->files);
         $this->load_forms_actions_and_filters($this->forms);
         $this->load_notices_actions_and_filters($this->notices);
@@ -85,12 +83,10 @@ final class UsersWP {
         $this->load_templates_actions_and_filters($this->templates);
         $this->load_tools_actions_and_filters($this->tools);
         $this->load_notifications_actions_and_filters($this->notifications);
-	    $this->load_seo_actions_and_filters($this->seo);
 
         //admin
         $this->load_form_builder_actions_and_filters($this->form_builder);
         $this->load_menus_actions_and_filters($this->menus);
-        $this->load_admin_actions_and_filters($this->admin);
         
     }
 
@@ -131,21 +127,7 @@ final class UsersWP {
         add_filter('uwp_before_extra_fields_save', array($instance, 'save_user_ip_on_register'), 10, 3);
         add_filter('uwp_update_usermeta', array($instance, 'modify_datepicker_value_on_update'), 10, 3);
         add_filter('uwp_get_usermeta', array($instance, 'modify_datepicker_value_on_get'), 10, 4);
-        add_filter('user_row_actions', array($instance, 'user_row_actions'), 10, 2);
-        add_action('bulk_actions-users', array($instance, 'users_bulk_actions'));
-        add_action('handle_bulk_actions-users', array($instance, 'handle_users_bulk_actions'), 10, 3);
-        add_filter('init', array($instance, 'process_user_actions'));
-        add_action('admin_notices', array($instance, 'show_update_messages'));
         add_action('get_user_metadata', array($instance, 'dynamically_add_user_meta'), 10, 4);
-    }
-
-	/**
-	 * Actions for AJAX
-	 *
-	 * @param $instance
-	 */
-    public function load_ajax_actions_and_filters($instance) {
-
     }
 
     public function load_files_actions_and_filters($instance) {
@@ -199,6 +181,7 @@ final class UsersWP {
         add_filter('uwp_form_input_html_multiselect', array($instance, 'form_input_multiselect'), 10, 4);
         add_filter('uwp_form_input_html_text', array($instance, 'form_input_text'), 10, 4);
         add_filter('uwp_form_input_html_textarea', array($instance, 'form_input_textarea'), 10, 4);
+	    add_filter('uwp_form_input_html_editor', array($instance, 'form_input_editor'), 10, 4);
         add_filter('uwp_form_input_html_fieldset', array($instance, 'form_input_fieldset'), 10, 4);
         add_filter('uwp_form_input_html_file', array($instance, 'form_input_file'), 10, 4);
         add_filter('uwp_form_input_html_checkbox', array($instance, 'form_input_checkbox'), 10, 4);
@@ -206,6 +189,8 @@ final class UsersWP {
         add_filter('uwp_form_input_html_url', array($instance, 'form_input_url'), 10, 4);
         add_filter('uwp_form_input_html_email', array($instance, 'form_input_email'), 10, 4);
         add_filter('uwp_form_input_html_password', array($instance, 'form_input_password'), 10, 4);
+	    add_filter('uwp_form_input_html_checkbox_register_gdpr', array($instance, 'form_input_register_gdpr'), 10, 4);
+	    add_filter('uwp_form_input_html_checkbox_register_tos', array($instance, 'form_input_register_tos'), 10, 4);
         // Country select
         add_filter('uwp_form_input_html_select_uwp_country', array($instance, 'form_input_select_country'), 10, 4);
 	    add_filter('uwp_form_input_html_phone', array($instance, 'form_input_phone'), 10, 4);
@@ -235,7 +220,7 @@ final class UsersWP {
 	 * @param $instance
 	 */
     public function load_pages_actions_and_filters($instance) {
-        add_action( 'wpmu_new_blog', array($instance, 'wpmu_generate_default_pages_on_new_site'), 10, 6 );
+        add_action( 'wpmu_new_blog', array($instance, 'wpmu_generate_default_pages_on_new_site'), 10, 1 );
         add_filter( 'display_post_states', array( $instance, 'add_display_post_states' ), 10, 2 );
     }
 
@@ -254,7 +239,6 @@ final class UsersWP {
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
         add_filter( 'get_comment_author_link', array($instance, 'get_comment_author_link') , 10 , 2 );
         add_action( 'uwp_user_post_counts', array($instance, 'get_user_post_counts'), 10, 1 );
-        add_action( 'uwp_users_profile_header', array($instance, 'get_profile_header'), 10, 1 );
         add_action( 'uwp_user_title', array($instance, 'get_profile_title'), 10, 2 );
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 2 );
         add_filter( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );
@@ -262,10 +246,8 @@ final class UsersWP {
 
         // Popup and crop functions
         add_filter( 'ajax_query_attachments_args', array($instance, 'restrict_attachment_display') );
-
         add_action( 'uwp_handle_file_upload_error_checks', array($instance, 'handle_file_upload_error_checks'), 10, 4 );
         add_action( 'wp_ajax_uwp_avatar_banner_upload', array($instance, 'ajax_avatar_banner_upload') );
-        //add_action( 'wp_ajax_uwp_ajax_image_crop_popup', array($instance, 'uwp_ajax_image_crop_popup') );
         add_action( 'wp_ajax_uwp_ajax_image_crop_popup_form', array($instance, 'ajax_image_crop_popup_form') );
         add_action( 'wp_ajax_uwp_ajax_profile_image_remove', array($instance, 'ajax_profile_image_remove') );
         add_action( 'wp_head', array($instance, 'define_ajaxurl') );
@@ -276,7 +258,6 @@ final class UsersWP {
         add_action( 'uwp_profile_more_info_tab_content', array($instance, 'get_profile_more_info'), 10, 1);
         add_action( 'uwp_profile_posts_tab_content', array($instance, 'get_profile_posts'), 10, 1);
         add_action( 'uwp_profile_comments_tab_content', array($instance, 'get_profile_comments'), 10, 1);
-        //add_action( 'uwp_profile_tab_content', array($instance, 'uwp_extra_fields_as_tab_values'), 10, 2 );
 
         // Profile Pagination
         add_action( 'uwp_profile_pagination', array($instance, 'get_profile_pagination'));
@@ -312,20 +293,14 @@ final class UsersWP {
         add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
         add_action( 'uwp_template_fields', array($instance, 'template_fields'), 10, 1 );
         add_action( 'uwp_template_fields', array($instance, 'template_extra_fields'), 10, 1 );
-        add_action( 'uwp_template_fields', array($instance, 'add_template_fields_terms_check'), 100, 1 );
-        //add_action( 'uwp_account_form_display', array($instance, 'account_edit_form_display'), 10, 1 );
         add_action( 'uwp_account_form_display', array($instance, 'privacy_edit_form_display'), 10, 1 );
         add_action( 'wp_logout', array($instance, 'logout_redirect'));
         add_action( 'init', array($instance, 'wp_login_redirect'));
         add_action( 'init', array($instance, 'wp_register_redirect'));
-        add_action( 'admin_init', array($instance, 'activation_redirect'));
         // Redirect functions
         add_action( 'template_redirect', array($instance, 'profile_redirect'), 10);
         add_action( 'template_redirect', array($instance, 'access_checks'), 20);
 	    add_action( 'wp', array($instance, 'redirect_templates_sub_pages'));
-        // Admin user edit page
-        add_action( 'edit_user_profile', array($instance, 'get_profile_extra_admin_edit'), 10, 1 );
-        add_action( 'show_user_profile', array($instance, 'get_profile_extra_admin_edit'), 10, 1 );
 	    add_action('wp_login', array($instance, 'unconfirmed_login_redirect'), 10, 2);
 
         add_filter( 'wp_setup_nav_menu_item', array($instance, 'setup_nav_menu_item'), 10, 1 );
@@ -361,17 +336,6 @@ final class UsersWP {
         add_action('uwp_account_form_display', array($instance, 'user_notifications_form_front'), 10, 1);
         add_action('init', array($instance, 'notification_submit_handler'));
     }
-
-	/**
-	 * Actions for SEO.
-	 *
-	 * @param $instance
-	 */
-	public function load_seo_actions_and_filters($instance) {
-		add_action('init', array($instance,'init'));
-		add_action('pre_get_document_title', array($instance,'output_title'));
-		add_action('uwp_profile_options', array($instance,'profile_options'));
-	}
 
 	/**
 	 * Actions for form builder
@@ -429,22 +393,6 @@ final class UsersWP {
     }
 
 	/**
-	 * Actions for admin
-	 *
-	 * @param $instance
-	 */
-    public function load_admin_actions_and_filters($instance) {
-        add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_styles') );
-        add_action( 'admin_enqueue_scripts', array($instance, 'enqueue_scripts') );
-        add_action('admin_head', array($instance, 'admin_only_css'));
-	    add_action('admin_footer', array($instance, 'admin_only_script'));
-	    add_action('user_profile_picture_description', array($instance, 'user_profile_picture_description'));
-	    add_action('show_user_profile', array($instance, 'edit_profile_banner_fields'));
-	    add_action('edit_user_profile', array($instance, 'edit_profile_banner_fields'));
-	    add_action('admin_body_class', array($instance, 'admin_body_class'));
-    }
-
-	/**
 	 * Register widgets
 	 *
 	 */
@@ -481,27 +429,6 @@ final class UsersWP {
     }
 
     /**
-     * The name of the plugin used to uniquely identify it within the context of
-     * WordPress and to define internationalization functionality.
-     *
-     * @since     1.0.0
-     * @return    string    The name of the plugin.
-     */
-    public function get_plugin_name() {
-        return $this->plugin_name;
-    }
-
-    /**
-     * Retrieve the version number of the plugin.
-     *
-     * @since     1.0.0
-     * @return    string    The version number of the plugin.
-     */
-    public function get_version() {
-        return $this->version;
-    }
-
-    /**
      * Load the required dependencies for this plugin.
      *
      * @since    1.0.0
@@ -530,12 +457,6 @@ final class UsersWP {
          * of the plugin.
          */
         require_once dirname(dirname( __FILE__ )) . '/includes/class-activator.php';
-
-        /**
-         * The class responsible for deactivation functionality
-         * of the plugin.
-         */
-        require_once dirname(dirname( __FILE__ )) . '/includes/class-deactivator.php';
 
         /**
          * The libraries required.

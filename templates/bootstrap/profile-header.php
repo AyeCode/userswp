@@ -27,7 +27,7 @@ if(!$uwp_in_user_loop){ ?><div class="card shadow-0 border-0 mw-100"><?php }
 
 if( ! $hide_cover ) {
 	if ( $uwp_in_user_loop ) {
-		echo '<a href="' . esc_url_raw( get_author_posts_url( $user->ID ) ) . '" title="' . $user->display_name . '">';
+		echo '<a href="' . esc_url_raw( uwp_build_profile_tab_url( $user->ID ) ) . '" title="' . $user->display_name . '">';
 	} ?>
 	<img class="card-img-top m-0 p-0 uwp-banner-image" src="<?php echo esc_url( $banner_url ); ?>"
 	     alt="<?php _e( "User banner image", "userswp" ); ?>">
@@ -37,17 +37,21 @@ if( ! $hide_cover ) {
 
 	<?php if ( ! $uwp_in_user_loop && is_user_logged_in() && $allow_change && ( get_current_user_id() == $user->ID ) ) { ?>
 		<div class="card-img-overlay p-1 bg-shadow-bottom-dd">
-			<a onclick="uwp_profile_image_change('banner');return false;" href="#"
-			   class="btn btn-sm uwp-banner-change-icon btn-outline-secondary uwp-profile-modal-form-trigger border-0"
-			   data-toggle="tooltip" data-placement="right" title=""
-			   data-original-title="<?php _e( 'Update Cover Image', 'userswp' ); ?>">
-				<i class="fas fa-camera fa-fw"></i>
-			</a>
+			<?php
+			echo aui()->button(array(
+				'type'  =>  'a',
+				'href'       => '#',
+				'class'      => 'btn btn-sm uwp-banner-change-icon btn-outline-secondary border-0',
+				'icon'       => 'fas fa-camera fa-fw',
+				'title'      => '',
+				'onclick'    => "uwp_profile_image_change('banner');return false;",
+				'extra_attributes'  => array('data-toggle'=>'tooltip', 'data-original-title'=>__( 'Update Profile Image', 'userswp' ))
+			));
+			?>
 		</div>
 	<?php }
 
 }?>
-
 
 <div class="card-body  <?php if(!$uwp_in_user_loop){ ?>mt-xl-0 pt-0<?php }else{?>text-center pb-0<?php }?>">
 
@@ -55,19 +59,24 @@ if( ! $hide_cover ) {
 
 		<?php if( ! $hide_avatar ){ ?>
 		<div class="col <?php if($uwp_in_user_loop){?>col-5<?php }?> text-center tofront ">
-			<?php if ($uwp_in_user_loop) { echo '<a href="'.esc_url_raw(get_author_posts_url($user->ID)).'" title="'.$user->display_name.'">';} ?>
+			<?php if ($uwp_in_user_loop) { echo '<a href="'.esc_url_raw(uwp_build_profile_tab_url($user->ID)).'" title="'.$user->display_name.'">';} ?>
 			<img class="rounded-circle shadow border border-white border-width-4 p-0 <?php if(!$hide_cover){ echo "mt-neg5";}?>"
 			     src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php _e("User avatar","userswp");?>">
 			<?php if ($uwp_in_user_loop) {echo '</a>';} ?>
 
 			<?php if (!$uwp_in_user_loop && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && $allow_change ) { ?>
 				<div class="card-img-overlay d-flex p-0">
-					<a onclick="uwp_profile_image_change('avatar');return false;" href="#"
-					   class="btn btn-sm uwp-banner-change-icon btn-outline-secondary btn-circle border-0 align-self-end mx-auto "
-					   data-toggle="tooltip" title=""
-					   data-original-title="<?php _e( 'Update Profile Image', 'userswp' ); ?>">
-						<i class="fas fa-camera fa-fw"></i>
-					</a>
+					<?php
+					echo aui()->button(array(
+						'type'  =>  'a',
+						'href'       => '#',
+						'class'      => 'btn btn-sm uwp-banner-change-icon btn-outline-secondary btn-circle border-0 align-self-end mx-auto',
+						'icon'       => 'fas fa-camera fa-fw',
+						'title'      => '',
+						'onclick'    => "uwp_profile_image_change('avatar');return false;",
+						'extra_attributes'  => array('data-toggle'=>'tooltip', 'data-original-title'=>__( 'Update Profile Image', 'userswp' ))
+					));
+					?>
 				</div>
 			<?php } ?>
 		</div>
@@ -98,7 +107,6 @@ if( ! $hide_cover ) {
 			?>
 		</div>
 	</div>
-
 
 </div>
 

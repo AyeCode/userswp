@@ -231,7 +231,6 @@ class UsersWP_GeoDirectory_Plugin {
 					'multiple' => true,
 					'type'     => 'multiselect',
 					'options'  => $gd_posttypes,
-					'class'    => 'uwp-select',
 				),
 				array(
 					'id'       => 'gd_profile_reviews',
@@ -240,7 +239,6 @@ class UsersWP_GeoDirectory_Plugin {
 					'multiple' => true,
 					'type'     => 'multiselect',
 					'options'  => $gd_posttypes,
-					'class'    => 'aui-select2 uwp-select',
 				),
 				array(
 					'id'       => 'gd_profile_favorites',
@@ -249,7 +247,6 @@ class UsersWP_GeoDirectory_Plugin {
 					'multiple' => true,
 					'type'     => 'multiselect',
 					'options'  => $gd_posttypes,
-					'class'    => 'uwp-select',
 				),
 				array(
 					'id'      => 'geodir_uwp_link_listing',
@@ -1167,7 +1164,7 @@ class UsersWP_GeoDirectory_Plugin {
 				} else {
 					echo aui()->alert( array(
 						'type'    => 'info',
-						'content' => sprintf( __( "No %s found.", 'geodirectory' ), $gd_post_types[ $post_type ]['labels']['name'] )
+						'content' => sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
 					) );
 				}
 				do_action( 'uwp_after_profile_listing_items', $user, $post_type );
@@ -1381,7 +1378,7 @@ class UsersWP_GeoDirectory_Plugin {
 				} else {
 					echo aui()->alert( array(
 						'type'    => 'info',
-						'content' => sprintf( __( "No %s found.", 'geodirectory' ), $gd_post_types[ $post_type ]['labels']['name'] )
+						'content' => sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] )
 					) );
 				}
 

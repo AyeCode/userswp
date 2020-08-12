@@ -454,6 +454,7 @@ $total_users = $users_count['total_users'];
                     $('form#mainform').find('.uwp_import_users_file').val(response.response);
 
                 } else {
+                    console.log(response);
                     alert(response.response);
 
                     this.count -= 1;

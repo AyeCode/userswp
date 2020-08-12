@@ -41,14 +41,16 @@ if($output === '' || $output=='head'){
 						?>
 						<li id="uwp-profile-<?php echo $tab_id; ?>"
 						    class="nav-item <?php echo $active; ?> list-unstyled">
-							<a href="<?php echo $tab_url; ?>" class="nav-link">
 								<?php
-								if(!empty($tab['tab_icon'])){
-									echo '<i class="'.esc_attr($tab['tab_icon']).'"></i>';
-								}
+                                $content = '<span class="uwp-profile-tab-label uwp-profile-'.$tab_id.'-label">'.esc_html__($tab['tab_name'], 'userswp').'</span>';
+                                echo aui()->button(array(
+									'type'       =>  'a',
+									'href'       => $tab_url,
+									'class'      => 'nav-link',
+									'icon'       => esc_attr($tab['tab_icon']),
+									'content'    => $content,
+								));
 								?>
-								<span class="uwp-profile-tab-label uwp-profile-<?php echo $tab_id; ?>-label "><?php echo esc_html(__($tab['tab_name'], 'userswp')); ?></span>
-							</a>
 						</li>
 						<?php
 					}
@@ -64,20 +66,6 @@ if($output === '' || $output=='head'){
 if($output === '' || $output=='body'){
 ?>
 <div id="tab-content" class="uwp-profile-content">
-	<?php
-	if(!empty($tabs_array)) {
-		foreach ($tabs_array as $tab) {
-			$tab_id = $tab['tab_key'];
-			$tab_url = uwp_build_profile_tab_url($user->ID, $tab_id, false);
-
-			$active = $active_tab == $tab_id ? ' active' : '';
-
-			if ($active_tab == $tab_id) {
-				$active_tab_content = $tab['tab_content_rendered'];
-			}
-		}
-	}
-	?>
 	<div class="uwp-profile-entries">
 		<?php
 		if(isset($active_tab_content) && !empty($active_tab_content)){

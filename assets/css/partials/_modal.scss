@@ -180,7 +180,6 @@
     flex-direction: column;
     background-color: #fff;
     background-clip: padding-box;
-    border: 1px solid #999;
     border: 1px solid rgba(0,0,0,.2);
     border-radius: 6px;
     -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
@@ -261,6 +260,7 @@
   width: 32px;
   height: 32px;
   margin: 0 auto;
+  background-image: url("../../images/loading.gif");
 }
 .uwp-crop-form input[type="submit"]:disabled {
   opacity: .5;
@@ -297,8 +297,6 @@
   }
 
   .tiny-green div {
-
-    font-family: arial;
     font-size: 3px;
     color: white;
     text-align: right;

@@ -76,6 +76,101 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 				'advanced' => false,
 				'element_require' => '[%condition%]!="is_empty" && [%condition%]!="is_not_empty"'
 			),
+			'badge'  => array(
+				'type' => 'text',
+				'title' => __('Badge:', 'userswp'),
+				'desc' => __('Badge text. Leave blank to show field title as a badge, or use %%input%% to use the input value of the field or %%profile_url%% for the user profile url, or the field key for any other info %%email%%.', 'userswp'),
+				'placeholder' => '',
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => false
+			),
+			'type'  => array(
+				'title' => __('Type', 'userswp'),
+				'desc' => __('Select the badge type.', 'userswp'),
+				'type' => 'select',
+				'options'   =>  array(
+					"" => __('Badge', 'userswp'),
+					"pill" => __('Pill', 'userswp'),
+				),
+				'default'  => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'     => __("Design","userswp")
+			),
+			'shadow'  => array(
+				'title' => __('Shadow', 'userswp'),
+				'desc' => __('Select the shadow badge type.', 'userswp'),
+				'type' => 'select',
+				'options'   =>  array(
+					"" => __('None', 'userswp'),
+					"small" => __('Small', 'userswp'),
+					"medium" => __('Medium', 'userswp'),
+					"large" => __('Large', 'userswp'),
+				),
+				'default'  => '',
+				'desc_tip' => true,
+				'group'     => __("Design","userswp")
+			),
+			'color'  => array(
+				'title' => __('Badge Color', 'userswp'),
+				'desc' => __('Select the the badge color.', 'userswp'),
+				'type' => 'select',
+				'options'   =>  array(
+					                "" => __('Custom colors', 'userswp'),
+				                )+uwp_aui_colors(true),
+				'default'  => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'     => __("Design","userswp")
+			),
+			'bg_color'  => array(
+				'type' => 'color',
+				'title' => __('Badge background color:', 'userswp'),
+				'desc' => __('Color for the badge background.', 'userswp'),
+				'placeholder' => '',
+				'default' => '#0073aa',
+				'desc_tip' => true,
+				'group'     => __("Design","userswp"),
+				'element_require' => '[%color%]==""',
+			),
+			'txt_color'  => array(
+				'type' => 'color',
+				'title' => __('Badge text color:', 'userswp'),
+				'desc' => __('Color for the badge text.', 'userswp'),
+				'placeholder' => '',
+				'desc_tip' => true,
+				'default'  => '#ffffff',
+				'group'     => __("Design","userswp"),
+				'element_require' => '[%color%]==""',
+			),
+			'size'  => array(
+				'type' => 'select',
+				'title' => __('Badge size:', 'userswp'),
+				'desc' => __('Size of the badge.', 'userswp'),
+				'options' =>  array(
+					"" => __('Medium', 'userswp'),
+					"small" => __('Small', 'userswp'),
+					"large" => __('Large', 'userswp'),
+					"extra-large" => __('Extra Large', 'userswp'),
+				),
+				'default' => '',
+				'desc_tip' => true,
+				'group'     => __("Design","userswp"),
+			),
+			'alignment'  => array(
+				'type' => 'select',
+				'title' => __('Alignment:', 'userswp'),
+				'desc' => __('How the item should be positioned on the page.', 'userswp'),
+				'options'   =>  array(
+					"" => __('None', 'userswp'),
+					"left" => __('Left', 'userswp'),
+					"center" => __('Center', 'userswp'),
+					"right" => __('Right', 'userswp'),
+				),
+				'desc_tip' => true,
+				'group'     => __("Design","userswp"),
+			),
 			'icon_class'  => array(
 				'type' => 'text',
 				'title' => __('Icon class:', 'userswp'),
@@ -85,14 +180,14 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 				'desc_tip' => true,
 				'group'     => __("Design","userswp")
 			),
-			'badge'  => array(
+			'css_class'  => array(
 				'type' => 'text',
-				'title' => __('Badge:', 'userswp'),
-				'desc' => __('Badge text. Leave blank to show field title as a badge, or use %%input%% to use the input value of the field or %%profile_url%% for the user profile url, or the field key for any other info %%email%%.', 'userswp'),
+				'title' => __('Extra class:', 'userswp'),
+				'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'userswp'),
 				'placeholder' => '',
 				'default' => '',
 				'desc_tip' => true,
-				'advanced' => false
+				'group'     => __("Design","userswp"),
 			),
 			'link'  => array(
 				'type' => 'text',
@@ -156,89 +251,6 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 				'default' => '',
 				'desc_tip' => true,
 				'group'     => __("Hover Action","userswp")
-			),
-			'type'  => array(
-				'title' => __('Type', 'userswp'),
-				'desc' => __('Select the badge type.', 'userswp'),
-				'type' => 'select',
-				'options'   =>  array(
-					"" => __('Badge', 'userswp'),
-					"pill" => __('Pill', 'userswp'),
-				),
-				'default'  => '',
-				'desc_tip' => true,
-				'advanced' => false,
-				'group'     => __("Design","userswp")
-			),
-			'shadow'  => array(
-				'title' => __('Shadow', 'userswp'),
-				'desc' => __('Select the shadow badge type.', 'userswp'),
-				'type' => 'select',
-				'options'   =>  array(
-					"" => __('None', 'userswp'),
-					"small" => __('Small', 'userswp'),
-					"medium" => __('Medium', 'userswp'),
-					"large" => __('Large', 'userswp'),
-				),
-				'default'  => '',
-				'desc_tip' => true,
-				'group'     => __("Design","userswp")
-			),
-			'bg_color'  => array(
-				'type' => 'color',
-				'title' => __('Badge background color:', 'userswp'),
-				'desc' => __('Color for the badge background.', 'userswp'),
-				'placeholder' => '',
-				'default' => '#0073aa',
-				'desc_tip' => true,
-				'group'     => __("Design","userswp"),
-				'element_require' => '[%color%]==""',
-			),
-			'txt_color'  => array(
-				'type' => 'color',
-				'title' => __('Badge text color:', 'userswp'),
-				'desc' => __('Color for the badge text.', 'userswp'),
-				'placeholder' => '',
-				'desc_tip' => true,
-				'default'  => '#ffffff',
-				'group'     => __("Design","userswp"),
-				'element_require' => '[%color%]==""',
-			),
-			'size'  => array(
-				'type' => 'select',
-				'title' => __('Badge size:', 'userswp'),
-				'desc' => __('Size of the badge.', 'userswp'),
-				'options' =>  array(
-					"" => __('Medium', 'userswp'),
-					"small" => __('Small', 'userswp'),
-					"large" => __('Large', 'userswp'),
-					"extra-large" => __('Extra Large', 'userswp'),
-				),
-				'default' => '',
-				'desc_tip' => true,
-				'group'     => __("Design","userswp"),
-			),
-			'alignment'  => array(
-				'type' => 'select',
-				'title' => __('Alignment:', 'userswp'),
-				'desc' => __('How the item should be positioned on the page.', 'userswp'),
-				'options'   =>  array(
-					"" => __('None', 'userswp'),
-					"left" => __('Left', 'userswp'),
-					"center" => __('Center', 'userswp'),
-					"right" => __('Right', 'userswp'),
-				),
-				'desc_tip' => true,
-				'group'     => __("Design","userswp"),
-			),
-			'css_class'  => array(
-				'type' => 'text',
-				'title' => __('Extra class:', 'userswp'),
-				'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'userswp'),
-				'placeholder' => '',
-				'default' => '',
-				'desc_tip' => true,
-				'group'     => __("Design","userswp"),
 			),
 		);
 

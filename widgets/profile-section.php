@@ -75,6 +75,11 @@ class UWP_Profile_Section_Widget extends WP_Super_Duper {
         $args = wp_parse_args( $args, $defaults );
         $output = '';
 
+	    $design_style = uwp_get_option("design_style",'bootstrap');
+	    if($design_style){
+			return $output;
+	    }
+
         if(isset($args['type']) && $args['type']=='open'){
             $class = !empty($args['class']) ? esc_attr($args['class']) : '';
             $position = isset($args['position']) ? $args['position'] : 'full';
@@ -85,9 +90,8 @@ class UWP_Profile_Section_Widget extends WP_Super_Duper {
 
         // if block demo return empty to show placeholder text
         if($this->is_block_content_call()){
-            $output = '';
             $section_type = $args['type']=='open' ? __('closing','userswp') : __('opening','userswp');
-            $output = '<div style="background:#0185ba33;padding: 10px;">'.sprintf( __('Archive Item Section: <b>%s : %s</b> <small>(requires %s section to work)</small>', 'geodirectory'),strtoupper($args['type']),strtoupper($args['position']),$section_type).'</div>';
+            $output = '<div style="background:#0185ba33;padding: 10px;">'.sprintf( __('Archive Item Section: <b>%s : %s</b> <small>(requires %s section to work)</small>', 'userswp'),strtoupper($args['type']),strtoupper($args['position']),$section_type).'</div>';
         }
 
         return $output;

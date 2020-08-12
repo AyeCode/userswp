@@ -246,6 +246,11 @@
   }
 }
 
+.uwp-account .uwp_wc_form .form-row label,
+.uwp-account .uwp_wc_form .form-row span {
+  width: 100%;
+}
+
 @media screen and (max-width: 480px) {
   .uwp_page{
     .uwp-login-form,

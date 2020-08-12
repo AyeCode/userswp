@@ -69,7 +69,7 @@ if ( ! class_exists( 'UsersWP_Settings_Import_Export', false ) ) :
         }
 
         public function get_settings( $current_section = '' ) {
-            global $hide_save_button;
+            global $uwp_hide_save_button;
 
             if ( 'settings' == $current_section ) {
 
@@ -78,7 +78,7 @@ if ( ! class_exists( 'UsersWP_Settings_Import_Export', false ) ) :
                  *
                  * @package userswp
                  */
-                $hide_save_button = true;
+                $uwp_hide_save_button = true;
                 $settings = apply_filters('uwp_settings_ie_main', array(
 
                     array(
@@ -96,7 +96,7 @@ if ( ! class_exists( 'UsersWP_Settings_Import_Export', false ) ) :
                  *
                  * @package userswp
                  */
-                $hide_save_button = true;
+                $uwp_hide_save_button = true;
                 $settings = apply_filters('uwp_settings_ie_main', array(
 
                     array(

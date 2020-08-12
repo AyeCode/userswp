@@ -16,9 +16,14 @@ do_action( 'uwp_template_before', 'forgot' ); ?>
 				?>
 				<div class="modal-header">
 					<h5 class="modal-title"><?php echo esc_attr($form_title);?></h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="<?php _e("Close","userswp");?>">
-						<span aria-hidden="true">&times;</span>
-					</button>
+					<?php
+					echo aui()->button(array(
+						'type'       =>  'button',
+						'class'      => 'close',
+						'content'    => '<span aria-hidden="true">&times;</span>',
+						'extra_attributes'  => array('aria-label'=>__("Close","userswp"), 'data-dismiss'=>"modal")
+					));
+					?>
 				</div>
 				<?php
 			}
@@ -38,19 +43,40 @@ do_action( 'uwp_template_before', 'forgot' ); ?>
 
 				<form class="uwp-forgot-form uwp_form" method="post">
 
-					<?php do_action( 'uwp_template_fields', 'forgot' ); ?>
+					<?php
+                    do_action( 'uwp_template_fields', 'forgot' );
+					echo aui()->button(array(
+						'type'       =>  'submit',
+						'class'      => 'btn btn-primary btn-block text-uppercase uwp_forgot_submit',
+						'content'    => __( 'Submit', 'userswp' ),
+						'name'       => 'uwp_forgot_submit',
+					));
+					?>
 
-					<button type="submit" name="uwp_forgot_submit"
-					       class="btn btn-primary btn-block text-uppercase uwp_forgot_submit"
-					       ><?php _e( 'Submit', 'userswp' ); ?></button>
 					<div class="uwp-footer-links">
-						<div class="uwp-footer-link float-left"><a rel="nofollow"
-						                                           href="<?php echo uwp_get_login_page_url(); ?>"
-						                                           class="d-block text-center mt-2 small uwp-login-link"><?php _e( 'Login', 'userswp' ); ?></a>
+						<div class="uwp-footer-link float-left">
+							<?php
+							echo aui()->button(array(
+								'type'  =>  'a',
+								'href'       => uwp_get_login_page_url(),
+								'class'      => 'd-block text-center mt-2 small uwp-login-link',
+								'title'      => __( 'Login', 'userswp' ),
+								'content'    => __( 'Login', 'userswp' ),
+								'extra_attributes'  => array('rel'=>'nofollow')
+							));
+							?>
 						</div>
-						<div class="uwp-footer-link float-right"><a rel="nofollow"
-						                                            href="<?php echo uwp_get_register_page_url(); ?>"
-						                                            class="d-block text-center mt-2 small uwp-register-link"><?php _e( 'Create account', 'userswp' ); ?></a>
+						<div class="uwp-footer-link float-right">
+							<?php
+							echo aui()->button(array(
+								'type'  =>  'a',
+								'href'       => uwp_get_register_page_url(),
+								'class'      => 'd-block text-center mt-2 small uwp-register-link',
+								'title'      => __( 'Create account', 'userswp' ),
+								'content'    => __( 'Create account', 'userswp' ),
+								'extra_attributes'  => array('rel'=>'nofollow')
+							));
+							?>
 						</div>
 					</div>
 

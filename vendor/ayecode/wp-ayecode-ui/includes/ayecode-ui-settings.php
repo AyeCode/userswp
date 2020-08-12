@@ -134,7 +134,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			if ( $this->settings['css'] ) {
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ), 1 );
 			}
-			if ( $this->settings['css_backend'] ) {
+			if ( $this->settings['css_backend'] && $this->load_admin_scripts() ) {
 				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_style' ), 1 );
 			}
 
@@ -142,7 +142,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			if ( $this->settings['js'] ) {
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
 			}
-			if ( $this->settings['js_backend'] ) {
+			if ( $this->settings['js_backend'] && $this->load_admin_scripts() ) {
 				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
 			}
 
@@ -152,6 +152,26 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			}
 
 
+		}
+
+		/**
+		 * Check if we should load the admin scripts or not.
+		 *
+		 * @return bool
+		 */
+		public function load_admin_scripts(){
+			$result = true;
+
+			if(!empty($this->settings['disable_admin'])){
+				$url_parts = explode("\n",$this->settings['disable_admin']);
+				foreach($url_parts as $part){
+					if( strpos($_SERVER['REQUEST_URI'], trim($part)) !== false ){
+						return false; // return early, no point checking further
+					}
+				}
+			}
+
+			return $result;
 		}
 
 		/**
@@ -425,8 +445,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					}
 				}
 
-				// run on window loaded
-				jQuery(window).load(function() {
+				/**
+				 * Initiate all AUI JS.
+				 */
+				function aui_init(){
 					// init tooltips
 					aui_init_tooltips();
 
@@ -441,6 +463,11 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 					// Set times to time ago
 					aui_time_ago('timeago');
+				}
+
+				// run on window loaded
+				jQuery(window).load(function() {
+					aui_init();
 				});
 			</script>
 			<?php
@@ -617,7 +644,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				'html_font_size'        => '16', // js to load, core-popper, popper
 				'css_backend'       => 'compatibility', // core, compatibility
 				'js_backend'        => $js_default_backend, // js to load, core-popper, popper
-
+				'disable_admin'     =>  '', // URL snippets to disable loading on admin
 			);
 
 			$settings = wp_parse_args( $db_settings, $defaults );
@@ -690,9 +717,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					<table class="form-table wpbs-table-settings">
 						<tr valign="top">
 							<th scope="row"><label
-									for="wpbs-css"><?php _e( 'Load CSS', 'aui' ); ?></label></th>
+									for="wpbs-css-admin"><?php _e( 'Load CSS', 'aui' ); ?></label></th>
 							<td>
-								<select name="ayecode-ui-settings[css_backend]" id="wpbs-css">
+								<select name="ayecode-ui-settings[css_backend]" id="wpbs-css-admin">
 									<option	value="compatibility" <?php selected( $this->settings['css_backend'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode', 'aui' ); ?></option>
 									<option value="core" <?php selected( $this->settings['css_backend'], 'core' ); ?>><?php _e( 'Full Mode', 'aui' ); ?></option>
 									<option	value="" <?php selected( $this->settings['css_backend'], '' ); ?>><?php _e( 'Disabled', 'aui' ); ?></option>
@@ -702,14 +729,24 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 						<tr valign="top">
 							<th scope="row"><label
-									for="wpbs-js"><?php _e( 'Load JS', 'aui' ); ?></label></th>
+									for="wpbs-js-admin"><?php _e( 'Load JS', 'aui' ); ?></label></th>
 							<td>
-								<select name="ayecode-ui-settings[js_backend]" id="wpbs-js">
+								<select name="ayecode-ui-settings[js_backend]" id="wpbs-js-admin">
 									<option	value="core-popper" <?php selected( $this->settings['js_backend'], 'core-popper' ); ?>><?php _e( 'Core + Popper (default)', 'aui' ); ?></option>
 									<option value="popper" <?php selected( $this->settings['js_backend'], 'popper' ); ?>><?php _e( 'Popper', 'aui' ); ?></option>
 									<option value="required" <?php selected( $this->settings['js_backend'], 'required' ); ?>><?php _e( 'Required functions only', 'aui' ); ?></option>
 									<option	value="" <?php selected( $this->settings['js_backend'], '' ); ?>><?php _e( 'Disabled (not recommended)', 'aui' ); ?></option>
 								</select>
+							</td>
+						</tr>
+
+						<tr valign="top">
+							<th scope="row"><label
+									for="wpbs-disable-admin"><?php _e( 'Disable load on URL', 'aui' ); ?></label></th>
+							<td>
+								<p><?php _e( 'If you have backend conflict you can enter a partial URL argument that will disable the loading of AUI on those pages. Add each argument on a new line.', 'aui' ); ?></p>
+								<textarea name="ayecode-ui-settings[disable_admin]" rows="10" cols="50" id="wpbs-disable-admin" class="large-text code" spellcheck="false" placeholder="myplugin.php &#10;action=go"><?php echo $this->settings['disable_admin'];?></textarea>
+
 							</td>
 						</tr>
 

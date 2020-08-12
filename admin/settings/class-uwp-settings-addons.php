@@ -74,8 +74,8 @@ if ( ! class_exists( 'UsersWP_Settings_Addons', false ) ) :
 
             if ('' == $current_section) {
 
-                global $hide_save_button;
-                $hide_save_button = true;
+                global $uwp_hide_save_button;
+                $uwp_hide_save_button = true;
 
                 $settings = array(
                     array(

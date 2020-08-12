@@ -212,7 +212,8 @@ class UsersWP_Admin_Settings {
 
             // Description handling
             $field_description = self::get_field_description( $value );
-            extract( $field_description );
+            $tooltip_html = $field_description['tooltip_html'] ? $field_description['tooltip_html'] : '';
+            $description = $field_description['description'] ? $field_description['description'] : '';
 
             // Switch based on type
             switch ( $value['type'] ) {

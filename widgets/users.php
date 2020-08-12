@@ -27,7 +27,7 @@ class UWP_Users_Widget extends WP_Super_Duper {
             'name'          => __('UWP > Users','userswp'),
             'widget_ops'    => array(
                 'classname'   => 'uwp-users-class',
-                'description' => esc_html__('Displays users form.','userswp'),
+                'description' => esc_html__('Displays users list.','userswp'),
             ),
             'arguments'     => array(
                 'title'  => array(
@@ -53,14 +53,13 @@ class UWP_Users_Widget extends WP_Super_Duper {
 	 * @param array $widget_args
 	 * @param string $content
 	 *
-	 * @return mixed|string|bool
+	 * @return string
 	 */
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
         ob_start();
 
         $design_style = uwp_get_option("design_style",'bootstrap');
-
 
         echo '<div class="uwp_page">';
 
@@ -72,9 +71,7 @@ class UWP_Users_Widget extends WP_Super_Duper {
 
         echo '</div>';
 
-        $output = ob_get_contents();
-
-        ob_end_clean();
+        $output = ob_get_clean();
 
         return trim($output);
 

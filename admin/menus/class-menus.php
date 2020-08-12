@@ -98,7 +98,7 @@ class UsersWP_Menus {
 
             <p class="button-controls">
 			    <span class="list-controls">
-					<a href="<?php echo admin_url( 'nav-menus.php?page-tab=all&selectall=1#users-wp-menu' ); ?>" class="select-all"><?php _e( 'Select all', 'geodirectory' ); ?></a>
+					<a href="<?php echo admin_url( 'nav-menus.php?page-tab=all&selectall=1#users-wp-menu' ); ?>" class="select-all"><?php _e( 'Select all', 'userswp' ); ?></a>
 				</span>
                 <span class="add-to-menu">
                     <input type="submit"<?php if ( function_exists( 'wp_nav_menu_disabled_check' ) ) : wp_nav_menu_disabled_check( $nav_menu_selected_id ); endif; ?> class="button-secondary submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu', 'userswp' ); ?>" name="add-custom-menu-item" id="submit-users-wp-menu" />

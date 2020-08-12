@@ -64,7 +64,6 @@ class UWP_Users_Search_Widget extends WP_Super_Duper {
         $template = $design_style ? $design_style."/search-form.php" : "search-form.php";
 
 	    uwp_get_template($template, $args);
-        
 
         $output = ob_get_clean();
 

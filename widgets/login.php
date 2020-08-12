@@ -67,11 +67,11 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     'type' => 'select',
                     'options'   =>  array(
                         ""        =>  __('default', 'userswp'),
-                        "bs1"        =>  __('Style 1', 'userswp'),
+                        "bootstrap" =>  __('Style 1', 'userswp'),
                     ),
                     'default'  => '',
                     'desc_tip' => true,
-                    'group'     => __("Design","geodirectory")
+                    'group'     => __("Design","userswp")
                 ),
                 'css_class'  => array(
                     'type' => 'text',
@@ -80,7 +80,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     'placeholder' => '',
                     'default' => '',
                     'desc_tip' => true,
-                    'group'     => __("Design","geodirectory")
+                    'group'     => __("Design","userswp")
                 ),
             )
 
@@ -94,7 +94,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
                 'desc_tip' => true,
                 'value'  => '1',
                 'default'  => '',
-                'group'     => __("Addons","geodirectory"),
+                'group'     => __("Addons","userswp"),
                 'element_require' => '[%logged_in_show%]==""',
             );
         }
@@ -107,7 +107,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
                 'desc_tip' => true,
                 'value'  => '1',
                 'default'  => '',
-                'group'     => __("Addons","geodirectory"),
+                'group'     => __("Addons","userswp"),
                 'element_require' => '[%logged_in_show%]==""',
             );
         }

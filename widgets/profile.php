@@ -27,7 +27,7 @@ class UWP_Profile_Widget extends WP_Super_Duper {
             'name'          => __('UWP > Profile','userswp'),
             'no_wrap'       => true,
             'widget_ops'    => array(
-                'classname'   => 'uwp-profile-class',
+                'classname'   => 'uwp-profile-class bsui',
                 'description' => esc_html__('Displays user profile.','userswp'),
             ),
             'arguments'     => array(

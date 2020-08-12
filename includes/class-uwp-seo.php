@@ -4,7 +4,10 @@ defined( 'ABSPATH' ) || exit;
 
 class UsersWP_Seo {
 
-    public function init(){
+    public function __construct(){
+	    add_action('pre_get_document_title', array($this,'output_title'));
+	    add_action('uwp_profile_options', array($this,'profile_options'));
+
 	    if(UsersWP_Seo::has_yoast()) {
 		    if ( UsersWP_Seo::has_yoast_14() ) {
 			    add_filter( 'wpseo_opengraph_title', array( $this, 'get_title' ), 10);
@@ -239,3 +242,5 @@ class UsersWP_Seo {
         return $url;
     }
 }
+
+new UsersWP_Seo();

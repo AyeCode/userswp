@@ -12,7 +12,7 @@
                 <?php do_action('uwp_template_fields', 'change'); ?>
                 <input name="uwp_change_submit" value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit"><br>
             </form>
-            <div class="uwp-footer-link uwp-changepsw"><a rel="nofollow" href="<?php echo uwp_get_page_link('account'); ?>"><?php echo __( 'Account', 'userswp' ); ?></a> <a style="float: right" href="<?php echo uwp_get_page_link('profile'); ?>"><?php echo __( 'Profile', 'userswp' ); ?></a></div>
+            <div class="uwp-footer-link uwp-changepsw"><a rel="nofollow" href="<?php echo uwp_get_page_link('account'); ?>"><?php echo __( 'Account', 'userswp' ); ?></a> <a style="float: right" href="<?php echo uwp_get_page_link('profile'); ?>"><?php _e( 'Profile', 'userswp' ); ?></a></div>
         </div>
     </div>
 <?php do_action('uwp_template_after', 'change'); ?>

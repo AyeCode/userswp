@@ -8,110 +8,6 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class UsersWP_Profile {
-    
-    /**
-     * Prints the profile page header section.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       object      $user       The User ID.
-     * @param       bool      $hide_cover   Hide cover image.
-     * @param       bool      $hide_avatar   Hide avatar image.
-     * @param       bool      $allow_change   Allow to change cover and avatar image.
-     */
-    public function get_profile_header($user, $hide_cover = false, $hide_avatar = false, $allow_change = true) {
-        if(!$user){
-            return;
-        }
-
-        add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
-        $uploads = wp_upload_dir();
-        remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
-        $upload_url = $uploads['baseurl'];
-        $class = "";
-
-        if($hide_cover) {
-            $class = "uwp-avatar-only";
-        }
-        
-        ?>
-
-        <div class="uwp-profile-header <?php echo $class; ?> clearfix">
-            <?php if(!$hide_cover) {
-                $banner = uwp_get_usermeta($user->ID, 'banner_thumb', '');
-                if (empty($banner)) {
-	                $banner = uwp_get_default_banner_uri();
-                } else {
-                    $banner = $upload_url.$banner;
-                }
-            ?>
-            <div class="uwp-profile-header-img clearfix">
-                <?php
-                if (!is_uwp_profile_page()) {
-                    echo '<a href="'.apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID).'" title="'.$user->display_name.'">';
-                }
-                ?>
-                <img src="<?php echo $banner; ?>" alt="" class="uwp-profile-header-img-src" data-recalc-dims="0" />
-                <?php
-                if (!is_uwp_profile_page()) {
-                    echo '</a>';
-                }
-                ?>
-            <?php if (is_user_logged_in() && is_uwp_profile_page() && $allow_change && (get_current_user_id() == $user->ID)) { ?>
-                <div class="uwp-banner-change-icon">
-                    <i class="fas fa-camera" aria-hidden="true"></i>
-                    <div data-type="banner" class="uwp-profile-banner-change uwp-profile-modal-form-trigger">
-                    <span class="uwp-profile-banner-change-inner">
-                        <?php echo __( 'Update Cover Photo', 'userswp' ); ?>
-                    </span>
-                    </div>
-                </div>
-            <?php } ?>
-            </div>
-            <?php }
-
-            // avatar of user
-            ?>
-            <div class="uwp-profile-avatar clearfix">
-                <?php
-                if(!$hide_avatar) {
-                    if (!is_uwp_profile_page()) {
-                        echo '<a href="' . apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID) . '" title="' . $user->display_name . '">';
-                    }
-                    $avatar = uwp_get_usermeta($user->ID, 'avatar_thumb', '');
-                    if (empty($avatar)) {
-                        $avatar = get_avatar($user->user_email, 150);
-                    } else {
-                        // check the image is not a full url before adding the local upload url
-                        if (strpos($avatar, 'http:') === false && strpos($avatar, 'https:') === false) {
-                            $avatar = $upload_url . $avatar;
-                        }
-                        $avatar = '<img src="' . $avatar . '" class="avatar avatar-150 photo" width="150" height="150">';
-                    }
-                    ?>
-                    <div class="uwp-profile-avatar-inner">
-                        <?php echo $avatar; ?>
-                        <?php if (is_user_logged_in() && (get_current_user_id() == $user->ID) && is_uwp_profile_page() && $allow_change) { ?>
-                            <div class="uwp-profile-avatar-change">
-                                <div class="uwp-profile-avatar-change-inner">
-                                    <i class="fas fa-camera" aria-hidden="true"></i>
-                                    <a id="uwp-profile-picture-change" data-type="avatar"
-                                       class="uwp-profile-modal-form-trigger"
-                                       href="#"><?php echo __('Update', 'userswp'); ?></a>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
-                    <?php
-                    if (!is_uwp_profile_page()) {
-                        echo '</a>';
-                    }
-                }
-                ?>
-            </div>
-        </div>
-        <?php
-    }
 
     /**
      * Prints the profile page title section. 
@@ -776,7 +672,7 @@ class UsersWP_Profile {
 	    $number = uwp_get_option('profile_no_of_items', 10);
 	    $offset = ( $paged - 1 ) * $number;
 
-	    $total_comments = uwp_comment_count($user->ID);
+	    $total_comments = $this->get_comment_count_by_user($user->ID);
 	    $maximum_pages = ceil($total_comments / $number);
 
 	    $query_args = array(
@@ -799,6 +695,33 @@ class UsersWP_Profile {
 	    $template = $design_style ? $design_style."/loop-comments.php" : "loop-comments.php";
 	    uwp_get_template($template, $args);
     }
+
+	/**
+	 * Gets the comment count.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 * @param       int         $user_id    User ID.
+	 * @return      int                     Comment count.
+	 */
+	public function get_comment_count_by_user($user_id) {
+		global $wpdb;
+
+		$count = $wpdb->get_var(
+			"SELECT COUNT(comment_ID)
+                FROM ".$wpdb->comments."
+                WHERE comment_post_ID in (
+                SELECT ID 
+                FROM ".$wpdb->posts." 
+                WHERE post_type = 'post' 
+                AND post_status = 'publish')
+                AND user_id = " . $user_id . "
+                AND comment_approved = '1'
+                AND comment_type NOT IN ('pingback', 'trackback' )"
+		);
+
+		return $count;
+	}
 
     /**
      * Rewrites profile page links
@@ -1147,7 +1070,6 @@ class UsersWP_Profile {
                     $('.uwp-modal-close').click(function(e) {
                         e.preventDefault();
                         var uwp_popup_type = $( this ).data( 'type' );
-                        // $('#uwp-'+uwp_popup_type+'-modal').hide();
                         var mod_shadow = jQuery('#uwp-modal-backdrop');
                         var container = jQuery('#uwp-popup-modal-wrap');
                         container.hide();
@@ -1196,11 +1118,10 @@ class UsersWP_Profile {
                     $('.uwp-modal-close').click(function(e) {
                         e.preventDefault();
                         var uwp_popup_type = $( this ).data( 'type' );
-                        // $('#uwp-'+uwp_popup_type+'-modal').hide();
                         var mod_shadow = jQuery('#uwp-modal-backdrop');
                         var container = jQuery('#uwp-popup-modal-wrap');
                         container.hide();
-                        container.replaceWith('<?php echo $this->modal_loading_html(); ?>');
+                        container.replaceWith('<?php $this->modal_loading_html(); ?>');
                         mod_shadow.remove();
                     });
 
@@ -1218,7 +1139,7 @@ class UsersWP_Profile {
 
 	                    // file size check
 	                    if(file_size && <?php echo absint($max_file_size);?> && file_size > <?php echo absint($max_file_size);?>){
-		                    err_container.html('<div class="uwp-alert-error text-center alert alert-danger"><?php _e( 'File too big.', 'userswp' );?></div>');
+		                    err_container.html('<div class="text-center alert alert-danger"><?php _e( 'File too big.', 'userswp' );?></div>');
 		                    return;
 	                    }
 
@@ -1286,7 +1207,6 @@ class UsersWP_Profile {
                     function showProgress(evt) {
                         if (evt.lengthComputable) {
                             var percentComplete = (evt.loaded / evt.total) * 100;
-//                            $('#progressbar').progressbar("option", "value", percentComplete );
                             progress(percentComplete, $('#progressBar'));
                         }
                     }
@@ -1846,7 +1766,6 @@ class UsersWP_Profile {
 
         }
 
-
         // Time
         if ($field->field_type == 'time') {
             $value = date(get_option('time_format'), strtotime($value));
@@ -1867,7 +1786,7 @@ class UsersWP_Profile {
                 $link_text = esc_url($link_text);
             }
 
-            $value = '<a href="'.$value.'">'.$link_text.'</a>';
+            $value = '<a href="'.$value.'" target="_blank" rel="nofollow">'.$link_text.'</a>';
         }
 
         // Checkbox

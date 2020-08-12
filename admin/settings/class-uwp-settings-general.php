@@ -126,7 +126,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'desc' => __( 'When enabled some register links will open in a lightbox instead of changing page.','userswp'),
 		            'type' => 'checkbox',
 		            'default'  => '1',
-		            'class' => 'uwp_label_inline',
 	            ),
                 array(
                     'id' => 'uwp_registration_action',
@@ -134,7 +133,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'desc' => __('Select how registration should be handled.', 'userswp'),
                     'type' => 'select',
                     'options' => $registration_options,
-                    'class' => 'uwp-select',
                     'desc_tip' => true,
                 ),
                 array(
@@ -144,7 +142,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'type' => 'select',
                     'options' => $pages_options,
                     'default'  => '-1',
-                    'class' => 'uwp-select',
                     'desc_tip' => true,
                 ),
 	            array(
@@ -161,7 +158,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'name' => __( 'Register TOS Page', 'userswp' ),
                     'desc' => __( 'Terms of Service page. When set "Accept terms and Conditions" checkbox will appear on the register form.', 'userswp' ),
                     'type' => 'single_select_page',
-                    'class' => 'uwp-select',
                     'desc_tip' => true,
                 ),
 	            array(
@@ -169,7 +165,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'name' => __( 'GDPR Policy Page', 'userswp' ),
 		            'desc' => __( 'When set checkbox to accept GDPR policy will appear on the register form.', 'userswp' ),
 		            'type' => 'single_select_page',
-		            'class' => 'uwp-select',
 		            'desc_tip' => true,
 	            ),
                 array(
@@ -239,7 +234,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'desc' => __( 'When enabled some login links will open in a lightbox instead of changing page. The page will reloaded after successful login instead of redirect.','userswp'),
 		            'type' => 'checkbox',
 		            'default'  => '1',
-		            'class' => 'uwp_label_inline',
 	            ),
                 array(
                     'id' => 'login_redirect_to',
@@ -247,7 +241,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'desc' => __( 'Set the page to redirect the user to after logging in. If default redirect has been set then WordPress default will be used.', 'userswp' ),
                     'type' => 'select',
                     'options' => $pages_options,
-                    'class' => 'uwp-select',
                     'default'  => '-1',
                     'desc_tip' => true,
                 ),
@@ -266,14 +259,12 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'desc' => __('When enabled /wp-login.php page will be redirected to UsersWP login page.','userswp' ),
                     'type' => 'checkbox',
                     'default'  => '0',
-                    'class' => 'uwp_label_inline',
                 ),
                 array(
                     'id' => 'logout_redirect_to',
                     'name' => __( 'Logout Redirect Page', 'userswp' ),
                     'desc' => __( 'Set the page to redirect the user to after logging out. If no page has been set WordPress default will be used.', 'userswp' ),
                     'type' => 'single_select_page',
-                    'class' => 'uwp-select',
                     'desc_tip' => true,
                 ),
                 array( 'type' => 'sectionend', 'id' => 'login_options' ),
@@ -296,7 +287,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'desc' => __( 'When enabled some forgot password links will open in a lightbox instead of changing page.','userswp'),
 		            'type' => 'checkbox',
 		            'default'  => '1',
-		            'class' => 'uwp_label_inline',
 	            ),
                 array(
                     'id'   => 'change_enable_old_password',
@@ -442,7 +432,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'desc' => __( 'Choose the default layout for Users Page - Users List', 'userswp' ),
                     'type'    => 'select',
                     'options' =>   $this->uwp_available_users_layout(),
-                    'class'    => 'uwp-select',
                     'desc_tip' => true,
                 ),
 	            array(
@@ -517,7 +506,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                         'above_content' =>  __('Above content', 'userswp'),
                         'below_content' =>  __('Below content', 'userswp'),
                     ),
-                    'class' => 'uwp-select',
                     'desc_tip' => true,
                     'default' => 'below_content',
                 ),
@@ -527,7 +515,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'desc' => __( 'Choose post types to display author box', 'userswp' ),
                     'type'  => 'multiselect',
                     'sortable' => true,
-                    'class'   => 'uwp-select',
                     'options' =>  uwp_get_posttypes(),
                     'desc_tip' => true,
                     'default' => 'post',
@@ -586,7 +573,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 			            'bootstrap' =>  __('Bootstrap', 'userswp'),
 			            '' =>  __('Legacy (non-bootstrap)', 'userswp'),
 		            ),
-		            'class' => 'uwp-select',
 		            'desc_tip' => true,
 		            'default' => 'bootstrap',
 	            ),
@@ -613,7 +599,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 					'desc'     => __( 'This is the front end user\'s profile page. This page automatically overrides the default WordPress author page.', 'userswp' ),
 					'id'       => 'profile_page',
 					'type'     => 'single_select_page',
-					'class'      => 'uwp-select',
 					'desc_tip' => true,
 				),
 				array(
@@ -621,7 +606,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 					'desc'     => __( 'This is the front end register page. This is where users create their account.', 'userswp' ),
 					'id'       => 'register_page',
 					'type'     => 'single_select_page',
-					'class'      => 'uwp-select',
 					'desc_tip' => true,
 				),
 				array(
@@ -629,7 +613,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 					'desc'     => __( 'This is the front end login page. This is where users will login after creating their account.', 'userswp' ),
 					'id'       => 'login_page',
 					'type'     => 'single_select_page',
-					'class'      => 'uwp-select',
 					'desc_tip' => true,
 				),
 				array(
@@ -637,7 +620,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 					'desc'     => __( 'This is the front end account page. This is where users can edit their account.', 'userswp' ),
 					'id'       => 'account_page',
 					'type'     => 'single_select_page',
-					'class'      => 'uwp-select',
 					'desc_tip' => true,
 				),
 				array(
@@ -645,7 +627,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 					'desc'     => __( 'This is the front end Change Password page.', 'userswp' ),
 					'id'       => 'change_page',
 					'type'     => 'single_select_page',
-					'class'      => 'uwp-select',
 					'desc_tip' => true,
 				),
 				array(
@@ -653,7 +634,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 					'desc'     => __( 'This is the front end Forgot Password page. This is the page where users are sent to reset their password when they lose it.', 'userswp' ),
 					'id'       => 'forgot_page',
 					'type'     => 'single_select_page',
-					'class'      => 'uwp-select',
 					'desc_tip' => true,
 				),
 				array(
@@ -661,7 +641,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 					'desc'     => __( 'This is the front end Reset Password page. This is the page where users can reset their password when they lose it.', 'userswp' ),
 					'id'       => 'reset_page',
 					'type'     => 'single_select_page',
-					'class'      => 'uwp-select',
 					'desc_tip' => true,
 				),
 				array(
@@ -669,7 +648,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 					'desc'     => __( 'This is the front end Users List page. This is the page where all registered users of the websites are listed.', 'userswp' ),
 					'id'       => 'users_page',
 					'type'     => 'single_select_page',
-					'class'      => 'uwp-select',
 					'desc_tip' => true,
 				),
 				array(
@@ -677,7 +655,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 					'desc'     => __( 'This is the page/template for displaying user item in users list page. You can change the template as you want which will apply to each user item in users list page.', 'userswp' ),
 					'id'       => 'user_list_item_page',
 					'type'     => 'single_select_page',
-					'class'      => 'uwp-select',
 					'desc_tip' => true,
 				),
 				array( 'type' => 'sectionend', 'id' => 'page_options' ),

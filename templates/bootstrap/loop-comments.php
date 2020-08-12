@@ -14,8 +14,7 @@ $title = isset( $args['template_args']['title'] ) ? $args['template_args']['titl
 	<?php
 	// The Loop
 	if ($the_query) {
-		$design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
-		$template     = $design_style ? $design_style . "/comments-item.php" : "comments-item.php";
+		$template     = "bootstrap/comments-item.php";
 		echo '<div class="cards">';
 		foreach ( $the_query as $comment ) {
 			$args['template_args']['comment'] = $comment;

@@ -1,0 +1,259 @@
+#uwp_form_builder_container {
+  padding: 0;
+  overflow: hidden;
+  width: auto;
+  margin-right: 0;
+
+  .clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+
+  .uwp-side-sortables {
+    border: 1px #DFDFDF solid;
+    background: #F5F5F5;
+    float: left;
+
+    p {
+      padding: 0 10px;
+    }
+    .uwp-tabs-panel {
+      height: auto;
+      overflow: visible;
+      padding: 5px;
+      background-color: #FFFFFF;
+      border: 1px #DFDFDF solid;
+      ul {
+        margin: 0;
+      }
+      .uwp-setting-name .select2-selection--multiple .select2-selection__rendered{
+        padding: 5px;
+      }
+    }
+    h3 {
+      font-size: 15px;
+      font-weight: normal;
+      line-height: 1;
+      padding: 8px 10px;
+      margin: 0;
+      border-bottom: 1px #DFDFDF solid;
+      text-shadow: 0 1px 0 #FFFFFF;
+    }
+
+    .inside {
+      position: relative;
+      margin: 10px 0;
+      line-height: 1.4em;
+      padding: 0 12px 0 10px;
+    }
+
+    #uwp-form-builder-tab-custom {
+      .super-duper-content-open {
+        display: none;
+      }
+    }
+
+  }
+
+  #uwp-available-fields.uwp-side-sortables {
+    width: 42%;
+    margin-right: 15px;
+    margin-bottom: 15px;
+  }
+
+  #uwp-selected-fields.uwp-side-sortables {
+    width: 55%;
+    margin-bottom: 15px;
+  }
+
+  #uwp-available-fields {
+    ul li {
+      float: left;
+      list-style: none outside none;
+      width: 50%;
+    }
+    ul.full li {
+      float: left;
+      list-style: none outside none;
+      width: 100%;
+    }
+  }
+
+  .uwp-draggable-form-items {
+    border: 1px solid #BBBBBB;
+    color: #464646;
+    display: block;
+    margin-right: 8px;
+    padding: 4px 0 4px 5px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    background: #fafafa;
+  }
+
+  .uwp-side-sortables {
+    .handlediv {
+      float: right;
+      height: 31px;
+      width: 27px;
+      cursor: pointer;
+    }
+  }
+
+  span.field-type {
+    float: right;
+    margin-right: 25px;
+    font-weight: initial;
+  }
+
+  .field_row_main {
+    margin: 0 7px;
+    background: #fff;
+    ul {
+      margin-top: 0;
+    }
+    .title {
+      border: 1px #DFDFDF solid;
+      background: #fafafa;
+      height: 37px;
+      line-height: 32px;
+      overflow: hidden;
+      padding-left: 10px;
+      position: relative;
+      text-shadow: 0 1px 0 #FFFFFF;
+      word-wrap: break-word;
+      padding-top: 3px;
+      margin-bottom: 1px;
+      cursor: move;
+      .handlediv {
+        float: right;
+        height: 26px;
+        width: 26px;
+        margin: 2px;
+        cursor: pointer;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  #uwp-form-builder-tab,
+  #uwp-form-builder-tab-predefined,
+  #uwp-form-builder-tab-custom {
+    float: left;
+    width: 100%;
+  }
+  #uwp-form-builder-tab ul {
+    margin: 0;
+  }
+
+  .advance.ui-sortable .ui-state-highlight,
+  .core.ui-sortable .ui-state-highlight{
+    width: 100%;
+    height:37px;
+    background: #2981B3;
+
+  }
+
+  .uwp-help-tip {
+    margin: 0;
+  }
+
+  .select2-container{ width: 100% !important;}
+
+  #uwp-selected-fields {
+    .li-settings{
+      position: relative;
+    }
+    .field_frm{
+      padding: 10px;
+      border: 1px #DFDFDF solid;
+    }
+    input[type="text"],
+    input[type="email"],
+    select {
+      width: 100%;
+      padding: 6px 12px;
+      height: 34px;
+      color: #555;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+      box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+      -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+      -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+      transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    select:focus {
+      border-color: #66afe9;
+      outline: 0;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+      box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    }
+
+    ul li label{
+      display: inline-block;
+      max-width: 100%;
+      margin-bottom: 5px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #666666;
+    }
+
+    .toggle-arrow {
+      position: absolute;
+      right: 0;
+      padding: 12px;
+      cursor: pointer;
+      z-index: 99;
+    }
+  }
+
+  ul.core.uwp_form_extras.ui-sortable {
+    ul:not(.widefat) {
+      padding-left: 25px;
+    }
+    li {
+      margin: 5px 0 !important;
+    }
+  }
+
+  .uwp-setting-name {
+    .uwp-help-tip {
+      float: none;
+    }
+  }
+
+  .uwp-tab-actions {
+    .button-primary.uwp-advanced-toggle {
+      float: left;
+      vertical-align: middle;
+      margin: 0 10px 0 0;
+    }
+
+    input#save {
+      margin-right: 7px;
+    }
+
+    a.item-delete {
+      color: #a00;
+      vertical-align: middle;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #uwp_form_builder_container {
+    #uwp-available-fields.uwp-side-sortables, #uwp-selected-fields.uwp-side-sortables {
+      width: auto;
+      margin-bottom: 15px;
+    }
+  }
+
+}

@@ -5,7 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 global $comment;
 $comment = isset( $args['template_args']['comment'] ) ? $args['template_args']['comment'] : '';
-
 ?>
 <li class="uwp-profile-item-li uwp-profile-item-clearfix">
 	<a class="uwp-profile-item-img" href="<?php echo get_comment_link($comment->comment_ID); ?>">
@@ -27,7 +26,7 @@ $comment = isset( $args['template_args']['comment'] ) ? $args['template_args']['
 	</time>
 	<div class="uwp-profile-item-summary">
 		<?php
-		$excerpt = strip_shortcodes(wp_trim_words( $comment->comment_content, 15, '...' ));
+		$excerpt = strip_shortcodes(wp_trim_words( $comment->comment_content, 100, '...' ));
 		echo $excerpt;
 		?>
 	</div>
