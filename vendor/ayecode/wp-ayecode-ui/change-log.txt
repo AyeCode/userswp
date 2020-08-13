@@ -1,3 +1,7 @@
+= 0.1.21 =
+* Added top and floating label type - ADDED
+* Added admin fix for gutenberg color input not showing color on some browsers - FIXED
+
 = 0.1.20 =
 * Button now has icon_extra_attributes option - ADDED
 * extra_attributes now available on more input types - ADDED

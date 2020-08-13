@@ -236,6 +236,13 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				    margin: 1em 0
 				}
                 ";
+
+					// @todo, remove once fixed :: fix for this bug https://github.com/WordPress/gutenberg/issues/14377
+					$custom_css .= "
+						.edit-post-sidebar input[type=color].components-text-control__input{
+						    padding: 0;
+						}
+					";
 					wp_add_inline_style( 'ayecode-ui', $custom_css );
 				}
 
