@@ -1,3 +1,6 @@
+= 0.1.22 =
+* In admin add script to footer to avoid jQuery UI tooltip issues - CHANGED
+
 = 0.1.21 =
 * Added top and floating label type - ADDED
 * Added admin fix for gutenberg color input not showing color on some browsers - FIXED

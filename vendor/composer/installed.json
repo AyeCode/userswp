@@ -53,24 +53,24 @@
     },
     {
         "name": "ayecode/wp-ayecode-ui",
-        "version": "0.1.21",
-        "version_normalized": "0.1.21.0",
+        "version": "0.1.22",
+        "version_normalized": "0.1.22.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
-            "reference": "bff957c33ed78b669cf9f4b1e6332fd4eee8a295"
+            "reference": "92f5ce9475c7ff06b5f90374f56e792ff8533f41"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/bff957c33ed78b669cf9f4b1e6332fd4eee8a295",
-            "reference": "bff957c33ed78b669cf9f4b1e6332fd4eee8a295",
+            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/92f5ce9475c7ff06b5f90374f56e792ff8533f41",
+            "reference": "92f5ce9475c7ff06b5f90374f56e792ff8533f41",
             "shasum": ""
         },
         "require": {
             "composer/installers": "~1.0",
             "php": ">=5.3.0"
         },
-        "time": "2020-08-12T15:36:42+00:00",
+        "time": "2020-08-18T15:46:24+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -151,17 +151,17 @@
     },
     {
         "name": "ayecode/wp-super-duper",
-        "version": "1.0.20",
-        "version_normalized": "1.0.20.0",
+        "version": "1.0.21",
+        "version_normalized": "1.0.21.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-super-duper.git",
-            "reference": "2ed9cd4d5feae45537abddfd5a0eeb0a74bf242e"
+            "reference": "680d5a7c99d0d839b455faf8381faa19fffd6d03"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/2ed9cd4d5feae45537abddfd5a0eeb0a74bf242e",
-            "reference": "2ed9cd4d5feae45537abddfd5a0eeb0a74bf242e",
+            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/680d5a7c99d0d839b455faf8381faa19fffd6d03",
+            "reference": "680d5a7c99d0d839b455faf8381faa19fffd6d03",
             "shasum": ""
         },
         "require": {
@@ -173,7 +173,7 @@
             "squizlabs/php_codesniffer": "^3.2",
             "wp-coding-standards/wpcs": "*"
         },
-        "time": "2020-08-12T15:35:36+00:00",
+        "time": "2020-08-18T15:52:04+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

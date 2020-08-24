@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.20";
+		public $version = "1.0.21";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -1322,7 +1322,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @return string
 		 */
 		public function shortcode_output( $args = array(), $content = '' ) {
-			$args = self::argument_values( $args );
+			$args = $this->argument_values( $args );
 
 			// add extra argument so we know its a output to gutenberg
 			//$args
@@ -1644,6 +1644,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					var is_fetching = false;
 					var prev_attributes = [];
 
+					var term_query_type = '';
+					var post_type_rest_slugs = <?php if(! empty( $this->arguments ) && isset($this->arguments['post_type']['onchange_rest']['values'])){echo "[".json_encode($this->arguments['post_type']['onchange_rest']['values'])."]";}else{echo "[]";} ?>;
+					const taxonomies_<?php echo str_replace("-","_", $this->id);?> = [{label: "Please wait", value: 0}];
+
 					/**
 					 * Register Basic Block.
 					 *
@@ -1756,6 +1760,40 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 						// The "edit" property must be a valid function.
 						edit: function (props) {
+
+
+
+							<?php
+							// if we have a post_type and a category then link them
+							if( isset($this->arguments['post_type']) && isset($this->arguments['category']) && isset($this->arguments['category']['post_type_linked']) ){
+							?>
+							if(typeof(prev_attributes[props.id]) != 'undefined' ){
+								$pt = props.attributes.post_type;
+								if(post_type_rest_slugs.length){
+									$value = post_type_rest_slugs[0][$pt];
+								}
+								if('post_type' in prev_attributes[props.id] && 'category' in prev_attributes[props.id] && $pt != term_query_type ){
+									term_query_type = $pt;
+									wp.apiFetch({path: "<?php if(isset($this->arguments['post_type']['onchange_rest']['path'])){echo $this->arguments['post_type']['onchange_rest']['path'];}else{'/wp/v2/"+$value+"/categories';} ?>"}).then(terms => {
+										while (taxonomies_<?php echo str_replace("-","_", $this->id);?>.length) {
+										taxonomies_<?php echo str_replace("-","_", $this->id);?>.pop();
+									}
+									taxonomies_<?php echo str_replace("-","_", $this->id);?>.push({label: "All", value: 0});
+									jQuery.each( terms, function( key, val ) {
+										taxonomies_<?php echo str_replace("-","_", $this->id);?>.push({label: val.name, value: val.id});
+									});
+
+									// setting the value back and fourth fixes the no update issue that sometimes happens where it won't update the options.
+									var $old_cat_value = props.attributes.category
+									props.setAttributes({category: [0] });
+									props.setAttributes({category: $old_cat_value });
+
+									return taxonomies_<?php echo str_replace("-","_", $this->id);?>;
+								});
+								}
+							}
+							<?php }?>
+
 
 							var content = props.attributes.content;
 
@@ -2018,6 +2056,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				return;
 			}
 
+			// require advanced
+			$require_advanced = ! empty( $args['advanced'] ) ? "props.attributes.show_advanced && " : "";
+
+			// element require
+			$element_require = ! empty( $args['element_require'] ) ? $this->block_props_replace( $args['element_require'], true ) . " && " : "";
+
+
 			$onchange  = "props.setAttributes({ $key: $key } )";
 			$onchangecomplete  = "";
 			$value     = "props.attributes.$key";
@@ -2029,6 +2074,40 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					$onchange = "props.setAttributes({ $key: Number($key) } )";
 				}
 			}
+/*
+ * https://www.wptricks.com/question/set-current-tab-on-a-gutenberg-tabpanel-component-from-outside-that-component/ es5 layout
+			elseif($args['type']=='tabs'){
+				?>
+				<script>
+					el(
+						wp.components.TabPanel,
+						{
+							tabs: [
+								{
+									name: 'show',
+									title: __( 'Show', 'my-textdomain' ),
+								},
+								{
+									name: 'edit',
+									title: __( 'Edit', 'my-textdomain' ),
+								},
+							],
+						},
+						( tab ) => {
+
+						if('show' === tab.name){
+						return 123;
+					}else if ( 'edit' === tab.name ) {
+						return 321;
+					}
+
+					}
+					),
+				</script>
+				<?php
+				return;
+			}
+*/
 			elseif ( $args['type'] == 'color' ) {
 				$type = 'ColorPicker';
 				$onchange = "";
@@ -2051,17 +2130,21 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$type = 'TextareaControl';
 			} elseif ( $args['type'] == 'select' || $args['type'] == 'multiselect' ) {
 				$type = 'SelectControl';
-				if ( ! empty( $args['options'] ) ) {
-					$options .= "options: [";
-					foreach ( $args['options'] as $option_val => $option_label ) {
-						$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
+
+				if($args['name'] == 'category' && !empty($args['post_type_linked'])){
+					$options .= "options: taxonomies_".str_replace("-","_", $this->id).",";
+				}else {
+
+					if ( ! empty( $args['options'] ) ) {
+						$options .= "options: [";
+						foreach ( $args['options'] as $option_val => $option_label ) {
+							$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
+						}
+						$options .= "],";
 					}
-					$options .= "],";
 				}
 				if ( isset( $args['multiple'] ) && $args['multiple'] ) { //@todo multiselect does not work at the moment: https://github.com/WordPress/gutenberg/issues/5550
 					$extra .= ' multiple: true, ';
-					//$onchange = "props.setAttributes({ $key: ['edit'] } )";
-					//$value = "['edit', 'delete']";
 				}
 			} elseif ( $args['type'] == 'alignment' ) {
 				$type = 'AlignmentToolbar'; // @todo this does not seem to work but cant find a example
@@ -2069,19 +2152,21 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				return;// if we have not implemented the control then don't break the JS.
 			}
 
-			// add show only if advanced
-			if ( ! empty( $args['advanced'] ) ) {
-				echo "props.attributes.show_advanced && ";
-			}
-			// add setting require if defined
-			if ( ! empty( $args['element_require'] ) ) {
-				echo $this->block_props_replace( $args['element_require'], true ) . " && ";
-			}
+
 
 			// color input does not show the labels so we add them
 			if($args['type']=='color'){
+				// add show only if advanced
+				echo $require_advanced;
+				// add setting require if defined
+				echo $element_require;
 				echo "el('div', {style: {'marginBottom': '8px'}}, '".addslashes( $args['title'] )."'),";
 			}
+
+			// add show only if advanced
+			echo $require_advanced;
+			// add setting require if defined
+			echo $element_require;
 			?>
 			el( wp.components.<?php echo $type; ?>, {
 			label: '<?php echo addslashes( $args['title'] ); ?>',
@@ -2104,11 +2189,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 			} ),
 			<?php
-			// color input does not show the labels so we add them
-			if($args['type']=='color'){
-				//echo "el('div', {style: {'marginBottom': '-8px','fontStyle': 'italic'}}, '".addslashes( $args['desc'] )."'),";
-			}
-
 
 		}
 

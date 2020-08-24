@@ -538,7 +538,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				// Bootstrap bundle
 				$url = $this->url.'assets/js/bootstrap.bundle.min.js';
 				wp_register_script( 'bootstrap-js-bundle', $url, array('select2','jquery'), $this->latest );
-				wp_enqueue_script( 'bootstrap-js-bundle' );
+				// if in admin then add to footer for compatibility.
+				is_admin() ? wp_enqueue_script( 'bootstrap-js-bundle', '', null, null, true ) : wp_enqueue_script( 'bootstrap-js-bundle');
 				$script = $this->inline_script();
 				wp_add_inline_script( 'bootstrap-js-bundle', $script );
 			}elseif($this->settings[$js_setting]=='popper'){

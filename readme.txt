@@ -127,6 +127,12 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.6 =
+* Password strength meter showing JS error in registration form for WordPress 5.0  - FIXED
+* Social login avatar image not displaying in the listing of the user in Supreme Directory theme - FIXED
+* Super Duper updated to v1.0.21 - CHANGED
+* AyeCode UI updated to v0.1.22 - CHANGED
+
 = 1.2.2.5 =
 * Add CSV to allowed mimes while importing users - ADDED
 * Setting to exclude our AUI scripts from the backend pages - ADDED

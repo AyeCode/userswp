@@ -2958,19 +2958,17 @@ class UsersWP_Forms {
 				?>
                 <div id="<?php echo $field->htmlvar_name;?>_row"
                      class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
-                    <label class="<?php echo $bs_sr_only; ?>">
                     <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value="0" />
                     <input name="<?php echo $field->htmlvar_name; ?>"
                            class="<?php echo $field->css_class; ?> <?php echo esc_attr($bs_form_control);?>"
                            placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                            title="<?php echo $site_title; ?>"
-						<?php if ($value == '1') { echo 'checked="checked"'; } ?>
+		                <?php if ($value == '1') { echo 'checked="checked"'; } ?>
                            type="<?php echo $field->field_type; ?>"
                            value="1">
-                    </label>
-					<?php
-					echo (trim($content)) ? $content : '&nbsp;';
-					?>
+	                <?php
+	                    echo (trim($content)) ? $content : '&nbsp;';
+	                ?>
                     <span class="uwp_message_note"><?php echo uwp_get_field_description($field);?></span>
 					<?php if ($field->is_required) { ?>
                         <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
@@ -3030,19 +3028,17 @@ class UsersWP_Forms {
 				?>
                 <div id="<?php echo $field->htmlvar_name;?>_row"
                      class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
-                    <label class="<?php echo $bs_sr_only; ?>">
                     <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value="0" />
                     <input name="<?php echo $field->htmlvar_name; ?>"
                            class="<?php echo $field->css_class; ?> <?php echo esc_attr($bs_form_control);?>"
                            placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
                            title="<?php echo $site_title; ?>"
-						<?php if ($value == '1') { echo 'checked="checked"'; } ?>
+		                <?php if ($value == '1') { echo 'checked="checked"'; } ?>
                            type="<?php echo $field->field_type; ?>"
                            value="1">
-                    </label>
-					<?php
-					echo (trim($content)) ? $content : '&nbsp;';
-					?>
+	                <?php
+	                    echo (trim($content)) ? $content : '&nbsp;';
+	                ?>
                     <span class="uwp_message_note"><?php echo uwp_get_field_description($field);?></span>
 					<?php if ($field->is_required) { ?>
                         <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
@@ -3562,6 +3558,7 @@ class UsersWP_Forms {
 
 			// load scripts
 			$wp_scripts->do_item( 'zxcvbn-async' );
+			$wp_scripts->do_item( 'wp-i18n' );
 			$wp_scripts->do_item( 'password-strength-meter' );
 			?>
             <script>

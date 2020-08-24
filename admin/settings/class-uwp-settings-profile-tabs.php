@@ -767,7 +767,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                                     <input type="button" class="button button-primary" name="save" id="save"
                                            value="<?php esc_attr_e('Save', 'userswp'); ?>"
                                            onclick="save_field('<?php echo $result_str; ?>', 'profile_tab')"/>
-                                           <a class="item-delete submitdelete deletion" id="delete-16" href="javascript:void(0);" onclick="delete_field('<?php echo esc_attr($result_str); ?>', '<?php echo $nonce; ?>', '<?php echo $tab_key ?>', 'profile_tab')"><?php _e("Remove","userswp");?></a>
+                                           <a class="item-delete submitdelete deletion" id="delete-<?php echo $result_str; ?>" href="javascript:void(0);" onclick="delete_field('<?php echo esc_attr($result_str); ?>', '<?php echo $nonce; ?>', '<?php echo $tab_key ?>', 'profile_tab')"><?php _e("Remove","userswp");?></a>
 
                                 </div>
                             </li>
