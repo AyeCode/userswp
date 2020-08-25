@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.5\n"
+"Project-Id-Version: UsersWP 1.2.2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-11 16:34+0530\n"
-"PO-Revision-Date: 2020-08-11 16:34+0530\n"
+"POT-Creation-Date: 2020-08-25 12:45+0530\n"
+"PO-Revision-Date: 2020-08-25 12:46+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: admin/class-admin-setup-wizard.php:408
 #: admin/settings/class-formbuilder.php:1327
-#: admin/settings/class-uwp-settings-profile-tabs.php:770
+#: admin/settings/class-uwp-settings-profile-tabs.php:788
 #: includes/class-tools.php:841
 msgid "Remove"
 msgstr ""
@@ -826,7 +826,7 @@ msgid "Adds a file input"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:787
-#: admin/settings/class-formbuilder.php:2475
+#: admin/settings/class-formbuilder.php:2471
 msgid "Fieldset:"
 msgstr ""
 
@@ -909,12 +909,12 @@ msgstr ""
 msgid "Is Public :"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1053 includes/class-profile.php:1795
+#: admin/settings/class-formbuilder.php:1053 includes/class-profile.php:1797
 #: includes/class-templates.php:960
 msgid "Yes"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1054 includes/class-profile.php:1797
+#: admin/settings/class-formbuilder.php:1054 includes/class-profile.php:1799
 #: includes/class-templates.php:959
 msgid "No"
 msgstr ""
@@ -979,7 +979,7 @@ msgid ""
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1207
-#: admin/settings/class-uwp-settings-profile-tabs.php:678
+#: admin/settings/class-uwp-settings-profile-tabs.php:696
 msgid "Upload icon :"
 msgstr ""
 
@@ -1008,8 +1008,8 @@ msgid "Select locations"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1320
-#: admin/settings/class-formbuilder.php:2554
-#: admin/settings/class-uwp-settings-profile-tabs.php:768
+#: admin/settings/class-formbuilder.php:2550
+#: admin/settings/class-uwp-settings-profile-tabs.php:786
 msgid "Save"
 msgstr ""
 
@@ -1200,11 +1200,11 @@ msgid ""
 "arrange fields order in register form."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2543
+#: admin/settings/class-formbuilder.php:2539
 msgid "No options available"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2556
+#: admin/settings/class-formbuilder.php:2552
 #: includes/libraries/class-geodirectory-plugin.php:1149
 #: includes/libraries/class-geodirectory-plugin.php:1362
 #: includes/libraries/class-geodirectory-plugin.php:1569
@@ -2175,74 +2175,74 @@ msgstr ""
 msgid "Comments"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:664
+#: admin/settings/class-uwp-settings-profile-tabs.php:682
 msgid "This will be the name of profile tab."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:665
+#: admin/settings/class-uwp-settings-profile-tabs.php:683
 msgid "Tab Name:"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:677
+#: admin/settings/class-uwp-settings-profile-tabs.php:695
 msgid "This will be the icon for profile tab."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:690
+#: admin/settings/class-uwp-settings-profile-tabs.php:708
 msgid "Select privacy for displaying profile tab and content."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:691
+#: admin/settings/class-uwp-settings-profile-tabs.php:709
 msgid "Privacy :"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:696
+#: admin/settings/class-uwp-settings-profile-tabs.php:714
 #: includes/class-templates.php:992
 msgid "Anyone"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:697
+#: admin/settings/class-uwp-settings-profile-tabs.php:715
 #: includes/class-templates.php:993
 msgid "Logged in"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:698
+#: admin/settings/class-uwp-settings-profile-tabs.php:716
 #: includes/class-templates.php:994
 msgid "Author only"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:708
+#: admin/settings/class-uwp-settings-profile-tabs.php:726
 #, php-format
 msgid "%s (Not Changeable)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:726
+#: admin/settings/class-uwp-settings-profile-tabs.php:744
 msgid ""
 "Enable to allow user to decide privacy for displaying profile tab and "
 "content."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:727
+#: admin/settings/class-uwp-settings-profile-tabs.php:745
 msgid "Let user decide :"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:728
+#: admin/settings/class-uwp-settings-profile-tabs.php:746
 msgid "N/A"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:749
+#: admin/settings/class-uwp-settings-profile-tabs.php:767
 msgid "Content to display in profile tab. Shortcode allowed."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:750
+#: admin/settings/class-uwp-settings-profile-tabs.php:768
 msgid "Tab content:"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:755
+#: admin/settings/class-uwp-settings-profile-tabs.php:773
 msgid "Add shortcode here."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:981
-#: admin/settings/class-uwp-settings-profile-tabs.php:984
+#: admin/settings/class-uwp-settings-profile-tabs.php:1000
+#: admin/settings/class-uwp-settings-profile-tabs.php:1003
 msgid "Failed to sort tab items."
 msgstr ""
 
@@ -2877,7 +2877,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:513 includes/class-activator.php:555
-#: includes/class-forms.php:3263
+#: includes/class-forms.php:3257
 msgid "Confirm Password"
 msgstr ""
 
@@ -3252,34 +3252,34 @@ msgstr ""
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:2942
+#: includes/class-forms.php:2941
 #, php-format
 msgid ""
 "By using this form I agree to the storage and handling of my data by this "
 "website. View our %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:3014
+#: includes/class-forms.php:3010
 #, php-format
 msgid "I accept %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:3227
+#: includes/class-forms.php:3221
 msgid "Hello, "
 msgstr ""
 
-#: includes/class-forms.php:3228 templates/bootstrap/dashboard-simple.php:23
+#: includes/class-forms.php:3222 templates/bootstrap/dashboard-simple.php:23
 #: templates/bootstrap/dashboard-simple.php:24
 #: templates/bootstrap/dashboard.php:39 templates/dashboard-simple.php:12
 #: templates/dashboard.php:32
 msgid "Logout"
 msgstr ""
 
-#: includes/class-forms.php:3346
+#: includes/class-forms.php:3340
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/class-forms.php:3492
+#: includes/class-forms.php:3486
 msgid "Privacy settings updated successfully."
 msgstr ""
 
@@ -3548,21 +3548,21 @@ msgstr ""
 msgid "File too big."
 msgstr ""
 
-#: includes/class-profile.php:1458
+#: includes/class-profile.php:1460
 #, php-format
 msgid "The uploaded file is too small. Minimum image width should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1461
+#: includes/class-profile.php:1463
 #, php-format
 msgid "The uploaded file is too small. Minimum image height should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1502
+#: includes/class-profile.php:1504
 msgid "Invalid request!"
 msgstr ""
 
-#: includes/class-profile.php:1523
+#: includes/class-profile.php:1525
 msgid "No fields available"
 msgstr ""
 
@@ -3943,7 +3943,6 @@ msgid "<strong>Error</strong>: cannot be empty."
 msgstr ""
 
 #: includes/class-validation.php:206 includes/class-validation.php:209
-#: includes/class-validation.php:268 includes/class-validation.php:271
 msgid "<strong>Error</strong>: "
 msgstr ""
 
@@ -4817,7 +4816,7 @@ msgstr ""
 msgid "Hide avatar image in user profile page."
 msgstr ""
 
-#: widgets/profile-header.php:54 widgets/user-avatar.php:61
+#: widgets/profile-header.php:54 widgets/user-avatar.php:60
 #: widgets/user-badge.php:42 widgets/user-cover.php:54 widgets/user-meta.php:44
 #: widgets/user-title.php:50
 msgid "User ID:"
@@ -4983,23 +4982,23 @@ msgstr ""
 msgid "Avatar image size in px. Default is 50px."
 msgstr ""
 
-#: widgets/user-avatar.php:43 widgets/user-cover.php:36
+#: widgets/user-avatar.php:42 widgets/user-cover.php:36
 msgid "Link to profile?:"
 msgstr ""
 
-#: widgets/user-avatar.php:44
+#: widgets/user-avatar.php:43
 msgid "Link avatar image to user's profile page."
 msgstr ""
 
-#: widgets/user-avatar.php:52
+#: widgets/user-avatar.php:51
 msgid "Allow to change avatar:"
 msgstr ""
 
-#: widgets/user-avatar.php:53
+#: widgets/user-avatar.php:52
 msgid "Allow user to change avatar image in profile page."
 msgstr ""
 
-#: widgets/user-avatar.php:62 widgets/user-cover.php:55
+#: widgets/user-avatar.php:61 widgets/user-cover.php:55
 msgid "Leave blank to use current user ID."
 msgstr ""
 

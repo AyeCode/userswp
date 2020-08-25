@@ -30,6 +30,9 @@
           display: inline-block;
           .embed-responsive{
             max-width: none;
+            &:before{
+              padding-top: 100%;
+            }
           }
         }
 

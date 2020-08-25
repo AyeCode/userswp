@@ -522,7 +522,7 @@ function uwp_checkPasswordStrength( $pass1,
     $strengthResult.removeClass( 'short bad good strong bg-warning bg-success bg-danger' );
 
     // Extend our blacklist array with those from the inputs & site data
-    blacklistArray = blacklistArray.concat( wp.passwordStrength.userInputBlacklist() );
+    blacklistArray = blacklistArray.concat( wp.passwordStrength.userInputDisallowedList() );
 
     // Get the password strength
     var strength = wp.passwordStrength.meter( pass1, blacklistArray, pass2 );

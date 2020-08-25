@@ -629,7 +629,7 @@ class UsersWP_Profile {
 			$navigation = str_replace( "nav-links", "uwp-nav-links", $navigation );
 		}
 
-		echo  $navigation;
+		echo $navigation;
 
 	}
 
@@ -1304,6 +1304,8 @@ class UsersWP_Profile {
                 $upload_url = $uploads['baseurl'];
                 if (substr( $avatar_thumb, 0, 4 ) !== "http") {
                     $url = $upload_url.$avatar_thumb;
+                } else {
+	                $url = $avatar_thumb;
                 }
             } else {
                 $default = uwp_get_default_avatar_uri();

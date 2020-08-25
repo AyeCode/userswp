@@ -31,7 +31,7 @@ class AUI_Component_Input {
 			'label'      => '',
 			'label_after'=> false,
 			'label_class'=> '',
-			'label_type' => '', // sets the lable type, horizontal
+			'label_type' => '', // sets the label type, default: hidden. Options: hidden, top, horizontal, floating
 			'help_text'  => '',
 			'validation_text'   => '',
 			'validation_pattern' => '',
@@ -53,6 +53,9 @@ class AUI_Component_Input {
 		$args   = wp_parse_args( $args, $defaults );
 		$output = '';
 		if ( ! empty( $args['type'] ) ) {
+			// hidden label option needs to be empty
+			$args['label_type'] = $args['label_type'] == 'hidden' ? '' : $args['label_type'];
+
 			$type = sanitize_html_class( $args['type'] );
 
 			$help_text = '';
@@ -64,6 +67,12 @@ class AUI_Component_Input {
 				'class' => $args['label_class']." ",
 				'label_type' => $args['label_type']
 			);
+
+			// floating labels need label after
+			if( $args['label_type'] == 'floating' && $type != 'checkbox' ){
+				$label_after = true;
+				$args['placeholder'] = ' '; // set the placeholder not empty so the floating label works.
+			}
 
 			// Some special sauce for files
 			if($type=='file' ){
@@ -170,10 +179,6 @@ class AUI_Component_Input {
 				$output .= $label . $help_text;
 			}
 
-
-
-
-
 			// some input types need a separate wrap
 			if($type == 'file') {
 				$output = self::wrap( array(
@@ -223,9 +228,6 @@ else{$eli.attr(\'type\',\'password\');}"
 					) );
 				}
 
-				// Labels need to be on the outside of the wrap
-//				$label = self::label( $label_args, $type );
-//				$output = $label . str_replace($label,"",$output);
 			}
 
 			if(!$label_after){
@@ -244,18 +246,10 @@ else{$eli.attr(\'type\',\'password\');}"
 				$output = $label . $output;
 			}
 
-//			// maybe horizontal label
-//			if($args['label_type']=='horizontal' && $type != 'checkbox'){
-//				$output .= '<div class="col-sm-10">';
-//			}
-//			// maybe horizontal label
-//			if($args['label_type']=='horizontal' && $type != 'checkbox'){
-//				$output .= '</div>';
-//			}
-
 			// wrap
 			if(!$args['no_wrap']){
-				$wrap_class = $args['label_type']=='horizontal' ? 'form-group row' : 'form-group';
+				$form_group_class = $args['label_type']=='floating' && $type != 'checkbox' ? 'form-label-group' : 'form-group';
+				$wrap_class = $args['label_type']=='horizontal' ? $form_group_class . ' row' : $form_group_class;
 				$output = self::wrap(array(
 					'content' => $output,
 					'class'   => $wrap_class,
@@ -286,8 +280,9 @@ else{$eli.attr(\'type\',\'password\');}"
 			'value'      => '',
 			'required'   => false,
 			'label'      => '',
+			'label_after'=> false,
 			'label_class'      => '',
-			'label_type' => '', // sets the lable type, horizontal
+			'label_type' => '', // sets the label type, default: hidden. Options: hidden, top, horizontal, floating
 			'help_text'  => '',
 			'validation_text'   => '',
 			'validation_pattern' => '',
@@ -302,9 +297,25 @@ else{$eli.attr(\'type\',\'password\');}"
 		$args   = wp_parse_args( $args, $defaults );
 		$output = '';
 
+		// hidden label option needs to be empty
+		$args['label_type'] = $args['label_type'] == 'hidden' ? '' : $args['label_type'];
+
+		// floating labels don't work with wysiwyg so set it as top
+		if($args['label_type'] == 'floating' && !empty($args['wysiwyg'])){
+			$args['label_type'] = 'top';
+		}
+
+		$label_after = $args['label_after'];
+
+		// floating labels need label after
+		if( $args['label_type'] == 'floating' && empty($args['wysiwyg']) ){
+			$label_after = true;
+			$args['placeholder'] = ' '; // set the placeholder not empty so the floating label works.
+		}
+
 		// label
 		if(!empty($args['label']) && is_array($args['label'])){
-		}elseif(!empty($args['label'])){
+		}elseif(!empty($args['label']) && !$label_after){
 			$label_args = array(
 				'title'=> $args['label'],
 				'for'=> $args['id'],
@@ -404,6 +415,16 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		}
 
+		if(!empty($args['label']) && $label_after){
+			$label_args = array(
+				'title'=> $args['label'],
+				'for'=> $args['id'],
+				'class' => $args['label_class']." ",
+				'label_type' => $args['label_type']
+			);
+			$output .= self::label( $label_args );
+		}
+
 		// help text
 		if(!empty($args['help_text'])){
 			$output .= AUI_Component_Helper::help_text($args['help_text']);
@@ -417,7 +438,8 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		// wrap
 		if(!$args['no_wrap']){
-			$wrap_class = $args['label_type']=='horizontal' ? 'form-group row' : 'form-group';
+			$form_group_class = $args['label_type']=='floating' ? 'form-label-group' : 'form-group';
+			$wrap_class = $args['label_type']=='horizontal' ? $form_group_class . ' row' : $form_group_class;
 			$output = self::wrap(array(
 				'content' => $output,
 				'class'   => $wrap_class,
@@ -434,7 +456,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'title'       => 'div',
 			'for'      => '',
 			'class'      => '',
-			'label_type'    => '', // horizontal
+			'label_type'    => '', // empty = hidden, top, horizontal
 		);
 
 		/**
@@ -560,8 +582,9 @@ else{$eli.attr(\'type\',\'password\');}"
 			'value'      => '', // can be an array or a string
 			'required'   => false,
 			'label'      => '',
+			'label_after'=> false,
+			'label_type' => '', // sets the label type, default: hidden. Options: hidden, top, horizontal, floating
 			'label_class'      => '',
-			'label_type' => '', // sets the lable type, horizontal
 			'help_text'  => '',
 			'placeholder'=> '',
 			'options'    => array(),
@@ -578,6 +601,21 @@ else{$eli.attr(\'type\',\'password\');}"
 		$args   = wp_parse_args( $args, $defaults );
 		$output = '';
 
+		// for now lets hide floating labels
+		if( $args['label_type'] == 'floating' ){$args['label_type'] = 'hidden';}
+
+		// hidden label option needs to be empty
+		$args['label_type'] = $args['label_type'] == 'hidden' ? '' : $args['label_type'];
+
+
+		$label_after = $args['label_after'];
+
+		// floating labels need label after
+		if( $args['label_type'] == 'floating' ){
+			$label_after = true;
+			$args['placeholder'] = ' '; // set the placeholder not empty so the floating label works.
+		}
+
 		// Maybe setup select2
 		$is_select2 = false;
 		if(!empty($args['select2'])){
@@ -588,7 +626,7 @@ else{$eli.attr(\'type\',\'password\');}"
 		}
 
 		// select2 tags
-		if( !empty($args['select2']) && $args['select2'] === 'tags'){ // triple equlas needed here for some reason
+		if( !empty($args['select2']) && $args['select2'] === 'tags'){ // triple equals needed here for some reason
 			$args['data-tags'] = 'true';
 			$args['data-token-separators'] = "[',']";
 			$args['multiple'] = true;
@@ -602,7 +640,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		// label
 		if(!empty($args['label']) && is_array($args['label'])){
-		}elseif(!empty($args['label'])){
+		}elseif(!empty($args['label']) && !$label_after){
 			$label_args = array(
 				'title'=> $args['label'],
 				'for'=> $args['id'],
@@ -713,6 +751,16 @@ else{$eli.attr(\'type\',\'password\');}"
 		// closing tag
 		$output .= '</select>';
 
+		if(!empty($args['label']) && $label_after){
+			$label_args = array(
+				'title'=> $args['label'],
+				'for'=> $args['id'],
+				'class' => $args['label_class']." ",
+				'label_type' => $args['label_type']
+			);
+			$output .= self::label($label_args);
+		}
+
 		// help text
 		if(!empty($args['help_text'])){
 			$output .= AUI_Component_Helper::help_text($args['help_text']);
@@ -753,7 +801,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'value'      => '',
 			'label'      => '',
 			'label_class'=> '',
-			'label_type' => '', // sets the lable type, horizontal
+			'label_type' => '', // sets the label type, default: hidden. Options: hidden, top, horizontal, floating
 			'inline'     => true,
 			'required'   => false,
 			'options'    => array(),
@@ -766,6 +814,9 @@ else{$eli.attr(\'type\',\'password\');}"
 		 * Parse incoming $args into an array and merge it with $defaults
 		 */
 		$args   = wp_parse_args( $args, $defaults );
+
+		// for now lets use horizontal for floating
+		if( $args['label_type'] != 'hidden' ){$args['label_type'] = 'horizontal';}
 
 		$label_args = array(
 			'title'=> $args['label'],

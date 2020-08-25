@@ -17,11 +17,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.19";
+		public $version = "1.0.21";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
 		public $base_id;
+		public $settings_hash;
 		public $arguments = array();
 		public $instance = array();
 		private $class_name;
@@ -1321,7 +1322,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @return string
 		 */
 		public function shortcode_output( $args = array(), $content = '' ) {
-			$args = self::argument_values( $args );
+			$args = $this->argument_values( $args );
 
 			// add extra argument so we know its a output to gutenberg
 			//$args
@@ -1333,6 +1334,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			$class = isset( $this->options['widget_ops']['classname'] ) ? esc_attr( $this->options['widget_ops']['classname'] ) : '';
+			$class .= " sdel-".$this->get_instance_hash();
 
 			$class = apply_filters( 'wp_super_duper_div_classname', $class, $args, $this );
 			$class = apply_filters( 'wp_super_duper_div_classname_' . $this->base_id, $class, $args, $this );
@@ -1375,7 +1377,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			// if preview show a placeholder if empty
 			if ( $this->is_preview() && $output == '' ) {
-				$output = $this->preview_placeholder_text( "[{" . $this->base_id . "}]" );
+				$output = $this->preview_placeholder_text( "{{" . $this->base_id . "}}" );
 			}
 
 			return apply_filters( 'wp_super_duper_widget_output', $output, $args, $shortcode_args, $this );
@@ -1494,9 +1496,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		public function register_block() {
 			wp_add_inline_script( 'wp-blocks', $this->block() );
 			if ( class_exists( 'SiteOrigin_Panels' ) ) {
-
 				wp_add_inline_script( 'wp-blocks', $this->siteorigin_js() );
-
 			}
 		}
 
@@ -1644,6 +1644,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					var is_fetching = false;
 					var prev_attributes = [];
 
+					var term_query_type = '';
+					var post_type_rest_slugs = <?php if(! empty( $this->arguments ) && isset($this->arguments['post_type']['onchange_rest']['values'])){echo "[".json_encode($this->arguments['post_type']['onchange_rest']['values'])."]";}else{echo "[]";} ?>;
+					const taxonomies_<?php echo str_replace("-","_", $this->id);?> = [{label: "Please wait", value: 0}];
+
 					/**
 					 * Register Basic Block.
 					 *
@@ -1757,13 +1761,55 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						// The "edit" property must be a valid function.
 						edit: function (props) {
 
+
+
+							<?php
+							// if we have a post_type and a category then link them
+							if( isset($this->arguments['post_type']) && isset($this->arguments['category']) && isset($this->arguments['category']['post_type_linked']) ){
+							?>
+							if(typeof(prev_attributes[props.id]) != 'undefined' ){
+								$pt = props.attributes.post_type;
+								if(post_type_rest_slugs.length){
+									$value = post_type_rest_slugs[0][$pt];
+								}
+								if('post_type' in prev_attributes[props.id] && 'category' in prev_attributes[props.id] && $pt != term_query_type ){
+									term_query_type = $pt;
+									wp.apiFetch({path: "<?php if(isset($this->arguments['post_type']['onchange_rest']['path'])){echo $this->arguments['post_type']['onchange_rest']['path'];}else{'/wp/v2/"+$value+"/categories';} ?>"}).then(terms => {
+										while (taxonomies_<?php echo str_replace("-","_", $this->id);?>.length) {
+										taxonomies_<?php echo str_replace("-","_", $this->id);?>.pop();
+									}
+									taxonomies_<?php echo str_replace("-","_", $this->id);?>.push({label: "All", value: 0});
+									jQuery.each( terms, function( key, val ) {
+										taxonomies_<?php echo str_replace("-","_", $this->id);?>.push({label: val.name, value: val.id});
+									});
+
+									// setting the value back and fourth fixes the no update issue that sometimes happens where it won't update the options.
+									var $old_cat_value = props.attributes.category
+									props.setAttributes({category: [0] });
+									props.setAttributes({category: $old_cat_value });
+
+									return taxonomies_<?php echo str_replace("-","_", $this->id);?>;
+								});
+								}
+							}
+							<?php }?>
+
+
 							var content = props.attributes.content;
 
 							function onChangeContent() {
 
-								if (!is_fetching && prev_attributes[props.id] != props.attributes) {
+								$refresh = false;
 
-									//console.log(props);
+								// Set the old content the same as the new one so we only compare all other attributes
+								if(typeof(prev_attributes[props.id]) != 'undefined'){
+									prev_attributes[props.id].content = props.attributes.content;
+								}else if(props.attributes.content === ""){
+									// if first load and content empty then refresh
+									$refresh = true;
+								}
+
+								if ( ( !is_fetching &&  JSON.stringify(prev_attributes[props.id]) != JSON.stringify(props.attributes) ) || $refresh  ) {
 
 									is_fetching = true;
 									var data = {
@@ -1788,6 +1834,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 										props.setAttributes({content: env});
 										is_fetching = false;
 										prev_attributes[props.id] = props.attributes;
+
+										// if AUI is active call the js init function
+										if (typeof aui_init === "function") {
+											aui_init();
+										}
 									});
 
 
@@ -1824,8 +1875,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 									if ( $show_advanced ) {
 									?>
 									el('div', {
-										style: {'padding-left': '16px','padding-right': '16px'}
-									},
+											style: {'padding-left': '16px','padding-right': '16px'}
+										},
 										el(
 											wp.components.ToggleControl,
 											{
@@ -2005,9 +2056,17 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				return;
 			}
 
+			// require advanced
+			$require_advanced = ! empty( $args['advanced'] ) ? "props.attributes.show_advanced && " : "";
+
+			// element require
+			$element_require = ! empty( $args['element_require'] ) ? $this->block_props_replace( $args['element_require'], true ) . " && " : "";
+
+
 			$onchange  = "props.setAttributes({ $key: $key } )";
+			$onchangecomplete  = "";
 			$value     = "props.attributes.$key";
-			$text_type = array( 'text', 'password', 'number', 'email', 'tel', 'url', 'color' );
+			$text_type = array( 'text', 'password', 'number', 'email', 'tel', 'url', 'colorx' );
 			if ( in_array( $args['type'], $text_type ) ) {
 				$type = 'TextControl';
 				// Save numbers as numbers and not strings
@@ -2015,9 +2074,54 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					$onchange = "props.setAttributes({ $key: Number($key) } )";
 				}
 			}
-			//									elseif ( $args['type'] == 'color' ) { //@todo ColorPicker labels are not shown yet, we use html5 color input for now https://github.com/WordPress/gutenberg/issues/14378
-			//										$type = 'ColorPicker';
-			//									}
+/*
+ * https://www.wptricks.com/question/set-current-tab-on-a-gutenberg-tabpanel-component-from-outside-that-component/ es5 layout
+			elseif($args['type']=='tabs'){
+				?>
+				<script>
+					el(
+						wp.components.TabPanel,
+						{
+							tabs: [
+								{
+									name: 'show',
+									title: __( 'Show', 'my-textdomain' ),
+								},
+								{
+									name: 'edit',
+									title: __( 'Edit', 'my-textdomain' ),
+								},
+							],
+						},
+						( tab ) => {
+
+						if('show' === tab.name){
+						return 123;
+					}else if ( 'edit' === tab.name ) {
+						return 321;
+					}
+
+					}
+					),
+				</script>
+				<?php
+				return;
+			}
+*/
+			elseif ( $args['type'] == 'color' ) {
+				$type = 'ColorPicker';
+				$onchange = "";
+				$extra = "color: $value,";
+				if(!empty($args['disable_alpha'])){
+					$extra .= "disableAlpha: true,";
+				}
+				$onchangecomplete = "onChangeComplete: function($key) {
+				value =  $key.rgb.a && $key.rgb.a < 1 ? \"rgba(\"+$key.rgb.r+\",\"+$key.rgb.g+\",\"+$key.rgb.b+\",\"+$key.rgb.a+\")\" : $key.hex;
+                        props.setAttributes({
+                            $key: value
+                        });
+                    },";
+			}
 			elseif ( $args['type'] == 'checkbox' ) {
 				$type = 'CheckboxControl';
 				$extra .= "checked: props.attributes.$key,";
@@ -2026,17 +2130,21 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$type = 'TextareaControl';
 			} elseif ( $args['type'] == 'select' || $args['type'] == 'multiselect' ) {
 				$type = 'SelectControl';
-				if ( ! empty( $args['options'] ) ) {
-					$options .= "options: [";
-					foreach ( $args['options'] as $option_val => $option_label ) {
-						$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
+
+				if($args['name'] == 'category' && !empty($args['post_type_linked'])){
+					$options .= "options: taxonomies_".str_replace("-","_", $this->id).",";
+				}else {
+
+					if ( ! empty( $args['options'] ) ) {
+						$options .= "options: [";
+						foreach ( $args['options'] as $option_val => $option_label ) {
+							$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
+						}
+						$options .= "],";
 					}
-					$options .= "],";
 				}
 				if ( isset( $args['multiple'] ) && $args['multiple'] ) { //@todo multiselect does not work at the moment: https://github.com/WordPress/gutenberg/issues/5550
 					$extra .= ' multiple: true, ';
-					//$onchange = "props.setAttributes({ $key: ['edit'] } )";
-					//$value = "['edit', 'delete']";
 				}
 			} elseif ( $args['type'] == 'alignment' ) {
 				$type = 'AlignmentToolbar'; // @todo this does not seem to work but cant find a example
@@ -2044,14 +2152,21 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				return;// if we have not implemented the control then don't break the JS.
 			}
 
+
+
+			// color input does not show the labels so we add them
+			if($args['type']=='color'){
+				// add show only if advanced
+				echo $require_advanced;
+				// add setting require if defined
+				echo $element_require;
+				echo "el('div', {style: {'marginBottom': '8px'}}, '".addslashes( $args['title'] )."'),";
+			}
+
 			// add show only if advanced
-			if ( ! empty( $args['advanced'] ) ) {
-				echo "props.attributes.show_advanced && ";
-			}
+			echo $require_advanced;
 			// add setting require if defined
-			if ( ! empty( $args['element_require'] ) ) {
-				echo $this->block_props_replace( $args['element_require'], true ) . " && ";
-			}
+			echo $element_require;
 			?>
 			el( wp.components.<?php echo $type; ?>, {
 			label: '<?php echo addslashes( $args['title'] ); ?>',
@@ -2068,11 +2183,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			<?php echo $options; ?>
 			<?php echo $extra; ?>
 			<?php echo $custom_attributes; ?>
+			<?php echo $onchangecomplete;?>
 			onChange: function ( <?php echo $key; ?> ) {
 			<?php echo $onchange; ?>
 			}
 			} ),
 			<?php
+
 		}
 
 		/**
@@ -2234,8 +2351,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			ob_start();
 			if ( $output && ! $no_wrap ) {
+
+				$class_original = $this->options['widget_ops']['classname'];
+				$class = $this->options['widget_ops']['classname']." sdel-".$this->get_instance_hash();
+
 				// Before widget
 				$before_widget = $args['before_widget'];
+				$before_widget = str_replace($class_original,$class,$before_widget);
 				$before_widget = apply_filters( 'wp_super_duper_before_widget', $before_widget, $args, $instance, $this );
 				$before_widget = apply_filters( 'wp_super_duper_before_widget_' . $this->base_id, $before_widget, $args, $instance, $this );
 
@@ -2247,7 +2369,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				echo $before_widget;
 				// elementor strips the widget wrapping div so we check for and add it back if needed
 				if ( $this->is_elementor_widget_output() ) {
-					echo ! empty( $this->options['widget_ops']['classname'] ) ? "<span class='" . esc_attr( $this->options['widget_ops']['classname'] ) . "'>" : '';
+					echo ! empty( $this->options['widget_ops']['classname'] ) ? "<span class='" . esc_attr( $class  ) . "'>" : '';
 				}
 				echo $this->output_title( $args, $instance );
 				echo $output;
@@ -2409,6 +2531,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			} elseif ( $this->is_fusion_preview() ) {
 				$preview = true;
 			} elseif ( $this->is_oxygen_preview() ) {
+				$preview = true;
+			} elseif( $this->is_block_content_call() ) {
 				$preview = true;
 			}
 
@@ -2794,6 +2918,43 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			return $result;
+		}
+
+		/**
+		 * Get an instance hash that will be unique to the type and settings.
+		 *
+		 * @since 1.0.20
+		 * @return string
+		 */
+		public function get_instance_hash(){
+			$instance_string = $this->base_id.serialize($this->instance);
+			return hash('crc32b',$instance_string);
+		}
+
+		/**
+		 * Generate and return inline styles from CSS rules that will match the unique class of the instance.
+		 *
+		 * @param array $rules
+		 *
+		 * @since 1.0.20
+		 * @return string
+		 */
+		public function get_instance_style($rules = array()){
+			$css = '';
+
+			if(!empty($rules)){
+				$rules = array_unique($rules);
+				$instance_hash = $this->get_instance_hash();
+				$css .= "<style>";
+				foreach($rules as $rule){
+					$css .= ".sdel-$instance_hash $rule";
+				}
+				$css .= "</style>";
+			}
+
+
+			return $css;
+
 		}
 
 	}
