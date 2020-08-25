@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.5
-Stable tag: 1.2.2.5
+Stable tag: 1.2.2.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -130,6 +130,7 @@ No questions so far, but don't hesitate to ask!
 = 1.2.2.6 =
 * Password strength meter showing JS error in registration form for WordPress 5.0  - FIXED
 * Social login avatar image not displaying in the listing of the user in Supreme Directory theme - FIXED
+* Tab builder child tab no more child after saving its details - FIXED
 * Super Duper updated to v1.0.21 - CHANGED
 * AyeCode UI updated to v0.1.22 - CHANGED
 

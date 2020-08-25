@@ -2927,7 +2927,6 @@ class UsersWP_Forms {
 
 			$design_style = uwp_get_option("design_style","bootstrap");
 			$bs_form_group = $design_style ? "form-group form-check" : "";
-			$bs_sr_only = $design_style ? "form-check-label" : "";
 			$bs_form_control = $design_style ? "form-check-input" : "";
 			$site_title = uwp_get_form_label($field);
 			$field->htmlvar_name = 'register_gdpr';
@@ -2996,7 +2995,6 @@ class UsersWP_Forms {
 
 			$design_style = uwp_get_option("design_style","bootstrap");
 			$bs_form_group = $design_style ? "form-group form-check" : "";
-			$bs_sr_only = $design_style ? "form-check-label" : "";
 			$bs_form_control = $design_style ? "form-check-input" : "";
 
 			$site_title = uwp_get_form_label($field);

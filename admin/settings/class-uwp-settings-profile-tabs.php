@@ -625,6 +625,22 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		        $user_decided = 0;
 		    }
 
+		    if (isset($request['tab_parent']) && $request['tab_parent'] != ''){
+			    $tab_parent = esc_attr($request['tab_parent']);
+            } elseif($field_info && isset( $field_info->tab_parent )) {
+			    $tab_parent = $field_info->tab_parent;
+            }else {
+                $tab_parent = 0;
+            }
+
+            if (isset($request['tab_level']) && $request['tab_level'] != ''){
+			    $tab_level = esc_attr($request['tab_level']);
+            } elseif($field_info && isset( $field_info->tab_level )) {
+			    $tab_level = $field_info->tab_level;
+            }else {
+                $tab_level = 0;
+            }
+
 		    $exclude_privacy_tab = apply_filters('uwp_exclude_privacy_settings_tabs',array());
 		    $exclude_privacy_option = false;
 		    if(!empty($exclude_privacy_tab) && in_array($tab_key,$exclude_privacy_tab)) {
@@ -655,6 +671,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                         <input type="hidden" name="form_type" id="form_type" value="profile-tabs"/>
                         <input type="hidden" name="tab_type" id="tab_type" value="<?php echo $tab_type; ?>"/>
                         <input type="hidden" name="tab_key" value="<?php echo $tab_key ?>"/>
+                        <input type="hidden" name="tab_parent" value="<?php echo $tab_parent ?>"/>
+                        <input type="hidden" name="tab_level" value="<?php echo $tab_level ?>"/>
 
                         <ul class="widefat post fixed" style="width:100%;">
 
@@ -789,6 +807,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
          *
          */
 	    public function tabs_ajax_handler(){
+
 		    if (isset($_REQUEST['create_field'])) {
 			    $field_id = isset($_REQUEST['field_id']) ? trim(sanitize_text_field($_REQUEST['field_id']), '_') : '';
 			    $field_action = isset($_REQUEST['field_ins_upd']) ? sanitize_text_field($_REQUEST['field_ins_upd']) : '';
