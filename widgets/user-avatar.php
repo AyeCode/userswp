@@ -37,7 +37,6 @@ class UWP_User_Avatar_Widget extends WP_Super_Duper {
                     'type' => 'number',
                     'desc_tip' => true,
                     'default'  => '50',
-                    'advanced' => true
                 ),
                 'link'  => array(
                     'title' => __("Link to profile?:", 'userswp'),
@@ -60,7 +59,7 @@ class UWP_User_Avatar_Widget extends WP_Super_Duper {
                 'user_id'  => array(
                     'title' => __('User ID:', 'userswp'),
                     'desc' => __('Leave blank to use current user ID.', 'userswp'),
-                    'type' => 'number',
+                    'type' => 'text',
                     'desc_tip' => true,
                     'default'  => '',
                     'advanced' => true
@@ -98,20 +97,21 @@ class UWP_User_Avatar_Widget extends WP_Super_Duper {
 	    $args['link'] = 1 == $args['link'] ? 1 : 0;
 	    $args['allow_change'] = !empty($args['allow_change']) ? $args['allow_change'] : 0;
 
-	    if('post_author' == $args['user_id'] && $post instanceof WP_Post){
-		    $user = get_userdata($post->post_author);
-		    $args['user_id'] = $post->post_author;
-	    } else if(isset($args['user_id']) && (int)$args['user_id'] > 0){
+	    if(isset($args['user_id']) && is_int($args['user_id']) && (int)$args['user_id'] > 0){
 		    $user = get_userdata($args['user_id']);
-	    } else {
+	    } else if(isset($args['user_id']) && 'post_author' == $args['user_id'] && $post instanceof WP_Post){
+		    $user = get_userdata($post->post_author);
+	    } else if(isset($args['user_id']) && 'displayed_user' == $args['user_id']){
 		    $user = uwp_get_displayed_user();
+	    } else {
+		    $user = get_userdata(get_current_user_id());
 	    }
 
-	    if(empty($args['user_id']) && !empty($user->ID)){
+	    if(!empty($user->ID)){
 		    $args['user_id'] = $user->ID;
 	    }
 
-	    if(!$user){
+	    if(!$args['user_id']){
 		    return '';
 	    }
 

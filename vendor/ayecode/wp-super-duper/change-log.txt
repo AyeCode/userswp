@@ -1,3 +1,14 @@
+= 1.0.21 =
+* Block Category can now update on post_type change - FIXED
+* Non static method 'argument_values' should not be called statically - FIXED
+
+= 1.0.20 =
+* On change content don't compare the actual content, only attributes - CHANGED
+* Call AUI init JS function if defined on each block edit - ADDED
+* is_preview() now included block preview - CHANGED
+* Empty block previews can show broken class input - FIXED
+* color input for block now uses colorPicker - CHANGED
+
 = 1.0.19 =
 * Put non grouped block settings in to a "settings" group - CHANGED
 

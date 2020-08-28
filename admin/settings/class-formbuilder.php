@@ -2429,10 +2429,7 @@ class UsersWP_Form_Builder {
                 foreach ($fields as $field) {
                     $result_str = $field;
                     $field_ins_upd = 'display';
-
-                    $default = false;
-
-                    $this->register_field_adminhtml($result_str, $field_ins_upd, $default);
+                    $this->register_field_adminhtml($result_str, $field_ins_upd, false);
                 }
             }?>
         </ul>
@@ -2450,7 +2447,6 @@ class UsersWP_Form_Builder {
         if (!is_object($cf) && (is_int($cf) || ctype_digit($cf))) {
             $field_info = $wpdb->get_row($wpdb->prepare("select * from " . $extras_table_name . " where id= %d", array($cf)));
         } elseif (is_object($cf)) {
-            //$field_info = $cf;
             $result_str = $cf->id;
             $field_info = $wpdb->get_row($wpdb->prepare("select * from " . $extras_table_name . " where id= %d", array((int) $cf->id)));
         } else {
@@ -2469,7 +2465,7 @@ class UsersWP_Form_Builder {
         }
 
         if ($field_info) {
-            $account_field_info = $wpdb->get_row($wpdb->prepare("select * from " . $table_name . " where htmlvar_name= %s", array($field_info->site_htmlvar_name)));
+            $account_field_info = uwp_get_custom_field_info($field_info->site_htmlvar_name);
             if (isset($account_field_info->site_title)) {
                 if ($account_field_info->field_type == 'fieldset') {
                     $field_site_name = __('Fieldset:', 'userswp') . ' ' . $account_field_info->site_title;
