@@ -176,6 +176,10 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
             return $value;
         }
 
+	    if(!$value){
+		    return;
+	    }
+
         $obj = new UsersWP_Profile();
         $value = $obj->get_field_value($field, $user);
 

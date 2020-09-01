@@ -127,6 +127,10 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.7 =
+* Change confirm email's placeholder - FIXED
+* Disable links in profile tabs for the posts and listings not published yet - FIXED
+
 = 1.2.2.6 =
 * Password strength meter showing JS error in registration form for WordPress 5.0  - FIXED
 * Social login avatar image not displaying in the listing of the user in Supreme Directory theme - FIXED

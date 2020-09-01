@@ -94,7 +94,10 @@ class UsersWP_GeoDirectory_Plugin {
 	/**
 	 * Add GD quick links to the logged in Dashboard.
 	 *
+	 * @param $links
 	 * @param $args
+     *
+     * @return array
 	 */
 	public function dashboard_output( $links, $args = array() ) {
 
@@ -719,13 +722,12 @@ class UsersWP_GeoDirectory_Plugin {
 					<?php } ?>
 				</div>
 			</div>
-		<?php } ?>
-		<div class="uwp-profile-subtab-entries">
-			<?php
+		<?php }
+		if(has_action( 'uwp_profile_gd_' . $type . '_subtab_content' )){
+            echo '<div class="uwp-profile-subtab-entries">';
 			do_action( 'uwp_profile_gd_' . $type . '_subtab_content', $user, $post_type );
-			?>
-		</div>
-		<?php
+            echo '</div>';
+        }
 	}
 
 	/**
@@ -1640,12 +1642,6 @@ class UsersWP_GeoDirectory_Plugin {
 			$args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' );
 
 			uwp_get_template( "bootstrap/loop-posts.php", $args );
-		} else {
-			echo aui()->alert( array(
-					'type'    => 'info',
-					'content' => __( 'This user does not have any favorites yet.', 'userswp' )
-				)
-			);
 		}
 
 	}

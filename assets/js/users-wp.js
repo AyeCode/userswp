@@ -1,4 +1,4 @@
-jQuery(window).load(function() {
+jQuery(window).on('load',function () {
 
     // Enable auth modals
     uwp_init_auth_modal();
@@ -68,7 +68,7 @@ jQuery(window).load(function() {
     });
 
     $(document).ready(function() {
-        $(".uwp_upload_file_remove").click(function(event){
+        $( '.uwp_upload_file_remove' ).on( 'click', function( event ) {
             event.preventDefault();
 
             var htmlvar =  $( this ).data( 'htmlvar' );
@@ -94,7 +94,7 @@ jQuery(window).load(function() {
 
 (function( $, window, undefined ) {
     $(document).ready(function() {
-        $("#uwp_layout").change(function(){
+        $( '#uwp_layout' ).on( 'change', function() {
             var layout = $(this).val();
             var container = $('#uwp_user_items_layout');
             container.removeClass();
@@ -114,7 +114,7 @@ jQuery(window).load(function() {
         });
 
         jQuery( document ).ready(function($) {
-            $( "#uwp_login_modal form.uwp-login-form" ).submit(function( e ) {
+            $( '#uwp_login_modal form.uwp-login-form' ).on( 'submit', function( e ) {
                 e.preventDefault();
                 uwp_ajax_login(this);
             });
@@ -244,7 +244,7 @@ function uwp_modal_login_form(){
                 setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus().unbind('focus');}, 300); // set focus on the first input after load animation
 
                 // process login form
-                jQuery(".uwp-auth-modal .modal-content form.uwp-login-form").submit(function(e){
+                jQuery( '.uwp-auth-modal .modal-content form.uwp-login-form' ).on( 'submit', function( e ) {
                     e.preventDefault(e);
                     uwp_modal_login_form_process();
                 });
@@ -442,7 +442,7 @@ function uwp_modal_forgot_password_form(){
                 setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus().unbind('focus');}, 300); // set focus on the first input after load animation
 
                 // process login form
-                jQuery(".uwp-auth-modal .modal-content form.uwp-forgot-form").submit(function(e){
+                jQuery( '.uwp-auth-modal .modal-content form.uwp-forgot-form' ).on( 'submit', function( e ) {
                     e.preventDefault(e);
                     uwp_modal_forgot_password_form_process();
                 });
@@ -472,11 +472,6 @@ function uwp_modal_forgot_password_form_process(){
             if(data.success){
                 $button.html($button_text).prop('disabled', true);// remove spinner
                 jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
-                // Show success message for 1 second before redirecting.
-                // setTimeout(function(){
-                //     location.reload();
-                // }, 1000);
-
             }else if(data.success===false){
                 jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
                 $button.html($button_text).prop('disabled', false);// enable submit

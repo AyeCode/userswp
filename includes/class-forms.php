@@ -3330,33 +3330,50 @@ class UsersWP_Forms {
 				$bs_form_group = $design_style ? "form-group" : "";
 				$bs_sr_only = $design_style ? "sr-only" : "";
 				$bs_form_control = $design_style ? "form-control" : "";
+				$site_title = __("Confirm Email", 'userswp');
 
-				ob_start(); // Start  buffering;
-				?>
-                <div id="uwp_account_confirm_email_row"
-                     class="<?php echo 'required_field';?> uwp_form_email_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
+				ob_start();
 
+				if( $design_style ){
+					echo aui()->input(array(
+						'type'  =>  'email',
+						'id'    =>  $field->htmlvar_name,
+						'name'    =>  $field->htmlvar_name,
+						'placeholder'   => $site_title,
+						'title'   => $site_title,
+						'value' =>  $value,
+						'required'  => $field->is_required,
+						'help_text' => uwp_get_field_description($field),
+						'label' => is_admin() ? '' : $site_title
+					));
+				}else {
+					?>
+                    <div id="uwp_account_confirm_email_row"
+                         class="<?php echo 'required_field'; ?> uwp_form_email_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+
+						<?php
+
+						if ( ! is_admin() ) { ?>
+                            <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
+								<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+								<?php if ( $field->is_required ) {
+									echo '<span>*</span>';
+								} ?>
+                            </label>
+						<?php } ?>
+
+                        <input name="confirm_email"
+                               class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
+                               id="uwp_account_confirm_email"
+                               placeholder="<?php echo $site_title; ?>"
+                               value=""
+                               title="<?php echo $site_title; ?>"
+							<?php echo 'required="required"'; ?>
+                               type="email"
+                        />
+                    </div>
 					<?php
-					$site_title = __("Confirm Email", 'userswp');
-					if (!is_admin()) { ?>
-                        <label class="<?php echo esc_attr($bs_sr_only);?>">
-							<?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-							<?php if ($field->is_required) echo '<span>*</span>';?>
-                        </label>
-					<?php } ?>
-
-                    <input name="confirm_email"
-                           class="uwp_textfield <?php echo esc_attr($bs_form_control);?>"
-                           id="uwp_account_confirm_email"
-                           placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
-                           value=""
-                           title="<?php echo $site_title; ?>"
-						<?php echo 'required="required"'; ?>
-                           type="email"
-                    />
-                </div>
-
-				<?php
+				}
 				$confirm_html = ob_get_clean();
 				$html = $html.$confirm_html;
 			}

@@ -1,4 +1,4 @@
-jQuery(window).load(function () {
+jQuery(window).on('load',function () {
 
     // Load color picker
     var UWPColorPicker = jQuery('.uwp-color-picker');
