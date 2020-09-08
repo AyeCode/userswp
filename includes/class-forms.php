@@ -3338,7 +3338,7 @@ class UsersWP_Forms {
 					echo aui()->input(array(
 						'type'  =>  'email',
 						'id'    =>  $field->htmlvar_name,
-						'name'    =>  $field->htmlvar_name,
+						'name'    =>  'confirm_email',
 						'placeholder'   => $site_title,
 						'title'   => $site_title,
 						'value' =>  $value,
@@ -3396,50 +3396,41 @@ class UsersWP_Forms {
 				return;
 			}
 
+			global $wpdb, $uwp_notices;
+
 			// Save fields privacy settings
 			$extra_where = "AND is_public='2'";
 			$fields = get_account_form_fields($extra_where);
 			$fields = apply_filters('uwp_account_privacy_fields', $fields);
 			$user_id = get_current_user_id();
-			global $wpdb, $uwp_notices;
 			$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
 			$user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT user_privacy, tabs_privacy FROM $meta_table WHERE user_id = %d", $user_id ) );
+			if (!empty($user_meta_info->user_privacy)) {
+				$public_fields = explode( ',', $user_meta_info->user_privacy );
+			} else {
+				$public_fields = array();
+            }
 
 			if ($fields) {
 
 				foreach ($fields as $field) {
 					$field_name = $field->htmlvar_name.'_privacy';
-
 					$field_value = strip_tags(esc_sql($_POST[$field_name]));
-					$value = '';
 
-					if (!empty($user_meta_info->user_privacy)) {
-						$public_fields = explode(',', $user_meta_info->user_privacy);
-						if ($field_value == 'no') {
-							if (!in_array($field_name, $public_fields)) {
-								$public_fields[] = $field_name;
-							}
-							$value = implode(',', $public_fields);
-						} else {
-							if (($field_name = array_search($field_name, $public_fields)) !== false) {
-								unset($public_fields[$field_name]);
-							}
-							$value = implode(',', $public_fields);
+					if ($field_value == 'no') {
+						if (!in_array($field_name, $public_fields)) {
+							$public_fields[] = $field_name;
 						}
 					} else {
-
-						if ($field_value == 'no') {
-							$public_fields = array($field_name);
-							$value = implode(',', $public_fields);
-						} else {
-							// For yes values no need to update since its a public field.
-							// We store only the private fields.
+						if (($field_name = array_search($field_name, $public_fields)) !== false) {
+							unset($public_fields[$field_name]);
 						}
 					}
-
-					uwp_update_usermeta($user_id, 'user_privacy', $value);
 				}
+
+				$value = implode(',', $public_fields);
+				uwp_update_usermeta($user_id, 'user_privacy', $value);
 			}
 
 			// Save tabs privacy settings
@@ -3448,7 +3439,6 @@ class UsersWP_Forms {
 
 			if( $tabs ){
 				$public_fields = maybe_unserialize($user_meta_info->tabs_privacy);
-//                print_r( $public_fields );exit;
 				$do_tabs_update = false;
 				foreach ($tabs as $tab) {
 					$field_name = $tab->tab_key . '_tab_privacy';

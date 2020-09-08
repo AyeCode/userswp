@@ -920,7 +920,7 @@ class UsersWP_Templates {
 	public function privacy_edit_form_display($type) {
 		if ($type == 'privacy') {
 			$make_profile_private = uwp_can_make_profile_private();
-			echo '<div class="uwp-account-form uwp_wc_form">';
+			echo '<div class="uwp-account-form">';
 			$extra_where = "AND is_public='2'";
 			$fields = get_account_form_fields($extra_where);
 			$fields = apply_filters('uwp_account_privacy_fields', $fields);

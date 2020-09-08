@@ -231,12 +231,13 @@ class UsersWP_Profile {
 
                 // Icon
                 $icon = uwp_get_field_icon($field->field_icon);
+	            $site_title = isset($field->site_title) ? __($field->site_title, 'userswp') : '';
 
                 if ($field->field_type == 'fieldset') {
                     $icon = '';
                     ?>
                     <div class="uwp-profile-extra-wrap m-0 p-0">
-                        <div class="uwp-profile-extra-key uwp-profile-extra-full m-0 p-0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></div>
+                        <div class="uwp-profile-extra-key uwp-profile-extra-full m-0 p-0"><h3 style="margin: 10px 0;"><?php echo $icon.$site_title; ?></h3></div>
                     </div>
                     <?php
                 } else {
@@ -244,7 +245,7 @@ class UsersWP_Profile {
                         $wrap_html = true;
                         ?>
                         <div class="uwp-profile-extra-wrap <?php echo $class; ?>">
-                            <div class="uwp-profile-extra-key d-inline-block"><?php echo $icon." ".$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
+                            <div class="uwp-profile-extra-key d-inline-block"><?php echo $icon." ".$site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
                             <div class="uwp-profile-extra-value d-inline-block">
                                 <?php
                                 if ($field->htmlvar_name == 'bio') {

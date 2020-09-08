@@ -13,7 +13,10 @@ jQuery(window).on('load',function () {
         var lesstext = uwp_localize_data.uwp_less_text;
         $('.uwp_more').each(function() {
             var content = $.trim($(this).text());
-
+            var length = $( this ).data( 'maxchar' );
+            if(length > 0 ){
+                showChar = length;
+            }
             if(content.length > showChar) {
 
                 var c = content.substr(0, showChar);
@@ -371,7 +374,7 @@ function uwp_modal_register_form(){
                     uwp_modal_register_form_process();
                 });
             }
-            uwp_init_auth_modal();
+            uwp_init_auth_modal();aui_init_select2();
         }
     });
 }
@@ -416,7 +419,7 @@ function uwp_modal_register_form_process(){
                 $button.html($button_text).prop('disabled', false);// enable submit
                 uwp_maybe_reset_recaptcha();
             }
-            uwp_init_auth_modal();
+            uwp_init_auth_modal();aui_init_select2();
         }
     });
 }
