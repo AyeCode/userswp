@@ -267,7 +267,7 @@ class UsersWP_Form_Builder {
                 'is_active'           =>  1,
                 'default_value'       =>  '',
                 'is_required'         =>  0,
-                'option_values'       =>  __('Select Gender/,Male,Female,Other', 'userswp'),
+                'option_values'       =>  __('Male,Female,Other', 'userswp'),
                 'required_msg'        =>  '',
                 'field_icon'          =>  'fas fa-user',
                 'css_class'           =>  ''

@@ -131,6 +131,7 @@ No questions so far, but don't hesitate to ask!
 * Change confirm email's placeholder - FIXED
 * Disable links in profile tabs for the posts and listings not published yet - FIXED
 * Placeholder not loaded in the select2 in registration form light box - FIXED
+* Use WP object cache for user meta - CHANGED
 
 = 1.2.2.6 =
 * Password strength meter showing JS error in registration form for WordPress 5.0  - FIXED

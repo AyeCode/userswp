@@ -838,6 +838,7 @@ class UsersWP_Forms {
 		$email_vars = array(
 			'user_id' => $user_data->ID,
 			'login_details' => $message,
+			'reset_link' => $reset_link,
 		);
 
 		UsersWP_Mails::send($user_data->user_email, 'forgot_password', $email_vars);
@@ -3457,20 +3458,7 @@ class UsersWP_Forms {
 				}
 
 				if($do_tabs_update){
-					if (!empty($user_meta_info)) {
-						$wpdb->update(
-							$meta_table,
-							array('tabs_privacy' => maybe_serialize($public_fields)),
-							array('user_id' => $user_id),
-							array('%s'),
-							array('%d')
-						);
-					} else {
-						$wpdb->insert(
-							$meta_table,
-							array('user_id' => $user_id, 'tabs_privacy' => $public_fields)
-						);
-					}
+					uwp_update_usermeta($user_id, 'tabs_privacy', maybe_serialize($public_fields));
 				}
 			}
 

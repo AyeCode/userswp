@@ -936,10 +936,10 @@ class UsersWP_Templates {
 						<?php if ($fields) { ?>
                             <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
                                 <div class="uwp-profile-extra-key col" style="font-weight: bold;">
-									<?php echo __("Field", "userswp") ?>
+									<?php _e("Field", "userswp") ?>
                                 </div>
                                 <div class="uwp-profile-extra-value col" style="font-weight: bold;">
-									<?php echo __("Is Public?", "userswp") ?>
+									<?php _e("Is Public?", "userswp") ?>
                                 </div>
                             </div>
 							<?php foreach ($fields as $field) { ?>
@@ -971,10 +971,10 @@ class UsersWP_Templates {
 						if( $tabs ){ ?>
                             <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
                                 <div class="uwp-profile-extra-key col" style="font-weight: bold;">
-									<?php echo __("Tab Name", "userswp") ?>
+									<?php _e("Tab Name", "userswp") ?>
                                 </div>
                                 <div class="uwp-profile-extra-value col" style="font-weight: bold;">
-									<?php echo __("Privacy", "userswp") ?>
+									<?php _e("Privacy", "userswp") ?>
                                 </div>
                             </div>
 						<?php }
