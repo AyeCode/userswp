@@ -498,7 +498,7 @@ class UsersWP_Profile {
 		$counts = array();
 		$post_types = array();
 		$exclude = array('wpi_invoice', 'wpi_quote', 'elementor_library', 'attachment', 'product', 'shop_order', 'download');
-		$exclude = apply_filters( 'uwp_get_user_post_counts', $exclude, $post_types );
+		$exclude = apply_filters( 'uwp_excluded_user_post_counts', $exclude, $user_id );
 
 		if($user_id){
 			$post_types = get_post_types( array('public'=>true,'publicly_queryable'=>true), 'objects');
@@ -519,11 +519,13 @@ class UsersWP_Profile {
 			}
 		}
 
+		$counts = apply_filters( 'uwp_get_user_post_counts', $counts, $post_types, $user_id );
+
 		if($echo){
 			$output = '';
 			if ( ! empty( $counts ) ) {
 				foreach ( $counts as $cpt => $post_type ) {
-					$post_count_text = $post_type['count'] > 1 ? esc_attr( $post_type['name'] ) . '<span class="badge badge-dark ml-1">' . absint( $post_type['count'] ) . '</span>' : esc_attr( $post_type['singular_name'] ) . '<span class="badge badge-dark ml-1">' . absint( $post_type['count'] ) . '</span>';
+					$post_count_text = $post_type['count'] > 1 ? esc_attr( $post_type['name'] ) . '<span class="badge badge-dark ml-1">' . esc_attr( $post_type['count'] ) . '</span>' : esc_attr( $post_type['singular_name'] ) . '<span class="badge badge-dark ml-1">' . esc_attr( $post_type['count'] ) . '</span>';
 					$output .= '<span class="badge badge-white text-muted pl-0">' . $post_count_text . '</span>' . " \n"; // needs line break for
 				}
 			}

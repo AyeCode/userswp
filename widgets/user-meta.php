@@ -170,18 +170,18 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
             $css_class = $args['css_class'];
         }
 
-        $privacy = uwp_get_usermeta($args['user_id'], '_privacy');
+        $privacy = uwp_get_usermeta($user->ID, $key.'_privacy');
 
         if (isset($privacy) && 'no' == $privacy) {
             return $value;
         }
 
+        $obj = new UsersWP_Profile();
+        $value = $obj->get_field_value($field, $user);
+
 	    if(!$value){
 		    return;
 	    }
-
-        $obj = new UsersWP_Profile();
-        $value = $obj->get_field_value($field, $user);
 
         switch ($args['show']){
             case 'icon-value':

@@ -793,6 +793,7 @@ class UsersWP_Forms {
 		$as_password = apply_filters('uwp_forgot_message_as_password', false);
 
 		global $wpdb, $wp_hasher;
+		$reset_link = '';
 
 		if ($as_password) {
 			$new_pass = wp_generate_password(12, false);
@@ -820,7 +821,6 @@ class UsersWP_Forms {
 			$message .= '<p>' .__('If this was by mistake, just ignore this email and nothing will happen.', 'userswp') . "</p>";
 			$message .= '<p>' .__('To reset your password, click the following link and follow the instructions.', 'userswp') . "</p>";
 			$reset_page = uwp_get_page_id('reset_page', false);
-			$reset_link = '';
 			if ($reset_page) {
 				$reset_link = add_query_arg( array(
 					'key' => $key,

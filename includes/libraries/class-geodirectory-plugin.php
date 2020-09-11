@@ -1256,7 +1256,7 @@ class UsersWP_GeoDirectory_Plugin {
 		} else {
 			$gd_post_types = geodir_get_posttypes( 'array' );
 			?>
-			<h3><?php _e( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' ) ?></h3>
+			<h3><?php _e( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' ); ?></h3>
 
 			<div class="uwp-profile-item-block">
 				<?php
