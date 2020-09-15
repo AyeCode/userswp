@@ -11,8 +11,10 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 		<?php
 		if ( $type == 'avatar' ) {
 			_e( 'Change your profile photo', 'userswp' );
+			$label = __( "Upload Avatar", "userswp" );
 		} else {
 			_e( 'Change your cover photo', 'userswp' );
+			$label = __( "Upload Banner", "userswp" );
 		}
 		?>
 	</h5>
@@ -36,7 +38,7 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 		echo aui()->button(array(
 			'type'       =>  'button',
 			'class'      => 'btn btn-primary uwp_upload_button',
-			'content'    => '<i class="fas fa-upload"></i>'.sprintf(__( 'Upload %s', 'userswp' ), $type),
+			'content'    => '<i class="fas fa-upload"></i>'.$label,
 			'onclick'    => "document.getElementById('uwp_upload_".$type."').click();",
 		));
 		echo aui()->alert( array(

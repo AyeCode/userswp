@@ -849,7 +849,7 @@ class UsersWP_Profile {
             } else {
                 $permalink_structure = 'CUSTOM';
                 // Add forward slash if not available
-                $link = user_trailingslashit($link);
+                $link = trailingslashit($link);
             }
 
             $url_type = apply_filters('uwp_profile_url_type', 'slug');

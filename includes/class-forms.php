@@ -245,6 +245,10 @@ class UsersWP_Forms {
 
 		global $uwp_notices;
 
+		if( isset( $data['uwp_register_hp'] ) && '' != $data['uwp_register_hp'] ) {
+			wp_die(__('No spam please!', 'userswp'));
+		}
+
 		if( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce' ) ) {
 			$message = aui()->alert(array(
 					'type'=>'error',
@@ -937,6 +941,10 @@ class UsersWP_Forms {
 	public function process_reset() {
 
 		$data = $_POST;
+
+		if( isset( $data['uwp_reset_hp'] ) && '' != $data['uwp_reset_hp'] ) {
+			wp_die(__('No spam please!', 'userswp'));
+		}
 
 		if( ! isset( $data['uwp_reset_nonce'] ) || ! wp_verify_nonce( $data['uwp_reset_nonce'], 'uwp-reset-nonce' ) ) {
 			return;

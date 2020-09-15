@@ -132,6 +132,8 @@ No questions so far, but don't hesitate to ask!
 * Disable links in profile tabs for the posts and listings not published yet - FIXED
 * Placeholder not loaded in the select2 in registration form light box - FIXED
 * Use WP object cache for user meta - CHANGED
+* Add slash if permalink structure don't have slash at the end for profile URL - FIXED
+* Added honeypot check for register and reset password forms - ADDED
 
 = 1.2.2.6 =
 * Password strength meter showing JS error in registration form for WordPress 5.0  - FIXED
