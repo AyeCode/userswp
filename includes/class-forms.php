@@ -259,9 +259,16 @@ class UsersWP_Forms {
 			else{$uwp_notices[] = array('register' => $message); return;}
 		}
 
-		$files = $_FILES;
-		$errors = new WP_Error();
-		$file_obj = new UsersWP_Files();
+		$hash = substr(hash( 'SHA256', AUTH_KEY . site_url() ), 0, 25);
+		if( empty( $data['uwp_register_hash'] ) || $hash != $data['uwp_register_hash'] ) {
+			$message = aui()->alert(array(
+					'type'=>'error',
+					'content'=> __('Security hash failed. Try again.', 'userswp')
+				)
+			);
+			if(wp_doing_ajax()){wp_send_json_error($message);}
+			else{$uwp_notices[] = array('register' => $message); return;}
+		}
 
 		if (!get_option('users_can_register')) {
 			$message = aui()->alert(array(
@@ -272,6 +279,10 @@ class UsersWP_Forms {
 			if(wp_doing_ajax()){wp_send_json_error($message);}
 			else{$uwp_notices[] = array('register' => $message); return;}
 		}
+
+		$files = $_FILES;
+		$errors = new WP_Error();
+		$file_obj = new UsersWP_Files();
 
 		do_action('uwp_before_validate', 'register');
 

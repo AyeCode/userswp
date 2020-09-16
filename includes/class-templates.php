@@ -449,6 +449,8 @@ class UsersWP_Templates {
                 }
                 echo '<input type="hidden" name="redirect_to" value="'.$redirect_to.'"/>';
             }
+	        $hash = substr(hash( 'SHA256', AUTH_KEY . site_url() ), 0, 25);
+	        echo '<input type="hidden" name="uwp_register_hash" value="'.$hash.'" style="display:none !important; visibility:hidden !important;" />';
 	        echo '<input type="hidden" name="uwp_register_hp" value="" style="display:none !important; visibility:hidden !important;" size="25" autocomplete="off" />';
             echo '<input type="hidden" name="uwp_register_nonce" value="'. wp_create_nonce( 'uwp-register-nonce' ) .'" />';
         } elseif ($form_type == 'change') {

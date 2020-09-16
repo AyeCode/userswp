@@ -26,6 +26,10 @@ class UsersWP_Meta {
             return $default;
         }
 
+        if(!$key){
+        	return $default;
+        }
+
         global $wpdb;
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
