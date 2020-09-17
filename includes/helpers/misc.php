@@ -1793,3 +1793,27 @@ function uwp_get_activation_link($user_id){
 
 	return $activation_link;
 }
+
+/**
+ * Checks a version number against the core version and adds a admin notice if requirements are not met.
+ *
+ * @param $name
+ * @param $version
+ *
+ * @return bool
+ */
+function uwp_min_version_check( $name, $version ) {
+	if ( version_compare( USERSWP_VERSION, $version, '<' ) ) {
+		add_action( 'admin_notices', function () use ( &$name ) {
+			?>
+            <div class="notice notice-error is-dismissible">
+                <p><?php echo sprintf( __( "%s requires a newer version of UsersWP and will not run until the UsersWP plugin is updated.", "userswp" ), $name ); ?></p>
+            </div>
+			<?php
+		} );
+
+		return false;
+	}
+
+	return true;
+}

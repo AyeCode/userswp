@@ -497,8 +497,11 @@ class UsersWP_Profile {
 
 		$counts = array();
 		$post_types = array();
-		$exclude = array('wpi_invoice', 'wpi_quote', 'elementor_library', 'attachment', 'product', 'shop_order', 'download');
-		$exclude = apply_filters( 'uwp_excluded_user_post_counts', $exclude, $user_id );
+		$exclude = array('elementor_library', 'attachment');
+		$exclude = apply_filters( 'uwp_user_excluded_posttypes', $exclude, $user_id );
+
+		$not_login_exclude = array('wpi_invoice', 'wpi_quote', 'product', 'download');
+		$not_login_exclude = apply_filters( 'uwp_non_login_user_excluded_posttypes', $not_login_exclude, $user_id );
 
 		if($user_id){
 			$post_types = get_post_types( array('public'=>true,'publicly_queryable'=>true), 'objects');
@@ -506,15 +509,24 @@ class UsersWP_Profile {
 			if(!empty($post_types)){
 				foreach($post_types as $cpt => $post_type){
 					$count = count_user_posts( $user_id , $cpt);
-					if($user_id == get_current_user_id()){
-						if($count){
-							$counts[$cpt] = array('name'=> $post_type->labels->name,'singular_name'=> $post_type->labels->singular_name,'count'=>$count);
+					if($count && !in_array($cpt, $exclude)) {
+						if ( $user_id == get_current_user_id() ) {
+							if ( $count ) {
+								$counts[ $cpt ] = array( 'name'          => $post_type->labels->name,
+								                         'singular_name' => $post_type->labels->singular_name,
+								                         'count'         => $count
+								);
+							}
+						} else {
+							if ( $count && ! in_array( $cpt, $not_login_exclude ) ) {
+								$counts[ $cpt ] = array( 'name'          => $post_type->labels->name,
+								                         'singular_name' => $post_type->labels->singular_name,
+								                         'count'         => $count
+								);
+							}
 						}
-                    } else {
-						if($count && !in_array($cpt, $exclude)){
-							$counts[$cpt] = array('name'=> $post_type->labels->name,'singular_name'=> $post_type->labels->singular_name,'count'=>$count);
-						}
-                    }
+					}
+
 				}
 			}
 		}
