@@ -245,6 +245,10 @@ class UsersWP_Forms {
 
 		global $uwp_notices;
 
+		if( isset( $data['uwp_register_hp'] ) && '' != $data['uwp_register_hp'] ) {
+			wp_die(__('No spam please!', 'userswp'));
+		}
+
 		if( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce' ) ) {
 			$message = aui()->alert(array(
 					'type'=>'error',
@@ -255,9 +259,16 @@ class UsersWP_Forms {
 			else{$uwp_notices[] = array('register' => $message); return;}
 		}
 
-		$files = $_FILES;
-		$errors = new WP_Error();
-		$file_obj = new UsersWP_Files();
+		$hash = substr(hash( 'SHA256', AUTH_KEY . site_url() ), 0, 25);
+		if( empty( $data['uwp_register_hash'] ) || $hash != $data['uwp_register_hash'] ) {
+			$message = aui()->alert(array(
+					'type'=>'error',
+					'content'=> __('Security hash failed. Try again.', 'userswp')
+				)
+			);
+			if(wp_doing_ajax()){wp_send_json_error($message);}
+			else{$uwp_notices[] = array('register' => $message); return;}
+		}
 
 		if (!get_option('users_can_register')) {
 			$message = aui()->alert(array(
@@ -268,6 +279,10 @@ class UsersWP_Forms {
 			if(wp_doing_ajax()){wp_send_json_error($message);}
 			else{$uwp_notices[] = array('register' => $message); return;}
 		}
+
+		$files = $_FILES;
+		$errors = new WP_Error();
+		$file_obj = new UsersWP_Files();
 
 		do_action('uwp_before_validate', 'register');
 
@@ -793,6 +808,7 @@ class UsersWP_Forms {
 		$as_password = apply_filters('uwp_forgot_message_as_password', false);
 
 		global $wpdb, $wp_hasher;
+		$reset_link = '';
 
 		if ($as_password) {
 			$new_pass = wp_generate_password(12, false);
@@ -820,7 +836,6 @@ class UsersWP_Forms {
 			$message .= '<p>' .__('If this was by mistake, just ignore this email and nothing will happen.', 'userswp') . "</p>";
 			$message .= '<p>' .__('To reset your password, click the following link and follow the instructions.', 'userswp') . "</p>";
 			$reset_page = uwp_get_page_id('reset_page', false);
-			$reset_link = '';
 			if ($reset_page) {
 				$reset_link = add_query_arg( array(
 					'key' => $key,
@@ -838,6 +853,7 @@ class UsersWP_Forms {
 		$email_vars = array(
 			'user_id' => $user_data->ID,
 			'login_details' => $message,
+			'reset_link' => $reset_link,
 		);
 
 		UsersWP_Mails::send($user_data->user_email, 'forgot_password', $email_vars);
@@ -936,6 +952,10 @@ class UsersWP_Forms {
 	public function process_reset() {
 
 		$data = $_POST;
+
+		if( isset( $data['uwp_reset_hp'] ) && '' != $data['uwp_reset_hp'] ) {
+			wp_die(__('No spam please!', 'userswp'));
+		}
 
 		if( ! isset( $data['uwp_reset_nonce'] ) || ! wp_verify_nonce( $data['uwp_reset_nonce'], 'uwp-reset-nonce' ) ) {
 			return;
@@ -3330,33 +3350,50 @@ class UsersWP_Forms {
 				$bs_form_group = $design_style ? "form-group" : "";
 				$bs_sr_only = $design_style ? "sr-only" : "";
 				$bs_form_control = $design_style ? "form-control" : "";
+				$site_title = __("Confirm Email", 'userswp');
 
-				ob_start(); // Start  buffering;
-				?>
-                <div id="uwp_account_confirm_email_row"
-                     class="<?php echo 'required_field';?> uwp_form_email_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
+				ob_start();
 
+				if( $design_style ){
+					echo aui()->input(array(
+						'type'  =>  'email',
+						'id'    =>  $field->htmlvar_name,
+						'name'    =>  'confirm_email',
+						'placeholder'   => $site_title,
+						'title'   => $site_title,
+						'value' =>  $value,
+						'required'  => $field->is_required,
+						'help_text' => uwp_get_field_description($field),
+						'label' => is_admin() ? '' : $site_title
+					));
+				}else {
+					?>
+                    <div id="uwp_account_confirm_email_row"
+                         class="<?php echo 'required_field'; ?> uwp_form_email_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+
+						<?php
+
+						if ( ! is_admin() ) { ?>
+                            <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
+								<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+								<?php if ( $field->is_required ) {
+									echo '<span>*</span>';
+								} ?>
+                            </label>
+						<?php } ?>
+
+                        <input name="confirm_email"
+                               class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
+                               id="uwp_account_confirm_email"
+                               placeholder="<?php echo $site_title; ?>"
+                               value=""
+                               title="<?php echo $site_title; ?>"
+							<?php echo 'required="required"'; ?>
+                               type="email"
+                        />
+                    </div>
 					<?php
-					$site_title = __("Confirm Email", 'userswp');
-					if (!is_admin()) { ?>
-                        <label class="<?php echo esc_attr($bs_sr_only);?>">
-							<?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-							<?php if ($field->is_required) echo '<span>*</span>';?>
-                        </label>
-					<?php } ?>
-
-                    <input name="confirm_email"
-                           class="uwp_textfield <?php echo esc_attr($bs_form_control);?>"
-                           id="uwp_account_confirm_email"
-                           placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
-                           value=""
-                           title="<?php echo $site_title; ?>"
-						<?php echo 'required="required"'; ?>
-                           type="email"
-                    />
-                </div>
-
-				<?php
+				}
 				$confirm_html = ob_get_clean();
 				$html = $html.$confirm_html;
 			}
@@ -3379,50 +3416,41 @@ class UsersWP_Forms {
 				return;
 			}
 
+			global $wpdb, $uwp_notices;
+
 			// Save fields privacy settings
 			$extra_where = "AND is_public='2'";
 			$fields = get_account_form_fields($extra_where);
 			$fields = apply_filters('uwp_account_privacy_fields', $fields);
 			$user_id = get_current_user_id();
-			global $wpdb, $uwp_notices;
 			$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
 			$user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT user_privacy, tabs_privacy FROM $meta_table WHERE user_id = %d", $user_id ) );
+			if (!empty($user_meta_info->user_privacy)) {
+				$public_fields = explode( ',', $user_meta_info->user_privacy );
+			} else {
+				$public_fields = array();
+            }
 
 			if ($fields) {
 
 				foreach ($fields as $field) {
 					$field_name = $field->htmlvar_name.'_privacy';
-
 					$field_value = strip_tags(esc_sql($_POST[$field_name]));
-					$value = '';
 
-					if (!empty($user_meta_info->user_privacy)) {
-						$public_fields = explode(',', $user_meta_info->user_privacy);
-						if ($field_value == 'no') {
-							if (!in_array($field_name, $public_fields)) {
-								$public_fields[] = $field_name;
-							}
-							$value = implode(',', $public_fields);
-						} else {
-							if (($field_name = array_search($field_name, $public_fields)) !== false) {
-								unset($public_fields[$field_name]);
-							}
-							$value = implode(',', $public_fields);
+					if ($field_value == 'no') {
+						if (!in_array($field_name, $public_fields)) {
+							$public_fields[] = $field_name;
 						}
 					} else {
-
-						if ($field_value == 'no') {
-							$public_fields = array($field_name);
-							$value = implode(',', $public_fields);
-						} else {
-							// For yes values no need to update since its a public field.
-							// We store only the private fields.
+						if (($field_name = array_search($field_name, $public_fields)) !== false) {
+							unset($public_fields[$field_name]);
 						}
 					}
-
-					uwp_update_usermeta($user_id, 'user_privacy', $value);
 				}
+
+				$value = implode(',', $public_fields);
+				uwp_update_usermeta($user_id, 'user_privacy', $value);
 			}
 
 			// Save tabs privacy settings
@@ -3431,7 +3459,6 @@ class UsersWP_Forms {
 
 			if( $tabs ){
 				$public_fields = maybe_unserialize($user_meta_info->tabs_privacy);
-//                print_r( $public_fields );exit;
 				$do_tabs_update = false;
 				foreach ($tabs as $tab) {
 					$field_name = $tab->tab_key . '_tab_privacy';
@@ -3450,20 +3477,7 @@ class UsersWP_Forms {
 				}
 
 				if($do_tabs_update){
-					if (!empty($user_meta_info)) {
-						$wpdb->update(
-							$meta_table,
-							array('tabs_privacy' => maybe_serialize($public_fields)),
-							array('user_id' => $user_id),
-							array('%s'),
-							array('%d')
-						);
-					} else {
-						$wpdb->insert(
-							$meta_table,
-							array('user_id' => $user_id, 'tabs_privacy' => $public_fields)
-						);
-					}
+					uwp_update_usermeta($user_id, 'tabs_privacy', maybe_serialize($public_fields));
 				}
 			}
 

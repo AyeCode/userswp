@@ -347,9 +347,9 @@ class UsersWP_Validation {
 
 	        if ($type != 'login' && (strlen($data['password']) < $password_min_length || strlen($data['password']) > $password_max_length )) {
 		        if(strlen($data['password']) > $password_max_length) {
-			        $errors->add('pass_match', sprintf(__('ERROR: Password must be %s characters or less.', 'userswp'), $password_max_length));
+			        $errors->add('pass_match', sprintf(__('<strong>Error</strong>: Password must be %s characters or less.', 'userswp'), $password_max_length));
 		        } else{
-			        $errors->add('pass_match', sprintf(__('ERROR: Password must be %s characters or more.', 'userswp'), $password_min_length));
+			        $errors->add('pass_match', sprintf(__('<strong>Error</strong>: Password must be %s characters or more.', 'userswp'), $password_min_length));
 		        }
 	        }
 
@@ -368,7 +368,7 @@ class UsersWP_Validation {
             } else {
                 //check password
                 if ($data['password'] != $data['confirm_password']) {
-                    $errors->add('pass_match', __('ERROR: Passwords do not match.', 'userswp'));
+                    $errors->add('pass_match', __('<strong>Error</strong>: Passwords do not match.', 'userswp'));
                 }
 
                 $validated_data['password'] = isset($data['password']) ? $data['password'] : '';

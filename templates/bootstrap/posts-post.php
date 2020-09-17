@@ -10,6 +10,12 @@ if ( has_post_thumbnail() ) {
 } else {
 	$thumb_url = uwp_get_default_thumb_uri();
 }
+
+$link = get_the_permalink();
+if('publish' != $post->post_status){
+	$link = '#';
+}
+
 ?>
 <div class="col mb-4">
 	<div class="card h-100">
@@ -21,10 +27,11 @@ if ( has_post_thumbnail() ) {
 		<div class="card-body">
 			<h3 class="card-title h5">
 				<?php
+
 				echo aui()->button(array(
 					'type'  =>  'a',
 					'class'  =>  '',
-					'href'       => get_the_permalink(),
+					'href'       => $link,
 					'content'    => get_the_title(),
 				));
 				?>

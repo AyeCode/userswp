@@ -1,4 +1,4 @@
-jQuery(window).load(function() {
+jQuery(window).on('load',function () {
 
     // Enable auth modals
     uwp_init_auth_modal();
@@ -13,7 +13,10 @@ jQuery(window).load(function() {
         var lesstext = uwp_localize_data.uwp_less_text;
         $('.uwp_more').each(function() {
             var content = $.trim($(this).text());
-
+            var length = $( this ).data( 'maxchar' );
+            if(length > 0 ){
+                showChar = length;
+            }
             if(content.length > showChar) {
 
                 var c = content.substr(0, showChar);
@@ -68,7 +71,7 @@ jQuery(window).load(function() {
     });
 
     $(document).ready(function() {
-        $(".uwp_upload_file_remove").click(function(event){
+        $( '.uwp_upload_file_remove' ).on( 'click', function( event ) {
             event.preventDefault();
 
             var htmlvar =  $( this ).data( 'htmlvar' );
@@ -94,7 +97,7 @@ jQuery(window).load(function() {
 
 (function( $, window, undefined ) {
     $(document).ready(function() {
-        $("#uwp_layout").change(function(){
+        $( '#uwp_layout' ).on( 'change', function() {
             var layout = $(this).val();
             var container = $('#uwp_user_items_layout');
             container.removeClass();
@@ -114,7 +117,7 @@ jQuery(window).load(function() {
         });
 
         jQuery( document ).ready(function($) {
-            $( "#uwp_login_modal form.uwp-login-form" ).submit(function( e ) {
+            $( '#uwp_login_modal form.uwp-login-form' ).on( 'submit', function( e ) {
                 e.preventDefault();
                 uwp_ajax_login(this);
             });
@@ -244,7 +247,7 @@ function uwp_modal_login_form(){
                 setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus().unbind('focus');}, 300); // set focus on the first input after load animation
 
                 // process login form
-                jQuery(".uwp-auth-modal .modal-content form.uwp-login-form").submit(function(e){
+                jQuery( '.uwp-auth-modal .modal-content form.uwp-login-form' ).on( 'submit', function( e ) {
                     e.preventDefault(e);
                     uwp_modal_login_form_process();
                 });
@@ -371,7 +374,7 @@ function uwp_modal_register_form(){
                     uwp_modal_register_form_process();
                 });
             }
-            uwp_init_auth_modal();
+            uwp_init_auth_modal();aui_init_select2();
         }
     });
 }
@@ -416,7 +419,7 @@ function uwp_modal_register_form_process(){
                 $button.html($button_text).prop('disabled', false);// enable submit
                 uwp_maybe_reset_recaptcha();
             }
-            uwp_init_auth_modal();
+            uwp_init_auth_modal();aui_init_select2();
         }
     });
 }
@@ -442,7 +445,7 @@ function uwp_modal_forgot_password_form(){
                 setTimeout(function(){jQuery('.uwp-auth-modal .modal-content input:visible:enabled:first').focus().unbind('focus');}, 300); // set focus on the first input after load animation
 
                 // process login form
-                jQuery(".uwp-auth-modal .modal-content form.uwp-forgot-form").submit(function(e){
+                jQuery( '.uwp-auth-modal .modal-content form.uwp-forgot-form' ).on( 'submit', function( e ) {
                     e.preventDefault(e);
                     uwp_modal_forgot_password_form_process();
                 });
@@ -472,11 +475,6 @@ function uwp_modal_forgot_password_form_process(){
             if(data.success){
                 $button.html($button_text).prop('disabled', true);// remove spinner
                 jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
-                // Show success message for 1 second before redirecting.
-                // setTimeout(function(){
-                //     location.reload();
-                // }, 1000);
-
             }else if(data.success===false){
                 jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
                 $button.html($button_text).prop('disabled', false);// enable submit

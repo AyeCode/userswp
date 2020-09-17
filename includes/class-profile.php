@@ -231,12 +231,13 @@ class UsersWP_Profile {
 
                 // Icon
                 $icon = uwp_get_field_icon($field->field_icon);
+	            $site_title = isset($field->site_title) ? __($field->site_title, 'userswp') : '';
 
                 if ($field->field_type == 'fieldset') {
                     $icon = '';
                     ?>
                     <div class="uwp-profile-extra-wrap m-0 p-0">
-                        <div class="uwp-profile-extra-key uwp-profile-extra-full m-0 p-0"><h3 style="margin: 10px 0;"><?php echo $icon.$field->site_title; ?></h3></div>
+                        <div class="uwp-profile-extra-key uwp-profile-extra-full m-0 p-0"><h3 style="margin: 10px 0;"><?php echo $icon.$site_title; ?></h3></div>
                     </div>
                     <?php
                 } else {
@@ -244,7 +245,7 @@ class UsersWP_Profile {
                         $wrap_html = true;
                         ?>
                         <div class="uwp-profile-extra-wrap <?php echo $class; ?>">
-                            <div class="uwp-profile-extra-key d-inline-block"><?php echo $icon." ".$field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
+                            <div class="uwp-profile-extra-key d-inline-block"><?php echo $icon." ".$site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
                             <div class="uwp-profile-extra-value d-inline-block">
                                 <?php
                                 if ($field->htmlvar_name == 'bio') {
@@ -496,8 +497,11 @@ class UsersWP_Profile {
 
 		$counts = array();
 		$post_types = array();
-		$exclude = array('wpi_invoice', 'wpi_quote', 'elementor_library', 'attachment', 'product', 'shop_order', 'download');
-		$exclude = apply_filters( 'uwp_get_user_post_counts', $exclude, $post_types );
+		$exclude = array('elementor_library', 'attachment');
+		$exclude = apply_filters( 'uwp_user_excluded_posttypes', $exclude, $user_id );
+
+		$not_login_exclude = array('wpi_invoice', 'wpi_quote', 'product', 'download');
+		$not_login_exclude = apply_filters( 'uwp_non_login_user_excluded_posttypes', $not_login_exclude, $user_id );
 
 		if($user_id){
 			$post_types = get_post_types( array('public'=>true,'publicly_queryable'=>true), 'objects');
@@ -505,24 +509,35 @@ class UsersWP_Profile {
 			if(!empty($post_types)){
 				foreach($post_types as $cpt => $post_type){
 					$count = count_user_posts( $user_id , $cpt);
-					if($user_id == get_current_user_id()){
-						if($count){
-							$counts[$cpt] = array('name'=> $post_type->labels->name,'singular_name'=> $post_type->labels->singular_name,'count'=>$count);
+					if($count && !in_array($cpt, $exclude)) {
+						if ( $user_id == get_current_user_id() ) {
+							if ( $count ) {
+								$counts[ $cpt ] = array( 'name'          => $post_type->labels->name,
+								                         'singular_name' => $post_type->labels->singular_name,
+								                         'count'         => $count
+								);
+							}
+						} else {
+							if ( $count && ! in_array( $cpt, $not_login_exclude ) ) {
+								$counts[ $cpt ] = array( 'name'          => $post_type->labels->name,
+								                         'singular_name' => $post_type->labels->singular_name,
+								                         'count'         => $count
+								);
+							}
 						}
-                    } else {
-						if($count && !in_array($cpt, $exclude)){
-							$counts[$cpt] = array('name'=> $post_type->labels->name,'singular_name'=> $post_type->labels->singular_name,'count'=>$count);
-						}
-                    }
+					}
+
 				}
 			}
 		}
+
+		$counts = apply_filters( 'uwp_get_user_post_counts', $counts, $post_types, $user_id );
 
 		if($echo){
 			$output = '';
 			if ( ! empty( $counts ) ) {
 				foreach ( $counts as $cpt => $post_type ) {
-					$post_count_text = $post_type['count'] > 1 ? esc_attr( $post_type['name'] ) . '<span class="badge badge-dark ml-1">' . absint( $post_type['count'] ) . '</span>' : esc_attr( $post_type['singular_name'] ) . '<span class="badge badge-dark ml-1">' . absint( $post_type['count'] ) . '</span>';
+					$post_count_text = $post_type['count'] > 1 ? esc_attr( $post_type['name'] ) . '<span class="badge badge-dark ml-1">' . esc_attr( $post_type['count'] ) . '</span>' : esc_attr( $post_type['singular_name'] ) . '<span class="badge badge-dark ml-1">' . esc_attr( $post_type['count'] ) . '</span>';
 					$output .= '<span class="badge badge-white text-muted pl-0">' . $post_count_text . '</span>' . " \n"; // needs line break for
 				}
 			}
@@ -846,7 +861,7 @@ class UsersWP_Profile {
             } else {
                 $permalink_structure = 'CUSTOM';
                 // Add forward slash if not available
-                $link = user_trailingslashit($link);
+                $link = trailingslashit($link);
             }
 
             $url_type = apply_filters('uwp_profile_url_type', 'slug');

@@ -231,7 +231,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 	            array(
 		            'id'   => 'login_modal',
 		            'name' => __( 'Login Lightbox', 'userswp' ),
-		            'desc' => __( 'When enabled some login links will open in a lightbox instead of changing page. The page will reloaded after successful login instead of redirect.','userswp'),
+		            'desc' => __( 'When enabled some login links will open in a lightbox instead of changing page. The page will be reloaded after successful login instead of a redirect.','userswp'),
 		            'type' => 'checkbox',
 		            'default'  => '1',
 	            ),

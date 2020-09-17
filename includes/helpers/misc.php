@@ -1370,7 +1370,7 @@ function uwp_get_localize_data(){
 
 function uwp_is_page_builder(){
     if(
-        isset($_GET['elementor-preview']) && $_GET['elementor-preview'] > 0 // elementor
+        (isset($_GET['elementor-preview']) && $_GET['elementor-preview'] > 0) // elementor
         || isset( $_REQUEST['et_fb'] ) || isset( $_REQUEST['et_pb_preview'] ) // divi
         || isset( $_REQUEST['fl_builder'] ) // beaver
         || ! empty( $_REQUEST['siteorigin_panels_live_editor'] ) // siteorigin
@@ -1792,4 +1792,28 @@ function uwp_get_activation_link($user_id){
 	);
 
 	return $activation_link;
+}
+
+/**
+ * Checks a version number against the core version and adds a admin notice if requirements are not met.
+ *
+ * @param $name
+ * @param $version
+ *
+ * @return bool
+ */
+function uwp_min_version_check( $name, $version ) {
+	if ( version_compare( USERSWP_VERSION, $version, '<' ) ) {
+		add_action( 'admin_notices', function () use ( &$name ) {
+			?>
+            <div class="notice notice-error is-dismissible">
+                <p><?php echo sprintf( __( "%s requires a newer version of UsersWP and will not run until the UsersWP plugin is updated.", "userswp" ), $name ); ?></p>
+            </div>
+			<?php
+		} );
+
+		return false;
+	}
+
+	return true;
 }
