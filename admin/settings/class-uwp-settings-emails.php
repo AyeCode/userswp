@@ -176,7 +176,7 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'placeholder' => UsersWP_Defaults::registration_activate_email_content(),
-						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags()
+						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_registration_activate_email_tags()
 					),
 
 					array('type' => 'sectionend', 'id' => 'registration_activate_email_settings'),
@@ -185,7 +185,7 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 
 					array(
 						'name' => __('Enable email', 'userswp'),
-						'desc' => __('Send an email to user for when successfull registration.', 'userswp'),
+						'desc' => __('Send an email to user for when successful registration.', 'userswp'),
 						'id' => 'registration_success_email',
 						'type' => 'checkbox',
 						'default' => 1,

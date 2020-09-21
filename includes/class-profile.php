@@ -249,15 +249,15 @@ class UsersWP_Profile {
                             <div class="uwp-profile-extra-value d-inline-block">
                                 <?php
                                 if ($field->htmlvar_name == 'bio') {
-                                    $is_profile_page = is_uwp_profile_page();
+	                                $show_read_more = apply_filters('uwp_profile_bio_show_read_more', true);
                                     $value = get_user_meta($user->ID, 'description', true);
                                     $value = stripslashes($value);
                                     $limit_words = apply_filters('uwp_profile_bio_content_limit', 50);
                                     if ($value) {
                                         ?>
-                                        <div class="uwp-profile-bio <?php if ($is_profile_page) { echo "uwp_more"; } ?>">
+                                        <div class="uwp-profile-bio <?php if ($show_read_more) { echo "uwp_more"; } ?>">
                                             <?php
-                                            if ($is_profile_page) {
+                                            if (is_uwp_profile_page()) {
                                                 echo nl2br($value);
                                             } else {
                                                 echo wp_trim_words( $value, $limit_words, '...' );
@@ -501,7 +501,7 @@ class UsersWP_Profile {
 		$exclude = apply_filters( 'uwp_user_excluded_posttypes', $exclude, $user_id );
 
 		$not_login_exclude = array('wpi_invoice', 'wpi_quote', 'product', 'download');
-		$not_login_exclude = apply_filters( 'uwp_non_login_user_excluded_posttypes', $not_login_exclude, $user_id );
+		$not_login_exclude = apply_filters( 'uwp_non_login_user_excluded_post_posttypes', $not_login_exclude, $user_id );
 
 		if($user_id){
 			$post_types = get_post_types( array('public'=>true,'publicly_queryable'=>true), 'objects');

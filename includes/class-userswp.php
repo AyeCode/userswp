@@ -166,7 +166,6 @@ final class UsersWP {
         add_action('personal_options_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('edit_user_profile_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('user_edit_form_tag', array($instance, 'add_multipart_to_admin_edit_form'));
-        add_action('uwp_template_form_title_after', array($instance, 'display_username_in_account'), 10, 1);
         add_action('template_redirect', array($instance, 'process_login'));
         add_action('template_redirect', array($instance, 'process_register'));
         add_action('template_redirect', array($instance, 'process_account'));
