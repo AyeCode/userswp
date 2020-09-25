@@ -40,7 +40,7 @@ if($output === '' || $output=='head'){
 
 						?>
 						<li id="uwp-profile-<?php echo $tab_id; ?>"
-						    class="nav-item <?php echo $active; ?> list-unstyled">
+						    class="nav-item <?php echo $active; ?> list-unstyled m-0">
 								<?php
                                 $content = '<span class="uwp-profile-tab-label uwp-profile-'.$tab_id.'-label">'.esc_html__($tab['tab_name'], 'userswp').'</span>';
                                 echo aui()->button(array(

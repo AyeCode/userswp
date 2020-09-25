@@ -1423,8 +1423,12 @@ function uwp_sanitize_tooltip( $var ) {
     ) ) );
 }
 
-function uwp_all_email_tags( $inline = true ){
+function uwp_all_email_tags( $inline = true, $extra_tags = array() ){
     $tags = array( '[#site_name#]', '[#site_name_url#]', '[#current_date#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#profile_link#]', '[#form_fields#]' );
+
+    if(is_array($extra_tags) && count($extra_tags) > 0){
+        $tags = array_merge($tags, $extra_tags);
+    }
 
     $tags = apply_filters( 'uwp_all_email_tags', $tags );
 
@@ -1433,18 +1437,6 @@ function uwp_all_email_tags( $inline = true ){
     }
 
     return $tags;
-}
-
-function uwp_registration_activate_email_tags( $inline = true ){
-	$tags = array( '[#site_name#]', '[#site_name_url#]', '[#current_date#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#activation_link#]', '[#profile_link#]', '[#form_fields#]' );
-
-	$tags = apply_filters( 'uwp_registration_activate_email_tags', $tags );
-
-	if ( $inline ) {
-		$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
-	}
-
-	return $tags;
 }
 
 function uwp_delete_account_email_tags( $inline = true ){
@@ -1493,7 +1485,7 @@ function uwp_authbox_tags( $inline = true ){
 
 function uwp_get_posttypes() {
 
-    $exclude_posts = array('attachment','revision','nav_menu_item','custom_css');
+    $exclude_posts = array('attachment','revision','nav_menu_item','custom_css','uwp-post');
     $exclude_posttype = apply_filters('uwp_exclude_register_posttype', $exclude_posts);
 
     $all_posttyps = get_post_types(array('public'   => true,),'objects');

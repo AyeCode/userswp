@@ -65,7 +65,16 @@ class UWP_User_Post_Counts_Widget extends WP_Super_Duper {
 
         ob_start();
 
-        do_action('uwp_user_post_counts', $user->ID);
+        ?>
+	    <nav class="navbar navbar-expand-xl navbar-light bg-white  mb-4 p-xl-0 greedy">
+		    <div class="w-100 justify-content-center">
+			    <ul class="navbar-nav flex-wrap m-0 list-unstyled">
+			        <?php do_action('uwp_user_post_counts', $user->ID); ?>
+			    </ul>
+		    </div>
+	    </nav>
+
+		<?php
 
         $output = ob_get_clean();
 

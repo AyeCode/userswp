@@ -1442,10 +1442,6 @@ class UsersWP_Form_Builder {
             $validation_pattern = isset($request_field['validation_pattern']) ? sanitize_text_field($request_field['validation_pattern']) : '';
             $validation_msg = isset($request_field['validation_msg']) ? sanitize_text_field($request_field['validation_msg']) : '';
 
-	        if ( empty( $htmlvar_name ) && $field_type == 'fieldset') {
-		        $htmlvar_name = $field_type_key;
-	        }
-
 	        if ( empty( $htmlvar_name ) ) {
 		        $htmlvar_name = sanitize_key( str_replace( array( '-', ' ', '"', "'" ), array( '_', '_', '', '' ), $request_field['site_title'] ) );
 		        if ( str_replace( '_', '', $htmlvar_name ) != '' ) {
