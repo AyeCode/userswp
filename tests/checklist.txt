@@ -3,6 +3,7 @@ Are the following tables created upon plugin activation?
     1) wp_uwp_form_fields
     2) wp_uwp_form_extras
     3) wp_uwp_usermeta
+    4) wp_uwp_profile_tabs
 
 Are the following pages created upon plugin activation?
 
@@ -14,6 +15,7 @@ Are the following pages created upon plugin activation?
     6) Change Password
     7) Profile
     8) Users
+    9) Users List Item
 
 Are the pages contain the uwp shortcodes?
 
@@ -40,7 +42,7 @@ Are the following pages getting displayed for everyone?
     1) Profile
     2) Users
 
-Is the wordpress menu page contains uwp menu section?
+Is the WP menu page contains uwp menu section?
 
 Are the menu items displayed properly?
 

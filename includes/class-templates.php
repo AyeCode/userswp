@@ -532,7 +532,7 @@ class UsersWP_Templates {
 
             ?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp_clear <?php echo esc_attr($bs_form_group);?>">
+                 class="<?php if ($field->is_required) echo 'required_field';?> clearfix uwp_clear <?php echo esc_attr($bs_form_group);?>">
             <?php
 
             $label = $site_title = uwp_get_form_label($field);
