@@ -22,14 +22,16 @@ class AUI_Component_Pagination {
 		global $wp_query;
 
 		$defaults = array(
+			'class'              => '',
 			'mid_size'           => 2,
 			'prev_text'          => '<i class="fas fa-chevron-left"></i>',
 			'next_text'          => '<i class="fas fa-chevron-right"></i>',
 			'screen_reader_text' => __( 'Posts navigation' ),
-			'before_page_number' => '',
-			'after_page_number'  => '',
+			'before_paging' => '',
+			'after_paging'  => '',
 			'type'               => 'array',
-			'total'              => isset( $wp_query->max_num_pages ) ? $wp_query->max_num_pages : 1
+			'total'              => isset( $wp_query->max_num_pages ) ? $wp_query->max_num_pages : 1,
+			'links'              => array() // an array of links if using custom links, this includes the a tag.
 		);
 
 		/**
@@ -43,10 +45,12 @@ class AUI_Component_Pagination {
 		if ( $args['total'] > 1 ) {
 
 			// Set up paginated links.
-			$links = paginate_links( $args );
+			$links = !empty(  $args['links'] ) ? $args['links'] :  paginate_links( $args );
+
+			$class = !empty($args['class']) ? $args['class'] : '';
 
 			// make the output bootstrap ready
-			$links_html = "<ul class='pagination m-0 p-0'>";
+			$links_html = "<ul class='pagination m-0 p-0 $class'>";
 			if ( ! empty( $links ) ) {
 				foreach ( $links as $link ) {
 					$active = strpos( $link, 'current' ) !== false ? 'active' : '';
