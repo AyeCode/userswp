@@ -132,7 +132,7 @@ class UsersWP_Forms {
 			$class = uwp_get_option("design_style",'bootstrap')=='bootstrap' ? 'form-control' : 'aui-select2';
 			echo "<select class='$class' onchange='window.location = jQuery(this).val();'>";
 			$this->output_options($options);
-			echo "<select>";
+			echo "</select>";
 		}
 	}
 
@@ -467,31 +467,34 @@ class UsersWP_Forms {
 
 		} else {
 
-			$user_data = get_userdata($user_id);
+			if ($reg_action != 'require_admin_review') {
 
-			if(isset($this->generated_password) && !empty($this->generated_password)) {
-				if(!uwp_get_option('change_disable_password_nag')) {
-					update_user_meta($user_id, 'default_password_nag', true); //Set up the Password change nag.
+				$user_data = get_userdata( $user_id );
+
+				if ( isset( $this->generated_password ) && ! empty( $this->generated_password ) ) {
+					if ( ! uwp_get_option( 'change_disable_password_nag' ) ) {
+						update_user_meta( $user_id, 'default_password_nag', true ); //Set up the Password change nag.
+					}
+					$message_pass             = $this->generated_password;
+					$this->generated_password = false;
+				} else {
+					$message_pass = __( "Password you entered during registration.", 'userswp' );
 				}
-				$message_pass = $this->generated_password;
-				$this->generated_password = false;
-			} else {
-				$message_pass = __("Password you entered during registration.", 'userswp');
+
+				$message = '<p><b>' . __( 'Your login Information :', 'userswp' ) . '</b></p>
+            <p>' . __( 'Username:', 'userswp' ) . ' ' . $user_data->user_login . '</p>
+            <p>' . __( 'Password:', 'userswp' ) . ' ' . $message_pass . '</p>';
+
+				$message = apply_filters( 'uwp_register_mail_message', $message, $user_id, $this->generated_password );
+
+				$email_vars = array(
+					'user_id'       => $user_id,
+					'login_details' => $message,
+					'form_fields'   => $form_fields,
+				);
+
+				UsersWP_Mails::send( $user_data->user_email, 'registration_success', $email_vars );
 			}
-
-			$message = '<p><b>' . __('Your login Information :', 'userswp') . '</b></p>
-            <p>' . __('Username:', 'userswp') . ' ' . $user_data->user_login . '</p>
-            <p>' . __('Password:', 'userswp') . ' ' . $message_pass . '</p>';
-
-			$message = apply_filters('uwp_register_mail_message', $message, $user_id, $this->generated_password);
-
-			$email_vars = array(
-				'user_id' => $user_id,
-				'login_details' => $message,
-				'form_fields' => $form_fields,
-			);
-
-			UsersWP_Mails::send($user_data->user_email, 'registration_success', $email_vars);
 		}
 
 		$error_code = $errors->get_error_code();
@@ -1613,6 +1616,7 @@ class UsersWP_Forms {
 			$bs_form_group = $design_style ? "form-group" : "";
 			$bs_sr_only = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
+			$extra_attributes = array();
 
 			ob_start(); // Start  buffering;
 
@@ -1623,10 +1627,6 @@ class UsersWP_Forms {
 
 			$date_format = $extra_fields['date_format'];
 			$jquery_date_format  = $date_format;
-
-			if (!empty($value) && !is_string($value)) {
-				$value = date('Y-m-d', $value);
-			}
 
 
 			// check if we need to change the format or not
@@ -1640,54 +1640,101 @@ class UsersWP_Forms {
 			}else{
 				$jquery_date_format = uwp_date_format_php_to_jqueryui( $jquery_date_format );
 			}
+
+			if (!empty($value) && !is_string($value)) {
+				$value = date('Y-m-d', $value);
+			}
+
 			if($value=='0000-00-00'){$value='';}//if date not set, then mark it empty
 			$value = uwp_date($value, 'Y-m-d', $date_format);
-			?>
-            <script type="text/javascript">
 
-                jQuery(function () {
+			// flatpickr attributes
+			$extra_attributes['data-alt-input'] = 'true';
+			$extra_attributes['data-alt-format'] = $date_format;
+			$extra_attributes['data-date-format'] = 'Y-m-d';
+			$site_title = uwp_get_form_label($field);
 
-                    jQuery("#<?php echo $field->htmlvar_name;?>").datepicker({changeMonth: true, changeYear: true
-						<?php if($field->htmlvar_name == 'dob'){ echo ", yearRange: '1900:+0'"; } else { echo ", yearRange: '1900:2050'"; }?>
-						<?php echo apply_filters("uwp_datepicker_extra_{$field->htmlvar_name}",'');?>});
+			// bootstrap
+			if( $design_style ) {
 
-                    jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("option", "dateFormat", '<?php echo $jquery_date_format;?>');
+				echo aui()->input(
+					array(
+						'id'               => $field->htmlvar_name,
+						'name'             => $field->htmlvar_name,
+						'required'         => ! empty( $field->is_required ) ? true : false,
+						'label'            => $site_title,
+						'label_show'       => true,
+						'label_type'       => 'hidden',
+						'type'             => 'datepicker',
+						'title'            => $site_title,
+						'placeholder'      => uwp_get_field_placeholder( $field ),
+						'class'            => '',
+						'value'            => $value,
+						'help_text'        => uwp_get_field_description( $field ),
+						'extra_attributes' => $extra_attributes
+					)
+				);
+			} else {
+				?>
+                <script type="text/javascript">
 
-					<?php if(!empty($value)){?>
-                    var parsedDate = jQuery.datepicker.parseDate('yy-mm-dd', '<?php echo $value;?>');
-                    jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("setDate", parsedDate);
+                    jQuery(function () {
+
+                        jQuery("#<?php echo $field->htmlvar_name;?>").datepicker({
+                            changeMonth: true, changeYear: true
+							<?php if ( $field->htmlvar_name == 'dob' ) {
+							echo ", yearRange: '1900:+0'";
+						} else {
+							echo ", yearRange: '1900:2050'";
+						}?>
+							<?php echo apply_filters( "uwp_datepicker_extra_{$field->htmlvar_name}", '' );?>});
+
+                        jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("option", "dateFormat", '<?php echo $jquery_date_format;?>');
+
+						<?php if(! empty( $value )){?>
+                        var parsedDate = jQuery.datepicker.parseDate('yy-mm-dd', '<?php echo $value;?>');
+                        jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("setDate", parsedDate);
+						<?php } ?>
+
+                    });
+
+                </script>
+                <div id="<?php echo $field->htmlvar_name; ?>_row"
+                     class="<?php if ( $field->is_required ) {
+					     echo 'required_field';
+				     } ?> clearfix uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+
+					<?php
+
+					if ( ! is_admin() ) { ?>
+                        <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
+							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php if ( $field->is_required ) {
+								echo '<span>*</span>';
+							} ?>
+                        </label>
 					<?php } ?>
 
-                });
+                    <input name="<?php echo $field->htmlvar_name; ?>"
+                           id="<?php echo $field->htmlvar_name; ?>"
+                           placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+                           title="<?php echo $site_title; ?>"
+                           type="text"
+						<?php if ( $field->is_required == 1 ) {
+							echo 'required="required"';
+						} ?>
+                           value="<?php echo esc_attr( $value ); ?>"
+                           class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"/>
 
-            </script>
-            <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp_clear uwp-fieldset-details <?php echo esc_attr($bs_form_group);?>">
+                    <span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<?php if ( $field->is_required ) { ?>
+                        <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+					<?php } ?>
+                </div>
 
 				<?php
-				$site_title = uwp_get_form_label($field);
-				if (!is_admin()) { ?>
-                    <label class="<?php echo esc_attr($bs_sr_only);?>">
-						<?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-						<?php if ($field->is_required) echo '<span>*</span>';?>
-                    </label>
-				<?php } ?>
+			}
 
-                <input name="<?php echo $field->htmlvar_name;?>"
-                       id="<?php echo $field->htmlvar_name;?>"
-                       placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
-                       title="<?php echo $site_title; ?>"
-                       type="text"
-					<?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
-                       value="<?php echo esc_attr($value);?>" class="uwp_textfield <?php echo esc_attr($bs_form_control);?>"/>
-
-                <span class="uwp_message_note"><?php echo uwp_get_field_description($field);?></span>
-				<?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
-				<?php } ?>
-            </div>
-
-			<?php
 			$html = ob_get_clean();
 		}
 
@@ -1726,41 +1773,73 @@ class UsersWP_Forms {
 
 			if ($value != '')
 				$value = date('H:i', strtotime($value));
-			?>
-            <script type="text/javascript">
-                jQuery(document).ready(function () {
 
-                    jQuery('#<?php echo $field->htmlvar_name;?>').timepicker({
-                        showPeriod: true,
-                        showLeadingZero: true
+			// flatpickr attributes
+			$extra_attributes['data-enable-time'] = 'true';
+			$extra_attributes['data-no-calendar'] = 'true';
+			$extra_attributes['data-date-format'] = 'H:i';
+			$site_title = uwp_get_form_label( $field );
+			$label_type = is_admin() ? '' : 'top';
+
+			if($design_style){
+				echo aui()->input(
+					array(
+						'id'                => $field->htmlvar_name,
+						'name'              => $field->htmlvar_name,
+						'required'          => !empty($field->is_required) ? true : false,
+						'label'              => $site_title,
+						'label_show'       => true,
+						'label_type'       => $label_type,
+						'type'              => 'timepicker',
+						'title'             =>  $site_title,
+						'placeholder'       => uwp_get_field_placeholder( $field ),
+						'class'             => '',
+						'value'             => $value,
+						'help_text'         => uwp_get_field_description( $field ),
+						'extra_attributes'  => $extra_attributes
+					)
+				);
+            } else {
+				?>
+                <script type="text/javascript">
+                    jQuery(document).ready(function () {
+
+                        jQuery('#<?php echo $field->htmlvar_name;?>').timepicker({
+                            showPeriod: true,
+                            showLeadingZero: true
+                        });
                     });
-                });
-            </script>
-            <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row clearfix uwp_clear uwp-fieldset-details <?php echo esc_attr($bs_form_group);?>">
+                </script>
+                <div id="<?php echo $field->htmlvar_name; ?>_row"
+                     class="<?php if ( $field->is_required ) {
+					     echo 'required_field';
+				     } ?> clearfix uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 
+					<?php
+					$site_title = uwp_get_form_label( $field );
+					if ( ! is_admin() ) { ?>
+                        <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
+							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php if ( $field->is_required ) {
+								echo '<span>*</span>';
+							} ?>
+                        </label>
+					<?php } ?>
+
+                    <input readonly="readonly" name="<?php echo $field->htmlvar_name; ?>"
+                           id="<?php echo $field->htmlvar_name; ?>"
+                           value="<?php echo esc_attr( $value ); ?>"
+                           placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+                           type="text"
+                           class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"/>
+
+                    <span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<?php if ( $field->is_required ) { ?>
+                        <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+					<?php } ?>
+                </div>
 				<?php
-				$site_title = uwp_get_form_label($field);
-				if (!is_admin()) { ?>
-                    <label class="<?php echo esc_attr($bs_sr_only);?>">
-						<?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-						<?php if ($field->is_required) echo '<span>*</span>';?>
-                    </label>
-				<?php } ?>
-
-                <input readonly="readonly" name="<?php echo $field->htmlvar_name;?>"
-                       id="<?php echo $field->htmlvar_name;?>"
-                       value="<?php echo esc_attr($value);?>"
-                       placeholder="<?php echo uwp_get_field_placeholder($field); ?>"
-                       type="text"
-                       class="uwp_textfield <?php echo esc_attr($bs_form_control);?>"/>
-
-                <span class="uwp_message_note"><?php echo uwp_get_field_description($field);?></span>
-				<?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
-				<?php } ?>
-            </div>
-			<?php
+			}
 			$html = ob_get_clean();
 		}
 
@@ -1823,7 +1902,7 @@ class UsersWP_Forms {
 			}else{
 				?>
                 <div id="<?php echo $field->htmlvar_name;?>_row"
-                     class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
+                     class="<?php if ($field->is_required) echo 'required_field';?> uwp_clear <?php echo esc_attr($bs_form_group);?>">
 
 					<?php
 					if (!is_admin()) { ?>
@@ -1930,7 +2009,7 @@ class UsersWP_Forms {
                 <div id="<?php echo $field->htmlvar_name; ?>_row"
                      class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
-				     } ?> uwp_form_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+				     } ?> uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 
 					<?php
 					if ( ! is_admin() ) { ?>
@@ -2119,18 +2198,29 @@ class UsersWP_Forms {
 			$design_style = uwp_get_option("design_style","bootstrap");
 			$id = wp_doing_ajax() ? $field->htmlvar_name."_ajax" : $field->htmlvar_name;
 
+			$checked          = $value == '1' ? true : false;
+
 			// bootstrap
-			if( $design_style ) { ?>
-                <div class="form-group">
-                    <div class="custom-control custom-checkbox">
-                        <input type="hidden" name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $id; ?>_hidden" value="1">
-                        <input type="checkbox" name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $id; ?>" placeholder="<?php echo $field->htmlvar_name; ?>" title="<?php echo $site_title; ?>" value="1" class="form-control custom-control-input"
-                               onchange="if(this.checked){jQuery('#<?php echo $id; ?>_hidden').val('1');} else{ jQuery('#<?php echo $id; ?>_hidden').val('0');}" <?php echo checked($value, 1)?> <?php if ($field->is_required == 1) { echo 'required="required"'; } ?>>
-                        <label for="<?php echo $id; ?>" class="custom-control-label"><?php echo $site_title; ?></label>
-                    </div>
-                </div>
-			<?php
-			}else{
+			if( $design_style ) {
+
+				echo '<input type="hidden" name="' . $field->htmlvar_name . '" id="checkbox_' . $id . '" value="0"/>';
+
+				echo aui()->input(
+					array(
+						'id'               => $id,
+						'name'             => $field->htmlvar_name,
+						'type'             => "checkbox",
+						'value'            => '1',
+						'title'            => $site_title,
+						'label'            => $site_title,
+						'label_show'       => true,
+						'required'          => !empty($field->is_required) ? true : false,
+						'checked'          => $checked,
+						'help_text'        => uwp_get_field_description($field),
+					)
+				);
+
+			} else {
 				?>
                 <div id="<?php echo $field->htmlvar_name;?>_row"
                      class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
@@ -2161,6 +2251,7 @@ class UsersWP_Forms {
 				<?php
 
 			}
+
 			$html = ob_get_clean();
 
 		}
@@ -2199,63 +2290,99 @@ class UsersWP_Forms {
 
 			ob_start(); // Start  buffering;
 
-			?>
-            <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
+			if( $design_style ){
 
-				<?php
+				$option_values_deep = uwp_string_values_to_options($field->option_values,true);
+				$option_values = array();
+				if(!empty($option_values_deep)){
+					foreach($option_values_deep as $option){
+						$option_values[$option['value']] = $option['label'];
+					}
+				}
+
 				$site_title = uwp_get_form_label($field);
-				if (!is_admin()) { ?>
-                    <label class="<?php echo esc_attr($bs_sr_only);?>">
-						<?php echo (trim($site_title)) ? $site_title : '&nbsp;'; ?>
-						<?php if ($field->is_required) echo '<span>*</span>';?>
-                    </label>
-				<?php } ?>
 
-				<?php if ($field->option_values) {
-					$option_values = uwp_string_values_to_options($field->option_values, true);
+				echo aui()->radio(
+					array(
+						'id'                => $field->htmlvar_name,
+						'name'              => $field->htmlvar_name,
+						'type'              => "radio",
+						'title'             => $site_title,
+						'label'             => is_admin() ? '' : $site_title,
+						'label_type'        => 'top',
+						'class'             => '',
+						'value'             => $value,
+						'options'           => $option_values
+					)
+				);
 
-					if (!empty($option_values)) {
-						$count = 0;
-						foreach ($option_values as $option_value) {
-							if (empty($option_value['optgroup'])) {
-								$count++;
-								if ($count == 1) {
-									$class = "uwp-radio-first";
-								} else {
-									$class = "";
-								}
-								?>
-								<?php if(!empty($design_style)){ ?>
-                                    <label class="<?php echo $bs_label_class; ?>">
-								<?php } else { ?>
-                                    <span class="uwp-radios <?php echo $class; ?>">
-								<?php } ?>
-                                <input name="<?php echo $field->htmlvar_name; ?>"
-                                       id="<?php echo $field->htmlvar_name; ?>"
-                                       title="<?php echo esc_attr($option_value['label']); ?>"
-									<?php checked($value, $option_value['value']);?>
-									<?php if ($field->is_required == 1) { echo 'required="required"'; } ?>
-                                       value="<?php echo esc_attr($option_value['value']); ?>"
-                                       class="uwp-radio <?php echo esc_attr($bs_form_control);?>" type="radio" />
-								<?php echo $option_value['label']; ?>
-								<?php if(!empty($design_style)){ ?>
-                                    </label>
-								<?php } else { ?>
-                                    </span>
-									<?php
+			} else {
+
+				?>
+                <div id="<?php echo $field->htmlvar_name; ?>_row"
+                     class="<?php if ( $field->is_required ) {
+					     echo 'required_field';
+				     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+
+					<?php
+					$site_title = uwp_get_form_label( $field );
+					if ( ! is_admin() ) { ?>
+                        <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
+							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php if ( $field->is_required ) {
+								echo '<span>*</span>';
+							} ?>
+                        </label>
+					<?php } ?>
+
+					<?php if ( $field->option_values ) {
+						$option_values = uwp_string_values_to_options( $field->option_values, true );
+
+						if ( ! empty( $option_values ) ) {
+							$count = 0;
+							foreach ( $option_values as $option_value ) {
+								if ( empty( $option_value['optgroup'] ) ) {
+									$count ++;
+									if ( $count == 1 ) {
+										$class = "uwp-radio-first";
+									} else {
+										$class = "";
+									}
+									?>
+									<?php if ( ! empty( $design_style ) ) { ?>
+                                        <label class="<?php echo $bs_label_class; ?>">
+									<?php } else { ?>
+                                        <span class="uwp-radios <?php echo $class; ?>">
+									<?php } ?>
+                                    <input name="<?php echo $field->htmlvar_name; ?>"
+                                           id="<?php echo $field->htmlvar_name; ?>"
+                                           title="<?php echo esc_attr( $option_value['label'] ); ?>"
+										<?php checked( $value, $option_value['value'] ); ?>
+										<?php if ( $field->is_required == 1 ) {
+											echo 'required="required"';
+										} ?>
+                                           value="<?php echo esc_attr( $option_value['value'] ); ?>"
+                                           class="uwp-radio <?php echo esc_attr( $bs_form_control ); ?>" type="radio"/>
+									<?php echo $option_value['label']; ?>
+									<?php if ( ! empty( $design_style ) ) { ?>
+                                        </label>
+									<?php } else { ?>
+                                        </span>
+										<?php
+									}
 								}
 							}
 						}
 					}
-				}
-				?>
-                <span class="uwp_message_note"><?php echo uwp_get_field_description($field);?></span>
-				<?php if ($field->is_required) { ?>
-                    <span class="uwp_message_error invalid-feedback"><?php _e($field->required_msg, 'userswp'); ?></span>
-				<?php } ?>
-            </div>
-			<?php
+					?>
+                    <span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<?php if ( $field->is_required ) { ?>
+                        <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+					<?php } ?>
+                </div>
+				<?php
+			}
+
 			$html = ob_get_clean();
 		}
 
@@ -2635,7 +2762,7 @@ class UsersWP_Forms {
 					'title'   => $site_title,
 					'value' =>  $value,
 					'required'  => $field->is_required,
-					'validation_text' => __( 'Please enter a valid URL including http://', 'userswp' ),
+					'validation_text' => __( 'Please enter a valid URL including https://', 'userswp' ),
 					'help_text' => uwp_get_field_description($field),
 					'label' => is_admin() ? '' : $site_title
 				));
@@ -2909,7 +3036,7 @@ class UsersWP_Forms {
                 <div id="<?php echo $field->htmlvar_name; ?>_row"
                      class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
-				     } ?> uwp_form_row clearfix uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+				     } ?> clearfix uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 					<?php
 					if ( ! is_admin() ) { ?>
                         <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
@@ -3177,7 +3304,7 @@ class UsersWP_Forms {
 
 			?>
             <div id="<?php echo $field->htmlvar_name;?>_row"
-                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_form_row uwp_clear <?php echo esc_attr($bs_form_group);?>">
+                 class="<?php if ($field->is_required) echo 'required_field';?> uwp_clear <?php echo esc_attr($bs_form_group);?>">
 
 				<?php
 				$site_title = uwp_get_form_label($field);
@@ -3217,32 +3344,6 @@ class UsersWP_Forms {
 		}
 
 		return $html;
-	}
-
-	/**
-	 * Prints the username link in "Edit Account" page
-	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string      $type       Page type.
-	 *
-	 * @return      void
-	 */
-	public function display_username_in_account($type) {
-		if ($type == 'account') {
-			$user_id = get_current_user_id();
-			$user_info = get_userdata($user_id);
-			$display_name = $user_info->user_login;
-			$template = new UsersWP_Templates();
-			$logout_url = $template->uwp_logout_url();
-			?>
-            <div class="uwp_account_page_username text-center">
-				<?php _e('Hello, ', 'userswp'); ?><a href="<?php echo uwp_build_profile_tab_url($user_id); ?>"> @<?php echo $display_name; ?> </a>
-                <a class="uwp-account-logout-link" href="<?php echo $logout_url; ?>">(<?php _e('Logout', 'userswp'); ?>)</a>
-            </div>
-			<?php
-		}
 	}
 
 

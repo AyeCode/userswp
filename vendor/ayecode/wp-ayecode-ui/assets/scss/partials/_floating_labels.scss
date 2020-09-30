@@ -26,6 +26,7 @@ $floating-input-padding-x : $input-padding-x;
   transition: all .1s ease-in-out;
   font-weight: normal;
   cursor: text;
+  pointer-events: none;
 }
 
 .form-label-group input::-webkit-input-placeholder,

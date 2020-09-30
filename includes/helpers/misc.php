@@ -605,40 +605,39 @@ function uwp_add_account_menu_links() {
 	$legacy = '<ul class="uwp_account_menu">';
     ob_start();
     ?>
-    <div class="dropdown text-center mb-4">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="account_settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <?php _e('Account Settings', 'userswp'); ?>
-        </button>
-        <ul class="dropdown-menu m-0 p-0 mt-3 list-unstyled" aria-labelledby="account_settings">
-            <?php
-            foreach( $account_available_tabs as $tab_id => $tab ) {
+    <ul class="navbar-nav m-0 p-0 mt-3 list-unstyled flex-md-column flex-row flex-wrap" aria-labelledby="account_settings">
+        <?php
+        foreach( $account_available_tabs as $tab_id => $tab ) {
 
-	            if ($tab_id == 'account') {
-		            $tab_url = $account_page_link;
-	            } else {
-		            $tab_url = add_query_arg(array(
-			            'type' => $tab_id,
-		            ), $account_page_link);
-	            }
-
-	            if (isset($tab['link'])) {
-		            $tab_url = $tab['link'];
-	            }
-
-	            $active = $type == $tab_id ? ' active' : '';
-
-	            ?>
-                <li class="m-0 p-0 list-unstyled"><a class="dropdown-item uwp-account-<?php echo $tab_id.' '.$active; ?>" href="<?php echo esc_url( $tab_url ); ?>"><?php echo $tab['title']; ?></a></li>
-	            <?php
-
-	            $legacy .= '<li id="uwp-account-'.$tab_id.'">';
-	            $legacy .= '<a class="'.$active.'" href="'.esc_url( $tab_url ).'">';
-	            $legacy .= '<i class="'.$tab["icon"].'"></i>'.$tab["title"];
-	            $legacy .= '</a></li>';
+            if ($tab_id == 'account') {
+                $tab_url = $account_page_link;
+            } else {
+                $tab_url = add_query_arg(array(
+                    'type' => $tab_id,
+                ), $account_page_link);
             }
+
+            if (isset($tab['link'])) {
+                $tab_url = $tab['link'];
+            }
+
+            $active = $type == $tab_id ? ' active' : '';
+
             ?>
-        </ul>
-    </div>
+            <li class="nav-item m-0 p-0 list-unstyled mx-md-2 mx-2">
+                <a class="nav-link text-decoration-none uwp-account-<?php echo $tab_id.' '.$active; ?>" href="<?php echo esc_url( $tab_url ); ?>">
+                    <?php echo '<i class="'.$tab["icon"].' mr-1"></i>'.$tab['title']; ?>
+                </a>
+            </li>
+            <?php
+
+            $legacy .= '<li id="uwp-account-'.$tab_id.'">';
+            $legacy .= '<a class="'.$active.'" href="'.esc_url( $tab_url ).'">';
+            $legacy .= '<i class="'.$tab["icon"].'"></i>'.$tab["title"];
+            $legacy .= '</a></li>';
+        }
+        ?>
+    </ul>
     <?php
 	$legacy .=  '</ul>';
 	$bs_output = ob_get_clean();
@@ -1424,8 +1423,12 @@ function uwp_sanitize_tooltip( $var ) {
     ) ) );
 }
 
-function uwp_all_email_tags( $inline = true ){
+function uwp_all_email_tags( $inline = true, $extra_tags = array() ){
     $tags = array( '[#site_name#]', '[#site_name_url#]', '[#current_date#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#profile_link#]', '[#form_fields#]' );
+
+    if(is_array($extra_tags) && count($extra_tags) > 0){
+        $tags = array_merge($tags, $extra_tags);
+    }
 
     $tags = apply_filters( 'uwp_all_email_tags', $tags );
 
@@ -1435,6 +1438,7 @@ function uwp_all_email_tags( $inline = true ){
 
     return $tags;
 }
+
 
 function uwp_delete_account_email_tags( $inline = true ){
     $tags = array( '[#site_name#]', '[#site_name_url#]', '[#current_date#]', '[#from_name#]', '[#from_email#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#form_fields#]' );
@@ -1482,7 +1486,7 @@ function uwp_authbox_tags( $inline = true ){
 
 function uwp_get_posttypes() {
 
-    $exclude_posts = array('attachment','revision','nav_menu_item','custom_css');
+    $exclude_posts = array('attachment','revision','nav_menu_item','custom_css','uwp-post');
     $exclude_posttype = apply_filters('uwp_exclude_register_posttype', $exclude_posts);
 
     $all_posttyps = get_post_types(array('public'   => true,),'objects');

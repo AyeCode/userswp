@@ -65,7 +65,7 @@ if( ! $hide_cover ) {
 			<?php if ($uwp_in_user_loop) {echo '</a>';} ?>
 
 			<?php if (!$uwp_in_user_loop && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && $allow_change ) { ?>
-				<div class="card-img-overlay d-flex p-0">
+				<div class="card-img-overlay p-0">
 					<?php
 					echo aui()->button(array(
 						'type'  =>  'a',
@@ -94,10 +94,8 @@ if( ! $hide_cover ) {
 					}
 					?>
 				</li>
-				<li class="list-group-item border-0 m-0 p-0  bg-transparent uwp-profile-post-counts">
-					<?php do_action('uwp_user_post_counts', $user->ID); ?>
-				</li>
 			</ul>
+			<?php echo do_shortcode("[uwp_user_post_counts]"); ?>
 		</div>
 		<div class="col-12 <?php if(!$uwp_in_user_loop){ ?>col-xl-4 text-xl-right <?php }?> text-center pt-2">
 			<?php

@@ -133,7 +133,9 @@ function uwp_account_get_available_tabs() {
         ),
     );
 
-	// Keep delete account last
+	$tabs = apply_filters( 'uwp_account_available_tabs', $tabs );
+
+	// Keep delete account and logout last
 	if(1 != uwp_get_option('disable_account_delete') && !current_user_can('administrator')){
 		$tabs['delete-account'] = array(
 			'title' => __('Delete Account', 'userswp'),
@@ -141,7 +143,14 @@ function uwp_account_get_available_tabs() {
 		);
 	}
 
-	$tabs = apply_filters( 'uwp_account_available_tabs', $tabs );
+	$template = new UsersWP_Templates();
+	$logout_url = $template->uwp_logout_url();
+
+	$tabs['logout'] = array(
+		'title' => __('Logout', 'userswp'),
+		'icon' => 'fas fa-sign-out-alt',
+		'link' => $logout_url,
+	);
 
 	return $tabs;
 }

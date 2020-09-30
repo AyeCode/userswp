@@ -44,6 +44,7 @@ class AUI_Component_Input {
 			'switch'     => false, // to show checkbox as a switch
 			'checked'   => false, // set a checkbox or radio as selected
 			'password_toggle' => true, // toggle view/hide password
+			'element_require'   => '', // [%element_id%] == "1"
 			'extra_attributes'  => array() // an array of extra attributes
 		);
 
@@ -83,8 +84,10 @@ class AUI_Component_Input {
 				$args['class'] .= ' custom-control-input ';
 			}elseif($type=='datepicker' || $type=='timepicker'){
 				$type = 'text';
-				$args['class'] .= ' aui-flatpickr bg-initial ';
+				//$args['class'] .= ' aui-flatpickr bg-initial ';
+				$args['class'] .= ' bg-initial ';
 
+				$args['extra_attributes']['data-aui-init'] = 'flatpickr';
 				// enqueue the script
 				$aui_settings = AyeCode_UI_Settings::instance();
 				$aui_settings->enqueue_flatpickr();
@@ -248,11 +251,14 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// wrap
 			if(!$args['no_wrap']){
+
 				$form_group_class = $args['label_type']=='floating' && $type != 'checkbox' ? 'form-label-group' : 'form-group';
 				$wrap_class = $args['label_type']=='horizontal' ? $form_group_class . ' row' : $form_group_class;
 				$output = self::wrap(array(
 					'content' => $output,
 					'class'   => $wrap_class,
+					'element_require'   => $args['element_require'],
+					'argument_id'  => $args['id']
 				));
 			}
 
@@ -289,6 +295,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'no_wrap'    => false,
 			'rows'      => '',
 			'wysiwyg'   => false,
+			'element_require'   => '', // [%element_id%] == "1"
 		);
 
 		/**
@@ -443,6 +450,8 @@ else{$eli.attr(\'type\',\'password\');}"
 			$output = self::wrap(array(
 				'content' => $output,
 				'class'   => $wrap_class,
+				'element_require'   => $args['element_require'],
+				'argument_id'  => $args['id']
 			));
 		}
 
@@ -518,6 +527,8 @@ else{$eli.attr(\'type\',\'password\');}"
 			'input_group_right' => '',
 			'input_group_left_inside' => false,
 			'input_group_right_inside' => false,
+			'element_require'   => '',
+			'argument_id'   => '',
 		);
 
 		/**
@@ -529,6 +540,17 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// open
 			$output .= '<'.sanitize_html_class($args['type']);
+
+			// element require
+			if(!empty($args['element_require'])){
+				$output .= AUI_Component_Helper::element_require($args['element_require']);
+				$args['class'] .= " aui-conditional-field";
+			}
+
+			// argument_id
+			if( !empty($args['argument_id']) ){
+				$output .= ' data-argument="'.esc_attr($args['argument_id']).'"';
+			}
 
 			// class
 			$class = !empty($args['class']) ? $args['class'] : '';
@@ -587,12 +609,13 @@ else{$eli.attr(\'type\',\'password\');}"
 			'label_class'      => '',
 			'help_text'  => '',
 			'placeholder'=> '',
-			'options'    => array(),
+			'options'    => array(), // array or string
 			'icon'       => '',
 			'multiple'   => false,
 			'select2'    => false,
 			'no_wrap'    => false,
-			'extra_attributes'  => array() // an array of extra attributes
+			'element_require'   => '', // [%element_id%] == "1"
+			'extra_attributes'  => array(), // an array of extra attributes
 		);
 
 		/**
@@ -663,6 +686,12 @@ else{$eli.attr(\'type\',\'password\');}"
 			$output .= " style='width:100%;' ";
 		}
 
+		// element require
+		if(!empty($args['element_require'])){
+			$output .= AUI_Component_Helper::element_require($args['element_require']);
+			$args['class'] .= " aui-conditional-field";
+		}
+
 		// class
 		$class = !empty($args['class']) ? $args['class'] : '';
 		$output .= AUI_Component_Helper::class_attr('custom-select '.$class);
@@ -716,33 +745,37 @@ else{$eli.attr(\'type\',\'password\');}"
 		// Options
 		if(!empty($args['options'])){
 
-			foreach($args['options'] as $val => $name){
-				$selected = '';
-				if(is_array($name)){
-					if (isset($name['optgroup']) && ($name['optgroup'] == 'start' || $name['optgroup'] == 'end')) {
-						$option_label = isset($name['label']) ? $name['label'] : '';
+			if(!is_array($args['options'])){
+				$output .= $args['options']; // not the preferred way but an option
+			}else{
+				foreach($args['options'] as $val => $name){
+					$selected = '';
+					if(is_array($name)){
+						if (isset($name['optgroup']) && ($name['optgroup'] == 'start' || $name['optgroup'] == 'end')) {
+							$option_label = isset($name['label']) ? $name['label'] : '';
 
-						$output .= $name['optgroup'] == 'start' ? '<optgroup label="' . esc_attr($option_label) . '">' : '</optgroup>';
-					} else {
-						$option_label = isset($name['label']) ? $name['label'] : '';
-						$option_value = isset($name['value']) ? $name['value'] : '';
-						if(!empty($args['multiple']) && !empty($args['value'])){
-							$selected = in_array($option_value, stripslashes_deep($args['value'])) ? "selected" : "";
-						} elseif(!empty($args['value'])) {
-							$selected = selected($option_value,stripslashes_deep($args['value']), false);
-						}
+							$output .= $name['optgroup'] == 'start' ? '<optgroup label="' . esc_attr($option_label) . '">' : '</optgroup>';
+						} else {
+							$option_label = isset($name['label']) ? $name['label'] : '';
+							$option_value = isset($name['value']) ? $name['value'] : '';
+							if(!empty($args['multiple']) && !empty($args['value'])){
+								$selected = in_array($option_value, stripslashes_deep($args['value'])) ? "selected" : "";
+							} elseif(!empty($args['value'])) {
+								$selected = selected($option_value,stripslashes_deep($args['value']), false);
+							}
 
-						$output .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
-					}
-				}else{
-					if(!empty($args['value'])){
-						if(is_array($args['value'])){
-							$selected = in_array($val,$args['value']) ? 'selected="selected"' : '';
-						} elseif(!empty($args['value'])) {
-							$selected = selected( $args['value'], $val, false);
+							$output .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
 						}
+					}else{
+						if(!empty($args['value'])){
+							if(is_array($args['value'])){
+								$selected = in_array($val,$args['value']) ? 'selected="selected"' : '';
+							} elseif(!empty($args['value'])) {
+								$selected = selected( $args['value'], $val, false);
+							}
+						}
+						$output .= '<option value="'.esc_attr($val).'" '.$selected.'>'.esc_attr($name).'</option>';
 					}
-					$output .= '<option value="'.esc_attr($val).'" '.$selected.'>'.esc_attr($name).'</option>';
 				}
 			}
 
@@ -778,6 +811,8 @@ else{$eli.attr(\'type\',\'password\');}"
 			$output = self::wrap(array(
 				'content' => $output,
 				'class'   => $wrap_class,
+				'element_require'   => $args['element_require'],
+				'argument_id'  => $args['id']
 			));
 		}
 
@@ -807,6 +842,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'options'    => array(),
 			'icon'       => '',
 			'no_wrap'    => false,
+			'element_require'   => '', // [%element_id%] == "1"
 			'extra_attributes'  => array() // an array of extra attributes
 		);
 
@@ -861,6 +897,8 @@ else{$eli.attr(\'type\',\'password\');}"
 		$output = self::wrap(array(
 			'content' => $output,
 			'class'   => $wrap_class,
+			'element_require'   => $args['element_require'],
+			'argument_id'  => $args['id']
 		));
 
 
@@ -918,7 +956,7 @@ else{$eli.attr(\'type\',\'password\');}"
 		}
 
 		// value
-		if(!empty($args['value'])){
+		if(isset($args['value'])){
 			$output .= ' value="'.sanitize_text_field($args['value']).'" ';
 		}
 

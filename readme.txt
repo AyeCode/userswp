@@ -134,6 +134,7 @@ No questions so far, but don't hesitate to ask!
 * Use WP object cache for user meta - CHANGED
 * Add slash if permalink structure don't have slash at the end for profile URL - FIXED
 * Added honeypot check for register and reset password forms - ADDED
+* Account page new design - CHANGED
 
 = 1.2.2.6 =
 * Password strength meter showing JS error in registration form for WordPress 5.0  - FIXED

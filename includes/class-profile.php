@@ -249,15 +249,15 @@ class UsersWP_Profile {
                             <div class="uwp-profile-extra-value d-inline-block">
                                 <?php
                                 if ($field->htmlvar_name == 'bio') {
-                                    $is_profile_page = is_uwp_profile_page();
+	                                $show_read_more = apply_filters('uwp_profile_bio_show_read_more', false);
                                     $value = get_user_meta($user->ID, 'description', true);
                                     $value = stripslashes($value);
                                     $limit_words = apply_filters('uwp_profile_bio_content_limit', 50);
                                     if ($value) {
                                         ?>
-                                        <div class="uwp-profile-bio <?php if ($is_profile_page) { echo "uwp_more"; } ?>">
+                                        <div class="uwp-profile-bio <?php if ($show_read_more) { echo "uwp_more"; } ?>">
                                             <?php
-                                            if ($is_profile_page) {
+                                            if (is_uwp_profile_page()) {
                                                 echo nl2br($value);
                                             } else {
                                                 echo wp_trim_words( $value, $limit_words, '...' );
@@ -495,56 +495,69 @@ class UsersWP_Profile {
 	 */
 	public function get_user_post_counts($user_id, $echo = true){
 
-		$counts = array();
-		$post_types = array();
-		$exclude = array('elementor_library', 'attachment');
-		$exclude = apply_filters( 'uwp_user_excluded_posttypes', $exclude, $user_id );
-
-		$not_login_exclude = array('wpi_invoice', 'wpi_quote', 'product', 'download');
-		$not_login_exclude = apply_filters( 'uwp_non_login_user_excluded_posttypes', $not_login_exclude, $user_id );
-
-		if($user_id){
-			$post_types = get_post_types( array('public'=>true,'publicly_queryable'=>true), 'objects');
-
-			if(!empty($post_types)){
-				foreach($post_types as $cpt => $post_type){
-					$count = count_user_posts( $user_id , $cpt);
-					if($count && !in_array($cpt, $exclude)) {
-						if ( $user_id == get_current_user_id() ) {
-							if ( $count ) {
-								$counts[ $cpt ] = array( 'name'          => $post_type->labels->name,
-								                         'singular_name' => $post_type->labels->singular_name,
-								                         'count'         => $count
-								);
-							}
-						} else {
-							if ( $count && ! in_array( $cpt, $not_login_exclude ) ) {
-								$counts[ $cpt ] = array( 'name'          => $post_type->labels->name,
-								                         'singular_name' => $post_type->labels->singular_name,
-								                         'count'         => $count
-								);
-							}
-						}
-					}
-
-				}
-			}
+		if(!$user_id){
+		    return;
 		}
 
-		$counts = apply_filters( 'uwp_get_user_post_counts', $counts, $post_types, $user_id );
+		$counts = array();
+
+
+		if ( $user_id == get_current_user_id() ) {
+
+			$post_types_login_only = uwp_get_option('login_user_post_counts_cpts');
+			$post_types_login_only = apply_filters( 'uwp_login_user_count_cpts', $post_types_login_only, $user_id );
+
+			if(!empty($post_types_login_only)) {
+				foreach ( $post_types_login_only as $cpt ) {
+					$post_type = get_post_type_object( $cpt );
+					$count     = count_user_posts( $user_id, $cpt );
+
+					if ( $post_type && $count ) {
+						$counts[ $cpt ] = array(
+							'name'          => $post_type->labels->name,
+							'singular_name' => $post_type->labels->singular_name,
+							'count'         => $count
+						);
+					}
+				}
+			}
+
+		} else {
+
+			$post_types = uwp_get_option('user_post_counts_cpts');
+			$post_types = apply_filters( 'uwp_user_count_cpts', $post_types, $user_id );
+
+			if(!empty($post_types)) {
+				foreach ( $post_types as $cpt ) {
+					$post_type = get_post_type_object( $cpt );
+					$count     = count_user_posts( $user_id, $cpt );
+
+					if ( $post_type && $count ) {
+						$counts[ $cpt ] = array(
+							'name'          => $post_type->labels->name,
+							'singular_name' => $post_type->labels->singular_name,
+							'count'         => $count
+						);
+					}
+				}
+			}
+
+        }
+
+		$counts = apply_filters( 'uwp_get_user_post_counts', $counts, $user_id );
 
 		if($echo){
 			$output = '';
 			if ( ! empty( $counts ) ) {
 				foreach ( $counts as $cpt => $post_type ) {
 					$post_count_text = $post_type['count'] > 1 ? esc_attr( $post_type['name'] ) . '<span class="badge badge-dark ml-1">' . esc_attr( $post_type['count'] ) . '</span>' : esc_attr( $post_type['singular_name'] ) . '<span class="badge badge-dark ml-1">' . esc_attr( $post_type['count'] ) . '</span>';
-					$output .= '<span class="badge badge-white text-muted pl-0">' . $post_count_text . '</span>' . " \n"; // needs line break for
+					$output .= '<li class="nav-item list-unstyled"><span class="badge badge-white text-muted pl-0 py-3">' . $post_count_text . '</span></li>' . " \n"; // needs line break for
 				}
 			}
             echo $output;
         }
 
-		return apply_filters( 'uwp_get_user_post_counts_output', $counts, $post_types );
+		return apply_filters( 'uwp_get_user_post_counts_output', $counts, $user_id );
 
 	}
 
@@ -1626,80 +1639,6 @@ class UsersWP_Profile {
     }
 
     /**
-     * Prints custom field values as tab content.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * @param       object      $user           The User ID.
-     * @param       string      $active_tab     Active tab.
-     */
-    public function uwp_extra_fields_as_tab_values($user, $active_tab)
-    {
-        global $wpdb;
-        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_public != '0' ORDER BY sort_order ASC");
-        $usermeta = uwp_get_usermeta_row($user->ID);
-        $privacy = ! empty( $usermeta ) && $usermeta->user_privacy ? explode(',', $usermeta->user_privacy) : array();
-
-        $fieldsets = array();
-        $fieldset = false;
-        foreach ($fields as $field) {
-            $key = str_replace('uwp_account_', '', $field->htmlvar_name);
-            if ($field->field_type == 'fieldset') {
-                $fieldset = $key;
-            }
-            $show_in = explode(',',$field->show_in);
-            if (in_array("[fieldset]", $show_in)) {
-                $fieldsets[$fieldset][] = $field;
-            }
-            if ($key == $active_tab && $field->field_type != 'fieldset') {
-                $value = $this->get_field_value($field, $user);
-                echo '<div class="uwp_profile_tab_field_content">';
-                echo $value;
-                echo '</div>';
-            }
-        }
-
-        if (isset($fieldsets[$active_tab])) {
-            $fieldset_fields = $fieldsets[$active_tab];
-            ?>
-            <div class="uwp-profile-extra">
-                <div class="uwp-profile-extra-div form-table">
-                <?php
-                foreach ($fieldset_fields as $field) {
-                    $display = false;
-                    if ($field->is_public == '1') {
-                        $display = true;
-                    } else {
-                        if (!in_array($field->htmlvar_name.'_privacy', $privacy)) {
-                            $display = true;
-                        }
-                    }
-                    if (!$display) {
-                        continue;
-                    }
-                    $value = $this->get_field_value($field, $user);
-                    // Icon
-                    $icon = uwp_get_field_icon( $field->field_icon );
-                    if($value) {
-                        ?>
-                        <div class="uwp-profile-extra-wrap">
-                            <div class="uwp-profile-extra-key"><?php echo $icon . $field->site_title; ?><span class="uwp-profile-extra-sep">:</span></div>
-                            <div class="uwp-profile-extra-value">
-                                <?php echo $value; ?>
-                            </div>
-                        </div>
-                        <?php
-                    }
-                }
-                ?>
-                </div>
-            </div>
-            <?php
-        }
-    }
-
-    /**
      * Gets custom field value based on key.
      *
      * @since       1.0.0
@@ -1791,7 +1730,7 @@ class UsersWP_Profile {
         // URL
         if ($field->field_type == 'url' && !empty($value)) {
             $link_text = $value;
-            // if deafult_value is not url then it will be used as link text. 
+            // if default_value is not url then it will be used as link text.
             if ($field->default_value && !empty($field->default_value) ) {
                 if (substr( $field->default_value, 0, 4 ) === "http") {
                     $link_text = $value;
