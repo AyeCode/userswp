@@ -189,6 +189,8 @@ class UsersWP_Activator {
             'account_delete_email_admin' => 1,
             'account_delete_email_subject_admin' => UsersWP_Defaults::account_delete_email_subject_admin(),
             'account_delete_email_content_admin' => UsersWP_Defaults::account_delete_email_content_admin(),
+            'user_post_counts_cpts' => array('post'),
+            'login_user_post_counts_cpts' => array('post'),
         );
 
         foreach ($options as $option => $value){
