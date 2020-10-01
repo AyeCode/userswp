@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdb12a73f1ea855fdcb35c00228f6126f
+class ComposerStaticInitf3d2d3b01d25e99f52c2a4d35c24b58c
 {
     public static $files = array (
         'e8d544c98e79f913e13eae1306ab635e' => __DIR__ . '/..' . '/ayecode/wp-ayecode-ui/ayecode-ui-loader.php',
@@ -33,9 +33,9 @@ class ComposerStaticInitdb12a73f1ea855fdcb35c00228f6126f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdb12a73f1ea855fdcb35c00228f6126f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdb12a73f1ea855fdcb35c00228f6126f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdb12a73f1ea855fdcb35c00228f6126f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf3d2d3b01d25e99f52c2a4d35c24b58c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf3d2d3b01d25e99f52c2a4d35c24b58c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf3d2d3b01d25e99f52c2a4d35c24b58c::$classMap;
 
         }, null, ClassLoader::class);
     }

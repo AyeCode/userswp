@@ -22,7 +22,7 @@ if ( ! $user ) {
 	return;
 }
 
-if(!$uwp_in_user_loop){ ?><div class="card shadow-0 border-0 mw-100"><?php } ?>
+if(!$uwp_in_user_loop){ ?><div class="card shadow-0 border-0 mw-100 bg-transparent"><?php } ?>
 
 <div class="card-body  <?php if(!$uwp_in_user_loop){ ?>mt-xl-0 pt-0<?php }else{?>text-center pb-0<?php }?>">
 

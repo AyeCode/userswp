@@ -19,16 +19,16 @@ do_action( 'uwp_template_before', 'account' ); ?>
                             <?php
                             echo do_shortcode('[uwp_user_avatar size=150 allow_change=1]');
                             do_action( 'uwp_template_form_title_before', 'account' ); ?>
-                            <a href="<?php echo uwp_build_profile_tab_url($user_id); ?>" class="mt-3 text-decoration-none"> @<?php echo $display_name; ?></a>
+                            <a href="<?php echo uwp_build_profile_tab_url($user_id); ?>" class="mt-0 text-decoration-none font-weight-bold"> @<?php echo $display_name; ?></a>
                             <?php do_action( 'uwp_template_form_title_after', 'account' ); ?>
                         </div>
-                        <div class="d-flex justify-content-center nav mt-4">
+                        <div class="d-flex justify-content-center nav mt-0">
 	                        <?php do_action( 'uwp_account_menu_display' ); ?>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-9">
                 <div class="pl-lg-4 pl-sm-0 h-100 pt-5 pb-lg-0 pb-3">
                     <?php
 

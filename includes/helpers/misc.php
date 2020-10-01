@@ -605,7 +605,7 @@ function uwp_add_account_menu_links() {
 	$legacy = '<ul class="uwp_account_menu">';
     ob_start();
     ?>
-    <ul class="navbar-nav m-0 p-0 mt-3 list-unstyled flex-md-column flex-row flex-wrap" aria-labelledby="account_settings">
+    <ul class="navbar-nav m-0 p-0 mt-3 list-unstyled flex-lg-column flex-row flex-wrap" aria-labelledby="account_settings">
         <?php
         foreach( $account_available_tabs as $tab_id => $tab ) {
 
