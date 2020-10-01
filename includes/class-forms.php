@@ -3322,7 +3322,6 @@ class UsersWP_Forms {
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
 						'checked'    => $checked,
-						'help_text'  => uwp_get_field_description( $field ),
 					)
 				);
 
@@ -3403,7 +3402,6 @@ class UsersWP_Forms {
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
 						'checked'    => $checked,
-						'help_text'  => uwp_get_field_description( $field ),
 					)
 				);
 

@@ -237,7 +237,6 @@ final class UsersWP {
         add_filter( 'edit_profile_url', array($instance, 'modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
         add_filter( 'get_comment_author_link', array($instance, 'get_comment_author_link') , 10 , 2 );
-        add_action( 'uwp_user_post_counts', array($instance, 'get_user_post_counts'), 10, 1 );
         add_action( 'uwp_user_title', array($instance, 'get_profile_title'), 10, 2 );
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 2 );
         add_filter( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );

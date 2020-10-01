@@ -15,7 +15,7 @@ do_action( 'uwp_template_before', 'account' ); ?>
             <div class="col-lg-3 h-100 height-auto px-0">
                 <div class="navbar-light h-100 height-auto">
                     <div class="bg-light pt-5 h-100">
-                        <div class="d-flex justify-content-center flex-column align-items-center top-margin">
+                        <div class="d-flex justify-content-center flex-column align-items-center">
                             <?php
                             echo do_shortcode('[uwp_user_avatar size=150 allow_change=1]');
                             do_action( 'uwp_template_form_title_before', 'account' ); ?>
