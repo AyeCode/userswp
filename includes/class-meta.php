@@ -79,7 +79,7 @@ class UsersWP_Meta {
                 default :
 					$obj_key = $user_id.'_'.$key;
 	                $row = wp_cache_get( $obj_key, 'uwp_usermeta' );
-	                if ( ! $row ) {
+	                if ( ! $row && uwp_column_exist($meta_table, $key) ) {
 		                $row = $wpdb->get_row($wpdb->prepare("SELECT {$key} FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
 		                wp_cache_set( $obj_key, $row, 'uwp_usermeta' );
 	                }

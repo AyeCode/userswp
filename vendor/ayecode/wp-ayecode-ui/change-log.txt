@@ -1,9 +1,13 @@
+= 0.1.25 =
+* Primary and Secondary default colors can be set via PHP constant - ADDED
+* Replace jQuery deprecated load() function - CHANGED
+
 = 0.1.24 =
 * Added ability to add multiple visible items to a slider responsively - ADDED
 
 = 0.1.23 =
 * Conditional fields options now work with AUI inputs - ADDED
-* Changed flatpikr to a data attribute initiator - CHANGED
+* Changed flatpickr to a data attribute initiator - CHANGED
 * aui_init_flatpickr() can have a race condition - FIXED
 * Greedy nav can break if initiated twice - FIXED
 
@@ -39,7 +43,7 @@
 
 = 0.1.15 =
 * Radio inputs now available - ADDED
-* Flatickr date/time picker script - ADDED
+* Flatpickr date/time picker script - ADDED
 * Use wp_kses_post() on label output instead of esc_attr() - CHANGED
 
 = 0.1.14 =
