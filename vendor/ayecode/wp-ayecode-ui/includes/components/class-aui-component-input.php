@@ -852,7 +852,7 @@ else{$eli.attr(\'type\',\'password\');}"
 		$args   = wp_parse_args( $args, $defaults );
 
 		// for now lets use horizontal for floating
-		if( $args['label_type'] != 'hidden' ){$args['label_type'] = 'horizontal';}
+		if( $args['label_type'] == 'floating' ){$args['label_type'] = 'horizontal';}
 
 		$label_args = array(
 			'title'=> $args['label'],

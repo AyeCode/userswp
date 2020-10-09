@@ -99,6 +99,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 */
 		public static function instance() {
 			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof AyeCode_UI_Settings ) ) {
+
 				self::$instance = new AyeCode_UI_Settings;
 
 				add_action( 'init', array( self::$instance, 'init' ) ); // set settings
@@ -120,9 +121,20 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 
 		/**
+		 * Setup some constants.
+		 */
+		public function constants(){
+			define('AUI_PRIMARY_COLOR_ORIGINAL', "#1e73be");
+			define('AUI_SECONDARY_COLOR_ORIGINAL', '#6c757d');
+			if (!defined('AUI_PRIMARY_COLOR')) define('AUI_PRIMARY_COLOR', AUI_PRIMARY_COLOR_ORIGINAL);
+			if (!defined('AUI_SECONDARY_COLOR')) define('AUI_SECONDARY_COLOR', AUI_SECONDARY_COLOR_ORIGINAL);
+		}
+
+		/**
 		 * Initiate the settings and add the required action hooks.
 		 */
 		public function init() {
+			$this->constants();
 			$this->settings = $this->get_settings();
 			$this->url = $this->get_url();
 
@@ -283,10 +295,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						var $dDownClass = '';
 						if(jQuery(this).find('.navbar-nav').length){
 							if(jQuery(this).find('.navbar-nav').hasClass("being-greedy")){return true;}
-							$vlinks = jQuery(this).find('.navbar-nav').addClass("being-greedy w-100");
+							$vlinks = jQuery(this).find('.navbar-nav').addClass("being-greedy w-100").removeClass('overflow-hidden');
 						}else if(jQuery(this).find('.nav').length){
 							if(jQuery(this).find('.nav').hasClass("being-greedy")){return true;}
-							$vlinks = jQuery(this).find('.nav').addClass("being-greedy w-100");
+							$vlinks = jQuery(this).find('.nav').addClass("being-greedy w-100").removeClass('overflow-hidden');
 							$dDownClass = ' mt-2 ';
 						}else{
 							return false;
@@ -687,7 +699,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				}
 
 				// run on window loaded
-				jQuery(window).load(function() {
+				jQuery(window).on("load",function() {
 					aui_init();
 				});
 			</script>
@@ -995,7 +1007,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			//  = Color Picker              =
 			//  =============================
 			$wp_customize->add_setting('aui_options[color_primary]', array(
-				'default'           => '#1e73be',
+				'default'           => AUI_PRIMARY_COLOR,
 				'sanitize_callback' => 'sanitize_hex_color',
 				'capability'        => 'edit_theme_options',
 				'type'              => 'option',
@@ -1026,14 +1038,18 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			$settings = get_option('aui_options');
 
 			ob_start();
+
+			$primary_color = !empty($settings['color_primary']) ? $settings['color_primary'] : AUI_PRIMARY_COLOR;
+			$secondary_color = !empty($settings['color_secondary']) ? $settings['color_secondary'] : AUI_SECONDARY_COLOR;
+				//AUI_PRIMARY_COLOR_ORIGINAL
 			?>
 			<style>
 				<?php
-					if(!empty($settings['color_primary']) && $settings['color_primary'] != "#1e73be"){
-						echo self::css_primary($settings['color_primary'],$compatibility);
+					if(!is_admin() && $primary_color != AUI_PRIMARY_COLOR_ORIGINAL){
+						echo self::css_primary($primary_color,$compatibility);
 					}
 
-					if(!empty($settings['color_secondary']) && $settings['color_secondary'] != "#6c757d"){
+					if(!is_admin() && $secondary_color != AUI_SECONDARY_COLOR_ORIGINAL){
 						echo self::css_secondary($settings['color_secondary'],$compatibility);
 					}
                 ?>

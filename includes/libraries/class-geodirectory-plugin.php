@@ -293,24 +293,6 @@ class UsersWP_GeoDirectory_Plugin {
 	}
 
 	/**
-	 * Registers the current addon tab items in "Choose the tabs to display in UsersWP Profile" setting.
-	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       array $tabs_arr Existing tabs array.
-	 *
-	 * @return      array     Tabs array.
-	 */
-	public function available_tab_items( $tabs_arr ) {
-		$tabs_arr['listings']  = __( 'Listings', 'userswp' );
-		$tabs_arr['reviews']   = __( 'Reviews', 'userswp' );
-		$tabs_arr['favorites'] = __( 'Favorites', 'userswp' );
-
-		return $tabs_arr;
-	}
-
-	/**
 	 * Adds predefined field in for profile tabs.
 	 *
 	 * @package     userswp

@@ -754,6 +754,7 @@ class UsersWP_Admin {
 		$uwp_mode = get_user_meta( $user_id, 'uwp_mod', true );
 		if( 'email_unconfirmed' == $uwp_mode ){
 			delete_user_meta( $user_id, 'uwp_mod');
+			do_action('uwp_email_activation_success', $user_id);
 		}
 
 		return true;

@@ -816,7 +816,7 @@ class UsersWP_Forms {
 
 		if ( $reg_action == 'force_redirect' ) {
 			$redirect_to = $this->get_register_redirect_url( $data, $user_id );
-			do_action( 'uwp_after_process_register', $data );
+			do_action( 'uwp_after_process_register', $result, $user_id );
 			if ( wp_doing_ajax() ) {
 				$message  = aui()->alert( array(
 						'type'    => 'success',
@@ -850,7 +850,7 @@ class UsersWP_Forms {
 				$uwp_notices[] = array( 'register' => $error );
 			} else {
 				$redirect_to = $this->get_register_redirect_url( $data, $user_id );
-				do_action( 'uwp_after_process_register', $data );
+				do_action( 'uwp_after_process_register', $result, $user_id );
 
 				if ( wp_doing_ajax() ) {
 					$message  = aui()->alert( array(
@@ -889,7 +889,7 @@ class UsersWP_Forms {
 
 				update_user_meta( $user_id, 'uwp_mod', '1' );
 
-				do_action( 'uwp_require_admin_review', $user_id, $data );
+				do_action( 'uwp_require_admin_review', $user_id, $result );
 
 				$message = aui()->alert( array(
 						'type'    => 'success',
@@ -913,7 +913,7 @@ class UsersWP_Forms {
 				);
 			}
 
-			do_action( 'uwp_after_process_register', $data, $user_id );
+			do_action( 'uwp_after_process_register', $result, $user_id );
 
 			if ( wp_doing_ajax() ) {
 				wp_send_json_success( $message );
