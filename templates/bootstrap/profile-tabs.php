@@ -63,17 +63,18 @@ if($output === '' || $output=='head'){
 <?php
 }
 
-if($output === '' || $output=='body'){
-?>
-<div id="tab-content" class="uwp-profile-content">
-	<div class="uwp-profile-entries">
-		<?php
-		if(isset($active_tab_content) && !empty($active_tab_content)){
-			echo $active_tab_content;
-		}
+if ( $output === '' || $output == 'body' ) {
+	if ( isset( $active_tab_content ) && ! empty( $active_tab_content ) ) {
 		?>
-	</div>
-</div>
-<?php
+        <div id="tab-content" class="uwp-profile-content">
+            <div class="uwp-profile-entries">
+				<?php
+
+				echo $active_tab_content;
+				?>
+            </div>
+        </div>
+		<?php
+	}
 }
 ?>

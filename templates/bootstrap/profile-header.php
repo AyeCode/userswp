@@ -116,7 +116,7 @@ if ( ! $uwp_in_user_loop ){ ?>
             </div>
         </div>
 
-		<?php if ( is_uwp_profile_page() ) { ?>
+		<?php if ( ! $uwp_in_user_loop && is_uwp_profile_page() ) { ?>
 
             <div class="row justify-content-center">
                 <div class="col">

@@ -240,7 +240,7 @@ final class UsersWP {
         add_action( 'uwp_user_title', array($instance, 'get_profile_title'), 10, 2 );
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 2 );
         add_filter( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );
-        add_action( 'uwp_profile_pagination' ,array($instance,'list_view_js'));
+        add_action( 'wp_footer' ,array($instance,'list_view_js'));
 
         // Popup and crop functions
         add_filter( 'ajax_query_attachments_args', array($instance, 'restrict_attachment_display') );
