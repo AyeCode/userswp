@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.21";
+		public $version = "1.0.22";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -1623,6 +1623,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function block() {
 			ob_start();
+
+			$show_advanced = $this->block_show_advanced();
 			?>
 			<script>
 				/**
@@ -1647,6 +1649,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					var term_query_type = '';
 					var post_type_rest_slugs = <?php if(! empty( $this->arguments ) && isset($this->arguments['post_type']['onchange_rest']['values'])){echo "[".json_encode($this->arguments['post_type']['onchange_rest']['values'])."]";}else{echo "[]";} ?>;
 					const taxonomies_<?php echo str_replace("-","_", $this->id);?> = [{label: "Please wait", value: 0}];
+					const sort_by_<?php echo str_replace("-","_", $this->id);?> = [{label: "Please wait", value: 0}];
 
 					/**
 					 * Register Basic Block.
@@ -1687,7 +1690,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							$this->options['block-wrap'] = '';
 						}
 
-						$show_advanced = $this->block_show_advanced();
+
 
 						$show_alignment = false;
 						// align feature
@@ -1762,18 +1765,25 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						edit: function (props) {
 
 
-
+							var $value = '';
 							<?php
 							// if we have a post_type and a category then link them
-							if( isset($this->arguments['post_type']) && isset($this->arguments['category']) && isset($this->arguments['category']['post_type_linked']) ){
+							if( isset($this->arguments['post_type']) && isset($this->arguments['category']) && !empty($this->arguments['category']['post_type_linked']) ){
 							?>
 							if(typeof(prev_attributes[props.id]) != 'undefined' ){
 								$pt = props.attributes.post_type;
 								if(post_type_rest_slugs.length){
 									$value = post_type_rest_slugs[0][$pt];
 								}
-								if('post_type' in prev_attributes[props.id] && 'category' in prev_attributes[props.id] && $pt != term_query_type ){
+								var run = false;
+
+								if($pt != term_query_type){
+									run = true;
 									term_query_type = $pt;
+								}
+
+								// taxonomies
+								if( $value && 'post_type' in prev_attributes[props.id] && 'category' in prev_attributes[props.id] && run ){
 									wp.apiFetch({path: "<?php if(isset($this->arguments['post_type']['onchange_rest']['path'])){echo $this->arguments['post_type']['onchange_rest']['path'];}else{'/wp/v2/"+$value+"/categories';} ?>"}).then(terms => {
 										while (taxonomies_<?php echo str_replace("-","_", $this->id);?>.length) {
 										taxonomies_<?php echo str_replace("-","_", $this->id);?>.pop();
@@ -1790,6 +1800,32 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 									return taxonomies_<?php echo str_replace("-","_", $this->id);?>;
 								});
+								}
+
+								// sort_by
+								if( $value && 'post_type' in prev_attributes[props.id] && 'sort_by' in prev_attributes[props.id] && run ){
+									var data = {
+										'action': 'geodir_get_sort_options',
+										'post_type': $pt
+									};
+									jQuery.post(ajaxurl, data, function(response) {
+										response = JSON.parse(response);
+										while (sort_by_<?php echo str_replace("-","_", $this->id);?>.length) {
+											sort_by_<?php echo str_replace("-","_", $this->id);?>.pop();
+										}
+
+										jQuery.each( response, function( key, val ) {
+											sort_by_<?php echo str_replace("-","_", $this->id);?>.push({label: val, value: key});
+										});
+
+										// setting the value back and fourth fixes the no update issue that sometimes happens where it won't update the options.
+										var $old_sort_by_value = props.attributes.sort_by
+										props.setAttributes({sort_by: [0] });
+										props.setAttributes({sort_by: $old_sort_by_value });
+
+										return sort_by_<?php echo str_replace("-","_", $this->id);?>;
+									});
+
 								}
 							}
 							<?php }?>
@@ -2074,40 +2110,40 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					$onchange = "props.setAttributes({ $key: Number($key) } )";
 				}
 			}
-/*
- * https://www.wptricks.com/question/set-current-tab-on-a-gutenberg-tabpanel-component-from-outside-that-component/ es5 layout
-			elseif($args['type']=='tabs'){
-				?>
-				<script>
-					el(
-						wp.components.TabPanel,
-						{
-							tabs: [
-								{
-									name: 'show',
-									title: __( 'Show', 'my-textdomain' ),
-								},
-								{
-									name: 'edit',
-									title: __( 'Edit', 'my-textdomain' ),
-								},
-							],
-						},
-						( tab ) => {
+			/*
+			 * https://www.wptricks.com/question/set-current-tab-on-a-gutenberg-tabpanel-component-from-outside-that-component/ es5 layout
+						elseif($args['type']=='tabs'){
+							?>
+							<script>
+								el(
+									wp.components.TabPanel,
+									{
+										tabs: [
+											{
+												name: 'show',
+												title: __( 'Show', 'my-textdomain' ),
+											},
+											{
+												name: 'edit',
+												title: __( 'Edit', 'my-textdomain' ),
+											},
+										],
+									},
+									( tab ) => {
 
-						if('show' === tab.name){
-						return 123;
-					}else if ( 'edit' === tab.name ) {
-						return 321;
-					}
+									if('show' === tab.name){
+									return 123;
+								}else if ( 'edit' === tab.name ) {
+									return 321;
+								}
 
-					}
-					),
-				</script>
-				<?php
-				return;
-			}
-*/
+								}
+								),
+							</script>
+							<?php
+							return;
+						}
+			*/
 			elseif ( $args['type'] == 'color' ) {
 				$type = 'ColorPicker';
 				$onchange = "";
@@ -2133,6 +2169,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 				if($args['name'] == 'category' && !empty($args['post_type_linked'])){
 					$options .= "options: taxonomies_".str_replace("-","_", $this->id).",";
+				}elseif($args['name'] == 'sort_by' && !empty($args['post_type_linked'])){
+					$options .= "options: sort_by_".str_replace("-","_", $this->id).",";
 				}else {
 
 					if ( ! empty( $args['options'] ) ) {

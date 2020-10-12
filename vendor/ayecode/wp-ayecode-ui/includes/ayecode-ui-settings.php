@@ -529,13 +529,23 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 							$element_require = $element_require.replace("&#039;", "'"); // replace single quotes
 							$element_require = $element_require.replace("&quot;", '"'); // replace double quotes
 
-							if (eval($element_require)) {
+							if (aui_check_form_condition($element_require,form)) {
 								jQuery(this).removeClass('d-none');
 							} else {
 								jQuery(this).addClass('d-none');
 							}
 						}
 					});
+				}
+
+				/**
+				 * Check form condition
+				 */
+				function aui_check_form_condition(condition,form) {
+					if(form){
+						condition = condition.replace("(form)", "('"+form+"')");
+					}
+					return new Function("return " + condition+";")();
 				}
 
 				/**
@@ -673,12 +683,55 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						aui_carousel_maybe_show_multiple_items(this);
 					});
 				}
+
+				/**
+				 * Allow navs to use multiple sub menus.
+				 */
+				function init_nav_sub_menus(){
+
+					jQuery('.navbar-multi-sub-menus').each(function(i, obj) {
+						// Check if already initialized, if so continue.
+						if(jQuery(this).hasClass("has-sub-sub-menus")){return true;}
+
+						// Make sure its always expanded
+						jQuery(this).addClass('has-sub-sub-menus');
+
+						jQuery(this).find( '.dropdown-menu a.dropdown-toggle' ).on( 'click', function ( e ) {
+							var $el = jQuery( this );
+							$el.toggleClass('active-dropdown');
+							var $parent = jQuery( this ).offsetParent( ".dropdown-menu" );
+							if ( !jQuery( this ).next().hasClass( 'show' ) ) {
+								jQuery( this ).parents( '.dropdown-menu' ).first().find( '.show' ).removeClass( "show" );
+							}
+							var $subMenu = jQuery( this ).next( ".dropdown-menu" );
+							$subMenu.toggleClass( 'show' );
+
+							jQuery( this ).parent( "li" ).toggleClass( 'show' );
+
+							jQuery( this ).parents( 'li.nav-item.dropdown.show' ).on( 'hidden.bs.dropdown', function ( e ) {
+								jQuery( '.dropdown-menu .show' ).removeClass( "show" );
+								$el.removeClass('active-dropdown');
+							} );
+
+							if ( !$parent.parent().hasClass( 'navbar-nav' ) ) {
+								$el.next().addClass('position-relative border-top border-bottom');
+							}
+
+							return false;
+						} );
+
+					});
+
+				}
 				
 
 				/**
 				 * Initiate all AUI JS.
 				 */
 				function aui_init(){
+					// nav menu submenus
+					init_nav_sub_menus();
+					
 					// init tooltips
 					aui_init_tooltips();
 
@@ -702,6 +755,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				jQuery(window).on("load",function() {
 					aui_init();
 				});
+
 			</script>
 			<?php
 			$output = ob_get_clean();
@@ -999,7 +1053,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 		public function customizer_settings($wp_customize){
 			$wp_customize->add_section('aui_settings', array(
-				'title'    => __('AyeCode UI'),
+				'title'    => __('AyeCode UI','aui'),
 				'priority' => 120,
 			));
 
@@ -1014,7 +1068,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				'transport'         => 'refresh',
 			));
 			$wp_customize->add_control( new WP_Customize_Color_Control($wp_customize, 'color_primary', array(
-				'label'    => __('Primary Color'),
+				'label'    => __('Primary Color','aui'),
 				'section'  => 'aui_settings',
 				'settings' => 'aui_options[color_primary]',
 			)));
@@ -1027,7 +1081,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				'transport'         => 'refresh',
 			));
 			$wp_customize->add_control( new WP_Customize_Color_Control($wp_customize, 'color_secondary', array(
-				'label'    => __('Secondary Color'),
+				'label'    => __('Secondary Color','aui'),
 				'section'  => 'aui_settings',
 				'settings' => 'aui_options[color_secondary]',
 			)));
