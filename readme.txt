@@ -135,6 +135,7 @@ No questions so far, but don't hesitate to ask!
 * Add slash if permalink structure don't have slash at the end for profile URL - FIXED
 * Added honeypot check for register and reset password forms - ADDED
 * Account page new design - CHANGED
+* Editing profile tabs settings resets tabs order - FIXED
 
 = 1.2.2.6 =
 * Password strength meter showing JS error in registration form for WordPress 5.0  - FIXED

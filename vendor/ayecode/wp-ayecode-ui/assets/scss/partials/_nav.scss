@@ -1,0 +1,6 @@
+// alert links might be styled the same color as the background
+.navbar-multi-sub-menus{
+  .dropdown-toggle.active-dropdown::after {
+    transform: rotate(-180deg);
+  }
+}
