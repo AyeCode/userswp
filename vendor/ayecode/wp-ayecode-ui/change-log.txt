@@ -1,3 +1,11 @@
+= 0.1.33 =
+* Select2 not being added if other JS options selected - FIXED
+* Inputs now have wrap_class argument to add classes to the wrapper - ADDED
+
+= 0.1.32 =
+* Multi-select not always adding [] to name attribute - FIXED
+* Multi-select not checking if values is_array - FIXED
+
 = 0.1.30 =
 * Changes for theme check - CHANGED
 

@@ -23,6 +23,7 @@ class AUI_Component_Input {
 			'type'       => 'text',
 			'name'       => '',
 			'class'      => '',
+			'wrap_class' => '',
 			'id'         => '',
 			'placeholder'=> '',
 			'title'      => '',
@@ -149,7 +150,7 @@ class AUI_Component_Input {
 			}
 
 			// class
-			$class = !empty($args['class']) ? $args['class'] : '';
+			$class = !empty($args['class']) ? AUI_Component_Helper::esc_classes( $args['class'] ) : '';
 			$output .= ' class="form-control '.$class.'" ';
 
 			// data-attributes
@@ -254,6 +255,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 				$form_group_class = $args['label_type']=='floating' && $type != 'checkbox' ? 'form-label-group' : 'form-group';
 				$wrap_class = $args['label_type']=='horizontal' ? $form_group_class . ' row' : $form_group_class;
+				$wrap_class = !empty($args['wrap_class']) ? $wrap_class." ".$args['wrap_class'] : $wrap_class;
 				$output = self::wrap(array(
 					'content' => $output,
 					'class'   => $wrap_class,
@@ -280,6 +282,7 @@ else{$eli.attr(\'type\',\'password\');}"
 		$defaults = array(
 			'name'       => '',
 			'class'      => '',
+			'wrap_class' => '',
 			'id'         => '',
 			'placeholder'=> '',
 			'title'      => '',
@@ -447,6 +450,7 @@ else{$eli.attr(\'type\',\'password\');}"
 		if(!$args['no_wrap']){
 			$form_group_class = $args['label_type']=='floating' ? 'form-label-group' : 'form-group';
 			$wrap_class = $args['label_type']=='horizontal' ? $form_group_class . ' row' : $form_group_class;
+			$wrap_class = !empty($args['wrap_class']) ? $wrap_class." ".$args['wrap_class'] : $wrap_class;
 			$output = self::wrap(array(
 				'content' => $output,
 				'class'   => $wrap_class,
@@ -497,6 +501,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			}
 
 			// class
+			$class = $class ? AUI_Component_Helper::esc_classes( $class ) : '';
 			$output .= ' class="'.$class.'" ';
 
 			// close
@@ -518,6 +523,13 @@ else{$eli.attr(\'type\',\'password\');}"
 		return $output;
 	}
 
+	/**
+	 * Wrap some content in a HTML wrapper.
+	 *
+	 * @param array $args
+	 *
+	 * @return string
+	 */
 	public static function wrap($args = array()){
 		$defaults = array(
 			'type'       => 'div',
@@ -553,7 +565,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			}
 
 			// class
-			$class = !empty($args['class']) ? $args['class'] : '';
+			$class = !empty($args['class']) ? AUI_Component_Helper::esc_classes( $args['class'] ) : '';
 			$output .= ' class="'.$class.'" ';
 
 			// close wrap
@@ -599,6 +611,7 @@ else{$eli.attr(\'type\',\'password\');}"
 	public static function select($args = array()){
 		$defaults = array(
 			'class'      => '',
+			'wrap_class' => '',
 			'id'         => '',
 			'title'      => '',
 			'value'      => '', // can be an array or a string
@@ -758,7 +771,7 @@ else{$eli.attr(\'type\',\'password\');}"
 						} else {
 							$option_label = isset($name['label']) ? $name['label'] : '';
 							$option_value = isset($name['value']) ? $name['value'] : '';
-							if(!empty($args['multiple']) && !empty($args['value'])){
+							if(!empty($args['multiple']) && !empty($args['value']) && is_array($args['value']) ){
 								$selected = in_array($option_value, stripslashes_deep($args['value'])) ? "selected" : "";
 							} elseif(!empty($args['value'])) {
 								$selected = selected($option_value,stripslashes_deep($args['value']), false);
@@ -808,6 +821,7 @@ else{$eli.attr(\'type\',\'password\');}"
 		// wrap
 		if(!$args['no_wrap']){
 			$wrap_class = $args['label_type']=='horizontal' ? 'form-group row' : 'form-group';
+			$wrap_class = !empty($args['wrap_class']) ? $wrap_class." ".$args['wrap_class'] : $wrap_class;
 			$output = self::wrap(array(
 				'content' => $output,
 				'class'   => $wrap_class,
@@ -830,6 +844,7 @@ else{$eli.attr(\'type\',\'password\');}"
 	public static function radio($args = array()){
 		$defaults = array(
 			'class'      => '',
+			'wrap_class' => '',
 			'id'         => '',
 			'title'      => '',
 			'horizontal' => false, // sets the lable horizontal
@@ -894,6 +909,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		// wrap
 		$wrap_class = $args['label_type']=='horizontal' ? 'form-group row' : 'form-group';
+		$wrap_class = !empty($args['wrap_class']) ? $wrap_class." ".$args['wrap_class'] : $wrap_class;
 		$output = self::wrap(array(
 			'content' => $output,
 			'class'   => $wrap_class,
