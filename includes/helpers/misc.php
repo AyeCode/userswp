@@ -568,8 +568,13 @@ add_filter('uwp_account_page_title', 'uwp_account_privacy_page_title', 10, 2);
  * @return      string             Title.
  */
 function uwp_account_privacy_page_title($title, $type) {
+
     if ($type == 'privacy') {
         $title = __( 'Privacy', 'userswp' );
+    } elseif ($type == 'notifications') {
+	    $title = __( 'E-Mail Notifications', 'userswp' );
+    } elseif ($type == 'delete-account') {
+	    $title = __( 'Delete Account', 'userswp' );
     }
 
     return $title;
