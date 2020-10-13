@@ -39,7 +39,7 @@ class UsersWP_Invoicing_Plugin {
     }
 
 	/**
-	 * Add GD quick links to the logged in Dashboard.
+	 * Add quick links to the logged in Dashboard.
 	 *
 	 * @since       1.0.0
 	 * @package     userswp
@@ -149,10 +149,10 @@ class UsersWP_Invoicing_Plugin {
      * @return      void
      */
     public function add_profile_invoices_tab_content($user) {
-        $this->profile_gd_invoices_content($user);
+        $this->profile_invoices_content($user);
     }
 
-    public function profile_gd_invoices_content($user) {
+    public function profile_invoices_content($user) {
         if (!is_user_logged_in()) {
             return;
         }
@@ -164,7 +164,7 @@ class UsersWP_Invoicing_Plugin {
             echo do_shortcode( '[wpinv_history]' );
         }else{
         ?>
-        <h3><?php echo __('Invoices', 'userswp'); ?></h3>
+        <h3><?php _e('Invoices', 'userswp'); ?></h3>
 
         <div class="uwp-profile-item-block">
             <?php

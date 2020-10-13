@@ -824,7 +824,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				wp_add_inline_script( 'bootstrap-js-bundle', $script );
 			}elseif($this->settings[$js_setting]=='popper'){
 				$url = $this->url.'assets/js/popper.min.js';
-				wp_register_script( 'bootstrap-js-popper', $url, array('jquery'), $this->latest );
+				wp_register_script( 'bootstrap-js-popper', $url, array('select2','jquery'), $this->latest );
 				wp_enqueue_script( 'bootstrap-js-popper' );
 				$load_inline = true;
 			}else{
@@ -833,7 +833,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 			// Load needed inline scripts by faking the loading of a script if the main script is not being loaded
 			if($load_inline){
-				wp_register_script( 'bootstrap-dummy', '',array('jquery') );
+				wp_register_script( 'bootstrap-dummy', '',array('select2','jquery') );
 				wp_enqueue_script( 'bootstrap-dummy' );
 				$script = $this->inline_script();
 				wp_add_inline_script( 'bootstrap-dummy', $script  );

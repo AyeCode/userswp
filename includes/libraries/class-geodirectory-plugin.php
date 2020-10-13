@@ -221,7 +221,7 @@ class UsersWP_GeoDirectory_Plugin {
 
 			$gd_posttypes = $this->get_gd_posttypes();
 
-			$settings = apply_filters( 'uwp_addon_activity_options', array(
+			$settings = apply_filters( 'uwp_addon_gd_options', array(
 				array(
 					'title' => __( 'GeoDirectory Settings', 'userswp' ),
 					'type'  => 'title',

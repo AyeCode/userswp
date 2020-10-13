@@ -285,15 +285,17 @@ class UsersWP_Forms {
 
 		if ( is_admin() ) {
 			if ( $user_id == get_current_user_id() ) {
-				$profile_url = admin_url( 'profile.php' );
+				$redirect_url = admin_url( 'profile.php' );
 			} else {
-				$profile_url = admin_url( 'user-edit.php?user_id=' . $user_id );
+				$redirect_url = admin_url( 'user-edit.php?user_id=' . $user_id );
 			}
+		} elseif(is_uwp_account_page()) {
+			$redirect_url = uwp_get_account_page_url();
 		} else {
-			$profile_url = uwp_build_profile_tab_url( $user_id );
-		}
+			$redirect_url = uwp_build_profile_tab_url( $user_id );
+        }
 
-		return $profile_url;
+		return $redirect_url;
 
 	}
 
@@ -1848,6 +1850,7 @@ class UsersWP_Forms {
 						'title'            => $site_title,
 						'placeholder'      => uwp_get_field_placeholder( $field ),
 						'class'            => '',
+						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 						'value'            => $value,
 						'help_text'        => uwp_get_field_description( $field ),
 						'extra_attributes' => $extra_attributes
@@ -1974,6 +1977,7 @@ class UsersWP_Forms {
 						'title'            => $site_title,
 						'placeholder'      => uwp_get_field_placeholder( $field ),
 						'class'            => '',
+						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 						'value'            => $value,
 						'help_text'        => uwp_get_field_description( $field ),
 						'extra_attributes' => $extra_attributes
@@ -2077,7 +2081,8 @@ class UsersWP_Forms {
 					'help_text'       => uwp_get_field_description( $field ),
 					'label'           => $site_title,
 					'options'         => $option_values_arr,
-					'select2'         => true
+					'select2'         => true,
+					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
 				?>
@@ -2186,7 +2191,8 @@ class UsersWP_Forms {
 					'label'           => $site_title,
 					'options'         => $option_values_arr,
 					'select2'         => true,
-					'multiple'        => true
+					'multiple'        => true,
+					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
 				?>
@@ -2306,6 +2312,7 @@ class UsersWP_Forms {
 		if ( empty( $html ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
+			$wrap_class = isset( $field->css_class ) ? $field->css_class : '';
 			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
@@ -2316,7 +2323,7 @@ class UsersWP_Forms {
             <div id="<?php echo $field->htmlvar_name; ?>_row"
                  class="<?php if ( $field->is_required ) {
 				     echo 'required_field';
-			     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+			     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group.$wrap_class ); ?>">
 
 				<?php
 				$site_title = uwp_get_form_label( $field );
@@ -2408,6 +2415,7 @@ class UsersWP_Forms {
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
 						'checked'    => $checked,
+						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 						'help_text'  => uwp_get_field_description( $field ),
 					)
 				);
@@ -2509,6 +2517,7 @@ class UsersWP_Forms {
 						'label'      => is_admin() ? '' : $site_title,
 						'label_type' => 'top',
 						'class'      => '',
+						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 						'value'      => $value,
 						'options'    => $option_values
 					)
@@ -2685,7 +2694,8 @@ class UsersWP_Forms {
 					'validation_text' => __( $field->required_msg, 'userswp' ),
 					'help_text'       => uwp_get_field_description( $field ),
 					'label'           => is_admin() ? '' : $site_title,
-					'step'            => $step
+					'step'            => $step,
+					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
 				?>
@@ -2780,7 +2790,8 @@ class UsersWP_Forms {
 					'validation_text' => __( $field->required_msg, 'userswp' ),
 					'help_text'       => uwp_get_field_description( $field ),
 					'label'           => is_admin() ? '' : $site_title,
-					'rows'            => '4'
+					'rows'            => '4',
+					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
 				?>
@@ -2863,7 +2874,8 @@ class UsersWP_Forms {
 					'help_text'       => uwp_get_field_description( $field ),
 					'label'           => is_admin() ? '' : $site_title,
 					'rows'            => 5,
-					'wysiwyg'         => true
+					'wysiwyg'         => true,
+					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
 				?>
@@ -2979,7 +2991,8 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => __( 'Please enter a valid URL including https://', 'userswp' ),
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() ? '' : $site_title
+					'label'           => is_admin() ? '' : $site_title,
+					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
 
@@ -3071,7 +3084,8 @@ class UsersWP_Forms {
 					'value'       => $value,
 					'required'    => $field->is_required,
 					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() ? '' : $site_title
+					'label'       => is_admin() ? '' : $site_title,
+					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
 
@@ -3165,7 +3179,8 @@ class UsersWP_Forms {
 					'value'       => $value,
 					'required'    => $field->is_required,
 					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() ? '' : $site_title
+					'label'       => is_admin() ? '' : $site_title,
+					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
 				?>
@@ -3244,7 +3259,8 @@ class UsersWP_Forms {
 					'value'       => $value,
 					'required'    => $field->is_required,
 					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() ? '' : $site_title
+					'label'       => is_admin() ? '' : $site_title,
+					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
 				?>
@@ -3322,6 +3338,7 @@ class UsersWP_Forms {
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
 						'checked'    => $checked,
+						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 					)
 				);
 
@@ -3402,6 +3419,7 @@ class UsersWP_Forms {
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
 						'checked'    => $checked,
+						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 					)
 				);
 

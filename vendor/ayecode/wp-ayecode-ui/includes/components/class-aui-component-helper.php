@@ -22,7 +22,7 @@ class AUI_Component_Helper {
 		$output = '';
 
 		if($text){
-			$is_multiple = strpos($text, '[]') !== false ? '[]' : '';
+			$is_multiple = strpos($text, '[]') !== false || (strpos($text, '[]') === false && $multiple ) ? '[]' : '';
 			$output = ' name="'.sanitize_html_class($text).$is_multiple.'" ';
 		}
 
