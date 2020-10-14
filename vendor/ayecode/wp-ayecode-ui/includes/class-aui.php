@@ -24,7 +24,9 @@ class AUI {
 	 *
 	 * @var string $ver The current version number.
 	 */
-	public static $ver = '0.1.22';
+	public static $ver = '0.1.33';
+
+	public static $options = null;
 
 	/**
 	 * There can be only one.
@@ -50,6 +52,9 @@ class AUI {
 			spl_autoload_register( "__autoload" );
 		}
 		spl_autoload_register( array( $this, 'autoload' ) );
+
+		// load options
+		self::$options = get_option('aui_options');
 	}
 
 	/**
@@ -65,6 +70,26 @@ class AUI {
 		if ( $file_path && is_readable( $file_path ) ) {
 			include_once( $file_path );
 		}
+	}
+
+	/**
+	 * Get the AUI options.
+	 *
+	 * @param $option
+	 *
+	 * @return string|void
+	 */
+	public function get_option( $option ){
+		$result = isset(self::$options[$option]) ? esc_attr(self::$options[$option]) : '';
+
+		if ( ! $result && $option) {
+			if( $option == 'color_primary' ){
+				$result = AUI_PRIMARY_COLOR;
+			}elseif( $option == 'color_secondary' ){
+				$result = AUI_SECONDARY_COLOR;
+			}
+		}
+		return $result;
 	}
 
 	public function render( $items = array() ) {

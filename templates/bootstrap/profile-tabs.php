@@ -40,7 +40,7 @@ if($output === '' || $output=='head'){
 
 						?>
 						<li id="uwp-profile-<?php echo $tab_id; ?>"
-						    class="nav-item <?php echo $active; ?> list-unstyled">
+						    class="nav-item <?php echo $active; ?> list-unstyled m-0">
 								<?php
                                 $content = '<span class="uwp-profile-tab-label uwp-profile-'.$tab_id.'-label">'.esc_html__($tab['tab_name'], 'userswp').'</span>';
                                 echo aui()->button(array(
@@ -63,17 +63,18 @@ if($output === '' || $output=='head'){
 <?php
 }
 
-if($output === '' || $output=='body'){
-?>
-<div id="tab-content" class="uwp-profile-content">
-	<div class="uwp-profile-entries">
-		<?php
-		if(isset($active_tab_content) && !empty($active_tab_content)){
-			echo $active_tab_content;
-		}
+if ( $output === '' || $output == 'body' ) {
+	if ( isset( $active_tab_content ) && ! empty( $active_tab_content ) ) {
 		?>
-	</div>
-</div>
-<?php
+        <div id="tab-content" class="uwp-profile-content">
+            <div class="uwp-profile-entries">
+				<?php
+
+				echo $active_tab_content;
+				?>
+            </div>
+        </div>
+		<?php
+	}
 }
 ?>

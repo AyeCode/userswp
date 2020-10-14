@@ -1,3 +1,34 @@
+= 0.1.33 =
+* Select2 not being added if other JS options selected - FIXED
+* Inputs now have wrap_class argument to add classes to the wrapper - ADDED
+
+= 0.1.32 =
+* Multi-select not always adding [] to name attribute - FIXED
+* Multi-select not checking if values is_array - FIXED
+
+= 0.1.30 =
+* Changes for theme check - CHANGED
+
+= 0.1.28 =
+* Allow menus to have multiple submenus with by adding class .navbar-multi-sub-menus - ADDED
+
+= 0.1.26 =
+* List view image not fully taking up column - FIXED
+* clear-both class added - ADDED
+
+= 0.1.25 =
+* Primary and Secondary default colors can be set via PHP constant - ADDED
+* Replace jQuery deprecated load() function - CHANGED
+
+= 0.1.24 =
+* Added ability to add multiple visible items to a slider responsively - ADDED
+
+= 0.1.23 =
+* Conditional fields options now work with AUI inputs - ADDED
+* Changed flatpickr to a data attribute initiator - CHANGED
+* aui_init_flatpickr() can have a race condition - FIXED
+* Greedy nav can break if initiated twice - FIXED
+
 = 0.1.22 =
 * In admin add script to footer to avoid jQuery UI tooltip issues - CHANGED
 
@@ -30,7 +61,7 @@
 
 = 0.1.15 =
 * Radio inputs now available - ADDED
-* Flatickr date/time picker script - ADDED
+* Flatpickr date/time picker script - ADDED
 * Use wp_kses_post() on label output instead of esc_attr() - CHANGED
 
 = 0.1.14 =

@@ -94,7 +94,10 @@ class UsersWP_GeoDirectory_Plugin {
 	/**
 	 * Add GD quick links to the logged in Dashboard.
 	 *
+	 * @param $links
 	 * @param $args
+     *
+     * @return array
 	 */
 	public function dashboard_output( $links, $args = array() ) {
 
@@ -218,7 +221,7 @@ class UsersWP_GeoDirectory_Plugin {
 
 			$gd_posttypes = $this->get_gd_posttypes();
 
-			$settings = apply_filters( 'uwp_addon_activity_options', array(
+			$settings = apply_filters( 'uwp_addon_gd_options', array(
 				array(
 					'title' => __( 'GeoDirectory Settings', 'userswp' ),
 					'type'  => 'title',
@@ -287,24 +290,6 @@ class UsersWP_GeoDirectory_Plugin {
 		}
 
 		return $post_type_arr;
-	}
-
-	/**
-	 * Registers the current addon tab items in "Choose the tabs to display in UsersWP Profile" setting.
-	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       array $tabs_arr Existing tabs array.
-	 *
-	 * @return      array     Tabs array.
-	 */
-	public function available_tab_items( $tabs_arr ) {
-		$tabs_arr['listings']  = __( 'Listings', 'userswp' );
-		$tabs_arr['reviews']   = __( 'Reviews', 'userswp' );
-		$tabs_arr['favorites'] = __( 'Favorites', 'userswp' );
-
-		return $tabs_arr;
 	}
 
 	/**
@@ -719,13 +704,12 @@ class UsersWP_GeoDirectory_Plugin {
 					<?php } ?>
 				</div>
 			</div>
-		<?php } ?>
-		<div class="uwp-profile-subtab-entries">
-			<?php
+		<?php }
+		if(has_action( 'uwp_profile_gd_' . $type . '_subtab_content' )){
+            echo '<div class="uwp-profile-subtab-entries">';
 			do_action( 'uwp_profile_gd_' . $type . '_subtab_content', $user, $post_type );
-			?>
-		</div>
-		<?php
+            echo '</div>';
+        }
 	}
 
 	/**
@@ -1254,7 +1238,7 @@ class UsersWP_GeoDirectory_Plugin {
 		} else {
 			$gd_post_types = geodir_get_posttypes( 'array' );
 			?>
-			<h3><?php _e( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' ) ?></h3>
+			<h3><?php _e( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' ); ?></h3>
 
 			<div class="uwp-profile-item-block">
 				<?php
@@ -1640,12 +1624,6 @@ class UsersWP_GeoDirectory_Plugin {
 			$args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' );
 
 			uwp_get_template( "bootstrap/loop-posts.php", $args );
-		} else {
-			echo aui()->alert( array(
-					'type'    => 'info',
-					'content' => __( 'This user does not have any favorites yet.', 'userswp' )
-				)
-			);
 		}
 
 	}

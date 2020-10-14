@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.5
-Stable tag: 1.2.2.6
+Stable tag: 1.2.2.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -126,6 +126,16 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.2.7 =
+* Change confirm email's placeholder - FIXED
+* Disable links in profile tabs for the posts and listings not published yet - FIXED
+* Placeholder not loaded in the select2 in registration form light box - FIXED
+* Use WP object cache for user meta - CHANGED
+* Add slash if permalink structure don't have slash at the end for profile URL - FIXED
+* Added honeypot check for register and reset password forms - ADDED
+* Account page new design - CHANGED
+* Editing profile tabs settings resets tabs order - FIXED
 
 = 1.2.2.6 =
 * Password strength meter showing JS error in registration form for WordPress 5.0  - FIXED

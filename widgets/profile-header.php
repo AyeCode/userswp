@@ -113,46 +113,46 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
 
         ob_start();
 
-        if ($enable_profile_header == '1') {
-
-	        wp_enqueue_script( 'jcrop', array( 'jquery' ) );
-	        wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
-	        wp_enqueue_style( 'jcrop' );
-	        wp_enqueue_style( 'jquery-ui' );
-            
-            // setup some args
-            add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
-            $uploads = wp_upload_dir();
-            remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
-            $upload_url = $uploads['baseurl'];
-            $banner = uwp_get_usermeta( $user->ID, 'banner_thumb', '' );
-            if ( empty( $banner ) ) {
-	            $banner = uwp_get_default_banner_uri();
-            } else {
-                $banner = $upload_url . $banner;
-            }
-
-            $avatar = uwp_get_usermeta( $user->ID, 'avatar_thumb', '' );
-            if ( empty( $avatar ) ) {
-                $avatar = get_avatar_url( $user->user_email, array( 'size' => 150 ) );
-            } else {
-                if ( strpos( $avatar, 'http:' ) === false && strpos( $avatar, 'https:' ) === false ) {
-                    $avatar = $upload_url . $avatar;
-                }
-            }
-            
-            $args['avatar_url'] = $avatar;
-            $args['banner_url'] = $banner;
-            
-
-            $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : uwp_get_option("design_style",'bootstrap');
-            $template = $design_style ? $design_style."/profile-header.php" : "profile-header.php";
-
-	        uwp_get_template($template, $args);
-
-            do_action('uwp_profile_header', $user, $args['hide_cover'], $args['hide_avatar'], $args['allow_change']);
-
+        if ($enable_profile_header != '1') {
+        	return;
         }
+
+        wp_enqueue_script( 'jcrop', array( 'jquery' ) );
+        wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
+        wp_enqueue_style( 'jcrop' );
+        wp_enqueue_style( 'jquery-ui' );
+
+        // setup some args
+        add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
+        $uploads = wp_upload_dir();
+        remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
+        $upload_url = $uploads['baseurl'];
+        $banner = uwp_get_usermeta( $user->ID, 'banner_thumb', '' );
+        if ( empty( $banner ) ) {
+            $banner = uwp_get_default_banner_uri();
+        } else {
+            $banner = $upload_url . $banner;
+        }
+
+        $avatar = uwp_get_usermeta( $user->ID, 'avatar_thumb', '' );
+        if ( empty( $avatar ) ) {
+            $avatar = get_avatar_url( $user->user_email, array( 'size' => 150 ) );
+        } else {
+            if ( strpos( $avatar, 'http:' ) === false && strpos( $avatar, 'https:' ) === false ) {
+                $avatar = $upload_url . $avatar;
+            }
+        }
+
+        $args['avatar_url'] = $avatar;
+        $args['banner_url'] = $banner;
+
+
+        $design_style = uwp_get_option("design_style",'bootstrap');
+        $template = $design_style ? $design_style."/profile-header.php" : "profile-header.php";
+
+        uwp_get_template($template, $args);
+
+        do_action('uwp_profile_header', $user, $args['hide_cover'], $args['hide_avatar'], $args['allow_change']);
 
         $output = ob_get_clean();
 

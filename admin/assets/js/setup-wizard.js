@@ -2,7 +2,7 @@ jQuery( document ).ready(function() {
 
     uwp_wizard_check_plugins();
 
-    jQuery('.uwp_install_plugins').click(function() {
+    jQuery(document).on('click', '.uwp_install_plugins', function () {
         uwp_wizard_check_plugins();
     });
 

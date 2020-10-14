@@ -22,7 +22,7 @@ class AUI_Component_Helper {
 		$output = '';
 
 		if($text){
-			$is_multiple = $multiple ? '[]' : '';
+			$is_multiple = strpos($text, '[]') !== false || (strpos($text, '[]') === false && $multiple ) ? '[]' : '';
 			$output = ' name="'.sanitize_html_class($text).$is_multiple.'" ';
 		}
 
@@ -201,11 +201,16 @@ class AUI_Component_Helper {
 	public static function extra_attributes($args){
 		$output = '';
 
-		if(!empty($args) && is_array($args) ){
+		if(!empty($args)){
 
-			foreach($args as $key => $val){
-				$output .= ' '.sanitize_html_class($key).'="'.esc_attr($val).'" ';
+			if( is_array($args) ){
+				foreach($args as $key => $val){
+					$output .= ' '.sanitize_html_class($key).'="'.esc_attr($val).'" ';
+				}
+			}else{
+				$output .= ' '.$args.' ';
 			}
+
 		}
 
 		return $output;
@@ -223,6 +228,30 @@ class AUI_Component_Helper {
 			$output .= '<small class="form-text text-muted">'.wp_kses_post($text).'</small>';
 		}
 
+
+		return $output;
+	}
+
+	/**
+	 * Replace element require context with JS.
+	 *
+	 * @param $input
+	 *
+	 * @return string|void
+	 */
+	public static function element_require( $input ) {
+
+		$input = str_replace( "'", '"', $input );// we only want double quotes
+
+		$output = esc_attr( str_replace( array( "[%", "%]", "%:checked]" ), array(
+			"jQuery(form).find('[data-argument=\"",
+			"\"]').find('input,select,textarea').val()",
+			"\"]').find('input:checked').val()",
+		), $input ) );
+
+		if($output){
+			$output = ' data-element-require="'.$output.'" ';
+		}
 
 		return $output;
 	}

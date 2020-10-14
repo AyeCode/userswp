@@ -166,7 +166,6 @@ final class UsersWP {
         add_action('personal_options_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('edit_user_profile_update', array($instance, 'update_profile_extra_admin_edit'), 10, 1);
         add_action('user_edit_form_tag', array($instance, 'add_multipart_to_admin_edit_form'));
-        add_action('uwp_template_form_title_after', array($instance, 'display_username_in_account'), 10, 1);
         add_action('template_redirect', array($instance, 'process_login'));
         add_action('template_redirect', array($instance, 'process_register'));
         add_action('template_redirect', array($instance, 'process_account'));
@@ -238,11 +237,10 @@ final class UsersWP {
         add_filter( 'edit_profile_url', array($instance, 'modify_admin_bar_edit_profile_url'), 10, 3);
         add_filter( 'the_title', array($instance, 'modify_profile_page_title'), 10, 2 );
         add_filter( 'get_comment_author_link', array($instance, 'get_comment_author_link') , 10 , 2 );
-        add_action( 'uwp_user_post_counts', array($instance, 'get_user_post_counts'), 10, 1 );
         add_action( 'uwp_user_title', array($instance, 'get_profile_title'), 10, 2 );
         add_action( 'uwp_profile_social', array($instance, 'get_profile_social'), 10, 2 );
         add_filter( 'get_avatar_url', array($instance, 'get_avatar_url'), 99, 3 );
-        add_action( 'uwp_profile_pagination' ,array($instance,'list_view_js'));
+        add_action( 'wp_footer' ,array($instance,'list_view_js'));
 
         // Popup and crop functions
         add_filter( 'ajax_query_attachments_args', array($instance, 'restrict_attachment_display') );

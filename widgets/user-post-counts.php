@@ -1,6 +1,6 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 /**
@@ -8,69 +8,130 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class UWP_User_Post_Counts_Widget extends WP_Super_Duper {
 
-    /**
-     * Register the user post counts widget with WordPress.
-     *
-     */
-    public function __construct() {
+	/**
+	 * Register the user post counts widget with WordPress.
+	 *
+	 */
+	public function __construct() {
 
 
-        $options = array(
-            'textdomain'    => 'userswp',
-            'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
-            'block-keywords'=> "['userswp','user']",
-            'class_name'     => __CLASS__,
-            'base_id'       => 'uwp_user_post_counts',
-            'name'          => __('UWP > User Post Counts','userswp'),
-            'no_wrap'       => true,
-            'block-wrap'    => '',
-            'widget_ops'    => array(
-                'classname'   => 'uwp-user-post-counts bsui',
-                'description' => esc_html__('Display user post, comments and other custom post type counts.','userswp'),
-            ),
-            'arguments'     => array(
-                'title'  => array(
-                    'title'       => __( 'Title', 'userswp' ),
-                    'desc'        => __( 'Enter widget title.', 'userswp' ),
-                    'type'        => 'text',
-                    'desc_tip'    => true,
-                    'default'     => '',
-                    'advanced'    => false
-                ),
-            )
+		$options = array(
+			'textdomain'     => 'userswp',
+			'block-icon'     => 'admin-site',
+			'block-category' => 'widgets',
+			'block-keywords' => "['userswp','user']",
+			'class_name'     => __CLASS__,
+			'base_id'        => 'uwp_user_post_counts',
+			'name'           => __( 'UWP > User Post Counts', 'userswp' ),
+			'no_wrap'        => true,
+			'block-wrap'     => '',
+			'widget_ops'     => array(
+				'classname'   => 'uwp-user-post-counts bsui',
+				'description' => esc_html__( 'Display user post, comments and other custom post type counts.', 'userswp' ),
+			),
+			'arguments'      => array(
+				'title' => array(
+					'title'    => __( 'Title', 'userswp' ),
+					'desc'     => __( 'Enter widget title.', 'userswp' ),
+					'type'     => 'text',
+					'desc_tip' => true,
+					'default'  => '',
+					'advanced' => false
+				),
+			)
 
-        );
+		);
 
 
-        parent::__construct( $options );
-    }
+		parent::__construct( $options );
+	}
 
 	/**
 	 * The Super block output function.
 	 *
-	 * @param array $args
-	 * @param array $widget_args
+	 * @param array  $args
+	 * @param array  $widget_args
 	 * @param string $content
 	 *
 	 * @return mixed|string|bool
 	 */
-    public function output( $args = array(), $widget_args = array(), $content = '' ) {
+	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        $user = uwp_get_displayed_user();
+		$user = uwp_get_displayed_user();
 
-        if(!$user){
-        	return '';
-        }
+		if ( ! $user ) {
+			return '';
+		}
 
-        ob_start();
+		ob_start();
 
-        do_action('uwp_user_post_counts', $user->ID);
+		$output  = "";
+		$counts  = array();
+		$user_id = $user->ID;
 
-        $output = ob_get_clean();
+		if ( is_user_logged_in() && $user_id == get_current_user_id() ) {
 
-        return $output;
+			$post_types = uwp_get_option( 'login_user_post_counts_cpts' );
+			$post_types = apply_filters( 'uwp_login_user_count_cpts', $post_types, $user_id );
 
-    }
+		} else {
+
+			$post_types = uwp_get_option( 'user_post_counts_cpts' );
+			$post_types = apply_filters( 'uwp_user_count_cpts', $post_types, $user_id );
+
+		}
+
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $cpt ) {
+				$post_type = get_post_type_object( $cpt );
+				$count     = count_user_posts( $user_id, $cpt );
+
+				if ( $post_type && $count ) {
+					$counts[ $cpt ] = array(
+						'name'          => $post_type->labels->name,
+						'singular_name' => $post_type->labels->singular_name,
+						'count'         => $count
+					);
+				}
+			}
+		}
+
+		$counts = apply_filters( 'uwp_get_user_post_counts', $counts, $user_id );
+
+		if ( is_uwp_profile_page() ) {
+
+			if ( ! empty( $counts ) ) {
+				$output .= '<nav class="navbar navbar-expand-xl navbar-light bg-white p-xl-0 greedy">';
+				$output .= '<div class="w-100 justify-content-center">';
+				$output .= '<ul class="navbar-nav flex-wrap m-0">';
+				$class = " pl-0";
+				foreach ( $counts as $cpt => $post_type ) {
+					$post_count_text = $post_type['count'] > 1 ? esc_attr( $post_type['name'] ) . '<span class="badge badge-dark ml-1">' . esc_attr( $post_type['count'] ) . '</span>' : esc_attr( $post_type['singular_name'] ) . '<span class="badge badge-dark ml-1">' . esc_attr( $post_type['count'] ) . '</span>';
+					$output          .= '<li class="nav-item"><span class="nav-link pr-0'.$class.'"><span class="badge badge-white text-muted'.$class.'">' . $post_count_text . '</span></span></li>' . " \n";
+					$class = '';
+				}
+				$output .= '</ul>';
+				$output .= '</div>';
+				$output .= '</nav>';
+			}
+
+		} else {
+			if ( ! empty( $counts ) ) {
+				$class = " pl-0";
+				foreach ( $counts as $cpt => $post_type ) {
+					$post_count_text = $post_type['count'] > 1 ? esc_attr( $post_type['name'] ) . '<span class="badge badge-dark ml-1">' . esc_attr( $post_type['count'] ) . '</span>' : esc_attr( $post_type['singular_name'] ) . '<span class="badge badge-dark ml-1">' . esc_attr( $post_type['count'] ) . '</span>';
+					$output          .= '<span class="badge badge-white nav-link text-muted pr-0'.$class.'">' . $post_count_text . '</span>' . " \n";
+					$class = '';
+				}
+			}
+		}
+
+		echo $output;
+
+		$output = ob_get_clean();
+
+		return $output;
+
+	}
 
 }

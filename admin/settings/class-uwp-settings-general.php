@@ -231,7 +231,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 	            array(
 		            'id'   => 'login_modal',
 		            'name' => __( 'Login Lightbox', 'userswp' ),
-		            'desc' => __( 'When enabled some login links will open in a lightbox instead of changing page. The page will reloaded after successful login instead of redirect.','userswp'),
+		            'desc' => __( 'When enabled some login links will open in a lightbox instead of changing page. The page will be reloaded after successful login instead of a redirect.','userswp'),
 		            'type' => 'checkbox',
 		            'default'  => '1',
 	            ),
@@ -411,6 +411,24 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'default'  => '0',
                     'advanced'  => true,
                 ),
+	            array(
+		            'id' => 'user_post_counts_cpts',
+		            'name' => __( 'User Counts CPTs', 'userswp' ),
+		            'desc' => __( 'Choose post types to display user counts in profile page for all users.', 'userswp' ),
+		            'type'  => 'multiselect',
+		            'sortable' => true,
+		            'options' =>  uwp_get_posttypes(),
+		            'desc_tip' => true,
+	            ),
+	            array(
+		            'id' => 'login_user_post_counts_cpts',
+		            'name' => __( 'User Counts CPTs for profile owner', 'userswp' ),
+		            'desc' => __( 'Choose post types to display user counts in profile page for profile owners.', 'userswp' ),
+		            'type'  => 'multiselect',
+		            'sortable' => true,
+		            'options' =>  uwp_get_posttypes(),
+		            'desc_tip' => true,
+	            ),
                 array( 'type' => 'sectionend', 'id' => 'profile_options' ),
             ));
         } else if ( 'users' == $current_section ) {

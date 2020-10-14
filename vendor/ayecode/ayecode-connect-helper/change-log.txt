@@ -1,0 +1,2 @@
+= 1.0.3 =
+* Added version comparisons so we know if the connect message will show or not - ADDED

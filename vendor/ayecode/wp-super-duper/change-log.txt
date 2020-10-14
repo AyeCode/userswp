@@ -1,3 +1,6 @@
+= 1.0.22 =
+* Sometimes arguments are not set early enough when building block JS - FIXED
+
 = 1.0.21 =
 * Block Category can now update on post_type change - FIXED
 * Non static method 'argument_values' should not be called statically - FIXED

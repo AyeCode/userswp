@@ -26,12 +26,22 @@ class UsersWP_Meta {
             return $default;
         }
 
+        if(!$key){
+        	return $default;
+        }
+
         global $wpdb;
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
         if (uwp_str_ends_with($key, '_privacy')) {
 	        if (uwp_str_ends_with($key, '_tab_privacy')) {
-		        $row = $wpdb->get_row($wpdb->prepare("SELECT tabs_privacy FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
+		        $obj_key = $user_id.'_tabs_privacy';
+		        $row = wp_cache_get( $obj_key, 'uwp_usermeta_tabs_privacy' );
+		        if ( ! $row ) {
+			        $row = $wpdb->get_row($wpdb->prepare("SELECT tabs_privacy FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
+			        wp_cache_set( $obj_key, $row, 'uwp_usermeta_tabs_privacy' );
+		        }
+
 		        $value = false;
 		        if (!empty($row)) {
 			        $public_fields = isset($row['tabs_privacy']) ? maybe_unserialize($row['tabs_privacy']) : $default;
@@ -41,7 +51,13 @@ class UsersWP_Meta {
 			        }
 		        }
 	        } else {
-		        $row = $wpdb->get_row($wpdb->prepare("SELECT user_privacy FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
+		        $obj_key = $user_id.'_user_privacy';
+		        $row = wp_cache_get( $obj_key, 'uwp_usermeta_user_privacy' );
+		        if ( ! $row ) {
+			        $row = $wpdb->get_row($wpdb->prepare("SELECT user_privacy FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
+			        wp_cache_set( $obj_key, $row, 'uwp_usermeta_user_privacy' );
+		        }
+
 		        $value = 'yes';
 		        if (!empty($row)) {
 			        $output = isset($row['user_privacy']) ? $row['user_privacy'] : $default;
@@ -61,7 +77,15 @@ class UsersWP_Meta {
                 case 'user_nicename': $value = $user_data->user_nicename; break;
                 case 'bio': $value = $user_data->description; break;
                 default :
-                    $row = $wpdb->get_row($wpdb->prepare("SELECT {$key} FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
+					$obj_key = $user_id.'_'.$key;
+	                $row = wp_cache_get( $obj_key, 'uwp_usermeta' );
+	                if ( ! $row ) {
+	                	if(uwp_column_exist($meta_table, $key)){
+			                $row = $wpdb->get_row($wpdb->prepare("SELECT {$key} FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
+			                wp_cache_set( $obj_key, $row, 'uwp_usermeta' );
+		                }
+	                }
+
                     if (!empty($row)) {
                         $value = isset($row[$key]) ? $row[$key] : $default;
                     } else {
@@ -97,6 +121,19 @@ class UsersWP_Meta {
 
         global $wpdb;
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+	    $cache_group = 'uwp_usermeta';
+	    $obj_key = $user_id . '_' . $key;
+
+	    if (uwp_str_ends_with($key, '_privacy')) {
+		    if ( 'tabs_privacy' == $key ) {
+			    $obj_key = $user_id . '_tabs_privacy';
+				$cache_group = 'uwp_usermeta_tab_privacy';
+		    } elseif('user_privacy' == $key) {
+			    $obj_key = $user_id . '_user_privacy';
+			    $cache_group = 'uwp_usermeta_user_privacy';
+		    }
+	    }
+
         $user_meta_info = $wpdb->get_col( $wpdb->prepare( "SELECT $key FROM $meta_table WHERE user_id = %d", $user_id ) );
 
         $value = apply_filters( 'uwp_update_usermeta', $value, $user_id, $key, $user_meta_info );
@@ -107,19 +144,30 @@ class UsersWP_Meta {
         $value = uwp_maybe_serialize($key, $value);
 
         if (!empty($user_meta_info)) {
-            $wpdb->update(
+	        $result = $wpdb->update(
                 $meta_table,
                 array($key => $value),
                 array('user_id' => $user_id),
                 array('%s'),
                 array('%d')
             );
+
+	        if ( ! $result ) {
+		        return false;
+	        }
+
         } else {
-            $wpdb->insert(
+	        $result = $wpdb->insert(
                 $meta_table,
                 array('user_id' => $user_id, $key => $value)
             );
+
+	        if ( ! $result ) {
+		        return false;
+	        }
         }
+
+	    wp_cache_delete( $obj_key, $cache_group );
 
         return true;
     }
@@ -142,7 +190,11 @@ class UsersWP_Meta {
         global $wpdb;
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
-        $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$meta_table} WHERE user_id = %d", $user_id));
+	    $row = wp_cache_get( $user_id, 'uwp_usermeta_row' );
+	    if ( ! $row ) {
+		    $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$meta_table} WHERE user_id = %d", $user_id));
+		    wp_cache_set( $user_id, $row, 'uwp_usermeta_row' );
+	    }
 
         return $row;
     }
@@ -164,7 +216,15 @@ class UsersWP_Meta {
 
         global $wpdb;
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
-        $wpdb->query($wpdb->prepare("DELETE FROM {$meta_table} WHERE user_id = %d", $user_id));
+
+        $count = $wpdb->query($wpdb->prepare("DELETE FROM {$meta_table} WHERE user_id = %d", $user_id));
+
+	    if ( ! $count ) {
+		    return false;
+	    }
+
+	    wp_cache_delete( $user_id, 'uwp_usermeta_row' );
+
     }
 
     /**

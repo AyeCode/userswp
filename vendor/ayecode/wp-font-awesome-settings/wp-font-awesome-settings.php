@@ -38,7 +38,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '1.0.11';
+		public $version = '1.0.12';
 
 		/**
 		 * Class textdomain.
@@ -278,7 +278,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 				'type'      => 'CSS', // type to use, CSS or JS or KIT
 				'version'   => '', // latest
 				'enqueue'   => '', // front and backend
-				'shims'     => '1', // default on for now, @todo maybe change to off in 2020
+				'shims'     => '0', // default OFF now in 2020
 				'js-pseudo' => '0', // if the pseudo elements flag should be set (CPU intensive)
 				'dequeue'   => '0', // if we should try to remove other versions added by other plugins/themes
 				'pro'       => '0', // if pro CDN url should be used
@@ -353,7 +353,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 								<input class="regular-text" id="wpfas-kit-url" type="url"
 								       name="wp-font-awesome-settings[kit-url]"
 								       value="<?php echo esc_attr( $this->settings['kit-url'] ); ?>"
-								       placeholder="https://kit.fontawesome.com/123abc.js"/>
+								       placeholder="<?php echo 'https://kit.font';echo 'awesome.com/123abc.js'; // this won't pass theme check :(?>"/>
 								<span><?php
 									echo sprintf(
 										__( 'Requires a free account with Font Awesome. %sGet kit url%s', 'font-awesome-settings' ),

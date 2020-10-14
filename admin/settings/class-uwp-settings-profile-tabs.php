@@ -670,7 +670,6 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                         <input type="hidden" name="field_id" id="field_id" value="<?php echo esc_attr($result_str); ?>"/>
                         <input type="hidden" name="form_type" id="form_type" value="profile-tabs"/>
                         <input type="hidden" name="tab_type" id="tab_type" value="<?php echo $tab_type; ?>"/>
-                        <input type="hidden" name="tab_key" value="<?php echo $tab_key ?>"/>
                         <input type="hidden" name="tab_parent" value="<?php echo $tab_parent ?>"/>
                         <input type="hidden" name="tab_level" value="<?php echo $tab_level ?>"/>
 
@@ -690,10 +689,24 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
                             <li class="uwp-setting-name">
 
+                                <label for="tab_key" class="uwp-tooltip-wrap">
+                                    <?php
+                                    echo uwp_help_tip(__('Key and URL slug for the profile tab.', 'userswp'));
+                                    _e('Tab key:', 'userswp'); ?>
+                                </label>
+                                <div class="uwp-input-wrap">
+                                    <input type="text" name="tab_key" id="tab_key"
+                                           value="<?php echo $tab_key; ?>" <?php if ( ! empty( $tab_key ) && $tab_key != '' ) { echo 'readonly="readonly"'; } ?>/>
+                                </div>
+
+                            </li>
+
+                            <li class="uwp-setting-name">
+
                                 <label for="tab_icon" class="uwp-tooltip-wrap">
                                     <?php
                                     echo uwp_help_tip(__('This will be the icon for profile tab.', 'userswp'));
-                                    _e('Upload icon :', 'userswp'); ?>
+                                    _e('Tab icon:', 'userswp'); ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="tab_icon" id="tab_icon"
@@ -706,7 +719,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                                 <label for="privacy" class="uwp-tooltip-wrap">
                                     <?php
                                     echo uwp_help_tip(__('Select privacy for displaying profile tab and content.', 'userswp'));
-                                    _e('Privacy :', 'userswp'); ?>
+                                    _e('Privacy:', 'userswp'); ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <?php

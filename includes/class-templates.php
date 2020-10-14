@@ -449,6 +449,9 @@ class UsersWP_Templates {
                 }
                 echo '<input type="hidden" name="redirect_to" value="'.$redirect_to.'"/>';
             }
+	        $hash = substr(hash( 'SHA256', AUTH_KEY . site_url() ), 0, 25);
+	        echo '<input type="hidden" name="uwp_register_hash" value="'.$hash.'" style="display:none !important; visibility:hidden !important;" />';
+	        echo '<input type="hidden" name="uwp_register_hp" value="" style="display:none !important; visibility:hidden !important;" size="25" autocomplete="off" />';
             echo '<input type="hidden" name="uwp_register_nonce" value="'. wp_create_nonce( 'uwp-register-nonce' ) .'" />';
         } elseif ($form_type == 'change') {
             echo '<input type="hidden" name="uwp_change_nonce" value="'. wp_create_nonce( 'uwp-change-nonce' ) .'" />';
@@ -459,6 +462,7 @@ class UsersWP_Templates {
                 echo '<input type="hidden" name="uwp_reset_username" value="' . sanitize_text_field($_GET['login']) . '" />';
                 echo '<input type="hidden" name="uwp_reset_key" value="' . sanitize_text_field($_GET['key']) . '" />';
             }
+	        echo '<input type="hidden" name="uwp_reset_hp" value="" style="display:none !important; visibility:hidden !important;" size="25" autocomplete="off" />';
             echo '<input type="hidden" name="uwp_reset_nonce" value="' . wp_create_nonce('uwp-reset-nonce') . '" />';
         }
     }
@@ -920,7 +924,7 @@ class UsersWP_Templates {
 	public function privacy_edit_form_display($type) {
 		if ($type == 'privacy') {
 			$make_profile_private = uwp_can_make_profile_private();
-			echo '<div class="uwp-account-form uwp_wc_form">';
+			echo '<div class="uwp-account-form">';
 			$extra_where = "AND is_public='2'";
 			$fields = get_account_form_fields($extra_where);
 			$fields = apply_filters('uwp_account_privacy_fields', $fields);
@@ -936,10 +940,10 @@ class UsersWP_Templates {
 						<?php if ($fields) { ?>
                             <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
                                 <div class="uwp-profile-extra-key col" style="font-weight: bold;">
-									<?php echo __("Field", "userswp") ?>
+									<?php _e("Field", "userswp") ?>
                                 </div>
                                 <div class="uwp-profile-extra-value col" style="font-weight: bold;">
-									<?php echo __("Is Public?", "userswp") ?>
+									<?php _e("Is Public?", "userswp") ?>
                                 </div>
                             </div>
 							<?php foreach ($fields as $field) { ?>
@@ -971,10 +975,10 @@ class UsersWP_Templates {
 						if( $tabs ){ ?>
                             <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
                                 <div class="uwp-profile-extra-key col" style="font-weight: bold;">
-									<?php echo __("Tab Name", "userswp") ?>
+									<?php _e("Tab Name", "userswp") ?>
                                 </div>
                                 <div class="uwp-profile-extra-value col" style="font-weight: bold;">
-									<?php echo __("Privacy", "userswp") ?>
+									<?php _e("Privacy", "userswp") ?>
                                 </div>
                             </div>
 						<?php }

@@ -128,7 +128,7 @@ jQuery(document).ready(function () {
             };
 
             jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true&update=update&manage_field_type=' + manage_field_type, data, function (theResponse) {
-                console.log('Fields have been ordered.');
+                console.log('Tabs have been ordered.');
             });
         }
     });
@@ -221,12 +221,31 @@ function save_field(id, type) {
                 aui_init_select2();
                 uwp_init_tooltips();
 
-                var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type='+manage_field_type;
-
-                jQuery.get(uwp_admin_ajax.url+'?action=' + action + '&create_field=true', order,
-                    function (theResponse) {
-
+                if('profile_tab' == type){
+                    var $tabs = jQuery('.field_row_main ul.core').nestedSortable('toArray', {startDepthCount: 0});
+                    var $order = {};
+                    jQuery.each($tabs, function( index, tab ) {
+                        if(tab.id){
+                            $order[index] = {id:tab.id, tab_level: tab.depth,tab_parent: tab.parent_id};
+                        }
                     });
+
+                    var data = {
+                        'tabs': $order
+                    };
+
+                    jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true&update=update&manage_field_type=' + manage_field_type, data, function (theResponse) {
+                        console.log('Tabs have been ordered.');
+                    });
+
+                } else {
+                    var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type='+manage_field_type;
+
+                    jQuery.get(uwp_admin_ajax.url+'?action=' + action + '&create_field=true', order,
+                        function (theResponse) {
+
+                        });
+                }
 
                 jQuery('.field_frm').hide();
             }

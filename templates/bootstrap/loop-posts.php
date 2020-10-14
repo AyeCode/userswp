@@ -6,6 +6,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $the_query = isset( $args['template_args']['the_query'] ) ? $args['template_args']['the_query'] : '';
 $title = isset( $args['template_args']['title'] ) ? $args['template_args']['title'] : '';
+
+if(isset($the_query->found_posts) && $the_query->found_posts == 0){
+    return;
+}
 ?>
 
 <div class="container mb-1">
@@ -40,13 +44,8 @@ $title = isset( $args['template_args']['title'] ) ? $args['template_args']['titl
 
 		/* Restore original Post Data */
 		wp_reset_postdata();
-	} else {
-		// no posts found
-		echo aui()->alert(array(
-			'type'=>'info',
-			'content'=> sprintf( __( "No %s found.", 'userswp' ), $title )
-		));
 	}
+
 	do_action( 'uwp_profile_pagination', $the_query->max_num_pages );
 	?>
 </div>

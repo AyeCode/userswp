@@ -133,7 +133,9 @@ function uwp_account_get_available_tabs() {
         ),
     );
 
-	// Keep delete account last
+	$tabs = apply_filters( 'uwp_account_available_tabs', $tabs );
+
+	// Keep delete account and logout last
 	if(1 != uwp_get_option('disable_account_delete') && !current_user_can('administrator')){
 		$tabs['delete-account'] = array(
 			'title' => __('Delete Account', 'userswp'),
@@ -141,7 +143,14 @@ function uwp_account_get_available_tabs() {
 		);
 	}
 
-	$tabs = apply_filters( 'uwp_account_available_tabs', $tabs );
+	$template = new UsersWP_Templates();
+	$logout_url = $template->uwp_logout_url();
+
+	$tabs['logout'] = array(
+		'title' => __('Logout', 'userswp'),
+		'icon' => 'fas fa-sign-out-alt',
+		'link' => $logout_url,
+	);
 
 	return $tabs;
 }
@@ -162,9 +171,16 @@ function uwp_get_tabs_privacy_by_user($user){
 
 	$tabs_privacy = array();
 	$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
-	$user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT tabs_privacy FROM $meta_table WHERE user_id = %d", $user->ID ) );
-	if(isset($user_meta_info->tabs_privacy) && !empty($user_meta_info->tabs_privacy)){
-		$tabs_privacy = maybe_unserialize($user_meta_info->tabs_privacy);
+	$obj_key = $user->ID.'_tabs_privacy';
+	$user_meta_info = wp_cache_get( $obj_key, 'uwp_usermeta_tabs_privacy' );
+
+	if ( ! $user_meta_info ) {
+		$user_meta_info = $wpdb->get_row($wpdb->prepare("SELECT tabs_privacy FROM {$meta_table} WHERE user_id = %d", $user->ID), ARRAY_A);
+		wp_cache_set( $obj_key, $user_meta_info, 'uwp_usermeta_tabs_privacy' );
+	}
+
+	if(isset($user_meta_info['tabs_privacy']) && !empty($user_meta_info['tabs_privacy'])){
+		$tabs_privacy = maybe_unserialize($user_meta_info['tabs_privacy']);
 	}
 
 	return $tabs_privacy;
