@@ -18,9 +18,20 @@ do_action( 'uwp_template_before', 'account' ); ?>
                         <div class="d-flex justify-content-center flex-column align-items-center">
                             <?php
                             echo do_shortcode('[uwp_user_avatar size=150 allow_change=1]');
-                            do_action( 'uwp_template_form_title_before', 'account' ); ?>
-                            <a href="<?php echo uwp_build_profile_tab_url($user_id); ?>" class="mt-0 text-decoration-none font-weight-bold"> @<?php echo $display_name; ?></a>
-                            <?php do_action( 'uwp_template_form_title_after', 'account' ); ?>
+
+                            do_action( 'uwp_template_form_title_before', 'account' );
+
+                            echo aui()->button( array(
+	                            'type'             => 'a',
+	                            'href'             => uwp_build_profile_tab_url($user_id),
+	                            'class'            => 'mt-0 text-decoration-none font-weight-bold',
+	                            'icon'             => '',
+	                            'title'            => $display_name,
+	                            'content'          => '@'.$display_name,
+                            ));
+
+                            do_action( 'uwp_template_form_title_after', 'account' );
+                            ?>
                         </div>
                         <div class="d-flex justify-content-center nav mt-0">
 	                        <?php do_action( 'uwp_account_menu_display' ); ?>
@@ -31,15 +42,15 @@ do_action( 'uwp_template_before', 'account' ); ?>
             <div class="col-lg-9">
                 <div class="pl-lg-4 pl-sm-0 h-100 pt-5 pb-lg-0 pb-3">
                     <?php
+                    $form_title = ! empty( $args['form_title'] ) ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Edit Account', 'userswp' );
 
-	                if ( isset( $_GET['type'] ) ) {
+                    if ( isset( $_GET['type'] ) ) {
 		                $type = strip_tags( esc_sql( $_GET['type'] ) );
 	                } else {
 		                $type = 'account';
 	                }
 
-	                $form_title = ! empty( $args['form_title'] ) ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Edit Account', 'userswp' );
-	                $form_title = apply_filters( 'uwp_template_form_title', $form_title, 'account' );
+	                $form_title = apply_filters( 'uwp_account_page_title', $form_title, $type );
 	                if ( $form_title != '0' ) {
 		                echo '<h3 class="mb-lg-5 mb-4">';
 		                echo $form_title;
