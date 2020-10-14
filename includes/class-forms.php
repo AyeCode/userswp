@@ -289,8 +289,8 @@ class UsersWP_Forms {
 			} else {
 				$redirect_url = admin_url( 'user-edit.php?user_id=' . $user_id );
 			}
-		} elseif(is_uwp_account_page()) {
-			$redirect_url = uwp_get_account_page_url();
+		} elseif(uwp_current_page_url()) {
+			$redirect_url = uwp_current_page_url();
 		} else {
 			$redirect_url = uwp_build_profile_tab_url( $user_id );
         }
@@ -343,15 +343,17 @@ class UsersWP_Forms {
 
 		if ( is_admin() ) {
 			if ( $user_id == get_current_user_id() ) {
-				$profile_url = admin_url( 'profile.php' );
+				$redirect_url = admin_url( 'profile.php' );
 			} else {
-				$profile_url = admin_url( 'user-edit.php?user_id=' . $user_id );
+				$redirect_url = admin_url( 'user-edit.php?user_id=' . $user_id );
 			}
+		} elseif(uwp_current_page_url()) {
+			$redirect_url = uwp_current_page_url();
 		} else {
-			$profile_url = uwp_build_profile_tab_url( $user_id );
+			$redirect_url = uwp_build_profile_tab_url( $user_id );
 		}
 
-		return $profile_url;
+		return $redirect_url;
 	}
 
 	/**
