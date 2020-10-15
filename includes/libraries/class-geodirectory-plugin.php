@@ -959,7 +959,7 @@ class UsersWP_GeoDirectory_Plugin {
 				// add some bootstrap styles
 				$author_actions = str_replace(
 					array( "gd_user_action", "gd-author-actions", "href=", "gd_delete_post" ),
-					array( "gd_user_action dropdown-item position-relative", "", "class='stretched-link' href=", "uwp_gd_delete_post" ),
+					array( "gd_user_action dropdown-item position-relative", "", "class='stretched-link dropdown-item' href=", "uwp_gd_delete_post" ),
 					$author_actions
 				);
 

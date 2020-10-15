@@ -1526,7 +1526,7 @@ class UsersWP_Form_Builder {
                             break;
 
                         case 'textarea':
-                        case 'html':
+                        case 'editor':
                         case 'url':
                         case 'file':
 
@@ -1712,7 +1712,7 @@ class UsersWP_Form_Builder {
                         }
                         break;
                     case 'textarea':
-                    case 'html':
+                    case 'editor':
                     case 'url':
                     case 'file':
 

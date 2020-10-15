@@ -1696,6 +1696,8 @@ class UsersWP_Profile {
                 $value = esc_textarea( $value );
                 $value = nl2br($value);
                 break;
+	        case 'editor':
+		        break;
             default:
                 $value = esc_html( $value );
         }
