@@ -568,7 +568,7 @@ function uwp_gd_delete_post($post_id){
     if (confirm(message)) {
 
         jQuery.ajax({
-            url: geodir_params.ajax_url,
+            url: uwp_localize_data.ajaxurl,
             type: 'POST',
             dataType: 'json',
             data: {
@@ -580,12 +580,29 @@ function uwp_gd_delete_post($post_id){
             success: function(data) {
 
                 if(data.success){
-                    lity('<div class="gd-notification gd-success"><i class="fas fa-check-circle"></i> '+ data.data.message +'</div>');
+                    var $modal_content = '<div class="alert alert-success m-0"><i class="fas fa-check-circle"></i> '+ data.data.message +'</div>';
+                }else{
+                    var $modal_content = '<div class="alert alert-danger m-0"><i class="fas fa-exclamation-circle"></i> '+ data.data.message +'</div>';
+                }
+
+                var $modal = '<div class="modal fade uwp-gd-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-gd-modal-title" aria-hidden="true">' +
+                    '<div class="modal-dialog modal-dialog-centered">' +
+                    '<div class="modal-content">' +
+                    $modal_content +
+                    '</div></div></div>';
+
+                if(!jQuery('.uwp-gd-modal').length){
+                    jQuery('body').append($modal);
+                }else{
+                    jQuery('.uwp-gd-modal .modal-content').html($modal_content);
+                }
+
+                jQuery('.uwp-gd-modal').modal();
+
+                if(data.success){
                     setTimeout(function() {
                         location.reload();
                     }, 3000);
-                }else{
-                    lity('<div class="gd-notification gd-error"><i class="fas fa-exclamation-circle"></i> '+ data.data.message +'</div>');
                 }
             }
         });

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.7\n"
+"Project-Id-Version: UsersWP 1.2.2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-14 12:31+0530\n"
-"PO-Revision-Date: 2020-10-14 12:31+0530\n"
+"POT-Creation-Date: 2020-10-15 20:35+0530\n"
+"PO-Revision-Date: 2020-10-15 20:35+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -3972,88 +3972,88 @@ msgstr ""
 msgid "<strong>Error</strong>: cannot be empty."
 msgstr ""
 
-#: includes/class-validation.php:206 includes/class-validation.php:209
+#: includes/class-validation.php:210 includes/class-validation.php:213
 msgid "<strong>Error</strong>: "
 msgstr ""
 
-#: includes/class-validation.php:216
+#: includes/class-validation.php:220
 msgid "<strong>Error</strong>: The email address isn&#8217;t correct."
 msgstr ""
 
-#: includes/class-validation.php:223
+#: includes/class-validation.php:227
 msgid ""
 "<strong>Error</strong>: This email is already registered, please choose "
 "another one."
 msgstr ""
 
-#: includes/class-validation.php:229
+#: includes/class-validation.php:233
 msgid "<strong>Error</strong>: This email doesn't exists."
 msgstr ""
 
-#: includes/class-validation.php:233
+#: includes/class-validation.php:237
 msgid ""
 "<strong>Error</strong>: This username is invalid because it uses illegal "
 "characters. Please enter a valid username."
 msgstr ""
 
-#: includes/class-validation.php:242
+#: includes/class-validation.php:246
 msgid ""
 "<strong>Error</strong>: This username is already registered. Please choose "
 "another one."
 msgstr ""
 
-#: includes/class-validation.php:249
+#: includes/class-validation.php:253
 #, php-format
 msgid "<strong>Error</strong>: Username must be %s characters or more."
 msgstr ""
 
-#: includes/class-validation.php:258 upgrade.php:256
+#: includes/class-validation.php:262 upgrade.php:256
 msgid "You must read and accept our GDPR policy."
 msgstr ""
 
-#: includes/class-validation.php:261
+#: includes/class-validation.php:265
 msgid "You must accept our terms and conditions."
 msgstr ""
 
-#: includes/class-validation.php:300
+#: includes/class-validation.php:304
 msgid "<strong>Error</strong>: Please enter your old password"
 msgstr ""
 
-#: includes/class-validation.php:306
+#: includes/class-validation.php:310
 msgid "<strong>Error</strong>: Incorrect old password"
 msgstr ""
 
-#: includes/class-validation.php:311
+#: includes/class-validation.php:315
 msgid "<strong>Error</strong>: Old password and new password are same"
 msgstr ""
 
-#: includes/class-validation.php:320
+#: includes/class-validation.php:324
 msgid "<strong>Error</strong>: Please enter your Email"
 msgstr ""
 
-#: includes/class-validation.php:325
+#: includes/class-validation.php:329
 msgid "<strong>Error</strong>: Please fill Confirm Email field"
 msgstr ""
 
-#: includes/class-validation.php:330
+#: includes/class-validation.php:334
 msgid "<strong>Error</strong>: Email and Confirm email not match"
 msgstr ""
 
-#: includes/class-validation.php:339
+#: includes/class-validation.php:343
 msgid "Please enter a password"
 msgstr ""
 
-#: includes/class-validation.php:350
+#: includes/class-validation.php:354
 #, php-format
 msgid "<strong>Error</strong>: Password must be %s characters or less."
 msgstr ""
 
-#: includes/class-validation.php:352
+#: includes/class-validation.php:356
 #, php-format
 msgid "<strong>Error</strong>: Password must be %s characters or more."
 msgstr ""
 
-#: includes/class-validation.php:371
+#: includes/class-validation.php:375
 msgid "<strong>Error</strong>: Passwords do not match."
 msgstr ""
 

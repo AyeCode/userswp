@@ -191,6 +191,10 @@ class UsersWP_Validation {
                             }
                             break;
 
+	                    case 'editor':
+		                    $sanitized_value = wp_kses_post( strip_shortcodes( $value ) );
+		                    break;
+
                         default:
                             $sanitized_value = sanitize_text_field($value);
 
