@@ -835,52 +835,6 @@ function uwp_can_make_profile_private() {
 }
 
 /**
- * Adds notification menu in admin toolbar.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @return      void
- */
-function uwp_notifications_toolbar_menu() {
-    global $wp_admin_bar;
-
-    if ( ! is_user_logged_in() ) {
-        return;
-    }
-
-    $available_counts = apply_filters('uwp_notifications_available_counts', array());
-
-    if (count($available_counts) == 0) {
-        return;
-    }
-
-    $total_count = 0;
-    foreach ($available_counts as $key => $value) {
-        $total_count = $total_count + $value;
-    }
-
-
-    $alert_class   = (int) $total_count > 0 ? 'pending-count' : 'count';
-    $menu_title    = '<span id="uwp-notification-count" class="' . $alert_class . '">'
-        . number_format_i18n( $total_count ) . '</span>';
-    $menu_link     = '';
-
-    // Add the top-level Notifications button.
-    $wp_admin_bar->add_menu( array(
-        'parent'    => 'top-secondary',
-        'id'        => 'uwp-notifications',
-        'title'     => $menu_title,
-        'href'      => $menu_link,
-    ) );
-
-    do_action('uwp_notifications_items', $wp_admin_bar);
-
-    return;
-}
-add_action( 'admin_bar_menu', 'uwp_notifications_toolbar_menu', 90 );
-
-/**
  * Returns the installation type.
  *
  * @since       1.0.0

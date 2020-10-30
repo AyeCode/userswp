@@ -2258,7 +2258,7 @@ class UsersWP_Form_Builder {
             </label>
 
         <?php
-        $reg_only_fields = array('username', 'register_gdpr', 'register_tos');
+        $reg_only_fields = array('username', 'register_gdpr', 'register_tos', 'subscribe');
         $reg_only_fields = apply_filters('uwp_register_only_fields', $reg_only_fields);
         if (isset($field_info->htmlvar_name) && in_array($field_info->htmlvar_name, $reg_only_fields)) {
             ?>

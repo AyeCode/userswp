@@ -182,6 +182,10 @@ function uwp_get_field_placeholder($field) {
 		}
 	}
 
+	if (isset($field->is_required) && !empty($field->is_required)) {
+		$placeholder .= ' *';
+	}
+
 	return apply_filters('uwp_get_field_placeholder', stripslashes($placeholder), $field);
 }
 

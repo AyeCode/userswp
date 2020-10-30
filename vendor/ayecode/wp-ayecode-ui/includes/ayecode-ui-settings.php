@@ -543,7 +543,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				 */
 				function aui_check_form_condition(condition,form) {
 					if(form){
-						condition = condition.replace("(form)", "('"+form+"')");
+						condition = condition.replace(/(form)/g, "('"+form+"')");
 					}
 					return new Function("return " + condition+";")();
 				}

@@ -1839,13 +1839,14 @@ class UsersWP_Forms {
 
 			// bootstrap
 			if ( $design_style ) {
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->input(
 					array(
 						'id'               => $field->htmlvar_name,
 						'name'             => $field->htmlvar_name,
 						'required'         => ! empty( $field->is_required ) ? true : false,
-						'label'            => $site_title,
+						'label'            => $site_title.$required,
 						'label_show'       => true,
 						'label_type'       => 'hidden',
 						'type'             => 'datepicker',
@@ -1967,12 +1968,14 @@ class UsersWP_Forms {
 			$label_type                           = is_admin() ? '' : 'top';
 
 			if ( $design_style ) {
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+
 				echo aui()->input(
 					array(
 						'id'               => $field->htmlvar_name,
 						'name'             => $field->htmlvar_name,
 						'required'         => ! empty( $field->is_required ) ? true : false,
-						'label'            => $site_title,
+						'label'            => $site_title.$required,
 						'label_show'       => true,
 						'label_type'       => $label_type,
 						'type'             => 'timepicker',
@@ -2072,6 +2075,8 @@ class UsersWP_Forms {
 			// bootstrap
 			if ( $design_style ) {
 
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+
 				echo aui()->select( array(
 					'id'              => $field->htmlvar_name,
 					'name'            => $field->htmlvar_name,
@@ -2081,7 +2086,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => $site_title,
+					'label'           => $site_title.$required,
 					'options'         => $option_values_arr,
 					'select2'         => true,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
@@ -2181,6 +2186,8 @@ class UsersWP_Forms {
 			// bootstrap
 			if ( $design_style ) {
 
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+
 				echo aui()->select( array(
 					'id'              => $field->htmlvar_name,
 					'name'            => $field->htmlvar_name,
@@ -2190,7 +2197,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => $site_title,
+					'label'           => $site_title.$required,
 					'options'         => $option_values_arr,
 					'select2'         => true,
 					'multiple'        => true,
@@ -2333,7 +2340,7 @@ class UsersWP_Forms {
                     <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
 						<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
 						<?php if ( $field->is_required ) {
-							echo '<span>*</span>';
+							echo ' <span class="text-danger">*</span>';
 						} ?>
                     </label>
 				<?php } ?>
@@ -2403,6 +2410,7 @@ class UsersWP_Forms {
 
 			// bootstrap
 			if ( $design_style ) {
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
 
 				echo '<input type="hidden" name="' . $field->htmlvar_name . '" id="checkbox_' . $id . '" value="0"/>';
 
@@ -2413,7 +2421,7 @@ class UsersWP_Forms {
 						'type'       => "checkbox",
 						'value'      => '1',
 						'title'      => $site_title,
-						'label'      => $site_title,
+						'label'      => $site_title.$required,
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
 						'checked'    => $checked,
@@ -2510,13 +2518,15 @@ class UsersWP_Forms {
 
 				$site_title = uwp_get_form_label( $field );
 
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+
 				echo aui()->radio(
 					array(
 						'id'         => $field->htmlvar_name,
 						'name'       => $field->htmlvar_name,
 						'type'       => "radio",
 						'title'      => $site_title,
-						'label'      => is_admin() ? '' : $site_title,
+						'label'      => is_admin() ? '' : $site_title.$required,
 						'label_type' => 'top',
 						'class'      => '',
 						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
@@ -2685,6 +2695,8 @@ class UsersWP_Forms {
 
 			// bootstrap
 			if ( $design_style ) {
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+
 				echo aui()->input( array(
 					'type'            => $type,
 					'id'              => $field->htmlvar_name,
@@ -2695,7 +2707,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => __( $field->required_msg, 'userswp' ),
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() ? '' : $site_title,
+					'label'           => is_admin() ? '' : $site_title.$required,
 					'step'            => $step,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
@@ -2782,6 +2794,8 @@ class UsersWP_Forms {
 
 			// bootstrap
 			if ( $design_style ) {
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+
 				echo aui()->textarea( array(
 					'id'              => $field->htmlvar_name,
 					'name'            => $field->htmlvar_name,
@@ -2791,7 +2805,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => __( $field->required_msg, 'userswp' ),
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() ? '' : $site_title,
+					'label'           => is_admin() ? '' : $site_title.$required,
 					'rows'            => '4',
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
@@ -2865,6 +2879,8 @@ class UsersWP_Forms {
 
 			// bootstrap
 			if ( $design_style ) {
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+
 				echo aui()->textarea( array(
 					'id'              => $field->htmlvar_name,
 					'name'            => $field->htmlvar_name,
@@ -2874,7 +2890,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => __( $field->required_msg, 'userswp' ),
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() ? '' : $site_title,
+					'label'           => is_admin() ? '' : $site_title.$required,
 					'rows'            => 5,
 					'wysiwyg'         => true,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
@@ -2983,6 +2999,8 @@ class UsersWP_Forms {
 
 			// bootstrap
 			if ( $design_style ) {
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+
 				echo aui()->input( array(
 					'type'            => 'url',
 					'id'              => $field->htmlvar_name,
@@ -2993,7 +3011,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => __( 'Please enter a valid URL including https://', 'userswp' ),
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() ? '' : $site_title,
+					'label'           => is_admin() ? '' : $site_title.$required,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
@@ -3077,6 +3095,8 @@ class UsersWP_Forms {
 			$site_title = uwp_get_form_label( $field );
 
 			if ( $design_style ) {
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+
 				echo aui()->input( array(
 					'type'        => 'email',
 					'id'          => $field->htmlvar_name,
@@ -3086,7 +3106,7 @@ class UsersWP_Forms {
 					'value'       => $value,
 					'required'    => $field->is_required,
 					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() ? '' : $site_title,
+					'label'       => is_admin() ? '' : $site_title.$required,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
@@ -3172,6 +3192,8 @@ class UsersWP_Forms {
 			$site_title = uwp_get_form_label( $field );
 
 			if ( $design_style ) {
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+
 				echo aui()->input( array(
 					'type'        => 'password',
 					'id'          => $field->htmlvar_name,
@@ -3181,7 +3203,7 @@ class UsersWP_Forms {
 					'value'       => $value,
 					'required'    => $field->is_required,
 					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() ? '' : $site_title,
+					'label'       => is_admin() ? '' : $site_title.$required,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
@@ -3252,6 +3274,8 @@ class UsersWP_Forms {
 			$site_title = uwp_get_form_label( $field );
 
 			if ( $design_style ) {
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+
 				echo aui()->input( array(
 					'type'        => 'tel',
 					'id'          => $field->htmlvar_name,
@@ -3261,7 +3285,7 @@ class UsersWP_Forms {
 					'value'       => $value,
 					'required'    => $field->is_required,
 					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() ? '' : $site_title,
+					'label'       => is_admin() ? '' : $site_title.$required,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
@@ -3326,7 +3350,7 @@ class UsersWP_Forms {
 
 			// bootstrap
 			if ( $design_style ) {
-
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
 				echo '<input type="hidden" name="' . $field->htmlvar_name . '" id="checkbox_' . $id . '" value="0"/>';
 
 				echo aui()->input(
@@ -3336,7 +3360,7 @@ class UsersWP_Forms {
 						'type'       => "checkbox",
 						'value'      => '1',
 						'title'      => $site_title,
-						'label'      => $content,
+						'label'      => $content.$required,
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
 						'checked'    => $checked,
@@ -3407,7 +3431,7 @@ class UsersWP_Forms {
 			ob_start();
 
 			if ( $design_style ) {
-
+				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
 				echo '<input type="hidden" name="' . $field->htmlvar_name . '" id="checkbox_' . $id . '" value="0"/>';
 
 				echo aui()->input(
@@ -3417,7 +3441,7 @@ class UsersWP_Forms {
 						'type'       => "checkbox",
 						'value'      => '1',
 						'title'      => $site_title,
-						'label'      => $content,
+						'label'      => $content.$required,
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
 						'checked'    => $checked,
@@ -3574,7 +3598,7 @@ class UsersWP_Forms {
                     <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
 						<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
 						<?php if ( $field->is_required ) {
-							echo '<span>*</span>';
+							echo '<span class="text-danger">*</span>';
 						} ?>
                     </label>
 				<?php } ?>
@@ -3651,16 +3675,18 @@ class UsersWP_Forms {
 				ob_start(); // Start  buffering;
 
 				if ( $design_style ) {
+					$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+
 					echo aui()->input( array(
 						'type'        => 'password',
 						'id'          => 'confirm_password',
 						'name'        => 'confirm_password',
-						'placeholder' => $site_title,
+						'placeholder' => uwp_get_field_placeholder($field),
 						'title'       => $site_title,
 						'value'       => $value,
 						'required'    => $field->is_required,
 						'help_text'   => uwp_get_field_description( $field ),
-						'label'       => is_admin() ? '' : $site_title
+						'label'       => is_admin() ? '' : $site_title.$required
 					) );
 				} else {
 					?>
@@ -3731,16 +3757,18 @@ class UsersWP_Forms {
 				ob_start();
 
 				if ( $design_style ) {
+					$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+
 					echo aui()->input( array(
 						'type'        => 'email',
 						'id'          => $field->htmlvar_name,
 						'name'        => 'confirm_email',
-						'placeholder' => $site_title,
+						'placeholder' => uwp_get_field_placeholder( $field ),
 						'title'       => $site_title,
 						'value'       => $value,
 						'required'    => $field->is_required,
 						'help_text'   => uwp_get_field_description( $field ),
-						'label'       => is_admin() ? '' : $site_title
+						'label'       => is_admin() ? '' : $site_title.$required
 					) );
 				} else {
 					?>
@@ -3761,7 +3789,7 @@ class UsersWP_Forms {
                         <input name="confirm_email"
                                class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
                                id="uwp_account_confirm_email"
-                               placeholder="<?php echo $site_title; ?>"
+                               placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
                                value=""
                                title="<?php echo $site_title; ?>"
 							<?php echo 'required="required"'; ?>

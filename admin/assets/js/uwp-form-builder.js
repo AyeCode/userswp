@@ -128,7 +128,7 @@ jQuery(document).ready(function () {
             };
 
             jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true&update=update&manage_field_type=' + manage_field_type, data, function (theResponse) {
-                console.log('Tabs have been ordered.');
+
             });
         }
     });
@@ -182,7 +182,6 @@ function save_field(id, type) {
 
                     alert(uwp_admin_ajax.custom_field_not_special_char);
 
-
                     return false;
                 }
             }
@@ -209,7 +208,6 @@ function save_field(id, type) {
         'data': request_data,
         'success': function (result) {
 
-            //alert(result);
             if (jQuery.trim(result) == 'invalid_key') {
 
                 alert(uwp_admin_ajax.custom_field_unique_name);
@@ -235,7 +233,7 @@ function save_field(id, type) {
                     };
 
                     jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true&update=update&manage_field_type=' + manage_field_type, data, function (theResponse) {
-                        console.log('Tabs have been ordered.');
+
                     });
 
                 } else {
@@ -267,9 +265,9 @@ function delete_field(id, nonce, deleteid, type) {
         var manage_field_type = 'custom_fields';
     }
 
-    var confarmation = confirm(uwp_admin_ajax.custom_field_delete);
+    var confirmation = confirm(uwp_admin_ajax.custom_field_delete);
 
-    if (confarmation == true) {
+    if (confirmation == true) {
         jQuery.get(uwp_admin_ajax.url+'?action='+action+'&create_field=true&manage_field_type='+manage_field_type, {
                 field_id: id,
                 field_ins_upd: 'delete',
