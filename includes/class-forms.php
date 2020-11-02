@@ -1349,6 +1349,12 @@ class UsersWP_Forms {
 
 		global $uwp_notices;
 
+		if(is_uwp_account_page()){
+            $notice_type = 'account';
+        } else {
+			$notice_type = 'change';
+        }
+
 		do_action( 'uwp_before_validate', 'change' );
 
 		$result = uwp_validate_fields( $data, 'change' );
@@ -1361,7 +1367,7 @@ class UsersWP_Forms {
 					'content' => $result->get_error_message()
 				)
 			);
-			$uwp_notices[] = array( 'change' => $message );
+			$uwp_notices[] = array( $notice_type => $message );
 
 			return;
 		}
@@ -1376,7 +1382,7 @@ class UsersWP_Forms {
 					'content' => $user_data->get_error_message()
 				)
 			);
-			$uwp_notices[] = array( 'change' => $message );
+			$uwp_notices[] = array( $notice_type => $message );
 
 			return;
 		}
@@ -1400,7 +1406,7 @@ class UsersWP_Forms {
 			)
 		);
 
-		$uwp_notices[] = array( 'change' => $message );
+		$uwp_notices[] = array( $notice_type => $message );
 
 		do_action( 'uwp_after_process_change', $data );
 
@@ -3763,7 +3769,7 @@ class UsersWP_Forms {
 						'type'        => 'email',
 						'id'          => $field->htmlvar_name,
 						'name'        => 'confirm_email',
-						'placeholder' => uwp_get_field_placeholder( $field ),
+						'placeholder' => $site_title,
 						'title'       => $site_title,
 						'value'       => $value,
 						'required'    => $field->is_required,
@@ -3789,7 +3795,7 @@ class UsersWP_Forms {
                         <input name="confirm_email"
                                class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
                                id="uwp_account_confirm_email"
-                               placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+                               placeholder="<?php echo $site_title; ?>"
                                value=""
                                title="<?php echo $site_title; ?>"
 							<?php echo 'required="required"'; ?>

@@ -129,6 +129,7 @@ No questions so far, but don't hesitate to ask!
 
 = 1.2.2.9 =
 * Show asterisk on required field label and placeholder in all forms. - FIXED
+* Change password form tab in account page. - ADDED
 * AyeCode UI updated to v0.1.35 - CHANGED
 
 = 1.2.2.8 =

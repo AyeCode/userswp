@@ -575,6 +575,8 @@ function uwp_account_privacy_page_title($title, $type) {
 	    $title = __( 'E-Mail Notifications', 'userswp' );
     } elseif ($type == 'delete-account') {
 	    $title = __( 'Delete Account', 'userswp' );
+    } elseif ($type == 'change-password') {
+	    $title = __( 'Change Password', 'userswp' );
     }
 
     return $title;
