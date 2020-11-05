@@ -1836,15 +1836,19 @@ class UsersWP_Forms {
 				$value = '';
 			}//if date not set, then mark it empty
 			$value = uwp_date( $value, 'Y-m-d', $date_format );
-
-			// flatpickr attributes
-			$extra_attributes['data-alt-input']   = 'true';
-			$extra_attributes['data-alt-format']  = $date_format;
-			$extra_attributes['data-date-format'] = 'Y-m-d';
 			$site_title                           = uwp_get_form_label( $field );
 
 			// bootstrap
 			if ( $design_style ) {
+				// flatpickr attributes
+				$extra_attributes['data-alt-input']   = 'true';
+				$extra_attributes['data-alt-format']  = $date_format;
+				$extra_attributes['data-date-format'] = 'Y-m-d';
+
+				if('dob' == $field_info->htmlvar_name){
+					$extra_attributes['data-max-date'] = 'today';
+				}
+
 				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->input(
@@ -1991,7 +1995,8 @@ class UsersWP_Forms {
 						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 						'value'            => $value,
 						'help_text'        => uwp_get_field_description( $field ),
-						'extra_attributes' => $extra_attributes
+						'extra_attributes' => $extra_attributes,
+						'input_group_right' => '<div class="input-group-text px-2 bg-transparent border-0x" onclick="jQuery(this).parent().parent().find(\'input\').val(\'\');"><i class="fas fa-times uwp-search-input-label-clear text-muted c-pointer" title="' . __( 'Clear field', 'uwp-search' ) . '" ></i></div>',
 					)
 				);
 			} else {
@@ -3431,7 +3436,7 @@ class UsersWP_Forms {
 			$field->htmlvar_name = 'register_tos';
 			$id                  = wp_doing_ajax() ? $field->htmlvar_name . "_ajax" : $field->htmlvar_name;
 
-			$content = $field_desc ? $field_desc : sprintf( __( 'I accept %s %s %s.', 'userswp' ), '<a href="' . $terms_page . '" target="_blank">', $site_title, '</a>' );
+			$content = $field_desc ? $field_desc : sprintf( __( 'I accept the %s %s %s.', 'userswp' ), '<a href="' . $terms_page . '" target="_blank">', $site_title, '</a>' );
 			$checked = $value == '1' ? true : false;
 
 			ob_start();
