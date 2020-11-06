@@ -62,7 +62,6 @@ class UsersWP_Admin {
 			update_option("uwp_setup_wizard_notice",1);
 			wp_redirect(admin_url('index.php?page=uwp-setup'));
 			exit;
-
 		}
 
 		if ( ! empty( $_GET['force_sync_data'] ) ) {

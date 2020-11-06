@@ -15,6 +15,7 @@ class AUI_Component_Helper {
 	 * A component helper for generating a input name.
 	 *
 	 * @param $text
+	 * @param $multiple bool If the name is set to be multiple but no brackets found then we add some.
 	 *
 	 * @return string
 	 */
@@ -22,8 +23,8 @@ class AUI_Component_Helper {
 		$output = '';
 
 		if($text){
-			$is_multiple = strpos($text, '[]') !== false || (strpos($text, '[]') === false && $multiple ) ? '[]' : '';
-			$output = ' name="'.sanitize_html_class($text).$is_multiple.'" ';
+			$is_multiple = strpos($text, '[') === false && $multiple  ? '[]' : '';
+			$output = ' name="'.esc_attr($text).$is_multiple.'" ';
 		}
 
 		return $output;

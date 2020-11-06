@@ -127,6 +127,11 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.9 =
+* Show asterisk on required field label and placeholder in all forms. - FIXED
+* Change password form tab in account page. - ADDED
+* AyeCode UI updated to v0.1.35 - CHANGED
+
 = 1.2.2.8 =
 * HTML editor field strips HTML tags in output - FIXED
 * Delete listing in profile tab not showing message in popup - FIXED
