@@ -1753,7 +1753,7 @@ function uwp_get_activation_link($user_id){
 			'key' => $key,
 			'login' => $user_data->user_login
 		),
-		site_url()
+		site_url('/login/')
 	);
 
 	return $activation_link;
