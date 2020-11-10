@@ -1845,7 +1845,7 @@ class UsersWP_Forms {
 				$extra_attributes['data-alt-format']  = $date_format;
 				$extra_attributes['data-date-format'] = 'Y-m-d';
 
-				if('dob' == $field_info->htmlvar_name){
+				if('dob' == $field->htmlvar_name){
 					$extra_attributes['data-max-date'] = 'today';
 				}
 
@@ -3686,13 +3686,18 @@ class UsersWP_Forms {
 				ob_start(); // Start  buffering;
 
 				if ( $design_style ) {
-					$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+					$required = '';
+					$placeholder = $site_title;
+					if (isset($field->is_required) && !empty($field->is_required)) {
+						$placeholder .= ' *';
+						$required = ' <span class="text-danger">*</span>';
+					}
 
 					echo aui()->input( array(
 						'type'        => 'password',
 						'id'          => 'confirm_password',
 						'name'        => 'confirm_password',
-						'placeholder' => uwp_get_field_placeholder($field),
+						'placeholder' => $placeholder,
 						'title'       => $site_title,
 						'value'       => $value,
 						'required'    => $field->is_required,
