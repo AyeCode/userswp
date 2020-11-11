@@ -1648,7 +1648,11 @@ class UsersWP_Profile {
 
         // Time
         if ($field->field_type == 'time') {
-            $value = date(get_option('time_format'), strtotime($value));
+	        if (!empty($value)) {
+		        $value = date(get_option('time_format'), strtotime($value));
+	        } else {
+		        $value = '';
+	        }
         }
 
         // URL
