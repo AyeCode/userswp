@@ -364,8 +364,10 @@ function get_uwp_users_list() {
 		$exclude_query = 'AND '. $wpdb->users.'.ID NOT IN ('.$exclude_users_list.')';
 	}
 
-	$order_by = 'display_name';
-	$order = 'ASC';
+	if(empty($sort_by)){
+        $sort_by = uwp_get_option('users_default_order_by', 'alpha_asc');
+    }
+
 	if ($sort_by) {
 		switch ($sort_by) {
 			case "newer":
@@ -384,7 +386,6 @@ function get_uwp_users_list() {
 				$order_by = 'display_name';
 				$order = 'DESC';
 				break;
-
 		}
 	}
 

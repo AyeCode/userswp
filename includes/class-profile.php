@@ -15,13 +15,17 @@ class UsersWP_Profile {
      * @since       1.0.0
      * @package     userswp
      * @param       object      $user       The User ID.
+     * @param       string      $tag        Tag
+     * @param       string      $title_class      Title Class
+     * @param       string      $link_class       Link Class
+     * @param       bool        $link       The User ID.
      */
     public function get_profile_title($user, $tag = 'h2', $title_class = '', $link_class = '',$link = true) {
         if(!$user){return;}
         ?>
         <div class="uwp-profile-name">
             <<?php echo esc_attr($tag); ?> class="uwp-user-title <?php echo $title_class;?>" data-user="<?php echo $user->ID; ?>">
-               <?php if($link){?><a href="<?php echo apply_filters('uwp_profile_link', get_author_posts_url($user->ID), $user->ID); ?>" class="<?php echo $link_class;?>"><?php }?>
+               <?php if($link){?><a href="<?php echo uwp_build_profile_tab_url($user->ID); ?>" class="<?php echo $link_class;?>"><?php }?>
                     <?php echo apply_filters('uwp_profile_display_name', $user->display_name); ?>
 	           <?php if($link){?></a><?php }?>
 	    <?php do_action('uwp_profile_after_title', $user->ID ); ?>
