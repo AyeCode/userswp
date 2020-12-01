@@ -133,6 +133,7 @@ No questions so far, but don't hesitate to ask!
 * Show asterisk on required field label and placeholder in all forms. - FIXED
 * Change password form tab in account page. - ADDED
 * Setting to choose default user listing sorting order - ADDED
+* Delete account email [#user_name#] tag not working - FIXED
 * AyeCode UI updated to v0.1.35 - CHANGED
 
 = 1.2.2.8 =

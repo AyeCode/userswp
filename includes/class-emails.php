@@ -307,7 +307,7 @@ class UsersWP_Mails {
 		$user_id = ! empty( $email_vars['user_id'] ) ? $email_vars['user_id'] : null;
 		if ( !empty( $user_id ) && $user_id > 0 ) {
 			$user_data = get_userdata($user_id);
-			$profile_link = apply_filters('uwp_profile_link', get_author_posts_url($user_id), $user_id);
+			$profile_link = uwp_build_profile_tab_url($user_id);
 			$replace_array = array_merge(
 				$replace_array,
 				array(

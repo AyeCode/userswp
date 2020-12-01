@@ -52,6 +52,7 @@ class UsersWP_GeoDirectory_Plugin {
 		add_filter( 'geodir_dashboard_link_favorite_listing', array( $this, 'dashboard_favorite_links' ), 10, 3 );
 		add_filter( 'geodir_dashboard_link_my_listing', array( $this, 'dashboard_listing_links' ), 10, 3 );
 		add_filter( 'widget_post_author', array( $this, 'get_widget_post_author' ), 10, 3 );
+		add_filter( 'widget_favorites_by_user', array( $this, 'get_widget_favorites_by_user' ), 10, 3 );
 
 		add_filter( 'uwp_tp_posts_post_footer', array( $this, 'posts_footer' ) );
 		add_filter( 'uwp_tp_comments_item_footer', array( $this, 'reviews_footer' ), 10, 2 );
@@ -964,7 +965,7 @@ class UsersWP_GeoDirectory_Plugin {
 				);
 
 				$new_html .= '
-                        <div class="col-1 text-right">
+                        <div class="col-2 text-right">
                         <div class="btn-group dropup">
                           <a href="#"  class="dropdown h5 text-muted m-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
@@ -1957,6 +1958,18 @@ class UsersWP_GeoDirectory_Plugin {
 
         return $post_author;
     }
+
+	public function get_widget_favorites_by_user( $favorites_by_user, $instance, $id_base = '' ) {
+		if ( isset( $id_base ) && 'gd_listings' == $id_base ) {
+			if ( is_uwp_profile_page() && isset( $instance['favorites_by_user'] ) && 'current_author' == $instance['favorites_by_user'] ) {
+				$user = uwp_get_user_by_author_slug();
+				if ( $user && isset( $user->ID ) ) {
+					$favorites_by_user = $user->ID;
+				}
+			}
+		}
+		return $favorites_by_user;
+	}
 }
 
 $userswp_geodirectory = UsersWP_GeoDirectory_Plugin::get_instance();

@@ -769,7 +769,7 @@ class UsersWP_Profile {
 
     public static function get_author_link($link, $user_id){
 
-        if (1 == uwp_get_option('uwp_disable_author_link') && !is_uwp_profile_page()) {
+        if (1 == uwp_get_option('uwp_disable_author_link') && !(is_uwp_profile_page() || is_uwp_users_page())) {
 		    return $link;
 	    }
 
