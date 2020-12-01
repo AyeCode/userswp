@@ -80,7 +80,9 @@ UsersWP can be extended with several add-ons. Few examples are:
 * [Online Users](https://userswp.io/downloads/online-users/) - This addon displays the list of users who are currently online and more.
 * [Frontend Post](https://userswp.io/downloads/frontend-post/) - Lets users submit blog post from the frontend.
 * [Multisite Creator](https://userswp.io/downloads/multisite-creator/) - Lets your users to create new site for multisite on registration.
-
+* [Activity](https://userswp.io/downloads/activity/) - Show a users activity actions right on their profile.
+* [Verified Users](https://userswp.io/downloads/verified-users/) - Make verified users stand out with their own verified badge.
+* [Realtime Notifications](https://userswp.io/downloads/realtime-notifications/) - Sends notifications to users, about activity on your website.
 
 There are many others and we release new Add-ons frequently. You can see the full collection here: [UsersWP Premium Add-ons](https://userswp.io/downloads/category/addons/)
 
@@ -130,6 +132,8 @@ No questions so far, but don't hesitate to ask!
 = 1.2.2.9 =
 * Show asterisk on required field label and placeholder in all forms. - FIXED
 * Change password form tab in account page. - ADDED
+* Setting to choose default user listing sorting order - ADDED
+* Delete account email [#user_name#] tag not working - FIXED
 * AyeCode UI updated to v0.1.35 - CHANGED
 
 = 1.2.2.8 =

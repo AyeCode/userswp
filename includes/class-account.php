@@ -164,6 +164,7 @@ class UsersWP_Account {
 	        $message = apply_filters('uwp_account_delete_mail_message', $message, $user_id);
 
 	        $user_email = $user->user_email;
+	        $user_name = !empty($user->display_name) ? $user->display_name :'';
 
             // Delete user
             if ( $delete_from_network ) {
@@ -193,10 +194,10 @@ class UsersWP_Account {
             if($deleted){
 
 	            $email_vars = array();
-
-	            UsersWP_Mails::send($user_email, 'account_delete');
-
 	            $email_vars['login_details'] = $message;
+	            $email_vars['user_name'] = $user_name;
+
+	            UsersWP_Mails::send($user_email, 'account_delete', $email_vars);
 
 	            UsersWP_Mails::send(get_bloginfo('admin_email'), 'account_delete', $email_vars, true);
             }

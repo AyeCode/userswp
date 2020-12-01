@@ -447,11 +447,19 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 array(
                     'id' => 'users_default_layout',
                     'name' => __( 'Users default layout', 'userswp' ),
-                    'desc' => __( 'Choose the default layout for Users Page - Users List', 'userswp' ),
+                    'desc' => __( 'Choose the default layout for users listing page.', 'userswp' ),
                     'type'    => 'select',
                     'options' =>   $this->uwp_available_users_layout(),
                     'desc_tip' => true,
                 ),
+	            array(
+		            'id' => 'users_default_order_by',
+		            'name' => __( 'Users default order', 'userswp' ),
+		            'desc' => __( 'Choose the default users order for users listing page.', 'userswp' ),
+		            'type'    => 'select',
+		            'options' =>   $this->uwp_available_users_order(),
+		            'desc_tip' => true,
+	            ),
 	            array(
 		            'id' => 'users_no_of_items',
 		            'name' => __( 'Number of items', 'userswp' ),
@@ -709,6 +717,19 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
         $tabs_arr = apply_filters('uwp_available_users_layout', $tabs_arr);
 
         return $tabs_arr;
+    }
+
+    public function uwp_available_users_order() {
+        $order_arr = array(
+            'alpha_asc' => __( 'Display name (A-Z)', 'userswp' ),
+            'alpha_desc' => __( 'Display name (Z-A)', 'userswp' ),
+            'newer' => __( 'Newer', 'userswp' ),
+            'older' => __( 'Older', 'userswp' ),
+        );
+
+	    $order_arr = apply_filters('uwp_available_users_layout', $order_arr);
+
+        return $order_arr;
     }
 
 	/**
