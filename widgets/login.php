@@ -48,6 +48,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     'desc_tip'    => true,
                     'default'     => '',
                     'placeholder' => __('Login','userswp'),
+                    'advanced'    => true
                 ),
                 'logged_in_show'  => array(
                     'title' => __('Logged in show', 'userswp'),
@@ -60,6 +61,16 @@ class UWP_Login_Widget extends WP_Super_Duper {
                     ),
                     'default'  => '',
                     'desc_tip' => true,
+                    'advanced'    => true
+                ),
+                'redirect_to' => array(
+	                'type' => 'text',
+	                'title' => __('Redirect to:', 'userswp'),
+	                'desc' => __('Enter the url you want to redirect after login.', 'userswp'),
+	                'placeholder' => '',
+	                'default' => '',
+	                'desc_tip' => true,
+	                'advanced' => true
                 ),
                 'design_style'  => array(
                     'title' => __('Design Style', 'userswp'),
@@ -129,7 +140,8 @@ class UWP_Login_Widget extends WP_Super_Duper {
         $defaults = array(
             'form_title'      => __('Login','userswp'),
             'logged_in_show'     => '',
-            'css_class'     => 'border-0'
+            'css_class'     => 'border-0',
+            'redirect_to' => '',
         );
 
         /**

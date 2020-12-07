@@ -42,7 +42,7 @@ do_action( 'uwp_template_before', 'register' ); ?>
 
 				<form class="uwp-registration-form uwp_form" method="post" enctype="multipart/form-data">
 					<?php
-                    do_action( 'uwp_template_fields', 'register' );
+                    do_action( 'uwp_template_fields', 'register', $args );
 					echo aui()->button(array(
 						'type'       => 'submit',
 						'class'      => 'btn btn-primary btn-block text-uppercase uwp_register_submit',
