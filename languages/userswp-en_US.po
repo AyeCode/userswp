@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.9\n"
+"Project-Id-Version: UsersWP 1.2.2.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-01 16:19+0530\n"
-"PO-Revision-Date: 2020-12-01 16:19+0530\n"
+"POT-Creation-Date: 2020-12-09 19:18+0530\n"
+"PO-Revision-Date: 2020-12-09 19:18+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -499,7 +499,7 @@ msgstr ""
 #: admin/settings/class-formbuilder.php:37
 #: admin/settings/class-uwp-settings-general.php:70
 #: includes/class-pages.php:324 templates/bootstrap/register.php:8
-#: templates/register.php:3 widgets/register.php:46 widgets/register.php:93
+#: templates/register.php:3 widgets/register.php:46 widgets/register.php:102
 msgid "Register"
 msgstr ""
 
@@ -910,12 +910,12 @@ msgid "Is Public :"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1053 includes/class-profile.php:1683
-#: includes/class-templates.php:964
+#: includes/class-templates.php:975
 msgid "Yes"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1054 includes/class-profile.php:1685
-#: includes/class-templates.php:963
+#: includes/class-templates.php:974
 msgid "No"
 msgstr ""
 
@@ -1250,7 +1250,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-addons.php:25
 #: admin/settings/class-uwp-settings-addons.php:65 includes/class-addons.php:26
-#: widgets/login.php:97 widgets/login.php:110
+#: widgets/login.php:108 widgets/login.php:121
 msgid "Addons"
 msgstr ""
 
@@ -1574,7 +1574,7 @@ msgstr ""
 #: templates/bootstrap/login.php:8 templates/bootstrap/login.php:65
 #: templates/bootstrap/register.php:62 templates/bootstrap/reset.php:49
 #: templates/login.php:7 templates/login.php:20 widgets/login.php:50
-#: widgets/login.php:130
+#: widgets/login.php:141
 msgid "Login"
 msgstr ""
 
@@ -1706,11 +1706,11 @@ msgid ""
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:179
-msgid "Username Length"
+msgid "Username Minimum Length"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:180
-msgid "Username limit "
+msgid "Minimum username character limit required for registration."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:188
@@ -2252,17 +2252,17 @@ msgid "Privacy:"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:727
-#: includes/class-templates.php:996
+#: includes/class-templates.php:1007
 msgid "Anyone"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:728
-#: includes/class-templates.php:997
+#: includes/class-templates.php:1008
 msgid "Logged in"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:729
-#: includes/class-templates.php:998
+#: includes/class-templates.php:1009
 msgid "Author only"
 msgstr ""
 
@@ -3632,36 +3632,36 @@ msgstr ""
 msgid "Profile Page"
 msgstr ""
 
-#: includes/class-templates.php:943
+#: includes/class-templates.php:954
 msgid "Field"
 msgstr ""
 
-#: includes/class-templates.php:946
+#: includes/class-templates.php:957
 msgid "Is Public?"
 msgstr ""
 
-#: includes/class-templates.php:978
+#: includes/class-templates.php:989
 msgid "Tab Name"
 msgstr ""
 
-#: includes/class-templates.php:981 includes/helpers/misc.php:574
+#: includes/class-templates.php:992 includes/helpers/misc.php:574
 #: includes/helpers/tabs.php:135
 msgid "Privacy"
 msgstr ""
 
-#: includes/class-templates.php:1016
+#: includes/class-templates.php:1027
 msgid " (Default)"
 msgstr ""
 
-#: includes/class-templates.php:1029
+#: includes/class-templates.php:1040
 msgid "Hide profile from the users listing page."
 msgstr ""
 
-#: includes/class-templates.php:1044
+#: includes/class-templates.php:1055
 msgid "Make the whole profile private"
 msgstr ""
 
-#: includes/class-templates.php:1050 includes/class-user-notifications.php:69
+#: includes/class-templates.php:1061 includes/class-user-notifications.php:69
 #: templates/bootstrap/change.php:29 templates/bootstrap/forgot.php:51
 #: templates/bootstrap/reset.php:33 templates/change.php:13
 #: templates/forgot.php:13 templates/reset.php:17
@@ -4705,33 +4705,33 @@ msgid "Enter the form title (or \"0\" for no title)"
 msgstr ""
 
 #: widgets/account.php:51 widgets/change.php:51 widgets/forgot.php:51
-#: widgets/login.php:65 widgets/register.php:50 widgets/reset.php:51
+#: widgets/login.php:76 widgets/register.php:59 widgets/reset.php:51
 msgid "Design Style"
 msgstr ""
 
 #: widgets/account.php:52 widgets/change.php:52 widgets/forgot.php:52
-#: widgets/login.php:66 widgets/register.php:51 widgets/reset.php:52
+#: widgets/login.php:77 widgets/register.php:60 widgets/reset.php:52
 msgid "The design style to use."
 msgstr ""
 
 #: widgets/account.php:55 widgets/change.php:55 widgets/forgot.php:55
-#: widgets/login.php:69 widgets/register.php:54 widgets/reset.php:55
+#: widgets/login.php:80 widgets/register.php:63 widgets/reset.php:55
 msgid "default"
 msgstr ""
 
 #: widgets/account.php:56 widgets/change.php:56 widgets/forgot.php:56
-#: widgets/login.php:70 widgets/register.php:55 widgets/reset.php:56
+#: widgets/login.php:81 widgets/register.php:64 widgets/reset.php:56
 msgid "Style 1"
 msgstr ""
 
 #: widgets/account.php:64 widgets/button-group.php:44 widgets/change.php:64
-#: widgets/forgot.php:64 widgets/login.php:78 widgets/register.php:63
+#: widgets/forgot.php:64 widgets/login.php:89 widgets/register.php:72
 #: widgets/reset.php:64 widgets/user-badge.php:185 widgets/user-meta.php:68
 msgid "Extra class:"
 msgstr ""
 
 #: widgets/account.php:65 widgets/button-group.php:45 widgets/change.php:65
-#: widgets/forgot.php:65 widgets/login.php:79 widgets/register.php:64
+#: widgets/forgot.php:65 widgets/login.php:90 widgets/register.php:73
 #: widgets/reset.php:65 widgets/user-badge.php:186 widgets/user-meta.php:69
 msgid "Give the wrapper an extra class so you can style things as you want."
 msgstr ""
@@ -4774,27 +4774,35 @@ msgstr ""
 msgid "Enter the form title (or `0` for no title)"
 msgstr ""
 
-#: widgets/login.php:53
+#: widgets/login.php:54
 msgid "Logged in show"
 msgstr ""
 
-#: widgets/login.php:54
+#: widgets/login.php:55
 msgid "What to show when logged in."
 msgstr ""
 
-#: widgets/login.php:57
+#: widgets/login.php:58
 msgid "User Dashboard (default)"
 msgstr ""
 
-#: widgets/login.php:58
+#: widgets/login.php:59
 msgid "Simple username and logout link"
 msgstr ""
 
-#: widgets/login.php:59
+#: widgets/login.php:60
 msgid "Nothing"
 msgstr ""
 
-#: widgets/login.php:74 widgets/login.php:83 widgets/user-avatar.php:40
+#: widgets/login.php:68 widgets/register.php:51
+msgid "Redirect to:"
+msgstr ""
+
+#: widgets/login.php:69
+msgid "Enter the url you want to redirect after login."
+msgstr ""
+
+#: widgets/login.php:85 widgets/login.php:94 widgets/user-avatar.php:40
 #: widgets/user-badge.php:99 widgets/user-badge.php:113
 #: widgets/user-badge.php:125 widgets/user-badge.php:134
 #: widgets/user-badge.php:144 widgets/user-badge.php:159
@@ -4803,27 +4811,27 @@ msgstr ""
 msgid "Design"
 msgstr ""
 
-#: widgets/login.php:92
+#: widgets/login.php:103
 msgid "Disable GeoDirectory links from the user dashboard."
 msgstr ""
 
-#: widgets/login.php:105
+#: widgets/login.php:116
 msgid "Disable WP Invoicing links from the user dashboard."
 msgstr ""
 
-#: widgets/login.php:160
+#: widgets/login.php:172
 msgid "Select an action"
 msgstr ""
 
-#: widgets/login.php:169
+#: widgets/login.php:181
 msgid "My Profile"
 msgstr ""
 
-#: widgets/login.php:173
+#: widgets/login.php:185
 msgid "View Profile"
 msgstr ""
 
-#: widgets/login.php:180
+#: widgets/login.php:192
 msgid "Edit Profile"
 msgstr ""
 
@@ -5017,6 +5025,10 @@ msgstr ""
 
 #: widgets/register.php:41
 msgid "Form Title"
+msgstr ""
+
+#: widgets/register.php:52
+msgid "Enter the url you want to redirect after register."
 msgstr ""
 
 #: widgets/reset.php:27
