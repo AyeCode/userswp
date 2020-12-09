@@ -1,0 +1,29 @@
+.bsui{
+  // 1- Import bootstrap framework
+  @import '1-frameworks/index-rtl'; // https://github.com/PerseusTheGreat/bootstrap-4-rtl
+  @import "main";
+  @import "partials/index"; // helpers
+}
+
+// Modal can't be inside wrapper
+@import "1-frameworks/bootstrap/functions";
+@import "1-frameworks/bootstrap/variables-rtl";
+@import "1-frameworks/bootstrap/mixins-rtl";
+@import "1-frameworks/bootstrap/root";
+@import "1-frameworks/bootstrap/modal-rtl";
+@import "1-frameworks/bootstrap/tooltip";
+@import "1-frameworks/bootstrap/popover-rtl";
+
+
+// select2 can't be inside wrapper
+@import '1-frameworks/select2/core';
+
+
+// Hide the WP Admin bar when modal is open.
+body{
+  &.modal-open{
+    #wpadminbar{
+      z-index: 999;
+    }
+  }
+}

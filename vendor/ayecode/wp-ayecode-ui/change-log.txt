@@ -1,3 +1,8 @@
+= 0.1.36 =
+* Show JS error when field condition has "form" word - FIXED
+* Bootstrap Updated to 4.5.3 - CHANGED
+* RTL support added for RTL languages - ADDED
+
 = 0.1.35 =
 * Conditional fields shows JavaScript error - FIXED
 

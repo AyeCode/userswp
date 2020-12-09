@@ -290,7 +290,7 @@ final class UsersWP {
 
         add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
         add_action( 'uwp_template_fields', array($instance, 'template_fields'), 10, 1 );
-        add_action( 'uwp_template_fields', array($instance, 'template_extra_fields'), 10, 1 );
+        add_action( 'uwp_template_fields', array($instance, 'template_extra_fields'), 10, 2 );
         add_action( 'uwp_account_form_display', array($instance, 'privacy_edit_form_display'), 10, 1 );
         add_action( 'wp_logout', array($instance, 'logout_redirect'));
         add_action( 'init', array($instance, 'wp_login_redirect'));
