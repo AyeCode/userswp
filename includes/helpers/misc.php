@@ -275,10 +275,10 @@ function uwp_set_php_limits() {
  */
 function uwp_error_log($log){
     /*
-     * A filter to override the WP_DEBUG setting for function uwp_error_log().
+     * A filter to override the debugging setting for function uwp_error_log().
      */
-    $should_log = apply_filters( 'uwp_log_errors', WP_DEBUG);
-    if ( true === $should_log ) {
+    $should_log = apply_filters( 'uwp_log_errors', uwp_get_option('enable_uwp_error_log', 0));
+    if ( 1 == $should_log ) {
         if ( is_array( $log ) || is_object( $log ) ) {
             error_log( print_r( $log, true ) );
         } else {

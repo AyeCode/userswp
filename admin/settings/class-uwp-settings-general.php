@@ -588,6 +588,12 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'type' => 'checkbox',
                 ),
 
+	            array(
+		            'id'   => 'enable_uwp_error_log',
+		            'name' => __( 'Debugging', 'userswp' ),
+		            'desc' => __( 'Show debugging info in the error logs.', 'userswp' ),
+		            'type' => 'checkbox',
+	            ),
 
 	            // @todo to be move to own design section
 	            array(
