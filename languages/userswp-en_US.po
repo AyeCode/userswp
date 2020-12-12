@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.10\n"
+"Project-Id-Version: UsersWP 1.2.2.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-09 19:18+0530\n"
-"PO-Revision-Date: 2020-12-09 19:18+0530\n"
+"POT-Creation-Date: 2020-12-12 14:43+0530\n"
+"PO-Revision-Date: 2020-12-12 14:43+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Menus"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:234 includes/class-tools.php:832
+#: admin/class-admin-setup-wizard.php:234 includes/class-tools.php:834
 msgid "Dummy Users"
 msgstr ""
 
@@ -145,7 +145,7 @@ msgstr ""
 #: admin/class-admin-setup-wizard.php:408
 #: admin/settings/class-formbuilder.php:1327
 #: admin/settings/class-uwp-settings-profile-tabs.php:801
-#: includes/class-tools.php:841
+#: includes/class-tools.php:843
 msgid "Remove"
 msgstr ""
 
@@ -910,12 +910,12 @@ msgid "Is Public :"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1053 includes/class-profile.php:1683
-#: includes/class-templates.php:975
+#: includes/class-templates.php:982
 msgid "Yes"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1054 includes/class-profile.php:1685
-#: includes/class-templates.php:974
+#: includes/class-templates.php:981
 msgid "No"
 msgstr ""
 
@@ -1580,7 +1580,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:72
 #: includes/class-account.php:43 includes/class-pages.php:329
-#: includes/helpers/misc.php:580 includes/helpers/tabs.php:127
+#: includes/helpers/misc.php:523 includes/helpers/tabs.php:127
 #: templates/bootstrap/change.php:15 widgets/change.php:47
 #: widgets/change.php:95
 msgid "Change Password"
@@ -2013,156 +2013,164 @@ msgid ""
 "this using this option."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:595
+#: admin/settings/class-uwp-settings-general.php:593
+msgid "Debugging"
+msgstr ""
+
+#: admin/settings/class-uwp-settings-general.php:594
+msgid "Show debugging info in the error logs."
+msgstr ""
+
+#: admin/settings/class-uwp-settings-general.php:601
 msgid "Default Design Style"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:596
+#: admin/settings/class-uwp-settings-general.php:602
 msgid "The default design style to use."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:599
+#: admin/settings/class-uwp-settings-general.php:605
 msgid "Bootstrap"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:600
+#: admin/settings/class-uwp-settings-general.php:606
 msgid "Legacy (non-bootstrap)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:617
+#: admin/settings/class-uwp-settings-general.php:623
 msgid "Page Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:624
+#: admin/settings/class-uwp-settings-general.php:630
 msgid "User Profile Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:625
+#: admin/settings/class-uwp-settings-general.php:631
 msgid ""
 "This is the front end user's profile page. This page automatically overrides "
 "the default WordPress author page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:631
+#: admin/settings/class-uwp-settings-general.php:637
 #: includes/class-status.php:346
 msgid "Register Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:632
+#: admin/settings/class-uwp-settings-general.php:638
 msgid ""
 "This is the front end register page. This is where users create their "
 "account."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:638
+#: admin/settings/class-uwp-settings-general.php:644
 #: includes/class-status.php:350
 msgid "Login Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:639
+#: admin/settings/class-uwp-settings-general.php:645
 msgid ""
 "This is the front end login page. This is where users will login after "
 "creating their account."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:645
+#: admin/settings/class-uwp-settings-general.php:651
 #: includes/class-status.php:354
 msgid "Account Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:646
+#: admin/settings/class-uwp-settings-general.php:652
 msgid ""
 "This is the front end account page. This is where users can edit their "
 "account."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:652
+#: admin/settings/class-uwp-settings-general.php:658
 #: includes/class-status.php:358
 msgid "Change Password Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:653
+#: admin/settings/class-uwp-settings-general.php:659
 msgid "This is the front end Change Password page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:659
+#: admin/settings/class-uwp-settings-general.php:665
 #: includes/class-status.php:362
 msgid "Forgot Password Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:660
+#: admin/settings/class-uwp-settings-general.php:666
 msgid ""
 "This is the front end Forgot Password page. This is the page where users are "
 "sent to reset their password when they lose it."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:666
+#: admin/settings/class-uwp-settings-general.php:672
 #: includes/class-status.php:366
 msgid "Reset Password Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:667
+#: admin/settings/class-uwp-settings-general.php:673
 msgid ""
 "This is the front end Reset Password page. This is the page where users can "
 "reset their password when they lose it."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:673
+#: admin/settings/class-uwp-settings-general.php:679
 #: includes/class-status.php:370
 msgid "Users List Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:674
+#: admin/settings/class-uwp-settings-general.php:680
 msgid ""
 "This is the front end Users List page. This is the page where all registered "
 "users of the websites are listed."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:680
+#: admin/settings/class-uwp-settings-general.php:686
 msgid "Users List Item Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:681
+#: admin/settings/class-uwp-settings-general.php:687
 msgid ""
 "This is the page/template for displaying user item in users list page. You "
 "can change the template as you want which will apply to each user item in "
 "users list page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:710
+#: admin/settings/class-uwp-settings-general.php:716
 msgid "Grid View - 1 Column (List View)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:711
+#: admin/settings/class-uwp-settings-general.php:717
 msgid "Grid View - 2 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:712
+#: admin/settings/class-uwp-settings-general.php:718
 msgid "Grid View - 3 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:713
+#: admin/settings/class-uwp-settings-general.php:719
 msgid "Grid View - 4 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:714
+#: admin/settings/class-uwp-settings-general.php:720
 msgid "Grid View - 5 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:724
+#: admin/settings/class-uwp-settings-general.php:730
 msgid "Display name (A-Z)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:725
+#: admin/settings/class-uwp-settings-general.php:731
 msgid "Display name (Z-A)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:726
+#: admin/settings/class-uwp-settings-general.php:732
 #: templates/users-actions.php:32
 msgid "Newer"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:727
+#: admin/settings/class-uwp-settings-general.php:733
 #: templates/users-actions.php:33
 msgid "Older"
 msgstr ""
@@ -2252,17 +2260,17 @@ msgid "Privacy:"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:727
-#: includes/class-templates.php:1007
+#: includes/class-templates.php:1014
 msgid "Anyone"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:728
-#: includes/class-templates.php:1008
+#: includes/class-templates.php:1015
 msgid "Logged in"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:729
-#: includes/class-templates.php:1009
+#: includes/class-templates.php:1016
 msgid "Author only"
 msgstr ""
 
@@ -2878,7 +2886,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: includes/class-account.php:92 includes/helpers/misc.php:578
+#: includes/class-account.php:92 includes/helpers/misc.php:521
 #: includes/helpers/tabs.php:145
 msgid "Delete Account"
 msgstr ""
@@ -3444,7 +3452,7 @@ msgstr ""
 msgid "Invalid activation key or account."
 msgstr ""
 
-#: includes/class-notices.php:74 includes/helpers/misc.php:1319
+#: includes/class-notices.php:74 includes/helpers/misc.php:1262
 msgid "Something went wrong."
 msgstr ""
 
@@ -3632,36 +3640,36 @@ msgstr ""
 msgid "Profile Page"
 msgstr ""
 
-#: includes/class-templates.php:954
+#: includes/class-templates.php:961
 msgid "Field"
 msgstr ""
 
-#: includes/class-templates.php:957
+#: includes/class-templates.php:964
 msgid "Is Public?"
 msgstr ""
 
-#: includes/class-templates.php:989
+#: includes/class-templates.php:996
 msgid "Tab Name"
 msgstr ""
 
-#: includes/class-templates.php:992 includes/helpers/misc.php:574
+#: includes/class-templates.php:999 includes/helpers/misc.php:517
 #: includes/helpers/tabs.php:135
 msgid "Privacy"
 msgstr ""
 
-#: includes/class-templates.php:1027
+#: includes/class-templates.php:1034
 msgid " (Default)"
 msgstr ""
 
-#: includes/class-templates.php:1040
+#: includes/class-templates.php:1047
 msgid "Hide profile from the users listing page."
 msgstr ""
 
-#: includes/class-templates.php:1055
+#: includes/class-templates.php:1062
 msgid "Make the whole profile private"
 msgstr ""
 
-#: includes/class-templates.php:1061 includes/class-user-notifications.php:69
+#: includes/class-templates.php:1068 includes/class-user-notifications.php:69
 #: templates/bootstrap/change.php:29 templates/bootstrap/forgot.php:51
 #: templates/bootstrap/reset.php:33 templates/change.php:13
 #: templates/forgot.php:13 templates/reset.php:17
@@ -3673,69 +3681,69 @@ msgstr ""
 msgid "Processed Successfully"
 msgstr ""
 
-#: includes/class-tools.php:775
+#: includes/class-tools.php:777
 msgid "Clear version numbers"
 msgstr ""
 
-#: includes/class-tools.php:776
+#: includes/class-tools.php:778
 msgid "This will force install/upgrade functions to run."
 msgstr ""
 
-#: includes/class-tools.php:779 includes/class-tools.php:798
-#: includes/class-tools.php:817
+#: includes/class-tools.php:781 includes/class-tools.php:800
+#: includes/class-tools.php:819
 msgid "Run"
 msgstr ""
 
-#: includes/class-tools.php:794
+#: includes/class-tools.php:796
 msgid "Fix User Data"
 msgstr ""
 
-#: includes/class-tools.php:795
+#: includes/class-tools.php:797
 msgid "Fixes User Data if you were using the Beta version."
 msgstr ""
 
-#: includes/class-tools.php:813
+#: includes/class-tools.php:815
 msgid "DB text translation"
 msgstr ""
 
-#: includes/class-tools.php:814
+#: includes/class-tools.php:816
 msgid ""
 "This tool will collect any texts stored in the DB and put them in the file "
 "db-language.php so they can then be used to translate them by translations "
 "tools."
 msgstr ""
 
-#: includes/class-tools.php:833
+#: includes/class-tools.php:835
 msgid "Dummy Users for Testing. Password for all dummy users:"
 msgstr ""
 
-#: includes/class-tools.php:840
+#: includes/class-tools.php:842
 msgid "Create"
 msgstr ""
 
-#: includes/class-tools.php:997
+#: includes/class-tools.php:1003
 msgid ""
 "Version numbers cleared. Install/upgrade functions will run on next page "
 "load."
 msgstr ""
 
-#: includes/class-tools.php:1014 includes/class-tools.php:1025
+#: includes/class-tools.php:1020 includes/class-tools.php:1031
 msgid "The menu is not valid."
 msgstr ""
 
-#: includes/class-tools.php:1092
+#: includes/class-tools.php:1098
 msgid "Menu already exists."
 msgstr ""
 
-#: includes/class-tools.php:1098
+#: includes/class-tools.php:1104
 msgid "Menu items already exist, none added."
 msgstr ""
 
-#: includes/class-tools.php:1100
+#: includes/class-tools.php:1106
 msgid "Menu items added successfully."
 msgstr ""
 
-#: includes/class-tools.php:1102
+#: includes/class-tools.php:1108
 msgid "Something went wrong, you can manually add items in Appearance > Menus"
 msgstr ""
 
@@ -4094,39 +4102,39 @@ msgstr ""
 msgid "Choose %s&hellip;"
 msgstr ""
 
-#: includes/helpers/misc.php:576
+#: includes/helpers/misc.php:519
 msgid "E-Mail Notifications"
 msgstr ""
 
-#: includes/helpers/misc.php:1317
+#: includes/helpers/misc.php:1260
 msgid "more"
 msgstr ""
 
-#: includes/helpers/misc.php:1318
+#: includes/helpers/misc.php:1261
 msgid "less"
 msgstr ""
 
-#: includes/helpers/misc.php:1320
+#: includes/helpers/misc.php:1263
 msgid "Something went wrong, please retry."
 msgstr ""
 
-#: includes/helpers/misc.php:1508 widgets/output-location.php:91
+#: includes/helpers/misc.php:1451 widgets/output-location.php:91
 msgid "Users Page"
 msgstr ""
 
-#: includes/helpers/misc.php:1509 widgets/output-location.php:92
+#: includes/helpers/misc.php:1452 widgets/output-location.php:92
 msgid "More info tab"
 msgstr ""
 
-#: includes/helpers/misc.php:1510
+#: includes/helpers/misc.php:1453
 msgid "Profile side (non bootstrap)"
 msgstr ""
 
-#: includes/helpers/misc.php:1511
+#: includes/helpers/misc.php:1454
 msgid "Fieldset"
 msgstr ""
 
-#: includes/helpers/misc.php:1776
+#: includes/helpers/misc.php:1719
 #, php-format
 msgid ""
 "%s requires a newer version of UsersWP and will not run until the UsersWP "
