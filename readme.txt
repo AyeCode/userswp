@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.6
-Stable tag: 1.2.2.10
+Stable tag: 1.2.2.11
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -128,6 +128,9 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.2.11 =
+* After Login redirects to home page issue - FIXED
 
 = 1.2.2.10 =
 * Added redirect_to param for login and register shortcodes - ADDED

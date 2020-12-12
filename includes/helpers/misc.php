@@ -116,63 +116,6 @@ function uwp_string_to_options($input = '', $translated = false)
     return $return;
 }
 
-
-/**
- * Resizes the image.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @param       string      $image      Reference a local file
- * @param       int         $width      Image width
- * @param       int         $height     Image height
- * @param       float       $scale      Image scale ratio.
- *
- * @return      mixed                   Resized image.
- */
-function uwp_resizeImage($image,$width,$height,$scale) {
-    /** @noinspection PhpUnusedLocalVariableInspection */
-    list($imagewidth, $imageheight, $imageType) = getimagesize($image);
-    $imageType = image_type_to_mime_type($imageType);
-    $newImageWidth = ceil($width * $scale);
-    $newImageHeight = ceil($height * $scale);
-    $newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
-    $source = false;
-    switch($imageType) {
-        case "image/gif":
-            $source=imagecreatefromgif($image);
-            break;
-        case "image/pjpeg":
-        case "image/jpeg":
-        case "image/jpg":
-            $source=imagecreatefromjpeg($image);
-            break;
-        case "image/png":
-        case "image/x-png":
-            $source=imagecreatefrompng($image);
-            break;
-    }
-    imagecopyresampled($newImage,$source,0,0,0,0,$newImageWidth,$newImageHeight,$width,$height);
-
-    switch($imageType) {
-        case "image/gif":
-            imagegif($newImage,$image);
-            break;
-        case "image/pjpeg":
-        case "image/jpeg":
-        case "image/jpg":
-            imagejpeg($newImage,$image,90);
-            break;
-        case "image/png":
-        case "image/x-png":
-            imagepng($newImage,$image);
-            break;
-    }
-
-    chmod($image, 0777);
-    return $image;
-}
-
 /**
  * Resizes thumbnail image.
  *
@@ -275,10 +218,10 @@ function uwp_set_php_limits() {
  */
 function uwp_error_log($log){
     /*
-     * A filter to override the WP_DEBUG setting for function uwp_error_log().
+     * A filter to override the debugging setting for function uwp_error_log().
      */
-    $should_log = apply_filters( 'uwp_log_errors', WP_DEBUG);
-    if ( true === $should_log ) {
+    $should_log = apply_filters( 'uwp_log_errors', uwp_get_option('enable_uwp_error_log', 0));
+    if ( 1 == $should_log ) {
         if ( is_array( $log ) || is_object( $log ) ) {
             error_log( print_r( $log, true ) );
         } else {
@@ -634,14 +577,14 @@ function uwp_add_account_menu_links() {
             ?>
             <li class="nav-item m-0 p-0 list-unstyled mx-md-2 mx-2">
                 <a class="nav-link text-decoration-none uwp-account-<?php echo $tab_id.' '.$active; ?>" href="<?php echo esc_url( $tab_url ); ?>">
-                    <?php echo '<i class="'.$tab["icon"].' mr-1"></i>'.$tab['title']; ?>
+                    <?php echo '<i class="'.esc_attr($tab["icon"]).' mr-1 fa-fw"></i>'.sanitize_text_field($tab['title']); ?>
                 </a>
             </li>
             <?php
 
             $legacy .= '<li id="uwp-account-'.$tab_id.'">';
             $legacy .= '<a class="'.$active.'" href="'.esc_url( $tab_url ).'">';
-            $legacy .= '<i class="'.$tab["icon"].'"></i>'.$tab["title"];
+            $legacy .= '<i class="'.esc_attr($tab["icon"]).'"></i>'.sanitize_text_field($tab["title"]);
             $legacy .= '</a></li>';
         }
         ?>

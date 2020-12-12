@@ -425,7 +425,7 @@ class UsersWP_Templates {
      */
     public function template_extra_fields($form_type, $args = array()){
         if ($form_type == 'login') {
-	        $redirect_to = home_url();
+	        $redirect_to = '';
 	        if(isset($args['redirect_to']) && !empty($args['redirect_to'])) {
 		        $redirect_to = $args['redirect_to'];
 	        } else {
@@ -440,10 +440,14 @@ class UsersWP_Templates {
 			        }
 		        }
 	        }
-	        echo '<input type="hidden" name="redirect_to" value="'.esc_url($redirect_to).'"/>';
+
+	        if($redirect_to){
+		        echo '<input type="hidden" name="redirect_to" value="'.esc_url($redirect_to).'"/>';
+            }
+
             echo '<input type="hidden" name="uwp_login_nonce" value="'. wp_create_nonce( 'uwp-login-nonce' ) .'" />';
         } elseif ($form_type == 'register') {
-	        $redirect_to = home_url();
+	        $redirect_to = '';
 	        if(isset($args['redirect_to']) && !empty($args['redirect_to'])) {
 		        $redirect_to = $args['redirect_to'];
 	        } else {
@@ -459,7 +463,10 @@ class UsersWP_Templates {
 		        }
 	        }
 
-	        echo '<input type="hidden" name="redirect_to" value="'.esc_url($redirect_to).'"/>';
+	        if($redirect_to) {
+		        echo '<input type="hidden" name="redirect_to" value="' . esc_url( $redirect_to ) . '"/>';
+	        }
+
 	        $hash = substr(hash( 'SHA256', AUTH_KEY . site_url() ), 0, 25);
 	        echo '<input type="hidden" name="uwp_register_hash" value="'.$hash.'" style="display:none !important; visibility:hidden !important;" />';
 	        echo '<input type="hidden" name="uwp_register_hp" value="" style="display:none !important; visibility:hidden !important;" size="25" autocomplete="off" />';
