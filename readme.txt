@@ -129,6 +129,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.12 =
+* User role custom field for registration - ADDED
+
 = 1.2.2.11 =
 * After Login redirects to home page issue - FIXED
 

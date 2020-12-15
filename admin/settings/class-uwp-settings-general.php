@@ -167,6 +167,15 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'type' => 'single_select_page',
 		            'desc_tip' => true,
 	            ),
+	            array(
+		            'id'   => 'register_user_roles',
+		            'name' => __( 'User Roles', 'userswp' ),
+		            'desc' => __( 'Select user roles to display in the registration form if user role custom field is used. ', 'userswp' ),
+		            'desc_tip' => true,
+		            'type' => 'multiselect',
+		            'default'  => '',
+		            'options' => uwp_get_user_roles(),
+	            ),
                 array(
                     'id'   => 'wp_register_redirect',
                     'name' => __( 'Redirect Admin Default Register Page', 'userswp' ),

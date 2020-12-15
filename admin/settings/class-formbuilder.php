@@ -254,7 +254,7 @@ class UsersWP_Form_Builder {
         );
 
         // Gender
-        $custom_fields['gender'] = array( // The key value should be unique and not contain any spaces.
+        $custom_fields['gender'] = array(
             'field_type'  =>  'select',
             'class'       =>  'uwp-gender',
             'icon'        =>  'fas fa-user',
@@ -274,7 +274,7 @@ class UsersWP_Form_Builder {
             )
         );
 
-        $custom_fields['dob'] = array( // The key value should be unique and not contain any spaces.
+        $custom_fields['dob'] = array(
             'field_type'  => 'datepicker',
             'class'       => 'uwp-dob',
             'icon'        => 'fas fa-birthday-cake',
@@ -303,8 +303,28 @@ class UsersWP_Form_Builder {
             )
         );
 
+	    // User role
+	    $custom_fields['user_roles'] = array(
+		    'field_type'  =>  'select',
+		    'class'       =>  'uwp-user_roles',
+		    'icon'        =>  'fas fa-user-tag',
+		    'name'        =>  __('User Role', 'userswp'),
+		    'description' =>  __('Adds a dropdown with user roles.', 'userswp'),
+		    'defaults'    => array(
+			    'admin_title'         =>  'User Role',
+			    'site_title'          =>  'User Role',
+			    'htmlvar_name'        =>  'user_role',
+			    'is_active'           =>  1,
+			    'default_value'       =>  '',
+			    'is_required'         =>  0,
+			    'required_msg'        =>  '',
+			    'field_icon'          =>  'fas fa-user-tag',
+			    'css_class'           =>  ''
+		    )
+	    );
+
         // Mobile
-        $custom_fields['mobile'] = array( // The key value should be unique and not contain any spaces.
+        $custom_fields['mobile'] = array(
             'field_type'  =>  'phone',
             'class'       =>  'uwp-mobile',
             'icon'        =>  'fas fa-mobile-alt',
@@ -364,7 +384,7 @@ class UsersWP_Form_Builder {
 	    );
 
         // Website
-	    $custom_fields['website'] = array( // The key value should be unique and not contain any spaces.
+	    $custom_fields['website'] = array(
 		    'field_type'  =>  'url',
 		    'class'       =>  'uwp-website',
 		    'icon'        =>  'fas fa-link',
@@ -385,7 +405,7 @@ class UsersWP_Form_Builder {
 	    );
 
         // Facebook
-        $custom_fields['facebook'] = array( // The key value should be unique and not contain any spaces.
+        $custom_fields['facebook'] = array(
             'field_type'  =>  'url',
             'class'       =>  'uwp-facebook',
             'icon'        =>  'fab fa-facebook-square',
@@ -406,7 +426,7 @@ class UsersWP_Form_Builder {
         );
 
         // Twitter
-        $custom_fields['twitter'] = array( // The key value should be unique and not contain any spaces.
+        $custom_fields['twitter'] = array(
             'field_type'  =>  'url',
             'class'       =>  'uwp-twitter',
             'icon'        =>  'fab fa-twitter-square',
@@ -427,7 +447,7 @@ class UsersWP_Form_Builder {
         );
 
         // Instagram
-        $custom_fields['instagram'] = array( // The key value should be unique and not contain any spaces.
+        $custom_fields['instagram'] = array(
             'field_type'  =>  'url',
             'class'       =>  'uwp-instagram',
             'icon'        =>  'fab fa-instagram',
@@ -448,7 +468,7 @@ class UsersWP_Form_Builder {
         );
 
         // Linkedin
-        $custom_fields['linkedin'] = array( // The key value should be unique and not contain any spaces.
+        $custom_fields['linkedin'] = array(
             'field_type'  =>  'url',
             'class'       =>  'uwp-linkedin',
             'icon'        =>  'fab fa-linkedin',
@@ -470,7 +490,7 @@ class UsersWP_Form_Builder {
 
 
         // Flickr
-        $custom_fields['flickr'] = array( // The key value should be unique and not contain any spaces.
+        $custom_fields['flickr'] = array(
             'field_type'  =>  'url',
             'class'       =>  'uwp-flickr',
             'icon'        =>  'fab fa-flickr',
@@ -491,7 +511,7 @@ class UsersWP_Form_Builder {
         );
 
         // GitHub
-        $custom_fields['github'] = array( // The key value should be unique and not contain any spaces.
+        $custom_fields['github'] = array(
             'field_type'  =>  'url',
             'class'       =>  'uwp-github',
             'icon'        =>  'fab fa-github-square',
@@ -512,7 +532,7 @@ class UsersWP_Form_Builder {
         );
 
         // YouTube
-        $custom_fields['youtube'] = array( // The key value should be unique and not contain any spaces.
+        $custom_fields['youtube'] = array(
             'field_type'  =>  'url',
             'class'       =>  'uwp-youtube',
             'icon'        =>  'fab fa-youtube-square',
@@ -533,7 +553,7 @@ class UsersWP_Form_Builder {
         );
 
         // WordPress
-        $custom_fields['wordpress'] = array( // The key value should be unique and not contain any spaces.
+        $custom_fields['wordpress'] = array(
             'field_type'  =>  'url',
             'class'       =>  'uwp-wordpress',
             'icon'        =>  'fab fa-wordpress-simple',
@@ -1975,12 +1995,11 @@ class UsersWP_Form_Builder {
             <div class="uwp-input-wrap">
 
                 <?php if(isset($field_type_key) && $field_type_key == 'uwp_country' ){
-
                     // @todo here we should show a multiselect to either include or exclude countries
                     _e('A full country list will be shown','userswp');
-                    ?>
-
-                <?php }else{?>
+                } elseif ( isset($field_type_key) && $field_type_key == 'user_roles' ){
+	                _e('A user roles list will be shown based on the setting in UsersWP->General->Register->User Roles for register form','userswp');
+                } else{?>
                     <input type="text" name="option_values" id="option_values" value="<?php echo $value; ?>"/>
                 <?php }?>
 
