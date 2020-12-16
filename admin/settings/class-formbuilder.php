@@ -668,6 +668,13 @@ class UsersWP_Form_Builder {
 	            'name'  =>  __('HTML', 'userswp'),
 	            'description' =>  __('Adds a wysiwyg editor input', 'userswp')
             ),
+            'custom_html' => array(
+	            'field_type'  =>  'custom_html',
+	            'class' =>  'uwp-custom-html',
+	            'icon' =>  'fas fa-code',
+	            'name'  =>  __('Custom HTML', 'userswp'),
+	            'description' =>  __('Adds a simple custom editor input', 'userswp')
+            ),
             'file' => array(
                 'field_type'  =>  'file',
                 'class' =>  'uwp-file',
@@ -1117,6 +1124,10 @@ class UsersWP_Form_Builder {
                                         </select>
                                     <?php } else if ($field_type == 'email') { ?>
                                         <input type="email" name="default_value" placeholder="<?php _e('info@mysite.com', 'userswp'); ?>" id="default_value" value="<?php echo esc_attr($value); ?>" /><br/>
+                                    <?php }elseif( $field_type == 'custom_html' ) {
+	                                    $value = strip_tags($value,'<p><strong><b><h1><h2><h3><h4><h5><h6><u><a>');
+	                                    ?>
+                                        <input type="text" name="default_value" id="default_value" value="<?php echo esc_attr($value); ?>" /><br/>
                                     <?php } else { ?>
                                         <input type="text" name="default_value" id="default_value" value="<?php echo esc_attr($value); ?>" /><br/>
                                     <?php } ?>

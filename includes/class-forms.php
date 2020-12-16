@@ -680,7 +680,7 @@ class UsersWP_Forms {
 		$result = apply_filters( 'uwp_before_extra_fields_save', $result, 'register', $user_id );
 
 		if ( isset( $result['user_role'] ) && ! empty( $result['user_role'] ) ) {
-			$user_roles = uwp_get_option( "register_user_roles", array() );
+			$user_roles = uwp_get_option( "register_user_roles" );
 			$chosen_role = strtolower($result['user_role']);
 			if ( ! empty( $user_roles ) ) {
 				$wp_roles = wp_roles();
@@ -4072,7 +4072,14 @@ class UsersWP_Forms {
 		echo '<div class="form-group"><div class="modal-error"></div></div>';
 	}
 
-	public function form_input_select_user_roles( $html, $field, $value, $form_type ) {
+	public function form_custom_html( $html, $field, $value, $form_type ) {
+
+		$html = !empty($field->default_value) ? $field->default_value :' ';
+
+		return $html;
+	}
+
+	public function form_input_select_user_roles( $html, $field, $value ) {
 
 		if(empty($html)) {
 
