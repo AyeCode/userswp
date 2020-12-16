@@ -679,6 +679,18 @@ class UsersWP_Forms {
 
 		$result = apply_filters( 'uwp_before_extra_fields_save', $result, 'register', $user_id );
 
+		if ( isset( $result['user_role'] ) && ! empty( $result['user_role'] ) ) {
+			$user_roles = uwp_get_option( "register_user_roles", array() );
+			$chosen_role = strtolower($result['user_role']);
+			if ( ! empty( $user_roles ) ) {
+				$wp_roles = wp_roles();
+				if($wp_roles->is_role($chosen_role) && in_array($chosen_role, array_keys($user_roles))){
+					$new_user = get_userdata($user_id);
+				    $new_user->set_role( $chosen_role );
+				}
+			}
+		}
+
 		$save_result = $this->save_user_extra_fields( $user_id, $result, 'register' );
 
 		$save_result = apply_filters( 'uwp_after_extra_fields_save', $save_result, $result, 'register', $user_id );
@@ -4075,16 +4087,18 @@ class UsersWP_Forms {
 
 			$user_roles_options = array();
 
-			if ( ! empty( $user_roles ) ) {
-				foreach ( $user_roles as $user_role ) {
-
-				    if($user_role && in_array($user_role, array_keys($get_user_roles))){
-					    $option_label = isset( $get_user_roles[ $user_role ] ) ? $get_user_roles[ $user_role ] : '';
-					    $option_value = isset( $user_role ) ? $user_role : '';
-					    $user_roles_options[$option_value] = $option_label;
-                    }
-				}
+			if ( empty( $user_roles ) ) {
+                return ' ';
 			}
+
+			foreach ( $user_roles as $user_role ) {
+
+                if($user_role && in_array($user_role, array_keys($get_user_roles))){
+                    $option_label = isset( $get_user_roles[ $user_role ] ) ? $get_user_roles[ $user_role ] : '';
+                    $option_value = isset( $user_role ) ? $user_role : '';
+                    $user_roles_options[$option_value] = $option_label;
+                }
+            }
 
 			ob_start();
 
