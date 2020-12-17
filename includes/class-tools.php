@@ -766,6 +766,8 @@ class UsersWP_Tools {
     public static function output() {
         ob_start();
         ?>
+        <div class="wrap userswp">
+            <h1><?php echo get_admin_page_title(); ?></h1>
         <table class="uwp-tools-table widefat">
             <tbody>
 
@@ -868,6 +870,7 @@ class UsersWP_Tools {
 
             </tbody>
         </table>
+        </div>
 
         <script type="text/javascript">
             (function( $, window, undefined ) {

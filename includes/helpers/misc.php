@@ -1726,3 +1726,17 @@ function uwp_min_version_check( $name, $version ) {
 
 	return true;
 }
+
+function uwp_get_user_roles() {
+
+	$wp_roles = wp_roles();
+
+	$user_roles = array();
+	if(!empty($wp_roles->roles) && is_array($wp_roles->roles)) {
+		foreach ($wp_roles->roles as $key => $role ) {
+			$user_roles[$key] = !empty($role['name']) ? $role['name']: $key;
+		}
+	}
+
+	return $user_roles;
+}

@@ -32,7 +32,6 @@ class UsersWP_Validation {
             return $errors;
         }
 
-
         if (!$fields) {
             global $wpdb;
             $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
@@ -99,22 +98,6 @@ class UsersWP_Validation {
                     if ($enable_confirm_email_field != '1') {
                         if ( $field->htmlvar_name == 'confirm_email' ) {
                             continue;
-                        }
-                    }
-                }
-
-
-
-                if (!isset($data[$field->htmlvar_name]) && $field->is_required == 1) {
-                    if (is_admin()) {
-                        //do nothing since admin edit fields can be empty
-                    } else {
-                        if ($field->required_msg) {
-                            $errors->add('empty_'.$field->htmlvar_name,  sprintf(__('<strong>Error</strong>: %s %s', 'userswp'), $field->site_title, $field->required_msg));
-                            return $errors;
-                        } else {
-                            $errors->add('empty_'.$field->htmlvar_name, sprintf(__('<strong>Error</strong>: cannot be empty.', 'userswp'), $field->site_title));
-                            return $errors;
                         }
                     }
                 }
@@ -201,16 +184,15 @@ class UsersWP_Validation {
                     }
                 }
 
-
                 if ($field->is_required == 1 && $sanitized_value == '') {
-                    if (is_admin()) {
+                    if (isset($GLOBALS['current_screen']) && !is_customize_preview()) {
                         //do nothing since admin edit fields can be empty
                     } else {
                         if ($field->required_msg) {
-                            $errors->add('empty_'.$field->htmlvar_name,  __('<strong>Error</strong>: '.$field->site_title.' '.$field->required_msg, 'userswp'));
+                            $errors->add('empty_'.$field->htmlvar_name,  sprintf(__('<strong>Error</strong>: %s %s', 'userswp'), $field->site_title, $field->required_msg));
                             return $errors;
                         } else {
-                            $errors->add('empty_'.$field->htmlvar_name, __('<strong>Error</strong>: '.$field->site_title.' cannot be empty.', 'userswp'));
+                            $errors->add('empty_'.$field->htmlvar_name, sprintf(__('<strong>Error</strong>: %s cannot be empty.', 'userswp'), $field->site_title));
                             return $errors;
                         }
                     }
