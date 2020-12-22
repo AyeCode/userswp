@@ -12,13 +12,13 @@ class UsersWP_Admin_Setup_Wizard {
 
 	public function __construct() {
 
-		add_action('admin_menu', array($this, 'admin_menus'));
-		add_action('current_screen', array($this, 'setup_wizard'));
-		add_action('uwp_wizard_content_general_settings', array($this, 'content_general_settings'));
-		add_action('uwp_wizard_content_use_userswp', array($this, 'content_use_userswp'));
-		add_action('uwp_wizard_content_menus', array($this, 'content_menus'));
-		add_action('uwp_wizard_content_dummy_users', array($this, 'content_dummy_users'));
-		add_action('admin_notices', array($this, 'setup_wizard_notice'));
+		add_action( 'admin_menu', array( $this, 'admin_menus' ) );
+		add_action( 'current_screen', array( $this, 'setup_wizard' ) );
+		add_action( 'uwp_wizard_content_general_settings', array( $this, 'content_general_settings' ) );
+		add_action( 'uwp_wizard_content_use_userswp', array( $this, 'content_use_userswp' ) );
+		add_action( 'uwp_wizard_content_menus', array( $this, 'content_menus' ) );
+		add_action( 'uwp_wizard_content_dummy_users', array( $this, 'content_dummy_users' ) );
+		add_action( 'admin_notices', array( $this, 'setup_wizard_notice' ) );
 		add_action( 'wp_loaded', array( $this, 'hide_wizard_notices' ) );
 
 	}
@@ -27,13 +27,15 @@ class UsersWP_Admin_Setup_Wizard {
 
 		$show_notice = get_option( "uwp_setup_wizard_notice" );
 
-		if( isset($show_notice) && 1 == $show_notice) {
+		if ( isset( $show_notice ) && 1 == $show_notice ) {
 			?>
             <div id="message" class="updated notice-alt uwp-message">
                 <p><?php _e( '<strong>Welcome to UsersWP</strong> &#8211; You&lsquo;re almost ready to start your site. :)', 'userswp' ); ?></p>
                 <p class="submit">
-                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=uwp-setup' ) ); ?>" class="button-primary"><?php _e( 'Run the Setup Wizard', 'userswp' ); ?></a>
-                    <a class="button-secondary skip" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'uwp-hide-notice', 'install' ), 'uwp_hide_notices_nonce', '_uwp_notice_nonce' ) ); ?>"><?php _e( 'Skip setup', 'userswp' ); ?></a>
+                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=uwp-setup' ) ); ?>"
+                       class="button-primary"><?php _e( 'Run the Setup Wizard', 'userswp' ); ?></a>
+                    <a class="button-secondary skip"
+                       href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'uwp-hide-notice', 'install' ), 'uwp_hide_notices_nonce', '_uwp_notice_nonce' ) ); ?>"><?php _e( 'Skip setup', 'userswp' ); ?></a>
                 </p>
             </div>
 			<?php
@@ -53,11 +55,11 @@ class UsersWP_Admin_Setup_Wizard {
 				wp_die( __( 'Cheatin&#8217; huh?', 'userswp' ) );
 			}
 
-			delete_option('uwp_setup_wizard_notice');
+			delete_option( 'uwp_setup_wizard_notice' );
 		}
 	}
 
-	public function admin_menus(){
+	public function admin_menus() {
 		add_dashboard_page( '', '', 'manage_options', 'uwp-setup', '' );
 	}
 
@@ -67,25 +69,25 @@ class UsersWP_Admin_Setup_Wizard {
 			return;
 		}
 
-		$suffix  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		$default_steps = array(
-			'introduction'     => array(
+			'introduction' => array(
 				'name'    => __( 'Introduction', 'userswp' ),
 				'view'    => array( $this, 'setup_introduction' ),
 				'handler' => '',
 			),
-			'content'          => array(
+			'content'      => array(
 				'name'    => __( 'Content', 'userswp' ),
 				'view'    => array( $this, 'setup_content' ),
 				'handler' => array( $this, 'setup_content_save' ),
 			),
-			'recommend'        => array(
+			'recommend'    => array(
 				'name'    => __( 'Recommend', 'userswp' ),
 				'view'    => array( $this, 'setup_recommend' ),
 				'handler' => array( $this, 'setup_recommend_save' ),
 			),
-			'next_steps'       => array(
+			'next_steps'   => array(
 				'name'    => __( 'Ready!', 'userswp' ),
 				'view'    => array( $this, 'setup_ready' ),
 				'handler' => '',
@@ -93,13 +95,17 @@ class UsersWP_Admin_Setup_Wizard {
 		);
 
 		$this->steps = apply_filters( 'uwp_setup_wizard_steps', $default_steps );
-		$this->step      = isset( $_GET['step'] ) ? sanitize_key( $_GET['step'] ) : current( array_keys( $this->steps ) );
+		$this->step  = isset( $_GET['step'] ) ? sanitize_key( $_GET['step'] ) : current( array_keys( $this->steps ) );
 
-		wp_enqueue_style('wp-admin' );
+		wp_enqueue_style( 'wp-admin' );
 		$obj = WP_Font_Awesome_Settings::instance();
 		$obj->enqueue_style();
 		$obj->enqueue_scripts();
-		wp_enqueue_style( 'uwp-setup-wizard-style', USERSWP_PLUGIN_URL . 'admin/assets/css/setup-wizard' . $suffix . '.css',array( 'dashicons', 'install', 'thickbox'),'','' );
+		wp_enqueue_style( 'uwp-setup-wizard-style', USERSWP_PLUGIN_URL . 'admin/assets/css/setup-wizard' . $suffix . '.css', array(
+			'dashicons',
+			'install',
+			'thickbox'
+		), '', '' );
 
 		$required_scripts = array(
 			'jquery',
@@ -108,11 +114,11 @@ class UsersWP_Admin_Setup_Wizard {
 			'jquery-ui-progressbar'
 		);
 
-		wp_register_script( 'uwp-setup', USERSWP_PLUGIN_URL . 'admin/assets/js/setup-wizard' . $suffix . '.js', $required_scripts , USERSWP_VERSION );
+		wp_register_script( 'uwp-setup', USERSWP_PLUGIN_URL . 'admin/assets/js/setup-wizard' . $suffix . '.js', $required_scripts, USERSWP_VERSION );
 
-		wp_localize_script( 'uwp-setup', 'uwp_wizard_obj',  array(
+		wp_localize_script( 'uwp-setup', 'uwp_wizard_obj', array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' )
-		));
+		) );
 
 		if ( ! empty( $_POST['save_step'] ) && isset( $this->steps[ $this->step ]['handler'] ) ) {
 			call_user_func( $this->steps[ $this->step ]['handler'], $this );
@@ -177,7 +183,6 @@ class UsersWP_Admin_Setup_Wizard {
 	}
 
 	public function setup_wizard_footer() {
-
 		if ( 'next_steps' === $this->step ) : ?>
             <p class="uwp-return-to-dashboard-wrap">
                 <a class="uwp-return-to-dashboard" href="<?php echo esc_url( admin_url() ); ?>">
@@ -187,6 +192,21 @@ class UsersWP_Admin_Setup_Wizard {
 		<?php endif; ?>
         </body>
         </html>
+		<?php
+	}
+
+	public function setup_introduction() {
+		?>
+        <h2><?php esc_html_e( 'Thank you for choosing UsersWP!', 'userswp' ); ?></h2>
+        <p><?php _e( 'This quick setup wizard will help you configure the basic settings. It\'s completely optional and shouldn\'t take longer than two minutes.', 'userswp' ); ?></p>
+        <p><?php _e( 'No time right now? If you don\'t want to go through the wizard, you can skip and return to the WordPress dashboard. Come back anytime if you change your mind!', 'userswp' ); ?></p>
+
+        <p class="uwp-setup-actions step">
+            <a href="<?php echo esc_url( admin_url() ); ?>"
+               class="button button-large"><?php esc_html_e( 'Not right now', 'userswp' ); ?></a>
+            <a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
+               class="button-primary button button-large button-next"><?php esc_html_e( "Let's go!", 'userswp' ); ?></a>
+        </p>
 		<?php
 	}
 
@@ -208,29 +228,25 @@ class UsersWP_Admin_Setup_Wizard {
 		return add_query_arg( 'step', $keys[ $step_index + 1 ] );
 	}
 
-	public function setup_introduction() {
-		?>
-        <h2><?php esc_html_e( 'Thank you for choosing UsersWP!', 'userswp' ); ?></h2>
-        <p><?php _e('This quick setup wizard will help you configure the basic settings. It\'s completely optional and shouldn\'t take longer than two minutes.','userswp'); ?></p>
-        <p><?php _e('No time right now? If you don\'t want to go through the wizard, you can skip and return to the WordPress dashboard. Come back anytime if you change your mind!','userswp'); ?></p>
-
-        <p class="uwp-setup-actions step">
-            <a href="<?php echo esc_url( admin_url() ); ?>" class="button button-large"><?php esc_html_e( 'Not right now', 'userswp' ); ?></a>
-            <a href="<?php echo esc_url( $this->get_next_step_link() ); ?>" class="button-primary button button-large button-next"><?php esc_html_e( "Let's go!", 'userswp' ); ?></a>
-        </p>
-		<?php
-	}
-
 	public function setup_content() {
 
 		$wizard_content = array();
 
-		if(!get_option('users_can_register')) {
-			$wizard_content['general_settings'] =  __( "General Settings", "userswp" );
+		if ( is_multisite() ) {
+			$reg = get_site_option( 'registration' );
+
+			if ( $reg == 'none' ) {
+				$wizard_content['general_settings'] = __( "General Settings", "userswp" );
+			}
+
+		} else {
+			if ( ! get_option( 'users_can_register' ) ) {
+				$wizard_content['general_settings'] = __( "General Settings", "userswp" );
+			}
 		}
 
 		$wizard_content['use_userswp'] = __( "How will you use UsersWP", "userswp" );
-		$wizard_content['menus'] = __( "Menus", "userswp" );
+		$wizard_content['menus']       = __( "Menus", "userswp" );
 		$wizard_content['dummy_users'] = __( "Dummy Users", "userswp" );
 
 		$wizard_content = apply_filters( 'uwp_wizard_content', $wizard_content );
@@ -252,8 +268,10 @@ class UsersWP_Admin_Setup_Wizard {
 			}
 			?>
             <p class="uwp-setup-actions step">
-                <a href="<?php echo esc_url( $this->get_next_step_link() ); ?>" class="button button-large button-next"><?php esc_html_e( 'Skip this step', 'userswp' ); ?></a>
-                <input type="submit" class="button-primary button button-large button-next" value="<?php esc_attr_e( 'Continue', 'userswp' ); ?>" name="save_step"/>
+                <a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
+                   class="button button-large button-next"><?php esc_html_e( 'Skip this step', 'userswp' ); ?></a>
+                <input type="submit" class="button-primary button button-large button-next"
+                       value="<?php esc_attr_e( 'Continue', 'userswp' ); ?>" name="save_step"/>
 				<?php wp_nonce_field( 'uwp-setup' ); ?>
             </p>
         </form>
@@ -261,23 +279,64 @@ class UsersWP_Admin_Setup_Wizard {
 	}
 
 	public function content_general_settings() {
-		if(!get_option('users_can_register')) {
-			?>
-            <table class="form-table">
-                <tbody>
-                <tr>
-                    <td>
-                        <p class="description-tooltip danger" style="color: red;"><i class="fas fa-exclamation-circle"></i>
-                            <strong><?php _e( 'Heads Up!', 'userswp' ); ?></strong> <?php _e( ' User registration is currently not allowed.', 'userswp' ); ?>
-                        </p>
-                        <input type="checkbox" name="users_can_register" class="uwp-general-seetings" value="1">
-                        <strong><?php _e( " Anyone can register", "userswp" ); ?></strong>
-                    </td>
-                    <td></td>
-                </tr>
-                </tbody>
-            </table>
-			<?php
+
+		if ( is_multisite() ) {
+
+			$reg = get_site_option( 'registration' );
+
+			if ( $reg == 'none' ) {
+				?>
+                <table class="form-table">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <p class="description-tooltip danger" style="color: red;"><i
+                                        class="fas fa-exclamation-circle"></i>
+                                <strong><?php _e( 'Heads Up!', 'userswp' ); ?></strong> <?php _e( ' User registration is currently not allowed.', 'userswp' ); ?>
+                            </p>
+                            <label><input class="uwp-general-seetings" name="registration" type="radio"
+                                          id="registration1"
+                                          value="none"<?php checked( $reg, 'none' ); ?> /> <?php _e( 'Registration is disabled', 'userswp' ); ?>
+                            </label><br/>
+                            <label><input class="uwp-general-seetings" name="registration" type="radio"
+                                          id="registration2"
+                                          value="user"<?php checked( $reg, 'user' ); ?> /> <?php _e( 'User accounts may be registered', 'userswp' ); ?>
+                            </label><br/>
+                            <label><input class="uwp-general-seetings" name="registration" type="radio"
+                                          id="registration3"
+                                          value="blog"<?php checked( $reg, 'blog' ); ?> /> <?php _e( 'Logged in users may register new sites', 'userswp' ); ?>
+                            </label><br/>
+                            <label><input class="uwp-general-seetings" name="registration" type="radio"
+                                          id="registration4"
+                                          value="all"<?php checked( $reg, 'all' ); ?> /> <?php _e( 'Both sites and user accounts can be registered', 'userswp' ); ?>
+                            </label>
+                        </td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+				<?php
+			}
+		} else {
+			if ( ! get_option( 'users_can_register' ) ) {
+				?>
+                <table class="form-table">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <p class="description-tooltip danger" style="color: red;"><i
+                                        class="fas fa-exclamation-circle"></i>
+                                <strong><?php _e( 'Heads Up!', 'userswp' ); ?></strong> <?php _e( ' User registration is currently not allowed.', 'userswp' ); ?>
+                            </p>
+                            <input type="checkbox" name="users_can_register" class="uwp-general-seetings" value="1">
+                            <strong><?php _e( " Anyone can register", "userswp" ); ?></strong>
+                        </td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+				<?php
+			}
 		}
 	}
 
@@ -383,7 +442,9 @@ class UsersWP_Admin_Setup_Wizard {
                     <div class="notice inline notice-success notice-alt uwp-wizard-menu uwp-wizard-menu-result"></div>
                 </td>
                 <td>
-                    <input type="button" value="<?php _e( "Insert menu items", "userswp" ); ?>" class="button-primary uwp_dummy_button" onclick="uwp_wizard_setup_menu('<?php echo wp_create_nonce( "uwp-wizard-setup-menu" ); ?>'); return false;" >
+                    <input type="button" value="<?php _e( "Insert menu items", "userswp" ); ?>"
+                           class="button-primary uwp_dummy_button"
+                           onclick="uwp_wizard_setup_menu('<?php echo wp_create_nonce( "uwp-wizard-setup-menu" ); ?>'); return false;">
                 </td>
             </tr>
             </tbody>
@@ -395,28 +456,42 @@ class UsersWP_Admin_Setup_Wizard {
 	public function content_dummy_users() {
 
 		$get_dummy_user_passowrd = $this->get_dummy_user_passowrd();
-		$dummy_users = get_users( array( 'meta_key' => 'uwp_dummy_user', 'meta_value' => '1', 'fields' => array( 'ID' ) ) );
-		$total_dummy_users = !empty( $dummy_users ) ? count($dummy_users) : 0;
+		$dummy_users             = get_users( array(
+			'meta_key'   => 'uwp_dummy_user',
+			'meta_value' => '1',
+			'fields'     => array( 'ID' )
+		) );
+		$total_dummy_users       = ! empty( $dummy_users ) ? count( $dummy_users ) : 0;
 		?>
         <table class="form-table uwp-dummy-table">
             <tbody>
             <tr>
                 <td>
-                    <p><?php echo sprintf(__('Dummy Users for Testing. Password for all dummy users: <strong>%s</strong>','userswp'),$get_dummy_user_passowrd); ?></p>
+                    <p><?php echo sprintf( __( 'Dummy Users for Testing. Password for all dummy users: <strong>%s</strong>', 'userswp' ), $get_dummy_user_passowrd ); ?></p>
                 </td>
                 <td style="width: 20%">
-                    <input style="display: <?php echo ( $total_dummy_users > 0 ) ? 'block' :'none'; ?>" type="button" value="<?php _e('Remove', 'userswp');?>" class="button-primary button uwp_diagnosis_button uwp_dummy_users_button uwp_remove_dummy_users_button" onclick="uwp_wizard_setup_dummy_users('<?php echo wp_create_nonce( "uwp_process_diagnosis" ); ?>','remove_dummy_users'); return false;"/>
-                    <input style="display: <?php echo ( $total_dummy_users > 0 ) ? 'none' :'block'; ?>"type="button" value="<?php _e( "Create Users", "userswp" ); ?>" class="button-primary button uwp_diagnosis_button uwp_dummy_users_button uwp_add_dummy_users_button" onclick="uwp_wizard_setup_dummy_users('<?php echo wp_create_nonce( "uwp_process_diagnosis" ); ?>','add_dummy_users'); return false;" >
+                    <input style="display: <?php echo ( $total_dummy_users > 0 ) ? 'block' : 'none'; ?>" type="button"
+                           value="<?php _e( 'Remove', 'userswp' ); ?>"
+                           class="button-primary button uwp_diagnosis_button uwp_dummy_users_button uwp_remove_dummy_users_button"
+                           onclick="uwp_wizard_setup_dummy_users('<?php echo wp_create_nonce( "uwp_process_diagnosis" ); ?>','remove_dummy_users'); return false;"/>
+                    <input style="display: <?php echo ( $total_dummy_users > 0 ) ? 'none' : 'block'; ?>" type="button"
+                           value="<?php _e( "Create Users", "userswp" ); ?>"
+                           class="button-primary button uwp_diagnosis_button uwp_dummy_users_button uwp_add_dummy_users_button"
+                           onclick="uwp_wizard_setup_dummy_users('<?php echo wp_create_nonce( "uwp_process_diagnosis" ); ?>','add_dummy_users'); return false;">
                 </td>
             </tr>
             <tr>
                 <td colspan="2" class="has-pbar">
                     <div id="uwp_diagnose_pb_add_dummy_users" class="uwp-pb-wrapper">
-                        <div class="progressBar" style="display: none;"><div></div></div>
+                        <div class="progressBar" style="display: none;">
+                            <div></div>
+                        </div>
                     </div>
                     <div id="uwp_diagnose_add_dummy_users"></div>
                     <div id="uwp_diagnose_pb_remove_dummy_users" class="uwp-pb-wrapper">
-                        <div class="progressBar" style="display: none;"><div></div></div>
+                        <div class="progressBar" style="display: none;">
+                            <div></div>
+                        </div>
                     </div>
                     <div id="uwp_diagnose_remove_dummy_users"></div>
                 </td>
@@ -426,14 +501,14 @@ class UsersWP_Admin_Setup_Wizard {
 		<?php
 	}
 
-	public function get_dummy_user_passowrd(){
-		return substr(hash( 'SHA256', AUTH_KEY . site_url() ), 0, 15);
+	public function get_dummy_user_passowrd() {
+		return substr( hash( 'SHA256', AUTH_KEY . site_url() ), 0, 15 );
 	}
 
 	public function setup_content_save() {
 		check_admin_referer( 'uwp-setup' );
 
-		if( !empty( $_REQUEST['step'] ) && 'content' === $_REQUEST['step'] ) {
+		if ( ! empty( $_REQUEST['step'] ) && 'content' === $_REQUEST['step'] ) {
 			$this->save_content_step_data();
 		}
 
@@ -443,31 +518,37 @@ class UsersWP_Admin_Setup_Wizard {
 
 	public function save_content_step_data() {
 
-		$login_register_page = !empty( $_POST['login_register_page'] ) ? $_POST['login_register_page'] : '';
-		$user_profiles_page = !empty( $_POST['user_profiles_page'] ) ? $_POST['user_profiles_page'] : '';
-		$member_directory_page = !empty( $_POST['member_directory_page'] ) ? $_POST['member_directory_page'] : '';
+		$login_register_page   = ! empty( $_POST['login_register_page'] ) ? $_POST['login_register_page'] : '';
+		$user_profiles_page    = ! empty( $_POST['user_profiles_page'] ) ? $_POST['user_profiles_page'] : '';
+		$member_directory_page = ! empty( $_POST['member_directory_page'] ) ? $_POST['member_directory_page'] : '';
 
-		if(isset($_POST['users_can_register']) && 1 == absint($_POST['users_can_register'])) {
-			update_option('users_can_register',1);
+		if ( is_multisite() ) {
+			if ( isset( $_POST['registration'] ) && ! empty( $_POST['registration'] ) ) {
+				update_site_option( 'registration', $_POST['registration'] );
+			}
+		} else {
+			if ( isset( $_POST['users_can_register'] ) && 1 == absint( $_POST['users_can_register'] ) ) {
+				update_option( 'users_can_register', 1 );
+			}
 		}
 
-		$login_page = uwp_get_page_id('login_page');
-		$register_page = uwp_get_page_id('register_page');
-		$change_page = uwp_get_page_id('change_page');
-		$forgot_page = uwp_get_page_id('forgot_page');
-		$reset_page = uwp_get_page_id('reset_page');
-		$profile_page = uwp_get_page_id('profile_page');
-		$account_page = uwp_get_page_id('account_page');
-		$users_page = uwp_get_page_id('users_page');
-		$user_list_item_page = uwp_get_page_id('user_list_item_page');
+		$login_page          = uwp_get_page_id( 'login_page' );
+		$register_page       = uwp_get_page_id( 'register_page' );
+		$change_page         = uwp_get_page_id( 'change_page' );
+		$forgot_page         = uwp_get_page_id( 'forgot_page' );
+		$reset_page          = uwp_get_page_id( 'reset_page' );
+		$profile_page        = uwp_get_page_id( 'profile_page' );
+		$account_page        = uwp_get_page_id( 'account_page' );
+		$users_page          = uwp_get_page_id( 'users_page' );
+		$user_list_item_page = uwp_get_page_id( 'user_list_item_page' );
 
-		$login_pages = array($login_page,$register_page,$change_page,$forgot_page,$reset_page);
+		$login_pages = array( $login_page, $register_page, $change_page, $forgot_page, $reset_page );
 
-		if( !empty($login_pages) && count($login_pages) > 0 ) {
+		if ( ! empty( $login_pages ) && count( $login_pages ) > 0 ) {
 			$login_page_status = 'draft';
 			foreach ( $login_pages as $login_page_id ) {
 
-				if(!empty($login_register_page)) {
+				if ( ! empty( $login_register_page ) ) {
 					$login_page_status = 'publish';
 				}
 
@@ -479,13 +560,13 @@ class UsersWP_Admin_Setup_Wizard {
 			}
 		}
 
-		$profile_pages = array($profile_page,$account_page);
+		$profile_pages = array( $profile_page, $account_page );
 
-		if( !empty($profile_pages) && count($profile_pages) > 0 ) {
+		if ( ! empty( $profile_pages ) && count( $profile_pages ) > 0 ) {
 			$profile_page_status = 'draft';
 			foreach ( $profile_pages as $profile_page_id ) {
 
-				if(!empty($user_profiles_page)) {
+				if ( ! empty( $user_profiles_page ) ) {
 					$profile_page_status = 'publish';
 				}
 
@@ -497,13 +578,13 @@ class UsersWP_Admin_Setup_Wizard {
 			}
 		}
 
-		$users_pages = array($users_page,$user_list_item_page);
+		$users_pages = array( $users_page, $user_list_item_page );
 
-		if( !empty($users_pages) && count($users_pages) > 0 ) {
+		if ( ! empty( $users_pages ) && count( $users_pages ) > 0 ) {
 			$user_page_status = 'draft';
 			foreach ( $users_pages as $user_page_id ) {
 
-				if(!empty($member_directory_page)) {
+				if ( ! empty( $member_directory_page ) ) {
 					$user_page_status = 'publish';
 				}
 
@@ -531,7 +612,7 @@ class UsersWP_Admin_Setup_Wizard {
 				if ( ! empty( $recommend_wp_plugins ) ) {
 					echo "<ul>";
 
-					$installed_text = '<i class="fas fa-check-circle" aria-hidden="true"></i> '. __( 'Installed', 'userswp' );
+					$installed_text  = '<i class="fas fa-check-circle" aria-hidden="true"></i> ' . __( 'Installed', 'userswp' );
 					$installing_text = '<i class="fas fa-sync fa-spin" aria-hidden="true"></i> ' . __( 'Installing', 'userswp' );
 
 					echo "<input type='hidden' id='uwp-installing-text' value='$installing_text' >";
@@ -557,7 +638,7 @@ class UsersWP_Admin_Setup_Wizard {
 						echo "<li class='" . $plugin['slug'] . "'>";
 						echo "<input type='checkbox' id='" . $plugin['slug'] . "' $checked $disabled $checkbox_class />";
 						echo $plugin['name'] . " " . $uwp_html_tip;
-						echo " | <a href='" . admin_url( "plugin-install.php?uwp_wizard_recommend=true&tab=plugin-information&plugin=" . $plugin['slug'] . '&TB_iframe=true&width=772&height=407' ) . "' class='thickbox'>".__('More info', 'userswp')."</a>";
+						echo " | <a href='" . admin_url( "plugin-install.php?uwp_wizard_recommend=true&tab=plugin-information&plugin=" . $plugin['slug'] . '&TB_iframe=true&width=772&height=407' ) . "' class='thickbox'>" . __( 'More info', 'userswp' ) . "</a>";
 						if ( $plugin_status == 'install' && $url ) {
 							echo " | <span class='uwp-plugin-status' >( " . __( 'Tick to install', 'userswp' ) . " )</span>";
 						} else {
@@ -575,34 +656,38 @@ class UsersWP_Admin_Setup_Wizard {
             </div>
             <p class="uwp-setup-actions step">
 				<?php wp_nonce_field( 'uwp-setup' ); ?>
-                <a href="<?php echo esc_url( $this->get_next_step_link() ); ?>" class="button button-large button-next"><?php esc_html_e( 'Skip this step', 'userswp' ); ?></a>
-                <input type="submit" class="button-primary button button-large button-next uwp-continue-recommend" value="<?php esc_attr_e( 'Continue', 'userswp' ); ?>" name="save_step"/>
-                <input type="submit" class="button-primary button button-large button-next uwp-install-recommend" value="<?php esc_attr_e( 'Install', 'userswp' ); ?>" name="install_recommend" onclick="uwp_wizard_install_plugins('<?php echo wp_create_nonce( 'updates' ); ?>');return false;"/>
+                <a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
+                   class="button button-large button-next"><?php esc_html_e( 'Skip this step', 'userswp' ); ?></a>
+                <input type="submit" class="button-primary button button-large button-next uwp-continue-recommend"
+                       value="<?php esc_attr_e( 'Continue', 'userswp' ); ?>" name="save_step"/>
+                <input type="submit" class="button-primary button button-large button-next uwp-install-recommend"
+                       value="<?php esc_attr_e( 'Install', 'userswp' ); ?>" name="install_recommend"
+                       onclick="uwp_wizard_install_plugins('<?php echo wp_create_nonce( 'updates' ); ?>');return false;"/>
             </p>
         </form>
 		<?php
 	}
 
-	public static function get_recommend_wp_plugins(){
+	public static function get_recommend_wp_plugins() {
 
 		$plugins = array(
-			'ayecode-connect' => array(
-				'url'   => 'https://wordpress.org/plugins/ayecode-connect/',
-				'slug'   => 'ayecode-connect',
-				'name'   => 'AyeCode Connect',
-				'desc'   => __( 'Allows you to install any purchased AyeCode Ltd product add-ons without a zip file. It also installs and activates licences automatically, so there is no need to copy/paste licenses.', 'userswp' ),
+			'ayecode-connect'      => array(
+				'url'  => 'https://wordpress.org/plugins/ayecode-connect/',
+				'slug' => 'ayecode-connect',
+				'name' => 'AyeCode Connect',
+				'desc' => __( 'Allows you to install any purchased AyeCode Ltd product add-ons without a zip file. It also installs and activates licences automatically, so there is no need to copy/paste licenses.', 'userswp' ),
 			),
 			'userswp-social-login' => array(
-				'url'   => 'https://wordpress.org/plugins/userswp-social-login/',
-				'slug'   => 'userswp-social-login',
-				'name'   => __('UsersWP – Social Login', 'userswp'),
-				'desc'   => __('This plugin lets your user to register and login with popular sites like Facebook, Google, Twitter, LinkedIn, Instagram, Yahoo, WordPress, vkontakte etc.','userswp'),
+				'url'  => 'https://wordpress.org/plugins/userswp-social-login/',
+				'slug' => 'userswp-social-login',
+				'name' => __( 'UsersWP – Social Login', 'userswp' ),
+				'desc' => __( 'This plugin lets your user to register and login with popular sites like Facebook, Google, Twitter, LinkedIn, Instagram, Yahoo, WordPress, vkontakte etc.', 'userswp' ),
 			),
-			'userswp-recaptcha' => array(
-				'url'   => 'https://wordpress.org/plugins/userswp-recaptcha/',
-				'slug'   => 'userswp-recaptcha',
-				'name'   => __('UsersWP – ReCaptcha', 'userswp'),
-				'desc'   => __('This plugin allows you to implement a super security captcha into forms like registration, login forms etc.','userswp'),
+			'userswp-recaptcha'    => array(
+				'url'  => 'https://wordpress.org/plugins/userswp-recaptcha/',
+				'slug' => 'userswp-recaptcha',
+				'name' => __( 'UsersWP – ReCaptcha', 'userswp' ),
+				'desc' => __( 'This plugin allows you to implement a super security captcha into forms like registration, login forms etc.', 'userswp' ),
 			),
 		);
 
@@ -615,24 +700,27 @@ class UsersWP_Admin_Setup_Wizard {
 		exit;
 	}
 
-	public function setup_ready(){
+	public function setup_ready() {
 		$this->setup_ready_actions();
 		?>
         <h2><?php esc_html_e( 'Awesome, you are ready to go!', 'userswp' ); ?></h2>
         <div class="uwp-message">
-            <p><?php _e('Thank you for using UsersWP :)','userswp'); ?></p>
+            <p><?php _e( 'Thank you for using UsersWP :)', 'userswp' ); ?></p>
         </div>
         <div class="uwp-setup-next-steps-last">
             <h2><?php _e( 'Learn more', 'userswp' ); ?></h2>
             <ul>
                 <li class="uwp-getting-started">
-                    <a href="https://userswp.io/docs/?utm_source=setupwizard&utm_medium=product&utm_content=getting-started&utm_campaign=userswpplugin" target="_blank"><?php esc_html_e( 'Getting started guide', 'userswp' ); ?></a>
+                    <a href="https://userswp.io/docs/?utm_source=setupwizard&utm_medium=product&utm_content=getting-started&utm_campaign=userswpplugin"
+                       target="_blank"><?php esc_html_e( 'Getting started guide', 'userswp' ); ?></a>
                 </li>
                 <li class="uwp-newsletter">
-                    <a href="https://userswp.io/newsletter-signup/?utm_source=setupwizard&utm_medium=product&utm_content=newsletter&utm_campaign=userswpplugin" target="_blank"><?php esc_html_e( 'Get Userswp advice in your inbox', 'userswp' ); ?></a>
+                    <a href="https://userswp.io/newsletter-signup/?utm_source=setupwizard&utm_medium=product&utm_content=newsletter&utm_campaign=userswpplugin"
+                       target="_blank"><?php esc_html_e( 'Get Userswp advice in your inbox', 'userswp' ); ?></a>
                 </li>
                 <li class="uwp-get-help">
-                    <a href="https://userswp.io/support/?utm_source=setupwizard&utm_medium=product&utm_content=docs&utm_campaign=userswpplugin" target="_blank"><?php esc_html_e( 'Have questions? Get help.', 'userswp' ); ?></a>
+                    <a href="https://userswp.io/support/?utm_source=setupwizard&utm_medium=product&utm_content=docs&utm_campaign=userswpplugin"
+                       target="_blank"><?php esc_html_e( 'Have questions? Get help.', 'userswp' ); ?></a>
                 </li>
             </ul>
         </div>
@@ -640,7 +728,7 @@ class UsersWP_Admin_Setup_Wizard {
 	}
 
 	private function setup_ready_actions() {
-		delete_option('uwp_setup_wizard_notice');
+		delete_option( 'uwp_setup_wizard_notice' );
 	}
 
 }
