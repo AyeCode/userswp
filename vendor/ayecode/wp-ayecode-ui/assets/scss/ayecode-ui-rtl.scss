@@ -1,0 +1,16 @@
+// 1- Import bootstrap framework
+@import '1-frameworks/index-rtl'; //https://github.com/PerseusTheGreat/bootstrap-4-rtl
+@import "main";
+@import "partials/index"; // helpers
+
+// select2 can't be inside wrapper
+@import '1-frameworks/select2/core';
+
+// Hide the WP Admin bar when modal is open.
+body{
+  &.modal-open{
+    #wpadminbar{
+      z-index: 999;
+    }
+  }
+}

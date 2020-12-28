@@ -195,7 +195,9 @@ final class UsersWP {
 	    add_filter('uwp_form_input_html_phone', array($instance, 'form_input_phone'), 10, 4);
 	    add_filter('uwp_form_input_email_email_after', array($instance, 'register_confirm_email_field'), 10, 4);
         add_filter('uwp_form_input_password_password_after', array($instance, 'register_confirm_password_field'), 10, 4);
-        
+	    add_filter('uwp_form_input_html_custom_html', array($instance, 'form_custom_html'), 10, 4);
+	    add_filter('uwp_form_input_html_select_user_roles', array($instance, 'form_input_select_user_roles'), 10, 3);
+
         // Emails
 	    add_filter('uwp_send_mail_form_fields', array($instance, 'init_mail_form_fields'), 10, 3);
     }
@@ -290,7 +292,7 @@ final class UsersWP {
 
         add_action( 'template_redirect', array($instance, 'change_default_password_redirect') );
         add_action( 'uwp_template_fields', array($instance, 'template_fields'), 10, 1 );
-        add_action( 'uwp_template_fields', array($instance, 'template_extra_fields'), 10, 1 );
+        add_action( 'uwp_template_fields', array($instance, 'template_extra_fields'), 10, 2 );
         add_action( 'uwp_account_form_display', array($instance, 'privacy_edit_form_display'), 10, 1 );
         add_action( 'wp_logout', array($instance, 'logout_redirect'));
         add_action( 'init', array($instance, 'wp_login_redirect'));

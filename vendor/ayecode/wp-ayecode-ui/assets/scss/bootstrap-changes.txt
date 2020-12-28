@@ -7,3 +7,15 @@ FROM
   @at-root a#{&} {
 TO:
   @at-root #{selector-unify(&, "a")} {
+
+
+/*
+Fix compile
+*/
+File _root.scss 5, 9
+FROM
+  --#{$color}: #{$value};
+TO:
+  #{--#{$color}}: #{$value};
+
+

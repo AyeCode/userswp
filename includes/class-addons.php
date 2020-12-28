@@ -275,6 +275,4 @@ class UsersWP_Admin_Addons extends Ayecode_Addons {
 
 		return $plugins;
 	}
-
-
 }

@@ -9,8 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $current_tab = ! empty( $_REQUEST['tab'] ) ? sanitize_title( $_REQUEST['tab'] ) : 'status';
 $tabs        = array(
-	'status' => __( 'System status', 'userswp' ),
-	'tools'  => __( 'Tools', 'userswp' ),
+	'status' => __( 'System Status', 'userswp' ),
 );
 $tabs        = apply_filters( 'uwp_admin_status_tabs', $tabs );
 ?>
@@ -29,9 +28,6 @@ $tabs        = apply_filters( 'uwp_admin_status_tabs', $tabs );
 	<h1 class="screen-reader-text"><?php echo esc_html( $tabs[ $current_tab ] ); ?></h1>
 	<?php
 		switch ( $current_tab ) {
-			case "tools" :
-				UsersWP_Tools::output();
-			break;
 			default :
 				if ( array_key_exists( $current_tab, $tabs ) && has_action( 'uwp_admin_status_content_' . $current_tab ) ) {
 					do_action( 'uwp_admin_status_content_' . $current_tab );

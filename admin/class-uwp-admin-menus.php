@@ -24,6 +24,7 @@ class UsersWP_Admin_Menus {
     public function __construct() {
         // Add menus
         add_action( 'admin_menu', array( $this, 'admin_menu' ), 9 );
+	    add_action( 'admin_menu', array( $this, 'tools_menu' ), 80 );
         add_action( 'admin_menu', array( $this, 'status_menu' ), 90 );
         add_action( 'admin_menu', array( $this, 'addons_menu' ), 99 );
     }
@@ -100,6 +101,20 @@ class UsersWP_Admin_Menus {
     /**
      * Add menu item.
      */
+    public function tools_menu() {
+        add_submenu_page(
+            "userswp",
+            __('UsersWP Tools', 'userswp'),
+            __('Tools', 'userswp'),
+            'manage_options',
+            'uwp_tools',
+            array( $this, 'tools_page' )
+        );
+    }
+
+    /**
+     * Add menu item.
+     */
     public function status_menu() {
         add_submenu_page(
             "userswp",
@@ -121,13 +136,20 @@ class UsersWP_Admin_Menus {
 
         add_submenu_page(
             "userswp",
-            __( 'UsersWP extensions', 'userswp' ),
+            __( 'UsersWP Extensions', 'userswp' ),
             __( 'Extensions', 'userswp' ),
             'manage_options',
             'uwp-addons',
             array( $this, 'addons_page' )
         );
     }
+
+	/**
+	 * Init the status page.
+	 */
+	public function tools_page() {
+		UsersWP_Tools::output();
+	}
 
     /**
      * Init the status page.

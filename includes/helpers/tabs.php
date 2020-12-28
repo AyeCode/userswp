@@ -123,6 +123,10 @@ function uwp_account_get_available_tabs() {
             'title' => __( 'Edit Account', 'userswp' ),
             'icon' => 'fas fa-user',
         ),
+        'change-password' => array(
+	        'title' => __( 'Change Password', 'userswp' ),
+	        'icon' => 'fas fa-asterisk',
+        ),
         'notifications' => array(
 	        'title' => __( 'Notifications', 'userswp' ),
 	        'icon' => 'fas fa-bell',

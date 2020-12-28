@@ -46,6 +46,15 @@ class UWP_Register_Widget extends WP_Super_Duper {
                     'placeholder' => __('Register','userswp'),
                     'advanced'    => true
                 ),
+                'redirect_to' => array(
+	                'type' => 'text',
+	                'title' => __('Redirect to:', 'userswp'),
+	                'desc' => __('Enter the url you want to redirect after register.', 'userswp'),
+	                'placeholder' => '',
+	                'default' => '',
+	                'desc_tip' => true,
+	                'advanced' => true
+                ),
 	            'design_style'  => array(
 		            'title' => __('Design Style', 'userswp'),
 		            'desc' => __('The design style to use.', 'userswp'),
@@ -91,7 +100,8 @@ class UWP_Register_Widget extends WP_Super_Duper {
 
         $defaults = array(
             'form_title'      => __('Register','userswp'),
-            'css_class'       => 'border-0'
+            'css_class'       => 'border-0',
+            'redirect_to'     => '',
         );
 
         /**

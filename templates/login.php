@@ -9,7 +9,7 @@
                 ?></h2>
             <?php do_action('uwp_template_display_notices', 'login'); ?>
             <form class="uwp-login-form uwp_form" method="post">
-                <?php do_action('uwp_template_fields', 'login'); ?>
+                <?php do_action('uwp_template_fields', 'login', $args); ?>
                 <div class="uwp-remember-me">
                     <label style="display: inline-block;" for="remember_me<?php if(wp_doing_ajax()){echo "_ajax";}?>">
                         <input name="remember_me" id="remember_me<?php if(wp_doing_ajax()){echo "_ajax";}?>" value="forever" type="checkbox">

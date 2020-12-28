@@ -1,3 +1,16 @@
+= 0.1.36 =
+* Show JS error when field condition has "form" word - FIXED
+* Bootstrap Updated to 4.5.3 - CHANGED
+* RTL support added for RTL languages - ADDED
+
+= 0.1.35 =
+* Conditional fields shows JavaScript error - FIXED
+
+= 0.1.34 =
+* Select input names with [multiples] being sanitized too much - FIXED
+* Map source file comments removed from CSS files - CHANGED
+* Not possible to use 0 as a value or placeholder - FIXED
+
 = 0.1.33 =
 * Select2 not being added if other JS options selected - FIXED
 * Inputs now have wrap_class argument to add classes to the wrapper - ADDED

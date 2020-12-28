@@ -1,6 +1,9 @@
 // buttons
 .hover-content{
   display: none;
+  &.fas{
+    display: none;
+  }
 }
 
 .btn,.badge,.hover-swap{

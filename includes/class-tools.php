@@ -766,10 +766,14 @@ class UsersWP_Tools {
     public static function output() {
         ob_start();
         ?>
+        <div class="wrap userswp">
+            <h1><?php echo get_admin_page_title(); ?></h1>
         <table class="uwp-tools-table widefat">
             <tbody>
 
-            <?php if (defined('USERSWP_VERSION')) { ?>
+            <?php if (defined('USERSWP_VERSION')) {
+	                do_action('uwp_tools_output_start');
+                ?>
                 <tr>
                     <th>
                         <strong class="tool-name"><?php _e('Clear version numbers', 'userswp');?></strong>
@@ -860,10 +864,13 @@ class UsersWP_Tools {
                     </td>
                 </tr>
 
-            <?php } ?>
+            <?php
+	            do_action('uwp_tools_output_end');
+            } ?>
 
             </tbody>
         </table>
+        </div>
 
         <script type="text/javascript">
             (function( $, window, undefined ) {
@@ -982,6 +989,8 @@ class UsersWP_Tools {
             case 'remove_dummy_users':
                 $this->uwp_tools_process_dummy_users($step, 'remove');
                 break;
+            default :
+                do_action('uwp_process_diagnosis', $type, $step);
         }
     }
 

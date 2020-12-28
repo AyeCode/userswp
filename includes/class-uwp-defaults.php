@@ -289,7 +289,7 @@ A user has been registered recently on your website.
 	 */
 	public static function author_box_content_bootstrap() {
 		return apply_filters( 'uwp_author_box_content_bootstrap',
-			'<div class="media p-3 bg-light">
+			'<div class="d-block text-center text-md-left d-md-flex p-3 bg-light">
   <a href="[#author_link#]"><img src="[#author_image_url#]" class="rounded-circle shadow border border-white border-width-4 mr-3" alt="[#author_name#]"></a>
   <div class="media-body">
     <h5 class="mt-0">Author: <a href="[#author_link#]">[#author_name#]</a></h5>

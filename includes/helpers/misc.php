@@ -116,63 +116,6 @@ function uwp_string_to_options($input = '', $translated = false)
     return $return;
 }
 
-
-/**
- * Resizes the image.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @param       string      $image      Reference a local file
- * @param       int         $width      Image width
- * @param       int         $height     Image height
- * @param       float       $scale      Image scale ratio.
- *
- * @return      mixed                   Resized image.
- */
-function uwp_resizeImage($image,$width,$height,$scale) {
-    /** @noinspection PhpUnusedLocalVariableInspection */
-    list($imagewidth, $imageheight, $imageType) = getimagesize($image);
-    $imageType = image_type_to_mime_type($imageType);
-    $newImageWidth = ceil($width * $scale);
-    $newImageHeight = ceil($height * $scale);
-    $newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
-    $source = false;
-    switch($imageType) {
-        case "image/gif":
-            $source=imagecreatefromgif($image);
-            break;
-        case "image/pjpeg":
-        case "image/jpeg":
-        case "image/jpg":
-            $source=imagecreatefromjpeg($image);
-            break;
-        case "image/png":
-        case "image/x-png":
-            $source=imagecreatefrompng($image);
-            break;
-    }
-    imagecopyresampled($newImage,$source,0,0,0,0,$newImageWidth,$newImageHeight,$width,$height);
-
-    switch($imageType) {
-        case "image/gif":
-            imagegif($newImage,$image);
-            break;
-        case "image/pjpeg":
-        case "image/jpeg":
-        case "image/jpg":
-            imagejpeg($newImage,$image,90);
-            break;
-        case "image/png":
-        case "image/x-png":
-            imagepng($newImage,$image);
-            break;
-    }
-
-    chmod($image, 0777);
-    return $image;
-}
-
 /**
  * Resizes thumbnail image.
  *
@@ -275,10 +218,10 @@ function uwp_set_php_limits() {
  */
 function uwp_error_log($log){
     /*
-     * A filter to override the WP_DEBUG setting for function uwp_error_log().
+     * A filter to override the debugging setting for function uwp_error_log().
      */
-    $should_log = apply_filters( 'uwp_log_errors', WP_DEBUG);
-    if ( true === $should_log ) {
+    $should_log = apply_filters( 'uwp_log_errors', uwp_get_option('enable_uwp_error_log', 0));
+    if ( 1 == $should_log ) {
         if ( is_array( $log ) || is_object( $log ) ) {
             error_log( print_r( $log, true ) );
         } else {
@@ -364,8 +307,10 @@ function get_uwp_users_list() {
 		$exclude_query = 'AND '. $wpdb->users.'.ID NOT IN ('.$exclude_users_list.')';
 	}
 
-	$order_by = 'display_name';
-	$order = 'ASC';
+	if(empty($sort_by)){
+        $sort_by = uwp_get_option('users_default_order_by', 'alpha_asc');
+    }
+
 	if ($sort_by) {
 		switch ($sort_by) {
 			case "newer":
@@ -384,7 +329,6 @@ function get_uwp_users_list() {
 				$order_by = 'display_name';
 				$order = 'DESC';
 				break;
-
 		}
 	}
 
@@ -575,6 +519,8 @@ function uwp_account_privacy_page_title($title, $type) {
 	    $title = __( 'E-Mail Notifications', 'userswp' );
     } elseif ($type == 'delete-account') {
 	    $title = __( 'Delete Account', 'userswp' );
+    } elseif ($type == 'change-password') {
+	    $title = __( 'Change Password', 'userswp' );
     }
 
     return $title;
@@ -631,14 +577,14 @@ function uwp_add_account_menu_links() {
             ?>
             <li class="nav-item m-0 p-0 list-unstyled mx-md-2 mx-2">
                 <a class="nav-link text-decoration-none uwp-account-<?php echo $tab_id.' '.$active; ?>" href="<?php echo esc_url( $tab_url ); ?>">
-                    <?php echo '<i class="'.$tab["icon"].' mr-1"></i>'.$tab['title']; ?>
+                    <?php echo '<i class="'.esc_attr($tab["icon"]).' mr-1 fa-fw"></i>'.sanitize_text_field($tab['title']); ?>
                 </a>
             </li>
             <?php
 
             $legacy .= '<li id="uwp-account-'.$tab_id.'">';
             $legacy .= '<a class="'.$active.'" href="'.esc_url( $tab_url ).'">';
-            $legacy .= '<i class="'.$tab["icon"].'"></i>'.$tab["title"];
+            $legacy .= '<i class="'.esc_attr($tab["icon"]).'"></i>'.sanitize_text_field($tab["title"]);
             $legacy .= '</a></li>';
         }
         ?>
@@ -833,52 +779,6 @@ function uwp_can_make_profile_private() {
     $make_profile_private = apply_filters('uwp_user_can_make_profile_private', false);
     return $make_profile_private;
 }
-
-/**
- * Adds notification menu in admin toolbar.
- *
- * @since       1.0.0
- * @package     userswp
- *
- * @return      void
- */
-function uwp_notifications_toolbar_menu() {
-    global $wp_admin_bar;
-
-    if ( ! is_user_logged_in() ) {
-        return;
-    }
-
-    $available_counts = apply_filters('uwp_notifications_available_counts', array());
-
-    if (count($available_counts) == 0) {
-        return;
-    }
-
-    $total_count = 0;
-    foreach ($available_counts as $key => $value) {
-        $total_count = $total_count + $value;
-    }
-
-
-    $alert_class   = (int) $total_count > 0 ? 'pending-count' : 'count';
-    $menu_title    = '<span id="uwp-notification-count" class="' . $alert_class . '">'
-        . number_format_i18n( $total_count ) . '</span>';
-    $menu_link     = '';
-
-    // Add the top-level Notifications button.
-    $wp_admin_bar->add_menu( array(
-        'parent'    => 'top-secondary',
-        'id'        => 'uwp-notifications',
-        'title'     => $menu_title,
-        'href'      => $menu_link,
-    ) );
-
-    do_action('uwp_notifications_items', $wp_admin_bar);
-
-    return;
-}
-add_action( 'admin_bar_menu', 'uwp_notifications_toolbar_menu', 90 );
 
 /**
  * Returns the installation type.
@@ -1797,7 +1697,7 @@ function uwp_get_activation_link($user_id){
 			'key' => $key,
 			'login' => $user_data->user_login
 		),
-		site_url()
+		site_url('/login/')
 	);
 
 	return $activation_link;
@@ -1825,4 +1725,18 @@ function uwp_min_version_check( $name, $version ) {
 	}
 
 	return true;
+}
+
+function uwp_get_user_roles() {
+
+	$wp_roles = wp_roles();
+
+	$user_roles = array();
+	if(!empty($wp_roles->roles) && is_array($wp_roles->roles)) {
+		foreach ($wp_roles->roles as $key => $role ) {
+			$user_roles[$key] = !empty($role['name']) ? $role['name']: $key;
+		}
+	}
+
+	return $user_roles;
 }

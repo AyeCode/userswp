@@ -167,6 +167,15 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'type' => 'single_select_page',
 		            'desc_tip' => true,
 	            ),
+	            array(
+		            'id'   => 'register_user_roles',
+		            'name' => __( 'User Roles', 'userswp' ),
+		            'desc' => __( 'Select user roles to display in the registration form if user role custom field is used. ', 'userswp' ),
+		            'desc_tip' => true,
+		            'type' => 'multiselect',
+		            'default'  => '',
+		            'options' => uwp_get_user_roles(),
+	            ),
                 array(
                     'id'   => 'wp_register_redirect',
                     'name' => __( 'Redirect Admin Default Register Page', 'userswp' ),
@@ -176,8 +185,8 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 ),
 	            array(
 		            'id'   => 'register_username_length',
-		            'name' => __( 'Username Length', 'userswp' ),
-		            'desc' => __( 'Username limit ', 'userswp' ),
+		            'name' => __( 'Username Minimum Length', 'userswp' ),
+		            'desc' => __( 'Minimum username character limit required for registration.', 'userswp' ),
 		            'desc_tip' => true,
 		            'type' => 'number',
 		            'default'  => '4',
@@ -447,11 +456,19 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 array(
                     'id' => 'users_default_layout',
                     'name' => __( 'Users default layout', 'userswp' ),
-                    'desc' => __( 'Choose the default layout for Users Page - Users List', 'userswp' ),
+                    'desc' => __( 'Choose the default layout for users listing page.', 'userswp' ),
                     'type'    => 'select',
                     'options' =>   $this->uwp_available_users_layout(),
                     'desc_tip' => true,
                 ),
+	            array(
+		            'id' => 'users_default_order_by',
+		            'name' => __( 'Users default order', 'userswp' ),
+		            'desc' => __( 'Choose the default users order for users listing page.', 'userswp' ),
+		            'type'    => 'select',
+		            'options' =>   $this->uwp_available_users_order(),
+		            'desc_tip' => true,
+	            ),
 	            array(
 		            'id' => 'users_no_of_items',
 		            'name' => __( 'Number of items', 'userswp' ),
@@ -580,6 +597,12 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'type' => 'checkbox',
                 ),
 
+	            array(
+		            'id'   => 'enable_uwp_error_log',
+		            'name' => __( 'Debugging', 'userswp' ),
+		            'desc' => __( 'Show debugging info in the error logs.', 'userswp' ),
+		            'type' => 'checkbox',
+	            ),
 
 	            // @todo to be move to own design section
 	            array(
@@ -709,6 +732,19 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
         $tabs_arr = apply_filters('uwp_available_users_layout', $tabs_arr);
 
         return $tabs_arr;
+    }
+
+    public function uwp_available_users_order() {
+        $order_arr = array(
+            'alpha_asc' => __( 'Display name (A-Z)', 'userswp' ),
+            'alpha_desc' => __( 'Display name (Z-A)', 'userswp' ),
+            'newer' => __( 'Newer', 'userswp' ),
+            'older' => __( 'Older', 'userswp' ),
+        );
+
+	    $order_arr = apply_filters('uwp_available_users_layout', $order_arr);
+
+        return $order_arr;
     }
 
 	/**

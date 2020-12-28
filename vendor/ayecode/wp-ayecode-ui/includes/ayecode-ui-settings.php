@@ -49,7 +49,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $latest = "4.3.1";
+		public $latest = "4.5.3";
 
 		/**
 		 * Current version of select2 being used.
@@ -195,15 +195,17 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 
 		/**
-		 * Adds the Font Awesome styles.
+		 * Adds the styles.
 		 */
 		public function enqueue_style() {
 
 			$css_setting = current_action() == 'wp_enqueue_scripts' ? 'css' : 'css_backend';
 
+			$rtl = is_rtl() ? '-rtl' : '';
+
 			if($this->settings[$css_setting]){
 				$compatibility = $this->settings[$css_setting]=='core' ? false : true;
-				$url = $this->settings[$css_setting]=='core' ? $this->url.'assets/css/ayecode-ui.css' : $this->url.'assets/css/ayecode-ui-compatibility.css';
+				$url = $this->settings[$css_setting]=='core' ? $this->url.'assets/css/ayecode-ui'.$rtl.'.css' : $this->url.'assets/css/ayecode-ui-compatibility'.$rtl.'.css';
 				wp_register_style( 'ayecode-ui', $url, array(), $this->latest );
 				wp_enqueue_style( 'ayecode-ui' );
 
@@ -542,8 +544,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				 * Check form condition
 				 */
 				function aui_check_form_condition(condition,form) {
-					if(form){
-						condition = condition.replace("(form)", "('"+form+"')");
+					if (form) {
+						condition = condition.replace(/\(form\)/g, "('"+form+"')");
 					}
 					return new Function("return " + condition+";")();
 				}
@@ -970,7 +972,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 									for="wpbs-css"><?php _e( 'Load CSS', 'aui' ); ?></label></th>
 							<td>
 								<select name="ayecode-ui-settings[css]" id="wpbs-css">
-									<option	value="compatibility" <?php selected( $this->settings['css'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode', 'aui' ); ?></option>
+									<option	value="compatibility" <?php selected( $this->settings['css'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode (default)', 'aui' ); ?></option>
 									<option value="core" <?php selected( $this->settings['css'], 'core' ); ?>><?php _e( 'Full Mode', 'aui' ); ?></option>
 									<option	value="" <?php selected( $this->settings['css'], '' ); ?>><?php _e( 'Disabled', 'aui' ); ?></option>
 								</select>
@@ -1087,6 +1089,29 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			)));
 		}
 
+		public static function bs3_compat_css() {
+			ob_start();
+			?>
+			/* Bootstrap 3 compatibility */
+			body.modal-open .modal-backdrop.show:not(.in) {opacity:0.5;}
+			body.modal-open .modal.show:not(.in)  {opacity:1;z-index: 99999}
+			body.modal-open .modal.show:not(.in) .modal-content  {box-shadow: none;}
+			body.modal-open .modal.show:not(.in)  .modal-dialog {transform: initial;}
+
+			.collapse.show:not(.in){display: inherit;}
+
+			/* With Avada builder */
+			body.modal-open .modal.in  {opacity:1;z-index: 99999}
+			body.modal-open .modal.bsui.in .modal-content  {box-shadow: none;}
+			.bsui .collapse.in{display: inherit;}
+
+
+
+			body.modal-open .modal.bsui .modal-dialog{left: auto;}
+			<?php
+			return ob_get_clean();
+		}
+
 
 		public static function custom_css($compatibility = true) {
 			$settings = get_option('aui_options');
@@ -1098,7 +1123,14 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				//AUI_PRIMARY_COLOR_ORIGINAL
 			?>
 			<style>
+
+
+
 				<?php
+
+				// BS compat @todo add option check
+				//echo self::bs3_compat_css();
+
 					if(!is_admin() && $primary_color != AUI_PRIMARY_COLOR_ORIGINAL){
 						echo self::css_primary($primary_color,$compatibility);
 					}

@@ -827,17 +827,12 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
 			    /* ------- check nonce field ------- */
 			    if (isset($_REQUEST['update']) && $_REQUEST['update'] == 'update') {
-				    $field_ids = array();
+
 				    if (!empty($_REQUEST['tabs']) && is_array($_REQUEST['tabs'])) {
 
 					    $tabs = $_REQUEST['tabs'];
-					    $return = $this->update_field_order($tabs);
+					    $this->update_field_order($tabs);
 
-                        if (is_array($return)) {
-                            $return = json_encode($return);
-                        }
-
-                        echo $return;
 				    }
 			    }
 
@@ -853,7 +848,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 				    if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'uwp_form_extras_nonce' . $field_id))
 					    return;
 
-				    echo $this->tabs_field_delete($field_id);
+				    $this->tabs_field_delete($field_id);
 			    }
 
 			    /* ---- Save field  ---- */
@@ -1001,14 +996,14 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 				foreach ( $tabs as $index => $tab ) {
 					$result = $wpdb->update(
 						$table_name,
-						array('sort_order' => $index, 'tab_level' => $tab['tab_level'], 'tab_parent' => $tab['tab_parent']),
+						array('sort_order' => $index, 'tab_level' => (int)$tab['tab_level'], 'tab_parent' => (int)$tab['tab_parent']),
 						array('id' => absint($tab['id'])),
 						array('%d','%d')
 					);
 					$count ++;
 				}
 				if($result !== false){
-					return $tabs;
+					return true;
 				}else{
 					return new WP_Error( 'failed', __( "Failed to sort tab items.", "userswp" ) );
 				}

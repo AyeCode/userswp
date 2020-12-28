@@ -33,6 +33,33 @@ class UsersWP_Account {
             </form>
 	    <?php }
 
+	    if ($type == 'change-password') {
+		    wp_enqueue_script( 'password-strength-meter' ); // add scripts
+		    $design_style = uwp_get_option("design_style","bootstrap");
+		    $bs_btn_class = $design_style ? "btn btn-primary btn-block text-uppercase" : "";
+		    ?>
+            <form class="uwp-account-form uwp_form mt-3" method="post" enctype="multipart/form-data">
+			    <?php do_action('uwp_template_fields', 'change'); ?>
+                <input name="uwp_change_submit" class="<?php echo $bs_btn_class; ?>" value="<?php _e( 'Change Password', 'userswp' ); ?>" type="submit">
+            </form>
+            <script>
+                jQuery( document ).ready( function( $ ) {
+                    // Binding to trigger uwp_checkPasswordStrength
+                    $( 'body' ).on( 'keyup', 'input[name=password], input[name=confirm_password]',
+                        function( event ) {
+                            uwp_checkPasswordStrength(
+                                $('input[name=password]'),         // First password field
+                                $('input[name=confirm_password]'), // Second password field
+                                $('#uwp-password-strength'),           // Strength meter
+                                $('input[type=submit]'),           // Submit button
+                                ['black', 'listed', 'word']        // Blacklisted words
+                            );
+                        }
+                    );
+                });
+            </script>
+		<?php }
+
 	    if ($type == 'delete-account') {
 	        if(1 == uwp_get_option('disable_account_delete') || current_user_can('administrator')){
                 return;
@@ -137,6 +164,7 @@ class UsersWP_Account {
 	        $message = apply_filters('uwp_account_delete_mail_message', $message, $user_id);
 
 	        $user_email = $user->user_email;
+	        $user_name = !empty($user->display_name) ? $user->display_name :'';
 
             // Delete user
             if ( $delete_from_network ) {
@@ -166,10 +194,10 @@ class UsersWP_Account {
             if($deleted){
 
 	            $email_vars = array();
-
-	            UsersWP_Mails::send($user_email, 'account_delete');
-
 	            $email_vars['login_details'] = $message;
+	            $email_vars['user_name'] = $user_name;
+
+	            UsersWP_Mails::send($user_email, 'account_delete', $email_vars);
 
 	            UsersWP_Mails::send(get_bloginfo('admin_email'), 'account_delete', $email_vars, true);
             }

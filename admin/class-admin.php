@@ -62,7 +62,6 @@ class UsersWP_Admin {
 			update_option("uwp_setup_wizard_notice",1);
 			wp_redirect(admin_url('index.php?page=uwp-setup'));
 			exit;
-
 		}
 
 		if ( ! empty( $_GET['force_sync_data'] ) ) {
@@ -151,8 +150,12 @@ class UsersWP_Admin {
 
 
         }
+
+	    if ( $hook_suffix == 'userswp_page_uwp_tools' ) {
+		    wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
+	    }
+
         if ( $hook_suffix == 'userswp_page_uwp_status' ) {
-            wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
             wp_enqueue_script( "uwp_status", USERSWP_PLUGIN_URL . 'admin/assets/js/system-status.js', array( 'jquery' ), USERSWP_VERSION, true );
         }
 

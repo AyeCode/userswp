@@ -41,7 +41,7 @@ do_action( 'uwp_template_before', 'login' ); ?>
 				?>
 				<form class="uwp-login-form uwp_form" method="post">
 
-					<?php do_action( 'uwp_template_fields', 'login' ); ?>
+					<?php do_action( 'uwp_template_fields', 'login', $args ); ?>
 
 					<div class="uwp-remember-me custom-checkbox mb-3">
                         <?php

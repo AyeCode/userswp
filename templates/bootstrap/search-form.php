@@ -15,7 +15,7 @@ if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
 	        'name'  =>  'uwps',
 	        'class'  =>  'form-control-sm',
 	        'value' =>  $keyword,
-	        'label' => __( 'Remember Me', 'userswp' ),
+	        'label' => __( 'Search for users...', 'userswp' ),
 	        'placeholder' => __('Search for users...', 'userswp'),
         ));
         ?>

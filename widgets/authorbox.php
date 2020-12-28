@@ -83,7 +83,7 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
         $output = do_shortcode($output );
 
         $author_id = $post->post_author;
-        $author_link = apply_filters('uwp_profile_link', get_author_posts_url($author_id), $author_id);
+        $author_link = uwp_build_profile_tab_url($author_id);
         $user = get_user_by('id', $author_id);
         $author_name = $user->display_name;
         $author_bio = get_user_meta($author_id, 'description', true);
