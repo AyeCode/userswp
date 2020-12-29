@@ -95,7 +95,6 @@ final class UsersWP {
      */
     private function init_hooks() {
         register_activation_hook( USERSWP_PLUGIN_FILE, array( 'UsersWP_Activator', 'activate' ) );
-        register_deactivation_hook( USERSWP_PLUGIN_FILE, array( 'UsersWP_Deactivator', 'deactivate' ) );
         add_action( 'admin_init', array('UsersWP_Activator', 'automatic_upgrade') );
         add_action( 'init', array( 'UsersWP_Activator', 'init_background_updater' ), 5 );
         add_action( 'widgets_init', array( $this, 'register_widgets' ) );
