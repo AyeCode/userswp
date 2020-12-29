@@ -129,7 +129,7 @@ function uwp_account_get_available_tabs() {
         ),
         'notifications' => array(
 	        'title' => __( 'Notifications', 'userswp' ),
-	        'icon' => 'fas fa-bell',
+	        'icon' => 'fas fa-envelope',
         ),
         'privacy' => array(
 	        'title' => __('Privacy', 'userswp'),
