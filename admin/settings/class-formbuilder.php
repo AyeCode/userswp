@@ -723,7 +723,7 @@ class UsersWP_Form_Builder {
 	public function register_available_fields( $form_type ) {
 		global $wpdb;
 
-		$form_id = ! empty( $_REQUEST['form'] ) ? $_REQUEST['form'] : 1;
+		$form_id = ! empty( $_REQUEST['form'] ) ? (int) $_REQUEST['form'] : 1;
 		if ( ! empty( $_REQUEST['form_type'] ) && $_REQUEST['form_type'] === 'new' ) {
 
 			$get_register_form = uwp_get_option( 'multiple_registration_forms' );
@@ -732,8 +732,7 @@ class UsersWP_Form_Builder {
 		}
 
 		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
-
-		$existing_fields = $wpdb->get_results( "select site_htmlvar_name from " . $extras_table_name . "  where form_type ='" . $form_type . "' AND form_id=$form_id" );
+		$existing_fields   = $wpdb->get_results( "select site_htmlvar_name from " . $extras_table_name . "  where form_type ='" . $form_type . "' AND form_id=$form_id" );
 
 		$existing_field_ids = array();
 		if ( ! empty( $existing_fields ) ) {
@@ -744,7 +743,8 @@ class UsersWP_Form_Builder {
 
 		?>
         <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
-        <input type="hidden" name="manage_field_form_id" class="manage_field_form_id" value="<?php echo $form_id; ?>">
+        <input type="hidden" name="manage_field_form_id" class="manage_field_form_id"
+               value="<?php echo esc_attr( $form_id ); ?>">
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="register">
         <ul>
 			<?php
@@ -1521,7 +1521,7 @@ class UsersWP_Form_Builder {
 		global $wpdb;
 		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
-		$form_id = ! empty( $_REQUEST['form'] ) ? $_REQUEST['form'] : 1;
+		$form_id = ! empty( $_REQUEST['form'] ) ? (int) $_REQUEST['form'] : 1;
 		if ( ! empty( $_REQUEST['form_type'] ) && $_REQUEST['form_type'] === 'new' ) {
 
 			$get_register_form = uwp_get_option( 'multiple_registration_forms' );
@@ -1529,7 +1529,8 @@ class UsersWP_Form_Builder {
 			$form_id           = ! empty( $new_added['id'] ) ? $new_added['id'] : 1;
 		}
 		?>
-        <input type="hidden" name="manage_field_form_id" class="manage_field_form_id" value="<?php echo $form_id; ?>>">
+        <input type="hidden" name="manage_field_form_id" class="manage_field_form_id"
+               value="<?php echo esc_attr( $form_id ); ?>>">
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="register">
         <ul class="core uwp_form_extras uwp-tabs-selected"><?php
 
