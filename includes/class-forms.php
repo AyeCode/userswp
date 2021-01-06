@@ -15,12 +15,12 @@ class UsersWP_Forms {
 	/**
 	 * Logs the error message.
 	 *
+	 * @param array|object|string $log Error message.
+	 *
+	 * @return      void
 	 * @since       1.0.0
 	 * @package     userswp
 	 *
-	 * @param       array|object|string $log Error message.
-	 *
-	 * @return      void
 	 */
 	public static function uwp_error_log( $log ) {
 		uwp_error_log( $log );
@@ -29,10 +29,10 @@ class UsersWP_Forms {
 	/**
 	 * Initialize UsersWP notices.
 	 *
-	 * @since       1.0.0
+	 * @return      void
 	 * @package     userswp
 	 *
-	 * @return      void
+	 * @since       1.0.0
 	 */
 	public function init_notices() {
 		global $uwp_notices;
@@ -42,10 +42,10 @@ class UsersWP_Forms {
 	/**
 	 * Handles all UsersWP forms.
 	 *
-	 * @since       1.0.0
+	 * @return      void
 	 * @package     userswp
 	 *
-	 * @return      void
+	 * @since       1.0.0
 	 */
 	public function handler() {
 		global $uwp_notices;
@@ -136,13 +136,13 @@ class UsersWP_Forms {
 	/**
 	 * Processes avatar and banner uploads form submission.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       array $data  Submitted $_POST data
-	 * @param       array $files Submitted $_FILES data
+	 * @param array $data  Submitted $_POST data
+	 * @param array $files Submitted $_FILES data
 	 *
 	 * @return      bool|WP_Error|string                File url to crop.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function process_upload_submit( $data = array(), $files = array(), $type = 'avatar' ) {
 
@@ -183,15 +183,15 @@ class UsersWP_Forms {
 	/**
 	 * Processes avatar and banner uploads image crop.
 	 *
-	 * @since       1.0.0
+	 * @param array  $data            Submitted $_POST data
+	 * @param string $type            Image type. Default 'avatar'.
+	 * @param bool   $unlink_prev_img True to remove previous image. Default false;
+	 *
+	 * @return      bool|WP_Error|string                Profile url.
 	 * @since       1.0.12 New param $unlink_prev_img introduced.
 	 * @package     userswp
 	 *
-	 * @param       array  $data            Submitted $_POST data
-	 * @param       string $type            Image type. Default 'avatar'.
-	 * @param       bool   $unlink_prev_img True to remove previous image. Default false;
-	 *
-	 * @return      bool|WP_Error|string                Profile url.
+	 * @since       1.0.0
 	 */
 	public function process_image_crop( $data = array(), $type = 'avatar', $unlink_prev_img = false ) {
 
@@ -289,11 +289,11 @@ class UsersWP_Forms {
 			} else {
 				$redirect_url = admin_url( 'user-edit.php?user_id=' . $user_id );
 			}
-		} elseif(uwp_current_page_url()) {
+		} elseif ( uwp_current_page_url() ) {
 			$redirect_url = uwp_current_page_url();
 		} else {
 			$redirect_url = uwp_build_profile_tab_url( $user_id );
-        }
+		}
 
 		return $redirect_url;
 
@@ -302,11 +302,11 @@ class UsersWP_Forms {
 	/**
 	 * Processes avatar and banner image reset.
 	 *
-	 * @package     userswp
-	 *
-	 * @param       string $type Image type. Default 'avatar'.
+	 * @param string $type Image type. Default 'avatar'.
 	 *
 	 * @return      bool|WP_Error|string                Profile url.
+	 * @package     userswp
+	 *
 	 */
 	public function process_image_reset( $type ) {
 		if ( ! is_user_logged_in() ) {
@@ -347,7 +347,7 @@ class UsersWP_Forms {
 			} else {
 				$redirect_url = admin_url( 'user-edit.php?user_id=' . $user_id );
 			}
-		} elseif(uwp_current_page_url()) {
+		} elseif ( uwp_current_page_url() ) {
 			$redirect_url = uwp_current_page_url();
 		} else {
 			$redirect_url = uwp_build_profile_tab_url( $user_id );
@@ -359,10 +359,11 @@ class UsersWP_Forms {
 	/**
 	 * Displays links in a dropdown
 	 *
-	 * @since       1.0.0
+	 * @param $options
+	 *
 	 * @package     userswp
 	 *
-	 * @param $options
+	 * @since       1.0.0
 	 */
 	public function output_dashboard_links( $options ) {
 		if ( ! empty( $options ) ) {
@@ -376,10 +377,11 @@ class UsersWP_Forms {
 	/**
 	 * Displays options for the dashboard links
 	 *
-	 * @since       1.0.0
+	 * @param $options
+	 *
 	 * @package     userswp
 	 *
-	 * @param $options
+	 * @since       1.0.0
 	 */
 	public function output_options( $options ) {
 		if ( ! empty( $options ) ) {
@@ -409,12 +411,12 @@ class UsersWP_Forms {
 	/**
 	 * Displays UsersWP notices in forms.
 	 *
+	 * @param string $type Form type
+	 *
+	 * @return      void
 	 * @since       1.0.0
 	 * @package     userswp
 	 *
-	 * @param       string $type Form type
-	 *
-	 * @return      void
 	 */
 	public function display_notices( $type ) {
 		global $uwp_notices;
@@ -680,15 +682,19 @@ class UsersWP_Forms {
 		$result = apply_filters( 'uwp_before_extra_fields_save', $result, 'register', $user_id );
 
 		if ( isset( $result['user_role'] ) && ! empty( $result['user_role'] ) ) {
-			$user_roles = uwp_get_option( "register_user_roles" );
-			$chosen_role = strtolower($result['user_role']);
+			$user_roles  = uwp_get_option( "register_user_roles" );
+			$chosen_role = strtolower( $result['user_role'] );
 			if ( ! empty( $user_roles ) ) {
 				$wp_roles = wp_roles();
-				if($wp_roles->is_role($chosen_role) && in_array($chosen_role, array_keys($user_roles))){
-					$new_user = get_userdata($user_id);
-				    $new_user->set_role( $chosen_role );
+				if ( $wp_roles->is_role( $chosen_role ) && in_array( $chosen_role, array_keys( $user_roles ) ) ) {
+					$new_user = get_userdata( $user_id );
+					$new_user->set_role( $chosen_role );
 				}
 			}
+		}
+
+		if ( isset( $data['uwp_register_form_id'] ) && ! empty( $data['uwp_register_form_id'] ) ) {
+			update_user_meta( $user_id, '_uwp_register_form_id', $data['uwp_register_form_id'] );
 		}
 
 		$save_result = $this->save_user_extra_fields( $user_id, $result, 'register' );
@@ -948,14 +954,14 @@ class UsersWP_Forms {
 	/**
 	 * Saves UsersWP related user custom fields.
 	 *
+	 * @param int    $user_id User ID.
+	 * @param array  $data    Result array.
+	 * @param string $type    Form type.
+	 *
+	 * @return      bool                        True when success. False when failure.
 	 * @since       1.0.0
 	 * @package     userswp
 	 *
-	 * @param       int    $user_id User ID.
-	 * @param       array  $data    Result array.
-	 * @param       string $type    Form type.
-	 *
-	 * @return      bool                        True when success. False when failure.
 	 */
 	public function save_user_extra_fields( $user_id, $data, $type ) {
 
@@ -1361,11 +1367,11 @@ class UsersWP_Forms {
 
 		global $uwp_notices;
 
-		if(is_uwp_account_page()){
-            $notice_type = 'account';
-        } else {
+		if ( is_uwp_account_page() ) {
+			$notice_type = 'account';
+		} else {
 			$notice_type = 'change';
-        }
+		}
 
 		do_action( 'uwp_before_validate', 'change' );
 
@@ -1660,14 +1666,14 @@ class UsersWP_Forms {
 	/**
 	 * Modifies the forms field in email based on the form type.
 	 *
-	 * @package    userswp
-	 * @subpackage userswp/includes
-	 *
 	 * @param string $form_fields Form fields.
 	 * @param string $type        Form type.
 	 * @param int    $user_id     User ID.
 	 *
 	 * @return string Modified mail field.
+	 * @package    userswp
+	 * @subpackage userswp/includes
+	 *
 	 */
 	public function init_mail_form_fields( $form_fields, $type, $user_id ) {
 		switch ( $type ) {
@@ -1738,10 +1744,10 @@ class UsersWP_Forms {
 	/**
 	 *
 	 *
-	 * @since   1.0.0
+	 * @return void
 	 * @since   1.0.12 Unlink file.
 	 * @package userswp
-	 * @return void
+	 * @since   1.0.0
 	 */
 	public function upload_file_remove() {
 
@@ -1790,15 +1796,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for datepicker field type.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_datepicker( $html, $field, $value, $form_type ) {
 
@@ -1847,8 +1853,8 @@ class UsersWP_Forms {
 			if ( $value == '0000-00-00' ) {
 				$value = '';
 			}//if date not set, then mark it empty
-			$value = uwp_date( $value, 'Y-m-d', $date_format );
-			$site_title                           = uwp_get_form_label( $field );
+			$value      = uwp_date( $value, 'Y-m-d', $date_format );
+			$site_title = uwp_get_form_label( $field );
 
 			// bootstrap
 			if ( $design_style ) {
@@ -1857,25 +1863,25 @@ class UsersWP_Forms {
 				$extra_attributes['data-alt-format']  = $date_format;
 				$extra_attributes['data-date-format'] = 'Y-m-d';
 
-				if('dob' == $field->htmlvar_name){
+				if ( 'dob' == $field->htmlvar_name ) {
 					$extra_attributes['data-max-date'] = 'today';
 				}
 
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->input(
 					array(
 						'id'               => $field->htmlvar_name,
 						'name'             => $field->htmlvar_name,
 						'required'         => ! empty( $field->is_required ) ? true : false,
-						'label'            => $site_title.$required,
+						'label'            => $site_title . $required,
 						'label_show'       => true,
 						'label_type'       => 'hidden',
 						'type'             => 'datepicker',
 						'title'            => $site_title,
 						'placeholder'      => uwp_get_field_placeholder( $field ),
 						'class'            => '',
-						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+						'wrap_class'       => isset( $field->css_class ) ? $field->css_class : '',
 						'value'            => $value,
 						'help_text'        => uwp_get_field_description( $field ),
 						'extra_attributes' => $extra_attributes
@@ -1951,15 +1957,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for time field type.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_time( $html, $field, $value, $form_type ) {
 
@@ -1990,24 +1996,24 @@ class UsersWP_Forms {
 			$label_type                           = is_admin() ? '' : 'top';
 
 			if ( $design_style ) {
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->input(
 					array(
-						'id'               => $field->htmlvar_name,
-						'name'             => $field->htmlvar_name,
-						'required'         => ! empty( $field->is_required ) ? true : false,
-						'label'            => $site_title.$required,
-						'label_show'       => true,
-						'label_type'       => $label_type,
-						'type'             => 'timepicker',
-						'title'            => $site_title,
-						'placeholder'      => uwp_get_field_placeholder( $field ),
-						'class'            => '',
-						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
-						'value'            => $value,
-						'help_text'        => uwp_get_field_description( $field ),
-						'extra_attributes' => $extra_attributes,
+						'id'                => $field->htmlvar_name,
+						'name'              => $field->htmlvar_name,
+						'required'          => ! empty( $field->is_required ) ? true : false,
+						'label'             => $site_title . $required,
+						'label_show'        => true,
+						'label_type'        => $label_type,
+						'type'              => 'timepicker',
+						'title'             => $site_title,
+						'placeholder'       => uwp_get_field_placeholder( $field ),
+						'class'             => '',
+						'wrap_class'        => isset( $field->css_class ) ? $field->css_class : '',
+						'value'             => $value,
+						'help_text'         => uwp_get_field_description( $field ),
+						'extra_attributes'  => $extra_attributes,
 						'input_group_right' => '<div class="input-group-text px-2 bg-transparent border-0x" onclick="jQuery(this).parent().parent().find(\'input\').val(\'\');"><i class="fas fa-times uwp-search-input-label-clear text-muted c-pointer" title="' . __( 'Clear field', 'uwp-search' ) . '" ></i></div>',
 					)
 				);
@@ -2061,15 +2067,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for select field type.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_select( $html, $field, $value, $form_type ) {
 
@@ -2098,7 +2104,7 @@ class UsersWP_Forms {
 			// bootstrap
 			if ( $design_style ) {
 
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->select( array(
 					'id'              => $field->htmlvar_name,
@@ -2109,7 +2115,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => $site_title.$required,
+					'label'           => $site_title . $required,
 					'options'         => $option_values_arr,
 					'select2'         => true,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
@@ -2173,15 +2179,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for multiselect field type.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_multiselect( $html, $field, $value, $form_type ) {
 
@@ -2209,7 +2215,7 @@ class UsersWP_Forms {
 			// bootstrap
 			if ( $design_style ) {
 
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->select( array(
 					'id'              => $field->htmlvar_name,
@@ -2220,7 +2226,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => $site_title.$required,
+					'label'           => $site_title . $required,
 					'options'         => $option_values_arr,
 					'select2'         => true,
 					'multiple'        => true,
@@ -2321,15 +2327,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for file field type.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_file( $html, $field, $value, $form_type ) {
 
@@ -2344,7 +2350,7 @@ class UsersWP_Forms {
 		if ( empty( $html ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$wrap_class = isset( $field->css_class ) ? $field->css_class : '';
+			$wrap_class      = isset( $field->css_class ) ? $field->css_class : '';
 			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
@@ -2355,7 +2361,7 @@ class UsersWP_Forms {
             <div id="<?php echo $field->htmlvar_name; ?>_row"
                  class="<?php if ( $field->is_required ) {
 				     echo 'required_field';
-			     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group.$wrap_class ); ?>">
+			     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group . $wrap_class ); ?>">
 
 				<?php
 				$site_title = uwp_get_form_label( $field );
@@ -2398,15 +2404,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for checkbox field type.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_checkbox( $html, $field, $value, $form_type ) {
 
@@ -2433,7 +2439,7 @@ class UsersWP_Forms {
 
 			// bootstrap
 			if ( $design_style ) {
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo '<input type="hidden" name="' . $field->htmlvar_name . '" id="checkbox_' . $id . '" value="0"/>';
 
@@ -2444,11 +2450,11 @@ class UsersWP_Forms {
 						'type'       => "checkbox",
 						'value'      => '1',
 						'title'      => $site_title,
-						'label'      => $site_title.$required,
+						'label'      => $site_title . $required,
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
 						'checked'    => $checked,
-						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+						'wrap_class' => isset( $field->css_class ) ? $field->css_class : '',
 						'help_text'  => uwp_get_field_description( $field ),
 					)
 				);
@@ -2501,15 +2507,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for radio field type.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_radio( $html, $field, $value, $form_type ) {
 
@@ -2541,7 +2547,7 @@ class UsersWP_Forms {
 
 				$site_title = uwp_get_form_label( $field );
 
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->radio(
 					array(
@@ -2549,10 +2555,10 @@ class UsersWP_Forms {
 						'name'       => $field->htmlvar_name,
 						'type'       => "radio",
 						'title'      => $site_title,
-						'label'      => is_admin() ? '' : $site_title.$required,
+						'label'      => is_admin() ? '' : $site_title . $required,
 						'label_type' => 'top',
 						'class'      => '',
-						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+						'wrap_class' => isset( $field->css_class ) ? $field->css_class : '',
 						'value'      => $value,
 						'options'    => $option_values
 					)
@@ -2634,15 +2640,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for text field type.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_text( $html, $field, $value, $form_type ) {
 
@@ -2718,7 +2724,7 @@ class UsersWP_Forms {
 
 			// bootstrap
 			if ( $design_style ) {
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->input( array(
 					'type'            => $type,
@@ -2730,7 +2736,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => __( $field->required_msg, 'userswp' ),
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() ? '' : $site_title.$required,
+					'label'           => is_admin() ? '' : $site_title . $required,
 					'step'            => $step,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
@@ -2788,15 +2794,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for textarea field type.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_textarea( $html, $field, $value, $form_type ) {
 
@@ -2817,7 +2823,7 @@ class UsersWP_Forms {
 
 			// bootstrap
 			if ( $design_style ) {
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->textarea( array(
 					'id'              => $field->htmlvar_name,
@@ -2828,7 +2834,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => __( $field->required_msg, 'userswp' ),
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() ? '' : $site_title.$required,
+					'label'           => is_admin() ? '' : $site_title . $required,
 					'rows'            => '4',
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
@@ -2902,7 +2908,7 @@ class UsersWP_Forms {
 
 			// bootstrap
 			if ( $design_style ) {
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->textarea( array(
 					'id'              => $field->htmlvar_name,
@@ -2913,7 +2919,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => __( $field->required_msg, 'userswp' ),
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() ? '' : $site_title.$required,
+					'label'           => is_admin() ? '' : $site_title . $required,
 					'rows'            => 5,
 					'wysiwyg'         => true,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
@@ -2954,15 +2960,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for fieldset field type.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_fieldset( $html, $field, $value, $form_type ) {
 		// Check if there is a custom field specific filter.
@@ -2991,15 +2997,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for url field type.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_url( $html, $field, $value, $form_type ) {
 
@@ -3022,7 +3028,7 @@ class UsersWP_Forms {
 
 			// bootstrap
 			if ( $design_style ) {
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->input( array(
 					'type'            => 'url',
@@ -3034,7 +3040,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => __( 'Please enter a valid URL including https://', 'userswp' ),
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() ? '' : $site_title.$required,
+					'label'           => is_admin() ? '' : $site_title . $required,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
@@ -3088,15 +3094,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for email field type.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_email( $html, $field, $value, $form_type ) {
 
@@ -3118,7 +3124,7 @@ class UsersWP_Forms {
 			$site_title = uwp_get_form_label( $field );
 
 			if ( $design_style ) {
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->input( array(
 					'type'        => 'email',
@@ -3129,8 +3135,8 @@ class UsersWP_Forms {
 					'value'       => $value,
 					'required'    => $field->is_required,
 					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() ? '' : $site_title.$required,
-					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+					'label'       => is_admin() ? '' : $site_title . $required,
+					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
 
@@ -3185,15 +3191,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for password field type.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_password( $html, $field, $value, $form_type ) {
 
@@ -3215,7 +3221,7 @@ class UsersWP_Forms {
 			$site_title = uwp_get_form_label( $field );
 
 			if ( $design_style ) {
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->input( array(
 					'type'        => 'password',
@@ -3226,8 +3232,8 @@ class UsersWP_Forms {
 					'value'       => $value,
 					'required'    => $field->is_required,
 					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() ? '' : $site_title.$required,
-					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+					'label'       => is_admin() ? '' : $site_title . $required,
+					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
 				?>
@@ -3278,14 +3284,14 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for Phone field.
 	 *
-	 * @since 1.0.0
-	 *
 	 * @param string $html      Form field html
 	 * @param object $field     Field info.
 	 * @param string $value     Form field default value.
 	 * @param string $form_type Form type
 	 *
 	 * @return string $html Modified form field html.
+	 * @since 1.0.0
+	 *
 	 */
 	public function form_input_phone( $html, $field, $value, $form_type ) {
 		if ( empty( $html ) ) {
@@ -3297,7 +3303,7 @@ class UsersWP_Forms {
 			$site_title = uwp_get_form_label( $field );
 
 			if ( $design_style ) {
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->input( array(
 					'type'        => 'tel',
@@ -3308,8 +3314,8 @@ class UsersWP_Forms {
 					'value'       => $value,
 					'required'    => $field->is_required,
 					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() ? '' : $site_title.$required,
-					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+					'label'       => is_admin() ? '' : $site_title . $required,
+					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
 				?>
@@ -3367,13 +3373,13 @@ class UsersWP_Forms {
 			$field_desc = str_replace( '%%link_start%%', $link_start, $field_desc );
 			$field_desc = str_replace( '%%link_end%%', $link_end, $field_desc );
 			$content    = $field_desc ? $field_desc : sprintf( __( 'By using this form I agree to the storage and handling of my data by this website. View our %s %s %s.', 'userswp' ), '<a href="' . $gdpr_page . '" target="_blank">', $site_title, '</a>' );
-			$checked = $value == '1' ? true : false;
+			$checked    = $value == '1' ? true : false;
 
 			ob_start(); // Start  buffering;
 
 			// bootstrap
 			if ( $design_style ) {
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 				echo '<input type="hidden" name="' . $field->htmlvar_name . '" id="checkbox_' . $id . '" value="0"/>';
 
 				echo aui()->input(
@@ -3383,11 +3389,11 @@ class UsersWP_Forms {
 						'type'       => "checkbox",
 						'value'      => '1',
 						'title'      => $site_title,
-						'label'      => $content.$required,
+						'label'      => $content . $required,
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
 						'checked'    => $checked,
-						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+						'wrap_class' => isset( $field->css_class ) ? $field->css_class : '',
 					)
 				);
 
@@ -3454,7 +3460,7 @@ class UsersWP_Forms {
 			ob_start();
 
 			if ( $design_style ) {
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 				echo '<input type="hidden" name="' . $field->htmlvar_name . '" id="checkbox_' . $id . '" value="0"/>';
 
 				echo aui()->input(
@@ -3464,11 +3470,11 @@ class UsersWP_Forms {
 						'type'       => "checkbox",
 						'value'      => '1',
 						'title'      => $site_title,
-						'label'      => $content.$required,
+						'label'      => $content . $required,
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
 						'checked'    => $checked,
-						'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+						'wrap_class' => isset( $field->css_class ) ? $field->css_class : '',
 					)
 				);
 
@@ -3513,10 +3519,10 @@ class UsersWP_Forms {
 	/**
 	 * Adds enctype tag in form for file fields.
 	 *
-	 * @since       1.0.0
+	 * @return      void
 	 * @package     userswp
 	 *
-	 * @return      void
+	 * @since       1.0.0
 	 */
 	function add_multipart_to_admin_edit_form() {
 		global $wpdb;
@@ -3530,12 +3536,12 @@ class UsersWP_Forms {
 	/**
 	 * Handles UsersWP custom field requests from admin.
 	 *
+	 * @param int $user_id User ID.
+	 *
+	 * @return      void
 	 * @since       1.0.0
 	 * @package     userswp
 	 *
-	 * @param       int $user_id User ID.
-	 *
-	 * @return      void
 	 */
 	public function update_profile_extra_admin_edit( $user_id ) {
 		global $wpdb;
@@ -3587,15 +3593,15 @@ class UsersWP_Forms {
 	/**
 	 * Form field template for country field.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function form_input_select_country( $html, $field, $value, $form_type ) {
 
@@ -3669,15 +3675,15 @@ class UsersWP_Forms {
 	/**
 	 * Adds confirm password field in forms.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function register_confirm_password_field( $html, $field, $value, $form_type ) {
 		if ( $form_type == 'register' ) {
@@ -3698,11 +3704,11 @@ class UsersWP_Forms {
 				ob_start(); // Start  buffering;
 
 				if ( $design_style ) {
-					$required = '';
+					$required    = '';
 					$placeholder = $site_title;
-					if (isset($field->is_required) && !empty($field->is_required)) {
+					if ( isset( $field->is_required ) && ! empty( $field->is_required ) ) {
 						$placeholder .= ' *';
-						$required = ' <span class="text-danger">*</span>';
+						$required    = ' <span class="text-danger">*</span>';
 					}
 
 					echo aui()->input( array(
@@ -3714,7 +3720,7 @@ class UsersWP_Forms {
 						'value'       => $value,
 						'required'    => $field->is_required,
 						'help_text'   => uwp_get_field_description( $field ),
-						'label'       => is_admin() ? '' : $site_title.$required
+						'label'       => is_admin() ? '' : $site_title . $required
 					) );
 				} else {
 					?>
@@ -3756,15 +3762,15 @@ class UsersWP_Forms {
 	/**
 	 * Adds confirm email field in forms.
 	 *
-	 * @since       1.0.0
-	 * @package     userswp
-	 *
-	 * @param       string $html      Form field html
-	 * @param       object $field     Field info.
-	 * @param       string $value     Form field default value.
-	 * @param       string $form_type Form type
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
 	 *
 	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
 	 */
 	public function register_confirm_email_field( $html, $field, $value, $form_type ) {
 		if ( $form_type == 'register' ) {
@@ -3785,7 +3791,7 @@ class UsersWP_Forms {
 				ob_start();
 
 				if ( $design_style ) {
-					$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+					$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 					echo aui()->input( array(
 						'type'        => 'email',
@@ -3796,7 +3802,7 @@ class UsersWP_Forms {
 						'value'       => $value,
 						'required'    => $field->is_required,
 						'help_text'   => uwp_get_field_description( $field ),
-						'label'       => is_admin() ? '' : $site_title.$required
+						'label'       => is_admin() ? '' : $site_title . $required
 					) );
 				} else {
 					?>
@@ -3837,10 +3843,10 @@ class UsersWP_Forms {
 	/**
 	 * Handles the privacy form submission.
 	 *
-	 * @since       1.0.0
+	 * @return      void
 	 * @package     userswp
 	 *
-	 * @return      void
+	 * @since       1.0.0
 	 */
 	public function privacy_submit_handler() {
 		if ( isset( $_POST['uwp_privacy_submit'] ) ) {
@@ -4074,44 +4080,44 @@ class UsersWP_Forms {
 
 	public function form_custom_html( $html, $field, $value, $form_type ) {
 
-		$html = !empty($field->default_value) ? $field->default_value :' ';
+		$html = ! empty( $field->default_value ) ? $field->default_value : ' ';
 
 		return $html;
 	}
 
 	public function form_input_select_user_roles( $html, $field, $value ) {
 
-		if(empty($html)) {
+		if ( empty( $html ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
 			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 
-			$user_roles = uwp_get_option( "register_user_roles" );
-			$site_title        = uwp_get_form_label( $field );
+			$user_roles     = uwp_get_option( "register_user_roles" );
+			$site_title     = uwp_get_form_label( $field );
 			$get_user_roles = uwp_get_user_roles();
 
 			$user_roles_options = array();
 
 			if ( empty( $user_roles ) ) {
-                return ' ';
+				return ' ';
 			}
 
 			foreach ( $user_roles as $user_role ) {
 
-                if($user_role && in_array($user_role, array_keys($get_user_roles))){
-                    $option_label = isset( $get_user_roles[ $user_role ] ) ? $get_user_roles[ $user_role ] : '';
-                    $option_value = isset( $user_role ) ? $user_role : '';
-                    $user_roles_options[$option_value] = $option_label;
-                }
-            }
+				if ( $user_role && in_array( $user_role, array_keys( $get_user_roles ) ) ) {
+					$option_label                        = isset( $get_user_roles[ $user_role ] ) ? $get_user_roles[ $user_role ] : '';
+					$option_value                        = isset( $user_role ) ? $user_role : '';
+					$user_roles_options[ $option_value ] = $option_label;
+				}
+			}
 
 			ob_start();
 
 			if ( $design_style ) {
 
-				$required = !empty($field->is_required) ? ' <span class="text-danger">*</span>' : '';
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->select( array(
 					'id'              => $field->htmlvar_name,
@@ -4122,7 +4128,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => $site_title.$required,
+					'label'           => $site_title . $required,
 					'options'         => $user_roles_options,
 					'select2'         => true,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
@@ -4131,8 +4137,8 @@ class UsersWP_Forms {
 				$select_options = '';
 				if ( ! empty( $user_roles_options ) ) {
 					foreach ( $user_roles_options as $option_value => $label ) {
-						$selected     = $option_value == $value ? 'selected="selected"' : '';
-						$select_options .= '<option value="' . esc_attr( $option_value ) . '" ' . $selected . '>' . __($label, 'userswp') . '</option>';
+						$selected       = $option_value == $value ? 'selected="selected"' : '';
+						$select_options .= '<option value="' . esc_attr( $option_value ) . '" ' . $selected . '>' . __( $label, 'userswp' ) . '</option>';
 					}
 				}
 				?>

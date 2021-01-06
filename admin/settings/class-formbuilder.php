@@ -131,7 +131,7 @@ class UsersWP_Form_Builder {
                     <h3>
                         <span>
                             <?php
-                            $title = __( 'List of fields those will appear in the account form', 'userswp' );
+                            $title = __( 'List of fields that will appear in the account form.', 'userswp' );
                             echo apply_filters( 'uwp_form_builder_selected_fields_head', $title, $form_type ); ?>
                         </span>
                     </h3>
@@ -2062,7 +2062,7 @@ class UsersWP_Form_Builder {
 	public function register_selected_fields_head( $heading, $form_type ) {
 		switch ( $form_type ) {
 			case 'register':
-				$heading = __( 'List of fields those will appear in register form.', 'userswp' );
+				$heading = __( 'List of fields that will appear in the register form.', 'userswp' );
 				break;
 
 		}

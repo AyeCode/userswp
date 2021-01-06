@@ -730,7 +730,7 @@ class UsersWP_Templates {
 			echo '<input type="hidden" name="uwp_register_hash" value="' . $hash . '" style="display:none !important; visibility:hidden !important;" />';
 			echo '<input type="hidden" name="uwp_register_hp" value="" style="display:none !important; visibility:hidden !important;" size="25" autocomplete="off" />';
 			echo '<input type="hidden" name="uwp_register_nonce" value="' . wp_create_nonce( 'uwp-register-nonce' ) . '" />';
-			echo '<input type="hidden" name="uwp_register_form_id" value="'.$form_id.'">';
+			echo '<input type="hidden" name="uwp_register_form_id" value="' . $form_id . '">';
 		} elseif ( $form_type == 'change' ) {
 			echo '<input type="hidden" name="uwp_change_nonce" value="' . wp_create_nonce( 'uwp-change-nonce' ) . '" />';
 		} elseif ( $form_type == 'forgot' ) {

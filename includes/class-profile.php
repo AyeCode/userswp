@@ -1132,7 +1132,16 @@ class UsersWP_Profile {
 		<?php
 	}
 
-	function get_avatar_url( $url, $id_or_email, $args ) {
+	/*
+     * Modifies get_avatar_url function to use UWP avatar URL.
+	 *
+     * @param string $url Default avatar URL
+     * @param int|string $id_or_email User ID or email
+	 *
+     * @return string $url New avatar URL
+     *
+    */
+	function get_avatar_url( $url, $id_or_email ) {
 
 		// don't filter on admin side.
 		if ( is_admin() && ! wp_doing_ajax() ) {
@@ -1233,13 +1242,6 @@ class UsersWP_Profile {
 			exit;
 		}
 	}
-
-	/*
-	 * Modifies get_avatar_url function to use userswp avatar URL.
-	 * @param array $avatar_defaults default avatars
-	 * @return array $avatar_defaults default avatars
-	 *
-	*/
 
 	/**
 	 * Modifies "edit my profile" link in admin bar

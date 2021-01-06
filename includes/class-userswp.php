@@ -639,7 +639,7 @@ final class UsersWP {
 		add_filter( 'get_comment_author_link', array( $instance, 'get_comment_author_link' ), 10, 2 );
 		add_action( 'uwp_user_title', array( $instance, 'get_profile_title' ), 10, 2 );
 		add_action( 'uwp_profile_social', array( $instance, 'get_profile_social' ), 10, 2 );
-		add_filter( 'get_avatar_url', array( $instance, 'get_avatar_url' ), 99, 3 );
+		add_filter( 'get_avatar_url', array( $instance, 'get_avatar_url' ), 99, 2 );
 		add_action( 'wp_footer', array( $instance, 'list_view_js' ) );
 
 		// Popup and crop functions

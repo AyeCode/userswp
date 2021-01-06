@@ -791,7 +791,6 @@ class UsersWP_Admin {
 	public function multiple_registration_form( $tab ) {
 
 		if ( ! empty( $tab ) && $tab == 'register' ) {
-			$form_type    = ! empty( $_REQUEST['form_type'] ) ? sanitize_text_field( $_REQUEST['form_type'] ) : false;
 			$current_form = ! empty( $_REQUEST['form'] ) ? (int) $_REQUEST['form'] : 1;
 
 			$register_tab   = admin_url( 'admin.php?page=uwp_form_builder&tab=' . $tab );
