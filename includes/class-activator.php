@@ -191,6 +191,12 @@ class UsersWP_Activator {
             'account_delete_email_content_admin' => UsersWP_Defaults::account_delete_email_content_admin(),
             'user_post_counts_cpts' => array('post'),
             'login_user_post_counts_cpts' => array('post'),
+            'multiple_registration_forms' => array(
+	            array(
+		            'id' => 1,
+		            'title' => __('Register','userswp'),
+	            )
+            )
         );
 
         foreach ($options as $option => $value){

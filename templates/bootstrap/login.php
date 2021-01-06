@@ -67,36 +67,37 @@ do_action( 'uwp_template_before', 'login' ); ?>
 					));
 					?>
 
-					<div class="uwp-footer-links">
-						<div class="uwp-footer-link d-inline-block">
-							<?php
-							echo aui()->button(array(
-								'type'  =>  'a',
-								'href'       => uwp_get_register_page_url(),
-								'class'      => 'd-block text-center mt-2 small uwp-register-link',
-								'content'    => __( 'Create account', 'userswp' ),
-								'extra_attributes'  => array('rel'=>'nofollow')
-							));
-							?>
-						</div>
-						<div class="uwp-footer-link float-right">
-							<?php
-							echo aui()->button(array(
-								'type'  =>  'a',
-								'href'       => uwp_get_forgot_page_url(),
-								'class'      => 'd-block text-center mt-2 small uwp-forgot-password-link',
-								'content'    => __( 'Forgot password?', 'userswp' ),
-								'extra_attributes'  => array('rel'=>'nofollow')
-							));
-							?>
-						</div>
-					</div>
-
-					<div class="form-group text-center mb-0 p-0">
-						<?php do_action( 'uwp_social_fields', 'login' ); ?>
-					</div>
-
 				</form>
+
+                <div class="uwp-footer-links">
+                    <div class="uwp-footer-link d-inline-block">
+						<?php
+						echo aui()->button(array(
+							'type'  =>  'a',
+							'href'       => uwp_get_register_page_url(),
+							'class'      => 'd-block text-center mt-2 small uwp-register-link',
+							'content'    => __( 'Create account', 'userswp' ),
+							'extra_attributes'  => array('rel'=>'nofollow')
+						));
+						?>
+                    </div>
+                    <div class="uwp-footer-link float-right">
+						<?php
+						echo aui()->button(array(
+							'type'  =>  'a',
+							'href'       => uwp_get_forgot_page_url(),
+							'class'      => 'd-block text-center mt-2 small uwp-forgot-password-link',
+							'content'    => __( 'Forgot password?', 'userswp' ),
+							'extra_attributes'  => array('rel'=>'nofollow')
+						));
+						?>
+                    </div>
+                </div>
+
+                <div class="form-group text-center mb-0 p-0">
+					<?php do_action( 'uwp_social_fields', 'login' ); ?>
+                </div>
+
 			</div>
 	</div>
 </div>
