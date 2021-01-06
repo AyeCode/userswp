@@ -36,3 +36,4 @@ do_action('uwp_users_loop_actions');
 		</select>
 	</form>
 </div>
+<?php do_action('uwp_after_users_loop_actions'); ?>
