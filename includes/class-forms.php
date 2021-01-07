@@ -988,15 +988,6 @@ class UsersWP_Forms {
 			if ( isset( $data['email'] ) ) {
 				unset( $data['email'] );
 			}
-			if ( isset( $data['display_name'] ) ) {
-				unset( $data['display_name'] );
-			}
-			if ( isset( $data['first_name'] ) ) {
-				unset( $data['first_name'] );
-			}
-			if ( isset( $data['last_name'] ) ) {
-				unset( $data['last_name'] );
-			}
 		}
 
 		if ( empty( $data ) ) {
