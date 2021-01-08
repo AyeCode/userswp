@@ -136,108 +136,6 @@ jQuery(window).on('load', function () {
         }
     });
 
-    jQuery(document).on('click', '.register-form-create', function ($) {
-        var current_obj = jQuery(this);
-        var nonce = current_obj.attr('data-nonce');
-
-        get_spin_loader(current_obj);
-
-        var form_confirmation = prompt(uwp_admin_ajax.update_register_form);
-
-        if (form_confirmation !== null) {
-            if (form_confirmation !== '') {
-                var data = {
-                    'action': 'uwp_ajax_create_register',
-                    'type': 'create',
-                    'form_title': form_confirmation,
-                    'nonce': nonce,
-                };
-
-                jQuery.post(uwp_admin_ajax.url, data, function (response) {
-                    response = JSON.parse(response);
-
-                    if (response.status) {
-                        remove_spin_loader(current_obj);
-                        window.location.replace(response.redirect);
-                    } else {
-                        console.log(response.message);
-                    }
-                });
-            } else{
-                remove_spin_loader(current_obj);
-            }
-        } else {
-            remove_spin_loader(current_obj);
-        }
-    });
-
-    jQuery(document).on('click', '.register-form-update', function ($) {
-
-        var current_obj = jQuery(this);
-        var form_id = current_obj.attr('data-id');
-        var form_title = current_obj.attr('data-title');
-
-        get_spin_loader(current_obj);
-
-        var form_confirmation = prompt(uwp_admin_ajax.update_register_form, form_title);
-
-        if (form_confirmation !== null) {
-            if (form_confirmation !== '') {
-                var data = {
-                    'action': 'uwp_ajax_update_register',
-                    'type': 'update',
-                    'form_id': form_id,
-                    'form_title': form_confirmation,
-                };
-
-                jQuery.post(uwp_admin_ajax.url, data, function (response) {
-                    response = JSON.parse(response);
-
-                    if (response.status) {
-                        remove_spin_loader(current_obj);
-                        location.reload();
-                    } else {
-                        console.log(response.message);
-                    }
-                });
-            } else {
-                remove_spin_loader(current_obj);
-            }
-        } else {
-            remove_spin_loader(current_obj);
-        }
-    });
-
-    jQuery(document).on('click', '.register-form-remove', function ($) {
-        var current_obj = jQuery(this);
-        var form_id = current_obj.attr('data-id');
-
-        get_spin_loader(current_obj);
-
-        var confirmation = confirm(uwp_admin_ajax.delete_register_form);
-
-        if (confirmation === true) {
-            var data = {
-                'action': 'uwp_ajax_remove_register',
-                'type': 'remove',
-                'form_id': form_id
-            };
-
-            jQuery.post(uwp_admin_ajax.url, data, function (response) {
-                response = JSON.parse(response);
-
-                if (response.status) {
-                    remove_spin_loader(current_obj);
-                    window.location.replace(response.redirect);
-                } else {
-                    console.log(response.message);
-                }
-            });
-        } else {
-            remove_spin_loader(current_obj);
-        }
-    });
-
     uwp_init_tooltips();
 });
 
@@ -303,12 +201,12 @@ function uwp_init_tooltips() {
     });
 }
 
-function get_spin_loader(loader_obj) {
+function uwp_get_spin_loader(loader_obj) {
 
     loader_obj.append('<i class="fas fa-circle-notch fa-spin ml-2 userswp-admin-spin"></i>');
 }
 
-function remove_spin_loader(loader_obj) {
+function uwp_remove_spin_loader(loader_obj) {
 
     setTimeout(function () {
         loader_obj.children('i.userswp-admin-spin').remove();

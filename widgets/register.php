@@ -29,15 +29,6 @@ class UWP_Register_Widget extends WP_Super_Duper {
 				'description' => esc_html__( 'Displays register form.', 'userswp' ),
 			),
 			'arguments'      => array(
-				'id'           => array(
-					'title'    => __( 'Form', 'userswp' ),
-					'desc'     => __( 'Select form.', 'userswp' ),
-					'type'     => 'select',
-					'options'  => uwp_get_register_forms(),
-					'default'  => 1,
-					'desc_tip' => true,
-					'advanced' => false
-				),
 				'title'        => array(
 					'title'    => __( 'Widget title', 'userswp' ),
 					'desc'     => __( 'Enter widget title.', 'userswp' ),
@@ -117,14 +108,6 @@ class UWP_Register_Widget extends WP_Super_Duper {
 		 * Parse incoming $args into an array and merge it with $defaults
 		 */
 		$args = wp_parse_args( $args, $defaults );
-
-		$args['id'] = ! empty( $args['id'] ) ? (int) $args['id'] : 1;
-
-		$fields = get_register_form_fields( $args['id'] );
-
-		if ( empty( $fields ) ) {
-			return;
-		}
 
 		ob_start();
 

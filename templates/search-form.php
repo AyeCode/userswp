@@ -14,6 +14,5 @@
             <input type="hidden" name="uwp_sort_by" value="<?php esc_attr_e($_GET['uwp_sort_by']); ?>">
 		<?php } ?>
         <button type="submit" class="btn btn-sm btn-outline-primary mb-2 uwp-search-submit"><?php _e('Search', 'userswp'); ?></button>
-		<?php do_action('uwp_after_search_button'); ?>
     </form>
 </div>

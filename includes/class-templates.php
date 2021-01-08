@@ -501,9 +501,8 @@ class UsersWP_Templates {
 		$table_name        = uwp_get_table_prefix() . 'uwp_form_fields';
 		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
-		$form_id = ! empty( $args['id'] ) ? (int) $args['id'] : 1;
 		if ( $form_type == 'register' ) {
-			$fields = get_register_form_fields( $form_id );
+			$fields = get_register_form_fields();
 		} elseif ( $form_type == 'account' ) {
 			$fields = get_account_form_fields();
 		} elseif ( $form_type == 'change' ) {
@@ -532,10 +531,9 @@ class UsersWP_Templates {
 					if ( $field->is_active != '1' ) {
 						continue;
 					}
-					$count = $wpdb->get_var( $wpdb->prepare( "select count(*) from " . $extras_table_name . " where site_htmlvar_name=%s AND form_type = %s AND form_id=%d", array(
+					$count = $wpdb->get_var( $wpdb->prepare( "select count(*) from " . $extras_table_name . " where site_htmlvar_name=%s AND form_type = %s", array(
 						$field->htmlvar_name,
 						$form_type,
-						$form_id
 					) ) );
 					if ( $count == 1 ) {
 						$this->template_fields_html( $field, $form_type );
@@ -601,6 +599,12 @@ class UsersWP_Templates {
 		}
 
 		$field = apply_filters( "uwp_form_input_field_{$field->field_type}", $field, $value, $form_type );
+
+		$exclude_fields = apply_filters('uwp_form_exclude_form_fields', array('user_role'));
+
+		if ( ! empty( $field->htmlvar_name ) && in_array( $field->htmlvar_name, $exclude_fields ) ) {
+			return;
+		}
 
 		$html = apply_filters( "uwp_form_input_html_{$field->field_type}", "", $field, $value, $form_type );
 
@@ -724,13 +728,10 @@ class UsersWP_Templates {
 				echo '<input type="hidden" name="redirect_to" value="' . esc_url( $redirect_to ) . '"/>';
 			}
 
-			$form_id = ! empty( $args['id'] ) ? $args['id'] : 1;
-
 			$hash = substr( hash( 'SHA256', AUTH_KEY . site_url() ), 0, 25 );
 			echo '<input type="hidden" name="uwp_register_hash" value="' . $hash . '" style="display:none !important; visibility:hidden !important;" />';
 			echo '<input type="hidden" name="uwp_register_hp" value="" style="display:none !important; visibility:hidden !important;" size="25" autocomplete="off" />';
 			echo '<input type="hidden" name="uwp_register_nonce" value="' . wp_create_nonce( 'uwp-register-nonce' ) . '" />';
-			echo '<input type="hidden" name="uwp_register_form_id" value="' . $form_id . '">';
 		} elseif ( $form_type == 'change' ) {
 			echo '<input type="hidden" name="uwp_change_nonce" value="' . wp_create_nonce( 'uwp-change-nonce' ) . '" />';
 		} elseif ( $form_type == 'forgot' ) {

@@ -681,9 +681,20 @@ class UsersWP_Forms {
 
 		$result = apply_filters( 'uwp_before_extra_fields_save', $result, 'register', $user_id );
 
-		if ( isset( $result['user_role'] ) && ! empty( $result['user_role'] ) ) {
-			$user_roles  = uwp_get_option( "register_user_roles" );
-			$chosen_role = strtolower( $result['user_role'] );
+		$fields = get_register_form_fields();
+
+		$user_role = '';
+		if( !empty($fields) && is_array($fields) ) {
+			foreach ( $fields as $key => $field ) {
+				if( isset( $field->htmlvar_name ) && !empty($field->htmlvar_name) && $field->htmlvar_name == 'user_role'  && !empty($field->option_values)) {
+					$user_role = $field->option_values;
+				}
+			}
+		}
+
+		if ( isset( $user_role ) && ! empty( $user_role ) ) {
+			$user_roles  = uwp_get_user_roles();
+			$chosen_role = strtolower( $user_role );
 			if ( ! empty( $user_roles ) ) {
 				$wp_roles = wp_roles();
 				if ( $wp_roles->is_role( $chosen_role ) && in_array( $chosen_role, array_keys( $user_roles ) ) ) {
@@ -691,10 +702,6 @@ class UsersWP_Forms {
 					$new_user->set_role( $chosen_role );
 				}
 			}
-		}
-
-		if ( isset( $data['uwp_register_form_id'] ) && ! empty( $data['uwp_register_form_id'] ) ) {
-			update_user_meta( $user_id, '_uwp_register_form_id', $data['uwp_register_form_id'] );
 		}
 
 		$save_result = $this->save_user_extra_fields( $user_id, $result, 'register' );
@@ -4072,95 +4079,6 @@ class UsersWP_Forms {
 	public function form_custom_html( $html, $field, $value, $form_type ) {
 
 		$html = ! empty( $field->default_value ) ? $field->default_value : ' ';
-
-		return $html;
-	}
-
-	public function form_input_select_user_roles( $html, $field, $value ) {
-
-		if ( empty( $html ) ) {
-
-			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group" : "";
-			$bs_sr_only      = $design_style ? "sr-only" : "";
-			$bs_form_control = $design_style ? "form-control" : "";
-
-			$user_roles     = uwp_get_option( "register_user_roles" );
-			$site_title     = uwp_get_form_label( $field );
-			$get_user_roles = uwp_get_user_roles();
-
-			$user_roles_options = array();
-
-			if ( empty( $user_roles ) ) {
-				return ' ';
-			}
-
-			foreach ( $user_roles as $user_role ) {
-
-				if ( $user_role && in_array( $user_role, array_keys( $get_user_roles ) ) ) {
-					$option_label                        = isset( $get_user_roles[ $user_role ] ) ? $get_user_roles[ $user_role ] : '';
-					$option_value                        = isset( $user_role ) ? $user_role : '';
-					$user_roles_options[ $option_value ] = $option_label;
-				}
-			}
-
-			ob_start();
-
-			if ( $design_style ) {
-
-				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
-
-				echo aui()->select( array(
-					'id'              => $field->htmlvar_name,
-					'name'            => $field->htmlvar_name,
-					'placeholder'     => uwp_get_field_placeholder( $field ),
-					'title'           => $site_title,
-					'value'           => $value,
-					'required'        => $field->is_required,
-					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
-					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => $site_title . $required,
-					'options'         => $user_roles_options,
-					'select2'         => true,
-					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
-				) );
-			} else {
-				$select_options = '';
-				if ( ! empty( $user_roles_options ) ) {
-					foreach ( $user_roles_options as $option_value => $label ) {
-						$selected       = $option_value == $value ? 'selected="selected"' : '';
-						$select_options .= '<option value="' . esc_attr( $option_value ) . '" ' . $selected . '>' . __( $label, 'userswp' ) . '</option>';
-					}
-				}
-				?>
-                <div id="<?php echo $field->htmlvar_name; ?>_row"
-                     class="<?php if ( $field->is_required ) {
-					     echo 'required_field';
-				     } ?> uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
-
-					<?php
-					if ( ! is_admin() ) { ?>
-                        <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
-							<?php if ( $field->is_required ) {
-								echo '<span>*</span>';
-							} ?>
-                        </label>
-					<?php } ?>
-                    <select name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $field->htmlvar_name; ?>"
-                            class="uwp_textfield aui-select2 <?php echo esc_attr( $bs_form_control ); ?>"
-                            title="<?php echo $site_title; ?>"
-                            data-placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
-                    ><?php echo $select_options; ?>
-                    </select>
-                    <span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
-                </div>
-
-				<?php
-			}
-
-			$html = ob_get_clean();
-		}
 
 		return $html;
 	}
