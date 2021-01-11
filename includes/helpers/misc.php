@@ -134,7 +134,7 @@ function uwp_string_to_options($input = '', $translated = false)
  */
 function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $src_h, $scale){
 	uwp_set_php_limits();
-	// ignore image createion warnings
+	// ignore image creation warnings
 	@ini_set('gd.jpeg_ignore_warning', 1);
 	/** @noinspection PhpUnusedLocalVariableInspection */
 	list($imagewidth, $imageheight, $imageType) = getimagesize($image);
@@ -159,6 +159,7 @@ function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $sr
 			break;
 	}
 	imagecopyresampled($newImage,$source,0,0,$x,$y,$newImageWidth, $newImageHeight, $src_w, $src_h);
+	$quality = apply_filters( 'uwp_resize_thumb_quality', 100);
 	switch($imageType) {
 		case "image/gif":
 			imagegif($newImage, $thumb_image_name);
@@ -166,7 +167,7 @@ function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $sr
 		case "image/pjpeg":
 		case "image/jpeg":
 		case "image/jpg":
-			imagejpeg($newImage, $thumb_image_name, 100);
+			imagejpeg($newImage, $thumb_image_name, $quality);
 			break;
 		case "image/png":
 		case "image/x-png":
@@ -611,7 +612,7 @@ function uwp_add_account_menu_links() {
  *
  * @return      array|bool                  Sorted field ids.
  */
-function uwp_form_extras_field_order($field_ids = array(), $form_type = 'register', $form_id = 1)
+function uwp_form_extras_field_order($field_ids = array(), $form_type = 'register')
 {
 	global $wpdb;
 	$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
@@ -626,7 +627,6 @@ function uwp_form_extras_field_order($field_ids = array(), $form_type = 'registe
 				$extras_table_name,
 				array(
 					'sort_order' => $count,
-					'form_id' => $form_id
 				),
 				array( 'id' => $cf )
 			);
