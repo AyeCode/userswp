@@ -74,7 +74,7 @@
     border-color: $list-group-active-border-color;
   }
 
-  & + & {
+  & + .list-group-item{
     border-top-width: 0;
 
     &.active {
