@@ -1,3 +1,6 @@
+= 1.0.23 =
+* Rows argument now available to group arguments to the one row - ADDED
+
 = 1.0.22 =
 * Sometimes arguments are not set early enough when building block JS - FIXED
 

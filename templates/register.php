@@ -14,13 +14,13 @@ $form_title = apply_filters( 'uwp_template_form_title', $form_title, 'register' 
 			<?php do_action( 'uwp_template_display_notices', 'register' ); ?>
             <form class="uwp-registration-form uwp_form" method="post" enctype="multipart/form-data">
 				<?php do_action( 'uwp_template_fields', 'register', $args ); ?>
-				<?php do_action( 'uwp_social_fields', 'register' ); ?>
                 <input name="uwp_register_submit" value="<?php _e( 'Create Account', 'userswp' ); ?>" type="submit">
             </form>
             <div class="uwp-footer-link uwp-login-now"><?php _e( 'Already a member?', 'userswp' ); ?> <a
                         rel="nofollow"
                         href="<?php echo uwp_get_login_page_url(); ?>"><?php _e( 'Login here', 'userswp' ); ?></a>
             </div>
+	        <?php do_action( 'uwp_social_fields', 'register' ); ?>
         </div>
     </div>
 <?php do_action( 'uwp_template_after', 'register' ); ?>
