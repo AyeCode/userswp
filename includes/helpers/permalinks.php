@@ -255,6 +255,13 @@ function uwp_process_activation_link() {
         $key =  strip_tags(esc_sql($_GET['key']));
         $login =  strip_tags(esc_sql($_GET['login']));
         $login_page = uwp_get_page_id('login_page', false);
+
+		// check_password_reset_key() pulls the activation ID from the cache, which can be unreliable for newly-created users.
+		// Clear the relevant cache section before we proceed.
+		$user = get_userdatabylogin($login);
+		if ($user)
+            wp_cache_delete($user->ID, 'users');
+            
         $result = check_password_reset_key($key, $login);
 
         if (is_wp_error($result)) {
