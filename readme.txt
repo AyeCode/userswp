@@ -130,6 +130,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.13 =
+* Reset password and email activation fails when object cache is enabled - FIXED
+
 = 1.2.2.12 =
 * User role custom field to assign user role after registration - ADDED
 * Template changes for the advanced search addon - ADDED
