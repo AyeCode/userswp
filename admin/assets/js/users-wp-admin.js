@@ -1,4 +1,4 @@
-jQuery(window).on('load',function () {
+jQuery(window).on('load', function () {
 
     // Load color picker
     var UWPColorPicker = jQuery('.uwp-color-picker');
@@ -199,4 +199,16 @@ function uwp_init_tooltips() {
                 });
         }
     });
+}
+
+function uwp_get_spin_loader(loader_obj) {
+
+    loader_obj.append('<i class="fas fa-circle-notch fa-spin ml-2 userswp-admin-spin"></i>');
+}
+
+function uwp_remove_spin_loader(loader_obj) {
+
+    setTimeout(function () {
+        loader_obj.children('i.userswp-admin-spin').remove();
+    }, 1000);
 }

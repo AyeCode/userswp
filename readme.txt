@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.6
-Stable tag: 1.2.2.11
+Stable tag: 1.2.2.12
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -83,6 +83,7 @@ UsersWP can be extended with several add-ons. Few examples are:
 * [Activity](https://userswp.io/downloads/activity/) - Show a users activity actions right on their profile.
 * [Verified Users](https://userswp.io/downloads/verified-users/) - Make verified users stand out with their own verified badge.
 * [Realtime Notifications](https://userswp.io/downloads/realtime-notifications/) - Sends notifications to users, about activity on your website.
+* [Advanced Search](https://userswp.io/downloads/advanced-search/) - Extends the regular UsersWP search form by adding options to filter by custom fields.
 
 There are many others and we release new Add-ons frequently. You can see the full collection here: [UsersWP Premium Add-ons](https://userswp.io/downloads/category/addons/)
 
@@ -130,7 +131,12 @@ No questions so far, but don't hesitate to ask!
 == Changelog ==
 
 = 1.2.2.12 =
-* User role custom field for registration - ADDED
+* User role custom field to assign user role after registration - ADDED
+* Template changes for the advanced search addon - ADDED
+* Allow enabling registration on multisite on setup wizard - ADDED
+* Activation link redirect support for WPML - FIXED
+* Super Duper updated to v1.0.23 - CHANGED
+* AyeCode UI updated to v0.1.40 - CHANGED
 
 = 1.2.2.11 =
 * After Login redirects to home page issue - FIXED

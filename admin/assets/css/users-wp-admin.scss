@@ -113,9 +113,9 @@
 }
 
 span.uwp-custom-desc code {position: relative;background-color: #e0e0e0;padding: 5px;margin: 2px;border-radius: 3px;color: #6d6d6d;cursor: pointer;border: 1px solid #e4e4e4;display: inline-block;}
-span.uwp-custom-desc code.uwp-tag-copied:before {content: 'Copied';position: absolute;background: #000;color: #FFF;top: -30px;left: 17%;padding: 5px 10px;border-radius: 5px;font-style: normal;}
+span.uwp-custom-desc code.uwp-tag-copied:before {content: 'Copied';position: absolute;background: #000;color: #FFF;top: -30px;left: calc(50% - 35px);padding: 5px 10px;border-radius: 5px;font-style: normal;}
 span.uwp-custom-desc code.uwp-tag-copied:after {content: " ";position: absolute;top: 100%;left: 50%;margin: -29px 0 0 -4px;margin-left: -5px;border-width: 5px;border-style: solid;border-color: black transparent transparent transparent;display: none;}
-.uwp-tag-copied span {content: " ";position: absolute;top: 25px;left: 40%;margin: -29px 0 0 -4px;margin-left: -5px;border-width: 5px;border-style: solid;border-color: black transparent transparent transparent;}
+.uwp-tag-copied span {content: " ";position: absolute;top: 25px;left: 50%;margin: -29px 0 0 -4px;margin-left: -5px;border-width: 5px;border-style: solid;border-color: black transparent transparent transparent;}
 .profile_seo_meta_separator-wrap td.forminp-radio ul li {display: inline-block;margin-right: 5px;}
 .profile_seo_meta_separator-wrap td.forminp-radio ul li label input.uwp-seo-meta-separator {position: absolute;top: -20px;left: 0;}
 .profile_seo_meta_separator-wrap td.forminp-radio ul li label {padding: 10px 15px;position: relative;vertical-align: middle;overflow: hidden;margin: 0px !important;border: 1px solid #CCC;margin-right: 10px;}

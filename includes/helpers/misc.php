@@ -14,53 +14,53 @@
  */
 function uwp_string_values_to_options($option_values = '', $translated = false)
 {
-    $options = array();
-    if ($option_values == '') {
-        return NULL;
-    }
+	$options = array();
+	if ($option_values == '') {
+		return NULL;
+	}
 
-    if (strpos($option_values, "{/optgroup}") !== false) {
-        $option_values_arr = explode("{/optgroup}", $option_values);
+	if (strpos($option_values, "{/optgroup}") !== false) {
+		$option_values_arr = explode("{/optgroup}", $option_values);
 
-        foreach ($option_values_arr as $optgroup) {
-            if (strpos($optgroup, "{optgroup}") !== false) {
-                $optgroup_arr = explode("{optgroup}", $optgroup);
+		foreach ($option_values_arr as $optgroup) {
+			if (strpos($optgroup, "{optgroup}") !== false) {
+				$optgroup_arr = explode("{optgroup}", $optgroup);
 
-                $count = 0;
-                foreach ($optgroup_arr as $optgroup_str) {
-                    $count++;
-                    $optgroup_str = trim($optgroup_str);
+				$count = 0;
+				foreach ($optgroup_arr as $optgroup_str) {
+					$count++;
+					$optgroup_str = trim($optgroup_str);
 
-                    $optgroup_label = '';
-                    if (strpos($optgroup_str, "|") !== false) {
-                        $optgroup_str_arr = explode("|", $optgroup_str, 2);
-                        $optgroup_label = trim($optgroup_str_arr[0]);
-                        if ($translated && $optgroup_label != '') {
-                            $optgroup_label = __($optgroup_label, 'userswp');
-                        }
-                        $optgroup_label = ucfirst($optgroup_label);
-                        $optgroup_str = $optgroup_str_arr[1];
-                    }
+					$optgroup_label = '';
+					if (strpos($optgroup_str, "|") !== false) {
+						$optgroup_str_arr = explode("|", $optgroup_str, 2);
+						$optgroup_label = trim($optgroup_str_arr[0]);
+						if ($translated && $optgroup_label != '') {
+							$optgroup_label = __($optgroup_label, 'userswp');
+						}
+						$optgroup_label = ucfirst($optgroup_label);
+						$optgroup_str = $optgroup_str_arr[1];
+					}
 
-                    $optgroup3 = uwp_string_to_options($optgroup_str, $translated);
+					$optgroup3 = uwp_string_to_options($optgroup_str, $translated);
 
-                    if ($count > 1 && $optgroup_label != '' && !empty($optgroup3)) {
-                        $optgroup_start = array(array('label' => $optgroup_label, 'value' => NULL, 'optgroup' => 'start'));
-                        $optgroup_end = array(array('label' => $optgroup_label, 'value' => NULL, 'optgroup' => 'end'));
-                        $optgroup3 = array_merge($optgroup_start, $optgroup3, $optgroup_end);
-                    }
-                    $options = array_merge($options, $optgroup3);
-                }
-            } else {
-                $optgroup1 = uwp_string_to_options($optgroup, $translated);
-                $options = array_merge($options, $optgroup1);
-            }
-        }
-    } else {
-        $options = uwp_string_to_options($option_values, $translated);
-    }
+					if ($count > 1 && $optgroup_label != '' && !empty($optgroup3)) {
+						$optgroup_start = array(array('label' => $optgroup_label, 'value' => NULL, 'optgroup' => 'start'));
+						$optgroup_end = array(array('label' => $optgroup_label, 'value' => NULL, 'optgroup' => 'end'));
+						$optgroup3 = array_merge($optgroup_start, $optgroup3, $optgroup_end);
+					}
+					$options = array_merge($options, $optgroup3);
+				}
+			} else {
+				$optgroup1 = uwp_string_to_options($optgroup, $translated);
+				$options = array_merge($options, $optgroup1);
+			}
+		}
+	} else {
+		$options = uwp_string_to_options($option_values, $translated);
+	}
 
-    return $options;
+	return $options;
 }
 
 /**
@@ -77,43 +77,43 @@ function uwp_string_values_to_options($option_values = '', $translated = false)
  */
 function uwp_string_to_options($input = '', $translated = false)
 {
-    $return = array();
-    if ($input != '') {
-        $input = trim($input);
-        $input = rtrim($input, ",");
-        $input = ltrim($input, ",");
-        $input = trim($input);
-    }
+	$return = array();
+	if ($input != '') {
+		$input = trim($input);
+		$input = rtrim($input, ",");
+		$input = ltrim($input, ",");
+		$input = trim($input);
+	}
 
-    $input_arr = explode(',', $input);
+	$input_arr = explode(',', $input);
 
-    if (!empty($input_arr)) {
-        foreach ($input_arr as $input_str) {
-            $input_str = trim($input_str);
+	if (!empty($input_arr)) {
+		foreach ($input_arr as $input_str) {
+			$input_str = trim($input_str);
 
-            if (strpos($input_str, "/") !== false) {
-                $input_str = explode("/", $input_str, 2);
-                $label = trim($input_str[0]);
-                if ($translated && $label != '') {
-                    $label = __($label, 'userswp');
-                }
-                $label = ucfirst($label);
-                $value = trim($input_str[1]);
-            } else {
-                if ($translated && $input_str != '') {
-                    $input_str = __($input_str, 'userswp');
-                }
-                $label = ucfirst($input_str);
-                $value = $input_str;
-            }
+			if (strpos($input_str, "/") !== false) {
+				$input_str = explode("/", $input_str, 2);
+				$label = trim($input_str[0]);
+				if ($translated && $label != '') {
+					$label = __($label, 'userswp');
+				}
+				$label = ucfirst($label);
+				$value = trim($input_str[1]);
+			} else {
+				if ($translated && $input_str != '') {
+					$input_str = __($input_str, 'userswp');
+				}
+				$label = ucfirst($input_str);
+				$value = $input_str;
+			}
 
-            if ($label != '') {
-                $return[] = array('label' => $label, 'value' => $value, 'optgroup' => NULL);
-            }
-        }
-    }
+			if ($label != '') {
+				$return[] = array('label' => $label, 'value' => $value, 'optgroup' => NULL);
+			}
+		}
+	}
 
-    return $return;
+	return $return;
 }
 
 /**
@@ -133,77 +133,78 @@ function uwp_string_to_options($input = '', $translated = false)
  * @return      mixed                               Resized image.
  */
 function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $src_h, $scale){
-    uwp_set_php_limits();
-    // ignore image createion warnings
-    @ini_set('gd.jpeg_ignore_warning', 1);
-    /** @noinspection PhpUnusedLocalVariableInspection */
-    list($imagewidth, $imageheight, $imageType) = getimagesize($image);
-    $imageType = image_type_to_mime_type($imageType);
+	uwp_set_php_limits();
+	// ignore image creation warnings
+	@ini_set('gd.jpeg_ignore_warning', 1);
+	/** @noinspection PhpUnusedLocalVariableInspection */
+	list($imagewidth, $imageheight, $imageType) = getimagesize($image);
+	$imageType = image_type_to_mime_type($imageType);
 
-    $newImageWidth = ceil($src_w * $scale);
-    $newImageHeight = ceil($src_h * $scale);
-    $newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
-    $source = false;
-    switch($imageType) {
-        case "image/gif":
-            $source=imagecreatefromgif($image);
-            break;
-        case "image/pjpeg":
-        case "image/jpeg":
-        case "image/jpg":
-            $source=imagecreatefromjpeg($image);
-            break;
-        case "image/png":
-        case "image/x-png":
-            $source=imagecreatefrompng($image);
-            break;
-    }
-    imagecopyresampled($newImage,$source,0,0,$x,$y,$newImageWidth, $newImageHeight, $src_w, $src_h);
-    switch($imageType) {
-        case "image/gif":
-            imagegif($newImage, $thumb_image_name);
-            break;
-        case "image/pjpeg":
-        case "image/jpeg":
-        case "image/jpg":
-            imagejpeg($newImage, $thumb_image_name, 100);
-            break;
-        case "image/png":
-        case "image/x-png":
-            imagepng($newImage, $thumb_image_name);
-            break;
-    }
+	$newImageWidth = ceil($src_w * $scale);
+	$newImageHeight = ceil($src_h * $scale);
+	$newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
+	$source = false;
+	switch($imageType) {
+		case "image/gif":
+			$source=imagecreatefromgif($image);
+			break;
+		case "image/pjpeg":
+		case "image/jpeg":
+		case "image/jpg":
+			$source=imagecreatefromjpeg($image);
+			break;
+		case "image/png":
+		case "image/x-png":
+			$source=imagecreatefrompng($image);
+			break;
+	}
+	imagecopyresampled($newImage,$source,0,0,$x,$y,$newImageWidth, $newImageHeight, $src_w, $src_h);
+	$quality = apply_filters( 'uwp_resize_thumb_quality', 100);
+	switch($imageType) {
+		case "image/gif":
+			imagegif($newImage, $thumb_image_name);
+			break;
+		case "image/pjpeg":
+		case "image/jpeg":
+		case "image/jpg":
+			imagejpeg($newImage, $thumb_image_name, $quality);
+			break;
+		case "image/png":
+		case "image/x-png":
+			imagepng($newImage, $thumb_image_name);
+			break;
+	}
 
-    chmod($thumb_image_name, 0777);
-    return $thumb_image_name;
+	chmod($thumb_image_name, 0777);
+	return $thumb_image_name;
 }
 
 /**
  * Try to set higher limits on the fly
  */
 function uwp_set_php_limits() {
-    error_reporting( 0 );
+	error_reporting( 0 );
 
-    // try to set higher limits for import
-    $max_input_time     = ini_get( 'max_input_time' );
-    $max_execution_time = ini_get( 'max_execution_time' );
-    $memory_limit       = ini_get( 'memory_limit' );
+	// try to set higher limits for import
+	$max_input_time     = ini_get( 'max_input_time' );
+	$max_execution_time = ini_get( 'max_execution_time' );
+	$memory_limit       = ini_get( 'memory_limit' );
 
-    if ( $max_input_time !== 0 && $max_input_time != -1 && ( ! $max_input_time || $max_input_time < 3000 ) ) {
-        ini_set( 'max_input_time', 3000 );
-    }
+	if ( $max_input_time !== 0 && $max_input_time != -1 && ( ! $max_input_time || $max_input_time < 3000 ) ) {
+		ini_set( 'max_input_time', 3000 );
+	}
 
-    if ( $max_execution_time !== 0 && ( ! $max_execution_time || $max_execution_time < 3000 ) ) {
-        ini_set( 'max_execution_time', 3000 );
-    }
+	if ( $max_execution_time !== 0 && ( ! $max_execution_time || $max_execution_time < 3000 ) ) {
+		ini_set( 'max_execution_time', 3000 );
+	}
 
-    if ( $memory_limit && str_replace( 'M', '', $memory_limit ) ) {
-        if ( str_replace( 'M', '', $memory_limit ) < 256 ) {
-            ini_set( 'memory_limit', '256M' );
-        }
-    }
+	if ( $memory_limit && str_replace( 'M', '', $memory_limit ) ) {
+		if ( str_replace( 'M', '', $memory_limit ) < 256 ) {
+			ini_set( 'memory_limit', '256M' );
+		}
+	}
 
-    ini_set( 'auto_detect_line_endings', true );
+	ini_set( 'auto_detect_line_endings', true );
 }
 
 /**
@@ -217,17 +218,17 @@ function uwp_set_php_limits() {
  * @return      void
  */
 function uwp_error_log($log){
-    /*
-     * A filter to override the debugging setting for function uwp_error_log().
-     */
-    $should_log = apply_filters( 'uwp_log_errors', uwp_get_option('enable_uwp_error_log', 0));
-    if ( 1 == $should_log ) {
-        if ( is_array( $log ) || is_object( $log ) ) {
-            error_log( print_r( $log, true ) );
-        } else {
-            error_log( $log );
-        }
-    }
+	/*
+	 * A filter to override the debugging setting for function uwp_error_log().
+	 */
+	$should_log = apply_filters( 'uwp_log_errors', uwp_get_option('enable_uwp_error_log', 0));
+	if ( 1 == $should_log ) {
+		if ( is_array( $log ) || is_object( $log ) ) {
+			error_log( print_r( $log, true ) );
+		} else {
+			error_log( $log );
+		}
+	}
 }
 
 function uwp_get_excluded_users_list() {
@@ -308,8 +309,8 @@ function get_uwp_users_list() {
 	}
 
 	if(empty($sort_by)){
-        $sort_by = uwp_get_option('users_default_order_by', 'alpha_asc');
-    }
+		$sort_by = uwp_get_option('users_default_order_by', 'alpha_asc');
+	}
 
 	if ($sort_by) {
 		switch ($sort_by) {
@@ -435,41 +436,41 @@ function get_uwp_users_list() {
  * @return      string      Layout class.
  */
 function uwp_get_layout_class($layout, $count_only = false) {
-    if(!$layout){
-        $layout = uwp_get_option('users_default_layout', 'list');
-    }
+	if(!$layout){
+		$layout = uwp_get_option('users_default_layout', 'list');
+	}
 
-    switch ($layout) {
-        case "list":
-            $class = "uwp_listview";
-	        $col_count = 1;
-            break;
-        case "2col":
-            $class = "uwp_gridview uwp_gridview_2col";
-	        $col_count = 2;
-            break;
-        case "3col":
-            $class = "uwp_gridview uwp_gridview_3col";
-	        $col_count = 3;
-            break;
-        case "4col":
-            $class = "uwp_gridview uwp_gridview_4col";
-	        $col_count = 4;
-            break;
-        case "5col":
-            $class = "uwp_gridview uwp_gridview_5col";
-	        $col_count = 5;
-            break;
-        default:
-            $class = "uwp_listview";
-	        $col_count = 1;
-    }
+	switch ($layout) {
+		case "list":
+			$class = "uwp_listview";
+			$col_count = 1;
+			break;
+		case "2col":
+			$class = "uwp_gridview uwp_gridview_2col";
+			$col_count = 2;
+			break;
+		case "3col":
+			$class = "uwp_gridview uwp_gridview_3col";
+			$col_count = 3;
+			break;
+		case "4col":
+			$class = "uwp_gridview uwp_gridview_4col";
+			$col_count = 4;
+			break;
+		case "5col":
+			$class = "uwp_gridview uwp_gridview_5col";
+			$col_count = 5;
+			break;
+		default:
+			$class = "uwp_listview";
+			$col_count = 1;
+	}
 
-    if($count_only){
-        return $col_count;
-    }
+	if($count_only){
+		return $col_count;
+	}
 
-    return $class;
+	return $class;
 }
 
 add_filter( 'uwp_users_list_ul_extra_class', 'uwp_get_layout_class', 10, 1 );
@@ -490,11 +491,11 @@ add_filter( 'get_user_option_metaboxhidden_nav-menus', 'uwp_always_nav_menu_visi
  */
 function uwp_always_nav_menu_visibility( $result, $option, $user )
 {
-    if( is_array($result) && in_array( 'add-users-wp-nav-menu', $result ) ) {
-        $result = array_diff( $result, array( 'add-users-wp-nav-menu' ) );
-    }
+	if( is_array($result) && in_array( 'add-users-wp-nav-menu', $result ) ) {
+		$result = array_diff( $result, array( 'add-users-wp-nav-menu' ) );
+	}
 
-    return $result;
+	return $result;
 }
 
 // Privacy
@@ -513,17 +514,17 @@ add_filter('uwp_account_page_title', 'uwp_account_privacy_page_title', 10, 2);
  */
 function uwp_account_privacy_page_title($title, $type) {
 
-    if ($type == 'privacy') {
-        $title = __( 'Privacy', 'userswp' );
-    } elseif ($type == 'notifications') {
-	    $title = __( 'E-Mail Notifications', 'userswp' );
-    } elseif ($type == 'delete-account') {
-	    $title = __( 'Delete Account', 'userswp' );
-    } elseif ($type == 'change-password') {
-	    $title = __( 'Change Password', 'userswp' );
-    }
+	if ($type == 'privacy') {
+		$title = __( 'Privacy', 'userswp' );
+	} elseif ($type == 'notifications') {
+		$title = __( 'E-Mail Notifications', 'userswp' );
+	} elseif ($type == 'delete-account') {
+		$title = __( 'Delete Account', 'userswp' );
+	} elseif ($type == 'change-password') {
+		$title = __( 'Change Password', 'userswp' );
+	}
 
-    return $title;
+	return $title;
 }
 
 add_action('uwp_account_menu_display', 'uwp_add_account_menu_links');
@@ -538,66 +539,66 @@ add_action('uwp_account_menu_display', 'uwp_add_account_menu_links');
  */
 function uwp_add_account_menu_links() {
 
-    if (isset($_GET['type'])) {
-        $type = strip_tags(esc_sql($_GET['type']));
-    } else {
-        $type = 'account';
-    }
+	if (isset($_GET['type'])) {
+		$type = strip_tags(esc_sql($_GET['type']));
+	} else {
+		$type = 'account';
+	}
 
-    $account_page = uwp_get_page_id('account_page', false);
-    $account_page_link = get_permalink($account_page);
+	$account_page = uwp_get_page_id('account_page', false);
+	$account_page_link = get_permalink($account_page);
 
-    $account_available_tabs = uwp_account_get_available_tabs();
+	$account_available_tabs = uwp_account_get_available_tabs();
 
-    if (!is_array($account_available_tabs) && count($account_available_tabs) > 0) {
-        return;
-    }
+	if (!is_array($account_available_tabs) && count($account_available_tabs) > 0) {
+		return;
+	}
 
 	$legacy = '<ul class="uwp_account_menu">';
-    ob_start();
-    ?>
+	ob_start();
+	?>
     <ul class="navbar-nav m-0 p-0 mt-3 list-unstyled flex-lg-column flex-row flex-wrap" aria-labelledby="account_settings">
-        <?php
-        foreach( $account_available_tabs as $tab_id => $tab ) {
+		<?php
+		foreach( $account_available_tabs as $tab_id => $tab ) {
 
-            if ($tab_id == 'account') {
-                $tab_url = $account_page_link;
-            } else {
-                $tab_url = add_query_arg(array(
-                    'type' => $tab_id,
-                ), $account_page_link);
-            }
+			if ($tab_id == 'account') {
+				$tab_url = $account_page_link;
+			} else {
+				$tab_url = add_query_arg(array(
+					'type' => $tab_id,
+				), $account_page_link);
+			}
 
-            if (isset($tab['link'])) {
-                $tab_url = $tab['link'];
-            }
+			if (isset($tab['link'])) {
+				$tab_url = $tab['link'];
+			}
 
-            $active = $type == $tab_id ? ' active' : '';
+			$active = $type == $tab_id ? ' active' : '';
 
-            ?>
+			?>
             <li class="nav-item m-0 p-0 list-unstyled mx-md-2 mx-2">
                 <a class="nav-link text-decoration-none uwp-account-<?php echo $tab_id.' '.$active; ?>" href="<?php echo esc_url( $tab_url ); ?>">
-                    <?php echo '<i class="'.esc_attr($tab["icon"]).' mr-1 fa-fw"></i>'.sanitize_text_field($tab['title']); ?>
+					<?php echo '<i class="'.esc_attr($tab["icon"]).' mr-1 fa-fw"></i>'.sanitize_text_field($tab['title']); ?>
                 </a>
             </li>
-            <?php
+			<?php
 
-            $legacy .= '<li id="uwp-account-'.$tab_id.'">';
-            $legacy .= '<a class="'.$active.'" href="'.esc_url( $tab_url ).'">';
-            $legacy .= '<i class="'.esc_attr($tab["icon"]).'"></i>'.sanitize_text_field($tab["title"]);
-            $legacy .= '</a></li>';
-        }
-        ?>
+			$legacy .= '<li id="uwp-account-'.$tab_id.'">';
+			$legacy .= '<a class="'.$active.'" href="'.esc_url( $tab_url ).'">';
+			$legacy .= '<i class="'.esc_attr($tab["icon"]).'"></i>'.sanitize_text_field($tab["title"]);
+			$legacy .= '</a></li>';
+		}
+		?>
     </ul>
-    <?php
+	<?php
 	$legacy .=  '</ul>';
 	$bs_output = ob_get_clean();
 	$style = uwp_get_option('design_style', 'bootstrap');
 	if(!empty($style)){
 		echo $bs_output;
-    } else {
+	} else {
 		echo $legacy;
-    }
+	}
 }
 
 /**
@@ -613,30 +614,30 @@ function uwp_add_account_menu_links() {
  */
 function uwp_form_extras_field_order($field_ids = array(), $form_type = 'register')
 {
-    global $wpdb;
-    $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
+	global $wpdb;
+	$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
-    $count = 0;
-    if (!empty($field_ids)):
-        foreach ($field_ids as $id) {
+	$count = 0;
+	if (!empty($field_ids)):
+		foreach ($field_ids as $id) {
 
-            $cf = trim($id, '_');
+			$cf = trim($id, '_');
 
-            $wpdb->query(
-                $wpdb->prepare(
-                    "update " . $extras_table_name . " set
-															sort_order=%d
-															where id= %d",
-                    array($count, $cf)
-                )
-            );
-            $count++;
-        }
+			$wpdb->update(
+				$extras_table_name,
+				array(
+					'sort_order' => $count,
+				),
+				array( 'id' => $cf )
+			);
 
-        return $field_ids;
-    else:
-        return false;
-    endif;
+			$count++;
+		}
+
+		return $field_ids;
+	else:
+		return false;
+	endif;
 }
 
 /**
@@ -651,11 +652,11 @@ function uwp_form_extras_field_order($field_ids = array(), $form_type = 'registe
  * @return      string                  Converted string.
  */
 function uwp_ucwords($string, $charset='UTF-8') {
-    if (function_exists('mb_convert_case')) {
-        return mb_convert_case($string, MB_CASE_TITLE, $charset);
-    } else {
-        return ucwords($string);
-    }
+	if (function_exists('mb_convert_case')) {
+		return mb_convert_case($string, MB_CASE_TITLE, $charset);
+	} else {
+		return ucwords($string);
+	}
 }
 
 /**
@@ -671,8 +672,8 @@ function uwp_ucwords($string, $charset='UTF-8') {
  */
 function uwp_column_exist($db, $column)
 {
-    $table = new UsersWP_Tables();
-    return $table->column_exists($db, $column);
+	$table = new UsersWP_Tables();
+	return $table->column_exists($db, $column);
 }
 
 /**
@@ -689,8 +690,8 @@ function uwp_column_exist($db, $column)
  */
 function uwp_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
 {
-    $table = new UsersWP_Tables();
-    return $table->add_column_if_not_exist($db, $column, $column_attr);
+	$table = new UsersWP_Tables();
+	return $table->add_column_if_not_exist($db, $column, $column_attr);
 
 }
 
@@ -703,12 +704,12 @@ function uwp_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 
  * @return      array   Excluded custom fields.
  */
 function uwp_get_excluded_fields() {
-    $excluded = array(
-        'password',
-        'confirm_password',
-        'user_privacy',
-    );
-    return apply_filters('uwp_excluded_fields',$excluded);
+	$excluded = array(
+		'password',
+		'confirm_password',
+		'user_privacy',
+	);
+	return apply_filters('uwp_excluded_fields',$excluded);
 }
 
 /**
@@ -724,46 +725,46 @@ function uwp_get_excluded_fields() {
  */
 function uwp_currency_format_number($number='',$cf=''){
 
-    $cs = isset($cf['extra_fields']) ? maybe_unserialize($cf['extra_fields']) : '';
+	$cs = isset($cf['extra_fields']) ? maybe_unserialize($cf['extra_fields']) : '';
 
-    $symbol = isset($cs['currency_symbol']) ? $cs['currency_symbol'] : '$';
-    $decimals = isset($cf['decimal_point']) && $cf['decimal_point'] ? $cf['decimal_point'] : 2;
-    $decimal_display = isset($cf['decimal_display']) && $cf['decimal_display'] ? $cf['decimal_display'] : 'if';
-    $decimalpoint = '.';
+	$symbol = isset($cs['currency_symbol']) ? $cs['currency_symbol'] : '$';
+	$decimals = isset($cf['decimal_point']) && $cf['decimal_point'] ? $cf['decimal_point'] : 2;
+	$decimal_display = isset($cf['decimal_display']) && $cf['decimal_display'] ? $cf['decimal_display'] : 'if';
+	$decimalpoint = '.';
 
-    if(isset($cs['decimal_separator']) && $cs['decimal_separator']=='comma'){
-        $decimalpoint = ',';
-    }
+	if(isset($cs['decimal_separator']) && $cs['decimal_separator']=='comma'){
+		$decimalpoint = ',';
+	}
 
-    $separator = ',';
+	$separator = ',';
 
-    if(isset($cs['thousand_separator'])){
-        if($cs['thousand_separator']=='comma'){$separator = ',';}
-        if($cs['thousand_separator']=='slash'){$separator = '\\';}
-        if($cs['thousand_separator']=='period'){$separator = '.';}
-        if($cs['thousand_separator']=='space'){$separator = ' ';}
-        if($cs['thousand_separator']=='none'){$separator = '';}
-    }
+	if(isset($cs['thousand_separator'])){
+		if($cs['thousand_separator']=='comma'){$separator = ',';}
+		if($cs['thousand_separator']=='slash'){$separator = '\\';}
+		if($cs['thousand_separator']=='period'){$separator = '.';}
+		if($cs['thousand_separator']=='space'){$separator = ' ';}
+		if($cs['thousand_separator']=='none'){$separator = '';}
+	}
 
-    $currency_symbol_placement = isset($cs['currency_symbol_placement']) ? $cs['currency_symbol_placement'] : 'left';
+	$currency_symbol_placement = isset($cs['currency_symbol_placement']) ? $cs['currency_symbol_placement'] : 'left';
 
-    if($decimals>0 && $decimal_display=='if'){
-        if(is_int($number) || floor( $number ) == $number)
-            $decimals = 0;
-    }
+	if($decimals>0 && $decimal_display=='if'){
+		if(is_int($number) || floor( $number ) == $number)
+			$decimals = 0;
+	}
 
-    $number = number_format($number,$decimals,$decimalpoint,$separator);
-
-
-
-    if($currency_symbol_placement=='left'){
-        $number = $symbol . $number;
-    }else{
-        $number = $number . $symbol;
-    }
+	$number = number_format($number,$decimals,$decimalpoint,$separator);
 
 
-    return $number;
+
+	if($currency_symbol_placement=='left'){
+		$number = $symbol . $number;
+	}else{
+		$number = $number . $symbol;
+	}
+
+
+	return $number;
 }
 
 
@@ -776,8 +777,8 @@ function uwp_currency_format_number($number='',$cf=''){
  * @return      bool
  */
 function uwp_can_make_profile_private() {
-    $make_profile_private = apply_filters('uwp_user_can_make_profile_private', false);
-    return $make_profile_private;
+	$make_profile_private = apply_filters('uwp_user_can_make_profile_private', false);
+	return $make_profile_private;
 }
 
 /**
@@ -789,35 +790,35 @@ function uwp_can_make_profile_private() {
  * @return      string      Installation type.
  */
 function uwp_get_installation_type() {
-    // *. Single Site
-    if (!is_multisite()) {
-        return "single";
-    } else {
-        // Multisite
-        if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-            require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-        }
+	// *. Single Site
+	if (!is_multisite()) {
+		return "single";
+	} else {
+		// Multisite
+		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		}
 
-        // Network active.
-        if ( is_plugin_active_for_network( 'userswp/userswp.php' ) ) {
-            if (defined('UWP_ROOT_PAGES')) {
-                if (UWP_ROOT_PAGES == 'all') {
-                    // *. Multisite - Network Active - Pages on all sites
-                    return "multi_na_all";
-                } else {
-                    // *. Multisite - Network Active - Pages on specific site
-                    return "multi_na_site_id";
-                }
-            } else {
-                // Multi - network active - default
-                // *. Multisite - Network Active - Pages on main site
-                return "multi_na_default";
-            }
-        } else {
-            // * Multisite - Not network active
-            return "multi_not_na";
-        }
-    }
+		// Network active.
+		if ( is_plugin_active_for_network( 'userswp/userswp.php' ) ) {
+			if (defined('UWP_ROOT_PAGES')) {
+				if (UWP_ROOT_PAGES == 'all') {
+					// *. Multisite - Network Active - Pages on all sites
+					return "multi_na_all";
+				} else {
+					// *. Multisite - Network Active - Pages on specific site
+					return "multi_na_site_id";
+				}
+			} else {
+				// Multi - network active - default
+				// *. Multisite - Network Active - Pages on main site
+				return "multi_na_default";
+			}
+		} else {
+			// * Multisite - Not network active
+			return "multi_not_na";
+		}
+	}
 }
 
 /**
@@ -829,8 +830,8 @@ function uwp_get_installation_type() {
  * @return      string      Table prefix
  */
 function uwp_get_table_prefix() {
-    $tables = new UsersWP_Tables();
-    return $tables->get_table_prefix();
+	$tables = new UsersWP_Tables();
+	return $tables->get_table_prefix();
 }
 
 /**
@@ -842,8 +843,8 @@ function uwp_get_table_prefix() {
  * @return      string      Table prefix
  */
 function get_usermeta_table_prefix() {
-    $tables = new UsersWP_Tables();
-    return $tables->get_usermeta_table_prefix();
+	$tables = new UsersWP_Tables();
+	return $tables->get_usermeta_table_prefix();
 }
 
 /**
@@ -859,11 +860,11 @@ function get_usermeta_table_prefix() {
  * @return      string                  Converted custom field value string.
  */
 function uwp_maybe_serialize($key, $value) {
-    $field = uwp_get_custom_field_info($key);
-    if (isset($field->field_type) && $field->field_type == 'multiselect' && is_array($value)) {
-        $value = implode(",", $value);
-    }
-    return $value;
+	$field = uwp_get_custom_field_info($key);
+	if (isset($field->field_type) && $field->field_type == 'multiselect' && is_array($value)) {
+		$value = implode(",", $value);
+	}
+	return $value;
 }
 
 /**
@@ -878,11 +879,11 @@ function uwp_maybe_serialize($key, $value) {
  * @return      array                   Converted custom field value array.
  */
 function uwp_maybe_unserialize($key, $value) {
-    $field = uwp_get_custom_field_info($key);
-    if (isset($field->field_type) && $field->field_type == 'multiselect' && $value) {
-        $value = explode(",", $value);
-    }
-    return $value;
+	$field = uwp_get_custom_field_info($key);
+	if (isset($field->field_type) && $field->field_type == 'multiselect' && $value) {
+		$value = explode(",", $value);
+	}
+	return $value;
 }
 
 /**
@@ -895,8 +896,8 @@ function uwp_maybe_unserialize($key, $value) {
  */
 function uwp_create_tables()
 {
-    $tables = new UsersWP_Tables();
-    $tables->create_tables();
+	$tables = new UsersWP_Tables();
+	$tables->create_tables();
 }
 
 /**
@@ -908,17 +909,17 @@ function uwp_create_tables()
  * @return      string      IP address.
  */
 function uwp_get_ip() {
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-        //check ip from share internet
-        $ip = $_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        //to check ip is pass from proxy
-        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    } else {
-        $ip = $_SERVER['REMOTE_ADDR'];
-    }
+	if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+		//check ip from share internet
+		$ip = $_SERVER['HTTP_CLIENT_IP'];
+	} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		//to check ip is pass from proxy
+		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	} else {
+		$ip = $_SERVER['REMOTE_ADDR'];
+	}
 
-    return apply_filters('uwp_get_ip', $ip);
+	return apply_filters('uwp_get_ip', $ip);
 }
 
 /**
@@ -934,8 +935,8 @@ function uwp_get_ip() {
  */
 function uwp_str_starts_with($haystack, $needle)
 {
-    $length = strlen($needle);
-    return (substr($haystack, 0, $length) === $needle);
+	$length = strlen($needle);
+	return (substr($haystack, 0, $length) === $needle);
 }
 
 /**
@@ -951,12 +952,12 @@ function uwp_str_starts_with($haystack, $needle)
  */
 function uwp_str_ends_with($haystack, $needle)
 {
-    $length = strlen($needle);
-    if ($length == 0) {
-        return true;
-    }
+	$length = strlen($needle);
+	if ($length == 0) {
+		return true;
+	}
 
-    return (substr($haystack, -$length) === $needle);
+	return (substr($haystack, -$length) === $needle);
 }
 
 /**
@@ -971,26 +972,26 @@ function uwp_str_ends_with($haystack, $needle)
  * @return      string                  Font awesome icon value.
  */
 function uwp_field_type_to_fa_icon($type) {
-    $field_types = array(
-        'text' => 'fas fa-minus',
-        'datepicker' => 'fas fa-calendar-alt',
-        'textarea' => 'fas fa-bars',
-        'time' =>'far fa-clock',
-        'checkbox' =>'far fa-check-square',
-        'phone' =>'far fa-phone',
-        'radio' =>'far fa-dot-circle',
-        'email' =>'far fa-envelope',
-        'select' =>'far fa-caret-square-down',
-        'multiselect' =>'far fa-caret-square-down',
-        'url' =>'fas fa-link',
-        'file' =>'fas fa-file'
-    );
+	$field_types = array(
+		'text' => 'fas fa-minus',
+		'datepicker' => 'fas fa-calendar-alt',
+		'textarea' => 'fas fa-bars',
+		'time' =>'far fa-clock',
+		'checkbox' =>'far fa-check-square',
+		'phone' =>'far fa-phone',
+		'radio' =>'far fa-dot-circle',
+		'email' =>'far fa-envelope',
+		'select' =>'far fa-caret-square-down',
+		'multiselect' =>'far fa-caret-square-down',
+		'url' =>'fas fa-link',
+		'file' =>'fas fa-file'
+	);
 
-    if (isset($field_types[$type])) {
-        return $field_types[$type];
-    } else {
-        return "";
-    }
+	if (isset($field_types[$type])) {
+		return $field_types[$type];
+	} else {
+		return "";
+	}
 
 }
 
@@ -1002,11 +1003,11 @@ function uwp_field_type_to_fa_icon($type) {
  * @return True if WPML is active else False.
  */
 function uwp_is_wpml() {
-    if (function_exists('icl_object_id')) {
-        return true;
-    }
+	if (function_exists('icl_object_id')) {
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 /**
@@ -1025,15 +1026,15 @@ function uwp_is_wpml() {
  * @return int|NULL
  */
 function uwp_wpml_object_id( $element_id, $element_type = 'post', $return_original_if_missing = false, $ulanguage_code = null ) {
-    if ( uwp_is_wpml() ) {
-        if ( function_exists( 'wpml_object_id_filter' ) ) {
-            return apply_filters( 'wpml_object_id', $element_id, $element_type, $return_original_if_missing, $ulanguage_code );
-        } else {
-            return icl_object_id( $element_id, $element_type, $return_original_if_missing, $ulanguage_code );
-        }
-    }
+	if ( uwp_is_wpml() ) {
+		if ( function_exists( 'wpml_object_id_filter' ) ) {
+			return apply_filters( 'wpml_object_id', $element_id, $element_type, $return_original_if_missing, $ulanguage_code );
+		} else {
+			return icl_object_id( $element_id, $element_type, $return_original_if_missing, $ulanguage_code );
+		}
+	}
 
-    return $element_id;
+	return $element_id;
 }
 
 /**
@@ -1042,30 +1043,30 @@ function uwp_wpml_object_id( $element_id, $element_type = 'post', $return_origin
  * @return bool
  */
 function uwp_is_localhost(){
-    $localhost = false;
+	$localhost = false;
 
-    if( isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME']=='localhost' ){
-        $localhost = true;
-    }elseif(isset($_SERVER['SERVER_ADDR']) && ( $_SERVER['SERVER_ADDR'] == '127.0.0.1' || $_SERVER['SERVER_ADDR'] == '::1' )  ){
-        $localhost = true;
-    }
+	if( isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME']=='localhost' ){
+		$localhost = true;
+	}elseif(isset($_SERVER['SERVER_ADDR']) && ( $_SERVER['SERVER_ADDR'] == '127.0.0.1' || $_SERVER['SERVER_ADDR'] == '::1' )  ){
+		$localhost = true;
+	}
 
-    return $localhost;
+	return $localhost;
 }
 
 function uwp_get_default_avatar_uri(){
-    $default = uwp_get_option('profile_default_profile', '');
-    if(empty($default)){
-        $default = USERSWP_PLUGIN_URL."assets/images/no_profile.png";
-    } else {
-        $default = wp_get_attachment_url($default);
-    }
+	$default = uwp_get_option('profile_default_profile', '');
+	if(empty($default)){
+		$default = USERSWP_PLUGIN_URL."assets/images/no_profile.png";
+	} else {
+		$default = wp_get_attachment_url($default);
+	}
 
 	return apply_filters('uwp_default_avatar_uri', $default);
 }
 
 function uwp_get_default_thumb_uri(){
-    $thumb_url = USERSWP_PLUGIN_URL."assets/images/no_thumb.png";
+	$thumb_url = USERSWP_PLUGIN_URL."assets/images/no_thumb.png";
 	return apply_filters('uwp_default_thumb_uri', $thumb_url);
 }
 
@@ -1075,7 +1076,7 @@ function uwp_get_default_banner_uri(){
 		$banner_url = USERSWP_PLUGIN_URL."assets/images/banner.png";
 	} else {
 		$banner_url = wp_get_attachment_url($banner);
-    }
+	}
 	return apply_filters('uwp_default_banner_uri', $banner_url);
 }
 
@@ -1087,20 +1088,20 @@ function uwp_get_default_banner_uri(){
  * @return array updated upload variable array.
  */
 function uwp_handle_multisite_profile_image($uploads){
-    if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-        require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-    }
+	if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+	}
 
-    // Network active.
-    if ( is_plugin_active_for_network( 'userswp/userswp.php' ) ) {
-        $main_site = get_network()->site_id;
-        switch_to_blog( $main_site );
-        remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image');
-        $uploads = wp_upload_dir();
-        restore_current_blog();
-    }
+	// Network active.
+	if ( is_plugin_active_for_network( 'userswp/userswp.php' ) ) {
+		$main_site = get_network()->site_id;
+		switch_to_blog( $main_site );
+		remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image');
+		$uploads = wp_upload_dir();
+		restore_current_blog();
+	}
 
-    return $uploads;
+	return $uploads;
 }
 
 /**
@@ -1113,49 +1114,49 @@ function uwp_handle_multisite_profile_image($uploads){
  * @return int
  */
 function uwp_let_to_num( $size ) {
-    $l   = substr( $size, -1 );
-    $ret = substr( $size, 0, -1 );
-    switch ( strtoupper( $l ) ) {
-        case 'P':
-            $ret *= 1024;
-        case 'T':
-            $ret *= 1024;
-        case 'G':
-            $ret *= 1024;
-        case 'M':
-            $ret *= 1024;
-        case 'K':
-            $ret *= 1024;
-    }
-    return $ret;
+	$l   = substr( $size, -1 );
+	$ret = substr( $size, 0, -1 );
+	switch ( strtoupper( $l ) ) {
+		case 'P':
+			$ret *= 1024;
+		case 'T':
+			$ret *= 1024;
+		case 'G':
+			$ret *= 1024;
+		case 'M':
+			$ret *= 1024;
+		case 'K':
+			$ret *= 1024;
+	}
+	return $ret;
 }
 
 function uwp_format_decimal($number, $dp = false, $trim_zeros = false){
-    $locale   = localeconv();
-    $decimals = array( uwp_get_decimal_separator(), $locale['decimal_point'], $locale['mon_decimal_point'] );
+	$locale   = localeconv();
+	$decimals = array( uwp_get_decimal_separator(), $locale['decimal_point'], $locale['mon_decimal_point'] );
 
-    // Remove locale from string.
-    if ( ! is_float( $number ) ) {
-        $number = str_replace( $decimals, '.', $number );
-        $number = preg_replace( '/[^0-9\.,-]/', '', uwp_clean( $number ) );
-    }
+	// Remove locale from string.
+	if ( ! is_float( $number ) ) {
+		$number = str_replace( $decimals, '.', $number );
+		$number = preg_replace( '/[^0-9\.,-]/', '', uwp_clean( $number ) );
+	}
 
-    if ( false !== $dp ) {
-        $dp     = intval( '' == $dp ? uwp_get_decimal_separator() : $dp );
-        $number = number_format( floatval( $number ), $dp, '.', '' );
-        // DP is false - don't use number format, just return a string in our format
-    } elseif ( is_float( $number ) ) {
-        // DP is false - don't use number format, just return a string using whatever is given. Remove scientific notation using sprintf.
-        $number     = str_replace( $decimals, '.', sprintf( '%.' . uwp_get_rounding_precision() . 'f', $number ) );
-        // We already had a float, so trailing zeros are not needed.
-        $trim_zeros = true;
-    }
+	if ( false !== $dp ) {
+		$dp     = intval( '' == $dp ? uwp_get_decimal_separator() : $dp );
+		$number = number_format( floatval( $number ), $dp, '.', '' );
+		// DP is false - don't use number format, just return a string in our format
+	} elseif ( is_float( $number ) ) {
+		// DP is false - don't use number format, just return a string using whatever is given. Remove scientific notation using sprintf.
+		$number     = str_replace( $decimals, '.', sprintf( '%.' . uwp_get_rounding_precision() . 'f', $number ) );
+		// We already had a float, so trailing zeros are not needed.
+		$trim_zeros = true;
+	}
 
-    if ( $trim_zeros && strstr( $number, '.' ) ) {
-        $number = rtrim( rtrim( $number, '0' ), '.' );
-    }
+	if ( $trim_zeros && strstr( $number, '.' ) ) {
+		$number = rtrim( rtrim( $number, '0' ), '.' );
+	}
 
-    return $number;
+	return $number;
 }
 
 /**
@@ -1164,8 +1165,8 @@ function uwp_format_decimal($number, $dp = false, $trim_zeros = false){
  * @return string
  */
 function uwp_get_decimal_separator() {
-    $separator = apply_filters( 'uwp_decimal_separator', '.' );
-    return $separator ? stripslashes( $separator ) : '.';
+	$separator = apply_filters( 'uwp_decimal_separator', '.' );
+	return $separator ? stripslashes( $separator ) : '.';
 }
 
 /**
@@ -1176,11 +1177,11 @@ function uwp_get_decimal_separator() {
  * @return int
  */
 function uwp_get_rounding_precision() {
-    $precision = uwp_get_decimal_separator() + 2;
-    if ( defined(UWP_ROUNDING_PRECISION) && absint( UWP_ROUNDING_PRECISION ) > $precision ) {
-        $precision = absint( UWP_ROUNDING_PRECISION );
-    }
-    return $precision;
+	$precision = uwp_get_decimal_separator() + 2;
+	if ( defined(UWP_ROUNDING_PRECISION) && absint( UWP_ROUNDING_PRECISION ) > $precision ) {
+		$precision = absint( UWP_ROUNDING_PRECISION );
+	}
+	return $precision;
 }
 
 /**
@@ -1193,11 +1194,11 @@ function uwp_get_rounding_precision() {
  */
 function uwp_clean( $var ) {
 
-    if ( is_array( $var ) ) {
-        return array_map( 'uwp_clean', $var );
-    } else {
-        return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
-    }
+	if ( is_array( $var ) ) {
+		return array_map( 'uwp_clean', $var );
+	} else {
+		return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
+	}
 
 }
 
@@ -1210,82 +1211,82 @@ function uwp_clean( $var ) {
  * @param string $value Value.
  */
 function uwp_maybe_define( $name, $value ) {
-    if ( ! defined( $name ) ) {
-        define( $name, $value );
-    }
+	if ( ! defined( $name ) ) {
+		define( $name, $value );
+	}
 }
 
 function uwp_insert_usermeta(){
-    global $wpdb;
-    $sort= "user_registered";
+	global $wpdb;
+	$sort= "user_registered";
 
-    $all_users_id = $wpdb->get_col( $wpdb->prepare(
-        "SELECT $wpdb->users.ID FROM $wpdb->users ORDER BY %s ASC"
-        , $sort ));
+	$all_users_id = $wpdb->get_col( $wpdb->prepare(
+		"SELECT $wpdb->users.ID FROM $wpdb->users ORDER BY %s ASC"
+		, $sort ));
 
-    //we got all the IDs, now loop through them to get individual IDs
-    foreach ( $all_users_id as $user_id ) {
-        $user_data = get_userdata($user_id);
+	//we got all the IDs, now loop through them to get individual IDs
+	foreach ( $all_users_id as $user_id ) {
+		$user_data = get_userdata($user_id);
 
-        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
-        $user_meta = array(
-            'username' => $user_data->user_login,
-            'email' => $user_data->user_email,
-            'first_name' => $user_data->first_name,
-            'last_name' => $user_data->last_name,
-            'display_name' => $user_data->display_name,
-        );
+		$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+		$user_meta = array(
+			'username' => $user_data->user_login,
+			'email' => $user_data->user_email,
+			'first_name' => $user_data->first_name,
+			'last_name' => $user_data->last_name,
+			'display_name' => $user_data->display_name,
+		);
 
-        $users = $wpdb->get_var($wpdb->prepare("SELECT COUNT(user_id) FROM {$meta_table} WHERE user_id = %d", $user_id));
+		$users = $wpdb->get_var($wpdb->prepare("SELECT COUNT(user_id) FROM {$meta_table} WHERE user_id = %d", $user_id));
 
-        if(!empty($users)) {
-            $wpdb->update(
-                $meta_table,
-                $user_meta,
-                array('user_id' => $user_id)
-            );
-        }  else {
-            $user_meta['user_id'] = $user_id;
-            $wpdb->insert(
-                $meta_table,
-                $user_meta
-            );
-        }
-    }
+		if(!empty($users)) {
+			$wpdb->update(
+				$meta_table,
+				$user_meta,
+				array('user_id' => $user_id)
+			);
+		}  else {
+			$user_meta['user_id'] = $user_id;
+			$wpdb->insert(
+				$meta_table,
+				$user_meta
+			);
+		}
+	}
 }
 
 function uwp_get_localize_data(){
-    $uwp_localize_data = array(
-        'uwp_more_char_limit' => 100,
-        'uwp_more_text' => __('more','userswp'),
-        'uwp_less_text' => __('less','userswp'),
-        'error' => __('Something went wrong.','userswp'),
-        'error_retry' => __('Something went wrong, please retry.','userswp'),
-        'uwp_more_ellipses_text' => '...',
-        'ajaxurl' => admin_url('admin-ajax.php'),
-        'login_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("login_modal",1) ? 1 : '',
-        'register_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("register_modal",1) ? 1 : '',
-        'forgot_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("forgot_modal",1) ? 1 : '',
-        'default_banner' => uwp_get_default_banner_uri(),
-    );
+	$uwp_localize_data = array(
+		'uwp_more_char_limit' => 100,
+		'uwp_more_text' => __('more','userswp'),
+		'uwp_less_text' => __('less','userswp'),
+		'error' => __('Something went wrong.','userswp'),
+		'error_retry' => __('Something went wrong, please retry.','userswp'),
+		'uwp_more_ellipses_text' => '...',
+		'ajaxurl' => admin_url('admin-ajax.php'),
+		'login_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("login_modal",1) ? 1 : '',
+		'register_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("register_modal",1) ? 1 : '',
+		'forgot_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("forgot_modal",1) ? 1 : '',
+		'default_banner' => uwp_get_default_banner_uri(),
+	);
 
-    return apply_filters('uwp_localize_data', $uwp_localize_data);
+	return apply_filters('uwp_localize_data', $uwp_localize_data);
 }
 
 function uwp_is_page_builder(){
-    if(
-        (isset($_GET['elementor-preview']) && $_GET['elementor-preview'] > 0) // elementor
-        || isset( $_REQUEST['et_fb'] ) || isset( $_REQUEST['et_pb_preview'] ) // divi
-        || isset( $_REQUEST['fl_builder'] ) // beaver
-        || ! empty( $_REQUEST['siteorigin_panels_live_editor'] ) // siteorigin
-        || ! empty( $_REQUEST['cornerstone_preview'] ) // cornerstone
-        || ! empty( $_REQUEST['fb-edit'] ) || ! empty( $_REQUEST['fusion_load_nonce'] ) // fusion builder
-        || ! empty( $_REQUEST['ct_builder'] ) || ( ! empty( $_REQUEST['action'] ) && ( substr( $_REQUEST['action'], 0, 11 ) === "oxy_render_"  || substr( $_REQUEST['action'], 0, 10 ) === "ct_render_" )  ) // oxygen
-    ){
-        return true; // builder.
-    }
+	if(
+		(isset($_GET['elementor-preview']) && $_GET['elementor-preview'] > 0) // elementor
+		|| isset( $_REQUEST['et_fb'] ) || isset( $_REQUEST['et_pb_preview'] ) // divi
+		|| isset( $_REQUEST['fl_builder'] ) // beaver
+		|| ! empty( $_REQUEST['siteorigin_panels_live_editor'] ) // siteorigin
+		|| ! empty( $_REQUEST['cornerstone_preview'] ) // cornerstone
+		|| ! empty( $_REQUEST['fb-edit'] ) || ! empty( $_REQUEST['fusion_load_nonce'] ) // fusion builder
+		|| ! empty( $_REQUEST['ct_builder'] ) || ( ! empty( $_REQUEST['action'] ) && ( substr( $_REQUEST['action'], 0, 11 ) === "oxy_render_"  || substr( $_REQUEST['action'], 0, 10 ) === "ct_render_" )  ) // oxygen
+	){
+		return true; // builder.
+	}
 
-    return false;
+	return false;
 }
 
 /**
@@ -1297,13 +1298,13 @@ function uwp_is_page_builder(){
  * @return string
  */
 function uwp_help_tip( $tip, $allow_html = false ) {
-    if ( $allow_html ) {
-        $tip = uwp_sanitize_tooltip( $tip );
-    } else {
-        $tip = esc_attr( $tip );
-    }
+	if ( $allow_html ) {
+		$tip = uwp_sanitize_tooltip( $tip );
+	} else {
+		$tip = esc_attr( $tip );
+	}
 
-    return '<span class="uwp-help-tip dashicons dashicons-editor-help" title="' . $tip . '"></span>';
+	return '<span class="uwp-help-tip dashicons dashicons-editor-help" title="' . $tip . '"></span>';
 }
 
 /**
@@ -1315,100 +1316,100 @@ function uwp_help_tip( $tip, $allow_html = false ) {
  * @return string
  */
 function uwp_sanitize_tooltip( $var ) {
-    return htmlspecialchars( wp_kses( html_entity_decode( $var ), array(
-        'br'     => array(),
-        'em'     => array(),
-        'strong' => array(),
-        'small'  => array(),
-        'span'   => array(),
-        'ul'     => array(),
-        'li'     => array(),
-        'ol'     => array(),
-        'p'      => array(),
-    ) ) );
+	return htmlspecialchars( wp_kses( html_entity_decode( $var ), array(
+		'br'     => array(),
+		'em'     => array(),
+		'strong' => array(),
+		'small'  => array(),
+		'span'   => array(),
+		'ul'     => array(),
+		'li'     => array(),
+		'ol'     => array(),
+		'p'      => array(),
+	) ) );
 }
 
 function uwp_all_email_tags( $inline = true, $extra_tags = array() ){
-    $tags = array( '[#site_name#]', '[#site_name_url#]', '[#current_date#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#profile_link#]', '[#form_fields#]' );
+	$tags = array( '[#site_name#]', '[#site_name_url#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#profile_link#]', '[#form_fields#]' );
 
-    if(is_array($extra_tags) && count($extra_tags) > 0){
-        $tags = array_merge($tags, $extra_tags);
-    }
+	if(is_array($extra_tags) && count($extra_tags) > 0){
+		$tags = array_merge($tags, $extra_tags);
+	}
 
-    $tags = apply_filters( 'uwp_all_email_tags', $tags );
+	$tags = apply_filters( 'uwp_all_email_tags', $tags );
 
-    if ( $inline ) {
-        $tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
-    }
+	if ( $inline ) {
+		$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+	}
 
-    return $tags;
+	return $tags;
 }
 
 
 function uwp_delete_account_email_tags( $inline = true ){
-    $tags = array( '[#site_name#]', '[#site_name_url#]', '[#current_date#]', '[#from_name#]', '[#from_email#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#form_fields#]' );
+	$tags = array( '[#site_name#]', '[#site_name_url#]', '[#from_name#]', '[#from_email#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#form_fields#]' );
 
-    $tags = apply_filters( 'uwp_delete_account_email_tags', $tags );
+	$tags = apply_filters( 'uwp_delete_account_email_tags', $tags );
 
-    if ( $inline ) {
-        $tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
-    }
+	if ( $inline ) {
+		$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+	}
 
-    return $tags;
+	return $tags;
 }
 
 function uwp_authbox_tags( $inline = true ){
-    global $wpdb;
+	global $wpdb;
 
-    $tags = array( '[#post_id#]', '[#author_id#]', '[#author_name#]', '[#author_link#]', '[#author_bio#]', '[#author_image#]', '[#author_image_url#]', '[#post_modified#]', '[#post_date#]', '[#author_nicename#]', '[#author_registered#]', '[#author_website#]' );
+	$tags = array( '[#post_id#]', '[#author_id#]', '[#author_name#]', '[#author_link#]', '[#author_bio#]', '[#author_image#]', '[#author_image_url#]', '[#post_modified#]', '[#post_date#]', '[#author_nicename#]', '[#author_registered#]', '[#author_website#]' );
 
-    $tags = apply_filters('uwp_author_box_default_tags', $tags, $inline);
+	$tags = apply_filters('uwp_author_box_default_tags', $tags, $inline);
 
-    $table_name = uwp_get_table_prefix() . 'uwp_usermeta';
+	$table_name = uwp_get_table_prefix() . 'uwp_usermeta';
 
-    $excluded = uwp_get_excluded_fields();
+	$excluded = uwp_get_excluded_fields();
 
-    $columns = $wpdb->get_col("show columns from $table_name");
+	$columns = $wpdb->get_col("show columns from $table_name");
 
-    $extra_tags = array_diff($columns,$excluded);
+	$extra_tags = array_diff($columns,$excluded);
 
-    if( !empty( $extra_tags ) && '' != $extra_tags ) {
+	if( !empty( $extra_tags ) && '' != $extra_tags ) {
 
-        foreach ( $extra_tags as $tag_val ) {
-            $tags[] = '[#'.$tag_val.'#]';
-        }
+		foreach ( $extra_tags as $tag_val ) {
+			$tags[] = '[#'.$tag_val.'#]';
+		}
 
-    }
+	}
 
-    $tags = apply_filters( 'uwp_all_author_box_tags', $tags );
+	$tags = apply_filters( 'uwp_all_author_box_tags', $tags );
 
-    if ( $inline ) {
-        $tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
-    }
+	if ( $inline ) {
+		$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+	}
 
-    return $tags;
+	return $tags;
 }
 
 function uwp_get_posttypes() {
 
-    $exclude_posts = array('attachment','revision','nav_menu_item','custom_css','uwp-post');
-    $exclude_posttype = apply_filters('uwp_exclude_register_posttype', $exclude_posts);
+	$exclude_posts = array('attachment','revision','nav_menu_item','custom_css','uwp-post');
+	$exclude_posttype = apply_filters('uwp_exclude_register_posttype', $exclude_posts);
 
-    $all_posttyps = get_post_types(array('public'   => true,),'objects');
+	$all_posttyps = get_post_types(array('public'   => true,),'objects');
 
-    $display_posttypes = array();
+	$display_posttypes = array();
 
-    if( !empty( $all_posttyps ) && '' != $all_posttyps ) {
-        foreach ( $all_posttyps as $pt_keys => $pt_values ) {
+	if( !empty( $all_posttyps ) && '' != $all_posttyps ) {
+		foreach ( $all_posttyps as $pt_keys => $pt_values ) {
 
-            if( !in_array($pt_values->name,$exclude_posttype) ) {
-                $display_posttypes[$pt_values->name] = $pt_values->label;
-            }
+			if( !in_array($pt_values->name,$exclude_posttype) ) {
+				$display_posttypes[$pt_values->name] = $pt_values->label;
+			}
 
-        }
-    }
+		}
+	}
 
-    return $display_posttypes;
+	return $display_posttypes;
 }
 
 /**
@@ -1421,57 +1422,57 @@ function uwp_get_posttypes() {
  * @return      string       Field icon element.
  */
 function uwp_get_field_icon( $value ) {
-    $field_icon = $value;
+	$field_icon = $value;
 
-    if ( ! empty( $value ) ) {
-        if (strpos($value, 'http') === 0) {
-            $field_icon = '<span class="uwp_field_icon" style="background: url(' . $value . ') no-repeat left center;padding-left:14px;background-size:100% auto;margin-right:5px"></span>';
-        } else {
-            $field_icon = '<i class="uwp_field_icon ' . $value . '"></i>';
-        }
-    }
+	if ( ! empty( $value ) ) {
+		if (strpos($value, 'http') === 0) {
+			$field_icon = '<span class="uwp_field_icon" style="background: url(' . $value . ') no-repeat left center;padding-left:14px;background-size:100% auto;margin-right:5px"></span>';
+		} else {
+			$field_icon = '<i class="uwp_field_icon ' . $value . '"></i>';
+		}
+	}
 
-    return apply_filters( 'uwp_get_field_icon', $field_icon, $value );
+	return apply_filters( 'uwp_get_field_icon', $field_icon, $value );
 }
 
 function uwp_get_user_by_author_slug(){
-    $url_type = apply_filters('uwp_profile_url_type', 'slug');
-    $author_slug = get_query_var('uwp_profile');
-    if ($url_type == 'id') {
-        $user = get_user_by('id', $author_slug);
-    } else {
-        $user = get_user_by('slug', $author_slug);
-    }
+	$url_type = apply_filters('uwp_profile_url_type', 'slug');
+	$author_slug = get_query_var('uwp_profile');
+	if ($url_type == 'id') {
+		$user = get_user_by('id', $author_slug);
+	} else {
+		$user = get_user_by('slug', $author_slug);
+	}
 
-    return $user;
+	return $user;
 }
 
 function uwp_get_show_in_locations(){
-    $show_in_locations = array(
-        "[users]" => __("Users Page", 'userswp'),
-        "[more_info]" => __("More info tab", 'userswp'),
-        "[profile_side]" => __("Profile side (non bootstrap)", 'userswp'),
-        "[fieldset]" => __("Fieldset", 'userswp'),
-    );
+	$show_in_locations = array(
+		"[users]" => __("Users Page", 'userswp'),
+		"[more_info]" => __("More info tab", 'userswp'),
+		"[profile_side]" => __("Profile side (non bootstrap)", 'userswp'),
+		"[fieldset]" => __("Fieldset", 'userswp'),
+	);
 
-    $show_in_locations = apply_filters('uwp_show_in_locations', $show_in_locations);
+	$show_in_locations = apply_filters('uwp_show_in_locations', $show_in_locations);
 
-    return $show_in_locations;
+	return $show_in_locations;
 }
 
 function uwp_get_displayed_user(){
-    global $uwp_user;
-    $user = uwp_get_user_by_author_slug(); // for user displayed in profile
+	global $uwp_user;
+	$user = uwp_get_user_by_author_slug(); // for user displayed in profile
 
-    if(!$user && is_user_logged_in()){
-        $user = get_userdata(get_current_user_id()); // for user currently logged in
-    }
+	if(!$user && is_user_logged_in()){
+		$user = get_userdata(get_current_user_id()); // for user currently logged in
+	}
 
-    if(isset($uwp_user) && !empty($uwp_user) && $uwp_user instanceof WP_User){ // for user displaying in loop
-        $user = $uwp_user;
-    }
+	if(isset($uwp_user) && !empty($uwp_user) && $uwp_user instanceof WP_User){ // for user displaying in loop
+		$user = $uwp_user;
+	}
 
-    return apply_filters('uwp_get_displayed_user', $user);
+	return apply_filters('uwp_get_displayed_user', $user);
 }
 
 /**
@@ -1697,7 +1698,7 @@ function uwp_get_activation_link($user_id){
 			'key' => $key,
 			'login' => $user_data->user_login
 		),
-		site_url('/login/')
+		home_url('/login/')
 	);
 
 	return $activation_link;

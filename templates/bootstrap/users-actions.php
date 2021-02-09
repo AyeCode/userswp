@@ -152,5 +152,7 @@ do_action('uwp_users_loop_actions');
                 </div>
             </div>
         </div>
+	    <?php do_action('uwp_advanced_search_form'); ?>
     </div>
 </div>
+<?php do_action('uwp_after_users_loop_actions'); ?>

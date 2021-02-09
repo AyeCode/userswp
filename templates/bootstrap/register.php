@@ -4,18 +4,19 @@
  *
  * @ver 1.0.0
  */
+
 $css_class = ! empty( $args['css_class'] ) ? esc_attr( $args['css_class'] ) : 'border-0';
 $form_title = ! empty( $args['form_title'] ) ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Register', 'userswp' );
 $form_title = apply_filters( 'uwp_template_form_title', $form_title, 'register' );
 do_action( 'uwp_template_before', 'register' ); ?>
-	<div class="row">
-		<div class="card mx-auto container-fluid p-0 <?php echo $css_class; ?>" >
+    <div class="row">
+        <div class="card mx-auto container-fluid p-0 <?php echo $css_class; ?>" >
 			<?php
 			// ajax modal
 			if(wp_doing_ajax() && $form_title != '0'){
 				?>
-				<div class="modal-header">
-					<h5 class="modal-title"><?php echo esc_attr($form_title);?></h5>
+                <div class="modal-header">
+                    <h5 class="modal-title"><?php echo esc_attr($form_title);?></h5>
 					<?php
 					echo aui()->button(array(
 						'type'       =>  'button',
@@ -24,11 +25,11 @@ do_action( 'uwp_template_before', 'register' ); ?>
 						'extra_attributes'  => array('aria-label'=>__("Close","userswp"), 'data-dismiss'=>"modal")
 					));
 					?>
-				</div>
+                </div>
 				<?php
 			}
 			?>
-			<div class="card-body">
+            <div class="card-body">
 				<?php
 				do_action( 'uwp_template_form_title_before', 'register' );
 
@@ -38,11 +39,11 @@ do_action( 'uwp_template_before', 'register' ); ?>
 					echo '</h3>';
 				}
 
-                do_action( 'uwp_template_display_notices', 'register' ); ?>
+				do_action( 'uwp_template_display_notices', 'register' ); ?>
 
-				<form class="uwp-registration-form uwp_form" method="post" enctype="multipart/form-data">
+                <form class="uwp-registration-form uwp_form" method="post" enctype="multipart/form-data">
 					<?php
-                    do_action( 'uwp_template_fields', 'register', $args );
+					do_action( 'uwp_template_fields', 'register', $args );
 					echo aui()->button(array(
 						'type'       => 'submit',
 						'class'      => 'btn btn-primary btn-block text-uppercase uwp_register_submit',
@@ -50,10 +51,10 @@ do_action( 'uwp_template_before', 'register' ); ?>
 						'name'       => 'uwp_register_submit',
 					));
 					?>
-				</form>
+                </form>
 
-				<div class="uwp-footer-links">
-					<div class="uwp-footer-link">
+                <div class="uwp-footer-links">
+                    <div class="uwp-footer-link">
 						<?php
 						echo aui()->button(array(
 							'type'  =>  'a',
@@ -63,14 +64,14 @@ do_action( 'uwp_template_before', 'register' ); ?>
 							'extra_attributes'  => array('rel'=>'nofollow')
 						));
 						?>
-					</div>
-				</div>
+                    </div>
+                </div>
 
-				<div class="form-group text-center mb-0 p-0">
+                <div class="form-group text-center mb-0 p-0">
 					<?php do_action( 'uwp_social_fields', 'register' ); ?>
-				</div>
+                </div>
 
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 <?php do_action( 'uwp_template_after', 'register' ); ?>

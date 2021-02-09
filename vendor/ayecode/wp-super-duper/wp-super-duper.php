@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.22";
+		public $version = "1.0.23";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -1949,8 +1949,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 										},
 										<?php
 
+
+
 										foreach ( $args as $k => $a ) {
+
+											$this->block_row_start( $k, $a );
 											$this->build_block_arguments( $k, $a );
+											$this->block_row_end( $k, $a );
 										}
 										?>
 									),
@@ -1966,7 +1971,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 										},
 										<?php
 										foreach ( $this->arguments as $key => $args ) {
+											$this->block_row_start( $key, $args );
 											$this->build_block_arguments( $key, $args );
+											$this->block_row_end( $key, $args );
 										}
 										?>
 									),
@@ -2081,6 +2088,84 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			), '', $output );
 		}
 
+		public function block_row_start($key, $args){
+
+			// check for row
+			if(!empty($args['row'])){
+
+				if(!empty($args['row']['open'])){
+
+				// element require
+				$element_require = ! empty( $args['element_require'] ) ? $this->block_props_replace( $args['element_require'], true ) . " && " : "";
+				echo $element_require;
+
+					if(false){?><script><?php }?>
+						el('div', {
+								className: 'bsui components-base-control',
+							},
+							<?php if(!empty($args['row']['title'])){ ?>
+							el('label', {
+									className: 'components-base-control__label',
+								},
+								'<?php echo addslashes( $args['row']['title'] ); ?>'
+							),
+							<?php }?>
+							<?php if(!empty($args['row']['desc'])){ ?>
+							el('p', {
+									className: 'components-base-control__help mb-0',
+								},
+								'<?php echo addslashes( $args['row']['desc'] ); ?>'
+							),
+							<?php }?>
+							el(
+								'div',
+								{
+									className: 'row mb-n2 <?php if(!empty($args['row']['class'])){ echo esc_attr($args['row']['class']);} ?>',
+								},
+								el(
+									'div',
+									{
+										className: 'col pr-2',
+									},
+
+					<?php
+					if(false){?></script><?php }
+				}elseif(!empty($args['row']['close'])){
+					if(false){?><script><?php }?>
+						el(
+							'div',
+							{
+								className: 'col pl-0',
+							},
+					<?php
+					if(false){?></script><?php }
+				}else{
+					if(false){?><script><?php }?>
+						el(
+							'div',
+							{
+								className: 'col pl-0 pr-2',
+							},
+					<?php
+					if(false){?></script><?php }
+				}
+
+			}
+
+		}
+
+		public function block_row_end($key, $args){
+
+			if(!empty($args['row'])){
+				// maybe close
+				if(!empty($args['row']['close'])){
+					echo "))";
+				}
+
+				echo "),";
+			}
+		}
+
 		public function build_block_arguments( $key, $args ) {
 			$custom_attributes = ! empty( $args['custom_attributes'] ) ? $this->array_to_attributes( $args['custom_attributes'] ) : '';
 			$options           = '';
@@ -2090,6 +2175,20 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			// `content` is a protected and special argument
 			if ( $key == 'content' ) {
 				return;
+			}
+
+
+			// icon
+			$icon = '';
+			if( !empty( $args['icon'] ) ){
+				$icon .= "el('div', {";
+									$icon .= "dangerouslySetInnerHTML: {__html: '".self::get_widget_icon( esc_attr($args['icon']))."'},";
+									$icon .= "className: 'text-center',";
+									$icon .= "title: '".addslashes( $args['title'] )."',";
+								$icon .= "}),";
+
+				// blank title as its added to the icon.
+				$args['title'] = '';
 			}
 
 			// require advanced
@@ -2186,6 +2285,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 			} elseif ( $args['type'] == 'alignment' ) {
 				$type = 'AlignmentToolbar'; // @todo this does not seem to work but cant find a example
+			}elseif ( $args['type'] == 'margins' ) {
+
 			} else {
 				return;// if we have not implemented the control then don't break the JS.
 			}
@@ -2205,6 +2306,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			echo $require_advanced;
 			// add setting require if defined
 			echo $element_require;
+
+			// icon
+			echo $icon;
 			?>
 			el( wp.components.<?php echo $type; ?>, {
 			label: '<?php echo addslashes( $args['title'] ); ?>',
@@ -2227,6 +2331,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 			} ),
 			<?php
+
 
 		}
 
@@ -2590,7 +2695,32 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			if ( ! empty( $instance['title'] ) ) {
 				/** This filter is documented in wp-includes/widgets/class-wp-widget-pages.php */
 				$title  = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
-				$output = $args['before_title'] . $title . $args['after_title'];
+
+				if(empty($instance['widget_title_tag'])){
+					$output = $args['before_title'] . $title . $args['after_title'];
+				}else{
+					$title_tag = esc_attr( $instance['widget_title_tag'] );
+
+					// classes
+					$title_classes = array();
+					$title_classes[] = !empty( $instance['widget_title_size_class'] ) ? sanitize_html_class( $instance['widget_title_size_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_align_class'] ) ? sanitize_html_class( $instance['widget_title_align_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_color_class'] ) ? "text-".sanitize_html_class( $instance['widget_title_color_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_border_class'] ) ? sanitize_html_class( $instance['widget_title_border_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_border_color_class'] ) ? "border-".sanitize_html_class( $instance['widget_title_border_color_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_mt_class'] ) ? "mt-".absint( $instance['widget_title_mt_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_mr_class'] ) ? "mr-".absint( $instance['widget_title_mr_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_mb_class'] ) ? "mb-".absint( $instance['widget_title_mb_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_ml_class'] ) ? "ml-".absint( $instance['widget_title_ml_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_pt_class'] ) ? "pt-".absint( $instance['widget_title_pt_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_pr_class'] ) ? "pr-".absint( $instance['widget_title_pr_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_pb_class'] ) ? "pb-".absint( $instance['widget_title_pb_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_pl_class'] ) ? "pl-".absint( $instance['widget_title_pl_class'] ) : '';
+
+					$class = !empty( $title_classes ) ? implode(" ",$title_classes) : '';
+					$output = "<$title_tag class='$class' >$title</$title_tag>";
+				}
+
 			}
 
 			return $output;
@@ -2636,7 +2766,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						echo "<div class='sd-toggle-group sd-input-group-" . sanitize_title_with_dashes( $key ) . "' $hide>";
 
 						foreach ( $args as $k => $a ) {
+
+							$this->widget_inputs_row_start($k, $a);
 							$this->widget_inputs( $a, $instance );
+							$this->widget_inputs_row_end($k, $a);
+
 						}
 
 						echo "</div>";
@@ -2646,10 +2780,46 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 				} else {
 					foreach ( $arguments as $key => $args ) {
+						$this->widget_inputs_row_start($key, $args);
 						$this->widget_inputs( $args, $instance );
+						$this->widget_inputs_row_end($key, $args);
 					}
 				}
 
+			}
+		}
+
+		public function widget_inputs_row_start($key, $args){
+			if(!empty($args['row'])){
+				// maybe open
+				if(!empty($args['row']['open'])){
+					?>
+					<div class='bsui sd-argument ' data-argument='<?php echo esc_attr( $args['row']['key'] ); ?>' data-element_require='<?php if ( !empty($args['row']['element_require'])) {
+						echo $this->convert_element_require( $args['row']['element_require'] );
+					} ?>'>
+					<?php if(!empty($args['row']['title'])){ ?>
+					<label class="mb-0 "><?php echo esc_attr( $args['row']['title'] ); ?><?php echo $this->widget_field_desc( $args['row'] ); ?></label>
+					<?php }?>
+					<div class='row <?php if(!empty($args['row']['class'])){ echo esc_attr($args['row']['class']);} ?>'>
+					<div class='col pr-2'>
+					<?php
+				}elseif(!empty($args['row']['close'])){
+					echo "<div class='col pl-0'>";
+				}else{
+					echo "<div class='col pl-0 pr-2'>";
+				}
+			}
+		}
+
+		public function widget_inputs_row_end($key, $args){
+
+			if(!empty($args['row'])){
+				// maybe close
+				if(!empty($args['row']['close'])){
+					echo "</div></div>";
+				}
+
+				echo "</div>";
 			}
 		}
 
@@ -2736,115 +2906,130 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$custom_attributes = $this->array_to_attributes( $args['custom_attributes'], true );
 			}
 
+
 			// before wrapper
 			?>
 			<p class="sd-argument <?php echo esc_attr( $class ); ?>"
-			   data-argument='<?php echo esc_attr( $args['name'] ); ?>'
-			   data-element_require='<?php if ( $element_require ) {
-				   echo $this->convert_element_require( $element_require );
-			   } ?>'
+			data-argument='<?php echo esc_attr( $args['name'] ); ?>'
+			data-element_require='<?php if ( $element_require ) {
+				echo $this->convert_element_require( $element_require );
+			} ?>'
 			>
-				<?php
+			<?php
 
-				switch ( $args['type'] ) {
-					//array('text','password','number','email','tel','url','color')
-					case "text":
-					case "password":
-					case "number":
-					case "email":
-					case "tel":
-					case "url":
-					case "color":
+
+			switch ( $args['type'] ) {
+				//array('text','password','number','email','tel','url','color')
+				case "text":
+				case "password":
+				case "number":
+				case "email":
+				case "tel":
+				case "url":
+				case "color":
+					?>
+					<label
+						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args );?><?php echo $this->widget_field_desc( $args ); ?></label>
+					<input <?php echo $placeholder; ?> class="widefat"
+						<?php echo $custom_attributes; ?>
+						                               id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+						                               name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
+						                               type="<?php echo esc_attr( $args['type'] ); ?>"
+						                               value="<?php echo esc_attr( $value ); ?>">
+					<?php
+
+					break;
+				case "select":
+					$multiple = isset( $args['multiple'] ) && $args['multiple'] ? true : false;
+					if ( $multiple ) {
+						if ( empty( $value ) ) {
+							$value = array();
+						}
+					}
+					?>
+					<label
+						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+					<select <?php echo $placeholder; ?> class="widefat"
+						<?php echo $custom_attributes; ?>
+						                                id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+						                                name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) );
+						                                if ( $multiple ) {
+							                                echo "[]";
+						                                } ?>"
+						<?php if ( $multiple ) {
+							echo "multiple";
+						} //@todo not implemented yet due to gutenberg not supporting it
 						?>
-						<label
-							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
-						<input <?php echo $placeholder; ?> class="widefat"
-							<?php echo $custom_attributes; ?>
-							                               id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-							                               name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
-							                               type="<?php echo esc_attr( $args['type'] ); ?>"
-							                               value="<?php echo esc_attr( $value ); ?>">
+					>
 						<?php
 
-						break;
-					case "select":
-						$multiple = isset( $args['multiple'] ) && $args['multiple'] ? true : false;
-						if ( $multiple ) {
-							if ( empty( $value ) ) {
-								$value = array();
+						if ( ! empty( $args['options'] ) ) {
+							foreach ( $args['options'] as $val => $label ) {
+								if ( $multiple ) {
+									$selected = in_array( $val, $value ) ? 'selected="selected"' : '';
+								} else {
+									$selected = selected( $value, $val, false );
+								}
+								echo "<option value='$val' " . $selected . ">$label</option>";
 							}
 						}
 						?>
-						<label
-							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
-						<select <?php echo $placeholder; ?> class="widefat"
-							<?php echo $custom_attributes; ?>
-							                                id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-							                                name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) );
-							                                if ( $multiple ) {
-								                                echo "[]";
-							                                } ?>"
-							<?php if ( $multiple ) {
-								echo "multiple";
-							} //@todo not implemented yet due to gutenberg not supporting it
-							?>
-						>
-							<?php
+					</select>
+					<?php
+					break;
+				case "checkbox":
+					?>
+					<input <?php echo $placeholder; ?>
+						<?php checked( 1, $value, true ) ?>
+						<?php echo $custom_attributes; ?>
+						class="widefat" id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+						name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="checkbox"
+						value="1">
+					<label
+						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args );?><?php echo $this->widget_field_desc( $args ); ?></label>
+					<?php
+					break;
+				case "textarea":
+					?>
+					<label
+						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+					<textarea <?php echo $placeholder; ?> class="widefat"
+						<?php echo $custom_attributes; ?>
+						                                  id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+						                                  name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
+					><?php echo esc_attr( $value ); ?></textarea>
+					<?php
 
-							if ( ! empty( $args['options'] ) ) {
-								foreach ( $args['options'] as $val => $label ) {
-									if ( $multiple ) {
-										$selected = in_array( $val, $value ) ? 'selected="selected"' : '';
-									} else {
-										$selected = selected( $value, $val, false );
-									}
-									echo "<option value='$val' " . $selected . ">$label</option>";
-								}
-							}
-							?>
-						</select>
-						<?php
-						break;
-					case "checkbox":
-						?>
-						<input <?php echo $placeholder; ?>
-							<?php checked( 1, $value, true ) ?>
-							<?php echo $custom_attributes; ?>
-							class="widefat" id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-							name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="checkbox"
-							value="1">
-						<label
-							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
-						<?php
-						break;
-					case "textarea":
-						?>
-						<label
-							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
-						<textarea <?php echo $placeholder; ?> class="widefat"
-							<?php echo $custom_attributes; ?>
-							                                  id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-							                                  name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
-						><?php echo esc_attr( $value ); ?></textarea>
-						<?php
+					break;
+				case "hidden":
+					?>
+					<input id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+					       name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="hidden"
+					       value="<?php echo esc_attr( $value ); ?>">
+					<?php
+					break;
+				default:
+					echo "No input type found!"; // @todo we need to add more input types.
+			}
 
-						break;
-					case "hidden":
-						?>
-						<input id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-						       name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="hidden"
-						       value="<?php echo esc_attr( $value ); ?>">
-						<?php
-						break;
-					default:
-						echo "No input type found!"; // @todo we need to add more input types.
-				}
-
-				// after wrapper
-				?>
+			// after wrapper
+			?>
 			</p>
 			<?php
 
+
+		}
+
+		public function get_widget_icon($icon = 'box-top', $title = ''){
+			if($icon=='box-top'){
+				return '<svg title="'.esc_attr($title).'" width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.714" y="5.492" width="1.048" height="9.017" fill="#555D66"></rect><rect x="16.265" y="5.498" width="1.023" height="9.003" fill="#555D66"></rect><rect x="5.518" y="2.186" width="8.964" height="2.482" fill="#272B2F"></rect><rect x="5.487" y="16.261" width="9.026" height="1.037" fill="#555D66"></rect></svg>';
+			}elseif($icon=='box-right'){
+				return '<svg title="'.esc_attr($title).'" width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.714" y="5.492" width="1.046" height="9.017" fill="#555D66"></rect><rect x="15.244" y="5.498" width="2.518" height="9.003" fill="#272B2F"></rect><rect x="5.518" y="2.719" width="8.964" height="0.954" fill="#555D66"></rect><rect x="5.487" y="16.308" width="9.026" height="0.99" fill="#555D66"></rect></svg>';
+			}elseif($icon=='box-bottom'){
+				return '<svg title="'.esc_attr($title).'" width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.714" y="5.492" width="1" height="9.017" fill="#555D66"></rect><rect x="16.261" y="5.498" width="1.027" height="9.003" fill="#555D66"></rect><rect x="5.518" y="2.719" width="8.964" height="0.968" fill="#555D66"></rect><rect x="5.487" y="15.28" width="9.026" height="2.499" fill="#272B2F"></rect></svg>';
+			}elseif($icon=='box-left'){
+				return '<svg title="'.esc_attr($title).'" width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.202" y="5.492" width="2.503" height="9.017" fill="#272B2F"></rect><rect x="16.276" y="5.498" width="1.012" height="9.003" fill="#555D66"></rect><rect x="5.518" y="2.719" width="8.964" height="0.966" fill="#555D66"></rect><rect x="5.487" y="16.303" width="9.026" height="0.995" fill="#555D66"></rect></svg>';
+			}
 		}
 
 		/**
@@ -2867,6 +3052,27 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			return $description;
+		}
+
+		/**
+		 * Get the widget input title html.
+		 *
+		 * @param $args
+		 *
+		 * @return string
+		 */
+		public function widget_field_title( $args ) {
+
+			$title = '';
+			if ( isset( $args['title'] ) && $args['title'] ) {
+				if ( isset( $args['icon'] ) && $args['icon'] ) {
+					$title = self::get_widget_icon( $args['icon'], $args['title']  );
+				} else {
+					$title = esc_attr($args['title']);
+				}
+			}
+
+			return $title;
 		}
 
 		/**

@@ -1,5 +1,5 @@
 jQuery(document).ready(function () {
-    
+
     jQuery("#uwp-form-builder-tab, #uwp-form-builder-tab-predefined, #uwp-form-builder-tab-custom").find("ul li a").click(function() {
         if(!jQuery(this).attr('id')){return;}
         var htmlvar_name = jQuery(this).attr('id').replace('uwp-','');
@@ -145,11 +145,11 @@ function uwp_data_type_changed(obj, cont) {
         if (jQuery(obj).val() == 'FLOAT' || jQuery(obj).val() == 'INT') {
             jQuery('#licontainer_' + cont).find('.uwp-price-extra-set').show();
 
-            if(jQuery('#licontainer_' + cont).find(".uwp-price-extra-set input[name='extra[is_price]']:checked").val()=='1'){
+            if (jQuery('#licontainer_' + cont).find(".uwp-price-extra-set input[name='extra[is_price]']:checked").val() == '1') {
                 jQuery('#licontainer_' + cont).find('.uwp-price-extra').show();
             }
 
-        }else{
+        } else {
             jQuery('#licontainer_' + cont).find('.uwp-price-extra-set').hide();
             jQuery('#licontainer_' + cont).find('.uwp-price-extra').hide();
         }

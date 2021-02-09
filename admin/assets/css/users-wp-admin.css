@@ -108,7 +108,7 @@ span.uwp-custom-desc code.uwp-tag-copied:before {
   background: #000;
   color: #FFF;
   top: -30px;
-  left: 17%;
+  left: calc(50% - 35px);
   padding: 5px 10px;
   border-radius: 5px;
   font-style: normal; }
@@ -129,7 +129,7 @@ span.uwp-custom-desc code.uwp-tag-copied:after {
   content: " ";
   position: absolute;
   top: 25px;
-  left: 40%;
+  left: 50%;
   margin: -29px 0 0 -4px;
   margin-left: -5px;
   border-width: 5px;

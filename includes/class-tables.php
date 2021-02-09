@@ -6,39 +6,39 @@
  * @author     GeoDirectory Team <info@wpgeodirectory.com>
  */
 class UsersWP_Tables {
-    
-    /**
-     * Creates UsersWP related tables.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @return      void
-     */
-    public function create_tables()
-    {
 
-        global $wpdb;
+	/**
+	 * Creates UsersWP related tables.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @return      void
+	 */
+	public function create_tables()
+	{
 
-        $wpdb->hide_errors();
+		global $wpdb;
 
-        // we may need to do some updates before dbDelta
-        self::upgrade_1200();
+		$wpdb->hide_errors();
 
-        $collate = '';
-        if ($wpdb->has_cap('collation')) {
-            if (!empty($wpdb->charset)) $collate = "DEFAULT CHARACTER SET $wpdb->charset";
-            if (!empty($wpdb->collate)) $collate .= " COLLATE $wpdb->collate";
-        }
+		// we may need to do some updates before dbDelta
+		self::upgrade_1200();
 
-        /**
-         * Include any functions needed for upgrades.
-         *
-         * @since 1.0.0
-         */
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $form_fields = "CREATE TABLE " . $table_name . " (
+		$collate = '';
+		if ($wpdb->has_cap('collation')) {
+			if (!empty($wpdb->charset)) $collate = "DEFAULT CHARACTER SET $wpdb->charset";
+			if (!empty($wpdb->collate)) $collate .= " COLLATE $wpdb->collate";
+		}
+
+		/**
+		 * Include any functions needed for upgrades.
+		 *
+		 * @since 1.0.0
+		 */
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+		$form_fields = "CREATE TABLE " . $table_name . " (
 							  id int(11) NOT NULL AUTO_INCREMENT,
 							  form_type varchar(100) NULL,
 							  data_type varchar(100) NULL,
@@ -73,13 +73,13 @@ class UsersWP_Tables {
 							  PRIMARY KEY  (id)
 							  ) $collate";
 
-        $form_fields = apply_filters('uwp_before_form_field_table_create', $form_fields);
+		$form_fields = apply_filters('uwp_before_form_field_table_create', $form_fields);
 
-        dbDelta($form_fields);
+		dbDelta($form_fields);
 
-        $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
+		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
-        $form_extras = "CREATE TABLE " . $extras_table_name . " (
+		$form_extras = "CREATE TABLE " . $extras_table_name . " (
 									  id int(11) NOT NULL AUTO_INCREMENT,
 									  form_type varchar(255) NOT NULL,
 									  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
@@ -104,13 +104,13 @@ class UsersWP_Tables {
 									  PRIMARY KEY  (id)
 									) $collate AUTO_INCREMENT=1 ;";
 
-        $form_extras = apply_filters('uwp_before_form_extras_table_create', $form_extras);
+		$form_extras = apply_filters('uwp_before_form_extras_table_create', $form_extras);
 
-        dbDelta($form_extras);
+		dbDelta($form_extras);
 
-        // Table for storing userswp usermeta
-        $usermeta_table_name = get_usermeta_table_prefix() . 'uwp_usermeta';
-        $user_meta = "CREATE TABLE " . $usermeta_table_name . " (
+		// Table for storing userswp usermeta
+		$usermeta_table_name = get_usermeta_table_prefix() . 'uwp_usermeta';
+		$user_meta = "CREATE TABLE " . $usermeta_table_name . " (
 						user_id int(20) NOT NULL,
 						user_ip varchar(20) NULL DEFAULT NULL,
 						user_privacy varchar(255) NULL DEFAULT NULL,
@@ -127,13 +127,13 @@ class UsersWP_Tables {
 						PRIMARY KEY  (user_id)
 						) $collate ";
 
-        $user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);
+		$user_meta = apply_filters('uwp_before_usermeta_table_create', $user_meta);
 
-        dbDelta($user_meta);
+		dbDelta($user_meta);
 
-        // profile tabs layout table
-        $profile_tabs_table_name = get_usermeta_table_prefix() . 'uwp_profile_tabs';
-        $tabs_tbl_query = " CREATE TABLE " . $profile_tabs_table_name . " (
+		// profile tabs layout table
+		$profile_tabs_table_name = get_usermeta_table_prefix() . 'uwp_profile_tabs';
+		$tabs_tbl_query = " CREATE TABLE " . $profile_tabs_table_name . " (
 							  id int(11) NOT NULL AUTO_INCREMENT,
 							  form_type varchar(100) NULL,
 							  sort_order int(11) NOT NULL,
@@ -150,195 +150,195 @@ class UsersWP_Tables {
 							  PRIMARY KEY  (id)
 							  ) $collate; ";
 
-        $tabs_tbl_query = apply_filters('uwp_profile_tabs_table_create_query', $tabs_tbl_query);
+		$tabs_tbl_query = apply_filters('uwp_profile_tabs_table_create_query', $tabs_tbl_query);
 
-        dbDelta($tabs_tbl_query);
+		dbDelta($tabs_tbl_query);
 
-    }
+	}
 
-    /**
-     * Deleting the table whenever a blog is deleted
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @param       array       $tables     Tables to delete.
-     *
-     * @return      array                   Modified table array to delete
-     */
-    public function drop_tables_on_delete_blog( $tables ) {
-        global $wpdb;
-        $tables[] = $wpdb->prefix . 'uwp_form_fields';
-        $tables[] = $wpdb->prefix . 'uwp_form_extras';
-        $tables[] = $wpdb->prefix . 'uwp_usermeta';
-        $tables[] = $wpdb->prefix . 'uwp_profile_tabs';
-        return $tables;
-    }
+	/**
+	 * Deleting the table whenever a blog is deleted
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       array       $tables     Tables to delete.
+	 *
+	 * @return      array                   Modified table array to delete
+	 */
+	public function drop_tables_on_delete_blog( $tables ) {
+		global $wpdb;
+		$tables[] = $wpdb->prefix . 'uwp_form_fields';
+		$tables[] = $wpdb->prefix . 'uwp_form_extras';
+		$tables[] = $wpdb->prefix . 'uwp_usermeta';
+		$tables[] = $wpdb->prefix . 'uwp_profile_tabs';
+		return $tables;
+	}
 
-    /**
-     * Returns the table prefix based on the installation type.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @return      string      Table prefix
-     */
-    public function get_table_prefix() {
-        global $wpdb;
-        return $wpdb->prefix;
-    }
+	/**
+	 * Returns the table prefix based on the installation type.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @return      string      Table prefix
+	 */
+	public function get_table_prefix() {
+		global $wpdb;
+		return $wpdb->prefix;
+	}
 
-    /**
-     * Returns the user meta table prefix based on the installation type.
-     *
-     * @since       1.0.16
-     * @package     userswp
-     *
-     * @return      string      Table prefix
-     */
-    public function get_usermeta_table_prefix() {
-        global $wpdb;
+	/**
+	 * Returns the user meta table prefix based on the installation type.
+	 *
+	 * @since       1.0.16
+	 * @package     userswp
+	 *
+	 * @return      string      Table prefix
+	 */
+	public function get_usermeta_table_prefix() {
+		global $wpdb;
 
-        if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-            require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-        }
+		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		}
 
-        // Network active.
-        if ( is_plugin_active_for_network( 'userswp/userswp.php' ) || 1 == get_network_option('', 'uwp_is_network_active') ) {
-            return $wpdb->base_prefix;
-        } else {
-            return $wpdb->prefix;
-        }
-    }
+		// Network active.
+		if ( is_plugin_active_for_network( 'userswp/userswp.php' ) || 1 == get_network_option('', 'uwp_is_network_active') ) {
+			return $wpdb->base_prefix;
+		} else {
+			return $wpdb->prefix;
+		}
+	}
 
-    /**
-     * Checks whether the column exists in the table.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @param       string      $db             Table name.
-     * @param       string      $column         Column name.
-     *
-     * @return      bool
-     */
-    public function column_exists($db, $column)
-    {
-        global $wpdb;
-        $exists = false;
-        $columns = $wpdb->get_col("show columns from $db");
-        foreach ($columns as $c) {
-            if ($c == $column) {
-                $exists = true;
-                break;
-            }
-        }
-        return $exists;
-    }
+	/**
+	 * Checks whether the column exists in the table.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       string      $db             Table name.
+	 * @param       string      $column         Column name.
+	 *
+	 * @return      bool
+	 */
+	public function column_exists($db, $column)
+	{
+		global $wpdb;
+		$exists = false;
+		$columns = $wpdb->get_col("show columns from $db");
+		foreach ($columns as $c) {
+			if ($c == $column) {
+				$exists = true;
+				break;
+			}
+		}
+		return $exists;
+	}
 
-    /**
-     * Adds column if not exist in the table.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     *
-     * @param       string      $db             Table name.
-     * @param       string      $column         Column name.
-     * @param       string      $column_attr    Column attributes.
-     *
-     * @return      bool|int                    True when success.
-     */
-    public function add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
-    {
-        $excluded = uwp_get_excluded_fields();
-        
-        if (!in_array($column, $excluded)) {
-            global $wpdb;
-            $result = 0;// no rows affected
-            if (!$this->column_exists($db, $column)) {
-                if (!empty($db) && !empty($column))
-                    $result = $wpdb->query("ALTER TABLE `$db` ADD `$column`  $column_attr");
-            }
-            return $result;
-        } else {
-            return true;
-        }
-    }
+	/**
+	 * Adds column if not exist in the table.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 *
+	 * @param       string      $db             Table name.
+	 * @param       string      $column         Column name.
+	 * @param       string      $column_attr    Column attributes.
+	 *
+	 * @return      bool|int                    True when success.
+	 */
+	public function add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
+	{
+		$excluded = uwp_get_excluded_fields();
 
-    /**
-     * In v1.2.0 we removed some prefixes so they must be updated before dbDelta runs so to not duplicate columns.
-     *
-     * @since 1.2.0
-     */
-    public function upgrade_1200(){
-        // Only run if its an upgrade, not an install
-        if(get_option('uwp_db_version')){
-            global $wpdb;
-            $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
-            $fields_table = uwp_get_table_prefix() . 'uwp_form_fields';
-            $extras_table = uwp_get_table_prefix() . 'uwp_form_extras';
-            $cols = $wpdb->get_results( "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$meta_table' AND  TABLE_SCHEMA ='$wpdb->dbname'");
+		if (!in_array($column, $excluded)) {
+			global $wpdb;
+			$result = 0;// no rows affected
+			if (!$this->column_exists($db, $column)) {
+				if (!empty($db) && !empty($column))
+					$result = $wpdb->query("ALTER TABLE `$db` ADD `$column`  $column_attr");
+			}
+			return $result;
+		} else {
+			return true;
+		}
+	}
 
-            if(!empty($cols)){
-                $current_cols = array();
-                foreach($cols as $col){
-                    $current_cols[] = $col->COLUMN_NAME;
-                }
-                foreach($cols as $col){
-                    if ( strpos( $col->COLUMN_NAME, 'uwp_account_' ) === 0 ) {
-                        $col_name  = sanitize_sql_orderby($col->COLUMN_NAME);
-                        $col_type  = $col->COLUMN_TYPE;
-                        $new_col_name  = in_array($col_name,$current_cols) ? str_ireplace("uwp_account_","",$col_name) : str_ireplace("uwp_account_","_",$col_name);
+	/**
+	 * In v1.2.0 we removed some prefixes so they must be updated before dbDelta runs so to not duplicate columns.
+	 *
+	 * @since 1.2.0
+	 */
+	public function upgrade_1200(){
+		// Only run if its an upgrade, not an install
+		if(get_option('uwp_db_version')){
+			global $wpdb;
+			$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+			$fields_table = uwp_get_table_prefix() . 'uwp_form_fields';
+			$extras_table = uwp_get_table_prefix() . 'uwp_form_extras';
+			$cols = $wpdb->get_results( "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$meta_table' AND  TABLE_SCHEMA ='$wpdb->dbname'");
 
-                        $sql = "ALTER TABLE `{$meta_table}` CHANGE `$col_name` `$new_col_name` $col_type";
+			if(!empty($cols)){
+				$current_cols = array();
+				foreach($cols as $col){
+					$current_cols[] = $col->COLUMN_NAME;
+				}
+				foreach($cols as $col){
+					if ( strpos( $col->COLUMN_NAME, 'uwp_account_' ) === 0 ) {
+						$col_name  = sanitize_sql_orderby($col->COLUMN_NAME);
+						$col_type  = $col->COLUMN_TYPE;
+						$new_col_name  = in_array($col_name,$current_cols) ? str_ireplace("uwp_account_","",$col_name) : str_ireplace("uwp_account_","_",$col_name);
 
-                        // alter the usermeta column
-                        $wpdb->query( $sql);
+						$sql = "ALTER TABLE `{$meta_table}` CHANGE `$col_name` `$new_col_name` $col_type";
 
-                        // Update the fields table keys
-                        $wpdb->update(
-                            $fields_table,
-                            array(
-                                'htmlvar_name' => $new_col_name,
-                            ),
-                            array( 'htmlvar_name' =>  $col_name),
-                            array(
-                                '%s',
-                            ),
-                            array( '%s' )
-                        );
+						// alter the usermeta column
+						$wpdb->query( $sql);
 
-                        // Update the fields extras table keys
-                        $wpdb->update(
-                            $extras_table,
-                            array(
-                                'site_htmlvar_name' => $new_col_name,
-                            ),
-                            array( 'site_htmlvar_name' =>  $col_name),
-                            array(
-                                '%s',
-                            ),
-                            array( '%s' )
-                        );
+						// Update the fields table keys
+						$wpdb->update(
+							$fields_table,
+							array(
+								'htmlvar_name' => $new_col_name,
+							),
+							array( 'htmlvar_name' =>  $col_name),
+							array(
+								'%s',
+							),
+							array( '%s' )
+						);
 
-                    }
-                }
-            }
+						// Update the fields extras table keys
+						$wpdb->update(
+							$extras_table,
+							array(
+								'site_htmlvar_name' => $new_col_name,
+							),
+							array( 'site_htmlvar_name' =>  $col_name),
+							array(
+								'%s',
+							),
+							array( '%s' )
+						);
 
-            // now change all htmlvar_names
-            $wpdb->query( "UPDATE $fields_table SET htmlvar_name = REPLACE(htmlvar_name, 'uwp_account_', '') WHERE htmlvar_name LIKE 'uwp_account_%'");
-            $wpdb->query( "UPDATE $fields_table SET htmlvar_name = REPLACE(htmlvar_name, 'uwp_change_', '') WHERE htmlvar_name LIKE 'uwp_change_%'");
-            $wpdb->query( "UPDATE $fields_table SET htmlvar_name = REPLACE(htmlvar_name, 'uwp_reset_', '') WHERE htmlvar_name LIKE 'uwp_reset_%'");
-            $wpdb->query( "UPDATE $fields_table SET htmlvar_name = REPLACE(htmlvar_name, 'uwp_forgot_', '') WHERE htmlvar_name LIKE 'uwp_forgot_%'");
-            $wpdb->query( "UPDATE $fields_table SET htmlvar_name = REPLACE(htmlvar_name, 'uwp_login_', '') WHERE htmlvar_name LIKE 'uwp_login_%'");
+					}
+				}
+			}
 
-            $wpdb->query( "UPDATE $fields_table SET htmlvar_name = 'avatar' WHERE htmlvar_name = 'uwp_avatar_file'");
-            $wpdb->query( "UPDATE $fields_table SET htmlvar_name = 'banner' WHERE htmlvar_name = 'uwp_banner_file'");
+			// now change all htmlvar_names
+			$wpdb->query( "UPDATE $fields_table SET htmlvar_name = REPLACE(htmlvar_name, 'uwp_account_', '') WHERE htmlvar_name LIKE 'uwp_account_%'");
+			$wpdb->query( "UPDATE $fields_table SET htmlvar_name = REPLACE(htmlvar_name, 'uwp_change_', '') WHERE htmlvar_name LIKE 'uwp_change_%'");
+			$wpdb->query( "UPDATE $fields_table SET htmlvar_name = REPLACE(htmlvar_name, 'uwp_reset_', '') WHERE htmlvar_name LIKE 'uwp_reset_%'");
+			$wpdb->query( "UPDATE $fields_table SET htmlvar_name = REPLACE(htmlvar_name, 'uwp_forgot_', '') WHERE htmlvar_name LIKE 'uwp_forgot_%'");
+			$wpdb->query( "UPDATE $fields_table SET htmlvar_name = REPLACE(htmlvar_name, 'uwp_login_', '') WHERE htmlvar_name LIKE 'uwp_login_%'");
 
-            $wpdb->query( "UPDATE $extras_table SET site_htmlvar_name = REPLACE(site_htmlvar_name, 'uwp_account_', '') WHERE site_htmlvar_name LIKE 'uwp_account_%'");
+			$wpdb->query( "UPDATE $fields_table SET htmlvar_name = 'avatar' WHERE htmlvar_name = 'uwp_avatar_file'");
+			$wpdb->query( "UPDATE $fields_table SET htmlvar_name = 'banner' WHERE htmlvar_name = 'uwp_banner_file'");
 
-        }
+			$wpdb->query( "UPDATE $extras_table SET site_htmlvar_name = REPLACE(site_htmlvar_name, 'uwp_account_', '') WHERE site_htmlvar_name LIKE 'uwp_account_%'");
 
-    }
+		}
+
+	}
 
 }
