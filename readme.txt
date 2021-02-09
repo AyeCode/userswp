@@ -132,6 +132,7 @@ No questions so far, but don't hesitate to ask!
 
 = 1.2.2.13 =
 * Reset password and email activation fails when object cache is enabled - FIXED
+* AyeCode UI updated to v0.1.41 - CHANGED
 
 = 1.2.2.12 =
 * User role custom field to assign user role after registration - ADDED

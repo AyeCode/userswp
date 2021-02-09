@@ -53,24 +53,24 @@
     },
     {
         "name": "ayecode/wp-ayecode-ui",
-        "version": "0.1.40",
-        "version_normalized": "0.1.40.0",
+        "version": "0.1.41",
+        "version_normalized": "0.1.41.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
-            "reference": "37d028276efc38eb024f3812a56ecd1788d79a47"
+            "reference": "5646d3060999d75b74c0d723e44fe84fce9d2a4b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/37d028276efc38eb024f3812a56ecd1788d79a47",
-            "reference": "37d028276efc38eb024f3812a56ecd1788d79a47",
+            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/5646d3060999d75b74c0d723e44fe84fce9d2a4b",
+            "reference": "5646d3060999d75b74c0d723e44fe84fce9d2a4b",
             "shasum": ""
         },
         "require": {
             "composer/installers": "~1.0",
             "php": ">=5.3.0"
         },
-        "time": "2021-01-08T11:06:46+00:00",
+        "time": "2021-02-08T17:01:33+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -208,12 +208,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/composer/installers.git",
-            "reference": "7f3c618fcbfc787cca2bb7a127e7eb3a146c7046"
+            "reference": "98b34f8ab3558bee5caa7c07efbab3f5bd7663ab"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/installers/zipball/7f3c618fcbfc787cca2bb7a127e7eb3a146c7046",
-            "reference": "7f3c618fcbfc787cca2bb7a127e7eb3a146c7046",
+            "url": "https://api.github.com/repos/composer/installers/zipball/98b34f8ab3558bee5caa7c07efbab3f5bd7663ab",
+            "reference": "98b34f8ab3558bee5caa7c07efbab3f5bd7663ab",
             "shasum": ""
         },
         "require": {
@@ -231,7 +231,7 @@
             "symfony/phpunit-bridge": "^4.2 || ^5",
             "symfony/process": "^2.3"
         },
-        "time": "2020-12-08T15:13:21+00:00",
+        "time": "2021-02-02T15:00:11+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "Composer\\Installers\\Plugin",
@@ -275,6 +275,7 @@
             "Porto",
             "RadPHP",
             "SMF",
+            "Starbug",
             "Thelia",
             "Whmcs",
             "WolfCMS",
@@ -315,6 +316,7 @@
             "phpbb",
             "piwik",
             "ppi",
+            "processwire",
             "puppet",
             "pxcms",
             "reindex",
@@ -324,6 +326,7 @@
             "sydes",
             "sylius",
             "symfony",
+            "tastyigniter",
             "typo3",
             "wordpress",
             "yawik",
