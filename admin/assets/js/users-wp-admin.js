@@ -97,7 +97,7 @@ jQuery(window).on('load', function () {
         }
     });
 
-    jQuery(document).on('click', 'span code', function ($) {
+    jQuery(document).on('click', '.userswp span code', function ($) {
         jQuery('span code').removeClass('uwp-tag-copied');
         jQuery('span code span').remove();
         jQuery(this).addClass('uwp-tag-copied');

@@ -1182,6 +1182,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					if(!is_admin() && $secondary_color != AUI_SECONDARY_COLOR_ORIGINAL){
 						echo self::css_secondary($settings['color_secondary'],$compatibility);
 					}
+
+					// Set admin bar z-index lower when modal is open.
+					echo ' body.modal-open #wpadminbar{z-index:999}';
                 ?>
 			</style>
 			<?php

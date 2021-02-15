@@ -117,3 +117,13 @@ function uwp_get_settings() {
 
     return apply_filters( 'uwp_get_settings', $settings );
 }
+
+function test_clean( $var ) {
+
+	if ( is_array( $var ) ) {
+		return array_map( 'test_clean', $var );
+	} else {
+		return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
+	}
+
+}

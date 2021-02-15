@@ -1,3 +1,6 @@
+= 0.1.42 =
+* Theme check wrongly thinks we hide the admin bar so we move CSS to PHP file - CHANGED
+
 = 0.1.41 =
 * Time ago feature is not working - FIXED
 * Allow HTML tags in textarea field with allow_tags attribute - ADDED
