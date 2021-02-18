@@ -15,18 +15,37 @@ if( !class_exists('UsersWP_Admin_Help') ) {
 
         public function __construct() {
             add_action( 'current_screen', array( $this, 'add_tabs' ), 50 );
+            add_filter( 'aui_screen_ids', array( $this, 'add_aui_screens' ));
         }
 
         public function get_screen_ids() {
 
             $screen_ids = array(
+                'user',
+                'profile',
                 'toplevel_page_userswp',
                 'userswp_page_uwp_form_builder',
                 'userswp_page_uwp_status',
                 'userswp_page_uwp-addons',
+                'userswp_page_uwp_tools',
             );
 
             $screen_ids = apply_filters('uwp_admin_help_screen_ids',$screen_ids);
+
+            return $screen_ids;
+        }
+
+        /**
+         * Tell AyeCode UI to load on certain admin pages.
+         * 
+         * @param $screen_ids
+         *
+         * @return array
+         */
+        public function add_aui_screens( $screen_ids ){
+
+            // load on these pages if set
+            $screen_ids = array_merge( $screen_ids, $this->get_screen_ids() );
 
             return $screen_ids;
         }
