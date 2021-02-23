@@ -102,6 +102,8 @@ class UsersWP_Admin {
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles( $hook_suffix ) {
+		$screen       = get_current_screen();
+		$screen_id    = $screen ? $screen->id : '';
 
 		if ( $hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php' ) {
 			wp_register_style( 'jquery-ui', USERSWP_PLUGIN_URL . 'assets/css/jquery-ui.css' );
@@ -124,7 +126,9 @@ class UsersWP_Admin {
 			wp_enqueue_style( 'wp-color-picker' );
 		}
 
-		wp_enqueue_style( "userswp_admin_css", USERSWP_PLUGIN_URL . 'admin/assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
+		if ( in_array( $screen_id, $this->get_screen_ids() ) ) {
+			wp_enqueue_style( "userswp_admin_css", USERSWP_PLUGIN_URL . 'admin/assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
+		}
 
 	}
 
