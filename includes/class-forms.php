@@ -1470,8 +1470,22 @@ class UsersWP_Forms {
 
 		do_action( 'uwp_after_validate', 'reset' );
 
-		$login     = $data['uwp_reset_username'];
-		$key       = $data['uwp_reset_key'];
+		$login     = sanitize_text_field($data['uwp_reset_username']);
+		$key       = sanitize_text_field($data['uwp_reset_key']);
+
+		$user = get_user_by('login', $login);
+		if (!$user){
+			$message       = aui()->alert( array(
+					'type'    => 'error',
+					'content' => __( 'Invalid username.', 'userswp' )
+				)
+			);
+			$uwp_notices[] = array( 'reset' => $message );
+			return;
+		}
+
+		clean_user_cache($user);
+
 		$user_data = check_password_reset_key( $key, $login );
 
 		if ( is_wp_error( $user_data ) ) {

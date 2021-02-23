@@ -257,4 +257,126 @@ class AUI_Component_Helper {
 		return $output;
 	}
 
+	/**
+	 * Returns an array of allowed HTML tags and attributes for a given context.
+	 *
+	 * @since 0.1.41
+	 *
+	 * @param string|array $context The context for which to retrieve tags. Allowed values are 'post',
+	 *                              'strip', 'data', 'entities', or the name of a field filter such as
+	 *                              'pre_user_description'.
+	 * @param array $input Input.
+	 * @return array Array of allowed HTML tags and their allowed attributes.
+	 */
+	public static function kses_allowed_html( $context = 'post', $input = array() ) {
+		$allowed_html = wp_kses_allowed_html( $context );
+
+		if ( is_array( $allowed_html ) ) {
+			// <iframe>
+			if ( ! isset( $allowed_html['iframe'] ) && $context == 'post' ) {
+				$allowed_html['iframe']     = array(
+					'class'        => true,
+					'id'           => true,
+					'src'          => true,
+					'width'        => true,
+					'height'       => true,
+					'frameborder'  => true,
+					'marginwidth'  => true,
+					'marginheight' => true,
+					'scrolling'    => true,
+					'style'        => true,
+					'title'        => true,
+					'allow'        => true,
+					'allowfullscreen' => true,
+					'data-*'       => true,
+				);
+			}
+		}
+
+		/**
+		 * Filters the allowed html tags.
+		 *
+		 * @since 0.1.41
+		 *
+		 * @param array[]|string $allowed_html Allowed html tags.
+		 * @param @param string|array $context The context for which to retrieve tags.
+		 * @param array $input Input field.
+		 */
+		return apply_filters( 'ayecode_ui_kses_allowed_html', $allowed_html, $context, $input );
+	}
+
+	/**
+	 * Filters content and keeps only allowable HTML elements.
+	 *
+	 * This function makes sure that only the allowed HTML element names, attribute
+	 * names and attribute values plus only sane HTML entities will occur in
+	 * $string. You have to remove any slashes from PHP's magic quotes before you
+	 * call this function.
+	 *
+	 * The default allowed protocols are 'http', 'https', 'ftp', 'mailto', 'news',
+	 * 'irc', 'gopher', 'nntp', 'feed', 'telnet, 'mms', 'rtsp' and 'svn'. This
+	 * covers all common link protocols, except for 'javascript' which should not
+	 * be allowed for untrusted users.
+	 *
+	 * @since 0.1.41
+	 *
+	 * @param string|array $value Content to filter through kses.
+	 * @param array  $input       Input Field.
+	 * @return string Filtered content with only allowed HTML elements.
+	 */
+	public static function _sanitize_html_field( $value, $input = array() ) {
+		if ( $value === '' ) {
+			return $value;
+		}
+
+		$allowed_html = self::kses_allowed_html( 'post', $input );
+
+		if ( ! is_array( $allowed_html ) ) {
+			$allowed_html = wp_kses_allowed_html( 'post' );
+		}
+
+		$filtered = trim( wp_unslash( $value ) );
+		$filtered = wp_kses( $filtered, $allowed_html );
+		$filtered = balanceTags( $filtered ); // Balances tags
+
+		return $filtered;
+	}
+
+	/**
+	 * Navigates through an array, object, or scalar, and removes slashes from the values.
+	 *
+	 * @since 0.1.41
+	 *
+	 * @param mixed $value The value to be stripped.
+	 * @param array  $input Input Field.
+	 * @return mixed Stripped value.
+	 */
+	public static function sanitize_html_field( $value, $input = array() ) {
+		$original = $value;
+
+		if ( is_array( $value ) ) {
+			foreach ( $value as $index => $item ) {
+				$value[ $index ] = self::_sanitize_html_field( $value, $input );
+			}
+		} elseif ( is_object( $value ) ) {
+			$object_vars = get_object_vars( $value );
+
+			foreach ( $object_vars as $property_name => $property_value ) {
+				$value->$property_name = self::_sanitize_html_field( $property_value, $input );
+			}
+		} else {
+			$value = self::_sanitize_html_field( $value, $input );
+		}
+
+		/**
+		 * Filters content and keeps only allowable HTML elements.
+		 *
+		 * @since 0.1.41
+		 *
+		 * @param string|array $value Content to filter through kses.
+		 * @param string|array $value Original content without filter.
+		 * @param array  $input       Input Field.
+		 */
+		return apply_filters( 'ayecode_ui_sanitize_html_field', $value, $original, $input );
+	}
 }

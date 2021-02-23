@@ -132,7 +132,7 @@ class UsersWP_Tables {
 		dbDelta($user_meta);
 
 		// profile tabs layout table
-		$profile_tabs_table_name = get_usermeta_table_prefix() . 'uwp_profile_tabs';
+		$profile_tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
 		$tabs_tbl_query = " CREATE TABLE " . $profile_tabs_table_name . " (
 							  id int(11) NOT NULL AUTO_INCREMENT,
 							  form_type varchar(100) NULL,

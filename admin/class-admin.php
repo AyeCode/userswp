@@ -102,6 +102,8 @@ class UsersWP_Admin {
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles( $hook_suffix ) {
+		$screen       = get_current_screen();
+		$screen_id    = $screen ? $screen->id : '';
 
 		if ( $hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php' ) {
 			wp_register_style( 'jquery-ui', USERSWP_PLUGIN_URL . 'assets/css/jquery-ui.css' );
@@ -124,7 +126,9 @@ class UsersWP_Admin {
 			wp_enqueue_style( 'wp-color-picker' );
 		}
 
-		wp_enqueue_style( "userswp_admin_css", USERSWP_PLUGIN_URL . 'admin/assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
+		if ( in_array( $screen_id, $this->get_screen_ids() ) ) {
+			wp_enqueue_style( "userswp_admin_css", USERSWP_PLUGIN_URL . 'admin/assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
+		}
 
 	}
 
@@ -138,6 +142,8 @@ class UsersWP_Admin {
 	public function enqueue_scripts( $hook_suffix ) {
 
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$screen       = get_current_screen();
+		$screen_id    = $screen ? $screen->id : '';
 
 		if ( $hook_suffix == 'profile.php' || $hook_suffix == 'user-edit.php' ) {
 
@@ -171,31 +177,58 @@ class UsersWP_Admin {
 			wp_enqueue_script( "uwp_form_builder", USERSWP_PLUGIN_URL . 'admin/assets/js/uwp-form-builder' . $suffix . '.js', array(), USERSWP_VERSION, 'all' );
 		}
 
-		wp_enqueue_script( "userswp_admin", USERSWP_PLUGIN_URL . 'admin/assets/js/users-wp-admin' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
+		if ( in_array( $screen_id, $this->get_screen_ids() ) ) {
+			wp_enqueue_script( "userswp_admin", USERSWP_PLUGIN_URL . 'admin/assets/js/users-wp-admin' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
 
-		wp_enqueue_script( "jquery-ui-tooltip" );
-		wp_enqueue_script( 'wp-color-picker' );
+			wp_enqueue_script( "jquery-ui-tooltip" );
+			wp_enqueue_script( 'wp-color-picker' );
 
-		$ajax_cons_data = array(
-			'url'                                => admin_url( 'admin-ajax.php' ),
-			'custom_field_not_blank_var'         => __( 'Field key must not be blank', 'userswp' ),
-			'custom_field_options_not_blank_var' => __( 'Option Values must not be blank', 'userswp' ),
-			'custom_field_not_special_char'      => __( 'Please do not use special character and spaces in field key.', 'userswp' ),
-			'custom_field_unique_name'           => __( 'Field key should be a unique name.', 'userswp' ),
-			'custom_field_delete'                => __( 'Are you sure you wish to delete this field?', 'userswp' ),
-			'custom_field_id_required'           => __( 'This field is required.', 'userswp' ),
-			'img_spacer'                         => admin_url( 'images/media-button-image.gif' ),
-			'txt_choose_image'                   => __( 'Choose an image', 'userswp' ),
-			'txt_use_image'                      => __( 'Use image', 'userswp' ),
-			'delete_register_form'               => __( 'Are you sure you wish to delete this form?', 'userswp' ),
-			'update_register_form'               => __( 'Enter register form title', 'userswp' ),
-		);
-		wp_localize_script( "userswp_admin", 'uwp_admin_ajax', $ajax_cons_data );
+			$ajax_cons_data = array(
+				'url'                                => admin_url( 'admin-ajax.php' ),
+				'custom_field_not_blank_var'         => __( 'Field key must not be blank', 'userswp' ),
+				'custom_field_options_not_blank_var' => __( 'Option Values must not be blank', 'userswp' ),
+				'custom_field_not_special_char'      => __( 'Please do not use special character and spaces in field key.', 'userswp' ),
+				'custom_field_unique_name'           => __( 'Field key should be a unique name.', 'userswp' ),
+				'custom_field_delete'                => __( 'Are you sure you wish to delete this field?', 'userswp' ),
+				'custom_field_id_required'           => __( 'This field is required.', 'userswp' ),
+				'img_spacer'                         => admin_url( 'images/media-button-image.gif' ),
+				'txt_choose_image'                   => __( 'Choose an image', 'userswp' ),
+				'txt_use_image'                      => __( 'Use image', 'userswp' ),
+				'delete_register_form'               => __( 'Are you sure you wish to delete this form?', 'userswp' ),
+				'update_register_form'               => __( 'Enter register form title', 'userswp' ),
+			);
+			wp_localize_script( "userswp_admin", 'uwp_admin_ajax', $ajax_cons_data );
 
-		$country_data = uwp_get_country_data();
-		wp_localize_script( USERSWP_NAME, 'uwp_country_data', $country_data );
+			$country_data = uwp_get_country_data();
+			wp_localize_script( USERSWP_NAME, 'uwp_country_data', $country_data );
+		}
 
 	}
+
+	public function get_screen_ids(){
+		$screen_ids = array(
+			'toplevel_page_userswp',
+			'userswp_page_uwp_form_builder',
+			'userswp_page_uwp_tools',
+			'userswp_page_uwp_status',
+			'page',
+			'edit-page',
+			'profile',
+			'users',
+		);
+
+		// Check for translated screen id.
+		$uwp_screen_id = sanitize_title( __( 'UsersWP', 'userswp' ) );
+
+		if ( $uwp_screen_id != 'userswp' ) {
+			$screen_ids[] = 'toplevel_page_' . $uwp_screen_id;
+			$screen_ids[] = $uwp_screen_id . '_page_uwp_form_builder';
+			$screen_ids[] = $uwp_screen_id . '_page_uwp_tools';
+			$screen_ids[] = $uwp_screen_id . '_page_uwp_status';
+		}
+
+		return apply_filters( 'uwp_screen_ids', $screen_ids );
+    }
 
 	/**
 	 * Displays update messages
