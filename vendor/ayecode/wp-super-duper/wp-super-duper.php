@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.23";
+		public $version = "1.0.24";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -1140,8 +1140,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length == 0) {
 						console.log('add advanced button');
-
-						jQuery(form).find('.widget-control-save').after($button);
+						if(jQuery(form).find('.widget-control-save').length > 0){
+							jQuery(form).find('.widget-control-save').after($button);
+						}else{
+							jQuery(form).find('.sd-show-advanced').after($button);
+						}
 					} else {
 						console.log('no advanced button');
 						console.log(jQuery($this).val());
@@ -1854,7 +1857,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 										'attributes': props.attributes,
 										'post_id': <?php global $post; if ( isset( $post->ID ) ) {
 										echo $post->ID;
-									}?>,
+									}else{echo '0';}?>,
 										'_ajax_nonce': '<?php echo wp_create_nonce( 'super_duper_output_shortcode' );?>'
 									};
 
