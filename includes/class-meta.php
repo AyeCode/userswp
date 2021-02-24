@@ -71,6 +71,10 @@ class UsersWP_Meta {
             $value = null;
             $user_data = get_userdata($user_id);
 
+	        if (!$user_data) {
+		        return $value;
+	        }
+
             switch ($key){
                 case 'email': $value = $user_data->user_email; break;
                 case 'username': $value = $user_data->user_login; break;
