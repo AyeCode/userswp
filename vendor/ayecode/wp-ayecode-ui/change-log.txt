@@ -1,3 +1,12 @@
+= 0.1.42 =
+* Theme check wrongly thinks we hide the admin bar so we move CSS to PHP file - CHANGED
+
+= 0.1.41 =
+* Time ago feature is not working - FIXED
+* Allow HTML tags in textarea field with allow_tags attribute - ADDED
+* Bootstrap v3 compatibility CSS function added to help with some conflicts - ADDED
+* Textarea (non wysiwyg) now supports `extra_attributes` - ADDED
+
 = 0.1.40 =
 * BS Full mode on backend causes style conflicts, warning added - ADDED
 
@@ -5,7 +14,7 @@
 * flatpickr calendar can sometimes have the year select hidden on some themes - FIXED
 
 = 0.1.38 =
-* List group item spacing amd border using wrong rule - FIXED
+* List group item spacing and border using wrong rule - FIXED
 
 = 0.1.36 =
 * Show JS error when field condition has "form" word - FIXED

@@ -57,7 +57,7 @@ class UsersWP_Menus {
 
         ?>
 
-        <div id="users-wp-menu" class="posttypediv">
+        <div id="users-wp-endpoints" class="posttypediv">
             <h4><?php esc_html_e( 'Common', 'userswp' ) ?></h4>
             <p><?php esc_html_e( 'Common links are visible to everyone.', 'userswp' ) ?></p>
 
@@ -96,12 +96,14 @@ class UsersWP_Menus {
                 </ul>
             </div>
 
-            <p class="button-controls">
-			    <span class="list-controls">
-					<a href="<?php echo admin_url( 'nav-menus.php?page-tab=all&selectall=1#users-wp-menu' ); ?>" class="select-all"><?php _e( 'Select all', 'userswp' ); ?></a>
-				</span>
+            <p class="button-controls wp-clearfix" data-items-type="users-wp-endpoints">
+                <span class="list-controls hide-if-no-js">
+                    <input type="checkbox" id="users-wp-endpoints-tab" class="select-all">
+                    <label for="users-wp-endpoints-tab"><?php _e( 'Select all', 'userswp' ); ?></label>
+                </span>
+
                 <span class="add-to-menu">
-                    <input type="submit"<?php if ( function_exists( 'wp_nav_menu_disabled_check' ) ) : wp_nav_menu_disabled_check( $nav_menu_selected_id ); endif; ?> class="button-secondary submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu', 'userswp' ); ?>" name="add-custom-menu-item" id="submit-users-wp-menu" />
+                    <input type="submit" class="button submit-add-to-menu right" value="<?php esc_attr_e( 'Add to menu', 'userswp' ); ?>" name="add-users-wp-endpoints-item" id="submit-users-wp-endpoints">
                     <span class="spinner"></span>
                 </span>
             </p>

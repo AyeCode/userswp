@@ -255,6 +255,15 @@ function uwp_process_activation_link() {
         $key =  strip_tags(esc_sql($_GET['key']));
         $login =  strip_tags(esc_sql($_GET['login']));
         $login_page = uwp_get_page_id('login_page', false);
+	    $user = get_user_by('login', $login);
+	    if (!$user){
+		    $redirect_to = add_query_arg(array('uwp_err' => 'act_wrong'), get_permalink($login_page));
+		    wp_redirect($redirect_to);
+		    exit();
+	    }
+
+	    clean_user_cache($user);
+
         $result = check_password_reset_key($key, $login);
 
         if (is_wp_error($result)) {

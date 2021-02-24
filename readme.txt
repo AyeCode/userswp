@@ -12,7 +12,7 @@ Light weight frontend user registration and login plugin.
 
 == Description ==
 
-[Addons](https://userswp.io/downloads/category/addons/) | [Demos](https://wpgeo.directory/userswp/) | [Docs](https://userswp.io/docs/)
+[Addons](https://userswp.io/downloads/category/addons/) | [Demos](https://demos.ayecode.io/userswp/) | [Docs](https://userswp.io/docs/)
 = THE ONLY LIGHTWEIGHT USER PROFILE PLUGIN FOR WORDPRESS. CUSTOMIZE 100% OF ITS DESIGN WITH YOUR FAVORITE PAGE BUILDER. FULLY COMPATIBLE WITH ELEMENTOR, OXYGEN, DIVI, BEAVER BUILDER, GUTENBERG AND MANY OTHER PAGE BUILDERS. USERSWP FEATURES FRONT END USER PROFILE, USERS DIRECTORY, A REGISTRATION AND A LOGIN FORM. =
 
 While BuddyPress, Ultimate Member, Profile Builder and similar plugins are excellent, we wanted to create something much lighter and simpler to use.
@@ -84,6 +84,7 @@ UsersWP can be extended with several add-ons. Few examples are:
 * [Verified Users](https://userswp.io/downloads/verified-users/) - Make verified users stand out with their own verified badge.
 * [Realtime Notifications](https://userswp.io/downloads/realtime-notifications/) - Sends notifications to users, about activity on your website.
 * [Advanced Search](https://userswp.io/downloads/advanced-search/) - Extends the regular UsersWP search form by adding options to filter by custom fields.
+* [Private Messages](https://userswp.io/downloads/private-messages/) - Allow users to message each other from your website.
 
 There are many others and we release new Add-ons frequently. You can see the full collection here: [UsersWP Premium Add-ons](https://userswp.io/downloads/category/addons/)
 
@@ -129,6 +130,11 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.2.13 =
+* Reset password and email activation fails when object cache is enabled - FIXED
+* Load our admin JS on UWP settings and pages only - CHANGED
+* AyeCode UI updated to v0.1.41 - CHANGED
 
 = 1.2.2.12 =
 * User role custom field to assign user role after registration - ADDED

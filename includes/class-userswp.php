@@ -470,7 +470,7 @@ final class UsersWP {
 			require_once dirname( dirname( __FILE__ ) ) . '/includes/libraries/class-geodirectory-plugin.php';
 		}
 
-		if ( class_exists( 'WPInv_Invoice' ) ) {
+		if ( class_exists( 'WPInv_Plugin' ) ) {
 			/**
 			 * The class responsible for displaying notices
 			 *

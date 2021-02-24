@@ -485,6 +485,7 @@ class UsersWP_Profile {
 				$value = nl2br( $value );
 				break;
 			case 'editor':
+                $value = nl2br( $value );
 				break;
 			default:
 				$value = esc_html( $value );
