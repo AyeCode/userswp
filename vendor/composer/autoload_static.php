@@ -7,8 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInitf3d2d3b01d25e99f52c2a4d35c24b58c
 {
     public static $files = array (
-        '24583d3588ebda5228dd453cfaa070da' => __DIR__ . '/..' . '/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php',
         'e8d544c98e79f913e13eae1306ab635e' => __DIR__ . '/..' . '/ayecode/wp-ayecode-ui/ayecode-ui-loader.php',
+        '24583d3588ebda5228dd453cfaa070da' => __DIR__ . '/..' . '/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php',
     );
 
     public static $prefixLengthsPsr4 = array (

@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '735476d6cd462fb571e6bdc9ab9b3a4afc813358',
+    'reference' => '5428a1e1f91f1a7ffd161e1a6c41baacf0b22f2c',
     'name' => 'uswerwp/userswp',
   ),
   'versions' => 
@@ -40,12 +40,12 @@
     ),
     'ayecode/wp-super-duper' => 
     array (
-      'pretty_version' => '1.0.23',
-      'version' => '1.0.23.0',
+      'pretty_version' => '1.0.24',
+      'version' => '1.0.24.0',
       'aliases' => 
       array (
       ),
-      'reference' => '9473c0b7cf3ef4c32374222994a3e4613cdaeb48',
+      'reference' => '4eaa2f6f6e1a29ff71f7fdbd694892d7479ef754',
     ),
     'composer/installers' => 
     array (
@@ -78,7 +78,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '735476d6cd462fb571e6bdc9ab9b3a4afc813358',
+      'reference' => '5428a1e1f91f1a7ffd161e1a6c41baacf0b22f2c',
     ),
   ),
 );

@@ -1,3 +1,7 @@
+= 1.0.24 =
+* WP 5.7 Gutenberg widgets screen has JS error which breaks page saving - FIXED
+* WP 5.7 Gutenberg widgets screen legacy widgets have no `show advanced` button - FIXED
+
 = 1.0.23 =
 * Rows argument now available to group arguments to the one row - ADDED
 
