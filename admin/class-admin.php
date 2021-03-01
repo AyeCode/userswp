@@ -781,7 +781,7 @@ class UsersWP_Admin {
 		$action  = isset( $_REQUEST['action'] ) ? sanitize_text_field($_REQUEST['action']) : false;
 		$nonce   = isset( $_REQUEST['_nonce'] ) ? sanitize_text_field($_REQUEST['_nonce']) : false;
 
-		if ( $user_id && 'uwp_resend' == $action && wp_verify_nonce( $nonce, 'uwp_resend' ) ) {
+		if ( $user_id && 'uwp_resend' == $action && !empty($nonce) && wp_verify_nonce( $nonce, 'uwp_resend' ) ) {
 			$send_result = $this->resend_activation_mail( $user_id );
 			if ( ! is_admin() ) {
 				global $uwp_notices;

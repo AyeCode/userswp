@@ -1512,7 +1512,7 @@ class UsersWP_Form_Builder {
 							// only make the field as big as it needs to be.
 							if (isset($option_values) && $option_values && $field_type == 'select') {
 								$option_values_arr = explode(',', $option_values);
-								if (is_array($option_values_arr)) {
+								if (isset($option_values_arr) && is_array($option_values_arr)) {
 									$op_max = 0;
 									foreach ($option_values_arr as $op_val) {
 										if (strlen($op_val) && strlen($op_val) > $op_max) {$op_max = strlen($op_val); }
@@ -1698,7 +1698,7 @@ class UsersWP_Form_Builder {
 						if (isset($option_values) && $option_values && $field_type == 'select') {
 							$option_values_arr = explode(',', $option_values);
 
-							if (is_array($option_values_arr)) {
+							if (isset($option_values_arr) && is_array($option_values_arr)) {
 								$op_max = 0;
 
 								foreach ($option_values_arr as $op_val) {
@@ -2643,7 +2643,7 @@ class UsersWP_Form_Builder {
 				return;
 
 			foreach ($_REQUEST as $pkey => $pval) {
-				if (is_array($_REQUEST[$pkey])) {
+				if (isset($_REQUEST[$pkey]) && is_array($_REQUEST[$pkey])) {
 					$tags = 'skip_field';
 				} else {
 					$tags = '';
