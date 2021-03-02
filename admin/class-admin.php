@@ -211,8 +211,7 @@ class UsersWP_Admin {
 			'userswp_page_uwp_form_builder',
 			'userswp_page_uwp_tools',
 			'userswp_page_uwp_status',
-			'page',
-			'edit-page',
+			'userswp_page_uwp-addons',
 			'profile',
 			'users',
 		);

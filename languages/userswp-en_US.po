@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.12\n"
+"Project-Id-Version: UsersWP 1.2.2.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-11 11:20+0530\n"
-"PO-Revision-Date: 2021-01-11 11:20+0530\n"
+"POT-Creation-Date: 2021-02-24 17:27+0530\n"
+"PO-Revision-Date: 2021-02-24 17:27+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -271,126 +271,131 @@ msgstr ""
 msgid "Something went wrong, please refresh and try again."
 msgstr ""
 
-#: admin/class-admin.php:181
+#: admin/class-admin.php:188
 msgid "Field key must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:182
+#: admin/class-admin.php:189
 msgid "Option Values must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:183
+#: admin/class-admin.php:190
 msgid "Please do not use special character and spaces in field key."
 msgstr ""
 
-#: admin/class-admin.php:184
+#: admin/class-admin.php:191
 msgid "Field key should be a unique name."
 msgstr ""
 
-#: admin/class-admin.php:185
+#: admin/class-admin.php:192
 msgid "Are you sure you wish to delete this field?"
 msgstr ""
 
-#: admin/class-admin.php:186
+#: admin/class-admin.php:193
 msgid "This field is required."
 msgstr ""
 
-#: admin/class-admin.php:188
+#: admin/class-admin.php:195
 msgid "Choose an image"
 msgstr ""
 
-#: admin/class-admin.php:189
+#: admin/class-admin.php:196
 msgid "Use image"
 msgstr ""
 
-#: admin/class-admin.php:190
+#: admin/class-admin.php:197
 msgid "Are you sure you wish to delete this form?"
 msgstr ""
 
-#: admin/class-admin.php:191
+#: admin/class-admin.php:198
 msgid "Enter register form title"
 msgstr ""
 
-#: admin/class-admin.php:213 admin/class-admin.php:758
+#: admin/class-admin.php:220 admin/class-uwp-admin-menus.php:80
+#: admin/menus/class-menus.php:291 includes/class-uwp-privacy.php:17
+msgid "UsersWP"
+msgstr ""
+
+#: admin/class-admin.php:245 admin/class-admin.php:790
 msgid "Activation email has been sent!"
 msgstr ""
 
-#: admin/class-admin.php:216
+#: admin/class-admin.php:248
 msgid "Error while sending activation email. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:219
+#: admin/class-admin.php:251
 msgid "User(s) has been activated!"
 msgstr ""
 
-#: admin/class-admin.php:323
+#: admin/class-admin.php:355
 #, php-format
 msgid ""
 "You can change your profile picture on your <a href=\"%s\">Profile Page</a>."
 msgstr ""
 
-#: admin/class-admin.php:389
+#: admin/class-admin.php:421
 msgid "Pending Email Activation"
 msgstr ""
 
-#: admin/class-admin.php:558
+#: admin/class-admin.php:590
 msgid "Change Avatar"
 msgstr ""
 
-#: admin/class-admin.php:560 templates/bootstrap/modal-profile-image.php:14
+#: admin/class-admin.php:592 templates/bootstrap/modal-profile-image.php:14
 msgid "Upload Avatar"
 msgstr ""
 
-#: admin/class-admin.php:570
+#: admin/class-admin.php:602
 msgid "Change Banner"
 msgstr ""
 
-#: admin/class-admin.php:572 templates/bootstrap/modal-profile-image.php:17
+#: admin/class-admin.php:604 templates/bootstrap/modal-profile-image.php:17
 msgid "Upload Banner"
 msgstr ""
 
-#: admin/class-admin.php:625 admin/class-admin.php:642
+#: admin/class-admin.php:657 admin/class-admin.php:674
 msgid "Resend Activation"
 msgstr ""
 
-#: admin/class-admin.php:626
+#: admin/class-admin.php:658
 msgid "Activate User"
 msgstr ""
 
-#: admin/class-admin.php:643
+#: admin/class-admin.php:675
 msgid "Activate Users"
 msgstr ""
 
-#: admin/class-admin.php:696 includes/class-forms.php:761
+#: admin/class-admin.php:728 includes/class-forms.php:761
 msgid "To activate your account, visit the following address:"
 msgstr ""
 
-#: admin/class-admin.php:700 includes/class-forms.php:765
+#: admin/class-admin.php:732 includes/class-forms.php:765
 msgid "Please activate your account :"
 msgstr ""
 
-#: admin/class-admin.php:764
+#: admin/class-admin.php:796
 msgid "Error while processing request. Please contact site admin."
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:46
+#: admin/class-uwp-admin-help.php:65
 msgid "Help &amp; Support"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:52 admin/class-uwp-admin-help.php:82
+#: admin/class-uwp-admin-help.php:71 admin/class-uwp-admin-help.php:101
 msgid "Found a bug?"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:58 admin/class-uwp-admin-help.php:91
-#: admin/class-uwp-admin-help.php:94
+#: admin/class-uwp-admin-help.php:77 admin/class-uwp-admin-help.php:110
+#: admin/class-uwp-admin-help.php:113
 msgid "Setup wizard"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:72
+#: admin/class-uwp-admin-help.php:91
 msgid "Help & Support"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:73
+#: admin/class-uwp-admin-help.php:92
 #, php-format
 msgid ""
 "Should you need help understanding, using, or extending UsersWP <a href="
@@ -398,28 +403,28 @@ msgid ""
 "resources including snippets, tutorials and much more.,"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:74
+#: admin/class-uwp-admin-help.php:93
 #, php-format
 msgid ""
 "For further assistance with UsersWP core or with premium extensions sold by "
 "UsersWP you can use our <a href=\"%1$s\">support forums</a>."
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:75
+#: admin/class-uwp-admin-help.php:94
 msgid ""
 "Before asking for help we recommend checking the system status page to "
 "identify any problems with your configuration."
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:76 admin/class-uwp-admin-help.php:84
+#: admin/class-uwp-admin-help.php:95 admin/class-uwp-admin-help.php:103
 msgid "System status"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:76
+#: admin/class-uwp-admin-help.php:95
 msgid "UsersWP support"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:83
+#: admin/class-uwp-admin-help.php:102
 #, php-format
 msgid ""
 "If you find a bug within UsersWP core you can create a ticket via <a href="
@@ -429,49 +434,44 @@ msgid ""
 "\"%3$s\">system status report</a>"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:84
+#: admin/class-uwp-admin-help.php:103
 msgid "Report a bug"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:92
+#: admin/class-uwp-admin-help.php:111
 msgid ""
 "If you need to access the setup wizard again, please click on the button "
 "below."
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:93
+#: admin/class-uwp-admin-help.php:112
 msgid ""
 "Running the wizard again will not delete your current settings. You will "
 "have the option to change any current settings."
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:102
+#: admin/class-uwp-admin-help.php:121
 msgid "For more information:"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:103
+#: admin/class-uwp-admin-help.php:122
 msgid "About UsersWP"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:104
+#: admin/class-uwp-admin-help.php:123
 msgid "WordPress.org project"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:105
+#: admin/class-uwp-admin-help.php:124
 msgid "Github project"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:106
+#: admin/class-uwp-admin-help.php:125
 msgid "Official extensions"
 msgstr ""
 
 #: admin/class-uwp-admin-menus.php:79
 msgid "UsersWP Settings"
-msgstr ""
-
-#: admin/class-uwp-admin-menus.php:80 admin/menus/class-menus.php:289
-#: includes/class-uwp-privacy.php:17
-msgid "UsersWP"
 msgstr ""
 
 #: admin/class-uwp-admin-menus.php:91 admin/class-uwp-admin-menus.php:92
@@ -510,15 +510,15 @@ msgstr ""
 msgid "Logged-Out"
 msgstr ""
 
-#: admin/menus/class-menus.php:101
+#: admin/menus/class-menus.php:102
 msgid "Select all"
 msgstr ""
 
-#: admin/menus/class-menus.php:104
-msgid "Add to Menu"
+#: admin/menus/class-menus.php:106
+msgid "Add to menu"
 msgstr ""
 
-#: admin/menus/class-menus.php:171 admin/menus/class-menus.php:312
+#: admin/menus/class-menus.php:173 admin/menus/class-menus.php:314
 msgid "Log out"
 msgstr ""
 
@@ -2259,12 +2259,12 @@ msgid "More Info"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:398
-#: includes/class-profile.php:892 upgrade.php:55
+#: includes/class-profile.php:893 upgrade.php:55
 msgid "Posts"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:406
-#: includes/class-profile.php:927 templates/bootstrap/loop-comments.php:9
+#: includes/class-profile.php:928 templates/bootstrap/loop-comments.php:9
 #: templates/loop-comments.php:9 upgrade.php:71
 msgid "Comments"
 msgstr ""
@@ -2984,7 +2984,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:515 includes/class-activator.php:557
-#: includes/class-forms.php:3701
+#: includes/class-forms.php:3715
 msgid "Confirm Password"
 msgstr ""
 
@@ -3202,7 +3202,7 @@ msgid "Banner reset successfully."
 msgstr ""
 
 #: includes/class-forms.php:216 includes/class-forms.php:729
-#: includes/class-forms.php:1624
+#: includes/class-forms.php:1638
 msgid "Something went wrong. Please contact site admin."
 msgstr ""
 
@@ -3339,59 +3339,63 @@ msgstr ""
 msgid "Password changed successfully."
 msgstr ""
 
-#: includes/class-forms.php:1497
+#: includes/class-forms.php:1480
+msgid "Invalid username."
+msgstr ""
+
+#: includes/class-forms.php:1511
 #, php-format
 msgid ""
 "Password updated successfully. Please <a href=\"%s\">login</a> with your new "
 "password."
 msgstr ""
 
-#: includes/class-forms.php:1611
+#: includes/class-forms.php:1625
 #, php-format
 msgid "%s"
 msgstr ""
 
-#: includes/class-forms.php:1652
+#: includes/class-forms.php:1666
 msgid "Account updated successfully."
 msgstr ""
 
-#: includes/class-forms.php:1682 includes/class-forms.php:1712
+#: includes/class-forms.php:1696 includes/class-forms.php:1726
 msgid "User Information:"
 msgstr ""
 
-#: includes/class-forms.php:2015
+#: includes/class-forms.php:2029
 msgid "Clear field"
 msgstr ""
 
-#: includes/class-forms.php:2715
+#: includes/class-forms.php:2729
 msgid "Username or Email"
 msgstr ""
 
-#: includes/class-forms.php:3039
+#: includes/class-forms.php:3053
 msgid "Please enter a valid URL including https://"
 msgstr ""
 
-#: includes/class-forms.php:3074
+#: includes/class-forms.php:3088
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:3373
+#: includes/class-forms.php:3387
 #, php-format
 msgid ""
 "By using this form I agree to the storage and handling of my data by this "
 "website. View our %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:3455
+#: includes/class-forms.php:3469
 #, php-format
 msgid "I accept the %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:3787
+#: includes/class-forms.php:3801
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/class-forms.php:3936
+#: includes/class-forms.php:3950
 msgid "Privacy settings updated successfully."
 msgstr ""
 
@@ -3628,53 +3632,53 @@ msgstr ""
 msgid "Edit Account"
 msgstr ""
 
-#: includes/class-profile.php:769
+#: includes/class-profile.php:770
 msgid "Page"
 msgstr ""
 
-#: includes/class-profile.php:805
+#: includes/class-profile.php:806
 msgid "Newer posts"
 msgstr ""
 
-#: includes/class-profile.php:809
+#: includes/class-profile.php:810
 msgid "Older posts"
 msgstr ""
 
-#: includes/class-profile.php:818
+#: includes/class-profile.php:819
 msgid "Previous"
 msgstr ""
 
-#: includes/class-profile.php:819
+#: includes/class-profile.php:820
 msgid "Next"
 msgstr ""
 
-#: includes/class-profile.php:820
+#: includes/class-profile.php:821
 msgid "Posts navigation"
 msgstr ""
 
-#: includes/class-profile.php:1347
+#: includes/class-profile.php:1348
 #, php-format
 msgid "The uploaded file is too small. Minimum image width should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1350
+#: includes/class-profile.php:1351
 #, php-format
 msgid "The uploaded file is too small. Minimum image height should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1393
+#: includes/class-profile.php:1394
 msgid "Invalid request!"
 msgstr ""
 
-#: includes/class-profile.php:1414
+#: includes/class-profile.php:1415
 msgid "No fields available"
 msgstr ""
 
-#: includes/class-profile.php:1577
+#: includes/class-profile.php:1578
 msgid "Loading Form ..."
 msgstr ""
 
-#: includes/class-profile.php:1671
+#: includes/class-profile.php:1672
 msgid "File too big."
 msgstr ""
 
@@ -4418,7 +4422,6 @@ msgid "View Invoices"
 msgstr ""
 
 #: includes/libraries/class-invoicing-plugin.php:98
-#: includes/libraries/class-invoicing-plugin.php:167
 msgid "Invoices"
 msgstr ""
 
@@ -4428,34 +4431,6 @@ msgstr ""
 
 #: includes/libraries/class-invoicing-plugin.php:119
 msgid "Quotes"
-msgstr ""
-
-#: includes/libraries/class-invoicing-plugin.php:196
-msgid "Invoice"
-msgstr ""
-
-#: includes/libraries/class-invoicing-plugin.php:208
-msgid "Invoice Status: "
-msgstr ""
-
-#: includes/libraries/class-invoicing-plugin.php:208
-msgid "(r)"
-msgstr ""
-
-#: includes/libraries/class-invoicing-plugin.php:213
-msgid "Invoice Total: "
-msgstr ""
-
-#: includes/libraries/class-invoicing-plugin.php:223
-msgid "Pay Now"
-msgstr ""
-
-#: includes/libraries/class-invoicing-plugin.php:239
-msgid "Listing"
-msgstr ""
-
-#: includes/libraries/class-invoicing-plugin.php:265
-msgid "No Invoices Found."
 msgstr ""
 
 #: includes/libraries/wp-background-process.php:423
