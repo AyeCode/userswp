@@ -648,38 +648,6 @@ class UsersWP_Admin_Settings {
                     <?php
                     break;
 
-                // Image width settings
-                case 'image_width' :
-
-                    $image_size       = str_replace( '_image_size', '', $value['id'] );
-                    if ( isset( $value['value'] ) ) {
-                        $size = $value['value'];
-                    } else {
-                        $size = uwp_get_image_size( $image_size );
-                    }
-                    $width            = isset( $size['width'] ) ? $size['width'] : $value['default']['width'];
-                    $height           = isset( $size['height'] ) ? $size['height'] : $value['default']['height'];
-                    $crop             = isset( $size['crop'] ) ? $size['crop'] : $value['default']['crop'];
-                    $disabled_attr    = '';
-                    $disabled_message = '';
-
-                    if ( has_filter( 'uwp_get_image_size_' . $image_size ) ) {
-                        $disabled_attr = 'disabled="disabled"';
-                        $disabled_message = "<p><small>" . __( 'The settings of this image size have been disabled because its values are being overwritten by a filter.', 'userswp' ) . "</small></p>";
-                    }
-
-                    ?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "uwp-advanced-setting";}?>">
-                    <th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ) ?> <?php echo $tooltip_html . $disabled_message; ?></th>
-                    <td class="forminp image_width_settings">
-
-                        <input name="<?php echo esc_attr( $value['id'] ); ?>[width]" <?php echo $disabled_attr; ?> id="<?php echo esc_attr( $value['id'] ); ?>-width" type="text" size="3" value="<?php echo $width; ?>" /> &times; <input name="<?php echo esc_attr( $value['id'] ); ?>[height]" <?php echo $disabled_attr; ?> id="<?php echo esc_attr( $value['id'] ); ?>-height" type="text" size="3" value="<?php echo $height; ?>" />px
-
-                        <label><input name="<?php echo esc_attr( $value['id'] ); ?>[crop]" <?php echo $disabled_attr; ?> id="<?php echo esc_attr( $value['id'] ); ?>-crop" type="checkbox" value="1" <?php checked( 1, $crop ); ?> /> <?php _e( 'Hard crop?', 'userswp' ); ?></label>
-
-                    </td>
-                    </tr><?php
-                    break;
-
                 // Single page selects
                 case 'single_select_page' :
                     if ( isset( $value['value'] ) ) {
@@ -708,7 +676,7 @@ class UsersWP_Admin_Settings {
                     <td class="forminp">
                         <?php echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'userswp' ) . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages( $args ) ); ?> <?php echo $description; ?>
 
-                        <?php if($args['selected'] > 0){ ?>
+                        <?php if(isset($args['selected']) && $args['selected'] > 0){ ?>
                             <a href="<?php echo get_edit_post_link( $args['selected'] ); ?>" class="button uwp-page-setting-edit"><?php _e('Edit Page','userswp');?></a>
 
                             <?php if(empty($value['is_template_page'])){ ?>
