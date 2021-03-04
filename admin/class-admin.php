@@ -160,7 +160,8 @@ class UsersWP_Admin {
 			wp_enqueue_script( 'jcrop', array( 'jquery' ) );
 			wp_enqueue_script( "country-select", USERSWP_PLUGIN_URL . 'assets/js/countrySelect' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION );
 
-
+			$country_data = uwp_get_country_data();
+			wp_localize_script( USERSWP_NAME, 'uwp_country_data', $country_data );
 		}
 
 		if ( $hook_suffix == 'userswp_page_uwp_tools' ) {
@@ -198,9 +199,6 @@ class UsersWP_Admin {
 				'update_register_form'               => __( 'Enter register form title', 'userswp' ),
 			);
 			wp_localize_script( "userswp_admin", 'uwp_admin_ajax', $ajax_cons_data );
-
-			$country_data = uwp_get_country_data();
-			wp_localize_script( USERSWP_NAME, 'uwp_country_data', $country_data );
 		}
 
 	}
@@ -214,6 +212,7 @@ class UsersWP_Admin {
 			'userswp_page_uwp-addons',
 			'profile',
 			'users',
+			'user-edit',
 		);
 
 		// Check for translated screen id.
