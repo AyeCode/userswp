@@ -21,7 +21,8 @@ if( !class_exists('UsersWP_Admin_Help') ) {
         public function get_screen_ids() {
 
             $screen_ids = array(
-                'user',
+                'user-edit',
+                'users',
                 'profile',
                 'toplevel_page_userswp',
                 'userswp_page_uwp_form_builder',
