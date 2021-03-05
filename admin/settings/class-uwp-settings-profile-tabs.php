@@ -215,6 +215,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 			$js_insert_function = $this->insert_shortcode_function();
 			WP_Super_Duper::shortcode_insert_button('',$js_insert_function);
 
+			$fields = array();
 			$fields[] = array(
 				'tab_type'   => 'shortcode',
 				'tab_name'   => __('Shortcode','userswp'),
@@ -983,7 +984,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
          *
          * @param       array       $tabs      Tabs array.
          *
-         * @return      array       Sorted tabs.
+         * @return      object|bool       Sorted tabs.
          */
         public function update_field_order($tabs = array())
         {

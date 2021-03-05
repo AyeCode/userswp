@@ -75,7 +75,7 @@ abstract class UsersWP_Settings_Page {
 	 *
 	 * @return array
 	 */
-	public function get_settings() {
+	public function get_settings($current_section = '') {
 		return apply_filters( 'uwp_get_settings_' . $this->id, array() );
 	}
 
@@ -140,12 +140,8 @@ abstract class UsersWP_Settings_Page {
 		$text_hide = __("Hide Advanced","userswp");
 
 		if(!$show){
-			$css = "none";
-			$text = $text_show;
 			$toggle_CSS = '';
 		}else{
-			$css = "block";
-			$text = $text_hide;
 			$toggle_CSS = 'uwpa-hide';
 		}
 		?>

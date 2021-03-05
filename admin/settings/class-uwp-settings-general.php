@@ -589,6 +589,13 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 ),
 
 	            array(
+		            'name'     => __( 'Advanced settings', 'userswp' ),
+		            'desc'     => __( 'Disable advanced toggle, show advanced settings at all times (not recommended).', 'userswp' ),
+		            'id'       => 'admin_disable_advanced',
+		            'type'     => 'checkbox',
+	            ),
+
+	            array(
 		            'id'   => 'enable_uwp_error_log',
 		            'name' => __( 'Debugging', 'userswp' ),
 		            'desc' => __( 'Show debugging info in the error logs.', 'userswp' ),
@@ -608,7 +615,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'desc_tip' => true,
 		            'default' => 'bootstrap',
 	            ),
-
 
                 array( 'type' => 'sectionend', 'id' => 'developer_options' ),
             ));
