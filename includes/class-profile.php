@@ -1326,7 +1326,7 @@ class UsersWP_Profile {
 	 * @param       string      $file_key       Field key.
 	 * @param       array       $file_to_upload File data to upload.
 	 *
-	 * @return      string|WP_Error                         Returns original value if no erros. Else returns errors.
+	 * @return      string|WP_Error                         Returns original value if no errors. Else returns errors.
 	 */
 	public function handle_file_upload_error_checks( $value, $field, $file_key, $file_to_upload ) {
 

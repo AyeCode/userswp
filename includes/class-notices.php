@@ -50,7 +50,7 @@ class UsersWP_Notices {
         );
 
 	    if(isset($user_id) && !empty($user_id)){
-		    $resend_link = uwp_current_page_url();
+		    $resend_link = uwp_get_login_page_url();
 		    $resend_link = add_query_arg(
 			    array(
 				    'user_id' => $user_id,
@@ -59,7 +59,8 @@ class UsersWP_Notices {
 			    ),
 			    $resend_link
 		    );
-		    $link = "<a href='".esc_url($resend_link)."' target='_blank'>".__('Resend', 'userswp')."</a>";
+
+		    $link = "<a href='".esc_url($resend_link)."' >".__('Resend', 'userswp')."</a>";
 	    }
 
         $messages['act_pending'] = array(

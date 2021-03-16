@@ -899,7 +899,7 @@ class UsersWP_Forms {
 			}
 		} else {
 			if ( $reg_action == 'require_email_activation' ) {
-				$resend_link = uwp_current_page_url();
+				$resend_link = uwp_get_register_page_url();
 				$resend_link = add_query_arg(
 					array(
 						'user_id' => $user_id,
@@ -908,6 +908,7 @@ class UsersWP_Forms {
 					),
 					$resend_link
 				);
+
 				$message     = aui()->alert( array(
 						'type'    => 'success',
 						'content' => sprintf( __( 'An email has been sent to your registered email address. Please click the activation link to proceed. %sResend%s.', 'userswp' ), '<a href="' . $resend_link . '"">', '</a>' )

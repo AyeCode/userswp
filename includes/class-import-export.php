@@ -450,8 +450,8 @@ class UsersWP_Import_Export {
 	 *
 	 */
     public function ie_upload_file(){
-        $nonce = $_REQUEST['nonce'];
-        if ( ! wp_verify_nonce( $nonce, 'uwp-ie-file-upload-nonce' ) ) {
+
+        if ( !(!empty($_REQUEST['nonce']) && wp_verify_nonce( $_REQUEST['nonce'], 'uwp-ie-file-upload-nonce' )) ) {
             echo 'error';return;
         }
 
