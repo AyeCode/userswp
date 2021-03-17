@@ -23,6 +23,7 @@ if( !class_exists('UsersWP_Admin_Help') ) {
             $screen_ids = array(
                 'user',
                 'profile',
+                'user-edit',
                 'toplevel_page_userswp',
                 'userswp_page_uwp_form_builder',
                 'userswp_page_uwp_status',
