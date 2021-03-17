@@ -133,6 +133,7 @@ No questions so far, but don't hesitate to ask!
 
 = 1.2.2.15 =
 * Divi theme broken layout issue on users profile - FIXED
+* Edit profile of other users page in backend throwing js error - FIXED
 
 = 1.2.2.14 =
 * Tested up to WP version 5.7 - CHANGED
