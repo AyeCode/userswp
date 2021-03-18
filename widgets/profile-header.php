@@ -108,14 +108,14 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
 	    if(!$user){
 			return '';
 	    }
+        
+        if ($enable_profile_header != '1') {
+        	return '';
+        }
 
         $args = apply_filters( 'uwp_widget_profile_header_args', $args, $widget_args, $this );
 
         ob_start();
-
-        if ($enable_profile_header != '1') {
-        	return;
-        }
 
         wp_enqueue_script( 'jcrop', array( 'jquery' ) );
         wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
