@@ -21,6 +21,66 @@ class UsersWP_Defaults {
 	 *
 	 * @return string
 	 */
+	public static function wp_new_user_notification_email_subject() {
+		return apply_filters( 'wp_new_user_notification_email_subject', __( "[[#site_name#]] Login Details", "userswp" ) );
+	}
+
+	/**
+	 * The new user account registration email body default.
+	 *
+	 * @return string
+	 */
+	public static function wp_new_user_notification_email_content() {
+		return apply_filters( 'wp_new_user_notification_email_content',
+			__( "Dear [#user_name#],
+
+To set your password, visit the following address:
+
+[#reset_link#]
+
+You can login here: [#login_url#]
+
+Thank you,
+[#site_name_url#]", "userswp"
+			)
+		);
+	}
+
+	/**
+	 * The new user account registration email subject default.
+	 *
+	 * @return string
+	 */
+	public static function wp_new_user_notification_email_subject_admin() {
+		return apply_filters( 'wp_new_user_notification_email_subject', __( "[[#site_name#]] New User Registration", "userswp" ) );
+	}
+
+	/**
+	 * The new user account registration email body default.
+	 *
+	 * @return string
+	 */
+	public static function wp_new_user_notification_email_content_admin() {
+		return apply_filters( 'wp_new_user_notification_email_content',
+			__( "Dear Admin,
+
+New user registration on your site: [#site_name#]
+
+Username: [#username#]
+
+Email: [#user_email#]
+
+Thank you,
+[#site_name_url#]", "userswp"
+			)
+		);
+	}
+
+	/**
+	 * The new user account registration email subject default.
+	 *
+	 * @return string
+	 */
 	public static function registration_activate_email_subject() {
 		return apply_filters( 'uwp_registration_activate_email_subject', __( "[[#site_name#]] Please activate your account", "userswp" ) );
 	}

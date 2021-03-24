@@ -83,6 +83,7 @@ is not needed to install packages with these frameworks:
 | MODX         | `modx-extra`
 | MODX Evo     | `modxevo-snippet`<br>`modxevo-plugin`<br>`modxevo-module`<br>`modxevo-template`<br>`modxevo-lib`
 | MediaWiki    | `mediawiki-extension`
+| Miaoxing     | `miaoxing-plugin`
 | October      | **`october-module`<br>`october-plugin`<br>`october-theme`**
 | OntoWiki     | `ontowiki-extension`<br>`ontowiki-theme`<br>`ontowiki-translation`
 | OXID         | `oxid-module`<br>`oxid-theme`<br>`oxid-out`
@@ -123,6 +124,7 @@ is not needed to install packages with these frameworks:
 | Vanilla      | `vanilla-plugin`<br>`vanilla-theme`
 | Vgmcp        | `vgmcp-bundle`<br>`vgmcp-theme`
 | WHMCS        | `whmcs-addons`<br>`whmcs-fraud`<br>`whmcs-gateways`<br>`whmcs-notifications`<br>`whmcs-registrars`<br>`whmcs-reports`<br>`whmcs-security`<br>`whmcs-servers`<br>`whmcs-social`<br>`whmcs-support`<br>`whmcs-templates`<br>`whmcs-includes`
+| Winter CMS   | **`winter-module`<br>`winter-plugin`<br>`winter-theme`**
 | Wolf CMS     | `wolfcms-plugin`
 | WordPress    | <b>`wordpress-plugin`<br>`wordpress-theme`</b><br>`wordpress-muplugin`<br>`wordpress-dropin`
 | YAWIK        | `yawik-module`

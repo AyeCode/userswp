@@ -1317,7 +1317,8 @@ class UsersWP_Forms {
 				), get_permalink( $reset_page ) );
 				$message    .= "<a href='" . $reset_link . "' target='_blank'>" . $reset_link . "</a>" . "\r\n";
 			} else {
-				$message .= home_url( "reset?key=$key&login=" . rawurlencode( $user_data->user_login ), 'login' ) . "\r\n";
+				$reset_link = home_url( "reset?key=$key&login=" . rawurlencode( $user_data->user_login ), 'login' );
+				$message .= "<a href='" .$reset_link. "' target='_blank'>" . $reset_link . "</a>". "\r\n";
 			}
 			$message = apply_filters( 'uwp_forgot_password_message', $message, $user_data, $reset_link );
 		}

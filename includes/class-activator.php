@@ -189,6 +189,12 @@ class UsersWP_Activator {
             'account_delete_email_admin' => 1,
             'account_delete_email_subject_admin' => UsersWP_Defaults::account_delete_email_subject_admin(),
             'account_delete_email_content_admin' => UsersWP_Defaults::account_delete_email_content_admin(),
+            'wp_new_user_notification_email' => 1,
+            'wp_new_user_notification_email_subject' => UsersWP_Defaults::wp_new_user_notification_email_subject(),
+            'wp_new_user_notification_email_content' => UsersWP_Defaults::wp_new_user_notification_email_content(),
+            'wp_new_user_notification_email_admin' => 1,
+            'wp_new_user_notification_email_subject_admin' => UsersWP_Defaults::wp_new_user_notification_email_subject_admin(),
+            'wp_new_user_notification_email_content_admin' => UsersWP_Defaults::wp_new_user_notification_email_content_admin(),
             'user_post_counts_cpts' => array('post'),
             'login_user_post_counts_cpts' => array('post'),
         );

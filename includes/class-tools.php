@@ -417,6 +417,10 @@ class UsersWP_Tools {
 			'registration_success_email_content_admin',
 			'account_delete_email_subject_admin',
 			'account_delete_email_content_admin',
+			'wp_new_user_notification_email_subject',
+			'wp_new_user_notification_email_content',
+			'wp_new_user_notification_email_subject_admin',
+			'wp_new_user_notification_email_content_admin',
 		);
 
 		/**

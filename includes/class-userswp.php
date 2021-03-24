@@ -711,6 +711,11 @@ final class UsersWP {
 		add_filter( 'register_url', array( $instance, 'wp_register_url' ), 10, 1 );
 		add_filter( 'lostpassword_url', array( $instance, 'wp_lostpassword_url' ), 10, 1 );
 
+		// Oxygen plugin
+		if ( defined( 'CT_VERSION' ) ) {
+			add_filter( 'uwp_get_template', array( $instance, 'oxygen_override_template' ), 11, 5 );
+		}
+
 	}
 
 	/**

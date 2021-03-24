@@ -1330,13 +1330,29 @@ function uwp_sanitize_tooltip( $var ) {
 }
 
 function uwp_all_email_tags( $inline = true, $extra_tags = array() ){
-	$tags = array( '[#site_name#]', '[#site_name_url#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#profile_link#]', '[#form_fields#]' );
+	$tags = array( '[#site_name#]', '[#site_name_url#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#user_email#]', '[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#profile_link#]', '[#form_fields#]' );
 
 	if(is_array($extra_tags) && count($extra_tags) > 0){
 		$tags = array_merge($tags, $extra_tags);
 	}
 
 	$tags = apply_filters( 'uwp_all_email_tags', $tags );
+
+	if ( $inline ) {
+		$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+	}
+
+	return $tags;
+}
+
+function uwp_wp_new_user_notification_tags( $inline = true, $extra_tags = array() ){
+	$tags = array( '[#site_name#]', '[#site_name_url#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#user_email#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', );
+
+	if(is_array($extra_tags) && count($extra_tags) > 0){
+		$tags = array_merge($tags, $extra_tags);
+	}
+
+	$tags = apply_filters( 'uwp_wp_new_user_notification_email_tags', $tags );
 
 	if ( $inline ) {
 		$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';

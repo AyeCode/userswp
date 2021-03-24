@@ -1789,10 +1789,13 @@ class UsersWP_Profile {
 	}
 
 	public function wpdiscuz_profile_url( $profile_url, $user ) {
-		$profile_page_url = uwp_get_page_id( 'profile_page', true );
+	    if(!$user){
+	        return $profile_url;
+        }
+
 		$allowed          = apply_filters( 'uwp_wpdiscuz_profile_url_change', true, $profile_url, $user );
-		if ( isset( $profile_page_url ) && ! empty( $profile_page_url ) && $allowed ) {
-			return $profile_page_url;
+		if ( $allowed && isset($user->user_login) ) {
+			return $this->get_profile_link( $profile_url, $user->ID );
 		}
 
 		return $profile_url;

@@ -1,3 +1,12 @@
+= 0.1.45 =
+* Some texts missing a textdomain - FIXED
+
+= 0.1.44 =
+* Field description is missing for radio field - FIXED
+* WP 5.7 Gutenberg widgets screen breaks some AUI CSS - FIXED
+* Calendar labels are not translatable - FIXED
+* Select2 JS labels are not translatable - FIXED
+
 = 0.1.43 =
 * AUI will now only load on backend (wp-admin) pages if the screen id has been added via filter 'aui_screen_ids' - BREAKING CHANGE
 
