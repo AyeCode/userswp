@@ -308,6 +308,7 @@ class UsersWP_Mails {
 		if ( !empty( $user_id ) && $user_id > 0 ) {
 			$user_data = get_userdata($user_id);
 			$profile_link = uwp_build_profile_tab_url($user_id);
+			$form_fields = apply_filters( 'uwp_send_mail_form_fields', "", 'account', $user_id );
 			$replace_array = array_merge(
 				$replace_array,
 				array(
@@ -316,6 +317,7 @@ class UsersWP_Mails {
 					'[#user_name#]'       => $user_data->display_name,
 					'[#username#]'        => $user_data->user_login,
 					'[#profile_link#]'    => $profile_link,
+					'[#form_fields#]'	  => $form_fields,
 				)
 			);
 		}
