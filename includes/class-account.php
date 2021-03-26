@@ -92,6 +92,13 @@ class UsersWP_Account {
                 <input name="uwp_delete_account_submit" class="<?php echo $bs_btn_class; ?>" value="<?php _e( 'Delete Account', 'userswp' ); ?>" type="submit">
             </form>
 	    <?php }
+
+	    if($type == 'wp2fa' && class_exists('\WP2FA\WP2FA')){
+		    if(1 == uwp_get_option('disable_wp_2fa')){
+			    return;
+		    }
+            echo do_shortcode( '[wp-2fa-setup-form]' );
+        }
     }
 
     /**

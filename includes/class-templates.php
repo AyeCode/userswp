@@ -1162,4 +1162,76 @@ class UsersWP_Templates {
 			}
 		}
 	}
+
+	/**
+	 * Oxygen override theme template.
+	 *
+	 * @since 1.2.2.15
+	 *
+	 * @param string $located Located template.
+	 * @param string $template_name Template name.
+	 * @param array $located Template args.
+	 * @param string $template_path Template path.
+	 * @param string $default_path Template default path.
+	 * @return string Located template.
+	 */
+	public function oxygen_override_template( $located, $template_name, $args, $template_path, $default_path ) {
+		if ( $_located = $this->oxygen_locate_template( $template_name ) ) {
+			$located = $_located;
+		}
+
+		return $located;
+	}
+
+	/**
+	 * Oxygen locate theme template.
+	 *
+	 * @since 1.2.2.15
+	 *
+	 * @param string $template The template.
+	 * @return string The theme template.
+	 */
+	public function oxygen_locate_template( $template ) {
+		$located = '';
+
+		if ( ! $template ) {
+			return $located;
+		}
+
+		$has_filter = has_filter( 'template', 'ct_oxygen_template_name' );
+
+		// Remove template filter
+		if ( $has_filter ) {
+			remove_filter( 'template', 'ct_oxygen_template_name' );
+		}
+
+		$_located = $this->get_theme_template_path() . '/' . $template;
+
+		if ( file_exists( $_located ) ) {
+			$located = $_located;
+		}
+
+		// Add template filter
+		if ( $has_filter ) {
+			add_filter( 'template', 'ct_oxygen_template_name' );
+		}
+
+		return $located;
+	}
+
+	/**
+	 * Get the UsersWP templates theme path.
+	 *
+	 * @since 1.2.2.15
+	 *
+	 * @return string Template path.
+	 */
+	public static function get_theme_template_path() {
+		$template = get_template();
+		$theme_root = get_theme_root( $template );
+
+		$theme_template_path = $theme_root . '/' . $template . '/' . untrailingslashit( uwp_get_theme_template_dir_name() );
+
+		return $theme_template_path;
+	}
 }

@@ -133,6 +133,13 @@ No questions so far, but don't hesitate to ask!
 
 = 1.2.2.15 =
 * Divi theme broken layout issue on users profile - FIXED
+* Edit profile of other users page in backend throwing js error - FIXED
+* Allow HTML in shortcode tab content in profile tabs - CHANGED
+* Admin should always redirect to wp-admin on login - CHANGED
+* Allow UWP template override from theme directory for Oxygen builder - CHANGED
+* Email setting for new user registration mail sent by WordPress on new user creation - ADDED
+* WP 2FA - Two-factor authentication for WordPress compatibility - ADDED
+* AyeCode UI updated to v0.1.45 - CHANGED
 
 = 1.2.2.14 =
 * Tested up to WP version 5.7 - CHANGED

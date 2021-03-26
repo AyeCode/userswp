@@ -139,11 +139,20 @@ function uwp_account_get_available_tabs() {
 
 	$tabs = apply_filters( 'uwp_account_available_tabs', $tabs );
 
+	if(class_exists('\WP2FA\WP2FA')){
+		if(1 != uwp_get_option('disable_wp_2fa')) {
+			$tabs['wp2fa'] = array(
+				'title' => __( 'WP - 2FA', 'userswp' ),
+				'icon'  => 'fas fa-user-lock',
+			);
+		}
+	}
+
 	// Keep delete account and logout last
 	if(1 != uwp_get_option('disable_account_delete') && !current_user_can('administrator')){
 		$tabs['delete-account'] = array(
 			'title' => __('Delete Account', 'userswp'),
-			'icon' => 'fas fa-lock',
+			'icon' => 'fas fa-user-times',
 		);
 	}
 
@@ -156,7 +165,7 @@ function uwp_account_get_available_tabs() {
 		'link' => $logout_url,
 	);
 
-	return $tabs;
+	return apply_filters( 'uwp_account_all_tabs', $tabs );
 }
 
 function uwp_profile_add_tabs($tab_data){

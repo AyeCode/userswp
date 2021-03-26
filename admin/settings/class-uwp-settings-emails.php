@@ -77,6 +77,39 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 			if($current_section == 'admin_emails'){
 				$settings = apply_filters( 'uwp_admin_email_settings', array(
 
+					array('name' => __('WP new user notification email', 'userswp'), 'type' => 'title', 'desc' => '', 'id' => 'wp_new_user_notification_email_settings'),
+
+					array(
+						'name' => __('Enable email', 'userswp'),
+						'desc' => __('This will replace the email sent by WordPress when new user registered.', 'userswp'),
+						'id' => 'wp_new_user_notification_email_admin',
+						'type' => 'checkbox',
+						'default' => 1,
+					),
+					array(
+						'name' => __('Subject', 'userswp'),
+						'desc' => __('The email subject.', 'userswp'),
+						'id' => 'wp_new_user_notification_email_subject_admin',
+						'type' => 'text',
+						'class' => 'large-text',
+						'desc_tip' => true,
+						'advanced' => true,
+						'placeholder' => UsersWP_Defaults::wp_new_user_notification_email_subject_admin(),
+					),
+					array(
+						'name' => __('Body', 'userswp'),
+						'desc' => __('The email body, this can be text or HTML.', 'userswp'),
+						'id' => 'wp_new_user_notification_email_content_admin',
+						'type' => 'textarea',
+						'class' => 'code uwp-email-body',
+						'desc_tip' => true,
+						'advanced' => true,
+						'placeholder' => UsersWP_Defaults::wp_new_user_notification_email_content_admin(),
+						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_wp_new_user_notification_tags()
+					),
+
+					array('type' => 'sectionend', 'id' => 'wp_new_user_notification_email_settings'),
+
 					array('name' => __('New account registration', 'userswp'), 'type' => 'title', 'desc' => '', 'id' => 'registration_success_admin_email_settings'),
 
 					array(
@@ -105,7 +138,7 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 						'desc_tip' => true,
 						'placeholder' => UsersWP_Defaults::registration_success_email_content_admin(),
 						'advanced' => true,
-						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags()
+						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags(true, array('[#form_fields#]'))
 					),
 
 					array('type' => 'sectionend', 'id' => 'registration_success_admin_email_settings'),
@@ -147,6 +180,38 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 			}elseif($current_section == 'user_emails'){
 				$settings = apply_filters( 'uwp_user_email_settings', array(
 
+					array('name' => __('WP new user notification email', 'userswp'), 'type' => 'title', 'desc' => '', 'id' => 'wp_new_user_notification_email_settings'),
+
+					array(
+						'name' => __('Enable email', 'userswp'),
+						'desc' => __('This will replace the email sent by WordPress when new user registered.', 'userswp'),
+						'id' => 'wp_new_user_notification_email',
+						'type' => 'checkbox',
+						'default' => 1,
+					),
+					array(
+						'name' => __('Subject', 'userswp'),
+						'desc' => __('The email subject.', 'userswp'),
+						'id' => 'wp_new_user_notification_email_subject',
+						'type' => 'text',
+						'class' => 'large-text',
+						'desc_tip' => true,
+						'advanced' => true,
+						'placeholder' => UsersWP_Defaults::wp_new_user_notification_email_subject(),
+					),
+					array(
+						'name' => __('Body', 'userswp'),
+						'desc' => __('The email body, this can be text or HTML.', 'userswp'),
+						'id' => 'wp_new_user_notification_email_content',
+						'type' => 'textarea',
+						'class' => 'code uwp-email-body',
+						'desc_tip' => true,
+						'advanced' => true,
+						'placeholder' => UsersWP_Defaults::wp_new_user_notification_email_content(),
+						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_wp_new_user_notification_tags(true, array('[#reset_link#]'))
+					),
+
+					array('type' => 'sectionend', 'id' => 'wp_new_user_notification_email_settings'),
 
 					array('name' => __('Registration activate email', 'userswp'), 'type' => 'title', 'desc' => '', 'id' => 'registration_activate_email_settings'),
 
@@ -341,7 +406,7 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'placeholder' => UsersWP_Defaults::account_update_email_content(),
-						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags()
+						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags(true, array('[#form_fields#]'))
 					),
 
 					array('type' => 'sectionend', 'id' => 'account_update_email_settings'),

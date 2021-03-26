@@ -55,24 +55,24 @@
         },
         {
             "name": "ayecode/wp-ayecode-ui",
-            "version": "0.1.43",
-            "version_normalized": "0.1.43.0",
+            "version": "0.1.45",
+            "version_normalized": "0.1.45.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
-                "reference": "3606edd468c8a502df34237d0ac9e3470f2ad08d"
+                "reference": "a8f19cac8310de825ae5fec71d57184ebb2d78d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/3606edd468c8a502df34237d0ac9e3470f2ad08d",
-                "reference": "3606edd468c8a502df34237d0ac9e3470f2ad08d",
+                "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/a8f19cac8310de825ae5fec71d57184ebb2d78d0",
+                "reference": "a8f19cac8310de825ae5fec71d57184ebb2d78d0",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "~1.0",
                 "php": ">=5.3.0"
             },
-            "time": "2021-02-24T08:24:26+00:00",
+            "time": "2021-03-23T15:34:24+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -101,7 +101,7 @@
             ],
             "support": {
                 "issues": "https://github.com/AyeCode/wp-ayecode-ui/issues",
-                "source": "https://github.com/AyeCode/wp-ayecode-ui/tree/0.1.43"
+                "source": "https://github.com/AyeCode/wp-ayecode-ui/tree/0.1.45"
             },
             "install-path": "../ayecode/wp-ayecode-ui"
         },
@@ -221,12 +221,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "98b34f8ab3558bee5caa7c07efbab3f5bd7663ab"
+                "reference": "260a3b3c67adbb8a3f895a49755e9a6e6b9fd8ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/98b34f8ab3558bee5caa7c07efbab3f5bd7663ab",
-                "reference": "98b34f8ab3558bee5caa7c07efbab3f5bd7663ab",
+                "url": "https://api.github.com/repos/composer/installers/zipball/260a3b3c67adbb8a3f895a49755e9a6e6b9fd8ee",
+                "reference": "260a3b3c67adbb8a3f895a49755e9a6e6b9fd8ee",
                 "shasum": ""
             },
             "require": {
@@ -244,7 +244,8 @@
                 "symfony/phpunit-bridge": "^4.2 || ^5",
                 "symfony/process": "^2.3"
             },
-            "time": "2021-02-02T15:00:11+00:00",
+            "time": "2021-03-23T06:47:48+00:00",
+            "default-branch": true,
             "type": "composer-plugin",
             "extra": {
                 "class": "Composer\\Installers\\Plugin",
@@ -322,6 +323,7 @@
                 "majima",
                 "mako",
                 "mediawiki",
+                "miaoxing",
                 "modulework",
                 "modx",
                 "moodle",
@@ -345,6 +347,24 @@
                 "yawik",
                 "zend",
                 "zikula"
+            ],
+            "support": {
+                "issues": "https://github.com/composer/installers/issues",
+                "source": "https://github.com/composer/installers/tree/main"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
             ],
             "install-path": "./installers"
         }

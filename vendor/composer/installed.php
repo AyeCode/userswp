@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '5428a1e1f91f1a7ffd161e1a6c41baacf0b22f2c',
+    'reference' => 'cf6dfa42b85cc9de7f70adb3ef2a915aa5460905',
     'name' => 'uswerwp/userswp',
   ),
   'versions' => 
@@ -22,12 +22,12 @@
     ),
     'ayecode/wp-ayecode-ui' => 
     array (
-      'pretty_version' => '0.1.43',
-      'version' => '0.1.43.0',
+      'pretty_version' => '0.1.45',
+      'version' => '0.1.45.0',
       'aliases' => 
       array (
       ),
-      'reference' => '3606edd468c8a502df34237d0ac9e3470f2ad08d',
+      'reference' => 'a8f19cac8310de825ae5fec71d57184ebb2d78d0',
     ),
     'ayecode/wp-font-awesome-settings' => 
     array (
@@ -55,7 +55,7 @@
       array (
         0 => '1.x-dev',
       ),
-      'reference' => '98b34f8ab3558bee5caa7c07efbab3f5bd7663ab',
+      'reference' => '260a3b3c67adbb8a3f895a49755e9a6e6b9fd8ee',
     ),
     'roundcube/plugin-installer' => 
     array (
@@ -78,7 +78,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '5428a1e1f91f1a7ffd161e1a6c41baacf0b22f2c',
+      'reference' => 'cf6dfa42b85cc9de7f70adb3ef2a915aa5460905',
     ),
   ),
 );
