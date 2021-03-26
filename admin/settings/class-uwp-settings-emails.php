@@ -138,7 +138,7 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 						'desc_tip' => true,
 						'placeholder' => UsersWP_Defaults::registration_success_email_content_admin(),
 						'advanced' => true,
-						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags()
+						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags(true, array('[#form_fields#]'))
 					),
 
 					array('type' => 'sectionend', 'id' => 'registration_success_admin_email_settings'),
@@ -406,7 +406,7 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'placeholder' => UsersWP_Defaults::account_update_email_content(),
-						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags()
+						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags(true, array('[#form_fields#]'))
 					),
 
 					array('type' => 'sectionend', 'id' => 'account_update_email_settings'),
