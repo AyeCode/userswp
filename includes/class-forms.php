@@ -684,9 +684,9 @@ class UsersWP_Forms {
 		$fields = get_register_form_fields();
 
 		$user_role = '';
-		if( !empty($fields) && is_array($fields) ) {
+		if ( ! empty( $fields ) && is_array( $fields ) ) {
 			foreach ( $fields as $key => $field ) {
-				if( isset( $field->htmlvar_name ) && !empty($field->htmlvar_name) && $field->htmlvar_name == 'user_role'  && !empty($field->option_values)) {
+				if ( isset( $field->htmlvar_name ) && ! empty( $field->htmlvar_name ) && $field->htmlvar_name == 'user_role' && ! empty( $field->option_values ) ) {
 					$user_role = $field->option_values;
 				}
 			}
@@ -909,7 +909,7 @@ class UsersWP_Forms {
 					$resend_link
 				);
 
-				$message     = aui()->alert( array(
+				$message = aui()->alert( array(
 						'type'    => 'success',
 						'content' => sprintf( __( 'An email has been sent to your registered email address. Please click the activation link to proceed. %sResend%s.', 'userswp' ), '<a href="' . $resend_link . '"">', '</a>' )
 					)
@@ -1106,6 +1106,11 @@ class UsersWP_Forms {
 
 		remove_action( 'authenticate', 'gglcptch_login_check', 21 );
 
+		global $wp2fa;
+		if ( wp_doing_ajax() && isset( $wp2fa ) && ! empty( $wp2fa ) ) {
+			remove_action( 'wp_login', array( $wp2fa->login, 'wp_login' ), 20 );
+		}
+
 		$user = wp_signon(
 			array(
 				'user_login'    => $result['username'],
@@ -1116,10 +1121,27 @@ class UsersWP_Forms {
 
 		add_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
 
+		if ( wp_doing_ajax() && ! is_wp_error( $user ) && isset( $wp2fa ) && ! empty( $wp2fa ) ) {
+
+			$two_fa = $this->check_2fa( $user );
+			if ( isset( $two_fa ) && ! empty( $two_fa ) ) {
+				if ( is_wp_error( $two_fa ) ) {
+					$message = aui()->alert( array(
+							'type'    => 'error',
+							'content' => $two_fa->get_error_message()
+						)
+					);
+					wp_send_json_error( $message );
+				} else {
+					wp_send_json_success( array( 'html' => $two_fa, 'is_2fa' => true ) );
+				}
+			}
+		}
+
 		if ( is_wp_error( $user ) ) {
 			$message = aui()->alert( array(
 					'type'    => 'error',
-					'content' => __( 'Invalid Username or Password.', 'userswp' )
+					'content' => $user->get_error_message()
 				)
 			);
 			if ( wp_doing_ajax() ) {
@@ -1148,6 +1170,284 @@ class UsersWP_Forms {
 
 	}
 
+	public function check_2fa( $user ) {
+		if ( 1 == uwp_get_option( 'disable_wp_2fa' ) ) {
+			return;
+		}
+
+		if ( ! $user ) {
+			$user = wp_get_current_user();
+		}
+
+		global $wp2fa;
+		$errors = new WP_Error();
+
+		if ( ! $wp2fa->login->is_user_using_two_factor( $user->ID ) ) {
+			return;
+		}
+		// Invalidate the current login session to prevent from being re-used.
+		$wp2fa->login->destroy_current_session_for_user( $user );
+
+		// Also clear the cookies which are no longer valid.
+		wp_clear_auth_cookie();
+
+		$login_nonce = $wp2fa->login->create_login_nonce( $user->ID );
+		if ( ! $login_nonce ) {
+			$errors->add( 'failed_login_nonce', __( 'Failed to create a login nonce.', 'userswp' ) );
+
+			return $errors;
+		}
+
+		$provider = $wp2fa->login->get_available_providers_for_user( $user );
+
+		ob_start();
+		?>
+
+        <div class="uwp-2fa-methods-wrap">
+            <form name="validate_2fa_form" id="validate_2fa_form" class="validate_2fa_form" action="" method="post"
+                  autocomplete="off">
+                <input type="hidden" name="provider" id="provider" value="<?php echo esc_attr( $provider ); ?>"/>
+                <input type="hidden" name="wp-auth-id" id="wp-auth-id" value="<?php echo esc_attr( $user->ID ); ?>"/>
+                <input type="hidden" name="wp-auth-nonce" id="wp-auth-nonce"
+                       value="<?php echo esc_attr( $login_nonce['key'] ); ?>"/>
+				<?php
+
+				// Check to see what provider is set and give the relevant authentication page.
+				if ( 'totp' === $provider ) {
+					?>
+                    <p><?php esc_html_e( 'Please enter the authentication code from your 2FA authentication app below to login:', 'userswp' ); ?></p>
+					<?php
+
+					echo aui()->input( array(
+						'type'        => 'tel',
+						'id'          => 'authcode',
+						'name'        => 'authcode',
+						'placeholder' => __( 'Authentication Code', 'userswp' ),
+						'value'       => '',
+						'label'       => __( 'Authentication Code', 'userswp' ),
+					) );
+
+					echo aui()->button( array(
+						'type'    => 'submit',
+						'class'   => 'btn btn-primary btn-block text-uppercase uwp-2fa-submit',
+						'name'    => 'submit',
+						'icon'    => '',
+						'content' => __( 'Log In', 'userswp' ),
+					) );
+
+				} elseif ( 'email' === $provider ) {
+					$has_token = $wp2fa->authentication->user_has_token( $user->ID );
+					if ( empty( $has_token ) || ! $has_token ) {
+						//\WP2FA\Admin\SetupWizard::send_authentication_setup_email( $user->ID );
+						$wp2fa->wizard->send_authentication_setup_email( $user->ID );
+					}
+					?>
+                    <p><?php esc_html_e( 'Please enter the 2FA verification code sent to your email address to login:', 'userswp' ); ?></p>
+					<?php
+					echo aui()->input( array(
+						'type'             => 'tel',
+						'id'               => 'authcode',
+						'name'             => 'wp-2fa-email-code',
+						'placeholder'      => __( 'Verification Code', 'userswp' ),
+						'value'            => '',
+						'label'            => __( 'Verification Code', 'userswp' ),
+						'extra_attributes' => array( 'size' => 20, 'pattern' => "[0-9]*" ),
+					) );
+
+					echo aui()->button( array(
+						'type'    => 'submit',
+						'class'   => 'btn btn-primary text-uppercase uwp-2fa-submit',
+						'name'    => 'submit',
+						'icon'    => '',
+						'content' => __( 'Log In', 'userswp' ),
+					) );
+
+					echo aui()->button( array(
+						'type'    => 'button',
+						'class'   => 'btn btn-secondary text-uppercase uwp-2fa-email-resend',
+						'name'    => 'wp-2fa-email-code-resend',
+						'icon'    => '',
+						'content' => __( 'Resend Code', 'userswp' ),
+					) );
+
+				}
+				?>
+            </form>
+        </div>
+
+		<?php
+		$codes_remaining = $wp2fa->backupcodes->codes_remaining_for_user( $user );
+		if ( isset( $codes_remaining ) && $codes_remaining > 0 ) {
+			?>
+            <div class="uwp-2fa-methods-wrap" style="display:none;">
+                <form name="validate_2fa_backup_codes_form" id="validate_2fa_backup_codes_form"
+                      class="validate_2fa_backup_codes_form" action="" method="post" autocomplete="off">
+                    <input type="hidden" name="provider" id="provider" value="backup_codes"/>
+                    <input type="hidden" name="wp-auth-id" id="wp-auth-id"
+                           value="<?php echo esc_attr( $user->ID ); ?>"/>
+                    <input type="hidden" name="wp-auth-nonce" id="wp-auth-nonce"
+                           value="<?php echo esc_attr( $login_nonce['key'] ); ?>"/>
+                    <div class="uwp-backup-fields">
+						<?php
+						echo aui()->input( array(
+							'type'             => 'tel',
+							'id'               => 'authcode',
+							'name'             => 'wp-2fa-backup-code',
+							'placeholder'      => __( 'Enter backup code', 'userswp' ),
+							'value'            => '',
+							'label'            => __( 'Backup Code', 'userswp' ),
+							'extra_attributes' => array( 'size' => 20, 'pattern' => "[0-9]*" ),
+						) );
+
+						echo aui()->button( array(
+							'type'    => 'submit',
+							'class'   => 'btn btn-primary btn-block text-uppercase uwp-2fa-submit',
+							'name'    => 'submit',
+							'icon'    => '',
+							'content' => __( 'Log In', 'userswp' ),
+						) );
+						?>
+                    </div>
+                </form>
+            </div>
+            <a href="#" class="uwp-switch-2fa-methods text-center d-block"><?php esc_html_e( 'Or, use a backup code.', 'userswp' ); ?></a>
+            <script type="text/javascript">
+                jQuery('.uwp-switch-2fa-methods').on('click',
+                    function (e) {
+                        e.preventDefault();
+                        jQuery('.uwp-auth-modal .modal-content .modal-error').html('');
+                        jQuery('.uwp-2fa-methods-wrap').toggle();
+                        return false;
+                    }
+                );
+            </script>
+			<?php
+		}
+
+		return ob_get_clean();
+	}
+
+	public function process_login_2fa() {
+		if ( ! isset( $_POST['wp-auth-id'], $_POST['wp-auth-nonce'] ) ) {
+			return;
+		}
+
+		$auth_id = (int) $_POST['wp-auth-id'];
+		$user    = get_userdata( $auth_id );
+		if ( ! $user ) {
+			$message = aui()->alert( array(
+					'type'    => 'error',
+					'content' => __( 'Invalid user data. Please try again.', 'userswp' )
+				)
+			);
+
+			wp_send_json_error( $message );
+		}
+
+		global $wp2fa;
+
+		$nonce = ( isset( $_POST['wp-auth-nonce'] ) ) ? sanitize_textarea_field( wp_unslash( $_POST['wp-auth-nonce'] ) ) : '';
+		if ( true !== $wp2fa->login->verify_login_nonce( $user->ID, $nonce ) ) {
+
+			$message = aui()->alert( array(
+					'type'    => 'error',
+					'content' => __( 'Invalid request! Please try again.', 'userswp' )
+				)
+			);
+
+			wp_send_json_error( $message );
+		}
+
+		if ( isset( $_POST['provider'] ) ) {
+			$provider  = sanitize_textarea_field( wp_unslash( $_POST['provider'] ) );
+			$providers = $wp2fa->login->get_available_providers_for_user( $user );
+			if ( isset( $providers[ $provider ] ) ) {
+				$provider = $providers[ $provider ];
+			} elseif ( isset( $provider ) ) {
+				$provider = $provider;
+			} else {
+				$provider = $provider;
+			}
+		}
+
+		// If this is an email login, or if the user failed validation previously, lets send the code to the user.
+		if ( 'email' === $provider && true !== $wp2fa->login->pre_process_email_authentication( $user ) ) {
+
+		}
+
+		// Validate TOTP.
+		if ( 'totp' === $provider && true !== $wp2fa->login->validate_totp_authentication( $user ) ) {
+
+			do_action( 'wp_login_failed', $user->user_login );
+
+			$message = aui()->alert( array(
+					'type'    => 'error',
+					'content' => __( 'Invalid verification code.', 'userswp' )
+				)
+			);
+
+			wp_send_json_error( $message );
+		}
+
+		// Validate Email.
+		if ( 'email' === $provider && true !== $wp2fa->login->validate_email_authentication( $user ) ) {
+
+			do_action( 'wp_login_failed', $user->user_login );
+
+			if ( isset( $_REQUEST['wp-2fa-email-code-resend'] ) && 1 == $_REQUEST['wp-2fa-email-code-resend'] ) {
+				$message = aui()->alert( array(
+						'type'    => 'info',
+						'content' => __( 'A new code has been sent.', 'userswp' )
+					)
+				);
+
+				wp_send_json_error( $message );
+			} else {
+				$message = aui()->alert( array(
+						'type'    => 'error',
+						'content' => __( 'Invalid verification code.', 'userswp' )
+					)
+				);
+
+				wp_send_json_error( $message );
+			}
+		}
+
+		// Backup Codes.
+		if ( 'backup_codes' === $provider && true !== $wp2fa->login->validate_backup_codes( $user ) ) {
+
+			do_action( 'wp_login_failed', $user->user_login );
+
+			$message = aui()->alert( array(
+					'type'    => 'error',
+					'content' => __( 'Invalid backup code.', 'userswp' )
+				)
+			);
+
+			wp_send_json_error( $message );
+		}
+
+		$wp2fa->login->delete_login_nonce( $user->ID );
+
+		$rememberme = false;
+		$remember   = ( isset( $_REQUEST['rememberme'] ) ) ? filter_var( $_REQUEST['rememberme'], FILTER_VALIDATE_BOOLEAN ) : '';
+		if ( ! empty( $remember ) ) {
+			$rememberme = true;
+		}
+
+		wp_set_auth_cookie( $user->ID, $rememberme );
+
+		do_action( 'two_factor_user_authenticated', $user );
+
+		$message = aui()->alert( array(
+				'type'    => 'success',
+				'content' => __( 'Validation successful. Redirecting...', 'userswp' )
+			)
+		);
+
+		wp_send_json_success( $message );
+	}
+
 	public function get_login_redirect_url( $data, $user ) {
 		if ( is_int( $user ) ) {
 			$user = get_userdata( $user );
@@ -1172,7 +1472,7 @@ class UsersWP_Forms {
 		} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id == - 2 && uwp_get_option( 'login_redirect_custom_url' ) ) {
 			$redirect_to = uwp_get_option( 'login_redirect_custom_url' );
 		} else {
-            $redirect_to = home_url( '/' );
+			$redirect_to = home_url( '/' );
 			$redirect_to = apply_filters( 'login_redirect', $redirect_to, '', $user );
 		}
 
@@ -1318,7 +1618,7 @@ class UsersWP_Forms {
 				$message    .= "<a href='" . $reset_link . "' target='_blank'>" . $reset_link . "</a>" . "\r\n";
 			} else {
 				$reset_link = home_url( "reset?key=$key&login=" . rawurlencode( $user_data->user_login ), 'login' );
-				$message .= "<a href='" .$reset_link. "' target='_blank'>" . $reset_link . "</a>". "\r\n";
+				$message    .= "<a href='" . $reset_link . "' target='_blank'>" . $reset_link . "</a>" . "\r\n";
 			}
 			$message = apply_filters( 'uwp_forgot_password_message', $message, $user_data, $reset_link );
 		}
@@ -1469,21 +1769,22 @@ class UsersWP_Forms {
 
 		do_action( 'uwp_after_validate', 'reset' );
 
-		$login     = sanitize_text_field($data['uwp_reset_username']);
-		$key       = sanitize_text_field($data['uwp_reset_key']);
+		$login = sanitize_text_field( $data['uwp_reset_username'] );
+		$key   = sanitize_text_field( $data['uwp_reset_key'] );
 
-		$user = get_user_by('login', $login);
-		if (!$user){
+		$user = get_user_by( 'login', $login );
+		if ( ! $user ) {
 			$message       = aui()->alert( array(
 					'type'    => 'error',
 					'content' => __( 'Invalid username.', 'userswp' )
 				)
 			);
 			$uwp_notices[] = array( 'reset' => $message );
+
 			return;
 		}
 
-		clean_user_cache($user);
+		clean_user_cache( $user );
 
 		$user_data = check_password_reset_key( $key, $login );
 

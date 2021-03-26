@@ -536,6 +536,7 @@ final class UsersWP {
 		// login
 		add_action( 'wp_ajax_nopriv_uwp_ajax_login_form', array( $instance, 'ajax_login_form' ) );
 		add_action( 'wp_ajax_nopriv_uwp_ajax_login', array( $instance, 'process_login' ) );
+		add_action( 'wp_ajax_nopriv_uwp_ajax_login_process_2fa', array( $instance, 'process_login_2fa' ) );
 
 		// register
 		add_action( 'wp_ajax_nopriv_uwp_ajax_register_form', array( $instance, 'ajax_register_form' ) );

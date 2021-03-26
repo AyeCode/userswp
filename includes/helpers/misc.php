@@ -522,6 +522,8 @@ function uwp_account_privacy_page_title($title, $type) {
 		$title = __( 'Delete Account', 'userswp' );
 	} elseif ($type == 'change-password') {
 		$title = __( 'Change Password', 'userswp' );
+    } elseif ($type == 'wp2fa') {
+		$title = __( 'Two-factor Authentication Settings', 'userswp' );
 	}
 
 	return $title;

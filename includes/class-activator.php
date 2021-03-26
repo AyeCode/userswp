@@ -146,6 +146,7 @@ class UsersWP_Activator {
             'login_modal' => 1,
             'login_redirect_to' => -1,
             'block_wp_login' => 0,
+            'disable_wp_2fa' => 0,
 	        'forgot_modal' => 1,
             'change_enable_old_password' => 1,
             'change_disable_password_nag' => 0,
