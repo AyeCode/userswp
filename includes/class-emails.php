@@ -16,6 +16,8 @@ class UsersWP_Mails {
 
 		add_action( 'uwp_email_header', array( $this, 'email_header' ), 10, 5 );
 		add_action( 'uwp_email_footer', array( $this, 'email_footer' ), 10, 4 );
+		add_action( 'wp_new_user_notification_email', array( $this, 'wp_new_user_notification_email' ), 10, 2 );
+		add_action( 'wp_new_user_notification_email_admin', array( $this, 'wp_new_user_notification_email_admin' ), 10, 2 );
 
 	}
 
@@ -315,6 +317,7 @@ class UsersWP_Mails {
 					'[#user_login#]'      => $user_data->user_login,
 					'[#user_name#]'       => $user_data->display_name,
 					'[#username#]'        => $user_data->user_login,
+					'[#user_email#]'      => $user_data->user_email,
 					'[#profile_link#]'    => $profile_link,
 				)
 			);
@@ -577,6 +580,115 @@ class UsersWP_Mails {
 		do_action( 'uwp_after_'.$email_name.'_email', $email_name, $email_vars );
 
 		return $sent;
+	}
+
+	public function wp_new_user_notification_email($wp_new_user_notification_email, $user){
+
+		$email_name = 'wp_new_user_notification';
+		$is_admin = false;
+		if ( !self::is_email_enabled( $email_name, '', $is_admin ) ) {
+			return;
+		}
+
+		$key = get_password_reset_key( $user );
+		if ( is_wp_error( $key ) ) {
+			return;
+		}
+
+		$email_vars = array(
+			'user_id' => $user->ID
+		);
+
+		$to = apply_filters( 'uwp_send_email_to', $user->user_email, $email_name, $email_vars, $is_admin);
+		$subject      = self::get_subject( $email_name, $email_vars, $is_admin );
+		$subject = !empty($subject) ? $subject : UsersWP_Defaults::wp_new_user_notification_email_subject();
+		$headers      = self::get_headers( $email_name, $email_vars, $is_admin );
+		$message = self::get_content( $email_name, $email_vars, $is_admin );
+		$message = !empty($message) ? $message : UsersWP_Defaults::wp_new_user_notification_email_content();
+
+		$reset_page = uwp_get_page_id( 'reset_page', false );
+		if ( $reset_page ) {
+			$reset_link = add_query_arg( array(
+				'key'   => $key,
+				'login' => rawurlencode( $user->user_login ),
+			), get_permalink( $reset_page ) );
+			$reset_link    = "<a href='" . $reset_link . "' target='_blank'>" . $reset_link . "</a>";
+		} else {
+			$reset_link = home_url( "reset?key=$key&login=" . rawurlencode( $user->user_login ), 'login' );
+			$reset_link = "<a href='" .$reset_link. "' target='_blank'>" . $reset_link . "</a>";
+		}
+
+		$message = str_replace( '[#reset_link#]', $reset_link, $message );
+
+		$plain_text = self::get_email_type() != 'html' ? true : false;
+		$template   = $plain_text ? 'emails/plain/uwp-email-' . $email_name . '.php' : 'emails/uwp-email-' . $email_name . '.php';
+
+		$content = uwp_get_template_html( $template, array(
+			'email_name'    => $email_name,
+			'email_vars'    => $email_vars,
+			'email_heading'	=> '',
+			'sent_to_admin' => $is_admin,
+			'plain_text'    => $plain_text,
+			'message_body'  => $message,
+		) );
+
+		$content = self::style_body( $content );
+		$content = apply_filters( 'uwp_mail_content', $content);
+
+		$wp_new_user_notification_email = array(
+			'to'      => $to,
+			'subject' => $subject,
+			'message' => $content,
+			'headers' => $headers,
+		);
+
+		return $wp_new_user_notification_email;
+
+	}
+
+	public function wp_new_user_notification_email_admin($wp_new_user_notification_email_admin, $user){
+
+		$email_name = 'wp_new_user_notification';
+		$is_admin = true;
+		if ( !self::is_email_enabled( $email_name, '', $is_admin ) ) {
+			return;
+		}
+
+		$email_vars = array(
+			'user_id' => $user->ID
+		);
+
+		$to = apply_filters( 'uwp_send_email_to', get_option( 'admin_email' ), $email_name, $email_vars, $is_admin);
+		$subject      = self::get_subject( $email_name, $email_vars, $is_admin );
+		$subject = !empty($subject) ? $subject : UsersWP_Defaults::wp_new_user_notification_email_subject_admin();
+		$headers      = self::get_headers( $email_name, $email_vars, $is_admin );
+		$message = self::get_content( $email_name, $email_vars, $is_admin );
+		$message = !empty($message) ? $message : UsersWP_Defaults::wp_new_user_notification_email_content_admin();
+
+		$plain_text = self::get_email_type() != 'html' ? true : false;
+		$template   = $plain_text ? 'emails/plain/uwp-email-' . $email_name . '.php' : 'emails/uwp-email-' . $email_name . '.php';
+
+		$content = uwp_get_template_html( $template, array(
+			'email_name'    => $email_name,
+			'email_vars'    => $email_vars,
+			'email_heading'	=> '',
+			'sent_to_admin' => $is_admin,
+			'plain_text'    => $plain_text,
+			'message_body'  => $message,
+		) );
+
+		$content = self::style_body( $content );
+		$content = apply_filters( 'uwp_mail_content', $content);
+
+		$wp_new_user_notification_email = array(
+			'to'      => $to,
+			'subject' => $subject,
+			'message' => $content,
+			'headers' => $headers,
+		);
+
+		return $wp_new_user_notification_email;
+
 	}
 
 }

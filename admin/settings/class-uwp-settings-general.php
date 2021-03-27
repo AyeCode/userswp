@@ -267,6 +267,13 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'type' => 'single_select_page',
                     'desc_tip' => true,
                 ),
+	            array(
+		            'id'   => 'disable_wp_2fa',
+		            'name' => __( 'Disable WP-2FA', 'userswp' ),
+		            'desc' => __('This will disable integration with WP 2FA - Two-factor authentication for WordPress plugin.','userswp' ),
+		            'type' => 'checkbox',
+		            'default'  => '0',
+	            ),
                 array( 'type' => 'sectionend', 'id' => 'login_options' ),
             ));
         } else if ( 'change-password' == $current_section ) {

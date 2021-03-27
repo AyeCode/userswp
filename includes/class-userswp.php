@@ -536,6 +536,7 @@ final class UsersWP {
 		// login
 		add_action( 'wp_ajax_nopriv_uwp_ajax_login_form', array( $instance, 'ajax_login_form' ) );
 		add_action( 'wp_ajax_nopriv_uwp_ajax_login', array( $instance, 'process_login' ) );
+		add_action( 'wp_ajax_nopriv_uwp_ajax_login_process_2fa', array( $instance, 'process_login_2fa' ) );
 
 		// register
 		add_action( 'wp_ajax_nopriv_uwp_ajax_register_form', array( $instance, 'ajax_register_form' ) );
@@ -710,6 +711,11 @@ final class UsersWP {
 		add_filter( 'login_url', array( $instance, 'wp_login_url' ), 10, 3 );
 		add_filter( 'register_url', array( $instance, 'wp_register_url' ), 10, 1 );
 		add_filter( 'lostpassword_url', array( $instance, 'wp_lostpassword_url' ), 10, 1 );
+
+		// Oxygen plugin
+		if ( defined( 'CT_VERSION' ) ) {
+			add_filter( 'uwp_get_template', array( $instance, 'oxygen_override_template' ), 11, 5 );
+		}
 
 	}
 

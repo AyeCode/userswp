@@ -49,7 +49,7 @@ class UWP_User_Title_Widget extends WP_Super_Duper {
                 'user_id'  => array(
                     'title' => __('User ID:', 'userswp'),
                     'desc' => __('Leave blank to use current user ID. For profile page it will take displayed user ID', 'userswp'),
-                    'type' => 'number',
+                    'type' => 'text',
                     'desc_tip' => true,
                     'default'  => '',
                     'advanced' => true
@@ -80,7 +80,7 @@ class UWP_User_Title_Widget extends WP_Super_Duper {
 		    $user = get_userdata($post->post_author);
 		    $args['user_id'] = $post->post_author;
 	    } else if(isset($args['user_id']) && (int)$args['user_id'] > 0){
-		    $user = get_userdata($args['user_id']);
+		    $user = get_userdata((int)$args['user_id']);
 	    } else {
 		    $user = uwp_get_displayed_user();
 	    }

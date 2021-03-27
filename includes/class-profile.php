@@ -1326,7 +1326,7 @@ class UsersWP_Profile {
 	 * @param       string      $file_key       Field key.
 	 * @param       array       $file_to_upload File data to upload.
 	 *
-	 * @return      string|WP_Error                         Returns original value if no erros. Else returns errors.
+	 * @return      string|WP_Error                         Returns original value if no errors. Else returns errors.
 	 */
 	public function handle_file_upload_error_checks( $value, $field, $file_key, $file_to_upload ) {
 
@@ -1789,10 +1789,13 @@ class UsersWP_Profile {
 	}
 
 	public function wpdiscuz_profile_url( $profile_url, $user ) {
-		$profile_page_url = uwp_get_page_id( 'profile_page', true );
+	    if(!$user){
+	        return $profile_url;
+        }
+
 		$allowed          = apply_filters( 'uwp_wpdiscuz_profile_url_change', true, $profile_url, $user );
-		if ( isset( $profile_page_url ) && ! empty( $profile_page_url ) && $allowed ) {
-			return $profile_page_url;
+		if ( $allowed && isset($user->user_login) ) {
+			return $this->get_profile_link( $profile_url, $user->ID );
 		}
 
 		return $profile_url;

@@ -862,6 +862,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'label'      => '',
 			'label_class'=> '',
 			'label_type' => '', // sets the label type, default: hidden. Options: hidden, top, horizontal, floating
+			'help_text'  => '',
 			'inline'     => true,
 			'required'   => false,
 			'options'    => array(),
@@ -911,11 +912,14 @@ else{$eli.attr(\'type\',\'password\');}"
 			}
 		}
 
+		// help text
+		$help_text = ! empty( $args['help_text'] ) ? AUI_Component_Helper::help_text( $args['help_text'] ) : '';
+		$output .= $help_text;
+
 		// maybe horizontal label
 		if($args['label_type']=='horizontal'){
 			$output .= '</div>';
 		}
-
 
 		// wrap
 		$wrap_class = $args['label_type']=='horizontal' ? 'form-group row' : 'form-group';

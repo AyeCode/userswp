@@ -639,6 +639,7 @@ class UsersWP_Admin {
 				'user_id' => $user_id,
 				'action'  => 'uwp_resend',
 				'_nonce'  => wp_create_nonce( 'uwp_resend' ),
+				'uwp_is_admin'  => 1,
 			),
 			admin_url( 'users.php' )
 		);
@@ -648,6 +649,7 @@ class UsersWP_Admin {
 				'user_id' => $user_id,
 				'action'  => 'uwp_activate_user',
 				'_nonce'  => wp_create_nonce( 'uwp_activate_user' ),
+				'uwp_is_admin'  => 1,
 			),
 			admin_url( 'users.php' )
 		);
@@ -690,7 +692,7 @@ class UsersWP_Admin {
 	public function handle_users_bulk_actions( $redirect_to, $doaction, $user_ids ) {
 		if ( 'uwp_resend' == $doaction ) {
 			foreach ( $user_ids as $user_id ) {
-				$this->resend_activation_mail( $user_id );
+				uwp_resend_activation_mail( $user_id );
 			}
 
 			$redirect_to = add_query_arg( 'update', 'uwp_resend', $redirect_to );
@@ -702,49 +704,6 @@ class UsersWP_Admin {
 		}
 
 		return $redirect_to;
-	}
-
-	/**
-	 * Sends activation email to user
-	 *
-	 * @param int $user_id User ID.
-	 *
-	 * @return      bool
-	 * @package     userswp
-	 *
-	 */
-	public function resend_activation_mail( $user_id = 0 ) {
-		if ( ! $user_id ) {
-			return false;
-		}
-		if ( 'email_unconfirmed' == get_user_meta( $user_id, 'uwp_mod', true ) ) {
-			$user_data = get_userdata( $user_id );
-
-			$activation_link = uwp_get_activation_link( $user_id );
-
-			if ( $activation_link ) {
-
-				$message = __( 'To activate your account, visit the following address:', 'userswp' ) . "\r\n\r\n";
-
-				$message .= "<a href='" . esc_url( $activation_link ) . "' target='_blank'>" . esc_url( $activation_link ) . "</a>" . "\r\n";
-
-				$activate_message = '<p><b>' . __( 'Please activate your account :', 'userswp' ) . '</b></p><p>' . $message . '</p>';
-
-				$activate_message = apply_filters( 'uwp_activation_mail_message', $activate_message, $user_id );
-
-				$email_vars = array(
-					'user_id'         => $user_id,
-					'login_details'   => $activate_message,
-					'activation_link' => $activation_link,
-				);
-
-				$send_result = UsersWP_Mails::send( $user_data->user_email, 'registration_activate', $email_vars );
-
-				return $send_result;
-			}
-		}
-
-		return true;
 	}
 
 	/**
@@ -779,35 +738,23 @@ class UsersWP_Admin {
 		$user_id = isset( $_REQUEST['user_id'] ) ? (int) $_REQUEST['user_id'] : 0;
 		$action  = isset( $_REQUEST['action'] ) ? sanitize_text_field($_REQUEST['action']) : false;
 		$nonce   = isset( $_REQUEST['_nonce'] ) ? sanitize_text_field($_REQUEST['_nonce']) : false;
+		$is_admin   = isset( $_REQUEST['uwp_is_admin'] ) ? sanitize_text_field($_REQUEST['uwp_is_admin']) : false;
 
 		if ( $user_id && 'uwp_resend' == $action && !empty($nonce) && wp_verify_nonce( $nonce, 'uwp_resend' ) ) {
-			$send_result = $this->resend_activation_mail( $user_id );
-			if ( ! is_admin() ) {
+			uwp_resend_activation_mail( $user_id );
+			if ( isset($is_admin) && $is_admin ) {
+				wp_redirect( add_query_arg( 'update', 'uwp_resend', admin_url( 'users.php' ) ) );
+				exit();
+			} else {
 				global $uwp_notices;
-
-				if ( $send_result ) {
-					$message       = __( 'Activation email has been sent!', 'userswp' );
-					$uwp_notices[] = aui()->alert( array(
-						'type'    => 'success',
-						'content' => $message
-					) );
-				} else {
-					$message       = __( 'Error while processing request. Please contact site admin.', 'userswp' );
-					$uwp_notices[] = aui()->alert( array(
-						'type'    => 'error',
-						'content' => $message
-					) );
-				}
-
-				return;
+				$message       = __( 'Activation email has been sent!', 'userswp' );
+				$uwp_notices[] = aui()->alert( array(
+					'type'    => 'success',
+					'content' => $message
+				) );
 			}
-			if ( ! $send_result ) {
-				wp_redirect( add_query_arg( 'update', 'err_uwp_resend', admin_url( 'users.php' ) ) );
-			}
-			wp_redirect( add_query_arg( 'update', 'uwp_resend', admin_url( 'users.php' ) ) );
-			exit();
 		} elseif ( $user_id && 'uwp_activate_user' == $action && wp_verify_nonce( $nonce, 'uwp_activate_user' ) ) {
-			if ( is_admin() && current_user_can( 'edit_users' ) ) {
+			if ( isset($is_admin) && $is_admin && current_user_can( 'edit_users' ) ) {
 				$this->activate_user( $user_id );
 				wp_redirect( add_query_arg( 'update', 'uwp_activate_user', admin_url( 'users.php' ) ) );
 			}

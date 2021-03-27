@@ -21,6 +21,66 @@ class UsersWP_Defaults {
 	 *
 	 * @return string
 	 */
+	public static function wp_new_user_notification_email_subject() {
+		return apply_filters( 'wp_new_user_notification_email_subject', __( "[[#site_name#]] Login Details", "userswp" ) );
+	}
+
+	/**
+	 * The new user account registration email body default.
+	 *
+	 * @return string
+	 */
+	public static function wp_new_user_notification_email_content() {
+		return apply_filters( 'wp_new_user_notification_email_content',
+			__( "Dear [#user_name#],
+
+To set your password, visit the following address:
+
+[#reset_link#]
+
+You can login here: [#login_url#]
+
+Thank you,
+[#site_name_url#]", "userswp"
+			)
+		);
+	}
+
+	/**
+	 * The new user account registration email subject default.
+	 *
+	 * @return string
+	 */
+	public static function wp_new_user_notification_email_subject_admin() {
+		return apply_filters( 'wp_new_user_notification_email_subject', __( "[[#site_name#]] New User Registration", "userswp" ) );
+	}
+
+	/**
+	 * The new user account registration email body default.
+	 *
+	 * @return string
+	 */
+	public static function wp_new_user_notification_email_content_admin() {
+		return apply_filters( 'wp_new_user_notification_email_content',
+			__( "Dear Admin,
+
+New user registration on your site: [#site_name#]
+
+Username: [#username#]
+
+Email: [#user_email#]
+
+Thank you,
+[#site_name_url#]", "userswp"
+			)
+		);
+	}
+
+	/**
+	 * The new user account registration email subject default.
+	 *
+	 * @return string
+	 */
 	public static function registration_activate_email_subject() {
 		return apply_filters( 'uwp_registration_activate_email_subject', __( "[[#site_name#]] Please activate your account", "userswp" ) );
 	}
@@ -290,7 +350,7 @@ A user has been registered recently on your website.
 	public static function author_box_content_bootstrap() {
 		return apply_filters( 'uwp_author_box_content_bootstrap',
 			'<div class="d-block text-center text-md-left d-md-flex p-3 bg-light">
-  <a href="[#author_link#]"><img src="[#author_image_url#]" class="rounded-circle shadow border border-white border-width-4 mr-3" alt="[#author_name#]"></a>
+  <a href="[#author_link#]"><img src="[#author_image_url#]" class="rounded-circle shadow border border-white border-width-4 mr-3" width="60" height="60" alt="[#author_name#]"></a>
   <div class="media-body">
     <h5 class="mt-0">Author: <a href="[#author_link#]">[#author_name#]</a></h5>
     [uwp_button_group]

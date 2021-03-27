@@ -243,3 +243,39 @@ function uwp_get_custom_field_info( $htmlvar_name, $form_type = 'account' ) {
 
 	return $field;
 }
+
+function uwp_resend_activation_mail($user_id) {
+
+	if ( ! $user_id ) {
+		return false;
+	}
+
+	if ( 'email_unconfirmed' == get_user_meta( $user_id, 'uwp_mod', true ) ) {
+		$user_data = get_userdata( $user_id );
+
+		$activation_link = uwp_get_activation_link( $user_id );
+
+		if ( $activation_link ) {
+
+			$message = __( 'To activate your account, visit the following address:', 'userswp' ) . "\r\n\r\n";
+
+			$message .= "<a href='" . esc_url( $activation_link ) . "' target='_blank'>" . esc_url( $activation_link ) . "</a>" . "\r\n";
+
+			$activate_message = '<p><b>' . __( 'Please activate your account :', 'userswp' ) . '</b></p><p>' . $message . '</p>';
+
+			$activate_message = apply_filters( 'uwp_activation_mail_message', $activate_message, $user_id );
+
+			$email_vars = array(
+				'user_id'         => $user_id,
+				'login_details'   => $activate_message,
+				'activation_link' => $activation_link,
+			);
+
+			$send_result = UsersWP_Mails::send( $user_data->user_email, 'registration_activate', $email_vars );
+
+			return $send_result;
+		}
+	}
+
+	return true;
+}

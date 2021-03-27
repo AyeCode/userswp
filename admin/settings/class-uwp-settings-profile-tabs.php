@@ -776,7 +776,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                             if($tab_type == 'shortcode'){
                             ?>
                             <li class="uwp-setting-name">
-                                <label for="tab_content">
+                                <label for="tab_content" style="width:100%;">
                                     <?php
                                     echo uwp_help_tip(__('Content to display in profile tab. Shortcode allowed.', 'userswp'));
                                     _e('Tab content:','userswp');
@@ -784,7 +784,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                                         echo WP_Super_Duper::shortcode_button("'tab_content_".$result_str."'");
                                     }
                                     ?><br>
-                                    <textarea name="tab_content" id="tab_content" placeholder="<?php _e('Add shortcode here.','userswp');?>"><?php echo stripslashes($tab_content);?></textarea>
+                                    <textarea name="tab_content" id="tab_content" placeholder="<?php _e('Add shortcode here.','userswp');?>"  style="width:100%;"><?php echo stripslashes($tab_content);?></textarea>
                                 </label>
                             </li>
                             <?php
@@ -860,7 +860,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 				    foreach ($_REQUEST as $pkey => $pval) {
 					    $tags = is_array($_REQUEST[$pkey]) ? 'skip_field' : '';
 
-					    if ($tags != 'skip_field') {
+					    if ($tags != 'skip_field' && $pkey != 'tab_content') {
 						    $_REQUEST[$pkey] = strip_tags(sanitize_text_field($_REQUEST[$pkey]), $tags);
 					    }
 				    }
@@ -916,7 +916,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                     'tab_name'      => $tab_name,
                     'tab_icon'      => $tab_icon,
                     'tab_key'       => sanitize_text_field($tab_key),
-                    'tab_content'   => sanitize_textarea_field($request_field['tab_content']),
+                    'tab_content'   => wp_kses_post($request_field['tab_content']),
                     'tab_privacy'   => $tab_privacy,
                     'user_decided'  => $user_decided,
                 );

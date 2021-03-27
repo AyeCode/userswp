@@ -49,7 +49,7 @@ if('publish' != $post->post_status){
 			<?php
 			$footer_html = '<div class="row">';
 				$footer_html .= '<div class="col">';
-					$footer_html .= apply_filters('uwp_tp_posts_post_footer_left', '<time class="uwp-profile-item-time published timeago" datetime="'.get_the_time( 'c' ).'" title="'.get_the_date().'">'.get_the_date().'</time>'); // time
+					$footer_html .= apply_filters('uwp_tp_posts_post_footer_left', '<time class="uwp-profile-item-time published timeago" datetime="'.get_the_time( 'c' ).'">'.get_the_date().'</time>'); // time
 				$footer_html .= '</div>';
 
 				$footer_html .= '<div class="col text-right">';
