@@ -1538,11 +1538,12 @@ class UsersWP_Forms {
 
 		// if no user we fake it and bail
 		if ( ! $user_data ) {
-			$message = aui()->alert( array(
-					'type'    => 'error',
-					'content' => __( 'Invalid email or user doesn\'t exists.', 'userswp' )
-				)
-			);
+		    $args = apply_filters('uwp_forgot_error_message', array(
+			    'type'    => 'error',
+			    'content' => __( 'Invalid email or user doesn\'t exists.', 'userswp' )
+		    ));
+
+			$message = aui()->alert( $args );
 			if ( wp_doing_ajax() ) {
 				wp_send_json_success( $message );
 			} else {
