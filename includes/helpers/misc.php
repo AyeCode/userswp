@@ -548,7 +548,7 @@ function uwp_add_account_menu_links() {
 	}
 
 	$account_page = uwp_get_page_id('account_page', false);
-	$account_page_link = get_permalink($account_page);
+	$account_page_link = get_permalink($account_page).wp_get_current_user()->user_login;
 
 	$account_available_tabs = uwp_account_get_available_tabs();
 
