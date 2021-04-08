@@ -838,8 +838,8 @@ class UsersWP_Forms {
 				'extras'      => $extras,
 				'form_fields' => $form_fields,
 			);
-
-			UsersWP_Mails::send( get_option( 'admin_email' ), 'registration_success', $email_vars, true );
+			$admin_email = UsersWP_Mails::get_admin_email();
+			UsersWP_Mails::send( $admin_email, 'registration_success', $email_vars, true );
 
 		}
 

@@ -205,8 +205,8 @@ class UsersWP_Account {
 	            $email_vars['user_name'] = $user_name;
 
 	            UsersWP_Mails::send($user_email, 'account_delete', $email_vars);
-
-	            UsersWP_Mails::send(get_bloginfo('admin_email'), 'account_delete', $email_vars, true);
+                $admin_email = UsersWP_Mails::get_admin_email();
+	            UsersWP_Mails::send( $admin_email, 'account_delete', $email_vars, true);
             }
 
 

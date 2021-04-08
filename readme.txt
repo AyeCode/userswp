@@ -134,6 +134,7 @@ No questions so far, but don't hesitate to ask!
 = 1.2.2.16 =
 * Argument to allow showing users list of specific roles - ADDED
 * AyeCode UI updated to v0.1.46 - CHANGED
+* Add filter to change admin email for uwp emails - ADDED 
 
 = 1.2.2.15 =
 * Divi theme broken layout issue on users profile - FIXED

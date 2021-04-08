@@ -657,7 +657,7 @@ class UsersWP_Mails {
 		$email_vars = array(
 			'user_id' => $user->ID
 		);
-
+		
 		$to = apply_filters( 'uwp_send_email_to', get_option( 'admin_email' ), $email_name, $email_vars, $is_admin);
 		$subject      = self::get_subject( $email_name, $email_vars, $is_admin );
 		$subject = !empty($subject) ? $subject : UsersWP_Defaults::wp_new_user_notification_email_subject_admin();
@@ -691,6 +691,18 @@ class UsersWP_Mails {
 
 	}
 
+	/**
+	 * Get the site admin email.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return mixed|void
+	 */
+	public static function get_admin_email() {
+		$admin_email = get_option( 'admin_email' );
+
+		return apply_filters( 'uwp_admin_email', $admin_email );
+	}
 }
 
 new UsersWP_Mails();
