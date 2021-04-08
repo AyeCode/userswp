@@ -276,7 +276,7 @@ function uwp_get_excluded_users_list() {
  *
  * @return   array $users array of users
  */
-function get_uwp_users_list() {
+function get_uwp_users_list($roles = array()) {
 
 	global $wpdb;
 
@@ -299,6 +299,14 @@ function get_uwp_users_list() {
 	$where = apply_filters('uwp_users_search_where', $where, $keyword);
 
 	$exclude_users = uwp_get_excluded_users_list();
+
+	if(isset($roles) && is_array($roles) && count($roles) > 0){
+		$users = get_users( array( 'role__not_in' => $roles, 'fields' => array('ID') ) );
+		$users = wp_list_pluck( $users, 'ID' );
+		if($users && count($users) > 0){
+			$exclude_users = array_merge($exclude_users, $users);
+		}
+    }
 	$exclude_users = apply_filters('uwp_excluded_users_from_list', $exclude_users, $where, $keyword);
 	$exclude_users = !empty($exclude_users) ? array_unique($exclude_users): array();
 

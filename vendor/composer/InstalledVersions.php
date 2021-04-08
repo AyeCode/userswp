@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'cf6dfa42b85cc9de7f70adb3ef2a915aa5460905',
+    'reference' => '0ae2e728ab409627f00d9e7688219703b11e04c5',
     'name' => 'uswerwp/userswp',
   ),
   'versions' => 
@@ -46,12 +46,12 @@ private static $installed = array (
     ),
     'ayecode/wp-ayecode-ui' => 
     array (
-      'pretty_version' => '0.1.45',
-      'version' => '0.1.45.0',
+      'pretty_version' => '0.1.46',
+      'version' => '0.1.46.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'a8f19cac8310de825ae5fec71d57184ebb2d78d0',
+      'reference' => '8b9825d9fe52f6da57302358df1a920eec3bace3',
     ),
     'ayecode/wp-font-awesome-settings' => 
     array (
@@ -79,7 +79,7 @@ private static $installed = array (
       array (
         0 => '1.x-dev',
       ),
-      'reference' => '260a3b3c67adbb8a3f895a49755e9a6e6b9fd8ee',
+      'reference' => '0f4a400e1c678d2650c5c27cce9e534cc3305c2a',
     ),
     'roundcube/plugin-installer' => 
     array (
@@ -102,7 +102,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'cf6dfa42b85cc9de7f70adb3ef2a915aa5460905',
+      'reference' => '0ae2e728ab409627f00d9e7688219703b11e04c5',
     ),
   ),
 );

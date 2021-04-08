@@ -38,6 +38,15 @@ class UWP_Users_Widget extends WP_Super_Duper {
                     'default'     => '',
                     'advanced'    => false
                 ),
+                'roles'  => array(
+	                'title' => __('Roles:', 'userswp'),
+	                'desc' => __('Choose user roles to show in list. All users will display if no role selected.', 'userswp'),
+	                'type' => 'select',
+	                'options' => uwp_get_user_roles(),
+	                'desc_tip' => true,
+	                'advanced' => false,
+	                'multiple' => true
+                )
             )
 
         );
@@ -59,14 +68,26 @@ class UWP_Users_Widget extends WP_Super_Duper {
 
         ob_start();
 
+	    if(isset($args['roles']) && !empty($args['roles'])){
+		    if(is_array($args['roles'])){
+			    $roles = implode(',', $args['roles']);
+		    } else {
+			    $roles = $args['roles'];
+		    }
+
+			$loop_shortcode = '[uwp_users_loop roles='.$roles.']';
+	    } else {
+		    $loop_shortcode = '[uwp_users_loop]';
+	    }
+
         $design_style = uwp_get_option("design_style",'bootstrap');
 
         echo '<div class="uwp_page">';
 
         if($design_style=='bootstrap'){
-            echo do_shortcode("[uwp_users_loop_actions]\n[uwp_users_loop]");
+            echo do_shortcode("[uwp_users_loop_actions]\n".$loop_shortcode);
         }else{
-            echo do_shortcode("[uwp_users_search]\n[uwp_users_loop_actions]\n[uwp_users_loop]");
+            echo do_shortcode("[uwp_users_search]\n[uwp_users_loop_actions]\n".$loop_shortcode);
         }
 
         echo '</div>';

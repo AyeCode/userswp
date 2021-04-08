@@ -131,6 +131,10 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.16 =
+* Argument to allow showing users list of specific roles - ADDED
+* AyeCode UI updated to v0.1.46 - CHANGED
+
 = 1.2.2.15 =
 * Divi theme broken layout issue on users profile - FIXED
 * Edit profile of other users page in backend throwing js error - FIXED
