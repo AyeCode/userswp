@@ -29,6 +29,17 @@ class UWP_Users_Loop_Widget extends WP_Super_Duper {
                 'classname'   => 'uwp-users-list bsui',
                 'description' => esc_html__('Displays users loop.','userswp'),
             ),
+            'arguments'     => array(
+	            'roles'  => array(
+		            'title' => __('Roles:', 'userswp'),
+		            'desc' => __('Choose user roles to show in list. All users will display if no role selected.', 'userswp'),
+		            'type' => 'select',
+		            'options' => uwp_get_user_roles(),
+		            'desc_tip' => true,
+		            'advanced' => false,
+		            'multiple' => true
+	            )
+            )
         );
 
         parent::__construct( $options );
@@ -47,8 +58,13 @@ class UWP_Users_Loop_Widget extends WP_Super_Duper {
         
         ob_start();
 
+	    $roles = isset($args['roles']) ? $args['roles'] : array();
+	    if(!empty($roles) && !is_array($roles)){
+		    $roles = explode(',', $roles);
+	    }
+
         // get users
-        $users_list = get_uwp_users_list();
+        $users_list = get_uwp_users_list($roles);
         $args['template_args']['users'] = $users_list['users'];
         $args['template_args']['total_users'] = $users_list['total_users'];
         
