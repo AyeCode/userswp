@@ -139,9 +139,7 @@ class UWP_Reset_Widget extends WP_Super_Duper {
 
 	    <?php
 
-	    $output = ob_get_contents();
-
-        ob_end_clean();
+	    $output = ob_get_clean();
 
         return trim($output);
 

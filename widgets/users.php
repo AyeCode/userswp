@@ -44,6 +44,7 @@ class UWP_Users_Widget extends WP_Super_Duper {
 	                'type' => 'select',
 	                'options' => uwp_get_user_roles(),
 	                'desc_tip' => true,
+	                'default'  => '',
 	                'advanced' => false,
 	                'multiple' => true
                 )

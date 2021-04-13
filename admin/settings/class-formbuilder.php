@@ -65,7 +65,9 @@ class UsersWP_Form_Builder {
         <div class="uwp-panel-heading">
             <h3><?php echo apply_filters('uwp_form_builder_panel_head', ''); ?></h3>
         </div>
-
+        <div class="uwp-before-form-builder-container">
+			<?php do_action( 'uwp_before_form_builder_content', $default_tab ); ?>
+        </div>
         <div id="uwp_form_builder_container" class="clearfix">
             <div class="uwp-form-builder-frame">
                 <div class="uwp-side-sortables" id="uwp-available-fields">
@@ -2369,9 +2371,17 @@ class UsersWP_Form_Builder {
 	{
 		global $wpdb;
 
+		$form_id = ! empty( $_REQUEST['form'] ) ? (int) $_REQUEST['form'] : 1;
+		if ( ! empty( $_REQUEST['form_type'] ) && $_REQUEST['form_type'] === 'new' ) {
+
+			$get_register_form = uwp_get_option( 'multiple_registration_forms' );
+			$new_added         = ! empty( $get_register_form ) ? end( $get_register_form ) : array();
+			$form_id           = ! empty( $new_added['id'] ) ? $new_added['id'] : 1;
+		}
+
 		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
-		$existing_fields = $wpdb->get_results("select site_htmlvar_name from " . $extras_table_name . "     where form_type ='" . $form_type . "'");
+		$existing_fields   = $wpdb->get_results( "select site_htmlvar_name from " . $extras_table_name . "  where form_type ='" . $form_type . "' AND form_id=$form_id" );
 
 		$existing_field_ids = array();
 		if (!empty($existing_fields)) {
@@ -2381,6 +2391,8 @@ class UsersWP_Form_Builder {
 		}
 		?>
         <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
+        <input type="hidden" name="manage_field_form_id" class="manage_field_form_id"
+               value="<?php echo esc_attr( $form_id ); ?>">
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="register">
         <ul>
 			<?php
@@ -2444,14 +2456,24 @@ class UsersWP_Form_Builder {
 	{
 		global $wpdb;
 		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
+
+		$form_id = ! empty( $_REQUEST['form'] ) ? (int) $_REQUEST['form'] : 1;
+		if ( ! empty( $_REQUEST['form_type'] ) && $_REQUEST['form_type'] === 'new' ) {
+
+			$get_register_form = uwp_get_option( 'multiple_registration_forms' );
+			$new_added         = ! empty( $get_register_form ) ? end( $get_register_form ) : array();
+			$form_id           = ! empty( $new_added['id'] ) ? $new_added['id'] : 1;
+		}
 		?>
+        <input type="hidden" name="manage_field_form_id" class="manage_field_form_id"
+               value="<?php echo esc_attr( $form_id ); ?>>">
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="register">
         <ul class="core uwp_form_extras uwp-tabs-selected"><?php
 
 			$fields = $wpdb->get_results(
 				$wpdb->prepare(
-					"select * from  " . $extras_table_name . " where form_type = %s order by sort_order asc",
-					array($form_type)
+					"select * from  " . $extras_table_name . " where form_type = %s AND form_id=%d order by sort_order asc",
+					array($form_type, $form_id)
 				)
 			);
 
@@ -2671,6 +2693,7 @@ class UsersWP_Form_Builder {
 	public function register_ajax_handler()
 	{
 		if (isset($_REQUEST['create_field'])) {
+			$form_id      = isset( $_REQUEST['form_id'] ) ? sanitize_text_field( $_REQUEST['form_id'] ) : '';
 			$field_id = isset($_REQUEST['field_id']) ? trim(sanitize_text_field($_REQUEST['field_id']), '_') : '';
 			$field_action = isset($_REQUEST['field_ins_upd']) ? sanitize_text_field($_REQUEST['field_ins_upd']) : '';
 
@@ -2683,7 +2706,7 @@ class UsersWP_Form_Builder {
 					}
 				}
 
-				$return = uwp_form_extras_field_order($field_ids, "register");
+				$return = uwp_form_extras_field_order($field_ids, "register", $form_id);
 
 				if (is_array($return)) {
 					$return = json_encode($return);
@@ -2759,6 +2782,7 @@ class UsersWP_Form_Builder {
 		global $wpdb;
 		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
+		$form_id    = isset( $request_field['form_id'] ) ? sanitize_text_field( $request_field['form_id'] ) : '';
 		$result_str = isset($request_field['field_id']) ? trim($request_field['field_id']) : '';
 
 		$cf = trim($result_str, '_');
@@ -2769,8 +2793,8 @@ class UsersWP_Form_Builder {
 		$form_type = $request_field['form_type'];
 		$field_type = $request_field['field_type'];
 
-		$check_html_variable = $wpdb->get_var($wpdb->prepare("select site_htmlvar_name from " . $extras_table_name . " where id <> %d and site_htmlvar_name = %s and form_type = %s ",
-			array($cf, $site_htmlvar_name, $form_type)));
+		$check_html_variable = $wpdb->get_var($wpdb->prepare("select site_htmlvar_name from " . $extras_table_name . " where id <> %d and site_htmlvar_name = %s and form_type = %s and form_id=%d",
+			array($cf, $site_htmlvar_name, $form_type, $form_id)));
 
 
 		if (!$check_html_variable) {
@@ -2799,13 +2823,15 @@ class UsersWP_Form_Builder {
 					form_type = %s,
 					field_type = %s,
 					site_htmlvar_name = %s,
-					sort_order = %s
+					sort_order = %s,
+					form_id = %d
 					where id = %d",
 						array(
 							$form_type,
 							$field_type,
 							$site_htmlvar_name,
 							$field_id,
+							$form_id,
 							$cf
 						)
 
@@ -2826,11 +2852,13 @@ class UsersWP_Form_Builder {
 					form_type = %s,
 					field_type = %s,
 					site_htmlvar_name = %s,
-					sort_order = %s",
+					sort_order = %s,
+						form_id = %s",
 						array($form_type,
 							$field_type,
 							$site_htmlvar_name,
-							$field_id
+							$field_id,
+							$form_id
 						)
 					)
 				);

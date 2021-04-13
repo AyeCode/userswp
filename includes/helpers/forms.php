@@ -7,12 +7,12 @@
  *
  * @since       1.0.0
  */
-function get_register_form_fields() {
+function get_register_form_fields($form_id = 1) {
 	global $wpdb;
 	$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 	$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
-	$fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.is_active = '1' AND fields.for_admin_use != '1' AND fields.is_register_field = '1' AND extras.form_type = 'register' ORDER BY extras.sort_order ASC", array('account')));
-	$fields = apply_filters('uwp_get_register_form_fields', $fields);
+	$fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.is_active = '1' AND fields.for_admin_use != '1' AND fields.is_register_field = '1' AND extras.form_type = 'register' AND extras.form_id=%d ORDER BY extras.sort_order ASC", array('account', $form_id)));
+	$fields = apply_filters('uwp_get_register_form_fields', $fields, $form_id);
 	return $fields;
 }
 
@@ -46,21 +46,12 @@ function check_register_form_field( $var ) {
  * @package     userswp
  *
  */
-function get_register_validate_form_fields( $role_id ) {
+function get_register_validate_form_fields( $form_id = 1 ) {
 	global $wpdb;
 	$table_name        = uwp_get_table_prefix() . 'uwp_form_fields';
 	$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
-	if ( $role_id == 0 ) {
-		$fields = $wpdb->get_results( $wpdb->prepare( "SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.for_admin_use != '1' AND fields.is_register_field = '1' ORDER BY extras.sort_order ASC", array( 'account' ) ) );
-	} else {
-		$slug   = get_post_field( 'post_name', $role_id );
-		$fields = $wpdb->get_results( $wpdb->prepare( "SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.for_admin_use != '1' AND fields.is_register_field = '1' AND FIND_IN_SET(%s, fields.user_roles) ORDER BY extras.sort_order ASC", array(
-			'account',
-			$slug
-		) ) );
-	}
-
-	$fields = apply_filters( 'uwp_get_register_validate_form_fields', $fields, $role_id );
+	$fields = $wpdb->get_results( $wpdb->prepare( "SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.for_admin_use != '1' AND fields.is_register_field = '1' AND extras.form_id = %s ORDER BY extras.sort_order ASC", array( 'account', $form_id ) ) );
+	$fields = apply_filters( 'uwp_get_register_validate_form_fields', $fields, $form_id );
 
 	return $fields;
 }
@@ -99,6 +90,7 @@ function get_change_validate_form_fields() {
 function get_account_form_fields( $extra_where = '' ) {
 	global $wpdb;
 
+	$form_id = get_user_meta( get_current_user_id(), '_uwp_register_form_id', true );
 	$table_name        = uwp_get_table_prefix() . 'uwp_form_fields';
 	$include_admin_use = apply_filters( 'uwp_account_include_admin_use_only_fields', false );
 	if ( $include_admin_use ) {
@@ -107,7 +99,7 @@ function get_account_form_fields( $extra_where = '' ) {
 		$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND for_admin_use != '1' AND is_register_only_field = '0' AND htmlvar_name != 'password'" . $extra_where . " ORDER BY sort_order ASC", array( 'account' ) ) );
 	}
 
-	return $fields;
+	return uwp_get_account_fields_sorted( $fields, $form_id );
 }
 
 /**
@@ -278,4 +270,139 @@ function uwp_resend_activation_mail($user_id) {
 	}
 
 	return true;
+}
+
+function uwp_get_register_forms() {
+
+	$get_register_form = uwp_get_option( 'multiple_registration_forms' );
+
+	$register_forms = array();
+
+	if ( ! empty( $get_register_form ) && is_array( $get_register_form ) ) {
+		foreach ( $get_register_form as $key => $register_form ) {
+			$form_id = ! empty( $register_form['id'] ) ? $register_form['id'] : '';
+			if ( ! empty( $form_id ) && $form_id > 0 ) {
+				$register_forms[ $form_id ] = ! empty( $register_form['title'] ) ? $register_form['title'] : '';
+			}
+		}
+	}
+
+	return $register_forms;
+}
+
+function uwp_get_register_form_title( $form_id ) {
+
+	$form_title = '';
+	if ( ! empty( $form_id ) && $form_id > 0 ) {
+		$get_register_form = uwp_get_option( 'multiple_registration_forms' );
+
+		if ( ! empty( $get_register_form ) && is_array( $get_register_form ) ) {
+
+			foreach ( $get_register_form as $key => $register_form ) {
+
+				if ( ! empty( $register_form['id'] ) && $register_form['id'] == $form_id ) {
+
+					$form_title = ! empty( $register_form['title'] ) ? $register_form['title'] : '';
+				}
+			}
+		}
+	}
+
+	return $form_title;
+}
+
+function uwp_get_next_register_form_id() {
+
+	global $wpdb;
+
+	$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
+	$fields            = $wpdb->get_results( "SELECT MAX(`form_id`) AS last_added FROM `$extras_table_name`" );
+	$last_added        = ! empty( $fields['0']->last_added ) ? (int) $fields['0']->last_added : 1;
+
+	$register_forms    = uwp_get_option( 'multiple_registration_forms' );
+	$register_form_ids = array();
+	if ( ! empty( $register_forms ) && is_array( $register_forms ) ) {
+		foreach ( $register_forms as $key => $register_form ) {
+			if ( ! empty( $register_form['id'] ) ) {
+				$register_form_ids[] = $register_form['id'];
+			}
+		}
+	}
+
+	$form_max_id = ! empty( $register_form_ids ) ? max( $register_form_ids ) : 0;
+
+	$next_form = max( $last_added, $form_max_id );
+	$next_form = ! empty( $next_form ) ? $next_form + 1 : 0;
+
+	return ! empty( $next_form ) ? $next_form : 1;
+}
+
+function uwp_get_register_form_id( $user_id ) {
+
+	if ( empty( $user_id ) ) {
+		return;
+	}
+
+	$form_id = get_user_meta( $user_id, '_uwp_register_form_id', true );
+
+	return ! empty( $form_id ) ? (int) $form_id : 1;
+}
+
+function uwp_get_register_fields_htmlvar( $form_id = 1 ) {
+
+	$fields = get_register_form_fields( $form_id );
+
+	$html_var = array();
+
+	if ( ! empty( $fields ) && is_array( $fields ) ) {
+
+		foreach ( $fields as $key => $field ) {
+
+			if ( ! empty( $field->htmlvar_name ) ) {
+
+				$html_var[] = $field->htmlvar_name;
+			}
+		}
+	}
+
+	return $html_var;
+}
+
+function uwp_get_account_fields_sorted( $fields = array(), $form_id = 1 ) {
+
+	if ( empty( $fields ) || ! is_array( $fields ) ) {
+		return;
+	}
+
+	$accept_fields = apply_filters( 'uwp_accept_account_fields', array(
+		'first_name',
+		'last_name',
+		'username',
+		'email',
+		'display_name',
+		'bio'
+	) );
+
+	$excluded_fields = uwp_get_excluded_fields();
+
+	$register_fields = uwp_get_register_fields_htmlvar( $form_id );
+
+	$register_fields = array_merge( $register_fields, $accept_fields );
+	$register_fields = array_unique( $register_fields );
+
+	$register_fields = array_diff( $register_fields, $excluded_fields );
+
+	foreach ( $fields as $key => $field ) {
+
+		$htmlvar_name = ! empty( $field->htmlvar_name ) ? $field->htmlvar_name : '';
+
+		if ( ! empty( $htmlvar_name ) && ! empty( $register_fields ) && ! in_array( $htmlvar_name, $register_fields ) ) {
+
+			unset( $fields[ $key ] );
+		}
+
+		$fields = array_values( $fields );
+	}
+
+	return $fields;
 }
