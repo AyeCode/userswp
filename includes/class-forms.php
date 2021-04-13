@@ -681,7 +681,13 @@ class UsersWP_Forms {
 
 		$result = apply_filters( 'uwp_before_extra_fields_save', $result, 'register', $user_id );
 
-		$fields = get_register_form_fields();
+		$form_id = 1;
+		if ( isset( $data['uwp_register_form_id'] ) && ! empty( $data['uwp_register_form_id'] ) ) {
+			update_user_meta( $user_id, '_uwp_register_form_id', (int) $data['uwp_register_form_id'] );
+			$form_id = (int) $data['uwp_register_form_id'];
+		}
+
+		$fields = get_register_form_fields($form_id);
 
 		$user_role = '';
 		if ( ! empty( $fields ) && is_array( $fields ) ) {
@@ -1991,7 +1997,8 @@ class UsersWP_Forms {
 	public function init_mail_form_fields( $form_fields, $type, $user_id ) {
 		switch ( $type ) {
 			case "register":
-				$fields    = get_register_form_fields();
+				$form_id = get_user_meta( $user_id, '_uwp_register_form_id', true );
+				$fields    = get_register_form_fields($form_id);
 				$user_data = get_userdata( $user_id );
 				if ( ! empty( $fields ) && is_array( $fields ) ) {
 					$form_fields = '<p><b>' . __( 'User Information:', 'userswp' ) . '</b></p>';
@@ -4294,8 +4301,8 @@ class UsersWP_Forms {
 		}
 
 		// do we need country code script in ajax?
-		$country_field = false;
-		$fields        = get_register_form_fields();
+		$country_field = false;$form_id = 1;
+		$fields        = get_register_form_fields($form_id);
 		if ( ! empty( $fields ) ) {
 			foreach ( $fields as $field ) {
 				if ( $field->field_type_key == 'country' || $field->field_type_key == 'uwp_country' ) {
