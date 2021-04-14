@@ -780,9 +780,10 @@ class UsersWP_Admin {
                     <tr>
                         <th><?php _e( 'Register Form:', 'userswp' ); ?></th>
                         <td>
+                            <div class="d-inline-block align-top">
                             <select onChange="window.location.replace(jQuery(this).val());"
                                     name="multiple-registration-select" id="multiple_registration_select"
-                                    class="small-text">
+                                    class="small-text aui-select2">
                                 <?php
 								if ( ! empty( $register_forms ) && is_array( $register_forms ) ) {
 									foreach ( $register_forms as $key => $forms ) {
@@ -794,6 +795,8 @@ class UsersWP_Admin {
 									<?php }
 								} ?>
                             </select>
+                            </div>
+                            <div class="d-inline-block align-top">
 							<?php if ( ! empty( $current_form ) && $current_form > 1 ) { ?>
                                 <button data-id="<?php echo $current_form; ?>"
                                         data-title="<?php echo uwp_get_register_form_title( $current_form ); ?>"
@@ -807,6 +810,7 @@ class UsersWP_Admin {
                                     class="btn btn-sm btn-primary register-form-create" type="button"
                                     name="register_form_create"
                                     id="register_form_create"><?php _e( 'Create Form', 'userswp' ); ?></button>
+                            </div>
                         </td>
                     </tr>
 					<?php if ( ! empty( $current_form ) && $current_form > 0 ) { ?>
