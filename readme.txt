@@ -131,6 +131,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.17 =
+* Remove tab if tab content is empty - ADDED
+
 = 1.2.2.16 =
 * Argument to allow showing users list of specific roles - ADDED
 * AyeCode UI updated to v0.1.46 - CHANGED

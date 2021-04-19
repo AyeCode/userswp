@@ -1421,6 +1421,8 @@ class UsersWP_GeoDirectory_Plugin {
 			self::get_bootstrap_favorites( $user, $post_type );
 		} else {
 			$gd_post_types = geodir_get_posttypes( 'array' );
+			$user_fav_posts = geodir_get_user_favourites( $user->ID );
+			if( $user_fav_posts ){
 			?>
 			<div class="uwp-profile-subtab-entries">
 				<h3><?php _e( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' ) ?></h3>
@@ -1428,8 +1430,6 @@ class UsersWP_GeoDirectory_Plugin {
 				<div class="uwp-profile-item-block">
 					<?php
 					$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
-
-					$user_fav_posts = geodir_get_user_favourites( $user->ID );
 
 					if ( $user_fav_posts ) {
 						$args = array(
@@ -1598,6 +1598,7 @@ class UsersWP_GeoDirectory_Plugin {
 				</div>
 			</div>
 			<?php
+			}
 		}
 	}
 
