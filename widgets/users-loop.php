@@ -35,6 +35,7 @@ class UWP_Users_Loop_Widget extends WP_Super_Duper {
 		            'desc' => __('Choose user roles to show in list. All users will display if no role selected.', 'userswp'),
 		            'type' => 'select',
 		            'options' => uwp_get_user_roles(),
+		            'default'  => '',
 		            'desc_tip' => true,
 		            'advanced' => false,
 		            'multiple' => true

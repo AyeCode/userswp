@@ -101,6 +101,7 @@ class UsersWP_Tables {
 									  search_condition varchar(100) NULL DEFAULT NULL,
 									  field_input_type varchar(255) NULL DEFAULT NULL,
 									  field_data_type varchar(255) NULL DEFAULT NULL,
+									  form_id int(11) NOT NULL DEFAULT 1,
 									  PRIMARY KEY  (id)
 									) $collate AUTO_INCREMENT=1 ;";
 

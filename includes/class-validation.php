@@ -36,12 +36,12 @@ class UsersWP_Validation {
             global $wpdb;
             $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
             if ($type == 'register') {
-                if (isset($data["uwp_role_id"])) {
-                    $role_id = (int) strip_tags(esc_sql($data["uwp_role_id"]));
-                } else {
-                    $role_id = 0;
-                }
-                $fields = get_register_validate_form_fields($role_id);
+	            if ( isset( $data['uwp_register_form_id'] ) && ! empty( $data['uwp_register_form_id'] ) ) {
+		            $form_id = (int) $data['uwp_register_form_id'];
+	            } else {
+		            $form_id = 1;
+	            }
+                $fields = get_register_validate_form_fields($form_id);
             } elseif ($type == 'change') {
                 $fields = get_change_validate_form_fields();
             } elseif ($type == 'account') {
