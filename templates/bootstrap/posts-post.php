@@ -21,7 +21,7 @@ if('publish' != $post->post_status){
 	<div class="card h-100">
 
 		<div class="embed-responsive embed-responsive-16by9">
-				<img alt="" class="card-img-top embed-responsive-item" src="<?php echo esc_url_raw( $thumb_url ); ?>" />
+				<img alt="" class="card-img-top embed-responsive-item mw-100" src="<?php echo esc_url_raw( $thumb_url ); ?>" />
 		</div>
 
 		<div class="card-body">
