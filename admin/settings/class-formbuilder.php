@@ -2600,7 +2600,7 @@ class UsersWP_Form_Builder {
 								if (!in_array($field_info->site_htmlvar_name, $no_actions)) { ?>
                                     <input type="button" class="button button-primary" name="save" id="save"
                                            value="<?php esc_attr_e('Save', 'userswp'); ?>"
-                                           onclick="save_field('<?php echo $result_str; ?>', 'register')"/>
+                                           onclick="save_field('<?php echo $result_str; ?>', 'register')" style="display: none;"/>
                                     <input type="button" name="delete" value="<?php esc_attr_e('Delete', 'userswp'); ?>"
                                            onclick="delete_field('<?php echo $result_str; ?>', '<?php echo $nonce; ?>','<?php echo $htmlvar_name ?>', 'register')"
                                            class="button"/>

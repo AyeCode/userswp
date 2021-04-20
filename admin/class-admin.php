@@ -490,10 +490,10 @@ class UsersWP_Admin {
 	public function get_profile_extra_edit( $user ) {
 		global $wpdb;
 		$table_name      = uwp_get_table_prefix() . 'uwp_form_fields';
-		$excluded_fields = apply_filters( 'uwp_exclude_edit_profile_fields', array() );
+		$excluded_fields = apply_filters( 'uwp_exclude_edit_profile_fields', array('bio', 'register_gdpr', 'register_tos', 'user_role') );
 		$query           = "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0'";
 		if ( is_array( $excluded_fields ) && count( $excluded_fields ) > 0 ) {
-			$query .= 'AND htmlvar_name NOT IN (' . implode( ',', $excluded_fields ) . ')';
+			$query .= "AND htmlvar_name NOT IN ('" . implode( "','", $excluded_fields ) . "')";
 		}
 		$query  .= ' ORDER BY sort_order ASC';
 		$fields = $wpdb->get_results( $query );
@@ -801,7 +801,7 @@ class UsersWP_Admin {
                                 <button data-id="<?php echo $current_form; ?>"
                                         data-title="<?php echo uwp_get_register_form_title( $current_form ); ?>"
                                         class="btn btn-sm btn-secondary register-form-update" type="button"
-                                        name="register_form_remove"><?php _e( 'Update Form', 'userswp' ); ?></button>
+                                        name="register_form_update"><?php _e( 'Update Form', 'userswp' ); ?></button>
                                 <button data-id="<?php echo $current_form; ?>"
                                         class="btn btn-sm btn-danger register-form-remove" type="button"
                                         name="register_form_remove"><?php _e( 'Delete Form', 'userswp' ); ?></button>
