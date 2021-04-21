@@ -3029,12 +3029,15 @@ class UsersWP_Forms {
 
 
 			$site_title   = uwp_get_form_label( $field );
+			$placeholder = uwp_get_field_placeholder( $field );
 			$manual_label = apply_filters( 'uwp_login_username_label_manual', true );
 			if ( $manual_label
 			     && isset( $field->form_type )
 			     && $field->form_type == 'login'
 			     && $field->htmlvar_name == 'username' ) {
 				$site_title = __( "Username or Email", 'userswp' );
+				$required = ! empty( $field->is_required ) ? ' *' : '';
+				$placeholder = $site_title . $required;
 			}
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
@@ -3050,7 +3053,7 @@ class UsersWP_Forms {
 					'type'            => $type,
 					'id'              => $field->htmlvar_name,
 					'name'            => $field->htmlvar_name,
-					'placeholder'     => uwp_get_field_placeholder( $field ),
+					'placeholder'     => $placeholder,
 					'title'           => $site_title,
 					'value'           => $value,
 					'required'        => $field->is_required,

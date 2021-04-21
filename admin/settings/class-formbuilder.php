@@ -2249,6 +2249,12 @@ class UsersWP_Form_Builder {
 			$value = ($cf['defaults']['is_register_field']) ? 1 : 0;
 		}
 
+		if (isset($field_info->htmlvar_name)) {
+			$htmlvar_name = $field_info->htmlvar_name;
+		} else if (isset($cf['defaults']['htmlvar_name']) && $cf['defaults']['htmlvar_name']) {
+			$htmlvar_name = ($cf['defaults']['htmlvar_name']) ? $cf['defaults']['htmlvar_name'] : '';
+		}
+
 		//register only field
 		$hide_register_only_field = (isset($cf['defaults']['is_register_only_field']) && $cf['defaults']['is_register_only_field'] === false) ? "style='display:none;'" : '';
 		$hide_register_only_field = (isset($field_info->for_admin_use) && $field_info->for_admin_use == '1') ? "style='display:none;'" : $hide_register_only_field;
@@ -2259,6 +2265,8 @@ class UsersWP_Form_Builder {
 			$register_only_value = ($cf['defaults']['is_register_only_field']) ? 1 : 0;
 		}
 
+		$reg_only_fields = uwp_get_register_only_fields();
+
 		?>
         <li <?php echo $hide_register_field; ?> class="cf-incin-reg-form uwp-setting-name uwp-advanced-setting">
             <label for="cat_sort" class="uwp-tooltip-wrap">
@@ -2268,9 +2276,7 @@ class UsersWP_Form_Builder {
             </label>
 
 			<?php
-			$reg_only_fields = array('username', 'register_gdpr', 'register_tos');
-			$reg_only_fields = apply_filters('uwp_register_mandatory_fields', $reg_only_fields);
-			if (isset($field_info->htmlvar_name) && in_array($field_info->htmlvar_name, $reg_only_fields)) {
+			if (isset($htmlvar_name) && in_array($htmlvar_name, $reg_only_fields)) {
 				?>
                 <div>
                     <input type="hidden" name="is_register_field" value="1" />
@@ -2294,9 +2300,7 @@ class UsersWP_Form_Builder {
             </label>
 
 			<?php
-			$reg_only_fields = array('username', 'register_gdpr', 'register_tos', 'subscribe');
-			$reg_only_fields = apply_filters('uwp_register_only_fields', $reg_only_fields);
-			if (isset($field_info->htmlvar_name) && in_array($field_info->htmlvar_name, $reg_only_fields)) {
+			if (isset($htmlvar_name) && in_array($htmlvar_name, $reg_only_fields)) {
 				?>
                 <div>
                     <input type="hidden" name="is_register_only_field" value="1" />
