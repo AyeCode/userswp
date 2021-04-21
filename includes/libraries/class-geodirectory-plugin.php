@@ -1398,12 +1398,15 @@ class UsersWP_GeoDirectory_Plugin {
 	 *
 	 */
 	public function get_bootstrap_reviews( $user, $post_type ) {
-		global $userswp;
+		global $userswp, $geodir_post_type;
+		$geodir_post_type = $post_type;
 		$args = array();
 
 		$args['template_args']['title'] = __( "Reviews", 'userswp' );
 
 		$userswp->profile->get_profile_comments( $user, $post_type, $args );
+
+		$geodir_post_type = '';
 
 	}
 

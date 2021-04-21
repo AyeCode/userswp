@@ -18,17 +18,16 @@ if(!empty($user->display_name)) { $user_name = $user->display_name;}
 
 	<div class="card-body">
 		<div class="row justify-content-center">
-			<div class="col-5 col-md-2 mb-3 col-xl-2 ">
+			<div class="col-5 col-md-2 mb-3 col-xl-2 text-center">
 				<img src="<?php echo esc_url_raw( $avatar_url ); ?>" class="align-self-start img-thumbnail rounded-circle mx-auto d-block" alt="...">
+                <cite><?php echo esc_attr($user_name);?></cite>
 			</div>
 			<div class="col-12 col-md-10 col-xl-10 text-muted">
 				<?php
 				do_action( 'uwp_before_comment_summary', $comment );
-				$excerpt = strip_shortcodes(wp_trim_words( $comment->comment_content, 100, '...' ));
-				echo $excerpt;
+				comment_text();
 				do_action( 'uwp_after_comment_summary', $comment );
 				?>
-				<footer class="blockquote-footer"><cite><?php echo esc_attr($user_name);?></cite></footer>
 			</div>
 		</div>
 	</div>
