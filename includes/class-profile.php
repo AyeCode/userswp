@@ -923,6 +923,10 @@ class UsersWP_Profile {
 		$the_query = new WP_Comment_Query();
 		$comments  = $the_query->query( $query_args );
 
+		if(!$comments){
+			return;
+		}
+
 		$args['template_args']['the_query']     = $comments;
 		$args['template_args']['user']          = $user;
 		$args['template_args']['title']         = ! empty( $args['template_args']['title'] ) ? $args['template_args']['title'] : __( "Comments", 'userswp' );

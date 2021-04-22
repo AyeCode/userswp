@@ -168,6 +168,7 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 					"center" => __('Center', 'userswp'),
 					"right" => __('Right', 'userswp'),
 				),
+				'default'  => '',
 				'desc_tip' => true,
 				'group'     => __("Design","userswp"),
 			),

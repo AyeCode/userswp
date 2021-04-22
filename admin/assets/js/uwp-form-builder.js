@@ -25,6 +25,8 @@ jQuery(document).ready(function () {
 
         if (manage_field_type == 'register'){
             var action = "uwp_ajax_register_action";
+            var register_form_id = jQuery('.manage_field_form_id').val();
+            data['form_id'] = register_form_id;
         } else if (manage_field_type == 'search') {
             var action = "uwp_ajax_search_action";
         } else if (manage_field_type == 'profile_tabs') {
@@ -88,15 +90,22 @@ jQuery(document).ready(function () {
             var manage_field_type = jQuery(this).closest('#uwp-selected-fields').find(".manage_field_type").val();
             var order = jQuery(this).sortable("serialize") + '&update=update&manage_field_type=' + manage_field_type;
 
+            var register_form_id = 0;
             if (manage_field_type == 'register'){
                 var action = "uwp_ajax_register_action";
+                register_form_id = jQuery('.manage_field_form_id').val();
             } else if (manage_field_type == 'search') {
                 var action = "uwp_ajax_search_action";
             } else {
                 var action = "uwp_ajax_action";
             }
 
-            jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true', order, function (theResponse) {
+            var form_id = '';
+            if (manage_field_type === 'register') {
+                form_id = '&form_id=' + register_form_id;
+            }
+
+            jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true', order + form_id, function (theResponse) {
                 console.log('Fields have been ordered.');
             });
         }
@@ -158,12 +167,14 @@ function uwp_data_type_changed(obj, cont) {
 
 function save_field(id, type) {
 
+    var register_form_id = 0;
     if('profile_tab' == type){
         var action = 'uwp_ajax_profile_tabs_action';
         var manage_field_type = 'profile_tab';
     } else if('register' == type){
         var action = 'uwp_ajax_register_action';
         var manage_field_type = 'register';
+        register_form_id = jQuery('.manage_field_form_id').val();
     }else {
         var action = 'uwp_ajax_action';
         var manage_field_type = 'custom_fields';
@@ -201,9 +212,13 @@ function save_field(id, type) {
     var fieldrequest = jQuery('#licontainer_' + id).find("select, textarea, input").serialize();
     var request_data = 'create_field=true&field_ins_upd=submit&' + fieldrequest;
 
+    var form_id = '';
+    if (manage_field_type === 'register') {
+        form_id = '&form_id=' + register_form_id;
+    }
 
     jQuery.ajax({
-        'url': uwp_admin_ajax.url + '?action=' + action + '&manage_field_type='+manage_field_type,
+        'url': uwp_admin_ajax.url + '?action=' + action + '&manage_field_type=' + manage_field_type + form_id,
         'type': 'POST',
         'data': request_data,
         'success': function (result) {
@@ -237,7 +252,7 @@ function save_field(id, type) {
                     });
 
                 } else {
-                    var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type='+manage_field_type;
+                    var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type='+manage_field_type+ form_id;
 
                     jQuery.get(uwp_admin_ajax.url+'?action=' + action + '&create_field=true', order,
                         function (theResponse) {
@@ -254,12 +269,14 @@ function save_field(id, type) {
 
 function delete_field(id, nonce, deleteid, type) {
 
+    var register_form_id = 0;
     if('profile_tab' == type){
         var action = 'uwp_ajax_profile_tabs_action';
         var manage_field_type = 'profile_tab';
     } else if('register' == type){
         var action = 'uwp_ajax_register_action';
         var manage_field_type = 'register';
+        register_form_id = jQuery('.manage_field_form_id').val();
     } else {
         var action = 'uwp_ajax_action';
         var manage_field_type = 'custom_fields';
@@ -268,7 +285,12 @@ function delete_field(id, nonce, deleteid, type) {
     var confirmation = confirm(uwp_admin_ajax.custom_field_delete);
 
     if (confirmation == true) {
-        jQuery.get(uwp_admin_ajax.url+'?action='+action+'&create_field=true&manage_field_type='+manage_field_type, {
+        var form_id = '';
+        if (manage_field_type === 'register') {
+            form_id = '&form_id=' + register_form_id;
+        }
+
+        jQuery.get(uwp_admin_ajax.url+'?action='+action+'&create_field=true&manage_field_type=' + manage_field_type + form_id, {
                 field_id: id,
                 field_ins_upd: 'delete',
                 _wpnonce: nonce

@@ -147,3 +147,24 @@ function uwp_doing_it_wrong( $function, $message, $version ) {
 	}
 }
 
+function uwp_password_strength_inline_js() {
+	wp_enqueue_script( 'password-strength-meter' ); // add scripts
+	?>
+	<script>
+        jQuery( document ).ready( function( $ ) {
+
+            $( 'body' ).on( 'keyup', 'input[name=password], input[name=confirm_password]',
+                function( event ) {
+                    uwp_checkPasswordStrength(
+                        $('input[name=password]'),
+                        $('input[name=confirm_password]'),
+                        $('#uwp-password-strength'),
+                        $('input[type=submit]'),
+                        ['black', 'listed', 'word']
+                    );
+                }
+            );
+        });
+	</script>
+	<?php
+}
