@@ -4023,16 +4023,15 @@ class UsersWP_Forms {
 				$bs_form_group   = $design_style ? "form-group" : "";
 				$bs_sr_only      = $design_style ? "sr-only" : "";
 				$bs_form_control = $design_style ? "form-control" : "";
-				$site_title      = __( "Confirm Password", 'userswp' );
+				$site_title      = $placeholder = __( "Confirm Password", 'userswp' );
+				$required    = '';
+				if ( isset( $field->is_required ) && ! empty( $field->is_required ) ) {
+					$placeholder .= ' *';
+					$required    = ' <span class="text-danger">*</span>';
+				}
 				ob_start(); // Start  buffering;
 
 				if ( $design_style ) {
-					$required    = '';
-					$placeholder = $site_title;
-					if ( isset( $field->is_required ) && ! empty( $field->is_required ) ) {
-						$placeholder .= ' *';
-						$required    = ' <span class="text-danger">*</span>';
-					}
 
 					echo aui()->input( array(
 						'type'        => 'password',
@@ -4064,7 +4063,7 @@ class UsersWP_Forms {
                         <input name="confirm_password"
                                class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
                                id="uwp_account_confirm_password"
-                               placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+                               placeholder="<?php echo $placeholder; ?>"
                                value=""
                                title="<?php echo $site_title; ?>"
 							<?php echo 'required="required"'; ?>
