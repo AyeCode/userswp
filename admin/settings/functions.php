@@ -117,3 +117,8 @@ function uwp_get_settings() {
 
     return apply_filters( 'uwp_get_settings', $settings );
 }
+
+function uwp_get_register_only_fields(){
+	$reg_only_fields = array('username', 'register_gdpr', 'register_tos', 'subscribe');
+	return apply_filters('uwp_register_mandatory_fields', $reg_only_fields);
+}
