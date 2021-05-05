@@ -136,6 +136,7 @@ No questions so far, but don't hesitate to ask!
 * Image size issue in list view of listing tab in profile - FIXED
 * GDPR and TOC fields not visible in register form builder if include in register form not enabled - FIXED
 * Show review attachments in reviews tab for GD listing reviews - CHANGED
+* Add language pot file - ADDED
 
 = 1.2.2.16 =
 * Argument to allow showing users list of specific roles - ADDED
