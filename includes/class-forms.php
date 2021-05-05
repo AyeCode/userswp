@@ -681,7 +681,13 @@ class UsersWP_Forms {
 
 		$result = apply_filters( 'uwp_before_extra_fields_save', $result, 'register', $user_id );
 
-		$fields = get_register_form_fields();
+		$form_id = 1;
+		if ( isset( $data['uwp_register_form_id'] ) && ! empty( $data['uwp_register_form_id'] ) ) {
+			update_user_meta( $user_id, '_uwp_register_form_id', (int) $data['uwp_register_form_id'] );
+			$form_id = (int) $data['uwp_register_form_id'];
+		}
+
+		$fields = get_register_form_fields($form_id);
 
 		$user_role = '';
 		if ( ! empty( $fields ) && is_array( $fields ) ) {
@@ -1991,7 +1997,8 @@ class UsersWP_Forms {
 	public function init_mail_form_fields( $form_fields, $type, $user_id ) {
 		switch ( $type ) {
 			case "register":
-				$fields    = get_register_form_fields();
+				$form_id = get_user_meta( $user_id, '_uwp_register_form_id', true );
+				$fields    = get_register_form_fields($form_id);
 				$user_data = get_userdata( $user_id );
 				if ( ! empty( $fields ) && is_array( $fields ) ) {
 					$form_fields = '<p><b>' . __( 'User Information:', 'userswp' ) . '</b></p>';
@@ -3022,12 +3029,15 @@ class UsersWP_Forms {
 
 
 			$site_title   = uwp_get_form_label( $field );
+			$placeholder = uwp_get_field_placeholder( $field );
 			$manual_label = apply_filters( 'uwp_login_username_label_manual', true );
 			if ( $manual_label
 			     && isset( $field->form_type )
 			     && $field->form_type == 'login'
 			     && $field->htmlvar_name == 'username' ) {
 				$site_title = __( "Username or Email", 'userswp' );
+				$required = ! empty( $field->is_required ) ? ' *' : '';
+				$placeholder = $site_title . $required;
 			}
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
@@ -3043,7 +3053,7 @@ class UsersWP_Forms {
 					'type'            => $type,
 					'id'              => $field->htmlvar_name,
 					'name'            => $field->htmlvar_name,
-					'placeholder'     => uwp_get_field_placeholder( $field ),
+					'placeholder'     => $placeholder,
 					'title'           => $site_title,
 					'value'           => $value,
 					'required'        => $field->is_required,
@@ -4013,16 +4023,15 @@ class UsersWP_Forms {
 				$bs_form_group   = $design_style ? "form-group" : "";
 				$bs_sr_only      = $design_style ? "sr-only" : "";
 				$bs_form_control = $design_style ? "form-control" : "";
-				$site_title      = __( "Confirm Password", 'userswp' );
+				$site_title      = $placeholder = __( "Confirm Password", 'userswp' );
+				$required    = '';
+				if ( isset( $field->is_required ) && ! empty( $field->is_required ) ) {
+					$placeholder .= ' *';
+					$required    = ' <span class="text-danger">*</span>';
+				}
 				ob_start(); // Start  buffering;
 
 				if ( $design_style ) {
-					$required    = '';
-					$placeholder = $site_title;
-					if ( isset( $field->is_required ) && ! empty( $field->is_required ) ) {
-						$placeholder .= ' *';
-						$required    = ' <span class="text-danger">*</span>';
-					}
 
 					echo aui()->input( array(
 						'type'        => 'password',
@@ -4054,7 +4063,7 @@ class UsersWP_Forms {
                         <input name="confirm_password"
                                class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
                                id="uwp_account_confirm_password"
-                               placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+                               placeholder="<?php echo $placeholder; ?>"
                                value=""
                                title="<?php echo $site_title; ?>"
 							<?php echo 'required="required"'; ?>
@@ -4294,8 +4303,8 @@ class UsersWP_Forms {
 		}
 
 		// do we need country code script in ajax?
-		$country_field = false;
-		$fields        = get_register_form_fields();
+		$country_field = false;$form_id = 1;
+		$fields        = get_register_form_fields($form_id);
 		if ( ! empty( $fields ) ) {
 			foreach ( $fields as $field ) {
 				if ( $field->field_type_key == 'country' || $field->field_type_key == 'uwp_country' ) {

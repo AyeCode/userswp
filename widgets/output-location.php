@@ -36,6 +36,7 @@ class UWP_Output_Location_Widget extends WP_Super_Duper {
                     'type' => 'select',
                     'options' => $this->show_in_locations(),
                     'desc_tip' => true,
+                    'default'  => '',
                     'advanced' => false
                 )
             )

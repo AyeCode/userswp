@@ -60,6 +60,7 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
                         "value" => __('Value', 'userswp'),
                         "value-strip" => __('Value (strip_tags)', 'userswp'),
                     ),
+                    'default'  => '',
                     'desc_tip' => true,
                     'advanced' => true
                 ),

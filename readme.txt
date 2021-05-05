@@ -131,6 +131,12 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.17 =
+* Remove profile tabs if content is empty for GeoDirectory - FIXED
+* Image size issue in list view of listing tab in profile - FIXED
+* GDPR and TOC fields not visible in register form builder if include in register form not enabled - FIXED
+* Show review attachments in reviews tab for GD listing reviews - CHANGED
+
 = 1.2.2.16 =
 * Argument to allow showing users list of specific roles - ADDED
 * AyeCode UI updated to v0.1.46 - CHANGED

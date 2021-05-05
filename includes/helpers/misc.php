@@ -619,10 +619,11 @@ function uwp_add_account_menu_links() {
  *
  * @param       array       $field_ids      Form extras field ids.
  * @param       string      $form_type      Form type.
+ * @param       int      $form_id      Form ID.
  *
  * @return      array|bool                  Sorted field ids.
  */
-function uwp_form_extras_field_order($field_ids = array(), $form_type = 'register')
+function uwp_form_extras_field_order($field_ids = array(), $form_type = 'register', $form_id = 1)
 {
 	global $wpdb;
 	$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
@@ -637,6 +638,7 @@ function uwp_form_extras_field_order($field_ids = array(), $form_type = 'registe
 				$extras_table_name,
 				array(
 					'sort_order' => $count,
+					'form_id' => $form_id
 				),
 				array( 'id' => $cf )
 			);
