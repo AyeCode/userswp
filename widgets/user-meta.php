@@ -95,12 +95,11 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
         $keys[] = __('Select Key','userswp');
         if(!empty($fields)){
             foreach($fields as $field){
-                $key = str_replace('uwp_account_', '', $field->htmlvar_name);
-                $keys[$key] = $key;
+	            $keys[ $field->htmlvar_name ] = $field->htmlvar_name . ' ( ' . __( $field->site_title, 'userswp' ) . ' )';
             }
         }
 
-        return $keys;
+        return apply_filters( 'uwp_meta_field_keys', $keys );
 
     }
 
@@ -144,8 +143,8 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
         }
 
 	    $key = str_replace('uwp_account_', '', $args['key']);
-
-        $fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = '".$key."'");
+	    $form_id = uwp_get_register_form_id( $user->ID );
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = %s AND form_id = %d", $key, $form_id));
 
         if(!$fields){
             return '';

@@ -245,7 +245,8 @@ function uwp_get_user_badge($args){
 	}
 
 	if ( $match_field ) {
-		$fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = '".$match_field."'");
+		$form_id = uwp_get_register_form_id( $user->ID );
+		$fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = %s AND form_id = %d", $match_field, $form_id));
 
 		if(!$fields){
 			return $output;

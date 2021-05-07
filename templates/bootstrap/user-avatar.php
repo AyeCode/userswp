@@ -30,7 +30,7 @@ if(!$uwp_in_user_loop){ ?><div class="card shadow-0 border-0 mw-100 bg-transpare
 
 		<div class="col <?php if($uwp_in_user_loop){?>col-5<?php }?> text-center tofront ">
 			<?php if ($uwp_in_user_loop || 1==$link) { echo '<a href="'.esc_url_raw(get_author_posts_url($user->ID)).'" title="'.$user->display_name.'">';} ?>
-			<img class="rounded-circle shadow border border-white border-width-4 p-0"
+			<img class="rounded-circle shadow border border-white border-width-4 p-0 mw-100"
 			     src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php _e("User avatar","userswp");?>" height="<?php echo $size; ?>" width="<?php echo $size; ?>">
 			<?php if ($uwp_in_user_loop || 1==$link) {echo '</a>';} ?>
 

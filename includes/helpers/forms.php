@@ -11,7 +11,7 @@ function get_register_form_fields($form_id = 1) {
 	global $wpdb;
 	$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 	$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
-	$fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.is_active = '1' AND fields.for_admin_use != '1' AND fields.is_register_field = '1' AND extras.form_type = 'register' AND extras.form_id=%d ORDER BY extras.sort_order ASC", array('account', $form_id)));
+	$fields = $wpdb->get_results($wpdb->prepare("SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.is_active = '1' AND fields.for_admin_use != '1' AND fields.is_register_field = '1' AND extras.form_type = 'register' AND extras.form_id=%d AND fields.form_id=%d ORDER BY extras.sort_order ASC", array('account', $form_id, $form_id)));
 	$fields = apply_filters('uwp_get_register_form_fields', $fields, $form_id);
 	return $fields;
 }
@@ -90,13 +90,13 @@ function get_change_validate_form_fields() {
 function get_account_form_fields( $extra_where = '' ) {
 	global $wpdb;
 
-	$form_id = get_user_meta( get_current_user_id(), '_uwp_register_form_id', true );
+	$form_id = uwp_get_register_form_id( get_current_user_id() );
 	$table_name        = uwp_get_table_prefix() . 'uwp_form_fields';
 	$include_admin_use = apply_filters( 'uwp_account_include_admin_use_only_fields', false );
 	if ( $include_admin_use ) {
-		$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_only_field = '0' AND htmlvar_name != 'password'" . $extra_where . " ORDER BY sort_order ASC", array( 'account' ) ) );
+		$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND is_register_only_field = '0' AND htmlvar_name != 'password' AND form_id = %s" . $extra_where . " ORDER BY sort_order ASC", array( 'account', $form_id ) ) );
 	} else {
-		$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND for_admin_use != '1' AND is_register_only_field = '0' AND htmlvar_name != 'password'" . $extra_where . " ORDER BY sort_order ASC", array( 'account' ) ) );
+		$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND for_admin_use != '1' AND is_register_only_field = '0' AND htmlvar_name != 'password' AND form_id = %s" . $extra_where . " ORDER BY sort_order ASC", array( 'account', $form_id ) ) );
 	}
 
 	return uwp_get_account_fields_sorted( $fields, $form_id );
@@ -272,7 +272,75 @@ function uwp_resend_activation_mail($user_id) {
 	return true;
 }
 
-function uwp_get_register_forms() {
+/**
+ * Check font awesome icon or not.
+ *
+ * @param string $icon Font awesome icon.
+ * @return bool True if font awesome icon.
+ */
+function uwp_is_fa_icon( $icon ) {
+	$return = false;
+	if ( $icon != '' ) {
+		$fa_icon = trim( $icon );
+		if ( strpos( $fa_icon, 'fa fa-' ) === 0 || strpos( $fa_icon, 'fas fa-' ) === 0 || strpos( $fa_icon, 'far fa-' ) === 0 || strpos( $fa_icon, 'fab fa-' ) === 0 || strpos( $fa_icon, 'fa-' ) === 0 ) {
+			$return = true;
+		}
+	}
+	return apply_filters( 'uwp_is_fa_icon', $return, $icon  );
+}
+
+/**
+ * Check icon url.
+ *
+ * @param string $icon Icon url.
+ * @return bool True if icon url.
+ */
+function uwp_is_icon_url( $icon ) {
+	$return = false;
+	if ( $icon != '' ) {
+		$icon = trim( $icon );
+		if ( strpos( $icon, 'http://' ) === 0 || strpos( $icon, 'https://' ) === 0 ) {
+			$return = true;
+		}
+	}
+	return apply_filters( 'uwp_is_icon_url', $return, $icon  );
+}
+
+/**
+ * Get the field icon.
+ *
+ * @since       1.0.12
+ * @package     userswp
+ *
+ * @param       string   $value   Field icon value.
+ * @return      string       Field icon element.
+ */
+function uwp_get_field_icon( $value ) {
+	$field_icon = $value;
+
+	if ( ! empty( $value ) ) {
+		if (strpos($value, 'http') === 0) {
+			$field_icon = '<span class="uwp_field_icon" style="background: url(' . $value . ') no-repeat left center;padding-left:14px;background-size:100% auto;margin-right:5px"></span>';
+		} else {
+			$field_icon = '<i class="uwp_field_icon ' . $value . '"></i>';
+		}
+	}
+
+	return apply_filters( 'uwp_get_field_icon', $field_icon, $value );
+}
+
+function uwp_get_registration_form_actions(){
+	$registration_options = array(
+		'auto_approve' =>  __('Auto approve', 'userswp'),
+		'auto_approve_login' =>  __('Auto approve + Auto Login', 'userswp'),
+		'require_email_activation' =>  __('Require Email Activation', 'userswp'),
+		'force_redirect' =>  __('Force Redirect to Redirect Page', 'userswp'),
+	);
+
+	return apply_filters('uwp_registration_status_options', $registration_options);
+}
+
+function uwp_get_register_forms_dropdown_options() {
 
 	$get_register_form = uwp_get_option( 'multiple_registration_forms' );
 
@@ -290,7 +358,7 @@ function uwp_get_register_forms() {
 	return $register_forms;
 }
 
-function uwp_get_register_form_title( $form_id ) {
+function uwp_get_register_form_by( $form_id, $type = 'title' ) {
 
 	$form_title = '';
 	if ( ! empty( $form_id ) && $form_id > 0 ) {
@@ -302,7 +370,7 @@ function uwp_get_register_form_title( $form_id ) {
 
 				if ( ! empty( $register_form['id'] ) && $register_form['id'] == $form_id ) {
 
-					$form_title = ! empty( $register_form['title'] ) ? $register_form['title'] : '';
+					$form_title = ! empty( $register_form[$type] ) ? $register_form[$type] : '';
 				}
 			}
 		}
@@ -402,6 +470,47 @@ function uwp_get_account_fields_sorted( $fields = array(), $form_id = 1 ) {
 		}
 
 		$fields = array_values( $fields );
+	}
+
+	return $fields;
+}
+
+function uwp_get_unique_custom_fields($fields, $key = 'htmlvar_name'){
+	if(empty($fields)){
+		return array();
+	}
+
+	$temp_array = array();
+	$i = 0;
+	$key_array = array();
+
+	foreach($fields as $field) {
+		if(is_object($field)){
+			$val = $field->$key;
+		} else {
+			$val = $field[$key];
+		}
+
+		if (!in_array($val, $key_array)) {
+			$key_array[$i] = $val;
+			$temp_array[$val] = $field;
+		}
+		$i++;
+	}
+
+	return $temp_array;
+}
+
+function uwp_get_default_form_fields(){
+	$fields = array();
+	$i = 1;
+
+	$account_fields = UsersWP_Activator::uwp_default_custom_fields_account();
+	if(!empty($account_fields)){
+		foreach ($account_fields as $account_field){
+			$fields[$account_field['htmlvar_name']] = $i;
+			$i++;
+		}
 	}
 
 	return $fields;

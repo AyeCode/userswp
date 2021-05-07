@@ -136,13 +136,19 @@ jQuery(window).on('load', function () {
         }
     });
 
+    jQuery(document).on('click', '.register-show-options', function ($) {
+        jQuery( "#uwp-form-more-options" ).toggle( "fast", function() {
+            // Animation complete.
+        });
+    });
+
     jQuery(document).on('click', '.register-form-create', function ($) {
         var current_obj = jQuery(this);
         var nonce = current_obj.attr('data-nonce');
 
         uwp_get_spin_loader(current_obj);
 
-        var form_confirmation = prompt(uwp_admin_ajax.update_register_form);
+        var form_confirmation = prompt(uwp_admin_ajax.ask_register_form_title);
 
         if (form_confirmation !== null) {
             if (form_confirmation !== '') {
@@ -171,44 +177,26 @@ jQuery(window).on('load', function () {
         }
     });
 
-    jQuery(document).on('click', '.register-form-update', function ($) {
+    jQuery(document).on('submit', '#uwp_user_type_form', function (e) {
+        e.preventDefault();
 
-        var current_obj = jQuery(this);
-        var form_id = current_obj.attr('data-id');
-        var form_title = current_obj.attr('data-title');
+        var data = jQuery(this).serialize()+ "&action=uwp_ajax_update_register&type=update";
+        var btn = jQuery("button[type=submit]",this);
 
-        uwp_get_spin_loader(current_obj);
+        uwp_get_spin_loader(btn);
 
-        var form_confirmation = prompt(uwp_admin_ajax.update_register_form, form_title);
-
-        if (form_confirmation !== null) {
-            if (form_confirmation !== '') {
-                var data = {
-                    'action': 'uwp_ajax_update_register',
-                    'type': 'update',
-                    'form_id': form_id,
-                    'form_title': form_confirmation,
-                };
-
-                jQuery.post(uwp_admin_ajax.url, data, function (response) {
-                    response = JSON.parse(response);
-
-                    if (response.status) {
-                        uwp_remove_spin_loader(current_obj);
-                        location.reload();
-                    } else {
-                        console.log(response.message);
-                    }
-                });
+        jQuery.post(uwp_admin_ajax.url, data, function (response) {
+            response = JSON.parse(response);
+            uwp_remove_spin_loader(btn);
+            if (response.status) {
+                location.reload();
             } else {
-                uwp_remove_spin_loader(current_obj);
+                console.log(response.message);
             }
-        } else {
-            uwp_remove_spin_loader(current_obj);
-        }
+        });
     });
 
-    jQuery(document).on('click', '.register-form-remove', function ($) {
+    jQuery(document).on('click', '.register-form-remove', function (e) {
         var current_obj = jQuery(this);
         var form_id = current_obj.attr('data-id');
 

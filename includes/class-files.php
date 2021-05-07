@@ -282,7 +282,6 @@ class UsersWP_Files {
             }
         }
 
-
         if (!empty($fields)) {
             foreach ($fields as $field) {
                 if(isset($files[$field->htmlvar_name])) {

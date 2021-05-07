@@ -755,6 +755,10 @@ final class UsersWP {
 		add_action( 'uwp_manage_available_fields', array( $instance, 'manage_available_fields' ) );
 		add_action( 'uwp_manage_selected_fields', array( $instance, 'manage_selected_fields' ) );
 		add_action( 'uwp_admin_extra_custom_fields', array( $instance, 'advance_admin_custom_fields' ), 10, 2 );
+
+		add_filter( 'uwp_before_form_builder_content', array( $instance, 'multiple_registration_form' ) );
+		add_filter( 'uwp_before_available_fields', array( $instance, 'display_before_available_fields' ) );
+
 		add_action( 'wp_ajax_uwp_ajax_register_action', array( $instance, 'register_ajax_handler' ) );
 		add_action( 'wp_ajax_uwp_ajax_action', array( $instance, 'create_field' ) );
 		add_action( 'uwp_form_builder_tabs_content', array( $instance, 'uwp_form_builder' ) );

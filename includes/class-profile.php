@@ -158,7 +158,8 @@ class UsersWP_Profile {
 
 		global $wpdb;
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-		$fields     = $wpdb->get_results( "SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND field_type = 'url' AND css_class LIKE '%uwp_social%' ORDER BY sort_order ASC" );
+		$form_id = uwp_get_register_form_id( $user->ID );
+		$fields     = $wpdb->get_results( $wpdb->prepare("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND field_type = 'url' AND css_class LIKE '%uwp_social%' AND form_id = %d ORDER BY sort_order ASC", $form_id ) );
 
 		$usermeta = isset( $user->ID ) ? uwp_get_usermeta_row( $user->ID ) : array();
 		$privacy  = ! empty( $usermeta ) && ! empty( $usermeta->user_privacy ) ? explode( ',', $usermeta->user_privacy ) : array();
@@ -251,7 +252,8 @@ class UsersWP_Profile {
 		ob_start();
 		global $wpdb;
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-		$fields     = $wpdb->get_results( "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' ORDER BY sort_order ASC" );
+		$form_id = uwp_get_register_form_id( $user->ID );
+		$fields     = $wpdb->get_results( $wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND css_class NOT LIKE '%uwp_social%' AND form_id = %d ORDER BY sort_order ASC", $form_id ));
 		$wrap_html  = false;
 		if ( $fields ) {
 			$usermeta = isset( $user->ID ) ? uwp_get_usermeta_row( $user->ID ) : array();
@@ -616,7 +618,8 @@ class UsersWP_Profile {
 				$tabs_privacy = uwp_get_tabs_privacy_by_user( $displayed_user );
 			}
 
-			$tabs_result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $tabs_table_name . " WHERE form_type=%s ORDER BY sort_order ASC", 'profile-tabs' ) );
+			$form_id = uwp_get_register_form_id( $displayed_user->ID );
+			$tabs_result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $tabs_table_name . " WHERE form_type = %s and form_id = %s ORDER BY sort_order ASC", 'profile-tabs', $form_id ) );
 			foreach ( $tabs_result as $tab ) {
 				if ( isset( $tab->user_decided ) && 1 == $tab->user_decided && ! empty( $tabs_privacy ) ) {
 

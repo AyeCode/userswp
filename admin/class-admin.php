@@ -47,7 +47,6 @@ class UsersWP_Admin {
 		add_action( 'handle_bulk_actions-users', array( $this, 'handle_users_bulk_actions' ), 10, 3 );
 		add_filter( 'init', array( $this, 'process_user_actions' ) );
 
-		add_filter( 'uwp_before_form_builder_content', array( $this, 'multiple_registration_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_create_register', array( $this, 'process_create_register_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_update_register', array( $this, 'process_update_register_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_remove_register', array( $this, 'process_remove_register_form' ) );
@@ -119,11 +118,11 @@ class UsersWP_Admin {
 			wp_enqueue_style( "uwp_timepicker_css", USERSWP_PLUGIN_URL . 'assets/css/jquery.ui.timepicker.css', array(), USERSWP_VERSION, 'all' );
 		}
 
-		if ( $hook_suffix == 'userswp_page_uwp_tools' ) {
+		if ( false !== strpos($hook_suffix, 'page_uwp_tools' )) {
 			wp_enqueue_style( "userswp", USERSWP_PLUGIN_URL . 'assets/css/users-wp.css', array(), USERSWP_VERSION, 'all' );
 		}
 
-		if ( $hook_suffix == 'userswp_page_uwp_form_builder' ) {
+		if ( false !== strpos($hook_suffix, 'page_uwp_form_builder' )) {
 			wp_enqueue_style( "uwp_form_builder", USERSWP_PLUGIN_URL . 'admin/assets/css/uwp-form-builder.css', array(), USERSWP_VERSION, 'all' );
 		}
 
@@ -169,15 +168,15 @@ class UsersWP_Admin {
 			wp_localize_script( USERSWP_NAME, 'uwp_country_data', $country_data );
 		}
 
-		if ( $hook_suffix == 'userswp_page_uwp_tools' ) {
+		if ( false !== strpos($hook_suffix, 'page_uwp_tools' )) {
 			wp_enqueue_script( 'jquery-ui-progressbar', array( 'jquery' ) );
 		}
 
-		if ( $hook_suffix == 'userswp_page_uwp_status' ) {
+		if ( false !== strpos($hook_suffix, 'page_uwp_status' )) {
 			wp_enqueue_script( "uwp_status", USERSWP_PLUGIN_URL . 'admin/assets/js/system-status.js', array( 'jquery' ), USERSWP_VERSION, true );
 		}
 
-		if ( $hook_suffix == 'userswp_page_uwp_form_builder' ) {
+		if ( false !== strpos($hook_suffix, 'page_uwp_form_builder' )) {
 			wp_enqueue_script( 'jquery-ui-sortable' );
 			wp_enqueue_script( 'uwp-nestable-script', USERSWP_PLUGIN_URL . 'admin/assets/js/jquery.nestable' . $suffix . '.js', array( 'jquery-ui-sortable' ), USERSWP_VERSION );
 			wp_enqueue_script( "uwp_form_builder", USERSWP_PLUGIN_URL . 'admin/assets/js/uwp-form-builder' . $suffix . '.js', array(), USERSWP_VERSION, 'all' );
@@ -201,7 +200,7 @@ class UsersWP_Admin {
 				'txt_choose_image'                   => __( 'Choose an image', 'userswp' ),
 				'txt_use_image'                      => __( 'Use image', 'userswp' ),
 				'delete_register_form'               => __( 'Are you sure you wish to delete this form?', 'userswp' ),
-				'update_register_form'               => __( 'Enter register form title', 'userswp' ),
+				'ask_register_form_title'            => __( 'Enter register form title', 'userswp' ),
 			);
 			wp_localize_script( "userswp_admin", 'uwp_admin_ajax', $ajax_cons_data );
 		}
@@ -276,10 +275,10 @@ class UsersWP_Admin {
 	public function admin_only_script() {
 
 		// check page is userswp or not.
-		if ( ! empty( $_GET['page'] ) && 'userswp' == $_GET['page'] ) {
+		if ( ! empty( $_GET['page'] ) && 'userswp' == $_GET['page']) {
 
 			// check tab is general or not.
-			if ( ! empty( $_GET['tab'] ) && 'general' == $_GET['tab'] ) {
+			if ( ! empty( $_GET['tab'] ) && 'general' == $_GET['tab']) {
 
 				// check for login section.
 				if ( ! empty( $_GET['section'] ) && 'login' == $_GET['section'] ) {
@@ -303,7 +302,7 @@ class UsersWP_Admin {
 				}
 
 				// check for registration section.
-				if ( ! empty( $_GET['section'] ) && 'register' == $_GET['section'] ) {
+				if ( (! empty( $_GET['section'] ) && 'register' == $_GET['section']) ) {
 					?>
                     <script type="text/javascript">
                         jQuery(document).ready(function () {
@@ -336,6 +335,26 @@ class UsersWP_Admin {
 				}
 			}
 
+		}
+
+		if('uwp_form_builder' == $_GET['page']) {
+			?>
+            <script type="text/javascript">
+                jQuery(document).ready(function () {
+                    var uwp_registration_action = jQuery('#uwp_registration_action');
+                    uwp_registration_action.on('change', function () {
+                        var value = jQuery(this).val();
+                        var register_redirect_obj = jQuery('#register_redirect_to');
+
+                        if ('auto_approve_login' === value || 'force_redirect' === value) {
+                            register_redirect_obj.parent().parent().show();
+                        } else {
+                            register_redirect_obj.parent().parent().hide();
+                        }
+                    }).change();
+                });
+            </script>
+			<?php
 		}
 
 	}
@@ -490,10 +509,11 @@ class UsersWP_Admin {
 	public function get_profile_extra_edit( $user ) {
 		global $wpdb;
 		$table_name      = uwp_get_table_prefix() . 'uwp_form_fields';
+		$form_id = uwp_get_register_form_id( $user->ID );
 		$excluded_fields = apply_filters( 'uwp_exclude_edit_profile_fields', array('bio', 'register_gdpr', 'register_tos', 'user_role') );
-		$query           = "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0'";
+		$query           = $wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' AND form_id = %d", $form_id);
 		if ( is_array( $excluded_fields ) && count( $excluded_fields ) > 0 ) {
-			$query .= "AND htmlvar_name NOT IN ('" . implode( "','", $excluded_fields ) . "')";
+			$query .= " AND htmlvar_name NOT IN ('" . implode( "','", $excluded_fields ) . "')";
 		}
 		$query  .= ' ORDER BY sort_order ASC';
 		$fields = $wpdb->get_results( $query );
@@ -766,67 +786,6 @@ class UsersWP_Admin {
 		}
 	}
 
-	public function multiple_registration_form( $tab ) {
-
-		if ( ! empty( $tab ) && $tab == 'register' ) {
-			$current_form = ! empty( $_REQUEST['form'] ) ? (int) $_REQUEST['form'] : 1;
-
-			$register_tab   = admin_url( 'admin.php?page=uwp_form_builder&tab=' . $tab );
-			$register_forms = uwp_get_option( 'multiple_registration_forms' );
-
-			?>
-            <div class="multiple-registration-form">
-                <table class="form-table bsui userswp">
-                    <tr>
-                        <th><?php _e( 'Register Form:', 'userswp' ); ?></th>
-                        <td>
-                            <div class="d-inline-block align-top">
-                            <select onChange="window.location.replace(jQuery(this).val());"
-                                    name="multiple-registration-select" id="multiple_registration_select"
-                                    class="small-text aui-select2">
-                                <?php
-								if ( ! empty( $register_forms ) && is_array( $register_forms ) ) {
-									foreach ( $register_forms as $key => $forms ) {
-										$form_id    = ! empty( $forms['id'] ) ? $forms['id'] : '';
-										$form_title = ! empty( $forms['title'] ) ? $forms['title'] : '';
-										?>
-                                        <option <?php selected( $current_form, $form_id ); ?>
-                                                value="<?php echo $register_tab . '&form=' . $form_id; ?>"><?php echo sprintf( __( '%s - #%s', 'userswp' ), $form_title, $form_id ); ?></option>
-									<?php }
-								} ?>
-                            </select>
-                            </div>
-                            <div class="d-inline-block align-top">
-							<?php if ( ! empty( $current_form ) && $current_form > 1 ) { ?>
-                                <button data-id="<?php echo $current_form; ?>"
-                                        data-title="<?php echo uwp_get_register_form_title( $current_form ); ?>"
-                                        class="btn btn-sm btn-secondary register-form-update" type="button"
-                                        name="register_form_update"><?php _e( 'Update Form', 'userswp' ); ?></button>
-                                <button data-id="<?php echo $current_form; ?>"
-                                        class="btn btn-sm btn-danger register-form-remove" type="button"
-                                        name="register_form_remove"><?php _e( 'Delete Form', 'userswp' ); ?></button>
-							<?php } ?>
-                            <button data-nonce="<?php echo wp_create_nonce( 'uwp-create-register-form-nonce' ); ?>"
-                                    class="btn btn-sm btn-primary register-form-create" type="button"
-                                    name="register_form_create"
-                                    id="register_form_create"><?php _e( 'Create Form', 'userswp' ); ?></button>
-                            </div>
-                        </td>
-                    </tr>
-					<?php if ( ! empty( $current_form ) && $current_form > 0 ) { ?>
-                        <tr>
-                            <th><?php _e( 'Register Form Shortcode:', 'userswp' ); ?></th>
-                            <td>
-                                <span class="uwp-custom-desc"><code><strong>[uwp_register id="<?php echo $current_form; ?>" title="<?php echo uwp_get_register_form_title( $current_form ); ?>"]</strong></code></span>
-                            </td>
-                        </tr>
-					<?php } ?>
-                </table>
-            </div>
-			<?php
-		}
-	}
-
 	public function process_create_register_form() {
 
 		$type       = ! empty( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : '';
@@ -845,13 +804,27 @@ class UsersWP_Admin {
 
 				$get_register_forms[] = array(
 					'id'    => $new_form_id,
-					'title' => ! empty( $form_title ) ? sanitize_text_field( $form_title ) : sprintf( __( 'Register %d', 'userswp' ), $new_form_id ),
+					'title' => ! empty( $form_title ) ? sanitize_text_field( $form_title ) : sprintf( __( 'Form %d', 'userswp' ), $new_form_id ),
 				);
 
 				uwp_update_option( 'multiple_registration_forms', $get_register_forms );
 
+				$fields = UsersWP_Activator::uwp_default_custom_fields_account();
+				$form_builder = new UsersWP_Form_Builder();
+
+				if(isset($fields) && count($fields) > 0){
+					foreach ($fields as $field_index => $field) {
+						$field['form_id'] = $new_form_id;
+						$form_builder->admin_form_field_save($field);
+					}
+                }
+
+				UsersWP_Activator::insert_form_extras($new_form_id);
+
+				do_action('uwp_create_register_form', $new_form_id);
+
 				$status   = true;
-				$redirect = admin_url( 'admin.php?page=uwp_form_builder&tab=register&form=' . $new_form_id );
+				$redirect = admin_url( 'admin.php?page=uwp_form_builder&tab=account&form=' . $new_form_id );
 			}
 		}
 
@@ -868,7 +841,14 @@ class UsersWP_Admin {
 	public function process_update_register_form() {
 
 		$type    = ! empty( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : '';
-		$form_id = ! empty( $_POST['form_id'] ) ? (int)$_POST['form_id'] : '';
+		$form_id = ! empty( $_POST['manage_field_form_id'] ) ? (int)$_POST['manage_field_form_id'] : '';
+		$form_title = ! empty( $_POST['form_title'] ) ? sanitize_text_field($_POST['form_title']) : __( 'Form', 'userswp' );
+		$user_role = ! empty( $_POST['user_role'] ) ? sanitize_text_field($_POST['user_role']) : '';
+		$action = ! empty( $_POST['reg_action'] ) ? sanitize_text_field($_POST['reg_action']) : 'auto_approve';
+		$redirect_to = (int) $_POST['redirect_to'];
+		$custom_url = ! empty( $_POST['custom_url'] ) ? sanitize_text_field($_POST['custom_url']) : '';
+		$gdpr_page = ! empty( $_POST['gdpr_page'] ) ? (int)$_POST['gdpr_page'] : '';
+		$tos_page = ! empty( $_POST['tos_page'] ) ? (int)$_POST['tos_page'] : '';
 
 		$status  = false;
 		$message = __( 'Something went wrong. Please try again.', 'userswp' );
@@ -882,12 +862,19 @@ class UsersWP_Admin {
 
 					if ( ! empty( $register_form['id'] ) && $register_form['id'] == $form_id ) {
 						$status                          = true;
-						$register_forms[ $key ]['title'] = ! empty( $_POST['form_title'] ) ? sanitize_text_field($_POST['form_title']) : __( 'Register', 'userswp' );
+						$register_forms[ $key ]['title'] = $form_title;
+						$register_forms[ $key ]['user_role'] = $user_role;
+						$register_forms[ $key ]['reg_action'] = $action;
+						$register_forms[ $key ]['redirect_to'] = $redirect_to;
+						$register_forms[ $key ]['custom_url'] = $custom_url;
+						$register_forms[ $key ]['gdpr_page'] = $gdpr_page;
+						$register_forms[ $key ]['tos_page'] = $tos_page;
 					}
 				}
 			}
 
 			$register_forms = array_values( $register_forms );
+			$register_forms = apply_filters('uwp_multiple_registration_forms_update', $register_forms);
 			uwp_update_option( 'multiple_registration_forms', $register_forms );
 		}
 
@@ -903,7 +890,7 @@ class UsersWP_Admin {
 	public function process_remove_register_form() {
 
 		global $wpdb;
-		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
+		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
 		$type    = ! empty( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : '';
 		$form_id = ! empty( $_POST['form_id'] ) ? (int)$_POST['form_id'] : '';
@@ -914,6 +901,7 @@ class UsersWP_Admin {
 		if ( ! empty( $type ) && ! empty( $form_id ) && $type === 'remove' ) {
 
 			$register_forms = uwp_get_option( 'multiple_registration_forms' );
+			$form_builder = new UsersWP_Form_Builder();
 
 			if ( ! empty( $register_forms ) && is_array( $register_forms ) ) {
 
@@ -922,17 +910,25 @@ class UsersWP_Admin {
 					if ( ! empty( $register_form['id'] ) && $register_form['id'] == $form_id ) {
 						$status = true;
 						unset( $register_forms[ $key ] );
-						$wpdb->query( $wpdb->prepare( "DELETE FROM `$extras_table_name` WHERE `form_type` = '%s' AND `form_id` = %d", array(
-							'register',
-							$form_id
-						) ) );
+						$fields = $wpdb->get_results(
+							$wpdb->prepare(
+								"select id from  " . $table_name . " where form_type = %s AND form_id = %d order by sort_order asc",
+								array('account', $form_id)
+							)
+						);
+
+						if (!empty($fields)) {
+							foreach ($fields as $field) {
+								$form_builder->admin_form_field_delete($field->id, false);
+							}
+						}
 					}
 				}
 			}
 
 			$register_forms = array_values( $register_forms );
 			uwp_update_option( 'multiple_registration_forms', $register_forms );
-			$redirect = admin_url( 'admin.php?page=uwp_form_builder&tab=register' );
+			$redirect = admin_url( 'admin.php?page=uwp_form_builder&tab=account' );
 		}
 
 		$response = array(

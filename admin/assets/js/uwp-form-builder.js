@@ -10,6 +10,7 @@ jQuery(document).ready(function () {
         var manage_field_type = jQuery(this).closest('#uwp-available-fields').find(".manage_field_type").val();
         var field_data_type = jQuery(this).data('data_type');
         var custom_type = jQuery(this).data("field-custom-type");
+        var form_id = jQuery('.manage_field_form_id').val();
 
         var data = {
             'htmlvar_name': htmlvar_name,
@@ -20,13 +21,12 @@ jQuery(document).ready(function () {
             'field_ins_upd': 'new',
             'manage_field_type': manage_field_type,
             'field_data_type':field_data_type,
-            'custom_type': custom_type
+            'custom_type': custom_type,
+            'form_id': form_id,
         };
 
         if (manage_field_type == 'register'){
             var action = "uwp_ajax_register_action";
-            var register_form_id = jQuery('.manage_field_form_id').val();
-            data['form_id'] = register_form_id;
         } else if (manage_field_type == 'search') {
             var action = "uwp_ajax_search_action";
         } else if (manage_field_type == 'profile_tabs') {
@@ -45,7 +45,8 @@ jQuery(document).ready(function () {
                 'tab_key':           jQuery(this).data('tab_key'),
                 'tab_content':       jQuery(this).data('tab_content'),
                 'tab_privacy':       jQuery(this).data('tab_privacy'),
-                'user_decided':      jQuery(this).data('user_decided')
+                'user_decided':      jQuery(this).data('user_decided'),
+                'form_id': form_id,
             };
         } else { //custom field
             var action = "uwp_ajax_action";
@@ -90,22 +91,18 @@ jQuery(document).ready(function () {
             var manage_field_type = jQuery(this).closest('#uwp-selected-fields').find(".manage_field_type").val();
             var order = jQuery(this).sortable("serialize") + '&update=update&manage_field_type=' + manage_field_type;
 
-            var register_form_id = 0;
+            form_id = jQuery('.manage_field_form_id').val();
+            form_id_param = '&form_id=' + form_id;
+
             if (manage_field_type == 'register'){
                 var action = "uwp_ajax_register_action";
-                register_form_id = jQuery('.manage_field_form_id').val();
             } else if (manage_field_type == 'search') {
                 var action = "uwp_ajax_search_action";
             } else {
                 var action = "uwp_ajax_action";
             }
 
-            var form_id = '';
-            if (manage_field_type === 'register') {
-                form_id = '&form_id=' + register_form_id;
-            }
-
-            jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true', order + form_id, function (theResponse) {
+            jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true', order + form_id_param, function (theResponse) {
                 console.log('Fields have been ordered.');
             });
         }
@@ -124,6 +121,8 @@ jQuery(document).ready(function () {
             var manage_field_type = jQuery(this).closest('#uwp-selected-fields').find(".manage_field_type").val();
             var $tabs = jQuery('.field_row_main ul.core').nestedSortable('toArray', {startDepthCount: 0});
             var $order = {};
+            var form_id = jQuery('.manage_field_form_id').val();
+
             jQuery.each($tabs, function( index, tab ) {
                 if(tab.id){
                     $order[index] = {id:tab.id, tab_level: tab.depth,tab_parent: tab.parent_id};
@@ -133,7 +132,8 @@ jQuery(document).ready(function () {
             var action = "uwp_ajax_profile_tabs_action";
 
             var data = {
-                'tabs': $order
+                'tabs': $order,
+                'form_id': form_id
             };
 
             jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true&update=update&manage_field_type=' + manage_field_type, data, function (theResponse) {
@@ -167,14 +167,14 @@ function uwp_data_type_changed(obj, cont) {
 
 function save_field(id, type) {
 
-    var register_form_id = 0;
+    form_id = jQuery('.manage_field_form_id').val();
+    form_id_param = '&form_id=' + form_id;
     if('profile_tab' == type){
         var action = 'uwp_ajax_profile_tabs_action';
         var manage_field_type = 'profile_tab';
     } else if('register' == type){
         var action = 'uwp_ajax_register_action';
         var manage_field_type = 'register';
-        register_form_id = jQuery('.manage_field_form_id').val();
     }else {
         var action = 'uwp_ajax_action';
         var manage_field_type = 'custom_fields';
@@ -212,23 +212,15 @@ function save_field(id, type) {
     var fieldrequest = jQuery('#licontainer_' + id).find("select, textarea, input").serialize();
     var request_data = 'create_field=true&field_ins_upd=submit&' + fieldrequest;
 
-    var form_id = '';
-    if (manage_field_type === 'register') {
-        form_id = '&form_id=' + register_form_id;
-    }
-
     jQuery.ajax({
-        'url': uwp_admin_ajax.url + '?action=' + action + '&manage_field_type=' + manage_field_type + form_id,
+        'url': uwp_admin_ajax.url + '?action=' + action + '&manage_field_type=' + manage_field_type + form_id_param,
         'type': 'POST',
         'data': request_data,
         'success': function (result) {
 
             if (jQuery.trim(result) == 'invalid_key') {
-
                 alert(uwp_admin_ajax.custom_field_unique_name);
-
-            }
-            else {
+            } else {
                 jQuery('#licontainer_' + id).replaceWith(jQuery.trim(result));
 
                 aui_init_select2();
@@ -252,7 +244,7 @@ function save_field(id, type) {
                     });
 
                 } else {
-                    var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type='+manage_field_type+ form_id;
+                    var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type='+manage_field_type+ form_id_param;
 
                     jQuery.get(uwp_admin_ajax.url+'?action=' + action + '&create_field=true', order,
                         function (theResponse) {
@@ -269,14 +261,15 @@ function save_field(id, type) {
 
 function delete_field(id, nonce, deleteid, type) {
 
-    var register_form_id = 0;
+    form_id = jQuery('.manage_field_form_id').val();
+    form_id_param = '&form_id=' + form_id;
+
     if('profile_tab' == type){
         var action = 'uwp_ajax_profile_tabs_action';
         var manage_field_type = 'profile_tab';
     } else if('register' == type){
         var action = 'uwp_ajax_register_action';
         var manage_field_type = 'register';
-        register_form_id = jQuery('.manage_field_form_id').val();
     } else {
         var action = 'uwp_ajax_action';
         var manage_field_type = 'custom_fields';
@@ -285,17 +278,13 @@ function delete_field(id, nonce, deleteid, type) {
     var confirmation = confirm(uwp_admin_ajax.custom_field_delete);
 
     if (confirmation == true) {
-        var form_id = '';
-        if (manage_field_type === 'register') {
-            form_id = '&form_id=' + register_form_id;
-        }
 
-        jQuery.get(uwp_admin_ajax.url+'?action='+action+'&create_field=true&manage_field_type=' + manage_field_type + form_id, {
+        jQuery.get(uwp_admin_ajax.url+'?action='+action+'&create_field=true&manage_field_type=' + manage_field_type + form_id_param, {
                 field_id: id,
                 field_ins_upd: 'delete',
                 _wpnonce: nonce
             },
-            function (data) {
+            function () {
                 jQuery('#licontainer_' + id).remove();
 
             });

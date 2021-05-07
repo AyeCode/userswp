@@ -304,6 +304,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 	    public function tabs_available_fields($form_type){
 		    global $wpdb;
 
+		    $form_id = ! empty( $_REQUEST['form'] ) ? (int) $_REQUEST['form'] : 1;
+
 		    $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
 
 		    $existing_fields = $wpdb->get_results("select tab_key from " . $table_name . " where form_type ='" . $form_type . "'");
@@ -321,7 +323,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		    <ul>
 			    <?php
 
-			    $fields = $this->tabs_fields($form_type);
+			    $fields = $this->tabs_fields($form_type, $form_id);
 
 			    if (!empty($fields)) {
 				    foreach ($fields as $field) {
@@ -471,13 +473,14 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 	    public function tabs_selected_fields($form_type)
 	    {
 		    global $wpdb;
+		    $form_id = ! empty( $_REQUEST['form'] ) ? (int) $_REQUEST['form'] : 1;
 		    $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
 		    ?>
 		    <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
 		    <input type="hidden" name="manage_field_type" class="manage_field_type" value="profile_tabs">
 		    <ul class="uwp-profile-tabs-selected core uwp_form_extras">
 			    <?php
-			    $tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM  " . $table_name . " where form_type = %s order by sort_order asc", array($form_type)));
+			    $tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM  " . $table_name . " where form_type = %s AND form_id = %s order by sort_order asc", array($form_type, $form_id)));
 			    if (!empty($tabs)) {
 				    foreach ($tabs as $key => $tab) {
 					    $field_ins_upd = 'display';
@@ -525,11 +528,11 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
          * @return array
          *
          */
-	    public function tabs_fields($form_type)
+	    public function tabs_fields($form_type, $form_id = 1)
 	    {
 		    $fields = array();
 
-		    return apply_filters('uwp_tabs_fields', $fields, $form_type);
+		    return apply_filters('uwp_tabs_fields', $fields, $form_type, $form_id);
 	    }
 
 	    /**
@@ -559,6 +562,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		    } else {
 		        $field_info = array();
 		    }
+
 
 		    if (isset($request['tab_type']) && $request['tab_type'] != ''){
 			    $tab_type = esc_attr($request['tab_type']);
@@ -825,6 +829,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		    if (isset($_REQUEST['create_field'])) {
 			    $field_id = isset($_REQUEST['field_id']) ? trim(sanitize_text_field($_REQUEST['field_id']), '_') : '';
 			    $field_action = isset($_REQUEST['field_ins_upd']) ? sanitize_text_field($_REQUEST['field_ins_upd']) : '';
+			    $form_id = isset($_REQUEST['form_id']) ? (int)$_REQUEST['form_id'] : 1;
 
 			    /* ------- check nonce field ------- */
 			    if (isset($_REQUEST['update']) && $_REQUEST['update'] == 'update') {
@@ -832,7 +837,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 				    if (!empty($_REQUEST['tabs']) && is_array($_REQUEST['tabs'])) {
 
 					    $tabs = $_REQUEST['tabs'];
-					    $this->update_field_order($tabs);
+					    $this->update_field_order($tabs, $form_id);
 
 				    }
 			    }
@@ -903,6 +908,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		    $form_type = isset($request_field['form_type']) ? $request_field['form_type'] : $tab_type;
 		    $tab_privacy = isset($request_field['tab_privacy']) ? (int)$request_field['tab_privacy'] : 0;
 		    $user_decided = isset($request_field['user_decided']) ? (int)$request_field['user_decided'] : 0;
+            $form_id = isset($request_field['form_id']) ? (int)$request_field['form_id'] : 1;
 
 		    $total_tabs = $wpdb->get_var("SELECT COUNT(id) FROM {$table_name}");
 
@@ -919,12 +925,13 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                     'tab_content'   => wp_kses_post($request_field['tab_content']),
                     'tab_privacy'   => $tab_privacy,
                     'user_decided'  => $user_decided,
+                    'form_id'       => $form_id,
                 );
 
             $format = array_fill( 0, count( $data ), '%s' );
 
-		    $check_html_variable = $wpdb->get_var($wpdb->prepare("select COUNT(*) from " . $table_name . " where tab_type = %s AND tab_name LIKE %s AND tab_key = %s and form_type = %s ",
-			    array($tab_type, $tab_name, $tab_key, $form_type)));
+		    $check_html_variable = $wpdb->get_var($wpdb->prepare("select COUNT(*) from " . $table_name . " where tab_type = %s AND tab_name LIKE %s AND tab_key = %s AND form_type = %s AND form_id = %s",
+			    array($tab_type, $tab_name, $tab_key, $form_type, $form_id)));
 
 
 		    if ( !$tab_id && (int)$check_html_variable > 0) {
@@ -986,7 +993,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
          *
          * @return      object|bool       Sorted tabs.
          */
-        public function update_field_order($tabs = array())
+        public function update_field_order($tabs = array(), $form_id = 1)
         {
             global $wpdb;
             $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
@@ -998,7 +1005,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 					$result = $wpdb->update(
 						$table_name,
 						array('sort_order' => $index, 'tab_level' => (int)$tab['tab_level'], 'tab_parent' => (int)$tab['tab_parent']),
-						array('id' => absint($tab['id'])),
+						array('id' => absint($tab['id']), 'form_id' => $form_id),
 						array('%d','%d')
 					);
 					$count ++;
