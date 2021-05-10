@@ -27,6 +27,8 @@
       padding: 5px;
       background-color: #FFFFFF;
       border: 1px #DFDFDF solid;
+      float: left;
+      width: 100%;
       ul {
         margin: 0;
       }
@@ -140,12 +142,6 @@
     }
   }
 
-  #uwp-form-builder-tab,
-  #uwp-form-builder-tab-predefined,
-  #uwp-form-builder-tab-custom {
-    float: left;
-    width: 100%;
-  }
   #uwp-form-builder-tab ul {
     margin: 0;
   }
@@ -246,6 +242,10 @@
       vertical-align: middle;
     }
   }
+}
+
+#multiple_registration_select {
+  line-height: 2;
 }
 
 @media screen and (max-width: 768px) {

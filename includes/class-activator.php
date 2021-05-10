@@ -201,7 +201,8 @@ class UsersWP_Activator {
             'multiple_registration_forms' => array(
 	            array(
 		            'id' => 1,
-		            'title' => __('Register','userswp'),
+		            'title' => __('Default','userswp'),
+		            'fields' => uwp_get_default_form_fields()
 	            )
             )
         );
@@ -731,7 +732,7 @@ class UsersWP_Activator {
      * @package     userswp
      * @return      void
      */
-    public static function insert_form_extras() {
+    public static function insert_form_extras($form_id = 1) {
         global $wpdb;
         $extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
@@ -774,7 +775,7 @@ class UsersWP_Activator {
 
 
         foreach ($fields as $field) {
-            $last_order = $wpdb->get_var("SELECT MAX(sort_order) as last_order FROM " . $extras_table_name);
+            $last_order = $wpdb->get_var("SELECT MAX(sort_order) as last_order FROM " . $extras_table_name . " where form_id = ". $form_id);
             $sort_order = (int)$last_order + 1;
             $wpdb->query(
                 $wpdb->prepare(
@@ -784,13 +785,15 @@ class UsersWP_Activator {
                         field_type = %s,
                         is_default = %s,
                         site_htmlvar_name = %s,
-                        sort_order = %s",
+                        sort_order = %s,
+                        form_id = %s",
                     array(
                         $field['form_type'],
                         $field['field_type'],
                         $field['is_default'],
                         $field['htmlvar_name'],
-                        $sort_order
+                        $sort_order,
+	                    $form_id
                     )
                 )
             );

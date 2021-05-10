@@ -140,7 +140,7 @@ class UsersWP_Seo {
             $user_name = !empty($displayed_user->user_login) ? $displayed_user->user_login :'';
             $display_name = !empty($displayed_user->display_name) ? $displayed_user->display_name :'';
             $user_email = !empty($displayed_user->user_email) ? $displayed_user->user_email :'';
-	        $user_bio = !empty($displayed_user->description) ? $displayed_user->description :'';
+	        $user_bio = !empty($displayed_user->description) ? strip_tags($displayed_user->description) :'';
 
             $meta_separator = uwp_get_option('profile_seo_meta_separator');
             $sep = !empty($meta_separator) ? $meta_separator : self::get_default_sep();

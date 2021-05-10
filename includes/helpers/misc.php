@@ -638,9 +638,8 @@ function uwp_form_extras_field_order($field_ids = array(), $form_type = 'registe
 				$extras_table_name,
 				array(
 					'sort_order' => $count,
-					'form_id' => $form_id
 				),
-				array( 'id' => $cf )
+				array( 'id' => $cf, 'form_id' => $form_id )
 			);
 
 			$count++;
@@ -1440,29 +1439,6 @@ function uwp_get_posttypes() {
 	return $display_posttypes;
 }
 
-/**
- * Get the field icon.
- *
- * @since       1.0.12
- * @package     userswp
- *
- * @param       string   $value   Field icon value.
- * @return      string       Field icon element.
- */
-function uwp_get_field_icon( $value ) {
-	$field_icon = $value;
-
-	if ( ! empty( $value ) ) {
-		if (strpos($value, 'http') === 0) {
-			$field_icon = '<span class="uwp_field_icon" style="background: url(' . $value . ') no-repeat left center;padding-left:14px;background-size:100% auto;margin-right:5px"></span>';
-		} else {
-			$field_icon = '<i class="uwp_field_icon ' . $value . '"></i>';
-		}
-	}
-
-	return apply_filters( 'uwp_get_field_icon', $field_icon, $value );
-}
-
 function uwp_get_user_by_author_slug(){
 	$url_type = apply_filters('uwp_profile_url_type', 'slug');
 	$author_slug = get_query_var('uwp_profile');
@@ -1501,40 +1477,6 @@ function uwp_get_displayed_user(){
 	}
 
 	return apply_filters('uwp_get_displayed_user', $user);
-}
-
-/**
- * Check font awesome icon or not.
- *
- * @param string $icon Font awesome icon.
- * @return bool True if font awesome icon.
- */
-function uwp_is_fa_icon( $icon ) {
-	$return = false;
-	if ( $icon != '' ) {
-		$fa_icon = trim( $icon );
-		if ( strpos( $fa_icon, 'fa fa-' ) === 0 || strpos( $fa_icon, 'fas fa-' ) === 0 || strpos( $fa_icon, 'far fa-' ) === 0 || strpos( $fa_icon, 'fab fa-' ) === 0 || strpos( $fa_icon, 'fa-' ) === 0 ) {
-			$return = true;
-		}
-	}
-	return apply_filters( 'uwp_is_fa_icon', $return, $icon  );
-}
-
-/**
- * Check icon url.
- *
- * @param string $icon Icon url.
- * @return bool True if icon url.
- */
-function uwp_is_icon_url( $icon ) {
-	$return = false;
-	if ( $icon != '' ) {
-		$icon = trim( $icon );
-		if ( strpos( $icon, 'http://' ) === 0 || strpos( $icon, 'https://' ) === 0 ) {
-			$return = true;
-		}
-	}
-	return apply_filters( 'uwp_is_icon_url', $return, $icon  );
 }
 
 function uwp_is_gdv2(){

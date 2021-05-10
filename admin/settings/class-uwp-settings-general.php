@@ -105,14 +105,9 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 				}
 			}
 
-			$registration_options = array(
-				'auto_approve' =>  __('Auto approve', 'userswp'),
-				'auto_approve_login' =>  __('Auto approve + Auto Login', 'userswp'),
-				'require_email_activation' =>  __('Require Email Activation', 'userswp'),
-				'force_redirect' =>  __('Force Redirect to Redirect Page', 'userswp'),
-			);
+			$registration_options = uwp_get_registration_form_actions();
 
-			$registration_options = apply_filters('uwp_registration_status_options', $registration_options);
+			$reg_forms_options = uwp_get_register_forms_dropdown_options();
 
             $settings = apply_filters( 'uwp_register_options', array(
                 array(
@@ -126,6 +121,15 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'desc' => __( 'When enabled some register links will open in a lightbox instead of changing page.','userswp'),
 		            'type' => 'checkbox',
 		            'default'  => '1',
+	            ),
+	            array(
+		            'id'   => 'register_modal_form',
+		            'name' => __( 'Default Lightbox Form', 'userswp' ),
+		            'desc' => __( 'Choose default form to display in lighbox from multipel forms.','userswp'),
+		            'type' => 'select',
+		            'options'  => $reg_forms_options,
+		            'default'  => '1',
+		            'desc_tip' => true,
 	            ),
                 array(
                     'id' => 'uwp_registration_action',
@@ -146,7 +150,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                 ),
 	            array(
 		            'id' => 'register_redirect_custom_url',
-		            'name' => __( 'Redirect Custom URL', 'userswp' ),
+		            'name' => __( 'Custom Redirect URL', 'userswp' ),
 		            'desc' => __( 'Set the custom url to redirect the user to after registration. Works with Auto approve + Auto login action only.', 'userswp' ),
 		            'type' => 'text',
 		            'default'  => '',

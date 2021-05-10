@@ -245,7 +245,8 @@ function uwp_get_user_badge($args){
 	}
 
 	if ( $match_field ) {
-		$fields = $wpdb->get_results("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = '".$match_field."'");
+		$form_id = uwp_get_register_form_id( $user->ID );
+		$fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = %s AND form_id = %d", $match_field, $form_id));
 
 		if(!$fields){
 			return $output;
@@ -276,7 +277,7 @@ function uwp_get_user_badge($args){
 		$is_date = apply_filters( 'uwp_user_badge_is_date', $is_date, $match_field, $field, $args );
 
 		$excluded_fields = uwp_get_excluded_fields();
-		if(in_array($field->htmlvar_name, $excluded_fields)){
+		if(isset($field->htmlvar_name) && in_array($field->htmlvar_name, $excluded_fields)){
 			$match_value = '';
 		} else {
 			$match_value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");

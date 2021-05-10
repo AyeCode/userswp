@@ -70,6 +70,7 @@ class UsersWP_Tables {
 							  decimal_point varchar( 10 ) NOT NULL,
 							  validation_pattern varchar( 255 ) NOT NULL,
 							  validation_msg text NULL DEFAULT NULL,
+							  form_id int(11) NOT NULL DEFAULT 1,
 							  PRIMARY KEY  (id)
 							  ) $collate";
 
@@ -148,6 +149,7 @@ class UsersWP_Tables {
 							  tab_icon varchar(255) NOT NULL,
 							  tab_key varchar(255) NOT NULL,
 							  tab_content text NULL DEFAULT NULL,
+							  form_id int(11) NOT NULL DEFAULT 1,
 							  PRIMARY KEY  (id)
 							  ) $collate; ";
 
