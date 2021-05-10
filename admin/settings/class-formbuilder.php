@@ -487,7 +487,7 @@ class UsersWP_Form_Builder {
 					<?php
 					if ( ! empty( $register_forms ) && is_array( $register_forms ) ) { ?>
                         <tr>
-                            <th><?php _e( 'User Type:', 'userswp' ); ?></th>
+                            <th><?php _e( 'Select Form:', 'userswp' ); ?></th>
                             <td>
                                 <div class="d-inline-block align-top">
                                     <select onChange="window.location.replace(jQuery(this).val());"
@@ -510,8 +510,7 @@ class UsersWP_Form_Builder {
                         <tr>
                             <th><?php _e( 'Register Form Shortcode:', 'userswp' ); ?></th>
                             <td>
-                                <span class="uwp-custom-desc"><code><strong>[uwp_register id="<?php echo $current_form; ?>
-                                            " title="<?php echo uwp_get_register_form_by( $current_form ); ?>"]</strong></code></span>
+                                <span class="uwp-custom-desc"><code><strong>[uwp_register id="<?php echo $current_form; ?>" title="<?php echo uwp_get_register_form_by( $current_form ); ?>"]</strong></code></span>
                             </td>
                         </tr>
 					<?php } ?>
@@ -533,7 +532,7 @@ class UsersWP_Form_Builder {
 					<?php
 					if ( ! empty( $register_forms ) && is_array( $register_forms ) ) { ?>
                         <tr>
-                            <th><?php _e( 'User Type:', 'userswp' ); ?></th>
+                            <th><?php _e( 'Select Form:', 'userswp' ); ?></th>
                             <td>
                                 <div class="d-inline-block align-top">
                                     <select onChange="window.location.replace(jQuery(this).val());"

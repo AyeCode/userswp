@@ -408,7 +408,7 @@ function uwp_get_next_register_form_id() {
 function uwp_get_register_form_id( $user_id ) {
 
 	if ( empty( $user_id ) ) {
-		return;
+		return 1;
 	}
 
 	$form_id = get_user_meta( $user_id, '_uwp_register_form_id', true );
