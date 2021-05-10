@@ -337,7 +337,7 @@ class UsersWP_Admin {
 
 		}
 
-		if('uwp_form_builder' == $_GET['page']) {
+		if(! empty( $_GET['page'] ) && 'uwp_form_builder' == $_GET['page']) {
 			?>
             <script type="text/javascript">
                 jQuery(document).ready(function () {
@@ -919,7 +919,7 @@ class UsersWP_Admin {
 
 						if (!empty($fields)) {
 							foreach ($fields as $field) {
-								$form_builder->admin_form_field_delete($field->id, false);
+								$form_builder->admin_form_field_delete($field->id, false, $form_id);
 							}
 						}
 					}

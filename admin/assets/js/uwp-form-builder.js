@@ -1,8 +1,9 @@
 jQuery(document).ready(function () {
 
-    jQuery("#uwp-form-builder-tab, #uwp-form-builder-tab-predefined, #uwp-form-builder-tab-custom").find("ul li a").click(function() {
+    jQuery("#uwp-form-builder-tab-shared, #uwp-form-builder-tab, #uwp-form-builder-tab-predefined, #uwp-form-builder-tab-custom").find("ul li a").click(function() {
         if(!jQuery(this).attr('id')){return;}
         var htmlvar_name = jQuery(this).attr('id').replace('uwp-','');
+        var htmlvar = htmlvar_name;
         var field_type = jQuery(this).data('field-type');
         var type_key = jQuery(this).data("field-type-key");
         var form_type = jQuery(this).closest('#uwp-form-builder-tab, #uwp-form-builder-tab-predefined').find('#form_type').val();
@@ -75,6 +76,10 @@ jQuery(document).ready(function () {
                 }
 
             });
+
+        if(jQuery('#uwp-form-builder-tab-shared #uwp-' + htmlvar).length > 0){
+            jQuery('#uwp-form-builder-tab-shared #uwp-' + htmlvar).closest('li').hide();
+        }
 
         if(htmlvar_name!='fieldset' && (manage_field_type == 'register' || manage_field_type == 'search') ){
             jQuery(this).closest('li').hide();
@@ -281,6 +286,7 @@ function delete_field(id, nonce, deleteid, type) {
 
         jQuery.get(uwp_admin_ajax.url+'?action='+action+'&create_field=true&manage_field_type=' + manage_field_type + form_id_param, {
                 field_id: id,
+                form_id: form_id,
                 field_ins_upd: 'delete',
                 _wpnonce: nonce
             },

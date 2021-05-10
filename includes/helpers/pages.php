@@ -277,7 +277,7 @@ function uwp_get_user_badge($args){
 		$is_date = apply_filters( 'uwp_user_badge_is_date', $is_date, $match_field, $field, $args );
 
 		$excluded_fields = uwp_get_excluded_fields();
-		if(in_array($field->htmlvar_name, $excluded_fields)){
+		if(isset($field->htmlvar_name) && in_array($field->htmlvar_name, $excluded_fields)){
 			$match_value = '';
 		} else {
 			$match_value = uwp_get_usermeta($user->ID, $field->htmlvar_name, "");
