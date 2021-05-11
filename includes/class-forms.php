@@ -682,14 +682,16 @@ class UsersWP_Forms {
 		$result = apply_filters( 'uwp_before_extra_fields_save', $result, 'register', $user_id );
 
 		$form_id = 1;
+
 		if ( isset( $data['uwp_register_form_id'] ) && ! empty( $data['uwp_register_form_id'] ) ) {
 			update_user_meta( $user_id, '_uwp_register_form_id', (int) $data['uwp_register_form_id'] );
 			$form_id = (int) $data['uwp_register_form_id'];
 		}
 
+		$user_role = uwp_get_register_form_by($form_id, 'user_role');
+
 		$fields = get_register_form_fields($form_id);
 
-		$user_role = '';
 		if ( ! empty( $fields ) && is_array( $fields ) ) {
 			foreach ( $fields as $key => $field ) {
 				if ( isset( $field->htmlvar_name ) && ! empty( $field->htmlvar_name ) && $field->htmlvar_name == 'user_role' && ! empty( $field->option_values ) ) {
@@ -755,7 +757,10 @@ class UsersWP_Forms {
 
 		do_action( 'uwp_after_custom_fields_save', 'register', $data, $result, $user_id );
 
-		$reg_action = uwp_get_option( 'uwp_registration_action', false );
+		$reg_action = uwp_get_register_form_by($form_id, 'reg_action');
+		if(!$reg_action){
+			$reg_action = uwp_get_option( 'uwp_registration_action', false );
+        }
 
 		$form_fields = apply_filters( 'uwp_send_mail_form_fields', "", 'register', $user_id );
 
@@ -823,7 +828,6 @@ class UsersWP_Forms {
 				wp_send_json_error( $message );
 			} else {
 				$uwp_notices[] = array( 'register' => $message );
-
 				return;
 			}
 		}
@@ -1021,7 +1025,17 @@ class UsersWP_Forms {
 			$user = get_userdata( $user );
 		}
 
-		$redirect_page_id = uwp_get_option( 'register_redirect_to', '' );
+		$redirect_page_id = $custom_url = '';
+		if ( isset( $data['uwp_register_form_id'] ) && ! empty( $data['uwp_register_form_id'] ) ) {
+			$form_id = (int) $data['uwp_register_form_id'];
+			$redirect_page_id = uwp_get_register_form_by($form_id, 'redirect_to');
+			$custom_url = uwp_get_register_form_by($form_id, 'custom_url');
+		}
+
+		if(!$redirect_page_id){
+			$redirect_page_id = uwp_get_option( 'register_redirect_to', '' );
+			$custom_url = uwp_get_option( 'register_redirect_custom_url' );
+		}
 
 		if ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
 			$redirect_to = esc_url_raw( $_REQUEST['redirect_to'] );
@@ -1035,8 +1049,8 @@ class UsersWP_Forms {
 				}
 			}
 			$redirect_to = get_permalink( $redirect_page_id );
-		} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id == - 2 && uwp_get_option( 'register_redirect_custom_url' ) ) {
-			$redirect_to = uwp_get_option( 'register_redirect_custom_url' );
+		} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id == - 2 && $custom_url ) {
+			$redirect_to = $custom_url;
 		} else {
 			if ( isset( $user ) && $user->has_cap( 'manage_options' ) ) {
 				$redirect_to = admin_url();
@@ -3029,12 +3043,15 @@ class UsersWP_Forms {
 
 
 			$site_title   = uwp_get_form_label( $field );
+			$placeholder = uwp_get_field_placeholder( $field );
 			$manual_label = apply_filters( 'uwp_login_username_label_manual', true );
 			if ( $manual_label
 			     && isset( $field->form_type )
 			     && $field->form_type == 'login'
 			     && $field->htmlvar_name == 'username' ) {
 				$site_title = __( "Username or Email", 'userswp' );
+				$required = ! empty( $field->is_required ) ? ' *' : '';
+				$placeholder = $site_title . $required;
 			}
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
@@ -3050,7 +3067,7 @@ class UsersWP_Forms {
 					'type'            => $type,
 					'id'              => $field->htmlvar_name,
 					'name'            => $field->htmlvar_name,
-					'placeholder'     => uwp_get_field_placeholder( $field ),
+					'placeholder'     => $placeholder,
 					'title'           => $site_title,
 					'value'           => $value,
 					'required'        => $field->is_required,
@@ -3675,7 +3692,11 @@ class UsersWP_Forms {
 
 	public function form_input_register_gdpr( $html, $field, $value, $form_type ) {
 
-		$reg_gdpr = uwp_get_option( 'register_gdpr_page', false );
+		$form_id = isset($field->form_id) ? (int) $field->form_id : 1;
+		$reg_gdpr = uwp_get_register_form_by($form_id, 'gdpr_page');
+		if(empty($reg_gdpr)){
+			$reg_gdpr = uwp_get_option( 'register_gdpr_page', false );
+        }
 
 		if ( ! empty( $reg_gdpr ) ) {
 
@@ -3756,7 +3777,11 @@ class UsersWP_Forms {
 
 	public function form_input_register_tos( $html, $field, $value, $form_type ) {
 
-		$reg_tos = uwp_get_option( 'register_terms_page', false );
+		$form_id = isset($field->form_id) ? (int) $field->form_id : 1;
+		$reg_tos = uwp_get_register_form_by($form_id, 'tos_page');
+		if(empty($reg_tos)){
+			$reg_tos = uwp_get_option( 'register_terms_page', false );
+		}
 
 		if ( ! empty( $reg_tos ) ) {
 
@@ -4020,16 +4045,15 @@ class UsersWP_Forms {
 				$bs_form_group   = $design_style ? "form-group" : "";
 				$bs_sr_only      = $design_style ? "sr-only" : "";
 				$bs_form_control = $design_style ? "form-control" : "";
-				$site_title      = __( "Confirm Password", 'userswp' );
+				$site_title      = $placeholder = __( "Confirm Password", 'userswp' );
+				$required    = '';
+				if ( isset( $field->is_required ) && ! empty( $field->is_required ) ) {
+					$placeholder .= ' *';
+					$required    = ' <span class="text-danger">*</span>';
+				}
 				ob_start(); // Start  buffering;
 
 				if ( $design_style ) {
-					$required    = '';
-					$placeholder = $site_title;
-					if ( isset( $field->is_required ) && ! empty( $field->is_required ) ) {
-						$placeholder .= ' *';
-						$required    = ' <span class="text-danger">*</span>';
-					}
 
 					echo aui()->input( array(
 						'type'        => 'password',
@@ -4061,7 +4085,7 @@ class UsersWP_Forms {
                         <input name="confirm_password"
                                class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
                                id="uwp_account_confirm_password"
-                               placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+                               placeholder="<?php echo $placeholder; ?>"
                                value=""
                                title="<?php echo $site_title; ?>"
 							<?php echo 'required="required"'; ?>
@@ -4320,8 +4344,14 @@ class UsersWP_Forms {
 			echo "<script type='text/javascript' src='" . USERSWP_PLUGIN_URL . 'assets/js/countrySelect.min.js' . "' ></script>";
 		}
 
+		$args = array();
+		$form_id = uwp_get_option('register_modal_form');
+		if($form_id > 0){
+            $args['id'] = $form_id;
+        }
+
 		// get template
-		uwp_get_template( "bootstrap/register.php" );
+		uwp_get_template( "bootstrap/register.php", $args );
 
 
 		// only show the JS if NOT doing a block render

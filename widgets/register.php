@@ -33,7 +33,7 @@ class UWP_Register_Widget extends WP_Super_Duper {
 					'title'    => __( 'Form', 'userswp' ),
 					'desc'     => __( 'Select form.', 'userswp' ),
 					'type'     => 'select',
-					'options'  => uwp_get_register_forms(),
+					'options'  => uwp_get_register_forms_dropdown_options(),
 					'default'  => 1,
 					'desc_tip' => true,
 					'advanced' => false

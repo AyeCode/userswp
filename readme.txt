@@ -84,7 +84,7 @@ UsersWP can be extended with several add-ons. Few examples are:
 * [Verified Users](https://userswp.io/downloads/verified-users/) - Make verified users stand out with their own verified badge.
 * [Realtime Notifications](https://userswp.io/downloads/realtime-notifications/) - Sends notifications to users, about activity on your website.
 * [Advanced Search](https://userswp.io/downloads/advanced-search/) - Extends the regular UsersWP search form by adding options to filter by custom fields.
-* [Private Messages](https://userswp.io/downloads/private-messages/) - Allow users to message each other from your website.
+* [Groups](https://userswp.io/downloads/groups/) - Easily create a community with discussion groups like Facebook.
 
 There are many others and we release new Add-ons frequently. You can see the full collection here: [UsersWP Premium Add-ons](https://userswp.io/downloads/category/addons/)
 
@@ -134,6 +134,9 @@ No questions so far, but don't hesitate to ask!
 = 1.2.2.17 =
 * Remove profile tabs if content is empty for GeoDirectory - FIXED
 * Image size issue in list view of listing tab in profile - FIXED
+* GDPR and TOC fields not visible in register form builder if include in register form not enabled - FIXED
+* Show review attachments in reviews tab for GD listing reviews - CHANGED
+* Multiple Registration forms with different fields configurations - ADDED
 
 = 1.2.2.16 =
 * Argument to allow showing users list of specific roles - ADDED

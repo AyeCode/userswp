@@ -21,7 +21,9 @@
       overflow: visible;
       padding: 5px;
       background-color: #FFFFFF;
-      border: 1px #DFDFDF solid; }
+      border: 1px #DFDFDF solid;
+      float: left;
+      width: 100%; }
       #uwp_form_builder_container .uwp-side-sortables .uwp-tabs-panel ul {
         margin: 0; }
       #uwp_form_builder_container .uwp-side-sortables .uwp-tabs-panel .uwp-setting-name .select2-selection--multiple .select2-selection__rendered {
@@ -100,11 +102,6 @@
         margin: 2px;
         cursor: pointer;
         vertical-align: middle; }
-  #uwp_form_builder_container #uwp-form-builder-tab,
-  #uwp_form_builder_container #uwp-form-builder-tab-predefined,
-  #uwp_form_builder_container #uwp-form-builder-tab-custom {
-    float: left;
-    width: 100%; }
   #uwp_form_builder_container #uwp-form-builder-tab ul {
     margin: 0; }
   #uwp_form_builder_container .advance.ui-sortable .ui-state-highlight,
@@ -170,6 +167,9 @@
   #uwp_form_builder_container .uwp-tab-actions a.item-delete {
     color: #a00;
     vertical-align: middle; }
+
+#multiple_registration_select {
+  line-height: 2; }
 
 @media screen and (max-width: 768px) {
   #uwp_form_builder_container #uwp-available-fields.uwp-side-sortables, #uwp_form_builder_container #uwp-selected-fields.uwp-side-sortables {
