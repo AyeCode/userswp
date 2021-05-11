@@ -137,6 +137,8 @@ No questions so far, but don't hesitate to ask!
 * GDPR and TOC fields not visible in register form builder if include in register form not enabled - FIXED
 * Show review attachments in reviews tab for GD listing reviews - CHANGED
 * Multiple Registration forms with different fields configurations - ADDED
+* AyeCode UI updated to v0.1.47 - CHANGED
+* Super Duper updated to v1.0.25 - CHANGED
 
 = 1.2.2.16 =
 * Argument to allow showing users list of specific roles - ADDED

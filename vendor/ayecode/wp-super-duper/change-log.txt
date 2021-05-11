@@ -1,3 +1,6 @@
+= 1.0.25 =
+* PHP Warning if default field value not set - FIXED
+
 = 1.0.24 =
 * WP 5.7 Gutenberg widgets screen has JS error which breaks page saving - FIXED
 * WP 5.7 Gutenberg widgets screen legacy widgets have no `show advanced` button - FIXED

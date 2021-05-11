@@ -1,3 +1,7 @@
+= 0.1.47 =
+* Timeago labels are not translatable - FIXED
+* Kleo theme fix for mobile menu in some situations not showing - FIXED
+
 = 0.1.46 =
 * JS function added to open embedded items in a lightbox gallery - ADDED
 
