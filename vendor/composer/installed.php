@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '0ae2e728ab409627f00d9e7688219703b11e04c5',
+    'reference' => '4e2d6e3fa06d62f8a5c69fe3430dbec7151067ed',
     'name' => 'uswerwp/userswp',
   ),
   'versions' => 
@@ -22,12 +22,12 @@
     ),
     'ayecode/wp-ayecode-ui' => 
     array (
-      'pretty_version' => '0.1.46',
-      'version' => '0.1.46.0',
+      'pretty_version' => '0.1.47',
+      'version' => '0.1.47.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8b9825d9fe52f6da57302358df1a920eec3bace3',
+      'reference' => '4bb5b0c46c494155ba402c379dc7a50cfb7b707e',
     ),
     'ayecode/wp-font-awesome-settings' => 
     array (
@@ -40,12 +40,12 @@
     ),
     'ayecode/wp-super-duper' => 
     array (
-      'pretty_version' => '1.0.24',
-      'version' => '1.0.24.0',
+      'pretty_version' => '1.0.25',
+      'version' => '1.0.25.0',
       'aliases' => 
       array (
       ),
-      'reference' => '4eaa2f6f6e1a29ff71f7fdbd694892d7479ef754',
+      'reference' => '046b2b3ee8f765322bf74725554aa777b6e4979b',
     ),
     'composer/installers' => 
     array (
@@ -55,7 +55,7 @@
       array (
         0 => '1.x-dev',
       ),
-      'reference' => '0f4a400e1c678d2650c5c27cce9e534cc3305c2a',
+      'reference' => 'ae03311f45dfe194412081526be2e003960df74b',
     ),
     'roundcube/plugin-installer' => 
     array (
@@ -78,7 +78,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '0ae2e728ab409627f00d9e7688219703b11e04c5',
+      'reference' => '4e2d6e3fa06d62f8a5c69fe3430dbec7151067ed',
     ),
   ),
 );
