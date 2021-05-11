@@ -352,6 +352,20 @@ class UsersWP_Admin {
                             register_redirect_obj.parent().parent().hide();
                         }
                     }).change();
+
+                    var register_redirect_to = jQuery('#register_redirect_to');
+                    register_redirect_to.on('change', function () {
+                        var value = jQuery(this).val();
+                        var register_redirect_custom_obj = jQuery('#register_redirect_custom_url');
+
+                        if ('-2' === value) {
+                            register_redirect_custom_obj.parent().show();
+                            register_redirect_custom_obj.parent().prev().show();
+                        } else {
+                            register_redirect_custom_obj.parent().hide();
+                            register_redirect_custom_obj.parent().prev().hide();
+                        }
+                    }).change();
                 });
             </script>
 			<?php

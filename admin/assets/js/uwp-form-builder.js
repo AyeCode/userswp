@@ -1,6 +1,6 @@
 jQuery(document).ready(function () {
 
-    jQuery("#uwp-form-builder-tab-shared, #uwp-form-builder-tab, #uwp-form-builder-tab-predefined, #uwp-form-builder-tab-custom").find("ul li a").click(function() {
+    jQuery("#uwp-form-builder-tab-existing, #uwp-form-builder-tab, #uwp-form-builder-tab-predefined, #uwp-form-builder-tab-custom").find("ul li a").click(function() {
         if(!jQuery(this).attr('id')){return;}
         var htmlvar_name = jQuery(this).attr('id').replace('uwp-','');
         var htmlvar = htmlvar_name;
@@ -77,8 +77,8 @@ jQuery(document).ready(function () {
 
             });
 
-        if(jQuery('#uwp-form-builder-tab-shared #uwp-' + htmlvar).length > 0){
-            jQuery('#uwp-form-builder-tab-shared #uwp-' + htmlvar).closest('li').hide();
+        if(jQuery('#uwp-form-builder-tab-existing #uwp-' + htmlvar).length > 0){
+            jQuery('#uwp-form-builder-tab-existing #uwp-' + htmlvar).closest('li').hide();
         }
 
         if(htmlvar_name!='fieldset' && (manage_field_type == 'register' || manage_field_type == 'search') ){
