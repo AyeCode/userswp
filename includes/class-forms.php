@@ -2790,6 +2790,7 @@ class UsersWP_Forms {
 						'checked'    => $checked,
 						'wrap_class' => isset( $field->css_class ) ? $field->css_class : '',
 						'help_text'  => uwp_get_field_description( $field ),
+						'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					)
 				);
 
@@ -3071,7 +3072,7 @@ class UsersWP_Forms {
 					'title'           => $site_title,
 					'value'           => $value,
 					'required'        => $field->is_required,
-					'validation_text' => __( $field->required_msg, 'userswp' ),
+					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					'help_text'       => uwp_get_field_description( $field ),
 					'label'           => is_admin() ? '' : $site_title . $required,
 					'step'            => $step,
@@ -3169,7 +3170,7 @@ class UsersWP_Forms {
 					'title'           => $site_title,
 					'value'           => stripslashes( $value ),
 					'required'        => $field->is_required,
-					'validation_text' => __( $field->required_msg, 'userswp' ),
+					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					'help_text'       => uwp_get_field_description( $field ),
 					'label'           => is_admin() ? '' : $site_title . $required,
 					'rows'            => '4',
@@ -3254,7 +3255,7 @@ class UsersWP_Forms {
 					'title'           => $site_title,
 					'value'           => stripslashes( $value ),
 					'required'        => $field->is_required,
-					'validation_text' => __( $field->required_msg, 'userswp' ),
+					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					'help_text'       => uwp_get_field_description( $field ),
 					'label'           => is_admin() ? '' : $site_title . $required,
 					'rows'            => 5,
@@ -3375,7 +3376,7 @@ class UsersWP_Forms {
 					'title'           => $site_title,
 					'value'           => $value,
 					'required'        => $field->is_required,
-					'validation_text' => __( 'Please enter a valid URL including https://', 'userswp' ),
+					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : __( 'Please enter a valid URL including https://', 'userswp' ),
 					'help_text'       => uwp_get_field_description( $field ),
 					'label'           => is_admin() ? '' : $site_title . $required,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
@@ -3474,6 +3475,7 @@ class UsersWP_Forms {
 					'help_text'   => uwp_get_field_description( $field ),
 					'label'       => is_admin() ? '' : $site_title . $required,
 					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
+					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 				) );
 			} else {
 
@@ -3571,6 +3573,7 @@ class UsersWP_Forms {
 					'help_text'   => uwp_get_field_description( $field ),
 					'label'       => is_admin() ? '' : $site_title . $required,
 					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
+					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 				) );
 			} else {
 				?>
@@ -3653,6 +3656,7 @@ class UsersWP_Forms {
 					'help_text'   => uwp_get_field_description( $field ),
 					'label'       => is_admin() ? '' : $site_title . $required,
 					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
+					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 				) );
 			} else {
 				?>
@@ -3735,6 +3739,7 @@ class UsersWP_Forms {
 						'required'   => ! empty( $field->is_required ) ? true : false,
 						'checked'    => $checked,
 						'wrap_class' => isset( $field->css_class ) ? $field->css_class : '',
+						'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					)
 				);
 
@@ -3820,6 +3825,7 @@ class UsersWP_Forms {
 						'required'   => ! empty( $field->is_required ) ? true : false,
 						'checked'    => $checked,
 						'wrap_class' => isset( $field->css_class ) ? $field->css_class : '',
+						'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					)
 				);
 
@@ -4064,7 +4070,8 @@ class UsersWP_Forms {
 						'value'       => $value,
 						'required'    => $field->is_required,
 						'help_text'   => uwp_get_field_description( $field ),
-						'label'       => is_admin() ? '' : $site_title . $required
+						'label'       => is_admin() ? '' : $site_title . $required,
+						'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					) );
 				} else {
 					?>
@@ -4146,7 +4153,8 @@ class UsersWP_Forms {
 						'value'       => $value,
 						'required'    => $field->is_required,
 						'help_text'   => uwp_get_field_description( $field ),
-						'label'       => is_admin() ? '' : $site_title . $required
+						'label'       => is_admin() ? '' : $site_title . $required,
+						'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					) );
 				} else {
 					?>

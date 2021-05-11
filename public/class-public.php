@@ -76,15 +76,13 @@ class UsersWP_Public {
 	    $enable_timepicker_fields = false;
 	    $enable_country_fields = false;
 
-	    $register_fields = get_register_form_fields();
-	    $account_fields = get_account_form_fields();
-	    $fields = array_merge($register_fields,$account_fields);
+	    $fields = $this->get_all_form_fields();
 	    if (!empty($fields)) {
 		    foreach ($fields as $field) {
-			    if ($field->field_type == 'time' || $field->field_type == 'datepicker') {
+			    if (isset($field->field_type) && ($field->field_type == 'time' || $field->field_type == 'datepicker')) {
 				    $enable_timepicker_fields = true;
 			    }
-			    if ($field->field_type_key == 'uwp_country' || $field->field_type_key == 'country') {
+			    if (isset($field->field_type_key) && ($field->field_type_key == 'uwp_country' || $field->field_type_key == 'country')) {
 				    $enable_country_fields = true;
 			    }
 		    }
@@ -103,6 +101,28 @@ class UsersWP_Public {
 		    wp_localize_script( 'country-select', 'uwp_country_data', $country_data );
 	    }
         
+    }
+
+    function get_all_form_fields($htmlvar_name = ''){
+		global $wpdb;
+	    $table_name        = uwp_get_table_prefix() . 'uwp_form_fields';
+	    $register_forms = uwp_get_option( 'multiple_registration_forms' );
+	    $custom_fields = array();
+
+	    if ( ! empty( $register_forms ) && is_array( $register_forms ) ) {
+		    foreach ( $register_forms as $key => $register_form ) {
+			    $form_ids[] = (int) $register_form['id'];
+		    }
+
+		    if ( isset( $form_ids ) && count( $form_ids ) > 0 ) {
+			    $form_ids_placeholder = array_fill( 0, count( $form_ids ), '%d' );
+			    $form_ids_placeholder = implode( ', ', $form_ids_placeholder );
+			    $query                = $wpdb->prepare("SELECT id,field_type,field_type_key FROM " . $table_name . " WHERE form_type = 'account' AND form_id IN (" . $form_ids_placeholder . ") AND (field_type = 'time' OR field_type = 'datepicker' OR field_type_key = 'uwp_country' OR field_type_key = 'country') ORDER BY sort_order ASC", $form_ids);
+			    $custom_fields        = $wpdb->get_results( $query);
+		    }
+	    }
+
+    	return $custom_fields;
     }
 
 }
