@@ -284,18 +284,22 @@ function delete_field(id, nonce, deleteid, type) {
 
     if (confirmation == true) {
 
-        jQuery.get(uwp_admin_ajax.url+'?action='+action+'&create_field=true&manage_field_type=' + manage_field_type + form_id_param, {
-                field_id: id,
-                form_id: form_id,
-                field_ins_upd: 'delete',
-                _wpnonce: nonce
-            },
-            function () {
-                jQuery('#licontainer_' + id).remove();
+        if (id.substring(0, 3) == "new") {
+            jQuery('#licontainer_' + id).remove();
+        } else {
+            jQuery.get(uwp_admin_ajax.url+'?action='+action+'&create_field=true&manage_field_type=' + manage_field_type + form_id_param, {
+                    field_id: id,
+                    form_id: form_id,
+                    field_ins_upd: 'delete',
+                    _wpnonce: nonce
+                },
+                function () {
+                    jQuery('#licontainer_' + id).remove();
 
-            });
+                });
 
-        jQuery('#uwp-'+deleteid).closest('li').show();
+            jQuery('#uwp-'+deleteid).closest('li').show();
+        }
 
     }
 

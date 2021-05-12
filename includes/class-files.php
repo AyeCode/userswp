@@ -29,7 +29,7 @@ class UsersWP_Files {
                 $allowed_mime_types = $extra_fields['uwp_file_types'];
             }
 
-            $allowed_mime_types = apply_filters('uwp_allowed_mime_types', $allowed_mime_types, $field->htmlvar_name);
+            $allowed_mime_types = apply_filters('uwp_fields_allowed_mime_types', $allowed_mime_types, $field->htmlvar_name);
 
             $file_urls       = array();
             $files_to_upload = $this->prepare_files( $files[ $field->htmlvar_name ] );

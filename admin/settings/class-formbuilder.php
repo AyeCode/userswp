@@ -1305,6 +1305,8 @@ class UsersWP_Form_Builder {
 			$field_type_name = $field_type;
 		}
 
+		$htmlvar_name = isset($field_info->htmlvar_name) ? sanitize_text_field($field_info->htmlvar_name) : '';
+
 		?>
         <li class="text li-settings" id="licontainer_<?php echo $result_str; ?>">
             <i class="fas fa-caret-down toggle-arrow" aria-hidden="true" onclick="uwp_show_hide(this);"></i>
@@ -1888,11 +1890,11 @@ class UsersWP_Form_Builder {
 								$default_fields = array( 'email', 'first_name', 'last_name', 'username', 'password' );
 								$default_fields = apply_filters( 'uwp_is_default_field', $default_fields, $field_info );
 
-								if ( isset( $field_info->htmlvar_name ) && ! in_array( $field_info->htmlvar_name, $default_fields ) ): ?>
+								if ( ! ( ! empty( $htmlvar_name ) && in_array( $htmlvar_name, $default_fields ) ) && apply_filters( 'uwp_cfa_can_delete_field', true, $field_info ) ){ ?>
                                     <a class="item-delete submitdelete deletion" id="delete-16"
                                        href="javascript:void(0);"
-                                       onclick="delete_field('<?php echo esc_attr( $result_str ); ?>', '<?php echo $nonce; ?>', '<?php echo $field_info->htmlvar_name; ?>')"><?php _e( "Remove", "userswp" ); ?></a>
-								<?php endif; ?>
+                                       onclick="delete_field('<?php echo esc_attr( $result_str ); ?>', '<?php echo $nonce; ?>', '<?php echo $htmlvar_name; ?>')"><?php _e( "Remove", "userswp" ); ?></a>
+								<?php } ?>
 								<?php UsersWP_Settings_Page::toggle_advanced_button(); ?>
                             </div>
                         </li>
