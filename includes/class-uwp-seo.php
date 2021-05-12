@@ -191,7 +191,7 @@ class UsersWP_Seo {
     public function output_description() {
 
         if(is_uwp_profile_page()) {
-            $description = $this->get_meta_description();
+            $description = $this->get_description();
             echo '<meta name="description" content="' . $description . '" />';
         }
     }
@@ -213,10 +213,10 @@ class UsersWP_Seo {
             $title = $this->get_meta_title();
         }
 
-        return $title;
+        return apply_filters('uwp_seo_profile_meta_title', sanitize_text_field($title));
     }
 
-    public function get_description($description) {
+    public function get_description($description = '') {
 	    if(1 == uwp_get_option('profile_seo_disable')){
 		    return $description;
 	    }
@@ -225,7 +225,9 @@ class UsersWP_Seo {
             $description = $this->get_meta_description();
         }
 
-        return $description;
+	    $description = apply_filters('uwp_seo_profile_meta_description', $description);
+
+        return sanitize_text_field($description);
     }
 
     public function get_opengraph_url($url) {
