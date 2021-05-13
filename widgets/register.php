@@ -122,6 +122,10 @@ class UWP_Register_Widget extends WP_Super_Duper {
 			return;
 		}
 
+		if(isset($_REQUEST['uwp_form_id']) && !empty($_REQUEST['uwp_form_id'])){
+			$args['id'] = (int) $_REQUEST['uwp_form_id'];
+		}
+
 		ob_start();
 
 		echo '<div class="uwp_widgets uwp_widget_register">';
@@ -129,7 +133,7 @@ class UWP_Register_Widget extends WP_Super_Duper {
 		$design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
 		$template     = $design_style ? $design_style . "/register.php" : "register.php";
 
-		echo '<div class="uwp_page wpbs ">';
+		echo '<div class="uwp_page wpbs">';
 
 		uwp_get_template( $template, $args );
 

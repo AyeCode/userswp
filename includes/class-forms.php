@@ -3970,7 +3970,7 @@ class UsersWP_Forms {
             <div id="<?php echo $field->htmlvar_name; ?>_row"
                  class="<?php if ( $field->is_required ) {
 				     echo 'required_field';
-			     } ?> uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+			     } ?> uwp_clear <?php echo esc_attr( $bs_form_group. ' '.$field->css_class ); ?>">
 
 				<?php
 				$site_title = uwp_get_form_label( $field );
@@ -4308,9 +4308,13 @@ class UsersWP_Forms {
 		// add the modal error container
 		add_action( 'uwp_template_display_notices', array( $this, 'modal_error_container' ) );
 
+		$args = array(
+			'form_title' => __('Login','userswp'),
+        );
+
 		// get the form
 		ob_start();
-		uwp_get_template( "bootstrap/login.php" );
+		uwp_get_template( "bootstrap/login.php", $args );
 		$form = ob_get_clean();
 
 		// send ajax response
@@ -4333,7 +4337,14 @@ class UsersWP_Forms {
 		}
 
 		// do we need country code script in ajax?
-		$country_field = false;$form_id = 1;
+		$country_field = false;
+
+		if(isset($_POST['form_id']) && !empty($_POST['form_id'])){
+			$form_id = (int)$_POST['form_id'];
+        } else {
+			$form_id = uwp_get_option('register_modal_form', 1);
+        }
+
 		$fields        = get_register_form_fields($form_id);
 		if ( ! empty( $fields ) ) {
 			foreach ( $fields as $field ) {
@@ -4353,7 +4364,6 @@ class UsersWP_Forms {
 		}
 
 		$args = array();
-		$form_id = uwp_get_option('register_modal_form');
 		if($form_id > 0){
             $args['id'] = $form_id;
         }
