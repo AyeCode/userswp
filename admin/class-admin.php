@@ -537,24 +537,27 @@ class UsersWP_Admin {
 		if ( $fields ) {
 			?>
             <div class="uwp-profile-extra">
-                <table class="uwp-profile-extra-table form-table">
+                <table class="uwp-profile-extra-table form-table bsui">
 					<?php
 					foreach ( $fields as $field ) {
 
-						// Icon
-						$icon = uwp_get_field_icon( $field->field_icon );
+						if(isset($field->css_class) && !empty($field->css_class)){
+							$field->css_class = $field->css_class.' w-50';
+                        } else {
+							$field->css_class = 'w-50';
+                        }
 
 						if ( $field->field_type == 'fieldset' ) {
 							?>
                             <tr style="margin: 0; padding: 0">
                                 <th class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3
-                                            style="margin: 10px 0;"><?php echo $icon . $field->site_title; ?></h3></th>
+                                            style="margin: 10px 0;"><?php echo $field->site_title; ?></h3></th>
                                 <td></td>
                             </tr>
 							<?php
 						} else { ?>
                             <tr>
-                                <th class="uwp-profile-extra-key"><?php echo $icon . $field->site_title; ?></th>
+                                <th class="uwp-profile-extra-key"><?php echo $field->site_title; ?></th>
                                 <td class="uwp-profile-extra-value">
 									<?php
 									$templates_obj = new UsersWP_Templates();
@@ -592,25 +595,23 @@ class UsersWP_Admin {
 			?>
             <div class="uwp-profile-extra uwp_page">
 				<?php do_action( 'uwp_admin_profile_edit', $user ); ?>
+                <h2><?php _e('UsersWP Account Details', 'userswp'); ?></h2>
                 <table class="uwp-profile-extra-table form-table">
 					<?php
 					foreach ( $fields as $field ) {
-
-						// Icon
-						$icon = uwp_get_field_icon( $field->field_icon );
 
 						if ( $field->field_type == 'fieldset' ) {
 							?>
                             <tr style="margin: 0; padding: 0">
                                 <th class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3
                                             style="margin: 10px 0;">
-										<?php echo $icon . $field->site_title; ?></h3></th>
+										<?php echo $field->site_title; ?></h3></th>
                                 <td></td>
                             </tr>
 							<?php
 						} else { ?>
                             <tr>
-                                <th class="uwp-profile-extra-key"><?php echo $icon . $field->site_title; ?></th>
+                                <th class="uwp-profile-extra-key"><?php echo $field->site_title; ?></th>
                                 <td class="uwp-profile-extra-value">
 									<?php
 									if ( $field->htmlvar_name == "avatar" ) {

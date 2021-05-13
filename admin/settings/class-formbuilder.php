@@ -283,7 +283,6 @@ class UsersWP_Form_Builder {
 	public function multiple_registration_form( $tab = '' ) {
 
 		if ( empty( $tab ) || $tab == 'account' ) {
-			global $wpdb;
 			$current_form        = ! empty( $_REQUEST['form'] ) ? (int) $_REQUEST['form'] : 1;
 			$register_tab        = admin_url( 'admin.php?page=uwp_form_builder&tab=account' );
 			$register_forms      = uwp_get_option( 'multiple_registration_forms' );
