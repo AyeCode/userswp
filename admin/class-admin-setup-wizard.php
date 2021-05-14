@@ -634,7 +634,7 @@ class UsersWP_Admin_Setup_Wizard {
 							$checkbox_class = "";
 						}
 
-						$uwp_html_tip = '<span class="gd-help-tip dashicons dashicons-editor-help" title="' . $plugin['desc'] . '"></span>';
+						$uwp_html_tip = '<span class="uwp-help-tip dashicons dashicons-editor-help" title="' . $plugin['desc'] . '"></span>';
 						echo "<li class='" . $plugin['slug'] . "'>";
 						echo "<input type='checkbox' id='" . $plugin['slug'] . "' $checked $disabled $checkbox_class />";
 						echo $plugin['name'] . " " . $uwp_html_tip;

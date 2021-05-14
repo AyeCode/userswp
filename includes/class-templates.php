@@ -508,43 +508,55 @@ class UsersWP_Templates {
 
 			if ( ! empty( $register_forms ) && is_array( $register_forms ) && count($register_forms) > 1 ) {
 
-				$form_options = uwp_get_register_forms_dropdown_options();
-				$options = array();
-				$current_value = $form_id;
-
-				if(!wp_doing_ajax()){
-					$current_url = uwp_current_page_url();
-					$current_value = add_query_arg(array('uwp_form_id' => $form_id), $current_url);
-
-					foreach ($form_options as $id => $title){
-						$current_url = add_query_arg(array('uwp_form_id' => $id), $current_url);
-						$options[$current_url] = $title;
+				$options  = uwp_get_register_forms_dropdown_options();
+				$id         = wp_doing_ajax() ? "uwp-form-select-ajax" : 'uwp-form-select';
+				?>
+                <div class="btn-group btn-group-sm mb-2" role="group" id="<?php echo $id; ?>">
+				<?php
+				$options = array_chunk( $options, 5, true );
+				$current_url   = uwp_current_page_url();
+				if ( isset( $options[0] ) && ! empty( $options[0] ) && count( $options[0] ) > 0 ) {
+					foreach ( $options[0] as $id => $val ) {
+						$active = $form_id == $id ? 'active' : '';
+						$url = esc_url_raw( add_query_arg( array( 'uwp_form_id' => $id ), $current_url ) );
+						echo aui()->button( array(
+							'type'    => 'a',
+							'href'    => $url,
+							'class'   => 'btn btn-secondary '.$active,
+							'content' => esc_attr( $val ),
+							'extra_attributes'  => array('data-form_id'=>$id)
+						) );
 					}
-				} else {
-					$options = $form_options;
 				}
 
-			    $switcher_field = new stdClass();
-			    $switcher_field->htmlvar_name = 'uwp_switch_reg_form';
-			    $switcher_field->field_type = 'select';
-			    $switcher_field->form_label = __('Switch form', 'userswp');
-				$switcher_field= apply_filters('uwp_reg_form_switcher_field', $switcher_field, $form_type, $args);
-
-				$site_title    = uwp_get_form_label( $switcher_field );
-				$id           = wp_doing_ajax() ? $switcher_field->htmlvar_name . "_ajax" : $switcher_field->htmlvar_name;
-
-				echo aui()->select( array(
-					'id'              => $id,
-					'name'            => $switcher_field->htmlvar_name,
-					'placeholder'     => uwp_get_field_placeholder( $switcher_field ),
-					'title'           => $site_title,
-					'value'           => $current_value,
-					'help_text'       => uwp_get_field_description( $switcher_field ),
-					'label'           => $site_title,
-					'options'         => $options,
-					'select2'         => true,
-					'wrap_class'      => isset( $switcher_field->css_class ) ? $switcher_field->css_class : '',
-				) );
+				if ( isset( $options[1] ) && ! empty( $options[1] ) && count( $options[1] ) > 0 ) {
+					foreach ( $options[1] as $id => $val ) {
+						$active = $form_id == $id ? 'active' : '';
+						$url = esc_url_raw( add_query_arg( array( 'uwp_form_id' => $id ), $current_url ) );
+						?>
+                        <div class="btn-group" role="group">
+                            <button id="uwp-form-select-dropdown" type="button" class="btn btn-secondary dropdown-toggle"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <?php _e('More', 'userswp'); ?>
+                            </button>
+                            <div class="dropdown-menu mt-3" aria-labelledby="uwp-form-select">
+								<?php
+								echo aui()->button( array(
+									'type'    => 'a',
+									'href'    => $url,
+									'class'   => 'dropdown-item ' . $active,
+									'content' => esc_attr( $val ),
+									'extra_attributes'  => array('data-form_id'=>$id)
+								) );
+								?>
+                            </div>
+                        </div>
+						<?php
+					}
+				}
+				?>
+                </div>
+				<?php
 			}
 		} elseif ( $form_type == 'account' ) {
 			$fields = get_account_form_fields();
