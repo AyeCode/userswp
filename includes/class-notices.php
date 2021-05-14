@@ -72,7 +72,7 @@ class UsersWP_Notices {
             'type' => 'error',
         );
         $messages['act_wrong'] = array(
-            'message' => __('Something went wrong.', 'userswp'),
+            'message' => __('Invalid activation key or account.', 'userswp'),
             'type' => 'error',
         );
 

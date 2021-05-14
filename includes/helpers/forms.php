@@ -99,7 +99,7 @@ function get_account_form_fields( $extra_where = '' ) {
 		$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND for_admin_use != '1' AND is_register_only_field = '0' AND htmlvar_name != 'password' AND form_id = %s" . $extra_where . " ORDER BY sort_order ASC", array( 'account', $form_id ) ) );
 	}
 
-	return uwp_get_account_fields_sorted( $fields, $form_id );
+	return $fields;
 }
 
 /**
@@ -408,7 +408,7 @@ function uwp_get_next_register_form_id() {
 function uwp_get_register_form_id( $user_id ) {
 
 	if ( empty( $user_id ) ) {
-		return;
+		return 1;
 	}
 
 	$form_id = get_user_meta( $user_id, '_uwp_register_form_id', true );
@@ -434,45 +434,6 @@ function uwp_get_register_fields_htmlvar( $form_id = 1 ) {
 	}
 
 	return $html_var;
-}
-
-function uwp_get_account_fields_sorted( $fields = array(), $form_id = 1 ) {
-
-	if ( empty( $fields ) || ! is_array( $fields ) ) {
-		return;
-	}
-
-	$accept_fields = apply_filters( 'uwp_accept_account_fields', array(
-		'first_name',
-		'last_name',
-		'username',
-		'email',
-		'display_name',
-		'bio'
-	) );
-
-	$excluded_fields = uwp_get_excluded_fields();
-
-	$register_fields = uwp_get_register_fields_htmlvar( $form_id );
-
-	$register_fields = array_merge( $register_fields, $accept_fields );
-	$register_fields = array_unique( $register_fields );
-
-	$register_fields = array_diff( $register_fields, $excluded_fields );
-
-	foreach ( $fields as $key => $field ) {
-
-		$htmlvar_name = ! empty( $field->htmlvar_name ) ? $field->htmlvar_name : '';
-
-		if ( ! empty( $htmlvar_name ) && ! empty( $register_fields ) && ! in_array( $htmlvar_name, $register_fields ) ) {
-
-			unset( $fields[ $key ] );
-		}
-
-		$fields = array_values( $fields );
-	}
-
-	return $fields;
 }
 
 function uwp_get_unique_custom_fields($fields, $key = 'htmlvar_name'){

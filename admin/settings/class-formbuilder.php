@@ -31,6 +31,11 @@ class UsersWP_Form_Builder {
 			$current_tab = empty( $_GET['tab'] ) ? 'account' : sanitize_title( $_GET['tab'] );
 		}
 
+		$form = '';
+		if(isset($_GET['form']) && !empty($_GET['form'])){
+			$form = '&form='.(int) $_GET['form'];
+        }
+
 		// Get tabs for the form builder page
 		$tabs = apply_filters( 'uwp_form_builder_tabs_array', array(
 			'account'  => __( 'Account', 'userswp' ),
@@ -42,7 +47,7 @@ class UsersWP_Form_Builder {
             <nav class="nav-tab-wrapper uwp-nav-tab-wrapper">
 				<?php
 				foreach ( $tabs as $name => $label ) {
-					echo '<a href="' . admin_url( 'admin.php?page=uwp_form_builder&tab=' . $name ) . '" id="uwp-form-builder-' . $name . '" class="nav-tab ' . ( $current_tab == $name ? 'nav-tab-active' : '' ) . '">' . $label . '</a>';
+					echo '<a href="' . admin_url( 'admin.php?page=uwp_form_builder&tab=' . $name . $form ) . '" id="uwp-form-builder-' . $name . '" class="nav-tab ' . ( $current_tab == $name ? 'nav-tab-active' : '' ) . '">' . $label . '</a>';
 				}
 				do_action( 'uwp_form_builder_tabs' );
 				?>
@@ -171,22 +176,21 @@ class UsersWP_Form_Builder {
 			$form_type = 'account';
 			$type      = 'predefined';
 			?>
-            <!--            <div class="uwp-side-sortables" id="uwp-shared-fields">-->
             <h3>
-                    <span>
-                        <?php echo apply_filters( 'uwp_form_builder_available_fields_head', __( 'Shared field', 'userswp' ), $form_type ); ?>
-                    </span>
+                <span>
+                    <?php echo apply_filters( 'uwp_form_builder_available_fields_head', __( 'Existing Fields', 'userswp' ), $form_type ); ?>
+                </span>
             </h3>
 
             <p>
 				<?php
-				$note = sprintf( __( 'Click on shared field to add it to the form. Shared fields are most used fields in all user types.', 'userswp' ), $form_type );
-				echo apply_filters( 'uwp_form_builder_shared_fields_note', $note, $form_type );
+				$note = sprintf( __( 'Click on field to add it to the form. Existing fields are most used fields in all other forms.', 'userswp' ), $form_type );
+				echo apply_filters( 'uwp_form_builder_existing_fields_note', $note, $form_type );
 				?>
             </p>
 
             <div class="inside">
-                <div id="uwp-form-builder-tab-shared" class="uwp-tabs-panel">
+                <div id="uwp-form-builder-tab-existing" class="uwp-tabs-panel">
                     <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
                     <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">
                     <ul class="core uwp-tabs-selected uwp_form_extras">
@@ -202,7 +206,7 @@ class UsersWP_Form_Builder {
 							}
 						}
 
-						$fields = $this->get_form_shared_fields( $form_type, 'array' );
+						$fields = $this->get_form_existing_fields( $form_type, 'array' );
 
 						if ( ! empty( $fields ) ) {
 							foreach ( $fields as $id => $field ) {
@@ -243,12 +247,11 @@ class UsersWP_Form_Builder {
                     </ul>
                 </div>
             </div>
-            <!--            </div>-->
 			<?php
 		}
 	}
 
-	public function get_form_shared_fields( $type = '', $output = '' ) {
+	public function get_form_existing_fields( $type = '', $output = '' ) {
 
 		global $wpdb;
 		$custom_fields  = array();
@@ -274,13 +277,12 @@ class UsersWP_Form_Builder {
 
 		$custom_fields = uwp_get_unique_custom_fields( $custom_fields );
 
-		return apply_filters( 'uwp_form_shared_fields', $custom_fields, $type );
+		return apply_filters( 'uwp_form_existing_fields', $custom_fields, $type );
 	}
 
 	public function multiple_registration_form( $tab = '' ) {
 
 		if ( empty( $tab ) || $tab == 'account' ) {
-			global $wpdb;
 			$current_form        = ! empty( $_REQUEST['form'] ) ? (int) $_REQUEST['form'] : 1;
 			$register_tab        = admin_url( 'admin.php?page=uwp_form_builder&tab=account' );
 			$register_forms      = uwp_get_option( 'multiple_registration_forms' );
@@ -360,13 +362,13 @@ class UsersWP_Form_Builder {
 
                     <table class="form-table bsui userswp" id="uwp-form-more-options" style="display:none;">
                         <tr>
-                            <th><?php _e( 'Title:', 'userswp' ); ?></th>
+                            <th><?php _e( 'Title:', 'userswp' ); echo uwp_help_tip(__('Title of the form', 'userswp')) ?></th>
                             <td>
                                 <input type="text" name="form_title" value="<?php echo $current_title; ?>"
                                        class="regular-text">
                             </td>
 							<?php if ( ! empty( $user_roles ) && is_array( $user_roles ) ) { ?>
-                                <th><?php _e( 'User Role to Assign:', 'userswp' ); ?></th>
+                                <th><?php _e( 'User Role to Assign:', 'userswp' ); echo uwp_help_tip(__('Role to assign when user register via this form.', 'userswp'))  ?></th>
                                 <td>
                                     <select name="user_role" id="multiple_registration_user_role"
                                             class="small-text aui-select2">
@@ -382,7 +384,7 @@ class UsersWP_Form_Builder {
 							<?php } ?>
                         </tr>
                         <tr>
-                            <th><?php _e( 'Registration Action:', 'userswp' ); ?></th>
+                            <th><?php _e( 'Registration Action:', 'userswp' ); echo uwp_help_tip(__('Select how registration should be handled.', 'userswp')) ?></th>
                             <td>
                                 <select name="reg_action" id="uwp_registration_action"
                                         class="small-text aui-select2">
@@ -396,7 +398,7 @@ class UsersWP_Form_Builder {
                             </td>
                         </tr>
                         <tr style="display:none;">
-                            <th><?php _e( 'Redirect Page:', 'userswp' ); ?></th>
+                            <th><?php _e( 'Redirect Page:', 'userswp' ); echo uwp_help_tip(__('Set the page to redirect the user to after signing up.', 'userswp'))  ?></th>
                             <td>
                                 <select name="redirect_to" id="register_redirect_to"
                                         class="small-text aui-select2">
@@ -419,14 +421,14 @@ class UsersWP_Form_Builder {
 									<?php } ?>
                                 </select>
                             </td>
-                            <th><?php _e( 'Custom Redirect URL:', 'userswp' ); ?></th>
+                            <th><?php _e( 'Custom Redirect URL:', 'userswp' ); echo uwp_help_tip(__( 'Set the page to redirect the user to after signing up. If default redirect has been set then WordPress default will be used.', 'userswp' )); ?></th>
                             <td>
                                 <input type="text" name="custom_url" id="register_redirect_custom_url"
                                        class="regular-text" value="<?php echo $current_custom_url; ?>">
                             </td>
                         </tr>
                         <tr>
-                            <th><?php _e( 'GDPR Policy Page:', 'userswp' ); ?></th>
+                            <th><?php _e( 'GDPR Policy Page:', 'userswp' ); echo uwp_help_tip(__('Page to link when GDPR policy page custom field added to form. If not set then default setting will be used.', 'userswp')); ?></th>
                             <td>
 								<?php
 								$args = array(
@@ -442,7 +444,7 @@ class UsersWP_Form_Builder {
 								echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'userswp' ) . "' id=", wp_dropdown_pages( $args ) );
 								?>
                             </td>
-                            <th><?php _e( 'TOS Page:', 'userswp' ); ?></th>
+                            <th><?php _e( 'TOS Page:', 'userswp' ); echo uwp_help_tip(__('Page to link when Terms and Conditions custom field added to form. If not set then default setting will be used.', 'userswp'));?></th>
                             <td>
 								<?php
 								$args = array(
@@ -464,7 +466,7 @@ class UsersWP_Form_Builder {
                             <td></td>
                             <td>
                                 <button class="btn btn-sm btn-secondary" id="form_update" type="submit"
-                                        name="form_update"><?php _e( 'Update', 'userswp' ) ?></button>
+                                        name="form_update"><?php _e( 'Update', 'userswp' ); ?></button>
                             </td>
                         </tr>
                     </table>
@@ -487,7 +489,7 @@ class UsersWP_Form_Builder {
 					<?php
 					if ( ! empty( $register_forms ) && is_array( $register_forms ) ) { ?>
                         <tr>
-                            <th><?php _e( 'User Type:', 'userswp' ); ?></th>
+                            <th><?php _e( 'Select Form:', 'userswp' ); ?></th>
                             <td>
                                 <div class="d-inline-block align-top">
                                     <select onChange="window.location.replace(jQuery(this).val());"
@@ -510,8 +512,7 @@ class UsersWP_Form_Builder {
                         <tr>
                             <th><?php _e( 'Register Form Shortcode:', 'userswp' ); ?></th>
                             <td>
-                                <span class="uwp-custom-desc"><code><strong>[uwp_register id="<?php echo $current_form; ?>
-                                            " title="<?php echo uwp_get_register_form_by( $current_form ); ?>"]</strong></code></span>
+                                <span class="uwp-custom-desc"><code><strong>[uwp_register id="<?php echo $current_form; ?>" title="<?php echo uwp_get_register_form_by( $current_form ); ?>"]</strong></code></span>
                             </td>
                         </tr>
 					<?php } ?>
@@ -533,7 +534,7 @@ class UsersWP_Form_Builder {
 					<?php
 					if ( ! empty( $register_forms ) && is_array( $register_forms ) ) { ?>
                         <tr>
-                            <th><?php _e( 'User Type:', 'userswp' ); ?></th>
+                            <th><?php _e( 'Select Form:', 'userswp' ); ?></th>
                             <td>
                                 <div class="d-inline-block align-top">
                                     <select onChange="window.location.replace(jQuery(this).val());"
@@ -1235,7 +1236,7 @@ class UsersWP_Form_Builder {
 		global $wpdb;
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 		$cf         = $result_str;
-		$cf_arr     = $this->get_form_shared_fields( $form_type );
+		$cf_arr     = $this->get_form_existing_fields( $form_type );
 
 		if ( ! is_object( $cf ) ) {
 
@@ -1302,6 +1303,8 @@ class UsersWP_Form_Builder {
 		} else {
 			$field_type_name = $field_type;
 		}
+
+		$htmlvar_name = isset($field_info->htmlvar_name) ? sanitize_text_field($field_info->htmlvar_name) : '';
 
 		?>
         <li class="text li-settings" id="licontainer_<?php echo $result_str; ?>">
@@ -1849,7 +1852,7 @@ class UsersWP_Form_Builder {
 
                                     <select multiple="multiple" name="show_in[]"
                                             style="min-width:300px;"
-                                            class="aui-select2"
+                                            class="aui-select2 form-control"
                                             data-placeholder="<?php _e( 'Select locations', 'userswp' ); ?>">
 										<?php
 
@@ -1886,11 +1889,11 @@ class UsersWP_Form_Builder {
 								$default_fields = array( 'email', 'first_name', 'last_name', 'username', 'password' );
 								$default_fields = apply_filters( 'uwp_is_default_field', $default_fields, $field_info );
 
-								if ( isset( $field_info->htmlvar_name ) && ! in_array( $field_info->htmlvar_name, $default_fields ) ): ?>
+								if ( ! ( ! empty( $htmlvar_name ) && in_array( $htmlvar_name, $default_fields ) ) && apply_filters( 'uwp_cfa_can_delete_field', true, $field_info ) ){ ?>
                                     <a class="item-delete submitdelete deletion" id="delete-16"
                                        href="javascript:void(0);"
-                                       onclick="delete_field('<?php echo esc_attr( $result_str ); ?>', '<?php echo $nonce; ?>', '<?php echo $field_info->htmlvar_name; ?>')"><?php _e( "Remove", "userswp" ); ?></a>
-								<?php endif; ?>
+                                       onclick="delete_field('<?php echo esc_attr( $result_str ); ?>', '<?php echo $nonce; ?>', '<?php echo $htmlvar_name; ?>')"><?php _e( "Remove", "userswp" ); ?></a>
+								<?php } ?>
 								<?php UsersWP_Settings_Page::toggle_advanced_button(); ?>
                             </div>
                         </li>

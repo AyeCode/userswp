@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.24";
+		public $version = "1.0.25";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -1737,8 +1737,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
 								} elseif ( $args['type'] == 'select' && ! empty( $args['multiple'] ) ) {
 									$type = 'array';
-									if ( is_array( $args['default'] ) ) {
-										$default = isset( $args['default'] ) ? "['" . implode( "','", $args['default'] ) . "']" : "[]";
+									if ( isset( $args['default'] ) && is_array( $args['default'] ) ) {
+										$default = ! empty( $args['default'] ) ? "['" . implode( "','", $args['default'] ) . "']" : "[]";
 									} else {
 										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
 									}

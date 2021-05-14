@@ -501,9 +501,51 @@ class UsersWP_Templates {
 		$table_name        = uwp_get_table_prefix() . 'uwp_form_fields';
 		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
-		$form_id = ! empty( $args['id'] ) ? (int) $args['id'] : 1;
+		$form_id = ! empty( $args['id'] ) ? (int) $args['id'] : uwp_get_option('register_modal_form', 1);
 		if ( $form_type == 'register' ) {
 			$fields = get_register_form_fields($form_id);
+			$register_forms      = uwp_get_option( 'multiple_registration_forms' );
+
+			if ( ! empty( $register_forms ) && is_array( $register_forms ) && count($register_forms) > 1 ) {
+
+				$form_options = uwp_get_register_forms_dropdown_options();
+				$options = array();
+				$current_value = $form_id;
+
+				if(!wp_doing_ajax()){
+					$current_url = uwp_current_page_url();
+					$current_value = add_query_arg(array('uwp_form_id' => $form_id), $current_url);
+
+					foreach ($form_options as $id => $title){
+						$current_url = add_query_arg(array('uwp_form_id' => $id), $current_url);
+						$options[$current_url] = $title;
+					}
+				} else {
+					$options = $form_options;
+				}
+
+			    $switcher_field = new stdClass();
+			    $switcher_field->htmlvar_name = 'uwp_switch_reg_form';
+			    $switcher_field->field_type = 'select';
+			    $switcher_field->form_label = __('Switch form', 'userswp');
+				$switcher_field= apply_filters('uwp_reg_form_switcher_field', $switcher_field, $form_type, $args);
+
+				$site_title    = uwp_get_form_label( $switcher_field );
+				$id           = wp_doing_ajax() ? $switcher_field->htmlvar_name . "_ajax" : $switcher_field->htmlvar_name;
+
+				echo aui()->select( array(
+					'id'              => $id,
+					'name'            => $switcher_field->htmlvar_name,
+					'placeholder'     => uwp_get_field_placeholder( $switcher_field ),
+					'title'           => $site_title,
+					'value'           => $current_value,
+					'help_text'       => uwp_get_field_description( $switcher_field ),
+					'label'           => $site_title,
+					'options'         => $options,
+					'select2'         => true,
+					'wrap_class'      => isset( $switcher_field->css_class ) ? $switcher_field->css_class : '',
+				) );
+			}
 		} elseif ( $form_type == 'account' ) {
 			$fields = get_account_form_fields();
 		} elseif ( $form_type == 'change' ) {

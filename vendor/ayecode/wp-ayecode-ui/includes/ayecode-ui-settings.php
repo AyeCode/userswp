@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.46';
+		public $version = '0.1.47';
 
 		/**
 		 * Class textdomain.
@@ -467,21 +467,22 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				 * @param selector string The .class selector
 				 */
 				function aui_time_ago(selector) {
+					var aui_timeago_params = <?php echo self::timeago_locale(); ?>;
 
 					var templates = {
-						prefix: "",
-						suffix: " ago",
-						seconds: "less than a minute",
-						minute: "about a minute",
-						minutes: "%d minutes",
-						hour: "about an hour",
-						hours: "about %d hours",
-						day: "a day",
-						days: "%d days",
-						month: "about a month",
-						months: "%d months",
-						year: "about a year",
-						years: "%d years"
+						prefix: aui_timeago_params.prefix_ago,
+						suffix: aui_timeago_params.suffix_ago,
+						seconds: aui_timeago_params.seconds,
+						minute: aui_timeago_params.minute,
+						minutes: aui_timeago_params.minutes,
+						hour: aui_timeago_params.hour,
+						hours: aui_timeago_params.hours,
+						day: aui_timeago_params.day,
+						days: aui_timeago_params.days,
+						month: aui_timeago_params.month,
+						months: aui_timeago_params.months,
+						year: aui_timeago_params.year,
+						years: aui_timeago_params.years
 					};
 					var template = function (t, n) {
 						return templates[t] && templates[t].replace(/%d/i, Math.abs(Math.round(n)));
@@ -983,13 +984,15 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			<?php
 			$output = ob_get_clean();
 
+
+
 			/*
 			 * We only add the <script> tags for code highlighting, so we strip them from the output.
 			 */
 			return str_replace( array(
 				'<script>',
 				'</script>'
-			), '', $output );
+			), '', self::minify_js($output) );
 		}
 
 
@@ -1363,7 +1366,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 			<?php if( defined( 'SVQ_THEME_VERSION' ) ){ ?>
 			/* KLEO theme specific */
-			.kleo-main-header .navbar-collapse.collapse.show:not(.in){display: inherit !important;}
+			.kleo-main-header .navbar-collapse.collapse.show:not(.in){display: block !important;}
 			<?php } ?>
 
 			<?php if( defined( 'FUSION_BUILDER_VERSION' ) ){ ?>
@@ -1377,7 +1380,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			return str_replace( array(
 				'<style>',
 				'</style>'
-			), '', ob_get_clean());
+			), '', self::minify_css( ob_get_clean() ) );
 		}
 
 
@@ -1419,7 +1422,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			return str_replace( array(
 				'<style>',
 				'</style>'
-			), '', ob_get_clean());
+			), '', self::minify_css( ob_get_clean() ) );
 		}
 
 		/**
@@ -2039,6 +2042,128 @@ if ( 0 ) { ?><script><?php } ?>
 			$locale = json_encode( $params );
 
 			return apply_filters( 'ayecode_ui_select2_locale', trim( $locale ) );
+		}
+
+		/**
+		 * Time ago JS localize.
+		 *
+		 * @since 0.1.47
+		 *
+		 * @return string Time ago JS locale.
+		 */
+		public static function timeago_locale() {
+			$params = array(
+				'prefix_ago' => '',
+				'suffix_ago' => ' ' . _x( 'ago', 'time ago', 'aui' ),
+				'prefix_after' => _x( 'after', 'time ago', 'aui' ) . ' ',
+				'suffix_after' => '',
+				'seconds' => _x( 'less than a minute', 'time ago', 'aui' ),
+				'minute' => _x( 'about a minute', 'time ago', 'aui' ),
+				'minutes' => _x( '%d minutes', 'time ago', 'aui' ),
+				'hour' => _x( 'about an hour', 'time ago', 'aui' ),
+				'hours' => _x( 'about %d hours', 'time ago', 'aui' ),
+				'day' => _x( 'a day', 'time ago', 'aui' ),
+				'days' => _x( '%d days', 'time ago', 'aui' ),
+				'month' => _x( 'about a month', 'time ago', 'aui' ),
+				'months' => _x( '%d months', 'time ago', 'aui' ),
+				'year' => _x( 'about a year', 'time ago', 'aui' ),
+				'years' => _x( '%d years', 'time ago', 'aui' ),
+			);
+
+			$params = apply_filters( 'ayecode_ui_timeago_params', $params );
+
+			foreach ( (array) $params as $key => $value ) {
+				if ( ! is_scalar( $value ) ) {
+					continue;
+				}
+
+				$params[ $key ] = html_entity_decode( (string) $value, ENT_QUOTES, 'UTF-8' );
+			}
+
+			$locale = json_encode( $params );
+
+			return apply_filters( 'ayecode_ui_timeago_locale', trim( $locale ) );
+		}
+
+		/**
+		 * JavaScript Minifier
+		 *
+		 * @param $input
+		 *
+		 * @return mixed
+		 */
+		public static function minify_js($input) {
+			if(trim($input) === "") return $input;
+			return preg_replace(
+				array(
+					// Remove comment(s)
+					'#\s*("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')\s*|\s*\/\*(?!\!|@cc_on)(?>[\s\S]*?\*\/)\s*|\s*(?<![\:\=])\/\/.*(?=[\n\r]|$)|^\s*|\s*$#',
+					// Remove white-space(s) outside the string and regex
+					'#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/)|\/(?!\/)[^\n\r]*?\/(?=[\s.,;]|[gimuy]|$))|\s*([!%&*\(\)\-=+\[\]\{\}|;:,.<>?\/])\s*#s',
+					// Remove the last semicolon
+					'#;+\}#',
+					// Minify object attribute(s) except JSON attribute(s). From `{'foo':'bar'}` to `{foo:'bar'}`
+					'#([\{,])([\'])(\d+|[a-z_][a-z0-9_]*)\2(?=\:)#i',
+					// --ibid. From `foo['bar']` to `foo.bar`
+					'#([a-z0-9_\)\]])\[([\'"])([a-z_][a-z0-9_]*)\2\]#i'
+				),
+				array(
+					'$1',
+					'$1$2',
+					'}',
+					'$1$3',
+					'$1.$3'
+				),
+				$input);
+		}
+
+		/**
+		 * Minify CSS
+		 *
+		 * @param $input
+		 *
+		 * @return mixed
+		 */
+		public static function minify_css($input) {
+			if(trim($input) === "") return $input;
+			return preg_replace(
+				array(
+					// Remove comment(s)
+					'#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')|\/\*(?!\!)(?>.*?\*\/)|^\s*|\s*$#s',
+					// Remove unused white-space(s)
+					'#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/))|\s*+;\s*+(})\s*+|\s*+([*$~^|]?+=|[{};,>~]|\s(?![0-9\.])|!important\b)\s*+|([[(:])\s++|\s++([])])|\s++(:)\s*+(?!(?>[^{}"\']++|"(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')*+{)|^\s++|\s++\z|(\s)\s+#si',
+					// Replace `0(cm|em|ex|in|mm|pc|pt|px|vh|vw|%)` with `0`
+					'#(?<=[\s:])(0)(cm|em|ex|in|mm|pc|pt|px|vh|vw|%)#si',
+					// Replace `:0 0 0 0` with `:0`
+					'#:(0\s+0|0\s+0\s+0\s+0)(?=[;\}]|\!important)#i',
+					// Replace `background-position:0` with `background-position:0 0`
+					'#(background-position):0(?=[;\}])#si',
+					// Replace `0.6` with `.6`, but only when preceded by `:`, `,`, `-` or a white-space
+					'#(?<=[\s:,\-])0+\.(\d+)#s',
+					// Minify string value
+					'#(\/\*(?>.*?\*\/))|(?<!content\:)([\'"])([a-z_][a-z0-9\-_]*?)\2(?=[\s\{\}\];,])#si',
+					'#(\/\*(?>.*?\*\/))|(\burl\()([\'"])([^\s]+?)\3(\))#si',
+					// Minify HEX color code
+					'#(?<=[\s:,\-]\#)([a-f0-6]+)\1([a-f0-6]+)\2([a-f0-6]+)\3#i',
+					// Replace `(border|outline):none` with `(border|outline):0`
+					'#(?<=[\{;])(border|outline):none(?=[;\}\!])#',
+					// Remove empty selector(s)
+					'#(\/\*(?>.*?\*\/))|(^|[\{\}])(?:[^\s\{\}]+)\{\}#s'
+				),
+				array(
+					'$1',
+					'$1$2$3$4$5$6$7',
+					'$1',
+					':0',
+					'$1:0 0',
+					'.$1',
+					'$1$3',
+					'$1$2$4$5',
+					'$1$2$3',
+					'$1:0',
+					'$1$2'
+				),
+				$input);
 		}
 	}
 
