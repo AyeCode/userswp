@@ -430,22 +430,10 @@ function uwp_modal_register_form(form_id){
 }
 
 function uwp_switch_reg_form_init() {
-    jQuery( '#uwp_switch_reg_form_ajax' ).on( 'change', function( e ) {
+    jQuery( '#uwp-form-select-ajax a' ).on( 'click', function( e ) {
         e.preventDefault(e);
-        var form_id = jQuery(this).val();
+        var form_id = jQuery(this).attr('data-form_id');
         uwp_modal_register_form(form_id);
-    });
-
-    jQuery( '#uwp_switch_reg_form' ).on( 'change', function( e ) {
-        e.preventDefault(e);
-        var current_url = jQuery(this).val();
-        // current_url = window.location.href;
-        // if (current_url.search.indexOf('?') > -1){
-        //     current_url += '&uwp_form_id=1'+form_id;
-        // }else{
-        //     current_url += '?uwp_form_id=1'+form_id;
-        // }
-        window.location.href = current_url;
     });
 }
 

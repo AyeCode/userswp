@@ -265,7 +265,11 @@ function uwp_init_advanced_settings() {
 function uwp_init_tooltips() {
 
     // we create, then destroy then create so we can ajax load and then call this function with impunity.
-    jQuery('.uwp-help-tip').tooltip({
+    var $tooltips = jQuery('.uwp-help-tip').tooltip();
+
+    var $method = uwp_tooltip_version() >= 4 ? 'dispose' : 'destroy';
+
+    $tooltips.tooltip($method).tooltip({
         content: function () {
             return jQuery(this).prop('title');
         },
@@ -273,11 +277,12 @@ function uwp_init_tooltips() {
         position: {
             my: 'center top',
             at: 'center bottom+10',
-            collision: 'flipfit',
+            collision: 'flipfit'
         },
         show: null,
         close: function (event, ui) {
             ui.tooltip.hover(
+
                 function () {
                     jQuery(this).stop(true).fadeTo(400, 1);
                 },
@@ -289,6 +294,17 @@ function uwp_init_tooltips() {
                 });
         }
     });
+}
+
+/**
+ * Get Bootstrap tooltip version.
+ */
+function uwp_tooltip_version() {
+    var ttv = 0;
+    if (typeof jQuery.fn === 'object' && typeof jQuery.fn.tooltip === 'function' && typeof jQuery.fn.tooltip.Constructor === 'function' && typeof jQuery.fn.tooltip.Constructor.VERSION != 'undefined') {
+        ttv = parseFloat(jQuery.fn.tooltip.Constructor.VERSION);
+    }
+    return ttv;
 }
 
 function uwp_get_spin_loader(loader_obj) {
