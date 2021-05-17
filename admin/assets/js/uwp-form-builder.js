@@ -7,7 +7,7 @@ jQuery(document).ready(function () {
         var field_type = jQuery(this).data('field-type');
         var type_key = jQuery(this).data("field-type-key");
         var form_type = jQuery(this).closest('#uwp-form-builder-tab, #uwp-form-builder-tab-predefined').find('#form_type').val();
-        var id = 'new'+jQuery(".field_row_main ul.core li:last").index();
+        var id = 'new'+jQuery(".field_row_main ul.core").children('li:last-child').index() + 1;
         var manage_field_type = jQuery(this).closest('#uwp-available-fields').find(".manage_field_type").val();
         var field_data_type = jQuery(this).data('data_type');
         var custom_type = jQuery(this).data("field-custom-type");

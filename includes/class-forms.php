@@ -707,7 +707,9 @@ class UsersWP_Forms {
 				$wp_roles = wp_roles();
 				if ( $wp_roles->is_role( $chosen_role ) && in_array( $chosen_role, array_keys( $user_roles ) ) ) {
 					$new_user = get_userdata( $user_id );
-					$new_user->set_role( $chosen_role );
+					if($new_user){
+						$new_user->set_role( $chosen_role );
+                    }
 				}
 			}
 		}
@@ -756,6 +758,13 @@ class UsersWP_Forms {
 		}
 
 		do_action( 'uwp_after_custom_fields_save', 'register', $data, $result, $user_id );
+
+		// Unset post data to empty the form on submit
+		foreach($data as $key=>$value){
+		    if(isset($key)){
+		        unset($_POST[$key]);
+            }
+        }
 
 		$reg_action = uwp_get_register_form_by($form_id, 'reg_action');
 		if(!$reg_action){
