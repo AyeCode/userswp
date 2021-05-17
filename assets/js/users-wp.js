@@ -459,6 +459,7 @@ function uwp_modal_register_form_process(){
 
                 if(data.data.message){
                     jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data.message);
+                    jQuery(".modal-content form.uwp-registration-form").trigger('reset');
                     // Show success message for 1 second before redirecting.
                     setTimeout(function(){
                         if(data.data.redirect){

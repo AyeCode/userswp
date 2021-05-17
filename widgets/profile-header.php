@@ -53,7 +53,7 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
 	            'user_id'  => array(
 		            'title' => __('User ID:', 'userswp'),
 		            'desc' => __('Leave blank to use current user ID. For profile page it will take displayed user ID. Input specific user ID for other pages.', 'userswp'),
-		            'type' => 'number',
+		            'type' => 'text',
 		            'desc_tip' => true,
 		            'default'  => '',
 		            'advanced' => true
