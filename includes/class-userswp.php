@@ -517,6 +517,7 @@ final class UsersWP {
 		add_filter( 'uwp_update_usermeta', array( $instance, 'modify_datepicker_value_on_update' ), 10, 3 );
 		add_filter( 'uwp_get_usermeta', array( $instance, 'modify_datepicker_value_on_get' ), 10, 4 );
 		add_action( 'get_user_metadata', array( $instance, 'dynamically_add_user_meta' ), 10, 4 );
+		add_action( 'wpf_get_user_meta', array( $instance, 'wpf_add_user_meta' ), 10, 2 );
 	}
 
 	public function load_files_actions_and_filters( $instance ) {
