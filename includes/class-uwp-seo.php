@@ -8,6 +8,10 @@ class UsersWP_Seo {
 	    add_action('pre_get_document_title', array($this,'output_title'));
 	    add_action('uwp_profile_options', array($this,'profile_options'));
 
+	    // Compatibility with SEOPress plugin
+	    add_action( 'seopress_titles_title', array( $this, 'get_title' ) );
+	    add_action( 'seopress_titles_desc', array( $this, 'get_description' ) );
+
 	    if(UsersWP_Seo::has_yoast()) {
 		    if ( UsersWP_Seo::has_yoast_14() ) {
 			    add_filter( 'wpseo_opengraph_title', array( $this, 'get_title' ), 10);
