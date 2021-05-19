@@ -158,7 +158,12 @@
     margin: 0;
   }
 
-  .select2-container{ width: 100% !important;}
+  .select2-container{
+    width: 100% !important;
+    .select2-search--inline .select2-search__field {
+      min-width: 300px;
+    }
+  }
 
   #uwp-selected-fields {
     .li-settings{

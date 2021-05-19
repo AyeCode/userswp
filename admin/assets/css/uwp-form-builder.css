@@ -113,6 +113,8 @@
     margin: 0; }
   #uwp_form_builder_container .select2-container {
     width: 100% !important; }
+    #uwp_form_builder_container .select2-container .select2-search--inline .select2-search__field {
+      min-width: 300px; }
   #uwp_form_builder_container #uwp-selected-fields .li-settings {
     position: relative; }
   #uwp_form_builder_container #uwp-selected-fields .field_frm {

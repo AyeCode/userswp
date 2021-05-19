@@ -39,6 +39,14 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
                     'default'     => '',
                     'advanced'    => false
                 ),
+                'user_id'  => array(
+	                'title' => __('User ID:', 'userswp'),
+	                'desc' => __('Leave blank to use current user ID. For profile page it will take displayed user ID. Input specific user ID for other pages.', 'userswp'),
+	                'type' => 'text',
+	                'desc_tip' => true,
+	                'default'  => '',
+	                'advanced' => true
+                ),
                 'css_class'  => array(
                     'type' => 'text',
                     'title' => __('Extra class:', 'userswp'),
@@ -67,8 +75,20 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
 	 */
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 
-        global $wpdb;
-        $user = uwp_get_displayed_user();
+        global $wpdb, $post;
+
+	    if('post_author' == $args['user_id'] && $post instanceof WP_Post){
+		    $user = get_userdata($post->post_author);
+		    $args['user_id'] = $post->post_author;
+	    } else if(isset($args['user_id']) && (int)$args['user_id'] > 0){
+		    $user = get_userdata($args['user_id']);
+	    } else {
+		    $user = uwp_get_displayed_user();
+	    }
+
+	    if(empty($args['user_id']) && !empty($user->ID)){
+		    $args['user_id'] = $user->ID;
+	    }
 
         if(empty($user)){
             return '';

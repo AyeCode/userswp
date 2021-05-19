@@ -353,7 +353,7 @@ A user has been registered recently on your website.
   <a href="[#author_link#]"><img src="[#author_image_url#]" class="rounded-circle shadow border border-white border-width-4 mr-3" width="60" height="60" alt="[#author_name#]"></a>
   <div class="media-body">
     <h5 class="mt-0">Author: <a href="[#author_link#]">[#author_name#]</a></h5>
-    [uwp_button_group]
+    [uwp_button_group user_id="post_author"]
     <p>[#author_bio#]</p>
   </div>
 </div>'

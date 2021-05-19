@@ -164,7 +164,7 @@ class UsersWP_Seo {
         $meta_title = !empty($meta_title) ? $meta_title : $this->get_default_meta_title();
         $meta_title = $this->replace_tags($meta_title);
 
-        return $meta_title;
+        return sanitize_text_field($meta_title);
     }
 
     public function get_meta_description() {
@@ -173,7 +173,7 @@ class UsersWP_Seo {
         $meta_description = !empty($meta_description) ? $meta_description : $this->get_default_meta_description();
         $meta_description = $this->replace_tags($meta_description);
 
-        return $meta_description;
+        return sanitize_text_field($meta_description);
     }
 
     public function output_title($title) {
@@ -213,7 +213,7 @@ class UsersWP_Seo {
             $title = $this->get_meta_title();
         }
 
-        return apply_filters('uwp_seo_profile_meta_title', sanitize_text_field($title));
+        return apply_filters('uwp_seo_profile_meta_title', $title);
     }
 
     public function get_description($description = '') {
@@ -225,9 +225,7 @@ class UsersWP_Seo {
             $description = $this->get_meta_description();
         }
 
-	    $description = apply_filters('uwp_seo_profile_meta_description', $description);
-
-        return sanitize_text_field($description);
+        return apply_filters('uwp_seo_profile_meta_description', substr($description, 0, 50));
     }
 
     public function get_opengraph_url($url) {
