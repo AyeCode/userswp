@@ -1,3 +1,7 @@
+= 0.1.48 =
+* Tooltips in wp-admin have wrong margin offset - FIXED
+* Inline CSS and JS is now minified to reduce size - CHANGED
+
 = 0.1.47 =
 * Timeago labels are not translatable - FIXED
 * Kleo theme fix for mobile menu in some situations not showing - FIXED

@@ -46,6 +46,7 @@ class UsersWP_Admin {
 		add_action( 'bulk_actions-users', array( $this, 'users_bulk_actions' ) );
 		add_action( 'handle_bulk_actions-users', array( $this, 'handle_users_bulk_actions' ), 10, 3 );
 		add_filter( 'init', array( $this, 'process_user_actions' ) );
+		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
 
 		add_action( 'wp_ajax_uwp_ajax_create_register', array( $this, 'process_create_register_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_update_register', array( $this, 'process_update_register_form' ) );
@@ -201,6 +202,7 @@ class UsersWP_Admin {
 				'txt_use_image'                      => __( 'Use image', 'userswp' ),
 				'delete_register_form'               => __( 'Are you sure you wish to delete this form?', 'userswp' ),
 				'ask_register_form_title'            => __( 'Enter register form title', 'userswp' ),
+				'form_updated_msg'                   => __( 'Updated! Reloading page...', 'userswp' )
 			);
 			wp_localize_script( "userswp_admin", 'uwp_admin_ajax', $ajax_cons_data );
 		}
@@ -799,6 +801,27 @@ class UsersWP_Admin {
 				wp_redirect( add_query_arg( 'update', 'uwp_activate_user', admin_url( 'users.php' ) ) );
 			}
 		}
+	}
+
+	/**
+	 * Show row meta on the plugin screen.
+	 *
+	 * @param	mixed $links Plugin Row Meta
+	 * @param	mixed $file  Plugin Base file
+	 * @return	array
+	 */
+	public static function plugin_row_meta( $links, $file ) {
+		if ( USERSWP_PLUGIN_BASENAME == $file ) {
+			$row_meta = array(
+				'docs'    => '<a href="' . esc_url( 'https://docs.userswp.io/' ) . '" aria-label="' . esc_attr__( 'View UsersWP Documentation', 'userswp' ) . '">' . esc_html__( 'Docs', 'userswp' ) . '</a>',
+				'support' => '<a href="' . esc_url( 'https://userswp.io/support/' ) . '" aria-label="' . esc_attr__( 'Visit UsersWP support', 'userswp' ) . '">' . esc_html__( 'Support', 'userswp' ) . '</a>',
+				'translation' => '<a href="' . esc_url( 'https://userswp.io/translate/projects' ) . '" aria-label="' . esc_attr__( 'View translations', 'userswp' ) . '">' . esc_html__( 'Translations', 'userswp' ) . '</a>',
+			);
+
+			return array_merge( $links, $row_meta );
+		}
+
+		return (array) $links;
 	}
 
 	public function process_create_register_form() {

@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '4e2d6e3fa06d62f8a5c69fe3430dbec7151067ed',
+    'reference' => '2b9161cc641a7876d84ca38ef1c690cd90cc0347',
     'name' => 'uswerwp/userswp',
   ),
   'versions' => 
@@ -22,12 +22,12 @@
     ),
     'ayecode/wp-ayecode-ui' => 
     array (
-      'pretty_version' => '0.1.47',
-      'version' => '0.1.47.0',
+      'pretty_version' => '0.1.48',
+      'version' => '0.1.48.0',
       'aliases' => 
       array (
       ),
-      'reference' => '4bb5b0c46c494155ba402c379dc7a50cfb7b707e',
+      'reference' => '1042a6b6bebd3f3dcfb063e252b0410f3efe34d2',
     ),
     'ayecode/wp-font-awesome-settings' => 
     array (
@@ -40,12 +40,12 @@
     ),
     'ayecode/wp-super-duper' => 
     array (
-      'pretty_version' => '1.0.25',
-      'version' => '1.0.25.0',
+      'pretty_version' => '1.0.26',
+      'version' => '1.0.26.0',
       'aliases' => 
       array (
       ),
-      'reference' => '046b2b3ee8f765322bf74725554aa777b6e4979b',
+      'reference' => '9f0c4fc4ff5fc3ffbe3346ae9964ae11b7032131',
     ),
     'composer/installers' => 
     array (
@@ -78,7 +78,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '4e2d6e3fa06d62f8a5c69fe3430dbec7151067ed',
+      'reference' => '2b9161cc641a7876d84ca38ef1c690cd90cc0347',
     ),
   ),
 );
