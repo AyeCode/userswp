@@ -17,7 +17,7 @@ Light weight frontend user registration and login plugin.
 
 While BuddyPress, Ultimate Member, Profile Builder and similar plugins are excellent, we wanted to create something much lighter and simpler to use.
 
-Something that could be gentle on your server resources. With less options to make it easy to setup, 100% compatible with page buidlers and more hooks to make it infinitely extensible for developers.
+Something that could be gentle on your server resources. With less options to make it easy to setup, 100% compatible with page builders and more hooks to make it infinitely extensible for developers.
 
 Today UsersWP is by far the simplest solution available to manage users on WordPress. It takes seconds to setup, it is super fast and it's perfect to create a community of users within your website.
 

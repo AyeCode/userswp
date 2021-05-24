@@ -882,11 +882,11 @@ class UsersWP_Admin {
 		$form_id = ! empty( $_POST['manage_field_form_id'] ) ? (int)$_POST['manage_field_form_id'] : '';
 		$form_title = ! empty( $_POST['form_title'] ) ? sanitize_text_field($_POST['form_title']) : __( 'Form', 'userswp' );
 		$user_role = ! empty( $_POST['user_role'] ) ? sanitize_text_field($_POST['user_role']) : '';
-		$action = ! empty( $_POST['reg_action'] ) ? sanitize_text_field($_POST['reg_action']) : 'auto_approve';
+		$action = ! empty( $_POST['reg_action'] ) ? sanitize_text_field($_POST['reg_action']) : uwp_get_option( 'uwp_registration_action', 'auto_approve' );
 		$redirect_to = (int) $_POST['redirect_to'];
 		$custom_url = ! empty( $_POST['custom_url'] ) ? sanitize_text_field($_POST['custom_url']) : '';
-		$gdpr_page = ! empty( $_POST['gdpr_page'] ) ? (int)$_POST['gdpr_page'] : '';
-		$tos_page = ! empty( $_POST['tos_page'] ) ? (int)$_POST['tos_page'] : '';
+		$gdpr_page = ! empty( $_POST['gdpr_page'] ) ? (int)$_POST['gdpr_page'] : (int)uwp_get_option('register_gdpr_page', false);
+		$tos_page = ! empty( $_POST['tos_page'] ) ? (int)$_POST['tos_page'] : (int)uwp_get_option('register_terms_page', false);
 
 		$status  = false;
 		$message = __( 'Something went wrong. Please try again.', 'userswp' );

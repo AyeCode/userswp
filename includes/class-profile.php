@@ -1290,7 +1290,6 @@ class UsersWP_Profile {
 	public function restrict_attachment_display( $wp_query ) {
 		if ( ! is_admin() ) {
 			if ( ! current_user_can( 'manage_options' ) ) {
-				//$wp_query['author'] = get_current_user_id();
 				$wp_query->set( 'author', get_current_user_id() );
 			}
 		}
