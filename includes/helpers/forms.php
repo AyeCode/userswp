@@ -462,7 +462,7 @@ function uwp_get_unique_custom_fields($fields, $key = 'htmlvar_name'){
 	return $temp_array;
 }
 
-function uwp_get_default_form_fields(){
+function uwp_get_default_form_data(){
 	$fields = array();
 	$i = 1;
 
@@ -474,5 +474,19 @@ function uwp_get_default_form_fields(){
 		}
 	}
 
-	return $fields;
+	$data = array(
+		array(
+			'id' => 1,
+			'title' => __('Default','userswp'),
+			'user_role' => get_option('default_role'),
+			'reg_action' => uwp_get_option( 'uwp_registration_action', 'auto_approve' ),
+			'redirect_to' => (int) uwp_get_option( 'register_redirect_to', - 1 ),
+			'custom_url' => uwp_get_option( 'register_redirect_custom_url', home_url() ),
+			'gdpr_page' => (int) uwp_get_option('register_gdpr_page', false),
+			'tos_page' => (int) uwp_get_option('register_terms_page', false),
+			'fields' => $fields
+		)
+	);
+
+	return $data;
 }

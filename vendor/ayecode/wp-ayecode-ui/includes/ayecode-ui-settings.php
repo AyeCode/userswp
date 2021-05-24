@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.47';
+		public $version = '0.1.48';
 
 		/**
 		 * Class textdomain.
@@ -286,6 +286,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				}
 				.blocks-widgets-container .bsui *{
 					box-sizing: border-box;
+				}
+				.bs-tooltip-top .arrow{
+					margin-left:0px;
 				}
                 ";
 

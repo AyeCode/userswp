@@ -17,7 +17,7 @@ Light weight frontend user registration and login plugin.
 
 While BuddyPress, Ultimate Member, Profile Builder and similar plugins are excellent, we wanted to create something much lighter and simpler to use.
 
-Something that could be gentle on your server resources. With less options to make it easy to setup, 100% compatible with page buidlers and more hooks to make it infinitely extensible for developers.
+Something that could be gentle on your server resources. With less options to make it easy to setup, 100% compatible with page builders and more hooks to make it infinitely extensible for developers.
 
 Today UsersWP is by far the simplest solution available to manage users on WordPress. It takes seconds to setup, it is super fast and it's perfect to create a community of users within your website.
 
@@ -138,8 +138,10 @@ No questions so far, but don't hesitate to ask!
 * Show review attachments in reviews tab for GD listing reviews - CHANGED
 * Multiple Registration forms with different fields configurations - ADDED
 * Author box social links was not showing of post author if placed on sidebar - FIXED
-* AyeCode UI updated to v0.1.47 - CHANGED
-* Super Duper updated to v1.0.25 - CHANGED
+* Compatibility with WP Fusion for using UWP user meta - ADDED
+* Compatibility with SEOPress plugin to use UWP setting for profile page meta title and meta description- ADDED
+* AyeCode UI updated to v0.1.48 - CHANGED
+* Super Duper updated to v1.0.26 - CHANGED
 
 = 1.2.2.16 =
 * Argument to allow showing users list of specific roles - ADDED

@@ -189,6 +189,7 @@ jQuery(window).on('load', function () {
             response = JSON.parse(response);
             uwp_remove_spin_loader(btn);
             if (response.status) {
+                btn.after('<b class="ml-1 text-success">'+uwp_admin_ajax.form_updated_msg+'</b>');
                 location.reload();
             } else {
                 console.log(response.message);

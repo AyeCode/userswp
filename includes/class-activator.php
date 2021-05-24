@@ -198,13 +198,7 @@ class UsersWP_Activator {
             'wp_new_user_notification_email_content_admin' => UsersWP_Defaults::wp_new_user_notification_email_content_admin(),
             'user_post_counts_cpts' => array('post'),
             'login_user_post_counts_cpts' => array('post'),
-            'multiple_registration_forms' => array(
-	            array(
-		            'id' => 1,
-		            'title' => __('Default','userswp'),
-		            'fields' => uwp_get_default_form_fields()
-	            )
-            )
+            'multiple_registration_forms' => uwp_get_default_form_data(),
         );
 
         foreach ($options as $option => $value){
