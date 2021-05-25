@@ -343,8 +343,6 @@ class UsersWP_Form_Builder {
                                         </select>
                                     </div>
                                     <div class="d-inline-block align-top">
-                                        <button class="btn btn-sm btn-info register-show-options" type="button"
-                                                id="show_options"><?php _e( 'Form Options', 'userswp' ); ?></button>
 										<?php if ( ! empty( $current_form ) && $current_form > 1 ) { ?>
                                             <button data-id="<?php echo $current_form; ?>"
                                                     class="btn btn-sm btn-danger register-form-remove" type="button"
@@ -360,7 +358,7 @@ class UsersWP_Form_Builder {
                         </table>
 					<?php } ?>
 
-                    <table class="form-table bsui userswp" id="uwp-form-more-options" style="display:none;">
+                    <table class="form-table bsui userswp" id="uwp-form-more-options">
                         <tr>
                             <th><?php _e( 'Title:', 'userswp' ); echo uwp_help_tip(__('Title of the form', 'userswp')) ?></th>
                             <td>
@@ -711,26 +709,6 @@ class UsersWP_Form_Builder {
 				'extra_fields'       => array(
 					'date_range' => 'c-100:c+0'
 				)
-			)
-		);
-
-		// User role
-		$custom_fields['user_role'] = array(
-			'field_type' => 'select',
-			'class'      => 'uwp-user_role',
-			'field_icon' => 'fas fa-user-tag',
-			'site_title' => __( 'User Role', 'userswp' ),
-			'help_text'  => __( 'User will get role selected in value.', 'userswp' ),
-			'defaults'   => array(
-				'admin_title'   => 'User Role',
-				'site_title'    => 'User Role',
-				'htmlvar_name'  => 'user_role',
-				'is_active'     => 1,
-				'default_value' => '',
-				'is_required'   => 0,
-				'required_msg'  => '',
-				'field_icon'    => 'fas fa-user-tag',
-				'css_class'     => ''
 			)
 		);
 
@@ -2104,21 +2082,6 @@ class UsersWP_Form_Builder {
 					_e( 'A full country list will be shown', 'userswp' );
 					?>
 
-				<?php } elseif ( isset( $field_type_key ) && $field_type_key == 'user_role' ) {
-					$user_roles = uwp_get_user_roles();
-					?>
-                    <select name="option_values" id="option_values" class="aui-select2">
-						<?php
-						if ( ! empty( $user_roles ) && is_array( $user_roles ) ) {
-							foreach ( $user_roles as $key => $user_role ) {
-								?>
-                                <option <?php selected( $value, $key ); ?>
-                                        value="<?php echo $key; ?>"><?php echo $user_role; ?></option>
-								<?php
-							}
-						}
-						?>
-                    </select>
 				<?php } else { ?>
                     <input type="text" name="option_values" id="option_values" value="<?php echo $value; ?>"/>
 				<?php } ?>

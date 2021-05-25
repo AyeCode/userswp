@@ -463,8 +463,8 @@ function uwp_get_unique_custom_fields($fields, $key = 'htmlvar_name'){
 }
 
 function uwp_get_default_form_data(){
-	$fields = array();
-	$i = 1;
+	$fields = array();$i = 1;
+	$user_role = get_option('default_role');
 
 	$account_fields = UsersWP_Activator::uwp_default_custom_fields_account();
 	if(!empty($account_fields)){
@@ -474,11 +474,23 @@ function uwp_get_default_form_data(){
 		}
 	}
 
+	$reg_fields = get_register_form_fields();
+
+	if ( ! empty( $reg_fields ) && is_array( $reg_fields ) ) {
+		foreach ( $reg_fields as $key => $field ) {
+			if ( isset( $field->htmlvar_name ) && ! empty( $field->htmlvar_name ) && $field->htmlvar_name == 'user_role' && ! empty( $field->option_values ) ) {
+				$user_role = $field->option_values;
+				$obj = new UsersWP_Form_Builder();
+				$obj->admin_form_field_delete( $field->id, true, 1 );
+			}
+		}
+	}
+
 	$data = array(
 		array(
 			'id' => 1,
 			'title' => __('Default','userswp'),
-			'user_role' => get_option('default_role'),
+			'user_role' => $user_role,
 			'reg_action' => uwp_get_option( 'uwp_registration_action', 'auto_approve' ),
 			'redirect_to' => (int) uwp_get_option( 'register_redirect_to', - 1 ),
 			'custom_url' => uwp_get_option( 'register_redirect_custom_url', home_url() ),

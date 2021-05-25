@@ -136,12 +136,6 @@ jQuery(window).on('load', function () {
         }
     });
 
-    jQuery(document).on('click', '.register-show-options', function ($) {
-        jQuery( "#uwp-form-more-options" ).toggle( "fast", function() {
-            // Animation complete.
-        });
-    });
-
     jQuery(document).on('click', '.register-form-create', function ($) {
         var current_obj = jQuery(this);
         var nonce = current_obj.attr('data-nonce');
