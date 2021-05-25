@@ -657,12 +657,6 @@ class UsersWP_Templates {
 
 		$field = apply_filters( "uwp_form_input_field_{$field->field_type}", $field, $value, $form_type );
 
-		$exclude_fields = apply_filters('uwp_form_exclude_form_fields', array('user_role'));
-
-		if ( ! empty( $field->htmlvar_name ) && in_array( $field->htmlvar_name, $exclude_fields ) ) {
-			return;
-		}
-
 		$html = apply_filters( "uwp_form_input_html_{$field->field_type}", "", $field, $value, $form_type );
 
 		if ( empty( $html ) ) {

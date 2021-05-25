@@ -690,16 +690,6 @@ class UsersWP_Forms {
 
 		$user_role = uwp_get_register_form_by($form_id, 'user_role');
 
-		$fields = get_register_form_fields($form_id);
-
-		if ( ! empty( $fields ) && is_array( $fields ) ) {
-			foreach ( $fields as $key => $field ) {
-				if ( isset( $field->htmlvar_name ) && ! empty( $field->htmlvar_name ) && $field->htmlvar_name == 'user_role' && ! empty( $field->option_values ) ) {
-					$user_role = $field->option_values;
-				}
-			}
-		}
-
 		if ( isset( $user_role ) && ! empty( $user_role ) ) {
 			$user_roles  = uwp_get_user_roles();
 			$chosen_role = strtolower( $user_role );
@@ -2708,7 +2698,7 @@ class UsersWP_Forms {
 
 				<?php
 				$site_title = uwp_get_form_label( $field );
-				if ( ! is_admin() ) { ?>
+				if ( ! is_admin() && !wp_doing_ajax() ) { ?>
                     <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
 						<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
 						<?php if ( $field->is_required ) {
@@ -2899,7 +2889,7 @@ class UsersWP_Forms {
 						'name'       => $field->htmlvar_name,
 						'type'       => "radio",
 						'title'      => $site_title,
-						'label'      => is_admin() ? '' : $site_title . $required,
+						'label'      => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 						'label_type' => 'top',
 						'class'      => '',
 						'wrap_class' => isset( $field->css_class ) ? $field->css_class : '',
@@ -3083,7 +3073,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() ? '' : $site_title . $required,
+					'label'           => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 					'step'            => $step,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
@@ -3181,7 +3171,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() ? '' : $site_title . $required,
+					'label'           => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 					'rows'            => '4',
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
@@ -3266,7 +3256,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() ? '' : $site_title . $required,
+					'label'           => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 					'rows'            => 5,
 					'wysiwyg'         => true,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
@@ -3387,7 +3377,7 @@ class UsersWP_Forms {
 					'required'        => $field->is_required,
 					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : __( 'Please enter a valid URL including https://', 'userswp' ),
 					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() ? '' : $site_title . $required,
+					'label'           => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
@@ -3482,7 +3472,7 @@ class UsersWP_Forms {
 					'value'       => $value,
 					'required'    => $field->is_required,
 					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() ? '' : $site_title . $required,
+					'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
 					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 				) );
@@ -3580,7 +3570,7 @@ class UsersWP_Forms {
 					'value'       => $value,
 					'required'    => $field->is_required,
 					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() ? '' : $site_title . $required,
+					'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
 					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 				) );
@@ -3663,7 +3653,7 @@ class UsersWP_Forms {
 					'value'       => $value,
 					'required'    => $field->is_required,
 					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() ? '' : $site_title . $required,
+					'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
 					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 				) );
@@ -3983,7 +3973,7 @@ class UsersWP_Forms {
 
 				<?php
 				$site_title = uwp_get_form_label( $field );
-				if ( ! is_admin() ) { ?>
+				if ( ! is_admin() && !wp_doing_ajax() ) { ?>
                     <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
 						<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
 						<?php if ( $field->is_required ) {
@@ -4079,7 +4069,7 @@ class UsersWP_Forms {
 						'value'       => $value,
 						'required'    => $field->is_required,
 						'help_text'   => uwp_get_field_description( $field ),
-						'label'       => is_admin() ? '' : $site_title . $required,
+						'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 						'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					) );
 				} else {
@@ -4162,7 +4152,7 @@ class UsersWP_Forms {
 						'value'       => $value,
 						'required'    => $field->is_required,
 						'help_text'   => uwp_get_field_description( $field ),
-						'label'       => is_admin() ? '' : $site_title . $required,
+						'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 						'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 					) );
 				} else {
