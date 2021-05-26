@@ -59,7 +59,7 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
 
         global $post, $wpdb;
 
-        if(!$post->ID){
+        if(empty($post->ID)){
             return '';
         }
 

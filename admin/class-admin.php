@@ -46,6 +46,7 @@ class UsersWP_Admin {
 		add_action( 'bulk_actions-users', array( $this, 'users_bulk_actions' ) );
 		add_action( 'handle_bulk_actions-users', array( $this, 'handle_users_bulk_actions' ), 10, 3 );
 		add_filter( 'init', array( $this, 'process_user_actions' ) );
+		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
 
 		add_action( 'wp_ajax_uwp_ajax_create_register', array( $this, 'process_create_register_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_update_register', array( $this, 'process_update_register_form' ) );
@@ -201,6 +202,7 @@ class UsersWP_Admin {
 				'txt_use_image'                      => __( 'Use image', 'userswp' ),
 				'delete_register_form'               => __( 'Are you sure you wish to delete this form?', 'userswp' ),
 				'ask_register_form_title'            => __( 'Enter register form title', 'userswp' ),
+				'form_updated_msg'                   => __( 'Updated! Reloading page...', 'userswp' )
 			);
 			wp_localize_script( "userswp_admin", 'uwp_admin_ajax', $ajax_cons_data );
 		}
@@ -524,7 +526,7 @@ class UsersWP_Admin {
 		global $wpdb;
 		$table_name      = uwp_get_table_prefix() . 'uwp_form_fields';
 		$form_id = uwp_get_register_form_id( $user->ID );
-		$excluded_fields = apply_filters( 'uwp_exclude_edit_profile_fields', array('bio', 'register_gdpr', 'register_tos', 'user_role') );
+		$excluded_fields = apply_filters( 'uwp_exclude_edit_profile_fields', array('bio', 'register_gdpr', 'register_tos') );
 		$query           = $wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' AND form_id = %d", $form_id);
 		if ( is_array( $excluded_fields ) && count( $excluded_fields ) > 0 ) {
 			$query .= " AND htmlvar_name NOT IN ('" . implode( "','", $excluded_fields ) . "')";
@@ -801,6 +803,27 @@ class UsersWP_Admin {
 		}
 	}
 
+	/**
+	 * Show row meta on the plugin screen.
+	 *
+	 * @param	mixed $links Plugin Row Meta
+	 * @param	mixed $file  Plugin Base file
+	 * @return	array
+	 */
+	public static function plugin_row_meta( $links, $file ) {
+		if ( USERSWP_PLUGIN_BASENAME == $file ) {
+			$row_meta = array(
+				'docs'    => '<a href="' . esc_url( 'https://docs.userswp.io/' ) . '" aria-label="' . esc_attr__( 'View UsersWP Documentation', 'userswp' ) . '">' . esc_html__( 'Docs', 'userswp' ) . '</a>',
+				'support' => '<a href="' . esc_url( 'https://userswp.io/support/' ) . '" aria-label="' . esc_attr__( 'Visit UsersWP support', 'userswp' ) . '">' . esc_html__( 'Support', 'userswp' ) . '</a>',
+				'translation' => '<a href="' . esc_url( 'https://userswp.io/translate/projects' ) . '" aria-label="' . esc_attr__( 'View translations', 'userswp' ) . '">' . esc_html__( 'Translations', 'userswp' ) . '</a>',
+			);
+
+			return array_merge( $links, $row_meta );
+		}
+
+		return (array) $links;
+	}
+
 	public function process_create_register_form() {
 
 		$type       = ! empty( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : '';
@@ -859,11 +882,11 @@ class UsersWP_Admin {
 		$form_id = ! empty( $_POST['manage_field_form_id'] ) ? (int)$_POST['manage_field_form_id'] : '';
 		$form_title = ! empty( $_POST['form_title'] ) ? sanitize_text_field($_POST['form_title']) : __( 'Form', 'userswp' );
 		$user_role = ! empty( $_POST['user_role'] ) ? sanitize_text_field($_POST['user_role']) : '';
-		$action = ! empty( $_POST['reg_action'] ) ? sanitize_text_field($_POST['reg_action']) : 'auto_approve';
+		$action = ! empty( $_POST['reg_action'] ) ? sanitize_text_field($_POST['reg_action']) : uwp_get_option( 'uwp_registration_action', 'auto_approve' );
 		$redirect_to = (int) $_POST['redirect_to'];
 		$custom_url = ! empty( $_POST['custom_url'] ) ? sanitize_text_field($_POST['custom_url']) : '';
-		$gdpr_page = ! empty( $_POST['gdpr_page'] ) ? (int)$_POST['gdpr_page'] : '';
-		$tos_page = ! empty( $_POST['tos_page'] ) ? (int)$_POST['tos_page'] : '';
+		$gdpr_page = ! empty( $_POST['gdpr_page'] ) ? (int)$_POST['gdpr_page'] : (int)uwp_get_option('register_gdpr_page', false);
+		$tos_page = ! empty( $_POST['tos_page'] ) ? (int)$_POST['tos_page'] : (int)uwp_get_option('register_terms_page', false);
 
 		$status  = false;
 		$message = __( 'Something went wrong. Please try again.', 'userswp' );

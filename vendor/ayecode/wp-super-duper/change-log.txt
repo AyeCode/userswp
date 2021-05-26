@@ -1,3 +1,6 @@
+= 1.0.26 =
+* Error on setting array option value in block editor - FIXED
+
 = 1.0.25 =
 * PHP Warning if default field value not set - FIXED
 

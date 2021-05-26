@@ -136,12 +136,6 @@ jQuery(window).on('load', function () {
         }
     });
 
-    jQuery(document).on('click', '.register-show-options', function ($) {
-        jQuery( "#uwp-form-more-options" ).toggle( "fast", function() {
-            // Animation complete.
-        });
-    });
-
     jQuery(document).on('click', '.register-form-create', function ($) {
         var current_obj = jQuery(this);
         var nonce = current_obj.attr('data-nonce');
@@ -189,6 +183,7 @@ jQuery(window).on('load', function () {
             response = JSON.parse(response);
             uwp_remove_spin_loader(btn);
             if (response.status) {
+                btn.after('<b class="ml-1 text-success">'+uwp_admin_ajax.form_updated_msg+'</b>');
                 location.reload();
             } else {
                 console.log(response.message);

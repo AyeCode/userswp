@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.25";
+		public $version = "1.0.26";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -1304,6 +1304,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$attributes       = '';
 				if ( ! empty( $attributes_array ) ) {
 					foreach ( $attributes_array as $key => $value ) {
+						if ( is_array( $value ) ) {
+							$value = implode( ",", $value );
+						}
 						$attributes .= " " . sanitize_title_with_dashes( $key ) . "='" . wp_slash( $value ) . "' ";
 					}
 				}

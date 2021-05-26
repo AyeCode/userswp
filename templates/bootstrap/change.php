@@ -12,7 +12,7 @@ do_action( 'uwp_template_before', 'change' ); ?>
 					<?php
 					do_action( 'uwp_template_form_title_before', 'change' );
 
-					$form_title = ! empty( $args['form_title'] ) ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Change Password', 'userswp' );
+					$form_title = ! empty( $args['form_title'] ) || $args['form_title']=='0' ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Change Password', 'userswp' );
 					$form_title = apply_filters( 'uwp_template_form_title', $form_title, 'change' );
 					if ( $form_title ) {
 						echo '<h3 class="card-title text-center mb-4">';

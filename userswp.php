@@ -39,6 +39,10 @@ if ( ! defined( 'USERSWP_PLUGIN_FILE' ) ) {
 	define( 'USERSWP_PLUGIN_FILE', __FILE__ );
 }
 
+if ( ! defined( 'USERSWP_PLUGIN_BASENAME' ) ) {
+	define( 'USERSWP_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+}
+
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
