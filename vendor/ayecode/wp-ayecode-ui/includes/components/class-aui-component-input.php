@@ -701,6 +701,11 @@ else{$eli.attr(\'type\',\'password\');}"
 			$output .= '<div class="col-sm-10">';
 		}
 
+		// Set hidden input to save empty value for multiselect.
+		if ( ! empty( $args['multiple'] ) && ! empty( $args['name'] ) ) {
+			$output .= '<input type="hidden" ' . AUI_Component_Helper::name( $args['name'] ) . ' value=""/>';
+		}
+
 		// open/type
 		$output .= '<select ';
 

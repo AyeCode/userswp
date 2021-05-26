@@ -18,12 +18,10 @@
       padding: 0 10px; }
     #uwp_form_builder_container .uwp-side-sortables .uwp-tabs-panel {
       height: auto;
-      overflow: visible;
+      overflow: hidden;
       padding: 5px;
       background-color: #FFFFFF;
-      border: 1px #DFDFDF solid;
-      float: left;
-      width: 100%; }
+      border: 1px #DFDFDF solid; }
       #uwp_form_builder_container .uwp-side-sortables .uwp-tabs-panel ul {
         margin: 0; }
       #uwp_form_builder_container .uwp-side-sortables .uwp-tabs-panel .uwp-setting-name .select2-selection--multiple .select2-selection__rendered {
@@ -35,12 +33,14 @@
       padding: 8px 10px;
       margin: 0;
       border-bottom: 1px #DFDFDF solid;
-      text-shadow: 0 1px 0 #FFFFFF; }
+      text-shadow: 0 1px 0 #FFFFFF;
+      border-top: 1px solid #DFDFDF; }
     #uwp_form_builder_container .uwp-side-sortables .inside {
       position: relative;
       margin: 10px 0;
       line-height: 1.4em;
-      padding: 0 12px 0 10px; }
+      padding: 0 12px 0 10px;
+      overflow: hidden; }
     #uwp_form_builder_container .uwp-side-sortables #uwp-form-builder-tab-custom .super-duper-content-open {
       display: none; }
   #uwp_form_builder_container #uwp-available-fields.uwp-side-sortables {

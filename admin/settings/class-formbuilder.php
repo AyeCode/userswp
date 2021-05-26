@@ -343,6 +343,8 @@ class UsersWP_Form_Builder {
                                         </select>
                                     </div>
                                     <div class="d-inline-block align-top">
+                                        <button class="btn btn-sm btn-info register-show-options" type="button"
+                                                id="show_options"><?php _e( 'Form Options', 'userswp' ); ?></button>
 										<?php if ( ! empty( $current_form ) && $current_form > 1 ) { ?>
                                             <button data-id="<?php echo $current_form; ?>"
                                                     class="btn btn-sm btn-danger register-form-remove" type="button"
@@ -358,7 +360,7 @@ class UsersWP_Form_Builder {
                         </table>
 					<?php } ?>
 
-                    <table class="form-table bsui userswp" id="uwp-form-more-options">
+                    <table class="form-table bsui userswp" id="uwp-form-more-options" style="display:none;">
                         <tr>
                             <th><?php _e( 'Title:', 'userswp' ); echo uwp_help_tip(__('Title of the form', 'userswp')) ?></th>
                             <td>
@@ -2342,7 +2344,7 @@ class UsersWP_Form_Builder {
 		}
 
 		?>
-        <li <?php echo $hide_register_field; ?> class="cf-incin-reg-form uwp-setting-name uwp-advanced-setting">
+        <li <?php echo $hide_register_field; ?> class="cf-incin-reg-form uwp-setting-name">
             <label for="cat_sort" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Lets you use this field as register form field, set from register tab above.', 'userswp' ) );
