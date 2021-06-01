@@ -284,7 +284,7 @@ class UsersWP_Profile {
 
 				// Icon
 				$icon       = uwp_get_field_icon( $field->field_icon );
-				$site_title = isset( $field->site_title ) ? __( $field->site_title, 'userswp' ) : '';
+				$site_title = isset( $field->site_title ) ? __( wp_unslash($field->site_title), 'userswp' ) : '';
 
 				if ( $field->field_type == 'fieldset' ) {
 					$icon = '';
@@ -1039,6 +1039,14 @@ class UsersWP_Profile {
 				$wp_rewrite->flush_rules( false );
 				delete_option( 'uwp_flush_rewrite' );
 			}
+
+			if ( function_exists('pll_current_language') ) {
+				$previous_lang = ! empty( $_COOKIE[ PLL_COOKIE ] ) ? $_COOKIE[ PLL_COOKIE ] : '';
+				$current_lang  = pll_current_language();
+				if ( $current_lang != $previous_lang ) {
+					flush_rewrite_rules( true );
+				}
+			}
 		}
 	}
 
@@ -1339,11 +1347,13 @@ class UsersWP_Profile {
 		if ( in_array( $field->htmlvar_name, array( 'avatar', 'banner' ) ) ) {
 
 			if ( $field->htmlvar_name == 'avatar' ) {
-				$min_width  = apply_filters( 'uwp_avatar_image_width', uwp_get_option( 'profile_avatar_width', 150 ) );
-				$min_height = apply_filters( 'uwp_avatar_image_height', uwp_get_option( 'profile_avatar_height', 150 ) );
+				$avatar_size = uwp_get_upload_image_size();
+				$min_width  = $avatar_size['width'];
+				$min_height = $avatar_size['height'];
 			} else {
-				$min_width  = apply_filters( 'uwp_banner_image_width', uwp_get_option( 'profile_banner_width', 1000 ) );
-				$min_height = apply_filters( 'uwp_banner_image_height', uwp_get_option( 'profile_banner_height', 300 ) );
+				$banner_size = uwp_get_upload_image_size('banner');
+				$min_width  = $banner_size['width'];
+				$min_height = $banner_size['height'];
 			}
 
 			$imagedetails = getimagesize( $file_to_upload['tmp_name'] );
@@ -1491,13 +1501,14 @@ class UsersWP_Profile {
 			return "";
 		}
 
-		// Get avatar full width and height.
 		if ( $type == 'avatar' ) {
-			$full_width  = apply_filters( 'uwp_avatar_image_width', uwp_get_option( 'profile_avatar_width', 150 ) );
-			$full_height = apply_filters( 'uwp_avatar_image_height', uwp_get_option( 'profile_avatar_height', 150 ) );
+			$avatar_size = uwp_get_upload_image_size();
+			$full_width  = $avatar_size['width'];
+			$full_height = $avatar_size['height'];
 		} else {
-			$full_width  = apply_filters( 'uwp_banner_image_width', uwp_get_option( 'profile_banner_width', 1000 ) );
-			$full_height = apply_filters( 'uwp_banner_image_height', uwp_get_option( 'profile_banner_height', 300 ) );
+			$banner_size = uwp_get_upload_image_size('banner');
+			$full_width  = $banner_size['width'];
+			$full_height = $banner_size['height'];
 		}
 
 		$values = array(

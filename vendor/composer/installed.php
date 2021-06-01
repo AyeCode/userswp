@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '21a8f8c5c3ca4d7996f96d12761f967d85828d5b',
+    'reference' => '35ccd4af5d3d805e9cf8883e4efd9e5fbbd6c699',
     'name' => 'uswerwp/userswp',
   ),
   'versions' => 
@@ -78,7 +78,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '21a8f8c5c3ca4d7996f96d12761f967d85828d5b',
+      'reference' => '35ccd4af5d3d805e9cf8883e4efd9e5fbbd6c699',
     ),
   ),
 );
