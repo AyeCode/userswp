@@ -502,3 +502,26 @@ function uwp_get_default_form_data(){
 
 	return $data;
 }
+
+function uwp_get_upload_image_size($type = "avatar"){
+
+	if ( $type == 'avatar' ) {
+		$width = uwp_get_option( 'profile_avatar_width', 150 );
+		$width = empty($width) ? 150 : $width;
+		$value['width'] = apply_filters( 'uwp_avatar_image_width', $width );
+
+		$height = uwp_get_option( 'profile_avatar_height', 150 );
+		$height = empty($height) ? 150 : $height;
+		$value['height'] = apply_filters( 'uwp_avatar_image_height', $height );
+	} else {
+		$width = uwp_get_option( 'profile_banner_width', 1000 );
+		$width = empty($width) ? 1000 : $width;
+		$value['width']  = apply_filters( 'uwp_banner_image_width', $width );
+
+		$height = uwp_get_option( 'profile_banner_height', 300 );
+		$height = empty($height) ? 300 : $height;
+		$value['height'] = apply_filters( 'uwp_banner_image_height', $height );
+	}
+
+	return $value;
+}
