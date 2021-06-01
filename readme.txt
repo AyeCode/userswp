@@ -140,7 +140,8 @@ No questions so far, but don't hesitate to ask!
 * Author box social links was not showing of post author if placed on sidebar - FIXED
 * Compatibility with WP Fusion for using UWP user meta - ADDED
 * Compatibility with SEOPress plugin to use UWP setting for profile page meta title and meta description- ADDED
-* AyeCode UI updated to v0.1.48 - CHANGED
+* Validation pattern for custom fields- ADDED
+* AyeCode UI updated to v0.1.49 - CHANGED
 * Super Duper updated to v1.0.26 - CHANGED
 
 = 1.2.2.16 =

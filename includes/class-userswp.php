@@ -806,6 +806,10 @@ final class UsersWP {
 		add_filter( 'uwp_builder_css_class_fieldset', array( $instance, 'return_empty_string' ), 10, 4 );
 		// filters for which is_public not required
 		add_filter( 'uwp_builder_is_public_password', array( $instance, 'return_empty_string' ), 10, 4 );
+		add_filter( 'uwp_builder_validation_pattern_text', array( $instance, 'validation_pattern' ), 10, 4 );
+		add_filter( 'uwp_builder_validation_pattern_email', array( $instance, 'validation_pattern' ), 10, 4 );
+		add_filter( 'uwp_builder_validation_pattern_phone', array( $instance, 'validation_pattern' ), 10, 4 );
+		add_filter( 'uwp_builder_validation_pattern_url', array( $instance, 'validation_pattern' ), 10, 4 );
 	}
 
 	/**

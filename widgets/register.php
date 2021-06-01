@@ -141,7 +141,9 @@ class UWP_Register_Widget extends WP_Super_Duper {
 
 		echo '</div>';
 
-		uwp_password_strength_inline_js();
+		if(!wp_doing_ajax()){
+			uwp_password_strength_inline_js();
+		}
 
 		$output = ob_get_clean();
 

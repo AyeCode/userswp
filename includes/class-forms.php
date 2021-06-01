@@ -2154,6 +2154,8 @@ class UsersWP_Forms {
 			$bs_sr_only       = $design_style ? "sr-only" : "";
 			$bs_form_control  = $design_style ? "form-control" : "";
 			$extra_attributes = array();
+			$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
+			$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
 
 			ob_start(); // Start  buffering;
 
@@ -2217,6 +2219,8 @@ class UsersWP_Forms {
 						'wrap_class'       => isset( $field->css_class ) ? $field->css_class : '',
 						'value'            => $value,
 						'help_text'        => uwp_get_field_description( $field ),
+						'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
+						'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 						'extra_attributes' => $extra_attributes
 					)
 				);
@@ -2314,6 +2318,8 @@ class UsersWP_Forms {
 			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control bg-white" : "";
+			$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
+			$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
 
 			ob_start(); // Start  buffering;
 
@@ -2346,6 +2352,8 @@ class UsersWP_Forms {
 						'wrap_class'        => isset( $field->css_class ) ? $field->css_class : '',
 						'value'             => $value,
 						'help_text'         => uwp_get_field_description( $field ),
+						'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
+						'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 						'extra_attributes'  => $extra_attributes,
 						'input_group_right' => '<div class="input-group-text px-2 bg-transparent border-0x" onclick="jQuery(this).parent().parent().find(\'input\').val(\'\');"><i class="fas fa-times uwp-search-input-label-clear text-muted c-pointer" title="' . __( 'Clear field', 'uwp-search' ) . '" ></i></div>',
 					)
@@ -2429,6 +2437,8 @@ class UsersWP_Forms {
 			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
+			$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
+			$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
 
 			ob_start(); // Start  buffering;
 			$option_values_arr = uwp_string_values_to_options( $field->option_values, true );
@@ -2446,7 +2456,8 @@ class UsersWP_Forms {
 					'title'           => $site_title,
 					'value'           => $value,
 					'required'        => $field->is_required,
-					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
+					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 					'help_text'       => uwp_get_field_description( $field ),
 					'label'           => $site_title . $required,
 					'options'         => $option_values_arr,
@@ -2535,6 +2546,8 @@ class UsersWP_Forms {
 			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
+			$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
+			$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
 
 			ob_start(); // Start  buffering;
 
@@ -2557,7 +2570,8 @@ class UsersWP_Forms {
 					'title'           => $site_title,
 					'value'           => $value,
 					'required'        => $field->is_required,
-					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
+					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 					'help_text'       => uwp_get_field_description( $field ),
 					'label'           => $site_title . $required,
 					'options'         => $option_values_arr,
@@ -3059,6 +3073,9 @@ class UsersWP_Forms {
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 
+			$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
+			$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
+
 			// bootstrap
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
@@ -3071,7 +3088,8 @@ class UsersWP_Forms {
 					'title'           => $site_title,
 					'value'           => $value,
 					'required'        => $field->is_required,
-					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
+					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 					'help_text'       => uwp_get_field_description( $field ),
 					'label'           => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 					'step'            => $step,
@@ -3156,6 +3174,7 @@ class UsersWP_Forms {
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 			$site_title      = uwp_get_form_label( $field );
+
 			ob_start(); // Start  buffering;
 
 			// bootstrap
@@ -3243,6 +3262,9 @@ class UsersWP_Forms {
 				'quicktags'     => false,
 			);
 
+			$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
+			$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
+
 			// bootstrap
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
@@ -3254,7 +3276,8 @@ class UsersWP_Forms {
 					'title'           => $site_title,
 					'value'           => stripslashes( $value ),
 					'required'        => $field->is_required,
-					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
+					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 					'help_text'       => uwp_get_field_description( $field ),
 					'label'           => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 					'rows'            => 5,
@@ -3362,6 +3385,8 @@ class UsersWP_Forms {
 
 			ob_start(); // Start  buffering;
 			$site_title = uwp_get_form_label( $field );
+			$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : __( 'Please enter a valid URL including https://', 'userswp' );
+			$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
 
 			// bootstrap
 			if ( $design_style ) {
@@ -3375,14 +3400,13 @@ class UsersWP_Forms {
 					'title'           => $site_title,
 					'value'           => $value,
 					'required'        => $field->is_required,
-					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : __( 'Please enter a valid URL including https://', 'userswp' ),
-					'help_text'       => uwp_get_field_description( $field ),
+					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
+                    'help_text'       => uwp_get_field_description( $field ),
 					'label'           => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
 			} else {
-
-
 				?>
                 <div id="<?php echo $field->htmlvar_name; ?>_row"
                      class="<?php if ( $field->is_required ) {
@@ -3459,6 +3483,8 @@ class UsersWP_Forms {
 
 			ob_start(); // Start  buffering;
 			$site_title = uwp_get_form_label( $field );
+			$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
+			$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
 
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
@@ -3471,14 +3497,13 @@ class UsersWP_Forms {
 					'title'       => $site_title,
 					'value'       => $value,
 					'required'    => $field->is_required,
+					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 					'help_text'   => uwp_get_field_description( $field ),
 					'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
-					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 				) );
 			} else {
-
-
 				?>
                 <div id="<?php echo $field->htmlvar_name; ?>_row"
                      class="<?php if ( $field->is_required ) {
@@ -3560,6 +3585,8 @@ class UsersWP_Forms {
 
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
+				$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
+				$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
 
 				echo aui()->input( array(
 					'type'        => 'password',
@@ -3569,10 +3596,11 @@ class UsersWP_Forms {
 					'title'       => $site_title,
 					'value'       => $value,
 					'required'    => $field->is_required,
+					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 					'help_text'   => uwp_get_field_description( $field ),
 					'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
-					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
 				) );
 			} else {
 				?>
@@ -3640,6 +3668,8 @@ class UsersWP_Forms {
 			$bs_form_control = $design_style ? "form-control" : "";
 			ob_start(); // Start  buffering;
 			$site_title = uwp_get_form_label( $field );
+			$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
+			$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
 
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
@@ -3655,7 +3685,8 @@ class UsersWP_Forms {
 					'help_text'   => uwp_get_field_description( $field ),
 					'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
-					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
+					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 				) );
 			} else {
 				?>
@@ -4056,6 +4087,9 @@ class UsersWP_Forms {
 					$placeholder .= ' *';
 					$required    = ' <span class="text-danger">*</span>';
 				}
+				$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
+				$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
+
 				ob_start(); // Start  buffering;
 
 				if ( $design_style ) {
@@ -4070,7 +4104,8 @@ class UsersWP_Forms {
 						'required'    => $field->is_required,
 						'help_text'   => uwp_get_field_description( $field ),
 						'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
-						'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
+						'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
+						'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 					) );
 				} else {
 					?>
@@ -4137,6 +4172,8 @@ class UsersWP_Forms {
 				$bs_sr_only      = $design_style ? "sr-only" : "";
 				$bs_form_control = $design_style ? "form-control" : "";
 				$site_title      = __( "Confirm Email", 'userswp' );
+				$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
+				$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
 
 				ob_start();
 
@@ -4153,7 +4190,8 @@ class UsersWP_Forms {
 						'required'    => $field->is_required,
 						'help_text'   => uwp_get_field_description( $field ),
 						'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
-						'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
+						'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
+						'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 					) );
 				} else {
 					?>
