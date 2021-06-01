@@ -143,6 +143,7 @@ No questions so far, but don't hesitate to ask!
 * Validation pattern for custom fields- ADDED
 * AyeCode UI updated to v0.1.49 - CHANGED
 * Super Duper updated to v1.0.26 - CHANGED
+* Password strength meter in registration lightbox not working - FIXED
 
 = 1.2.2.16 =
 * Argument to allow showing users list of specific roles - ADDED
