@@ -587,6 +587,10 @@ function uwp_checkPasswordStrength( $pass1,
     // Add the strength meter results
     switch ( strength ) {
 
+        case -1:
+            $strengthResult.addClass( 'short bg-danger' ).html( pwsL10n.unknown );
+            break;
+
         case 2:
             $strengthResult.addClass( 'bad bg-warning' ).html( pwsL10n.bad ).width('50%');
             break;

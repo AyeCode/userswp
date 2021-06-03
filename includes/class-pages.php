@@ -410,6 +410,10 @@ class UsersWP_Pages {
             $link = get_permalink($page_id);
         }
 
+	    if ( ! empty( $link ) && function_exists( 'PLL' ) ) {
+		    $link = PLL()->links_model->add_language_to_link( $link, PLL()->curlang );
+	    }
+
         return $link;
     }
 

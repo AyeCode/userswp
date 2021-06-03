@@ -343,6 +343,8 @@ class UsersWP_Form_Builder {
                                         </select>
                                     </div>
                                     <div class="d-inline-block align-top">
+                                        <button class="btn btn-sm btn-info register-show-options" type="button"
+                                                id="show_options"><?php _e( 'Form Options', 'userswp' ); ?></button>
 										<?php if ( ! empty( $current_form ) && $current_form > 1 ) { ?>
                                             <button data-id="<?php echo $current_form; ?>"
                                                     class="btn btn-sm btn-danger register-form-remove" type="button"
@@ -358,7 +360,7 @@ class UsersWP_Form_Builder {
                         </table>
 					<?php } ?>
 
-                    <table class="form-table bsui userswp" id="uwp-form-more-options">
+                    <table class="form-table bsui userswp" id="uwp-form-more-options" style="display:none;">
                         <tr>
                             <th><?php _e( 'Title:', 'userswp' ); echo uwp_help_tip(__('Title of the form', 'userswp')) ?></th>
                             <td>
@@ -1700,7 +1702,7 @@ class UsersWP_Form_Builder {
 							<?php
 						}
 
-						// required_msg
+						// validation pattern
 						if ( has_filter( "uwp_builder_validation_pattern_{$field_type}" ) ) {
 
 							echo apply_filters( "uwp_builder_validation_pattern_{$field_type}", '', $result_str, $cf, $field_info );
@@ -1879,6 +1881,65 @@ class UsersWP_Form_Builder {
         </li>
 		<?php
 	}
+
+	/**
+	 * Add HTML5 validation pattern fields.
+	 *
+	 * @since 1.2.2.17
+	 *
+	 * @param string $output Html output.
+	 * @param string $result_str Result string.
+	 * @param array $cf Custom fields values.
+	 * @param object $field_info Extra fields information.
+	 * @return string $output.
+	 */
+	public static function validation_pattern( $output, $result_str, $cf, $field_info ) {
+		ob_start();
+
+		$value = '';
+		if ( isset( $field_info->validation_pattern ) ) {
+			$value = esc_attr( $field_info->validation_pattern );
+		} elseif ( isset( $cf['defaults']['validation_pattern'] ) && $cf['defaults']['validation_pattern'] ) {
+			$value = $cf['defaults']['validation_pattern'];
+		}
+		?>
+        <li class="cf-is-validation-pattern uwp-setting-name uwp-advanced-setting">
+            <label for="validation_pattern" class="uwp-tooltip-wrap">
+				<?php
+				echo uwp_help_tip( __( 'Enter regex expression for HTML5 pattern validation.', 'userswp' ) );
+				_e( 'Validation pattern:', 'userswp' ); ?>
+            </label>
+            <div class="uwp-input-wrap">
+                <input type="text" name="validation_pattern" id="validation_pattern"
+                       value="<?php echo esc_attr( $value ); ?>"/>
+            </div>
+        </li>
+
+        <?php
+		$value = '';
+		if ( isset( $field_info->validation_msg ) ) {
+			$value = esc_attr( $field_info->validation_msg );
+		} elseif ( isset( $cf['defaults']['validation_msg'] ) && $cf['defaults']['validation_msg'] ) {
+			$value = $cf['defaults']['validation_msg'];
+		}
+		?>
+        <li class="cf-is-validation-msg uwp-setting-name uwp-advanced-setting">
+            <label for="validation_msg" class="uwp-tooltip-wrap">
+				<?php
+				echo uwp_help_tip( __( 'Enter a extra validation message to show to the user if validation fails.', 'userswp' ) );
+				_e( 'Validation message:', 'userswp' ); ?>
+            </label>
+            <div class="uwp-input-wrap">
+                <input type="text" name="validation_msg" id="required_msg"
+                       value="<?php echo esc_attr( $value ); ?>"/>
+            </div>
+        </li>
+		<?php
+
+		$output = ob_get_clean();
+
+		return $output;
+    }
 
 	public function register_selected_fields( $form_type ) {
 		global $wpdb;
@@ -2342,7 +2403,7 @@ class UsersWP_Form_Builder {
 		}
 
 		?>
-        <li <?php echo $hide_register_field; ?> class="cf-incin-reg-form uwp-setting-name uwp-advanced-setting">
+        <li <?php echo $hide_register_field; ?> class="cf-incin-reg-form uwp-setting-name">
             <label for="cat_sort" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Lets you use this field as register form field, set from register tab above.', 'userswp' ) );

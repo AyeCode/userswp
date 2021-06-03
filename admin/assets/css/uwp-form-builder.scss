@@ -23,12 +23,10 @@
     }
     .uwp-tabs-panel {
       height: auto;
-      overflow: visible;
+      overflow: hidden;
       padding: 5px;
       background-color: #FFFFFF;
       border: 1px #DFDFDF solid;
-      float: left;
-      width: 100%;
       ul {
         margin: 0;
       }
@@ -44,6 +42,7 @@
       margin: 0;
       border-bottom: 1px #DFDFDF solid;
       text-shadow: 0 1px 0 #FFFFFF;
+      border-top: 1px solid #DFDFDF;
     }
 
     .inside {
@@ -51,6 +50,7 @@
       margin: 10px 0;
       line-height: 1.4em;
       padding: 0 12px 0 10px;
+      overflow: hidden;
     }
 
     #uwp-form-builder-tab-custom {
