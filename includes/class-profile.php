@@ -981,7 +981,7 @@ class UsersWP_Profile {
 		$page_id = uwp_get_page_id( 'profile_page', false );
 		if ( $page_id && ! isset( $_REQUEST['page_id'] ) ) {
 			$link                = get_page_link( $page_id );
-			$uwp_profile_link    = trailingslashit( substr( str_replace( home_url(), '', $link ), 1 ) );
+			$uwp_profile_link    = trailingslashit( $this->profile_slug() );
 			$uwp_profile_page_id = $page_id;
 
 			// {home_url}/profile/1
@@ -1048,6 +1048,24 @@ class UsersWP_Profile {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Get the slug for the profile page.
+	 *
+	 * @since 1.2.2.18
+	 *
+	 * @param string $slug Profile slug. Default profile.
+	 *
+	 * @return string
+	 */
+	public function profile_slug( $slug = 'profile' ) {
+		if ( $page_id = uwp_get_page_id( 'profile_page', false ) ) {
+			if ( $_slug = get_post_field( 'post_name', absint( $page_id ) ) ) {
+				$slug = $_slug;
+			}
+		}
+		return apply_filters( 'uwp_rewrite_profile_slug', $slug );
 	}
 
 	/**
