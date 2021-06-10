@@ -445,38 +445,53 @@ function get_uwp_users_list($roles = array()) {
  */
 function uwp_get_layout_class($layout, $count_only = false) {
 	if(!$layout){
-		$layout = uwp_get_option('users_default_layout', 'list');
+		if(uwp_get_option("design_style",'bootstrap')){
+            $value = '3col';
+        } else {
+			$value = 'list';
+        }
+	    $layout = uwp_get_option('users_default_layout', $value);
 	}
 
 	switch ($layout) {
 		case "list":
 			$class = "uwp_listview";
+			$bs_class = "row-cols-md-1";
 			$col_count = 1;
 			break;
 		case "2col":
 			$class = "uwp_gridview uwp_gridview_2col";
+			$bs_class = "row-cols-md-2";
 			$col_count = 2;
 			break;
 		case "3col":
 			$class = "uwp_gridview uwp_gridview_3col";
+			$bs_class = "row-cols-md-3";
 			$col_count = 3;
 			break;
 		case "4col":
 			$class = "uwp_gridview uwp_gridview_4col";
+			$bs_class = "row-cols-md-4";
 			$col_count = 4;
 			break;
 		case "5col":
 			$class = "uwp_gridview uwp_gridview_5col";
+			$bs_class = "row-cols-md-5";
 			$col_count = 5;
 			break;
 		default:
 			$class = "uwp_listview";
+			$bs_class = "row-cols-md-3";
 			$col_count = 1;
 	}
 
 	if($count_only){
 		return $col_count;
 	}
+
+	if(uwp_get_option("design_style",'bootstrap')){
+	    return $bs_class;
+    }
 
 	return $class;
 }

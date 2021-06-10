@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '35ccd4af5d3d805e9cf8883e4efd9e5fbbd6c699',
+    'reference' => '08fd47e3a24cc11c4bc93d84a8166c4a238a63ff',
     'name' => 'uswerwp/userswp',
   ),
   'versions' => 
@@ -46,12 +46,12 @@ private static $installed = array (
     ),
     'ayecode/wp-ayecode-ui' => 
     array (
-      'pretty_version' => '0.1.49',
-      'version' => '0.1.49.0',
+      'pretty_version' => '0.1.51',
+      'version' => '0.1.51.0',
       'aliases' => 
       array (
       ),
-      'reference' => '00082d05acd50d4ce103e054f483ca24f106f93c',
+      'reference' => 'bcd4413ac3cc6513b852aabbe74f940a7dee0814',
     ),
     'ayecode/wp-font-awesome-settings' => 
     array (
@@ -102,7 +102,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '35ccd4af5d3d805e9cf8883e4efd9e5fbbd6c699',
+      'reference' => '08fd47e3a24cc11c4bc93d84a8166c4a238a63ff',
     ),
   ),
 );

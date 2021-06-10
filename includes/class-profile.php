@@ -1044,6 +1044,8 @@ class UsersWP_Profile {
 				$previous_lang = ! empty( $_COOKIE[ PLL_COOKIE ] ) ? $_COOKIE[ PLL_COOKIE ] : '';
 				$current_lang  = pll_current_language();
 				if ( $current_lang != $previous_lang ) {
+
+
 					flush_rewrite_rules( true );
 				}
 			}
@@ -1834,77 +1836,6 @@ class UsersWP_Profile {
 		}
 
 		return $profile_url;
-	}
-
-	/**
-	 * This is the JS needed for the list view selector for CPTs view.
-	 */
-	public function list_view_js() {
-		?>
-        <script type="text/javascript">/* <![CDATA[ */
-
-            function uwp_list_view_select($val, $noStore) {
-
-                var $storage_key = "uwp_list_view";
-                var $list = jQuery('.uwp-users-loop > .row');
-                if (!$list.length) {
-                    $list = jQuery('.uwp-profile-cpt-loop > .row');
-                    $storage_key = "uwp_cpt_list_view";
-                }
-
-                var $listSelect = jQuery('.uwp-list-view-select');
-                if ($val == 0) {
-                    $list.removeClass('row-cols-sm-2 row-cols-md-2 row-cols-md-3 row-cols-md-4 row-cols-md-5').addClass('row-cols-md-0');
-                    $listSelect.find('button').removeClass('active');
-                    $listSelect.find('button.uwp-list-view-select-list').addClass('active');
-                } else {
-                    $listSelect.find('button').removeClass('active');
-                    $listSelect.find('button.uwp-list-view-select-grid').addClass('active');
-                    $listSelect.find('button[data-gridview="' + $val + '"]').addClass('active');
-                    $list.removeClass('row-cols-md-0 row-cols-md-2 row-cols-md-3 row-cols-md-4 row-cols-md-5').addClass('row-cols-sm-2 row-cols-md-' + $val);
-                }
-
-                // only store if it was a user action
-                if (!$noStore) {
-                    // store the user selection
-                    localStorage.setItem($storage_key, $val);
-                }
-            }
-
-            // set the current user selection if set
-            if (typeof(Storage) !== "undefined") {
-                var $storage_key = "uwp_list_view";
-                var $list = jQuery('.uwp-users-loop > .row');
-                if (!$list.length) {
-                    $list = jQuery('.uwp-profile-cpt-loop > .row');
-                    $storage_key = "uwp_cpt_list_view";
-                }
-                var $noStore = false;
-                var uwp_list_view = localStorage.getItem($storage_key);
-                setTimeout(function () {
-                    if (!uwp_list_view) {
-                        $noStore = true;
-                        if ($list.hasClass('row-cols-md-0')) {
-                            uwp_list_view = 0;
-                        } else if ($list.hasClass('row-cols-md-1')) {
-                            uwp_list_view = 1;
-                        } else if ($list.hasClass('row-cols-md-2')) {
-                            uwp_list_view = 2;
-                        } else if ($list.hasClass('row-cols-md-3')) {
-                            uwp_list_view = 3;
-                        } else if ($list.hasClass('row-cols-md-4')) {
-                            uwp_list_view = 4;
-                        } else if ($list.hasClass('row-cols-md-5')) {
-                            uwp_list_view = 5;
-                        } else {
-                            uwp_list_view = <?php echo uwp_get_layout_class( '', true ); ?>;
-                        }
-                    }
-                    uwp_list_view_select(uwp_list_view, $noStore);
-                }, 10); // we need to give it a very short time so the page loads the actual html
-            }
-            /* ]]> */</script>
-		<?php
 	}
 
 	/**
