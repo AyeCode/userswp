@@ -133,6 +133,7 @@ No questions so far, but don't hesitate to ask!
 
 = 1.2.2.18 =
 * WPML profile page sometime going to 404 page - FIXED
+* Recaptcha giving error for auto approve and auto login - FIXED
 * AyeCode UI updated to v0.1.51 - CHANGED
 
 = 1.2.2.17 =
