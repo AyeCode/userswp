@@ -752,8 +752,9 @@ class UsersWP_Forms {
 		do_action( 'uwp_after_custom_fields_save', 'register', $data, $result, $user_id );
 
 		// Unset post data to empty the form on submit
+		$excluded_post_data = apply_filters('uwp_register_excluded_post_reset_fields', array('uwp_register_nonce'));
 		foreach($data as $key=>$value){
-			if(isset($key)){
+			if(isset($key) && !in_array($key, $excluded_post_data)){
 				unset($_POST[$key]);
 			}
 		}
@@ -882,12 +883,17 @@ class UsersWP_Forms {
 			);
 
 			if ( is_wp_error( $res ) ) {
-				$error         = aui()->alert( array(
+				$message = aui()->alert( array(
 						'type'    => 'error',
-						'content' => __( 'Invalid Username or Password.', 'userswp' )
+						'content' => $res->get_error_message()
 					)
 				);
-				$uwp_notices[] = array( 'register' => $error );
+				
+			    if ( wp_doing_ajax() ) {
+					wp_send_json_error( $message );
+				} else {
+					$uwp_notices[] = array( 'register' => $message );
+				}
 			} else {
 				$redirect_to = $this->get_register_redirect_url( $data, $user_id );
 				do_action( 'uwp_after_process_register', $result, $user_id );

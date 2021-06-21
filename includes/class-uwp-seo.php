@@ -229,7 +229,7 @@ class UsersWP_Seo {
             $description = $this->get_meta_description();
         }
 
-        return apply_filters('uwp_seo_profile_meta_description', substr($description, 0, 50));
+        return apply_filters('uwp_seo_profile_meta_description', substr($description, 0, 150), $description);
     }
 
     public function get_opengraph_url($url) {

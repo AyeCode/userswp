@@ -149,7 +149,9 @@ class UsersWP_Invoicing_Plugin {
      * @return      void
      */
     public function add_profile_invoices_tab_content($user) {
-        echo do_shortcode('[wpinv_history]');
+        if(is_user_logged_in() && isset($user->ID) && get_current_user_id() == $user->ID){
+	        echo do_shortcode('[wpinv_history]');
+        }
     }
 
 	/**

@@ -16,7 +16,7 @@ $total_users = isset( $args['template_args']['total_users'] ) ? $args['template_
     // The Loop
     if ( $users ) {
 
-        echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">';
+        echo '<div class="row row-cols-1 row-cols-sm-2 '.apply_filters('uwp_users_list_ul_extra_class', '').'">';
 
         global $uwp_user;
         $original_user = $uwp_user;
