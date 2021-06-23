@@ -158,7 +158,7 @@ class UsersWP_Activator {
             'profile_no_of_items' => 10,
             'users_no_of_items' => 10,
             'uwp_disable_author_link' => 0,
-            'users_default_layout' => 'list',
+            'users_default_layout' => '3col',
             'author_box_enable_disable' => 1,
             'author_box_display_content' => 'below_content',
             'author_box_display_post_types' => array('post'),

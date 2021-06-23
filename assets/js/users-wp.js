@@ -40,6 +40,39 @@ jQuery(window).on('load',function () {
             $(this).prev().toggle();
             return false;
         });
+
+        // set the current user selection if set
+        if (typeof(Storage) !== "undefined") {
+            var $storage_key = "uwp_list_view";
+            var $list = jQuery('.uwp-users-loop > .row');
+            if (!$list.length) {
+                $list = jQuery('.uwp-profile-cpt-loop > .row');
+                $storage_key = "uwp_cpt_list_view";
+            }
+            var $noStore = false;
+            var uwp_list_view = localStorage.getItem($storage_key);
+            setTimeout(function () {
+                if (!uwp_list_view) {
+                    $noStore = true;
+                    if ($list.hasClass('row-cols-md-0')) {
+                        uwp_list_view = 0;
+                    } else if ($list.hasClass('row-cols-md-1')) {
+                        uwp_list_view = 1;
+                    } else if ($list.hasClass('row-cols-md-2')) {
+                        uwp_list_view = 2;
+                    } else if ($list.hasClass('row-cols-md-3')) {
+                        uwp_list_view = 3;
+                    } else if ($list.hasClass('row-cols-md-4')) {
+                        uwp_list_view = 4;
+                    } else if ($list.hasClass('row-cols-md-5')) {
+                        uwp_list_view = 5;
+                    } else {
+                        uwp_list_view = 3;
+                    }
+                }
+                uwp_list_view_select(uwp_list_view, $noStore);
+            }, 10); // we need to give it a very short time so the page loads the actual html
+        }
     });
 }( jQuery, window ));
 
@@ -148,6 +181,34 @@ jQuery(window).on('load',function () {
 function uwp_nl2br(str, is_xhtml) {
     var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
     return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
+}
+
+function uwp_list_view_select($val, $noStore) {
+
+    var $storage_key = "uwp_list_view";
+    var $list = jQuery('.uwp-users-loop > .row');
+    if (!$list.length) {
+        $list = jQuery('.uwp-profile-cpt-loop > .row');
+        $storage_key = "uwp_cpt_list_view";
+    }
+
+    var $listSelect = jQuery('.uwp-list-view-select');
+    if ($val == 0) {
+        $list.removeClass('row-cols-sm-2 row-cols-md-2 row-cols-md-3 row-cols-md-4 row-cols-md-5').addClass('row-cols-md-0');
+        $listSelect.find('button').removeClass('active');
+        $listSelect.find('button.uwp-list-view-select-list').addClass('active');
+    } else {
+        $listSelect.find('button').removeClass('active');
+        $listSelect.find('button.uwp-list-view-select-grid').addClass('active');
+        $listSelect.find('button[data-gridview="' + $val + '"]').addClass('active');
+        $list.removeClass('row-cols-md-0 row-cols-md-2 row-cols-md-3 row-cols-md-4 row-cols-md-5').addClass('row-cols-sm-2 row-cols-md-' + $val);
+    }
+
+    // only store if it was a user action
+    if (!$noStore) {
+        // store the user selection
+        localStorage.setItem($storage_key, $val);
+    }
 }
 
 function uwp_profile_image_change(type){

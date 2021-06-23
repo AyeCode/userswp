@@ -369,7 +369,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// name
 			if(!empty($args['name'])){
-				$output .= ' name="'.sanitize_html_class($args['name']).'" ';
+				$output .= ' name="'.esc_attr($args['name']).'" ';
 			}
 
 			// id
