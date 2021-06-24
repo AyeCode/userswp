@@ -156,6 +156,12 @@ function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $sr
 		case "image/png":
 		case "image/x-png":
 			$source=imagecreatefrompng($image);
+			if(apply_filters('uwp_keep_png_transperent', true, $thumb_image_name, $image, $x, $y, $src_w, $src_h)){
+				$background = imagecolorallocate($newImage , 0, 0, 0);
+				imagecolortransparent($newImage, $background);
+				imagealphablending($newImage, false);
+				imagesavealpha($newImage, true);
+            }
 			break;
 	}
 	imagecopyresampled($newImage,$source,0,0,$x,$y,$newImageWidth, $newImageHeight, $src_w, $src_h);

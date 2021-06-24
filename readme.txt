@@ -134,6 +134,8 @@ No questions so far, but don't hesitate to ask!
 = 1.2.2.18 =
 * WPML profile page sometime going to 404 page - FIXED
 * Recaptcha giving error for auto approve and auto login - FIXED
+* Profile image upload adds black background for transparent image - FIXED
+* Parameter to display specific register forms via shortcode or widget - ADDED
 * AyeCode UI updated to v0.1.51 - CHANGED
 
 = 1.2.2.17 =

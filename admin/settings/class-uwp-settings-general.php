@@ -93,21 +93,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
              *
              * @package userswp
              */
-			$pages = get_pages();
-			$pages_options = array(
-				'-1' => __( 'Last User Page', 'userswp' ),
-				'0' => __( 'Default Redirect', 'userswp'),
-				'-2' => __( 'Custom Redirect', 'userswp'),
-			);
-			if ( $pages ) {
-				foreach ( $pages as $page ) {
-					$pages_options[ $page->ID ] = $page->post_title;
-				}
-			}
-
-			$registration_options = uwp_get_registration_form_actions();
-
-			$reg_forms_options = uwp_get_register_forms_dropdown_options();
 
             $settings = apply_filters( 'uwp_register_options', array(
                 array(
@@ -127,48 +112,8 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'name' => __( 'Default Lightbox Form', 'userswp' ),
 		            'desc' => __( 'Choose default form to display in lighbox from multipel forms.','userswp'),
 		            'type' => 'select',
-		            'options'  => $reg_forms_options,
+		            'options'  => uwp_get_register_forms_dropdown_options(),
 		            'default'  => '1',
-		            'desc_tip' => true,
-	            ),
-                array(
-                    'id' => 'uwp_registration_action',
-                    'name' => __('Registration Action', 'userswp'),
-                    'desc' => __('Select how registration should be handled.', 'userswp'),
-                    'type' => 'select',
-                    'options' => $registration_options,
-                    'desc_tip' => true,
-                ),
-                array(
-                    'id' => 'register_redirect_to',
-                    'name' => __( 'Register Redirect Page', 'userswp' ),
-                    'desc' => __( 'Set the page to redirect the user to after signing up. If default redirect has been set then WordPress default will be used.', 'userswp' ),
-                    'type' => 'select',
-                    'options' => $pages_options,
-                    'default'  => '-1',
-                    'desc_tip' => true,
-                ),
-	            array(
-		            'id' => 'register_redirect_custom_url',
-		            'name' => __( 'Custom Redirect URL', 'userswp' ),
-		            'desc' => __( 'Set the custom url to redirect the user to after registration. Works with Auto approve + Auto login action only.', 'userswp' ),
-		            'type' => 'text',
-		            'default'  => '',
-		            'desc_tip' => true,
-		            'class' => 'uwp-register-redirect-custom-url',
-	            ),
-                array(
-                    'id' => 'register_terms_page',
-                    'name' => __( 'Register TOS Page', 'userswp' ),
-                    'desc' => __( 'Terms of Service page. When set "Accept terms and Conditions" checkbox will appear on the register form.', 'userswp' ),
-                    'type' => 'single_select_page',
-                    'desc_tip' => true,
-                ),
-	            array(
-		            'id' => 'register_gdpr_page',
-		            'name' => __( 'GDPR Policy Page', 'userswp' ),
-		            'desc' => __( 'When set checkbox to accept GDPR policy will appear on the register form.', 'userswp' ),
-		            'type' => 'single_select_page',
 		            'desc_tip' => true,
 	            ),
                 array(

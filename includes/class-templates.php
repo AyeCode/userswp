@@ -505,11 +505,12 @@ class UsersWP_Templates {
 		$form_id = ! empty( $args['id'] ) ? (int) $args['id'] : uwp_get_option('register_modal_form', 1);
 		if ( $form_type == 'register' ) {
 			$fields = get_register_form_fields($form_id);
-			$register_forms      = uwp_get_option( 'multiple_registration_forms' );
+			$form_limit = ! empty( $args['limit'] ) ? sanitize_text_field($args['limit']) : '';
 
-			if ( ! empty( $register_forms ) && is_array( $register_forms ) && count($register_forms) > 1 ) {
-
-				$options  = uwp_get_register_forms_dropdown_options();
+			if(isset($form_limit) && !empty($form_limit)){
+				$form_limit = explode(',', $form_limit);
+				$form_limit = array_map('trim', $form_limit);
+				$options  = uwp_get_register_forms_dropdown_options($form_limit);
 				$id         = wp_doing_ajax() ? "uwp-form-select-ajax" : 'uwp-form-select';
 				?>
                 <div class="btn-group btn-group-sm mb-2" role="group" id="<?php echo $id; ?>">

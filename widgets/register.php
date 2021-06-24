@@ -38,13 +38,21 @@ class UWP_Register_Widget extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => false
 				),
+				'limit'        => array(
+					'title'    => __( 'Display form having IDs', 'userswp' ),
+					'desc'     => __( 'Enter comma separeted IDs to show limited forms', 'userswp' ),
+					'type'     => 'text',
+					'desc_tip' => true,
+					'default'  => '',
+					'advanced' => true
+				),
 				'title'        => array(
 					'title'    => __( 'Widget title', 'userswp' ),
 					'desc'     => __( 'Enter widget title.', 'userswp' ),
 					'type'     => 'text',
 					'desc_tip' => true,
 					'default'  => '',
-					'advanced' => false
+					'advanced' => true
 				),
 				'form_title'   => array(
 					'title'       => __( 'Form Title', 'userswp' ),

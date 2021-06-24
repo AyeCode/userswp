@@ -340,7 +340,7 @@ function uwp_get_registration_form_actions(){
 	return apply_filters('uwp_registration_status_options', $registration_options);
 }
 
-function uwp_get_register_forms_dropdown_options() {
+function uwp_get_register_forms_dropdown_options($include_forms = array()) {
 
 	$get_register_form = uwp_get_option( 'multiple_registration_forms' );
 
@@ -351,6 +351,14 @@ function uwp_get_register_forms_dropdown_options() {
 			$form_id = ! empty( $register_form['id'] ) ? $register_form['id'] : '';
 			if ( ! empty( $form_id ) && $form_id > 0 ) {
 				$register_forms[ $form_id ] = ! empty( $register_form['title'] ) ? $register_form['title'] : '';
+			}
+		}
+	}
+
+	if(!empty($register_forms) && isset($include_forms) && count($include_forms) > 0){
+		foreach($register_forms as $form_id => $title){
+			if(!in_array($form_id, $include_forms)){
+				unset($register_forms[$form_id]);
 			}
 		}
 	}
