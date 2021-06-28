@@ -362,16 +362,12 @@ function uwp_maybe_check_recaptcha($form){
 }
 
 /**
- * Maybe reset the recpatcha on ajax submit fail.
+ * Maybe reset the recaptcha on ajax submit fail.
  */
 function uwp_maybe_reset_recaptcha() {
     if( jQuery('.uwp-auth-modal .modal-content .g-recaptcha-response').length ){
-        jQuery('.uwp-auth-modal .modal-content .uwp-captcha-render').html(''); // reset
-        var id = jQuery('.uwp-auth-modal .modal-content .uwp-captcha-render').attr('id');
-        jQuery('.uwp-auth-modal .modal-content .uwp-captcha-render').replaceWith("<div id='"+id+"' class='uwp-captcha-render'></div>");
-        setTimeout(function(){
-            uwp_init_recaptcha();
-        }, 50);
+        var id = jQuery('.uwp-auth-modal .modal-content .g-recaptcha-response').attr('id');
+        uwp_reset_captcha(id);
     }
 }
 

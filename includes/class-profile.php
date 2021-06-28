@@ -1673,6 +1673,7 @@ class UsersWP_Profile {
 		uwp_get_template( $template );
 
 		$content_wrap = $design_style == 'bootstrap' ? '.uwp-profile-image-change-modal .modal-content' : '#uwp-popup-modal-wrap';
+		$bg_color = apply_filters('uwp_crop_image_bg_color', '', $type);
 		?>
 
         <script type="text/javascript">
@@ -1721,17 +1722,11 @@ class UsersWP_Profile {
                             // Your server script to process the upload
                             url: '<?php echo admin_url( 'admin-ajax.php' ); ?>',
                             type: 'POST',
-
-                            // Form data
                             data: fd,
-
-                            // Tell jQuery not to process data or worry about content-type
-                            // You *must* include these options!
                             cache: false,
                             contentType: false,
                             processData: false,
 
-                            // Custom XMLHttpRequest
                             xhr: function () {
                                 myXhr = $.ajaxSettings.xhr();
                                 if (myXhr.upload) {
@@ -1759,6 +1754,7 @@ class UsersWP_Profile {
                                         onSelect: updateCoords,
                                         allowResize: true,
                                         allowSelect: false,
+                                        bgColor: '<?php echo $bg_color; ?>',
                                         boxWidth: 650,   //Maximum width you want for your bigger images
                                         boxHeight: 400,  //Maximum Height for your bigger images
                                         setSelect: [0, 0, uwp_full_width, uwp_full_height],
