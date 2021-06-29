@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.7
-Stable tag: 1.2.2.17
+Stable tag: 1.2.2.18
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -136,7 +136,7 @@ No questions so far, but don't hesitate to ask!
 * Recaptcha giving error for auto approve and auto login - FIXED
 * Profile image upload adds black background for transparent image - FIXED
 * Parameter to display specific register forms via shortcode or widget - ADDED
-* AyeCode UI updated to v0.1.51 - CHANGED
+* AyeCode UI updated to v0.1.52 - CHANGED
 
 = 1.2.2.17 =
 * Remove profile tabs if content is empty for GeoDirectory - FIXED

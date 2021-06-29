@@ -1,3 +1,6 @@
+= 0.1.52 =
+* WP 5.8 legacy widgets preview not loading styles - FIXED
+
 = 0.1.51 =
 * Textarea "name" arg can't contain [square brackets] - FIXED
 
