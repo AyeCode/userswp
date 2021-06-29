@@ -109,6 +109,12 @@ class UsersWP_Activator {
         // update the version
         update_option('uwp_db_version', USERSWP_VERSION);
 
+        $installed = get_option( 'uwp_installed_on' );
+
+	    if ( empty( $installed ) ) {
+		    update_option( 'uwp_installed_on', time() );
+	    }
+
     }
 
     /**

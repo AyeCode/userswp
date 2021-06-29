@@ -131,6 +131,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.19 =
+* Deactivation survey popup - ADDED
+
 = 1.2.2.18 =
 * WPML profile page sometime going to 404 page - FIXED
 * Recaptcha giving error for auto approve and auto login - FIXED
