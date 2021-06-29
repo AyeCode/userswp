@@ -136,7 +136,7 @@ No questions so far, but don't hesitate to ask!
 * Recaptcha giving error for auto approve and auto login - FIXED
 * Profile image upload adds black background for transparent image - FIXED
 * Parameter to display specific register forms via shortcode or widget - ADDED
-* AyeCode UI updated to v0.1.51 - CHANGED
+* AyeCode UI updated to v0.1.52 - CHANGED
 
 = 1.2.2.17 =
 * Remove profile tabs if content is empty for GeoDirectory - FIXED
