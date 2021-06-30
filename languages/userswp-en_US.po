@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.18\n"
+"Project-Id-Version: UsersWP 1.2.2.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-29 12:30+0530\n"
-"PO-Revision-Date: 2021-06-29 12:30+0530\n"
+"POT-Creation-Date: 2021-06-30 15:03+0530\n"
+"PO-Revision-Date: 2021-06-30 15:03+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -240,163 +240,163 @@ msgstr ""
 msgid "Learn more"
 msgstr ""
 
-#: admin/class-admin.php:89
+#: admin/class-admin.php:100
 msgid "UsersWP - an AyeCode product!"
 msgstr ""
 
-#: admin/class-admin.php:90
+#: admin/class-admin.php:101
 msgid "Please confirm you wish to connect your site?"
 msgstr ""
 
-#: admin/class-admin.php:91
+#: admin/class-admin.php:102
 #, php-format
 msgid ""
 "<strong>Have a license?</strong> Forget about entering license keys or "
 "downloading zip files, connect your site for instant access. %slearn more%s"
 msgstr ""
 
-#: admin/class-admin.php:92
+#: admin/class-admin.php:103
 msgid "Connect Site"
 msgstr ""
 
-#: admin/class-admin.php:93
+#: admin/class-admin.php:104
 msgid "Connecting..."
 msgstr ""
 
-#: admin/class-admin.php:94
+#: admin/class-admin.php:105
 msgid "This service will only work with a live domain, not a localhost."
 msgstr ""
 
-#: admin/class-admin.php:95
+#: admin/class-admin.php:106
 msgid "Something went wrong, please refresh and try again."
 msgstr ""
 
-#: admin/class-admin.php:194
+#: admin/class-admin.php:205
 msgid "Field key must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:195
+#: admin/class-admin.php:206
 msgid "Option Values must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:196
+#: admin/class-admin.php:207
 msgid "Please do not use special character and spaces in field key."
 msgstr ""
 
-#: admin/class-admin.php:197
+#: admin/class-admin.php:208
 msgid "Field key should be a unique name."
 msgstr ""
 
-#: admin/class-admin.php:198
+#: admin/class-admin.php:209
 msgid "Are you sure you wish to delete this field?"
 msgstr ""
 
-#: admin/class-admin.php:199
+#: admin/class-admin.php:210
 msgid "This field is required."
 msgstr ""
 
-#: admin/class-admin.php:201
+#: admin/class-admin.php:212
 msgid "Choose an image"
 msgstr ""
 
-#: admin/class-admin.php:202
+#: admin/class-admin.php:213
 msgid "Use image"
 msgstr ""
 
-#: admin/class-admin.php:203
+#: admin/class-admin.php:214
 msgid "Are you sure you wish to delete this form?"
 msgstr ""
 
-#: admin/class-admin.php:204
+#: admin/class-admin.php:215
 msgid "Enter register form title"
 msgstr ""
 
-#: admin/class-admin.php:205
+#: admin/class-admin.php:216
 msgid "Updated! Reloading page..."
 msgstr ""
 
-#: admin/class-admin.php:225 admin/class-uwp-admin-menus.php:80
+#: admin/class-admin.php:236 admin/class-uwp-admin-menus.php:80
 #: admin/menus/class-menus.php:291 includes/class-uwp-privacy.php:17
 msgid "UsersWP"
 msgstr ""
 
-#: admin/class-admin.php:250 admin/class-admin.php:792
+#: admin/class-admin.php:261 admin/class-admin.php:803
 msgid "Activation email has been sent!"
 msgstr ""
 
-#: admin/class-admin.php:253
+#: admin/class-admin.php:264
 msgid "Error while sending activation email. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:256
+#: admin/class-admin.php:267
 msgid "User(s) has been activated!"
 msgstr ""
 
-#: admin/class-admin.php:394
+#: admin/class-admin.php:405
 #, php-format
 msgid ""
 "You can change your profile picture on your <a href=\"%s\">Profile Page</a>."
 msgstr ""
 
-#: admin/class-admin.php:460
+#: admin/class-admin.php:471
 msgid "Pending Email Activation"
 msgstr ""
 
-#: admin/class-admin.php:600
+#: admin/class-admin.php:611
 msgid "UsersWP Account Details"
 msgstr ""
 
-#: admin/class-admin.php:631
+#: admin/class-admin.php:642
 msgid "Change Avatar"
 msgstr ""
 
-#: admin/class-admin.php:633 templates/bootstrap/modal-profile-image.php:14
+#: admin/class-admin.php:644 templates/bootstrap/modal-profile-image.php:14
 msgid "Upload Avatar"
 msgstr ""
 
-#: admin/class-admin.php:643
+#: admin/class-admin.php:654
 msgid "Change Banner"
 msgstr ""
 
-#: admin/class-admin.php:645 templates/bootstrap/modal-profile-image.php:17
+#: admin/class-admin.php:656 templates/bootstrap/modal-profile-image.php:17
 msgid "Upload Banner"
 msgstr ""
 
-#: admin/class-admin.php:700 admin/class-admin.php:717
+#: admin/class-admin.php:711 admin/class-admin.php:728
 msgid "Resend Activation"
 msgstr ""
 
-#: admin/class-admin.php:701
+#: admin/class-admin.php:712
 msgid "Activate User"
 msgstr ""
 
-#: admin/class-admin.php:718
+#: admin/class-admin.php:729
 msgid "Activate Users"
 msgstr ""
 
-#: admin/class-admin.php:816
+#: admin/class-admin.php:827
 msgid "View UsersWP Documentation"
 msgstr ""
 
-#: admin/class-admin.php:817
+#: admin/class-admin.php:828
 msgid "Visit UsersWP support"
 msgstr ""
 
-#: admin/class-admin.php:818
+#: admin/class-admin.php:829
 msgid "View translations"
 msgstr ""
 
-#: admin/class-admin.php:834 admin/class-admin.php:892
-#: admin/class-admin.php:937 includes/class-forms.php:330
+#: admin/class-admin.php:845 admin/class-admin.php:903
+#: admin/class-admin.php:948 includes/class-forms.php:330
 msgid "Something went wrong. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:845
+#: admin/class-admin.php:856
 #, php-format
 msgid "Form %d"
 msgstr ""
 
-#: admin/class-admin.php:883 admin/settings/class-formbuilder.php:293
+#: admin/class-admin.php:894 admin/settings/class-formbuilder.php:293
 #: widgets/register.php:33
 msgid "Form"
 msgstr ""
@@ -964,8 +964,8 @@ msgstr ""
 msgid "Adds a radio input"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1033 includes/class-activator.php:392
-#: includes/class-activator.php:659
+#: admin/settings/class-formbuilder.php:1033 includes/class-activator.php:398
+#: includes/class-activator.php:665
 msgid "Email"
 msgstr ""
 
@@ -3053,8 +3053,8 @@ msgid "Update Account"
 msgstr ""
 
 #: includes/class-account.php:68 includes/class-account.php:69
-#: includes/class-activator.php:363 includes/class-activator.php:552
-#: includes/class-activator.php:691
+#: includes/class-activator.php:369 includes/class-activator.php:558
+#: includes/class-activator.php:697
 msgid "Password"
 msgstr ""
 
@@ -3092,45 +3092,45 @@ msgstr ""
 msgid "<strong>Error</strong>: Super Administrators cannot be deleted."
 msgstr ""
 
-#: includes/class-activator.php:350 includes/class-activator.php:626
+#: includes/class-activator.php:356 includes/class-activator.php:632
 #: includes/libraries/class-geodirectory-plugin.php:1845
 msgid "Username"
 msgstr ""
 
-#: includes/class-activator.php:421
+#: includes/class-activator.php:427
 msgid "Avatar"
 msgstr ""
 
-#: includes/class-activator.php:459
+#: includes/class-activator.php:465
 msgid "Banner"
 msgstr ""
 
-#: includes/class-activator.php:497
+#: includes/class-activator.php:503
 msgid "Old Password"
 msgstr ""
 
-#: includes/class-activator.php:510
+#: includes/class-activator.php:516
 msgid "New Password"
 msgstr ""
 
-#: includes/class-activator.php:523 includes/class-activator.php:565
+#: includes/class-activator.php:529 includes/class-activator.php:571
 #: includes/class-forms.php:4092
 msgid "Confirm Password"
 msgstr ""
 
-#: includes/class-activator.php:594
+#: includes/class-activator.php:600
 msgid "First Name"
 msgstr ""
 
-#: includes/class-activator.php:610
+#: includes/class-activator.php:616
 msgid "Last Name"
 msgstr ""
 
-#: includes/class-activator.php:643
+#: includes/class-activator.php:649
 msgid "Display Name"
 msgstr ""
 
-#: includes/class-activator.php:675
+#: includes/class-activator.php:681
 msgid "Bio"
 msgstr ""
 
