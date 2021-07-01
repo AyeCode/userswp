@@ -51,6 +51,17 @@ class UsersWP_Admin {
 		add_action( 'wp_ajax_uwp_ajax_create_register', array( $this, 'process_create_register_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_update_register', array( $this, 'process_update_register_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_remove_register', array( $this, 'process_remove_register_form' ) );
+
+		// Register with the deactivation survey class.
+		if(class_exists('AyeCode_Deactivation_Survey')){
+			AyeCode_Deactivation_Survey::instance(array(
+				'slug'		=> 'userswp',
+				'version'	=> USERSWP_VERSION,
+				'support_url'=> 'https://userswp.io/support/',
+				'documentation_url'=> 'https://docs.userswp.io/',
+				'activated' => get_option('uwp_installed_on', 0)
+			));
+        }
 	}
 
 	/**
@@ -494,9 +505,9 @@ class UsersWP_Admin {
 
 		global $wpdb, $pagenow;
 
-		remove_filter( 'pre_user_query', array( &$this, 'request_users_filter' ) );
-
 		if ( is_admin() && $pagenow == 'users.php' && isset( $_GET['uwp_status'] ) && $_GET['uwp_status'] != '' ) {
+
+			do_action('uwp_users_show_pending_email_activation', $query);
 
 			$status = sanitize_text_field( urldecode( $_GET['uwp_status'] ) );
 

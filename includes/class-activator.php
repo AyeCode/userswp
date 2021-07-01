@@ -109,6 +109,12 @@ class UsersWP_Activator {
         // update the version
         update_option('uwp_db_version', USERSWP_VERSION);
 
+        $installed = get_option( 'uwp_installed_on' );
+
+	    if ( empty( $installed ) ) {
+		    update_option( 'uwp_installed_on', time() );
+	    }
+
     }
 
     /**
@@ -806,6 +812,11 @@ class UsersWP_Activator {
 
         if ( $uwp_db_version != USERSWP_VERSION ) {
             self::activate(is_plugin_active_for_network( 'userswp/userswp.php' ));
+	        $settings = get_option( 'uwp_settings', array());
+	        if(isset($settings['design_style']) && 'bootstrap' == $settings['design_style'] ){
+		        $settings['users_default_layout'] = '3col';
+		        update_option( 'uwp_settings', $settings );
+	        }
         }
     }
 

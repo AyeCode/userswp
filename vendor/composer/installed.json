@@ -55,24 +55,24 @@
         },
         {
             "name": "ayecode/wp-ayecode-ui",
-            "version": "0.1.51",
-            "version_normalized": "0.1.51.0",
+            "version": "0.1.52",
+            "version_normalized": "0.1.52.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
-                "reference": "bcd4413ac3cc6513b852aabbe74f940a7dee0814"
+                "reference": "ea5f529219c7715d9b8e15cc6c053668509f1182"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/bcd4413ac3cc6513b852aabbe74f940a7dee0814",
-                "reference": "bcd4413ac3cc6513b852aabbe74f940a7dee0814",
+                "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/ea5f529219c7715d9b8e15cc6c053668509f1182",
+                "reference": "ea5f529219c7715d9b8e15cc6c053668509f1182",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "~1.0",
                 "php": ">=5.3.0"
             },
-            "time": "2021-06-09T15:12:18+00:00",
+            "time": "2021-06-28T17:28:59+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -101,9 +101,66 @@
             ],
             "support": {
                 "issues": "https://github.com/AyeCode/wp-ayecode-ui/issues",
-                "source": "https://github.com/AyeCode/wp-ayecode-ui/tree/0.1.51"
+                "source": "https://github.com/AyeCode/wp-ayecode-ui/tree/0.1.52"
             },
             "install-path": "../ayecode/wp-ayecode-ui"
+        },
+        {
+            "name": "ayecode/wp-deactivation-survey",
+            "version": "1.0.3",
+            "version_normalized": "1.0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AyeCode/wp-deactivation-survey.git",
+                "reference": "c4b0ba914835f17dca0cf69fe621c2db491d4667"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AyeCode/wp-deactivation-survey/zipball/c4b0ba914835f17dca0cf69fe621c2db491d4667",
+                "reference": "c4b0ba914835f17dca0cf69fe621c2db491d4667",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "*",
+                "squizlabs/php_codesniffer": "^3.2",
+                "wp-coding-standards/wpcs": "*"
+            },
+            "time": "2021-06-29T09:53:37+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "wp-deactivation-survey.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "AyeCode Ltd",
+                    "email": "contact@ayecode.io",
+                    "homepage": "https://ayecode.io/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Adds a deactivation survey on plugin deactivation.",
+            "homepage": "https://github.com/AyeCode/wp-deactivation-survey",
+            "keywords": [
+                "deactivation",
+                "survey",
+                "wordpress"
+            ],
+            "support": {
+                "issues": "https://github.com/AyeCode/wp-deactivation-survey/issues",
+                "source": "https://github.com/AyeCode/wp-deactivation-survey/tree/1.0.3"
+            },
+            "install-path": "../ayecode/wp-deactivation-survey"
         },
         {
             "name": "ayecode/wp-font-awesome-settings",
