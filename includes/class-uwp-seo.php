@@ -92,6 +92,14 @@ class UsersWP_Seo {
             'custom_desc' => __('Available SEO tags:', 'uwp-groups') . ' '.self::get_seo_tags(true),
         );
 
+	    $settings[] = array(
+		    'id'   => 'profile_seo_meta_description_length',
+		    'name' => __( 'Meta Description Length', 'userswp' ),
+		    'type' => 'number',
+		    'default'  => 150,
+		    'advanced'  => true,
+	    );
+
        $settings[] = array( 'type' => 'sectionend', 'id' => 'profile_seo_options' );
 
         return $settings;
@@ -229,7 +237,9 @@ class UsersWP_Seo {
             $description = $this->get_meta_description();
         }
 
-        return apply_filters('uwp_seo_profile_meta_description', substr($description, 0, 150), $description);
+        $length = uwp_get_option('profile_seo_meta_description_length', 150);
+
+        return apply_filters('uwp_seo_profile_meta_description', substr($description, 0, $length), $description);
     }
 
     public function get_opengraph_url($url) {

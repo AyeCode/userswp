@@ -131,6 +131,10 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.20 =
+* Allow to select multiple values for default lightbox register form - CHANGED
+* Setting for profile SEO description length - ADDED
+
 = 1.2.2.19 =
 * Deactivation survey popup - ADDED
 

@@ -205,6 +205,7 @@ class UsersWP_Activator {
             'user_post_counts_cpts' => array('post'),
             'login_user_post_counts_cpts' => array('post'),
             'multiple_registration_forms' => uwp_get_default_form_data(),
+            'profile_seo_meta_description_length' => 150,
         );
 
         foreach ($options as $option => $value){
