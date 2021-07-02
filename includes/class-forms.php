@@ -4387,7 +4387,7 @@ class UsersWP_Forms {
 		if(isset($_POST['form_id']) && !empty($_POST['form_id'])){
 			$form_id = (int)$_POST['form_id'];
 		} else {
-			$form_id = uwp_get_option('register_modal_form', 1);
+			$form_id = 1;
 		}
 
 		$fields        = get_register_form_fields($form_id);
@@ -4412,6 +4412,8 @@ class UsersWP_Forms {
 		if($form_id > 0){
 			$args['id'] = $form_id;
 		}
+
+		$args['limit'] = uwp_get_option('register_modal_form', 1);
 
 		// get template
 		uwp_get_template( "bootstrap/register.php", $args );
