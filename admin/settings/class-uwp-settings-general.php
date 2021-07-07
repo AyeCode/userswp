@@ -109,9 +109,9 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 	            ),
 	            array(
 		            'id'   => 'register_modal_form',
-		            'name' => __( 'Default Lightbox Form', 'userswp' ),
-		            'desc' => __( 'Choose default form to display in lighbox from multipel forms.','userswp'),
-		            'type' => 'select',
+		            'name' => __( 'Lightbox Form(s)', 'userswp' ),
+		            'desc' => __( 'Choose form(s) to display in lighbox. You can select multiple forms.','userswp'),
+		            'type' => 'multiselect',
 		            'options'  => uwp_get_register_forms_dropdown_options(),
 		            'default'  => '1',
 		            'desc_tip' => true,

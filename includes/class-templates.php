@@ -505,10 +505,14 @@ class UsersWP_Templates {
 		$form_id = ! empty( $args['id'] ) ? (int) $args['id'] : uwp_get_option('register_modal_form', 1);
 		if ( $form_type == 'register' ) {
 			$fields = get_register_form_fields($form_id);
-			$form_limit = ! empty( $args['limit'] ) ? sanitize_text_field($args['limit']) : '';
+			$form_limit = ! empty( $args['limit'] ) ? $args['limit'] : '';
 
 			if(isset($form_limit) && !empty($form_limit)){
-				$form_limit = explode(',', $form_limit);
+			    if(!is_array($form_limit)){
+				    $form_limit = explode(',', $form_limit);
+                }
+
+				$form_limit = array_map('uwp_clean', $form_limit);
 				$form_limit = array_map('trim', $form_limit);
 				$options  = uwp_get_register_forms_dropdown_options($form_limit);
 				$id         = wp_doing_ajax() ? "uwp-form-select-ajax" : 'uwp-form-select';
