@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.7
-Stable tag: 1.2.2.19
+Stable tag: 1.2.2.20
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -130,6 +130,10 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.2.20 =
+* Allow to select multiple values for default lightbox register form - CHANGED
+* Setting for profile SEO description length - ADDED
 
 = 1.2.2.19 =
 * Deactivation survey popup - ADDED
