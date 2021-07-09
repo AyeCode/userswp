@@ -340,7 +340,7 @@ class UsersWP_Templates {
 			$redirect_to = home_url( '/' );
 		}
 		$redirect_to = apply_filters( 'uwp_logout_redirect', $redirect_to );
-		wp_redirect( $redirect_to );
+		wp_safe_redirect( $redirect_to );
 		exit();
 	}
 
@@ -387,7 +387,7 @@ class UsersWP_Templates {
 				if ( $redirect ) {
 					$redirect_to = add_query_arg( 'redirect_to', $redirect, $redirect_to );
 				}
-				wp_redirect( $redirect_to );
+				wp_safe_redirect( $redirect_to );
 				exit();
 			}
 		}
@@ -749,7 +749,7 @@ class UsersWP_Templates {
 				if ( - 1 == uwp_get_option( 'login_redirect_to', - 1 ) ) {
 					$referer = wp_get_referer();
 					if ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
-						$redirect_to = urldecode( $_REQUEST['redirect_to'] );
+						$redirect_to = esc_url( urldecode( $_REQUEST['redirect_to'] ) );
 					} else if ( isset( $referer ) && ! empty( $referer ) ) {
 						$redirect_to = $referer;
 					} else {
@@ -777,7 +777,7 @@ class UsersWP_Templates {
 				if ( - 1 ==  $redirect_to_value) {
 					$referer = wp_get_referer();
 					if ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
-						$redirect_to = urldecode( $_REQUEST['redirect_to'] );
+						$redirect_to = esc_url( urldecode( $_REQUEST['redirect_to'] ) );
 					} else if ( isset( $referer ) && ! empty( $referer ) ) {
 						$redirect_to = $referer;
 					} else {
@@ -794,7 +794,7 @@ class UsersWP_Templates {
 			echo '<input type="hidden" name="uwp_register_hash" value="' . $hash . '" style="display:none !important; visibility:hidden !important;" />';
 			echo '<input type="hidden" name="uwp_register_hp" value="" style="display:none !important; visibility:hidden !important;" size="25" autocomplete="off" />';
 			echo '<input type="hidden" name="uwp_register_nonce" value="' . wp_create_nonce( 'uwp-register-nonce' ) . '" />';
-			echo '<input type="hidden" name="uwp_register_form_id" value="' . $form_id . '">';
+			echo '<input type="hidden" name="uwp_register_form_id" value="' . absint($form_id) . '">';
 		} elseif ( $form_type == 'change' ) {
 			echo '<input type="hidden" name="uwp_change_nonce" value="' . wp_create_nonce( 'uwp-change-nonce' ) . '" />';
 		} elseif ( $form_type == 'forgot' ) {

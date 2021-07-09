@@ -81,7 +81,7 @@ if( !class_exists('UsersWP_Admin_Help') ) {
 
             $screen->set_help_sidebar( $this->get_help_tab_sidebar_content());
 
-            $section = !empty( $_GET['section'] ) ? '_'.$_GET['section'] : '';
+            $section = !empty( $_GET['section'] ) ? '_'.esc_attr($_GET['section']) : '';
 
             do_action( 'uwp_adds_help_screen_tabs'.$section,$screen );
 
