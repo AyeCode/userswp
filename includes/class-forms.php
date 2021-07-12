@@ -204,7 +204,7 @@ class UsersWP_Forms {
 			$user_id = get_current_user_id();
 			// If is another user's profile page
 		} elseif ( is_admin() && ! empty( $_GET['user_id'] ) && is_numeric( $_GET['user_id'] ) ) {
-			$user_id = $_GET['user_id'];
+			$user_id = absint($_GET['user_id']);
 			// Otherwise something is wrong.
 		} else {
 			$user_id = get_current_user_id();
@@ -319,7 +319,7 @@ class UsersWP_Forms {
 			$user_id = get_current_user_id();
 			// If is another user's profile page
 		} elseif ( is_admin() && ! empty( $_GET['user_id'] ) && is_numeric( $_GET['user_id'] ) ) {
-			$user_id = $_GET['user_id'];
+			$user_id = absint($_GET['user_id']);
 			// Otherwise something is wrong.
 		} else {
 			$user_id = get_current_user_id();
@@ -655,13 +655,13 @@ class UsersWP_Forms {
 		}
 
 		$args = array(
-			'user_login'   => $user_login,
-			'user_email'   => $email,
+			'user_login'   => sanitize_user( $user_login ),
+			'user_email'   => sanitize_email( $email ),
 			'user_pass'    => $password,
-			'display_name' => $display_name,
-			'first_name'   => $first_name,
-			'last_name'    => $last_name,
-			'user_url'     => $user_url,
+			'display_name' => sanitize_title( $display_name ),
+			'first_name'   => esc_attr( $first_name ),
+			'last_name'    => esc_attr( $last_name ),
+			'user_url'     => esc_url_raw($user_url),
 		);
 
 		$user_id = wp_insert_user( $args );
@@ -1189,7 +1189,7 @@ class UsersWP_Forms {
 				wp_send_json_success( $message );
 			} else {
 				$redirect_to = $this->get_login_redirect_url( $data, $user );
-				wp_redirect( $redirect_to );
+				wp_safe_redirect( $redirect_to );
 				exit();
 			}
 

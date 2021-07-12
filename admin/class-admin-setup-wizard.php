@@ -518,13 +518,13 @@ class UsersWP_Admin_Setup_Wizard {
 
 	public function save_content_step_data() {
 
-		$login_register_page   = ! empty( $_POST['login_register_page'] ) ? $_POST['login_register_page'] : '';
-		$user_profiles_page    = ! empty( $_POST['user_profiles_page'] ) ? $_POST['user_profiles_page'] : '';
-		$member_directory_page = ! empty( $_POST['member_directory_page'] ) ? $_POST['member_directory_page'] : '';
+		$login_register_page   = ! empty( $_POST['login_register_page'] ) ? absint( $_POST['login_register_page'] ) : '';
+		$user_profiles_page    = ! empty( $_POST['user_profiles_page'] ) ? absint( $_POST['user_profiles_page'] ) : '';
+		$member_directory_page = ! empty( $_POST['member_directory_page'] ) ? absint( $_POST['member_directory_page'] ) : '';
 
 		if ( is_multisite() ) {
 			if ( isset( $_POST['registration'] ) && ! empty( $_POST['registration'] ) ) {
-				update_site_option( 'registration', $_POST['registration'] );
+				update_site_option( 'registration', esc_attr( $_POST['registration'] ) );
 			}
 		} else {
 			if ( isset( $_POST['users_can_register'] ) && 1 == absint( $_POST['users_can_register'] ) ) {

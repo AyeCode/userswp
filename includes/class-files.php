@@ -333,8 +333,7 @@ class UsersWP_Files {
             $user_id = get_current_user_id();
             // If is another user's profile page
         } elseif (is_admin() && ! empty($_GET['user_id']) && is_numeric($_GET['user_id']) ) {
-            $user_id = $_GET['user_id'];
-            $user_id = (int) sanitize_text_field($user_id);
+            $user_id = absint( $_GET['user_id'] );
             // Otherwise something is wrong.
         } else {
             $user_id = get_current_user_id();
@@ -395,7 +394,7 @@ class UsersWP_Files {
         list($category,$type) = explode('/',$file['type']);
         if ('image'!=$category || !in_array($type,array('jpg','jpeg','gif','png'))) {
             $file['error'] = "Sorry, you can only upload a .GIF, a .JPG, or a .PNG image file.";
-        } else if ($post_id = (isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : false)) {
+        } else if ($post_id = (isset($_REQUEST['post_id']) ? absint($_REQUEST['post_id']) : false)) {
             if (count(get_posts("post_type=attachment&post_parent={$post_id}"))>0)
                 $file['error'] = "Sorry, you cannot upload more than one (1) image.";
         }
