@@ -2,7 +2,7 @@
 $css_class = ! empty( $args['css_class'] ) ? esc_attr( $args['css_class'] ) : '';
 $form_title = ! empty( $args['form_title'] ) ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Reset Password', 'userswp' );
 ?>
-    <div class="uwp-content-wrap <?php echo $css_class; ?>">
+    <div class="uwp-content-wrap <?php echo esc_attr( $css_class ); ?>">
         <div class="uwp-login">
             <div class="uwp-lf-icon"><i class="fas fa-key fa-fw"></i></div>
             <?php do_action('uwp_template_form_title_before', 'reset'); ?>

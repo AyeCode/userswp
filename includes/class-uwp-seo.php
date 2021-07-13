@@ -146,12 +146,12 @@ class UsersWP_Seo {
             if(!$displayed_user){
 				return $string;
             }
-            $site_name = get_bloginfo('name');
-            $first_name = !empty($displayed_user->first_name) ? $displayed_user->first_name :'';
-            $last_name = !empty($displayed_user->last_name) ? $displayed_user->last_name :'';
-            $user_name = !empty($displayed_user->user_login) ? $displayed_user->user_login :'';
-            $display_name = !empty($displayed_user->display_name) ? $displayed_user->display_name :'';
-            $user_email = !empty($displayed_user->user_email) ? $displayed_user->user_email :'';
+            $site_name = esc_attr( get_bloginfo('name') );
+            $first_name = !empty($displayed_user->first_name) ? esc_attr( $displayed_user->first_name ) :'';
+            $last_name = !empty($displayed_user->last_name) ? esc_attr( $displayed_user->last_name ) :'';
+            $user_name = !empty($displayed_user->user_login) ? esc_attr( $displayed_user->user_login ) :'';
+            $display_name = !empty($displayed_user->display_name) ? esc_attr( $displayed_user->display_name ) :'';
+            $user_email = !empty($displayed_user->user_email) ? esc_url( $displayed_user->user_email ) :'';
 	        $user_bio = !empty($displayed_user->description) ? strip_tags($displayed_user->description) :'';
 
             $meta_separator = uwp_get_option('profile_seo_meta_separator');

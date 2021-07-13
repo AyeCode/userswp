@@ -24,7 +24,7 @@ if ( ! $user ) {
 if(!$uwp_in_user_loop){ ?><div class="card shadow-0 border-0 mw-100"><?php }
 
 	if ( $uwp_in_user_loop || 1==$link ) {
-		echo '<a href="' . esc_url_raw( get_author_posts_url( $user->ID ) ) . '" title="' . $user->display_name . '">';
+		echo '<a href="' . esc_url( get_author_posts_url( $user->ID ) ) . '" title="' . esc_attr( $user->display_name ) . '">';
 	} ?>
 	<img class="card-img-top m-0 p-0 uwp-banner-image" src="<?php echo esc_url( $banner_url ); ?>"
 	     alt="<?php _e( "User banner image", "userswp" ); ?>">

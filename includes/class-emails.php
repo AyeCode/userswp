@@ -291,19 +291,19 @@ class UsersWP_Mails {
 		$date_time       = $date . ' ' . $time;
 
 		$replace_array = array(
-			'[#blogname#]'      => $blogname,
-			'[#site_url#]'      => $site_url,
+			'[#blogname#]'      => esc_attr( $blogname ),
+			'[#site_url#]'      => esc_url( $site_url ),
 			'[#site_name_url#]' => '<a href="' . esc_url( $site_url ) . '">' . $site_url . '</a>',
 			'[#site_link#]'     => '<a href="' . esc_url( $site_url ) . '">' . $blogname . '</a>',
-			'[#site_name#]'     => $email_from_anme,
-			'[#login_url#]'     => $login_url,
+			'[#site_name#]'     => esc_attr( $email_from_anme ),
+			'[#login_url#]'     => esc_url( $login_url ),
 			'[#login_link#]'    => '<a href="' . esc_url( $login_url ) . '">' . __( 'Login', 'userswp' ) . '</a>',
 			'[#current_date#]'  => date_i18n( 'Y-m-d H:i:s', $timestamp ),
 			'[#date#]'          => $date,
 			'[#time#]'          => $time,
 			'[#date_time#]'     => $date_time,
-			'[#from_name#]'     => self::get_mail_from_name(),
-			'[#from_email#]'    => self::get_mail_from(),
+			'[#from_name#]'     => esc_attr( self::get_mail_from_name() ),
+			'[#from_email#]'    => sanitize_email( self::get_mail_from() ),
 		);
 
 		$user_id = ! empty( $email_vars['user_id'] ) ? $email_vars['user_id'] : null;
@@ -313,12 +313,12 @@ class UsersWP_Mails {
 			$replace_array = array_merge(
 				$replace_array,
 				array(
-					'[#to_name#]'         => $user_data->display_name,
-					'[#user_login#]'      => $user_data->user_login,
-					'[#user_name#]'       => $user_data->display_name,
-					'[#username#]'        => $user_data->user_login,
-					'[#user_email#]'      => $user_data->user_email,
-					'[#profile_link#]'    => $profile_link,
+					'[#to_name#]'         => esc_attr( $user_data->display_name ),
+					'[#user_login#]'      => esc_attr( $user_data->user_login ),
+					'[#user_name#]'       => esc_attr( $user_data->display_name ),
+					'[#username#]'        => esc_attr( $user_data->user_login ),
+					'[#user_email#]'      => sanitize_email( $user_data->user_email ),
+					'[#profile_link#]'    => esc_url( $profile_link ),
 				)
 			);
 		}
@@ -327,7 +327,7 @@ class UsersWP_Mails {
 
 		foreach ( $email_vars as $key => $value ) {
 			if ( is_scalar( $value ) ) {
-				$replace_array[ '[#' . $key . '#]' ] = $value;
+				$replace_array[ '[#' . $key . '#]' ] = esc_attr( $value );
 			}
 		}
 

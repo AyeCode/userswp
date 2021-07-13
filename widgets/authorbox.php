@@ -85,7 +85,7 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
         $author_id = $post->post_author;
         $author_link = uwp_build_profile_tab_url($author_id);
         $user = get_user_by('id', $author_id);
-        $author_name = $user->display_name;
+        $author_name = esc_attr( $user->display_name );
         $author_bio = get_user_meta($author_id, 'description', true);
 	    $limit_words = apply_filters('uwp_author_bio_content_limit', 200);
 	    $author_bio = wp_trim_words( $author_bio, $limit_words, '...' );
@@ -96,18 +96,18 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
         $avatar_size = apply_filters('uwp_author_box_avatar_size', 100, $args);
 
         $replace_array = array(
-            '[#post_id#]' => $post->ID,
-            '[#post_modified#]' => $post->post_modified,
-            '[#post_date#]' => $post->post_date,
-            '[#author_id#]' => $post->post_author,
-            '[#author_name#]' => $author_name,
-            '[#author_link#]' => $author_link,
-            '[#author_bio#]' => $author_bio,
+            '[#post_id#]' => absint( $post->ID ),
+            '[#post_modified#]' => esc_attr( $post->post_modified ),
+            '[#post_date#]' => esc_attr( $post->post_date ),
+            '[#author_id#]' => absint( $post->post_author ),
+            '[#author_name#]' => esc_attr( $author_name ),
+            '[#author_link#]' => esc_url( $author_link ),
+            '[#author_bio#]' => esc_textarea( $author_bio ),
             '[#author_image#]' => get_avatar($post->post_author, $avatar_size),
             '[#author_image_url#]' => get_avatar_url($post->post_author, $avatar_size),
-            '[#author_nicename#]' => $user->user_nicename,
-            '[#author_registered#]' => $user->user_registered,
-            '[#author_website#]' => $user->user_url,
+            '[#author_nicename#]' => esc_attr( $user->user_nicename ),
+            '[#author_registered#]' => esc_attr( $user->user_registered ),
+            '[#author_website#]' => esc_url( $user->user_url ),
         );
 
         if( !empty( $user_meta ) && '' !== $user_meta ) {
@@ -116,14 +116,14 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
                 if(in_array($meta_key, array('avatar_thumb', 'banner_thumb')) && !empty($meta_val)){
                     $uploads = wp_upload_dir();
                     $upload_url = $uploads['baseurl'];
-                    $meta_val = $upload_url.$meta_val;
+                    $meta_val = esc_url( $upload_url.$meta_val );
                 }
 
                 if( in_array($meta_key, array('user_privacy')) ) {
                     continue;
                 }
 
-                $replace_array['[#'.$meta_key.'#]'] = $meta_val;
+                $replace_array['[#'.$meta_key.'#]'] = esc_attr( $meta_val );
             }
         }
 

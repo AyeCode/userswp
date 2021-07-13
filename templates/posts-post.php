@@ -31,7 +31,7 @@ $user = uwp_get_displayed_user();
 		<?php
 		do_action( 'uwp_before_profile_summary', get_the_ID(), $post->post_author, $post->post_type );
 		$excerpt = strip_shortcodes( wp_trim_words( get_the_excerpt(), 15, '...' ) );
-		echo $excerpt;
+		echo esc_attr( $excerpt );
 		do_action( 'uwp_after_profile_summary', get_the_ID(), $post->post_author, $post->post_type );
 		?>
 	</div>

@@ -148,15 +148,15 @@ class UsersWP_Account {
 	        }
 
 	        $message = '<p><b>' . __('Deleted user information :', 'userswp') . '</b></p>
-	            <p>' . __('First Name:', 'userswp') . ' ' . $user->first_name . '</p>
-                <p>' . __('Last Name:', 'userswp') . ' ' . $user->last_name . '</p>
-                <p>' . __('Username:', 'userswp') . ' ' . $user->user_login . '</p>
-                <p>' . __('Email:', 'userswp') . ' ' . $user->user_email . '</p>';
+	            <p>' . __('First Name:', 'userswp') . ' ' . esc_attr( $user->first_name ) . '</p>
+                <p>' . __('Last Name:', 'userswp') . ' ' . esc_attr( $user->last_name ) . '</p>
+                <p>' . __('Username:', 'userswp') . ' ' . esc_attr( $user->user_login ). '</p>
+                <p>' . __('Email:', 'userswp') . ' ' .  sanitize_email( $user->user_email ) . '</p>';
 
 	        $message = apply_filters('uwp_account_delete_mail_message', $message, $user_id);
 
-	        $user_email = $user->user_email;
-	        $user_name = !empty($user->display_name) ? $user->display_name :'';
+	        $user_email = sanitize_email( $user->user_email );
+	        $user_name = !empty($user->display_name) ? esc_attr( $user->display_name ) :'';
 
             // Delete user
             if ( $delete_from_network ) {

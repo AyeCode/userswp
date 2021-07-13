@@ -25,7 +25,7 @@ if ( ! $user ) {
 <div class="uwp-profile-header-img clearfix">
 	<?php
 	if ($uwp_in_user_loop || 1==$link) {
-		echo '<a href="'.uwp_build_profile_tab_url($user->ID).'" title="'.$user->display_name.'">';
+		echo '<a href="'.esc_url( uwp_build_profile_tab_url($user->ID) ).'" title="'.esc_attr( $user->display_name ).'">';
 	}
 	?>
     <img src="<?php echo esc_url( $banner_url ); ?>" alt="<?php _e( "User banner image", "userswp" ); ?>" class="uwp-profile-header-img-src" />

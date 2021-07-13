@@ -131,6 +131,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.21 =
+* Extra sanitization and escaping of backend user inputs - FIXED/SECURITY
+
 = 1.2.2.20 =
 * Allow to select multiple values for default lightbox register form - CHANGED
 * Setting for profile SEO description length - ADDED

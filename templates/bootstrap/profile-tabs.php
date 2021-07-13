@@ -39,10 +39,10 @@ if($output === '' || $output=='head'){
 						$tab_url = $append_hash ? esc_url($tab_url).'#tab-content' : esc_url($tab_url);
 
 						?>
-						<li id="uwp-profile-<?php echo $tab_id; ?>"
+						<li id="uwp-profile-<?php echo esc_attr( $tab_id ); ?>"
 						    class="nav-item <?php echo $active; ?> list-unstyled m-0">
 								<?php
-                                $content = '<span class="uwp-profile-tab-label uwp-profile-'.$tab_id.'-label">'.esc_html__($tab['tab_name'], 'userswp').'</span>';
+                                $content = '<span class="uwp-profile-tab-label uwp-profile-'.esc_attr( $tab_id ).'-label">'.esc_html__($tab['tab_name'], 'userswp').'</span>';
                                 echo aui()->button(array(
 									'type'       =>  'a',
 									'href'       => $tab_url,

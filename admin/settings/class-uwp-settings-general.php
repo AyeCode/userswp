@@ -711,7 +711,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		$users = array();
 		if(!empty($get_users) ) {
 			foreach ($get_users as $key => $user) {
-				$users[$user->ID] = $user->display_name;
+				$users[$user->ID] = esc_attr( $user->display_name );
 			}
 		}
 

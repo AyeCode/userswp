@@ -7,7 +7,7 @@
 $css_class = !empty($args['css_class']) ? esc_attr( $args['css_class'] ) : 'border-0';
 do_action( 'uwp_template_before', 'change' ); ?>
 	<div class="row">
-		<div class="card mx-auto container-fluid p-0 <?php echo $css_class; ?>" >
+		<div class="card mx-auto container-fluid p-0 <?php echo esc_attr( $css_class ); ?>" >
 				<div class="card-body">
 					<?php
 					do_action( 'uwp_template_form_title_before', 'change' );
@@ -16,7 +16,7 @@ do_action( 'uwp_template_before', 'change' ); ?>
 					$form_title = apply_filters( 'uwp_template_form_title', $form_title, 'change' );
 					if ( $form_title ) {
 						echo '<h3 class="card-title text-center mb-4">';
-						echo $form_title;
+						echo esc_attr( $form_title );
 						echo '</h3>';
 					}
 

@@ -15,7 +15,7 @@ $comment = isset( $args['template_args']['comment'] ) ? $args['template_args']['
 			$thumb_url = uwp_get_default_thumb_uri();
 		}
 		?>
-		<img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo $thumb_url; ?>">
+		<img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo esc_url( $thumb_url ); ?>">
 	</a>
 
 	<h3 class="uwp-profile-item-title">
@@ -27,7 +27,7 @@ $comment = isset( $args['template_args']['comment'] ) ? $args['template_args']['
 	<div class="uwp-profile-item-summary">
 		<?php
 		$excerpt = strip_shortcodes(wp_trim_words( $comment->comment_content, 100, '...' ));
-		echo $excerpt;
+		echo esc_attr( $excerpt );
 		?>
 	</div>
 </li>

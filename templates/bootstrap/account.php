@@ -7,7 +7,7 @@
 $css_class    = ! empty( $args['css_class'] ) ? esc_attr( $args['css_class'] ) : 'border-0';
 $user_id      = get_current_user_id();
 $user_info    = get_userdata( $user_id );
-$display_name = $user_info->user_login;
+$display_name = esc_attr($user_info->user_login);
 
 do_action( 'uwp_template_before', 'account' ); ?>
     <div class="container h-100">
@@ -53,7 +53,7 @@ do_action( 'uwp_template_before', 'account' ); ?>
 					$form_title = apply_filters( 'uwp_account_page_title', $form_title, $type );
 					if ( $form_title != '0' ) {
 						echo '<h3 class="mb-lg-5 mb-4">';
-						echo $form_title;
+						echo esc_attr( $form_title );
 						echo '</h3>';
 					}
 

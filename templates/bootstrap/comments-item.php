@@ -8,7 +8,7 @@ $comment = isset( $args['template_args']['comment'] ) ? $args['template_args']['
 $avatar_url = get_avatar_url( $comment->comment_author_email, array( 'size' => 500 ) );
 $user_name = isset($comment->comment_author) ? $comment->comment_author : '';
 $user = !empty($comment->user_id) ? get_userdata( $comment->user_id ) : '';
-if(!empty($user->display_name)) { $user_name = $user->display_name;}
+if(!empty($user->display_name)) { $user_name = esc_attr( $user->display_name );}
 ?>
 <div class="card mb-5">
 
