@@ -65,3 +65,5 @@ function run_users_wp() {
 }
 
 run_users_wp();
+
+//echo sanitize_text_field("O'Connor");exit;

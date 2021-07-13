@@ -1857,7 +1857,7 @@ class UsersWP_Forms {
 	 */
 	public function process_account() {
 
-		$data  = $_POST;
+		$data  = wp_unslash( $_POST );
 		$files = $_FILES;
 
 		if ( ! isset( $data['uwp_account_nonce'] ) || ! wp_verify_nonce( $data['uwp_account_nonce'], 'uwp-account-nonce' ) ) {
@@ -3094,7 +3094,7 @@ class UsersWP_Forms {
 					'name'            => $field->htmlvar_name,
 					'placeholder'     => $placeholder,
 					'title'           => $site_title,
-					'value'           => $value,
+					'value'           => wp_unslash( $value ),
 					'required'        => $field->is_required,
 					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
 					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
@@ -3503,7 +3503,7 @@ class UsersWP_Forms {
 					'name'        => $field->htmlvar_name,
 					'placeholder' => uwp_get_field_placeholder( $field ),
 					'title'       => $site_title,
-					'value'       => $value,
+					'value'       => wp_unslash( $value ),
 					'required'    => $field->is_required,
 					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
 					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
