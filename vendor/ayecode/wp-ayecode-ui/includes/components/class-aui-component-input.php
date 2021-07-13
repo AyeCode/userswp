@@ -120,7 +120,7 @@ class AUI_Component_Input {
 
 			// value
 			if(!empty($args['value'])){
-				$output .= ' value="'.sanitize_text_field($args['value']).'" ';
+				$output .= AUI_Component_Helper::value($args['value']);
 			}
 
 			// checked, for radio and checkboxes
@@ -507,7 +507,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// for
 			if(!empty($args['for'])){
-				$output .= ' for="'.sanitize_text_field($args['for']).'" ';
+				$output .= ' for="'.esc_attr($args['for']).'" ';
 			}
 
 			// class
@@ -992,7 +992,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		// value
 		if(isset($args['value'])){
-			$output .= ' value="'.sanitize_text_field($args['value']).'" ';
+			$output .= AUI_Component_Helper::value($args['value']);
 		}
 
 		// checked, for radio and checkboxes
