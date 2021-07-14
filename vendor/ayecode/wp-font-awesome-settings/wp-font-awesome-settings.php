@@ -28,7 +28,8 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 	 * @since 1.0.10 Now able to pass wp.org theme check.
 	 * @since 1.0.11 Font Awesome Pro now supported.
 	 * @since 1.0.11 Font Awesome Kits now supported.
-	 * @ver 1.0.11
+	 * @since 1.0.13 RTL language support added.
+	 * @ver 1.0.13
 	 * @todo decide how to implement textdomain
 	 */
 	class WP_Font_Awesome_Settings {
@@ -38,7 +39,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '1.0.12';
+		public $version = '1.0.13';
 
 		/**
 		 * Class textdomain.
@@ -149,6 +150,11 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			wp_deregister_style( 'font-awesome' ); // deregister in case its already there
 			wp_register_style( 'font-awesome', $url, array(), null );
 			wp_enqueue_style( 'font-awesome' );
+
+			// RTL language support CSS.
+			if ( is_rtl() ) {
+				wp_add_inline_style( 'font-awesome', $this->rtl_inline_css() );
+			}
 
 			if ( $this->settings['shims'] ) {
 				$url = $this->get_url( true );
@@ -304,7 +310,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 				wp_die( __( 'You do not have sufficient permissions to access this page.', 'font-awesome-settings' ) );
 			}
 
-			// a hidden way to force the update of the verison number vai api instead of waiting the 48 hours
+			// a hidden way to force the update of the version number via api instead of waiting the 48 hours
 			if ( isset( $_REQUEST['force-version-check'] ) ) {
 				$this->get_latest_version( $force_api = true );
 			}
@@ -504,7 +510,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		/**
 		 * Get the latest version of Font Awesome.
 		 *
-		 * We check for a cached bersion and if none we will check for a live version via API and then cache it for 48 hours.
+		 * We check for a cached version and if none we will check for a live version via API and then cache it for 48 hours.
 		 *
 		 * @since 1.0.7
 		 * @return mixed|string The latest version number found.
@@ -546,6 +552,18 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			}
 
 			return $version;
+		}
+
+		/**
+		 * Inline CSS for RTL language support.
+		 *
+		 * @since 1.0.13
+		 * @return string Inline CSS.
+		 */
+		public function rtl_inline_css() {
+			$inline_css = '[dir=rtl] .fa-address,[dir=rtl] .fa-address-card,[dir=rtl] .fa-adjust,[dir=rtl] .fa-alarm-clock,[dir=rtl] .fa-align-left,[dir=rtl] .fa-align-right,[dir=rtl] .fa-analytics,[dir=rtl] .fa-angle-double-left,[dir=rtl] .fa-angle-double-right,[dir=rtl] .fa-angle-left,[dir=rtl] .fa-angle-right,[dir=rtl] .fa-arrow-alt-circle-left,[dir=rtl] .fa-arrow-alt-circle-right,[dir=rtl] .fa-arrow-alt-from-left,[dir=rtl] .fa-arrow-alt-from-right,[dir=rtl] .fa-arrow-alt-left,[dir=rtl] .fa-arrow-alt-right,[dir=rtl] .fa-arrow-alt-square-left,[dir=rtl] .fa-arrow-alt-square-right,[dir=rtl] .fa-arrow-alt-to-left,[dir=rtl] .fa-arrow-alt-to-right,[dir=rtl] .fa-arrow-circle-left,[dir=rtl] .fa-arrow-circle-right,[dir=rtl] .fa-arrow-from-left,[dir=rtl] .fa-arrow-from-right,[dir=rtl] .fa-arrow-left,[dir=rtl] .fa-arrow-right,[dir=rtl] .fa-arrow-square-left,[dir=rtl] .fa-arrow-square-right,[dir=rtl] .fa-arrow-to-left,[dir=rtl] .fa-arrow-to-right,[dir=rtl] .fa-balance-scale-left,[dir=rtl] .fa-balance-scale-right,[dir=rtl] .fa-bed,[dir=rtl] .fa-bed-bunk,[dir=rtl] .fa-bed-empty,[dir=rtl] .fa-border-left,[dir=rtl] .fa-border-right,[dir=rtl] .fa-calendar-check,[dir=rtl] .fa-caret-circle-left,[dir=rtl] .fa-caret-circle-right,[dir=rtl] .fa-caret-left,[dir=rtl] .fa-caret-right,[dir=rtl] .fa-caret-square-left,[dir=rtl] .fa-caret-square-right,[dir=rtl] .fa-cart-arrow-down,[dir=rtl] .fa-cart-plus,[dir=rtl] .fa-chart-area,[dir=rtl] .fa-chart-bar,[dir=rtl] .fa-chart-line,[dir=rtl] .fa-chart-line-down,[dir=rtl] .fa-chart-network,[dir=rtl] .fa-chart-pie,[dir=rtl] .fa-chart-pie-alt,[dir=rtl] .fa-chart-scatter,[dir=rtl] .fa-check-circle,[dir=rtl] .fa-check-square,[dir=rtl] .fa-chevron-circle-left,[dir=rtl] .fa-chevron-circle-right,[dir=rtl] .fa-chevron-double-left,[dir=rtl] .fa-chevron-double-right,[dir=rtl] .fa-chevron-left,[dir=rtl] .fa-chevron-right,[dir=rtl] .fa-chevron-square-left,[dir=rtl] .fa-chevron-square-right,[dir=rtl] .fa-clock,[dir=rtl] .fa-file,[dir=rtl] .fa-file-alt,[dir=rtl] .fa-file-archive,[dir=rtl] .fa-file-audio,[dir=rtl] .fa-file-chart-line,[dir=rtl] .fa-file-chart-pie,[dir=rtl] .fa-file-code,[dir=rtl] .fa-file-excel,[dir=rtl] .fa-file-image,[dir=rtl] .fa-file-pdf,[dir=rtl] .fa-file-powerpoint,[dir=rtl] .fa-file-video,[dir=rtl] .fa-file-word,[dir=rtl] .fa-flag,[dir=rtl] .fa-folder,[dir=rtl] .fa-folder-open,[dir=rtl] .fa-hand-lizard,[dir=rtl] .fa-hand-point-down,[dir=rtl] .fa-hand-point-left,[dir=rtl] .fa-hand-point-right,[dir=rtl] .fa-hand-point-up,[dir=rtl] .fa-hand-scissors,[dir=rtl] .fa-image,[dir=rtl] .fa-long-arrow-alt-left,[dir=rtl] .fa-long-arrow-alt-right,[dir=rtl] .fa-long-arrow-left,[dir=rtl] .fa-long-arrow-right,[dir=rtl] .fa-luggage-cart,[dir=rtl] .fa-moon,[dir=rtl] .fa-pencil,[dir=rtl] .fa-pencil-alt,[dir=rtl] .fa-play-circle,[dir=rtl] .fa-project-diagram,[dir=rtl] .fa-quote-left,[dir=rtl] .fa-quote-right,[dir=rtl] .fa-shopping-cart,[dir=rtl] .fa-thumbs-down,[dir=rtl] .fa-thumbs-up,[dir=rtl] .fa-user-chart{filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1);transform:scale(-1,1)}[dir=rtl] .fa-spin{animation-direction:reverse}';
+
+			return $inline_css;
 		}
 
 	}

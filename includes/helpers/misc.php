@@ -1263,7 +1263,7 @@ function uwp_insert_usermeta(){
 		$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 		$user_meta = array(
 			'username' => $user_data->user_login,
-			'email' => $user_data->user_email,
+			'email' => sanitize_email( $user_data->user_email ),
 			'first_name' => $user_data->first_name,
 			'last_name' => $user_data->last_name,
 			'display_name' => $user_data->display_name,

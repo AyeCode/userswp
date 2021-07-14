@@ -8,7 +8,7 @@ $the_query = isset( $args['template_args']['the_query'] ) ? $args['template_args
 $maximum_pages = isset( $args['template_args']['maximum_pages'] ) ? $args['template_args']['maximum_pages'] : '';
 $title = isset( $args['template_args']['title'] ) ? $args['template_args']['title'] : __('Comments', 'userswp');
 ?>
-<h3><?php echo $title;?></h3>
+<h3><?php echo esc_attr( $title );?></h3>
 
 <div class="uwp-profile-comments-loop">
 	<?php

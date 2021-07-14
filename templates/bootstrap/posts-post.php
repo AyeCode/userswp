@@ -39,7 +39,7 @@ if('publish' != $post->post_status){
 			<div class="uwp-profile-item-summary card-text">
 				<?php
 				do_action( 'uwp_before_profile_summary', get_the_ID(), $post->post_author, $post->post_type );
-				echo $excerpt = strip_shortcodes( wp_trim_words( get_the_excerpt(), 25, '...' ) );
+				echo $excerpt = esc_attr( strip_shortcodes( wp_trim_words( get_the_excerpt(), 25, '...' ) ) );
 				do_action( 'uwp_after_profile_summary', get_the_ID(), $post->post_author, $post->post_type );
 				?>
 			</div>

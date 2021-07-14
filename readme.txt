@@ -131,6 +131,12 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.21 =
+* Some text inputs add extra slash to apostrophes - FIXED
+* Extra sanitization and escaping of backend user inputs - FIXED/SECURITY
+* AUI package updated - CHANGED
+* Font Awesome Settings package updated - CHANGED
+
 = 1.2.2.20 =
 * Allow to select multiple values for default lightbox register form - CHANGED
 * Setting for profile SEO description length - ADDED

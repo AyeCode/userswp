@@ -31,13 +31,13 @@ if($hide_cover) {
 }
 
 ?>
-<div class="uwp-profile-header <?php echo $class; ?> clearfix">
+<div class="uwp-profile-header <?php echo esc_attr( $class ); ?> clearfix">
 	<?php if(!$hide_cover) {
 		?>
 		<div class="uwp-profile-header-img clearfix">
 			<?php
 			if ($uwp_in_user_loop) {
-				echo '<a href="'.uwp_build_profile_tab_url($user->ID).'" title="'.$user->display_name.'">';
+				echo '<a href="'.esc_url(uwp_build_profile_tab_url($user->ID)).'" title="'.esc_attr( $user->display_name ).'">';
 			}
 			?>
 			<img src="<?php echo esc_url( $banner_url ); ?>" alt="<?php _e( "User banner image", "userswp" ); ?>" class="uwp-profile-header-img-src" />
@@ -63,7 +63,7 @@ if($hide_cover) {
 		<?php
 		if(!$hide_avatar) {
 			if ($uwp_in_user_loop) {
-				echo '<a href="' . uwp_build_profile_tab_url($user->ID) . '" title="' . $user->display_name . '">';
+				echo '<a href="' . esc_url (uwp_build_profile_tab_url($user->ID) ) . '" title="' . esc_attr( $user->display_name ) . '">';
 			}
 			?>
 			<div class="uwp-profile-avatar-inner">

@@ -25,11 +25,11 @@ if ( ! $user ) {
 <div class="uwp-profile-avatar clearfix">
     <?php
         if ($uwp_in_user_loop || 1==$link) {
-            echo '<a href="' . uwp_build_profile_tab_url($user->ID) . '" title="' . $user->display_name . '">';
+            echo '<a href="' . esc_url( uwp_build_profile_tab_url($user->ID) ) . '" title="' . esc_attr( $user->display_name ) . '">';
         }
         ?>
         <div class="uwp-profile-avatar">
-            <img class="avatar avatar-<?php echo $size; ?> photo" src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php _e("User avatar","userswp");?>" width="<?php echo $size; ?>" height="<?php echo $size; ?>">
+            <img class="avatar avatar-<?php echo absint( $size ); ?> photo" src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php _e("User avatar","userswp");?>" width="<?php echo absint( $size ); ?>" height="<?php echo absint( $size ); ?>">
             <?php if (!$uwp_in_user_loop && is_user_logged_in() && (get_current_user_id() == $user->ID) && $allow_change) { ?>
                 <div class="uwp-profile-avatar-change">
                     <div class="uwp-profile-avatar-change-inner">

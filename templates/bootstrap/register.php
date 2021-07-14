@@ -10,7 +10,7 @@ $form_title = ! empty( $args['form_title'] ) || $args['form_title']=='0' ? esc_a
 $form_title = apply_filters( 'uwp_template_form_title', $form_title, 'register' );
 do_action( 'uwp_template_before', 'register' ); ?>
     <div class="row">
-        <div class="card mx-auto container-fluid p-0 <?php echo $css_class; ?>" >
+        <div class="card mx-auto container-fluid p-0 <?php echo esc_attr( $css_class ); ?>" >
 			<?php
 			// ajax modal
 			if(wp_doing_ajax() && $form_title != '0'){
@@ -35,7 +35,7 @@ do_action( 'uwp_template_before', 'register' ); ?>
 
 				if (!wp_doing_ajax() && $form_title != '0' ) {
 					echo '<h3 class="card-title text-center mb-4">';
-					echo $form_title;
+					echo esc_attr( $form_title );
 					echo '</h3>';
 				}
 

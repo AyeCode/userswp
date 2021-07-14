@@ -99,11 +99,11 @@ class UsersWP_Profile {
 		}
 		?>
         <div class="uwp-profile-name">
-        <<?php echo esc_attr( $tag ); ?> class="uwp-user-title <?php echo $title_class; ?>"
-        data-user="<?php echo $user->ID; ?>">
-		<?php if ( $link ){ ?><a href="<?php echo uwp_build_profile_tab_url( $user->ID ); ?>"
-                                 class="<?php echo $link_class; ?>"><?php } ?>
-		<?php echo apply_filters( 'uwp_profile_display_name', $user->display_name ); ?>
+        <<?php echo esc_attr( $tag ); ?> class="uwp-user-title <?php echo esc_attr( $title_class ); ?>"
+        data-user="<?php echo absint( $user->ID ); ?>">
+		<?php if ( $link ){ ?><a href="<?php echo esc_url( uwp_build_profile_tab_url( $user->ID ) ); ?>"
+                                 class="<?php echo esc_attr( $link_class ); ?>"><?php } ?>
+		<?php echo apply_filters( 'uwp_profile_display_name', esc_attr( $user->display_name ) ); ?>
 		<?php if ( $link ){ ?></a><?php } ?>
 		<?php do_action( 'uwp_profile_after_title', $user->ID ); ?>
         </<?php echo esc_attr( $tag ); ?>>
@@ -211,7 +211,7 @@ class UsersWP_Profile {
 					}
 
 					if ( $value ) {
-						echo '<li><a target="_blank" rel="nofollow" href="' . $value . '">' . $title . '</a></li>';
+						echo '<li><a target="_blank" rel="nofollow" href="' . esc_url($value) . '">' . esc_atrr($title) . '</a></li>';
 					}
 				}
 				?>
@@ -298,7 +298,7 @@ class UsersWP_Profile {
 					if ( $value ) {
 						$wrap_html = true;
 						?>
-                        <div class="uwp-profile-extra-wrap <?php echo $class; ?>">
+                        <div class="uwp-profile-extra-wrap <?php echo esc_attr( $class ); ?>">
                             <div class="uwp-profile-extra-key d-inline-block"><?php echo $icon . " " . $site_title; ?>
                                 <span class="uwp-profile-extra-sep">:</span></div>
                             <div class="uwp-profile-extra-value d-inline-block">
@@ -456,7 +456,7 @@ class UsersWP_Profile {
 				$link_text = esc_url( $link_text );
 			}
 
-			$value = '<a href="' . $value . '" target="_blank" rel="nofollow">' . $link_text . '</a>';
+			$value = '<a href="' . esc_url( $value ) . '" target="_blank" rel="nofollow">' . esc_attr( $link_text ) . '</a>';
 		}
 
 		// Checkbox
@@ -1115,7 +1115,7 @@ class UsersWP_Profile {
 			} else {
 				$user = get_user_by( 'slug', $author_slug );
 			}
-			$title = $user->display_name;
+			$title = esc_attr( $user->display_name );
 		}
 
 		return $title;

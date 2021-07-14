@@ -75,7 +75,7 @@ class AUI_Component_Helper {
 		$output = '';
 
 		if($text){
-			$output = ' value="'.sanitize_text_field($text).'" ';
+			$output = ' value="'.esc_attr($text).'" ';
 		}
 
 		return $output;

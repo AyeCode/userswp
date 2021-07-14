@@ -672,7 +672,7 @@ class UsersWP_Templates {
 			$bs_form_control = $design_style ? "form-control" : "";
 
 			?>
-            <div id="<?php echo $field->htmlvar_name; ?>_row"
+            <div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
                  class="<?php if ( $field->is_required ) {
 				     echo 'required_field';
 			     } ?> uwp_form_row clearfix uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">

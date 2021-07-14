@@ -5,7 +5,7 @@ echo '<div class="uwp-login-widget user-loggedin">';
 
 echo '<p>'.__( 'Logged in as ', 'userswp' );
 
-$content = get_avatar( $current_user->ID, 35 ). '<strong>'. apply_filters('uwp_profile_display_name', $current_user->display_name).'</strong>';
+$content = get_avatar( $current_user->ID, 35 ). '<strong>'. apply_filters('uwp_profile_display_name', esc_attr( $current_user->display_name )).'</strong>';
 
 echo aui()->button(array(
 	'type'  =>  'a',

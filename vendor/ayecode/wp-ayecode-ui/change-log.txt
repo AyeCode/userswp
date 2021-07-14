@@ -1,3 +1,6 @@
+= 0.1.53 =
+* Better escaping for input values - CHANGED
+
 = 0.1.52 =
 * WP 5.8 legacy widgets preview not loading styles - FIXED
 
