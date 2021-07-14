@@ -75,7 +75,7 @@ class AUI_Component_Helper {
 		$output = '';
 
 		if($text){
-			$output = ' value="'.esc_attr($text).'" ';
+			$output = ' value="'.esc_attr( wp_unslash( $text ) ).'" ';
 		}
 
 		return $output;

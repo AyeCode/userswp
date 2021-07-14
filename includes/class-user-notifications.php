@@ -100,7 +100,7 @@ class UsersWP_Notifications {
             global $uwp_notices;
             $user_id = get_current_user_id();
             if (isset($_POST['uwp_mute_notifications']) && !empty($_POST['uwp_mute_notifications'])) {
-                update_user_meta($user_id, 'uwp_mute_notifications', absint($_POST['uwp_mute_notifications']));
+                update_user_meta($user_id, 'uwp_mute_notifications', array_map('uwp_clean', (array) $_POST['uwp_mute_notifications']));
             }
 
 	        $message = apply_filters('uwp_notification_update_success_message', __('Notification settings updated successfully.', 'userswp'));
