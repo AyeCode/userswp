@@ -131,6 +131,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.22 =
+* Some parts of HTML email converted to htmlentities - FIXED
+
 = 1.2.2.21 =
 * Some text inputs add extra slash to apostrophes - FIXED
 * Extra sanitization and escaping of backend user inputs - FIXED/SECURITY
