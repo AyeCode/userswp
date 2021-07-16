@@ -291,7 +291,7 @@ class UsersWP_Mails {
 		$date_time       = $date . ' ' . $time;
 
 		$replace_array = array(
-			'[#blogname#]'      => esc_attr( $blogname ),
+			'[#blogname#]'      => $blogname,
 			'[#site_url#]'      => esc_url( $site_url ),
 			'[#site_name_url#]' => '<a href="' . esc_url( $site_url ) . '">' . $site_url . '</a>',
 			'[#site_link#]'     => '<a href="' . esc_url( $site_url ) . '">' . $blogname . '</a>',
@@ -327,7 +327,7 @@ class UsersWP_Mails {
 
 		foreach ( $email_vars as $key => $value ) {
 			if ( is_scalar( $value ) ) {
-				$replace_array[ '[#' . $key . '#]' ] = esc_attr( $value );
+				$replace_array[ '[#' . $key . '#]' ] = $value ;
 			}
 		}
 

@@ -416,14 +416,4 @@ class UsersWP_Meta {
 		return $metadata;
 	}
 
-	// compatibility with WP Fusion plugin
-	public function wpf_add_user_meta($user_meta, $user_id){
-		$meta_data = uwp_get_usermeta_row($user_id);
-		if(isset($meta_data) && !empty($meta_data)){
-			$user_meta = array_merge($user_meta, (array)$meta_data);
-		}
-
-		return $user_meta;
-	}
-
 }

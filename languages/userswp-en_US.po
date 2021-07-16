@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.20\n"
+"Project-Id-Version: UsersWP 1.2.2.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-07 15:42+0530\n"
-"PO-Revision-Date: 2021-07-07 15:42+0530\n"
+"POT-Creation-Date: 2021-07-14 20:18+0530\n"
+"PO-Revision-Date: 2021-07-14 20:18+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1425,7 +1425,7 @@ msgstr ""
 msgid "Upload Image"
 msgstr ""
 
-#: admin/settings/class-settings.php:355 includes/class-files.php:357
+#: admin/settings/class-settings.php:355 includes/class-files.php:356
 msgid "Remove Image"
 msgstr ""
 
@@ -3311,7 +3311,7 @@ msgstr ""
 msgid "Uploaded files need to be one of the following file types: %s"
 msgstr ""
 
-#: includes/class-files.php:366
+#: includes/class-files.php:365
 msgid "Remove File"
 msgstr ""
 
