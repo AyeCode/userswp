@@ -658,7 +658,7 @@ class UsersWP_Forms {
 			'user_login'   => sanitize_user( $user_login ),
 			'user_email'   => sanitize_email( $email ),
 			'user_pass'    => $password,
-			'display_name' => sanitize_title( $display_name ),
+			'display_name' => sanitize_text_field( $display_name ),
 			'first_name'   => esc_attr( $first_name ),
 			'last_name'    => esc_attr( $last_name ),
 			'user_url'     => esc_url_raw($user_url),

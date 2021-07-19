@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '9e3ba3daeb6f2548a039e799a0b7af2bf5111d6e',
+    'reference' => '0839a86c99eb40afadb56d95b55ba682380a0d1e',
     'name' => 'uswerwp/userswp',
   ),
   'versions' => 
@@ -111,7 +111,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '9e3ba3daeb6f2548a039e799a0b7af2bf5111d6e',
+      'reference' => '0839a86c99eb40afadb56d95b55ba682380a0d1e',
     ),
   ),
 );
