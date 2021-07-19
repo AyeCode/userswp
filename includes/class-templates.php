@@ -516,12 +516,14 @@ class UsersWP_Templates {
 				$form_limit = array_map('trim', $form_limit);
 				$options  = uwp_get_register_forms_dropdown_options($form_limit);
 				$id         = wp_doing_ajax() ? "uwp-form-select-ajax" : 'uwp-form-select';
+
+
 				?>
                 <div class="btn-group btn-group-sm mb-2" role="group" id="<?php echo $id; ?>">
 				<?php
 				$options = array_chunk( $options, 5, true );
 				$current_url   = uwp_current_page_url();
-				if ( isset( $options[0] ) && ! empty( $options[0] ) && count( $options[0] ) > 0 ) {
+				if ( isset( $options[0] ) && ! empty( $options[0] ) && count( $options[0] ) > 1 ) {
 					foreach ( $options[0] as $id => $val ) {
 						$active = $form_id == $id ? 'active' : '';
 						$url = esc_url_raw( add_query_arg( array( 'uwp_form_id' => $id ), $current_url ) );
@@ -533,6 +535,8 @@ class UsersWP_Templates {
 							'extra_attributes'  => array('data-form_id'=>$id)
 						) );
 					}
+				}elseif(count( $options[0] ) == 1){
+					$form_id = key($options[0]);
 				}
 
 				if ( isset( $options[1] ) && ! empty( $options[1] ) && count( $options[1] ) > 0 ) {
