@@ -506,11 +506,11 @@ class UsersWP_Templates {
 		if ( $form_type == 'register' ) {
 			$fields = get_register_form_fields($form_id);
 			$form_limit = ! empty( $args['limit'] ) ? $args['limit'] : '';
+			if(isset($form_limit) && !is_array($form_limit)){
+				$form_limit = explode(',', $form_limit);
+			}
 
-			if(isset($form_limit) && !empty($form_limit)){
-			    if(!is_array($form_limit)){
-				    $form_limit = explode(',', $form_limit);
-                }
+			if(isset($form_limit) && !empty($form_limit) && count($form_limit) > 1){
 
 				$form_limit = array_map('uwp_clean', $form_limit);
 				$form_limit = array_map('trim', $form_limit);

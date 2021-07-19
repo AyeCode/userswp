@@ -235,11 +235,11 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
                 ?>
                 <li>
-                    <a id="uwp-<?php echo $field['tab_key']; ?>"
+                    <a id="uwp-<?php echo esc_attr($field['tab_key']); ?>"
                        data-field-custom-type="predefined"
                        class="uwp-draggable-form-items"
                        data-tab_layout="profile"
-                       data-field-type-key="uwp-<?php echo $field['tab_key']; ?>"
+                       data-field-type-key="uwp-<?php echo esc_attr($field['tab_key']); ?>"
                        data-tab_type="<?php echo isset($field['tab_type']) ? esc_attr($field['tab_type']) : ''; ?>"
                        data-tab_name="<?php echo isset($field['tab_name']) ? esc_attr($field['tab_name']) : ''; ?>"
                        data-tab_icon="<?php echo isset($field['tab_icon']) ? esc_attr($field['tab_icon']) : ''; ?>"
@@ -318,7 +318,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		    }
 
 		    ?>
-		    <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
+		    <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr($form_type); ?>"/>
 		    <input type="hidden" name="manage_field_type" class="manage_field_type" value="profile_tabs">
 		    <ul>
 			    <?php
@@ -350,7 +350,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                         }
 					    ?>
 					    <li <?php echo $style; ?> >
-						    <a id="uwp-<?php echo $field['tab_key']; ?>"
+						    <a id="uwp-<?php echo esc_attr($field['tab_key']); ?>"
                                 data-field-custom-type="custom"
                                class="uwp-draggable-form-items"
                                data-tab_layout="profile"
@@ -426,11 +426,11 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 
                     ?>
                     <li>
-                        <a id="uwp-<?php echo $field['tab_key']; ?>"
+                        <a id="uwp-<?php echo esc_attr($field['tab_key']); ?>"
                            data-field-custom-type="predefined"
                            class="uwp-draggable-form-items"
                            data-tab_layout="profile"
-                           data-field-type-key="uwp-<?php echo $field['tab_key']; ?>"
+                           data-field-type-key="uwp-<?php echo esc_attr($field['tab_key']); ?>"
 						   data-tab_type="<?php echo isset($field['tab_type']) ? esc_attr($field['tab_type']) : ''; ?>"
 						   data-tab_name="<?php echo isset($field['tab_name']) ? esc_attr($field['tab_name']) : ''; ?>"
 						   data-tab_icon="<?php echo isset($field['tab_icon']) ? esc_attr($field['tab_icon']) : ''; ?>"
@@ -473,10 +473,10 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 	    public function tabs_selected_fields($form_type)
 	    {
 		    global $wpdb;
-		    $form_id = ! empty( $_REQUEST['form'] ) ? (int) $_REQUEST['form'] : 1;
+		    $form_id = ! empty( $_REQUEST['form'] ) ? absint($_REQUEST['form']) : 1;
 		    $table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
 		    ?>
-		    <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
+		    <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr($form_type); ?>"/>
 		    <input type="hidden" name="manage_field_type" class="manage_field_type" value="profile_tabs">
 		    <ul class="uwp-profile-tabs-selected core uwp_form_extras">
 			    <?php
@@ -607,7 +607,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
             if ( uwp_is_fa_icon( $icon ) ) {
                 $field_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
             } elseif ( uwp_is_icon_url( $icon ) ) {
-                $field_icon = '<b style="background-image: url("' . $icon . '")"></b>';
+                $field_icon = '<b style="background-image: url("' . esc_url($icon) . '")"></b>';
             } elseif (isset($field_info->tab_type) && $field_info->tab_type == 'fieldset') {
 			    $field_icon = '<i class="fas fa-arrows-h" aria-hidden="true"></i>';
 		    } else {
@@ -829,7 +829,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		    if (isset($_REQUEST['create_field'])) {
 			    $field_id = isset($_REQUEST['field_id']) ? trim(sanitize_text_field($_REQUEST['field_id']), '_') : '';
 			    $field_action = isset($_REQUEST['field_ins_upd']) ? sanitize_text_field($_REQUEST['field_ins_upd']) : '';
-			    $form_id = isset($_REQUEST['form_id']) ? (int)$_REQUEST['form_id'] : 1;
+			    $form_id = isset($_REQUEST['form_id']) ? absint($_REQUEST['form_id']) : 1;
 
 			    /* ------- check nonce field ------- */
 			    if (isset($_REQUEST['update']) && $_REQUEST['update'] == 'update') {
@@ -901,7 +901,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 		    $tab_id = isset($request_field['field_id']) && $request_field['field_id'] ? absint($request_field['field_id']) : '';
 		    $tab_name= isset($request_field['tab_name']) ? sanitize_text_field($request_field['tab_name']) : '';
 		    $tab_icon= isset($request_field['tab_icon']) ? sanitize_text_field($request_field['tab_icon']) : '';
-		    $tab_key = !empty($request_field['tab_key']) ? sanitize_text_field($request_field['tab_key']) : sanitize_title($tab_name, 'uwp-tab-'.$tab_id);
+		    $tab_key = !empty($request_field['tab_key']) ? sanitize_title($request_field['tab_key']) : sanitize_title($tab_name, 'uwp-tab-'.$tab_name);
 		    $tab_level = !empty($request_field['tab_level']) ? sanitize_text_field($request_field['tab_level']) : 0;
 		    $tab_parent = !empty($request_field['tab_parent']) ? sanitize_text_field($request_field['tab_parent']) : 0;
 		    $tab_type = isset($request_field['tab_type']) ? sanitize_text_field($request_field['tab_type']) : 'standard';
