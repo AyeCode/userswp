@@ -692,17 +692,17 @@ class UsersWP_Templates {
                     </label>
 				<?php } ?>
 
-                <input name="<?php echo $field->htmlvar_name; ?>"
-                       class="<?php echo $field->css_class; ?> <?php echo esc_attr( $bs_form_control ); ?>"
+                <input name="<?php echo esc_attr($field->htmlvar_name); ?>"
+                       class="<?php echo esc_attr($field->css_class); ?> <?php echo esc_attr( $bs_form_control ); ?>"
                        placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
-                       title="<?php echo $label; ?>"
+                       title="<?php echo esc_attr($label); ?>"
 					<?php if ( $field->for_admin_use == 1 ) {
 						echo 'readonly="readonly"';
 					} ?>
 					<?php if ( $field->is_required == 1 ) {
 						echo 'required="required"';
 					} ?>
-                       type="<?php echo $field->field_type; ?>"
+                       type="<?php echo esc_attr($field->field_type); ?>"
                        value="<?php echo esc_html( $value ); ?>">
 
             </div>

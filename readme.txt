@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.8
-Stable tag: 1.2.2.23
+Stable tag: 1.2.2.24
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -130,6 +130,10 @@ No questions so far, but don't hesitate to ask!
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.2.24 =
+* Lists tab showing no tab error when lists CPT slug changed - FIXED
+* Extra sanitization and escaping of form builder inputs - FIXED
 
 = 1.2.2.23 =
 * Show Yoast SEO profile page disabled notice only if using profile page - FIXED
