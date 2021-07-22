@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.8
-Stable tag: 1.2.2.22
+Stable tag: 1.2.2.23
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -131,9 +131,13 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.23 =
+* Show Yoast SEO profile page disabled notice only if using profile page - FIXED
+* Register popup if only one type selected should not show selector - FIXED
+* Profile tab key generated from title instead of ID if not supplied while creating field - FIXED
+
 = 1.2.2.22 =
 * Some parts of HTML email converted to htmlentities - FIXED
-* Register popup if only one type selected should not show selector - FIXED
 
 = 1.2.2.21 =
 * Some text inputs add extra slash to apostrophes - FIXED

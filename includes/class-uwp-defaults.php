@@ -122,7 +122,7 @@ Thank you,
 		return apply_filters( 'uwp_registration_success_email_content',
 			__( "Dear [#user_name#],
 
-You can log in  with the following information:
+You can log in with the following information:
 
 [#login_details#]
 

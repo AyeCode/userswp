@@ -497,7 +497,7 @@ class UsersWP_Profile {
 			$value = uwp_output_country_html( $value );
 		}
 
-		return $value;
+		return apply_filters('uwp_get_field_value', $value, $field, $user);
 	}
 
 	/**
