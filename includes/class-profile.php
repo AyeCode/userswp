@@ -487,6 +487,7 @@ class UsersWP_Profile {
 				$value = nl2br( $value );
 				break;
 			case 'editor':
+                $value = wp_kses_post( $value );
                 $value = nl2br( $value );
 				break;
 			default:

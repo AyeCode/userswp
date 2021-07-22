@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.23\n"
+"Project-Id-Version: UsersWP 1.2.2.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-19 19:41+0530\n"
-"PO-Revision-Date: 2021-07-19 19:41+0530\n"
+"POT-Creation-Date: 2021-07-22 19:40+0530\n"
+"PO-Revision-Date: 2021-07-22 19:41+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1224,9 +1224,9 @@ msgid "No options available"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:2087
-#: includes/libraries/class-geodirectory-plugin.php:1145
-#: includes/libraries/class-geodirectory-plugin.php:1361
-#: includes/libraries/class-geodirectory-plugin.php:1575
+#: includes/libraries/class-geodirectory-plugin.php:1146
+#: includes/libraries/class-geodirectory-plugin.php:1362
+#: includes/libraries/class-geodirectory-plugin.php:1576
 msgid "Delete"
 msgstr ""
 
@@ -1390,28 +1390,28 @@ msgid ""
 "arrange fields order in register form."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2840
-#: admin/settings/class-formbuilder.php:2861
-#: admin/settings/class-formbuilder.php:2893
+#: admin/settings/class-formbuilder.php:2845
+#: admin/settings/class-formbuilder.php:2866
+#: admin/settings/class-formbuilder.php:2898
 msgid "Column change failed, you may have too many columns."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2998
-#: admin/settings/class-formbuilder.php:3040
-#: admin/settings/class-formbuilder.php:3054
-#: admin/settings/class-formbuilder.php:3107 includes/class-tools.php:82
+#: admin/settings/class-formbuilder.php:3003
+#: admin/settings/class-formbuilder.php:3045
+#: admin/settings/class-formbuilder.php:3059
+#: admin/settings/class-formbuilder.php:3112 includes/class-tools.php:82
 msgid ""
 "Column creation failed, you may have too many columns or the default value "
 "does not match with field data type."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:3067
+#: admin/settings/class-formbuilder.php:3072
 msgid ""
 "Column creation failed, you may have too many columns or the default value "
 "must have in valid date format."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:3080
+#: admin/settings/class-formbuilder.php:3085
 msgid ""
 "Column creation failed, you may have too many columns or the default value "
 "must have in valid time format."
@@ -2389,12 +2389,12 @@ msgid "More Info"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:401
-#: includes/class-profile.php:896 upgrade.php:55
+#: includes/class-profile.php:897 upgrade.php:55
 msgid "Posts"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:409
-#: includes/class-profile.php:935 templates/bootstrap/loop-comments.php:9
+#: includes/class-profile.php:936 templates/bootstrap/loop-comments.php:9
 #: templates/loop-comments.php:9 upgrade.php:71
 msgid "Comments"
 msgstr ""
@@ -3093,7 +3093,7 @@ msgid "<strong>Error</strong>: Super Administrators cannot be deleted."
 msgstr ""
 
 #: includes/class-activator.php:357 includes/class-activator.php:633
-#: includes/libraries/class-geodirectory-plugin.php:1845
+#: includes/libraries/class-geodirectory-plugin.php:1846
 msgid "Username"
 msgstr ""
 
@@ -3806,53 +3806,53 @@ msgstr ""
 msgid "Edit Account"
 msgstr ""
 
-#: includes/class-profile.php:773
+#: includes/class-profile.php:774
 msgid "Page"
 msgstr ""
 
-#: includes/class-profile.php:809
+#: includes/class-profile.php:810
 msgid "Newer posts"
 msgstr ""
 
-#: includes/class-profile.php:813
+#: includes/class-profile.php:814
 msgid "Older posts"
 msgstr ""
 
-#: includes/class-profile.php:822
+#: includes/class-profile.php:823
 msgid "Previous"
 msgstr ""
 
-#: includes/class-profile.php:823
+#: includes/class-profile.php:824
 msgid "Next"
 msgstr ""
 
-#: includes/class-profile.php:824
+#: includes/class-profile.php:825
 msgid "Posts navigation"
 msgstr ""
 
-#: includes/class-profile.php:1384
+#: includes/class-profile.php:1385
 #, php-format
 msgid "The uploaded file is too small. Minimum image width should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1387
+#: includes/class-profile.php:1388
 #, php-format
 msgid "The uploaded file is too small. Minimum image height should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1430
+#: includes/class-profile.php:1431
 msgid "Invalid request!"
 msgstr ""
 
-#: includes/class-profile.php:1451
+#: includes/class-profile.php:1452
 msgid "No fields available"
 msgstr ""
 
-#: includes/class-profile.php:1615
+#: includes/class-profile.php:1616
 msgid "Loading Form ..."
 msgstr ""
 
-#: includes/class-profile.php:1710
+#: includes/class-profile.php:1711
 msgid "File too big."
 msgstr ""
 
@@ -4595,7 +4595,7 @@ msgid "Listings"
 msgstr ""
 
 #: includes/libraries/class-geodirectory-plugin.php:329
-#: includes/libraries/class-geodirectory-plugin.php:1405 upgrade.php:87
+#: includes/libraries/class-geodirectory-plugin.php:1406 upgrade.php:87
 msgid "Reviews"
 msgstr ""
 
@@ -4607,56 +4607,56 @@ msgstr ""
 msgid "Lists"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1131
-#: includes/libraries/class-geodirectory-plugin.php:1347
-#: includes/libraries/class-geodirectory-plugin.php:1561
+#: includes/libraries/class-geodirectory-plugin.php:1132
+#: includes/libraries/class-geodirectory-plugin.php:1348
+#: includes/libraries/class-geodirectory-plugin.php:1562
 msgid "Edit Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1136
-#: includes/libraries/class-geodirectory-plugin.php:1352
-#: includes/libraries/class-geodirectory-plugin.php:1566
+#: includes/libraries/class-geodirectory-plugin.php:1137
+#: includes/libraries/class-geodirectory-plugin.php:1353
+#: includes/libraries/class-geodirectory-plugin.php:1567
 msgid "Edit"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1140
-#: includes/libraries/class-geodirectory-plugin.php:1356
-#: includes/libraries/class-geodirectory-plugin.php:1570
+#: includes/libraries/class-geodirectory-plugin.php:1141
+#: includes/libraries/class-geodirectory-plugin.php:1357
+#: includes/libraries/class-geodirectory-plugin.php:1571
 msgid "Delete Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1163
+#: includes/libraries/class-geodirectory-plugin.php:1164
 #: templates/loop-posts.php:27
 #, php-format
 msgid "No %s found."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1225
+#: includes/libraries/class-geodirectory-plugin.php:1226
 #: templates/bootstrap/posts-post.php:59
 msgid "View"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1809
+#: includes/libraries/class-geodirectory-plugin.php:1810
 msgid "Published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1812
+#: includes/libraries/class-geodirectory-plugin.php:1813
 msgid "Pending"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1815
+#: includes/libraries/class-geodirectory-plugin.php:1816
 msgid "Closed"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1818
+#: includes/libraries/class-geodirectory-plugin.php:1819
 msgid "Expired"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1821
+#: includes/libraries/class-geodirectory-plugin.php:1822
 msgid "Not published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1826
+#: includes/libraries/class-geodirectory-plugin.php:1827
 msgid "Status: "
 msgstr ""
 
