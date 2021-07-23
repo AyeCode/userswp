@@ -830,6 +830,7 @@ class UsersWP_GeoDirectory_Plugin {
 		}
 
 		$subtab     = get_query_var( 'uwp_subtab' );
+		$uwp_tab = get_query_var('uwp_tab');
 		$type       = geodir_lists_slug();
 		$user_lists = GeoDir_Lists_Data::get_user_lists( $user->ID );
 		$subtabs    = array();
@@ -860,11 +861,11 @@ class UsersWP_GeoDirectory_Plugin {
                 <div class="pb-3">
 					<?php
 					foreach ( $subtabs as $tab_id => $tab ) {
-						$tab_url = uwp_build_profile_tab_url( $user->ID, $type, $tab_id );
+						$tab_url = uwp_build_profile_tab_url( $user->ID, $uwp_tab, $tab_id );
 						$active  = $active_tab == $tab_id ? 'btn-primary' : 'btn-outline-primary';
 						?>
-                        <a id="uwp-profile-gd-<?php echo $tab_id; ?>" href="<?php echo esc_url( $tab_url ); ?>"
-                           class=" btn btn-sm <?php echo $active; ?>">
+                        <a id="uwp-profile-gd-<?php echo esc_attr($tab_id); ?>" href="<?php echo esc_url( $tab_url ); ?>"
+                           class=" btn btn-sm <?php echo esc_attr($active); ?>">
 							<?php echo esc_html__( $tab['title'], 'userswp' ); ?>
                             <span class="badge badge-light ml-1"><?php echo $tab['count']; ?></span>
                         </a>
@@ -884,10 +885,10 @@ class UsersWP_GeoDirectory_Plugin {
 								$tab_url = uwp_build_profile_tab_url( $user->ID, $type, $tab_id );
 								$active  = $active_tab == $tab_id ? ' active' : '';
 								?>
-                                <li id="uwp-profile-gd-<?php echo $tab_id; ?>" class="<?php echo $active; ?>">
+                                <li id="uwp-profile-gd-<?php echo esc_attr($tab_id); ?>" class="<?php echo esc_attr($active); ?>">
                                     <a href="<?php echo esc_url( $tab_url ); ?>">
                                     <span
-                                            class="uwp-profile-tab-label uwp-profile-gd-<?php echo $tab_id; ?>-label "><span
+                                            class="uwp-profile-tab-label uwp-profile-gd-<?php echo esc_attr($tab_id); ?>-label "><span
                                                 class="uwp-profile-tab-sub-ul-count uwp-profile-sub-ul-gd-<?php echo $tab_id; ?>-count"><?php echo $tab['count']; ?></span> <?php echo esc_html__( $tab['title'], 'userswp' ); ?></span>
                                     </a>
                                 </li>

@@ -176,7 +176,7 @@ class UsersWP_Seo {
         $meta_title = !empty($meta_title) ? $meta_title : $this->get_default_meta_title();
         $meta_title = $this->replace_tags($meta_title);
 
-        return sanitize_text_field($meta_title);
+        return esc_html($meta_title);
     }
 
     public function get_meta_description() {
@@ -185,7 +185,7 @@ class UsersWP_Seo {
         $meta_description = !empty($meta_description) ? $meta_description : $this->get_default_meta_description();
         $meta_description = $this->replace_tags($meta_description);
 
-        return sanitize_text_field($meta_description);
+        return esc_html($meta_description);
     }
 
     public function output_title($title) {
