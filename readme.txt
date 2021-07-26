@@ -131,6 +131,9 @@ No questions so far, but don't hesitate to ask!
 
 == Changelog ==
 
+= 1.2.2.25 =
+* Claim listing redirects to account after registration and auto login - FIXED
+
 = 1.2.2.24 =
 * Lists tab showing no tab error when lists CPT slug changed - FIXED
 * Extra sanitization and escaping of form builder inputs - FIXED

@@ -205,11 +205,15 @@ class UsersWP_Templates {
 		     ( $reset_page && ( (int) $reset_page == $current_page_id ) ) ) {
 			if ( is_user_logged_in() ) {
 				$redirect_page_id = uwp_get_page_id( 'account_page', false );
-				if ( empty( $redirect_page_id ) ) {
-					$redirect_to = home_url( '/' );
-				} else {
+
+				if ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
+					$redirect_to = esc_url_raw( $_REQUEST['redirect_to'] );
+				} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id > 0 ) {
 					$redirect_to = get_permalink( $redirect_page_id );
-				}
+				} else {
+					$redirect_to = home_url( '/' );
+                }
+
 				$redirect_to = apply_filters( 'uwp_logged_in_redirect', $redirect_to );
 				wp_redirect( $redirect_to );
 				exit();
