@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '0839a86c99eb40afadb56d95b55ba682380a0d1e',
+    'reference' => 'b070e879e5c3dcfac67ab2038d3eff8a5cd0e2df',
     'name' => 'uswerwp/userswp',
   ),
   'versions' => 
@@ -58,13 +58,12 @@
     ),
     'composer/installers' => 
     array (
-      'pretty_version' => 'dev-main',
-      'version' => 'dev-main',
+      'pretty_version' => '1.x-dev',
+      'version' => '1.9999999.9999999.9999999-dev',
       'aliases' => 
       array (
-        0 => '1.x-dev',
       ),
-      'reference' => 'ae03311f45dfe194412081526be2e003960df74b',
+      'reference' => '1e8a1614adc33d455f81e9b5381d4f661565fe90',
     ),
     'roundcube/plugin-installer' => 
     array (
@@ -87,7 +86,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '0839a86c99eb40afadb56d95b55ba682380a0d1e',
+      'reference' => 'b070e879e5c3dcfac67ab2038d3eff8a5cd0e2df',
     ),
   ),
 );
