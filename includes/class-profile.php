@@ -580,7 +580,10 @@ class UsersWP_Profile {
 				if ( isset( $tab->tab_level ) && $tab->tab_level > 0 ) {
 					continue;
 				}
-				if ( empty( $tabs_content[ $tab->id . "tab" ] ) ) {
+
+				$hide_empty = apply_filters('uwp_hide_empty_tabs', true, $tab, $tabs);
+
+				if ( $hide_empty && empty( $tabs_content[ $tab->id . "tab" ] ) ) {
 					continue;
 				}
 
