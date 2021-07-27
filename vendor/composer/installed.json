@@ -277,17 +277,17 @@
         },
         {
             "name": "composer/installers",
-            "version": "dev-main",
-            "version_normalized": "dev-main",
+            "version": "1.x-dev",
+            "version_normalized": "1.9999999.9999999.9999999-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "ae03311f45dfe194412081526be2e003960df74b"
+                "reference": "1e8a1614adc33d455f81e9b5381d4f661565fe90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/ae03311f45dfe194412081526be2e003960df74b",
-                "reference": "ae03311f45dfe194412081526be2e003960df74b",
+                "url": "https://api.github.com/repos/composer/installers/zipball/1e8a1614adc33d455f81e9b5381d4f661565fe90",
+                "reference": "1e8a1614adc33d455f81e9b5381d4f661565fe90",
                 "shasum": ""
             },
             "require": {
@@ -305,8 +305,7 @@
                 "symfony/phpunit-bridge": "^4.2 || ^5",
                 "symfony/process": "^2.3"
             },
-            "time": "2021-04-28T06:42:17+00:00",
-            "default-branch": true,
+            "time": "2021-07-23T09:01:08+00:00",
             "type": "composer-plugin",
             "extra": {
                 "class": "Composer\\Installers\\Plugin",
@@ -411,7 +410,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/installers/issues",
-                "source": "https://github.com/composer/installers/tree/v1.11.0"
+                "source": "https://github.com/composer/installers/tree/1.x"
             },
             "funding": [
                 {

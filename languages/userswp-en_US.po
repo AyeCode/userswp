@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.24\n"
+"Project-Id-Version: UsersWP 1.2.2.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-22 19:40+0530\n"
-"PO-Revision-Date: 2021-07-22 19:41+0530\n"
+"POT-Creation-Date: 2021-07-27 17:43+0530\n"
+"PO-Revision-Date: 2021-07-27 17:43+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1100,12 +1100,12 @@ msgid "Is Public :"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1575 includes/class-profile.php:465
-#: includes/class-templates.php:1094
+#: includes/class-templates.php:1098
 msgid "Yes"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1576 includes/class-profile.php:467
-#: includes/class-templates.php:1093
+#: includes/class-templates.php:1097
 msgid "No"
 msgstr ""
 
@@ -2389,12 +2389,12 @@ msgid "More Info"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:401
-#: includes/class-profile.php:897 upgrade.php:55
+#: includes/class-profile.php:900 upgrade.php:55
 msgid "Posts"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:409
-#: includes/class-profile.php:936 templates/bootstrap/loop-comments.php:9
+#: includes/class-profile.php:939 templates/bootstrap/loop-comments.php:9
 #: templates/loop-comments.php:9 upgrade.php:71
 msgid "Comments"
 msgstr ""
@@ -2432,17 +2432,17 @@ msgid "Privacy:"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:732
-#: includes/class-templates.php:1126
+#: includes/class-templates.php:1130
 msgid "Anyone"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:733
-#: includes/class-templates.php:1127
+#: includes/class-templates.php:1131
 msgid "Logged in"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:734
-#: includes/class-templates.php:1128
+#: includes/class-templates.php:1132
 msgid "Author only"
 msgstr ""
 
@@ -3806,53 +3806,53 @@ msgstr ""
 msgid "Edit Account"
 msgstr ""
 
-#: includes/class-profile.php:774
+#: includes/class-profile.php:777
 msgid "Page"
 msgstr ""
 
-#: includes/class-profile.php:810
+#: includes/class-profile.php:813
 msgid "Newer posts"
 msgstr ""
 
-#: includes/class-profile.php:814
+#: includes/class-profile.php:817
 msgid "Older posts"
 msgstr ""
 
-#: includes/class-profile.php:823
+#: includes/class-profile.php:826
 msgid "Previous"
 msgstr ""
 
-#: includes/class-profile.php:824
+#: includes/class-profile.php:827
 msgid "Next"
 msgstr ""
 
-#: includes/class-profile.php:825
+#: includes/class-profile.php:828
 msgid "Posts navigation"
-msgstr ""
-
-#: includes/class-profile.php:1385
-#, php-format
-msgid "The uploaded file is too small. Minimum image width should be %s px"
 msgstr ""
 
 #: includes/class-profile.php:1388
 #, php-format
+msgid "The uploaded file is too small. Minimum image width should be %s px"
+msgstr ""
+
+#: includes/class-profile.php:1391
+#, php-format
 msgid "The uploaded file is too small. Minimum image height should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1431
+#: includes/class-profile.php:1434
 msgid "Invalid request!"
 msgstr ""
 
-#: includes/class-profile.php:1452
+#: includes/class-profile.php:1455
 msgid "No fields available"
 msgstr ""
 
-#: includes/class-profile.php:1616
+#: includes/class-profile.php:1619
 msgid "Loading Form ..."
 msgstr ""
 
-#: includes/class-profile.php:1711
+#: includes/class-profile.php:1714
 msgid "File too big."
 msgstr ""
 
@@ -3860,40 +3860,40 @@ msgstr ""
 msgid "Profile Page"
 msgstr ""
 
-#: includes/class-templates.php:550
+#: includes/class-templates.php:554
 msgid "More"
 msgstr ""
 
-#: includes/class-templates.php:1072
+#: includes/class-templates.php:1076
 msgid "Field"
 msgstr ""
 
-#: includes/class-templates.php:1075
+#: includes/class-templates.php:1079
 msgid "Is Public?"
 msgstr ""
 
-#: includes/class-templates.php:1108
+#: includes/class-templates.php:1112
 msgid "Tab Name"
 msgstr ""
 
-#: includes/class-templates.php:1111 includes/helpers/misc.php:547
+#: includes/class-templates.php:1115 includes/helpers/misc.php:547
 #: includes/helpers/tabs.php:135
 msgid "Privacy"
 msgstr ""
 
-#: includes/class-templates.php:1147
+#: includes/class-templates.php:1151
 msgid " (Default)"
 msgstr ""
 
-#: includes/class-templates.php:1162
+#: includes/class-templates.php:1166
 msgid "Hide profile from the users listing page."
 msgstr ""
 
-#: includes/class-templates.php:1178
+#: includes/class-templates.php:1182
 msgid "Make the whole profile private"
 msgstr ""
 
-#: includes/class-templates.php:1186 includes/class-user-notifications.php:69
+#: includes/class-templates.php:1190 includes/class-user-notifications.php:69
 #: templates/bootstrap/change.php:29 templates/bootstrap/forgot.php:51
 #: templates/bootstrap/reset.php:33 templates/change.php:13
 #: templates/forgot.php:13 templates/reset.php:17
