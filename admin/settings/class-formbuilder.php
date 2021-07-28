@@ -3210,21 +3210,21 @@ class UsersWP_Form_Builder {
 	}
 
 	public function register_ajax_handler() {
-		if ( isset( $_POST['create_field'] ) ) {
+		if ( isset( $_REQUEST['create_field'] ) ) {
 
 			if ( ! current_user_can( 'manage_options' ) ) {
 				wp_die( -1 );
 			}
 
-			$form_id      = isset( $_POST['form_id'] ) ? sanitize_text_field( $_POST['form_id'] ) : 1;
-			$field_id     = isset( $_POST['field_id'] ) ? trim( sanitize_text_field( $_POST['field_id'] ), '_' ) : '';
-			$field_action = isset( $_POST['field_ins_upd'] ) ? sanitize_text_field( $_POST['field_ins_upd'] ) : '';
+			$form_id      = isset( $_REQUEST['form_id'] ) ? sanitize_text_field( $_REQUEST['form_id'] ) : 1;
+			$field_id     = isset( $_REQUEST['field_id'] ) ? trim( sanitize_text_field( $_REQUEST['field_id'] ), '_' ) : '';
+			$field_action = isset( $_REQUEST['field_ins_upd'] ) ? sanitize_text_field( $_REQUEST['field_ins_upd'] ) : '';
 
 			/* ------- check nonce field ------- */
-			if ( isset( $_POST['update'] ) && $_POST['update'] == 'update' ) {
+			if ( isset( $_REQUEST['update'] ) && $_REQUEST['update'] == 'update' ) {
 				$field_ids = array();
-				if ( ! empty( $_POST['licontainer'] ) && is_array( $_POST['licontainer'] ) ) {
-					foreach ( $_POST['licontainer'] as $lic_id ) {
+				if ( ! empty( $_REQUEST['licontainer'] ) && is_array( $_REQUEST['licontainer'] ) ) {
+					foreach ( $_REQUEST['licontainer'] as $lic_id ) {
 						$field_ids[] = sanitize_text_field( $lic_id );
 					}
 				}
@@ -3240,33 +3240,33 @@ class UsersWP_Form_Builder {
 
 			/* ---- Show field form in admin ---- */
 			if ( $field_action == 'new' ) {
-				$form_type = isset( $_POST['form_type'] ) ? sanitize_text_field( $_POST['form_type'] ) : '';
+				$form_type = isset( $_REQUEST['form_type'] ) ? sanitize_text_field( $_REQUEST['form_type'] ) : '';
 				$fields    = $this->register_fields( $form_type, $form_id );
 
 
-				$_POST['site_field_id'] = isset( $_POST['field_id'] ) ? sanitize_text_field( $_POST['field_id'] ) : '';
-				$_POST['is_default']    = '0';
+				$_REQUEST['site_field_id'] = isset( $_REQUEST['field_id'] ) ? sanitize_text_field( $_REQUEST['field_id'] ) : '';
+				$_REQUEST['is_default']    = '0';
 
 				if ( ! empty( $fields ) ) {
 					foreach ( $fields as $val ) {
 						$val = stripslashes_deep( $val );
 
-						if ( $val['htmlvar_name'] == $_POST['htmlvar_name'] ) {
-							$_POST['field_type'] = $val['field_type'];
-							$_POST['site_title'] = $val['site_title'];
+						if ( $val['htmlvar_name'] == $_REQUEST['htmlvar_name'] ) {
+							$_REQUEST['field_type'] = $val['field_type'];
+							$_REQUEST['site_title'] = $val['site_title'];
 						}
 					}
 				}
 
 
-				$htmlvar_name = isset( $_POST['htmlvar_name'] ) ? sanitize_text_field( $_POST['htmlvar_name'] ) : '';
+				$htmlvar_name = isset( $_REQUEST['htmlvar_name'] ) ? sanitize_text_field( $_REQUEST['htmlvar_name'] ) : '';
 
-				$this->register_field_adminhtml( $htmlvar_name, $field_action, false, $_POST );
+				$this->register_field_adminhtml( $htmlvar_name, $field_action, false, $_REQUEST );
 			}
 
 			/* ---- Delete field ---- */
-			if ( $field_id != '' && $field_action == 'delete' && isset( $_POST['_wpnonce'] ) ) {
-				if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'uwp_form_extras_nonce' . $field_id ) ) {
+			if ( $field_id != '' && $field_action == 'delete' && isset( $_REQUEST['_wpnonce'] ) ) {
+				if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'uwp_form_extras_nonce' . $field_id ) ) {
 					return;
 				}
 
@@ -3274,21 +3274,21 @@ class UsersWP_Form_Builder {
 			}
 
 			/* ---- Save field  ---- */
-			if ( $field_id != '' && $field_action == 'submit' && isset( $_POST['_wpnonce'] ) ) {
-				if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'uwp_form_extras_nonce' . $field_id ) ) {
+			if ( $field_id != '' && $field_action == 'submit' && isset( $_REQUEST['_wpnonce'] ) ) {
+				if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'uwp_form_extras_nonce' . $field_id ) ) {
 					return;
 				}
 
-				foreach ( $_POST as $pkey => $pval ) {
-					$tags = is_array( $_POST[ $pkey ] ) ? 'skip_field' : '';
+				foreach ( $_REQUEST as $pkey => $pval ) {
+					$tags = is_array( $_REQUEST[ $pkey ] ) ? 'skip_field' : '';
 
 					if ( $tags != 'skip_field' ) {
-						$_POST[ $pkey ] = strip_tags( sanitize_text_field( $_POST[ $pkey ] ), $tags );
+						$_REQUEST[ $pkey ] = strip_tags( sanitize_text_field( $_REQUEST[ $pkey ] ), $tags );
 					}
 				}
 
 
-				$return = $this->register_field_save( $_POST );
+				$return = $this->register_field_save( $_REQUEST );
 
 				if ( is_int( $return ) ) {
 					$lastid = $return;
