@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'b070e879e5c3dcfac67ab2038d3eff8a5cd0e2df',
+    'reference' => '68ba402fe786ba8c1084562e5d073f433a7f0f86',
     'name' => 'uswerwp/userswp',
   ),
   'versions' => 
@@ -46,12 +46,12 @@ private static $installed = array (
     ),
     'ayecode/wp-ayecode-ui' => 
     array (
-      'pretty_version' => '0.1.55',
-      'version' => '0.1.55.0',
+      'pretty_version' => '0.1.56',
+      'version' => '0.1.56.0',
       'aliases' => 
       array (
       ),
-      'reference' => '7f48bf6d5edd6592957cecc2ce6a7eb40a48e910',
+      'reference' => '670d69332268995f9f2b67d861a57a3b910714be',
     ),
     'ayecode/wp-deactivation-survey' => 
     array (
@@ -110,7 +110,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'b070e879e5c3dcfac67ab2038d3eff8a5cd0e2df',
+      'reference' => '68ba402fe786ba8c1084562e5d073f433a7f0f86',
     ),
   ),
 );
