@@ -587,12 +587,12 @@ class UsersWP_Mails {
 		$email_name = 'wp_new_user_notification';
 		$is_admin = false;
 		if ( !self::is_email_enabled( $email_name, '', $is_admin ) ) {
-			return;
+			return $wp_new_user_notification_email;
 		}
 
 		$key = get_password_reset_key( $user );
 		if ( is_wp_error( $key ) ) {
-			return;
+			return $wp_new_user_notification_email;
 		}
 
 		$email_vars = array(
