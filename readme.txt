@@ -1,4 +1,4 @@
-=== UsersWP - User Profile & Registration ===
+=== UsersWP - User Registration & User Profile  ===
 Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
@@ -13,7 +13,7 @@ Light weight frontend user registration and login plugin.
 == Description ==
 
 [Addons](https://userswp.io/downloads/category/addons/) | [Demos](https://demos.ayecode.io/userswp/) | [Docs](https://userswp.io/docs/)
-= THE ONLY LIGHTWEIGHT USER PROFILE PLUGIN FOR WORDPRESS. CUSTOMIZE 100% OF ITS DESIGN WITH YOUR FAVORITE PAGE BUILDER. FULLY COMPATIBLE WITH ELEMENTOR, OXYGEN, DIVI, BEAVER BUILDER, GUTENBERG AND MANY OTHER PAGE BUILDERS. USERSWP FEATURES FRONT END USER PROFILE, USERS DIRECTORY, A REGISTRATION AND A LOGIN FORM. =
+= The only lightweight and 100% secure user registration, user login and user profile plugin for WordPress. Customize the design with your favorite page builder. Fully compatible with Elementor, Oxygen, Divi, Beaver Builder, Gutenberg and many other page builders. UsersWP features front end user profiles and accounts, users directory, unlimited registration forms and login form. =
 
 While BuddyPress, Ultimate Member, Profile Builder and similar plugins are excellent, we wanted to create something much lighter and simpler to use.
 
@@ -24,20 +24,20 @@ Today UsersWP is by far the simplest solution available to manage users on WordP
 = FEATURES =
 
 * Drag and Drop forms builder with all kind of custom fields for your user profiles.
-* Shortcode for the Login form
-* Shortcode for the Registration form
-* Shortcode for the Edit Account form
-* Shortcodes for the Users Directory
-* Shortcodes for the User profile  
-* Shortcode for the Password Recovery form
-* Shortcode for the Change Password form
-* Shortcode for the Reset Password form
-* Shortcode for the Authorbox
+* Multiple registration forms, allowing to assign a different role to each form.
+* Login form
+* Edit Account form
+* Users Directory
+* User profile  
+* Password Recovery form
+* Change Password form
+* Reset Password form
+* Authorbox
 * Custom menu items like login/logout links and links to relevant pages.
 
-After activation all pages are created with the correct shortcodes so that you are good to go in seconds.
+All the above elements can be added to your website via Gutenberg Blocks, Widgeets (that can be used with most page builders) or Shortcodes.
 
-All shortcodes are available as widgets and blocks too, so they can be used via page builders.
+After activation all pages are created with the correct shortcodes so that you are good to go in seconds.
 
 You can customize the design of both the Users Directory and the User Profile templates using your favorite page builder. For example, you can decide where any element of the user profile appears. Elements like: the Avatar, the header banner, the name and all custom fields you created.    
 
@@ -65,7 +65,7 @@ We provide some free extensions:
 = Premium Add-ons =
 
 UsersWP can be extended with several add-ons. Few examples are:
-* [~~GeoDirectory~~](https://userswp.io/downloads/geodirectory/) - NOW BUILT IN TO CORE - Create a tab for each listing type submitted, reviews and favorite listings.
+* [~~GeoDirectory~~](https://wpgeodirectory.com/) - NOW BUILT IN TO CORE - Create a tab for each listing type submitted, reviews and favorite listings.
 * [WooCommerce](https://userswp.io/downloads/woocommerce/) - Connect WooCommerce with UsersWP, display orders and reviews in user profile pages.
 * [bbPress](https://userswp.io/downloads/bbpress-2/) - Connect bbPress with UsersWP, display forum interactions in user profile pages.
 * [Easy Digital Downloads](https://userswp.io/downloads/easy-digital-downloads/) - Display “Downloads” and “Purchases” tab in user profile pages.
@@ -85,6 +85,7 @@ UsersWP can be extended with several add-ons. Few examples are:
 * [Realtime Notifications](https://userswp.io/downloads/realtime-notifications/) - Sends notifications to users, about activity on your website.
 * [Advanced Search](https://userswp.io/downloads/advanced-search/) - Extends the regular UsersWP search form by adding options to filter by custom fields.
 * [Groups](https://userswp.io/downloads/groups/) - Easily create a community with discussion groups like Facebook.
+* [User to User Private Messages](https://userswp.io/downloads/private-messages/) - Allow your users to send each other private messages in a Facebook-like chat.
 
 There are many others and we release new Add-ons frequently. You can see the full collection here: [UsersWP Premium Add-ons](https://userswp.io/downloads/category/addons/)
 
@@ -118,13 +119,27 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 
 == Frequently Asked Questions ==
 
-No questions so far, but don't hesitate to ask!
+= Can I create more than 1 user registration form, for example one for teachers and one for students  =
+
+Yes you can and you can assign a custom role to each user registration form.
+
+= How many user registration forms can I create? =
+
+Unlimited user registration forms.
+
+= Can I moderate user registrations? =
+
+Yes you can moderate user registration, but you'll need the [User Registration Moderation](https://userswp.io/downloads/moderation/) add-on, which lets you manually approve or reject user registrations. 
+
+= Can I customize the design of the User profile with Elementor? =
+
+Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver Builder, Oxygen, and other page builders. 
 
 == Screenshots ==
 
 1. User Profile Page.
 2. Users Directory.
-3. Registration Form.
+3. User Registration Form.
 4. Drag and Drop Profile Builder.
 5. Login Form.
 6. Edit Account Form.
@@ -132,7 +147,7 @@ No questions so far, but don't hesitate to ask!
 == Changelog ==
 
 = 1.2.2.25 =
-* Claim listing redirects to account after registration and auto login - FIXED
+* Claim listing redirects to account after user registration and auto login - FIXED
 * Filter to show profile empty tabs - ADDED
 
 = 1.2.2.24 =
