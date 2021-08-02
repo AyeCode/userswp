@@ -65,7 +65,7 @@ if ( ! $uwp_in_user_loop ){ ?>
 					<?php if ( $uwp_in_user_loop ) {
 						echo '<a href="' . esc_url( uwp_build_profile_tab_url( $user->ID ) ) . '" title="' .  esc_attr( $user->display_name ) . '">';
 					} ?>
-                    <img class="rounded-circle shadow border border-white border-width-4 p-0 <?php if ( ! $hide_cover ) {
+                    <img class="rounded-circle shadow border border-white border-width-4 p-0 mw-100 <?php if ( ! $hide_cover ) {
 						echo "mt-neg5";
 					} ?>"
                          src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php _e( "User avatar", "userswp" ); ?>">

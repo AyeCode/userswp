@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.2.26 =
+* New user notification should be sent default if disabled from our settings - FIXED
+
 = 1.2.2.25 =
 * Claim listing redirects to account after user registration and auto login - FIXED
 * Filter to show profile empty tabs - ADDED
