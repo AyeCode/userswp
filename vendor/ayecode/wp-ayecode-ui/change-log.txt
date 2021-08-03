@@ -1,3 +1,6 @@
+= 0.1.56 =
+* Radio with empty value do not renders value attribute - FIXED
+
 = 0.1.55 =
 * Add unique CSS class to radio/checkbox wrapper - ADDED
 * Added wp_unslash() to value output helper - ADDED

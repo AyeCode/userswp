@@ -71,11 +71,11 @@ class AUI_Component_Helper {
 	 *
 	 * @return string The sanitized item.
 	 */
-	public static function value($text){
+	public static function value( $text ) {
 		$output = '';
 
-		if($text){
-			$output = ' value="'.esc_attr( wp_unslash( $text ) ).'" ';
+		if ( $text !== null && $text !== false ) {
+			$output = ' value="' . esc_attr( wp_unslash( $text ) ) . '" ';
 		}
 
 		return $output;
