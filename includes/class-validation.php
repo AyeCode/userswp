@@ -220,7 +220,7 @@ class UsersWP_Validation {
 
                 // Check the username for register
                 if ('register' == $type && $field->htmlvar_name == 'username') {
-                    if (!validate_username($sanitized_value)) {
+                    if (!empty($sanitized_value) && !validate_username($sanitized_value)) {
                         $errors->add('invalid_username', $incorrect_username_error_msg);
                         return $errors;
                     }
@@ -262,7 +262,7 @@ class UsersWP_Validation {
 
                 // Check the username for login
                 if ($type != 'account' && $field->htmlvar_name == 'username') {
-                    if (!is_email($sanitized_value) && !validate_username($sanitized_value)) {
+                    if (!empty($sanitized_value) && !is_email($sanitized_value) && !validate_username($sanitized_value)) {
                         $errors->add('invalid_username', $incorrect_username_error_msg);
                         return $errors;
                     }

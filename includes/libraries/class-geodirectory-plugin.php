@@ -506,8 +506,12 @@ class UsersWP_GeoDirectory_Plugin {
 	 *
 	 * @return      mixed
 	 */
-	public function geodir_get_reviews_by_user_id( $post_type = 'gd_place', $user_id, $count_only = false, $offset = 0, $limit = 20 ) {
+	public function geodir_get_reviews_by_user_id( $post_type, $user_id, $count_only = false, $offset = 0, $limit = 20 ) {
 		global $wpdb;
+
+		if(empty($post_type)){
+			$post_type = 'gd_place';
+        }
 
 		if ( $count_only ) {
 			if ( uwp_is_gdv2() ) {
@@ -846,14 +850,20 @@ class UsersWP_GeoDirectory_Plugin {
 
 		if ( ! empty( $subtabs ) ) {
 			$subtab_keys = array_keys( $subtabs );
-			$default_tab = $subtab_keys[0];
+			$default_tab = isset($subtab_keys[0]) ? $subtab_keys[0] : '';
 		} else {
 			$default_tab = '';
 		}
 
 		$default_tab = apply_filters( 'uwp_default_gd_lists_subtab', $default_tab, $user, $type );
 		$active_tab  = ! empty( $subtab ) && array_key_exists( $subtab, $subtabs ) ? $subtab : $default_tab;
-		$active_id   = ! empty( $active_tab ) ? $subtabs[ $active_tab ]['id'] : $subtabs[ $default_tab ]['id'];
+		if(! empty( $active_tab ) && isset($subtabs[ $active_tab ]['id'])){
+			$active_id = $subtabs[ $active_tab ]['id'];
+        } elseif(isset($subtabs[ $default_tab ]['id'])){
+			$active_id = $subtabs[ $default_tab ]['id'];
+        } else {
+			$active_id = '';
+        }
 
 		if ( uwp_get_option( "design_style", 'bootstrap' ) ) {
 			if ( is_array( $subtabs ) && count( $subtabs ) > 0 ) {
@@ -889,7 +899,7 @@ class UsersWP_GeoDirectory_Plugin {
                                     <a href="<?php echo esc_url( $tab_url ); ?>">
                                     <span
                                             class="uwp-profile-tab-label uwp-profile-gd-<?php echo esc_attr($tab_id); ?>-label "><span
-                                                class="uwp-profile-tab-sub-ul-count uwp-profile-sub-ul-gd-<?php echo $tab_id; ?>-count"><?php echo $tab['count']; ?></span> <?php echo esc_html__( $tab['title'], 'userswp' ); ?></span>
+                                                class="uwp-profile-tab-sub-ul-count uwp-profile-sub-ul-gd-<?php echo esc_attr($tab_id); ?>-count"><?php echo $tab['count']; ?></span> <?php echo esc_html__( $tab['title'], 'userswp' ); ?></span>
                                     </a>
                                 </li>
 								<?php
