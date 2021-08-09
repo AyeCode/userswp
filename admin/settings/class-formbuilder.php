@@ -567,7 +567,7 @@ class UsersWP_Form_Builder {
 		}
 	}
 
-	public function custom_available_fields( $type = '', $form_type ) {
+	public function custom_available_fields( $type, $form_type ) {
 		?>
         <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">

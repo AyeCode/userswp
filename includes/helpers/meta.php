@@ -29,7 +29,7 @@ function uwp_get_usermeta( $user_id = false, $key = '', $default = false ) {
  *
  * @return      bool                            Update success or not?.
  */
-function uwp_update_usermeta( $user_id = false, $key, $value ) {
+function uwp_update_usermeta( $user_id, $key, $value ) {
     $meta = new UsersWP_Meta();
     return $meta->update_usermeta($user_id, $key, $value);
 }

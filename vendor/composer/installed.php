@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '68ba402fe786ba8c1084562e5d073f433a7f0f86',
+    'reference' => 'a2c88e390e3e8da45725d6ff8f4087ae4cf96f23',
     'name' => 'uswerwp/userswp',
   ),
   'versions' => 
@@ -22,12 +22,12 @@
     ),
     'ayecode/wp-ayecode-ui' => 
     array (
-      'pretty_version' => '0.1.56',
-      'version' => '0.1.56.0',
+      'pretty_version' => '0.1.58',
+      'version' => '0.1.58.0',
       'aliases' => 
       array (
       ),
-      'reference' => '670d69332268995f9f2b67d861a57a3b910714be',
+      'reference' => '82a712650d68a4daaeff182c6d7a801f6fd6123b',
     ),
     'ayecode/wp-deactivation-survey' => 
     array (
@@ -86,7 +86,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '68ba402fe786ba8c1084562e5d073f433a7f0f86',
+      'reference' => 'a2c88e390e3e8da45725d6ff8f4087ae4cf96f23',
     ),
   ),
 );
