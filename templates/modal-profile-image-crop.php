@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 $type  = isset( $_POST['uwp_popup_type'] ) && $_POST['uwp_popup_type'] == 'avatar' ? 'avatar' : 'banner';
-$image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
+$image_url = !empty($args['image_url']) ? esc_url( $args['image_url'] ) : '';
 ?>
 <div class="uwp-bs-modal uwp_fade uwp_show" id="uwp-<?php echo $type; ?>-modal">
 	<div class="uwp-bs-modal-dialog">
@@ -36,7 +36,7 @@ $image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
 							<input type="hidden" name="w" value="" id="<?php echo $type; ?>-w" />
 							<input type="hidden" name="h" value="" id="<?php echo $type; ?>-h" />
 							<input type="hidden" id="uwp-<?php echo $type; ?>-crop-image" name="uwp_crop" value="<?php echo $image_url; ?>" />
-							<input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp-crop-nonce' ); ?>" />
+							<input type="hidden" name="uwp_crop_nonce" value="<?php echo wp_create_nonce( 'uwp_crop_nonce_'.$type ); ?>" />
 							<input type="submit" name="uwp_<?php echo $type; ?>_crop" value="<?php _e('Apply', 'userswp'); ?>" class="button button-primary" id="save_uwp_<?php echo $type; ?>" />
 						</form>
 					</div>

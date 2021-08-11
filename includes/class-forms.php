@@ -199,6 +199,10 @@ class UsersWP_Forms {
 			return false;
 		}
 
+		if ( empty( $_POST['uwp_crop_nonce'] ) || !wp_verify_nonce( $_POST['uwp_crop_nonce'], 'uwp_crop_nonce_'.$type ) ) {
+			return;
+		}
+
 		// If is current user's profile (profile.php)
 		if ( is_admin() && defined( 'IS_PROFILE_PAGE' ) && IS_PROFILE_PAGE ) {
 			$user_id = get_current_user_id();
@@ -313,6 +317,10 @@ class UsersWP_Forms {
 	public function process_image_reset( $type ) {
 		if ( ! is_user_logged_in() ) {
 			return false;
+		}
+
+		if ( empty( $_POST['uwp_reset_nonce'] ) || !wp_verify_nonce( $_POST['uwp_reset_nonce'], 'uwp_reset_nonce_'.$type ) ) {
+			return;
 		}
 
 		if ( is_admin() && defined( 'IS_PROFILE_PAGE' ) && IS_PROFILE_PAGE ) {

@@ -77,6 +77,13 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 		<div id="<?php echo $type; ?>-crop-actions">
 			<form class="uwp-crop-form" method="post">
 				<?php
+				echo aui()->input( array(
+					'type'    => 'hidden',
+					'name'    => 'uwp_reset_nonce',
+					'id'      => 'uwp_reset_nonce',
+					'value'   => wp_create_nonce( 'uwp_reset_nonce_'.$type ),
+					'no_wrap' => true,
+				) );
 				echo aui()->button(array(
 					'type'       => 'submit',
 					'id'         => 'reset_uwp_'.$type,

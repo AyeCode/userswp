@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $type  = isset( $_POST['uwp_popup_type'] ) && $_POST['uwp_popup_type'] == 'avatar' ? 'avatar' : 'banner';
-$image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
+$image_url = !empty($args['image_url']) ? esc_url( $args['image_url'] ) : '';
 ?>
 <div class="modal-header" xmlns="http://www.w3.org/1999/html">
 	<h5 class="modal-title" id="uwp-profile-modal-title">
@@ -69,7 +69,7 @@ $image_url = !empty($args['image_url']) ? esc_attr( $args['image_url'] ) : '';
                 echo aui()->input(array(
 	                'type'  =>  'hidden',
 	                'name'  =>  'uwp_crop_nonce',
-	                'value' =>  wp_create_nonce( 'uwp-crop-nonce' ),
+	                'value' =>  wp_create_nonce( 'uwp_crop_nonce_'.$type ),
 	                'no_wrap' => true,
                 ));
                 echo aui()->button(array(

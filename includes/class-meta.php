@@ -117,7 +117,7 @@ class UsersWP_Meta {
      * 
      * @return      bool                            Update success or not?.
      */
-    public function update_usermeta( $user_id = false, $key, $value ) {
+    public function update_usermeta( $user_id, $key, $value ) {
 
         if (!$user_id || !$key ) {
             return false;

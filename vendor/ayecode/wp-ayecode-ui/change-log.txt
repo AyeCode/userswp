@@ -1,3 +1,9 @@
+= 0.1.58 =
+* Filter added to be able to override AUI loading from wp-admin - ADDED
+
+= 0.1.57 =
+* Video shows extra padding on Divi theme - FIXED
+
 = 0.1.56 =
 * Radio with empty value do not renders value attribute - FIXED
 
