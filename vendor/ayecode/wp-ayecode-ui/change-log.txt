@@ -1,3 +1,7 @@
+= 0.1.59 =
+* Parameter added to add attributes to main wrapper - ADDED
+* Conditional fields scripts added - ADDED
+
 = 0.1.58 =
 * Filter added to be able to override AUI loading from wp-admin - ADDED
 

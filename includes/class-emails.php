@@ -283,7 +283,7 @@ class UsersWP_Mails {
 	public static function replace_variables( $content, $email_name = '', $email_vars = array() ) {
 		$site_url        = home_url();
 		$blogname        = uwp_get_blogname();
-		$email_from_anme = self::get_mail_from_name();
+		$email_from_name = self::get_mail_from_name();
 		$login_url       = wp_login_url( false ); // 'false' to prevent adding redirect_to to login url.
 		$timestamp       = current_time( 'timestamp' );
 		$date            = date_i18n( get_option( 'date_format' ), $timestamp );
@@ -295,7 +295,7 @@ class UsersWP_Mails {
 			'[#site_url#]'      => esc_url( $site_url ),
 			'[#site_name_url#]' => '<a href="' . esc_url( $site_url ) . '">' . $site_url . '</a>',
 			'[#site_link#]'     => '<a href="' . esc_url( $site_url ) . '">' . $blogname . '</a>',
-			'[#site_name#]'     => esc_attr( $email_from_anme ),
+			'[#site_name#]'     => esc_attr( $email_from_name ),
 			'[#login_url#]'     => esc_url( $login_url ),
 			'[#login_link#]'    => '<a href="' . esc_url( $login_url ) . '">' . __( 'Login', 'userswp' ) . '</a>',
 			'[#current_date#]'  => date_i18n( 'Y-m-d H:i:s', $timestamp ),

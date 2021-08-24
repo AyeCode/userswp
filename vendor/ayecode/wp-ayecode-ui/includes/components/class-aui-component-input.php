@@ -46,7 +46,8 @@ class AUI_Component_Input {
 			'checked'   => false, // set a checkbox or radio as selected
 			'password_toggle' => true, // toggle view/hide password
 			'element_require'   => '', // [%element_id%] == "1"
-			'extra_attributes'  => array() // an array of extra attributes
+			'extra_attributes'  => array(), // an array of extra attributes
+			'wrap_attributes' => array()
 		);
 
 		/**
@@ -251,8 +252,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			}
 
 			// wrap
-			if(!$args['no_wrap']){
-
+			if ( ! $args['no_wrap'] ) {
 				$form_group_class = $args['label_type']=='floating' && $type != 'checkbox' ? 'form-label-group' : 'form-group';
 				$wrap_class = $args['label_type']=='horizontal' ? $form_group_class . ' row' : $form_group_class;
 				$wrap_class = !empty($args['wrap_class']) ? $wrap_class." ".$args['wrap_class'] : $wrap_class;
@@ -260,12 +260,10 @@ else{$eli.attr(\'type\',\'password\');}"
 					'content' => $output,
 					'class'   => $wrap_class,
 					'element_require'   => $args['element_require'],
-					'argument_id'  => $args['id']
+					'argument_id'  => $args['id'],
+					'wrap_attributes' => $args['wrap_attributes'],
 				));
 			}
-
-
-
 		}
 
 		return $output;
@@ -301,6 +299,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'allow_tags' => false, // Allow HTML tags
 			'element_require'   => '', // [%element_id%] == "1"
 			'extra_attributes'  => array(), // an array of extra attributes
+			'wrap_attributes'   => array(),
 		);
 
 		/**
@@ -465,7 +464,8 @@ else{$eli.attr(\'type\',\'password\');}"
 				'content' => $output,
 				'class'   => $wrap_class,
 				'element_require'   => $args['element_require'],
-				'argument_id'  => $args['id']
+				'argument_id'  => $args['id'],
+				'wrap_attributes' => $args['wrap_attributes'],
 			));
 		}
 
@@ -551,6 +551,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'input_group_right_inside' => false,
 			'element_require'   => '',
 			'argument_id'   => '',
+			'wrap_attributes' => array()
 		);
 
 		/**
@@ -577,6 +578,11 @@ else{$eli.attr(\'type\',\'password\');}"
 			// class
 			$class = !empty($args['class']) ? AUI_Component_Helper::esc_classes( $args['class'] ) : '';
 			$output .= ' class="'.$class.'" ';
+
+			// Attributes
+			if ( ! empty( $args['wrap_attributes'] ) ) {
+				$output .= AUI_Component_Helper::extra_attributes( $args['wrap_attributes'] );
+			}
 
 			// close wrap
 			$output .= ' >';
@@ -639,6 +645,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'no_wrap'    => false,
 			'element_require'   => '', // [%element_id%] == "1"
 			'extra_attributes'  => array(), // an array of extra attributes
+			'wrap_attributes'   => array(),
 		);
 
 		/**
@@ -841,7 +848,8 @@ else{$eli.attr(\'type\',\'password\');}"
 				'content' => $output,
 				'class'   => $wrap_class,
 				'element_require'   => $args['element_require'],
-				'argument_id'  => $args['id']
+				'argument_id'  => $args['id'],
+				'wrap_attributes' => $args['wrap_attributes'],
 			));
 		}
 
@@ -874,7 +882,8 @@ else{$eli.attr(\'type\',\'password\');}"
 			'icon'       => '',
 			'no_wrap'    => false,
 			'element_require'   => '', // [%element_id%] == "1"
-			'extra_attributes'  => array() // an array of extra attributes
+			'extra_attributes'  => array(), // an array of extra attributes
+			'wrap_attributes'   => array()
 		);
 
 		/**
@@ -933,7 +942,8 @@ else{$eli.attr(\'type\',\'password\');}"
 			'content' => $output,
 			'class'   => $wrap_class,
 			'element_require'   => $args['element_require'],
-			'argument_id'  => $args['id']
+			'argument_id'  => $args['id'],
+			'wrap_attributes' => $args['wrap_attributes'],
 		));
 
 
