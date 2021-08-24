@@ -146,6 +146,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.2.28 =
+* AyeCode UI updated to v0.1.59 - CHANGED
+* Super Duper updated to v1.0.27 - CHANGED
+
 = 1.2.2.27 =
 * PHP 8.0 version warnings - FIXED
 * Nonce for the avatar and banner reset - ADDED
