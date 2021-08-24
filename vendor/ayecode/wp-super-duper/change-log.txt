@@ -1,3 +1,8 @@
+= 1.0.27 =
+* Category settings loads only 10 categories on CPT change - FIXED
+* Hook added to filter class & attributes for Elementor widget output - ADDED
+* Functions file added for individual function calls - ADDED
+
 = 1.0.26 =
 * Error on setting array option value in block editor - FIXED
 

@@ -838,35 +838,59 @@ final class UsersWP {
 	 *
 	 */
 	public function register_widgets() {
-		register_widget( "UWP_Register_Widget" );
-		register_widget( "UWP_Forgot_Widget" );
-		register_widget( "UWP_Login_Widget" );
-		register_widget( "UWP_Change_Widget" );
-		register_widget( "UWP_Reset_Widget" );
-		register_widget( "UWP_Users_Widget" );
-		register_widget( "UWP_Users_Item_Widget" );
-		register_widget( "UWP_Account_Widget" );
-		register_widget( "UWP_Profile_Widget" );
+		global $pagenow;
 
-		register_widget( "UWP_Profile_Header_Widget" );
-		register_widget( "UWP_Profile_Social_Widget" );
-		register_widget( "UWP_Profile_Tabs_Widget" );
-		register_widget( "UWP_Profile_Actions_Widget" );
-		register_widget( "UWP_Profile_Section_Widget" );
+		$block_widget_init_screens = function_exists('sd_pagenow_exclude') ? sd_pagenow_exclude() : array();
 
-		register_widget( "UWP_User_Title_Widget" );
-		register_widget( "UWP_User_Avatar_Widget" );
-		register_widget( "UWP_User_Cover_Widget" );
-		register_widget( "UWP_User_Post_Counts_Widget" );
-		register_widget( "UWP_User_Meta_Widget" );
-		register_widget( "UWP_Users_Search_Widget" );
-		register_widget( "UWP_Users_Loop_Actions" );
-		register_widget( "UWP_Users_Loop_Widget" );
-		register_widget( "UWP_User_Actions_Widget" );
-		register_widget( "UWP_Output_Location_Widget" );
-		register_widget( "UWP_Author_Box_Widget" );
-		register_widget( "UWP_Button_Group_Widget" );
-		register_widget( "UWP_User_Badge_Widget" );
+		if ( is_admin() && $pagenow && in_array($pagenow, $block_widget_init_screens)) {
+			// don't initiate in these conditions.
+		}else{
+
+			$exclude = function_exists('sd_widget_exclude') ? sd_widget_exclude() : array();
+			$widgets = $this->get_widgets();
+
+			if( !empty($widgets) ){
+				foreach ( $widgets as $widget ) {
+					if(!in_array($widget,$exclude)){
+						register_widget( $widget );
+					}
+				}
+			}
+		}
+	}
+
+	public function get_widgets(){
+		$widgets = array(
+			'UWP_Register_Widget',
+			'UWP_Forgot_Widget',
+			'UWP_Login_Widget',
+			'UWP_Change_Widget',
+			'UWP_Reset_Widget',
+			'UWP_Users_Widget',
+			'UWP_Users_Item_Widget',
+			'UWP_Account_Widget',
+			'UWP_Profile_Widget',
+			'UWP_Profile_Header_Widget',
+			'UWP_Profile_Social_Widget',
+			'UWP_Profile_Tabs_Widget',
+			'UWP_Profile_Actions_Widget',
+			'UWP_Profile_Section_Widget',
+			'UWP_User_Title_Widget',
+			'UWP_User_Avatar_Widget',
+			'UWP_User_Cover_Widget',
+			'UWP_User_Post_Counts_Widget',
+			'UWP_User_Meta_Widget',
+			'UWP_Users_Search_Widget',
+			'UWP_Users_Loop_Actions',
+			'UWP_Users_Loop_Widget',
+			'UWP_User_Actions_Widget',
+			'UWP_Output_Location_Widget',
+			'UWP_Author_Box_Widget',
+			'UWP_Button_Group_Widget',
+			'UWP_User_Badge_Widget',
+		);
+
+		return apply_filters('uwp_get_widgets', $widgets );
 	}
 
 	/**
