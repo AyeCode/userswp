@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.59';
+		public $version = '0.1.60';
 
 		/**
 		 * Class textdomain.
@@ -2248,13 +2248,24 @@ function aui_cf_field_setup_rules($) {
     var aui_cf_field_keys = [];
 
     $('[data-rule-key]').each(function() {
-        var key = jQuery(this).data('rule-key'), irule = parseInt(jQuery(this).data('has-rule'));
+        var key = $(this).data('rule-key'), irule = parseInt($(this).data('has-rule'));
         if (key) {
             aui_cf_field_keys.push(key);
         }
 
         var parse_conds = {};
         if ($(this).data('rule-fie-0')) {
+            $(this).find('input,select,textarea').each(function() {
+                if ($(this).attr('required') || $(this).attr('oninvalid')) {
+                    $(this).addClass('aui-cf-req');
+                    if ($(this).attr('required')) {
+                        $(this).attr('data-rule-req', true);
+                    }
+                    if ($(this).attr('oninvalid')) {
+                        $(this).attr('data-rule-oninvalid', $(this).attr('oninvalid'));
+                    }
+                }
+            });
             for (var i = 0; i < irule; i++) {
                 var field = $(this).data('rule-fie-' + i);
                 if (typeof parse_conds[i] === 'undefined') {
@@ -2266,7 +2277,7 @@ function aui_cf_field_setup_rules($) {
                 parse_conds[i]['value'] = $(this).data('rule-val-' + i);
             }
 
-            jQuery.each(parse_conds, function(j, data) {
+            $.each(parse_conds, function(j, data) {
                 var item = {
                     'field': {
                         key: key,
@@ -2285,19 +2296,19 @@ function aui_cf_field_setup_rules($) {
                 aui_cf_field_rules.push(item);
             });
         }
-        aui_cf_field_default_values[jQuery(this).data('rule-key')] = aui_cf_field_get_default_value(jQuery(this));
+        aui_cf_field_default_values[$(this).data('rule-key')] = aui_cf_field_get_default_value($(this));
     });
 
-    jQuery.each(aui_cf_field_keys, function(i, fkey) {
+    $.each(aui_cf_field_keys, function(i, fkey) {
         aui_cf_field_key_rules[fkey] = aui_cf_field_get_children(fkey);
     });
 
-    jQuery('[data-rule-key]:visible').each(function() {
-        var conds = aui_cf_field_key_rules[jQuery(this).data('rule-key')];
+    $('[data-rule-key]:visible').each(function() {
+        var conds = aui_cf_field_key_rules[$(this).data('rule-key')];
         if (conds && conds.length) {
-            var $main_el = jQuery(this), el = aui_cf_field_get_element($main_el);
-            if (jQuery(el).length) {
-                aui_cf_field_apply_rules(jQuery(el));
+            var $main_el = $(this), el = aui_cf_field_get_element($main_el);
+            if ($(el).length) {
+                aui_cf_field_apply_rules($(el));
             }
         }
     });
@@ -2385,14 +2396,14 @@ function aui_cf_field_apply_rules($el) {
         } else if (condition.condition === 'contains') {
             switch (field_type) {
                 case 'multiselect':
-                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) { //
+                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) {
                         $keys[condition.key][index] = true;
                     } else {
                         $keys[condition.key][index] = false;
                     }
                     break;
                 case 'checkbox':
-                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) { //
+                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) {
                         $keys[condition.key][index] = true;
                     } else {
                         $keys[condition.key][index] = false;
@@ -2400,7 +2411,7 @@ function aui_cf_field_apply_rules($el) {
                     break;
                 default:
                     if (typeof $keys[condition.key][index] === 'undefined') {
-                        if (current_value && current_value.indexOf(condition.value) >= 0 && aui_cf_field_in_array(current_value, $keys_values[condition.key])) {
+                        if (current_value && current_value.indexOf(condition.value) >= 0 && aui_cf_field_in_array(current_value, $keys_values[condition.key], false, true)) {
                             $keys[condition.key][index] = true;
                         } else {
                             $keys[condition.key][index] = false;
@@ -2617,12 +2628,12 @@ function aui_cf_field_get_children(field_key) {
 /**
  * Check in array field value.
  */
-function aui_cf_field_in_array(find, item, match) {
+function aui_cf_field_in_array(find, item, exact, match) {
     var found = false, key;
-    match = !!match;
+    exact = !!exact;
 
     for (key in item) {
-        if ((match && item[key] === find) || (!match && item[key] == find)) {
+        if ((exact && item[key] === find) || (!exact && item[key] == find) || (match && (typeof find === 'string' || typeof find === 'number') && (typeof item[key] === 'string' || typeof item[key] === 'number') && find.length && find.indexOf(item[key]) >= 0)) {
             found = true;
             break;
         }
@@ -2660,6 +2671,15 @@ function aui_cf_field_apply_action($el, rule, isTrue) {
 function aui_cf_field_show_element($el) {
     $el.removeClass('d-none').show();
 
+    $el.find('.aui-cf-req').each(function() {
+        if (jQuery(this).data('rule-req')) {
+            jQuery(this).removeAttr('required').prop('required', true);
+        }
+        if (jQuery(this).data('rule-oninvalid')) {
+            jQuery(this).removeAttr('oninvalid').attr('oninvalid', jQuery(this).data('rule-oninvalid'));
+        }
+    });
+
     if (window && window.navigator.userAgent.indexOf("MSIE") !== -1) {
         $el.css({
             "visibility": "visible"
@@ -2672,6 +2692,15 @@ function aui_cf_field_show_element($el) {
  */
 function aui_cf_field_hide_element($el) {
     $el.addClass('d-none').hide();
+
+    $el.find('.aui-cf-req').each(function() {
+        if (jQuery(this).data('rule-req')) {
+            jQuery(this).removeAttr('required');
+        }
+        if (jQuery(this).data('rule-oninvalid')) {
+            jQuery(this).removeAttr('oninvalid');
+        }
+    });
 
     if (window && window.navigator.userAgent.indexOf("MSIE") !== -1) {
         $el.css({
