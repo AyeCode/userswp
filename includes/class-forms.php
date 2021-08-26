@@ -781,7 +781,7 @@ class UsersWP_Forms {
 
 			$message = __( 'To activate your account, visit the following address:', 'userswp' ) . "\r\n\r\n";
 
-			$message .= "<a href='" . esc_url( $activation_link ) . "' target='_blank'>" . esc_url( $activation_link ) . "</a>" . "\r\n";
+			$message .= "<a href='" . esc_url_raw( $activation_link ) . "' target='_blank'>" . esc_url_raw( $activation_link ) . "</a>" . "\r\n";
 
 			$activate_message = '<p><b>' . __( 'Please activate your account :', 'userswp' ) . '</b></p><p>' . $message . '</p>';
 
