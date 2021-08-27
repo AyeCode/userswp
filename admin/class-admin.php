@@ -30,6 +30,7 @@ class UsersWP_Admin {
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'activation_redirect' ) );
 		add_action( 'admin_init', array( $this, 'init_ayecode_connect_helper' ) );
+		add_action( 'admin_init', array( $this, 'prevent_admin_access' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_notices', array( $this, 'show_update_messages' ) );
@@ -109,6 +110,41 @@ class UsersWP_Admin {
 		}
 	}
 
+	/**
+	 * Restrict the wp-admin area from specific user roles if set to do so.
+	 */
+	public function prevent_admin_access() {
+		$restricted_roles = (array) uwp_get_option( 'admin_blocked_roles', array() );
+
+		// Checking action in request to allow ajax request go through
+		if ( ! empty ( $restricted_roles ) && is_user_logged_in() && ! wp_doing_ajax() && ! wp_doing_cron() ) {
+			$roles = wp_get_current_user()->roles;
+
+			$prevent = false;
+
+			// Always allow administrator role.
+			if ( ! ( ! empty( $roles ) && in_array( 'administrator', $roles ) ) ) {
+				foreach( $restricted_roles as $role ) {
+					if ( in_array( $role, $roles ) ) {
+						$prevent = true;
+						break;
+					}
+				}
+			}
+
+			/*
+			 * Check and prevent admin access based on user role.
+			 *
+			 * @param bool $prevent True to prevent admin access.
+			 */
+			$prevent = apply_filters( 'uwp_prevent_wp_admin_access', $prevent );
+
+			if ( $prevent ) {
+				wp_safe_redirect( home_url() );
+				exit;
+			}
+		}
+	}
 
 	/**
 	 * Register the stylesheets for the admin area.

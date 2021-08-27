@@ -146,6 +146,11 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3 =
+* User role based login/logout redirects - ADDED
+* User role based hide admin bar settings - ADDED
+* Setting for restricting admin based on user roles  - ADDED
+
 = 1.2.2.28 =
 * AyeCode UI updated to v0.1.60 - CHANGED
 * Super Duper updated to v1.0.27 - CHANGED

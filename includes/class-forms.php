@@ -1197,7 +1197,7 @@ class UsersWP_Forms {
 				wp_send_json_success( $message );
 			} else {
 				$redirect_to = $this->get_login_redirect_url( $data, $user );
-				wp_safe_redirect( $redirect_to );
+				wp_redirect( $redirect_to );
 				exit();
 			}
 
@@ -1489,6 +1489,13 @@ class UsersWP_Forms {
 		}
 
 		$redirect_page_id = uwp_get_option( 'login_redirect_to', - 1 );
+		$custom_url = uwp_get_option( 'login_redirect_custom_url' );
+
+		if($user && isset($user->roles[0])){
+			$user_role = $user->roles[0];
+			$redirect_page_id = uwp_get_option( 'login_redirect_to_'.$user_role, $redirect_page_id );
+			$custom_url = uwp_get_option( 'login_redirect_custom_url_'.$user_role );
+		}
 
 		if ( isset( $user ) && $user->has_cap( 'manage_options' ) ) {
 			$redirect_to = admin_url();
@@ -1504,8 +1511,8 @@ class UsersWP_Forms {
 				}
 			}
 			$redirect_to = get_permalink( $redirect_page_id );
-		} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id == - 2 && uwp_get_option( 'login_redirect_custom_url' ) ) {
-			$redirect_to = uwp_get_option( 'login_redirect_custom_url' );
+		} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id == - 2 && !empty($custom_url) ) {
+			$redirect_to = $custom_url;
 		} else {
 			$redirect_to = home_url( '/' );
 			$redirect_to = apply_filters( 'login_redirect', $redirect_to, '', $user );
