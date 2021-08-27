@@ -24,7 +24,7 @@ if ( ! defined( 'USERSWP_NAME' ) ) {
 }
 
 if ( ! defined( 'USERSWP_VERSION' ) ) {
-	define( 'USERSWP_VERSION', '1.2.2.28' );
+	define( 'USERSWP_VERSION', '1.2.2.29' );
 }
 
 if ( ! defined( 'USERSWP_PATH' ) ) {
