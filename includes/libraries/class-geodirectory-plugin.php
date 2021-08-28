@@ -1721,7 +1721,7 @@ class UsersWP_GeoDirectory_Plugin {
 
 			if ( ! empty( $author ) && ! empty( $author->ID ) ) {
 				$favourite = isset( $_REQUEST['list'] ) && $_REQUEST['list'] == 'favourite' ? true : false;
-				$post_type = isset( $_REQUEST['stype'] ) ? sanitize_text_field( $_REQUEST['stype'] ) : null;
+				$post_type = isset( $_REQUEST['stype'] ) ? esc_attr( $_REQUEST['stype'] ) : null;
 
 				$author_id     = $author->ID;
 				$author_link   = uwp_build_profile_tab_url( $author_id );
@@ -1917,7 +1917,7 @@ class UsersWP_GeoDirectory_Plugin {
 
 			if ( ! empty( $author ) && ! empty( $author->ID ) ) {
 				$favourite = isset( $_REQUEST['list'] ) && $_REQUEST['list'] == 'favourite' ? true : false;
-				$post_type = isset( $_REQUEST['stype'] ) ? sanitize_text_field( $_REQUEST['stype'] ) : null;
+				$post_type = isset( $_REQUEST['stype'] ) ? esc_attr( $_REQUEST['stype'] ) : null;
 
 				$author_id     = $author->ID;
 				$author_link   = uwp_build_profile_tab_url( $author_id );

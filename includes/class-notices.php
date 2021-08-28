@@ -60,7 +60,7 @@ class UsersWP_Notices {
 			    $resend_link
 		    );
 
-		    $link = "<a href='".esc_url($resend_link)."' >".__('Resend', 'userswp')."</a>";
+		    $link = "<a href='".esc_url_raw($resend_link)."' >".__('Resend', 'userswp')."</a>";
 	    }
 
         $messages['act_pending'] = array(

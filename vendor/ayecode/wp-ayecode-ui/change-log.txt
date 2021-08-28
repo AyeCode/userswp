@@ -1,3 +1,9 @@
+= 0.1.61 =
+* Escape validation pattern - FIXED
+
+= 0.1.60 =
+* Conditional fields changes - CHANGED
+
 = 0.1.59 =
 * Parameter added to add attributes to main wrapper - ADDED
 * Conditional fields scripts added - ADDED

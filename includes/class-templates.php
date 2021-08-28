@@ -809,8 +809,8 @@ class UsersWP_Templates {
 			echo '<input type="hidden" name="uwp_forgot_nonce" value="' . wp_create_nonce( 'uwp-forgot-nonce' ) . '" />';
 		} elseif ( $form_type == 'reset' ) {
 			if ( isset( $_GET['key'] ) && isset( $_GET['login'] ) ) {
-				echo '<input type="hidden" name="uwp_reset_username" value="' . sanitize_text_field( $_GET['login'] ) . '" />';
-				echo '<input type="hidden" name="uwp_reset_key" value="' . sanitize_text_field( $_GET['key'] ) . '" />';
+				echo '<input type="hidden" name="uwp_reset_username" value="' . esc_attr( $_GET['login'] ) . '" />';
+				echo '<input type="hidden" name="uwp_reset_key" value="' . esc_attr( $_GET['key'] ) . '" />';
 			}
 			echo '<input type="hidden" name="uwp_reset_hp" value="" style="display:none !important; visibility:hidden !important;" size="25" autocomplete="off" />';
 			echo '<input type="hidden" name="uwp_reset_nonce" value="' . wp_create_nonce( 'uwp-reset-nonce' ) . '" />';
