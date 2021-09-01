@@ -137,7 +137,7 @@ class AUI_Component_Input {
 
 			// validation_pattern
 			if(!empty($args['validation_pattern'])){
-				$output .= ' pattern="'.$args['validation_pattern'].'" ';
+				$output .= ' pattern="' . esc_attr( $args['validation_pattern'] ) . '" ';
 			}
 
 			// step (for numbers)
@@ -394,7 +394,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// validation_pattern
 			if(!empty($args['validation_pattern'])){
-				$output .= ' pattern="'.$args['validation_pattern'].'" ';
+				$output .= ' pattern="' . esc_attr( $args['validation_pattern'] ) . '" ';
 			}
 
 			// required
