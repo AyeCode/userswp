@@ -863,25 +863,7 @@ class UsersWP_Forms {
 
 		}
 
-		if ( $reg_action == 'force_redirect' ) {
-			$redirect_to = $this->get_register_redirect_url( $data, $user_id );
-			do_action( 'uwp_after_process_register', $result, $user_id );
-			if ( wp_doing_ajax() ) {
-				$message  = aui()->alert( array(
-						'type'    => 'success',
-						'content' => __( 'Account registered successfully. Redirecting...', 'userswp' )
-					)
-				);
-				$response = array(
-					'message'  => $message,
-					'redirect' => $redirect_to,
-				);
-				wp_send_json_success( $response );
-			} else {
-				wp_redirect( $redirect_to );
-			}
-			exit();
-		} elseif ( $reg_action == 'auto_approve_login' ) {
+		if ( $reg_action == 'auto_approve_login' ) {
 			$res = wp_signon(
 				array(
 					'user_login'    => $user_login,

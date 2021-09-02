@@ -86,7 +86,7 @@ class UsersWP_Settings_Redirects extends UsersWP_Settings_Page {
 
 		global $wp_roles;
 
-		$pages = get_pages();
+		$pages = get_pages(); $desc = '';
 		$pages_options = array(
 			'-1' => __( 'Last User Page', 'userswp' ),
 			'0' => __( 'Default Redirect', 'userswp'),
@@ -98,11 +98,18 @@ class UsersWP_Settings_Redirects extends UsersWP_Settings_Page {
 			}
 		}
 
+		if ( - 1 == uwp_get_option( 'login_redirect_to' ) ) {
+			$desc = '<div class="bsui">' . aui()->alert( array(
+					'type'    => 'error',
+					'content' => __( 'Login redirect based on user role will not work if "Last User Page" is set in General->Login->Login Redirect Page.', 'userswp' )
+				) ) . '</div>';
+		}
+
 		$settings_array = array(
 			array(
 				'title' => __( 'Role based redirect settings', 'userswp' ),
 				'type'  => 'title',
-				'desc' => __('Login redirect based on user role will not work if "Last User Page" is set in General->Login->Login Redirect Page.','userswp'),
+				'desc' => $desc,
 				'id'    => 'redirects_options',
 			),
 		);

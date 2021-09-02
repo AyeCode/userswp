@@ -334,7 +334,6 @@ function uwp_get_registration_form_actions(){
 		'auto_approve' =>  __('Auto approve', 'userswp'),
 		'auto_approve_login' =>  __('Auto approve + Auto Login', 'userswp'),
 		'require_email_activation' =>  __('Require Email Activation', 'userswp'),
-		'force_redirect' =>  __('Force Redirect to Redirect Page', 'userswp'),
 	);
 
 	return apply_filters('uwp_registration_status_options', $registration_options);

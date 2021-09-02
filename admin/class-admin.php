@@ -349,39 +349,6 @@ class UsersWP_Admin {
                     </script>
 					<?php
 				}
-
-				// check for registration section.
-				if ( (! empty( $_GET['section'] ) && 'register' == $_GET['section']) ) {
-					?>
-                    <script type="text/javascript">
-                        jQuery(document).ready(function () {
-                            var uwp_registration_action = jQuery('#uwp_registration_action');
-                            uwp_registration_action.on('change', function () {
-                                var value = jQuery(this).val();
-                                var register_redirect_obj = jQuery('#register_redirect_to');
-
-                                if ('auto_approve_login' === value || 'force_redirect' === value) {
-                                    register_redirect_obj.parent().parent().show();
-                                } else {
-                                    register_redirect_obj.parent().parent().hide();
-                                }
-                            }).change();
-
-                            var register_redirect_to = jQuery('#register_redirect_to');
-                            register_redirect_to.on('change', function () {
-                                var value = jQuery(this).val();
-                                var register_redirect_custom_obj = jQuery('#register_redirect_custom_url');
-
-                                if ('-2' === value) {
-                                    register_redirect_custom_obj.parent().parent().show();
-                                } else {
-                                    register_redirect_custom_obj.parent().parent().hide();
-                                }
-                            }).change();
-                        });
-                    </script>
-					<?php
-				}
 			}
 
 		}
@@ -395,7 +362,7 @@ class UsersWP_Admin {
                         var value = jQuery(this).val();
                         var register_redirect_obj = jQuery('#register_redirect_to');
 
-                        if ('auto_approve_login' === value || 'force_redirect' === value) {
+                        if ('auto_approve_login' === value) {
                             register_redirect_obj.parent().parent().show();
                         } else {
                             register_redirect_obj.parent().parent().hide();
