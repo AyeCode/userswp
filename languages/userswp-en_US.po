@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.28\n"
+"Project-Id-Version: UsersWP 1.2.2.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-26 16:02+0530\n"
-"PO-Revision-Date: 2021-08-26 16:02+0530\n"
+"POT-Creation-Date: 2021-09-06 16:42+0530\n"
+"PO-Revision-Date: 2021-09-06 16:42+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -33,7 +33,7 @@ msgstr ""
 msgid "Skip setup"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:51 admin/settings/class-settings.php:75
+#: admin/class-admin-setup-wizard.php:51 admin/settings/class-settings.php:76
 msgid "Action failed. Please refresh the page and retry."
 msgstr ""
 
@@ -240,163 +240,163 @@ msgstr ""
 msgid "Learn more"
 msgstr ""
 
-#: admin/class-admin.php:100
+#: admin/class-admin.php:101
 msgid "UsersWP - an AyeCode product!"
 msgstr ""
 
-#: admin/class-admin.php:101
+#: admin/class-admin.php:102
 msgid "Please confirm you wish to connect your site?"
 msgstr ""
 
-#: admin/class-admin.php:102
+#: admin/class-admin.php:103
 #, php-format
 msgid ""
 "<strong>Have a license?</strong> Forget about entering license keys or "
 "downloading zip files, connect your site for instant access. %slearn more%s"
 msgstr ""
 
-#: admin/class-admin.php:103
+#: admin/class-admin.php:104
 msgid "Connect Site"
 msgstr ""
 
-#: admin/class-admin.php:104
+#: admin/class-admin.php:105
 msgid "Connecting..."
 msgstr ""
 
-#: admin/class-admin.php:105
+#: admin/class-admin.php:106
 msgid "This service will only work with a live domain, not a localhost."
 msgstr ""
 
-#: admin/class-admin.php:106
+#: admin/class-admin.php:107
 msgid "Something went wrong, please refresh and try again."
 msgstr ""
 
-#: admin/class-admin.php:205
+#: admin/class-admin.php:241
 msgid "Field key must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:206
+#: admin/class-admin.php:242
 msgid "Option Values must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:207
+#: admin/class-admin.php:243
 msgid "Please do not use special character and spaces in field key."
 msgstr ""
 
-#: admin/class-admin.php:208
+#: admin/class-admin.php:244
 msgid "Field key should be a unique name."
 msgstr ""
 
-#: admin/class-admin.php:209
+#: admin/class-admin.php:245
 msgid "Are you sure you wish to delete this field?"
 msgstr ""
 
-#: admin/class-admin.php:210
+#: admin/class-admin.php:246
 msgid "This field is required."
 msgstr ""
 
-#: admin/class-admin.php:212
+#: admin/class-admin.php:248
 msgid "Choose an image"
 msgstr ""
 
-#: admin/class-admin.php:213
+#: admin/class-admin.php:249
 msgid "Use image"
 msgstr ""
 
-#: admin/class-admin.php:214
+#: admin/class-admin.php:250
 msgid "Are you sure you wish to delete this form?"
 msgstr ""
 
-#: admin/class-admin.php:215
+#: admin/class-admin.php:251
 msgid "Enter register form title"
 msgstr ""
 
-#: admin/class-admin.php:216
+#: admin/class-admin.php:252
 msgid "Updated! Reloading page..."
 msgstr ""
 
-#: admin/class-admin.php:236 admin/class-uwp-admin-menus.php:80
+#: admin/class-admin.php:272 admin/class-uwp-admin-menus.php:80
 #: admin/menus/class-menus.php:291 includes/class-uwp-privacy.php:17
 msgid "UsersWP"
 msgstr ""
 
-#: admin/class-admin.php:261 admin/class-admin.php:803
+#: admin/class-admin.php:297 admin/class-admin.php:806
 msgid "Activation email has been sent!"
 msgstr ""
 
-#: admin/class-admin.php:264
+#: admin/class-admin.php:300
 msgid "Error while sending activation email. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:267
+#: admin/class-admin.php:303
 msgid "User(s) has been activated!"
 msgstr ""
 
-#: admin/class-admin.php:405
+#: admin/class-admin.php:408
 #, php-format
 msgid ""
 "You can change your profile picture on your <a href=\"%s\">Profile Page</a>."
 msgstr ""
 
-#: admin/class-admin.php:471
+#: admin/class-admin.php:474
 msgid "Pending Email Activation"
 msgstr ""
 
-#: admin/class-admin.php:611
+#: admin/class-admin.php:614
 msgid "UsersWP Account Details"
 msgstr ""
 
-#: admin/class-admin.php:642
+#: admin/class-admin.php:645
 msgid "Change Avatar"
 msgstr ""
 
-#: admin/class-admin.php:644 templates/bootstrap/modal-profile-image.php:14
+#: admin/class-admin.php:647 templates/bootstrap/modal-profile-image.php:14
 msgid "Upload Avatar"
 msgstr ""
 
-#: admin/class-admin.php:654
+#: admin/class-admin.php:657
 msgid "Change Banner"
 msgstr ""
 
-#: admin/class-admin.php:656 templates/bootstrap/modal-profile-image.php:17
+#: admin/class-admin.php:659 templates/bootstrap/modal-profile-image.php:17
 msgid "Upload Banner"
 msgstr ""
 
-#: admin/class-admin.php:711 admin/class-admin.php:728
+#: admin/class-admin.php:714 admin/class-admin.php:731
 msgid "Resend Activation"
 msgstr ""
 
-#: admin/class-admin.php:712
+#: admin/class-admin.php:715
 msgid "Activate User"
 msgstr ""
 
-#: admin/class-admin.php:729
+#: admin/class-admin.php:732
 msgid "Activate Users"
 msgstr ""
 
-#: admin/class-admin.php:827
+#: admin/class-admin.php:830
 msgid "View UsersWP Documentation"
 msgstr ""
 
-#: admin/class-admin.php:828
+#: admin/class-admin.php:831
 msgid "Visit UsersWP support"
 msgstr ""
 
-#: admin/class-admin.php:829
+#: admin/class-admin.php:832
 msgid "View translations"
 msgstr ""
 
-#: admin/class-admin.php:845 admin/class-admin.php:903
-#: admin/class-admin.php:948 includes/class-forms.php:338
+#: admin/class-admin.php:848 admin/class-admin.php:906
+#: admin/class-admin.php:951 includes/class-forms.php:338
 msgid "Something went wrong. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:856
+#: admin/class-admin.php:859
 #, php-format
 msgid "Form %d"
 msgstr ""
 
-#: admin/class-admin.php:894 admin/settings/class-formbuilder.php:293
+#: admin/class-admin.php:897 admin/settings/class-formbuilder.php:293
 #: widgets/register.php:33
 msgid "Form"
 msgstr ""
@@ -647,7 +647,7 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:379
 #: admin/settings/class-formbuilder.php:395
-#: admin/settings/class-formbuilder.php:420 includes/class-forms.php:1961
+#: admin/settings/class-formbuilder.php:420 includes/class-forms.php:1950
 #, php-format
 msgid "%s"
 msgstr ""
@@ -670,16 +670,19 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:408
 #: admin/settings/class-uwp-settings-general.php:164
+#: admin/settings/class-uwp-settings-redirects.php:91
 msgid "Last User Page"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:409
 #: admin/settings/class-uwp-settings-general.php:165
+#: admin/settings/class-uwp-settings-redirects.php:92
 msgid "Default Redirect"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:410
 #: admin/settings/class-uwp-settings-general.php:166
+#: admin/settings/class-uwp-settings-redirects.php:93
 msgid "Custom Redirect"
 msgstr ""
 
@@ -705,7 +708,7 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:444
 #: admin/settings/class-formbuilder.php:460
-#: admin/settings/class-settings.php:677
+#: admin/settings/class-settings.php:678
 msgid "Select a page&hellip;"
 msgstr ""
 
@@ -1100,12 +1103,12 @@ msgid "Is Public :"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1575 includes/class-profile.php:465
-#: includes/class-templates.php:1098
+#: includes/class-templates.php:1109
 msgid "Yes"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1576 includes/class-profile.php:467
-#: includes/class-templates.php:1097
+#: includes/class-templates.php:1108
 msgid "No"
 msgstr ""
 
@@ -1417,27 +1420,27 @@ msgid ""
 "must have in valid time format."
 msgstr ""
 
-#: admin/settings/class-settings.php:83
+#: admin/settings/class-settings.php:84
 msgid "Your settings have been saved."
 msgstr ""
 
-#: admin/settings/class-settings.php:354
+#: admin/settings/class-settings.php:355
 msgid "Upload Image"
 msgstr ""
 
-#: admin/settings/class-settings.php:355 includes/class-files.php:356
+#: admin/settings/class-settings.php:356 includes/class-files.php:356
 msgid "Remove Image"
 msgstr ""
 
-#: admin/settings/class-settings.php:680
+#: admin/settings/class-settings.php:681
 msgid "Edit Page"
 msgstr ""
 
-#: admin/settings/class-settings.php:683
+#: admin/settings/class-settings.php:684
 msgid "View Page"
 msgstr ""
 
-#: admin/settings/class-settings.php:826
+#: admin/settings/class-settings.php:827
 msgid "Documentation"
 msgstr ""
 
@@ -1565,8 +1568,8 @@ msgstr ""
 #: admin/settings/class-uwp-settings-emails.php:376
 #: admin/settings/class-uwp-settings-emails.php:409
 #: admin/settings/class-uwp-settings-emails.php:442
-#: admin/settings/class-uwp-settings-general.php:512
 #: admin/settings/class-uwp-settings-general.php:522
+#: admin/settings/class-uwp-settings-general.php:532
 msgid "Available template tags:"
 msgstr ""
 
@@ -1784,7 +1787,7 @@ msgid "Pages"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:71
-#: includes/class-emails.php:300 includes/class-forms.php:4365
+#: includes/class-emails.php:300 includes/class-forms.php:4354
 #: includes/class-pages.php:325 templates/bootstrap/forgot.php:63
 #: templates/bootstrap/forgot.php:64 templates/bootstrap/login.php:8
 #: templates/bootstrap/login.php:65 templates/bootstrap/register.php:63
@@ -1892,20 +1895,24 @@ msgid ""
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:189
+#: admin/settings/class-uwp-settings-redirects.php:126
 msgid "Login Redirect Page"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:190
+#: admin/settings/class-uwp-settings-redirects.php:127
 msgid ""
 "Set the page to redirect the user to after logging in. If default redirect "
 "has been set then WordPress default will be used."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:198
+#: admin/settings/class-uwp-settings-redirects.php:136
 msgid "Redirect Custom URL"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:199
+#: admin/settings/class-uwp-settings-redirects.php:137
 msgid "Set the custom url to redirect the user to after logging in."
 msgstr ""
 
@@ -1918,431 +1925,442 @@ msgid ""
 "When enabled /wp-login.php page will be redirected to UsersWP login page."
 msgstr ""
 
+#: admin/settings/class-uwp-settings-general.php:213
+msgid "Restrict wp-admin"
+msgstr ""
+
 #: admin/settings/class-uwp-settings-general.php:214
+msgid ""
+"The user roles that should be restricted from accessing the wp-admin area."
+msgstr ""
+
+#: admin/settings/class-uwp-settings-general.php:224
+#: admin/settings/class-uwp-settings-redirects.php:146
 msgid "Logout Redirect Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:215
+#: admin/settings/class-uwp-settings-general.php:225
+#: admin/settings/class-uwp-settings-redirects.php:147
 msgid ""
 "Set the page to redirect the user to after logging out. If no page has been "
 "set WordPress default will be used."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:221
+#: admin/settings/class-uwp-settings-general.php:231
 msgid "Disable WP-2FA"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:222
+#: admin/settings/class-uwp-settings-general.php:232
 msgid ""
 "This will disable integration with WP 2FA - Two-factor authentication for "
 "WordPress plugin."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:236
+#: admin/settings/class-uwp-settings-general.php:246
 msgid "Change Password Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:242
+#: admin/settings/class-uwp-settings-general.php:252
 msgid "Forgot password lightbox"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:243
+#: admin/settings/class-uwp-settings-general.php:253
 msgid ""
 "When enabled some forgot password links will open in a lightbox instead of "
 "changing page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:249
+#: admin/settings/class-uwp-settings-general.php:259
 msgid "Enabled Old Password?"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:250
+#: admin/settings/class-uwp-settings-general.php:260
 msgid ""
 "Ask user to enter their old password before changing the password to add an "
 "extra layer of security."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:256
+#: admin/settings/class-uwp-settings-general.php:266
 msgid "Disable system generated password notice."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:257
+#: admin/settings/class-uwp-settings-general.php:267
 msgid ""
 "This option will disable system generated password notice if user has not "
 "changed default password after registration."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:274
+#: admin/settings/class-uwp-settings-general.php:284
 msgid "Profile Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:280
+#: admin/settings/class-uwp-settings-general.php:290
 msgid "Default banner image"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:281
+#: admin/settings/class-uwp-settings-general.php:291
 msgid "Recommended image size: 1000x300"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:288
+#: admin/settings/class-uwp-settings-general.php:298
 msgid "Default profile image"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:289
+#: admin/settings/class-uwp-settings-general.php:299
 msgid "Recommended image size: 150x150"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:296
+#: admin/settings/class-uwp-settings-general.php:306
 msgid "Display header in profile"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:303
+#: admin/settings/class-uwp-settings-general.php:313
 msgid "Display body in profile"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:310
+#: admin/settings/class-uwp-settings-general.php:320
 msgid "Profile avatar max file size"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:311
+#: admin/settings/class-uwp-settings-general.php:321
 #, php-format
 msgid ""
 "Enter Profile Avatar max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 "
 "Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:319
+#: admin/settings/class-uwp-settings-general.php:329
 msgid "Profile banner max file size"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:320
+#: admin/settings/class-uwp-settings-general.php:330
 #, php-format
 msgid ""
 "Enter Profile Banner max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 "
 "Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:328
+#: admin/settings/class-uwp-settings-general.php:338
 msgid "Profile avatar width"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:335
+#: admin/settings/class-uwp-settings-general.php:345
 msgid "Profile avatar height"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:342
+#: admin/settings/class-uwp-settings-general.php:352
 msgid "Profile banner width"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:349
+#: admin/settings/class-uwp-settings-general.php:359
 msgid "Profile banner height"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:356
-#: admin/settings/class-uwp-settings-general.php:421
+#: admin/settings/class-uwp-settings-general.php:366
+#: admin/settings/class-uwp-settings-general.php:431
 msgid "Number of items"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:359
+#: admin/settings/class-uwp-settings-general.php:369
 msgid "Enter number of items to display in profile tabs."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:365
+#: admin/settings/class-uwp-settings-general.php:375
 msgid "Disable author redirect to UsersWP profile page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:372
+#: admin/settings/class-uwp-settings-general.php:382
 msgid "User Counts CPTs"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:373
+#: admin/settings/class-uwp-settings-general.php:383
 msgid "Choose post types to display user counts in profile page for all users."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:381
+#: admin/settings/class-uwp-settings-general.php:391
 msgid "User Counts CPTs for profile owner"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:382
+#: admin/settings/class-uwp-settings-general.php:392
 msgid ""
 "Choose post types to display user counts in profile page for profile owners."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:398
+#: admin/settings/class-uwp-settings-general.php:408
 msgid "Users Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:405
+#: admin/settings/class-uwp-settings-general.php:415
 msgid "Users default layout"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:406
+#: admin/settings/class-uwp-settings-general.php:416
 msgid "Choose the default layout for users listing page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:413
+#: admin/settings/class-uwp-settings-general.php:423
 msgid "Users default order"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:414
+#: admin/settings/class-uwp-settings-general.php:424
 msgid "Choose the default users order for users listing page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:424
+#: admin/settings/class-uwp-settings-general.php:434
 msgid "Enter number of items to display in users list page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:430
+#: admin/settings/class-uwp-settings-general.php:440
 msgid "Users to exclude"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:431
+#: admin/settings/class-uwp-settings-general.php:441
 msgid "Select users to exclude from the users listing."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:448
+#: admin/settings/class-uwp-settings-general.php:458
 msgid "User Account Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:455
+#: admin/settings/class-uwp-settings-general.php:465
 msgid "Disable Account Delete"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:456
+#: admin/settings/class-uwp-settings-general.php:466
 msgid "Don't allow users to delete their own account. Default enabled."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:471
+#: admin/settings/class-uwp-settings-general.php:481
 msgid "Author Box Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:477
+#: admin/settings/class-uwp-settings-general.php:487
 msgid "Enable Author Box"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:478
+#: admin/settings/class-uwp-settings-general.php:488
 msgid "Displays author box based on settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:484
+#: admin/settings/class-uwp-settings-general.php:494
 msgid "Where to display?"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:485
+#: admin/settings/class-uwp-settings-general.php:495
 msgid "Displays the author box above or below post content."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:488
+#: admin/settings/class-uwp-settings-general.php:498
 msgid "Above content"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:489
+#: admin/settings/class-uwp-settings-general.php:499
 msgid "Below content"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:496
+#: admin/settings/class-uwp-settings-general.php:506
 msgid "Post types"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:497
+#: admin/settings/class-uwp-settings-general.php:507
 msgid "Choose post types to display author box"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:505
+#: admin/settings/class-uwp-settings-general.php:515
 msgid "Author box Content"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:506
 #: admin/settings/class-uwp-settings-general.php:516
+#: admin/settings/class-uwp-settings-general.php:526
 msgid "The author box body, this can be text or HTML."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:515
+#: admin/settings/class-uwp-settings-general.php:525
 msgid "Author box Content (bootstrap)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:535
+#: admin/settings/class-uwp-settings-general.php:545
 msgid "Developer Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:542
+#: admin/settings/class-uwp-settings-general.php:552
 msgid "Disable Avatar Override?"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:543
+#: admin/settings/class-uwp-settings-general.php:553
 msgid ""
 "By default UsersWP will change the avatar to profile image. You can disable "
 "this using this option."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:548
+#: admin/settings/class-uwp-settings-general.php:558
 msgid "Advanced settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:549
+#: admin/settings/class-uwp-settings-general.php:559
 msgid ""
 "Disable advanced toggle, show advanced settings at all times (not "
 "recommended)."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:556
+#: admin/settings/class-uwp-settings-general.php:566
 msgid "Debugging"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:557
+#: admin/settings/class-uwp-settings-general.php:567
 msgid "Show debugging info in the error logs."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:564
+#: admin/settings/class-uwp-settings-general.php:574
 msgid "Default Design Style"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:565
+#: admin/settings/class-uwp-settings-general.php:575
 msgid "The default design style to use."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:568
+#: admin/settings/class-uwp-settings-general.php:578
 msgid "Bootstrap"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:569
+#: admin/settings/class-uwp-settings-general.php:579
 msgid "Legacy (non-bootstrap)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:585
+#: admin/settings/class-uwp-settings-general.php:595
 msgid "Page Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:592
+#: admin/settings/class-uwp-settings-general.php:602
 msgid "User Profile Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:593
+#: admin/settings/class-uwp-settings-general.php:603
 msgid ""
 "This is the front end user's profile page. This page automatically overrides "
 "the default WordPress author page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:599
+#: admin/settings/class-uwp-settings-general.php:609
 #: includes/class-status.php:346
 msgid "Register Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:600
+#: admin/settings/class-uwp-settings-general.php:610
 msgid ""
 "This is the front end register page. This is where users create their "
 "account."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:606
+#: admin/settings/class-uwp-settings-general.php:616
 #: includes/class-status.php:350
 msgid "Login Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:607
+#: admin/settings/class-uwp-settings-general.php:617
 msgid ""
 "This is the front end login page. This is where users will login after "
 "creating their account."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:613
+#: admin/settings/class-uwp-settings-general.php:623
 #: includes/class-status.php:354
 msgid "Account Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:614
+#: admin/settings/class-uwp-settings-general.php:624
 msgid ""
 "This is the front end account page. This is where users can edit their "
 "account."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:620
+#: admin/settings/class-uwp-settings-general.php:630
 #: includes/class-status.php:358
 msgid "Change Password Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:621
+#: admin/settings/class-uwp-settings-general.php:631
 msgid "This is the front end Change Password page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:627
+#: admin/settings/class-uwp-settings-general.php:637
 #: includes/class-status.php:362
 msgid "Forgot Password Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:628
+#: admin/settings/class-uwp-settings-general.php:638
 msgid ""
 "This is the front end Forgot Password page. This is the page where users are "
 "sent to reset their password when they lose it."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:634
+#: admin/settings/class-uwp-settings-general.php:644
 #: includes/class-status.php:366
 msgid "Reset Password Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:635
+#: admin/settings/class-uwp-settings-general.php:645
 msgid ""
 "This is the front end Reset Password page. This is the page where users can "
 "reset their password when they lose it."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:641
+#: admin/settings/class-uwp-settings-general.php:651
 #: includes/class-status.php:370
 msgid "Users List Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:642
+#: admin/settings/class-uwp-settings-general.php:652
 msgid ""
 "This is the front end Users List page. This is the page where all registered "
 "users of the websites are listed."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:648
+#: admin/settings/class-uwp-settings-general.php:658
 msgid "Users List Item Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:649
+#: admin/settings/class-uwp-settings-general.php:659
 msgid ""
 "This is the page/template for displaying user item in users list page. You "
 "can change the template as you want which will apply to each user item in "
 "users list page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:678
+#: admin/settings/class-uwp-settings-general.php:688
 msgid "Grid View - 1 Column (List View)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:679
+#: admin/settings/class-uwp-settings-general.php:689
 msgid "Grid View - 2 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:680
+#: admin/settings/class-uwp-settings-general.php:690
 msgid "Grid View - 3 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:681
+#: admin/settings/class-uwp-settings-general.php:691
 msgid "Grid View - 4 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:682
+#: admin/settings/class-uwp-settings-general.php:692
 msgid "Grid View - 5 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:692
+#: admin/settings/class-uwp-settings-general.php:702
 msgid "Display name (A-Z)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:693
+#: admin/settings/class-uwp-settings-general.php:703
 msgid "Display name (Z-A)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:694
+#: admin/settings/class-uwp-settings-general.php:704
 #: templates/users-actions.php:32
 msgid "Newer"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:695
+#: admin/settings/class-uwp-settings-general.php:705
 #: templates/users-actions.php:33
 msgid "Older"
 msgstr ""
@@ -2432,17 +2450,17 @@ msgid "Privacy:"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:732
-#: includes/class-templates.php:1130
+#: includes/class-templates.php:1141
 msgid "Anyone"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:733
-#: includes/class-templates.php:1131
+#: includes/class-templates.php:1142
 msgid "Logged in"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:734
-#: includes/class-templates.php:1132
+#: includes/class-templates.php:1143
 msgid "Author only"
 msgstr ""
 
@@ -2480,6 +2498,32 @@ msgstr ""
 #: admin/settings/class-uwp-settings-profile-tabs.php:1016
 #: admin/settings/class-uwp-settings-profile-tabs.php:1019
 msgid "Failed to sort tab items."
+msgstr ""
+
+#: admin/settings/class-uwp-settings-redirects.php:28
+msgid "Redirects"
+msgstr ""
+
+#: admin/settings/class-uwp-settings-redirects.php:69
+msgid "Role based redirects"
+msgstr ""
+
+#: admin/settings/class-uwp-settings-redirects.php:104
+msgid ""
+"Login redirect based on user role will not work if \"Last User Page\" is set "
+"in General->Login->Login Redirect Page."
+msgstr ""
+
+#: admin/settings/class-uwp-settings-redirects.php:110
+msgid "Role based redirect settings"
+msgstr ""
+
+#: admin/settings/class-uwp-settings-redirects.php:154
+msgid "Hide Adminbar"
+msgstr ""
+
+#: admin/settings/class-uwp-settings-redirects.php:155
+msgid "Hide admin bar from frontend for this user role."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-uninstall.php:28
@@ -3114,7 +3158,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:530 includes/class-activator.php:572
-#: includes/class-forms.php:4100
+#: includes/class-forms.php:4089
 msgid "Confirm Password"
 msgstr ""
 
@@ -3332,7 +3376,7 @@ msgid "Banner reset successfully."
 msgstr ""
 
 #: includes/class-forms.php:220 includes/class-forms.php:739
-#: includes/class-forms.php:1974
+#: includes/class-forms.php:1963
 msgid "Something went wrong. Please contact site admin."
 msgstr ""
 
@@ -3352,12 +3396,12 @@ msgid ""
 "for you, you can remove this warning by <a href=\"%s\">clicking here</a>."
 msgstr ""
 
-#: includes/class-forms.php:500 includes/class-forms.php:1780
+#: includes/class-forms.php:500 includes/class-forms.php:1769
 msgid "No spam please!"
 msgstr ""
 
-#: includes/class-forms.php:506 includes/class-forms.php:1101
-#: includes/class-forms.php:1536
+#: includes/class-forms.php:506 includes/class-forms.php:1083
+#: includes/class-forms.php:1525
 msgid "Security verification failed. Try again."
 msgstr ""
 
@@ -3387,7 +3431,7 @@ msgstr ""
 msgid "Password you entered during registration."
 msgstr ""
 
-#: includes/class-forms.php:814 includes/class-forms.php:1629
+#: includes/class-forms.php:814 includes/class-forms.php:1618
 msgid "Your login Information :"
 msgstr ""
 
@@ -3399,181 +3443,181 @@ msgstr ""
 msgid "User Information :"
 msgstr ""
 
-#: includes/class-forms.php:872 includes/class-forms.php:912
+#: includes/class-forms.php:894
 msgid "Account registered successfully. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:939
+#: includes/class-forms.php:921
 #, php-format
 msgid ""
 "An email has been sent to your registered email address. Please click the "
 "activation link to proceed. %sResend%s."
 msgstr ""
 
-#: includes/class-forms.php:951
+#: includes/class-forms.php:933
 msgid "Your account is under moderation. We will email you once its approved."
 msgstr ""
 
-#: includes/class-forms.php:959
+#: includes/class-forms.php:941
 #, php-format
 msgid ""
 "Account registered successfully. A password has been generated and mailed to "
 "your registered Email ID. Please login %shere%s."
 msgstr ""
 
-#: includes/class-forms.php:961
+#: includes/class-forms.php:943
 #, php-format
 msgid "Account registered successfully. Please login %shere%s"
 msgstr ""
 
-#: includes/class-forms.php:1193
+#: includes/class-forms.php:1175
 msgid "Login successful. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:1231
+#: includes/class-forms.php:1213
 msgid "Failed to create a login nonce."
 msgstr ""
 
-#: includes/class-forms.php:1260 includes/class-forms.php:1262
+#: includes/class-forms.php:1242 includes/class-forms.php:1244
 msgid "Authentication Code"
 msgstr ""
 
-#: includes/class-forms.php:1270 includes/class-forms.php:1297
-#: includes/class-forms.php:1342
+#: includes/class-forms.php:1252 includes/class-forms.php:1279
+#: includes/class-forms.php:1324
 msgid "Log In"
 msgstr ""
 
-#: includes/class-forms.php:1286 includes/class-forms.php:1288
+#: includes/class-forms.php:1268 includes/class-forms.php:1270
 msgid "Verification Code"
 msgstr ""
 
-#: includes/class-forms.php:1305
+#: includes/class-forms.php:1287
 msgid "Resend Code"
 msgstr ""
 
-#: includes/class-forms.php:1331
+#: includes/class-forms.php:1313
 msgid "Enter backup code"
 msgstr ""
 
-#: includes/class-forms.php:1333
+#: includes/class-forms.php:1315
 msgid "Backup Code"
 msgstr ""
 
-#: includes/class-forms.php:1375
+#: includes/class-forms.php:1357
 msgid "Invalid user data. Please try again."
 msgstr ""
 
-#: includes/class-forms.php:1389
+#: includes/class-forms.php:1371
 msgid "Invalid request! Please try again."
 msgstr ""
 
-#: includes/class-forms.php:1420 includes/class-forms.php:1443
+#: includes/class-forms.php:1402 includes/class-forms.php:1425
 msgid "Invalid verification code."
 msgstr ""
 
-#: includes/class-forms.php:1435
+#: includes/class-forms.php:1417
 msgid "A new code has been sent."
 msgstr ""
 
-#: includes/class-forms.php:1458
+#: includes/class-forms.php:1440
 msgid "Invalid backup code."
 msgstr ""
 
-#: includes/class-forms.php:1479
+#: includes/class-forms.php:1461
 msgid "Validation successful. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:1578
+#: includes/class-forms.php:1567
 msgid "Invalid email or user doesn't exists."
 msgstr ""
 
-#: includes/class-forms.php:1596
+#: includes/class-forms.php:1585
 msgid "Your account is not activated yet. Please activate your account first."
 msgstr ""
 
-#: includes/class-forms.php:1630 includes/class-forms.php:1645
+#: includes/class-forms.php:1619 includes/class-forms.php:1634
 #, php-format
 msgid "Username: %s"
 msgstr ""
 
-#: includes/class-forms.php:1631
+#: includes/class-forms.php:1620
 #, php-format
 msgid "Password: %s"
 msgstr ""
 
-#: includes/class-forms.php:1643
+#: includes/class-forms.php:1632
 msgid "You have requested to reset your password for the following account:"
 msgstr ""
 
-#: includes/class-forms.php:1646
+#: includes/class-forms.php:1635
 msgid "If this was by mistake, just ignore this email and nothing will happen."
 msgstr ""
 
-#: includes/class-forms.php:1647
+#: includes/class-forms.php:1636
 msgid ""
 "To reset your password, click the following link and follow the instructions."
 msgstr ""
 
-#: includes/class-forms.php:1676
+#: includes/class-forms.php:1665
 msgid "Please check your email."
 msgstr ""
 
-#: includes/class-forms.php:1756
+#: includes/class-forms.php:1745
 msgid "Password changed successfully."
 msgstr ""
 
-#: includes/class-forms.php:1815
+#: includes/class-forms.php:1804
 msgid "Invalid username."
 msgstr ""
 
-#: includes/class-forms.php:1847
+#: includes/class-forms.php:1836
 #, php-format
 msgid ""
 "Password updated successfully. Please <a href=\"%s\">login</a> with your new "
 "password."
 msgstr ""
 
-#: includes/class-forms.php:2002
+#: includes/class-forms.php:1991
 msgid "Account updated successfully."
 msgstr ""
 
-#: includes/class-forms.php:2033 includes/class-forms.php:2063
+#: includes/class-forms.php:2022 includes/class-forms.php:2052
 msgid "User Information:"
 msgstr ""
 
-#: includes/class-forms.php:2374
+#: includes/class-forms.php:2363
 msgid "Clear field"
 msgstr ""
 
-#: includes/class-forms.php:3082
+#: includes/class-forms.php:3071
 msgid "Username or Email"
 msgstr ""
 
-#: includes/class-forms.php:3404
+#: includes/class-forms.php:3393
 msgid "Please enter a valid URL including https://"
 msgstr ""
 
-#: includes/class-forms.php:3453
+#: includes/class-forms.php:3442
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:3766
+#: includes/class-forms.php:3755
 #, php-format
 msgid ""
 "By using this form I agree to the storage and handling of my data by this "
 "website. View our %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:3853
+#: includes/class-forms.php:3842
 #, php-format
 msgid "I accept the %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:4190
+#: includes/class-forms.php:4179
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/class-forms.php:4343
+#: includes/class-forms.php:4332
 msgid "Privacy settings updated successfully."
 msgstr ""
 
@@ -3864,36 +3908,36 @@ msgstr ""
 msgid "More"
 msgstr ""
 
-#: includes/class-templates.php:1076
+#: includes/class-templates.php:1087
 msgid "Field"
 msgstr ""
 
-#: includes/class-templates.php:1079
+#: includes/class-templates.php:1090
 msgid "Is Public?"
 msgstr ""
 
-#: includes/class-templates.php:1112
+#: includes/class-templates.php:1123
 msgid "Tab Name"
 msgstr ""
 
-#: includes/class-templates.php:1115 includes/helpers/misc.php:547
+#: includes/class-templates.php:1126 includes/helpers/misc.php:547
 #: includes/helpers/tabs.php:135
 msgid "Privacy"
 msgstr ""
 
-#: includes/class-templates.php:1151
+#: includes/class-templates.php:1162
 msgid " (Default)"
 msgstr ""
 
-#: includes/class-templates.php:1166
+#: includes/class-templates.php:1177
 msgid "Hide profile from the users listing page."
 msgstr ""
 
-#: includes/class-templates.php:1182
+#: includes/class-templates.php:1193
 msgid "Make the whole profile private"
 msgstr ""
 
-#: includes/class-templates.php:1190 includes/class-user-notifications.php:69
+#: includes/class-templates.php:1201 includes/class-user-notifications.php:69
 #: templates/bootstrap/change.php:29 templates/bootstrap/forgot.php:51
 #: templates/bootstrap/reset.php:33 templates/change.php:13
 #: templates/forgot.php:13 templates/reset.php:17
@@ -4375,11 +4419,7 @@ msgstr ""
 msgid "Require Email Activation"
 msgstr ""
 
-#: includes/helpers/forms.php:337
-msgid "Force Redirect to Redirect Page"
-msgstr ""
-
-#: includes/helpers/forms.php:500 widgets/profile-tabs.php:47
+#: includes/helpers/forms.php:499 widgets/profile-tabs.php:47
 msgid "Default"
 msgstr ""
 
@@ -5027,9 +5067,12 @@ msgid "User ID:"
 msgstr ""
 
 #: widgets/button-group.php:44 widgets/profile-header.php:55
+#: widgets/user-avatar.php:62 widgets/user-cover.php:55
+#: widgets/user-meta.php:45 widgets/user-title.php:51
 msgid ""
-"Leave blank to use current user ID. For profile page it will take displayed "
-"user ID. Input specific user ID for other pages."
+"Leave blank to use current user ID or use post_author for current post "
+"author ID. For profile page it will take displayed user ID. Input specific "
+"user ID for other pages."
 msgstr ""
 
 #: widgets/change.php:27
@@ -5341,10 +5384,6 @@ msgstr ""
 msgid "Allow user to change avatar image in profile page."
 msgstr ""
 
-#: widgets/user-avatar.php:62 widgets/user-cover.php:55
-msgid "Leave blank to use current user ID."
-msgstr ""
-
 #: widgets/user-badge.php:22
 msgid "UWP > User Badge"
 msgstr ""
@@ -5628,12 +5667,6 @@ msgstr ""
 
 #: widgets/user-meta.php:35
 msgid "Key:"
-msgstr ""
-
-#: widgets/user-meta.php:45 widgets/user-title.php:51
-msgid ""
-"Leave blank to use current user ID. For profile page it will take displayed "
-"user ID"
 msgstr ""
 
 #: widgets/user-meta.php:52
