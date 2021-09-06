@@ -814,8 +814,36 @@ class UsersWP_Activator {
         if ( $uwp_db_version != USERSWP_VERSION ) {
             self::activate(is_plugin_active_for_network( 'userswp/userswp.php' ));
 	        $settings = get_option( 'uwp_settings', array());
+	        $needs_update = false;
 	        if(isset($settings['design_style']) && 'bootstrap' == $settings['design_style'] ){
 		        $settings['users_default_layout'] = '3col';
+		        $needs_update = true;
+	        }
+
+	        if(isset($settings['uwp_registration_action']) && $settings['uwp_registration_action'] == 'force_redirect'){
+		        $settings['uwp_registration_action'] = 'auto_approve_login';
+		        $needs_update = true;
+	        }
+
+	        $get_register_form = $settings['multiple_registration_forms'];
+
+	        if ( ! empty( $get_register_form ) && is_array( $get_register_form ) ) {
+
+		        foreach ( $get_register_form as $key => $register_form ) {
+
+			        if ( ! empty( $register_form['id'] )) {
+
+				        $reg_action = $register_form['reg_action'];
+
+				        if(isset($reg_action) && $reg_action == 'force_redirect'){
+					        $settings['multiple_registration_forms'][$key]['reg_action'] = 'auto_approve_login';
+					        $needs_update = true;
+				        }
+			        }
+		        }
+	        }
+
+	        if($needs_update){
 		        update_option( 'uwp_settings', $settings );
 	        }
         }

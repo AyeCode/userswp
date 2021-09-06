@@ -491,6 +491,7 @@ final class UsersWP {
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 		add_action( 'uwp_flush_rewrite_rules', array( $this, 'flush_rewrite_rules' ) );
 		add_action( 'uwp_language_file_add_string', array( $this, 'register_string' ), 10, 1 );
+		add_action( 'after_setup_theme', array( $this, 'hide_admin_bar' ));
 	}
 
 	/**
@@ -915,5 +916,25 @@ final class UsersWP {
 	 */
 	public function flush_rewrite_rules() {
 		flush_rewrite_rules();
+	}
+
+	/**
+	 * Hide admin bar based on settings.
+	 */
+	public function hide_admin_bar(){
+
+		$is_hidden = false;
+		if(is_user_logged_in()){
+			$user = get_userdata(get_current_user_id());
+
+			if($user && isset($user->roles[0])){
+				$user_role = $user->roles[0];
+				$is_hidden = uwp_get_option( 'hide_admin_bar_'.$user_role );
+			}
+		}
+
+		if($is_hidden){
+			show_admin_bar(false);
+		}
 	}
 }

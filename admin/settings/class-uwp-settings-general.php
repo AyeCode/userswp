@@ -209,6 +209,16 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'type' => 'checkbox',
                     'default'  => '0',
                 ),
+	            array(
+		            'name'       => __( 'Restrict wp-admin', 'userswp' ),
+		            'desc'       => __( 'The user roles that should be restricted from accessing the wp-admin area.', 'userswp' ),
+		            'id'         => 'admin_blocked_roles',
+		            'default'    => array('subscriber'),
+		            'type'       => 'multiselect',
+		            'class'      => 'uwp-select',
+		            'options'    => uwp_get_user_roles(array('administrator')),
+		            'desc_tip'   => true,
+	            ),
                 array(
                     'id' => 'logout_redirect_to',
                     'name' => __( 'Logout Redirect Page', 'userswp' ),
