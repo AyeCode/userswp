@@ -128,9 +128,7 @@ class UWP_User_Post_Counts_Widget extends WP_Super_Duper {
 
 		echo $output;
 
-		$output = ob_get_clean();
-
-		return $output;
+		return ob_get_clean();
 
 	}
 

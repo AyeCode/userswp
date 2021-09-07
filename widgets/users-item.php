@@ -71,11 +71,7 @@ class UWP_Users_Item_Widget extends WP_Super_Duper {
 			echo do_shortcode( "[uwp_profile_header][uwp_user_title tag= 'h4'][uwp_profile_social][uwp_output_location location='users'][uwp_user_actions]" );
 		}
 
-		$output = ob_get_contents();
-
-		ob_end_clean();
-
-		return trim( $output );
+		return ob_get_clean();
 
 	}
 

@@ -53,10 +53,8 @@ class UWP_Users_Loop_Actions extends WP_Super_Duper {
         $template = $design_style ? $design_style."/users-actions.php" : "users-actions.php";
 
 	    uwp_get_template($template, $args);
-        
-        $output = ob_get_clean();
 
-        return $output;
+	    return ob_get_clean();
 
     }
 

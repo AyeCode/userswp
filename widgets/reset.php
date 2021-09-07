@@ -47,18 +47,6 @@ class UWP_Reset_Widget extends WP_Super_Duper {
                     'placeholder' => __('Reset Password','userswp'),
                     'advanced'    => true
                 ),
-	            'design_style'  => array(
-		            'title' => __('Design Style', 'userswp'),
-		            'desc' => __('The design style to use.', 'userswp'),
-		            'type' => 'select',
-		            'options'   =>  array(
-			            ""        =>  __('default', 'userswp'),
-			            "bootstrap" =>  __('Style 1', 'userswp'),
-		            ),
-		            'default'  => '',
-		            'desc_tip' => true,
-		            'advanced' => true
-	            ),
                 'css_class'  => array(
 	                'type' => 'text',
 	                'title' => __('Extra class:', 'userswp'),
@@ -100,10 +88,6 @@ class UWP_Reset_Widget extends WP_Super_Duper {
          * Parse incoming $args into an array and merge it with $defaults
          */
         $args = wp_parse_args( $args, $defaults );
-
-	    if ( $this->is_preview() ) {
-		    return;
-	    }
 
         ob_start();
 

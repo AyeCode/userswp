@@ -80,9 +80,7 @@ class UWP_Users_Loop_Widget extends WP_Super_Duper {
         $total_pages = ceil($total_users/$number);
         do_action('uwp_profile_pagination', $total_pages);
 
-        $output = ob_get_clean();
-
-        return $output;
+	    return ob_get_clean();
 
     }
 
