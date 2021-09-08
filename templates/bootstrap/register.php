@@ -60,7 +60,7 @@ do_action( 'uwp_template_before', 'register' ); ?>
 							'type'  =>  'a',
 							'href'       => uwp_get_login_page_url(),
 							'class'      => 'd-block text-center mt-2 small uwp-login-link',
-							'content'    => __( 'Login', 'userswp' ),
+							'content'    => uwp_get_option("login_link_title",__( 'Login', 'userswp' )),
 							'extra_attributes'  => array('rel'=>'nofollow')
 						));
 						?>

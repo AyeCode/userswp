@@ -20,9 +20,9 @@ $form_title = ! empty( $args['form_title'] ) ? esc_attr__( $args['form_title'], 
                 echo sprintf(__('You can not access this page directly. Follow the password reset link you received in your email. To request new password reset link <a href="%s">visit here</a>.', 'userswp'), uwp_get_page_link('forgot'));
             } ?>
 
-            <div class="uwp-footer-link uwp-resetpsw"><?php _e( 'Already a member?', 'userswp' ); ?><a rel="nofollow" href="<?php echo uwp_get_login_page_url(); ?>"><?php _e( 'Login here', 'userswp' ); ?></a></div>
+            <div class="uwp-footer-link uwp-resetpsw"><?php _e( 'Already a member?', 'userswp' ); ?><a rel="nofollow" href="<?php echo uwp_get_login_page_url(); ?>"><?php echo uwp_get_option("login_link_title",__( 'Login here', 'userswp' )); ?></a></div>
             <div class="clfx"></div>
-            <div class="uwp-footer-link uwp-register-now"><?php _e( 'Not a member?', 'userswp' ); ?> <a rel="nofollow" href="<?php echo uwp_get_register_page_url(); ?>"><?php _e( 'Create account', 'userswp' ); ?></a></div>
+            <div class="uwp-footer-link uwp-register-now"><?php _e( 'Not a member?', 'userswp' ); ?> <a rel="nofollow" href="<?php echo uwp_get_register_page_url(); ?>"><?php echo uwp_get_option("register_link_title",__( 'Create account', 'userswp' )); ?></a></div>
         </div>
     </div>
 <?php do_action('uwp_template_after', 'reset'); ?>

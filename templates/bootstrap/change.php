@@ -36,8 +36,7 @@ do_action( 'uwp_template_before', 'change' ); ?>
 	                            'type'  =>  'a',
 	                            'href'       => uwp_get_account_page_url(),
 	                            'class'      => 'd-block text-center mt-2 small',
-	                            'title'      => __( 'Account', 'userswp' ),
-	                            'content'    => __( 'Account', 'userswp' ),
+	                            'content'    => uwp_get_option("account_link_title",__( 'Account', 'userswp' )),
 	                            'extra_attributes'  => array('rel'=>'nofollow')
                             ));
                             ?>
@@ -48,8 +47,7 @@ do_action( 'uwp_template_before', 'change' ); ?>
 								'type'  =>  'a',
 								'href'       => uwp_get_profile_page_url(),
 								'class'      => 'd-block text-center mt-2 small',
-								'title'      => __( 'Profile', 'userswp' ),
-								'content'    => __( 'Profile', 'userswp' ),
+								'content'    => uwp_get_option("profile_link_title",__( 'Profile', 'userswp' )),
 								'extra_attributes'  => array('rel'=>'nofollow')
 							));
 							?>
