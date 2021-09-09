@@ -954,11 +954,22 @@ class UsersWP_Templates {
 
 		$redirect = null;
 
+		$user = get_userdata(get_current_user_id());
+		if($user && isset($user->roles[0])){
+			$user_role = $user->roles[0];
+			$redirect_page_id = uwp_get_option( 'logout_redirect_to_'.$user_role );
+		}
+
 		if ( ! empty( $custom_redirect ) ) {
 			$redirect = esc_url( $custom_redirect );
-		} else if ( uwp_get_option( 'logout_redirect_to', false ) ) {
-			$page_url = uwp_get_page_id( 'logout_redirect_to', true );
-			$redirect = $page_url;
+		} else if ( isset($redirect_page_id) && !empty($redirect_page_id) ) {
+			if ( uwp_is_wpml() ) {
+				$wpml_page_id = uwp_wpml_object_id( $redirect_page_id, 'page', true, ICL_LANGUAGE_CODE );
+				if ( ! empty( $wpml_page_id ) ) {
+					$redirect_page_id = $wpml_page_id;
+				}
+			}
+			$redirect = get_permalink( $redirect_page_id );
 		}
 
 		return wp_logout_url( apply_filters( 'uwp_logout_url', $redirect, $custom_redirect ) );

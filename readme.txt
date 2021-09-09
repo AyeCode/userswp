@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.8
-Stable tag: 1.2.2.29
+Stable tag: 1.2.2.30
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -145,6 +145,11 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.2.30 =
+* User role based login/logout redirects - ADDED
+* User role based hide admin bar settings - ADDED
+* Setting for restricting admin based on user roles  - ADDED
 
 = 1.2.2.29 =
 * AyeCode UI updated to v0.1.61 - CHANGED

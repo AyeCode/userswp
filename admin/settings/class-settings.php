@@ -54,6 +54,7 @@ class UsersWP_Admin_Settings {
 			$settings = array();
 
             $settings[] = include( 'class-uwp-settings-general.php' );
+            $settings[] = include( 'class-uwp-settings-redirects.php' );
             $settings[] = include( 'class-uwp-settings-emails.php' );
             $settings[] = include( 'class-uwp-settings-import-export.php' );
             $settings[] = include( 'class-uwp-settings-addons.php' );

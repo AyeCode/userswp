@@ -41,7 +41,7 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
                 ),
                 'user_id'  => array(
 	                'title' => __('User ID:', 'userswp'),
-	                'desc' => __('Leave blank to use current user ID. For profile page it will take displayed user ID. Input specific user ID for other pages.', 'userswp'),
+	                'desc' => __('Leave blank to use current user ID or use post_author for current post author ID. For profile page it will take displayed user ID. Input specific user ID for other pages.', 'userswp'),
 	                'type' => 'text',
 	                'desc_tip' => true,
 	                'default'  => '',
