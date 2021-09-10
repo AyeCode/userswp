@@ -71,9 +71,7 @@ class UWP_Profile_Social_Widget extends WP_Super_Duper {
 
         do_action('uwp_profile_social', $user, $args['exclude']);
 
-        $output = ob_get_clean();
-
-        return $output;
+	    return ob_get_clean();
 
     }
 

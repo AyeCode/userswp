@@ -25,7 +25,6 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
             'class_name'     => __CLASS__,
             'base_id'       => 'uwp_profile_header',
             'name'          => __('UWP > Profile Header','userswp'),
-            //'no_wrap'       => true,
             'block-wrap'    => '',
             'widget_ops'    => array(
                 'classname'   => 'uwp-profile-header bsui',

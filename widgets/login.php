@@ -158,7 +158,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
 
         ob_start();
         
-        if(is_user_logged_in() && !is_admin() && !$this->is_preview()) {
+        if(is_user_logged_in()) {
 
             if($args['logged_in_show']=='simple'){
                 $template = $design_style ? $design_style."/dashboard-simple.php" : "dashboard-simple.php";
@@ -216,9 +216,7 @@ class UWP_Login_Widget extends WP_Super_Duper {
 
         echo '</div>';
 
-        $output = ob_get_clean();
-
-        return trim($output);
+	    return ob_get_clean();
 
     }
         

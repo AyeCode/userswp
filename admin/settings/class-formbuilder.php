@@ -347,6 +347,7 @@ class UsersWP_Form_Builder {
                                                 id="show_options"><?php _e( 'Form Options', 'userswp' ); ?></button>
 										<?php if ( ! empty( $current_form ) && $current_form > 1 ) { ?>
                                             <button data-id="<?php echo esc_attr($current_form); ?>"
+                                                    data-nonce="<?php echo wp_create_nonce( 'uwp-delete-register-form-nonce' ); ?>"
                                                     class="btn btn-sm btn-danger register-form-remove" type="button"
                                                     name="form_remove"><?php _e( 'Delete Form', 'userswp' ); ?></button>
 										<?php } ?>
@@ -470,6 +471,7 @@ class UsersWP_Form_Builder {
                             </td>
                         </tr>
                     </table>
+                    <input type="hidden" name="uwp_update_register_form_nonce" value="<?php echo wp_create_nonce( 'uwp-update-register-form-nonce' ); ?>" />
 					<?php do_action( 'uwp_user_type_form_after', $current_form, $tab ); ?>
                 </form>
             </div>

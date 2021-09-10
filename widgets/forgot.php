@@ -116,11 +116,7 @@ class UWP_Forgot_Widget extends WP_Super_Duper {
 
         echo '</div>';
 
-        $output = ob_get_contents();
-
-        ob_end_clean();
-
-        return trim($output);
+	    return ob_get_clean();
 
     }
 

@@ -18,7 +18,7 @@ $form_title = apply_filters( 'uwp_template_form_title', $form_title, 'register' 
             </form>
             <div class="uwp-footer-link uwp-login-now"><?php _e( 'Already a member?', 'userswp' ); ?> <a
                         rel="nofollow"
-                        href="<?php echo uwp_get_login_page_url(); ?>"><?php _e( 'Login here', 'userswp' ); ?></a>
+                        href="<?php echo uwp_get_login_page_url(); ?>"><?php echo uwp_get_option("login_link_title",__( 'Login here', 'userswp' )); ?></a>
             </div>
 	        <?php do_action( 'uwp_social_fields', 'register' ); ?>
         </div>

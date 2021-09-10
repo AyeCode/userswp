@@ -97,9 +97,7 @@ class UWP_User_Title_Widget extends WP_Super_Duper {
 
         do_action('uwp_user_title', $user, $title_tag);
 
-        $output = ob_get_clean();
-
-        return $output;
+	    return ob_get_clean();
 
     }
 
