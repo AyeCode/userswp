@@ -226,20 +226,22 @@ class UsersWP_Import_Export {
             $is_writeable   = $is_dir && is_writeable( $this->export_dir );
 
             if ( $is_dir && $is_writeable ) {
-                return true;
+
             } else if ( $is_dir && !$is_writeable ) {
                 if ( !$this->wp_filesystem->chmod( $this->export_dir, FS_CHMOD_DIR ) ) {
                     return wp_sprintf( __( 'Filesystem ERROR: Export location %s is not writable, check your file permissions.', 'userswp' ), $this->export_dir );
                 }
-
-                return true;
             } else {
                 if ( !$this->wp_filesystem->mkdir( $this->export_dir, FS_CHMOD_DIR ) ) {
                     return wp_sprintf( __( 'Filesystem ERROR: Could not create directory %s. This is usually due to inconsistent file permissions.', 'userswp' ), $this->export_dir );
                 }
-
-                return true;
             }
+
+	        if(!$this->wp_filesystem->exists( $this->export_dir . '/index.php')){
+		        $this->wp_filesystem->copy( USERSWP_PATH . 'assets/index.php', $this->export_dir . '/index.php' );
+	        }
+
+	        return true;
         } catch ( Exception $e ) {
             return $e->getMessage();
         }

@@ -840,6 +840,10 @@ class UsersWP_Admin {
 
 	public function process_create_register_form() {
 
+	    if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
 		$type       = ! empty( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : '';
 		$form_title = ! empty( $_POST['form_title'] ) ? sanitize_text_field($_POST['form_title']) : '';
 		$nonce      = ! empty( $_POST['nonce'] ) ? sanitize_text_field($_POST['nonce']) : '';
@@ -892,6 +896,12 @@ class UsersWP_Admin {
 
 	public function process_update_register_form() {
 
+		check_ajax_referer( 'uwp-update-register-form-nonce', 'uwp_update_register_form_nonce' );
+
+	    if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
 		$type    = ! empty( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : '';
 		$form_id = ! empty( $_POST['manage_field_form_id'] ) ? (int)$_POST['manage_field_form_id'] : '';
 		$form_title = ! empty( $_POST['form_title'] ) ? sanitize_text_field($_POST['form_title']) : __( 'Form', 'userswp' );
@@ -941,6 +951,12 @@ class UsersWP_Admin {
 
 	public function process_remove_register_form() {
 
+		check_ajax_referer( 'uwp-delete-register-form-nonce', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
 		global $wpdb;
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
@@ -948,7 +964,7 @@ class UsersWP_Admin {
 		$form_id = ! empty( $_POST['form_id'] ) ? (int)$_POST['form_id'] : '';
 
 		$status   = false;
-		$message  = __( 'Something went wrong. Please try again.', 'userswp' );
+		$message  = __( 'Security nonce failed. Please try again.', 'userswp' );
 		$redirect = '';
 		if ( ! empty( $type ) && ! empty( $form_id ) && $type === 'remove' ) {
 
