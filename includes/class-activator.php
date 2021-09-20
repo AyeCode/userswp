@@ -825,7 +825,7 @@ class UsersWP_Activator {
 		        $needs_update = true;
 	        }
 
-	        $get_register_form = $settings['multiple_registration_forms'];
+	        $get_register_form = isset( $settings['multiple_registration_forms'] ) ? $settings['multiple_registration_forms'] : false;
 
 	        if ( ! empty( $get_register_form ) && is_array( $get_register_form ) ) {
 
@@ -846,6 +846,10 @@ class UsersWP_Activator {
 	        if($needs_update){
 		        update_option( 'uwp_settings', $settings );
 	        }
+
+            // Run this function once.
+            update_option( 'uwp_db_version', USERSWP_VERSION );
+
         }
     }
 
