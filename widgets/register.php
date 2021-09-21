@@ -126,12 +126,8 @@ class UWP_Register_Widget extends WP_Super_Duper {
 		 */
 		$args = wp_parse_args( $args, $defaults );
 
-		if ( $this->is_preview() ) {
-			return;
-		}
-
 		if(isset($_REQUEST['uwp_form_id']) && !empty($_REQUEST['uwp_form_id'])){
-			$args['id'] = (int) $_REQUEST['uwp_form_id'];
+			$args['id'] = absint($_REQUEST['uwp_form_id']);
 		}
 
 		ob_start();
@@ -153,9 +149,7 @@ class UWP_Register_Widget extends WP_Super_Duper {
 			uwp_password_strength_inline_js();
 		}
 
-		$output = ob_get_clean();
-
-		return trim( $output );
+		return ob_get_clean();
 
 	}
 }

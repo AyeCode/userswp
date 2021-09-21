@@ -226,14 +226,14 @@ class UsersWP_Form_Builder {
                                        href="javascript:void(0);">
 
 										<?php if ( isset( $field['field_icon'] ) && strpos( $field['field_icon'], ' fa-' ) !== false ) {
-											echo '<i class="' . $field['field_icon'] . '" aria-hidden="true"></i>';
+											echo '<i class="' . esc_attr($field['field_icon']) . '" aria-hidden="true"></i>';
 										} elseif ( isset( $field['field_icon'] ) && $field['field_icon'] ) {
-											echo '<b style="background-image: url("' . $field['field_icon'] . '")"></b>';
+											echo '<b style="background-image: url("' . esc_url($field['field_icon']) . '")"></b>';
 										} else {
 											echo '<i class="fas fa-cog" aria-hidden="true"></i>';
 										}
 
-										echo ' ' . $field['site_title'];
+										echo ' ' . esc_attr($field['site_title']);
 
 										if ( isset( $field['help_text'] ) && $field['help_text'] ) {
 											echo uwp_help_tip( $field['help_text'] );
@@ -347,6 +347,7 @@ class UsersWP_Form_Builder {
                                                 id="show_options"><?php _e( 'Form Options', 'userswp' ); ?></button>
 										<?php if ( ! empty( $current_form ) && $current_form > 1 ) { ?>
                                             <button data-id="<?php echo esc_attr($current_form); ?>"
+                                                    data-nonce="<?php echo wp_create_nonce( 'uwp-delete-register-form-nonce' ); ?>"
                                                     class="btn btn-sm btn-danger register-form-remove" type="button"
                                                     name="form_remove"><?php _e( 'Delete Form', 'userswp' ); ?></button>
 										<?php } ?>
@@ -392,7 +393,7 @@ class UsersWP_Form_Builder {
 									foreach ( $actions as $key => $action ) {
 										?>
                                         <option <?php selected( $current_action, $key ); ?>
-                                                value="<?php echo $key; ?>"><?php echo sprintf( __( '%s', 'userswp' ), $action ); ?></option>
+                                                value="<?php echo esc_attr($key); ?>"><?php echo sprintf( __( '%s', 'userswp' ), $action ); ?></option>
 									<?php } ?>
                                 </select>
                             </td>
@@ -470,6 +471,7 @@ class UsersWP_Form_Builder {
                             </td>
                         </tr>
                     </table>
+                    <input type="hidden" name="uwp_update_register_form_nonce" value="<?php echo wp_create_nonce( 'uwp-update-register-form-nonce' ); ?>" />
 					<?php do_action( 'uwp_user_type_form_after', $current_form, $tab ); ?>
                 </form>
             </div>
@@ -569,7 +571,7 @@ class UsersWP_Form_Builder {
 
 	public function custom_available_fields( $type, $form_type ) {
 		?>
-        <input type="hidden" name="form_type" id="form_type" value="<?php echo $form_type; ?>"/>
+        <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr($form_type); ?>"/>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">
 		<?php
 		if ( $type == 'predefined' ) {
@@ -614,14 +616,14 @@ class UsersWP_Form_Builder {
                        href="javascript:void(0);">
 
 						<?php if ( isset( $field['field_icon'] ) && strpos( $field['field_icon'], ' fa-' ) !== false ) {
-							echo '<i class="' . $field['field_icon'] . '" aria-hidden="true"></i>';
+							echo '<i class="' . esc_attr($field['field_icon']) . '" aria-hidden="true"></i>';
 						} elseif ( isset( $field['field_icon'] ) && $field['field_icon'] ) {
-							echo '<b style="background-image: url("' . $field['field_icon'] . '")"></b>';
+							echo '<b style="background-image: url("' . esc_url($field['field_icon']) . '")"></b>';
 						} else {
 							echo '<i class="fas fa-cog" aria-hidden="true"></i>';
 						}
 
-						echo ' ' . $field['site_title'];
+						echo ' ' . esc_attr($field['site_title']);
 
 						if ( isset( $field['help_text'] ) && $field['help_text'] ) {
 							echo uwp_help_tip( $field['help_text'] );
@@ -1133,9 +1135,9 @@ class UsersWP_Form_Builder {
 					?>
                     <li <?php echo $style; ?> >
 
-                        <a id="uwp-<?php echo $field['htmlvar_name']; ?>"
-                           class="uwp-draggable-form-items uwp-<?php echo $field['field_type']; ?>"
-                           href="javascript:void(0);" data-field-type="<?php echo $field['field_type']; ?>">
+                        <a id="uwp-<?php echo esc_attr($field['htmlvar_name']); ?>"
+                           class="uwp-draggable-form-items uwp-<?php echo esc_attr($field['field_type']); ?>"
+                           href="javascript:void(0);" data-field-type="<?php echo esc_attr($field['field_type']); ?>">
 
 							<?php if ( $icon = uwp_get_field_icon( $field['field_icon'] ) ) {
 								echo $icon;
@@ -1143,7 +1145,7 @@ class UsersWP_Form_Builder {
 								echo '<i class="fas fa-cog" aria-hidden="true"></i>';
 							} ?>
 
-							<?php echo $field['site_title']; ?>
+							<?php echo esc_attr($field['site_title']); ?>
 
                         </a>
                     </li>
@@ -1271,9 +1273,9 @@ class UsersWP_Form_Builder {
 		$field_display = $field_type == 'address' && $field_info->htmlvar_name == 'post' ? 'style="display:none"' : '';
 
 		if ( isset( $cf['field_icon'] ) && strpos( $cf['field_icon'], ' fa-' ) !== false ) {
-			$field_icon = '<i class="' . $cf['field_icon'] . '" aria-hidden="true"></i>';
+			$field_icon = '<i class="' . esc_attr($cf['field_icon']) . '" aria-hidden="true"></i>';
 		} elseif ( isset( $cf['field_icon'] ) && $cf['field_icon'] ) {
-			$field_icon = '<b style="background-image: url("' . $cf['field_icon'] . '")"></b>';
+			$field_icon = '<b style="background-image: url("' . esc_url($cf['field_icon']) . '")"></b>';
 		} else {
 			$field_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
 		}
@@ -1482,7 +1484,7 @@ class UsersWP_Form_Builder {
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="placeholder_value"
-                                           id="placeholder_value_<?php echo $result_str; ?>"
+                                           id="placeholder_value_<?php echo esc_attr($result_str); ?>"
                                            title="<?php _e( 'Enter placeholder text for this field.', 'userswp' ); ?>"
                                            value="<?php echo esc_attr($value); ?>"/>
                                 </div>
@@ -1870,7 +1872,7 @@ class UsersWP_Form_Builder {
 								if ( $can_delete ){ ?>
                                     <a class="item-delete submitdelete deletion" id="delete-16"
                                        href="javascript:void(0);"
-                                       onclick="delete_field('<?php echo esc_attr( $result_str ); ?>', '<?php echo $nonce; ?>', '<?php echo $htmlvar_name; ?>')"><?php _e( "Remove", "userswp" ); ?></a>
+                                       onclick="delete_field('<?php echo esc_attr( $result_str ); ?>', '<?php echo wp_create_nonce( 'custom_fields_delete_' . $result_str ); ?>', '<?php echo esc_attr($htmlvar_name); ?>')"><?php _e( "Remove", "userswp" ); ?></a>
 								<?php } ?>
 								<?php UsersWP_Settings_Page::toggle_advanced_button(); ?>
                             </div>
@@ -2033,7 +2035,7 @@ class UsersWP_Form_Builder {
 		if ( uwp_is_fa_icon( $icon ) ) {
 			$field_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
 		} elseif ( uwp_is_icon_url( $icon ) ) {
-			$field_icon = '<b style="background-image: url("' . $icon . '")"></b>';
+			$field_icon = '<b style="background-image: url("' . esc_url($icon) . '")"></b>';
 		} elseif ( isset( $field_info->field_type ) && $field_info->field_type == 'fieldset' ) {
 			$field_icon = '<i class="fas fa-arrows-alt-h" aria-hidden="true"></i>';
 		} else {
@@ -2519,7 +2521,7 @@ class UsersWP_Form_Builder {
 		$field_type_key = isset( $_REQUEST['field_type_key'] ) ? sanitize_text_field( $_REQUEST['field_type_key'] ) : '';
 		$field_action   = isset( $_REQUEST['field_ins_upd'] ) ? sanitize_text_field( $_REQUEST['field_ins_upd'] ) : '';
 		$field_id       = isset( $_REQUEST['field_id'] ) ? sanitize_text_field( $_REQUEST['field_id'] ) : '';
-		$form_id        = isset( $_REQUEST['form_id'] ) ? (int) $_REQUEST['form_id'] : 1;
+		$form_id        = isset( $_REQUEST['form_id'] ) ? absint($_REQUEST['form_id']) : 1;
 
 		$field_id = $field_id != '' ? trim( $field_id, '_' ) : $field_id;
 
@@ -2543,7 +2545,7 @@ class UsersWP_Form_Builder {
 
 		/* ---- Delete field ---- */
 		if ( $field_id != '' && $field_action == 'delete' && isset( $_REQUEST['_wpnonce'] ) && isset( $_REQUEST['create_field'] ) && isset( $_REQUEST['manage_field_type'] ) && $_REQUEST['manage_field_type'] == 'custom_fields' ) {
-			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'custom_fields_' . $field_id ) ) {
+			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'custom_fields_delete_' . $field_id ) ) {
 				return;
 			}
 

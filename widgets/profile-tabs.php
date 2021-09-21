@@ -174,9 +174,7 @@ class UWP_Profile_Tabs_Widget extends WP_Super_Duper {
 
 	    uwp_get_template($template, $args);
 
-        $output = ob_get_clean();
-
-        return $output;
+	    return ob_get_clean();
 
     }
 

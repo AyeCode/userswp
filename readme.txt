@@ -146,6 +146,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.2.31 =
+* Settings to change the footer link title in forms - ADDED
+* Nonce check for registration form options in form builder - ADDED
+
 = 1.2.2.30 =
 * User role based login/logout redirects - ADDED
 * User role based hide admin bar settings - ADDED

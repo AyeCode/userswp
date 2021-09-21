@@ -200,6 +200,7 @@ jQuery(window).on('load', function () {
     jQuery(document).on('click', '.register-form-remove', function (e) {
         var current_obj = jQuery(this);
         var form_id = current_obj.attr('data-id');
+        var nonce = current_obj.attr('data-nonce');
 
         uwp_get_spin_loader(current_obj);
 
@@ -209,7 +210,8 @@ jQuery(window).on('load', function () {
             var data = {
                 'action': 'uwp_ajax_remove_register',
                 'type': 'remove',
-                'form_id': form_id
+                'form_id': form_id,
+                'nonce': nonce,
             };
 
             jQuery.post(uwp_admin_ajax.url, data, function (response) {

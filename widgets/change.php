@@ -101,10 +101,6 @@ class UWP_Change_Widget extends WP_Super_Duper {
          */
         $args = wp_parse_args( $args, $defaults );
 
-	    if ( $this->is_preview() ) {
-		    return;
-	    }
-
         ob_start();
 
         echo '<div class="uwp_widgets uwp_widget_change">';

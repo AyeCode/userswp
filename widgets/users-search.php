@@ -65,9 +65,7 @@ class UWP_Users_Search_Widget extends WP_Super_Duper {
 
 	    uwp_get_template($template, $args);
 
-        $output = ob_get_clean();
-
-        return $output;
+	    return ob_get_clean();
 
     }
 
