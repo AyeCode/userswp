@@ -305,14 +305,6 @@ function get_uwp_users_list($roles = array()) {
 	$where = apply_filters('uwp_users_search_where', $where, $keyword);
 
 	$exclude_users = uwp_get_excluded_users_list();
-
-	if(isset($roles) && is_array($roles) && count($roles) > 0){
-		$users = get_users( array( 'role__not_in' => $roles, 'fields' => array('ID') ) );
-		$users = wp_list_pluck( $users, 'ID' );
-		if($users && count($users) > 0){
-			$exclude_users = array_merge($exclude_users, $users);
-		}
-    }
 	$exclude_users = apply_filters('uwp_excluded_users_from_list', $exclude_users, $where, $keyword);
 	$exclude_users = !empty($exclude_users) ? array_unique($exclude_users): array();
 
@@ -392,7 +384,20 @@ function get_uwp_users_list($roles = array()) {
 		$user_results = $wpdb->get_results($user_query);
 		$get_users = wp_list_pluck($user_results, 'ID');
 
+		if(isset($roles) && is_array($roles) && count($roles) > 0){
+			$users = get_users( array( 'role__in' => $roles, 'fields' => array('ID') ) );
+			$users = wp_list_pluck( $users, 'ID' );
+			if($get_users && count($get_users) > 0 && $users && count($users) > 0){
+				foreach ($get_users as $key => $get_user){
+					if(!in_array($get_user, $users)){
+						unset($get_users[$key]);
+					}
+				}
+			}
+		}
+
 		if(!empty($get_users) && is_array($get_users) && count($get_users) > 0){
+
 			$args = array(
 				'include' => $get_users,
 				'number' => (int) $number,
@@ -425,6 +430,16 @@ function get_uwp_users_list($roles = array()) {
 
 		if(!empty($exclude_users)) {
 			$args['exclude'] = $exclude_users;
+		}
+
+		if(isset($roles) && is_array($roles) && count($roles) > 0){
+			$include_users = array();
+			$users = get_users( array( 'role__in' => $roles, 'fields' => array('ID') ) );
+			$users = wp_list_pluck( $users, 'ID' );
+			if($users && count($users) > 0){
+				$include_users = array_merge($include_users, $users);
+				$args['include'] = $include_users;
+			}
 		}
 
 		if(!empty($order_by) && !empty($order) ) {
