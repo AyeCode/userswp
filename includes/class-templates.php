@@ -127,15 +127,16 @@ class UsersWP_Templates {
 	 */
 	public static function users_list_item_template_content() {
 
+		$item_page_id = uwp_get_option( 'user_list_item_page', 0 );
+		$content   = get_post_field( 'post_content', $item_page_id );
+
 		/*
 		 * Some page builders need to be able to take control here so we add a filter to bypass it on the fly
 		 */
-		$bypass_content = apply_filters( 'uwp_bypass_users_list_item_template_content', '' );
+		$bypass_content = apply_filters( 'uwp_bypass_users_list_item_template_content', '', $content, $item_page_id );
 		if ( $bypass_content ) {
 			return $bypass_content;
 		}
-		$item_page = uwp_get_option( 'user_list_item_page', 0 );
-		$content   = get_post_field( 'post_content', $item_page );
 
 		// if the content is blank then we grab the page defaults
 		if ( $content == '' ) {
@@ -215,18 +216,18 @@ class UsersWP_Templates {
                 }
 
 				$redirect_to = apply_filters( 'uwp_logged_in_redirect', $redirect_to );
-				wp_redirect( $redirect_to );
+				wp_safe_redirect( $redirect_to );
 				exit();
 			}
 		} elseif ( $account_page && ( (int) $account_page == $current_page_id ) ||
 		           ( $change_page && ( (int) $change_page == $current_page_id ) ) ) {
 			if ( ! is_user_logged_in() ) {
-				wp_redirect( get_permalink( $login_page ) );
+				wp_safe_redirect( get_permalink( $login_page ) );
 				exit();
 			} else {
 				$can_user_can_edit_account = apply_filters( 'uwp_user_can_edit_own_profile', true, get_current_user_id() );
 				if ( ! $can_user_can_edit_account && ( (int) $account_page == $current_page_id ) ) {
-					wp_redirect( home_url( '/' ) );
+					wp_safe_redirect( home_url( '/' ) );
 					exit();
 				}
 			}
@@ -268,7 +269,7 @@ class UsersWP_Templates {
 				}
 			}
 			if ( $change_page ) {
-				wp_redirect( get_permalink( $change_page ) );
+				wp_safe_redirect( get_permalink( $change_page ) );
 				exit();
 			}
 		}
@@ -313,11 +314,11 @@ class UsersWP_Templates {
 						$user_id     = get_current_user_id();
 						$obj         = new UsersWP_Profile();
 						$profile_url = $obj->get_profile_link( get_author_posts_url( $user_id ), $user_id );
-						wp_redirect( $profile_url );
+						wp_safe_redirect( $profile_url );
 						exit();
 					} else {
 						$redirect_to = apply_filters( 'uwp_no_login_profile_redirect', home_url( '/' ) );
-						wp_redirect( $redirect_to );
+						wp_safe_redirect( $redirect_to );
 						exit();
 					}
 
@@ -365,7 +366,7 @@ class UsersWP_Templates {
 				if ( $redirect_to ) {
 					$redirect_to = add_query_arg( 'redirect_to', admin_url(), $redirect_to );
 				}
-				wp_redirect( $redirect_to );
+				wp_safe_redirect( $redirect_to );
 				exit();
 			}
 		}

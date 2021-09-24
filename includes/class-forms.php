@@ -900,7 +900,7 @@ class UsersWP_Forms {
 					);
 					wp_send_json_success( $response );
 				} else {
-					wp_redirect( $redirect_to );
+					wp_safe_redirect( $redirect_to );
 				}
 				exit();
 			}
@@ -1179,7 +1179,7 @@ class UsersWP_Forms {
 				wp_send_json_success( $message );
 			} else {
 				$redirect_to = $this->get_login_redirect_url( $data, $user );
-				wp_redirect( $redirect_to );
+				wp_safe_redirect( $redirect_to );
 				exit();
 			}
 
@@ -3071,6 +3071,7 @@ class UsersWP_Forms {
 				$site_title = __( "Username or Email", 'userswp' );
 				$required = ! empty( $field->is_required ) ? ' *' : '';
 				$placeholder = $site_title . $required;
+				$placeholder = apply_filters( 'uwp_get_field_placeholder', stripslashes( $placeholder ), $field );
 			}
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
