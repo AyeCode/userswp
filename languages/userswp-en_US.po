@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.31\n"
+"Project-Id-Version: UsersWP 1.2.2.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-22 18:26+0530\n"
-"PO-Revision-Date: 2021-09-22 18:26+0530\n"
+"POT-Creation-Date: 2021-09-24 18:32+0530\n"
+"PO-Revision-Date: 2021-09-24 18:32+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1107,12 +1107,12 @@ msgid "Is Public :"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1577 includes/class-profile.php:465
-#: includes/class-templates.php:1109
+#: includes/class-templates.php:1110
 msgid "Yes"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1578 includes/class-profile.php:467
-#: includes/class-templates.php:1108
+#: includes/class-templates.php:1109
 msgid "No"
 msgstr ""
 
@@ -1792,7 +1792,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:71
 #: admin/settings/class-uwp-settings-general.php:283
-#: includes/class-emails.php:300 includes/class-forms.php:4354
+#: includes/class-emails.php:300 includes/class-forms.php:4355
 #: includes/class-pages.php:325 templates/bootstrap/forgot.php:63
 #: templates/bootstrap/login.php:8 templates/bootstrap/login.php:65
 #: templates/bootstrap/register.php:63 templates/bootstrap/reset.php:49
@@ -2508,17 +2508,17 @@ msgid "Privacy:"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:732
-#: includes/class-templates.php:1141
+#: includes/class-templates.php:1142
 msgid "Anyone"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:733
-#: includes/class-templates.php:1142
+#: includes/class-templates.php:1143
 msgid "Logged in"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:734
-#: includes/class-templates.php:1143
+#: includes/class-templates.php:1144
 msgid "Author only"
 msgstr ""
 
@@ -3216,7 +3216,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:530 includes/class-activator.php:572
-#: includes/class-forms.php:4089
+#: includes/class-forms.php:4090
 msgid "Confirm Password"
 msgstr ""
 
@@ -3651,31 +3651,31 @@ msgstr ""
 msgid "Username or Email"
 msgstr ""
 
-#: includes/class-forms.php:3393
+#: includes/class-forms.php:3394
 msgid "Please enter a valid URL including https://"
 msgstr ""
 
-#: includes/class-forms.php:3442
+#: includes/class-forms.php:3443
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:3755
+#: includes/class-forms.php:3756
 #, php-format
 msgid ""
 "By using this form I agree to the storage and handling of my data by this "
 "website. View our %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:3842
+#: includes/class-forms.php:3843
 #, php-format
 msgid "I accept the %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:4179
+#: includes/class-forms.php:4180
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/class-forms.php:4332
+#: includes/class-forms.php:4333
 msgid "Privacy settings updated successfully."
 msgstr ""
 
@@ -3962,40 +3962,40 @@ msgstr ""
 msgid "Profile Page"
 msgstr ""
 
-#: includes/class-templates.php:554
+#: includes/class-templates.php:555
 msgid "More"
 msgstr ""
 
-#: includes/class-templates.php:1087
+#: includes/class-templates.php:1088
 msgid "Field"
 msgstr ""
 
-#: includes/class-templates.php:1090
+#: includes/class-templates.php:1091
 msgid "Is Public?"
 msgstr ""
 
-#: includes/class-templates.php:1123
+#: includes/class-templates.php:1124
 msgid "Tab Name"
 msgstr ""
 
-#: includes/class-templates.php:1126 includes/helpers/misc.php:562
+#: includes/class-templates.php:1127 includes/helpers/misc.php:562
 #: includes/helpers/tabs.php:135
 msgid "Privacy"
 msgstr ""
 
-#: includes/class-templates.php:1162
+#: includes/class-templates.php:1163
 msgid " (Default)"
 msgstr ""
 
-#: includes/class-templates.php:1177
+#: includes/class-templates.php:1178
 msgid "Hide profile from the users listing page."
 msgstr ""
 
-#: includes/class-templates.php:1193
+#: includes/class-templates.php:1194
 msgid "Make the whole profile private"
 msgstr ""
 
-#: includes/class-templates.php:1201 includes/class-user-notifications.php:69
+#: includes/class-templates.php:1202 includes/class-user-notifications.php:69
 #: templates/bootstrap/change.php:29 templates/bootstrap/forgot.php:51
 #: templates/bootstrap/reset.php:33 templates/change.php:13
 #: templates/forgot.php:13 templates/reset.php:17

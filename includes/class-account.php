@@ -202,7 +202,7 @@ class UsersWP_Account {
 
             // Redirect after deletion
             $redirect_page = home_url();
-            wp_redirect($redirect_page);
+            wp_safe_redirect($redirect_page);
             exit();
         }
     }
