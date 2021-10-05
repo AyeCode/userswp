@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.2.33 =
+* Button group widget field not showing if privacy set to let user decide - FIXED
+
 = 1.2.2.32 =
 * User list item template via elementor showing default template content - FIXED
 * Placeholder filter to change login username placeholder - FIXED

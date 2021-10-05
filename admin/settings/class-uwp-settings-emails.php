@@ -241,7 +241,7 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 						'desc_tip' => true,
 						'advanced' => true,
 						'placeholder' => UsersWP_Defaults::registration_activate_email_content(),
-						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags()
+						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags(true, array('[#activation_link#]'))
 					),
 
 					array('type' => 'sectionend', 'id' => 'registration_activate_email_settings'),
