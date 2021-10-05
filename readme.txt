@@ -148,6 +148,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.2.33 =
 * Button group widget field not showing if privacy set to let user decide - FIXED
+* Sorting options to sort by first name and last name for users listing page - ADDED
 
 = 1.2.2.32 =
 * User list item template via elementor showing default template content - FIXED

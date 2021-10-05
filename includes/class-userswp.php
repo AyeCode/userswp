@@ -858,7 +858,12 @@ final class UsersWP {
 			if( !empty($widgets) ){
 				foreach ( $widgets as $widget ) {
 					if(!in_array($widget,$exclude)){
-						register_widget( $widget );
+						// SD V1 used to extend the widget class. V2 does not, so we cannot call register widget on it.
+						if ( is_subclass_of( $widget, 'WP_Widget' ) ) {
+							register_widget( $widget );
+						} else {
+							new $widget();
+						}
 					}
 				}
 			}

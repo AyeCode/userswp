@@ -6,8 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 $default_layout = uwp_get_option('users_default_layout', 'list');
 
 $sort_by = "";
+$sort_by_options = uwp_get_sort_by_order_list();
+
 if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
 	$sort_by = strip_tags(esc_attr($_GET['uwp_sort_by']));
+	if(!isset($sort_by_options[$sort_by])){$sort_by = "";}
 }
 
 do_action('uwp_users_loop_actions');
@@ -28,11 +31,13 @@ do_action('uwp_users_loop_actions');
 <div class="uwp-user-sort" id="uwp_user_sort">
 	<form method="get" action="">
 		<select name="uwp_sort_by" id="uwp_sort_by" class="aui-select2" onchange="this.form.submit()">
-			<option value=""><?php _e("Sort By:", "userswp"); ?></option>
-			<option <?php selected( $sort_by, "newer" ); ?> value="newer"><?php echo __("Newer", "userswp"); ?></option>
-			<option <?php selected( $sort_by, "older" ); ?> value="older"><?php echo __("Older", "userswp"); ?></option>
-			<option <?php selected( $sort_by, "alpha_asc" ); ?> value="alpha_asc"><?php echo __("A-Z", "userswp"); ?></option>
-			<option <?php selected( $sort_by, "alpha_desc" ); ?> value="alpha_desc"><?php echo __("Z-A", "userswp"); ?></option>
+            <option value=""><?php _e("Sort By:", "userswp"); ?></option>
+            <?php
+            foreach ($sort_by_options as $key => $val){
+	            $active = isset($_REQUEST['uwp_sort_by']) && $_REQUEST['uwp_sort_by']==$key ? 'active' : '';
+	            echo '<option '. selected( $sort_by, $key ).' value="'.$key.'">'. $val.'</option>';
+            }
+            ?>
 		</select>
 	</form>
 </div>

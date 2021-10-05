@@ -291,7 +291,7 @@ function get_uwp_users_list($roles = array()) {
 		$keyword = stripslashes(strip_tags($_GET['uwps']));
 	}
 
-	$sort_by = false;
+	$sort_by = $meta_key = false;
 	if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
 		$sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
 	}
@@ -334,6 +334,26 @@ function get_uwp_users_list($roles = array()) {
 				break;
 			case "alpha_desc":
 				$order_by = 'display_name';
+				$order = 'DESC';
+				break;
+            case "lname_asc":
+                $meta_key = 'last_name';
+				$order_by = 'meta_value';
+				$order = 'ASC';
+				break;
+			case "fname_asc":
+				$meta_key = 'first_name';
+				$order_by = 'meta_value';
+				$order = 'ASC';
+				break;
+            case "lname_desc":
+                $meta_key = 'last_name';
+				$order_by = 'meta_value';
+				$order = 'DESC';
+				break;
+			case "fname_desc":
+				$meta_key = 'first_name';
+				$order_by = 'meta_value';
 				$order = 'DESC';
 				break;
 		}
@@ -408,6 +428,10 @@ function get_uwp_users_list($roles = array()) {
 				$args['exclude'] = $exclude_users;
 			}
 
+			if(!empty($meta_key)) {
+				$args['meta_key'] = $meta_key;
+			}
+
 			if(!empty($order_by) && !empty($order) ) {
 				$args['orderby'] = $order_by;
 				$args['order'] = $order;
@@ -440,6 +464,10 @@ function get_uwp_users_list($roles = array()) {
 				$include_users = array_merge($include_users, $users);
 				$args['include'] = $include_users;
 			}
+		}
+
+		if(!empty($meta_key)) {
+			$args['meta_key'] = $meta_key;
 		}
 
 		if(!empty($order_by) && !empty($order) ) {
@@ -1752,4 +1780,21 @@ function uwp_get_user_roles($exclude = array()) {
 	}
 
 	return $user_roles;
+}
+
+function uwp_get_sort_by_order_list(){
+	$order_arr = array(
+		'alpha_asc' => __( 'Display name (A-Z)', 'userswp' ),
+		'alpha_desc' => __( 'Display name (Z-A)', 'userswp' ),
+		'newer' => __( 'Newer', 'userswp' ),
+		'older' => __( 'Older', 'userswp' ),
+		'fname_asc' => __("First name (A-Z)", "userswp"),
+		'fname_desc' => __("First name (Z-A)", "userswp"),
+		'lname_asc' => __("Last name (A-Z)", "userswp"),
+		'lname_desc' => __("Last name (Z-A)", "userswp"),
+	);
+
+	$order_arr = apply_filters('uwp_available_users_layout', $order_arr);
+
+	return $order_arr;
 }
