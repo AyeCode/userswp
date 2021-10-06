@@ -473,7 +473,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'name' => __( 'Users default order', 'userswp' ),
 		            'desc' => __( 'Choose the default users order for users listing page.', 'userswp' ),
 		            'type'    => 'select',
-		            'options' =>   $this->uwp_available_users_order(),
+		            'options' => uwp_get_sort_by_order_list(),
 		            'desc_tip' => true,
 	            ),
 	            array(
@@ -745,19 +745,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
         $tabs_arr = apply_filters('uwp_available_users_layout', $tabs_arr);
 
         return $tabs_arr;
-    }
-
-    public function uwp_available_users_order() {
-        $order_arr = array(
-            'alpha_asc' => __( 'Display name (A-Z)', 'userswp' ),
-            'alpha_desc' => __( 'Display name (Z-A)', 'userswp' ),
-            'newer' => __( 'Newer', 'userswp' ),
-            'older' => __( 'Older', 'userswp' ),
-        );
-
-	    $order_arr = apply_filters('uwp_available_users_layout', $order_arr);
-
-        return $order_arr;
     }
 
 	/**

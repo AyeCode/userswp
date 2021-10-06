@@ -113,7 +113,7 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
 
         // get the field settings
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $db_fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND is_public = '1' AND field_type = 'url' AND htmlvar_name IN($prepare_fields)",$fields));
+        $db_fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE ( form_type = 'register' OR form_type = 'account' ) AND field_type = 'url' AND htmlvar_name IN($prepare_fields)",$fields));
         $field_info = array();
         if(!empty($db_fields)){
             foreach($db_fields as $db_field){
@@ -123,9 +123,11 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
 
         // get the user meta
         $user_meta = uwp_get_usermeta_row($user->ID);
+	    $privacy  = isset( $user_meta ) && ! empty( $user_meta->user_privacy ) ? explode( ',', $user_meta->user_privacy ) : array();
+
         $buttons = array();
         foreach($fields as $field){
-            if(!empty($user_meta->{$field}) && isset($field_info[$field])){
+            if(!empty($user_meta->{$field}) && isset($field_info[$field]) && ! in_array( $field . '_privacy', $privacy )){
                 $buttons[$field] = $field_info[$field];
                 $buttons[$field]->url = esc_url($user_meta->{$field});
             }

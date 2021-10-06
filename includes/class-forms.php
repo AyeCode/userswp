@@ -1479,7 +1479,7 @@ class UsersWP_Forms {
 			$custom_url = uwp_get_option( 'login_redirect_custom_url_'.$user_role );
 		}
 
-		if ( isset( $user ) && $user->has_cap( 'manage_options' ) ) {
+		if ( $user && $user->has_cap( 'manage_options' ) ) {
 			$redirect_to = admin_url();
 		} elseif ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
 			$redirect_to = esc_url_raw( $_REQUEST['redirect_to'] );

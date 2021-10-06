@@ -2,12 +2,12 @@
 /**
  * Login template (default)
  * 
- * @ver 1.0.0
+ * @ver 1.0.1
  */
 $css_class = !empty($args['css_class']) ? esc_attr( $args['css_class'] ) : 'border-0';
 $form_title = ! empty( $args['form_title'] ) || $args['form_title']=='0' ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Login', 'userswp' );
 $form_title = apply_filters( 'uwp_template_form_title', $form_title, 'login' );
-do_action( 'uwp_template_before', 'login' ); ?>
+do_action( 'uwp_template_before', 'login', $args ); ?>
 <div class="row">
 	<div class="card mx-auto container-fluid p-0 <?php echo esc_attr( $css_class ); ?>" >
 		<?php
@@ -29,7 +29,7 @@ do_action( 'uwp_template_before', 'login' ); ?>
 		}
 		?>
 			<div class="card-body">
-				<?php do_action( 'uwp_template_form_title_before', 'login' );
+				<?php do_action( 'uwp_template_form_title_before', 'login', $args );
 
 				if ( !wp_doing_ajax() && $form_title != '0' ) {
 					echo '<h3 class="card-title text-center mb-4">';
@@ -37,7 +37,7 @@ do_action( 'uwp_template_before', 'login' ); ?>
 					echo '</h3>';
 				}
 				
-				do_action( 'uwp_template_display_notices', 'login' ); 
+				do_action( 'uwp_template_display_notices', 'login', $args );
 				?>
 				<form class="uwp-login-form uwp_form" method="post">
 
@@ -95,10 +95,10 @@ do_action( 'uwp_template_before', 'login' ); ?>
                 </div>
 
                 <div class="form-group text-center mb-0 p-0">
-					<?php do_action( 'uwp_social_fields', 'login' ); ?>
+					<?php do_action( 'uwp_social_fields', 'login', $args ); ?>
                 </div>
 
 			</div>
 	</div>
 </div>
-<?php do_action( 'uwp_template_after', 'login' ); ?>
+<?php do_action( 'uwp_template_after', 'login', $args ); ?>
