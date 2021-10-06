@@ -2,7 +2,6 @@
 
 class SD_Hello_World extends WP_Super_Duper {
 
-
 	public $arguments;
 
 	/**
@@ -28,7 +27,10 @@ class SD_Hello_World extends WP_Super_Duper {
 					'content' => 'Hello: [%after_text%]' // block properties can be added by wrapping them in [%name%]
 				)
 			),
-			'block-wrap'    => '', // You can specify the type of element to wrap the block `div` or `span` etc.. Or blank for no wrap at all.
+			'output_types'   => array( 'block', 'shortcode' ),
+			// Sample showing how to disable widgets for a given SD instance.
+			'block-wrap'     => '',
+			// You can specify the type of element to wrap the block `div` or `span` etc.. Or blank for no wrap at all.
 			'class_name'     => __CLASS__,
 			// The calling class name
 			'base_id'        => 'hello_world',
@@ -40,8 +42,12 @@ class SD_Hello_World extends WP_Super_Duper {
 				// widget class
 				'description' => esc_html__( 'This is an example that will take a text parameter and output it after `Hello:`.', 'hello-world' ),
 				// widget description
+				'output'      => array( $this, 'output' )
 			),
-			'no_wrap'       => true, // This will prevent the widget being wrapped in the containing widget class div.
+			'no_wrap'        => true,
+			// This will prevent the widget being wrapped in the containing widget class div.
+			//'block-editor-style'    => 'https://example.com/style.css',
+			// Lets you add a URL for styles that should be added to the block editor.
 			'arguments'      => array( // these are the arguments that will be used in the widget, shortcode and block settings.
 				'after_text' => array( // this is the input name=''
 					'title'       => __( 'Text after hello:', 'hello-world' ),
@@ -76,7 +82,6 @@ class SD_Hello_World extends WP_Super_Duper {
 	 * @return string
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
-
 		/**
 		 * @var string $after_text
 		 * @var string $another_input This is added by filter below.
@@ -91,16 +96,11 @@ class SD_Hello_World extends WP_Super_Duper {
 		}
 
 		return "Hello: " . $after_text . "" . $another_input;
-
 	}
 
 }
 
-// register it.
-add_action( 'widgets_init', function () {
-	register_widget( 'SD_Hello_World' );
-} );
-
+new SD_Hello_World();
 
 /**
  * Extend the options via filter hook, this can be done via plugin/theme.

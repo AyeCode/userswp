@@ -10,7 +10,7 @@
  *
  * @return mixed|void
  */
-function sd_pagenow_exclude(){
+function sd_pagenow_exclude() {
 	return apply_filters( 'sd_pagenow_exclude', array(
 		'upload.php',
 		'edit-comments.php',
@@ -33,6 +33,6 @@ function sd_pagenow_exclude(){
  *
  * @return mixed|void
  */
-function sd_widget_exclude(){
+function sd_widget_exclude() {
 	return apply_filters( 'sd_widget_exclude', array() );
 }
