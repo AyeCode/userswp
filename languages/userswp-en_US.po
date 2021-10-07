@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.32\n"
+"Project-Id-Version: UsersWP 1.2.2.33\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-24 18:32+0530\n"
-"PO-Revision-Date: 2021-09-24 18:32+0530\n"
+"POT-Creation-Date: 2021-10-07 18:48+0530\n"
+"PO-Revision-Date: 2021-10-07 18:49+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1803,7 +1803,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:72
 #: includes/class-account.php:42 includes/class-pages.php:329
-#: includes/helpers/misc.php:568 includes/helpers/tabs.php:127
+#: includes/helpers/misc.php:596 includes/helpers/tabs.php:127
 #: templates/bootstrap/change.php:15 widgets/change.php:47
 #: widgets/change.php:95
 msgid "Change Password"
@@ -2403,24 +2403,6 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:742
 msgid "Grid View - 5 Column"
-msgstr ""
-
-#: admin/settings/class-uwp-settings-general.php:752
-msgid "Display name (A-Z)"
-msgstr ""
-
-#: admin/settings/class-uwp-settings-general.php:753
-msgid "Display name (Z-A)"
-msgstr ""
-
-#: admin/settings/class-uwp-settings-general.php:754
-#: templates/users-actions.php:32
-msgid "Newer"
-msgstr ""
-
-#: admin/settings/class-uwp-settings-general.php:755
-#: templates/users-actions.php:33
-msgid "Older"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-import-export.php:25
@@ -3160,7 +3142,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: includes/class-account.php:77 includes/helpers/misc.php:566
+#: includes/class-account.php:77 includes/helpers/misc.php:594
 #: includes/helpers/tabs.php:154
 msgid "Delete Account"
 msgstr ""
@@ -3978,7 +3960,7 @@ msgstr ""
 msgid "Tab Name"
 msgstr ""
 
-#: includes/class-templates.php:1127 includes/helpers/misc.php:562
+#: includes/class-templates.php:1127 includes/helpers/misc.php:590
 #: includes/helpers/tabs.php:135
 msgid "Privacy"
 msgstr ""
@@ -4481,51 +4463,83 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: includes/helpers/misc.php:564
+#: includes/helpers/misc.php:592
 msgid "E-Mail Notifications"
 msgstr ""
 
-#: includes/helpers/misc.php:570
+#: includes/helpers/misc.php:598
 msgid "Two-factor Authentication Settings"
 msgstr ""
 
-#: includes/helpers/misc.php:1308
+#: includes/helpers/misc.php:1336
 msgid "more"
 msgstr ""
 
-#: includes/helpers/misc.php:1309
+#: includes/helpers/misc.php:1337
 msgid "less"
 msgstr ""
 
-#: includes/helpers/misc.php:1310
+#: includes/helpers/misc.php:1338
 msgid "Something went wrong."
 msgstr ""
 
-#: includes/helpers/misc.php:1311
+#: includes/helpers/misc.php:1339
 msgid "Something went wrong, please retry."
 msgstr ""
 
-#: includes/helpers/misc.php:1492 widgets/output-location.php:90
+#: includes/helpers/misc.php:1520 widgets/output-location.php:90
 msgid "Users Page"
 msgstr ""
 
-#: includes/helpers/misc.php:1493 widgets/output-location.php:91
+#: includes/helpers/misc.php:1521 widgets/output-location.php:91
 msgid "More info tab"
 msgstr ""
 
-#: includes/helpers/misc.php:1494
+#: includes/helpers/misc.php:1522
 msgid "Profile side (non bootstrap)"
 msgstr ""
 
-#: includes/helpers/misc.php:1495
+#: includes/helpers/misc.php:1523
 msgid "Fieldset"
 msgstr ""
 
-#: includes/helpers/misc.php:1726
+#: includes/helpers/misc.php:1754
 #, php-format
 msgid ""
 "%s requires a newer version of UsersWP and will not run until the UsersWP "
 "plugin is updated."
+msgstr ""
+
+#: includes/helpers/misc.php:1787
+msgid "Display name (A-Z)"
+msgstr ""
+
+#: includes/helpers/misc.php:1788
+msgid "Display name (Z-A)"
+msgstr ""
+
+#: includes/helpers/misc.php:1789
+msgid "Newer"
+msgstr ""
+
+#: includes/helpers/misc.php:1790
+msgid "Older"
+msgstr ""
+
+#: includes/helpers/misc.php:1791
+msgid "First name (A-Z)"
+msgstr ""
+
+#: includes/helpers/misc.php:1792
+msgid "First name (Z-A)"
+msgstr ""
+
+#: includes/helpers/misc.php:1793
+msgid "Last name (A-Z)"
+msgstr ""
+
+#: includes/helpers/misc.php:1794
+msgid "Last name (Z-A)"
 msgstr ""
 
 #: includes/helpers/pages.php:544
@@ -4898,41 +4912,25 @@ msgstr ""
 msgid "Update Cover Image"
 msgstr ""
 
-#: templates/bootstrap/users-actions.php:9
-msgid "Newest"
-msgstr ""
-
-#: templates/bootstrap/users-actions.php:10
-msgid "Oldest"
-msgstr ""
-
-#: templates/bootstrap/users-actions.php:11 templates/users-actions.php:34
-msgid "A-Z"
-msgstr ""
-
-#: templates/bootstrap/users-actions.php:12 templates/users-actions.php:35
-msgid "Z-A"
-msgstr ""
-
-#: templates/bootstrap/users-actions.php:40
+#: templates/bootstrap/users-actions.php:35
 msgid "Sort By"
 msgstr ""
 
-#: templates/bootstrap/users-actions.php:53
+#: templates/bootstrap/users-actions.php:48
 msgid "Sort Options"
 msgstr ""
 
-#: templates/bootstrap/users-actions.php:95
+#: templates/bootstrap/users-actions.php:90
 msgid "Clear Sort"
 msgstr ""
 
-#: templates/bootstrap/users-actions.php:117
-#: templates/bootstrap/users-actions.php:124
-#: templates/bootstrap/users-actions.php:131
-#: templates/bootstrap/users-actions.php:138
-#: templates/bootstrap/users-actions.php:145 templates/users-actions.php:20
-#: templates/users-actions.php:21 templates/users-actions.php:22
-#: templates/users-actions.php:23
+#: templates/bootstrap/users-actions.php:112
+#: templates/bootstrap/users-actions.php:119
+#: templates/bootstrap/users-actions.php:126
+#: templates/bootstrap/users-actions.php:133
+#: templates/bootstrap/users-actions.php:140 templates/users-actions.php:23
+#: templates/users-actions.php:24 templates/users-actions.php:25
+#: templates/users-actions.php:26
 #, php-format
 msgid "Grid %d"
 msgstr ""
@@ -4969,11 +4967,11 @@ msgstr ""
 msgid "Update Cover Photo"
 msgstr ""
 
-#: templates/users-actions.php:19
+#: templates/users-actions.php:22
 msgid "List View"
 msgstr ""
 
-#: templates/users-actions.php:31
+#: templates/users-actions.php:34
 msgid "Sort By:"
 msgstr ""
 
