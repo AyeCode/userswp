@@ -5,12 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $sort_by = "";
-$sort_by_options = array(
-	'newer' => __("Newest", "userswp"),
-	'older' => __("Oldest", "userswp"),
-	'alpha_asc' => __("A-Z", "userswp"),
-	'alpha_desc' => __("Z-A", "userswp"),
-);
+$sort_by_options = uwp_get_sort_by_order_list();
 
 if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
 	$sort_by = strip_tags(esc_attr($_GET['uwp_sort_by']));
