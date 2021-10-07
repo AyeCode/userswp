@@ -1,3 +1,6 @@
+= 2.0.2 =
+* Elementor Pro will cause fatal error if old style register_widget is calles - FIXED
+
 = 2.0.1 =
 * Added missing static functions to main class for backwards comparability - FIXED
 

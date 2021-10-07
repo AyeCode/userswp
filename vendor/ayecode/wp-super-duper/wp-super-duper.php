@@ -23,7 +23,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	abstract class WP_Super_Duper {
 	
-		public $version = "2.0.1";
+		public $version = "2.0.2";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -748,6 +748,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function _register(){
 			// backwards compatibility
+		}
+
+		/**
+		 * Prevents elementor errors if called the SDv1 way.
+		 */
+		public function _set(){
+			// backwards compatibility for elementor pro
 		}
 	
 		/**
