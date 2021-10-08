@@ -220,17 +220,17 @@
         },
         {
             "name": "ayecode/wp-super-duper",
-            "version": "1.0.27",
-            "version_normalized": "1.0.27.0",
+            "version": "2.0.2",
+            "version_normalized": "2.0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/wp-super-duper.git",
-                "reference": "ce187bc9afc5cd7f5d790d84eb6fd9b98e56992d"
+                "reference": "ffbd740273dde423206c13c680ee90202b334799"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/ce187bc9afc5cd7f5d790d84eb6fd9b98e56992d",
-                "reference": "ce187bc9afc5cd7f5d790d84eb6fd9b98e56992d",
+                "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/ffbd740273dde423206c13c680ee90202b334799",
+                "reference": "ffbd740273dde423206c13c680ee90202b334799",
                 "shasum": ""
             },
             "require": {
@@ -242,7 +242,7 @@
                 "squizlabs/php_codesniffer": "^3.2",
                 "wp-coding-standards/wpcs": "*"
             },
-            "time": "2021-08-23T14:59:43+00:00",
+            "time": "2021-10-07T19:33:14+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -274,7 +274,7 @@
             ],
             "support": {
                 "issues": "https://github.com/AyeCode/wp-super-duper/issues",
-                "source": "https://github.com/AyeCode/wp-super-duper/tree/1.0.27"
+                "source": "https://github.com/AyeCode/wp-super-duper/tree/2.0.2"
             },
             "install-path": "../ayecode/wp-super-duper"
         },
@@ -285,12 +285,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "1e8a1614adc33d455f81e9b5381d4f661565fe90"
+                "reference": "d20a64ed3c94748397ff5973488761b22f6d3f19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/1e8a1614adc33d455f81e9b5381d4f661565fe90",
-                "reference": "1e8a1614adc33d455f81e9b5381d4f661565fe90",
+                "url": "https://api.github.com/repos/composer/installers/zipball/d20a64ed3c94748397ff5973488761b22f6d3f19",
+                "reference": "d20a64ed3c94748397ff5973488761b22f6d3f19",
                 "shasum": ""
             },
             "require": {
@@ -308,7 +308,7 @@
                 "symfony/phpunit-bridge": "^4.2 || ^5",
                 "symfony/process": "^2.3"
             },
-            "time": "2021-07-23T09:01:08+00:00",
+            "time": "2021-09-13T08:19:44+00:00",
             "type": "composer-plugin",
             "extra": {
                 "class": "Composer\\Installers\\Plugin",
@@ -391,6 +391,7 @@
                 "modx",
                 "moodle",
                 "osclass",
+                "pantheon",
                 "phpbb",
                 "piwik",
                 "ppi",
@@ -413,7 +414,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/installers/issues",
-                "source": "https://github.com/composer/installers/tree/1.x"
+                "source": "https://github.com/composer/installers/tree/v1.12.0"
             },
             "funding": [
                 {

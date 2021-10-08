@@ -1,3 +1,17 @@
+= 2.0.2 =
+* Elementor Pro will cause fatal error if old style register_widget is calles - FIXED
+
+= 2.0.1 =
+* Added missing static functions to main class for backwards comparability - FIXED
+
+= 2.0.0 =
+* WARNING v2 is a breaking change, please see our migration guide in our github repo https://github.com/AyeCode/wp-super-duper/ -  BREAKING CHANGE
+* Widget, blocks and shortcodes classes separated our for better readability and memory usage - CHANGED
+* 'output_types'  => array( 'block', 'shortcode' ) argument added to be able to only load certain types of output - ADDED
+* Legacy widgets can be converted to blocks on the fly - ADDED
+* Widgets hidden from legacy selector to prevent double option in widgets area - CHANGED
+* Option added to WordPress General settings to set if widgets are loaded - ADDED
+
 = 1.0.27 =
 * Category settings loads only 10 categories on CPT change - FIXED
 * Hook added to filter class & attributes for Elementor widget output - ADDED
