@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.8
-Stable tag: 1.2.2.34
+Stable tag: 1.2.2.35
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -145,6 +145,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.2.35 =
+* Super Duper v2 causing some issues with builders that use widgets, rolled back to SDv1 to resolve - FIXED
 
 = 1.2.2.34 =
 * Elementor Pro can cause error if old extension installed and not updated - FIXED
