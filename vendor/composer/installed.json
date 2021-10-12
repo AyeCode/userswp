@@ -107,17 +107,17 @@
         },
         {
             "name": "ayecode/wp-deactivation-survey",
-            "version": "1.0.3",
-            "version_normalized": "1.0.3.0",
+            "version": "1.0.4",
+            "version_normalized": "1.0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/wp-deactivation-survey.git",
-                "reference": "c4b0ba914835f17dca0cf69fe621c2db491d4667"
+                "reference": "d2777fed30acfc4da53b45bf3b4fec2fb27d8398"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/wp-deactivation-survey/zipball/c4b0ba914835f17dca0cf69fe621c2db491d4667",
-                "reference": "c4b0ba914835f17dca0cf69fe621c2db491d4667",
+                "url": "https://api.github.com/repos/AyeCode/wp-deactivation-survey/zipball/d2777fed30acfc4da53b45bf3b4fec2fb27d8398",
+                "reference": "d2777fed30acfc4da53b45bf3b4fec2fb27d8398",
                 "shasum": ""
             },
             "require": {
@@ -129,7 +129,7 @@
                 "squizlabs/php_codesniffer": "^3.2",
                 "wp-coding-standards/wpcs": "*"
             },
-            "time": "2021-06-29T09:53:37+00:00",
+            "time": "2021-10-11T16:17:34+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -158,7 +158,7 @@
             ],
             "support": {
                 "issues": "https://github.com/AyeCode/wp-deactivation-survey/issues",
-                "source": "https://github.com/AyeCode/wp-deactivation-survey/tree/1.0.3"
+                "source": "https://github.com/AyeCode/wp-deactivation-survey/tree/1.0.4"
             },
             "install-path": "../ayecode/wp-deactivation-survey"
         },

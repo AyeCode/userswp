@@ -19,7 +19,7 @@ if ( ! class_exists( 'AyeCode_Deactivation_Survey' ) ) {
 
 		public static $plugins;
 
-		public $version = "1.0.3";
+		public $version = "1.0.4";
 
 		public static function instance( $plugin = array() ) {
 			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof AyeCode_Deactivation_Survey ) ) {
@@ -78,6 +78,7 @@ if ( ! class_exists( 'AyeCode_Deactivation_Survey' ) ) {
 				'suddenly-stopped-working'	=> 'The plugin suddenly stopped working',
 				'plugin-broke-site'			=> 'The plugin broke my site',
 				'plugin-setup-difficult'	=> 'Too difficult to setup',
+				'plugin-design-difficult'	=> 'Too difficult to get the design i want',
 				'no-longer-needed'			=> 'I don\'t need this plugin any more',
 				'found-better-plugin'		=> 'I found a better plugin',
 				'temporary-deactivation'	=> 'It\'s a temporary deactivation, I\'m troubleshooting',
