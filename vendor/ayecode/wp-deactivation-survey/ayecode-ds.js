@@ -55,7 +55,7 @@
                 jQuery("#ayecode-feedback-other").attr('placeholder',strings.brief_description ).show();
             }else if(jQuery(this).val()=="found-better-plugin"){
                 jQuery("#ayecode-feedback-other").attr('placeholder',strings.better_plugins_name ).show();
-            }else if(jQuery(this).val()=="suddenly-stopped-working" || jQuery(this).val()=="plugin-broke-site" || jQuery(this).val()=="plugin-setup-difficult"){
+            }else if(jQuery(this).val()=="suddenly-stopped-working" || jQuery(this).val()=="plugin-broke-site" || jQuery(this).val()=="plugin-setup-difficult" || jQuery(this).val()=="plugin-design-difficult"){
                 jQuery(".ayecodeds-help-buttons").show();
             }
 

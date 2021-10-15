@@ -1,2 +1,5 @@
+= 1.0.4 =
+* Added option for difficult to design - ADDED
+
 = 1.0.3 =
 * Initial release
