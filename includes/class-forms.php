@@ -1049,7 +1049,7 @@ class UsersWP_Forms {
 		} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id == - 2 && $custom_url ) {
 			$redirect_to = $custom_url;
 		} else {
-			if ( isset( $user ) && $user->has_cap( 'manage_options' ) ) {
+			if ( $user && $user->has_cap( 'manage_options' ) ) {
 				$redirect_to = admin_url();
 			} else {
 				$redirect_to = home_url( '/' );
