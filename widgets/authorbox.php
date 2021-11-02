@@ -87,7 +87,7 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
         $user = get_user_by('id', $author_id);
         $author_name = esc_attr( $user->display_name );
         $author_bio = get_user_meta($author_id, 'description', true);
-	    $limit_words = apply_filters('uwp_author_bio_content_limit', 200);
+	    $limit_words = apply_filters('uwp_author_bio_content_limit', uwp_get_option('author_box_bio_limit', 200));
 	    $author_bio = wp_trim_words( $author_bio, $limit_words, '...' );
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
         $user_meta = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$meta_table} WHERE user_id = %d", $author_id), ARRAY_A);

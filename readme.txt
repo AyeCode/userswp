@@ -148,6 +148,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.2.36 =
 * Deactivation survey class updated to v1.0.4 - CHANGED
+* Setting to limit bio in authorbox - ADDED
+* Option to profile tabs to disable Greedy menu - ADDED
+* Filter to allow modifying [gd_author_actions] shortcode in profile tabs - ADDED
 
 = 1.2.2.35 =
 * Super Duper v2 causing some issues with builders that use widgets, rolled back to SDv1 to resolve - FIXED

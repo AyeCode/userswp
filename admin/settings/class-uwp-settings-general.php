@@ -561,6 +561,15 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'desc_tip' => true,
                     'default' => 'post',
                 ),
+	            array(
+		            'id'   => 'author_box_bio_limit',
+		            'name' => __( 'Bio Length', 'userswp' ),
+		            'desc' => __( 'Author bio word limit in Author box.', 'userswp' ),
+		            'desc_tip' => true,
+		            'type' => 'number',
+		            'default'  => '200',
+		            'advanced' => true,
+	            ),
                 array(
                     'name' => __('Author box Content', 'userswp'),
                     'desc' => __('The author box body, this can be text or HTML.', 'userswp'),
@@ -569,7 +578,8 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'class' => 'code uwp-authorbox-body',
                     'desc_tip' => true,
                     'placeholder' => UsersWP_Defaults::author_box_content(),
-                    'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_authbox_tags()
+                    'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_authbox_tags(),
+	                'advanced' => true,
                 ),
 	            array(
 		            'name' => __('Author box Content (bootstrap)', 'userswp'),
@@ -579,7 +589,8 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'class' => 'code uwp-authorbox-body',
 		            'desc_tip' => true,
 		            'placeholder' => UsersWP_Defaults::author_box_content_bootstrap(),
-		            'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_authbox_tags()
+		            'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_authbox_tags(),
+		            'advanced' => true,
 	            ),
 
                 array( 'type' => 'sectionend', 'id' => 'authorbox_options' ),

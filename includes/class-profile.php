@@ -907,6 +907,8 @@ class UsersWP_Profile {
 	 * @package     userswp
 	 *
 	 * @param       object $user The User ID.
+	 * @param       string $post_type Post type.
+	 * @param       array $args Extra arguments.
 	 *
 	 * @return      void
 	 */
@@ -937,6 +939,77 @@ class UsersWP_Profile {
 		$args['template_args']['the_query']     = $comments;
 		$args['template_args']['user']          = $user;
 		$args['template_args']['title']         = ! empty( $args['template_args']['title'] ) ? $args['template_args']['title'] : __( "Comments", 'userswp' );
+		$args['template_args']['maximum_pages'] = $maximum_pages;
+
+		$design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
+		$template     = $design_style ? $design_style . "/loop-comments.php" : "loop-comments.php";
+		uwp_get_template( $template, $args );
+	}
+
+	/**
+	 * Displays the profile page "user comments" tab content.
+	 *
+	 * @since       1.2.2.36
+	 * @package     userswp
+	 *
+	 * @param       object $user The User ID.
+     * @param       string $post_type Post type.
+	 * @param       array $args Extra arguments.
+	 *
+	 * @return      void
+	 */
+	public function get_profile_user_comments( $user, $post_type = 'post', $args = array() ) {
+
+		$paged  = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+		$number = uwp_get_option( 'profile_no_of_items', 10 );
+		$offset = ( $paged - 1 ) * $number;
+
+		$args = array(
+			'post_type' => $post_type,
+			'post_status' => 'published',
+			'posts_per_page' => -1,
+			'author' => $user->ID,
+			'fields' => 'ids',
+		);
+
+		$wp_query = new WP_Query($args);
+		$post_ids = $wp_query->posts;
+
+		if(isset( $the_query->found_posts ) && $wp_query->found_posts == 0 || empty($post_ids) ){
+			return;
+        }
+
+		$query_args = array(
+			'count'     => true,
+			'post_type' => $post_type,
+			'post__in'  => $post_ids,
+		);
+		// The Query
+		$the_query = new WP_Comment_Query();
+		$comments_count  = $the_query->query( $query_args );
+
+		$total_comments = $comments_count;
+		$maximum_pages  = ceil( $total_comments / $number );
+
+		$query_args = array(
+			'number'    => $number,
+			'offset'    => $offset,
+			'paged'     => $paged,
+			'post_type' => $post_type,
+			'post__in'  => $post_ids,
+		);
+
+		// The Query
+		$the_query = new WP_Comment_Query();
+		$comments  = $the_query->query( $query_args );
+
+		if(!$comments){
+			return;
+		}
+
+		$args['template_args']['the_query']     = $comments;
+		$args['template_args']['user']          = $user;
+		$args['template_args']['title']         = ! empty( $args['template_args']['title'] ) ? $args['template_args']['title'] : __( "User Comments", 'userswp' );
 		$args['template_args']['maximum_pages'] = $maximum_pages;
 
 		$design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : uwp_get_option( "design_style", 'bootstrap' );
