@@ -66,6 +66,15 @@ class UWP_Profile_Header_Widget extends WP_Super_Duper {
                     'default'  => 1,
                     'advanced' => true
                 ),
+                'disable_greedy'  => array(
+	                'title' => __('Disable Greedy Menu for post counts', 'userswp'),
+	                'desc' => __('Greedy menu prevents a large menu falling onto another line by adding a dropdown select.', 'userswp'),
+	                'type' => 'checkbox',
+	                'desc_tip' => true,
+	                'value'  => '1',
+	                'default'  => '',
+	                'advanced' => true,
+                ),
             )
 
         );

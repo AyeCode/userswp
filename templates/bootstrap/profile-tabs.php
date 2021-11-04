@@ -9,6 +9,7 @@ $output = ! empty( $args['output'] ) ? esc_attr( $args['output'] ) : '';
 $account_page = uwp_get_page_id('account_page', false);
 $tabs_array = $args['tabs_array'];
 $active_tab = $args['active_tab'];
+$greedy_menu_class = empty($args['disable_greedy']) ? 'greedy' : '';
 
 do_action( 'uwp_template_before', 'profile-tabs' );
 $user = uwp_get_displayed_user();
@@ -18,7 +19,7 @@ if(!$user){
 
 if($output === '' || $output=='head'){
 ?>
-<nav class="navbar navbar-expand-xl navbar-light bg-white  mb-4 p-xl-0 greedy">
+<nav class="navbar navbar-expand-xl navbar-light bg-white  mb-4 p-xl-0 <?php echo esc_attr($greedy_menu_class); ?>">
 	<div class="w-100 justify-content-center p-xl-0 border-bottom">
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#uwp-profile-tabs-nav" aria-controls="navbarNavDropdown-1" aria-expanded="false" aria-label="Toggle navigation" style=""><span class="navbar-toggler-icon"></span></button>
 		<div class="collapse navbar-collapse" id="uwp-profile-tabs-nav">

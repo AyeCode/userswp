@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.8
-Stable tag: 1.2.2.35
+Stable tag: 1.2.2.36
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -148,6 +148,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.2.36 =
 * Deactivation survey class updated to v1.0.4 - CHANGED
+* Setting to limit bio in authorbox - ADDED
+* Option to profile tabs to disable Greedy menu - ADDED
+* Filter to allow modifying [gd_author_actions] shortcode in profile tabs - ADDED
+* AyeCode UI updated to v0.1.62 - CHANGED
 
 = 1.2.2.35 =
 * Super Duper v2 causing some issues with builders that use widgets, rolled back to SDv1 to resolve - FIXED

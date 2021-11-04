@@ -49,6 +49,10 @@
 
       }
 
+      .gv-hide-0{
+        display: none;
+      }
+
     }
   }
 }
@@ -108,7 +112,7 @@ Grid view hide secondary info.
 // hide if on small breakpoint
 @media (max-width: 576px) {
   .row {
-    .gv-hide-2,.gv-hide-3,.gv-hide-4,.gv-hide-5{
+    .gv-hide-0,.gv-hide-2,.gv-hide-3,.gv-hide-4,.gv-hide-5{
       display: none;
     }
 
