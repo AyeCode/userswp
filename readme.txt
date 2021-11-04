@@ -151,6 +151,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 * Setting to limit bio in authorbox - ADDED
 * Option to profile tabs to disable Greedy menu - ADDED
 * Filter to allow modifying [gd_author_actions] shortcode in profile tabs - ADDED
+* AyeCode UI updated to v0.1.62 - CHANGED
 
 = 1.2.2.35 =
 * Super Duper v2 causing some issues with builders that use widgets, rolled back to SDv1 to resolve - FIXED
