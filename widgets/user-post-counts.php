@@ -38,6 +38,15 @@ class UWP_User_Post_Counts_Widget extends WP_Super_Duper {
 					'default'  => '',
 					'advanced' => false
 				),
+				'disable_greedy'  => array(
+					'title' => __('Disable Greedy Menu', 'userswp'),
+					'desc' => __('Greedy menu prevents a large menu falling onto another line by adding a dropdown select.', 'userswp'),
+					'type' => 'checkbox',
+					'desc_tip' => true,
+					'value'  => '1',
+					'default'  => '',
+					'advanced' => true,
+				),
 			)
 
 		);
@@ -97,11 +106,12 @@ class UWP_User_Post_Counts_Widget extends WP_Super_Duper {
 		}
 
 		$counts = apply_filters( 'uwp_get_user_post_counts', $counts, $user_id );
+		$greedy_menu_class = empty($args['disable_greedy']) ? 'greedy' : '';
 
 		if ( is_uwp_profile_page() ) {
 
 			if ( ! empty( $counts ) ) {
-				$output .= '<nav class="navbar navbar-expand-xl navbar-light bg-white p-xl-0 greedy">';
+				$output .= '<nav class="navbar navbar-expand-xl navbar-light bg-white p-xl-0 '.esc_attr($greedy_menu_class).'">';
 				$output .= '<div class="w-100 justify-content-center">';
 				$output .= '<ul class="navbar-nav flex-wrap m-0">';
 				$class = " pl-0";

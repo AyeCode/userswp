@@ -76,7 +76,7 @@ do_action( 'uwp_template_before', 'login', $args ); ?>
 							'type'  =>  'a',
 							'href'       => uwp_get_register_page_url(),
 							'class'      => 'd-block text-center mt-2 small uwp-register-link',
-							'content'    => uwp_get_option("register_link_title",__( 'Create account', 'userswp' )),
+							'content'    => uwp_get_option("register_link_title") ? uwp_get_option("register_link_title") : __( 'Create account', 'userswp' ),
 							'extra_attributes'  => array('rel'=>'nofollow')
 						));
 						?>
@@ -87,7 +87,7 @@ do_action( 'uwp_template_before', 'login', $args ); ?>
 							'type'  =>  'a',
 							'href'       => uwp_get_forgot_page_url(),
 							'class'      => 'd-block text-center mt-2 small uwp-forgot-password-link',
-							'content'    => uwp_get_option("forgot_link_title",__( 'Forgot password?', 'userswp' )),
+							'content'    => uwp_get_option("forgot_link_title") ? uwp_get_option("forgot_link_title") : __( 'Forgot password?', 'userswp' ),
 							'extra_attributes'  => array('rel'=>'nofollow')
 						));
 						?>

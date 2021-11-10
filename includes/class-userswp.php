@@ -661,6 +661,7 @@ final class UsersWP {
 		add_action( 'uwp_profile_more_info_tab_content', array( $instance, 'get_profile_more_info' ), 10, 1 );
 		add_action( 'uwp_profile_posts_tab_content', array( $instance, 'get_profile_posts' ), 10, 1 );
 		add_action( 'uwp_profile_comments_tab_content', array( $instance, 'get_profile_comments' ), 10, 1 );
+		//add_action( 'uwp_profile_user-comments_tab_content', array( $instance, 'get_profile_user_comments' ), 10, 1 );
 
 		// Profile Pagination
 		add_action( 'uwp_profile_pagination', array( $instance, 'get_profile_pagination' ) );

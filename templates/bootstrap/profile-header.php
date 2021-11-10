@@ -107,7 +107,7 @@ if ( ! $uwp_in_user_loop ){ ?>
 						?>
                     </li>
                 </ul>
-				<?php echo do_shortcode( "[uwp_user_post_counts]" ); ?>
+				<?php echo do_shortcode( "[uwp_user_post_counts disable_greedy=".$args['disable_greedy']."]" ); ?>
             </div>
             <div class="col-12 <?php if ( ! $uwp_in_user_loop ) { ?>col-xl-4 text-xl-right <?php } ?> text-center pt-2">
 				<?php

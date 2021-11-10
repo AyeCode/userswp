@@ -169,6 +169,7 @@ class UsersWP_Activator {
             'author_box_display_content' => 'below_content',
             'author_box_display_post_types' => array('post'),
             'author_box_content' => '',
+            'author_box_bio_limit' => 200,
             'registration_success_email_admin' => 1,
             'registration_success_email_subject_admin' => UsersWP_Defaults::registration_success_email_subject_admin(),
             'registration_success_email_content_admin' => UsersWP_Defaults::registration_success_email_content_admin(),

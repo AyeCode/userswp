@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.2.33\n"
+"Project-Id-Version: UsersWP 1.2.2.37\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-07 18:48+0530\n"
-"PO-Revision-Date: 2021-10-07 18:49+0530\n"
+"POT-Creation-Date: 2021-11-09 16:03+0530\n"
+"PO-Revision-Date: 2021-11-09 16:03+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -163,7 +163,7 @@ msgstr ""
 
 #: admin/class-admin-setup-wizard.php:474
 #: admin/settings/class-formbuilder.php:1875
-#: admin/settings/class-uwp-settings-profile-tabs.php:806
+#: admin/settings/class-uwp-settings-profile-tabs.php:814
 #: includes/class-tools.php:849
 msgid "Remove"
 msgstr ""
@@ -971,8 +971,8 @@ msgstr ""
 msgid "Adds a radio input"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1035 includes/class-activator.php:399
-#: includes/class-activator.php:666
+#: admin/settings/class-formbuilder.php:1035 includes/class-activator.php:400
+#: includes/class-activator.php:667
 msgid "Email"
 msgstr ""
 
@@ -1205,7 +1205,7 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:1868
 #: admin/settings/class-formbuilder.php:2085
-#: admin/settings/class-uwp-settings-profile-tabs.php:804
+#: admin/settings/class-uwp-settings-profile-tabs.php:812
 msgid "Save"
 msgstr ""
 
@@ -1572,8 +1572,8 @@ msgstr ""
 #: admin/settings/class-uwp-settings-emails.php:376
 #: admin/settings/class-uwp-settings-emails.php:409
 #: admin/settings/class-uwp-settings-emails.php:442
-#: admin/settings/class-uwp-settings-general.php:572
-#: admin/settings/class-uwp-settings-general.php:582
+#: admin/settings/class-uwp-settings-general.php:581
+#: admin/settings/class-uwp-settings-general.php:592
 msgid "Available template tags:"
 msgstr ""
 
@@ -1923,7 +1923,7 @@ msgid "Set the custom url to redirect the user to after logging in."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:207
-msgid "Register link title"
+msgid "Register Link Title"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:208
@@ -1938,11 +1938,11 @@ msgid "Create account"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:217
-msgid "Forgot password link title"
+msgid "Forgot Password Link Title"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:218
-msgid "Enter the Forgot password title."
+msgid "Enter the forgot password title."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:221
@@ -2005,7 +2005,7 @@ msgid ""
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:279
-msgid "Login link title"
+msgid "Login Link Title"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:280
@@ -2013,7 +2013,7 @@ msgid "Enter the login link title."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:289
-msgid "Profile link title"
+msgid "Profile Link Title"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:290
@@ -2021,7 +2021,7 @@ msgid "Enter the profile link title."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:299
-msgid "Account link title"
+msgid "Account Link Title"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:300
@@ -2224,184 +2224,192 @@ msgstr ""
 msgid "Choose post types to display author box"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:565
+#: admin/settings/class-uwp-settings-general.php:566
+msgid "Bio Length"
+msgstr ""
+
+#: admin/settings/class-uwp-settings-general.php:567
+msgid "Author bio word limit in Author box."
+msgstr ""
+
+#: admin/settings/class-uwp-settings-general.php:574
 msgid "Author box Content"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:566
-#: admin/settings/class-uwp-settings-general.php:576
+#: admin/settings/class-uwp-settings-general.php:575
+#: admin/settings/class-uwp-settings-general.php:586
 msgid "The author box body, this can be text or HTML."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:575
+#: admin/settings/class-uwp-settings-general.php:585
 msgid "Author box Content (bootstrap)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:595
+#: admin/settings/class-uwp-settings-general.php:606
 msgid "Developer Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:602
+#: admin/settings/class-uwp-settings-general.php:613
 msgid "Disable Avatar Override?"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:603
+#: admin/settings/class-uwp-settings-general.php:614
 msgid ""
 "By default UsersWP will change the avatar to profile image. You can disable "
 "this using this option."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:608
+#: admin/settings/class-uwp-settings-general.php:619
 msgid "Advanced settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:609
+#: admin/settings/class-uwp-settings-general.php:620
 msgid ""
 "Disable advanced toggle, show advanced settings at all times (not "
 "recommended)."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:616
+#: admin/settings/class-uwp-settings-general.php:627
 msgid "Debugging"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:617
+#: admin/settings/class-uwp-settings-general.php:628
 msgid "Show debugging info in the error logs."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:624
+#: admin/settings/class-uwp-settings-general.php:635
 msgid "Default Design Style"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:625
+#: admin/settings/class-uwp-settings-general.php:636
 msgid "The default design style to use."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:628
+#: admin/settings/class-uwp-settings-general.php:639
 msgid "Bootstrap"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:629
+#: admin/settings/class-uwp-settings-general.php:640
 msgid "Legacy (non-bootstrap)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:645
+#: admin/settings/class-uwp-settings-general.php:656
 msgid "Page Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:652
+#: admin/settings/class-uwp-settings-general.php:663
 msgid "User Profile Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:653
+#: admin/settings/class-uwp-settings-general.php:664
 msgid ""
 "This is the front end user's profile page. This page automatically overrides "
 "the default WordPress author page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:659
+#: admin/settings/class-uwp-settings-general.php:670
 #: includes/class-status.php:346
 msgid "Register Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:660
+#: admin/settings/class-uwp-settings-general.php:671
 msgid ""
 "This is the front end register page. This is where users create their "
 "account."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:666
+#: admin/settings/class-uwp-settings-general.php:677
 #: includes/class-status.php:350
 msgid "Login Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:667
+#: admin/settings/class-uwp-settings-general.php:678
 msgid ""
 "This is the front end login page. This is where users will login after "
 "creating their account."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:673
+#: admin/settings/class-uwp-settings-general.php:684
 #: includes/class-status.php:354
 msgid "Account Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:674
+#: admin/settings/class-uwp-settings-general.php:685
 msgid ""
 "This is the front end account page. This is where users can edit their "
 "account."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:680
+#: admin/settings/class-uwp-settings-general.php:691
 #: includes/class-status.php:358
 msgid "Change Password Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:681
+#: admin/settings/class-uwp-settings-general.php:692
 msgid "This is the front end Change Password page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:687
+#: admin/settings/class-uwp-settings-general.php:698
 #: includes/class-status.php:362
 msgid "Forgot Password Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:688
+#: admin/settings/class-uwp-settings-general.php:699
 msgid ""
 "This is the front end Forgot Password page. This is the page where users are "
 "sent to reset their password when they lose it."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:694
+#: admin/settings/class-uwp-settings-general.php:705
 #: includes/class-status.php:366
 msgid "Reset Password Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:695
+#: admin/settings/class-uwp-settings-general.php:706
 msgid ""
 "This is the front end Reset Password page. This is the page where users can "
 "reset their password when they lose it."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:701
+#: admin/settings/class-uwp-settings-general.php:712
 #: includes/class-status.php:370
 msgid "Users List Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:702
+#: admin/settings/class-uwp-settings-general.php:713
 msgid ""
 "This is the front end Users List page. This is the page where all registered "
 "users of the websites are listed."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:708
+#: admin/settings/class-uwp-settings-general.php:719
 msgid "Users List Item Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:709
+#: admin/settings/class-uwp-settings-general.php:720
 msgid ""
 "This is the page/template for displaying user item in users list page. You "
 "can change the template as you want which will apply to each user item in "
 "users list page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:738
+#: admin/settings/class-uwp-settings-general.php:749
 msgid "Grid View - 1 Column (List View)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:739
+#: admin/settings/class-uwp-settings-general.php:750
 msgid "Grid View - 2 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:740
+#: admin/settings/class-uwp-settings-general.php:751
 msgid "Grid View - 3 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:741
+#: admin/settings/class-uwp-settings-general.php:752
 msgid "Grid View - 4 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:742
+#: admin/settings/class-uwp-settings-general.php:753
 msgid "Grid View - 5 Column"
 msgstr ""
 
@@ -2452,91 +2460,91 @@ msgid "Posts"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:409
-#: includes/class-profile.php:939 templates/bootstrap/loop-comments.php:9
+#: includes/class-profile.php:941 templates/bootstrap/loop-comments.php:9
 #: templates/loop-comments.php:9 upgrade.php:71
 msgid "Comments"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:686
+#: admin/settings/class-uwp-settings-profile-tabs.php:694
 msgid "This will be the name of profile tab."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:687
+#: admin/settings/class-uwp-settings-profile-tabs.php:695
 msgid "Tab Name:"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:699
+#: admin/settings/class-uwp-settings-profile-tabs.php:707
 msgid "Key and URL slug for the profile tab."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:700
+#: admin/settings/class-uwp-settings-profile-tabs.php:708
 msgid "Tab key:"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:713
+#: admin/settings/class-uwp-settings-profile-tabs.php:721
 msgid "This will be the icon for profile tab."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:714
+#: admin/settings/class-uwp-settings-profile-tabs.php:722
 msgid "Tab icon:"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:726
+#: admin/settings/class-uwp-settings-profile-tabs.php:734
 msgid "Select privacy for displaying profile tab and content."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:727
+#: admin/settings/class-uwp-settings-profile-tabs.php:735
 msgid "Privacy:"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:732
+#: admin/settings/class-uwp-settings-profile-tabs.php:740
 #: includes/class-templates.php:1142
 msgid "Anyone"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:733
+#: admin/settings/class-uwp-settings-profile-tabs.php:741
 #: includes/class-templates.php:1143
 msgid "Logged in"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:734
+#: admin/settings/class-uwp-settings-profile-tabs.php:742
 #: includes/class-templates.php:1144
 msgid "Author only"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:744
+#: admin/settings/class-uwp-settings-profile-tabs.php:752
 #, php-format
 msgid "%s (Not Changeable)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:762
+#: admin/settings/class-uwp-settings-profile-tabs.php:770
 msgid ""
 "Enable to allow user to decide privacy for displaying profile tab and "
 "content."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:763
+#: admin/settings/class-uwp-settings-profile-tabs.php:771
 msgid "Let user decide :"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:764
+#: admin/settings/class-uwp-settings-profile-tabs.php:772
 msgid "N/A"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:785
+#: admin/settings/class-uwp-settings-profile-tabs.php:793
 msgid "Content to display in profile tab. Shortcode allowed."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:786
+#: admin/settings/class-uwp-settings-profile-tabs.php:794
 msgid "Tab content:"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:791
+#: admin/settings/class-uwp-settings-profile-tabs.php:799
 msgid "Add shortcode here."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-profile-tabs.php:1021
-#: admin/settings/class-uwp-settings-profile-tabs.php:1024
+#: admin/settings/class-uwp-settings-profile-tabs.php:1029
+#: admin/settings/class-uwp-settings-profile-tabs.php:1032
 msgid "Failed to sort tab items."
 msgstr ""
 
@@ -3137,8 +3145,8 @@ msgid "Update Account"
 msgstr ""
 
 #: includes/class-account.php:68 includes/class-account.php:69
-#: includes/class-activator.php:370 includes/class-activator.php:559
-#: includes/class-activator.php:698
+#: includes/class-activator.php:371 includes/class-activator.php:560
+#: includes/class-activator.php:699
 msgid "Password"
 msgstr ""
 
@@ -3176,45 +3184,45 @@ msgstr ""
 msgid "<strong>Error</strong>: Super Administrators cannot be deleted."
 msgstr ""
 
-#: includes/class-activator.php:357 includes/class-activator.php:633
+#: includes/class-activator.php:358 includes/class-activator.php:634
 #: includes/libraries/class-geodirectory-plugin.php:1856
 msgid "Username"
 msgstr ""
 
-#: includes/class-activator.php:428
+#: includes/class-activator.php:429
 msgid "Avatar"
 msgstr ""
 
-#: includes/class-activator.php:466
+#: includes/class-activator.php:467
 msgid "Banner"
 msgstr ""
 
-#: includes/class-activator.php:504
+#: includes/class-activator.php:505
 msgid "Old Password"
 msgstr ""
 
-#: includes/class-activator.php:517
+#: includes/class-activator.php:518
 msgid "New Password"
 msgstr ""
 
-#: includes/class-activator.php:530 includes/class-activator.php:572
+#: includes/class-activator.php:531 includes/class-activator.php:573
 #: includes/class-forms.php:4090
 msgid "Confirm Password"
 msgstr ""
 
-#: includes/class-activator.php:601
+#: includes/class-activator.php:602
 msgid "First Name"
 msgstr ""
 
-#: includes/class-activator.php:617
+#: includes/class-activator.php:618
 msgid "Last Name"
 msgstr ""
 
-#: includes/class-activator.php:650
+#: includes/class-activator.php:651
 msgid "Display Name"
 msgstr ""
 
-#: includes/class-activator.php:682
+#: includes/class-activator.php:683
 msgid "Bio"
 msgstr ""
 
@@ -3914,29 +3922,33 @@ msgstr ""
 msgid "Posts navigation"
 msgstr ""
 
-#: includes/class-profile.php:1388
+#: includes/class-profile.php:1012
+msgid "User Comments"
+msgstr ""
+
+#: includes/class-profile.php:1461
 #, php-format
 msgid "The uploaded file is too small. Minimum image width should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1391
+#: includes/class-profile.php:1464
 #, php-format
 msgid "The uploaded file is too small. Minimum image height should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1434
+#: includes/class-profile.php:1507
 msgid "Invalid request!"
 msgstr ""
 
-#: includes/class-profile.php:1455
+#: includes/class-profile.php:1528
 msgid "No fields available"
 msgstr ""
 
-#: includes/class-profile.php:1619
+#: includes/class-profile.php:1692
 msgid "Loading Form ..."
 msgstr ""
 
-#: includes/class-profile.php:1714
+#: includes/class-profile.php:1787
 msgid "File too big."
 msgstr ""
 
@@ -5256,6 +5268,17 @@ msgstr ""
 msgid "Allow user to change cover and avatar image in profile page."
 msgstr ""
 
+#: widgets/profile-header.php:70
+msgid "Disable Greedy Menu for post counts"
+msgstr ""
+
+#: widgets/profile-header.php:71 widgets/profile-tabs.php:58
+#: widgets/profile.php:44 widgets/user-post-counts.php:43
+msgid ""
+"Greedy menu prevents a large menu falling onto another line by adding a "
+"dropdown select."
+msgstr ""
+
 #: widgets/profile-section.php:28
 msgid "UWP > Profile Section"
 msgstr ""
@@ -5345,24 +5368,29 @@ msgstr ""
 msgid "JSON Array (developer option)"
 msgstr ""
 
-#: widgets/profile-tabs.php:109
+#: widgets/profile-tabs.php:57 widgets/profile.php:43
+#: widgets/user-post-counts.php:42
+msgid "Disable Greedy Menu"
+msgstr ""
+
+#: widgets/profile-tabs.php:118
 msgid "Not Found"
 msgstr ""
 
-#: widgets/profile-tabs.php:114
+#: widgets/profile-tabs.php:123
 msgid "<strong>ERROR</strong>: This tab does not exist."
 msgstr ""
 
-#: widgets/profile-tabs.php:128 widgets/profile-tabs.php:145
+#: widgets/profile-tabs.php:137 widgets/profile-tabs.php:154
 msgid "No Tabs"
 msgstr ""
 
-#: widgets/profile-tabs.php:133
+#: widgets/profile-tabs.php:142
 #, php-format
 msgid "No content, please make sure tabs have been added %shere.%s"
 msgstr ""
 
-#: widgets/profile-tabs.php:150
+#: widgets/profile-tabs.php:159
 msgid "No content found."
 msgstr ""
 

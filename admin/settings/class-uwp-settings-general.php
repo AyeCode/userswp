@@ -204,7 +204,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 	            ),
 	            array(
 		            'id' => 'register_link_title',
-		            'name' => __( 'Register link title', 'userswp' ),
+		            'name' => __( 'Register Link Title', 'userswp' ),
 		            'desc' => __( 'Enter the register link title.', 'userswp' ),
 		            'type' => 'text',
 		            'default'  => '',
@@ -214,8 +214,8 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 	            ),
 	            array(
 		            'id' => 'forgot_link_title',
-		            'name' => __( 'Forgot password link title', 'userswp' ),
-		            'desc' => __( 'Enter the Forgot password title.', 'userswp' ),
+		            'name' => __( 'Forgot Password Link Title', 'userswp' ),
+		            'desc' => __( 'Enter the forgot password title.', 'userswp' ),
 		            'type' => 'text',
 		            'default'  => '',
 		            'placeholder'  => __( 'Forgot password?', 'userswp' ),
@@ -276,7 +276,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 	            ),
 	            array(
 		            'id' => 'login_link_title',
-		            'name' => __( 'Login link title', 'userswp' ),
+		            'name' => __( 'Login Link Title', 'userswp' ),
 		            'desc' => __( 'Enter the login link title.', 'userswp' ),
 		            'type' => 'text',
 		            'default'  => '',
@@ -286,7 +286,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 	            ),
 	            array(
 		            'id' => 'profile_link_title',
-		            'name' => __( 'Profile link title', 'userswp' ),
+		            'name' => __( 'Profile Link Title', 'userswp' ),
 		            'desc' => __( 'Enter the profile link title.', 'userswp' ),
 		            'type' => 'text',
 		            'default'  => '',
@@ -296,7 +296,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 	            ),
 	            array(
 		            'id' => 'account_link_title',
-		            'name' => __( 'Account link title', 'userswp' ),
+		            'name' => __( 'Account Link Title', 'userswp' ),
 		            'desc' => __( 'Enter the account link title.', 'userswp' ),
 		            'type' => 'text',
 		            'default'  => '',
@@ -561,6 +561,15 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'desc_tip' => true,
                     'default' => 'post',
                 ),
+	            array(
+		            'id'   => 'author_box_bio_limit',
+		            'name' => __( 'Bio Length', 'userswp' ),
+		            'desc' => __( 'Author bio word limit in Author box.', 'userswp' ),
+		            'desc_tip' => true,
+		            'type' => 'number',
+		            'default'  => '200',
+		            'advanced' => true,
+	            ),
                 array(
                     'name' => __('Author box Content', 'userswp'),
                     'desc' => __('The author box body, this can be text or HTML.', 'userswp'),
@@ -569,7 +578,8 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'class' => 'code uwp-authorbox-body',
                     'desc_tip' => true,
                     'placeholder' => UsersWP_Defaults::author_box_content(),
-                    'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_authbox_tags()
+                    'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_authbox_tags(),
+	                'advanced' => true,
                 ),
 	            array(
 		            'name' => __('Author box Content (bootstrap)', 'userswp'),
@@ -579,7 +589,8 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'class' => 'code uwp-authorbox-body',
 		            'desc_tip' => true,
 		            'placeholder' => UsersWP_Defaults::author_box_content_bootstrap(),
-		            'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_authbox_tags()
+		            'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_authbox_tags(),
+		            'advanced' => true,
 	            ),
 
                 array( 'type' => 'sectionend', 'id' => 'authorbox_options' ),

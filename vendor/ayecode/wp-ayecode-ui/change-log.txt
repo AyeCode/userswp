@@ -1,3 +1,6 @@
+= 0.1.62 =
+* Grid view .gv-hide-0 class added to hide items on list view - ADDED
+
 = 0.1.61 =
 * Escape validation pattern - FIXED
 

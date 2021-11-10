@@ -11,7 +11,7 @@ $dashboard_links = !empty($args['template_args']['dashboard_links']) ? $args['te
 
 <div class="card text-center border-0">
     <a href="<?php echo esc_url( $profile_link );?>">
-    <img src="<?php echo get_avatar_url( get_current_user_id(), 100 ); ?>" class="rounded-circle shadow border border-white border-width-4" alt="<?php echo esc_attr($display_name);?>">
+    <img src="<?php echo get_avatar_url( get_current_user_id(), 100 ); ?>" class="rounded-circle shadow border border-white border-width-4" alt="<?php echo esc_attr($user_info->data->display_name);?>">
     </a>
     <div class="card-body">
         <?php do_action('uwp_template_form_title_before', 'dashboard'); ?>
