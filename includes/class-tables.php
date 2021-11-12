@@ -157,6 +157,28 @@ class UsersWP_Tables {
 
 		dbDelta($tabs_tbl_query);
 
+		// user sorting options table
+		$profile_tabs_table_name = uwp_get_table_prefix() . 'uwp_user_sorting';
+		$tabs_tbl_query = " CREATE TABLE " . $profile_tabs_table_name . " (
+							  id int(11) NOT NULL AUTO_INCREMENT,
+							  data_type varchar(255) NOT NULL,
+							  field_type varchar(255) NOT NULL,
+							  frontend_title varchar(255) NOT NULL,
+							  htmlvar_name varchar(255) NOT NULL,
+							  field_icon varchar(255) NULL DEFAULT NULL,
+						      sort_order int(11) NOT NULL DEFAULT '0',
+							  tab_parent varchar(100) NOT NULL DEFAULT '0',
+							  tab_level int(11) NOT NULL DEFAULT '0',
+							  is_active int(11) NOT NULL DEFAULT '0',
+							  is_default int(11) NOT NULL DEFAULT '0',
+							  sort varchar(5) DEFAULT 'asc',
+							  PRIMARY KEY  (id)
+							  ) $collate; ";
+
+		$tabs_tbl_query = apply_filters('uwp_user_sorting_table_create_query', $tabs_tbl_query);
+
+		dbDelta($tabs_tbl_query);
+
 	}
 
 	/**

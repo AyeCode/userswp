@@ -49,7 +49,20 @@ jQuery(document).ready(function () {
                 'user_decided':      jQuery(this).data('user_decided'),
                 'form_id': form_id,
             };
-        } else { //custom field
+        } else if(manage_field_type == 'user_sorting'){
+            var action = 'uwp_ajax_user_sorting_action';
+            data = {
+                'htmlvar_name':      htmlvar_name,
+                'form_type':         form_type,
+                'field_type':        field_type,
+                'field_ins_upd':     'new',
+                'data_type':         jQuery(this).data('data_type'),
+                'tab_level':         jQuery(this).data('tab_level'),
+                'tab_parent':        jQuery(this).data('tab_parent'),
+                'frontend_title':    jQuery(this).data('frontend_title'),
+                'sort':              jQuery(this).data('sort'),
+            };
+        }else { //custom field
             var action = "uwp_ajax_action";
             htmlvar_name = id;
         }
@@ -180,7 +193,10 @@ function save_field(id, type) {
     } else if('register' == type){
         var action = 'uwp_ajax_register_action';
         var manage_field_type = 'register';
-    }else {
+    } else if('user_sorting' == type){
+        var action = 'uwp_ajax_user_sorting_action';
+        var manage_field_type = 'user_sorting';
+    } else {
         var action = 'uwp_ajax_action';
         var manage_field_type = 'custom_fields';
     }
@@ -275,6 +291,9 @@ function delete_field(id, nonce, deleteid, type) {
     } else if('register' == type){
         var action = 'uwp_ajax_register_action';
         var manage_field_type = 'register';
+    }else if('user_sorting' == type){
+        var action = 'uwp_ajax_user_sorting_action';
+        var manage_field_type = 'user_sorting';
     } else {
         var action = 'uwp_ajax_action';
         var manage_field_type = 'custom_fields';

@@ -983,6 +983,7 @@ class UsersWP_Profile {
 			'count'     => true,
 			'post_type' => $post_type,
 			'post__in'  => $post_ids,
+			'author__not_in'  => $user->ID,
 		);
 		// The Query
 		$the_query = new WP_Comment_Query();
@@ -997,6 +998,7 @@ class UsersWP_Profile {
 			'paged'     => $paged,
 			'post_type' => $post_type,
 			'post__in'  => $post_ids,
+			'author__not_in'  => $user->ID,
 		);
 
 		// The Query
