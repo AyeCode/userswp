@@ -29,13 +29,81 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			add_action( 'uwp_manage_available_fields', array( $this, 'manage_available_fields' ), 10, 1 );
 			add_action( 'uwp_manage_selected_fields', array( $this, 'manage_selected_fields' ), 10, 1 );
 			add_action( 'wp_ajax_uwp_ajax_user_sorting_action', array( $this, 'ajax_handler' ) );
+			add_action( 'uwp_add_custom_sort_options', array( $this, 'add_custom_sort_options' ) );
+			add_action( 'pre_user_query', array( $this, 'pre_user_query' ) );
 
 		}
+
+		public function pre_user_query($vars){
+
+            global $wpdb;
+
+			if ( isset( $vars->query_vars['orderby'] ) && 'uwp_meta_value' == $vars->query_vars['orderby'] && is_uwp_users_page() ) {
+
+				$sort_by = $meta_key = '';$order = 'ASC';
+				if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
+					$sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
+				}
+
+				if(empty($sort_by)){
+					$sort_by = uwp_get_default_sort();
+				}
+
+				if ($sort_by) {
+
+					if ( substr( strtolower( $sort_by ) , -5 ) == '_desc' ) {
+						$order = 'DESC';
+						$meta_key = substr( $sort_by , 0, strlen( $sort_by ) - 5 );
+						$order_by = 'meta_value';
+					} else if ( substr( strtolower( $sort_by ) , -4 ) == '_asc' ) {
+						$order = 'ASC';
+						$meta_key = substr( $sort_by , 0, strlen( $sort_by ) - 4 );
+						$order_by = 'meta_value';
+					}
+
+					switch ($sort_by) {
+						case "newer":
+							$order_by = 'registered';
+							$order = 'DESC';
+							break;
+						case "older":
+							$order_by = 'registered';
+							$order = 'ASC';
+							break;
+					}
+
+					if ( ! empty( $order_by ) && $meta_key ) {
+						$meta_table_name = uwp_get_table_prefix() . 'uwp_usermeta';
+						$table_name = uwp_get_table_prefix() . 'uwp_user_sorting';
+
+						$vars->query_from.= " INNER JOIN " . $meta_table_name . " ON (" . $meta_table_name . ".user_id = $wpdb->users.ID)  ";
+						$vars->query_orderby = 'ORDER BY '.$meta_key.' '.$order;
+
+						$parent_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM " . $table_name . " WHERE htmlvar_name = %s AND sort = %s AND tab_parent = 0", $meta_key, $order ) );
+
+						if ( $parent_id ) {
+							$children = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE tab_parent = %d ORDER BY sort_order ASC", $parent_id ) );
+
+							if ( $children ) {
+
+								foreach ( $children as $child ) {
+									if ( !in_array($child->field_type, array('newer', 'older')) ) {
+										$vars->query_orderby .= ' , '.$child->htmlvar_name.' '.$order;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			return $vars;
+        }
 
 		/**
 		 * Add a tab to form builder
 		 *
-		 * @since       1.0.0
+		 * @since       1.2.2.38
 		 * @package     userswp
 		 *
 		 * @param       array   $tabs   Tabs
@@ -52,7 +120,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 		/**
 		 * Add a tab to form builder
 		 *
-		 * @since       2.0.0
+		 * @since       1.2.2.38
 		 * @package     userswp
 		 *
 		 * @param       string   $heading   Heading
@@ -74,7 +142,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 		/**
 		 * Add a note above available fields.
 		 *
-		 * @since       2.0.0
+		 * @since       1.2.2.38
 		 * @package     userswp
 		 *
 		 * @param       string   $note   Note to display
@@ -96,7 +164,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 		/**
 		 * Heading for the selected fields
 		 *
-		 * @since       2.0.0
+		 * @since       1.2.2.38
 		 * @package     userswp
 		 *
 		 * @param       string   $heading   Heading to display
@@ -118,7 +186,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 		/**
 		 * Add a note above selected fields.
 		 *
-		 * @since       2.0.0
+		 * @since       1.2.2.38
 		 * @package     userswp
 		 *
 		 * @param       string   $note   Note to display
@@ -139,7 +207,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 		/**
 		 * Display available fields
 		 *
-		 * @since       2.0.0
+		 * @since       1.2.2.38
 		 * @package     userswp
 		 *
 		 * @param       string   $form_type   Form type
@@ -155,7 +223,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 		/**
 		 * Display selected fields
 		 *
-		 * @since       2.0.0
+		 * @since       1.2.2.38
 		 * @package     userswp
 		 *
 		 * @param       string   $form_type   Form type
@@ -171,7 +239,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 		/**
 		 * Display available sorting fields
 		 *
-		 * @since       2.0.0
+		 * @since       1.2.2.38
 		 * @package     userswp
 		 *
 		 * @param       string   $form_type   Form type
@@ -185,39 +253,49 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			$fields['newer'] = array(
 				'data_type'      => '',
 				'field_type'     => 'newer',
-				'frontend_title' => __('Newer', 'userswp'),
+				'site_title' => __('Newer', 'userswp'),
 				'htmlvar_name'   => 'newer',
-				'field_icon'     => 'fas fa-random',
+				'field_icon'     => 'fas fa-sort',
 				'sort'           => 'asc',
 				'description'    => __( 'Sort by new user registration', 'userswp' )
 			);
 
+			$fields['older'] = array(
+				'data_type'      => '',
+				'field_type'     => 'older',
+				'site_title' => __('Older', 'userswp'),
+				'htmlvar_name'   => 'older',
+				'field_icon'     => 'fas fa-sort',
+				'sort'           => 'asc',
+				'description'    => __( 'Sort by new user registration in descending order', 'userswp' )
+			);
+
 			$fields['display_name'] = array(
 				'data_type'      => '',
-				'field_type'     => 'display_name',
-				'frontend_title' => __('Display name', 'userswp'),
+				'field_type'     => 'text',
+				'site_title' => __('Display name', 'userswp'),
 				'htmlvar_name'   => 'display_name',
-				'field_icon'     => 'fas fa-random',
+				'field_icon'     => 'fas fa-sort',
 				'sort'           => 'asc',
 				'description'    => __( 'Sort alphabetically by display name in ascending order', 'userswp' )
 			);
 
 			$fields['first_name'] = array(
 				'data_type'      => '',
-				'field_type'     => 'first_name',
-				'frontend_title' => __('First name', 'userswp'),
+				'field_type'     => 'text',
+				'site_title' => __('First name', 'userswp'),
 				'htmlvar_name'   => 'first_name',
-				'field_icon'     => 'fas fa-random',
+				'field_icon'     => 'fas fa-sort',
 				'sort'           => 'asc',
 				'description'    => __( 'Sort alphabetically by first name in ascending order', 'userswp' )
 			);
 
 			$fields['last_name'] = array(
 				'data_type'      => '',
-				'field_type'     => 'last_name',
-				'frontend_title' => __('Last name', 'userswp'),
+				'field_type'     => 'text',
+				'site_title' => __('Last name', 'userswp'),
 				'htmlvar_name'   => 'last_name',
-				'field_icon'     => 'fas fa-random',
+				'field_icon'     => 'fas fa-sort',
 				'sort'           => 'asc',
 				'description'    => __( 'Sort alphabetically by last name in descending order', 'userswp' )
 			);
@@ -264,16 +342,16 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 							<a id="uwp-<?php echo esc_attr($field['htmlvar_name']); ?>"
 							   class="uwp-draggable-form-items"
 							   data-field_type="<?php echo isset($field['field_type']) ? esc_attr($field['field_type']) : ''; ?>"
-							   data-frontend_title="<?php echo isset($field['frontend_title']) ? esc_attr($field['frontend_title']) : ''; ?>"
+							   data-site_title="<?php echo isset($field['site_title']) ? esc_attr($field['site_title']) : ''; ?>"
 							   data-field_icon="<?php echo isset($field['field_icon']) ? esc_attr($field['field_icon']) : ''; ?>"
 							   data-id="<?php echo isset($field['htmlvar_name']) ? esc_attr($field['htmlvar_name']) : ''; ?>"
-							   data-data_type="<?php echo isset($field['data_type']) ? esc_attr($field['data_type']) : 0; ?>"
+							   data-data_type="<?php echo isset($field['data_type']) ? esc_attr($field['data_type']) : 'VARCHAR'; ?>"
 							   data-tab_parent="<?php echo isset($field['tab_parent']) ? esc_attr($field['tab_parent']) : ''; ?>"
 							   data-tab_level="<?php echo isset($field['tab_content']) ? esc_attr($field['tab_content']) : ''; ?>"
 							   data-sort="<?php echo isset($field['sort']) ? esc_attr($field['sort']) : 'asc'; ?>"
 							   href="javascript:void(0);">
 								<?php echo $field_icon; ?>
-								<?php echo esc_attr($field['frontend_title']); ?>
+								<?php echo esc_attr($field['site_title']); ?>
 							</a>
 						</li>
 						<?php
@@ -366,12 +444,36 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				$field= array();
 			}
 
-			if (isset($request['frontend_title'])) {
-				$frontend_title = esc_attr($request['frontend_title']);
-			} elseif($field && isset( $field->frontend_title )) {
-				$frontend_title = $field->frontend_title;
+			if (isset($request['site_title'])) {
+				$site_title = esc_attr($request['site_title']);
+			} elseif($field && isset( $field->site_title )) {
+				$site_title = $field->site_title;
 			} else {
-				$frontend_title = '';
+				$site_title = '';
+			}
+
+			if (isset($request['htmlvar_name'])) {
+				$htmlvar_name = esc_attr($request['htmlvar_name']);
+			} elseif($field && isset( $field->htmlvar_name )) {
+				$htmlvar_name = $field->htmlvar_name;
+			} else {
+				$htmlvar_name = '';
+			}
+
+			if (isset($request['field_type'])) {
+				$field_type = esc_attr($request['field_type']);
+			} elseif($field && isset( $field->field_type )) {
+				$field_type = $field->field_type;
+			} else {
+				$field_type = '';
+			}
+
+			if (isset($request['data_type'])) {
+				$data_type = esc_attr($request['data_type']);
+			} elseif($field && isset( $field->data_type )) {
+				$data_type = $field->data_type;
+			} else {
+				$data_type = '';
 			}
 
 			if (isset($request['field_icon']) && $request['field_icon'] != '') {
@@ -411,117 +513,116 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			?>
             <li class="text li-settings" id="licontainer_<?php echo $field_id; ?>">
                 <i class="fas fa-caret-down toggle-arrow" aria-hidden="true" onclick="uwp_show_hide(this);"></i>
-                <form>
-                    <div class="title title<?php echo $field_id; ?> uwp-fieldset">
-						<?php
-						$nonce = wp_create_nonce('uwp_sort_extras_nonce_' . $field_id);
-						echo $field_icon;
-						?>
-                        <b><?php echo uwp_ucwords(' ' . $frontend_title); ?></b>
+                <div class="title title<?php echo $field_id; ?> uwp-fieldset">
+                    <?php
+                    $nonce = wp_create_nonce('uwp_sort_extras_nonce_' . $field_id);
+                    echo $field_icon;
+                    ?>
+                    <b><?php echo uwp_ucwords(' ' . $site_title); ?></b>
 
-                    </div>
-                    <div id="field_frm<?php echo $field_id; ?>" class="field_frm"
-                         style="display:<?php if ($field_ins_upd == 'submit') {
-						     echo 'block;';
-					     } else {
-						     echo 'none;';
-					     } ?>">
+                </div>
+                <div id="field_frm<?php echo $field_id; ?>" class="field_frm"
+                     style="display:<?php if ($field_ins_upd == 'submit') {
+                         echo 'block;';
+                     } else {
+                         echo 'none;';
+                     } ?>">
 
-                        <input type="hidden" name="_wpnonce" id="uwp_sort_extras_nonce" value="<?php echo esc_attr($nonce); ?>"/>
-                        <input type="hidden" name="field_id" id="field_id" value="<?php echo esc_attr($field_id); ?>"/>
-                        <input type="hidden" name="form_type" id="form_type" value="user_sorting"/>
-                        <input type="hidden" name="field_type" id="field_type" value="<?php echo esc_attr($field->field_type); ?>"/>
-                        <input type="hidden" name="data_type" id="data_type" value="<?php echo esc_attr($field->data_type); ?>"/>
-                        <input type="hidden" name="tab_parent" value="<?php echo esc_attr($tab_parent); ?>"/>
-                        <input type="hidden" name="tab_level" value="<?php echo esc_attr($tab_level); ?>"/>
+                    <input type="hidden" name="_wpnonce" id="uwp_sort_extras_nonce" value="<?php echo esc_attr($nonce); ?>"/>
+                    <input type="hidden" name="field_id" id="field_id" value="<?php echo esc_attr($field_id); ?>"/>
+                    <input type="hidden" name="form_type" id="form_type" value="user_sorting"/>
+                    <input type="hidden" name="field_type" id="field_type" value="<?php echo esc_attr($field_type); ?>"/>
+                    <input type="hidden" name="data_type" id="data_type" value="<?php echo esc_attr($data_type); ?>"/>
+                    <input type="hidden" name="tab_parent" value="<?php echo esc_attr($tab_parent); ?>"/>
+                    <input type="hidden" name="tab_level" value="<?php echo esc_attr($tab_level); ?>"/>
+                    <input type="hidden" name="htmlvar_name" value="<?php echo esc_attr($htmlvar_name) ?>"/>
 
-                        <ul class="widefat post fixed" style="width:100%;">
+                    <ul class="widefat post fixed" style="width:100%;">
 
-                            <li class="uwp-setting-name">
-                                <label for="frontend_title" class="uwp-tooltip-wrap">
-									<?php
-									echo uwp_help_tip(__('This is the text used for the sort option.', 'userswp'));
-									_e('Frontend title', 'userswp'); ?>
-                                </label>
-                                <div class="uwp-input-wrap">
-                                    <input type="text" name="frontend_title" id="frontend_title"
-                                           value="<?php echo esc_attr($frontend_title); ?>"/>
-                                </div>
-                            </li>
+                        <li class="uwp-setting-name">
+                            <label for="site_title" class="uwp-tooltip-wrap">
+                                <?php
+                                echo uwp_help_tip(__('This is the text used for the sort option.', 'userswp'));
+                                _e('Frontend title', 'userswp'); ?>
+                            </label>
+                            <div class="uwp-input-wrap">
+                                <input type="text" name="site_title" id="site_title"
+                                       value="<?php echo esc_attr($site_title); ?>"/>
+                            </div>
+                        </li>
 
-                            <li class="uwp-setting-name">
+                        <li class="uwp-setting-name">
 
-                                <label for="sort" class="uwp-tooltip-wrap">
-									<?php
-									echo uwp_help_tip(__('Select the sort direction: (A-Z or Z-A).', 'userswp'));
-									_e('Ascending or Descending', 'userswp'); ?>
-                                </label>
-                                <div class="uwp-input-wrap">
-                                    <select name="sort" id="uwp-sort-<?php echo esc_attr( $field->id );?>">
-		                                <?php $value = isset( $field->sort ) && $field->sort=='desc'  ? 'desc' : 'asc'; ?>
-                                        <option value="asc" <?php selected( 'asc', $value, true ); ?>><?php _e( 'Ascending', 'userswp' ); ?></option>
-                                        <option	value="desc" <?php selected( 'desc', $value, true ); ?>><?php _e( 'Descending', 'userswp' ); ?></option>
-                                    </select>
-                                </div>
+                            <label for="sort" class="uwp-tooltip-wrap">
+                                <?php
+                                echo uwp_help_tip(__('Select the sort direction: (A-Z or Z-A).', 'userswp'));
+                                _e('Ascending or Descending', 'userswp'); ?>
+                            </label>
+                            <div class="uwp-input-wrap">
+                                <select name="sort" id="uwp-sort-<?php echo esc_attr( $field->id );?>">
+                                    <?php $value = isset( $field->sort ) && $field->sort=='desc'  ? 'desc' : 'asc'; ?>
+                                    <option value="asc" <?php selected( 'asc', $value, true ); ?>><?php _e( 'Ascending', 'userswp' ); ?></option>
+                                    <option	value="desc" <?php selected( 'desc', $value, true ); ?>><?php _e( 'Descending', 'userswp' ); ?></option>
+                                </select>
+                            </div>
 
-                            </li>
+                        </li>
 
-                            <li class="uwp-setting-name">
+                        <li class="uwp-setting-name">
 
-                                <label for="is_default" class="uwp-tooltip-wrap">
-									<?php
-									echo uwp_help_tip(__('This sets the option as the overall default sort value, there can be only one.', 'userswp'));
-									_e('Default sort?', 'userswp'); ?>
-                                </label>
-                                <div class="uwp-input-wrap">
-                                    <input type="radio" name="is_default"
-                                           value="1" <?php if ( isset( $field->is_default ) && $field->is_default == 1 ) {
-		                                echo 'checked="checked"';
-	                                } ?>/>
-                                </div>
+                            <label for="is_default" class="uwp-tooltip-wrap">
+                                <?php
+                                echo uwp_help_tip(__('This sets the option as the overall default sort value, there can be only one.', 'userswp'));
+                                _e('Default sort?', 'userswp'); ?>
+                            </label>
+                            <div class="uwp-input-wrap">
+                                <input type="radio" name="is_default"
+                                       value="1" <?php if ( isset( $field->is_default ) && $field->is_default == 1 ) {
+                                    echo 'checked="checked"';
+                                } ?>/>
+                            </div>
 
-                            </li>
+                        </li>
 
-                            <li class="uwp-setting-name">
+                        <li class="uwp-setting-name">
 
-                                <label for="is_active" class="uwp-tooltip-wrap">
-									<?php
-									echo uwp_help_tip(__('Set if this sort option is active or not, if not it will not be shown to users.', 'userswp'));
-									_e('Is active?', 'userswp'); ?>
-                                </label>
-                                <div class="uwp-input-wrap">
-	                                <?php $value = isset( $field->is_active ) && $field->is_active  ? $field->is_active : 0; ?>
-                                    <input type="hidden" name="is_active" value="0" />
-                                    <input type="checkbox" name="is_active" value="1" <?php checked( $value, 1, true );?> />
-                                </div>
+                            <label for="is_active" class="uwp-tooltip-wrap">
+                                <?php
+                                echo uwp_help_tip(__('Set if this sort option is active or not, if not it will not be shown to users.', 'userswp'));
+                                _e('Is active?', 'userswp'); ?>
+                            </label>
+                            <div class="uwp-input-wrap">
+                                <?php $value = isset( $field->is_active ) && $field->is_active  ? $field->is_active : 0; ?>
+                                <input type="hidden" name="is_active" value="0" />
+                                <input type="checkbox" name="is_active" value="1" <?php checked( $value, 1, true );?> />
+                            </div>
 
-                            </li>
+                        </li>
 
-                            <input type="hidden" readonly="readonly" name="sort_order" id="sort_order"
-                                   value="<?php if ( isset( $field->sort_order ) ) {
-		                               echo esc_attr( $field->sort_order );
-	                               } ?>" size="50"/>
+                        <input type="hidden" readonly="readonly" name="sort_order" id="sort_order"
+                               value="<?php if ( isset( $field->sort_order ) ) {
+                                   echo esc_attr( $field->sort_order );
+                               } ?>" size="50"/>
 
-							<?php
+                        <?php
 
-							do_action('uwp_user_sorting_custom_fields', $field_id);
+                        do_action('uwp_user_sorting_custom_fields', $field_id);
 
-							?>
+                        ?>
 
-                            <li>
-                                <div class="uwp-input-wrap uwp-sort-actions" data-setting="save_button">
+                        <li>
+                            <div class="uwp-input-wrap uwp-tab-actions" data-setting="save_button">
 
-                                    <input type="button" class="button button-primary" name="save" id="save"
-                                           value="<?php esc_attr_e('Save', 'userswp'); ?>"
-                                           onclick="save_field('<?php echo esc_attr($field_id); ?>', 'user_sorting')"/>
-                                    <a class="item-delete submitdelete deletion" id="delete-<?php echo esc_attr($field_id); ?>" href="javascript:void(0);" onclick="delete_field('<?php echo esc_attr($field_id); ?>', '<?php echo wp_create_nonce('uwp_sort_delete_nonce_' . $field_id); ?>', '<?php echo esc_attr($tab_key); ?>', 'user_sorting')"><?php _e("Remove","userswp");?></a>
+                                <input type="button" class="button button-primary" name="save" id="save"
+                                       value="<?php esc_attr_e('Save', 'userswp'); ?>"
+                                       onclick="save_field('<?php echo esc_attr($field_id); ?>', 'user_sorting')"/>
+                                <a class="item-delete submitdelete deletion" id="delete-<?php echo esc_attr($field_id); ?>" href="javascript:void(0);" onclick="delete_field('<?php echo esc_attr($field_id); ?>', '<?php echo wp_create_nonce('uwp_sort_delete_nonce_' . $field_id); ?>', '<?php echo esc_attr($tab_key); ?>', 'user_sorting')"><?php _e("Remove","userswp");?></a>
 
-                                </div>
-                            </li>
-                        </ul>
+                            </div>
+                        </li>
+                    </ul>
 
-                    </div>
-                </form>
+                </div>
             </li>
 			<?php
 		}
@@ -615,8 +716,13 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			$id = isset($request_field['field_id']) && $request_field['field_id'] ? absint($request_field['field_id']) : '';
 			$data_type = isset($request_field['data_type']) ? sanitize_text_field($request_field['data_type']) : 'VARCHAR';
 			$field_type = isset($request_field['field_type']) ? sanitize_text_field($request_field['field_type']) : '';
-			$frontend_title = isset($request_field['frontend_title']) ? sanitize_text_field($request_field['frontend_title']) : '';
-			$htmlvar_name = !empty($request_field['htmlvar_name']) ? sanitize_title($request_field['htmlvar_name']) : sanitize_title($frontend_title, 'uwp-sort-'.$frontend_title);
+			$site_title = isset($request_field['site_title']) ? sanitize_text_field($request_field['site_title']) : '';
+			$htmlvar_name = !empty($request_field['htmlvar_name']) ? sanitize_text_field($request_field['htmlvar_name']) : str_replace( array(
+				'-',
+				' ',
+				'"',
+				"'"
+			), array( '_', '', '', '' ), sanitize_title_with_dashes( $request_field['site_title'] ) );
 			$tab_parent = !empty($request_field['tab_parent']) ? sanitize_text_field($request_field['tab_parent']) : 0;
 			$tab_level = !empty($request_field['tab_level']) ? sanitize_text_field($request_field['tab_level']) : 0;
 			$field_icon = isset($request_field['field_icon']) ? sanitize_text_field($request_field['field_icon']) : '';
@@ -626,18 +732,22 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 
 			$total_tabs = $wpdb->get_var("SELECT COUNT(id) FROM {$table_name}");
 
+			if(isset($is_default) && $is_default > 0){
+				$wpdb->query($wpdb->prepare("update " . $table_name . " set is_default='0' where is_default='1'"));
+			}
+
 			$data = array(
 				'data_type'     => $data_type,
 				'field_type'    => $field_type,
-				'frontend_title'=> $frontend_title,
+				'site_title'    => $site_title,
 				'htmlvar_name'  => $htmlvar_name,
 				'sort_order'    => $total_tabs + 1,
 				'tab_parent'    => $tab_parent,
 				'tab_level'     => $tab_level,
 				'field_icon'    => $field_icon,
-				'is_active'    => $is_active,
+				'is_active'     => $is_active,
 				'is_default'    => $is_default,
-				'sort'    => $sort,
+				'sort'          => $sort,
 			);
 
 			$format = array_fill( 0, count( $data ), '%s' );
@@ -699,7 +809,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 		}
 
 		/**
-		 * Updates profile tabs sort order.
+		 * Updates user sorting sort order.
 		 *
 		 * @param       array       $tabs      Tabs array.
 		 *
@@ -718,7 +828,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 						$table_name,
 						array('sort_order' => $index, 'tab_level' => (int)$tab['tab_level'], 'tab_parent' => (int)$tab['tab_parent']),
 						array('id' => absint($tab['id'])),
-						array('%d','%d')
+						array('%d','%d','%d')
 					);
 					$count ++;
 				}
@@ -731,6 +841,33 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				return new WP_Error( 'failed', __( "Failed to sort tab items.", "userswp" ) );
 			}
 		}
+
+		/**
+		 * Show custom fields in the user sorting form builder.
+		 *
+		 * @param       array       $fields      Fields array.
+		 *
+		 * @return      array       Merged fields array.
+		 */
+		public function add_custom_sort_options($fields){
+			global $wpdb;
+			$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+
+			$custom_fields = $wpdb->get_results(
+				$wpdb->prepare(
+					"select data_type,field_type,site_title,htmlvar_name,field_icon from " . $table_name . " where is_active='1' and user_sort='1' AND field_type != 'fieldset' order by sort_order asc"
+				), 'ARRAY_A'
+			);
+
+			if (!empty($custom_fields)) {
+
+				foreach ($custom_fields as $val) {
+					$fields[$val['htmlvar_name']] = $val;
+				}
+			}
+
+			return $fields;
+        }
 
 	}
 

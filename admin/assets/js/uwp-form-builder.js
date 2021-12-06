@@ -54,12 +54,12 @@ jQuery(document).ready(function () {
             data = {
                 'htmlvar_name':      htmlvar_name,
                 'form_type':         form_type,
-                'field_type':        field_type,
+                'field_type':        jQuery(this).data('field_type'),
                 'field_ins_upd':     'new',
                 'data_type':         jQuery(this).data('data_type'),
                 'tab_level':         jQuery(this).data('tab_level'),
                 'tab_parent':        jQuery(this).data('tab_parent'),
-                'frontend_title':    jQuery(this).data('frontend_title'),
+                'site_title':        jQuery(this).data('site_title'),
                 'sort':              jQuery(this).data('sort'),
             };
         }else { //custom field
@@ -147,7 +147,11 @@ jQuery(document).ready(function () {
                 }
             });
 
-            var action = "uwp_ajax_profile_tabs_action";
+            if (manage_field_type == 'user_sorting') {
+                var action = "uwp_ajax_user_sorting_action";
+            } else {
+                var action = "uwp_ajax_profile_tabs_action";
+            }
 
             var data = {
                 'tabs': $order,

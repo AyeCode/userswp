@@ -71,6 +71,7 @@ class UsersWP_Tables {
 							  validation_pattern varchar( 255 ) NOT NULL,
 							  validation_msg text NULL DEFAULT NULL,
 							  form_id int(11) NOT NULL DEFAULT 1,
+							  user_sort enum( '0', '1' ) NOT NULL DEFAULT '0',
 							  PRIMARY KEY  (id)
 							  ) $collate";
 
@@ -163,7 +164,7 @@ class UsersWP_Tables {
 							  id int(11) NOT NULL AUTO_INCREMENT,
 							  data_type varchar(255) NOT NULL,
 							  field_type varchar(255) NOT NULL,
-							  frontend_title varchar(255) NOT NULL,
+							  site_title varchar(255) NOT NULL,
 							  htmlvar_name varchar(255) NOT NULL,
 							  field_icon varchar(255) NULL DEFAULT NULL,
 						      sort_order int(11) NOT NULL DEFAULT '0',
