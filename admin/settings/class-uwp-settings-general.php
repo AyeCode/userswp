@@ -469,14 +469,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'desc_tip' => true,
                 ),
 	            array(
-		            'id' => 'users_default_order_by',
-		            'name' => __( 'Users default order', 'userswp' ),
-		            'desc' => __( 'Choose the default users order for users listing page.', 'userswp' ),
-		            'type'    => 'select',
-		            'options' => uwp_get_sort_by_order_list(),
-		            'desc_tip' => true,
-	            ),
-	            array(
 		            'id' => 'users_no_of_items',
 		            'name' => __( 'Number of items', 'userswp' ),
 		            'type' => 'number',

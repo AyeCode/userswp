@@ -918,7 +918,7 @@ class UsersWP_Profile {
 		$number = uwp_get_option( 'profile_no_of_items', 10 );
 		$offset = ( $paged - 1 ) * $number;
 
-		$total_comments = $this->get_comment_count_by_user( $user->ID );
+		$total_comments = $this->get_comment_count_by_user( $user->ID, $post_type );
 		$maximum_pages  = ceil( $total_comments / $number );
 
 		$query_args = array(
@@ -983,6 +983,7 @@ class UsersWP_Profile {
 			'count'     => true,
 			'post_type' => $post_type,
 			'post__in'  => $post_ids,
+			'author__not_in'  => $user->ID,
 		);
 		// The Query
 		$the_query = new WP_Comment_Query();
@@ -997,6 +998,7 @@ class UsersWP_Profile {
 			'paged'     => $paged,
 			'post_type' => $post_type,
 			'post__in'  => $post_ids,
+			'author__not_in'  => $user->ID,
 		);
 
 		// The Query
@@ -1027,7 +1029,7 @@ class UsersWP_Profile {
 	 *
 	 * @return      int                     Comment count.
 	 */
-	public function get_comment_count_by_user( $user_id ) {
+	public function get_comment_count_by_user( $user_id, $post_type = 'post' ) {
 		global $wpdb;
 
 		$count = $wpdb->get_var(
@@ -1036,7 +1038,7 @@ class UsersWP_Profile {
                 WHERE comment_post_ID in (
                 SELECT ID 
                 FROM " . $wpdb->posts . " 
-                WHERE post_type = 'post' 
+                WHERE post_type = ".$post_type." 
                 AND post_status = 'publish')
                 AND user_id = " . $user_id . "
                 AND comment_approved = '1'

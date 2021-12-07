@@ -22,7 +22,7 @@
                 <div class="uwp-footer-link uwp-register-now"><?php _e( 'Not a member?', 'userswp' ); ?> <a rel="nofollow" href="<?php echo uwp_get_register_page_url(); ?>"><?php echo uwp_get_option("register_link_title") ? uwp_get_option("register_link_title") : __( 'Create account', 'userswp' ); ?></a></div>
                 <div class="uwp-footer-link uwp-forgotpsw"><a rel="nofollow" href="<?php echo uwp_get_forgot_page_url(); ?>"><?php echo uwp_get_option("forgot_link_title") ? uwp_get_option("forgot_link_title") : __( 'Forgot password?', 'userswp' ); ?></a></div>
             </div>
-	        <?php do_action('uwp_social_fields', 'login'); ?>
+	        <?php do_action('uwp_social_fields', 'login', $args); ?>
         </div>
     </div>
 <?php do_action('uwp_template_after', 'login'); ?>

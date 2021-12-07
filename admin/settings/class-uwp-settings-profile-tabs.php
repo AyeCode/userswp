@@ -412,13 +412,13 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
 				'tab_content'=> ''
 			);
 
-			/*$fields[] = array(
+			$fields[] = array(
 				'tab_type'   => 'standard',
 				'tab_name'   => __('User Comments','userswp'),
 				'tab_icon'   => 'fas fa-comments',
 				'tab_key'    => 'user-comments',
 				'tab_content'=> ''
-			);*/
+			);
 
 		    $fields = apply_filters('uwp_profile_tabs_predefined_fields', $fields, $form_type);
 
