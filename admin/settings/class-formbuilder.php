@@ -708,8 +708,6 @@ class UsersWP_Form_Builder {
 				'required_msg'       => '',
 				'field_icon'         => 'fas fa-birthday-cake',
 				'css_class'          => '',
-				'cat_sort'           => true,
-				'cat_filter'         => true,
 				'extra_fields'       => array(
 					'date_range' => 'c-100:c+0'
 				)
@@ -2220,7 +2218,7 @@ class UsersWP_Form_Builder {
 		if ( isset( $field_info->htmlvar_name ) && $field_info->htmlvar_name == 'password' ) {
 			?>
             <li class="uwp-setting-name uwp-advanced-setting">
-                <label for="cat_sort" class="uwp-tooltip-wrap">
+                <label for="extra[confirm_password]" class="uwp-tooltip-wrap">
 					<?php
 					echo uwp_help_tip( __( 'Lets you display confirm password form field.', 'userswp' ) );
 					_e( 'Display confirm password field?:', 'userswp' ); ?>
@@ -2251,7 +2249,7 @@ class UsersWP_Form_Builder {
 		if ( isset( $field_info->htmlvar_name ) && $field_info->htmlvar_name == 'email' ) {
 			?>
             <li class="uwp-setting-name uwp-advanced-setting">
-                <label for="cat_sort" class="uwp-tooltip-wrap">
+                <label for="extra[confirm_email]" class="uwp-tooltip-wrap">
 					<?php
 					echo uwp_help_tip( __( 'Lets you display confirm email form field.', 'userswp' ) );
 					_e( 'Display confirm email field?:', 'userswp' ); ?>
@@ -2380,6 +2378,7 @@ class UsersWP_Form_Builder {
 	public function advance_admin_custom_fields( $field_info, $cf ) {
 		$hide_register_field = ( isset( $cf['defaults']['is_register_field'] ) && $cf['defaults']['is_register_field'] === false ) ? "style='display:none;'" : '';
 		$hide_register_field = ( isset( $field_info->for_admin_use ) && $field_info->for_admin_use == '1' ) ? "style='display:none;'" : $hide_register_field;
+		$hide_user_sort = ( isset( $cf['defaults']['user_sort'] ) && $cf['defaults']['user_sort'] === false ) ? "style='display:none;'" : '';
 
 		$value = 0;
 		if ( isset( $field_info->is_register_field ) ) {
@@ -2404,9 +2403,16 @@ class UsersWP_Form_Builder {
 			$register_only_value = ( $cf['defaults']['is_register_only_field'] ) ? 1 : 0;
 		}
 
+		$user_sort_value = 0;
+		if ( isset( $field_info->user_sort ) ) {
+			$user_sort_value = (int) $field_info->user_sort;
+		} else if ( isset( $cf['defaults']['user_sort'] ) && $cf['defaults']['user_sort'] ) {
+			$user_sort_value = ( $cf['defaults']['user_sort'] ) ? 1 : 0;
+		}
+
 		?>
         <li <?php echo $hide_register_field; ?> class="cf-incin-reg-form uwp-setting-name">
-            <label for="cat_sort" class="uwp-tooltip-wrap">
+            <label for="is_register_field" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Lets you use this field as register form field, set from register tab above.', 'userswp' ) );
 				_e( 'Include this field in register form:', 'userswp' ); ?>
@@ -2431,7 +2437,7 @@ class UsersWP_Form_Builder {
         </li>
 
         <li <?php echo $hide_register_only_field; ?>class="cf-inconlyin-reg-form uwp-setting-name uwp-advanced-setting">
-            <label for="cat_sort" class="uwp-tooltip-wrap">
+            <label for="is_register_only_field" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Lets you use this field as register ONLY form field.', 'userswp' ) );
 				_e( 'Include this field ONLY in register form:', 'userswp' ); ?>
@@ -2454,6 +2460,17 @@ class UsersWP_Form_Builder {
                 </div>
 			<?php } ?>
         </li>
+
+        <li <?php echo $hide_user_sort; ?> class="cf-incin-reg-form uwp-setting-name">
+            <label for="user_sort" class="uwp-tooltip-wrap">
+				<?php
+				echo uwp_help_tip( __( 'Lets you use this field as sorting in the users listing page, set from user sorting tab above.', 'userswp' ) );
+				_e( 'Include this field in sorting options:', 'userswp' ); ?>
+            </label>
+            <input type="hidden" name="user_sort" value="0"/>
+            <input type="checkbox" name="user_sort" value="1" <?php checked( $user_sort_value, 1, true ); ?> />
+        </li>
+
 		<?php
 	}
 
@@ -2671,7 +2688,7 @@ class UsersWP_Form_Builder {
 
 	public function admin_form_field_save( $request_field = array() ) {
 
-	    global $wpdb;
+	    global $wpdb;$wpdb->show_errors();
 
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
@@ -2761,6 +2778,7 @@ class UsersWP_Form_Builder {
 			$decimal_point          = $decimal_point > 0 ? ( $decimal_point > 10 ? 10 : $decimal_point ) : '';
 			$validation_pattern     = isset( $request_field['validation_pattern'] ) ? sanitize_text_field( $request_field['validation_pattern'] ) : '';
 			$validation_msg         = isset( $request_field['validation_msg'] ) ? sanitize_text_field( $request_field['validation_msg'] ) : '';
+			$user_sort              = isset( $request_field['user_sort'] ) ? absint( $request_field['user_sort'] ) : 0;
 
 			if ( empty( $htmlvar_name ) ) {
 				$htmlvar_name = sanitize_key( str_replace( array( '-', ' ', '"', "'" ), array(
@@ -2943,7 +2961,8 @@ class UsersWP_Form_Builder {
                             extra_fields = %s,
                             validation_pattern = %s,
                             validation_msg = %s,
-                            form_id = %d
+                            form_id = %d,
+                            user_sort = %s
                             where id = %d",
 
 						array(
@@ -2978,6 +2997,7 @@ class UsersWP_Form_Builder {
 							$validation_pattern,
 							$validation_msg,
 							$form_id,
+							$user_sort,
 							$cf
 						)
 					)
@@ -3156,7 +3176,8 @@ class UsersWP_Form_Builder {
                             extra_fields = %s,
                             validation_pattern = %s,
                             validation_msg = %s,
-						    form_id = %d ",
+						    form_id = %d,
+						    user_sort = %s ",
 
 						array(
 							$form_type,
@@ -3189,7 +3210,8 @@ class UsersWP_Form_Builder {
 							$extra_field_query,
 							$validation_pattern,
 							$validation_msg,
-							$form_id
+							$form_id,
+							$user_sort
 						)
 
 					)
@@ -3337,7 +3359,7 @@ class UsersWP_Form_Builder {
 
 		/*-------- check duplicate validation --------*/
 
-		$site_htmlvar_name = isset( $request_field['site_htmlvar_name'] ) ? $request_field['site_htmlvar_name'] : $request_field['htmlvar_name'];
+		$site_htmlvar_name = isset( $request_field['site_htmlvar_name'] ) ? sanitize_text_field($request_field['site_htmlvar_name']) : sanitize_text_field($request_field['htmlvar_name']);
 		$form_type         = $request_field['form_type'];
 		$field_type        = $request_field['field_type'];
 
@@ -3362,7 +3384,7 @@ class UsersWP_Form_Builder {
 				$form_type = 'register';
 			}
 
-			$site_htmlvar_name = $request_field['site_htmlvar_name'];
+			$site_htmlvar_name = sanitize_text_field($request_field['site_htmlvar_name']);
 			$field_id          = ( isset( $request_field['field_id'] ) && $request_field['field_id'] ) ? str_replace( 'new', '', $request_field['field_id'] ) : '';
 
 			if ( ! empty( $user_meta_info ) ) {

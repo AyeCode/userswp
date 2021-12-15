@@ -254,6 +254,19 @@ function uwp_show_hide($this) {
     }
 }
 
+function uwp_show_hide_radio(id, sh, cl) {
+    setTimeout(function() {
+        $show = jQuery(id).is(":checked");
+        if ($show) {
+            console.log('checked');
+            jQuery(id).closest('.li-settings').find('.' + cl).show('fast');
+        } else {
+            console.log('unchecked');
+            jQuery(id).closest('.li-settings').find('.' + cl).hide('fast');
+        }
+    }, 100);
+}
+
 function uwp_init_advanced_settings() {
     jQuery(".uwp-advanced-toggle").off("click").click(function () {
         jQuery(".uwp-advanced-toggle").toggleClass("uwpa-hide");

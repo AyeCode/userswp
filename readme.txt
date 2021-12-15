@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.2.38 =
+* Profile tab to show other user comments on profile owner's posts - ADDED
+
 = 1.2.2.37 =
 * Show default labels for texts in form footer if empty in settings - FIXED
 

@@ -20,7 +20,7 @@ $form_title = apply_filters( 'uwp_template_form_title', $form_title, 'register' 
                         rel="nofollow"
                         href="<?php echo uwp_get_login_page_url(); ?>"><?php echo uwp_get_option("login_link_title") ? uwp_get_option("login_link_title") : __( 'Login here', 'userswp' ); ?></a>
             </div>
-	        <?php do_action( 'uwp_social_fields', 'register' ); ?>
+	        <?php do_action( 'uwp_social_fields', 'register', $args ); ?>
         </div>
     </div>
 <?php do_action( 'uwp_template_after', 'register' ); ?>

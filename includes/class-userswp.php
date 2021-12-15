@@ -262,6 +262,11 @@ final class UsersWP {
 		require_once dirname( dirname( __FILE__ ) ) . '/admin/settings/class-uwp-settings-profile-tabs.php';
 
 		/**
+		 * The class responsible for user sorting builder.
+		 */
+		require_once dirname( dirname( __FILE__ ) ) . '/admin/settings/class-uwp-settings-user-sorting.php';
+
+		/**
 		 * The class responsible for adding tools functions
 		 */
 		require_once dirname( dirname( __FILE__ ) ) . '/includes/class-tools.php';
@@ -661,7 +666,7 @@ final class UsersWP {
 		add_action( 'uwp_profile_more_info_tab_content', array( $instance, 'get_profile_more_info' ), 10, 1 );
 		add_action( 'uwp_profile_posts_tab_content', array( $instance, 'get_profile_posts' ), 10, 1 );
 		add_action( 'uwp_profile_comments_tab_content', array( $instance, 'get_profile_comments' ), 10, 1 );
-		//add_action( 'uwp_profile_user-comments_tab_content', array( $instance, 'get_profile_user_comments' ), 10, 1 );
+		add_action( 'uwp_profile_user-comments_tab_content', array( $instance, 'get_profile_user_comments' ), 10, 1 );
 
 		// Profile Pagination
 		add_action( 'uwp_profile_pagination', array( $instance, 'get_profile_pagination' ) );
