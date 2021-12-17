@@ -1038,7 +1038,7 @@ class UsersWP_Profile {
                 WHERE comment_post_ID in (
                 SELECT ID 
                 FROM " . $wpdb->posts . " 
-                WHERE post_type = ".$post_type." 
+                WHERE post_type = '".$post_type."' 
                 AND post_status = 'publish')
                 AND user_id = " . $user_id . "
                 AND comment_approved = '1'

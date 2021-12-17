@@ -63,6 +63,11 @@ class UsersWP_Notices {
 		    $link = "<a href='".esc_url_raw($resend_link)."' >".__('Resend', 'userswp')."</a>";
 	    }
 
+	    $messages['act_email_success'] = array(
+		    'message' => __('Email updated successfully.', 'userswp'),
+		    'type' => 'success',
+	    );
+
         $messages['act_pending'] = array(
             'message' => __('Your account is not activated yet. Please check your email for activation email.', 'userswp').$link,
             'type' => 'error',

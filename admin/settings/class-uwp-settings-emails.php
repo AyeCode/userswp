@@ -411,6 +411,39 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 
 					array('type' => 'sectionend', 'id' => 'account_update_email_settings'),
 
+					array('name' => __('Account new email activation email', 'userswp'), 'type' => 'title', 'desc' => '', 'id' => 'account_new_email_activation_email_settings'),
+
+					array(
+						'name' => __('Enable email', 'userswp'),
+						'desc' => __('Send an email to user when updating account details.', 'userswp'),
+						'id' => 'account_new_email_activation_email',
+						'type' => 'checkbox',
+						'default' => 1,
+					),
+					array(
+						'name' => __('Subject', 'userswp'),
+						'desc' => __('The email subject.', 'userswp'),
+						'id' => 'account_new_email_activation_email_subject',
+						'type' => 'text',
+						'class' => 'large-text',
+						'desc_tip' => true,
+						'advanced' => true,
+						'placeholder' => UsersWP_Defaults::account_new_email_activation_email_subject(),
+					),
+					array(
+						'name' => __('Body', 'userswp'),
+						'desc' => __('The email body, this can be text or HTML.', 'userswp'),
+						'id' => 'account_new_email_activation_email_content',
+						'type' => 'textarea',
+						'class' => 'code uwp-email-body',
+						'desc_tip' => true,
+						'advanced' => true,
+						'placeholder' => UsersWP_Defaults::account_new_email_activation_email_content(),
+						'custom_desc' => __('Available template tags:', 'userswp') . ' ' . uwp_all_email_tags(true, array('[#new_email#]', '[#new_email_link#]'))
+					),
+
+					array('type' => 'sectionend', 'id' => 'account_new_email_activation_email_settings'),
+
 					array('name' => __('Account delete email', 'userswp'), 'type' => 'title', 'desc' => '', 'id' => 'account_delete_email_settings'),
 
 					array(
