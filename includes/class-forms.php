@@ -1679,7 +1679,7 @@ class UsersWP_Forms {
 	 * @package     userswp
 	 *
 	 */
-	public function process_change() {
+        public function process_change() {
 
 		$data = $_POST;
 
@@ -1914,10 +1914,6 @@ class UsersWP_Forms {
 			'ID' => get_current_user_id()
 		);
 
-		if ( isset( $result['email'] ) ) {
-			$args['user_email'] = $result['email'];
-		}
-
 		if ( isset( $result['first_name'] ) && isset( $result['last_name'] ) ) {
 			$args['display_name'] = $result['first_name'] . ' ' . $result['last_name'];
 		}
@@ -1981,20 +1977,59 @@ class UsersWP_Forms {
 
 		$form_fields = apply_filters( 'uwp_send_mail_form_fields', "", 'account', $user_id );
 
-		$email_vars = array(
-			'user_id'     => $user_id,
-			'form_fields' => $form_fields,
-		);
+		if ( isset( $result['email'] ) && $user_data->user_email !== trim($result['email']) ) {
 
-		UsersWP_Mails::send( $user_data->user_email, 'account_update', $email_vars );
+				$hash            = md5( $result['email'] . time() . wp_rand() );
+				$new_admin_email = array(
+					'hash'     => $hash,
+					'newemail' => $result['email'],
+				);
 
-		$message       = apply_filters( 'uwp_account_update_success_message', __( 'Account updated successfully.', 'userswp' ), $data );
-		$message       = aui()->alert( array(
-				'type'    => 'success',
-				'content' => $message
-			)
-		);
-		$uwp_notices[] = array( 'account' => $message );
+				update_user_meta(get_current_user_id(), 'uwp_update_email_hash', $new_admin_email);
+
+                $new_email_link = add_query_arg(
+                    array(
+                        'uwp_new_email' => 'yes',
+                        'key' => $hash,
+                        'login' => $user_data->user_login
+                    ),
+	                uwp_get_account_page_url()
+                );
+
+				$email_vars = array(
+					'user_id'     => $user_id,
+					'new_email' => $result['email'],
+					'new_email_link' => esc_url( $new_email_link ),
+				);
+
+				UsersWP_Mails::send( $user_data->user_email, 'account_new_email_activation', $email_vars );
+
+				$message       = apply_filters( 'uwp_account_pending_new_email_activation_message', __( 'Account updated successfully. The new address will become active once you confirm via activation link sent to your new email.', 'userswp' ), $data );
+				$message       = aui()->alert( array(
+						'type'    => 'success',
+						'content' => $message
+					)
+				);
+
+				$uwp_notices[] = array( 'account' => $message );
+
+		} else {
+			$email_vars = array(
+				'user_id'     => $user_id,
+				'form_fields' => $form_fields,
+			);
+
+			UsersWP_Mails::send( $user_data->user_email, 'account_update', $email_vars );
+
+			$message       = apply_filters( 'uwp_account_update_success_message', __( 'Account updated successfully.', 'userswp' ), $data );
+			$message       = aui()->alert( array(
+					'type'    => 'success',
+					'content' => $message
+				)
+			);
+
+			$uwp_notices[] = array( 'account' => $message );
+        }
 
 		do_action( 'uwp_after_process_account', $data );
 

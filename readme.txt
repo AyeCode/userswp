@@ -148,6 +148,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.2.38 =
 * Profile tab to show other user comments on profile owner's posts - ADDED
+* Verify new email via activation link in the email when changed from the account form - ADDED
+* User sorting in form builder for sorting the users on users listing page - ADDED
+* Direct download exported user file instead of open in new tab - CHANGED
+* Listing reviews pagination not showing - FIXED
 
 = 1.2.2.37 =
 * Show default labels for texts in form footer if empty in settings - FIXED

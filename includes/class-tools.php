@@ -421,6 +421,9 @@ class UsersWP_Tools {
 			'wp_new_user_notification_email_content',
 			'wp_new_user_notification_email_subject_admin',
 			'wp_new_user_notification_email_content_admin',
+			'account_new_email_activation_email',
+			'account_new_email_activation_email_subject',
+			'account_new_email_activation_email_content',
 		);
 
 		/**

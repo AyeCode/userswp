@@ -293,6 +293,55 @@ function uwp_process_activation_link() {
     }
 }
 
+add_action('template_redirect', 'uwp_process_new_email_activation_link');
+/**
+ * Handles the new email activation request coming via email activation link.
+ *
+ * @since       1.0.0
+ * @package     userswp
+ *
+ * @return      void
+ */
+function uwp_process_new_email_activation_link() {
+	if (isset($_GET['uwp_new_email']) && $_GET['uwp_new_email'] == 'yes') {
+		if(!defined('DONOTCACHEPAGE')){
+			define( 'DONOTCACHEPAGE', true );
+		}
+		$key =  strip_tags(esc_sql($_GET['key']));
+		$login =  strip_tags(esc_sql($_GET['login']));
+		$account_page = uwp_get_page_id('account_page', false);
+		$user = get_user_by('login', $login);
+		if (!$user){
+			return;
+		}
+
+		if ( ! is_user_logged_in()) {
+			$login_page    = uwp_get_page_id( 'login_page', false );
+			$redirect_to = add_query_arg(array('redirect_to' => urlencode(uwp_current_page_url())), get_permalink($login_page));
+			wp_safe_redirect($redirect_to);
+			exit();
+		}
+
+		clean_user_cache($user);
+
+		$hash = get_user_meta($user->ID, 'uwp_update_email_hash', true);
+
+		if ( $user && isset($hash) && hash_equals( $hash['hash'], $key ) && ! empty( $hash['newemail'] ) ) {
+			$args = array(
+				'ID' => $user->ID,
+				'user_email' => $hash['newemail'],
+			);
+			$user_id = wp_update_user( $args );
+			delete_user_meta($user_id, 'uwp_update_email_hash', true);
+
+			$redirect_to = add_query_arg(array('uwp_err' => 'act_email_success'), get_permalink($account_page));
+			do_action('uwp_new_email_activation_success', $user->ID);
+			wp_safe_redirect($redirect_to);
+			exit();
+		}
+	}
+}
+
 function uwp_current_page_url() {
     $pageURL = 'http';
     if (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) {
