@@ -222,7 +222,19 @@ class UsersWP_Templates {
 		} elseif ( $account_page && ( (int) $account_page == $current_page_id ) ||
 		           ( $change_page && ( (int) $change_page == $current_page_id ) ) ) {
 			if ( ! is_user_logged_in() ) {
-				wp_safe_redirect( get_permalink( $login_page ) );
+				if ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
+					$redirect_to = esc_url( $_REQUEST['redirect_to'] );
+					$login_page = add_query_arg(
+						array(
+							'redirect_to' => $redirect_to,
+						),
+						get_permalink($login_page)
+					);
+				} else {
+					$login_page = get_permalink($login_page);
+                }
+
+				wp_safe_redirect( $login_page );
 				exit();
 			} else {
 				$can_user_can_edit_account = apply_filters( 'uwp_user_can_edit_own_profile', true, get_current_user_id() );
@@ -754,12 +766,12 @@ class UsersWP_Templates {
 			$redirect_to = '';
 			if ( isset( $args['redirect_to'] ) && ! empty( $args['redirect_to'] ) ) {
 				$redirect_to = $args['redirect_to'];
+			} elseif ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
+				$redirect_to = esc_url( urldecode( $_REQUEST['redirect_to'] ) );
 			} else {
 				if ( - 1 == uwp_get_option( 'login_redirect_to', - 1 ) ) {
 					$referer = wp_get_referer();
-					if ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
-						$redirect_to = esc_url( urldecode( $_REQUEST['redirect_to'] ) );
-					} else if ( isset( $referer ) && ! empty( $referer ) ) {
+					if ( isset( $referer ) && ! empty( $referer ) ) {
 						$redirect_to = $referer;
 					} else {
 						$redirect_to = home_url();

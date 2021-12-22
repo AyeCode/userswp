@@ -245,6 +245,34 @@ Thank you,
 	}
 
 	/**
+	 * The update account email pending activation subject default.
+	 *
+	 * @return string
+	 */
+	public static function account_new_email_activation_email_subject() {
+		return apply_filters( 'account_new_email_activation_email_subject', __( "[#site_name#] - New email address activation required", "userswp" ) );
+	}
+
+	/**
+	 * The update account email pending activation body default.
+	 *
+	 * @return string
+	 */
+	public static function account_new_email_activation_email_content() {
+		return apply_filters( 'account_new_email_activation_email_content',
+			__( "Dear [#user_name#],
+
+You recently requested to change your email address. Please click on the following link to change it: [#new_email_link#]
+
+You can safely ignore and delete this email if you do not want to take this action.
+
+Thank you,
+[#site_name_url#]", "userswp"
+			)
+		);
+	}
+
+	/**
 	 * The update account email subject default.
 	 *
 	 * @return string

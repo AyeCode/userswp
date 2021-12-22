@@ -224,7 +224,7 @@ $total_users = $users_count['total_users'];
                                         message.html('<div id="uwp-export-success" class="updated notice is-dismissible"><p>' + msg + '<span class="notice-dismiss"></span></p></div>');
                                     }
                                     if (res.data.file && res.data.file.u) {
-                                        message.append('<span class="uwp-export-file"><a href="' + res.data.file.u + '" target="_blank"><i class="fas fa-download"></i> ' + res.data.file.u + '</a><span> - ' + res.data.file.s + '<span><span>');
+                                        message.append('<span class="uwp-export-file"><a href="' + res.data.file.u + '" target="_blank" download><i class="fas fa-download"></i> ' + res.data.file.u + '</a><span> - ' + res.data.file.s + '<span><span>');
                                     }
                                     message.find('.uwp-export-loader').html('<i class="fas fa-check-circle"></i>');
                                 } else {
