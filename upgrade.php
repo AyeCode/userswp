@@ -13,6 +13,130 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Adds default sorting options in user sorting table
+ */
+function uwp_upgrade_1230(){
+	global $wpdb;
+	$user_sorting_table_name = uwp_get_table_prefix() . 'uwp_user_sorting';
+	$fields = array();
+
+	$fields['display_name_asc'] = array(
+		'data_type'      => '',
+		'field_type'     => 'text',
+		'site_title' => __('Display name (A-Z)', 'userswp'),
+		'htmlvar_name'   => 'display_name',
+		'field_icon'     => 'fas fa-sort',
+		'sort'           => 'asc',
+		'old_value'      => 'alpha_asc',
+	);
+
+	$fields['display_name_desc'] = array(
+		'data_type'      => '',
+		'field_type'     => 'text',
+		'site_title' => __('Display name (Z-A)', 'userswp'),
+		'htmlvar_name'   => 'display_name',
+		'field_icon'     => 'fas fa-sort',
+		'sort'           => 'desc',
+		'old_value'      => 'alpha_desc',
+	);
+
+	$fields['newer'] = array(
+		'data_type'      => '',
+		'field_type'     => 'newer',
+		'site_title' => __('Newer', 'userswp'),
+		'htmlvar_name'   => 'newer',
+		'field_icon'     => 'fas fa-sort',
+		'sort'           => 'asc',
+		'old_value'      => 'newer',
+	);
+
+	$fields['older'] = array(
+		'data_type'      => '',
+		'field_type'     => 'older',
+		'site_title' => __('Older', 'userswp'),
+		'htmlvar_name'   => 'older',
+		'field_icon'     => 'fas fa-sort',
+		'sort'           => 'desc',
+		'old_value'      => 'older',
+	);
+
+	$fields['first_name_asc'] = array(
+		'data_type'      => '',
+		'field_type'     => 'text',
+		'site_title' => __('First name (A-Z)', 'userswp'),
+		'htmlvar_name'   => 'first_name',
+		'field_icon'     => 'fas fa-sort',
+		'sort'           => 'asc',
+		'old_value'      => 'fname_asc',
+	);
+
+	$fields['first_name_desc'] = array(
+		'data_type'      => '',
+		'field_type'     => 'text',
+		'site_title' => __('First name (Z-A)', 'userswp'),
+		'htmlvar_name'   => 'first_name',
+		'field_icon'     => 'fas fa-sort',
+		'sort'           => 'asc',
+		'old_value'      => 'fname_desc',
+	);
+
+	$fields['last_name_asc'] = array(
+		'data_type'      => '',
+		'field_type'     => 'text',
+		'site_title' => __('Last name (A-Z)', 'userswp'),
+		'htmlvar_name'   => 'last_name',
+		'field_icon'     => 'fas fa-sort',
+		'sort'           => 'asc',
+		'old_value'      => 'lname_asc',
+	);
+
+	$fields['last_name_desc'] = array(
+		'data_type'      => '',
+		'field_type'     => 'text',
+		'site_title' => __('Last name (Z-A)', 'userswp'),
+		'htmlvar_name'   => 'last_name',
+		'field_icon'     => 'fas fa-sort',
+		'sort'           => 'desc',
+		'old_value'      => 'lname_desc',
+	);
+
+	$sort_order = 1;
+	$default_option = uwp_get_option('users_default_order_by', 'alpha_asc');
+
+	foreach ($fields as $field) {
+		if(isset($default_option) && $default_option == $field['old_value']){
+			$is_default = 1;
+		} else {
+			$is_default = 0;
+		}
+		$wpdb->query(
+			$wpdb->prepare(
+				"insert into " . $user_sorting_table_name . " set
+					field_type = %s,
+					site_title = %s,
+					htmlvar_name = %s,
+					field_icon = %s,
+					sort_order = %s,
+					is_default = %d,
+					sort = %s,
+					is_active = %d",
+				array(
+					$field['field_type'],
+					$field['site_title'],
+					$field['htmlvar_name'],
+					$field['field_icon'],
+					$sort_order,
+					$is_default,
+					$field['sort'],
+					1,
+				)
+			)
+		);
+		$sort_order++;
+	}
+}
+
+/**
  * Change account fields to not have uwp_account_ prefix.
  */
 function uwp_upgrade_1200() {

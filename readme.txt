@@ -146,7 +146,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.2.38 =
+= 1.2.3 =
 * Profile tab to show other user comments on profile owner's posts - ADDED
 * Verify new email via activation link in the email when changed from the account form - ADDED
 * User sorting in form builder for sorting the users on users listing page - ADDED
