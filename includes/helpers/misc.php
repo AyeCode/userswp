@@ -1793,7 +1793,7 @@ function uwp_get_default_sort(){
     global $wpdb;
 	$table_name = uwp_get_table_prefix() . 'uwp_user_sorting';
 
-	$field = $wpdb->get_row( $wpdb->prepare( "SELECT htmlvar_name, sort, field_type FROM " . $table_name . " WHERE is_active = 1 AND is_default = 1 ORDER BY sort_order ASC" ) );
+	$field = $wpdb->get_row("SELECT htmlvar_name, sort, field_type FROM " . $table_name . " WHERE is_active = 1 AND is_default = 1 ORDER BY sort_order ASC" );
 	if ( ! empty( $field ) ) {
 		if ( $field->field_type == 'random' ) {
 			$default_sort = 'random';

@@ -159,8 +159,8 @@ class UsersWP_Tables {
 		dbDelta($tabs_tbl_query);
 
 		// user sorting options table
-		$profile_tabs_table_name = uwp_get_table_prefix() . 'uwp_user_sorting';
-		$tabs_tbl_query = " CREATE TABLE " . $profile_tabs_table_name . " (
+		$user_sorting_table_name = uwp_get_table_prefix() . 'uwp_user_sorting';
+		$tabs_tbl_query = " CREATE TABLE " . $user_sorting_table_name . " (
 							  id int(11) NOT NULL AUTO_INCREMENT,
 							  data_type varchar(255) NOT NULL,
 							  field_type varchar(255) NOT NULL,

@@ -266,7 +266,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				'site_title' => __('Older', 'userswp'),
 				'htmlvar_name'   => 'older',
 				'field_icon'     => 'fas fa-sort',
-				'sort'           => 'asc',
+				'sort'           => 'desc',
 				'description'    => __( 'Sort by new user registration in descending order', 'userswp' )
 			);
 
@@ -297,7 +297,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				'htmlvar_name'   => 'last_name',
 				'field_icon'     => 'fas fa-sort',
 				'sort'           => 'asc',
-				'description'    => __( 'Sort alphabetically by last name in descending order', 'userswp' )
+				'description'    => __( 'Sort alphabetically by last name in ascending order', 'userswp' )
 			);
 
 			$fields = apply_filters( 'uwp_add_custom_sort_options', $fields );
@@ -380,7 +380,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
             <input type="hidden" name="manage_field_type" class="manage_field_type" value="user_sorting">
             <ul class="uwp-profile-tabs-selected core uwp_form_extras">
 				<?php
-				$tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM  " . $table_name . " order by sort_order asc"));
+				$tabs = $wpdb->get_results("SELECT * FROM  " . $table_name . " order by sort_order asc");
 				if (!empty($tabs)) {
 					foreach ($tabs as $key => $tab) {
 						$field_ins_upd = 'display';
@@ -853,11 +853,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			global $wpdb;
 			$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
-			$custom_fields = $wpdb->get_results(
-				$wpdb->prepare(
-					"select data_type,field_type,site_title,htmlvar_name,field_icon from " . $table_name . " where is_active='1' and user_sort='1' AND field_type != 'fieldset' order by sort_order asc"
-				), 'ARRAY_A'
-			);
+			$custom_fields = $wpdb->get_results("select data_type,field_type,site_title,htmlvar_name,field_icon from " . $table_name . " where is_active='1' and user_sort='1' AND field_type != 'fieldset' order by sort_order asc", 'ARRAY_A');
 
 			if (!empty($custom_fields)) {
 
