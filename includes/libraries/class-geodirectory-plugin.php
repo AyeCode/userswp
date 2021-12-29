@@ -1778,18 +1778,17 @@ class UsersWP_GeoDirectory_Plugin {
 	 * @return      bool
 	 */
 	public function gd_is_listings_tab() {
-		global $wp_query;
-		if ( is_page() && class_exists( 'UsersWP' ) ) {
-			$profile_page = uwp_get_page_id( 'profile_page', false );
-			if ( $profile_page ) {
-				if ( isset( $wp_query->query_vars['uwp_profile'] )
-				     && isset( $wp_query->query_vars['uwp_tab'] )
-				     && ( $wp_query->query_vars['uwp_tab'] == 'listings' || $wp_query->query_vars['uwp_tab'] == 'favorites' )
-				) {
+		global $wp_query, $uwp_profile_tabs_array;
 
-					return true;
+		if ( is_page() && class_exists( 'UsersWP' ) && isset( $wp_query->query_vars['uwp_profile'] ) && ( $profile_page = uwp_get_page_id( 'profile_page', false ) ) ) {
+			$active_tab = ! empty( $wp_query->query_vars['uwp_tab'] ) ? $wp_query->query_vars['uwp_tab'] : '';
 
-				}
+			if ( empty( $active_tab ) && ! empty( $uwp_profile_tabs_array ) && ! empty( $uwp_profile_tabs_array[0]->tab_key ) ) {
+				$active_tab = $uwp_profile_tabs_array[0]->tab_key;
+			}
+
+			if ( $active_tab == 'listings' || $active_tab == 'favorites' ) {
+				return true;
 			}
 		}
 
