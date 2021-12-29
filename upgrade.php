@@ -28,7 +28,7 @@ function uwp_upgrade_1230(){
 	$fields['display_name_asc'] = array(
 		'data_type'      => '',
 		'field_type'     => 'text',
-		'site_title' => __('Display name (A-Z)', 'userswp'),
+		'site_title' => __('Display Name (A-Z)', 'userswp'),
 		'htmlvar_name'   => 'display_name',
 		'field_icon'     => 'fas fa-sort',
 		'sort'           => 'asc',
@@ -38,7 +38,7 @@ function uwp_upgrade_1230(){
 	$fields['display_name_desc'] = array(
 		'data_type'      => '',
 		'field_type'     => 'text',
-		'site_title' => __('Display name (Z-A)', 'userswp'),
+		'site_title' => __('Display Name (Z-A)', 'userswp'),
 		'htmlvar_name'   => 'display_name',
 		'field_icon'     => 'fas fa-sort',
 		'sort'           => 'desc',
@@ -68,7 +68,7 @@ function uwp_upgrade_1230(){
 	$fields['first_name_asc'] = array(
 		'data_type'      => '',
 		'field_type'     => 'text',
-		'site_title' => __('First name (A-Z)', 'userswp'),
+		'site_title' => __('First Name (A-Z)', 'userswp'),
 		'htmlvar_name'   => 'first_name',
 		'field_icon'     => 'fas fa-sort',
 		'sort'           => 'asc',
@@ -78,7 +78,7 @@ function uwp_upgrade_1230(){
 	$fields['first_name_desc'] = array(
 		'data_type'      => '',
 		'field_type'     => 'text',
-		'site_title' => __('First name (Z-A)', 'userswp'),
+		'site_title' => __('First Name (Z-A)', 'userswp'),
 		'htmlvar_name'   => 'first_name',
 		'field_icon'     => 'fas fa-sort',
 		'sort'           => 'asc',
@@ -88,7 +88,7 @@ function uwp_upgrade_1230(){
 	$fields['last_name_asc'] = array(
 		'data_type'      => '',
 		'field_type'     => 'text',
-		'site_title' => __('Last name (A-Z)', 'userswp'),
+		'site_title' => __('Last Name (A-Z)', 'userswp'),
 		'htmlvar_name'   => 'last_name',
 		'field_icon'     => 'fas fa-sort',
 		'sort'           => 'asc',
@@ -98,7 +98,7 @@ function uwp_upgrade_1230(){
 	$fields['last_name_desc'] = array(
 		'data_type'      => '',
 		'field_type'     => 'text',
-		'site_title' => __('Last name (Z-A)', 'userswp'),
+		'site_title' => __('Last Name (Z-A)', 'userswp'),
 		'htmlvar_name'   => 'last_name',
 		'field_icon'     => 'fas fa-sort',
 		'sort'           => 'desc',
