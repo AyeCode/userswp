@@ -16,6 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Adds default sorting options in user sorting table
  */
 function uwp_upgrade_1230(){
+	$updated  = uwp_get_option( "user_sorting_updated" );
+	if ( isset($updated) && $updated > 0 ) {
+		return;
+	}
+
 	global $wpdb;
 	$user_sorting_table_name = uwp_get_table_prefix() . 'uwp_user_sorting';
 	$fields = array();
@@ -134,6 +139,9 @@ function uwp_upgrade_1230(){
 		);
 		$sort_order++;
 	}
+
+	// set as updated
+	uwp_update_option( "user_sorting_updated", "1230" );
 }
 
 /**
