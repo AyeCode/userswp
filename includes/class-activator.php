@@ -840,7 +840,7 @@ class UsersWP_Activator {
 
 			        if ( ! empty( $register_form['id'] )) {
 
-				        $reg_action = $register_form['reg_action'];
+				        $reg_action = isset($register_form['reg_action']) ? $register_form['reg_action'] : '';
 
 				        if(isset($reg_action) && $reg_action == 'force_redirect'){
 					        $settings['multiple_registration_forms'][$key]['reg_action'] = 'auto_approve_login';

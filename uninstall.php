@@ -70,6 +70,11 @@ function uwp_uninstall() {
 		$sql                = "DROP TABLE IF EXISTS $profile_table_name";
 		$wpdb->query( $sql );
 
+		// Drop user sorting table
+		$sorting_table_name = $wpdb->prefix . 'uwp_user_sorting';
+		$sql                = "DROP TABLE IF EXISTS $sorting_table_name";
+		$wpdb->query( $sql );
+
 		// Delete pages
 		$pages = array( 'register_page', 'login_page', 'profile_page', 'account_page', 'change_page', 'forgot_page', 'reset_page', 'users_page', 'user_list_item_page');
 
