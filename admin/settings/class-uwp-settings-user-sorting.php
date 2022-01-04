@@ -30,7 +30,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			add_action( 'uwp_manage_selected_fields', array( $this, 'manage_selected_fields' ), 10, 1 );
 			add_action( 'wp_ajax_uwp_ajax_user_sorting_action', array( $this, 'ajax_handler' ) );
 			add_action( 'uwp_add_custom_sort_options', array( $this, 'add_custom_sort_options' ) );
-			add_action( 'pre_user_query', array( $this, 'pre_user_query' ) );
+			add_action( 'pre_user_query', array( $this, 'pre_user_query' ), 99 );
 
 		}
 
@@ -59,17 +59,6 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 						$order = 'ASC';
 						$meta_key = substr( $sort_by , 0, strlen( $sort_by ) - 4 );
 						$order_by = 'meta_value';
-					}
-
-					switch ($sort_by) {
-						case "newer":
-							$order_by = 'registered';
-							$order = 'DESC';
-							break;
-						case "older":
-							$order_by = 'registered';
-							$order = 'ASC';
-							break;
 					}
 
 					if ( ! empty( $order_by ) && $meta_key ) {

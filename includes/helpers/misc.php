@@ -304,6 +304,26 @@ function get_uwp_users_list($roles = array()) {
 	$exclude_users = !empty($exclude_users) ? array_unique($exclude_users): array();
 
 	$exclude_query = ' ';$order_by = 'uwp_meta_value'; $order = 'ASC';
+
+	if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
+		$sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
+	} else {
+		$sort_by = '';
+    }
+
+	if ($sort_by) {
+		switch ( $sort_by ) {
+			case "newer":
+				$order_by = 'registered';
+				$order    = 'DESC';
+				break;
+			case "older":
+				$order_by = 'registered';
+				$order    = 'ASC';
+				break;
+		}
+	}
+
 	if(!empty($exclude_users)) {
 		$exclude_users_list = implode(',', $exclude_users);
 		$exclude_query = 'AND '. $wpdb->users.'.ID NOT IN ('.$exclude_users_list.')';
