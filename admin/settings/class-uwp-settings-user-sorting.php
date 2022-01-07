@@ -708,7 +708,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			$total_tabs = $wpdb->get_var( "SELECT COUNT(id) FROM {$table_name}" );
 
 			if ( isset( $is_default ) && $is_default > 0 ) {
-				$wpdb->query( $wpdb->prepare( "update " . $table_name . " set is_default='0' where is_default='1'" ) );
+				$wpdb->query( "update " . $table_name . " set is_default='0' where is_default='1'" );
 			}
 
 			$data = array(
