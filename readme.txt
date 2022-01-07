@@ -153,6 +153,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 * Direct download exported user file instead of open in new tab - CHANGED
 * Listing reviews pagination not showing - FIXED
 * Listings author actions don't detects the current tab - FIXED
+* Filter to show all reviews with and without ratings in reviews profile tab - ADDED
 
 = 1.2.2.37 =
 * Show default labels for texts in form footer if empty in settings - FIXED

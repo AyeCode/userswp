@@ -759,9 +759,10 @@ class UsersWP_GeoDirectory_Plugin {
 				$post_type_slug = $gd_post_types[ $post_type_id ]['has_archive'];
 
 				if ( uwp_is_gdv2() ) {
+					$reviews = apply_filters('uwp_profile_gd_show_all_reviews', false, $user, $post_type_id);
 					if ( $type == 'favorites' && geodir_cpt_has_favourite_disabled( $post_type_id ) ) {
 						continue;
-					} elseif ( $type == 'reviews' && geodir_cpt_has_rating_disabled( $post_type_id ) ) {
+					} elseif ( $type == 'reviews' && $reviews && geodir_cpt_has_rating_disabled( $post_type_id ) ) {
 						continue;
 					}
 				}
