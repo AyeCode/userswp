@@ -1046,6 +1046,8 @@ class UsersWP_Forms {
 				}
 			}
 			$redirect_to = get_permalink( $redirect_page_id );
+		} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id == - 1 && wp_get_referer() ) {
+			$redirect_to = esc_url( wp_get_referer() );
 		} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id == - 2 && $custom_url ) {
 			$redirect_to = $custom_url;
 		} else {
@@ -1493,6 +1495,8 @@ class UsersWP_Forms {
 				}
 			}
 			$redirect_to = get_permalink( $redirect_page_id );
+		} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id == - 1 && wp_get_referer() ) {
+			$redirect_to = esc_url( wp_get_referer() );
 		} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id == - 2 && !empty($custom_url) ) {
 			$redirect_to = $custom_url;
 		} else {
