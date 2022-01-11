@@ -81,7 +81,7 @@ function uwp_upgrade_1230(){
 		'site_title' => __('First Name (Z-A)', 'userswp'),
 		'htmlvar_name'   => 'first_name',
 		'field_icon'     => 'fas fa-sort',
-		'sort'           => 'asc',
+		'sort'           => 'desc',
 		'old_value'      => 'fname_desc',
 	);
 
