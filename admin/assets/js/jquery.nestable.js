@@ -6,6 +6,8 @@
  * Depends on:
  *	 jquery.ui.sortable.js 1.10+
  *
+ * 2022-01-27 Added 267-272 lines for WordPress v5.9 + jQuery UI v1.13 compatibility.
+ *
  * Copyright (c) 2010-2016 Manuele J Sarfatti and contributors
  * Licensed under the MIT License
  * http://www.opensource.org/licenses/mit-license.php
@@ -261,6 +263,13 @@
             level = this._getLevel(this.placeholder);
             childLevels = this._getChildLevels(this.helper);
             newList = document.createElement(o.listType);
+
+            /* WordPress v5.9 + jQuery UI v1.13 compatibility */
+            this.dragDirection = {
+                vertical: this._getDragVerticalDirection(),
+                horizontal: this._getDragHorizontalDirection()
+            };
+            /***/
 
             //Rearrange
             for (i = this.items.length - 1; i >= 0; i--) {

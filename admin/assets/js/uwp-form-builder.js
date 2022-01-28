@@ -59,6 +59,7 @@ jQuery(document).ready(function () {
                 'data_type':         jQuery(this).data('data_type'),
                 'tab_level':         jQuery(this).data('tab_level'),
                 'tab_parent':        jQuery(this).data('tab_parent'),
+                'field_icon':        jQuery(this).data('field_icon'),
                 'site_title':        jQuery(this).data('site_title'),
                 'sort':              jQuery(this).data('sort'),
             };
