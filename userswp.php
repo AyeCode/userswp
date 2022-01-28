@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 Text Domain: userswp
 Domain Path: /languages
 Requires at least: 4.9
-Tested up to: 5.8
+Tested up to: 5.9
 */
 
 // If this file is called directly, abort.

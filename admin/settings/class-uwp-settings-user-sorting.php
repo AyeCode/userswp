@@ -121,7 +121,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 		public function available_fields_head( $heading, $form_type ) {
 			switch ( $form_type ) {
 				case 'user-sorting':
-					$heading = __( 'Available user sorting.', 'userswp' );
+					$heading = __( 'Available sorting options for users listing and search results', 'userswp' );
 					break;
 			}
 
@@ -142,7 +142,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 		public function available_fields_note( $note, $form_type ) {
 			switch ( $form_type ) {
 				case 'user-sorting':
-					$note = __( "Fields that can be added to the user sorting.", 'userswp' );
+					$note = __( "Click on any box below to make it appear in the sorting option dropdown on users listing and search results. To make a field available here, go to account tab and expand any field from selected fields panel and tick the checkbox saying 'Include this field in sorting options'.", 'userswp' );
 					break;
 			}
 
@@ -163,7 +163,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 		public function selected_fields_head( $heading, $form_type ) {
 			switch ( $form_type ) {
 				case 'user-sorting':
-					$heading = __( 'User Sorting', 'userswp' );
+					$heading = __( 'List of fields that will appear in users listing and search results sorting option dropdown box.', 'userswp' );
 					break;
 			}
 
@@ -184,7 +184,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 		public function selected_fields_note( $note, $form_type ) {
 			switch ( $form_type ) {
 				case 'user-sorting':
-					$note = __( 'Choose the items from left panel to create the user sorting.', 'userswp' );
+					$note = __( 'Click to expand and view field related settings. You may drag and drop to arrange fields order in sorting option dropdown box on users listing and search results page.', 'userswp' );
 					break;
 			}
 
@@ -240,7 +240,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				'field_type'   => 'newer',
 				'site_title'   => __( 'Newer', 'userswp' ),
 				'htmlvar_name' => 'newer',
-				'field_icon'   => 'fas fa-sort',
+				'field_icon'   => 'fas fa-calendar',
 				'sort'         => 'asc',
 				'description'  => __( 'Sort by new user registration', 'userswp' )
 			);
@@ -250,7 +250,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				'field_type'   => 'older',
 				'site_title'   => __( 'Older', 'userswp' ),
 				'htmlvar_name' => 'older',
-				'field_icon'   => 'fas fa-sort',
+				'field_icon'   => 'fas fa-calendar',
 				'sort'         => 'desc',
 				'description'  => __( 'Sort by new user registration in descending order', 'userswp' )
 			);
@@ -260,7 +260,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				'field_type'   => 'text',
 				'site_title'   => __( 'Display Name', 'userswp' ),
 				'htmlvar_name' => 'display_name',
-				'field_icon'   => 'fas fa-sort',
+				'field_icon'   => 'fas fa-sort-alpha-up',
 				'sort'         => 'asc',
 				'description'  => __( 'Sort alphabetically by display name in ascending order', 'userswp' )
 			);
@@ -270,7 +270,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				'field_type'   => 'text',
 				'site_title'   => __( 'First Name', 'userswp' ),
 				'htmlvar_name' => 'first_name',
-				'field_icon'   => 'fas fa-sort',
+				'field_icon'   => 'fas fa-sort-alpha-up',
 				'sort'         => 'asc',
 				'description'  => __( 'Sort alphabetically by first name in ascending order', 'userswp' )
 			);
@@ -280,7 +280,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				'field_type'   => 'text',
 				'site_title'   => __( 'Last Name', 'userswp' ),
 				'htmlvar_name' => 'last_name',
-				'field_icon'   => 'fas fa-sort',
+				'field_icon'   => 'fas fa-sort-alpha-up',
 				'sort'         => 'asc',
 				'description'  => __( 'Sort alphabetically by last name in ascending order', 'userswp' )
 			);
@@ -501,6 +501,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
                            value="<?php echo esc_attr( $nonce ); ?>"/>
                     <input type="hidden" name="field_id" id="field_id" value="<?php echo esc_attr( $field_id ); ?>"/>
                     <input type="hidden" name="form_type" id="form_type" value="user_sorting"/>
+                    <input type="hidden" name="field_icon" id="field_icon" value="<?php echo $icon; ?>"/>
                     <input type="hidden" name="field_type" id="field_type"
                            value="<?php echo esc_attr( $field_type ); ?>"/>
                     <input type="hidden" name="data_type" id="data_type" value="<?php echo esc_attr( $data_type ); ?>"/>
