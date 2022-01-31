@@ -30,7 +30,7 @@ function uwp_upgrade_1230(){
 		'field_type'     => 'text',
 		'site_title' => __('Display Name (A-Z)', 'userswp'),
 		'htmlvar_name'   => 'display_name',
-		'field_icon'     => 'fas fa-sort',
+		'field_icon'     => 'fas fa-sort-alpha-up',
 		'sort'           => 'asc',
 		'old_value'      => 'alpha_asc',
 	);
@@ -40,7 +40,7 @@ function uwp_upgrade_1230(){
 		'field_type'     => 'text',
 		'site_title' => __('Display Name (Z-A)', 'userswp'),
 		'htmlvar_name'   => 'display_name',
-		'field_icon'     => 'fas fa-sort',
+		'field_icon'     => 'fas fa-sort-alpha-up',
 		'sort'           => 'desc',
 		'old_value'      => 'alpha_desc',
 	);
@@ -50,7 +50,7 @@ function uwp_upgrade_1230(){
 		'field_type'     => 'newer',
 		'site_title' => __('Newer', 'userswp'),
 		'htmlvar_name'   => 'newer',
-		'field_icon'     => 'fas fa-sort',
+		'field_icon'     => 'fas fa-calendar',
 		'sort'           => 'asc',
 		'old_value'      => 'newer',
 	);
@@ -60,7 +60,7 @@ function uwp_upgrade_1230(){
 		'field_type'     => 'older',
 		'site_title' => __('Older', 'userswp'),
 		'htmlvar_name'   => 'older',
-		'field_icon'     => 'fas fa-sort',
+		'field_icon'     => 'fas fa-calendar',
 		'sort'           => 'desc',
 		'old_value'      => 'older',
 	);
@@ -70,7 +70,7 @@ function uwp_upgrade_1230(){
 		'field_type'     => 'text',
 		'site_title' => __('First Name (A-Z)', 'userswp'),
 		'htmlvar_name'   => 'first_name',
-		'field_icon'     => 'fas fa-sort',
+		'field_icon'     => 'fas fa-fa-sort-alpha-up',
 		'sort'           => 'asc',
 		'old_value'      => 'fname_asc',
 	);
@@ -80,7 +80,7 @@ function uwp_upgrade_1230(){
 		'field_type'     => 'text',
 		'site_title' => __('First Name (Z-A)', 'userswp'),
 		'htmlvar_name'   => 'first_name',
-		'field_icon'     => 'fas fa-sort',
+		'field_icon'     => 'fas fa-fa-sort-alpha-up',
 		'sort'           => 'desc',
 		'old_value'      => 'fname_desc',
 	);
@@ -90,7 +90,7 @@ function uwp_upgrade_1230(){
 		'field_type'     => 'text',
 		'site_title' => __('Last Name (A-Z)', 'userswp'),
 		'htmlvar_name'   => 'last_name',
-		'field_icon'     => 'fas fa-sort',
+		'field_icon'     => 'fas fa-fa-sort-alpha-up',
 		'sort'           => 'asc',
 		'old_value'      => 'lname_asc',
 	);
@@ -100,7 +100,7 @@ function uwp_upgrade_1230(){
 		'field_type'     => 'text',
 		'site_title' => __('Last Name (Z-A)', 'userswp'),
 		'htmlvar_name'   => 'last_name',
-		'field_icon'     => 'fas fa-sort',
+		'field_icon'     => 'fas fa-fa-sort-alpha-up',
 		'sort'           => 'desc',
 		'old_value'      => 'lname_desc',
 	);
