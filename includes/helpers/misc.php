@@ -1808,7 +1808,7 @@ function uwp_get_default_sort(){
 		return $cache;
 	}
 
-	$default_sort = '';
+	$default_sort = 'newer_asc';
 
     global $wpdb;
 	$table_name = uwp_get_table_prefix() . 'uwp_user_sorting';

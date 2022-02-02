@@ -2006,7 +2006,7 @@ class UsersWP_Forms {
 					'new_email_link' => esc_url( $new_email_link ),
 				);
 
-				UsersWP_Mails::send( $user_data->user_email, 'account_new_email_activation', $email_vars );
+				UsersWP_Mails::send( $result['email'], 'account_new_email_activation', $email_vars );
 
 				$message       = apply_filters( 'uwp_account_pending_new_email_activation_message', __( 'Account updated successfully. The new address will become active once you confirm via activation link sent to your new email.', 'userswp' ), $data );
 				$message       = aui()->alert( array(
