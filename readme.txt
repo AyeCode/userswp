@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.9
-Stable tag: 1.2.3.1
+Stable tag: 1.2.3.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -146,7 +146,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.3.1 =
+= 1.2.3.2 =
 * Account email address change email was not sent - FIXED
 * Profile image crop feature could crop other users profile images  - FIXED
 

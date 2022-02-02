@@ -101,9 +101,9 @@ class UsersWP_Forms {
 			$message   = __( 'Banner reset successfully.', 'userswp' );
 			$processed = true;
 		}
-		echo '###0';
+
 		if ( $processed ) {
-			echo '###1';
+
 			if ( is_wp_error( $errors ) ) {
 				echo aui()->alert( array(
 					'type'    => 'error',
