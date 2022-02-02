@@ -148,7 +148,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.3.1 =
 * Account email address change email was not sent - FIXED
-* Profile image upload nonce authorisation stronger - CHANGED
+* Profile image crop feature could crop other users profile images  - FIXED
 
 = 1.2.3 =
 * Profile tab to show other user comments on profile owner's posts - ADDED
