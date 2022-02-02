@@ -69,7 +69,7 @@ $image_url = !empty($args['image_url']) ? esc_url( $args['image_url'] ) : '';
                 echo aui()->input(array(
 	                'type'  =>  'hidden',
 	                'name'  =>  'uwp_crop_nonce',
-	                'value' =>  wp_create_nonce( 'uwp_crop_nonce_'.$type.'_'.get_current_user_id() ),
+	                'value' =>  wp_create_nonce( 'uwp_crop_nonce_'.$type ),
 	                'no_wrap' => true,
                 ));
                 echo aui()->button(array(

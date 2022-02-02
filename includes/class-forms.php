@@ -199,7 +199,7 @@ class UsersWP_Forms {
 			return false;
 		}
 
-		if ( empty( $_POST['uwp_crop_nonce'] ) || !wp_verify_nonce( $_POST['uwp_crop_nonce'], 'uwp_crop_nonce_'.$type.'_'.get_current_user_id() ) ) {
+		if ( empty( $_POST['uwp_crop_nonce'] ) || !wp_verify_nonce( $_POST['uwp_crop_nonce'], 'uwp_crop_nonce_'.$type ) ) {
 			return;
 		}
 
