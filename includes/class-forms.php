@@ -103,6 +103,7 @@ class UsersWP_Forms {
 		}
 
 		if ( $processed ) {
+
 			if ( is_wp_error( $errors ) ) {
 				echo aui()->alert( array(
 					'type'    => 'error',
@@ -194,7 +195,8 @@ class UsersWP_Forms {
 	 * @since       1.0.0
 	 */
 	public function process_image_crop( $data = array(), $type = 'avatar', $unlink_prev_img = false ) {
-
+		global $wpdb;
+		
 		if ( ! is_user_logged_in() ) {
 			return false;
 		}
@@ -207,7 +209,7 @@ class UsersWP_Forms {
 		if ( is_admin() && defined( 'IS_PROFILE_PAGE' ) && IS_PROFILE_PAGE ) {
 			$user_id = get_current_user_id();
 			// If is another user's profile page
-		} elseif ( is_admin() && ! empty( $_GET['user_id'] ) && is_numeric( $_GET['user_id'] ) ) {
+		} elseif (  is_admin() && current_user_can( 'manage_options' ) && ! empty( $_GET['user_id'] ) && is_numeric( $_GET['user_id'] ) ) {
 			$user_id = absint($_GET['user_id']);
 			// Otherwise something is wrong.
 		} else {
@@ -253,6 +255,17 @@ class UsersWP_Forms {
 			//Scale the image based on cropped width setting
 			$scale = $full_width / $w;
 			//$scale = 1; // no scaling
+
+			// check we are not editing another user file
+			$db_value = trailingslashit( $uploads['subdir'] ) . $thumb_image_name;
+			$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+			$file_exists = $wpdb->get_var($wpdb->prepare("SELECT user_id FROM {$meta_table} WHERE ( `avatar_thumb` = %s OR `banner_thumb` = %s ) ", $db_value, $db_value));
+
+			// if file already exists then we should not be cropping it.
+			if( $file_exists ){
+				wp_die(  __( 'Something went wrong. Please contact site admin.', 'userswp' ), 403 );
+			}
+
 			$cropped = uwp_resizeThumbnailImage( $thumb_image_location, $image_url, $x, $y, $w, $h, $scale );
 			$cropped = str_replace( $upload_path, $upload_url, $cropped );
 
@@ -2006,7 +2019,7 @@ class UsersWP_Forms {
 					'new_email_link' => esc_url( $new_email_link ),
 				);
 
-				UsersWP_Mails::send( $user_data->user_email, 'account_new_email_activation', $email_vars );
+				UsersWP_Mails::send( $result['email'], 'account_new_email_activation', $email_vars );
 
 				$message       = apply_filters( 'uwp_account_pending_new_email_activation_message', __( 'Account updated successfully. The new address will become active once you confirm via activation link sent to your new email.', 'userswp' ), $data );
 				$message       = aui()->alert( array(
