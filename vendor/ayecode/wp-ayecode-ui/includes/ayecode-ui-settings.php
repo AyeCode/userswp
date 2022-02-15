@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.62';
+		public $version = '0.1.63';
 
 		/**
 		 * Class textdomain.
@@ -134,6 +134,18 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 * Initiate the settings and add the required action hooks.
 		 */
 		public function init() {
+
+			// Maybe fix settings
+			if ( ! empty( $_REQUEST['aui-fix-admin'] ) && !empty($_REQUEST['nonce']) && wp_verify_nonce( $_REQUEST['nonce'], "aui-fix-admin" ) ) {
+				$db_settings = get_option( 'ayecode-ui-settings' );
+				if ( ! empty( $db_settings ) ) {
+					$db_settings['css_backend'] = 'compatibility';
+					$db_settings['js_backend'] = 'core-popper';
+					update_option( 'ayecode-ui-settings', $db_settings );
+					wp_safe_redirect(admin_url("options-general.php?page=ayecode-ui-settings&updated=true"));
+				}
+			}
+
 			$this->constants();
 			$this->settings = $this->get_settings();
 			$this->url = $this->get_url();
@@ -144,7 +156,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			 * We load super early in case there is a theme version that might change the colors
 			 */
 			if ( $this->settings['css'] ) {
-				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ), 1 );
+				$priority = $this->is_bs3_compat() ? 100 : 1;
+				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ), $priority );
 			}
 			if ( $this->settings['css_backend'] && $this->load_admin_scripts() ) {
 				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_style' ), 1 );
@@ -164,7 +177,21 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				add_action( 'wp_footer', array( $this, 'html_font_size' ), 10 );
 			}
 
+			// Maybe show backend style error
+			if( $this->settings['css_backend'] != 'compatibility' || $this->settings['js_backend'] != 'core-popper' ){
+				add_action( 'admin_notices', array( $this, 'show_admin_style_notice' ) );
+			}
 
+		}
+
+		/**
+		 * Show admin notice if backend scripts not loaded.
+		 */
+		public function show_admin_style_notice(){
+			$fix_url = admin_url("options-general.php?page=ayecode-ui-settings&aui-fix-admin=true&nonce=".wp_create_nonce('aui-fix-admin'));
+			$button = '<a href="'.esc_url($fix_url).'" class="button-primary">Fix Now</a>';
+			$message = __( '<b>Style Issue:</b> AyeCode UI is disable or set wrong.')." " .$button;
+			echo '<div class="notice notice-error aui-settings-error-notice"><p>'.$message.'</p></div>';
 		}
 
 		/**
@@ -202,6 +229,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 * @return bool
 		 */
 		public function is_aui_screen(){
+//			echo '###';exit;
 			$load = false;
 			// check if we should load or not
 			if ( is_admin() ) {
@@ -211,7 +239,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					'post',
 					'settings_page_ayecode-ui-settings',
 					'appearance_page_gutenberg-widgets',
-					'widgets'
+					'widgets',
+					'ayecode-ui-settings',
 				);
 				$screen_ids = apply_filters( 'aui_screen_ids', $aui_screens );
 
@@ -238,6 +267,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 */
 		public function enqueue_style() {
 
+
 			if( is_admin() && !$this->is_aui_screen()){
 				// don't add wp-admin scripts if not requested to
 			}else{
@@ -254,6 +284,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					// flatpickr
 					wp_register_style( 'flatpickr', $this->url.'assets/css/flatpickr.min.css', array(), $this->latest );
 
+					// fontawesome-iconpicker
+					//wp_register_style( 'fontawesome-iconpicker', $this->url.'assets/css/flatpickr.min.css', array(), $this->latest );
 
 					// fix some wp-admin issues
 					if(is_admin()){
@@ -296,6 +328,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				}
 				.bs-tooltip-top .arrow{
 					margin-left:0px;
+				}
+				
+				.custom-switch input[type=checkbox]{
+				    display:none;
 				}
                 ";
 
@@ -575,7 +611,43 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					$aui_doing_init_flatpickr = false;
 				}
 
-				function aui_modal($title,$body,$footer,$dismissible,$class,$dialog_class) {
+				/**
+				 * Initiate iconpicker on the page.
+				 */
+				$aui_doing_init_iconpicker = false;
+				function aui_init_iconpicker(){
+					if ( typeof jQuery.fn.iconpicker === "function" && !$aui_doing_init_iconpicker) {
+						$aui_doing_init_iconpicker = true;
+						jQuery('input[data-aui-init="iconpicker"]:not(.iconpicker-input)').iconpicker();
+					}
+					$aui_doing_init_iconpicker= false;
+				}
+
+				function aui_modal_iframe($title,$url,$footer,$dismissible,$class,$dialog_class,$body_class){
+					if(!$body_class){$body_class = 'p-0';}
+					var $body = '<div class="ac-preview-loading text-center position-absolute w-100 text-dark vh-100 overlay overlay-white p-0 m-0 d-none d-flex justify-content-center align-items-center"><div class="spinner-border" role="status"></div></div>';
+					$body += '<iframe id="embedModal-iframe" class="w-100 vh-100 p-0 m-0" src="" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>';
+
+					$m = aui_modal($title,$body,$footer,$dismissible,$class,$dialog_class,$body_class);
+					jQuery( $m ).on( 'shown.bs.modal', function ( e ) {
+						iFrame = jQuery( '#embedModal-iframe') ;
+
+						jQuery('.ac-preview-loading').addClass('d-flex');
+						iFrame.attr({
+							src: $url
+						});
+
+						//resize the iframe once loaded.
+						iFrame.load(function() {
+							jQuery('.ac-preview-loading').removeClass('d-flex');
+						});
+					});
+
+					return $m;
+
+				}
+
+				function aui_modal($title,$body,$footer,$dismissible,$class,$dialog_class,$body_class) {
 					if(!$class){$class = '';}
 					if(!$dialog_class){$dialog_class = '';}
 					if(!$body){$body = '<div class="text-center"><div class="spinner-border" role="status"></div></div>';}
@@ -587,7 +659,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 					$modal += '<div class="modal aui-modal fade shadow bsui '+$class+'" tabindex="-1">'+
 						'<div class="modal-dialog modal-dialog-centered '+$dialog_class+'">'+
-							'<div class="modal-content">';
+							'<div class="modal-content border-0 shadow">';
 
 					if($title) {
 						$modal += '<div class="modal-header">' +
@@ -601,7 +673,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 						$modal += '</div>';
 					}
-					$modal += '<div class="modal-body">'+
+					$modal += '<div class="modal-body '+$body_class+'">'+
 									$body+
 								'</div>';
 
@@ -617,7 +689,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 					jQuery('body').append($modal);
 
-					jQuery('.aui-modal').modal('hide').modal({
+					return jQuery('.aui-modal').modal('hide').modal({
 						//backdrop: 'static'
 					});
 				}
@@ -634,7 +706,6 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 							$element_require = $element_require.replace("&#039;", "'"); // replace single quotes
 							$element_require = $element_require.replace("&quot;", '"'); // replace double quotes
-
 							if (aui_check_form_condition($element_require,form)) {
 								jQuery(this).removeClass('d-none');
 							} else {
@@ -954,6 +1025,87 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						aui_lightbox_embed(this,ele);
 					});
 				}
+
+				/**
+				 * Show a toast.
+				 */
+				$aui_doing_toast = false;
+				function aui_toast($id,$type,$title,$title_small,$body,$time,$can_close){
+
+					if($aui_doing_toast){setTimeout(function(){
+						aui_toast($id,$type,$title,$title_small,$body,$time,$can_close);
+					}, 500); return;}
+
+					$aui_doing_toast = true;
+
+					if($can_close == null){$can_close = false;}
+					if($time == '' || $time == null ){$time = 3000;}
+
+					// if already setup then just show
+					if(document.getElementById($id)){
+						jQuery('#'+$id).toast('show');
+						setTimeout(function(){ $aui_doing_toast = false; }, 500);
+						return;
+					}
+
+					var uniqid = Date.now();
+					if($id){
+						uniqid = $id;
+					}
+
+					$op = "";
+					$tClass = '';
+					$thClass = '';
+					$icon = "";
+
+					if ($type == 'success') {
+						$op = "opacity:.92;";
+						$tClass = 'alert alert-success';
+						$thClass = 'bg-transparent border-0 alert-success';
+						$icon = "<div class='h5 m-0 p-0'><i class='fas fa-check-circle mr-2'></i></div>";
+					} else if ($type == 'error' || $type == 'danger') {
+						$op = "opacity:.92;";
+						$tClass = 'alert alert-danger';
+						$thClass = 'bg-transparent border-0 alert-danger';
+						$icon = "<div class='h5 m-0 p-0'><i class='far fa-times-circle mr-2'></i></div>";
+					} else if ($type == 'info') {
+						$op = "opacity:.92;";
+						$tClass = 'alert alert-info';
+						$thClass = 'bg-transparent border-0 alert-info';
+						$icon = "<div class='h5 m-0 p-0'><i class='fas fa-info-circle mr-2'></i></div>";
+					} else if ($type == 'warning') {
+						$op = "opacity:.92;";
+						$tClass = 'alert alert-warning';
+						$thClass = 'bg-transparent border-0 alert-warning';
+						$icon = "<div class='h5 m-0 p-0'><i class='fas fa-exclamation-triangle mr-2'></i></div>";
+					}
+
+
+					// add container if not exist
+					if(!document.getElementById("aui-toasts")){
+						jQuery('body').append('<div class="bsui" id="aui-toasts"><div class="position-fixed aui-toast-bottom-right pr-3 mb-1" style="z-index: 50000;right: 0;bottom: 0;'+$op+'"></div></div>');
+					}
+
+					$toast = '<div id="'+uniqid+'" class="toast fade hide shadow hover-shadow '+$tClass+'" style="" role="alert" aria-live="assertive" aria-atomic="true" data-delay="'+$time+'">';
+					if($type || $title || $title_small){
+						$toast += '<div class="toast-header '+$thClass+'">';
+						if($icon ){$toast += $icon;}
+						if($title){$toast += '<strong class="mr-auto">'+$title+'</strong>';}
+						if($title_small){$toast += '<small>'+$title_small+'</small>';}
+						if($can_close){$toast += '<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">×</span></button>';}
+						$toast += '</div>';
+					}
+					
+					if($body){
+						$toast += '<div class="toast-body">'+$body+'</div>';
+					}
+
+					$toast += '</div>';
+
+					jQuery('.aui-toast-bottom-right').prepend($toast);
+					jQuery('#'+uniqid).toast('show');
+					setTimeout(function(){ $aui_doing_toast = false; }, 500);
+				}
 				
 
 				/**
@@ -971,6 +1123,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 					// init flatpickr
 					aui_init_flatpickr();
+
+					// init iconpicker
+					aui_init_iconpicker();
 
 					// init Greedy nav
 					aui_init_greedy_nav();
@@ -1014,6 +1169,33 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						});
 					}
 				});
+
+				/**
+				 * Show a "confirm" dialog to the user (using jQuery UI's dialog)
+				 *
+				 * @param {string} message The message to display to the user
+				 * @param {string} okButtonText OPTIONAL - The OK button text, defaults to "Yes"
+				 * @param {string} cancelButtonText OPTIONAL - The Cancel button text, defaults to "No"
+				 * @returns {Q.Promise<boolean>} A promise of a boolean value
+				 */
+				var aui_confirm = function (message, okButtonText, cancelButtonText, isDelete, large ) {
+					okButtonText = okButtonText || 'Yes';
+					cancelButtonText = cancelButtonText || 'Cancel';
+					message = message || 'Are you sure?';
+					sizeClass = large ? '' : 'modal-sm';
+					btnClass = isDelete ? 'btn-danger' : 'btn-primary';
+
+					deferred = jQuery.Deferred();
+					var $body = "";
+					$body += "<h3 class='h4 py-3 text-center text-dark'>"+message+"</h3>";
+					$body += "<div class='d-flex'>";
+					$body += "<button class='btn btn-outline-secondary w-50 btn-round' data-dismiss='modal'  onclick='deferred.resolve(false);'>"+cancelButtonText+"</button>";
+					$body += "<button class='btn "+btnClass+" ml-2 w-50 btn-round' data-dismiss='modal'  onclick='deferred.resolve(true);'>"+okButtonText+"</button>";
+					$body += "</div>";
+					$modal = aui_modal('',$body,'',false,'',sizeClass);
+
+					return deferred.promise();
+				}
 			</script>
 			<?php
 			$output = ob_get_clean();
@@ -1095,6 +1277,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				// flatpickr
 				wp_register_script( 'flatpickr', $this->url . 'assets/js/flatpickr.min.js', array(), $this->latest );
 
+				// flatpickr
+				wp_register_script( 'iconpicker', $this->url . 'assets/js/fontawesome-iconpicker.min.js', array(), $this->latest );
+				
 				// Bootstrap file browser
 				wp_register_script( 'aui-custom-file-input', $url = $this->url . 'assets/js/bs-custom-file-input.min.js', array( 'jquery' ), $this->select2_version );
 				wp_add_inline_script( 'aui-custom-file-input', $this->inline_script_file_browser() );
@@ -1138,6 +1323,14 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		public function enqueue_flatpickr(){
 			wp_enqueue_style( 'flatpickr' );
 			wp_enqueue_script( 'flatpickr' );
+		}
+
+		/**
+		 * Enqueue iconpicker if called.
+		 */
+		public function enqueue_iconpicker(){
+			wp_enqueue_style( 'iconpicker' );
+			wp_enqueue_script( 'iconpicker' );
 		}
 
 		/**
@@ -1445,6 +1638,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 					// Set admin bar z-index lower when modal is open.
 					echo ' body.modal-open #wpadminbar{z-index:999}.embed-responsive-16by9 .fluid-width-video-wrapper{padding:0 !important;position:initial}';
+
+					if(is_admin()){
+						echo ' body.modal-open #adminmenuwrap{z-index:999} body.modal-open #wpadminbar{z-index:1025}';
+					}
                 ?>
 			</style>
 			<?php

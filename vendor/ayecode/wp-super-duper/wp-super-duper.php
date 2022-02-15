@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.27";
+		public $version = "1.0.28";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -691,7 +691,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							$editor_id = '#generate-sections-modal-dialog ' + $editor_id;
 							tmceActive = jQuery($editor_id).closest('.wp-editor-wrap').hasClass('tmce-active') ? true : false;
 						}
-						if (tinyMCE && tinyMCE.activeEditor && tmceActive) {
+						if (typeof tinyMCE !== 'undefined' && tinyMCE.activeEditor && tmceActive) {
 							tinyMCE.execCommand('mceInsertContent', false, $shortcode);
 						} else {
 							var $txt = jQuery($editor_id);
@@ -1274,7 +1274,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function register_shortcode() {
 			add_shortcode( $this->base_id, array( $this, 'shortcode_output' ) );
-			add_action( 'wp_ajax_super_duper_output_shortcode', array( __CLASS__, 'render_shortcode' ) );
+			add_action( 'wp_ajax_super_duper_output_shortcode', array( $this, 'render_shortcode' ) );
 		}
 
 		/**
@@ -1282,8 +1282,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 *
 		 * @since 1.0.0
 		 */
-		public static function render_shortcode() {
-
+		public function render_shortcode() {
 			check_ajax_referer( 'super_duper_output_shortcode', '_ajax_nonce', true );
 			if ( ! current_user_can( 'manage_options' ) ) {
 				wp_die();
@@ -1299,6 +1298,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			if ( isset( $_POST['shortcode'] ) && $_POST['shortcode'] ) {
+				$is_preview = $this->is_preview();
 				$shortcode_name   = sanitize_title_with_dashes( $_POST['shortcode'] );
 				$attributes_array = isset( $_POST['attributes'] ) && $_POST['attributes'] ? $_POST['attributes'] : array();
 				$attributes       = '';
@@ -1307,14 +1307,29 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						if ( is_array( $value ) ) {
 							$value = implode( ",", $value );
 						}
-						$attributes .= " " . sanitize_title_with_dashes( $key ) . "='" . wp_slash( $value ) . "' ";
+
+						if ( ! empty( $value ) ) {
+							$value = wp_unslash( $value );
+
+							// Encode [ and ].
+							if ( $is_preview ) {
+								$value = $this->encode_shortcodes( $value );
+							}
+						}
+						$attributes .= " " . sanitize_title_with_dashes( $key ) . "='" . esc_attr( $value ) . "' ";
 					}
 				}
 
 				$shortcode = "[" . $shortcode_name . " " . $attributes . "]";
 
-				echo do_shortcode( $shortcode );
+				$content = do_shortcode( $shortcode );
 
+				// Decode [ and ].
+				if ( ! empty( $content ) && $is_preview ) {
+					$content = $this->decode_shortcodes( $content );
+				}
+
+				echo $content;
 			}
 			wp_die();
 		}
@@ -1328,6 +1343,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @return string
 		 */
 		public function shortcode_output( $args = array(), $content = '' ) {
+			$_instance = $args;
+
 			$args = $this->argument_values( $args );
 
 			// add extra argument so we know its a output to gutenberg
@@ -1337,6 +1354,23 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			// if we have a enclosed shortcode we add it to the special `html` argument
 			if ( ! empty( $content ) ) {
 				$args['html'] = $content;
+			}
+
+			if ( ! $this->is_preview() ) {
+				/**
+				 * Filters the settings for a particular widget args.
+				 *
+				 * @since 1.0.28
+				 *
+				 * @param array          $args      The current widget instance's settings.
+				 * @param WP_Super_Duper $widget    The current widget settings.
+				 * @param array          $_instance An array of default widget arguments.
+				 */
+				$args = apply_filters( 'wp_super_duper_widget_display_callback', $args, $this, $_instance );
+
+				if ( ! is_array( $args ) ) {
+					return $args;
+				}
 			}
 
 			$class = isset( $this->options['widget_ops']['classname'] ) ? esc_attr( $this->options['widget_ops']['classname'] ) : '';
@@ -1514,12 +1548,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		public function block_show_advanced() {
 
 			$show      = false;
-			$arguments = $this->arguments;
-
-			if ( empty( $arguments ) ) {
-				$arguments = $this->get_arguments();
-			}
-
+			$arguments = $this->get_arguments();
+			
 			if ( ! empty( $arguments ) ) {
 				foreach ( $arguments as $argument ) {
 					if ( isset( $argument['advanced'] ) && $argument['advanced'] ) {
@@ -2287,7 +2317,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 				}
 				if ( isset( $args['multiple'] ) && $args['multiple'] ) { //@todo multiselect does not work at the moment: https://github.com/WordPress/gutenberg/issues/5550
-					$extra .= ' multiple: true, ';
+					$extra .= ' multiple:true,style:{height:"auto",paddingRight:"8px"}, ';
 				}
 			} elseif ( $args['type'] == 'alignment' ) {
 				$type = 'AlignmentToolbar'; // @todo this does not seem to work but cant find a example
@@ -3210,6 +3240,83 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			return $css;
+		}
+
+		/**
+		 * Encode shortcodes tags.
+		 *
+		 * @since 1.0.28
+		 *
+		 * @param string $content Content to search for shortcode tags.
+		 * @return string Content with shortcode tags removed.
+		 */
+		public function encode_shortcodes( $content ) {
+			// Avoids existing encoded tags.
+			$trans   = array(
+				'&#91;' => '&#091;',
+				'&#93;' => '&#093;',
+				'&amp;#91;' => '&#091;',
+				'&amp;#93;' => '&#093;',
+				'&lt;' => '&0lt;',
+				'&gt;' => '&0gt;',
+				'&amp;lt;' => '&0lt;',
+				'&amp;gt;' => '&0gt;',
+			);
+
+			$content = strtr( $content, $trans );
+
+			$trans   = array(
+				'[' => '&#91;',
+				']' => '&#93;',
+				'<' => '&lt;',
+				'>' => '&gt;',
+				'"' => '&quot;',
+				"'" => '&apos;',
+			);
+
+			$content = strtr( $content, $trans );
+
+			return $content;
+		}
+
+		/**
+		 * Remove encoded shortcod tags.
+		 *
+		 * @since 1.0.28
+		 *
+		 * @param string $content Content to search for shortcode tags.
+		 * @return string Content with decoded shortcode tags.
+		 */
+		public function decode_shortcodes( $content ) {
+			$trans   = array(
+				'&#91;' => '[',
+				'&#93;' => ']',
+				'&amp;#91;' => '[',
+				'&amp;#93;' => ']',
+				'&lt;' => '<',
+				'&gt;' => '>',
+				'&amp;lt;' => '<',
+				'&amp;gt;' => '>',
+				'&quot;' => '"',
+				'&apos;' => "'",
+			);
+
+			$content = strtr( $content, $trans );
+
+			$trans   = array(
+				'&#091;' => '&#91;',
+				'&#093;' => '&#93;',
+				'&amp;#091;' => '&#91;',
+				'&amp;#093;' => '&#93;',
+				'&0lt;' => '&lt;',
+				'&0gt;' => '&gt;',
+				'&amp;0lt;' => '&lt;',
+				'&amp;0gt;' => '&gt;',
+			);
+
+			$content = strtr( $content, $trans );
+
+			return $content;
 		}
 	}
 }

@@ -1,3 +1,12 @@
+= 0.1.63 =
+* Deprecated: version_compare(): Passing null to parameter - FIXED
+* iconpicker input type added - ADDED
+* aui_modal_iframe() function added to show iframes in a modal - ADDED
+* aui_toast() function added to add toasts to the screen - ADDED
+* aui_confirm() function added to replace JS confirm with a bootstrap alternative - ADDED
+* modal in wp-admin not showing correctly - FIXED
+* Admin notice added if admin settings not set to defaults - ADDED
+
 = 0.1.62 =
 * Grid view .gv-hide-0 class added to hide items on list view - ADDED
 
