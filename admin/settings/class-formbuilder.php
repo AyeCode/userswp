@@ -2644,6 +2644,11 @@ class UsersWP_Form_Builder {
 
 			if ( $field = $wpdb->get_row( $wpdb->prepare( "select id, htmlvar_name  from " . $table_name . " where id= %d AND form_id = %d", array( $cf, $form_id ) ) ) ) {
 
+				$excluded_delete = array('username', 'email');
+			    if(isset($field->htmlvar_name) && in_array($field->htmlvar_name, $excluded_delete)){
+                    return $field_id;
+                }
+
 				$wpdb->query( $wpdb->prepare( "delete from " . $table_name . " where id= %d AND form_id = %d", array( $cf, $form_id ) ) );
 
 				// Also delete register form field
