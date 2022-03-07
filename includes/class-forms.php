@@ -196,7 +196,6 @@ class UsersWP_Forms {
 	 */
 	public function process_image_crop( $data = array(), $type = 'avatar', $unlink_prev_img = false ) {
 		global $wpdb;
-		
 		if ( ! is_user_logged_in() ) {
 			return false;
 		}
@@ -215,17 +214,24 @@ class UsersWP_Forms {
 		} else {
 			$user_id = get_current_user_id();
 		}
-		$image_url = $data['uwp_crop'];
+
+		// Ensure we have a valid URL with an allowed meme type.
+		$image_url = $this->normalize_url( esc_url( $data['uwp_crop'] ) );
+		$filetype  = wp_check_filetype( $image_url );
 
 		$errors = new WP_Error();
-		if ( empty( $image_url ) ) {
+		if ( empty( $image_url ) || empty( $filetype['ext'] ) ) {
 			$errors->add( 'something_wrong', __( 'Something went wrong. Please contact site admin.', 'userswp' ) );
 		}
 
-		$error_code = $errors->get_error_code();
-		if ( ! empty( $error_code ) ) {
+		if ( $errors->has_errors() ) {
 			return $errors;
 		}
+
+		// Retrieve current thumbnail.
+		$current_field     = 'avatar' === $type ? 'avatar_thumb' : 'banner_thumb';
+		$current_thumbnail = $this->normalize_url( uwp_get_usermeta( $user_id, $current_field, '' ) );
+		$thumb_postfix     = '_uwp_' . $type . '_thumb';
 
 		if ( $image_url ) {
 			if ( $type == 'avatar' ) {
@@ -236,17 +242,16 @@ class UsersWP_Forms {
 				$full_width = $banner_size['width'];
 			}
 
-			$image_url = esc_url( $image_url );
 			add_filter( 'upload_dir', 'uwp_handle_multisite_profile_image', 10, 1 );
 			$uploads = wp_upload_dir();
 			remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image' );
 			$upload_url           = $uploads['baseurl'];
 			$upload_path          = $uploads['basedir'];
-			$image_url            = str_replace( $upload_url, $upload_path, $image_url );
-			$ext                  = pathinfo( $image_url, PATHINFO_EXTENSION ); // to get extension
-			$name                 = pathinfo( $image_url, PATHINFO_FILENAME ); //file name without extension
-			$thumb_image_name     = $name . '_uwp_' . $type . '_thumb' . '.' . $ext;
-			$thumb_image_location = str_replace( $name . '.' . $ext, $thumb_image_name, $image_url );
+			$image_path           = str_replace( $upload_url, $upload_path, $image_url );
+			$ext                  = $filetype['ext']; // to get extension
+			$name                 = sanitize_file_name( pathinfo( $image_path, PATHINFO_FILENAME ) ); //file name without extension
+			$thumb_image_name     = $name . $thumb_postfix . '.' . $ext;
+			$thumb_image_location = str_replace( $name . '.' . $ext, $thumb_image_name, $image_path );
 			//Get the new coordinates to crop the image.
 			$x = $data["x"];
 			$y = $data["y"];
@@ -271,18 +276,8 @@ class UsersWP_Forms {
 
 			// Remove previous avatar/banner
 			$unlink_img = '';
-			if ( $unlink_prev_img ) {
-				if ( $type == 'avatar' ) {
-					$previous_img = uwp_get_usermeta( $user_id, 'avatar_thumb' );
-				} else if ( $type == 'banner' ) {
-					$previous_img = uwp_get_usermeta( $user_id, 'banner_thumb' );
-				} else {
-					$previous_img = '';
-				}
-
-				if ( $previous_img ) {
-					$unlink_img = untrailingslashit( $upload_path ) . '/' . ltrim( $previous_img, '/' );
-				}
+			if ( $unlink_prev_img && $current_thumbnail ) {
+				$unlink_img = untrailingslashit( $upload_path ) . '/' . ltrim( $current_thumbnail, '/' );
 			}
 
 			// remove the uploads path for easy migrations
@@ -316,6 +311,28 @@ class UsersWP_Forms {
 
 		return $redirect_url;
 
+	}
+
+	/**
+	 * Normalizes a URL.
+	 *
+	 */
+	public function normalize_url( $url ) {
+
+		// Normalize.
+		$url = wp_normalize_path( $url );
+
+		// Remove query vars.
+		$url = strtok( $url, '?' );
+
+		// Split.
+		$url = explode( '/', $url );
+
+		// Clean.
+		$url = array_diff( $url, array( '..', '.' ) );
+
+		// Rejoin and return.
+		return implode( '/', $url );
 	}
 
 	/**
