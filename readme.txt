@@ -146,9 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.3.2 =
-* AyeCode UI updated to v0.1.63 - CHANGED
-* Super Duper updated to v1.0.28 - CHANGED
+= 1.2.3.3 =
+* AyeCode UI updated to v0.1.66 - CHANGED
+* Super Duper updated to v1.0.29 - CHANGED
 
 = 1.2.3.2 =
 * Account email address change email was not sent - FIXED

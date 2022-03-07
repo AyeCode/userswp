@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.63';
+		public $version = '0.1.66';
 
 		/**
 		 * Class textdomain.
@@ -241,6 +241,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					'appearance_page_gutenberg-widgets',
 					'widgets',
 					'ayecode-ui-settings',
+					'site-editor'
 				);
 				$screen_ids = apply_filters( 'aui_screen_ids', $aui_screens );
 
@@ -278,14 +279,11 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				if($this->settings[$css_setting]){
 					$compatibility = $this->settings[$css_setting]=='core' ? false : true;
 					$url = $this->settings[$css_setting]=='core' ? $this->url.'assets/css/ayecode-ui'.$rtl.'.css' : $this->url.'assets/css/ayecode-ui-compatibility'.$rtl.'.css';
-					wp_register_style( 'ayecode-ui', $url, array(), $this->latest );
+					wp_register_style( 'ayecode-ui', $url, array(), $this->version );
 					wp_enqueue_style( 'ayecode-ui' );
 
 					// flatpickr
-					wp_register_style( 'flatpickr', $this->url.'assets/css/flatpickr.min.css', array(), $this->latest );
-
-					// fontawesome-iconpicker
-					//wp_register_style( 'fontawesome-iconpicker', $this->url.'assets/css/flatpickr.min.css', array(), $this->latest );
+					wp_register_style( 'flatpickr', $this->url.'assets/css/flatpickr.min.css', array(), $this->version );
 
 					// fix some wp-admin issues
 					if(is_admin()){
@@ -1083,7 +1081,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 					// add container if not exist
 					if(!document.getElementById("aui-toasts")){
-						jQuery('body').append('<div class="bsui" id="aui-toasts"><div class="position-fixed aui-toast-bottom-right pr-3 mb-1" style="z-index: 50000;right: 0;bottom: 0;'+$op+'"></div></div>');
+						jQuery('body').append('<div class="bsui" id="aui-toasts"><div class="position-fixed aui-toast-bottom-right pr-3 mb-1" style="z-index: 500000;right: 0;bottom: 0;'+$op+'"></div></div>');
 					}
 
 					$toast = '<div id="'+uniqid+'" class="toast fade hide shadow hover-shadow '+$tClass+'" style="" role="alert" aria-live="assertive" aria-atomic="true" data-delay="'+$time+'">';
@@ -1275,10 +1273,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				wp_register_script( 'select2', $this->url . 'assets/js/select2.min.js', array( 'jquery' ), $this->select2_version );
 
 				// flatpickr
-				wp_register_script( 'flatpickr', $this->url . 'assets/js/flatpickr.min.js', array(), $this->latest );
+				wp_register_script( 'flatpickr', $this->url . 'assets/js/flatpickr.min.js', array(), $this->version );
 
 				// flatpickr
-				wp_register_script( 'iconpicker', $this->url . 'assets/js/fontawesome-iconpicker.min.js', array(), $this->latest );
+				wp_register_script( 'iconpicker', $this->url . 'assets/js/fontawesome-iconpicker.min.js', array(), $this->version );
 				
 				// Bootstrap file browser
 				wp_register_script( 'aui-custom-file-input', $url = $this->url . 'assets/js/bs-custom-file-input.min.js', array( 'jquery' ), $this->select2_version );
@@ -1292,14 +1290,14 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					wp_register_script( 'bootstrap-js-bundle', $url, array(
 						'select2',
 						'jquery'
-					), $this->latest, $this->is_bs3_compat() );
+					), $this->version, $this->is_bs3_compat() );
 					// if in admin then add to footer for compatibility.
 					is_admin() ? wp_enqueue_script( 'bootstrap-js-bundle', '', null, null, true ) : wp_enqueue_script( 'bootstrap-js-bundle' );
 					$script = $this->inline_script();
 					wp_add_inline_script( 'bootstrap-js-bundle', $script );
 				} elseif ( $this->settings[ $js_setting ] == 'popper' ) {
 					$url = $this->url . 'assets/js/popper.min.js';
-					wp_register_script( 'bootstrap-js-popper', $url, array( 'select2', 'jquery' ), $this->latest );
+					wp_register_script( 'bootstrap-js-popper', $url, array( 'select2', 'jquery' ), $this->version );
 					wp_enqueue_script( 'bootstrap-js-popper' );
 					$load_inline = true;
 				} else {
@@ -1601,6 +1599,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			body.modal-open .modal.in  {opacity:1;z-index: 99999}
 			body.modal-open .modal.bsui.in .modal-content  {box-shadow: none;}
 			.bsui .collapse.in{display: inherit;}
+			.bsui .collapse.in.row.show{display: flex;}
+			.bsui .collapse.in.row:not(.show){display: none;}
+
 			<?php } ?>
 			</style>
 			<?php

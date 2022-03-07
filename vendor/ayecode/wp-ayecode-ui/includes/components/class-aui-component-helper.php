@@ -402,4 +402,79 @@ class AUI_Component_Helper {
 
 		return $class;
 	}
+
+	/**
+	 * Sanitizes a multiline string from user input or from the database.
+	 *
+	 * Emulate the WP native sanitize_textarea_field function in a %%variable%% safe way.
+	 *
+	 * @see   https://core.trac.wordpress.org/browser/trunk/src/wp-includes/formatting.php for the original
+	 *
+	 * @since 0.1.66
+	 *
+	 * @param string $str String to sanitize.
+	 * @return string Sanitized string.
+	 */
+	public static function sanitize_textarea_field( $str ) {
+		$filtered = self::_sanitize_text_fields( $str, true );
+
+		/**
+		 * Filters a sanitized textarea field string.
+		 *
+		 * @see https://core.trac.wordpress.org/browser/trunk/src/wp-includes/formatting.php
+		 *
+		 * @param string $filtered The sanitized string.
+		 * @param string $str      The string prior to being sanitized.
+		 */
+		return apply_filters( 'sanitize_textarea_field', $filtered, $str );
+	}
+
+	/**
+	 * Internal helper function to sanitize a string from user input or from the db.
+	 *
+	 * @since 0.1.66
+	 * @access private
+	 *
+	 * @param string $str           String to sanitize.
+	 * @param bool   $keep_newlines Optional. Whether to keep newlines. Default: false.
+	 * @return string Sanitized string.
+	 */
+	public static function _sanitize_text_fields( $str, $keep_newlines = false ) {
+		if ( is_object( $str ) || is_array( $str ) ) {
+			return '';
+		}
+
+		$str = (string) $str;
+
+		$filtered = wp_check_invalid_utf8( $str );
+
+		if ( strpos( $filtered, '<' ) !== false ) {
+			$filtered = wp_pre_kses_less_than( $filtered );
+			// This will strip extra whitespace for us.
+			$filtered = wp_strip_all_tags( $filtered, false );
+
+			// Use HTML entities in a special case to make sure no later
+			// newline stripping stage could lead to a functional tag.
+			$filtered = str_replace( "<\n", "&lt;\n", $filtered );
+		}
+
+		if ( ! $keep_newlines ) {
+			$filtered = preg_replace( '/[\r\n\t ]+/', ' ', $filtered );
+		}
+		$filtered = trim( $filtered );
+
+		$found = false;
+		while ( preg_match( '`[^%](%[a-f0-9]{2})`i', $filtered, $match ) ) {
+			$filtered = str_replace( $match[1], '', $filtered );
+			$found = true;
+		}
+		unset( $match );
+
+		if ( $found ) {
+			// Strip out the whitespace that may now exist after removing the octets.
+			$filtered = trim( preg_replace( '` +`', ' ', $filtered ) );
+		}
+
+		return $filtered;
+	}
 }

@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.28";
+		public $version = "1.0.29";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -92,6 +92,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				if ( function_exists( 'generate_sections_sections_metabox' ) ) {
 					add_action( 'generate_sections_metabox', array( $this, 'shortcode_insert_button_script' ) );
 				}
+				/* Load script on Divi theme builder page */
+				if ( function_exists( 'et_builder_is_tb_admin_screen' ) && et_builder_is_tb_admin_screen() ) {
+					add_thickbox();
+					add_action( 'admin_footer', array( $this, 'shortcode_insert_button_script' ) );
+				}
+
 				if ( $this->is_preview() ) {
 					add_action( 'wp_footer', array( $this, 'shortcode_insert_button_script' ) );
 					// this makes the insert button work for elementor
@@ -649,7 +655,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				.generate-sections-modal #custom-media-buttons > .sd-lable-shortcode-inserter {
 					display: inline;
 				}
-
+				<?php } ?>
+				<?php if ( function_exists( 'et_builder_is_tb_admin_screen' ) && et_builder_is_tb_admin_screen() ) { ?>
+				body.divi_page_et_theme_builder div#TB_window.gd-tb-window{z-index:9999999}
 				<?php } ?>
 			</style>
 			<?php
@@ -982,6 +990,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 
 					jQuery.post(ajaxurl, data, function (response) {
+						jQuery('#TB_ajaxContent').closest('#TB_window').addClass('gd-tb-window');
 						jQuery('#TB_ajaxContent').html(response);
 						//return response;
 					}).then(function (env) {

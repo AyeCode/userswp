@@ -1,3 +1,6 @@
+= 1.0.29 =
+* Shortcode button not working in editor on Divi theme builder - FIXED
+
 = 1.0.28 =
 * Some extra escaping block parameters - CHANGED
 * Block editor multi-select dropdown style issue - FIXED
