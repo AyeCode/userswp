@@ -1,3 +1,12 @@
+= 1.0.29 =
+* Shortcode button not working in editor on Divi theme builder - FIXED
+
+= 1.0.28 =
+* Some extra escaping block parameters - CHANGED
+* Block editor multi-select dropdown style issue - FIXED
+* If tinyMCE is undefined the inserter can fail - FIXED
+* block_show_advanced() sometimes has no arguments - FIXED
+
 = 1.0.27 =
 * Category settings loads only 10 categories on CPT change - FIXED
 * Hook added to filter class & attributes for Elementor widget output - ADDED
