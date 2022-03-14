@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.4 =
+* UsersWP Elementor widgets not showing in searches - FIXED
+
 = 1.2.3.3 =
 * AyeCode UI updated to v0.1.66 - CHANGED
 * Super Duper updated to v1.0.29 - CHANGED
