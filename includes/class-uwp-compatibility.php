@@ -82,10 +82,10 @@ class UsersWP_Compatibility {
 
 		if ( ! empty( $config['initial_document']['widgets'] ) ) {
 			foreach( $config['initial_document']['widgets'] as $key => $widget){
-				if(substr( $key, 0, 13 ) === "wp-widget-gd_"){
+				if(substr( $key, 0, 13 ) === "wp-widget-uwp_"){
 					$config['initial_document']['widgets'][$key]['categories'][] = 'userswp';
 					$config['initial_document']['widgets'][$key]['hide_on_search'] = false;
-					$config['initial_document']['widgets'][$key]['icon'] = 'eicon-globe'; //@todo if no icons use on page then font-awesome is not loaded, wif we can fifure out how to force load we can use icons. <i class="fas fa-globe-americas"></i><i class="fa-solid fa-earth-americas"></i>
+					$config['initial_document']['widgets'][$key]['icon'] = 'eicon-user-circle-o'; //@todo if no icons use on page then font-awesome is not loaded, wif we can fifure out how to force load we can use icons. <i class="fas fa-globe-americas"></i><i class="fa-solid fa-earth-americas"></i>
 				}
 			}
 		}
