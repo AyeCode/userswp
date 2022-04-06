@@ -1567,7 +1567,7 @@ class UsersWP_Form_Builder {
                                 </label>
                                 <div class="uwp-input-wrap">
 									<?php
-									if ( ! $value ) {
+									if ( ! isset($value) ) {
 										$value = "1";
 									}
 									?>

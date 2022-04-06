@@ -492,6 +492,9 @@ else{$eli.attr(\'type\',\'password\');}"
 			'label_type'         => '',
 			'label_col'          => '',
 			// sets the label type, default: hidden. Options: hidden, top, horizontal, floating
+			'input_group_right'        => '',
+			'input_group_left'         => '',
+			'input_group_right_inside' => false,
 			'help_text'          => '',
 			'validation_text'    => '',
 			'validation_pattern' => '',
@@ -638,6 +641,30 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// closing tag
 			$output .= '</textarea>';
+
+
+			// input group wraps
+			if ( $args['input_group_left'] || $args['input_group_right'] ) {
+				$w100 = strpos( $args['class'], 'w-100' ) !== false ? ' w-100' : '';
+				if ( $args['input_group_left'] ) {
+					$output = self::wrap( array(
+						'content'                 => $output,
+						'class'                   => $args['input_group_left_inside'] ? 'input-group-inside position-relative' . $w100 : 'input-group',
+						'input_group_left'        => $args['input_group_left'],
+						'input_group_left_inside' => $args['input_group_left_inside']
+					) );
+				}
+				if ( $args['input_group_right'] ) {
+					$output = self::wrap( array(
+						'content'                  => $output,
+						'class'                    => $args['input_group_right_inside'] ? 'input-group-inside position-relative' . $w100 : 'input-group',
+						'input_group_right'        => $args['input_group_right'],
+						'input_group_right_inside' => $args['input_group_right_inside']
+					) );
+				}
+
+			}
+
 
 		}
 
