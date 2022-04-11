@@ -1,3 +1,6 @@
+= 0.1.67 =
+* input_group_left/right now supported by textareas - ADDED
+
 = 0.1.66 =
 * Textarea shows stripped some part for variable like %category% - FIXED
 

@@ -651,7 +651,7 @@ class UsersWP_Mails {
 		$email_name = 'wp_new_user_notification';
 		$is_admin = true;
 		if ( !self::is_email_enabled( $email_name, '', $is_admin ) ) {
-			return;
+			return $wp_new_user_notification_email_admin;
 		}
 
 		$email_vars = array(

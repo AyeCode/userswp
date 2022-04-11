@@ -1208,6 +1208,9 @@ class UsersWP_GeoDirectory_Plugin {
 		if ( get_current_user_id() == $user->ID ) {
 			$query_args['post_status'] = array( 'publish', 'draft', 'private', 'pending', 'gd-closed', 'gd-expired' );
 		}
+
+		$query_args = apply_filters( 'uwp_listing_query_args', $query_args, $user, $post_type );
+
 		// The Query
 		$the_query     = new WP_Query( $query_args );
 		$gd_post_types = geodir_get_posttypes( 'array' );
