@@ -60,7 +60,7 @@ do_action( 'uwp_template_before', 'forgot' ); ?>
 								'type'  =>  'a',
 								'href'       => uwp_get_login_page_url(),
 								'class'      => 'd-block text-center mt-2 small uwp-login-link',
-								'content'    => uwp_get_option("login_link_title") ? uwp_get_option("login_link_title") : __( 'Login', 'userswp' ),
+								'content'    => uwp_get_option("login_link_title") ? __(uwp_get_option("login_link_title"), 'userswp') : __( 'Login', 'userswp' ),
 								'extra_attributes'  => array('rel'=>'nofollow')
 							));
 							?>
@@ -71,7 +71,7 @@ do_action( 'uwp_template_before', 'forgot' ); ?>
 								'type'  =>  'a',
 								'href'       => uwp_get_register_page_url(),
 								'class'      => 'd-block text-center mt-2 small uwp-register-link',
-								'content'    => uwp_get_option("register_link_title") ? uwp_get_option("register_link_title") : __( 'Create account', 'userswp' ),
+								'content'    => uwp_get_option("register_link_title") ? __(uwp_get_option("register_link_title"), 'userswp') : __( 'Create account', 'userswp' ),
 								'extra_attributes'  => array('rel'=>'nofollow')
 							));
 							?>

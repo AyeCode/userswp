@@ -1231,23 +1231,23 @@ class UsersWP_Forms {
 		global $wp2fa;
 		$errors = new WP_Error();
 
-		if ( ! $wp2fa->login->is_user_using_two_factor( $user->ID ) ) {
+		if ( ! \WP2FA\Admin\Helpers\User_Helper::is_user_using_two_factor( $user->ID ) ) {
 			return;
 		}
 		// Invalidate the current login session to prevent from being re-used.
-		$wp2fa->login->destroy_current_session_for_user( $user );
+		\WP2FA\Authenticator\Login::destroy_current_session_for_user( $user );
 
 		// Also clear the cookies which are no longer valid.
 		wp_clear_auth_cookie();
 
-		$login_nonce = $wp2fa->login->create_login_nonce( $user->ID );
+		$login_nonce = \WP2FA\Authenticator\Login::create_login_nonce( $user->ID );
 		if ( ! $login_nonce ) {
 			$errors->add( 'failed_login_nonce', __( 'Failed to create a login nonce.', 'userswp' ) );
 
 			return $errors;
 		}
 
-		$provider = $wp2fa->login->get_available_providers_for_user( $user );
+		$provider = \WP2FA\Authenticator\Login::get_available_providers_for_user( $user );
 
 		ob_start();
 		?>
@@ -1285,10 +1285,9 @@ class UsersWP_Forms {
 					) );
 
 				} elseif ( 'email' === $provider ) {
-					$has_token = $wp2fa->authentication->user_has_token( $user->ID );
+					$has_token = \WP2FA\Authenticator\Authentication::user_has_token( $user->ID );
 					if ( empty( $has_token ) || ! $has_token ) {
-						//\WP2FA\Admin\SetupWizard::send_authentication_setup_email( $user->ID );
-						$wp2fa->wizard->send_authentication_setup_email( $user->ID );
+						\WP2FA\Admin\Setup_Wizard::send_authentication_setup_email( $user->ID );
 					}
 					?>
 					<p><?php esc_html_e( 'Please enter the 2FA verification code sent to your email address to login:', 'userswp' ); ?></p>
@@ -1325,7 +1324,7 @@ class UsersWP_Forms {
 		</div>
 
 		<?php
-		$codes_remaining = $wp2fa->backupcodes->codes_remaining_for_user( $user );
+		$codes_remaining = \WP2FA\Authenticator\Backup_Codes::codes_remaining_for_user( $user );
 		if ( isset( $codes_remaining ) && $codes_remaining > 0 ) {
 			?>
 			<div class="uwp-2fa-methods-wrap" style="display:none;">
@@ -1396,7 +1395,7 @@ class UsersWP_Forms {
 		global $wp2fa;
 
 		$nonce = ( isset( $_POST['wp-auth-nonce'] ) ) ? sanitize_textarea_field( wp_unslash( $_POST['wp-auth-nonce'] ) ) : '';
-		if ( true !== $wp2fa->login->verify_login_nonce( $user->ID, $nonce ) ) {
+		if ( true !== \WP2FA\Authenticator\Login::verify_login_nonce( $user->ID, $nonce ) ) {
 
 			$message = aui()->alert( array(
 					'type'    => 'error',
@@ -1409,7 +1408,7 @@ class UsersWP_Forms {
 
 		if ( isset( $_POST['provider'] ) ) {
 			$provider  = sanitize_textarea_field( wp_unslash( $_POST['provider'] ) );
-			$providers = $wp2fa->login->get_available_providers_for_user( $user );
+			$providers = \WP2FA\Authenticator\Login::get_available_providers_for_user( $user );
 			if ( isset( $providers[ $provider ] ) ) {
 				$provider = $providers[ $provider ];
 			} elseif ( isset( $provider ) ) {
@@ -1420,12 +1419,12 @@ class UsersWP_Forms {
 		}
 
 		// If this is an email login, or if the user failed validation previously, lets send the code to the user.
-		if ( 'email' === $provider && true !== $wp2fa->login->pre_process_email_authentication( $user ) ) {
+		if ( 'email' === $provider && true !== \WP2FA\Authenticator\Login::pre_process_email_authentication( $user ) ) {
 
 		}
 
 		// Validate TOTP.
-		if ( 'totp' === $provider && true !== $wp2fa->login->validate_totp_authentication( $user ) ) {
+		if ( 'totp' === $provider && true !== \WP2FA\Authenticator\Login::validate_totp_authentication( $user ) ) {
 
 			do_action( 'wp_login_failed', $user->user_login );
 
@@ -1439,7 +1438,7 @@ class UsersWP_Forms {
 		}
 
 		// Validate Email.
-		if ( 'email' === $provider && true !== $wp2fa->login->validate_email_authentication( $user ) ) {
+		if ( 'email' === $provider && true !== \WP2FA\Authenticator\Login::validate_email_authentication( $user ) ) {
 
 			do_action( 'wp_login_failed', $user->user_login );
 
@@ -1463,7 +1462,7 @@ class UsersWP_Forms {
 		}
 
 		// Backup Codes.
-		if ( 'backup_codes' === $provider && true !== $wp2fa->login->validate_backup_codes( $user ) ) {
+		if ( 'backup_codes' === $provider && true !== \WP2FA\Authenticator\Login::validate_backup_codes( $user ) ) {
 
 			do_action( 'wp_login_failed', $user->user_login );
 
@@ -1476,7 +1475,7 @@ class UsersWP_Forms {
 			wp_send_json_error( $message );
 		}
 
-		$wp2fa->login->delete_login_nonce( $user->ID );
+		\WP2FA\Authenticator\Login::delete_login_nonce( $user->ID );
 
 		$rememberme = false;
 		$remember   = ( isset( $_REQUEST['rememberme'] ) ) ? filter_var( $_REQUEST['rememberme'], FILTER_VALIDATE_BOOLEAN ) : '';

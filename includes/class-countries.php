@@ -16,7 +16,7 @@ class UsersWP_Countries {
      * @return      array       Country array.
      */
     public function get_country_data(){
-        return array(
+	    $countries = array(
             'af' => 'Afghanistan (‫افغانستان‬‎)',
             'ax' => 'Åland Islands (Åland)',
             'al' => 'Albania (Shqipëri)',
@@ -266,6 +266,8 @@ class UsersWP_Countries {
             'zm' => 'Zambia',
             'zw' => 'Zimbabwe',
         );
+
+	    return apply_filters('uwp_country_list', $countries);
     }
 
     /**
