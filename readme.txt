@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.9
-Stable tag: 1.2.3.3
+Stable tag: 1.2.3.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -152,7 +152,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 * Add filter to edit listings profile tab query parameters - ADDED
 * WP 2FA plugin update breaks login form - FIXED
 * WPML switch language for email compatibility - ADDED
-* Filter to allo modifying country list for country custom field - ADDED
+* Filter to allow modifying country list for country custom field - ADDED
 * Tiktok and website URL to user button group in profile page - ADDED
 * Setting to allow login lightbox redirects based on settings - ADDED
 
