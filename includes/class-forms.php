@@ -1116,7 +1116,7 @@ class UsersWP_Forms {
 				)
 			);
 			if ( wp_doing_ajax() ) {
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			} else {
 				return;
 			}
@@ -1137,7 +1137,7 @@ class UsersWP_Forms {
 				)
 			);
 			if ( wp_doing_ajax() ) {
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			} else {
 				$uwp_notices[] = array( 'login' => $message );
 
@@ -1180,7 +1180,7 @@ class UsersWP_Forms {
 							'content' => $two_fa->get_error_message()
 						)
 					);
-					wp_send_json_error( $message );
+					wp_send_json_error( array( 'message' => $message) );
 				} else {
 					wp_send_json_success( array( 'html' => $two_fa, 'is_2fa' => true ) );
 				}
@@ -1194,7 +1194,7 @@ class UsersWP_Forms {
 				)
 			);
 			if ( wp_doing_ajax() ) {
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			} else {
 				$uwp_notices[] = array( 'login' => $message );
 
@@ -1208,7 +1208,11 @@ class UsersWP_Forms {
 				)
 			);
 			if ( wp_doing_ajax() ) {
-				wp_send_json_success( $message );
+				$redirect_to = '';
+			    if(1 == uwp_get_option('login_modal_enable_redirect')){
+				    $redirect_to = $this->get_login_redirect_url( $data, $user );
+                }
+				wp_send_json_success(  array( 'message' => $message, 'redirect' => $redirect_to )  );
 			} else {
 				$redirect_to = $this->get_login_redirect_url( $data, $user );
 				wp_safe_redirect( $redirect_to );
@@ -1389,7 +1393,7 @@ class UsersWP_Forms {
 				)
 			);
 
-			wp_send_json_error( $message );
+			wp_send_json_error( array( 'message' => $message) );
 		}
 
 		global $wp2fa;
@@ -1403,7 +1407,7 @@ class UsersWP_Forms {
 				)
 			);
 
-			wp_send_json_error( $message );
+			wp_send_json_error( array( 'message' => $message) );
 		}
 
 		if ( isset( $_POST['provider'] ) ) {
@@ -1434,7 +1438,7 @@ class UsersWP_Forms {
 				)
 			);
 
-			wp_send_json_error( $message );
+			wp_send_json_error( array( 'message' => $message) );
 		}
 
 		// Validate Email.
@@ -1449,7 +1453,7 @@ class UsersWP_Forms {
 					)
 				);
 
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			} else {
 				$message = aui()->alert( array(
 						'type'    => 'error',
@@ -1457,7 +1461,7 @@ class UsersWP_Forms {
 					)
 				);
 
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			}
 		}
 
@@ -1472,7 +1476,7 @@ class UsersWP_Forms {
 				)
 			);
 
-			wp_send_json_error( $message );
+			wp_send_json_error( array( 'message' => $message) );
 		}
 
 		\WP2FA\Authenticator\Login::delete_login_nonce( $user->ID );
@@ -1493,7 +1497,7 @@ class UsersWP_Forms {
 			)
 		);
 
-		wp_send_json_success( $message );
+		wp_send_json_success( array( 'message' => $message) );
 	}
 
 	public function get_login_redirect_url( $data, $user ) {

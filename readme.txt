@@ -154,6 +154,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 * WPML switch language for email compatibility - ADDED
 * Filter to allo modifying country list for country custom field - ADDED
 * Tiktok and website URL to user button group in profile page - ADDED
+* Setting to allow login lightbox redirects based on settings - ADDED
 
 = 1.2.3.3 =
 * AyeCode UI updated to v0.1.66 - CHANGED
