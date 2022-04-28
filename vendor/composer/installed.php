@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'e8eba7212e8a5bf2a180e2212eed6f63ad981cc7',
+        'reference' => '497c8c1b3c049e94e4f145ccd59f80aabc1886b8',
         'name' => 'uswerwp/userswp',
         'dev' => true,
     ),
@@ -93,7 +93,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'e8eba7212e8a5bf2a180e2212eed6f63ad981cc7',
+            'reference' => '497c8c1b3c049e94e4f145ccd59f80aabc1886b8',
             'dev_requirement' => false,
         ),
         'wp-coding-standards/wpcs' => array(
