@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.3.3\n"
+"Project-Id-Version: UsersWP 1.2.3.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-07 21:47+0530\n"
-"PO-Revision-Date: 2022-03-07 21:47+0530\n"
+"POT-Creation-Date: 2022-04-28 15:26+0530\n"
+"PO-Revision-Date: 2022-04-28 15:26+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -83,7 +83,7 @@ msgstr ""
 msgid "Menus"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:250 includes/class-tools.php:843
+#: admin/class-admin-setup-wizard.php:250 includes/class-tools.php:850
 msgid "Dummy Users"
 msgstr ""
 
@@ -165,7 +165,7 @@ msgstr ""
 #: admin/settings/class-formbuilder.php:1873
 #: admin/settings/class-uwp-settings-profile-tabs.php:814
 #: admin/settings/class-uwp-settings-user-sorting.php:594
-#: includes/class-tools.php:852
+#: includes/class-tools.php:859
 msgid "Remove"
 msgstr ""
 
@@ -552,7 +552,7 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:41
 #: admin/settings/class-uwp-settings-general.php:75
-#: admin/settings/class-uwp-settings-general.php:303
+#: admin/settings/class-uwp-settings-general.php:310
 #: includes/class-pages.php:326 templates/bootstrap/change.php:39
 #: templates/change.php:15 widgets/account.php:95
 msgid "Account"
@@ -652,7 +652,7 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:380
 #: admin/settings/class-formbuilder.php:396
-#: admin/settings/class-formbuilder.php:421 includes/class-forms.php:1980
+#: admin/settings/class-formbuilder.php:421 includes/class-forms.php:1983
 #, php-format
 msgid "%s"
 msgstr ""
@@ -1234,8 +1234,8 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:2087
 #: includes/libraries/class-geodirectory-plugin.php:1157
-#: includes/libraries/class-geodirectory-plugin.php:1373
-#: includes/libraries/class-geodirectory-plugin.php:1587
+#: includes/libraries/class-geodirectory-plugin.php:1376
+#: includes/libraries/class-geodirectory-plugin.php:1590
 msgid "Delete"
 msgstr ""
 
@@ -1590,8 +1590,8 @@ msgstr ""
 #: admin/settings/class-uwp-settings-emails.php:409
 #: admin/settings/class-uwp-settings-emails.php:442
 #: admin/settings/class-uwp-settings-emails.php:475
-#: admin/settings/class-uwp-settings-general.php:573
-#: admin/settings/class-uwp-settings-general.php:584
+#: admin/settings/class-uwp-settings-general.php:580
+#: admin/settings/class-uwp-settings-general.php:591
 msgid "Available template tags:"
 msgstr ""
 
@@ -1814,8 +1814,8 @@ msgid "Pages"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:71
-#: admin/settings/class-uwp-settings-general.php:283
-#: includes/class-emails.php:300 includes/class-forms.php:4424
+#: admin/settings/class-uwp-settings-general.php:290
+#: includes/class-emails.php:300 includes/class-forms.php:4427
 #: includes/class-pages.php:325 templates/bootstrap/forgot.php:63
 #: templates/bootstrap/login.php:8 templates/bootstrap/login.php:65
 #: templates/bootstrap/register.php:63 templates/bootstrap/reset.php:49
@@ -1833,7 +1833,7 @@ msgid "Change Password"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:73
-#: admin/settings/class-uwp-settings-general.php:293
+#: admin/settings/class-uwp-settings-general.php:300
 #: includes/class-pages.php:330 templates/bootstrap/change.php:50
 #: templates/change.php:15
 msgid "Profile"
@@ -1924,507 +1924,515 @@ msgid ""
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:189
+msgid "Enable Login Lightbox Redirect"
+msgstr ""
+
+#: admin/settings/class-uwp-settings-general.php:190
+msgid "When enabled the login in lightbox will follow login redirect settings."
+msgstr ""
+
+#: admin/settings/class-uwp-settings-general.php:196
 #: admin/settings/class-uwp-settings-redirects.php:126
 msgid "Login Redirect Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:190
+#: admin/settings/class-uwp-settings-general.php:197
 #: admin/settings/class-uwp-settings-redirects.php:127
 msgid ""
 "Set the page to redirect the user to after logging in. If default redirect "
 "has been set then WordPress default will be used."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:198
+#: admin/settings/class-uwp-settings-general.php:205
 #: admin/settings/class-uwp-settings-redirects.php:136
 msgid "Redirect Custom URL"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:199
+#: admin/settings/class-uwp-settings-general.php:206
 #: admin/settings/class-uwp-settings-redirects.php:137
 msgid "Set the custom url to redirect the user to after logging in."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:207
+#: admin/settings/class-uwp-settings-general.php:214
 msgid "Register Link Title"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:208
+#: admin/settings/class-uwp-settings-general.php:215
 msgid "Enter the register link title."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:211
+#: admin/settings/class-uwp-settings-general.php:218
 #: templates/bootstrap/forgot.php:74 templates/bootstrap/login.php:79
 #: templates/bootstrap/reset.php:60 templates/forgot.php:17
 #: templates/login.php:22 templates/reset.php:25
 msgid "Create account"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:217
+#: admin/settings/class-uwp-settings-general.php:224
 msgid "Forgot Password Link Title"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:218
+#: admin/settings/class-uwp-settings-general.php:225
 msgid "Enter the forgot password title."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:221
+#: admin/settings/class-uwp-settings-general.php:228
 #: templates/bootstrap/login.php:90 templates/login.php:23
 msgid "Forgot password?"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:227
+#: admin/settings/class-uwp-settings-general.php:234
 msgid "Redirect wp-login.php?"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:228
+#: admin/settings/class-uwp-settings-general.php:235
 msgid ""
 "When enabled /wp-login.php page will be redirected to UsersWP login page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:233
+#: admin/settings/class-uwp-settings-general.php:240
 msgid "Restrict wp-admin"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:234
+#: admin/settings/class-uwp-settings-general.php:241
 msgid ""
 "The user roles that should be restricted from accessing the wp-admin area."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:244
+#: admin/settings/class-uwp-settings-general.php:251
 #: admin/settings/class-uwp-settings-redirects.php:146
 msgid "Logout Redirect Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:245
+#: admin/settings/class-uwp-settings-general.php:252
 #: admin/settings/class-uwp-settings-redirects.php:147
 msgid ""
 "Set the page to redirect the user to after logging out. If no page has been "
 "set WordPress default will be used."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:251
+#: admin/settings/class-uwp-settings-general.php:258
 msgid "Disable WP-2FA"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:252
+#: admin/settings/class-uwp-settings-general.php:259
 msgid ""
 "This will disable integration with WP 2FA - Two-factor authentication for "
 "WordPress plugin."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:266
+#: admin/settings/class-uwp-settings-general.php:273
 msgid "Change Password Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:272
+#: admin/settings/class-uwp-settings-general.php:279
 msgid "Forgot password lightbox"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:273
+#: admin/settings/class-uwp-settings-general.php:280
 msgid ""
 "When enabled some forgot password links will open in a lightbox instead of "
 "changing page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:279
+#: admin/settings/class-uwp-settings-general.php:286
 msgid "Login Link Title"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:280
+#: admin/settings/class-uwp-settings-general.php:287
 msgid "Enter the login link title."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:289
+#: admin/settings/class-uwp-settings-general.php:296
 msgid "Profile Link Title"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:290
+#: admin/settings/class-uwp-settings-general.php:297
 msgid "Enter the profile link title."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:299
+#: admin/settings/class-uwp-settings-general.php:306
 msgid "Account Link Title"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:300
+#: admin/settings/class-uwp-settings-general.php:307
 msgid "Enter the account link title."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:309
+#: admin/settings/class-uwp-settings-general.php:316
 msgid "Enabled Old Password?"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:310
+#: admin/settings/class-uwp-settings-general.php:317
 msgid ""
 "Ask user to enter their old password before changing the password to add an "
 "extra layer of security."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:316
+#: admin/settings/class-uwp-settings-general.php:323
 msgid "Disable system generated password notice."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:317
+#: admin/settings/class-uwp-settings-general.php:324
 msgid ""
 "This option will disable system generated password notice if user has not "
 "changed default password after registration."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:334
+#: admin/settings/class-uwp-settings-general.php:341
 msgid "Profile Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:340
+#: admin/settings/class-uwp-settings-general.php:347
 msgid "Default banner image"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:341
+#: admin/settings/class-uwp-settings-general.php:348
 msgid "Recommended image size: 1000x300"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:348
+#: admin/settings/class-uwp-settings-general.php:355
 msgid "Default profile image"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:349
+#: admin/settings/class-uwp-settings-general.php:356
 msgid "Recommended image size: 150x150"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:356
+#: admin/settings/class-uwp-settings-general.php:363
 msgid "Display header in profile"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:363
+#: admin/settings/class-uwp-settings-general.php:370
 msgid "Display body in profile"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:370
+#: admin/settings/class-uwp-settings-general.php:377
 msgid "Profile avatar max file size"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:371
+#: admin/settings/class-uwp-settings-general.php:378
 #, php-format
 msgid ""
 "Enter Profile Avatar max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 "
 "Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:379
+#: admin/settings/class-uwp-settings-general.php:386
 msgid "Profile banner max file size"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:380
+#: admin/settings/class-uwp-settings-general.php:387
 #, php-format
 msgid ""
 "Enter Profile Banner max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 "
 "Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:388
+#: admin/settings/class-uwp-settings-general.php:395
 msgid "Profile avatar width"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:395
+#: admin/settings/class-uwp-settings-general.php:402
 msgid "Profile avatar height"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:402
+#: admin/settings/class-uwp-settings-general.php:409
 msgid "Profile banner width"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:409
+#: admin/settings/class-uwp-settings-general.php:416
 msgid "Profile banner height"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:416
-#: admin/settings/class-uwp-settings-general.php:473
+#: admin/settings/class-uwp-settings-general.php:423
+#: admin/settings/class-uwp-settings-general.php:480
 msgid "Number of items"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:419
+#: admin/settings/class-uwp-settings-general.php:426
 msgid "Enter number of items to display in profile tabs."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:425
+#: admin/settings/class-uwp-settings-general.php:432
 msgid "Disable author redirect to UsersWP profile page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:432
+#: admin/settings/class-uwp-settings-general.php:439
 msgid "User Counts CPTs"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:433
+#: admin/settings/class-uwp-settings-general.php:440
 msgid "Choose post types to display user counts in profile page for all users."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:441
+#: admin/settings/class-uwp-settings-general.php:448
 msgid "User Counts CPTs for profile owner"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:442
+#: admin/settings/class-uwp-settings-general.php:449
 msgid ""
 "Choose post types to display user counts in profile page for profile owners."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:458
+#: admin/settings/class-uwp-settings-general.php:465
 msgid "Users Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:465
+#: admin/settings/class-uwp-settings-general.php:472
 msgid "Users default layout"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:466
+#: admin/settings/class-uwp-settings-general.php:473
 msgid "Choose the default layout for users listing page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:476
+#: admin/settings/class-uwp-settings-general.php:483
 msgid "Enter number of items to display in users list page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:482
+#: admin/settings/class-uwp-settings-general.php:489
 msgid "Users to exclude"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:483
+#: admin/settings/class-uwp-settings-general.php:490
 msgid "Select users to exclude from the users listing."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:500
+#: admin/settings/class-uwp-settings-general.php:507
 msgid "User Account Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:507
+#: admin/settings/class-uwp-settings-general.php:514
 msgid "Disable Account Delete"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:508
+#: admin/settings/class-uwp-settings-general.php:515
 msgid "Don't allow users to delete their own account. Default enabled."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:523
+#: admin/settings/class-uwp-settings-general.php:530
 msgid "Author Box Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:529
+#: admin/settings/class-uwp-settings-general.php:536
 msgid "Enable Author Box"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:530
+#: admin/settings/class-uwp-settings-general.php:537
 msgid "Displays author box based on settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:536
+#: admin/settings/class-uwp-settings-general.php:543
 msgid "Where to display?"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:537
+#: admin/settings/class-uwp-settings-general.php:544
 msgid "Displays the author box above or below post content."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:540
+#: admin/settings/class-uwp-settings-general.php:547
 msgid "Above content"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:541
+#: admin/settings/class-uwp-settings-general.php:548
 msgid "Below content"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:548
+#: admin/settings/class-uwp-settings-general.php:555
 msgid "Post types"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:549
+#: admin/settings/class-uwp-settings-general.php:556
 msgid "Choose post types to display author box"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:558
+#: admin/settings/class-uwp-settings-general.php:565
 msgid "Bio Length"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:559
+#: admin/settings/class-uwp-settings-general.php:566
 msgid "Author bio word limit in Author box."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:566
+#: admin/settings/class-uwp-settings-general.php:573
 msgid "Author box Content"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:567
-#: admin/settings/class-uwp-settings-general.php:578
+#: admin/settings/class-uwp-settings-general.php:574
+#: admin/settings/class-uwp-settings-general.php:585
 msgid "The author box body, this can be text or HTML."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:577
+#: admin/settings/class-uwp-settings-general.php:584
 msgid "Author box Content (bootstrap)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:598
+#: admin/settings/class-uwp-settings-general.php:605
 msgid "Developer Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:605
+#: admin/settings/class-uwp-settings-general.php:612
 msgid "Disable Avatar Override?"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:606
+#: admin/settings/class-uwp-settings-general.php:613
 msgid ""
 "By default UsersWP will change the avatar to profile image. You can disable "
 "this using this option."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:611
+#: admin/settings/class-uwp-settings-general.php:618
 msgid "Advanced settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:612
+#: admin/settings/class-uwp-settings-general.php:619
 msgid ""
 "Disable advanced toggle, show advanced settings at all times (not "
 "recommended)."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:619
+#: admin/settings/class-uwp-settings-general.php:626
 msgid "Debugging"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:620
+#: admin/settings/class-uwp-settings-general.php:627
 msgid "Show debugging info in the error logs."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:627
+#: admin/settings/class-uwp-settings-general.php:634
 msgid "Default Design Style"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:628
+#: admin/settings/class-uwp-settings-general.php:635
 msgid "The default design style to use."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:631
+#: admin/settings/class-uwp-settings-general.php:638
 msgid "Bootstrap"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:632
+#: admin/settings/class-uwp-settings-general.php:639
 msgid "Legacy (non-bootstrap)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:648
+#: admin/settings/class-uwp-settings-general.php:655
 msgid "Page Settings"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:655
+#: admin/settings/class-uwp-settings-general.php:662
 msgid "User Profile Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:656
+#: admin/settings/class-uwp-settings-general.php:663
 msgid ""
 "This is the front end user's profile page. This page automatically overrides "
 "the default WordPress author page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:662
+#: admin/settings/class-uwp-settings-general.php:669
 #: includes/class-status.php:346
 msgid "Register Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:663
+#: admin/settings/class-uwp-settings-general.php:670
 msgid ""
 "This is the front end register page. This is where users create their "
 "account."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:669
+#: admin/settings/class-uwp-settings-general.php:676
 #: includes/class-status.php:350
 msgid "Login Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:670
+#: admin/settings/class-uwp-settings-general.php:677
 msgid ""
 "This is the front end login page. This is where users will login after "
 "creating their account."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:676
+#: admin/settings/class-uwp-settings-general.php:683
 #: includes/class-status.php:354
 msgid "Account Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:677
+#: admin/settings/class-uwp-settings-general.php:684
 msgid ""
 "This is the front end account page. This is where users can edit their "
 "account."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:683
+#: admin/settings/class-uwp-settings-general.php:690
 #: includes/class-status.php:358
 msgid "Change Password Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:684
+#: admin/settings/class-uwp-settings-general.php:691
 msgid "This is the front end Change Password page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:690
+#: admin/settings/class-uwp-settings-general.php:697
 #: includes/class-status.php:362
 msgid "Forgot Password Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:691
+#: admin/settings/class-uwp-settings-general.php:698
 msgid ""
 "This is the front end Forgot Password page. This is the page where users are "
 "sent to reset their password when they lose it."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:697
+#: admin/settings/class-uwp-settings-general.php:704
 #: includes/class-status.php:366
 msgid "Reset Password Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:698
+#: admin/settings/class-uwp-settings-general.php:705
 msgid ""
 "This is the front end Reset Password page. This is the page where users can "
 "reset their password when they lose it."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:704
+#: admin/settings/class-uwp-settings-general.php:711
 #: includes/class-status.php:370
 msgid "Users List Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:705
+#: admin/settings/class-uwp-settings-general.php:712
 msgid ""
 "This is the front end Users List page. This is the page where all registered "
 "users of the websites are listed."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:711
+#: admin/settings/class-uwp-settings-general.php:718
 msgid "Users List Item Page"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:712
+#: admin/settings/class-uwp-settings-general.php:719
 msgid ""
 "This is the page/template for displaying user item in users list page. You "
 "can change the template as you want which will apply to each user item in "
 "users list page."
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:741
+#: admin/settings/class-uwp-settings-general.php:748
 msgid "Grid View - 1 Column (List View)"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:742
+#: admin/settings/class-uwp-settings-general.php:749
 msgid "Grid View - 2 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:743
+#: admin/settings/class-uwp-settings-general.php:750
 msgid "Grid View - 3 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:744
+#: admin/settings/class-uwp-settings-general.php:751
 msgid "Grid View - 4 Column"
 msgstr ""
 
-#: admin/settings/class-uwp-settings-general.php:745
+#: admin/settings/class-uwp-settings-general.php:752
 msgid "Grid View - 5 Column"
 msgstr ""
 
@@ -3323,7 +3331,7 @@ msgid "<strong>Error</strong>: Super Administrators cannot be deleted."
 msgstr ""
 
 #: includes/class-activator.php:364 includes/class-activator.php:640
-#: includes/libraries/class-geodirectory-plugin.php:1856
+#: includes/libraries/class-geodirectory-plugin.php:1859
 msgid "Username"
 msgstr ""
 
@@ -3344,7 +3352,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:537 includes/class-activator.php:579
-#: includes/class-forms.php:4159
+#: includes/class-forms.php:4162
 msgid "Confirm Password"
 msgstr ""
 
@@ -3550,7 +3558,7 @@ msgid "Banner reset successfully."
 msgstr ""
 
 #: includes/class-forms.php:224 includes/class-forms.php:271
-#: includes/class-forms.php:769 includes/class-forms.php:1993
+#: includes/class-forms.php:769 includes/class-forms.php:1996
 msgid "Something went wrong. Please contact site admin."
 msgstr ""
 
@@ -3570,12 +3578,12 @@ msgid ""
 "for you, you can remove this warning by <a href=\"%s\">clicking here</a>."
 msgstr ""
 
-#: includes/class-forms.php:530 includes/class-forms.php:1803
+#: includes/class-forms.php:530 includes/class-forms.php:1806
 msgid "No spam please!"
 msgstr ""
 
 #: includes/class-forms.php:536 includes/class-forms.php:1115
-#: includes/class-forms.php:1559
+#: includes/class-forms.php:1562
 msgid "Security verification failed. Try again."
 msgstr ""
 
@@ -3605,7 +3613,7 @@ msgstr ""
 msgid "Password you entered during registration."
 msgstr ""
 
-#: includes/class-forms.php:844 includes/class-forms.php:1652
+#: includes/class-forms.php:844 includes/class-forms.php:1655
 msgid "Your login Information :"
 msgstr ""
 
@@ -3648,156 +3656,156 @@ msgstr ""
 msgid "Login successful. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:1245
+#: includes/class-forms.php:1249
 msgid "Failed to create a login nonce."
 msgstr ""
 
-#: includes/class-forms.php:1274 includes/class-forms.php:1276
+#: includes/class-forms.php:1278 includes/class-forms.php:1280
 msgid "Authentication Code"
 msgstr ""
 
-#: includes/class-forms.php:1284 includes/class-forms.php:1311
-#: includes/class-forms.php:1356
+#: includes/class-forms.php:1288 includes/class-forms.php:1314
+#: includes/class-forms.php:1359
 msgid "Log In"
 msgstr ""
 
-#: includes/class-forms.php:1300 includes/class-forms.php:1302
+#: includes/class-forms.php:1303 includes/class-forms.php:1305
 msgid "Verification Code"
 msgstr ""
 
-#: includes/class-forms.php:1319
+#: includes/class-forms.php:1322
 msgid "Resend Code"
 msgstr ""
 
-#: includes/class-forms.php:1345
+#: includes/class-forms.php:1348
 msgid "Enter backup code"
 msgstr ""
 
-#: includes/class-forms.php:1347
+#: includes/class-forms.php:1350
 msgid "Backup Code"
 msgstr ""
 
-#: includes/class-forms.php:1389
+#: includes/class-forms.php:1392
 msgid "Invalid user data. Please try again."
 msgstr ""
 
-#: includes/class-forms.php:1403
+#: includes/class-forms.php:1406
 msgid "Invalid request! Please try again."
 msgstr ""
 
-#: includes/class-forms.php:1434 includes/class-forms.php:1457
+#: includes/class-forms.php:1437 includes/class-forms.php:1460
 msgid "Invalid verification code."
 msgstr ""
 
-#: includes/class-forms.php:1449
+#: includes/class-forms.php:1452
 msgid "A new code has been sent."
 msgstr ""
 
-#: includes/class-forms.php:1472
+#: includes/class-forms.php:1475
 msgid "Invalid backup code."
 msgstr ""
 
-#: includes/class-forms.php:1493
+#: includes/class-forms.php:1496
 msgid "Validation successful. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:1601
+#: includes/class-forms.php:1604
 msgid "Invalid email or user doesn't exists."
 msgstr ""
 
-#: includes/class-forms.php:1619
+#: includes/class-forms.php:1622
 msgid "Your account is not activated yet. Please activate your account first."
 msgstr ""
 
-#: includes/class-forms.php:1653 includes/class-forms.php:1668
+#: includes/class-forms.php:1656 includes/class-forms.php:1671
 #, php-format
 msgid "Username: %s"
 msgstr ""
 
-#: includes/class-forms.php:1654
+#: includes/class-forms.php:1657
 #, php-format
 msgid "Password: %s"
 msgstr ""
 
-#: includes/class-forms.php:1666
+#: includes/class-forms.php:1669
 msgid "You have requested to reset your password for the following account:"
 msgstr ""
 
-#: includes/class-forms.php:1669
+#: includes/class-forms.php:1672
 msgid "If this was by mistake, just ignore this email and nothing will happen."
 msgstr ""
 
-#: includes/class-forms.php:1670
+#: includes/class-forms.php:1673
 msgid ""
 "To reset your password, click the following link and follow the instructions."
 msgstr ""
 
-#: includes/class-forms.php:1699
+#: includes/class-forms.php:1702
 msgid "Please check your email."
 msgstr ""
 
-#: includes/class-forms.php:1779
+#: includes/class-forms.php:1782
 msgid "Password changed successfully."
 msgstr ""
 
-#: includes/class-forms.php:1838
+#: includes/class-forms.php:1841
 msgid "Invalid username."
 msgstr ""
 
-#: includes/class-forms.php:1870
+#: includes/class-forms.php:1873
 #, php-format
 msgid ""
 "Password updated successfully. Please <a href=\"%s\">login</a> with your new "
 "password."
 msgstr ""
 
-#: includes/class-forms.php:2041
+#: includes/class-forms.php:2044
 msgid ""
 "Account updated successfully. The new address will become active once you "
 "confirm via activation link sent to your new email."
 msgstr ""
 
-#: includes/class-forms.php:2058
+#: includes/class-forms.php:2061
 msgid "Account updated successfully."
 msgstr ""
 
-#: includes/class-forms.php:2091 includes/class-forms.php:2121
+#: includes/class-forms.php:2094 includes/class-forms.php:2124
 msgid "User Information:"
 msgstr ""
 
-#: includes/class-forms.php:2432
+#: includes/class-forms.php:2435
 msgid "Clear field"
 msgstr ""
 
-#: includes/class-forms.php:3140
+#: includes/class-forms.php:3143
 msgid "Username or Email"
 msgstr ""
 
-#: includes/class-forms.php:3463
+#: includes/class-forms.php:3466
 msgid "Please enter a valid URL including https://"
 msgstr ""
 
-#: includes/class-forms.php:3512
+#: includes/class-forms.php:3515
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:3825
+#: includes/class-forms.php:3828
 #, php-format
 msgid ""
 "By using this form I agree to the storage and handling of my data by this "
 "website. View our %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:3912
+#: includes/class-forms.php:3915
 #, php-format
 msgid "I accept the %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:4249
+#: includes/class-forms.php:4252
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/class-forms.php:4402
+#: includes/class-forms.php:4405
 msgid "Privacy settings updated successfully."
 msgstr ""
 
@@ -3873,9 +3881,19 @@ msgstr ""
 msgid "No csv file found."
 msgstr ""
 
-#: includes/class-import-export.php:586 includes/class-import-export.php:648
-#: includes/class-import-export.php:664
-msgid "Row - "
+#: includes/class-import-export.php:586
+#, php-format
+msgid "Row - %s Error: Skipped due to invalid/no data."
+msgstr ""
+
+#: includes/class-import-export.php:648
+#, php-format
+msgid "Row - %s Error: User could not be created."
+msgstr ""
+
+#: includes/class-import-export.php:674
+#, php-format
+msgid "Row - %s Error: %s"
 msgstr ""
 
 #: includes/class-notices.php:26
@@ -4129,73 +4147,73 @@ msgid "Submit"
 msgstr ""
 
 #: includes/class-tools.php:211 includes/class-tools.php:305
-#: includes/class-tools.php:576
+#: includes/class-tools.php:583
 msgid "Processed Successfully"
 msgstr ""
 
-#: includes/class-tools.php:786
+#: includes/class-tools.php:793
 msgid "Clear version numbers"
 msgstr ""
 
-#: includes/class-tools.php:787
+#: includes/class-tools.php:794
 msgid "This will force install/upgrade functions to run."
 msgstr ""
 
-#: includes/class-tools.php:790 includes/class-tools.php:809
-#: includes/class-tools.php:828
+#: includes/class-tools.php:797 includes/class-tools.php:816
+#: includes/class-tools.php:835
 msgid "Run"
 msgstr ""
 
-#: includes/class-tools.php:805
+#: includes/class-tools.php:812
 msgid "Fix User Data"
 msgstr ""
 
-#: includes/class-tools.php:806
+#: includes/class-tools.php:813
 msgid "Fixes User Data if you were using the Beta version."
 msgstr ""
 
-#: includes/class-tools.php:824
+#: includes/class-tools.php:831
 msgid "DB text translation"
 msgstr ""
 
-#: includes/class-tools.php:825
+#: includes/class-tools.php:832
 msgid ""
 "This tool will collect any texts stored in the DB and put them in the file "
 "db-language.php so they can then be used to translate them by translations "
 "tools."
 msgstr ""
 
-#: includes/class-tools.php:844
+#: includes/class-tools.php:851
 msgid "Dummy Users for Testing. Password for all dummy users:"
 msgstr ""
 
-#: includes/class-tools.php:851
+#: includes/class-tools.php:858
 msgid "Create"
 msgstr ""
 
-#: includes/class-tools.php:1013
+#: includes/class-tools.php:1020
 msgid ""
 "Version numbers cleared. Install/upgrade functions will run on next page "
 "load."
 msgstr ""
 
-#: includes/class-tools.php:1030 includes/class-tools.php:1041
+#: includes/class-tools.php:1037 includes/class-tools.php:1048
 msgid "The menu is not valid."
 msgstr ""
 
-#: includes/class-tools.php:1108
+#: includes/class-tools.php:1115
 msgid "Menu already exists."
 msgstr ""
 
-#: includes/class-tools.php:1114
+#: includes/class-tools.php:1121
 msgid "Menu items already exist, none added."
 msgstr ""
 
-#: includes/class-tools.php:1116
+#: includes/class-tools.php:1123
 msgid "Menu items added successfully."
 msgstr ""
 
-#: includes/class-tools.php:1118
+#: includes/class-tools.php:1125
 msgid "Something went wrong, you can manually add items in Appearance > Menus"
 msgstr ""
 
@@ -4837,7 +4855,7 @@ msgid "Listings"
 msgstr ""
 
 #: includes/libraries/class-geodirectory-plugin.php:329
-#: includes/libraries/class-geodirectory-plugin.php:1417 upgrade.php:219
+#: includes/libraries/class-geodirectory-plugin.php:1420 upgrade.php:219
 msgid "Reviews"
 msgstr ""
 
@@ -4850,20 +4868,20 @@ msgid "Lists"
 msgstr ""
 
 #: includes/libraries/class-geodirectory-plugin.php:1143
-#: includes/libraries/class-geodirectory-plugin.php:1359
-#: includes/libraries/class-geodirectory-plugin.php:1573
+#: includes/libraries/class-geodirectory-plugin.php:1362
+#: includes/libraries/class-geodirectory-plugin.php:1576
 msgid "Edit Listing"
 msgstr ""
 
 #: includes/libraries/class-geodirectory-plugin.php:1148
-#: includes/libraries/class-geodirectory-plugin.php:1364
-#: includes/libraries/class-geodirectory-plugin.php:1578
+#: includes/libraries/class-geodirectory-plugin.php:1367
+#: includes/libraries/class-geodirectory-plugin.php:1581
 msgid "Edit"
 msgstr ""
 
 #: includes/libraries/class-geodirectory-plugin.php:1152
-#: includes/libraries/class-geodirectory-plugin.php:1368
-#: includes/libraries/class-geodirectory-plugin.php:1582
+#: includes/libraries/class-geodirectory-plugin.php:1371
+#: includes/libraries/class-geodirectory-plugin.php:1585
 msgid "Delete Listing"
 msgstr ""
 
@@ -4873,32 +4891,32 @@ msgstr ""
 msgid "No %s found."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1237
+#: includes/libraries/class-geodirectory-plugin.php:1240
 #: templates/bootstrap/posts-post.php:59
 msgid "View"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1820
+#: includes/libraries/class-geodirectory-plugin.php:1823
 msgid "Published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1823
+#: includes/libraries/class-geodirectory-plugin.php:1826
 msgid "Pending"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1826
+#: includes/libraries/class-geodirectory-plugin.php:1829
 msgid "Closed"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1829
+#: includes/libraries/class-geodirectory-plugin.php:1832
 msgid "Expired"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1832
+#: includes/libraries/class-geodirectory-plugin.php:1835
 msgid "Not published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1837
+#: includes/libraries/class-geodirectory-plugin.php:1840
 msgid "Status: "
 msgstr ""
 
