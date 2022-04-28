@@ -583,7 +583,7 @@ class UsersWP_Import_Export {
         if ( ! empty( $rows ) ) {
             foreach ( $rows as $row ) {
                 if( empty($row) ) {
-                    $return['msg'] = __('Row - ' .$this->imp_step. ' Error: '. 'Skipped due to invalid/no data.','userswp');
+                    $return['msg'] = sprintf(__('Row - %s Error: '. 'Skipped due to invalid/no data.','userswp'), $this->imp_step);
                     continue;
                 }
 
@@ -645,12 +645,22 @@ class UsersWP_Import_Export {
                                 wp_update_user( $args );
                             }
                         } else {
-                            $return['msg'] = __('Row - ' .$this->imp_step. ' Error: '. 'User could not be created.','userswp');
+                            $return['msg'] = sprintf(__('Row - %s Error: '. 'User could not be created.','userswp'), $this->imp_step);
                             continue;
                         }
                     }
                 } else {
                     $user_id = wp_create_user( $username, $password, $email );
+	                if( !is_wp_error( $user_id ) ) {
+		                $args = array(
+			                'ID'           => $user_id,
+			                'first_name'   => $first_name,
+			                'last_name'    => $last_name,
+			                'description'  => $bio,
+			                'display_name' => $display_name
+		                );
+		                wp_update_user( $args );
+	                }
                 }
 
                 if( !is_wp_error( $user_id ) ){
@@ -661,7 +671,7 @@ class UsersWP_Import_Export {
                         }
                     }
                 } else {
-                    $return['msg'] = __('Row - ' .$this->imp_step. ' Error: '. $user_id->get_error_message(),'userswp');
+                    $return['msg'] = sprintf(__('Row - %s Error: %s','userswp'), $this->imp_step, $user_id->get_error_message());
                     continue;
                 }
             }

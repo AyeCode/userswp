@@ -1,3 +1,12 @@
+= 0.1.70 =
+* select2 can sometimes double initiate - FIXED
+
+= 0.1.69 =
+* Parameter added to be able to directly echo functions - ADDED
+
+= 0.1.68 =
+* Bootstrap updated to 4.6.1 - UPDATED
+
 = 0.1.67 =
 * input_group_left/right now supported by textareas - ADDED
 

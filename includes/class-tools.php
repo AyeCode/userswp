@@ -397,6 +397,13 @@ class UsersWP_Tools {
 		$translation_texts = !empty( $translation_texts ) && is_array( $translation_texts ) ? $translation_texts : array();
 
 		$uwp_options = array(
+			'register_link_title',
+			'forgot_link_title',
+			'login_link_title',
+			'profile_link_title',
+			'account_link_title',
+			'author_box_content',
+			'author_box_content_bootstrap',
 			'email_name',
 			'email_footer_text',
 			'registration_activate_email_subject',

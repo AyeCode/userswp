@@ -10,7 +10,7 @@ TO:
 
 
 /*
-Fix compile
+Fix compile (maybe not needed anymore?)
 */
 File _root.scss 5, 9
 FROM
@@ -27,5 +27,5 @@ File _list-group-rtl.scss 77
 FROM
   & + & {
 TO:
-  & + .list-group-item{
+  & + .list-group-item {
 

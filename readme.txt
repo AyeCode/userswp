@@ -148,8 +148,13 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.3.4 =
 * UsersWP Elementor widgets not showing in searches - FIXED
-* AyeCode UI updated to v0.1.67 - CHANGED
+* AyeCode UI updated to v0.1.70 - CHANGED
 * Add filter to edit listings profile tab query parameters - ADDED
+* WP 2FA plugin update breaks login form - FIXED
+* WPML switch language for email compatibility - ADDED
+* Filter to allo modifying country list for country custom field - ADDED
+* Tiktok and website URL to user button group in profile page - ADDED
+* Setting to allow login lightbox redirects based on settings - ADDED
 
 = 1.2.3.3 =
 * AyeCode UI updated to v0.1.66 - CHANGED
