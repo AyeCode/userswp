@@ -33,7 +33,7 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
                 'fields'  => array(
                     'title'       => __( 'Fields', 'userswp' ),
                     'desc'        => __( 'Enter a comma separated list of field keys. (leave empty for default social fields)', 'userswp' ),
-                    'placeholder' => 'facebook,twitter,instagram,linkedin,flickr,github,youtube,wordpress',
+                    'placeholder' => 'facebook,twitter,instagram,linkedin,flickr,github,youtube,wordpress,tiktok,user_url',
                     'type'        => 'text',
                     'desc_tip'    => true,
                     'default'     => '',
@@ -95,7 +95,7 @@ class UWP_Button_Group_Widget extends WP_Super_Duper {
         }
 
         $defaults = array(
-            'fields' => 'facebook,twitter,instagram,linkedin,flickr,github,youtube,wordpress',
+            'fields' => 'facebook,twitter,instagram,linkedin,flickr,github,youtube,wordpress,tiktok,user_url',
             'css_class'     => 'btn-sm btn-circle'
         );
 

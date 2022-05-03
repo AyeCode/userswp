@@ -24,7 +24,7 @@ class AUI {
 	 *
 	 * @var string $ver The current version number.
 	 */
-	public static $ver = '0.1.67';
+	public static $ver = '0.1.70';
 
 	public static $options = null;
 
@@ -92,7 +92,7 @@ class AUI {
 		return $result;
 	}
 
-	public function render( $items = array() ) {
+	public function render( $items = array(), $echo = false ) {
 		$output = '';
 
 		if ( ! empty( $items ) ) {
@@ -104,7 +104,12 @@ class AUI {
 			}
 		}
 
-		return $output;
+		if ( $echo ) {
+			echo $output;
+		}else{
+			return $output;
+		}
+
 	}
 
 	/**
@@ -112,12 +117,19 @@ class AUI {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args
+	 * @param array $args The function arguments.
+	 * @param bool  $echo If we should return or echo.
 	 *
 	 * @return string The rendered component.
 	 */
-	public function alert( $args = array() ) {
-		return AUI_Component_Alert::get( $args );
+	public function alert( $args = array(), $echo = false ) {
+		$output = AUI_Component_Alert::get( $args );
+
+		if ( $echo ) {
+			echo $output;
+		}else{
+			return $output;
+		}
 	}
 
 	/**
@@ -125,12 +137,19 @@ class AUI {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args
+	 * @param array $args The function arguments.
+	 * @param bool  $echo If we should return or echo.
 	 *
 	 * @return string The rendered component.
 	 */
-	public function input( $args = array() ) {
-		return AUI_Component_Input::input( $args );
+	public function input( $args = array(), $echo = false ) {
+		$output = AUI_Component_Input::input( $args );
+
+		if ( $echo ) {
+			echo $output;
+		}else{
+			return $output;
+		}
 	}
 
 	/**
@@ -138,12 +157,19 @@ class AUI {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args
+	 * @param array $args The function arguments.
+	 * @param bool  $echo If we should return or echo.
 	 *
 	 * @return string The rendered component.
 	 */
-	public function textarea( $args = array() ) {
-		return AUI_Component_Input::textarea( $args );
+	public function textarea( $args = array(), $echo = false ) {
+		$output = AUI_Component_Input::textarea( $args );
+
+		if ( $echo ) {
+			echo $output;
+		}else{
+			return $output;
+		}
 	}
 
 	/**
@@ -151,12 +177,19 @@ class AUI {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args
+	 * @param array $args The function arguments.
+	 * @param bool  $echo If we should return or echo.
 	 *
 	 * @return string The rendered component.
 	 */
-	public function button( $args = array() ) {
-		return AUI_Component_Button::get( $args );
+	public function button( $args = array(), $echo = false ) {
+		$output = AUI_Component_Button::get( $args );
+
+		if ( $echo ) {
+			echo $output;
+		}else{
+			return $output;
+		}
 	}
 
 	/**
@@ -164,16 +197,17 @@ class AUI {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args
+	 * @param array $args The function arguments.
+	 * @param bool  $echo If we should return or echo.
 	 *
 	 * @return string The rendered component.
 	 */
-	public function badge( $args = array() ) {
+	public function badge( $args = array(), $echo = false ) {
 		$defaults = array(
 			'class' => 'badge badge-primary align-middle',
 		);
 
-		// maybe set type
+		// maybe set type.
 		if ( empty( $args['href'] ) ) {
 			$defaults['type'] = 'badge';
 		}
@@ -183,7 +217,13 @@ class AUI {
 		 */
 		$args = wp_parse_args( $args, $defaults );
 
-		return AUI_Component_Button::get( $args );
+		$output = AUI_Component_Button::get( $args );
+
+		if ( $echo ) {
+			echo $output;
+		}else{
+			return $output;
+		}
 	}
 
 	/**
@@ -191,12 +231,19 @@ class AUI {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args
+	 * @param array $args The function arguments.
+	 * @param bool  $echo If we should return or echo.
 	 *
 	 * @return string The rendered component.
 	 */
-	public function dropdown( $args = array() ) {
-		return AUI_Component_Dropdown::get( $args );
+	public function dropdown( $args = array(), $echo = false ) {
+		$output = AUI_Component_Dropdown::get( $args );
+
+		if ( $echo ) {
+			echo $output;
+		}else{
+			return $output;
+		}
 	}
 
 	/**
@@ -204,12 +251,19 @@ class AUI {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args
+	 * @param array $args The function arguments.
+	 * @param bool  $echo If we should return or echo.
 	 *
 	 * @return string The rendered component.
 	 */
-	public function select( $args = array() ) {
-		return AUI_Component_Input::select( $args );
+	public function select( $args = array(), $echo = false ) {
+		$output = AUI_Component_Input::select( $args );
+
+		if ( $echo ) {
+			echo $output;
+		}else{
+			return $output;
+		}
 	}
 
 	/**
@@ -217,12 +271,19 @@ class AUI {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args
+	 * @param array $args The function arguments.
+	 * @param bool  $echo If we should return or echo.
 	 *
 	 * @return string The rendered component.
 	 */
-	public function radio( $args = array() ) {
-		return AUI_Component_Input::radio( $args );
+	public function radio( $args = array(), $echo = false ) {
+		$output = AUI_Component_Input::radio( $args );
+
+		if ( $echo ) {
+			echo $output;
+		}else{
+			return $output;
+		}
 	}
 
 	/**
@@ -230,12 +291,19 @@ class AUI {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args
+	 * @param array $args The function arguments.
+	 * @param bool  $echo If we should return or echo.
 	 *
 	 * @return string The rendered component.
 	 */
-	public function pagination( $args = array() ) {
-		return AUI_Component_Pagination::get( $args );
+	public function pagination( $args = array(), $echo = false ) {
+		$output = AUI_Component_Pagination::get( $args );
+
+		if ( $echo ) {
+			echo $output;
+		}else{
+			return $output;
+		}
 	}
 
 }

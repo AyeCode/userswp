@@ -184,6 +184,13 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'type' => 'checkbox',
 		            'default'  => '1',
 	            ),
+	            array(
+		            'id'   => 'login_modal_enable_redirect',
+		            'name' => __( 'Enable Login Lightbox Redirect', 'userswp' ),
+		            'desc' => __( 'When enabled the login in lightbox will follow login redirect settings.','userswp'),
+		            'type' => 'checkbox',
+		            'default'  => '0',
+	            ),
                 array(
                     'id' => 'login_redirect_to',
                     'name' => __( 'Login Redirect Page', 'userswp' ),

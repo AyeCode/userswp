@@ -556,6 +556,14 @@ class UsersWP_Mails {
 		}
 
 		$to = apply_filters( 'uwp_send_email_to', $to, $email_name, $email_vars, $is_admin );
+
+		if(empty($to)){
+			return false;
+		}
+
+		// Switch language to user language.
+		do_action( 'wpml_switch_language_for_email', $to );
+
 		$subject      = self::get_subject( $email_name, $email_vars, $is_admin );
 		$message_body = self::get_content( $email_name, $email_vars, $is_admin );
 		$headers      = self::get_headers( $email_name, $email_vars, $is_admin );
@@ -579,6 +587,9 @@ class UsersWP_Mails {
 
 		do_action( 'uwp_after_'.$email_name.'_email', $email_name, $email_vars );
 
+		// Switch language back.
+		do_action( 'wpml_restore_language_from_email' );
+
 		return $sent;
 	}
 
@@ -600,6 +611,10 @@ class UsersWP_Mails {
 		);
 
 		$to = apply_filters( 'uwp_send_email_to', $user->user_email, $email_name, $email_vars, $is_admin);
+
+		// Switch language to user language.
+		do_action( 'wpml_switch_language_for_email', $to );
+
 		$subject      = self::get_subject( $email_name, $email_vars, $is_admin );
 		$subject = !empty($subject) ? $subject : UsersWP_Defaults::wp_new_user_notification_email_subject();
 		$headers      = self::get_headers( $email_name, $email_vars, $is_admin );
@@ -635,6 +650,9 @@ class UsersWP_Mails {
 		$content = self::style_body( $content );
 		$content = apply_filters( 'uwp_mail_content', $content);
 
+		// Switch language back.
+		do_action( 'wpml_restore_language_from_email' );
+
 		$wp_new_user_notification_email = array(
 			'to'      => $to,
 			'subject' => $subject,
@@ -659,6 +677,10 @@ class UsersWP_Mails {
 		);
 
 		$to = apply_filters( 'uwp_send_email_to', get_option( 'admin_email' ), $email_name, $email_vars, $is_admin);
+
+		// Switch language to user language.
+		do_action( 'wpml_switch_language_for_email', $to );
+
 		$subject      = self::get_subject( $email_name, $email_vars, $is_admin );
 		$subject = !empty($subject) ? $subject : UsersWP_Defaults::wp_new_user_notification_email_subject_admin();
 		$headers      = self::get_headers( $email_name, $email_vars, $is_admin );
@@ -679,6 +701,9 @@ class UsersWP_Mails {
 
 		$content = self::style_body( $content );
 		$content = apply_filters( 'uwp_mail_content', $content);
+
+		// Switch language back.
+		do_action( 'wpml_restore_language_from_email' );
 
 		$wp_new_user_notification_email = array(
 			'to'      => $to,

@@ -2461,7 +2461,7 @@ class UsersWP_Form_Builder {
 			<?php } ?>
         </li>
 
-        <li <?php echo $hide_user_sort; ?> class="cf-incin-reg-form uwp-setting-name">
+        <li <?php echo $hide_user_sort; ?> class="cf-incin-reg-form uwp-setting-name uwp-advanced-setting">
             <label for="user_sort" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Lets you use this field as sorting in the users listing page, set from user sorting tab above.', 'userswp' ) );

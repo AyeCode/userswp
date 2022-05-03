@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.67';
+		public $version = '0.1.70';
 
 		/**
 		 * Class textdomain.
@@ -501,8 +501,11 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				 */
 				function aui_init_select2(){
 					var select2_args = jQuery.extend({}, aui_select2_locale());
-
-					jQuery("select.aui-select2").select2(select2_args);
+					jQuery("select.aui-select2").each(function() {
+						if (!jQuery(this).hasClass("select2-hidden-accessible")) {
+							jQuery(this).select2(select2_args);
+						}
+					});
 				}
 
 				/**

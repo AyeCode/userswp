@@ -1817,7 +1817,11 @@ function uwp_get_default_sort(){
 	if ( ! empty( $field ) ) {
 		if ( $field->field_type == 'random' ) {
 			$default_sort = 'random';
-		} else {
+		} elseif ( 'newer' == $field->htmlvar_name) {
+            $default_sort = 'user_registered_desc';
+		} elseif ( 'older' == $field->htmlvar_name ) {
+			$default_sort = 'user_registered_asc';
+		}else {
 			$default_sort = $field->htmlvar_name . '_' . $field->sort;
 		}
 	}

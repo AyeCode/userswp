@@ -12,3 +12,5 @@ README.md export-ignore
 /.idea/ export-ignore
 /.wordpress-org/ export-ignore
 /.github/ export-ignore
+/vendor/squizlabs/ export-ignore
+/vendor/wp-coding-standards/ export-ignore

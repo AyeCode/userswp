@@ -389,7 +389,7 @@ function uwp_modal_login_form_process(){
         success: function(data) {
             if(data.success==true){
                 jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').html($button_text).prop('disabled', true);// remove spinner
-                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
+                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data.message);
                 // Show success message for 1 second before redirecting.
                 if(data.data.is_2fa){
                     jQuery(".modal-content form.uwp-login-form").replaceWith(data.data.html);
@@ -408,14 +408,20 @@ function uwp_modal_login_form_process(){
                         e.preventDefault(e);
                         uwp_modal_login_form_2fa_process('form.validate_2fa_form', '&wp-2fa-email-code-resend=1');
                     });
-                }else {
-                    setTimeout(function(){
-                        location.reload();
-                    }, 1000);
+                } else {
+                    if(data.data.redirect){
+                        setTimeout(function(){
+                            location.href = data.data.redirect;
+                        }, 1000);
+                    } else {
+                        setTimeout(function(){
+                            location.reload();
+                        }, 1000);
+                    }
                 }
 
             }else if(data.success===false){
-                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
+                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data.message);
                 jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').html($button_text).prop('disabled', false);// enable submit
                 uwp_maybe_reset_recaptcha();
             }
@@ -439,14 +445,20 @@ function uwp_modal_login_form_2fa_process(type, fields){
         success: function(data) {
             if(data.success==true){
                 $button.html($button_text).prop('disabled', true);// remove spinner
-                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
+                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data.message);
                 // Show success message for 1 second before redirecting.
-                setTimeout(function(){
-                    location.reload();
-                }, 1000);
+                if(data.data.redirect){
+                    setTimeout(function(){
+                        location.href = data.data.redirect;
+                    }, 1000);
+                } else {
+                    setTimeout(function(){
+                        location.reload();
+                    }, 1000);
+                }
 
             }else if(data.success===false){
-                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
+                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data.message);
                 $button.html($button_text).prop('disabled', false);// enable submit
             }
             uwp_init_auth_modal();
