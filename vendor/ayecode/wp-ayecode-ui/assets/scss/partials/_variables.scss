@@ -10,6 +10,7 @@ $brand-wordpress: #207297;
 $brand-google: #ea4335;
 $brand-yahoo: #6040d2;
 $brand-vkontakte: #4a76a8;
+$brand-tiktok: #010101;
 
 $branding-colors: () !default;
 $branding-colors: map-merge(
@@ -25,6 +26,7 @@ $branding-colors: map-merge(
                         "google": $brand-google,
                         "yahoo": $brand-yahoo,
                         "vkontakte": $brand-vkontakte,
+                        "tiktok": $brand-tiktok,
                 ),
                 $branding-colors
 );

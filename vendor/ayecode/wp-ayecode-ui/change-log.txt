@@ -1,3 +1,6 @@
+= 0.1.71 =
+* TikTok class added for .btn-tiktok - ADDED
+
 = 0.1.70 =
 * select2 can sometimes double initiate - FIXED
 
