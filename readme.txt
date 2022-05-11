@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.5 =
+* User locale language selection custom field for multilingual compatibility - ADDED
+
 = 1.2.3.4 =
 * UsersWP Elementor widgets not showing in searches - FIXED
 * AyeCode UI updated to v0.1.70 - CHANGED

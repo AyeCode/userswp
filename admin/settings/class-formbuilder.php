@@ -964,6 +964,27 @@ class UsersWP_Form_Builder {
 			)
 		);
 
+		// Language
+		$custom_fields['uwp_language'] = array(
+			'field_type' => 'select',
+			'class'      => 'uwp-language',
+			'field_icon' => 'fas fa-language',
+			'site_title' => __( 'Select Language', 'userswp' ),
+			'help_text'  => __( 'Adds a input for user language selection.', 'userswp' ),
+			'defaults'   => array(
+				'admin_title'   => 'Select Language',
+				'site_title'    => 'Select Language',
+				'htmlvar_name'  => 'uwp_language',
+				'is_active'     => 1,
+				'default_value' => '',
+				'is_required'   => 0,
+				'option_values' => '',
+				'required_msg'  => '',
+				'field_icon'    => 'fas fa-language',
+				'css_class'     => ''
+			)
+		);
+
 
 		return apply_filters( 'uwp_form_fields_predefined', $custom_fields, $type );
 	}
@@ -2141,10 +2162,10 @@ class UsersWP_Form_Builder {
 
 					// @todo here we should show a multiselect to either include or exclude countries
 					_e( 'A full country list will be shown', 'userswp' );
-					?>
-
-				<?php } else { ?>
-                    <input type="text" name="option_values" id="option_values" value="<?php echo $value; ?>"/>
+                } elseif ( isset( $field_type_key ) && $field_type_key == 'uwp_language' ) {
+					_e( 'Available translation languages list will be shown', 'userswp' );
+				} else { ?>
+                    <input type="text" name="option_values" id="option_values" value="<?php echo esc_attr($value); ?>"/>
 				<?php } ?>
 
                 <br/>

@@ -603,6 +603,7 @@ final class UsersWP {
 			'register_confirm_password_field'
 		), 10, 4 );
 		add_filter( 'uwp_form_input_html_custom_html', array( $instance, 'form_custom_html' ), 10, 4 );
+		add_filter( 'uwp_form_input_html_select_uwp_language', array( $instance, 'form_input_uwp_language' ), 10, 4 );
 
 		// Emails
 		add_filter( 'uwp_send_mail_form_fields', array( $instance, 'init_mail_form_fields' ), 10, 4 );
