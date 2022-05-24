@@ -40,8 +40,9 @@ class AyeCode_UI_Plugin {
 			echo "<head>";
 			wp_head();
 			echo "</head>";
-			echo "<body>";
+			echo "<body class='bsui'>";
 			echo $this->get_examples();
+			wp_footer();
 			echo "</body>";
 			exit;
 		}
@@ -54,17 +55,86 @@ class AyeCode_UI_Plugin {
 		// open form
 		$output .= "<form class='p-5 m-5 border rounded'>";
 
+		$output .= aui()->input(
+			array(
+				'type'             => 'datepicker',
+				'id'               => 'wpinv_discount_start',
+				'size'             => 'sm',
+				'name'             => 'wpinv_discount_start',
+				'label'            => __( 'Start Date', 'invoicing' ),
+				'placeholder'      => 'YYYY-MM-DD 00:00',
+				'value'            => '',
+				'extra_attributes' => array(
+					'data-enable-time' => 'true',
+					'data-time_24hr'   => 'true',
+					'data-allow-input' => 'true',
+				),
+			),
+		);
+
+		$output .= aui()->input(
+			array(
+				'type'             => 'datepicker',
+				'id'               => 'wpinv_discount_start',
+				//'size'             => 'smx',
+				'name'             => 'wpinv_discount_start',
+				'label'            => __( 'Start Date', 'invoicing' ),
+				'placeholder'      => 'YYYY-MM-DD 00:00',
+				'value'            => '',
+				'extra_attributes' => array(
+					'data-enable-time' => 'true',
+					'data-time_24hr'   => 'true',
+					'data-allow-input' => 'true',
+				),
+			),
+		);
+		$output .= aui()->input(
+			array(
+				'type'             => 'datepicker',
+				'id'               => 'wpinv_discount_start',
+				'size'             => 'lg',
+				'name'             => 'wpinv_discount_start',
+				'label'            => __( 'Start Date', 'invoicing' ),
+				'placeholder'      => 'YYYY-MM-DD 00:00',
+				'value'            => '',
+				'extra_attributes' => array(
+					'data-enable-time' => 'true',
+					'data-time_24hr'   => 'true',
+					//'data-allow-input' => 'true',
+				),
+			)
+		);
+
+
 		// input example
 		$output .= aui()->input(array(
 			'type'  =>  'text',
 			'id'    =>  'text-example',
+			'size'             => 'sm',
+			//'clear_icon'    => true,
 			'name'    =>  'text-example',
 			'placeholder'   => 'text placeholder',
 			'title'   => 'Text input example',
 			'value' =>  '',
 			'required'  => false,
 			'help_text' => 'help text',
-			'label' => 'Text input example label'
+			'label' => 'Text input example label',
+			'label_type' => 'top'
+		));
+
+		$output .= aui()->input(array(
+			'type'  =>  'search',
+			'id'    =>  'text-example',
+			'size'             => 'sm',
+			//'clear_icon'    => true,
+			'name'    =>  'text-example',
+			'placeholder'   => 'text placeholder',
+			'title'   => 'Text input example',
+			'value' =>  '',
+			'required'  => false,
+			'help_text' => 'help text',
+			'label' => 'Text input example label',
+			'label_type' => 'top'
 		));
 
 		// input example

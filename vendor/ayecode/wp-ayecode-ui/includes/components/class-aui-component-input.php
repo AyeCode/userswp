@@ -29,11 +29,13 @@ class AUI_Component_Input {
 			'title'                    => '',
 			'value'                    => '',
 			'required'                 => false,
+			'size'                     => '', // sm, lg, small, large
+			'clear_icon'               => '', // true will show a clear icon, can't be used with input_group_right
 			'label'                    => '',
 			'label_after'              => false,
 			'label_class'              => '',
 			'label_col'                => '2',
-			'label_type'               => '',
+			'label_type'               => '', // top, horizontal, empty = hidden
 			'label_force_left'         => false, // used to force checkbox label left when using horizontal
 			// sets the label type, default: hidden. Options: hidden, top, horizontal, floating
 			'help_text'                => '',
@@ -88,6 +90,19 @@ class AUI_Component_Input {
 				$args['placeholder'] = ' '; // set the placeholder not empty so the floating label works.
 			}
 
+			// size
+			$size = '';
+			if ( $args['size'] == 'lg' || $args['size'] == 'large' ) {
+				$size = 'lg';
+				$args['class'] .= ' form-control-lg';
+			}elseif ( $args['size'] == 'sm' || $args['size'] == 'small' ) {
+				$size = 'sm';
+				$args['class'] .= ' form-control-sm';
+			}
+
+			// clear function
+			$clear_function = 'jQuery(this).parent().parent().find(\'input\').val(\'\');';
+
 			// Some special sauce for files
 			if ( $type == 'file' ) {
 				$label_after = true; // if type file we need the label after
@@ -97,10 +112,16 @@ class AUI_Component_Input {
 				$args['class'] .= ' custom-control-input ';
 			} elseif ( $type == 'datepicker' || $type == 'timepicker' ) {
 				$type = 'text';
-				//$args['class'] .= ' aui-flatpickr bg-initial ';
-				$args['class'] .= ' bg-initial ';
+				$args['class'] .= ' bg-initial '; // @todo not sure why we have this?
 
 				$args['extra_attributes']['data-aui-init'] = 'flatpickr';
+
+				// set a way to clear field if empty
+				if ( $args['input_group_right'] === '' && $args['clear_icon'] !== false ) {
+					$args['input_group_right_inside'] = true;
+					$args['clear_icon'] = true;
+				}
+
 				// enqueue the script
 				$aui_settings = AyeCode_UI_Settings::instance();
 				$aui_settings->enqueue_flatpickr();
@@ -123,6 +144,12 @@ class AUI_Component_Input {
 				$output .= '<input type="hidden" name="' . esc_attr( $args['name'] ) . '" value="0" />';
 			}
 
+			// allow clear icon
+			if ( $args['input_group_right'] === '' && $args['clear_icon'] ) {
+				$font_size = $size == 'sm' ? '1.3' : ( $size == 'lg' ? '1.65' : '1.5' );
+				$args['input_group_right_inside'] = true;
+				$args['input_group_right'] = '<span class="input-group-text aui-clear-input c-pointer bg-initial border-0 px-2 d-none" onclick="' . $clear_function . '"><span style="font-size: '.$font_size.'rem" aria-hidden="true" class="close">&times;</span></span>';
+			}
 
 			// open/type
 			$output .= '<input type="' . $type . '" ';
@@ -271,10 +298,13 @@ else{$eli.attr(\'type\',\'password\');}"
 			// input group wraps
 			if ( $args['input_group_left'] || $args['input_group_right'] ) {
 				$w100 = strpos( $args['class'], 'w-100' ) !== false ? ' w-100' : '';
+				$group_size = $size == 'lg' ? ' input-group-lg' : '';
+				$group_size = !$group_size && $size == 'sm' ? ' input-group-sm' : $group_size;
+
 				if ( $args['input_group_left'] ) {
 					$output = self::wrap( array(
 						'content'                 => $output,
-						'class'                   => $args['input_group_left_inside'] ? 'input-group-inside position-relative' . $w100 : 'input-group',
+						'class'                   => $args['input_group_left_inside'] ? 'input-group-inside position-relative' . $w100 . $group_size : 'input-group' . $group_size,
 						'input_group_left'        => $args['input_group_left'],
 						'input_group_left_inside' => $args['input_group_left_inside']
 					) );
@@ -282,7 +312,7 @@ else{$eli.attr(\'type\',\'password\');}"
 				if ( $args['input_group_right'] ) {
 					$output = self::wrap( array(
 						'content'                  => $output,
-						'class'                    => $args['input_group_right_inside'] ? 'input-group-inside position-relative' . $w100 : 'input-group',
+						'class'                    => $args['input_group_right_inside'] ? 'input-group-inside position-relative' . $w100 . $group_size : 'input-group' . $group_size,
 						'input_group_right'        => $args['input_group_right'],
 						'input_group_right_inside' => $args['input_group_right_inside']
 					) );
@@ -452,9 +482,9 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// Input group right
 			if ( ! empty( $args['input_group_right'] ) ) {
-				$position_class    = ! empty( $args['input_group_left_inside'] ) ? 'position-absolute h-100' : '';
+				$position_class    = ! empty( $args['input_group_right_inside'] ) ? 'position-absolute h-100' : '';
 				$input_group_right = strpos( $args['input_group_right'], '<' ) !== false ? $args['input_group_right'] : '<span class="input-group-text">' . $args['input_group_right'] . '</span>';
-				$output .= '<div class="input-group-append ' . $position_class . '">' . $input_group_right . '</div>';
+				$output .= '<div class="input-group-append ' . $position_class . '" style="top:0;right:0;">' . $input_group_right . '</div>';
 			}
 
 
