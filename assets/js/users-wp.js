@@ -331,7 +331,7 @@ function uwp_maybe_check_recaptcha($form){
             // remove the original spinner
             jQuery('.uwp-auth-modal .modal-content button[type="submit"] i.fa-spin,.uwp-auth-modal .modal-content button[type="submit"] svg.fa-spin').remove();
 
-            // bail and add warning if still no recaptcha after 5 loops
+            // bail and add warning if still no recaptcha after 5 loops`
             if(uwp_recaptcha_loops>=6){
                 jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').prop('disabled', false);
                 jQuery('.uwp-auth-modal .modal-content .uwp_register_submit').prop('disabled', false);
@@ -538,12 +538,12 @@ function uwp_modal_register_form_process(){
                         }
                     }, 1000);
                 }else{
-                    jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
+                    jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data.message);
                 }
 
 
             }else if(data.success===false){
-                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
+                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data.message);
                 $button.html($button_text).prop('disabled', false);// enable submit
                 uwp_maybe_reset_recaptcha();
             }

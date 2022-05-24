@@ -250,7 +250,7 @@ if ( ! class_exists( 'UsersWP_Settings_Email', false ) ) :
 
 					array(
 						'name' => __('Enable email', 'userswp'),
-						'desc' => __('Send an email to user for when successfull registration.', 'userswp'),
+						'desc' => __('Send an email to user on successful registration.', 'userswp'),
 						'id' => 'registration_success_email',
 						'type' => 'checkbox',
 						'default' => 1,
