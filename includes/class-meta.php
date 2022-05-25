@@ -80,6 +80,7 @@ class UsersWP_Meta {
                 case 'username': $value = $user_data->user_login; break;
                 case 'user_nicename': $value = $user_data->user_nicename; break;
                 case 'bio': $value = $user_data->description; break;
+                case 'uwp_language': $value = $user_data->locale; break;
                 default :
 					$obj_key = $user_id.'_'.$key;
 	                $row = wp_cache_get( $obj_key, 'uwp_usermeta' );

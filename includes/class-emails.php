@@ -316,6 +316,8 @@ class UsersWP_Mails {
 					'[#to_name#]'         => esc_attr( $user_data->display_name ),
 					'[#user_login#]'      => esc_attr( $user_data->user_login ),
 					'[#user_name#]'       => esc_attr( $user_data->display_name ),
+					'[#first_name#]'       => esc_attr( $user_data->first_name ),
+					'[#last_name#]'       => esc_attr( $user_data->last_name ),
 					'[#username#]'        => esc_attr( $user_data->user_login ),
 					'[#user_email#]'      => sanitize_email( $user_data->user_email ),
 					'[#profile_link#]'    => esc_url( $profile_link ),

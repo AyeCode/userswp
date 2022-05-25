@@ -39,7 +39,7 @@ function check_register_form_field( $var ) {
 /**
  * Returns the register form validate-able fields.
  *
- * @param int $role_id Role ID from role addons. Default 0.
+ * @param int $form_id  Form ID Default 1.
  *
  * @return      array                   Validate-able fields.
  * @since       1.0.0
@@ -50,7 +50,7 @@ function get_register_validate_form_fields( $form_id = 1 ) {
 	global $wpdb;
 	$table_name        = uwp_get_table_prefix() . 'uwp_form_fields';
 	$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
-	$fields = $wpdb->get_results( $wpdb->prepare( "SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.for_admin_use != '1' AND fields.is_register_field = '1' AND extras.form_id = %s ORDER BY extras.sort_order ASC", array( 'account', $form_id ) ) );
+	$fields = $wpdb->get_results( $wpdb->prepare( "SELECT fields.* FROM " . $table_name . " fields JOIN " . $extras_table_name . " extras ON extras.site_htmlvar_name = fields.htmlvar_name WHERE fields.form_type = %s AND fields.field_type != 'fieldset' AND fields.field_type != 'file' AND fields.is_active = '1' AND fields.for_admin_use != '1' AND fields.is_register_field = '1' AND fields.form_id = %s ORDER BY extras.sort_order ASC", array( 'account', $form_id ) ) );
 	$fields = apply_filters( 'uwp_get_register_validate_form_fields', $fields, $form_id );
 
 	return $fields;

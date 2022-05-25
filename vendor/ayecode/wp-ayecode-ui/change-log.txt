@@ -1,3 +1,10 @@
+= 0.1.72 =
+* Input now has "size" option: sm, small, lg, large - ADDED
+* Input now has "clear_icon" that will show a clear icon when field has value if set to true - ADDED
+
+= 0.1.71 =
+* TikTok class added for .btn-tiktok - ADDED
+
 = 0.1.70 =
 * select2 can sometimes double initiate - FIXED
 

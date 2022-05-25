@@ -54,6 +54,11 @@
   @include button-variant($brand-vkontakte, $white);
 }
 
+.btn-tiktok {
+  @include button-variant($brand-tiktok, $white);
+  color: $white;
+}
+
 
 .btn-circle {
   border-radius: 100%;

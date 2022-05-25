@@ -537,7 +537,7 @@ class UsersWP_Forms {
 				)
 			);
 			if ( wp_doing_ajax() ) {
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			} else {
 				$uwp_notices[] = array( 'register' => $message );
 
@@ -553,7 +553,7 @@ class UsersWP_Forms {
 				)
 			);
 			if ( wp_doing_ajax() ) {
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			} else {
 				$uwp_notices[] = array( 'register' => $message );
 
@@ -568,7 +568,7 @@ class UsersWP_Forms {
 				)
 			);
 			if ( wp_doing_ajax() ) {
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			} else {
 				$uwp_notices[] = array( 'register' => $message );
 
@@ -593,7 +593,7 @@ class UsersWP_Forms {
 				)
 			);
 			if ( wp_doing_ajax() ) {
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			} else {
 				$uwp_notices[] = array( 'register' => $message );
 
@@ -610,7 +610,7 @@ class UsersWP_Forms {
 				)
 			);
 			if ( wp_doing_ajax() ) {
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			} else {
 				$uwp_notices[] = array( 'register' => $message );
 
@@ -683,7 +683,7 @@ class UsersWP_Forms {
 					)
 				);
 				if ( wp_doing_ajax() ) {
-					wp_send_json_error( $message );
+					wp_send_json_error( array( 'message' => $message) );
 				} else {
 					$uwp_notices[] = array( 'register' => $message );
 
@@ -711,7 +711,7 @@ class UsersWP_Forms {
 				)
 			);
 			if ( wp_doing_ajax() ) {
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			} else {
 				$uwp_notices[] = array( 'register' => $message );
 
@@ -755,7 +755,7 @@ class UsersWP_Forms {
 				)
 			);
 			if ( wp_doing_ajax() ) {
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			} else {
 				$uwp_notices[] = array( 'register' => $message );
 
@@ -770,7 +770,7 @@ class UsersWP_Forms {
 				)
 			);
 			if ( wp_doing_ajax() ) {
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			} else {
 				$uwp_notices[] = array( 'register' => $message );
 
@@ -865,7 +865,7 @@ class UsersWP_Forms {
 				)
 			);
 			if ( wp_doing_ajax() ) {
-				wp_send_json_error( $message );
+				wp_send_json_error( array( 'message' => $message) );
 			} else {
 				$uwp_notices[] = array( 'register' => $message );
 				return;
@@ -910,7 +910,7 @@ class UsersWP_Forms {
 				);
 				
 			    if ( wp_doing_ajax() ) {
-					wp_send_json_error( $message );
+					wp_send_json_error( array( 'message' => $message) );
 				} else {
 					$uwp_notices[] = array( 'register' => $message );
 				}
@@ -983,7 +983,7 @@ class UsersWP_Forms {
 			do_action( 'uwp_after_process_register', $result, $user_id );
 
 			if ( wp_doing_ajax() ) {
-				wp_send_json_success( $message );
+				wp_send_json_success( array( 'message' => $message) );
 			} else {
 				$uwp_notices[] = array( 'register' => $message );
 			}
@@ -1040,6 +1040,9 @@ class UsersWP_Forms {
 			return true;
 		} else {
 			foreach ( $data as $key => $value ) {
+			    if('uwp_language' == $key){
+			        update_user_meta($user_id, 'locale', $value);
+			    }
 				uwp_update_usermeta( $user_id, $key, $value );
 			}
 
@@ -4009,6 +4012,9 @@ class UsersWP_Forms {
 		//Normal fields
 		$fields = $wpdb->get_results( "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND field_type != 'fieldset' ORDER BY sort_order ASC" );
 		if ( $fields ) {
+		    if(isset($_POST['locale'])){
+		          $_POST['uwp_language'] = sanitize_text_field($_POST['locale']);
+		    }
 			$result = uwp_validate_fields( $_POST, 'account', $fields );
 			if ( is_wp_error( $result ) ) {
 				die( $result->get_error_message() );
@@ -4125,6 +4131,117 @@ class UsersWP_Forms {
 			</div>
 
 			<?php
+			$html = ob_get_clean();
+		}
+
+		return $html;
+	}
+
+	/**
+	 * Form field template for language field.
+	 *
+	 * @param string $html      Form field html
+	 * @param object $field     Field info.
+	 * @param string $value     Form field default value.
+	 * @param string $form_type Form type
+	 *
+	 * @return      string                          Modified form field html.
+	 * @package     userswp
+	 *
+	 * @since       1.0.0
+	 */
+	public function form_input_uwp_language( $html, $field, $value, $form_type ) {
+
+		// If no html then we run the standard output.
+		if ( empty( $html ) ) {
+
+			$design_style    = uwp_get_option( "design_style", "bootstrap" );
+			$bs_form_group   = $design_style ? "form-group m-0" : "";
+			$bs_sr_only      = $design_style ? "sr-only" : "";
+			$bs_form_control = $design_style ? "form-control" : "";
+			$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
+			$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
+
+			ob_start(); // Start  buffering;
+
+			?>
+            <div id="<?php echo esc_attr($field->htmlvar_name); ?>_row"
+                 class="<?php if ( $field->is_required ) {
+				     echo 'required_field';
+			     } ?> uwp_clear <?php echo esc_attr( $bs_form_group. ' '.$field->css_class ); ?>">
+
+				<?php
+				$site_title = uwp_get_form_label( $field );
+				if ( ! is_admin() && !wp_doing_ajax() ) { ?>
+                    <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
+						<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+						<?php if ( $field->is_required ) {
+							echo '<span class="text-danger">*</span>';
+						} ?>
+                    </label>
+				<?php } ?>
+
+				<?php
+				if ( empty( $field->default_value ) ) {
+                    $field->default_value = 'site-default';
+				}
+
+				// if value empty set the default
+				if ( $value == '' && isset( $field->default_value ) && $field->default_value ) {
+					$value = $field->default_value;
+				}
+
+				require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+				$translations = wp_get_available_translations();
+				$available_languages = get_available_languages();
+				$languages = array('site-default' => __( 'Site Default', 'userswp' ));
+
+                foreach ( $available_languages as $locale ) {
+                    if ( isset( $translations[ $locale ] ) ) {
+                        $translation = $translations[ $locale ];
+                        $languages[$translation['language']] = $translation['native_name'];
+
+                        // Remove installed language from available translations.
+                        unset( $translations[ $locale ] );
+                    } else {
+                        $languages[$locale] = $translation[$locale];
+                    }
+                }
+
+			if ( $design_style ) {
+
+				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
+
+				echo aui()->select( array(
+					'id'              => $field->htmlvar_name,
+					'name'            => $field->htmlvar_name,
+					'placeholder'     => uwp_get_field_placeholder( $field ),
+					'title'           => $site_title,
+					'value'           => $value,
+					'required'        => $field->is_required,
+					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
+					'help_text'       => uwp_get_field_description( $field ),
+					'label'           => $site_title . $required,
+					'options'         => $languages,
+					'select2'         => true,
+					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+				) );
+			} else {
+				    ?>
+                <select name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $field->htmlvar_name; ?>"
+                        class="uwp_textfield aui-select2 <?php echo esc_attr( $bs_form_control ); ?>"
+                        title="<?php echo $site_title; ?>"
+                        data-placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+                ><?php echo $select_options; ?>
+                </select>
+                <span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+                <?php if ( $field->is_required ) { ?>
+                    <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+                <?php }
+			}
+
+
 			$html = ob_get_clean();
 		}
 
