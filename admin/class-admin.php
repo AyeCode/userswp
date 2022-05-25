@@ -540,7 +540,7 @@ class UsersWP_Admin {
 		global $wpdb;
 		$table_name      = uwp_get_table_prefix() . 'uwp_form_fields';
 		$form_id = uwp_get_register_form_id( $user->ID );
-		$excluded_fields = apply_filters( 'uwp_exclude_edit_profile_fields', array('bio', 'register_gdpr', 'register_tos') );
+		$excluded_fields = apply_filters( 'uwp_exclude_edit_profile_fields', array('bio', 'register_gdpr', 'register_tos', 'uwp_language', 'multisite_site_title', 'multisite_site_address') );
 		$query           = $wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND is_default = '0' AND form_id = %d", $form_id);
 		if ( is_array( $excluded_fields ) && count( $excluded_fields ) > 0 ) {
 			$query .= " AND htmlvar_name NOT IN ('" . implode( "','", $excluded_fields ) . "')";
