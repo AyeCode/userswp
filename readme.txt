@@ -35,7 +35,7 @@ Today UsersWP is by far the simplest solution available to manage users on WordP
 * Authorbox
 * Custom menu items like login/logout links and links to relevant pages.
 
-All the above elements can be added to your website via Gutenberg Blocks, Widgeets (that can be used with most page builders) or Shortcodes.
+All the above elements can be added to your website via Gutenberg Blocks, Widgets (that can be used with most page builders) or Shortcodes.
 
 After activation all pages are created with the correct shortcodes so that you are good to go in seconds.
 
