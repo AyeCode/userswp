@@ -974,9 +974,10 @@ class UsersWP_Form_Builder {
 			'defaults'   => array(
 				'admin_title'   => 'Select Language',
 				'site_title'    => 'Select Language',
+				'form_label'    => __( 'Site Language', 'userswp' ),
 				'htmlvar_name'  => 'uwp_language',
 				'is_active'     => 1,
-				'default_value' => '',
+				'default_value' => 'site-default',
 				'is_required'   => 0,
 				'option_values' => '',
 				'required_msg'  => '',

@@ -4182,6 +4182,10 @@ class UsersWP_Forms {
 				<?php } ?>
 
 				<?php
+				if ( empty( $field->default_value ) ) {
+                    $field->default_value = 'site-default';
+				}
+
 				// if value empty set the default
 				if ( $value == '' && isset( $field->default_value ) && $field->default_value ) {
 					$value = $field->default_value;
@@ -4189,15 +4193,20 @@ class UsersWP_Forms {
 
 				require_once ABSPATH . 'wp-admin/includes/translation-install.php';
 				$translations = wp_get_available_translations();
-				$select_options = '';$translations_opts = array();
+				$available_languages = get_available_languages();
+				$languages = array('site-default' => __( 'Site Default', 'userswp' ));
 
-				if($translations){
-                    foreach ( $translations as $translation ) {
-                        $translations_opts[$translation['language']] = $translation['native_name'];
-                        $selected     = $translation['language'] == $value ? 'selected="selected"' : '';
-                        $select_options .= '<option value="' . esc_attr( $translation['language'] ) . '" ' . $selected . '>' . $translation['native_name'] . '</option>';
+                foreach ( $available_languages as $locale ) {
+                    if ( isset( $translations[ $locale ] ) ) {
+                        $translation = $translations[ $locale ];
+                        $languages[$translation['language']] = $translation['native_name'];
+
+                        // Remove installed language from available translations.
+                        unset( $translations[ $locale ] );
+                    } else {
+                        $languages[$locale] = $translation[$locale];
                     }
-				}
+                }
 
 			if ( $design_style ) {
 
@@ -4214,7 +4223,7 @@ class UsersWP_Forms {
 					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 					'help_text'       => uwp_get_field_description( $field ),
 					'label'           => $site_title . $required,
-					'options'         => $translations_opts,
+					'options'         => $languages,
 					'select2'         => true,
 					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
 				) );
