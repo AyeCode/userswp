@@ -2019,7 +2019,19 @@ class UsersWP_Forms {
 
 		if ( isset( $result['email'] ) && $user_data->user_email !== trim($result['email']) ) {
 
-				$hash            = md5( $result['email'] . time() . wp_rand() );
+                if(email_exists(trim($result['email']))){
+                    $message       = aui()->alert( array(
+                        'type'    => 'error',
+                        'content' => __( 'This email is already registered, please choose another one.', 'userswp' )
+                        )
+                    );
+
+                    $uwp_notices[] = array( 'account' => $message );
+                    return;
+
+                }
+
+		        $hash            = md5( $result['email'] . time() . wp_rand() );
 				$new_admin_email = array(
 					'hash'     => $hash,
 					'newemail' => $result['email'],
@@ -2071,7 +2083,7 @@ class UsersWP_Forms {
 			$uwp_notices[] = array( 'account' => $message );
         }
 
-		do_action( 'uwp_after_process_account', $data );
+		do_action( 'uwp_after_process_account', $data, $user_id );
 
 	}
 

@@ -104,9 +104,9 @@ class UWP_Reset_Widget extends WP_Super_Duper {
 
         echo '</div>';
 
-	    $output = ob_get_clean();
-
 	    uwp_password_strength_inline_js();
+
+	    $output = ob_get_clean();
 
         return trim($output);
 
