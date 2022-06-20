@@ -271,7 +271,7 @@ class UsersWP_Forms {
 				wp_die(  __( 'Something went wrong. Please contact site admin.', 'userswp' ), 403 );
 			}
 
-			$cropped = uwp_resizeThumbnailImage( $thumb_image_location, $image_url, $x, $y, $w, $h, $scale );
+			$cropped = uwp_resizeThumbnailImage( $thumb_image_location, $image_path, $x, $y, $w, $h, $scale );
 			$cropped = str_replace( $upload_path, $upload_url, $cropped );
 
 			// Remove previous avatar/banner
