@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.6 =
+* Some servers fail to crop images - FIXED
+
 = 1.2.3.5 =
 * User locale language selection custom field for multilingual compatibility - ADDED
 * AyeCode UI updated to v0.1.72 - CHANGED
