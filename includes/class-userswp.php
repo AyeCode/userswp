@@ -628,7 +628,7 @@ final class UsersWP {
 	 * @param $instance
 	 */
 	public function load_pages_actions_and_filters( $instance ) {
-		add_action( 'wp_initialize_site', array( $instance, 'wpmu_generate_default_pages_on_new_site' ), 10, 1 );
+		add_action( 'wpmu_new_blog', array( $instance, 'wpmu_generate_default_pages_on_new_site' ), 10, 1 );
 		add_filter( 'display_post_states', array( $instance, 'add_display_post_states' ), 10, 2 );
 	}
 
