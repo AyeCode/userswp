@@ -271,7 +271,7 @@ class UsersWP_Forms {
 				wp_die(  __( 'Something went wrong. Please contact site admin.', 'userswp' ), 403 );
 			}
 
-			$cropped = uwp_resizeThumbnailImage( $thumb_image_location, $image_url, $x, $y, $w, $h, $scale );
+			$cropped = uwp_resizeThumbnailImage( $thumb_image_location, $image_path, $x, $y, $w, $h, $scale );
 			$cropped = str_replace( $upload_path, $upload_url, $cropped );
 
 			// Remove previous avatar/banner
@@ -2019,7 +2019,19 @@ class UsersWP_Forms {
 
 		if ( isset( $result['email'] ) && $user_data->user_email !== trim($result['email']) ) {
 
-				$hash            = md5( $result['email'] . time() . wp_rand() );
+                if(email_exists(trim($result['email']))){
+                    $message       = aui()->alert( array(
+                        'type'    => 'error',
+                        'content' => __( 'This email is already registered, please choose another one.', 'userswp' )
+                        )
+                    );
+
+                    $uwp_notices[] = array( 'account' => $message );
+                    return;
+
+                }
+
+		        $hash            = md5( $result['email'] . time() . wp_rand() );
 				$new_admin_email = array(
 					'hash'     => $hash,
 					'newemail' => $result['email'],
@@ -2071,7 +2083,7 @@ class UsersWP_Forms {
 			$uwp_notices[] = array( 'account' => $message );
         }
 
-		do_action( 'uwp_after_process_account', $data );
+		do_action( 'uwp_after_process_account', $data, $user_id );
 
 	}
 
