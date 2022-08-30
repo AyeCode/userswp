@@ -160,29 +160,24 @@
         },
         {
             "name": "ayecode/wp-font-awesome-settings",
-            "version": "1.0.13",
-            "version_normalized": "1.0.13.0",
+            "version": "1.0.15",
+            "version_normalized": "1.0.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/wp-font-awesome-settings.git",
-                "reference": "a7a11ee4290674ec214d1fe694139af275350402"
+                "reference": "9692a09d7c385d26d157529cf34a03f2987c21a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/a7a11ee4290674ec214d1fe694139af275350402",
-                "reference": "a7a11ee4290674ec214d1fe694139af275350402",
+                "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/9692a09d7c385d26d157529cf34a03f2987c21a3",
+                "reference": "9692a09d7c385d26d157529cf34a03f2987c21a3",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "~1.0",
                 "php": ">=5.3.0"
             },
-            "require-dev": {
-                "dealerdirect/phpcodesniffer-composer-installer": "*",
-                "squizlabs/php_codesniffer": "^3.2",
-                "wp-coding-standards/wpcs": "*"
-            },
-            "time": "2021-07-13T15:09:44+00:00",
+            "time": "2022-08-04T13:29:55+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -210,7 +205,7 @@
             ],
             "support": {
                 "issues": "https://github.com/AyeCode/wp-font-awesome-settings/issues",
-                "source": "https://github.com/AyeCode/wp-font-awesome-settings/tree/1.0.13"
+                "source": "https://github.com/AyeCode/wp-font-awesome-settings/tree/1.0.15"
             },
             "install-path": "../ayecode/wp-font-awesome-settings"
         },
