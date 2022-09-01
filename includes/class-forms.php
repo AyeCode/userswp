@@ -1854,9 +1854,10 @@ class UsersWP_Forms {
 		$user_data = check_password_reset_key( $key, $login );
 
 		if ( is_wp_error( $user_data ) ) {
+		    $error = apply_filters('uwp_reset_password_error_message', $user_data->get_error_message(), $user_data);
 			$message       = aui()->alert( array(
 					'type'    => 'error',
-					'content' => $user_data->get_error_message()
+					'content' => $error
 				)
 			);
 			$uwp_notices[] = array( 'reset' => $message );
@@ -3678,7 +3679,7 @@ class UsersWP_Forms {
 
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
-				$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
+				$required_msg = (!empty( $field->required_msg ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
 				$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
 
 				echo aui()->input( array(
