@@ -1,14 +1,14 @@
-=== UsersWP - User Registration & User Profile  ===
+=== UsersWP - Front-end login form, User Registration, User Profile & Members Directory plugin for WordPress  ===
 Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
-Tags: login form, registration, registration form, user profile, user registration
+Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.0
 Stable tag: 1.2.3.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Light weight frontend user registration and login plugin.
+Light weight Front-end login form, User Registration, User Profile and Members Directory plugin.
 
 == Description ==
 
