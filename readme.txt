@@ -146,6 +146,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.7 =
+* AyeCode UI updated to v0.1.75 - CHANGED
+* Super Duper updated to v1.1.1 - CHANGED
+
 = 1.2.3.6 =
 * Some servers fail to crop images - FIXED
 * Show error message when updating account details with existing user email. - CHANGED

@@ -1,3 +1,14 @@
+= 1.1.1 =
+* props.id deprecated and replaced with props.clientId, this could cause issues with wrong content displayed - FIXED
+* We will now attempt to auto-recover all blocks - ADDED
+* Nested blocks support -  ADDED
+* New input types supported for blocks 'image' and 'images' - ADDED
+* Many helper functions added for input arguments - ADDED
+* Font Awesome icons for block icons updated to  5.15.4 - UPDATED
+
+= 1.0.30 =
+* Block icon not loading when WordPress installed on sub-directory - FIXED
+
 = 1.0.29 =
 * Shortcode button not working in editor on Divi theme builder - FIXED
 

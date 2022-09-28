@@ -13,11 +13,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 *
 	 * Class WP_Super_Duper
 	 * @since 1.0.16 change log moved to file change-log.txt - CHANGED
-	 * @ver 1.0.19
+	 * @ver 1.1.1
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.29";
+		public $version = "1.1.1";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -42,7 +42,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			$sd_widgets[ $options['base_id'] ] = array(
 				'name'       => $options['name'],
-				'class_name' => $options['class_name']
+				'class_name' => $options['class_name'],
+				'output_types' => !empty($options['output_types']) ? $options['output_types'] : array()
 			);
 			$this->base_id                     = $options['base_id'];
 			// lets filter the options before we do anything
@@ -54,15 +55,28 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			$this->base_id   = $options['base_id'];
 			$this->arguments = isset( $options['arguments'] ) ? $options['arguments'] : array();
 
+            // nested blocks can't work as a widget
+            if(!empty($this->options['nested-block'])){
+                if(empty($this->options['output_types'])){
+                    $this->options['output_types'] = array('shortcode','block');
+                }elseif (($key = array_search('widget', $this->options['output_types'])) !== false) {
+                    unset($this->options['output_types'][$key]);
+                }
+            }
+
 			// init parent
-			parent::__construct( $options['base_id'], $options['name'], $options['widget_ops'] );
+			if(empty($this->options['output_types']) || in_array('widget',$this->options['output_types'])){
+                parent::__construct( $options['base_id'], $options['name'], $options['widget_ops'] );
+			}
+
 
 			if ( isset( $options['class_name'] ) ) {
 				// register widget
 				$this->class_name = $options['class_name'];
 
-				// register shortcode
-				$this->register_shortcode();
+				// register shortcode, this needs to be done even for blocks and widgets
+                $this->register_shortcode();
+
 
 				// Fusion Builder (avada) support
 				if ( function_exists( 'fusion_builder_map' ) ) {
@@ -70,7 +84,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 
 				// register block
-				add_action( 'admin_enqueue_scripts', array( $this, 'register_block' ) );
+				if(empty($this->options['output_types']) || in_array('block',$this->options['output_types'])){
+				    add_action( 'admin_enqueue_scripts', array( $this, 'register_block' ) );
+                }
 			}
 
 			// add the CSS and JS we need ONCE
@@ -117,6 +133,16 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			do_action( 'wp_super_duper_widget_init', $options, $this );
+		}
+
+        /**
+         * The register widget function
+         * @return void
+         */
+		public function _register() {
+            if(empty($this->options['output_types']) || in_array('widget',$this->options['output_types'])){
+                parent::_register();
+			}
 		}
 
 		/**
@@ -247,6 +273,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			global $sd_widgets;
+
+//			print_r($sd_widgets);exit;
 			?>
 
 			<div class="sd-shortcode-left-wrap">
@@ -257,6 +285,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					echo '<select class="widefat" onchange="sd_get_shortcode_options(this);">';
 					echo "<option>" . __( 'Select shortcode' ) . "</option>";
 					foreach ( $sd_widgets as $shortcode => $class ) {
+						if(!empty($class['output_types']) && !in_array('shortcode', $class['output_types'])){ continue; }
 						echo "<option value='" . esc_attr( $shortcode ) . "'>" . esc_attr( $shortcode ) . " (" . esc_attr( $class['name'] ) . ")</option>";
 					}
 					echo "</select>";
@@ -357,10 +386,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Insert shortcode builder button to classic editor (not inside Gutenberg, not needed).
 		 *
-		 * @since 1.0.0
-		 *
 		 * @param string $editor_id Optional. Shortcode editor id. Default null.
 		 * @param string $insert_shortcode_function Optional. Insert shortcode function. Default null.
+		 *
+		 *@since 1.0.0
+		 *
 		 */
 		public static function shortcode_insert_button( $editor_id = '', $insert_shortcode_function = '' ) {
 			global $sd_widgets, $shortcode_insert_button_once;
@@ -429,8 +459,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Makes SD work with the siteOrigin page builder.
 		 *
-		 * @since 1.0.6
 		 * @return mixed
+		 *@since 1.0.6
 		 */
 		public static function siteorigin_js() {
 			ob_start();
@@ -501,9 +531,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					jQuery(document).on('open_dialog', function (w, e) {
 						setTimeout(function () {
 							if (jQuery('.so-panels-dialog-wrapper:visible .so-content.panel-dialog .sd-show-advanced').length) {
-								console.log('exists');
 								if (jQuery('.so-panels-dialog-wrapper:visible .so-content.panel-dialog .sd-show-advanced').val() == '1') {
-									console.log('true');
 									sd_so_init_widget('.so-panels-dialog-wrapper:visible .so-content.panel-dialog .sd-show-advanced', 'div');
 								}
 							}
@@ -527,10 +555,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Output the JS and CSS for the shortcode insert button.
 		 *
-		 * @since 1.0.6
-		 *
 		 * @param string $editor_id
 		 * @param string $insert_shortcode_function
+		 *
+		 *@since 1.0.6
+		 *
 		 */
 		public static function shortcode_insert_button_script( $editor_id = '', $insert_shortcode_function = '' ) {
 			?>
@@ -1100,7 +1129,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				 * Check a form to see what items should be shown or hidden.
 				 */
 				function sd_show_hide(form) {
-					console.log('show/hide');
 					jQuery(form).find(".sd-argument").each(function () {
 
 						var $element_require = jQuery(this).data('element_require');
@@ -1132,8 +1160,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				 * Initialise a individual widget.
 				 */
 				function sd_init_widget($this, $selector) {
-					console.log($selector);
-
 					if (!$selector) {
 						$selector = 'form';
 					}
@@ -1369,11 +1395,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				/**
 				 * Filters the settings for a particular widget args.
 				 *
-				 * @since 1.0.28
-				 *
 				 * @param array          $args      The current widget instance's settings.
 				 * @param WP_Super_Duper $widget    The current widget settings.
 				 * @param array          $_instance An array of default widget arguments.
+				 *
+				 *@since 1.0.28
+				 *
 				 */
 				$args = apply_filters( 'wp_super_duper_widget_display_callback', $args, $this, $_instance );
 
@@ -1468,9 +1495,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 *
 		 * @param $instance
 		 *
-		 * @since 1.0.12 Don't set checkbox default value if the value is empty.
-		 *
 		 * @return array
+		 *@since 1.0.12 Don't set checkbox default value if the value is empty.
+		 *
 		 */
 		public function argument_values( $instance ) {
 			$argument_values = array();
@@ -1502,9 +1529,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Set arguments in super duper.
 		 *
-		 * @since 1.0.0
-		 *
 		 * @return array Set arguments.
+		 *@since 1.0.0
+		 *
 		 */
 		public function set_arguments() {
 			return $this->arguments;
@@ -1513,9 +1540,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Get arguments in super duper.
 		 *
-		 * @since 1.0.0
-		 *
 		 * @return array Get arguments.
+		 *@since 1.0.0
+		 *
 		 */
 		public function get_arguments() {
 			if ( empty( $this->arguments ) ) {
@@ -1558,7 +1585,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			$show      = false;
 			$arguments = $this->get_arguments();
-			
+
 			if ( ! empty( $arguments ) ) {
 				foreach ( $arguments as $argument ) {
 					if ( isset( $argument['advanced'] ) && $argument['advanced'] ) {
@@ -1577,6 +1604,33 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @return string
 		 */
 		public function get_url() {
+			$url = $this->url;
+
+			if ( ! $url ) {
+				$content_dir = wp_normalize_path( untrailingslashit( WP_CONTENT_DIR ) );
+				$content_url = untrailingslashit( WP_CONTENT_URL );
+
+				// Replace http:// to https://.
+				if ( strpos( $content_url, 'http://' ) === 0 && strpos( plugins_url(), 'https://' ) === 0 ) {
+					$content_url = str_replace( 'http://', 'https://', $content_url );
+				}
+
+				// Check if we are inside a plugin
+				$file_dir = str_replace( "/includes", "", wp_normalize_path( dirname( __FILE__ ) ) );
+				$url = str_replace( $content_dir, $content_url, $file_dir );
+				$url = trailingslashit( $url );
+				$this->url = $url;
+			}
+
+			return $url;
+		}
+
+		/**
+		 * Get the url path to the current folder.
+		 *
+		 * @return string
+		 */
+		public function get_url_old() {
 
 			$url = $this->url;
 
@@ -1606,8 +1660,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 *
 		 * @param $icon
 		 *
-		 * @since 1.1.0
 		 * @return string
+		 *@since 1.1.0
 		 */
 		public function get_block_icon( $icon ) {
 
@@ -1661,17 +1715,339 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Output the JS for building the dynamic Guntenberg block.
 		 *
-		 * @since 1.0.4 Added block_wrap property which will set the block wrapping output element ie: div, span, p or empty for no wrap.
-		 * @since 1.0.9 Save numbers as numbers and not strings.
-		 * @since 1.1.0 Font Awesome classes can be used for icons.
 		 * @return mixed
+		 *@since 1.0.9 Save numbers as numbers and not strings.
+		 * @since 1.1.0 Font Awesome classes can be used for icons.
+		 * @since 1.0.4 Added block_wrap property which will set the block wrapping output element ie: div, span, p or empty for no wrap.
 		 */
 		public function block() {
+            global $sd_is_js_functions_loaded;
+
 			ob_start();
 
 			$show_advanced = $this->block_show_advanced();
+
+
 			?>
 			<script>
+
+			<?php
+			if(!$sd_is_js_functions_loaded){
+                $sd_is_js_functions_loaded = true;
+            ?>
+
+			/**
+ * Try to auto-recover blocks.
+ */
+function sd_auto_recover_blocks() {
+	var recursivelyRecoverInvalidBlockList = blocks => {
+		const _blocks = [...blocks]
+		let recoveryCalled = false
+		const recursivelyRecoverBlocks = willRecoverBlocks => {
+			willRecoverBlocks.forEach(_block => {
+				if (isInvalid(_block)) {
+					recoveryCalled = true
+					const newBlock = recoverBlock(_block)
+					for (const key in newBlock) {
+						_block[key] = newBlock[key]
+					}
+				}
+				if (_block.innerBlocks.length) {
+					recursivelyRecoverBlocks(_block.innerBlocks)
+				}
+			})
+		}
+
+		recursivelyRecoverBlocks(_blocks)
+		return [_blocks, recoveryCalled]
+	}
+
+	var recoverBlock = ({
+							name,
+							attributes,
+							innerBlocks
+						}) => wp.blocks.createBlock(name, attributes, innerBlocks);
+
+	var recoverBlocks = blocks => {
+		return blocks.map(_block => {
+			const block = _block
+
+			// If the block is a reusable block, recover the Stackable blocks inside it.
+			if (_block.name === 'core/block') {
+				const {
+					attributes: {
+						ref
+					}
+				} = _block
+				const parsedBlocks = wp.blocks.parse(wp.data.select('core').getEntityRecords('postType', 'wp_block', {
+					include: [ref]
+				})?.[0]?.content?.raw) || []
+
+				const [recoveredBlocks, recoveryCalled] = recursivelyRecoverInvalidBlockList(parsedBlocks)
+
+				if (recoveryCalled) {
+					console.log('Stackable notice: block ' + block.name + ' (' + block.clientId + ') was auto-recovered, you should not see this after saving your page.') // eslint-disable-line no-console
+					return {
+						blocks: recoveredBlocks,
+						isReusable: true,
+						ref,
+					}
+				}
+			}
+
+			if (block.innerBlocks && block.innerBlocks.length) {
+				const newInnerBlocks = recoverBlocks(block.innerBlocks)
+				if (newInnerBlocks.some(block => block.recovered)) {
+					block.innerBlocks = newInnerBlocks
+					block.replacedClientId = block.clientId
+					block.recovered = true
+				}
+			}
+
+			if (!block.isValid) {
+				const newBlock = recoverBlock(block)
+				newBlock.replacedClientId = block.clientId
+				newBlock.recovered = true
+				console.log('Stackable notice: block ' + block.name + ' (' + block.clientId + ') was auto-recovered, you should not see this after saving your page.') // eslint-disable-line no-console
+
+				return newBlock
+			}
+
+			return block
+		})
+	}
+
+	// Recover all the blocks that we can find.
+	var mainBlocks = recoverBlocks(wp.data.select('core/block-editor').getBlocks())
+
+	// Replace the recovered blocks with the new ones.
+	mainBlocks.forEach(block => {
+		if (block.isReusable && block.ref) {
+			// Update the reusable blocks.
+			wp.data.dispatch('core').editEntityRecord('postType', 'wp_block', block.ref, {
+				content: wp.blocks.serialize(block.blocks)
+			}).then(() => {
+				// But don't save them, let the user do the saving themselves. Our goal is to get rid of the block error visually.
+				// dispatch( 'core' ).saveEditedEntityRecord( 'postType', 'wp_block', block.ref )
+			})
+		}
+
+		if (block.recovered && block.replacedClientId) {
+			wp.data.dispatch('core/block-editor').replaceBlock(block.replacedClientId, block)
+		}
+	})
+}
+
+
+// Wait will window is loaded before calling.
+window.onload = function() {
+	sd_auto_recover_blocks();
+	// fire a second time incase of load delays.
+	setTimeout(function(){
+		sd_auto_recover_blocks();
+	}, 2000);
+};
+
+
+			/**
+			*
+* @param $args
+* @returns {*|{}}
+*/
+            function sd_build_aui_styles($args){
+
+                $styles = {};
+                // background color
+                if ( $args['bg'] !== undefined && $args['bg'] !== '' ) {
+                   if( $args['bg'] == 'custom-color' ){
+                       $styles['background-color']=  $args['bg_color'];
+                   }else  if( $args['bg'] == 'custom-gradient' ){
+                       $styles['background-image']=  $args['bg_gradient'];
+
+					    // use background on text
+						 if( $args['bg_on_text'] !== undefined && $args['bg_on_text'] ){
+							$styles['backgroundClip'] = "text";
+							$styles['WebkitBackgroundClip'] = "text";
+							$styles['text-fill-color'] = "transparent";
+							$styles['WebkitTextFillColor'] = "transparent";
+						 }
+                   }
+
+                }
+
+                if( $args['bg_image'] !== undefined && $args['bg_image'] !== '' ){
+                    var hasImage = true
+                    if($styles['background-color'] !== undefined && $args['bg'] == 'custom-color'){
+                           $styles['background-image'] = "url("+$args['bg_image']+")";
+                           $styles['background-blend-mode'] =  "overlay";
+                    }else if($styles['background-image'] !== undefined && $args['bg'] == 'custom-gradient'){
+                           $styles['background-image'] +=  ",url("+$args['bg_image']+")";
+                    }else if($args['bg'] !== undefined && $args['bg'] != '' && $args['bg'] != 'transparent' ){
+                           // do nothing as we alreay have a preset
+                           hasImage = false;
+                    }else{
+                           $styles['background-image'] = "url("+$args['bg_image']+")";
+                    }
+
+                    if( hasImage){
+                         $styles['background-size'] = "cover";
+
+						 if( $args['bg_image_fixed'] !== undefined && $args['bg_image_fixed'] ){
+							 $styles['background-attachment'] = "fixed";
+						 }
+                    }
+
+                    if( hasImage && $args['bg_image_xy'].x !== undefined && $args['bg_image_xy'].x.length){
+                          $styles['background-position'] =  ($args['bg_image_xy'].x * 100 ) + "% " + ( $args['bg_image_xy'].y * 100) + "%";
+                    }
+                }
+
+
+
+				// sticky offset top
+				if( $args['sticky_offset_top'] !== undefined && $args['sticky_offset_top'] !== '' ){
+					$styles['top'] =  $args['sticky_offset_top'];
+				}
+
+				// sticky offset bottom
+				if( $args['sticky_offset_bottom'] !== undefined && $args['sticky_offset_bottom'] !== '' ){
+					$styles['bottom'] =  $args['sticky_offset_bottom'];
+				}
+
+				// font size
+				if( $args['font_size_custom'] !== undefined && $args['font_size_custom'] !== '' ){
+					$styles['fontSize'] =  $args['font_size_custom'] + "rem";
+				}
+
+                return $styles;
+
+            }
+
+            function sd_build_aui_class($args){
+
+                $classes = [];
+
+                // margins
+	            if ( $args['mt'] !== undefined && $args['mt'] !== '' ) { $classes.push( "mt-" + $args['mt'] );  $mt = $args['mt']; }else{$mt = null;}
+	            if ( $args['mr'] !== undefined && $args['mr'] !== '' ) { $classes.push( "mr-" + $args['mr'] );  $mr = $args['mr']; }else{$mr = null;}
+	            if ( $args['mb'] !== undefined && $args['mb'] !== '' ) { $classes.push( "mb-" + $args['mb'] );  $mb = $args['mb']; }else{$mb = null;}
+	            if ( $args['ml'] !== undefined && $args['ml'] !== '' ) { $classes.push( "ml-" + $args['ml'] );  $ml = $args['ml']; }else{$ml = null;}
+
+                // margins tablet
+	            if ( $args['mt_md'] !== undefined && $args['mt_md'] !== '' ) { $classes.push( "mt-md-" + $args['mt_md'] );  $mt_md = $args['mt_md']; }else{$mt_md = null;}
+	            if ( $args['mr_md'] !== undefined && $args['mr_md'] !== '' ) { $classes.push( "mr-md-" + $args['mr_md'] );  $mt_md = $args['mr_md']; }else{$mr_md = null;}
+	            if ( $args['mb_md'] !== undefined && $args['mb_md'] !== '' ) { $classes.push( "mb-md-" + $args['mb_md'] );  $mt_md = $args['mb_md']; }else{$mb_md = null;}
+	            if ( $args['ml_md'] !== undefined && $args['ml_md'] !== '' ) { $classes.push( "ml-md-" + $args['ml_md'] );  $mt_md = $args['ml_md']; }else{$ml_md = null;}
+
+                // margins desktop
+                if ( $args['mt_lg'] !== undefined && $args['mt_lg'] !== '' ) { if($mt == null && $mt_md == null){ $classes.push( "mt-" + $args['mt_lg'] ); }else{$classes.push( "mt-lg-" + $args['mt_lg'] ); } }
+	            if ( $args['mr_lg'] !== undefined && $args['mr_lg'] !== '' ) { if($mr == null && $mr_md == null){ $classes.push( "mr-" + $args['mr_lg'] ); }else{$classes.push( "mr-lg-" + $args['mr_lg'] ); } }
+	            if ( $args['mb_lg'] !== undefined && $args['mb_lg'] !== '' ) { if($mb == null && $mb_md == null){ $classes.push( "mb-" + $args['mb_lg'] ); }else{$classes.push( "mb-lg-" + $args['mb_lg'] ); } }
+	            if ( $args['ml_lg'] !== undefined && $args['ml_lg'] !== '' ) { if($ml == null && $ml_md == null){ $classes.push( "ml-" + $args['ml_lg'] ); }else{$classes.push( "ml-lg-" + $args['ml_lg'] ); } }
+
+                // padding
+                if ( $args['pt'] !== undefined && $args['pt'] !== '' ) { $classes.push( "pt-" + $args['pt'] ); $pt = $args['pt']; }else{$pt = null;}
+	            if ( $args['pr'] !== undefined && $args['pr'] !== '' ) { $classes.push( "pr-" + $args['pr'] ); $pr = $args['pt']; }else{$pr = null;}
+	            if ( $args['pb'] !== undefined && $args['pb'] !== '' ) { $classes.push( "pb-" + $args['pb'] ); $pb = $args['pt']; }else{$pb = null;}
+	            if ( $args['pl'] !== undefined && $args['pl'] !== '' ) { $classes.push( "pl-" + $args['pl'] ); $pl = $args['pt']; }else{$pl = null;}
+
+                // padding tablet
+                if ( $args['pt_md'] !== undefined && $args['pt_md'] !== '' ) { $classes.push( "pt-md-" + $args['pt_md'] ); $pt_md = $args['pt_md']; }else{$pt_md = null;}
+	            if ( $args['pr_md'] !== undefined && $args['pr_md'] !== '' ) { $classes.push( "pr-md-" + $args['pr_md'] ); $pr_md = $args['pt_md']; }else{$pr_md = null;}
+	            if ( $args['pb_md'] !== undefined && $args['pb_md'] !== '' ) { $classes.push( "pb-md-" + $args['pb_md'] ); $pb_md = $args['pt_md']; }else{$pb_md = null;}
+	            if ( $args['pl_md'] !== undefined && $args['pl_md'] !== '' ) { $classes.push( "pl-md-" + $args['pl_md'] ); $pl_md = $args['pt_md']; }else{$pl_md = null;}
+
+                // padding desktop
+                if ( $args['pt_lg'] !== undefined && $args['pt_lg'] !== '' ) { if($pt == null && $pt_md == null){ $classes.push( "pt-" + $args['pt_lg'] ); }else{$classes.push( "pt-lg-" + $args['pt_lg'] ); } }
+	            if ( $args['pr_lg'] !== undefined && $args['pr_lg'] !== '' ) { if($pr == null && $pr_md == null){ $classes.push( "pr-" + $args['pr_lg'] ); }else{$classes.push( "pr-lg-" + $args['pr_lg'] ); } }
+	            if ( $args['pb_lg'] !== undefined && $args['pb_lg'] !== '' ) { if($pb == null && $pb_md == null){ $classes.push( "pb-" + $args['pb_lg'] ); }else{$classes.push( "pb-lg-" + $args['pb_lg'] ); } }
+	            if ( $args['pl_lg'] !== undefined && $args['pl_lg'] !== '' ) { if($pl == null && $pl_md == null){ $classes.push( "pl-" + $args['pl_lg'] ); }else{$classes.push( "pl-lg-" + $args['pl_lg'] ); } }
+
+				// row cols, mobile, tablet, desktop
+	            if ( $args['row_cols'] !== undefined && $args['row_cols'] !== '' ) { $classes.push( "row-cols-" + $args['row_cols'] );  $row_cols = $args['row_cols']; }else{$row_cols = null;}
+	            if ( $args['row_cols_md'] !== undefined && $args['row_cols_md'] !== '' ) { $classes.push( "row-cols-md-" + $args['row_cols_md'] );  $row_cols_md = $args['row_cols_md']; }else{$row_cols_md = null;}
+                if ( $args['row_cols_lg'] !== undefined && $args['row_cols_lg'] !== '' ) { if($row_cols == null && $row_cols_md == null){ $classes.push( "row-cols-" + $args['row_cols_lg'] ); }else{$classes.push( "row-cols-lg-" + $args['row_cols_lg'] ); } }
+
+				// columns , mobile, tablet, desktop
+	            if ( $args['col'] !== undefined && $args['col'] !== '' ) { $classes.push( "col-" + $args['col'] );  $col = $args['col']; }else{$col = null;}
+	            if ( $args['col_md'] !== undefined && $args['col_md'] !== '' ) { $classes.push( "col-md-" + $args['col_md'] );  $col_md = $args['col_md']; }else{$col_md = null;}
+                if ( $args['col_lg'] !== undefined && $args['col_lg'] !== '' ) { if($col == null && $col_md == null){ $classes.push( "col-" + $args['col_lg'] ); }else{$classes.push( "col-lg-" + $args['col_lg'] ); } }
+
+
+                // border
+                if ( $args['border'] === undefined || $args['border']=='')  { }
+                else if ( $args['border'] !== undefined && ( $args['border']=='none' || $args['border']==='0') ) { $classes.push( "border-0" ); }
+	            else if ( $args['border'] !== undefined ) { $classes.push( "border border-" + $args['border'] ); }
+
+                // border radius type
+              //  if ( $args['rounded'] !== undefined && $args['rounded'] !== '' ) { $classes.push($args['rounded']); }
+
+                // border radius size
+                if ( $args['rounded_size'] !== undefined && $args['rounded_size'] !== '' ) {
+                    $classes.push("rounded-" + $args['rounded_size']);
+                    // if we set a size then we need to remove "rounded" if set
+                    var index = $classes.indexOf("rounded");
+                    if (index !== -1) {
+                      $classes.splice(index, 1);
+                    }
+                }
+
+                // shadow
+               // if ( $args['shadow'] !== undefined && $args['shadow'] !== '' ) { $classes.push($args['shadow']); }
+
+                // background
+                if ( $args['bg'] !== undefined  && $args['bg'] !== '' ) { $classes.push("bg-" + $args['bg']); }
+
+                // text_color
+                if ( $args['text_color'] !== undefined && $args['text_color'] !== '' ) { $classes.push( "text-" + $args['text_color']); }
+
+                // text_align
+                if ( $args['text_justify'] !== undefined && $args['text_justify'] ) { $classes.push('text-justify'); }
+                else{
+                    if ( $args['text_align'] !== undefined && $args['text_align'] !== '' ) { $classes.push($args['text_align']); $text_align = $args['text_align']; }else{$text_align = null;}
+                    if ( $args['text_align_md'] !== undefined && $args['text_align_md'] !== '' ) { $classes.push($args['text_align_md']); $text_align_md = $args['text_align_md']; }else{$text_align_md = null;}
+                    if ( $args['text_align_lg'] !== undefined && $args['text_align_lg'] !== '' ) { if($text_align  == null && $text_align_md == null){ $classes.push($args['text_align_lg'].replace("-lg", "")); }else{$classes.push($args['text_align_lg']);} }
+                }
+
+				// display
+			  	if ( $args['display'] !== undefined && $args['display'] !== '' ) { $classes.push($args['display']); $display = $args['display']; }else{$display = null;}
+				if ( $args['display_md'] !== undefined && $args['display_md'] !== '' ) { $classes.push($args['display_md']); $display_md = $args['display_md']; }else{$display_md = null;}
+				if ( $args['display_lg'] !== undefined && $args['display_lg'] !== '' ) { if($display  == null && $display_md == null){ $classes.push($args['display_lg'].replace("-lg", "")); }else{$classes.push($args['display_lg']);} }
+
+				// bgtus - background transparent until scroll
+                if ( $args['bgtus'] !== undefined && $args['bgtus'] ) { $classes.push("bg-transparent-until-scroll"); }
+
+
+				// build classes from build keys
+				$build_keys = sd_get_class_build_keys();
+				if ( $build_keys.length ) {
+					$build_keys.forEach($key => {
+						if ( $key == 'font_size' && $args[ $key ] == 'custom' ) {
+							 return;
+						}
+						if ( $args[$key] !== undefined && $args[$key] !== '' ) { $classes.push($args[$key]); }
+					});
+				}
+
+                return $classes.join(" ");
+            }
+
+			function sd_get_class_build_keys(){
+				return <?php echo json_encode(sd_get_class_build_keys());?>;
+			}
+
+            <?php
+
+
+            }
+
+			if(method_exists($this,'block_global_js')){
+					echo $this->block_global_js();
+			}
+			?>
+
+jQuery(function() {
+
 				/**
 				 * BLOCK: Basic
 				 *
@@ -1682,7 +2058,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				 *        editor.css — Editor styles for the block.
 				 *        style.css  — Editor & Front end styles for the block.
 				 */
-				(function () {
+				(function (blocksx, elementx, blockEditor) {
 					var __ = wp.i18n.__; // The __() for internationalization.
 					var el = wp.element.createElement; // The wp.element.createElement() function to create elements.
 					var editable = wp.blocks.Editable;
@@ -1691,10 +2067,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					var is_fetching = false;
 					var prev_attributes = [];
 
+                    var InnerBlocks = blockEditor.InnerBlocks;
+
 					var term_query_type = '';
 					var post_type_rest_slugs = <?php if(! empty( $this->arguments ) && isset($this->arguments['post_type']['onchange_rest']['values'])){echo "[".json_encode($this->arguments['post_type']['onchange_rest']['values'])."]";}else{echo "[]";} ?>;
 					const taxonomies_<?php echo str_replace("-","_", $this->id);?> = [{label: "Please wait", value: 0}];
 					const sort_by_<?php echo str_replace("-","_", $this->id);?> = [{label: "Please wait", value: 0}];
+                    const MediaUpload = wp.blockEditor.MediaUpload;
 
 					/**
 					 * Register Basic Block.
@@ -1709,7 +2088,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					 *                             registered; otherwise `undefined`.
 					 */
 					registerBlockType('<?php echo str_replace( "_", "-", sanitize_title_with_dashes( $this->options['textdomain'] ) . '/' . sanitize_title_with_dashes( $this->options['class_name'] ) );  ?>', { // Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-						title: '<?php echo addslashes( $this->options['name'] ); ?>', // Block title.
+						apiVersion: 2,
+                        title: '<?php echo addslashes( $this->options['name'] ); ?>', // Block title.
 						description: '<?php echo addslashes( $this->options['widget_ops']['description'] )?>', // Block title.
 						icon: <?php echo $this->get_block_icon( $this->options['block-icon'] );?>,//'<?php echo isset( $this->options['block-icon'] ) ? esc_attr( $this->options['block-icon'] ) : 'shield-alt';?>', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 						supports: {
@@ -1719,12 +2099,41 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							}
 							?>
 						},
+						<?php
+						if ( isset( $this->options['block-label'] ) ) {
+						?>
+						__experimentalLabel( attributes, { context } ) {
+                            return <?php echo $this->options['block-label']; ?>;
+                        },
+                        <?php
+                        }
+                        ?>
 						category: '<?php echo isset( $this->options['block-category'] ) ? esc_attr( $this->options['block-category'] ) : 'common';?>', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 						<?php if ( isset( $this->options['block-keywords'] ) ) {
 						echo "keywords : " . $this->options['block-keywords'] . ",";
-					}?>
 
-						<?php
+//						// block hover preview.
+//						$example_args = array();
+//						if(!empty($this->arguments)){
+//							foreach($this->arguments as $key => $a_args){
+//								if(isset($a_args['example'])){
+//									$example_args[$key] = $a_args['example'];
+//								}
+//							}
+//						}
+//						$viewport_width = isset($this->options['example']['viewportWidth']) ? 'viewportWidth: '.absint($this->options['example']['viewportWidth']) : '';
+//						if( isset( $this->options['example'] ) && $this->options['example'] === false ){
+//							// no preview if set to false
+//						}elseif( !empty( $example_args ) ){
+//							echo "example : {attributes:{".$this->array_to_attributes( $example_args )."},$viewport_width},";
+//						}elseif( !empty( $this->options['example'] ) ){
+//							unset($this->options['example']['viewportWidth']);
+//							echo "example : {".$this->array_to_attributes( $this->options['example'] ).$viewport_width."},";
+//						}else{
+//							echo 'example : {'.$viewport_width.'},';
+//						}
+
+                        }
 
 						// maybe set no_wrap
 						$no_wrap = isset( $this->options['no_wrap'] ) && $this->options['no_wrap'] ? true : false;
@@ -1735,7 +2144,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							$this->options['block-wrap'] = '';
 						}
 
-
+						// maybe load the drag/drop functions.
+						$img_drag_drop = false;
 
 						$show_alignment = false;
 						// align feature
@@ -1762,7 +2172,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								echo "},";
 							}
 
+
+
 							foreach ( $this->arguments as $key => $args ) {
+
+								if( $args['type'] == 'image' ||  $args['type'] == 'images' ){
+									$img_drag_drop = true;
+								}
 
 								// set if we should show alignment
 								if ( $key == 'alignment' ) {
@@ -1771,7 +2187,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 								$extra = '';
 
-								if ( $args['type'] == 'checkbox' ) {
+								if ( $args['type'] == 'notice' ||  $args['type'] == 'tab' ) {
+									continue;
+								}
+								elseif ( $args['type'] == 'checkbox' ) {
 									$type    = 'boolean';
 									$default = isset( $args['default'] ) && $args['default'] ? 'true' : 'false';
 								} elseif ( $args['type'] == 'number' ) {
@@ -1787,9 +2206,25 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								} elseif ( $args['type'] == 'multiselect' ) {
 									$type    = 'array';
 									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
-								} else {
+								} elseif ( $args['type'] == 'image_xy' ) {
+									$type    = 'object';
+									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+								} elseif ( $args['type'] == 'image' ) {
 									$type    = 'string';
 									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+
+                                    // add a field for ID
+//                                    echo $key . "_id : {";
+//                                    echo "type : 'number',";
+//                                    echo "},";
+//                                    echo $key . "_xy : {";
+//                                    echo "type : 'object',";
+//                                    echo "},";
+
+								} else {
+									$type    = !empty($args['hidden_type']) ? esc_attr($args['hidden_type']) : 'string';
+									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+
 								}
 								echo $key . " : {";
 								echo "type : '$type',";
@@ -1810,12 +2245,104 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						edit: function (props) {
 
 
+<?php
+// only include the drag/drop functions if required.
+if( $img_drag_drop ){
+
+?>
+
+function enableDragSort(listClass) {
+	setTimeout(function(){
+		 const sortableLists = document.getElementsByClassName(listClass);
+		 Array.prototype.map.call(sortableLists, (list) => {enableDragList(list)});
+	}, 300);
+}
+
+function enableDragList(list) {
+  Array.prototype.map.call(list.children, (item) => {enableDragItem(item)});
+}
+
+function enableDragItem(item) {
+  item.setAttribute('draggable', true)
+  item.ondrag = handleDrag;
+  item.ondragend = handleDrop;
+}
+
+function handleDrag(item) {
+  const selectedItem = item.target,
+        list = selectedItem.parentNode,
+        x = event.clientX,
+        y = event.clientY;
+
+  selectedItem.classList.add('drag-sort-active');
+  let swapItem = document.elementFromPoint(x, y) === null ? selectedItem : document.elementFromPoint(x, y);
+
+  if (list === swapItem.parentNode) {
+    swapItem = swapItem !== selectedItem.nextSibling ? swapItem : swapItem.nextSibling;
+    list.insertBefore(selectedItem, swapItem);
+  }
+}
+
+function handleDrop(item) {
+
+	item.target.classList.remove('drag-sort-active');
+
+	const newOrder = [];
+	let $parent = item.target.parentNode;
+	let $field = $parent.dataset.field;
+	let $imgs = JSON.parse('[' + props.attributes[$field] + ']');
+	item.target.parentNode.classList.add('xxx');
+	$children = $parent.children;
+
+	Object.keys($children).forEach(function(key) {
+	  let $nKey = $children[key].dataset.index
+	  newOrder.push($imgs[$nKey]);
+	});
+
+	// @todo find out why we need to empty the value first otherwise the order is wrong.
+	props.setAttributes({ [$field]: '' });
+	setTimeout(function(){
+		props.setAttributes({ [$field]: JSON.stringify(newOrder).replace('[','').replace(']','') });
+	}, 100);
+
+}
+<?php } ?>
+
+							if (typeof(props.attributes.styleid) !== 'undefined'){
+								if(props.attributes.styleid==''){ props.setAttributes({ 'styleid': 'block-'+(Math.random() + 1).toString(36).substring(2) } ); }
+							}
+
+                            <?php
+                            if(!empty($this->options['block-edit-raw'])) {
+                                echo $this->options['block-edit-raw']; // strings have to be in single quotes, may cause issues
+                            }else{
+                            ?>
+
+function hasSelectedInnerBlock(props) {
+    const select = wp.data.select('core/editor');
+    const selected = select.getBlockSelectionStart();
+    const inner = select.getBlock(props.clientId).innerBlocks;
+    for (let i = 0; i < inner.length; i++) {
+        if (inner[i].clientId === selected || inner[i].innerBlocks.length && hasSelectedInnerBlock(inner[i])) {
+            return true;
+        }
+    }
+    return false;
+};
+
+const parentBlocksIDs = wp.data.select( 'core/block-editor' ).getBlockParents(props.clientId);
+const parentBlocks = wp.data.select('core/block-editor').getBlocksByClientId(parentBlocksIDs);
+// const isParentOfSelectedBlock = useSelect( ( select ) => wp.data.select( 'core/block-editor' ).hasSelectedInnerBlock( props.clientId, true ) ):
+    const block = wp.data.select('core/block-editor').getBlocksByClientId(props.clientId);//.[0].innerBlocks;
+    const childBlocks = block[0].innerBlocks;
+
+
 							var $value = '';
 							<?php
 							// if we have a post_type and a category then link them
 							if( isset($this->arguments['post_type']) && isset($this->arguments['category']) && !empty($this->arguments['category']['post_type_linked']) ){
 							?>
-							if(typeof(prev_attributes[props.id]) != 'undefined' ){
+							if(typeof(prev_attributes[props.clientId]) != 'undefined' ){
 								$pt = props.attributes.post_type;
 								if(post_type_rest_slugs.length){
 									$value = post_type_rest_slugs[0][$pt];
@@ -1828,7 +2355,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								}
 
 								// taxonomies
-								if( $value && 'post_type' in prev_attributes[props.id] && 'category' in prev_attributes[props.id] && run ){
+								if( $value && 'post_type' in prev_attributes[props.clientId] && 'category' in prev_attributes[props.clientId] && run ){
 									wp.apiFetch({path: "<?php if(isset($this->arguments['post_type']['onchange_rest']['path'])){echo $this->arguments['post_type']['onchange_rest']['path'];}else{'/wp/v2/"+$value+"/categories/?per_page=100';} ?>"}).then(terms => {
 										while (taxonomies_<?php echo str_replace("-","_", $this->id);?>.length) {
 										taxonomies_<?php echo str_replace("-","_", $this->id);?>.pop();
@@ -1848,7 +2375,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								}
 
 								// sort_by
-								if( $value && 'post_type' in prev_attributes[props.id] && 'sort_by' in prev_attributes[props.id] && run ){
+								if( $value && 'post_type' in prev_attributes[props.clientId] && 'sort_by' in prev_attributes[props.clientId] && run ){
 									var data = {
 										'action': 'geodir_get_sort_options',
 										'post_type': $pt
@@ -1874,29 +2401,36 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								}
 							}
 							<?php }?>
+// Get device type const.
+const { deviceType } = wp.data.useSelect( select => {
+        const { __experimentalGetPreviewDeviceType } = select( 'core/edit-site' ) ? select( 'core/edit-site' ) : select( 'core/edit-post' ) ; // for sie editor https://github.com/WordPress/gutenberg/issues/39248
 
-
+        return {
+            deviceType: __experimentalGetPreviewDeviceType(),
+        }
+    }, [] );
 							var content = props.attributes.content;
 
-							function onChangeContent() {
-
+							function onChangeContent($type) {
+// console.log(deviceType);
 								$refresh = false;
-
 								// Set the old content the same as the new one so we only compare all other attributes
-								if(typeof(prev_attributes[props.id]) != 'undefined'){
-									prev_attributes[props.id].content = props.attributes.content;
+								if(typeof(prev_attributes[props.clientId]) != 'undefined'){
+									prev_attributes[props.clientId].content = props.attributes.content;
 								}else if(props.attributes.content === ""){
 									// if first load and content empty then refresh
 									$refresh = true;
 								}
 
-								if ( ( !is_fetching &&  JSON.stringify(prev_attributes[props.id]) != JSON.stringify(props.attributes) ) || $refresh  ) {
+								if ( ( !is_fetching &&  JSON.stringify(prev_attributes[props.clientId]) != JSON.stringify(props.attributes) ) || $refresh  ) {
 
 									is_fetching = true;
+
 									var data = {
 										'action': 'super_duper_output_shortcode',
 										'shortcode': '<?php echo $this->options['base_id'];?>',
 										'attributes': props.attributes,
+										'block_parent_name': parentBlocks.length ? parentBlocks[parentBlocks.length - 1].name : '',
 										'post_id': <?php global $post; if ( isset( $post->ID ) ) {
 										echo $post->ID;
 									}else{echo '0';}?>,
@@ -1912,9 +2446,22 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 											env = "<div style='background:#0185ba33;padding: 10px;border: 4px #ccc dashed;'>" + "<?php _e( 'Placeholder for: ' );?>" + props.name + "</div>";
 										}
 
-										props.setAttributes({content: env});
+                                         <?php
+                                        if(!empty($this->options['nested-block'])){
+                                            ?>
+                                            // props.setAttributes({content: env});
 										is_fetching = false;
-										prev_attributes[props.id] = props.attributes;
+										prev_attributes[props.clientId] = props.attributes;
+                                             <?php
+                                        }else{
+                                        ?>
+                                       props.setAttributes({content: env});
+										is_fetching = false;
+										prev_attributes[props.clientId] = props.attributes;
+                                        <?php
+                                        }
+                                        ?>
+
 
 										// if AUI is active call the js init function
 										if (typeof aui_init === "function") {
@@ -1925,9 +2472,21 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 								}
 
+
 								return props.attributes.content;
 
 							}
+
+                            <?php
+                            if(!empty($this->options['block-edit-js'])) {
+                                echo  $this->options['block-edit-js'] ; // strings have to be in single quotes, may cause issues
+                            }
+
+
+
+                            ?>
+
+
 
 							return [
 
@@ -1974,38 +2533,103 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 									}
 
-									$arguments = $this->group_arguments( $this->arguments );
+								//	print_r( $this->arguments);
 
+									//echo '####';
+
+									$arguments = $this->group_arguments( $this->arguments );
+//print_r($arguments ); exit;
 									// Do we have sections?
 									$has_sections = $arguments == $this->arguments ? false : true;
 
 
 									if($has_sections){
 									$panel_count = 0;
+									$open_tab = '';
+
+									$open_tab_groups = array();
+									$used_tabs = array();
 									foreach($arguments as $key => $args){
-									?>
-									el(wp.components.PanelBody, {
-											title: '<?php esc_attr_e( $key ); ?>',
-											initialOpen: <?php if ( $panel_count ) {
-											echo "false";
-										} else {
-											echo "true";
-										}?>
-										},
-										<?php
 
+										$close_tab = false;
+										$close_tabs = false;
 
+										 if(!empty($this->options['block_group_tabs'])) {
+											foreach($this->options['block_group_tabs'] as $tab_name => $tab_args){
+												if(in_array($key,$tab_args['groups'])){
 
-										foreach ( $args as $k => $a ) {
+													$open_tab_groups[] = $key;
 
-											$this->block_row_start( $k, $a );
-											$this->build_block_arguments( $k, $a );
-											$this->block_row_end( $k, $a );
+													if($open_tab != $tab_name){
+														$tab_args['tab']['tabs_open'] = $open_tab == '' ? true : false;
+														$tab_args['tab']['open'] = true;
+
+														$this->block_tab_start( '', $tab_args );
+//														echo '###open'.$tab_name;print_r($tab_args);
+														$open_tab = $tab_name;
+														$used_tabs[] = $tab_name;
+													}
+
+													if($open_tab_groups == $tab_args['groups']){
+														//$open_tab = '';
+														$close_tab = true;
+														$open_tab_groups = array();
+
+//													print_r(array_keys($this->options['block_group_tabs']));echo '####';print_r($used_tabs);
+													if($used_tabs == array_keys($this->options['block_group_tabs'])){
+//														echo '@@@';
+															$close_tabs = true;
+														}
+													}
+
+												}
+											}
 										}
+
+//
+
+									//	print_r($arguments);exit;
+
 										?>
-									),
-									<?php
-									$panel_count ++;
+										el(wp.components.PanelBody, {
+												title: '<?php esc_attr_e( $key ); ?>',
+												initialOpen: <?php if ( $panel_count ) {
+												echo "false";
+											} else {
+												echo "true";
+											}?>
+											},
+											<?php
+
+
+
+											foreach ( $args as $k => $a ) {
+
+												$this->block_tab_start( $k, $a );
+												$this->block_row_start( $k, $a );
+												$this->build_block_arguments( $k, $a );
+												$this->block_row_end( $k, $a );
+												$this->block_tab_end( $k, $a );
+											}
+											?>
+										),
+										<?php
+										$panel_count ++;
+
+
+										if($close_tab || $close_tabs){
+											$tab_args = array(
+												'tab'	=> array(
+													'tabs_close' => $close_tabs,
+												'close' => true,
+												)
+
+											);
+											$this->block_tab_end( '', $tab_args );
+//											echo '###close'; print_r($tab_args);
+											$panel_count = 0;
+										}
+//
 
 									}
 									}else {
@@ -2034,25 +2658,28 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								// If the user sets block-output array then build it
 								if ( ! empty( $this->options['block-output'] ) ) {
 								$this->block_element( $this->options['block-output'] );
+							}elseif(!empty($this->options['block-edit-return'])){
+                                   echo $this->options['block-edit-return'];
 							}else{
 								// if no block-output is set then we try and get the shortcode html output via ajax.
 								?>
-								el('div', {
+								el('div', wp.blockEditor.useBlockProps({
 									dangerouslySetInnerHTML: {__html: onChangeContent()},
 									className: props.className,
 									style: {'minHeight': '30px'}
-								})
+								}))
 								<?php
 								}
 								?>
 							]; // end return
+
+							<?php
+                            } // end block-edit-raw else
+                            ?>
 						},
 
 						// The "save" property must be specified and must be a valid function.
 						save: function (props) {
-
-							//console.log(props);
-
 
 							var attr = props.attributes;
 							var align = '';
@@ -2065,10 +2692,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							if(! empty( $this->arguments )){
 
 							foreach($this->arguments as $key => $args){
+                               // if($args['type']=='tabs'){continue;}
 							?>
 							if (attr.hasOwnProperty("<?php echo esc_attr( $key );?>")) {
 								if ('<?php echo esc_attr( $key );?>' == 'html') {
 									$html = attr.<?php echo esc_attr( $key );?>;
+								} else if ('<?php echo esc_attr( $args['type'] );?>' == 'image_xy') {
+									content += " <?php echo esc_attr( $key );?>='{x:" + attr.<?php echo esc_attr( $key );?>.x + ",y:"+attr.<?php echo esc_attr( $key );?>.y +"}' ";
 								} else {
 									content += " <?php echo esc_attr( $key );?>='" + attr.<?php echo esc_attr( $key );?>+ "' ";
 								}
@@ -2080,11 +2710,17 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							?>
 							content += "]";
 
+                            <?php
+//                            if(!empty($this->options['nested-block'])){
+//                                ?>
+//                                $html = 'el( InnerBlocks.Content )';
+//                                <?php
+//                            }
+                            ?>
 							// if has html element
 							if ($html) {
 								content += $html + "[/<?php echo $this->options['base_id'];?>]";
 							}
-
 
 							// @todo should we add inline style here or just css classes?
 							if (attr.alignment) {
@@ -2100,7 +2736,49 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							}
 
 							<?php
-							if(isset( $this->options['block-wrap'] ) && $this->options['block-wrap'] == ''){
+//							if(!empty($this->options['nested-block'])){
+//                                ?x>
+//                              return el(
+//                                    'div',
+//                                    { className: props.className,
+//                                        style: {'minHeight': '300px','position':'relative','overflow':'hidden','backgroundImage': 'url(https://s.w.org/images/core/5.5/don-quixote-06.jpg)'}
+//                                    },
+//                                    el( InnerBlocks.Content ),
+//                                    el('div', {dangerouslySetInnerHTML: {__html: content}, className: align})
+//                                );
+//                                <x?php
+//							}else
+
+                            if(!empty($this->options['block-output'])){
+//                               echo "return";
+//                               $this->block_element( $this->options['block-output'], true );
+//                               echo ";";
+
+                               ?>
+                              return el(
+                                   '',
+                                   {},
+                                   el('', {dangerouslySetInnerHTML: {__html: content}}),
+                                   <?php $this->block_element( $this->options['block-output'], true ); ?>
+                                   el('', {dangerouslySetInnerHTML: {__html: "[/<?php echo $this->options['base_id'];?>]"}})
+                               );
+                                <?php
+
+							}elseif(!empty($this->options['block-save-return'])){
+                                   echo 'return ' . $this->options['block-save-return'];
+							}elseif(!empty($this->options['nested-block'])){
+                                ?>
+                              return el(
+                                   '',
+                                   {},
+                                   el('', {dangerouslySetInnerHTML: {__html: content+"\n"}}),
+                                   InnerBlocks.Content ? el( InnerBlocks.Content ) : '', // @todo i think we need a comma here
+                                   el('', {dangerouslySetInnerHTML: {__html: "[/<?php echo $this->options['base_id'];?>]"}})
+                               );
+                                <?php
+							}elseif(!empty( $this->options['block-save-return'] ) ){
+                                echo "return ". $this->options['block-edit-return'].";";
+							}elseif(isset( $this->options['block-wrap'] ) && $this->options['block-wrap'] == ''){
 							?>
 							return content;
 							<?php
@@ -2110,7 +2788,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							if (attr.hasOwnProperty("block_wrap")) {
 								block_wrap = attr.block_wrap;
 							}
-							return el(block_wrap, {dangerouslySetInnerHTML: {__html: content}, className: align});
+							return el(block_wrap, wp.blockEditor.useBlockProps.save( {dangerouslySetInnerHTML: {__html: content}, className: align} ));
 							<?php
 							}
 							?>
@@ -2118,7 +2796,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 						}
 					});
-				})();
+				})(
+                    window.wp.blocks,
+    window.wp.element,
+    window.wp.blockEditor
+				);
+
+                });
 			</script>
 			<?php
 			$output = ob_get_clean();
@@ -2133,6 +2817,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			), '', $output );
 		}
 
+
+
 		public function block_row_start($key, $args){
 
 			// check for row
@@ -2142,7 +2828,18 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 				// element require
 				$element_require = ! empty( $args['element_require'] ) ? $this->block_props_replace( $args['element_require'], true ) . " && " : "";
+                $device_type = ! empty( $args['device_type'] ) ? esc_attr($args['device_type']) : '';
+                $device_type_require = ! empty( $args['device_type'] ) ? " deviceType == '" . esc_attr($device_type) . "' && " : '';
+                $device_type_icon = '';
+                if($device_type=='Desktop'){
+                    $device_type_icon = '<span class="dashicons dashicons-desktop" style="font-size: 18px;"></span>';
+                }elseif($device_type=='Tablet'){
+                    $device_type_icon = '<span class="dashicons dashicons-tablet" style="font-size: 18px;"></span>';
+                }elseif($device_type=='Mobile'){
+                    $device_type_icon = '<span class="dashicons dashicons-smartphone" style="font-size: 18px;"></span>';
+                }
 				echo $element_require;
+                echo $device_type_require;
 
 					if(false){?><script><?php }?>
 						el('div', {
@@ -2151,8 +2848,16 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							<?php if(!empty($args['row']['title'])){ ?>
 							el('label', {
 									className: 'components-base-control__label',
+									style: {width:"100%"}
 								},
-								'<?php echo addslashes( $args['row']['title'] ); ?>'
+								el('span',{dangerouslySetInnerHTML: {__html: '<?php echo addslashes( $args['row']['title'] ) ?>'}}),
+								<?php if($device_type_icon){ ?>
+                                    deviceType == '<?php echo $device_type;?>' && el('span',{dangerouslySetInnerHTML: {__html: '<?php echo $device_type_icon; ?>'},title: deviceType + ": Set preview mode to change",style: {float:"right",color:"var(--wp-admin-theme-color)"}})
+								<?php
+                                }
+                                ?>
+
+
 							),
 							<?php }?>
 							<?php if(!empty($args['row']['desc'])){ ?>
@@ -2211,17 +2916,92 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 		}
 
+		public function block_tab_start($key, $args){
+
+			// check for row
+			if(!empty($args['tab'])){
+
+				if(!empty($args['tab']['tabs_open'])){
+
+					if(false){?><script><?php }?>
+
+el('div',{className: 'bsui'},
+
+						el('hr', {className: 'm-0'}), el(
+									wp.components.TabPanel,
+									{
+                                        activeClass: 'is-active',
+                                        className: 'btn-groupx',
+                                        initialTabName: '<?php echo addslashes( esc_attr( $args['tab']['key']) ); ?>',
+										tabs: [
+
+					<?php
+					if(false){?></script><?php }
+				}
+
+				if(!empty($args['tab']['open'])){
+
+					if(false){?><script><?php }?>
+							{
+												name: '<?php echo addslashes( esc_attr( $args['tab']['key']) ); ?>',
+												title: el('div', {dangerouslySetInnerHTML: {__html: '<?php echo addslashes( esc_attr( $args['tab']['title']) ); ?>'}}),
+												className: '<?php echo addslashes( esc_attr( $args['tab']['class']) ); ?>',
+												content: el('div',{}, <?php if(!empty($args['tab']['desc'])){ ?>el('p', {
+									className: 'components-base-control__help mb-0',
+									dangerouslySetInnerHTML: {__html:'<?php echo addslashes( $args['tab']['desc'] ); ?>'}
+								}),<?php }
+					if(false){?></script><?php }
+				}
+
+			}
+
+		}
+
+		public function block_tab_end($key, $args){
+
+			if(!empty($args['tab'])){
+				// maybe close
+				if(!empty($args['tab']['close'])){
+					echo ")}, /* tab close */";
+				}
+
+				if(!empty($args['tab']['tabs_close'])){
+					if(false){?><script><?php }?>
+							],
+									},
+									( tab ) => {
+
+									return tab.content;
+
+								}
+								)), /* tabs close */
+					<?php if(false){ ?></script><?php }
+				}
+			}
+		}
+
 		public function build_block_arguments( $key, $args ) {
 			$custom_attributes = ! empty( $args['custom_attributes'] ) ? $this->array_to_attributes( $args['custom_attributes'] ) : '';
 			$options           = '';
 			$extra             = '';
 			$require           = '';
+            $inside_elements   = '';
 
 			// `content` is a protected and special argument
 			if ( $key == 'content' ) {
 				return;
 			}
 
+            $device_type = ! empty( $args['device_type'] ) ? esc_attr($args['device_type']) : '';
+            $device_type_require = ! empty( $args['device_type'] ) ? " deviceType == '" . esc_attr($device_type) . "' && " : '';
+            $device_type_icon = '';
+            if($device_type=='Desktop'){
+                $device_type_icon = '<span class="dashicons dashicons-desktop" style="font-size: 18px;"></span>';
+            }elseif($device_type=='Tablet'){
+                $device_type_icon = '<span class="dashicons dashicons-tablet" style="font-size: 18px;"></span>';
+            }elseif($device_type=='Mobile'){
+                $device_type_icon = '<span class="dashicons dashicons-smartphone" style="font-size: 18px;"></span>';
+            }
 
 			// icon
 			$icon = '';
@@ -2246,48 +3026,80 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			$onchange  = "props.setAttributes({ $key: $key } )";
 			$onchangecomplete  = "";
 			$value     = "props.attributes.$key";
-			$text_type = array( 'text', 'password', 'number', 'email', 'tel', 'url', 'colorx' );
+			$text_type = array( 'text', 'password', 'number', 'email', 'tel', 'url', 'colorx','range' );
 			if ( in_array( $args['type'], $text_type ) ) {
 				$type = 'TextControl';
 				// Save numbers as numbers and not strings
 				if ( $args['type'] == 'number' ) {
-					$onchange = "props.setAttributes({ $key: Number($key) } )";
+					$onchange = "props.setAttributes({ $key: $key ? Number($key) : '' } )";
 				}
+			}else if ( $args['type'] == 'styleid' ) {
+				$type = 'TextControl';
+				$args['type'] == 'text';
+				// Save numbers as numbers and not strings
+				$value     = "props.attributes.$key ? props.attributes.$key : 'aaabbbccc'";
+			}else if ( $args['type'] == 'notice' ) {
+
+				$notice_message = !empty($args['desc']) ? addslashes($args['desc']) : '';
+				$notice_status = !empty($args['status']) ? esc_attr($args['status']) : 'info';
+
+				$notice = "el('div',{className:'bsui'},el(wp.components.Notice, {status: '$notice_status',isDismissible: false,className: 'm-0 pr-0 mb-3'},el('div',{dangerouslySetInnerHTML: {__html: '$notice_message'}}))),";
+				echo $notice_message ? $element_require . $notice : '';
+				return;
 			}
 			/*
 			 * https://www.wptricks.com/question/set-current-tab-on-a-gutenberg-tabpanel-component-from-outside-that-component/ es5 layout
 						elseif($args['type']=='tabs'){
 							?>
-							<script>
 								el(
 									wp.components.TabPanel,
 									{
+                                        activeClass: 'active-tab',
+                                        initialTabName: deviceType,
 										tabs: [
 											{
-												name: 'show',
-												title: __( 'Show', 'my-textdomain' ),
+												name: 'Desktop',
+												title: el('div', {dangerouslySetInnerHTML: {__html: '<i class="fas fa-desktop"></i>'}}),
+												className: 'tab-one' + deviceType == 'Desktop' ? ' active-tab' : '',
+												content: el('div', {dangerouslySetInnerHTML: {__html: 'ddd'}})
 											},
 											{
-												name: 'edit',
-												title: __( 'Edit', 'my-textdomain' ),
+												name: 'Tablet',
+												title: el('div', {dangerouslySetInnerHTML: {__html: '<i class="fas fa-tablet-alt"></i>'}}),
+												className: 'tab-two' + deviceType == 'Tablet' ? ' active-tab' : '',
+												content: el('div', {dangerouslySetInnerHTML: {__html: 'ttt'}})
+											},
+											{
+												name: 'Mobile',
+												title: el('div', {dangerouslySetInnerHTML: {__html: '<i class="fas fa-mobile-alt"></i>'}}),
+												className: 'tab-two' + deviceType == 'Mobile' ? ' active-tab' : '',
+												content: el('div', {dangerouslySetInnerHTML: {__html: 'mmm'}})
 											},
 										],
 									},
 									( tab ) => {
 
-									if('show' === tab.name){
-									return 123;
-								}else if ( 'edit' === tab.name ) {
-									return 321;
-								}
+// @todo https://github.com/WordPress/gutenberg/issues/39248
+									if(tab.name=='Desktop'){
+									wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType('Desktop');
+wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
+									}else if(tab.name=='Tablet'){
+									wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType('Tablet');
+wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
+									}else if(tab.name=='Mobile'){
+									wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType('Mobile');
+wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
+									}
+
+									return tab.content;
 
 								}
 								),
-							</script>
+
 							<?php
 							return;
 						}
-			*/
+*/
 			elseif ( $args['type'] == 'color' ) {
 				$type = 'ColorPicker';
 				$onchange = "";
@@ -2301,6 +3113,154 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
                             $key: value
                         });
                     },";
+			}elseif ( $args['type'] == 'gradient' ) {
+				$type = 'GradientPicker';
+
+			}elseif ( $args['type'] == 'image' ) {
+//                print_r($args);
+
+                $img_preview = isset($args['focalpoint']) && !$args['focalpoint'] ? "props.attributes.$key && el('img', { src: props.attributes.$key,style: {maxWidth:'100%',background: '#ccc'}})," : " props.attributes.$key && el(wp.components.FocalPointPicker,{
+                            url:props.attributes.$key,
+                            value: props.attributes.{$key}_xy.x !== undefined && props.attributes.{$key}_xy.x.length ? props.attributes.{$key}_xy  : {x: 0.5,y: 0.5,},
+                            onChange: function(focalPoint){
+                                              return props.setAttributes({
+                                                  {$key}_xy: focalPoint
+                                                });
+                                    },
+                                    // @todo for some reason this does not work as expected.
+//                         onDrag: function(focalPointTemp){
+//                                  return props.setAttributes({
+//                                      {$key}_xy: focalPointTemp
+//                                    });
+//                        }
+
+
+                        }), ";
+
+
+                $value = '""';
+				$type = 'MediaUpload';
+                $extra .= "onSelect: function(media){
+                      return props.setAttributes({
+                          $key: media.url,
+                          {$key}_id: media.id
+                        });
+                      },";
+                   $extra .= "type: 'image',";
+                   $extra .= "render: function (obj) {
+                        return el( 'div',{},
+                        !props.attributes.$key && el( wp.components.Button, {
+                          className: 'components-button components-circular-option-picker__clear is-primary is-smallx',
+                          onClick: obj.open
+                        },
+                        'Upload Image'
+                        ),
+                       $img_preview
+                        props.attributes.$key && el( wp.components.Button, {
+                                      className: 'components-button components-circular-option-picker__clear is-secondary is-small',
+                                      style: {margin:'8px 0'},
+                                      onClick: function(){
+                                              return props.setAttributes({
+                                                  $key: '',
+                                                  {$key}_id: ''
+                                                });
+                                    }
+                                    },
+                                    props.attributes.$key? 'Clear' : ''
+                            )
+                       )
+
+
+
+                      }";
+                $onchange = "";
+
+                //$inside_elements = ",el('div',{},'file upload')";
+			}elseif ( $args['type'] == 'images' ) {
+				//                print_r($args);
+
+                $img_preview = "props.attributes.$key && (function() {
+
+                        let uploads = JSON.parse('['+props.attributes.$key+']');
+						let images = [];
+                      uploads.map((upload, index) => (
+
+							images.push( el('div',{className: 'col p-2',draggable: 'true','data-index': index}, el('img', { src: upload.sizes.thumbnail.url,style: {maxWidth:'100%',background: '#ccc',pointerEvents:'none'}}),el('i',{
+							className: 'fas fa-times-circle text-danger position-absolute  ml-n2 mt-n1 bg-white rounded-circle c-pointer',
+							onClick: function(){
+							    aui_confirm('".__('Are you sure?')."', '".__('Delete')."', '".__('Cancel')."', true).then(function(confirmed) {
+if (confirmed) {
+											let new_uploads = JSON.parse(props.attributes.$key);
+											new_uploads.splice(index, 1); //remove
+                                              return props.setAttributes({
+                                                  {$key}: JSON.stringify( new_uploads ),
+                                                });
+                                                }
+                                           });
+                                    }},'') ) )
+						));
+
+
+						return images;
+})(),";
+
+
+                $value = '""';
+				$type = 'MediaUpload';
+                $extra .= "onSelect: function(media){
+
+                let slim_images = props.attributes.$key ? JSON.parse('['+props.attributes.$key+']') : [];
+				if(media.length){
+						for (var i=0; i < media.length; i++) {
+							slim_images.push({id: media[i].id, caption: media[i].caption, description: media[i].description,title: media[i].title,alt: media[i].alt,sizes: media[i].sizes});
+						}
+				}
+
+                      return props.setAttributes({
+                          $key: JSON.stringify(slim_images).replace('[','').replace(']',''),
+                        });
+                      },";
+                   $extra .= "type: 'image',";
+                   $extra .= "multiple: true,";
+                   $extra .= "render: function (obj) {
+
+                   // init the sort
+				enableDragSort('sd-sortable');
+                        return el( 'div',{},
+                        el( wp.components.Button, {
+                          className: 'components-button components-circular-option-picker__clear is-primary is-smallx',
+                          onClick: obj.open
+                        },
+                        'Upload Images'
+                        ),
+
+
+						el('div',{className: 'row row-cols-3 px-2 sd-sortable','data-field':'$key'},
+
+                       $img_preview
+
+                       ),
+                        props.attributes.$key && el( wp.components.Button, {
+                                      className: 'components-button components-circular-option-picker__clear is-secondary is-small',
+                                      style: {margin:'8px 0'},
+                                      onClick: function(){
+                                              return props.setAttributes({
+                                                  $key: '',
+                                                });
+                                    }
+                                    },
+                                    props.attributes.$key? 'Clear All' : ''
+                            )
+                       )
+
+
+
+
+
+                      }";
+                $onchange = "";
+
+                //$inside_elements = ",el('div',{},'file upload')";
 			}
 			elseif ( $args['type'] == 'checkbox' ) {
 				$type = 'CheckboxControl';
@@ -2351,15 +3311,39 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			echo $require_advanced;
 			// add setting require if defined
 			echo $element_require;
+            echo $device_type_require;
 
 			// icon
 			echo $icon;
 			?>
-			el( wp.components.<?php echo $type; ?>, {
-			label: '<?php echo addslashes( $args['title'] ); ?>',
-			help: '<?php if ( isset( $args['desc'] ) ) {
-				echo addslashes( $args['desc'] );
-			} ?>',
+			el( <?php echo $args['type'] == 'image' || $args['type'] == 'images' ? $type  : "wp.components.".$type; ?>, {
+			label: <?php
+			if(empty($args['title'])){
+                echo "''";
+			}elseif(empty($args['row']) && !empty($args['device_type'])){
+                ?>el('label', {
+									className: 'components-base-control__label',
+									style: {width:"100%"}
+								},
+								el('span',{dangerouslySetInnerHTML: {__html: '<?php echo addslashes( $args['title'] ) ?>'}}),
+								<?php if($device_type_icon){ ?>
+                                    deviceType == '<?php echo $device_type;?>' && el('span',{dangerouslySetInnerHTML: {__html: '<?php echo $device_type_icon; ?>'},title: deviceType + ": Set preview mode to change",style: {right:"0",position:"absolute",color:"var(--wp-admin-theme-color)"}})
+								<?php
+                                }
+                                ?>
+
+
+							)<?php
+
+			}else{
+                 ?>'<?php echo addslashes( $args['title'] ); ?>'<?php
+
+			}
+
+			?>,
+			help: <?php if ( isset( $args['desc'] ) ) {
+				echo "el('span',{dangerouslySetInnerHTML: {__html: '".wp_kses_post( addslashes($args['desc']) )."'}})";
+			}else{ echo "''"; } ?>,
 			value: <?php echo $value; ?>,
 			<?php if ( $type == 'TextControl' && $args['type'] != 'text' ) {
 				echo "type: '" . addslashes( $args['type'] ) . "',";
@@ -2370,11 +3354,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			<?php echo $options; ?>
 			<?php echo $extra; ?>
 			<?php echo $custom_attributes; ?>
-			<?php echo $onchangecomplete;?>
+			<?php echo $onchangecomplete;
+            if($onchange){
+            ?>
 			onChange: function ( <?php echo $key; ?> ) {
 			<?php echo $onchange; ?>
 			}
-			} ),
+			<?php }?>
+			} <?php echo $inside_elements; ?> ),
 			<?php
 
 
@@ -2383,29 +3370,30 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Convert an array of attributes to block string.
 		 *
-		 * @todo there is prob a faster way to do this, also we could add some validation here.
-		 *
 		 * @param $custom_attributes
 		 *
 		 * @return string
+		 *@todo there is prob a faster way to do this, also we could add some validation here.
+		 *
 		 */
 		public function array_to_attributes( $custom_attributes, $html = false ) {
 			$attributes = '';
 			if ( ! empty( $custom_attributes ) ) {
 
-				if ( $html ) {
-					foreach ( $custom_attributes as $key => $val ) {
-						$attributes .= " $key='$val' ";
-					}
-				} else {
-					foreach ( $custom_attributes as $key => $val ) {
-						$attributes .= "'$key': '$val',";
+				foreach ( $custom_attributes as $key => $val ) {
+					if(is_array($val)){
+						$attributes .= $key.': {'.$this->array_to_attributes( $val, $html ).'},';
+					}else{
+						$attributes .= $html ?  " $key='$val' " : "'$key': '$val',";
 					}
 				}
+
 			}
 
 			return $attributes;
 		}
+
+
 
 		/**
 		 * A self looping function to create the output for JS block elements.
@@ -2414,7 +3402,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 *
 		 * @param $args
 		 */
-		public function block_element( $args ) {
+		public function block_element( $args, $save = false ) {
 
 
 			if ( ! empty( $args ) ) {
@@ -2433,28 +3421,63 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								unset( $new_args['element_require'] );
 							}
 
-							echo "\n el( '" . $new_args['element'] . "', {";
+                            if($new_args['element']=='InnerBlocks'){
+                                echo "\n el( InnerBlocks, {";
+                            }elseif($new_args['element']=='innerBlocksProps'){
+                                $element = isset($new_args['inner_element']) ? esc_attr($new_args['inner_element']) : 'div';
+                              //  echo "\n el( 'section', wp.blockEditor.useInnerBlocksProps( blockProps, {";
+//                                echo $save ? "\n el( '$element', wp.blockEditor.useInnerBlocksProps.save( " : "\n el( '$element', wp.blockEditor.useInnerBlocksProps( ";
+                                echo $save ? "\n el( '$element', wp.blockEditor.useInnerBlocksProps.save( " : "\n el( '$element', wp.blockEditor.useInnerBlocksProps( ";
+                                echo $save ? "wp.blockEditor.useBlockProps.save( {" : "wp.blockEditor.useBlockProps( {";
+                                echo !empty($new_args['blockProps']) ? $this->block_element( $new_args['blockProps'],$save ) : '';
+
+                                echo "} ), {";
+                                echo !empty($new_args['innerBlocksProps']) && !$save ? $this->block_element( $new_args['innerBlocksProps'],$save ) : '';
+                            //    echo '###';
+
+                              //  echo '###';
+                            }elseif($new_args['element']=='BlocksProps'){
+
+								if ( isset($new_args['if_inner_element']) ) {
+									$element = $new_args['if_inner_element'];
+								}else {
+									$element = isset($new_args['inner_element']) ? "'".esc_attr($new_args['inner_element'])."'" : "'div'";
+								}
+
+								unset($new_args['inner_element']);
+                                echo $save ? "\n el( $element, wp.blockEditor.useBlockProps.save( {" : "\n el( $element, wp.blockEditor.useBlockProps( {";
+                                echo !empty($new_args['blockProps']) ? $this->block_element( $new_args['blockProps'],$save ) : '';
+
+
+                               // echo "} ),";
+
+                            }else{
+                                echo "\n el( '" . $new_args['element'] . "', {";
+                            }
+
 
 							// get the attributes
 							foreach ( $new_args as $new_key => $new_value ) {
 
 
-								if ( $new_key == 'element' || $new_key == 'content' || $new_key == 'element_require' || $new_key == 'element_repeat' || is_array( $new_value ) ) {
+								if ( $new_key == 'element' || $new_key == 'content'|| $new_key == 'if_content' || $new_key == 'element_require' || $new_key == 'element_repeat' || is_array( $new_value ) ) {
 									// do nothing
 								} else {
-									echo $this->block_element( array( $new_key => $new_value ) );
+									echo $this->block_element( array( $new_key => $new_value ),$save );
 								}
 							}
 
-							echo "},";// end attributes
+							echo $new_args['element']=='BlocksProps' ? '} ),' : "},";// end attributes
 
 							// get the content
 							$first_item = 0;
 							foreach ( $new_args as $new_key => $new_value ) {
-								if ( $new_key === 'content' || is_array( $new_value ) ) {
+								if ( $new_key === 'content' || $new_key === 'if_content' || is_array( $new_value ) ) {
 
 									if ( $new_key === 'content' ) {
 										echo "'" . $this->block_props_replace( wp_slash( $new_value ) ) . "'";
+									}else if ( $new_key === 'if_content' ) {
+										echo  $this->block_props_replace(  $new_value  );
 									}
 
 									if ( is_array( $new_value ) ) {
@@ -2470,18 +3493,23 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 										if ( isset( $new_value['element_repeat'] ) ) {
 											$x = 1;
 											while ( $x <= absint( $new_value['element_repeat'] ) ) {
-												$this->block_element( array( '' => $new_value ) );
+												$this->block_element( array( '' => $new_value ),$save );
 												$x ++;
 											}
 										} else {
-											$this->block_element( array( '' => $new_value ) );
+											$this->block_element( array( '' => $new_value ),$save );
 										}
 									}
 									$first_item ++;
 								}
 							}
 
-							echo ")";// end content
+                            if($new_args['element']=='innerBlocksProps' || $new_args['element']=='xBlocksProps'){
+                                echo "))";// end content
+                            }else{
+                                echo ")";// end content
+                            }
+
 
 							echo ", \n";
 
@@ -2489,9 +3517,23 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					} else {
 
 						if ( substr( $element, 0, 3 ) === "if_" ) {
+							$extra = '';
+							if( strpos($new_args, '[%WrapClass%]') !== false ){
+								$new_args = str_replace('[%WrapClass%]"','" + sd_build_aui_class(props.attributes)',$new_args);
+								$new_args = str_replace('[%WrapClass%]','+ sd_build_aui_class(props.attributes)',$new_args);
+							}
 							echo str_replace( "if_", "", $element ) . ": " . $this->block_props_replace( $new_args, true ) . ",";
+						} elseif ( $element == 'style' &&  strpos($new_args, '[%WrapStyle%]') !== false ) {
+                            $new_args = str_replace('[%WrapStyle%]','',$new_args);
+                            echo $element . ": {..." . $this->block_props_replace( $new_args ) . " , ...sd_build_aui_styles(props.attributes) },";
+//                            echo $element . ": " . $this->block_props_replace( $new_args ) . ",";
 						} elseif ( $element == 'style' ) {
 							echo $element . ": " . $this->block_props_replace( $new_args ) . ",";
+						} elseif ( ( $element == 'class' || $element == 'className'  ) &&  strpos($new_args, '[%WrapClass%]') !== false ) {
+                            $new_args = str_replace('[%WrapClass%]','',$new_args);
+                            echo $element . ": '" . $this->block_props_replace( $new_args ) . "' + sd_build_aui_class(props.attributes),";
+						} elseif ( $element == 'template' && $new_args ) {
+							echo $element . ": $new_args,";
 						} else {
 							echo $element . ": '" . $this->block_props_replace( $new_args ) . "',";
 						}
@@ -2588,8 +3630,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Tests if the current output is inside a elementor container.
 		 *
-		 * @since 1.0.4
 		 * @return bool
+		 *@since 1.0.4
 		 */
 		public function is_elementor_widget_output() {
 			$result = false;
@@ -2603,8 +3645,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Tests if the current output is inside a elementor preview.
 		 *
-		 * @since 1.0.4
 		 * @return bool
+		 *@since 1.0.4
 		 */
 		public function is_elementor_preview() {
 			$result = false;
@@ -2618,8 +3660,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Tests if the current output is inside a Divi preview.
 		 *
-		 * @since 1.0.6
 		 * @return bool
+		 *@since 1.0.6
 		 */
 		public function is_divi_preview() {
 			$result = false;
@@ -2633,8 +3675,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Tests if the current output is inside a Beaver builder preview.
 		 *
-		 * @since 1.0.6
 		 * @return bool
+		 *@since 1.0.6
 		 */
 		public function is_beaver_preview() {
 			$result = false;
@@ -2648,8 +3690,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Tests if the current output is inside a siteorigin builder preview.
 		 *
-		 * @since 1.0.6
 		 * @return bool
+		 *@since 1.0.6
 		 */
 		public function is_siteorigin_preview() {
 			$result = false;
@@ -2663,8 +3705,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Tests if the current output is inside a cornerstone builder preview.
 		 *
-		 * @since 1.0.8
 		 * @return bool
+		 *@since 1.0.8
 		 */
 		public function is_cornerstone_preview() {
 			$result = false;
@@ -2678,8 +3720,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Tests if the current output is inside a fusion builder preview.
 		 *
-		 * @since 1.1.0
 		 * @return bool
+		 *@since 1.1.0
 		 */
 		public function is_fusion_preview() {
 			$result = false;
@@ -2693,8 +3735,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Tests if the current output is inside a Oxygen builder preview.
 		 *
-		 * @since 1.0.18
 		 * @return bool
+		 *@since 1.0.18
 		 */
 		public function is_oxygen_preview() {
 			$result = false;
@@ -2708,8 +3750,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * General function to check if we are in a preview situation.
 		 *
-		 * @since 1.0.6
 		 * @return bool
+		 *@since 1.0.6
 		 */
 		public function is_preview() {
 			$preview = false;
@@ -2897,11 +3939,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Convert require element.
 		 *
-		 * @since 1.0.0
-		 *
 		 * @param string $input Input element.
 		 *
 		 * @return string $output
+		 *@since 1.0.0
+		 *
 		 */
 		public function convert_element_require( $input ) {
 
@@ -3204,8 +4246,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 *
 		 * This can be used in your widget to return different content as the block content.
 		 *
-		 * @since 1.0.3
 		 * @return bool
+		 *@since 1.0.3
 		 */
 		public function is_block_content_call() {
 			$result = false;
@@ -3219,8 +4261,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Get an instance hash that will be unique to the type and settings.
 		 *
-		 * @since 1.0.20
 		 * @return string
+		 *@since 1.0.20
 		 */
 		public function get_instance_hash(){
 			$instance_string = $this->base_id.serialize($this->instance);
@@ -3232,8 +4274,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 *
 		 * @param array $rules
 		 *
-		 * @since 1.0.20
 		 * @return string
+		 *@since 1.0.20
 		 */
 		public function get_instance_style($rules = array()){
 			$css = '';
@@ -3254,10 +4296,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Encode shortcodes tags.
 		 *
-		 * @since 1.0.28
-		 *
 		 * @param string $content Content to search for shortcode tags.
-		 * @return string Content with shortcode tags removed.
+		 *
+*@return string Content with shortcode tags removed.
+		 *@since 1.0.28
+		 *
 		 */
 		public function encode_shortcodes( $content ) {
 			// Avoids existing encoded tags.
@@ -3291,10 +4334,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Remove encoded shortcod tags.
 		 *
-		 * @since 1.0.28
-		 *
 		 * @param string $content Content to search for shortcode tags.
-		 * @return string Content with decoded shortcode tags.
+		 *
+*@return string Content with decoded shortcode tags.
+		 *@since 1.0.28
+		 *
 		 */
 		public function decode_shortcodes( $content ) {
 			$trans   = array(

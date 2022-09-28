@@ -5,6 +5,8 @@
   @import "partials/index"; // helpers
 }
 
+@import "partials/wp_core"; // WP core
+
 // Modal can't be inside wrapper
 @import "1-frameworks/bootstrap/functions";
 @import "1-frameworks/bootstrap/variables-rtl";
