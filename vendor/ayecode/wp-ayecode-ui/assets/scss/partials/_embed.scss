@@ -29,26 +29,32 @@ Set images and videos to fit a certain way.
 
 // embed item has action
 .embed-has-action{
-  transition: transform .5s;
-  transition-timing-function: ease-in-out;
+  transition: all .3s ease-in-out;
   i,svg.svg-inline--fa{
-    display: none;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(0.3);
     color: #fff;
     font-size: 1.5em;
     opacity: 0;
+    transition: all .3s ease-in-out;
+  }
+
+  img{
+    filter: brightness(100%);
+    transition: all .3s ease-in-out;
   }
 
   &:hover{
     img{
-      filter: brightness(80%);
+      filter: brightness(75%);
+      transition: all .3s ease-in-out;
     }
     i,svg.svg-inline--fa{
-      display: block;
       opacity: 0.8;
+      transform: translate(-50%, -50%) scale(1);
+      transition: all .3s ease-in-out;
     }
   }
 }

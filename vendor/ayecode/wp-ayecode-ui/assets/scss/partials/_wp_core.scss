@@ -1,0 +1,47 @@
+// WP Core conflict changes
+
+figure.wp-block-gallery {
+  display: flex;
+}
+
+body.admin-bar{
+  .fixed-top{
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 782px) {
+  body.admin-bar{
+    .fixed-top {
+      margin-top: 46px;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+    html:not([data-scroll='0']){
+      body.admin-bar {
+        .fixed-top {
+          margin-top: 0;
+          transition: all 0.2s ease;
+        }
+      }
+  }
+}
+
+
+// background transparent until scroll
+.bg-transparent-until-scroll{
+  transition: background 0.2s ease;
+}
+html[data-scroll='0'],html:not([data-scroll]){
+  .bg-transparent-until-scroll{
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+}
+
+.editor-styles-wrapper .tab-pane.is-selected, .editor-styles-wrapper .tab-pane.has-child-selected{
+  display: block !important;
+  opacity: 1 !important;
+}
