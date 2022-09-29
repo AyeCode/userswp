@@ -113,6 +113,7 @@ class AUI_Component_Input {
 			} elseif ( $type == 'datepicker' || $type == 'timepicker' ) {
 				$type = 'text';
 				$args['class'] .= ' bg-initial '; // @todo not sure why we have this?
+				$clear_function .= "jQuery(this).parent().parent().find('input[name=\'" . esc_attr( $args['name'] ) . "\']').trigger('change');";
 
 				$args['extra_attributes']['data-aui-init'] = 'flatpickr';
 
@@ -824,17 +825,9 @@ else{$eli.attr(\'type\',\'password\');}"
 			$args['data-allow-clear'] = isset( $args['data-allow-clear'] ) ? (bool) $args['data-allow-clear'] : true;
 		}
 
-
-
-		// maybe horizontal label
-//		if ( $args['label_type'] == 'horizontal' ) {
-//			$input_col = AUI_Component_Helper::get_column_class( $args['label_col'], 'input' );
-//			$output .= '<div class="' . $input_col . '">';
-//		}
-
 		// Set hidden input to save empty value for multiselect.
 		if ( ! empty( $args['multiple'] ) && ! empty( $args['name'] ) ) {
-			$output .= '<input type="hidden" ' . AUI_Component_Helper::name( $args['name'] ) . ' value=""/>';
+			$output .= '<input type="hidden" ' . AUI_Component_Helper::name( $args['name'] ) . ' value="" data-ignore-rule/>';
 		}
 
 		// open/type

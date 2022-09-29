@@ -98,7 +98,7 @@ class UWP_User_Avatar_Widget extends WP_Super_Duper {
 		$args['link']         = 1 == $args['link'] ? 1 : 0;
 		$args['allow_change'] = ! empty( $args['allow_change'] ) ? $args['allow_change'] : 0;
 
-		if ( isset( $args['user_id'] ) && is_int( $args['user_id'] ) && (int) $args['user_id'] > 0 ) {
+		if ( isset( $args['user_id'] ) && (int) $args['user_id'] > 0 ) {
 			$user = get_userdata( $args['user_id'] );
 		} else if ( isset( $args['user_id'] ) && 'post_author' == $args['user_id'] && $post instanceof WP_Post ) {
 			$user = get_userdata( $post->post_author );

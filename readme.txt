@@ -1,14 +1,14 @@
-=== UsersWP - User Registration & User Profile  ===
+=== UsersWP - Front-end login form, User Registration, User Profile & Members Directory plugin for WordPress  ===
 Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
-Tags: login form, registration, registration form, user profile, user registration
+Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.0
 Stable tag: 1.2.3.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Light weight frontend user registration and login plugin.
+Light weight Front-end login form, User Registration, User Profile and Members Directory plugin.
 
 == Description ==
 
@@ -145,6 +145,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.3.7 =
+* AyeCode UI updated to v0.1.75 - CHANGED
+* Super Duper updated to v1.1.1 - CHANGED
 
 = 1.2.3.6 =
 * Some servers fail to crop images - FIXED
