@@ -376,6 +376,16 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 
 		);
 
+		$input[ $type . '_image_use_featured' ] = array(
+			'type'            => 'checkbox',
+			'title'           => __( 'Use featured image' ),
+			'default'         => '',
+			'desc_tip'        => true,
+			'group'           => __( "Background" ),
+			'element_require' => '( [%' . $type . '%]=="" || [%' . $type . '%]=="custom-color" || [%' . $type . '%]=="custom-gradient" || [%' . $type . '%]=="transparent" )'
+
+		);
+
 
 		$input[ $type . '_image' ] = wp_parse_args( $overwrite_image, array(
 			'type'        => 'image',
@@ -384,7 +394,7 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 			'default'     => '',
 			'desc_tip'    => true,
 			'group'       => __( "Background" ),
-//			'element_require' => '( [%' . $type . '%]=="" || [%' . $type . '%]=="custom-color" || [%' . $type . '%]=="custom-gradient" || [%' . $type . '%]=="transparent" )'
+//			'element_require' => ' ![%' . $type . '_image_use_featured%] '
 		) );
 
 		$input[ $type . '_image_id' ] = wp_parse_args( $overwrite_image, array(
@@ -875,6 +885,7 @@ function sd_aui_colors( $include_branding = false, $include_outlines = false, $o
 	$theme_colors["salmon"]    = __( 'Salmon' );
 	$theme_colors["cyan"]      = __( 'Cyan' );
 	$theme_colors["gray"]      = __( 'Gray' );
+	$theme_colors["gray-dark"]      = __( 'Gray dark' );
 	$theme_colors["indigo"]    = __( 'Indigo' );
 	$theme_colors["orange"]    = __( 'Orange' );
 
@@ -893,6 +904,7 @@ function sd_aui_colors( $include_branding = false, $include_outlines = false, $o
 		$theme_colors["outline-salmon"]    = __( 'Salmon outline' ) . $button_only;
 		$theme_colors["outline-cyan"]      = __( 'Cyan outline' ) . $button_only;
 		$theme_colors["outline-gray"]      = __( 'Gray outline' ) . $button_only;
+		$theme_colors["outline-gray-dark"]      = __( 'Gray dark outline' ) . $button_only;
 		$theme_colors["outline-indigo"]    = __( 'Indigo outline' ) . $button_only;
 		$theme_colors["outline-orange"]    = __( 'Orange outline' ) . $button_only;
 	}
@@ -902,7 +914,7 @@ function sd_aui_colors( $include_branding = false, $include_outlines = false, $o
 		$theme_colors = $theme_colors + sd_aui_branding_colors();
 	}
 
-	return $theme_colors;
+	return apply_filters( 'sd_aui_colors', $theme_colors, $include_outlines, $include_branding );
 }
 
 /**
