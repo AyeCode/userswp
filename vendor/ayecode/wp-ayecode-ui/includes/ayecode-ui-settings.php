@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.75';
+		public $version = '0.1.76';
 
 		/**
 		 * Class textdomain.
@@ -88,6 +88,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 */
 		private static $instance = null;
 
+
 		/**
 		 * Main AyeCode_UI_Settings Instance.
 		 *
@@ -110,6 +111,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 					// Maybe show example page
 					add_action( 'template_redirect', array( self::$instance,'maybe_show_examples' ) );
+
+					if ( defined( 'BLOCKSTRAP_VERSION' ) ) {
+						add_filter( 'sd_aui_colors', array( self::$instance,'sd_aui_colors' ), 10, 3 );
+					}
 				}
 
 				add_action( 'customize_register', array( self::$instance, 'customizer_settings' ));
@@ -121,14 +126,145 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 
 		/**
+         * Add custom colors to the color selector.
+         *
+		 * @param $theme_colors
+		 * @param $include_outlines
+		 * @param $include_branding
+		 *
+		 * @return mixed
+		 */
+		public function sd_aui_colors( $theme_colors, $include_outlines, $include_branding ){
+
+
+			$setting = wp_get_global_settings();
+
+			if(!empty($setting['color']['palette']['custom'])){
+				foreach($setting['color']['palette']['custom'] as $color){
+					$theme_colors[$color['slug']] = esc_attr($color['name']);
+				}
+			}
+
+			return $theme_colors;
+		}
+
+		/**
 		 * Setup some constants.
 		 */
 		public function constants(){
-			define('AUI_PRIMARY_COLOR_ORIGINAL', "#1e73be");
-			define('AUI_SECONDARY_COLOR_ORIGINAL', '#6c757d');
-			if (!defined('AUI_PRIMARY_COLOR')) define('AUI_PRIMARY_COLOR', AUI_PRIMARY_COLOR_ORIGINAL);
-			if (!defined('AUI_SECONDARY_COLOR')) define('AUI_SECONDARY_COLOR', AUI_SECONDARY_COLOR_ORIGINAL);
+			define( 'AUI_PRIMARY_COLOR_ORIGINAL', "#1e73be" );
+			define( 'AUI_SECONDARY_COLOR_ORIGINAL', '#6c757d' );
+			define( 'AUI_INFO_COLOR_ORIGINAL', '#17a2b8' );
+			define( 'AUI_WARNING_COLOR_ORIGINAL', '#ffc107' );
+			define( 'AUI_DANGER_COLOR_ORIGINAL', '#dc3545' );
+			define( 'AUI_SUCCESS_COLOR_ORIGINAL', '#44c553' );
+			define( 'AUI_LIGHT_COLOR_ORIGINAL', '#f8f9fa' );
+			define( 'AUI_DARK_COLOR_ORIGINAL', '#343a40' );
+			define( 'AUI_WHITE_COLOR_ORIGINAL', '#fff' );
+			define( 'AUI_PURPLE_COLOR_ORIGINAL', '#ad6edd' );
+			define( 'AUI_SALMON_COLOR_ORIGINAL', '#ff977a' );
+			define( 'AUI_CYAN_COLOR_ORIGINAL', '#35bdff' );
+			define( 'AUI_GRAY_COLOR_ORIGINAL', '#ced4da' );
+			define( 'AUI_INDIGO_COLOR_ORIGINAL', '#502c6c' );
+			define( 'AUI_ORANGE_COLOR_ORIGINAL', '#orange' );
+			define( 'AUI_BLACK_COLOR_ORIGINAL', '#000' );
+
+			if ( ! defined( 'AUI_PRIMARY_COLOR' ) ) {
+				define( 'AUI_PRIMARY_COLOR', AUI_PRIMARY_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_SECONDARY_COLOR' ) ) {
+				define( 'AUI_SECONDARY_COLOR', AUI_SECONDARY_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_INFO_COLOR' ) ) {
+				define( 'AUI_INFO_COLOR', AUI_INFO_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_WARNING_COLOR' ) ) {
+				define( 'AUI_WARNING_COLOR', AUI_WARNING_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_DANGER_COLOR' ) ) {
+				define( 'AUI_DANGER_COLOR', AUI_DANGER_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_SUCCESS_COLOR' ) ) {
+				define( 'AUI_SUCCESS_COLOR', AUI_SUCCESS_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_LIGHT_COLOR' ) ) {
+				define( 'AUI_LIGHT_COLOR', AUI_LIGHT_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_DARK_COLOR' ) ) {
+				define( 'AUI_DARK_COLOR', AUI_DARK_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_WHITE_COLOR' ) ) {
+				define( 'AUI_WHITE_COLOR', AUI_WHITE_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_PURPLE_COLOR' ) ) {
+				define( 'AUI_PURPLE_COLOR', AUI_PURPLE_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_SALMON_COLOR' ) ) {
+				define( 'AUI_SALMON_COLOR', AUI_SALMON_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_CYAN_COLOR' ) ) {
+				define( 'AUI_CYAN_COLOR', AUI_CYAN_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_GRAY_COLOR' ) ) {
+				define( 'AUI_GRAY_COLOR', AUI_GRAY_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_INDIGO_COLOR' ) ) {
+				define( 'AUI_INDIGO_COLOR', AUI_INDIGO_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_ORANGE_COLOR' ) ) {
+				define( 'AUI_ORANGE_COLOR', AUI_ORANGE_COLOR_ORIGINAL );
+			}
+			if ( ! defined( 'AUI_BLACK_COLOR' ) ) {
+				define( 'AUI_BLACK_COLOR', AUI_BLACK_COLOR_ORIGINAL );
+			}
+
 		}
+
+        public static function get_colors( $original = false){
+
+	        if ( ! defined( 'AUI_PRIMARY_COLOR' ) ) {
+                return array();
+	        }
+	        if ( $original ) {
+                return array(
+	                'primary'   => AUI_PRIMARY_COLOR_ORIGINAL,
+	                'secondary' => AUI_SECONDARY_COLOR_ORIGINAL,
+	                'info'      => AUI_INFO_COLOR_ORIGINAL,
+	                'warning'   => AUI_WARNING_COLOR_ORIGINAL,
+	                'danger'    => AUI_DANGER_COLOR_ORIGINAL,
+	                'success'   => AUI_SUCCESS_COLOR_ORIGINAL,
+	                'light'     => AUI_LIGHT_COLOR_ORIGINAL,
+	                'dark'      => AUI_DARK_COLOR_ORIGINAL,
+	                'white'     => AUI_WHITE_COLOR_ORIGINAL,
+	                'purple'    => AUI_PURPLE_COLOR_ORIGINAL,
+	                'salmon'    => AUI_SALMON_COLOR_ORIGINAL,
+	                'cyan'      => AUI_CYAN_COLOR_ORIGINAL,
+	                'gray'      => AUI_GRAY_COLOR_ORIGINAL,
+	                'indigo'    => AUI_INDIGO_COLOR_ORIGINAL,
+	                'orange'    => AUI_ORANGE_COLOR_ORIGINAL,
+	                'black'     => AUI_BLACK_COLOR_ORIGINAL,
+                );
+	        }
+
+            return array(
+	            'primary'   => AUI_PRIMARY_COLOR,
+	            'secondary' => AUI_SECONDARY_COLOR,
+	            'info'      => AUI_INFO_COLOR,
+	            'warning'   => AUI_WARNING_COLOR,
+	            'danger'    => AUI_DANGER_COLOR,
+	            'success'   => AUI_SUCCESS_COLOR,
+	            'light'     => AUI_LIGHT_COLOR,
+	            'dark'      => AUI_DARK_COLOR,
+	            'white'     => AUI_WHITE_COLOR,
+	            'purple'    => AUI_PURPLE_COLOR,
+	            'salmon'    => AUI_SALMON_COLOR,
+	            'cyan'      => AUI_CYAN_COLOR,
+	            'gray'      => AUI_GRAY_COLOR,
+	            'indigo'    => AUI_INDIGO_COLOR,
+	            'orange'    => AUI_ORANGE_COLOR,
+	            'black'     => AUI_BLACK_COLOR,
+            );
+        }
 
 		/**
 		 * Initiate the settings and add the required action hooks.
@@ -261,6 +397,19 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			}
 
 			return apply_filters( 'aui_load_on_admin' , $load );
+		}
+
+		/**
+         * Check if the current theme is a block theme.
+         *
+		 * @return bool
+		 */
+		public static function is_block_theme() {
+			if ( function_exists( 'wp_is_block_theme' && wp_is_block_theme() ) ) {
+				return true;
+			}
+
+			return false;
 		}
 
 		/**
@@ -624,10 +773,23 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					$aui_doing_init_iconpicker= false;
 				}
 
-				function aui_modal_iframe($title,$url,$footer,$dismissible,$class,$dialog_class,$body_class){
+				function aui_modal_iframe($title,$url,$footer,$dismissible,$class,$dialog_class,$body_class,responsive){
 					if(!$body_class){$body_class = 'p-0';}
-					var $body = '<div class="ac-preview-loading text-center position-absolute w-100 text-dark vh-100 overlay overlay-white p-0 m-0 d-none d-flex justify-content-center align-items-center"><div class="spinner-border" role="status"></div></div>';
-					$body += '<iframe id="embedModal-iframe" class="w-100 vh-100 p-0 m-0" src="" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>';
+					var wClass = 'text-center position-absolute w-100 text-dark overlay overlay-white p-0 m-0 d-none d-flex justify-content-center align-items-center';
+					var $body = "", sClass = "w-100 p-0 m-0";
+					if (responsive) {
+						$body += '<div class="embed-responsive embed-responsive-16by9">';
+						wClass += ' h-100';
+						sClass += ' embed-responsive-item';
+					} else {
+						wClass += ' vh-100';
+						sClass += ' vh-100';
+					}
+					$body += '<div class="ac-preview-loading ' + wClass + '" style="left:0;top:0"><div class="spinner-border" role="status"></div></div>';
+					$body += '<iframe id="embedModal-iframe" class="' + sClass + '" src="" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>';
+					if (responsive) {
+						$body += '</div>';
+					}
 
 					$m = aui_modal($title,$body,$footer,$dismissible,$class,$dialog_class,$body_class);
 					jQuery( $m ).on( 'shown.bs.modal', function ( e ) {
@@ -1030,6 +1192,22 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				}
 
 				/**
+				 * Init modal iframe.
+				 */
+				function aui_init_modal_iframe() {
+					jQuery('.aui-has-embed, [data-aui-embed="iframe"]').each(function(e){
+						if (!jQuery(this).hasClass('aui-modal-iframed') && jQuery(this).data('embed-url')) {
+							jQuery(this).addClass('aui-modal-iframed');
+
+							jQuery(this).on("click",function(e1) {
+								aui_modal_iframe('',jQuery(this).data('embed-url'),'',true,'','modal-lg','aui-modal-iframe p-0',true);
+								return false;
+							});
+						}
+					});
+				}
+
+				/**
 				 * Show a toast.
 				 */
 				$aui_doing_toast = false;
@@ -1189,6 +1367,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					
 					// init lightbox embeds
 					aui_init_lightbox_embed();
+
+					/* Init modal iframe */
+					aui_init_modal_iframe();
 				}
 
 				// run on window loaded
@@ -1264,6 +1445,20 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
                 // call data scroll function ASAP.
                 aui_set_data_scroll();
+
+				<?php
+                // FSE tweaks.
+                if(!empty($_REQUEST['postType']) && $_REQUEST['postType']=='wp_template'){ ?>
+                setTimeout(function(){
+                    let Iframe = document.getElementsByClassName("edit-site-visual-editor__editor-canvas");
+                    let iframe_doc = Iframe[0].contentWindow ? Iframe[0].contentWindow.document : Iframe[0].contentDocument;
+                    Iframe[0].contentWindow.onscroll = function () {
+                        iframe_doc.documentElement.dataset.scroll = Iframe[0].contentWindow.scrollY;
+                    };
+                }, 3000);
+				<?php } ?>
+
+
 			</script>
 			<?php
 			$output = ob_get_clean();
@@ -1704,13 +1899,31 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 
 		public static function custom_css($compatibility = true) {
-			$settings = get_option('aui_options');
+			$colors = array();
+			if ( defined( 'BLOCKSTRAP_VERSION' ) ) {
+
+				$setting = wp_get_global_settings();
+				if(!empty($setting['color']['palette']['theme'])){
+					foreach($setting['color']['palette']['theme'] as $color){
+						$colors[$color['slug']] = esc_attr($color['color']);
+					}
+				}
+
+				if(!empty($setting['color']['palette']['custom'])){
+					foreach($setting['color']['palette']['custom'] as $color){
+						$colors[$color['slug']] = esc_attr($color['color']);
+					}
+				}
+			}else{
+				$settings = get_option('aui_options');
+				$colors = array(
+					'primary'   => ! empty( $settings['color_primary'] ) ? $settings['color_primary'] : AUI_PRIMARY_COLOR,
+					'secondary' => ! empty( $settings['color_secondary'] ) ? $settings['color_secondary'] : AUI_SECONDARY_COLOR
+				);
+			}
 
 			ob_start();
 
-			$primary_color = !empty($settings['color_primary']) ? $settings['color_primary'] : AUI_PRIMARY_COLOR;
-			$secondary_color = !empty($settings['color_secondary']) ? $settings['color_secondary'] : AUI_SECONDARY_COLOR;
-				//AUI_PRIMARY_COLOR_ORIGINAL
 			?>
 			<style>
 				<?php
@@ -1720,13 +1933,20 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					    echo self::bs3_compat_css();
 					}
 
-					if(!is_admin() && $primary_color != AUI_PRIMARY_COLOR_ORIGINAL){
-						echo self::css_primary($primary_color,$compatibility);
-					}
-
-					if(!is_admin() && $secondary_color != AUI_SECONDARY_COLOR_ORIGINAL){
-						echo self::css_secondary($settings['color_secondary'],$compatibility);
-					}
+                    if(!empty($colors)){
+                        $d_colors = self::get_colors(true);
+                        //print_r($d_colors );exit;
+//                        print_r($colors );exit;
+                        $is_fse = !empty($_REQUEST['postType']) && $_REQUEST['postType']=='wp_template';
+                        foreach($colors as $key => $color ){
+                            if((empty( $d_colors[$key]) ||  $d_colors[$key] != $color) || $is_fse ) {
+                                $var = $is_fse ? "var(--wp--preset--color--$key)" : $color;
+                                $compat = $is_fse ? '.editor-styles-wrapper' : $compatibility;
+                                echo self::css_overwrite($key,$var,$compat);
+                            }
+                        }
+                       // exit;
+                    }
 
 					// Set admin bar z-index lower when modal is open.
 					echo ' body.modal-open #wpadminbar{z-index:999}.embed-responsive-16by9 .fluid-width-video-wrapper{padding:0 !important;position:initial}';
@@ -1748,6 +1968,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			), '', self::minify_css( ob_get_clean() ) );
 		}
 
+
+
 		/**
 		 * Check if we should add booststrap 3 compatibility changes.
 		 *
@@ -1757,9 +1979,212 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			return defined('AYECODE_UI_BS3_COMPAT') || defined('SVQ_THEME_VERSION') || defined('FUSION_BUILDER_VERSION');
 		}
 
-		public static function css_primary($color_code,$compatibility){;
-			$color_code = sanitize_hex_color($color_code);
+		/**
+         * Build the CSS to overwrite a bootstrap color variable.
+         *
+		 * @param $type
+		 * @param $color_code
+		 * @param $compatibility
+		 *
+		 * @return string
+		 */
+		public static function css_overwrite($type,$color_code,$compatibility){
+
+            $is_var = false;
 			if(!$color_code){return '';}
+			if(!sanitize_hex_color($color_code)){
+				$color_code = esc_attr($color_code);
+				$is_var = true;
+//                echo '###1'.$color_code;//exit;
+			}
+			if(!$color_code){return '';}
+
+            if($compatibility===true || $compatibility===1){
+	            $compatibility = '.bsui';
+            }elseif(!$compatibility){
+	            $compatibility = '';
+            }else{
+	            $compatibility = esc_attr($compatibility);
+            }
+
+//            echo '####'.$color_code;exit;
+
+			$type = sanitize_html_class($type);
+
+			/**
+			 * c = color, b = background color, o = border-color, f = fill
+			 */
+			$selectors = array(
+				".btn-{$type}"                                              => array( 'b', 'o' ),
+				".btn-{$type}.disabled"                                     => array( 'b', 'o' ),
+				".btn-{$type}:disabled"                                     => array( 'b', 'o' ),
+				".btn-outline-{$type}"                                      => array( 'c', 'o' ),
+				".btn-outline-{$type}:hover"                                => array( 'b', 'o' ),
+				".btn-outline-{$type}:not(:disabled):not(.disabled).active" => array( 'b', 'o' ),
+				".btn-outline-{$type}:not(:disabled):not(.disabled):active" => array( 'b', 'o' ),
+				".show>.btn-outline-{$type}.dropdown-toggle"                => array( 'b', 'o' ),
+				".badge-{$type}"                                            => array( 'b' ),
+				".alert-{$type}"                                            => array( 'b', 'o' ),
+				".bg-{$type}"                                               => array( 'b', 'f' ),
+				".btn-link.btn-{$type}"                                     => array( 'c' ),
+			);
+
+			if ( $type == 'primary' ) {
+				$selectors = $selectors + array(
+						'a'                                                                                                    => array( 'c' ),
+						'.btn-link'                                                                                            => array( 'c' ),
+						'.dropdown-item.active'                                                                                => array( 'b' ),
+						'.custom-control-input:checked~.custom-control-label::before'                                          => array(
+							'b',
+							'o'
+						),
+						'.custom-checkbox .custom-control-input:indeterminate~.custom-control-label::before'                   => array(
+							'b',
+							'o'
+						),
+						'.nav-pills .nav-link.active'                                                                          => array( 'b' ),
+						'.nav-pills .show>.nav-link'                                                                           => array( 'b' ),
+						'.page-link'                                                                                           => array( 'c' ),
+						'.page-item.active .page-link'                                                                         => array(
+							'b',
+							'o'
+						),
+						'.progress-bar'                                                                                        => array( 'b' ),
+						'.list-group-item.active'                                                                              => array(
+							'b',
+							'o'
+						),
+						'.select2-container .select2-results__option--highlighted.select2-results__option[aria-selected=true]' => array( 'b' ),
+//				    '.custom-range::-webkit-slider-thumb' => array('b'), // these break the inline rules...
+//				    '.custom-range::-moz-range-thumb' => array('b'),
+//				    '.custom-range::-ms-thumb' => array('b'),
+					);
+			}
+
+			$important_selectors = array(
+				".bg-{$type}" => array('b','f'),
+				".border-{$type}" => array('o'),
+				".text-{$type}" => array('c'),
+			);
+
+			$color = array();
+			$color_i = array();
+			$background = array();
+			$background_i = array();
+			$border = array();
+			$border_i = array();
+			$fill = array();
+			$fill_i = array();
+
+			$output = '';
+
+			// build rules into each type
+			foreach($selectors as $selector => $types){
+				$selector = $compatibility ? $compatibility . " ".$selector : $selector;
+				$types = array_combine($types,$types);
+				if(isset($types['c'])){$color[] = $selector;}
+				if(isset($types['b'])){$background[] = $selector;}
+				if(isset($types['o'])){$border[] = $selector;}
+				if(isset($types['f'])){$fill[] = $selector;}
+			}
+
+			// build rules into each type
+			foreach($important_selectors as $selector => $types){
+				$selector = $compatibility ? $compatibility . " ".$selector : $selector;
+				$types = array_combine($types,$types);
+				if(isset($types['c'])){$color_i[] = $selector;}
+				if(isset($types['b'])){$background_i[] = $selector;}
+				if(isset($types['o'])){$border_i[] = $selector;}
+				if(isset($types['f'])){$fill_i[] = $selector;}
+			}
+
+			// add any color rules
+			if(!empty($color)){
+				$output .= implode(",",$color) . "{color: $color_code;} ";
+			}
+			if(!empty($color_i)){
+				$output .= implode(",",$color_i) . "{color: $color_code !important;} ";
+			}
+
+			// add any background color rules
+			if(!empty($background)){
+				$output .= implode(",",$background) . "{background-color: $color_code;} ";
+			}
+			if(!empty($background_i)){
+				$output .= implode(",",$background_i) . "{background-color: $color_code !important;} ";
+			}
+
+			// add any border color rules
+			if(!empty($border)){
+				$output .= implode(",",$border) . "{border-color: $color_code;} ";
+			}
+			if(!empty($border_i)){
+				$output .= implode(",",$border_i) . "{border-color: $color_code !important;} ";
+			}
+
+			// add any fill color rules
+			if(!empty($fill)){
+				$output .= implode(",",$fill) . "{fill: $color_code;} ";
+			}
+			if(!empty($fill_i)){
+				$output .= implode(",",$fill_i) . "{fill: $color_code !important;} ";
+			}
+
+
+			$prefix = $compatibility ? $compatibility . " " : "";
+
+            $transition = $is_var ? 'transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,filter 0.15s ease-in-out;' : '';
+			// darken
+			$darker_075 = $is_var ? $color_code.';filter:brightness(0.925)' : self::css_hex_lighten_darken($color_code,"-0.075");
+			$darker_10 = $is_var ? $color_code.';filter:brightness(0.9)' : self::css_hex_lighten_darken($color_code,"-0.10");
+			$darker_125 = $is_var ? $color_code.';filter:brightness(0.875)' : self::css_hex_lighten_darken($color_code,"-0.125");
+
+			// lighten
+			$lighten_25 = $is_var ? $color_code.';filter:brightness(1.25)' :self::css_hex_lighten_darken($color_code,"0.25");
+
+			// opacity see https://css-tricks.com/8-digit-hex-codes/
+			$op_25 = $color_code."40"; // 25% opacity
+
+
+			// button states
+			$output .= $is_var ? $prefix ." .btn-{$type}{{$transition }} " : '';
+			$output .= $prefix ." .btn-{$type}:hover, $prefix .btn-{$type}:focus, $prefix .btn-{$type}.focus{background-color: ".$darker_075.";    border-color: ".$darker_10.";} ";
+//			$output .= $prefix ." .btn-{$type}:hover, $prefix .btn-{$type}:focus, $prefix .btn-{$type}.focus{background-color: #000;    border-color: #000;} ";
+			$output .= $prefix ." .btn-outline-{$type}:not(:disabled):not(.disabled):active:focus, $prefix .btn-outline-{$type}:not(:disabled):not(.disabled).active:focus, .show>$prefix .btn-outline-{$type}.dropdown-toggle:focus{box-shadow: 0 0 0 0.2rem $op_25;} ";
+			$output .= $prefix ." .btn-{$type}:not(:disabled):not(.disabled):active, $prefix .btn-{$type}:not(:disabled):not(.disabled).active, .show>$prefix .btn-{$type}.dropdown-toggle{background-color: ".$darker_10.";    border-color: ".$darker_125.";} ";
+			$output .= $prefix ." .btn-{$type}:not(:disabled):not(.disabled):active:focus, $prefix .btn-{$type}:not(:disabled):not(.disabled).active:focus, .show>$prefix .btn-{$type}.dropdown-toggle:focus {box-shadow: 0 0 0 0.2rem $op_25;} ";
+
+			if ( $type == 'primary' ) {
+				// dropdown's
+				$output .= $prefix . " .dropdown-item.active, $prefix .dropdown-item:active{background-color: $color_code;} ";
+
+				// input states
+				$output .= $prefix . " .form-control:focus{border-color: " . $lighten_25 . ";box-shadow: 0 0 0 0.2rem $op_25;} ";
+
+				// page link
+				$output .= $prefix . " .page-link:focus{box-shadow: 0 0 0 0.2rem $op_25;} ";
+			}
+
+			return $output;
+		}
+
+		/**
+         *
+         * @deprecated 0.1.76 Use css_overwrite()
+         *
+		 * @param $color_code
+		 * @param $compatibility
+		 * @param $use_variable
+		 *
+		 * @return string
+		 */
+		public static function css_primary($color_code,$compatibility, $use_variable = false){
+
+            if(!$use_variable){
+				$color_code = sanitize_hex_color($color_code);
+				if(!$color_code){return '';}
+			}
+
 			/**
 			 * c = color, b = background color, o = border-color, f = fill
 			 */
@@ -1897,6 +2322,15 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			return $output;
 		}
 
+		/**
+         *
+         * @deprecated 0.1.76 Use css_overwrite()
+         *
+		 * @param $color_code
+		 * @param $compatibility
+		 *
+		 * @return string
+		 */
 		public static function css_secondary($color_code,$compatibility){;
 			$color_code = sanitize_hex_color($color_code);
 			if(!$color_code){return '';}

@@ -1,3 +1,7 @@
+= 0.1.76 =
+* Open video popup on badge click when available - ADDED
+* Changes added for upcoming FSE BlockStrap theme -  ADDED
+
 = 0.1.75 =
 * Font Awesome Settings Dequeue option can disable iconpicker - FIXED
 * aui_init_counters() helper functions added to animate number counters - ADDED

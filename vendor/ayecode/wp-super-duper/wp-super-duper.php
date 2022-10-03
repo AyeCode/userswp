@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.1.1";
+		public $version = "1.1.2";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -1848,6 +1848,20 @@ window.onload = function() {
 	}, 2000);
 };
 
+// fire when URL changes also.
+let lastUrl = location.href;
+new MutationObserver(() => {
+	const url = location.href;
+	if (url !== lastUrl) {
+		lastUrl = url;
+		sd_auto_recover_blocks();
+		// fire a second time incase of load delays.
+		setTimeout(function(){
+			sd_auto_recover_blocks();
+		}, 2000);
+	}
+}).observe(document, {subtree: true, childList: true});
+
 
 			/**
 			*
@@ -1875,18 +1889,25 @@ window.onload = function() {
 
                 }
 
-                if( $args['bg_image'] !== undefined && $args['bg_image'] !== '' ){
+				let $bg_image = $args['bg_image'] !== undefined && $args['bg_image'] !== '' ? $args['bg_image'] : '';
+
+				// maybe use featured image.
+				if( $args['bg_image_use_featured'] !== undefined && $args['bg_image_use_featured'] ){
+					$bg_image = '<?php echo $this->get_url();?>icons/placeholder.png';
+				}
+
+                if( $bg_image !== undefined && $bg_image !== '' ){
                     var hasImage = true
                     if($styles['background-color'] !== undefined && $args['bg'] == 'custom-color'){
-                           $styles['background-image'] = "url("+$args['bg_image']+")";
+                           $styles['background-image'] = "url("+$bg_image+")";
                            $styles['background-blend-mode'] =  "overlay";
                     }else if($styles['background-image'] !== undefined && $args['bg'] == 'custom-gradient'){
-                           $styles['background-image'] +=  ",url("+$args['bg_image']+")";
+                           $styles['background-image'] +=  ",url("+$bg_image+")";
                     }else if($args['bg'] !== undefined && $args['bg'] != '' && $args['bg'] != 'transparent' ){
                            // do nothing as we alreay have a preset
                            hasImage = false;
                     }else{
-                           $styles['background-image'] = "url("+$args['bg_image']+")";
+                           $styles['background-image'] = "url("+$bg_image+")";
                     }
 
                     if( hasImage){
@@ -1897,7 +1918,7 @@ window.onload = function() {
 						 }
                     }
 
-                    if( hasImage && $args['bg_image_xy'].x !== undefined && $args['bg_image_xy'].x.length){
+                    if( hasImage && $args['bg_image_xy'].x !== undefined && $args['bg_image_xy'].x >=0 ){
                           $styles['background-position'] =  ($args['bg_image_xy'].x * 100 ) + "% " + ( $args['bg_image_xy'].y * 100) + "%";
                     }
                 }
@@ -2203,6 +2224,9 @@ jQuery(function() {
 									} else {
 										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
 									}
+								} elseif ( $args['type'] == 'tagselect' ) {
+									$type    = 'array';
+									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
 								} elseif ( $args['type'] == 'multiselect' ) {
 									$type    = 'array';
 									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
@@ -3119,10 +3143,12 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 			}elseif ( $args['type'] == 'image' ) {
 //                print_r($args);
 
-                $img_preview = isset($args['focalpoint']) && !$args['focalpoint'] ? "props.attributes.$key && el('img', { src: props.attributes.$key,style: {maxWidth:'100%',background: '#ccc'}})," : " props.attributes.$key && el(wp.components.FocalPointPicker,{
-                            url:props.attributes.$key,
-                            value: props.attributes.{$key}_xy.x !== undefined && props.attributes.{$key}_xy.x.length ? props.attributes.{$key}_xy  : {x: 0.5,y: 0.5,},
+                $img_preview = isset($args['focalpoint']) && !$args['focalpoint'] ? " props.attributes.$key && el('img', { src: props.attributes.$key,style: {maxWidth:'100%',background: '#ccc'}})," : " ( props.attributes.$key ||  props.attributes.{$key}_use_featured ) && el(wp.components.FocalPointPicker,{
+                            url:  props.attributes.{$key}_use_featured === true ? '".$this->get_url()."icons/placeholder.png'  : props.attributes.$key,
+                            value: props.attributes.{$key}_xy.x !== undefined && props.attributes.{$key}_xy.x >= 0 ? props.attributes.{$key}_xy  : {x: 0.5,y: 0.5,},
+//                            value: props.attributes.{$key}_xy,
                             onChange: function(focalPoint){
+                            console.log(props.attributes);
                                               return props.setAttributes({
                                                   {$key}_xy: focalPoint
                                                 });
@@ -3149,7 +3175,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
                    $extra .= "type: 'image',";
                    $extra .= "render: function (obj) {
                         return el( 'div',{},
-                        !props.attributes.$key && el( wp.components.Button, {
+                        ( !props.attributes.$key && !props.attributes.{$key}_use_featured ) && el( wp.components.Button, {
                           className: 'components-button components-circular-option-picker__clear is-primary is-smallx',
                           onClick: obj.open
                         },
@@ -3158,7 +3184,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
                        $img_preview
                         props.attributes.$key && el( wp.components.Button, {
                                       className: 'components-button components-circular-option-picker__clear is-secondary is-small',
-                                      style: {margin:'8px 0'},
+                                      style: {margin:'8px 0',display: 'block'},
                                       onClick: function(){
                                               return props.setAttributes({
                                                   $key: '',
@@ -3288,6 +3314,41 @@ if (confirmed) {
 				if ( isset( $args['multiple'] ) && $args['multiple'] ) { //@todo multiselect does not work at the moment: https://github.com/WordPress/gutenberg/issues/5550
 					$extra .= ' multiple:true,style:{height:"auto",paddingRight:"8px"}, ';
 				}
+			} elseif ( $args['type'] == 'tagselect' ) {
+//				$type = 'FormTokenField';
+//
+//				if ( ! empty( $args['options'] ) ) {
+//						$options .= "suggestions: [";
+//						foreach ( $args['options'] as $option_val => $option_label ) {
+//							$options .= "{ value: '" . esc_attr( $option_val ) . "', title: '" . addslashes( $option_label ) . "' },";
+////							$options .= "'" . esc_attr( $option_val ) . "':'" . addslashes( $option_label ) . "',";
+//						}
+//						$options .= "],";
+//				}
+//
+//				$onchangex  = "{ ( selectedItems ) => {
+//						// Build array of selected posts.
+//						let selectedPostsArray = [];
+//						selectedPosts.map(
+//							( postName ) => {
+//								const matchingPost = posts.find( ( post ) => {
+//									return post.title.raw === postName;
+//
+//								} );
+//								if ( matchingPost !== undefined ) {
+//									selectedPostsArray.push( matchingPost.id );
+//								}
+//							}
+//						)
+//
+//						setAttributes( { selectedPosts: selectedPostsArray } );
+//					} } ";
+//				$onchange  = '';// "props.setAttributes({ $key: [ props.attributes.$key ] } )";
+//
+////				$options  = "";
+//				$value     = "[]";
+//				$extra .= ' __experimentalExpandOnFocus: true,';
+
 			} elseif ( $args['type'] == 'alignment' ) {
 				$type = 'AlignmentToolbar'; // @todo this does not seem to work but cant find a example
 			}elseif ( $args['type'] == 'margins' ) {
