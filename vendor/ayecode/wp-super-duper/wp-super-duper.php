@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.1.2";
+		public $version = "1.1.1";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -1736,6 +1736,17 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
                 $sd_is_js_functions_loaded = true;
             ?>
 
+function sd_show_view_options($this){
+	if(jQuery($this).html().length){
+		jQuery($this).html('');
+	}else{
+		jQuery($this).html('<div class="position-absolute d-flex flex-column bg-white p-1 rounded border shadow-lg " style="top:-80px;left:-5px;"><div class="dashicons dashicons-desktop mb-1" onclick="sd_set_view_type(\'Desktop\');"></div><div class="dashicons dashicons-tablet mb-1" onclick="sd_set_view_type(\'Tablet\');"></div><div class="dashicons dashicons-smartphone" onclick="sd_set_view_type(\'Mobile\');"></div></div>');
+	}
+}
+
+function sd_set_view_type($device){
+	wp.data.dispatch('core/edit-site') ? wp.data.dispatch('core/edit-site').__experimentalSetPreviewDeviceType($device) : wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType($device);
+}
 			/**
  * Try to auto-recover blocks.
  */
@@ -1938,6 +1949,11 @@ new MutationObserver(() => {
 				// font size
 				if( $args['font_size_custom'] !== undefined && $args['font_size_custom'] !== '' ){
 					$styles['fontSize'] =  $args['font_size_custom'] + "rem";
+				}
+
+				// font color
+				if( $args['text_color_custom'] !== undefined && $args['text_color_custom'] !== '' ){
+					$styles['color'] =  $args['text_color_custom'];
 				}
 
                 return $styles;
@@ -3020,11 +3036,11 @@ el('div',{className: 'bsui'},
             $device_type_require = ! empty( $args['device_type'] ) ? " deviceType == '" . esc_attr($device_type) . "' && " : '';
             $device_type_icon = '';
             if($device_type=='Desktop'){
-                $device_type_icon = '<span class="dashicons dashicons-desktop" style="font-size: 18px;"></span>';
+                $device_type_icon = '<span class="dashicons dashicons-desktop" style="font-size: 18px;" onclick="sd_show_view_options(this);"></span>';
             }elseif($device_type=='Tablet'){
-                $device_type_icon = '<span class="dashicons dashicons-tablet" style="font-size: 18px;"></span>';
+                $device_type_icon = '<span class="dashicons dashicons-tablet" style="font-size: 18px;" onclick="sd_show_view_options(this);"></span>';
             }elseif($device_type=='Mobile'){
-                $device_type_icon = '<span class="dashicons dashicons-smartphone" style="font-size: 18px;"></span>';
+                $device_type_icon = '<span class="dashicons dashicons-smartphone" style="font-size: 18px;" onclick="sd_show_view_options(this);"></span>';
             }
 
 			// icon

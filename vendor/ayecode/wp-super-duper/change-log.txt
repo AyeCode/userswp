@@ -1,3 +1,7 @@
+= 1.1.3 =
+* Preview mode can now be changed from block setting icon - ADDED
+* text_color_custom now implemented for inline custom colors - ADDED
+
 = 1.1.2 =
 * BlockStrap theme color pickers will now add custom colors from FSE - ADDED
 

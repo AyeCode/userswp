@@ -630,10 +630,14 @@ function sd_get_element_require_string( $args, $key, $type ) {
  *
  * @return array
  */
-function sd_get_text_color_input( $type = 'text_color', $overwrite = array() ) {
+function sd_get_text_color_input( $type = 'text_color', $overwrite = array(), $has_custom = false ) {
 	$options = array(
 		           '' => __( "None" ),
 	           ) + sd_aui_colors();
+
+	if ( $has_custom ) {
+		$options['custom'] = __( 'Custom color' );
+	}
 
 	$defaults = array(
 		'type'     => 'select',
@@ -643,6 +647,53 @@ function sd_get_text_color_input( $type = 'text_color', $overwrite = array() ) {
 		'desc_tip' => true,
 		'group'    => __( "Typography" )
 	);
+
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+
+	return $input;
+}
+
+function sd_get_text_color_input_group( $type = 'text_color', $overwrite = array(), $overwrite_custom = array() ) {
+	$inputs = array();
+
+	if ( $overwrite !== false ) {
+		$inputs[ $type ] = sd_get_text_color_input( $type, $overwrite, true );
+	}
+
+	if ( $overwrite_custom !== false ) {
+		$custom            = $type . "_custom";
+		$inputs[ $custom ] = sd_get_custom_color_input( $custom, $overwrite_custom, $type );
+	}
+
+
+	return $inputs;
+}
+
+/**
+ * A helper function for custom color.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function sd_get_custom_color_input( $type = 'color_custom', $overwrite = array(), $parent_type = '' ) {
+
+
+	$defaults = array(
+		'type'              => 'color',
+		'title'             => __( 'Custom color' ),
+		'default'           => '',
+		'placeholder'       => '',
+		'desc_tip'          => true,
+		'group'             => __( "Typography" )
+	);
+
+	if ( $parent_type ) {
+		$defaults['element_require'] = '[%' . $parent_type . '%]=="custom"';
+	}
 
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1728,7 +1779,11 @@ function sd_build_aui_styles( $args ) {
 	// font size
 	if ( ! empty( $args['font_size_custom'] ) && $args['font_size_custom'] !== '' ) {
 		$styles['font-size'] = (float) $args['font_size_custom'] . "rem";
+	}
 
+	// font color
+	if ( ! empty( $args['text_color_custom'] ) && $args['text_color_custom'] !== '' ) {
+		$styles['color'] = esc_attr( $args['text_color_custom'] );
 	}
 
 	$style_string = '';

@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.76';
+		public $version = '0.1.77';
 
 		/**
 		 * Class textdomain.
@@ -1449,13 +1449,31 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				<?php
                 // FSE tweaks.
                 if(!empty($_REQUEST['postType']) && $_REQUEST['postType']=='wp_template'){ ?>
-                setTimeout(function(){
+                function aui_fse_set_data_scroll() {
                     let Iframe = document.getElementsByClassName("edit-site-visual-editor__editor-canvas");
                     let iframe_doc = Iframe[0].contentWindow ? Iframe[0].contentWindow.document : Iframe[0].contentDocument;
                     Iframe[0].contentWindow.onscroll = function () {
                         iframe_doc.documentElement.dataset.scroll = Iframe[0].contentWindow.scrollY;
                     };
+                }
+
+                setTimeout(function(){
+                    aui_fse_set_data_scroll();
                 }, 3000);
+
+                // fire when URL changes also.
+                let lastUrl = location.href;
+                new MutationObserver(() => {
+                    const url = location.href;
+                    if (url !== lastUrl) {
+                        lastUrl = url;
+                        aui_fse_set_data_scroll();
+                        // fire a second time incase of load delays.
+                        setTimeout(function(){
+                            aui_fse_set_data_scroll();
+                        }, 2000);
+                    }
+                }).observe(document, {subtree: true, childList: true});
 				<?php } ?>
 
 
