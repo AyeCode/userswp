@@ -147,8 +147,8 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 == Changelog ==
 
 = 1.2.3.7 =
-* AyeCode UI updated to v0.1.76 - CHANGED
-* Super Duper updated to v1.1.2 - CHANGED
+* AyeCode UI updated to v0.1.77 - CHANGED
+* Super Duper updated to v1.1.3 - CHANGED
 
 = 1.2.3.6 =
 * Some servers fail to crop images - FIXED
