@@ -27,6 +27,10 @@ class UsersWP_Seo {
 	    } else{
 		    add_action( 'wp_head', array( $this, 'output_description' ) );
 	    }
+
+		if ( uwp_is_wpml() ) {
+			add_filter( 'rewrite_rules_array', array( $this, 'rewrite_rules_array' ), 999, 1 );
+		}
     }
 
     public function profile_options($settings) {
@@ -255,6 +259,63 @@ class UsersWP_Seo {
 
         return $url;
     }
+
+	/**
+	 * Filter the rewrite rules to work with translated profile slugs.
+	 *
+	 * @since 1.2.3.7
+	 *
+	 * @param array $rules Rewrite rules.
+	 * @return array Filtered rewrite rules.
+	 */
+	public function rewrite_rules_array( $rules ) {
+		global $sitepress;
+
+		$page_id = uwp_get_page_id( 'profile_page', false );
+		if ( empty( $page_id ) ) {
+			return $rules;
+		}
+
+		$trid = $sitepress->get_element_trid( $page_id, 'post_page' );
+		if ( empty( $trid ) ) {
+			return $rules;
+		}
+
+		$page_slug = get_post_field( 'post_name', $page_id );
+		$tr_page_slugs = array();
+
+		if ( $translations = $sitepress->get_element_translations( $trid, 'post_page' ) ) {
+			foreach ( $translations as $lang => $translation ) {
+				if ( ! empty( $translation->element_id ) ) {
+					$tr_page_slug = get_post_field( 'post_name', $translation->element_id );
+
+					if ( $tr_page_slug && $tr_page_slug != $page_slug && ! in_array( $tr_page_slug, $tr_page_slugs ) ) {
+						$tr_page_slugs[ $translation->element_id ] = $tr_page_slug;
+					}
+				}
+			}
+		}
+
+		if ( ! empty( $tr_page_slugs ) ) {
+			$_rules = $rules;
+			$rules = array();
+
+			foreach ( $_rules as $regex => $query ) {
+				$rules[ $regex ] = $query;
+
+				if ( strpos( $regex, '^' . $page_slug . '/' ) !== false && strpos( $query, 'page_id=' . $page_id . '&' ) !== false ) {
+					foreach ( $tr_page_slugs as $tr_page_id => $tr_page_slug ) {
+						$_regex = str_replace( '^' . $page_slug . '/', '^' . $tr_page_slug . '/', $regex );
+						$_query = str_replace( 'page_id=' . $page_id . '&', 'page_id=' . $tr_page_id . '&', $query );
+
+						$rules[ $_regex ] = $_query;
+					}
+				}
+			}
+		}
+
+		return $rules;
+	}
 }
 
 new UsersWP_Seo();
