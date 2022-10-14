@@ -376,6 +376,16 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 
 		);
 
+		$input[ $type . '_image_use_featured' ] = array(
+			'type'            => 'checkbox',
+			'title'           => __( 'Use featured image' ),
+			'default'         => '',
+			'desc_tip'        => true,
+			'group'           => __( "Background" ),
+			'element_require' => '( [%' . $type . '%]=="" || [%' . $type . '%]=="custom-color" || [%' . $type . '%]=="custom-gradient" || [%' . $type . '%]=="transparent" )'
+
+		);
+
 
 		$input[ $type . '_image' ] = wp_parse_args( $overwrite_image, array(
 			'type'        => 'image',
@@ -384,7 +394,7 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 			'default'     => '',
 			'desc_tip'    => true,
 			'group'       => __( "Background" ),
-//			'element_require' => '( [%' . $type . '%]=="" || [%' . $type . '%]=="custom-color" || [%' . $type . '%]=="custom-gradient" || [%' . $type . '%]=="transparent" )'
+//			'element_require' => ' ![%' . $type . '_image_use_featured%] '
 		) );
 
 		$input[ $type . '_image_id' ] = wp_parse_args( $overwrite_image, array(
@@ -620,10 +630,14 @@ function sd_get_element_require_string( $args, $key, $type ) {
  *
  * @return array
  */
-function sd_get_text_color_input( $type = 'text_color', $overwrite = array() ) {
+function sd_get_text_color_input( $type = 'text_color', $overwrite = array(), $has_custom = false ) {
 	$options = array(
 		           '' => __( "None" ),
 	           ) + sd_aui_colors();
+
+	if ( $has_custom ) {
+		$options['custom'] = __( 'Custom color' );
+	}
 
 	$defaults = array(
 		'type'     => 'select',
@@ -633,6 +647,53 @@ function sd_get_text_color_input( $type = 'text_color', $overwrite = array() ) {
 		'desc_tip' => true,
 		'group'    => __( "Typography" )
 	);
+
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+
+	return $input;
+}
+
+function sd_get_text_color_input_group( $type = 'text_color', $overwrite = array(), $overwrite_custom = array() ) {
+	$inputs = array();
+
+	if ( $overwrite !== false ) {
+		$inputs[ $type ] = sd_get_text_color_input( $type, $overwrite, true );
+	}
+
+	if ( $overwrite_custom !== false ) {
+		$custom            = $type . "_custom";
+		$inputs[ $custom ] = sd_get_custom_color_input( $custom, $overwrite_custom, $type );
+	}
+
+
+	return $inputs;
+}
+
+/**
+ * A helper function for custom color.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function sd_get_custom_color_input( $type = 'color_custom', $overwrite = array(), $parent_type = '' ) {
+
+
+	$defaults = array(
+		'type'              => 'color',
+		'title'             => __( 'Custom color' ),
+		'default'           => '',
+		'placeholder'       => '',
+		'desc_tip'          => true,
+		'group'             => __( "Typography" )
+	);
+
+	if ( $parent_type ) {
+		$defaults['element_require'] = '[%' . $parent_type . '%]=="custom"';
+	}
 
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -875,6 +936,7 @@ function sd_aui_colors( $include_branding = false, $include_outlines = false, $o
 	$theme_colors["salmon"]    = __( 'Salmon' );
 	$theme_colors["cyan"]      = __( 'Cyan' );
 	$theme_colors["gray"]      = __( 'Gray' );
+	$theme_colors["gray-dark"]      = __( 'Gray dark' );
 	$theme_colors["indigo"]    = __( 'Indigo' );
 	$theme_colors["orange"]    = __( 'Orange' );
 
@@ -893,6 +955,7 @@ function sd_aui_colors( $include_branding = false, $include_outlines = false, $o
 		$theme_colors["outline-salmon"]    = __( 'Salmon outline' ) . $button_only;
 		$theme_colors["outline-cyan"]      = __( 'Cyan outline' ) . $button_only;
 		$theme_colors["outline-gray"]      = __( 'Gray outline' ) . $button_only;
+		$theme_colors["outline-gray-dark"]      = __( 'Gray dark outline' ) . $button_only;
 		$theme_colors["outline-indigo"]    = __( 'Indigo outline' ) . $button_only;
 		$theme_colors["outline-orange"]    = __( 'Orange outline' ) . $button_only;
 	}
@@ -902,7 +965,7 @@ function sd_aui_colors( $include_branding = false, $include_outlines = false, $o
 		$theme_colors = $theme_colors + sd_aui_branding_colors();
 	}
 
-	return $theme_colors;
+	return apply_filters( 'sd_aui_colors', $theme_colors, $include_outlines, $include_branding );
 }
 
 /**
@@ -1716,7 +1779,11 @@ function sd_build_aui_styles( $args ) {
 	// font size
 	if ( ! empty( $args['font_size_custom'] ) && $args['font_size_custom'] !== '' ) {
 		$styles['font-size'] = (float) $args['font_size_custom'] . "rem";
+	}
 
+	// font color
+	if ( ! empty( $args['text_color_custom'] ) && $args['text_color_custom'] !== '' ) {
+		$styles['color'] = esc_attr( $args['text_color_custom'] );
 	}
 
 	$style_string = '';

@@ -32,7 +32,7 @@ body.admin-bar{
 
 // background transparent until scroll
 .bg-transparent-until-scroll{
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
 }
 html[data-scroll='0'],html:not([data-scroll]){
   .bg-transparent-until-scroll{
@@ -44,4 +44,11 @@ html[data-scroll='0'],html:not([data-scroll]){
 .editor-styles-wrapper .tab-pane.is-selected, .editor-styles-wrapper .tab-pane.has-child-selected{
   display: block !important;
   opacity: 1 !important;
+}
+
+// Show dropdown when selected.
+.editor-styles-wrapper .dropdown-menu {
+  &.is-selected, &.has-child-selected{
+    display: block;
+  }
 }

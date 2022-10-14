@@ -74,7 +74,7 @@ $colors: map-merge(
 "cyan":       $cyan,
 "white":      $white,
 "gray":       $gray-600,
-"gray-dark":  $gray-800
+"gray-dark":  $gray-700
 ),
 $colors
 );
@@ -117,6 +117,7 @@ $white:         $white !default;
      "salmon":     $salmon,
      "cyan":       $cyan,
      "gray":       $gray-400,
+     "gray-dark":  $gray-600,
      "indigo":     $indigo,
      "orange":     $orange
    ),
