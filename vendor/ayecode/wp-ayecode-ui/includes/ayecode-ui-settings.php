@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.77';
+		public $version = '0.1.84';
 
 		/**
 		 * Class textdomain.
@@ -126,8 +126,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 
 		/**
-         * Add custom colors to the color selector.
-         *
+		 * Add custom colors to the color selector.
+		 *
 		 * @param $theme_colors
 		 * @param $include_outlines
 		 * @param $include_branding
@@ -220,51 +220,51 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 		}
 
-        public static function get_colors( $original = false){
+		public static function get_colors( $original = false){
 
-	        if ( ! defined( 'AUI_PRIMARY_COLOR' ) ) {
-                return array();
-	        }
-	        if ( $original ) {
-                return array(
-	                'primary'   => AUI_PRIMARY_COLOR_ORIGINAL,
-	                'secondary' => AUI_SECONDARY_COLOR_ORIGINAL,
-	                'info'      => AUI_INFO_COLOR_ORIGINAL,
-	                'warning'   => AUI_WARNING_COLOR_ORIGINAL,
-	                'danger'    => AUI_DANGER_COLOR_ORIGINAL,
-	                'success'   => AUI_SUCCESS_COLOR_ORIGINAL,
-	                'light'     => AUI_LIGHT_COLOR_ORIGINAL,
-	                'dark'      => AUI_DARK_COLOR_ORIGINAL,
-	                'white'     => AUI_WHITE_COLOR_ORIGINAL,
-	                'purple'    => AUI_PURPLE_COLOR_ORIGINAL,
-	                'salmon'    => AUI_SALMON_COLOR_ORIGINAL,
-	                'cyan'      => AUI_CYAN_COLOR_ORIGINAL,
-	                'gray'      => AUI_GRAY_COLOR_ORIGINAL,
-	                'indigo'    => AUI_INDIGO_COLOR_ORIGINAL,
-	                'orange'    => AUI_ORANGE_COLOR_ORIGINAL,
-	                'black'     => AUI_BLACK_COLOR_ORIGINAL,
-                );
-	        }
+			if ( ! defined( 'AUI_PRIMARY_COLOR' ) ) {
+				return array();
+			}
+			if ( $original ) {
+				return array(
+					'primary'   => AUI_PRIMARY_COLOR_ORIGINAL,
+					'secondary' => AUI_SECONDARY_COLOR_ORIGINAL,
+					'info'      => AUI_INFO_COLOR_ORIGINAL,
+					'warning'   => AUI_WARNING_COLOR_ORIGINAL,
+					'danger'    => AUI_DANGER_COLOR_ORIGINAL,
+					'success'   => AUI_SUCCESS_COLOR_ORIGINAL,
+					'light'     => AUI_LIGHT_COLOR_ORIGINAL,
+					'dark'      => AUI_DARK_COLOR_ORIGINAL,
+					'white'     => AUI_WHITE_COLOR_ORIGINAL,
+					'purple'    => AUI_PURPLE_COLOR_ORIGINAL,
+					'salmon'    => AUI_SALMON_COLOR_ORIGINAL,
+					'cyan'      => AUI_CYAN_COLOR_ORIGINAL,
+					'gray'      => AUI_GRAY_COLOR_ORIGINAL,
+					'indigo'    => AUI_INDIGO_COLOR_ORIGINAL,
+					'orange'    => AUI_ORANGE_COLOR_ORIGINAL,
+					'black'     => AUI_BLACK_COLOR_ORIGINAL,
+				);
+			}
 
-            return array(
-	            'primary'   => AUI_PRIMARY_COLOR,
-	            'secondary' => AUI_SECONDARY_COLOR,
-	            'info'      => AUI_INFO_COLOR,
-	            'warning'   => AUI_WARNING_COLOR,
-	            'danger'    => AUI_DANGER_COLOR,
-	            'success'   => AUI_SUCCESS_COLOR,
-	            'light'     => AUI_LIGHT_COLOR,
-	            'dark'      => AUI_DARK_COLOR,
-	            'white'     => AUI_WHITE_COLOR,
-	            'purple'    => AUI_PURPLE_COLOR,
-	            'salmon'    => AUI_SALMON_COLOR,
-	            'cyan'      => AUI_CYAN_COLOR,
-	            'gray'      => AUI_GRAY_COLOR,
-	            'indigo'    => AUI_INDIGO_COLOR,
-	            'orange'    => AUI_ORANGE_COLOR,
-	            'black'     => AUI_BLACK_COLOR,
-            );
-        }
+			return array(
+				'primary'   => AUI_PRIMARY_COLOR,
+				'secondary' => AUI_SECONDARY_COLOR,
+				'info'      => AUI_INFO_COLOR,
+				'warning'   => AUI_WARNING_COLOR,
+				'danger'    => AUI_DANGER_COLOR,
+				'success'   => AUI_SUCCESS_COLOR,
+				'light'     => AUI_LIGHT_COLOR,
+				'dark'      => AUI_DARK_COLOR,
+				'white'     => AUI_WHITE_COLOR,
+				'purple'    => AUI_PURPLE_COLOR,
+				'salmon'    => AUI_SALMON_COLOR,
+				'cyan'      => AUI_CYAN_COLOR,
+				'gray'      => AUI_GRAY_COLOR,
+				'indigo'    => AUI_INDIGO_COLOR,
+				'orange'    => AUI_ORANGE_COLOR,
+				'black'     => AUI_BLACK_COLOR,
+			);
+		}
 
 		/**
 		 * Initiate the settings and add the required action hooks.
@@ -361,7 +361,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 		/**
 		 * Check if the current admin screen should load scripts.
-		 * 
+		 *
 		 * @return bool
 		 */
 		public function is_aui_screen(){
@@ -400,8 +400,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 
 		/**
-         * Check if the current theme is a block theme.
-         *
+		 * Check if the current theme is a block theme.
+		 *
 		 * @return bool
 		 */
 		public static function is_block_theme() {
@@ -428,8 +428,21 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				if($this->settings[$css_setting]){
 					$compatibility = $this->settings[$css_setting]=='core' ? false : true;
 					$url = $this->settings[$css_setting]=='core' ? $this->url.'assets/css/ayecode-ui'.$rtl.'.css' : $this->url.'assets/css/ayecode-ui-compatibility'.$rtl.'.css';
+
+
+
 					wp_register_style( 'ayecode-ui', $url, array(), $this->version );
 					wp_enqueue_style( 'ayecode-ui' );
+
+					$current_screen = function_exists('get_current_screen' ) ? get_current_screen() : '';
+
+//					if ( is_admin() && !empty($_REQUEST['postType']) ) {
+					if ( is_admin() && ( !empty($_REQUEST['postType']) || $current_screen->is_block_editor() ) && ( defined( 'BLOCKSTRAP_VERSION' ) || defined( 'AUI_FSE' ) )  ) {
+						$url = $this->url.'assets/css/ayecode-ui-fse.css';
+						wp_register_style( 'ayecode-ui-fse', $url, array(), $this->version );
+						wp_enqueue_style( 'ayecode-ui-fse' );
+					}
+
 
 					// flatpickr
 					wp_register_style( 'flatpickr', $this->url.'assets/css/flatpickr.min.css', array(), $this->version );
@@ -511,782 +524,782 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 			ob_start();
 			?>
-			<script>
-				/**
-				 * An AUI bootstrap adaptation of GreedyNav.js ( by Luke Jackson ).
-				 *
-				 * Simply add the class `greedy` to any <nav> menu and it will do the rest.
-				 * Licensed under the MIT license - http://opensource.org/licenses/MIT
-				 * @ver 0.0.1
-				 */
-				function aui_init_greedy_nav(){
-					jQuery('nav.greedy').each(function(i, obj) {
+            <script>
+                /**
+                 * An AUI bootstrap adaptation of GreedyNav.js ( by Luke Jackson ).
+                 *
+                 * Simply add the class `greedy` to any <nav> menu and it will do the rest.
+                 * Licensed under the MIT license - http://opensource.org/licenses/MIT
+                 * @ver 0.0.1
+                 */
+                function aui_init_greedy_nav(){
+                    jQuery('nav.greedy').each(function(i, obj) {
 
-						// Check if already initialized, if so continue.
-						if(jQuery(this).hasClass("being-greedy")){return true;}
+                        // Check if already initialized, if so continue.
+                        if(jQuery(this).hasClass("being-greedy")){return true;}
 
-						// Make sure its always expanded
-						jQuery(this).addClass('navbar-expand');
+                        // Make sure its always expanded
+                        jQuery(this).addClass('navbar-expand');
 
-						// vars
-						var $vlinks = '';
-						var $dDownClass = '';
-						if(jQuery(this).find('.navbar-nav').length){
-							if(jQuery(this).find('.navbar-nav').hasClass("being-greedy")){return true;}
-							$vlinks = jQuery(this).find('.navbar-nav').addClass("being-greedy w-100").removeClass('overflow-hidden');
-						}else if(jQuery(this).find('.nav').length){
-							if(jQuery(this).find('.nav').hasClass("being-greedy")){return true;}
-							$vlinks = jQuery(this).find('.nav').addClass("being-greedy w-100").removeClass('overflow-hidden');
-							$dDownClass = ' mt-2 ';
-						}else{
-							return false;
-						}
+                        // vars
+                        var $vlinks = '';
+                        var $dDownClass = '';
+                        if(jQuery(this).find('.navbar-nav').length){
+                            if(jQuery(this).find('.navbar-nav').hasClass("being-greedy")){return true;}
+                            $vlinks = jQuery(this).find('.navbar-nav').addClass("being-greedy w-100").removeClass('overflow-hidden');
+                        }else if(jQuery(this).find('.nav').length){
+                            if(jQuery(this).find('.nav').hasClass("being-greedy")){return true;}
+                            $vlinks = jQuery(this).find('.nav').addClass("being-greedy w-100").removeClass('overflow-hidden');
+                            $dDownClass = ' mt-2 ';
+                        }else{
+                            return false;
+                        }
 
-						jQuery($vlinks).append('<li class="nav-item list-unstyled ml-auto greedy-btn d-none dropdown ">' +
-							'<a href="javascript:void(0)" data-toggle="dropdown" class="nav-link"><i class="fas fa-ellipsis-h"></i> <span class="greedy-count badge badge-dark badge-pill"></span></a>' +
-							'<ul class="greedy-links dropdown-menu  dropdown-menu-right '+$dDownClass+'"></ul>' +
-							'</li>');
+                        jQuery($vlinks).append('<li class="nav-item list-unstyled ml-auto greedy-btn d-none dropdown ">' +
+                            '<a href="javascript:void(0)" data-toggle="dropdown" class="nav-link"><i class="fas fa-ellipsis-h"></i> <span class="greedy-count badge badge-dark badge-pill"></span></a>' +
+                            '<ul class="greedy-links dropdown-menu  dropdown-menu-right '+$dDownClass+'"></ul>' +
+                            '</li>');
 
-						var $hlinks = jQuery(this).find('.greedy-links');
-						var $btn = jQuery(this).find('.greedy-btn');
+                        var $hlinks = jQuery(this).find('.greedy-links');
+                        var $btn = jQuery(this).find('.greedy-btn');
 
-						var numOfItems = 0;
-						var totalSpace = 0;
-						var closingTime = 1000;
-						var breakWidths = [];
+                        var numOfItems = 0;
+                        var totalSpace = 0;
+                        var closingTime = 1000;
+                        var breakWidths = [];
 
-						// Get initial state
-						$vlinks.children().outerWidth(function(i, w) {
-							totalSpace += w;
-							numOfItems += 1;
-							breakWidths.push(totalSpace);
-						});
+                        // Get initial state
+                        $vlinks.children().outerWidth(function(i, w) {
+                            totalSpace += w;
+                            numOfItems += 1;
+                            breakWidths.push(totalSpace);
+                        });
 
-						var availableSpace, numOfVisibleItems, requiredSpace, buttonSpace ,timer;
+                        var availableSpace, numOfVisibleItems, requiredSpace, buttonSpace ,timer;
 
-						/*
+                        /*
 						 The check function.
 						 */
-						function check() {
+                        function check() {
 
-							// Get instant state
-							buttonSpace = $btn.width();
-							availableSpace = $vlinks.width() - 10;
-							numOfVisibleItems = $vlinks.children().length;
-							requiredSpace = breakWidths[numOfVisibleItems - 1];
+                            // Get instant state
+                            buttonSpace = $btn.width();
+                            availableSpace = $vlinks.width() - 10;
+                            numOfVisibleItems = $vlinks.children().length;
+                            requiredSpace = breakWidths[numOfVisibleItems - 1];
 
-							// There is not enough space
-							if (numOfVisibleItems > 1 && requiredSpace > availableSpace) {
-								$vlinks.children().last().prev().prependTo($hlinks);
-								numOfVisibleItems -= 1;
-								check();
-								// There is more than enough space
-							} else if (availableSpace > breakWidths[numOfVisibleItems]) {
-								$hlinks.children().first().insertBefore($btn);
-								numOfVisibleItems += 1;
-								check();
-							}
-							// Update the button accordingly
-							jQuery($btn).find(".greedy-count").html( numOfItems - numOfVisibleItems);
-							if (numOfVisibleItems === numOfItems) {
-								$btn.addClass('d-none');
-							} else $btn.removeClass('d-none');
-						}
+                            // There is not enough space
+                            if (numOfVisibleItems > 1 && requiredSpace > availableSpace) {
+                                $vlinks.children().last().prev().prependTo($hlinks);
+                                numOfVisibleItems -= 1;
+                                check();
+                                // There is more than enough space
+                            } else if (availableSpace > breakWidths[numOfVisibleItems]) {
+                                $hlinks.children().first().insertBefore($btn);
+                                numOfVisibleItems += 1;
+                                check();
+                            }
+                            // Update the button accordingly
+                            jQuery($btn).find(".greedy-count").html( numOfItems - numOfVisibleItems);
+                            if (numOfVisibleItems === numOfItems) {
+                                $btn.addClass('d-none');
+                            } else $btn.removeClass('d-none');
+                        }
 
-						// Window listeners
-						jQuery(window).on("resize",function() {
-							check();
-						});
+                        // Window listeners
+                        jQuery(window).on("resize",function() {
+                            check();
+                        });
 
-						// do initial check
-						check();
-					});
-				}
+                        // do initial check
+                        check();
+                    });
+                }
 
-				function aui_select2_locale() {
-					var aui_select2_params = <?php echo self::select2_locale(); ?>;
+                function aui_select2_locale() {
+                    var aui_select2_params = <?php echo self::select2_locale(); ?>;
 
-					return {
-						'language': {
-							errorLoading: function() {
-								// Workaround for https://github.com/select2/select2/issues/4355 instead of i18n_ajax_error.
-								return aui_select2_params.i18n_searching;
-							},
-							inputTooLong: function(args) {
-								var overChars = args.input.length - args.maximum;
-								if (1 === overChars) {
-									return aui_select2_params.i18n_input_too_long_1;
-								}
-								return aui_select2_params.i18n_input_too_long_n.replace('%item%', overChars);
-							},
-							inputTooShort: function(args) {
-								var remainingChars = args.minimum - args.input.length;
-								if (1 === remainingChars) {
-									return aui_select2_params.i18n_input_too_short_1;
-								}
-								return aui_select2_params.i18n_input_too_short_n.replace('%item%', remainingChars);
-							},
-							loadingMore: function() {
-								return aui_select2_params.i18n_load_more;
-							},
-							maximumSelected: function(args) {
-								if (args.maximum === 1) {
-									return aui_select2_params.i18n_selection_too_long_1;
-								}
-								return aui_select2_params.i18n_selection_too_long_n.replace('%item%', args.maximum);
-							},
-							noResults: function() {
-								return aui_select2_params.i18n_no_matches;
-							},
-							searching: function() {
-								return aui_select2_params.i18n_searching;
-							}
-						}
-					};
-				}
+                    return {
+                        'language': {
+                            errorLoading: function() {
+                                // Workaround for https://github.com/select2/select2/issues/4355 instead of i18n_ajax_error.
+                                return aui_select2_params.i18n_searching;
+                            },
+                            inputTooLong: function(args) {
+                                var overChars = args.input.length - args.maximum;
+                                if (1 === overChars) {
+                                    return aui_select2_params.i18n_input_too_long_1;
+                                }
+                                return aui_select2_params.i18n_input_too_long_n.replace('%item%', overChars);
+                            },
+                            inputTooShort: function(args) {
+                                var remainingChars = args.minimum - args.input.length;
+                                if (1 === remainingChars) {
+                                    return aui_select2_params.i18n_input_too_short_1;
+                                }
+                                return aui_select2_params.i18n_input_too_short_n.replace('%item%', remainingChars);
+                            },
+                            loadingMore: function() {
+                                return aui_select2_params.i18n_load_more;
+                            },
+                            maximumSelected: function(args) {
+                                if (args.maximum === 1) {
+                                    return aui_select2_params.i18n_selection_too_long_1;
+                                }
+                                return aui_select2_params.i18n_selection_too_long_n.replace('%item%', args.maximum);
+                            },
+                            noResults: function() {
+                                return aui_select2_params.i18n_no_matches;
+                            },
+                            searching: function() {
+                                return aui_select2_params.i18n_searching;
+                            }
+                        }
+                    };
+                }
 
-				/**
-				 * Initiate Select2 items.
-				 */
-				function aui_init_select2(){
-					var select2_args = jQuery.extend({}, aui_select2_locale());
-					jQuery("select.aui-select2").each(function() {
-						if (!jQuery(this).hasClass("select2-hidden-accessible")) {
-							jQuery(this).select2(select2_args);
-						}
-					});
-				}
+                /**
+                 * Initiate Select2 items.
+                 */
+                function aui_init_select2(){
+                    var select2_args = jQuery.extend({}, aui_select2_locale());
+                    jQuery("select.aui-select2").each(function() {
+                        if (!jQuery(this).hasClass("select2-hidden-accessible")) {
+                            jQuery(this).select2(select2_args);
+                        }
+                    });
+                }
 
-				/**
-				 * A function to convert a time value to a "ago" time text.
-				 *
-				 * @param selector string The .class selector
-				 */
-				function aui_time_ago(selector) {
-					var aui_timeago_params = <?php echo self::timeago_locale(); ?>;
+                /**
+                 * A function to convert a time value to a "ago" time text.
+                 *
+                 * @param selector string The .class selector
+                 */
+                function aui_time_ago(selector) {
+                    var aui_timeago_params = <?php echo self::timeago_locale(); ?>;
 
-					var templates = {
-						prefix: aui_timeago_params.prefix_ago,
-						suffix: aui_timeago_params.suffix_ago,
-						seconds: aui_timeago_params.seconds,
-						minute: aui_timeago_params.minute,
-						minutes: aui_timeago_params.minutes,
-						hour: aui_timeago_params.hour,
-						hours: aui_timeago_params.hours,
-						day: aui_timeago_params.day,
-						days: aui_timeago_params.days,
-						month: aui_timeago_params.month,
-						months: aui_timeago_params.months,
-						year: aui_timeago_params.year,
-						years: aui_timeago_params.years
-					};
-					var template = function (t, n) {
-						return templates[t] && templates[t].replace(/%d/i, Math.abs(Math.round(n)));
-					};
+                    var templates = {
+                        prefix: aui_timeago_params.prefix_ago,
+                        suffix: aui_timeago_params.suffix_ago,
+                        seconds: aui_timeago_params.seconds,
+                        minute: aui_timeago_params.minute,
+                        minutes: aui_timeago_params.minutes,
+                        hour: aui_timeago_params.hour,
+                        hours: aui_timeago_params.hours,
+                        day: aui_timeago_params.day,
+                        days: aui_timeago_params.days,
+                        month: aui_timeago_params.month,
+                        months: aui_timeago_params.months,
+                        year: aui_timeago_params.year,
+                        years: aui_timeago_params.years
+                    };
+                    var template = function (t, n) {
+                        return templates[t] && templates[t].replace(/%d/i, Math.abs(Math.round(n)));
+                    };
 
-					var timer = function (time) {
-						if (!time)
-							return;
-						time = time.replace(/\.\d+/, ""); // remove milliseconds
-						time = time.replace(/-/, "/").replace(/-/, "/");
-						time = time.replace(/T/, " ").replace(/Z/, " UTC");
-						time = time.replace(/([\+\-]\d\d)\:?(\d\d)/, " $1$2"); // -04:00 -> -0400
-						time = new Date(time * 1000 || time);
+                    var timer = function (time) {
+                        if (!time)
+                            return;
+                        time = time.replace(/\.\d+/, ""); // remove milliseconds
+                        time = time.replace(/-/, "/").replace(/-/, "/");
+                        time = time.replace(/T/, " ").replace(/Z/, " UTC");
+                        time = time.replace(/([\+\-]\d\d)\:?(\d\d)/, " $1$2"); // -04:00 -> -0400
+                        time = new Date(time * 1000 || time);
 
-						var now = new Date();
-						var seconds = ((now.getTime() - time) * .001) >> 0;
-						var minutes = seconds / 60;
-						var hours = minutes / 60;
-						var days = hours / 24;
-						var years = days / 365;
+                        var now = new Date();
+                        var seconds = ((now.getTime() - time) * .001) >> 0;
+                        var minutes = seconds / 60;
+                        var hours = minutes / 60;
+                        var days = hours / 24;
+                        var years = days / 365;
 
-						return templates.prefix + (
-								seconds < 45 && template('seconds', seconds) ||
-								seconds < 90 && template('minute', 1) ||
-								minutes < 45 && template('minutes', minutes) ||
-								minutes < 90 && template('hour', 1) ||
-								hours < 24 && template('hours', hours) ||
-								hours < 42 && template('day', 1) ||
-								days < 30 && template('days', days) ||
-								days < 45 && template('month', 1) ||
-								days < 365 && template('months', days / 30) ||
-								years < 1.5 && template('year', 1) ||
-								template('years', years)
-							) + templates.suffix;
-					};
+                        return templates.prefix + (
+                            seconds < 45 && template('seconds', seconds) ||
+                            seconds < 90 && template('minute', 1) ||
+                            minutes < 45 && template('minutes', minutes) ||
+                            minutes < 90 && template('hour', 1) ||
+                            hours < 24 && template('hours', hours) ||
+                            hours < 42 && template('day', 1) ||
+                            days < 30 && template('days', days) ||
+                            days < 45 && template('month', 1) ||
+                            days < 365 && template('months', days / 30) ||
+                            years < 1.5 && template('year', 1) ||
+                            template('years', years)
+                        ) + templates.suffix;
+                    };
 
-					var elements = document.getElementsByClassName(selector);
-					if (selector && elements && elements.length) {
-						for (var i in elements) {
-							var $el = elements[i];
-							if (typeof $el === 'object') {
-								$el.innerHTML = '<i class="far fa-clock"></i> ' + timer($el.getAttribute('title') || $el.getAttribute('datetime'));
-							}
-						}
-					}
+                    var elements = document.getElementsByClassName(selector);
+                    if (selector && elements && elements.length) {
+                        for (var i in elements) {
+                            var $el = elements[i];
+                            if (typeof $el === 'object') {
+                                $el.innerHTML = '<i class="far fa-clock"></i> ' + timer($el.getAttribute('title') || $el.getAttribute('datetime'));
+                            }
+                        }
+                    }
 
-					// update time every minute
-					setTimeout(function() {
-						aui_time_ago(selector);
-					}, 60000);
+                    // update time every minute
+                    setTimeout(function() {
+                        aui_time_ago(selector);
+                    }, 60000);
 
-				}
+                }
 
-				/**
-				 * Initiate tooltips on the page.
-				 */
-				function aui_init_tooltips(){
-					jQuery('[data-toggle="tooltip"]').tooltip();
-					jQuery('[data-toggle="popover"]').popover();
-					jQuery('[data-toggle="popover-html"]').popover({
-						html: true
-					});
+                /**
+                 * Initiate tooltips on the page.
+                 */
+                function aui_init_tooltips(){
+                    jQuery('[data-toggle="tooltip"]').tooltip();
+                    jQuery('[data-toggle="popover"]').popover();
+                    jQuery('[data-toggle="popover-html"]').popover({
+                        html: true
+                    });
 
-					// fix popover container compatibility
-					jQuery('[data-toggle="popover"],[data-toggle="popover-html"]').on('inserted.bs.popover', function () {
-						jQuery('body > .popover').wrapAll("<div class='bsui' />");
-					});
-				}
+                    // fix popover container compatibility
+                    jQuery('[data-toggle="popover"],[data-toggle="popover-html"]').on('inserted.bs.popover', function () {
+                        jQuery('body > .popover').wrapAll("<div class='bsui' />");
+                    });
+                }
 
-				/**
-				 * Initiate flatpickrs on the page.
-				 */
-				$aui_doing_init_flatpickr = false;
-				function aui_init_flatpickr(){
-					if ( typeof jQuery.fn.flatpickr === "function" && !$aui_doing_init_flatpickr) {
-						$aui_doing_init_flatpickr = true;
+                /**
+                 * Initiate flatpickrs on the page.
+                 */
+                $aui_doing_init_flatpickr = false;
+                function aui_init_flatpickr(){
+                    if ( typeof jQuery.fn.flatpickr === "function" && !$aui_doing_init_flatpickr) {
+                        $aui_doing_init_flatpickr = true;
 						<?php if ( ! empty( $flatpickr_locale ) ) { ?>try{flatpickr.localize(<?php echo $flatpickr_locale; ?>);}catch(err){console.log(err.message);}<?php } ?>
-						jQuery('input[data-aui-init="flatpickr"]:not(.flatpickr-input)').flatpickr();
-					}
-					$aui_doing_init_flatpickr = false;
-				}
-
-				/**
-				 * Initiate iconpicker on the page.
-				 */
-				$aui_doing_init_iconpicker = false;
-				function aui_init_iconpicker(){
-					if ( typeof jQuery.fn.iconpicker === "function" && !$aui_doing_init_iconpicker) {
-						$aui_doing_init_iconpicker = true;
-						jQuery('input[data-aui-init="iconpicker"]:not(.iconpicker-input)').iconpicker();
-					}
-					$aui_doing_init_iconpicker= false;
-				}
-
-				function aui_modal_iframe($title,$url,$footer,$dismissible,$class,$dialog_class,$body_class,responsive){
-					if(!$body_class){$body_class = 'p-0';}
-					var wClass = 'text-center position-absolute w-100 text-dark overlay overlay-white p-0 m-0 d-none d-flex justify-content-center align-items-center';
-					var $body = "", sClass = "w-100 p-0 m-0";
-					if (responsive) {
-						$body += '<div class="embed-responsive embed-responsive-16by9">';
-						wClass += ' h-100';
-						sClass += ' embed-responsive-item';
-					} else {
-						wClass += ' vh-100';
-						sClass += ' vh-100';
-					}
-					$body += '<div class="ac-preview-loading ' + wClass + '" style="left:0;top:0"><div class="spinner-border" role="status"></div></div>';
-					$body += '<iframe id="embedModal-iframe" class="' + sClass + '" src="" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>';
-					if (responsive) {
-						$body += '</div>';
-					}
-
-					$m = aui_modal($title,$body,$footer,$dismissible,$class,$dialog_class,$body_class);
-					jQuery( $m ).on( 'shown.bs.modal', function ( e ) {
-						iFrame = jQuery( '#embedModal-iframe') ;
-
-						jQuery('.ac-preview-loading').addClass('d-flex');
-						iFrame.attr({
-							src: $url
-						});
-
-						//resize the iframe once loaded.
-						iFrame.load(function() {
-							jQuery('.ac-preview-loading').removeClass('d-flex');
-						});
-					});
-
-					return $m;
-
-				}
-
-				function aui_modal($title,$body,$footer,$dismissible,$class,$dialog_class,$body_class) {
-					if(!$class){$class = '';}
-					if(!$dialog_class){$dialog_class = '';}
-					if(!$body){$body = '<div class="text-center"><div class="spinner-border" role="status"></div></div>';}
-					// remove it first
-					jQuery('.aui-modal').modal('hide').modal('dispose').remove();
-					jQuery('.modal-backdrop').remove();
-
-					var $modal = '';
-
-					$modal += '<div class="modal aui-modal fade shadow bsui '+$class+'" tabindex="-1">'+
-						'<div class="modal-dialog modal-dialog-centered '+$dialog_class+'">'+
-							'<div class="modal-content border-0 shadow">';
-
-					if($title) {
-						$modal += '<div class="modal-header">' +
-						'<h5 class="modal-title">' + $title + '</h5>';
-
-						if ($dismissible) {
-							$modal += '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-								'<span aria-hidden="true">&times;</span>' +
-								'</button>';
-						}
-
-						$modal += '</div>';
-					}
-					$modal += '<div class="modal-body '+$body_class+'">'+
-									$body+
-								'</div>';
-
-					if($footer){
-						$modal += '<div class="modal-footer">'+
-							$footer +
-							'</div>';
-					}
-
-					$modal +='</div>'+
-						'</div>'+
-					'</div>';
-
-					jQuery('body').append($modal);
-
-					return jQuery('.aui-modal').modal('hide').modal({
-						//backdrop: 'static'
-					});
-				}
-
-				/**
-				 * Show / hide fields depending on conditions.
-				 */
-				function aui_conditional_fields(form){
-					jQuery(form).find(".aui-conditional-field").each(function () {
-
-						var $element_require = jQuery(this).data('element-require');
-
-						if ($element_require) {
-
-							$element_require = $element_require.replace("&#039;", "'"); // replace single quotes
-							$element_require = $element_require.replace("&quot;", '"'); // replace double quotes
-							if (aui_check_form_condition($element_require,form)) {
-								jQuery(this).removeClass('d-none');
-							} else {
-								jQuery(this).addClass('d-none');
-							}
-						}
-					});
-				}
-
-				/**
-				 * Check form condition
-				 */
-				function aui_check_form_condition(condition,form) {
-					if (form) {
-						condition = condition.replace(/\(form\)/g, "('"+form+"')");
-					}
-					return new Function("return " + condition+";")();
-				}
-
-				/**
-				 * A function to determine if a element is on screen.
-				 */
-				jQuery.fn.aui_isOnScreen = function(){
-
-					var win = jQuery(window);
-
-					var viewport = {
-						top : win.scrollTop(),
-						left : win.scrollLeft()
-					};
-					viewport.right = viewport.left + win.width();
-					viewport.bottom = viewport.top + win.height();
-
-					var bounds = this.offset();
-					bounds.right = bounds.left + this.outerWidth();
-					bounds.bottom = bounds.top + this.outerHeight();
-
-					return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
-
-				};
-
-				/**
-				 * Maybe show multiple carousel items if set to do so.
-				 */ 
-				function aui_carousel_maybe_show_multiple_items($carousel){
-					var $items = {};
-					var $item_count = 0;
-
-					// maybe backup
-					if(!jQuery($carousel).find('.carousel-inner-original').length){
-						jQuery($carousel).append('<div class="carousel-inner-original d-none">'+jQuery($carousel).find('.carousel-inner').html()+'</div>');
-					}
-
-					// Get the original items html
-					jQuery($carousel).find('.carousel-inner-original .carousel-item').each(function () {
-						$items[$item_count] = jQuery(this).html();
-						$item_count++;
-					});
-
-					// bail if no items
-					if(!$item_count){return;}
-
-					if(jQuery(window).width() <= 576){
-						// maybe restore original
-						if(jQuery($carousel).find('.carousel-inner').hasClass('aui-multiple-items') && jQuery($carousel).find('.carousel-inner-original').length){
-							jQuery($carousel).find('.carousel-inner').removeClass('aui-multiple-items').html(jQuery($carousel).find('.carousel-inner-original').html());
-							jQuery($carousel).find(".carousel-indicators li").removeClass("d-none");
-						}
-
-					}else{
-						// new items
-						var $md_count = jQuery($carousel).data('limit_show');
-						var $new_items = '';
-						var $new_items_count = 0;
-						var $new_item_count = 0;
-						var $closed = true;
-						Object.keys($items).forEach(function(key,index) {
-
-							// close
-							if(index != 0 && Number.isInteger(index/$md_count) ){
-								$new_items += '</div></div>';
-								$closed = true;
-							}
-
-							// open
-							if(index == 0 || Number.isInteger(index/$md_count) ){
-								$active = index == 0 ? 'active' : '';
-								$new_items += '<div class="carousel-item '+$active+'"><div class="row m-0">';
-								$closed = false;
-								$new_items_count++;
-								$new_item_count = 0;
-							}
-
-							// content
-							$new_items += '<div class="col pr-1 pl-0">'+$items[index]+'</div>';
-							$new_item_count++;
-
-
-						});
-
-						// close if not closed in the loop
-						if(!$closed){
-							// check for spares
-							if($md_count-$new_item_count > 0){
-								$placeholder_count = $md_count-$new_item_count;
-								while($placeholder_count > 0){
-									$new_items += '<div class="col pr-1 pl-0"></div>';
-									$placeholder_count--;
-								}
-
-							}
-
-							$new_items += '</div></div>';
-						}
-
-						// insert the new items
-						jQuery($carousel).find('.carousel-inner').addClass('aui-multiple-items').html($new_items);
-
-						// fix any lazyload images in the active slider
-						jQuery($carousel).find('.carousel-item.active img').each(function () {
-							// fix the srcset
-							if(real_srcset = jQuery(this).attr("data-srcset")){
-								if(!jQuery(this).attr("srcset")) jQuery(this).attr("srcset",real_srcset);
-							}
-							// fix the src
-							if(real_src = jQuery(this).attr("data-src")){
-								if(!jQuery(this).attr("srcset"))  jQuery(this).attr("src",real_src);
-							}
-						});
-
-						// maybe fix carousel indicators
-						$hide_count = $new_items_count-1;
-						jQuery($carousel).find(".carousel-indicators li:gt("+$hide_count+")").addClass("d-none");
-					}
-
-					// trigger a global action to say we have
-					jQuery( window ).trigger( "aui_carousel_multiple" );
-				}
-
-				/**
-				 * Init Multiple item carousels.
-				 */ 
-				function aui_init_carousel_multiple_items(){
-					jQuery(window).on("resize",function(){
-						jQuery('.carousel-multiple-items').each(function () {
-							aui_carousel_maybe_show_multiple_items(this);
-						});
-					});
-
-					// run now
-					jQuery('.carousel-multiple-items').each(function () {
-						aui_carousel_maybe_show_multiple_items(this);
-					});
-				}
-
-				/**
-				 * Allow navs to use multiple sub menus.
-				 */
-				function init_nav_sub_menus(){
-
-					jQuery('.navbar-multi-sub-menus').each(function(i, obj) {
-						// Check if already initialized, if so continue.
-						if(jQuery(this).hasClass("has-sub-sub-menus")){return true;}
-
-						// Make sure its always expanded
-						jQuery(this).addClass('has-sub-sub-menus');
-
-						jQuery(this).find( '.dropdown-menu a.dropdown-toggle' ).on( 'click', function ( e ) {
-							var $el = jQuery( this );
-							$el.toggleClass('active-dropdown');
-							var $parent = jQuery( this ).offsetParent( ".dropdown-menu" );
-							if ( !jQuery( this ).next().hasClass( 'show' ) ) {
-								jQuery( this ).parents( '.dropdown-menu' ).first().find( '.show' ).removeClass( "show" );
-							}
-							var $subMenu = jQuery( this ).next( ".dropdown-menu" );
-							$subMenu.toggleClass( 'show' );
-
-							jQuery( this ).parent( "li" ).toggleClass( 'show' );
-
-							jQuery( this ).parents( 'li.nav-item.dropdown.show' ).on( 'hidden.bs.dropdown', function ( e ) {
-								jQuery( '.dropdown-menu .show' ).removeClass( "show" );
-								$el.removeClass('active-dropdown');
-							} );
-
-							if ( !$parent.parent().hasClass( 'navbar-nav' ) ) {
-								$el.next().addClass('position-relative border-top border-bottom');
-							}
-
-							return false;
-						} );
-
-					});
-
-				}
-
-
-				/**
-				 * Open a lightbox when an embed item is clicked.
-				 */
-				function aui_lightbox_embed($link,ele){
-					ele.preventDefault();
-
-					// remove it first
-					jQuery('.aui-carousel-modal').remove();
-
-					var $modal = '<div class="modal fade aui-carousel-modal bsui" tabindex="-1" role="dialog" aria-labelledby="aui-modal-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-xl mw-100"><div class="modal-content bg-transparent border-0"><div class="modal-header"><h5 class="modal-title" id="aui-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
-					jQuery('body').append($modal);
-
-					jQuery('.aui-carousel-modal').modal({
-						//backdrop: 'static'
-					});
-					jQuery('.aui-carousel-modal').on('hidden.bs.modal', function (e) {
-						jQuery("iframe").attr('src', '');
-					});
-
-					$container = jQuery($link).closest('.aui-gallery');
-
-					$clicked_href = jQuery($link).attr('href');
-					$images = [];
-					$container.find('.aui-lightbox-image').each(function() {
-						var a = this;
-						var href = jQuery(a).attr('href');
-						if (href) {
-							$images.push(href);
-						}
-					});
-
-					if( $images.length ){
-						var $carousel = '<div id="aui-embed-slider-modal" class="carousel slide" >';
-
-						// indicators
-						if($images.length > 1){
-							$i = 0;
-							$carousel  += '<ol class="carousel-indicators position-fixed">';
-							$container.find('.aui-lightbox-image').each(function() {
-								$active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
-								$carousel  += '<li data-target="#aui-embed-slider-modal" data-slide-to="'+$i+'" class="'+$active+'"></li>';
-								$i++;
-
-							});
-							$carousel  += '</ol>';
-						}
-
-
-
-						// items
-						$i = 0;
-						$carousel  += '<div class="carousel-inner">';
-						$container.find('.aui-lightbox-image').each(function() {
-							var a = this;
-
-							$active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
-							$carousel  += '<div class="carousel-item '+ $active+'"><div>';
-
-
-							// image
-							var css_height = window.innerWidth > window.innerHeight ? '90vh' : 'auto';
-							var img = jQuery(a).find('img').clone().removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('max-height',css_height).get(0).outerHTML;
-							$carousel  += img;
-							// captions
-							if(jQuery(a).parent().find('.carousel-caption').length ){
-								$carousel  += jQuery(a).parent().find('.carousel-caption').clone().removeClass('sr-only').get(0).outerHTML;
-							}else if(jQuery(a).parent().find('.figure-caption').length ){
+                        jQuery('input[data-aui-init="flatpickr"]:not(.flatpickr-input)').flatpickr();
+                    }
+                    $aui_doing_init_flatpickr = false;
+                }
+
+                /**
+                 * Initiate iconpicker on the page.
+                 */
+                $aui_doing_init_iconpicker = false;
+                function aui_init_iconpicker(){
+                    if ( typeof jQuery.fn.iconpicker === "function" && !$aui_doing_init_iconpicker) {
+                        $aui_doing_init_iconpicker = true;
+                        jQuery('input[data-aui-init="iconpicker"]:not(.iconpicker-input)').iconpicker();
+                    }
+                    $aui_doing_init_iconpicker= false;
+                }
+
+                function aui_modal_iframe($title,$url,$footer,$dismissible,$class,$dialog_class,$body_class,responsive){
+                    if(!$body_class){$body_class = 'p-0';}
+                    var wClass = 'text-center position-absolute w-100 text-dark overlay overlay-white p-0 m-0 d-none d-flex justify-content-center align-items-center';
+                    var $body = "", sClass = "w-100 p-0 m-0";
+                    if (responsive) {
+                        $body += '<div class="embed-responsive embed-responsive-16by9">';
+                        wClass += ' h-100';
+                        sClass += ' embed-responsive-item';
+                    } else {
+                        wClass += ' vh-100';
+                        sClass += ' vh-100';
+                    }
+                    $body += '<div class="ac-preview-loading ' + wClass + '" style="left:0;top:0"><div class="spinner-border" role="status"></div></div>';
+                    $body += '<iframe id="embedModal-iframe" class="' + sClass + '" src="" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>';
+                    if (responsive) {
+                        $body += '</div>';
+                    }
+
+                    $m = aui_modal($title,$body,$footer,$dismissible,$class,$dialog_class,$body_class);
+                    jQuery( $m ).on( 'shown.bs.modal', function ( e ) {
+                        iFrame = jQuery( '#embedModal-iframe') ;
+
+                        jQuery('.ac-preview-loading').addClass('d-flex');
+                        iFrame.attr({
+                            src: $url
+                        });
+
+                        //resize the iframe once loaded.
+                        iFrame.load(function() {
+                            jQuery('.ac-preview-loading').removeClass('d-flex');
+                        });
+                    });
+
+                    return $m;
+
+                }
+
+                function aui_modal($title,$body,$footer,$dismissible,$class,$dialog_class,$body_class) {
+                    if(!$class){$class = '';}
+                    if(!$dialog_class){$dialog_class = '';}
+                    if(!$body){$body = '<div class="text-center"><div class="spinner-border" role="status"></div></div>';}
+                    // remove it first
+                    jQuery('.aui-modal').modal('hide').modal('dispose').remove();
+                    jQuery('.modal-backdrop').remove();
+
+                    var $modal = '';
+
+                    $modal += '<div class="modal aui-modal fade shadow bsui '+$class+'" tabindex="-1">'+
+                        '<div class="modal-dialog modal-dialog-centered '+$dialog_class+'">'+
+                        '<div class="modal-content border-0 shadow">';
+
+                    if($title) {
+                        $modal += '<div class="modal-header">' +
+                            '<h5 class="modal-title">' + $title + '</h5>';
+
+                        if ($dismissible) {
+                            $modal += '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
+                                '<span aria-hidden="true">&times;</span>' +
+                                '</button>';
+                        }
+
+                        $modal += '</div>';
+                    }
+                    $modal += '<div class="modal-body '+$body_class+'">'+
+                        $body+
+                        '</div>';
+
+                    if($footer){
+                        $modal += '<div class="modal-footer">'+
+                            $footer +
+                            '</div>';
+                    }
+
+                    $modal +='</div>'+
+                        '</div>'+
+                        '</div>';
+
+                    jQuery('body').append($modal);
+
+                    return jQuery('.aui-modal').modal('hide').modal({
+                        //backdrop: 'static'
+                    });
+                }
+
+                /**
+                 * Show / hide fields depending on conditions.
+                 */
+                function aui_conditional_fields(form){
+                    jQuery(form).find(".aui-conditional-field").each(function () {
+
+                        var $element_require = jQuery(this).data('element-require');
+
+                        if ($element_require) {
+
+                            $element_require = $element_require.replace("&#039;", "'"); // replace single quotes
+                            $element_require = $element_require.replace("&quot;", '"'); // replace double quotes
+                            if (aui_check_form_condition($element_require,form)) {
+                                jQuery(this).removeClass('d-none');
+                            } else {
+                                jQuery(this).addClass('d-none');
+                            }
+                        }
+                    });
+                }
+
+                /**
+                 * Check form condition
+                 */
+                function aui_check_form_condition(condition,form) {
+                    if (form) {
+                        condition = condition.replace(/\(form\)/g, "('"+form+"')");
+                    }
+                    return new Function("return " + condition+";")();
+                }
+
+                /**
+                 * A function to determine if a element is on screen.
+                 */
+                jQuery.fn.aui_isOnScreen = function(){
+
+                    var win = jQuery(window);
+
+                    var viewport = {
+                        top : win.scrollTop(),
+                        left : win.scrollLeft()
+                    };
+                    viewport.right = viewport.left + win.width();
+                    viewport.bottom = viewport.top + win.height();
+
+                    var bounds = this.offset();
+                    bounds.right = bounds.left + this.outerWidth();
+                    bounds.bottom = bounds.top + this.outerHeight();
+
+                    return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
+
+                };
+
+                /**
+                 * Maybe show multiple carousel items if set to do so.
+                 */
+                function aui_carousel_maybe_show_multiple_items($carousel){
+                    var $items = {};
+                    var $item_count = 0;
+
+                    // maybe backup
+                    if(!jQuery($carousel).find('.carousel-inner-original').length){
+                        jQuery($carousel).append('<div class="carousel-inner-original d-none">'+jQuery($carousel).find('.carousel-inner').html()+'</div>');
+                    }
+
+                    // Get the original items html
+                    jQuery($carousel).find('.carousel-inner-original .carousel-item').each(function () {
+                        $items[$item_count] = jQuery(this).html();
+                        $item_count++;
+                    });
+
+                    // bail if no items
+                    if(!$item_count){return;}
+
+                    if(jQuery(window).width() <= 576){
+                        // maybe restore original
+                        if(jQuery($carousel).find('.carousel-inner').hasClass('aui-multiple-items') && jQuery($carousel).find('.carousel-inner-original').length){
+                            jQuery($carousel).find('.carousel-inner').removeClass('aui-multiple-items').html(jQuery($carousel).find('.carousel-inner-original').html());
+                            jQuery($carousel).find(".carousel-indicators li").removeClass("d-none");
+                        }
+
+                    }else{
+                        // new items
+                        var $md_count = jQuery($carousel).data('limit_show');
+                        var $new_items = '';
+                        var $new_items_count = 0;
+                        var $new_item_count = 0;
+                        var $closed = true;
+                        Object.keys($items).forEach(function(key,index) {
+
+                            // close
+                            if(index != 0 && Number.isInteger(index/$md_count) ){
+                                $new_items += '</div></div>';
+                                $closed = true;
+                            }
+
+                            // open
+                            if(index == 0 || Number.isInteger(index/$md_count) ){
+                                $active = index == 0 ? 'active' : '';
+                                $new_items += '<div class="carousel-item '+$active+'"><div class="row m-0">';
+                                $closed = false;
+                                $new_items_count++;
+                                $new_item_count = 0;
+                            }
+
+                            // content
+                            $new_items += '<div class="col pr-1 pl-0">'+$items[index]+'</div>';
+                            $new_item_count++;
+
+
+                        });
+
+                        // close if not closed in the loop
+                        if(!$closed){
+                            // check for spares
+                            if($md_count-$new_item_count > 0){
+                                $placeholder_count = $md_count-$new_item_count;
+                                while($placeholder_count > 0){
+                                    $new_items += '<div class="col pr-1 pl-0"></div>';
+                                    $placeholder_count--;
+                                }
+
+                            }
+
+                            $new_items += '</div></div>';
+                        }
+
+                        // insert the new items
+                        jQuery($carousel).find('.carousel-inner').addClass('aui-multiple-items').html($new_items);
+
+                        // fix any lazyload images in the active slider
+                        jQuery($carousel).find('.carousel-item.active img').each(function () {
+                            // fix the srcset
+                            if(real_srcset = jQuery(this).attr("data-srcset")){
+                                if(!jQuery(this).attr("srcset")) jQuery(this).attr("srcset",real_srcset);
+                            }
+                            // fix the src
+                            if(real_src = jQuery(this).attr("data-src")){
+                                if(!jQuery(this).attr("srcset"))  jQuery(this).attr("src",real_src);
+                            }
+                        });
+
+                        // maybe fix carousel indicators
+                        $hide_count = $new_items_count-1;
+                        jQuery($carousel).find(".carousel-indicators li:gt("+$hide_count+")").addClass("d-none");
+                    }
+
+                    // trigger a global action to say we have
+                    jQuery( window ).trigger( "aui_carousel_multiple" );
+                }
+
+                /**
+                 * Init Multiple item carousels.
+                 */
+                function aui_init_carousel_multiple_items(){
+                    jQuery(window).on("resize",function(){
+                        jQuery('.carousel-multiple-items').each(function () {
+                            aui_carousel_maybe_show_multiple_items(this);
+                        });
+                    });
+
+                    // run now
+                    jQuery('.carousel-multiple-items').each(function () {
+                        aui_carousel_maybe_show_multiple_items(this);
+                    });
+                }
+
+                /**
+                 * Allow navs to use multiple sub menus.
+                 */
+                function init_nav_sub_menus(){
+
+                    jQuery('.navbar-multi-sub-menus').each(function(i, obj) {
+                        // Check if already initialized, if so continue.
+                        if(jQuery(this).hasClass("has-sub-sub-menus")){return true;}
+
+                        // Make sure its always expanded
+                        jQuery(this).addClass('has-sub-sub-menus');
+
+                        jQuery(this).find( '.dropdown-menu a.dropdown-toggle' ).on( 'click', function ( e ) {
+                            var $el = jQuery( this );
+                            $el.toggleClass('active-dropdown');
+                            var $parent = jQuery( this ).offsetParent( ".dropdown-menu" );
+                            if ( !jQuery( this ).next().hasClass( 'show' ) ) {
+                                jQuery( this ).parents( '.dropdown-menu' ).first().find( '.show' ).removeClass( "show" );
+                            }
+                            var $subMenu = jQuery( this ).next( ".dropdown-menu" );
+                            $subMenu.toggleClass( 'show' );
+
+                            jQuery( this ).parent( "li" ).toggleClass( 'show' );
+
+                            jQuery( this ).parents( 'li.nav-item.dropdown.show' ).on( 'hidden.bs.dropdown', function ( e ) {
+                                jQuery( '.dropdown-menu .show' ).removeClass( "show" );
+                                $el.removeClass('active-dropdown');
+                            } );
+
+                            if ( !$parent.parent().hasClass( 'navbar-nav' ) ) {
+                                $el.next().addClass('position-relative border-top border-bottom');
+                            }
+
+                            return false;
+                        } );
+
+                    });
+
+                }
+
+
+                /**
+                 * Open a lightbox when an embed item is clicked.
+                 */
+                function aui_lightbox_embed($link,ele){
+                    ele.preventDefault();
+
+                    // remove it first
+                    jQuery('.aui-carousel-modal').remove();
+
+                    var $modal = '<div class="modal fade aui-carousel-modal bsui" tabindex="-1" role="dialog" aria-labelledby="aui-modal-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-xl mw-100"><div class="modal-content bg-transparent border-0"><div class="modal-header"><h5 class="modal-title" id="aui-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
+                    jQuery('body').append($modal);
+
+                    jQuery('.aui-carousel-modal').modal({
+                        //backdrop: 'static'
+                    });
+                    jQuery('.aui-carousel-modal').on('hidden.bs.modal', function (e) {
+                        jQuery("iframe").attr('src', '');
+                    });
+
+                    $container = jQuery($link).closest('.aui-gallery');
+
+                    $clicked_href = jQuery($link).attr('href');
+                    $images = [];
+                    $container.find('.aui-lightbox-image').each(function() {
+                        var a = this;
+                        var href = jQuery(a).attr('href');
+                        if (href) {
+                            $images.push(href);
+                        }
+                    });
+
+                    if( $images.length ){
+                        var $carousel = '<div id="aui-embed-slider-modal" class="carousel slide" >';
+
+                        // indicators
+                        if($images.length > 1){
+                            $i = 0;
+                            $carousel  += '<ol class="carousel-indicators position-fixed">';
+                            $container.find('.aui-lightbox-image').each(function() {
+                                $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
+                                $carousel  += '<li data-target="#aui-embed-slider-modal" data-slide-to="'+$i+'" class="'+$active+'"></li>';
+                                $i++;
+
+                            });
+                            $carousel  += '</ol>';
+                        }
+
+
+
+                        // items
+                        $i = 0;
+                        $carousel  += '<div class="carousel-inner">';
+                        $container.find('.aui-lightbox-image').each(function() {
+                            var a = this;
+
+                            $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
+                            $carousel  += '<div class="carousel-item '+ $active+'"><div>';
+
+
+                            // image
+                            var css_height = window.innerWidth > window.innerHeight ? '90vh' : 'auto';
+                            var img = jQuery(a).find('img').clone().removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('max-height',css_height).get(0).outerHTML;
+                            $carousel  += img;
+                            // captions
+                            if(jQuery(a).parent().find('.carousel-caption').length ){
+                                $carousel  += jQuery(a).parent().find('.carousel-caption').clone().removeClass('sr-only').get(0).outerHTML;
+                            }else if(jQuery(a).parent().find('.figure-caption').length ){
                                 $carousel  += jQuery(a).parent().find('.figure-caption').clone().removeClass('sr-only').addClass('carousel-caption').get(0).outerHTML;
                             }
-							$carousel  += '</div></div>';
-							$i++;
+                            $carousel  += '</div></div>';
+                            $i++;
 
-						});
-						$container.find('.aui-lightbox-iframe').each(function() {
-							var a = this;
+                        });
+                        $container.find('.aui-lightbox-iframe').each(function() {
+                            var a = this;
 
-							$active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
-							$carousel  += '<div class="carousel-item '+ $active+'"><div class="modal-xl mx-auto embed-responsive embed-responsive-16by9">';
-
-
-							// iframe
-							var css_height = window.innerWidth > window.innerHeight ? '95vh' : 'auto';
-							var url = jQuery(a).attr('href');
-							var iframe = '<iframe class="embed-responsive-item" style="height:'+css_height +'" src="'+url+'?rel=0&amp;showinfo=0&amp;modestbranding=1&amp;autoplay=1" id="video" allow="autoplay"></iframe>';
-							var img = iframe ;//.css('height',css_height).get(0).outerHTML;
-							$carousel  += img;
-
-							$carousel  += '</div></div>';
-							$i++;
-
-						});
-						$carousel  += '</div>';
+                            $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
+                            $carousel  += '<div class="carousel-item '+ $active+'"><div class="modal-xl mx-auto embed-responsive embed-responsive-16by9">';
 
 
-						// next/prev indicators
-						if($images.length > 1) {
-							$carousel += '<a class="carousel-control-prev" href="#aui-embed-slider-modal" role="button" data-slide="prev">';
-							$carousel += '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
-							$carousel += ' <a class="carousel-control-next" href="#aui-embed-slider-modal" role="button" data-slide="next">';
-							$carousel += '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
-							$carousel += '</a>';
-						}
+                            // iframe
+                            var css_height = window.innerWidth > window.innerHeight ? '95vh' : 'auto';
+                            var url = jQuery(a).attr('href');
+                            var iframe = '<iframe class="embed-responsive-item" style="height:'+css_height +'" src="'+url+'?rel=0&amp;showinfo=0&amp;modestbranding=1&amp;autoplay=1" id="video" allow="autoplay"></iframe>';
+                            var img = iframe ;//.css('height',css_height).get(0).outerHTML;
+                            $carousel  += img;
+
+                            $carousel  += '</div></div>';
+                            $i++;
+
+                        });
+                        $carousel  += '</div>';
 
 
-						$carousel  += '</div>';
-
-						var $close = '<button type="button" class="close text-white text-right position-fixed" style="font-size: 2.5em;right: 20px;top: 10px; z-index: 1055;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
-
-						jQuery('.aui-carousel-modal .modal-content').html($carousel).prepend($close);
-
-						// enable ajax load
-						//gd_init_carousel_ajax();
-					}
-
-				}
-
-				/**
-				 * Init lightbox embed.
-				 */
-				function aui_init_lightbox_embed(){
-					// Open a lightbox for embeded items
-					jQuery('.aui-lightbox-image, .aui-lightbox-iframe').off('click').on("click",function(ele) {
-						aui_lightbox_embed(this,ele);
-					});
-				}
-
-				/**
-				 * Init modal iframe.
-				 */
-				function aui_init_modal_iframe() {
-					jQuery('.aui-has-embed, [data-aui-embed="iframe"]').each(function(e){
-						if (!jQuery(this).hasClass('aui-modal-iframed') && jQuery(this).data('embed-url')) {
-							jQuery(this).addClass('aui-modal-iframed');
-
-							jQuery(this).on("click",function(e1) {
-								aui_modal_iframe('',jQuery(this).data('embed-url'),'',true,'','modal-lg','aui-modal-iframe p-0',true);
-								return false;
-							});
-						}
-					});
-				}
-
-				/**
-				 * Show a toast.
-				 */
-				$aui_doing_toast = false;
-				function aui_toast($id,$type,$title,$title_small,$body,$time,$can_close){
-
-					if($aui_doing_toast){setTimeout(function(){
-						aui_toast($id,$type,$title,$title_small,$body,$time,$can_close);
-					}, 500); return;}
-
-					$aui_doing_toast = true;
-
-					if($can_close == null){$can_close = false;}
-					if($time == '' || $time == null ){$time = 3000;}
-
-					// if already setup then just show
-					if(document.getElementById($id)){
-						jQuery('#'+$id).toast('show');
-						setTimeout(function(){ $aui_doing_toast = false; }, 500);
-						return;
-					}
-
-					var uniqid = Date.now();
-					if($id){
-						uniqid = $id;
-					}
-
-					$op = "";
-					$tClass = '';
-					$thClass = '';
-					$icon = "";
-
-					if ($type == 'success') {
-						$op = "opacity:.92;";
-						$tClass = 'alert alert-success';
-						$thClass = 'bg-transparent border-0 alert-success';
-						$icon = "<div class='h5 m-0 p-0'><i class='fas fa-check-circle mr-2'></i></div>";
-					} else if ($type == 'error' || $type == 'danger') {
-						$op = "opacity:.92;";
-						$tClass = 'alert alert-danger';
-						$thClass = 'bg-transparent border-0 alert-danger';
-						$icon = "<div class='h5 m-0 p-0'><i class='far fa-times-circle mr-2'></i></div>";
-					} else if ($type == 'info') {
-						$op = "opacity:.92;";
-						$tClass = 'alert alert-info';
-						$thClass = 'bg-transparent border-0 alert-info';
-						$icon = "<div class='h5 m-0 p-0'><i class='fas fa-info-circle mr-2'></i></div>";
-					} else if ($type == 'warning') {
-						$op = "opacity:.92;";
-						$tClass = 'alert alert-warning';
-						$thClass = 'bg-transparent border-0 alert-warning';
-						$icon = "<div class='h5 m-0 p-0'><i class='fas fa-exclamation-triangle mr-2'></i></div>";
-					}
+                        // next/prev indicators
+                        if($images.length > 1) {
+                            $carousel += '<a class="carousel-control-prev" href="#aui-embed-slider-modal" role="button" data-slide="prev">';
+                            $carousel += '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
+                            $carousel += ' <a class="carousel-control-next" href="#aui-embed-slider-modal" role="button" data-slide="next">';
+                            $carousel += '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
+                            $carousel += '</a>';
+                        }
 
 
-					// add container if not exist
-					if(!document.getElementById("aui-toasts")){
-						jQuery('body').append('<div class="bsui" id="aui-toasts"><div class="position-fixed aui-toast-bottom-right pr-3 mb-1" style="z-index: 500000;right: 0;bottom: 0;'+$op+'"></div></div>');
-					}
+                        $carousel  += '</div>';
 
-					$toast = '<div id="'+uniqid+'" class="toast fade hide shadow hover-shadow '+$tClass+'" style="" role="alert" aria-live="assertive" aria-atomic="true" data-delay="'+$time+'">';
-					if($type || $title || $title_small){
-						$toast += '<div class="toast-header '+$thClass+'">';
-						if($icon ){$toast += $icon;}
-						if($title){$toast += '<strong class="mr-auto">'+$title+'</strong>';}
-						if($title_small){$toast += '<small>'+$title_small+'</small>';}
-						if($can_close){$toast += '<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">×</span></button>';}
-						$toast += '</div>';
-					}
-					
-					if($body){
-						$toast += '<div class="toast-body">'+$body+'</div>';
-					}
+                        var $close = '<button type="button" class="close text-white text-right position-fixed" style="font-size: 2.5em;right: 20px;top: 10px; z-index: 1055;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
 
-					$toast += '</div>';
+                        jQuery('.aui-carousel-modal .modal-content').html($carousel).prepend($close);
 
-					jQuery('.aui-toast-bottom-right').prepend($toast);
-					jQuery('#'+uniqid).toast('show');
-					setTimeout(function(){ $aui_doing_toast = false; }, 500);
-				}
+                        // enable ajax load
+                        //gd_init_carousel_ajax();
+                    }
+
+                }
+
+                /**
+                 * Init lightbox embed.
+                 */
+                function aui_init_lightbox_embed(){
+                    // Open a lightbox for embeded items
+                    jQuery('.aui-lightbox-image, .aui-lightbox-iframe').off('click').on("click",function(ele) {
+                        aui_lightbox_embed(this,ele);
+                    });
+                }
+
+                /**
+                 * Init modal iframe.
+                 */
+                function aui_init_modal_iframe() {
+                    jQuery('.aui-has-embed, [data-aui-embed="iframe"]').each(function(e){
+                        if (!jQuery(this).hasClass('aui-modal-iframed') && jQuery(this).data('embed-url')) {
+                            jQuery(this).addClass('aui-modal-iframed');
+
+                            jQuery(this).on("click",function(e1) {
+                                aui_modal_iframe('',jQuery(this).data('embed-url'),'',true,'','modal-lg','aui-modal-iframe p-0',true);
+                                return false;
+                            });
+                        }
+                    });
+                }
+
+                /**
+                 * Show a toast.
+                 */
+                $aui_doing_toast = false;
+                function aui_toast($id,$type,$title,$title_small,$body,$time,$can_close){
+
+                    if($aui_doing_toast){setTimeout(function(){
+                        aui_toast($id,$type,$title,$title_small,$body,$time,$can_close);
+                    }, 500); return;}
+
+                    $aui_doing_toast = true;
+
+                    if($can_close == null){$can_close = false;}
+                    if($time == '' || $time == null ){$time = 3000;}
+
+                    // if already setup then just show
+                    if(document.getElementById($id)){
+                        jQuery('#'+$id).toast('show');
+                        setTimeout(function(){ $aui_doing_toast = false; }, 500);
+                        return;
+                    }
+
+                    var uniqid = Date.now();
+                    if($id){
+                        uniqid = $id;
+                    }
+
+                    $op = "";
+                    $tClass = '';
+                    $thClass = '';
+                    $icon = "";
+
+                    if ($type == 'success') {
+                        $op = "opacity:.92;";
+                        $tClass = 'alert alert-success';
+                        $thClass = 'bg-transparent border-0 alert-success';
+                        $icon = "<div class='h5 m-0 p-0'><i class='fas fa-check-circle mr-2'></i></div>";
+                    } else if ($type == 'error' || $type == 'danger') {
+                        $op = "opacity:.92;";
+                        $tClass = 'alert alert-danger';
+                        $thClass = 'bg-transparent border-0 alert-danger';
+                        $icon = "<div class='h5 m-0 p-0'><i class='far fa-times-circle mr-2'></i></div>";
+                    } else if ($type == 'info') {
+                        $op = "opacity:.92;";
+                        $tClass = 'alert alert-info';
+                        $thClass = 'bg-transparent border-0 alert-info';
+                        $icon = "<div class='h5 m-0 p-0'><i class='fas fa-info-circle mr-2'></i></div>";
+                    } else if ($type == 'warning') {
+                        $op = "opacity:.92;";
+                        $tClass = 'alert alert-warning';
+                        $thClass = 'bg-transparent border-0 alert-warning';
+                        $icon = "<div class='h5 m-0 p-0'><i class='fas fa-exclamation-triangle mr-2'></i></div>";
+                    }
+
+
+                    // add container if not exist
+                    if(!document.getElementById("aui-toasts")){
+                        jQuery('body').append('<div class="bsui" id="aui-toasts"><div class="position-fixed aui-toast-bottom-right pr-3 mb-1" style="z-index: 500000;right: 0;bottom: 0;'+$op+'"></div></div>');
+                    }
+
+                    $toast = '<div id="'+uniqid+'" class="toast fade hide shadow hover-shadow '+$tClass+'" style="" role="alert" aria-live="assertive" aria-atomic="true" data-delay="'+$time+'">';
+                    if($type || $title || $title_small){
+                        $toast += '<div class="toast-header '+$thClass+'">';
+                        if($icon ){$toast += $icon;}
+                        if($title){$toast += '<strong class="mr-auto">'+$title+'</strong>';}
+                        if($title_small){$toast += '<small>'+$title_small+'</small>';}
+                        if($can_close){$toast += '<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">×</span></button>';}
+                        $toast += '</div>';
+                    }
+
+                    if($body){
+                        $toast += '<div class="toast-body">'+$body+'</div>';
+                    }
+
+                    $toast += '</div>';
+
+                    jQuery('.aui-toast-bottom-right').prepend($toast);
+                    jQuery('#'+uniqid).toast('show');
+                    setTimeout(function(){ $aui_doing_toast = false; }, 500);
+                }
 
                 /**
                  * Animate a number.
@@ -1331,103 +1344,103 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                         observer.observe(EL);
                     });
                 }
-				
 
-				/**
-				 * Initiate all AUI JS.
-				 */
-				function aui_init(){
+
+                /**
+                 * Initiate all AUI JS.
+                 */
+                function aui_init(){
 
                     // init counters
                     aui_init_counters();
 
-					// nav menu submenus
-					init_nav_sub_menus();
-					
-					// init tooltips
-					aui_init_tooltips();
+                    // nav menu submenus
+                    init_nav_sub_menus();
 
-					// init select2
-					aui_init_select2();
+                    // init tooltips
+                    aui_init_tooltips();
 
-					// init flatpickr
-					aui_init_flatpickr();
+                    // init select2
+                    aui_init_select2();
 
-					// init iconpicker
-					aui_init_iconpicker();
+                    // init flatpickr
+                    aui_init_flatpickr();
 
-					// init Greedy nav
-					aui_init_greedy_nav();
+                    // init iconpicker
+                    aui_init_iconpicker();
 
-					// Set times to time ago
-					aui_time_ago('timeago');
-					
-					// init multiple item carousels
-					aui_init_carousel_multiple_items();
-					
-					// init lightbox embeds
-					aui_init_lightbox_embed();
+                    // init Greedy nav
+                    aui_init_greedy_nav();
 
-					/* Init modal iframe */
-					aui_init_modal_iframe();
-				}
+                    // Set times to time ago
+                    aui_time_ago('timeago');
 
-				// run on window loaded
-				jQuery(window).on("load",function() {
-					aui_init();
-				});
+                    // init multiple item carousels
+                    aui_init_carousel_multiple_items();
 
-				/* Fix modal background scroll on iOS mobile device */
-				jQuery(function($) {
-					var ua = navigator.userAgent.toLowerCase();
-					var isiOS = ua.match(/(iphone|ipod|ipad)/);
-					if (isiOS) {
-						var pS = 0; pM = parseFloat($('body').css('marginTop'));
+                    // init lightbox embeds
+                    aui_init_lightbox_embed();
 
-						$(document).on('show.bs.modal', function() {
-							pS = window.scrollY;
-							$('body').css({
-								marginTop: -pS,
-								overflow: 'hidden',
-								position: 'fixed',
-							});
-						}).on('hidden.bs.modal', function() {
-							$('body').css({
-								marginTop: pM,
-								overflow: 'visible',
-								position: 'inherit',
-							});
-							window.scrollTo(0, pS);
-						});
-					}
-				});
+                    /* Init modal iframe */
+                    aui_init_modal_iframe();
+                }
 
-				/**
-				 * Show a "confirm" dialog to the user (using jQuery UI's dialog)
-				 *
-				 * @param {string} message The message to display to the user
-				 * @param {string} okButtonText OPTIONAL - The OK button text, defaults to "Yes"
-				 * @param {string} cancelButtonText OPTIONAL - The Cancel button text, defaults to "No"
-				 * @returns {Q.Promise<boolean>} A promise of a boolean value
-				 */
-				var aui_confirm = function (message, okButtonText, cancelButtonText, isDelete, large ) {
-					okButtonText = okButtonText || 'Yes';
-					cancelButtonText = cancelButtonText || 'Cancel';
-					message = message || 'Are you sure?';
-					sizeClass = large ? '' : 'modal-sm';
-					btnClass = isDelete ? 'btn-danger' : 'btn-primary';
+                // run on window loaded
+                jQuery(window).on("load",function() {
+                    aui_init();
+                });
 
-					deferred = jQuery.Deferred();
-					var $body = "";
-					$body += "<h3 class='h4 py-3 text-center text-dark'>"+message+"</h3>";
-					$body += "<div class='d-flex'>";
-					$body += "<button class='btn btn-outline-secondary w-50 btn-round' data-dismiss='modal'  onclick='deferred.resolve(false);'>"+cancelButtonText+"</button>";
-					$body += "<button class='btn "+btnClass+" ml-2 w-50 btn-round' data-dismiss='modal'  onclick='deferred.resolve(true);'>"+okButtonText+"</button>";
-					$body += "</div>";
-					$modal = aui_modal('',$body,'',false,'',sizeClass);
+                /* Fix modal background scroll on iOS mobile device */
+                jQuery(function($) {
+                    var ua = navigator.userAgent.toLowerCase();
+                    var isiOS = ua.match(/(iphone|ipod|ipad)/);
+                    if (isiOS) {
+                        var pS = 0; pM = parseFloat($('body').css('marginTop'));
 
-					return deferred.promise();
-				};
+                        $(document).on('show.bs.modal', function() {
+                            pS = window.scrollY;
+                            $('body').css({
+                                marginTop: -pS,
+                                overflow: 'hidden',
+                                position: 'fixed',
+                            });
+                        }).on('hidden.bs.modal', function() {
+                            $('body').css({
+                                marginTop: pM,
+                                overflow: 'visible',
+                                position: 'inherit',
+                            });
+                            window.scrollTo(0, pS);
+                        });
+                    }
+                });
+
+                /**
+                 * Show a "confirm" dialog to the user (using jQuery UI's dialog)
+                 *
+                 * @param {string} message The message to display to the user
+                 * @param {string} okButtonText OPTIONAL - The OK button text, defaults to "Yes"
+                 * @param {string} cancelButtonText OPTIONAL - The Cancel button text, defaults to "No"
+                 * @returns {Q.Promise<boolean>} A promise of a boolean value
+                 */
+                var aui_confirm = function (message, okButtonText, cancelButtonText, isDelete, large ) {
+                    okButtonText = okButtonText || 'Yes';
+                    cancelButtonText = cancelButtonText || 'Cancel';
+                    message = message || 'Are you sure?';
+                    sizeClass = large ? '' : 'modal-sm';
+                    btnClass = isDelete ? 'btn-danger' : 'btn-primary';
+
+                    deferred = jQuery.Deferred();
+                    var $body = "";
+                    $body += "<h3 class='h4 py-3 text-center text-dark'>"+message+"</h3>";
+                    $body += "<div class='d-flex'>";
+                    $body += "<button class='btn btn-outline-secondary w-50 btn-round' data-dismiss='modal'  onclick='deferred.resolve(false);'>"+cancelButtonText+"</button>";
+                    $body += "<button class='btn "+btnClass+" ml-2 w-50 btn-round' data-dismiss='modal'  onclick='deferred.resolve(true);'>"+okButtonText+"</button>";
+                    $body += "</div>";
+                    $modal = aui_modal('',$body,'',false,'',sizeClass);
+
+                    return deferred.promise();
+                };
 
                 /**
                  * Add a window scrolled data element.
@@ -1447,10 +1460,12 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                 aui_set_data_scroll();
 
 				<?php
-                // FSE tweaks.
-                if(!empty($_REQUEST['postType']) && $_REQUEST['postType']=='wp_template'){ ?>
+				// FSE tweaks.
+				if(!empty($_REQUEST['postType']) && $_REQUEST['postType']=='wp_template'){ ?>
                 function aui_fse_set_data_scroll() {
+                    console.log('init scroll');
                     let Iframe = document.getElementsByClassName("edit-site-visual-editor__editor-canvas");
+                    if( Iframe[0] === undefined ){ return; }
                     let iframe_doc = Iframe[0].contentWindow ? Iframe[0].contentWindow.document : Iframe[0].contentDocument;
                     Iframe[0].contentWindow.onscroll = function () {
                         iframe_doc.documentElement.dataset.scroll = Iframe[0].contentWindow.scrollY;
@@ -1462,11 +1477,11 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                 }, 3000);
 
                 // fire when URL changes also.
-                let lastUrl = location.href;
+                let FSElastUrl = location.href;
                 new MutationObserver(() => {
                     const url = location.href;
-                    if (url !== lastUrl) {
-                        lastUrl = url;
+                    if (url !== FSElastUrl) {
+                        FSElastUrl = url;
                         aui_fse_set_data_scroll();
                         // fire a second time incase of load delays.
                         setTimeout(function(){
@@ -1477,7 +1492,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				<?php } ?>
 
 
-			</script>
+            </script>
 			<?php
 			$output = ob_get_clean();
 
@@ -1502,12 +1517,12 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		public static function bs3_compat_js() {
 			ob_start();
 			?>
-			<script>
+            <script>
 				<?php if( defined( 'FUSION_BUILDER_VERSION' ) ){ ?>
-				/* With Avada builder */
+                /* With Avada builder */
 
 				<?php } ?>
-			</script>
+            </script>
 			<?php
 			return str_replace( array(
 				'<script>',
@@ -1523,12 +1538,12 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		public function inline_script_file_browser(){
 			ob_start();
 			?>
-			<script>
-				// run on doc ready
-				jQuery(document).ready(function () {
-					bsCustomFileInput.init();
-				});
-			</script>
+            <script>
+                // run on doc ready
+                jQuery(document).ready(function () {
+                    bsCustomFileInput.init();
+                });
+            </script>
 			<?php
 			$output = ob_get_clean();
 
@@ -1560,7 +1575,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 				// flatpickr
 				wp_register_script( 'iconpicker', $this->url . 'assets/js/fa-iconpicker.min.js', array(), $this->version );
-				
+
 				// Bootstrap file browser
 				wp_register_script( 'aui-custom-file-input', $url = $this->url . 'assets/js/bs-custom-file-input.min.js', array( 'jquery' ), $this->select2_version );
 				wp_add_inline_script( 'aui-custom-file-input', $this->inline_script_file_browser() );
@@ -1712,14 +1727,17 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				}
 			}
 
-			$defaults = array(
-				'css'       => 'compatibility', // core, compatibility
-				'js'        => $js_default, // js to load, core-popper, popper
-				'html_font_size'        => '16', // js to load, core-popper, popper
-				'css_backend'       => 'compatibility', // core, compatibility
-				'js_backend'        => $js_default_backend, // js to load, core-popper, popper
-				'disable_admin'     =>  '', // URL snippets to disable loading on admin
-			);
+			/**
+			 * Filter the default settings.
+			 */
+			$defaults = apply_filters( 'ayecode-ui-default-settings', array(
+				'css'            => 'compatibility', // core, compatibility
+				'js'             => $js_default, // js to load, core-popper, popper
+				'html_font_size' => '16', // js to load, core-popper, popper
+				'css_backend'    => 'compatibility', // core, compatibility
+				'js_backend'     => $js_default_backend, // js to load, core-popper, popper
+				'disable_admin'  => '', // URL snippets to disable loading on admin
+			), $db_settings );
 
 			$settings = wp_parse_args( $db_settings, $defaults );
 
@@ -1740,99 +1758,99 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				wp_die( __( 'You do not have sufficient permissions to access this page.', 'aui' ) );
 			}
 			?>
-			<div class="wrap">
-				<h1><?php echo $this->name; ?></h1>
-				<p><?php _e("Here you can adjust settings if you are having compatibility issues.",'aui');?></p>
-				<form method="post" action="options.php">
+            <div class="wrap">
+                <h1><?php echo $this->name; ?></h1>
+                <p><?php echo apply_filters( 'ayecode-ui-settings-message', __("Here you can adjust settings if you are having compatibility issues.",'aui') );?></p>
+                <form method="post" action="options.php">
 					<?php
 					settings_fields( 'ayecode-ui-settings' );
 					do_settings_sections( 'ayecode-ui-settings' );
 					?>
 
-					<h2><?php _e( 'Frontend', 'aui' ); ?></h2>
-					<table class="form-table wpbs-table-settings">
-						<tr valign="top">
-							<th scope="row"><label
-									for="wpbs-css"><?php _e( 'Load CSS', 'aui' ); ?></label></th>
-							<td>
-								<select name="ayecode-ui-settings[css]" id="wpbs-css">
-									<option	value="compatibility" <?php selected( $this->settings['css'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode (default)', 'aui' ); ?></option>
-									<option value="core" <?php selected( $this->settings['css'], 'core' ); ?>><?php _e( 'Full Mode', 'aui' ); ?></option>
-									<option	value="" <?php selected( $this->settings['css'], '' ); ?>><?php _e( 'Disabled', 'aui' ); ?></option>
-								</select>
-							</td>
-						</tr>
+                    <h2><?php _e( 'Frontend', 'aui' ); ?></h2>
+                    <table class="form-table wpbs-table-settings">
+                        <tr valign="top">
+                            <th scope="row"><label
+                                        for="wpbs-css"><?php _e( 'Load CSS', 'aui' ); ?></label></th>
+                            <td>
+                                <select name="ayecode-ui-settings[css]" id="wpbs-css">
+                                    <option	value="compatibility" <?php selected( $this->settings['css'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode (default)', 'aui' ); ?></option>
+                                    <option value="core" <?php selected( $this->settings['css'], 'core' ); ?>><?php _e( 'Full Mode', 'aui' ); ?></option>
+                                    <option	value="" <?php selected( $this->settings['css'], '' ); ?>><?php _e( 'Disabled', 'aui' ); ?></option>
+                                </select>
+                            </td>
+                        </tr>
 
-						<tr valign="top">
-							<th scope="row"><label
-									for="wpbs-js"><?php _e( 'Load JS', 'aui' ); ?></label></th>
-							<td>
-								<select name="ayecode-ui-settings[js]" id="wpbs-js">
-									<option	value="core-popper" <?php selected( $this->settings['js'], 'core-popper' ); ?>><?php _e( 'Core + Popper (default)', 'aui' ); ?></option>
-									<option value="popper" <?php selected( $this->settings['js'], 'popper' ); ?>><?php _e( 'Popper', 'aui' ); ?></option>
-									<option value="required" <?php selected( $this->settings['js'], 'required' ); ?>><?php _e( 'Required functions only', 'aui' ); ?></option>
-									<option	value="" <?php selected( $this->settings['js'], '' ); ?>><?php _e( 'Disabled (not recommended)', 'aui' ); ?></option>
-								</select>
-							</td>
-						</tr>
+                        <tr valign="top">
+                            <th scope="row"><label
+                                        for="wpbs-js"><?php _e( 'Load JS', 'aui' ); ?></label></th>
+                            <td>
+                                <select name="ayecode-ui-settings[js]" id="wpbs-js">
+                                    <option	value="core-popper" <?php selected( $this->settings['js'], 'core-popper' ); ?>><?php _e( 'Core + Popper (default)', 'aui' ); ?></option>
+                                    <option value="popper" <?php selected( $this->settings['js'], 'popper' ); ?>><?php _e( 'Popper', 'aui' ); ?></option>
+                                    <option value="required" <?php selected( $this->settings['js'], 'required' ); ?>><?php _e( 'Required functions only', 'aui' ); ?></option>
+                                    <option	value="" <?php selected( $this->settings['js'], '' ); ?>><?php _e( 'Disabled (not recommended)', 'aui' ); ?></option>
+                                </select>
+                            </td>
+                        </tr>
 
-						<tr valign="top">
-							<th scope="row"><label
-									for="wpbs-font_size"><?php _e( 'HTML Font Size (px)', 'aui' ); ?></label></th>
-							<td>
-								<input type="number" name="ayecode-ui-settings[html_font_size]" id="wpbs-font_size" value="<?php echo absint( $this->settings['html_font_size']); ?>" placeholder="16" />
-								<p class="description" ><?php _e("Our font sizing is rem (responsive based) here you can set the html font size in-case your theme is setting it too low.",'aui');?></p>
-							</td>
-						</tr>
+                        <tr valign="top">
+                            <th scope="row"><label
+                                        for="wpbs-font_size"><?php _e( 'HTML Font Size (px)', 'aui' ); ?></label></th>
+                            <td>
+                                <input type="number" name="ayecode-ui-settings[html_font_size]" id="wpbs-font_size" value="<?php echo absint( $this->settings['html_font_size']); ?>" placeholder="16" />
+                                <p class="description" ><?php _e("Our font sizing is rem (responsive based) here you can set the html font size in-case your theme is setting it too low.",'aui');?></p>
+                            </td>
+                        </tr>
 
-					</table>
+                    </table>
 
-					<h2><?php _e( 'Backend', 'aui' ); ?> (wp-admin)</h2>
-					<table class="form-table wpbs-table-settings">
-						<tr valign="top">
-							<th scope="row"><label
-									for="wpbs-css-admin"><?php _e( 'Load CSS', 'aui' ); ?></label></th>
-							<td>
-								<select name="ayecode-ui-settings[css_backend]" id="wpbs-css-admin">
-									<option	value="compatibility" <?php selected( $this->settings['css_backend'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode (default)', 'aui' ); ?></option>
-									<option value="core" <?php selected( $this->settings['css_backend'], 'core' ); ?>><?php _e( 'Full Mode (will cause style issues)', 'aui' ); ?></option>
-									<option	value="" <?php selected( $this->settings['css_backend'], '' ); ?>><?php _e( 'Disabled', 'aui' ); ?></option>
-								</select>
-							</td>
-						</tr>
+                    <h2><?php _e( 'Backend', 'aui' ); ?> (wp-admin)</h2>
+                    <table class="form-table wpbs-table-settings">
+                        <tr valign="top">
+                            <th scope="row"><label
+                                        for="wpbs-css-admin"><?php _e( 'Load CSS', 'aui' ); ?></label></th>
+                            <td>
+                                <select name="ayecode-ui-settings[css_backend]" id="wpbs-css-admin">
+                                    <option	value="compatibility" <?php selected( $this->settings['css_backend'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode (default)', 'aui' ); ?></option>
+                                    <option value="core" <?php selected( $this->settings['css_backend'], 'core' ); ?>><?php _e( 'Full Mode (will cause style issues)', 'aui' ); ?></option>
+                                    <option	value="" <?php selected( $this->settings['css_backend'], '' ); ?>><?php _e( 'Disabled', 'aui' ); ?></option>
+                                </select>
+                            </td>
+                        </tr>
 
-						<tr valign="top">
-							<th scope="row"><label
-									for="wpbs-js-admin"><?php _e( 'Load JS', 'aui' ); ?></label></th>
-							<td>
-								<select name="ayecode-ui-settings[js_backend]" id="wpbs-js-admin">
-									<option	value="core-popper" <?php selected( $this->settings['js_backend'], 'core-popper' ); ?>><?php _e( 'Core + Popper (default)', 'aui' ); ?></option>
-									<option value="popper" <?php selected( $this->settings['js_backend'], 'popper' ); ?>><?php _e( 'Popper', 'aui' ); ?></option>
-									<option value="required" <?php selected( $this->settings['js_backend'], 'required' ); ?>><?php _e( 'Required functions only', 'aui' ); ?></option>
-									<option	value="" <?php selected( $this->settings['js_backend'], '' ); ?>><?php _e( 'Disabled (not recommended)', 'aui' ); ?></option>
-								</select>
-							</td>
-						</tr>
+                        <tr valign="top">
+                            <th scope="row"><label
+                                        for="wpbs-js-admin"><?php _e( 'Load JS', 'aui' ); ?></label></th>
+                            <td>
+                                <select name="ayecode-ui-settings[js_backend]" id="wpbs-js-admin">
+                                    <option	value="core-popper" <?php selected( $this->settings['js_backend'], 'core-popper' ); ?>><?php _e( 'Core + Popper (default)', 'aui' ); ?></option>
+                                    <option value="popper" <?php selected( $this->settings['js_backend'], 'popper' ); ?>><?php _e( 'Popper', 'aui' ); ?></option>
+                                    <option value="required" <?php selected( $this->settings['js_backend'], 'required' ); ?>><?php _e( 'Required functions only', 'aui' ); ?></option>
+                                    <option	value="" <?php selected( $this->settings['js_backend'], '' ); ?>><?php _e( 'Disabled (not recommended)', 'aui' ); ?></option>
+                                </select>
+                            </td>
+                        </tr>
 
-						<tr valign="top">
-							<th scope="row"><label
-									for="wpbs-disable-admin"><?php _e( 'Disable load on URL', 'aui' ); ?></label></th>
-							<td>
-								<p><?php _e( 'If you have backend conflict you can enter a partial URL argument that will disable the loading of AUI on those pages. Add each argument on a new line.', 'aui' ); ?></p>
-								<textarea name="ayecode-ui-settings[disable_admin]" rows="10" cols="50" id="wpbs-disable-admin" class="large-text code" spellcheck="false" placeholder="myplugin.php &#10;action=go"><?php echo $this->settings['disable_admin'];?></textarea>
+                        <tr valign="top">
+                            <th scope="row"><label
+                                        for="wpbs-disable-admin"><?php _e( 'Disable load on URL', 'aui' ); ?></label></th>
+                            <td>
+                                <p><?php _e( 'If you have backend conflict you can enter a partial URL argument that will disable the loading of AUI on those pages. Add each argument on a new line.', 'aui' ); ?></p>
+                                <textarea name="ayecode-ui-settings[disable_admin]" rows="10" cols="50" id="wpbs-disable-admin" class="large-text code" spellcheck="false" placeholder="myplugin.php &#10;action=go"><?php echo $this->settings['disable_admin'];?></textarea>
 
-							</td>
-						</tr>
+                            </td>
+                        </tr>
 
-					</table>
+                    </table>
 
 					<?php
 					submit_button();
 					?>
-				</form>
+                </form>
 
-				<div id="wpbs-version"><?php echo $this->version; ?></div>
-			</div>
+                <div id="wpbs-version"><?php echo $this->version; ?></div>
+            </div>
 
 			<?php
 		}
@@ -1881,33 +1899,33 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		public static function bs3_compat_css() {
 			ob_start();
 			?>
-			<style>
-			/* Bootstrap 3 compatibility */
-			body.modal-open .modal-backdrop.show:not(.in) {opacity:0.5;}
-			body.modal-open .modal.show:not(.in)  {opacity:1;z-index: 99999}
-			body.modal-open .modal.show:not(.in) .modal-content  {box-shadow: none;}
-			body.modal-open .modal.show:not(.in)  .modal-dialog {transform: initial;}
+            <style>
+                /* Bootstrap 3 compatibility */
+                body.modal-open .modal-backdrop.show:not(.in) {opacity:0.5;}
+                body.modal-open .modal.show:not(.in)  {opacity:1;z-index: 99999}
+                body.modal-open .modal.show:not(.in) .modal-content  {box-shadow: none;}
+                body.modal-open .modal.show:not(.in)  .modal-dialog {transform: initial;}
 
-			body.modal-open .modal.bsui .modal-dialog{left: auto;}
+                body.modal-open .modal.bsui .modal-dialog{left: auto;}
 
-			.collapse.show:not(.in){display: inherit;}
-			.fade.show{opacity: 1;}
+                .collapse.show:not(.in){display: inherit;}
+                .fade.show{opacity: 1;}
 
-			<?php if( defined( 'SVQ_THEME_VERSION' ) ){ ?>
-			/* KLEO theme specific */
-			.kleo-main-header .navbar-collapse.collapse.show:not(.in){display: block !important;}
-			<?php } ?>
+                <?php if( defined( 'SVQ_THEME_VERSION' ) ){ ?>
+                /* KLEO theme specific */
+                .kleo-main-header .navbar-collapse.collapse.show:not(.in){display: block !important;}
+                <?php } ?>
 
-			<?php if( defined( 'FUSION_BUILDER_VERSION' ) ){ ?>
-			/* With Avada builder */
-			body.modal-open .modal.in  {opacity:1;z-index: 99999}
-			body.modal-open .modal.bsui.in .modal-content  {box-shadow: none;}
-			.bsui .collapse.in{display: inherit;}
-			.bsui .collapse.in.row.show{display: flex;}
-			.bsui .collapse.in.row:not(.show){display: none;}
+                <?php if( defined( 'FUSION_BUILDER_VERSION' ) ){ ?>
+                /* With Avada builder */
+                body.modal-open .modal.in  {opacity:1;z-index: 99999}
+                body.modal-open .modal.bsui.in .modal-content  {box-shadow: none;}
+                .bsui .collapse.in{display: inherit;}
+                .bsui .collapse.in.row.show{display: flex;}
+                .bsui .collapse.in.row:not(.show){display: none;}
 
-			<?php } ?>
-			</style>
+                <?php } ?>
+            </style>
 			<?php
 			return str_replace( array(
 				'<style>',
@@ -1943,28 +1961,28 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			ob_start();
 
 			?>
-			<style>
-				<?php
+            <style>
+                <?php
 
 					// BS v3 compat
 					if( self::is_bs3_compat() ){
-					    echo self::bs3_compat_css();
+						echo self::bs3_compat_css();
 					}
 
-                    if(!empty($colors)){
-                        $d_colors = self::get_colors(true);
-                        //print_r($d_colors );exit;
+					if(!empty($colors)){
+						$d_colors = self::get_colors(true);
+						//print_r($d_colors );exit;
 //                        print_r($colors );exit;
-                        $is_fse = !empty($_REQUEST['postType']) && $_REQUEST['postType']=='wp_template';
-                        foreach($colors as $key => $color ){
-                            if((empty( $d_colors[$key]) ||  $d_colors[$key] != $color) || $is_fse ) {
-                                $var = $is_fse ? "var(--wp--preset--color--$key)" : $color;
-                                $compat = $is_fse ? '.editor-styles-wrapper' : $compatibility;
-                                echo self::css_overwrite($key,$var,$compat);
-                            }
-                        }
-                       // exit;
-                    }
+						$is_fse = !empty($_REQUEST['postType']) && $_REQUEST['postType']=='wp_template';
+						foreach($colors as $key => $color ){
+							if((empty( $d_colors[$key]) ||  $d_colors[$key] != $color) || $is_fse ) {
+								$var = $is_fse ? "var(--wp--preset--color--$key)" : $color;
+								$compat = $is_fse ? '.editor-styles-wrapper' : $compatibility;
+								echo self::css_overwrite($key,$var,$compat);
+							}
+						}
+					   // exit;
+					}
 
 					// Set admin bar z-index lower when modal is open.
 					echo ' body.modal-open #wpadminbar{z-index:999}.embed-responsive-16by9 .fluid-width-video-wrapper{padding:0 !important;position:initial}';
@@ -1972,8 +1990,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					if(is_admin()){
 						echo ' body.modal-open #adminmenuwrap{z-index:999} body.modal-open #wpadminbar{z-index:1025}';
 					}
-                ?>
-			</style>
+				?>
+            </style>
 			<?php
 
 
@@ -1998,8 +2016,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 
 		/**
-         * Build the CSS to overwrite a bootstrap color variable.
-         *
+		 * Build the CSS to overwrite a bootstrap color variable.
+		 *
 		 * @param $type
 		 * @param $color_code
 		 * @param $compatibility
@@ -2008,7 +2026,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 */
 		public static function css_overwrite($type,$color_code,$compatibility){
 
-            $is_var = false;
+			$is_var = false;
 			if(!$color_code){return '';}
 			if(!sanitize_hex_color($color_code)){
 				$color_code = esc_attr($color_code);
@@ -2017,13 +2035,13 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			}
 			if(!$color_code){return '';}
 
-            if($compatibility===true || $compatibility===1){
-	            $compatibility = '.bsui';
-            }elseif(!$compatibility){
-	            $compatibility = '';
-            }else{
-	            $compatibility = esc_attr($compatibility);
-            }
+			if($compatibility===true || $compatibility===1){
+				$compatibility = '.bsui';
+			}elseif(!$compatibility){
+				$compatibility = '';
+			}else{
+				$compatibility = esc_attr($compatibility);
+			}
 
 //            echo '####'.$color_code;exit;
 
@@ -2151,7 +2169,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 			$prefix = $compatibility ? $compatibility . " " : "";
 
-            $transition = $is_var ? 'transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,filter 0.15s ease-in-out;' : '';
+			$transition = $is_var ? 'transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,filter 0.15s ease-in-out;' : '';
 			// darken
 			$darker_075 = $is_var ? $color_code.';filter:brightness(0.925)' : self::css_hex_lighten_darken($color_code,"-0.075");
 			$darker_10 = $is_var ? $color_code.';filter:brightness(0.9)' : self::css_hex_lighten_darken($color_code,"-0.10");
@@ -2187,9 +2205,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 
 		/**
-         *
-         * @deprecated 0.1.76 Use css_overwrite()
-         *
+		 *
+		 * @deprecated 0.1.76 Use css_overwrite()
+		 *
 		 * @param $color_code
 		 * @param $compatibility
 		 * @param $use_variable
@@ -2198,7 +2216,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 */
 		public static function css_primary($color_code,$compatibility, $use_variable = false){
 
-            if(!$use_variable){
+			if(!$use_variable){
 				$color_code = sanitize_hex_color($color_code);
 				if(!$color_code){return '';}
 			}
@@ -2341,9 +2359,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 
 		/**
-         *
-         * @deprecated 0.1.76 Use css_overwrite()
-         *
+		 *
+		 * @deprecated 0.1.76 Use css_overwrite()
+		 *
 		 * @param $color_code
 		 * @param $compatibility
 		 *
@@ -2726,46 +2744,46 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				$month_long[] = addslashes( $params[ 'month_long_' . $i ] );
 			}
 
-ob_start();
-if ( 0 ) { ?><script><?php } ?>
-{
-	weekdays: {
-		shorthand: ['<?php echo implode( "','", $day_s3 ); ?>'],
-		longhand: ['<?php echo implode( "','", $day_s5 ); ?>'],
-	},
-	months: {
-		shorthand: ['<?php echo implode( "','", $month_s ); ?>'],
-		longhand: ['<?php echo implode( "','", $month_long ); ?>'],
-	},
-	daysInMonth: [31,28,31,30,31,30,31,31,30,31,30,31],
-	firstDayOfWeek: <?php echo (int) $params[ 'firstDayOfWeek' ]; ?>,
-	ordinal: function (nth) {
-		var s = nth % 100;
-		if (s > 3 && s < 21)
-			return "th";
-		switch (s % 10) {
-			case 1:
-				return "st";
-			case 2:
-				return "nd";
-			case 3:
-				return "rd";
-			default:
-				return "th";
-		}
-	},
-	rangeSeparator: '<?php echo addslashes( $params[ 'rangeSeparator' ] ); ?>',
-	weekAbbreviation: '<?php echo addslashes( $params[ 'weekAbbreviation' ] ); ?>',
-	scrollTitle: '<?php echo addslashes( $params[ 'scrollTitle' ] ); ?>',
-	toggleTitle: '<?php echo addslashes( $params[ 'toggleTitle' ] ); ?>',
-	amPM: ['<?php echo addslashes( $params[ 'am_upper' ] ); ?>','<?php echo addslashes( $params[ 'pm_upper' ] ); ?>'],
-	yearAriaLabel: '<?php echo addslashes( $params[ 'year' ] ); ?>',
-	hourAriaLabel: '<?php echo addslashes( $params[ 'hour' ] ); ?>',
-	minuteAriaLabel: '<?php echo addslashes( $params[ 'minute' ] ); ?>',
-	time_24hr: <?php echo ( $params[ 'time_24hr' ] ? 'true' : 'false' ) ; ?>
-}
-<?php if ( 0 ) { ?></script><?php } ?>
-<?php
+			ob_start();
+		if ( 0 ) { ?><script><?php } ?>
+                {
+                    weekdays: {
+                        shorthand: ['<?php echo implode( "','", $day_s3 ); ?>'],
+                            longhand: ['<?php echo implode( "','", $day_s5 ); ?>'],
+                    },
+                    months: {
+                        shorthand: ['<?php echo implode( "','", $month_s ); ?>'],
+                            longhand: ['<?php echo implode( "','", $month_long ); ?>'],
+                    },
+                    daysInMonth: [31,28,31,30,31,30,31,31,30,31,30,31],
+                        firstDayOfWeek: <?php echo (int) $params[ 'firstDayOfWeek' ]; ?>,
+                    ordinal: function (nth) {
+                        var s = nth % 100;
+                        if (s > 3 && s < 21)
+                            return "th";
+                        switch (s % 10) {
+                            case 1:
+                                return "st";
+                            case 2:
+                                return "nd";
+                            case 3:
+                                return "rd";
+                            default:
+                                return "th";
+                        }
+                    },
+                    rangeSeparator: '<?php echo addslashes( $params[ 'rangeSeparator' ] ); ?>',
+                        weekAbbreviation: '<?php echo addslashes( $params[ 'weekAbbreviation' ] ); ?>',
+                    scrollTitle: '<?php echo addslashes( $params[ 'scrollTitle' ] ); ?>',
+                    toggleTitle: '<?php echo addslashes( $params[ 'toggleTitle' ] ); ?>',
+                    amPM: ['<?php echo addslashes( $params[ 'am_upper' ] ); ?>','<?php echo addslashes( $params[ 'pm_upper' ] ); ?>'],
+                    yearAriaLabel: '<?php echo addslashes( $params[ 'year' ] ); ?>',
+                    hourAriaLabel: '<?php echo addslashes( $params[ 'hour' ] ); ?>',
+                    minuteAriaLabel: '<?php echo addslashes( $params[ 'minute' ] ); ?>',
+                    time_24hr: <?php echo ( $params[ 'time_24hr' ] ? 'true' : 'false' ) ; ?>
+                }
+				<?php if ( 0 ) { ?></script><?php } ?>
+			<?php
 			$locale = ob_get_clean();
 
 			return apply_filters( 'ayecode_ui_flatpickr_locale', trim( $locale ) );
@@ -2949,507 +2967,507 @@ if ( 0 ) { ?><script><?php } ?>
 		public function conditional_fields_js() {
 			ob_start();
 			?>
-<script>
-/**
- * Conditional Fields
- */
-var aui_cf_field_rules = [], aui_cf_field_key_rules = {}, aui_cf_field_default_values = {};
+            <script>
+                /**
+                 * Conditional Fields
+                 */
+                var aui_cf_field_rules = [], aui_cf_field_key_rules = {}, aui_cf_field_default_values = {};
 
-jQuery(function($) {
-    aui_cf_field_init_rules($);
-});
+                jQuery(function($) {
+                    aui_cf_field_init_rules($);
+                });
 
-/**
- * Conditional fields init.
- */
-function aui_cf_field_init_rules($) {
-    if (!$('[data-has-rule]').length) {
-        return;
-    }
-    $('input.select2-search__field').attr('data-ignore-rule','');
-    $('[data-rule-key]').on('change keypress keyup gdclear', 'input, textarea', function() {
-        aui_cf_field_apply_rules($(this));
-    });
-
-    $('[data-rule-key]').on('change gdclear', 'select', function() {
-        aui_cf_field_apply_rules($(this));
-    });
-
-    $('[data-rule-key]').on('change.select2', 'select', function() {
-        aui_cf_field_apply_rules($(this));
-    });
-
-    aui_cf_field_setup_rules($);
-}
-
-/**
- * Setup conditional field rules.
- */
-function aui_cf_field_setup_rules($) {
-    var aui_cf_field_keys = [];
-
-    $('[data-rule-key]').each(function() {
-        var key = $(this).data('rule-key'), irule = parseInt($(this).data('has-rule'));
-        if (key) {
-            aui_cf_field_keys.push(key);
-        }
-
-        var parse_conds = {};
-        if ($(this).data('rule-fie-0')) {
-            $(this).find('input,select,textarea').each(function() {
-                if ($(this).attr('required') || $(this).attr('oninvalid')) {
-                    $(this).addClass('aui-cf-req');
-                    if ($(this).attr('required')) {
-                        $(this).attr('data-rule-req', true);
+                /**
+                 * Conditional fields init.
+                 */
+                function aui_cf_field_init_rules($) {
+                    if (!$('[data-has-rule]').length) {
+                        return;
                     }
-                    if ($(this).attr('oninvalid')) {
-                        $(this).attr('data-rule-oninvalid', $(this).attr('oninvalid'));
-                    }
-                }
-            });
-            for (var i = 0; i < irule; i++) {
-                var field = $(this).data('rule-fie-' + i);
-                if (typeof parse_conds[i] === 'undefined') {
-                    parse_conds[i] = {};
-                }
-                parse_conds[i]['action'] = $(this).data('rule-act-' + i);
-                parse_conds[i]['field'] = $(this).data('rule-fie-' + i);
-                parse_conds[i]['condition'] = $(this).data('rule-con-' + i);
-                parse_conds[i]['value'] = $(this).data('rule-val-' + i);
-            }
+                    $('input.select2-search__field').attr('data-ignore-rule','');
+                    $('[data-rule-key]').on('change keypress keyup gdclear', 'input, textarea', function() {
+                        aui_cf_field_apply_rules($(this));
+                    });
 
-            $.each(parse_conds, function(j, data) {
-                var item = {
-                    'field': {
-                        key: key,
-                        action: data.action,
-                        field: data.field,
-                        condition: data.condition,
-                        value: data.value,
-                        rule: {
-                            key: key,
-                            action: data.action,
-                            condition: data.condition,
-                            value: data.value
+                    $('[data-rule-key]').on('change gdclear', 'select', function() {
+                        aui_cf_field_apply_rules($(this));
+                    });
+
+                    $('[data-rule-key]').on('change.select2', 'select', function() {
+                        aui_cf_field_apply_rules($(this));
+                    });
+
+                    aui_cf_field_setup_rules($);
+                }
+
+                /**
+                 * Setup conditional field rules.
+                 */
+                function aui_cf_field_setup_rules($) {
+                    var aui_cf_field_keys = [];
+
+                    $('[data-rule-key]').each(function() {
+                        var key = $(this).data('rule-key'), irule = parseInt($(this).data('has-rule'));
+                        if (key) {
+                            aui_cf_field_keys.push(key);
                         }
+
+                        var parse_conds = {};
+                        if ($(this).data('rule-fie-0')) {
+                            $(this).find('input,select,textarea').each(function() {
+                                if ($(this).attr('required') || $(this).attr('oninvalid')) {
+                                    $(this).addClass('aui-cf-req');
+                                    if ($(this).attr('required')) {
+                                        $(this).attr('data-rule-req', true);
+                                    }
+                                    if ($(this).attr('oninvalid')) {
+                                        $(this).attr('data-rule-oninvalid', $(this).attr('oninvalid'));
+                                    }
+                                }
+                            });
+                            for (var i = 0; i < irule; i++) {
+                                var field = $(this).data('rule-fie-' + i);
+                                if (typeof parse_conds[i] === 'undefined') {
+                                    parse_conds[i] = {};
+                                }
+                                parse_conds[i]['action'] = $(this).data('rule-act-' + i);
+                                parse_conds[i]['field'] = $(this).data('rule-fie-' + i);
+                                parse_conds[i]['condition'] = $(this).data('rule-con-' + i);
+                                parse_conds[i]['value'] = $(this).data('rule-val-' + i);
+                            }
+
+                            $.each(parse_conds, function(j, data) {
+                                var item = {
+                                    'field': {
+                                        key: key,
+                                        action: data.action,
+                                        field: data.field,
+                                        condition: data.condition,
+                                        value: data.value,
+                                        rule: {
+                                            key: key,
+                                            action: data.action,
+                                            condition: data.condition,
+                                            value: data.value
+                                        }
+                                    }
+                                };
+                                aui_cf_field_rules.push(item);
+                            });
+                        }
+                        aui_cf_field_default_values[$(this).data('rule-key')] = aui_cf_field_get_default_value($(this));
+                    });
+
+                    $.each(aui_cf_field_keys, function(i, fkey) {
+                        aui_cf_field_key_rules[fkey] = aui_cf_field_get_children(fkey);
+                    });
+
+                    $('[data-rule-key]:visible').each(function() {
+                        var conds = aui_cf_field_key_rules[$(this).data('rule-key')];
+                        if (conds && conds.length) {
+                            var $main_el = $(this), el = aui_cf_field_get_element($main_el);
+                            if ($(el).length) {
+                                aui_cf_field_apply_rules($(el));
+                            }
+                        }
+                    });
+                }
+
+                /**
+                 * Apply conditional field rules.
+                 */
+                function aui_cf_field_apply_rules($el) {
+                    if (!$el.parents('[data-rule-key]').length) {
+                        return;
                     }
-                };
-                aui_cf_field_rules.push(item);
-            });
-        }
-        aui_cf_field_default_values[$(this).data('rule-key')] = aui_cf_field_get_default_value($(this));
-    });
 
-    $.each(aui_cf_field_keys, function(i, fkey) {
-        aui_cf_field_key_rules[fkey] = aui_cf_field_get_children(fkey);
-    });
-
-    $('[data-rule-key]:visible').each(function() {
-        var conds = aui_cf_field_key_rules[$(this).data('rule-key')];
-        if (conds && conds.length) {
-            var $main_el = $(this), el = aui_cf_field_get_element($main_el);
-            if ($(el).length) {
-                aui_cf_field_apply_rules($(el));
-            }
-        }
-    });
-}
-
-/**
- * Apply conditional field rules.
- */
-function aui_cf_field_apply_rules($el) {
-    if (!$el.parents('[data-rule-key]').length) {
-        return;
-    }
-
-    if ($el.data('no-rule')) {
-        return;
-    }
-
-    var key = $el.parents('[data-rule-key]').data('rule-key');
-    var conditions = aui_cf_field_key_rules[key];
-    if (typeof conditions === 'undefined') {
-        return;
-    }
-    var field_type = aui_cf_field_get_type($el.parents('[data-rule-key]')), current_value = aui_cf_field_get_value($el);
-    var $keys = {}, $keys_values = {}, $key_rules = {};
-
-    jQuery.each(conditions, function(index, condition) {
-        if (typeof $keys_values[condition.key] == 'undefined') {
-            $keys_values[condition.key] = [];
-            $key_rules[condition.key] = {}
-        }
-
-        $keys_values[condition.key].push(condition.value);
-        $key_rules[condition.key] = condition;
-    });
-
-    jQuery.each(conditions, function(index, condition) {
-        if (typeof $keys[condition.key] == 'undefined') {
-            $keys[condition.key] = {};
-        }
-
-        if (condition.condition === 'empty') {
-            var field_value = Array.isArray(current_value) ? current_value.join('') : current_value;
-            if (!field_value || field_value === '') {
-                $keys[condition.key][index] = true;
-            } else {
-                $keys[condition.key][index] = false;
-            }
-        } else if (condition.condition === 'not empty') {
-            var field_value = Array.isArray(current_value) ? current_value.join('') : current_value;
-            if (field_value && field_value !== '') {
-                $keys[condition.key][index] = true;
-            } else {
-                $keys[condition.key][index] = false;
-            }
-        } else if (condition.condition === 'equals to') {
-            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
-            if (((condition.value && condition.value == condition.value) || (condition.value === field_value)) && aui_cf_field_in_array(field_value, $keys_values[condition.key])) {
-                $keys[condition.key][index] = true;
-            } else {
-                $keys[condition.key][index] = false;
-            }
-        } else if (condition.condition === 'not equals') {
-            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
-            if (jQuery.isNumeric(condition.value) && parseInt(field_value) !== parseInt(condition.value) && field_value && !aui_cf_field_in_array(field_value, $keys_values[condition.key])) {
-                $keys[condition.key][index] = true;
-            } else if (condition.value != field_value && !aui_cf_field_in_array(field_value, $keys_values[condition.key])) {
-                $keys[condition.key][index] = true;
-            } else {
-                $keys[condition.key][index] = false;
-            }
-        } else if (condition.condition === 'greater than') {
-            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
-            if (jQuery.isNumeric(condition.value) && parseInt(field_value) > parseInt(condition.value)) {
-                $keys[condition.key][index] = true;
-            } else {
-                $keys[condition.key][index] = false;
-            }
-        } else if (condition.condition === 'less than') {
-            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
-            if (jQuery.isNumeric(condition.value) && parseInt(field_value) < parseInt(condition.value)) {
-                $keys[condition.key][index] = true;
-            } else {
-                $keys[condition.key][index] = false;
-            }
-        } else if (condition.condition === 'contains') {
-            switch (field_type) {
-                case 'multiselect':
-                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) {
-                        $keys[condition.key][index] = true;
-                    } else {
-                        $keys[condition.key][index] = false;
+                    if ($el.data('no-rule')) {
+                        return;
                     }
-                    break;
-                case 'checkbox':
-                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) {
-                        $keys[condition.key][index] = true;
-                    } else {
-                        $keys[condition.key][index] = false;
+
+                    var key = $el.parents('[data-rule-key]').data('rule-key');
+                    var conditions = aui_cf_field_key_rules[key];
+                    if (typeof conditions === 'undefined') {
+                        return;
                     }
-                    break;
-                default:
-                    if (typeof $keys[condition.key][index] === 'undefined') {
-                        if (current_value && current_value.indexOf(condition.value) >= 0 && aui_cf_field_in_array(current_value, $keys_values[condition.key], false, true)) {
-                            $keys[condition.key][index] = true;
+                    var field_type = aui_cf_field_get_type($el.parents('[data-rule-key]')), current_value = aui_cf_field_get_value($el);
+                    var $keys = {}, $keys_values = {}, $key_rules = {};
+
+                    jQuery.each(conditions, function(index, condition) {
+                        if (typeof $keys_values[condition.key] == 'undefined') {
+                            $keys_values[condition.key] = [];
+                            $key_rules[condition.key] = {}
+                        }
+
+                        $keys_values[condition.key].push(condition.value);
+                        $key_rules[condition.key] = condition;
+                    });
+
+                    jQuery.each(conditions, function(index, condition) {
+                        if (typeof $keys[condition.key] == 'undefined') {
+                            $keys[condition.key] = {};
+                        }
+
+                        if (condition.condition === 'empty') {
+                            var field_value = Array.isArray(current_value) ? current_value.join('') : current_value;
+                            if (!field_value || field_value === '') {
+                                $keys[condition.key][index] = true;
+                            } else {
+                                $keys[condition.key][index] = false;
+                            }
+                        } else if (condition.condition === 'not empty') {
+                            var field_value = Array.isArray(current_value) ? current_value.join('') : current_value;
+                            if (field_value && field_value !== '') {
+                                $keys[condition.key][index] = true;
+                            } else {
+                                $keys[condition.key][index] = false;
+                            }
+                        } else if (condition.condition === 'equals to') {
+                            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
+                            if (((condition.value && condition.value == condition.value) || (condition.value === field_value)) && aui_cf_field_in_array(field_value, $keys_values[condition.key])) {
+                                $keys[condition.key][index] = true;
+                            } else {
+                                $keys[condition.key][index] = false;
+                            }
+                        } else if (condition.condition === 'not equals') {
+                            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
+                            if (jQuery.isNumeric(condition.value) && parseInt(field_value) !== parseInt(condition.value) && field_value && !aui_cf_field_in_array(field_value, $keys_values[condition.key])) {
+                                $keys[condition.key][index] = true;
+                            } else if (condition.value != field_value && !aui_cf_field_in_array(field_value, $keys_values[condition.key])) {
+                                $keys[condition.key][index] = true;
+                            } else {
+                                $keys[condition.key][index] = false;
+                            }
+                        } else if (condition.condition === 'greater than') {
+                            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
+                            if (jQuery.isNumeric(condition.value) && parseInt(field_value) > parseInt(condition.value)) {
+                                $keys[condition.key][index] = true;
+                            } else {
+                                $keys[condition.key][index] = false;
+                            }
+                        } else if (condition.condition === 'less than') {
+                            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
+                            if (jQuery.isNumeric(condition.value) && parseInt(field_value) < parseInt(condition.value)) {
+                                $keys[condition.key][index] = true;
+                            } else {
+                                $keys[condition.key][index] = false;
+                            }
+                        } else if (condition.condition === 'contains') {
+                            switch (field_type) {
+                                case 'multiselect':
+                                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) {
+                                        $keys[condition.key][index] = true;
+                                    } else {
+                                        $keys[condition.key][index] = false;
+                                    }
+                                    break;
+                                case 'checkbox':
+                                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) {
+                                        $keys[condition.key][index] = true;
+                                    } else {
+                                        $keys[condition.key][index] = false;
+                                    }
+                                    break;
+                                default:
+                                    if (typeof $keys[condition.key][index] === 'undefined') {
+                                        if (current_value && current_value.indexOf(condition.value) >= 0 && aui_cf_field_in_array(current_value, $keys_values[condition.key], false, true)) {
+                                            $keys[condition.key][index] = true;
+                                        } else {
+                                            $keys[condition.key][index] = false;
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                    });
+
+                    jQuery.each($keys, function(index, field) {
+                        if (aui_cf_field_in_array(true, field)) {
+                            aui_cf_field_apply_action($el, $key_rules[index], true);
                         } else {
-                            $keys[condition.key][index] = false;
+                            aui_cf_field_apply_action($el, $key_rules[index], false);
+                        }
+                    });
+
+                    /* Trigger field change */
+                    if ($keys.length) {
+                        $el.trigger('aui_cf_field_on_change');
+                    }
+                }
+
+                /**
+                 * Get the field element.
+                 */
+                function aui_cf_field_get_element($el) {
+                    var el = $el.find('input:not("[data-ignore-rule]"),textarea,select'), type = aui_cf_field_get_type($el);
+                    if (type && window._aui_cf_field_elements && typeof window._aui_cf_field_elements == 'object' && typeof window._aui_cf_field_elements[type] != 'undefined') {
+                        el = window._aui_cf_field_elements[type];
+                    }
+                    return el;
+                }
+
+                /**
+                 * Get the field type.
+                 */
+                function aui_cf_field_get_type($el) {
+                    return $el.data('rule-type');
+                }
+
+                /**
+                 * Get the field value.
+                 */
+                function aui_cf_field_get_value($el) {
+                    var current_value = $el.val();
+
+                    if ($el.is(':checkbox')) {
+                        current_value = '';
+                        if ($el.parents('[data-rule-key]').find('input:checked').length > 1) {
+                            $el.parents('[data-rule-key]').find('input:checked').each(function() {
+                                current_value = current_value + jQuery(this).val() + ' ';
+                            });
+                        } else {
+                            if ($el.parents('[data-rule-key]').find('input:checked').length >= 1) {
+                                current_value = $el.parents('[data-rule-key]').find('input:checked').val();
+                            }
                         }
                     }
-                    break;
-            }
-        }
-    });
 
-    jQuery.each($keys, function(index, field) {
-        if (aui_cf_field_in_array(true, field)) {
-            aui_cf_field_apply_action($el, $key_rules[index], true);
-        } else {
-            aui_cf_field_apply_action($el, $key_rules[index], false);
-        }
-    });
+                    if ($el.is(':radio')) {
+                        current_value = $el.parents('[data-rule-key]').find('input[type=radio]:checked').val();
+                    }
 
-    /* Trigger field change */
-    if ($keys.length) {
-        $el.trigger('aui_cf_field_on_change');
-    }
-}
-
-/**
- * Get the field element.
- */
-function aui_cf_field_get_element($el) {
-    var el = $el.find('input:not("[data-ignore-rule]"),textarea,select'), type = aui_cf_field_get_type($el);
-    if (type && window._aui_cf_field_elements && typeof window._aui_cf_field_elements == 'object' && typeof window._aui_cf_field_elements[type] != 'undefined') {
-        el = window._aui_cf_field_elements[type];
-    }
-    return el;
-}
-
-/**
- * Get the field type.
- */
-function aui_cf_field_get_type($el) {
-    return $el.data('rule-type');
-}
-
-/**
- * Get the field value.
- */
-function aui_cf_field_get_value($el) {
-    var current_value = $el.val();
-
-    if ($el.is(':checkbox')) {
-        current_value = '';
-        if ($el.parents('[data-rule-key]').find('input:checked').length > 1) {
-            $el.parents('[data-rule-key]').find('input:checked').each(function() {
-                current_value = current_value + jQuery(this).val() + ' ';
-            });
-        } else {
-            if ($el.parents('[data-rule-key]').find('input:checked').length >= 1) {
-                current_value = $el.parents('[data-rule-key]').find('input:checked').val();
-            }
-        }
-    }
-
-    if ($el.is(':radio')) {
-        current_value = $el.parents('[data-rule-key]').find('input[type=radio]:checked').val();
-    }
-
-    return current_value;
-}
-
-/**
- * Get the field default value.
- */
-function aui_cf_field_get_default_value($el) {
-    var value = '', type = aui_cf_field_get_type($el);
-
-    switch (type) {
-        case 'text':
-        case 'number':
-        case 'date':
-        case 'textarea':
-        case 'select':
-            value = $el.find('input:text,input[type="number"],textarea,select').val();
-            break;
-        case 'phone':
-        case 'email':
-        case 'color':
-        case 'url':
-        case 'hidden':
-        case 'password':
-        case 'file':
-            value = $el.find('input[type="' + type + '"]').val();
-            break;
-        case 'multiselect':
-            value = $el.find('select').val();
-            break;
-        case 'radio':
-            if ($el.find('input[type="radio"]:checked').length >= 1) {
-                value = $el.find('input[type="radio"]:checked').val();
-            }
-            break;
-        case 'checkbox':
-            if ($el.find('input[type="checkbox"]:checked').length >= 1) {
-                if ($el.find('input[type="checkbox"]:checked').length > 1) {
-                    var values = [];
-                    values.push(value);
-                    $el.find('input[type="checkbox"]:checked').each(function() {
-                        values.push(jQuery(this).val());
-                    });
-                    value = values;
-                } else {
-                    value = $el.find('input[type="checkbox"]:checked').val();
+                    return current_value;
                 }
-            }
-            break;
-        default:
-            if (window._aui_cf_field_default_values && typeof window._aui_cf_field_default_values == 'object' && typeof window._aui_cf_field_default_values[type] != 'undefined') {
-                value = window._aui_cf_field_default_values[type];
-            }
-            break;
-    }
-    return {
-        type: type,
-        value: value
-    };
-}
 
-/**
- * Reset field default value.
- */
-function aui_cf_field_reset_default_value($el) {
-    var type = aui_cf_field_get_type($el), key = $el.data('rule-key'), field = aui_cf_field_default_values[key];
+                /**
+                 * Get the field default value.
+                 */
+                function aui_cf_field_get_default_value($el) {
+                    var value = '', type = aui_cf_field_get_type($el);
 
-    switch (type) {
-        case 'text':
-        case 'number':
-        case 'date':
-        case 'textarea':
-            $el.find('input:text,input[type="number"],textarea').val(field.value);
-            break;
-        case 'phone':
-        case 'email':
-        case 'color':
-        case 'url':
-        case 'hidden':
-        case 'password':
-        case 'file':
-            $el.find('input[type="' + type + '"]').val(field.value);
-            break;
-        case 'select':
-            $el.find('select').find('option').prop('selected', false);
-            $el.find('select').val(field.value);
-            $el.find('select').trigger('change');
-            break;
-        case 'multiselect':
-            $el.find('select').find('option').prop('selected', false);
-            if ((typeof field.value === 'object' || typeof field.value === 'array') && !field.value.length && $el.find('select option:first').text() == '') {
-                $el.find('select option:first').remove(); // Clear first option to show placeholder.
-            }
-            jQuery.each(field.value, function(i, v) {
-                $el.find('select').find('option[value="' + v + '"]').attr('selected', true);
-            });
-            $el.find('select').trigger('change');
-            break;
-        case 'checkbox':
-            if ($el.find('input[type="checkbox"]:checked').length >= 1) {
-                $el.find('input[type="checkbox"]:checked').prop('checked', false);
-                if (Array.isArray(field.value)) {
-                    jQuery.each(field.value, function(i, v) {
-                        $el.find('input[type="checkbox"][value="' + v + '"]').attr('checked', true);
-                    });
-                } else {
-                    $el.find('input[type="checkbox"][value="' + field.value + '"]').attr('checked', true);
+                    switch (type) {
+                        case 'text':
+                        case 'number':
+                        case 'date':
+                        case 'textarea':
+                        case 'select':
+                            value = $el.find('input:text,input[type="number"],textarea,select').val();
+                            break;
+                        case 'phone':
+                        case 'email':
+                        case 'color':
+                        case 'url':
+                        case 'hidden':
+                        case 'password':
+                        case 'file':
+                            value = $el.find('input[type="' + type + '"]').val();
+                            break;
+                        case 'multiselect':
+                            value = $el.find('select').val();
+                            break;
+                        case 'radio':
+                            if ($el.find('input[type="radio"]:checked').length >= 1) {
+                                value = $el.find('input[type="radio"]:checked').val();
+                            }
+                            break;
+                        case 'checkbox':
+                            if ($el.find('input[type="checkbox"]:checked').length >= 1) {
+                                if ($el.find('input[type="checkbox"]:checked').length > 1) {
+                                    var values = [];
+                                    values.push(value);
+                                    $el.find('input[type="checkbox"]:checked').each(function() {
+                                        values.push(jQuery(this).val());
+                                    });
+                                    value = values;
+                                } else {
+                                    value = $el.find('input[type="checkbox"]:checked').val();
+                                }
+                            }
+                            break;
+                        default:
+                            if (window._aui_cf_field_default_values && typeof window._aui_cf_field_default_values == 'object' && typeof window._aui_cf_field_default_values[type] != 'undefined') {
+                                value = window._aui_cf_field_default_values[type];
+                            }
+                            break;
+                    }
+                    return {
+                        type: type,
+                        value: value
+                    };
                 }
-            }
-            break;
-        case 'radio':
-            if ($el.find('input[type="radio"]:checked').length >= 1) {
-                setTimeout(function() {
-                    $el.find('input[type="radio"]:checked').prop('checked', false);
-                    $el.find('input[type="radio"][value="' + field.value + '"]').attr('checked', true);
-                }, 100);
-            }
-            break;
-        default:
-            jQuery(document.body).trigger('aui_cf_field_reset_default_value', type, $el, field);
-            break;
-    }
 
-    if (!$el.hasClass('aui-cf-field-has-changed')) {
-        var el = aui_cf_field_get_element($el);
-        if (type === 'radio' || type === 'checkbox') {
-            el = el.find(':checked');
-        }
-        if (el) {
-            el.trigger('change');
-            $el.addClass('aui-cf-field-has-changed');
-        }
-    }
-}
+                /**
+                 * Reset field default value.
+                 */
+                function aui_cf_field_reset_default_value($el) {
+                    var type = aui_cf_field_get_type($el), key = $el.data('rule-key'), field = aui_cf_field_default_values[key];
 
-/**
- * Get the field children.
- */
-function aui_cf_field_get_children(field_key) {
-    var rules = [];
-    jQuery.each(aui_cf_field_rules, function(j, rule) {
-        if (rule.field.field === field_key) {
-            rules.push(rule.field.rule);
-        }
-    });
-    return rules;
-}
+                    switch (type) {
+                        case 'text':
+                        case 'number':
+                        case 'date':
+                        case 'textarea':
+                            $el.find('input:text,input[type="number"],textarea').val(field.value);
+                            break;
+                        case 'phone':
+                        case 'email':
+                        case 'color':
+                        case 'url':
+                        case 'hidden':
+                        case 'password':
+                        case 'file':
+                            $el.find('input[type="' + type + '"]').val(field.value);
+                            break;
+                        case 'select':
+                            $el.find('select').find('option').prop('selected', false);
+                            $el.find('select').val(field.value);
+                            $el.find('select').trigger('change');
+                            break;
+                        case 'multiselect':
+                            $el.find('select').find('option').prop('selected', false);
+                            if ((typeof field.value === 'object' || typeof field.value === 'array') && !field.value.length && $el.find('select option:first').text() == '') {
+                                $el.find('select option:first').remove(); // Clear first option to show placeholder.
+                            }
+                            jQuery.each(field.value, function(i, v) {
+                                $el.find('select').find('option[value="' + v + '"]').attr('selected', true);
+                            });
+                            $el.find('select').trigger('change');
+                            break;
+                        case 'checkbox':
+                            if ($el.find('input[type="checkbox"]:checked').length >= 1) {
+                                $el.find('input[type="checkbox"]:checked').prop('checked', false);
+                                if (Array.isArray(field.value)) {
+                                    jQuery.each(field.value, function(i, v) {
+                                        $el.find('input[type="checkbox"][value="' + v + '"]').attr('checked', true);
+                                    });
+                                } else {
+                                    $el.find('input[type="checkbox"][value="' + field.value + '"]').attr('checked', true);
+                                }
+                            }
+                            break;
+                        case 'radio':
+                            if ($el.find('input[type="radio"]:checked').length >= 1) {
+                                setTimeout(function() {
+                                    $el.find('input[type="radio"]:checked').prop('checked', false);
+                                    $el.find('input[type="radio"][value="' + field.value + '"]').attr('checked', true);
+                                }, 100);
+                            }
+                            break;
+                        default:
+                            jQuery(document.body).trigger('aui_cf_field_reset_default_value', type, $el, field);
+                            break;
+                    }
 
-/**
- * Check in array field value.
- */
-function aui_cf_field_in_array(find, item, exact, match) {
-    var found = false, key;
-    exact = !!exact;
+                    if (!$el.hasClass('aui-cf-field-has-changed')) {
+                        var el = aui_cf_field_get_element($el);
+                        if (type === 'radio' || type === 'checkbox') {
+                            el = el.find(':checked');
+                        }
+                        if (el) {
+                            el.trigger('change');
+                            $el.addClass('aui-cf-field-has-changed');
+                        }
+                    }
+                }
 
-    for (key in item) {
-        if ((exact && item[key] === find) || (!exact && item[key] == find) || (match && (typeof find === 'string' || typeof find === 'number') && (typeof item[key] === 'string' || typeof item[key] === 'number') && find.length && find.indexOf(item[key]) >= 0)) {
-            found = true;
-            break;
-        }
-    }
-    return found;
-}
+                /**
+                 * Get the field children.
+                 */
+                function aui_cf_field_get_children(field_key) {
+                    var rules = [];
+                    jQuery.each(aui_cf_field_rules, function(j, rule) {
+                        if (rule.field.field === field_key) {
+                            rules.push(rule.field.rule);
+                        }
+                    });
+                    return rules;
+                }
 
-/**
- * App the field condition action.
- */
-function aui_cf_field_apply_action($el, rule, isTrue) {
-    var $destEl = jQuery('[data-rule-key="' + rule.key + '"]');
+                /**
+                 * Check in array field value.
+                 */
+                function aui_cf_field_in_array(find, item, exact, match) {
+                    var found = false, key;
+                    exact = !!exact;
 
-    if (rule.action === 'show' && isTrue) {
-        if ($destEl.is(':hidden')) {
-            aui_cf_field_reset_default_value($destEl);
-        }
-        aui_cf_field_show_element($destEl);
-    } else if (rule.action === 'show' && !isTrue) {
-        aui_cf_field_hide_element($destEl);
-    } else if (rule.action === 'hide' && isTrue) {
-        aui_cf_field_hide_element($destEl);
-    } else if (rule.action === 'hide' && !isTrue) {
-        if ($destEl.is(':hidden')) {
-            aui_cf_field_reset_default_value($destEl);
-        }
-        aui_cf_field_show_element($destEl);
-    }
-    return $el.removeClass('aui-cf-field-has-changed');
-}
+                    for (key in item) {
+                        if ((exact && item[key] === find) || (!exact && item[key] == find) || (match && (typeof find === 'string' || typeof find === 'number') && (typeof item[key] === 'string' || typeof item[key] === 'number') && find.length && find.indexOf(item[key]) >= 0)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    return found;
+                }
 
-/**
- * Show field element.
- */
-function aui_cf_field_show_element($el) {
-    $el.removeClass('d-none').show();
+                /**
+                 * App the field condition action.
+                 */
+                function aui_cf_field_apply_action($el, rule, isTrue) {
+                    var $destEl = jQuery('[data-rule-key="' + rule.key + '"]');
 
-    $el.find('.aui-cf-req').each(function() {
-        if (jQuery(this).data('rule-req')) {
-            jQuery(this).removeAttr('required').prop('required', true);
-        }
-        if (jQuery(this).data('rule-oninvalid')) {
-            jQuery(this).removeAttr('oninvalid').attr('oninvalid', jQuery(this).data('rule-oninvalid'));
-        }
-    });
+                    if (rule.action === 'show' && isTrue) {
+                        if ($destEl.is(':hidden')) {
+                            aui_cf_field_reset_default_value($destEl);
+                        }
+                        aui_cf_field_show_element($destEl);
+                    } else if (rule.action === 'show' && !isTrue) {
+                        aui_cf_field_hide_element($destEl);
+                    } else if (rule.action === 'hide' && isTrue) {
+                        aui_cf_field_hide_element($destEl);
+                    } else if (rule.action === 'hide' && !isTrue) {
+                        if ($destEl.is(':hidden')) {
+                            aui_cf_field_reset_default_value($destEl);
+                        }
+                        aui_cf_field_show_element($destEl);
+                    }
+                    return $el.removeClass('aui-cf-field-has-changed');
+                }
 
-    if (window && window.navigator.userAgent.indexOf("MSIE") !== -1) {
-        $el.css({
-            "visibility": "visible"
-        });
-    }
-}
+                /**
+                 * Show field element.
+                 */
+                function aui_cf_field_show_element($el) {
+                    $el.removeClass('d-none').show();
 
-/**
- * Hide field element.
- */
-function aui_cf_field_hide_element($el) {
-    $el.addClass('d-none').hide();
+                    $el.find('.aui-cf-req').each(function() {
+                        if (jQuery(this).data('rule-req')) {
+                            jQuery(this).removeAttr('required').prop('required', true);
+                        }
+                        if (jQuery(this).data('rule-oninvalid')) {
+                            jQuery(this).removeAttr('oninvalid').attr('oninvalid', jQuery(this).data('rule-oninvalid'));
+                        }
+                    });
 
-    $el.find('.aui-cf-req').each(function() {
-        if (jQuery(this).data('rule-req')) {
-            jQuery(this).removeAttr('required');
-        }
-        if (jQuery(this).data('rule-oninvalid')) {
-            jQuery(this).removeAttr('oninvalid');
-        }
-    });
+                    if (window && window.navigator.userAgent.indexOf("MSIE") !== -1) {
+                        $el.css({
+                            "visibility": "visible"
+                        });
+                    }
+                }
 
-    if (window && window.navigator.userAgent.indexOf("MSIE") !== -1) {
-        $el.css({
-            "visibility": "hidden"
-        });
-    }
-}
-<?php do_action( 'aui_conditional_fields_js', $this ); ?>
-</script>
+                /**
+                 * Hide field element.
+                 */
+                function aui_cf_field_hide_element($el) {
+                    $el.addClass('d-none').hide();
+
+                    $el.find('.aui-cf-req').each(function() {
+                        if (jQuery(this).data('rule-req')) {
+                            jQuery(this).removeAttr('required');
+                        }
+                        if (jQuery(this).data('rule-oninvalid')) {
+                            jQuery(this).removeAttr('oninvalid');
+                        }
+                    });
+
+                    if (window && window.navigator.userAgent.indexOf("MSIE") !== -1) {
+                        $el.css({
+                            "visibility": "hidden"
+                        });
+                    }
+                }
+				<?php do_action( 'aui_conditional_fields_js', $this ); ?>
+            </script>
 			<?php
 			$output = ob_get_clean();
 

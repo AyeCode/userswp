@@ -30,7 +30,9 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 	 * @since 1.0.11 Font Awesome Kits now supported.
 	 * @since 1.0.13 RTL language support added.
 	 * @since 1.0.14 Warning added for v6 pro requires kit and will now not work if official FA plugin installed.
-	 * @since 1.0.15 Font Awesome will now load in the FSE if enable din teh backend.
+	 * @since 1.0.15 Font Awesome will now load in the FSE if enable din the backend.
+	 * @since 1.1.0 Option added to load FontAwesome locally.
+	 * @since 1.1.1 Requires to re-save settings to load locally when option does not exists - FIXED.
 	 * @ver 1.0.15
 	 * @todo decide how to implement textdomain
 	 */
@@ -41,7 +43,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '1.0.15';
+		public $version = '1.1.1';
 
 		/**
 		 * Class textdomain.
@@ -113,6 +115,10 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 * @since 1.0.8 Settings name wrong - FIXED
 		 */
 		public function init() {
+			// Download fontawesome locally.
+			add_action( 'add_option_wp-font-awesome-settings', array( $this, 'add_option_wp_font_awesome_settings' ), 10, 2 );
+			add_action( 'update_option_wp-font-awesome-settings', array( $this, 'update_option_wp_font_awesome_settings' ), 10, 2 );
+
 			$this->settings = $this->get_settings();
 
 			// check if the official plugin is active and use that instead if so.
@@ -189,9 +195,10 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		public function enqueue_style() {
 			// build url
 			$url = $this->get_url();
+			$version = ! empty( $this->settings['local'] ) && empty( $this->settings['pro'] ) ? strip_tags( $this->settings['local_version'] ) : null;
 
 			wp_deregister_style( 'font-awesome' ); // deregister in case its already there
-			wp_register_style( 'font-awesome', $url, array(), null );
+			wp_register_style( 'font-awesome', $url, array(), $version );
 			wp_enqueue_style( 'font-awesome' );
 
 			// RTL language support CSS.
@@ -202,7 +209,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			if ( $this->settings['shims'] ) {
 				$url = $this->get_url( true );
 				wp_deregister_style( 'font-awesome-shims' ); // deregister in case its already there
-				wp_register_style( 'font-awesome-shims', $url, array(), null );
+				wp_register_style( 'font-awesome-shims', $url, array(), $version );
 				wp_enqueue_style( 'font-awesome-shims' );
 			}
 		}
@@ -231,10 +238,11 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 * Get the url of the Font Awesome files.
 		 *
 		 * @param bool $shims If this is a shim file or not.
+		 * @param bool $local Load locally if allowed.
 		 *
 		 * @return string The url to the file.
 		 */
-		public function get_url( $shims = false ) {
+		public function get_url( $shims = false, $local = true ) {
 			$script  = $shims ? 'v4-shims' : 'all';
 			$sub     = $this->settings['pro'] ? 'pro' : 'use';
 			$type    = $this->settings['type'];
@@ -250,11 +258,19 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 				$url .= $kit_url; // CDN
 				$url .= "?wpfas=true"; // set our var so our version is not removed
 			} else {
-				$url .= "https://$sub.fontawesome.com/releases/"; // CDN
-				$url .= ! empty( $version ) ? "v" . $version . '/' : "v" . $this->get_latest_version() . '/'; // version
+				$v = '';
+				// Check and load locally.
+				if ( $local && $this->has_local() ) {
+					$script .= ".min";
+					$v .= '&ver=' . strip_tags( $this->settings['local_version'] );
+					$url .= $this->get_fonts_url(); // Local fonts url.
+				} else {
+					$url .= "https://$sub.fontawesome.com/releases/"; // CDN
+					$url .= ! empty( $version ) ? "v" . $version . '/' : "v" . $this->get_latest_version() . '/'; // version
+				}
 				$url .= $type == 'CSS' ? 'css/' : 'js/'; // type
 				$url .= $type == 'CSS' ? $script . '.css' : $script . '.js'; // type
-				$url .= "?wpfas=true"; // set our var so our version is not removed
+				$url .= "?wpfas=true" . $v; // set our var so our version is not removed
 			}
 
 			return $url;
@@ -320,7 +336,6 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 * @return array The array of settings.
 		 */
 		public function get_settings() {
-
 			$db_settings = get_option( 'wp-font-awesome-settings' );
 
 			$defaults = array(
@@ -331,6 +346,8 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 				'js-pseudo' => '0', // if the pseudo elements flag should be set (CPU intensive)
 				'dequeue'   => '0', // if we should try to remove other versions added by other plugins/themes
 				'pro'       => '0', // if pro CDN url should be used
+				'local'     => '0', // Store fonts locally.
+				'local_version' => '', // Local fonts version.
 				'kit-url'   => '', // the kit url
 			);
 
@@ -343,7 +360,6 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			 */
 			return $this->settings = apply_filters( 'wp-font-awesome-settings', $settings, $db_settings, $defaults );
 		}
-
 
 		/**
 		 * The settings page html output.
@@ -364,13 +380,21 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
                     .wpfas-kit-show {
                         display: none;
                     }
-
-                    .wpfas-kit-set .wpfas-kit-hide {
+                    .wpfas-kit-set .wpfas-kit-hide,.wpfas-has-pro .wpfas-hide-pro {
                         display: none;
                     }
-
                     .wpfas-kit-set .wpfas-kit-show {
                         display: table-row;
+                    }
+                    .fas-settings-form .submit{
+                        display: inline;
+                        padding-right: 5px;
+                    }
+                    .fas-settings-form .fas-buttons{
+                        margin: 15px 0;
+                    }
+                    #wpfas-version{
+                        color: #646970;
                     }
                 </style>
                 <div class="wrap">
@@ -379,32 +403,37 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 						<?php
 						settings_fields( 'wp-font-awesome-settings' );
 						do_settings_sections( 'wp-font-awesome-settings' );
-						$kit_set = $this->settings['type'] == 'KIT' ? 'wpfas-kit-set' : '';
+						$table_class = '';
+						if ( $this->settings['type'] ) {
+							$table_class .= 'wpfas-' . sanitize_html_class( strtolower( $this->settings['type'] ) ) . '-set';
+						}
+						if ( ! empty( $this->settings['pro'] ) ) {
+							$table_class .= ' wpfas-has-pro';
+						}
 						?>
-                        <table class="form-table wpfas-table-settings <?php echo esc_attr( $kit_set ); ?>">
+						<?php if ( $this->settings['type'] != 'KIT' && ! empty( $this->settings['local'] ) && empty( $this->settings['pro'] ) ) { ?>
+							<?php if ( $this->has_local() ) { ?>
+							<div class="notice notice-info"><p><strong><?php _e( 'Font Awesome fonts are loading locally.', 'font-awesome-settings' ); ?></strong></p></div>
+							<?php } else { ?>
+							<div class="notice notice-error"><p><strong><?php _e( 'Font Awesome fonts are not loading locally!', 'font-awesome-settings' ); ?></strong></p></div>
+							<?php } ?>
+						<?php } ?>
+                        <table class="form-table wpfas-table-settings <?php echo esc_attr( $table_class ); ?>">
                             <tr valign="top">
-                                <th scope="row"><label
-                                            for="wpfas-type"><?php _e( 'Type', 'font-awesome-settings' ); ?></label></th>
+                                <th scope="row"><label for="wpfas-type"><?php _e( 'Type', 'font-awesome-settings' ); ?></label></th>
                                 <td>
-                                    <select name="wp-font-awesome-settings[type]" id="wpfas-type"
-                                            onchange="if(this.value=='KIT'){jQuery('.wpfas-table-settings').addClass('wpfas-kit-set');}else{jQuery('.wpfas-table-settings').removeClass('wpfas-kit-set');}">
-                                        <option
-                                                value="CSS" <?php selected( $this->settings['type'], 'CSS' ); ?>><?php _e( 'CSS (default)', 'font-awesome-settings' ); ?></option>
+                                    <select name="wp-font-awesome-settings[type]" id="wpfas-type" onchange="if(this.value=='KIT'){jQuery('.wpfas-table-settings').addClass('wpfas-kit-set');}else{jQuery('.wpfas-table-settings').removeClass('wpfas-kit-set');}">
+                                        <option value="CSS" <?php selected( $this->settings['type'], 'CSS' ); ?>><?php _e( 'CSS (default)', 'font-awesome-settings' ); ?></option>
                                         <option value="JS" <?php selected( $this->settings['type'], 'JS' ); ?>>JS</option>
-                                        <option
-                                                value="KIT" <?php selected( $this->settings['type'], 'KIT' ); ?>><?php _e( 'Kits (settings managed on fontawesome.com)', 'font-awesome-settings' ); ?></option>
+                                        <option value="KIT" <?php selected( $this->settings['type'], 'KIT' ); ?>><?php _e( 'Kits (settings managed on fontawesome.com)', 'font-awesome-settings' ); ?></option>
                                     </select>
                                 </td>
                             </tr>
 
                             <tr valign="top" class="wpfas-kit-show">
-                                <th scope="row"><label
-                                            for="wpfas-kit-url"><?php _e( 'Kit URL', 'font-awesome-settings' ); ?></label></th>
+                                <th scope="row"><label for="wpfas-kit-url"><?php _e( 'Kit URL', 'font-awesome-settings' ); ?></label></th>
                                 <td>
-                                    <input class="regular-text" id="wpfas-kit-url" type="url"
-                                           name="wp-font-awesome-settings[kit-url]"
-                                           value="<?php echo esc_attr( $this->settings['kit-url'] ); ?>"
-                                           placeholder="<?php echo 'https://kit.font';echo 'awesome.com/123abc.js'; // this won't pass theme check :(?>"/>
+                                    <input class="regular-text" id="wpfas-kit-url" type="url" name="wp-font-awesome-settings[kit-url]" value="<?php echo esc_attr( $this->settings['kit-url'] ); ?>" placeholder="<?php echo 'https://kit.font';echo 'awesome.com/123abc.js'; // this won't pass theme check :(?>"/>
                                     <span><?php
 										echo sprintf(
 											__( 'Requires a free account with Font Awesome. %sGet kit url%s', 'font-awesome-settings' ),
@@ -416,58 +445,31 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
                             </tr>
 
                             <tr valign="top" class="wpfas-kit-hide">
-                                <th scope="row"><label
-                                            for="wpfas-version"><?php _e( 'Version', 'font-awesome-settings' ); ?></label></th>
+                                <th scope="row"><label for="wpfas-version"><?php _e( 'Version', 'font-awesome-settings' ); ?></label></th>
                                 <td>
                                     <select name="wp-font-awesome-settings[version]" id="wpfas-version">
-                                        <option
-                                                value="" <?php selected( $this->settings['version'], '' ); ?>><?php echo sprintf( __( 'Latest - %s (default)', 'font-awesome-settings' ), $this->get_latest_version() ); ?>
-                                        </option>
-                                        <option value="6.1.0" <?php selected( $this->settings['version'], '6.1.0' ); ?>>
-                                            6.1.0
-                                        </option>
-                                        <option value="6.0.0" <?php selected( $this->settings['version'], '6.0.0' ); ?>>
-                                            6.0.0
-                                        </option>
-                                        <option value="5.15.4" <?php selected( $this->settings['version'], '5.15.4' ); ?>>
-                                            5.15.4
-                                        </option>
-                                        <option value="5.6.0" <?php selected( $this->settings['version'], '5.6.0' ); ?>>
-                                            5.6.0
-                                        </option>
-                                        <option value="5.5.0" <?php selected( $this->settings['version'], '5.5.0' ); ?>>
-                                            5.5.0
-                                        </option>
-                                        <option value="5.4.0" <?php selected( $this->settings['version'], '5.4.0' ); ?>>
-                                            5.4.0
-                                        </option>
-                                        <option value="5.3.0" <?php selected( $this->settings['version'], '5.3.0' ); ?>>
-                                            5.3.0
-                                        </option>
-                                        <option value="5.2.0" <?php selected( $this->settings['version'], '5.2.0' ); ?>>
-                                            5.2.0
-                                        </option>
-                                        <option value="5.1.0" <?php selected( $this->settings['version'], '5.1.0' ); ?>>
-                                            5.1.0
-                                        </option>
-                                        <option value="4.7.0" <?php selected( $this->settings['version'], '4.7.0' ); ?>>
-                                            4.7.1 (CSS only)
-                                        </option>
+                                        <option value="" <?php selected( $this->settings['version'], '' ); ?>><?php echo sprintf( __( 'Latest - %s (default)', 'font-awesome-settings' ), $this->get_latest_version() ); ?></option>
+                                        <option value="6.1.0" <?php selected( $this->settings['version'], '6.1.0' ); ?>>6.1.0</option>
+                                        <option value="6.0.0" <?php selected( $this->settings['version'], '6.0.0' ); ?>>6.0.0</option>
+                                        <option value="5.15.4" <?php selected( $this->settings['version'], '5.15.4' ); ?>>5.15.4</option>
+                                        <option value="5.6.0" <?php selected( $this->settings['version'], '5.6.0' ); ?>>5.6.0</option>
+                                        <option value="5.5.0" <?php selected( $this->settings['version'], '5.5.0' ); ?>>5.5.0</option>
+                                        <option value="5.4.0" <?php selected( $this->settings['version'], '5.4.0' ); ?>>5.4.0</option>
+                                        <option value="5.3.0" <?php selected( $this->settings['version'], '5.3.0' ); ?>>5.3.0</option>
+                                        <option value="5.2.0" <?php selected( $this->settings['version'], '5.2.0' ); ?>>5.2.0</option>
+                                        <option value="5.1.0" <?php selected( $this->settings['version'], '5.1.0' ); ?>>5.1.0</option>
+                                        <option value="4.7.0" <?php selected( $this->settings['version'], '4.7.0' ); ?>>4.7.1 (CSS only)</option>
                                     </select>
                                 </td>
                             </tr>
 
                             <tr valign="top">
-                                <th scope="row"><label
-                                            for="wpfas-enqueue"><?php _e( 'Enqueue', 'font-awesome-settings' ); ?></label></th>
+                                <th scope="row"><label for="wpfas-enqueue"><?php _e( 'Enqueue', 'font-awesome-settings' ); ?></label></th>
                                 <td>
                                     <select name="wp-font-awesome-settings[enqueue]" id="wpfas-enqueue">
-                                        <option
-                                                value="" <?php selected( $this->settings['enqueue'], '' ); ?>><?php _e( 'Frontend + Backend (default)', 'font-awesome-settings' ); ?></option>
-                                        <option
-                                                value="frontend" <?php selected( $this->settings['enqueue'], 'frontend' ); ?>><?php _e( 'Frontend', 'font-awesome-settings' ); ?></option>
-                                        <option
-                                                value="backend" <?php selected( $this->settings['enqueue'], 'backend' ); ?>><?php _e( 'Backend', 'font-awesome-settings' ); ?></option>
+                                        <option value="" <?php selected( $this->settings['enqueue'], '' ); ?>><?php _e( 'Frontend + Backend (default)', 'font-awesome-settings' ); ?></option>
+                                        <option value="frontend" <?php selected( $this->settings['enqueue'], 'frontend' ); ?>><?php _e( 'Frontend', 'font-awesome-settings' ); ?></option>
+                                        <option value="backend" <?php selected( $this->settings['enqueue'], 'backend' ); ?>><?php _e( 'Backend', 'font-awesome-settings' ); ?></option>
                                     </select>
                                 </td>
                             </tr>
@@ -477,10 +479,9 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
                                             for="wpfas-pro"><?php _e( 'Enable pro', 'font-awesome-settings' ); ?></label></th>
                                 <td>
                                     <input type="hidden" name="wp-font-awesome-settings[pro]" value="0"/>
-                                    <input type="checkbox" name="wp-font-awesome-settings[pro]"
-                                           value="1" <?php checked( $this->settings['pro'], '1' ); ?> id="wpfas-pro"/>
+                                    <input type="checkbox" name="wp-font-awesome-settings[pro]" value="1" <?php checked( $this->settings['pro'], '1' ); ?> id="wpfas-pro" onchange="if(jQuery(this).is(':checked')){jQuery('.wpfas-table-settings').addClass('wpfas-has-pro')}else{jQuery('.wpfas-table-settings').removeClass('wpfas-has-pro')}"/>
                                     <span><?php
-										echo sprintf(
+										echo wp_sprintf(
 											__( 'Requires a subscription. %sLearn more%s  %sManage my allowed domains%s', 'font-awesome-settings' ),
 											'<a rel="noopener noreferrer" target="_blank" href="https://fontawesome.com/referral?a=c9b89e1418">',
 											' <i class="fas fa-external-link-alt"></i></a>',
@@ -490,6 +491,16 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 										?></span>
                                 </td>
                             </tr>
+
+							<tr valign="top" class="wpfas-kit-hide wpfas-hide-pro">
+								<th scope="row"><label for="wpfas-local"><?php _e( 'Load Fonts Locally', 'font-awesome-settings' ); ?></label></th>
+								<td>
+									<input type="hidden" name="wp-font-awesome-settings[local]" value="0"/>
+									<input type="hidden" name="wp-font-awesome-settings[local_version]" value="<?php echo esc_attr( $this->settings['local_version'] ); ?>"/>
+									<input type="checkbox" name="wp-font-awesome-settings[local]" value="1" <?php checked( $this->settings['local'], '1' ); ?> id="wpfas-local"/>
+									<span><?php _e( '(For free version only) Load FontAwesome fonts from locally. This downloads FontAwesome fonts from fontawesome.com & stores at the local site.', 'font-awesome-settings' ); ?></span>
+								</td>
+							</tr>
 
                             <tr valign="top" class="wpfas-kit-hide">
                                 <th scope="row"><label
@@ -540,21 +551,6 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 
                     <div id="wpfas-version"><?php echo sprintf(__( 'Version: %s (affiliate links provided)', 'font-awesome-settings' ), $this->version ); ?></div>
                 </div>
-
-                <style>
-                    .fas-settings-form .submit{
-                        display: inline;
-                        padding-right: 5px;
-                    }
-
-                    .fas-settings-form .fas-buttons{
-                        margin: 15px 0;
-                    }
-                    #wpfas-version{
-                        margin-top: 30px;
-                        color: #646970;
-                    }
-                </style>
 				<?php
 			}
 		}
@@ -605,6 +601,13 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 				}
 			}
 
+			// Check and auto download fonts locally.
+			if ( empty( $this->settings['pro'] ) && empty( $this->settings['version'] ) && $this->settings['type'] != 'KIT' && ! empty( $this->settings['local'] ) && ! empty( $this->settings['local_version'] ) && ! empty( $latest_version ) ) {
+				if ( version_compare( $latest_version, $this->settings['local_version'], '>' ) && is_admin() && ! wp_doing_ajax() ) {
+					$this->download_package( $latest_version );
+				}
+			}
+
 			return $latest_version;
 		}
 
@@ -644,11 +647,10 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @return void
 		 */
-		public function admin_notices(){
+		public function admin_notices() {
 			$settings = $this->settings;
 
 			if ( defined( 'FONTAWESOME_PLUGIN_FILE' ) ) {
-
 				if ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page'] == 'wp-font-awesome-settings' ) {
 					?>
                     <div class="notice  notice-error is-dismissible">
@@ -656,8 +658,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
                     </div>
 					<?php
 				}
-
-			}else{
+			} else {
 				if ( ! empty( $settings ) ) {
 					if ( $settings['type'] != 'KIT' && $settings['pro'] && ( $settings['version'] == '' || version_compare( $settings['version'], '6', '>=' ) ) ) {
 						$link = admin_url('options-general.php?page=wp-font-awesome-settings');
@@ -669,9 +670,270 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 					}
 				}
 			}
-
 		}
 
+		/**
+		 * Handle fontawesome add settings to download fontawesome to store locally.
+		 *
+		 * @since 1.1.1
+		 *
+		 * @param string $option The option name.
+		 * @param mixed  $value  The option value.
+		 */
+		public function add_option_wp_font_awesome_settings( $option, $value ) {
+			// Do nothing if WordPress is being installed.
+			if ( wp_installing() ) {
+				return;
+			}
+
+			if ( ! empty( $value['local'] ) && empty( $value['pro'] ) && ! ( ! empty( $value['type'] ) && $value['type'] == 'KIT' ) ) {
+				$version = isset( $value['version'] ) && $value['version'] ? $value['version'] : $this->get_latest_version();
+
+				if ( ! empty( $version ) ) {
+					$response = $this->download_package( $version, $value );
+
+					if ( is_wp_error( $response ) ) {
+						add_settings_error( 'general', 'fontawesome_download', __( 'ERROR:', 'font-awesome-settings' ) . ' ' . $response->get_error_message(), 'error' );
+					}
+				}
+			}
+		}
+
+		/**
+		 * Handle fontawesome update settings to download fontawesome to store locally.
+		 *
+		 * @since 1.1.0
+		 *
+		 * @param mixed $old_value The old option value.
+		 * @param mixed $value     The new option value.
+		 */
+		public function update_option_wp_font_awesome_settings( $old_value, $new_value ) {
+			// Do nothing if WordPress is being installed.
+			if ( wp_installing() ) {
+				return;
+			}
+
+			if ( ! empty( $new_value['local'] ) && empty( $new_value['pro'] ) && ! ( ! empty( $new_value['type'] ) && $new_value['type'] == 'KIT' ) ) {
+				// Old values
+				$old_version = isset( $old_value['version'] ) && $old_value['version'] ? $old_value['version'] : ( isset( $old_value['local_version'] ) ? $old_value['local_version'] : '' );
+				$old_local = isset( $old_value['local'] ) ? (int) $old_value['local'] : 0;
+
+				// New values
+				$new_version = isset( $new_value['version'] ) && $new_value['version'] ? $new_value['version'] : $this->get_latest_version();
+
+				if ( empty( $old_local ) || $old_version !== $new_version || ! file_exists( $this->get_fonts_dir() . 'css' . DIRECTORY_SEPARATOR . 'all.css' ) ) {
+					$response = $this->download_package( $new_version, $new_value );
+
+					if ( is_wp_error( $response ) ) {
+						add_settings_error( 'general', 'fontawesome_download', __( 'ERROR:', 'font-awesome-settings' ) . ' ' . $response->get_error_message(), 'error' );
+					}
+				}
+			}
+		}
+
+		/**
+		 * Get the fonts directory local path.
+		 *
+		 * @since 1.1.0
+		 *
+		 * @param string Fonts directory local path.
+		 */
+		public function get_fonts_dir() {
+			$upload_dir = wp_upload_dir( null, false );
+
+			return $upload_dir['basedir'] . DIRECTORY_SEPARATOR .  'ayefonts' . DIRECTORY_SEPARATOR . 'fa' . DIRECTORY_SEPARATOR;
+		}
+
+		/**
+		 * Get the fonts directory local url.
+		 *
+		 * @since 1.1.0
+		 *
+		 * @param string Fonts directory local url.
+		 */
+		public function get_fonts_url() {
+			$upload_dir = wp_upload_dir( null, false );
+
+			return $upload_dir['baseurl'] .  '/ayefonts/fa/';
+		}
+
+		/**
+		 * Check whether load locally active.
+		 *
+		 * @since 1.1.0
+		 *
+		 * @return bool True if active else false.
+		 */
+		public function has_local() {
+			if ( ! empty( $this->settings['local'] ) && empty( $this->settings['pro'] ) && file_exists( $this->get_fonts_dir() . 'css' . DIRECTORY_SEPARATOR . 'all.css' ) ) {
+				return true;
+			}
+
+			return false;
+		}
+
+		/**
+		 * Get the WP Filesystem access.
+		 *
+		 * @since 1.1.0
+		 *
+		 * @return object The WP Filesystem.
+		 */
+		public function get_wp_filesystem() {
+			if ( ! function_exists( 'get_filesystem_method' ) ) {
+				require_once( ABSPATH . "/wp-admin/includes/file.php" );
+			}
+
+			$access_type = get_filesystem_method();
+
+			if ( $access_type === 'direct' ) {
+				/* You can safely run request_filesystem_credentials() without any issues and don't need to worry about passing in a URL */
+				$creds = request_filesystem_credentials( trailingslashit( site_url() ) . 'wp-admin/', '', false, false, array() );
+
+				/* Initialize the API */
+				if ( ! WP_Filesystem( $creds ) ) {
+					/* Any problems and we exit */
+					return false;
+				}
+
+				global $wp_filesystem;
+
+				return $wp_filesystem;
+				/* Do our file manipulations below */
+			} else if ( defined( 'FTP_USER' ) ) {
+				$creds = request_filesystem_credentials( trailingslashit( site_url() ) . 'wp-admin/', '', false, false, array() );
+
+				/* Initialize the API */
+				if ( ! WP_Filesystem( $creds ) ) {
+					/* Any problems and we exit */
+					return false;
+				}
+
+				global $wp_filesystem;
+
+				return $wp_filesystem;
+			} else {
+				/* Don't have direct write access. Prompt user with our notice */
+				return false;
+			}
+		}
+
+		/**
+		 * Download the fontawesome package file.
+		 *
+		 * @since 1.1.0
+		 *
+		 * @param mixed $version The font awesome.
+		 * @param array $option Fontawesome settings.
+		 * @return WP_ERROR|bool Error on fail and true on success.
+		 */
+		public function download_package( $version, $option = array() ) {
+			$filename = 'fontawesome-free-' . $version . '-web';
+			$url = 'https://use.fontawesome.com/releases/v' . $version . '/' . $filename . '.zip';
+
+			if ( ! function_exists( 'wp_handle_upload' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/file.php';
+			}
+
+			$download_file = download_url( esc_url_raw( $url ) );
+
+			if ( is_wp_error( $download_file ) ) {
+				return new WP_Error( 'fontawesome_download_failed', __( $download_file->get_error_message(), 'font-awesome-settings' ) );
+			} else if ( empty( $download_file ) ) {
+				return new WP_Error( 'fontawesome_download_failed', __( 'Something went wrong in downloading the font awesome to store locally.', 'font-awesome-settings' ) );
+			}
+
+			$response = $this->extract_package( $download_file, $filename, true );
+
+			// Update local version.
+			if ( is_wp_error( $response ) ) {
+				return $response;
+			} else if ( $response ) {
+				if ( empty( $option ) ) {
+					$option = get_option( 'wp-font-awesome-settings' );
+				}
+
+				$option['local_version'] = $version;
+
+				// Remove action to prevent looping.
+				remove_action( 'update_option_wp-font-awesome-settings', array( $this, 'update_option_wp_font_awesome_settings' ), 10, 2 );
+
+				update_option( 'wp-font-awesome-settings', $option );
+
+				return true;
+			}
+
+			return false;
+		}
+
+		/**
+		 * Extract the fontawesome package file.
+		 *
+		 * @since 1.1.0
+		 *
+		 * @param string $package The package file path.
+		 * @param string $dirname Package file name.
+		 * @param bool   $delete_package Delete temp file or not.
+		 * @return WP_Error|bool True on success WP_Error on fail.
+		 */
+		public function extract_package( $package, $dirname = '', $delete_package = false ) {
+			global $wp_filesystem;
+
+			$wp_filesystem = $this->get_wp_filesystem();
+
+			if ( empty( $wp_filesystem ) && isset( $wp_filesystem->errors ) && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
+				return new WP_Error( 'fontawesome_filesystem_error', __( $wp_filesystem->errors->get_error_message(), 'font-awesome-settings' ) );
+			} else if ( empty( $wp_filesystem ) ) {
+				return new WP_Error( 'fontawesome_filesystem_error', __( 'Failed to initialise WP_Filesystem while trying to download the Font Awesome package.', 'font-awesome-settings' ) );
+			}
+
+			$fonts_dir = $this->get_fonts_dir();
+			$fonts_tmp_dir = dirname( $fonts_dir ) . DIRECTORY_SEPARATOR . 'fa-tmp' . DIRECTORY_SEPARATOR;
+
+			if ( $wp_filesystem->is_dir( $fonts_tmp_dir ) ) {
+				$wp_filesystem->delete( $fonts_tmp_dir, true );
+			}
+
+			// Unzip package to working directory.
+			$result = unzip_file( $package, $fonts_tmp_dir );
+
+			if ( is_wp_error( $result ) ) {
+				$wp_filesystem->delete( $fonts_tmp_dir, true );
+
+				if ( 'incompatible_archive' === $result->get_error_code() ) {
+					return new WP_Error( 'fontawesome_incompatible_archive', __( $result->get_error_message(), 'font-awesome-settings' ) );
+				}
+
+				return $result;
+			}
+
+			if ( $wp_filesystem->is_dir( $fonts_dir ) ) {
+				$wp_filesystem->delete( $fonts_dir, true );
+			}
+
+			$extract_dir = $fonts_tmp_dir;
+
+			if ( $dirname && $wp_filesystem->is_dir( $extract_dir . $dirname . DIRECTORY_SEPARATOR ) ) {
+				$extract_dir .= $dirname . DIRECTORY_SEPARATOR;
+			}
+
+			try {
+				$return = $wp_filesystem->move( $extract_dir, $fonts_dir, true );
+			} catch ( Exception $e ) {
+				$return = new WP_Error( 'fontawesome_move_package', __( 'Fail to move font awesome package!', 'font-awesome-settings' ) );
+			}
+
+			if ( $wp_filesystem->is_dir( $fonts_tmp_dir ) ) {
+				$wp_filesystem->delete( $fonts_tmp_dir, true );
+			}
+
+			// Once extracted, delete the package if required.
+			if ( $delete_package ) {
+				unlink( $package );
+			}
+
+			return $return;
+		}
 	}
 
 	/**

@@ -34,12 +34,37 @@ body.admin-bar{
 .bg-transparent-until-scroll{
   transition: all 0.2s ease;
 }
+
+// frontend
 html[data-scroll='0'],html:not([data-scroll]){
-  .bg-transparent-until-scroll{
-    background: transparent !important;
-    box-shadow: none !important;
+  body:not(.block-editor-iframe__body){
+      .bg-transparent-until-scroll:not(.nav-menu-open){
+        background: transparent !important;
+        box-shadow: none !important;
+      }
   }
 }
+
+// FSE editor
+html[data-scroll='0'],html:not([data-scroll]){
+  body.block-editor-iframe__body{
+    .wp-block-template-part:not(.has-child-selected){
+      .bg-transparent-until-scroll:not(.nav-menu-open){
+        background: transparent !important;
+        box-shadow: none !important;
+      }
+    }
+  }
+}
+
+// fix for fully transparent nav menu open on mobile
+.navbar.bg-transparent.nav-menu-open.navbar-dark{
+  background: #343a40 !important;
+}
+.navbar.bg-transparent.nav-menu-open.navbar-light{
+  background: #f8f9fa !important;
+}
+
 
 .editor-styles-wrapper .tab-pane.is-selected, .editor-styles-wrapper .tab-pane.has-child-selected{
   display: block !important;
@@ -52,3 +77,6 @@ html[data-scroll='0'],html:not([data-scroll]){
     display: block;
   }
 }
+
+/* Fix conflicts calendar year selector */
+body>.flatpickr-calendar .flatpickr-month .flatpickr-current-month>*{display:inline-block}

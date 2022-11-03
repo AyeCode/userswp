@@ -1,3 +1,24 @@
+= 1.1.10 =
+* styleid argument now auto added to class list - ADDED
+
+= 1.1.9 =
+* Device type switcher not working on multiline items - FIXED
+* Spacing option increased from 5 to 12 - ADDED
+* MultiSelect inputs now show a clear button - ADDED
+
+= 1.1.8 =
+* prevent JS error that breaks the GD block - FIXED
+* bug with justify content between helper function - FIXED
+
+= 1.1.5 =
+* Customize > Widgets section don't show advanced settings toggle button - FIXED
+* Flex positioning helper functions - ADDED
+
+= 1.1.4 =
+* Hover animations helper functions - ADDED
+* Flex layout helper classes - ADDED
+* Constant added for version number SUPER_DUPER_VER - ADDED
+
 = 1.1.3 =
 * Preview mode can now be changed from block setting icon - ADDED
 * text_color_custom now implemented for inline custom colors - ADDED

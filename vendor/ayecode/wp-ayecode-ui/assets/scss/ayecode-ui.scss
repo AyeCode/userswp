@@ -3,5 +3,7 @@
 @import "main";
 @import "partials/index"; // helpers
 
+@import "partials/wp_core"; // WP core
+
 // select2 can't be inside wrapper
 @import '1-frameworks/select2/core';
