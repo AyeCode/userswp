@@ -154,21 +154,28 @@ $white:         $white !default;
 // // variables. Mostly focused on spacing.
 // // You can add more entries to the $spacers map, should you need more variation.
 //
-// $spacer: 1rem !default;
-// $spacers: () !default;
-// // stylelint-disable-next-line scss/dollar-variable-default
-// $spacers: map-merge(
-//   (
-//     0: 0,
-//     1: ($spacer * .25),
-//     2: ($spacer * .5),
-//     3: $spacer,
-//     4: ($spacer * 1.5),
-//     5: ($spacer * 3)
-//   ),
-//   $spacers
-// );
-//
+ $spacer: 1rem !default;
+ $spacers: () !default;
+ // stylelint-disable-next-line scss/dollar-variable-default
+ $spacers: map-merge(
+   (
+     0: 0,
+     1: ($spacer * .25),
+     2: ($spacer * .5),
+     3: $spacer,
+     4: ($spacer * 1.5),
+     5: ($spacer * 3),
+     6: ($spacer * 4),
+     7: ($spacer * 6),
+     8: ($spacer * 8),
+     9: ($spacer * 10),
+     10: ($spacer * 12),
+     11: ($spacer * 14),
+     12: ($spacer * 16)
+   ),
+   $spacers
+ );
+
 // // This variable affects the `.h-*` and `.w-*` classes.
 // $sizes: () !default;
 // // stylelint-disable-next-line scss/dollar-variable-default

@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
+	define( 'SUPER_DUPER_VER', '1.1.10' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -17,7 +18,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.1.1";
+		public $version = SUPER_DUPER_VER;
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -1159,11 +1160,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				/**
 				 * Initialise a individual widget.
 				 */
-				function sd_init_widget($this, $selector) {
+				function sd_init_widget($this, $selector, $form) {
 					if (!$selector) {
 						$selector = 'form';
 					}
-					// only run once.
+					// Only run once.
 					if (jQuery($this).data('sd-widget-enabled')) {
 						return;
 					} else {
@@ -1171,28 +1172,25 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 
 					var $button = '<button title="<?php _e( 'Advanced Settings' );?>" style="line-height: 28px;" class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><span class="dashicons dashicons-admin-settings" style="width: 28px;font-size: 28px;"></span></button>';
-					var form = jQuery($this).parents('' + $selector + '');
+					var form = $form ? $form : jQuery($this).parents('' + $selector + '');
 
 					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length == 0) {
 						console.log('add advanced button');
-						if(jQuery(form).find('.widget-control-save').length > 0){
+						if (jQuery(form).find('.widget-control-save').length > 0) {
 							jQuery(form).find('.widget-control-save').after($button);
-						}else{
+						} else {
 							jQuery(form).find('.sd-show-advanced').after($button);
 						}
 					} else {
-						console.log('no advanced button');
-						console.log(jQuery($this).val());
-						console.log(jQuery(form).find('.sd-advanced-button').length);
-
+						console.log('no advanced button, ' + jQuery($this).val() + ', ' + jQuery(form).find('.sd-advanced-button').length);
 					}
 
-					// show hide on form change
-					jQuery(form).on("change", function () {
+					/* Show hide on form change */
+					jQuery(form).on("change", function() {
 						sd_show_hide(form);
 					});
 
-					// show hide on load
+					/* Show hide on load */
 					sd_show_hide(form);
 				}
 
@@ -1222,29 +1220,28 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						sd_init_widgets("form");
 					}
 
-					// init on widget added
+					/* Init on widget added */
 					jQuery(document).on('widget-added', function (e, widget) {
-						console.log('widget added');
-						// is it a SD widget?
+						/* Is it a SD widget? */
 						if (jQuery(widget).find('.sd-show-advanced').length) {
-							// init the widget
-							sd_init_widget(jQuery(widget).find('.sd-show-advanced'), "form");
+							var widgetId = jQuery(widget).find('[name="widget-id"]').length ? ': ' + jQuery(widget).find('[name="widget-id"]').val() : '';
+							console.log('widget added' + widgetId);
+							/* Init the widget */
+							sd_init_widget(jQuery(widget).find('.sd-show-advanced'), "form", jQuery(widget).find('.sd-show-advanced').closest('form'));
 						}
 					});
 
-					// init on widget updated
+					/* Init on widget updated */
 					jQuery(document).on('widget-updated', function (e, widget) {
-						console.log('widget updated');
-
-						// is it a SD widget?
+						/* Is it a SD widget? */
 						if (jQuery(widget).find('.sd-show-advanced').length) {
-							// init the widget
-							sd_init_widget(jQuery(widget).find('.sd-show-advanced'), "form");
+							var widgetId = jQuery(widget).find('[name="widget-id"]').length ? ': ' + jQuery(widget).find('[name="widget-id"]').val() : '';
+							console.log('widget updated' + widgetId);
+							/* Init the widget */
+							sd_init_widget(jQuery(widget).find('.sd-show-advanced'), "form", jQuery(widget).find('.sd-show-advanced').closest('form'));
 						}
 					});
-
 				});
-
 
 				/**
 				 * We need to run this before jQuery is ready
@@ -1751,11 +1748,14 @@ function sd_set_view_type($device){
  * Try to auto-recover blocks.
  */
 function sd_auto_recover_blocks() {
+	console.log('recover blocks');
 	var recursivelyRecoverInvalidBlockList = blocks => {
 		const _blocks = [...blocks]
+		// const _blocks = wp.data.select('core/block-editor').getBlocks();
 		let recoveryCalled = false
 		const recursivelyRecoverBlocks = willRecoverBlocks => {
 			willRecoverBlocks.forEach(_block => {
+				consol.log(_block);
 				if (isInvalid(_block)) {
 					recoveryCalled = true
 					const newBlock = recoverBlock(_block)
@@ -1782,6 +1782,10 @@ function sd_auto_recover_blocks() {
 	var recoverBlocks = blocks => {
 		return blocks.map(_block => {
 			const block = _block
+//
+// if ( _block.name === 'core/template-part') {
+// 	const template = wp.data.select('core/block-editor').getTemplate(_block);console.log(template )
+// }
 
 			// If the block is a reusable block, recover the Stackable blocks inside it.
 			if (_block.name === 'core/block') {
@@ -1856,7 +1860,8 @@ window.onload = function() {
 	// fire a second time incase of load delays.
 	setTimeout(function(){
 		sd_auto_recover_blocks();
-	}, 2000);
+		console.log('arb');
+	}, 5000);
 };
 
 // fire when URL changes also.
@@ -1954,6 +1959,11 @@ new MutationObserver(() => {
 				// font color
 				if( $args['text_color_custom'] !== undefined && $args['text_color_custom'] !== '' ){
 					$styles['color'] =  $args['text_color_custom'];
+				}
+
+				// font line height
+				if( $args['font_line_height'] !== undefined && $args['font_line_height'] !== '' ){
+					$styles['lineHeight'] =  $args['font_line_height'];
 				}
 
                 return $styles;
@@ -2054,15 +2064,30 @@ new MutationObserver(() => {
 				// bgtus - background transparent until scroll
                 if ( $args['bgtus'] !== undefined && $args['bgtus'] ) { $classes.push("bg-transparent-until-scroll"); }
 
+				// hover animations
+                if ( $args['hover_animations'] !== undefined && $args['hover_animations'] ) { $classes.push($args['hover_animations'].replace(',',' ')); }
 
 				// build classes from build keys
 				$build_keys = sd_get_class_build_keys();
 				if ( $build_keys.length ) {
 					$build_keys.forEach($key => {
-						if ( $key == 'font_size' && $args[ $key ] == 'custom' ) {
+
+						if($key.endsWith("-MTD")){
+
+							$k = $key.replace("-MTD","");
+
+							// Mobile, Tablet, Desktop
+							if ( $args[$k] !== undefined && $args[$k] !== '' ) { $classes.push( $args[$k] );  $v = $args[$k]; }else{$v = null;}
+							if ( $args[$k + '_md'] !== undefined && $args[$k + '_md'] !== '' ) { $classes.push( $args[$k + '_md'] );  $v_md = $args[$k + '_md']; }else{$v_md = null;}
+							if ( $args[$k + '_lg'] !== undefined && $args[$k + '_lg'] !== '' ) { if($v == null && $v_md == null){ $classes.push( $args[$k + '_lg'].replace('-lg','') ); }else{$classes.push( $args[$k + '_lg'] ); } }
+
+						}else{
+							if ( $key == 'font_size' && $args[ $key ] == 'custom' ) {
 							 return;
+							}
+							if ( $args[$key] !== undefined && $args[$key] !== '' ) { $classes.push($args[$key]); }
 						}
-						if ( $args[$key] !== undefined && $args[$key] !== '' ) { $classes.push($args[$key]); }
+
 					});
 				}
 
@@ -2125,7 +2150,7 @@ jQuery(function() {
 					 *                             registered; otherwise `undefined`.
 					 */
 					registerBlockType('<?php echo str_replace( "_", "-", sanitize_title_with_dashes( $this->options['textdomain'] ) . '/' . sanitize_title_with_dashes( $this->options['class_name'] ) );  ?>', { // Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-						apiVersion: 2,
+						apiVersion: <?php echo isset($this->options['block-api-version']) ? absint($this->options['block-api-version']) : 2 ; ?>,
                         title: '<?php echo addslashes( $this->options['name'] ); ?>', // Block title.
 						description: '<?php echo addslashes( $this->options['widget_ops']['description'] )?>', // Block title.
 						icon: <?php echo $this->get_block_icon( $this->options['block-icon'] );?>,//'<?php echo isset( $this->options['block-icon'] ) ? esc_attr( $this->options['block-icon'] ) : 'shield-alt';?>', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
@@ -2440,15 +2465,21 @@ const parentBlocks = wp.data.select('core/block-editor').getBlocksByClientId(par
 
 								}
 							}
-							<?php }?>
-// Get device type const.
-const { deviceType } = wp.data.useSelect( select => {
-        const { __experimentalGetPreviewDeviceType } = select( 'core/edit-site' ) ? select( 'core/edit-site' ) : select( 'core/edit-post' ) ; // for sie editor https://github.com/WordPress/gutenberg/issues/39248
-
-        return {
-            deviceType: __experimentalGetPreviewDeviceType(),
-        }
-    }, [] );
+							<?php } ?>
+<?php
+$current_screen = function_exists('get_current_screen') ? get_current_screen() : '';
+if(!empty($current_screen->base) && $current_screen->base==='widgets'){
+	echo 'const { deviceType } = "";';
+}else{
+?>
+/** Get device type const. */
+const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(select => {
+	const { __experimentalGetPreviewDeviceType } = select('core/edit-site') ? select('core/edit-site') : select('core/edit-post') ? select('core/edit-post') : ''; // For sie editor https://github.com/WordPress/gutenberg/issues/39248
+	return {
+		deviceType: __experimentalGetPreviewDeviceType(),
+	}
+}, []) : '';
+<?php } ?>
 							var content = props.attributes.content;
 
 							function onChangeContent($type) {
@@ -2872,11 +2903,11 @@ const { deviceType } = wp.data.useSelect( select => {
                 $device_type_require = ! empty( $args['device_type'] ) ? " deviceType == '" . esc_attr($device_type) . "' && " : '';
                 $device_type_icon = '';
                 if($device_type=='Desktop'){
-                    $device_type_icon = '<span class="dashicons dashicons-desktop" style="font-size: 18px;"></span>';
+                    $device_type_icon = '<span class="dashicons dashicons-desktop" style="font-size: 18px;" onclick="sd_show_view_options(this);"></span>';
                 }elseif($device_type=='Tablet'){
-                    $device_type_icon = '<span class="dashicons dashicons-tablet" style="font-size: 18px;"></span>';
+                    $device_type_icon = '<span class="dashicons dashicons-tablet" style="font-size: 18px;" onclick="sd_show_view_options(this);"></span>';
                 }elseif($device_type=='Mobile'){
-                    $device_type_icon = '<span class="dashicons dashicons-smartphone" style="font-size: 18px;"></span>';
+                    $device_type_icon = '<span class="dashicons dashicons-smartphone" style="font-size: 18px;" onclick="sd_show_view_options(this);"></span>';
                 }
 				echo $element_require;
                 echo $device_type_require;
@@ -2887,12 +2918,12 @@ const { deviceType } = wp.data.useSelect( select => {
 							},
 							<?php if(!empty($args['row']['title'])){ ?>
 							el('label', {
-									className: 'components-base-control__label',
+									className: 'components-base-control__label position-relative',
 									style: {width:"100%"}
 								},
 								el('span',{dangerouslySetInnerHTML: {__html: '<?php echo addslashes( $args['row']['title'] ) ?>'}}),
 								<?php if($device_type_icon){ ?>
-                                    deviceType == '<?php echo $device_type;?>' && el('span',{dangerouslySetInnerHTML: {__html: '<?php echo $device_type_icon; ?>'},title: deviceType + ": Set preview mode to change",style: {float:"right",color:"var(--wp-admin-theme-color)"}})
+                                    deviceType == '<?php echo $device_type;?>' && el('span',{dangerouslySetInnerHTML: {__html: '<?php echo $device_type_icon; ?>'},title: deviceType + ": Set preview mode to change",style: {right:"0",position:"absolute",color:"var(--wp-admin-theme-color)"}})
 								<?php
                                 }
                                 ?>
@@ -3026,6 +3057,7 @@ el('div',{className: 'bsui'},
 			$extra             = '';
 			$require           = '';
             $inside_elements   = '';
+			$after_elements	   = '';
 
 			// `content` is a protected and special argument
 			if ( $key == 'content' ) {
@@ -3310,6 +3342,7 @@ if (confirmed) {
 				$onchange = "props.setAttributes({ $key: ! props.attributes.$key } )";
 			} elseif ( $args['type'] == 'textarea' ) {
 				$type = 'TextareaControl';
+
 			} elseif ( $args['type'] == 'select' || $args['type'] == 'multiselect' ) {
 				$type = 'SelectControl';
 
@@ -3328,7 +3361,21 @@ if (confirmed) {
 					}
 				}
 				if ( isset( $args['multiple'] ) && $args['multiple'] ) { //@todo multiselect does not work at the moment: https://github.com/WordPress/gutenberg/issues/5550
-					$extra .= ' multiple:true,style:{height:"auto",paddingRight:"8px"}, ';
+					$extra .= ' multiple:true,style:{height:"auto",paddingRight:"8px","overflow-y":"auto"}, ';
+				}
+
+				if($args['type'] == 'multiselect' ||  ( isset( $args['multiple'] ) && $args['multiple'] ) ){
+					$after_elements	 .= "props.attributes.$key && el( wp.components.Button, {
+                                      className: 'components-button components-circular-option-picker__clear is-secondary is-small',
+                                      style: {margin:'-8px 0 8px 0',display: 'block'},
+                                      onClick: function(){
+                                              return props.setAttributes({
+                                                  $key: '',
+                                                });
+                                    }
+                                    },
+                                    'Clear'
+                            ),";
 				}
 			} elseif ( $args['type'] == 'tagselect' ) {
 //				$type = 'FormTokenField';
@@ -3440,7 +3487,7 @@ if (confirmed) {
 			<?php }?>
 			} <?php echo $inside_elements; ?> ),
 			<?php
-
+			echo $after_elements;
 
 		}
 

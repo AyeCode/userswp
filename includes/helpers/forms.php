@@ -68,6 +68,10 @@ function get_change_validate_form_fields() {
 	global $wpdb;
 	$table_name          = uwp_get_table_prefix() . 'uwp_form_fields';
 	$enable_old_password = uwp_get_option( 'change_enable_old_password', false );
+	$user_id = get_current_user_id();
+	if($user_id && 1 == get_user_meta($user_id, 'is_uwp_social_login_no_password', true)){
+		$enable_old_password = 0;
+	}
 	if ( $enable_old_password == '1' ) {
 		$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' AND for_admin_use != '1' ORDER BY sort_order ASC", array( 'change' ) ) );
 	} else {
@@ -114,6 +118,10 @@ function get_change_form_fields() {
 	global $wpdb;
 	$table_name          = uwp_get_table_prefix() . 'uwp_form_fields';
 	$enable_old_password = uwp_get_option( 'change_enable_old_password', false );
+	$user_id = get_current_user_id();
+	if($user_id && 1 == get_user_meta($user_id, 'is_uwp_social_login_no_password', true)){
+		$enable_old_password = 0;
+	}
 	if ( $enable_old_password == '1' ) {
 		$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE form_type = %s AND is_active = '1' AND for_admin_use != '1' ORDER BY sort_order ASC", array( 'change' ) ) );
 	} else {

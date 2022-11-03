@@ -1780,6 +1780,8 @@ class UsersWP_Forms {
 			delete_user_meta( $user_data->ID, 'default_password_nag' );
 		}
 
+		delete_user_meta($user_data->ID, 'is_uwp_social_login_no_password');
+
 		$message = aui()->alert( array(
 				'type'    => 'success',
 				'content' => apply_filters( 'uwp_change_password_success_message', __( 'Password changed successfully.', 'userswp' ), $data )

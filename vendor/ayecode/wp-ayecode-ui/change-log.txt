@@ -1,3 +1,24 @@
+= 0.1.84 =
+* Compatibility added for BlockStrap theme - ADDED
+
+= 0.1.83 =
+* Filter for default settings - ADDED
+
+= 0.1.82 =
+* Added CSS build file for FSE to fix consistency issues - ADDED
+* Increased spacer options from 5 to 12 - ADDED
+* FSE CSS can now be activated in other themes by adding constant AUI_FSE - ADDED
+
+= 0.1.81 =
+* Tweaks for FSE - ADDED
+
+= 0.1.80 =
+* Flatpickr CSS conflict fix - FIXED
+* Tweaks for FSE - ADDED
+
+= 0.1.79 =
+* Hover animations class tweaks - CHANGED
+
 = 0.1.77 =
 * FSE tweaks - ADDED
 

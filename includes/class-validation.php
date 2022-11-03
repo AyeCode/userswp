@@ -71,6 +71,10 @@ class UsersWP_Validation {
         $enable_confirm_password_field = isset($password_extra['confirm_password']) ? $password_extra['confirm_password'] : '0';
 
         $enable_old_password = uwp_get_option('change_enable_old_password', false);
+	    $user_id = get_current_user_id();
+	    if($user_id && 1 == get_user_meta($user_id, 'is_uwp_social_login_no_password', true)){
+		    $enable_old_password = 0;
+	    }
 
         if ($type == 'account' || $type == 'change') {
             if (!is_user_logged_in()) {

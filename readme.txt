@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
-Tested up to: 6.0
-Stable tag: 1.2.3.6
+Tested up to: 6.1
+Stable tag: 1.2.3.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -147,8 +147,11 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 == Changelog ==
 
 = 1.2.3.7 =
-* AyeCode UI updated to v0.1.77 - CHANGED
-* Super Duper updated to v1.1.3 - CHANGED
+* AyeCode UI updated to v0.1.84 - CHANGED
+* Super Duper updated to v1.1.10 - CHANGED
+* Font Awesome Settings package updated to 1.1.1 - CHANGED
+* Support for WPML translated profile page slug - FIXED
+* Social login users can't change password - FIXED
 
 = 1.2.3.6 =
 * Some servers fail to crop images - FIXED
