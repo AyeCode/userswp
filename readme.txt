@@ -148,6 +148,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.3.8 =
 * Users not displaying when custom field wise sorted - FIXED
+* Support for WPML translated profile page slug creating issues for other multilingual plugins - FIXED
 
 = 1.2.3.7 =
 * AyeCode UI updated to v0.1.84 - CHANGED

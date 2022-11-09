@@ -1048,8 +1048,8 @@ function uwp_field_type_to_fa_icon($type) {
  * @return True if WPML is active else False.
  */
 function uwp_is_wpml() {
-	if (function_exists('icl_object_id')) {
-		return true;
+	if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) && function_exists( 'icl_object_id' ) ) {
+	    return true;
 	}
 
 	return false;
