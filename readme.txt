@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.8 =
+* Users not displaying when custom field wise sorted - FIXED
+
 = 1.2.3.7 =
 * AyeCode UI updated to v0.1.84 - CHANGED
 * Super Duper updated to v1.1.10 - CHANGED
