@@ -64,6 +64,13 @@
     color: color-yiq($color);
     background-color: rgba($color, $form-feedback-tooltip-opacity);
     @include border-radius($form-feedback-tooltip-border-radius);
+
+    // See https://github.com/twbs/bootstrap/pull/31557
+    // Align tooltip to form elements
+    .form-row > .col > &,
+    .form-row > [class*="col-"] > & {
+      right: $form-grid-gutter-width * .5; //rtl
+    }
   }
 
   @include form-validation-state-selector($state) {
@@ -78,7 +85,7 @@
       border-color: $color;
 
       @if $enable-validation-icons {
-        padding-left: $input-height-inner; //rtl
+        padding-left: $input-height-inner !important; /* stylelint-disable-line declaration-no-important */  //rtl
         background-image: escape-svg($icon);
         background-repeat: no-repeat;
         background-position: left $input-height-inner-quarter center; //rtl
@@ -88,6 +95,16 @@
       &:focus {
         border-color: $color;
         box-shadow: 0 0 0 $input-focus-width rgba($color, .25);
+      }
+    }
+  }
+
+  // stylelint-disable-next-line selector-no-qualifying-type
+  select.form-control {
+    @include form-validation-state-selector($state) {
+      @if $enable-validation-icons {
+        padding-left: $input-padding-x * 4 !important; /* stylelint-disable-line declaration-no-important */  //rtl
+        background-position: left $input-padding-x * 2 center; //rtl
       }
     }
   }
@@ -107,8 +124,8 @@
       border-color: $color;
 
       @if $enable-validation-icons {
-        padding-left: $custom-select-feedback-icon-padding-left; //rtl
-        background: $custom-select-background, escape-svg($icon) $custom-select-bg no-repeat $custom-select-feedback-icon-position / $custom-select-feedback-icon-size;
+        padding-left: $custom-select-feedback-icon-padding-left !important; /* stylelint-disable-line declaration-no-important */ //rtl
+        background: $custom-select-background, $custom-select-bg escape-svg($icon) $custom-select-feedback-icon-position / $custom-select-feedback-icon-size no-repeat;
       }
 
       &:focus {

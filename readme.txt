@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.1
-Stable tag: 1.2.3.7
+Stable tag: 1.2.3.8
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -145,6 +145,11 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.3.8 =
+* Users not displaying when custom field wise sorted - FIXED
+* Support for WPML translated profile page slug creating issues for other multilingual plugins - FIXED
+* AyeCode UI updated to v0.1.85 - CHANGED
 
 = 1.2.3.7 =
 * AyeCode UI updated to v0.1.84 - CHANGED
