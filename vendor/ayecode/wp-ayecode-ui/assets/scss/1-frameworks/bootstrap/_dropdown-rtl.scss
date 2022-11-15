@@ -77,7 +77,7 @@
 
   .dropdown-toggle {
     @include caret(right);
-    &::after {
+    &::before { //rtl
       vertical-align: 0;
     }
   }
@@ -94,13 +94,13 @@
 
   .dropdown-toggle {
     @include caret(left);
-    &::before {
+    &::after { //rtl
       vertical-align: 0;
     }
   }
 }
 
-// When enabled Popper.js, reset basic dropdown position
+// When Popper is enabled, reset the basic dropdown position
 // stylelint-disable-next-line no-duplicate-selectors
 .dropdown-menu {
   &[x-placement^="top"],

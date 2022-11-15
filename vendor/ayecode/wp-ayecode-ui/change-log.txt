@@ -1,3 +1,6 @@
+= 0.1.85 =
+* Bootstrap updated to latest v4.6.2 - UPDATED
+
 = 0.1.84 =
 * Compatibility added for BlockStrap theme - ADDED
 
