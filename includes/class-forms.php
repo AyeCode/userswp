@@ -1263,7 +1263,7 @@ class UsersWP_Forms {
 			<form name="validate_2fa_form" id="validate_2fa_form" class="validate_2fa_form" action="" method="post"
 			      autocomplete="off">
 				<input type="hidden" name="provider" id="provider" value="<?php echo esc_attr( $provider ); ?>"/>
-				<input type="hidden" name="wp-auth-id" id="wp-auth-id" value="<?php echo esc_attr( $user->ID ); ?>"/>
+				<input type="hidden" name="uwp-auth-id" id="uwp-auth-id" value="<?php echo esc_attr( $user->ID ); ?>"/>
 				<input type="hidden" name="wp-auth-nonce" id="wp-auth-nonce"
 				       value="<?php echo esc_attr( $login_nonce['key'] ); ?>"/>
 				<?php
@@ -1338,7 +1338,7 @@ class UsersWP_Forms {
 				<form name="validate_2fa_backup_codes_form" id="validate_2fa_backup_codes_form"
 				      class="validate_2fa_backup_codes_form" action="" method="post" autocomplete="off">
 					<input type="hidden" name="provider" id="provider" value="backup_codes"/>
-					<input type="hidden" name="wp-auth-id" id="wp-auth-id"
+					<input type="hidden" name="uwp-auth-id" id="uwp-auth-id"
 					       value="<?php echo esc_attr( $user->ID ); ?>"/>
 					<input type="hidden" name="wp-auth-nonce" id="wp-auth-nonce"
 					       value="<?php echo esc_attr( $login_nonce['key'] ); ?>"/>
@@ -1383,11 +1383,11 @@ class UsersWP_Forms {
 	}
 
 	public function process_login_2fa() {
-		if ( ! isset( $_POST['wp-auth-id'], $_POST['wp-auth-nonce'] ) ) {
+		if ( ! isset( $_POST['uwp-auth-id'], $_POST['wp-auth-nonce'] ) ) {
 			return;
 		}
 
-		$auth_id = (int) $_POST['wp-auth-id'];
+		$auth_id = (int) $_POST['uwp-auth-id'];
 		$user    = get_userdata( $auth_id );
 		if ( ! $user ) {
 			$message = aui()->alert( array(
