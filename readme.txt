@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.10 =
+* Change: BS5 compatibility.
+
 = 1.2.3.9 =
 * 2fa redirect not working - FIXED
 
