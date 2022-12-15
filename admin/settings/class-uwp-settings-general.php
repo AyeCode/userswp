@@ -124,6 +124,15 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
                     'default'  => '1',
                 ),
 	            array(
+		            'id'   => 'register_min_password_strength',
+		            'name' => __( 'Minimum password strength', 'userswp' ),
+		            'desc' => __( 'Forces users to use strong password on registration if set.', 'userswp' ),
+		            'type' => 'select',
+		            'options' => array('-1'=>'None','3'=>'Medium','4'=>'Strong'),
+		            'default'  => '',
+		            'desc_tip' => true,
+	            ),
+	            array(
 		            'id'   => 'register_username_length',
 		            'name' => __( 'Username Minimum Length', 'userswp' ),
 		            'desc' => __( 'Minimum username character limit required for registration.', 'userswp' ),
