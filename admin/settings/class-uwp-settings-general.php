@@ -128,7 +128,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'name' => __( 'Minimum password strength', 'userswp' ),
 		            'desc' => __( 'Forces users to use strong password on registration if set.', 'userswp' ),
 		            'type' => 'select',
-		            'options' => array('-1'=>'None','3'=>'Medium','4'=>'Strong'),
+		            'options' => array(''=>'None','3'=>'Medium','4'=>'Strong'),
 		            'default'  => '',
 		            'desc_tip' => true,
 	            ),

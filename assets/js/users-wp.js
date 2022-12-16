@@ -697,8 +697,12 @@ function uwp_checkPasswordStrength( $pass1,
     }
 
     // set the status of the submit button
-    if ( uwp_localize_data.uwp_pass_strength && strength >= parseInt(uwp_localize_data.uwp_pass_strength) ) {
-        $submitButton.removeAttr( 'disabled' );
+    if ( parseInt(uwp_localize_data.uwp_pass_strength) > 0) {
+        if(4 == parseInt(uwp_localize_data.uwp_pass_strength) && strength === 4){
+            $submitButton.removeAttr( 'disabled' );
+        } else if(3 == parseInt(uwp_localize_data.uwp_pass_strength) && (strength === 3 || strength === 4)){
+            $submitButton.removeAttr( 'disabled' );
+        }
     }
 
     return strength;
