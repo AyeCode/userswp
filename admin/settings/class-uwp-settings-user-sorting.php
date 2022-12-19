@@ -66,8 +66,14 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 						$meta_table_name = uwp_get_table_prefix() . 'uwp_usermeta';
 						$table_name      = uwp_get_table_prefix() . 'uwp_user_sorting';
 
+                        if('user_registered' == $meta_key){
+                            $orderby = $meta_key;
+                        } else {
+	                        $orderby = $meta_table_name . '.' . $meta_key;
+                        }
+
 						$vars->query_from    .= " INNER JOIN " . $meta_table_name . " ON (" . $meta_table_name . ".user_id = $wpdb->users.ID)  ";
-						$vars->query_orderby = 'ORDER BY ' . $meta_table_name . '.'.$meta_key . ' ' . $order;
+						$vars->query_orderby = 'ORDER BY ' . $orderby . ' ' . $order;
 
 						$parent_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM " . $table_name . " WHERE htmlvar_name = %s AND sort = %s AND tab_parent = 0", $meta_key, $order ) );
 
