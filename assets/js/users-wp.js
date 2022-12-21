@@ -218,9 +218,14 @@ function uwp_profile_image_change(type){
     var $modal = '<div class="modal fade uwp-profile-image-change-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="uwp-profile-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
     jQuery('body').append($modal);
 
-    jQuery('.uwp-profile-image-change-modal').modal({
-        backdrop: 'static'
-    });
+    if ( window.bootstrap && window.bootstrap.Modal ) {
+        var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-profile-image-change-modal'));
+        authModal.show();
+    } else {
+        jQuery('.uwp-profile-image-change-modal').modal({
+            backdrop: 'static'
+        });
+    }
 
     // do something with the file here
     var data = {
@@ -285,7 +290,13 @@ function uwp_modal_loading(inputs){
     }else{
         jQuery('.uwp-auth-modal .modal-content').html($modal_content);
     }
-    jQuery('.uwp-auth-modal').modal();
+
+    if ( window.bootstrap && window.bootstrap.Modal ) {
+        var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-auth-modal'));
+        authModal.show();
+    } else {
+        jQuery('.uwp-auth-modal').modal();
+    }
 }
 
 /**
@@ -644,6 +655,10 @@ function uwp_checkPasswordStrength( $pass1,
         $strengthResult.parent().remove();
     }
 
+    if ( parseInt(uwp_localize_data.uwp_pass_strength) > 0 ) {
+        $submitButton.attr('disabled', 'disabled');
+    }
+
     // Reset the form & meter
     $strengthResult.removeClass( 'short bad good strong bg-warning bg-success bg-danger' );
 
@@ -679,6 +694,15 @@ function uwp_checkPasswordStrength( $pass1,
         default:
             $strengthResult.addClass( 'short bg-danger' ).html( pwsL10n.short ).width('25%');
 
+    }
+
+    // set the status of the submit button
+    if ( parseInt(uwp_localize_data.uwp_pass_strength) > 0) {
+        if(4 == parseInt(uwp_localize_data.uwp_pass_strength) && strength === 4){
+            $submitButton.removeAttr( 'disabled' );
+        } else if(3 == parseInt(uwp_localize_data.uwp_pass_strength) && (strength === 3 || strength === 4)){
+            $submitButton.removeAttr( 'disabled' );
+        }
     }
 
     return strength;
@@ -729,7 +753,12 @@ function uwp_gd_delete_post($post_id){
                     jQuery('.uwp-gd-modal .modal-content').html($modal_content);
                 }
 
-                jQuery('.uwp-gd-modal').modal();
+                if ( window.bootstrap && window.bootstrap.Modal ) {
+                    var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-gd-modal'));
+                    authModal.show();
+                } else {
+                    jQuery('.uwp-gd-modal').modal();
+                }
 
                 if(data.success){
                     setTimeout(function() {

@@ -146,6 +146,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.11 =
+* Change: BS5 compatibility.
+* Setting to force user use strong password on registration - ADDED
+
 = 1.2.3.10 =
 * CSV formula injection sanitation - ADDED
 
