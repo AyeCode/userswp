@@ -364,6 +364,7 @@ class UsersWP_Import_Export {
             foreach ( $data as $row ) {
                 $i = 1;
                 foreach ( $row as $key => $column ) {
+                    $column = $this->escape_data( $column );
                     $row_data .= '"' . addslashes( preg_replace( "/\"/","'", $column ) ) . '"';
                     $row_data .= $i == count( $columns ) ? '' : ',';
                     $i++;
@@ -550,7 +551,7 @@ class UsersWP_Import_Export {
                 $response['msg']    = __( 'Users import completed.', 'userswp' );
             }
 
-            $response['data']['msg']    = $return['msg'];
+            $response['data']['msg']    = ! empty( $return['msg'] ) ? $return['msg'] : $response['msg'];
             $response['data']['step']   = $this->imp_step;
             $response['data']['done']   = $done;
         } else {
@@ -796,6 +797,26 @@ class UsersWP_Import_Export {
 	    $mimes['csv'] = "text/csv";
 	    return $mimes;
     }
+
+	/**
+	 * Escape a string to be used in a CSV export.
+	 *
+	 * @see https://hackerone.com/reports/72785
+	 *
+	 * @since 1.2.3.10
+	 *
+	 * @param string $data Data to escape.
+	 * @return string
+	 */
+	public function escape_data( $data ) {
+		$escape_chars = array( '=', '+', '-', '@' );
+
+		if ( $data && in_array( substr( $data, 0, 1 ), $escape_chars, true ) ) {
+			$data = " " . $data;
+		}
+
+		return $data;
+	}
 
 }
 new UsersWP_Import_Export();
