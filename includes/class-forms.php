@@ -2245,7 +2245,7 @@ class UsersWP_Forms {
 		if ( empty( $html ) ) {
 
 			$design_style     = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group    = $design_style ? "form-group mb-3" : "";
+			$bs_form_group    = $design_style ? "form-group" : "";
 			$bs_sr_only       = $design_style ? "sr-only" : "";
 			$bs_form_control  = $design_style ? "form-control" : "";
 			$extra_attributes = array();
@@ -2410,7 +2410,7 @@ class UsersWP_Forms {
 		if ( empty( $html ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group mb-3" : "";
+			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control bg-white" : "";
 			$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
@@ -2529,7 +2529,7 @@ class UsersWP_Forms {
 		if ( empty( $html ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group mb-3" : "";
+			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 			$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
@@ -2638,7 +2638,7 @@ class UsersWP_Forms {
 		if ( empty( $html ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group mb-3" : "";
+			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 			$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
@@ -2793,7 +2793,7 @@ class UsersWP_Forms {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
 			$wrap_class      = isset( $field->css_class ) ? $field->css_class : '';
-			$bs_form_group   = $design_style ? "form-group mb-3" : "";
+			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 
@@ -2867,7 +2867,7 @@ class UsersWP_Forms {
 		if ( empty( $html ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group mb-3 form-check" : "";
+			$bs_form_group   = $design_style ? "form-group form-check" : "";
 			$bs_sr_only      = $design_style ? "form-check-label" : "";
 			$bs_form_control = $design_style ? "form-check-input" : "";
 
@@ -2971,7 +2971,7 @@ class UsersWP_Forms {
 		if ( empty( $html ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group mb-3 form-check-inline" : "";
+			$bs_form_group   = $design_style ? "form-group form-check-inline" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_label_class  = $design_style ? "form-check-label" : "";
 			$bs_form_control = $design_style ? "form-check-input" : "";
@@ -3165,7 +3165,7 @@ class UsersWP_Forms {
 			}
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group mb-3" : "";
+			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 
@@ -3266,7 +3266,7 @@ class UsersWP_Forms {
 		if ( empty( $html ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group mb-3" : "";
+			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 			$site_title      = uwp_get_form_label( $field );
@@ -3346,7 +3346,7 @@ class UsersWP_Forms {
 			ob_start();
 
 			$design_style  = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group = $design_style ? "form-group mb-3" : "";
+			$bs_form_group = $design_style ? "form-group" : "";
 			$bs_sr_only    = $design_style ? "sr-only" : "";
 			$site_title    = uwp_get_form_label( $field );
 
@@ -3475,7 +3475,7 @@ class UsersWP_Forms {
 		if ( empty( $html ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group mb-3" : "";
+			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 
@@ -3573,7 +3573,7 @@ class UsersWP_Forms {
 		if ( empty( $html ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group mb-3" : "";
+			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 
@@ -3672,7 +3672,7 @@ class UsersWP_Forms {
 		if ( empty( $html ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group mb-3" : "";
+			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 
@@ -3759,7 +3759,7 @@ class UsersWP_Forms {
 	public function form_input_phone( $html, $field, $value, $form_type ) {
 		if ( empty( $html ) ) {
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group mb-3" : "";
+			$bs_form_group   = $design_style ? "form-group" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 			ob_start(); // Start  buffering;
@@ -3831,7 +3831,7 @@ class UsersWP_Forms {
 		if ( ! empty( $reg_gdpr ) ) {
 
 			$design_style        = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group       = $design_style ? "form-group mb-3 form-check" : "";
+			$bs_form_group       = $design_style ? "form-group form-check" : "";
 			$bs_form_control     = $design_style ? "form-check-input" : "";
 			$site_title          = uwp_get_form_label( $field );
 			$field->htmlvar_name = 'register_gdpr';
@@ -3917,7 +3917,7 @@ class UsersWP_Forms {
 		if ( ! empty( $reg_tos ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group mb-3 form-check" : "";
+			$bs_form_group   = $design_style ? "form-group form-check" : "";
 			$bs_form_control = $design_style ? "form-check-input" : "";
 
 			$site_title          = uwp_get_form_label( $field );
@@ -4288,7 +4288,7 @@ class UsersWP_Forms {
 			if ( $enable_confirm_password_field == '1' ) {
 
 				$design_style    = uwp_get_option( "design_style", "bootstrap" );
-				$bs_form_group   = $design_style ? "form-group mb-3" : "";
+				$bs_form_group   = $design_style ? "form-group" : "";
 				$bs_sr_only      = $design_style ? "sr-only" : "";
 				$bs_form_control = $design_style ? "form-control" : "";
 				$site_title      = $placeholder = __( "Confirm Password", 'userswp' );
@@ -4378,7 +4378,7 @@ class UsersWP_Forms {
 			if ( $enable_confirm_email_field == '1' ) {
 
 				$design_style    = uwp_get_option( "design_style", "bootstrap" );
-				$bs_form_group   = $design_style ? "form-group mb-3" : "";
+				$bs_form_group   = $design_style ? "form-group" : "";
 				$bs_sr_only      = $design_style ? "sr-only" : "";
 				$bs_form_control = $design_style ? "form-control" : "";
 				$site_title      = __( "Confirm Email", 'userswp' );
@@ -4692,7 +4692,7 @@ class UsersWP_Forms {
 	 * @since 1.2.0
 	 */
 	public function modal_error_container( $type = '' ) {
-		echo '<div class="form-group mb-3"><div class="modal-error"></div></div>';
+		echo '<div class="form-group"><div class="modal-error"></div></div>';
 	}
 
 	public function form_custom_html( $html, $field, $value, $form_type ) {
