@@ -688,7 +688,7 @@ class UsersWP_Templates {
 		if ( empty( $html ) ) {
 
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group" : "";
+			$bs_form_group   = $design_style ? "form-group mb-3" : "";
 			$bs_sr_only      = $design_style ? "sr-only" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 
@@ -1087,7 +1087,7 @@ class UsersWP_Templates {
 			$fields          = apply_filters( 'uwp_account_privacy_fields', $fields );
 			$user_id         = get_current_user_id();
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
-			$bs_form_group   = $design_style ? "form-group row" : "";
+			$bs_form_group   = $design_style ? "form-group mb-3 row" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
 			$bs_btn_class    = $design_style ? "btn btn-primary btn-block text-uppercase" : "";
 			?>
