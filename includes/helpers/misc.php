@@ -1312,7 +1312,6 @@ function uwp_get_localize_data(){
 		'login_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("login_modal",1) ? 1 : '',
 		'register_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("register_modal",1) ? 1 : '',
 		'forgot_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("forgot_modal",1) ? 1 : '',
-		'uwp_pass_strength' => uwp_get_option("register_min_password_strength",0),
 		'default_banner' => uwp_get_default_banner_uri(),
 	);
 

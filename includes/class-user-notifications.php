@@ -21,7 +21,7 @@ class UsersWP_Notifications {
         if ($type == 'notifications') {
             $user_id = get_current_user_id();
             $design_style = uwp_get_option("design_style","bootstrap");
-            $bs_form_group = $design_style ? "form-group mb-3 form-check" : "";
+            $bs_form_group = $design_style ? "form-group form-check" : "";
             $bs_form_control = $design_style ? "form-check-input" : "";
             $bs_sr_only = $design_style ? "form-check-label" : "";
             $bs_btn_class = $design_style ? "btn btn-primary btn-block text-uppercase" : "";
