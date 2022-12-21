@@ -655,6 +655,10 @@ function uwp_checkPasswordStrength( $pass1,
         $strengthResult.parent().remove();
     }
 
+    if ( parseInt(uwp_localize_data.uwp_pass_strength) > 0 ) {
+        $submitButton.attr('disabled', 'disabled');
+    }
+
     // Reset the form & meter
     $strengthResult.removeClass( 'short bad good strong bg-warning bg-success bg-danger' );
 
@@ -690,6 +694,15 @@ function uwp_checkPasswordStrength( $pass1,
         default:
             $strengthResult.addClass( 'short bg-danger' ).html( pwsL10n.short ).width('25%');
 
+    }
+
+    // set the status of the submit button
+    if ( parseInt(uwp_localize_data.uwp_pass_strength) > 0) {
+        if(4 == parseInt(uwp_localize_data.uwp_pass_strength) && strength === 4){
+            $submitButton.removeAttr( 'disabled' );
+        } else if(3 == parseInt(uwp_localize_data.uwp_pass_strength) && (strength === 3 || strength === 4)){
+            $submitButton.removeAttr( 'disabled' );
+        }
     }
 
     return strength;
