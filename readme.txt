@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.1
-Stable tag: 1.2.3.10
+Stable tag: 1.2.3.11
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -147,7 +147,6 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 == Changelog ==
 
 = 1.2.3.11 =
-* Change: BS5 compatibility.
 * Setting to force user use strong password on registration - ADDED
 
 = 1.2.3.10 =
