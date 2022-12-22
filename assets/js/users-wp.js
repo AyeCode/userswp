@@ -218,14 +218,18 @@ function uwp_profile_image_change(type){
     var $modal = '<div class="modal fade uwp-profile-image-change-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="uwp-profile-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
     jQuery('body').append($modal);
 
-    if ( window.bootstrap && window.bootstrap.Modal ) {
-        var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-profile-image-change-modal'));
-        authModal.show();
-    } else {
-        jQuery('.uwp-profile-image-change-modal').modal({
-            backdrop: 'static'
-        });
-    }
+    jQuery('.uwp-profile-image-change-modal').modal({
+        backdrop: 'static'
+    });
+
+    // if ( window.bootstrap && window.bootstrap.Modal ) {
+    //     var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-profile-image-change-modal'));
+    //     authModal.show();
+    // } else {
+    //     jQuery('.uwp-profile-image-change-modal').modal({
+    //         backdrop: 'static'
+    //     });
+    // }
 
     // do something with the file here
     var data = {
@@ -291,12 +295,14 @@ function uwp_modal_loading(inputs){
         jQuery('.uwp-auth-modal .modal-content').html($modal_content);
     }
 
-    if ( window.bootstrap && window.bootstrap.Modal ) {
-        var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-auth-modal'));
-        authModal.show();
-    } else {
-        jQuery('.uwp-auth-modal').modal();
-    }
+    jQuery('.uwp-auth-modal').modal();
+
+    // if ( window.bootstrap && window.bootstrap.Modal ) {
+    //     var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-auth-modal'));
+    //     authModal.show();
+    // } else {
+    //     jQuery('.uwp-auth-modal').modal();
+    // }
 }
 
 /**
@@ -753,12 +759,14 @@ function uwp_gd_delete_post($post_id){
                     jQuery('.uwp-gd-modal .modal-content').html($modal_content);
                 }
 
-                if ( window.bootstrap && window.bootstrap.Modal ) {
-                    var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-gd-modal'));
-                    authModal.show();
-                } else {
-                    jQuery('.uwp-gd-modal').modal();
-                }
+                jQuery('.uwp-gd-modal').modal();
+
+                // if ( window.bootstrap && window.bootstrap.Modal ) {
+                //     var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-gd-modal'));
+                //     authModal.show();
+                // } else {
+                //     jQuery('.uwp-gd-modal').modal();
+                // }
 
                 if(data.success){
                     setTimeout(function() {
