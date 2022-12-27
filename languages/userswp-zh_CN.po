@@ -1,0 +1,5952 @@
+# Translation of 翻译插件 - UsersWP &#8211; User Registration &amp; User Profile - 程序主体 in Chinese (China)
+# This file is distributed under the same license as the 翻译插件 - UsersWP &#8211; User Registration &amp; User Profile - 程序主体 package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-12-27 22:28+0800\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.8.3\n"
+"Language: zh_CN\n"
+"Project-Id-Version: UsersWP简体中文翻译\n"
+"POT-Creation-Date: \n"
+"Last-Translator: Misaka10042 <misaka@mis1042.com>\n"
+"Language-Team: \n"
+
+#: admin/settings/class-formbuilder.php:2467
+msgid "Lets you use this field as sorting in the users listing page, set from user sorting tab above."
+msgstr "允许您使用此字段作为用户列表页面中的排序，从上面的用户排序选项卡设置。"
+
+#: admin/settings/class-formbuilder.php:2468
+msgid "Include this field in sorting options:"
+msgstr "在排序选项中包括此字段:"
+
+#: admin/settings/class-uwp-settings-emails.php:414
+msgid "Account new email activation email"
+msgstr "帐户激活电子邮件"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:104
+msgid "User Sorting"
+msgstr "用户排序"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:124
+msgid "Available sorting options for users listing and search results"
+msgstr "用户列表和搜索结果的排序选项"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:145
+msgid "Click on any box below to make it appear in the sorting option dropdown on users listing and search results. To make a field available here, go to account tab and expand any field from selected fields panel and tick the checkbox saying 'Include this field in sorting options'."
+msgstr "单击下面的任意框，使其出现在用户列表和搜索结果的排序选项下拉列表中。要在此处提供字段，请转到“帐户”选项卡并从所选字段面板中展开任何字段，然后勾选“在排序选项中包含此字段”复选框。"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:166
+msgid "List of fields that will appear in users listing and search results sorting option dropdown box."
+msgstr "将显示在用户列表和搜索结果排序选项下拉框中的字段列表。"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:187
+msgid "Click to expand and view field related settings. You may drag and drop to arrange fields order in sorting option dropdown box on users listing and search results page."
+msgstr "单击展开并查看字段相关的设置。您可以在用户列表和搜索结果页面上的排序选项下拉框中拖放以排列字段顺序。"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:245
+msgid "Sort by new user registration"
+msgstr "按新用户注册排序"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:255
+msgid "Sort by new user registration in descending order"
+msgstr "按新用户注册的降序排序"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:265
+msgid "Sort alphabetically by display name in ascending order"
+msgstr "按显示名称的字母顺序升序排序"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:275
+msgid "Sort alphabetically by first name in ascending order"
+msgstr "按名字字母顺序升序排序"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:285
+msgid "Sort alphabetically by last name in ascending order"
+msgstr "按姓氏字母顺序升序排序"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:517
+msgid "This is the text used for the sort option."
+msgstr "这是用于排序选项的文本"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:518
+msgid "Frontend title"
+msgstr "前端标题"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:530
+msgid "Select the sort direction: (A-Z or Z-A)."
+msgstr "选择排序方向： （ A-Z或Z-A ）。"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:531
+msgid "Ascending or Descending"
+msgstr "升序或降序"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:536
+msgid "Ascending"
+msgstr "顺序"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:537
+msgid "Descending"
+msgstr "反序"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:547
+msgid "This sets the option as the overall default sort value, there can be only one."
+msgstr "这将选项设置为唯一整体默认排序值。"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:548
+msgid "Default sort?"
+msgstr "默认排序？"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:563
+msgid "Set if this sort option is active or not, if not it will not be shown to users."
+msgstr "设置是否启用排序选项，如果为否则用户将不会看到这个选项"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:564
+msgid "Is active?"
+msgstr "是否启用？"
+
+#: includes/class-forms.php:2024
+msgid "Account updated successfully. The new address will become active once you confirm via activation link sent to your new email."
+msgstr "账户已更新，您的新邮件地址将会在您通过链接验证后启用"
+
+#: includes/class-notices.php:67
+msgid "Email updated successfully."
+msgstr "邮件已成功更新"
+
+#: includes/class-uwp-defaults.php:253
+msgid "[#site_name#] - New email address activation required"
+msgstr "[#site_name#] - 您的邮件地址需要验证"
+
+#: includes/class-uwp-defaults.php:263
+msgid ""
+"Dear [#user_name#],\n"
+"\n"
+"You recently requested to change your email address. Please click on the following link to change it: [#new_email_link#]\n"
+"\n"
+"You can safely ignore and delete this email if you do not want to take this action.\n"
+"\n"
+"Thank you,\n"
+"[#site_name_url#]"
+msgstr ""
+"尊敬的[# USER_NAME #] ，\n"
+"\n"
+"您最近申请更改电子邮件地址。 请点击以下链接进行更改： [# NEW_EMAIL_LINK #]\n"
+"\n"
+"如果您不想采取此操作，可以安全地忽略并删除此电子邮件。\n"
+"\n"
+"谢谢，\n"
+"[# site_name_url #]"
+
+#: admin/settings/class-uwp-settings-general.php:558
+msgid "Bio Length"
+msgstr "简介长度"
+
+#: admin/settings/class-uwp-settings-general.php:559
+msgid "Author bio word limit in Author box."
+msgstr "作者页面的个人简介长度限制"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:417
+#: includes/class-profile.php:1014
+msgid "User Comments"
+msgstr "用户评论"
+
+#: widgets/profile-header.php:70
+msgid "Disable Greedy Menu for post counts"
+msgstr "禁用贪婪菜单"
+
+#: widgets/profile-header.php:71 widgets/profile-tabs.php:58
+#: widgets/profile.php:44 widgets/user-post-counts.php:43
+msgid "Greedy menu prevents a large menu falling onto another line by adding a dropdown select."
+msgstr "贪婪菜单添加了一个下拉选择项以防止主菜单占用多行"
+
+#: widgets/profile-tabs.php:57 widgets/profile.php:43
+#: widgets/user-post-counts.php:42
+msgid "Disable Greedy Menu"
+msgstr "禁用贪婪菜单"
+
+#: admin/class-admin.php:967
+msgid "Security nonce failed. Please try again."
+msgstr "安全随机数遇到了问题，请重试"
+
+#: admin/settings/class-uwp-settings-general.php:207
+msgid "Register Link Title"
+msgstr "注册链接标题"
+
+#: admin/settings/class-uwp-settings-general.php:208
+msgid "Enter the register link title."
+msgstr "输入注册链接标题。"
+
+#: admin/settings/class-uwp-settings-general.php:217
+msgid "Forgot Password Link Title"
+msgstr "忘记密码链接标题"
+
+#: admin/settings/class-uwp-settings-general.php:218
+msgid "Enter the forgot password title."
+msgstr "输入忘记密码标题。"
+
+#: admin/settings/class-uwp-settings-general.php:279
+msgid "Login Link Title"
+msgstr "登录链接标题"
+
+#: admin/settings/class-uwp-settings-general.php:280
+msgid "Enter the login link title."
+msgstr "输入登录链接标题。"
+
+#: admin/settings/class-uwp-settings-general.php:289
+msgid "Profile Link Title"
+msgstr "个人资料链接标题"
+
+#: admin/settings/class-uwp-settings-general.php:290
+msgid "Enter the profile link title."
+msgstr "输入个人资料链接标题。"
+
+#: admin/settings/class-uwp-settings-general.php:299
+msgid "Account Link Title"
+msgstr "帐户链接标题"
+
+#: admin/settings/class-uwp-settings-general.php:300
+msgid "Enter the account link title."
+msgstr "输入帐户链接标题。"
+
+#: upgrade.php:71
+msgid "First Name (A-Z)"
+msgstr "名字（ A-Z ）"
+
+#: upgrade.php:81
+msgid "First Name (Z-A)"
+msgstr "名字（ Z-A ）"
+
+#: upgrade.php:91
+msgid "Last Name (A-Z)"
+msgstr "姓氏（ A-Z ）"
+
+#: upgrade.php:101
+msgid "Last Name (Z-A)"
+msgstr "姓氏（ Z-A ）"
+
+#: admin/settings/class-uwp-settings-general.php:233
+msgid "Restrict wp-admin"
+msgstr "重定向后台管理页面(wp-admin)"
+
+#: admin/settings/class-uwp-settings-general.php:234
+msgid "The user roles that should be restricted from accessing the wp-admin area."
+msgstr "应限制能够访问后台管理的用户角色"
+
+#: admin/settings/class-uwp-settings-redirects.php:28
+msgid "Redirects"
+msgstr "重定向"
+
+#: admin/settings/class-uwp-settings-redirects.php:69
+msgid "Role based redirects"
+msgstr "基于用户角色的重定向"
+
+#: admin/settings/class-uwp-settings-redirects.php:104
+msgid "Login redirect based on user role will not work if \"Last User Page\" is set in General->Login->Login Redirect Page."
+msgstr "如果在常规- >登录- >登录重定向页面中设置“最后的用户页面” ，基于用户角色的登录重定向将不起作用。"
+
+#: admin/settings/class-uwp-settings-redirects.php:110
+msgid "Role based redirect settings"
+msgstr "基于角色的重定向设置"
+
+#: admin/settings/class-uwp-settings-redirects.php:154
+msgid "Hide Adminbar"
+msgstr "隐藏管理栏"
+
+#: admin/settings/class-uwp-settings-redirects.php:155
+msgid "Hide admin bar from frontend for this user role."
+msgstr "从前端隐藏此用户角色的管理栏。"
+
+#: widgets/button-group.php:44 widgets/profile-header.php:54
+#: widgets/user-avatar.php:62 widgets/user-cover.php:55
+#: widgets/user-meta.php:45 widgets/user-title.php:51
+msgid "Leave blank to use current user ID or use post_author for current post author ID. For profile page it will take displayed user ID. Input specific user ID for other pages."
+msgstr "留空以使用当前用户ID或使用POST_AUTHOR作为当前帖子作者ID。对于个人资料页面，它将使用显示的用户ID。输入其他页面的特定用户ID。"
+
+#: admin/class-admin.php:242
+msgid "Option Values must not be blank"
+msgstr "选项值不能为空"
+
+#: admin/class-admin.php:246
+msgid "This field is required."
+msgstr "此字段为必填字段。"
+
+#: admin/menus/class-menus.php:49 admin/menus/class-menus.php:61
+msgid "Common"
+msgstr "常规"
+
+#: admin/menus/class-menus.php:52 admin/menus/class-menus.php:73
+msgid "Logged-In"
+msgstr "登录"
+
+#: admin/menus/class-menus.php:55 admin/menus/class-menus.php:86
+msgid "Logged-Out"
+msgstr "退出登录"
+
+#: admin/menus/class-menus.php:62
+msgid "Common links are visible to everyone."
+msgstr "所有人可见的普通链接"
+
+#: admin/menus/class-menus.php:74
+msgid "Logged-In links are not visible to visitors who are not logged in."
+msgstr "登录链接对于未登录的用户不可见。"
+
+#: admin/menus/class-menus.php:87
+msgid "Logged-Out links are not visible to users who are logged in."
+msgstr "已退出登陆的链接对登录的用户不可见。"
+
+#: admin/menus/class-menus.php:106
+msgid "Add to menu"
+msgstr "添加到菜单"
+
+#: admin/menus/class-menus.php:173 admin/menus/class-menus.php:314
+msgid "Log out"
+msgstr "退出登录"
+
+#: admin/class-admin-setup-wizard.php:239
+#: admin/class-admin-setup-wizard.php:244
+msgid "General Settings"
+msgstr "常规设置"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:221
+msgid "Shortcode"
+msgstr "代码"
+
+#: includes/helpers/pages.php:549
+msgid "Info"
+msgstr "信息"
+
+#: admin/settings/class-formbuilder.php:515
+msgid "Register Form Shortcode:"
+msgstr "注册页短代码"
+
+#: admin/settings/class-formbuilder.php:41
+#: admin/settings/class-uwp-settings-general.php:75
+#: admin/settings/class-uwp-settings-general.php:303
+#: includes/class-pages.php:326 templates/bootstrap/change.php:39
+#: templates/change.php:15 widgets/account.php:95
+msgid "Account"
+msgstr "帐户"
+
+#: admin/settings/class-formbuilder.php:42
+#: admin/settings/class-uwp-settings-general.php:70
+#: includes/class-pages.php:324 templates/bootstrap/register.php:9
+#: templates/register.php:3 widgets/register.php:63 widgets/register.php:119
+msgid "Register"
+msgstr "注册"
+
+#: includes/helpers/misc.php:562
+msgid "E-Mail Notifications"
+msgstr "电子邮件通知"
+
+#: admin/settings/class-uwp-settings-general.php:655
+msgid "User Profile Page"
+msgstr "用户资料页面"
+
+#: admin/settings/class-uwp-settings-general.php:656
+msgid "This is the front end user's profile page. This page automatically overrides the default WordPress author page."
+msgstr "这是前端用户的个人资料页面。此页面会替换WordPress自带的作者页面。"
+
+#: admin/settings/class-uwp-settings-general.php:662
+msgid "Register Page"
+msgstr "注册页面"
+
+#: admin/settings/class-uwp-settings-general.php:663
+msgid "This is the front end register page. This is where users create their account."
+msgstr "这是前端注册页面。就是是用户创建帐户的地方。"
+
+#: admin/settings/class-uwp-settings-general.php:669
+msgid "Login Page"
+msgstr "登陆页面"
+
+#: admin/settings/class-uwp-settings-general.php:670
+msgid "This is the front end login page. This is where users will login after creating their account."
+msgstr "这是前端登录页面。就是用户在创建帐户后登录的位置。"
+
+#: admin/settings/class-uwp-settings-general.php:676
+msgid "Account Page"
+msgstr "账户页面"
+
+#: admin/settings/class-uwp-settings-general.php:677
+msgid "This is the front end account page. This is where users can edit their account."
+msgstr "这是前端帐户页面。就是用户可以编辑其帐户的地方。"
+
+#: admin/settings/class-uwp-settings-general.php:683
+msgid "Change Password Page"
+msgstr "更改密码页"
+
+#: admin/settings/class-uwp-settings-general.php:684
+msgid "This is the front end Change Password page."
+msgstr "这是前端更改密码页面。"
+
+#: admin/settings/class-uwp-settings-general.php:690
+msgid "Forgot Password Page"
+msgstr "忘记密码页"
+
+#: admin/settings/class-uwp-settings-general.php:691
+msgid "This is the front end Forgot Password page. This is the page where users are sent to reset their password when they lose it."
+msgstr "这是前端忘记密码页面。就是用户在丢失密码时被发送重置密码的页面。"
+
+#: admin/settings/class-uwp-settings-general.php:697
+msgid "Reset Password Page"
+msgstr "重置密码页面"
+
+#: admin/settings/class-uwp-settings-general.php:698
+msgid "This is the front end Reset Password page. This is the page where users can reset their password when they lose it."
+msgstr "这是前端重置密码页面。就是用户在丢失密码时可以重置密码的页面。"
+
+#: admin/settings/class-uwp-settings-general.php:704
+msgid "Users List Page"
+msgstr "用户列表页面"
+
+#: admin/settings/class-uwp-settings-general.php:705
+msgid "This is the front end Users List page. This is the page where all registered users of the websites are listed."
+msgstr "这是前端用户列表页面。就是列出网站所有注册用户的页面。"
+
+#: admin/settings/class-uwp-settings-general.php:416
+#: admin/settings/class-uwp-settings-general.php:473
+msgid "Number of items"
+msgstr "项目数量"
+
+#: admin/settings/class-uwp-settings-general.php:419
+msgid "Enter number of items to display in profile tabs."
+msgstr "输入要在配置文件选项卡中显示的项数。"
+
+#: admin/settings/class-uwp-settings-general.php:356
+msgid "Display header in profile"
+msgstr "在用户资料页面显示标题"
+
+#: admin/settings/class-uwp-settings-general.php:370
+msgid "Profile avatar max file size"
+msgstr "用户个人资料头像最大文件大小"
+
+#: admin/settings/class-uwp-settings-general.php:379
+msgid "Profile banner max file size"
+msgstr "用户个人资料横幅最大文件大小"
+
+#: admin/settings/class-uwp-settings-general.php:402
+msgid "Profile banner width"
+msgstr "用户个人资料横幅宽度"
+
+#: admin/settings/class-uwp-settings-general.php:363
+msgid "Display body in profile"
+msgstr "在用户资料页面显示正文"
+
+#: admin/settings/class-uwp-settings-general.php:465
+msgid "Users default layout"
+msgstr "用户默认布局"
+
+#: admin/settings/class-uwp-settings-general.php:309
+msgid "Enabled Old Password?"
+msgstr "启用旧密码？"
+
+#: admin/settings/class-uwp-settings-uninstall.php:89
+msgid "Remove Data on Uninstall?"
+msgstr "在卸载时删除数据?"
+
+#: admin/settings/class-uwp-settings-emails.php:216
+msgid "Registration activate email"
+msgstr "注册激活电子邮件"
+
+#: admin/settings/class-uwp-settings-emails.php:249
+msgid "Registration success email"
+msgstr "成功注册电子邮件"
+
+#: admin/settings/class-uwp-settings-emails.php:282
+msgid "Forgot password email"
+msgstr "忘记密码电子邮件"
+
+#: admin/settings/class-uwp-settings-emails.php:348
+msgid "Reset password email"
+msgstr "重设密码电子邮件"
+
+#: admin/settings/class-uwp-settings-emails.php:381
+msgid "Account update email"
+msgstr "帐户信息更新电子邮件"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:393 upgrade.php:195
+msgid "More Info"
+msgstr "更多"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:401
+#: includes/class-profile.php:900 upgrade.php:187
+msgid "Posts"
+msgstr "文章设置"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:409
+#: includes/class-profile.php:941 templates/bootstrap/loop-comments.php:9
+#: templates/loop-comments.php:9 upgrade.php:203
+msgid "Comments"
+msgstr "条评论"
+
+#: templates/users-actions.php:22
+msgid "List View"
+msgstr "列表视图"
+
+#: admin/settings/class-uwp-settings-general.php:742
+msgid "Grid View - 2 Column"
+msgstr "网格视图 - 2 列"
+
+#: admin/settings/class-uwp-settings-general.php:743
+msgid "Grid View - 3 Column"
+msgstr "网格视图 - 3 列"
+
+#: admin/settings/class-uwp-settings-general.php:744
+msgid "Grid View - 4 Column"
+msgstr "网格视图 - 4 列"
+
+#: admin/settings/class-uwp-settings-general.php:745
+msgid "Grid View - 5 Column"
+msgstr "网格视图 - 5 列"
+
+#: admin/settings/class-formbuilder.php:82
+msgid "Add new form field"
+msgstr "添加新表单字段"
+
+#: admin/settings/class-formbuilder.php:112
+msgid "Predefined Fields"
+msgstr "预定义的字段"
+
+#: admin/settings/class-formbuilder.php:595
+msgid "This adds a section separator with a title."
+msgstr "这将添加带有标题的节分隔符。"
+
+#: admin/settings/class-formbuilder.php:594
+msgid "Fieldset (section separator)"
+msgstr "字段集（段分隔符）"
+
+#: admin/settings/class-formbuilder.php:636
+msgid "There are no custom fields here yet."
+msgstr "这里还没有自定义字段。"
+
+#: admin/settings/class-formbuilder.php:653
+msgid "Country"
+msgstr "国家 / 地区"
+
+#: admin/settings/class-formbuilder.php:654
+msgid "Adds a input for Country field."
+msgstr "为“国家”字段添加输入。"
+
+#: admin/settings/class-formbuilder.php:674
+msgid "Gender"
+msgstr "性别"
+
+#: admin/settings/class-formbuilder.php:675
+msgid "Adds a input for Gender field."
+msgstr "为“性别”字段添加输入。"
+
+#: admin/settings/class-formbuilder.php:722
+msgid "Mobile"
+msgstr "手机"
+
+#: admin/settings/class-formbuilder.php:723
+msgid "Adds a input for Mobile field."
+msgstr "为电话号码字段添加输入。"
+
+#: admin/settings/class-formbuilder.php:984
+msgid "Text"
+msgstr "文本"
+
+#: admin/settings/class-formbuilder.php:985
+msgid "Add any sort of text field, text or numbers"
+msgstr "添加任何类型的文本字段、文本或数字"
+
+#: admin/settings/class-formbuilder.php:991
+msgid "Date"
+msgstr "日期"
+
+#: admin/settings/class-formbuilder.php:992
+msgid "Adds a date picker."
+msgstr "添加日期选择器。"
+
+#: admin/settings/class-formbuilder.php:998
+msgid "Textarea"
+msgstr "文本区域"
+
+#: admin/settings/class-formbuilder.php:999
+msgid "Adds a textarea"
+msgstr "添加一个文本区域"
+
+#: admin/settings/class-formbuilder.php:1005
+msgid "Time"
+msgstr "Time"
+
+#: admin/settings/class-formbuilder.php:1006
+msgid "Adds a time picker"
+msgstr "添加一个时间选项"
+
+#: admin/settings/class-formbuilder.php:1012
+msgid "Checkbox"
+msgstr "复选"
+
+#: admin/settings/class-formbuilder.php:1013
+msgid "Adds a checkbox"
+msgstr "添加一个复选框"
+
+#: admin/settings/class-formbuilder.php:1019
+msgid "Phone"
+msgstr "电话"
+
+#: admin/settings/class-formbuilder.php:1020
+msgid "Adds a phone input"
+msgstr "添加电话输入"
+
+#: admin/settings/class-formbuilder.php:1026
+msgid "Radio"
+msgstr "广播电台"
+
+#: admin/settings/class-formbuilder.php:1027
+msgid "Adds a radio input"
+msgstr "添加广播输入"
+
+#: admin/settings/class-formbuilder.php:1033 includes/class-activator.php:406
+#: includes/class-activator.php:673
+msgid "Email"
+msgstr "邮箱地址"
+
+#: admin/settings/class-formbuilder.php:1034
+msgid "Adds a email input"
+msgstr "添加电子邮件输入"
+
+#: admin/settings/class-formbuilder.php:1039
+#: admin/settings/class-formbuilder.php:2363
+msgid "Select"
+msgstr "选择"
+
+#: admin/settings/class-formbuilder.php:1040
+msgid "Adds a select input"
+msgstr "添加选择输入"
+
+#: admin/settings/class-formbuilder.php:1046
+msgid "Multi Select"
+msgstr "多选"
+
+#: admin/settings/class-formbuilder.php:1047
+msgid "Adds a multiselect input"
+msgstr "添加多选输入"
+
+#: admin/settings/class-formbuilder.php:1053
+msgid "URL"
+msgstr "URL"
+
+#: admin/settings/class-formbuilder.php:1054
+msgid "Adds a url input"
+msgstr "添加一个URL输入"
+
+#: admin/settings/class-formbuilder.php:1067
+msgid "File Upload"
+msgstr "文件上传"
+
+#: admin/settings/class-formbuilder.php:1068
+msgid "Adds a file input"
+msgstr "添加文件輸入"
+
+#: admin/settings/class-formbuilder.php:1299
+#: admin/settings/class-formbuilder.php:2002
+msgid "Fieldset:"
+msgstr "字段集："
+
+#: widgets/user-meta.php:59
+msgid "Label"
+msgstr "标签"
+
+#: admin/settings/class-formbuilder.php:1366
+msgid "This will be the label for the field."
+msgstr "这将是字段的标签。"
+
+#: admin/settings/class-formbuilder.php:1394
+msgid "Form Label: (Optional)"
+msgstr "标签（可选）"
+
+#: admin/settings/class-formbuilder.php:1393
+msgid "If your form label is different, then you can fill this field. Ex: You would like to display \"What is your age?\" in Form Field but would like to display \"DOB\" in site. In such cases \"What is your age?\" should be entered here and \"DOB\" should be entered in previous field. Note: If this field not filled, then the previous field will be used in Form."
+msgstr "如果您的表单标签不同，则可以填写此字段。例如：您希望在表单字段中显示“您的年龄是多少？” ，但希望在网站中显示“DOB”。在这种情况下， “您的年龄是多少？”应输入此处， “出生日期”应输入上一个字段。注意：如果未填写此字段，则前一个字段将用于表单。"
+
+#: admin/settings/class-formbuilder.php:1448
+msgid "This is a unique identifier used in the HTML, it MUST NOT contain spaces or special characters."
+msgstr "这是HTML中使用的唯一标识符，不能包含空格或特殊字符。"
+
+#: admin/settings/class-formbuilder.php:1453
+msgid "Must not contain spaces or special characters"
+msgstr "不得包含空格或特殊字符"
+
+#: admin/settings/class-formbuilder.php:1510
+msgid "Is active :"
+msgstr "是否启用？"
+
+#: admin/settings/class-formbuilder.php:1509
+msgid "If no is selected then the field will not be displayed anywhere."
+msgstr "如果选择“否”，则该字段将不会显示在任何位置。"
+
+#: admin/settings/class-formbuilder.php:1575 includes/class-profile.php:465
+#: includes/class-templates.php:1122
+msgid "Yes"
+msgstr "是的"
+
+#: admin/settings/class-formbuilder.php:1576 includes/class-profile.php:467
+#: includes/class-templates.php:1121
+msgid "No"
+msgstr "否"
+
+#: admin/settings/class-formbuilder.php:1566
+msgid "Is Public :"
+msgstr "是否公开？"
+
+#: admin/settings/class-formbuilder.php:1565
+msgid "If no is selected then the field will not be visible to other users."
+msgstr "如果选择“否”，则该字段将不会显示在任何位置。"
+
+#: admin/settings/class-formbuilder.php:1577
+msgid "Let User Decide"
+msgstr "让用户决定"
+
+#: admin/settings/class-formbuilder.php:1611
+msgid "Default value :"
+msgstr "默认值 ："
+
+#: admin/settings/class-formbuilder.php:1602
+msgid "Should the checkbox be checked by default?"
+msgstr "默认情况下是否应选中该复选框？"
+
+#: admin/settings/class-formbuilder.php:1604
+msgid "A default value for the field, usually blank. Ex: info@mysite.com"
+msgstr "字段的默认值，通常为空。例如：info@mysite.com"
+
+#: admin/settings/class-formbuilder.php:1606
+msgid "A default value for the field, usually blank. (for links this will be used as the link text)"
+msgstr "字段的默认值，通常为空。（对于链接，这将用作链接文本）"
+
+#: admin/settings/class-formbuilder.php:1616
+msgid "Unchecked"
+msgstr "未选中"
+
+#: admin/settings/class-formbuilder.php:1617
+msgid "Checked"
+msgstr "已选中"
+
+#: admin/settings/class-formbuilder.php:1621
+msgid "info@mysite.com"
+msgstr "info@mysite.com"
+
+#: admin/settings/class-formbuilder.php:1662
+msgid "Is required :"
+msgstr "是否是必须的："
+
+#: admin/settings/class-formbuilder.php:1661
+msgid "Select yes to set field as required"
+msgstr "选择“是”以根据需要设置字段"
+
+#: admin/settings/class-formbuilder.php:1695
+msgid "Required message:"
+msgstr "未提供的提示信息："
+
+#: admin/settings/class-formbuilder.php:1694
+msgid "Enter text for the error message if the field is required and has not fulfilled the requirements."
+msgstr "如果该字段为必填字段且未满足要求，请为错误消息输入文本。"
+
+#: admin/settings/class-formbuilder.php:1737
+msgid "Upload icon :"
+msgstr "上传图标："
+
+#: admin/settings/class-formbuilder.php:1773
+msgid "CSS class :"
+msgstr "CSS 类 :"
+
+#: admin/settings/class-formbuilder.php:1764
+msgid "Enter custom css class for field custom style."
+msgstr "为字段自定义样式输入自定义css类。"
+
+#: admin/settings/class-formbuilder.php:1766
+msgid "(Enter class `uwp-comma-list` to show list as comma separated)"
+msgstr "（输入类 `uwp-comma-list` 以显示用逗号分开的列表）"
+
+#: admin/settings/class-formbuilder.php:1801
+msgid "Show in what locations?:"
+msgstr "在哪些位置显示？："
+
+#: admin/settings/class-formbuilder.php:1800
+msgid "Select in what locations you want to display this field."
+msgstr "选择要显示此字段的位置。"
+
+#: includes/helpers/misc.php:1490 widgets/output-location.php:90
+msgid "Users Page"
+msgstr "用户页面"
+
+#: includes/helpers/misc.php:1491 widgets/output-location.php:91
+msgid "More info tab"
+msgstr "更多信息选项卡"
+
+#: widgets/output-location.php:92
+msgid "Profile side"
+msgstr "用户资料位置"
+
+#: admin/settings/class-formbuilder.php:1836
+msgid "Select locations"
+msgstr "选择位置"
+
+#: admin/settings/class-formbuilder.php:1866
+#: admin/settings/class-formbuilder.php:2083
+#: admin/settings/class-uwp-settings-profile-tabs.php:812
+#: admin/settings/class-uwp-settings-user-sorting.php:590
+msgid "Save"
+msgstr "保存"
+
+#: admin/settings/class-formbuilder.php:2087
+#: includes/libraries/class-geodirectory-plugin.php:1157
+#: includes/libraries/class-geodirectory-plugin.php:1373
+#: includes/libraries/class-geodirectory-plugin.php:1587
+msgid "Delete"
+msgstr "刪除"
+
+#: admin/settings/class-formbuilder.php:2865
+#: admin/settings/class-formbuilder.php:2886
+#: admin/settings/class-formbuilder.php:2918
+msgid "Column change failed, you may have too many columns."
+msgstr "列更改失败，可能是列太多。"
+
+#: admin/settings/class-formbuilder.php:3025
+#: admin/settings/class-formbuilder.php:3067
+#: admin/settings/class-formbuilder.php:3081
+#: admin/settings/class-formbuilder.php:3134 includes/class-tools.php:82
+msgid "Column creation failed, you may have too many columns or the default value does not match with field data type."
+msgstr "列创建失败，可能是列太多或默认值与字段数据类型不匹配。"
+
+#: admin/settings/class-formbuilder.php:3094
+msgid "Column creation failed, you may have too many columns or the default value must have in valid date format."
+msgstr "列创建失败，可能是列太多，或者默认值必须为有效的日期格式。"
+
+#: admin/settings/class-formbuilder.php:3107
+msgid "Column creation failed, you may have too many columns or the default value must have in valid time format."
+msgstr "列创建失败，可能是列太多，或者默认值必须为有效的时间格式。"
+
+#: admin/settings/class-formbuilder.php:2136
+msgid "Option Values :"
+msgstr "选项值："
+
+#: admin/settings/class-formbuilder.php:2122
+msgid "Option Values should be separated by comma."
+msgstr "选项值应以逗号分隔。"
+
+#: admin/settings/class-formbuilder.php:2124
+msgid "If using for a tick filter place a / and then either a 1 for true or 0 for false"
+msgstr "如果使用记号过滤器，则将a/和1分别表示为真，0表示为假"
+
+# 翻译者只有高中不到的学历是真的看不懂啊
+#: admin/settings/class-formbuilder.php:2125
+msgid "eg: No Dogs Allowed/0,Dogs Allowed/1"
+msgstr "例如：禁止带狗/0，允许带狗/1"
+
+#: admin/settings/class-formbuilder.php:2128
+msgid "Like: Apple,Bannana,Pear,Peach"
+msgstr "例如： 苹果， 香蕉， 梨， 桃子"
+
+#: admin/settings/class-formbuilder.php:2129
+msgid "Or you can show Selection/Value shown: Pets Allowed/Yes,Pets not Allowed/No"
+msgstr "或者您可以显示选择/显示值：允许宠物/是，不允许宠物/否"
+
+#: admin/settings/class-formbuilder.php:2130
+msgid "- If using OPTGROUP tag to grouping options, use {optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"
+msgstr "- 如果使用 OPTGROUP 标签进行分组选项，请使用{optgroup}OPTGROUP-标签|选项-1，选项-2{/optgroup}"
+
+#: admin/settings/class-formbuilder.php:2131
+msgid "eg: {optgroup}Pets Allowed|No Dogs Allowed/0,Dogs Allowed/1{/optgroup},{optgroup}Sports|Cricket/Cricket,Football/Football,Hockey{/optgroup}"
+msgstr "例如: {optgroup}允许带宠物|不允许带狗/0,允许带狗/1{/optgroup},{optgroup}运动|板球/板球、足球/足球、曲棍球{/optgroup}"
+
+#: admin/settings/class-formbuilder.php:2143
+msgid "A full country list will be shown"
+msgstr "将显示完整的国家/地区列表"
+
+#: admin/settings/class-formbuilder.php:2172
+msgid "Date Format :"
+msgstr "日期格式:"
+
+#: admin/settings/class-formbuilder.php:2171
+msgid "Select the date format."
+msgstr "选择日期格式。"
+
+#: admin/settings/class-formbuilder.php:2224
+msgid "Display confirm password field?:"
+msgstr "显示确认密码字段？："
+
+#: admin/settings/class-formbuilder.php:2223
+msgid "Lets you display confirm password form field."
+msgstr "这让网站显示确认密码字段"
+
+#: admin/settings/class-formbuilder.php:2255
+msgid "Display confirm email field?:"
+msgstr "显示确认电子邮件字段？："
+
+#: admin/settings/class-formbuilder.php:2254
+msgid "Lets you display confirm email form field."
+msgstr "这让网站显示确认电子邮件表单字段。"
+
+#: admin/settings/class-formbuilder.php:2284
+msgid "Allowed file types :"
+msgstr "允许的文件类型："
+
+#: admin/settings/class-formbuilder.php:2283
+msgid "Select file types to allowed for file uploading. (Select multiple file types by holding down \"Ctrl\" key.)"
+msgstr "选择允许上载文件的文件类型(按住“Ctrl”键选择多种文件类型。）"
+
+#: admin/settings/class-formbuilder.php:2289
+msgid "All types"
+msgstr "所有类型"
+
+#: admin/settings/class-formbuilder.php:2292
+msgid "%s formats"
+msgstr "%s 格式"
+
+#: admin/settings/class-formbuilder.php:2322
+msgid "Field Data Type:"
+msgstr "字段数据类型："
+
+#: admin/settings/class-formbuilder.php:2321
+msgid "Select Custom Field type"
+msgstr "选择自定义字段类型"
+
+#: admin/settings/class-formbuilder.php:2331
+msgid "Text Field"
+msgstr "文本字段"
+
+#: admin/settings/class-formbuilder.php:2335
+msgid "Number Field"
+msgstr "数字字段"
+
+#: admin/settings/class-formbuilder.php:2339
+msgid "Decimal Field"
+msgstr "十进制字段"
+
+#: admin/settings/class-formbuilder.php:2358
+msgid "Decimal places to display after point"
+msgstr "小数点后的位数"
+
+#: admin/settings/class-formbuilder.php:2418
+msgid "Include this field in register form:"
+msgstr "以注册表的形式包括此字段："
+
+#: admin/settings/class-formbuilder.php:2417
+msgid "Lets you use this field as register form field, set from register tab above."
+msgstr "让网站使用此字段作为注册表单字段，设置自上面的注册选项卡。"
+
+#: admin/settings/class-formbuilder.php:2443
+msgid "Include this field ONLY in register form:"
+msgstr "仅在注册表单中包括此字段："
+
+#: admin/settings/class-formbuilder.php:2442
+msgid "Lets you use this field as register ONLY form field."
+msgstr "让网站使用此字段作为仅注册窗体字段。"
+
+#: admin/settings/class-formbuilder.php:2484
+msgid "Available register form fields."
+msgstr "可用的注册表单字段。"
+
+#: admin/settings/class-formbuilder.php:2494
+msgid "Click on any box below to make it appear in register form. To make a field available here, go to account tab and expand any field from selected fields panel and tick the checkbox saying 'Include this field in register form'."
+msgstr "单击下面的任何复选框以使其显示在注册表单中。若要使此处的字段可用，请转到帐户选项卡，展开所选字段面板中的任何字段，并勾选“将此字段包含在注册表单”复选框。"
+
+#: admin/settings/class-formbuilder.php:2504
+msgid "List of fields that will appear in the register form."
+msgstr "将显示在登记表中的字段列表。"
+
+#: admin/settings/class-formbuilder.php:2515
+msgid "Click to expand and view field related settings. You may drag and drop to arrange fields order in register form."
+msgstr "单击以扩展并查看字段相关设置。您可以拖放以登记表的形式排列字段顺序。"
+
+#: includes/class-uwp-defaults.php:143
+msgid "[#site_name#] - Your new password"
+msgstr "[#site_name#] - 您的新密码"
+
+#: includes/class-uwp-defaults.php:171
+msgid "[#site_name#] - Password has been changed"
+msgstr "[#site_name#]-密码已更改"
+
+#: includes/class-uwp-defaults.php:199
+msgid "[#site_name#] - Password has been reset"
+msgstr "[#site_name#]-密码已重置"
+
+#: includes/class-uwp-defaults.php:227
+msgid "[#site_name#] - Account has been updated"
+msgstr "[#site_name#] - 帐户已更新"
+
+#: includes/class-activator.php:364 includes/class-activator.php:640
+#: includes/libraries/class-geodirectory-plugin.php:1856
+msgid "Username"
+msgstr "姓名"
+
+#: includes/class-account.php:68 includes/class-account.php:69
+#: includes/class-activator.php:377 includes/class-activator.php:566
+#: includes/class-activator.php:705
+msgid "Password"
+msgstr "密码"
+
+#: includes/class-activator.php:435
+msgid "Avatar"
+msgstr "头像"
+
+#: includes/class-activator.php:473
+msgid "Banner"
+msgstr "横幅"
+
+#: includes/class-activator.php:511
+msgid "Old Password"
+msgstr "旧密码"
+
+#: includes/class-activator.php:524
+msgid "New Password"
+msgstr "新密码"
+
+#: includes/class-activator.php:537 includes/class-activator.php:579
+#: includes/class-forms.php:4142
+msgid "Confirm Password"
+msgstr "确认密码"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:271
+#: includes/class-activator.php:608
+msgid "First Name"
+msgstr "名字"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:281
+#: includes/class-activator.php:624
+msgid "Last Name"
+msgstr "姓"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:261
+#: includes/class-activator.php:657
+msgid "Display Name"
+msgstr "显示名称"
+
+#: includes/class-activator.php:689
+msgid "Bio"
+msgstr "简介"
+
+#: includes/class-forms.php:1682
+msgid "Please check your email."
+msgstr "请检查您的电子邮箱。"
+
+#: includes/class-forms.php:1762
+msgid "Password changed successfully."
+msgstr "密码已成功更改。"
+
+#: includes/class-forms.php:1853
+msgid "Password updated successfully. Please <a href=\"%s\">login</a> with your new password."
+msgstr "密码成功更新。请 <a href=\"%s\">使用</a> 新密码登录。"
+
+#: includes/class-forms.php:2041
+msgid "Account updated successfully."
+msgstr "帐户成功更新。"
+
+#: includes/class-forms.php:66 includes/class-forms.php:80
+msgid "Avatar cropped successfully."
+msgstr "头像成功裁剪。"
+
+#: includes/class-forms.php:73 includes/class-forms.php:87
+msgid "Banner cropped successfully."
+msgstr "横幅成功裁剪。"
+
+#: includes/class-forms.php:477
+msgid "We have removed the system generated password warning for you. From this point forward you can continue to access our site as usual. To go to home page, <a href=\"%s\">click here</a>."
+msgstr "我们已为您删除系统生成的密码警告。从现在起，您可以继续像往常一样访问我们的网站。要转到主页，<a href=\"%s\">请点击此处</a>。"
+
+#: includes/class-forms.php:484
+msgid "<strong>Warning</strong>: It seems like you are using a system generated password. Please change the password in this page. If this is not a problem for you, you can remove this warning by <a href=\"%s\">clicking here</a>."
+msgstr "<strong>警告</strong>：您似乎正在使用系统生成的密码。请更改此页面中的密码。如果这不是您的问题，您可以通过<a href=\"%s\">点击此处</a>删除此警告。"
+
+#: includes/class-forms.php:795 includes/helpers/forms.php:252
+msgid "To activate your account, visit the following address:"
+msgstr "要激活您的帐户，请访问以下地址："
+
+#: includes/class-forms.php:934
+msgid "An email has been sent to your registered email address. Please click the activation link to proceed. %sResend%s."
+msgstr "已向您的注册电子邮件地址发送电子邮件。请单击激活链接继续。%sResend%s."
+
+#: includes/class-forms.php:946
+msgid "Your account is under moderation. We will email you once its approved."
+msgstr "您的帐户正在审核中。我们批准后将向您发送电子邮件。"
+
+#: includes/class-forms.php:954
+msgid "Account registered successfully. A password has been generated and mailed to your registered Email ID. Please login %shere%s."
+msgstr "帐户注册成功。已生成密码并将其发送到您注册的电子邮件。请登录%shere%s。"
+
+#: includes/class-forms.php:827 includes/class-forms.php:1635
+msgid "Your login Information :"
+msgstr "您的登录信息："
+
+#: includes/class-forms.php:1636 includes/class-forms.php:1651
+msgid "Username: %s"
+msgstr "用户名：%s"
+
+#: includes/class-forms.php:1637
+msgid "Password: %s"
+msgstr "密码：%s"
+
+#: includes/class-forms.php:1652
+msgid "If this was by mistake, just ignore this email and nothing will happen."
+msgstr "如果该邮件错误地发送给您，您只需忽略此电子邮件而什么都不会发生。"
+
+#: includes/class-forms.php:3495
+msgid "Please enter a valid URL including http://"
+msgstr "请输入一个包括http://的有效链接"
+
+#: templates/profile-header.php:54 templates/user-cover.php:42
+msgid "Update Cover Photo"
+msgstr "更该封面图片"
+
+#: admin/settings/class-formbuilder.php:470 templates/profile-header.php:77
+#: templates/user-avatar.php:39
+msgid "Update"
+msgstr "保存"
+
+#: includes/class-profile.php:131 includes/helpers/tabs.php:123
+#: templates/account.php:13 templates/bootstrap/account.php:45
+#: templates/profile-tabs.php:54 widgets/account.php:47
+msgid "Edit Account"
+msgstr "编辑账户"
+
+#: includes/class-profile.php:777
+msgid "Page"
+msgstr "页面"
+
+#: templates/loop-comments.php:28
+msgid "No comments found"
+msgstr "无评论"
+
+#: includes/class-profile.php:1694
+msgid "Loading Form ..."
+msgstr "加载中"
+
+#: templates/bootstrap/modal-profile-image-crop.php:14
+#: templates/bootstrap/modal-profile-image.php:13
+#: templates/modal-profile-image-crop.php:16
+#: templates/modal-profile-image.php:17
+msgid "Change your profile photo"
+msgstr "更改您的头像"
+
+#: templates/bootstrap/modal-profile-image-crop.php:16
+#: templates/bootstrap/modal-profile-image.php:16
+#: templates/modal-profile-image-crop.php:18
+#: templates/modal-profile-image.php:19
+msgid "Change your cover photo"
+msgstr "更改您的封面图"
+
+#: templates/bootstrap/modal-profile-image-crop.php:78
+#: templates/bootstrap/modal-profile-image.php:99
+#: templates/modal-profile-image-crop.php:40
+#: templates/modal-profile-image.php:44
+msgid "Apply"
+msgstr "应用"
+
+#: templates/bootstrap/modal-profile-image-crop.php:29
+#: templates/bootstrap/modal-profile-image.php:72
+#: templates/modal-profile-image-crop.php:44
+#: templates/modal-profile-image.php:48
+msgid "Cancel"
+msgstr "取消"
+
+#: templates/modal-profile-image.php:30
+msgid "Upload"
+msgstr "上传"
+
+#: templates/modal-profile-image.php:31
+msgid "Note: Max upload image size: "
+msgstr "注: 最大上传图片尺寸:"
+
+#. Plugin Name of the plugin
+#: admin/class-admin.php:272 admin/class-uwp-admin-menus.php:80
+#: admin/menus/class-menus.php:291 includes/class-uwp-privacy.php:17
+msgid "UsersWP"
+msgstr "UsersWP"
+
+#: includes/class-profile.php:1463
+msgid "The uploaded file is too small. Minimum image width should be %s px"
+msgstr "您上传的图片不合规。最小图像宽度应为%s px"
+
+#: includes/class-profile.php:1466
+msgid "The uploaded file is too small. Minimum image height should be %s px"
+msgstr "您上传的图片不合规。最小图像高度应为%s px"
+
+#: includes/class-profile.php:1530
+msgid "No fields available"
+msgstr "没有可用字段"
+
+#: templates/users-actions.php:34
+msgid "Sort By:"
+msgstr "排序依据："
+
+#: admin/settings/class-uwp-settings-user-sorting.php:241 upgrade.php:51
+msgid "Newer"
+msgstr "最新发布"
+
+#: admin/settings/class-uwp-settings-user-sorting.php:251 upgrade.php:61
+msgid "Older"
+msgstr "最早发布"
+
+#: includes/class-account.php:32
+msgid "Update Account"
+msgstr "更新帐户"
+
+#: includes/class-date.php:150
+msgid "January"
+msgstr "一月"
+
+#: includes/class-date.php:151
+msgid "February"
+msgstr "二月"
+
+#: includes/class-date.php:152
+msgid "March"
+msgstr "三月"
+
+#: includes/class-date.php:153
+msgid "April"
+msgstr "四月"
+
+#: includes/class-date.php:154
+msgid "May"
+msgstr "5月"
+
+#: includes/class-date.php:155
+msgid "June"
+msgstr "六月"
+
+#: includes/class-date.php:156
+msgid "July"
+msgstr "七月"
+
+#: includes/class-date.php:157
+msgid "August"
+msgstr "八月"
+
+#: includes/class-date.php:158
+msgid "September"
+msgstr "九月"
+
+#: includes/class-date.php:159
+msgid "October"
+msgstr "十月"
+
+#: includes/class-date.php:160
+msgid "November"
+msgstr "十一月"
+
+#: includes/class-date.php:161
+msgid "December"
+msgstr "十二月"
+
+#: includes/class-date.php:182
+msgctxt "January abbreviation"
+msgid "Jan"
+msgstr "1月"
+
+#: includes/class-date.php:183
+msgctxt "February abbreviation"
+msgid "Feb"
+msgstr "2月"
+
+#: includes/class-date.php:184
+msgctxt "March abbreviation"
+msgid "Mar"
+msgstr "3月"
+
+#: includes/class-date.php:185
+msgctxt "April abbreviation"
+msgid "Apr"
+msgstr "4月"
+
+#: includes/class-date.php:186
+msgctxt "May abbreviation"
+msgid "May"
+msgstr "5月"
+
+#: includes/class-date.php:187
+msgctxt "June abbreviation"
+msgid "Jun"
+msgstr "6月"
+
+#: includes/class-date.php:188
+msgctxt "July abbreviation"
+msgid "Jul"
+msgstr "7月"
+
+#: includes/class-date.php:189
+msgctxt "August abbreviation"
+msgid "Aug"
+msgstr "8月"
+
+#: includes/class-date.php:190
+msgctxt "September abbreviation"
+msgid "Sep"
+msgstr "9月"
+
+#: includes/class-date.php:191
+msgctxt "October abbreviation"
+msgid "Oct"
+msgstr "10月"
+
+#: includes/class-date.php:192
+msgctxt "November abbreviation"
+msgid "Nov"
+msgstr "11月"
+
+#: includes/class-date.php:193
+msgctxt "December abbreviation"
+msgid "Dec"
+msgstr "12月"
+
+#: includes/class-files.php:50
+msgid "Allowed files types are: %s"
+msgstr "允许的文件类型为：%s"
+
+#: includes/class-files.php:200
+msgid "\"%s\" (filetype %s) needs to be one of the following file types: %s"
+msgstr "\"%s\"(文件类型 %s>)需要下列文件类型之一：%s"
+
+#: includes/class-files.php:202
+msgid "Uploaded files need to be one of the following file types: %s"
+msgstr "上传的文件必须是以下文件类型之一：%s"
+
+#: admin/settings/class-settings.php:356 includes/class-files.php:356
+msgid "Remove Image"
+msgstr "删除图像"
+
+#: includes/class-files.php:365
+msgid "Remove File"
+msgstr "删除文件"
+
+#: includes/class-validation.php:77
+msgid "<strong>Error</strong>: Permission denied."
+msgstr "<strong>错误</strong>：您没有权限。"
+
+#: includes/class-validation.php:202
+msgid "<strong>Error</strong>: The email address isn&#8217;t correct."
+msgstr "<strong>错误</strong>: 邮箱地址不是&#8217;t 错误."
+
+#: includes/class-validation.php:209
+msgid "<strong>Error</strong>: This email is already registered, please choose another one."
+msgstr "<strong>错误</strong>：此电子邮件已注册，请选择另一个。"
+
+#: includes/class-validation.php:215
+msgid "<strong>Error</strong>: This email doesn't exists."
+msgstr "<strong>错误</strong>：此电子邮件不存在。"
+
+#: includes/class-validation.php:219
+msgid "<strong>Error</strong>: This username is invalid because it uses illegal characters. Please enter a valid username."
+msgstr "<strong>错误</strong>：此用户名无效，因为它使用非法字符。请输入有效的用户名。"
+
+#: includes/class-validation.php:228
+msgid "<strong>Error</strong>: This username is already registered. Please choose another one."
+msgstr "<strong>错误</strong>：此用户名已注册。请再选一个。"
+
+#: includes/class-validation.php:286
+msgid "<strong>Error</strong>: Please enter your old password"
+msgstr "<strong>错误</strong>：请输入您的旧密码"
+
+#: includes/class-validation.php:292
+msgid "<strong>Error</strong>: Incorrect old password"
+msgstr "<strong>错误</strong>：旧密码不正确"
+
+#: includes/class-validation.php:297
+msgid "<strong>Error</strong>: Old password and new password are same"
+msgstr "<strong>错误</strong>：旧密码和新密码相同"
+
+#: includes/class-validation.php:306
+msgid "<strong>Error</strong>: Please enter your Email"
+msgstr "<strong>错误</strong>：请输入您的电子邮件"
+
+#: includes/class-validation.php:311
+msgid "<strong>Error</strong>: Please fill Confirm Email field"
+msgstr "<strong>错误</strong>：请填写确认电子邮件字段"
+
+#: includes/class-validation.php:316
+msgid "<strong>Error</strong>: Email and Confirm email not match"
+msgstr "<strong>错误</strong>：电子邮件和确认电子邮件不匹配"
+
+#: includes/class-validation.php:325
+msgid "Please enter a password"
+msgstr "请输入密码"
+
+#: admin/settings/class-uwp-settings-general.php:28
+msgid "General"
+msgstr "常规"
+
+#: admin/settings/class-uwp-settings-general.php:71
+#: admin/settings/class-uwp-settings-general.php:283
+#: includes/class-emails.php:300 includes/class-forms.php:4407
+#: includes/class-pages.php:325 templates/bootstrap/forgot.php:63
+#: templates/bootstrap/login.php:8 templates/bootstrap/login.php:65
+#: templates/bootstrap/register.php:63 templates/bootstrap/reset.php:49
+#: templates/login.php:7 templates/login.php:19 widgets/login.php:50
+#: widgets/login.php:141
+msgid "Login"
+msgstr "登陆"
+
+#: admin/settings/class-uwp-settings-general.php:72
+#: includes/class-account.php:42 includes/class-pages.php:329
+#: includes/helpers/misc.php:566 includes/helpers/tabs.php:127
+#: templates/bootstrap/change.php:15 widgets/change.php:47
+#: widgets/change.php:95
+msgid "Change Password"
+msgstr "更改密码"
+
+#: admin/settings/class-uwp-settings-general.php:73
+#: admin/settings/class-uwp-settings-general.php:293
+#: includes/class-pages.php:330 templates/bootstrap/change.php:50
+#: templates/change.php:15
+msgid "Profile"
+msgstr "个人资料"
+
+#: admin/settings/class-uwp-settings-general.php:74
+#: admin/settings/class-uwp-settings-import-export.php:64
+#: includes/class-pages.php:331
+msgid "Users"
+msgstr "用户数"
+
+#: admin/settings/class-uwp-settings-uninstall.php:28
+msgid "Uninstall"
+msgstr "移除设定"
+
+#: admin/class-uwp-admin-menus.php:91 admin/class-uwp-admin-menus.php:92
+msgid "Form Builder"
+msgstr "表单构建器"
+
+#: admin/class-admin.php:408
+msgid "You can change your profile picture on your <a href=\"%s\">Profile Page</a>."
+msgstr "您可以在个人资料<a href=\"%s\">页面上更改您的个人资料</a>照片。"
+
+#: admin/class-admin.php:645
+msgid "Change Avatar"
+msgstr "更改您的头像"
+
+#: admin/class-admin.php:647 templates/bootstrap/modal-profile-image.php:14
+msgid "Upload Avatar"
+msgstr "上传图像"
+
+#: admin/class-admin.php:657
+msgid "Change Banner"
+msgstr "更改横幅"
+
+#: admin/class-admin.php:659 templates/bootstrap/modal-profile-image.php:17
+msgid "Upload Banner"
+msgstr "上传横幅"
+
+#: includes/class-templates.php:1139 includes/helpers/misc.php:560
+#: includes/helpers/tabs.php:135
+msgid "Privacy"
+msgstr "隐私"
+
+#: includes/class-templates.php:1100
+msgid "Field"
+msgstr "字段"
+
+#: includes/class-templates.php:1103
+msgid "Is Public?"
+msgstr "是否公开？"
+
+#: includes/class-templates.php:1214 includes/class-user-notifications.php:69
+#: templates/bootstrap/change.php:29 templates/bootstrap/forgot.php:51
+#: templates/bootstrap/reset.php:33 templates/change.php:13
+#: templates/forgot.php:13 templates/reset.php:17
+msgid "Submit"
+msgstr "提交"
+
+#: includes/class-pages.php:195
+msgid "Select a Page"
+msgstr "选择一个页面"
+
+#: admin/settings/class-formbuilder.php:388
+msgid "Select how registration should be handled."
+msgstr "选择如何处理注册后的用户。"
+
+#: admin/settings/class-formbuilder.php:425
+msgid "Set the page to redirect the user to after signing up. If default redirect has been set then WordPress default will be used."
+msgstr "设置页面以在注册后将用户重定向到哪里。如果设置为默认，则将使用WordPress默认值。"
+
+#: admin/settings/class-uwp-settings-general.php:189
+#: admin/settings/class-uwp-settings-redirects.php:126
+msgid "Login Redirect Page"
+msgstr "登录后跳转页面"
+
+#: admin/settings/class-uwp-settings-general.php:190
+#: admin/settings/class-uwp-settings-redirects.php:127
+msgid "Set the page to redirect the user to after logging in. If default redirect has been set then WordPress default will be used."
+msgstr "设置页面以在登录后将用户重定向到。如果设置为默认，则将使用WordPress默认值。"
+
+#: admin/settings/class-uwp-settings-general.php:244
+#: admin/settings/class-uwp-settings-redirects.php:146
+msgid "Logout Redirect Page"
+msgstr "注销重定向页面"
+
+#: admin/settings/class-uwp-settings-general.php:245
+#: admin/settings/class-uwp-settings-redirects.php:147
+msgid "Set the page to redirect the user to after logging out. If no page has been set WordPress default will be used."
+msgstr "设置页面以在注销后将用户重定向到。如果没有设置，将使用WordPress默认值。"
+
+#: includes/helpers/forms.php:334
+msgid "Auto approve"
+msgstr "自动批准"
+
+#: includes/helpers/forms.php:335
+msgid "Auto approve + Auto Login"
+msgstr "自动批准 + 自动登录"
+
+#: includes/helpers/forms.php:336
+msgid "Require Email Activation"
+msgstr "需要电子邮件激活"
+
+#: includes/class-notices.php:48
+msgid "Account activated successfully. Please login to continue."
+msgstr "帐户成功激活。请登录以继续。"
+
+#: includes/class-notices.php:72
+msgid "Your account is not activated yet. Please check your email for activation email."
+msgstr "您的帐户尚未激活。请检查您的电子邮件激活电子邮件。"
+
+#: includes/class-notices.php:76 includes/class-notices.php:80
+msgid "Invalid activation key or account."
+msgstr "无效激活密钥或帐户。"
+
+#: includes/helpers/misc.php:1308
+msgid "Something went wrong."
+msgstr "出现了问题。"
+
+#: includes/class-forms.php:4232
+msgid "Confirm Email"
+msgstr "确认邮件"
+
+#: includes/class-pages.php:324
+msgctxt "page_slug"
+msgid "register"
+msgstr "注册"
+
+#: includes/class-pages.php:325
+msgctxt "page_slug"
+msgid "login"
+msgstr "登陆"
+
+#: includes/class-pages.php:326
+msgctxt "page_slug"
+msgid "account"
+msgstr "帐户"
+
+#: includes/class-pages.php:327
+msgctxt "page_slug"
+msgid "forgot"
+msgstr "忘记"
+
+#: includes/class-pages.php:327 templates/bootstrap/forgot.php:8
+#: templates/forgot.php:7 widgets/forgot.php:47 widgets/forgot.php:95
+msgid "Forgot Password?"
+msgstr "忘记密码页"
+
+#: includes/class-pages.php:328
+msgctxt "page_slug"
+msgid "reset"
+msgstr "重置"
+
+#: includes/class-pages.php:328 templates/bootstrap/reset.php:8
+#: templates/reset.php:3 widgets/reset.php:47 widgets/reset.php:83
+msgid "Reset Password"
+msgstr "重置密码"
+
+#: includes/class-pages.php:329
+msgctxt "page_slug"
+msgid "change"
+msgstr "更改"
+
+#: includes/class-pages.php:330
+msgctxt "page_slug"
+msgid "profile"
+msgstr "个人资料"
+
+#: includes/class-pages.php:331
+msgctxt "page_slug"
+msgid "users"
+msgstr "用户数"
+
+#: templates/bootstrap/register.php:50 templates/register.php:17
+msgid "Create Account"
+msgstr "创建帐户"
+
+#: templates/bootstrap/login.php:56 templates/login.php:16
+msgid "Remember Me"
+msgstr "记住我"
+
+#: admin/settings/class-uwp-settings-general.php:221
+#: templates/bootstrap/login.php:90 templates/login.php:23
+msgid "Forgot password?"
+msgstr "忘记密码？"
+
+#: templates/forgot.php:15 templates/register.php:19 templates/reset.php:23
+msgid "Already a member?"
+msgstr "已经有账户了？"
+
+#: templates/forgot.php:15 templates/register.php:21 templates/reset.php:23
+msgid "Login here"
+msgstr "这里登录"
+
+#: templates/bootstrap/reset.php:39 templates/reset.php:20
+msgid "You can not access this page directly. Follow the password reset link you received in your email. To request new password reset link <a href=\"%s\">visit here</a>."
+msgstr "您无法直接访问此页面。按照您在电子邮件中收到的密码重置链接。要请求新的密码重置链接 <a href=\"%s\">访问这里</a>。"
+
+#: widgets/account.php:34 widgets/authorbox.php:34 widgets/change.php:34
+#: widgets/forgot.php:34 widgets/login.php:38 widgets/profile.php:35
+#: widgets/register.php:50 widgets/reset.php:34 widgets/users.php:34
+msgid "Widget title"
+msgstr "小工具标题"
+
+#. Plugin URI of the plugin
+msgid "https://userswp.io/"
+msgstr "https://userswp.io/"
+
+#. Author of the plugin
+msgid "AyeCode Ltd"
+msgstr "AyeCode Ltd"
+
+#. Author URI of the plugin
+msgid "https://userswp.io"
+msgstr "https://userswp.io"
+
+#: includes/helpers/misc.php:1493
+msgid "Fieldset"
+msgstr "字段集"
+
+#: admin/settings/class-formbuilder.php:2427
+msgid "This is mandatory register form field."
+msgstr "这是必填的注册表单字段。"
+
+#: admin/settings/class-formbuilder.php:2451
+msgid "This field is applicable only for register form."
+msgstr "此字段仅适用于注册表单。"
+
+#: admin/settings/class-uwp-settings-emails.php:113
+msgid "New account registration"
+msgstr "新用户注册"
+
+#: includes/class-tools.php:211 includes/class-tools.php:305
+#: includes/class-tools.php:576
+msgid "Processed Successfully"
+msgstr "处理完成"
+
+#: admin/class-uwp-admin-menus.php:108
+msgid "Tools"
+msgstr "工具"
+
+#: admin/class-admin-setup-wizard.php:379
+msgid "Action"
+msgstr "动作"
+
+#: includes/class-tools.php:805
+msgid "Fix User Data"
+msgstr "修复用户数据"
+
+#: includes/class-tools.php:806
+msgid "Fixes User Data if you were using the Beta version."
+msgstr "如果您使用的是测试版，则修复用户数据。"
+
+#: includes/class-tools.php:790 includes/class-tools.php:809
+#: includes/class-tools.php:828
+msgid "Run"
+msgstr "运行"
+
+#: admin/settings/class-uwp-settings-general.php:227
+msgid "Redirect wp-login.php?"
+msgstr "重定向wp-login.php？"
+
+#: widgets/register.php:29
+msgid "Displays register form."
+msgstr "显示注册表单"
+
+#: admin/settings/class-formbuilder.php:1538
+msgid "For admin use only? :"
+msgstr "仅供管理员使用？："
+
+#: admin/settings/class-formbuilder.php:1537
+msgid "If yes is selected then only site admin can see and edit this field."
+msgstr "如果选择“是”，则只有站点管理员可以查看和编辑此字段。"
+
+#: includes/class-forms.php:3123
+msgid "Username or Email"
+msgstr "用户名或电子邮件"
+
+#: admin/settings/class-uwp-settings-general.php:340
+msgid "Default banner image"
+msgstr "默认背景图片"
+
+#: admin/settings/class-uwp-settings-general.php:341
+msgid "Recommended image size: 1000x300"
+msgstr "推荐图像大小： 1000x300"
+
+#: admin/settings/class-uwp-settings-general.php:348
+msgid "Default profile image"
+msgstr "默认个人资料图片"
+
+#: admin/settings/class-uwp-settings-general.php:349
+msgid "Recommended image size: 150x150"
+msgstr "推荐图像大小： 150x150"
+
+#: admin/settings/class-uwp-settings-emails.php:315
+msgid "Change password email"
+msgstr "重设密码电子邮件"
+
+#: admin/class-admin-setup-wizard.php:474
+#: admin/settings/class-formbuilder.php:1873
+#: admin/settings/class-uwp-settings-profile-tabs.php:814
+#: admin/settings/class-uwp-settings-user-sorting.php:594
+#: includes/class-tools.php:852
+msgid "Remove"
+msgstr "移除"
+
+#: includes/class-forms.php:1649
+msgid "You have requested to reset your password for the following account:"
+msgstr "您已请求重置以下帐户的密码："
+
+#: includes/class-forms.php:1653
+msgid "To reset your password, click the following link and follow the instructions."
+msgstr "要重置密码，请单击以下链接并按照说明操作。"
+
+#: admin/settings/class-formbuilder.php:409
+#: admin/settings/class-uwp-settings-general.php:164
+#: admin/settings/class-uwp-settings-redirects.php:91
+msgid "Last User Page"
+msgstr "上一个用户界面"
+
+#: includes/class-templates.php:1190
+msgid "Hide profile from the users listing page."
+msgstr "从用户列表页面隐藏个人资料。"
+
+#: includes/class-templates.php:1206
+msgid "Make the whole profile private"
+msgstr "保密个人资料"
+
+#: includes/helpers/tabs.php:163 templates/bootstrap/dashboard-simple.php:23
+#: templates/bootstrap/dashboard-simple.php:24
+#: templates/bootstrap/dashboard.php:39 templates/dashboard-simple.php:12
+#: templates/dashboard.php:32
+msgid "Logout"
+msgstr "退出"
+
+#: includes/libraries/class-geodirectory-plugin.php:233
+msgid "GeoDirectory Settings"
+msgstr "GeoDirectory 设置"
+
+#: includes/libraries/class-geodirectory-plugin.php:209
+msgid "GeoDirectory"
+msgstr "GeoDirectory"
+
+#: includes/libraries/class-geodirectory-plugin.php:239
+msgid "CPT listings in profile"
+msgstr "个人资料中的自定义文章类型"
+
+#: includes/libraries/class-geodirectory-plugin.php:240
+msgid "Choose the post types to show listings tab in UsersWP Profile"
+msgstr "选择要在UsersWP个人资料中显示列表选项卡的文章类型"
+
+#: includes/libraries/class-geodirectory-plugin.php:247
+msgid "CPT reviews in profile"
+msgstr "个人资料中的自定义文章评论"
+
+#: includes/libraries/class-geodirectory-plugin.php:248
+msgid "Choose the post types to show reviews tab in UsersWP Profile"
+msgstr "选择要在UsersWP个人资料中显示列表选项卡的文章评论"
+
+#: includes/libraries/class-geodirectory-plugin.php:255
+msgid "CPT favorites in profile"
+msgstr "个人资料中的自定义文章收藏夹"
+
+#: includes/libraries/class-geodirectory-plugin.php:256
+msgid "Choose the post types to show favorites tab in UsersWP Profile"
+msgstr "选择要在UsersWP配置文件中显示列表选项卡的文章收藏夹"
+
+#: includes/libraries/class-geodirectory-plugin.php:264
+msgid "If this option is selected, the my listing link from GD loginbox will redirect to listings tab of UsersWP profile."
+msgstr "如果启用此选项，来自于GD loginbox的列表链接会被重定向到UsersWP个人资料页"
+
+#: includes/libraries/class-geodirectory-plugin.php:271
+msgid "If this option is selected, the favorite link from GD loginbox will redirect to favorites tab of UsersWP profile."
+msgstr "如果启用此选项，来自于GD loginbox的收藏夹链接会被重定向到UsersWP个人资料页"
+
+#: includes/libraries/class-geodirectory-plugin.php:319 upgrade.php:211
+msgid "Listings"
+msgstr "列表"
+
+#: includes/libraries/class-geodirectory-plugin.php:329
+#: includes/libraries/class-geodirectory-plugin.php:1417 upgrade.php:219
+msgid "Reviews"
+msgstr "评价"
+
+#: includes/libraries/class-geodirectory-plugin.php:339 upgrade.php:227
+msgid "Favorites"
+msgstr "收藏"
+
+#: includes/libraries/class-invoicing-plugin.php:98
+msgid "Invoices"
+msgstr "发票"
+
+#: includes/libraries/class-geodirectory-plugin.php:1143
+#: includes/libraries/class-geodirectory-plugin.php:1359
+#: includes/libraries/class-geodirectory-plugin.php:1573
+msgid "Edit Listing"
+msgstr "编辑列表"
+
+#: includes/libraries/class-geodirectory-plugin.php:1148
+#: includes/libraries/class-geodirectory-plugin.php:1364
+#: includes/libraries/class-geodirectory-plugin.php:1578
+msgid "Edit"
+msgstr "编辑"
+
+#: includes/libraries/class-geodirectory-plugin.php:1152
+#: includes/libraries/class-geodirectory-plugin.php:1368
+#: includes/libraries/class-geodirectory-plugin.php:1582
+msgid "Delete Listing"
+msgstr "删除列表"
+
+#: includes/helpers/tabs.php:87 templates/bootstrap/loop-comments.php:28
+msgid "No %s found"
+msgstr "未找到 %s"
+
+#: includes/libraries/class-geodirectory-plugin.php:1820
+msgid "Published"
+msgstr "已发布"
+
+#: includes/libraries/class-geodirectory-plugin.php:1832
+msgid "Not published"
+msgstr "未发布"
+
+#: includes/libraries/class-geodirectory-plugin.php:1837
+msgid "Status: "
+msgstr "状态："
+
+#: templates/forgot.php:17 templates/login.php:22 templates/reset.php:25
+msgid "Not a member?"
+msgstr "还没有账户？"
+
+#: admin/settings/class-uwp-settings-general.php:211
+#: templates/bootstrap/forgot.php:74 templates/bootstrap/login.php:79
+#: templates/bootstrap/reset.php:60 templates/forgot.php:17
+#: templates/login.php:22 templates/reset.php:25
+msgid "Create account"
+msgstr "创建帐户"
+
+#: templates/bootstrap/dashboard-simple.php:6 templates/dashboard-simple.php:6
+msgid "Logged in as "
+msgstr "登录为："
+
+#: admin/views/html-admin-settings-import-export-settings.php:3
+msgid "Export Settings"
+msgstr "导出设置"
+
+#: admin/views/html-admin-settings-import-export-settings.php:5
+msgid "Export the plugin settings for this site as a .json file. This allows you to easily import the configuration into another site."
+msgstr "将此站点的插件设置导出为.json文件。这允许您轻松地将配置导入到另一个站点。"
+
+#: admin/views/html-admin-settings-import-export-settings.php:10
+msgid "Export"
+msgstr "导出"
+
+#: admin/views/html-admin-settings-import-export-settings.php:17
+msgid "Import Settings"
+msgstr "导入设置"
+
+#: admin/views/html-admin-settings-import-export-settings.php:19
+msgid "Import the plugin settings from a .json file. This file can be obtained by exporting the settings on another site using the form above."
+msgstr "从.json文件导入插件设置。该文件可以通过使用上面的表单在另一个站点上导出设置来获得该文件。"
+
+#: admin/views/html-admin-settings-import-export-settings.php:27
+#: admin/views/html-admin-settings-import-export-users.php:150
+msgid "Import"
+msgstr "导入"
+
+#: admin/views/html-admin-settings-import-export-users.php:120
+msgid "Export Users Data"
+msgstr "导出用户数据"
+
+#: admin/views/html-admin-settings-import-export-users.php:122
+msgid "Download a CSV of all users data for usersWP."
+msgstr "从UsersWP下载CSV格式的所有用户数据"
+
+#: admin/views/html-admin-settings-import-export-users.php:134
+msgid "Export CSV"
+msgstr "导出 CSV"
+
+#: admin/views/html-admin-settings-import-export-users.php:141
+msgid "Import Users"
+msgstr "导入用户"
+
+#: admin/views/html-admin-settings-import-export-users.php:143
+msgid "Import the users data from a .csv file. This file can be obtained by exporting the data on another site using the form above."
+msgstr "从.csv文件导入插件设置。该文件可以通过使用上面的表单在另一个站点上导出设置来获得该文件。"
+
+#: admin/views/html-admin-settings-import-export-users.php:145
+msgid "Select File"
+msgstr "选择文件"
+
+#: admin/views/html-admin-settings-import-export-users.php:349
+msgid "Allowed Files"
+msgstr "允许的文件"
+
+#: admin/views/html-admin-settings-import-export-users.php:379
+msgid "Maximum number of files reached!"
+msgstr "已达到最大文件数量"
+
+#: admin/views/html-admin-settings-import-export-users.php:426
+msgid "The file you have uploaded exceeds the file size limit. Please try again."
+msgstr "您上载的文件超出了文件大小限制。请再试一次。"
+
+#: admin/views/html-admin-settings-import-export-users.php:430
+msgid "Invalid file uploaded. Please upload .csv file. Please try again."
+msgstr "上传的文件无效，请上传.csv文件。"
+
+#: admin/settings/class-uwp-settings-general.php:482
+msgid "Users to exclude"
+msgstr "排除用户"
+
+#: admin/settings/class-uwp-settings-general.php:316
+msgid "Disable system generated password notice."
+msgstr "禁用系统生成密码通知。"
+
+#: admin/settings/class-uwp-settings-import-export.php:65
+msgid "Settings"
+msgstr "设置"
+
+#: includes/class-import-export.php:74
+msgid "Settings imported successfully!"
+msgstr "设置已成功导入"
+
+#: includes/class-import-export.php:113
+msgid "Please upload a valid .json file. %sGo Back%s"
+msgstr "请上传有效的.json文件。%s返回%s"
+
+#: includes/class-import-export.php:117
+msgid "Please upload a file to import. %sGo Back%s"
+msgstr "请上传一个文件。%s返回%s"
+
+#: includes/class-import-export.php:132
+msgid "Invalid export request found."
+msgstr "无效的导出请求"
+
+#: includes/class-import-export.php:144 includes/class-import-export.php:503
+msgid "Security check failed."
+msgstr "安全检查失败。"
+
+#: includes/class-import-export.php:181
+msgid "No data found for export."
+msgstr "没有需要导出的数据"
+
+#: includes/class-import-export.php:218
+msgid "Filesystem ERROR: Could not access filesystem."
+msgstr "文件系统错误：无法访问文件系统"
+
+#: includes/class-import-export.php:232
+msgid "Filesystem ERROR: Export location %s is not writable, check your file permissions."
+msgstr "文件系统错误：导出位置 %s 不可写，请检查您的文件权限"
+
+#: includes/class-import-export.php:236
+msgid "Filesystem ERROR: Could not create directory %s. This is usually due to inconsistent file permissions."
+msgstr "文件系统错误：无法创建目录 %s  这通常是由于文件权限不一致"
+
+#: includes/class-import-export.php:491
+msgid "Invalid import request found."
+msgstr "无效的导入请求"
+
+#: includes/class-import-export.php:516
+msgid "Invalid file type, please upload .csv file."
+msgstr "无效的文件类型，请上传.csv文件"
+
+#: includes/class-import-export.php:550
+msgid "Users import completed."
+msgstr "用户导入完成"
+
+#: includes/class-import-export.php:557
+msgid "No valid data found for import."
+msgstr "未找到用于导入的有效数据。"
+
+#: includes/class-import-export.php:574
+msgid "No csv file found."
+msgstr "未找到csv文件"
+
+#: admin/class-admin.php:714 admin/class-admin.php:731
+msgid "Resend Activation"
+msgstr "重发激活邮件"
+
+#: admin/class-admin.php:297 admin/class-admin.php:806
+msgid "Activation email has been sent!"
+msgstr "激活邮件已发送"
+
+#: admin/class-admin.php:300
+msgid "Error while sending activation email. Please try again."
+msgstr "发送激活邮件时出错。请重试。"
+
+#: admin/settings/class-uwp-settings-import-export.php:25
+msgid "Import/Export"
+msgstr "导入/导出"
+
+#: includes/class-uwp-privacy.php:24 includes/class-uwp-privacy.php:27
+msgid "UsersWP User Data"
+msgstr "UsersWP用户数据"
+
+#: includes/class-uwp-privacy.php:37
+msgid "User data/profile"
+msgstr "用户数据/个人资料"
+
+#: includes/class-uwp-privacy.php:38
+msgid "Example privacy texts."
+msgstr "隐私政策示例"
+
+#: includes/class-uwp-privacy.php:39
+msgid "We collect information about you during the registration and edit profile process on our site. This information may include, but is not limited to, your name, email address, phone number, address, IP and any other details that might be requested from you for the purpose of building your public profile."
+msgstr "我们在我们的网站上注册和编辑个人资料的过程中收集有关您的信息。这些信息可能包括但不限于您的姓名、电子邮件地址、电话号码、地址、IP以及为建立您的公开个人资料而可能要求您提供的任何其他详细信息。"
+
+#: includes/class-uwp-privacy.php:40
+msgid "Handling this data also allows us to:"
+msgstr "使用这些数据还使我们能够："
+
+#: includes/class-uwp-privacy.php:42
+msgid "- Send you important account/order/service information."
+msgstr "-向您发送重要的帐户/订单/服务信息。"
+
+#: includes/class-uwp-privacy.php:43
+msgid "- Display this information in a public facing manner (such as a web page or API request) and allow website users to search and view submitted information."
+msgstr "- 以面向公众的方式（如网页或 API 请求）显示此信息，并允许网站用户搜索和查看提交的信息。"
+
+#: includes/class-uwp-privacy.php:44
+msgid "- Respond to your queries or complaints."
+msgstr "-回复您的询问或投诉。"
+
+#: includes/class-uwp-privacy.php:45
+msgid "- Set up and administer your account, provide technical and/or customer support, and to verify your identity. We do this on the basis of our legitimate business interests."
+msgstr "- 设置和管理您的帐户，提供技术和/或客户支持，垃圾邮件预防以及验证您的身份。我们这样做是基于我们的合法商业利益。"
+
+#: includes/class-uwp-privacy.php:47
+msgid "Any profile information provided to this site may be displayed publicly."
+msgstr "提供给本网站的任何个人资料信息都可能公开显示。"
+
+#: includes/libraries/class-geodirectory-plugin.php:263
+msgid "Redirect my listing link from GD login box to UsersWP profile"
+msgstr "将我的列表链接从GD login box重定向到UsersWP个人资料页"
+
+#: includes/libraries/class-geodirectory-plugin.php:270
+msgid "Redirect favorite link from GD login box to UsersWP profile"
+msgstr "将我的收藏夹链接从GD login box重定向到UsersWP个人资料页"
+
+#: widgets/login.php:31
+msgid "UWP > Login"
+msgstr "UWP > 登录"
+
+#: widgets/login.php:34
+msgid "Displays login form or current logged in user."
+msgstr "显示登录表单或当前登录的用户。"
+
+#: widgets/register.php:26
+msgid "UWP > Register"
+msgstr "UWP > 注册"
+
+#: admin/class-admin.php:245
+msgid "Are you sure you wish to delete this field?"
+msgstr "是否确实要删除此字段？"
+
+#: admin/class-uwp-admin-menus.php:79
+msgid "UsersWP Settings"
+msgstr "UsersWP设置"
+
+#: includes/helpers/tabs.php:131
+msgid "Notifications"
+msgstr "通知"
+
+#: admin/settings/class-formbuilder.php:87
+msgid "Click on any box below to add a field of that type on %s form. You must use a fieldset to group your fields."
+msgstr "单击下面的任何框，在 %s 表单上添加该类型的字段。您必须使用字段集来分组字段。"
+
+#: admin/settings/class-formbuilder.php:151
+msgid "Click to expand and view field related settings. You may drag and drop to arrange fields order on %s form too."
+msgstr "单击以展开并查看字段相关设置。您也可以拖放以排列%s表单上的字段顺序。"
+
+#: admin/settings/class-formbuilder.php:2359
+msgid "Select decimal precision:"
+msgstr "选择小数精度："
+
+#: admin/settings/class-uwp-settings-general.php:371
+msgid "Enter Profile Avatar max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used."
+msgstr "输入个人资料图片的最大大小（Kb），例如512 kb为512，1 Mb为1024，2 Mb为2048等，如果为空将使用WordPress的默认值（%s）"
+
+#: admin/settings/class-uwp-settings-general.php:380
+msgid "Enter Profile Banner max file size in Kb. e.g. 512 for 512 kb, 1024 for 1 Mb, 2048 for 2 Mb etc. If empty WordPress default (%s) will be used."
+msgstr "输入个人资料横幅的最大大小（Kb），例如512 kb为512，1 Mb为1024，2 Mb为2048等，如果为空将使用WordPress的默认值（%s）"
+
+#: includes/class-forms.php:956
+msgid "Account registered successfully. Please login %shere%s"
+msgstr "帐户注册成功。请登录%shere%s"
+
+#: includes/class-profile.php:1509
+msgid "Invalid request!"
+msgstr "无效请求"
+
+#: includes/libraries/class-geodirectory-plugin.php:1175
+#: templates/loop-posts.php:27
+msgid "No %s found."
+msgstr "未找到 %s。"
+
+#: admin/class-uwp-admin-menus.php:121 admin/class-uwp-admin-menus.php:122
+msgid "Status"
+msgstr "当前状态"
+
+#: admin/views/html-admin-page-status-report.php:72
+msgid "Please copy and paste this information in your ticket when contacting support:"
+msgstr "请联系支持时提供这样的信息："
+
+#: admin/views/html-admin-page-status-report.php:73
+msgid "Get system report"
+msgstr "获取系统报告"
+
+#: admin/views/html-admin-page-status-report.php:76
+msgid "Copy for Support"
+msgstr "复制给支持人员"
+
+#: admin/views/html-admin-page-status-report.php:77
+msgid "Copying to clipboard failed. Please press Ctrl/Cmd+C to copy."
+msgstr "复制到剪贴板失败，请按 Ctrl/Cmd+C 键来复制。"
+
+#: admin/views/html-admin-page-status-report.php:83
+msgid "WordPress Environment"
+msgstr "WordPress 环境"
+
+#: admin/views/html-admin-page-status-report.php:88
+msgid "Home URL"
+msgstr "主站链接"
+
+#: admin/views/html-admin-page-status-report.php:92
+msgid "Site URL"
+msgstr "网站链接"
+
+#: admin/views/html-admin-page-status-report.php:96
+msgid "UWP version"
+msgstr "UWP 版本"
+
+#: admin/views/html-admin-page-status-report.php:100
+msgid "WP version"
+msgstr "软件版本"
+
+#: admin/views/html-admin-page-status-report.php:104
+msgid "WP multisite"
+msgstr "WP 多站点"
+
+#: admin/views/html-admin-page-status-report.php:108
+msgid "WP memory limit"
+msgstr "WP 内存限制"
+
+#: admin/views/html-admin-page-status-report.php:111
+msgid "%1$s - We recommend setting memory to at least 64MB. See: %2$s"
+msgstr "%1$s - 我们建议将内存至少设置为64MB。 参见：%2$s"
+
+#: admin/views/html-admin-page-status-report.php:111
+msgid "Increasing memory allocated to PHP"
+msgstr "增加分配给PHP的内存"
+
+#: admin/views/html-admin-page-status-report.php:118
+msgid "WP debug mode"
+msgstr "WP调试模式"
+
+#: admin/views/html-admin-page-status-report.php:128
+msgid "WP cron"
+msgstr "WP任务"
+
+#: admin/views/html-admin-page-status-report.php:138
+msgid "Language"
+msgstr "语言"
+
+#: admin/views/html-admin-page-status-report.php:168
+msgid "Server Environment"
+msgstr "服务器环境"
+
+#: admin/views/html-admin-page-status-report.php:173
+msgid "Server info"
+msgstr "服务器信息"
+
+#: admin/views/html-admin-page-status-report.php:177
+msgid "PHP version"
+msgstr "PHP 版本"
+
+#: admin/views/html-admin-page-status-report.php:180
+msgid "%1$s - We recommend a minimum PHP version of 5.6."
+msgstr "%1$s - 我们建议最低 PHP 版本为 5.6。"
+
+#: admin/views/html-admin-page-status-report.php:188
+msgid "PHP post max size"
+msgstr "PHP 最大的 POST 尺寸"
+
+#: admin/views/html-admin-page-status-report.php:192
+msgid "PHP time limit"
+msgstr "PHP 执行时间限制"
+
+#: admin/views/html-admin-page-status-report.php:196
+msgid "PHP max input vars"
+msgstr "PHP 输入变量最大值"
+
+#: admin/views/html-admin-page-status-report.php:200
+msgid "cURL version"
+msgstr "cURL 版本"
+
+#: admin/views/html-admin-page-status-report.php:204
+msgid "SUHOSIN installed"
+msgstr "SUHOSIN 已安装"
+
+#: admin/views/html-admin-page-status-report.php:215
+msgid "MySQL version"
+msgstr "MySQL 版本"
+
+#: admin/views/html-admin-page-status-report.php:219
+msgid "%1$s - We recommend a minimum MySQL version of 5.6. See: %2$s"
+msgstr "%1$s - 我们建议最低MySQL版本为5.6。 参见： %2$s"
+
+#: admin/views/html-admin-page-status-report.php:219
+msgid "WordPress requirements"
+msgstr "WordPress 版本需求"
+
+#: admin/views/html-admin-page-status-report.php:228
+msgid "Max upload size"
+msgstr "最大上传限制"
+
+#: admin/views/html-admin-page-status-report.php:232
+msgid "Default timezone is UTC"
+msgstr "默认的时区是UTC"
+
+#: admin/views/html-admin-page-status-report.php:235
+msgid "Default timezone is %s - it should be UTC"
+msgstr "默认时区是 %s -默认为 UTC"
+
+#: admin/views/html-admin-page-status-report.php:242
+msgid "fsockopen/cURL"
+msgstr "fsockopen/cURL"
+
+#: admin/views/html-admin-page-status-report.php:247
+msgid "Your server does not have fsockopen or cURL enabled - PayPal IPN and other scripts which communicate with other servers will not work. Contact your hosting provider."
+msgstr "您的服务器没有启用fsockopen或curl，这将导致与PayPal IPN和其他与其他服务器通信的脚本将无法工作。请与主机提供商联系。"
+
+#: admin/views/html-admin-page-status-report.php:252
+msgid "SoapClient"
+msgstr "SOAP客户端"
+
+#: admin/views/html-admin-page-status-report.php:257
+msgid "Your server does not have the %s class enabled - some gateway plugins which use SOAP may not work as expected."
+msgstr "您的服务器未启用%s类-某些使用SOAP的网关插件可能无法工作。"
+
+#: admin/views/html-admin-page-status-report.php:262
+msgid "DOMDocument"
+msgstr "DOMDocument"
+
+#: admin/views/html-admin-page-status-report.php:267
+msgid "Your server does not have the %s class enabled - HTML/Multipart emails, and also some extensions, will not work without DOMDocument."
+msgstr "您的服务器没有启用 %s 类 - 如果没有 DOMDocument，HTML/Multipart 电子邮件以及一些扩展将无法工作。"
+
+#: admin/views/html-admin-page-status-report.php:272
+msgid "GZip"
+msgstr "GZip"
+
+#: admin/views/html-admin-page-status-report.php:277
+msgid "Your server does not support the %s function - this is required to use the GeoIP database from MaxMind."
+msgstr "您的服务器不支持%s功能-这是使用MaxMind的GeoIP数据库所必需的。"
+
+#: admin/views/html-admin-page-status-report.php:282
+msgid "GD Library"
+msgstr "GD 库"
+
+#: admin/views/html-admin-page-status-report.php:287
+msgid "Your server does not have enabled %s - this is required for image processing."
+msgstr "您的服务器没有启用%s - 这是图像处理所需的。"
+
+#: admin/views/html-admin-page-status-report.php:292
+msgid "Multibyte string"
+msgstr "多字节字符串"
+
+#: admin/views/html-admin-page-status-report.php:297
+msgid "Your server does not support the %s functions - this is required for better character encoding. Some fallbacks will be used instead for it."
+msgstr "您的服务器不支持%s函数-这是更好的字符编码所必需的。将使用一些回退来代替它。"
+
+#: admin/views/html-admin-page-status-report.php:302
+msgid "Remote POST"
+msgstr "远程POST请求"
+
+#: admin/views/html-admin-page-status-report.php:307
+#: admin/views/html-admin-page-status-report.php:317
+msgid "%s failed. Contact your hosting provider."
+msgstr "%s 失败了，请联系您的服务器提供商。"
+
+#: admin/views/html-admin-page-status-report.php:312
+msgid "Remote GET"
+msgstr "远程GET请求"
+
+#: admin/views/html-admin-page-status-report.php:350
+msgid "User Platform"
+msgstr "用户平台"
+
+#: admin/views/html-admin-page-status-report.php:355
+msgid "Platform"
+msgstr "平台"
+
+#: admin/views/html-admin-page-status-report.php:359
+msgid "Browser name"
+msgstr "浏览器名称"
+
+#: admin/views/html-admin-page-status-report.php:363
+msgid "Browser version"
+msgstr "浏览器版本"
+
+#: admin/views/html-admin-page-status-report.php:367
+msgid "User agent"
+msgstr "用户代理"
+
+#: admin/views/html-admin-page-status-report.php:375
+msgid "Database"
+msgstr "数据库"
+
+#: admin/views/html-admin-page-status-report.php:380
+msgid "UWP database version"
+msgstr "UWP 数据库版本"
+
+#: admin/views/html-admin-page-status-report.php:384
+msgid "Database Prefix"
+msgstr "数据表前缀"
+
+#: admin/views/html-admin-page-status-report.php:387
+msgid "%1$s - We recommend using a prefix with less than 20 characters."
+msgstr "%1$s - 我们建议使用少于 20 个字符的前缀。"
+
+#: admin/views/html-admin-page-status-report.php:395
+msgid "Total Database Size"
+msgstr "数据库总大小"
+
+#: admin/views/html-admin-page-status-report.php:400
+msgid "Database Data Size"
+msgstr "数据库大小"
+
+#: admin/views/html-admin-page-status-report.php:405
+msgid "Database Index Size"
+msgstr "数据库索引大小"
+
+#: admin/views/html-admin-page-status-report.php:414
+msgid "Table does not exist"
+msgstr "表不存在"
+
+#: admin/views/html-admin-page-status-report.php:416
+#: admin/views/html-admin-page-status-report.php:426
+msgid "Data: %.2fMB + Index: %.2fMB"
+msgstr "数据：%.2fMB+索引：%.2fMB"
+
+#: admin/views/html-admin-page-status-report.php:435
+msgid "Security"
+msgstr "安全"
+
+#: admin/views/html-admin-page-status-report.php:440
+msgid "Secure connection (HTTPS)"
+msgstr "安全连接(HTTPS)"
+
+#: admin/views/html-admin-page-status-report.php:445
+msgid "Your site is not using HTTPS."
+msgstr "您的网站未使用 HTTPS。"
+
+#: admin/views/html-admin-page-status-report.php:450
+msgid "Hide errors from visitors"
+msgstr "对访客隐藏错误"
+
+#: admin/views/html-admin-page-status-report.php:455
+msgid "Error messages should not be shown to visitors."
+msgstr "访客不应该看到错误信息"
+
+#: admin/views/html-admin-page-status-report.php:464
+msgid "Active Plugins"
+msgstr "激活插件"
+
+#: admin/views/html-admin-page-status-report.php:476
+msgid "Visit plugin homepage"
+msgstr "访问插件主页"
+
+#. translators: %s: plugin latest version
+#. translators: %s: theme latest version
+#. translators: %s: parant theme latest version
+#: admin/views/html-admin-page-status-report.php:483
+#: admin/views/html-admin-page-status-report.php:569
+#: admin/views/html-admin-page-status-report.php:596
+msgid "%s is available"
+msgstr "%s 可用"
+
+#: admin/views/html-admin-page-status-report.php:487
+msgid "Network enabled"
+msgstr "启用网络"
+
+#. translators: %s: plugin author
+#: admin/views/html-admin-page-status-report.php:494
+msgid "by %s"
+msgstr "由 %s"
+
+#: admin/views/html-admin-page-status-report.php:508
+msgid "UWP Pages"
+msgstr "UWP 页面"
+
+#: admin/views/html-admin-page-status-report.php:517
+msgid "Edit %s page"
+msgstr "编辑%s页面"
+
+#: admin/views/html-admin-page-status-report.php:525
+msgid "Page not set"
+msgstr "页面未设置"
+
+#: admin/views/html-admin-page-status-report.php:528
+msgid "Page ID is set, but the page does not exist"
+msgstr "页面ID已设置,但是页面不存在"
+
+#: admin/views/html-admin-page-status-report.php:531
+msgid "Page visibility should be <a href=\"%s\" target=\"_blank\">public</a>"
+msgstr "页面的可见性应该是<a href=\"%s\" target=\"_blank\">公开</a>"
+
+#: admin/views/html-admin-page-status-report.php:537
+msgid "Page does not contains the shortcode."
+msgstr "页面不包含短代码。"
+
+#: admin/views/html-admin-page-status-report.php:555
+msgid "Theme"
+msgstr "模版"
+
+#: admin/views/html-admin-page-status-report.php:560
+msgid "Name"
+msgstr "名称"
+
+#: admin/views/html-admin-page-status-report.php:564
+msgid "Version"
+msgstr "版本"
+
+#: admin/views/html-admin-page-status-report.php:574
+msgid "Author URL"
+msgstr "作者链接"
+
+#: admin/views/html-admin-page-status-report.php:578
+msgid "Child theme"
+msgstr "子主题"
+
+#: admin/views/html-admin-page-status-report.php:580
+msgid "If you are modifying userswp on a parent theme that you did not build personally we recommend using a child theme. See: <a href=\"%s\" target=\"_blank\">How to create a child theme</a>"
+msgstr "如果您正在修改您没有构建的UsersWP的父主题，我们建议您用子主题，参见<a href=\"%s\" target=\"_blank\">如何创建子主题</a>"
+
+#: admin/views/html-admin-page-status-report.php:587
+msgid "Parent theme name"
+msgstr "父主题名称"
+
+#: admin/views/html-admin-page-status-report.php:591
+msgid "Parent theme version"
+msgstr "父主题版本"
+
+#: admin/views/html-admin-page-status-report.php:601
+msgid "Parent theme author URL"
+msgstr "父主题作者链接"
+
+#: admin/views/html-admin-page-status-report.php:610
+msgid "Templates"
+msgstr "模板"
+
+#: admin/views/html-admin-page-status-report.php:617
+#: admin/views/html-admin-page-status-report.php:646
+msgid "Overrides"
+msgstr "重写"
+
+#: admin/views/html-admin-page-status-report.php:626
+msgid "%1$s version %2$s is out of date. The core version is %3$s"
+msgstr "%1$s 版本%2$s已过期。核心版本为%3$s"
+
+#: admin/views/html-admin-page-status-report.php:655
+msgid "Outdated templates"
+msgstr "过时的模板"
+
+#: includes/class-status.php:342
+msgctxt "Page setting"
+msgid "Profile Page"
+msgstr "个人资料页面"
+
+#: includes/class-status.php:346
+msgctxt "Page setting"
+msgid "Register Page"
+msgstr "注册页面"
+
+#: includes/class-status.php:350
+msgctxt "Page setting"
+msgid "Login Page"
+msgstr "登陆页面"
+
+#: includes/class-status.php:354
+msgctxt "Page setting"
+msgid "Account Page"
+msgstr "账户页面"
+
+#: includes/class-status.php:358
+msgctxt "Page setting"
+msgid "Change Password Page"
+msgstr "更改密码页"
+
+#: includes/class-status.php:362
+msgctxt "Page setting"
+msgid "Forgot Password Page"
+msgstr "忘记密码页"
+
+#: includes/class-status.php:366
+msgctxt "Page setting"
+msgid "Reset Password Page"
+msgstr "重置密码页"
+
+#: includes/class-status.php:370
+msgctxt "Page setting"
+msgid "Users List Page"
+msgstr "用户列表页面"
+
+#: includes/class-user-notifications.php:39
+msgid "Disable account update notification."
+msgstr "禁用帐户更新通知。"
+
+#: includes/class-user-notifications.php:74
+msgid "You will see the options to disable the active notifications for UsersWP and it's add ons."
+msgstr "您将看到禁用UsersWP及其附加组件的活动通知的选项。"
+
+#: admin/views/html-admin-settings-import-export-users.php:126
+msgid "Max entries per csv file:"
+msgstr "每个csv文件的最大条目数："
+
+#: admin/views/html-admin-settings-import-export-users.php:127
+msgid "The maximum number of entries per csv file (default to 5000, you might want to lower this to prevent memory issues.)"
+msgstr "每个 csv 文件的最大条目数量（默认值为 5000，您可能需要降低此条目以防止内存问题。）"
+
+#: includes/class-import-export.php:149 includes/class-import-export.php:222
+msgid "Filesystem ERROR: "
+msgstr "文件系统错误："
+
+#: includes/class-import-export.php:540
+msgid "Total "
+msgstr "合计"
+
+#: includes/class-import-export.php:586 includes/class-import-export.php:648
+#: includes/class-import-export.php:664
+msgid "Row - "
+msgstr "行"
+
+#: admin/class-admin-setup-wizard.php:250 includes/class-tools.php:843
+msgid "Dummy Users"
+msgstr "虚拟用户"
+
+#: includes/class-tools.php:844
+msgid "Dummy Users for Testing. Password for all dummy users:"
+msgstr "用于测试的虚拟用户，这是所有虚拟用户的密码"
+
+#: includes/class-tools.php:851
+msgid "Create"
+msgstr "创建"
+
+#: admin/views/html-admin-page-status-report.php:142
+msgid "UWP Installation Mode"
+msgstr "UWP 安装模式"
+
+#: admin/views/html-admin-page-status-report.php:146
+msgid "UsersWP is Network Activate for All Site"
+msgstr "UsersWP在所有网站上启用"
+
+#: admin/views/html-admin-page-status-report.php:149
+msgid "UsersWP is Network Activate for Specific Site"
+msgstr "UsersWP在特定的网站上启用"
+
+#: admin/views/html-admin-page-status-report.php:152
+msgid "UsersWP is Activate for Main Site"
+msgstr "UsersWP在主网站上启用"
+
+#: admin/views/html-admin-page-status-report.php:157
+msgid "UsersWP is Activate for Single Site"
+msgstr "UsersWP在单个网站上启用"
+
+#: includes/class-forms.php:861
+msgid "User Information :"
+msgstr "用户信息"
+
+#: includes/class-account.php:151 includes/class-forms.php:862
+msgid "First Name:"
+msgstr "名："
+
+#: includes/class-account.php:152 includes/class-forms.php:863
+msgid "Last Name:"
+msgstr "姓："
+
+#: includes/class-account.php:153 includes/class-forms.php:828
+#: includes/class-forms.php:864
+msgid "Username:"
+msgstr "用户名："
+
+#: includes/class-account.php:154 includes/class-forms.php:865
+msgid "Email:"
+msgstr "电子邮件："
+
+#: includes/class-forms.php:799 includes/helpers/forms.php:256
+msgid "Please activate your account :"
+msgstr "请激活您的账户"
+
+#: includes/class-forms.php:829
+msgid "Password:"
+msgstr "密码："
+
+#: templates/bootstrap/search-form.php:37 templates/search-form.php:16
+msgid "Search"
+msgstr "搜索"
+
+#: includes/helpers/misc.php:1306
+msgid "more"
+msgstr "更多"
+
+#: includes/helpers/misc.php:1307
+msgid "less"
+msgstr "更少"
+
+#: includes/class-files.php:55
+msgid "The uploaded file is too big. Maximum size allowed:"
+msgstr "上传的文件太大了。允许的最大尺寸："
+
+#: includes/class-notices.php:114
+msgid "UsersWP data sync"
+msgstr "UsersWP 数据同步"
+
+#: includes/class-notices.php:114
+msgid "Users data sync is running in the background."
+msgstr "用户数据同步在后台运行。"
+
+#: includes/class-notices.php:114
+msgid "Taking a while? Click here to run it now."
+msgstr "等了很久？单击此处立即运行。"
+
+#: includes/libraries/class-geodirectory-plugin.php:1823
+msgid "Pending"
+msgstr "待推送"
+
+#: includes/libraries/class-geodirectory-plugin.php:1826
+msgid "Closed"
+msgstr "已关闭"
+
+#: includes/libraries/class-geodirectory-plugin.php:1829
+msgid "Expired"
+msgstr "已过期"
+
+#: includes/libraries/wp-background-process.php:423
+msgid "Every %d Minutes"
+msgstr "每 %d 分钟"
+
+#: templates/bootstrap/dashboard.php:6 templates/dashboard.php:6
+msgid "Hello, %s"
+msgstr "您好 %s"
+
+#: widgets/login.php:172
+msgid "Select an action"
+msgstr "选择您要做的事"
+
+#: widgets/login.php:181
+msgid "My Profile"
+msgstr "我的个人资料"
+
+#: widgets/login.php:185
+msgid "View Profile"
+msgstr "查看资料"
+
+#: widgets/login.php:192
+msgid "Edit Profile"
+msgstr "编辑个人资料"
+
+#: widgets/forgot.php:27
+msgid "UWP > Forgot"
+msgstr "UWP > 忘记"
+
+#: widgets/forgot.php:30
+msgid "Displays forgot password form."
+msgstr "显示忘记密码表单。"
+
+#: widgets/account.php:35 widgets/authorbox.php:35 widgets/change.php:35
+#: widgets/forgot.php:35 widgets/profile-actions.php:35
+#: widgets/profile-tabs.php:36 widgets/profile.php:36 widgets/register.php:51
+#: widgets/reset.php:35 widgets/user-actions.php:37
+#: widgets/user-post-counts.php:35 widgets/users-search.php:36
+#: widgets/users.php:35
+msgid "Enter widget title."
+msgstr "输入小组件标题"
+
+#: widgets/login.php:39
+msgid "Enter widget title"
+msgstr "输入小组件标题"
+
+#: widgets/login.php:54
+msgid "Logged in show"
+msgstr "登录时显示"
+
+#: widgets/login.php:55
+msgid "What to show when logged in."
+msgstr "登录时显示的内容。"
+
+#: widgets/login.php:58
+msgid "User Dashboard (default)"
+msgstr "用户仪表板（默认值）"
+
+#: widgets/login.php:59
+msgid "Simple username and logout link"
+msgstr "简单的用户名和登出链接"
+
+#: widgets/login.php:60
+msgid "Nothing"
+msgstr "无"
+
+#: widgets/login.php:103
+msgid "Disable GeoDirectory links from the user dashboard."
+msgstr "从用户仪表板中禁用GeoDirectory链接"
+
+#: widgets/login.php:116
+msgid "Disable WP Invoicing links from the user dashboard."
+msgstr "从用户仪表板中禁用WP Invoicing链接"
+
+#: widgets/profile.php:27
+msgid "UWP > Profile"
+msgstr "UWP > 个人资料"
+
+#: widgets/profile.php:31
+msgid "Displays user profile."
+msgstr "显示用户个人资料。"
+
+#: widgets/reset.php:27
+msgid "UWP > Reset"
+msgstr "UWP > 重置"
+
+#: widgets/reset.php:30
+msgid "Displays reset password form."
+msgstr "显示重置密码表单。"
+
+#: widgets/account.php:27
+msgid "UWP > Account"
+msgstr "UWP > 帐户"
+
+#: widgets/account.php:30
+msgid "Displays account form."
+msgstr "显示帐户表单。"
+
+#: widgets/change.php:27
+msgid "UWP > Change"
+msgstr "UWP > 更改"
+
+#: widgets/change.php:30
+msgid "Displays change password form."
+msgstr "显示更改密码表单。"
+
+#: widgets/users.php:27
+msgid "UWP > Users"
+msgstr "UWP > 用户"
+
+#: widgets/users.php:30
+msgid "Displays users list."
+msgstr "显示用户列表。"
+
+#: includes/libraries/class-geodirectory-plugin.php:120
+msgid "Add Listing"
+msgstr "添加到列表"
+
+#: includes/libraries/class-geodirectory-plugin.php:139
+msgid "My Favorites"
+msgstr "我的收藏"
+
+#: includes/libraries/class-geodirectory-plugin.php:158
+msgid "My Listings"
+msgstr "我的列表"
+
+#: includes/libraries/class-invoicing-plugin.php:64
+msgid "My Invoices"
+msgstr "我的发票"
+
+#: includes/libraries/class-invoicing-plugin.php:68
+msgid "View Invoices"
+msgstr "查看发票"
+
+#: admin/settings/class-uwp-settings-general.php:122
+msgid "When enabled /wp-login.php?action=register page will be redirected to UsersWP register page."
+msgstr "启用 将/wp-login.php?action=register 页面将重定向到UsersWP注册页面。"
+
+#: includes/libraries/class-geodirectory-plugin.php:177
+msgid "My Lists"
+msgstr "我的列表"
+
+#: admin/settings/class-formbuilder.php:1367
+msgid "Field Label:"
+msgstr "字段标签："
+
+#: admin/settings/class-formbuilder.php:1449
+msgid "Field Key :"
+msgstr "字段编号 :"
+
+#: admin/settings/class-formbuilder.php:1736
+msgid "Upload icon using media and enter its url path, or enter %sfont awesome%s class eg:\"fas fa-home\""
+msgstr "使用媒体上传图标并输入其网址路径，或输入 %sfont awesome%s 类，例如：\"fas fa-home\""
+
+#: admin/settings/class-formbuilder.php:2072
+msgid "No options available"
+msgstr "没有可用的选项"
+
+#: admin/settings/class-uwp-settings-general.php:69
+msgid "Pages"
+msgstr "网页"
+
+#: admin/settings/class-uwp-settings-general.php:76
+msgid "Author box"
+msgstr "作者框"
+
+#: admin/settings/class-uwp-settings-general.php:648
+msgid "Page Settings"
+msgstr "页面设置"
+
+#: admin/settings/class-uwp-settings-general.php:99
+msgid "Register Settings"
+msgstr "注册设置"
+
+#: admin/settings/class-uwp-settings-general.php:121
+msgid "Redirect Admin Default Register Page"
+msgstr "重定向管理员默认注册页面"
+
+#: admin/settings/class-uwp-settings-general.php:176
+msgid "Login Settings"
+msgstr "登录设置"
+
+#: admin/settings/class-uwp-settings-general.php:266
+msgid "Change Password Settings"
+msgstr "更改密码设置"
+
+#: admin/settings/class-uwp-settings-general.php:310
+msgid "Ask user to enter their old password before changing the password to add an extra layer of security."
+msgstr "要求用户在更改密码之前输入旧密码以添加额外的安全防护"
+
+#: admin/settings/class-uwp-settings-general.php:317
+msgid "This option will disable system generated password notice if user has not changed default password after registration."
+msgstr "如果用户在注册后未更改默认密码，此选项将禁用系统生成的密码通知。"
+
+#: admin/settings/class-uwp-settings-general.php:334
+msgid "Profile Settings"
+msgstr "个人资料设置"
+
+#: admin/settings/class-uwp-settings-general.php:425
+msgid "Disable author redirect to UsersWP profile page."
+msgstr "禁用作者重定向到 UsersWP 个人资料页面。"
+
+#: admin/settings/class-uwp-settings-general.php:458
+msgid "Users Settings"
+msgstr "用户设置"
+
+#: admin/settings/class-uwp-settings-general.php:523
+msgid "Author Box Settings"
+msgstr "作者框设置"
+
+#: admin/settings/class-uwp-settings-general.php:529
+msgid "Enable Author Box"
+msgstr "启用作者框"
+
+#: admin/settings/class-uwp-settings-general.php:530
+msgid "Displays author box based on settings"
+msgstr "根据设置显示作者框"
+
+#: admin/settings/class-uwp-settings-general.php:536
+msgid "Where to display?"
+msgstr "在哪里显示?"
+
+#: admin/settings/class-uwp-settings-general.php:537
+msgid "Displays the author box above or below post content."
+msgstr "在文章内容上方或下方显示作者框。"
+
+#: admin/settings/class-uwp-settings-general.php:540
+msgid "Above content"
+msgstr "内容上方"
+
+#: admin/settings/class-uwp-settings-general.php:541
+msgid "Below content"
+msgstr "内容下方"
+
+#: admin/settings/class-uwp-settings-general.php:548
+msgid "Post types"
+msgstr "文章类型"
+
+#: admin/settings/class-uwp-settings-general.php:549
+msgid "Choose post types to display author box"
+msgstr "选择文章类型以显示作者框"
+
+#: admin/settings/class-uwp-settings-general.php:566
+msgid "Author box Content"
+msgstr "作者框内容"
+
+#: admin/settings/class-uwp-settings-general.php:567
+#: admin/settings/class-uwp-settings-general.php:578
+msgid "The author box body, this can be text or HTML."
+msgstr "作者框的正文，这可以是文本或HTML。"
+
+#: admin/settings/class-uwp-settings-emails.php:108
+#: admin/settings/class-uwp-settings-emails.php:141
+#: admin/settings/class-uwp-settings-emails.php:174
+#: admin/settings/class-uwp-settings-emails.php:211
+#: admin/settings/class-uwp-settings-emails.php:244
+#: admin/settings/class-uwp-settings-emails.php:277
+#: admin/settings/class-uwp-settings-emails.php:310
+#: admin/settings/class-uwp-settings-emails.php:343
+#: admin/settings/class-uwp-settings-emails.php:376
+#: admin/settings/class-uwp-settings-emails.php:409
+#: admin/settings/class-uwp-settings-emails.php:442
+#: admin/settings/class-uwp-settings-emails.php:475
+#: admin/settings/class-uwp-settings-general.php:573
+#: admin/settings/class-uwp-settings-general.php:584
+msgid "Available template tags:"
+msgstr "可用模板标签："
+
+#: admin/class-admin-setup-wizard.php:51 admin/settings/class-settings.php:76
+msgid "Action failed. Please refresh the page and retry."
+msgstr "动作失败。请刷新页面重试。"
+
+#: admin/settings/class-settings.php:84
+msgid "Your settings have been saved."
+msgstr "您的设置已经保存。"
+
+#: admin/settings/class-settings.php:355
+msgid "Upload Image"
+msgstr "上传图像"
+
+#: admin/settings/class-formbuilder.php:445
+#: admin/settings/class-formbuilder.php:461
+#: admin/settings/class-settings.php:678
+msgid "Select a page&hellip;"
+msgstr "选择一个页面&hellip;"
+
+#: admin/settings/class-settings.php:681
+msgid "Edit Page"
+msgstr "编辑页面"
+
+#: admin/settings/class-settings.php:684
+msgid "View Page"
+msgstr "查看页面"
+
+#: admin/settings/class-settings.php:827
+msgid "Documentation"
+msgstr "程序文档"
+
+#: admin/settings/class-uwp-settings-page.php:139
+msgid "Show Advanced"
+msgstr "显示高级选项"
+
+#: admin/settings/class-uwp-settings-page.php:140
+msgid "Hide Advanced"
+msgstr "隐藏高级选项"
+
+#: admin/settings/class-uwp-settings-uninstall.php:67
+#: admin/settings/class-uwp-settings-uninstall.php:82
+msgid "Uninstall Settings"
+msgstr "移除设定"
+
+#: admin/settings/class-uwp-settings-uninstall.php:84
+msgid "NOTE: Add-ons should be deleted before core to ensure complete uninstall."
+msgstr "注意：应在删除核心之前删除附加组件，以确保完全卸载。"
+
+#: admin/settings/class-uwp-settings-uninstall.php:90
+msgid "Check this box if you would like UsersWP to completely remove all of its data when the plugin is deleted."
+msgstr "如果您希望UsersWP在删除插件时完全删除其所有数据，请选中此框。"
+
+#: admin/settings/class-uwp-settings-emails.php:28
+msgid "Emails"
+msgstr "电子邮箱"
+
+#: admin/settings/class-uwp-settings-emails.php:68
+msgid "User Emails"
+msgstr "用户邮箱"
+
+#: admin/settings/class-uwp-settings-emails.php:69
+msgid "Admin Emails"
+msgstr "管理员邮箱"
+
+#: admin/settings/class-uwp-settings-emails.php:83
+#: admin/settings/class-uwp-settings-emails.php:116
+#: admin/settings/class-uwp-settings-emails.php:149
+#: admin/settings/class-uwp-settings-emails.php:186
+#: admin/settings/class-uwp-settings-emails.php:219
+#: admin/settings/class-uwp-settings-emails.php:252
+#: admin/settings/class-uwp-settings-emails.php:285
+#: admin/settings/class-uwp-settings-emails.php:318
+#: admin/settings/class-uwp-settings-emails.php:351
+#: admin/settings/class-uwp-settings-emails.php:384
+#: admin/settings/class-uwp-settings-emails.php:417
+#: admin/settings/class-uwp-settings-emails.php:450
+msgid "Enable email"
+msgstr "启用电子邮件"
+
+#: admin/settings/class-uwp-settings-emails.php:117
+msgid "Send an email to admin when user has created account on site."
+msgstr "当用户创建帐户时，向管理员发送电子邮件。"
+
+#: admin/settings/class-uwp-settings-emails.php:90
+#: admin/settings/class-uwp-settings-emails.php:123
+#: admin/settings/class-uwp-settings-emails.php:156
+#: admin/settings/class-uwp-settings-emails.php:193
+#: admin/settings/class-uwp-settings-emails.php:226
+#: admin/settings/class-uwp-settings-emails.php:259
+#: admin/settings/class-uwp-settings-emails.php:292
+#: admin/settings/class-uwp-settings-emails.php:325
+#: admin/settings/class-uwp-settings-emails.php:358
+#: admin/settings/class-uwp-settings-emails.php:391
+#: admin/settings/class-uwp-settings-emails.php:424
+#: admin/settings/class-uwp-settings-emails.php:457
+msgid "Subject"
+msgstr "邮件主题"
+
+#: admin/settings/class-uwp-settings-emails.php:91
+#: admin/settings/class-uwp-settings-emails.php:124
+#: admin/settings/class-uwp-settings-emails.php:157
+#: admin/settings/class-uwp-settings-emails.php:194
+#: admin/settings/class-uwp-settings-emails.php:227
+#: admin/settings/class-uwp-settings-emails.php:260
+#: admin/settings/class-uwp-settings-emails.php:293
+#: admin/settings/class-uwp-settings-emails.php:326
+#: admin/settings/class-uwp-settings-emails.php:359
+#: admin/settings/class-uwp-settings-emails.php:392
+#: admin/settings/class-uwp-settings-emails.php:425
+#: admin/settings/class-uwp-settings-emails.php:458
+msgid "The email subject."
+msgstr "邮件主题."
+
+#: admin/settings/class-uwp-settings-emails.php:100
+#: admin/settings/class-uwp-settings-emails.php:133
+#: admin/settings/class-uwp-settings-emails.php:166
+#: admin/settings/class-uwp-settings-emails.php:203
+#: admin/settings/class-uwp-settings-emails.php:236
+#: admin/settings/class-uwp-settings-emails.php:269
+#: admin/settings/class-uwp-settings-emails.php:302
+#: admin/settings/class-uwp-settings-emails.php:335
+#: admin/settings/class-uwp-settings-emails.php:368
+#: admin/settings/class-uwp-settings-emails.php:401
+#: admin/settings/class-uwp-settings-emails.php:434
+#: admin/settings/class-uwp-settings-emails.php:467
+msgid "Body"
+msgstr "主体"
+
+#: admin/settings/class-uwp-settings-emails.php:101
+#: admin/settings/class-uwp-settings-emails.php:134
+#: admin/settings/class-uwp-settings-emails.php:167
+#: admin/settings/class-uwp-settings-emails.php:204
+#: admin/settings/class-uwp-settings-emails.php:237
+#: admin/settings/class-uwp-settings-emails.php:270
+#: admin/settings/class-uwp-settings-emails.php:303
+#: admin/settings/class-uwp-settings-emails.php:336
+#: admin/settings/class-uwp-settings-emails.php:369
+#: admin/settings/class-uwp-settings-emails.php:402
+#: admin/settings/class-uwp-settings-emails.php:435
+#: admin/settings/class-uwp-settings-emails.php:468
+msgid "The email body, this can be text or HTML."
+msgstr "电子邮件正文，这可以是文本或HTML。"
+
+#: admin/settings/class-uwp-settings-emails.php:220
+msgid "Send an email to user for activation when registered."
+msgstr "注册后向用户发送电子邮件以激活。"
+
+#: admin/settings/class-uwp-settings-emails.php:253
+msgid "Send an email to user for when successfull registration."
+msgstr "成功注册时向用户发送电子邮件。"
+
+#: admin/settings/class-uwp-settings-emails.php:286
+msgid "Send an email to user for forgot password."
+msgstr "向用户发送一封忘记密码的电子邮件。"
+
+#: admin/settings/class-uwp-settings-emails.php:319
+msgid "Send an email to user for change password."
+msgstr "向用户发送电子邮件以更改密码。"
+
+#: admin/settings/class-uwp-settings-emails.php:352
+msgid "Send an email to user for reset password."
+msgstr "向用户发送电子邮件以重置密码。"
+
+#: admin/settings/class-uwp-settings-emails.php:385
+#: admin/settings/class-uwp-settings-emails.php:418
+msgid "Send an email to user when updating account details."
+msgstr "更新帐户详细信息时向用户发送电子邮件。"
+
+#: admin/settings/class-uwp-settings-addons.php:25
+#: admin/settings/class-uwp-settings-addons.php:65 includes/class-addons.php:26
+#: widgets/login.php:108 widgets/login.php:121
+msgid "Addons"
+msgstr "插件"
+
+#: admin/settings/class-uwp-settings-addons.php:82
+msgid "UsersWP Addons"
+msgstr "UsersWP插件"
+
+#: admin/settings/class-uwp-settings-addons.php:84
+msgid "Please select an addon to view its settings. Check our list of addons available for UsersWP %s here %s"
+msgstr "请选择一个插件来查看其设置。请在此处查看我们可供用户使用%s的插件列表%s"
+
+#: admin/class-admin.php:241
+msgid "Field key must not be blank"
+msgstr "选项值不能为空"
+
+#: admin/class-admin.php:243
+msgid "Please do not use special character and spaces in field key."
+msgstr "请勿在字段键中使用特殊字符和空格。"
+
+#: admin/class-admin.php:244
+msgid "Field key should be a unique name."
+msgstr "字段键应该是唯一的名称。"
+
+#: admin/class-admin.php:248
+msgid "Choose an image"
+msgstr "选择一张图像"
+
+#: admin/class-admin.php:249
+msgid "Use image"
+msgstr "使用图像"
+
+#: admin/class-uwp-admin-help.php:96 admin/class-uwp-admin-help.php:104
+msgid "System status"
+msgstr "系统状态"
+
+#: admin/views/html-admin-settings.php:31
+msgid "Save changes"
+msgstr "保存更改"
+
+#: includes/class-validation.php:192
+msgid "<strong>Error</strong>: %s %s"
+msgstr "<strong>错误</strong>： %s%s"
+
+#: includes/class-validation.php:195
+msgid "<strong>Error</strong>: %s cannot be empty."
+msgstr "<strong>错误</strong>： %s 不能为空"
+
+#: includes/class-uwp-defaults.php:85
+msgid "[[#site_name#]] Please activate your account"
+msgstr "[[#site_name#]] 请激活您的帐户"
+
+#: includes/class-uwp-defaults.php:95
+msgid ""
+"Dear [#user_name#],\n"
+"\n"
+"Thank you for signing up with [#site_name#]\n"
+"\n"
+"[#login_details#]\n"
+"\n"
+"Thank you,\n"
+"[#site_name_url#]"
+msgstr ""
+"亲爱的[#user_name#]\n"
+"\n"
+"感谢您注册[#site_name#]\n"
+"\n"
+"[#login_details#]\n"
+"\n"
+"谢谢\n"
+"[#site_name_url#]"
+
+#: includes/class-uwp-defaults.php:113
+msgid "[[#site_name#]] Your Log In Details"
+msgstr "[[#site_name#]] 您的登录信息"
+
+#: includes/class-uwp-defaults.php:123
+msgid ""
+"Dear [#user_name#],\n"
+"\n"
+"You can log in with the following information:\n"
+"\n"
+"[#login_details#]\n"
+"\n"
+"You can login here: [#login_url#]\n"
+"\n"
+"Thank you,\n"
+"[#site_name_url#]"
+msgstr ""
+"亲爱的[#user_name#]\n"
+"\n"
+"您的登录信息：\n"
+"\n"
+"[#login_details#]\n"
+"\n"
+"您可以在此处登录：[#login_url#]\n"
+"\n"
+"谢谢\n"
+"[#site_name_url#]"
+
+#: includes/class-uwp-defaults.php:153
+msgid ""
+"Dear [#user_name#],\n"
+"\n"
+"[#login_details#]\n"
+"\n"
+"You can login here: [#login_url#]\n"
+"\n"
+"Thank you,\n"
+"[#site_name_url#]"
+msgstr ""
+"亲爱的[#user_name#]\n"
+"\n"
+"[#login_details#]\n"
+"\n"
+"您可以在此处登录：[#login_url#]\n"
+"\n"
+"谢谢\n"
+"[#site_name_url#]"
+
+#: includes/class-uwp-defaults.php:181
+msgid ""
+"Dear [#user_name#],\n"
+"\n"
+"Your password has been changed successfully.\n"
+"\n"
+"You can login here: [#login_url#]\n"
+"\n"
+"Thank you,\n"
+"[#site_name_url#]"
+msgstr ""
+"亲爱的[#user_name#]\n"
+"\n"
+"您的密码已成功更改。\n"
+"\n"
+"您可以在此处登录：[#login_url#]\n"
+"\n"
+"谢谢\n"
+"[#site_name_url#]"
+
+#: includes/class-uwp-defaults.php:209
+msgid ""
+"Dear [#user_name#],\n"
+"\n"
+"Your password has been reset.\n"
+"\n"
+"You can login here: [#login_url#]\n"
+"\n"
+"Thank you,\n"
+"[#site_name_url#]"
+msgstr ""
+"亲爱的[#user_name#]\n"
+"\n"
+"您的密码已重置。\n"
+"\n"
+"您可以在此处登录：[#login_url#]\n"
+"\n"
+"谢谢\n"
+"[#site_name_url#]"
+
+#: includes/class-uwp-defaults.php:237
+msgid ""
+"Dear [#user_name#],\n"
+"\n"
+"Your account has been updated successfully.\n"
+"\n"
+"Thank you,\n"
+"[#site_name_url#]"
+msgstr ""
+"亲爱的[#user_name#]\n"
+"\n"
+"您的帐户已成功更新。\n"
+"\n"
+"谢谢\n"
+"[#site_name_url#]"
+
+#: includes/class-uwp-defaults.php:335
+msgid "[[#site_name#]] New account registration"
+msgstr "[[#site_name#]] 新用户注册"
+
+#: includes/class-uwp-defaults.php:345
+msgid ""
+"Dear Admin,\n"
+"\n"
+"A user has been registered recently on your website.\n"
+"\n"
+"[#extras#]"
+msgstr ""
+"亲爱的管理员，\n"
+"\n"
+"有用户最近已在您的网站上注册。\n"
+"\n"
+"[#extras#]"
+
+#: widgets/authorbox.php:27
+msgid "UWP > Author Box"
+msgstr "UWP > 作者框"
+
+#: widgets/authorbox.php:30
+msgid "Displays author box."
+msgstr "显示作者框。"
+
+#: includes/class-addons.php:27
+msgid "Recommended plugins"
+msgstr "推荐的插件"
+
+#: includes/class-addons.php:28
+msgid "Membership"
+msgstr "用户身份"
+
+#: includes/class-addons.php:102 includes/class-addons.php:103
+msgid "Free"
+msgstr "免费"
+
+#: includes/class-addons.php:151
+msgid "From: $%d"
+msgstr "来自: $%d"
+
+#: includes/class-addons.php:172
+msgid "Active"
+msgstr "活跃"
+
+#: includes/class-addons.php:175 includes/class-addons.php:226
+msgid "Activate"
+msgstr "激活"
+
+#: admin/class-admin-setup-wizard.php:664
+#: admin/views/html-admin-page-addons.php:120 includes/class-addons.php:193
+#: includes/class-addons.php:230
+msgid "Install"
+msgstr "安装"
+
+#: includes/class-addons.php:195
+msgid "Get it"
+msgstr "获得"
+
+#: includes/class-addons.php:225
+msgid "Something went wrong!"
+msgstr "出了点问题。"
+
+#: includes/class-addons.php:227
+msgid "Activating"
+msgstr "激活中"
+
+#: includes/class-addons.php:228
+msgid "Deactivate"
+msgstr "停用"
+
+#: admin/class-admin-setup-wizard.php:615 includes/class-addons.php:229
+msgid "Installed"
+msgstr "安装"
+
+#: admin/class-admin-setup-wizard.php:616 includes/class-addons.php:231
+msgid "Installing"
+msgstr "安装中"
+
+#: includes/class-addons.php:232
+msgid "Error"
+msgstr "错误"
+
+#: includes/class-addons.php:266
+msgid "Turn any WordPress theme into a global business directory portal."
+msgstr "将任何WordPress主题变成一个全球商业目录门户。"
+
+#: includes/class-addons.php:272
+msgid "Create & Send Invoices, Manage Taxes & VAT. Collect One Time & Recurring Payments."
+msgstr "创建和发送发票，管理税收和增值税。收集一次性和经常性的付款。"
+
+#: admin/class-admin-setup-wizard.php:641
+#: admin/views/html-admin-page-addons.php:72
+#: admin/views/html-admin-page-addons.php:86
+msgid "More info"
+msgstr "更多"
+
+#: admin/views/html-admin-page-addons.php:112
+msgid "All of our UsersWP Addons can be found on UsersWP.io here: <a href=\"%s\">UsersWP Addons</a>"
+msgstr "UsersWP的所有插件都可以在<a href=\"%s\">UsersWP Addons</a>找到"
+
+#: admin/views/html-admin-page-addons.php:115
+msgid "The plugin <a href='https://wpeasyupdates.com/' target='_blank'>WP Easy Updates</a> is required to check for and update some installed plugins/themes, please <a href='%s'>activate</a> it now."
+msgstr "需要使用插件<a href='https://wpeasyupdates.com/' target='_blank'>WP Easy Updates</a>来检查和更新一些已安装的插件/主题，请立即<a href='%s'>激活</a>它。"
+
+#: admin/views/html-admin-page-addons.php:116
+msgid "The plugin <a href='https://wpeasyupdates.com/' target='_blank'>WP Easy Updates</a> is required to check for and update some installed plugins/themes, please <a href='%s' onclick='window.open(\"https://wpeasyupdates.com/wp-easy-updates.zip\", \"_blank\");' >download</a> and install it now."
+msgstr "需要使用插件<a href='https://wpeasyupdates.com/' target='_blank'>WP Easy Updates</a>来检查和更新一些已安装的插件/主题，请<a href='%s' onclick='window.open(\"https://wpeasyupdates.com/wp-easy-updates.zip\", \"_blank\");' >下载</a>并立即安装它。"
+
+#: admin/views/html-admin-page-addons.php:119
+msgid "Licence key"
+msgstr "许可证密钥："
+
+#: admin/views/html-admin-page-addons.php:120
+msgid "Enter your licence key"
+msgstr "输入您的许可证密钥"
+
+#: admin/views/html-admin-page-addons.php:123
+msgid "%sFind your licence key here%s OR %sBuy one here%s"
+msgstr "%s在这里找到您的许可证密钥%s或%s在这里购买一个%s"
+
+#: admin/class-uwp-admin-menus.php:139
+msgid "UsersWP Extensions"
+msgstr "UsersWP扩展"
+
+#: admin/class-uwp-admin-menus.php:140
+msgid "Extensions"
+msgstr "扩展"
+
+#: templates/bootstrap/no-users-found.php:11 templates/no-users-found.php:12
+msgid "No users were found matching your selection."
+msgstr "没有发现符合您选择的用户。"
+
+#: widgets/profile-actions.php:27
+msgid "UWP > Profile Actions"
+msgstr "UWP > 个人资料操作"
+
+#: widgets/profile-actions.php:30
+msgid "Display profile actions."
+msgstr "显示个人资料操作。"
+
+#: widgets/profile-actions.php:34 widgets/profile-tabs.php:35
+#: widgets/user-actions.php:36 widgets/user-post-counts.php:34
+#: widgets/users-search.php:35
+msgid "Title"
+msgstr "标题"
+
+#: widgets/profile-section.php:28
+msgid "UWP > Profile Section"
+msgstr "UWP > 个人资料部分"
+
+#: widgets/profile-section.php:32
+msgid "Display section to contain other elements."
+msgstr "显示部分包含其他的元素。"
+
+#: widgets/profile-section.php:36
+msgid "Type:"
+msgstr "类型："
+
+#: widgets/profile-section.php:37
+msgid "This is the opening or closing section."
+msgstr "这是开放或关闭部分。"
+
+#: widgets/profile-section.php:40
+msgid "Open"
+msgstr "开放"
+
+#: templates/bootstrap/forgot.php:24 templates/bootstrap/login.php:24
+#: templates/bootstrap/register.php:25 widgets/profile-section.php:41
+msgid "Close"
+msgstr "关闭"
+
+#: widgets/profile-section.php:48
+msgid "Position:"
+msgstr "职位："
+
+#: widgets/profile-section.php:49
+msgid "This is position of the section."
+msgstr "这是职位的部分"
+
+#: widgets/profile-section.php:52 widgets/user-badge.php:167
+msgid "Left"
+msgstr "左"
+
+#: widgets/profile-section.php:53 widgets/user-badge.php:169
+msgid "Right"
+msgstr "右"
+
+#: widgets/profile-section.php:54
+msgid "Full"
+msgstr "占满"
+
+#: widgets/profile-section.php:93
+msgid "closing"
+msgstr "开放"
+
+#: widgets/profile-section.php:93
+msgid "opening"
+msgstr "关闭"
+
+#: widgets/profile-section.php:94
+msgid "Archive Item Section: <b>%s : %s</b> <small>(requires %s section to work)</small>"
+msgstr "归档项目部分: <b>%s : %s</b> <small>(需要%s部分才能工作)</small>"
+
+#: widgets/user-meta.php:27
+msgid "UWP > User Meta"
+msgstr "UWP > 用户元数据"
+
+#: widgets/user-meta.php:31
+msgid "Displays user meta."
+msgstr "显示用户元数据。"
+
+#: widgets/user-meta.php:35
+msgid "Key:"
+msgstr "密匙"
+
+#: widgets/user-badge.php:52 widgets/user-meta.php:36
+msgid "This is the custom field key."
+msgstr "这是自定义字段键。"
+
+#: widgets/button-group.php:43 widgets/profile-header.php:53
+#: widgets/user-avatar.php:61 widgets/user-badge.php:42
+#: widgets/user-cover.php:54 widgets/user-meta.php:44 widgets/user-title.php:50
+msgid "User ID:"
+msgstr "用户ID:"
+
+#: widgets/user-meta.php:52
+msgid "Show:"
+msgstr "显示："
+
+#: widgets/user-meta.php:53
+msgid "What part of the post meta to show."
+msgstr "文章元数据的哪一部分要显示。"
+
+#: widgets/user-meta.php:56
+msgid "Icon + Label + Value"
+msgstr "图标 +标签 + 值"
+
+#: widgets/user-meta.php:57
+msgid "Icon + Value"
+msgstr "图标 + 值"
+
+#: widgets/user-meta.php:58
+msgid "Label + Value"
+msgstr "标签 + 值"
+
+#: widgets/user-meta.php:60
+msgid "Value"
+msgstr "值"
+
+#: widgets/user-meta.php:61
+msgid "Value (strip_tags)"
+msgstr "值（strip_tags）"
+
+#: widgets/account.php:64 widgets/button-group.php:52 widgets/change.php:64
+#: widgets/forgot.php:64 widgets/login.php:89 widgets/register.php:89
+#: widgets/reset.php:52 widgets/user-badge.php:186 widgets/user-meta.php:69
+msgid "Extra class:"
+msgstr "额外类："
+
+#: widgets/account.php:65 widgets/button-group.php:53 widgets/change.php:65
+#: widgets/forgot.php:65 widgets/login.php:90 widgets/register.php:90
+#: widgets/reset.php:53 widgets/user-badge.php:187 widgets/user-meta.php:70
+msgid "Give the wrapper an extra class so you can style things as you want."
+msgstr "给包装器一个额外的类，这样你就可以按照自己的意愿来设计样式。"
+
+#: widgets/user-meta.php:95
+msgid "Select Key"
+msgstr "选择键"
+
+#: widgets/profile-tabs.php:27
+msgid "UWP > Profile Tabs"
+msgstr "UWP > 个人资料选项卡"
+
+#: widgets/profile-tabs.php:31
+msgid "Displays profile tabs."
+msgstr "显示个人资料选项卡。"
+
+#: widgets/user-avatar.php:27
+msgid "UWP > User Avatar"
+msgstr "UWP > 用户头像"
+
+#: widgets/user-title.php:31
+msgid "Displays user name."
+msgstr "显示用户名字。"
+
+#: widgets/user-title.php:35
+msgid "Header Tag:"
+msgstr "标题标签："
+
+#: widgets/user-avatar.php:35
+msgid "Avatar size:"
+msgstr "头像大小："
+
+#: widgets/user-avatar.php:36
+msgid "Avatar image size in px. Default is 50px."
+msgstr "头像的大小，单位是px。默认是50px。"
+
+#: widgets/user-avatar.php:43 widgets/user-cover.php:36
+msgid "Link to profile?:"
+msgstr "链接到个人资料页面？："
+
+#: widgets/user-avatar.php:44
+msgid "Link avatar image to user's profile page."
+msgstr "将头像图像链接到用户的个人资料页面。"
+
+#: widgets/users-loop-actions.php:27
+msgid "UWP > User Loop Action"
+msgstr "UWP > 用户循环操作"
+
+#: widgets/users-loop-actions.php:30
+msgid "Displays user loop actions."
+msgstr "显示用户循环操作。"
+
+#: widgets/profile-header.php:27
+msgid "UWP > Profile Header"
+msgstr "UWP > 个人资料头"
+
+#: widgets/profile-header.php:31
+msgid "Displays user profile header."
+msgstr "显示个人资料头。"
+
+#: widgets/profile-header.php:35
+msgid "Hide cover image:"
+msgstr "隐藏封面图像："
+
+#: widgets/profile-header.php:36
+msgid "Hide cover image in user profile page."
+msgstr "在用户资料页中隐藏封面图片。"
+
+#: widgets/profile-header.php:44
+msgid "Hide avatar image:"
+msgstr "隐藏头像:"
+
+#: widgets/profile-header.php:45
+msgid "Hide avatar image in user profile page."
+msgstr "在用户资料页中隐藏头像。"
+
+#: widgets/profile-header.php:61
+msgid "Allow to change cover and avatar:"
+msgstr "允许修改封面和头像。"
+
+#: widgets/profile-header.php:62
+msgid "Allow user to change cover and avatar image in profile page."
+msgstr "允许用户更改资料页面中的封面和头像。"
+
+#: widgets/user-title.php:27
+msgid "UWP > User Title"
+msgstr "UWP > 用户标题"
+
+#: widgets/user-title.php:36
+msgid "Header tag for the user title."
+msgstr "用户标题的标头标记。"
+
+#: widgets/profile-social.php:27
+msgid "UWP > Profile Social"
+msgstr "UWP > 个人资料社交"
+
+#: widgets/profile-social.php:30
+msgid "Displays fields which are selected to display in social location from form builder."
+msgstr "显示从表单生成器中选择在社交位置显示的字段。"
+
+#: widgets/profile-social.php:34
+msgid "Exclude Fields"
+msgstr "排除字段"
+
+#: widgets/profile-social.php:35
+msgid "Enter comma separated field keys to exclude from displaying in social location."
+msgstr "输入逗号分离字段键，以不在社交位置显示。"
+
+#: widgets/user-actions.php:27
+msgid "UWP > User Actions"
+msgstr "UWP > 用户操作"
+
+#: widgets/user-actions.php:32
+msgid "Display user actions."
+msgstr "显示用户操作。"
+
+#: widgets/users-loop.php:26
+msgid "UWP > Users Loop"
+msgstr "UWP > 用户循环"
+
+#: widgets/users-loop.php:30
+msgid "Displays users loop."
+msgstr "显示用户循环。"
+
+#: widgets/output-location.php:27
+msgid "UWP > Output Location"
+msgstr "UWP > 输出位置"
+
+#: widgets/output-location.php:30
+msgid "Displays fields which are selected to display in selected output location from form builder."
+msgstr "显示从表单生成器中选择显示在选定输出位置的字段。"
+
+#: widgets/output-location.php:34
+msgid "Location:"
+msgstr "位置："
+
+#: widgets/output-location.php:35
+msgid "The location type to output."
+msgstr "要输出的位置类型。"
+
+#: widgets/users-search.php:27
+msgid "UWP > Users Search Form"
+msgstr "UWP > 用户搜索表单"
+
+#: widgets/users-search.php:31
+msgid "Displays users search form."
+msgstr "显示用户搜索表单。"
+
+#: admin/menus/class-menus.php:28
+msgid "UsersWP Endpoints"
+msgstr "UsersWP端点"
+
+#: admin/menus/class-menus.php:102
+msgid "Select all"
+msgstr "全选"
+
+#: admin/settings/class-uwp-settings-general.php:77
+msgid "Developer"
+msgstr "开发人员"
+
+#: admin/settings/class-uwp-settings-general.php:711
+msgid "Users List Item Page"
+msgstr "用户列表项目页"
+
+#: admin/settings/class-uwp-settings-general.php:712
+msgid "This is the page/template for displaying user item in users list page. You can change the template as you want which will apply to each user item in users list page."
+msgstr "这是在用户列表页显示用户项目的页面/模板。你可以根据你的需要改变模板，它将适用于用户列表页中的每个用户项目。"
+
+#: admin/settings/class-uwp-settings-general.php:598
+msgid "Developer Settings"
+msgstr "开发者设置"
+
+#: admin/settings/class-uwp-settings-general.php:605
+msgid "Disable Avatar Override?"
+msgstr "禁用 Avatar 覆盖？"
+
+#: admin/settings/class-uwp-settings-general.php:606
+msgid "By default UsersWP will change the avatar to profile image. You can disable this using this option."
+msgstr "默认情况下，UsersWP会将头像更改为个人资料图像。您可以使用此选项禁用此选项。"
+
+#: includes/class-pages.php:332
+msgctxt "page_slug"
+msgid "user-list-item"
+msgstr "user-list-item"
+
+#: includes/class-pages.php:332
+msgid "Users List Item"
+msgstr "用户列表项目"
+
+#: includes/class-pages.php:507
+msgid "UWP Register Page"
+msgstr "UWP 注册页面"
+
+#: includes/class-pages.php:511
+msgid "UWP Login Page"
+msgstr "UWP 登录页面"
+
+#: includes/class-pages.php:515
+msgid "UWP Forgot Password Page"
+msgstr "UWP忘记密码页面"
+
+#: includes/class-pages.php:519
+msgid "UWP Reset Password Page"
+msgstr "UWP重设密码页面"
+
+#: includes/class-pages.php:523
+msgid "UWP Account Page"
+msgstr "UWP 帐户页面"
+
+#: includes/class-pages.php:527
+msgid "UWP Profile Page"
+msgstr "UWP 个人资料页面"
+
+#: includes/class-pages.php:531
+msgid "UWP Users Page"
+msgstr "UWP 用户页面"
+
+#: includes/class-pages.php:535
+msgid "UWP User Item Page"
+msgstr "UWP用户项目页面"
+
+#: includes/class-pages.php:539
+msgid "UWP Change Password Page"
+msgstr "UWP 更改密码页面"
+
+#: admin/class-admin.php:715
+msgid "Activate User"
+msgstr "激活用户"
+
+#: admin/class-admin.php:303
+msgid "User(s) has been activated!"
+msgstr "用户已被激活！"
+
+#. Description of the plugin
+msgid "The only lightweight user profile plugin for WordPress. UsersWP features front end user profile, users directory, a registration and a login form."
+msgstr "WordPress唯一的轻量级用户配置文件插件。UsersWP具有前端用户配置文件，用户目录，一个注册和一个登录表格。"
+
+#: includes/helpers/misc.php:1492
+msgid "Profile side (non bootstrap)"
+msgstr "个人资料位置（不是bootstrap）"
+
+#: includes/class-profile.php:813
+msgid "Newer posts"
+msgstr "较新文章"
+
+#: includes/class-profile.php:817
+msgid "Older posts"
+msgstr "先前文章"
+
+#: includes/class-profile.php:826
+msgctxt "previous set of posts"
+msgid "Previous"
+msgstr "上一页"
+
+#: includes/class-profile.php:827
+msgctxt "next set of posts"
+msgid "Next"
+msgstr "下一页"
+
+#: includes/class-profile.php:828
+msgid "Posts navigation"
+msgstr "文章导航"
+
+#: includes/class-forms.php:665
+msgid "Sorry, that username is not allowed."
+msgstr "抱歉，该用户名是不允许的。"
+
+#: includes/class-forms.php:907
+msgid "Account registered successfully. Redirecting..."
+msgstr "帐户注册成功。重定向中……"
+
+#: includes/class-forms.php:1190
+msgid "Login successful. Redirecting..."
+msgstr "登陆成功，重定向中……"
+
+#: includes/class-tools.php:786
+msgid "Clear version numbers"
+msgstr "版本号"
+
+#: includes/class-tools.php:787
+msgid "This will force install/upgrade functions to run."
+msgstr "这将强制运行安装/升级功能。"
+
+#: includes/class-tools.php:1013
+msgid "Version numbers cleared. Install/upgrade functions will run on next page load."
+msgstr "版本号被清除。安装/升级功能将在下一个页面加载时运行。"
+
+#: includes/class-notices.php:26
+msgid "User registration is currently not allowed."
+msgstr "目前不允许用户注册。"
+
+#: includes/class-notices.php:137
+msgid "Congratulations your site is now set to use the new Bootstrap styles!"
+msgstr "恭喜你，你的网站现在已经设置为使用新的Bootstrap样式了"
+
+#: includes/class-notices.php:143
+msgid "Try our exciting new bootstrap styling for a more modern and clean look (switch back at any time)."
+msgstr "试试我们令人兴奋的新bootstrap风格，以获得更现代和简洁的外观（随时切换回来）。"
+
+#: includes/class-notices.php:144
+msgid "Try Now"
+msgstr "立即试用"
+
+#: includes/libraries/class-geodirectory-plugin.php:1237
+#: templates/bootstrap/posts-post.php:59
+msgid "View"
+msgstr "浏览"
+
+#: includes/libraries/class-invoicing-plugin.php:108
+msgid "Subscriptions"
+msgstr "订阅"
+
+#: includes/libraries/class-invoicing-plugin.php:119
+msgid "Quotes"
+msgstr "引文"
+
+#: upgrade.php:235
+msgid "Activity"
+msgstr "动态"
+
+#: upgrade.php:243
+msgid "Downloads"
+msgstr "下载"
+
+#: upgrade.php:251
+msgid "Purchases"
+msgstr "购买"
+
+#: upgrade.php:259
+msgid "Followers"
+msgstr "粉丝"
+
+#: upgrade.php:267
+msgid "Following"
+msgstr "关注中"
+
+#: upgrade.php:275
+msgid "Friends"
+msgstr "好友"
+
+#: upgrade.php:283
+msgid "MyCred"
+msgstr "我的信用"
+
+#: upgrade.php:291
+msgid "Products"
+msgstr "产品"
+
+#: upgrade.php:299
+msgid "Orders"
+msgstr "订单"
+
+#: upgrade.php:307
+msgid "Jobs"
+msgstr "工作"
+
+#: upgrade.php:315
+msgid "Topics"
+msgstr "话题"
+
+#: upgrade.php:324
+msgid "Replies"
+msgstr "回复"
+
+#: widgets/button-group.php:27
+msgid "UWP > Button Group"
+msgstr "UWP > 按钮组"
+
+#: widgets/button-group.php:30
+msgid "Displays a group of buttons from the custom fields."
+msgstr "显示一组来自自定义字段的按钮。"
+
+#: widgets/button-group.php:34
+msgid "Fields"
+msgstr "字段"
+
+#: widgets/button-group.php:35
+msgid "Enter a comma separated list of field keys. (leave empty for default social fields)"
+msgstr "输入一个逗号分隔的字段键列表。(对于默认的社会字段则留空)"
+
+#: widgets/profile-tabs.php:43
+msgid "Output Type:"
+msgstr "输出类型："
+
+#: widgets/profile-tabs.php:44
+msgid "What parts should be output."
+msgstr "哪些部件应该输出。"
+
+#: includes/helpers/forms.php:499 widgets/profile-tabs.php:47
+msgid "Default"
+msgstr "默认"
+
+#: widgets/profile-tabs.php:48
+msgid "Head only"
+msgstr "仅头部"
+
+#: widgets/profile-tabs.php:49
+msgid "Body only"
+msgstr "仅正文"
+
+#: widgets/profile-tabs.php:50
+msgid "JSON Array (developer option)"
+msgstr "JSON Array（开发人员选项）"
+
+#: widgets/profile-tabs.php:118
+msgid "Not Found"
+msgstr "未找到"
+
+#: widgets/profile-tabs.php:123
+msgid "<strong>ERROR</strong>: This tab does not exist."
+msgstr "<strong>错误</strong>：此选项卡不存在。"
+
+#: widgets/profile-tabs.php:137 widgets/profile-tabs.php:154
+msgid "No Tabs"
+msgstr "无选项卡"
+
+#: widgets/profile-tabs.php:142
+msgid "No content, please make sure tabs have been added %shere.%s"
+msgstr "没有内容，请确保选项卡已添加 %shere.%s"
+
+#: widgets/profile-tabs.php:159
+msgid "No content found."
+msgstr "未找到内容。"
+
+#: widgets/account.php:42 widgets/change.php:42 widgets/forgot.php:42
+#: widgets/login.php:45 widgets/reset.php:42
+msgid "Form title"
+msgstr "表单标题"
+
+#: widgets/login.php:46
+msgid "Enter the form title (or `0` for no title)"
+msgstr "输入表格标题（或\"0\"无标题）"
+
+#: widgets/account.php:51 widgets/change.php:51 widgets/forgot.php:51
+#: widgets/login.php:76 widgets/register.php:76
+msgid "Design Style"
+msgstr "设计风格"
+
+#: widgets/account.php:52 widgets/change.php:52 widgets/forgot.php:52
+#: widgets/login.php:77 widgets/register.php:77
+msgid "The design style to use."
+msgstr "要使用的设计风格。"
+
+#: widgets/account.php:55 widgets/change.php:55 widgets/forgot.php:55
+#: widgets/login.php:80 widgets/register.php:80
+msgid "default"
+msgstr "默认"
+
+#: widgets/account.php:56 widgets/change.php:56 widgets/forgot.php:56
+#: widgets/login.php:81 widgets/register.php:81
+msgid "Style 1"
+msgstr "样式 1"
+
+#: widgets/login.php:85 widgets/login.php:94 widgets/user-avatar.php:40
+#: widgets/user-badge.php:99 widgets/user-badge.php:113
+#: widgets/user-badge.php:125 widgets/user-badge.php:134
+#: widgets/user-badge.php:144 widgets/user-badge.php:159
+#: widgets/user-badge.php:173 widgets/user-badge.php:182
+#: widgets/user-badge.php:191
+msgid "Design"
+msgstr "设计"
+
+#: widgets/account.php:43 widgets/change.php:43 widgets/forgot.php:43
+#: widgets/register.php:59 widgets/reset.php:43
+msgid "Enter the form title (or \"0\" for no title)"
+msgstr "输入表格标题（或\"0\"无标题）"
+
+#: widgets/register.php:58
+msgid "Form Title"
+msgstr "表单标题"
+
+#: widgets/users-item.php:29
+msgid "UWP > Users Item"
+msgstr "UWP > 用户项目"
+
+#: widgets/users-item.php:32
+msgid "Template for displaying a single user item inside the users loop."
+msgstr "用于在用户循环中显示单个用户项目的模板。"
+
+#: templates/change.php:7
+msgid "Change"
+msgstr "更改"
+
+#: templates/bootstrap/user-cover.php:44
+msgid "Update Cover Image"
+msgstr "上传封面图像"
+
+#: templates/bootstrap/profile-header.php:50
+#: templates/bootstrap/profile-header.php:87
+#: templates/bootstrap/user-avatar.php:46
+msgid "Update Profile Image"
+msgstr "上传个人资料图像"
+
+#: templates/bootstrap/comments-item.php:43
+#: templates/bootstrap/comments-item.php:44
+msgid "View Comment"
+msgstr "查看评论"
+
+#: templates/bootstrap/users-actions.php:35
+msgid "Sort By"
+msgstr "排序方式"
+
+#: templates/bootstrap/users-actions.php:48
+msgid "Sort Options"
+msgstr "排序选项"
+
+#: templates/bootstrap/users-actions.php:90
+msgid "Clear Sort"
+msgstr "清除排序"
+
+#: templates/bootstrap/users-actions.php:112
+#: templates/bootstrap/users-actions.php:119
+#: templates/bootstrap/users-actions.php:126
+#: templates/bootstrap/users-actions.php:133
+#: templates/bootstrap/users-actions.php:140 templates/users-actions.php:23
+#: templates/users-actions.php:24 templates/users-actions.php:25
+#: templates/users-actions.php:26
+msgid "Grid %d"
+msgstr "网格 %d"
+
+#: templates/bootstrap/search-form.php:11
+#: templates/bootstrap/search-form.php:19
+#: templates/bootstrap/search-form.php:20 templates/search-form.php:10
+#: templates/search-form.php:11
+msgid "Search for users..."
+msgstr "搜索用户..."
+
+#: templates/bootstrap/modal-profile-image.php:47
+msgid "Note: Max upload image size: %s"
+msgstr "注：最大上传图像大小：%s"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:49
+#: admin/settings/class-uwp-settings-profile-tabs.php:113
+msgid "Profile Tabs"
+msgstr "个人资料选项卡"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:69
+msgid "Available profile tabs."
+msgstr "可用的个人资料选项卡"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:91
+msgid "Fields that can be added to the profile tabs."
+msgstr "可添加到个人资料选项卡的字段。"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:135
+msgid "Choose the items from left panel to create the profile tabs."
+msgstr "从左侧面板中选择项目来创建档案标签。"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:695
+msgid "Tab Name:"
+msgstr "选项卡名称："
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:794
+msgid "Tab content:"
+msgstr "选项卡内容："
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:799
+msgid "Add shortcode here."
+msgstr "在此处添加短代码。"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:1029
+#: admin/settings/class-uwp-settings-profile-tabs.php:1032
+#: admin/settings/class-uwp-settings-user-sorting.php:810
+#: admin/settings/class-uwp-settings-user-sorting.php:813
+msgid "Failed to sort tab items."
+msgstr "对标签项目排序失败。"
+
+#: admin/settings/class-uwp-settings-general.php:105
+msgid "Register Lightbox"
+msgstr "注册窗口"
+
+#: admin/settings/class-uwp-settings-general.php:106
+msgid "When enabled some register links will open in a lightbox instead of changing page."
+msgstr "启用后，一些注册链接将在一个新窗口中打开，而不是现在的页面。"
+
+#: admin/settings/class-uwp-settings-general.php:182
+msgid "Login Lightbox"
+msgstr "登录窗口"
+
+#: admin/settings/class-uwp-settings-general.php:228
+msgid "When enabled /wp-login.php page will be redirected to UsersWP login page."
+msgstr "当启用时，/wp-login.php将被重定向到UsersWP登录页面。"
+
+#: admin/settings/class-uwp-settings-general.php:272
+msgid "Forgot password lightbox"
+msgstr "忘记密码窗口"
+
+#: admin/settings/class-uwp-settings-general.php:273
+msgid "When enabled some forgot password links will open in a lightbox instead of changing page."
+msgstr "启用后，一些忘记密码的链接将在一个新窗口中打开，而不是现在的页面。"
+
+#: admin/settings/class-uwp-settings-general.php:577
+msgid "Author box Content (bootstrap)"
+msgstr "作者框内容（Bootstrap）"
+
+#: admin/settings/class-uwp-settings-general.php:627
+msgid "Default Design Style"
+msgstr "默认设计样式"
+
+#: admin/settings/class-uwp-settings-general.php:628
+msgid "The default design style to use."
+msgstr "要使用的默认设计样式。"
+
+#: admin/settings/class-uwp-settings-general.php:631
+msgid "Bootstrap"
+msgstr "Bootstrap"
+
+#: admin/settings/class-uwp-settings-general.php:632
+msgid "Legacy (non-bootstrap)"
+msgstr "传统（不是Bootstrap）"
+
+#: admin/settings/class-formbuilder.php:95
+msgid "Standard Fields"
+msgstr "标准字段"
+
+#: admin/settings/class-formbuilder.php:125
+msgid "Custom Fields"
+msgstr "自定义字段"
+
+#: admin/settings/class-formbuilder.php:694
+#: admin/settings/class-formbuilder.php:698
+#: admin/settings/class-formbuilder.php:699
+msgid "Date of birth"
+msgstr "出生日期"
+
+#: admin/settings/class-formbuilder.php:695
+msgid "Adds a date input for users to enter their date of birth."
+msgstr "为用户输入出生日期添加日期输入。"
+
+#: admin/settings/class-formbuilder.php:700
+msgid "Enter your date of birth."
+msgstr "输入您的出生日期。"
+
+#: admin/settings/class-formbuilder.php:803 includes/helpers/pages.php:570
+msgid "Facebook"
+msgstr "Facebook"
+
+#: admin/settings/class-formbuilder.php:804
+msgid "Let users enter their facebook url."
+msgstr "让用户输入他们的Instagram网址。"
+
+#: admin/settings/class-formbuilder.php:808
+msgid "Facebook url"
+msgstr "Facebook 网址"
+
+#: admin/settings/class-formbuilder.php:824 includes/helpers/pages.php:571
+msgid "Twitter"
+msgstr "Twitter"
+
+#: admin/settings/class-formbuilder.php:825
+msgid "Let users enter their twitter url."
+msgstr "让用户输入他们的Twitter网址。"
+
+#: admin/settings/class-formbuilder.php:829
+msgid "Twitter url"
+msgstr "Twitter 网址"
+
+#: admin/settings/class-formbuilder.php:845 includes/helpers/pages.php:572
+msgid "Instagram"
+msgstr "Instagram"
+
+#: admin/settings/class-formbuilder.php:846
+msgid "Let users enter their instagram url."
+msgstr "让用户输入他们的Instagram网址。"
+
+#: admin/settings/class-formbuilder.php:850
+msgid "Instagram url"
+msgstr "Instagram 网址"
+
+#: admin/settings/class-formbuilder.php:866 includes/helpers/pages.php:573
+msgid "Linkedin"
+msgstr "LinkedIn"
+
+#: admin/settings/class-formbuilder.php:867
+msgid "Let users enter their linkedin url."
+msgstr "让用户输入他们的Linkedin网址"
+
+#: admin/settings/class-formbuilder.php:871
+msgid "Linkedin url"
+msgstr "LinkedIn 网址"
+
+#: admin/settings/class-formbuilder.php:888 includes/helpers/pages.php:574
+msgid "Flickr"
+msgstr "Flickr"
+
+#: admin/settings/class-formbuilder.php:889
+msgid "Let users enter their Flickr url."
+msgstr "让用户输入他们的Flicker网址"
+
+#: admin/settings/class-formbuilder.php:893
+msgid "Flickr url"
+msgstr "Flickr 网址"
+
+#: admin/settings/class-formbuilder.php:909 includes/helpers/pages.php:575
+msgid "GitHub"
+msgstr "GitHub"
+
+#: admin/settings/class-formbuilder.php:910
+msgid "Let users enter their GitHub url."
+msgstr "让用户输入他们的Github网址"
+
+#: admin/settings/class-formbuilder.php:914
+msgid "GitHub url"
+msgstr "GitHub 上 URL"
+
+#: admin/settings/class-formbuilder.php:930 includes/helpers/pages.php:576
+msgid "YouTube"
+msgstr "YouTube"
+
+#: admin/settings/class-formbuilder.php:931
+msgid "Let users enter their YouTube url."
+msgstr "让用户输入他们的Youtube网址"
+
+#: admin/settings/class-formbuilder.php:935
+msgid "YouTube url"
+msgstr "YouTube 网址"
+
+#: admin/settings/class-formbuilder.php:951 includes/helpers/pages.php:577
+msgid "WordPress"
+msgstr "WordPress"
+
+#: admin/settings/class-formbuilder.php:952
+msgid "Let users enter their WordPress profile url."
+msgstr "让用户输入他们的WordPress个人资料网址"
+
+#: admin/settings/class-formbuilder.php:956
+msgid "WordPress url"
+msgstr "WordPress 网址"
+
+#: includes/class-notices.php:177
+msgid "Yoast SEO has disabled user profiles, please enable them."
+msgstr "Yoast SEO已禁用用户个人资料，请启用。"
+
+#: includes/class-notices.php:178
+msgid "View Settings"
+msgstr "查看设置"
+
+#: includes/class-profile.php:1789
+msgid "File too big."
+msgstr "文件太大。"
+
+#: templates/bootstrap/profile-header.php:34
+#: templates/bootstrap/user-cover.php:30 templates/profile-header.php:43
+#: templates/user-cover.php:31
+msgid "User banner image"
+msgstr "用户横幅图像"
+
+#: templates/bootstrap/profile-header.php:71
+#: templates/bootstrap/user-avatar.php:34 templates/profile-header.php:70
+#: templates/user-avatar.php:32
+msgid "User avatar"
+msgstr "用户头像"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:735
+msgid "Privacy:"
+msgstr "私密性："
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:740
+#: includes/class-templates.php:1154
+msgid "Anyone"
+msgstr "任何人"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:741
+#: includes/class-templates.php:1155
+msgid "Logged in"
+msgstr "已登录"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:742
+#: includes/class-templates.php:1156
+msgid "Author only"
+msgstr "仅作者"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:771
+msgid "Let user decide :"
+msgstr "让用户决定："
+
+#: includes/class-templates.php:1136
+msgid "Tab Name"
+msgstr "选项卡名称："
+
+#: includes/libraries/class-geodirectory-plugin.php:350
+msgid "Lists"
+msgstr "列表"
+
+#: admin/class-uwp-admin-help.php:66
+msgid "Help &amp; Support"
+msgstr "帮助与支持"
+
+#: admin/class-uwp-admin-help.php:72 admin/class-uwp-admin-help.php:102
+msgid "Found a bug?"
+msgstr "发现了错误？"
+
+#: admin/class-uwp-admin-help.php:78 admin/class-uwp-admin-help.php:111
+#: admin/class-uwp-admin-help.php:114
+msgid "Setup wizard"
+msgstr "安装向导"
+
+#: admin/class-uwp-admin-help.php:92
+msgid "Help & Support"
+msgstr "帮助与支持"
+
+#: admin/class-uwp-admin-help.php:93
+msgid "Should you need help understanding, using, or extending UsersWP <a href=\"%1$s\">please read our documentation</a>. You will find all kinds of resources including snippets, tutorials and much more.,"
+msgstr "如果你需要帮助理解、使用或扩展UsersWP <a href=\"%1$s\">请阅读我们的文档</a>。这有各种资源，包括片段、教程和更多。"
+
+#: admin/class-uwp-admin-help.php:94
+msgid "For further assistance with UsersWP core or with premium extensions sold by UsersWP you can use our <a href=\"%1$s\">support forums</a>."
+msgstr "对于UsersWP核心或由UsersWP出售的高级扩展的进一步协助，你可以使用我们的<a href=\"%1$s\">支持论坛</a>。"
+
+#: admin/class-uwp-admin-help.php:95
+msgid "Before asking for help we recommend checking the system status page to identify any problems with your configuration."
+msgstr "在寻求帮助之前，我们建议检查系统状态页，以确定你的配置是否有问题。"
+
+#: admin/class-uwp-admin-help.php:96
+msgid "UsersWP support"
+msgstr "UsersWP支持"
+
+#: admin/class-uwp-admin-help.php:103
+msgid "If you find a bug within UsersWP core you can create a ticket via <a href=\"%1$s\">Github issues</a>. Ensure you read the <a href=\"%2$s\">contribution guide</a> prior to submitting your report. To help us solve your issue, please be as descriptive as possible and include your <a href=\"%3$s\">system status report</a>"
+msgstr "如果您在UsersWP核心中发现错误，您可以通过<a href=\"%1$s\">Github Issues</a>创建工单。在提交Issues之前，请务必阅读<a href=\"%2$s\">贡献指南</a>。为了帮助我们解决您的问题，请尽可能描述并包含您的<a href=\"%3$s\">系统状态报告</a>"
+
+#: admin/class-uwp-admin-help.php:104
+msgid "Report a bug"
+msgstr "反馈 BUG"
+
+#: admin/class-uwp-admin-help.php:112
+msgid "If you need to access the setup wizard again, please click on the button below."
+msgstr "如果你需要再次访问设置向导，请点击下面的按钮。"
+
+#: admin/class-uwp-admin-help.php:113
+msgid "Running the wizard again will not delete your current settings. You will have the option to change any current settings."
+msgstr "再次运行该向导不会删除你当前的设置。你将可以选择改变任何当前的设置。"
+
+#: admin/class-uwp-admin-help.php:122
+msgid "For more information:"
+msgstr "获取更多信息："
+
+#: admin/class-uwp-admin-help.php:123
+msgid "About UsersWP"
+msgstr "关于UsersWP"
+
+#: admin/class-uwp-admin-help.php:124
+msgid "WordPress.org project"
+msgstr "WordPress.org项目"
+
+#: admin/class-uwp-admin-help.php:125
+msgid "Github project"
+msgstr "Github项目"
+
+#: admin/class-uwp-admin-help.php:126
+msgid "Official extensions"
+msgstr "官方扩展"
+
+#: admin/settings/class-formbuilder.php:410
+#: admin/settings/class-uwp-settings-general.php:165
+#: admin/settings/class-uwp-settings-redirects.php:92
+msgid "Default Redirect"
+msgstr "默认重定向"
+
+#: admin/settings/class-formbuilder.php:411
+#: admin/settings/class-uwp-settings-general.php:166
+#: admin/settings/class-uwp-settings-redirects.php:93
+msgid "Custom Redirect"
+msgstr "自定义重定向"
+
+#: admin/settings/class-uwp-settings-general.php:198
+#: admin/settings/class-uwp-settings-redirects.php:136
+msgid "Redirect Custom URL"
+msgstr "重定向到自定义链接"
+
+#: admin/settings/class-uwp-settings-general.php:199
+#: admin/settings/class-uwp-settings-redirects.php:137
+msgid "Set the custom url to redirect the user to after logging in."
+msgstr "设置自定义网址，以便在登录后将用户重定向到。"
+
+#: admin/settings/class-uwp-settings-general.php:741
+msgid "Grid View - 1 Column (List View)"
+msgstr "网格视图 - 1 列（列表视图）"
+
+#: admin/class-admin-setup-wizard.php:33
+msgid "<strong>Welcome to UsersWP</strong> &#8211; You&lsquo;re almost ready to start your site. :)"
+msgstr "<strong>欢迎来到用户WP-</strong> 你几乎准备好开始你的网站了。:)"
+
+#: admin/class-admin-setup-wizard.php:36
+msgid "Run the Setup Wizard"
+msgstr "运行安装向导"
+
+#: admin/class-admin-setup-wizard.php:38
+msgid "Skip setup"
+msgstr "跳过安装"
+
+#: admin/class-admin-setup-wizard.php:55
+msgid "Cheatin&#8217; huh?"
+msgstr "开玩笑，呵？"
+
+#: admin/class-admin-setup-wizard.php:76
+msgid "Introduction"
+msgstr "介绍"
+
+#: admin/class-admin-setup-wizard.php:81
+msgid "Content"
+msgstr "正文"
+
+#: admin/class-admin-setup-wizard.php:91
+msgid "Ready!"
+msgstr "完成"
+
+#: admin/class-admin-setup-wizard.php:143
+msgid "Userswp &rsaquo; Setup Wizard"
+msgstr "UsersWP ›安装向导"
+
+#: admin/class-admin-setup-wizard.php:189
+msgid "Return to the WordPress Dashboard"
+msgstr "返回WordPress控制面板"
+
+#: admin/class-admin-setup-wizard.php:200
+msgid "Thank you for choosing UsersWP!"
+msgstr "感谢您选择UsersWP ！"
+
+#: admin/class-admin-setup-wizard.php:201
+msgid "This quick setup wizard will help you configure the basic settings. It's completely optional and shouldn't take longer than two minutes."
+msgstr "此快速设置向导将帮助您配置基本设置。这是完全可选的，最多花费两分钟。"
+
+#: admin/class-admin-setup-wizard.php:202
+msgid "No time right now? If you don't want to go through the wizard, you can skip and return to the WordPress dashboard. Come back anytime if you change your mind!"
+msgstr "现在没时间？如果您不想使用安装向导，您可以跳过并返回到仪表盘。如果您改变主意，随时可以回来！"
+
+#: admin/class-admin-setup-wizard.php:206
+msgid "Not right now"
+msgstr "现在不行"
+
+#: admin/class-admin-setup-wizard.php:208
+msgid "Let's go!"
+msgstr "现在开始"
+
+#: admin/class-admin-setup-wizard.php:248
+msgid "How will you use UsersWP"
+msgstr "您将如何使用UsersWP"
+
+#: admin/class-admin-setup-wizard.php:249
+msgid "Menus"
+msgstr "菜单"
+
+#: admin/class-admin-setup-wizard.php:272
+#: admin/class-admin-setup-wizard.php:660
+msgid "Skip this step"
+msgstr "跳过此步骤"
+
+#: admin/class-admin-setup-wizard.php:274
+#: admin/class-admin-setup-wizard.php:662
+msgid "Continue"
+msgstr "继续"
+
+#: admin/class-admin-setup-wizard.php:350
+msgid "Login/Register"
+msgstr "登录 / 注册"
+
+#: admin/class-admin-setup-wizard.php:356
+msgid "User Profiles"
+msgstr "用户资料"
+
+#: admin/class-admin-setup-wizard.php:362
+msgid "Members Directory"
+msgstr "用户目录"
+
+#: admin/class-admin-setup-wizard.php:376
+msgid "Select the theme main menu"
+msgstr "选择主题主菜单"
+
+#: admin/class-admin-setup-wizard.php:406
+#: admin/class-admin-setup-wizard.php:433
+msgid "( Auto detected )"
+msgstr "（ 自动检测 ）"
+
+#: admin/class-admin-setup-wizard.php:429
+msgid "Create new menu in:"
+msgstr "在...中创建新菜单："
+
+#: admin/class-admin-setup-wizard.php:445
+msgid "Insert menu items"
+msgstr "插入菜单项"
+
+#: admin/class-admin-setup-wizard.php:470
+msgid "Dummy Users for Testing. Password for all dummy users: <strong>%s</strong>"
+msgstr "用于测试的虚拟用户，这是所有虚拟用户的密码：<strong>%s</strong>"
+
+#: admin/class-admin-setup-wizard.php:478
+msgid "Create Users"
+msgstr "创建用户"
+
+#: admin/class-admin-setup-wizard.php:706
+msgid "Awesome, you are ready to go!"
+msgstr "太棒了，您已经准备好了！"
+
+#: admin/class-admin-setup-wizard.php:708
+msgid "Thank you for using UsersWP :)"
+msgstr "感谢您使用UsersWP:)"
+
+#: admin/class-admin-setup-wizard.php:711
+msgid "Learn more"
+msgstr "了解更多"
+
+#: admin/class-admin-setup-wizard.php:715
+msgid "Getting started guide"
+msgstr "使用者入门"
+
+#: admin/class-admin-setup-wizard.php:719
+msgid "Get Userswp advice in your inbox"
+msgstr "在收件箱中获取UsersWP建议"
+
+#: admin/class-admin-setup-wizard.php:723
+msgid "Have questions? Get help."
+msgstr "有问题吗？获取帮助。"
+
+#: includes/class-tools.php:1030 includes/class-tools.php:1041
+msgid "The menu is not valid."
+msgstr "菜单无效。"
+
+#: includes/class-tools.php:1108
+msgid "Menu already exists."
+msgstr "菜单已存在。"
+
+#: includes/class-tools.php:1114
+msgid "Menu items already exist, none added."
+msgstr "菜单项已存在，未添加任何菜单项。"
+
+#: includes/class-tools.php:1116
+msgid "Menu items added successfully."
+msgstr "成功添加菜单项。"
+
+#: includes/class-tools.php:1118
+msgid "Something went wrong, you can manually add items in Appearance > Menus"
+msgstr "出错了，你可以在外观>菜单中手动添加项目"
+
+#: includes/class-forms.php:519 includes/class-forms.php:1098
+#: includes/class-forms.php:1542
+msgid "Security verification failed. Try again."
+msgstr "安全验证失败。再试一次。"
+
+#: includes/class-forms.php:2074 includes/class-forms.php:2104
+msgid "User Information:"
+msgstr "用户信息："
+
+#: admin/class-admin-setup-wizard.php:295
+#: admin/class-admin-setup-wizard.php:329 includes/class-notices.php:25
+msgid "Heads Up!"
+msgstr "小心!"
+
+#: admin/settings/class-formbuilder.php:741
+msgid "GDPR Policy Page"
+msgstr "GDPR 政策"
+
+#: admin/class-admin-setup-wizard.php:86
+msgid "Recommend"
+msgstr "推荐"
+
+#: admin/class-admin-setup-wizard.php:605
+msgid "Recommended Plugins"
+msgstr "推荐插件"
+
+#: admin/class-admin-setup-wizard.php:606
+msgid "Below are a few recommended plugins that will help you with your site."
+msgstr "以下是一些推荐的插件，将帮助您处理您的站点。"
+
+#: admin/class-admin-setup-wizard.php:643
+msgid "Tick to install"
+msgstr "等待安装"
+
+#: admin/class-admin-setup-wizard.php:683
+msgid "UsersWP – Social Login"
+msgstr "UsersWP –社会化登录"
+
+#: admin/class-admin-setup-wizard.php:684
+msgid "This plugin lets your user to register and login with popular sites like Facebook, Google, Twitter, LinkedIn, Instagram, Yahoo, WordPress, vkontakte etc."
+msgstr "此插件允许您的用户使用社交网站账户注册和登录您的网站，如Facebook ， Google ， Twitter ， LinkedIn ， Instagram ， Yahoo ， WordPress ， vkontakte等。"
+
+#: admin/class-admin-setup-wizard.php:689
+msgid "UsersWP – ReCaptcha"
+msgstr "UsersWP – ReCaptcha"
+
+#: admin/class-admin-setup-wizard.php:690
+msgid "This plugin allows you to implement a super security captcha into forms like registration, login forms etc."
+msgstr "此插件允许您在注册、登录表单等表单中实现超级安全验证码。"
+
+#: includes/class-forms.php:3808
+msgid "By using this form I agree to the storage and handling of my data by this website. View our %s %s %s."
+msgstr "通过使用此表单，我同意通过本网站存储和处理我的数据。查看我们的%s %s %s。"
+
+#: includes/class-account.php:77 includes/helpers/misc.php:564
+#: includes/helpers/tabs.php:154
+msgid "Delete Account"
+msgstr "删除帐户"
+
+#: includes/class-account.php:115
+msgid "<strong>Error</strong>: Incorrect password."
+msgstr "<strong>错误</strong>：密码不正确。"
+
+#: includes/class-account.php:169
+msgid "<strong>Error</strong>: Super Administrators cannot be deleted."
+msgstr "<strong>错误</strong>：无法删除超级管理员。"
+
+#: includes/class-account.php:150
+msgid "Deleted user information :"
+msgstr "已删除的用户信息："
+
+#: includes/template-functions.php:95
+msgid "%s does not exist."
+msgstr "%s不存在。"
+
+#: includes/class-uwp-privacy-exporters.php:27
+msgid "UsersWP user data"
+msgstr "UsersWP用户数据"
+
+#: includes/class-uwp-privacy-exporters.php:28
+msgid "The UsersWP user data"
+msgstr "UsersWP用户数据"
+
+#: admin/settings/class-uwp-settings-emails.php:624
+#: includes/class-emails.php:96
+msgid "%s - Powered by UsersWP"
+msgstr "%s - 由 UsersWP 提供支持"
+
+#: includes/class-emails.php:529
+msgid ""
+"Email from UsersWP failed to send.\n"
+"Time: %s\n"
+"To: %s\n"
+"Subject: %s\n"
+"Error: %s\n"
+"\n"
+msgstr ""
+"来自UsersWP的电子邮件未能发送。\n"
+"发送时间： %s\n"
+"发送至： %s\n"
+"主题：%s\n"
+"错误：%s\n"
+
+#: includes/class-uwp-defaults.php:281
+msgid "[#site_name#] - Your account has been deleted."
+msgstr "[#site_name#]-您的帐户已被删除。"
+
+#: includes/class-uwp-defaults.php:291
+msgid ""
+"Dear [#user_name#],\n"
+"\n"
+"Your account has been deleted successfully.\n"
+"\n"
+"Thank you,\n"
+"[#site_name_url#]"
+msgstr ""
+"亲爱的[#user_name#]\n"
+"\n"
+"您的帐户已成功删除。\n"
+"\n"
+"谢谢\n"
+"[#site_name_url#]"
+
+#: includes/class-uwp-defaults.php:307
+msgid "[#site_name#] - Account has been deleted by a user."
+msgstr "[#site_name#] - 帐户已被用户删除。"
+
+#: includes/class-uwp-defaults.php:317
+msgid ""
+"Dear Admin,\n"
+"\n"
+"User has deleted own account from the site.\n"
+"\n"
+"[#login_details#]\n"
+"\n"
+"Thank you,\n"
+"[#site_name_url#]"
+msgstr ""
+"亲爱的管理员，\n"
+"\n"
+"用户已从网站中删除自己的帐户。\n"
+"\n"
+"[#login_details#]\n"
+"\n"
+"谢谢\n"
+"[#site_name_url#]"
+
+#: admin/settings/class-formbuilder.php:782
+#: admin/settings/class-formbuilder.php:787
+msgid "Website"
+msgstr "网址"
+
+#: admin/settings/class-formbuilder.php:783
+msgid "Let users enter their website url."
+msgstr "让用户输入他们的网站网址。"
+
+#: admin/settings/class-uwp-settings-emails.php:67
+msgid "Email Options"
+msgstr "邮箱选项"
+
+#: admin/settings/class-uwp-settings-emails.php:146
+#: admin/settings/class-uwp-settings-emails.php:447
+msgid "Account delete email"
+msgstr "帐户删除电子邮件"
+
+#: admin/settings/class-uwp-settings-emails.php:150
+msgid "Send an email to admin after user account deleted from the site."
+msgstr "从网站删除用户帐户后，向管理员发送电子邮件。"
+
+#: admin/settings/class-uwp-settings-emails.php:451
+msgid "Send an email to user after deleting account from the site."
+msgstr "从网站删除帐户后向用户发送电子邮件。"
+
+#: admin/settings/class-uwp-settings-emails.php:485
+msgid "Email sender options"
+msgstr "邮件发件人选项"
+
+#: admin/settings/class-uwp-settings-emails.php:488
+msgid "Sender name"
+msgstr "发件人名称"
+
+#: admin/settings/class-uwp-settings-emails.php:489
+msgid "How the sender name appears in outgoing UsersWP emails."
+msgstr "发件人名称如何出现在发出的UsersWP电子邮件中。"
+
+#: admin/settings/class-uwp-settings-emails.php:496
+msgid "Email address"
+msgstr "电子邮箱地址"
+
+#: admin/settings/class-uwp-settings-emails.php:497
+msgid "How the sender email appears in outgoing UsersWP emails."
+msgstr "发件人的电子邮件如何出现在发出的UsersWP电子邮件中。"
+
+#: admin/settings/class-uwp-settings-emails.php:506
+msgid "Email Template"
+msgstr "邮件模板"
+
+#: admin/settings/class-uwp-settings-emails.php:506
+msgid "This section lets you customize the UsersWP email template. %sClick here to preview your email template%s."
+msgstr "本节让你自定义UsersWP的电子邮件模板。%s点击这里预览你的电子邮件模板%s。"
+
+#: admin/settings/class-uwp-settings-emails.php:511
+msgid "Email type"
+msgstr "电邮类型"
+
+#: admin/settings/class-uwp-settings-emails.php:512
+msgid "Select format of the email to send."
+msgstr "选择要发送的电子邮件的格式。"
+
+#: admin/settings/class-uwp-settings-emails.php:519
+msgid "Logo"
+msgstr "徽标或者商标"
+
+#: admin/settings/class-uwp-settings-emails.php:520
+msgid "Upload a logo to be displayed at the top of the emails. Displayed on HTML emails only."
+msgstr "上传一个标志，显示在电子邮件的顶部。只显示在HTML邮件上。"
+
+#: admin/settings/class-uwp-settings-emails.php:527
+msgid "Footer Text"
+msgstr "底部文本"
+
+#: admin/settings/class-uwp-settings-emails.php:528
+msgid "The text to appear in the footer of all UsersWP emails."
+msgstr "出现在所有UsersWP邮件页脚的文字。"
+
+#: admin/settings/class-uwp-settings-emails.php:537
+msgid "Base Color"
+msgstr "基本颜色"
+
+#: admin/settings/class-uwp-settings-emails.php:538
+msgid "The base color for UsersWP email template. Default <code>#557da2</code>."
+msgstr "用户WP电子邮件模板的基本颜色。默 <code>#557da2</code> 认值。"
+
+#: admin/settings/class-uwp-settings-emails.php:546
+msgid "Background Color"
+msgstr "背景颜色"
+
+#: admin/settings/class-uwp-settings-emails.php:547
+msgid "The background color of email template. Default <code>#f5f5f5</code>."
+msgstr "电子邮件模板的背景颜色。默认<code># f5f5f5</code>。"
+
+#: admin/settings/class-uwp-settings-emails.php:555
+msgid "Body Background Color"
+msgstr "主体背景颜色"
+
+#: admin/settings/class-uwp-settings-emails.php:556
+msgid "The main body background color of email template. Default <code>#fdfdfd</code>."
+msgstr "电子邮件模板的主体背景颜色。默认<code># fdfdfd</code>。"
+
+#: admin/settings/class-uwp-settings-emails.php:564
+msgid "Body Text Color"
+msgstr "正文文本颜色"
+
+#: admin/settings/class-uwp-settings-emails.php:565
+msgid "The main body text color. Default <code>#505050</code>."
+msgstr "主体文本颜色。默认<code># 505050</code>。"
+
+#: admin/settings/class-uwp-settings-emails.php:573
+msgid "Header Background Color"
+msgstr "头部背景色"
+
+#: admin/settings/class-uwp-settings-emails.php:574
+msgid "The header background color of email template. Default <code>#555555</code>."
+msgstr "电子邮件模板的标题背景颜色。默认值 <code>#555555</code> 。"
+
+#: admin/settings/class-uwp-settings-emails.php:582
+msgid "Header Text Color"
+msgstr "顶部文字颜色"
+
+#: admin/settings/class-uwp-settings-emails.php:583
+msgid "The footer text color. Default <code>#ffffff</code>."
+msgstr "脚文本颜色。默认值 <code>#ffffff</code> 。"
+
+#: admin/settings/class-uwp-settings-emails.php:591
+msgid "Footer Background Color"
+msgstr "页脚背景颜色"
+
+#: admin/settings/class-uwp-settings-emails.php:592
+msgid "The footer background color of email template. Default <code>#666666</code>."
+msgstr "电子邮件模板的脚背景颜色。默认值 <code>#666666</code> 。"
+
+#: admin/settings/class-uwp-settings-emails.php:600
+msgid "Footer Text Color"
+msgstr "页脚文本颜色"
+
+#: admin/settings/class-uwp-settings-emails.php:601
+msgid "The footer text color. Default <code>#dddddd</code>."
+msgstr "脚文本颜色。默认值 <code>#dddddd</code> 。"
+
+#: admin/settings/class-formbuilder.php:1060
+#: admin/settings/class-uwp-settings-emails.php:637
+msgid "HTML"
+msgstr "HTML"
+
+#: admin/settings/class-uwp-settings-emails.php:639
+msgid "Plain text"
+msgstr "纯文本"
+
+#: includes/class-forms.php:824
+msgid "Password you entered during registration."
+msgstr "注册时输入的密码。"
+
+#: admin/class-admin.php:101
+msgid "UsersWP - an AyeCode product!"
+msgstr "用户WP-一个 AyeCode 产品！"
+
+#: admin/class-admin.php:102
+msgid "Please confirm you wish to connect your site?"
+msgstr "请确认您希望连接您的网站？"
+
+#: admin/class-admin.php:103
+msgid "<strong>Have a license?</strong> Forget about entering license keys or downloading zip files, connect your site for instant access. %slearn more%s"
+msgstr "<strong>有序列号吗？</strong> 忘记输入序列号密钥或下载 zip 文件，连接您的网站以获得即时访问权限。 %s了解更多%s"
+
+#: admin/class-admin.php:104
+msgid "Connect Site"
+msgstr "连接网站"
+
+#: admin/class-admin.php:105
+msgid "Connecting..."
+msgstr "连接中..."
+
+#: admin/class-admin.php:106
+msgid "This service will only work with a live domain, not a localhost."
+msgstr "这项服务只适用于实时域名，而不是本地主机。"
+
+#: admin/class-admin.php:107
+msgid "Something went wrong, please refresh and try again."
+msgstr "出现问题，请刷新并重试"
+
+#: includes/helpers/misc.php:1309
+msgid "Something went wrong, please retry."
+msgstr "出了点问题，请重试。"
+
+#: includes/class-tools.php:824
+msgid "DB text translation"
+msgstr "DB文本翻译"
+
+#: includes/class-tools.php:825
+msgid "This tool will collect any texts stored in the DB and put them in the file db-language.php so they can then be used to translate them by translations tools."
+msgstr "这个工具将收集存储在DB中的任何文本，并把它们放在db-language.php文件中，这样它们就可以被翻译工具用来翻译它们了。"
+
+#: widgets/user-avatar.php:31
+msgid "Displays user avatar image for user."
+msgstr "显示用户头像图片供用户使用。"
+
+#: widgets/user-avatar.php:53
+msgid "Allow user to change avatar image in profile page."
+msgstr "允许用户更改资料页面中的头像图片。"
+
+#: widgets/user-post-counts.php:25
+msgid "UWP > User Post Counts"
+msgstr "UWP > 用户文章计数"
+
+#: widgets/user-post-counts.php:30
+msgid "Display user post, comments and other custom post type counts."
+msgstr "显示用户文章、评论和其他自定义文章类型计数。"
+
+#: widgets/user-cover.php:27
+msgid "UWP > User Cover Image"
+msgstr "UWP > 用户封面图像"
+
+#: widgets/user-cover.php:32
+msgid "Displays user cover image for user."
+msgstr "显示用户封面图片供用户使用。"
+
+#: widgets/user-cover.php:37
+msgid "Link cover image to user's profile page."
+msgstr "将封面图像链接到用户的个人资料页面。"
+
+#: widgets/user-cover.php:45
+msgid "Allow to change cover:"
+msgstr "允许更改封面："
+
+#: widgets/user-cover.php:46
+msgid "Allow user to change cover image in profile page."
+msgstr "允许用户更改配置文件页面中的封面图像。"
+
+#: includes/class-notices.php:63
+msgid "Resend"
+msgstr "重新发送"
+
+#: includes/class-user-notifications.php:106
+msgid "Notification settings updated successfully."
+msgstr "成功更新了通知设置。"
+
+#: includes/class-forms.php:94
+msgid "Avatar reset successfully."
+msgstr "Avatar 成功重置。"
+
+#: includes/class-forms.php:101
+msgid "Banner reset successfully."
+msgstr "横幅成功重置。"
+
+#: includes/class-forms.php:4385
+msgid "Privacy settings updated successfully."
+msgstr "隐私设置已成功更新。"
+
+#: templates/bootstrap/modal-profile-image.php:92
+#: templates/modal-profile-image.php:43
+msgid "Reset to Default"
+msgstr "重置为默认"
+
+#: admin/settings/class-formbuilder.php:1480
+msgid "Display placeholder text for this field."
+msgstr "显示此字段的占位符文本。"
+
+#: admin/settings/class-formbuilder.php:1481
+msgid "Placeholder :"
+msgstr "占位符："
+
+#: admin/settings/class-formbuilder.php:1486
+msgid "Enter placeholder text for this field."
+msgstr "在此字段中输入占位符文本。"
+
+#: admin/settings/class-uwp-settings-general.php:388
+msgid "Profile avatar width"
+msgstr "个人资料头像宽度"
+
+#: admin/settings/class-uwp-settings-general.php:395
+msgid "Profile avatar height"
+msgstr "个人资料头像高度"
+
+#: admin/settings/class-uwp-settings-general.php:409
+msgid "Profile banner height"
+msgstr "个人资料横幅高度"
+
+#: admin/class-admin-setup-wizard.php:295
+#: admin/class-admin-setup-wizard.php:329
+msgid " User registration is currently not allowed."
+msgstr "目前不允许用户注册。"
+
+#: admin/class-admin-setup-wizard.php:332
+msgid " Anyone can register"
+msgstr "任何人都可以注册"
+
+#: includes/helpers/forms.php:177
+msgid "Choose %s&hellip;"
+msgstr "选择 %s&hellip;"
+
+#: includes/class-uwp-seo.php:35
+msgid "Profile SEO"
+msgstr "个人资料 SEO"
+
+#: includes/class-uwp-seo.php:43
+msgid "Disable meta tags"
+msgstr "禁用元标题"
+
+#: includes/class-uwp-seo.php:44
+msgid "This will disable adding SEO meta tags on profile page."
+msgstr "这将禁用在个人资料页面上添加 SEO 元标记。"
+
+#: includes/class-uwp-seo.php:52
+msgid "Title separator"
+msgstr "标题分隔线"
+
+#: includes/class-uwp-seo.php:56
+msgid "Choose the symbol to use as your title separator. This will display, for instance, between your user profile title and site name. Symbols are shown in the size they will appear in the search results."
+msgstr "选择要用作标题分隔符的符号。 例如，这将显示在用户个人资料标题和站点名称之间。 符号以将出现在搜索结果中的大小显示。"
+
+#: includes/class-uwp-seo.php:73
+msgid "Meta Title"
+msgstr "元标题"
+
+#: includes/class-uwp-seo.php:77 includes/class-uwp-seo.php:92
+msgid "Available SEO tags:"
+msgstr "可用 SEO 标签："
+
+#: includes/class-uwp-seo.php:85
+msgid "Meta Description"
+msgstr "元描述"
+
+#: includes/class-uwp-seo.php:88
+msgid "Enter the meta description to use for the page."
+msgstr "输入用于页面的元描述。"
+
+#: includes/class-forms.php:1584
+msgid "Invalid email or user doesn't exists."
+msgstr "无效邮箱或用户不存在"
+
+#: admin/settings/class-uwp-settings-general.php:137
+msgid "Minimum Password Limit"
+msgstr "最低密码限制"
+
+#: admin/settings/class-uwp-settings-general.php:138
+msgid "Minimum Password limit user should enter in the form."
+msgstr "最低密码限制用户应以表单输入。"
+
+#: admin/settings/class-uwp-settings-general.php:146
+msgid "Maximum Password Limit"
+msgstr "最大密码限制"
+
+#: admin/settings/class-uwp-settings-general.php:147
+msgid "Maximum Password limit user should enter in the form."
+msgstr "最大密码限制用户应以表单输入。"
+
+#: admin/settings/class-uwp-settings-general.php:183
+msgid "When enabled some login links will open in a lightbox instead of changing page. The page will be reloaded after successful login instead of a redirect."
+msgstr "启用后，某些登录链接将在新窗口中打开，而不是当前页面。页面将在成功登录后重新加载，而不是重定向。"
+
+#: admin/settings/class-uwp-settings-general.php:476
+msgid "Enter number of items to display in users list page."
+msgstr "输入要在用户列表页面中显示的项目数量。"
+
+#: admin/settings/class-uwp-settings-general.php:483
+msgid "Select users to exclude from the users listing."
+msgstr "选择用户以排除在用户列表之外。"
+
+#: admin/settings/class-uwp-settings-general.php:500
+msgid "User Account Settings"
+msgstr "账号设置"
+
+#: admin/settings/class-uwp-settings-general.php:507
+msgid "Disable Account Delete"
+msgstr "禁用帐户删除"
+
+#: admin/settings/class-uwp-settings-general.php:508
+msgid "Don't allow users to delete their own account. Default enabled."
+msgstr "不允许用户删除自己的帐户。启用默认值。"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:752
+msgid "%s (Not Changeable)"
+msgstr "%s（不变）"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:772
+msgid "N/A"
+msgstr "N/A"
+
+#: admin/class-admin.php:474
+msgid "Pending Email Activation"
+msgstr "等待邮件激活"
+
+#: admin/class-admin-setup-wizard.php:678
+msgid "Allows you to install any purchased AyeCode Ltd product add-ons without a zip file. It also installs and activates licences automatically, so there is no need to copy/paste licenses."
+msgstr "允许您安装任何购买的AyeCode有限公司产品附加组件，而无需zip文件。它还会自动安装和激活许可证，因此无需复制/粘贴许可证。"
+
+#: includes/class-validation.php:235
+msgid "<strong>Error</strong>: Username must be %s characters or more."
+msgstr "<strong>错误</strong>：用户名必须是 %s 字符或更多。"
+
+#: includes/class-templates.php:1175
+msgid " (Default)"
+msgstr "（默认）"
+
+#: admin/class-admin.php:732
+msgid "Activate Users"
+msgstr "激活用户"
+
+#: widgets/user-badge.php:22
+msgid "UWP > User Badge"
+msgstr "UWP > 用户徽章"
+
+#: widgets/user-badge.php:26
+msgid "Displays the user badge."
+msgstr "显示用户徽章。"
+
+#: widgets/user-badge.php:43 widgets/user-badge.php:44
+msgid "Leave blank to use current user id."
+msgstr "留空以使用当前用户 ID。"
+
+#: widgets/user-badge.php:51
+msgid "Field Key:"
+msgstr "字段键："
+
+#: widgets/user-badge.php:61
+msgid "Field condition:"
+msgstr "字段条件："
+
+#: widgets/user-badge.php:62
+msgid "Select the custom field condition."
+msgstr "选择自定义字段条件。"
+
+#: widgets/user-badge.php:71
+msgid "Value to match:"
+msgstr "匹配的值："
+
+#: widgets/user-badge.php:72
+msgid "Match this text with field value to display user badge."
+msgstr "将此文本与字段值匹配以显示用户徽章。"
+
+#: widgets/user-badge.php:177
+msgid "Icon class:"
+msgstr "图标类"
+
+#: widgets/user-badge.php:178
+msgid "You can show a font-awesome icon here by entering the icon class."
+msgstr "您可以通过输入图标类在这里显示一个font-awesome图标。"
+
+#: widgets/user-badge.php:81
+msgid "Badge:"
+msgstr "徽章："
+
+#: widgets/user-badge.php:82
+msgid "Badge text. Leave blank to show field title as a badge, or use %%input%% to use the input value of the field or %%profile_url%% for the user profile url, or the field key for any other info %%email%%."
+msgstr "徽章文本。留空以将字段标题显示为徽章，或使用% % input %%使用字段的输入值或%% profile_url %%作为用户配置文件URL ，或任何其他信息的字段键%% email %%。"
+
+#: widgets/user-badge.php:195
+msgid "Link url:"
+msgstr "Link URL:"
+
+#: widgets/user-badge.php:196
+msgid "Badge link url. You can use this to make the button link to something, %%input%% can be used here if a link or %%profile_url%% for the user profile url."
+msgstr "徽章链接网址。您可以使用此按钮链接到某些内容，如果链接或 %%profile_url%% 用户配置文件URL，%%input%% 则可以在这里使用。"
+
+#: widgets/user-badge.php:200 widgets/user-badge.php:209
+#: widgets/user-badge.php:218 widgets/user-badge.php:227
+msgid "Click Action"
+msgstr "单击操作"
+
+#: widgets/user-badge.php:203
+msgid "Open link in new window:"
+msgstr "在新窗口中打开链接"
+
+#: widgets/user-badge.php:204
+msgid "This will open the link in a new window."
+msgstr "这将在一个新的窗口中打开链接。"
+
+#: widgets/user-badge.php:213
+msgid "Popover title:"
+msgstr "弹出标题："
+
+#: widgets/user-badge.php:214
+msgid "Reveals some title text onclick. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%."
+msgstr "显示一些标题文本上点击。输入某些文本或使用 %%input%% 用于字段的输入值或字段密钥，用于任何其他信息 %%email%%。"
+
+#: widgets/user-badge.php:222
+msgid "Popover text:"
+msgstr "弹出文本："
+
+#: widgets/user-badge.php:223
+msgid "Reveals some text onclick. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%."
+msgstr "显示一些文字点击。输入某些文本或使用 %%input%% 用于字段的输入值或字段密钥，用于任何其他信息 %%email%%。"
+
+#: widgets/user-badge.php:231
+msgid "Tooltip text:"
+msgstr "工具提示文本："
+
+#: widgets/user-badge.php:232
+msgid "Reveals some text on hover. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%. (this can NOT be used with popover text)"
+msgstr "在悬停时显示一些文本。输入一些文本或使用% % input %%使用字段的输入值或任何其他信息的字段键% % email %%。（这不能用于弹出文本）"
+
+#: widgets/user-badge.php:236 widgets/user-badge.php:245
+#: widgets/user-badge.php:254
+msgid "Hover Action"
+msgstr "悬停动作"
+
+#: widgets/user-badge.php:240
+msgid "Hover content:"
+msgstr "悬停内容："
+
+#: widgets/user-badge.php:241
+msgid "Change the button text on hover. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%."
+msgstr "更改悬停上的按钮文本。输入某些文本或使用 %%input%% 用于字段的输入值或字段密钥，用于任何其他信息 %%email%%。"
+
+#: widgets/user-badge.php:249
+msgid "Hover icon:"
+msgstr "悬停图标："
+
+#: widgets/user-badge.php:250
+msgid "Change the button icon on hover. You can show a font-awesome icon here by entering the icon class."
+msgstr "更改悬停上的按钮图标。您可以通过输入图标类在这里显示一个 font-awesome图标。"
+
+#: widgets/user-badge.php:89
+msgid "Type"
+msgstr "类型"
+
+#: widgets/user-badge.php:90
+msgid "Select the badge type."
+msgstr "选择徽章类型。"
+
+#: widgets/user-badge.php:93
+msgid "Badge"
+msgstr "勋章"
+
+#: widgets/user-badge.php:94
+msgid "Pill"
+msgstr "圆形"
+
+#: widgets/user-badge.php:102
+msgid "Shadow"
+msgstr "阴影"
+
+#: widgets/user-badge.php:103
+msgid "Select the shadow badge type."
+msgstr "选择阴影徽章类型。"
+
+#: widgets/user-badge.php:106 widgets/user-badge.php:166
+msgid "None"
+msgstr "无"
+
+#: widgets/user-badge.php:107 widgets/user-badge.php:153
+msgid "Small"
+msgstr "小"
+
+#: widgets/user-badge.php:108 widgets/user-badge.php:152
+msgid "Medium"
+msgstr "中"
+
+#: widgets/user-badge.php:109 widgets/user-badge.php:154
+msgid "Large"
+msgstr "大尺寸"
+
+#: widgets/user-badge.php:129
+msgid "Badge background color:"
+msgstr "徽章背景颜色："
+
+#: widgets/user-badge.php:130
+msgid "Color for the badge background."
+msgstr "徽章背景的颜色。"
+
+#: widgets/user-badge.php:139
+msgid "Badge text color:"
+msgstr "徽章文本颜色："
+
+#: widgets/user-badge.php:140
+msgid "Color for the badge text."
+msgstr "徽章文本的颜色。"
+
+#: widgets/user-badge.php:149
+msgid "Badge size:"
+msgstr "徽章大小："
+
+#: widgets/user-badge.php:150
+msgid "Size of the badge."
+msgstr "徽章的大小。"
+
+#: widgets/user-badge.php:155
+msgid "Extra Large"
+msgstr "超大"
+
+#: widgets/user-badge.php:163
+msgid "Alignment:"
+msgstr "对齐:"
+
+#: widgets/user-badge.php:164
+msgid "How the item should be positioned on the page."
+msgstr "项目应如何在页面上放置。"
+
+#: widgets/user-badge.php:168
+msgid "Center"
+msgstr "居中"
+
+#: widgets/user-badge.php:293
+msgid "User ID is missing"
+msgstr "用户 ID 缺失"
+
+#: widgets/user-badge.php:296
+msgid "Field key is missing"
+msgstr "字段键缺失"
+
+#: widgets/user-badge.php:340
+msgid "is equal"
+msgstr "等于"
+
+#: widgets/user-badge.php:341
+msgid "is not equal"
+msgstr "不等于"
+
+#: widgets/user-badge.php:342
+msgid "is greater than"
+msgstr "大于"
+
+#: widgets/user-badge.php:343
+msgid "is less than"
+msgstr "小于"
+
+#: widgets/user-badge.php:344
+msgid "is empty"
+msgstr "为空"
+
+#: widgets/user-badge.php:345
+msgid "is not empty"
+msgstr "不为空"
+
+#: widgets/user-badge.php:116
+msgid "Badge Color"
+msgstr "徽章颜色"
+
+#: widgets/user-badge.php:117
+msgid "Select the the badge color."
+msgstr "选择徽章颜色。"
+
+#: widgets/user-badge.php:120
+msgid "Custom colors"
+msgstr "自定义颜色"
+
+#: widgets/user-avatar.php:52
+msgid "Allow to change avatar:"
+msgstr "允许更改头像："
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:694
+msgid "This will be the name of profile tab."
+msgstr "这将是个人资料选项卡的名称。"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:721
+msgid "This will be the icon for profile tab."
+msgstr "这将是个人资料选项卡的图标。"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:734
+msgid "Select privacy for displaying profile tab and content."
+msgstr "选择显示个人资料选项卡和内容的隐私。"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:770
+msgid "Enable to allow user to decide privacy for displaying profile tab and content."
+msgstr "启用允许用户决定显示个人资料选项卡和内容的隐私。"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:793
+msgid "Content to display in profile tab. Shortcode allowed."
+msgstr "在配置文件选项卡中显示的内容。允许短代码。"
+
+#: admin/settings/class-formbuilder.php:144
+msgid "List of fields that will appear in the account form."
+msgstr "将出现在帐户表单中的字段列表。"
+
+#: admin/settings/class-formbuilder.php:742
+msgid "Adds Register GDPR page."
+msgstr "添加注册GDPR页面。"
+
+#: admin/settings/class-formbuilder.php:746 upgrade.php:383
+msgid "GDPR Policy"
+msgstr "GDPR 政策"
+
+#: admin/settings/class-formbuilder.php:761
+#: admin/settings/class-formbuilder.php:766 upgrade.php:400
+msgid "Terms & Conditions"
+msgstr "条款和声明"
+
+#: admin/settings/class-formbuilder.php:762
+msgid "Adds Register TOS page."
+msgstr "添加注册 TOS 页面。"
+
+#: admin/settings/class-formbuilder.php:1061
+msgid "Adds a wysiwyg editor input"
+msgstr "添加所见即所得编辑器输入"
+
+#: admin/settings/class-formbuilder.php:1420
+msgid "This will be displayed below the field in the form."
+msgstr "这将显示在表单中的字段下方。"
+
+#: admin/settings/class-formbuilder.php:1421
+msgid "Field Description:"
+msgstr "字段说明："
+
+#: includes/class-forms.php:550
+msgid "User registration is currently not allowed. Please check settings of your site."
+msgstr "目前不允许用户注册。请检查您网站的设置。"
+
+#: includes/class-forms.php:222 includes/class-forms.php:266
+#: includes/class-forms.php:752 includes/class-forms.php:1976
+msgid "Something went wrong. Please contact site admin."
+msgstr "发生了错误，请联系管理员"
+
+#: includes/class-forms.php:1602
+msgid "Your account is not activated yet. Please activate your account first."
+msgstr "您的帐户尚未激活。请先激活你的帐户。"
+
+#: admin/settings/class-formbuilder.php:380
+#: admin/settings/class-formbuilder.php:396
+#: admin/settings/class-formbuilder.php:421 includes/class-forms.php:1963
+msgid "%s"
+msgstr "%s"
+
+#: admin/class-admin.php:852 admin/class-admin.php:916
+#: includes/class-forms.php:351
+msgid "Something went wrong. Please try again."
+msgstr "出了些问题.请再试一次。"
+
+#: includes/class-validation.php:244 upgrade.php:388
+msgid "You must read and accept our GDPR policy."
+msgstr "您必须阅读并接受我们的 GDPR 政策。"
+
+#: includes/class-validation.php:247
+msgid "You must accept our terms and conditions."
+msgstr "您必须接受我们的条款和条件"
+
+#: includes/helpers/pages.php:544
+msgid "Primary"
+msgstr "主要的"
+
+#: includes/helpers/pages.php:545
+msgid "Secondary"
+msgstr "次要"
+
+#: includes/helpers/pages.php:546
+msgid "Success"
+msgstr "成功"
+
+#: includes/helpers/pages.php:547
+msgid "Danger"
+msgstr "危险"
+
+#: includes/helpers/pages.php:548
+msgid "Warning"
+msgstr "警告"
+
+#: includes/helpers/pages.php:550
+msgid "Light"
+msgstr "浅色"
+
+#: includes/helpers/pages.php:551
+msgid "Dark"
+msgstr "深色"
+
+#: includes/helpers/pages.php:552
+msgid "White"
+msgstr "白色"
+
+#: includes/helpers/pages.php:553
+msgid "Purple"
+msgstr "紫色"
+
+#: includes/helpers/pages.php:554
+msgid "Salmon"
+msgstr "鲑鱼"
+
+#: includes/helpers/pages.php:555
+msgid "Cyan"
+msgstr "青色"
+
+#: includes/helpers/pages.php:556
+msgid "Gray"
+msgstr "灰色"
+
+#: includes/helpers/pages.php:557
+msgid "Indigo"
+msgstr "靛蓝"
+
+#: includes/helpers/pages.php:558
+msgid "Orange"
+msgstr "橙色"
+
+#: includes/helpers/pages.php:578
+msgid "Google"
+msgstr "Google"
+
+#: includes/helpers/pages.php:579
+msgid "Yahoo"
+msgstr "Yahoo"
+
+#: includes/helpers/pages.php:580
+msgid "Vkontakte"
+msgstr "Vkontakte"
+
+#: upgrade.php:405
+msgid "You must read and accept our terms and conditions."
+msgstr "您必须阅读并接受我们的条款和条件。"
+
+#: admin/settings/class-uwp-settings-general.php:432
+msgid "User Counts CPTs"
+msgstr "用户计数 CPT"
+
+#: admin/settings/class-uwp-settings-general.php:433
+msgid "Choose post types to display user counts in profile page for all users."
+msgstr "选择文章类型，以显示所有用户的个人资料页面中的用户计数。"
+
+#: admin/settings/class-uwp-settings-general.php:441
+msgid "User Counts CPTs for profile owner"
+msgstr "用户计数自定义文章"
+
+#: admin/settings/class-uwp-settings-general.php:442
+msgid "Choose post types to display user counts in profile page for profile owners."
+msgstr "选择文章类型，以显示配置文件所有者的个人资料页面中的用户计数。"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:707
+msgid "Key and URL slug for the profile tab."
+msgstr "个人资料选项卡的关键字和网址别名。"
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:708
+msgid "Tab key:"
+msgstr "选项卡关键字："
+
+#: admin/settings/class-uwp-settings-profile-tabs.php:722
+msgid "Tab icon:"
+msgstr "选项卡图标："
+
+#: admin/settings/class-formbuilder.php:683
+msgid "Male,Female,Other"
+msgstr "男,女,其他"
+
+#: includes/helpers/misc.php:1724
+msgid "%s requires a newer version of UsersWP and will not run until the UsersWP plugin is updated."
+msgstr "%s 需要较新版本的UsersWP，在UsersWP插件更新之前不会运行。"
+
+#: includes/class-validation.php:336
+msgid "<strong>Error</strong>: Password must be %s characters or less."
+msgstr "<strong>error</strong>：密码必须小于等于%s个字符。"
+
+#: includes/class-validation.php:338
+msgid "<strong>Error</strong>: Password must be %s characters or more."
+msgstr "<strong>错误</strong>：密码必须为 %s 个字符或更多。"
+
+#: includes/class-validation.php:357
+msgid "<strong>Error</strong>: Passwords do not match."
+msgstr "<strong>错误</strong>：密码不匹配。"
+
+#: includes/class-forms.php:513 includes/class-forms.php:1786
+msgid "No spam please!"
+msgstr "请不要制造垃圾！"
+
+#: includes/class-forms.php:535
+msgid "Security hash failed. Try again."
+msgstr "安全哈希失败。再试一次。"
+
+#: includes/class-forms.php:3446
+msgid "Please enter a valid URL including https://"
+msgstr "请输入一个包括http://的有效链接"
+
+#: includes/class-forms.php:2415
+msgid "Clear field"
+msgstr "清除字段"
+
+#: includes/class-forms.php:3895
+msgid "I accept the %s %s %s."
+msgstr "我接受%s %s %s。"
+
+#: admin/settings/class-uwp-settings-general.php:466
+msgid "Choose the default layout for users listing page."
+msgstr "选择用户列表页面的默认布局。"
+
+#: upgrade.php:31
+msgid "Display Name (A-Z)"
+msgstr "显示名称（A-Z）"
+
+#: upgrade.php:41
+msgid "Display Name (Z-A)"
+msgstr "显示名称（Z-A）"
+
+#: widgets/login.php:68 widgets/register.php:68
+msgid "Redirect to:"
+msgstr "重定向到"
+
+#: widgets/login.php:69
+msgid "Enter the url you want to redirect after login."
+msgstr "登录后输入要重定向的网址。"
+
+#: widgets/register.php:69
+msgid "Enter the url you want to redirect after register."
+msgstr "注册后输入要重定向的网址。"
+
+#: admin/settings/class-uwp-settings-general.php:128
+msgid "Username Minimum Length"
+msgstr "用户名 最小长度"
+
+#: admin/settings/class-uwp-settings-general.php:129
+msgid "Minimum username character limit required for registration."
+msgstr "注册所需的最低用户名字符限制。"
+
+#: admin/settings/class-uwp-settings-general.php:619
+msgid "Debugging"
+msgstr "调试"
+
+#: admin/settings/class-uwp-settings-general.php:620
+msgid "Show debugging info in the error logs."
+msgstr "在错误日志中显示调试信息。"
+
+#: admin/class-uwp-admin-menus.php:107
+msgid "UsersWP Tools"
+msgstr "UsersWP工具"
+
+#: admin/class-admin.php:250
+msgid "Are you sure you wish to delete this form?"
+msgstr "是否确实要永久删除此表单？"
+
+#: admin/class-admin.php:251
+msgid "Enter register form title"
+msgstr "输入注册表单标题"
+
+#: admin/class-admin-setup-wizard.php:299
+msgid "Registration is disabled"
+msgstr "注册已停用"
+
+#: admin/class-admin-setup-wizard.php:303
+msgid "User accounts may be registered"
+msgstr "用户帐号可以注册"
+
+#: admin/class-admin-setup-wizard.php:307
+msgid "Logged in users may register new sites"
+msgstr "登录用户可以注册新站点"
+
+#: admin/class-admin-setup-wizard.php:311
+msgid "Both sites and user accounts can be registered"
+msgstr "网站和用户帐号都可以注册"
+
+#: admin/views/html-admin-page-status.php:12
+msgid "System Status"
+msgstr "系统状态"
+
+#: includes/class-forms.php:1821
+msgid "Invalid username."
+msgstr "无效的用户名."
+
+#: admin/settings/class-uwp-settings-general.php:611
+msgid "Advanced settings"
+msgstr "高级选项"
+
+#: admin/settings/class-uwp-settings-general.php:612
+msgid "Disable advanced toggle, show advanced settings at all times (not recommended)."
+msgstr "禁用高级切换，在任何时候都显示高级设置（不推荐）。"
+
+#: includes/helpers/misc.php:568
+msgid "Two-factor Authentication Settings"
+msgstr "双因素身份验证设置"
+
+#: includes/helpers/tabs.php:145
+msgid "WP - 2FA"
+msgstr "WP - 2FA"
+
+#: includes/class-uwp-defaults.php:25
+msgid "[[#site_name#]] Login Details"
+msgstr "[[#site_name#]] 登录详细信息"
+
+#: includes/class-uwp-defaults.php:35
+msgid ""
+"Dear [#user_name#],\n"
+"\n"
+"To set your password, visit the following address:\n"
+"\n"
+"[#reset_link#]\n"
+"\n"
+"You can login here: [#login_url#]\n"
+"\n"
+"Thank you,\n"
+"[#site_name_url#]"
+msgstr ""
+"亲爱的[#user_name#]\n"
+"\n"
+"要设置密码，请访问以下地址：\n"
+"\n"
+"[#reset_link#]\n"
+"\n"
+"您可以在此处登录：[#login_url#]\n"
+"\n"
+"谢谢\n"
+"[#site_name_url#]"
+
+#: includes/class-uwp-defaults.php:55
+msgid "[[#site_name#]] New User Registration"
+msgstr "[[#site_name#]] 新用户注册"
+
+#: includes/class-uwp-defaults.php:65
+msgid ""
+"Dear Admin,\n"
+"\n"
+"New user registration on your site: [#site_name#]\n"
+"\n"
+"Username: [#username#]\n"
+"\n"
+"Email: [#user_email#]\n"
+"\n"
+"Thank you,\n"
+"[#site_name_url#]"
+msgstr ""
+"亲爱的管理员，\n"
+"\n"
+"您网站上的新用户注册：[#site_name#]\n"
+"\n"
+"用户名：[#username#]\n"
+"\n"
+"电子邮件：[#user_email#]\n"
+"\n"
+"谢谢\n"
+"[#site_name_url#]"
+
+#: includes/class-forms.php:1228
+msgid "Failed to create a login nonce."
+msgstr "无法创建登录名。"
+
+#: includes/class-forms.php:1250
+msgid "Please enter the authentication code from your 2FA authentication app below to login:"
+msgstr "请在下面输入您的2FA身份验证应用程序中的身份验证代码以登录："
+
+#: includes/class-forms.php:1257 includes/class-forms.php:1259
+msgid "Authentication Code"
+msgstr "验证码"
+
+#: includes/class-forms.php:1267 includes/class-forms.php:1294
+#: includes/class-forms.php:1339
+msgid "Log In"
+msgstr "登录"
+
+#: includes/class-forms.php:1277
+msgid "Please enter the 2FA verification code sent to your email address to login:"
+msgstr "请输入发送到您的电子邮件地址以登录的2FA验证码："
+
+#: includes/class-forms.php:1283 includes/class-forms.php:1285
+msgid "Verification Code"
+msgstr "验证码"
+
+#: includes/class-forms.php:1302
+msgid "Resend Code"
+msgstr "重新发送代码"
+
+#: includes/class-forms.php:1328
+msgid "Enter backup code"
+msgstr "输入备份代码"
+
+#: includes/class-forms.php:1330
+msgid "Backup Code"
+msgstr "备份代码"
+
+#: includes/class-forms.php:1345
+msgid "Or, use a backup code."
+msgstr "或者，使用备份代码。"
+
+#: includes/class-forms.php:1372
+msgid "Invalid user data. Please try again."
+msgstr "无效的用户数据。请重试。"
+
+#: includes/class-forms.php:1386
+msgid "Invalid request! Please try again."
+msgstr "无效请求！请重试。"
+
+#: includes/class-forms.php:1417 includes/class-forms.php:1440
+msgid "Invalid verification code."
+msgstr "验证代码无效。"
+
+#: includes/class-forms.php:1432
+msgid "A new code has been sent."
+msgstr "新的验证码已经发送。"
+
+#: includes/class-forms.php:1455
+msgid "Invalid backup code."
+msgstr "无效备份代码。"
+
+#: includes/class-forms.php:1476
+msgid "Validation successful. Redirecting..."
+msgstr "验证成功。重定向……"
+
+#: admin/settings/class-uwp-settings-general.php:251
+msgid "Disable WP-2FA"
+msgstr "禁用 WP-2FA"
+
+#: admin/settings/class-uwp-settings-general.php:252
+msgid "This will disable integration with WP 2FA - Two-factor authentication for WordPress plugin."
+msgstr "这将禁用与 WP 2FA 的集成 - WordPress 插件的双重身份验证。"
+
+#: admin/settings/class-uwp-settings-emails.php:80
+#: admin/settings/class-uwp-settings-emails.php:183
+msgid "WP new user notification email"
+msgstr "WP 新用户通知电子邮件"
+
+#: admin/settings/class-uwp-settings-emails.php:84
+#: admin/settings/class-uwp-settings-emails.php:187
+msgid "This will replace the email sent by WordPress when new user registered."
+msgstr "这将取代 WordPress 在新用户注册时发送的电子邮件。"
+
+#: widgets/users-loop.php:34 widgets/users.php:42
+msgid "Roles:"
+msgstr "角色："
+
+#: widgets/users-loop.php:35 widgets/users.php:43
+msgid "Choose user roles to show in list. All users will display if no role selected."
+msgstr "选择要显示在列表中的用户角色。如果没有选择角色，所有用户都将显示。"
+
+#: includes/class-templates.php:567
+msgid "More"
+msgstr "更多"
+
+#: admin/class-admin.php:907 admin/settings/class-formbuilder.php:293
+#: widgets/register.php:33
+msgid "Form"
+msgstr "表单"
+
+#: widgets/register.php:34
+msgid "Select form."
+msgstr "选择表单。"
+
+#: admin/class-admin.php:252
+msgid "Updated! Reloading page..."
+msgstr "更新！正在重新加载页面..."
+
+#: admin/class-admin.php:614
+msgid "UsersWP Account Details"
+msgstr "UsersWP帐户详细信息"
+
+#: admin/class-admin.php:830
+msgid "View UsersWP Documentation"
+msgstr "查看UsersWP文档"
+
+#: admin/class-admin.php:830
+msgid "Docs"
+msgstr "文档"
+
+#: admin/class-admin.php:831
+msgid "Visit UsersWP support"
+msgstr "访问UsersWP支持"
+
+#: admin/class-admin.php:831
+msgid "Support"
+msgstr "技术支持"
+
+#: admin/class-admin.php:832
+msgid "View translations"
+msgstr "查看翻译"
+
+#: admin/class-admin.php:832
+msgid "Translations"
+msgstr "翻译"
+
+#: admin/class-admin.php:863
+msgid "Form %d"
+msgstr "表单 %d"
+
+#: admin/settings/class-formbuilder.php:181
+msgid "Existing Fields"
+msgstr "字段"
+
+#: admin/settings/class-formbuilder.php:187
+msgid "Click on field to add it to the form. Existing fields are most used fields in all other forms."
+msgstr "单击字段将其添加到表单中。现有字段是所有其他形式中最常用的字段。"
+
+#: admin/settings/class-formbuilder.php:311
+#: admin/settings/class-formbuilder.php:494
+#: admin/settings/class-formbuilder.php:539
+msgid "Select Form:"
+msgstr "选择表单："
+
+#: admin/settings/class-formbuilder.php:340
+#: admin/settings/class-formbuilder.php:506
+#: admin/settings/class-formbuilder.php:551
+msgid "%s - #%s"
+msgstr "%s - #%s"
+
+#: admin/settings/class-formbuilder.php:347
+msgid "Form Options"
+msgstr "排序选项"
+
+#: admin/settings/class-formbuilder.php:352
+msgid "Delete Form"
+msgstr "删除表格"
+
+#: admin/settings/class-formbuilder.php:357
+msgid "Create Form"
+msgstr "从..创建"
+
+#: admin/settings/class-formbuilder.php:366
+msgid "Title:"
+msgstr "标题："
+
+#: admin/settings/class-formbuilder.php:366
+msgid "Title of the form"
+msgstr "表单标题"
+
+#: admin/settings/class-formbuilder.php:372
+msgid "User Role to Assign:"
+msgstr "要分配的用户角色:"
+
+#: admin/settings/class-formbuilder.php:372
+msgid "Role to assign when user register via this form."
+msgstr "用户通过此表单注册时分配的角色。"
+
+#: admin/settings/class-formbuilder.php:388
+msgid "Registration Action:"
+msgstr "注册操作："
+
+#: admin/settings/class-formbuilder.php:402
+msgid "Redirect Page:"
+msgstr "重定向页面："
+
+#: admin/settings/class-formbuilder.php:402
+msgid "Set the page to redirect the user to after signing up."
+msgstr "设置页面在注册后将用户重定向到。"
+
+#: admin/settings/class-formbuilder.php:425
+msgid "Custom Redirect URL:"
+msgstr "自定义重定向网址"
+
+#: admin/settings/class-formbuilder.php:432
+msgid "GDPR Policy Page:"
+msgstr "GDPR 政策"
+
+#: admin/settings/class-formbuilder.php:432
+msgid "Page to link when GDPR policy page custom field added to form. If not set then default setting will be used."
+msgstr "当GDPR策略页面自定义字段添加到表单时链接的页面。如果未设置，则将使用默认设置。"
+
+#: admin/settings/class-formbuilder.php:448
+msgid "TOS Page:"
+msgstr "服务条款页："
+
+#: admin/settings/class-formbuilder.php:448
+msgid "Page to link when Terms and Conditions custom field added to form. If not set then default setting will be used."
+msgstr "当条款和条件自定义字段添加到表单时链接的页面。如果未设置，则将使用默认设置。"
+
+#: admin/settings/class-formbuilder.php:1909
+msgid "Enter regex expression for HTML5 pattern validation."
+msgstr "输入正则表达式进行HTML5模式验证。"
+
+#: admin/settings/class-formbuilder.php:1910
+msgid "Validation pattern:"
+msgstr "验证模式："
+
+#: admin/settings/class-formbuilder.php:1929
+msgid "Enter a extra validation message to show to the user if validation fails."
+msgstr "如果验证失败，请输入额外的验证消息以向用户显示。"
+
+#: admin/settings/class-formbuilder.php:1930
+msgid "Validation message:"
+msgstr "验证消息"
+
+#: widgets/register.php:42
+msgid "Display form having IDs"
+msgstr "显示有ID的表单"
+
+#: widgets/register.php:43
+msgid "Enter comma separeted IDs to show limited forms"
+msgstr "输入逗号隔开的ID，以显示有限的表格"
+
+#: admin/settings/class-uwp-settings-general.php:112
+msgid "Lightbox Form(s)"
+msgstr "灯箱表单"
+
+#: admin/settings/class-uwp-settings-general.php:113
+msgid "Choose form(s) to display in lighbox. You can select multiple forms."
+msgstr "选择以 lighbox 显示的形式。您可以选择多个表单。"
+
+#: includes/class-uwp-seo.php:97
+msgid "Meta Description Length"
+msgstr "元数据描述长度"
