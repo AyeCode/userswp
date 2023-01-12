@@ -2002,7 +2002,7 @@ class UsersWP_GeoDirectory_Plugin {
 	 *
 	 * @since 1.2.3.12
 	 *
-	 *
+	 * @param int $max_num_pages Max number pages.
 	 */
 	public function unset_gd_post( $max_num_pages ) {
 		global $gd_post;
