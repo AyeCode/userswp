@@ -62,6 +62,7 @@ class UsersWP_GeoDirectory_Plugin {
 
 		add_filter( 'uwp_tp_posts_post_footer', array( $this, 'posts_footer' ) );
 		add_filter( 'uwp_tp_comments_item_footer', array( $this, 'reviews_footer' ), 10, 2 );
+		add_action( 'uwp_profile_pagination', array( $this, 'unset_gd_post' ), 1, 1 );
 
 		do_action( 'uwp_gd_setup_actions', $this );
 	}
@@ -1994,6 +1995,19 @@ class UsersWP_GeoDirectory_Plugin {
 		}
 
 		return $favorites_by_user;
+	}
+
+	/**
+	 * Unset GD Post variable after posts loop.
+	 *
+	 * @since 1.2.3.12
+	 *
+	 *
+	 */
+	public function unset_gd_post( $max_num_pages ) {
+		global $gd_post;
+
+		$gd_post = NULL;
 	}
 }
 
