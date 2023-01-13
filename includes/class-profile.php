@@ -103,7 +103,7 @@ class UsersWP_Profile {
         data-user="<?php echo absint( $user->ID ); ?>">
 		<?php if ( $link ){ ?><a href="<?php echo esc_url( uwp_build_profile_tab_url( $user->ID ) ); ?>"
                                  class="<?php echo esc_attr( $link_class ); ?>"><?php } ?>
-		<?php echo apply_filters( 'uwp_profile_display_name', esc_attr( $user->display_name ) ); ?>
+		<?php echo apply_filters( 'uwp_profile_display_name', esc_attr( $user->display_name ), $user ); ?>
 		<?php if ( $link ){ ?></a><?php } ?>
 		<?php do_action( 'uwp_profile_after_title', $user->ID ); ?>
         </<?php echo esc_attr( $tag ); ?>>
