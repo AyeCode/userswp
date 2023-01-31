@@ -230,8 +230,15 @@ function uwp_get_field_description( $field, $default = '' ) {
  * @since       1.0.0
  */
 function uwp_get_custom_field_info( $htmlvar_name, $form_type = 'account' ) {
-	global $wpdb;
+	global $wpdb, $custom_field_info;
 	$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
+	$cache_key = $htmlvar_name . '_' . $form_type;
+
+	// Return cached field data.
+	if ( isset( $custom_field_info[ $cache_key ] ) ) {
+		return $custom_field_info[ $cache_key ];
+	}
+
 	if ( $form_type ) {
 		$field = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s AND form_type = %s", array(
 			$htmlvar_name,
@@ -240,7 +247,10 @@ function uwp_get_custom_field_info( $htmlvar_name, $form_type = 'account' ) {
 	} else {
 		$field = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s", array( $htmlvar_name ) ) );
 	}
-
+	
+	// Cache the field data.
+	$custom_field_info[ $cache_key ] = $field;
+	
 	return $field;
 }
 

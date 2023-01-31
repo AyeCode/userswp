@@ -4646,13 +4646,15 @@ class UsersWP_Forms {
 					$('body').on('keyup', 'input[name=password], input[name=confirm_password]',
 						function (event) {
 							var $form = $(this).closest('form');
-							uwp_checkPasswordStrength(
-								$('input[name=password]', $form),         // First password field
-								$('input[name=confirm_password]', $form), // Second password field
-								$('#uwp-password-strength', $form),           // Strength meter
-								$('input[type=submit]', $form),           // Submit button
-								['black', 'listed', 'word']        // Blacklisted words
-							);
+							if( ! $form.hasClass('uwp-login-form') ) {
+								uwp_checkPasswordStrength(
+									$('input[name=password]', $form),         // First password field
+									$('input[name=confirm_password]', $form), // Second password field
+									$('#uwp-password-strength', $form),           // Strength meter
+									$('input[type=submit]', $form),           // Submit button
+									['black', 'listed', 'word']        // Blacklisted words
+								);
+							}
 						}
 					);
 				});
