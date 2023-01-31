@@ -47,7 +47,7 @@ do_action( 'uwp_template_before', 'register', $args ); ?>
 					echo aui()->input(array(
 						'type'       => 'submit',
 						'class'      => 'btn btn-primary btn-block text-uppercase uwp_register_submit',
-						'content'    => __( 'Create Account', 'userswp' ),
+						'value'    => __( 'Create Account', 'userswp' ),
 						'name'       => 'uwp_register_submit',
 					));
 					?>
