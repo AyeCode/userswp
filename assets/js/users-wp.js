@@ -510,7 +510,7 @@ function uwp_modal_register_form(form_id){
                     uwp_modal_register_form_process();
                 });
             }
-            uwp_init_auth_modal();aui_init_select2();uwp_switch_reg_form_init();
+            uwp_init_auth_modal();aui_init_select2();uwp_switch_reg_form_init();aui_init();
         }
     });
 }
