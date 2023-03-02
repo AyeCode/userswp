@@ -298,7 +298,7 @@ class UsersWP_Validation {
             }
 
             if( $old_pass == $data['password'] ) {
-                $errors->add( 'invalid_password', __( '<strong>Error</strong>: Old password and new password are same', 'userswp' ) );
+                $errors->add( 'invalid_password', __( '<strong>Error</strong>: The old password and the new password are the same', 'userswp' ) );
                 return $errors;
             }
 

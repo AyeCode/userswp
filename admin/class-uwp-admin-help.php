@@ -101,7 +101,7 @@ if( !class_exists('UsersWP_Admin_Help') ) {
 
             $bugs_html = "<h2>".__('Found a bug?','userswp')."</h2>";
             $bugs_html .= "<p>".sprintf(__('If you find a bug within UsersWP core you can create a ticket via <a href="%1$s">Github issues</a>. Ensure you read the <a href="%2$s">contribution guide</a> prior to submitting your report. To help us solve your issue, please be as descriptive as possible and include your <a href="%3$s">system status report</a>','userswp'),'https://github.com/UsersWP/userswp/issues?state=open','https://github.com/UsersWP/userswp/blob/master/CONTRIBUTING.md',admin_url( 'admin.php?page=uwp_status' ))."</p>";
-            $bugs_html .= "<p><a href='https://github.com/UsersWP/userwp/issues?state=open' class='button button-primary'>". __( 'Report a bug', 'userswp' ) ."</a> <a href='".admin_url( 'admin.php?page=uwp_status' )."' class='button'>".__( 'System status', 'userswp' )."</a></p>";
+            $bugs_html .= "<p><a href='https://github.com/UsersWP/userswp/issues?state=open' class='button button-primary'>". __( 'Report a bug', 'userswp' ) ."</a> <a href='".admin_url( 'admin.php?page=uwp_status' )."' class='button'>".__( 'System status', 'userswp' )."</a></p>";
 
             return apply_filters('uwp_bugs_help_tab_content',$bugs_html);
         }

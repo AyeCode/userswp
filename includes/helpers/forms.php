@@ -349,8 +349,8 @@ function uwp_get_field_icon( $value ) {
 
 function uwp_get_registration_form_actions(){
 	$registration_options = array(
-		'auto_approve' =>  __('Auto approve', 'userswp'),
-		'auto_approve_login' =>  __('Auto approve + Auto Login', 'userswp'),
+		'auto_approve' =>  __('Auto Approve', 'userswp'),
+		'auto_approve_login' =>  __('Auto Approve + Auto Login', 'userswp'),
 		'require_email_activation' =>  __('Require Email Activation', 'userswp'),
 	);
 

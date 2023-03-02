@@ -146,6 +146,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.12 =
+* Text changes in error messages - CHANGED
+* Excluded users are still showing when showing users by role - FIXED
+
 = 1.2.3.11 =
 * Setting to force user use strong password on registration - ADDED
 

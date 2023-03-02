@@ -672,9 +672,11 @@ class UsersWP_GeoDirectory_Plugin {
 					foreach ( $subtabs as $tab_id => $tab ) {
 
 						$tab_url = uwp_build_profile_tab_url( $user->ID, $type, $tab_id );
-
 						$active    = $active_tab == $tab_id ? 'btn-primary' : 'btn-outline-primary';
 						$post_type = $active_tab == $tab_id ? $tab['ptype'] : $post_type;
+						$append_hash = apply_filters('uwp_add_tab_content_hashtag', true, $tab, $user);
+						$tab_url = $append_hash ? esc_url($tab_url).'#tab-content' : esc_url($tab_url);
+
 						?>
                         <a id="uwp-profile-gd-<?php echo $tab_id; ?>" href="<?php echo esc_url( $tab_url ); ?>"
                            class=" btn btn-sm <?php echo $active; ?>">
@@ -696,9 +698,11 @@ class UsersWP_GeoDirectory_Plugin {
 							foreach ( $subtabs as $tab_id => $tab ) {
 
 								$tab_url = uwp_build_profile_tab_url( $user->ID, $type, $tab_id );
-
 								$active    = $active_tab == $tab_id ? ' active' : '';
 								$post_type = $active_tab == $tab_id ? $tab['ptype'] : $post_type;
+								$append_hash = apply_filters('uwp_add_tab_content_hashtag', true, $tab, $user);
+								$tab_url = $append_hash ? esc_url($tab_url).'#tab-content' : esc_url($tab_url);
+
 								?>
                                 <li id="uwp-profile-gd-<?php echo $tab_id; ?>" class="<?php echo $active; ?>">
                                     <a href="<?php echo esc_url( $tab_url ); ?>">
