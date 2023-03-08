@@ -263,7 +263,7 @@ function uwp_get_excluded_users_list() {
 	if ( !empty($excluded_globally) ) {
 
 		if(is_array($excluded_globally)) {
-			$exclude_users = $excluded_globally;
+			$exclude_users = array_merge($exclude_users, $excluded_globally);
 		} else {
 			$excluded_users = str_replace(' ', '', $excluded_globally);
 			$users_array = explode(',', $excluded_users);
@@ -422,13 +422,19 @@ function get_uwp_users_list($roles = array()) {
 			'paged' => (int) $paged,
 		);
 
+		$roles_args = array(
+			'fields' => array('ID'),
+		);
+
 		if(!empty($exclude_users)) {
 			$args['exclude'] = $exclude_users;
+			$roles_args['exclude'] = $exclude_users;
 		}
 
 		if(isset($roles) && is_array($roles) && count($roles) > 0){
 			$include_users = array();
-			$users = get_users( array( 'role__in' => $roles, 'fields' => array('ID') ) );
+			$roles_args['role__in'] = $roles;
+			$users = get_users( $roles_args );
 			$users = wp_list_pluck( $users, 'ID' );
 			if($users && count($users) > 0){
 				$include_users = array_merge($include_users, $users);
