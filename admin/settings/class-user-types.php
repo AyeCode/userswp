@@ -37,20 +37,6 @@ class UsersWP_User_Types {
                        id="manage_field_form_id"
                        value="<?php echo esc_attr( $current_form ); ?>">
 				<?php do_action( 'uwp_user_type_form_before', $current_form, $tab ); ?>
-				<?php
-				if ( ! empty( $register_forms ) && is_array( $register_forms ) ) { ?>
-                    <table class="form-table bsui userswp" id="uwp-forms-main">
-                        <tr>
-                            <td>
-
-                                <div class="d-inline-block align-top">
-
-                                </div>
-
-                            </td>
-                        </tr>
-                    </table>
-				<?php } ?>
                 <?php
 
                     $form_id = $_GET[ 'form' ];
@@ -110,21 +96,24 @@ class UsersWP_User_Types {
                         <input type="text" name="form_title" value="<?php echo esc_attr($current_title); ?>"
                                class="regular-text">
                     </td>
-                    <?php if ( ! empty( $user_roles ) && is_array( $user_roles ) ) { ?>
+
+                </tr>
+                <tr>
+	                <?php if ( ! empty( $user_roles ) && is_array( $user_roles ) ) { ?>
                         <th><?php _e( 'User Role to Assign:', 'userswp' ); echo uwp_help_tip(__('Role to assign when user register via this form.', 'userswp'))  ?></th>
                         <td>
                             <select name="user_role" id="multiple_registration_user_role"
                                     class="small-text aui-select2">
-                                <?php
-                                foreach ( $user_roles as $key => $user_role ) {
-                                    ?>
+				                <?php
+				                foreach ( $user_roles as $key => $user_role ) {
+					                ?>
                                     <option <?php selected( $current_role, $key ); ?>
                                             value="<?php echo esc_attr($key); ?>"><?php echo sprintf( __( '%s', 'userswp' ), $user_role ); ?></option>
-                                <?php }
-                                ?>
+				                <?php }
+				                ?>
                             </select>
                         </td>
-                    <?php } ?>
+	                <?php } ?>
                 </tr>
                 <tr>
                     <th><?php _e( 'Registration Action:', 'userswp' ); echo uwp_help_tip(__('Select how registration should be handled.', 'userswp')) ?></th>
@@ -164,6 +153,9 @@ class UsersWP_User_Types {
                             <?php } ?>
                         </select>
                     </td>
+
+                </tr>
+                <tr>
                     <th><?php _e( 'Custom Redirect URL:', 'userswp' ); echo uwp_help_tip(__( 'Set the page to redirect the user to after signing up. If default redirect has been set then WordPress default will be used.', 'userswp' )); ?></th>
                     <td>
                         <input type="text" name="custom_url" id="register_redirect_custom_url"
@@ -187,21 +179,23 @@ class UsersWP_User_Types {
                         echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'userswp' ) . "' id=", wp_dropdown_pages( $args ) );
                         ?>
                     </td>
+                </tr>
+                <tr>
                     <th><?php _e( 'TOS Page:', 'userswp' ); echo uwp_help_tip(__('Page to link when Terms and Conditions custom field added to form. If not set then default setting will be used.', 'userswp'));?></th>
                     <td>
-                        <?php
-                        $args = array(
-                            'name'             => 'tos_page',
-                            'id'               => 'multiple_registration_tos_page',
-                            'sort_column'      => 'menu_order',
-                            'sort_order'       => 'ASC',
-                            'show_option_none' => ' ',
-                            'class'            => ' regular-text aui-select2 ',
-                            'echo'             => false,
-                            'selected'         => (int) $current_tos_page > 0 ? (int) $current_tos_page : - 1,
-                        );
-                        echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'userswp' ) . "' id=", wp_dropdown_pages( $args ) );
-                        ?>
+		                <?php
+		                $args = array(
+			                'name'             => 'tos_page',
+			                'id'               => 'multiple_registration_tos_page',
+			                'sort_column'      => 'menu_order',
+			                'sort_order'       => 'ASC',
+			                'show_option_none' => ' ',
+			                'class'            => ' regular-text aui-select2 ',
+			                'echo'             => false,
+			                'selected'         => (int) $current_tos_page > 0 ? (int) $current_tos_page : - 1,
+		                );
+		                echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'userswp' ) . "' id=", wp_dropdown_pages( $args ) );
+		                ?>
                     </td>
                 </tr>
                 <?php //do_action( 'uwp_user_type_form_before_submit', $current_form, $tab ); ?>
@@ -210,7 +204,7 @@ class UsersWP_User_Types {
                     <td>
                         <button class="btn btn-sm btn-secondary" id="form_update" type="submit"
                                 name="form_update"><?php _e( 'Update', 'userswp' ); ?></button>
-		                    <?php if ( ! empty( $current_form ) && $current_form > 1 ) { ?>
+		                    <?php if ( ! empty( $current_form ) && $current_form['id'] > 1 ) { ?>
                                 <button data-id="<?php echo esc_attr($form_id); ?>"
                                         data-nonce="<?php echo wp_create_nonce( 'uwp-delete-register-form-nonce' ); ?>"
                                         class="btn btn-sm btn-danger register-form-remove" type="button"

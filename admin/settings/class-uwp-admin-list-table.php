@@ -132,7 +132,6 @@ class UWP_Admin_List_Table extends WP_List_Table {
 	public function column_title( $item ) {
 
 		$edit_link = admin_url ( 'admin.php?page=uwp_user_types&form=' . $item[ 'id' ] );
-		$view_link = get_permalink ( $item[ 'id' ] );
 		$output    = '';
 
 		// Title.
@@ -140,13 +139,16 @@ class UWP_Admin_List_Table extends WP_List_Table {
 
 		// Get actions.
 		$actions = array (
-			'edit' => '<a class="" href="' . $edit_link . '">' . esc_html__ ( 'Edit' , 'my_plugin' ) . '</a>' ,
-			'view' => '<a
+			'edit' => '<a class="" href="' . $edit_link . '">' . esc_html__ ( 'Edit' , 'my_plugin' ) . '</a>',
+		);
+
+		if( $item['id'] > 1 ) {
+			$actions['delete'] ='<a
 				class="register-form-remove"
 				data-id="' . $item[ "id" ] . '"
 				data-nonce="' . wp_create_nonce ( 'uwp-delete-register-form-nonce' ) . '"
-				href="#">' . esc_html__ ( 'Delete' , 'my_plugin' ) . '</a>' ,
-		);
+				href="#">' . esc_html__ ( 'Delete' , 'my_plugin' ) . '</a>';
+		}
 
 		$row_actions = array ();
 
