@@ -266,6 +266,7 @@ class UsersWP_Admin {
 			'profile',
 			'users',
 			'user-edit',
+            'userswp_page_uwp_user_types'
 		);
 
 		// Check for translated screen id.
@@ -353,7 +354,7 @@ class UsersWP_Admin {
 
 		}
 
-		if(! empty( $_GET['page'] ) && 'uwp_form_builder' == $_GET['page']) {
+		if(! empty( $_GET['page'] ) && 'uwp_user_types' == $_GET['page']) {
 			?>
             <script type="text/javascript">
                 jQuery(document).ready(function () {
@@ -880,7 +881,7 @@ class UsersWP_Admin {
 				do_action('uwp_create_register_form', $new_form_id);
 
 				$status   = true;
-				$redirect = admin_url( 'admin.php?page=uwp_form_builder&tab=account&form=' . $new_form_id );
+				$redirect = admin_url( 'admin.php?page=uwp_user_types&form=' . $new_form_id );
 			}
 		}
 
@@ -996,7 +997,7 @@ class UsersWP_Admin {
 
 			$register_forms = array_values( $register_forms );
 			uwp_update_option( 'multiple_registration_forms', $register_forms );
-			$redirect = admin_url( 'admin.php?page=uwp_form_builder&tab=account' );
+			$redirect = admin_url( 'admin.php?page=uwp_user_types' );
 		}
 
 		$response = array(

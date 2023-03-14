@@ -489,7 +489,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				.bs-tooltip-top .arrow{
 					margin-left:0px;
 				}
-				
+
 				.custom-switch input[type=checkbox]{
 				    display:none;
 				}

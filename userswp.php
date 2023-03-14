@@ -65,3 +65,9 @@ function run_users_wp() {
 }
 
 run_users_wp();
+
+function pre( $a ) {
+	echo '<pre>';
+	var_dump( $a );
+	echo '</pre>';
+}

@@ -257,6 +257,16 @@ final class UsersWP {
 		require_once dirname( dirname( __FILE__ ) ) . '/admin/settings/class-formbuilder.php';
 
 		/**
+		 * The class responsible for adding admin table listing
+		 */
+		require_once dirname ( dirname ( __FILE__ ) ) . '/admin/settings/class-uwp-admin-list-table.php';
+
+		/**
+		 * The class responsible for adding user types
+		 */
+		require_once dirname( dirname( __FILE__ ) ) . '/admin/settings/class-user-types.php';
+
+		/**
 		 * The class responsible for defining all admin area settings.
 		 */
 		require_once dirname( dirname( __FILE__ ) ) . '/admin/settings/class-uwp-settings-profile-tabs.php';

@@ -25,6 +25,7 @@ class UsersWP_Admin_Menus {
         // Add menus
         add_action( 'admin_menu', array( $this, 'admin_menu' ), 9 );
 	    add_action( 'admin_menu', array( $this, 'tools_menu' ), 80 );
+	    add_action( 'admin_menu', array( $this, 'user_types_menu' ), 85 );
         add_action( 'admin_menu', array( $this, 'status_menu' ), 90 );
         add_action( 'admin_menu', array( $this, 'addons_menu' ), 99 );
     }
@@ -101,16 +102,30 @@ class UsersWP_Admin_Menus {
     /**
      * Add menu item.
      */
-    public function tools_menu() {
+    public function user_types_menu() {
         add_submenu_page(
             "userswp",
-            __('UsersWP Tools', 'userswp'),
-            __('Tools', 'userswp'),
+            __('User Types', 'userswp'),
+            __('User Types', 'userswp'),
             'manage_options',
-            'uwp_tools',
-            array( $this, 'tools_page' )
+            'uwp_user_types',
+	        array( $this, 'user_types_page' )
         );
     }
+
+	/**
+	 * Add menu item.
+	 */
+	public function tools_menu() {
+		add_submenu_page(
+			"userswp",
+			__('UsersWP Tools', 'userswp'),
+			__('Tools', 'userswp'),
+			'manage_options',
+			'uwp_tools',
+			array( $this, 'tools_page' )
+		);
+	}
 
     /**
      * Add menu item.
@@ -143,6 +158,13 @@ class UsersWP_Admin_Menus {
             array( $this, 'addons_page' )
         );
     }
+
+	/**
+	 * Init the user types page.
+	 */
+	public function user_types_page() {
+		UsersWP_User_Types::output();
+	}
 
 	/**
 	 * Init the status page.
