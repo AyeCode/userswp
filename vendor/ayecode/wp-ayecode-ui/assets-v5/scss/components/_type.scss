@@ -1,0 +1,48 @@
+//
+// Typography
+// --------------------------------------------------
+
+
+// Heading line height
+
+h1, .h1, .fs-1 { line-height: $h1-line-height; }
+h2, .h2, .fs-2 { line-height: $h2-line-height; }
+h3, .h3, .fs-3 { line-height: $h3-line-height; }
+h4, .h4, .fs-4 { line-height: $h4-line-height; }
+h5, .h5, .fs-5 { line-height: $h5-line-height; }
+h6, .h6, .fs-6 { line-height: $h6-line-height; }
+
+
+// Lists
+
+ul, ol, dt {
+  li {
+    margin-bottom: $spacer * .25;
+  }
+}
+
+
+// Description lists
+
+dt {
+  color: $headings-color;
+}
+
+
+// Blockquotes
+
+.blockquote {
+  position: relative;
+  color: $blockquote-color;
+  font-weight: $blockquote-font-weight;
+  &::before {
+    display: inline-block;
+    font: {
+      family: $icons-font-family;
+      size: $blockquote-icon-size;
+    }
+    color: $blockquote-icon-color;
+    content: $fi-quote;
+  }
+}
+.blockquote-footer { margin-top: 0; }

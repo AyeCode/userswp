@@ -1,0 +1,67 @@
+//
+// Custom scrollbar
+// based on https://github.com/Grsmto/simplebar
+// --------------------------------------------------
+
+
+// Base styles
+
+.simplebar-scrollbar {
+  &::before {
+    right: 0;
+    left: 0;
+    background-color: $scrollbar-bg;
+    @include border-radius($scrollbar-border-radius);
+  }
+  &.simplebar-visible::before { opacity: 1; }
+}
+
+.simplebar-track {
+  @include border-radius($scrollbar-border-radius);
+
+  &.simplebar-vertical {
+    width: $scrollbar-width;
+    .simplebar-scrollbar:before {
+      top: 0;
+      bottom: 0;
+    }
+  }
+
+  &.simplebar-horizontal {
+    height: $scrollbar-width;
+    .simplebar-scrollbar {
+      height: $scrollbar-width;
+      top: 0;
+      bottom: 0;
+      &::before {
+        right: 0;
+        left: 0;
+      }
+    }
+  }
+}
+
+[data-simplebar] {
+
+  &[data-simplebar-auto-hide=false] {
+    .simplebar-track { background-color: $scrollbar-track-bg; }
+  }
+}
+
+
+// Light version
+
+[data-simplebar-inverse] {
+  .simplebar-scrollbar:before { background-color: $scrollbar-light-bg; }
+
+  &[data-simplebar-auto-hide=false] {
+    .simplebar-track { background-color: $scrollbar-light-track-bg; }
+  }
+}
+
+
+// Scrollbar on top
+
+[data-simplebar-horizontal-top] {
+  .simplebar-track.simplebar-horizontal { top: 0; }
+}

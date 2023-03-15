@@ -1,0 +1,51 @@
+//
+// Icon box
+// --------------------------------------------------
+
+
+// Media
+
+.icon-box-media {
+  display: block;
+  width: $icon-box-media-width;
+  min-width: $icon-box-media-width;
+  height: $icon-box-media-width;
+  transition: $icon-box-media-transition;
+  border-radius: $icon-box-media-border-radius;
+  background: {
+    position: center;
+    size: cover;
+  }
+  font-size: $icon-box-media-font-size;
+  line-height: $icon-box-media-width - .25rem;
+  text-align: center;
+}
+
+
+// Title
+
+.icon-box-title {
+  margin-bottom: $spacer * .5;
+  &:not(.text-light):not(.text-white) {
+    color: $icon-box-title-color !important;
+  }
+}
+
+
+// Hover / active effect
+
+@each $color, $value in map-remove($theme-colors, 'secondary', 'light') {
+  .icon-box:hover .icon-box-media.text-#{$color},
+  .icon-box.active .icon-box-media.text-#{$color},
+  .icon-box.show .icon-box-media.text-#{$color} {
+    background-color: $value !important;
+    color: $white !important;
+  }
+}
+
+.icon-box:hover .icon-box-media.text-light,
+.icon-box.active .icon-box-media.text-light,
+.icon-box.show .icon-box-media.text-light {
+  background-color: $light !important;
+  color: $primary !important;
+}

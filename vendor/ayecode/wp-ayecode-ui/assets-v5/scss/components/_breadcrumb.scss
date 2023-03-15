@@ -1,0 +1,46 @@
+//
+// Breadcrumb
+// --------------------------------------------------
+
+
+// Base
+
+.breadcrumb-item {
+  + .breadcrumb-item::before {
+    margin-top: .25rem;
+    font: {
+      family: $icons-font-family;
+      size: .7em;
+      weight: 900;
+    }
+  }
+}
+
+
+// Dark version
+
+.breadcrumb-item {
+  > a {
+    color: $breadcrumb-color;
+    text-decoration: none;
+    &:hover {
+      color: $breadcrumb-hover-color;
+    }
+  }
+}
+
+
+// Light version
+
+.breadcrumb-light .breadcrumb-item {
+  > a {
+    color: $breadcrumb-light-color;
+    &:hover {
+      color: $breadcrumb-light-hover-color;
+    }
+  }
+  &.active { color: $breadcrumb-light-active-color; }
+  + .breadcrumb-item::before {
+    color: $breadcrumb-light-divider-color;
+  }
+}

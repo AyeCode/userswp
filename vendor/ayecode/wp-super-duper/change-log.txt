@@ -1,3 +1,20 @@
+= 1.1.16 =
+* Better block auto-recovery - ADDED
+* Functions added to support BS5 changes and new features - ADDED
+
+= 1.1.15 =
+* Prevent duplicate CPT sort options API requests - FIXED
+
+= 1.1.14 =
+* Helper functions for BS5 added - ADDED
+* Will try to auto-recover blocks in editor - ADDED
+* Single apostrophe will break block input settings - FIXED
+
+= 1.1.11 =
+* Functions added to build CSS for some hover args - ADDED
+* Template parts auto recover blocks not working - FIXED
+* Multiple taxonomies API requests can cause a loop - FIXED
+
 = 1.1.10 =
 * styleid argument now auto added to class list - ADDED
 

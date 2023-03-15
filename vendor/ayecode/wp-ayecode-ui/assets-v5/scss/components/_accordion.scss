@@ -1,0 +1,66 @@
+//
+// Accordion
+// --------------------------------------------------
+
+
+// General
+
+.accordion-button {
+  font-weight: $accordion-button-font-weight;
+}
+.accordion-body {
+  padding-top: $accordion-body-padding-y * .1667;
+}
+
+
+// Light version
+
+.accordion-light {
+
+  .accordion-item {
+    background-color: $accordion-light-bg;
+    border-color: $accordion-light-border-color;
+  }
+  
+  .accordion-button {
+    background-color: $accordion-light-bg !important;
+
+    // Button colors
+    &.collapsed {
+      color: $accordion-light-button-color;
+    }
+    &:not(.collapsed) {
+      color: $accordion-light-button-active-color;
+      box-shadow: none;
+    }
+
+    // Button indicator colors
+    &:not(.collapsed)::after {
+      background-image: escape-svg($accordion-light-button-active-icon);
+    }
+    &::after {
+      background-image: escape-svg($accordion-light-button-icon);
+    }
+  }
+}
+
+
+// Collapse label
+
+.collapse-label {
+  &::after {
+    content: attr(data-bs-label-expanded);
+  }
+  > [class^='fi-'],
+  > [class*=' fi-'] {
+    transform: rotate(180deg);
+    transition: transform .2s ease-in-out;
+  }
+  &.collapsed {
+    > [class^='fi-'],
+    > [class*=' fi-'] { transform: none; }  
+    &::after {
+      content: attr(data-bs-label-collapsed);
+    }
+  }
+}

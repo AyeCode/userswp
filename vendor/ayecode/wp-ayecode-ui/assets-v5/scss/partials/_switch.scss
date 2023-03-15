@@ -1,0 +1,54 @@
+@mixin switch($res: 'sm') {
+  $index: 1rem;
+  $mainVal: 1rem;
+  $lh: 1rem;
+  $mr: 0;
+
+  @if $res == 'md' {
+    $index: 1.6rem;
+    $mainVal: 1.3rem;
+    $lh: 1.8rem;
+    $mr: 0.5rem;
+  } @else if $res == 'lg' {
+    $index: 2rem;
+    $mainVal: 1.5rem;
+    $lh: 1.8rem;
+    $mr: 0.5rem;
+  } @else if $res == 'xl' {
+    $index: 3rem;
+    $mainVal: 2rem;
+    $lh: 2.4rem;
+    $mr: 0.5rem;
+  }
+
+  line-height: $lh;
+
+
+  .form-check-input {
+    height: $mainVal;
+    width: calc(#{$index} + 0.75rem);
+    margin-right: $mr;
+  }
+
+  .form-check-input::before{
+    content: none;
+  }
+}
+
+// YOU CAN PUT ALL RESOLUTION HERE
+// sm - DEFAULT, md, lg, xl
+.form-switch.custom-switch-sm {
+  @include switch();
+}
+
+.form-switch.custom-switch-md {
+  @include switch('md');
+}
+
+.form-switch.custom-switch-lg {
+  @include switch('lg');
+}
+
+.form-switch.custom-switch-xl {
+  @include switch('xl');
+}

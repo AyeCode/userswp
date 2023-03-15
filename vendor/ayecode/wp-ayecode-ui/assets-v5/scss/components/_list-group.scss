@@ -1,0 +1,52 @@
+//
+// List group
+// --------------------------------------------------
+
+
+// List items
+
+.list-group-item {
+  margin-bottom: 0;
+
+  & + .list-group-item.active {
+    border-top-color: transparent;
+  }
+}
+
+
+// Interactive list items
+
+.list-group-item-action {
+  transition: $list-group-action-transition;
+  &:active { transition: none; }
+  &.active {
+    border-color: transparent;
+  }
+}
+
+
+// Contextual variants
+
+@each $color, $value in map-remove($theme-faded-colors, 'secondary', 'light') {
+  .list-group-item-#{$color},
+  .list-group-item-#{$color}:hover {
+    background-color: $value !important;
+  }
+}
+
+.list-group-item-secondary,
+.list-group-item-light {
+  color: $body-color !important;
+}
+.list-group-item-light:hover {
+  background-color: $light !important;
+}
+.list-group-item-secondary {
+  background-color: $gray-200 !important;
+  &:hover { background-color: $gray-200 !important; }
+}
+.list-group-item-dark,
+.list-group-item-dark:hover {
+  background-color: $dark !important;
+  color: $white !important;
+}

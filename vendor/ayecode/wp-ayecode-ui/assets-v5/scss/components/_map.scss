@@ -1,0 +1,153 @@
+//
+// Interactive Map
+// Based on https://github.com/Leaflet/Leaflet
+// --------------------------------------------------
+
+
+// Zoom controls
+
+.leaflet-touch {
+  .leaflet-control-layers,
+  .leaflet-bar {
+    border: 0;
+    box-shadow: $box-shadow;
+  }
+  .leaflet-bar a {
+    transition: $nav-link-transition;
+    color: $nav-link-color;
+    font-weight: normal;
+    line-height: 26px;
+    &:first-child {
+      border-bottom-color: $border-color;
+      border-top-left-radius: $border-radius-sm;
+      border-top-right-radius: $border-radius-sm;
+    }
+    &:last-child {
+      border-bottom-left-radius: $border-radius-sm;
+      border-bottom-right-radius: $border-radius-sm;
+    }
+    &:hover {
+      background-color: $white;
+      color: $nav-link-hover-color;
+    }
+    &.leaflet-disabled {
+      background-color: $white;
+      color: rgba($nav-link-disabled-color, .7);
+    }
+  }
+}
+
+
+// Custom marker: Dot
+
+.custom-marker-dot {
+  display: block;
+  width: .875rem !important;
+  height: .875rem !important;
+  margin: {
+    top: -.75rem !important;
+    left: -.375rem !important;
+  }
+  padding-left: .875rem;
+  transition: box-shadow .2s ease-in-out;
+  border-radius: 50%;
+  box-sizing: border-box;
+  background: $primary;
+
+  &:hover {
+    box-shadow: 0 0 0 .625rem rgba($primary, .25);
+  }
+  
+  &.leaflet-marker-shadow { display: none; }
+}
+
+
+// Custom marker: Icon
+
+.custom-marker-icon {
+  display: block;
+  width: 3rem !important;
+  height: auto !important;
+  margin: {
+    top: -1.5rem !important;
+    left: -1.5rem !important;
+  }
+  &.leaflet-marker-shadow { display: none; }
+}
+
+
+// Popup
+
+.leaflet-popup-content-wrapper {
+  min-width: 17.5rem;
+  padding: 0;
+  overflow: hidden;
+  .leaflet-popup-content {
+    width: 100% !important;
+    margin: 0 !important;
+    color: $body-color;
+  }
+}
+.leaflet-container {
+  font-family: $font-family-sans-serif;
+  a.leaflet-popup-close-button {
+    top: .5rem;
+    right: .5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    background-color: $white;
+    border-radius: 50%;
+    color: rgba($gray-800, .7);
+    font-size: .875rem;
+    line-height: 1.5rem;
+    text-align: center;
+    box-shadow: $box-shadow-sm;
+    &:hover { color: $gray-800; }
+  }
+}
+.leaflet-popup:focus,
+.leaflet-marker-icon:focus { outline: none; }
+.leaflet-popup-tip-container {
+  backface-visibility: hidden;
+}
+@-moz-document url-prefix() {
+  .leaflet-container a.leaflet-popup-close-button {
+    line-height: 1.375rem;
+  }
+}
+
+
+// Hide / show map popup
+
+.map-popup {
+  transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
+  background-color: $white;
+  z-index: 10;
+  &.invisible {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .btn-icon {
+    position: absolute;
+    top: $spacer;
+    right: $spacer;
+    z-index: 999;
+  }
+}
+
+.map-popup,
+.map-popup .interactive-map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@include media-breakpoint-down(lg) {
+  .map-popup {
+    position: fixed;
+    z-index: $zindex-fixed + 1;
+  }
+}

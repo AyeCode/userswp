@@ -1,0 +1,11 @@
+//
+// Close button
+// --------------------------------------------------
+
+
+.btn-close { transition: $btn-close-transition; }
+
+// Inside modal header
+.modal-header .btn-close {
+  margin: ($modal-header-padding-y * -.25) ($modal-header-padding-x * -.25) ($modal-header-padding-y * -.25) auto;
+}

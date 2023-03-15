@@ -1,0 +1,344 @@
+//
+// Utilities
+// Extends default Bootstrap utility classes
+// Classes with a purpose to reduce the frequency of 
+// highly repetitive declarations
+// --------------------------------------------------
+
+@import '1-frameworks/bootstrap/functions';
+@import '1-frameworks/bootstrap/variables';
+@import '1-frameworks/bootstrap/maps';
+@import '1-frameworks/bootstrap/mixins';
+@import '1-frameworks/bootstrap/utilities';
+
+$utilities: map-merge(
+  $utilities,
+  (
+    // Border (sides)
+    'border-top': (
+      property: border-top,
+      responsive: true,
+      values: (
+        null: $border-width solid $border-color,
+        0: 0,
+      )
+    ),
+    'border-end': (
+      property: border-right,
+      class: border-end,
+      responsive: true,
+      values: (
+        null: $border-width solid $border-color,
+        0: 0,
+      )
+    ),
+    'border-bottom': (
+      property: border-bottom,
+      responsive: true,
+      values: (
+        null: $border-width solid $border-color,
+        0: 0,
+      )
+    ),
+    'border-start': (
+      property: border-left,
+      class: border-start,
+      responsive: true,
+      values: (
+        null: $border-width solid $border-color,
+        0: 0,
+      )
+    ),
+    'border': (
+      property: border,
+      class: border,
+      responsive: true,
+      values: (
+        null: $border-width solid $border-color,
+        0: 0,
+      )
+    ),
+
+    // Border colors
+    'border-color': map-merge(
+      map-get($utilities, 'border-color'),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, 'border-color'), 'values'),
+          (
+            'light': $border-light-color
+          )
+        )
+      )
+    ),
+
+    // Background colors
+    'background-color': map-merge(
+      map-get($utilities, 'background-color'),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, 'background-color'), 'values'),
+          (
+            'transparent': transparent
+          )
+        )
+      )
+    ),
+
+    // Disable background
+    'background': (
+      property: background,
+      class: bg,
+      values: none
+    ),
+
+    // Border radius
+    'rounded': (
+      property: border-radius,
+      class: rounded,
+      responsive: true,
+      values: (
+        null: $border-radius,
+        0: 0,
+        1: $border-radius-sm,
+        2: $border-radius,
+        3: $border-radius-lg,
+        4: $border-radius-xl,
+        circle: 50%,
+        pill: $border-radius-pill
+      )
+    ),
+
+    // Background faded colors
+    'background-faded-color': (
+      property: background-color,
+      class: bg-faded,
+      values: $theme-faded-colors
+    ),
+
+    // Disable background image
+    'background-image': (
+      property: background-image,
+      class: bg-image,
+      values: none
+    ),
+
+    // Background size
+    'background-size': (
+      property: background-size,
+      class: bg-size,
+      values: (
+        cover: cover,
+        contain: contain
+      )
+    ),
+
+    // Background position
+    'background-position': (
+      property: background-position,
+      class: bg-position,
+      values: (
+        'center': center,
+        'center-y': left center,
+        'center-x': center top,
+        'top-right': top right,
+        'top-center': top center,
+        'top-left': top left,
+        'center-right': center right,
+        'center-left': center left,
+        'bottom-right': bottom right,
+        'bottom-left': bottom left,
+        'bottom-center': bottom center
+      )
+    ),
+
+    // Background repeat
+    'background-repeat': (
+      property: background-repeat,
+      class: bg-repeat,
+      values: (
+        0: no-repeat,
+        x: repeat-x,
+        y: repeat-y
+      )
+    ),
+
+    // Text color
+    'color': (
+      property: color,
+      class: text,
+      values: map-merge(
+        $theme-colors,
+        (
+          'white': $white,
+          'body': $body-color,
+          'muted': $text-muted,
+          'nav': $nav-link-color,
+          'black-50': rgba($black, .5),
+          'white-50': rgba($white, .5),
+          'reset': inherit,
+        )
+      )
+    ),
+
+    // Text shadow
+    'text-shadow': (
+      property: text-shadow,
+      values: (
+        null: $text-shadow
+      )
+    ),
+
+    // Font weight
+    'font-weight': map-merge(
+      map-get($utilities, 'font-weight'),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, 'font-weight'), 'values'),
+          (
+            medium: $font-weight-medium,
+          )
+        )
+      )
+    ),
+
+    // Width
+    'width': (
+      property: width,
+      class: w,
+      responsive: true,
+      values: (
+        25: 25%,
+        50: 50%,
+        75: 75%,
+        100: 100%,
+        auto: auto
+      )
+    ),
+
+    // Height
+    'height': (
+      property: height,
+      class: h,
+      responsive: true,
+      values: (
+        25: 25%,
+        50: 50%,
+        75: 75%,
+        100: 100%,
+        auto: auto
+      )
+    ),
+
+    // Opacity
+    'opacity': (
+      property: opacity,
+      class: opacity,
+      values: (
+        10: .1,
+        15: .15,
+        25: .25,
+        35: .35,
+        40: .40,
+        50: .5,
+        60: .6,
+        65: .65,
+        70: .7,
+        75: .75,
+        80: .8,
+        90: .9,
+        100: 1
+      )
+    ),
+
+    // Rounded top: 0
+    'rounded-top': map-merge(
+      map-get($utilities, 'rounded-top'),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, 'rounded-top'), 'values'),
+          (
+            0: 0
+          )
+        )
+      )
+    ),
+
+    // Rounded end: 0
+    'rounded-end': map-merge(
+      map-get($utilities, 'rounded-end'),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, 'rounded-end'), 'values'),
+          (
+            0: 0
+          )
+        )
+      )
+    ),
+
+    // Rounded bottom: 0
+    'rounded-bottom': map-merge(
+      map-get($utilities, 'rounded-bottom'),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, 'rounded-bottom'), 'values'),
+          (
+            0: 0
+          )
+        )
+      )
+    ),
+
+    // Rounded start: 0
+    'rounded-start': map-merge(
+      map-get($utilities, 'rounded-start'),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, 'rounded-start'), 'values'),
+          (
+            0: 0
+          )
+        )
+      )
+    ),
+
+    // Z-index
+    'z-index': (
+      property: z-index,
+      class: zindex,
+      responsive: true,
+      values: 0 1 5 10
+    )
+  )
+);
+
+
+// Fix the light border color priority
+
+[class^='border-'], [class*=' border-'] {
+  &.border-light { border-color: $border-light-color !important; }
+}
+
+
+// Opacity transition
+
+.opacity-transition {
+  transition: opacity .25s ease-in-out;
+  &:hover { opacity: 1 !important; }
+}
+
+
+// Image scale on hover
+
+.hover-img-scale {
+  img {
+    will-change: transform;
+    transition: transform .3s ease-in-out;
+    transform: none;
+  }
+
+  &:hover img {
+    transform: translateY(-.25rem) scale(1.01);
+  }
+}

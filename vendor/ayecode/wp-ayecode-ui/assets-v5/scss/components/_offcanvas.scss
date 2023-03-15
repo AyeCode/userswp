@@ -1,0 +1,151 @@
+//
+// Offcanvas
+// --------------------------------------------------
+
+
+// Offcanvas base styles
+
+.offcanvas {
+  will-change: transform, box-shadow;
+  transition: transform .4s cubic-bezier(.165, .84, .44, 1), box-shadow .3s ease;
+  box-shadow: none;
+  visibility: visible !important;
+}
+
+
+// Offcanvas Header and Footer
+
+.offcanvas-header,
+.offcanvas-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  padding: $offcanvas-padding-y $offcanvas-padding-x;
+
+  .bg-dark & {
+    background-color: rgba($white, .05);
+  }
+}
+
+
+// Offcanvas body (content holder)
+
+.offcanvas-body {
+  height: 100%;
+
+  // Custom scrollbar inside offcanvas
+  &::-webkit-scrollbar {
+    width: $scrollbar-width;
+    background-color: transparent;
+    opacity: 0;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $scrollbar-bg;
+    @include border-radius($scrollbar-width * .5);
+  }
+  & > .simplebar-track {
+    display: block;
+    background-color: transparent;
+  }
+  .simplebar-vertical { margin-right: .1875rem; }
+
+  // Nav inside offcanvas
+  > :not(.card) {
+
+    .nav {
+      flex-direction: column;
+      margin: {
+        right: -$offcanvas-padding-x;
+        left: -$offcanvas-padding-x;
+      }
+      > li { margin-bottom: 0; }
+    }
+    &:not(.navbar-nav) .nav-link {
+      padding: .3rem $offcanvas-padding-x;
+      font-weight: normal;
+      &.active {
+        position: relative;
+        &::before {
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: .125rem;
+          height: 100%;
+          background-color: $nav-link-active-color;
+          content: '';
+        }
+      }
+    }
+    .nav-light .nav-link.active::before {
+      background-color: $nav-link-light-active-color;
+    }
+  }
+}
+
+.bg-dark .offcanvas-body {
+  &::-webkit-scrollbar-thumb {
+    background-color: $scrollbar-light-bg;
+  }
+}
+
+.offcanvas-collapse .card-flush {
+  border: 0;
+  > .card-body { padding: 0; }
+}
+
+
+// Control the breakpoint at which offcanvas expands or collapses
+@include media-breakpoint-up(lg) {
+
+  // Expand offcanvas from lg breakpoint
+  .offcanvas-expand {
+    transform: none;
+    &.offcanvas-start,
+    &.offcanvas-end,
+    &.offcanvas-bottom { transform: none; }
+    z-index: $zindex-fixed + 1;
+  }
+
+  // Collapse offcanvas down from lg breakpoint
+  .offcanvas-collapse {
+    display: block;
+    position: static;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    transform: none !important;
+    background-color: transparent;
+
+    .offcanvas-header,
+    .offcanvas-footer { display: none; }
+
+    .offcanvas-body {
+      padding: 0;
+      overflow: initial;
+    }
+
+    .card-flush {
+      border: $card-border-width solid $card-border-color;
+      > .card-body {
+        padding: $card-spacer-y $card-spacer-x;
+      }
+    }
+  }
+
+  // Offcanvas enabled container (for layouts with fixed side navigation)
+  .offcanvas-enabled-start {
+    padding-left: $offcanvas-horizontal-width + 1.5rem;
+  }
+  .offcanvas-enabled-end {
+    padding: {
+      right: $offcanvas-horizontal-width + 1.5rem;
+      left: 0;
+    }
+  }
+}
