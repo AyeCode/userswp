@@ -1,0 +1,95 @@
+//
+// Reboot
+// --------------------------------------------------
+
+
+html * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Sticky footer
+html, body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
+.page-wrapper {
+  flex: 1 0 auto;
+}
+.footer {
+  flex-shrink: 0;
+}
+
+
+// Links
+a {
+  transition: $link-transition;
+  &:focus { outline: none; }
+  &:hover > .text-decoration-underline {
+    text-decoration: none !important;
+  }
+}
+
+// Background transition for links
+a[class^='bg-'],
+a[class*='bg-'] {
+  transition: background-color .25s ease;
+}
+
+
+// Images
+// Responsive images (ensure images don't scale beyond their parents)
+img,
+figure {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+
+// Responsive iframes
+iframe {
+  width: 100%;
+}
+
+// Text Selection Color
+::selection {
+  background: $user-selection-color;
+}
+::-moz-selection {
+  background: $user-selection-color;
+}
+
+b,
+strong {
+  font-weight: $font-weight-bold;
+}
+
+small { font-weight: inherit; }
+
+// Disable button :focus outline
+button:focus {
+  outline: none;
+}
+
+// Vertical divider
+.hr-vertical {
+  width: $border-width;
+  height: 100% !important;
+}
+
+
+// Horizontal rule - light version
+.hr-light {
+  color: $border-light-color;
+}
+
+// Add extra padding to Footer when there is fixed button on bottom
+@include media-breakpoint-down(lg) {
+  .fixed-bottom-btn .footer {
+    padding-bottom: 2.25rem;
+  }
+}

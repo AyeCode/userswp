@@ -226,7 +226,7 @@ class AUI_Component_Helper {
 		$output = '';
 
 		if ( $text ) {
-			$output .= '<small class="form-text text-muted">' . wp_kses_post( $text ) . '</small>';
+			$output .= '<small class="form-text text-muted d-block">' . wp_kses_post( $text ) . '</small>';
 		}
 
 

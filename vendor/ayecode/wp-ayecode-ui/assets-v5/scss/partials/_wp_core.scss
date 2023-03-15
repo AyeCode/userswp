@@ -1,0 +1,101 @@
+// WP Core conflict changes
+
+figure.wp-block-gallery {
+  display: flex;
+}
+
+body.admin-bar{
+  .fixed-top{
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 782px) {
+  body.admin-bar{
+    .fixed-top {
+      margin-top: 46px;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+    html:not([data-scroll='0']){
+      body.admin-bar {
+        .fixed-top {
+          margin-top: 0;
+          transition: all 0.2s ease;
+        }
+      }
+  }
+}
+
+
+// background transparent until scroll
+.bg-transparent-until-scroll{
+  transition: all 0.2s ease;
+}
+
+// frontend
+html[data-scroll='0'],html:not([data-scroll]){
+  body:not(.block-editor-iframe__body){
+      .bg-transparent-until-scroll:not(.nav-menu-open){
+        background: transparent !important;
+        box-shadow: none !important;
+      }
+  }
+}
+
+// FSE editor
+html[data-scroll='0'],html:not([data-scroll]){
+  body.block-editor-iframe__body{
+    .wp-block-template-part:not(.has-child-selected){
+      .bg-transparent-until-scroll:not(.nav-menu-open){
+        background: transparent !important;
+        box-shadow: none !important;
+      }
+    }
+  }
+}
+
+// fix for fully transparent nav menu open on mobile
+.navbar.bg-transparent.nav-menu-open.navbar-dark{
+  background: #343a40 !important;
+}
+.navbar.bg-transparent.nav-menu-open.navbar-light{
+  background: #f8f9fa !important;
+}
+
+
+.editor-styles-wrapper .tab-pane.is-selected, .editor-styles-wrapper .tab-pane.has-child-selected{
+  display: block !important;
+  opacity: 1 !important;
+}
+
+// Show dropdown when selected.
+.editor-styles-wrapper .dropdown-menu {
+  &.is-selected, &.has-child-selected{
+    display: block;
+  }
+}
+
+//
+.editor-styles-wrapper {
+  .wp-block-blockstrap-blockstrap-widget-post-info,
+  .wp-block-geodirectory-geodir-widget-post-fav{
+    position: unset !important;
+  }
+
+  .wp-block-blockstrap-blockstrap-widget-container{
+    .card{
+
+    }
+  }
+}
+
+/* Fix conflicts calendar year selector */
+body>.flatpickr-calendar .flatpickr-month .flatpickr-current-month>*{display:inline-block}
+
+// add blurr to open modal background, added here so will work in compatibility mode
+body.modal-open .modal{
+  backdrop-filter: blur(10px);
+}

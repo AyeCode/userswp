@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.10' );
+	define( 'SUPER_DUPER_VER', '1.1.16' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -1718,7 +1718,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @since 1.0.4 Added block_wrap property which will set the block wrapping output element ie: div, span, p or empty for no wrap.
 		 */
 		public function block() {
-            global $sd_is_js_functions_loaded;
+            global $sd_is_js_functions_loaded, $aui_bs5;
 
 			ob_start();
 
@@ -1744,19 +1744,16 @@ function sd_show_view_options($this){
 function sd_set_view_type($device){
 	wp.data.dispatch('core/edit-site') ? wp.data.dispatch('core/edit-site').__experimentalSetPreviewDeviceType($device) : wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType($device);
 }
-			/**
+/**
  * Try to auto-recover blocks.
  */
 function sd_auto_recover_blocks() {
-	console.log('recover blocks');
 	var recursivelyRecoverInvalidBlockList = blocks => {
 		const _blocks = [...blocks]
-		// const _blocks = wp.data.select('core/block-editor').getBlocks();
 		let recoveryCalled = false
 		const recursivelyRecoverBlocks = willRecoverBlocks => {
 			willRecoverBlocks.forEach(_block => {
-				consol.log(_block);
-				if (isInvalid(_block)) {
+				if (!_block.isValid) {
 					recoveryCalled = true
 					const newBlock = recoverBlock(_block)
 					for (const key in newBlock) {
@@ -1768,73 +1765,56 @@ function sd_auto_recover_blocks() {
 				}
 			})
 		}
-
 		recursivelyRecoverBlocks(_blocks)
 		return [_blocks, recoveryCalled]
 	}
-
-	var recoverBlock = ({
-							name,
-							attributes,
-							innerBlocks
-						}) => wp.blocks.createBlock(name, attributes, innerBlocks);
-
+	var recoverBlock = ({ name, attributes, innerBlocks }) => wp.blocks.createBlock(name, attributes, innerBlocks);
 	var recoverBlocks = blocks => {
 		return blocks.map(_block => {
-			const block = _block
-//
-// if ( _block.name === 'core/template-part') {
-// 	const template = wp.data.select('core/block-editor').getTemplate(_block);console.log(template )
-// }
-
+			const block = _block;
 			// If the block is a reusable block, recover the Stackable blocks inside it.
 			if (_block.name === 'core/block') {
-				const {
-					attributes: {
-						ref
-					}
-				} = _block
-				const parsedBlocks = wp.blocks.parse(wp.data.select('core').getEntityRecords('postType', 'wp_block', {
-					include: [ref]
-				})?.[0]?.content?.raw) || []
-
+				const { attributes: { ref } } = _block
+				const parsedBlocks = wp.blocks.parse(wp.data.select('core').getEntityRecords('postType', 'wp_block', { include: [ref] })?.[0]?.content?.raw) || []
 				const [recoveredBlocks, recoveryCalled] = recursivelyRecoverInvalidBlockList(parsedBlocks)
-
 				if (recoveryCalled) {
-					console.log('Stackable notice: block ' + block.name + ' (' + block.clientId + ') was auto-recovered, you should not see this after saving your page.') // eslint-disable-line no-console
-					return {
-						blocks: recoveredBlocks,
-						isReusable: true,
-						ref,
-					}
+					console.log('Stackable notice: block ' + block.name + ' (' + block.clientId + ') was auto-recovered, you should not see this after saving your page.');
+					return { blocks: recoveredBlocks, isReusable: true, ref }
+				}
+			} else if (_block.name === 'core/template-part' && _block.attributes && _block.attributes.theme) {
+				var tmplPart = wp.data.select('core').getEntityRecord('postType', 'wp_template_part', _block.attributes.theme + '//' + _block.attributes.slug);
+				var tmplPartBlocks = block.innerBlocks && block.innerBlocks.length ? block.innerBlocks : wp.blocks.parse(tmplPart?.content?.raw) || [];
+				if (tmplPartBlocks && tmplPartBlocks.length && tmplPartBlocks.some(block => !block.isValid)) {
+					block.innerBlocks = tmplPartBlocks;
+					block.tmplPartId = _block.attributes.theme + '//' + _block.attributes.slug;
 				}
 			}
-
 			if (block.innerBlocks && block.innerBlocks.length) {
+				if (block.tmplPartId) {
+					console.log('Template part ' + block.tmplPartId + ' block ' + block.name + ' (' + block.clientId + ') starts');
+				}
 				const newInnerBlocks = recoverBlocks(block.innerBlocks)
 				if (newInnerBlocks.some(block => block.recovered)) {
 					block.innerBlocks = newInnerBlocks
 					block.replacedClientId = block.clientId
 					block.recovered = true
 				}
+				if (block.tmplPartId) {
+					console.log('Template part ' + block.tmplPartId + ' block ' + block.name + ' (' + block.clientId + ') ends');
+				}
 			}
-
 			if (!block.isValid) {
 				const newBlock = recoverBlock(block)
 				newBlock.replacedClientId = block.clientId
 				newBlock.recovered = true
-				console.log('Stackable notice: block ' + block.name + ' (' + block.clientId + ') was auto-recovered, you should not see this after saving your page.') // eslint-disable-line no-console
-
+				console.log('Stackable notice: block ' + block.name + ' (' + block.clientId + ') was auto-recovered, you should not see this after saving your page.');
 				return newBlock
 			}
-
 			return block
 		})
 	}
-
 	// Recover all the blocks that we can find.
-	var mainBlocks = recoverBlocks(wp.data.select('core/block-editor').getBlocks())
-
+	var mainBlocks = recoverBlocks(wp.data.select('core/block-editor').getBlocks());
 	// Replace the recovered blocks with the new ones.
 	mainBlocks.forEach(block => {
 		if (block.isReusable && block.ref) {
@@ -1843,40 +1823,76 @@ function sd_auto_recover_blocks() {
 				content: wp.blocks.serialize(block.blocks)
 			}).then(() => {
 				// But don't save them, let the user do the saving themselves. Our goal is to get rid of the block error visually.
-				// dispatch( 'core' ).saveEditedEntityRecord( 'postType', 'wp_block', block.ref )
 			})
 		}
-
 		if (block.recovered && block.replacedClientId) {
 			wp.data.dispatch('core/block-editor').replaceBlock(block.replacedClientId, block)
 		}
 	})
 }
 
+/**
+ * Try to auto-recover OUR blocks if traditional way fails.
+ */
+function sd_auto_recover_blocks_fallback() {
+	jQuery(".edit-site-visual-editor__editor-canvas").contents().find('div[class*=" wp-block-blockstrap-"] .block-editor-warning__actions  .block-editor-warning__action .components-button.is-primary').not(":contains('Keep as HTML')").removeAttr('disabled').click();
+}
 
 // Wait will window is loaded before calling.
 window.onload = function() {
 	sd_auto_recover_blocks();
 	// fire a second time incase of load delays.
-	setTimeout(function(){
+	setTimeout(function() {
 		sd_auto_recover_blocks();
-		console.log('arb');
 	}, 5000);
+
+	setTimeout(function() {
+		sd_auto_recover_blocks_fallback();
+	}, 6000);
+
+	setTimeout(function() {
+		sd_auto_recover_blocks_fallback();
+	}, 10000);
+
+	setTimeout(function() {
+		sd_auto_recover_blocks_fallback();
+	}, 15000);
+
+	setTimeout(function() {
+		sd_auto_recover_blocks_fallback();
+	}, 20000);
 };
 
 // fire when URL changes also.
 let lastUrl = location.href;
 new MutationObserver(() => {
-	const url = location.href;
-	if (url !== lastUrl) {
-		lastUrl = url;
-		sd_auto_recover_blocks();
-		// fire a second time incase of load delays.
-		setTimeout(function(){
-			sd_auto_recover_blocks();
-		}, 2000);
-	}
-}).observe(document, {subtree: true, childList: true});
+    const url = location.href;
+    if (url !== lastUrl) {
+        lastUrl = url;
+        sd_auto_recover_blocks();
+        // fire a second time incase of load delays.
+        setTimeout(function() {
+            sd_auto_recover_blocks();
+			sd_auto_recover_blocks_fallback();
+        }, 2000);
+
+		setTimeout(function() {
+		sd_auto_recover_blocks_fallback();
+		}, 10000);
+
+		setTimeout(function() {
+		sd_auto_recover_blocks_fallback();
+		}, 15000);
+
+		setTimeout(function() {
+		sd_auto_recover_blocks_fallback();
+		}, 20000);
+
+    }
+}).observe(document, {
+    subtree: true,
+    childList: true
+});
 
 
 			/**
@@ -1952,18 +1968,27 @@ new MutationObserver(() => {
 				}
 
 				// font size
-				if( $args['font_size_custom'] !== undefined && $args['font_size_custom'] !== '' ){
-					$styles['fontSize'] =  $args['font_size_custom'] + "rem";
+				if( $args['font_size'] === undefined || $args['font_size'] === 'custom' ){
+					if( $args['font_size_custom'] !== undefined && $args['font_size_custom'] !== '' ){
+						$styles['fontSize'] =  $args['font_size_custom'] + "rem";
+					}
 				}
 
 				// font color
-				if( $args['text_color_custom'] !== undefined && $args['text_color_custom'] !== '' ){
-					$styles['color'] =  $args['text_color_custom'];
+				if( $args['text_color'] === undefined || $args['text_color'] === 'custom' ){
+					if( $args['text_color_custom'] !== undefined && $args['text_color_custom'] !== '' ){
+						$styles['color'] =  $args['text_color_custom'];
+					}
 				}
 
 				// font line height
 				if( $args['font_line_height'] !== undefined && $args['font_line_height'] !== '' ){
 					$styles['lineHeight'] =  $args['font_line_height'];
+				}
+
+				// max height
+				if( $args['max_height'] !== undefined && $args['max_height'] !== '' ){
+					$styles['maxHeight'] =  $args['max_height'];
 				}
 
                 return $styles;
@@ -1974,41 +1999,63 @@ new MutationObserver(() => {
 
                 $classes = [];
 
+				<?php
+				if($aui_bs5){
+					?>
+				$aui_bs5 = true;
+				$p_ml = 'ms-';
+				$p_mr = 'me-';
+
+				$p_pl = 'ps-';
+				$p_pr = 'pe-';
+					<?php
+				}else{
+						?>
+				$aui_bs5 = false;
+				$p_ml = 'ml-';
+				$p_mr = 'mr-';
+
+				$p_pl = 'pl-';
+				$p_pr = 'pr-';
+					<?php
+				}
+				?>
+
                 // margins
 	            if ( $args['mt'] !== undefined && $args['mt'] !== '' ) { $classes.push( "mt-" + $args['mt'] );  $mt = $args['mt']; }else{$mt = null;}
-	            if ( $args['mr'] !== undefined && $args['mr'] !== '' ) { $classes.push( "mr-" + $args['mr'] );  $mr = $args['mr']; }else{$mr = null;}
+	            if ( $args['mr'] !== undefined && $args['mr'] !== '' ) { $classes.push( $p_mr + $args['mr'] );  $mr = $args['mr']; }else{$mr = null;}
 	            if ( $args['mb'] !== undefined && $args['mb'] !== '' ) { $classes.push( "mb-" + $args['mb'] );  $mb = $args['mb']; }else{$mb = null;}
-	            if ( $args['ml'] !== undefined && $args['ml'] !== '' ) { $classes.push( "ml-" + $args['ml'] );  $ml = $args['ml']; }else{$ml = null;}
+	            if ( $args['ml'] !== undefined && $args['ml'] !== '' ) { $classes.push( $p_ml + $args['ml'] );  $ml = $args['ml']; }else{$ml = null;}
 
                 // margins tablet
 	            if ( $args['mt_md'] !== undefined && $args['mt_md'] !== '' ) { $classes.push( "mt-md-" + $args['mt_md'] );  $mt_md = $args['mt_md']; }else{$mt_md = null;}
-	            if ( $args['mr_md'] !== undefined && $args['mr_md'] !== '' ) { $classes.push( "mr-md-" + $args['mr_md'] );  $mt_md = $args['mr_md']; }else{$mr_md = null;}
+	            if ( $args['mr_md'] !== undefined && $args['mr_md'] !== '' ) { $classes.push( $p_mr + "md-" + $args['mr_md'] );  $mt_md = $args['mr_md']; }else{$mr_md = null;}
 	            if ( $args['mb_md'] !== undefined && $args['mb_md'] !== '' ) { $classes.push( "mb-md-" + $args['mb_md'] );  $mt_md = $args['mb_md']; }else{$mb_md = null;}
-	            if ( $args['ml_md'] !== undefined && $args['ml_md'] !== '' ) { $classes.push( "ml-md-" + $args['ml_md'] );  $mt_md = $args['ml_md']; }else{$ml_md = null;}
+	            if ( $args['ml_md'] !== undefined && $args['ml_md'] !== '' ) { $classes.push( $p_ml + "md-" + $args['ml_md'] );  $mt_md = $args['ml_md']; }else{$ml_md = null;}
 
                 // margins desktop
                 if ( $args['mt_lg'] !== undefined && $args['mt_lg'] !== '' ) { if($mt == null && $mt_md == null){ $classes.push( "mt-" + $args['mt_lg'] ); }else{$classes.push( "mt-lg-" + $args['mt_lg'] ); } }
-	            if ( $args['mr_lg'] !== undefined && $args['mr_lg'] !== '' ) { if($mr == null && $mr_md == null){ $classes.push( "mr-" + $args['mr_lg'] ); }else{$classes.push( "mr-lg-" + $args['mr_lg'] ); } }
+	            if ( $args['mr_lg'] !== undefined && $args['mr_lg'] !== '' ) { if($mr == null && $mr_md == null){ $classes.push( $p_mr + $args['mr_lg'] ); }else{$classes.push( $p_mr + "lg-" + $args['mr_lg'] ); } }
 	            if ( $args['mb_lg'] !== undefined && $args['mb_lg'] !== '' ) { if($mb == null && $mb_md == null){ $classes.push( "mb-" + $args['mb_lg'] ); }else{$classes.push( "mb-lg-" + $args['mb_lg'] ); } }
-	            if ( $args['ml_lg'] !== undefined && $args['ml_lg'] !== '' ) { if($ml == null && $ml_md == null){ $classes.push( "ml-" + $args['ml_lg'] ); }else{$classes.push( "ml-lg-" + $args['ml_lg'] ); } }
+	            if ( $args['ml_lg'] !== undefined && $args['ml_lg'] !== '' ) { if($ml == null && $ml_md == null){ $classes.push( $p_ml + $args['ml_lg'] ); }else{$classes.push( $p_ml + "lg-" + $args['ml_lg'] ); } }
 
                 // padding
                 if ( $args['pt'] !== undefined && $args['pt'] !== '' ) { $classes.push( "pt-" + $args['pt'] ); $pt = $args['pt']; }else{$pt = null;}
-	            if ( $args['pr'] !== undefined && $args['pr'] !== '' ) { $classes.push( "pr-" + $args['pr'] ); $pr = $args['pt']; }else{$pr = null;}
+	            if ( $args['pr'] !== undefined && $args['pr'] !== '' ) { $classes.push( $p_pr + $args['pr'] ); $pr = $args['pt']; }else{$pr = null;}
 	            if ( $args['pb'] !== undefined && $args['pb'] !== '' ) { $classes.push( "pb-" + $args['pb'] ); $pb = $args['pt']; }else{$pb = null;}
-	            if ( $args['pl'] !== undefined && $args['pl'] !== '' ) { $classes.push( "pl-" + $args['pl'] ); $pl = $args['pt']; }else{$pl = null;}
+	            if ( $args['pl'] !== undefined && $args['pl'] !== '' ) { $classes.push( $p_pl + $args['pl'] ); $pl = $args['pt']; }else{$pl = null;}
 
                 // padding tablet
                 if ( $args['pt_md'] !== undefined && $args['pt_md'] !== '' ) { $classes.push( "pt-md-" + $args['pt_md'] ); $pt_md = $args['pt_md']; }else{$pt_md = null;}
-	            if ( $args['pr_md'] !== undefined && $args['pr_md'] !== '' ) { $classes.push( "pr-md-" + $args['pr_md'] ); $pr_md = $args['pt_md']; }else{$pr_md = null;}
+	            if ( $args['pr_md'] !== undefined && $args['pr_md'] !== '' ) { $classes.push( $p_pr + "md-" + $args['pr_md'] ); $pr_md = $args['pt_md']; }else{$pr_md = null;}
 	            if ( $args['pb_md'] !== undefined && $args['pb_md'] !== '' ) { $classes.push( "pb-md-" + $args['pb_md'] ); $pb_md = $args['pt_md']; }else{$pb_md = null;}
-	            if ( $args['pl_md'] !== undefined && $args['pl_md'] !== '' ) { $classes.push( "pl-md-" + $args['pl_md'] ); $pl_md = $args['pt_md']; }else{$pl_md = null;}
+	            if ( $args['pl_md'] !== undefined && $args['pl_md'] !== '' ) { $classes.push( $p_pl + "md-" + $args['pl_md'] ); $pl_md = $args['pt_md']; }else{$pl_md = null;}
 
                 // padding desktop
                 if ( $args['pt_lg'] !== undefined && $args['pt_lg'] !== '' ) { if($pt == null && $pt_md == null){ $classes.push( "pt-" + $args['pt_lg'] ); }else{$classes.push( "pt-lg-" + $args['pt_lg'] ); } }
-	            if ( $args['pr_lg'] !== undefined && $args['pr_lg'] !== '' ) { if($pr == null && $pr_md == null){ $classes.push( "pr-" + $args['pr_lg'] ); }else{$classes.push( "pr-lg-" + $args['pr_lg'] ); } }
+	            if ( $args['pr_lg'] !== undefined && $args['pr_lg'] !== '' ) { if($pr == null && $pr_md == null){ $classes.push( $p_pr + $args['pr_lg'] ); }else{$classes.push( $p_pr + "lg-" + $args['pr_lg'] ); } }
 	            if ( $args['pb_lg'] !== undefined && $args['pb_lg'] !== '' ) { if($pb == null && $pb_md == null){ $classes.push( "pb-" + $args['pb_lg'] ); }else{$classes.push( "pb-lg-" + $args['pb_lg'] ); } }
-	            if ( $args['pl_lg'] !== undefined && $args['pl_lg'] !== '' ) { if($pl == null && $pl_md == null){ $classes.push( "pl-" + $args['pl_lg'] ); }else{$classes.push( "pl-lg-" + $args['pl_lg'] ); } }
+	            if ( $args['pl_lg'] !== undefined && $args['pl_lg'] !== '' ) { if($pl == null && $pl_md == null){ $classes.push( $p_pl + $args['pl_lg'] ); }else{$classes.push( $p_pl + "lg-" + $args['pl_lg'] ); } }
 
 				// row cols, mobile, tablet, desktop
 	            if ( $args['row_cols'] !== undefined && $args['row_cols'] !== '' ) { $classes.push( "row-cols-" + $args['row_cols'] );  $row_cols = $args['row_cols']; }else{$row_cols = null;}
@@ -2024,20 +2071,37 @@ new MutationObserver(() => {
                 // border
                 if ( $args['border'] === undefined || $args['border']=='')  { }
                 else if ( $args['border'] !== undefined && ( $args['border']=='none' || $args['border']==='0') ) { $classes.push( "border-0" ); }
-	            else if ( $args['border'] !== undefined ) { $classes.push( "border border-" + $args['border'] ); }
+	            else if ( $args['border'] !== undefined ) {
+					if($aui_bs5 && $args['border_type'] !== undefined){
+						$args['border_type'] = $args['border_type'].replace('-left','-start').replace('-right','-end');
+					}
+					$border_class = 'border';
+					if ( $args['border_type'] !== undefined && ! $args['border_type'].includes( '-0' )  ) {
+						$border_class = '';
+					}
+					$classes.push( $border_class + " border-" + $args['border'] );
+				}
 
                 // border radius type
               //  if ( $args['rounded'] !== undefined && $args['rounded'] !== '' ) { $classes.push($args['rounded']); }
 
                 // border radius size
-                if ( $args['rounded_size'] !== undefined && $args['rounded_size'] !== '' ) {
-                    $classes.push("rounded-" + $args['rounded_size']);
-                    // if we set a size then we need to remove "rounded" if set
-                    var index = $classes.indexOf("rounded");
-                    if (index !== -1) {
-                      $classes.splice(index, 1);
-                    }
+                if( $args['rounded_size'] !== undefined && ( $args['rounded_size']==='sm' || $args['rounded_size']==='lg' ) ){
+					if ( $args['rounded_size'] !== undefined && $args['rounded_size'] !== '' ) {
+						$classes.push("rounded-" + $args['rounded_size']);
+						// if we set a size then we need to remove "rounded" if set
+						var index = $classes.indexOf("rounded");
+						if (index !== -1) {
+						  $classes.splice(index, 1);
+						}
+                	}
+                }else{
+					// rounded_size , mobile, tablet, desktop
+					if ( $args['rounded_size'] !== undefined && $args['rounded_size'] !== '' ) { $classes.push( "rounded-" + $args['rounded_size'] );  $rounded_size = $args['rounded_size']; }else{$rounded_size = null;}
+					if ( $args['rounded_size_md'] !== undefined && $args['rounded_size_md'] !== '' ) { $classes.push( "rounded-md-" + $args['rounded_size_md'] );  $rounded_size_md = $args['rounded_size_md']; }else{$rounded_size_md = null;}
+					if ( $args['rounded_size_lg'] !== undefined && $args['rounded_size_lg'] !== '' ) { if($rounded_size == null && $rounded_size_md == null){ $classes.push( "rounded-" + $args['rounded_size_lg'] ); }else{$classes.push( "rounded-lg-" + $args['rounded_size_lg'] ); } }
                 }
+
 
                 // shadow
                // if ( $args['shadow'] !== undefined && $args['shadow'] !== '' ) { $classes.push($args['shadow']); }
@@ -2051,9 +2115,18 @@ new MutationObserver(() => {
                 // text_align
                 if ( $args['text_justify'] !== undefined && $args['text_justify'] ) { $classes.push('text-justify'); }
                 else{
-                    if ( $args['text_align'] !== undefined && $args['text_align'] !== '' ) { $classes.push($args['text_align']); $text_align = $args['text_align']; }else{$text_align = null;}
-                    if ( $args['text_align_md'] !== undefined && $args['text_align_md'] !== '' ) { $classes.push($args['text_align_md']); $text_align_md = $args['text_align_md']; }else{$text_align_md = null;}
-                    if ( $args['text_align_lg'] !== undefined && $args['text_align_lg'] !== '' ) { if($text_align  == null && $text_align_md == null){ $classes.push($args['text_align_lg'].replace("-lg", "")); }else{$classes.push($args['text_align_lg']);} }
+                    if ( $args['text_align'] !== undefined && $args['text_align'] !== '' ) {
+						if($aui_bs5){ $args['text_align'] = $args['text_align'].replace('-left','-start').replace('-right','-end'); }
+						$classes.push($args['text_align']); $text_align = $args['text_align'];
+					}else{$text_align = null;}
+                    if ( $args['text_align_md'] !== undefined && $args['text_align_md'] !== '' ) {
+						if($aui_bs5){ $args['text_align_md'] = $args['text_align_md'].replace('-left','-start').replace('-right','-end'); }
+						$classes.push($args['text_align_md']); $text_align_md = $args['text_align_md'];
+					}else{$text_align_md = null;}
+                    if ( $args['text_align_lg'] !== undefined && $args['text_align_lg'] !== '' ) {
+						if($aui_bs5){ $args['text_align_lg'] = $args['text_align_lg'].replace('-left','-start').replace('-right','-end'); }
+						if($text_align  == null && $text_align_md == null){ $classes.push($args['text_align_lg'].replace("-lg", ""));
+						}else{$classes.push($args['text_align_lg']);} }
                 }
 
 				// display
@@ -2064,8 +2137,34 @@ new MutationObserver(() => {
 				// bgtus - background transparent until scroll
                 if ( $args['bgtus'] !== undefined && $args['bgtus'] ) { $classes.push("bg-transparent-until-scroll"); }
 
+				// cscos - change color scheme on scroll
+                if ( $args['bgtus'] !== undefined && $args['bgtus'] && $args['cscos'] !== undefined && $args['cscos'] ) { $classes.push("color-scheme-flip-on-scroll"); }
+
 				// hover animations
-                if ( $args['hover_animations'] !== undefined && $args['hover_animations'] ) { $classes.push($args['hover_animations'].replace(',',' ')); }
+                if ( $args['hover_animations'] !== undefined && $args['hover_animations'] ) { $classes.push($args['hover_animations'].toString().replace(',',' ')); }
+
+				// absolute_position
+				if ( $args['absolute_position'] !== undefined ) {
+					if ( 'top-left' === $args['absolute_position'] ) {
+						$classes.push('start-0 top-0');
+					} else if ( 'top-center' === $args['absolute_position'] ) {
+						$classes.push('start-50 top-0 translate-middle');
+					} else if ( 'top-right' === $args['absolute_position'] ) {
+						$classes.push('end-0 top-0');
+					} else if ( 'center-left' === $args['absolute_position'] ) {
+						$classes.push('start-0 bottom-50');
+					} else if ( 'center' === $args['absolute_position'] ) {
+						$classes.push('start-50 top-50 translate-middle');
+					} else if ( 'center-right' === $args['absolute_position'] ) {
+						$classes.push('end-0 top-50');
+					} else if ( 'bottom-left' === $args['absolute_position'] ) {
+						$classes.push('start-0 bottom-0');
+					} else if ( 'bottom-center' === $args['absolute_position'] ) {
+						$classes.push('start-50 bottom-0 translate-middle');
+					} else if ( 'bottom-right' === $args['absolute_position'] ) {
+						$classes.push('end-0 bottom-0');
+					}
+				}
 
 				// build classes from build keys
 				$build_keys = sd_get_class_build_keys();
@@ -2399,73 +2498,118 @@ const parentBlocksIDs = wp.data.select( 'core/block-editor' ).getBlockParents(pr
 const parentBlocks = wp.data.select('core/block-editor').getBlocksByClientId(parentBlocksIDs);
 // const isParentOfSelectedBlock = useSelect( ( select ) => wp.data.select( 'core/block-editor' ).hasSelectedInnerBlock( props.clientId, true ) ):
     const block = wp.data.select('core/block-editor').getBlocksByClientId(props.clientId);//.[0].innerBlocks;
-    const childBlocks = block[0].innerBlocks;
+    const childBlocks = block[0] == null ? '' : block[0].innerBlocks;
 
+	var $value = '';
+	<?php
+	// if we have a post_type and a category then link them
+	if( isset($this->arguments['post_type']) && isset($this->arguments['category']) && !empty($this->arguments['category']['post_type_linked']) ){
+	?>
+	if(typeof(prev_attributes[props.clientId]) != 'undefined'){
+		$pt = props.attributes.post_type;
+		if(post_type_rest_slugs.length){
+			$value = post_type_rest_slugs[0][$pt];
+		}
+		var run = false;
 
-							var $value = '';
-							<?php
-							// if we have a post_type and a category then link them
-							if( isset($this->arguments['post_type']) && isset($this->arguments['category']) && !empty($this->arguments['category']['post_type_linked']) ){
-							?>
-							if(typeof(prev_attributes[props.clientId]) != 'undefined' ){
-								$pt = props.attributes.post_type;
-								if(post_type_rest_slugs.length){
-									$value = post_type_rest_slugs[0][$pt];
-								}
-								var run = false;
+		if($pt != term_query_type){
+			run = true;
+			term_query_type = $pt;
+		}
+<?php
+	$cat_path = '';
+	if ( ! empty( $this->arguments['post_type']['onchange_rest']['path'] ) ) {
+		$cat_path = esc_js( strip_tags( $this->arguments['post_type']['onchange_rest']['path'] ) );
+		$cat_path = str_replace( array( '&quot;', '&#039;' ), array( '"', "'" ), $cat_path );
+	}
+?>
+		/* taxonomies */
+		if($value && 'post_type' in prev_attributes[props.clientId] && 'category' in prev_attributes[props.clientId] && run){
+			if (!window.gdCPTCats) {
+				window.gdCPTCats = [];
+			}
+			var gdCatPath = "<?php echo ( ! empty( $cat_path ) ? $cat_path : "/wp/v2/" + $value + "/categories/?per_page=100" ); ?>";
+			if (window.gdCPTCats[gdCatPath]) {
+				terms = window.gdCPTCats[gdCatPath];
+				while (taxonomies_<?php echo str_replace("-","_", $this->id);?>.length) {
+					taxonomies_<?php echo str_replace("-","_", $this->id);?>.pop();
+				}
+				taxonomies_<?php echo str_replace("-","_", $this->id);?>.push({label: "All", value: 0});
+				jQuery.each( terms, function( key, val ) {
+					taxonomies_<?php echo str_replace("-","_", $this->id);?>.push({label: val.name, value: val.id});
+				});
 
-								if($pt != term_query_type){
-									run = true;
-									term_query_type = $pt;
-								}
+				/* Setting the value back and fourth fixes the no update issue that sometimes happens where it won't update the options. */
+				var $old_cat_value = props.attributes.category
+				props.setAttributes({category: [0] });
+				props.setAttributes({category: $old_cat_value });
+			} else {
+				wp.apiFetch({path: gdCatPath}).then(terms => {
+					window.gdCPTCats[gdCatPath] = terms;
+					while (taxonomies_<?php echo str_replace("-","_", $this->id);?>.length) {
+						taxonomies_<?php echo str_replace("-","_", $this->id);?>.pop();
+					}
+					taxonomies_<?php echo str_replace("-","_", $this->id);?>.push({label: "All", value: 0});
+					jQuery.each( terms, function( key, val ) {
+						taxonomies_<?php echo str_replace("-","_", $this->id);?>.push({label: val.name, value: val.id});
+					});
 
-								// taxonomies
-								if( $value && 'post_type' in prev_attributes[props.clientId] && 'category' in prev_attributes[props.clientId] && run ){
-									wp.apiFetch({path: "<?php if(isset($this->arguments['post_type']['onchange_rest']['path'])){echo $this->arguments['post_type']['onchange_rest']['path'];}else{'/wp/v2/"+$value+"/categories/?per_page=100';} ?>"}).then(terms => {
-										while (taxonomies_<?php echo str_replace("-","_", $this->id);?>.length) {
-										taxonomies_<?php echo str_replace("-","_", $this->id);?>.pop();
-									}
-									taxonomies_<?php echo str_replace("-","_", $this->id);?>.push({label: "All", value: 0});
-									jQuery.each( terms, function( key, val ) {
-										taxonomies_<?php echo str_replace("-","_", $this->id);?>.push({label: val.name, value: val.id});
-									});
+					/* Setting the value back and fourth fixes the no update issue that sometimes happens where it won't update the options. */
+					var $old_cat_value = props.attributes.category
+					props.setAttributes({category: [0] });
+					props.setAttributes({category: $old_cat_value });
 
-									// setting the value back and fourth fixes the no update issue that sometimes happens where it won't update the options.
-									var $old_cat_value = props.attributes.category
-									props.setAttributes({category: [0] });
-									props.setAttributes({category: $old_cat_value });
+					return taxonomies_<?php echo str_replace("-","_", $this->id);?>;
+				});
+			}
+		}
 
-									return taxonomies_<?php echo str_replace("-","_", $this->id);?>;
-								});
-								}
+		/* sort_by */
+		if($value && 'post_type' in prev_attributes[props.clientId] && 'sort_by' in prev_attributes[props.clientId] && run){
+			if (!window.gdCPTSort) {
+				window.gdCPTSort = [];
+			}
+			if (window.gdCPTSort[$pt]) {
+				response = window.gdCPTSort[$pt];
+				while (sort_by_<?php echo str_replace("-","_", $this->id);?>.length) {
+					sort_by_<?php echo str_replace("-","_", $this->id);?>.pop();
+				}
 
-								// sort_by
-								if( $value && 'post_type' in prev_attributes[props.clientId] && 'sort_by' in prev_attributes[props.clientId] && run ){
-									var data = {
-										'action': 'geodir_get_sort_options',
-										'post_type': $pt
-									};
-									jQuery.post(ajaxurl, data, function(response) {
-										response = JSON.parse(response);
-										while (sort_by_<?php echo str_replace("-","_", $this->id);?>.length) {
-											sort_by_<?php echo str_replace("-","_", $this->id);?>.pop();
-										}
+				jQuery.each( response, function( key, val ) {
+					sort_by_<?php echo str_replace("-","_", $this->id);?>.push({label: val, value: key});
+				});
 
-										jQuery.each( response, function( key, val ) {
-											sort_by_<?php echo str_replace("-","_", $this->id);?>.push({label: val, value: key});
-										});
+				// setting the value back and fourth fixes the no update issue that sometimes happens where it won't update the options.
+				var $old_sort_by_value = props.attributes.sort_by
+				props.setAttributes({sort_by: [0] });
+				props.setAttributes({sort_by: $old_sort_by_value });
+			} else {
+				var data = {
+					'action': 'geodir_get_sort_options',
+					'post_type': $pt
+				};
+				jQuery.post(ajaxurl, data, function(response) {
+					response = JSON.parse(response);
+					window.gdCPTSort[$pt] = response;
+					while (sort_by_<?php echo str_replace("-","_", $this->id);?>.length) {
+						sort_by_<?php echo str_replace("-","_", $this->id);?>.pop();
+					}
 
-										// setting the value back and fourth fixes the no update issue that sometimes happens where it won't update the options.
-										var $old_sort_by_value = props.attributes.sort_by
-										props.setAttributes({sort_by: [0] });
-										props.setAttributes({sort_by: $old_sort_by_value });
+					jQuery.each( response, function( key, val ) {
+						sort_by_<?php echo str_replace("-","_", $this->id);?>.push({label: val, value: key});
+					});
 
-										return sort_by_<?php echo str_replace("-","_", $this->id);?>;
-									});
+					// setting the value back and fourth fixes the no update issue that sometimes happens where it won't update the options.
+					var $old_sort_by_value = props.attributes.sort_by
+					props.setAttributes({sort_by: [0] });
+					props.setAttributes({sort_by: $old_sort_by_value });
 
-								}
-							}
-							<?php } ?>
+					return sort_by_<?php echo str_replace("-","_", $this->id);?>;
+				});
+			}
+		}
+	}
+	<?php } ?>
 <?php
 $current_screen = function_exists('get_current_screen') ? get_current_screen() : '';
 if(!empty($current_screen->base) && $current_screen->base==='widgets'){
@@ -2526,7 +2670,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
                                              <?php
                                         }else{
                                         ?>
-                                       props.setAttributes({content: env});
+                                        props.setAttributes({content: env});
 										is_fetching = false;
 										prev_attributes[props.clientId] = props.attributes;
                                         <?php
@@ -2733,8 +2877,9 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
                                    echo $this->options['block-edit-return'];
 							}else{
 								// if no block-output is set then we try and get the shortcode html output via ajax.
+								$block_edit_wrap_tag = !empty($this->options['block_edit_wrap_tag']) ? esc_attr($this->options['block_edit_wrap_tag']) : 'div';
 								?>
-								el('div', wp.blockEditor.useBlockProps({
+								el('<?php echo esc_attr($block_edit_wrap_tag); ?>', wp.blockEditor.useBlockProps({
 									dangerouslySetInnerHTML: {__html: onChangeContent()},
 									className: props.className,
 									style: {'minHeight': '30px'}
@@ -2771,7 +2916,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 								} else if ('<?php echo esc_attr( $args['type'] );?>' == 'image_xy') {
 									content += " <?php echo esc_attr( $key );?>='{x:" + attr.<?php echo esc_attr( $key );?>.x + ",y:"+attr.<?php echo esc_attr( $key );?>.y +"}' ";
 								} else {
-									content += " <?php echo esc_attr( $key );?>='" + attr.<?php echo esc_attr( $key );?>+ "' ";
+									content += " <?php echo esc_attr( $key );?>='" + attr.<?php echo esc_attr( $key );?>.toString().replace('\'','&#39;') + "' ";
 								}
 							}
 							<?php
@@ -2946,7 +3091,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 								el(
 									'div',
 									{
-										className: 'col pr-2',
+										className: 'col pr-2 pe-2',
 									},
 
 					<?php
@@ -2956,7 +3101,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 						el(
 							'div',
 							{
-								className: 'col pl-0',
+								className: 'col pl-0 ps-0',
 							},
 					<?php
 					if(false){?></script><?php }
@@ -2965,7 +3110,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 						el(
 							'div',
 							{
-								className: 'col pl-0 pr-2',
+								className: 'col pl-0 ps-0 pr-2 pe-2',
 							},
 					<?php
 					if(false){?></script><?php }
@@ -3105,17 +3250,35 @@ el('div',{className: 'bsui'},
 				if ( $args['type'] == 'number' ) {
 					$onchange = "props.setAttributes({ $key: $key ? Number($key) : '' } )";
 				}
-			}else if ( $args['type'] == 'styleid' ) {
+			}
+//			else if ( $args['type'] == 'popup' ) {
+//				$type = 'TextControl';
+//				$args['type'] == 'text';
+//				$after_elements .= "el( wp.components.Button, {
+//                          className: 'components-button components-circular-option-picker__clear is-primary is-smallx',
+//                          onClick: function(){
+//							  aui_modal('','<input id=\'zzz\' value= />');
+//							  const source = document.getElementById('zzz');
+//							  source.value = props.attributes.$key;
+//							  source.addEventListener('input', function(e){props.setAttributes({ $key: e.target.value });});
+//                          }
+//                        },
+//                        'test'
+//                        ),";
+//
+//				$value     = "props.attributes.$key ? props.attributes.$key : ''";
+//			}
+			else if ( $args['type'] == 'styleid' ) {
 				$type = 'TextControl';
 				$args['type'] == 'text';
 				// Save numbers as numbers and not strings
-				$value     = "props.attributes.$key ? props.attributes.$key : 'aaabbbccc'";
+				$value     = "props.attributes.$key ? props.attributes.$key : ''";
 			}else if ( $args['type'] == 'notice' ) {
 
 				$notice_message = !empty($args['desc']) ? addslashes($args['desc']) : '';
 				$notice_status = !empty($args['status']) ? esc_attr($args['status']) : 'info';
 
-				$notice = "el('div',{className:'bsui'},el(wp.components.Notice, {status: '$notice_status',isDismissible: false,className: 'm-0 pr-0 mb-3'},el('div',{dangerouslySetInnerHTML: {__html: '$notice_message'}}))),";
+				$notice = "el('div',{className:'bsui'},el(wp.components.Notice, {status: '$notice_status',isDismissible: false,className: 'm-0 pr-0 pe-0 mb-3'},el('div',{dangerouslySetInnerHTML: {__html: '$notice_message'}}))),";
 				echo $notice_message ? $element_require . $notice : '';
 				return;
 			}
@@ -3262,12 +3425,12 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 							images.push( el('div',{className: 'col p-2',draggable: 'true','data-index': index}, el('img', { src: upload.sizes.thumbnail.url,style: {maxWidth:'100%',background: '#ccc',pointerEvents:'none'}}),el('i',{
 							className: 'fas fa-times-circle text-danger position-absolute  ml-n2 mt-n1 bg-white rounded-circle c-pointer',
 							onClick: function(){
-							    aui_confirm('".__('Are you sure?')."', '".__('Delete')."', '".__('Cancel')."', true).then(function(confirmed) {
+							    aui_confirm('".esc_attr__('Are you sure?')."', '".esc_attr__('Delete')."', '".esc_attr__('Cancel')."', true).then(function(confirmed) {
 if (confirmed) {
-											let new_uploads = JSON.parse(props.attributes.$key);
+											let new_uploads = JSON.parse('['+props.attributes.$key+']');
 											new_uploads.splice(index, 1); //remove
                                               return props.setAttributes({
-                                                  {$key}: JSON.stringify( new_uploads ),
+                                                  {$key}: JSON.stringify( new_uploads ).replace('[','').replace(']',''),
                                                 });
                                                 }
                                            });
@@ -3710,13 +3873,13 @@ if (confirmed) {
 				$class = $this->options['widget_ops']['classname']." sdel-".$this->get_instance_hash();
 
 				// Before widget
-				$before_widget = $args['before_widget'];
-				$before_widget = str_replace($class_original,$class,$before_widget);
+				$before_widget = ! empty( $args['before_widget'] ) ? $args['before_widget'] : '';
+				$before_widget = $before_widget ? str_replace( $class_original, $class, $before_widget ) : $before_widget;
 				$before_widget = apply_filters( 'wp_super_duper_before_widget', $before_widget, $args, $instance, $this );
 				$before_widget = apply_filters( 'wp_super_duper_before_widget_' . $this->base_id, $before_widget, $args, $instance, $this );
 
 				// After widget
-				$after_widget = $args['after_widget'];
+				$after_widget = ! empty( $args['after_widget'] ) ? $args['after_widget'] : '';
 				$after_widget = apply_filters( 'wp_super_duper_after_widget', $after_widget, $args, $instance, $this );
 				$after_widget = apply_filters( 'wp_super_duper_after_widget_' . $this->base_id, $after_widget, $args, $instance, $this );
 
@@ -4022,9 +4185,9 @@ if (confirmed) {
 					<div class='col pr-2'>
 					<?php
 				}elseif(!empty($args['row']['close'])){
-					echo "<div class='col pl-0'>";
+					echo "<div class='col pl-0 ps-0'>";
 				}else{
-					echo "<div class='col pl-0 pr-2'>";
+					echo "<div class='col pl-0 ps-0 pr-2 pe-2'>";
 				}
 			}
 		}
@@ -4447,7 +4610,7 @@ if (confirmed) {
 				'<' => '&lt;',
 				'>' => '&gt;',
 				'"' => '&quot;',
-				"'" => '&apos;',
+				"'" => '&#39;',
 			);
 
 			$content = strtr( $content, $trans );

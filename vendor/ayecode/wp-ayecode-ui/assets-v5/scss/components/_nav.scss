@@ -1,0 +1,301 @@
+//
+// Nav (Navigation components)
+// --------------------------------------------------
+
+
+// Base styles
+
+.nav-item { margin-bottom: 0; }
+.nav-link {
+
+  &.active { color: $nav-link-active-color; }
+  &.active:not([data-bs-toggle='dropdown']) {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  > i { transition: opacity .25s ease-in-out; }
+  &:hover > i,
+  &.active > i { opacity: 1 !important; }
+
+  > img { margin-top: -.125rem; }
+}
+
+
+// Light version
+
+.nav-light .nav-link,
+.nav-link-light {
+  color: $nav-link-light-color;
+  text-decoration: none;
+
+  &:hover, &:focus { color: $nav-link-light-hover-color; }
+  &.active { color: $nav-link-light-active-color; }
+  &.disabled { color: $nav-link-light-disabled-color; }
+
+  > i { transition: opacity .25s ease-in-out; }
+  &:hover > i,
+  &.active > i { opacity: 1 !important; }
+}
+
+
+// Muted version
+
+.nav-muted .nav-link,
+.nav-link-muted {
+  text-decoration: none;
+  color: $nav-link-muted-color;
+
+  &:hover, &:focus { color: $nav-link-muted-hover-color; }
+  &.active { color: $nav-link-muted-active-color; }
+  &.disabled { color: $nav-link-disabled-color; }
+
+  > i { transition: opacity .25s ease-in-out; }
+  &:hover > i,
+  &.active > i { opacity: 1 !important; }
+}
+
+
+// Heading navs
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  .nav-link {
+    padding: initial;
+    color: $gray-800;
+
+    &:hover { color: $nav-link-hover-color; }
+    &.active { color: $nav-link-active-color; }
+
+    > i { transition: opacity .25s ease-in-out; }
+    &:hover > i,
+    &.active > i { opacity: 1 !important; }
+  }
+
+  &.text-light .nav-link,
+  &.text-white .nav-link {
+    color: $nav-link-light-color;
+    &:hover, &:focus { color: $nav-link-light-hover-color; }
+    &.active { color: $nav-link-light-active-color; }
+    &.disabled { color: $nav-link-light-disabled-color; }
+  }
+}
+
+
+// Nav tabs
+
+.nav-tabs {
+  margin-bottom: ($spacer * 1.5);
+
+  .nav-link {
+    @include border-radius($nav-tabs-border-radius);
+    @include box-shadow($nav-tabs-link-box-shadow);
+    background-color: $nav-tabs-link-bg;
+    color: $nav-tabs-link-color;
+    font-weight: $nav-tabs-link-font-weight;
+
+    > i { font-size: .85em; }
+
+    &:hover, &.show {
+      @include box-shadow($nav-tabs-link-hover-box-shadow);
+      color: $nav-tabs-link-hover-color;
+    }
+    &.active {
+      @include box-shadow($nav-tabs-link-active-box-shadow);
+    }
+    &.disabled,
+    &[disabled] {
+      background-color: $nav-tabs-link-disabled-bg;
+    }
+
+    > i {
+      margin-top: -.125rem;
+      vertical-align: middle;
+    }
+
+    &.dropdown-toggle.active:hover,
+    &.dropdown-toggle.active.show {
+      color: $nav-tabs-link-active-color;
+    }
+  }
+
+  .nav-item {
+    margin-bottom: 0;
+  }
+
+  .dropdown-menu {
+    @include border-radius($nav-tabs-border-radius);
+  }
+}
+
+
+// Nav tabs light
+
+.nav-tabs-light {
+  .nav-item.show {
+    .nav-link { color: $nav-tabs-light-link-active-color; }
+  }
+
+  .nav-link {
+    background-color: $nav-tabs-light-link-bg;
+    color: $nav-tabs-light-link-color;
+    
+    &:hover, &.show {
+      background-color: $nav-tabs-light-link-hover-bg;
+      color: $nav-tabs-light-link-hover-color;
+    }
+    &.active {
+      background-color: $nav-tabs-light-link-active-bg;
+      color: $nav-tabs-light-link-active-color;
+    }
+  }
+}
+
+
+// Nav pills
+
+.nav-pills {
+  .nav-link {
+    background-color: $nav-pills-link-bg;
+    font-weight: $nav-pills-link-font-weight;
+
+    > i { font-size: .85em; }
+
+    &:hover {
+      color: $nav-pills-link-hover-color;
+      background-color: $nav-pills-link-hover-bg;
+      @include box-shadow($nav-pills-link-hover-box-shadow);
+    }
+    &:focus { color: $nav-pills-link-hover-color; }
+
+    &.active {
+      color: $nav-pills-link-active-color;
+      @include box-shadow($nav-pills-link-active-box-shadow);
+    }
+
+    &:disabled,
+    &.disabled {
+      background-color: $nav-pills-link-disabled-bg;
+      color: $nav-pills-link-disabled-color;
+    }
+  }
+}
+
+
+// Nav pills light
+
+.nav-pills.nav-pills-light {
+  .nav-link {
+    background-color: $nav-pills-light-link-bg;
+    color: $nav-pills-light-link-color;
+    box-shadow: none;
+
+    &:hover {
+      background-color: $nav-pills-light-link-hover-bg;
+      color: $nav-pills-light-link-hover-color;
+      box-shadow: none;
+    }
+
+    &.active {
+      background-color: $nav-pills-light-link-active-bg;
+      color: $nav-pills-light-link-active-color;
+      box-shadow: none;
+    }
+
+    &:disabled,
+    &.disabled {
+      background-color: $nav-pills-light-link-disabled-bg;
+      color: $nav-pills-light-link-disabled-color;
+    }
+  }
+}
+
+
+// Spacing
+
+.nav-tabs:not(.nav-fill):not(.nav-justified),
+.nav-pills {
+  .nav-item {
+    margin-right: ($spacer * .75);
+    &:last-child { margin-right: 0; }
+  }
+  &.justify-content-center .nav-item {
+    margin: {
+      right: ($spacer * .375);
+      left: ($spacer * .375);
+    }
+  }
+  &.justify-content-end .nav-item {
+    margin: {
+      right: 0;
+      left: ($spacer * .75);
+    }
+  }
+  &.flex-column {
+    .nav-item {
+      margin: {
+        right: 0;
+        bottom: ($spacer * .75);
+        left: 0;
+      }
+      &:last-child { margin-bottom: 0; }
+    }
+  }
+}
+
+
+// Nav inside card
+
+.card-nav {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li { margin-bottom: 0; }
+}
+
+.card-nav-link {
+  position: relative;
+  display: block;
+  padding: $spacer 0;
+  transition: $nav-link-transition;
+  border-top: $border-width solid $border-color;
+  color: $nav-link-color;
+  text-decoration: none;
+
+  &::before {
+    position: absolute;
+    display: none;
+    top: 0;
+    left: -$card-spacer-x;
+    width: .125rem;
+    height: 100%;
+    background-color: $nav-link-active-color;
+    content: '';
+  }
+
+  &:hover { color: $nav-link-hover-color; }
+  &.active {
+    color: $nav-link-active-color;
+    pointer-events: none;
+    &::before { display: block; }
+  }
+
+  > i {
+    margin-top: -.125rem;
+    transition: opacity .25s ease-in-out;
+  }
+  &:hover > i,
+  &.active > i { opacity: 1 !important; }
+}
+
+.card-nav-light,
+.card-light {
+  .card-nav-link {
+    border-top-color: $border-light-color;
+    color: $nav-link-light-color;
+    &::before { background-color: $nav-link-light-active-color; }
+    &:hover { color: $nav-link-light-hover-color; }
+    &.active { color: $nav-link-light-active-color; }
+  }
+}

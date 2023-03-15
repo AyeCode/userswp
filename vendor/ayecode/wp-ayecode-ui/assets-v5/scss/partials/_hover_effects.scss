@@ -1,0 +1,55 @@
+$transition-all: all ease .3s !default; /* Animation */
+
+.transition-all{
+  transition: $transition-all;
+}
+.hover-zoom{
+  transition: transform .2s; /* Animation */
+  &:hover{
+    transform: scale(1.2);
+  }
+}
+
+.hover-shadow{
+  transition: $transition-all;
+  &:hover{
+    box-shadow: $box-shadow !important;
+  }
+}
+
+.hover-move-up{
+  top: 0;
+  position: relative;
+  transition: $transition-all;
+  &:hover{
+    top: -10px !important;
+  }
+}
+
+.hover-move-down{
+  bottom: 0;
+  position: relative;
+  transition: $transition-all;
+  &:hover{
+    bottom: -10px !important;
+  }
+}
+
+.hover-move-left{
+  left: 0;
+  position: relative;
+  transition: $transition-all;
+  &:hover{
+    left: -10px !important;
+  }
+}
+
+.hover-move-right{
+  right: 0;
+  position: relative;
+  transition: $transition-all;
+  &:hover{
+    right: -10px !important;
+  }
+}
+

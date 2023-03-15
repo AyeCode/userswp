@@ -1,0 +1,111 @@
+//
+// Date / Time Picker
+// based on https://github.com/flatpickr/flatpickr
+// --------------------------------------------------
+
+
+.date-picker {
+  &[readonly] {
+    background-color: $input-bg;
+    &.form-control-light {
+      background-color: $input-light-bg;
+    }
+  }
+}
+.flatpickr-calendar {
+  width: 325px;
+  padding: 0 .5rem;
+  @include border-radius($dropdown-border-radius);
+  @include box-shadow($dropdown-box-shadow);
+  @if $enable-shadows {
+    border: 0;
+  }
+}
+.flatpickr-innerContainer {
+  padding-bottom: 1.125rem;
+}
+.flatpickr-months {
+  padding: .75rem 0;
+  svg { vertical-align: top; }
+  .flatpickr-prev-month,
+  .flatpickr-next-month {
+    top: .75rem;
+    &:hover svg { fill: $primary; }
+  }
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+  padding: .25rem;
+  appearance: none;
+}
+.numInputWrapper:hover,
+.flatpickr-current-month .flatpickr-monthDropdown-months:hover {
+  background-color: darken($gray-100, 1%);
+}
+.flatpickr-day {
+  height: 38px;
+  border-radius: 0;
+  @include border-radius($border-radius);
+  line-height: 37px;
+  &:hover:not(.flatpickr-disabled):not(.today):not(.selected) {
+    border-color: darken($gray-100, 1%);
+    background-color: darken($gray-100, 1%);
+  }
+  &.today {
+    border-color: rgba($primary, .5) !important;
+    color: $primary !important;
+    &.selected { color: $white !important; }
+    &:hover { background-color: transparent; }
+  }
+  &.selected {
+    border-color: $primary !important;
+    background-color: $primary !important;
+  }
+  &.flatpickr-disabled {
+    color: darken($gray-400, 6%) !important;
+  }
+  &.nextMonthDay {
+    color: darken($gray-500, 5%);
+  }
+  &.inRange {
+    border-color: darken($gray-100, 1%) !important;
+    background-color: darken($gray-100, 1%) !important;
+    box-shadow: -5px 0 0 darken($gray-100, 1%), 5px 0 0 darken($gray-100, 1%);
+  }
+  &.startRange,
+  &.endRange,
+  &.endRange.seleced,
+  &.endRange:hover {
+    border-color: $primary !important;
+    background-color: $primary !important;
+  }
+}
+.flatpickr-day.selected.endRange,
+.flatpickr-day.startRange.endRange,
+.flatpickr-day.endRange.endRange {
+  border-radius: 0;
+  @include border-radius(0 $border-radius $border-radius 0);
+}
+.flatpickr-day.selected.startRange,
+.flatpickr-day.startRange.startRange,
+.flatpickr-day.endRange.startRange {
+  border-radius: 0;
+  @include border-radius($border-radius 0 0 $border-radius);
+}
+.flatpickr-day.selected.startRange + .endRange:not(:nth-child(7n+1)),
+.flatpickr-day.startRange.startRange + .endRange:not(:nth-child(7n+1)),
+.flatpickr-day.endRange.startRange + .endRange:not(:nth-child(7n+1)) {
+  box-shadow: -10px 0 0 $primary;
+}
+.flatpickr-time {
+  margin-bottom: .5rem;
+  input:hover,
+  .flatpickr-am-pm:hover,
+  input:focus,
+  .flatpickr-am-pm:focus {
+    background-color: darken($gray-100, 1%);
+  }
+  input.flatpickr-hour {
+    font-weight: $font-weight-bold;
+  }
+}

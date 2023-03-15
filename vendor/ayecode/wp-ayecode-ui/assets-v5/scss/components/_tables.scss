@@ -1,0 +1,30 @@
+//
+// Tables
+// --------------------------------------------------
+
+.table:not(.table-dark) {
+  thead:not(.thead-dark) th,
+  tbody th {
+    color: $table-th-color !important;
+  }
+  td { color: $table-color !important; }
+}
+.table-dark td {
+  color: $table-dark-color;
+}
+.table-secondary,
+.table-secondary > th,
+.table-secondary > td {
+  background-color: $secondary;
+}
+// .table > :not(:last-child) > :last-child > * {
+//   border-bottom-color: darken($table-border-color, 15%);
+// }
+.table.table-dark > :not(:last-child) > :last-child > * {
+  border-bottom-color: rgba($white, .5);
+}
+
+// Remove highlight border color between thead, tbody and tfoot.
+.table > :not(:first-child) {
+  border-top: 0;
+}

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UsersWP 1.2.3.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-22 15:38+0530\n"
-"PO-Revision-Date: 2022-12-22 15:39+0530\n"
+"POT-Creation-Date: 2023-03-15 17:05+0530\n"
+"PO-Revision-Date: 2023-03-15 17:05+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -713,7 +713,7 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:445
 #: admin/settings/class-formbuilder.php:461
-#: admin/settings/class-settings.php:678
+#: admin/settings/class-settings.php:754
 msgid "Select a page&hellip;"
 msgstr ""
 
@@ -1245,9 +1245,9 @@ msgid "No options available"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:2109
-#: includes/libraries/class-geodirectory-plugin.php:1157
-#: includes/libraries/class-geodirectory-plugin.php:1376
-#: includes/libraries/class-geodirectory-plugin.php:1590
+#: includes/libraries/class-geodirectory-plugin.php:1162
+#: includes/libraries/class-geodirectory-plugin.php:1381
+#: includes/libraries/class-geodirectory-plugin.php:1595
 msgid "Delete"
 msgstr ""
 
@@ -1456,23 +1456,23 @@ msgstr ""
 msgid "Your settings have been saved."
 msgstr ""
 
-#: admin/settings/class-settings.php:355
+#: admin/settings/class-settings.php:383
 msgid "Upload Image"
 msgstr ""
 
-#: admin/settings/class-settings.php:356 includes/class-files.php:356
+#: admin/settings/class-settings.php:384 includes/class-files.php:356
 msgid "Remove Image"
 msgstr ""
 
-#: admin/settings/class-settings.php:681
+#: admin/settings/class-settings.php:757
 msgid "Edit Page"
 msgstr ""
 
-#: admin/settings/class-settings.php:684
+#: admin/settings/class-settings.php:760
 msgid "View Page"
 msgstr ""
 
-#: admin/settings/class-settings.php:827
+#: admin/settings/class-settings.php:921
 msgid "Documentation"
 msgstr ""
 
@@ -1842,7 +1842,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:72
 #: includes/class-account.php:42 includes/class-pages.php:329
-#: includes/helpers/misc.php:566 includes/helpers/tabs.php:127
+#: includes/helpers/misc.php:572 includes/helpers/tabs.php:127
 #: templates/bootstrap/change.php:15 widgets/change.php:47
 #: widgets/change.php:95
 msgid "Change Password"
@@ -3320,7 +3320,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: includes/class-account.php:77 includes/helpers/misc.php:564
+#: includes/class-account.php:77 includes/helpers/misc.php:570
 #: includes/helpers/tabs.php:154
 msgid "Delete Account"
 msgstr ""
@@ -3355,7 +3355,7 @@ msgid "<strong>Error</strong>: Super Administrators cannot be deleted."
 msgstr ""
 
 #: includes/class-activator.php:364 includes/class-activator.php:640
-#: includes/libraries/class-geodirectory-plugin.php:1859
+#: includes/libraries/class-geodirectory-plugin.php:1864
 msgid "Username"
 msgstr ""
 
@@ -3625,11 +3625,11 @@ msgstr ""
 msgid "Sorry, that username is not allowed."
 msgstr ""
 
-#: includes/class-forms.php:812 includes/helpers/forms.php:260
+#: includes/class-forms.php:812 includes/helpers/forms.php:270
 msgid "To activate your account, visit the following address:"
 msgstr ""
 
-#: includes/class-forms.php:816 includes/helpers/forms.php:264
+#: includes/class-forms.php:816 includes/helpers/forms.php:274
 msgid "Please activate your account :"
 msgstr ""
 
@@ -4154,7 +4154,7 @@ msgstr ""
 msgid "Tab Name"
 msgstr ""
 
-#: includes/class-templates.php:1139 includes/helpers/misc.php:560
+#: includes/class-templates.php:1139 includes/helpers/misc.php:566
 #: includes/helpers/tabs.php:135
 msgid "Privacy"
 msgstr ""
@@ -4621,7 +4621,8 @@ msgid "<strong>Error</strong>: Incorrect old password"
 msgstr ""
 
 #: includes/class-validation.php:301
-msgid "<strong>Error</strong>: Old password and new password are same"
+msgid ""
+"<strong>Error</strong>: The old password and the new password are the same"
 msgstr ""
 
 #: includes/class-validation.php:310
@@ -4659,63 +4660,63 @@ msgstr ""
 msgid "Choose %s&hellip;"
 msgstr ""
 
-#: includes/helpers/forms.php:342
-msgid "Auto approve"
+#: includes/helpers/forms.php:352
+msgid "Auto Approve"
 msgstr ""
 
-#: includes/helpers/forms.php:343
-msgid "Auto approve + Auto Login"
+#: includes/helpers/forms.php:353
+msgid "Auto Approve + Auto Login"
 msgstr ""
 
-#: includes/helpers/forms.php:344
+#: includes/helpers/forms.php:354
 msgid "Require Email Activation"
 msgstr ""
 
-#: includes/helpers/forms.php:507 widgets/profile-tabs.php:47
+#: includes/helpers/forms.php:517 widgets/profile-tabs.php:47
 msgid "Default"
 msgstr ""
 
-#: includes/helpers/misc.php:562
+#: includes/helpers/misc.php:568
 msgid "E-Mail Notifications"
 msgstr ""
 
-#: includes/helpers/misc.php:568
+#: includes/helpers/misc.php:574
 msgid "Two-factor Authentication Settings"
 msgstr ""
 
-#: includes/helpers/misc.php:1306
+#: includes/helpers/misc.php:1312
 msgid "more"
 msgstr ""
 
-#: includes/helpers/misc.php:1307
+#: includes/helpers/misc.php:1313
 msgid "less"
 msgstr ""
 
-#: includes/helpers/misc.php:1308
+#: includes/helpers/misc.php:1314
 msgid "Something went wrong."
 msgstr ""
 
-#: includes/helpers/misc.php:1309
+#: includes/helpers/misc.php:1315
 msgid "Something went wrong, please retry."
 msgstr ""
 
-#: includes/helpers/misc.php:1491 widgets/output-location.php:90
+#: includes/helpers/misc.php:1497 widgets/output-location.php:90
 msgid "Users Page"
 msgstr ""
 
-#: includes/helpers/misc.php:1492 widgets/output-location.php:91
+#: includes/helpers/misc.php:1498 widgets/output-location.php:91
 msgid "More info tab"
 msgstr ""
 
-#: includes/helpers/misc.php:1493
+#: includes/helpers/misc.php:1499
 msgid "Profile side (non bootstrap)"
 msgstr ""
 
-#: includes/helpers/misc.php:1494
+#: includes/helpers/misc.php:1500
 msgid "Fieldset"
 msgstr ""
 
-#: includes/helpers/misc.php:1725
+#: includes/helpers/misc.php:1731
 #, php-format
 msgid ""
 "%s requires a newer version of UsersWP and will not run until the UsersWP "
@@ -4814,141 +4815,141 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:120
+#: includes/libraries/class-geodirectory-plugin.php:121
 msgid "Add Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:139
+#: includes/libraries/class-geodirectory-plugin.php:140
 msgid "My Favorites"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:158
+#: includes/libraries/class-geodirectory-plugin.php:159
 msgid "My Listings"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:177
+#: includes/libraries/class-geodirectory-plugin.php:178
 msgid "My Lists"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:209
+#: includes/libraries/class-geodirectory-plugin.php:210
 msgid "GeoDirectory"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:233
+#: includes/libraries/class-geodirectory-plugin.php:234
 msgid "GeoDirectory Settings"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:239
+#: includes/libraries/class-geodirectory-plugin.php:240
 msgid "CPT listings in profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:240
+#: includes/libraries/class-geodirectory-plugin.php:241
 msgid "Choose the post types to show listings tab in UsersWP Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:247
+#: includes/libraries/class-geodirectory-plugin.php:248
 msgid "CPT reviews in profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:248
+#: includes/libraries/class-geodirectory-plugin.php:249
 msgid "Choose the post types to show reviews tab in UsersWP Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:255
+#: includes/libraries/class-geodirectory-plugin.php:256
 msgid "CPT favorites in profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:256
+#: includes/libraries/class-geodirectory-plugin.php:257
 msgid "Choose the post types to show favorites tab in UsersWP Profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:263
+#: includes/libraries/class-geodirectory-plugin.php:264
 msgid "Redirect my listing link from GD login box to UsersWP profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:264
+#: includes/libraries/class-geodirectory-plugin.php:265
 msgid ""
 "If this option is selected, the my listing link from GD loginbox will "
 "redirect to listings tab of UsersWP profile."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:270
+#: includes/libraries/class-geodirectory-plugin.php:271
 msgid "Redirect favorite link from GD login box to UsersWP profile"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:271
+#: includes/libraries/class-geodirectory-plugin.php:272
 msgid ""
 "If this option is selected, the favorite link from GD loginbox will redirect "
 "to favorites tab of UsersWP profile."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:319 upgrade.php:211
+#: includes/libraries/class-geodirectory-plugin.php:320 upgrade.php:211
 msgid "Listings"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:329
-#: includes/libraries/class-geodirectory-plugin.php:1420 upgrade.php:219
+#: includes/libraries/class-geodirectory-plugin.php:330
+#: includes/libraries/class-geodirectory-plugin.php:1425 upgrade.php:219
 msgid "Reviews"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:339 upgrade.php:227
+#: includes/libraries/class-geodirectory-plugin.php:340 upgrade.php:227
 msgid "Favorites"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:350
+#: includes/libraries/class-geodirectory-plugin.php:351
 msgid "Lists"
-msgstr ""
-
-#: includes/libraries/class-geodirectory-plugin.php:1143
-#: includes/libraries/class-geodirectory-plugin.php:1362
-#: includes/libraries/class-geodirectory-plugin.php:1576
-msgid "Edit Listing"
 msgstr ""
 
 #: includes/libraries/class-geodirectory-plugin.php:1148
 #: includes/libraries/class-geodirectory-plugin.php:1367
 #: includes/libraries/class-geodirectory-plugin.php:1581
+msgid "Edit Listing"
+msgstr ""
+
+#: includes/libraries/class-geodirectory-plugin.php:1153
+#: includes/libraries/class-geodirectory-plugin.php:1372
+#: includes/libraries/class-geodirectory-plugin.php:1586
 msgid "Edit"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1152
-#: includes/libraries/class-geodirectory-plugin.php:1371
-#: includes/libraries/class-geodirectory-plugin.php:1585
+#: includes/libraries/class-geodirectory-plugin.php:1157
+#: includes/libraries/class-geodirectory-plugin.php:1376
+#: includes/libraries/class-geodirectory-plugin.php:1590
 msgid "Delete Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1175
+#: includes/libraries/class-geodirectory-plugin.php:1180
 #: templates/loop-posts.php:27
 #, php-format
 msgid "No %s found."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1240
+#: includes/libraries/class-geodirectory-plugin.php:1245
 #: templates/bootstrap/posts-post.php:59
 msgid "View"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1823
+#: includes/libraries/class-geodirectory-plugin.php:1828
 msgid "Published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1826
+#: includes/libraries/class-geodirectory-plugin.php:1831
 msgid "Pending"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1829
+#: includes/libraries/class-geodirectory-plugin.php:1834
 msgid "Closed"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1832
+#: includes/libraries/class-geodirectory-plugin.php:1837
 msgid "Expired"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1835
+#: includes/libraries/class-geodirectory-plugin.php:1840
 msgid "Not published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1840
+#: includes/libraries/class-geodirectory-plugin.php:1845
 msgid "Status: "
 msgstr ""
 
@@ -5317,8 +5318,7 @@ msgid "User ID:"
 msgstr ""
 
 #: widgets/button-group.php:44 widgets/profile-header.php:54
-#: widgets/user-avatar.php:62 widgets/user-cover.php:55
-#: widgets/user-meta.php:45 widgets/user-title.php:51
+#: widgets/user-cover.php:55 widgets/user-meta.php:45 widgets/user-title.php:51
 msgid ""
 "Leave blank to use current user ID or use post_author for current post "
 "author ID. For profile page it will take displayed user ID. Input specific "
@@ -5648,6 +5648,13 @@ msgstr ""
 
 #: widgets/user-avatar.php:53
 msgid "Allow user to change avatar image in profile page."
+msgstr ""
+
+#: widgets/user-avatar.php:62
+msgid ""
+"Leave blank to use current user ID or use post_author for current post "
+"author ID. For profile page use displayed_user. Input specific user ID for "
+"other pages."
 msgstr ""
 
 #: widgets/user-badge.php:22

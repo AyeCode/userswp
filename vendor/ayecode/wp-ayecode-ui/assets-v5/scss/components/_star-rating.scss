@@ -1,0 +1,42 @@
+//
+// Star rating
+// --------------------------------------------------
+
+
+// Base styles
+
+.star-rating {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.star-rating-icon {
+  display: inline-block;
+  margin-right: .125rem;
+  color: $star-rating-icon-color;
+  font-size: $star-rating-icon-size;
+
+  &.active {
+    color: $star-rating-icon-active-color;
+  }
+}
+
+
+// Light version
+
+.text-light,
+.text-white {
+  .star-rating-icon {
+    color: $star-rating-light-icon-color;
+    &.active {
+      color: $star-rating-icon-active-color;
+    }
+  }
+}
+
+
+// Sizing
+
+.star-rating-sm .star-rating-icon {
+  font-size: $star-rating-sm-icon-size;
+}

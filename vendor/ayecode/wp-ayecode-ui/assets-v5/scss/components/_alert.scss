@@ -1,0 +1,43 @@
+//
+// Alert
+// --------------------------------------------------
+
+
+// Icons and dividers
+
+.alert {
+  [class^='fi-'], [class*=' fi-'] {
+    margin-top: .175rem;
+  }
+  hr { color: rgba($black, .1); }
+}
+
+
+// Secondary / light alert
+
+.alert-secondary {
+  border-color: $gray-400;
+  background-color: $secondary;
+}
+.alert-secondary,
+.alert-light {
+  color: $gray-800;
+  .alert-link { color: $gray-900; }
+}
+
+
+// Dark alert
+
+.alert-dark {
+  border-color: $dark;
+  background-color: $dark;
+  color: $white;
+  .alert-link { color: $white; }
+}
+
+
+// Dismissible alert
+
+.alert-dismissible .btn-close {
+  padding-top: $alert-padding-y * 1.5;
+}
