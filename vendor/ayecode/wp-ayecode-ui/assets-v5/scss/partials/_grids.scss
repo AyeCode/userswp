@@ -1,0 +1,129 @@
+// add our own 0 level which is list view
+@media (min-width: 576px) {
+  .row {
+    &.row-cols-md-0 {
+      display: block;
+
+      & > * {
+        flex: 0 0 100%;
+        max-width: 100%;
+        width: 100%;
+
+      }
+
+      .card{
+        width: 100%;
+        display: inline-flex;
+        flex-flow: row wrap;
+
+        .embed-responsive{
+          max-width: 30%;
+          display: inline-block;
+          img{
+            border-top-right-radius: unset;
+            object-fit: cover;
+            //max-height: 250px;
+          }
+        }
+
+        .card-img-top{
+          max-width: 30%;
+          height: 100%;
+          display: inline-block;
+          margin-bottom: 0 !important;
+          .embed-responsive{
+            max-width: none;
+            &:before{
+              padding-top: 100%;
+            }
+          }
+        }
+
+        .card-body{
+          display: inline-block;
+          vertical-align: top;
+          max-width: 69%;
+          padding-left: 1rem !important;
+        }
+
+        .card-footer{
+          flex: 1 100%;
+        }
+
+
+      }
+
+      .gv-hide-0{
+        display: none;
+      }
+
+    }
+  }
+}
+
+/*
+Grid view hide secondary info.
+*/
+
+.row-cols-md-2{
+  .gv-hide-2{
+    display: none;
+  }
+
+  .gv-hide-s-2{
+    .gv-secondary{
+      display: none;
+    }
+  }
+}
+
+.row-cols-md-3{
+  .gv-hide-2,.gv-hide-3{
+    display: none;
+  }
+
+  .gv-hide-s-2,.gv-hide-s-3{
+    .gv-secondary{
+      display: none;
+    }
+  }
+}
+
+.row-cols-md-4{
+  .gv-hide-2,.gv-hide-3,.gv-hide-4{
+    display: none;
+  }
+
+  .gv-hide-s-2,.gv-hide-s-3,.gv-hide-s-4{
+    .gv-secondary{
+      display: none;
+    }
+  }
+}
+
+.row-cols-md-5{
+  .gv-hide-2,.gv-hide-3,.gv-hide-4,.gv-hide-5{
+    display: none;
+  }
+
+  .gv-hide-s-2,.gv-hide-s-3,.gv-hide-s-4,.gv-hide-s-5{
+    .gv-secondary{
+      display: none;
+    }
+  }
+}
+
+// hide if on small breakpoint
+@media (max-width: 576px) {
+  .row {
+    .gv-hide-0,.gv-hide-2,.gv-hide-3,.gv-hide-4,.gv-hide-5{
+      display: none;
+    }
+
+    .gv-hide-s-2,.gv-hide-s-3,.gv-hide-s-4,.gv-hide-s-5{
+      .gv-secondary{
+        display: none;
+      }
+    }
+  }
+}

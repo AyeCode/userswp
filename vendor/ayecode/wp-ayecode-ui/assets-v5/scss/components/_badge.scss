@@ -1,0 +1,30 @@
+//
+// Badge
+// --------------------------------------------------
+
+
+// Fix badge colors
+
+.badge.bg-secondary,
+.badge.bg-light {
+  color: $gray-900;
+}
+
+.badge.bg-warning {
+  color: $white;
+}
+
+
+// Badge translucent
+
+@each $color, $value in $theme-colors {
+  .badge.bg-faded-#{$color} {
+    color: $value;
+  }
+}
+.badge.bg-faded-secondary {
+  color: $gray-900;
+}
+.badge.bg-faded-light {
+  background-color: rgba($light, .1) !important;
+}

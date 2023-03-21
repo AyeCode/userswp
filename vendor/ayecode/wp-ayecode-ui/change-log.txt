@@ -1,3 +1,24 @@
+= 0.1.91 =
+* Improvements to BS5 compatibility - ADDED
+
+= 0.1.90 =
+* Improvements for FSE color pallet changes - CHANGED
+* Default value as BS v5 should not have been set yet - FIXED
+
+= 0.1.89 =
+* Prevent conditional fields execution twice on select2 - FIXED
+* Changes to BS5 CSS - CHANGED
+* Added notice when theme is overriding default settings - ADDED
+
+= 0.1.88 =
+* BS 4/5 functions split to separate files - CHANGED
+* Tweaks for FSE styles - ADDED
+* $aui_bs5 global added for detecting if BS5 is active - ADDED
+
+= 0.1.86 =
+* Tweaks for FSE styles - ADDED
+* Added support for Bootstrap v5 - (NOT YET COMPLETE)
+
 = 0.1.85 =
 * Bootstrap updated to latest v4.6.2 - UPDATED
 

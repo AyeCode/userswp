@@ -1,0 +1,139 @@
+//
+// Dropdown
+// --------------------------------------------------
+
+
+// Caret
+
+.dropdown-toggle {
+  &::after,
+  &::before {
+    display: inline-block;
+    font: {
+      family: "Font Awesome 6 Free";
+      size: .7em;
+      weight: 900;
+    }
+    vertical-align: middle;
+  }
+  &::after {
+    margin-left: .5rem;
+    content: $fi-chevron-down;
+  }
+  &::before { margin-right: .25rem; }
+}
+.dropdown-toggle:not(.dropdown-toggle-split) {
+  &::before { margin-left: -.25rem; }
+  &::after { margin-right: -.25rem; }
+}
+.dropdown .dropdown-toggle,
+.dropup .dropdown-toggle,
+.dropend .dropdown-toggle {
+  &::before { display: none; }
+}
+.dropup .dropdown-toggle::after {
+  content: $fi-chevron-up;
+}
+.dropend .dropdown-toggle::after {
+  content: $fi-chevron-right;
+}
+.dropstart .dropdown-toggle {
+  &::before {
+    content: $fi-chevron-left;
+  }
+  &::after { display: none; }
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, h5, .h6 {
+  .dropdown-toggle::after {
+    font-size: $font-size-base;
+  }
+}
+
+
+// Dropdown menu
+
+.dropdown-menu {
+  li {
+    margin-bottom: 0;
+    &:hover > .dropdown-item {
+      color: $dropdown-link-hover-color;
+    }
+  }
+  .active > .dropdown-item {
+    color: $dropdown-link-active-color;
+  }
+  .active > .dropdown-item,
+  .dropdown-item.active {
+    pointer-events: none;
+  }
+  &.dropdown-menu-dark {
+    li:hover > .dropdown-item {
+      color: $dropdown-dark-link-hover-color;
+    }
+    .active > .dropdown-item {
+      color: $dropdown-dark-link-active-color;
+    }
+  }
+
+  &.w-100 { min-width: 100%; }
+}
+.dropdown-item {
+  transition: $link-transition;
+  
+  > i {
+    margin-top: -.125rem;
+    transition: opacity .25s ease-in-out;
+  }
+  &:hover > i,
+  &.active > i { opacity: 1 !important; }
+}
+
+
+// Dropdown header
+
+.dropdown-header {
+  border-bottom: 0;
+  @include font-size($font-size-base);
+}
+
+
+// Dropdown divider
+
+.dropdown-divider {
+  margin-right: $dropdown-divider-margin-x;
+  margin-left: $dropdown-divider-margin-x;
+}
+
+
+// Dropdown menu animation
+
+.dropdown-menu.show {
+  animation: fade-in .25s ease-in-out;
+}
+
+
+// Split button dropdown fix
+
+.dropdown-toggle-split::after {
+  margin-left: -.0625rem !important;
+}
+
+
+// Dropdown component animations
+
+@keyframes fade-in  {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slide-up {
+  from {
+    transform: translateY(.5rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

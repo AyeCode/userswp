@@ -1,0 +1,49 @@
+// Custom Colors
+$brand-facebook: #3b5998;
+$brand-twitter: #55acee;
+$brand-instagram: #125688;
+$brand-linkedin: #0976b4;
+$brand-flickr: #f8457e;
+$brand-github: #333;
+$brand-youtube: #e52d27;
+$brand-wordpress: #207297;
+$brand-google: #ea4335;
+$brand-yahoo: #6040d2;
+$brand-vkontakte: #4a76a8;
+$brand-tiktok: #010101;
+
+$branding-colors: () !default;
+$branding-colors: map-merge(
+                (
+                        "facebook": $brand-facebook,
+                        "twitter": $brand-twitter,
+                        "instagram": $brand-instagram,
+                        "linkedin": $brand-linkedin,
+                        "flickr": $brand-flickr,
+                        "github": $brand-github,
+                        "youtube": $brand-youtube,
+                        "wordpress": $brand-wordpress,
+                        "google": $brand-google,
+                        "yahoo": $brand-yahoo,
+                        "vkontakte": $brand-vkontakte,
+                        "tiktok": $brand-tiktok,
+                ),
+                $branding-colors
+);
+
+$grid-breakpoints: (
+        xs: 0,
+        sm: 576px,
+        md: 768px,
+        lg: 992px,
+        xl: 1200px,
+        xxl: 1400px,
+) !default;
+
+$container-max-widths: (
+        sm: 540px,
+        md: 720px,
+        lg: 960px,
+        xl: 1140px,
+        xxl: 1320px
+) !default;

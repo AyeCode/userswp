@@ -19,6 +19,8 @@ class AUI_Component_Input {
 	 * @return string The rendered component.
 	 */
 	public static function input( $args = array() ) {
+		global $aui_bs5;
+
 		$defaults = array(
 			'type'                     => 'text',
 			'name'                     => '',
@@ -31,6 +33,7 @@ class AUI_Component_Input {
 			'required'                 => false,
 			'size'                     => '', // sm, lg, small, large
 			'clear_icon'               => '', // true will show a clear icon, can't be used with input_group_right
+			'with_hidden'              => false, // Append hidden field for single checkbox.
 			'label'                    => '',
 			'label_after'              => false,
 			'label_class'              => '',
@@ -48,6 +51,7 @@ class AUI_Component_Input {
 			// forces the input group inside the input
 			'input_group_left_inside'  => false,
 			// forces the input group inside the input
+			'form_group_class'         => '',
 			'step'                     => '',
 			'switch'                   => false,
 			// to show checkbox as a switch
@@ -109,13 +113,19 @@ class AUI_Component_Input {
 				$args['class'] .= ' custom-file-input ';
 			} elseif ( $type == 'checkbox' ) {
 				$label_after = true; // if type file we need the label after
-				$args['class'] .= ' custom-control-input ';
+				$args['class'] .= $aui_bs5 ? ' form-check-input' : ' custom-control-input ';
 			} elseif ( $type == 'datepicker' || $type == 'timepicker' ) {
+				$orig_type = $type;
 				$type = 'text';
 				$args['class'] .= ' bg-initial '; // @todo not sure why we have this?
 				$clear_function .= "jQuery(this).parent().parent().find('input[name=\'" . esc_attr( $args['name'] ) . "\']').trigger('change');";
 
 				$args['extra_attributes']['data-aui-init'] = 'flatpickr';
+
+				// Disable native datetime inputs.
+				if ( ( $orig_type == 'timepicker' || ! empty( $args['extra_attributes']['data-enable-time'] ) ) && ! isset( $args['extra_attributes']['data-disable-mobile'] ) ) {
+					$args['extra_attributes']['data-disable-mobile'] = 'true';
+				}
 
 				// set a way to clear field if empty
 				if ( $args['input_group_right'] === '' && $args['clear_icon'] !== false ) {
@@ -141,7 +151,7 @@ class AUI_Component_Input {
 				$aui_settings->enqueue_iconpicker();
 			}
 
-			if ( $type == 'checkbox' && !empty($args['name'] ) && strpos($args['name'], '[') === false ) {
+			if ( $type == 'checkbox' && ( ( ! empty( $args['name'] ) && strpos( $args['name'], '[' ) === false ) || ! empty( $args['with_hidden'] ) ) ) {
 				$output .= '<input type="hidden" name="' . esc_attr( $args['name'] ) . '" value="0" />';
 			}
 
@@ -149,7 +159,8 @@ class AUI_Component_Input {
 			if ( $args['input_group_right'] === '' && $args['clear_icon'] ) {
 				$font_size = $size == 'sm' ? '1.3' : ( $size == 'lg' ? '1.65' : '1.5' );
 				$args['input_group_right_inside'] = true;
-				$args['input_group_right'] = '<span class="input-group-text aui-clear-input c-pointer bg-initial border-0 px-2 d-none" onclick="' . $clear_function . '"><span style="font-size: '.$font_size.'rem" aria-hidden="true" class="close">&times;</span></span>';
+				$align_class = $aui_bs5 ? ' h-100 py-0' : '';
+				$args['input_group_right'] = '<span class="input-group-text aui-clear-input c-pointer bg-initial border-0 px-2 d-none ' . $align_class . '" onclick="' . $clear_function . '"><span style="font-size: '.$font_size.'rem" aria-hidden="true" class="close">&times;</span></span>';
 			}
 
 			// open/type
@@ -208,7 +219,7 @@ class AUI_Component_Input {
 
 			// class
 			$class = ! empty( $args['class'] ) ? AUI_Component_Helper::esc_classes( $args['class'] ) : '';
-			$output .= ' class="form-control ' . $class . '" ';
+			$output .= $aui_bs5 &&  $type == 'checkbox' ? ' class="' . $class . '" ' : ' class="form-control ' . $class . '" ';
 
 			// data-attributes
 			$output .= AUI_Component_Helper::data_attributes( $args );
@@ -241,7 +252,7 @@ class AUI_Component_Input {
 
 					}
 
-					$label_base_class = ' custom-control-label';
+					$label_base_class = $aui_bs5 ? ' form-check-label' : ' custom-control-label';
 				}
 				$label_args['class'] .= $label_base_class;
 				$temp_label_args = $label_args;
@@ -261,7 +272,7 @@ class AUI_Component_Input {
 			if ( $type == 'file' ) {
 				$output = self::wrap( array(
 					'content' => $output,
-					'class'   => 'form-group custom-file'
+					'class'   => $aui_bs5 ? 'mb-3 custom-file' : 'form-group custom-file'
 				) );
 			} elseif ( $type == 'checkbox' ) {
 
@@ -269,14 +280,18 @@ class AUI_Component_Input {
 				$label_col = AUI_Component_Helper::get_column_class( $args['label_col'], 'label' );
 				$label = !empty( $args['label_force_left'] ) ? self::label( $label_args, 'cb' ) : '<div class="' . $label_col . ' col-form-label"></div>';
 				$switch_size_class = $args['switch'] && !is_bool( $args['switch'] ) ? ' custom-switch-'.esc_attr( $args['switch'] ) : '';
-				$wrap_class = $args['switch'] ? 'custom-switch'.$switch_size_class : 'custom-checkbox';
+				if ( $aui_bs5 ) {
+					$wrap_class = $args['switch'] ? 'form-check form-switch' . $switch_size_class : 'form-check';
+				}else{
+					$wrap_class = $args['switch'] ? 'custom-switch' . $switch_size_class :  'custom-checkbox' ;
+				}
 				if ( ! empty( $args['label_force_left'] ) ) {
-					$wrap_class .= ' d-flex align-content-center';
-					$label = str_replace("custom-control-label","", self::label( $label_args, 'cb' ) );
+					$wrap_class .= $aui_bs5 ? '' : ' d-flex align-content-center';
+					$label = str_replace(array("form-check-label","custom-control-label"),"", self::label( $label_args, 'cb' ) );
 				}
 				$output     = self::wrap( array(
 					'content' => $output,
-					'class'   => 'custom-control ' . $wrap_class
+					'class'   => $aui_bs5 ? $wrap_class : 'custom-control ' . $wrap_class
 				) );
 
 				if ( $args['label_type'] == 'horizontal' ) {
@@ -339,7 +354,12 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// wrap
 			if ( ! $args['no_wrap'] ) {
-				$form_group_class = $args['label_type'] == 'floating' && $type != 'checkbox' ? 'form-label-group' : 'form-group';
+				if ( ! empty( $args['form_group_class'] ) ) {
+					$fg_class = esc_attr( $args['form_group_class'] );
+				}else{
+					$fg_class = $aui_bs5 ? 'mb-3' : 'form-group';
+				}
+				$form_group_class = $args['label_type'] == 'floating' && $type != 'checkbox' ? 'form-label-group' : $fg_class;
 				$wrap_class       = $args['label_type'] == 'horizontal' ? $form_group_class . ' row' : $form_group_class;
 				$wrap_class       = ! empty( $args['wrap_class'] ) ? $wrap_class . " " . $args['wrap_class'] : $wrap_class;
 				$output           = self::wrap( array(
@@ -356,6 +376,7 @@ else{$eli.attr(\'type\',\'password\');}"
 	}
 
 	public static function label( $args = array(), $type = '' ) {
+		global $aui_bs5;
 		//<label for="exampleInputEmail1">Email address</label>
 		$defaults = array(
 			'title'      => 'div',
@@ -382,8 +403,10 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// maybe horizontal
 			if ( $args['label_type'] == 'horizontal' && $type != 'checkbox' ) {
-				$class .= ' ' . AUI_Component_Helper::get_column_class( $args['label_col'], 'label' ) . ' col-form-label';
+				$class .= ' ' . AUI_Component_Helper::get_column_class( $args['label_col'], 'label' ) . ' col-form-label '.$type;
 			}
+
+			if( $aui_bs5 ){ $class .= ' form-label'; }
 
 			// open
 			$output .= '<label ';
@@ -424,9 +447,10 @@ else{$eli.attr(\'type\',\'password\');}"
 	 * @return string
 	 */
 	public static function wrap( $args = array() ) {
+		global $aui_bs5;
 		$defaults = array(
 			'type'                     => 'div',
-			'class'                    => 'form-group',
+			'class'                    => $aui_bs5 ? 'mb-3' : 'form-group',
 			'content'                  => '',
 			'input_group_left'         => '',
 			'input_group_right'        => '',
@@ -475,7 +499,8 @@ else{$eli.attr(\'type\',\'password\');}"
 			if ( ! empty( $args['input_group_left'] ) ) {
 				$position_class   = ! empty( $args['input_group_left_inside'] ) ? 'position-absolute h-100' : '';
 				$input_group_left = strpos( $args['input_group_left'], '<' ) !== false ? $args['input_group_left'] : '<span class="input-group-text">' . $args['input_group_left'] . '</span>';
-				$output .= '<div class="input-group-prepend ' . $position_class . '">' . $input_group_left . '</div>';
+				$output .= $aui_bs5 ? $input_group_left : '<div class="input-group-prepend ' . $position_class . '">' . $input_group_left . '</div>';
+//				$output .= '<div class="input-group-prepend ' . $position_class . '">' . $input_group_left . '</div>';
 			}
 
 			// content
@@ -485,7 +510,8 @@ else{$eli.attr(\'type\',\'password\');}"
 			if ( ! empty( $args['input_group_right'] ) ) {
 				$position_class    = ! empty( $args['input_group_right_inside'] ) ? 'position-absolute h-100' : '';
 				$input_group_right = strpos( $args['input_group_right'], '<' ) !== false ? $args['input_group_right'] : '<span class="input-group-text">' . $args['input_group_right'] . '</span>';
-				$output .= '<div class="input-group-append ' . $position_class . '" style="top:0;right:0;">' . $input_group_right . '</div>';
+				$output .= $aui_bs5 ? str_replace( 'input-group-text','input-group-text top-0 end-0', $input_group_right ) : '<div class="input-group-append ' . $position_class . '" style="top:0;right:0;">' . $input_group_right . '</div>';
+//				$output .= '<div class="input-group-append ' . $position_class . '" style="top:0;right:0;">' . $input_group_right . '</div>';
 			}
 
 
@@ -508,6 +534,8 @@ else{$eli.attr(\'type\',\'password\');}"
 	 * @return string The rendered component.
 	 */
 	public static function textarea( $args = array() ) {
+		global $aui_bs5;
+
 		$defaults = array(
 			'name'               => '',
 			'class'              => '',
@@ -526,6 +554,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'input_group_right'        => '',
 			'input_group_left'         => '',
 			'input_group_right_inside' => false,
+			'form_group_class'      => '',
 			'help_text'          => '',
 			'validation_text'    => '',
 			'validation_pattern' => '',
@@ -546,6 +575,7 @@ else{$eli.attr(\'type\',\'password\');}"
 		 */
 		$args   = wp_parse_args( $args, $defaults );
 		$output = '';
+		$label = '';
 
 		// hidden label option needs to be empty
 		$args['label_type'] = $args['label_type'] == 'hidden' ? '' : $args['label_type'];
@@ -573,13 +603,13 @@ else{$eli.attr(\'type\',\'password\');}"
 				'label_type' => $args['label_type'],
 				'label_col'  => $args['label_col']
 			);
-			$output .= self::label( $label_args );
+			$label .= self::label( $label_args );
 		}
 
 		// maybe horizontal label
 		if ( $args['label_type'] == 'horizontal' ) {
 			$input_col = AUI_Component_Helper::get_column_class( $args['label_col'], 'input' );
-			$output .= '<div class="' . $input_col . '">';
+			$label .= '<div class="' . $input_col . '">';
 		}
 
 		if ( ! empty( $args['wysiwyg'] ) ) {
@@ -715,6 +745,10 @@ else{$eli.attr(\'type\',\'password\');}"
 			$output .= AUI_Component_Helper::help_text( $args['help_text'] );
 		}
 
+		if ( ! $label_after ) {
+			$output = $label . $output;
+		}
+
 		// maybe horizontal label
 		if ( $args['label_type'] == 'horizontal' ) {
 			$output .= '</div>';
@@ -723,7 +757,12 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		// wrap
 		if ( ! $args['no_wrap'] ) {
-			$form_group_class = $args['label_type'] == 'floating' ? 'form-label-group' : 'form-group';
+			if ( ! empty( $args['form_group_class'] ) ) {
+				$fg_class = esc_attr( $args['form_group_class'] );
+			}else{
+				$fg_class = $aui_bs5 ? 'mb-3' : 'form-group';
+			}
+			$form_group_class = $args['label_type'] == 'floating' ? 'form-label-group' : $fg_class;
 			$wrap_class       = $args['label_type'] == 'horizontal' ? $form_group_class . ' row' : $form_group_class;
 			$wrap_class       = ! empty( $args['wrap_class'] ) ? $wrap_class . " " . $args['wrap_class'] : $wrap_class;
 			$output           = self::wrap( array(
@@ -747,6 +786,7 @@ else{$eli.attr(\'type\',\'password\');}"
 	 * @return string The rendered component.
 	 */
 	public static function select( $args = array() ) {
+		global $aui_bs5;
 		$defaults = array(
 			'class'            => '',
 			'wrap_class'       => '',
@@ -773,6 +813,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'input_group_left' => '',
 			'input_group_right_inside' => false, // forces the input group inside the input
 			'input_group_left_inside' => false, // forces the input group inside the input
+			'form_group_class'  => '',
 			'element_require'  => '',
 			// [%element_id%] == "1"
 			'extra_attributes' => array(),
@@ -846,7 +887,8 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		// class
 		$class = ! empty( $args['class'] ) ? $args['class'] : '';
-		$output .= AUI_Component_Helper::class_attr( 'custom-select ' . $class );
+		$select_class = $aui_bs5 ? 'form-select ' : 'custom-select ';
+		$output .= AUI_Component_Helper::class_attr( $select_class . $class );
 
 		// name
 		if ( ! empty( $args['name'] ) ) {
@@ -1007,7 +1049,12 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		// wrap
 		if ( ! $args['no_wrap'] ) {
-			$wrap_class = $args['label_type'] == 'horizontal' ? 'form-group row' : 'form-group';
+			if ( ! empty( $args['form_group_class'] ) ) {
+				$fg_class = esc_attr( $args['form_group_class'] );
+			}else{
+				$fg_class = $aui_bs5 ? 'mb-3' : 'form-group';
+			}
+			$wrap_class = $args['label_type'] == 'horizontal' ? $fg_class . ' row' : $fg_class;
 			$wrap_class = ! empty( $args['wrap_class'] ) ? $wrap_class . " " . $args['wrap_class'] : $wrap_class;
 			$output     = self::wrap( array(
 				'content'         => $output,
@@ -1030,6 +1077,8 @@ else{$eli.attr(\'type\',\'password\');}"
 	 * @return string The rendered component.
 	 */
 	public static function radio( $args = array() ) {
+		global $aui_bs5;
+
 		$defaults = array(
 			'class'            => '',
 			'wrap_class'       => '',
@@ -1109,7 +1158,8 @@ else{$eli.attr(\'type\',\'password\');}"
 		}
 
 		// wrap
-		$wrap_class = $args['label_type'] == 'horizontal' ? 'form-group row' : 'form-group';
+		$fg_class = $aui_bs5 ? 'mb-3' : 'form-group';
+		$wrap_class = $args['label_type'] == 'horizontal' ? $fg_class . ' row' : $fg_class;
 		$wrap_class = ! empty( $args['wrap_class'] ) ? $wrap_class . " " . $args['wrap_class'] : $wrap_class;
 		$output     = self::wrap( array(
 			'content'         => $output,

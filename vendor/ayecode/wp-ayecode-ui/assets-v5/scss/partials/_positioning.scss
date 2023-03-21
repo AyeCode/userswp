@@ -1,0 +1,105 @@
+// top left
+.ab-left,.ab-top-left{
+  position: absolute;
+  z-index: 1;
+  top: 2px;
+  left: 2px;
+  margin: 0;
+}
+.ab-left-angle,.ab-top-left-angle{
+  position: absolute;
+  z-index: 1;
+  top: 13px;
+  left: -15px;
+  margin: 0;
+  transform: rotate(-45deg);
+  transform-origin: bottom;
+  width: 100px;
+  text-align: center;
+  .badge{
+    display: block;
+  }
+}
+
+// top right
+.ab-right,.ab-top-right{
+  position: absolute;
+  z-index: 1;
+  top: 2px;
+  right: 2px;
+  margin: 0;
+}
+
+.ab-right-angle,.ab-top-right-angle{
+  position: absolute;
+  z-index: 1;
+  top: 13px;
+  right: -15px;
+  margin: 0;
+  transform: rotate(45deg);
+  transform-origin: bottom;
+  width: 100px;
+  text-align: center;
+  .badge{
+    display: block;
+  }
+
+}
+
+// bottom left
+.ab-bottom-left{
+  position: absolute;
+  z-index: 1;
+  bottom: 6px;
+  left: 2px;
+  margin: 0;
+}
+.ab-bottom-left-angle{
+  position: absolute;
+  z-index: 1;
+  bottom: 13px;
+  left: -15px;
+  margin: 0;
+  transform: rotate(45deg);
+  transform-origin: top;
+  width: 100px;
+  text-align: center;
+  .badge{
+    display: block;
+  }
+}
+
+// bottom right
+.ab-bottom-right{
+  position: absolute;
+  z-index: 1;
+  bottom: 6px;
+  right: 2px;
+  margin: 0;
+}
+
+.ab-bottom-right-angle{
+  position: absolute;
+  z-index: 1;
+  bottom: 13px;
+  right: -15px;
+  margin: 0;
+  transform: rotate(-45deg);
+  transform-origin: top;
+  width: 100px;
+  text-align: center;
+  .badge{
+    display: block;
+  }
+
+}
+
+.sticky-scroll{
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+}
+
+.clear-both{
+  clear: both;
+}

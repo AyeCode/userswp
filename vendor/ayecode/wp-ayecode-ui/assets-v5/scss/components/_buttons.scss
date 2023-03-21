@@ -1,0 +1,425 @@
+//
+// Buttons
+// --------------------------------------------------
+
+
+// Overriding button variant colors
+// 
+// Solid variant
+
+@each $color, $value in map-remove($theme-colors, 'secondary', 'light', 'white') {
+  .btn-#{$color} {
+    color: $btn-color;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &.active,
+    &.show {
+      color: $btn-color !important;
+      @include box-shadow(
+        0 .25rem .25rem .125rem rgba($value, .1),
+        0 .375rem .75rem -.125rem rgba($value, .4)
+      );
+    }
+
+    &:disabled,
+    &.disabled {
+      color: $btn-color;
+    }
+  }
+}
+
+.btn:not(.btn-link){
+  &:hover{
+    a:not([class*="btn-"]):not([class*="text-"]){
+      color: inherit;
+    }
+  }
+
+  a:hover:not([class*="btn-"]):not([class*="text-"]){
+    color: inherit;
+  }
+}
+
+.btn-secondary {
+  border-color: darken($border-color, 4%);
+  color: $gray-800;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active,
+  &.show {
+    @include box-shadow(
+      0 .25rem .25rem .125rem rgba($gray-500, .1),
+      0 .375rem .75rem -.125rem rgba($gray-500, .4)
+    );
+  }
+  &:disabled,
+  &.disabled {
+    color: $text-muted;
+  }
+}
+
+.btn-light {
+  color: $gray-800;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    color: $primary;
+  }
+  &:disabled,
+  &.disabled {
+    color: $text-muted;
+  }
+}
+
+.btn.bg-gradient {
+  border-color: transparent;
+}
+
+
+// Outline buttons
+
+[class^='btn-outline-'],
+[class*=' btn-outline-'] {
+  &:hover, &:active,
+  &.active, &.show,
+  &.dropdown-toggle.show {
+    color: $btn-color !important;
+  }
+}
+
+.btn-outline-secondary {
+  border-color: $gray-400;
+  color: $gray-800;
+
+  &:hover, &:focus, &:active,
+  &.active, &.show,
+  &.dropdown-toggle.show {
+    color: $gray-900 !important;
+    background-color: $secondary;
+    border-color: $gray-400 !important;
+  }
+}
+.btn-group > .btn-check:checked + .btn {
+  border-color: $gray-400 !important;
+}
+
+.btn-outline-light {
+  &:hover, &:focus, &:active,
+  &.active, &.show,
+  &.dropdown-toggle.show {
+    background-color: $light;
+    color: $primary;
+  }
+}
+
+
+// Translucent buttons
+
+@each $color, $value in $theme-faded-colors {
+  .btn-translucent-#{$color} {
+    background-color: $value;
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .btn-translucent-#{$color} {
+    color: $value;
+    &:hover, &:focus, &:active,
+    &.active, &.show {
+      background-color: $value;
+    }
+  }
+}
+
+[class^='btn-translucent-'],
+[class*=' btn-translucent-'] {
+  &:hover, &:focus, &:active,
+  &.active, &.show {
+    color: $btn-color;
+  }
+}
+
+.btn-translucent-light {
+  color: $light;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    background-color: $light;
+    color: $primary;
+  }
+}
+
+
+// Link button
+
+.btn-link {
+  border: 0;
+  background-color: transparent !important;
+  color: $btn-link-color;
+  font-weight: $btn-font-weight;
+  text-decoration: $btn-link-decoration;
+  &:hover {
+    color: $btn-link-hover-color;
+    text-decoration: $btn-link-hover-decoration;
+  }
+
+  &.btn-light {
+    color: $btn-link-light-color;
+    &:hover { color: $btn-link-light-hover-color; }
+  }
+}
+
+
+// Shadow
+
+.btn.shadow-sm:hover,
+.btn-icon.shadow-sm:hover {
+  box-shadow: $box-shadow !important;
+}
+
+
+// Light to primary hover effect
+
+.btn-light-primary,
+.btn-light-primary.shadow-sm {
+  background-color: $light;
+  color: $gray-700;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    color: $white;
+    background-color: $primary;
+    @include box-shadow(
+      0 .25rem .25rem .125rem rgba($primary, .1),
+      0 .375rem .75rem -.125rem rgba($primary, .4)
+     !important);
+
+  }
+
+  &.text-primary {
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      color: $light !important;
+    }
+  }
+}
+
+
+// Button size: XS
+
+.btn-xs {
+  font-weight: normal;
+  @include button-size($btn-padding-y-xs, $btn-padding-x-xs, $btn-font-size-xs, $btn-border-radius-xs);
+}
+
+
+// Icons + Spinners
+
+.btn {
+  > [class^='fi-'],
+  > [class*=' fi-'] {
+    margin-top: -.1875rem;
+    vertical-align: middle;
+  }
+  > .spinner-border,
+  > .spinner-grow {
+    vertical-align: middle;
+  }
+}
+
+
+// Icon button
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $btn-icon-size;
+  height: $btn-icon-size;
+  padding: 0;
+
+  > i {
+    margin-top: .0625rem !important;
+    font-size: 1.1em;
+  }
+
+  &.btn-sm {
+    width: $btn-icon-sm-size;
+    height: $btn-icon-sm-size;
+  }
+  &.btn-xs {
+    width: $btn-icon-xs-size;
+    height: $btn-icon-xs-size;
+    > i { font-size: 1.2em; }
+  }
+  &.btn-xxs {
+    width: $btn-icon-xxs-size;
+    height: $btn-icon-xxs-size;
+    border-radius: $btn-border-radius-xs;
+    font-size: $btn-font-size-xs;
+    > i {
+      margin-top: 0 !important;
+      font-size: 1em;
+    }
+  }
+
+  &.btn-light.border {
+    color: $gray-700;
+    border-color: darken($border-color, 5%) !important;
+    &:hover {
+      color: $primary;
+      border-color: $primary !important;
+    }
+  }
+
+  &.btn-translucent-primary:hover {
+    @include box-shadow(
+      0 .25rem .25rem .125rem rgba($primary, .1),
+      0 .375rem .75rem -.125rem rgba($primary, .4)
+    );
+  }
+}
+
+
+// Button group
+
+.btn-group .border-light {
+  border-color: rgba($white, .2) !important;
+}
+
+
+// Market buttons
+
+.btn-market {
+  display: inline-block;
+  position: relative;
+  padding: $btn-market-padding-y $btn-market-padding-x;
+  @include border-radius($btn-market-border-radius);
+  background-image: $btn-market-bg;
+  border: $btn-market-border-width solid $btn-market-border-color;
+  @include box-shadow($btn-market-box-shadow);
+
+  > img,
+  > svg {
+    display: block;
+    margin: {
+      right: auto;
+      left: auto;
+    }
+  }
+}
+
+
+// Scroll to top button
+
+.btn-scroll-top {
+  display: block;
+  position: fixed;
+  right: -($btn-scroll-top-size * 1.5);
+  bottom: $spacer * 1.25;
+  width: $btn-scroll-top-size;
+  height: $btn-scroll-top-size;
+  transition: $btn-scroll-top-transition;
+  border-radius: 50%;
+  background-color: $btn-scroll-top-bg;
+  color: $btn-scroll-top-color;
+  text-align: center;
+  opacity: 0;
+  z-index: $zindex-btn-scroll-top;
+  > .btn-scroll-top-icon {
+    font: {
+      size: $btn-scroll-top-icon-font-size;
+      weight: bold;
+    }
+    line-height: $btn-scroll-top-size - .125rem;
+  }
+
+  .btn-scroll-top-tooltip {
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    transform: translateY(-50%);
+    transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  &:hover {
+    background-color: $btn-scroll-top-hover-bg;
+    color: $btn-scroll-top-hover-color;
+    .btn-scroll-top-tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  &.show {
+    right: $spacer * 1.25;
+    opacity: 1;
+  }
+
+  @include media-breakpoint-down(sm) {
+    width: $btn-scroll-top-size * .8;
+    height: $btn-scroll-top-size * .8;
+    bottom: $spacer;
+    > .btn-scroll-top-icon {
+      line-height: ($btn-scroll-top-size * .8) - .125rem;
+    }
+    &.show { right: $spacer; }
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  .fixed-bottom-btn .btn-scroll-top {
+    bottom: $spacer + 2.25rem;
+  }
+}
+
+
+// Like / dislike buttons
+
+.btn-like,
+.btn-dislike {
+  display: inline-flex;
+  align-items: center;
+  transition: $btn-like-dislike-transition;
+  border: 0;
+  background: none !important;
+  color: $btn-like-dislike-color;
+  font-size: $btn-like-dislike-font-size;
+
+  &:focus { outline: none; }
+
+  > i {
+    margin-right: .25rem;
+    font-size: $btn-like-dislike-icon-size;
+  }
+
+  &.btn-light {
+    color: $btn-like-dislike-light-color;
+  }
+}
+
+.btn-like {
+  > i { margin-top: -.0625rem; }
+  &:hover { color: $btn-like-hover-color; }
+  &.active { color: $btn-like-active-color; }
+}
+
+.btn-dislike {
+  > i { margin-bottom: -.125rem; }
+  &:hover { color: $btn-dislike-hover-color; }
+  &.active { color: $btn-dislike-active-color; }
+}

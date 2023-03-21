@@ -1,0 +1,98 @@
+//
+// Code
+// --------------------------------------------------
+
+
+:not(pre) > code[class*='language-'],
+pre[class*='language-'],
+pre {
+  margin: 0;
+  padding: {
+    top: $spacer * 1.5;
+    bottom: $spacer * 1.5;
+  }
+  background-color: $pre-bg;
+  font-size: $code-font-size;
+}
+pre {
+  padding: {
+    right: $spacer;
+    left: $spacer;
+  }
+}
+.code-toolbar {
+  :not(pre) > code[class*='language-'],
+  pre[class*='language-'] {
+    padding-top: $spacer * 2;
+  }
+}
+code[class*="language-"],
+pre[class*="language-"],
+pre {
+  color: $pre-color;
+  text-shadow: none;
+}
+
+// Line numbers
+.line-numbers .line-numbers-rows {
+  border-right: $pre-line-numbers-border-width solid $pre-line-numbers-border-color;
+  > span::before {
+    color: $pre-line-numbers-color;
+  }
+}
+
+// Toolbar (Copy button)
+div.code-toolbar > .toolbar {
+  opacity: 1;
+  > .toolbar-item > a,
+  > .toolbar-item > button,
+  .toolbar-item > span {
+    display: inline-block;
+    margin: .375rem .5rem;
+    padding: .25rem .75rem;
+    transition: $btn-transition;
+    border-radius: $border-radius-sm;
+    border: $border-width solid rgba($primary, .35);
+    background-color: rgba($primary, .12);
+    color: $primary;
+    font: {
+      size: $font-size-xs;
+      weight: $font-weight-bold;
+    }
+    box-shadow: none;
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+    &:hover {
+      background-color: $primary;
+      color: $white !important;
+    }
+  }
+}
+
+// Code highlighting colors overrides (prism.js)
+.token.boolean, .token.constant, .token.deleted, .token.number,
+.token.property, .token.symbol, .token.tag {
+  color: #47abfd;
+}
+.token.cdata, .token.comment, .token.doctype, .token.prolog {
+  color: rgba($white, .4);
+}
+.token.attr-name, .token.builtin, .token.char,
+.token.inserted, .token.selector {
+  color: #a8e1ff;
+}
+.token.atrule, .token.attr-value,
+.token.keyword, .token.string {
+  color: #f69733;
+}
+.language-css .token.string, .style .token.string,
+.token.entity, .token.operator, .token.url {
+  color: #35bcba;
+  background-color: transparent;
+}
+.token.class-name, .token.function {
+  color: #35bcba;
+  background-color: transparent;
+}
