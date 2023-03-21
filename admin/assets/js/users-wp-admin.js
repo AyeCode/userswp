@@ -174,7 +174,7 @@ jQuery(window).on('load', function () {
             }
         } else {
             uwp_remove_spin_loader(current_obj);
-        }
+        }s/uwp-membership
     });
 
     jQuery(document).on('submit', '#uwp_user_type_form', function (e) {
@@ -190,7 +190,7 @@ jQuery(window).on('load', function () {
             uwp_remove_spin_loader(btn);
             if (response.status) {
                 btn.after('<b class="ml-1 text-success">'+uwp_admin_ajax.form_updated_msg+'</b>');
-                location.reload();
+                window.location.replace(response.redirect);
             } else {
                 console.log(response.message);
             }

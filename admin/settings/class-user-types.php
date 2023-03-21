@@ -21,7 +21,7 @@ class UsersWP_User_Types {
 
 		do_action( 'uwp_user_types_start' );
 		if ( isset( $_GET['form'] ) ) {
-
+			$form_id = $_GET[ 'form' ];
             $current_form        = ! empty( $_GET['form'] ) ? (int) $_GET['form'] : 1;
             $register_forms      = uwp_get_option( 'multiple_registration_forms' );
             if ( ! empty( $_GET['form_type'] ) && $_GET['form_type'] === 'new' ) {
@@ -31,19 +31,15 @@ class UsersWP_User_Types {
             ?>
 
             <div class="multiple-registration-form">
-
+                <h1 class="wp-heading-inline"><?php echo __('Edit user type ID ', 'userswp') . $form_id;?></h1>
             <form class="uwp_user_type_form" id="uwp_user_type_form" method="POST">
                 <input type="hidden" name="manage_field_form_id" class="manage_field_form_id"
                        id="manage_field_form_id"
                        value="<?php echo esc_attr( $current_form ); ?>">
-				<?php do_action( 'uwp_user_type_form_before', $current_form, $tab ); ?>
-                <?php
-
-                    $form_id = $_GET[ 'form' ];
-                    self::update_form ( $form_id );
-                ?>
+				<?php do_action( 'uwp_user_type_form_before', $current_form ); ?>
+                <?php self::update_form ( $form_id ); ?>
                 <input type="hidden" name="uwp_update_register_form_nonce" value="<?php echo wp_create_nonce( 'uwp-update-register-form-nonce' ); ?>" />
-				<?php do_action( 'uwp_user_type_form_after', $current_form, $tab ); ?>
+				<?php do_action( 'uwp_user_type_form_after', $current_form ); ?>
             </form>
         </div>
 		<?php
@@ -76,18 +72,17 @@ class UsersWP_User_Types {
             $current_form = $register_forms[ $form_key ];
 
 	        $current_title  = ! empty( $current_form['title'] ) ? $current_form['title'] : '';
-            $current_gdpr_page   = ! empty( $forms['gdpr_page'] ) ? (int) $forms['gdpr_page'] : - 1;
-            $current_tos_page    = ! empty( $forms['tos_page'] ) ? (int) $forms['tos_page'] : - 1;
-	        $user_role   = ! empty( $forms['user_role'] ) ? $forms['user_role'] : '';
+            $current_gdpr_page   = ! empty( $current_form['gdpr_page'] ) ? (int) $current_form['gdpr_page'] : - 1;
+            $current_tos_page    = ! empty( $current_form['tos_page'] ) ? (int) $current_form['tos_page'] : - 1;
+	        $user_role   = ! empty( $current_form['user_role'] ) ? $current_form['user_role'] : '';
             if ( ! empty( $user_role ) && in_array( $user_role, array_keys( $user_roles ) ) ) {
                 $current_role = $user_role;
             }
-	        $current_custom_url  = ! empty( $forms['custom_url'] ) ? $forms['custom_url'] : '';
+	        $current_custom_url  = ! empty( $current_form['custom_url'] ) ? $current_form['custom_url'] : '';
 
 	        $actions             = uwp_get_registration_form_actions();
 	        $current_action      = uwp_get_option( 'uwp_registration_action', false );
-	        $current_action      = ! empty( $forms['reg_action'] ) ? $forms['reg_action'] : $current_action;
-
+	        $current_action      = ! empty( $current_form['reg_action'] ) ? $current_form['reg_action'] : $current_action;
             ?>
             <table class="form-table bsui userswp" id="uwp-form-more-options" style="display:block;">
                 <tr>
@@ -198,7 +193,7 @@ class UsersWP_User_Types {
 		                ?>
                     </td>
                 </tr>
-                <?php //do_action( 'uwp_user_type_form_before_submit', $current_form, $tab ); ?>
+                <?php do_action( 'uwp_user_type_form_before_submit', $current_form ); ?>
                 <tr>
                     <td></td>
                     <td>

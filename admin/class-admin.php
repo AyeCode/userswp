@@ -913,6 +913,7 @@ class UsersWP_Admin {
 		$gdpr_page = ! empty( $_POST['gdpr_page'] ) ? (int)$_POST['gdpr_page'] : (int)uwp_get_option('register_gdpr_page', false);
 		$tos_page = ! empty( $_POST['tos_page'] ) ? (int)$_POST['tos_page'] : (int)uwp_get_option('register_terms_page', false);
 
+        $redirect = '';
 		$status  = false;
 		$message = __( 'Something went wrong. Please try again.', 'userswp' );
 		if ( ! empty( $type ) && ! empty( $form_id ) && $type === 'update' ) {
@@ -939,11 +940,14 @@ class UsersWP_Admin {
 			$register_forms = array_values( $register_forms );
 			$register_forms = apply_filters('uwp_multiple_registration_forms_update', $register_forms);
 			uwp_update_option( 'multiple_registration_forms', $register_forms );
+			$redirect = admin_url( 'admin.php?page=uwp_user_types' );
 		}
+
 
 		$response = array(
 			'status'  => $status,
 			'message' => $message,
+            'redirect' => $redirect,
 		);
 
 		echo json_encode( $response );
