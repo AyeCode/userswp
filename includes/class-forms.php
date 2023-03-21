@@ -4564,6 +4564,10 @@ class UsersWP_Forms {
 		uwp_get_template( "bootstrap/login.php", $args );
 		$form = ob_get_clean();
 
+        // bs5
+        if( function_exists('aui_bs_convert_sd_output')){
+            $form = aui_bs_convert_sd_output( $form );
+        }
 		// send ajax response
 		wp_send_json_success( $form );
 	}
@@ -4663,6 +4667,11 @@ class UsersWP_Forms {
 		}
 		$form = ob_get_clean();
 
+        // bs5
+        if( function_exists('aui_bs_convert_sd_output')){
+            $form = aui_bs_convert_sd_output( $form );
+        }
+
 		// send ajax response
 		wp_send_json_success( $form );
 	}
@@ -4681,6 +4690,11 @@ class UsersWP_Forms {
 		ob_start();
 		uwp_get_template( "bootstrap/forgot.php" );
 		$form = ob_get_clean();
+
+        // bs5
+        if( function_exists('aui_bs_convert_sd_output')){
+            $form = aui_bs_convert_sd_output( $form );
+        }
 
 		// send ajax response
 		wp_send_json_success( $form );
