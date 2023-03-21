@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.16' );
+	define( 'SUPER_DUPER_VER', '1.1.17' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -129,8 +129,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				add_action( 'wp_ajax_super_duper_get_widget_settings', array( __CLASS__, 'get_widget_settings' ) );
 				add_action( 'wp_ajax_super_duper_get_picker', array( __CLASS__, 'get_picker' ) );
 
-				// add generator text to admin head
+				// add generator text to head
 				add_action( 'admin_head', array( $this, 'generator' ) );
+				add_action( 'wp_head', array( $this, 'generator' ) );
 			}
 
 			do_action( 'wp_super_duper_widget_init', $options, $this );
@@ -343,10 +344,25 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		}
 
 		/**
-		 * Output the version in the admin header.
+		 * Output the version in the header.
 		 */
 		public function generator() {
-			echo '<meta name="generator" content="WP Super Duper v' . $this->version . '" />';
+			$file = str_replace( array( "/", "\\" ), "/", realpath( __FILE__ ) );
+			$plugins_dir = str_replace( array( "/", "\\" ), "/", realpath( WP_PLUGIN_DIR ) );
+
+			// Find source plugin/theme of SD
+			$source = array();
+			if ( strpos( $file, $plugins_dir ) !== false ) {
+				$source = explode( "/", plugin_basename( $file ) );
+			} else if ( function_exists( 'get_theme_root' ) ) {
+				$themes_dir = str_replace( array( "/", "\\" ), "/", realpath( get_theme_root() ) );
+
+				if ( strpos( $file, $themes_dir ) !== false ) {
+					$source = explode( "/", ltrim( str_replace( $themes_dir, "", $file ), "/" ) );
+				}
+			}
+
+			echo '<meta name="generator" content="WP Super Duper v' . $this->version . '"' . ( ! empty( $source[0] ) ? ' data-sd-source="' . esc_attr( $source[0] ) . '"' : '' ) . ' />';
 		}
 
 		/**
@@ -790,10 +806,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				 Gets the shortcode options.
 				 */
 				function sd_get_shortcode_options($this) {
-
 					$short_code = jQuery($this).val();
 					if ($short_code) {
-
 						var data = {
 							'action': 'super_duper_get_widget_settings',
 							'shortcode': $short_code,
@@ -824,18 +838,15 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								jQuery('#TB_ajaxContent').css('width', 'auto').css('height', '75vh');
 							}, 200);
 
-
 							return response;
 						});
 					}
-
 				}
 
 				/*
 				 Builds and inserts the shortcode into the viewer.
 				 */
 				function sd_build_shortcode($id) {
-
 					var multiSelects = {};
 					var multiSelectsRemove = [];
 
@@ -878,11 +889,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						$form_data = $form_data.concat($ms_arr);
 					}
 
-
 					if ($form_data) {
 						$content = '';
 						$form_data.forEach(function (element) {
-
 							if (element.value) {
 								$field_name = element.name.substr(element.name.indexOf("][") + 2);
 								$field_name = $field_name.replace("]", "");
@@ -892,7 +901,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 									$output = $output + " " + $field_name + '="' + element.value + '"';
 								}
 							}
-
 						});
 					}
 					$output = $output + "]";
@@ -904,7 +912,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 					jQuery('#TB_ajaxContent #sd-shortcode-output').html($output);
 				}
-
 
 				/*
 				 Delay the init of the textareas for 1 second.
@@ -919,10 +926,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				 Init the textareas to be able to show the shortcode builder button.
 				 */
 				function sd_init_textareas() {
-
 					// General textareas
 					jQuery(document).on('focus', 'textarea', function () {
-
 						if (jQuery(this).hasClass('wp-editor-area')) {
 							// insert the shortcode button to the textarea lable if not there already
 							if (!jQuery(this).parent().find('.sd-lable-shortcode-inserter').length) {
@@ -994,7 +999,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 //							jQuery(this).parent().parent().find('.wpb_element_label').append(sd_shortcode_button());
 //						}
 //					});
-
 				}
 
 				/**
@@ -1043,7 +1047,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						return '<?php echo self::shortcode_button();?>';
 					}
 				}
-
 			</script>
 			<?php
 		}
@@ -1708,6 +1711,51 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			return $arguments;
 		}
 
+		/**
+		 * Parse used group tabs.
+		 *
+		 * @since 1.1.17
+		 */
+		public function group_block_tabs( $tabs, $arguments ) {
+			if ( ! empty( $tabs ) && ! empty( $arguments ) ) {
+				$has_sections = false;
+
+				foreach ( $this->arguments as $key => $args ) {
+					if ( isset( $args['group'] ) ) {
+						$has_sections = true;
+						break;
+					}
+				}
+
+				if ( ! $has_sections ) {
+					return $tabs;
+				}
+
+				$new_tabs = array();
+
+				foreach ( $tabs as $tab_key => $tab ) {
+					$new_groups = array();
+
+					if ( ! empty( $tab['groups'] ) && is_array( $tab['groups'] ) ) {
+						foreach ( $tab['groups'] as $group ) {
+							if ( isset( $arguments[ $group ] ) ) {
+								$new_groups[] = $group;
+							}
+						}
+					}
+
+					if ( ! empty( $new_groups ) ) {
+						$tab['groups'] = $new_groups;
+
+						$new_tabs[ $tab_key ] = $tab;
+					}
+				}
+
+				$tabs = $new_tabs;
+			}
+
+			return $tabs;
+		}
 
 		/**
 		 * Output the JS for building the dynamic Guntenberg block.
@@ -2748,12 +2796,9 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 
 									}
 
-								//	print_r( $this->arguments);
-
-									//echo '####';
-
 									$arguments = $this->group_arguments( $this->arguments );
-//print_r($arguments ); exit;
+									$block_group_tabs = ! empty( $this->options['block_group_tabs'] ) ? $this->group_block_tabs( $this->options['block_group_tabs'], $arguments ) : array();
+
 									// Do we have sections?
 									$has_sections = $arguments == $this->arguments ? false : true;
 
@@ -2764,47 +2809,36 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 
 									$open_tab_groups = array();
 									$used_tabs = array();
-									foreach($arguments as $key => $args){
 
+									foreach ( $arguments as $key => $args ) {
 										$close_tab = false;
 										$close_tabs = false;
 
-										 if(!empty($this->options['block_group_tabs'])) {
-											foreach($this->options['block_group_tabs'] as $tab_name => $tab_args){
-												if(in_array($key,$tab_args['groups'])){
-
+										 if ( ! empty( $block_group_tabs ) ) {
+											foreach ( $block_group_tabs as $tab_name => $tab_args ) {
+												if ( in_array( $key, $tab_args['groups'] ) ) {
 													$open_tab_groups[] = $key;
 
-													if($open_tab != $tab_name){
+													if ( $open_tab != $tab_name ) {
 														$tab_args['tab']['tabs_open'] = $open_tab == '' ? true : false;
 														$tab_args['tab']['open'] = true;
 
 														$this->block_tab_start( '', $tab_args );
-//														echo '###open'.$tab_name;print_r($tab_args);
 														$open_tab = $tab_name;
 														$used_tabs[] = $tab_name;
 													}
 
-													if($open_tab_groups == $tab_args['groups']){
-														//$open_tab = '';
+													if ( $open_tab_groups == $tab_args['groups'] ) {
 														$close_tab = true;
 														$open_tab_groups = array();
 
-//													print_r(array_keys($this->options['block_group_tabs']));echo '####';print_r($used_tabs);
-													if($used_tabs == array_keys($this->options['block_group_tabs'])){
-//														echo '@@@';
+														if ( $used_tabs == array_keys( $block_group_tabs ) ) {
 															$close_tabs = true;
 														}
 													}
-
 												}
 											}
 										}
-
-//
-
-									//	print_r($arguments);exit;
-
 										?>
 										el(wp.components.PanelBody, {
 												title: '<?php esc_attr_e( $key ); ?>',
@@ -2815,11 +2849,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 											}?>
 											},
 											<?php
-
-
-
 											foreach ( $args as $k => $a ) {
-
 												$this->block_tab_start( $k, $a );
 												$this->block_row_start( $k, $a );
 												$this->build_block_arguments( $k, $a );
@@ -2830,7 +2860,6 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 										),
 										<?php
 										$panel_count ++;
-
 
 										if($close_tab || $close_tabs){
 											$tab_args = array(
@@ -3183,14 +3212,10 @@ el('div',{className: 'bsui'},
 
 				if(!empty($args['tab']['tabs_close'])){
 					if(false){?><script><?php }?>
-							],
-									},
-									( tab ) => {
-
-									return tab.content;
-
-								}
-								)), /* tabs close */
+						]}, ( tab ) => {
+								return tab.content;
+							}
+						)), /* tabs close */
 					<?php if(false){ ?></script><?php }
 				}
 			}

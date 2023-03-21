@@ -760,6 +760,7 @@ class UsersWP_Form_Builder {
 			'field_icon' => 'fas fa-file',
 			'site_title' => __( 'Terms & Conditions', 'userswp' ),
 			'help_text'  => __( 'Adds Register TOS page.', 'userswp' ),
+            'help_text_tip'    => __( 'This will show next to the checkbox, to add a link to the TOS page, use format: %%link_start%% View TOS %%link_end%%', 'userswp' ),
 			'defaults'   => array(
 				'admin_title'   => 'Terms & Conditions',
 				'site_title'    => 'Terms & Conditions',
@@ -770,7 +771,7 @@ class UsersWP_Form_Builder {
 				'is_required'   => 1,
 				'required_msg'  => '',
 				'field_icon'    => 'fas fa-file',
-				'css_class'     => 'btn-register-tos'
+				'css_class'     => 'btn-register-tos',
 			)
 		);
 
@@ -1439,7 +1440,8 @@ class UsersWP_Form_Builder {
                             <li class="uwp-setting-name">
                                 <label for="help_text" class="uwp-tooltip-wrap">
 									<?php
-									echo uwp_help_tip( __( 'This will be displayed below the field in the form.', 'userswp' ) );
+									$tip_text = !empty($cf['help_text_tip']) ? esc_attr($cf['help_text_tip']) : __( 'This will be displayed below the field in the form.', 'userswp' );
+									echo uwp_help_tip( $tip_text );
 									_e( 'Field Description:', 'userswp' ); ?>
                                 </label>
                                 <div class="uwp-input-wrap">
