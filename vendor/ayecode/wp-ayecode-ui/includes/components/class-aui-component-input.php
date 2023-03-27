@@ -160,7 +160,7 @@ class AUI_Component_Input {
 				$font_size = $size == 'sm' ? '1.3' : ( $size == 'lg' ? '1.65' : '1.5' );
 				$args['input_group_right_inside'] = true;
 				$align_class = $aui_bs5 ? ' h-100 py-0' : '';
-				$args['input_group_right'] = '<span class="input-group-text aui-clear-input c-pointer bg-initial border-0 px-2 d-none ' . $align_class . '" onclick="' . $clear_function . '"><span style="font-size: '.$font_size.'rem" aria-hidden="true" class="close">&times;</span></span>';
+				$args['input_group_right'] = '<span class="input-group-text aui-clear-input c-pointer bg-initial border-0 px-2 d-none ' . $align_class . '" onclick="' . $clear_function . '"><span style="font-size: ' . $font_size . 'rem" aria-hidden="true" class="' . ( $aui_bs5 ? 'btn-close' : 'close' ) . '">' . ( $aui_bs5 ? '' : '&times;' ) . '</span></span>';
 			}
 
 			// open/type

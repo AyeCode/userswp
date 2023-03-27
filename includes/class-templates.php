@@ -515,7 +515,7 @@ class UsersWP_Templates {
 	 */
 	public function template_fields( $form_type, $args = array() ) {
 
-		global $wpdb;
+		global $wpdb, $aui_bs5;
 		$table_name        = uwp_get_table_prefix() . 'uwp_form_fields';
 		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
@@ -562,8 +562,7 @@ class UsersWP_Templates {
 						$url = esc_url_raw( add_query_arg( array( 'uwp_form_id' => $id ), $current_url ) );
 						?>
                         <div class="btn-group" role="group">
-                            <button id="uwp-form-select-dropdown" type="button" class="btn btn-secondary dropdown-toggle"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button id="uwp-form-select-dropdown" type="button" class="btn btn-secondary dropdown-toggle" data-<?php echo ( $aui_bs5 ? 'bs-' : '' ); ?>toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <?php _e('More', 'userswp'); ?>
                             </button>
                             <div class="dropdown-menu mt-3" aria-labelledby="uwp-form-select">

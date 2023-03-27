@@ -3,6 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+global $aui_bs5;
+
 $files = new UsersWP_Files();
 $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner';
 ?>
@@ -70,7 +72,7 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 		'type'       =>  'button',
 		'class'      => 'btn btn-outline-primary uwp_modal_btn uwp-modal-close',
 		'content'    => __( 'Cancel', 'userswp' ),
-		'extra_attributes'  => array('data-type'=>$type, 'data-dismiss'=>"modal")
+		'extra_attributes'  => array('data-type'=>$type, 'data-' . ( $aui_bs5 ? 'bs-' : '' ) . 'dismiss'=>"modal")
 	));
 	?>
 	<div class="uwp-<?php echo $type; ?>-crop-p-wrap">

@@ -1,3 +1,7 @@
+= 0.1.92 =
+* removed extra styling in bs5 for deprecated .form-group class - REMOVED
+* Multiple AUI lightbox instances can prevent scrollbar coming back once closed - FIXED
+
 = 0.1.91 =
 * Improvements to BS5 compatibility - ADDED
 

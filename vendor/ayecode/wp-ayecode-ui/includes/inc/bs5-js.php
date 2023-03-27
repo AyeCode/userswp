@@ -307,9 +307,12 @@
         if(!$class){$class = '';}
         if(!$dialog_class){$dialog_class = '';}
         if(!$body){$body = '<div class="text-center"><div class="spinner-border" role="status"></div></div>';}
-        // remove it first
+
+       // remove it first
        jQuery('.aui-modal').remove();
        jQuery('.modal-backdrop').remove();
+       jQuery('body').css({'overflow': '','padding-right':''});
+
 
         // var modal = document.getElementById('aui-modal');
 
