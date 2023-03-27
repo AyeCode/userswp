@@ -3,6 +3,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
+
+global $aui_bs5;
+
 $type  = isset( $_POST['uwp_popup_type'] ) && $_POST['uwp_popup_type'] == 'avatar' ? 'avatar' : 'banner';
 $image_url = !empty($args['image_url']) ? esc_url( $args['image_url'] ) : '';
 ?>
@@ -19,7 +22,7 @@ $image_url = !empty($args['image_url']) ? esc_url( $args['image_url'] ) : '';
 					}
 					?>
 				</h4>
-				<button type="button" class="close uwp-modal-close" data-type="<?php echo $type; ?>" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close uwp-modal-close" data-type="<?php echo $type; ?>" data-<?php echo ( $aui_bs5 ? 'bs-' : '' ); ?>dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="uwp-bs-modal-body">
 				<div id="uwp-bs-modal-notice" class="bsui"></div>
@@ -41,7 +44,7 @@ $image_url = !empty($args['image_url']) ? esc_url( $args['image_url'] ) : '';
 						</form>
 					</div>
 				</div>
-				<button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal"><?php _e( 'Cancel', 'userswp' ); ?></button>
+				<button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-<?php echo ( $aui_bs5 ? 'bs-' : '' ); ?>dismiss="modal"><?php _e( 'Cancel', 'userswp' ); ?></button>
 			</div>
 		</div>
 	</div>

@@ -4,6 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+global $aui_bs5;
+
 $files = new UsersWP_Files();
 $type = isset($_POST['type']) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner';
 ?>
@@ -20,7 +22,7 @@ $type = isset($_POST['type']) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner
 					}
 					?>
 				</h4>
-				<button type="button" class="close uwp-modal-close" data-type="<?php echo $type; ?>" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close uwp-modal-close" data-type="<?php echo $type; ?>" data-<?php echo ( $aui_bs5 ? 'bs-' : '' ); ?>dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="uwp-bs-modal-body">
 				<div id="uwp-bs-modal-notice" class="bsui"></div>
@@ -45,7 +47,7 @@ $type = isset($_POST['type']) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner
 						</form>
 					</div>
 				</div>
-				<button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-dismiss="modal"><?php _e( 'Cancel', 'userswp' ); ?></button>
+				<button type="button" data-type="<?php echo $type; ?>" class="button uwp_modal_btn uwp-modal-close" data-<?php echo ( $aui_bs5 ? 'bs-' : '' ); ?>dismiss="modal"><?php _e( 'Cancel', 'userswp' ); ?></button>
 			</div>
 		</div>
 	</div>

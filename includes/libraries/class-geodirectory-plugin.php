@@ -970,7 +970,7 @@ class UsersWP_GeoDirectory_Plugin {
 	 * @return string
 	 */
 	public function posts_footer( $html ) {
-		global $post;
+		global $post, $aui_bs5;
 
 		if ( ! empty( $post->post_type ) && uwp_is_gdv2() && geodir_is_gd_post_type( $post->post_type ) ) {
 			$post_avgratings = geodir_get_post_rating( $post->ID );
@@ -991,7 +991,7 @@ class UsersWP_GeoDirectory_Plugin {
 				$new_html .= '
                         <div class="col-2 text-right">
                         <div class="btn-group dropup">
-                          <a href="#"  class="dropdown h5 text-muted m-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <a href="#"  class="dropdown h5 text-muted m-0" data-' . ( $aui_bs5 ? 'bs-' : '' ) . 'toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
                           </a>
                           <div class="dropdown-menu dropdown-menu-right dropdown-caret-0">
