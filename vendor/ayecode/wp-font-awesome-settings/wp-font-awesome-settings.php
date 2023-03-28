@@ -33,6 +33,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 	 * @since 1.0.15 Font Awesome will now load in the FSE if enable din the backend.
 	 * @since 1.1.0 Option added to load FontAwesome locally.
 	 * @since 1.1.1 Requires to re-save settings to load locally when option does not exists - FIXED.
+	 * @since 1.1.2 Bumped the latest version to 6.3.0 - CHANGED.
 	 * @ver 1.0.15
 	 * @todo decide how to implement textdomain
 	 */
@@ -43,7 +44,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '1.1.1';
+		public $version = '1.1.2';
 
 		/**
 		 * Class textdomain.
@@ -57,7 +58,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $latest = "5.8.2";
+		public $latest = "6.3.0";
 
 		/**
 		 * The title.

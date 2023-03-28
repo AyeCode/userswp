@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.91';
+		public $version = '0.1.92';
 
 		/**
 		 * Class textdomain.
