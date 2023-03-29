@@ -53,20 +53,20 @@
     },
     {
         "name": "ayecode/wp-ayecode-ui",
-        "version": "0.1.91",
-        "version_normalized": "0.1.91.0",
+        "version": "0.1.92",
+        "version_normalized": "0.1.92.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
-            "reference": "fe8cf5496f5e8bbc9f57bc58e6d147a33ac10b87"
+            "reference": "32220325cf46967b558af6b9441319c8078ff719"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/fe8cf5496f5e8bbc9f57bc58e6d147a33ac10b87",
-            "reference": "fe8cf5496f5e8bbc9f57bc58e6d147a33ac10b87",
+            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/32220325cf46967b558af6b9441319c8078ff719",
+            "reference": "32220325cf46967b558af6b9441319c8078ff719",
             "shasum": ""
         },
-        "time": "2023-03-13T13:12:16+00:00",
+        "time": "2023-03-27T14:36:15+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -92,11 +92,7 @@
             "ayecode",
             "boot",
             "bootstrap"
-        ],
-        "support": {
-            "issues": "https://github.com/AyeCode/wp-ayecode-ui/issues",
-            "source": "https://github.com/AyeCode/wp-ayecode-ui/tree/0.1.91"
-        }
+        ]
     },
     {
         "name": "ayecode/wp-deactivation-survey",
@@ -156,24 +152,24 @@
     },
     {
         "name": "ayecode/wp-font-awesome-settings",
-        "version": "1.1.1",
-        "version_normalized": "1.1.1.0",
+        "version": "1.1.2",
+        "version_normalized": "1.1.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-font-awesome-settings.git",
-            "reference": "dab8a00bde5608d4e79dec9f4766329a75618a32"
+            "reference": "9222b305caf0d1ccc36940007e6786d20f939af8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/dab8a00bde5608d4e79dec9f4766329a75618a32",
-            "reference": "dab8a00bde5608d4e79dec9f4766329a75618a32",
+            "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/9222b305caf0d1ccc36940007e6786d20f939af8",
+            "reference": "9222b305caf0d1ccc36940007e6786d20f939af8",
             "shasum": ""
         },
         "require": {
             "composer/installers": "~1.0",
             "php": ">=5.3.0"
         },
-        "time": "2022-11-02T10:24:24+00:00",
+        "time": "2023-03-28T08:40:35+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -198,11 +194,7 @@
         "keywords": [
             "FontAwesome",
             "font-awesome"
-        ],
-        "support": {
-            "issues": "https://github.com/AyeCode/wp-font-awesome-settings/issues",
-            "source": "https://github.com/AyeCode/wp-font-awesome-settings/tree/1.1.1"
-        }
+        ]
     },
     {
         "name": "ayecode/wp-super-duper",

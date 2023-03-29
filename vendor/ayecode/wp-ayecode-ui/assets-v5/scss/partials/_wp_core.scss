@@ -99,3 +99,10 @@ body>.flatpickr-calendar .flatpickr-month .flatpickr-current-month>*{display:inl
 body.modal-open .modal{
   backdrop-filter: blur(10px);
 }
+
+
+// UWP specific styles
+.aui_bs5.uwp_page .modal-body .jcrop-holder img,
+.aui_bs5.uwp_page .modal-body img.jcrop-preview {
+  max-width: none;
+}
