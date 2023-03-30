@@ -7,9 +7,9 @@ namespace Composer\Autoload;
 class ComposerStaticInitf3d2d3b01d25e99f52c2a4d35c24b58c
 {
     public static $files = array (
-        'e8d544c98e79f913e13eae1306ab635e' => __DIR__ . '/..' . '/ayecode/wp-ayecode-ui/ayecode-ui-loader.php',
         '24583d3588ebda5228dd453cfaa070da' => __DIR__ . '/..' . '/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php',
         '42671a413efb740d7040437ff2a982cd' => __DIR__ . '/..' . '/ayecode/wp-super-duper/sd-functions.php',
+        'e8d544c98e79f913e13eae1306ab635e' => __DIR__ . '/..' . '/ayecode/wp-ayecode-ui/ayecode-ui-loader.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -29,6 +29,7 @@ class ComposerStaticInitf3d2d3b01d25e99f52c2a4d35c24b58c
     public static $classMap = array (
         'AyeCode_Connect_Helper' => __DIR__ . '/..' . '/ayecode/ayecode-connect-helper/ayecode-connect-helper.php',
         'AyeCode_Deactivation_Survey' => __DIR__ . '/..' . '/ayecode/wp-deactivation-survey/wp-deactivation-survey.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'WP_Super_Duper' => __DIR__ . '/..' . '/ayecode/wp-super-duper/wp-super-duper.php',
     );
 

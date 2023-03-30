@@ -58,3 +58,10 @@
   -o-transform: none !important;
   transform: none !important;
 }
+
+//
+.carousel-item > .ratio {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+}
