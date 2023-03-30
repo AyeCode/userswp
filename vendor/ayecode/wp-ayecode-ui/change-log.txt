@@ -1,3 +1,7 @@
+= 0.1.93 =
+* Rounded right not working in BS5 - FIXED
+* Firefox and Safari can have issues displaying images with the .ratio class - FIXED
+
 = 0.1.92 =
 * removed extra styling in bs5 for deprecated .form-group class - REMOVED
 * Multiple AUI lightbox instances can prevent scrollbar coming back once closed - FIXED
