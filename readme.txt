@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.18 =
+* Checkbox in register popup is not clickable - FIXED
+
 = 1.2.3.17 =
 * AyeCode UI updated to v0.1.93 - UPDATED
 * Super Duper updated to v1.1.18 - UPDATED

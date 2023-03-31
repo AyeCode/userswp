@@ -276,7 +276,7 @@ function uwp_init_auth_modal(){
     }
 }
 
-function uwp_modal_loading(inputs){
+function uwp_modal_loading(inputs) {
     $input_single = '<span class="badge badge-pill badge-light p-3 mt-3 w-100 bg-loading">&nbsp;</span>';
     $inputs = inputs ? $input_single.repeat(inputs) : $input_single;
 
@@ -289,18 +289,17 @@ function uwp_modal_loading(inputs){
         $modal_content +
         '</div></div></div>';
 
-    if(!jQuery('.uwp-auth-modal').length){
+    if (!jQuery('.uwp-auth-modal').length) {
         jQuery('body').append($modal);
-    }else{
+    } else {
         jQuery('.uwp-auth-modal .modal-content').html($modal_content);
     }
 
-    // jQuery('.uwp-auth-modal').modal();
+    jQuery('.modal-backdrop').remove();
 
-    if ( window.bootstrap && window.bootstrap.Modal ) {
-        // var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-auth-modal'));
-        // authModal.show();
-        aui_modal('',$modal_content,'',true,'uwp-auth-modal');
+    if (window.bootstrap && window.bootstrap.Modal) {
+        var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-auth-modal'));
+        authModal.show();
     } else {
         jQuery('.uwp-auth-modal').modal();
     }
