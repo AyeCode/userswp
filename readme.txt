@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.2
-Stable tag: 1.2.3.17
+Stable tag: 1.2.3.18
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
