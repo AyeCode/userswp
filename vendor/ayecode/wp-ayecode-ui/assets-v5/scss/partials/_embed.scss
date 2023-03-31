@@ -58,3 +58,8 @@ Set images and videos to fit a certain way.
     }
   }
 }
+
+// Seems to break firefox and safari if not dispaly block
+.ratio {
+  display: block;
+}

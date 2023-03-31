@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
-Tested up to: 6.1
-Stable tag: 1.2.3.15
+Tested up to: 6.2
+Stable tag: 1.2.3.17
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -145,6 +145,13 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.3.17 =
+* AyeCode UI updated to v0.1.93 - UPDATED
+* Super Duper updated to v1.1.18 - UPDATED
+
+= 1.2.3.16 =
+* Some plugins calling wp_login_url() too early causing error - FIXED
 
 = 1.2.3.15 =
 * AyeCode UI updated - UPDATED

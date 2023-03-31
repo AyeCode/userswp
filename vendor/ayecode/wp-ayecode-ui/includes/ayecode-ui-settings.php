@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.92';
+		public $version = '0.1.93';
 
 		/**
 		 * Class textdomain.
@@ -959,11 +959,30 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					?>
                 </form>
 
-                <div id="wpbs-version"><?php echo $this->version; ?></div>
+                <div id="wpbs-version" data-aui-source="<?php echo esc_attr( $this->get_load_source() ); ?>"><?php echo $this->version; ?></div>
             </div>
 
 			<?php
 		}
+
+        public function get_load_source(){
+	        $file = str_replace( array( "/", "\\" ), "/", realpath( __FILE__ ) );
+	        $plugins_dir = str_replace( array( "/", "\\" ), "/", realpath( WP_PLUGIN_DIR ) );
+
+	        // Find source plugin/theme of SD
+	        $source = array();
+	        if ( strpos( $file, $plugins_dir ) !== false ) {
+		        $source = explode( "/", plugin_basename( $file ) );
+	        } else if ( function_exists( 'get_theme_root' ) ) {
+		        $themes_dir = str_replace( array( "/", "\\" ), "/", realpath( get_theme_root() ) );
+
+		        if ( strpos( $file, $themes_dir ) !== false ) {
+			        $source = explode( "/", ltrim( str_replace( $themes_dir, "", $file ), "/" ) );
+		        }
+	        }
+
+            return isset($source[0]) ? esc_attr($source[0]) : '';
+        }
 
 		public function customizer_settings($wp_customize){
 			$wp_customize->add_section('aui_settings', array(

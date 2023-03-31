@@ -429,6 +429,10 @@ class UsersWP_Templates {
 			return $login_url; // Do not change the URL for Jetpack SSO
 		}
 
+		if( did_action('init') === 0 ){
+			return $login_url; // Some plugin calls login link very early.
+		}
+
 		$login_page_id    = uwp_get_page_id( 'login_page', false );
 		$redirect_page_id = uwp_get_page_id( 'login_redirect_to' );
 		if ( ( ! is_admin() || wp_doing_ajax() ) && $login_page_id ) {

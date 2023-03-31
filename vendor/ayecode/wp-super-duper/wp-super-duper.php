@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.17' );
+	define( 'SUPER_DUPER_VER', '1.1.18' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -1781,6 +1781,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
                 $sd_is_js_functions_loaded = true;
             ?>
 
+
+
 function sd_show_view_options($this){
 	if(jQuery($this).html().length){
 		jQuery($this).html('');
@@ -1883,6 +1885,7 @@ function sd_auto_recover_blocks() {
  * Try to auto-recover OUR blocks if traditional way fails.
  */
 function sd_auto_recover_blocks_fallback() {
+    console.log('sd_auto_recover_blocks_fallback()');
 	jQuery(".edit-site-visual-editor__editor-canvas").contents().find('div[class*=" wp-block-blockstrap-"] .block-editor-warning__actions  .block-editor-warning__action .components-button.is-primary').not(":contains('Keep as HTML')").removeAttr('disabled').click();
 }
 

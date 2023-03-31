@@ -1872,6 +1872,54 @@ function sd_get_flex_wrap_input( $type = 'flex_wrap', $overwrite = array() ) {
 	return $input;
 }
 
+function sd_get_float_group( $type = 'float', $overwrite = array() ) {
+	$inputs = array();
+	$sizes  = array(
+		''    => 'Mobile',
+		'_md' => 'Tablet',
+		'_lg' => 'Desktop',
+	);
+
+	if ( $overwrite !== false ) {
+
+		foreach ( $sizes as $ds => $dt ) {
+			$overwrite['device_type'] = $dt;
+			$inputs[ $type . $ds ]    = sd_get_float_input( $type, $overwrite );
+		}
+	}
+
+	return $inputs;
+}
+function sd_get_float_input( $type = 'float', $overwrite = array() ) {
+	$device_size = '';
+	if ( ! empty( $overwrite['device_type'] ) ) {
+		if ( $overwrite['device_type'] == 'Tablet' ) {
+			$device_size = '-md';
+		} elseif ( $overwrite['device_type'] == 'Desktop' ) {
+			$device_size = '-lg';
+		}
+	}
+	$options = array(
+		''                                      => __( 'Default', 'super-duper' ),
+		'float' . $device_size . '-start'       => 'left',
+		'float' . $device_size . '-end'         => 'right',
+		'float' . $device_size . '-none' => 'none',
+	);
+
+	$defaults = array(
+		'type'     => 'select',
+		'title'    => __( 'Float', 'super-duper' ),
+		'options'  => $options,
+		'default'  => '',
+		'desc_tip' => true,
+		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+	);
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+	return $input;
+}
+
 /**
  * @param $type
  * @param $overwrite
@@ -2636,6 +2684,7 @@ function sd_get_class_build_keys() {
 		'h100',
 		'overflow',
 		'scrollbars',
+		'float-MTD',
 	);
 
 	return apply_filters( 'sd_class_build_keys', $keys );
