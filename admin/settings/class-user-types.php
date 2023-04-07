@@ -50,12 +50,13 @@ class UsersWP_User_Types {
             $admin_list_table->prepare_items();
             ?>
             <div class="wrap">
-            <div class="bsui">
-            <button data-nonce="<?php echo wp_create_nonce( 'uwp-create-register-form-nonce' ); ?>"
-                    class="btn btn-sm btn-primary register-form-create" type="button"
-                    name="register_form_create"
-                    id="form_create"><?php _e( 'Create Form', 'userswp' ); ?></button>
-            </div>
+                <h1 class="wp-heading-inline"><?php _e( 'User Types', 'userswp' ); ?></h1>
+<!--                <div class="bsui">-->
+                <button data-nonce="<?php echo wp_create_nonce( 'uwp-create-register-form-nonce' ); ?>"
+                        class="page-title-action register-form-create" type="button"
+                        name="register_form_create"
+                        id="form_create"><?php _e( 'Add User Type', 'userswp' ); ?></button>
+<!--                </div>-->
 		<?php
 
 		$admin_list_table->display();
