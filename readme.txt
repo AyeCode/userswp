@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.19 =
+* wp_initialize_site used as wpmu_new_blog deprecated - CHANGED
+
 = 1.2.3.18 =
 * Checkbox in register popup is not clickable - FIXED
 
