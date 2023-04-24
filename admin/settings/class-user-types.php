@@ -194,22 +194,20 @@ class UsersWP_User_Types {
 		                ?>
                     </td>
                 </tr>
-                <?php do_action( 'uwp_user_type_form_before_submit', $current_form ); ?>
-                <tr>
-                    <td></td>
-                    <td>
-                        <button class="btn btn-sm btn-secondary" id="form_update" type="submit"
-                                name="form_update"><?php _e( 'Update', 'userswp' ); ?></button>
-		                    <?php if ( ! empty( $current_form ) && $current_form['id'] > 1 ) { ?>
-                                <button data-id="<?php echo esc_attr($form_id); ?>"
-                                        data-nonce="<?php echo wp_create_nonce( 'uwp-delete-register-form-nonce' ); ?>"
-                                        class="btn btn-sm btn-danger register-form-remove" type="button"
-                                        name="form_remove"><?php _e( 'Delete Form', 'userswp' ); ?></button>
-		                    <?php } ?>
-
-                    </td>
-                </tr>
             </table>
+
+            <?php do_action( 'uwp_user_type_form_before_submit', $current_form ); ?>
+
+            <div class="bsui">
+                <button class="btn btn-sm btn-secondary" id="form_update" type="submit"
+                        name="form_update"><?php _e( 'Update', 'userswp' ); ?></button>
+                <?php if ( ! empty( $current_form ) && $current_form['id'] > 1 ) { ?>
+                    <button data-id="<?php echo esc_attr($form_id); ?>"
+                            data-nonce="<?php echo wp_create_nonce( 'uwp-delete-register-form-nonce' ); ?>"
+                            class="btn btn-sm btn-danger register-form-remove" type="button"
+                            name="form_remove"><?php _e( 'Delete Form', 'userswp' ); ?></button>
+                <?php } ?>
+            </div>
         <?php
     }
 }
