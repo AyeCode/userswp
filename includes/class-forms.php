@@ -963,6 +963,30 @@ class UsersWP_Forms {
 						'content' => __( 'Your account is under moderation. We will email you once its approved.', 'userswp' )
 					)
 				);
+			} elseif ( $reg_action == 'require_payment' ) {
+				$first_name = $data['first_name'];
+				$last_name = $data['last_name'];
+				$form_id = (int) $data['uwp_register_form_id'];
+
+				$redirect_to = $this->get_register_redirect_url( $data, $user_id ) . '&first_name=' . $first_name . '&last_name=' . $last_name;
+
+				do_action( 'uwp_after_process_register', $result, $user_id, $form_id );
+
+				if ( wp_doing_ajax() ) {
+					$message  = aui()->alert( array(
+							'type'    => 'success',
+							'content' => __( 'Account registered successfully. Redirecting...', 'userswp' )
+						)
+					);
+					$response = array(
+						'message'  => $message,
+						'redirect' => $redirect_to,
+					);
+					wp_send_json_success( $response );
+				} else {
+					wp_safe_redirect( $redirect_to );
+				}
+				exit();
 			} else {
 
 				$login_page_url = wp_login_url();
