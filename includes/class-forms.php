@@ -3683,6 +3683,7 @@ class UsersWP_Forms {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 				$required_msg = (!empty( $field->required_msg ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
 				$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
+				$wrap_class = isset( $field->css_class ) ? $field->css_class.' uwp-password-wrap' : 'uwp-password-wrap';
 
 				echo aui()->input( array(
 					'type'        => 'password',
@@ -3696,7 +3697,7 @@ class UsersWP_Forms {
 					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 					'help_text'   => uwp_get_field_description( $field ),
 					'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
-					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
+					'wrap_class'  => $wrap_class,
 				) );
 			} else {
 				?>
@@ -4299,6 +4300,7 @@ class UsersWP_Forms {
 				}
 				$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
 				$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
+				$wrap_class = isset( $field->css_class ) ? $field->css_class.' uwp-password-wrap' : 'uwp-password-wrap';
 
 				ob_start(); // Start  buffering;
 
@@ -4316,6 +4318,7 @@ class UsersWP_Forms {
 						'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 						'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
 						'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
+						'wrap_class' => $wrap_class,
 					) );
 				} else {
 					?>
@@ -4614,7 +4617,7 @@ class UsersWP_Forms {
 			echo "<script type='text/javascript' src='" . USERSWP_PLUGIN_URL . 'assets/js/countrySelect.min.js' . "' ></script>";
 		}
 
-		$args = array();
+		$args = array('form_title' => '');
 		if($form_id > 0){
 			$args['id'] = $form_id;
 		}
@@ -4654,7 +4657,7 @@ class UsersWP_Forms {
 								uwp_checkPasswordStrength(
 									$('input[name=password]', $form),         // First password field
 									$('input[name=confirm_password]', $form), // Second password field
-									$('#uwp-password-strength', $form),           // Strength meter
+									$('.uwp-password-strength', $form),           // Strength meter
 									$('input[type=submit]', $form),           // Submit button
 									['black', 'listed', 'word']        // Blacklisted words
 								);
