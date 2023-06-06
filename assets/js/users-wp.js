@@ -651,9 +651,9 @@ function uwp_checkPasswordStrength( $pass1,
     // maybe insert
     if(!jQuery('#uwp-password-strength').length && pass1){
         if($pass2.length){
-            $container = $pass2.closest('.form-group');
+            $container = $pass2.closest('.uwp-password-wrap');
         }else{
-            $container = $pass1.closest('.form-group');
+            $container = $pass1.closest('.uwp-password-wrap');
         }
         $container.append( '<div class="progress mt-1"><div id="uwp-password-strength" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;"></div></div>' );
         $strengthResult = jQuery('#uwp-password-strength');
@@ -704,10 +704,13 @@ function uwp_checkPasswordStrength( $pass1,
 
     // set the status of the submit button
     if ( parseInt(uwp_localize_data.uwp_pass_strength) > 0) {
+        $container.find('small').remove();
         if(4 == parseInt(uwp_localize_data.uwp_pass_strength) && strength === 4){
             $submitButton.removeAttr( 'disabled' );
         } else if(3 == parseInt(uwp_localize_data.uwp_pass_strength) && (strength === 3 || strength === 4)){
             $submitButton.removeAttr( 'disabled' );
+        } else {
+            $container.append("<small>"+uwp_localize_data.uwp_strong_pass_msg+"</small>");
         }
     }
 

@@ -1089,6 +1089,7 @@ class UsersWP_Templates {
 			$fields          = get_account_form_fields( $extra_where );
 			$fields          = apply_filters( 'uwp_account_privacy_fields', $fields );
 			$user_id         = get_current_user_id();
+			$form_id         = uwp_get_register_form_id( $user_id );
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
 			$bs_form_group   = $design_style ? "form-group mb-3 row" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
@@ -1131,7 +1132,7 @@ class UsersWP_Templates {
 
 						global $wpdb;
 						$tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
-						$tabs            = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $tabs_table_name . " WHERE form_type=%s AND user_decided = 1 ORDER BY sort_order ASC", 'profile-tabs' ) );
+						$tabs            = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $tabs_table_name . " WHERE form_type = %s AND user_decided = 1 AND form_id = %s ORDER BY sort_order ASC", array('profile-tabs', $form_id) ) );
 
 						if ( $tabs ) { ?>
                             <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
