@@ -908,7 +908,7 @@ class UsersWP_Forms {
 						'content' => $res->get_error_message()
 					)
 				);
-				
+
 			    if ( wp_doing_ajax() ) {
 					wp_send_json_error( array( 'message' => $message) );
 				} else {
@@ -966,9 +966,10 @@ class UsersWP_Forms {
 			} elseif ( $reg_action == 'require_payment' ) {
 				$first_name = $data['first_name'];
 				$last_name = $data['last_name'];
+                $email = $data['email'];
 				$form_id = (int) $data['uwp_register_form_id'];
 
-				$redirect_to = $this->get_register_redirect_url( $data, $user_id ) . '&first_name=' . $first_name . '&last_name=' . $last_name;
+				$redirect_to = $this->get_register_redirect_url( $data, $user_id ) . '&first_name=' . $first_name . '&last_name=' . $last_name . '&email=' . $email;
 
 				do_action( 'uwp_after_process_register', $result, $user_id, $form_id );
 

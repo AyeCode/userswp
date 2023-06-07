@@ -72,7 +72,6 @@ class UsersWP_User_Types {
 	        $user_roles          = uwp_get_user_roles();
             // Remove admin role
             unset( $user_roles['administrator'] );
-
             $current_form = $register_forms[ $form_key ];
 
 	        $current_title  = ! empty( $current_form['title'] ) ? $current_form['title'] : '';
