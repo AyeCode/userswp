@@ -155,13 +155,16 @@ function uwp_password_strength_inline_js() {
 
             $( 'body' ).on( 'keyup', 'input[name=password], input[name=confirm_password]',
                 function( event ) {
-                    uwp_checkPasswordStrength(
-                        $('input[name=password]'),
-                        $('input[name=confirm_password]'),
-                        $('#uwp-password-strength'),
-                        $('input[type=submit]'),
-                        ['black', 'listed', 'word']
-                    );
+                    var $form = $(this).closest('form');
+                    if( ! $form.hasClass('uwp-login-form') ) {
+                        uwp_checkPasswordStrength(
+                            $('input[name=password]', $form),         // First password field
+                            $('input[name=confirm_password]', $form), // Second password field
+                            $('#uwp-password-strength', $form),           // Strength meter
+                            $('input[type=submit]', $form),           // Submit button
+                            ['black', 'listed', 'word']        // Blacklisted words
+                        );
+                    }
                 }
             );
         });

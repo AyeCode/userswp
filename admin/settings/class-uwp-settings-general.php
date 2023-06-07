@@ -133,6 +133,16 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'desc_tip' => true,
 	            ),
 	            array(
+		            'id' => 'register_uwp_strong_pass_msg',
+		            'name' => __( 'Error message for entering strong password', 'userswp' ),
+		            'desc' => __( 'Enter the message to show when user enters weak password in registration form.', 'userswp' ),
+		            'type' => 'text',
+		            'default'  => '',
+		            'placeholder'  => __( 'Please enter valid strong password.', 'userswp' ),
+		            'desc_tip' => true,
+		            'advanced' => true,
+	            ),
+	            array(
 		            'id'   => 'register_username_length',
 		            'name' => __( 'Username Minimum Length', 'userswp' ),
 		            'desc' => __( 'Minimum username character limit required for registration.', 'userswp' ),

@@ -167,7 +167,7 @@ class UsersWP_Notices {
 	    }
 
         if( defined( 'WPSEO_VERSION' ) && version_compare( WPSEO_VERSION, '7.0', '>=' ) && class_exists('WPSEO_Options') && WPSEO_Options::get( 'disable-author', false ) ){
-            $settings_link = admin_url("admin.php?page=wpseo_titles#top#archives");
+            $settings_link = admin_url("admin.php?page=wpseo_page_settings#/author-archives");
 
 	        $profile_page_id = uwp_get_page_id( 'profile_page' );
 	        if ($profile_page_id > 0 && ( $page_object = get_post( $profile_page_id ) )) {
