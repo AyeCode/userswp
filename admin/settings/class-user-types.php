@@ -70,6 +70,9 @@ class UsersWP_User_Types {
             $register_forms      = uwp_get_option( 'multiple_registration_forms' );
             $form_key = array_search( $form_id, wp_list_pluck ( $register_forms, 'id' ) );
 	        $user_roles          = uwp_get_user_roles();
+            // Remove admin role
+            unset( $user_roles['administrator'] );
+
             $current_form = $register_forms[ $form_key ];
 
 	        $current_title  = ! empty( $current_form['title'] ) ? $current_form['title'] : '';
