@@ -66,8 +66,7 @@ class UWP_Admin_List_Table extends WP_List_Table {
 			'user_role'  => __ ( 'User Role' , 'userwp' ) ,
 			'reg_action' => __ ( 'Registration Action' , 'userwp' ) ,
 		);
-
-		return $columns;
+		return apply_filters ('uwp_user_types_table_columns', $columns );
 	}
 
 	/**
@@ -97,12 +96,16 @@ class UWP_Admin_List_Table extends WP_List_Table {
 		$data           = array ();
 		$register_forms = uwp_get_option ( 'multiple_registration_forms' );
 		foreach ( $register_forms as $register_form ) {
-			$data[] = array (
+			$form_data = array (
 				'title'      => $register_form[ 'title' ] ,
 				'id'         => $register_form[ 'id' ] ,
 				'user_role'  => isset( $register_form[ 'user_role' ] ) ? $register_form[ 'user_role' ] : '-' ,
 				'reg_action' => isset( $register_form[ 'reg_action' ] ) ? $register_form[ 'reg_action' ] : '-' ,
 			);
+
+			$form_data =  apply_filters ('uwp_user_types_table_data', $form_data, $register_form );
+
+			$data[] = $form_data;
 		}
 
 		return $data;
@@ -125,7 +128,7 @@ class UWP_Admin_List_Table extends WP_List_Table {
 				return $item[ $column_name ];
 
 			default:
-				return print_r ( $item , true );
+				return $item[ $column_name ];
 		}
 	}
 
@@ -139,7 +142,7 @@ class UWP_Admin_List_Table extends WP_List_Table {
 
 		// Get actions.
 		$actions = array (
-			'edit' => '<a class="" href="' . $edit_link . '">' . esc_html__ ( 'Edit' , 'my_plugin' ) . '</a>',
+			'edit' => '<a class="" href="' . esc_url( $edit_link ) . '">' . esc_html__ ( 'Edit' , 'userswp' ) . '</a>',
 		);
 
 		if( $item['id'] > 1 ) {
@@ -151,6 +154,8 @@ class UWP_Admin_List_Table extends WP_List_Table {
 		}
 
 		$row_actions = array ();
+
+		$actions = apply_filters ( 'uwp_user_types_table_actions', $actions );
 
 		foreach ( $actions as $action => $link ) {
 			$row_actions[] = '<span class="' . esc_attr ( $action ) . '">' . $link . '</span>';
