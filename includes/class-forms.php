@@ -970,43 +970,26 @@ class UsersWP_Forms {
 				$form_id = (int) $data['uwp_register_form_id'];
 
 				$redirect_to = $this->get_register_redirect_url( $data, $user_id ) . '&first_name=' . $first_name . '&last_name=' . $last_name . '&email=' . $email;
-//
-//				do_action( 'uwp_after_process_register_with_payment', $result, $user_id, $form_id );
-//
-//				if ( wp_doing_ajax() ) {
-//					$message  = aui()->alert( array(
-//							'type'    => 'success',
-//							'content' => __( 'Account registered successfully. Redirecting...', 'userswp' )
-//						)
-//					);
-//					$response = array(
-//						'message'  => $message,
-//						'redirect' => $redirect_to,
-//					);
-//					wp_send_json_success( $response );
-//				} else {
-//					wp_safe_redirect( $redirect_to );
-//				}
-//				exit();
-                $user_data       = get_userdata( $user_id );
+//                Calling this function makes the user to be in pending
                 $activation_link = uwp_get_activation_link( $user_id );
 
-                $message = __( 'To activate your account, visit the following address:', 'userswp' ) . "\r\n\r\n";
+				do_action( 'uwp_after_process_register_with_payment', $result, $user_id, $form_id );
 
-                $message .= "<a href='" . esc_url_raw( $activation_link ) . "' target='_blank'>" . esc_url_raw( $activation_link ) . "</a>" . "\r\n";
-                $message .=  __( 'Please continue payment from here :', 'userswp' )  . "<a href='" . esc_url_raw( $redirect_to ) . "' target='_blank'>" . __( 'Continue Payment', 'uwp-membeership' ) . "</a>" . "\r\n";
-                $activate_message = '<p><b>' . __( 'Please activate your account :', 'userswp' ) . '</b></p><p>' . $message . '</p>';
-
-                $activate_message = apply_filters( 'uwp_activation_mail_message', $activate_message, $user_id );
-
-                $email_vars = array(
-                    'user_id'         => $user_id,
-                    'login_details'   => $activate_message,
-                    'activation_link' => $activation_link,
-                );
-
-                UsersWP_Mails::send( $user_data->user_email, 'registration_activate', $email_vars );
-
+				if ( wp_doing_ajax() ) {
+					$message  = aui()->alert( array(
+							'type'    => 'success',
+							'content' => __( 'Account registered successfully. Redirecting...', 'userswp' )
+						)
+					);
+					$response = array(
+						'message'  => $message,
+						'redirect' => $redirect_to,
+					);
+					wp_send_json_success( $response );
+				} else {
+					wp_safe_redirect( $redirect_to );
+				}
+				exit();
 			} else {
 
 				$login_page_url = wp_login_url();
