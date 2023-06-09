@@ -972,6 +972,7 @@ class UsersWP_Forms {
 				$redirect_to = $this->get_register_redirect_url( $data, $user_id ) . '&first_name=' . $first_name . '&last_name=' . $last_name . '&email=' . $email;
 //                Calling this function makes the user to be in pending
                 $activation_link = uwp_get_activation_link( $user_id );
+                update_user_meta( $user_id, 'uwp_mod', 'payment_unconfirmed' );
 
 				do_action( 'uwp_after_process_register_with_payment', $result, $user_id, $form_id );
 
