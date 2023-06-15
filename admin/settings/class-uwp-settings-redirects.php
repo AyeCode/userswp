@@ -151,7 +151,7 @@ class UsersWP_Settings_Redirects extends UsersWP_Settings_Page {
 
 				$settings_array[] = array(
 					'id'   => 'hide_admin_bar_'.$key,
-					'name' => __( 'Hide Adminbar', 'userswp' ),
+					'name' => __( 'Hide Admin Bar', 'userswp' ),
 					'desc' => __('Hide admin bar from frontend for this user role.','userswp' ),
 					'type' => 'checkbox',
 					'default'  => '0',
