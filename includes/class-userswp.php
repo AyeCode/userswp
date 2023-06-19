@@ -21,6 +21,7 @@ final class UsersWP {
 	 * @access   protected
 	 * @var      string $version The current version of the plugin.
 	 */
+	protected $plugin_name;
 	protected $version;
 	protected $i18n;
 	protected $templates;
@@ -31,10 +32,12 @@ final class UsersWP {
 	protected $assets;
 	protected $admin;
 	protected $menus;
+	protected $admin_menus;
 	protected $form_builder;
 	protected $ajax;
 	protected $tools;
 	protected $tables;
+	protected $notifications;
 
 	/**
 	 * Define the core functionality of the plugin.

@@ -317,7 +317,7 @@ class UsersWP_Form_Builder {
 											<?php
 											foreach ( $register_forms as $key => $forms ) {
 												$form_id     = ! empty( $forms['id'] ) ? $forms['id'] : '';
-												$form_title  = ! empty( $forms['title'] ) ? $forms['title'] : '';
+												$form_title  = ! empty( $forms['title'] ) ? sanitize_title_with_dashes($forms['title']) : '';
 												$user_role   = ! empty( $forms['user_role'] ) ? $forms['user_role'] : '';
 												$action      = ! empty( $forms['reg_action'] ) ? $forms['reg_action'] : $current_action;
 												$redirect_to = isset( $forms['redirect_to'] ) ? $forms['redirect_to'] : '';
@@ -500,7 +500,7 @@ class UsersWP_Form_Builder {
 										<?php
 										foreach ( $register_forms as $key => $forms ) {
 											$form_id    = ! empty( $forms['id'] ) ? $forms['id'] : '';
-											$form_title = ! empty( $forms['title'] ) ? $forms['title'] : '';
+											$form_title = ! empty( $forms['title'] ) ? sanitize_title_with_dashes($forms['title']) : '';
 											?>
                                             <option <?php selected( $current_form, $form_id ); ?>
                                                     value="<?php echo $register_tab . '&form=' . $form_id; ?>"><?php echo sprintf( __( '%s - #%s', 'userswp' ), $form_title, $form_id ); ?></option>

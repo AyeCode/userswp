@@ -126,6 +126,10 @@ class UWP_Register_Widget extends WP_Super_Duper {
 		 */
 		$args = wp_parse_args( $args, $defaults );
 
+		if(isset($_REQUEST['user_type']) && !empty($_REQUEST['user_type'])){
+			$args['id'] = uwp_get_form_id_by_type(sanitize_text_field($_REQUEST['user_type']));
+		}
+
 		if(isset($_REQUEST['uwp_form_id']) && !empty($_REQUEST['uwp_form_id'])){
 			$args['id'] = absint($_REQUEST['uwp_form_id']);
 		}
