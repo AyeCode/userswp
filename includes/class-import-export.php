@@ -17,6 +17,10 @@ class UsersWP_Import_Export {
     public $total_rows;
     public $imp_step;
     public $skipped;
+	private $empty;
+	private $step;
+	private $file;
+	private $filename;
 
 
     public function __construct() {

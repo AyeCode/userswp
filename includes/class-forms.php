@@ -618,7 +618,7 @@ class UsersWP_Forms {
 			}
 		}
 
-		do_action( 'uwp_after_validate', 'register' );
+		do_action( 'uwp_after_validate', $result, 'register', $data );
 
 		$result = array_merge( $result, $uploads_result );
 
@@ -1148,7 +1148,7 @@ class UsersWP_Forms {
 			}
 		}
 
-		do_action( 'uwp_after_validate', 'login' );
+		do_action( 'uwp_after_validate', $result, 'login', $data );
 
 		if ( isset( $data['remember_me'] ) && $data['remember_me'] == 'forever' ) {
 			$remember_me = true;
@@ -1595,7 +1595,7 @@ class UsersWP_Forms {
 			}
 		}
 
-		do_action( 'uwp_after_validate', 'forgot' );
+		do_action( 'uwp_after_validate', $result, 'forgot', $data );
 
 
 		$user_data = get_user_by( 'email', $data['email'] );
@@ -1752,7 +1752,7 @@ class UsersWP_Forms {
 			return;
 		}
 
-		do_action( 'uwp_after_validate', 'change' );
+		do_action( 'uwp_after_validate', $result, 'change', $data );
 
 		$user_data = get_user_by( 'id', get_current_user_id() );
 
@@ -1834,7 +1834,7 @@ class UsersWP_Forms {
 			return;
 		}
 
-		do_action( 'uwp_after_validate', 'reset' );
+		do_action( 'uwp_after_validate', $result, 'reset', $data );
 
 		$login = sanitize_text_field( $data['uwp_reset_username'] );
 		$key   = sanitize_text_field( $data['uwp_reset_key'] );
@@ -1941,7 +1941,7 @@ class UsersWP_Forms {
 			return;
 		}
 
-		do_action( 'uwp_after_validate', 'account' );
+		do_action( 'uwp_after_validate', $result, 'account', $data );
 
 		//unset if value is empty for files
 		foreach ( $uploads_result as $upload_file_key => $upload_file_value ) {

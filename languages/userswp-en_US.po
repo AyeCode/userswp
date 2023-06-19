@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.3.19\n"
+"Project-Id-Version: UsersWP 1.2.3.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-06 16:26+0530\n"
-"PO-Revision-Date: 2023-06-06 16:27+0530\n"
+"POT-Creation-Date: 2023-06-19 14:49+0530\n"
+"PO-Revision-Date: 2023-06-19 14:49+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -2647,7 +2647,7 @@ msgid "Role based redirect settings"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-redirects.php:154
-msgid "Hide Adminbar"
+msgid "Hide Admin Bar"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-redirects.php:155
@@ -3867,89 +3867,89 @@ msgstr ""
 msgid "Privacy settings updated successfully."
 msgstr ""
 
-#: includes/class-import-export.php:74
+#: includes/class-import-export.php:78
 msgid "Settings imported successfully!"
-msgstr ""
-
-#: includes/class-import-export.php:113
-#, php-format
-msgid "Please upload a valid .json file. %sGo Back%s"
 msgstr ""
 
 #: includes/class-import-export.php:117
 #, php-format
+msgid "Please upload a valid .json file. %sGo Back%s"
+msgstr ""
+
+#: includes/class-import-export.php:121
+#, php-format
 msgid "Please upload a file to import. %sGo Back%s"
 msgstr ""
 
-#: includes/class-import-export.php:132
+#: includes/class-import-export.php:136
 msgid "Invalid export request found."
 msgstr ""
 
-#: includes/class-import-export.php:144 includes/class-import-export.php:504
+#: includes/class-import-export.php:148 includes/class-import-export.php:508
 msgid "Security check failed."
 msgstr ""
 
-#: includes/class-import-export.php:149 includes/class-import-export.php:222
+#: includes/class-import-export.php:153 includes/class-import-export.php:226
 msgid "Filesystem ERROR: "
 msgstr ""
 
-#: includes/class-import-export.php:181
+#: includes/class-import-export.php:185
 msgid "No data found for export."
 msgstr ""
 
-#: includes/class-import-export.php:218
+#: includes/class-import-export.php:222
 msgid "Filesystem ERROR: Could not access filesystem."
 msgstr ""
 
-#: includes/class-import-export.php:232
+#: includes/class-import-export.php:236
 #, php-format
 msgid ""
 "Filesystem ERROR: Export location %s is not writable, check your file "
 "permissions."
 msgstr ""
 
-#: includes/class-import-export.php:236
+#: includes/class-import-export.php:240
 #, php-format
 msgid ""
 "Filesystem ERROR: Could not create directory %s. This is usually due to "
 "inconsistent file permissions."
 msgstr ""
 
-#: includes/class-import-export.php:492
+#: includes/class-import-export.php:496
 msgid "Invalid import request found."
 msgstr ""
 
-#: includes/class-import-export.php:517
+#: includes/class-import-export.php:521
 msgid "Invalid file type, please upload .csv file."
 msgstr ""
 
-#: includes/class-import-export.php:541
+#: includes/class-import-export.php:545
 msgid "Total "
 msgstr ""
 
-#: includes/class-import-export.php:551
+#: includes/class-import-export.php:555
 msgid "Users import completed."
 msgstr ""
 
-#: includes/class-import-export.php:558
+#: includes/class-import-export.php:562
 msgid "No valid data found for import."
 msgstr ""
 
-#: includes/class-import-export.php:575
+#: includes/class-import-export.php:579
 msgid "No csv file found."
 msgstr ""
 
-#: includes/class-import-export.php:587
+#: includes/class-import-export.php:591
 #, php-format
 msgid "Row - %s Error: Skipped due to invalid/no data."
 msgstr ""
 
-#: includes/class-import-export.php:649
+#: includes/class-import-export.php:653
 #, php-format
 msgid "Row - %s Error: User could not be created."
 msgstr ""
 
-#: includes/class-import-export.php:675
+#: includes/class-import-export.php:679
 #, php-format
 msgid "Row - %s Error: %s"
 msgstr ""
@@ -4698,7 +4698,7 @@ msgstr ""
 msgid "Require Email Activation"
 msgstr ""
 
-#: includes/helpers/forms.php:517 widgets/profile-tabs.php:47
+#: includes/helpers/forms.php:537 widgets/profile-tabs.php:47
 msgid "Default"
 msgstr ""
 
