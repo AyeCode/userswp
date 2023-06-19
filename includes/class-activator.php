@@ -846,6 +846,13 @@ class UsersWP_Activator {
 					        $settings['multiple_registration_forms'][$key]['reg_action'] = 'auto_approve_login';
 					        $needs_update = true;
 				        }
+
+				        $reg_title = isset($register_form['title']) ? $register_form['title'] : '';
+
+				        if(isset($reg_title) && !empty($reg_title)){
+					        $settings['multiple_registration_forms'][$key]['title'] = sanitize_title_with_dashes($reg_title);
+					        $needs_update = true;
+				        }
 			        }
 		        }
 	        }

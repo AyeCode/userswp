@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.20 =
+* Allow to access register form using 'user_type' argument in register page URL - ADDED
+
 = 1.2.3.19 =
 * wp_initialize_site used as wpmu_new_blog deprecated - CHANGED
 * Archive setting link of Yoast SEO in admin notice - CHANGED

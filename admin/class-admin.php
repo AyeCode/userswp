@@ -845,7 +845,7 @@ class UsersWP_Admin {
 		}
 
 		$type       = ! empty( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : '';
-		$form_title = ! empty( $_POST['form_title'] ) ? sanitize_text_field($_POST['form_title']) : '';
+		$form_title = ! empty( $_POST['form_title'] ) ? sanitize_title_with_dashes($_POST['form_title']) : '';
 		$nonce      = ! empty( $_POST['nonce'] ) ? sanitize_text_field($_POST['nonce']) : '';
 
 		$status   = false;
