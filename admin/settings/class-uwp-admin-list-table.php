@@ -150,7 +150,7 @@ class UWP_Admin_List_Table extends WP_List_Table {
 				class="register-form-remove"
 				data-id="' . $item[ "id" ] . '"
 				data-nonce="' . wp_create_nonce ( 'uwp-delete-register-form-nonce' ) . '"
-				href="#">' . esc_html__ ( 'Delete' , 'my_plugin' ) . '</a>';
+				href="#">' . esc_html__ ( 'Delete' , 'uwp-membership' ) . '</a>';
 		}
 
 		$row_actions = array ();

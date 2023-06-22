@@ -70,6 +70,7 @@ class UsersWP_User_Types {
             $register_forms      = uwp_get_option( 'multiple_registration_forms' );
             $form_key = array_search( $form_id, wp_list_pluck ( $register_forms, 'id' ) );
 	        $user_roles          = uwp_get_user_roles();
+	        $current_role        = get_option( 'default_role' );
             // Remove admin role
             unset( $user_roles['administrator'] );
             $current_form = $register_forms[ $form_key ];
@@ -81,6 +82,7 @@ class UsersWP_User_Types {
             if ( ! empty( $user_role ) && in_array( $user_role, array_keys( $user_roles ) ) ) {
                 $current_role = $user_role;
             }
+
 	        $current_custom_url  = ! empty( $current_form['custom_url'] ) ? $current_form['custom_url'] : '';
 
 	        $actions             = uwp_get_registration_form_actions();
