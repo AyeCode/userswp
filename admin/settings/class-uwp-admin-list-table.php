@@ -155,7 +155,7 @@ class UWP_Admin_List_Table extends WP_List_Table {
 
 		$row_actions = array ();
 
-		$actions = apply_filters ( 'uwp_user_types_table_actions', $actions );
+		$actions = apply_filters ( 'uwp_user_types_table_actions', $actions, $item );
 
 		foreach ( $actions as $action => $link ) {
 			$row_actions[] = '<span class="' . esc_attr ( $action ) . '">' . $link . '</span>';
