@@ -99,6 +99,7 @@ class UWP_Admin_List_Table extends WP_List_Table {
 			$form_data = array (
 				'title'      => $register_form[ 'title' ] ,
 				'id'         => $register_form[ 'id' ] ,
+				'slug'         => isset( $register_form[ 'slug' ] ) ? $register_form[ 'slug' ] : '',
 				'user_role'  => isset( $register_form[ 'user_role' ] ) ? $register_form[ 'user_role' ] : '-' ,
 				'reg_action' => isset( $register_form[ 'reg_action' ] ) ? $register_form[ 'reg_action' ] : '-' ,
 			);
