@@ -845,7 +845,7 @@ class UsersWP_Admin {
 		}
 
 		$type       = ! empty( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : '';
-		$form_title = ! empty( $_POST['form_title'] ) ? sanitize_title_with_dashes($_POST['form_title']) : '';
+		$form_title = ! empty( $_POST['form_title'] ) ? sanitize_text_field($_POST['form_title']) : '';
 		$nonce      = ! empty( $_POST['nonce'] ) ? sanitize_text_field($_POST['nonce']) : '';
 
 		$status   = false;
@@ -861,6 +861,7 @@ class UsersWP_Admin {
 				$get_register_forms[] = array(
 					'id'    => $new_form_id,
 					'title' => ! empty( $form_title ) ? sanitize_text_field( $form_title ) : sprintf( __( 'Form %d', 'userswp' ), $new_form_id ),
+					'slug' => ! empty( $form_title ) ? sanitize_title_with_dashes( $form_title ) : sprintf( __( 'form-%d', 'userswp' ), $new_form_id ),
 				);
 
 				uwp_update_option( 'multiple_registration_forms', $get_register_forms );

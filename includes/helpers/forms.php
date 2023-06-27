@@ -247,10 +247,10 @@ function uwp_get_custom_field_info( $htmlvar_name, $form_type = 'account' ) {
 	} else {
 		$field = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE htmlvar_name = %s", array( $htmlvar_name ) ) );
 	}
-	
+
 	// Cache the field data.
 	$custom_field_info[ $cache_key ] = $field;
-	
+
 	return $field;
 }
 
@@ -413,7 +413,7 @@ function uwp_get_form_id_by_type($form_type){
 
 			foreach ( $get_register_form as $key => $register_form ) {
 
-				if ( ! empty( $register_form['title'] ) && $form_type == sanitize_title_with_dashes($register_form['title']) ) {
+				if ( ! empty( $register_form['title'] ) && $form_type == $register_form['slug'] ) {
 
 					$form_id = $register_form['id'];
 				}
