@@ -21,6 +21,7 @@ final class UsersWP {
 	 * @access   protected
 	 * @var      string $version The current version of the plugin.
 	 */
+	protected $plugin_name;
 	protected $version;
 	protected $i18n;
 	protected $templates;
@@ -31,10 +32,12 @@ final class UsersWP {
 	protected $assets;
 	protected $admin;
 	protected $menus;
+	protected $admin_menus;
 	protected $form_builder;
 	protected $ajax;
 	protected $tools;
 	protected $tables;
+	protected $notifications;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -638,7 +641,7 @@ final class UsersWP {
 	 * @param $instance
 	 */
 	public function load_pages_actions_and_filters( $instance ) {
-		add_action( 'wpmu_new_blog', array( $instance, 'wpmu_generate_default_pages_on_new_site' ), 10, 1 );
+		add_action( 'wp_initialize_site', array( $instance, 'wpmu_generate_default_pages_on_new_site' ), 10, 1 );
 		add_filter( 'display_post_states', array( $instance, 'add_display_post_states' ), 10, 2 );
 	}
 

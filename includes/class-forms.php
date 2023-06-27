@@ -618,7 +618,7 @@ class UsersWP_Forms {
 			}
 		}
 
-		do_action( 'uwp_after_validate', 'register' );
+		do_action( 'uwp_after_validate', $result, 'register', $data );
 
 		$result = array_merge( $result, $uploads_result );
 
@@ -1176,7 +1176,7 @@ class UsersWP_Forms {
 			}
 		}
 
-		do_action( 'uwp_after_validate', 'login' );
+		do_action( 'uwp_after_validate', $result, 'login', $data );
 
 		if ( isset( $data['remember_me'] ) && $data['remember_me'] == 'forever' ) {
 			$remember_me = true;
@@ -1623,7 +1623,7 @@ class UsersWP_Forms {
 			}
 		}
 
-		do_action( 'uwp_after_validate', 'forgot' );
+		do_action( 'uwp_after_validate', $result, 'forgot', $data );
 
 
 		$user_data = get_user_by( 'email', $data['email'] );
@@ -1780,7 +1780,7 @@ class UsersWP_Forms {
 			return;
 		}
 
-		do_action( 'uwp_after_validate', 'change' );
+		do_action( 'uwp_after_validate', $result, 'change', $data );
 
 		$user_data = get_user_by( 'id', get_current_user_id() );
 
@@ -1862,7 +1862,7 @@ class UsersWP_Forms {
 			return;
 		}
 
-		do_action( 'uwp_after_validate', 'reset' );
+		do_action( 'uwp_after_validate', $result, 'reset', $data );
 
 		$login = sanitize_text_field( $data['uwp_reset_username'] );
 		$key   = sanitize_text_field( $data['uwp_reset_key'] );
@@ -1969,7 +1969,7 @@ class UsersWP_Forms {
 			return;
 		}
 
-		do_action( 'uwp_after_validate', 'account' );
+		do_action( 'uwp_after_validate', $result, 'account', $data );
 
 		//unset if value is empty for files
 		foreach ( $uploads_result as $upload_file_key => $upload_file_value ) {
@@ -3711,6 +3711,7 @@ class UsersWP_Forms {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 				$required_msg = (!empty( $field->required_msg ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
 				$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
+				$wrap_class = isset( $field->css_class ) ? $field->css_class.' uwp-password-wrap' : 'uwp-password-wrap';
 
 				echo aui()->input( array(
 					'type'        => 'password',
@@ -3724,7 +3725,7 @@ class UsersWP_Forms {
 					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
 					'help_text'   => uwp_get_field_description( $field ),
 					'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
-					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
+					'wrap_class'  => $wrap_class,
 				) );
 			} else {
 				?>
@@ -4327,6 +4328,7 @@ class UsersWP_Forms {
 				}
 				$required_msg = (!empty( $field->is_required ) && $field->required_msg != '') ? __( $field->required_msg, 'userswp' ) : '';
 				$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
+				$wrap_class = isset( $field->css_class ) ? $field->css_class.' uwp-password-wrap' : 'uwp-password-wrap';
 
 				ob_start(); // Start  buffering;
 
@@ -4344,6 +4346,7 @@ class UsersWP_Forms {
 						'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
 						'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
 						'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
+						'wrap_class' => $wrap_class,
 					) );
 				} else {
 					?>
@@ -4592,6 +4595,10 @@ class UsersWP_Forms {
 		uwp_get_template( "bootstrap/login.php", $args );
 		$form = ob_get_clean();
 
+        // bs5
+        if( function_exists('aui_bs_convert_sd_output')){
+            $form = aui_bs_convert_sd_output( $form );
+        }
 		// send ajax response
 		wp_send_json_success( $form );
 	}
@@ -4638,7 +4645,7 @@ class UsersWP_Forms {
 			echo "<script type='text/javascript' src='" . USERSWP_PLUGIN_URL . 'assets/js/countrySelect.min.js' . "' ></script>";
 		}
 
-		$args = array();
+		$args = array('form_title' => '');
 		if($form_id > 0){
 			$args['id'] = $form_id;
 		}
@@ -4678,7 +4685,7 @@ class UsersWP_Forms {
 								uwp_checkPasswordStrength(
 									$('input[name=password]', $form),         // First password field
 									$('input[name=confirm_password]', $form), // Second password field
-									$('#uwp-password-strength', $form),           // Strength meter
+									$('.uwp-password-strength', $form),           // Strength meter
 									$('input[type=submit]', $form),           // Submit button
 									['black', 'listed', 'word']        // Blacklisted words
 								);
@@ -4690,6 +4697,11 @@ class UsersWP_Forms {
 			<?php
 		}
 		$form = ob_get_clean();
+
+        // bs5
+        if( function_exists('aui_bs_convert_sd_output')){
+            $form = aui_bs_convert_sd_output( $form );
+        }
 
 		// send ajax response
 		wp_send_json_success( $form );
@@ -4709,6 +4721,11 @@ class UsersWP_Forms {
 		ob_start();
 		uwp_get_template( "bootstrap/forgot.php" );
 		$form = ob_get_clean();
+
+        // bs5
+        if( function_exists('aui_bs_convert_sd_output')){
+            $form = aui_bs_convert_sd_output( $form );
+        }
 
 		// send ajax response
 		wp_send_json_success( $form );

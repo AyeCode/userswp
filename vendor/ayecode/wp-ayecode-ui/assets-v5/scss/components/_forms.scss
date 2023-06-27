@@ -1,0 +1,349 @@
+//
+// Forms
+// --------------------------------------------------
+
+
+// Disabled inputs
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+}
+
+
+// Remove default -webkit search input clear button
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
+
+
+// Disable :focus shadow on certain inputs
+
+.form-control.border-top-0:focus {
+  box-shadow: none;
+}
+
+
+// Password visibility toggle
+
+.password-toggle {
+  position: relative;
+  .form-control {
+    padding-right: $font-size-base + ($spacer * 2);
+  }
+}
+
+.password-toggle-btn {
+  position: absolute;
+  top: 50%;
+  right: .625rem;
+  margin-bottom: 0;
+  padding: $spacer * .5;
+  transform: translateY(-50%);
+  font-size: $btn-font-size-lg;
+  line-height: 1;
+  cursor: pointer;
+
+  .password-toggle-indicator {
+    transition: color .2s ease-in-out;
+    color: $input-placeholder-color;
+    font: {
+      family: $icons-font-family;
+      size: 1.125em;;
+      style: normal;
+    }
+    &::before { content: $fi-eye-on; }
+    &:hover { color: $input-color; }
+  }
+
+  .password-toggle-check {
+    position: absolute;
+    left: 0;
+    z-index: -1;
+    width: 1rem;
+    height: 1.25rem;
+    opacity: 0;
+
+    &:checked ~ .password-toggle-indicator::before {
+      content: $fi-eye-off;
+    }
+  }
+}
+.form-control-light + .password-toggle-btn .password-toggle-indicator {
+  color: rgba($white, .5);
+  &:hover { color: $white; }
+}
+
+.was-validated .password-toggle .form-control:invalid,
+.was-validated .password-toggle .form-control.is-invalid,
+.was-validated .password-toggle .form-control:valid,
+.was-validated .password-toggle .form-control.is-valid {
+  padding-right: 4rem;
+  & + .password-toggle-btn { right: 2.1rem; }
+}
+
+
+// Switches
+
+.form-switch {
+  .form-check-input {
+    height: $form-switch-height;
+    border: 0;
+    background-color: $form-switch-bg;
+    &:checked {
+      background-color: $form-switch-checked-bg;
+    }
+  }
+}
+
+
+// Form validation
+
+.valid-tooltip,
+.invalid-tooltip {
+  position: static;
+}
+.valid-tooltip {
+  background-color: $form-feedback-tooltip-valid-bg;
+  color: $form-feedback-tooltip-valid-color;
+}
+.invalid-tooltip {
+  background-color: $form-feedback-tooltip-invalid-bg;
+  color: $form-feedback-tooltip-invalid-color;
+}
+
+.was-validated :valid ~ .valid-tooltip,
+.was-validated :invalid ~ .invalid-tooltip,
+.is-valid ~ .valid-tooltip,
+.is-invalid ~ .invalid-tooltip {
+  display: table;
+}
+.was-validated :valid:not(:required):not(.btn),
+.is-valid:not(:required):not(.btn) {
+  border-color: $input-border-color !important;
+  background-image: none;
+  &:focus {
+    border-color: $input-focus-border-color !important;
+    box-shadow: $input-focus-box-shadow;
+  }
+  &.form-control-light,
+  &.form-select-light {
+    border-color: $input-light-border-color !important;
+    &:focus {
+      border-color: $input-light-focus-border-color !important;
+      box-shadow: none;
+    }
+  }
+}
+
+.was-validated .form-control-light:focus,
+.was-validated .form-select-light:focus {
+  box-shadow: none !important;
+}
+
+
+// Form-check validation highlighting fix
+
+.was-validated .form-check-input:valid:checked,
+.form-check-input.is-valid:checked {
+  background-color: $form-check-input-checked-bg-color;
+  border-color: $form-check-input-checked-border-color;
+  box-shadow: none;
+}
+.was-validated .form-check-input:invalid:checked,
+.form-check-input.is-invalid:checked {
+  background-color: transparent;
+  border-color: $form-check-input-border-color;
+}
+.was-validated .form-check-input:valid ~ .form-check-label,
+.was-validated .form-check-input.is-valid ~ .form-check-label {
+  color: inherit;
+}
+
+
+// Forms light version
+// 
+
+// Input & select
+
+.form-control-light,
+.form-select-light {
+  background-color: $input-light-bg;
+  color: $input-light-color;
+  border-color: $input-light-border-color;
+  &::placeholder {
+    color: $input-light-placeholder-color;
+  }
+  &:focus {
+    border-color: $input-light-focus-border-color;
+    background-color: $input-light-focus-bg;
+    color: $input-light-color;
+    @include box-shadow($input-light-focus-box-shadow);
+    &::placeholder {
+      color: $input-light-focus-placeholder-color;
+    }
+  }
+  &:disabled {
+    background-color: $input-light-disabled-bg;
+    color: $input-light-disabled-color;
+    opacity: $input-light-disabled-opacity;
+    &::placeholder {
+      color: $input-light-disabled-placeholder-color;
+    }
+  }
+}
+
+
+// Select
+
+.form-select {
+  transition: $input-transition;
+}
+.form-select-light {
+  background-image: escape-svg($form-select-light-indicator);
+  &:focus {
+    background-image: escape-svg($form-select-light-focus-indicator);
+  }
+  option { color: initial; }
+}
+
+
+// Checkbox & radio
+
+.form-check-light {
+  .form-check-input {
+    border-color: $form-check-input-light-border-color;
+    &:focus {
+      border-color: $form-check-input-light-focus-border-color;
+    }
+    &:checked {
+      border-color: $form-check-input-light-checked-border-color;
+    }
+  }
+  .form-check-label {
+    color: $form-check-label-light-color;
+  }
+}
+
+
+// Switch
+
+.form-switch-light {
+  .form-check-input {
+    background-color: $form-switch-light-bg;
+    &:checked {
+      background-color: $form-switch-light-checked-bg;
+    }
+  }
+  .form-check-label {
+    color: $form-switch-light-color;
+  }
+}
+
+
+// Range slider
+
+.range-slider-ui {
+  height: $range-slider-height;
+  margin: {
+    top: 3rem;
+    bottom: 1.75rem;
+  }
+  border: 0;
+  background-color: $range-slider-bg;
+  box-shadow: none;
+
+  .noUi-connect {
+    background-color: $range-slider-connect-bg;
+  }
+
+  .noUi-handle {
+    top: 50%;
+    width: $range-slider-handle-size;
+    height: $range-slider-handle-size;
+    margin-top: -($range-slider-handle-size * .455);
+    border: 0;
+    border-radius: 50%;
+    background-color: $range-slider-handle-bg;
+    box-shadow: none;
+    &::before {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: ($range-slider-handle-size * .572);
+      height: ($range-slider-handle-size * .572);
+      margin: {
+        top: -($range-slider-handle-size * .286);
+        left: -($range-slider-handle-size * .286);
+      }
+      border-radius: 50%;
+      background-color: $white;
+      content: '';
+    }
+    &::after { display: none; }
+    &:focus { outline: none; }
+  }
+
+  .noUi-marker-normal { display: none; }
+  .noUi-marker-horizontal {
+    &.noUi-marker {
+      width: $border-width;
+      background-color: darken($border-color, 6%);
+    }
+    &.noUi-marker-large { height: .75rem; }
+  }
+  .noUi-value {
+    padding-top: .125rem;
+    color: $body-color;
+    font-size: $font-size-sm;
+  }
+
+  .noUi-tooltip {
+    padding: $tooltip-padding-y $tooltip-padding-x;
+    border: $border-width solid $border-color;
+    @include border-radius($border-radius-pill);
+    background-color: $range-slider-tooltip-bg;
+    color: $range-slider-tooltip-color;
+    font-size: $range-slider-tooltip-font-size;
+    line-height: 1.2;
+    box-shadow: $box-shadow-sm;
+    &::before { content: '$'; }
+  }
+
+  &.range-slider-distance-tooltip .noUi-tooltip {
+    &::before { display: none; }
+    &::after { content: ' km'; }
+  }
+}
+html:not([dir=rtl]) .range-slider-ui.noUi-horizontal .noUi-handle {
+  right: -($range-slider-handle-size * .5);
+}
+.range-slider-light .range-slider-ui {
+  background-color: $range-slider-light-bg;
+}
+
+
+// Subscription form status
+
+.subscription-status {
+  display: table;
+  @include border-radius($border-radius-sm);
+  font-size: $font-size-base * .8125;
+  &.status-success,
+  &.status-error {
+    margin-top: .5rem;
+    padding: .25rem .5rem;
+  }
+  &.status-success {
+    background-color: rgba($success, .1);
+    color: darken($success, 10%);
+  }
+  &.status-error {
+    background-color: rgba($danger, .1);
+    color: $danger;
+  }
+}

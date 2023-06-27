@@ -1,0 +1,119 @@
+//
+// Form group
+// --------------------------------------------------
+
+
+// Base styles
+/*
+.form-group {
+  display: flex;
+  align-items: center;
+  padding: $form-group-padding;
+  border: $form-group-border-width solid $form-group-border-color;
+  border-radius: $form-group-border-radius;
+  background-color: $form-group-bg;
+  box-shadow: $form-group-box-shadow;
+
+  > div:first-child:not(.row),
+  > .form-control:first-child,
+  > .form-select:first-child {
+    margin-left: -$form-group-padding;
+  }
+
+  // Form controls inside form group
+  .form-control,
+  .form-select {
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  // Input group inside form group
+  .input-group {
+    .input-group-text {
+      margin-top: .125rem;
+      padding-right: 0;
+      border: 0;
+      background: transparent;
+      & + .form-control,
+      & + .form-select {
+        padding-left: $input-padding-x * .667;
+      }
+    }
+  }
+
+  // Dropdown inside form group
+  .dropdown-toggle {
+    font-weight: normal;
+    &.btn-link {
+      padding: {
+        right: $btn-padding-x * .728;
+        left: $btn-padding-x * .728;
+      }
+      color: $input-placeholder-color;
+      &:hover, &.show {
+        color: $gray-800;
+      }
+    }
+  }
+  .dropdown-menu:not(.my-3) {
+    margin: {
+      top: $form-group-padding + .25rem !important;
+      bottom: $form-group-padding + .25rem !important;
+    }
+  }
+
+  // Range slider inside form group
+  .range-slider {
+    width: 100%;
+    padding: {
+      right: $input-padding-x;
+      left: $input-padding-x;
+    }
+  }
+  .range-slider-ui {
+    margin: {
+      top: 0;
+      bottom: 0;
+    }
+  }
+
+  // Pill shape fix
+  &.rounded-pill,
+  &.rounded-xl-pill,
+  &.rounded-lg-pill,
+  &.rounded-md-pill,
+  &.rounded-sm-pill, {
+    padding-left: $form-group-padding + .25rem;
+  }
+}
+
+
+// Light version
+
+.form-group-light {
+  border-color: $form-group-light-border-color;
+  background-color: $form-group-light-bg;
+
+  .form-control,
+  .form-select {
+    color: $input-light-color;
+    &:focus { background-color: transparent; }
+  }
+  .input-group .input-group-text {
+    color: rgba($input-light-color, .55);
+  }
+  .dropdown-toggle.btn-link {
+    color: $input-light-placeholder-color;
+    &:hover, &.show {
+      color: $input-light-color;
+    }
+  }
+  .range-slider .range-slider-ui {
+    background-color: $range-slider-light-bg;
+  }
+}
+*/

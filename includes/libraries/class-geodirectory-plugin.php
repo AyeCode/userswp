@@ -672,9 +672,11 @@ class UsersWP_GeoDirectory_Plugin {
 					foreach ( $subtabs as $tab_id => $tab ) {
 
 						$tab_url = uwp_build_profile_tab_url( $user->ID, $type, $tab_id );
-
 						$active    = $active_tab == $tab_id ? 'btn-primary' : 'btn-outline-primary';
 						$post_type = $active_tab == $tab_id ? $tab['ptype'] : $post_type;
+						$append_hash = apply_filters('uwp_add_tab_content_hashtag', true, $tab, $user);
+						$tab_url = $append_hash ? esc_url($tab_url).'#tab-content' : esc_url($tab_url);
+
 						?>
                         <a id="uwp-profile-gd-<?php echo $tab_id; ?>" href="<?php echo esc_url( $tab_url ); ?>"
                            class=" btn btn-sm <?php echo $active; ?>">
@@ -696,9 +698,11 @@ class UsersWP_GeoDirectory_Plugin {
 							foreach ( $subtabs as $tab_id => $tab ) {
 
 								$tab_url = uwp_build_profile_tab_url( $user->ID, $type, $tab_id );
-
 								$active    = $active_tab == $tab_id ? ' active' : '';
 								$post_type = $active_tab == $tab_id ? $tab['ptype'] : $post_type;
+								$append_hash = apply_filters('uwp_add_tab_content_hashtag', true, $tab, $user);
+								$tab_url = $append_hash ? esc_url($tab_url).'#tab-content' : esc_url($tab_url);
+
 								?>
                                 <li id="uwp-profile-gd-<?php echo $tab_id; ?>" class="<?php echo $active; ?>">
                                     <a href="<?php echo esc_url( $tab_url ); ?>">
@@ -966,7 +970,7 @@ class UsersWP_GeoDirectory_Plugin {
 	 * @return string
 	 */
 	public function posts_footer( $html ) {
-		global $post;
+		global $post, $aui_bs5;
 
 		if ( ! empty( $post->post_type ) && uwp_is_gdv2() && geodir_is_gd_post_type( $post->post_type ) ) {
 			$post_avgratings = geodir_get_post_rating( $post->ID );
@@ -987,7 +991,7 @@ class UsersWP_GeoDirectory_Plugin {
 				$new_html .= '
                         <div class="col-2 text-right">
                         <div class="btn-group dropup">
-                          <a href="#"  class="dropdown h5 text-muted m-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <a href="#"  class="dropdown h5 text-muted m-0" data-' . ( $aui_bs5 ? 'bs-' : '' ) . 'toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
                           </a>
                           <div class="dropdown-menu dropdown-menu-right dropdown-caret-0">

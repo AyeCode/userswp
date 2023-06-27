@@ -4,6 +4,9 @@
  *
  * @ver 1.0.0
  */
+
+global $aui_bs5;
+
 $css_class = ! empty( $args['css_class'] ) ? esc_attr( $args['css_class'] ) : 'border-0';
 $form_title = ! empty( $args['form_title'] ) || $args['form_title']=='0' ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Forgot Password?', 'userswp' );
 $form_title = apply_filters( 'uwp_template_form_title', $form_title, 'forgot' );
@@ -21,7 +24,7 @@ do_action( 'uwp_template_before', 'forgot' ); ?>
 						'type'       =>  'button',
 						'class'      => 'close',
 						'content'    => '<span aria-hidden="true">&times;</span>',
-						'extra_attributes'  => array('aria-label'=>__("Close","userswp"), 'data-dismiss'=>"modal")
+						'extra_attributes'  => array('aria-label'=>__("Close","userswp"), 'data-' . ( $aui_bs5 ? 'bs-' : '' ) . 'dismiss'=>"modal")
 					));
 					?>
 				</div>

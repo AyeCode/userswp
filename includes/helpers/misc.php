@@ -263,7 +263,7 @@ function uwp_get_excluded_users_list() {
 	if ( !empty($excluded_globally) ) {
 
 		if(is_array($excluded_globally)) {
-			$exclude_users = $excluded_globally;
+			$exclude_users = array_merge($exclude_users, $excluded_globally);
 		} else {
 			$excluded_users = str_replace(' ', '', $excluded_globally);
 			$users_array = explode(',', $excluded_users);
@@ -422,13 +422,19 @@ function get_uwp_users_list($roles = array()) {
 			'paged' => (int) $paged,
 		);
 
+		$roles_args = array(
+			'fields' => array('ID'),
+		);
+
 		if(!empty($exclude_users)) {
 			$args['exclude'] = $exclude_users;
+			$roles_args['exclude'] = $exclude_users;
 		}
 
 		if(isset($roles) && is_array($roles) && count($roles) > 0){
 			$include_users = array();
-			$users = get_users( array( 'role__in' => $roles, 'fields' => array('ID') ) );
+			$roles_args['role__in'] = $roles;
+			$users = get_users( $roles_args );
 			$users = wp_list_pluck( $users, 'ID' );
 			if($users && count($users) > 0){
 				$include_users = array_merge($include_users, $users);
@@ -1313,6 +1319,7 @@ function uwp_get_localize_data(){
 		'register_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("register_modal",1) ? 1 : '',
 		'forgot_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("forgot_modal",1) ? 1 : '',
 		'uwp_pass_strength' => uwp_get_option("register_min_password_strength",0),
+		'uwp_strong_pass_msg' => uwp_get_option("register_uwp_strong_pass_msg",__("Please enter valid strong password.", "userswp")),
 		'default_banner' => uwp_get_default_banner_uri(),
 	);
 

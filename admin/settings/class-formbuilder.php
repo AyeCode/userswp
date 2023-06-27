@@ -317,7 +317,7 @@ class UsersWP_Form_Builder {
 											<?php
 											foreach ( $register_forms as $key => $forms ) {
 												$form_id     = ! empty( $forms['id'] ) ? $forms['id'] : '';
-												$form_title  = ! empty( $forms['title'] ) ? $forms['title'] : '';
+												$form_title  = ! empty( $forms['title'] ) ? sanitize_title_with_dashes($forms['title']) : '';
 												$user_role   = ! empty( $forms['user_role'] ) ? $forms['user_role'] : '';
 												$action      = ! empty( $forms['reg_action'] ) ? $forms['reg_action'] : $current_action;
 												$redirect_to = isset( $forms['redirect_to'] ) ? $forms['redirect_to'] : '';
@@ -500,7 +500,7 @@ class UsersWP_Form_Builder {
 										<?php
 										foreach ( $register_forms as $key => $forms ) {
 											$form_id    = ! empty( $forms['id'] ) ? $forms['id'] : '';
-											$form_title = ! empty( $forms['title'] ) ? $forms['title'] : '';
+											$form_title = ! empty( $forms['title'] ) ? sanitize_title_with_dashes($forms['title']) : '';
 											?>
                                             <option <?php selected( $current_form, $form_id ); ?>
                                                     value="<?php echo $register_tab . '&form=' . $form_id; ?>"><?php echo sprintf( __( '%s - #%s', 'userswp' ), $form_title, $form_id ); ?></option>
@@ -760,6 +760,7 @@ class UsersWP_Form_Builder {
 			'field_icon' => 'fas fa-file',
 			'site_title' => __( 'Terms & Conditions', 'userswp' ),
 			'help_text'  => __( 'Adds Register TOS page.', 'userswp' ),
+            'help_text_tip'    => __( 'This will show next to the checkbox, to add a link to the TOS page, use format: %%link_start%% View TOS %%link_end%%', 'userswp' ),
 			'defaults'   => array(
 				'admin_title'   => 'Terms & Conditions',
 				'site_title'    => 'Terms & Conditions',
@@ -770,7 +771,7 @@ class UsersWP_Form_Builder {
 				'is_required'   => 1,
 				'required_msg'  => '',
 				'field_icon'    => 'fas fa-file',
-				'css_class'     => 'btn-register-tos'
+				'css_class'     => 'btn-register-tos',
 			)
 		);
 
@@ -1439,7 +1440,8 @@ class UsersWP_Form_Builder {
                             <li class="uwp-setting-name">
                                 <label for="help_text" class="uwp-tooltip-wrap">
 									<?php
-									echo uwp_help_tip( __( 'This will be displayed below the field in the form.', 'userswp' ) );
+									$tip_text = !empty($cf['help_text_tip']) ? esc_attr($cf['help_text_tip']) : __( 'This will be displayed below the field in the form.', 'userswp' );
+									echo uwp_help_tip( $tip_text );
 									_e( 'Field Description:', 'userswp' ); ?>
                                 </label>
                                 <div class="uwp-input-wrap">

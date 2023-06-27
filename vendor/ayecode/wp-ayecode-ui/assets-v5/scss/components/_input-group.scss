@@ -1,0 +1,27 @@
+//
+// Input group
+// --------------------------------------------------
+
+
+// Absolutely positioned addons
+
+.input-group .position-absolute {
+  z-index: 5;
+  & + .form-control,
+  & + .password-toggle .form-control {
+    padding-left: 2.5rem;
+  }
+}
+
+
+// Fix checkbox and radio position inside
+
+.input-group .form-check-input {
+  margin-top: .5rem;
+}
+
+
+// Button addons sizing fix
+
+.input-group-lg .btn { @extend .btn-lg; }
+.input-group-sm .btn { @extend .btn-sm; }

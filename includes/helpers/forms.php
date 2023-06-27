@@ -349,8 +349,8 @@ function uwp_get_field_icon( $value ) {
 
 function uwp_get_registration_form_actions(){
 	$registration_options = array(
-		'auto_approve' =>  __('Auto approve', 'userswp'),
-		'auto_approve_login' =>  __('Auto approve + Auto Login', 'userswp'),
+		'auto_approve' =>  __('Auto Approve', 'userswp'),
+		'auto_approve_login' =>  __('Auto Approve + Auto Login', 'userswp'),
 		'require_email_activation' =>  __('Require Email Activation', 'userswp'),
 	);
 
@@ -402,6 +402,26 @@ function uwp_get_register_form_by( $form_id, $type = 'title' ) {
 	}
 
 	return $form_title;
+}
+
+function uwp_get_form_id_by_type($form_type){
+	$form_id = 1;
+	if ( isset($form_type) && ! empty( $form_type ) ) {
+		$get_register_form = uwp_get_option( 'multiple_registration_forms' );
+
+		if ( ! empty( $get_register_form ) && is_array( $get_register_form ) ) {
+
+			foreach ( $get_register_form as $key => $register_form ) {
+
+				if ( ! empty( $register_form['title'] ) && $form_type == sanitize_title_with_dashes($register_form['title']) ) {
+
+					$form_id = $register_form['id'];
+				}
+			}
+		}
+	}
+
+	return $form_id;
 }
 
 function uwp_get_next_register_form_id() {

@@ -429,6 +429,10 @@ class UsersWP_Templates {
 			return $login_url; // Do not change the URL for Jetpack SSO
 		}
 
+		if( did_action('init') === 0 ){
+			return $login_url; // Some plugin calls login link very early.
+		}
+
 		$login_page_id    = uwp_get_page_id( 'login_page', false );
 		$redirect_page_id = uwp_get_page_id( 'login_redirect_to' );
 		if ( ( ! is_admin() || wp_doing_ajax() ) && $login_page_id ) {
@@ -515,7 +519,7 @@ class UsersWP_Templates {
 	 */
 	public function template_fields( $form_type, $args = array() ) {
 
-		global $wpdb;
+		global $wpdb, $aui_bs5;
 		$table_name        = uwp_get_table_prefix() . 'uwp_form_fields';
 		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
@@ -562,8 +566,7 @@ class UsersWP_Templates {
 						$url = esc_url_raw( add_query_arg( array( 'uwp_form_id' => $id ), $current_url ) );
 						?>
                         <div class="btn-group" role="group">
-                            <button id="uwp-form-select-dropdown" type="button" class="btn btn-secondary dropdown-toggle"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button id="uwp-form-select-dropdown" type="button" class="btn btn-secondary dropdown-toggle" data-<?php echo ( $aui_bs5 ? 'bs-' : '' ); ?>toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <?php _e('More', 'userswp'); ?>
                             </button>
                             <div class="dropdown-menu mt-3" aria-labelledby="uwp-form-select">
@@ -1086,6 +1089,7 @@ class UsersWP_Templates {
 			$fields          = get_account_form_fields( $extra_where );
 			$fields          = apply_filters( 'uwp_account_privacy_fields', $fields );
 			$user_id         = get_current_user_id();
+			$form_id         = uwp_get_register_form_id( $user_id );
 			$design_style    = uwp_get_option( "design_style", "bootstrap" );
 			$bs_form_group   = $design_style ? "form-group mb-3 row" : "";
 			$bs_form_control = $design_style ? "form-control" : "";
@@ -1128,7 +1132,7 @@ class UsersWP_Templates {
 
 						global $wpdb;
 						$tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
-						$tabs            = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $tabs_table_name . " WHERE form_type=%s AND user_decided = 1 ORDER BY sort_order ASC", 'profile-tabs' ) );
+						$tabs            = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $tabs_table_name . " WHERE form_type = %s AND user_decided = 1 AND form_id = %s ORDER BY sort_order ASC", array('profile-tabs', $form_id) ) );
 
 						if ( $tabs ) { ?>
                             <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">

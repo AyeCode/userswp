@@ -1,0 +1,231 @@
+//
+// Navbar
+// --------------------------------------------------
+
+
+// Navbar brand
+
+.navbar-brand {
+  font-weight: $navbar-brand-font-weight;
+}
+
+
+// Navbar nav
+
+.navbar-nav {
+  margin-top: $spacer;
+
+  .nav-item {
+    margin-bottom: .375rem;
+    padding: .125rem 1rem;
+    border: $border-width solid transparent;
+    border-radius: $border-radius;
+  }
+
+  .dropdown-toggle {
+    display: flex;
+    &::after {
+      display: block;
+      font-size: .75em;
+      margin: {
+        top: .1875rem;
+        right: 0 !important;
+        left: auto;
+      }
+    }
+  }
+
+  .dropdown-menu {
+    margin-bottom: $dropdown-padding-y * 1.5;
+    padding: {
+      top: 0;
+      bottom: 0;
+    }
+    border: 0;
+    border-left: $border-width * 2 solid transparent;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+
+    .dropdown-menu {
+      display: block;
+      margin: {
+        bottom: 0;
+        left: $dropdown-item-padding-x;
+      }
+      opacity: 1;
+    }
+
+    .dropdown-toggle::after { display: none; }
+  }
+}
+
+.navbar-divider {
+  width: $border-width;
+  height: 1.75rem;
+}
+.navbar-light .navbar-divider {
+  background-color: $dark;
+  opacity: .1;
+}
+.navbar-dark .navbar-divider {
+  background-color: $light;
+  opacity: .15;
+}
+
+
+// Styles for expanded navbar only
+
+.navbar-expand {
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    $next: breakpoint-next($breakpoint, $grid-breakpoints);
+    $infix: breakpoint-infix($next, $grid-breakpoints);
+
+    &#{$infix} {
+      @include media-breakpoint-up($next) {
+        .navbar-nav {
+          margin-top: 0;
+          padding-top: 0;
+          border-top: none;
+          border-radius: 0;
+          .nav-item {
+            position: relative;
+            margin-bottom: 0;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+          }
+          .nav-link {
+            padding: $navbar-nav-link-padding-y $navbar-nav-link-padding-x;
+            //font-size: $navbar-nav-link-font-size;
+          }
+          .dropdown-toggle {
+            display: block;
+            &::after {
+              display: inline-block;
+              margin: {
+                top: 0;
+                left: .375rem;
+              }
+              font-size: .7em;
+            }
+          }
+        }
+        .dropdown-menu {
+          margin-bottom: 0;
+          padding: {
+            top: $dropdown-padding-y;
+            bottom: $dropdown-padding-y;
+          }
+          border: $dropdown-border-width solid $dropdown-border-color;
+          @include border-radius ($dropdown-border-radius);
+          background-color: $dropdown-bg;
+          @include box-shadow($dropdown-box-shadow);
+          &.dropdown-menu-dark {
+            border-color: $dropdown-dark-border-color;
+            background-color: $dropdown-dark-bg;
+            @include box-shadow($dropdown-dark-box-shadow);
+          }
+          > .dropdown {
+            > .dropdown-toggle {
+              display: block;
+              position: relative;
+              padding-right: $dropdown-item-padding-x * 1.5;
+              &::after {
+                display: block;
+                position: absolute;
+                top: 50%;
+                right: $spacer;
+                margin-top: -.375rem;
+                content: $fi-chevron-right;
+              }
+            }
+            .dropdown-menu {
+              display: none;
+              top: 0;
+              right: auto;
+              left: 100%;
+              width: auto;
+              margin: {
+                top: -$dropdown-padding-y;
+                right: 0;
+                left: -.375rem;
+              }
+              padding-bottom: $dropdown-padding-y;
+            }
+            &:hover > .dropdown-menu {
+              animation: fade-in .25s ease-in-out;
+            }
+          }
+          &.show { display: none; }
+        }
+        .dropdown-menu-end {
+          left: auto;
+          right: 0;
+        }
+        .dropdown:hover > .dropdown-menu {
+          display: block;
+          animation: slide-up .25s ease-in-out;
+        }
+
+        &.navbar-light,
+        &.navbar-dark {
+          background-color: transparent;
+        }
+        &.navbar-home.navbar-dark .dropdown-item {
+          color: $dropdown-link-color;
+        }
+      }
+    }
+  }
+}
+
+
+// Navbar themes
+
+// Dark links against light background
+.navbar-light {
+  transition: $navbar-transition;
+  background-color: $light;
+  .nav-item {
+    border-color: $border-color;
+    &:hover .nav-link:not(.disabled) {
+      color: $navbar-light-hover-color;
+    }
+    &.active .nav-link:not(.disabled) {
+      color: $navbar-light-active-color;
+    }
+  }
+  .navbar-nav .dropdown-menu {
+    border-left-color: $border-color;
+  }
+
+  &.navbar-stuck {
+    background-color: $light;
+    box-shadow: $box-shadow-sm;
+  }
+}
+
+// White links against dark background
+.navbar-dark {
+  transition: $navbar-transition;
+  background-color: $dark;
+  .nav-item {
+    border-color: $border-light-color;
+    &:hover .nav-link:not(.disabled) {
+      color: $navbar-dark-hover-color;
+    }
+    &.active .nav-link:not(.disabled) {
+      color: $navbar-dark-active-color;
+    }
+  }
+  .navbar-nav .dropdown-menu {
+    border-left-color: $border-light-color;
+  }
+
+  &.navbar-stuck { background-color: $dark; }
+}
+
+.navbar-home.navbar-dark .dropdown-item {
+  color: $dropdown-dark-color;
+}

@@ -36,7 +36,7 @@ class AyeCode_UI_Plugin {
 	}
 
 	public function maybe_show_examples(){
-		if(current_user_can('manage_options') && isset($_REQUEST['preview-aui'])){
+		if ( current_user_can( 'manage_options' ) && isset( $_REQUEST['preview-aui'] ) ) {
 			echo "<head>";
 			wp_head();
 			echo "</head>";
@@ -51,17 +51,18 @@ class AyeCode_UI_Plugin {
 	public function get_examples(){
 		$output = '';
 
-
 		// open form
-		$output .= "<form class='p-5 m-5 border rounded'>";
+		$output .= "<form class='p-5 m-5 border rounded bg-white'>";
 
 		$output .= aui()->input(
 			array(
 				'type'             => 'datepicker',
-				'id'               => 'wpinv_discount_start',
+				'id'               => 'date_example_sm',
 				'size'             => 'sm',
-				'name'             => 'wpinv_discount_start',
-				'label'            => __( 'Start Date', 'invoicing' ),
+				'name'             => 'date_example_sm',
+				'label'            => 'Date Input Label (small)',
+				'help_text'        => 'help text',
+				'label_type'       => 'top',
 				'placeholder'      => 'YYYY-MM-DD 00:00',
 				'value'            => '',
 				'extra_attributes' => array(
@@ -69,16 +70,18 @@ class AyeCode_UI_Plugin {
 					'data-time_24hr'   => 'true',
 					'data-allow-input' => 'true',
 				),
-			),
+			)
 		);
 
 		$output .= aui()->input(
 			array(
 				'type'             => 'datepicker',
-				'id'               => 'wpinv_discount_start',
+				'id'               => 'date_example',
 				//'size'             => 'smx',
-				'name'             => 'wpinv_discount_start',
-				'label'            => __( 'Start Date', 'invoicing' ),
+				'name'             => 'date_example',
+				'label'            => 'Date Input Label',
+				'help_text'        => 'help text',
+				'label_type'       => 'top',
 				'placeholder'      => 'YYYY-MM-DD 00:00',
 				'value'            => '',
 				'extra_attributes' => array(
@@ -86,15 +89,18 @@ class AyeCode_UI_Plugin {
 					'data-time_24hr'   => 'true',
 					'data-allow-input' => 'true',
 				),
-			),
+			)
 		);
+
 		$output .= aui()->input(
 			array(
 				'type'             => 'datepicker',
-				'id'               => 'wpinv_discount_start',
+				'id'               => 'date_example_lg',
 				'size'             => 'lg',
-				'name'             => 'wpinv_discount_start',
-				'label'            => __( 'Start Date', 'invoicing' ),
+				'name'             => 'date_example_lg',
+				'label'            => 'Date Input Label (large)',
+				'help_text'        => 'help text',
+				'label_type'       => 'top',
 				'placeholder'      => 'YYYY-MM-DD 00:00',
 				'value'            => '',
 				'extra_attributes' => array(
@@ -105,108 +111,121 @@ class AyeCode_UI_Plugin {
 			)
 		);
 
+		// input example
+		$output .= aui()->input(
+			array(
+				'type'  =>  'text',
+				'id'    =>  'text-example',
+				'size'             => 'sm',
+				//'clear_icon'    => true,
+				'name'    =>  'text-example',
+				'placeholder'   => 'text placeholder',
+				'title'   => 'Text input example',
+				'value' =>  '',
+				'required'  => false,
+				'help_text' => 'help text',
+				'label' => 'Text input example label',
+				'label_type' => 'top'
+			)
+		);
+
+		$output .= aui()->input(
+			array(
+				'type'  =>  'search',
+				'id'    =>  'text-example',
+				'size'             => 'sm',
+				//'clear_icon'    => true,
+				'name'    =>  'text-example',
+				'placeholder'   => 'text placeholder',
+				'title'   => 'Text input example',
+				'value' =>  '',
+				'required'  => false,
+				'help_text' => 'help text',
+				'label' => 'Text input example label',
+				'label_type' => 'top'
+			)
+		);
 
 		// input example
-		$output .= aui()->input(array(
-			'type'  =>  'text',
-			'id'    =>  'text-example',
-			'size'             => 'sm',
-			//'clear_icon'    => true,
-			'name'    =>  'text-example',
-			'placeholder'   => 'text placeholder',
-			'title'   => 'Text input example',
-			'value' =>  '',
-			'required'  => false,
-			'help_text' => 'help text',
-			'label' => 'Text input example label',
-			'label_type' => 'top'
-		));
-
-		$output .= aui()->input(array(
-			'type'  =>  'search',
-			'id'    =>  'text-example',
-			'size'             => 'sm',
-			//'clear_icon'    => true,
-			'name'    =>  'text-example',
-			'placeholder'   => 'text placeholder',
-			'title'   => 'Text input example',
-			'value' =>  '',
-			'required'  => false,
-			'help_text' => 'help text',
-			'label' => 'Text input example label',
-			'label_type' => 'top'
-		));
-
-		// input example
-		$output .= aui()->input(array(
-			'type'  =>  'url',
-			'id'    =>  'text-example2',
-			'name'    =>  'text-example',
-			'placeholder'   => 'url placeholder',
-			'title'   => 'Text input example',
-			'value' =>  '',
-			'required'  => false,
-			'help_text' => 'help text',
-			'label' => 'Text input example label'
-		));
+		$output .= aui()->input(
+			array(
+				'type'  =>  'url',
+				'id'    =>  'text-example2',
+				'name'    =>  'text-example',
+				'placeholder'   => 'url placeholder',
+				'title'   => 'Text input example',
+				'value' =>  '',
+				'required'  => false,
+				'help_text' => 'help text',
+				'label' => 'Text input example label'
+			)
+		);
 
 		// checkbox example
-		$output .= aui()->input(array(
-			'type'  =>  'checkbox',
-			'id'    =>  'checkbox-example',
-			'name'    =>  'checkbox-example',
-			'placeholder'   => 'checkbox-example',
-			'title'   => 'Checkbox example',
-			'value' =>  '1',
-			'checked'   => true,
-			'required'  => false,
-			'help_text' => 'help text',
-			'label' => 'Checkbox checked'
-		));
+		$output .= aui()->input(
+			array(
+				'type'  =>  'checkbox',
+				'id'    =>  'checkbox-example',
+				'name'    =>  'checkbox-example',
+				'placeholder'   => 'checkbox-example',
+				'title'   => 'Checkbox example',
+				'value' =>  '1',
+				'checked'   => true,
+				'required'  => false,
+				'help_text' => 'help text',
+				'label' => 'Checkbox checked'
+			)
+		);
 
 		// checkbox example
-		$output .= aui()->input(array(
-			'type'  =>  'checkbox',
-			'id'    =>  'checkbox-example2',
-			'name'    =>  'checkbox-example2',
-			'placeholder'   => 'checkbox-example',
-			'title'   => 'Checkbox example',
-			'value' =>  '1',
-			'checked'   => false,
-			'required'  => false,
-			'help_text' => 'help text',
-			'label' => 'Checkbox un-checked'
-		));
+		$output .= aui()->input(
+			array(
+				'type'  =>  'checkbox',
+				'id'    =>  'checkbox-example2',
+				'name'    =>  'checkbox-example2',
+				'placeholder'   => 'checkbox-example',
+				'title'   => 'Checkbox example',
+				'value' =>  '1',
+				'checked'   => false,
+				'required'  => false,
+				'help_text' => 'help text',
+				'label' => 'Checkbox un-checked'
+			)
+		);
 
 		// switch example
-		$output .= aui()->input(array(
-			'type'  =>  'checkbox',
-			'id'    =>  'switch-example',
-			'name'    =>  'switch-example',
-			'placeholder'   => 'checkbox-example',
-			'title'   => 'Switch example',
-			'value' =>  '1',
-			'checked'   => true,
-			'switch'    => true,
-			'required'  => false,
-			'help_text' => 'help text',
-			'label' => 'Switch on'
-		));
+		$output .= aui()->input(
+			array(
+				'type'  =>  'checkbox',
+				'id'    =>  'switch-example',
+				'name'    =>  'switch-example',
+				'placeholder'   => 'checkbox-example',
+				'title'   => 'Switch example',
+				'value' =>  '1',
+				'checked'   => true,
+				'switch'    => true,
+				'required'  => false,
+				'help_text' => 'help text',
+				'label' => 'Switch on'
+			)
+		);
 
 		// switch example
-		$output .= aui()->input(array(
-			'type'  =>  'checkbox',
-			'id'    =>  'switch-example2',
-			'name'    =>  'switch-example2',
-			'placeholder'   => 'checkbox-example',
-			'title'   => 'Switch example',
-			'value' =>  '1',
-			'checked'   => false,
-			'switch'    => true,
-			'required'  => false,
-			'help_text' => 'help text',
-			'label' => 'Switch off'
-		));
+		$output .= aui()->input(
+			array(
+				'type'  =>  'checkbox',
+				'id'    =>  'switch-example2',
+				'name'    =>  'switch-example2',
+				'placeholder'   => 'checkbox-example',
+				'title'   => 'Switch example',
+				'value' =>  '1',
+				'checked'   => false,
+				'switch'    => true,
+				'required'  => false,
+				'help_text' => 'help text',
+				'label' => 'Switch off'
+			)
+		);
 
 		// close form
 		$output .= "</form>";
@@ -214,4 +233,5 @@ class AyeCode_UI_Plugin {
 		return $output;
 	}
 }
+
 new AyeCode_UI_Plugin();

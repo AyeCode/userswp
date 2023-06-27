@@ -218,18 +218,18 @@ function uwp_profile_image_change(type){
     var $modal = '<div class="modal fade uwp-profile-image-change-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="uwp-profile-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
     jQuery('body').append($modal);
 
-    jQuery('.uwp-profile-image-change-modal').modal({
-        backdrop: 'static'
-    });
+    // jQuery('.uwp-profile-image-change-modal').modal({
+    //     backdrop: 'static'
+    // });
 
-    // if ( window.bootstrap && window.bootstrap.Modal ) {
-    //     var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-profile-image-change-modal'));
-    //     authModal.show();
-    // } else {
-    //     jQuery('.uwp-profile-image-change-modal').modal({
-    //         backdrop: 'static'
-    //     });
-    // }
+    if ( window.bootstrap && window.bootstrap.Modal ) {
+        var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-profile-image-change-modal'));
+        authModal.show();
+    } else {
+        jQuery('.uwp-profile-image-change-modal').modal({
+            backdrop: 'static'
+        });
+    }
 
     // do something with the file here
     var data = {
@@ -276,7 +276,7 @@ function uwp_init_auth_modal(){
     }
 }
 
-function uwp_modal_loading(inputs){
+function uwp_modal_loading(inputs) {
     $input_single = '<span class="badge badge-pill badge-light p-3 mt-3 w-100 bg-loading">&nbsp;</span>';
     $inputs = inputs ? $input_single.repeat(inputs) : $input_single;
 
@@ -289,20 +289,20 @@ function uwp_modal_loading(inputs){
         $modal_content +
         '</div></div></div>';
 
-    if(!jQuery('.uwp-auth-modal').length){
+    if (!jQuery('.uwp-auth-modal').length) {
         jQuery('body').append($modal);
-    }else{
+    } else {
         jQuery('.uwp-auth-modal .modal-content').html($modal_content);
     }
 
-    jQuery('.uwp-auth-modal').modal();
+    jQuery('.modal-backdrop').remove();
 
-    // if ( window.bootstrap && window.bootstrap.Modal ) {
-    //     var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-auth-modal'));
-    //     authModal.show();
-    // } else {
-    //     jQuery('.uwp-auth-modal').modal();
-    // }
+    if (window.bootstrap && window.bootstrap.Modal) {
+        var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-auth-modal'));
+        authModal.show();
+    } else {
+        jQuery('.uwp-auth-modal').modal();
+    }
 }
 
 /**
@@ -510,7 +510,7 @@ function uwp_modal_register_form(form_id){
                     uwp_modal_register_form_process();
                 });
             }
-            uwp_init_auth_modal();aui_init_select2();uwp_switch_reg_form_init();
+            uwp_init_auth_modal();aui_init_select2();uwp_switch_reg_form_init();aui_init();
         }
     });
 }
@@ -651,9 +651,9 @@ function uwp_checkPasswordStrength( $pass1,
     // maybe insert
     if(!jQuery('#uwp-password-strength').length && pass1){
         if($pass2.length){
-            $container = $pass2.closest('.form-group');
+            $container = $pass2.closest('.uwp-password-wrap');
         }else{
-            $container = $pass1.closest('.form-group');
+            $container = $pass1.closest('.uwp-password-wrap');
         }
         $container.append( '<div class="progress mt-1"><div id="uwp-password-strength" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;"></div></div>' );
         $strengthResult = jQuery('#uwp-password-strength');
@@ -704,10 +704,13 @@ function uwp_checkPasswordStrength( $pass1,
 
     // set the status of the submit button
     if ( parseInt(uwp_localize_data.uwp_pass_strength) > 0) {
+        $container.find('small').remove();
         if(4 == parseInt(uwp_localize_data.uwp_pass_strength) && strength === 4){
             $submitButton.removeAttr( 'disabled' );
         } else if(3 == parseInt(uwp_localize_data.uwp_pass_strength) && (strength === 3 || strength === 4)){
             $submitButton.removeAttr( 'disabled' );
+        } else {
+            $container.append("<small>"+uwp_localize_data.uwp_strong_pass_msg+"</small>");
         }
     }
 
@@ -759,14 +762,14 @@ function uwp_gd_delete_post($post_id){
                     jQuery('.uwp-gd-modal .modal-content').html($modal_content);
                 }
 
-                jQuery('.uwp-gd-modal').modal();
+                // jQuery('.uwp-gd-modal').modal();
 
-                // if ( window.bootstrap && window.bootstrap.Modal ) {
-                //     var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-gd-modal'));
-                //     authModal.show();
-                // } else {
-                //     jQuery('.uwp-gd-modal').modal();
-                // }
+                if ( window.bootstrap && window.bootstrap.Modal ) {
+                    var authModal = new window.bootstrap.Modal(document.querySelector('.uwp-gd-modal'));
+                    authModal.show();
+                } else {
+                    jQuery('.uwp-gd-modal').modal();
+                }
 
                 if(data.success){
                     setTimeout(function() {
