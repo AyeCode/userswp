@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.21 =
+* Allow to dismiss notice displayed when author archive disabled from Yoast SEO- ADDED
+
 = 1.2.3.20 =
 * Allow to access register form using 'user_type' argument in register page URL - ADDED
 * Creation of dynamic property is deprecated warning - FIXED
