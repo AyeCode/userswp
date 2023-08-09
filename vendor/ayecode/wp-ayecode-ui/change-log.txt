@@ -1,3 +1,14 @@
+= 0.1.97 =
+* BS5 removed mb-3 on slider as it was causing padding issues on GD when mixed Single and Slider archives - CHANGED
+* image cover classes are nto vertically centering image - FIXED
+
+= 0.1.96 =
+* BS4 to BS5 font italic class is not working - FIXED
+* Custom pallet colors not showing in BS5 when selected as a color in block - FIXED
+
+= 0.1.94 =
+* Fix conditional field for multiselect field type in search bar - FIXED
+
 = 0.1.93 =
 * Rounded right not working in BS5 - FIXED
 * Firefox and Safari can have issues displaying images with the .ratio class - FIXED

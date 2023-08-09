@@ -1,3 +1,21 @@
+= 1.1.23 =
+* Type missing ; causing error - FIXED
+
+= 1.1.22 =
+* Avada converts checkbox to select dropdown don't saves empty value - CHANGED
+* Check preview for Kallyas theme Zion builder editor - ADDED
+* PHP notice of argument must be of type array, null given - FIXED
+
+= 1.1.21 =
+* New line character in translation results in JS error - FIXED
+* Background Gradient picker broken after WP update - FIXED
+
+= 1.1.20 =
+* WP installs less than 5.9 can throw fatal error for render_block filter - FIXED
+
+= 1.1.19 =
+* Block Visibility feature added - ADDED
+
 = 1.1.18 =
 * Added helper function for float inputs - ADDED
 

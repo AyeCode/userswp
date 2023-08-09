@@ -1058,7 +1058,7 @@ class UsersWP_Profile {
 	public function rewrite_profile_link() {
 
 		$page_id = uwp_get_page_id( 'profile_page', false );
-		if ( $page_id && ! isset( $_REQUEST['page_id'] ) ) {
+		if ( $page_id && ! isset( $_REQUEST['page_id'] ) && get_post_type( $page_id ) == 'page'  ) {
 			$link                = get_page_link( $page_id );
 			$uwp_profile_link    = trailingslashit( $this->profile_slug() );
 			$uwp_profile_page_id = $page_id;

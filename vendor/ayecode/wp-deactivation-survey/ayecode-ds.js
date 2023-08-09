@@ -16,7 +16,7 @@
 
         // Dialog HTML
         var element = $('\
-			<div class="ayecodeds-deactivate-dialog" data-remodal-id="' + plugin.slug + '">\
+			<div class="ayecodeds-deactivate-dialog" data-modal-id="' + plugin.slug + '">\
 				<form>\
 					<input type="hidden" name="plugin"/>\
 					<h2>' + strings.quick_feedback + '<span id="ayecodeds-plugin-name"></span></h2>\
@@ -30,7 +30,7 @@
 					</p> \
 					<p class="ayecodeds-deactivate-dialog-buttons" style="float: right;">\
 						<input type="submit" class="button confirm" value="' + strings.skip_and_deactivate + '"/>\
-						<button data-remodal-action="cancel" class="button button-primary" onclick="tb_remove();jQuery(\'#ayecode-deactivation-form\').html(\'\');return false;">' + strings.cancel + '</button>\
+						<button data-modal-action="cancel" class="button button-primary" onclick="tb_remove();jQuery(\'#ayecode-deactivation-form\').html(\'\');return false;">' + strings.cancel + '</button>\
 					</p>\
 				</form><style>#TB_window {overflow-y:auto;border-radius: 4px;height: fit-content !important;width:auto !important; left: 50%;top: 50% !important;margin-left: unset !important; -webkit-transform: translate(-50%, -50%);transform: translate(-50%, -50%);}#TB_title{display:none;}#TB_ajaxContent {height: auto !important;}</style>\
 			</div>\
