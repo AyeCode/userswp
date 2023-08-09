@@ -23,7 +23,7 @@ do_action( 'uwp_template_before', 'login', $args ); ?>
 				echo aui()->button(array(
 					'type'       =>  'button',
 					'class'      => 'close',
-					'content'    => '<span aria-hidden="true">&times;</span>',
+					'content'    => ' <span aria-hidden="true">&times;</span>',
 					'extra_attributes'  => array('aria-label'=>__("Close","userswp"), 'data-' . ( $aui_bs5 ? 'bs-' : '' ) . 'dismiss'=>"modal")
 				));
 				?>

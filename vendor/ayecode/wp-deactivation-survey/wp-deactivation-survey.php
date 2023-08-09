@@ -19,7 +19,7 @@ if ( ! class_exists( 'AyeCode_Deactivation_Survey' ) ) {
 
 		public static $plugins;
 
-		public $version = "1.0.4";
+		public $version = "1.0.6";
 
 		public static function instance( $plugin = array() ) {
 			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof AyeCode_Deactivation_Survey ) ) {

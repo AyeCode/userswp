@@ -106,3 +106,18 @@ body.modal-open .modal{
 .aui_bs5.uwp_page .modal-body img.jcrop-preview {
   max-width: none;
 }
+
+/* skip links */
+.bs-skip-links {
+  z-index: 10000;
+  left: 50%;
+  transform: translate(-50%, -150%);
+  transition: transform 0.3s;
+}
+.bs-skip-links:focus-within {
+  transform: translate(-50%, 0%);
+}
+
+.form-switch .form-check-input:checked::before{
+  content: none;
+}

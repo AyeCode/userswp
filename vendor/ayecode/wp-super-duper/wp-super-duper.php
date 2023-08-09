@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.18' );
+	define( 'SUPER_DUPER_VER', '1.1.23' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -232,7 +232,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						if ( isset( $val['default'] ) && $val['default'] == '0' ) {
 							unset( $param['default'] );
 						}
-						$param['value'] = array( '' => __( "No" ), '1' => __( "Yes" ) );
+						$param['value'] = array( '0' => __( "No" ), '1' => __( "Yes" ) );
 					} elseif ( $param['type'] == 'select' || $param['type'] == 'multiple_select' ) {
 						$param['value'] = isset( $val['options'] ) ? $val['options'] : array();
 					} else {
@@ -1766,23 +1766,17 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @since 1.0.4 Added block_wrap property which will set the block wrapping output element ie: div, span, p or empty for no wrap.
 		 */
 		public function block() {
-            global $sd_is_js_functions_loaded, $aui_bs5;
-
-			ob_start();
+			global $sd_is_js_functions_loaded, $aui_bs5;
 
 			$show_advanced = $this->block_show_advanced();
 
-
+			ob_start();
 			?>
 			<script>
-
 			<?php
-			if(!$sd_is_js_functions_loaded){
-                $sd_is_js_functions_loaded = true;
-            ?>
-
-
-
+			if ( ! $sd_is_js_functions_loaded ) {
+				$sd_is_js_functions_loaded = true;
+			?>
 function sd_show_view_options($this){
 	if(jQuery($this).html().length){
 		jQuery($this).html('');
@@ -1793,6 +1787,158 @@ function sd_show_view_options($this){
 
 function sd_set_view_type($device){
 	wp.data.dispatch('core/edit-site') ? wp.data.dispatch('core/edit-site').__experimentalSetPreviewDeviceType($device) : wp.data.dispatch('core/edit-post').__experimentalSetPreviewDeviceType($device);
+}
+
+jQuery(function(){
+	sd_block_visibility_init();
+});
+function sd_block_visibility_init() {
+	jQuery(document).off('change', '.bs-vc-modal-form').on('change', '.bs-vc-modal-form', function() {
+		try {
+			aui_conditional_fields('.bs-vc-modal-form');
+		} catch(err) {
+			console.log(err.message);
+		}
+	});
+
+	jQuery(document).off('click', '.bs-vc-save').on('click', '.bs-vc-save', function() {
+		var $bsvcModal = jQuery(this).closest('.bs-vc-modal'), $bsvcForm = $bsvcModal.find('.bs-vc-modal-form'), vOutput = jQuery('#bsvc_output', $bsvcForm).val(), rawValue = '', oVal = {}, oOut = {}, iRule = 0;
+		jQuery(this).addClass('disabled');
+		jQuery('.bs-vc-modal-form .bs-vc-rule-sets .bs-vc-rule').each(function(){
+			vRule = jQuery(this).find('.bsvc_rule').val(), oRule = {};
+			if (vRule == 'logged_in' || vRule == 'logged_out') {
+				oRule.type = vRule;
+			} else if (vRule == 'user_roles') {
+				oRule.type = vRule;
+				if (jQuery(this).find('.bsvc_user_roles:checked').length) {
+					var user_roles = jQuery(this).find('.bsvc_user_roles:checked').map(function() {
+						return jQuery(this).val();
+					}).get();
+					if (user_roles && user_roles.length) {
+						oRule.user_roles = user_roles.join(",");
+					}
+				}
+			} else if (vRule == 'gd_field') {
+				if (jQuery(this).find('.bsvc_gd_field ').val() && jQuery(this).find('.bsvc_gd_field_condition').val()) {
+					oRule.type = vRule;
+					oRule.field = jQuery(this).find('.bsvc_gd_field ').val();
+					oRule.condition = jQuery(this).find('.bsvc_gd_field_condition').val();
+					if (oRule.condition != 'is_empty' && oRule.condition != 'is_not_empty') {
+						oRule.search = jQuery(this).find('.bsvc_gd_field_search').val();
+					}
+				}
+			}
+			if (Object.keys(oRule).length > 0) {
+				iRule++;
+				oVal['rule'+iRule] = oRule;
+			}
+		});
+		if (vOutput == 'hide') {
+			oOut.type = vOutput;
+		} else if (vOutput == 'message') {
+			if (jQuery('#bsvc_message', $bsvcForm).val()) {
+				oOut.type = vOutput;
+				oOut.message = jQuery('#bsvc_message', $bsvcForm).val();
+				if (jQuery('#bsvc_message_type', $bsvcForm).val()) {
+					oOut.message_type = jQuery('#bsvc_message_type', $bsvcForm).val();
+				}
+			}
+		} else if (vOutput == 'page') {
+			if (jQuery('#bsvc_page', $bsvcForm).val()) {
+				oOut.type = vOutput;
+				oOut.page = jQuery('#bsvc_page', $bsvcForm).val();
+			}
+		} else if (vOutput == 'template_part') {
+			if (jQuery('#bsvc_tmpl_part', $bsvcForm).val()) {
+				oOut.type = vOutput;
+				oOut.template_part = jQuery('#bsvc_tmpl_part', $bsvcForm).val();
+			}
+		}
+		if (Object.keys(oOut).length > 0) {
+			oVal.output = oOut;
+		}
+		if (Object.keys(oVal).length > 0) {
+			rawValue = JSON.stringify(oVal);
+		}
+		$bsvcModal.find('[name="bsvc_raw_value"]').val(rawValue).trigger('change');
+		$bsvcModal.find('.bs-vc-close').trigger('click');
+	});
+	jQuery(document).off('click', '.bs-vc-add-rule').on('click', '.bs-vc-add-rule', function() {
+		var bsvcTmpl = jQuery('.bs-vc-rule-template').html();
+		var c = parseInt(jQuery('.bs-vc-modal-form .bs-vc-rule-sets .bs-vc-rule:last').data('bs-index'));
+		if (c > 0) {
+			c++;
+		} else {
+			c = 1;
+		}
+		bsvcTmpl = bsvcTmpl.replace(/BSVCINDEX/g, c);
+		jQuery('.bs-vc-modal-form .bs-vc-rule-sets').append(bsvcTmpl);
+		jQuery('.bs-vc-modal-form .bs-vc-rule-sets .bs-vc-rule:last').find('select').each(function(){
+			if (!jQuery(this).hasClass('no-select2')) {
+				jQuery(this).addClass('aui-select2');
+			}
+		});
+		if (!jQuery(this).hasClass('bs-vc-rendering')) {
+			if(typeof aui_init_select2 == 'function') {
+				aui_init_select2();
+			}
+			if(typeof aui_conditional_fields == 'function') {
+				aui_conditional_fields('.bs-vc-modal-form');
+			}
+		}
+	});
+	jQuery(document).off('click', '.bs-vc-remove-rule').on('click', '.bs-vc-remove-rule', function() {
+		jQuery(this).closest('.bs-vc-rule').remove();
+	});
+}
+function sd_block_visibility_render_fields(oValue) {
+	if (typeof oValue == 'object' && oValue.rule1 && typeof oValue.rule1 == 'object') {
+		for(k = 1; k <= Object.keys(oValue).length; k++) {
+			if (oValue['rule' + k] && oValue['rule' + k].type) {
+				var oRule = oValue['rule' + k];
+				jQuery('.bs-vc-modal-form .bs-vc-add-rule').addClass('bs-vc-rendering').trigger('click');
+				var elRule = jQuery('.bs-vc-modal-form .bs-vc-rule-sets .bs-vc-rule:last');
+				jQuery('select.bsvc_rule', elRule).val(oRule.type);
+				if (oRule.type == 'user_roles' && oRule.user_roles) {
+					var user_roles = oRule.user_roles;
+					if (typeof user_roles == 'string') {
+						user_roles = user_roles.split(",");
+					}
+					if (user_roles.length) {
+						jQuery.each(user_roles, function(i, role){
+							elRule.find("input[value='" + role + "']").prop('checked', true);
+						});
+					}
+					jQuery('select.bsvc_user_roles', elRule).val(oRule.user_roles);
+				} else if (oRule.type == 'gd_field') {
+					if (oRule.field) {
+						jQuery('select.bsvc_gd_field', elRule).val(oRule.field);
+						if (oRule.condition) {
+							jQuery('select.bsvc_gd_field_condition', elRule).val(oRule.condition);
+							if (typeof oRule.search != 'undefined' && oRule.condition != 'is_empty' && oRule.condition != 'is_not_empty') {
+								jQuery('input.bsvc_gd_field_search', elRule).val(oRule.search);
+							}
+						}
+					}
+				}
+				jQuery('.bs-vc-modal-form .bs-vc-add-rule').removeClass('bs-vc-rendering');
+			}
+		}
+
+		if (oValue.output && oValue.output.type) {
+			jQuery('.bs-vc-modal-form #bsvc_output').val(oValue.output.type);
+			if (oValue.output.type == 'message' && typeof oValue.output.message != 'undefined') {
+				jQuery('.bs-vc-modal-form #bsvc_message').val(oValue.output.message);
+				if (typeof oValue.output.message_type != 'undefined') {
+					jQuery('.bs-vc-modal-form #bsvc_message_type').val(oValue.output.message_type);
+				}
+			} else if (oValue.output.type == 'page' && typeof oValue.output.page != 'undefined') {
+				jQuery('.bs-vc-modal-form #bsvc_page').val(oValue.output.page);
+			} else if (oValue.output.type == 'template_part' && typeof oValue.output.template_part != 'undefined') {
+				jQuery('.bs-vc-modal-form #bsvc_template_part').val(oValue.output.template_part);
+			}
+		}
+	}
 }
 /**
  * Try to auto-recover blocks.
@@ -1885,7 +2031,7 @@ function sd_auto_recover_blocks() {
  * Try to auto-recover OUR blocks if traditional way fails.
  */
 function sd_auto_recover_blocks_fallback() {
-    console.log('sd_auto_recover_blocks_fallback()');
+	console.log('sd_auto_recover_blocks_fallback()');
 	jQuery(".edit-site-visual-editor__editor-canvas").contents().find('div[class*=" wp-block-blockstrap-"] .block-editor-warning__actions  .block-editor-warning__action .components-button.is-primary').not(":contains('Keep as HTML')").removeAttr('disabled').click();
 }
 
@@ -2796,7 +2942,6 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 									)
 									,
 									<?php
-
 									}
 
 									$arguments = $this->group_arguments( $this->arguments );
@@ -2804,7 +2949,6 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 
 									// Do we have sections?
 									$has_sections = $arguments == $this->arguments ? false : true;
-
 
 									if($has_sections){
 									$panel_count = 0;
@@ -3378,6 +3522,42 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
                     },";
 			}elseif ( $args['type'] == 'gradient' ) {
 				$type = 'GradientPicker';
+				$extra .= "gradients: [{
+			name: 'Vivid cyan blue to vivid purple',
+			gradient:
+				'linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%)',
+			slug: 'vivid-cyan-blue-to-vivid-purple',
+		},
+		{
+			name: 'Light green cyan to vivid green cyan',
+			gradient:
+				'linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%)',
+			slug: 'light-green-cyan-to-vivid-green-cyan',
+		},
+		{
+			name: 'Luminous vivid amber to luminous vivid orange',
+			gradient:
+				'linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%)',
+			slug: 'luminous-vivid-amber-to-luminous-vivid-orange',
+		},
+		{
+			name: 'Luminous vivid orange to vivid red',
+			gradient:
+				'linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%)',
+			slug: 'luminous-vivid-orange-to-vivid-red',
+		},
+		{
+			name: 'Very light gray to cyan bluish gray',
+			gradient:
+				'linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%)',
+			slug: 'very-light-gray-to-cyan-bluish-gray',
+		},
+		{
+			name: 'Cool to warm spectrum',
+			gradient:
+				'linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%)',
+			slug: 'cool-to-warm-spectrum',
+		}],";
 
 			}elseif ( $args['type'] == 'image' ) {
 //                print_r($args);
@@ -3603,15 +3783,48 @@ if (confirmed) {
 //				$value     = "[]";
 //				$extra .= ' __experimentalExpandOnFocus: true,';
 
-			} elseif ( $args['type'] == 'alignment' ) {
+			} else if ( $args['type'] == 'alignment' ) {
 				$type = 'AlignmentToolbar'; // @todo this does not seem to work but cant find a example
-			}elseif ( $args['type'] == 'margins' ) {
+			} else if ( $args['type'] == 'margins' ) {
 
+			} else if ( $args['type'] == 'visibility_conditions' && ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) ) {
+				$type = 'TextControl';
+				$value = "(props.attributes.$key ? props.attributes.$key : '')";
+				$args['type'] = 'text';
+				$options .= 'disabled:true,';
+				$bsvc_title = esc_attr( addslashes( $args['title'] ) );
+				$bsvc_body = $this->block_visibility_fields( $args );
+				// @TODO reset button
+				$bsvc_footer = '<button type="button" class="btn btn-danger d-none">' . __( 'Reset', 'super-duper' ) . '</button><button type="button" class="btn btn-secondary bs-vc-close text-white" data-bs-dismiss="modal">' . __( 'Close', 'super-duper' ) . '</button><button type="button" class="btn btn-primary bs-vc-save">' . __( 'Save Rules', 'super-duper' ) . '</button>';
+				$after_elements .= "el('div', {className: 'components-base-control bs-vc-button-wrap'}, el(wp.components.Button, {
+						className: 'components-button components-circular-option-picker__clear is-primary is-smallx',
+						onClick: function() {
+							var sValue = props.attributes." . $key . ";
+							var oValue;
+							try {oValue = JSON.parse(sValue);} catch(err) {}
+							jQuery(document).off('show.bs.modal', '.bs-vc-modal').on('show.bs.modal', '.bs-vc-modal', function (e) {
+								if (e.target && jQuery(e.target).hasClass('bs-vc-modal')) {
+									sd_block_visibility_render_fields(oValue);
+									if (!jQuery('.bs-vc-modal-form .bs-vc-rule-sets .bs-vc-rule').length) {
+										jQuery('.bs-vc-modal-form .bs-vc-add-rule').trigger('click');
+									}
+									if(typeof aui_init_select2 == 'function') {
+										aui_init_select2();
+									}
+									jQuery('.bs-vc-modal-form').trigger('change');
+								}
+							});
+							aui_modal('" . $bsvc_title . "', '" . addslashes( $bsvc_body ) . "', '" . $bsvc_footer . "', true, 'bs-vc-modal', 'modal-lg', '');
+							jQuery(document).off('change', '#bsvc_raw_value').on('change', '#bsvc_raw_value', function(e) {
+								props.setAttributes({" . $key . ": e.target.value});
+							});
+						}
+					},
+					'" . addslashes( ! empty( $args['button_title'] ) ? $args['button_title'] : $args['title'] ) . "'
+				) ),";
 			} else {
 				return;// if we have not implemented the control then don't break the JS.
 			}
-
-
 
 			// color input does not show the labels so we add them
 			if($args['type']=='color'){
@@ -3632,54 +3845,28 @@ if (confirmed) {
 			echo $icon;
 			?>
 			el( <?php echo $args['type'] == 'image' || $args['type'] == 'images' ? $type  : "wp.components.".$type; ?>, {
-			label: <?php
-			if(empty($args['title'])){
-                echo "''";
-			}elseif(empty($args['row']) && !empty($args['device_type'])){
-                ?>el('label', {
-									className: 'components-base-control__label',
-									style: {width:"100%"}
-								},
-								el('span',{dangerouslySetInnerHTML: {__html: '<?php echo addslashes( $args['title'] ) ?>'}}),
-								<?php if($device_type_icon){ ?>
-                                    deviceType == '<?php echo $device_type;?>' && el('span',{dangerouslySetInnerHTML: {__html: '<?php echo $device_type_icon; ?>'},title: deviceType + ": Set preview mode to change",style: {right:"0",position:"absolute",color:"var(--wp-admin-theme-color)"}})
-								<?php
-                                }
-                                ?>
-
-
-							)<?php
-
-			}else{
-                 ?>'<?php echo addslashes( $args['title'] ); ?>'<?php
-
-			}
-
-			?>,
-			help: <?php if ( isset( $args['desc'] ) ) {
-				echo "el('span',{dangerouslySetInnerHTML: {__html: '".wp_kses_post( addslashes($args['desc']) )."'}})";
-			}else{ echo "''"; } ?>,
+			label: <?php if ( empty( $args['title'] ) ) { echo "''"; } else if ( empty( $args['row'] ) && ! empty( $args['device_type'] ) ) { ?>el('label',{className:'components-base-control__label',style:{width:"100%"}},el('span',{dangerouslySetInnerHTML: {__html: '<?php echo addslashes( $args['title'] ) ?>'}}),<?php if ( $device_type_icon ) { ?>deviceType == '<?php echo $device_type;?>' && el('span',{dangerouslySetInnerHTML: {__html: '<?php echo $device_type_icon; ?>'},title: deviceType + ": Set preview mode to change",style: {right:"0",position:"absolute",color:"var(--wp-admin-theme-color)"}})<?php } ?>)<?php
+			} else { ?>'<?php echo addslashes( trim( esc_html( $args['title'] ) ) ); ?>'<?php } ?>,
+			help: <?php echo ( isset( $args['desc'] ) ? "el('span', {dangerouslySetInnerHTML: {__html: '" . trim( wp_kses_post( addslashes( $args['desc'] ) ) ) . "'}})" : "''" ); ?>,
 			value: <?php echo $value; ?>,
 			<?php if ( $type == 'TextControl' && $args['type'] != 'text' ) {
 				echo "type: '" . addslashes( $args['type'] ) . "',";
 			} ?>
 			<?php if ( ! empty( $args['placeholder'] ) ) {
-				echo "placeholder: '" . addslashes( $args['placeholder'] ) . "',";
+				echo "placeholder: '" . addslashes( trim( esc_html( $args['placeholder'] ) ) ) . "',";
 			} ?>
 			<?php echo $options; ?>
 			<?php echo $extra; ?>
 			<?php echo $custom_attributes; ?>
-			<?php echo $onchangecomplete;
-            if($onchange){
-            ?>
+			<?php echo $onchangecomplete; ?>
+			<?php if ( $onchange ) { ?>
 			onChange: function ( <?php echo $key; ?> ) {
-			<?php echo $onchange; ?>
+				<?php echo $onchange; ?>
 			}
-			<?php }?>
-			} <?php echo $inside_elements; ?> ),
+			<?php } ?>
+		} <?php echo $inside_elements; ?> ),
 			<?php
 			echo $after_elements;
-
 		}
 
 		/**
@@ -3883,8 +4070,11 @@ if (confirmed) {
 		 * @param array $instance
 		 */
 		public function widget( $args, $instance ) {
+			if ( ! is_array( $args ) ) {
+				$args = array();
+			}
 
-			// get the filtered values
+			// Get the filtered values
 			$argument_values = $this->argument_values( $instance );
 			$argument_values = $this->string_to_bool( $argument_values );
 			$output          = $this->output( $argument_values, $args );
@@ -4063,6 +4253,23 @@ if (confirmed) {
 		}
 
 		/**
+		 * Check for Kallyas theme Zion builder preview.
+		 *
+		 * @since 1.1.22
+		 *
+		 * @return bool True when preview page otherwise false.
+		 */
+		public function is_kallyas_zion_preview() {
+			$result = false;
+
+			if ( function_exists( 'znhg_kallyas_theme_config' ) && ! empty( $_REQUEST['zn_pb_edit'] ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
 		 * General function to check if we are in a preview situation.
 		 *
 		 * @return bool
@@ -4083,6 +4290,8 @@ if (confirmed) {
 			} elseif ( $this->is_fusion_preview() ) {
 				$preview = true;
 			} elseif ( $this->is_oxygen_preview() ) {
+				$preview = true;
+			} elseif( $this->is_kallyas_zion_preview() ) {
 				$preview = true;
 			} elseif( $this->is_block_content_call() ) {
 				$preview = true;
@@ -4315,18 +4524,10 @@ if (confirmed) {
 				$custom_attributes = $this->array_to_attributes( $args['custom_attributes'], true );
 			}
 
-
 			// before wrapper
 			?>
-			<p class="sd-argument <?php echo esc_attr( $class ); ?>"
-			data-argument='<?php echo esc_attr( $args['name'] ); ?>'
-			data-element_require='<?php if ( $element_require ) {
-				echo $this->convert_element_require( $element_require );
-			} ?>'
-			>
+			<p class="sd-argument <?php echo esc_attr( $class ); ?>" data-argument='<?php echo esc_attr( $args['name'] ); ?>' data-element_require='<?php if ( $element_require ) { echo $this->convert_element_require( $element_require );} ?>'>
 			<?php
-
-
 			switch ( $args['type'] ) {
 				//array('text','password','number','email','tel','url','color')
 				case "text":
@@ -4337,14 +4538,8 @@ if (confirmed) {
 				case "url":
 				case "color":
 					?>
-					<label
-						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args );?><?php echo $this->widget_field_desc( $args ); ?></label>
-					<input <?php echo $placeholder; ?> class="widefat"
-						<?php echo $custom_attributes; ?>
-						                               id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-						                               name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
-						                               type="<?php echo esc_attr( $args['type'] ); ?>"
-						                               value="<?php echo esc_attr( $value ); ?>">
+					<label for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args );?><?php echo $this->widget_field_desc( $args ); ?></label>
+					<input <?php echo $placeholder; ?> class="widefat" <?php echo $custom_attributes; ?> id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="<?php echo esc_attr( $args['type'] ); ?>" value="<?php echo esc_attr( $value ); ?>">
 					<?php
 
 					break;
@@ -4356,20 +4551,12 @@ if (confirmed) {
 						}
 					}
 					?>
-					<label
-						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
-					<select <?php echo $placeholder; ?> class="widefat"
-						<?php echo $custom_attributes; ?>
-						                                id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-						                                name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) );
-						                                if ( $multiple ) {
-							                                echo "[]";
-						                                } ?>"
+					<label for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+					<select <?php echo $placeholder; ?> class="widefat" <?php echo $custom_attributes; ?> id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); if ( $multiple ) { echo "[]"; } ?>"
 						<?php if ( $multiple ) {
 							echo "multiple";
 						} //@todo not implemented yet due to gutenberg not supporting it
-						?>
-					>
+						?>>
 						<?php
 
 						if ( ! empty( $args['options'] ) ) {
@@ -4388,45 +4575,27 @@ if (confirmed) {
 					break;
 				case "checkbox":
 					?>
-					<input <?php echo $placeholder; ?>
-						<?php checked( 1, $value, true ) ?>
-						<?php echo $custom_attributes; ?>
-						class="widefat" id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-						name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="checkbox"
-						value="1">
-					<label
-						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args );?><?php echo $this->widget_field_desc( $args ); ?></label>
+					<input <?php echo $placeholder; ?> <?php checked( 1, $value, true ) ?> <?php echo $custom_attributes; ?> class="widefat" id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="checkbox" value="1">
+					<label for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args );?><?php echo $this->widget_field_desc( $args ); ?></label>
 					<?php
 					break;
 				case "textarea":
 					?>
-					<label
-						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
-					<textarea <?php echo $placeholder; ?> class="widefat"
-						<?php echo $custom_attributes; ?>
-						                                  id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-						                                  name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
-					><?php echo esc_attr( $value ); ?></textarea>
+					<label for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+					<textarea <?php echo $placeholder; ?> class="widefat" <?php echo $custom_attributes; ?> id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"><?php echo esc_attr( $value ); ?></textarea>
 					<?php
 
 					break;
 				case "hidden":
 					?>
-					<input id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-					       name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="hidden"
-					       value="<?php echo esc_attr( $value ); ?>">
+					<input id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="hidden" value="<?php echo esc_attr( $value ); ?>">
 					<?php
 					break;
 				default:
 					echo "No input type found!"; // @todo we need to add more input types.
 			}
-
 			// after wrapper
-			?>
-			</p>
-			<?php
-
-
+			?></p><?php
 		}
 
 		public function get_widget_icon($icon = 'box-top', $title = ''){
@@ -4683,6 +4852,226 @@ if (confirmed) {
 			);
 
 			$content = strtr( $content, $trans );
+
+			return $content;
+		}
+
+		public function block_visibility_fields( $args ) {
+			$value = ! empty( $args['value'] ) ? esc_attr( $args['value'] ) : '';
+			$content = '<div class="bs-vc-rule-template d-none">';
+				$content .= '<div class="p-3 pb-0 mb-3 border border-1 rounded-1 position-relative bs-vc-rule" data-bs-index="BSVCINDEX" >';
+					$content .= '<div class="row">';
+						$content .= '<div class="col-sm-12">';
+							$content .= '<div class="bs-rule-action position-absolute top-0 end-0 p-2 zindex-5"><span class="text-danger c-pointer bs-vc-remove-rule" title="' . esc_attr__( 'Remove Rule', 'super-duper' ) . '"><i class="fas fa-circle-minus fs-6"></i></span></div>';
+							$content .= aui()->select(
+								array(
+									'id'          => 'bsvc_rule_BSVCINDEX',
+									'name'        => 'bsvc_rule_BSVCINDEX',
+									'label'       => __( 'Rule', 'super-duper' ),
+									'placeholder' => __( 'Select Rule...', 'super-duper' ),
+									'class'       => 'bsvc_rule form-select-sm',
+									'options'     => sd_visibility_rules_options(),
+									'default'     => '',
+									'value'       => '',
+									'label_type'  => '',
+									'select2'     => false,
+									'input_group_left' => __( 'Rule:', 'super-duper' ),
+									'extra_attributes' => array(
+										'data-minimum-results-for-search' => '-1'
+									)
+								)
+							);
+
+						$content .= '</div>';
+
+						if ( class_exists( 'GeoDirectory' ) ) {
+							$content .= '<div class="col-md-7 col-sm-12">';
+
+								$content .= aui()->select(
+									array(
+										'id'          => 'bsvc_gd_field_BSVCINDEX',
+										'name'        => 'bsvc_gd_field_BSVCINDEX',
+										'label'       => __( 'FIELD', 'super-duper' ),
+										'placeholder' => __( 'FIELD', 'super-duper' ),
+										'class'       => 'bsvc_gd_field form-select-sm',
+										'options'     => sd_visibility_gd_field_options(),
+										'default'     => '',
+										'value'       => '',
+										'label_type'  => '',
+										'select2'     => false,
+										'element_require'  => '[%bsvc_rule_BSVCINDEX%]=="gd_field"',
+										'extra_attributes' => array(
+											'data-minimum-results-for-search' => '-1'
+										)
+									)
+								);
+
+							$content .= '</div>';
+							$content .= '<div class="col-md-5 col-sm-12">';
+
+								$content .= aui()->select(
+									array(
+										'id'          => 'bsvc_gd_field_condition_BSVCINDEX',
+										'name'        => 'bsvc_gd_field_condition_BSVCINDEX',
+										'label'       => __( 'CONDITION', 'super-duper' ),
+										'placeholder' => __( 'CONDITION', 'super-duper' ),
+										'class'       => 'bsvc_gd_field_condition form-select-sm',
+										'options'     => sd_visibility_field_condition_options(),
+										'default'     => '',
+										'value'       => '',
+										'label_type'  => '',
+										'select2'     => false,
+										'element_require'  => '[%bsvc_rule_BSVCINDEX%]=="gd_field"',
+										'extra_attributes' => array(
+											'data-minimum-results-for-search' => '-1'
+										)
+									)
+								);
+
+							$content .= '</div>';
+							$content .= '<div class="col-sm-12">';
+
+								$content .= aui()->input(
+									array(
+										'type'            => 'text',
+										'id'              => 'bsvc_gd_field_search_BSVCINDEX',
+										'name'            => 'bsvc_gd_field_search_BSVCINDEX',
+										'label'           => __( 'VALUE TO MATCH', 'super-duper' ),
+										'class'           => 'bsvc_gd_field_search form-control-sm',
+										'placeholder'     => __( 'VALUE TO MATCH', 'super-duper' ),
+										'label_type'      => '',
+										'value'           => '',
+										'element_require' => '([%bsvc_rule_BSVCINDEX%]=="gd_field" && [%bsvc_gd_field_condition_BSVCINDEX%] && [%bsvc_gd_field_condition_BSVCINDEX%]!="is_empty" && [%bsvc_gd_field_condition_BSVCINDEX%]!="is_not_empty")'
+									)
+								);
+
+							$content .= '</div>';
+						}
+
+					$content .= '</div>';
+
+					$content .= '<div class="row aui-conditional-field" data-element-require="jQuery(form).find(\'[name=bsvc_rule_BSVCINDEX]\').val()==\'user_roles\'" data-argument="bsvc_user_roles_BSVCINDEX_1"><label for="bsvc_user_roles_BSVCINDEX_1" class="form-label mb-3">' . __( 'Select User Roles:', 'super-duper' ) . '</label>';
+						$role_options = sd_user_roles_options();
+
+						$role_option_i = 0;
+						foreach ( $role_options as $role_option_key => $role_option_name ) {
+							$role_option_i++;
+
+							$content .= '<div class="col-sm-6">';
+							$content .= aui()->input(
+								array(
+									'id'               => 'bsvc_user_roles_BSVCINDEX_' . $role_option_i,
+									'name'             => 'bsvc_user_roles_BSVCINDEX[]',
+									'type'             => 'checkbox',
+									'label'            => $role_option_name,
+									'label_type'       => 'hidden',
+									'class'            => 'bsvc_user_roles',
+									'value'            => $role_option_key,
+									'switch'           => 'md',
+									'no_wrap'          => true
+								)
+							);
+							$content .= '</div>';
+						}
+					$content .= '</div>';
+				$content .= '</div>';
+			$content .= '</div>';
+			$content .= '<form id="bs-vc-modal-form" class="bs-vc-modal-form">';
+			$content .= '<div class="bs-vc-rule-sets"></div>';
+			$content .= '<div class="row"><div class="col-sm-12 text-center pt-1 pb-4"><button type="button" class="btn btn-sm btn-primary d-block w-100 bs-vc-add-rule"><i class="fas fa-plus"></i> ' . __( 'Add Rule', 'super-duper' ) . '</button></div></div>';
+			$content .= '<div class="row"><div class="col-md-6 col-sm-12">';
+			$content .= aui()->select(
+				array(
+					'id'          => 'bsvc_output',
+					'name'        => 'bsvc_output',
+					'label'       => __( 'What should happen if rules met.', 'super-duper' ),
+					'placeholder' => __( 'Default Output', 'super-duper' ),
+					'class'       => 'bsvc_output form-select-sm',
+					'options'     => sd_visibility_output_options(),
+					'default'     => '',
+					'value'       => '',
+					'label_type'  => 'top',
+					'select2'     => true,
+					'extra_attributes' => array(
+						'data-minimum-results-for-search' => '-1'
+					)
+				)
+			);
+
+			$content .= '</div><div class="col-md-6 col-sm-12">';
+
+			$content .= aui()->select(
+				array(
+					'id'              => 'bsvc_page',
+					'name'            => 'bsvc_page',
+					'label'           => __( 'Page Content', 'super-duper' ),
+					'placeholder'     => __( 'Select Page ID...', 'super-duper' ),
+					'class'           => 'bsvc_page form-select-sm',
+					'options'         => sd_template_page_options(),
+					'default'         => '',
+					'value'           => '',
+					'label_type'      => 'top',
+					'select2'         => true,
+					'element_require' => '[%bsvc_output%]=="page"'
+				)
+			);
+
+			$content .= aui()->select(
+				array(
+					'id'          => 'bsvc_tmpl_part',
+					'name'        => 'bsvc_tmpl_part',
+					'label'       => __( 'Template Part', 'super-duper' ),
+					'placeholder' => __( 'Select Template Part...', 'super-duper' ),
+					'class'       => 'bsvc_tmpl_part form-select-sm',
+					'options'     => sd_template_part_options(),
+					'default'     => '',
+					'value'       => '',
+					'label_type'  => 'top',
+					'select2'     => true,
+					'element_require'  => '[%bsvc_output%]=="template_part"',
+					'extra_attributes' => array(
+						'data-minimum-results-for-search' => '-1'
+					)
+				)
+			);
+
+			$content .= aui()->select(
+				array(
+					'id'               => 'bsvc_message_type',
+					'name'             => 'bsvc_message_type',
+					'label'            => __( 'Custom Message Type', 'super-duper' ),
+					'placeholder'      => __( 'Default (none)', 'super-duper' ),
+					'class'            => 'bsvc_message_type form-select-sm',
+					'options'          => sd_aui_colors(),
+					'default'          => '',
+					'value'            => '',
+					'label_type'       => 'top',
+					'select2'          => true,
+					'element_require'  => '[%bsvc_output%]=="message"',
+					'extra_attributes' => array(
+						'data-minimum-results-for-search' => '-1'
+					)
+				)
+			);
+
+			$content .= '</div><div class="col-sm-12">';
+
+			$content .= aui()->input(
+				array(
+					'type'            => 'text',
+					'id'              => 'bsvc_message',
+					'name'            => 'bsvc_message',
+					'label'           => '',
+					'class'           => 'bsvc_message form-control-sm',
+					'placeholder'     => __( 'CUSTOM MESSAGE TO SHOW', 'super-duper' ),
+					'label_type'      => '',
+					'value'           => '',
+					'form_group_class' => ' ',
+					'element_require' => '[%bsvc_output%]=="message"',
+				)
+			);
+
+			$content .= '</div></div></form><input type="hidden" id="bsvc_raw_value" name="bsvc_raw_value" value="' . $value . '">';
 
 			return $content;
 		}

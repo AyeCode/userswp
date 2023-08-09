@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
-Tested up to: 6.2
-Stable tag: 1.2.3.20
+Tested up to: 6.3
+Stable tag: 1.2.3.21
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -145,6 +145,11 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.3.21 =
+* Allow to dismiss notice displayed when author archive disabled from Yoast SEO- ADDED
+* AyeCode UI updated to v0.1.97 - UPDATED
+* Super Duper updated to v1.1.23 - UPDATED
 
 = 1.2.3.20 =
 * Allow to access register form using 'user_type' argument in register page URL - ADDED
