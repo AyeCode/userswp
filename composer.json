@@ -21,5 +21,10 @@
     "ayecode/ayecode-connect-helper": "^1.0",
     "ayecode/wp-deactivation-survey": "^1.0"
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "dev",
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true
+    }
+  }
 }

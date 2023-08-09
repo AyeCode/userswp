@@ -1,21 +1,21 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.3.20\n"
+"Project-Id-Version: UsersWP 1.2.3.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-19 14:49+0530\n"
-"PO-Revision-Date: 2023-06-19 14:49+0530\n"
+"POT-Creation-Date: 2023-08-09 18:11+0530\n"
+"PO-Revision-Date: 2023-08-09 18:11+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e;_n:1,2;_n_noop:1,2;"
 "_nx:1,2;_x;_ex;esc_attr_e;esc_attr__\n"
 "X-Poedit-Basepath: ..\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: vendor\n"
 
@@ -321,7 +321,7 @@ msgstr ""
 msgid "UsersWP"
 msgstr ""
 
-#: admin/class-admin.php:297 admin/class-admin.php:884
+#: admin/class-admin.php:297 admin/class-admin.php:806
 msgid "Activation email has been sent!"
 msgstr ""
 
@@ -343,70 +343,66 @@ msgstr ""
 msgid "Pending Email Activation"
 msgstr ""
 
-#: admin/class-admin.php:615
+#: admin/class-admin.php:614
 msgid "UsersWP Account Details"
 msgstr ""
 
-#: admin/class-admin.php:646
+#: admin/class-admin.php:645
 msgid "Change Avatar"
 msgstr ""
 
-#: admin/class-admin.php:648 templates/bootstrap/modal-profile-image.php:16
+#: admin/class-admin.php:647 templates/bootstrap/modal-profile-image.php:16
 msgid "Upload Avatar"
 msgstr ""
 
-#: admin/class-admin.php:658
+#: admin/class-admin.php:657
 msgid "Change Banner"
 msgstr ""
 
-#: admin/class-admin.php:660 templates/bootstrap/modal-profile-image.php:19
+#: admin/class-admin.php:659 templates/bootstrap/modal-profile-image.php:19
 msgid "Upload Banner"
 msgstr ""
 
-#: admin/class-admin.php:697 admin/class-admin.php:700
-msgid "Switch form"
-msgstr ""
-
-#: admin/class-admin.php:792 admin/class-admin.php:809
+#: admin/class-admin.php:714 admin/class-admin.php:731
 msgid "Resend Activation"
 msgstr ""
 
-#: admin/class-admin.php:793
+#: admin/class-admin.php:715
 msgid "Activate User"
 msgstr ""
 
-#: admin/class-admin.php:810
+#: admin/class-admin.php:732
 msgid "Activate Users"
 msgstr ""
 
-#: admin/class-admin.php:908
+#: admin/class-admin.php:830
 msgid "View UsersWP Documentation"
 msgstr ""
 
-#: admin/class-admin.php:909
+#: admin/class-admin.php:831
 msgid "Visit UsersWP support"
 msgstr ""
 
-#: admin/class-admin.php:910
+#: admin/class-admin.php:832
 msgid "View translations"
 msgstr ""
 
-#: admin/class-admin.php:930 admin/class-admin.php:994
+#: admin/class-admin.php:852 admin/class-admin.php:916
 #: includes/class-forms.php:368
 msgid "Something went wrong. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:941
+#: admin/class-admin.php:863
 #, php-format
 msgid "Form %d"
 msgstr ""
 
-#: admin/class-admin.php:985 admin/settings/class-formbuilder.php:293
+#: admin/class-admin.php:907 admin/settings/class-formbuilder.php:293
 #: widgets/register.php:33
 msgid "Form"
 msgstr ""
 
-#: admin/class-admin.php:1045
+#: admin/class-admin.php:967
 msgid "Security nonce failed. Please try again."
 msgstr ""
 
@@ -430,8 +426,8 @@ msgstr ""
 #: admin/class-uwp-admin-help.php:93
 #, php-format
 msgid ""
-"Should you need help understanding, using, or extending UsersWP <a href="
-"\"%1$s\">please read our documentation</a>. You will find all kinds of "
+"Should you need help understanding, using, or extending UsersWP <a "
+"href=\"%1$s\">please read our documentation</a>. You will find all kinds of "
 "resources including snippets, tutorials and much more.,"
 msgstr ""
 
@@ -459,11 +455,11 @@ msgstr ""
 #: admin/class-uwp-admin-help.php:103
 #, php-format
 msgid ""
-"If you find a bug within UsersWP core you can create a ticket via <a href="
-"\"%1$s\">Github issues</a>. Ensure you read the <a href=\"%2$s"
-"\">contribution guide</a> prior to submitting your report. To help us solve "
-"your issue, please be as descriptive as possible and include your <a href="
-"\"%3$s\">system status report</a>"
+"If you find a bug within UsersWP core you can create a ticket via <a "
+"href=\"%1$s\">Github issues</a>. Ensure you read the <a "
+"href=\"%2$s\">contribution guide</a> prior to submitting your report. To "
+"help us solve your issue, please be as descriptive as possible and include "
+"your <a href=\"%3$s\">system status report</a>"
 msgstr ""
 
 #: admin/class-uwp-admin-help.php:104
@@ -2797,8 +2793,8 @@ msgstr ""
 #: admin/views/html-admin-page-addons.php:112
 #, php-format
 msgid ""
-"All of our UsersWP Addons can be found on UsersWP.io here: <a href=\"%s"
-"\">UsersWP Addons</a>"
+"All of our UsersWP Addons can be found on UsersWP.io here: <a "
+"href=\"%s\">UsersWP Addons</a>"
 msgstr ""
 
 #: admin/views/html-admin-page-addons.php:115
@@ -3212,8 +3208,8 @@ msgstr ""
 #, php-format
 msgid ""
 "If you are modifying userswp on a parent theme that you did not build "
-"personally we recommend using a child theme. See: <a href=\"%s\" target="
-"\"_blank\">How to create a child theme</a>"
+"personally we recommend using a child theme. See: <a href=\"%s\" "
+"target=\"_blank\">How to create a child theme</a>"
 msgstr ""
 
 #: admin/views/html-admin-page-status-report.php:587
@@ -4006,12 +4002,16 @@ msgstr ""
 msgid "Try Now"
 msgstr ""
 
-#: includes/class-notices.php:177
+#: includes/class-notices.php:179
 msgid "Yoast SEO has disabled user profiles, please enable them."
 msgstr ""
 
-#: includes/class-notices.php:178
+#: includes/class-notices.php:181
 msgid "View Settings"
+msgstr ""
+
+#: includes/class-notices.php:183
+msgid "Dismiss"
 msgstr ""
 
 #: includes/class-pages.php:195
@@ -5100,8 +5100,8 @@ msgstr ""
 #, php-format
 msgid ""
 "You can not access this page directly. Follow the password reset link you "
-"received in your email. To request new password reset link <a href=\"%s"
-"\">visit here</a>."
+"received in your email. To request new password reset link <a "
+"href=\"%s\">visit here</a>."
 msgstr ""
 
 #: templates/bootstrap/search-form.php:11

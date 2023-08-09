@@ -214,11 +214,11 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Border' ),
+		'title'    => __( 'Border', 'super-duper' ),
 		'options'  => array(),
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'geodirectory' ),
+		'group'    => __( 'Wrapper Styles', 'super-duper' ),
 	);
 
 	// title
@@ -291,7 +291,7 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 		$defaults['element_require'] = '[%border%]';
 
 	} else {
-		$defaults['title']   = __( 'Border color' );
+		$defaults['title']   = __( 'Border color', 'super-duper' );
 		$defaults['options'] = array(
 			                       ''  => __( 'Default', 'super-duper' ),
 			                       '0' => __( 'None', 'super-duper' ),
@@ -476,7 +476,7 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 			'title'           => __( 'Fixed background', 'super-duper' ),
 			'default'         => '',
 			'desc_tip'        => true,
-			'group'           => ! empty( $overwrite_image['group'] ) ? $overwrite_image['group'] : __( 'Background' ),
+			'group'           => ! empty( $overwrite_image['group'] ) ? $overwrite_image['group'] : __( 'Background', 'super-duper' ),
 			'element_require' => '( [%' . $type . '%]=="" || [%' . $type . '%]=="custom-color" || [%' . $type . '%]=="custom-gradient" || [%' . $type . '%]=="transparent" )',
 
 		);
@@ -1034,6 +1034,7 @@ function sd_aui_colors( $include_branding = false, $include_outlines = false, $o
 	$theme_colors['info']      = __( 'Info', 'super-duper' );
 	$theme_colors['light']     = __( 'Light', 'super-duper' );
 	$theme_colors['dark']      = __( 'Dark', 'super-duper' );
+	$theme_colors['black']     = __( 'Black', 'super-duper' );
 	$theme_colors['white']     = __( 'White', 'super-duper' );
 	$theme_colors['purple']    = __( 'Purple', 'super-duper' );
 	$theme_colors['salmon']    = __( 'Salmon', 'super-duper' );
@@ -1092,7 +1093,7 @@ function sd_aui_colors( $include_branding = false, $include_outlines = false, $o
 }
 
 /**
- * Get the AUI brangin colors.
+ * Get the AUI branding colors.
  *
  * @return array
  */
@@ -1242,7 +1243,7 @@ function sd_get_sticky_offset_input( $type = 'top', $overwrite = array() ) {
 	$defaults = array(
 		'type'            => 'number',
 		'title'           => __( 'Sticky offset', 'super-duper' ),
-		//'desc' =>  __('Sticky offset'),
+		//'desc' =>  __( 'Sticky offset', 'super-duper' ),
 		'default'         => '',
 		'desc_tip'        => true,
 		'group'           => __( 'Wrapper Styles', 'super-duper' ),
@@ -1538,7 +1539,7 @@ function sd_get_anchor_input( $type = 'anchor', $overwrite = array() ) {
 	$defaults = array(
 		'type'     => 'text',
 		'title'    => __( 'HTML anchor', 'super-duper' ),
-		'desc'     => __( 'Enter a word or two — without spaces — to make a unique web address just for this block, called an “anchor.” Then, you’ll be able to link directly to this section of your page.' ),
+		'desc'     => __( 'Enter a word or two — without spaces — to make a unique web address just for this block, called an “anchor.” Then, you’ll be able to link directly to this section of your page.', 'super-duper' ),
 		'default'  => '',
 		'desc_tip' => true,
 		'group'    => __( 'Advanced', 'super-duper' ),
@@ -1682,7 +1683,7 @@ function sd_get_flex_justify_content_input( $type = 'flex_justify_content', $ove
 
 	$defaults = array(
 		'type'            => 'select',
-		'title'           => __( 'Justify content' ),
+		'title'           => __( 'Justify content', 'super-duper' ),
 		'options'         => $options,
 		'default'         => '',
 		'desc_tip'        => true,
@@ -2023,29 +2024,6 @@ function sd_get_scrollbars_input( $type = 'scrollbars', $overwrite = array() ) {
 		'default'  => '',
 		'desc_tip' => true,
 		'group'    => __( 'Wrapper Styles', 'super-duper' ),
-	);
-
-	$input = wp_parse_args( $overwrite, $defaults );
-
-	return $input;
-}
-
-/**
- * This is a placeholder function for the visibility conditions input.
- *
- * @param $type
- * @param $overwrite
- *
- * @return array
- */
-function sd_get_visibility_conditions_input( $type = 'visibility_conditions', $overwrite = array() ) {
-
-	$defaults = array(
-		'type'     => 'hidden',
-		'title'    => __( '', 'super-duper' ),
-		'default'  => '',
-		'desc_tip' => true,
-		'group'    => __( '', 'super-duper' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -2684,8 +2662,637 @@ function sd_get_class_build_keys() {
 		'h100',
 		'overflow',
 		'scrollbars',
-		'float-MTD',
+		'float-MTD'
 	);
 
 	return apply_filters( 'sd_class_build_keys', $keys );
+}
+
+/**
+ * This is a placeholder function for the visibility conditions input.
+ *
+ * @param $type
+ * @param $overwrite
+ *
+ * @return array
+ */
+function sd_get_visibility_conditions_input( $type = 'visibility_conditions', $overwrite = array() ) {
+	$defaults = array(
+		'type'         => 'visibility_conditions',
+		'title'        => __( 'Block Visibility', 'super-duper' ),
+		'button_title' => __( 'Set Block Visibility', 'super-duper' ),
+		'default'      => '',
+		'desc_tip'     => true,
+		'group'        => __( 'Visibility Conditions', 'super-duper' ),
+	);
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+	return $input;
+}
+
+/**
+ * Get a array of user roles.
+ *
+ *
+ *
+ * @param array $exclude An array of roles to exclude from the return array.
+ * @return array An array of roles.
+ */
+function sd_user_roles_options( $exclude = array() ) {
+	$user_roles = array();
+
+	if ( !function_exists('get_editable_roles') ) {
+		require_once( ABSPATH . '/wp-admin/includes/user.php' );
+	}
+
+	$roles = get_editable_roles();
+
+	foreach ( $roles as $role => $data ) {
+		if ( ! ( ! empty( $exclude ) && in_array( $role, $exclude ) ) ) {
+			$user_roles[ esc_attr( $role ) ] = translate_user_role( $data['name'] );
+		}
+	}
+
+	return apply_filters( 'sd_user_roles_options', $user_roles );
+}
+
+/**
+ * Get visibility conditions rule options.
+ *
+ *
+ *
+ * @return array Rule options.
+ */
+function sd_visibility_rules_options() {
+	$options = array(
+		'logged_in'  => __( 'Logged In', 'super-duper' ),
+		'logged_out' => __( 'Logged Out', 'super-duper' ),
+		'user_roles' => __( 'Specific User Roles', 'super-duper' )
+	);
+
+	if ( class_exists( 'GeoDirectory' ) ) {
+		$options['gd_field'] = __( 'GD Field', 'super-duper' );
+	}
+
+	return apply_filters( 'sd_visibility_rules_options', $options );
+}
+
+/**
+ * Get visibility GD field options.
+ *
+ * @return array
+ */
+function sd_visibility_gd_field_options(){
+	$fields = geodir_post_custom_fields( '', 'all', 'all', 'none' );
+
+	$keys = array();
+	if ( ! empty( $fields ) ) {
+		foreach( $fields as $field ) {
+			if ( apply_filters( 'geodir_badge_field_skip_key', false, $field ) ) {
+				continue;
+			}
+
+			$keys[ $field['htmlvar_name'] ] = $field['htmlvar_name'] . ' ( ' . __( $field['admin_title'], 'geodirectory' ) . ' )';
+
+			// Extra address fields
+			if ( $field['htmlvar_name'] == 'address' && ( $address_fields = geodir_post_meta_address_fields( '' ) ) ) {
+				foreach ( $address_fields as $_field => $args ) {
+					if ( $_field != 'map_directions' && $_field != 'street' ) {
+						$keys[ $_field ] = $_field . ' ( ' . $args['frontend_title'] . ' )';
+					}
+				}
+			}
+		}
+	}
+
+	$keys['post_date'] = 'post_date ( ' . __( 'post date', 'geodirectory' ) . ' )';
+	$keys['post_modified'] = 'post_modified ( ' . __( 'post modified', 'geodirectory' ) . ' )';
+	$keys['default_category'] = 'default_category ( ' . __( 'Default Category', 'geodirectory' ) . ' )';
+	$keys['post_id'] = 'post_id ( ' . __( 'post id', 'geodirectory' ) . ' )';
+	$keys['post_status'] = 'post_status ( ' . __( 'Post Status', 'geodirectory' ) . ' )';
+
+	$options = apply_filters( 'geodir_badge_field_keys', $keys );
+
+	return apply_filters( 'sd_visibility_gd_field_options', $options );
+}
+
+/**
+ * Get visibility field conditions options.
+ *
+ * @return array
+ */
+function sd_visibility_field_condition_options(){
+	$options = array(
+		'is_empty' => __( 'is empty', 'super-duper' ),
+		'is_not_empty' => __( 'is not empty', 'super-duper' ),
+		'is_equal' => __( 'is equal', 'super-duper' ),
+		'is_not_equal' => __( 'is not equal', 'super-duper' ),
+		'is_greater_than' => __( 'is greater than', 'super-duper' ),
+		'is_less_than' => __( 'is less than', 'super-duper' ),
+		'is_contains' => __( 'is contains', 'super-duper' ),
+		'is_not_contains' => __( 'is not contains', 'super-duper' ),
+	);
+
+	return apply_filters( 'sd_visibility_field_condition_options', $options );
+}
+
+/**
+ * Get visibility conditions output options.
+ *
+ *
+ *
+ * @return array Template type options.
+ */
+function sd_visibility_output_options() {
+	$options = array(
+		'hide'          => __( 'Hide Block', 'super-duper' ),
+		'message'       => __( 'Show Custom Message', 'super-duper' ),
+		'page'          => __( 'Show Page Content', 'super-duper' ),
+		'template_part' => __( 'Show Template Part', 'super-duper' ),
+	);
+
+	return apply_filters( 'sd_visibility_output_options', $options );
+}
+
+/**
+ * Get the template page options.
+ *
+ *
+ *
+ * @param array $args Array of arguments.
+ * @return array Template page options.
+ */
+function sd_template_page_options( $args = array() ) {
+	global $sd_tmpl_page_options;
+
+	if ( ! empty( $sd_tmpl_page_options ) ) {
+		return $sd_tmpl_page_options;
+	}
+
+	$args = wp_parse_args( $args, array(
+		'child_of'    => 0,
+		'sort_column' => 'post_title',
+		'sort_order'  => 'ASC'
+	) );
+
+	$exclude_pages = array();
+	if ( $page_on_front = get_option( 'page_on_front' ) ) {
+		$exclude_pages[] = $page_on_front;
+	}
+
+	if ( $page_for_posts = get_option( 'page_for_posts' ) ) {
+		$exclude_pages[] = $page_for_posts;
+	}
+
+	if ( ! empty( $exclude_pages ) ) {
+		$args['exclude'] = $exclude_pages;
+	}
+
+	$pages = get_pages( $args );
+
+	$options = array( '' => __( 'Select Page...', 'super-duper' ) );
+	if ( ! empty( $pages ) ) {
+		foreach ( $pages as $page ) {
+			if ( ! empty( $page->ID ) && ! empty( $page->post_title ) ) {
+				$options[ $page->ID ] = $page->post_title . ' (#' . $page->ID . ')';
+			}
+		}
+	}
+
+	$sd_tmpl_page_options = $options;
+
+	return apply_filters( 'sd_template_page_options', $options );
+}
+
+/**
+ * Get the template part options.
+ *
+ *
+ *
+ * @param array $args Array of arguments.
+ * @return array Template part options.
+ */
+function sd_template_part_options( $args = array() ) {
+	global $sd_tmpl_part_options;
+
+	if ( ! empty( $sd_tmpl_part_options ) ) {
+		return $sd_tmpl_part_options;
+	}
+
+	$options = array( '' => __( 'Select Template Part...', 'super-duper' ) );
+
+	$parts = get_block_templates( array(), 'wp_template_part' );
+
+	if ( ! empty( $parts ) ) {
+		foreach ( $parts as $part ) {
+			$options[ $part->slug ] = $part->title . ' (#' . $part->slug . ')';
+		}
+	}
+
+	$sd_tmpl_part_options = $options;
+
+	return apply_filters( 'sd_template_part_options', $options, $args );
+}
+
+/**
+ * Get the template part by slug.
+ *
+ *
+ *
+ * @param string $slug Template slug.
+ * @return array Template part object.
+ */
+function sd_get_template_part_by_slug( $slug ) {
+	global $bs_tmpl_part_by_slug;
+
+	if ( empty( $bs_tmpl_part_by_slug ) ) {
+		$bs_tmpl_part_by_slug = array();
+	}
+
+	if ( isset( $bs_tmpl_part_by_slug[ $slug ] ) ) {
+		return $bs_tmpl_part_by_slug[ $slug ];
+	}
+
+	$template_query = get_block_templates( array( 'slug__in' => array( $slug ) ), 'wp_template_part' );
+
+	$query_post = ! empty( $template_query ) ? $template_query[0] : array();
+
+	$template_part = ! empty( $query_post ) && $query_post->status == 'publish' ? $query_post : array();
+
+	$bs_tmpl_part_by_slug[ $slug ] = $template_part;
+
+	return apply_filters( 'sd_get_template_part_by_slug', $template_part, $slug );
+}
+
+/**
+ * Filters the content of a single block.
+ *
+ *
+ *
+ * @param string   $block_content The block content.
+ * @param array    $block         The full block, including name and attributes.
+ * @param WP_Block $instance      The block instance.
+ */
+function sd_render_block( $block_content, $block, $instance = '' ) {
+	// No block visibility conditions set.
+	if ( empty( $block['attrs']['visibility_conditions'] ) ) {
+		return $block_content;
+	}
+
+	$attributes = json_decode( $block['attrs']['visibility_conditions'], true );
+	$rules = ! empty( $attributes ) ? sd_block_parse_rules( $attributes ) : array();
+
+	// No rules set.
+	if ( empty( $rules ) ) {
+		return $block_content;
+	}
+
+	$_block_content = $block_content;
+
+	if ( ! empty( $rules ) && sd_block_check_rules( $rules ) ) {
+		if ( ! empty( $attributes['output']['type'] ) ) {
+			switch ( $attributes['output']['type'] ) {
+				case 'hide':
+					$valid_type = true;
+					$content = '';
+
+					break;
+				case 'message':
+					$valid_type = true;
+
+					if ( isset( $attributes['output']['message'] ) ) {
+						$content = $attributes['output']['message'] != '' ? __( stripslashes( $attributes['output']['message'] ), 'super-duper' ) : $attributes['output']['message'];
+
+						if ( ! empty( $attributes['output']['message_type'] ) ) {
+							$content = aui()->alert( array(
+									'type'=> $attributes['output']['message_type'],
+									'content'=> $content
+								)
+							);
+						}
+					}
+
+					break;
+				case 'page':
+					$valid_type = true;
+
+					$page_id = ! empty( $attributes['output']['page'] ) ? absint( $attributes['output']['page'] ) : 0;
+					$content = sd_get_page_content( $page_id );
+
+					break;
+				case 'template_part':
+					$valid_type = true;
+
+					$template_part = ! empty( $attributes['output']['template_part'] ) ? $attributes['output']['template_part'] : '';
+					$content = sd_get_template_part_content( $template_part );
+
+					break;
+				default:
+					$valid_type = false;
+					break;
+			}
+
+			if ( $valid_type ) {
+				$block_content = '<div class="' . esc_attr( wp_get_block_default_classname( $instance->name ) ) . ' sd-block-has-rule">' . $content . '</div>';
+			}
+		}
+	}
+
+	return apply_filters( 'sd_render_block_visibility_content', $block_content, $_block_content, $attributes, $block, $instance );
+}
+add_filter( 'render_block', 'sd_render_block', 9, 3 );
+
+function sd_get_page_content( $page_id ) {
+	$content = $page_id > 0 ? get_post_field( 'post_content', (int) $page_id ) : '';
+
+	// Maybe bypass content
+	$bypass_content = apply_filters( 'sd_bypass_page_content', '', $content, $page_id );
+	if ( $bypass_content ) {
+		return $bypass_content;
+	}
+
+	// Run the shortcodes on the content.
+	$content = do_shortcode( $content );
+
+	// Run block content if its available.
+	if ( function_exists( 'do_blocks' ) ) {
+		$content = do_blocks( $content );
+	}
+
+	return apply_filters( 'sd_get_page_content', $content, $page_id );
+}
+
+function sd_get_template_part_content( $template_part ) {
+	$template_part_post = $template_part ? sd_get_template_part_by_slug( $template_part ) : array();
+	$content = ! empty( $template_part_post ) ? $template_part_post->content : '';
+
+	// Maybe bypass content
+	$bypass_content = apply_filters( 'sd_bypass_template_part_content', '', $content, $template_part );
+	if ( $bypass_content ) {
+		return $bypass_content;
+	}
+
+	// Run the shortcodes on the content.
+	$content = do_shortcode( $content );
+
+	// Run block content if its available.
+	if ( function_exists( 'do_blocks' ) ) {
+		$content = do_blocks( $content );
+	}
+
+	return apply_filters( 'sd_get_template_part_content', $content, $template_part );
+}
+
+function sd_block_parse_rules( $attrs ) {
+	$rules = array();
+
+	if ( ! empty( $attrs ) && is_array( $attrs ) ) {
+		$attrs_keys = array_keys( $attrs );
+
+		for ( $i = 1; $i <= count( $attrs_keys ); $i++ ) {
+			if ( ! empty( $attrs[ 'rule' . $i ] ) && is_array( $attrs[ 'rule' . $i ] ) ) {
+				$rules[] = $attrs[ 'rule' . $i ];
+			}
+		}
+	}
+
+	return apply_filters( 'sd_block_parse_rules', $rules, $attrs );
+}
+
+function sd_block_check_rules( $rules ) {
+	if ( ! ( is_array( $rules ) && ! empty( $rules ) ) ) {
+		return true;
+	}
+
+	foreach ( $rules as $key => $rule ) {
+		$match = apply_filters( 'sd_block_check_rule', true, $rule );
+
+		if ( ! $match ) {
+			break;
+		}
+	}
+
+	return apply_filters( 'sd_block_check_rules', $match, $rules );
+}
+
+function sd_block_check_rule( $match, $rule ) {
+	if ( $match && ! empty( $rule['type'] ) ) {
+		switch ( $rule['type'] ) {
+			case 'logged_in':
+				$match = (bool) is_user_logged_in();
+
+				break;
+			case 'logged_out':
+				$match = ! is_user_logged_in();
+
+				break;
+			case 'user_roles':
+				$match = false;
+
+				if ( ! empty( $rule['user_roles'] ) ) {
+					$user_roles = is_scalar( $rule['user_roles'] ) ? explode( ",", $rule['user_roles'] ) : $rule['user_roles'];
+
+					if ( is_array( $user_roles ) ) {
+						$user_roles = array_filter( array_map( 'trim', $user_roles ) );
+					}
+
+					if ( ! empty( $user_roles ) && is_array( $user_roles ) && is_user_logged_in() && ( $current_user = wp_get_current_user() ) ) {
+						$current_user_roles = $current_user->roles;
+
+						foreach ( $user_roles as $role ) {
+							if ( in_array( $role, $current_user_roles ) ) {
+								$match = true;
+							}
+						}
+					}
+				}
+
+				break;
+			case 'gd_field':
+				$match = sd_block_check_rule_gd_field( $rule );
+
+				break;
+		}
+	}
+
+	return $match;
+}
+add_filter( 'sd_block_check_rule', 'sd_block_check_rule', 10, 2 );
+
+function sd_block_check_rule_gd_field( $rule ) {
+	global $gd_post;
+
+	$match_found = false;
+
+	if ( class_exists( 'GeoDirectory' ) && ! empty( $gd_post->ID ) && ! empty( $rule['field'] ) && ! empty( $rule['condition'] ) ) {
+		$args['block_visibility'] = true;
+		$args['key'] = $rule['field'];
+		$args['condition'] = $rule['condition'];
+		$args['search'] = isset( $rule['search'] ) ? $rule['search'] : '';
+
+		if ( $args['key'] == 'street' ) {
+			$args['key'] = 'address';
+		}
+
+		$match_field = $_match_field = $args['key'];
+
+		if ( $match_field == 'address' ) {
+			$match_field = 'street';
+		} elseif ( $match_field == 'post_images' ) {
+			$match_field = 'featured_image';
+		}
+
+		$find_post = $gd_post;
+		$find_post_keys = ! empty( $find_post ) ? array_keys( (array) $find_post ) : array();
+
+		if ( ! empty( $find_post->ID ) && ! in_array( 'post_category', $find_post_keys ) ) {
+			$find_post = geodir_get_post_info( (int) $find_post->ID );
+			$find_post_keys = ! empty( $find_post ) ? array_keys( (array) $find_post ) : array();
+		}
+
+		if ( $match_field === '' || ( ! empty( $find_post_keys ) && ( in_array( $match_field, $find_post_keys ) || in_array( $_match_field, $find_post_keys ) ) ) ) {
+			$address_fields = array( 'street2', 'neighbourhood', 'city', 'region', 'country', 'zip', 'latitude', 'longitude' ); // Address fields
+			$field = array();
+
+			if ( $match_field && ! in_array( $match_field, array( 'post_date', 'post_modified', 'default_category', 'post_id', 'post_status' ) ) && ! in_array( $match_field, $address_fields ) ) {
+				$package_id = geodir_get_post_package_id( $find_post->ID, $find_post->post_type );
+				$fields = geodir_post_custom_fields( $package_id, 'all', $find_post->post_type, 'none' );
+
+				foreach ( $fields as $field_info ) {
+					if ( $match_field == $field_info['htmlvar_name'] ) {
+						$field = $field_info;
+						break;
+					} elseif( $_match_field == $field_info['htmlvar_name'] ) {
+						$field = $field_info;
+						break;
+					}
+				}
+
+				if ( empty( $field ) ) {
+					return false;
+				}
+			}
+
+			// Parse search.
+			$search = sd_gd_field_rule_search( $args['search'], $find_post->post_type, $rule );
+
+			// Address fields.
+			if ( in_array( $match_field, $address_fields ) && ( $address_fields = geodir_post_meta_address_fields( '' ) ) ) {
+				if ( ! empty( $address_fields[ $match_field ] ) ) {
+					$field = $address_fields[ $match_field ];
+				}
+			}
+
+			$is_date = ( ! empty( $field['type'] ) && $field['type'] == 'datepicker' ) || in_array( $match_field, array( 'post_date', 'post_modified' ) ) ? true : false;
+			$is_date = apply_filters( 'geodir_post_badge_is_date', $is_date, $match_field, $field, $args, $find_post );
+
+			$match_value = isset($find_post->{$match_field}) ? esc_attr( trim( $find_post->{$match_field} ) ) : '';
+			$match_found = $match_field === '' ? true : false;
+
+			if ( ! $match_found ) {
+				if ( ( $match_field == 'post_date' || $match_field == 'post_modified' ) && ( empty( $args['condition'] ) || $args['condition'] == 'is_greater_than' || $args['condition'] == 'is_less_than' ) ) {
+					if ( strpos( $search, '+' ) === false && strpos( $search, '-' ) === false ) {
+						$search = '+' . $search;
+					}
+					$the_time = $match_field == 'post_modified' ? get_the_modified_date( 'Y-m-d', $find_post ) : get_the_time( 'Y-m-d', $find_post );
+					$until_time = strtotime( $the_time . ' ' . $search . ' days' );
+					$now_time   = strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
+					if ( ( empty( $args['condition'] ) || $args['condition'] == 'is_less_than' ) && $until_time > $now_time ) {
+						$match_found = true;
+					} elseif ( $args['condition'] == 'is_greater_than' && $until_time < $now_time ) {
+						$match_found = true;
+					}
+				} else {
+					switch ( $args['condition'] ) {
+						case 'is_equal':
+							$match_found = (bool) ( $search != '' && $match_value == $search );
+							break;
+						case 'is_not_equal':
+							$match_found = (bool) ( $search != '' && $match_value != $search );
+							break;
+						case 'is_greater_than':
+							$match_found = (bool) ( $search != '' && ( is_float( $search ) || is_numeric( $search ) ) && ( is_float( $match_value ) || is_numeric( $match_value ) ) && $match_value > $search );
+							break;
+						case 'is_less_than':
+							$match_found = (bool) ( $search != '' && ( is_float( $search ) || is_numeric( $search ) ) && ( is_float( $match_value ) || is_numeric( $match_value ) ) && $match_value < $search );
+							break;
+						case 'is_empty':
+							$match_found = (bool) ( $match_value === '' || $match_value === false || $match_value === '0' || is_null( $match_value ) );
+							break;
+						case 'is_not_empty':
+							$match_found = (bool) ( $match_value !== '' && $match_value !== false && $match_value !== '0' && ! is_null( $match_value ) );
+							break;
+						case 'is_contains':
+							$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) !== false );
+							break;
+						case 'is_not_contains':
+							$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) === false );
+							break;
+					}
+				}
+			}
+
+			$match_found = apply_filters( 'geodir_post_badge_check_match_found', $match_found, $args, $find_post );
+		}
+	}
+
+	return $match_found;
+}
+
+function sd_gd_field_rule_search( $search, $post_type, $rule ) {
+	if ( ! $search ) {
+		return $search;
+	}
+
+	$orig_search = $search;
+	$_search = strtolower( $search );
+
+	if ( $_search == 'date_today' ) {
+		$search = date( 'Y-m-d' );
+	} else if ( $_search == 'date_tomorrow' ) {
+		$search = date( 'Y-m-d', strtotime( "+1 day" ) );
+	} else if ( $_search == 'date_yesterday' ) {
+		$search = date( 'Y-m-d', strtotime( "-1 day" ) );
+	} else if ( $_search == 'time_his' ) {
+		$search = date( 'H:i:s' );
+	} else if ( $_search == 'time_hi' ) {
+		$search = date( 'H:i' );
+	} else if ( $_search == 'datetime_now' ) {
+		$search = date( 'Y-m-d H:i:s' );
+	} else if ( strpos( $_search, 'datetime_after_' ) === 0 ) {
+		$_searches = explode( 'datetime_after_', $_search, 2 );
+
+		if ( ! empty( $_searches[1] ) ) {
+			$search = date( 'Y-m-d H:i:s', strtotime( "+ " . str_replace( "_", " ", $_searches[1] ) ) );
+		} else {
+			$search = date( 'Y-m-d H:i:s' );
+		}
+	} else if ( strpos( $_search, 'datetime_before_' ) === 0 ) {
+		$_searches = explode( 'datetime_before_', $_search, 2 );
+
+		if ( ! empty( $_searches[1] ) ) {
+			$search = date( 'Y-m-d H:i:s', strtotime( "- " . str_replace( "_", " ", $_searches[1] ) ) );
+		} else {
+			$search = date( 'Y-m-d H:i:s' );
+		}
+	} else if ( strpos( $_search, 'date_after_' ) === 0 ) {
+		$_searches = explode( 'date_after_', $_search, 2 );
+
+		if ( ! empty( $_searches[1] ) ) {
+			$search = date( 'Y-m-d', strtotime( "+ " . str_replace( "_", " ", $_searches[1] ) ) );
+		} else {
+			$search = date( 'Y-m-d' );
+		}
+	} else if ( strpos( $_search, 'date_before_' ) === 0 ) {
+		$_searches = explode( 'date_before_', $_search, 2 );
+
+		if ( ! empty( $_searches[1] ) ) {
+			$search = date( 'Y-m-d', strtotime( "- " . str_replace( "_", " ", $_searches[1] ) ) );
+		} else {
+			$search = date( 'Y-m-d' );
+		}
+	}
+
+	return apply_filters( 'sd_gd_field_rule_search', $search, $post_type, $rule, $orig_search );
 }

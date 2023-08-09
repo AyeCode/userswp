@@ -5,7 +5,7 @@
  * @wordpress-plugin
  * Plugin Name: AyeCode Deactivation Survey Testing
  * Description: If you see this as a plugin something has gone wrong.
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: AyeCode
  * Author URI: https://ayecode.io
  * Text Domain: ayecode-ds

@@ -328,7 +328,6 @@
 
             if ($dismissible) {
                 $modal += '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">' +
-                    '<span aria-hidden="true">&times;</span>' +
                     '</button>';
             }
 
@@ -463,7 +462,7 @@
                 if(index == 0 || Number.isInteger(index/$md_count) ){
                     $row_cols_class = $md_cols_count ? ' g-lg-4 g-3 row-cols-1 row-cols-lg-' + $md_cols_count  : '';
                     $active = index == 0 ? 'active' : '';
-                    $new_items += '<div class="carousel-item '+$active+'"><div class="row' + $row_cols_class + ' mb-3">'; //mb to account for shadows
+                    $new_items += '<div class="carousel-item '+$active+'"><div class="row' + $row_cols_class + ' ">'; // mb to account for shadows (removed mb-3 as it was causing padding issues
                     $closed = false;
                     $new_items_count++;
                     $new_item_count = 0;
