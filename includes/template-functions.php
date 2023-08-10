@@ -171,3 +171,36 @@ function uwp_password_strength_inline_js() {
 	</script>
 	<?php
 }
+
+/**
+ * Get all UsersWP screen ids.
+ *
+ * @since 1.2.3.22
+ *
+ * @return array UsersWP screen IDs
+ */
+function uwp_get_screen_ids() {
+	$screen_ids = array(
+		'toplevel_page_userswp',
+		'userswp_page_uwp_form_builder',
+		'userswp_page_uwp_tools',
+		'userswp_page_uwp_status',
+		'userswp_page_uwp-addons',
+		'profile',
+		'users',
+		'user-edit',
+	);
+
+	// Check for translated screen id.
+	$uwp_screen_id = sanitize_title( __( 'UsersWP', 'userswp' ) );
+
+	if ( $uwp_screen_id != 'userswp' ) {
+		$screen_ids[] = 'toplevel_page_' . $uwp_screen_id;
+		$screen_ids[] = $uwp_screen_id . '_page_uwp_form_builder';
+		$screen_ids[] = $uwp_screen_id . '_page_uwp_tools';
+		$screen_ids[] = $uwp_screen_id . '_page_uwp_status';
+		$screen_ids[] = $uwp_screen_id . '_page_uwp-addons';
+	}
+
+	return apply_filters( 'uwp_screen_ids', $screen_ids );
+}
