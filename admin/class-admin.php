@@ -48,6 +48,7 @@ class UsersWP_Admin {
 		add_action( 'handle_bulk_actions-users', array( $this, 'handle_users_bulk_actions' ), 10, 3 );
 		add_filter( 'init', array( $this, 'process_user_actions' ) );
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
+		add_filter( 'aui_screen_ids', array( $this, 'add_aui_screens' ), 20, 1 );
 
 		add_action( 'wp_ajax_uwp_ajax_create_register', array( $this, 'process_create_register_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_update_register', array( $this, 'process_update_register_form' ) );
@@ -178,7 +179,7 @@ class UsersWP_Admin {
 			wp_enqueue_style( 'wp-color-picker' );
 		}
 
-		if ( in_array( $screen_id, $this->get_screen_ids() ) ) {
+		if ( in_array( $screen_id, uwp_get_screen_ids() ) ) {
 			wp_enqueue_style( "userswp_admin_css", USERSWP_PLUGIN_URL . 'admin/assets/css/users-wp-admin.css', array(), USERSWP_VERSION, 'all' );
 		}
 
@@ -230,7 +231,7 @@ class UsersWP_Admin {
 			wp_enqueue_script( "uwp_form_builder", USERSWP_PLUGIN_URL . 'admin/assets/js/uwp-form-builder' . $suffix . '.js', array(), USERSWP_VERSION, 'all' );
 		}
 
-		if ( in_array( $screen_id, $this->get_screen_ids() ) ) {
+		if ( in_array( $screen_id, uwp_get_screen_ids() ) ) {
 			wp_enqueue_script( "userswp_admin", USERSWP_PLUGIN_URL . 'admin/assets/js/users-wp-admin' . $suffix . '.js', array( 'jquery' ), USERSWP_VERSION, false );
 
 			wp_enqueue_script( "jquery-ui-tooltip" );
@@ -257,29 +258,8 @@ class UsersWP_Admin {
 	}
 
 	public function get_screen_ids(){
-		$screen_ids = array(
-			'toplevel_page_userswp',
-			'userswp_page_uwp_form_builder',
-			'userswp_page_uwp_tools',
-			'userswp_page_uwp_status',
-			'userswp_page_uwp-addons',
-			'profile',
-			'users',
-			'user-edit',
-		);
-
-		// Check for translated screen id.
-		$uwp_screen_id = sanitize_title( __( 'UsersWP', 'userswp' ) );
-
-		if ( $uwp_screen_id != 'userswp' ) {
-			$screen_ids[] = 'toplevel_page_' . $uwp_screen_id;
-			$screen_ids[] = $uwp_screen_id . '_page_uwp_form_builder';
-			$screen_ids[] = $uwp_screen_id . '_page_uwp_tools';
-			$screen_ids[] = $uwp_screen_id . '_page_uwp_status';
-		}
-
-		return apply_filters( 'uwp_screen_ids', $screen_ids );
-    }
+		return uwp_get_screen_ids();
+	}
 
 	/**
 	 * Displays update messages
@@ -417,7 +397,24 @@ class UsersWP_Admin {
 	public function admin_body_class( $classes ) {
 		$screen = get_current_screen();
 		if ( 'profile' == $screen->base || 'user-edit' == $screen->base ) {
-			$classes .= 'uwp_page';
+			$classes .= ' uwp_page';
+		}
+
+		// Add original UsersWP page class when UsersWP screen is translated.
+		if ( ! empty( $_GET['page'] ) && in_array( $_GET['page'], array( 'uwp_form_builder', 'uwp_tools', 'uwp_status', 'uwp-addons' ) ) ) {
+			$uwp_screen_id = sanitize_title( __( 'UsersWP', 'userswp' ) );
+
+			if ( $uwp_screen_id != 'userswp' ) {
+				$classes .= ' userswp_page_' . esc_attr( sanitize_text_field( $_GET['page'] ) );
+			}
+		}
+
+		// Add body class for admin pages.
+		$screen = get_current_screen();
+		$screen_id = $screen ? $screen->id : '';
+
+		if ( $screen_id && in_array( $screen_id, uwp_get_screen_ids() ) ) {
+			$classes .= ' uwp-admin-page uwp-admin-page-' . sanitize_key( $screen_id );
 		}
 
 		return $classes;
@@ -1007,5 +1004,25 @@ class UsersWP_Admin {
 
 		echo json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * Tell AyeCode UI to load on certain admin pages.
+	 *
+	 * @since 1.2.3.22
+	 *
+	 * @param array $screen_ids Screen IDs.
+	 * @return array Screen IDs.
+	 */
+	public function add_aui_screens( $screen_ids ) {
+		// Load on these pages if set
+		if ( is_admin() && ! wp_doing_ajax() ) {
+			$screen_ids = array_merge( $screen_ids, uwp_get_screen_ids() );
+		}
+
+		// AUI is also needed for setup wizard.
+		$screen_ids[] = 'uwp-setup';
+
+		return $screen_ids;
 	}
 }

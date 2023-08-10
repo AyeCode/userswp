@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.22 =
+* Translated UWP screen id breaks admin pages UI - FIXED
+
 = 1.2.3.21 =
 * Allow to dismiss notice displayed when author archive disabled from Yoast SEO- ADDED
 * AyeCode UI updated to v0.1.97 - UPDATED
