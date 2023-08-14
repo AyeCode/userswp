@@ -148,6 +148,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.3.22 =
 * Translated UWP screen id breaks admin pages UI - FIXED
+* Pagination not working if user list placed on homepage - FIXED
 
 = 1.2.3.21 =
 * Allow to dismiss notice displayed when author archive disabled from Yoast SEO- ADDED

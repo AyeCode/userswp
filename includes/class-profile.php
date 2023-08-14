@@ -829,6 +829,10 @@ class UsersWP_Profile {
 				'total'              => $total,
 			) );
 
+			if ( is_front_page() ) {
+				$args['current'] = ( get_query_var( 'page' ) ) ? absint( get_query_var( 'page' ) ) : 1;
+			}
+
 			// Set up paginated links.
 			$links = paginate_links( $args );
 
