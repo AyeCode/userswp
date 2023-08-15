@@ -172,17 +172,30 @@ class UsersWP_Notices {
 	        $profile_page_id = uwp_get_page_id( 'profile_page' );
 	        if ($profile_page_id > 0 && ( $page_object = get_post( $profile_page_id ) )) {
 		        if ('page' === $page_object->post_type && in_array($page_object->post_status, array('publish'))) {
-			        ?>
-                    <div class="notice notice-error">
-                        <p><strong>UsersWP - </strong><?php _e( 'Yoast SEO has disabled user profiles, please enable them.', 'userswp' ); ?>
-                            <a href="<?php echo esc_url_raw( $settings_link );?>" class="button button-primary"><?php _e( 'View Settings', 'userswp' ); ?></a>
-                        </p>
-                    </div>
-			        <?php
+			        if ( !get_user_meta( get_current_user_id(), 'uwp_seo_author_disabled_notice_dismissed' ) ) {
+				        ?>
+                        <div class="notice notice-error">
+                            <p><strong>UsersWP
+                                    - </strong><?php _e( 'Yoast SEO has disabled user profiles, please enable them.', 'userswp' ); ?>
+                                <a href="<?php echo esc_url_raw( $settings_link ); ?>"
+                                   class="button button-primary"><?php _e( 'View Settings', 'userswp' ); ?></a>
+                                <a href="<?php echo add_query_arg('uwp-seo-notice-dismissed', 1, uwp_current_page_url()); ?>"
+                                   class="button button-primary"><?php _e( 'Dismiss', 'userswp' ); ?></a>
+                            </p>
+                        </div>
+				        <?php
+			        }
 		        }
 	        }
         }
 
+    }
+
+    public function admin_init_handler(){
+	    $user_id = get_current_user_id();
+	    if ( isset( $_GET['uwp-seo-notice-dismissed'] ) ) {
+		    add_user_meta( $user_id, 'uwp_seo_author_disabled_notice_dismissed', 'true', true );
+	    }
     }
     
 }

@@ -291,7 +291,11 @@ function get_uwp_users_list($roles = array()) {
 		$keyword = stripslashes(strip_tags($_GET['uwps']));
 	}
 
-	$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+	if ( is_front_page() ) {
+		$paged = ( get_query_var( 'page' ) ) ? absint( get_query_var( 'page' ) ) : 1;
+	} else {
+		$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+	}
 
 	$number = uwp_get_option('users_no_of_items', 10);
 	$number = !empty($number) ? $number : 10;

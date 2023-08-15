@@ -4685,7 +4685,7 @@ class UsersWP_Forms {
 								uwp_checkPasswordStrength(
 									$('input[name=password]', $form),         // First password field
 									$('input[name=confirm_password]', $form), // Second password field
-									$('.uwp-password-strength', $form),           // Strength meter
+									$('#uwp-password-strength', $form),           // Strength meter
 									$('input[type=submit]', $form),           // Submit button
 									['black', 'listed', 'word']        // Blacklisted words
 								);

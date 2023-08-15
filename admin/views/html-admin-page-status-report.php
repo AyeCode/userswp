@@ -344,7 +344,7 @@ $pages            = UsersWP_Status::get_pages();
 	}?>
 	</tbody>
 </table>
-<table class="widefat" cellspacing="0">
+<table class="uwp-status-table widefat" cellspacing="0">
 	<thead>
 	<tr>
 		<th colspan="3" data-export-label="User Platform"><h2><?php _e( 'User Platform', 'userswp' ); ?></h2></th>
