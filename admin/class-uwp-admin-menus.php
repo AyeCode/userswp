@@ -25,7 +25,7 @@ class UsersWP_Admin_Menus {
         // Add menus
         add_action( 'admin_menu', array( $this, 'admin_menu' ), 9 );
 	    add_action( 'admin_menu', array( $this, 'tools_menu' ), 80 );
-	    add_action( 'admin_menu', array( $this, 'user_types_menu' ), 85 );
+	    add_action( 'admin_menu', array( $this, 'user_types_menu' ), 75 );
         add_action( 'admin_menu', array( $this, 'status_menu' ), 90 );
         add_action( 'admin_menu', array( $this, 'addons_menu' ), 99 );
     }

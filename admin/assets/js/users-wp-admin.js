@@ -174,7 +174,7 @@ jQuery(window).on('load', function () {
             }
         } else {
             uwp_remove_spin_loader(current_obj);
-        }s/uwp-membership
+        }
     });
 
     jQuery(document).on('submit', '#uwp_user_type_form', function (e) {

@@ -30,8 +30,15 @@ class UsersWP_User_Types {
             }
             ?>
 
-            <div class="multiple-registration-form">
-                <h1 class="wp-heading-inline"><?php echo __('Edit user type ID ', 'userswp') . $form_id;?></h1>
+            <div class="multiple-registration-form wrap">
+                <h1 class="wp-heading-inline"><?php esc_html_e( 'Edit user type ', 'userswp' ); ?></h1>
+                <button
+                    data-nonce="<?php echo esc_attr( wp_create_nonce( 'uwp-create-register-form-nonce' ) ); ?>"
+                    class="page-title-action register-form-create" type="button"
+                    name="register_form_create"
+                    id="form_create">
+                    <?php esc_html_e( 'Add User Type', 'userswp' ); ?>
+                </button>
             <form class="uwp_user_type_form" id="uwp_user_type_form" method="POST">
                 <input type="hidden" name="manage_field_form_id" class="manage_field_form_id"
                        id="manage_field_form_id"
@@ -88,19 +95,22 @@ class UsersWP_User_Types {
 	        $actions             = uwp_get_registration_form_actions();
 	        $current_action      = uwp_get_option( 'uwp_registration_action', false );
 	        $current_action      = ! empty( $current_form['reg_action'] ) ? $current_form['reg_action'] : $current_action;
+            $current_redirect_to = ! empty( $current_form['redirect_to'] ) ? $current_form['redirect_to'] : '';
+
             ?>
             <table class="form-table bsui userswp" id="uwp-form-more-options" style="display:block;">
                 <tr>
-                    <th><?php _e( 'Title:', 'userswp' ); echo uwp_help_tip(__('Title of the form', 'userswp')) ?></th>
+                    <th><?php _e( 'Title:', 'userswp' ); echo uwp_help_tip(__('For example, Members', 'userswp')) ?></th>
                     <td>
                         <input type="text" name="form_title" value="<?php echo esc_attr($current_title); ?>"
-                               class="regular-text">
+                               class="regular-text" required>
                     </td>
 
                 </tr>
                 <tr>
 	                <?php if ( ! empty( $user_roles ) && is_array( $user_roles ) ) { ?>
-                        <th><?php _e( 'User Role to Assign:', 'userswp' ); echo uwp_help_tip(__('Role to assign when user register via this form.', 'userswp'))  ?></th>
+                        <th>
+                            <?php esc_html_e( 'User Role to Assign:', 'userswp' ); echo uwp_help_tip( __( 'Role to assign this user type.', 'userswp' ) ); ?></th>
                         <td>
                             <select name="user_role" id="multiple_registration_user_role"
                                     class="small-text aui-select2">
@@ -203,8 +213,13 @@ class UsersWP_User_Types {
             <?php do_action( 'uwp_user_type_form_before_submit', $current_form ); ?>
 
             <div class="bsui">
-                <button class="btn btn-sm btn-secondary" id="form_update" type="submit"
+                <button class="btn btn-sm btn-primary" id="form_update" type="submit"
                         name="form_update"><?php _e( 'Update', 'userswp' ); ?></button>
+                <a
+                    href="<?php echo esc_url( add_query_arg( 'form', (int) $form_id, admin_url( 'admin.php?page=uwp_form_builder&tab=account' ) ) ); ?>"
+                    class="btn btn-sm btn-link"
+                    target="_blank"
+                ><?php esc_html_e( 'Edit registration form', 'userswp' ); ?></a>
             </div>
         <?php
     }

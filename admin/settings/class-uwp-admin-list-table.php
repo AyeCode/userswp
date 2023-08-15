@@ -95,14 +95,27 @@ class UWP_Admin_List_Table extends WP_List_Table {
 	private function table_data() {
 		$data           = array ();
 		$register_forms = uwp_get_option ( 'multiple_registration_forms' );
+
 		foreach ( $register_forms as $register_form ) {
 			$form_data = array (
 				'title'      => $register_form[ 'title' ] ,
 				'id'         => $register_form[ 'id' ] ,
 				'slug'         => isset( $register_form[ 'slug' ] ) ? $register_form[ 'slug' ] : '',
-				'user_role'  => isset( $register_form[ 'user_role' ] ) ? $register_form[ 'user_role' ] : '-' ,
-				'reg_action' => isset( $register_form[ 'reg_action' ] ) ? $register_form[ 'reg_action' ] : '-' ,
+				'user_role'  => isset( $register_form[ 'user_role' ] ) ? $register_form[ 'user_role' ] : get_option( 'default_role' ),
+				'reg_action' => isset( $register_form[ 'reg_action' ] ) ? $register_form[ 'reg_action' ] : 'auto_approve',
 			);
+
+			$user_roles = uwp_get_user_roles();
+
+			if ( isset( $form_data['user_role'] ) && isset( $user_roles[ $form_data['user_role'] ] ) ) {
+				$form_data['user_role'] = $user_roles[ $form_data['user_role'] ];
+			}
+
+			$reg_actions = uwp_get_registration_form_actions();
+
+			if ( isset( $form_data['reg_action'] ) && isset( $reg_actions[ $form_data['reg_action'] ] ) ) {
+				$form_data['reg_action'] = $reg_actions[ $form_data['reg_action'] ];
+			}
 
 			$form_data =  apply_filters ('uwp_user_types_table_data', $form_data, $register_form );
 
@@ -135,6 +148,7 @@ class UWP_Admin_List_Table extends WP_List_Table {
 
 	public function column_title( $item ) {
 
+		$edit_form_url = add_query_arg( 'form', (int) $item['id'], admin_url( 'admin.php?page=uwp_form_builder&tab=account' ) );
 		$edit_link = admin_url ( 'admin.php?page=uwp_user_types&form=' . $item[ 'id' ] );
 		$output    = '';
 
@@ -144,6 +158,7 @@ class UWP_Admin_List_Table extends WP_List_Table {
 		// Get actions.
 		$actions = array (
 			'edit' => '<a class="" href="' . esc_url( $edit_link ) . '">' . esc_html__ ( 'Edit' , 'userswp' ) . '</a>',
+			'edit-form' => '<a class="" href="' . esc_url( $edit_form_url ) . '">' . esc_html__( 'Edit Form', 'userswp' ) . '</a>',
 		);
 
 		if( $item['id'] > 1 ) {

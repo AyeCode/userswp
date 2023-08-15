@@ -342,20 +342,6 @@ class UsersWP_Form_Builder {
 											?>
                                         </select>
                                     </div>
-                                    <div class="d-inline-block align-top">
-                                        <button class="btn btn-sm btn-info register-show-options" type="button"
-                                                id="show_options"><?php _e( 'Form Options', 'userswp' ); ?></button>
-										<?php if ( ! empty( $current_form ) && $current_form > 1 ) { ?>
-                                            <button data-id="<?php echo esc_attr($current_form); ?>"
-                                                    data-nonce="<?php echo wp_create_nonce( 'uwp-delete-register-form-nonce' ); ?>"
-                                                    class="btn btn-sm btn-danger register-form-remove" type="button"
-                                                    name="form_remove"><?php _e( 'Delete Form', 'userswp' ); ?></button>
-										<?php } ?>
-                                        <button data-nonce="<?php echo wp_create_nonce( 'uwp-create-register-form-nonce' ); ?>"
-                                                class="btn btn-sm btn-primary register-form-create" type="button"
-                                                name="register_form_create"
-                                                id="form_create"><?php _e( 'Create Form', 'userswp' ); ?></button>
-                                    </div>
                                 </td>
                             </tr>
                         </table>
