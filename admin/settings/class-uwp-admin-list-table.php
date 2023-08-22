@@ -134,16 +134,10 @@ class UWP_Admin_List_Table extends WP_List_Table {
 	 * @return Mixed
 	 */
 	public function column_default( $item , $column_name ) {
-		switch ( $column_name ) {
-			case 'title':
-			case 'id':
-			case 'user_role':
-			case 'reg_action':
-				return $item[ $column_name ];
-
-			default:
-				return $item[ $column_name ];
-		}
+		$value = isset( $item[ $column_name ] ) ? $item[ $column_name ] : '';
+		$value = apply_filters( 'uwp_user_types_table_column_default', $value, $item, $column_name );
+	
+		return '' === $value ? '&mdash;' : $value;
 	}
 
 	public function column_title( $item ) {
