@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.3.21\n"
+"Project-Id-Version: UsersWP 1.2.3.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-09 18:11+0530\n"
-"PO-Revision-Date: 2023-08-09 18:11+0530\n"
+"POT-Creation-Date: 2023-09-06 16:46+0530\n"
+"PO-Revision-Date: 2023-09-06 16:46+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -241,189 +241,190 @@ msgstr ""
 msgid "Learn more"
 msgstr ""
 
-#: admin/class-admin.php:101
+#: admin/class-admin.php:102
 msgid "UsersWP - an AyeCode product!"
 msgstr ""
 
-#: admin/class-admin.php:102
+#: admin/class-admin.php:103
 msgid "Please confirm you wish to connect your site?"
 msgstr ""
 
-#: admin/class-admin.php:103
+#: admin/class-admin.php:104
 #, php-format
 msgid ""
 "<strong>Have a license?</strong> Forget about entering license keys or "
 "downloading zip files, connect your site for instant access. %slearn more%s"
 msgstr ""
 
-#: admin/class-admin.php:104
+#: admin/class-admin.php:105
 msgid "Connect Site"
 msgstr ""
 
-#: admin/class-admin.php:105
+#: admin/class-admin.php:106
 msgid "Connecting..."
 msgstr ""
 
-#: admin/class-admin.php:106
+#: admin/class-admin.php:107
 msgid "This service will only work with a live domain, not a localhost."
 msgstr ""
 
-#: admin/class-admin.php:107
+#: admin/class-admin.php:108
 msgid "Something went wrong, please refresh and try again."
 msgstr ""
 
-#: admin/class-admin.php:241
+#: admin/class-admin.php:242
 msgid "Field key must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:242
+#: admin/class-admin.php:243
 msgid "Option Values must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:243
+#: admin/class-admin.php:244
 msgid "Please do not use special character and spaces in field key."
 msgstr ""
 
-#: admin/class-admin.php:244
+#: admin/class-admin.php:245
 msgid "Field key should be a unique name."
 msgstr ""
 
-#: admin/class-admin.php:245
+#: admin/class-admin.php:246
 msgid "Are you sure you wish to delete this field?"
 msgstr ""
 
-#: admin/class-admin.php:246
+#: admin/class-admin.php:247
 msgid "This field is required."
 msgstr ""
 
-#: admin/class-admin.php:248
+#: admin/class-admin.php:249
 msgid "Choose an image"
 msgstr ""
 
-#: admin/class-admin.php:249
+#: admin/class-admin.php:250
 msgid "Use image"
 msgstr ""
 
-#: admin/class-admin.php:250
+#: admin/class-admin.php:251
 msgid "Are you sure you wish to delete this form?"
 msgstr ""
 
-#: admin/class-admin.php:251
+#: admin/class-admin.php:252
 msgid "Enter register form title"
 msgstr ""
 
-#: admin/class-admin.php:252
+#: admin/class-admin.php:253
 msgid "Updated! Reloading page..."
 msgstr ""
 
-#: admin/class-admin.php:272 admin/class-uwp-admin-menus.php:80
-#: admin/menus/class-menus.php:291 includes/class-uwp-privacy.php:17
-msgid "UsersWP"
-msgstr ""
-
-#: admin/class-admin.php:297 admin/class-admin.php:806
+#: admin/class-admin.php:277 admin/class-admin.php:803
 msgid "Activation email has been sent!"
 msgstr ""
 
-#: admin/class-admin.php:300
+#: admin/class-admin.php:280
 msgid "Error while sending activation email. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:303
+#: admin/class-admin.php:283
 msgid "User(s) has been activated!"
 msgstr ""
 
-#: admin/class-admin.php:408
+#: admin/class-admin.php:388
 #, php-format
 msgid ""
 "You can change your profile picture on your <a href=\"%s\">Profile Page</a>."
 msgstr ""
 
-#: admin/class-admin.php:474
+#: admin/class-admin.php:405 admin/class-uwp-admin-menus.php:80
+#: admin/menus/class-menus.php:291 includes/class-uwp-privacy.php:17
+#: includes/template-functions.php:195
+msgid "UsersWP"
+msgstr ""
+
+#: admin/class-admin.php:471
 msgid "Pending Email Activation"
 msgstr ""
 
-#: admin/class-admin.php:614
+#: admin/class-admin.php:611
 msgid "UsersWP Account Details"
 msgstr ""
 
-#: admin/class-admin.php:645
+#: admin/class-admin.php:642
 msgid "Change Avatar"
 msgstr ""
 
-#: admin/class-admin.php:647 templates/bootstrap/modal-profile-image.php:16
+#: admin/class-admin.php:644 templates/bootstrap/modal-profile-image.php:16
 msgid "Upload Avatar"
 msgstr ""
 
-#: admin/class-admin.php:657
+#: admin/class-admin.php:654
 msgid "Change Banner"
 msgstr ""
 
-#: admin/class-admin.php:659 templates/bootstrap/modal-profile-image.php:19
+#: admin/class-admin.php:656 templates/bootstrap/modal-profile-image.php:19
 msgid "Upload Banner"
 msgstr ""
 
-#: admin/class-admin.php:714 admin/class-admin.php:731
+#: admin/class-admin.php:711 admin/class-admin.php:728
 msgid "Resend Activation"
 msgstr ""
 
-#: admin/class-admin.php:715
+#: admin/class-admin.php:712
 msgid "Activate User"
 msgstr ""
 
-#: admin/class-admin.php:732
+#: admin/class-admin.php:729
 msgid "Activate Users"
 msgstr ""
 
-#: admin/class-admin.php:830
+#: admin/class-admin.php:827
 msgid "View UsersWP Documentation"
 msgstr ""
 
-#: admin/class-admin.php:831
+#: admin/class-admin.php:828
 msgid "Visit UsersWP support"
 msgstr ""
 
-#: admin/class-admin.php:832
+#: admin/class-admin.php:829
 msgid "View translations"
 msgstr ""
 
-#: admin/class-admin.php:852 admin/class-admin.php:916
+#: admin/class-admin.php:849 admin/class-admin.php:913
 #: includes/class-forms.php:368
 msgid "Something went wrong. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:863
+#: admin/class-admin.php:860
 #, php-format
 msgid "Form %d"
 msgstr ""
 
-#: admin/class-admin.php:907 admin/settings/class-formbuilder.php:293
+#: admin/class-admin.php:904 admin/settings/class-formbuilder.php:293
 #: widgets/register.php:33
 msgid "Form"
 msgstr ""
 
-#: admin/class-admin.php:967
+#: admin/class-admin.php:964
 msgid "Security nonce failed. Please try again."
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:66
+#: admin/class-uwp-admin-help.php:38
 msgid "Help &amp; Support"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:72 admin/class-uwp-admin-help.php:102
+#: admin/class-uwp-admin-help.php:44 admin/class-uwp-admin-help.php:74
 msgid "Found a bug?"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:78 admin/class-uwp-admin-help.php:111
-#: admin/class-uwp-admin-help.php:114
+#: admin/class-uwp-admin-help.php:50 admin/class-uwp-admin-help.php:83
+#: admin/class-uwp-admin-help.php:86
 msgid "Setup wizard"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:92
+#: admin/class-uwp-admin-help.php:64
 msgid "Help & Support"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:93
+#: admin/class-uwp-admin-help.php:65
 #, php-format
 msgid ""
 "Should you need help understanding, using, or extending UsersWP <a "
@@ -431,28 +432,28 @@ msgid ""
 "resources including snippets, tutorials and much more.,"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:94
+#: admin/class-uwp-admin-help.php:66
 #, php-format
 msgid ""
 "For further assistance with UsersWP core or with premium extensions sold by "
 "UsersWP you can use our <a href=\"%1$s\">support forums</a>."
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:95
+#: admin/class-uwp-admin-help.php:67
 msgid ""
 "Before asking for help we recommend checking the system status page to "
 "identify any problems with your configuration."
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:96 admin/class-uwp-admin-help.php:104
+#: admin/class-uwp-admin-help.php:68 admin/class-uwp-admin-help.php:76
 msgid "System status"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:96
+#: admin/class-uwp-admin-help.php:68
 msgid "UsersWP support"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:103
+#: admin/class-uwp-admin-help.php:75
 #, php-format
 msgid ""
 "If you find a bug within UsersWP core you can create a ticket via <a "
@@ -462,39 +463,39 @@ msgid ""
 "your <a href=\"%3$s\">system status report</a>"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:104
+#: admin/class-uwp-admin-help.php:76
 msgid "Report a bug"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:112
+#: admin/class-uwp-admin-help.php:84
 msgid ""
 "If you need to access the setup wizard again, please click on the button "
 "below."
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:113
+#: admin/class-uwp-admin-help.php:85
 msgid ""
 "Running the wizard again will not delete your current settings. You will "
 "have the option to change any current settings."
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:122
+#: admin/class-uwp-admin-help.php:94
 msgid "For more information:"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:123
+#: admin/class-uwp-admin-help.php:95
 msgid "About UsersWP"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:124
+#: admin/class-uwp-admin-help.php:96
 msgid "WordPress.org project"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:125
+#: admin/class-uwp-admin-help.php:97
 msgid "Github project"
 msgstr ""
 
-#: admin/class-uwp-admin-help.php:126
+#: admin/class-uwp-admin-help.php:98
 msgid "Official extensions"
 msgstr ""
 
@@ -1849,7 +1850,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:72
 #: includes/class-account.php:42 includes/class-pages.php:329
-#: includes/helpers/misc.php:572 includes/helpers/tabs.php:127
+#: includes/helpers/misc.php:576 includes/helpers/tabs.php:127
 #: templates/bootstrap/change.php:15 widgets/change.php:47
 #: widgets/change.php:95
 msgid "Change Password"
@@ -1927,7 +1928,7 @@ msgid ""
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:141
-#: includes/helpers/misc.php:1322
+#: includes/helpers/misc.php:1326
 msgid "Please enter valid strong password."
 msgstr ""
 
@@ -2524,18 +2525,18 @@ msgid "More Info"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:401
-#: includes/class-profile.php:900 upgrade.php:187
+#: includes/class-profile.php:904 upgrade.php:187
 msgid "Posts"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:409
-#: includes/class-profile.php:941 templates/bootstrap/loop-comments.php:9
+#: includes/class-profile.php:945 templates/bootstrap/loop-comments.php:9
 #: templates/loop-comments.php:9 upgrade.php:203
 msgid "Comments"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:417
-#: includes/class-profile.php:1014
+#: includes/class-profile.php:1018
 msgid "User Comments"
 msgstr ""
 
@@ -3342,7 +3343,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: includes/class-account.php:77 includes/helpers/misc.php:570
+#: includes/class-account.php:77 includes/helpers/misc.php:574
 #: includes/helpers/tabs.php:154
 msgid "Delete Account"
 msgstr ""
@@ -4134,29 +4135,29 @@ msgstr ""
 msgid "Posts navigation"
 msgstr ""
 
-#: includes/class-profile.php:1463
+#: includes/class-profile.php:1467
 #, php-format
 msgid "The uploaded file is too small. Minimum image width should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1466
+#: includes/class-profile.php:1470
 #, php-format
 msgid "The uploaded file is too small. Minimum image height should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1509
+#: includes/class-profile.php:1513
 msgid "Invalid request!"
 msgstr ""
 
-#: includes/class-profile.php:1530
+#: includes/class-profile.php:1534
 msgid "No fields available"
 msgstr ""
 
-#: includes/class-profile.php:1694
+#: includes/class-profile.php:1698
 msgid "Loading Form ..."
 msgstr ""
 
-#: includes/class-profile.php:1789
+#: includes/class-profile.php:1793
 msgid "File too big."
 msgstr ""
 
@@ -4180,7 +4181,7 @@ msgstr ""
 msgid "Tab Name"
 msgstr ""
 
-#: includes/class-templates.php:1143 includes/helpers/misc.php:566
+#: includes/class-templates.php:1143 includes/helpers/misc.php:570
 #: includes/helpers/tabs.php:135
 msgid "Privacy"
 msgstr ""
@@ -4542,46 +4543,46 @@ msgid ""
 "Any profile information provided to this site may be displayed publicly."
 msgstr ""
 
-#: includes/class-uwp-seo.php:39
+#: includes/class-uwp-seo.php:44
 msgid "Profile SEO"
 msgstr ""
 
-#: includes/class-uwp-seo.php:47
+#: includes/class-uwp-seo.php:52
 msgid "Disable meta tags"
 msgstr ""
 
-#: includes/class-uwp-seo.php:48
+#: includes/class-uwp-seo.php:53
 msgid "This will disable adding SEO meta tags on profile page."
 msgstr ""
 
-#: includes/class-uwp-seo.php:56
+#: includes/class-uwp-seo.php:61
 msgid "Title separator"
 msgstr ""
 
-#: includes/class-uwp-seo.php:60
+#: includes/class-uwp-seo.php:65
 msgid ""
 "Choose the symbol to use as your title separator. This will display, for "
 "instance, between your user profile title and site name. Symbols are shown "
 "in the size they will appear in the search results."
 msgstr ""
 
-#: includes/class-uwp-seo.php:77
+#: includes/class-uwp-seo.php:82
 msgid "Meta Title"
 msgstr ""
 
-#: includes/class-uwp-seo.php:81 includes/class-uwp-seo.php:96
+#: includes/class-uwp-seo.php:86 includes/class-uwp-seo.php:101
 msgid "Available SEO tags:"
 msgstr ""
 
-#: includes/class-uwp-seo.php:89
+#: includes/class-uwp-seo.php:94
 msgid "Meta Description"
 msgstr ""
 
-#: includes/class-uwp-seo.php:92
+#: includes/class-uwp-seo.php:97
 msgid "Enter the meta description to use for the page."
 msgstr ""
 
-#: includes/class-uwp-seo.php:101
+#: includes/class-uwp-seo.php:106
 msgid "Meta Description Length"
 msgstr ""
 
@@ -4702,47 +4703,47 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: includes/helpers/misc.php:568
+#: includes/helpers/misc.php:572
 msgid "E-Mail Notifications"
 msgstr ""
 
-#: includes/helpers/misc.php:574
+#: includes/helpers/misc.php:578
 msgid "Two-factor Authentication Settings"
 msgstr ""
 
-#: includes/helpers/misc.php:1312
+#: includes/helpers/misc.php:1316
 msgid "more"
 msgstr ""
 
-#: includes/helpers/misc.php:1313
+#: includes/helpers/misc.php:1317
 msgid "less"
 msgstr ""
 
-#: includes/helpers/misc.php:1314
+#: includes/helpers/misc.php:1318
 msgid "Something went wrong."
 msgstr ""
 
-#: includes/helpers/misc.php:1315
+#: includes/helpers/misc.php:1319
 msgid "Something went wrong, please retry."
 msgstr ""
 
-#: includes/helpers/misc.php:1498 widgets/output-location.php:90
+#: includes/helpers/misc.php:1502 widgets/output-location.php:90
 msgid "Users Page"
 msgstr ""
 
-#: includes/helpers/misc.php:1499 widgets/output-location.php:91
+#: includes/helpers/misc.php:1503 widgets/output-location.php:91
 msgid "More info tab"
 msgstr ""
 
-#: includes/helpers/misc.php:1500
+#: includes/helpers/misc.php:1504
 msgid "Profile side (non bootstrap)"
 msgstr ""
 
-#: includes/helpers/misc.php:1501
+#: includes/helpers/misc.php:1505
 msgid "Fieldset"
 msgstr ""
 
-#: includes/helpers/misc.php:1732
+#: includes/helpers/misc.php:1736
 #, php-format
 msgid ""
 "%s requires a newer version of UsersWP and will not run until the UsersWP "
