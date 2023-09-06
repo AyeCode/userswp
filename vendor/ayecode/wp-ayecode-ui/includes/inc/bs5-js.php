@@ -9,7 +9,6 @@
      */
     function aui_init_greedy_nav(){
         jQuery('nav.greedy').each(function(i, obj) {
-
             // Check if already initialized, if so continue.
             if(jQuery(this).hasClass("being-greedy")){return true;}
 
@@ -19,21 +18,20 @@
             // vars
             var $vlinks = '';
             var $dDownClass = '';
+            var ddItemClass = 'greedy-nav-item';
             if(jQuery(this).find('.navbar-nav').length){
                 if(jQuery(this).find('.navbar-nav').hasClass("being-greedy")){return true;}
                 $vlinks = jQuery(this).find('.navbar-nav').addClass("being-greedy w-100").removeClass('overflow-hidden');
             }else if(jQuery(this).find('.nav').length){
                 if(jQuery(this).find('.nav').hasClass("being-greedy")){return true;}
                 $vlinks = jQuery(this).find('.nav').addClass("being-greedy w-100").removeClass('overflow-hidden');
-                $dDownClass = ' mt-2 ';
+                $dDownClass = ' mt-0 p-0 zi-5 ';
+                ddItemClass += ' mt-0 me-0';
             }else{
                 return false;
             }
 
-            jQuery($vlinks).append('<li class="nav-item list-unstyled ml-auto greedy-btn d-none dropdown ">' +
-                '<a href="javascript:void(0)" data-toggle="dropdown" class="nav-link"><i class="fas fa-ellipsis-h"></i> <span class="greedy-count badge badge-dark badge-pill"></span></a>' +
-                '<ul class="greedy-links dropdown-menu  dropdown-menu-right '+$dDownClass+'"></ul>' +
-                '</li>');
+            jQuery($vlinks).append('<li class="nav-item list-unstyled ml-auto greedy-btn d-none dropdown"><a href="javascript:void(0)" data-bs-toggle="collapse" class="nav-link greedy-nav-link"><i class="fas fa-ellipsis-h"></i> <span class="greedy-count badge bg-dark rounded-pill"></span></a><ul class="greedy-links dropdown-menu dropdown-menu-end '+$dDownClass+'"></ul></li>');
 
             var $hlinks = jQuery(this).find('.greedy-links');
             var $btn = jQuery(this).find('.greedy-btn');
@@ -56,7 +54,6 @@
 			 The check function.
 			 */
             function check() {
-
                 // Get instant state
                 buttonSpace = $btn.width();
                 availableSpace = $vlinks.width() - 10;
@@ -65,7 +62,15 @@
 
                 // There is not enough space
                 if (numOfVisibleItems > 1 && requiredSpace > availableSpace) {
-                    $vlinks.children().last().prev().prependTo($hlinks);
+                    var $li = $vlinks.children().last().prev();
+                    $li.addClass(ddItemClass);
+                    if (!jQuery($hlinks).children().length) {
+                        $li.find('.nav-link').addClass('rounded-0 rounded-bottom');
+                    } else {
+                        jQuery($hlinks).find('.nav-link').removeClass('rounded-top');
+                        $li.find('.nav-link').addClass('rounded-0 rounded-top');
+                    }
+                    $li.prependTo($hlinks);
                     numOfVisibleItems -= 1;
                     check();
                     // There is more than enough space
@@ -143,7 +148,6 @@
         var select2_args = jQuery.extend({}, aui_select2_locale());
         jQuery("select.aui-select2").each(function() {
             if (!jQuery(this).hasClass("select2-hidden-accessible")) {
-                console.log(select2_args);
                 jQuery(this).select2(select2_args);
             }
         });
@@ -469,7 +473,7 @@
                 }
 
                 // content
-                $new_items += '<div class="col pr-1 pl-0">'+$items[index]+'</div>';
+                $new_items += '<div class="col pe-1 ps-0">'+$items[index]+'</div>';
                 $new_item_count++;
 
 
@@ -481,7 +485,7 @@
                 if($md_count-$new_item_count > 0){
                     $placeholder_count = $md_count-$new_item_count;
                     while($placeholder_count > 0){
-                        $new_items += '<div class="col pr-1 pl-0"></div>';
+                        $new_items += '<div class="col pe-1 ps-0"></div>';
                         $placeholder_count--;
                     }
 
@@ -680,7 +684,7 @@
 
             $carousel  += '</div>';
 
-            var $close = '<button type="button" class="btn-close btn-close-white text-right position-fixed" style="right: 20px;top: 10px; z-index: 1055;" data-bs-dismiss="modal" aria-label="Close"></button>';
+            var $close = '<button type="button" class="btn-close btn-close-white text-end position-fixed" style="right: 20px;top: 10px; z-index: 1055;" data-bs-dismiss="modal" aria-label="Close"></button>';
 
             jQuery('.aui-carousel-modal .modal-content').html($carousel).prepend($close);
 
@@ -755,22 +759,22 @@
             $op = "opacity:.92;";
             $tClass = 'alert bg-success w-auto';
             $thClass = 'bg-transparent border-0 text-white';
-            $icon = "<div class='h5 m-0 p-0'><i class='fas fa-check-circle mr-2 me-2'></i></div>";
+            $icon = "<div class='h5 m-0 p-0'><i class='fas fa-check-circle me-2'></i></div>";
         } else if ($type == 'error' || $type == 'danger') {
             $op = "opacity:.92;";
             $tClass = 'alert bg-danger  w-auto';
             $thClass = 'bg-transparent border-0 text-white';
-            $icon = "<div class='h5 m-0 p-0'><i class='far fa-times-circle mr-2 me-2'></i></div>";
+            $icon = "<div class='h5 m-0 p-0'><i class='far fa-times-circle me-2'></i></div>";
         } else if ($type == 'info') {
             $op = "opacity:.92;";
             $tClass = 'alert bg-info  w-auto';
             $thClass = 'bg-transparent border-0 text-white';
-            $icon = "<div class='h5 m-0 p-0'><i class='fas fa-info-circle mr-2 me-2'></i></div>";
+            $icon = "<div class='h5 m-0 p-0'><i class='fas fa-info-circle me-2'></i></div>";
         } else if ($type == 'warning') {
             $op = "opacity:.92;";
             $tClass = 'alert bg-warning  w-auto';
             $thClass = 'bg-transparent border-0 text-dark';
-            $icon = "<div class='h5 m-0 p-0'><i class='fas fa-exclamation-triangle mr-2 me-2'></i></div>";
+            $icon = "<div class='h5 m-0 p-0'><i class='fas fa-exclamation-triangle me-2'></i></div>";
         }
 
 
@@ -783,9 +787,9 @@
         if($type || $title || $title_small){
             $toast += '<div class="toast-header '+$thClass+'">';
             if($icon ){$toast += $icon;}
-            if($title){$toast += '<strong class="mr-auto me-auto">'+$title+'</strong>';}
+            if($title){$toast += '<strong class="me-auto">'+$title+'</strong>';}
             if($title_small){$toast += '<small>'+$title_small+'</small>';}
-            if($can_close){$toast += '<button type="button" class="ml-2 ms-2 mb-1 close" data-bs-dismiss="toast" aria-label="Close"><span aria-hidden="true">×</span></button>';}
+            if($can_close){$toast += '<button type="button" class="ms-2 mb-1 btn-close" data-bs-dismiss="toast" aria-label="Close"></button>';}
             $toast += '</div>';
         }
 

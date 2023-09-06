@@ -704,7 +704,13 @@ function uwp_checkPasswordStrength( $pass1,
 
     // set the status of the submit button
     if ( parseInt(uwp_localize_data.uwp_pass_strength) > 0) {
+        if($pass2.length){
+            $container = $pass2.closest('.uwp-password-wrap');
+        }else{
+            $container = $pass1.closest('.uwp-password-wrap');
+        }
         $container.find('small').remove();
+
         if(4 == parseInt(uwp_localize_data.uwp_pass_strength) && strength === 4){
             $submitButton.removeAttr( 'disabled' );
         } else if(3 == parseInt(uwp_localize_data.uwp_pass_strength) && (strength === 3 || strength === 4)){

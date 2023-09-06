@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.23' );
+	define( 'SUPER_DUPER_VER', '1.1.24' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -3621,88 +3621,78 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
                 $onchange = "";
 
                 //$inside_elements = ",el('div',{},'file upload')";
-			}elseif ( $args['type'] == 'images' ) {
-				//                print_r($args);
-
-                $img_preview = "props.attributes.$key && (function() {
-
-                        let uploads = JSON.parse('['+props.attributes.$key+']');
-						let images = [];
-                      uploads.map((upload, index) => (
-
-							images.push( el('div',{className: 'col p-2',draggable: 'true','data-index': index}, el('img', { src: upload.sizes.thumbnail.url,style: {maxWidth:'100%',background: '#ccc',pointerEvents:'none'}}),el('i',{
-							className: 'fas fa-times-circle text-danger position-absolute  ml-n2 mt-n1 bg-white rounded-circle c-pointer',
-							onClick: function(){
-							    aui_confirm('".esc_attr__('Are you sure?')."', '".esc_attr__('Delete')."', '".esc_attr__('Cancel')."', true).then(function(confirmed) {
-if (confirmed) {
-											let new_uploads = JSON.parse('['+props.attributes.$key+']');
-											new_uploads.splice(index, 1); //remove
-                                              return props.setAttributes({
-                                                  {$key}: JSON.stringify( new_uploads ).replace('[','').replace(']',''),
-                                                });
-                                                }
-                                           });
-                                    }},'') ) )
-						));
-
-
-						return images;
+			} else if ( $args['type'] == 'images' ) {
+				$img_preview = "props.attributes.$key && (function() {
+	let uploads = JSON.parse('['+props.attributes.$key+']');
+	let images = [];
+	uploads.map((upload, index) => (
+		images.push( el('div',{ className: 'col p-2', draggable: 'true', 'data-index': index }, 
+			el('img', {
+				src: (upload.sizes && upload.sizes.thumbnail ? upload.sizes.thumbnail.url : upload.url),
+				style: { maxWidth:'100%', background: '#ccc', pointerEvents:'none' }
+			}),
+			el('i',{
+				className: 'fas fa-times-circle text-danger position-absolute  ml-n2 mt-n1 bg-white rounded-circle c-pointer',
+				onClick: function() {
+					aui_confirm('".esc_attr__('Are you sure?')."', '".esc_attr__('Delete')."', '".esc_attr__('Cancel')."', true).then(function(confirmed) {
+						if (confirmed) {
+							let new_uploads = JSON.parse('['+props.attributes.$key+']');
+							new_uploads.splice(index, 1);
+								return props.setAttributes({ {$key}: JSON.stringify( new_uploads ).replace('[','').replace(']','') });
+							}
+					});
+				}},
+			'')
+		))
+	));
+	return images;
 })(),";
 
 
-                $value = '""';
+				$value = '""';
 				$type = 'MediaUpload';
-                $extra .= "onSelect: function(media){
-
-                let slim_images = props.attributes.$key ? JSON.parse('['+props.attributes.$key+']') : [];
-				if(media.length){
-						for (var i=0; i < media.length; i++) {
-							slim_images.push({id: media[i].id, caption: media[i].caption, description: media[i].description,title: media[i].title,alt: media[i].alt,sizes: media[i].sizes});
-						}
+				$extra .= "onSelect: function(media){
+	let slim_images = props.attributes.$key ? JSON.parse('['+props.attributes.$key+']') : [];
+	if(media.length){
+		for (var i=0; i < media.length; i++) {
+			slim_images.push({id: media[i].id, caption: media[i].caption, description: media[i].description,title: media[i].title,alt: media[i].alt,sizes: media[i].sizes, url: media[i].url});
+		}
+	}
+	var slimImagesV = JSON.stringify(slim_images);
+	if (slimImagesV) {
+		slimImagesV = slimImagesV.replace('[','').replace(']','').replace(/'/g, '&#39;');
+	}
+	return props.setAttributes({ $key: slimImagesV});
+},";
+				$extra .= "type: 'image',";
+				$extra .= "multiple: true,";
+				$extra .= "render: function (obj) {
+	/* Init the sort */
+	enableDragSort('sd-sortable');
+	return el( 'div',{},
+		el( wp.components.Button, {
+				className: 'components-button components-circular-option-picker__clear is-primary is-smallx',
+				onClick: obj.open
+			},
+			'Upload Images'
+		),
+		el('div',{
+				className: 'row row-cols-3 px-2 sd-sortable',
+				'data-field':'$key'
+			},
+			$img_preview
+		),
+		props.attributes.$key && el( wp.components.Button, {
+				className: 'components-button components-circular-option-picker__clear is-secondary is-small',
+				style: {margin:'8px 0'},
+				onClick: function(){
+					return props.setAttributes({ $key: '' });
 				}
-
-                      return props.setAttributes({
-                          $key: JSON.stringify(slim_images).replace('[','').replace(']',''),
-                        });
-                      },";
-                   $extra .= "type: 'image',";
-                   $extra .= "multiple: true,";
-                   $extra .= "render: function (obj) {
-
-                   // init the sort
-				enableDragSort('sd-sortable');
-                        return el( 'div',{},
-                        el( wp.components.Button, {
-                          className: 'components-button components-circular-option-picker__clear is-primary is-smallx',
-                          onClick: obj.open
-                        },
-                        'Upload Images'
-                        ),
-
-
-						el('div',{className: 'row row-cols-3 px-2 sd-sortable','data-field':'$key'},
-
-                       $img_preview
-
-                       ),
-                        props.attributes.$key && el( wp.components.Button, {
-                                      className: 'components-button components-circular-option-picker__clear is-secondary is-small',
-                                      style: {margin:'8px 0'},
-                                      onClick: function(){
-                                              return props.setAttributes({
-                                                  $key: '',
-                                                });
-                                    }
-                                    },
-                                    props.attributes.$key? 'Clear All' : ''
-                            )
-                       )
-
-
-
-
-
-                      }";
+			},
+			props.attributes.$key ? 'Clear All' : ''
+		)
+	)
+}";
                 $onchange = "";
 
                 //$inside_elements = ",el('div',{},'file upload')";
