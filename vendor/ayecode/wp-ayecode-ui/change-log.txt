@@ -1,3 +1,6 @@
+= 0.1.98 =
+* Greedy tab links not showing properly in mobile device - FIXED
+
 = 0.1.97 =
 * BS5 removed mb-3 on slider as it was causing padding issues on GD when mixed Single and Slider archives - CHANGED
 * image cover classes are nto vertically centering image - FIXED

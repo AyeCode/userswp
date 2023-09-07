@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.3
-Stable tag: 1.2.3.21
+Stable tag: 1.2.3.22
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -149,6 +149,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 = 1.2.3.22 =
 * Translated UWP screen id breaks admin pages UI - FIXED
 * Pagination not working if user list placed on homepage - FIXED
+* Canonical URL of user profile page should be profile URL of the user - FIXED
+* AyeCode UI updated to v0.1.98 - UPDATED
+* Super Duper updated to v1.1.24 - UPDATED
 
 = 1.2.3.21 =
 * Allow to dismiss notice displayed when author archive disabled from Yoast SEO- ADDED

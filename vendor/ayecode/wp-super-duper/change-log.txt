@@ -1,3 +1,7 @@
+= 1.1.24 =
+* Gallery block shows image when requested image size don't exists - FIXED
+* Gallery block shows JS error when image title contains multiple single quote - FIXED
+
 = 1.1.23 =
 * Type missing ; causing error - FIXED
 
