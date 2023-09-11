@@ -61,8 +61,7 @@ class UWP_Admin_List_Table extends WP_List_Table {
 	 */
 	public function get_columns() {
 		$columns = array (
-			'title'      => __ ( 'Title' , 'userwp' ) ,
-			'id'         => __ ( 'ID' , 'userswp' ) ,
+			'title'      => __( 'User Type' , 'userwp' ) ,
 			'user_role'  => __ ( 'User Role' , 'userwp' ) ,
 			'reg_action' => __ ( 'Registration Action' , 'userwp' ) ,
 		);
@@ -151,6 +150,7 @@ class UWP_Admin_List_Table extends WP_List_Table {
 
 		// Get actions.
 		$actions = array (
+			'id'        => '<span class="id">ID: ' . esc_html( $item['id'] ) . '</span>',
 			'edit' => '<a class="" href="' . esc_url( $edit_link ) . '">' . esc_html__ ( 'Edit' , 'userswp' ) . '</a>',
 			'edit-form' => '<a class="" href="' . esc_url( $edit_form_url ) . '">' . esc_html__( 'Edit Form', 'userswp' ) . '</a>',
 		);
