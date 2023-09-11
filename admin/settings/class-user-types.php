@@ -82,130 +82,215 @@ class UsersWP_User_Types {
             unset( $user_roles['administrator'] );
             $current_form = $register_forms[ $form_key ];
 
-	        $current_title  = ! empty( $current_form['title'] ) ? $current_form['title'] : '';
-            $current_gdpr_page   = ! empty( $current_form['gdpr_page'] ) ? (int) $current_form['gdpr_page'] : - 1;
-            $current_tos_page    = ! empty( $current_form['tos_page'] ) ? (int) $current_form['tos_page'] : - 1;
 	        $user_role   = ! empty( $current_form['user_role'] ) ? $current_form['user_role'] : '';
-            if ( ! empty( $user_role ) && in_array( $user_role, array_keys( $user_roles ) ) ) {
+            if ( ! empty( $user_role ) && in_array( $user_role, array_keys( $user_roles ), true ) ) {
                 $current_role = $user_role;
             }
 
-	        $current_custom_url  = ! empty( $current_form['custom_url'] ) ? $current_form['custom_url'] : '';
-
-	        $actions             = uwp_get_registration_form_actions();
-	        $current_action      = uwp_get_option( 'uwp_registration_action', false );
-	        $current_action      = ! empty( $current_form['reg_action'] ) ? $current_form['reg_action'] : $current_action;
-            $current_redirect_to = ! empty( $current_form['redirect_to'] ) ? $current_form['redirect_to'] : '';
+	        $current_action = uwp_get_option( 'uwp_registration_action', false );
+	        $current_action = ! empty( $current_form['reg_action'] ) ? $current_form['reg_action'] : $current_action;
+            $all_pages      = wp_list_pluck( get_pages(), 'post_title', 'ID' );
 
             ?>
             <table class="form-table bsui userswp" id="uwp-form-more-options" style="display:block;">
                 <tr>
-                    <th><?php _e( 'Title:', 'userswp' ); echo uwp_help_tip(__('For example, Members', 'userswp')) ?></th>
-                    <td>
-                        <input type="text" name="form_title" value="<?php echo esc_attr($current_title); ?>"
-                               class="regular-text" required>
-                    </td>
-
-                </tr>
-                <tr>
-	                <?php if ( ! empty( $user_roles ) && is_array( $user_roles ) ) { ?>
-                        <th>
-                            <?php esc_html_e( 'User Role to Assign:', 'userswp' ); echo uwp_help_tip( __( 'Role to assign this user type.', 'userswp' ) ); ?></th>
-                        <td>
-                            <select name="user_role" id="multiple_registration_user_role"
-                                    class="small-text aui-select2">
-				                <?php
-				                foreach ( $user_roles as $key => $user_role ) {
-					                ?>
-                                    <option <?php selected( $current_role, $key ); ?>
-                                            value="<?php echo esc_attr($key); ?>"><?php echo sprintf( __( '%s', 'userswp' ), $user_role ); ?></option>
-				                <?php }
-				                ?>
-                            </select>
-                        </td>
-	                <?php } ?>
-                </tr>
-                <tr>
-                    <th><?php _e( 'Registration Action:', 'userswp' ); echo uwp_help_tip(__('Select how registration should be handled.', 'userswp')) ?></th>
-                    <td>
-                        <select name="reg_action" id="uwp_registration_action"
-                                class="small-text aui-select2">
-                            <?php
-                            foreach ( $actions as $key => $action ) {
-                                ?>
-                                <option <?php selected( $current_action, $key ); ?>
-                                        value="<?php echo esc_attr($key); ?>"><?php echo sprintf( __( '%s', 'userswp' ), $action ); ?></option>
-                            <?php } ?>
-                        </select>
-                    </td>
-                </tr>
-                <tr style="display:none;">
-                    <th><?php _e( 'Redirect Page:', 'userswp' ); echo uwp_help_tip(__('Set the page to redirect the user to after signing up.', 'userswp'))  ?></th>
-                    <td>
-                        <select name="redirect_to" id="register_redirect_to"
-                                class="small-text aui-select2">
-                            <?php
-                            $pages         = get_pages();
-                            $pages_options = array(
-                                '-1' => __( 'Last User Page', 'userswp' ),
-                                '0'  => __( 'Default Redirect', 'userswp' ),
-                                '-2' => __( 'Custom Redirect', 'userswp' ),
+                    <th>
+                        <?php
+                            esc_html_e( 'Title:', 'userswp' );
+                            echo wp_kses_post(
+                                uwp_help_tip(
+                                    __( 'For example, Members', 'userswp' )
+                                )
                             );
-                            if ( $pages ) {
-                                foreach ( $pages as $page ) {
-                                    $pages_options[ $page->ID ] = $page->post_title;
-                                }
-                            }
-                            foreach ( $pages_options as $key => $option ) {
-                                ?>
-                                <option <?php selected( $current_redirect_to, $key ); ?>
-                                        value="<?php echo esc_attr($key); ?>"><?php echo sprintf( __( '%s', 'userswp' ), $option ); ?></option>
-                            <?php } ?>
-                        </select>
-                    </td>
-
-                </tr>
-                <tr>
-                    <th><?php _e( 'Custom Redirect URL:', 'userswp' ); echo uwp_help_tip(__( 'Set the page to redirect the user to after signing up. If default redirect has been set then WordPress default will be used.', 'userswp' )); ?></th>
+                        ?>
+                    </th>
                     <td>
-                        <input type="text" name="custom_url" id="register_redirect_custom_url"
-                               class="regular-text" value="<?php echo esc_attr($current_custom_url); ?>">
+                        <input
+                            type="text"
+                            name="form_title"
+                            value="<?php echo esc_attr( ! empty( $current_form['title'] ) ? $current_form['title'] : '' ); ?>"
+                            class="form-control"
+                            required
+                        />
                     </td>
                 </tr>
                 <tr>
-                    <th><?php _e( 'GDPR Policy Page:', 'userswp' ); echo uwp_help_tip(__('Page to link when GDPR policy page custom field added to form. If not set then default setting will be used.', 'userswp')); ?></th>
+                    <th>
+                        <?php
+                            esc_html_e( 'User Role to Assign:', 'userswp' );
+                            echo wp_kses_post(
+                                uwp_help_tip(
+                                    __( 'Role to assign this user type.', 'userswp' )
+                                )
+                            );
+                        ?>
+                    </th>
                     <td>
                         <?php
-                        $args = array(
-                            'name'             => 'gdpr_page',
-                            'id'               => 'multiple_registration_gdpr_page',
-                            'sort_column'      => 'menu_order',
-                            'sort_order'       => 'ASC',
-                            'show_option_none' => ' ',
-                            'class'            => ' regular-text aui-select2 ',
-                            'echo'             => false,
-                            'selected'         => (int) $current_gdpr_page > 0 ? (int) $current_gdpr_page : - 1,
-                        );
-                        echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'userswp' ) . "' id=", wp_dropdown_pages( $args ) );
+                            aui()->select(
+                                array(
+                                    'name'        => 'user_role',
+                                    'id'          => 'multiple_registration_user_role',
+                                    'placeholder' => __( 'Select a role&hellip;', 'userswp' ),
+                                    'options'     => $user_roles,
+                                    'value'       => $current_role,
+                                    'no_wrap'     => true,
+                                    'select2'     => true,
+                                    'class'       => 'w-100',
+                                ),
+                                true
+                            );
                         ?>
                     </td>
                 </tr>
                 <tr>
-                    <th><?php _e( 'TOS Page:', 'userswp' ); echo uwp_help_tip(__('Page to link when Terms and Conditions custom field added to form. If not set then default setting will be used.', 'userswp'));?></th>
+                    <th>
+                        <?php
+                            esc_html_e( 'Registration Action:', 'userswp' );
+                            echo wp_kses_post(
+                                uwp_help_tip(
+                                    __( 'Select how registration should be handled.', 'userswp' )
+                                )
+                            );
+                        ?>
+                    </th>
                     <td>
-		                <?php
-		                $args = array(
-			                'name'             => 'tos_page',
-			                'id'               => 'multiple_registration_tos_page',
-			                'sort_column'      => 'menu_order',
-			                'sort_order'       => 'ASC',
-			                'show_option_none' => ' ',
-			                'class'            => ' regular-text aui-select2 ',
-			                'echo'             => false,
-			                'selected'         => (int) $current_tos_page > 0 ? (int) $current_tos_page : - 1,
-		                );
-		                echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'userswp' ) . "' id=", wp_dropdown_pages( $args ) );
-		                ?>
+                        <?php
+                            aui()->select(
+                                array(
+                                    'name'        => 'reg_action',
+                                    'id'          => 'uwp_registration_action',
+                                    'placeholder' => __( 'Select an action&hellip;', 'userswp' ),
+                                    'options'     => uwp_get_registration_form_actions(),
+                                    'value'       => $current_action,
+                                    'no_wrap'     => true,
+                                    'select2'     => true,
+                                    'class'       => 'w-100',
+                                ),
+                                true
+                            );
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <?php
+                            esc_html_e( 'Redirect Page:', 'userswp' );
+                            echo wp_kses_post(
+                                uwp_help_tip(
+                                    __( 'Set the page to redirect the user to after signing up.', 'userswp' )
+                                )
+                            );
+                        ?>
+                    </th>
+                    <td>
+                        <?php
+                            aui()->select(
+                                array(
+                                    'name'        => 'redirect_to',
+                                    'id'          => 'register_redirect_to',
+                                    'placeholder' => __( 'Select a page&hellip;', 'userswp' ),
+                                    'options'     => array_replace(
+                                        array(
+                                            '-1' => __( 'Last User Page', 'userswp' ),
+                                            '0'  => __( 'Default Redirect', 'userswp' ),
+                                            '-2' => __( 'Custom Redirect', 'userswp' ),
+                                        ),
+                                        $all_pages
+                                    ),
+                                    'value'       => ! empty( $current_form['redirect_to'] ) ? $current_form['redirect_to'] : '',
+                                    'no_wrap'     => true,
+                                    'select2'     => true,
+                                    'class'       => 'w-100',
+                                ),
+                                true
+                            );
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <?php
+                            esc_html_e( 'Custom Redirect URL:', 'userswp' );
+                            echo wp_kses_post(
+                                uwp_help_tip(
+                                    __( 'Set the page to redirect the user to after signing up. If default redirect has been set then WordPress default will be used.', 'userswp' )
+                                )
+                            );
+                        ?>
+                    </th>
+                    <td>
+                        <?php
+                            aui()->input(
+                                array(
+                                    'name'        => 'custom_url',
+                                    'id'          => 'register_redirect_custom_url',
+                                    'placeholder' => __( 'Enter URL&hellip;', 'userswp' ),
+                                    'value'       => ! empty( $current_form['custom_url'] ) ? $current_form['custom_url'] : '',
+                                    'no_wrap'     => true,
+                                    'class'       => 'w-100',
+                                ),
+                                true
+                            );
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <?php
+                            esc_html_e( 'GDPR Policy Page:', 'userswp' );
+                            echo wp_kses_post(
+                                uwp_help_tip(
+                                    __( 'Page to link when GDPR policy page custom field added to form. If not set then default setting will be used.', 'userswp' )
+                                )
+                            );
+                        ?>
+                    </th>
+                    <td>
+                        <?php
+                            aui()->select(
+                                array(
+                                    'name'        => 'gdpr_page',
+                                    'id'          => 'multiple_registration_gdpr_page',
+                                    'placeholder' => __( 'Select a page&hellip;', 'userswp' ),
+                                    'options'     => $all_pages,
+                                    'value'       => ! empty( $current_form['gdpr_page'] ) ? (int) $current_form['gdpr_page'] : '',
+                                    'no_wrap'     => true,
+                                    'select2'     => true,
+                                    'class'       => 'w-100',
+                                ),
+                                true
+                            );
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <?php
+                            esc_html_e( 'TOS Page:', 'userswp' );
+                            echo wp_kses_post(
+                                uwp_help_tip(
+                                    __( 'Page to link when Terms and Conditions custom field added to form. If not set then default setting will be used.', 'userswp' )
+                                )
+                            );
+                        ?>
+                    </th>
+                    <td style="min-width: 26.2rem;">
+                        <?php
+                            aui()->select(
+                                array(
+                                    'name'        => 'tos_page',
+                                    'id'          => 'multiple_registration_tos_page',
+                                    'placeholder' => __( 'Select a page&hellip;', 'userswp' ),
+                                    'options'     => $all_pages,
+                                    'value'       => ! empty( $current_form['tos_page'] ) ? (int) $current_form['tos_page'] : '',
+                                    'no_wrap'     => true,
+                                    'select2'     => true,
+                                    'class'       => 'w-100',
+                                ),
+                                true
+                            );
+                        ?>
                     </td>
                 </tr>
             </table>
@@ -213,8 +298,14 @@ class UsersWP_User_Types {
             <?php do_action( 'uwp_user_type_form_before_submit', $current_form ); ?>
 
             <div class="bsui">
-                <button class="btn btn-sm btn-primary" id="form_update" type="submit"
-                        name="form_update"><?php _e( 'Update', 'userswp' ); ?></button>
+                <button
+                    class="btn btn-sm btn-primary"
+                    id="form_update"
+                    type="submit"
+                    name="form_update"
+                >
+                    <?php esc_html_e( 'Update', 'userswp' ); ?>
+                </button>
                 <a
                     href="<?php echo esc_url( add_query_arg( 'form', (int) $form_id, admin_url( 'admin.php?page=uwp_form_builder&tab=account' ) ) ); ?>"
                     class="btn btn-sm btn-link"
