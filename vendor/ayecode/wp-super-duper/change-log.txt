@@ -1,3 +1,9 @@
+= 1.1.26 =
+* Attempt auto recovery block on non edit template mode - CHANGED
+
+= 1.1.25 =
+* Undefined array key "title" thrown for some blocks when using Avada - FIXED
+
 = 1.1.24 =
 * Gallery block shows image when requested image size don't exists - FIXED
 * Gallery block shows JS error when image title contains multiple single quote - FIXED
