@@ -964,15 +964,9 @@ class UsersWP_Forms {
 					)
 				);
 			} elseif ( $reg_action == 'require_payment' ) {
-				$first_name = $data['first_name'];
-				$last_name = $data['last_name'];
-                $email = $data['email'];
-				$form_id = (int) $data['uwp_register_form_id'];
 
-				$redirect_to = $this->get_register_redirect_url( $data, $user_id ) . '&first_name=' . $first_name . '&last_name=' . $last_name . '&email=' . $email;
-//                Calling this function makes the user to be in pending
-                $activation_link = uwp_get_activation_link( $user_id );
-                update_user_meta( $user_id, 'uwp_mod', 'payment_unconfirmed' );
+				$redirect_to = apply_filters( 'uwp_register_payment_redirect_url', $this->get_register_redirect_url( $data, $user_id ), $user_id, $result );
+				update_user_meta( $user_id, 'uwp_mod', 'payment_unconfirmed' );
 
 				do_action( 'uwp_after_process_register_with_payment', $result, $user_id, $form_id );
 
