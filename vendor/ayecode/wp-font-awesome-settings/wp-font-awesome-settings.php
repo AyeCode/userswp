@@ -34,7 +34,9 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 	 * @since 1.1.0 Option added to load FontAwesome locally.
 	 * @since 1.1.1 Requires to re-save settings to load locally when option does not exists - FIXED.
 	 * @since 1.1.2 Bumped the latest version to 6.3.0 - CHANGED.
-	 * @ver 1.0.15
+     * @since 1.1.3 Added JS files for iconpicker and added constant for URL for AyeCode-UI - ADDED.
+     * @since 1.1.5 Added constant for when pro enabled - ADDED.
+	 * @ver 1.1.5
 	 * @todo decide how to implement textdomain
 	 */
 	class WP_Font_Awesome_Settings {
@@ -44,7 +46,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '1.1.2';
+		public $version = '1.1.5';
 
 		/**
 		 * Class textdomain.
@@ -58,7 +60,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $latest = "6.3.0";
+		public $latest = "6.4.2";
 
 		/**
 		 * The title.
@@ -101,6 +103,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 				if ( is_admin() ) {
 					add_action( 'admin_menu', array( self::$instance, 'menu_item' ) );
 					add_action( 'admin_init', array( self::$instance, 'register_settings' ) );
+					add_action( 'admin_init', array( self::$instance, 'constants' ) );
 					add_action( 'admin_notices', array( self::$instance, 'admin_notices' ) );
 				}
 
@@ -108,6 +111,55 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			}
 
 			return self::$instance;
+		}
+
+		/**
+         * Define any constants that may be needed by other packages.
+         *
+		 * @return void
+		 */
+		public function constants(){
+
+			// register iconpicker constant
+			if ( ! defined( 'FAS_ICONPICKER_JS_URL' ) ) {
+				$url = $this->get_path_url();
+				$version = $this->settings['version'];
+
+				if( !$version || version_compare($version,'5.999','>')){
+					$url .= 'assets/js/fa-iconpicker-v6.min.js';
+				}else{
+					$url .= 'assets/js/fa-iconpicker-v5.min.js';
+				}
+
+				define( 'FAS_ICONPICKER_JS_URL', $url );
+
+			}
+
+            // Set a constant if pro enbaled
+			if ( ! defined( 'FAS_PRO' ) && $this->settings['pro'] ) {
+				define( 'FAS_PRO', true );
+			}
+		}
+
+		/**
+		 * Get the url path to the current folder.
+		 *
+		 * @return string
+		 */
+		public function get_path_url() {
+			$content_dir = wp_normalize_path( untrailingslashit( WP_CONTENT_DIR ) );
+			$content_url = untrailingslashit( WP_CONTENT_URL );
+
+			// Replace http:// to https://.
+			if ( strpos( $content_url, 'http://' ) === 0 && strpos( plugins_url(), 'https://' ) === 0 ) {
+				$content_url = str_replace( 'http://', 'https://', $content_url );
+			}
+
+			// Check if we are inside a plugin
+			$file_dir = str_replace( "/includes", "", wp_normalize_path( dirname( __FILE__ ) ) );
+			$url = str_replace( $content_dir, $content_url, $file_dir );
+
+			return trailingslashit( $url );
 		}
 
 		/**
@@ -128,7 +180,8 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 				if ( $this->settings['type'] == 'CSS' ) {
 
 					if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'frontend' ) {
-						add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ), 5000 );
+//						add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ), 5000 );
+						add_action( 'wp_footer', array( $this, 'enqueue_style' ), 5000 );
 					}
 
 					if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'backend' ) {
@@ -414,9 +467,9 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 						?>
 						<?php if ( $this->settings['type'] != 'KIT' && ! empty( $this->settings['local'] ) && empty( $this->settings['pro'] ) ) { ?>
 							<?php if ( $this->has_local() ) { ?>
-							<div class="notice notice-info"><p><strong><?php _e( 'Font Awesome fonts are loading locally.', 'font-awesome-settings' ); ?></strong></p></div>
+                                <div class="notice notice-info"><p><strong><?php _e( 'Font Awesome fonts are loading locally.', 'font-awesome-settings' ); ?></strong></p></div>
 							<?php } else { ?>
-							<div class="notice notice-error"><p><strong><?php _e( 'Font Awesome fonts are not loading locally!', 'font-awesome-settings' ); ?></strong></p></div>
+                                <div class="notice notice-error"><p><strong><?php _e( 'Font Awesome fonts are not loading locally!', 'font-awesome-settings' ); ?></strong></p></div>
 							<?php } ?>
 						<?php } ?>
                         <table class="form-table wpfas-table-settings <?php echo esc_attr( $table_class ); ?>">
@@ -493,15 +546,15 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
                                 </td>
                             </tr>
 
-							<tr valign="top" class="wpfas-kit-hide wpfas-hide-pro">
-								<th scope="row"><label for="wpfas-local"><?php _e( 'Load Fonts Locally', 'font-awesome-settings' ); ?></label></th>
-								<td>
-									<input type="hidden" name="wp-font-awesome-settings[local]" value="0"/>
-									<input type="hidden" name="wp-font-awesome-settings[local_version]" value="<?php echo esc_attr( $this->settings['local_version'] ); ?>"/>
-									<input type="checkbox" name="wp-font-awesome-settings[local]" value="1" <?php checked( $this->settings['local'], '1' ); ?> id="wpfas-local"/>
-									<span><?php _e( '(For free version only) Load FontAwesome fonts from locally. This downloads FontAwesome fonts from fontawesome.com & stores at the local site.', 'font-awesome-settings' ); ?></span>
-								</td>
-							</tr>
+                            <tr valign="top" class="wpfas-kit-hide wpfas-hide-pro">
+                                <th scope="row"><label for="wpfas-local"><?php _e( 'Load Fonts Locally', 'font-awesome-settings' ); ?></label></th>
+                                <td>
+                                    <input type="hidden" name="wp-font-awesome-settings[local]" value="0"/>
+                                    <input type="hidden" name="wp-font-awesome-settings[local_version]" value="<?php echo esc_attr( $this->settings['local_version'] ); ?>"/>
+                                    <input type="checkbox" name="wp-font-awesome-settings[local]" value="1" <?php checked( $this->settings['local'], '1' ); ?> id="wpfas-local"/>
+                                    <span><?php _e( '(For free version only) Load FontAwesome fonts from locally. This downloads FontAwesome fonts from fontawesome.com & stores at the local site.', 'font-awesome-settings' ); ?></span>
+                                </td>
+                            </tr>
 
                             <tr valign="top" class="wpfas-kit-hide">
                                 <th scope="row"><label
@@ -545,7 +598,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 							<?php
 							submit_button();
 							?>
-                            <p class="submit"><a href="https://fontawesome.com/referral?a=c9b89e1418" class="button button-secondary"><?php _e('Get 14,000+ more icons with Font Awesome Pro','font-awesome-settings'); ?> <i class="fas fa-external-link-alt"></i></a></p>
+                            <p class="submit"><a href="https://fontawesome.com/referral?a=c9b89e1418" class="button button-secondary"><?php _e('Get 24,000+ more icons with Font Awesome Pro','font-awesome-settings'); ?> <i class="fas fa-external-link-alt"></i></a></p>
 
                         </div>
                     </form>

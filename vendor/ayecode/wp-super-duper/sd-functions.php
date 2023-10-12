@@ -2175,19 +2175,19 @@ function sd_build_aui_class( $args ) {
 	}
 	if ( isset( $args['pr_md'] ) && $args['pr_md'] !== '' ) {
 		$classes[] = $p_pr . 'md-' . sanitize_html_class( $args['pr_md'] );
-		$pt_md     = $args['pr_md'];
+		$pr_md     = $args['pr_md'];
 	} else {
 		$pr_md = null;
 	}
 	if ( isset( $args['pb_md'] ) && $args['pb_md'] !== '' ) {
 		$classes[] = 'pb-md-' . sanitize_html_class( $args['pb_md'] );
-		$pt_md     = $args['pb_md'];
+		$pb_md     = $args['pb_md'];
 	} else {
 		$pb_md = null;
 	}
 	if ( isset( $args['pl_md'] ) && $args['pl_md'] !== '' ) {
 		$classes[] = $p_pl . 'md-' . sanitize_html_class( $args['pl_md'] );
-		$pt_md     = $args['pl_md'];
+		$pl_md     = $args['pl_md'];
 	} else {
 		$pl_md = null;
 	}
