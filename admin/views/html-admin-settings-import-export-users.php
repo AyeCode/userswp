@@ -423,11 +423,11 @@ $total_users = $users_count['total_users'];
                 var msg = '';
                 switch (error.code) {
                     case -600:
-                        msg = '<?php _e( 'The file you have uploaded exceeds the file size limit. Please try again.', 'userswp' ); ?>'
+                        msg = '<?php esc_attr_e( 'The file you have uploaded exceeds the file size limit. Please try again.', 'userswp' ); ?>'
                         break;
 
                     case -601:
-                        msg = '<?php _e( 'Invalid file uploaded. Please upload .csv file. Please try again.', 'userswp' ); ?>'
+                        msg = '<?php esc_attr_e( 'Invalid file uploaded. Please upload .csv file. Please try again.', 'userswp' ); ?>'
                         break;
 
                     default:

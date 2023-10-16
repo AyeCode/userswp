@@ -188,7 +188,7 @@ class UsersWP_Validation {
                     }
                 }
 
-                if ($field->is_required == 1 && $sanitized_value == '') {
+                if ($field->is_required == 1 && $sanitized_value == '' && $field->field_type != 'file') {
                     if (isset($GLOBALS['current_screen']) && !is_customize_preview()) {
                         //do nothing since admin edit fields can be empty
                     } else {
