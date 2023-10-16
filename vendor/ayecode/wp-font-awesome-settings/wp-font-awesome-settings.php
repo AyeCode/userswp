@@ -36,7 +36,8 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 	 * @since 1.1.2 Bumped the latest version to 6.3.0 - CHANGED.
      * @since 1.1.3 Added JS files for iconpicker and added constant for URL for AyeCode-UI - ADDED.
      * @since 1.1.5 Added constant for when pro enabled - ADDED.
-	 * @ver 1.1.5
+     * @since 1.1.6 Calling FA in wp_footer can cause issues on frontend - REVERTED
+	 * @ver 1.1.6
 	 * @todo decide how to implement textdomain
 	 */
 	class WP_Font_Awesome_Settings {
@@ -46,7 +47,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '1.1.5';
+		public $version = '1.1.6';
 
 		/**
 		 * Class textdomain.
@@ -180,8 +181,8 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 				if ( $this->settings['type'] == 'CSS' ) {
 
 					if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'frontend' ) {
-//						add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ), 5000 );
-						add_action( 'wp_footer', array( $this, 'enqueue_style' ), 5000 );
+						add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ), 5000 );
+//						add_action( 'wp_footer', array( $this, 'enqueue_style' ), 5000 ); // not sure why this was added, seems to break frontend
 					}
 
 					if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'backend' ) {

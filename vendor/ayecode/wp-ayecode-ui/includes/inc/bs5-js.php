@@ -972,7 +972,7 @@
             navbar.dataset.css = cs_scroll
         }
 
-        if($value > 0 ){
+        if($value > 0 || navbar.classList.contains('nav-menu-open') ){
             navbar.classList.remove(cs_original);
             navbar.classList.add(cs_scroll);
         }else{
