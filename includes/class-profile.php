@@ -1882,12 +1882,25 @@ class UsersWP_Profile {
 	}
 
 	public function ajax_profile_image_remove() {
-		$type = isset( $_POST['type'] ) ? strip_tags( esc_sql( $_POST['type'] ) ) : '';
-		if ( $type && in_array( $type, array( 'banner', 'avatar' ) ) ) {
-			$user_id = get_current_user_id();
-			uwp_update_usermeta( $user_id, 'banner_thumb', '' );
+		//check_ajax_referer( 'uwp_basic_nonce', 'security' ); // @todo pass security in AJAX request.
+
+		$type = ! empty( $_POST['type'] ) ? $_POST['type'] : '';
+
+		if ( ! in_array( $type, array( 'banner', 'avatar' ) ) ) {
+			wp_die( -1 );
 		}
-		exit();
+
+		$user_id = is_user_logged_in() ? (int) get_current_user_id() : 0;
+
+		if ( empty( $user_id ) ) {
+			wp_send_json_error( __( 'Invalid access!', 'userswp' ) );
+		}
+
+		uwp_update_usermeta( $user_id, $type . '_thumb', '' );
+
+		wp_send_json_success();
+
+		wp_die();
 	}
 
 	/**

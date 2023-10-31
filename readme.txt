@@ -150,6 +150,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 * Super Duper updated to v1.1.27 - UPDATED
 * FontAwesome package updated to v1.1.6 - UPDATED
 * AyeCode UI updated to v0.2.0 - UPDATED
+* Profile picture could be removed if clicking a bad link CSRF - FIXED/SECURITY
 
 = 1.2.3.22 =
 * Translated UWP screen id breaks admin pages UI - FIXED

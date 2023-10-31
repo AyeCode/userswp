@@ -1325,6 +1325,7 @@ function uwp_get_localize_data(){
 		'uwp_pass_strength' => uwp_get_option("register_min_password_strength",0),
 		'uwp_strong_pass_msg' => uwp_get_option("register_uwp_strong_pass_msg",__("Please enter valid strong password.", "userswp")),
 		'default_banner' => uwp_get_default_banner_uri(),
+		'basicNonce' => esc_attr( wp_create_nonce( 'uwp_basic_nonce' ) )
 	);
 
 	return apply_filters('uwp_localize_data', $uwp_localize_data);

@@ -113,14 +113,22 @@ jQuery(window).on('load',function () {
             var data = {
                 'action': 'uwp_upload_file_remove',
                 'htmlvar': htmlvar,
-                'uid': uid
+                'uid': uid,
+                'security': uwp_localize_data.basicNonce
             };
 
-            jQuery.post(uwp_localize_data.ajaxurl, data, function(response) {
-                $("#"+htmlvar+"_row").find(".uwp_file_preview_wrap").remove();
-                $("#"+htmlvar).closest("td").find(".uwp_file_preview_wrap").remove();
-                if($('input[name='+htmlvar+']').data( 'is-required' )){
-                    $('input[name='+htmlvar+']').prop('required',true);
+            jQuery.ajax({
+                url: uwp_localize_data.ajaxurl,
+                type: 'POST',
+                data: data,
+                dataType: 'json'
+            }).done(function(res, textStatus, jqXHR) {
+                if (typeof res == 'object' && res.success) {
+                    $("#"+htmlvar+"_row").find(".uwp_file_preview_wrap").remove();
+                    $("#"+htmlvar).closest("td").find(".uwp_file_preview_wrap").remove();
+                    if($('input[name='+htmlvar+']').data( 'is-required' )){
+                        $('input[name='+htmlvar+']').prop('required',true);
+                    }
                 }
             });
         });

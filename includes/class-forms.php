@@ -2178,47 +2178,51 @@ class UsersWP_Forms {
 	 * @since   1.0.0
 	 */
 	public function upload_file_remove() {
+		check_ajax_referer( 'uwp_basic_nonce', 'security' );
 
-		$htmlvar    = strip_tags( esc_sql( $_POST['htmlvar'] ) );
-		$user_id    = (int) strip_tags( esc_sql( $_POST['uid'] ) );
-		$permission = false;
-		if ( $user_id == get_current_user_id() ) {
-			$permission = true;
-		} else {
-			if ( current_user_can( 'manage_options' ) ) {
-				$permission = true;
-			}
+		$htmlvar = esc_sql( strip_tags( $_POST['htmlvar'] ) );
+		$user_id = ! empty( $_POST['uid'] ) ? absint( $_POST['uid'] ) : 0;
+
+		if ( empty( $user_id ) ) {
+			wp_die( -1 );
 		}
-		if ( $permission ) {
-			// Remove file
-			if ( $htmlvar == "banner_thumb" ) {
-				$file = uwp_get_usermeta( $user_id, 'banner_thumb' );
-				$type = 'banner';
-			} elseif ( $htmlvar == "avatar_thumb" ) {
-				$file = uwp_get_usermeta( $user_id, 'avatar_thumb' );
-				$type = 'avatar';
-			} else {
-				$file = '';
-				$type = '';
-			}
 
-			uwp_update_usermeta( $user_id, $htmlvar, '' );
+		if ( ! ( is_user_logged_in() && ( $user_id == (int) get_current_user_id() || current_user_can( 'manage_options' ) ) ) ) {
+			wp_send_json_error( __( 'Invalid access!', 'userswp' ) );
+		}
 
-			if ( $file ) {
-				$uploads     = wp_upload_dir();
-				$upload_path = $uploads['basedir'];
-				$unlink_file = untrailingslashit( $upload_path ) . '/' . ltrim( $file, '/' );
+		// Remove file
+		if ( $htmlvar == "banner_thumb" ) {
+			$file = uwp_get_usermeta( $user_id, 'banner_thumb' );
+			$type = 'banner';
+		} else if ( $htmlvar == "avatar_thumb" ) {
+			$file = uwp_get_usermeta( $user_id, 'avatar_thumb' );
+			$type = 'avatar';
+		} else {
+			$file = '';
+			$type = '';
+		}
 
-				if ( is_file( $unlink_file ) && file_exists( $unlink_file ) ) {
-					@unlink( $unlink_file );
-					$unlink_ori_file = str_replace( '_uwp_' . $type . '_thumb' . '.', '.', $unlink_file );
-					if ( is_file( $unlink_ori_file ) && file_exists( $unlink_ori_file ) ) {
-						@unlink( $unlink_ori_file );
-					}
+		uwp_update_usermeta( $user_id, $htmlvar, '' );
+
+		if ( $file ) {
+			$uploads     = wp_upload_dir();
+			$upload_path = $uploads['basedir'];
+			$unlink_file = untrailingslashit( $upload_path ) . '/' . ltrim( $file, '/' );
+
+			if ( is_file( $unlink_file ) && file_exists( $unlink_file ) ) {
+				@unlink( $unlink_file );
+				$unlink_ori_file = str_replace( '_uwp_' . $type . '_thumb' . '.', '.', $unlink_file );
+
+				if ( is_file( $unlink_ori_file ) && file_exists( $unlink_ori_file ) ) {
+					@unlink( $unlink_ori_file );
 				}
 			}
 		}
-		die();
+
+		wp_send_json_success();
+
+		wp_die();
 	}
 
 	/**

@@ -282,23 +282,21 @@ class UsersWP_Files {
             }
         }
 
-        if (!empty($fields)) {
-            foreach ($fields as $field) {
-                if(isset($files[$field->htmlvar_name])) {
+        if ( ! empty( $fields ) ) {
+            foreach ( $fields as $field ) {
+                if ( isset( $files[ $field->htmlvar_name ] ) && ! empty( $files[ $field->htmlvar_name ]['name'] ) ) {
+                    $file_urls = $this->handle_file_upload( $field, $files );
 
-                    $file_urls = $this->handle_file_upload($field, $files);
-
-                    if (is_wp_error($file_urls)) {
+                    if ( is_wp_error( $file_urls ) ) {
                         return $file_urls;
                     }
 
-                    if ($url_only) {
+                    if ( $url_only ) {
                         $validated_data[$field->htmlvar_name] = $file_urls['url'];
                     } else {
                         $validated_data[$field->htmlvar_name] = $file_urls;
                     }
                 }
-
             }
         }
 
