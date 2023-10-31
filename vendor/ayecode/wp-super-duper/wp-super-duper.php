@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.27' );
+	define( 'SUPER_DUPER_VER', '1.1.28' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -930,7 +930,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					jQuery(document).on('focus', 'textarea', function () {
 						if (jQuery(this).hasClass('wp-editor-area')) {
 							// insert the shortcode button to the textarea lable if not there already
-							if (!jQuery(this).parent().find('.sd-lable-shortcode-inserter').length) {
+							if (!(jQuery(this).parent().find('.sd-lable-shortcode-inserter').length || (jQuery(this).closest('.wp-editor-wrap').length && jQuery(this).closest('.wp-editor-wrap').find('.sd-lable-shortcode-inserter').length))) {
 								jQuery(this).parent().find('.quicktags-toolbar').append(sd_shortcode_button(jQuery(this).attr('id')));
 							}
 						} else {
@@ -959,7 +959,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						}
 					});
 
-					// Fushion builder (avada)
+					// Fusion builder (avada)
 					jQuery(document).on('focusin', '.CodeMirror.cm-s-default', function () {
 						// insert the shortcode button to the textarea lable if not there already
 						if (!jQuery(this).parent().find('.sd-lable-shortcode-inserter').length) {
@@ -2160,7 +2160,7 @@ new MutationObserver(() => {
                     }else if($styles['background-image'] !== undefined && $args['bg'] == 'custom-gradient'){
                            $styles['background-image'] +=  ",url("+$bg_image+")";
                     }else if($args['bg'] !== undefined && $args['bg'] != '' && $args['bg'] != 'transparent' ){
-                           // do nothing as we alreay have a preset
+                           // do nothing as we already have a preset
                            hasImage = false;
                     }else{
                            $styles['background-image'] = "url("+$bg_image+")";
