@@ -1,3 +1,6 @@
+= 1.1.28 =
+* Shortcode button added twice in the page content editor - FIXED
+
 = 1.1.27 =
 * Tablet padding option values are not working properly - FIXED
 
