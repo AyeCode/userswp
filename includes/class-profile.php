@@ -1040,9 +1040,9 @@ class UsersWP_Profile {
 			"SELECT COUNT(comment_ID)
                 FROM " . $wpdb->comments . "
                 WHERE comment_post_ID in (
-                SELECT ID 
-                FROM " . $wpdb->posts . " 
-                WHERE post_type = '".$post_type."' 
+                SELECT ID
+                FROM " . $wpdb->posts . "
+                WHERE post_type = '".$post_type."'
                 AND post_status = 'publish')
                 AND user_id = " . $user_id . "
                 AND comment_approved = '1'
@@ -1882,12 +1882,15 @@ class UsersWP_Profile {
 	}
 
 	public function ajax_profile_image_remove() {
-		$type = isset( $_POST['type'] ) ? strip_tags( esc_sql( $_POST['type'] ) ) : '';
-		if ( $type && in_array( $type, array( 'banner', 'avatar' ) ) ) {
-			$user_id = get_current_user_id();
-			uwp_update_usermeta( $user_id, 'banner_thumb', '' );
-		}
-		exit();
+        if ( wp_verify_nonce( $_POST['nonce'] ) ) {
+
+            $type = isset( $_POST['type'] ) ? strip_tags( esc_sql( $_POST['type'] ) ) : '';
+            if ( $type && in_array( $type, array( 'banner', 'avatar' ) ) ) {
+                $user_id = get_current_user_id();
+                uwp_update_usermeta( $user_id, 'banner_thumb', '' );
+            }
+            exit();
+        }
 	}
 
 	/**

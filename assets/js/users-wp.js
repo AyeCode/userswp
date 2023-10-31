@@ -113,7 +113,8 @@ jQuery(window).on('load',function () {
             var data = {
                 'action': 'uwp_upload_file_remove',
                 'htmlvar': htmlvar,
-                'uid': uid
+                'uid': uid,
+                'nonce': uwp_localize_data.nonce
             };
 
             jQuery.post(uwp_localize_data.ajaxurl, data, function(response) {

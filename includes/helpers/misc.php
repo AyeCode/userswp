@@ -344,10 +344,10 @@ function get_uwp_users_list($roles = array()) {
             ON ( $wpdb->users.ID = $wpdb->usermeta.user_id )
             WHERE 1=1
             $exclude_query
-            AND ( 
-                ( $wpdb->usermeta.meta_key = 'first_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
-                OR 
-                ( $wpdb->usermeta.meta_key = 'last_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
+            AND (
+                ( $wpdb->usermeta.meta_key = 'first_name' AND $wpdb->usermeta.meta_value LIKE %s )
+                OR
+                ( $wpdb->usermeta.meta_key = 'last_name' AND $wpdb->usermeta.meta_value LIKE %s )
                 OR user_login LIKE %s OR user_nicename LIKE %s OR display_name LIKE %s
             )
             ORDER BY display_name ASC",
@@ -364,8 +364,8 @@ function get_uwp_users_list($roles = array()) {
 			$keyword_query = '';
 
 			if($keyword) {
-				$keyword_query = " AND (( $wpdb->usermeta.meta_key = 'first_name' AND $wpdb->usermeta.meta_value LIKE '$keyword' ) 
-                OR ( $wpdb->usermeta.meta_key = 'last_name' AND $wpdb->usermeta.meta_value LIKE '$keyword' ) 
+				$keyword_query = " AND (( $wpdb->usermeta.meta_key = 'first_name' AND $wpdb->usermeta.meta_value LIKE '$keyword' )
+                OR ( $wpdb->usermeta.meta_key = 'last_name' AND $wpdb->usermeta.meta_value LIKE '$keyword' )
                 OR 'user_login' LIKE '$keyword' OR 'user_nicename' LIKE '$keyword' OR 'display_name' LIKE '$keyword')";
 			}
 
@@ -1325,6 +1325,7 @@ function uwp_get_localize_data(){
 		'uwp_pass_strength' => uwp_get_option("register_min_password_strength",0),
 		'uwp_strong_pass_msg' => uwp_get_option("register_uwp_strong_pass_msg",__("Please enter valid strong password.", "userswp")),
 		'default_banner' => uwp_get_default_banner_uri(),
+        'nonce' => wp_create_nonce('uwp-nonce')
 	);
 
 	return apply_filters('uwp_localize_data', $uwp_localize_data);
