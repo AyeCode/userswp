@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.98';
+		public $version = '0.2.0';
 
 		/**
 		 * Class textdomain.
@@ -434,6 +434,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				}
 			}
 
+
+
 			return apply_filters( 'aui_load_on_admin' , $load );
 		}
 
@@ -657,8 +659,12 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				// flatpickr
 				wp_register_script( 'flatpickr', $this->url . 'assets/js/flatpickr.min.js', array(), $this->version );
 
-				// flatpickr
-				wp_register_script( 'iconpicker', $this->url . 'assets/js/fa-iconpicker.min.js', array(), $this->version );
+				// iconpicker
+				if ( defined( 'FAS_ICONPICKER_JS_URL' ) ) {
+					wp_register_script( 'iconpicker', FAS_ICONPICKER_JS_URL, array(), $this->version );
+				}else{
+					wp_register_script( 'iconpicker', $this->url . 'assets/js/fa-iconpicker.min.js', array(), $this->version );
+				}
 
 				// Bootstrap file browser
 				wp_register_script( 'aui-custom-file-input', $url = $this->url . 'assets/js/bs-custom-file-input.min.js', array( 'jquery' ), $this->select2_version );

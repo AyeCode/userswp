@@ -146,6 +146,11 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.23 =
+* Super Duper updated to v1.1.27 - UPDATED
+* FontAwesome package updated to v1.1.6 - UPDATED
+* AyeCode UI updated to v0.2.0 - UPDATED
+
 = 1.2.3.22 =
 * Translated UWP screen id breaks admin pages UI - FIXED
 * Pagination not working if user list placed on homepage - FIXED

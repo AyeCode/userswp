@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.24' );
+	define( 'SUPER_DUPER_VER', '1.1.27' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -211,7 +211,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 
 					// heading
-					$param['heading'] = $val['title'];
+					$param['heading'] = isset( $val['title'] ) ? $val['title'] : '';
 
 					// description
 					$param['description'] = isset( $val['desc'] ) ? $val['desc'] : '';
@@ -2030,9 +2030,21 @@ function sd_auto_recover_blocks() {
 /**
  * Try to auto-recover OUR blocks if traditional way fails.
  */
-function sd_auto_recover_blocks_fallback() {
+function sd_auto_recover_blocks_fallback(editTmpl) {
 	console.log('sd_auto_recover_blocks_fallback()');
-	jQuery(".edit-site-visual-editor__editor-canvas").contents().find('div[class*=" wp-block-blockstrap-"] .block-editor-warning__actions  .block-editor-warning__action .components-button.is-primary').not(":contains('Keep as HTML')").removeAttr('disabled').click();
+	var $bsRecoverBtn = jQuery(".edit-site-visual-editor__editor-canvas").contents().find('div[class*=" wp-block-blockstrap-"] .block-editor-warning__actions  .block-editor-warning__action .components-button.is-primary').not(":contains('Keep as HTML')");
+	if ($bsRecoverBtn.length) {
+		if (!editTmpl && jQuery('.edit-site-page-panels__edit-template-button').length && !jQuery('.edit-site-page-panels__edit-template-button').hasClass('bs-edit-tmpl-clicked')) {
+			jQuery('.edit-site-page-panels__edit-template-button').addClass('bs-edit-tmpl-clicked').trigger('click');
+			jQuery('body').addClass('bs-edit-tmpl-untick');
+		}
+		$bsRecoverBtn.removeAttr('disabled').trigger('click');
+	} else {
+		if (jQuery('body').hasClass('bs-edit-tmpl-untick')) {
+			jQuery('body').removeClass('bs-edit-tmpl-untick');
+			jQuery('.components-button.edit-site-document-actions__back').trigger('click');
+		}
+	}
 }
 
 // Wait will window is loaded before calling.
@@ -2058,6 +2070,21 @@ window.onload = function() {
 	setTimeout(function() {
 		sd_auto_recover_blocks_fallback();
 	}, 20000);
+	
+	setTimeout(function() {
+		sd_auto_recover_blocks_fallback();
+	}, 30000);
+	
+	setTimeout(function() {
+		sd_auto_recover_blocks_fallback();
+	}, 60000);
+
+	jQuery('.edit-site-page-panels__edit-template-button').on('click', function() {
+		setTimeout(function() {
+			sd_auto_recover_blocks_fallback(true);
+			jQuery('.edit-site-page-panels__edit-template-button').addClass('bs-edit-tmpl-clicked');
+		}, 100);
+	});
 };
 
 // fire when URL changes also.

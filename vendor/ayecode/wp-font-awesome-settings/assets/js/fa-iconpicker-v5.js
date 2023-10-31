@@ -614,14 +614,25 @@
                 });
             }
             if (this.hasInput()) {
-                this.input.on("keyup.iconpicker", function(d) {
-                    if (!b.inArray(d.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ])) {
-                        c.update();
+                this.input.on("keyup.iconpicker paste", function(d) { // Notice the added "paste"
+                    if (d.type === 'paste') {
+                        // Handle the paste event
+                        setTimeout(function() { // Use a timeout to ensure the pasted content is actually in the input
+                            c.update();
+                            if (c.options.inputSearch === true) {
+                                c.filter(a(this).val().toLowerCase());
+                            }
+                        }.bind(this), 0); // bind(this) to ensure 'this' inside the setTimeout is the input element
                     } else {
-                        c._updateFormGroupStatus(c.getValid(this.value) !== false);
-                    }
-                    if (c.options.inputSearch === true) {
-                        c.filter(a(this).val().toLowerCase());
+                        // Existing keyup event logic
+                        if (!b.inArray(d.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ])) {
+                            c.update();
+                        } else {
+                            c._updateFormGroupStatus(c.getValid(this.value) !== false);
+                        }
+                        if (c.options.inputSearch === true) {
+                            c.filter(a(this).val().toLowerCase());
+                        }
                     }
                 });
             }
@@ -821,10 +832,17 @@
         _updateComponents: function() {
             this.iconpicker.find(".iconpicker-item.iconpicker-selected").removeClass("iconpicker-selected " + this.options.selectedCustomClass);
             if (this.iconpickerValue) {
+                console.log(this.iconpickerValue);
                 this.iconpicker.find("." + this.options.fullClassFormatter(this.iconpickerValue).replace(/ /g, ".")).parent().addClass("iconpicker-selected " + this.options.selectedCustomClass);
             }
             if (this.hasComponent()) {
                 var a = this.component.find("i");
+
+                // check if we have a unknowen class value
+                if(a.className === undefined && this.input[0].value){
+                    this.iconpickerValue = this.input[0].value;
+                }
+
                 if (a.length > 0) {
                     a.attr("class", this.options.fullClassFormatter(this.iconpickerValue));
                 } else {
@@ -1015,9 +1033,9 @@
                 a = this.setSourceValue(a);
                 this._updateFormGroupStatus(a !== false);
             }
-            if (a !== false) {
-                this._updateComponents();
-            }
+            //if (a !== false) {
+            this._updateComponents();
+            // }
             this._trigger("iconpickerUpdated", {
                 iconpickerValue: this.iconpickerValue
             });
