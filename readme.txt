@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.3
-Stable tag: 1.2.3.22
+Stable tag: 1.2.3.23
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -147,7 +147,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 == Changelog ==
 
 = 1.2.3.23 =
-* Super Duper updated to v1.1.27 - UPDATED
+* Super Duper updated to v1.1.28 - UPDATED
 * FontAwesome package updated to v1.1.6 - UPDATED
 * AyeCode UI updated to v0.2.0 - UPDATED
 * Profile picture could be removed if clicking a bad link CSRF - FIXED/SECURITY
