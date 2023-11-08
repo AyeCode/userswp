@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
-Tested up to: 6.3
-Stable tag: 1.2.3.23
+Tested up to: 6.4
+Stable tag: 1.2.3.24
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -145,6 +145,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.3.24 =
+* Tested up to WP version 6.4 - CHANGED
 
 = 1.2.3.23 =
 * Super Duper updated to v1.1.28 - UPDATED
