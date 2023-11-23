@@ -383,7 +383,7 @@ class UsersWP_Profile {
 				if ( $field->field_type_key != 'country' && $field->field_type_key != 'uwp_country' ) {
 					if ( ! empty( $value ) ) {
 						$data  = $this->uwp_array_search( $option_values_arr, 'value', $value );
-						$value = $data[0]['label'];
+						$value = !empty( $data[0]['label'] ) ? $data[0]['label'] : '';
 					} else {
 						$value = '';
 					}
