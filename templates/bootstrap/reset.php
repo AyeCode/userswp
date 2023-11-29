@@ -24,7 +24,7 @@ do_action( 'uwp_template_before', 'reset' ); ?>
 				<?php do_action( 'uwp_template_display_notices', 'reset' ); ?>
 
 				<?php if ( isset( $_GET['key'] ) && isset( $_GET['login'] ) ) { ?>
-					<form class="uwp-login-form uwp_form" method="post">
+					<form class="uwp-reset-form uwp_form" method="post">
 						<?php
                         do_action( 'uwp_template_fields', 'reset' );
 						echo aui()->button(array(

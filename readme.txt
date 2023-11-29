@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.3.25 =
+* Password strength not working in reset password form - FIXED
+
 = 1.2.3.24 =
 * Tested up to WP version 6.4 - CHANGED
 
