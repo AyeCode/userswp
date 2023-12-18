@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.4 =
+* Add support to resize webp image for avatar/banner - FIXED
+
 = 1.2.3.24 =
 * Tested up to WP version 6.4 - CHANGED
 
