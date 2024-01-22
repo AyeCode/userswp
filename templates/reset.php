@@ -12,7 +12,7 @@ $form_title = ! empty( $args['form_title'] ) ? esc_attr__( $args['form_title'], 
             </h2>
             <?php do_action('uwp_template_display_notices', 'reset'); ?>
             <?php if (isset($_GET['key']) && isset($_GET['login'])) { ?>
-                <form class="uwp-login-form uwp_form" method="post">
+                <form class="uwp-reset-form uwp_form" method="post">
                     <?php do_action('uwp_template_fields', 'reset'); ?>
                     <input name="uwp_reset_submit" value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit"><br>
                 </form>
