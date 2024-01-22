@@ -132,56 +132,80 @@ function uwp_string_to_options($input = '', $translated = false)
  *
  * @return      mixed                               Resized image.
  */
-function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $src_h, $scale){
+function uwp_resizeThumbnailImage( $thumb_image_name, $image, $x, $y, $src_w, $src_h, $scale, $wp_error = false ) {
 	uwp_set_php_limits();
-	// ignore image creation warnings
-	@ini_set('gd.jpeg_ignore_warning', 1);
+
+	// Ignore image creation warnings
+	@ini_set( 'gd.jpeg_ignore_warning', 1 );
+
+	$newImageWidth = ceil( $src_w * $scale );
+	$newImageHeight = ceil( $src_h * $scale );
+
 	/** @noinspection PhpUnusedLocalVariableInspection */
-	list($imagewidth, $imageheight, $imageType) = getimagesize($image);
-	$imageType = image_type_to_mime_type($imageType);
+	list( $imagewidth, $imageheight, $imageType ) = getimagesize( $image );
+	$imageType = image_type_to_mime_type( $imageType );
 
-	$newImageWidth = ceil($src_w * $scale);
-	$newImageHeight = ceil($src_h * $scale);
-	$newImage = imagecreatetruecolor($newImageWidth,$newImageHeight);
+	if ( function_exists( 'wp_crop_image' ) ) {
+		$wp_crop = ! in_array( $imageType, array( 'image/gif', 'image/pjpeg', 'image/jpeg', 'image/jpg', 'image/png', 'image/x-png' ) ) ? true : false;
+		$wp_crop = apply_filters( 'uwp_resize_image_use_wp_crop_image', $wp_crop, $imageType, $image, $thumb_image_name, $x, $y, $src_w, $src_h, $scale );
+
+		if ( $wp_crop ) {
+			$cropped = wp_crop_image( $image, $x, $y, $src_w, $src_h, $newImageWidth, $newImageHeight, false, $thumb_image_name );
+
+			if ( $wp_error && is_wp_error( $cropped ) ) {
+				return $cropped;
+			}
+
+			return $thumb_image_name;
+		}
+	}
+
+	$newImage = imagecreatetruecolor( $newImageWidth, $newImageHeight );
 	$source = false;
-	switch($imageType) {
+
+	switch( $imageType ) {
 		case "image/gif":
-			$source=imagecreatefromgif($image);
+			$source = imagecreatefromgif( $image );
 			break;
 		case "image/pjpeg":
 		case "image/jpeg":
 		case "image/jpg":
-			$source=imagecreatefromjpeg($image);
+			$source = imagecreatefromjpeg( $image );
 			break;
 		case "image/png":
 		case "image/x-png":
-			$source=imagecreatefrompng($image);
-			if(apply_filters('uwp_keep_png_transperent', true, $thumb_image_name, $image, $x, $y, $src_w, $src_h)){
-				$background = imagecolorallocate($newImage , 0, 0, 0);
-				imagecolortransparent($newImage, $background);
-				imagealphablending($newImage, false);
-				imagesavealpha($newImage, true);
-            }
-			break;
-	}
-	imagecopyresampled($newImage,$source,0,0,$x,$y,$newImageWidth, $newImageHeight, $src_w, $src_h);
-	$quality = apply_filters( 'uwp_resize_thumb_quality', 100);
-	switch($imageType) {
-		case "image/gif":
-			imagegif($newImage, $thumb_image_name);
-			break;
-		case "image/pjpeg":
-		case "image/jpeg":
-		case "image/jpg":
-			imagejpeg($newImage, $thumb_image_name, $quality);
-			break;
-		case "image/png":
-		case "image/x-png":
-			imagepng($newImage, $thumb_image_name);
+			$source = imagecreatefrompng( $image );
+			if ( apply_filters( 'uwp_keep_png_transperent', true, $thumb_image_name, $image, $x, $y, $src_w, $src_h ) ) {
+				$background = imagecolorallocate( $newImage, 0, 0, 0 );
+
+				imagecolortransparent( $newImage, $background );
+				imagealphablending( $newImage, false );
+				imagesavealpha( $newImage, true );
+			}
 			break;
 	}
 
-	chmod($thumb_image_name, 0777);
+	imagecopyresampled( $newImage, $source, 0, 0, $x, $y, $newImageWidth, $newImageHeight, $src_w, $src_h );
+
+	$quality = apply_filters( 'uwp_resize_thumb_quality', 100 );
+
+	switch( $imageType ) {
+		case "image/gif":
+			imagegif( $newImage, $thumb_image_name );
+			break;
+		case "image/pjpeg":
+		case "image/jpeg":
+		case "image/jpg":
+			imagejpeg( $newImage, $thumb_image_name, $quality );
+			break;
+		case "image/png":
+		case "image/x-png":
+			imagepng( $newImage, $thumb_image_name );
+			break;
+	}
+
+	chmod( $thumb_image_name, 0777 );
+
 	return $thumb_image_name;
 }
 
