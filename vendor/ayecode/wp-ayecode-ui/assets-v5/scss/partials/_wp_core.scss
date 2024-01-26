@@ -149,3 +149,11 @@ body.modal-open .modal{
 .zi-7 {
     z-index: 1000000 !important
 }
+
+
+// Uploader in safari button overflowing
+.geodir-add-files .moxie-shim {
+  position: initial !important;
+  background: transparent; // this is for divi theme that does background position stuff and breaks it.
+}
+

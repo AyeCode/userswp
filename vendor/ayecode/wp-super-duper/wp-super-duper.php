@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.28' );
+	define( 'SUPER_DUPER_VER', '1.1.33' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -130,8 +130,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				add_action( 'wp_ajax_super_duper_get_picker', array( __CLASS__, 'get_picker' ) );
 
 				// add generator text to head
-				add_action( 'admin_head', array( $this, 'generator' ) );
-				add_action( 'wp_head', array( $this, 'generator' ) );
+				add_action( 'admin_head', array( $this, 'generator' ), 99 );
+				add_action( 'wp_head', array( $this, 'generator' ), 99 );
 			}
 
 			do_action( 'wp_super_duper_widget_init', $options, $this );
@@ -232,7 +232,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						if ( isset( $val['default'] ) && $val['default'] == '0' ) {
 							unset( $param['default'] );
 						}
-						$param['value'] = array( '0' => __( "No" ), '1' => __( "Yes" ) );
+						$param['value'] = array( '0' => __( "No", 'ayecode-connect' ), '1' => __( "Yes", 'ayecode-connect' ) );
 					} elseif ( $param['type'] == 'select' || $param['type'] == 'multiple_select' ) {
 						$param['value'] = isset( $val['options'] ) ? $val['options'] : array();
 					} else {
@@ -285,7 +285,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				//				print_r($sd_widgets);exit;
 				if ( ! empty( $sd_widgets ) ) {
 					echo '<select class="widefat" onchange="sd_get_shortcode_options(this);">';
-					echo "<option>" . __( 'Select shortcode' ) . "</option>";
+					echo "<option>" . __( 'Select shortcode', 'ayecode-connect' ) . "</option>";
 					foreach ( $sd_widgets as $shortcode => $class ) {
 						if(!empty($class['output_types']) && !in_array('shortcode', $class['output_types'])){ continue; }
 						echo "<option value='" . esc_attr( $shortcode ) . "'>" . esc_attr( $shortcode ) . " (" . esc_attr( $class['name'] ) . ")</option>";
@@ -305,7 +305,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						<button class="button sd-insert-shortcode-button"
 						        onclick="sd_insert_shortcode(<?php if ( ! empty( $editor_id ) ) {
 							        echo "'" . $editor_id . "'";
-						        } ?>)"><?php _e( 'Insert shortcode' ); ?></button>
+						        } ?>)"><?php _e( 'Insert shortcode', 'ayecode-connect' ); ?></button>
 					<?php } ?>
 					<button class="button"
 					        onclick="sd_copy_to_clipboard()"><?php _e( 'Copy shortcode' ); ?></button>
@@ -362,7 +362,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 			}
 
-			echo '<meta name="generator" content="WP Super Duper v' . $this->version . '"' . ( ! empty( $source[0] ) ? ' data-sd-source="' . esc_attr( $source[0] ) . '"' : '' ) . ' />';
+			echo '<meta name="generator" content="WP Super Duper v' . esc_attr( $this->version ) . '"' . ( ! empty( $source[0] ) ? ' data-sd-source="' . esc_attr( $source[0] ) . '"' : '' ) . ' />';
 		}
 
 		/**
@@ -528,7 +528,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						jQuery($this).data('sd-widget-enabled', true);
 					}
 
-					var $button = '<button title="<?php _e( 'Advanced Settings' );?>" class="button button-primary right sd-advanced-button" onclick="sd_so_toggle_advanced(this);return false;"><i class="fas fa-sliders-h" aria-hidden="true"></i></button>';
+					var $button = '<button title="<?php _e( 'Advanced Settings', 'ayecode-connect' );?>" class="button button-primary right sd-advanced-button" onclick="sd_so_toggle_advanced(this);return false;"><i class="fas fa-sliders-h" aria-hidden="true"></i></button>';
 					var form = jQuery($this).parents('' + $selector + '');
 
 					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length == 0) {
@@ -1174,7 +1174,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						jQuery($this).data('sd-widget-enabled', true);
 					}
 
-					var $button = '<button title="<?php _e( 'Advanced Settings' );?>" style="line-height: 28px;" class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><span class="dashicons dashicons-admin-settings" style="width: 28px;font-size: 28px;"></span></button>';
+					var $button = '<button title="<?php _e( 'Advanced Settings', 'ayecode-connect' );?>" style="line-height: 28px;" class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><span class="dashicons dashicons-admin-settings" style="width: 28px;font-size: 28px;"></span></button>';
 					var form = $form ? $form : jQuery($this).parents('' + $selector + '');
 
 					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length == 0) {
@@ -1467,7 +1467,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @return string
 		 */
 		public function preview_placeholder_text( $name = '' ) {
-			return "<div style='background:#0185ba33;padding: 10px;border: 4px #ccc dashed;'>" . sprintf( __( 'Placeholder for: %s' ), $name ) . "</div>";
+			return "<div style='background:#0185ba33;padding: 10px;border: 4px #ccc dashed;'>" . wp_sprintf( __( 'Placeholder for: %s', 'ayecode-connect' ), $name ) . "</div>";
 		}
 
 		/**
@@ -1687,10 +1687,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		}
 
 		public function group_arguments( $arguments ) {
-//			echo '###';print_r($arguments);
 			if ( ! empty( $arguments ) ) {
 				$temp_arguments = array();
-				$general        = __( "General" );
+				$general        = __( "General", 'ayecode-connect' );
 				$add_sections   = false;
 				foreach ( $arguments as $key => $args ) {
 					if ( isset( $args['group'] ) ) {
@@ -1707,7 +1706,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 			}
 
-//			echo '###';print_r($arguments);
 			return $arguments;
 		}
 
@@ -2038,7 +2036,9 @@ function sd_auto_recover_blocks_fallback(editTmpl) {
 			jQuery('.edit-site-page-panels__edit-template-button').addClass('bs-edit-tmpl-clicked').trigger('click');
 			jQuery('body').addClass('bs-edit-tmpl-untick');
 		}
-		$bsRecoverBtn.removeAttr('disabled').trigger('click');
+		if(jQuery('.edit-site-layout.is-edit-mode').length){
+			$bsRecoverBtn.removeAttr('disabled').trigger('click');
+		}
 	} else {
 		if (jQuery('body').hasClass('bs-edit-tmpl-untick')) {
 			jQuery('body').removeClass('bs-edit-tmpl-untick');
@@ -2882,7 +2882,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 
 										// if the content is empty then we place some placeholder text
 										if (env == '') {
-											env = "<div style='background:#0185ba33;padding: 10px;border: 4px #ccc dashed;'>" + "<?php _e( 'Placeholder for: ' );?>" + props.name + "</div>";
+											env = "<div style='background:#0185ba33;padding: 10px;border: 4px #ccc dashed;'>" + "<?php _e( 'Placeholder for:', 'ayecode-connect' );?> " + props.name + "</div>";
 										}
 
                                          <?php
@@ -3053,7 +3053,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 									}else {
 									?>
 									el(wp.components.PanelBody, {
-											title: '<?php esc_attr_e( "Settings" ); ?>',
+											title: '<?php esc_attr_e( "Settings", 'ayecode-connect' ); ?>',
 											initialOpen: true
 										},
 										<?php
@@ -3743,7 +3743,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					if ( ! empty( $args['options'] ) ) {
 						$options .= "options: [";
 						foreach ( $args['options'] as $option_val => $option_label ) {
-							$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
+							$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . esc_js( addslashes( $option_label ) ) . "' },";
 						}
 						$options .= "],";
 					}
@@ -3812,7 +3812,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 				$bsvc_title = esc_attr( addslashes( $args['title'] ) );
 				$bsvc_body = $this->block_visibility_fields( $args );
 				// @TODO reset button
-				$bsvc_footer = '<button type="button" class="btn btn-danger d-none">' . __( 'Reset', 'super-duper' ) . '</button><button type="button" class="btn btn-secondary bs-vc-close text-white" data-bs-dismiss="modal">' . __( 'Close', 'super-duper' ) . '</button><button type="button" class="btn btn-primary bs-vc-save">' . __( 'Save Rules', 'super-duper' ) . '</button>';
+				$bsvc_footer = '<button type="button" class="btn btn-danger d-none">' . __( 'Reset', 'ayecode-connect' ) . '</button><button type="button" class="btn btn-secondary bs-vc-close text-white" data-bs-dismiss="modal">' . __( 'Close', 'ayecode-connect' ) . '</button><button type="button" class="btn btn-primary bs-vc-save">' . __( 'Save Rules', 'ayecode-connect' ) . '</button>';
 				$after_elements .= "el('div', {className: 'components-base-control bs-vc-button-wrap'}, el(wp.components.Button, {
 						className: 'components-button components-circular-option-picker__clear is-primary is-smallx',
 						onClick: function() {
@@ -3870,7 +3870,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 				echo "type: '" . addslashes( $args['type'] ) . "',";
 			} ?>
 			<?php if ( ! empty( $args['placeholder'] ) ) {
-				echo "placeholder: '" . addslashes( trim( esc_html( $args['placeholder'] ) ) ) . "',";
+				echo "placeholder: '" . esc_js( addslashes( trim( esc_html( $args['placeholder'] ) ) ) ) . "',";
 			} ?>
 			<?php echo $options; ?>
 			<?php echo $extra; ?>
@@ -4070,11 +4070,10 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 		 * @return mixed
 		 */
 		public function block_props_replace( $string, $no_wrap = false ) {
-
 			if ( $no_wrap ) {
-				$string = str_replace( array( "[%", "%]" ), array( "props.attributes.", "" ), $string );
+				$string = str_replace( array( "[%", "%]", "%:checked]" ), array( "props.attributes.", "", "" ), $string );
 			} else {
-				$string = str_replace( array( "[%", "%]" ), array( "'+props.attributes.", "+'" ), $string );
+				$string = str_replace( array( "![%", "[%", "%]", "%:checked]" ), array( "'+!props.attributes.", "'+props.attributes.", "+'", "+'" ), $string );
 			}
 
 			return $string;
@@ -4287,6 +4286,23 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 		}
 
 		/**
+		 * Check for Bricks theme builder preview.
+		 *
+		 * @since 1.1.31
+		 *
+		 * @return bool True when preview page otherwise false.
+		 */
+		public function is_bricks_preview() {
+			$result = false;
+
+			if ( function_exists( 'bricks_is_builder' ) && ( bricks_is_builder() || bricks_is_builder_call() ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
 		 * General function to check if we are in a preview situation.
 		 *
 		 * @return bool
@@ -4311,6 +4327,8 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 			} elseif( $this->is_kallyas_zion_preview() ) {
 				$preview = true;
 			} elseif( $this->is_block_content_call() ) {
+				$preview = true;
+			} elseif( $this->is_bricks_preview() ) {
 				$preview = true;
 			}
 
@@ -4424,36 +4442,41 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 			}
 		}
 
-		public function widget_inputs_row_start($key, $args){
-			if(!empty($args['row'])){
-				// maybe open
-				if(!empty($args['row']['open'])){
+		public function widget_inputs_row_start( $key, $args ) {
+			if ( ! empty( $args['row'] ) ) {
+				// Maybe open
+				if ( ! empty( $args['row']['open'] ) ) {
 					?>
-					<div class='bsui sd-argument ' data-argument='<?php echo esc_attr( $args['row']['key'] ); ?>' data-element_require='<?php if ( !empty($args['row']['element_require'])) {
-						echo $this->convert_element_require( $args['row']['element_require'] );
-					} ?>'>
-					<?php if(!empty($args['row']['title'])){ ?>
-					<label class="mb-0 "><?php echo esc_attr( $args['row']['title'] ); ?><?php echo $this->widget_field_desc( $args['row'] ); ?></label>
-					<?php }?>
-					<div class='row <?php if(!empty($args['row']['class'])){ echo esc_attr($args['row']['class']);} ?>'>
+					<div class='bsui sd-argument' data-argument='<?php echo esc_attr( $args['row']['key'] ); ?>' data-element_require='<?php echo ( ! empty( $args['row']['element_require'] ) ? $this->convert_element_require( $args['row']['element_require'] ) : '' ); ?>'>
+					<?php if ( ! empty( $args['row']['title'] ) ) { ?>
+					<?php 
+						if ( isset( $args['row']['icon'] ) ) {
+							$args['row']['icon'] = '';
+						}
+
+						if ( ! isset( $args['row']['device_type'] ) && isset( $args['device_type'] ) ) {
+							$args['row']['device_type'] = $args['device_type'];
+						}
+					?>
+					<label class="mb-0"><?php echo $this->widget_field_title( $args['row'] ); ?><?php echo $this->widget_field_desc( $args['row'] ); ?></label>
+					<?php } ?>
+					<div class='row<?php echo ( ! empty( $args['row']['class'] ) ? ' ' . esc_attr( $args['row']['class'] ) : '' ); ?>'>
 					<div class='col pr-2'>
 					<?php
-				}elseif(!empty($args['row']['close'])){
+				} else if ( ! empty( $args['row']['close'] ) ) {
 					echo "<div class='col pl-0 ps-0'>";
-				}else{
+				} else {
 					echo "<div class='col pl-0 ps-0 pr-2 pe-2'>";
 				}
 			}
 		}
 
-		public function widget_inputs_row_end($key, $args){
-
-			if(!empty($args['row'])){
-				// maybe close
-				if(!empty($args['row']['close'])){
+		public function widget_inputs_row_end( $key, $args ) {
+			if ( ! empty( $args['row'] ) ) {
+				// Maybe close
+				if ( ! empty( $args['row']['close'] ) ) {
 					echo "</div></div>";
 				}
-
 				echo "</div>";
 			}
 		}
@@ -4487,12 +4510,12 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 		 *
 		 */
 		public function convert_element_require( $input ) {
-
 			$input = str_replace( "'", '"', $input );// we only want double quotes
 
-			$output = esc_attr( str_replace( array( "[%", "%]" ), array(
+			$output = esc_attr( str_replace( array( "[%", "%]", "%:checked]" ), array(
 				"jQuery(form).find('[data-argument=\"",
-				"\"]').find('input,select,textarea').val()"
+				"\"]').find('input,select,textarea').val()",
+				"\"]').find('input:checked').val()"
 			), $input ) );
 
 			return $output;
@@ -4657,13 +4680,17 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 		 * @return string
 		 */
 		public function widget_field_title( $args ) {
-
 			$title = '';
+
 			if ( isset( $args['title'] ) && $args['title'] ) {
+				if ( ! empty( $args['device_type'] ) ) {
+					$args['title'] .= ' (' . $args['device_type'] . ')'; // Append device type to title.
+				}
+
 				if ( isset( $args['icon'] ) && $args['icon'] ) {
 					$title = self::get_widget_icon( $args['icon'], $args['title']  );
 				} else {
-					$title = esc_attr($args['title']);
+					$title = esc_attr( $args['title'] );
 				}
 			}
 
@@ -4879,20 +4906,20 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 				$content .= '<div class="p-3 pb-0 mb-3 border border-1 rounded-1 position-relative bs-vc-rule" data-bs-index="BSVCINDEX" >';
 					$content .= '<div class="row">';
 						$content .= '<div class="col-sm-12">';
-							$content .= '<div class="bs-rule-action position-absolute top-0 end-0 p-2 zindex-5"><span class="text-danger c-pointer bs-vc-remove-rule" title="' . esc_attr__( 'Remove Rule', 'super-duper' ) . '"><i class="fas fa-circle-minus fs-6"></i></span></div>';
+							$content .= '<div class="bs-rule-action position-absolute top-0 end-0 p-2 zindex-5"><span class="text-danger c-pointer bs-vc-remove-rule" title="' . esc_attr__( 'Remove Rule', 'ayecode-connect' ) . '"><i class="fas fa-circle-minus fs-6"></i></span></div>';
 							$content .= aui()->select(
 								array(
 									'id'          => 'bsvc_rule_BSVCINDEX',
 									'name'        => 'bsvc_rule_BSVCINDEX',
-									'label'       => __( 'Rule', 'super-duper' ),
-									'placeholder' => __( 'Select Rule...', 'super-duper' ),
+									'label'       => __( 'Rule', 'ayecode-connect' ),
+									'placeholder' => __( 'Select Rule...', 'ayecode-connect' ),
 									'class'       => 'bsvc_rule form-select-sm',
 									'options'     => sd_visibility_rules_options(),
 									'default'     => '',
 									'value'       => '',
 									'label_type'  => '',
 									'select2'     => false,
-									'input_group_left' => __( 'Rule:', 'super-duper' ),
+									'input_group_left' => __( 'Rule:', 'ayecode-connect' ),
 									'extra_attributes' => array(
 										'data-minimum-results-for-search' => '-1'
 									)
@@ -4908,8 +4935,8 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 									array(
 										'id'          => 'bsvc_gd_field_BSVCINDEX',
 										'name'        => 'bsvc_gd_field_BSVCINDEX',
-										'label'       => __( 'FIELD', 'super-duper' ),
-										'placeholder' => __( 'FIELD', 'super-duper' ),
+										'label'       => __( 'FIELD', 'ayecode-connect' ),
+										'placeholder' => __( 'FIELD', 'ayecode-connect' ),
 										'class'       => 'bsvc_gd_field form-select-sm',
 										'options'     => sd_visibility_gd_field_options(),
 										'default'     => '',
@@ -4930,8 +4957,8 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 									array(
 										'id'          => 'bsvc_gd_field_condition_BSVCINDEX',
 										'name'        => 'bsvc_gd_field_condition_BSVCINDEX',
-										'label'       => __( 'CONDITION', 'super-duper' ),
-										'placeholder' => __( 'CONDITION', 'super-duper' ),
+										'label'       => __( 'CONDITION', 'ayecode-connect' ),
+										'placeholder' => __( 'CONDITION', 'ayecode-connect' ),
 										'class'       => 'bsvc_gd_field_condition form-select-sm',
 										'options'     => sd_visibility_field_condition_options(),
 										'default'     => '',
@@ -4953,9 +4980,9 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 										'type'            => 'text',
 										'id'              => 'bsvc_gd_field_search_BSVCINDEX',
 										'name'            => 'bsvc_gd_field_search_BSVCINDEX',
-										'label'           => __( 'VALUE TO MATCH', 'super-duper' ),
+										'label'           => __( 'VALUE TO MATCH', 'ayecode-connect' ),
 										'class'           => 'bsvc_gd_field_search form-control-sm',
-										'placeholder'     => __( 'VALUE TO MATCH', 'super-duper' ),
+										'placeholder'     => __( 'VALUE TO MATCH', 'ayecode-connect' ),
 										'label_type'      => '',
 										'value'           => '',
 										'element_require' => '([%bsvc_rule_BSVCINDEX%]=="gd_field" && [%bsvc_gd_field_condition_BSVCINDEX%] && [%bsvc_gd_field_condition_BSVCINDEX%]!="is_empty" && [%bsvc_gd_field_condition_BSVCINDEX%]!="is_not_empty")'
@@ -4967,7 +4994,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 
 					$content .= '</div>';
 
-					$content .= '<div class="row aui-conditional-field" data-element-require="jQuery(form).find(\'[name=bsvc_rule_BSVCINDEX]\').val()==\'user_roles\'" data-argument="bsvc_user_roles_BSVCINDEX_1"><label for="bsvc_user_roles_BSVCINDEX_1" class="form-label mb-3">' . __( 'Select User Roles:', 'super-duper' ) . '</label>';
+					$content .= '<div class="row aui-conditional-field" data-element-require="jQuery(form).find(\'[name=bsvc_rule_BSVCINDEX]\').val()==\'user_roles\'" data-argument="bsvc_user_roles_BSVCINDEX_1"><label for="bsvc_user_roles_BSVCINDEX_1" class="form-label mb-3">' . __( 'Select User Roles:', 'ayecode-connect' ) . '</label>';
 						$role_options = sd_user_roles_options();
 
 						$role_option_i = 0;
@@ -4995,14 +5022,14 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 			$content .= '</div>';
 			$content .= '<form id="bs-vc-modal-form" class="bs-vc-modal-form">';
 			$content .= '<div class="bs-vc-rule-sets"></div>';
-			$content .= '<div class="row"><div class="col-sm-12 text-center pt-1 pb-4"><button type="button" class="btn btn-sm btn-primary d-block w-100 bs-vc-add-rule"><i class="fas fa-plus"></i> ' . __( 'Add Rule', 'super-duper' ) . '</button></div></div>';
+			$content .= '<div class="row"><div class="col-sm-12 text-center pt-1 pb-4"><button type="button" class="btn btn-sm btn-primary d-block w-100 bs-vc-add-rule"><i class="fas fa-plus"></i> ' . __( 'Add Rule', 'ayecode-connect' ) . '</button></div></div>';
 			$content .= '<div class="row"><div class="col-md-6 col-sm-12">';
 			$content .= aui()->select(
 				array(
 					'id'          => 'bsvc_output',
 					'name'        => 'bsvc_output',
-					'label'       => __( 'What should happen if rules met.', 'super-duper' ),
-					'placeholder' => __( 'Default Output', 'super-duper' ),
+					'label'       => __( 'What should happen if rules met.', 'ayecode-connect' ),
+					'placeholder' => __( 'Default Output', 'ayecode-connect' ),
 					'class'       => 'bsvc_output form-select-sm',
 					'options'     => sd_visibility_output_options(),
 					'default'     => '',
@@ -5021,8 +5048,8 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 				array(
 					'id'              => 'bsvc_page',
 					'name'            => 'bsvc_page',
-					'label'           => __( 'Page Content', 'super-duper' ),
-					'placeholder'     => __( 'Select Page ID...', 'super-duper' ),
+					'label'           => __( 'Page Content', 'ayecode-connect' ),
+					'placeholder'     => __( 'Select Page ID...', 'ayecode-connect' ),
 					'class'           => 'bsvc_page form-select-sm',
 					'options'         => sd_template_page_options(),
 					'default'         => '',
@@ -5037,8 +5064,8 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 				array(
 					'id'          => 'bsvc_tmpl_part',
 					'name'        => 'bsvc_tmpl_part',
-					'label'       => __( 'Template Part', 'super-duper' ),
-					'placeholder' => __( 'Select Template Part...', 'super-duper' ),
+					'label'       => __( 'Template Part', 'ayecode-connect' ),
+					'placeholder' => __( 'Select Template Part...', 'ayecode-connect' ),
 					'class'       => 'bsvc_tmpl_part form-select-sm',
 					'options'     => sd_template_part_options(),
 					'default'     => '',
@@ -5056,8 +5083,8 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 				array(
 					'id'               => 'bsvc_message_type',
 					'name'             => 'bsvc_message_type',
-					'label'            => __( 'Custom Message Type', 'super-duper' ),
-					'placeholder'      => __( 'Default (none)', 'super-duper' ),
+					'label'            => __( 'Custom Message Type', 'ayecode-connect' ),
+					'placeholder'      => __( 'Default (none)', 'ayecode-connect' ),
 					'class'            => 'bsvc_message_type form-select-sm',
 					'options'          => sd_aui_colors(),
 					'default'          => '',
@@ -5080,7 +5107,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'            => 'bsvc_message',
 					'label'           => '',
 					'class'           => 'bsvc_message form-control-sm',
-					'placeholder'     => __( 'CUSTOM MESSAGE TO SHOW', 'super-duper' ),
+					'placeholder'     => __( 'CUSTOM MESSAGE TO SHOW', 'ayecode-connect' ),
 					'label_type'      => '',
 					'value'           => '',
 					'form_group_class' => ' ',

@@ -19,7 +19,7 @@ if ( ! class_exists( 'AyeCode_Deactivation_Survey' ) ) {
 
 		public static $plugins;
 
-		public $version = "1.0.6";
+		public $version = "1.0.7";
 
 		public static function instance( $plugin = array() ) {
 			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof AyeCode_Deactivation_Survey ) ) {
@@ -55,19 +55,19 @@ if ( ! class_exists( 'AyeCode_Deactivation_Survey' ) ) {
 			 * We deliberately don't add textdomains here so that double textdomain warning is not given in theme review.
 			 */
 			wp_localize_script('ayecode-deactivation-survey', 'ayecodeds_deactivate_feedback_form_strings', array(
-				'quick_feedback'			=> 'Quick Feedback',
-				'foreword'					=> 'If you would be kind enough, please tell us why you\'re deactivating?',
-				'better_plugins_name'		=> 'Please tell us which plugin?',
-				'please_tell_us'			=> 'Please tell us the reason so we can improve the plugin',
-				'do_not_attach_email'		=> 'Do not send my e-mail address with this feedback',
-				'brief_description'			=> 'Please give us any feedback that could help us improve',
-				'cancel'					=> 'Cancel',
-				'skip_and_deactivate'		=> 'Skip &amp; Deactivate',
-				'submit_and_deactivate'		=> 'Submit &amp; Deactivate',
-				'please_wait'				=> 'Please wait',
-				'get_support'				=> 'Get Support',
-				'documentation'				=> 'Documentation',
-				'thank_you'					=> 'Thank you!',
+				'quick_feedback'			=> __( 'Quick Feedback', 'ayecode-connect' ),
+				'foreword'					=> __( 'If you would be kind enough, please tell us why you\'re deactivating?', 'ayecode-connect' ),
+				'better_plugins_name'		=> __( 'Please tell us which plugin?', 'ayecode-connect' ),
+				'please_tell_us'			=> __( 'Please tell us the reason so we can improve the plugin', 'ayecode-connect' ),
+				'do_not_attach_email'		=> __( 'Do not send my e-mail address with this feedback', 'ayecode-connect' ),
+				'brief_description'			=> __( 'Please give us any feedback that could help us improve', 'ayecode-connect' ),
+				'cancel'					=> __( 'Cancel', 'ayecode-connect' ),
+				'skip_and_deactivate'		=> __( 'Skip &amp; Deactivate', 'ayecode-connect' ),
+				'submit_and_deactivate'		=> __( 'Submit &amp; Deactivate', 'ayecode-connect' ),
+				'please_wait'				=> __( 'Please wait', 'ayecode-connect' ),
+				'get_support'				=> __( 'Get Support', 'ayecode-connect' ),
+				'documentation'				=> __( 'Documentation', 'ayecode-connect' ),
+				'thank_you'					=> __( 'Thank you!', 'ayecode-connect' ),
 			));
 
 			// Plugins
@@ -75,29 +75,25 @@ if ( ! class_exists( 'AyeCode_Deactivation_Survey' ) ) {
 
 			// Reasons
 			$defaultReasons = array(
-				'suddenly-stopped-working'	=> 'The plugin suddenly stopped working',
-				'plugin-broke-site'			=> 'The plugin broke my site',
-				'plugin-setup-difficult'	=> 'Too difficult to setup',
-				'plugin-design-difficult'	=> 'Too difficult to get the design i want',
-				'no-longer-needed'			=> 'I don\'t need this plugin any more',
-				'found-better-plugin'		=> 'I found a better plugin',
-				'temporary-deactivation'	=> 'It\'s a temporary deactivation, I\'m troubleshooting',
-				'other'						=> 'Other',
+				'suddenly-stopped-working'	=> __( 'The plugin suddenly stopped working', 'ayecode-connect' ),
+				'plugin-broke-site'			=> __( 'The plugin broke my site', 'ayecode-connect' ),
+				'plugin-setup-difficult'	=> __( 'Too difficult to setup', 'ayecode-connect' ),
+				'plugin-design-difficult'	=> __( 'Too difficult to get the design i want', 'ayecode-connect' ),
+				'no-longer-needed'			=> __( 'I don\'t need this plugin any more', 'ayecode-connect' ),
+				'found-better-plugin'		=> __( 'I found a better plugin', 'ayecode-connect' ),
+				'temporary-deactivation'	=> __( 'It\'s a temporary deactivation, I\'m troubleshooting', 'ayecode-connect' ),
+				'other'						=> __( 'Other', 'ayecode-connect' ),
 			);
 
-			foreach($plugins as $plugin)
-			{
-				$plugin->reasons = apply_filters('ayecode_deactivation_survey_reasons', $defaultReasons, $plugin);
+			foreach( $plugins as $plugin ) {
+				$plugin->reasons = apply_filters( 'ayecode_deactivation_survey_reasons', $defaultReasons, $plugin );
 				$plugin->url = home_url();
 				$plugin->activated = 0;
 			}
 
 			// Send plugin data
 			wp_localize_script('ayecode-deactivation-survey', 'ayecodeds_deactivate_feedback_form_plugins', $plugins);
-
 		}
-		
-
 	}
 
 }
