@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.3.24\n"
+"Project-Id-Version: UsersWP 1.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-01 13:13+0530\n"
-"PO-Revision-Date: 2023-11-08 17:02+0530\n"
+"POT-Creation-Date: 2024-01-29 14:45+0000\n"
+"PO-Revision-Date: 2024-01-29 14:45+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -15,7 +15,7 @@ msgstr ""
 "_nx:1,2;_x;_ex;esc_attr_e;esc_attr__\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.0.1\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: vendor\n"
 
@@ -1850,7 +1850,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:72
 #: includes/class-account.php:42 includes/class-pages.php:329
-#: includes/helpers/misc.php:576 includes/helpers/tabs.php:127
+#: includes/helpers/misc.php:600 includes/helpers/tabs.php:127
 #: templates/bootstrap/change.php:15 widgets/change.php:47
 #: widgets/change.php:95
 msgid "Change Password"
@@ -1928,7 +1928,7 @@ msgid ""
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:141
-#: includes/helpers/misc.php:1326
+#: includes/helpers/misc.php:1350
 msgid "Please enter valid strong password."
 msgstr ""
 
@@ -3343,7 +3343,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: includes/class-account.php:77 includes/helpers/misc.php:574
+#: includes/class-account.php:77 includes/helpers/misc.php:598
 #: includes/helpers/tabs.php:154
 msgid "Delete Account"
 msgstr ""
@@ -4185,7 +4185,7 @@ msgstr ""
 msgid "Tab Name"
 msgstr ""
 
-#: includes/class-templates.php:1143 includes/helpers/misc.php:570
+#: includes/class-templates.php:1143 includes/helpers/misc.php:594
 #: includes/helpers/tabs.php:135
 msgid "Privacy"
 msgstr ""
@@ -4707,47 +4707,47 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: includes/helpers/misc.php:572
+#: includes/helpers/misc.php:596
 msgid "E-Mail Notifications"
 msgstr ""
 
-#: includes/helpers/misc.php:578
+#: includes/helpers/misc.php:602
 msgid "Two-factor Authentication Settings"
 msgstr ""
 
-#: includes/helpers/misc.php:1316
+#: includes/helpers/misc.php:1340
 msgid "more"
 msgstr ""
 
-#: includes/helpers/misc.php:1317
+#: includes/helpers/misc.php:1341
 msgid "less"
 msgstr ""
 
-#: includes/helpers/misc.php:1318
+#: includes/helpers/misc.php:1342
 msgid "Something went wrong."
 msgstr ""
 
-#: includes/helpers/misc.php:1319
+#: includes/helpers/misc.php:1343
 msgid "Something went wrong, please retry."
 msgstr ""
 
-#: includes/helpers/misc.php:1503 widgets/output-location.php:90
+#: includes/helpers/misc.php:1527 widgets/output-location.php:90
 msgid "Users Page"
 msgstr ""
 
-#: includes/helpers/misc.php:1504 widgets/output-location.php:91
+#: includes/helpers/misc.php:1528 widgets/output-location.php:91
 msgid "More info tab"
 msgstr ""
 
-#: includes/helpers/misc.php:1505
+#: includes/helpers/misc.php:1529
 msgid "Profile side (non bootstrap)"
 msgstr ""
 
-#: includes/helpers/misc.php:1506
+#: includes/helpers/misc.php:1530
 msgid "Fieldset"
 msgstr ""
 
-#: includes/helpers/misc.php:1737
+#: includes/helpers/misc.php:1761
 #, php-format
 msgid ""
 "%s requires a newer version of UsersWP and will not run until the UsersWP "
