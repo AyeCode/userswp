@@ -1,3 +1,21 @@
+= 0.2.6 - 2024-01-25 =
+* Single quote breaks validation message - FIXED
+* WP Editor Styles can now style headings, links, typography - ADDED
+
+= 0.2.5 - 2023-12-14 =
+* Update textdomain - CHANGED
+* Inline CSS breaks p element in block editor - FIXED
+
+= 0.2.4 =
+* Last ios fix broke standard image select from library - FIXED
+
+= 0.2.3 =
+* iOS add listing add images button not working - FIXED
+
+= 0.2.1 =
+* Manage native mobile datepicker for date or time input on mobile - CHANGED
+* plupload button on safari can overflow and block other page elements - FIXED
+
 = 0.2.0 =
 * color-scheme-flip-on-scroll feature should flip when mobile menu opened even if not scrolled - FIXED
 * Font awesome icon-picker searcher updated to latest 6.x - UPDATED

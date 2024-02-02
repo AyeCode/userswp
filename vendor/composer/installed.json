@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "ayecode/ayecode-connect-helper",
-            "version": "1.0.3",
-            "version_normalized": "1.0.3.0",
+            "version": "1.0.4",
+            "version_normalized": "1.0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/ayecode-connect-helper.git",
-                "reference": "1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4"
+                "reference": "d9d9ba849b808a38bb23532e7585c4186bc086cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/ayecode-connect-helper/zipball/1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4",
-                "reference": "1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4",
+                "url": "https://api.github.com/repos/AyeCode/ayecode-connect-helper/zipball/d9d9ba849b808a38bb23532e7585c4186bc086cd",
+                "reference": "d9d9ba849b808a38bb23532e7585c4186bc086cd",
                 "shasum": ""
             },
             "require": {
@@ -24,7 +24,7 @@
                 "squizlabs/php_codesniffer": "^3.2",
                 "wp-coding-standards/wpcs": "*"
             },
-            "time": "2020-02-26T18:53:58+00:00",
+            "time": "2023-12-14T17:21:42+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -51,24 +51,28 @@
                 "ayecode",
                 "wp"
             ],
+            "support": {
+                "issues": "https://github.com/AyeCode/ayecode-connect-helper/issues",
+                "source": "https://github.com/AyeCode/ayecode-connect-helper/tree/1.0.4"
+            },
             "install-path": "../ayecode/ayecode-connect-helper"
         },
         {
             "name": "ayecode/wp-ayecode-ui",
-            "version": "0.2.0",
-            "version_normalized": "0.2.0.0",
+            "version": "0.2.6",
+            "version_normalized": "0.2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
-                "reference": "e84efbc7d23b96dc74d782a99645a69561775f31"
+                "reference": "023e7750dab3a6fa212cdfef701c7a6f3e48d269"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/e84efbc7d23b96dc74d782a99645a69561775f31",
-                "reference": "e84efbc7d23b96dc74d782a99645a69561775f31",
+                "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/023e7750dab3a6fa212cdfef701c7a6f3e48d269",
+                "reference": "023e7750dab3a6fa212cdfef701c7a6f3e48d269",
                 "shasum": ""
             },
-            "time": "2023-10-12T13:04:18+00:00",
+            "time": "2024-01-24T17:06:14+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -97,26 +101,26 @@
             ],
             "support": {
                 "issues": "https://github.com/AyeCode/wp-ayecode-ui/issues",
-                "source": "https://github.com/AyeCode/wp-ayecode-ui/tree/0.2.0"
+                "source": "https://github.com/AyeCode/wp-ayecode-ui/tree/0.2.6"
             },
             "install-path": "../ayecode/wp-ayecode-ui"
         },
         {
             "name": "ayecode/wp-deactivation-survey",
-            "version": "1.0.6",
-            "version_normalized": "1.0.6.0",
+            "version": "1.0.7",
+            "version_normalized": "1.0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/wp-deactivation-survey.git",
-                "reference": "4edfd24e58ee27ecb6bab08a4e15bed5dd012bda"
+                "reference": "674f19132ca65e88f600dd212b721bbb8967c678"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/wp-deactivation-survey/zipball/4edfd24e58ee27ecb6bab08a4e15bed5dd012bda",
-                "reference": "4edfd24e58ee27ecb6bab08a4e15bed5dd012bda",
+                "url": "https://api.github.com/repos/AyeCode/wp-deactivation-survey/zipball/674f19132ca65e88f600dd212b721bbb8967c678",
+                "reference": "674f19132ca65e88f600dd212b721bbb8967c678",
                 "shasum": ""
             },
-            "time": "2023-04-13T12:44:54+00:00",
+            "time": "2023-12-14T17:21:06+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -145,30 +149,30 @@
             ],
             "support": {
                 "issues": "https://github.com/AyeCode/wp-deactivation-survey/issues",
-                "source": "https://github.com/AyeCode/wp-deactivation-survey/tree/1.0.6"
+                "source": "https://github.com/AyeCode/wp-deactivation-survey/tree/1.0.7"
             },
             "install-path": "../ayecode/wp-deactivation-survey"
         },
         {
             "name": "ayecode/wp-font-awesome-settings",
-            "version": "1.1.6",
-            "version_normalized": "1.1.6.0",
+            "version": "1.1.7",
+            "version_normalized": "1.1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/wp-font-awesome-settings.git",
-                "reference": "37c34c29dfbe3e37a4cd5bf5d902c0498acc2c4c"
+                "reference": "f52f48d05ff760eb1e22e747a2d011c669f25ed1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/37c34c29dfbe3e37a4cd5bf5d902c0498acc2c4c",
-                "reference": "37c34c29dfbe3e37a4cd5bf5d902c0498acc2c4c",
+                "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/f52f48d05ff760eb1e22e747a2d011c669f25ed1",
+                "reference": "f52f48d05ff760eb1e22e747a2d011c669f25ed1",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "~1.0",
                 "php": ">=5.3.0"
             },
-            "time": "2023-10-12T13:17:30+00:00",
+            "time": "2023-12-14T17:12:22+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -196,30 +200,30 @@
             ],
             "support": {
                 "issues": "https://github.com/AyeCode/wp-font-awesome-settings/issues",
-                "source": "https://github.com/AyeCode/wp-font-awesome-settings/tree/1.1.6"
+                "source": "https://github.com/AyeCode/wp-font-awesome-settings/tree/1.1.7"
             },
             "install-path": "../ayecode/wp-font-awesome-settings"
         },
         {
             "name": "ayecode/wp-super-duper",
-            "version": "1.1.28",
-            "version_normalized": "1.1.28.0",
+            "version": "1.1.33",
+            "version_normalized": "1.1.33.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/wp-super-duper.git",
-                "reference": "46d9f6dd41545d2a64f78d2cb8b2d444a5d07428"
+                "reference": "9a19aa2c4a2a548c4820b631b696856b2c9d4382"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/46d9f6dd41545d2a64f78d2cb8b2d444a5d07428",
-                "reference": "46d9f6dd41545d2a64f78d2cb8b2d444a5d07428",
+                "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/9a19aa2c4a2a548c4820b631b696856b2c9d4382",
+                "reference": "9a19aa2c4a2a548c4820b631b696856b2c9d4382",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "~1.0",
                 "php": ">=5.3.0"
             },
-            "time": "2023-10-31T14:00:21+00:00",
+            "time": "2024-01-24T17:02:51+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -251,7 +255,7 @@
             ],
             "support": {
                 "issues": "https://github.com/AyeCode/wp-super-duper/issues",
-                "source": "https://github.com/AyeCode/wp-super-duper/tree/1.1.28"
+                "source": "https://github.com/AyeCode/wp-super-duper/tree/1.1.33"
             },
             "install-path": "../ayecode/wp-super-duper"
         },

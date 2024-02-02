@@ -52,8 +52,8 @@ function sd_widget_exclude() {
 function sd_get_margin_input( $type = 'mt', $overwrite = array(), $include_negatives = true ) {
 	global $aui_bs5;
 	$options = array(
-		''     => __( 'None', 'super-duper' ),
-		'auto' => __( 'auto', 'super-duper' ),
+		''     => __( 'None', 'ayecode-connect' ),
+		'auto' => __( 'auto', 'ayecode-connect' ),
 		'0'    => '0',
 		'1'    => '1',
 		'2'    => '2',
@@ -86,37 +86,37 @@ function sd_get_margin_input( $type = 'mt', $overwrite = array(), $include_negat
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Margin top', 'super-duper' ),
+		'title'    => __( 'Margin top', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+		'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	// title
 	if ( $type == 'mt' ) {
-		$defaults['title'] = __( 'Margin top', 'super-duper' );
+		$defaults['title'] = __( 'Margin top', 'ayecode-connect' );
 		$defaults['icon']  = 'box-top';
 		$defaults['row']   = array(
-			'title' => __( 'Margins', 'super-duper' ),
+			'title' => __( 'Margins', 'ayecode-connect' ),
 			'key'   => 'wrapper-margins',
 			'open'  => true,
 			'class' => 'text-center',
 		);
 	} elseif ( $type == 'mr' ) {
-		$defaults['title'] = __( 'Margin right', 'super-duper' );
+		$defaults['title'] = __( 'Margin right', 'ayecode-connect' );
 		$defaults['icon']  = 'box-right';
 		$defaults['row']   = array(
 			'key' => 'wrapper-margins',
 		);
 	} elseif ( $type == 'mb' ) {
-		$defaults['title'] = __( 'Margin bottom', 'super-duper' );
+		$defaults['title'] = __( 'Margin bottom', 'ayecode-connect' );
 		$defaults['icon']  = 'box-bottom';
 		$defaults['row']   = array(
 			'key' => 'wrapper-margins',
 		);
 	} elseif ( $type == 'ml' ) {
-		$defaults['title'] = __( 'Margin left', 'super-duper' );
+		$defaults['title'] = __( 'Margin left', 'ayecode-connect' );
 		$defaults['icon']  = 'box-left';
 		$defaults['row']   = array(
 			'key'   => 'wrapper-margins',
@@ -139,7 +139,7 @@ function sd_get_margin_input( $type = 'mt', $overwrite = array(), $include_negat
  */
 function sd_get_padding_input( $type = 'pt', $overwrite = array() ) {
 	$options = array(
-		''   => __( 'None', 'super-duper' ),
+		''   => __( 'None', 'ayecode-connect' ),
 		'0'  => '0',
 		'1'  => '1',
 		'2'  => '2',
@@ -157,37 +157,37 @@ function sd_get_padding_input( $type = 'pt', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Padding top', 'super-duper' ),
+		'title'    => __( 'Padding top', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+		'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	// title
 	if ( $type == 'pt' ) {
-		$defaults['title'] = __( 'Padding top', 'super-duper' );
+		$defaults['title'] = __( 'Padding top', 'ayecode-connect' );
 		$defaults['icon']  = 'box-top';
 		$defaults['row']   = array(
-			'title' => __( 'Padding', 'super-duper' ),
+			'title' => __( 'Padding', 'ayecode-connect' ),
 			'key'   => 'wrapper-padding',
 			'open'  => true,
 			'class' => 'text-center',
 		);
 	} elseif ( $type == 'pr' ) {
-		$defaults['title'] = __( 'Padding right', 'super-duper' );
+		$defaults['title'] = __( 'Padding right', 'ayecode-connect' );
 		$defaults['icon']  = 'box-right';
 		$defaults['row']   = array(
 			'key' => 'wrapper-padding',
 		);
 	} elseif ( $type == 'pb' ) {
-		$defaults['title'] = __( 'Padding bottom', 'super-duper' );
+		$defaults['title'] = __( 'Padding bottom', 'ayecode-connect' );
 		$defaults['icon']  = 'box-bottom';
 		$defaults['row']   = array(
 			'key' => 'wrapper-padding',
 		);
 	} elseif ( $type == 'pl' ) {
-		$defaults['title'] = __( 'Padding left', 'super-duper' );
+		$defaults['title'] = __( 'Padding left', 'ayecode-connect' );
 		$defaults['icon']  = 'box-left';
 		$defaults['row']   = array(
 			'key'   => 'wrapper-padding',
@@ -214,18 +214,18 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Border', 'super-duper' ),
+		'title'    => __( 'Border', 'ayecode-connect' ),
 		'options'  => array(),
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+		'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	// title
 	if ( 'rounded' === $type ) {
-		$defaults['title']           = __( 'Border radius type', 'super-duper' );
+		$defaults['title']           = __( 'Border radius type', 'ayecode-connect' );
 		$defaults['options']         = array(
-			''               => __( 'Default', 'super-duper' ),
+			''               => __( 'Default', 'ayecode-connect' ),
 			'rounded'        => 'rounded',
 			'rounded-top'    => 'rounded-top',
 			'rounded-right'  => 'rounded-right',
@@ -234,11 +234,11 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 		);
 		$defaults['element_require'] = '[%border%]';
 	} elseif ( 'rounded_size' === $type ) {
-		$defaults['title'] = __( 'Border radius size', 'super-duper' );
+		$defaults['title'] = __( 'Border radius size', 'ayecode-connect' );
 
 		if ( $aui_bs5 ) {
 			$defaults['options'] = array(
-				''       => __( 'Default', 'super-duper' ),
+				''       => __( 'Default', 'ayecode-connect' ),
 				'0'      => '0',
 				'1'      => '1',
 				'2'      => '2',
@@ -249,16 +249,16 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 			);
 		} else {
 			$defaults['options'] = array(
-				''   => __( 'Default', 'super-duper' ),
-				'sm' => __( 'Small', 'super-duper' ),
-				'lg' => __( 'Large', 'super-duper' ),
+				''   => __( 'Default', 'ayecode-connect' ),
+				'sm' => __( 'Small', 'ayecode-connect' ),
+				'lg' => __( 'Large', 'ayecode-connect' ),
 			);
 		}
 		$defaults['element_require'] = '[%border%]';
 	} elseif ( 'width' === $type ) { // BS%
-		$defaults['title']           = __( 'Border width', 'super-duper' );
+		$defaults['title']           = __( 'Border width', 'ayecode-connect' );
 		$defaults['options']         = array(
-			''         => __( 'Default', 'super-duper' ),
+			''         => __( 'Default', 'ayecode-connect' ),
 			'border-2' => '2',
 			'border-3' => '3',
 			'border-4' => '4',
@@ -266,9 +266,9 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 		);
 		$defaults['element_require'] = $aui_bs5 ? '[%border%]' : '1==2';
 	} elseif ( 'opacity' === $type ) { // BS%
-		$defaults['title']           = __( 'Border opacity', 'super-duper' );
+		$defaults['title']           = __( 'Border opacity', 'ayecode-connect' );
 		$defaults['options']         = array(
-			''                  => __( 'Default', 'super-duper' ),
+			''                  => __( 'Default', 'ayecode-connect' ),
 			'border-opacity-75' => '75%',
 			'border-opacity-50' => '50%',
 			'border-opacity-25' => '25%',
@@ -276,25 +276,25 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 		);
 		$defaults['element_require'] = $aui_bs5 ? '[%border%]' : '1==2';
 	} elseif ( 'type' === $type ) {
-		$defaults['title']           = __( 'Border show', 'super-duper' );
+		$defaults['title']           = __( 'Border show', 'ayecode-connect' );
 		$defaults['options']         = array(
-			'border'          => __( 'Full (set color to show)', 'super-duper' ),
-			'border-top'      => __( 'Top', 'super-duper' ),
-			'border-bottom'   => __( 'Bottom', 'super-duper' ),
-			'border-left'     => __( 'Left', 'super-duper' ),
-			'border-right'    => __( 'Right', 'super-duper' ),
-			'border-top-0'    => __( '-Top', 'super-duper' ),
-			'border-bottom-0' => __( '-Bottom', 'super-duper' ),
-			'border-left-0'   => __( '-Left', 'super-duper' ),
-			'border-right-0'  => __( '-Right', 'super-duper' ),
+			'border'          => __( 'Full (set color to show)', 'ayecode-connect' ),
+			'border-top'      => __( 'Top', 'ayecode-connect' ),
+			'border-bottom'   => __( 'Bottom', 'ayecode-connect' ),
+			'border-left'     => __( 'Left', 'ayecode-connect' ),
+			'border-right'    => __( 'Right', 'ayecode-connect' ),
+			'border-top-0'    => __( '-Top', 'ayecode-connect' ),
+			'border-bottom-0' => __( '-Bottom', 'ayecode-connect' ),
+			'border-left-0'   => __( '-Left', 'ayecode-connect' ),
+			'border-right-0'  => __( '-Right', 'ayecode-connect' ),
 		);
 		$defaults['element_require'] = '[%border%]';
 
 	} else {
-		$defaults['title']   = __( 'Border color', 'super-duper' );
+		$defaults['title']   = __( 'Border color', 'ayecode-connect' );
 		$defaults['options'] = array(
-			                       ''  => __( 'Default', 'super-duper' ),
-			                       '0' => __( 'None', 'super-duper' ),
+			                       ''  => __( 'Default', 'ayecode-connect' ),
+			                       '0' => __( 'None', 'ayecode-connect' ),
 		                       ) + sd_aui_colors();
 	}
 
@@ -313,19 +313,19 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
  */
 function sd_get_shadow_input( $type = 'shadow', $overwrite = array() ) {
 	$options = array(
-		''          => __( 'None', 'super-duper' ),
-		'shadow-sm' => __( 'Small', 'super-duper' ),
-		'shadow'    => __( 'Regular', 'super-duper' ),
-		'shadow-lg' => __( 'Large', 'super-duper' ),
+		''          => __( 'None', 'ayecode-connect' ),
+		'shadow-sm' => __( 'Small', 'ayecode-connect' ),
+		'shadow'    => __( 'Regular', 'ayecode-connect' ),
+		'shadow-lg' => __( 'Large', 'ayecode-connect' ),
 	);
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Shadow', 'super-duper' ),
+		'title'    => __( 'Shadow', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+		'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -343,17 +343,17 @@ function sd_get_shadow_input( $type = 'shadow', $overwrite = array() ) {
  */
 function sd_get_background_input( $type = 'bg', $overwrite = array() ) {
 	$options = array(
-		           ''            => __( 'None', 'super-duper' ),
-		           'transparent' => __( 'Transparent', 'super-duper' ),
+		           ''            => __( 'None', 'ayecode-connect' ),
+		           'transparent' => __( 'Transparent', 'ayecode-connect' ),
 	           ) + sd_aui_colors();
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Background color', 'super-duper' ),
+		'title'    => __( 'Background color', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+		'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -371,7 +371,7 @@ function sd_get_background_input( $type = 'bg', $overwrite = array() ) {
  */
 function sd_get_opacity_input( $type = 'opacity', $overwrite = array() ) {
 	$options = array(
-		''            => __( 'Default', 'super-duper' ),
+		''            => __( 'Default', 'ayecode-connect' ),
 		'opacity-10'  => '10%',
 		'opacity-15'  => '15%',
 		'opacity-25'  => '25%',
@@ -389,11 +389,11 @@ function sd_get_opacity_input( $type = 'opacity', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Opacity', 'super-duper' ),
+		'title'    => __( 'Opacity', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+		'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -414,25 +414,25 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 	$color_options = $include_button_colors ? sd_aui_colors( false, true, true, true ) : sd_aui_colors();
 
 	$options = array(
-		           ''            => __( 'None', 'super-duper' ),
-		           'transparent' => __( 'Transparent', 'super-duper' ),
+		           ''            => __( 'None', 'ayecode-connect' ),
+		           'transparent' => __( 'Transparent', 'ayecode-connect' ),
 	           ) + $color_options;
 
 	if ( false !== $overwrite_color ) {
-		$options['custom-color'] = __( 'Custom Color', 'super-duper' );
+		$options['custom-color'] = __( 'Custom Color', 'ayecode-connect' );
 	}
 
 	if ( false !== $overwrite_gradient ) {
-		$options['custom-gradient'] = __( 'Custom Gradient', 'super-duper' );
+		$options['custom-gradient'] = __( 'Custom Gradient', 'ayecode-connect' );
 	}
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Background Color', 'super-duper' ),
+		'title'    => __( 'Background Color', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Background', 'super-duper' ),
+		'group'    => __( 'Background', 'ayecode-connect' ),
 	);
 
 	if ( $overwrite !== false ) {
@@ -444,11 +444,11 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 			$overwrite_color,
 			array(
 				'type'            => 'color',
-				'title'           => __( 'Custom color', 'super-duper' ),
+				'title'           => __( 'Custom color', 'ayecode-connect' ),
 				'placeholder'     => '',
 				'default'         => '#0073aa',
 				'desc_tip'        => true,
-				'group'           => __( 'Background', 'super-duper' ),
+				'group'           => __( 'Background', 'ayecode-connect' ),
 				'element_require' => '[%' . $type . '%]=="custom-color"',
 			)
 		);
@@ -459,11 +459,11 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 			$overwrite_gradient,
 			array(
 				'type'            => 'gradient',
-				'title'           => __( 'Custom gradient', 'super-duper' ),
+				'title'           => __( 'Custom gradient', 'ayecode-connect' ),
 				'placeholder'     => '',
 				'default'         => 'linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%)',
 				'desc_tip'        => true,
-				'group'           => __( 'Background', 'super-duper' ),
+				'group'           => __( 'Background', 'ayecode-connect' ),
 				'element_require' => '[%' . $type . '%]=="custom-gradient"',
 			)
 		);
@@ -473,20 +473,20 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 
 		$input[ $type . '_image_fixed' ] = array(
 			'type'            => 'checkbox',
-			'title'           => __( 'Fixed background', 'super-duper' ),
+			'title'           => __( 'Fixed background', 'ayecode-connect' ),
 			'default'         => '',
 			'desc_tip'        => true,
-			'group'           => ! empty( $overwrite_image['group'] ) ? $overwrite_image['group'] : __( 'Background', 'super-duper' ),
+			'group'           => ! empty( $overwrite_image['group'] ) ? $overwrite_image['group'] : __( 'Background', 'ayecode-connect' ),
 			'element_require' => '( [%' . $type . '%]=="" || [%' . $type . '%]=="custom-color" || [%' . $type . '%]=="custom-gradient" || [%' . $type . '%]=="transparent" )',
 
 		);
 
 		$input[ $type . '_image_use_featured' ] = array(
 			'type'            => 'checkbox',
-			'title'           => __( 'Use featured image', 'super-duper' ),
+			'title'           => __( 'Use featured image', 'ayecode-connect' ),
 			'default'         => '',
 			'desc_tip'        => true,
-			'group'           => ! empty( $overwrite_image['group'] ) ? $overwrite_image['group'] : __( 'Background', 'super-duper' ),
+			'group'           => ! empty( $overwrite_image['group'] ) ? $overwrite_image['group'] : __( 'Background', 'ayecode-connect' ),
 			'element_require' => '( [%' . $type . '%]=="" || [%' . $type . '%]=="custom-color" || [%' . $type . '%]=="custom-gradient" || [%' . $type . '%]=="transparent" )',
 
 		);
@@ -495,11 +495,11 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 			$overwrite_image,
 			array(
 				'type'        => 'image',
-				'title'       => __( 'Custom image', 'super-duper' ),
+				'title'       => __( 'Custom image', 'ayecode-connect' ),
 				'placeholder' => '',
 				'default'     => '',
 				'desc_tip'    => true,
-				'group'       => __( 'Background', 'super-duper' ),
+				'group'       => __( 'Background', 'ayecode-connect' ),
 				//          'element_require' => ' ![%' . $type . '_image_use_featured%] '
 			)
 		);
@@ -512,7 +512,7 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 				'title'       => '',
 				'placeholder' => '',
 				'default'     => '',
-				'group'       => __( 'Background', 'super-duper' ),
+				'group'       => __( 'Background', 'ayecode-connect' ),
 			)
 		);
 
@@ -523,7 +523,7 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 				'title'       => '',
 				'placeholder' => '',
 				'default'     => '',
-				'group'       => __( 'Background', 'super-duper' ),
+				'group'       => __( 'Background', 'ayecode-connect' ),
 			)
 		);
 	}
@@ -542,43 +542,43 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 function sd_get_shape_divider_inputs( $type = 'sd', $overwrite = array(), $overwrite_color = array(), $overwrite_gradient = array(), $overwrite_image = array() ) {
 
 	$options = array(
-		''                      => __( 'None', 'super-duper' ),
-		'mountains'             => __( 'Mountains', 'super-duper' ),
-		'drops'                 => __( 'Drops', 'super-duper' ),
-		'clouds'                => __( 'Clouds', 'super-duper' ),
-		'zigzag'                => __( 'Zigzag', 'super-duper' ),
-		'pyramids'              => __( 'Pyramids', 'super-duper' ),
-		'triangle'              => __( 'Triangle', 'super-duper' ),
-		'triangle-asymmetrical' => __( 'Triangle Asymmetrical', 'super-duper' ),
-		'tilt'                  => __( 'Tilt', 'super-duper' ),
-		'opacity-tilt'          => __( 'Opacity Tilt', 'super-duper' ),
-		'opacity-fan'           => __( 'Opacity Fan', 'super-duper' ),
-		'curve'                 => __( 'Curve', 'super-duper' ),
-		'curve-asymmetrical'    => __( 'Curve Asymmetrical', 'super-duper' ),
-		'waves'                 => __( 'Waves', 'super-duper' ),
-		'wave-brush'            => __( 'Wave Brush', 'super-duper' ),
-		'waves-pattern'         => __( 'Waves Pattern', 'super-duper' ),
-		'arrow'                 => __( 'Arrow', 'super-duper' ),
-		'split'                 => __( 'Split', 'super-duper' ),
-		'book'                  => __( 'Book', 'super-duper' ),
+		''                      => __( 'None', 'ayecode-connect' ),
+		'mountains'             => __( 'Mountains', 'ayecode-connect' ),
+		'drops'                 => __( 'Drops', 'ayecode-connect' ),
+		'clouds'                => __( 'Clouds', 'ayecode-connect' ),
+		'zigzag'                => __( 'Zigzag', 'ayecode-connect' ),
+		'pyramids'              => __( 'Pyramids', 'ayecode-connect' ),
+		'triangle'              => __( 'Triangle', 'ayecode-connect' ),
+		'triangle-asymmetrical' => __( 'Triangle Asymmetrical', 'ayecode-connect' ),
+		'tilt'                  => __( 'Tilt', 'ayecode-connect' ),
+		'opacity-tilt'          => __( 'Opacity Tilt', 'ayecode-connect' ),
+		'opacity-fan'           => __( 'Opacity Fan', 'ayecode-connect' ),
+		'curve'                 => __( 'Curve', 'ayecode-connect' ),
+		'curve-asymmetrical'    => __( 'Curve Asymmetrical', 'ayecode-connect' ),
+		'waves'                 => __( 'Waves', 'ayecode-connect' ),
+		'wave-brush'            => __( 'Wave Brush', 'ayecode-connect' ),
+		'waves-pattern'         => __( 'Waves Pattern', 'ayecode-connect' ),
+		'arrow'                 => __( 'Arrow', 'ayecode-connect' ),
+		'split'                 => __( 'Split', 'ayecode-connect' ),
+		'book'                  => __( 'Book', 'ayecode-connect' ),
 	);
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Type', 'super-duper' ),
+		'title'    => __( 'Type', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Shape Divider', 'super-duper' ),
+		'group'    => __( 'Shape Divider', 'ayecode-connect' ),
 	);
 
 	$input[ $type ] = wp_parse_args( $overwrite, $defaults );
 
 	$input[ $type . '_notice' ] = array(
 		'type'            => 'notice',
-		'desc'            => __( 'Parent element must be position `relative`', 'super-duper' ),
+		'desc'            => __( 'Parent element must be position `relative`', 'ayecode-connect' ),
 		'status'          => 'warning',
-		'group'           => __( 'Shape Divider', 'super-duper' ),
+		'group'           => __( 'Shape Divider', 'ayecode-connect' ),
 		'element_require' => '[%' . $type . '%]!=""',
 	);
 
@@ -586,33 +586,33 @@ function sd_get_shape_divider_inputs( $type = 'sd', $overwrite = array(), $overw
 		$overwrite_color,
 		array(
 			'type'            => 'select',
-			'title'           => __( 'Position', 'super-duper' ),
+			'title'           => __( 'Position', 'ayecode-connect' ),
 			'options'         => array(
-				'top'    => __( 'Top', 'super-duper' ),
-				'bottom' => __( 'Bottom', 'super-duper' ),
+				'top'    => __( 'Top', 'ayecode-connect' ),
+				'bottom' => __( 'Bottom', 'ayecode-connect' ),
 			),
 			'desc_tip'        => true,
-			'group'           => __( 'Shape Divider', 'super-duper' ),
+			'group'           => __( 'Shape Divider', 'ayecode-connect' ),
 			'element_require' => '[%' . $type . '%]!=""',
 		)
 	);
 
 	$options = array(
-		           ''            => __( 'None', 'super-duper' ),
-		           'transparent' => __( 'Transparent', 'super-duper' ),
+		           ''            => __( 'None', 'ayecode-connect' ),
+		           'transparent' => __( 'Transparent', 'ayecode-connect' ),
 	           ) + sd_aui_colors()
 	           + array(
-		           'custom-color' => __( 'Custom Color', 'super-duper' ),
+		           'custom-color' => __( 'Custom Color', 'ayecode-connect' ),
 	           );
 
 	$input[ $type . '_color' ] = wp_parse_args(
 		$overwrite_color,
 		array(
 			'type'            => 'select',
-			'title'           => __( 'Color', 'super-duper' ),
+			'title'           => __( 'Color', 'ayecode-connect' ),
 			'options'         => $options,
 			'desc_tip'        => true,
-			'group'           => __( 'Shape Divider', 'super-duper' ),
+			'group'           => __( 'Shape Divider', 'ayecode-connect' ),
 			'element_require' => '[%' . $type . '%]!=""',
 		)
 	);
@@ -621,11 +621,11 @@ function sd_get_shape_divider_inputs( $type = 'sd', $overwrite = array(), $overw
 		$overwrite_color,
 		array(
 			'type'            => 'color',
-			'title'           => __( 'Custom color', 'super-duper' ),
+			'title'           => __( 'Custom color', 'ayecode-connect' ),
 			'placeholder'     => '',
 			'default'         => '#0073aa',
 			'desc_tip'        => true,
-			'group'           => __( 'Shape Divider', 'super-duper' ),
+			'group'           => __( 'Shape Divider', 'ayecode-connect' ),
 			'element_require' => '[%' . $type . '_color%]=="custom-color" && [%' . $type . '%]!=""',
 		)
 	);
@@ -634,7 +634,7 @@ function sd_get_shape_divider_inputs( $type = 'sd', $overwrite = array(), $overw
 		$overwrite_gradient,
 		array(
 			'type'              => 'range',
-			'title'             => __( 'Width', 'super-duper' ),
+			'title'             => __( 'Width', 'ayecode-connect' ),
 			'placeholder'       => '',
 			'default'           => '200',
 			'desc_tip'          => true,
@@ -642,21 +642,21 @@ function sd_get_shape_divider_inputs( $type = 'sd', $overwrite = array(), $overw
 				'min' => 100,
 				'max' => 300,
 			),
-			'group'             => __( 'Shape Divider', 'super-duper' ),
+			'group'             => __( 'Shape Divider', 'ayecode-connect' ),
 			'element_require'   => '[%' . $type . '%]!=""',
 		)
 	);
 
 	$input[ $type . '_height' ] = array(
 		'type'              => 'range',
-		'title'             => __( 'Height', 'super-duper' ),
+		'title'             => __( 'Height', 'ayecode-connect' ),
 		'default'           => '100',
 		'desc_tip'          => true,
 		'custom_attributes' => array(
 			'min' => 0,
 			'max' => 500,
 		),
-		'group'             => __( 'Shape Divider', 'super-duper' ),
+		'group'             => __( 'Shape Divider', 'ayecode-connect' ),
 		'element_require'   => '[%' . $type . '%]!=""',
 	);
 
@@ -683,28 +683,28 @@ function sd_get_shape_divider_inputs( $type = 'sd', $overwrite = array(), $overw
 
 	$input[ $type . '_flip' ] = array(
 		'type'            => 'checkbox',
-		'title'           => __( 'Flip', 'super-duper' ),
+		'title'           => __( 'Flip', 'ayecode-connect' ),
 		'default'         => '',
 		'desc_tip'        => true,
-		'group'           => __( 'Shape Divider', 'super-duper' ),
+		'group'           => __( 'Shape Divider', 'ayecode-connect' ),
 		'element_require' => sd_get_element_require_string( $requires, 'flip', 'sd' ),
 	);
 
 	$input[ $type . '_invert' ] = array(
 		'type'            => 'checkbox',
-		'title'           => __( 'Invert', 'super-duper' ),
+		'title'           => __( 'Invert', 'ayecode-connect' ),
 		'default'         => '',
 		'desc_tip'        => true,
-		'group'           => __( 'Shape Divider', 'super-duper' ),
+		'group'           => __( 'Shape Divider', 'ayecode-connect' ),
 		'element_require' => sd_get_element_require_string( $requires, 'invert', 'sd' ),
 	);
 
 	$input[ $type . '_btf' ] = array(
 		'type'            => 'checkbox',
-		'title'           => __( 'Bring to front', 'super-duper' ),
+		'title'           => __( 'Bring to front', 'ayecode-connect' ),
 		'default'         => '',
 		'desc_tip'        => true,
-		'group'           => __( 'Shape Divider', 'super-duper' ),
+		'group'           => __( 'Shape Divider', 'ayecode-connect' ),
 		'element_require' => '[%' . $type . '%]!=""',
 
 	);
@@ -750,20 +750,20 @@ function sd_get_element_require_string( $args, $key, $type ) {
  */
 function sd_get_text_color_input( $type = 'text_color', $overwrite = array(), $has_custom = false ) {
 	$options = array(
-		           '' => __( 'None', 'super-duper' ),
+		           '' => __( 'None', 'ayecode-connect' ),
 	           ) + sd_aui_colors();
 
 	if ( $has_custom ) {
-		$options['custom'] = __( 'Custom color', 'super-duper' );
+		$options['custom'] = __( 'Custom color', 'ayecode-connect' );
 	}
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Text color', 'super-duper' ),
+		'title'    => __( 'Text color', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Typography', 'super-duper' ),
+		'group'    => __( 'Typography', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -798,11 +798,11 @@ function sd_get_custom_color_input( $type = 'color_custom', $overwrite = array()
 
 	$defaults = array(
 		'type'        => 'color',
-		'title'       => __( 'Custom color', 'super-duper' ),
+		'title'       => __( 'Custom color', 'ayecode-connect' ),
 		'default'     => '',
 		'placeholder' => '',
 		'desc_tip'    => true,
-		'group'       => __( 'Typography', 'super-duper' ),
+		'group'       => __( 'Typography', 'ayecode-connect' ),
 	);
 
 	if ( $parent_type ) {
@@ -833,8 +833,8 @@ function sd_get_col_input( $type = 'col', $overwrite = array() ) {
 		}
 	}
 	$options = array(
-		''     => __( 'Default', 'super-duper' ),
-		'auto' => __( 'auto', 'super-duper' ),
+		''     => __( 'Default', 'ayecode-connect' ),
+		'auto' => __( 'auto', 'ayecode-connect' ),
 		'1'    => '1/12',
 		'2'    => '2/12',
 		'3'    => '3/12',
@@ -851,11 +851,11 @@ function sd_get_col_input( $type = 'col', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'            => 'select',
-		'title'           => __( 'Column width', 'super-duper' ),
+		'title'           => __( 'Column width', 'ayecode-connect' ),
 		'options'         => $options,
 		'default'         => '',
 		'desc_tip'        => true,
-		'group'           => __( 'Container', 'super-duper' ),
+		'group'           => __( 'Container', 'ayecode-connect' ),
 		'element_require' => '[%container%]=="col"',
 	);
 
@@ -883,7 +883,7 @@ function sd_get_row_cols_input( $type = 'row_cols', $overwrite = array() ) {
 		}
 	}
 	$options = array(
-		''  => __( 'auto', 'super-duper' ),
+		''  => __( 'auto', 'ayecode-connect' ),
 		'1' => '1',
 		'2' => '2',
 		'3' => '3',
@@ -894,11 +894,11 @@ function sd_get_row_cols_input( $type = 'row_cols', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'            => 'select',
-		'title'           => __( 'Row columns', 'super-duper' ),
+		'title'           => __( 'Row columns', 'ayecode-connect' ),
 		'options'         => $options,
 		'default'         => '',
 		'desc_tip'        => true,
-		'group'           => __( 'Container', 'super-duper' ),
+		'group'           => __( 'Container', 'ayecode-connect' ),
 		'element_require' => '[%container%]=="row"',
 	);
 
@@ -926,19 +926,19 @@ function sd_get_text_align_input( $type = 'text_align', $overwrite = array() ) {
 		}
 	}
 	$options = array(
-		''                                => __( 'Default', 'super-duper' ),
-		'text' . $device_size . '-left'   => __( 'Left', 'super-duper' ),
-		'text' . $device_size . '-right'  => __( 'Right', 'super-duper' ),
-		'text' . $device_size . '-center' => __( 'Center', 'super-duper' ),
+		''                                => __( 'Default', 'ayecode-connect' ),
+		'text' . $device_size . '-left'   => __( 'Left', 'ayecode-connect' ),
+		'text' . $device_size . '-right'  => __( 'Right', 'ayecode-connect' ),
+		'text' . $device_size . '-center' => __( 'Center', 'ayecode-connect' ),
 	);
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Text align', 'super-duper' ),
+		'title'    => __( 'Text align', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Typography', 'super-duper' ),
+		'group'    => __( 'Typography', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -965,7 +965,7 @@ function sd_get_display_input( $type = 'display', $overwrite = array() ) {
 		}
 	}
 	$options = array(
-		''                                   => __( 'Default', 'super-duper' ),
+		''                                   => __( 'Default', 'ayecode-connect' ),
 		'd' . $device_size . '-none'         => 'none',
 		'd' . $device_size . '-inline'       => 'inline',
 		'd' . $device_size . '-inline-block' => 'inline-block',
@@ -979,11 +979,11 @@ function sd_get_display_input( $type = 'display', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Display', 'super-duper' ),
+		'title'    => __( 'Display', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+		'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1003,10 +1003,10 @@ function sd_get_text_justify_input( $type = 'text_justify', $overwrite = array()
 
 	$defaults = array(
 		'type'     => 'checkbox',
-		'title'    => __( 'Text justify', 'super-duper' ),
+		'title'    => __( 'Text justify', 'ayecode-connect' ),
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Typography', 'super-duper' ),
+		'group'    => __( 'Typography', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1026,43 +1026,43 @@ function sd_get_text_justify_input( $type = 'text_justify', $overwrite = array()
 function sd_aui_colors( $include_branding = false, $include_outlines = false, $outline_button_only_text = false, $include_translucent = false ) {
 	$theme_colors = array();
 
-	$theme_colors['primary']   = __( 'Primary', 'super-duper' );
-	$theme_colors['secondary'] = __( 'Secondary', 'super-duper' );
-	$theme_colors['success']   = __( 'Success', 'super-duper' );
-	$theme_colors['danger']    = __( 'Danger', 'super-duper' );
-	$theme_colors['warning']   = __( 'Warning', 'super-duper' );
-	$theme_colors['info']      = __( 'Info', 'super-duper' );
-	$theme_colors['light']     = __( 'Light', 'super-duper' );
-	$theme_colors['dark']      = __( 'Dark', 'super-duper' );
-	$theme_colors['black']     = __( 'Black', 'super-duper' );
-	$theme_colors['white']     = __( 'White', 'super-duper' );
-	$theme_colors['purple']    = __( 'Purple', 'super-duper' );
-	$theme_colors['salmon']    = __( 'Salmon', 'super-duper' );
-	$theme_colors['cyan']      = __( 'Cyan', 'super-duper' );
-	$theme_colors['gray']      = __( 'Gray', 'super-duper' );
-	$theme_colors['muted']     = __( 'Muted', 'super-duper' );
-	$theme_colors['gray-dark'] = __( 'Gray dark', 'super-duper' );
-	$theme_colors['indigo']    = __( 'Indigo', 'super-duper' );
-	$theme_colors['orange']    = __( 'Orange', 'super-duper' );
+	$theme_colors['primary']   = __( 'Primary', 'ayecode-connect' );
+	$theme_colors['secondary'] = __( 'Secondary', 'ayecode-connect' );
+	$theme_colors['success']   = __( 'Success', 'ayecode-connect' );
+	$theme_colors['danger']    = __( 'Danger', 'ayecode-connect' );
+	$theme_colors['warning']   = __( 'Warning', 'ayecode-connect' );
+	$theme_colors['info']      = __( 'Info', 'ayecode-connect' );
+	$theme_colors['light']     = __( 'Light', 'ayecode-connect' );
+	$theme_colors['dark']      = __( 'Dark', 'ayecode-connect' );
+	$theme_colors['black']     = __( 'Black', 'ayecode-connect' );
+	$theme_colors['white']     = __( 'White', 'ayecode-connect' );
+	$theme_colors['purple']    = __( 'Purple', 'ayecode-connect' );
+	$theme_colors['salmon']    = __( 'Salmon', 'ayecode-connect' );
+	$theme_colors['cyan']      = __( 'Cyan', 'ayecode-connect' );
+	$theme_colors['gray']      = __( 'Gray', 'ayecode-connect' );
+	$theme_colors['muted']     = __( 'Muted', 'ayecode-connect' );
+	$theme_colors['gray-dark'] = __( 'Gray dark', 'ayecode-connect' );
+	$theme_colors['indigo']    = __( 'Indigo', 'ayecode-connect' );
+	$theme_colors['orange']    = __( 'Orange', 'ayecode-connect' );
 
 	if ( $include_outlines ) {
-		$button_only                       = $outline_button_only_text ? ' ' . __( '(button only)', 'super-duper' ) : '';
-		$theme_colors['outline-primary']   = __( 'Primary outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-secondary'] = __( 'Secondary outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-success']   = __( 'Success outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-danger']    = __( 'Danger outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-warning']   = __( 'Warning outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-info']      = __( 'Info outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-light']     = __( 'Light outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-dark']      = __( 'Dark outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-white']     = __( 'White outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-purple']    = __( 'Purple outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-salmon']    = __( 'Salmon outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-cyan']      = __( 'Cyan outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-gray']      = __( 'Gray outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-gray-dark'] = __( 'Gray dark outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-indigo']    = __( 'Indigo outline', 'super-duper' ) . $button_only;
-		$theme_colors['outline-orange']    = __( 'Orange outline', 'super-duper' ) . $button_only;
+		$button_only                       = $outline_button_only_text ? ' ' . __( '(button only)', 'ayecode-connect' ) : '';
+		$theme_colors['outline-primary']   = __( 'Primary outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-secondary'] = __( 'Secondary outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-success']   = __( 'Success outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-danger']    = __( 'Danger outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-warning']   = __( 'Warning outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-info']      = __( 'Info outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-light']     = __( 'Light outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-dark']      = __( 'Dark outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-white']     = __( 'White outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-purple']    = __( 'Purple outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-salmon']    = __( 'Salmon outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-cyan']      = __( 'Cyan outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-gray']      = __( 'Gray outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-gray-dark'] = __( 'Gray dark outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-indigo']    = __( 'Indigo outline', 'ayecode-connect' ) . $button_only;
+		$theme_colors['outline-orange']    = __( 'Orange outline', 'ayecode-connect' ) . $button_only;
 	}
 
 	if ( $include_branding ) {
@@ -1070,23 +1070,23 @@ function sd_aui_colors( $include_branding = false, $include_outlines = false, $o
 	}
 
 	if ( $include_translucent ) {
-		$button_only                           = $outline_button_only_text ? ' ' . __( '(button only)', 'super-duper' ) : '';
-		$theme_colors['translucent-primary']   = __( 'Primary translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-secondary'] = __( 'Secondary translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-success']   = __( 'Success translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-danger']    = __( 'Danger translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-warning']   = __( 'Warning translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-info']      = __( 'Info translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-light']     = __( 'Light translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-dark']      = __( 'Dark translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-white']     = __( 'White translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-purple']    = __( 'Purple translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-salmon']    = __( 'Salmon translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-cyan']      = __( 'Cyan translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-gray']      = __( 'Gray translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-gray-dark'] = __( 'Gray dark translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-indigo']    = __( 'Indigo translucent', 'super-duper' ) . $button_only;
-		$theme_colors['translucent-orange']    = __( 'Orange translucent', 'super-duper' ) . $button_only;
+		$button_only                           = $outline_button_only_text ? ' ' . __( '(button only)', 'ayecode-connect' ) : '';
+		$theme_colors['translucent-primary']   = __( 'Primary translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-secondary'] = __( 'Secondary translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-success']   = __( 'Success translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-danger']    = __( 'Danger translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-warning']   = __( 'Warning translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-info']      = __( 'Info translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-light']     = __( 'Light translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-dark']      = __( 'Dark translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-white']     = __( 'White translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-purple']    = __( 'Purple translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-salmon']    = __( 'Salmon translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-cyan']      = __( 'Cyan translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-gray']      = __( 'Gray translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-gray-dark'] = __( 'Gray dark translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-indigo']    = __( 'Indigo translucent', 'ayecode-connect' ) . $button_only;
+		$theme_colors['translucent-orange']    = __( 'Orange translucent', 'ayecode-connect' ) . $button_only;
 	}
 
 	return apply_filters( 'sd_aui_colors', $theme_colors, $include_outlines, $include_branding );
@@ -1099,17 +1099,17 @@ function sd_aui_colors( $include_branding = false, $include_outlines = false, $o
  */
 function sd_aui_branding_colors() {
 	return array(
-		'facebook'  => __( 'Facebook', 'super-duper' ),
-		'twitter'   => __( 'Twitter', 'super-duper' ),
-		'instagram' => __( 'Instagram', 'super-duper' ),
-		'linkedin'  => __( 'Linkedin', 'super-duper' ),
-		'flickr'    => __( 'Flickr', 'super-duper' ),
-		'github'    => __( 'GitHub', 'super-duper' ),
-		'youtube'   => __( 'YouTube', 'super-duper' ),
-		'wordpress' => __( 'WordPress', 'super-duper' ),
-		'google'    => __( 'Google', 'super-duper' ),
-		'yahoo'     => __( 'Yahoo', 'super-duper' ),
-		'vkontakte' => __( 'Vkontakte', 'super-duper' ),
+		'facebook'  => __( 'Facebook', 'ayecode-connect' ),
+		'twitter'   => __( 'Twitter', 'ayecode-connect' ),
+		'instagram' => __( 'Instagram', 'ayecode-connect' ),
+		'linkedin'  => __( 'Linkedin', 'ayecode-connect' ),
+		'flickr'    => __( 'Flickr', 'ayecode-connect' ),
+		'github'    => __( 'GitHub', 'ayecode-connect' ),
+		'youtube'   => __( 'YouTube', 'ayecode-connect' ),
+		'wordpress' => __( 'WordPress', 'ayecode-connect' ),
+		'google'    => __( 'Google', 'ayecode-connect' ),
+		'yahoo'     => __( 'Yahoo', 'ayecode-connect' ),
+		'vkontakte' => __( 'Vkontakte', 'ayecode-connect' ),
 	);
 }
 
@@ -1125,7 +1125,7 @@ function sd_aui_branding_colors() {
 function sd_get_container_class_input( $type = 'container', $overwrite = array() ) {
 
 	$options = array(
-		'container'       => __( 'container (default)', 'super-duper' ),
+		'container'       => __( 'container (default)', 'ayecode-connect' ),
 		'container-sm'    => 'container-sm',
 		'container-md'    => 'container-md',
 		'container-lg'    => 'container-lg',
@@ -1141,16 +1141,16 @@ function sd_get_container_class_input( $type = 'container', $overwrite = array()
 		'card-footer'     => 'card-footer',
 		'list-group'      => 'list-group',
 		'list-group-item' => 'list-group-item',
-		''                => __( 'no container class', 'super-duper' ),
+		''                => __( 'no container class', 'ayecode-connect' ),
 	);
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Type', 'super-duper' ),
+		'title'    => __( 'Type', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Container', 'super-duper' ),
+		'group'    => __( 'Container', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1169,7 +1169,7 @@ function sd_get_container_class_input( $type = 'container', $overwrite = array()
 function sd_get_position_class_input( $type = 'position', $overwrite = array() ) {
 
 	$options = array(
-		''                  => __( 'Default', 'super-duper' ),
+		''                  => __( 'Default', 'ayecode-connect' ),
 		'position-static'   => 'static',
 		'position-relative' => 'relative',
 		'position-absolute' => 'absolute',
@@ -1182,11 +1182,11 @@ function sd_get_position_class_input( $type = 'position', $overwrite = array() )
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Position', 'super-duper' ),
+		'title'    => __( 'Position', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+		'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1203,7 +1203,7 @@ function sd_get_position_class_input( $type = 'position', $overwrite = array() )
 function sd_get_absolute_position_input( $type = 'absolute_position', $overwrite = array() ) {
 
 	$options = array(
-		''              => __( 'Default', 'super-duper' ),
+		''              => __( 'Default', 'ayecode-connect' ),
 		'top-left'      => 'top-left',
 		'top-center'    => 'top-center',
 		'top-right'     => 'top-right',
@@ -1217,11 +1217,11 @@ function sd_get_absolute_position_input( $type = 'absolute_position', $overwrite
 
 	$defaults = array(
 		'type'            => 'select',
-		'title'           => __( 'Absolute Position', 'super-duper' ),
+		'title'           => __( 'Absolute Position', 'ayecode-connect' ),
 		'options'         => $options,
 		'default'         => '',
 		'desc_tip'        => true,
-		'group'           => __( 'Wrapper Styles', 'super-duper' ),
+		'group'           => __( 'Wrapper Styles', 'ayecode-connect' ),
 		'element_require' => '[%position%]=="position-absolute"',
 	);
 
@@ -1242,26 +1242,26 @@ function sd_get_sticky_offset_input( $type = 'top', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'            => 'number',
-		'title'           => __( 'Sticky offset', 'super-duper' ),
-		//'desc' =>  __( 'Sticky offset', 'super-duper' ),
+		'title'           => __( 'Sticky offset', 'ayecode-connect' ),
+		//'desc' =>  __( 'Sticky offset', 'ayecode-connect' ),
 		'default'         => '',
 		'desc_tip'        => true,
-		'group'           => __( 'Wrapper Styles', 'super-duper' ),
+		'group'           => __( 'Wrapper Styles', 'ayecode-connect' ),
 		'element_require' => '[%position%]=="sticky" || [%position%]=="sticky-top"',
 	);
 
 	// title
 	if ( $type == 'top' ) {
-		$defaults['title'] = __( 'Top offset', 'super-duper' );
+		$defaults['title'] = __( 'Top offset', 'ayecode-connect' );
 		$defaults['icon']  = 'box-top';
 		$defaults['row']   = array(
-			'title' => __( 'Sticky offset', 'super-duper' ),
+			'title' => __( 'Sticky offset', 'ayecode-connect' ),
 			'key'   => 'sticky-offset',
 			'open'  => true,
 			'class' => 'text-center',
 		);
 	} elseif ( $type == 'bottom' ) {
-		$defaults['title'] = __( 'Bottom offset', 'super-duper' );
+		$defaults['title'] = __( 'Bottom offset', 'ayecode-connect' );
 		$defaults['icon']  = 'box-bottom';
 		$defaults['row']   = array(
 			'key'   => 'sticky-offset',
@@ -1285,7 +1285,7 @@ function sd_get_sticky_offset_input( $type = 'top', $overwrite = array() ) {
 function sd_get_font_size_input( $type = 'font_size', $overwrite = array(), $has_custom = false ) {
 	global $aui_bs5;
 
-	$options[] = __( 'Inherit from parent', 'super-duper' );
+	$options[] = __( 'Inherit from parent', 'ayecode-connect' );
 	if ( $aui_bs5 ) {
 		// responsive font sizes
 		$options['fs-base'] = 'fs-base (body default)';
@@ -1323,16 +1323,16 @@ function sd_get_font_size_input( $type = 'font_size', $overwrite = array(), $has
 	}
 
 	if ( $has_custom ) {
-		$options['custom'] = __( 'Custom size', 'super-duper' );
+		$options['custom'] = __( 'Custom size', 'ayecode-connect' );
 	}
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Font size', 'super-duper' ),
+		'title'    => __( 'Font size', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Typography', 'super-duper' ),
+		'group'    => __( 'Typography', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1352,7 +1352,7 @@ function sd_get_font_custom_size_input( $type = 'font_size_custom', $overwrite =
 
 	$defaults = array(
 		'type'              => 'number',
-		'title'             => __( 'Font size (rem)', 'super-duper' ),
+		'title'             => __( 'Font size (rem)', 'ayecode-connect' ),
 		'default'           => '',
 		'placeholder'       => '1.25',
 		'custom_attributes' => array(
@@ -1361,7 +1361,7 @@ function sd_get_font_custom_size_input( $type = 'font_size_custom', $overwrite =
 			'max'  => '100',
 		),
 		'desc_tip'          => true,
-		'group'             => __( 'Typography', 'super-duper' ),
+		'group'             => __( 'Typography', 'ayecode-connect' ),
 	);
 
 	if ( $parent_type ) {
@@ -1385,7 +1385,7 @@ function sd_get_font_line_height_input( $type = 'font_line_height', $overwrite =
 
 	$defaults = array(
 		'type'              => 'number',
-		'title'             => __( 'Font Line Height', 'super-duper' ),
+		'title'             => __( 'Font Line Height', 'ayecode-connect' ),
 		'default'           => '',
 		'placeholder'       => '1.75',
 		'custom_attributes' => array(
@@ -1394,7 +1394,7 @@ function sd_get_font_line_height_input( $type = 'font_line_height', $overwrite =
 			'max'  => '100',
 		),
 		'desc_tip'          => true,
-		'group'             => __( 'Typography', 'super-duper' ),
+		'group'             => __( 'Typography', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1437,7 +1437,7 @@ function sd_get_font_size_input_group( $type = 'font_size', $overwrite = array()
 function sd_get_font_weight_input( $type = 'font_weight', $overwrite = array() ) {
 
 	$options = array(
-		''                                => __( 'Inherit', 'super-duper' ),
+		''                                => __( 'Inherit', 'ayecode-connect' ),
 		'font-weight-bold'                => 'bold',
 		'font-weight-bolder'              => 'bolder',
 		'font-weight-normal'              => 'normal',
@@ -1453,11 +1453,11 @@ function sd_get_font_weight_input( $type = 'font_weight', $overwrite = array() )
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Appearance', 'super-duper' ),
+		'title'    => __( 'Appearance', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Typography', 'super-duper' ),
+		'group'    => __( 'Typography', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1476,19 +1476,19 @@ function sd_get_font_weight_input( $type = 'font_weight', $overwrite = array() )
 function sd_get_font_case_input( $type = 'font_weight', $overwrite = array() ) {
 
 	$options = array(
-		''                => __( 'Default', 'super-duper' ),
-		'text-lowercase'  => __( 'lowercase', 'super-duper' ),
-		'text-uppercase'  => __( 'UPPERCASE', 'super-duper' ),
-		'text-capitalize' => __( 'Capitalize', 'super-duper' ),
+		''                => __( 'Default', 'ayecode-connect' ),
+		'text-lowercase'  => __( 'lowercase', 'ayecode-connect' ),
+		'text-uppercase'  => __( 'UPPERCASE', 'ayecode-connect' ),
+		'text-capitalize' => __( 'Capitalize', 'ayecode-connect' ),
 	);
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Letter case', 'super-duper' ),
+		'title'    => __( 'Letter case', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Typography', 'super-duper' ),
+		'group'    => __( 'Typography', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1508,17 +1508,17 @@ function sd_get_font_case_input( $type = 'font_weight', $overwrite = array() ) {
 function sd_get_font_italic_input( $type = 'font_italic', $overwrite = array() ) {
 
 	$options = array(
-		''            => __( 'No', 'super-duper' ),
-		'font-italic' => __( 'Yes', 'super-duper' ),
+		''            => __( 'No', 'ayecode-connect' ),
+		'font-italic' => __( 'Yes', 'ayecode-connect' ),
 	);
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Font italic', 'super-duper' ),
+		'title'    => __( 'Font italic', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Typography', 'super-duper' ),
+		'group'    => __( 'Typography', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1538,11 +1538,11 @@ function sd_get_anchor_input( $type = 'anchor', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'     => 'text',
-		'title'    => __( 'HTML anchor', 'super-duper' ),
-		'desc'     => __( 'Enter a word or two — without spaces — to make a unique web address just for this block, called an “anchor.” Then, you’ll be able to link directly to this section of your page.', 'super-duper' ),
+		'title'    => __( 'HTML anchor', 'ayecode-connect' ),
+		'desc'     => __( 'Enter a word or two — without spaces — to make a unique web address just for this block, called an “anchor.” Then, you’ll be able to link directly to this section of your page.', 'ayecode-connect' ),
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Advanced', 'super-duper' ),
+		'group'    => __( 'Advanced', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1562,11 +1562,11 @@ function sd_get_class_input( $type = 'css_class', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'     => 'text',
-		'title'    => __( 'Additional CSS class(es)', 'super-duper' ),
-		'desc'     => __( 'Separate multiple classes with spaces.', 'super-duper' ),
+		'title'    => __( 'Additional CSS class(es)', 'ayecode-connect' ),
+		'desc'     => __( 'Separate multiple classes with spaces.', 'ayecode-connect' ),
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Advanced', 'super-duper' ),
+		'group'    => __( 'Advanced', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1585,23 +1585,23 @@ function sd_get_class_input( $type = 'css_class', $overwrite = array() ) {
 function sd_get_hover_animations_input( $type = 'hover_animations', $overwrite = array() ) {
 
 	$options = array(
-		''                 => __( 'none', 'super-duper' ),
-		'hover-zoom'       => __( 'Zoom', 'super-duper' ),
-		'hover-shadow'     => __( 'Shadow', 'super-duper' ),
-		'hover-move-up'    => __( 'Move up', 'super-duper' ),
-		'hover-move-down'  => __( 'Move down', 'super-duper' ),
-		'hover-move-left'  => __( 'Move left', 'super-duper' ),
-		'hover-move-right' => __( 'Move right', 'super-duper' ),
+		''                 => __( 'none', 'ayecode-connect' ),
+		'hover-zoom'       => __( 'Zoom', 'ayecode-connect' ),
+		'hover-shadow'     => __( 'Shadow', 'ayecode-connect' ),
+		'hover-move-up'    => __( 'Move up', 'ayecode-connect' ),
+		'hover-move-down'  => __( 'Move down', 'ayecode-connect' ),
+		'hover-move-left'  => __( 'Move left', 'ayecode-connect' ),
+		'hover-move-right' => __( 'Move right', 'ayecode-connect' ),
 	);
 
 	$defaults = array(
 		'type'     => 'select',
 		'multiple' => true,
-		'title'    => __( 'Hover Animations', 'super-duper' ),
+		'title'    => __( 'Hover Animations', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Hover Animations', 'super-duper' ),
+		'group'    => __( 'Hover Animations', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1620,7 +1620,7 @@ function sd_get_flex_align_items_input( $type = 'align-items', $overwrite = arra
 		}
 	}
 	$options = array(
-		''                                         => __( 'Default', 'super-duper' ),
+		''                                         => __( 'Default', 'ayecode-connect' ),
 		'align-items' . $device_size . '-start'    => 'align-items-start',
 		'align-items' . $device_size . '-end'      => 'align-items-end',
 		'align-items' . $device_size . '-center'   => 'align-items-center',
@@ -1630,11 +1630,11 @@ function sd_get_flex_align_items_input( $type = 'align-items', $overwrite = arra
 
 	$defaults = array(
 		'type'            => 'select',
-		'title'           => __( 'Vertical Align Items', 'super-duper' ),
+		'title'           => __( 'Vertical Align Items', 'ayecode-connect' ),
 		'options'         => $options,
 		'default'         => '',
 		'desc_tip'        => true,
-		'group'           => __( 'Wrapper Styles', 'super-duper' ),
+		'group'           => __( 'Wrapper Styles', 'ayecode-connect' ),
 		'element_require' => ' ( ( [%container%]=="row" ) || ( [%display%]=="d-flex" || [%display_md%]=="d-md-flex" || [%display_lg%]=="d-lg-flex" ) ) ',
 
 	);
@@ -1673,7 +1673,7 @@ function sd_get_flex_justify_content_input( $type = 'flex_justify_content', $ove
 		}
 	}
 	$options = array(
-		''                                            => __( 'Default', 'super-duper' ),
+		''                                            => __( 'Default', 'ayecode-connect' ),
 		'justify-content' . $device_size . '-start'   => 'justify-content-start',
 		'justify-content' . $device_size . '-end'     => 'justify-content-end',
 		'justify-content' . $device_size . '-center'  => 'justify-content-center',
@@ -1683,11 +1683,11 @@ function sd_get_flex_justify_content_input( $type = 'flex_justify_content', $ove
 
 	$defaults = array(
 		'type'            => 'select',
-		'title'           => __( 'Justify content', 'super-duper' ),
+		'title'           => __( 'Justify content', 'ayecode-connect' ),
 		'options'         => $options,
 		'default'         => '',
 		'desc_tip'        => true,
-		'group'           => __( 'Wrapper Styles', 'super-duper' ),
+		'group'           => __( 'Wrapper Styles', 'ayecode-connect' ),
 		'element_require' => '( ( [%container%]=="row" ) || ( [%display%]=="d-flex" || [%display_md%]=="d-md-flex" || [%display_lg%]=="d-lg-flex" ) ) ',
 
 	);
@@ -1727,7 +1727,7 @@ function sd_get_flex_align_self_input( $type = 'flex_align_self', $overwrite = a
 		}
 	}
 	$options = array(
-		''                                         => __( 'Default', 'super-duper' ),
+		''                                         => __( 'Default', 'ayecode-connect' ),
 		'align-items' . $device_size . '-start'    => 'align-items-start',
 		'align-items' . $device_size . '-end'      => 'align-items-end',
 		'align-items' . $device_size . '-center'   => 'align-items-center',
@@ -1737,11 +1737,11 @@ function sd_get_flex_align_self_input( $type = 'flex_align_self', $overwrite = a
 
 	$defaults = array(
 		'type'            => 'select',
-		'title'           => __( 'Align Self', 'super-duper' ),
+		'title'           => __( 'Align Self', 'ayecode-connect' ),
 		'options'         => $options,
 		'default'         => '',
 		'desc_tip'        => true,
-		'group'           => __( 'Wrapper Styles', 'super-duper' ),
+		'group'           => __( 'Wrapper Styles', 'ayecode-connect' ),
 		'element_require' => ' [%container%]=="col" ',
 
 	);
@@ -1780,7 +1780,7 @@ function sd_get_flex_order_input( $type = 'flex_order', $overwrite = array() ) {
 		}
 	}
 	$options = array(
-		'' => __( 'Default', 'super-duper' ),
+		'' => __( 'Default', 'ayecode-connect' ),
 	);
 
 	$i = 0;
@@ -1791,11 +1791,11 @@ function sd_get_flex_order_input( $type = 'flex_order', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'            => 'select',
-		'title'           => __( 'Flex Order', 'super-duper' ),
+		'title'           => __( 'Flex Order', 'ayecode-connect' ),
 		'options'         => $options,
 		'default'         => '',
 		'desc_tip'        => true,
-		'group'           => __( 'Wrapper Styles', 'super-duper' ),
+		'group'           => __( 'Wrapper Styles', 'ayecode-connect' ),
 		'element_require' => ' [%container%]=="col" ',
 
 	);
@@ -1853,7 +1853,7 @@ function sd_get_flex_wrap_input( $type = 'flex_wrap', $overwrite = array() ) {
 		}
 	}
 	$options = array(
-		''                                      => __( 'Default', 'super-duper' ),
+		''                                      => __( 'Default', 'ayecode-connect' ),
 		'flex' . $device_size . '-nowrap'       => 'nowrap',
 		'flex' . $device_size . '-wrap'         => 'wrap',
 		'flex' . $device_size . '-wrap-reverse' => 'wrap-reverse',
@@ -1861,11 +1861,11 @@ function sd_get_flex_wrap_input( $type = 'flex_wrap', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Flex wrap', 'super-duper' ),
+		'title'    => __( 'Flex wrap', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+		'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1901,7 +1901,7 @@ function sd_get_float_input( $type = 'float', $overwrite = array() ) {
 		}
 	}
 	$options = array(
-		''                                      => __( 'Default', 'super-duper' ),
+		''                                      => __( 'Default', 'ayecode-connect' ),
 		'float' . $device_size . '-start'       => 'left',
 		'float' . $device_size . '-end'         => 'right',
 		'float' . $device_size . '-none' => 'none',
@@ -1909,11 +1909,11 @@ function sd_get_float_input( $type = 'float', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Float', 'super-duper' ),
+		'title'    => __( 'Float', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+		'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1930,7 +1930,7 @@ function sd_get_float_input( $type = 'float', $overwrite = array() ) {
 function sd_get_zindex_input( $type = 'zindex', $overwrite = array() ) {
 
 	$options = array(
-		''          => __( 'Default', 'super-duper' ),
+		''          => __( 'Default', 'ayecode-connect' ),
 		'zindex-0'  => '0',
 		'zindex-1'  => '1',
 		'zindex-5'  => '5',
@@ -1939,11 +1939,11 @@ function sd_get_zindex_input( $type = 'zindex', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Z-index', 'super-duper' ),
+		'title'    => __( 'Z-index', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+		'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1960,20 +1960,20 @@ function sd_get_zindex_input( $type = 'zindex', $overwrite = array() ) {
 function sd_get_overflow_input( $type = 'overflow', $overwrite = array() ) {
 
 	$options = array(
-		''                 => __( 'Default', 'super-duper' ),
-		'overflow-auto'    => __( 'Auto', 'super-duper' ),
-		'overflow-hidden'  => __( 'Hidden', 'super-duper' ),
-		'overflow-visible' => __( 'Visible', 'super-duper' ),
-		'overflow-scroll'  => __( 'Scroll', 'super-duper' ),
+		''                 => __( 'Default', 'ayecode-connect' ),
+		'overflow-auto'    => __( 'Auto', 'ayecode-connect' ),
+		'overflow-hidden'  => __( 'Hidden', 'ayecode-connect' ),
+		'overflow-visible' => __( 'Visible', 'ayecode-connect' ),
+		'overflow-scroll'  => __( 'Scroll', 'ayecode-connect' ),
 	);
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Overflow', 'super-duper' ),
+		'title'    => __( 'Overflow', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+		'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -1991,12 +1991,12 @@ function sd_get_max_height_input( $type = 'max_height', $overwrite = array() ) {
 
 	$defaults = array(
 		'type'        => 'text',
-		'title'       => __( 'Max height', 'super-duper' ),
+		'title'       => __( 'Max height', 'ayecode-connect' ),
 		'value'       => '',
 		'default'     => '',
 		'placeholder' => '',
 		'desc_tip'    => true,
-		'group'       => __( 'Wrapper Styles', 'super-duper' ),
+		'group'       => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -2013,17 +2013,17 @@ function sd_get_max_height_input( $type = 'max_height', $overwrite = array() ) {
 function sd_get_scrollbars_input( $type = 'scrollbars', $overwrite = array() ) {
 
 	$options = array(
-		''               => __( 'Default', 'super-duper' ),
-		'scrollbars-ios' => __( 'IOS Style', 'super-duper' ),
+		''               => __( 'Default', 'ayecode-connect' ),
+		'scrollbars-ios' => __( 'IOS Style', 'ayecode-connect' ),
 	);
 
 	$defaults = array(
 		'type'     => 'select',
-		'title'    => __( 'Scrollbars', 'super-duper' ),
+		'title'    => __( 'Scrollbars', 'ayecode-connect' ),
 		'options'  => $options,
 		'default'  => '',
 		'desc_tip' => true,
-		'group'    => __( 'Wrapper Styles', 'super-duper' ),
+		'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -2679,11 +2679,11 @@ function sd_get_class_build_keys() {
 function sd_get_visibility_conditions_input( $type = 'visibility_conditions', $overwrite = array() ) {
 	$defaults = array(
 		'type'         => 'visibility_conditions',
-		'title'        => __( 'Block Visibility', 'super-duper' ),
-		'button_title' => __( 'Set Block Visibility', 'super-duper' ),
+		'title'        => __( 'Block Visibility', 'ayecode-connect' ),
+		'button_title' => __( 'Set Block Visibility', 'ayecode-connect' ),
 		'default'      => '',
 		'desc_tip'     => true,
-		'group'        => __( 'Visibility Conditions', 'super-duper' ),
+		'group'        => __( 'Visibility Conditions', 'ayecode-connect' ),
 	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -2726,13 +2726,13 @@ function sd_user_roles_options( $exclude = array() ) {
  */
 function sd_visibility_rules_options() {
 	$options = array(
-		'logged_in'  => __( 'Logged In', 'super-duper' ),
-		'logged_out' => __( 'Logged Out', 'super-duper' ),
-		'user_roles' => __( 'Specific User Roles', 'super-duper' )
+		'logged_in'  => __( 'Logged In', 'ayecode-connect' ),
+		'logged_out' => __( 'Logged Out', 'ayecode-connect' ),
+		'user_roles' => __( 'Specific User Roles', 'ayecode-connect' )
 	);
 
 	if ( class_exists( 'GeoDirectory' ) ) {
-		$options['gd_field'] = __( 'GD Field', 'super-duper' );
+		$options['gd_field'] = __( 'GD Field', 'ayecode-connect' );
 	}
 
 	return apply_filters( 'sd_visibility_rules_options', $options );
@@ -2784,14 +2784,14 @@ function sd_visibility_gd_field_options(){
  */
 function sd_visibility_field_condition_options(){
 	$options = array(
-		'is_empty' => __( 'is empty', 'super-duper' ),
-		'is_not_empty' => __( 'is not empty', 'super-duper' ),
-		'is_equal' => __( 'is equal', 'super-duper' ),
-		'is_not_equal' => __( 'is not equal', 'super-duper' ),
-		'is_greater_than' => __( 'is greater than', 'super-duper' ),
-		'is_less_than' => __( 'is less than', 'super-duper' ),
-		'is_contains' => __( 'is contains', 'super-duper' ),
-		'is_not_contains' => __( 'is not contains', 'super-duper' ),
+		'is_empty' => __( 'is empty', 'ayecode-connect' ),
+		'is_not_empty' => __( 'is not empty', 'ayecode-connect' ),
+		'is_equal' => __( 'is equal', 'ayecode-connect' ),
+		'is_not_equal' => __( 'is not equal', 'ayecode-connect' ),
+		'is_greater_than' => __( 'is greater than', 'ayecode-connect' ),
+		'is_less_than' => __( 'is less than', 'ayecode-connect' ),
+		'is_contains' => __( 'is contains', 'ayecode-connect' ),
+		'is_not_contains' => __( 'is not contains', 'ayecode-connect' ),
 	);
 
 	return apply_filters( 'sd_visibility_field_condition_options', $options );
@@ -2806,10 +2806,10 @@ function sd_visibility_field_condition_options(){
  */
 function sd_visibility_output_options() {
 	$options = array(
-		'hide'          => __( 'Hide Block', 'super-duper' ),
-		'message'       => __( 'Show Custom Message', 'super-duper' ),
-		'page'          => __( 'Show Page Content', 'super-duper' ),
-		'template_part' => __( 'Show Template Part', 'super-duper' ),
+		'hide'          => __( 'Hide Block', 'ayecode-connect' ),
+		'message'       => __( 'Show Custom Message', 'ayecode-connect' ),
+		'page'          => __( 'Show Page Content', 'ayecode-connect' ),
+		'template_part' => __( 'Show Template Part', 'ayecode-connect' ),
 	);
 
 	return apply_filters( 'sd_visibility_output_options', $options );
@@ -2851,7 +2851,7 @@ function sd_template_page_options( $args = array() ) {
 
 	$pages = get_pages( $args );
 
-	$options = array( '' => __( 'Select Page...', 'super-duper' ) );
+	$options = array( '' => __( 'Select Page...', 'ayecode-connect' ) );
 	if ( ! empty( $pages ) ) {
 		foreach ( $pages as $page ) {
 			if ( ! empty( $page->ID ) && ! empty( $page->post_title ) ) {
@@ -2880,7 +2880,7 @@ function sd_template_part_options( $args = array() ) {
 		return $sd_tmpl_part_options;
 	}
 
-	$options = array( '' => __( 'Select Template Part...', 'super-duper' ) );
+	$options = array( '' => __( 'Select Template Part...', 'ayecode-connect' ) );
 
 	$parts = get_block_templates( array(), 'wp_template_part' );
 
@@ -2962,7 +2962,7 @@ function sd_render_block( $block_content, $block, $instance = '' ) {
 					$valid_type = true;
 
 					if ( isset( $attributes['output']['message'] ) ) {
-						$content = $attributes['output']['message'] != '' ? __( stripslashes( $attributes['output']['message'] ), 'super-duper' ) : $attributes['output']['message'];
+						$content = $attributes['output']['message'] != '' ? __( stripslashes( $attributes['output']['message'] ), 'ayecode-connect' ) : $attributes['output']['message'];
 
 						if ( ! empty( $attributes['output']['message_type'] ) ) {
 							$content = aui()->alert( array(

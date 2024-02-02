@@ -1,5 +1,4 @@
 <?php
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -13,7 +12,7 @@ if ( ! class_exists( "AyeCode_Connect_Helper" ) ) {
 	class AyeCode_Connect_Helper {
 
 		// Hold the version number
-		var $version = "1.0.3";
+		var $version = "1.0.4";
 
 		// Hold the default strings.
 		var $strings = array();
@@ -30,23 +29,19 @@ if ( ! class_exists( "AyeCode_Connect_Helper" ) ) {
 		 * @param array $pages
 		 */
 		public function __construct( $strings = array(), $pages = array() ) {
-
 			// Only fire if not localhost and the current user has the right permissions.
 			if ( ! $this->is_localhost() && current_user_can( 'manage_options' ) ) {
-
-
 				// set default strings
 				$default_strings = array(
-					'connect_title'     => __( "Thanks for choosing an AyeCode Product!" ),
-					'connect_external'  => __( "Please confirm you wish to connect your site?" ),
-					'connect'           => sprintf( __( "<strong>Have a license?</strong> Forget about entering license keys or downloading zip files, connect your site for instant access. %slearn more%s" ), "<a href='https://ayecode.io/introducing-ayecode-connect/' target='_blank'>", "</a>" ),
-					'connect_button'    => __( "Connect Site" ),
-					'connecting_button' => __( "Connecting..." ),
-					'error_localhost'   => __( "This service will only work with a live domain, not a localhost." ),
-					'error'             => __( "Something went wrong, please refresh and try again." ),
+					'connect_title'     => __( "Thanks for choosing an AyeCode Product!", 'ayecode-connect' ),
+					'connect_external'  => __( "Please confirm you wish to connect your site?", 'ayecode-connect' ),
+					'connect'           => wp_sprintf( __( "<strong>Have a license?</strong> Forget about entering license keys or downloading zip files, connect your site for instant access. %slearn more%s", 'ayecode-connect' ), "<a href='https://ayecode.io/introducing-ayecode-connect/' target='_blank'>", "</a>" ),
+					'connect_button'    => __( "Connect Site", 'ayecode-connect' ),
+					'connecting_button' => __( "Connecting...", 'ayecode-connect' ),
+					'error_localhost'   => __( "This service will only work with a live domain, not a localhost.", 'ayecode-connect' ),
+					'error'             => __( "Something went wrong, please refresh and try again.", 'ayecode-connect' ),
 				);
 				$this->strings   = array_merge( $default_strings, $strings );
-
 
 				// set default pages
 				$default_pages = array();
@@ -65,7 +60,6 @@ if ( ! class_exists( "AyeCode_Connect_Helper" ) ) {
 			if ( ! has_action( 'wp_ajax_nopriv_ayecode_connect_helper_installed' ) ) {
 				add_action( 'wp_ajax_nopriv_ayecode_connect_helper_installed', array( $this, 'ayecode_connect_helper_installed' ) );
 			}
-
 		}
 
 		/**
@@ -99,7 +93,6 @@ if ( ! class_exists( "AyeCode_Connect_Helper" ) ) {
 		 * Install and activate the AyeCode Connect Plugin
 		 */
 		public function ayecode_connect_install() {
-
 			// bail if localhost
 			if ( $this->is_localhost() ) {
 				wp_send_json_error( $this->strings['error_localhost'] );
@@ -302,19 +295,13 @@ if ( ! class_exists( "AyeCode_Connect_Helper" ) ) {
 					</span>
 					<span class="acch-float-left acch-text">
 						<h3 class="acch-title"><?php echo esc_attr( $connect_title_string ); ?></h3>
-					<p>
-						<?php
-						echo $connect_string;
-						?>
+					<p><?php echo $connect_string; ?>
 					</p>
 					</span>
 
 					<span class="acch-float-left acch-button">
-						<button onclick="ayecode_connect_helper(this);" id="gd-connect-site"
-						        class="button button-primary"
-						        data-connecting="<?php echo esc_attr( $connecting_button_string ); ?>"><?php echo esc_attr( $connect_button_string ) ?></button>
+						<button onclick="ayecode_connect_helper(this);" id="gd-connect-site" class="button button-primary" data-connecting="<?php echo esc_attr( $connecting_button_string ); ?>"><?php echo esc_attr( $connect_button_string ) ?></button>
 					</span>
-
 				</div>
 
 				<?php
@@ -361,11 +348,8 @@ if ( ! class_exists( "AyeCode_Connect_Helper" ) ) {
 					</span>
 
 					<span class="acch-float-left acch-button">
-						<button onclick="ayecode_connect_helper(this);" id="gd-connect-site"
-						        class="button button-primary"
-						        data-connecting="<?php echo esc_attr( $connecting_button_string ); ?>"><?php echo esc_attr( $connect_button_string ) ?></button>
+						<button onclick="ayecode_connect_helper(this);" id="gd-connect-site" class="button button-primary" data-connecting="<?php echo esc_attr( $connecting_button_string ); ?>"><?php echo esc_attr( $connect_button_string ) ?></button>
 					</span>
-
 						</div>
 					</div>
 					<?php
@@ -414,7 +398,6 @@ if ( ! class_exists( "AyeCode_Connect_Helper" ) ) {
 				.acch-button {
 					zoom: 1.3;
 				}
-
 			</style>
 			<script>
 				/**
@@ -450,9 +433,7 @@ if ( ! class_exists( "AyeCode_Connect_Helper" ) ) {
 							}
 						}
 					});
-				}
-
-
+				} 
 				<?php
 				// add thickbox if external request is requested
 				if(! empty( $_REQUEST['external-connect-request'] )) {
@@ -465,7 +446,6 @@ if ( ! class_exists( "AyeCode_Connect_Helper" ) ) {
 				<?php
 				}
 				?>
-
 			</script>
 			<?php
 		}
@@ -480,17 +460,13 @@ if ( ! class_exists( "AyeCode_Connect_Helper" ) ) {
 
 			// check if on a page set to show
 			if ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $this->pages ) ) {
-
 				// check if not active and connected
 				if ( ! defined( 'AYECODE_CONNECT_VERSION' ) || ! get_option( 'ayecode_connect_blog_token' ) ) {
 					$show = true;
 				}
-
 			}
 
 			return $show;
 		}
-
 	}
-
 }

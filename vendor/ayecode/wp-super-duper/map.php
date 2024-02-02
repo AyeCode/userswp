@@ -22,13 +22,13 @@ class SD_Map extends WP_Super_Duper {
 			'block-output'   => array( // the block visual output elements as an array
 				array(
 					'element' => 'p',
-					'content' => __('A Google API key is required to use this block, we recommend installing our plugin which makes it easy and sets it globally, or you can set a key in the block settings sidebar: ','super-duper'),
+					'content' => __('A Google API key is required to use this block, we recommend installing our plugin which makes it easy and sets it globally, or you can set a key in the block settings sidebar: ', 'ayecode-connect' ),
 					//'element_require' => '"1"=='.get_option( 'rgmk_google_map_api_key', '"0"') ? '"0"' : '"1"',
 					'element_require' => get_option( 'rgmk_google_map_api_key', false) ? '1==0' : '1==1 && [%api_key%]==""',
 				),
 				array(
 					'element' => 'a',
-					'content' => __('API KEY for Google Maps','super-duper'),
+					'content' => __('API KEY for Google Maps', 'ayecode-connect' ),
 					'element_require' => get_option( 'rgmk_google_map_api_key', false) ? '1==0' : '1==1 && [%api_key%]==""',
 					'href' => 'https://wordpress.org/plugins/api-key-for-google-maps/',
 				),
@@ -45,7 +45,7 @@ class SD_Map extends WP_Super_Duper {
 					'style'   => '{overflow:"hidden", position:"relative"}',
 					array(
 						'element' => 'iframe',
-						'title'   => __( 'Placeholderx', 'super-duper' ),
+						'title'   => __( 'Placeholderx', 'ayecode-connect' ),
 						'class'   => '[%className%]',
 						'width'   => '[%width%]',
 						'height'  => '[%height%]',
@@ -58,7 +58,7 @@ class SD_Map extends WP_Super_Duper {
 				),
 				array(
 					'element' => 'style',
-					'content' => '.sd-map-iframe-cover:hover:before {background: #4a4a4a88; content: "'.__("Click here, Settings are in the block settings sidebar","super-duper").'";} .sd-map-iframe-cover:before{cursor: pointer; content: ""; width: 100%; height: 100%; position: absolute; top: 0; bottom: 0;padding-top: 33%; text-align: center;  color: #fff; font-size: 20px; font-weight: bold;}',
+					'content' => '.sd-map-iframe-cover:hover:before {background: #4a4a4a88; content: "'.__( 'Click here, Settings are in the block settings sidebar', 'ayecode-connect' ).'";} .sd-map-iframe-cover:before{cursor: pointer; content: ""; width: 100%; height: 100%; position: absolute; top: 0; bottom: 0;padding-top: 33%; text-align: center;  color: #fff; font-size: 20px; font-weight: bold;}',
 					'element_require' => '[%type%]!="image"',
 				),
 			),
@@ -66,26 +66,26 @@ class SD_Map extends WP_Super_Duper {
 			// The calling class name
 			'base_id'        => 'sd_map',
 			// this is used as the widget id and the shortcode id.
-			'name'           => __( 'Map', 'super-duper' ),
+			'name'           => __( 'Map', 'ayecode-connect' ),
 			// the name of the widget/block
 			'widget_ops'     => array(
 				'classname'   => 'sd-map-class',
 				// widget class
-				'description' => esc_html__( 'This is an example that will take a text parameter and output it after `Hello:`.', 'hello-world' ),
+				'description' => esc_html__( 'This is an example that will take a text parameter and output it after `Hello:`.', 'ayecode-connect' ),
 				// widget description
 			),
 			'arguments'      => array( // these are the arguments that will be used in the widget, shortcode and block settings.
 				'type'  => array(
-					'title' => __('Map Type:', 'geodirectory'),
-					'desc' => __('Select the map type to use.', 'geodirectory'),
+					'title' => __('Map Type:', 'ayecode-connect'),
+					'desc' => __('Select the map type to use.', 'ayecode-connect'),
 					'type' => 'select',
 					'options'   =>  array(
-						"image" => __('Static Image', 'geodirectory'),
-						"place" => __('Place', 'geodirectory'),
-//						"directions" => __('Directions', 'geodirectory'),
-//						"search" => __('Search', 'geodirectory'),
-//						"view" => __('View', 'geodirectory'),
-//						"streetview" => __('Streetview', 'geodirectory'),
+						"image" => __('Static Image', 'ayecode-connect'),
+						"place" => __('Place', 'ayecode-connect'),
+//						"directions" => __('Directions', 'ayecode-connect'),
+//						"search" => __('Search', 'ayecode-connect'),
+//						"view" => __('View', 'ayecode-connect'),
+//						"streetview" => __('Streetview', 'ayecode-connect'),
 					),
 					'default'  => 'image',
 					'desc_tip' => true,
@@ -93,8 +93,8 @@ class SD_Map extends WP_Super_Duper {
 				),
 				'location'            => array(
 					'type'        => 'text',
-					'title'       => __( 'Location:', 'geodirectory' ),
-					'desc'        => __( 'Enter the location to show on the map, place, city, zip code or GPS.', 'geodirectory' ),
+					'title'       => __( 'Location:', 'ayecode-connect' ),
+					'desc'        => __( 'Enter the location to show on the map, place, city, zip code or GPS.', 'ayecode-connect' ),
 					'placeholder' => 'Place, city, zip code or GPS',
 					'desc_tip'    => true,
 					'default'     => 'Ireland',
@@ -102,8 +102,8 @@ class SD_Map extends WP_Super_Duper {
 				),
 				'static_width'            => array(
 					'type'        => 'number',
-					'title'       => __( 'Width:', 'geodirectory' ),
-					'desc'        => __( 'This is the width of the map, for static maps you can only use px values.', 'geodirectory' ),
+					'title'       => __( 'Width:', 'ayecode-connect' ),
+					'desc'        => __( 'This is the width of the map, for static maps you can only use px values.', 'ayecode-connect' ),
 					'placeholder' => '600',
 					'desc_tip'    => true,
 					'default'     => '600',
@@ -116,8 +116,8 @@ class SD_Map extends WP_Super_Duper {
 				),
 				'static_height'           => array(
 					'type'        => 'number',
-					'title'       => __( 'Height:', 'geodirectory' ),
-					'desc'        => __( 'This is the height of the map, for static maps you can only use px values.', 'geodirectory' ),
+					'title'       => __( 'Height:', 'ayecode-connect' ),
+					'desc'        => __( 'This is the height of the map, for static maps you can only use px values.', 'ayecode-connect' ),
 					'placeholder' => '400',
 					'desc_tip'    => true,
 					'default'     => '400',
@@ -131,8 +131,8 @@ class SD_Map extends WP_Super_Duper {
 				),
 				'width'            => array(
 					'type'        => 'text',
-					'title'       => __( 'Width:', 'geodirectory' ),
-					'desc'        => __( 'This is the width of the map, you can use % or px here.', 'geodirectory' ),
+					'title'       => __( 'Width:', 'ayecode-connect' ),
+					'desc'        => __( 'This is the width of the map, you can use % or px here.', 'ayecode-connect' ),
 					'placeholder' => '100%',
 					'desc_tip'    => true,
 					'default'     => '100%',
@@ -141,8 +141,8 @@ class SD_Map extends WP_Super_Duper {
 				),
 				'height'           => array(
 					'type'        => 'text',
-					'title'       => __( 'Height:', 'geodirectory' ),
-					'desc'        => __( 'This is the height of the map, you can use %, px or vh here.', 'geodirectory' ),
+					'title'       => __( 'Height:', 'ayecode-connect' ),
+					'desc'        => __( 'This is the height of the map, you can use %, px or vh here.', 'ayecode-connect' ),
 					'placeholder' => '425px',
 					'desc_tip'    => true,
 					'default'     => '425px',
@@ -151,13 +151,13 @@ class SD_Map extends WP_Super_Duper {
 				),
 				'maptype'          => array(
 					'type'     => 'select',
-					'title'    => __( 'Mapview:', 'geodirectory' ),
-					'desc'     => __( 'This is the type of map view that will be used by default.', 'geodirectory' ),
+					'title'    => __( 'Mapview:', 'ayecode-connect' ),
+					'desc'     => __( 'This is the type of map view that will be used by default.', 'ayecode-connect' ),
 					'options'  => array(
-						"roadmap"   => __( 'Road Map', 'geodirectory' ),
-						"satellite" => __( 'Satellite Map', 'geodirectory' ),
-//						"hybrid"    => __( 'Hybrid Map', 'geodirectory' ),
-//						"terrain"   => __( 'Terrain Map', 'geodirectory' ),
+						"roadmap"   => __( 'Road Map', 'ayecode-connect' ),
+						"satellite" => __( 'Satellite Map', 'ayecode-connect' ),
+//						"hybrid"    => __( 'Hybrid Map', 'ayecode-connect' ),
+//						"terrain"   => __( 'Terrain Map', 'ayecode-connect' ),
 					),
 					'desc_tip' => true,
 					'default'  => 'roadmap',
@@ -165,8 +165,8 @@ class SD_Map extends WP_Super_Duper {
 				),
 				'zoom'             => array(
 					'type'        => 'select',
-					'title'       => __( 'Zoom level:', 'geodirectory' ),
-					'desc'        => __( 'This is the zoom level of the map, `auto` is recommended.', 'geodirectory' ),
+					'title'       => __( 'Zoom level:', 'ayecode-connect' ),
+					'desc'        => __( 'This is the zoom level of the map, `auto` is recommended.', 'ayecode-connect' ),
 					'options'     => range( 1, 19 ),
 					'placeholder' => '',
 					'desc_tip'    => true,
@@ -175,8 +175,8 @@ class SD_Map extends WP_Super_Duper {
 				),
 				'api_key'           => array(
 					'type'        => 'text',
-					'title'       => __( 'Api Key:', 'geodirectory' ),
-					'desc'        => __( 'This is the height of the map, you can use %, px or vh here.', 'geodirectory' ),
+					'title'       => __( 'Api Key:', 'ayecode-connect' ),
+					'desc'        => __( 'This is the height of the map, you can use %, px or vh here.', 'ayecode-connect' ),
 					'placeholder' => '',
 					'desc_tip'    => true,
 					'default'     => '',

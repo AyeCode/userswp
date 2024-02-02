@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.0';
+		public $version = '0.2.6';
 
 		/**
 		 * Class textdomain.
@@ -515,11 +515,6 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				th, td, div, h2 {
 				    box-sizing: content-box;
 				}
-				p {
-				    font-size: 13px;
-				    line-height: 1.5;
-				    margin: 1em 0;
-				}
 				h1, h2, h3, h4, h5, h6 {
 				    display: block;
 				    font-weight: 600;
@@ -846,129 +841,118 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 */
 		public function settings_page() {
 			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_die( __( 'You do not have sufficient permissions to access this page.', 'aui' ) );
+				wp_die( __( 'You do not have sufficient permissions to access this page.', 'ayecode-connect' ) );
 			}
             $overrides = apply_filters( 'ayecode-ui-settings', array(), array(), array() );
 
 			?>
             <div class="wrap">
                 <h1><?php echo $this->name; ?></h1>
-                <p><?php echo apply_filters( 'ayecode-ui-settings-message', __("Here you can adjust settings if you are having compatibility issues.",'aui') );?></p>
+                <p><?php echo apply_filters( 'ayecode-ui-settings-message', __("Here you can adjust settings if you are having compatibility issues.", 'ayecode-connect' ) );?></p>
                 <form method="post" action="options.php">
 					<?php
 					settings_fields( 'ayecode-ui-settings' );
 					do_settings_sections( 'ayecode-ui-settings' );
 					?>
 
-                    <h2><?php _e( 'BootStrap Version', 'aui' ); ?></h2>
-                    <p><?php echo apply_filters( 'ayecode-ui-version-settings-message', __("V5 is recommended, however if you have another plugin installed using v4, you may need to use v4 also.",'aui') );?></p>
+                    <h2><?php _e( 'BootStrap Version', 'ayecode-connect' ); ?></h2>
+                    <p><?php echo apply_filters( 'ayecode-ui-version-settings-message', __("V5 is recommended, however if you have another plugin installed using v4, you may need to use v4 also.", 'ayecode-connect' ) );?></p>
 	                <div class="bsui"><?php
 	                if ( ! empty( $overrides ) ) {
 		                echo aui()->alert(array(
 			                'type'=> 'info',
-			                'content'=> __("Some options are disabled as your current theme is overriding them.",'aui')
+			                'content'=> __("Some options are disabled as your current theme is overriding them.", 'ayecode-connect' )
 		                ));
 	                }
 	                ?>
                     </div>
                     <table class="form-table wpbs-table-version-settings">
                         <tr valign="top">
-                            <th scope="row"><label
-                                        for="wpbs-css"><?php _e( 'Version', 'aui' ); ?></label></th>
+                            <th scope="row"><label for="wpbs-css"><?php _e( 'Version', 'ayecode-connect' ); ?></label></th>
                             <td>
                                 <select name="ayecode-ui-settings[bs_ver]" id="wpbs-css" <?php echo !empty($overrides['bs_ver']) ? 'disabled' : ''; ?>>
-                                    <option	value="5" <?php selected( $this->settings['bs_ver'], '5' ); ?>><?php _e( 'v5 (recommended)', 'aui' ); ?></option>
-                                    <option value="4" <?php selected( $this->settings['bs_ver'], '4' ); ?>><?php _e( 'v4 (legacy)', 'aui' ); ?></option>
+                                    <option	value="5" <?php selected( $this->settings['bs_ver'], '5' ); ?>><?php _e( 'v5 (recommended)', 'ayecode-connect' ); ?></option>
+                                    <option value="4" <?php selected( $this->settings['bs_ver'], '4' ); ?>><?php _e( 'v4 (legacy)', 'ayecode-connect' ); ?></option>
                                 </select>
                             </td>
                         </tr>
                     </table>
 
-                    <h2><?php _e( 'Frontend', 'aui' ); ?></h2>
+                    <h2><?php _e( 'Frontend', 'ayecode-connect' ); ?></h2>
                     <table class="form-table wpbs-table-settings">
                         <tr valign="top">
-                            <th scope="row"><label
-                                        for="wpbs-css"><?php _e( 'Load CSS', 'aui' ); ?></label></th>
+                            <th scope="row"><label for="wpbs-css"><?php _e( 'Load CSS', 'ayecode-connect' ); ?></label></th>
                             <td>
                                 <select name="ayecode-ui-settings[css]" id="wpbs-css" <?php echo !empty($overrides['css']) ? 'disabled' : ''; ?>>
-                                    <option	value="compatibility" <?php selected( $this->settings['css'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode (default)', 'aui' ); ?></option>
-                                    <option value="core" <?php selected( $this->settings['css'], 'core' ); ?>><?php _e( 'Full Mode', 'aui' ); ?></option>
-                                    <option	value="" <?php selected( $this->settings['css'], '' ); ?>><?php _e( 'Disabled', 'aui' ); ?></option>
+                                    <option	value="compatibility" <?php selected( $this->settings['css'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode (default)', 'ayecode-connect' ); ?></option>
+                                    <option value="core" <?php selected( $this->settings['css'], 'core' ); ?>><?php _e( 'Full Mode', 'ayecode-connect' ); ?></option>
+                                    <option	value="" <?php selected( $this->settings['css'], '' ); ?>><?php _e( 'Disabled', 'ayecode-connect' ); ?></option>
                                 </select>
                             </td>
                         </tr>
 
                         <tr valign="top">
-                            <th scope="row"><label
-                                        for="wpbs-js"><?php _e( 'Load JS', 'aui' ); ?></label></th>
+                            <th scope="row"><label for="wpbs-js"><?php _e( 'Load JS', 'ayecode-connect' ); ?></label></th>
                             <td>
                                 <select name="ayecode-ui-settings[js]" id="wpbs-js" <?php echo !empty($overrides['js']) ? 'disabled' : ''; ?>>
-                                    <option	value="core-popper" <?php selected( $this->settings['js'], 'core-popper' ); ?>><?php _e( 'Core + Popper (default)', 'aui' ); ?></option>
-                                    <option value="popper" <?php selected( $this->settings['js'], 'popper' ); ?>><?php _e( 'Popper', 'aui' ); ?></option>
-                                    <option value="required" <?php selected( $this->settings['js'], 'required' ); ?>><?php _e( 'Required functions only', 'aui' ); ?></option>
-                                    <option	value="" <?php selected( $this->settings['js'], '' ); ?>><?php _e( 'Disabled (not recommended)', 'aui' ); ?></option>
+                                    <option	value="core-popper" <?php selected( $this->settings['js'], 'core-popper' ); ?>><?php _e( 'Core + Popper (default)', 'ayecode-connect' ); ?></option>
+                                    <option value="popper" <?php selected( $this->settings['js'], 'popper' ); ?>><?php _e( 'Popper', 'ayecode-connect' ); ?></option>
+                                    <option value="required" <?php selected( $this->settings['js'], 'required' ); ?>><?php _e( 'Required functions only', 'ayecode-connect' ); ?></option>
+                                    <option	value="" <?php selected( $this->settings['js'], '' ); ?>><?php _e( 'Disabled (not recommended)', 'ayecode-connect' ); ?></option>
                                 </select>
                             </td>
                         </tr>
 
                         <tr valign="top">
-                            <th scope="row"><label
-                                        for="wpbs-font_size"><?php _e( 'HTML Font Size (px)', 'aui' ); ?></label></th>
+                            <th scope="row"><label for="wpbs-font_size"><?php _e( 'HTML Font Size (px)', 'ayecode-connect' ); ?></label></th>
                             <td>
                                 <input type="number" name="ayecode-ui-settings[html_font_size]" id="wpbs-font_size" value="<?php echo absint( $this->settings['html_font_size']); ?>" placeholder="16" <?php echo !empty($overrides['html_font_size']) ? 'disabled' : ''; ?> />
-                                <p class="description" ><?php _e("Our font sizing is rem (responsive based) here you can set the html font size in-case your theme is setting it too low.",'aui');?></p>
+                                <p class="description" ><?php _e("Our font sizing is rem (responsive based) here you can set the html font size in-case your theme is setting it too low.", 'ayecode-connect' );?></p>
                             </td>
                         </tr>
 
                     </table>
 
-                    <h2><?php _e( 'Backend', 'aui' ); ?> (wp-admin)</h2>
+                    <h2><?php _e( 'Backend', 'ayecode-connect' ); ?> (wp-admin)</h2>
                     <table class="form-table wpbs-table-settings">
                         <tr valign="top">
-                            <th scope="row"><label
-                                        for="wpbs-css-admin"><?php _e( 'Load CSS', 'aui' ); ?></label></th>
+                            <th scope="row"><label for="wpbs-css-admin"><?php _e( 'Load CSS', 'ayecode-connect' ); ?></label></th>
                             <td>
                                 <select name="ayecode-ui-settings[css_backend]" id="wpbs-css-admin" <?php echo !empty($overrides['css_backend']) ? 'disabled' : ''; ?>>
-                                    <option	value="compatibility" <?php selected( $this->settings['css_backend'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode (default)', 'aui' ); ?></option>
-                                    <option value="core" <?php selected( $this->settings['css_backend'], 'core' ); ?>><?php _e( 'Full Mode (will cause style issues)', 'aui' ); ?></option>
-                                    <option	value="" <?php selected( $this->settings['css_backend'], '' ); ?>><?php _e( 'Disabled', 'aui' ); ?></option>
+                                    <option	value="compatibility" <?php selected( $this->settings['css_backend'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode (default)', 'ayecode-connect' ); ?></option>
+                                    <option value="core" <?php selected( $this->settings['css_backend'], 'core' ); ?>><?php _e( 'Full Mode (will cause style issues)', 'ayecode-connect' ); ?></option>
+                                    <option	value="" <?php selected( $this->settings['css_backend'], '' ); ?>><?php _e( 'Disabled', 'ayecode-connect' ); ?></option>
                                 </select>
                             </td>
                         </tr>
 
                         <tr valign="top">
-                            <th scope="row"><label
-                                        for="wpbs-js-admin"><?php _e( 'Load JS', 'aui' ); ?></label></th>
+                            <th scope="row"><label for="wpbs-js-admin"><?php _e( 'Load JS', 'ayecode-connect' ); ?></label></th>
                             <td>
                                 <select name="ayecode-ui-settings[js_backend]" id="wpbs-js-admin" <?php echo !empty($overrides['js_backend']) ? 'disabled' : ''; ?>>
-                                    <option	value="core-popper" <?php selected( $this->settings['js_backend'], 'core-popper' ); ?>><?php _e( 'Core + Popper (default)', 'aui' ); ?></option>
-                                    <option value="popper" <?php selected( $this->settings['js_backend'], 'popper' ); ?>><?php _e( 'Popper', 'aui' ); ?></option>
-                                    <option value="required" <?php selected( $this->settings['js_backend'], 'required' ); ?>><?php _e( 'Required functions only', 'aui' ); ?></option>
-                                    <option	value="" <?php selected( $this->settings['js_backend'], '' ); ?>><?php _e( 'Disabled (not recommended)', 'aui' ); ?></option>
+                                    <option	value="core-popper" <?php selected( $this->settings['js_backend'], 'core-popper' ); ?>><?php _e( 'Core + Popper (default)', 'ayecode-connect' ); ?></option>
+                                    <option value="popper" <?php selected( $this->settings['js_backend'], 'popper' ); ?>><?php _e( 'Popper', 'ayecode-connect' ); ?></option>
+                                    <option value="required" <?php selected( $this->settings['js_backend'], 'required' ); ?>><?php _e( 'Required functions only', 'ayecode-connect' ); ?></option>
+                                    <option	value="" <?php selected( $this->settings['js_backend'], '' ); ?>><?php _e( 'Disabled (not recommended)', 'ayecode-connect' ); ?></option>
                                 </select>
                             </td>
                         </tr>
 
                         <tr valign="top">
-                            <th scope="row"><label
-                                        for="wpbs-disable-admin"><?php _e( 'Disable load on URL', 'aui' ); ?></label></th>
+                            <th scope="row"><label for="wpbs-disable-admin"><?php _e( 'Disable load on URL', 'ayecode-connect' ); ?></label></th>
                             <td>
-                                <p><?php _e( 'If you have backend conflict you can enter a partial URL argument that will disable the loading of AUI on those pages. Add each argument on a new line.', 'aui' ); ?></p>
+                                <p><?php _e( 'If you have backend conflict you can enter a partial URL argument that will disable the loading of AUI on those pages. Add each argument on a new line.', 'ayecode-connect' ); ?></p>
                                 <textarea name="ayecode-ui-settings[disable_admin]" rows="10" cols="50" id="wpbs-disable-admin" class="large-text code" spellcheck="false" placeholder="myplugin.php &#10;action=go"><?php echo $this->settings['disable_admin'];?></textarea>
-
                             </td>
                         </tr>
-
                     </table>
 
 					<?php
 					submit_button();
 					?>
                 </form>
-
                 <div id="wpbs-version" data-aui-source="<?php echo esc_attr( $this->get_load_source() ); ?>"><?php echo $this->version; ?></div>
             </div>
-
 			<?php
 		}
 
@@ -993,7 +977,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 		public function customizer_settings($wp_customize){
 			$wp_customize->add_section('aui_settings', array(
-				'title'    => __('AyeCode UI','aui'),
+				'title'    => __('AyeCode UI', 'ayecode-connect' ),
 				'priority' => 120,
 			));
 
@@ -1008,7 +992,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				'transport'         => 'refresh',
 			));
 			$wp_customize->add_control( new WP_Customize_Color_Control($wp_customize, 'color_primary', array(
-				'label'    => __('Primary Color','aui'),
+				'label'    => __('Primary Color', 'ayecode-connect' ),
 				'section'  => 'aui_settings',
 				'settings' => 'aui_options[color_primary]',
 			)));
@@ -1021,7 +1005,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				'transport'         => 'refresh',
 			));
 			$wp_customize->add_control( new WP_Customize_Color_Control($wp_customize, 'color_secondary', array(
-				'label'    => __('Secondary Color','aui'),
+				'label'    => __('Secondary Color', 'ayecode-connect' ),
 				'section'  => 'aui_settings',
 				'settings' => 'aui_options[color_secondary]',
 			)));
@@ -1113,14 +1097,14 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						echo self::bs3_compat_css();
 					}
 
+                    $current_screen = function_exists('get_current_screen' ) ? get_current_screen() : '';
+                    $is_fse = false;
+                    if ( is_admin() && ( !empty($_REQUEST['postType']) || $current_screen->is_block_editor() ) && ( defined( 'BLOCKSTRAP_VERSION' ) || defined( 'AUI_FSE' ) )  ) {
+                        $is_fse = true;
+                    }
+
 					if(!empty($colors)){
 						$d_colors = self::get_colors(true);
-
-                        $current_screen = function_exists('get_current_screen' ) ? get_current_screen() : '';
-                        $is_fse = false;
-                        if ( is_admin() && ( !empty($_REQUEST['postType']) || $current_screen->is_block_editor() ) && ( defined( 'BLOCKSTRAP_VERSION' ) || defined( 'AUI_FSE' ) )  ) {
-                            $is_fse = true;
-                        }
 
 //						$is_fse = !empty($_REQUEST['postType']) && $_REQUEST['postType']=='wp_template';
 						foreach($colors as $key => $color ){
@@ -1140,9 +1124,11 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						echo ' body.modal-open #adminmenuwrap{z-index:999} body.modal-open #wpadminbar{z-index:1025}';
 					}
 
-                    if( $aui_bs5 && defined( 'BLOCKSTRAP_VERSION' ) ){
+                    if( $aui_bs5 && defined( 'BLOCKSTRAP_VERSION' )  ){
                         $css = '';
                         $theme_settings = wp_get_global_styles();
+
+//                        print_r( $theme_settings);exit;
 
                         // font face
                         if( !empty( $theme_settings['typography']['fontFamily'] ) ){
@@ -1151,12 +1137,106 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                         }
 
                         // font size
-                        $css .= '--bs-body-font-size: var(--wp--preset--font-size--small);';
+                        if( !empty( $theme_settings['typography']['fontSize'] ) ){
+                            $css .= '--bs-body-font-size: ' . esc_attr( $theme_settings['typography']['fontSize'] ) . ' ;';
+                        }
+
+                        // line height
+                         if( !empty( $theme_settings['typography']['lineHeight'] ) ){
+                            $css .= '--bs-body-line-height: ' . esc_attr( $theme_settings['typography']['lineHeight'] ) . ';';
+                        }
+
+
+                           // font weight
+                         if( !empty( $theme_settings['typography']['fontWeight'] ) ){
+                            $css .= '--bs-body-font-weight: ' . esc_attr( $theme_settings['typography']['fontWeight'] ) . ';';
+                        }
+
+                        // Background
+                         if( !empty( $theme_settings['color']['background'] ) ){
+                            $css .= '--bs-body-bg: ' . esc_attr( $theme_settings['color']['background'] ) . ';';
+                        }
+
+                         // Background Gradient
+                         if( !empty( $theme_settings['color']['gradient'] ) ){
+                            $css .= 'background: ' . esc_attr( $theme_settings['color']['gradient'] ) . ';';
+                        }
+
+                           // Background Gradient
+                         if( !empty( $theme_settings['color']['gradient'] ) ){
+                            $css .= 'background: ' . esc_attr( $theme_settings['color']['gradient'] ) . ';';
+                        }
+
+                        // text color
+                        if( !empty( $theme_settings['color']['text'] ) ){
+                            $css .= '--bs-body-color: ' . esc_attr( $theme_settings['color']['text'] ) . ';';
+                        }
+
+
+                        // link colors
+                        if( !empty( $theme_settings['elements']['link']['color']['text'] ) ){
+                            $css .= '--bs-link-color: ' . esc_attr( $theme_settings['elements']['link']['color']['text'] ) . ';';
+                        }
+                        if( !empty( $theme_settings['elements']['link'][':hover']['color']['text'] ) ){
+                            $css .= '--bs-link-hover-color: ' . esc_attr( $theme_settings['elements']['link'][':hover']['color']['text'] ) . ';';
+                        }
+
 
 
                         if($css){
-                            echo 'body{' . $css . '}';
+                            echo  $is_fse ? 'body.editor-styles-wrapper{' . $css . '}' : 'body{' . $css . '}';
                         }
+
+                        $bep = $is_fse ? 'body.editor-styles-wrapper ' : '';
+
+
+                        // Headings
+                        $headings_css = '';
+                        if( !empty( $theme_settings['elements']['heading']['color']['text'] ) ){
+                            $headings_css .= "color: " . esc_attr( $theme_settings['elements']['heading']['color']['text'] ) . ";";
+                        }
+
+                        // heading background
+                        if( !empty( $theme_settings['elements']['heading']['color']['background'] ) ){
+                            $headings_css .= 'background: ' . esc_attr( $theme_settings['elements']['heading']['color']['background'] ) . ';';
+                        }
+
+                         // heading font family
+                        if( !empty( $theme_settings['elements']['heading']['typography']['fontFamily'] ) ){
+                            $headings_css .= 'font-family: ' . esc_attr( $theme_settings['elements']['heading']['typography']['fontFamily']  ) . ';';
+                        }
+
+                        if( $headings_css ){
+                            echo "$bep h1,$bep h2,$bep h3, $bep h4,$bep h5,$bep h6{ " . $headings_css . "}";
+                        }
+
+                        $hs = array('h1','h2','h3','h4','h5','h6');
+
+                        foreach($hs as $hn){
+                            $h_css = '';
+                             if( !empty( $theme_settings['elements'][$hn]['color']['text'] ) ){
+                                $h_css .= 'color: ' . esc_attr( $theme_settings['elements'][$hn]['color']['text'] ) . ';';
+                             }
+
+                              if( !empty( $theme_settings['elements'][$hn]['typography']['fontSize'] ) ){
+                                $h_css .= 'font-size: ' . esc_attr( $theme_settings['elements'][$hn]['typography']['fontSize']  ) . ';';
+                             }
+
+                              if( !empty( $theme_settings['elements'][$hn]['typography']['fontFamily'] ) ){
+                                $h_css .= 'font-family: ' . esc_attr( $theme_settings['elements'][$hn]['typography']['fontFamily']  ) . ';';
+                             }
+
+                             if($h_css){
+                                echo $bep . $hn . '{'.$h_css.'}';
+                             }
+                        }
+
+//                        wp_mail('x@x.com','ss',print_r($_SERVER,true).'@@@');
+//                        print_r($_SERVER);exit;
+
+
+
+
                     }
 				?>
             </style>
@@ -2135,71 +2215,71 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 */
 		public static function calendar_params() {
 			$params = array(
-				'month_long_1' => __( 'January', 'aui' ),
-				'month_long_2' => __( 'February', 'aui' ),
-				'month_long_3' => __( 'March', 'aui' ),
-				'month_long_4' => __( 'April', 'aui' ),
-				'month_long_5' => __( 'May', 'aui' ),
-				'month_long_6' => __( 'June', 'aui' ),
-				'month_long_7' => __( 'July', 'aui' ),
-				'month_long_8' => __( 'August', 'aui' ),
-				'month_long_9' => __( 'September', 'aui' ),
-				'month_long_10' => __( 'October', 'aui' ),
-				'month_long_11' => __( 'November', 'aui' ),
-				'month_long_12' => __( 'December', 'aui' ),
-				'month_s_1' => _x( 'Jan', 'January abbreviation', 'aui' ),
-				'month_s_2' => _x( 'Feb', 'February abbreviation', 'aui' ),
-				'month_s_3' => _x( 'Mar', 'March abbreviation', 'aui' ),
-				'month_s_4' => _x( 'Apr', 'April abbreviation', 'aui' ),
-				'month_s_5' => _x( 'May', 'May abbreviation', 'aui' ),
-				'month_s_6' => _x( 'Jun', 'June abbreviation', 'aui' ),
-				'month_s_7' => _x( 'Jul', 'July abbreviation', 'aui' ),
-				'month_s_8' => _x( 'Aug', 'August abbreviation', 'aui' ),
-				'month_s_9' => _x( 'Sep', 'September abbreviation', 'aui' ),
-				'month_s_10' => _x( 'Oct', 'October abbreviation', 'aui' ),
-				'month_s_11' => _x( 'Nov', 'November abbreviation', 'aui' ),
-				'month_s_12' => _x( 'Dec', 'December abbreviation', 'aui' ),
-				'day_s1_1' => _x( 'S', 'Sunday initial', 'aui' ),
-				'day_s1_2' => _x( 'M', 'Monday initial', 'aui' ),
-				'day_s1_3' => _x( 'T', 'Tuesday initial', 'aui' ),
-				'day_s1_4' => _x( 'W', 'Wednesday initial', 'aui' ),
-				'day_s1_5' => _x( 'T', 'Friday initial', 'aui' ),
-				'day_s1_6' => _x( 'F', 'Thursday initial', 'aui' ),
-				'day_s1_7' => _x( 'S', 'Saturday initial', 'aui' ),
-				'day_s2_1' => __( 'Su', 'aui' ),
-				'day_s2_2' => __( 'Mo', 'aui' ),
-				'day_s2_3' => __( 'Tu', 'aui' ),
-				'day_s2_4' => __( 'We', 'aui' ),
-				'day_s2_5' => __( 'Th', 'aui' ),
-				'day_s2_6' => __( 'Fr', 'aui' ),
-				'day_s2_7' => __( 'Sa', 'aui' ),
-				'day_s3_1' => __( 'Sun', 'aui' ),
-				'day_s3_2' => __( 'Mon', 'aui' ),
-				'day_s3_3' => __( 'Tue', 'aui' ),
-				'day_s3_4' => __( 'Wed', 'aui' ),
-				'day_s3_5' => __( 'Thu', 'aui' ),
-				'day_s3_6' => __( 'Fri', 'aui' ),
-				'day_s3_7' => __( 'Sat', 'aui' ),
-				'day_s5_1' => __( 'Sunday', 'aui' ),
-				'day_s5_2' => __( 'Monday', 'aui' ),
-				'day_s5_3' => __( 'Tuesday', 'aui' ),
-				'day_s5_4' => __( 'Wednesday', 'aui' ),
-				'day_s5_5' => __( 'Thursday', 'aui' ),
-				'day_s5_6' => __( 'Friday', 'aui' ),
-				'day_s5_7' => __( 'Saturday', 'aui' ),
-				'am_lower' => __( 'am', 'aui' ),
-				'pm_lower' => __( 'pm', 'aui' ),
-				'am_upper' => __( 'AM', 'aui' ),
-				'pm_upper' => __( 'PM', 'aui' ),
+				'month_long_1' => __( 'January', 'ayecode-connect' ),
+				'month_long_2' => __( 'February', 'ayecode-connect' ),
+				'month_long_3' => __( 'March', 'ayecode-connect' ),
+				'month_long_4' => __( 'April', 'ayecode-connect' ),
+				'month_long_5' => __( 'May', 'ayecode-connect' ),
+				'month_long_6' => __( 'June', 'ayecode-connect' ),
+				'month_long_7' => __( 'July', 'ayecode-connect' ),
+				'month_long_8' => __( 'August', 'ayecode-connect' ),
+				'month_long_9' => __( 'September', 'ayecode-connect' ),
+				'month_long_10' => __( 'October', 'ayecode-connect' ),
+				'month_long_11' => __( 'November', 'ayecode-connect' ),
+				'month_long_12' => __( 'December', 'ayecode-connect' ),
+				'month_s_1' => _x( 'Jan', 'January abbreviation', 'ayecode-connect' ),
+				'month_s_2' => _x( 'Feb', 'February abbreviation', 'ayecode-connect' ),
+				'month_s_3' => _x( 'Mar', 'March abbreviation', 'ayecode-connect' ),
+				'month_s_4' => _x( 'Apr', 'April abbreviation', 'ayecode-connect' ),
+				'month_s_5' => _x( 'May', 'May abbreviation', 'ayecode-connect' ),
+				'month_s_6' => _x( 'Jun', 'June abbreviation', 'ayecode-connect' ),
+				'month_s_7' => _x( 'Jul', 'July abbreviation', 'ayecode-connect' ),
+				'month_s_8' => _x( 'Aug', 'August abbreviation', 'ayecode-connect' ),
+				'month_s_9' => _x( 'Sep', 'September abbreviation', 'ayecode-connect' ),
+				'month_s_10' => _x( 'Oct', 'October abbreviation', 'ayecode-connect' ),
+				'month_s_11' => _x( 'Nov', 'November abbreviation', 'ayecode-connect' ),
+				'month_s_12' => _x( 'Dec', 'December abbreviation', 'ayecode-connect' ),
+				'day_s1_1' => _x( 'S', 'Sunday initial', 'ayecode-connect' ),
+				'day_s1_2' => _x( 'M', 'Monday initial', 'ayecode-connect' ),
+				'day_s1_3' => _x( 'T', 'Tuesday initial', 'ayecode-connect' ),
+				'day_s1_4' => _x( 'W', 'Wednesday initial', 'ayecode-connect' ),
+				'day_s1_5' => _x( 'T', 'Friday initial', 'ayecode-connect' ),
+				'day_s1_6' => _x( 'F', 'Thursday initial', 'ayecode-connect' ),
+				'day_s1_7' => _x( 'S', 'Saturday initial', 'ayecode-connect' ),
+				'day_s2_1' => __( 'Su', 'ayecode-connect' ),
+				'day_s2_2' => __( 'Mo', 'ayecode-connect' ),
+				'day_s2_3' => __( 'Tu', 'ayecode-connect' ),
+				'day_s2_4' => __( 'We', 'ayecode-connect' ),
+				'day_s2_5' => __( 'Th', 'ayecode-connect' ),
+				'day_s2_6' => __( 'Fr', 'ayecode-connect' ),
+				'day_s2_7' => __( 'Sa', 'ayecode-connect' ),
+				'day_s3_1' => __( 'Sun', 'ayecode-connect' ),
+				'day_s3_2' => __( 'Mon', 'ayecode-connect' ),
+				'day_s3_3' => __( 'Tue', 'ayecode-connect' ),
+				'day_s3_4' => __( 'Wed', 'ayecode-connect' ),
+				'day_s3_5' => __( 'Thu', 'ayecode-connect' ),
+				'day_s3_6' => __( 'Fri', 'ayecode-connect' ),
+				'day_s3_7' => __( 'Sat', 'ayecode-connect' ),
+				'day_s5_1' => __( 'Sunday', 'ayecode-connect' ),
+				'day_s5_2' => __( 'Monday', 'ayecode-connect' ),
+				'day_s5_3' => __( 'Tuesday', 'ayecode-connect' ),
+				'day_s5_4' => __( 'Wednesday', 'ayecode-connect' ),
+				'day_s5_5' => __( 'Thursday', 'ayecode-connect' ),
+				'day_s5_6' => __( 'Friday', 'ayecode-connect' ),
+				'day_s5_7' => __( 'Saturday', 'ayecode-connect' ),
+				'am_lower' => __( 'am', 'ayecode-connect' ),
+				'pm_lower' => __( 'pm', 'ayecode-connect' ),
+				'am_upper' => __( 'AM', 'ayecode-connect' ),
+				'pm_upper' => __( 'PM', 'ayecode-connect' ),
 				'firstDayOfWeek' => (int) get_option( 'start_of_week' ),
 				'time_24hr' => false,
-				'year' => __( 'Year', 'aui' ),
-				'hour' => __( 'Hour', 'aui' ),
-				'minute' => __( 'Minute', 'aui' ),
-				'weekAbbreviation' => __( 'Wk', 'aui' ),
-				'rangeSeparator' => __( ' to ', 'aui' ),
-				'scrollTitle' => __( 'Scroll to increment', 'aui' ),
-				'toggleTitle' => __( 'Click to toggle', 'aui' )
+				'year' => __( 'Year', 'ayecode-connect' ),
+				'hour' => __( 'Hour', 'ayecode-connect' ),
+				'minute' => __( 'Minute', 'ayecode-connect' ),
+				'weekAbbreviation' => __( 'Wk', 'ayecode-connect' ),
+				'rangeSeparator' => __( ' to ', 'ayecode-connect' ),
+				'scrollTitle' => __( 'Scroll to increment', 'ayecode-connect' ),
+				'toggleTitle' => __( 'Click to toggle', 'ayecode-connect' )
 			);
 
 			return apply_filters( 'ayecode_ui_calendar_params', $params );
@@ -2297,17 +2377,17 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 */
 		public static function select2_params() {
 			$params = array(
-				'i18n_select_state_text'    => esc_attr__( 'Select an option&hellip;', 'aui' ),
-				'i18n_no_matches'           => _x( 'No matches found', 'enhanced select', 'aui' ),
-				'i18n_ajax_error'           => _x( 'Loading failed', 'enhanced select', 'aui' ),
-				'i18n_input_too_short_1'    => _x( 'Please enter 1 or more characters', 'enhanced select', 'aui' ),
-				'i18n_input_too_short_n'    => _x( 'Please enter %item% or more characters', 'enhanced select', 'aui' ),
-				'i18n_input_too_long_1'     => _x( 'Please delete 1 character', 'enhanced select', 'aui' ),
-				'i18n_input_too_long_n'     => _x( 'Please delete %item% characters', 'enhanced select', 'aui' ),
-				'i18n_selection_too_long_1' => _x( 'You can only select 1 item', 'enhanced select', 'aui' ),
-				'i18n_selection_too_long_n' => _x( 'You can only select %item% items', 'enhanced select', 'aui' ),
-				'i18n_load_more'            => _x( 'Loading more results&hellip;', 'enhanced select', 'aui' ),
-				'i18n_searching'            => _x( 'Searching&hellip;', 'enhanced select', 'aui' )
+				'i18n_select_state_text'    => esc_attr__( 'Select an option&hellip;', 'ayecode-connect' ),
+				'i18n_no_matches'           => _x( 'No matches found', 'enhanced select', 'ayecode-connect' ),
+				'i18n_ajax_error'           => _x( 'Loading failed', 'enhanced select', 'ayecode-connect' ),
+				'i18n_input_too_short_1'    => _x( 'Please enter 1 or more characters', 'enhanced select', 'ayecode-connect' ),
+				'i18n_input_too_short_n'    => _x( 'Please enter %item% or more characters', 'enhanced select', 'ayecode-connect' ),
+				'i18n_input_too_long_1'     => _x( 'Please delete 1 character', 'enhanced select', 'ayecode-connect' ),
+				'i18n_input_too_long_n'     => _x( 'Please delete %item% characters', 'enhanced select', 'ayecode-connect' ),
+				'i18n_selection_too_long_1' => _x( 'You can only select 1 item', 'enhanced select', 'ayecode-connect' ),
+				'i18n_selection_too_long_n' => _x( 'You can only select %item% items', 'enhanced select', 'ayecode-connect' ),
+				'i18n_load_more'            => _x( 'Loading more results&hellip;', 'enhanced select', 'ayecode-connect' ),
+				'i18n_searching'            => _x( 'Searching&hellip;', 'enhanced select', 'ayecode-connect' )
 			);
 
 			return apply_filters( 'ayecode_ui_select2_params', $params );
@@ -2346,20 +2426,20 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		public static function timeago_locale() {
 			$params = array(
 				'prefix_ago' => '',
-				'suffix_ago' => ' ' . _x( 'ago', 'time ago', 'aui' ),
-				'prefix_after' => _x( 'after', 'time ago', 'aui' ) . ' ',
+				'suffix_ago' => ' ' . _x( 'ago', 'time ago', 'ayecode-connect' ),
+				'prefix_after' => _x( 'after', 'time ago', 'ayecode-connect' ) . ' ',
 				'suffix_after' => '',
-				'seconds' => _x( 'less than a minute', 'time ago', 'aui' ),
-				'minute' => _x( 'about a minute', 'time ago', 'aui' ),
-				'minutes' => _x( '%d minutes', 'time ago', 'aui' ),
-				'hour' => _x( 'about an hour', 'time ago', 'aui' ),
-				'hours' => _x( 'about %d hours', 'time ago', 'aui' ),
-				'day' => _x( 'a day', 'time ago', 'aui' ),
-				'days' => _x( '%d days', 'time ago', 'aui' ),
-				'month' => _x( 'about a month', 'time ago', 'aui' ),
-				'months' => _x( '%d months', 'time ago', 'aui' ),
-				'year' => _x( 'about a year', 'time ago', 'aui' ),
-				'years' => _x( '%d years', 'time ago', 'aui' ),
+				'seconds' => _x( 'less than a minute', 'time ago', 'ayecode-connect' ),
+				'minute' => _x( 'about a minute', 'time ago', 'ayecode-connect' ),
+				'minutes' => _x( '%d minutes', 'time ago', 'ayecode-connect' ),
+				'hour' => _x( 'about an hour', 'time ago', 'ayecode-connect' ),
+				'hours' => _x( 'about %d hours', 'time ago', 'ayecode-connect' ),
+				'day' => _x( 'a day', 'time ago', 'ayecode-connect' ),
+				'days' => _x( '%d days', 'time ago', 'ayecode-connect' ),
+				'month' => _x( 'about a month', 'time ago', 'ayecode-connect' ),
+				'months' => _x( '%d months', 'time ago', 'ayecode-connect' ),
+				'year' => _x( 'about a year', 'time ago', 'ayecode-connect' ),
+				'years' => _x( '%d years', 'time ago', 'ayecode-connect' ),
 			);
 
 			$params = apply_filters( 'ayecode_ui_timeago_params', $params );
@@ -2650,9 +2730,25 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                                 $keys[condition.key][index] = false;
                             }
                         } else if (condition.condition === 'contains') {
+                            var avalues = condition.value;
+                            if (!Array.isArray(avalues)) {
+                                if (jQuery.isNumeric(avalues)) {
+                                    avalues = [avalues];
+                                } else {
+                                    avalues = avalues.split(",");
+                                }
+                            }
                             switch (field_type) {
                                 case 'multiselect':
-                                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) {
+                                    var found = false;
+                                    for (var key in avalues) {
+                                        var svalue = jQuery.isNumeric(avalues[key]) ? avalues[key] : (avalues[key]).trim();
+                                        if (!found && current_value && ((!Array.isArray(current_value) && current_value.indexOf(svalue) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(svalue, current_value)))) {
+                                            found = true;
+                                        }
+                                    }
+                    
+                                    if (found) {
                                         $keys[condition.key][index] = true;
                                     } else {
                                         $keys[condition.key][index] = false;

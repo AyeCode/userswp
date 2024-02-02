@@ -26,7 +26,7 @@ class AUI_Component_Pagination {
 			'mid_size'           => 2,
 			'prev_text'          => '<i class="fas fa-chevron-left"></i>',
 			'next_text'          => '<i class="fas fa-chevron-right"></i>',
-			'screen_reader_text' => __( 'Posts navigation','aui' ),
+			'screen_reader_text' => __( 'Posts navigation', 'ayecode-connect' ),
 			'before_paging'      => '',
 			'after_paging'       => '',
 			'type'               => 'array',

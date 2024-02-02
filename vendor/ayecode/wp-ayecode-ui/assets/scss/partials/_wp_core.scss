@@ -80,3 +80,9 @@ html[data-scroll='0'],html:not([data-scroll]){
 
 /* Fix conflicts calendar year selector */
 body>.flatpickr-calendar .flatpickr-month .flatpickr-current-month>*{display:inline-block}
+
+// Uploader in safari button overflowing
+.geodir-add-files .moxie-shim {
+  position: initial !important;
+  background: transparent; // this is for divi theme that does background position stuff and breaks it.
+}
