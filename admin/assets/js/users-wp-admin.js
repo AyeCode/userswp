@@ -190,7 +190,7 @@ jQuery(window).on('load', function () {
             uwp_remove_spin_loader(btn);
             if (response.status) {
                 btn.after('<b class="ml-1 text-success">'+uwp_admin_ajax.form_updated_msg+'</b>');
-                location.reload();
+                window.location.replace(response.redirect);
             } else {
                 console.log(response.message);
             }

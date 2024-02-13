@@ -333,7 +333,7 @@ class UsersWP_Admin {
 
 		}
 
-		if(! empty( $_GET['page'] ) && 'uwp_form_builder' == $_GET['page']) {
+		if(! empty( $_GET['page'] ) && 'uwp_user_types' == $_GET['page']) {
 			?>
             <script type="text/javascript">
                 jQuery(document).ready(function () {
@@ -842,7 +842,7 @@ class UsersWP_Admin {
 		}
 
 		$type       = ! empty( $_POST['type'] ) ? sanitize_text_field($_POST['type']) : '';
-		$form_title = ! empty( $_POST['form_title'] ) ? sanitize_title_with_dashes($_POST['form_title']) : '';
+		$form_title = ! empty( $_POST['form_title'] ) ? sanitize_text_field($_POST['form_title']) : '';
 		$nonce      = ! empty( $_POST['nonce'] ) ? sanitize_text_field($_POST['nonce']) : '';
 
 		$status   = false;
@@ -858,6 +858,7 @@ class UsersWP_Admin {
 				$get_register_forms[] = array(
 					'id'    => $new_form_id,
 					'title' => ! empty( $form_title ) ? sanitize_text_field( $form_title ) : sprintf( __( 'Form %d', 'userswp' ), $new_form_id ),
+                    'slug' =>  ! empty( $form_title ) ? sanitize_title_with_dashes( $form_title ) : sprintf( __( 'form-%d', 'userswp' ), $new_form_id )
 				);
 
 				uwp_update_option( 'multiple_registration_forms', $get_register_forms );
@@ -877,7 +878,7 @@ class UsersWP_Admin {
 				do_action('uwp_create_register_form', $new_form_id);
 
 				$status   = true;
-				$redirect = admin_url( 'admin.php?page=uwp_form_builder&tab=account&form=' . $new_form_id );
+				$redirect = admin_url( 'admin.php?page=uwp_user_types&form=' . $new_form_id );
 			}
 		}
 
@@ -909,6 +910,7 @@ class UsersWP_Admin {
 		$gdpr_page = ! empty( $_POST['gdpr_page'] ) ? (int)$_POST['gdpr_page'] : (int)uwp_get_option('register_gdpr_page', false);
 		$tos_page = ! empty( $_POST['tos_page'] ) ? (int)$_POST['tos_page'] : (int)uwp_get_option('register_terms_page', false);
 
+        $redirect = '';
 		$status  = false;
 		$message = __( 'Something went wrong. Please try again.', 'userswp' );
 		if ( ! empty( $type ) && ! empty( $form_id ) && $type === 'update' ) {
@@ -935,11 +937,14 @@ class UsersWP_Admin {
 			$register_forms = array_values( $register_forms );
 			$register_forms = apply_filters('uwp_multiple_registration_forms_update', $register_forms);
 			uwp_update_option( 'multiple_registration_forms', $register_forms );
+			$redirect = admin_url( 'admin.php?page=uwp_user_types' );
 		}
+
 
 		$response = array(
 			'status'  => $status,
 			'message' => $message,
+            'redirect' => $redirect,
 		);
 
 		echo json_encode( $response );
@@ -993,7 +998,7 @@ class UsersWP_Admin {
 
 			$register_forms = array_values( $register_forms );
 			uwp_update_option( 'multiple_registration_forms', $register_forms );
-			$redirect = admin_url( 'admin.php?page=uwp_form_builder&tab=account' );
+			$redirect = admin_url( 'admin.php?page=uwp_user_types' );
 		}
 
 		$response = array(

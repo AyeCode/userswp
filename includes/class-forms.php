@@ -908,7 +908,7 @@ class UsersWP_Forms {
 						'content' => $res->get_error_message()
 					)
 				);
-				
+
 			    if ( wp_doing_ajax() ) {
 					wp_send_json_error( array( 'message' => $message) );
 				} else {
@@ -963,6 +963,28 @@ class UsersWP_Forms {
 						'content' => __( 'Your account is under moderation. We will email you once its approved.', 'userswp' )
 					)
 				);
+			} elseif ( $reg_action == 'require_payment' ) {
+
+				$redirect_to = apply_filters( 'uwp_register_payment_redirect_url', $this->get_register_redirect_url( $data, $user_id ), $user_id, $result );
+				update_user_meta( $user_id, 'uwp_mod', 'payment_unconfirmed' );
+
+				do_action( 'uwp_after_process_register_with_payment', $result, $user_id, $form_id );
+
+				if ( wp_doing_ajax() ) {
+					$message  = aui()->alert( array(
+							'type'    => 'success',
+							'content' => __( 'Account registered successfully. Redirecting...', 'userswp' )
+						)
+					);
+					$response = array(
+						'message'  => $message,
+						'redirect' => $redirect_to,
+					);
+					wp_send_json_success( $response );
+				} else {
+					wp_safe_redirect( $redirect_to );
+				}
+				exit();
 			} else {
 
 				$login_page_url = wp_login_url();

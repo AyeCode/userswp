@@ -22,7 +22,7 @@
  */
 class UsersWP_Public {
 
-    
+
     /**
      * Register the stylesheets for the public-facing side of the site.
      *
@@ -100,7 +100,7 @@ class UsersWP_Public {
 		    $country_data = uwp_get_country_data();
 		    wp_localize_script( 'country-select', 'uwp_country_data', $country_data );
 	    }
-        
+
     }
 
     function get_all_form_fields($htmlvar_name = ''){
