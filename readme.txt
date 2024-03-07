@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.5 =
+* Remove profile image ajax call had nonce check commented out for testing - FIXED
+
 = 1.2.4 =
 * Add support to resize webp image for avatar/banner - FIXED
 * Password strength not working in reset password form - FIXED

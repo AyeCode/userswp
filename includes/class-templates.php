@@ -540,7 +540,7 @@ class UsersWP_Templates {
 
 
 				?>
-                <div class="btn-group btn-group-sm mb-2" role="group" id="<?php echo $id; ?>">
+                <div class="btn-group btn-group-sm mb-2" role="group" id="<?php echo esc_attr( $id ); ?>">
 				<?php
 				$options = array_chunk( $options, 5, true );
 				$current_url   = uwp_current_page_url();
@@ -548,12 +548,12 @@ class UsersWP_Templates {
 					foreach ( $options[0] as $id => $val ) {
 						$active = $form_id == $id ? 'active' : '';
 						$url = esc_url_raw( add_query_arg( array( 'uwp_form_id' => $id ), $current_url ) );
-						echo aui()->button( array(
+						echo aui()->button( array(  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'type'    => 'a',
-							'href'    => $url,
+							'href'    => esc_url( $url ),
 							'class'   => 'btn btn-secondary '.$active,
 							'content' => esc_attr( $val ),
-							'extra_attributes'  => array('data-form_id'=>$id)
+							'extra_attributes'  => array('data-form_id'=> esc_attr( $id ) )
 						) );
 					}
 				}elseif(count( $options[0] ) == 1){

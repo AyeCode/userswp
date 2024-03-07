@@ -103,7 +103,7 @@ class UsersWP_Profile {
         data-user="<?php echo absint( $user->ID ); ?>">
 		<?php if ( $link ){ ?><a href="<?php echo esc_url( uwp_build_profile_tab_url( $user->ID ) ); ?>"
                                  class="<?php echo esc_attr( $link_class ); ?>"><?php } ?>
-		<?php echo apply_filters( 'uwp_profile_display_name', esc_attr( $user->display_name ), $user ); ?>
+		<?php echo esc_attr( apply_filters( 'uwp_profile_display_name', esc_attr( $user->display_name ), $user ) ); ?>
 		<?php if ( $link ){ ?></a><?php } ?>
 		<?php do_action( 'uwp_profile_after_title', $user->ID ); ?>
         </<?php echo esc_attr( $tag ); ?>>
@@ -126,7 +126,7 @@ class UsersWP_Profile {
 		$can_user_edit_account = apply_filters( 'uwp_user_can_edit_own_profile', true, $user->ID );
 
 		if ( ! $uwp_in_user_loop && $account_page && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && $can_user_edit_account ) { ?>
-            <a href="<?php echo get_permalink( $account_page ); ?>"
+            <a href="<?php echo esc_url( get_permalink( $account_page ) ); ?>"
                class="btn btn-sm btn-outline-dark btn-circle mt-n1" data-toggle="tooltip"
                title="<?php esc_attr_e( 'Edit Account', 'userswp' ); ?>"><i
                         class="fas fa-pencil-alt fa-fw fa-lg"></i></a>
@@ -211,7 +211,7 @@ class UsersWP_Profile {
 					}
 
 					if ( $value ) {
-						echo '<li><a target="_blank" rel="nofollow" href="' . esc_url($value) . '">' . esc_atrr($title) . '</a></li>';
+						echo '<li><a target="_blank" rel="nofollow" href="' . esc_url( $value ) . '">' . esc_attr( $title ) . '</a></li>';
 					}
 				}
 				?>
@@ -233,7 +233,7 @@ class UsersWP_Profile {
 		if ( ! $show_type ) {
 			return;
 		}
-		echo $this->get_extra_fields( $user, '[' . $show_type . ']' );
+		echo $this->get_extra_fields( $user, '[' . $show_type . ']' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -291,7 +291,7 @@ class UsersWP_Profile {
 					?>
                     <div class="uwp-profile-extra-wrap m-0 p-0">
                         <div class="uwp-profile-extra-key uwp-profile-extra-full m-0 p-0"><h3
-                                    style="margin: 10px 0;"><?php echo $icon . $site_title; ?></h3></div>
+                                    style="margin: 10px 0;"><?php echo wp_kses($icon, array('i'=>array(), 'span'=> array() ) ) . esc_attr( $site_title ); ?></h3></div>
                     </div>
 					<?php
 				} else {
@@ -299,7 +299,7 @@ class UsersWP_Profile {
 						$wrap_html = true;
 						?>
                         <div class="uwp-profile-extra-wrap <?php echo esc_attr( $class ); ?>">
-                            <div class="uwp-profile-extra-key d-inline-block"><?php echo $icon . " " . $site_title; ?>
+                            <div class="uwp-profile-extra-key d-inline-block"><?php echo wp_kses($icon, array('i'=>array(), 'span'=> array() ) ) . " " . esc_attr( $site_title ); ?>
                                 <span class="uwp-profile-extra-sep">:</span></div>
                             <div class="uwp-profile-extra-value d-inline-block">
 								<?php
@@ -315,16 +315,16 @@ class UsersWP_Profile {
 										} ?>">
 											<?php
 											if ( is_uwp_profile_page() ) {
-												echo nl2br( $value );
+												echo nl2br( esc_attr( $value ) );
 											} else {
-												echo wp_trim_words( $value, $limit_words, '...' );
+												echo esc_attr( wp_trim_words(  $value, $limit_words, '...' ) );
 											}
 											?>
                                         </div>
 										<?php
 									}
 								} else {
-									echo $value;
+									echo wp_kses_post( $value );
 								}
 								?>
                             </div>
@@ -538,7 +538,7 @@ class UsersWP_Profile {
 	 * @param       object $user The User ID.
 	 */
 	public function get_profile_side_extra( $user ) {
-		echo $this->get_extra_fields( $user, '[profile_side]' );
+		echo $this->get_extra_fields( $user, '[profile_side]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -550,7 +550,7 @@ class UsersWP_Profile {
 	 * @param       object $user The User ID.
 	 */
 	public function get_users_extra( $user ) {
-		echo $this->get_extra_fields( $user, '[users]' );
+		echo $this->get_extra_fields( $user, '[users]' ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -691,7 +691,8 @@ class UsersWP_Profile {
 			do_action( 'uwp_profile_' . $tab->tab_key . '_tab_content', $user, $tab );
 		}
 
-		echo self::tab_content_child( $tab ); // child elements
+		// child elements
+		echo self::tab_content_child( $tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		return ob_get_clean();
 	}
@@ -785,7 +786,7 @@ class UsersWP_Profile {
 					'type'               => 'list'
 				);
 
-				echo paginate_links( $args );
+				echo paginate_links( $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 
 
@@ -857,7 +858,7 @@ class UsersWP_Profile {
 			$navigation = str_replace( "nav-links", "uwp-nav-links", $navigation );
 		}
 
-		echo $navigation;
+		echo $navigation; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 
@@ -873,7 +874,7 @@ class UsersWP_Profile {
 	 */
 	public function get_profile_more_info( $user ) {
 		$extra = $this->get_profile_extra( $user );
-		echo $extra;
+		echo $extra; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -1242,7 +1243,7 @@ class UsersWP_Profile {
                         var mod_shadow = jQuery('#uwp-modal-backdrop');
                         var container = jQuery('#uwp-popup-modal-wrap');
                         container.hide();
-                        container.replaceWith('<?php echo $this->modal_loading_html(); ?>');
+                        container.replaceWith('<?php echo $this->modal_loading_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>');
                         mod_shadow.remove();
                     });
                 });
@@ -1513,7 +1514,7 @@ class UsersWP_Profile {
 				'content' => __( "Invalid request!", "userswp" )
 			) );
 			$return          = json_encode( $result );
-			echo $return;
+			echo $return; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			die();
 		}
 
@@ -1534,7 +1535,7 @@ class UsersWP_Profile {
 				'content' => __( "No fields available", "userswp" )
 			) );
 			$return          = json_encode( $result );
-			echo $return;
+			echo $return; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			die();
 		}
 
@@ -1547,10 +1548,10 @@ class UsersWP_Profile {
 				'content' => $errors->get_error_message()
 			) );
 			$return          = json_encode( $result );
-			echo $return;
+			echo $return; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			$return = $this->ajax_image_crop_popup( $errors['url'], $type );
-			echo $return;
+			echo $return; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		die();
@@ -1667,7 +1668,7 @@ class UsersWP_Profile {
                         var mod_shadow = jQuery('#uwp-modal-backdrop');
                         var container = jQuery('#uwp-popup-modal-wrap');
                         container.hide();
-                        container.replaceWith('<?php echo $this->modal_loading_html(); ?>');
+                        container.replaceWith('<?php echo $this->modal_loading_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>');
                         mod_shadow.remove();
                     });
                 });
@@ -1695,7 +1696,7 @@ class UsersWP_Profile {
                     <div class="uwp-bs-modal-content">
                         <div class="uwp-bs-modal-header">
                             <h4 class="uwp-bs-modal-title">
-								<?php echo __( "Loading Form ...", "userswp" ); ?>
+								<?php esc_attr_e( "Loading Form ...", "userswp" ); ?>
                             </h4>
                         </div>
                         <div class="uwp-bs-modal-body">
@@ -1710,7 +1711,7 @@ class UsersWP_Profile {
 		<?php
 		$output = ob_get_contents();
 		ob_end_clean();
-		echo trim( preg_replace( "/\s+|\n+|\r/", ' ', $output ) );
+		echo trim( preg_replace( "/\s+|\n+|\r/", ' ', $output ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -1729,7 +1730,7 @@ class UsersWP_Profile {
 		if ( $type && in_array( $type, array( 'banner', 'avatar' ) ) ) {
 			$output = $this->crop_submit_form( $type );
 		}
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		exit();
 	}
 
@@ -1762,7 +1763,7 @@ class UsersWP_Profile {
         <script type="text/javascript">
             (function ($, window, undefined) {
 
-                var uwp_popup_type = '<?php echo $type; ?>';
+                var uwp_popup_type = '<?php echo esc_attr( $type ); ?>';
 
                 $(document).ready(function () {
                     $("#progressbar").progressbar();
@@ -1776,7 +1777,7 @@ class UsersWP_Profile {
                         mod_shadow.remove();
                     });
 
-                    $('#uwp_upload_<?php echo $type; ?>').on('change', function (e) {
+                    $('#uwp_upload_<?php echo esc_attr( $type ); ?>').on('change', function (e) {
                         e.preventDefault();
 
                         var container = jQuery('<?php echo esc_attr( $content_wrap );?>');
@@ -1790,20 +1791,20 @@ class UsersWP_Profile {
 
                         // file size check
                         if (file_size && <?php echo absint( $max_file_size );?> && file_size > <?php echo absint( $max_file_size );?>) {
-                            err_container.html('<div class="text-center alert alert-danger"><?php _e( 'File too big.', 'userswp' );?></div>');
+                            err_container.html('<div class="text-center alert alert-danger"><?php esc_attr_e( 'File too big.', 'userswp' );?></div>');
                             return;
                         }
 
-                        fd.append('<?php echo $type; ?>', file);
+                        fd.append('<?php echo esc_attr( $type ); ?>', file);
                         // our AJAX identifier
                         fd.append('action', 'uwp_avatar_banner_upload');
-                        fd.append('uwp_popup_type', '<?php echo $type; ?>');
+                        fd.append('uwp_popup_type', '<?php echo esc_attr( $type ); ?>');
 
                         $("#progressBar").show().removeClass('d-none');
 
                         $.ajax({
                             // Your server script to process the upload
-                            url: '<?php echo admin_url( 'admin-ajax.php' ); ?>',
+                            url: '<?php echo esc_url( admin_url( 'admin-ajax.php' ) );  ?>',
                             type: 'POST',
                             data: fd,
                             cache: false,
@@ -1837,7 +1838,7 @@ class UsersWP_Profile {
                                         onSelect: updateCoords,
                                         allowResize: true,
                                         allowSelect: false,
-                                        bgColor: '<?php echo $bg_color; ?>',
+                                        bgColor: '<?php echo esc_html( $bg_color ); ?>',
                                         boxWidth: 650,   //Maximum width you want for your bigger images
                                         boxHeight: 400,  //Maximum Height for your bigger images
                                         setSelect: [0, 0, uwp_full_width, uwp_full_height],
@@ -1882,7 +1883,7 @@ class UsersWP_Profile {
 	}
 
 	public function ajax_profile_image_remove() {
-		//check_ajax_referer( 'uwp_basic_nonce', 'security' ); // @todo pass security in AJAX request.
+		check_ajax_referer( 'uwp_basic_nonce', 'security' );
 
 		$type = ! empty( $_POST['type'] ) ? $_POST['type'] : '';
 
@@ -1913,7 +1914,7 @@ class UsersWP_Profile {
 	public function define_ajaxurl() {
 
 		echo '<script type="text/javascript">
-           var ajaxurl = "' . admin_url( 'admin-ajax.php' ) . '";
+           var ajaxurl = "' . esc_url( admin_url( 'admin-ajax.php' ) ) . '";
          </script>';
 	}
 
