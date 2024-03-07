@@ -296,6 +296,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			?>
             <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr( $form_type ); ?>"/>
             <input type="hidden" name="manage_field_type" class="manage_field_type" value="user_sorting">
+			<?php wp_nonce_field( 'uwp-admin-settings','uwp-admin-settings' ); ?>
             <ul>
 				<?php
 
@@ -632,7 +633,9 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				if ( isset( $_REQUEST['update'] ) && $_REQUEST['update'] == 'update' ) {
 
 					if ( ! empty( $_REQUEST['tabs'] ) && is_array( $_REQUEST['tabs'] ) ) {
-
+						if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'uwp-admin-settings' ) ) {
+							return;
+						}
 						$tabs = $_REQUEST['tabs'];
 						$this->update_field_order( $tabs );
 
@@ -641,6 +644,9 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 
 				/* ---- Show field form in admin ---- */
 				if ( $field_action == 'new' ) {
+					if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'uwp-admin-settings') ) {
+						return;
+					}
 					$htmlvar_name = isset( $_REQUEST['htmlvar_name'] ) ? sanitize_text_field( $_REQUEST['htmlvar_name'] ) : sanitize_text_field( $_REQUEST['tab_key'] );
 					$this->field_adminhtml( $htmlvar_name, $field_action, $_REQUEST );
 				}

@@ -12,6 +12,7 @@ jQuery(document).ready(function () {
         var field_data_type = jQuery(this).data('data_type');
         var custom_type = jQuery(this).data("field-custom-type");
         var form_id = jQuery('.manage_field_form_id').val();
+        var _nonce = jQuery('#uwp-admin-settings').val();
 
         var data = {
             'htmlvar_name': htmlvar_name,
@@ -24,6 +25,8 @@ jQuery(document).ready(function () {
             'field_data_type':field_data_type,
             'custom_type': custom_type,
             'form_id': form_id,
+            '_wpnonce': _nonce
+
         };
 
         if (manage_field_type == 'register'){
@@ -48,6 +51,7 @@ jQuery(document).ready(function () {
                 'tab_privacy':       jQuery(this).data('tab_privacy'),
                 'user_decided':      jQuery(this).data('user_decided'),
                 'form_id': form_id,
+                '_wpnonce': _nonce
             };
         } else if(manage_field_type == 'user_sorting'){
             var action = 'uwp_ajax_user_sorting_action';
@@ -62,6 +66,7 @@ jQuery(document).ready(function () {
                 'field_icon':        jQuery(this).data('field_icon'),
                 'site_title':        jQuery(this).data('site_title'),
                 'sort':              jQuery(this).data('sort'),
+                '_wpnonce': _nonce
             };
         }else { //custom field
             var action = "uwp_ajax_action";
@@ -156,7 +161,8 @@ jQuery(document).ready(function () {
 
             var data = {
                 'tabs': $order,
-                'form_id': form_id
+                'form_id': form_id,
+                '_wpnonce': jQuery('#uwp-admin-settings').val()
             };
 
             jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true&update=update&manage_field_type=' + manage_field_type, data, function (theResponse) {
@@ -262,7 +268,8 @@ function save_field(id, type) {
                     });
 
                     var data = {
-                        'tabs': $order
+                        'tabs': $order,
+                        '_wpnonce': jQuery('#uwp-admin-settings').val()
                     };
 
                     jQuery.get(uwp_admin_ajax.url + '?action='+ action +'&create_field=true&update=update&manage_field_type=' + manage_field_type, data, function (theResponse) {
