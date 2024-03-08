@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Coding Standards for Plugins">
+	<description>Only scans for security issues</description>
+
+	<rule ref="WordPress-Extra" />
+
+	<!-- Check all PHP files in directory tree by default. -->
+	<arg name="extensions" value="php"/>
+	<file>.</file>
+
+	<!-- Show progress and sniff codes in all reports -->
+	<arg value="ps"/>
+
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/index.php</exclude-pattern>
+	<exclude-pattern>*/includes/libraries/*</exclude-pattern>
+	<exclude-pattern>*/tests/*</exclude-pattern>
+
+	<rule ref="Internal.NoCodeFound">
+		<exclude-pattern>*</exclude-pattern>
+	</rule>
+
+	<rule ref="Squiz.Commenting">
+		<exclude-pattern>*</exclude-pattern>
+	</rule>
+
+	<rule ref="Generic.Commenting.DocComment">
+		<exclude-pattern>*</exclude-pattern>
+	</rule>
+
+	<rule ref="Generic.Formatting">
+		<exclude-pattern>*</exclude-pattern>
+	</rule>
+
+	<rule ref="Generic.WhiteSpace">
+		<exclude-pattern>*</exclude-pattern>
+	</rule>
+
+	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
+		<exclude-pattern>*</exclude-pattern>
+	</rule>
+
+	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+		<exclude-pattern>*</exclude-pattern>
+	</rule>
+
+	<config name="minimum_supported_wp_version" value="4.9" />
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array" value="userswp" />
+		</properties>
+	</rule>
+
+</ruleset>

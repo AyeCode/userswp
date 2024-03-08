@@ -49,15 +49,15 @@ class UsersWP_Notifications {
                                         $checked = 0;
                                     }
                                     ?>
-                                    <div class="uwp-profile-extra-wrap uwp_mute_notification_items <?php echo $bs_form_group; ?>">
-                                        <div id="uwp_mute_<?php echo $id; ?>"
-                                             class="uwp_mute_notification_item uwp_mute_<?php echo $id; ?>">
+                                    <div class="uwp-profile-extra-wrap uwp_mute_notification_items <?php echo esc_attr( $bs_form_group ); ?>">
+                                        <div id="uwp_mute_<?php echo esc_attr( $id ); ?>"
+                                             class="uwp_mute_notification_item uwp_mute_<?php echo esc_attr( $id ); ?>">
                                             <?php if(!empty($design_style)){ ?>
-                                            <label class="<?php echo $bs_sr_only; ?>">
+                                            <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
                                                 <?php } ?>
-                                            <input name="uwp_mute_notifications[<?php echo $id; ?>]"
-                                                   class="<?php echo $bs_form_control; ?>" <?php checked($checked, "1", true); ?> type="checkbox"
-                                                   value="1"><?php echo $text; ?>
+                                            <input name="uwp_mute_notifications[<?php echo esc_attr( $id ); ?>]"
+                                                   class="<?php echo esc_attr( $bs_form_control ); ?>" <?php checked($checked, "1", true); ?> type="checkbox"
+                                                   value="1"><?php echo wp_kses_post( $text ); ?>
                                             <?php if(!empty($design_style)){ ?>
                                                 </label>
                                             <?php } ?>
@@ -65,13 +65,13 @@ class UsersWP_Notifications {
                                     </div>
                                 <?php }
                                 ?>
-                                <input type="hidden" name="uwp_notification_nonce" value="<?php echo wp_create_nonce( 'uwp-notification-nonce' ); ?>" />
-                                <input name="uwp_notification_submit" class="<?php echo $bs_btn_class; ?>" value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
+                                <input type="hidden" name="uwp_notification_nonce" value="<?php echo esc_attr( wp_create_nonce( 'uwp-notification-nonce' ) ); ?>" />
+                                <input name="uwp_notification_submit" class="<?php echo esc_attr( $bs_btn_class ); ?>" value="<?php esc_attr_e( 'Submit', 'userswp' ); ?>" type="submit">
                                 <?php
                             } else {
-	                            echo aui()->alert(array(
+	                            echo aui()->alert(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			                            'type'=>'info',
-			                            'content'=> __( 'You will see the options to disable the active notifications for UsersWP and it\'s add ons.', 'userswp' )
+			                            'content'=> esc_attr__( 'You will see the options to disable the active notifications for UsersWP and it\'s add ons.', 'userswp' )
 		                            )
 	                            );
                             }?>

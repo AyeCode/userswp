@@ -19,11 +19,11 @@ class UsersWP_Notices {
     function display_registration_disabled_notice($type) {
         if ($type == 'register') {
             if (!get_option('users_can_register')) {
-                echo aui()->alert(array(
+                echo aui()->alert(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'class' => 'text-center',
                         'type'=>'danger',
-                        'heading'  => __( 'Heads Up!', 'userswp' ),
-                        'content'=> __( 'User registration is currently not allowed.', 'userswp' )
+                        'heading'  => esc_attr__( 'Heads Up!', 'userswp' ),
+                        'content'=> esc_attr__( 'User registration is currently not allowed.', 'userswp' )
                     )
                 );
             }
@@ -96,7 +96,7 @@ class UsersWP_Notices {
         }
 
         if($notice && $echo){
-            echo $notice;
+            echo $notice; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         }else{
             return $notice;
         }
@@ -111,7 +111,7 @@ class UsersWP_Notices {
         if ( $updater->is_updating() || ! empty( $_GET['force_sync_data'] ) ) {
             ?>
             <div id="message" class="updated notice notice-alt uwp-message">
-                <p><strong><?php _e( 'UsersWP data sync', 'userswp' ); ?></strong> &#8211; <?php _e( 'Users data sync is running in the background.', 'userswp' ); ?> <a href="<?php echo esc_url( add_query_arg( 'force_sync_data', 'true', admin_url( 'admin.php?page=userswp' ) ) ); ?>"><?php _e( 'Taking a while? Click here to run it now.', 'userswp' ); ?></a></p>
+                <p><strong><?php esc_attr_e( 'UsersWP data sync', 'userswp' ); ?></strong> &#8211; <?php esc_attr_e( 'Users data sync is running in the background.', 'userswp' ); ?> <a href="<?php echo esc_url( add_query_arg( 'force_sync_data', 'true', admin_url( 'admin.php?page=userswp' ) ) ); ?>"><?php esc_attr_e( 'Taking a while? Click here to run it now.', 'userswp' ); ?></a></p>
             </div>
             <?php
         }
@@ -134,21 +134,21 @@ class UsersWP_Notices {
                 uwp_update_option('design_style','bootstrap');
                 ?>
                 <div class="notice notice-success">
-                    <p><strong>UsersWP - </strong><?php _e( 'Congratulations your site is now set to use the new Bootstrap styles!', 'userswp' ); ?></p>
+                    <p><strong>UsersWP - </strong><?php esc_attr_e( 'Congratulations your site is now set to use the new Bootstrap styles!', 'userswp' ); ?></p>
                 </div>
                 <?php
             }else{
             ?>
             <div class="notice notice-info is-dismissible uwp-notice-try-bootstrap">
-                <p><strong>UsersWP - </strong><?php _e( 'Try our exciting new bootstrap styling for a more modern and clean look (switch back at any time).', 'userswp' ); ?>
-                    <a href="<?php echo esc_url_raw( $settings_link );?>" class="button button-primary"><?php _e( 'Try Now', 'userswp' ); ?></a>
+                <p><strong>UsersWP - </strong><?php esc_attr_e( 'Try our exciting new bootstrap styling for a more modern and clean look (switch back at any time).', 'userswp' ); ?>
+                    <a href="<?php echo esc_url_raw( $settings_link );?>" class="button button-primary"><?php esc_attr_e( 'Try Now', 'userswp' ); ?></a>
                 </p>
             </div>
                 <script>
                     jQuery(function() {
                         setTimeout(function(){
                             jQuery('.uwp-notice-try-bootstrap .notice-dismiss').click(function(){
-                                jQuery.post("<?php echo admin_url("admin-ajax.php?action=uwp_notice_clear_try_bootstrap"); ?>", function(data, status){
+                                jQuery.post("<?php echo esc_url( admin_url("admin-ajax.php?action=uwp_notice_clear_try_bootstrap")); ?>", function(data, status){
                                 });
                             });
                         }, 300);
@@ -176,11 +176,11 @@ class UsersWP_Notices {
 				        ?>
                         <div class="notice notice-error">
                             <p><strong>UsersWP
-                                    - </strong><?php _e( 'Yoast SEO has disabled user profiles, please enable them.', 'userswp' ); ?>
+                                    - </strong><?php esc_attr_e( 'Yoast SEO has disabled user profiles, please enable them.', 'userswp' ); ?>
                                 <a href="<?php echo esc_url_raw( $settings_link ); ?>"
-                                   class="button button-primary"><?php _e( 'View Settings', 'userswp' ); ?></a>
-                                <a href="<?php echo add_query_arg('uwp-seo-notice-dismissed', 1, uwp_current_page_url()); ?>"
-                                   class="button button-primary"><?php _e( 'Dismiss', 'userswp' ); ?></a>
+                                   class="button button-primary"><?php esc_attr_e( 'View Settings', 'userswp' ); ?></a>
+                                <a href="<?php echo esc_url( add_query_arg('uwp-seo-notice-dismissed', 1, uwp_current_page_url()) ); ?>"
+                                   class="button button-primary"><?php esc_attr_e( 'Dismiss', 'userswp' ); ?></a>
                             </p>
                         </div>
 				        <?php
