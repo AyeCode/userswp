@@ -213,7 +213,7 @@ class UsersWP_Admin_Addons extends Ayecode_Addons {
 
 		$target = '';
 		if ( ! empty( $button_args['url'] ) ) {
-			$target = strpos($button_args['url'], get_site_url()) !== false ? '' : ' target="_blank" ';
+			$target = strpos($button_args['url'], get_site_url()) !== false ? '' : '_blank';
 		}
 
 		?>
@@ -222,16 +222,16 @@ class UsersWP_Admin_Addons extends Ayecode_Addons {
 			data-licensing="<?php echo $button_args['licensing'] ? 1 : 0;?>"
 			data-title="<?php echo esc_attr($button_args['title']);?>"
 			data-type="<?php echo esc_attr($button_args['type']);?>"
-			data-text-error-message="<?php _e('Something went wrong!','userswp');?>"
-			data-text-activate="<?php _e('Activate','userswp');?>"
-			data-text-activating="<?php _e('Activating','userswp');?>"
-			data-text-deactivate="<?php _e('Deactivate','userswp');?>"
-			data-text-installed="<?php _e('Installed','userswp');?>"
-			data-text-install="<?php _e('Install','userswp');?>"
-			data-text-installing="<?php _e('Installing','userswp');?>"
-			data-text-error="<?php _e('Error','userswp');?>"
-			<?php if(!empty($button_args['onclick'])){echo " onclick='".$button_args['onclick']."' ";}?>
-			<?php echo $target;?>
+			data-text-error-message="<?php esc_attr_e('Something went wrong!','userswp');?>"
+			data-text-activate="<?php esc_attr_e('Activate','userswp');?>"
+			data-text-activating="<?php esc_attr_e('Activating','userswp');?>"
+			data-text-deactivate="<?php esc_attr_e('Deactivate','userswp');?>"
+			data-text-installed="<?php esc_attr_e('Installed','userswp');?>"
+			data-text-install="<?php esc_attr_e('Install','userswp');?>"
+			data-text-installing="<?php esc_attr_e('Installing','userswp');?>"
+			data-text-error="<?php esc_attr_e('Error','userswp');?>"
+			<?php if(!empty($button_args['onclick'])){echo " onclick='".esc_html($button_args['onclick'] )."' ";}?>
+			target="<?php echo esc_attr( $target );?>"
 			class="addons-button  <?php echo esc_attr( $button_args['class'] ); ?>"
 			href="<?php echo esc_url( $button_args['url'] ); ?>">
 			<?php echo esc_html( $button_args['button_text'] ); ?>

@@ -551,7 +551,7 @@ class UsersWP_Templates {
 						echo aui()->button( array(  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'type'    => 'a',
 							'href'    => esc_url( $url ),
-							'class'   => 'btn btn-secondary '.$active,
+							'class'   => 'btn btn-secondary '. esc_attr( $active ),
 							'content' => esc_attr( $val ),
 							'extra_attributes'  => array('data-form_id'=> esc_attr( $id ) )
 						) );
@@ -567,16 +567,16 @@ class UsersWP_Templates {
 						?>
                         <div class="btn-group" role="group">
                             <button id="uwp-form-select-dropdown" type="button" class="btn btn-secondary dropdown-toggle" data-<?php echo ( $aui_bs5 ? 'bs-' : '' ); ?>toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <?php _e('More', 'userswp'); ?>
+                                <?php esc_attr_e('More', 'userswp'); ?>
                             </button>
                             <div class="dropdown-menu mt-3" aria-labelledby="uwp-form-select">
 								<?php
-								echo aui()->button( array(
+								echo aui()->button( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'type'    => 'a',
-									'href'    => $url,
-									'class'   => 'dropdown-item ' . $active,
+									'href'    => esc_url( $url ),
+									'class'   => 'dropdown-item ' . esc_attr( $active ),
 									'content' => esc_attr( $val ),
-									'extra_attributes'  => array('data-form_id'=>$id)
+									'extra_attributes'  => array('data-form_id'=> esc_attr( $id ) )
 								) );
 								?>
                             </div>
@@ -705,7 +705,7 @@ class UsersWP_Templates {
 				$label = $site_title = uwp_get_form_label( $field );
 				if ( ! is_admin() ) { ?>
                     <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-						<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+						<?php echo ( trim( $site_title ) ) ? esc_attr( $site_title ) : '&nbsp;'; ?>
 						<?php if ( $field->is_required ) {
 							echo '<span>*</span>';
 						} ?>
@@ -714,7 +714,7 @@ class UsersWP_Templates {
 
                 <input name="<?php echo esc_attr($field->htmlvar_name); ?>"
                        class="<?php echo esc_attr($field->css_class); ?> <?php echo esc_attr( $bs_form_control ); ?>"
-                       placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+                       placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
                        title="<?php echo esc_attr($label); ?>"
 					<?php if ( $field->for_admin_use == 1 ) {
 						echo 'readonly="readonly"';
@@ -728,7 +728,7 @@ class UsersWP_Templates {
             </div>
 			<?php
 		} else {
-			echo $html;
+			echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -786,7 +786,7 @@ class UsersWP_Templates {
 				echo '<input type="hidden" name="redirect_to" value="' . esc_url( $redirect_to ) . '"/>';
 			}
 
-			echo '<input type="hidden" name="uwp_login_nonce" value="' . wp_create_nonce( 'uwp-login-nonce' ) . '" />';
+			echo '<input type="hidden" name="uwp_login_nonce" value="' . esc_attr( wp_create_nonce( 'uwp-login-nonce' ) ) . '" />';
 		} elseif ( $form_type == 'register' ) {
 			$redirect_to = '';
 			$form_id = ! empty( $args['id'] ) ? $args['id'] : 1;
@@ -815,21 +815,21 @@ class UsersWP_Templates {
 			}
 
 			$hash = substr( hash( 'SHA256', AUTH_KEY . site_url() ), 0, 25 );
-			echo '<input type="hidden" name="uwp_register_hash" value="' . $hash . '" style="display:none !important; visibility:hidden !important;" />';
+			echo '<input type="hidden" name="uwp_register_hash" value="' . esc_html( $hash ) . '" style="display:none !important; visibility:hidden !important;" />';
 			echo '<input type="hidden" name="uwp_register_hp" value="" style="display:none !important; visibility:hidden !important;" size="25" autocomplete="off" />';
-			echo '<input type="hidden" name="uwp_register_nonce" value="' . wp_create_nonce( 'uwp-register-nonce' ) . '" />';
+			echo '<input type="hidden" name="uwp_register_nonce" value="' . esc_attr( wp_create_nonce( 'uwp-register-nonce' ) ) . '" />';
 			echo '<input type="hidden" name="uwp_register_form_id" value="' . absint($form_id) . '">';
 		} elseif ( $form_type == 'change' ) {
-			echo '<input type="hidden" name="uwp_change_nonce" value="' . wp_create_nonce( 'uwp-change-nonce' ) . '" />';
+			echo '<input type="hidden" name="uwp_change_nonce" value="' . esc_attr( wp_create_nonce( 'uwp-change-nonce' ) ) . '" />';
 		} elseif ( $form_type == 'forgot' ) {
-			echo '<input type="hidden" name="uwp_forgot_nonce" value="' . wp_create_nonce( 'uwp-forgot-nonce' ) . '" />';
+			echo '<input type="hidden" name="uwp_forgot_nonce" value="' . esc_attr( wp_create_nonce( 'uwp-forgot-nonce' ) ) . '" />';
 		} elseif ( $form_type == 'reset' ) {
 			if ( isset( $_GET['key'] ) && isset( $_GET['login'] ) ) {
 				echo '<input type="hidden" name="uwp_reset_username" value="' . esc_attr( $_GET['login'] ) . '" />';
 				echo '<input type="hidden" name="uwp_reset_key" value="' . esc_attr( $_GET['key'] ) . '" />';
 			}
 			echo '<input type="hidden" name="uwp_reset_hp" value="" style="display:none !important; visibility:hidden !important;" size="25" autocomplete="off" />';
-			echo '<input type="hidden" name="uwp_reset_nonce" value="' . wp_create_nonce( 'uwp-reset-nonce' ) . '" />';
+			echo '<input type="hidden" name="uwp_reset_nonce" value="' . esc_attr( wp_create_nonce( 'uwp-reset-nonce' ) ) . '" />';
 		}
 	}
 
@@ -1099,17 +1099,17 @@ class UsersWP_Templates {
                 <div class="uwp-profile-extra-div form-table">
                     <form class="uwp-account-form uwp_form" method="post">
 						<?php if ( $fields ) { ?>
-                            <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
+                            <div class="uwp-profile-extra-wrap <?php echo esc_attr( $bs_form_group ); ?>">
                                 <div class="uwp-profile-extra-key col" style="font-weight: bold;">
-									<?php _e( "Field", "userswp" ) ?>
+									<?php esc_attr_e( "Field", "userswp" ) ?>
                                 </div>
                                 <div class="uwp-profile-extra-value col" style="font-weight: bold;">
-									<?php _e( "Is Public?", "userswp" ) ?>
+									<?php esc_attr_e( "Is Public?", "userswp" ) ?>
                                 </div>
                             </div>
 							<?php foreach ( $fields as $field ) { ?>
-                                <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
-                                    <div class="uwp-profile-extra-key col"><?php echo $field->site_title; ?>
+                                <div class="uwp-profile-extra-wrap <?php echo esc_attr( $bs_form_group ); ?>">
+                                    <div class="uwp-profile-extra-key col"><?php echo esc_attr( $field->site_title ); ?>
                                         <span class="uwp-profile-extra-sep">:</span></div>
                                     <div class="uwp-profile-extra-value col">
 										<?php
@@ -1119,11 +1119,11 @@ class UsersWP_Templates {
 											$value = 'yes';
 										}
 										?>
-                                        <select name="<?php echo $field_name; ?>"
-                                                class="uwp_privacy_field aui-select2 <?php echo $bs_form_control; ?>"
+                                        <select name="<?php echo esc_attr( $field_name ); ?>"
+                                                class="uwp_privacy_field aui-select2 <?php echo esc_attr( $bs_form_control ); ?>"
                                                 style="margin: 0;">
-                                            <option value="no" <?php selected( $value, "no" ); ?>><?php echo __( "No", "userswp" ) ?></option>
-                                            <option value="yes" <?php selected( $value, "yes" ); ?>><?php echo __( "Yes", "userswp" ) ?></option>
+                                            <option value="no" <?php selected( $value, "no" ); ?>><?php esc_attr_e( "No", "userswp" ) ?></option>
+                                            <option value="yes" <?php selected( $value, "yes" ); ?>><?php esc_attr_e( "Yes", "userswp" ) ?></option>
                                         </select>
                                     </div>
                                 </div>
@@ -1135,19 +1135,19 @@ class UsersWP_Templates {
 						$tabs            = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $tabs_table_name . " WHERE form_type = %s AND user_decided = 1 AND form_id = %s ORDER BY sort_order ASC", array('profile-tabs', $form_id) ) );
 
 						if ( $tabs ) { ?>
-                            <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
+                            <div class="uwp-profile-extra-wrap <?php echo esc_attr( $bs_form_group ); ?>">
                                 <div class="uwp-profile-extra-key col" style="font-weight: bold;">
-									<?php _e( "Tab Name", "userswp" ) ?>
+									<?php esc_attr_e( "Tab Name", "userswp" ) ?>
                                 </div>
                                 <div class="uwp-profile-extra-value col" style="font-weight: bold;">
-									<?php _e( "Privacy", "userswp" ) ?>
+									<?php esc_attr_e( "Privacy", "userswp" ) ?>
                                 </div>
                             </div>
 						<?php }
 
 						foreach ( $tabs as $tab ) { ?>
-                            <div class="uwp-profile-extra-wrap <?php echo $bs_form_group; ?>">
-                                <div class="uwp-profile-extra-key col"><?php _e( $tab->tab_name, 'userswp' ); ?>
+                            <div class="uwp-profile-extra-wrap <?php echo esc_attr( $bs_form_group ); ?>">
+                                <div class="uwp-profile-extra-key col"><?php esc_attr_e( $tab->tab_name, 'userswp' ); ?>
                                     <span class="uwp-profile-extra-sep">:</span></div>
                                 <div class="uwp-profile-extra-value col">
 									<?php
@@ -1168,8 +1168,8 @@ class UsersWP_Templates {
 										$value = $admin_privacy;
 									}
 									?>
-                                    <select name="<?php echo $field_name; ?>"
-                                            class="uwp_tab_privacy_field aui-select2 <?php echo $bs_form_control; ?>"
+                                    <select name="<?php echo esc_attr( $field_name ); ?>"
+                                            class="uwp_tab_privacy_field aui-select2 <?php echo esc_attr( $bs_form_control ); ?>"
                                             style="margin: 0;">
 										<?php
 										foreach ( $privacy_options as $key => $val ) {
@@ -1178,7 +1178,7 @@ class UsersWP_Templates {
 											if ( $admin_privacy == $key ) {
 												$default = __( ' (Default)', 'userswp' );
 											}
-											echo '<option value="' . $key . '"' . selected( $value, $key, false ) . '>' . $val . $default . '</option>';
+											echo '<option value="' . esc_attr( $key ) . '"' . selected( $value, $key, false ) . '>' . esc_attr( $val . $default ) . '</option>';
 										}
 										?>
                                     </select>
@@ -1191,7 +1191,7 @@ class UsersWP_Templates {
                             <div id="uwp_hide_from_listing" class="uwp_hide_from_listing">
                                 <input name="uwp_hide_from_listing" class="" <?php checked( $value, "1", true ); ?>
                                        type="checkbox"
-                                       value="1"><?php _e( 'Hide profile from the users listing page.', 'userswp' ); ?>
+                                       value="1"><?php esc_attr_e( 'Hide profile from the users listing page.', 'userswp' ); ?>
                             </div>
                         </div>
 						<?php
@@ -1207,15 +1207,15 @@ class UsersWP_Templates {
                                 <input type="hidden" name="uwp_make_profile_private" value="0">
                                 <input name="uwp_make_profile_private" class="" <?php checked( $value, "1", true ); ?>
                                        type="checkbox" value="1">
-								<?php _e( 'Make the whole profile private', 'userswp' ); ?>
+								<?php esc_attr_e( 'Make the whole profile private', 'userswp' ); ?>
                             </div>
 							<?php
 						}
 						?>
                         <input type="hidden" name="uwp_privacy_nonce"
-                               value="<?php echo wp_create_nonce( 'uwp-privacy-nonce' ); ?>"/>
-                        <input name="uwp_privacy_submit" class="<?php echo $bs_btn_class; ?>"
-                               value="<?php echo __( 'Submit', 'userswp' ); ?>" type="submit">
+                               value="<?php echo esc_attr( wp_create_nonce( 'uwp-privacy-nonce' ) ); ?>"/>
+                        <input name="uwp_privacy_submit" class="<?php echo esc_attr( $bs_btn_class ); ?>"
+                               value="<?php esc_attr_e( 'Submit', 'userswp' ); ?>" type="submit">
                     </form>
                 </div>
             </div>

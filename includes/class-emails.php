@@ -144,11 +144,11 @@ class UsersWP_Mails {
 		ob_start();
 
 		if ( $plain_text ) {
-			echo wp_strip_all_tags( $message );
+			echo esc_attr( wp_strip_all_tags( $message ) );
 		} else {
 			do_action( 'uwp_email_header', $email_heading, $email_name, $email_vars, $plain_text, $sent_to_admin );
 
-			echo wpautop( wptexturize( $message ) );
+			echo wp_kses_post( wpautop( wptexturize( $message ) ) );
 
 			do_action( 'uwp_email_footer', $email_name, $email_vars, $plain_text, $sent_to_admin );
 		}
