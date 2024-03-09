@@ -30,12 +30,12 @@ class UsersWP_Admin_Setup_Wizard {
 		if ( isset( $show_notice ) && 1 == $show_notice ) {
 			?>
             <div id="message" class="updated notice-alt uwp-message">
-                <p><?php _e( '<strong>Welcome to UsersWP</strong> &#8211; You&lsquo;re almost ready to start your site. :)', 'userswp' ); ?></p>
+                <p><?php esc_html_e( '<strong>Welcome to UsersWP</strong> &#8211; You&lsquo;re almost ready to start your site. :)', 'userswp' ); ?></p>
                 <p class="submit">
                     <a href="<?php echo esc_url( admin_url( 'admin.php?page=uwp-setup' ) ); ?>"
-                       class="button-primary"><?php _e( 'Run the Setup Wizard', 'userswp' ); ?></a>
+                       class="button-primary"><?php esc_html_e( 'Run the Setup Wizard', 'userswp' ); ?></a>
                     <a class="button-secondary skip"
-                       href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'uwp-hide-notice', 'install' ), 'uwp_hide_notices_nonce', '_uwp_notice_nonce' ) ); ?>"><?php _e( 'Skip setup', 'userswp' ); ?></a>
+                       href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'uwp-hide-notice', 'install' ), 'uwp_hide_notices_nonce', '_uwp_notice_nonce' ) ); ?>"><?php esc_html_e( 'Skip setup', 'userswp' ); ?></a>
                 </p>
             </div>
 			<?php
@@ -48,11 +48,11 @@ class UsersWP_Admin_Setup_Wizard {
 		if ( isset( $_GET['uwp-hide-notice'] ) && isset( $_GET['_uwp_notice_nonce'] ) ) {
 
 			if ( ! wp_verify_nonce( $_GET['_uwp_notice_nonce'], 'uwp_hide_notices_nonce' ) ) {
-				wp_die( __( 'Action failed. Please refresh the page and retry.', 'userswp' ) );
+				wp_die( esc_html__( 'Action failed. Please refresh the page and retry.', 'userswp' ) );
 			}
 
 			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_die( __( 'Cheatin&#8217; huh?', 'userswp' ) );
+				wp_die( esc_html__( 'Cheatin&#8217; huh?', 'userswp' ) );
 			}
 
 			delete_option( 'uwp_setup_wizard_notice' );
@@ -198,8 +198,8 @@ class UsersWP_Admin_Setup_Wizard {
 	public function setup_introduction() {
 		?>
         <h2><?php esc_html_e( 'Thank you for choosing UsersWP!', 'userswp' ); ?></h2>
-        <p><?php _e( 'This quick setup wizard will help you configure the basic settings. It\'s completely optional and shouldn\'t take longer than two minutes.', 'userswp' ); ?></p>
-        <p><?php _e( 'No time right now? If you don\'t want to go through the wizard, you can skip and return to the WordPress dashboard. Come back anytime if you change your mind!', 'userswp' ); ?></p>
+        <p><?php esc_html_e( 'This quick setup wizard will help you configure the basic settings. It\'s completely optional and shouldn\'t take longer than two minutes.', 'userswp' ); ?></p>
+        <p><?php esc_html_e( 'No time right now? If you don\'t want to go through the wizard, you can skip and return to the WordPress dashboard. Come back anytime if you change your mind!', 'userswp' ); ?></p>
 
         <p class="uwp-setup-actions step">
             <a href="<?php echo esc_url( admin_url() ); ?>"
@@ -292,23 +292,23 @@ class UsersWP_Admin_Setup_Wizard {
                         <td>
                             <p class="description-tooltip danger" style="color: red;"><i
                                         class="fas fa-exclamation-circle"></i>
-                                <strong><?php _e( 'Heads Up!', 'userswp' ); ?></strong> <?php _e( ' User registration is currently not allowed.', 'userswp' ); ?>
+                                <strong><?php esc_html_e( 'Heads Up!', 'userswp' ); ?></strong> <?php esc_html_e( ' User registration is currently not allowed.', 'userswp' ); ?>
                             </p>
                             <label><input class="uwp-general-seetings" name="registration" type="radio"
                                           id="registration1"
-                                          value="none"<?php checked( $reg, 'none' ); ?> /> <?php _e( 'Registration is disabled', 'userswp' ); ?>
+                                          value="none"<?php checked( $reg, 'none' ); ?> /> <?php esc_html_e( 'Registration is disabled', 'userswp' ); ?>
                             </label><br/>
                             <label><input class="uwp-general-seetings" name="registration" type="radio"
                                           id="registration2"
-                                          value="user"<?php checked( $reg, 'user' ); ?> /> <?php _e( 'User accounts may be registered', 'userswp' ); ?>
+                                          value="user"<?php checked( $reg, 'user' ); ?> /> <?php esc_html_e( 'User accounts may be registered', 'userswp' ); ?>
                             </label><br/>
                             <label><input class="uwp-general-seetings" name="registration" type="radio"
                                           id="registration3"
-                                          value="blog"<?php checked( $reg, 'blog' ); ?> /> <?php _e( 'Logged in users may register new sites', 'userswp' ); ?>
+                                          value="blog"<?php checked( $reg, 'blog' ); ?> /> <?php esc_html_e( 'Logged in users may register new sites', 'userswp' ); ?>
                             </label><br/>
                             <label><input class="uwp-general-seetings" name="registration" type="radio"
                                           id="registration4"
-                                          value="all"<?php checked( $reg, 'all' ); ?> /> <?php _e( 'Both sites and user accounts can be registered', 'userswp' ); ?>
+                                          value="all"<?php checked( $reg, 'all' ); ?> /> <?php esc_html_e( 'Both sites and user accounts can be registered', 'userswp' ); ?>
                             </label>
                         </td>
                         <td></td>
@@ -326,10 +326,10 @@ class UsersWP_Admin_Setup_Wizard {
                         <td>
                             <p class="description-tooltip danger" style="color: red;"><i
                                         class="fas fa-exclamation-circle"></i>
-                                <strong><?php _e( 'Heads Up!', 'userswp' ); ?></strong> <?php _e( ' User registration is currently not allowed.', 'userswp' ); ?>
+                                <strong><?php esc_html_e( 'Heads Up!', 'userswp' ); ?></strong> <?php esc_html_e( ' User registration is currently not allowed.', 'userswp' ); ?>
                             </p>
                             <input type="checkbox" name="users_can_register" class="uwp-general-seetings" value="1">
-                            <strong><?php _e( " Anyone can register", "userswp" ); ?></strong>
+                            <strong><?php esc_html_e( " Anyone can register", "userswp" ); ?></strong>
                         </td>
                         <td></td>
                     </tr>
@@ -347,19 +347,19 @@ class UsersWP_Admin_Setup_Wizard {
             <tr>
                 <td>
                     <input type="checkbox" name="login_register_page" class="use-uwp-pages" value="1" checked>
-                    <strong><?php _e( "Login/Register", "userswp" ); ?></strong></td>
+                    <strong><?php esc_html_e( "Login/Register", "userswp" ); ?></strong></td>
                 <td></td>
             </tr>
             <tr>
                 <td>
                     <input type="checkbox" name="user_profiles_page" class="use-uwp-pages" value="1" checked>
-                    <strong><?php _e( "User Profiles", "userswp" ); ?></strong></td>
+                    <strong><?php esc_html_e( "User Profiles", "userswp" ); ?></strong></td>
                 <td></td>
             </tr>
             <tr>
                 <td>
                     <input type="checkbox" name="member_directory_page" class="use-uwp-pages" value="1" checked>
-                    <strong><?php _e( "Members Directory", "userswp" ); ?></strong></td>
+                    <strong><?php esc_html_e( "Members Directory", "userswp" ); ?></strong></td>
                 <td></td>
             </tr>
             </tbody>
@@ -373,10 +373,10 @@ class UsersWP_Admin_Setup_Wizard {
             <tbody>
             <tr>
                 <td>
-                    <strong><?php _e( "Select the theme main menu", "userswp" ); ?></strong>
+                    <strong><?php esc_html_e( "Select the theme main menu", "userswp" ); ?></strong>
                 </td>
                 <td style="width: 20%">
-                    <strong><?php _e( "Action", "userswp" ); ?></strong>
+                    <strong><?php esc_html_e( "Action", "userswp" ); ?></strong>
                 </td>
             </tr>
             <tr>
@@ -390,20 +390,19 @@ class UsersWP_Admin_Setup_Wizard {
 						echo "<select id='uwp_wizard_menu_id' data-type='add' class='uwp-select'>";
 
 						foreach ( $set_menus as $menu_location => $menu_id ) {
-							$selected = '';
+							$selected = false;
 
 							if ( strpos( strtolower( $menu_location ), 'primary' ) !== false || strpos( strtolower( $menu_location ), 'main' ) !== false ) {
-								$selected = 'selected="selected"';
+								$selected = true;
 							}
 
 							$menu_item = wp_get_nav_menus( $menu_id )[0];
 
 							?>
-                            <option value="<?php echo esc_attr( $menu_id ); ?>" <?php echo $selected; ?>>
-								<?php echo esc_attr( $menu_item->name );
+                            <option value="<?php echo esc_attr( $menu_id ); ?>" <?php selected( $selected, true ); ?>>
+								<?php echo esc_html( $menu_item->name );
 								if ( $selected ) {
-									echo ' ';
-									_e( '( Auto detected )', 'userswp' );
+									echo ' ' . esc_html__( '( Auto detected )', 'userswp' );
 								} ?>
                             </option>
 							<?php
@@ -419,18 +418,17 @@ class UsersWP_Admin_Setup_Wizard {
 							echo "<select id='uwp_wizard_menu_location' data-type='create' class='uwp-select'>";
 
 							foreach ( $menus as $menu_slug => $menu_name ) {
-								$selected = '';
+								$selected = false;
 
 								if ( strpos( strtolower( $menu_slug ), 'primary' ) !== false || strpos( strtolower( $menu_slug ), 'main' ) !== false ) {
-									$selected = 'selected="selected"';
+									$selected = true;
 								}
 								?>
-                                <option value="<?php echo esc_attr( $menu_slug ); ?>" <?php echo $selected; ?>>
-									<?php _e( 'Create new menu in:', 'userswp' );
-									echo ' ' . esc_attr( $menu_name );
+                                <option value="<?php echo esc_attr( $menu_slug ); ?>" <?php selected( $selected, true ); ?>>
+									<?php esc_html_e( 'Create new menu in:', 'userswp' );
+									echo ' ' . esc_html__( $menu_name );
 									if ( $selected ) {
-										echo ' ';
-										_e( '( Auto detected )', 'userswp' );
+										echo ' ' . esc_html__( '( Auto detected )', 'userswp' );
 									} ?>
                                 </option>
 								<?php
@@ -442,9 +440,9 @@ class UsersWP_Admin_Setup_Wizard {
                     <div class="notice inline notice-success notice-alt uwp-wizard-menu uwp-wizard-menu-result"></div>
                 </td>
                 <td>
-                    <input type="button" value="<?php _e( "Insert menu items", "userswp" ); ?>"
+                    <input type="button" value="<?php esc_attr_e( "Insert menu items", "userswp" ); ?>"
                            class="button-primary uwp_dummy_button"
-                           onclick="uwp_wizard_setup_menu('<?php echo wp_create_nonce( "uwp-wizard-setup-menu" ); ?>'); return false;">
+                           onclick="uwp_wizard_setup_menu('<?php echo esc_attr( wp_create_nonce( "uwp-wizard-setup-menu" ) ); ?>'); return false;">
                 </td>
             </tr>
             </tbody>
@@ -467,17 +465,17 @@ class UsersWP_Admin_Setup_Wizard {
             <tbody>
             <tr>
                 <td>
-                    <p><?php echo sprintf( __( 'Dummy Users for Testing. Password for all dummy users: <strong>%s</strong>', 'userswp' ), $get_dummy_user_passowrd ); ?></p>
+                    <p><?php echo wp_sprintf( __( 'Dummy Users for Testing. Password for all dummy users: <strong>%s</strong>', 'userswp' ), $get_dummy_user_passowrd ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
                 </td>
                 <td style="width: 20%">
                     <input style="display: <?php echo ( $total_dummy_users > 0 ) ? 'block' : 'none'; ?>" type="button"
-                           value="<?php _e( 'Remove', 'userswp' ); ?>"
+                           value="<?php esc_attr_e( 'Remove', 'userswp' ); ?>"
                            class="button-primary button uwp_diagnosis_button uwp_dummy_users_button uwp_remove_dummy_users_button"
-                           onclick="uwp_wizard_setup_dummy_users('<?php echo wp_create_nonce( "uwp_process_diagnosis" ); ?>','remove_dummy_users'); return false;"/>
+                           onclick="uwp_wizard_setup_dummy_users('<?php echo esc_attr( wp_create_nonce( "uwp_process_diagnosis" ) ); ?>','remove_dummy_users'); return false;"/>
                     <input style="display: <?php echo ( $total_dummy_users > 0 ) ? 'none' : 'block'; ?>" type="button"
-                           value="<?php _e( "Create Users", "userswp" ); ?>"
+                           value="<?php esc_attr_e( "Create Users", "userswp" ); ?>"
                            class="button-primary button uwp_diagnosis_button uwp_dummy_users_button uwp_add_dummy_users_button"
-                           onclick="uwp_wizard_setup_dummy_users('<?php echo wp_create_nonce( "uwp_process_diagnosis" ); ?>','add_dummy_users'); return false;">
+                           onclick="uwp_wizard_setup_dummy_users('<?php echo esc_attr( wp_create_nonce( "uwp_process_diagnosis" ) ); ?>','add_dummy_users'); return false;">
                 </td>
             </tr>
             <tr>
@@ -602,8 +600,8 @@ class UsersWP_Admin_Setup_Wizard {
 		?>
         <form method="post">
             <div class="uwp-wizard-recommend">
-                <h2 class="uwp-settings-title "><?php _e( "Recommended Plugins", "userswp" ); ?></h2>
-                <p><?php _e( "Below are a few recommended plugins that will help you with your site.", "userswp" ); ?></p>
+                <h2 class="uwp-settings-title "><?php esc_html_e( "Recommended Plugins", "userswp" ); ?></h2>
+                <p><?php esc_html_e( "Below are a few recommended plugins that will help you with your site.", "userswp" ); ?></p>
 				<?php
 				include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
 
@@ -615,8 +613,8 @@ class UsersWP_Admin_Setup_Wizard {
 					$installed_text  = '<i class="fas fa-check-circle" aria-hidden="true"></i> ' . __( 'Installed', 'userswp' );
 					$installing_text = '<i class="fas fa-sync fa-spin" aria-hidden="true"></i> ' . __( 'Installing', 'userswp' );
 
-					echo "<input type='hidden' id='uwp-installing-text' value='$installing_text' >";
-					echo "<input type='hidden' id='uwp-installed-text' value='$installed_text' >";
+					echo "<input type='hidden' id='uwp-installing-text' value='" . esc_attr( $installing_text ) . "' >";
+					echo "<input type='hidden' id='uwp-installed-text' value='" . esc_attr( $installed_text ) . "' >";
 
 					foreach ( $recommend_wp_plugins as $plugin ) {
 						$status = install_plugin_install_status( array( "slug" => $plugin['slug'], "version" => "" ) );
@@ -634,18 +632,17 @@ class UsersWP_Admin_Setup_Wizard {
 							$checkbox_class = "";
 						}
 
-						$uwp_html_tip = '<span class="uwp-help-tip dashicons dashicons-editor-help" title="' . $plugin['desc'] . '"></span>';
-						echo "<li class='" . $plugin['slug'] . "'>";
-						echo "<input type='checkbox' id='" . $plugin['slug'] . "' $checked $disabled $checkbox_class />";
-						echo $plugin['name'] . " " . $uwp_html_tip;
-						echo " | <a href='" . admin_url( "plugin-install.php?uwp_wizard_recommend=true&tab=plugin-information&plugin=" . $plugin['slug'] . '&TB_iframe=true&width=772&height=407' ) . "' class='thickbox'>" . __( 'More info', 'userswp' ) . "</a>";
+						$uwp_html_tip = '<span class="uwp-help-tip dashicons dashicons-editor-help" title="' . esc_attr( $plugin['desc'] ) . '"></span>';
+						echo "<li class='" . esc_attr( $plugin['slug'] ) . "'>";
+						echo "<input type='checkbox' id='" . esc_attr( $plugin['slug'] ) . "' $checked $disabled $checkbox_class />" . $plugin['name'] . " " . $uwp_html_tip; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo " | <a href='" . esc_url( admin_url( "plugin-install.php?uwp_wizard_recommend=true&tab=plugin-information&plugin=" . $plugin['slug'] . '&TB_iframe=true&width=772&height=407' ) ) . "' class='thickbox'>" . esc_html__( 'More info', 'userswp' ) . "</a>";
 						if ( $plugin_status == 'install' && $url ) {
-							echo " | <span class='uwp-plugin-status' >( " . __( 'Tick to install', 'userswp' ) . " )</span>";
+							echo " | <span class='uwp-plugin-status' >( " . esc_html__( 'Tick to install', 'userswp' ) . " )</span>";
 						} else {
 							if ( ! empty( $plugin_status ) ) {
 								$plugin_status = $installed_text;
 							}
-							echo " | <span class='uwp-plugin-status'>$plugin_status</span>";
+							echo " | <span class='uwp-plugin-status'>" . esc_html( $plugin_status ) . "</span>";
 						}
 						echo "</li>";
 
@@ -662,7 +659,7 @@ class UsersWP_Admin_Setup_Wizard {
                        value="<?php esc_attr_e( 'Continue', 'userswp' ); ?>" name="save_step"/>
                 <input type="submit" class="button-primary button button-large button-next uwp-install-recommend"
                        value="<?php esc_attr_e( 'Install', 'userswp' ); ?>" name="install_recommend"
-                       onclick="uwp_wizard_install_plugins('<?php echo wp_create_nonce( 'updates' ); ?>');return false;"/>
+                       onclick="uwp_wizard_install_plugins('<?php echo esc_attr( wp_create_nonce( 'updates' ) ); ?>');return false;"/>
             </p>
         </form>
 		<?php
@@ -705,10 +702,10 @@ class UsersWP_Admin_Setup_Wizard {
 		?>
         <h2><?php esc_html_e( 'Awesome, you are ready to go!', 'userswp' ); ?></h2>
         <div class="uwp-message">
-            <p><?php _e( 'Thank you for using UsersWP :)', 'userswp' ); ?></p>
+            <p><?php esc_html_e( 'Thank you for using UsersWP :)', 'userswp' ); ?></p>
         </div>
         <div class="uwp-setup-next-steps-last">
-            <h2><?php _e( 'Learn more', 'userswp' ); ?></h2>
+            <h2><?php esc_html_e( 'Learn more', 'userswp' ); ?></h2>
             <ul>
                 <li class="uwp-getting-started">
                     <a href="https://userswp.io/docs/?utm_source=setupwizard&utm_medium=product&utm_content=getting-started&utm_campaign=userswpplugin"

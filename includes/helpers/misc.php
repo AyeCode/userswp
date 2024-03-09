@@ -399,7 +399,7 @@ function get_uwp_users_list($roles = array()) {
             WHERE 1=1 $keyword_query $exclude_query  $where ORDER BY display_name ASC";
 		}
 
-		$user_results = $wpdb->get_results($user_query);
+		$user_results = $wpdb->get_results($user_query); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$get_users = wp_list_pluck($user_results, 'ID');
 
 		if(isset($roles) && is_array($roles) && count($roles) > 0){
@@ -656,14 +656,14 @@ function uwp_add_account_menu_links() {
 			?>
             <li class="nav-item m-0 p-0 list-unstyled mx-md-2 mx-2">
                 <a class="nav-link text-decoration-none uwp-account-<?php echo $tab_id.' '.$active; ?>" href="<?php echo esc_url( $tab_url ); ?>">
-					<?php echo '<i class="'.esc_attr($tab["icon"]).' mr-1 fa-fw"></i>'.sanitize_text_field($tab['title']); ?>
+					<?php echo '<i class="'.esc_attr($tab["icon"]).' mr-1 fa-fw"></i>'.esc_html($tab['title']); ?>
                 </a>
             </li>
 			<?php
 
 			$legacy .= '<li id="uwp-account-'.$tab_id.'">';
 			$legacy .= '<a class="'.$active.'" href="'.esc_url( $tab_url ).'">';
-			$legacy .= '<i class="'.esc_attr($tab["icon"]).'"></i>'.sanitize_text_field($tab["title"]);
+			$legacy .= '<i class="'.esc_attr($tab["icon"]).'"></i>'.esc_html($tab["title"]);
 			$legacy .= '</a></li>';
 		}
 		?>
@@ -673,9 +673,9 @@ function uwp_add_account_menu_links() {
 	$bs_output = ob_get_clean();
 	$style = uwp_get_option('design_style', 'bootstrap');
 	if(!empty($style)){
-		echo $bs_output;
+		echo $bs_output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	} else {
-		echo $legacy;
+		echo $legacy; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
 
@@ -702,7 +702,7 @@ function uwp_form_extras_field_order($field_ids = array(), $form_type = 'registe
 
 			$cf = trim($id, '_');
 
-			$wpdb->update(
+			$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$extras_table_name,
 				array(
 					'sort_order' => $count,
@@ -1299,7 +1299,7 @@ function uwp_insert_usermeta(){
 	global $wpdb;
 	$sort= "user_registered";
 
-	$all_users_id = $wpdb->get_col( $wpdb->prepare(
+	$all_users_id = $wpdb->get_col( $wpdb->prepare( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		"SELECT $wpdb->users.ID FROM $wpdb->users ORDER BY %s ASC"
 		, $sort ));
 
@@ -1316,17 +1316,17 @@ function uwp_insert_usermeta(){
 			'display_name' => $user_data->display_name,
 		);
 
-		$users = $wpdb->get_var($wpdb->prepare("SELECT COUNT(user_id) FROM {$meta_table} WHERE user_id = %d", $user_id));
+		$users = $wpdb->get_var($wpdb->prepare("SELECT COUNT(user_id) FROM {$meta_table} WHERE user_id = %d", $user_id)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		if(!empty($users)) {
-			$wpdb->update(
+			$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$meta_table,
 				$user_meta,
 				array('user_id' => $user_id)
 			);
 		}  else {
 			$user_meta['user_id'] = $user_id;
-			$wpdb->insert(
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$meta_table,
 				$user_meta
 			);
@@ -1467,7 +1467,7 @@ function uwp_authbox_tags( $inline = true ){
 
 	$excluded = uwp_get_excluded_fields();
 
-	$columns = $wpdb->get_col("show columns from $table_name");
+	$columns = $wpdb->get_col("show columns from $table_name"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 	$extra_tags = array_diff($columns,$excluded);
 
@@ -1730,7 +1730,7 @@ function uwp_get_activation_link($user_id){
 		$wp_hasher = new PasswordHash( 8, true );
 	}
 	$hashed = $wp_hasher->HashPassword( $key );
-	$wpdb->update( $wpdb->users, array( 'user_activation_key' => time().":".$hashed ), array( 'user_login' => $user_data->user_login ) );
+	$wpdb->update( $wpdb->users, array( 'user_activation_key' => time().":".$hashed ), array( 'user_login' => $user_data->user_login ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	update_user_meta( $user_id, 'uwp_mod', 'email_unconfirmed' );
 
 	$activation_link = add_query_arg(
@@ -1758,7 +1758,7 @@ function uwp_min_version_check( $name, $version ) {
 		add_action( 'admin_notices', function () use ( &$name ) {
 			?>
             <div class="notice notice-error is-dismissible">
-                <p><?php echo sprintf( __( "%s requires a newer version of UsersWP and will not run until the UsersWP plugin is updated.", "userswp" ), $name ); ?></p>
+                <p><?php echo esc_html( wp_sprintf( __( "%s requires a newer version of UsersWP and will not run until the UsersWP plugin is updated.", "userswp" ), $name ) ); ?></p>
             </div>
 			<?php
 		} );
@@ -1799,9 +1799,7 @@ function uwp_get_sort_by_order_list(){
 	global $wpdb;
 	$table_name = uwp_get_table_prefix() . 'uwp_user_sorting';
 
-	$sort_options_raw = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE is_active = %d AND field_type != 'address' AND tab_parent = '0' ORDER BY sort_order ASC", array(
-		1
-	) ) );
+	$sort_options_raw = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE is_active = %d AND field_type != 'address' AND tab_parent = '0' ORDER BY sort_order ASC", array( 1 ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 
 	$sort_options = array();
 
@@ -1850,7 +1848,7 @@ function uwp_get_default_sort(){
     global $wpdb;
 	$table_name = uwp_get_table_prefix() . 'uwp_user_sorting';
 
-	$field = $wpdb->get_row("SELECT htmlvar_name, sort, field_type FROM " . $table_name . " WHERE is_active = 1 AND is_default = 1 ORDER BY sort_order ASC" );
+	$field = $wpdb->get_row("SELECT htmlvar_name, sort, field_type FROM " . $table_name . " WHERE is_active = 1 AND is_default = 1 ORDER BY sort_order ASC" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 	if ( ! empty( $field ) ) {
 		if ( $field->field_type == 'random' ) {
 			$default_sort = 'random';

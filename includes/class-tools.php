@@ -41,8 +41,8 @@ class UsersWP_Tools {
     public function tools_wrap_error_message($message, $class) {
         ob_start();
         ?>
-        <div class="notice inline notice-<?php echo $class; ?> notice-alt">
-            <p><?php echo $message; ?></p>
+        <div class="notice inline notice-<?php echo esc_attr( $class ); ?> notice-alt">
+            <p><?php echo wp_kses_post( $message ); ?></p>
         </div>
         <?php
         $html = ob_get_clean();
@@ -63,7 +63,7 @@ class UsersWP_Tools {
 
         $form_type = 'account';
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT htmlvar_name FROM " . $table_name . " WHERE form_type = %s ORDER BY sort_order ASC", array($form_type)));
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT htmlvar_name FROM " . $table_name . " WHERE form_type = %s ORDER BY sort_order ASC", array($form_type))); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
         $excluded = uwp_get_excluded_fields();
@@ -100,7 +100,7 @@ class UsersWP_Tools {
         global $wpdb;
         $form_type = 'account';
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-        $fields = $wpdb->get_results($wpdb->prepare("SELECT htmlvar_name FROM " . $table_name . " WHERE form_type = %s ORDER BY sort_order ASC", array($form_type)));
+        $fields = $wpdb->get_results($wpdb->prepare("SELECT htmlvar_name FROM " . $table_name . " WHERE form_type = %s ORDER BY sort_order ASC", array($form_type))); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
         $excluded = uwp_get_excluded_fields();
 
@@ -136,7 +136,7 @@ class UsersWP_Tools {
         $items_per_page = apply_filters('tools_process_fix_usermeta_per_page', 10, $step);
         $offset = (int) $step * $items_per_page;
 
-        $user_ids = $wpdb->get_col( $wpdb->prepare(
+        $user_ids = $wpdb->get_col( $wpdb->prepare( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             "SELECT $wpdb->users.ID FROM $wpdb->users LIMIT %d OFFSET %d",
             $items_per_page, $offset ));
 
@@ -333,7 +333,7 @@ class UsersWP_Tools {
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 		// Custom fields table
 		$sql  = "SELECT site_title, form_label, help_text, required_msg, default_value, option_values, validation_msg FROM " . $table_name . " where form_type = 'account'";
-		$rows = $wpdb->get_results( $sql );
+		$rows = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		if ( ! empty( $rows ) ) {
 			foreach ( $rows as $row ) {
@@ -781,7 +781,7 @@ class UsersWP_Tools {
         ob_start();
         ?>
         <div class="wrap userswp">
-            <h1><?php echo get_admin_page_title(); ?></h1>
+            <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
         <table class="uwp-tools-table widefat">
             <tbody>
 
@@ -790,11 +790,11 @@ class UsersWP_Tools {
                 ?>
                 <tr>
                     <th>
-                        <strong class="tool-name"><?php _e('Clear version numbers', 'userswp');?></strong>
-                        <p class="tool-description"><?php _e('This will force install/upgrade functions to run.', 'userswp');?></p>
+                        <strong class="tool-name"><?php esc_html_e('Clear version numbers', 'userswp');?></strong>
+                        <p class="tool-description"><?php esc_html_e('This will force install/upgrade functions to run.', 'userswp');?></p>
                     </th>
                     <td class="run-tool">
-                        <input type="button" value="<?php _e('Run', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="clear_version_numbers"/>
+                        <input type="button" value="<?php esc_attr_e('Run', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="clear_version_numbers"/>
                     </td>
                 </tr>
 
@@ -809,11 +809,11 @@ class UsersWP_Tools {
 
                 <tr>
                     <th>
-                        <strong class="tool-name"><?php _e('Fix User Data', 'userswp');?></strong>
-                        <p class="tool-description"><?php _e('Fixes User Data if you were using the Beta version.', 'userswp');?></p>
+                        <strong class="tool-name"><?php esc_html_e('Fix User Data', 'userswp');?></strong>
+                        <p class="tool-description"><?php esc_html_e('Fixes User Data if you were using the Beta version.', 'userswp');?></p>
                     </th>
                     <td class="run-tool">
-                        <input type="button" value="<?php _e('Run', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="fix_user_data"/>
+                        <input type="button" value="<?php esc_attr_e('Run', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="fix_user_data"/>
                     </td>
                 </tr>
 
@@ -828,11 +828,11 @@ class UsersWP_Tools {
 
                 <tr>
                     <th>
-                        <strong class="tool-name"><?php _e('DB text translation', 'userswp');?></strong>
-                        <p class="tool-description"><?php _e('This tool will collect any texts stored in the DB and put them in the file db-language.php so they can then be used to translate them by translations tools.', 'userswp');?></p>
+                        <strong class="tool-name"><?php esc_html_e('DB text translation', 'userswp');?></strong>
+                        <p class="tool-description"><?php esc_html_e('This tool will collect any texts stored in the DB and put them in the file db-language.php so they can then be used to translate them by translations tools.', 'userswp');?></p>
                     </th>
                     <td class="run-tool">
-                        <input type="button" value="<?php _e('Run', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="export_db_texts"/>
+                        <input type="button" value="<?php esc_attr_e('Run', 'userswp');?>" class="button-primary uwp_diagnosis_button" data-diagnose="export_db_texts"/>
                     </td>
                 </tr>
 
@@ -847,16 +847,16 @@ class UsersWP_Tools {
 
                 <tr>
                     <th>
-                        <strong class="tool-name"><?php _e('Dummy Users', 'userswp');?></strong>
-                        <p class="tool-description"><?php _e('Dummy Users for Testing. Password for all dummy users:', 'userswp'); echo " ".self::get_dummy_user_passowrd();?></p>
+                        <strong class="tool-name"><?php esc_html_e('Dummy Users', 'userswp');?></strong>
+                        <p class="tool-description"><?php esc_html_e('Dummy Users for Testing. Password for all dummy users:', 'userswp'); echo " " . esc_html( self::get_dummy_user_passowrd() );?></p>
                     </th>
                     <td class="run-tool">
 	                    <?php
 	                    $dummy_users = get_users( array( 'meta_key' => 'uwp_dummy_user', 'meta_value' => '1', 'fields' => array( 'ID' ) ) );
 	                    $total_dummy_users = !empty( $dummy_users ) ? count($dummy_users) : 0;
 	                    ?>
-                        <input style="display: <?php echo ( $total_dummy_users > 0 ) ? 'none' :'block'; ?>" type="button" value="<?php _e('Create', 'userswp');?>" class="button-primary uwp_diagnosis_button uwp_add_dummy_users_button" data-diagnose="add_dummy_users"/>
-                        <input style="display: <?php echo ( $total_dummy_users > 0 ) ? 'block' :'none'; ?>" type="button" value="<?php _e('Remove', 'userswp');?>" class="button-primary uwp_diagnosis_button uwp_remove_dummy_users_button" data-diagnose="remove_dummy_users"/>
+                        <input style="display: <?php echo ( $total_dummy_users > 0 ) ? 'none' :'block'; ?>" type="button" value="<?php esc_attr_e('Create', 'userswp');?>" class="button-primary uwp_diagnosis_button uwp_add_dummy_users_button" data-diagnose="add_dummy_users"/>
+                        <input style="display: <?php echo ( $total_dummy_users > 0 ) ? 'block' :'none'; ?>" type="button" value="<?php esc_attr_e('Remove', 'userswp');?>" class="button-primary uwp_diagnosis_button uwp_remove_dummy_users_button" data-diagnose="remove_dummy_users"/>
                     </td>
                 </tr>
 
@@ -910,7 +910,7 @@ class UsersWP_Tools {
                         action: 'uwp_process_diagnosis',
                         step: step,
                         type: type,
-                        security: '<?php echo wp_create_nonce('uwp_process_diagnosis'); ?>',
+                        security: '<?php echo esc_js( wp_create_nonce('uwp_process_diagnosis') ); ?>',
                     },
                     beforeSend: function() {},
                     success: function(response, textStatus, xhr) {
@@ -949,7 +949,7 @@ class UsersWP_Tools {
         </script>
         <?php
 
-        echo ob_get_clean();
+        echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 
 	/**

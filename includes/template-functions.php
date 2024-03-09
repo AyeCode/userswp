@@ -143,7 +143,7 @@ function uwp_doing_it_wrong( $function, $message, $version ) {
 		do_action( 'doing_it_wrong_run', $function, $message, $version );
 		uwp_error_log( $function . ' was called incorrectly. ' . $message . '. This message was added in version ' . $version . '.' );
 	} else {
-		_doing_it_wrong( $function, $message, $version );
+		_doing_it_wrong( $function, $message, $version ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
 

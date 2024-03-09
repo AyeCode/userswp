@@ -77,18 +77,20 @@ function uwp_generic_tab_content($user, $post_type = false, $title = '', $post_i
 	    $query_args['post_type'] = $post_type;
     }
 
-    if (is_array($post_ids)) {
-        if (!empty($post_ids)) {
-	        $query_args['post__in'] = $post_ids;
-        } else {
-            // no posts found
-	        echo aui()->alert(array(
-		        'type'=>'info',
-		        'content'=> sprintf(__('No %s found', 'userswp'), strtolower($title))
-	        ));
-            return;
-        }
-    }
+	if (is_array($post_ids)) {
+		if (!empty($post_ids)) {
+			$query_args['post__in'] = $post_ids;
+		} else {
+			// no posts found
+			echo aui()->alert( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				'type'=>'info',
+				'content'=> esc_html( wp_sprintf( __( 'No %s found', 'userswp' ), strtolower( $title ) ) )
+			) );
+
+			return;
+		}
+	}
+
     // The Query
     $the_query = new WP_Query($query_args);
 
@@ -188,7 +190,7 @@ function uwp_get_tabs_privacy_by_user($user){
 	$user_meta_info = wp_cache_get( $obj_key, 'uwp_usermeta_tabs_privacy' );
 
 	if ( ! $user_meta_info ) {
-		$user_meta_info = $wpdb->get_row($wpdb->prepare("SELECT tabs_privacy FROM {$meta_table} WHERE user_id = %d", $user->ID), ARRAY_A);
+		$user_meta_info = $wpdb->get_row($wpdb->prepare("SELECT tabs_privacy FROM {$meta_table} WHERE user_id = %d", $user->ID), ARRAY_A); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		wp_cache_set( $obj_key, $user_meta_info, 'uwp_usermeta_tabs_privacy' );
 	}
 

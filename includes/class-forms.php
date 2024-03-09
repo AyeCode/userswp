@@ -105,20 +105,20 @@ class UsersWP_Forms {
 		if ( $processed ) {
 
 			if ( is_wp_error( $errors ) ) {
-				echo aui()->alert( array(
+				echo aui()->alert( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'type'    => 'error',
 					'class'   => 'text-center',
-					'content' => $errors->get_error_message()
+					'content' => wp_kses_post( $errors->get_error_message() )
 				) );
 			} else {
 				if ( $redirect ) {
 					wp_safe_redirect( $redirect );
 					exit();
 				} else {
-					echo aui()->alert( array(
+					echo aui()->alert( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'    => 'success',
 						'class'   => 'text-center',
-						'content' => $message
+						'content' => wp_kses_post( $message )
 					) );
 				}
 			}
@@ -264,11 +264,11 @@ class UsersWP_Forms {
 			// check we are not editing another user file
 			$db_value = trailingslashit( $uploads['subdir'] ) . $thumb_image_name;
 			$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
-			$file_exists = $wpdb->get_var($wpdb->prepare("SELECT user_id FROM {$meta_table} WHERE ( `avatar_thumb` = %s OR `banner_thumb` = %s ) ", $db_value, $db_value));
+			$file_exists = $wpdb->get_var($wpdb->prepare("SELECT user_id FROM {$meta_table} WHERE ( `avatar_thumb` = %s OR `banner_thumb` = %s ) ", $db_value, $db_value)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 			// if file already exists then we should not be cropping it.
 			if( $file_exists ){
-				wp_die(  __( 'Something went wrong. Please contact site admin.', 'userswp' ), 403 );
+				wp_die( esc_html__( 'Something went wrong. Please contact site admin.', 'userswp' ), 403 );
 			}
 
 			$cropped = uwp_resizeThumbnailImage( $thumb_image_location, $image_path, $x, $y, $w, $h, $scale );
@@ -408,7 +408,7 @@ class UsersWP_Forms {
 	public function output_dashboard_links( $options ) {
 		if ( ! empty( $options ) ) {
 			$class = uwp_get_option( "design_style", 'bootstrap' ) == 'bootstrap' ? 'form-control' : 'aui-select2';
-			echo "<select class='$class' onchange='window.location = jQuery(this).val();'>";
+			echo '<select class="' . esc_attr( $class ) . '" onchange="window.location = jQuery(this).val();">';
 			$this->output_options( $options );
 			echo "</select>";
 		}
@@ -435,11 +435,7 @@ class UsersWP_Forms {
 					} elseif ( ! empty( $link['optgroup'] ) && $link['optgroup'] == 'close' ) {
 						echo "</optgroup>";
 					} elseif ( ! empty( $link['text'] ) ) {
-						$disabled     = ! empty( $link['disabled'] ) ? 'disabled' : '';
-						$selected     = ! empty( $link['selected'] ) ? 'selected' : '';
-						$value        = ! empty( $link['url'] ) ? esc_url( $link['url'] ) : '';
-						$display_none = ! empty( $link['display_none'] ) ? 'style="display:none;"' : '';
-						echo "<option $disabled $selected value='$value' $display_none>";
+						echo '<option value="' . ( ! empty( $link['url'] ) ? esc_url( $link['url'] ) : '' ) . '"' . selected( ! empty( $link['selected'] ), true, false ) . ( ! empty( $link['disabled'] ) ? ' disabled' : '' ) . '' . ( ! empty( $link['display_none'] ) ? ' style="display:none;"' : '' ) . '>';
 						echo esc_attr__( $link['text'], 'userswp' );
 						echo "</option>";
 					}
@@ -468,12 +464,12 @@ class UsersWP_Forms {
 				if ( is_array( $notice ) ) {
 					foreach ( $notice as $key => $val ) {
 						if ( $key == $type ) {
-							echo $val;
+							echo wp_kses_post( $val );
 						}
 					}
 				} else {
 					if ( ! empty( $notice ) ) {
-						echo $notice;
+						echo wp_kses_post( $notice );
 					}
 				}
 
@@ -492,17 +488,17 @@ class UsersWP_Forms {
 				if ( isset( $_GET['uwp_remove_nag'] ) && $_GET['uwp_remove_nag'] == 'yes' ) {
 					delete_user_meta( $user_id, 'default_password_nag' );
 					$message = sprintf( __( 'We have removed the system generated password warning for you. From this point forward you can continue to access our site as usual. To go to home page, <a href="%s">click here</a>.', 'userswp' ), home_url( '/' ) );
-					echo aui()->alert( array(
+					echo aui()->alert( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'class'   => 'text-center',
 						'type'    => 'success',
-						'content' => $message
+						'content' => wp_kses_post( $message )
 					) );
 				} else {
 					$message = sprintf( __( '<strong>Warning</strong>: It seems like you are using a system generated password. Please change the password in this page. If this is not a problem for you, you can remove this warning by <a href="%s">clicking here</a>.', 'userswp' ), $remove_nag_url );
-					echo aui()->alert( array(
+					echo aui()->alert( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'class'   => 'text-center',
 						'type'    => 'warning',
-						'content' => $message
+						'content' => wp_kses_post( $message )
 					) );
 				}
 			}
@@ -527,7 +523,7 @@ class UsersWP_Forms {
 		global $uwp_notices;
 
 		if ( isset( $data['uwp_register_hp'] ) && '' != $data['uwp_register_hp'] ) {
-			wp_die( __( 'No spam please!', 'userswp' ) );
+			wp_die( esc_html__( 'No spam please!', 'userswp' ) );
 		}
 
 		if ( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce' ) ) {
@@ -1274,21 +1270,21 @@ class UsersWP_Forms {
 					<p><?php esc_html_e( 'Please enter the authentication code from your 2FA authentication app below to login:', 'userswp' ); ?></p>
 					<?php
 
-					echo aui()->input( array(
+					echo aui()->input( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'        => 'tel',
 						'id'          => 'authcode',
 						'name'        => 'authcode',
-						'placeholder' => __( 'Authentication Code', 'userswp' ),
+						'placeholder' => esc_attr__( 'Authentication Code', 'userswp' ),
 						'value'       => '',
-						'label'       => __( 'Authentication Code', 'userswp' ),
+						'label'       => esc_html__( 'Authentication Code', 'userswp' ),
 					) );
 
-					echo aui()->button( array(
+					echo aui()->button( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'    => 'submit',
 						'class'   => 'btn btn-primary btn-block text-uppercase uwp-2fa-submit',
 						'name'    => 'submit',
 						'icon'    => '',
-						'content' => __( 'Log In', 'userswp' ),
+						'content' => esc_html__( 'Log In', 'userswp' ),
 					) );
 
 				} elseif ( 'email' === $provider ) {
@@ -1299,30 +1295,30 @@ class UsersWP_Forms {
 					?>
 					<p><?php esc_html_e( 'Please enter the 2FA verification code sent to your email address to login:', 'userswp' ); ?></p>
 					<?php
-					echo aui()->input( array(
+					echo aui()->input( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'             => 'tel',
 						'id'               => 'authcode',
 						'name'             => 'wp-2fa-email-code',
-						'placeholder'      => __( 'Verification Code', 'userswp' ),
+						'placeholder'      => esc_attr__( 'Verification Code', 'userswp' ),
 						'value'            => '',
-						'label'            => __( 'Verification Code', 'userswp' ),
+						'label'            => esc_html__( 'Verification Code', 'userswp' ),
 						'extra_attributes' => array( 'size' => 20, 'pattern' => "[0-9]*" ),
 					) );
 
-					echo aui()->button( array(
+					echo aui()->button( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'    => 'submit',
 						'class'   => 'btn btn-primary text-uppercase uwp-2fa-submit',
 						'name'    => 'submit',
 						'icon'    => '',
-						'content' => __( 'Log In', 'userswp' ),
+						'content' => esc_html__( 'Log In', 'userswp' ),
 					) );
 
-					echo aui()->button( array(
+					echo aui()->button( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'    => 'button',
 						'class'   => 'btn btn-secondary text-uppercase uwp-2fa-email-resend',
 						'name'    => 'wp-2fa-email-code-resend',
 						'icon'    => '',
-						'content' => __( 'Resend Code', 'userswp' ),
+						'content' => esc_html__( 'Resend Code', 'userswp' ),
 					) );
 
 				}
@@ -1344,22 +1340,22 @@ class UsersWP_Forms {
 					       value="<?php echo esc_attr( $login_nonce['key'] ); ?>"/>
 					<div class="uwp-backup-fields">
 						<?php
-						echo aui()->input( array(
+						echo aui()->input( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'type'             => 'tel',
 							'id'               => 'authcode',
 							'name'             => 'wp-2fa-backup-code',
-							'placeholder'      => __( 'Enter backup code', 'userswp' ),
+							'placeholder'      => esc_attr__( 'Enter backup code', 'userswp' ),
 							'value'            => '',
-							'label'            => __( 'Backup Code', 'userswp' ),
+							'label'            => esc_html__( 'Backup Code', 'userswp' ),
 							'extra_attributes' => array( 'size' => 20, 'pattern' => "[0-9]*" ),
 						) );
 
-						echo aui()->button( array(
+						echo aui()->button( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'type'    => 'submit',
 							'class'   => 'btn btn-primary btn-block text-uppercase uwp-2fa-submit',
 							'name'    => 'submit',
 							'icon'    => '',
-							'content' => __( 'Log In', 'userswp' ),
+							'content' => esc_html__( 'Log In', 'userswp' ),
 						) );
 						?>
 					</div>
@@ -1668,7 +1664,7 @@ class UsersWP_Forms {
 				$wp_hasher = new PasswordHash( 8, true );
 			}
 			$hashed = $wp_hasher->HashPassword( $key );
-			$wpdb->update( $wpdb->users, array( 'user_activation_key' => time() . ":" . $hashed ), array( 'user_login' => $user_data->user_login ) );
+			$wpdb->update( $wpdb->users, array( 'user_activation_key' => time() . ":" . $hashed ), array( 'user_login' => $user_data->user_login ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$message    = '<p>' . __( 'You have requested to reset your password for the following account:', 'userswp' ) . "</p>";
 			$message    .= home_url( '/' ) . "</p>";
 			$message    .= '<p>' . sprintf( __( 'Username: %s', 'userswp' ), $user_data->user_login ) . "</p>";
@@ -1808,7 +1804,7 @@ class UsersWP_Forms {
 		$data = $_POST;
 
 		if ( isset( $data['uwp_reset_hp'] ) && '' != $data['uwp_reset_hp'] ) {
-			wp_die( __( 'No spam please!', 'userswp' ) );
+			wp_die( esc_html__( 'No spam please!', 'userswp' ) );
 		}
 
 		if ( ! isset( $data['uwp_reset_nonce'] ) || ! wp_verify_nonce( $data['uwp_reset_nonce'], 'uwp-reset-nonce' ) ) {
@@ -2303,24 +2299,24 @@ class UsersWP_Forms {
 
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-				echo aui()->input(
+				echo aui()->input( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					array(
-						'id'               => $field->htmlvar_name,
-						'name'             => $field->htmlvar_name,
+						'id'               => esc_attr( $field->htmlvar_name ),
+						'name'             => esc_attr( $field->htmlvar_name ),
 						'required'         => ! empty( $field->is_required ) ? true : false,
-						'label'            => $site_title . $required,
+						'label'            => wp_kses_post( $site_title . $required ),
 						'label_show'       => true,
 						'label_type'       => 'hidden',
 						'type'             => 'datepicker',
-						'title'            => $site_title,
-						'placeholder'      => uwp_get_field_placeholder( $field ),
+						'title'            => esc_html( $site_title ),
+						'placeholder'      => esc_attr( uwp_get_field_placeholder( $field ) ),
 						'class'            => '',
-						'wrap_class'       => isset( $field->css_class ) ? $field->css_class : '',
-						'value'            => $value,
-						'help_text'        => uwp_get_field_description( $field ),
-						'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
-						'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
-						'extra_attributes' => $extra_attributes
+						'wrap_class'       => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
+						'value'            => esc_attr( $value ),
+						'help_text'        => wp_kses_post( uwp_get_field_description( $field ) ),
+						'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
+						'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
+						'extra_attributes' => $extra_attributes // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					)
 				);
 			} else {
@@ -2328,27 +2324,26 @@ class UsersWP_Forms {
 				<script type="text/javascript">
 
 					jQuery(function () {
-
-						jQuery("#<?php echo $field->htmlvar_name;?>").datepicker({
+						jQuery("#<?php echo esc_attr( $field->htmlvar_name );?>").datepicker({
 							changeMonth: true, changeYear: true
 							<?php if ( $field->htmlvar_name == 'dob' ) {
 							echo ", yearRange: '1900:+0'";
 						} else {
 							echo ", yearRange: '1900:2050'";
 						}?>
-							<?php echo apply_filters( "uwp_datepicker_extra_{$field->htmlvar_name}", '' );?>});
+							<?php echo apply_filters( "uwp_datepicker_extra_{$field->htmlvar_name}", '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>});
 
-						jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("option", "dateFormat", '<?php echo $jquery_date_format;?>');
+						jQuery("#<?php echo esc_attr( $field->htmlvar_name ); ?>").datepicker("option", "dateFormat", '<?php echo esc_attr( $jquery_date_format ); ?>');
 
 						<?php if(! empty( $value )){?>
-						var parsedDate = jQuery.datepicker.parseDate('yy-mm-dd', '<?php echo $value;?>');
-						jQuery("#<?php echo $field->htmlvar_name;?>").datepicker("setDate", parsedDate);
+						var parsedDate = jQuery.datepicker.parseDate('yy-mm-dd', '<?php echo esc_attr( $value );?>');
+						jQuery("#<?php echo esc_attr( $field->htmlvar_name ); ?>").datepicker("setDate", parsedDate);
 						<?php } ?>
 
 					});
 
 				</script>
-				<div id="<?php echo $field->htmlvar_name; ?>_row"
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 				     class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
 				     } ?> clearfix uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
@@ -2357,17 +2352,17 @@ class UsersWP_Forms {
 
 					if ( ! is_admin() ) { ?>
 						<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 							<?php if ( $field->is_required ) {
 								echo '<span>*</span>';
 							} ?>
 						</label>
 					<?php } ?>
 
-					<input name="<?php echo $field->htmlvar_name; ?>"
-					       id="<?php echo $field->htmlvar_name; ?>"
-					       placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
-					       title="<?php echo $site_title; ?>"
+					<input name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					       id="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					       placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
+					       title="<?php echo esc_attr( $site_title ); ?>"
 					       type="text"
 						<?php if ( $field->is_required == 1 ) {
 							echo 'required="required"';
@@ -2375,9 +2370,9 @@ class UsersWP_Forms {
 						   value="<?php echo esc_attr( $value ); ?>"
 						   class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"/>
 
-					<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 
@@ -2436,39 +2431,38 @@ class UsersWP_Forms {
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-				echo aui()->input(
+				echo aui()->input( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					array(
-						'id'                => $field->htmlvar_name,
-						'name'              => $field->htmlvar_name,
+						'id'                => esc_attr( $field->htmlvar_name ),
+						'name'              => esc_attr( $field->htmlvar_name ),
 						'required'          => ! empty( $field->is_required ) ? true : false,
-						'label'             => $site_title . $required,
+						'label'             => wp_kses_post( $site_title . $required ),
 						'label_show'        => true,
-						'label_type'        => $label_type,
+						'label_type'        => esc_attr( $label_type ),
 						'type'              => 'timepicker',
-						'title'             => $site_title,
-						'placeholder'       => uwp_get_field_placeholder( $field ),
+						'title'             => esc_html( $site_title ),
+						'placeholder'       => esc_attr( uwp_get_field_placeholder( $field ) ),
 						'class'             => '',
-						'wrap_class'        => isset( $field->css_class ) ? $field->css_class : '',
-						'value'             => $value,
-						'help_text'         => uwp_get_field_description( $field ),
-						'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
-						'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
-						'extra_attributes'  => $extra_attributes,
-						'input_group_right' => '<div class="input-group-text px-2 bg-transparent border-0x" onclick="jQuery(this).parent().parent().find(\'input\').val(\'\');"><i class="fas fa-times uwp-search-input-label-clear text-muted c-pointer" title="' . __( 'Clear field', 'uwp-search' ) . '" ></i></div>',
+						'wrap_class'        => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
+						'value'             => esc_attr( $value ),
+						'help_text'         => wp_kses_post( uwp_get_field_description( $field ) ),
+						'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
+						'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
+						'extra_attributes'  => $extra_attributes, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						'input_group_right' => '<div class="input-group-text px-2 bg-transparent border-0x" onclick="jQuery(this).parent().parent().find(\'input\').val(\'\');"><i class="fas fa-times uwp-search-input-label-clear text-muted c-pointer" title="' . esc_attr__( 'Clear field', 'uwp-search' ) . '" ></i></div>',
 					)
 				);
 			} else {
 				?>
 				<script type="text/javascript">
 					jQuery(document).ready(function () {
-
-						jQuery('#<?php echo $field->htmlvar_name;?>').timepicker({
+						jQuery('#<?php echo esc_attr( $field->htmlvar_name ); ?>').timepicker({
 							showPeriod: true,
 							showLeadingZero: true
 						});
 					});
 				</script>
-				<div id="<?php echo $field->htmlvar_name; ?>_row"
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 				     class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
 				     } ?> clearfix uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
@@ -2477,23 +2471,23 @@ class UsersWP_Forms {
 					$site_title = uwp_get_form_label( $field );
 					if ( ! is_admin() ) { ?>
 						<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 							<?php if ( $field->is_required ) {
 								echo '<span>*</span>';
 							} ?>
 						</label>
 					<?php } ?>
 
-					<input readonly="readonly" name="<?php echo $field->htmlvar_name; ?>"
-					       id="<?php echo $field->htmlvar_name; ?>"
+					<input readonly="readonly" name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					       id="<?php echo esc_attr( $field->htmlvar_name ); ?>"
 					       value="<?php echo esc_attr( $value ); ?>"
-					       placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+					       placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
 					       type="text"
 					       class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"/>
 
-					<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 				<?php
@@ -2548,24 +2542,24 @@ class UsersWP_Forms {
 
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-				echo aui()->select( array(
-					'id'              => $field->htmlvar_name,
-					'name'            => $field->htmlvar_name,
-					'placeholder'     => uwp_get_field_placeholder( $field ),
-					'title'           => $site_title,
-					'value'           => $value,
-					'required'        => $field->is_required,
-					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
-					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
-					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => $site_title . $required,
-					'options'         => $option_values_arr,
+				echo aui()->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'id'              => esc_attr( $field->htmlvar_name ),
+					'name'            => esc_attr( $field->htmlvar_name ),
+					'placeholder'     => esc_attr( uwp_get_field_placeholder( $field ) ),
+					'title'           => esc_html( $site_title ),
+					'value'           => esc_attr( $value ),
+					'required'        => (bool) $field->is_required,
+					'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
+					'help_text'       => wp_kses_post( uwp_get_field_description( $field ) ),
+					'label'           => wp_kses_post( $site_title . $required ),
+					'options'         => $option_values_arr, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'select2'         => true,
-					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+					'wrap_class'      => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
 				) );
 			} else {
 				?>
-				<div id="<?php echo $field->htmlvar_name; ?>_row"
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 				     class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
 				     } ?> uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
@@ -2573,7 +2567,7 @@ class UsersWP_Forms {
 					<?php
 					if ( ! is_admin() ) { ?>
 						<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 							<?php if ( $field->is_required ) {
 								echo '<span>*</span>';
 							} ?>
@@ -2599,15 +2593,15 @@ class UsersWP_Forms {
 						}
 					}
 					?>
-					<select name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $field->htmlvar_name; ?>"
+					<select name="<?php echo esc_attr( $field->htmlvar_name ); ?>" id="<?php echo esc_attr( $field->htmlvar_name ); ?>"
 					        class="uwp_textfield aui-select2 <?php echo esc_attr( $bs_form_control ); ?>"
-					        title="<?php echo $site_title; ?>"
-					        data-placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
-					><?php echo $select_options; ?>
+					        title="<?php echo esc_attr( $site_title ); ?>"
+					        data-placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
+					><?php echo $select_options; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</select>
-					<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 
@@ -2662,25 +2656,25 @@ class UsersWP_Forms {
 
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-				echo aui()->select( array(
-					'id'              => $field->htmlvar_name,
-					'name'            => $field->htmlvar_name,
-					'placeholder'     => uwp_get_field_placeholder( $field ),
-					'title'           => $site_title,
-					'value'           => $value,
-					'required'        => $field->is_required,
-					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
-					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
-					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => $site_title . $required,
-					'options'         => $option_values_arr,
+				echo aui()->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'id'              => esc_attr( $field->htmlvar_name ),
+					'name'            => esc_attr( $field->htmlvar_name ),
+					'placeholder'     => esc_attr( uwp_get_field_placeholder( $field ) ),
+					'title'           => esc_html( $site_title ),
+					'value'           => esc_attr( $value ),
+					'required'        => (bool) $field->is_required,
+					'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
+					'help_text'       => wp_kses_post( uwp_get_field_description( $field ) ),
+					'label'           => wp_kses_post( $site_title . $required ),
+					'options'         => $option_values_arr, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'select2'         => true,
 					'multiple'        => true,
-					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+					'wrap_class'      => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
 				) );
 			} else {
 				?>
-				<div id="<?php echo $field->htmlvar_name; ?>_row"
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 				     class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
 				     } ?> uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
@@ -2688,20 +2682,20 @@ class UsersWP_Forms {
 					<?php
 					if ( ! is_admin() ) { ?>
 						<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 							<?php if ( $field->is_required ) {
 								echo '<span>*</span>';
 							} ?>
 						</label>
 					<?php } ?>
 
-					<input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value=""/>
+					<input type="hidden" name="<?php echo esc_attr( $field->htmlvar_name ); ?>" value=""/>
 					<?php if ( $multi_display == 'select' ) { ?>
 					<div class="uwp_multiselect_list">
-						<select name="<?php echo $field->htmlvar_name; ?>[]"
-						        id="<?php echo $field->htmlvar_name; ?>"
-						        title="<?php echo $site_title; ?>"
-						        data-placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+						<select name="<?php echo esc_attr( $field->htmlvar_name ); ?>[]"
+						        id="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+						        title="<?php echo esc_attr( $site_title ); ?>"
+						        data-placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
 						        class="aui-select2 <?php echo esc_attr( $bs_form_control ); ?>"
 						>
 							<?php
@@ -2752,14 +2746,14 @@ class UsersWP_Forms {
 									}
 								}
 							}
-							echo $select_options;
+							echo $select_options; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 							if ( $multi_display == 'select' ) { ?></select></div>
 				<?php } else { ?>
 					</ul>
 				<?php } ?>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 				<?php
@@ -2804,27 +2798,27 @@ class UsersWP_Forms {
 			ob_start(); // Start  buffering;
 
 			?>
-			<div id="<?php echo $field->htmlvar_name; ?>_row"
+			<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 			     class="<?php if ( $field->is_required ) {
 				     echo 'required_field';
-			     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group . $wrap_class ); ?>">
+			     } ?> uwp_form_<?php echo esc_attr( $field->field_type ); ?>_row uwp_clear <?php echo esc_attr( $bs_form_group . $wrap_class ); ?>">
 
 				<?php
 				$site_title = uwp_get_form_label( $field );
 				if ( ! is_admin() && !wp_doing_ajax() ) { ?>
 					<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-						<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+						<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 						<?php if ( $field->is_required ) {
 							echo ' <span class="text-danger">*</span>';
 						} ?>
 					</label>
 				<?php } ?>
 
-				<?php echo $file_obj->file_upload_preview( $field, $value ); ?>
-				<input name="<?php echo $field->htmlvar_name; ?>"
-				       class="<?php echo $field->css_class; ?> <?php echo esc_attr( $bs_form_control ); ?>"
-				       placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
-				       title="<?php echo $site_title; ?>"
+				<?php echo $file_obj->file_upload_preview( $field, $value ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<input name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+				       class="<?php echo esc_attr( $field->css_class ); ?> <?php echo esc_attr( $bs_form_control ); ?>"
+				       placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
+				       title="<?php echo esc_attr( $site_title ); ?>"
 					<?php
 					if ( $field->is_required == 1 ) {
 						echo 'data-is-required="1"';
@@ -2833,10 +2827,10 @@ class UsersWP_Forms {
 						echo 'required="required"';
 					}
 					?>
-					   type="<?php echo $field->field_type; ?>">
-				<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					   type="<?php echo esc_attr( $field->field_type ); ?>">
+				<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 				<?php if ( $field->is_required ) { ?>
-					<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+					<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 				<?php } ?>
 			</div>
 
@@ -2887,56 +2881,56 @@ class UsersWP_Forms {
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-				echo '<input type="hidden" name="' . $field->htmlvar_name . '" id="checkbox_' . $id . '" value="0"/>';
+				echo '<input type="hidden" name="' . esc_attr( $field->htmlvar_name ) . '" id="checkbox_' . esc_attr( $id ) . '" value="0"/>';
 
-				echo aui()->input(
+				echo aui()->input( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					array(
-						'id'         => $id,
-						'name'       => $field->htmlvar_name,
+						'id'         => esc_attr( $id ),
+						'name'       => esc_attr( $field->htmlvar_name ),
 						'type'       => "checkbox",
 						'value'      => '1',
-						'title'      => $site_title,
-						'label'      => $site_title . $required,
+						'title'      => esc_html( $site_title ),
+						'label'      => wp_kses_post( $site_title . $required ),
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
-						'checked'    => $checked,
-						'wrap_class' => isset( $field->css_class ) ? $field->css_class : '',
-						'help_text'  => uwp_get_field_description( $field ),
-						'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
+						'checked'    => (bool) $checked,
+						'wrap_class' => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
+						'help_text'  => wp_kses_post( uwp_get_field_description( $field ) ),
+						'validation_text' => ! empty( $field->is_required ) ? esc_attr__( $field->required_msg, 'userswp' ) : '',
 					)
 				);
 
 			} else {
 				?>
-				<div id="<?php echo $field->htmlvar_name; ?>_row"
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 				     class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
-				     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+				     } ?> uwp_form_<?php echo esc_attr( $field->field_type ); ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 					<?php if ( ! empty( $design_style ) ){ ?>
-					<label class="<?php echo $bs_sr_only; ?>">
+					<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
 						<?php } ?>
-						<input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value="0"/>
-						<input name="<?php echo $field->htmlvar_name; ?>"
-						       class="<?php echo $field->css_class; ?> <?php echo esc_attr( $bs_form_control ); ?>"
-						       placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
-						       title="<?php echo $site_title; ?>"
+						<input type="hidden" name="<?php echo esc_attr( $field->htmlvar_name ); ?>" value="0"/>
+						<input name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+						       class="<?php echo esc_attr( $field->css_class ); ?> <?php echo esc_attr( $bs_form_control ); ?>"
+						       placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
+						       title="<?php echo esc_attr( $site_title ); ?>"
 							<?php if ( $field->is_required == 1 ) {
 								echo 'required="required"';
 							} ?>
 							<?php if ( $value == '1' ) {
 								echo 'checked="checked"';
 							} ?>
-							   type="<?php echo $field->field_type; ?>"
+							   type="<?php echo esc_attr( $field->field_type ); ?>"
 							   value="1">
 						<?php
-						echo ( trim( $site_title ) ) ? $site_title : '&nbsp;';
+						echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;';
 						?>
 						<?php if ( ! empty( $design_style ) ){ ?>
 					</label>
 				<?php } ?>
-					<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 
@@ -2996,34 +2990,34 @@ class UsersWP_Forms {
 
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-				echo aui()->radio(
+				echo aui()->radio( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					array(
-						'id'         => $field->htmlvar_name,
-						'name'       => $field->htmlvar_name,
+						'id'         => esc_attr( $field->htmlvar_name ),
+						'name'       => esc_attr( $field->htmlvar_name ),
 						'type'       => "radio",
-						'title'      => $site_title,
-						'label'      => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
+						'title'      => esc_html( $site_title ),
+						'label'      => is_admin() && !wp_doing_ajax() ? '' : wp_kses_post( $site_title . $required ),
 						'label_type' => 'top',
 						'class'      => '',
-						'wrap_class' => isset( $field->css_class ) ? $field->css_class : '',
-						'value'      => $value,
-						'options'    => $option_values
+						'wrap_class' => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
+						'value'      => esc_attr( $value ),
+						'options'    => $option_values // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					)
 				);
 
 			} else {
 
 				?>
-				<div id="<?php echo $field->htmlvar_name; ?>_row"
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 				     class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
-				     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+				     } ?> uwp_form_<?php echo esc_attr( $field->field_type ); ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 
 					<?php
 					$site_title = uwp_get_form_label( $field );
 					if ( ! is_admin() ) { ?>
 						<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 							<?php if ( $field->is_required ) {
 								echo '<span>*</span>';
 							} ?>
@@ -3045,12 +3039,12 @@ class UsersWP_Forms {
 									}
 									?>
 									<?php if ( ! empty( $design_style ) ) { ?>
-										<label class="<?php echo $bs_label_class; ?>">
+										<label class="<?php echo esc_attr( $bs_label_class ); ?>">
 									<?php } else { ?>
-										<span class="uwp-radios <?php echo $class; ?>">
+										<span class="uwp-radios <?php echo esc_attr( $class ); ?>">
 									<?php } ?>
-									<input name="<?php echo $field->htmlvar_name; ?>"
-									       id="<?php echo $field->htmlvar_name; ?>"
+									<input name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+									       id="<?php echo esc_attr( $field->htmlvar_name ); ?>"
 									       title="<?php echo esc_attr( $option_value['label'] ); ?>"
 										<?php checked( $value, $option_value['value'] ); ?>
 										<?php if ( $field->is_required == 1 ) {
@@ -3058,7 +3052,7 @@ class UsersWP_Forms {
 										} ?>
 										   value="<?php echo esc_attr( $option_value['value'] ); ?>"
 										   class="uwp-radio <?php echo esc_attr( $bs_form_control ); ?>" type="radio"/>
-									<?php echo $option_value['label']; ?>
+									<?php echo esc_html( $option_value['label'] ); ?>
 									<?php if ( ! empty( $design_style ) ) { ?>
 										</label>
 									<?php } else { ?>
@@ -3070,9 +3064,9 @@ class UsersWP_Forms {
 						}
 					}
 					?>
-					<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 				<?php
@@ -3180,31 +3174,31 @@ class UsersWP_Forms {
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-				echo aui()->input( array(
-					'type'            => $type,
-					'id'              => $field->htmlvar_name,
-					'name'            => $field->htmlvar_name,
-					'placeholder'     => $placeholder,
-					'title'           => $site_title,
-					'value'           => wp_unslash( $value ),
-					'required'        => $field->is_required,
-					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
-					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
-					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
-					'step'            => $step,
-					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+				echo aui()->input( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'type'            => esc_attr( $type ),
+					'id'              => esc_attr( $field->htmlvar_name ),
+					'name'            => esc_attr( $field->htmlvar_name ),
+					'placeholder'     => esc_attr( $placeholder ),
+					'title'           => esc_html( $site_title ),
+					'value'           => esc_attr( wp_unslash( $value ) ),
+					'required'        => (bool) $field->is_required,
+					'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
+					'help_text'       => wp_kses_post( uwp_get_field_description( $field ) ),
+					'label'           => is_admin() && !wp_doing_ajax() ? '' : wp_kses_post( $site_title . $required ),
+					'step'            => esc_attr( $step ),
+					'wrap_class'      => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
 				) );
 			} else {
 				?>
-				<div id="<?php echo $field->htmlvar_name; ?>_row" class="<?php if ( $field->is_required ) {
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row" class="<?php if ( $field->is_required ) {
 					echo 'required_field';
-				} ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+				} ?> uwp_form_<?php echo esc_attr( $field->field_type ); ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 					<?php
 
 					if ( ! is_admin() ) { ?>
 						<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 							<?php if ( $field->is_required ) {
 								echo '<span>*</span>';
 							} ?>
@@ -3212,13 +3206,13 @@ class UsersWP_Forms {
 					<?php }
 					?>
 
-					<input name="<?php echo $field->htmlvar_name; ?>"
-					       class="<?php echo $field->css_class; ?> uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
-					       id="<?php echo $field->htmlvar_name; ?>"
-					       placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+					<input name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					       class="<?php echo esc_attr( $field->css_class ); ?> uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
+					       id="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					       placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
 					       value="<?php echo esc_attr( stripslashes( $value ) ); ?>"
-					       title="<?php echo $site_title; ?>"
-					       oninvalid="this.setCustomValidity('<?php _e( $field->required_msg, 'userswp' ); ?>')"
+					       title="<?php echo esc_attr( $site_title ); ?>"
+					       oninvalid="this.setCustomValidity('<?php esc_attr_e( $field->required_msg, 'userswp' ); ?>')"
 					       oninput="setCustomValidity('')"
 						<?php if ( $field->is_required == 1 ) {
 							echo 'required="required"';
@@ -3226,14 +3220,14 @@ class UsersWP_Forms {
 						<?php if ( $field->for_admin_use == 1 ) {
 							echo 'readonly="readonly"';
 						} ?>
-						   type="<?php echo $type; ?>"
+						   type="<?php echo esc_attr( $type ); ?>"
 						<?php if ( $step ) {
-							echo 'step="' . $step . '"';
+							echo 'step="' . esc_attr( $step ) . '"';
 						} ?>
 					/>
-					<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 
@@ -3281,52 +3275,52 @@ class UsersWP_Forms {
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-				echo aui()->textarea( array(
-					'id'              => $field->htmlvar_name,
-					'name'            => $field->htmlvar_name,
-					'placeholder'     => uwp_get_field_placeholder( $field ),
-					'title'           => $site_title,
-					'value'           => stripslashes( $value ),
-					'required'        => $field->is_required,
-					'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
-					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
+				echo aui()->textarea( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'id'              => esc_attr( $field->htmlvar_name ),
+					'name'            => esc_attr( $field->htmlvar_name ),
+					'placeholder'     => esc_attr( uwp_get_field_placeholder( $field ) ),
+					'title'           => esc_html( $site_title ),
+					'value'           => wp_kses_post( stripslashes( $value ) ),
+					'required'        => (bool) $field->is_required,
+					'validation_text' => ! empty( $field->is_required ) ? esc_attr__( $field->required_msg, 'userswp' ) : '',
+					'help_text'       => wp_kses_post( uwp_get_field_description( $field ) ),
+					'label'           => is_admin() && !wp_doing_ajax() ? '' : wp_kses_post( $site_title . $required ),
 					'rows'            => '4',
-					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+					'wrap_class'      => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
 				) );
 			} else {
 				?>
 
-				<div id="<?php echo $field->htmlvar_name; ?>_row"
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 				     class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
-				     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+				     } ?> uwp_form_<?php echo esc_attr( $field->field_type ); ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 
 					<?php
 
 					if ( ! is_admin() ) { ?>
 						<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 							<?php if ( $field->is_required ) {
 								echo '<span>*</span>';
 							} ?>
 						</label>
 					<?php } ?>
 
-					<textarea name="<?php echo $field->htmlvar_name; ?>"
-					          class="<?php echo $field->css_class; ?> <?php echo esc_attr( $bs_form_control ); ?>"
-					          placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
-					          title="<?php echo $site_title; ?>"
-					          oninvalid="this.setCustomValidity('<?php _e( $field->required_msg, 'userswp' ); ?>')"
+					<textarea name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					          class="<?php echo esc_attr( $field->css_class ); ?> <?php echo esc_attr( $bs_form_control ); ?>"
+					          placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
+					          title="<?php echo esc_attr( $site_title ); ?>"
+					          oninvalid="this.setCustomValidity('<?php esc_attr_e( $field->required_msg, 'userswp' ); ?>')"
 					          oninput="setCustomValidity('')"
 						<?php if ( $field->is_required == 1 ) {
 							echo 'required="required"';
 						} ?>
-						      type="<?php echo $field->field_type; ?>"
-						      rows="4"><?php echo stripslashes( $value ); ?></textarea>
-					<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+						      type="<?php echo esc_attr( $field->field_type ); ?>"
+						      rows="4"><?php echo wp_kses_post( stripslashes( $value ) ); ?></textarea>
+					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 
@@ -3369,33 +3363,33 @@ class UsersWP_Forms {
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-				echo aui()->textarea( array(
-					'id'              => $field->htmlvar_name,
-					'name'            => $field->htmlvar_name,
-					'placeholder'     => uwp_get_field_placeholder( $field ),
-					'title'           => $site_title,
-					'value'           => stripslashes( $value ),
-					'required'        => $field->is_required,
-					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
-					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
-					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
+				echo aui()->textarea( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'id'              => esc_attr( $field->htmlvar_name ),
+					'name'            => esc_attr( $field->htmlvar_name ),
+					'placeholder'     => esc_attr( uwp_get_field_placeholder( $field ) ),
+					'title'           => esc_html( $site_title ),
+					'value'           => wp_kses_post( stripslashes( $value ) ),
+					'required'        => (bool) $field->is_required,
+					'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
+					'help_text'       => wp_kses_post( uwp_get_field_description( $field ) ),
+					'label'           => is_admin() && !wp_doing_ajax() ? '' : wp_kses_post( $site_title . $required ),
 					'rows'            => 5,
 					'wysiwyg'         => true,
-					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+					'wrap_class'      => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
 				) );
 			} else {
 				?>
-				<div id="<?php echo $field->htmlvar_name; ?>_row"
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 				     class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
-				     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+				     } ?> uwp_form_<?php echo esc_attr( $field->field_type ); ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 
 					<?php
 
 					if ( ! is_admin() ) { ?>
 						<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 							<?php if ( $field->is_required ) {
 								echo '<span>*</span>';
 							} ?>
@@ -3404,9 +3398,9 @@ class UsersWP_Forms {
 
 					<?php wp_editor( $content, $editor_id, $args ); ?>
 
-					<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 				<?php
@@ -3442,10 +3436,10 @@ class UsersWP_Forms {
 			ob_start(); // Start  buffering;
 			$site_title = uwp_get_form_label( $field );
 			?>
-			<h3 class="uwp_input_fieldset <?php echo $field->css_class; ?>">
-				<?php echo $site_title; ?>
+			<h3 class="uwp_input_fieldset <?php echo esc_attr( $field->css_class ); ?>">
+				<?php echo esc_html( $site_title ); ?>
 				<?php if ( $field->help_text != '' ) {
-					echo '<small>( ' . $field->help_text . ' )</small>';
+					echo '<small>( ' . wp_kses_post( $field->help_text ) . ' )</small>';
 				} ?></h3>
 			<?php
 			$html = ob_get_clean();
@@ -3492,54 +3486,54 @@ class UsersWP_Forms {
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-				echo aui()->input( array(
+				echo aui()->input( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'type'            => 'url',
-					'id'              => $field->htmlvar_name,
-					'name'            => $field->htmlvar_name,
-					'placeholder'     => uwp_get_field_placeholder( $field ),
-					'title'           => $site_title,
-					'value'           => $value,
-					'required'        => $field->is_required,
-					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
-					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
-					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
-					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+					'id'              => esc_attr( $field->htmlvar_name ),
+					'name'            => esc_attr( $field->htmlvar_name ),
+					'placeholder'     => esc_attr( uwp_get_field_placeholder( $field ) ),
+					'title'           => esc_html( $site_title ),
+					'value'           => esc_attr( $value ),
+					'required'        => (bool) $field->is_required,
+					'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
+					'help_text'       => wp_kses_post( uwp_get_field_description( $field ) ),
+					'label'           => is_admin() && !wp_doing_ajax() ? '' : wp_kses_post( $site_title . $required ),
+					'wrap_class'      => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
 				) );
 			} else {
 				?>
-				<div id="<?php echo $field->htmlvar_name; ?>_row"
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 				     class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
-				     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+				     } ?> uwp_form_<?php echo esc_attr( $field->field_type ); ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 
 					<?php
 					if ( ! is_admin() ) { ?>
 						<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 							<?php if ( $field->is_required ) {
 								echo '<span>*</span>';
 							} ?>
 						</label>
 					<?php } ?>
 
-					<input name="<?php echo $field->htmlvar_name; ?>"
+					<input name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
 					       class="<?php //echo $field->css_class;
 					       ?> uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
-					       id="<?php echo $field->htmlvar_name; ?>"
-					       placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+					       id="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					       placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
 					       value="<?php echo esc_attr( stripslashes( $value ) ); ?>"
-					       title="<?php echo $site_title; ?>"
+					       title="<?php echo esc_attr( $site_title ); ?>"
 						<?php if ( $field->is_required == 1 ) {
 							echo 'required="required"';
 						} ?>
 						   type="url"
-						   oninvalid="setCustomValidity('<?php _e( 'Please enter a valid URL including http://', 'userswp' ); ?>')"
+						   oninvalid="setCustomValidity('<?php esc_attr_e( 'Please enter a valid URL including http://', 'userswp' ); ?>')"
 						   onchange="try{setCustomValidity('')}catch(e){}"
 					/>
-					<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 
@@ -3589,51 +3583,51 @@ class UsersWP_Forms {
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-				echo aui()->input( array(
+				echo aui()->input( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'type'        => 'email',
-					'id'          => $field->htmlvar_name,
-					'name'        => $field->htmlvar_name,
-					'placeholder' => uwp_get_field_placeholder( $field ),
-					'title'       => $site_title,
-					'value'       => wp_unslash( $value ),
-					'required'    => $field->is_required,
-					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
-					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
-					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
-					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
+					'id'          => esc_attr( $field->htmlvar_name ),
+					'name'        => esc_attr( $field->htmlvar_name ),
+					'placeholder' => esc_attr( uwp_get_field_placeholder( $field ) ),
+					'title'       => esc_html( $site_title ),
+					'value'       => esc_attr( wp_unslash( $value ) ),
+					'required'    => (bool) $field->is_required,
+					'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
+					'help_text'   => wp_kses_post( uwp_get_field_description( $field ) ),
+					'label'       => is_admin() && !wp_doing_ajax() ? '' : wp_kses_post( $site_title . $required ),
+					'wrap_class'  => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
 				) );
 			} else {
 				?>
-				<div id="<?php echo $field->htmlvar_name; ?>_row"
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 				     class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
-				     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+				     } ?> uwp_form_<?php echo esc_attr( $field->field_type ); ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 
 					<?php
 					if ( ! is_admin() ) { ?>
 						<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 							<?php if ( $field->is_required ) {
 								echo '<span>*</span>';
 							} ?>
 						</label>
 					<?php } ?>
 
-					<input name="<?php echo $field->htmlvar_name; ?>"
-					       class="<?php echo $field->css_class; ?> uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
-					       id="<?php echo $field->htmlvar_name; ?>"
-					       placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+					<input name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					       class="<?php echo esc_attr( $field->css_class ); ?> uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
+					       id="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					       placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
 					       value="<?php echo esc_attr( stripslashes( $value ) ); ?>"
-					       title="<?php echo $site_title; ?>"
+					       title="<?php echo esc_attr( $site_title ); ?>"
 						<?php if ( $field->is_required == 1 ) {
 							echo 'required="required"';
 						} ?>
 						   type="email"
 					/>
-					<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 
@@ -3689,49 +3683,49 @@ class UsersWP_Forms {
 				$validation_text = !empty($field->validation_msg) ? __($field->validation_msg, 'userswp') : '';
 				$wrap_class = isset( $field->css_class ) ? $field->css_class.' uwp-password-wrap' : 'uwp-password-wrap';
 
-				echo aui()->input( array(
+				echo aui()->input( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'type'        => 'password',
-					'id'          => $field->htmlvar_name,
-					'name'        => $field->htmlvar_name,
-					'placeholder' => uwp_get_field_placeholder( $field ),
-					'title'       => $site_title,
-					'value'       => $value,
-					'required'    => $field->is_required,
-					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
-					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
-					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
-					'wrap_class'  => $wrap_class,
+					'id'          => esc_attr( $field->htmlvar_name ),
+					'name'        => esc_attr( $field->htmlvar_name ),
+					'placeholder' => esc_attr( uwp_get_field_placeholder( $field ) ),
+					'title'       => esc_html( $site_title ),
+					'value'       => esc_attr( $value ),
+					'required'    => (bool) $field->is_required,
+					'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
+					'help_text'   => wp_kses_post( uwp_get_field_description( $field ) ),
+					'label'       => is_admin() && !wp_doing_ajax() ? '' : wp_kses_post( $site_title . $required ),
+					'wrap_class'  => esc_attr( $wrap_class ),
 				) );
 			} else {
 				?>
-				<div id="<?php echo $field->htmlvar_name; ?>_row" class="<?php if ( $field->is_required ) {
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row" class="<?php if ( $field->is_required ) {
 					echo 'required_field';
-				} ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+				} ?> uwp_form_<?php echo esc_attr( $field->field_type ); ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 					<?php
 					if ( ! is_admin() ) { ?>
 						<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 							<?php if ( $field->is_required ) {
 								echo '<span>*</span>';
 							} ?>
 						</label>
 					<?php } ?>
 
-					<input name="<?php echo $field->htmlvar_name; ?>"
-					       class="<?php echo $field->css_class; ?> uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
-					       id="<?php echo $field->htmlvar_name; ?>"
-					       placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
+					<input name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					       class="<?php echo esc_attr( $field->css_class ); ?> uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
+					       id="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					       placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
 					       value="<?php echo esc_attr( stripslashes( $value ) ); ?>"
-					       title="<?php echo $site_title; ?>"
+					       title="<?php echo esc_attr( $site_title ); ?>"
 						<?php if ( $field->is_required == 1 ) {
 							echo 'required="required"';
 						} ?>
 						   type="password"
 					/>
-					<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 
@@ -3775,39 +3769,39 @@ class UsersWP_Forms {
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-				echo aui()->input( array(
+				echo aui()->input( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'type'        => 'tel',
-					'id'          => $field->htmlvar_name,
-					'name'        => $field->htmlvar_name,
-					'placeholder' => uwp_get_field_placeholder( $field ),
-					'title'       => $site_title,
-					'value'       => $value,
-					'required'    => $field->is_required,
-					'help_text'   => uwp_get_field_description( $field ),
-					'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
-					'wrap_class'  => isset( $field->css_class ) ? $field->css_class : '',
-					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
-					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
+					'id'          => esc_attr( $field->htmlvar_name ),
+					'name'        => esc_attr( $field->htmlvar_name ),
+					'placeholder' => esc_attr( uwp_get_field_placeholder( $field ) ),
+					'title'       => esc_html( $site_title ),
+					'value'       => esc_attr( $value ),
+					'required'    => (bool) $field->is_required,
+					'help_text'   => wp_kses_post( uwp_get_field_description( $field ) ),
+					'label'       => is_admin() && !wp_doing_ajax() ? '' : wp_kses_post( $site_title . $required ),
+					'wrap_class'  => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
+					'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash($field->validation_pattern) ) : '',
 				) );
 			} else {
 				?>
-				<div id="<?php echo $field->htmlvar_name; ?>_row"
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 				     class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
 				     } ?> clearfix uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
 					<?php
 					if ( ! is_admin() ) { ?>
 						<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-							<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+							<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 							<?php if ( $field->is_required ) {
 								echo '<span>*</span>';
 							} ?>
 						</label>
 					<?php } ?>
-					<input name="<?php echo $field->htmlvar_name; ?>"
-					       class="<?php echo $field->css_class; ?> <?php echo esc_attr( $bs_form_control ); ?>"
-					       placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
-					       title="<?php echo $site_title; ?>"
+					<input name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					       class="<?php echo esc_attr( $field->css_class ); ?> <?php echo esc_attr( $bs_form_control ); ?>"
+					       placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
+					       title="<?php echo esc_attr( $site_title ); ?>"
 						<?php if ( $field->for_admin_use == 1 ) {
 							echo 'readonly="readonly"';
 						} ?>
@@ -3843,12 +3837,12 @@ class UsersWP_Forms {
 			$id                  = wp_doing_ajax() ? $field->htmlvar_name . "_ajax" : $field->htmlvar_name;
 
 			$gdpr_page  = get_permalink( $reg_gdpr );
-			$link_start = '<a href="' . $gdpr_page . '" target="_blank">';
+			$link_start = '<a href="' . esc_url( $gdpr_page ) . '" target="_blank">';
 			$link_end   = '</a>';
 			$field_desc = uwp_get_field_description( $field, '' );
 			$field_desc = str_replace( '%%link_start%%', $link_start, $field_desc );
 			$field_desc = str_replace( '%%link_end%%', $link_end, $field_desc );
-			$content    = $field_desc ? $field_desc : sprintf( __( 'By using this form I agree to the storage and handling of my data by this website. View our %s %s %s.', 'userswp' ), '<a href="' . $gdpr_page . '" target="_blank">', $site_title, '</a>' );
+			$content    = $field_desc ? $field_desc : sprintf( __( 'By using this form I agree to the storage and handling of my data by this website. View our %s %s %s.', 'userswp' ), '<a href="' . esc_url( $gdpr_page ) . '" target="_blank">', $site_title, '</a>' );
 			$checked    = $value == '1' ? true : false;
 
 			ob_start(); // Start  buffering;
@@ -3856,46 +3850,46 @@ class UsersWP_Forms {
 			// bootstrap
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
-				echo '<input type="hidden" name="' . $field->htmlvar_name . '" id="checkbox_' . $id . '" value="0"/>';
+				echo '<input type="hidden" name="' . esc_attr( $field->htmlvar_name ) . '" id="checkbox_' . esc_attr( $id ) . '" value="0"/>';
 
-				echo aui()->input(
+				echo aui()->input( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					array(
-						'id'         => $id,
-						'name'       => $field->htmlvar_name,
+						'id'         => esc_attr( $id ),
+						'name'       => esc_attr( $field->htmlvar_name ),
 						'type'       => "checkbox",
 						'value'      => '1',
-						'title'      => $site_title,
-						'label'      => $content . $required,
+						'title'      => esc_html( $site_title ),
+						'label'      => wp_kses_post( $content . $required ),
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
-						'checked'    => $checked,
-						'wrap_class' => isset( $field->css_class ) ? $field->css_class : '',
-						'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
+						'checked'    => (bool) $checked,
+						'wrap_class' => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
+						'validation_text' => ! empty( $field->is_required ) ? esc_attr__( $field->required_msg, 'userswp' ) : '',
 					)
 				);
 
 			} else {
 				?>
-				<div id="<?php echo $field->htmlvar_name; ?>_row"
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 				     class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
-				     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
-					<input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value="0"/>
-					<input name="<?php echo $field->htmlvar_name; ?>"
-					       class="<?php echo $field->css_class; ?> <?php echo esc_attr( $bs_form_control ); ?>"
-					       placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
-					       title="<?php echo $site_title; ?>"
+				     } ?> uwp_form_<?php echo esc_attr( $field->field_type ); ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+					<input type="hidden" name="<?php echo esc_attr( $field->htmlvar_name ); ?>" value="0"/>
+					<input name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					       class="<?php echo esc_attr( $field->css_class ); ?> <?php echo esc_attr( $bs_form_control ); ?>"
+					       placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
+					       title="<?php echo esc_attr( $site_title ); ?>"
 						<?php if ( $value == '1' ) {
 							echo 'checked="checked"';
 						} ?>
-						   type="<?php echo $field->field_type; ?>"
+						   type="<?php echo esc_attr( $field->field_type ); ?>"
 						   value="1">
 					<?php
-					echo ( trim( $content ) ) ? $content : '&nbsp;';
+					echo ( trim( $content ) ) ? wp_kses_post( $content ) : '&nbsp;';
 					?>
-					<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 
@@ -3927,7 +3921,7 @@ class UsersWP_Forms {
 
 			$site_title          = uwp_get_form_label( $field );
 			$terms_page          = get_permalink( $reg_tos );
-			$link_start          = '<a href="' . $terms_page . '" target="_blank">';
+			$link_start          = '<a href="' . esc_url( $terms_page ) . '" target="_blank">';
 			$link_end            = '</a>';
 			$field_desc          = uwp_get_field_description( $field, '' );
 			$field_desc          = str_replace( '%%link_start%%', $link_start, $field_desc );
@@ -3935,53 +3929,53 @@ class UsersWP_Forms {
 			$field->htmlvar_name = 'register_tos';
 			$id                  = wp_doing_ajax() ? $field->htmlvar_name . "_ajax" : $field->htmlvar_name;
 
-			$content = $field_desc ? $field_desc : sprintf( __( 'I accept the %s %s %s.', 'userswp' ), '<a href="' . $terms_page . '" target="_blank">', $site_title, '</a>' );
+			$content = $field_desc ? $field_desc : sprintf( __( 'I accept the %s %s %s.', 'userswp' ), '<a href="' . esc_url( $terms_page ) . '" target="_blank">', $site_title, '</a>' );
 			$checked = $value == '1' ? true : false;
 
 			ob_start();
 
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
-				echo '<input type="hidden" name="' . $field->htmlvar_name . '" id="checkbox_' . $id . '" value="0"/>';
+				echo '<input type="hidden" name="' . esc_attr( $field->htmlvar_name ) . '" id="checkbox_' . esc_attr( $id ) . '" value="0"/>';
 
-				echo aui()->input(
+				echo aui()->input( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					array(
-						'id'         => $id,
-						'name'       => $field->htmlvar_name,
+						'id'         => esc_attr( $id ),
+						'name'       => esc_attr( $field->htmlvar_name ),
 						'type'       => "checkbox",
 						'value'      => '1',
-						'title'      => $site_title,
-						'label'      => $content . $required,
+						'title'      => esc_html( $site_title ),
+						'label'      => wp_kses_post( $content . $required ),
 						'label_show' => true,
 						'required'   => ! empty( $field->is_required ) ? true : false,
-						'checked'    => $checked,
-						'wrap_class' => isset( $field->css_class ) ? $field->css_class : '',
-						'validation_text' => ! empty( $field->is_required ) ? __( $field->required_msg, 'userswp' ) : '',
+						'checked'    => (bool) $checked,
+						'wrap_class' => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
+						'validation_text' => ! empty( $field->is_required ) ? esc_attr__( $field->required_msg, 'userswp' ) : '',
 					)
 				);
 
 			} else {
 				?>
-				<div id="<?php echo $field->htmlvar_name; ?>_row"
+				<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 				     class="<?php if ( $field->is_required ) {
 					     echo 'required_field';
-				     } ?> uwp_form_<?php echo $field->field_type; ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
-					<input type="hidden" name="<?php echo $field->htmlvar_name; ?>" value="0"/>
-					<input name="<?php echo $field->htmlvar_name; ?>"
-					       class="<?php echo $field->css_class; ?> <?php echo esc_attr( $bs_form_control ); ?>"
-					       placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
-					       title="<?php echo $site_title; ?>"
+				     } ?> uwp_form_<?php echo esc_attr( $field->field_type ); ?>_row uwp_clear <?php echo esc_attr( $bs_form_group ); ?>">
+					<input type="hidden" name="<?php echo esc_attr( $field->htmlvar_name ); ?>" value="0"/>
+					<input name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
+					       class="<?php echo esc_attr( $field->css_class ); ?> <?php echo esc_attr( $bs_form_control ); ?>"
+					       placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
+					       title="<?php echo esc_attr( $site_title ); ?>"
 						<?php if ( $value == '1' ) {
 							echo 'checked="checked"';
 						} ?>
-						   type="<?php echo $field->field_type; ?>"
+						   type="<?php echo esc_attr( $field->field_type ); ?>"
 						   value="1">
 					<?php
-					echo ( trim( $content ) ) ? $content : '&nbsp;';
+					echo ( trim( $content ) ) ? wp_kses_post( $content ) : '&nbsp;';
 					?>
-					<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
-						<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+						<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 					<?php } ?>
 				</div>
 
@@ -4009,7 +4003,7 @@ class UsersWP_Forms {
 	function add_multipart_to_admin_edit_form() {
 		global $wpdb;
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-		$fields     = $wpdb->get_results( "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type = 'file' AND is_default = '0' ORDER BY sort_order ASC" );
+		$fields     = $wpdb->get_results( "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type = 'file' AND is_default = '0' ORDER BY sort_order ASC" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		if ( $fields ) {
 			echo 'enctype="multipart/form-data"';
 		}
@@ -4030,14 +4024,14 @@ class UsersWP_Forms {
 		$file_obj   = new UsersWP_Files();
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 		//Normal fields
-		$fields = $wpdb->get_results( "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND field_type != 'fieldset' ORDER BY sort_order ASC" );
+		$fields = $wpdb->get_results( "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type != 'file' AND field_type != 'fieldset' ORDER BY sort_order ASC" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		if ( $fields ) {
 		    if(isset($_POST['locale'])){
 		          $_POST['uwp_language'] = sanitize_text_field($_POST['locale']);
 		    }
 			$result = uwp_validate_fields( $_POST, 'account', $fields );
 			if ( is_wp_error( $result ) ) {
-				die( $result->get_error_message() );
+				die( wp_kses_post( $result->get_error_message() ) );
 			}
 			if ( isset( $result['display_name'] ) && ! empty( $result['display_name'] ) ) {
 				$display_name = $result['display_name'];
@@ -4061,7 +4055,7 @@ class UsersWP_Forms {
 		}
 
 		//File fields
-		$fields = $wpdb->get_results( "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type = 'file' AND is_default = '0' ORDER BY sort_order ASC" );
+		$fields = $wpdb->get_results( "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND field_type = 'file' AND is_default = '0' ORDER BY sort_order ASC" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		if ( $fields ) {
 			$result = $file_obj->validate_uploads( $_FILES, 'account', true, $fields );
 			if ( ! is_wp_error( $result ) ) {
@@ -4101,7 +4095,7 @@ class UsersWP_Forms {
 			ob_start(); // Start  buffering;
 
 			?>
-			<div id="<?php echo $field->htmlvar_name; ?>_row"
+			<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
 			     class="<?php if ( $field->is_required ) {
 				     echo 'required_field';
 			     } ?> uwp_clear <?php echo esc_attr( $bs_form_group. ' '.$field->css_class ); ?>">
@@ -4110,7 +4104,7 @@ class UsersWP_Forms {
 				$site_title = uwp_get_form_label( $field );
 				if ( ! is_admin() && !wp_doing_ajax() ) { ?>
 					<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-						<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+						<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 						<?php if ( $field->is_required ) {
 							echo '<span class="text-danger">*</span>';
 						} ?>
@@ -4126,27 +4120,27 @@ class UsersWP_Forms {
 				?>
 
 				<input type="text" class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
-				       title="<?php echo $site_title; ?>" id="<?php echo $field->htmlvar_name;
+				       title="<?php echo esc_attr( $site_title ); ?>" id="<?php echo esc_attr( $field->htmlvar_name );
 				if ( wp_doing_ajax() ) {
 					echo "_ajax";
 				} ?>"/>
-				<input type="hidden" id="<?php echo $field->htmlvar_name;
+				<input type="hidden" id="<?php echo esc_attr( $field->htmlvar_name );
 				if ( wp_doing_ajax() ) {
 					echo "_ajax";
-				} ?>_code" name="<?php echo $field->htmlvar_name; ?>"/>
+				} ?>_code" name="<?php echo esc_attr( $field->htmlvar_name ); ?>"/>
 
 				<script>
 					jQuery(function () {
-						jQuery("#<?php echo $field->htmlvar_name; if ( wp_doing_ajax() ) {
+						jQuery("#<?php echo esc_attr( $field->htmlvar_name ); if ( wp_doing_ajax() ) {
 							echo "_ajax";
-						}?>").countrySelect(<?php echo $select_country_options;?>);
+						}?>").countrySelect(<?php echo esc_js( $select_country_options );?>);
 					});
 				</script>
 
 
-				<span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+				<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 				<?php if ( $field->is_required ) { ?>
-					<span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+					<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 				<?php } ?>
 			</div>
 
@@ -4194,7 +4188,7 @@ class UsersWP_Forms {
 				$site_title = uwp_get_form_label( $field );
 				if ( ! is_admin() && !wp_doing_ajax() ) { ?>
                     <label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-						<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+						<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 						<?php if ( $field->is_required ) {
 							echo '<span class="text-danger">*</span>';
 						} ?>
@@ -4232,32 +4226,32 @@ class UsersWP_Forms {
 
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-				echo aui()->select( array(
-					'id'              => $field->htmlvar_name,
-					'name'            => $field->htmlvar_name,
-					'placeholder'     => uwp_get_field_placeholder( $field ),
-					'title'           => $site_title,
-					'value'           => $value,
-					'required'        => $field->is_required,
-					'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
-					'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
-					'help_text'       => uwp_get_field_description( $field ),
-					'label'           => $site_title . $required,
-					'options'         => $languages,
+				echo aui()->select( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'id'              => esc_attr( $field->htmlvar_name ),
+					'name'            => esc_attr( $field->htmlvar_name ),
+					'placeholder'     => esc_attr( uwp_get_field_placeholder( $field ) ),
+					'title'           => esc_attr( $site_title ),
+					'value'           => esc_attr( $value ),
+					'required'        => (bool) $field->is_required,
+					'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
+					'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
+					'help_text'       => wp_kses_post( uwp_get_field_description( $field ) ),
+					'label'           => wp_kses_post( $site_title . $required ),
+					'options'         => $languages, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'select2'         => true,
-					'wrap_class'      => isset( $field->css_class ) ? $field->css_class : '',
+					'wrap_class'      => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
 				) );
 			} else {
 				    ?>
-                <select name="<?php echo $field->htmlvar_name; ?>" id="<?php echo $field->htmlvar_name; ?>"
+                <select name="<?php echo esc_attr( $field->htmlvar_name ); ?>" id="<?php echo esc_attr( $field->htmlvar_name ); ?>"
                         class="uwp_textfield aui-select2 <?php echo esc_attr( $bs_form_control ); ?>"
-                        title="<?php echo $site_title; ?>"
-                        data-placeholder="<?php echo uwp_get_field_placeholder( $field ); ?>"
-                ><?php echo $select_options; ?>
+                        title="<?php echo esc_attr( $site_title ); ?>"
+                        data-placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
+                ><?php echo $select_options; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                 </select>
-                <span class="uwp_message_note"><?php echo uwp_get_field_description( $field ); ?></span>
+                <span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
                 <?php if ( $field->is_required ) { ?>
-                    <span class="uwp_message_error invalid-feedback"><?php _e( $field->required_msg, 'userswp' ); ?></span>
+                    <span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
                 <?php }
 			}
 
@@ -4310,19 +4304,19 @@ class UsersWP_Forms {
 
 				if ( $design_style ) {
 
-					echo aui()->input( array(
+					echo aui()->input( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'        => 'password',
 						'id'          => 'confirm_password',
 						'name'        => 'confirm_password',
-						'placeholder' => $placeholder,
-						'title'       => $site_title,
-						'value'       => $value,
-						'required'    => $field->is_required,
-						'help_text'   => uwp_get_field_description( $field ),
-						'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
-						'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
-						'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
-						'wrap_class' => $wrap_class,
+						'placeholder' => esc_attr( $placeholder ),
+						'title'       => esc_attr( $site_title ),
+						'value'       => esc_attr( $value ),
+						'required'    => (bool) $field->is_required,
+						'help_text'   => wp_kses_post( uwp_get_field_description( $field ) ),
+						'label'       => is_admin() && ! wp_doing_ajax() ? '' : wp_kses_post( $site_title . $required ),
+						'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
+						'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
+						'wrap_class' => esc_attr( $wrap_class ),
 					) );
 				} else {
 					?>
@@ -4333,22 +4327,13 @@ class UsersWP_Forms {
 
 						if ( ! is_admin() ) { ?>
 							<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-								<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+								<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 								<?php if ( $field->is_required ) {
 									echo '<span>*</span>';
 								} ?>
 							</label>
 						<?php } ?>
-
-						<input name="confirm_password"
-						       class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
-						       id="uwp_account_confirm_password"
-						       placeholder="<?php echo $placeholder; ?>"
-						       value=""
-						       title="<?php echo $site_title; ?>"
-							<?php echo 'required="required"'; ?>
-							   type="password"
-						/>
+						<input name="confirm_password" class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>" id="uwp_account_confirm_password" placeholder="<?php echo esc_attr( $placeholder ); ?>" value="" title="<?php echo esc_attr( $site_title ); ?>" <?php echo 'required="required"'; ?> type="password"/>
 					</div>
 
 					<?php
@@ -4397,18 +4382,18 @@ class UsersWP_Forms {
 				if ( $design_style ) {
 					$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
-					echo aui()->input( array(
+					echo aui()->input( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'        => 'email',
-						'id'          => $field->htmlvar_name,
+						'id'          => esc_attr( $field->htmlvar_name ),
 						'name'        => 'confirm_email',
-						'placeholder' => $site_title,
-						'title'       => $site_title,
-						'value'       => $value,
-						'required'    => $field->is_required,
-						'help_text'   => uwp_get_field_description( $field ),
-						'label'       => is_admin() && !wp_doing_ajax() ? '' : $site_title . $required,
-						'validation_text' => $validation_text != '' ? $validation_text : $required_msg,
-						'validation_pattern' => ! empty( $field->validation_pattern ) ? wp_unslash($field->validation_pattern) : '',
+						'placeholder' => esc_attr( $site_title ),
+						'title'       => esc_attr( $site_title ),
+						'value'       => esc_attr( $value ),
+						'required'    => (bool) $field->is_required,
+						'help_text'   => wp_kses_post( uwp_get_field_description( $field ) ),
+						'label'       => is_admin() && ! wp_doing_ajax() ? '' : wp_kses_post( $site_title . $required ),
+						'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
+						'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
 					) );
 				} else {
 					?>
@@ -4419,7 +4404,7 @@ class UsersWP_Forms {
 
 						if ( ! is_admin() ) { ?>
 							<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
-								<?php echo ( trim( $site_title ) ) ? $site_title : '&nbsp;'; ?>
+								<?php echo ( trim( $site_title ) ) ? esc_attr( $site_title ) : '&nbsp;'; ?>
 								<?php if ( $field->is_required ) {
 									echo '<span>*</span>';
 								} ?>
@@ -4429,9 +4414,9 @@ class UsersWP_Forms {
 						<input name="confirm_email"
 						       class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
 						       id="uwp_account_confirm_email"
-						       placeholder="<?php echo $site_title; ?>"
+						       placeholder="<?php echo esc_attr( $site_title ); ?>"
 						       value=""
-						       title="<?php echo $site_title; ?>"
+						       title="<?php echo esc_attr( $site_title ); ?>"
 							<?php echo 'required="required"'; ?>
 							   type="email"
 						/>
@@ -4469,7 +4454,7 @@ class UsersWP_Forms {
 			$user_id     = get_current_user_id();
 			$meta_table  = get_usermeta_table_prefix() . 'uwp_usermeta';
 
-			$user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT user_privacy, tabs_privacy FROM $meta_table WHERE user_id = %d", $user_id ) );
+			$user_meta_info = $wpdb->get_row( $wpdb->prepare( "SELECT user_privacy, tabs_privacy FROM $meta_table WHERE user_id = %d", $user_id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			if ( ! empty( $user_meta_info->user_privacy ) ) {
 				$public_fields = explode( ',', $user_meta_info->user_privacy );
 			} else {
@@ -4499,7 +4484,7 @@ class UsersWP_Forms {
 
 			// Save tabs privacy settings
 			$tabs_table_name = uwp_get_table_prefix() . 'uwp_profile_tabs';
-			$tabs            = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $tabs_table_name . " WHERE form_type=%s AND user_decided = 1 ORDER BY sort_order ASC", 'profile-tabs' ) );
+			$tabs            = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $tabs_table_name . " WHERE form_type=%s AND user_decided = 1 ORDER BY sort_order ASC", 'profile-tabs' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 			if ( $tabs ) {
 				$public_fields  = maybe_unserialize( $user_meta_info->tabs_privacy );
@@ -4618,7 +4603,7 @@ class UsersWP_Forms {
 		if ( $country_field ) {
 			$country_data = uwp_get_country_data();
 			echo "<script>var uwp_country_data = " . json_encode( $country_data ) . "</script>";
-			echo "<script type='text/javascript' src='" . USERSWP_PLUGIN_URL . 'assets/js/countrySelect.min.js' . "' ></script>";
+			echo "<script type='text/javascript' src='" . esc_url( USERSWP_PLUGIN_URL ) . 'assets/js/countrySelect.min.js' . "' ></script>";
 		}
 
 		$args = array('form_title' => '');
