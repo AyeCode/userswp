@@ -16,15 +16,14 @@ $user = uwp_get_displayed_user();
 				$thumb_url = uwp_get_default_thumb_uri();
 			}
 			?>
-			<img class="uwp-profile-item-alignleft uwp-profile-item-thumb"
-			     src="<?php echo esc_url_raw( $thumb_url ); ?>">
+			<img class="uwp-profile-item-alignleft uwp-profile-item-thumb" src="<?php echo esc_url_raw( $thumb_url ); ?>">
 		</a>
 	</div>
 
 	<h3 class="uwp-profile-item-title">
-		<a href="<?php echo esc_url_raw( get_the_permalink() ); ?>"><?php echo get_the_title(); ?></a>
+		<a href="<?php echo esc_url_raw( get_the_permalink() ); ?>"><?php echo esc_html( get_the_title() ); ?></a>
 	</h3>
-	<time class="uwp-profile-item-time published" datetime="<?php echo get_the_time( 'c' ); ?>">
+	<time class="uwp-profile-item-time published" datetime="<?php echo esc_attr( get_the_time( 'c' ) ); ?>">
 		<?php echo get_the_date(); ?>
 	</time>
 	<div class="uwp-profile-item-summary">

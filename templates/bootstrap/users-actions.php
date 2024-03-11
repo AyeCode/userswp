@@ -35,17 +35,17 @@ do_action('uwp_users_loop_actions');
                         $content =  __("Sort By", "userswp");
                     }
                     
-                    echo aui()->button(array(
+                    echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'type'  =>  'button',
                         'id'    =>  'uwp-user-sort',
                         'icon'       => 'fas fa-sort',
                         'class'      => 'btn btn-outline-primary rounded-right',
-                        'content'    => $content,
+                        'content'    => $content, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         'extra_attributes'  => array('data-toggle'=>'dropdown', 'aria-haspopup'=>'true', 'aria-expanded'=>'false')
                     ));
                     ?>
                     <div class="dropdown-menu mt-3" aria-labelledby="uwp-user-sort">
-                        <h6 class="dropdown-header"><?php _e("Sort Options", "userswp"); ?></h6>
+                        <h6 class="dropdown-header"><?php esc_html_e("Sort Options", "userswp"); ?></h6>
 						<?php
 						$base_link = uwp_get_page_id('users_page',true);
 
@@ -73,21 +73,21 @@ do_action('uwp_users_loop_actions');
 
 						foreach ($sort_by_options as $key => $val){
 							$active = isset($_REQUEST['uwp_sort_by']) && $_REQUEST['uwp_sort_by']==$key ? 'active' : '';
-							echo aui()->button(array(
+							echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								'type'  =>  'a',
 								'href'    =>  esc_url_raw(add_query_arg(array('uwp_sort_by'=>$key),$base_link)),
-								'class'      => 'dropdown-item '.$active,
+								'class'      => esc_html( 'dropdown-item '.$active ),
 								'content'    => esc_attr($val),
 							));
 						}
 
 						if(!empty($_REQUEST['uwp_sort_by'])){
 							echo '<div class="dropdown-divider"></div>';
-						    echo aui()->button(array(
+						    echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								'type'  =>  'a',
 								'href'    =>  esc_url_raw($base_link),
 								'class'      => 'dropdown-item',
-								'content'    => __("Clear Sort", "userswp"),
+								'content'    => esc_html__("Clear Sort", "userswp"),
 							));
 						} ?>
                     </div>
@@ -96,7 +96,7 @@ do_action('uwp_users_loop_actions');
                 <div class="btn-group btn-group-sm uwp-list-view-select" role="group" aria-label="First group">
                     <div class="btn-group btn-group-sm" role="group">
 	                    <?php
-	                    echo aui()->button(array(
+	                    echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		                    'type'  =>  'button',
 		                    'id'      => 'uwp-list-view-select-grid',
 		                    'class'      => 'btn btn-outline-primary rounded-right uwp-list-view-select-grid',
@@ -106,38 +106,38 @@ do_action('uwp_users_loop_actions');
 	                    ?>
                         <div class="dropdown-menu dropdown-menu-right mt-3 p-0" aria-labelledby="uwp-list-view-select-grid">
                             <?php
-                            echo aui()->button(array(
+                            echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	                            'type'  =>  'button',
 	                            'class'      => 'dropdown-item',
-	                            'content'    => sprintf(__("Grid %d","userswp"),1),
+	                            'content'    => esc_html( sprintf(__("Grid %d","userswp"),1) ),
 	                            'onclick'    => 'uwp_list_view_select(1);return false;',
 	                            'extra_attributes'  => array('data-gridview'=>'1')
                             ));
-                            echo aui()->button(array(
+                            echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	                            'type'  =>  'button',
 	                            'class'      => 'dropdown-item',
-	                            'content'    => sprintf(__("Grid %d","userswp"),2),
+	                            'content'    => esc_html( sprintf(__("Grid %d","userswp"),2) ),
 	                            'onclick'    => 'uwp_list_view_select(2);return false;',
 	                            'extra_attributes'  => array('data-gridview'=>'2')
                             ));
-                            echo aui()->button(array(
+                            echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	                            'type'  =>  'button',
 	                            'class'      => 'dropdown-item',
-	                            'content'    => sprintf(__("Grid %d","userswp"),3),
+	                            'content'    => esc_html( sprintf(__("Grid %d","userswp"),3) ),
 	                            'onclick'    => 'uwp_list_view_select(3);return false;',
 	                            'extra_attributes'  => array('data-gridview'=>'3')
                             ));
-                            echo aui()->button(array(
+                            echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	                            'type'  =>  'button',
 	                            'class'      => 'dropdown-item',
-	                            'content'    => sprintf(__("Grid %d","userswp"),4),
+	                            'content'    => esc_html( sprintf(__("Grid %d","userswp"),4) ),
 	                            'onclick'    => 'uwp_list_view_select(4);return false;',
 	                            'extra_attributes'  => array('data-gridview'=>'4')
                             ));
-                            echo aui()->button(array(
+                            echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	                            'type'  =>  'button',
 	                            'class'      => 'dropdown-item',
-	                            'content'    => sprintf(__("Grid %d","userswp"),5),
+	                            'content'    => esc_html( sprintf(__("Grid %d","userswp"),5) ),
 	                            'onclick'    => 'uwp_list_view_select(5);return false;',
 	                            'extra_attributes'  => array('data-gridview'=>'5')
                             ));

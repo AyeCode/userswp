@@ -31,7 +31,7 @@ if ( ! $uwp_in_user_loop ){ ?>
 			echo '<a href="' . esc_url( uwp_build_profile_tab_url( $user->ID ) ) . '" title="' .  esc_attr( $user->display_name ). '">';
 		} ?>
         <img class="card-img-top m-0 p-0 uwp-banner-image" src="<?php echo esc_url( $banner_url ); ?>"
-             alt="<?php _e( "User banner image", "userswp" ); ?>">
+             alt="<?php esc_attr_e( "User banner image", "userswp" ); ?>">
 		<?php if ( $uwp_in_user_loop ) {
 			echo '</a>';
 		} ?>
@@ -39,15 +39,14 @@ if ( ! $uwp_in_user_loop ){ ?>
 		<?php if ( ! $uwp_in_user_loop && is_user_logged_in() && $allow_change && ( get_current_user_id() == $user->ID ) ) { ?>
             <div class="card-img-overlay p-1 bg-shadow-bottom-dd">
 				<?php
-				echo aui()->button( array(
+				echo aui()->button( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'type'             => 'a',
 					'href'             => '#',
 					'class'            => 'btn btn-sm uwp-banner-change-icon btn-outline-secondary border-0',
 					'icon'             => 'fas fa-camera fa-fw',
 					'title'            => '',
 					'onclick'          => "uwp_profile_image_change('banner');return false;",
-					'extra_attributes' => array( 'data-toggle'         => 'tooltip',
-					                             'data-original-title' => __( 'Update Profile Image', 'userswp' )
+					'extra_attributes' => array( 'data-toggle' => 'tooltip', 'data-original-title' => esc_html__( 'Update Profile Image', 'userswp' )
 					)
 				) );
 				?>
@@ -68,7 +67,7 @@ if ( ! $uwp_in_user_loop ){ ?>
                     <img class="rounded-circle shadow border border-white border-width-4 p-0 mw-100 <?php if ( ! $hide_cover ) {
 						echo "mt-neg5";
 					} ?>"
-                         src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php _e( "User avatar", "userswp" ); ?>">
+                         src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php esc_html_e( "User avatar", "userswp" ); ?>">
 					<?php if ( $uwp_in_user_loop ) {
 						echo '</a>';
 					} ?>
@@ -76,15 +75,14 @@ if ( ! $uwp_in_user_loop ){ ?>
 					<?php if ( ! $uwp_in_user_loop && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && $allow_change ) { ?>
                         <div class="card-img-overlay p-0">
 							<?php
-							echo aui()->button( array(
+							echo aui()->button( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								'type'             => 'a',
 								'href'             => '#',
 								'class'            => 'btn btn-sm uwp-banner-change-icon btn-outline-secondary btn-circle border-0 align-self-end mx-auto',
 								'icon'             => 'fas fa-camera fa-fw',
 								'title'            => '',
 								'onclick'          => "uwp_profile_image_change('avatar');return false;",
-								'extra_attributes' => array( 'data-toggle'         => 'tooltip',
-								                             'data-original-title' => __( 'Update Profile Image', 'userswp' )
+								'extra_attributes' => array( 'data-toggle'         => 'tooltip', 'data-original-title' => esc_html__( 'Update Profile Image', 'userswp' )
 								)
 							) );
 							?>

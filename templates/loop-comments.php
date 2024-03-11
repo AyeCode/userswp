@@ -25,7 +25,7 @@ $title = isset( $args['template_args']['title'] ) ? $args['template_args']['titl
 		echo '</ul>';
 	} else {
 		// no comments found
-		echo "<p>".__('No comments found', 'userswp')."</p>";
+		echo "<p>".esc_html__('No comments found', 'userswp')."</p>";
 	}
 
 	do_action('uwp_profile_pagination', $maximum_pages);
