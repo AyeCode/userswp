@@ -213,7 +213,7 @@ class UsersWP_Seo {
 
         if(is_uwp_profile_page()) {
             $description = $this->get_description();
-            echo '<meta name="description" content="' . $description . '" />';
+            echo '<meta name="description" content="' . esc_attr( $description ) . '" />';
         }
     }
 

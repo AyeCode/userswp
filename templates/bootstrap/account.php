@@ -21,13 +21,13 @@ do_action( 'uwp_template_before', 'account' ); ?>
 
 							do_action( 'uwp_template_form_title_before', 'account' );
 
-							echo aui()->button( array(
+							echo aui()->button( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								'type'    => 'a',
-								'href'    => uwp_build_profile_tab_url( $user_id ),
+								'href'    => esc_url( uwp_build_profile_tab_url( $user_id ) ),
 								'class'   => 'mt-0 text-decoration-none font-weight-bold',
 								'icon'    => '',
-								'title'   => $display_name,
-								'content' => '@' . $display_name,
+								'title'   => esc_html( $display_name ),
+								'content' => '@' . esc_html( $display_name ),
 							) );
 
 							do_action( 'uwp_template_form_title_after', 'account' );
