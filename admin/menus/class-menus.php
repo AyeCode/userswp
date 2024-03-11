@@ -61,7 +61,7 @@ class UsersWP_Menus {
             <h4><?php esc_html_e( 'Common', 'userswp' ) ?></h4>
             <p><?php esc_html_e( 'Common links are visible to everyone.', 'userswp' ) ?></p>
 
-            <div id="tabs-panel-posttype-<?php echo $post_type_name; ?>-common" class="tabs-panel tabs-panel-active">
+            <div id="tabs-panel-posttype-<?php echo esc_attr( $post_type_name ); ?>-common" class="tabs-panel tabs-panel-active">
                 <ul id="users_wp-menu-checklist-common" class="categorychecklist form-no-clear">
                     <?php
                     if ($tabs['common']['pages']) {
@@ -73,7 +73,7 @@ class UsersWP_Menus {
             <h4><?php esc_html_e( 'Logged-In', 'userswp' ) ?></h4>
             <p><?php esc_html_e( 'Logged-In links are not visible to visitors who are not logged in.', 'userswp' ) ?></p>
 
-            <div id="tabs-panel-posttype-<?php echo $post_type_name; ?>-loggedin" class="tabs-panel tabs-panel-active">
+            <div id="tabs-panel-posttype-<?php echo esc_attr( $post_type_name ); ?>-loggedin" class="tabs-panel tabs-panel-active">
                 <ul id="users_wp-menu-checklist-loggedin" class="categorychecklist form-no-clear">
                     <?php
                     if ($tabs['loggedin']['pages']) {
@@ -86,7 +86,7 @@ class UsersWP_Menus {
             <h4><?php esc_html_e( 'Logged-Out', 'userswp' ) ?></h4>
             <p><?php esc_html_e( 'Logged-Out links are not visible to users who are logged in.', 'userswp' ) ?></p>
 
-            <div id="tabs-panel-posttype-<?php echo $post_type_name; ?>-loggedin" class="tabs-panel tabs-panel-active">
+            <div id="tabs-panel-posttype-<?php echo esc_attr( $post_type_name ); ?>-loggedin" class="tabs-panel tabs-panel-active">
                 <ul id="users_wp-menu-checklist-loggedin" class="categorychecklist form-no-clear">
                     <?php
                     if ($tabs['loggedout']['pages']) {
@@ -99,7 +99,7 @@ class UsersWP_Menus {
             <p class="button-controls wp-clearfix" data-items-type="users-wp-endpoints">
                 <span class="list-controls hide-if-no-js">
                     <input type="checkbox" id="users-wp-endpoints-tab" class="select-all">
-                    <label for="users-wp-endpoints-tab"><?php _e( 'Select all', 'userswp' ); ?></label>
+                    <label for="users-wp-endpoints-tab"><?php esc_html_e( 'Select all', 'userswp' ); ?></label>
                 </span>
 
                 <span class="add-to-menu">

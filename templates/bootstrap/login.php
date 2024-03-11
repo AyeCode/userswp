@@ -20,11 +20,11 @@ do_action( 'uwp_template_before', 'login', $args ); ?>
 			<div class="modal-header">
 				<h5 class="modal-title"><?php echo esc_attr($form_title);?></h5>
 				<?php
-				echo aui()->button(array(
+				echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'type'       =>  'button',
 					'class'      => 'close',
 					'content'    => ' <span aria-hidden="true">&times;</span>',
-					'extra_attributes'  => array('aria-label'=>__("Close","userswp"), 'data-' . ( $aui_bs5 ? 'bs-' : '' ) . 'dismiss'=>"modal")
+					'extra_attributes'  => array('aria-label'=>esc_html__("Close","userswp"), 'data-' . ( $aui_bs5 ? 'bs-' : '' ) . 'dismiss'=>"modal")
 				));
 				?>
 			</div>
@@ -51,21 +51,21 @@ do_action( 'uwp_template_before', 'login', $args ); ?>
                         $id = 'remember_me';
                         if(wp_doing_ajax()){$id.='_ajax';}
 
-                        echo aui()->input(array(
-	                        'type'  =>  'checkbox',
-	                        'id'    =>  $id,
+                        echo aui()->input(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	                        'type'  => 'checkbox',
+	                        'id'    => esc_html( $id ),
 	                        'name'    =>  'remember_me',
 	                        'value' =>  'forever',
-	                        'label' => __( 'Remember Me', 'userswp' ),
+	                        'label' => esc_html__( 'Remember Me', 'userswp' ),
                         ));
                         ?>
 					</div>
 
 					<?php
-					echo aui()->button(array(
+					echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'       =>  'submit',
 						'class'      => 'btn btn-primary btn-block text-uppercase uwp_login_submit',
-						'content'    => __( 'Login', 'userswp' ),
+						'content'    => esc_html__( 'Login', 'userswp' ),
 						'name'       => 'uwp_login_submit',
 					));
 					?>
@@ -75,22 +75,22 @@ do_action( 'uwp_template_before', 'login', $args ); ?>
                 <div class="uwp-footer-links">
                     <div class="uwp-footer-link d-inline-block">
 						<?php
-						echo aui()->button(array(
+						echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'type'  =>  'a',
-							'href'       => uwp_get_register_page_url(),
+							'href'       => esc_url( uwp_get_register_page_url() ),
 							'class'      => 'd-block text-center mt-2 small uwp-register-link',
-							'content'    => uwp_get_option("register_link_title") ? uwp_get_option("register_link_title") : __( 'Create account', 'userswp' ),
+							'content'    => esc_attr( uwp_get_option("register_link_title") ? uwp_get_option("register_link_title") : __( 'Create account', 'userswp' ) ),
 							'extra_attributes'  => array('rel'=>'nofollow')
 						));
 						?>
                     </div>
                     <div class="uwp-footer-link float-right">
 						<?php
-						echo aui()->button(array(
+						echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'type'  =>  'a',
-							'href'       => uwp_get_forgot_page_url(),
+							'href'       => esc_url( uwp_get_forgot_page_url() ),
 							'class'      => 'd-block text-center mt-2 small uwp-forgot-password-link',
-							'content'    => uwp_get_option("forgot_link_title") ? uwp_get_option("forgot_link_title") : __( 'Forgot password?', 'userswp' ),
+							'content'    => esc_attr( uwp_get_option("forgot_link_title") ? uwp_get_option("forgot_link_title") : __( 'Forgot password?', 'userswp' ) ),
 							'extra_attributes'  => array('rel'=>'nofollow')
 						));
 						?>

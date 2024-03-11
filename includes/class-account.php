@@ -28,8 +28,8 @@ class UsersWP_Account {
 		    ?>
             <form class="uwp-account-form uwp_form mt-3" method="post" enctype="multipart/form-data">
 			    <?php do_action('uwp_template_fields', 'account'); ?>
-                <input type="hidden" name="uwp_account_nonce" value="<?php echo wp_create_nonce( 'uwp-account-nonce' ); ?>" />
-                <input name="uwp_account_submit" class="<?php echo $bs_btn_class; ?>" value="<?php _e( 'Update Account', 'userswp' ); ?>" type="submit">
+                <input type="hidden" name="uwp_account_nonce" value="<?php echo esc_attr( wp_create_nonce( 'uwp-account-nonce' ) ); ?>" />
+                <input name="uwp_account_submit" class="<?php echo esc_attr( $bs_btn_class ); ?>" value="<?php esc_attr_e( 'Update Account', 'userswp' ); ?>" type="submit">
             </form>
 	    <?php }
 
@@ -39,7 +39,7 @@ class UsersWP_Account {
 		    ?>
             <form class="uwp-account-form uwp_form mt-3" method="post" enctype="multipart/form-data">
 			    <?php do_action('uwp_template_fields', 'change'); ?>
-                <input name="uwp_change_submit" class="<?php echo $bs_btn_class; ?>" value="<?php _e( 'Change Password', 'userswp' ); ?>" type="submit">
+                <input name="uwp_change_submit" class="<?php echo esc_attr( $bs_btn_class ); ?>" value="<?php esc_attr_e( 'Change Password', 'userswp' ); ?>" type="submit">
             </form>
 		<?php
 		    uwp_password_strength_inline_js();
@@ -73,8 +73,8 @@ class UsersWP_Account {
                 $obj->template_fields_html($fields, 'delete-account');
 
                 ?>
-                <input type="hidden" name="uwp_delete_account_nonce" value="<?php echo wp_create_nonce( 'uwp-delete-account-nonce' ); ?>" />
-                <input name="uwp_delete_account_submit" class="<?php echo $bs_btn_class; ?>" value="<?php _e( 'Delete Account', 'userswp' ); ?>" type="submit">
+                <input type="hidden" name="uwp_delete_account_nonce" value="<?php echo esc_attr( wp_create_nonce( 'uwp-delete-account-nonce' ) ); ?>" />
+                <input name="uwp_delete_account_submit" class="<?php echo esc_attr( $bs_btn_class ); ?>" value="<?php esc_attr_e( 'Delete Account', 'userswp' ); ?>" type="submit">
             </form>
 	    <?php }
 

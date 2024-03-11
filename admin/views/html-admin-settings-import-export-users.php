@@ -117,14 +117,14 @@ $total_users = $users_count['total_users'];
 ?>
 <div class="metabox-holder uwp-ie-container">
     <div class="postbox uwp-export-users">
-        <h3><span><?php _e( 'Export Users Data', 'userswp' ); ?></span></h3>
+        <h3><span><?php esc_html_e( 'Export Users Data', 'userswp' ); ?></span></h3>
         <div class="inside uwp-export-users-form">
-            <p><?php _e( 'Download a CSV of all users data for usersWP.', 'invoicing' ); ?></p>
+            <p><?php esc_html_e( 'Download a CSV of all users data for usersWP.', 'invoicing' ); ?></p>
             <table class="form-table">
                 <tbody>
                 <tr>
-                    <th class=""><label for="uwp_ie_chunk_size"><?php _e( 'Max entries per csv file:', 'userswp' );?></label></th>
-                    <td><select name="uwp_ie_chunk_size" class="aui-select2" id="uwp_ie_chunk_size" data-ucount = "<?php echo $total_users;?>" style="min-width:140px"><?php echo $uwp_chunk_sizes_opts;?></select><p class="description"><?php _e( 'The maximum number of entries per csv file (default to 5000, you might want to lower this to prevent memory issues.)', 'userswp' );?></p></td>
+                    <th class=""><label for="uwp_ie_chunk_size"><?php esc_html_e( 'Max entries per csv file:', 'userswp' );?></label></th>
+                    <td><select name="uwp_ie_chunk_size" class="aui-select2" id="uwp_ie_chunk_size" data-ucount = "<?php echo esc_attr( $total_users );?>" style="min-width:140px"><?php echo esc_attr( $uwp_chunk_sizes_opts );?></select><p class="description"><?php esc_html_e( 'The maximum number of entries per csv file (default to 5000, you might want to lower this to prevent memory issues.)', 'userswp' );?></p></td>
                 </tr>
                 </tbody>
             </table>
@@ -138,11 +138,11 @@ $total_users = $users_count['total_users'];
     </div>
 
     <div class="postbox">
-        <h3><span><?php _e( 'Import Users' ); ?></span></h3>
+        <h3><span><?php esc_html_e( 'Import Users' ); ?></span></h3>
         <div class="inside" id="uwp-imp-container">
-            <p><?php _e( 'Import the users data from a .csv file. This file can be obtained by exporting the data on another site using the form above.' ); ?></p>
+            <p><?php esc_html_e( 'Import the users data from a .csv file. This file can be obtained by exporting the data on another site using the form above.' ); ?></p>
                 <p class="uwp-imp-uploaded-file">
-                    <a id="uwp-imp-browse" class="button file-selector button-primary" href="#"><?php _e( 'Select File', 'userswp' ); ?></a>
+                    <a id="uwp-imp-browse" class="button file-selector button-primary" href="#"><?php esc_html_e( 'Select File', 'userswp' ); ?></a>
                 </p>
                 <p>
                     <input type="hidden" value="" name="uwp_import_users_file" class="uwp_import_users_file">
@@ -344,9 +344,9 @@ $total_users = $users_count['total_users'];
                 urlstream_upload: true,
                 file_data_name: 'import_file',
                 max_file_size: max_file_size + 'kb',
-                url: '<?php echo admin_url( 'admin-ajax.php' ) . '?nonce=' . wp_create_nonce( 'uwp-ie-file-upload-nonce' ); ?>' + '&type=' + type,
+                url: '<?php echo esc_url( admin_url( 'admin-ajax.php' ) . '?nonce=' . wp_create_nonce( 'uwp-ie-file-upload-nonce' ) ); ?>' + '&type=' + type,
                 filters: [{
-                    title: '<?php _e('Allowed Files', 'userswp'); ?>',
+                    title: '<?php echo esc_js( __('Allowed Files', 'userswp') ); ?>',
                     extensions: allowed_type
                 }]
             });
@@ -376,7 +376,7 @@ $total_users = $users_count['total_users'];
                 if ( this.count >= this.max) {
 
                     if ( this.count > this.max ) {
-                        $('#' + this.container + ' .uwp-file-warning').addClass('error').html( '<?php _e( 'Maximum number of files reached!', 'userswp' ); ?>' );
+                        $('#' + this.container + ' .uwp-file-warning').addClass('error').html( '<?php echo esc_js( __( 'Maximum number of files reached!', 'userswp' ) ); ?>' );
                         $('#' + this.container).find('.file-selector').hide();
 
                         return;

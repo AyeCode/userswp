@@ -73,7 +73,7 @@ class UsersWP_Admin_Settings {
 		global $current_tab;
 
 		if ( empty( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'userswp-settings' ) ) {
-			die( __( 'Action failed. Please refresh the page and retry.', 'userswp' ) );
+			die( esc_html__( 'Action failed. Please refresh the page and retry.', 'userswp' ) );
 		}
 
 		// Trigger actions
@@ -225,15 +225,15 @@ class UsersWP_Admin_Settings {
 						echo '<h2 class="uwp-settings-title">';
 						echo esc_html( $value['title'] );
 						if ( ! empty( $value['title_html'] ) ) {
-							echo $value['title_html'];}
+							echo $value['title_html'];} // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						if ( isset( $value['desc_tip'] ) && $value['desc_tip'] ) {
-							echo $tooltip_html;
+							echo $tooltip_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						}
 						echo '</h2>';
 					}
 
 					if ( ! empty( $value['desc'] ) && ( ! isset( $value['desc_tip'] ) || ! $value['desc_tip'] ) ) {
-						echo wpautop( wptexturize( wp_kses_post( $value['desc'] ) ) );
+						echo wpautop( wptexturize( wp_kses_post( $value['desc'] ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					}
 
 					echo '<table class="form-table">' . "\n\n";
@@ -272,9 +272,9 @@ class UsersWP_Admin_Settings {
 ">
 					<th scope="row" class="titledesc">
 						<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-						<?php echo $tooltip_html; ?>
+						<?php echo wp_kses_post( $tooltip_html ); ?>
 					</th>
-					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
+					<td class="forminp forminp-<?php echo esc_attr( sanitize_title( $value['type'] ) ); ?>">
 						<input
 								name="<?php echo esc_attr( $value['id'] ); ?>"
 								id="<?php echo esc_attr( $value['id'] ); ?>"
@@ -283,7 +283,7 @@ class UsersWP_Admin_Settings {
 								value="<?php echo esc_attr( $option_value ); ?>"
 								class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-							<?php echo implode( ' ', $custom_attributes ); ?>
+							<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							<?php
 							if ( ! empty( $value['disabled'] ) && true == $value['disabled'] ) {
 								echo 'disabled="disabled"'; }
@@ -296,7 +296,7 @@ class UsersWP_Admin_Settings {
 							if ( $value['type'] == 'number' ) {
 								echo "lang='EN'";} // HTML5 number input can change number format depending on browser language, we don't want that
 							?>
-						/> <?php echo $description; ?>
+						/> <?php echo wp_kses_post( $description ); ?>
 					</td>
 					</tr>
 					<?php
@@ -319,19 +319,19 @@ class UsersWP_Admin_Settings {
 					">
 					<th scope="row" class="titledesc">
 						<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-						<?php echo $tooltip_html; ?>
+						<?php echo wp_kses_post( $tooltip_html ); ?>
 					</th>
-					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
+					<td class="forminp forminp-<?php echo esc_attr( sanitize_title( $value['type'] ) ); ?>">
 						<input
 								name="<?php echo esc_attr( $value['id'] ); ?>"
-								id="<?php echo sanitize_key( $value['id'] ); ?>"
+								id="<?php echo esc_attr( sanitize_key( $value['id'] ) ); ?>"
 								type="text"
 								dir="ltr"
 								value="<?php echo esc_attr( $option_value ); ?>"
 								class="uwp-color-picker"
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
 								data-default-color="<?php echo esc_attr( $value['default'] ); ?>
-									<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?> "/>&lrm; <?php echo $description; ?>
+									<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?> "/>&lrm; <?php echo wp_kses_post( $description ); ?>
 					</td>
 					</tr>
 					<?php
@@ -372,16 +372,16 @@ class UsersWP_Admin_Settings {
 					">
 					<th scope="row" class="titledesc">
 						<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-						<?php echo $tooltip_html; ?>
+						<?php echo wp_kses_post( $tooltip_html ); ?>
 					</th>
-					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
+					<td class="forminp forminp-<?php echo esc_attr( sanitize_title( $value['type'] ) ); ?>">
 
 						<div class="uwp-upload-img" data-field="<?php echo esc_attr( $value['id'] ); ?>">
-							<div class="uwp-upload-display uwp-img-size-<?php echo $image_size; ?> thumbnail"><div class="centered"><?php echo $show_img; ?></div></div>
+							<div class="uwp-upload-display uwp-img-size-<?php echo esc_attr( $image_size ); ?> thumbnail"><div class="centered"><?php echo $show_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div></div>
 							<div class="uwp-upload-fields">
 								<input type="hidden" id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" value="<?php echo esc_attr( $option_value ); ?>" />
-								<button type="button" class="uwp_upload_image_button button"><?php _e( 'Upload Image', 'userswp' ); ?></button>
-								<button type="button" class="uwp_remove_image_button button <?php echo $remove_class; ?>"><?php _e( 'Remove Image', 'userswp' ); ?></button>
+								<button type="button" class="uwp_upload_image_button button"><?php esc_html_e( 'Upload Image', 'userswp' ); ?></button>
+								<button type="button" class="uwp_remove_image_button button <?php echo esc_attr( $remove_class ); ?>"><?php esc_html_e( 'Remove Image', 'userswp' ); ?></button>
 							</div>
 						</div>
 					</td>
@@ -408,10 +408,10 @@ class UsersWP_Admin_Settings {
 					">
 					<th scope="row" class="titledesc">
 						<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-						<?php echo $tooltip_html; ?>
+						<?php echo wp_kses_post( $tooltip_html ); ?>
 					</th>
-					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
-						<?php echo $description; ?>
+					<td class="forminp forminp-<?php echo esc_attr( sanitize_title( $value['type'] ) ); ?>">
+						<?php echo wp_kses_post( $description ); ?>
 
 						<textarea
 								name="<?php echo esc_attr( $value['id'] ); ?>"
@@ -419,11 +419,11 @@ class UsersWP_Admin_Settings {
 								style="<?php echo esc_attr( $value['css'] ); ?>"
 								class="large-text <?php echo esc_attr( $value['class'] ); ?>"
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								rows="<?php echo $rows; ?>"
-							<?php echo implode( ' ', $custom_attributes ); ?>
+								rows="<?php echo esc_attr( $rows ); ?>"
+							<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 						><?php echo esc_textarea( stripslashes( $option_value ) ); ?></textarea>
 						<?php if ( ! empty( $value['custom_desc'] ) ) { ?>
-							<span class="uwp-custom-desc"><?php echo $value['custom_desc']; ?></span>
+							<span class="uwp-custom-desc"><?php echo wp_kses_post( $value['custom_desc'] ); ?></span>
 						<?php } ?>
 					</td>
 					</tr>
@@ -446,10 +446,10 @@ class UsersWP_Admin_Settings {
 					<tr valign="top" class="<?php echo ( ! empty( $value['advanced'] ) ? 'uwp-advanced-setting' : '' ); ?>">
 					<th scope="row" class="titledesc">
 						<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-						<?php echo $tooltip_html; ?>
+						<?php echo wp_kses_post( $tooltip_html ); ?>
 					</th>
-					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
-						<?php echo $description; ?>
+					<td class="forminp forminp-<?php echo esc_attr( sanitize_title( $value['type'] ) ); ?>">
+						<?php echo wp_kses_post( $description ); ?>
 						<?php
 						if ( $wp_version >= 3.3 && function_exists( 'wp_editor' ) ) {
 							wp_editor(
@@ -471,12 +471,12 @@ class UsersWP_Admin_Settings {
 									style="<?php echo esc_attr( $value['css'] ); ?>"
 									class="large-text <?php echo esc_attr( $value['class'] ); ?>"
 									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-									rows="<?php echo $rows; ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
+									rows="<?php echo esc_attr( $rows ); ?>"
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							><?php echo esc_textarea( stripslashes( $option_value ) ); ?></textarea>
 						<?php } ?>
 						<?php if ( ! empty( $value['custom_desc'] ) ) { ?>
-							<span class="uwp-custom-desc"><?php echo $value['custom_desc']; ?></span>
+							<span class="uwp-custom-desc"><?php echo wp_kses_post( $value['custom_desc'] ); ?></span>
 						<?php } ?>
 					</td>
 					</tr>
@@ -506,15 +506,15 @@ class UsersWP_Admin_Settings {
 					">
 					<th scope="row" class="titledesc">
 						<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-						<?php echo $tooltip_html; ?>
+						<?php echo wp_kses_post( $tooltip_html ); ?>
 					</th>
-					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
+					<td class="forminp forminp-<?php echo esc_attr( sanitize_title( $value['type'] ) ); ?>">
 						<select
 								name="<?php echo esc_attr( $value['id'] ); ?><?php echo ( 'multiselect' === $value['type'] ) ? '[]' : ''; ?>"
 								id="<?php echo esc_attr( $value['id'] ); ?>"
 								style="<?php echo esc_attr( $value['css'] ); ?>"
 								class="regular-text aui-select2 <?php echo esc_attr( $value['class'] ); ?>"
-							<?php echo implode( ' ', $custom_attributes ); ?>
+							<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
 							<?php echo ! empty( $value['sortable'] ) ? ' data-sortable="true"' : ''; ?>
 							<?php echo ! empty( $value['placeholder'] ) ? ' data-placeholder="' . esc_attr( $value['placeholder'] ) . '"' : ''; ?>
@@ -537,12 +537,12 @@ class UsersWP_Admin_Settings {
 																}
 
 																?>
-									><?php echo $val; ?></option>
+									><?php echo esc_html( $val ); ?></option>
 									<?php
 								}
 							}
 							?>
-						</select> <?php echo $description; ?>
+						</select> <?php echo wp_kses_post( $description ); ?>
 					</td>
 					</tr>
 					<?php
@@ -557,7 +557,7 @@ class UsersWP_Admin_Settings {
 					}
 
 					?>
-					<tr valign="top" class="<?php echo $wrap_class; ?>
+					<tr valign="top" class="<?php echo esc_attr( $wrap_class ); ?>
 													   <?php
 														if ( isset( $value['advanced'] ) && $value['advanced'] ) {
 															echo ' uwp-advanced-setting';}
@@ -565,11 +565,11 @@ class UsersWP_Admin_Settings {
 					">
 					<th scope="row" class="titledesc">
 						<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-						<?php echo $tooltip_html; ?>
+						<?php echo wp_kses_post( $tooltip_html ); ?>
 					</th>
-					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
+					<td class="forminp forminp-<?php echo esc_attr( sanitize_title( $value['type'] ) ); ?>">
 						<fieldset>
-							<?php echo $description; ?>
+							<?php echo wp_kses_post( $description ); ?>
 							<ul>
 								<?php
 								foreach ( $value['options'] as $key => $val ) {
@@ -577,13 +577,13 @@ class UsersWP_Admin_Settings {
 									<li>
 										<label><input
 													name="<?php echo esc_attr( $value['id'] ); ?>"
-													value="<?php echo $key; ?>"
+													value="<?php echo esc_attr( $key ); ?>"
 													type="radio"
 													style="<?php echo esc_attr( $value['css'] ); ?>"
 													class="<?php echo esc_attr( $value['class'] ); ?>"
-												<?php echo implode( ' ', $custom_attributes ); ?>
+												<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 												<?php checked( $key, $option_value ); ?>
-											/> <?php echo $val; ?></label>
+											/> <?php echo esc_html( $val ); ?></label>
 									</li>
 									<?php
 								}
@@ -645,7 +645,7 @@ class UsersWP_Admin_Settings {
 					}
 
 					?>
-						<label for="<?php echo $value['id']; ?>">
+						<label for="<?php echo esc_attr( $value['id'] ); ?>">
 							<input
 								name="<?php echo esc_attr( $value['id'] ); ?>"
 								id="<?php echo esc_attr( $value['id'] ); ?>"
@@ -654,9 +654,9 @@ class UsersWP_Admin_Settings {
 								value="1"
 								<?php checked( $option_value, '1' ); ?>
 								<?php checked( $option_value, 'yes' ); ?>
-								<?php echo implode( ' ', $custom_attributes ); ?>
-							/> <?php echo $description; ?>
-						</label> <?php echo $tooltip_html; ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+							/> <?php echo wp_kses_post( $description ); ?>
+						</label> <?php echo wp_kses_post( $tooltip_html ); ?>
 					<?php
 
 					if ( ! isset( $value['checkboxgroup'] ) || 'end' == $value['checkboxgroup'] ) {
@@ -689,7 +689,7 @@ class UsersWP_Admin_Settings {
 					" >
 						<th scope="row" class="titledesc">
 							<label><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
+							<?php echo wp_kses_post( $tooltip_html ); ?>
 						</th>
 						<td class="forminp forminp-checkbox">
 							<div class="uwp-mcheck-rows uwp-mcheck-<?php echo sanitize_key( $value['id'] ); ?>">
@@ -703,16 +703,16 @@ class UsersWP_Admin_Settings {
 									?>
 									<div class="uwp-mcheck-row">
 										<input
-												name="<?php echo esc_attr( $value['id'] ); ?>[<?php echo $key; ?>]"
+												name="<?php echo esc_attr( $value['id'] ); ?>[<?php echo esc_attr( $key ); ?>]"
 												id="<?php echo esc_attr( $value['id'] . '-' . sanitize_key( $key ) ); ?>"
 												type="checkbox"
 												class="<?php echo esc_attr( isset( $value['class'] ) ? $value['class'] : '' ); ?>"
-												value="<?php echo $key; ?>"
+												value="<?php echo esc_attr( $key ); ?>"
 											<?php checked( $checked, true ); ?>
-											<?php echo implode( ' ', $custom_attributes ); ?>
-										/> <label for="<?php echo $value['id'] . '-' . sanitize_key( $key ); ?>"><?php echo $title; ?></label></div>
+											<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+										/> <label for="<?php echo esc_attr( $value['id'] . '-' . sanitize_key( $key ) ); ?>"><?php echo esc_html( $title ); ?></label></div>
 								<?php } ?>
-								<?php echo $description; ?>
+								<?php echo wp_kses_post( $description ); ?>
 							</div>
 						</td>
 					</tr>
@@ -749,15 +749,15 @@ class UsersWP_Admin_Settings {
 						echo 'uwp-advanced-setting';}
 					?>
 					">
-					<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ); ?> <?php echo $tooltip_html; ?></th>
+					<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ); ?> <?php echo wp_kses_post( $tooltip_html ); ?></th>
 					<td class="forminp">
-						<?php echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'userswp' ) . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages( $args ) ); ?> <?php echo $description; ?>
+						<?php echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'userswp' ) . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages( $args ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php echo wp_kses_post( $description ); ?>
 
 						<?php if ( isset( $args['selected'] ) && $args['selected'] > 0 ) { ?>
-							<a href="<?php echo get_edit_post_link( $args['selected'] ); ?>" class="button uwp-page-setting-edit"><?php _e( 'Edit Page', 'userswp' ); ?></a>
+							<a href="<?php echo esc_url( get_edit_post_link( $args['selected'] ) ); ?>" class="button uwp-page-setting-edit"><?php esc_html_e( 'Edit Page', 'userswp' ); ?></a>
 
 							<?php if ( empty( $value['is_template_page'] ) ) { ?>
-								<a href="<?php echo get_permalink( $args['selected'] ); ?>" class="button uwp-page-setting-view"><?php _e( 'View Page', 'userswp' ); ?></a>
+								<a href="<?php echo esc_url( get_permalink( $args['selected'] ) ); ?>" class="button uwp-page-setting-view"><?php esc_html_e( 'View Page', 'userswp' ); ?></a>
 								<?php
 							}
 						}
@@ -828,14 +828,14 @@ class UsersWP_Admin_Settings {
 					<th scope="row" class="titledesc">
 						<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
 					</th>
-					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ); ?>">
+					<td class="forminp forminp-<?php echo esc_attr( sanitize_title( $value['type'] ) ); ?>">
 						<input
 								name="<?php echo esc_attr( $value['id'] ); ?>"
 								id="<?php echo esc_attr( $value['id'] ); ?>"
 								type="hidden"
 								value="<?php echo esc_attr( $option_value ); ?>"
-							<?php echo implode( ' ', $custom_attributes ); ?>
-						/> <?php echo $description; ?>
+							<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						/> <?php echo wp_kses_post( $description ); ?>
 					</td>
 					</tr>
 					<?php
@@ -860,14 +860,14 @@ class UsersWP_Admin_Settings {
 						echo 'uwp-advanced-setting'; }
 					?>
 					">
-						<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ); ?> <?php echo $tooltip_html; ?></th>
+						<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ); ?> <?php echo wp_kses_post( $tooltip_html ); ?></th>
 						<td class="forminp">
 							<select
 								name="<?php echo esc_attr( $value['id'] ); ?>"
 								id="<?php echo esc_attr( $value['id'] ); ?>"
 								style="<?php echo esc_attr( $value['css'] ); ?>"
 								class="regular-text aui-fa-select2 <?php echo esc_attr( $value['class'] ); ?>"
-							<?php echo implode( ' ', $custom_attributes ); ?>
+							<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							<?php echo ! empty( $value['sortable'] ) ? ' data-sortable="true"' : ''; ?>
 							<?php echo ! empty( $value['placeholder'] ) ? ' data-placeholder="' . esc_attr( $value['placeholder'] ) . '"' : ''; ?>
 								>

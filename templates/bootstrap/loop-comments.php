@@ -23,12 +23,11 @@ $title = isset( $args['template_args']['title'] ) ? $args['template_args']['titl
 		echo '</div>';
 	} else {
 		// no comments found
-		echo aui()->alert(array(
+		echo aui()->alert(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'type'=>'info',
-			'content'=> sprintf(__('No %s found', 'userswp'), strtolower($title))
+			'content'=> esc_html( sprintf(__('No %s found', 'userswp'), strtolower($title)) )
 		));
 	}
-
 	do_action('uwp_profile_pagination', $maximum_pages);
 	?>
 </div>

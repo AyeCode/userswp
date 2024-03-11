@@ -17,11 +17,11 @@ $tabs        = apply_filters( 'uwp_admin_status_tabs', $tabs );
 	<nav class="nav-tab-wrapper uwp-nav-tab-wrapper">
 		<?php
 			foreach ( $tabs as $name => $label ) {
-				echo '<a href="' . admin_url( 'admin.php?page=uwp_status&tab=' . $name ) . '" class="nav-tab ';
+				echo '<a href="' . esc_url( admin_url( 'admin.php?page=uwp_status&tab=' . $name ) ) . '" class="nav-tab ';
 				if ( $current_tab == $name ) {
 					echo 'nav-tab-active';
 				}
-				echo '">' . $label . '</a>';
+				echo '">' . esc_html( $label ) . '</a>';
 			}
 		?>
 	</nav>
