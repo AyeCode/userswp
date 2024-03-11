@@ -161,9 +161,9 @@ abstract class UsersWP_Settings_Page {
 
 		<?php
 
-		echo "<button class='button-primary uwp-advanced-toggle $toggle_CSS' type=\"button\"  >";
-		echo "<span class='uwpat-text-show'>$text_show</span>";
-		echo "<span class='uwpat-text-hide'>$text_hide</span>";
+		echo "<button class='button-primary uwp-advanced-toggle " . esc_attr( $toggle_CSS ) . "' type=\"button\"  >";
+		echo "<span class='uwpat-text-show'>" . esc_html( $text_show ) . "</span>";
+		echo "<span class='uwpat-text-hide'>" . esc_html( $text_hide ) . "</span>";
 		echo "</button>";
 
 		?>
@@ -190,7 +190,7 @@ abstract class UsersWP_Settings_Page {
 		$array_keys = array_keys( $sections );
 
 		foreach ( $sections as $id => $label ) {
-			echo '<li><a href="' . admin_url( 'admin.php?page=userswp&tab=' . $this->id . '&section=' . sanitize_title( $id ) ) . '" class="' . ( $current_section == $id ? 'current' : '' ) . '">' . $label . '</a> ' . ( end( $array_keys ) == $id ? '' : '|' ) . ' </li>';
+			echo '<li><a href="' . esc_attr( admin_url( 'admin.php?page=userswp&tab=' . $this->id . '&section=' . sanitize_title( $id ) ) ) . '" class="' . ( $current_section == $id ? 'current' : '' ) . '">' . esc_html( $label ) . '</a> ' . ( end( $array_keys ) == $id ? '' : '|' ) . ' </li>';
 		}
 
 		echo '</ul><br class="clear" />';

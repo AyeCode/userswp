@@ -64,7 +64,7 @@ class UsersWP_Ajax {
     public function uwp_die( $message = '', $title = '', $status = 400 ) {
         add_filter( 'wp_die_ajax_handler', '_uwp_die_handler', 10, 3 );
         add_filter( 'wp_die_handler', '_uwp_die_handler', 10, 3 );
-        wp_die( $message, $title, array( 'response' => $status ));
+        wp_die( $message, $title, array( 'response' => $status )); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 
 	/**

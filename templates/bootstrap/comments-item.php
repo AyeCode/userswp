@@ -13,7 +13,7 @@ if(!empty($user->display_name)) { $user_name = esc_attr( $user->display_name );}
 <div class="card mb-5">
 
 	<div class="card-header">
-        <a href="<?php echo get_comment_link($comment->comment_ID); ?>"><?php echo get_the_title($comment->comment_post_ID); ?></a>
+        <a href="<?php echo esc_url( get_comment_link($comment->comment_ID) ); ?>"><?php echo esc_html( get_the_title($comment->comment_post_ID) ); ?></a>
 	</div>
 
 	<div class="card-body">
@@ -44,8 +44,7 @@ if(!empty($user->display_name)) { $user_name = esc_attr( $user->display_name );}
                             'content'    => __( 'View Comment', 'userswp' ),
                         ));
 
-		echo apply_filters('uwp_tp_comments_item_footer', $footer_html,$comment);
+		echo apply_filters('uwp_tp_comments_item_footer', $footer_html,$comment); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 	</div>
-
 </div>

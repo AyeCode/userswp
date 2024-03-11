@@ -655,7 +655,7 @@ function uwp_add_account_menu_links() {
 
 			?>
             <li class="nav-item m-0 p-0 list-unstyled mx-md-2 mx-2">
-                <a class="nav-link text-decoration-none uwp-account-<?php echo $tab_id.' '.$active; ?>" href="<?php echo esc_url( $tab_url ); ?>">
+                <a class="nav-link text-decoration-none uwp-account-<?php echo esc_attr( $tab_id.' '.$active ); ?>" href="<?php echo esc_url( $tab_url ); ?>">
 					<?php echo '<i class="'.esc_attr($tab["icon"]).' mr-1 fa-fw"></i>'.esc_html($tab['title']); ?>
                 </a>
             </li>

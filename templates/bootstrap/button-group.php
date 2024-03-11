@@ -10,18 +10,18 @@ do_action( 'uwp_template_before', 'button-group' ); ?>
 <div class="bsui-button-group">
 	<?php
 	foreach($buttons as $button){
-		$icon_class = !empty($button->field_icon) ? esc_attr($button->field_icon) : 'fas fa-link';
-		$button_class = !empty($button->css_class) ? " ".esc_attr($button->css_class) : 'btn-secondary';
+		$icon_class = !empty($button->field_icon) ? $button->field_icon : 'fas fa-link';
+		$button_class = !empty($button->css_class) ? " " . $button->css_class : 'btn-secondary';
 		$button_class .= " ml-1 mb-1 border-0 btn ".$css_class;
-		$button_url = !empty($button->url) ? esc_url($button->url) : '#';
-		$tooltip_text = !empty($button->site_title) ? esc_attr($button->site_title) : '';
+		$button_url = !empty($button->url) ? $button->url : '';
+		$tooltip_text = !empty($button->site_title) ? $button->site_title : '';
 
-		echo aui()->button(array(
+		echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'type'  =>  'a',
-			'href'       => $button_url,
-			'class'      => $button_class,
-			'title'      => $tooltip_text,
-			'icon'       => $icon_class.' fa-fw fa-lg',
+			'href'       => $button_url ? esc_url( $button_url ) : '#',
+			'class'      => esc_attr( $button_class ),
+			'title'      => esc_attr( $tooltip_text ),
+			'icon'       => esc_attr( $icon_class.' fa-fw fa-lg' ),
 			'style'  => '',
 			'new_window'  => true,
 			'extra_attributes'  => array('data-toggle'=>'tooltip')

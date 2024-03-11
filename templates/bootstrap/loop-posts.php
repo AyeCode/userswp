@@ -15,7 +15,7 @@ if(isset($the_query->found_posts) && $the_query->found_posts == 0){
 <div class="container mb-1">
 	<div class="row">
 		<div class="col-sm p-0">
-			<h3><?php echo $title; ?></h3>
+			<h3><?php echo esc_html( $title ); ?></h3>
 		</div>
 		<div class="col p-0 d-none d-sm-block">
 			<div class="btn-toolbar justify-content-end" role="toolbar" aria-label="Toolbar with button groups">

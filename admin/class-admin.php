@@ -286,9 +286,9 @@ class UsersWP_Admin {
 
 		if ( ! empty( $messages ) ) {
 			if ( isset( $messages['err_msg'] ) ) {
-				echo '<div class="notice notice-error"><p>' . $messages['err_msg'] . '</p></div>';
+				echo '<div class="notice notice-error"><p>' . esc_html( $messages['err_msg'] ) . '</p></div>';
 			} else {
-				echo '<div class="notice notice-success is-dismissible"><p>' . $messages['msg'] . '</p></div>';
+				echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( $messages['msg'] ) . '</p></div>';
 			}
 		}
 	}
@@ -446,7 +446,7 @@ class UsersWP_Admin {
 			if ( $plain_text ) {
 				echo '<div style="white-space:pre-wrap;font-family:sans-serif">';
 			}
-			echo $message;
+			echo $message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			if ( $plain_text ) {
 				echo '</div>';
 			}
@@ -543,7 +543,7 @@ class UsersWP_Admin {
 			$query .= " AND htmlvar_name NOT IN ('" . implode( "','", $excluded_fields ) . "')";
 		}
 		$query  .= ' ORDER BY sort_order ASC';
-		$fields = $wpdb->get_results( $query );
+		$fields = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		$this->edit_profile_banner_fields( $user ); // Displays avatar and banner fields
 
@@ -564,13 +564,13 @@ class UsersWP_Admin {
 							?>
                             <tr style="margin: 0; padding: 0">
                                 <th class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3
-                                            style="margin: 10px 0;"><?php echo $field->site_title; ?></h3></th>
+                                            style="margin: 10px 0;"><?php echo esc_html( $field->site_title ); ?></h3></th>
                                 <td></td>
                             </tr>
 							<?php
 						} else { ?>
                             <tr>
-                                <th class="uwp-profile-extra-key"><?php echo $field->site_title; ?></th>
+                                <th class="uwp-profile-extra-key"><?php echo esc_html( $field->site_title ); ?></th>
                                 <td class="uwp-profile-extra-value">
 									<?php
 									$templates_obj = new UsersWP_Templates();
@@ -603,12 +603,12 @@ class UsersWP_Admin {
 		$file_obj = new UsersWP_Files();
 
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-		$fields     = $wpdb->get_results( "SELECT * FROM " . $table_name . " WHERE (form_type = 'avatar' OR form_type = 'banner') ORDER BY sort_order ASC" );
+		$fields     = $wpdb->get_results( "SELECT * FROM " . $table_name . " WHERE (form_type = 'avatar' OR form_type = 'banner') ORDER BY sort_order ASC" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		if ( $fields ) {
 			?>
             <div class="uwp-profile-extra uwp_page">
 				<?php do_action( 'uwp_admin_profile_edit', $user ); ?>
-                <h2><?php _e('UsersWP Account Details', 'userswp'); ?></h2>
+                <h2><?php esc_html_e('UsersWP Account Details', 'userswp'); ?></h2>
                 <table class="uwp-profile-extra-table form-table">
 					<?php
 					foreach ( $fields as $field ) {
@@ -618,13 +618,13 @@ class UsersWP_Admin {
                             <tr style="margin: 0; padding: 0">
                                 <th class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3
                                             style="margin: 10px 0;">
-										<?php echo $field->site_title; ?></h3></th>
+										<?php echo esc_html( $field->site_title ); ?></h3></th>
                                 <td></td>
                             </tr>
 							<?php
 						} else { ?>
                             <tr>
-                                <th class="uwp-profile-extra-key"><?php echo $field->site_title; ?></th>
+                                <th class="uwp-profile-extra-key"><?php echo esc_html( $field->site_title ); ?></th>
                                 <td class="uwp-profile-extra-value">
 									<?php
 									if ( $field->htmlvar_name == "avatar" ) {
@@ -635,7 +635,7 @@ class UsersWP_Admin {
 										$value = "";
 									}
 
-									echo $file_obj->file_upload_preview( $field, $value );
+									echo $file_obj->file_upload_preview( $field, $value ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 									if ( $field->htmlvar_name == "avatar" ) {
 										if ( ! empty( $value ) ) {
@@ -646,7 +646,7 @@ class UsersWP_Admin {
 										?>
                                         <a onclick="uwp_profile_image_change('avatar');return false;" href="#"
                                            class="uwp-banner-change-icon-admin">
-											<?php echo $label; ?>
+											<?php echo esc_html( $label ); ?>
                                         </a>
 										<?php
 									} elseif ( $field->htmlvar_name == "banner" ) {
@@ -657,7 +657,7 @@ class UsersWP_Admin {
 										} ?>
                                         <a onclick="uwp_profile_image_change('banner');return false;" href="#"
                                            class="uwp-banner-change-icon-admin">
-											<?php echo $label; ?>
+											<?php echo esc_html( $label ); ?>
                                         </a>
 										<?php
 									}
@@ -975,7 +975,7 @@ class UsersWP_Admin {
 					if ( ! empty( $register_form['id'] ) && $register_form['id'] == $form_id ) {
 						$status = true;
 						unset( $register_forms[ $key ] );
-						$fields = $wpdb->get_results(
+						$fields = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 							$wpdb->prepare(
 								"select id from  " . $table_name . " where form_type = %s AND form_id = %d order by sort_order asc",
 								array('account', $form_id)

@@ -12,10 +12,10 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 	<h5 class="modal-title" id="uwp-profile-modal-title">
 		<?php
 		if ( $type == 'avatar' ) {
-			_e( 'Change your profile photo', 'userswp' );
+			esc_html_e( 'Change your profile photo', 'userswp' );
 			$label = __( "Upload Avatar", "userswp" );
 		} else {
-			_e( 'Change your cover photo', 'userswp' );
+			esc_html_e( 'Change your cover photo', 'userswp' );
 			$label = __( "Upload Banner", "userswp" );
 		}
 		?>
@@ -23,39 +23,39 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 </div>
 <div class="modal-body text-center">
 	<div id="uwp-bs-modal-notice"></div>
-	<form id="uwp-upload-<?php echo $type; ?>-form" method="post" enctype="multipart/form-data">
+	<form id="uwp-upload-<?php echo esc_attr( $type ); ?>-form" method="post" enctype="multipart/form-data">
 		<?php
-		echo aui()->input(array(
+		echo aui()->input(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'type'    =>  'hidden',
 			'name'    =>  'uwp_upload_nonce',
 			'no_wrap' =>  true,
-			'value'   =>  wp_create_nonce( 'uwp-upload-nonce' ),
+			'value'   => esc_html( wp_create_nonce( 'uwp-upload-nonce' ) ),
 		));
-		echo aui()->input(array(
+		echo aui()->input(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'type'    =>  'hidden',
-			'name'    =>  'uwp_'.$type.'_submit',
+			'name'    =>  esc_html( 'uwp_'.$type.'_submit' ),
 			'no_wrap' =>  true,
 			'value'   =>  '',
 		));
-		echo aui()->button(array(
+		echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			'type'       =>  'button',
 			'class'      => 'btn btn-primary uwp_upload_button',
-			'content'    => '<i class="fas fa-upload"></i>'.$label,
-			'onclick'    => "document.getElementById('uwp_upload_".$type."').click();",
+			'content'    => '<i class="fas fa-upload"></i>'. esc_html( $label ),
+			'onclick'    => "document.getElementById('uwp_upload_".esc_js( $type )."').click();",
 		));
-		echo aui()->alert( array(
+		echo aui()->alert( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'class'   => 'text-center text-center m-3 p-0 w-50 mx-auto',
 				'type'    => 'info',
-				'content' => sprintf( __( 'Note: Max upload image size: %s', 'userswp' ), $files->uwp_formatSizeUnits( $files->uwp_get_max_upload_size( $type ) ) )
+				'content' => esc_html( sprintf( __( 'Note: Max upload image size: %s', 'userswp' ), $files->uwp_formatSizeUnits( $files->uwp_get_max_upload_size( $type ) ) ) )
 			)
 		);
 		?>
 		<div class="uwp_upload_field d-none">
             <?php
-            echo aui()->input(array(
+            echo aui()->input(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	            'type'       =>  'file',
-	            'id'         =>  'uwp_upload_'.$type,
-	            'name'       =>  'uwp_'.$type.'_file',
+	            'id'         =>  esc_html( 'uwp_upload_'.$type ),
+	            'name'       =>  esc_html( 'uwp_'.$type.'_file' ),
 	            'extra_attributes'  => array('required'=>'required')
             ));
             ?>
@@ -68,37 +68,37 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 
 <div class="modal-footer">
 	<?php
-	echo aui()->button(array(
+	echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		'type'       =>  'button',
 		'class'      => 'btn btn-outline-primary uwp_modal_btn uwp-modal-close',
-		'content'    => __( 'Cancel', 'userswp' ),
-		'extra_attributes'  => array('data-type'=>$type, 'data-' . ( $aui_bs5 ? 'bs-' : '' ) . 'dismiss'=>"modal")
+		'content'    => esc_html__( 'Cancel', 'userswp' ),
+		'extra_attributes'  => array('data-type'=> esc_html( $type ), 'data-' . ( $aui_bs5 ? 'bs-' : '' ) . 'dismiss'=>"modal")
 	));
 	?>
-	<div class="uwp-<?php echo $type; ?>-crop-p-wrap">
-		<div id="<?php echo $type; ?>-crop-actions">
+	<div class="uwp-<?php echo esc_attr( $type ); ?>-crop-p-wrap">
+		<div id="<?php echo esc_attr( $type ); ?>-crop-actions">
 			<form class="uwp-crop-form" method="post">
 				<?php
-				echo aui()->input( array(
+				echo aui()->input( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'type'    => 'hidden',
 					'name'    => 'uwp_reset_nonce',
 					'id'      => 'uwp_reset_nonce',
-					'value'   => wp_create_nonce( 'uwp_reset_nonce_'.$type ),
+					'value'   => esc_html( wp_create_nonce( 'uwp_reset_nonce_'.$type ) ),
 					'no_wrap' => true,
 				) );
-				echo aui()->button(array(
+				echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'type'       => 'submit',
-					'id'         => 'reset_uwp_'.$type,
-					'name'       => 'uwp_'.$type.'_reset',
+					'id'         => esc_html( 'reset_uwp_'.$type ),
+					'name'       => esc_html( 'uwp_'.$type.'_reset' ),
 					'class'      => 'btn btn-primary btn-danger',
-					'content'    => __( 'Reset to Default', 'userswp' ),
+					'content'    => esc_html__( 'Reset to Default', 'userswp' ),
 				));
-				echo aui()->button(array(
+				echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'type'       =>  'submit',
-					'id'         =>  'save_uwp_'.$type,
-					'name'       =>  'uwp_'.$type.'_crop',
+					'id'         =>  esc_html( 'save_uwp_'.$type ),
+					'name'       =>  esc_html( 'uwp_'.$type.'_crop' ),
 					'class'      =>  'btn btn-primary',
-					'content'    =>  __( 'Apply', 'userswp' ),
+					'content'    =>  esc_html__( 'Apply', 'userswp' ),
 					'extra_attributes'  => array('disabled'=>'disabled')
 				));
 				?>
