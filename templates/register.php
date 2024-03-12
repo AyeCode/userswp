@@ -8,17 +8,17 @@ $form_title = apply_filters( 'uwp_template_form_title', $form_title, 'register' 
             <div class="uwp-rf-icon"><i class="fas fa-pencil-alt fa-fw"></i></div>
 			<?php do_action( 'uwp_template_form_title_before', 'register' ); ?>
             <h2><?php
-				echo apply_filters( 'uwp_template_form_title', $form_title, 'register' );
+				echo apply_filters( 'uwp_template_form_title', $form_title, 'register' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
             </h2>
 			<?php do_action( 'uwp_template_display_notices', 'register' ); ?>
             <form class="uwp-registration-form uwp_form" method="post" enctype="multipart/form-data">
 				<?php do_action( 'uwp_template_fields', 'register', $args ); ?>
-                <input name="uwp_register_submit" value="<?php _e( 'Create Account', 'userswp' ); ?>" type="submit">
+                <input name="uwp_register_submit" value="<?php esc_attr_e( 'Create Account', 'userswp' ); ?>" type="submit">
             </form>
-            <div class="uwp-footer-link uwp-login-now"><?php _e( 'Already a member?', 'userswp' ); ?> <a
+            <div class="uwp-footer-link uwp-login-now"><?php esc_html_e( 'Already a member?', 'userswp' ); ?> <a
                         rel="nofollow"
-                        href="<?php echo uwp_get_login_page_url(); ?>"><?php echo uwp_get_option("login_link_title") ? uwp_get_option("login_link_title") : __( 'Login here', 'userswp' ); ?></a>
+                        href="<?php echo esc_url( uwp_get_login_page_url() ); ?>"><?php echo uwp_get_option("login_link_title") ? esc_html( uwp_get_option("login_link_title") ) : esc_html__( 'Login here', 'userswp' ); ?></a>
             </div>
 	        <?php do_action( 'uwp_social_fields', 'register', $args ); ?>
         </div>

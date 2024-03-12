@@ -28,7 +28,7 @@ if ( ! $user ) {
 		echo '<a href="'.esc_url( uwp_build_profile_tab_url($user->ID) ).'" title="'.esc_attr( $user->display_name ).'">';
 	}
 	?>
-    <img src="<?php echo esc_url( $banner_url ); ?>" alt="<?php _e( "User banner image", "userswp" ); ?>" class="uwp-profile-header-img-src" />
+    <img src="<?php echo esc_url( $banner_url ); ?>" alt="<?php esc_attr_e( "User banner image", "userswp" ); ?>" class="uwp-profile-header-img-src" />
 	<?php
 	if ($uwp_in_user_loop || 1==$link) {
 		echo '</a>';
@@ -39,7 +39,7 @@ if ( ! $user ) {
             <i class="fas fa-camera" aria-hidden="true"></i>
             <div data-type="banner" class="uwp-profile-banner-change uwp-profile-modal-form-trigger">
                     <span class="uwp-profile-banner-change-inner">
-                        <?php _e( 'Update Cover Photo', 'userswp' ); ?>
+                        <?php esc_html_e( 'Update Cover Photo', 'userswp' ); ?>
                     </span>
             </div>
         </div>

@@ -29,14 +29,14 @@ if ( ! $user ) {
         }
         ?>
         <div class="uwp-profile-avatar">
-            <img class="avatar avatar-<?php echo absint( $size ); ?> photo" src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php _e("User avatar","userswp");?>" width="<?php echo absint( $size ); ?>" height="<?php echo absint( $size ); ?>">
+            <img class="avatar avatar-<?php echo absint( $size ); ?> photo" src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php esc_attr_e("User avatar","userswp");?>" width="<?php echo absint( $size ); ?>" height="<?php echo absint( $size ); ?>">
             <?php if (!$uwp_in_user_loop && is_user_logged_in() && (get_current_user_id() == $user->ID) && $allow_change) { ?>
                 <div class="uwp-profile-avatar-change">
                     <div class="uwp-profile-avatar-change-inner">
                         <i class="fas fa-camera" aria-hidden="true"></i>
                         <a id="uwp-profile-picture-change" data-type="avatar"
                            class="uwp-profile-modal-form-trigger"
-                           href="#"><?php _e('Update', 'userswp'); ?></a>
+                           href="#"><?php esc_attr_e('Update', 'userswp'); ?></a>
                     </div>
                 </div>
             <?php } ?>

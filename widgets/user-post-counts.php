@@ -136,10 +136,8 @@ class UWP_User_Post_Counts_Widget extends WP_Super_Duper {
 			}
 		}
 
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		return ob_get_clean();
-
 	}
-
 }
