@@ -62,7 +62,7 @@ do_action( 'uwp_template_before', 'register', $args ); ?>
 							'type'  =>  'a',
 							'href'       => esc_url( uwp_get_login_page_url() ),
 							'class'      => 'd-block text-center mt-2 small uwp-login-link',
-							'content'    => uwp_get_option("login_link_title") ? esc_html__( uwp_get_option("login_link_title"), 'userswp') : esc_html__( 'Login', 'userswp' ) ),
+							'content'    => uwp_get_option("login_link_title") ? esc_html__( uwp_get_option("login_link_title"), 'userswp') : esc_html__( 'Login', 'userswp' ),
 							'extra_attributes'  => array('rel'=>'nofollow')
 						));
 						?>
