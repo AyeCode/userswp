@@ -272,7 +272,9 @@
 
     function aui_modal_iframe($title,$url,$footer,$dismissible,$class,$dialog_class,$body_class,responsive){
         if(!$body_class){$body_class = 'p-0';}
-        var wClass = 'text-center position-absolute w-100 text-dark overlay overlay-white p-0 m-0 d-none d-flex justify-content-center align-items-center';
+        var wClass = 'text-center position-absolute w-100 text-dark overlay overlay-white p-0 m-0 d-flex justify-content-center align-items-center';
+        var wStyle = '';
+        var sStyle = '';
         var $body = "", sClass = "w-100 p-0 m-0";
         if (responsive) {
             $body += '<div class="embed-responsive embed-responsive-16by9">';
@@ -281,25 +283,34 @@
         } else {
             wClass += ' vh-100';
             sClass += ' vh-100';
+            wStyle += ' height: 90vh !important;';
+            sStyle += ' height: 90vh !important;';
         }
-        $body += '<div class="ac-preview-loading ' + wClass + '" style="left:0;top:0"><div class="spinner-border" role="status"></div></div>';
-        $body += '<iframe id="embedModal-iframe" class="' + sClass + '" src="" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>';
+        $body += '<div class="ac-preview-loading ' + wClass + '" style="left:0;top:0;' + wStyle + '"><div class="spinner-border" role="status"></div></div>';
+        $body += '<iframe id="embedModal-iframe" class="' + sClass + '" style="' + sStyle + '" src="" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>';
         if (responsive) {
             $body += '</div>';
         }
-
+        console.log('b4-show-modal');
         $m = aui_modal($title,$body,$footer,$dismissible,$class,$dialog_class,$body_class);
-        jQuery( $m ).on( 'shown.bs.modal', function ( e ) {
+
+        // myModalEl.addEventListener('hidden.bs.modal', event => {
+        //     jQuery(".aui-carousel-modal iframe").attr('src', '');
+        // });
+
+        const auiModal = document.getElementById('aui-modal');
+        auiModal.addEventListener( 'shown.bs.modal', function ( e ) {console.log('show-modal');
             iFrame = jQuery( '#embedModal-iframe') ;
 
             jQuery('.ac-preview-loading').addClass('d-flex');
+
             iFrame.attr({
                 src: $url
             });
 
             //resize the iframe once loaded.
             iFrame.load(function() {
-                jQuery('.ac-preview-loading').removeClass('d-flex');
+                jQuery('.ac-preview-loading').removeClass('d-flex').addClass('d-none');
             });
         });
 
@@ -473,7 +484,7 @@
                 }
 
                 // content
-                $new_items += '<div class="col pe-1 ps-0">'+$items[index]+'</div>';
+                $new_items += '<div class="col ">'+$items[index]+'</div>';
                 $new_item_count++;
 
 
@@ -485,7 +496,7 @@
                 if($md_count-$new_item_count > 0){
                     $placeholder_count = $md_count-$new_item_count;
                     while($placeholder_count > 0){
-                        $new_items += '<div class="col pe-1 ps-0"></div>';
+                        $new_items += '<div class="col "></div>';
                         $placeholder_count--;
                     }
 

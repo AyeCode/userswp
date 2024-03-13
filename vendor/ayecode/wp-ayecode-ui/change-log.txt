@@ -1,6 +1,11 @@
-= 0.2.6 - 2024-01-25 =
+= 0.2.8 - 2024-02-22 =
+* Gallery padding made slider images taller than single images - FIXED
+* aui_modal_iframe() function not loading iframe when bs5 selected - FIXED
+
+= 0.2.7 - 2024-01-25 =
 * Single quote breaks validation message - FIXED
 * WP Editor Styles can now style headings, links, typography - ADDED
+* Unused icons font file can load if old class used - FIXED
 
 = 0.2.5 - 2023-12-14 =
 * Update textdomain - CHANGED
