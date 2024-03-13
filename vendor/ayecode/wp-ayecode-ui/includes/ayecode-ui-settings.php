@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.6';
+		public $version = '0.2.8';
 
 		/**
 		 * Class textdomain.
@@ -792,6 +792,33 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 
 		/**
+         * Get the date the site was installed.
+         *
+		 * @return false|string
+		 */
+        public function get_site_install_date() {
+	        global $wpdb; // This gives you access to the WordPress database object
+
+	        // Prepare the SQL query to get the oldest registration date
+	        $query = "SELECT MIN(user_registered) AS oldest_registration_date FROM {$wpdb->users}";
+
+	        // Execute the query
+	        $date = $wpdb->get_var($query);
+
+	        return $date ? $date : false;
+        }
+
+		/**
+		 * Show admin notice if backend scripts not loaded.
+		 */
+		public function show_admin_version_notice(){
+			$fix_url = admin_url("options-general.php?page=ayecode-ui-settings" );
+			$button = '<a href="'.esc_url($fix_url).'" class="button-primary">View Settings</a>';
+			$message = __( '<b>Style Issue:</b> AyeCode UI has changed its default version from v4 to v5, if you notice unwanted style changes, please revert to v4 (saving the settings page will remove this notice)')." " .$button;
+			echo '<div class="notice notice-error aui-settings-error-notice"><p>'.$message.'</p></div>';
+		}
+
+		/**
 		 * Get the current Font Awesome output settings.
 		 *
 		 * @return array The array of settings.
@@ -799,6 +826,14 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		public function get_settings() {
 
 			$db_settings = get_option( 'ayecode-ui-settings' );
+
+            // Maybe show default version notice
+			$site_install_date = new DateTime( self::get_site_install_date() );
+			$switch_over_date = new DateTime("2024-02-01");
+			if ( empty( $db_settings ) && $site_install_date < $switch_over_date ) {
+				add_action( 'admin_notices', array( $this, 'show_admin_version_notice' ) );
+			}
+
 			$js_default = 'core-popper';
 			$js_default_backend = $js_default;
 
@@ -822,7 +857,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				'css_backend'    => 'compatibility', // core, compatibility
 				'js_backend'     => $js_default_backend, // js to load, core-popper, popper
 				'disable_admin'  => '', // URL snippets to disable loading on admin
-                'bs_ver'         => '4', // The default bootstrap version to sue by default
+                'bs_ver'         => '5', // The default bootstrap version to sue by default
 			), $db_settings );
 
 			$settings = wp_parse_args( $db_settings, $defaults );
@@ -830,7 +865,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			/**
 			 * Filter the Bootstrap settings.
 			 *
-			 * @todo if we add this filer people might use it and then it defeates the purpose of this class :/
+			 * @todo if we add this filer people might use it and then it defeats the purpose of this class :/
 			 */
 			return $this->settings = apply_filters( 'ayecode-ui-settings', $settings, $db_settings, $defaults );
 		}

@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.33' );
+	define( 'SUPER_DUPER_VER', '1.1.35' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -1096,6 +1096,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					font-weight: bold;
 					margin-bottom: 1px;
 				}
+				.elementor-control .sd-argument select[multiple]{height:100px}
+				.elementor-control .sd-argument select[multiple] option{padding:3px}
 			</style>
 			<?php
 			$output = ob_get_clean();
@@ -1804,7 +1806,7 @@ function sd_block_visibility_init() {
 		jQuery(this).addClass('disabled');
 		jQuery('.bs-vc-modal-form .bs-vc-rule-sets .bs-vc-rule').each(function(){
 			vRule = jQuery(this).find('.bsvc_rule').val(), oRule = {};
-			if (vRule == 'logged_in' || vRule == 'logged_out') {
+			if (vRule == 'logged_in' || vRule == 'logged_out' || vRule == 'post_author') {
 				oRule.type = vRule;
 			} else if (vRule == 'user_roles') {
 				oRule.type = vRule;
@@ -4913,7 +4915,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 									'name'        => 'bsvc_rule_BSVCINDEX',
 									'label'       => __( 'Rule', 'ayecode-connect' ),
 									'placeholder' => __( 'Select Rule...', 'ayecode-connect' ),
-									'class'       => 'bsvc_rule form-select-sm',
+									'class'       => 'bsvc_rule form-select-sm no-select2',
 									'options'     => sd_visibility_rules_options(),
 									'default'     => '',
 									'value'       => '',
@@ -4937,7 +4939,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 										'name'        => 'bsvc_gd_field_BSVCINDEX',
 										'label'       => __( 'FIELD', 'ayecode-connect' ),
 										'placeholder' => __( 'FIELD', 'ayecode-connect' ),
-										'class'       => 'bsvc_gd_field form-select-sm',
+										'class'       => 'bsvc_gd_field form-select-sm no-select2',
 										'options'     => sd_visibility_gd_field_options(),
 										'default'     => '',
 										'value'       => '',
@@ -4959,7 +4961,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 										'name'        => 'bsvc_gd_field_condition_BSVCINDEX',
 										'label'       => __( 'CONDITION', 'ayecode-connect' ),
 										'placeholder' => __( 'CONDITION', 'ayecode-connect' ),
-										'class'       => 'bsvc_gd_field_condition form-select-sm',
+										'class'       => 'bsvc_gd_field_condition form-select-sm no-select2',
 										'options'     => sd_visibility_field_condition_options(),
 										'default'     => '',
 										'value'       => '',
@@ -5030,12 +5032,12 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'        => 'bsvc_output',
 					'label'       => __( 'What should happen if rules met.', 'ayecode-connect' ),
 					'placeholder' => __( 'Default Output', 'ayecode-connect' ),
-					'class'       => 'bsvc_output form-select-sm',
+					'class'       => 'bsvc_output form-select-sm no-select2',
 					'options'     => sd_visibility_output_options(),
 					'default'     => '',
 					'value'       => '',
 					'label_type'  => 'top',
-					'select2'     => true,
+					'select2'     => false,
 					'extra_attributes' => array(
 						'data-minimum-results-for-search' => '-1'
 					)
@@ -5050,12 +5052,12 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'            => 'bsvc_page',
 					'label'           => __( 'Page Content', 'ayecode-connect' ),
 					'placeholder'     => __( 'Select Page ID...', 'ayecode-connect' ),
-					'class'           => 'bsvc_page form-select-sm',
+					'class'           => 'bsvc_page form-select-sm no-select2',
 					'options'         => sd_template_page_options(),
 					'default'         => '',
 					'value'           => '',
 					'label_type'      => 'top',
-					'select2'         => true,
+					'select2'         => false,
 					'element_require' => '[%bsvc_output%]=="page"'
 				)
 			);
@@ -5066,12 +5068,12 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'        => 'bsvc_tmpl_part',
 					'label'       => __( 'Template Part', 'ayecode-connect' ),
 					'placeholder' => __( 'Select Template Part...', 'ayecode-connect' ),
-					'class'       => 'bsvc_tmpl_part form-select-sm',
+					'class'       => 'bsvc_tmpl_part form-select-sm no-select2',
 					'options'     => sd_template_part_options(),
 					'default'     => '',
 					'value'       => '',
 					'label_type'  => 'top',
-					'select2'     => true,
+					'select2'     => false,
 					'element_require'  => '[%bsvc_output%]=="template_part"',
 					'extra_attributes' => array(
 						'data-minimum-results-for-search' => '-1'
@@ -5085,12 +5087,12 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'             => 'bsvc_message_type',
 					'label'            => __( 'Custom Message Type', 'ayecode-connect' ),
 					'placeholder'      => __( 'Default (none)', 'ayecode-connect' ),
-					'class'            => 'bsvc_message_type form-select-sm',
+					'class'            => 'bsvc_message_type form-select-sm no-select2',
 					'options'          => sd_aui_colors(),
 					'default'          => '',
 					'value'            => '',
 					'label_type'       => 'top',
-					'select2'          => true,
+					'select2'          => false,
 					'element_require'  => '[%bsvc_output%]=="message"',
 					'extra_attributes' => array(
 						'data-minimum-results-for-search' => '-1'

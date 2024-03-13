@@ -2728,6 +2728,7 @@ function sd_visibility_rules_options() {
 	$options = array(
 		'logged_in'  => __( 'Logged In', 'ayecode-connect' ),
 		'logged_out' => __( 'Logged Out', 'ayecode-connect' ),
+		'post_author'  => __( 'Post Author', 'ayecode-connect' ),
 		'user_roles' => __( 'Specific User Roles', 'ayecode-connect' )
 	);
 
@@ -2743,7 +2744,7 @@ function sd_visibility_rules_options() {
  *
  * @return array
  */
-function sd_visibility_gd_field_options(){
+function sd_visibility_gd_field_options() {
 	$fields = geodir_post_custom_fields( '', 'all', 'all', 'none' );
 
 	$keys = array();
@@ -2766,15 +2767,55 @@ function sd_visibility_gd_field_options(){
 		}
 	}
 
-	$keys['post_date'] = 'post_date ( ' . __( 'post date', 'geodirectory' ) . ' )';
-	$keys['post_modified'] = 'post_modified ( ' . __( 'post modified', 'geodirectory' ) . ' )';
-	$keys['default_category'] = 'default_category ( ' . __( 'Default Category', 'geodirectory' ) . ' )';
-	$keys['post_id'] = 'post_id ( ' . __( 'post id', 'geodirectory' ) . ' )';
-	$keys['post_status'] = 'post_status ( ' . __( 'Post Status', 'geodirectory' ) . ' )';
+	$standard_fields = sd_visibility_gd_standard_field_options();
+
+	if ( ! empty( $standard_fields ) ) {
+		foreach ( $standard_fields as $key => $option ) {
+			$keys[ $key ] = $option;
+		}
+	}
 
 	$options = apply_filters( 'geodir_badge_field_keys', $keys );
 
 	return apply_filters( 'sd_visibility_gd_field_options', $options );
+}
+
+/**
+ * Get visibility GD post standard field options.
+ *
+ * @return array
+ */
+function sd_visibility_gd_standard_field_options( $post_type = '' ) {
+	$fields = sd_visibility_gd_standard_fields( $post_type );
+
+	$options = array();
+
+	foreach ( $fields as $key => $field ) {
+		if ( ! empty( $field['frontend_title'] ) ) {
+			$options[ $key ] = $key . ' ( ' . $field['frontend_title'] . ' )';
+		}
+	}
+
+	return apply_filters( 'sd_visibility_gd_standard_field_options', $options, $fields );
+}
+
+/**
+ * Get visibility GD post standard fields.
+ *
+ * @return array
+ */
+function sd_visibility_gd_standard_fields( $post_type = '' ) {
+	$standard_fields = geodir_post_meta_standard_fields( $post_type );
+
+	$fields = array();
+
+	foreach ( $standard_fields as $key => $field ) {
+		if ( $key != 'post_link' && strpos( $key, 'event' ) === false && ! empty( $field['frontend_title'] ) ) {
+			$fields[ $key ] = $field;
+		}
+	}
+
+	return apply_filters( 'sd_visibility_gd_standard_fields', $fields );
 }
 
 /**
@@ -3077,6 +3118,8 @@ function sd_block_check_rules( $rules ) {
 }
 
 function sd_block_check_rule( $match, $rule ) {
+	global $post;
+
 	if ( $match && ! empty( $rule['type'] ) ) {
 		switch ( $rule['type'] ) {
 			case 'logged_in':
@@ -3085,6 +3128,14 @@ function sd_block_check_rule( $match, $rule ) {
 				break;
 			case 'logged_out':
 				$match = ! is_user_logged_in();
+
+				break;
+			case 'post_author':
+				if ( ! empty( $post ) && $post->post_type != 'page' && ! empty( $post->post_author ) && is_user_logged_in() ) {
+					$match = (int) $post->post_author === (int) get_current_user_id() ? true : false;
+				} else {
+					$match = false;
+				}
 
 				break;
 			case 'user_roles':
@@ -3155,7 +3206,9 @@ function sd_block_check_rule_gd_field( $rule ) {
 			$address_fields = array( 'street2', 'neighbourhood', 'city', 'region', 'country', 'zip', 'latitude', 'longitude' ); // Address fields
 			$field = array();
 
-			if ( $match_field && ! in_array( $match_field, array( 'post_date', 'post_modified', 'default_category', 'post_id', 'post_status' ) ) && ! in_array( $match_field, $address_fields ) ) {
+			$standard_fields = sd_visibility_gd_standard_fields();
+
+			if ( $match_field && ! in_array( $match_field, array_keys( $standard_fields ) ) && ! in_array( $match_field, $address_fields ) ) {
 				$package_id = geodir_get_post_package_id( $find_post->ID, $find_post->post_type );
 				$fields = geodir_post_custom_fields( $package_id, 'all', $find_post->post_type, 'none' );
 
@@ -3174,15 +3227,19 @@ function sd_block_check_rule_gd_field( $rule ) {
 				}
 			}
 
-			// Parse search.
-			$search = sd_gd_field_rule_search( $args['search'], $find_post->post_type, $rule );
-
 			// Address fields.
 			if ( in_array( $match_field, $address_fields ) && ( $address_fields = geodir_post_meta_address_fields( '' ) ) ) {
 				if ( ! empty( $address_fields[ $match_field ] ) ) {
 					$field = $address_fields[ $match_field ];
 				}
+			} else if ( in_array( $match_field, array_keys( $standard_fields ) ) ) {
+				if ( ! empty( $standard_fields[ $match_field ] ) ) {
+					$field = $standard_fields[ $match_field ];
+				}
 			}
+
+			// Parse search.
+			$search = sd_gd_field_rule_search( $args['search'], $find_post->post_type, $rule, $field, $find_post );
 
 			$is_date = ( ! empty( $field['type'] ) && $field['type'] == 'datepicker' ) || in_array( $match_field, array( 'post_date', 'post_modified' ) ) ? true : false;
 			$is_date = apply_filters( 'geodir_post_badge_is_date', $is_date, $match_field, $field, $args, $find_post );
@@ -3240,7 +3297,9 @@ function sd_block_check_rule_gd_field( $rule ) {
 	return $match_found;
 }
 
-function sd_gd_field_rule_search( $search, $post_type, $rule ) {
+function sd_gd_field_rule_search( $search, $post_type, $rule, $field = array(), $gd_post = array() ) {
+	global $post;
+
 	if ( ! $search ) {
 		return $search;
 	}
@@ -3248,7 +3307,13 @@ function sd_gd_field_rule_search( $search, $post_type, $rule ) {
 	$orig_search = $search;
 	$_search = strtolower( $search );
 
-	if ( $_search == 'date_today' ) {
+	if ( ! empty( $rule['field'] ) && $rule['field'] == 'post_author' ) {
+		if ( $search == 'current_user' ) {
+			$search = is_user_logged_in() ? (int) get_current_user_id() : - 1;
+		} else if ( $search == 'current_author' ) {
+			$search = ( ! empty( $post ) && $post->post_type != 'page' && isset( $post->post_author ) ) ? absint( $post->post_author ) : - 1;
+		}
+	} else if ( $_search == 'date_today' ) {
 		$search = date( 'Y-m-d' );
 	} else if ( $_search == 'date_tomorrow' ) {
 		$search = date( 'Y-m-d', strtotime( "+1 day" ) );

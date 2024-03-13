@@ -1,3 +1,9 @@
+= 1.1.35 - 2024-03-13 =
+* Add style multiselect field for Elementor editor - CHANGED
+
+= 1.1.34 - 2024-02-15 =
+* Post Author support added in Block Visibility - ADDED
+
 = 1.1.33 - 2024-01-25 =
 * Escape new line characters from option label - FIXED
 

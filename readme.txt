@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
-Tested up to: 6.4
-Stable tag: 1.2.4
+Tested up to: 6.5
+Stable tag: 1.2.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -148,6 +148,8 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.5 =
 * Remove profile image ajax call had nonce check commented out for testing - FIXED
+* Composer packages updated to latest - UPDATED
+* Security review of all output data to strengthen escaping and sanitization - UPDATED
 
 = 1.2.4 =
 * Add support to resize webp image for avatar/banner - FIXED
