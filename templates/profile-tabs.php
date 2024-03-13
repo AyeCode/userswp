@@ -35,7 +35,7 @@ if ( $output === '' || $output == 'head' ) {
 
 					?>
                     <li id="uwp-profile-<?php echo esc_attr( $tab_id ); ?>"
-                        class="<?php echo $active; ?>">
+                        class="<?php echo esc_attr( $active ); ?>">
                         <a href="<?php echo esc_url( $tab_url ); ?>">
                             <span class="uwp-profile-tab-label uwp-profile-<?php echo esc_attr( $tab_id ); ?>-label "><?php esc_html_e( $tab['tab_name'], 'userswp' ); ?></span>
                         </a>
@@ -50,8 +50,8 @@ if ( $output === '' || $output == 'head' ) {
 		?>
 		<?php if ( $account_page && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && $can_user_edit_account ) { ?>
             <div class="uwp-edit-account">
-                <a href="<?php echo get_permalink( $account_page ); ?>"
-                   title="<?php _e( 'Edit Account', 'userswp' ); ?>"><i class="fas fa-cog"></i></a>
+                <a href="<?php echo esc_url( get_permalink( $account_page ) ); ?>"
+                   title="<?php esc_attr_e( 'Edit Account', 'userswp' ); ?>"><i class="fas fa-cog"></i></a>
             </div>
 		<?php } ?>
     </div>
@@ -62,7 +62,7 @@ if ( $output === '' || $output == 'body' ) {
 		?>
         <div class="uwp-profile-entries">
 			<?php
-			echo $active_tab_content;
+			echo $active_tab_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
         </div>
 	<?php } ?>

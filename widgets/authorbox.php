@@ -134,7 +134,7 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
             $output = str_replace( $key, $value, $output );
         }
 
-        echo $output;
+        echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
         $output = ob_get_clean();
 

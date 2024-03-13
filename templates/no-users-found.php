@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-echo aui()->alert(array(
+echo aui()->alert(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	'type'=> 'info',
-	'content'=> __( "No users were found matching your selection.", 'userswp' )
+	'content'=> esc_html__( "No users were found matching your selection.", 'userswp' )
 ));

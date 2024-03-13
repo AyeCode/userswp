@@ -20,11 +20,11 @@ do_action( 'uwp_template_before', 'register', $args ); ?>
                 <div class="modal-header">
                     <h5 class="modal-title"><?php echo esc_attr($form_title);?></h5>
 					<?php
-					echo aui()->button(array(
+					echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'       =>  'button',
 						'class'      => 'close',
 						'content'    => '<span aria-hidden="true">&times;</span>',
-						'extra_attributes'  => array('aria-label'=>__("Close","userswp"), 'data-' . ( $aui_bs5 ? 'bs-' : '' ) . 'dismiss'=>"modal")
+						'extra_attributes'  => array('aria-label'=>esc_html__("Close","userswp"), 'data-' . ( $aui_bs5 ? 'bs-' : '' ) . 'dismiss'=>"modal")
 					));
 					?>
                 </div>
@@ -46,10 +46,10 @@ do_action( 'uwp_template_before', 'register', $args ); ?>
                 <form class="uwp-registration-form uwp_form" method="post" enctype="multipart/form-data">
 					<?php
 					do_action( 'uwp_template_fields', 'register', $args );
-					echo aui()->input(array(
+					echo aui()->input(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'       => 'submit',
 						'class'      => 'btn btn-primary btn-block text-uppercase uwp_register_submit',
-						'value'    => __( 'Create Account', 'userswp' ),
+						'value'    => esc_html__( 'Create Account', 'userswp' ),
 						'name'       => 'uwp_register_submit',
 					));
 					?>
@@ -58,11 +58,11 @@ do_action( 'uwp_template_before', 'register', $args ); ?>
                 <div class="uwp-footer-links">
                     <div class="uwp-footer-link">
 						<?php
-						echo aui()->button(array(
+						echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'type'  =>  'a',
-							'href'       => uwp_get_login_page_url(),
+							'href'       => esc_url( uwp_get_login_page_url() ),
 							'class'      => 'd-block text-center mt-2 small uwp-login-link',
-							'content'    => uwp_get_option("login_link_title") ? __(uwp_get_option("login_link_title"), 'userswp') : __( 'Login', 'userswp' ),
+							'content'    => uwp_get_option("login_link_title") ? esc_html__( uwp_get_option("login_link_title"), 'userswp') : esc_html__( 'Login', 'userswp' ) ),
 							'extra_attributes'  => array('rel'=>'nofollow')
 						));
 						?>

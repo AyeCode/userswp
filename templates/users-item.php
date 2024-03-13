@@ -5,5 +5,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <li class="uwp-users-list-user">
-    <?php echo UsersWP_Templates::users_list_item_template_content(); ?>
+    <?php echo UsersWP_Templates::users_list_item_template_content(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 </li>

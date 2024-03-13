@@ -19,7 +19,7 @@ $total_users = isset( $args['template_args']['total_users'] ) ? $args['template_
         if ($users) {
             ?>
 
-            <ul class="uwp-users-list-wrap <?php echo apply_filters('uwp_users_list_ul_extra_class', ''); ?>"
+            <ul class="uwp-users-list-wrap <?php echo esc_attr( apply_filters('uwp_users_list_ul_extra_class', '') ); ?>"
                 id="uwp_user_items_layout">
                 <?php
 

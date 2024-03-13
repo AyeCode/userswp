@@ -28,7 +28,7 @@ if ( !isset( $email_vars ) ) {
 						<table border="0" cellpadding="10" cellspacing="0" width="100%">
 							<tr>
 								<td colspan="2" valign="middle" id="footer_text">
-									<?php echo $footer_text; ?>
+									<?php echo $footer_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 								</td>
 							</tr>
 						</table>

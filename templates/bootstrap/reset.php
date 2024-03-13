@@ -27,37 +27,37 @@ do_action( 'uwp_template_before', 'reset' ); ?>
 					<form class="uwp-reset-form uwp_form" method="post">
 						<?php
                         do_action( 'uwp_template_fields', 'reset' );
-						echo aui()->button(array(
+						echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'type'       => 'submit',
 							'class'      => 'btn btn-primary btn-block text-uppercase',
-							'content'    => __( 'Submit', 'userswp' ),
+							'content'    => esc_html__( 'Submit', 'userswp' ),
 							'name'       => 'uwp_reset_submit',
 						));
                         ?>
 					</form>
 				<?php } else {
-					echo aui()->alert(array('type'=>'danger','content'=> sprintf( __( 'You can not access this page directly. Follow the password reset link you received in your email. To request new password reset link <a href="%s">visit here</a>.', 'userswp' ), uwp_get_forgot_page_url() ) ));
+					echo aui()->alert(array('type'=>'danger','content'=> sprintf( __( 'You can not access this page directly. Follow the password reset link you received in your email. To request new password reset link <a href="%s">visit here</a>.', 'userswp' ), esc_url( uwp_get_forgot_page_url() ) ) )); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				} ?>
 
 				<div class="uwp-footer-links">
 					<div class="uwp-footer-link float-left">
 						<?php
-						echo aui()->button(array(
+						echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'type'  =>  'a',
-							'href'       => uwp_get_login_page_url(),
+							'href'       => esc_url( uwp_get_login_page_url() ),
 							'class'      => 'd-block text-center mt-2 small',
-							'content'    => uwp_get_option("login_link_title") ? uwp_get_option("login_link_title") : __( 'Login', 'userswp' ),
+							'content'    => uwp_get_option("login_link_title") ? esc_html( uwp_get_option("login_link_title") ) : esc_html__( 'Login', 'userswp' ),
 							'extra_attributes'  => array('rel'=>'nofollow')
 						));
 						?>
 					</div>
 					<div class="uwp-footer-link float-right">
 						<?php
-						echo aui()->button(array(
+						echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'type'  =>  'a',
-							'href'       => uwp_get_register_page_url(),
+							'href'       => esc_url( uwp_get_register_page_url() ),
 							'class'      => 'd-block text-center mt-2 small',
-							'content'    => uwp_get_option("register_link_title") ? uwp_get_option("register_link_title") : __( 'Create account', 'userswp' ),
+							'content'    => uwp_get_option("register_link_title") ? esc_html( uwp_get_option("register_link_title") ) : esc_html__( 'Create account', 'userswp' ),
 							'extra_attributes'  => array('rel'=>'nofollow')
 						));
 						?>

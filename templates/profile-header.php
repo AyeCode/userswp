@@ -40,7 +40,7 @@ if($hide_cover) {
 				echo '<a href="'.esc_url(uwp_build_profile_tab_url($user->ID)).'" title="'.esc_attr( $user->display_name ).'">';
 			}
 			?>
-			<img src="<?php echo esc_url( $banner_url ); ?>" alt="<?php _e( "User banner image", "userswp" ); ?>" class="uwp-profile-header-img-src" />
+			<img src="<?php echo esc_url( $banner_url ); ?>" alt="<?php esc_html_e( "User banner image", "userswp" ); ?>" class="uwp-profile-header-img-src" />
 			<?php
 			if ($uwp_in_user_loop) {
 				echo '</a>';
@@ -51,7 +51,7 @@ if($hide_cover) {
 					<i class="fas fa-camera" aria-hidden="true"></i>
 					<div data-type="banner" class="uwp-profile-banner-change uwp-profile-modal-form-trigger">
                     <span class="uwp-profile-banner-change-inner">
-                        <?php _e( 'Update Cover Photo', 'userswp' ); ?>
+                        <?php esc_html_e( 'Update Cover Photo', 'userswp' ); ?>
                     </span>
 					</div>
 				</div>
@@ -67,14 +67,14 @@ if($hide_cover) {
 			}
 			?>
 			<div class="uwp-profile-avatar-inner">
-                <img class="avatar avatar-150 photo" src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php _e("User avatar","userswp");?>" width="150" height="150">
+                <img class="avatar avatar-150 photo" src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php esc_attr_e("User avatar","userswp");?>" width="150" height="150">
 				<?php if (!$uwp_in_user_loop && is_user_logged_in() && (get_current_user_id() == $user->ID) && $allow_change) { ?>
 					<div class="uwp-profile-avatar-change">
 						<div class="uwp-profile-avatar-change-inner">
 							<i class="fas fa-camera" aria-hidden="true"></i>
 							<a id="uwp-profile-picture-change" data-type="avatar"
 							   class="uwp-profile-modal-form-trigger"
-							   href="#"><?php _e('Update', 'userswp'); ?></a>
+							   href="#"><?php esc_html_e('Update', 'userswp'); ?></a>
 						</div>
 					</div>
 				<?php } ?>

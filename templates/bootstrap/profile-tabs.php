@@ -37,19 +37,17 @@ if($output === '' || $output=='head'){
 						}
 
 						$append_hash = apply_filters('uwp_add_tab_content_hashtag', true, $tab, $user);
-						$tab_url = $append_hash ? esc_url($tab_url).'#tab-content' : esc_url($tab_url);
-
 						?>
 						<li id="uwp-profile-<?php echo esc_attr( $tab_id ); ?>"
-						    class="nav-item <?php echo $active; ?> list-unstyled m-0">
+						    class="nav-item <?php echo esc_attr( $active ); ?> list-unstyled m-0">
 								<?php
                                 $content = '<span class="uwp-profile-tab-label uwp-profile-'.esc_attr( $tab_id ).'-label">'.esc_html__($tab['tab_name'], 'userswp').'</span>';
-                                echo aui()->button(array(
+                                echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'type'       =>  'a',
-									'href'       => $tab_url,
+									'href'       => $append_hash ? esc_url($tab_url).'#tab-content' : esc_url($tab_url),
 									'class'      => 'nav-link',
 									'icon'       => esc_attr($tab['tab_icon']),
-									'content'    => $content,
+									'content'    => $content, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								));
 								?>
 						</li>
@@ -71,7 +69,7 @@ if ( $output === '' || $output == 'body' ) {
             <div class="uwp-profile-entries">
 				<?php
 
-				echo $active_tab_content;
+				echo $active_tab_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
             </div>
         </div>

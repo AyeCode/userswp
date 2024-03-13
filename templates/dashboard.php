@@ -13,7 +13,7 @@ $dashboard_links = !empty($args['template_args']['dashboard_links']) ? $args['te
             <div class="uwp-account-avatar"><a href="<?php echo esc_url( $profile_link );?>"><?php echo get_avatar( get_current_user_id(), 100 ); ?></a></div>
             <?php do_action('uwp_template_form_title_before', 'dashboard'); ?>
             <h2><?php
-                echo apply_filters('uwp_template_form_title',  esc_attr( $hello_text ), 'dashboard');
+                echo apply_filters('uwp_template_form_title',  esc_attr( $hello_text ), 'dashboard'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 ?></h2>
             <?php do_action('uwp_template_form_title_after', 'dashboard'); ?>
             <?php do_action('uwp_template_display_notices', 'dashboard'); ?>
@@ -29,7 +29,7 @@ $dashboard_links = !empty($args['template_args']['dashboard_links']) ? $args['te
             </div>
             <div class="uwp-login-links">
                 <div class="uwp-logout-link">
-                    <a href="<?php echo wp_logout_url();?>"><?php _e("Logout","userswp");?></a>
+                    <a href="<?php echo esc_url( wp_logout_url() );?>"><?php esc_html_e("Logout","userswp");?></a>
                 </div>
             </div>
 
