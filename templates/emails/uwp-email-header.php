@@ -25,7 +25,7 @@ if ( !isset( $email_heading ) ) {
 				<tr>
                     <td align="center" valign="middle" id="template_header">
                         <div id="template_header_logo">
-                        <p style="margin-top:0;"><?php echo esc_html( $header_text ); ?></p>
+                        <p style="margin-top:0;"><?php echo wp_kses_post( $header_text ); ?></p>
                         </div>
 					</td>
 				</tr>
@@ -40,7 +40,7 @@ if ( !isset( $email_heading ) ) {
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_heading">
                                         <tr>
                                             <td id="header_wrapper">
-                                                <h1><?php echo $email_heading; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></h1>
+                                                <h1><?php echo wp_kses_post( $email_heading ); ?></h1>
                                             </td>
                                         </tr>
                                     </table>
