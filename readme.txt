@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.8 =
+* Email header logo image broken after update - FIXED
+
 = 1.2.7 =
 * Profile title tag could be changed to non heading tag by a contributor level user - FIXED
 
