@@ -4093,57 +4093,45 @@ class UsersWP_Forms {
 			$bs_form_control = $design_style ? "form-control" : "";
 
 			ob_start(); // Start  buffering;
-
 			?>
-			<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row"
-			     class="<?php if ( $field->is_required ) {
-				     echo 'required_field';
-			     } ?> uwp_clear <?php echo esc_attr( $bs_form_group. ' '.$field->css_class ); ?>">
+			<div id="<?php echo esc_attr( $field->htmlvar_name ); ?>_row" class="<?php echo ( $field->is_required ? 'required_field' : '' ); ?> uwp_clear <?php echo esc_attr( $bs_form_group. ' ' . $field->css_class ); ?>">
 
 				<?php
 				$site_title = uwp_get_form_label( $field );
-				if ( ! is_admin() && !wp_doing_ajax() ) { ?>
+
+				if ( ! is_admin() && !wp_doing_ajax() ) {
+				?>
 					<label class="<?php echo esc_attr( $bs_sr_only ); ?>">
 						<?php echo ( trim( $site_title ) ) ? esc_html( $site_title ) : '&nbsp;'; ?>
 						<?php if ( $field->is_required ) {
 							echo '<span class="text-danger">*</span>';
 						} ?>
 					</label>
-				<?php } ?>
-
 				<?php
+				}
 				// if value empty set the default
 				if ( $value == '' && isset( $field->default_value ) && $field->default_value ) {
 					$value = $field->default_value;
 				}
-				$select_country_options = apply_filters( 'uwp_form_input_select_country', "{defaultCountry: '$value'}", $field, $value, $form_type );
+				if ( $value === false ) {
+					$value = '';
+				}
+				$select_country_options = wp_json_encode( array( 'defaultCountry' => wp_unslash( $value ) ) );
+				$select_country_options = apply_filters( 'uwp_form_input_select_country', $select_country_options, $field, $value, $form_type );
+
+				$htmlvar_name = $field->htmlvar_name;
+				if ( wp_doing_ajax() ) {
+					$htmlvar_name .= '_ajax';
+				}
 				?>
-
-				<input type="text" class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
-				       title="<?php echo esc_attr( $site_title ); ?>" id="<?php echo esc_attr( $field->htmlvar_name );
-				if ( wp_doing_ajax() ) {
-					echo "_ajax";
-				} ?>"/>
-				<input type="hidden" id="<?php echo esc_attr( $field->htmlvar_name );
-				if ( wp_doing_ajax() ) {
-					echo "_ajax";
-				} ?>_code" name="<?php echo esc_attr( $field->htmlvar_name ); ?>"/>
-
-				<script>
-					jQuery(function () {
-						jQuery("#<?php echo esc_attr( $field->htmlvar_name ); if ( wp_doing_ajax() ) {
-							echo "_ajax";
-						}?>").countrySelect(<?php echo esc_js( $select_country_options );?>);
-					});
-				</script>
-
-
+				<input type="text" class="uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>" title="<?php echo esc_attr( $site_title ); ?>" id="<?php echo esc_attr( $htmlvar_name ); ?>"/>
+				<input type="hidden" id="<?php echo esc_attr( $htmlvar_name ); ?>_code" name="<?php echo esc_attr( $field->htmlvar_name ); ?>"/>
+				<script>jQuery(function(){jQuery("#<?php echo esc_js( $htmlvar_name ); ?>").countrySelect(<?php echo wp_json_encode( json_decode( $select_country_options ) ); ?>);});</script>
 				<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 				<?php if ( $field->is_required ) { ?>
 					<span class="uwp_message_error invalid-feedback"><?php echo esc_html__( $field->required_msg, 'userswp' ); ?></span>
 				<?php } ?>
 			</div>
-
 			<?php
 			$html = ob_get_clean();
 		}
