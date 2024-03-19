@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.9 =
+* JS error breaks Country field in register form - FIXED
+
 = 1.2.8 =
 * Email header logo image broken after update - FIXED
 
