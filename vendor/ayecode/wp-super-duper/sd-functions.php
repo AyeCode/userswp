@@ -2032,6 +2032,148 @@ function sd_get_scrollbars_input( $type = 'scrollbars', $overwrite = array() ) {
 }
 
 /**
+ * @param $type
+ * @param $overwrite
+ *
+ * @return array
+ */
+function sd_get_new_window_input( $type = 'target', $overwrite = array() ) {
+
+	$defaults = array(
+		'type'     => 'checkbox',
+		'title'    => __( 'Open in new window', 'ayecode-connect' ),
+		'default'  => '',
+		'desc_tip' => true,
+		'group'    => __( 'Link', 'ayecode-connect' ),
+	);
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+	return $input;
+}
+
+/**
+ * @param $type
+ * @param $overwrite
+ *
+ * @return array
+ */
+function sd_get_nofollow_input( $type = 'nofollow', $overwrite = array() ) {
+
+	$defaults = array(
+		'type'     => 'checkbox',
+		'title'    => __( 'Add nofollow', 'ayecode-connect' ),
+		'default'  => '',
+		'desc_tip' => true,
+		'group'    => __( 'Link', 'ayecode-connect' ),
+	);
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+	return $input;
+}
+
+/**
+ * @param $type
+ * @param $overwrite
+ *
+ * @return array
+ */
+function sd_get_attributes_input( $type = 'attributes', $overwrite = array() ) {
+
+	$defaults = array(
+		'type'        => 'text',
+		'title'       => __( 'Custom Attributes', 'ayecode-connect' ),
+		'value'       => '',
+		'default'     => '',
+		'placeholder' => 'key|value,key2|value2',
+		'desc_tip'    => true,
+		'group'       => __( 'Link', 'ayecode-connect' ),
+	);
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+	return $input;
+}
+
+/**
+ * @param $args
+ *
+ * @return string
+ */
+function sd_build_attributes_string_escaped( $args ) {
+	global $aui_bs5;
+
+	$attributes = array();
+	$string_escaped = '';
+
+	if ( ! empty( $args['custom'] ) ) {
+		$attributes = sd_parse_custom_attributes($args['custom']);
+	}
+
+	// new window
+	if ( ! empty( $args['new_window'] ) ) {
+		$attributes['target'] = '_blank';
+	}
+
+	// nofollow
+	if ( ! empty( $args['nofollow'] ) ) {
+		$attributes['rel'] = isset($attributes['rel']) ? $attributes['rel'] . ' nofollow' : 'nofollow';
+	}
+
+	if(!empty($attributes )){
+		foreach ( $attributes as $key => $val ) {
+			$string_escaped .= esc_attr($key) . '="' . esc_attr($val) . '" ';
+		}
+	}
+
+	return $string_escaped;
+}
+
+/**
+ * @info borrowed from elementor
+ *
+ * @param $attributes_string
+ * @param $delimiter
+ *
+ * @return array
+ */
+function sd_parse_custom_attributes( $attributes_string, $delimiter = ',' ) {
+	$attributes = explode( $delimiter, $attributes_string );
+	$result = [];
+
+	foreach ( $attributes as $attribute ) {
+		$attr_key_value = explode( '|', $attribute );
+
+		$attr_key = mb_strtolower( $attr_key_value[0] );
+
+		// Remove any not allowed characters.
+		preg_match( '/[-_a-z0-9]+/', $attr_key, $attr_key_matches );
+
+		if ( empty( $attr_key_matches[0] ) ) {
+			continue;
+		}
+
+		$attr_key = $attr_key_matches[0];
+
+		// Avoid Javascript events and unescaped href.
+		if ( 'href' === $attr_key || 'on' === substr( $attr_key, 0, 2 ) ) {
+			continue;
+		}
+
+		if ( isset( $attr_key_value[1] ) ) {
+			$attr_value = trim( $attr_key_value[1] );
+		} else {
+			$attr_value = '';
+		}
+
+		$result[ $attr_key ] = $attr_value;
+	}
+
+	return $result;
+}
+
+/**
  * Build AUI classes from settings.
  *
  * @param $args

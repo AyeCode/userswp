@@ -57,7 +57,7 @@
   &:hover {
     box-shadow: 0 0 0 .625rem rgba($primary, .25);
   }
-  
+
   &.leaflet-marker-shadow { display: none; }
 }
 
@@ -79,12 +79,12 @@
 // Popup
 
 .leaflet-popup-content-wrapper {
-  min-width: 17.5rem;
   padding: 0;
   overflow: hidden;
   .leaflet-popup-content {
-    width: 100% !important;
-    margin: 0 !important;
+    width: 220px !important;
+    margin:10px !important;
+    padding:3px !important;
     color: $body-color;
   }
 }

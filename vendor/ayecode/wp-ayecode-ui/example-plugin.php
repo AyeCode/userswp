@@ -41,7 +41,7 @@ class AyeCode_UI_Plugin {
 			wp_head();
 			echo "</head>";
 			echo "<body class='bsui'>";
-			echo $this->get_examples();
+			echo $this->get_examples(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			wp_footer();
 			echo "</body>";
 			exit;

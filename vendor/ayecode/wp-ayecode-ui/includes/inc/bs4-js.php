@@ -91,7 +91,7 @@
     }
 
     function aui_select2_locale() {
-        var aui_select2_params = <?php echo self::select2_locale(); ?>;
+        var aui_select2_params = <?php echo self::select2_locale(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 
         return {
             'language': {
@@ -150,7 +150,7 @@
      * @param selector string The .class selector
      */
     function aui_time_ago(selector) {
-        var aui_timeago_params = <?php echo self::timeago_locale(); ?>;
+        var aui_timeago_params = <?php echo self::timeago_locale(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 
         var templates = {
             prefix: aui_timeago_params.prefix_ago,
@@ -242,7 +242,7 @@
     function aui_init_flatpickr(){
         if ( typeof jQuery.fn.flatpickr === "function" && !$aui_doing_init_flatpickr) {
             $aui_doing_init_flatpickr = true;
-			<?php if ( ! empty( $flatpickr_locale ) ) { ?>try{flatpickr.localize(<?php echo $flatpickr_locale; ?>);}catch(err){console.log(err.message);}<?php } ?>
+			<?php if ( ! empty( $flatpickr_locale ) ) { ?>try{flatpickr.localize(<?php echo $flatpickr_locale; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>);}catch(err){console.log(err.message);}<?php } ?>
             jQuery('input[data-aui-init="flatpickr"]:not(.flatpickr-input)').flatpickr();
         }
         $aui_doing_init_flatpickr = false;

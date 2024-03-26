@@ -3,7 +3,7 @@
 Plugin Name: UsersWP
 Plugin URI: https://userswp.io/
 Description: The only lightweight user profile plugin for WordPress. UsersWP features front end user profile, users directory, a registration and a login form.
-Version: 1.2.8
+Version: 1.2.9
 Author: AyeCode Ltd
 Author URI: https://userswp.io
 License: GPL-2.0+
@@ -24,7 +24,7 @@ if ( ! defined( 'USERSWP_NAME' ) ) {
 }
 
 if ( ! defined( 'USERSWP_VERSION' ) ) {
-	define( 'USERSWP_VERSION', '1.2.8' );
+	define( 'USERSWP_VERSION', '1.2.9' );
 }
 
 if ( ! defined( 'USERSWP_PATH' ) ) {

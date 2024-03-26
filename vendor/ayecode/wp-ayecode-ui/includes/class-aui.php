@@ -105,7 +105,7 @@ class AUI {
 		}
 
 		if ( $echo ) {
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}else{
 			return $output;
 		}
@@ -126,7 +126,7 @@ class AUI {
 		$output = AUI_Component_Alert::get( $args );
 
 		if ( $echo ) {
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}else{
 			return $output;
 		}
@@ -146,7 +146,7 @@ class AUI {
 		$output = AUI_Component_Input::input( $args );
 
 		if ( $echo ) {
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}else{
 			return $output;
 		}
@@ -166,7 +166,7 @@ class AUI {
 		$output = AUI_Component_Input::textarea( $args );
 
 		if ( $echo ) {
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}else{
 			return $output;
 		}
@@ -186,7 +186,7 @@ class AUI {
 		$output = AUI_Component_Button::get( $args );
 
 		if ( $echo ) {
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}else{
 			return $output;
 		}
@@ -220,7 +220,7 @@ class AUI {
 		$output = AUI_Component_Button::get( $args );
 
 		if ( $echo ) {
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}else{
 			return $output;
 		}
@@ -240,7 +240,7 @@ class AUI {
 		$output = AUI_Component_Dropdown::get( $args );
 
 		if ( $echo ) {
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}else{
 			return $output;
 		}
@@ -260,7 +260,7 @@ class AUI {
 		$output = AUI_Component_Input::select( $args );
 
 		if ( $echo ) {
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}else{
 			return $output;
 		}
@@ -280,7 +280,7 @@ class AUI {
 		$output = AUI_Component_Input::radio( $args );
 
 		if ( $echo ) {
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}else{
 			return $output;
 		}
@@ -300,7 +300,7 @@ class AUI {
 		$output = AUI_Component_Pagination::get( $args );
 
 		if ( $echo ) {
-			echo $output;
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}else{
 			return $output;
 		}
