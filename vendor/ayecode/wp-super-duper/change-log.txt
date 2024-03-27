@@ -1,3 +1,6 @@
+= 1.1.36 - 2024-03-26 =
+* Added helper functions for link attributes - ADDED
+
 = 1.1.35 - 2024-03-13 =
 * Add style multiselect field for Elementor editor - CHANGED
 

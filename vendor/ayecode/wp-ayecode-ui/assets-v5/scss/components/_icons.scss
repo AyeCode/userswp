@@ -276,10 +276,10 @@ $fi-entertainment-alt: '\ea07';
 
 @font-face {
   font-family: '#{$icons-font-family}';
-  src:
-    url('#{$icons-font-path}/#{$icons-font-family}.ttf?1barpw') format('truetype'),
-    url('#{$icons-font-path}/#{$icons-font-family}.woff?1barpw') format('woff'),
-    url('#{$icons-font-path}/#{$icons-font-family}.svg?1barpw##{$icons-font-family}') format('svg');
+  //src:
+  //  url('#{$icons-font-path}/#{$icons-font-family}.ttf?1barpw') format('truetype'),
+  //  url('#{$icons-font-path}/#{$icons-font-family}.woff?1barpw') format('woff'),
+  //  url('#{$icons-font-path}/#{$icons-font-family}.svg?1barpw##{$icons-font-family}') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;

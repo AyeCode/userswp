@@ -86,3 +86,8 @@ body>.flatpickr-calendar .flatpickr-month .flatpickr-current-month>*{display:inl
   position: initial !important;
   background: transparent; // this is for divi theme that does background position stuff and breaks it.
 }
+
+// Backend import/export safari issues
+.gd-settings-wrap .moxie-shim input{
+  font-size: 0 !important;
+}

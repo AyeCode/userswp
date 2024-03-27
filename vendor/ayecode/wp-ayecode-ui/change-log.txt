@@ -1,3 +1,10 @@
+= 0.2.10 - TBD =
+* Safari wp-admin plupload overflow issue on hidden input causing horizontal scroll issue - FIXED
+
+= 0.2.9 - 2024-03-19 =
+* BS5 styles can call broken font awesome url from css - FIXED
+* Plugin check review - DONE
+
 = 0.2.8 - 2024-02-22 =
 * Gallery padding made slider images taller than single images - FIXED
 * aui_modal_iframe() function not loading iframe when bs5 selected - FIXED

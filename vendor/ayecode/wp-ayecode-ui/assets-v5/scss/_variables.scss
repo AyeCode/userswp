@@ -175,7 +175,7 @@ $zindex-lightbox-content:      1110 !default;
 //$path-to-fonts:               'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap' !default;
 //$font-family-sans-serif:      'Poppins', sans-serif !default;
 //$headings-color:              $gray-900 !default;
-$headings-color:              null !default;
+$headings-color:              inherit !default;
 
 $font-size-base:              1rem !default;
 $font-size-lg:                ($font-size-base * 1.125) !default;
