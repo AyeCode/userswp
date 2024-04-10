@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.10 =
+* Rotate image when required before crop image - CHANGED
+
 = 1.2.9 =
 * JS error breaks Country field in register form - FIXED
 
