@@ -203,9 +203,30 @@ class UsersWP_Files {
             }
         } else {
             $upload = wp_handle_upload( $file, apply_filters( 'uwp_handle_upload_overrides', array( 'test_form' => false ) ) );
+
             if ( ! empty( $upload['error'] ) ) {
                 return new WP_Error( 'upload', $upload['error'] );
             } else {
+                if ( ! empty( $upload['type'] ) && $upload['type'] != 'image/png' && strpos( $upload['type'], 'image/' ) === 0 ) {
+                    // Fetch additional metadata from EXIF/IPTC.
+                    $exif_meta = wp_read_image_metadata( $upload['file'] );
+
+                    if ( ! empty( $exif_meta ) && is_array( $exif_meta ) && ! empty( $exif_meta['orientation'] ) && 1 !== (int) $exif_meta['orientation'] ) {
+                        $editor = wp_get_image_editor( $upload['file'] );
+
+                        if ( ! empty( $editor ) && ! is_wp_error( $editor ) ) {
+                            // Rotate the whole original image if there is EXIF data and "orientation" is not 1.
+                            $rotated = $editor->maybe_exif_rotate();
+                            $rotated = $rotated === true ? $editor->save( $editor->generate_filename( 'rotated' ) ) : false;
+
+                            if ( ! empty( $rotated ) && ! is_wp_error( $rotated ) && ! empty( $rotated['path'] ) ) {
+                                $upload['url'] = str_replace( basename( $upload['url'] ), basename( $rotated['path'] ), $upload['url'] );
+                                $upload['file'] = $rotated['path'];
+                            }
+                        }
+                    }
+                }
+
                 $uploaded_file->url       = $upload['url'];
                 $uploaded_file->name      = basename( $upload['file'] );
                 $uploaded_file->path      = $upload['file'];
@@ -214,7 +235,6 @@ class UsersWP_Files {
                 $uploaded_file->extension = substr( strrchr( $uploaded_file->name, '.' ), 1 );
             }
         }
-
 
         return $uploaded_file;
     }
