@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.10';
+		public $version = '0.2.14';
 
 		/**
 		 * Class textdomain.
@@ -1292,19 +1292,30 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			return defined('AYECODE_UI_BS3_COMPAT') || defined('SVQ_THEME_VERSION') || defined('FUSION_BUILDER_VERSION');
 		}
 
-		public static function hex_to_rgb($hex) {
+		public static function hex_to_rgb( $hex ) {
 			// Remove '#' if present
-			$hex = str_replace('#', '', $hex);
+			$hex = str_replace( '#', '', $hex );
+
+			// Check if input is RGB
+			if ( strpos( $hex, 'rgba(' ) === 0 || strpos( $hex, 'rgb(' ) === 0 ) {
+				$_rgb = explode( ',', str_replace( array( 'rgba(', 'rgb(', ')' ), '', $hex ) );
+
+				$rgb = ( isset( $_rgb[0] ) ? (int) trim( $_rgb[0] ) : '0' ) . ',';
+				$rgb .= ( isset( $_rgb[1] ) ? (int) trim( $_rgb[1] ) : '0' ) . ',';
+				$rgb .= ( isset( $_rgb[2] ) ? (int) trim( $_rgb[2] ) : '0' );
+
+				return $rgb;
+			}
 
 			// Convert 3-digit hex to 6-digit hex
-			if(strlen($hex) == 3) {
-				$hex = str_repeat(substr($hex, 0, 1), 2) . str_repeat(substr($hex, 1, 1), 2) . str_repeat(substr($hex, 2, 1), 2);
+			if ( strlen( $hex ) == 3 ) {
+				$hex = str_repeat( substr( $hex, 0, 1 ), 2 ) . str_repeat( substr( $hex, 1, 1 ), 2 ) . str_repeat( substr( $hex, 2, 1 ), 2 );
 			}
 
 			// Convert hex to RGB
-			$r = hexdec(substr($hex, 0, 2));
-			$g = hexdec(substr($hex, 2, 2));
-			$b = hexdec(substr($hex, 4, 2));
+			$r = hexdec( substr( $hex, 0, 2 ) );
+			$g = hexdec( substr( $hex, 2, 2 ) );
+			$b = hexdec( substr( $hex, 4, 2 ) );
 
 			// Return RGB values as an array
 			return $r . ',' . $g . ',' . $b;
@@ -1427,6 +1438,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 			}
 
+			$output .= $prefix . ' .link-'.esc_attr($type).' {color: var(--bs-'.esc_attr($type).'-rgb) !important;}';
 			$output .= $prefix . ' .link-'.esc_attr($type).':hover {color: rgba(var(--bs-'.esc_attr($type).'-rgb), .8) !important;}';
 
 			//  buttons
@@ -1454,6 +1466,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			//  buttons outline
 			$output .= $prefix . ' .btn-outline-'.esc_attr($type).'{';
 			$output .= ' 
+			--bs-btn-color: '.esc_attr($color_code).';
             --bs-btn-border-color: '.esc_attr($color_code).';
             --bs-btn-hover-bg: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
             --bs-btn-hover-border-color: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
@@ -2101,6 +2114,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 */
 		public static function css_hex_lighten_darken($hexCode, $adjustPercent) {
 			$hexCode = ltrim($hexCode, '#');
+
+			if ( strpos( $hexCode, 'rgba(' ) !== false || strpos( $hexCode, 'rgb(' ) !== false ) {
+				return $hexCode;
+			}
 
 			if (strlen($hexCode) == 3) {
 				$hexCode = $hexCode[0] . $hexCode[0] . $hexCode[1] . $hexCode[1] . $hexCode[2] . $hexCode[2];

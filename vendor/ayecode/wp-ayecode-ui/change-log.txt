@@ -1,4 +1,19 @@
-= 0.2.10 - TBD =
+= 0.2.14 - 2024-05-09 =
+* Label type top don't have margin to label - FIXED
+* Improvements for aui_lightbox_embed() function - CHANGED
+
+= 0.2.13 - 2024-05-02 =
+* BS4 lightbox displays blurred image - FIXED
+* Fix PHP notice in HEX to RGB conversion - FIXED
+* Outline buttons not using correct text color when user adjusted colors in block themes - FIXED
+
+= 0.2.12 - 2024-04-25 =
+* Enhance BS4 to BS5 class replacements - CHANGED
+
+= 0.2.11 - 2024-04-11 =
+* .link-* classes not respecting editor color change - FIXED
+
+= 0.2.10 - 2024-04-04 =
 * Safari wp-admin plupload overflow issue on hidden input causing horizontal scroll issue - FIXED
 
 = 0.2.9 - 2024-03-19 =
@@ -38,7 +53,7 @@
 
 = 0.1.97 =
 * BS5 removed mb-3 on slider as it was causing padding issues on GD when mixed Single and Slider archives - CHANGED
-* image cover classes are nto vertically centering image - FIXED
+* image cover classes are not vertically centering image - FIXED
 
 = 0.1.96 =
 * BS4 to BS5 font italic class is not working - FIXED
@@ -118,7 +133,7 @@
 
 = 0.1.73 =
 * Conditional field multiselect field don't match for specific option - FIXED
-* Allow to run conditionl fields on custom event trigger - ADDED
+* Allow to run conditional fields on custom event trigger - ADDED
 
 = 0.1.72 =
 * Input now has "size" option: sm, small, lg, large - ADDED

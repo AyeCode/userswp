@@ -17,6 +17,37 @@ if(!$user){
 	return;
 }
 
+$head_output = $active_tab_content = '';
+if(!empty($tabs_array)) {
+    foreach ($tabs_array as $tab) {
+        $tab_id = $tab['tab_key'];
+        $tab_url = uwp_build_profile_tab_url($user->ID, $tab_id, false);
+
+        $active = $active_tab == $tab_id ? ' active border-bottom border-primary border-width-2' : '';
+
+        if ($active_tab == $tab_id) {
+            $active_tab_content = $tab['tab_content_rendered'];
+        }
+
+        $append_hash = apply_filters('uwp_add_tab_content_hashtag', true, $tab, $user);
+        $head_output .= '
+        <li id="uwp-profile-'.esc_attr( $tab_id ).'"
+            class="nav-item '.esc_attr( $active ).' list-unstyled m-0">
+        ';
+
+        $content = '<span class="uwp-profile-tab-label uwp-profile-'.esc_attr( $tab_id ).'-label">'.esc_html__($tab['tab_name'], 'userswp').'</span>';
+        $head_output .= aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            'type'       =>  'a',
+            'href'       => $append_hash ? esc_url($tab_url).'#tab-content' : esc_url($tab_url),
+            'class'      => 'nav-link',
+            'icon'       => esc_attr($tab['tab_icon']),
+            'content'    => $content, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        ));
+
+        $head_output .= '</li>';
+    }
+}
+
 if($output === '' || $output=='head'){
 ?>
 <nav class="navbar navbar-expand-xl navbar-light bg-white  mb-4 p-xl-0 <?php echo esc_attr($greedy_menu_class); ?>">
@@ -25,35 +56,7 @@ if($output === '' || $output=='head'){
 		<div class="collapse navbar-collapse" id="uwp-profile-tabs-nav">
 			<ul class="navbar-nav flex-wrap m-0 list-unstyled">
 				<?php
-				if(!empty($tabs_array)) {
-					foreach ($tabs_array as $tab) {
-						$tab_id = $tab['tab_key'];
-						$tab_url = uwp_build_profile_tab_url($user->ID, $tab_id, false);
-
-						$active = $active_tab == $tab_id ? ' active border-bottom border-primary border-width-2' : '';
-
-						if ($active_tab == $tab_id) {
-							$active_tab_content = $tab['tab_content_rendered'];
-						}
-
-						$append_hash = apply_filters('uwp_add_tab_content_hashtag', true, $tab, $user);
-						?>
-						<li id="uwp-profile-<?php echo esc_attr( $tab_id ); ?>"
-						    class="nav-item <?php echo esc_attr( $active ); ?> list-unstyled m-0">
-								<?php
-                                $content = '<span class="uwp-profile-tab-label uwp-profile-'.esc_attr( $tab_id ).'-label">'.esc_html__($tab['tab_name'], 'userswp').'</span>';
-                                echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									'type'       =>  'a',
-									'href'       => $append_hash ? esc_url($tab_url).'#tab-content' : esc_url($tab_url),
-									'class'      => 'nav-link',
-									'icon'       => esc_attr($tab['tab_icon']),
-									'content'    => $content, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								));
-								?>
-						</li>
-						<?php
-					}
-				}
+                    echo $head_output;
 				?>
 			</ul>
 		</div>
@@ -68,8 +71,7 @@ if ( $output === '' || $output == 'body' ) {
         <div id="tab-content" class="uwp-profile-content">
             <div class="uwp-profile-entries">
 				<?php
-
-				echo $active_tab_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				    echo $active_tab_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
             </div>
         </div>

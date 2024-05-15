@@ -2651,6 +2651,8 @@ class UsersWP_Forms {
 
 			$option_values_arr = uwp_string_values_to_options( $field->option_values, true );
 			$site_title        = uwp_get_form_label( $field );
+            $value = is_array($value) ? $value : esc_attr($value);
+
 			// bootstrap
 			if ( $design_style ) {
 
@@ -2661,7 +2663,7 @@ class UsersWP_Forms {
 					'name'            => esc_attr( $field->htmlvar_name ),
 					'placeholder'     => esc_attr( uwp_get_field_placeholder( $field ) ),
 					'title'           => esc_html( $site_title ),
-					'value'           => esc_attr( $value ),
+					'value'           => $value,
 					'required'        => (bool) $field->is_required,
 					'validation_text' => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
 					'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
