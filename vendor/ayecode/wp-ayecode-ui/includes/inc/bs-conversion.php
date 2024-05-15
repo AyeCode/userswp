@@ -17,13 +17,24 @@ function aui_bs_convert_sd_output( $output, $instance = '', $args = '', $sd = ''
 	global $aui_bs5;
 
 	if ( $aui_bs5 ) {
-
 		$convert = array(
-			'ml-'                   => 'ms-',
-			'mr-'                   => 'me-',
-			'pl-'                   => 'ps-',
-			'pr-'                   => 'pe-',
-			' form-row'              => ' row',
+			'"ml-' => '"ms-',
+			'"mr-' => '"me-',
+			'"pl-' => '"ps-',
+			'"pr-' => '"pe-',
+			"'ml-" => "'ms-",
+			"'mr-" => "'me-",
+			"'pl-" => "'ps-",
+			"'pr-" => "'pe-",
+			' ml-' => ' ms-',
+			' mr-' => ' me-',
+			' pl-' => ' ps-',
+			' pr-' => ' pe-',
+			'.ml-' => '.ms-',
+			'.mr-' => '.me-',
+			'.pl-' => '.ps-',
+			'.pr-' => '.pe-',
+			' form-row' => ' row',
 			' embed-responsive-item' => '',
 			' embed-responsive' => ' ratio',
 			'-1by1'    => '-1x1',

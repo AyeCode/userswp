@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.8\n"
+"Project-Id-Version: UsersWP 1.2.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-15 16:53+0530\n"
-"PO-Revision-Date: 2024-03-15 16:53+0530\n"
+"POT-Creation-Date: 2024-05-15 20:37+0530\n"
+"PO-Revision-Date: 2024-05-15 20:37+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -15,7 +15,7 @@ msgstr ""
 "_nx:1,2;_x;_ex;esc_attr_e;esc_attr__\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: vendor\n"
 
@@ -298,8 +298,8 @@ msgstr ""
 #: admin/class-uwp-admin-help.php:65
 #, php-format
 msgid ""
-"Should you need help understanding, using, or extending UsersWP <a href="
-"\"%1$s\">please read our documentation</a>. You will find all kinds of "
+"Should you need help understanding, using, or extending UsersWP <a "
+"href=\"%1$s\">please read our documentation</a>. You will find all kinds of "
 "resources including snippets, tutorials and much more.,"
 msgstr ""
 
@@ -327,11 +327,11 @@ msgstr ""
 #: admin/class-uwp-admin-help.php:75
 #, php-format
 msgid ""
-"If you find a bug within UsersWP core you can create a ticket via <a href="
-"\"%1$s\">Github issues</a>. Ensure you read the <a href=\"%2$s"
-"\">contribution guide</a> prior to submitting your report. To help us solve "
-"your issue, please be as descriptive as possible and include your <a href="
-"\"%3$s\">system status report</a>"
+"If you find a bug within UsersWP core you can create a ticket via <a "
+"href=\"%1$s\">Github issues</a>. Ensure you read the <a "
+"href=\"%2$s\">contribution guide</a> prior to submitting your report. To "
+"help us solve your issue, please be as descriptive as possible and include "
+"your <a href=\"%3$s\">system status report</a>"
 msgstr ""
 
 #: admin/class-uwp-admin-help.php:76
@@ -1449,7 +1449,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:71
 #: admin/settings/class-uwp-settings-general.php:309
-#: includes/class-emails.php:300 includes/class-forms.php:4551
+#: includes/class-emails.php:300 includes/class-forms.php:4541
 #: includes/class-pages.php:325 templates/bootstrap/forgot.php:66
 #: templates/bootstrap/login.php:11 templates/login.php:7
 #: templates/login.php:19 widgets/login.php:50 widgets/login.php:141
@@ -2347,8 +2347,8 @@ msgstr ""
 #: admin/views/html-admin-page-addons.php:93
 #, php-format
 msgid ""
-"All of our UsersWP Addons can be found on UsersWP.io here: <a href=\"%s"
-"\">UsersWP Addons</a>"
+"All of our UsersWP Addons can be found on UsersWP.io here: <a "
+"href=\"%s\">UsersWP Addons</a>"
 msgstr ""
 
 #: admin/views/html-admin-page-addons.php:96
@@ -2401,8 +2401,8 @@ msgstr ""
 #, php-format
 msgid ""
 "If you are modifying userswp on a parent theme that you did not build "
-"personally we recommend using a child theme. See: <a href=\"%s\" target="
-"\"_blank\">How to create a child theme</a>"
+"personally we recommend using a child theme. See: <a href=\"%s\" "
+"target=\"_blank\">How to create a child theme</a>"
 msgstr ""
 
 #: admin/views/html-admin-page-status.php:12
@@ -2509,7 +2509,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:537 includes/class-activator.php:579
-#: includes/class-forms.php:4293
+#: includes/class-forms.php:4283
 msgid "Confirm Password"
 msgstr ""
 
@@ -2694,11 +2694,11 @@ msgstr ""
 msgid "Uploaded files need to be one of the following file types: %s"
 msgstr ""
 
-#: includes/class-files.php:354
+#: includes/class-files.php:374
 msgid "Remove Image"
 msgstr ""
 
-#: includes/class-files.php:363
+#: includes/class-files.php:383
 msgid "Remove File"
 msgstr ""
 
@@ -2929,39 +2929,39 @@ msgstr ""
 msgid "Clear field"
 msgstr ""
 
-#: includes/class-forms.php:3159
+#: includes/class-forms.php:3161
 msgid "Username or Email"
 msgstr ""
 
-#: includes/class-forms.php:3482
+#: includes/class-forms.php:3484
 msgid "Please enter a valid URL including https://"
 msgstr ""
 
-#: includes/class-forms.php:3531
+#: includes/class-forms.php:3533
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:3845
+#: includes/class-forms.php:3847
 #, php-format
 msgid ""
 "By using this form I agree to the storage and handling of my data by this "
 "website. View our %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:3932
+#: includes/class-forms.php:3934
 #, php-format
 msgid "I accept the %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:4211
+#: includes/class-forms.php:4201
 msgid "Site Default"
 msgstr ""
 
-#: includes/class-forms.php:4376
+#: includes/class-forms.php:4366
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/class-forms.php:4529
+#: includes/class-forms.php:4519
 msgid "Privacy settings updated successfully."
 msgstr ""
 
@@ -4101,8 +4101,8 @@ msgstr ""
 #, php-format
 msgid ""
 "You can not access this page directly. Follow the password reset link you "
-"received in your email. To request new password reset link <a href=\"%s"
-"\">visit here</a>."
+"received in your email. To request new password reset link <a "
+"href=\"%s\">visit here</a>."
 msgstr ""
 
 #: templates/bootstrap/user-avatar.php:34 templates/profile-header.php:70

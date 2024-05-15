@@ -597,7 +597,7 @@
         // remove it first
         jQuery('.aui-carousel-modal').remove();
 
-        var $modal = '<div class="modal fade aui-carousel-modal bsui" id="aui-carousel-modal" tabindex="-1" role="dialog" aria-labelledby="aui-modal-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-xl mw-100"><div class="modal-content bg-transparent border-0"><div class="modal-header"><h5 class="modal-title" id="aui-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
+        var $modal = '<div class="modal fade aui-carousel-modal bsui" id="aui-carousel-modal" tabindex="-1" role="dialog" aria-labelledby="aui-modal-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-xl mw-100"><div class="modal-content bg-transparent border-0 shadow-none"><div class="modal-header"><h5 class="modal-title" id="aui-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
         jQuery('body').append($modal);
 
         const ayeModal = new bootstrap.Modal('.aui-carousel-modal', {});
@@ -639,35 +639,60 @@
 
             // items
             $i = 0;
-            $carousel  += '<div class="carousel-inner">';
+            $carousel += '<div class="carousel-inner d-flex align-items-center">';
             $container.find('.aui-lightbox-image').each(function() {
                 var a = this;
                 var href = jQuery(a).attr('href');
 
                 $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
-                $carousel  += '<div class="carousel-item '+ $active+'"><div>';
-
+                $carousel += '<div class="carousel-item '+ $active+'"><div>';
 
                 // image
                 var css_height = window.innerWidth > window.innerHeight ? '90vh' : 'auto';
-                var img = href ? jQuery(a).find('img').clone().attr('src', href ).attr('sizes', '' ).removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('max-height',css_height).get(0).outerHTML :  jQuery(a).find('img').clone().removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('max-height',css_height).get(0).outerHTML;;
-                $carousel  += img;
+                var srcset = jQuery(a).find('img').attr('srcset');
+                var sizes = '';
+                if (srcset) {
+                    var sources = srcset.split(',')
+                        .map(s => {
+                            var parts = s.trim().split(' ');
+                            return {
+                                width: parseInt(parts[1].replace('w', '')),
+                                descriptor: parts[1].replace('w', 'px')  // Ensuring the descriptor is in pixels
+                            };
+                        })
+                        .sort((a, b) => b.width - a.width); // Sort from largest to smallest for proper descending order
+
+                    // Build the sizes string
+                    sizes = sources.map((source, index, array) => {
+                        // For the largest source, do not include max-width to serve as default for larger viewports
+                        if (index === 0) {
+                            return `${source.descriptor}`; // Using full descriptor for the largest image
+                        } else {
+                            // For other sources, specify max-width for one pixel less than the current width
+                            return `(max-width: ${source.width - 1}px) ${array[index - 1].descriptor}`;
+                        }
+                    }).reverse().join(', '); // Reverse to start from smallest to largest for logical order
+
+                }
+
+
+                var img = href ? jQuery(a).find('img').clone().attr('src', href ).attr('sizes', sizes ).removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('max-height',css_height).get(0).outerHTML :  jQuery(a).find('img').clone().removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('max-height',css_height).get(0).outerHTML;
+                $carousel += img;
                 // captions
                 if(jQuery(a).parent().find('.carousel-caption').length ){
-                    $carousel  += jQuery(a).parent().find('.carousel-caption').clone().removeClass('sr-only').get(0).outerHTML;
+                    $carousel += jQuery(a).parent().find('.carousel-caption').clone().removeClass('sr-only visually-hidden').get(0).outerHTML;
                 }else if(jQuery(a).parent().find('.figure-caption').length ){
-                    $carousel  += jQuery(a).parent().find('.figure-caption').clone().removeClass('sr-only').addClass('carousel-caption').get(0).outerHTML;
+                    $carousel += jQuery(a).parent().find('.figure-caption').clone().removeClass('sr-only visually-hidden').addClass('carousel-caption').get(0).outerHTML;
                 }
-                $carousel  += '</div></div>';
+                $carousel += '</div></div>';
                 $i++;
-
             });
+
             $container.find('.aui-lightbox-iframe').each(function() {
                 var a = this;
 
                 $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
-                $carousel  += '<div class="carousel-item '+ $active+'"><div class="modal-xl mx-auto embed-responsive embed-responsive-16by9">';
-
+                $carousel += '<div class="carousel-item '+ $active+'"><div class="modal-xl mx-auto embed-responsive embed-responsive-16by9">';
 
                 // iframe
                 var css_height = window.innerWidth > window.innerHeight ? '95vh' : 'auto';
@@ -692,7 +717,6 @@
                 $carousel += '</a>';
             }
 
-
             $carousel  += '</div>';
 
             var $close = '<button type="button" class="btn-close btn-close-white text-end position-fixed" style="right: 20px;top: 10px; z-index: 1055;" data-bs-dismiss="modal" aria-label="Close"></button>';
@@ -705,7 +729,6 @@
             // enable ajax load
             //gd_init_carousel_ajax();
         }
-
     }
 
     /**

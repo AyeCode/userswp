@@ -1575,6 +1575,30 @@ function sd_get_class_input( $type = 'css_class', $overwrite = array() ) {
 }
 
 /**
+ * A helper function for the class input.
+ *
+ * @param $type
+ * @param $overwrite
+ *
+ * @return array
+ */
+function sd_get_custom_name_input( $type = 'metadata_name', $overwrite = array() ) {
+
+	$defaults = array(
+		'type'     => 'text',
+		'title'    => __( 'Block Name', 'ayecode-connect' ),
+		'desc'     => __( 'Set a custom name for this block', 'ayecode-connect' ),
+		'default'  => '',
+		'desc_tip' => true,
+		'group'    => __( 'Advanced', 'ayecode-connect' ),
+	);
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+	return $input;
+}
+
+/**
  * A helper function for font size inputs.
  *
  * @param string $type

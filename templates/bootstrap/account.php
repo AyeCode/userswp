@@ -42,7 +42,7 @@ do_action( 'uwp_template_before', 'account' ); ?>
             <div class="col-lg-9">
                 <div class="pl-lg-4 pl-sm-0 h-100 pt-5 pb-lg-0 pb-3">
 					<?php
-					$form_title = ! empty( $args['form_title'] ) ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Edit Account', 'userswp' );
+                    $form_title = ! empty( $args['form_title'] ) || $args['form_title']=='0' ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Edit Account', 'userswp' );
 
 					if ( isset( $_GET['type'] ) ) {
 						$type = strip_tags( esc_sql( $_GET['type'] ) );
