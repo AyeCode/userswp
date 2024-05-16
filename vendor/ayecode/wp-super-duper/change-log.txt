@@ -1,3 +1,15 @@
+= 1.1.39 - 2024-04-18 =
+* Better block recovery - UPDATED
+
+= 1.1.38 - 2024-04-16 =
+* Escape shortcode param names - ADDED
+* Better block recovery - UPDATED
+
+= 1.1.37 - 2024-04-11 =
+* Font size option as inherit could output a 0 as a class - FIXED
+* Block rename functionality removed by default and added back with new function metadata_name = sd_get_custom_name_input() - CHANGED
+* Show eye icon in block list view when visibility conditions are set - ADDED
+
 = 1.1.36 - 2024-03-26 =
 * Added helper functions for link attributes - ADDED
 

@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.5
-Stable tag: 1.2.9
+Stable tag: 1.2.10
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -148,6 +148,11 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.10 =
 * Rotate image when required before crop image - CHANGED
+* Multiselect selected values not showing in account form - FIXED
+* Account page title showing even form_title set to 0 - FIXED
+* Profile page shortcode [uwp_profile_tabs output="body"] not displaying content if used separately - FIXED
+* Super Duper updated to v1.1.39 - UPDATED
+* AyeCode UI updated to v0.2.14 - UPDATED
 
 = 1.2.9 =
 * JS error breaks Country field in register form - FIXED
