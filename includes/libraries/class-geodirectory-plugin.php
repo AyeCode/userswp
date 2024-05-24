@@ -64,6 +64,9 @@ class UsersWP_GeoDirectory_Plugin {
 		add_filter( 'uwp_tp_comments_item_footer', array( $this, 'reviews_footer' ), 10, 2 );
 		add_action( 'uwp_profile_pagination', array( $this, 'unset_gd_post' ), 1 );
 
+		add_filter( 'posts_join', array( $this, 'posts_join' ), 11, 2 );
+		add_filter( 'get_usernumposts', array( $this, 'get_usernumposts' ), 11, 4 );
+
 		do_action( 'uwp_gd_setup_actions', $this );
 	}
 
@@ -418,14 +421,33 @@ class UsersWP_GeoDirectory_Plugin {
 	 */
 	public function get_listings_count( $post_type, $user_id = 0 ) {
 		global $wpdb, $sitepress, $wpml_query_filter;
+
 		if ( empty( $user_id ) ) {
 			return 0;
 		}
 
-		$post_status = is_super_admin() ? " OR p.post_status = 'private'" : '';
-		if ( $user_id && $user_id == get_current_user_id() ) {
-			$post_status .= " OR p.post_status = 'draft' OR p.post_status = 'private' OR p.post_status = 'pending' OR p.post_status = 'gd-closed' OR p.post_status = 'gd-expired'";
+		if ( ! empty( $user_id ) && (int) get_current_user_id() == (int) $user_id ) {
+			$post_status = geodir_get_post_stati( 'author-archive', array( 'post_type' => $post_type ) );
+		} else {
+			$post_status = geodir_get_post_stati( 'public', array( 'post_type' => $post_type ) );
 		}
+
+		if ( empty( $post_status ) ) {
+			$post_status = array( 'publish' );
+		}
+
+		if ( is_super_admin() ) {
+			$post_status[] = 'private';
+		}
+
+		$post_status = array_unique( $post_status );
+		$post_status_where = array();
+
+		foreach ( $post_status as $status ) {
+			$post_status_where[] = $wpdb->prepare( "p.post_status = %s", $status );
+		}
+
+		$post_status_where = implode( " OR ", $post_status_where );
 
 		$join  = '';
 		$where = '';
@@ -446,7 +468,12 @@ class UsersWP_GeoDirectory_Plugin {
 			}
 		}
 
-		$count = (int) $wpdb->get_var( "SELECT count( p.ID ) FROM " . $wpdb->prefix . "posts AS p {$join} WHERE p.post_author=" . (int) $user_id . " AND p.post_type='" . $post_type . "' AND ( p.post_status = 'publish' " . $post_status . " ) {$where}" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$table = geodir_db_cpt_table( $post_type );
+
+		$sql = "SELECT count( p.ID ) FROM " . $wpdb->prefix . "posts AS p INNER JOIN `" . $table . "` AS pd ON `pd`.`post_id` = `p`.`ID` {$join} WHERE p.post_author=" . (int) $user_id . " AND p.post_type='" . $post_type . "' AND ( " . $post_status_where . " ) {$where}";
+		$sql = apply_filters( 'geodir_uwp_listings_count_sql', $sql, $post_type, $user_id );
+
+		$count = (int) $wpdb->get_var( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		return apply_filters( 'geodir_uwp_count_total', $count, $user_id );
 	}
@@ -612,15 +639,38 @@ class UsersWP_GeoDirectory_Plugin {
 	public function geodir_count_favorite( $post_type, $user_id = 0 ) {
 		global $wpdb;
 
-		$post_status = is_super_admin() ? " OR " . $wpdb->posts . ".post_status = 'private'" : '';
-		if ( $user_id && $user_id == get_current_user_id() ) {
-			$post_status .= " OR " . $wpdb->posts . ".post_status = 'draft' OR " . $wpdb->posts . ".post_status = 'private' OR " . $wpdb->posts . ".post_status = 'pending' OR " . $wpdb->posts . ".post_status = 'gd-closed' OR " . $wpdb->posts . ".post_status = 'gd-expired'";
+		if ( ! empty( $user_id ) && (int) get_current_user_id() == (int) $user_id ) {
+			$post_status = geodir_get_post_stati( 'author-archive', array( 'post_type' => $post_type ) );
+		} else {
+			$post_status = geodir_get_post_stati( 'public', array( 'post_type' => $post_type ) );
 		}
+
+		if ( empty( $post_status ) ) {
+			$post_status = array( 'publish' );
+		}
+
+		if ( is_super_admin() ) {
+			$post_status[] = 'private';
+		}
+
+		$post_status = array_unique( $post_status );
+		$post_status_where = array();
+
+		foreach ( $post_status as $status ) {
+			$post_status_where[] = $wpdb->prepare( "`" . $wpdb->posts . "`.post_status = %s", $status );
+		}
+
+		$post_status_where = implode( " OR ", $post_status_where );
 
 		$user_fav_posts = geodir_get_user_favourites( (int) $user_id );
 		$user_fav_posts = ! empty( $user_fav_posts ) ? implode( "','", $user_fav_posts ) : "-1";
 
-		$count = (int) $wpdb->get_var( "SELECT count( ID ) FROM " . $wpdb->posts . " WHERE " . $wpdb->posts . ".ID IN ('" . $user_fav_posts . "') AND post_type='" . $post_type . "' AND ( post_status = 'publish' " . $post_status . " )" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$table = geodir_db_cpt_table( $post_type );
+
+		$sql = "SELECT count( ID ) FROM " . $wpdb->posts . " INNER JOIN `" . $table . "` ON `" . $table . "`.`post_id` = " . $wpdb->posts . ".`ID` WHERE " . $wpdb->posts . ".ID IN ('" . $user_fav_posts . "') AND post_type='" . $post_type . "' AND ( " . $post_status_where . " )";
+		$sql = apply_filters( 'geodir_uwp_favorite_count_sql', $sql, $post_type, $user_id );
+
+		$count = (int) $wpdb->get_var( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		return apply_filters( 'uwp_geodir_count_favorite', $count, $user_id );
 	}
@@ -1027,17 +1077,23 @@ class UsersWP_GeoDirectory_Plugin {
 
 			$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
+			if ( ! empty( $user ) && ! empty( $user->ID ) && (int) get_current_user_id() == (int) $user->ID ) {
+				$post_status = geodir_get_post_stati( 'author-archive', array( 'post_type' => $post_type ) );
+			} else {
+				$post_status = geodir_get_post_stati( 'public', array( 'post_type' => $post_type ) );
+			}
+
 			$args = array(
-				'post_type'      => $post_type,
-				'post_status'    => array( 'publish' ),
-				'posts_per_page' => uwp_get_option( 'profile_no_of_items', 10 ),
-				'author'         => $user->ID,
-				'paged'          => $paged,
+				'post_type'        => $post_type,
+				'post_status'      => $post_status,
+				'posts_per_page'   => uwp_get_option( 'profile_no_of_items', 10 ),
+				'author'           => $user->ID,
+				'paged'            => $paged,
+				'uwp_geodir_query' => true
 			);
 
-			if ( get_current_user_id() == $user->ID ) {
-				$args['post_status'] = array( 'publish', 'draft', 'private', 'pending', 'gd-closed', 'gd-expired' );
-			}
+			$args = apply_filters( 'uwp_listing_query_args', $args, $user, $post_type );
+
 			// The Query
 			$the_query = new WP_Query( $args );
 
@@ -1045,7 +1101,7 @@ class UsersWP_GeoDirectory_Plugin {
 				return;
 			}
 			?>
-            <h3><?php esc_html_e( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' ) ?></h3>
+            <h3><?php esc_html( geodir_post_type_name( $post_type , true ) ) ?></h3>
 
             <div class="uwp-profile-item-block">
 				<?php
@@ -1060,6 +1116,11 @@ class UsersWP_GeoDirectory_Plugin {
 						global $post;
 						$post = geodir_get_post_info( $post_id );
 						setup_postdata( $post );
+
+						if ( empty( $post ) ) {
+							continue;
+						}
+
 						$post_avgratings = geodir_get_post_rating( $post->ID );
 						$post_ratings    = geodir_get_rating_stars( $post_avgratings, $post->ID );
 						ob_start();
@@ -1174,7 +1235,7 @@ class UsersWP_GeoDirectory_Plugin {
 				} else {
 					echo aui()->alert( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'    => 'info',
-						'content' => esc_html( wp_sprintf( __( "No %s found.", 'userswp' ), $gd_post_types[ $post_type ]['labels']['name'] ) )
+						'content' => esc_html( wp_sprintf( __( "No %s found.", 'userswp' ), geodir_post_type_name( $post_type , true ) ) )
 					) );
 				}
 				do_action( 'uwp_after_profile_listing_items', $user, $post_type );
@@ -1196,33 +1257,33 @@ class UsersWP_GeoDirectory_Plugin {
 	 *
 	 */
 	public function get_bootstrap_listings( $user, $post_type ) {
-
 		$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
-		$query_args = array(
-			'post_type'      => $post_type,
-			'post_status'    => array( 'publish' ),
-			'posts_per_page' => uwp_get_option( 'profile_no_of_items', 10 ),
-			'author'         => $user->ID,
-			'paged'          => $paged,
-		);
-
-		if ( get_current_user_id() == $user->ID ) {
-			$query_args['post_status'] = array( 'publish', 'draft', 'private', 'pending', 'gd-closed', 'gd-expired' );
+		if ( ! empty( $user ) && ! empty( $user->ID ) && (int) get_current_user_id() == (int) $user->ID ) {
+			$post_status = geodir_get_post_stati( 'author-archive', array( 'post_type' => $post_type ) );
+		} else {
+			$post_status = geodir_get_post_stati( 'public', array( 'post_type' => $post_type ) );
 		}
+
+		$query_args = array(
+			'post_type'        => $post_type,
+			'post_status'      => $post_status,
+			'posts_per_page'   => uwp_get_option( 'profile_no_of_items', 10 ),
+			'author'           => $user->ID,
+			'paged'            => $paged,
+			'uwp_geodir_query' => true
+		);
 
 		$query_args = apply_filters( 'uwp_listing_query_args', $query_args, $user, $post_type );
 
 		// The Query
 		$the_query     = new WP_Query( $query_args );
-		$gd_post_types = geodir_get_posttypes( 'array' );
 
 		$args                               = array();
 		$args['template_args']['the_query'] = $the_query;
-		$args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' );
+		$args['template_args']['title']     = geodir_post_type_name( $post_type , true );
 
 		uwp_get_template( "bootstrap/loop-posts.php", $args );
-
 	}
 
 	/**
@@ -1282,7 +1343,7 @@ class UsersWP_GeoDirectory_Plugin {
 			}
 				do_action( 'uwp_before_profile_reviews_items', $user, $post_type );
 				?>
-                <h3><?php esc_html_e( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' ); ?></h3>
+                <h3><?php esc_html( geodir_post_type_name( $post_type , true ) ); ?></h3>
 
                 <div class="uwp-profile-item-block">
                     <ul class="uwp-profile-item-ul">
@@ -1451,24 +1512,22 @@ class UsersWP_GeoDirectory_Plugin {
 				return;
 			}
 
+			if ( ! empty( $user ) && ! empty( $user->ID ) && (int) get_current_user_id() == (int) $user->ID ) {
+				$post_status = geodir_get_post_stati( 'author-archive', array( 'post_type' => $post_type ) );
+			} else {
+				$post_status = geodir_get_post_stati( 'public', array( 'post_type' => $post_type ) );
+			}
+
 			$args = array(
 				'post_type'      => $post_type,
-				'post_status'    => array( 'publish' ),
+				'post_status'    => $post_status,
 				'posts_per_page' => uwp_get_option( 'profile_no_of_items', 10 ),
 				'post__in'       => $user_fav_posts,
 				'paged'          => $paged,
+				'uwp_geodir_query' => true
 			);
 
-			if ( get_current_user_id() == $user->ID ) {
-				$args['post_status'] = array(
-					'publish',
-					'draft',
-					'private',
-					'pending',
-					'gd-closed',
-					'gd-expired'
-				);
-			}
+			$args = apply_filters( 'uwp_listing_query_args', $args, $user, $post_type );
 
 			// The Query
 			$the_query = new WP_Query( $args );
@@ -1477,7 +1536,7 @@ class UsersWP_GeoDirectory_Plugin {
 				return;
 			}
 			?>
-            <h3><?php esc_html_e( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' ) ?></h3>
+            <h3><?php esc_html( geodir_post_type_name( $post_type , true ) ) ?></h3>
 
             <div class="uwp-profile-item-block">
 				<?php
@@ -1632,27 +1691,31 @@ class UsersWP_GeoDirectory_Plugin {
 
 			$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
+			if ( ! empty( $user ) && ! empty( $user->ID ) && (int) get_current_user_id() == (int) $user->ID ) {
+				$post_status = geodir_get_post_stati( 'author-archive', array( 'post_type' => $post_type ) );
+			} else {
+				$post_status = geodir_get_post_stati( 'public', array( 'post_type' => $post_type ) );
+			}
+
 			$args = array(
 				'post_type'      => $post_type,
-				'post_status'    => array( 'publish' ),
+				'post_status'    => $post_status,
 				'posts_per_page' => uwp_get_option( 'profile_no_of_items', 10 ),
 				'paged'          => $paged,
-				'post__in'       => $favorite_ids
+				'post__in'       => $favorite_ids,
+				'uwp_geodir_query' => true
 			);
 
-			if ( get_current_user_id() == $user->ID ) {
-				$args['post_status'] = array( 'publish', 'draft', 'private', 'pending', 'gd-closed', 'gd-expired' );
-			}
+			$args = apply_filters( 'uwp_listing_query_args', $args, $user, $post_type );
+
 			// The Query
 			$the_query     = new WP_Query( $args );
-			$gd_post_types = geodir_get_posttypes( 'array' );
 
 			$args['template_args']['the_query'] = $the_query;
-			$args['template_args']['title']     = __( $gd_post_types[ $post_type ]['labels']['name'], 'geodirectory' );
+			$args['template_args']['title']     = geodir_post_type_name( $post_type , true );
 
 			uwp_get_template( "bootstrap/loop-posts.php", $args );
 		}
-
 	}
 
 	/**
@@ -2005,6 +2068,32 @@ class UsersWP_GeoDirectory_Plugin {
 	public function unset_gd_post() {
 		global $gd_post;
 		$gd_post = NULL;
+	}
+
+	public function posts_join( $join, $wp_query ) {
+		global $wpdb;
+
+		if ( ! empty( $wp_query ) && ! empty( $wp_query->query_vars ) && ! empty( $wp_query->query_vars['uwp_geodir_query'] ) && ! empty( $wp_query->query_vars['post_type'] ) ) {
+			$post_type = $wp_query->query_vars['post_type'];
+
+			if ( is_scalar( $post_type ) && geodir_is_gd_post_type( $post_type ) ) {
+				$table = geodir_db_cpt_table( $post_type );
+
+				$join .= ( $join ? " " : "" ) . "INNER JOIN `" . $table . "` ON ( `" . $table . "`.`post_id` = `" . $wpdb->posts . "`.`ID` )";
+			}
+		}
+
+		return $join;
+	}
+
+	public function get_usernumposts( $count, $userid, $post_type, $public_only ) {
+		global $_uwp_user_post_counts;
+
+		if ( ! empty( $_uwp_user_post_counts ) && is_scalar( $post_type ) && geodir_is_gd_post_type( $post_type ) ) {
+			$count = $this->get_listings_count( $post_type, $userid );
+		}
+
+		return $count;
 	}
 }
 

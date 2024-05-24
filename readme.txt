@@ -154,6 +154,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 * Super Duper updated to v1.1.39 - UPDATED
 * AyeCode UI updated to v0.2.14 - UPDATED
 
+= 1.2.11 - TBD =
+* Profile shows incorrect listings count for GD post types - FIXED
+
 = 1.2.9 =
 * JS error breaks Country field in register form - FIXED
 
