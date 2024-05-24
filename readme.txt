@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.11 - TBD =
+* Profile shows incorrect listings count for GD post types - FIXED
+
 = 1.2.10 =
 * Rotate image when required before crop image - CHANGED
 * Multiselect selected values not showing in account form - FIXED
@@ -153,9 +156,6 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 * Profile page shortcode [uwp_profile_tabs output="body"] not displaying content if used separately - FIXED
 * Super Duper updated to v1.1.39 - UPDATED
 * AyeCode UI updated to v0.2.14 - UPDATED
-
-= 1.2.11 - TBD =
-* Profile shows incorrect listings count for GD post types - FIXED
 
 = 1.2.9 =
 * JS error breaks Country field in register form - FIXED
