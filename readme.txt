@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.11 - TBD =
+* Profile shows incorrect listings count for GD post types - FIXED
+
 = 1.2.10 =
 * Rotate image when required before crop image - CHANGED
 * Multiselect selected values not showing in account form - FIXED

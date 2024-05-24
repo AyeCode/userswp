@@ -65,6 +65,7 @@ class UWP_User_Post_Counts_Widget extends WP_Super_Duper {
 	 * @return mixed|string|bool
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
+		global $_uwp_user_post_counts;
 
 		$user = uwp_get_displayed_user();
 
@@ -91,6 +92,8 @@ class UWP_User_Post_Counts_Widget extends WP_Super_Duper {
 		}
 
 		if ( ! empty( $post_types ) ) {
+			$_uwp_user_post_counts = true;
+
 			foreach ( $post_types as $cpt ) {
 				$post_type = get_post_type_object( $cpt );
 				$count     = count_user_posts( $user_id, $cpt );
@@ -103,6 +106,8 @@ class UWP_User_Post_Counts_Widget extends WP_Super_Duper {
 					);
 				}
 			}
+
+			$_uwp_user_post_counts = false;
 		}
 
 		$counts = apply_filters( 'uwp_get_user_post_counts', $counts, $user_id );
