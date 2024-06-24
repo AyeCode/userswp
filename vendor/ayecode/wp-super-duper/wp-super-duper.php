@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-    define( 'SUPER_DUPER_VER', '1.1.39' );
+    define( 'SUPER_DUPER_VER', '1.1.45' );
 
     /**
      * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -2010,21 +2010,24 @@ function sd_auto_recover_blocks() {
         })
     }
     // Recover all the blocks that we can find.
-    var mainBlocks = recoverBlocks(wp.data.select('core/block-editor').getBlocks());
+    var sdBlockEditor = wp.data.select('core/block-editor');
+    var mainBlocks = sdBlockEditor ? recoverBlocks(sdBlockEditor.getBlocks()) : null;
     // Replace the recovered blocks with the new ones.
-    mainBlocks.forEach(block => {
-        if (block.isReusable && block.ref) {
-            // Update the reusable blocks.
-            wp.data.dispatch('core').editEntityRecord('postType', 'wp_block', block.ref, {
-                content: wp.blocks.serialize(block.blocks)
-            }).then(() => {
-                // But don't save them, let the user do the saving themselves. Our goal is to get rid of the block error visually.
-            })
-        }
-        if (block.recovered && block.replacedClientId) {
-            wp.data.dispatch('core/block-editor').replaceBlock(block.replacedClientId, block)
-        }
-    })
+    if (mainBlocks) {
+        mainBlocks.forEach(block => {
+            if (block.isReusable && block.ref) {
+                // Update the reusable blocks.
+                wp.data.dispatch('core').editEntityRecord('postType', 'wp_block', block.ref, {
+                    content: wp.blocks.serialize(block.blocks)
+                }).then(() => {
+                    // But don't save them, let the user do the saving themselves. Our goal is to get rid of the block error visually.
+                })
+            }
+            if (block.recovered && block.replacedClientId) {
+                wp.data.dispatch('core/block-editor').replaceBlock(block.replacedClientId, block)
+            }
+        })
+    }
 }
 
 /**
@@ -2144,7 +2147,7 @@ new MutationObserver(() => {
 
                 // maybe use featured image.
                 if( $args['bg_image_use_featured'] !== undefined && $args['bg_image_use_featured'] ){
-                    $bg_image = '<?php echo $this->get_url();?>icons/placeholder.png';
+                    $bg_image = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiID8+CjxzdmcgYmFzZVByb2ZpbGU9InRpbnkiIGhlaWdodD0iNDAwIiB2ZXJzaW9uPSIxLjIiIHdpZHRoPSI0MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6ZXY9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEveG1sLWV2ZW50cyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxkZWZzIC8+PHJlY3QgZmlsbD0iI2QzZDNkMyIgaGVpZ2h0PSI0MDAiIHdpZHRoPSI0MDAiIHg9IjAiIHk9IjAiIC8+PGxpbmUgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIxMCIgeDE9IjAiIHgyPSI0MDAiIHkxPSIwIiB5Mj0iNDAwIiAvPjxsaW5lIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMTAiIHgxPSIwIiB4Mj0iNDAwIiB5MT0iNDAwIiB5Mj0iMCIgLz48cmVjdCBmaWxsPSIjZDNkM2QzIiBoZWlnaHQ9IjUwIiB3aWR0aD0iMjE4LjAiIHg9IjkxLjAiIHk9IjE3NS4wIiAvPjx0ZXh0IGZpbGw9IndoaXRlIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjAwLjAiIHk9IjIwNy41Ij5QTEFDRUhPTERFUjwvdGV4dD48L3N2Zz4=';
                 }
 
                 if( $bg_image !== undefined && $bg_image !== '' ){
@@ -2439,6 +2442,9 @@ jQuery(function() {
                  *        style.css  — Editor & Front end styles for the block.
                  */
                 (function (blocksx, elementx, blockEditor) {
+                    if (typeof blockEditor === 'undefined') {
+                        return;<?php /* Yoast SEO load blocks.js without block-editor.js on post edit pages */ ?>
+                    }
                     var __ = wp.i18n.__; // The __() for internationalization.
                     var el = wp.element.createElement; // The wp.element.createElement() function to create elements.
                     var editable = wp.blocks.Editable;
@@ -2484,35 +2490,62 @@ jQuery(function() {
                         },
                         __experimentalLabel( attributes, { context } ) {
                             var visibility_html = attributes && attributes.visibility_conditions ? ' &#128065;' : '';
-                            var metadata_name = attributes && attributes.metadata && attributes.metadata.name ? attributes.metadata.name : '<?php echo esc_attr( addslashes( $this->options['name'] ) ); ?>';
+                            var metadata_name = attributes && attributes.metadata && attributes.metadata.name ? attributes.metadata.name : '';
                             var label_name = <?php echo !empty($this->options['block-label']) ? $this->options['block-label'] : "'" . esc_attr( addslashes( $this->options['name'] ) ) . "'"; ?>;
                             return metadata_name ? metadata_name + visibility_html  : label_name + visibility_html;
                         },
                         category: '<?php echo isset( $this->options['block-category'] ) ? esc_attr( $this->options['block-category'] ) : 'common';?>', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
                         <?php if ( isset( $this->options['block-keywords'] ) ) {
                         echo "keywords : " . $this->options['block-keywords'] . ",";
+                        }
 
-//						// block hover preview.
-//						$example_args = array();
-//						if(!empty($this->arguments)){
-//							foreach($this->arguments as $key => $a_args){
-//								if(isset($a_args['example'])){
-//									$example_args[$key] = $a_args['example'];
-//								}
-//							}
-//						}
-//						$viewport_width = isset($this->options['example']['viewportWidth']) ? 'viewportWidth: '.absint($this->options['example']['viewportWidth']) : '';
-//						if( isset( $this->options['example'] ) && $this->options['example'] === false ){
-//							// no preview if set to false
-//						}elseif( !empty( $example_args ) ){
-//							echo "example : {attributes:{".$this->array_to_attributes( $example_args )."},$viewport_width},";
-//						}elseif( !empty( $this->options['example'] ) ){
-//							unset($this->options['example']['viewportWidth']);
-//							echo "example : {".$this->array_to_attributes( $this->options['example'] ).$viewport_width."},";
-//						}else{
-//							echo 'example : {'.$viewport_width.'},';
-//						}
 
+                        // block hover preview.
+                        $example_args = array();
+                        if(!empty($this->arguments)){
+                            foreach($this->arguments as $key => $a_args){
+                                if(isset($a_args['example'])){
+                                    $example_args[$key] = $a_args['example'];
+                                }
+                            }
+                        }
+                        $viewport_width = isset($this->options['example']['viewportWidth']) ? 'viewportWidth: '.absint($this->options['example']['viewportWidth']) : '';
+                        $example_inner_blocks = !empty($this->options['example']['innerBlocks']) && is_array($this->options['example']['innerBlocks']) ? 'innerBlocks: ' . wp_json_encode($this->options['example']['innerBlocks']) : '';
+                        if( isset( $this->options['example'] ) && $this->options['example'] === false ){
+                            // no preview if set to false
+                        }elseif( !empty( $example_args ) ){
+                            echo "example : {attributes:{".$this->array_to_attributes( $example_args )."},$viewport_width},";
+                        }elseif( !empty( $this->options['example'] ) ){
+                            unset($this->options['example']['viewportWidth']);
+                            unset($this->options['example']['innerBlocks']);
+                            $example_atts = $this->array_to_attributes( $this->options['example'] );
+                            $example_parts = array();
+                            if($example_atts){
+                                $example_parts[] = rtrim($example_atts,",");
+                            }
+                            if($viewport_width){
+                                $example_parts[] = $viewport_width;
+                            }
+                            if($example_inner_blocks){
+                                $example_parts[] = $example_inner_blocks;
+                            }
+                            if(!empty($example_parts)){
+                                echo "example : {".implode(',', $example_parts)."},";
+                            }
+                        }else{
+                            echo 'example : {viewportWidth: 500},';
+                        }
+
+
+
+                        // limit to parent
+                        if( !empty( $this->options['parent'] ) ){
+                            echo "parent : " . wp_json_encode( $this->options['parent'] ) . ",";
+                        }
+
+                        // limit allowed blocks
+                        if( !empty( $this->options['allowed-blocks'] ) ){
+                            echo "allowedBlocks : " . wp_json_encode( $this->options['allowed-blocks'] ) . ",";
                         }
 
                         // maybe set no_wrap
@@ -3596,7 +3629,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 //                print_r($args);
 
                 $img_preview = isset($args['focalpoint']) && !$args['focalpoint'] ? " props.attributes.$key && el('img', { src: props.attributes.$key,style: {maxWidth:'100%',background: '#ccc'}})," : " ( props.attributes.$key ||  props.attributes.{$key}_use_featured ) && el(wp.components.FocalPointPicker,{
-                            url:  props.attributes.{$key}_use_featured === true ? '".$this->get_url()."icons/placeholder.png'  : props.attributes.$key,
+                            url:  props.attributes.{$key}_use_featured === true ? 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiID8+CjxzdmcgYmFzZVByb2ZpbGU9InRpbnkiIGhlaWdodD0iNDAwIiB2ZXJzaW9uPSIxLjIiIHdpZHRoPSI0MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6ZXY9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEveG1sLWV2ZW50cyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxkZWZzIC8+PHJlY3QgZmlsbD0iI2QzZDNkMyIgaGVpZ2h0PSI0MDAiIHdpZHRoPSI0MDAiIHg9IjAiIHk9IjAiIC8+PGxpbmUgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIxMCIgeDE9IjAiIHgyPSI0MDAiIHkxPSIwIiB5Mj0iNDAwIiAvPjxsaW5lIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMTAiIHgxPSIwIiB4Mj0iNDAwIiB5MT0iNDAwIiB5Mj0iMCIgLz48cmVjdCBmaWxsPSIjZDNkM2QzIiBoZWlnaHQ9IjUwIiB3aWR0aD0iMjE4LjAiIHg9IjkxLjAiIHk9IjE3NS4wIiAvPjx0ZXh0IGZpbGw9IndoaXRlIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjAwLjAiIHk9IjIwNy41Ij5QTEFDRUhPTERFUjwvdGV4dD48L3N2Zz4='  : props.attributes.$key,
                             value: props.attributes.{$key}_xy.x !== undefined && props.attributes.{$key}_xy.x >= 0 ? props.attributes.{$key}_xy  : {x: 0.5,y: 0.5,},
 //                            value: props.attributes.{$key}_xy,
                             onChange: function(focalPoint){
@@ -4355,9 +4388,17 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
                 /** This filter is documented in wp-includes/widgets/class-wp-widget-pages.php */
                 $title  = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
 
-                if(empty($instance['widget_title_tag'])){
+                if ( empty( $instance['widget_title_tag'] ) ) {
+                    if ( ! isset( $args['before_title'] ) ) {
+                        $args['before_title'] = '';
+                    }
+
+                    if ( ! isset( $args['after_title'] ) ) {
+                        $args['after_title'] = '';
+                    }
+
                     $output = $args['before_title'] . $title . $args['after_title'];
-                }else{
+                } else {
                     $title_tag = esc_attr( $instance['widget_title_tag'] );
 
                     // classes

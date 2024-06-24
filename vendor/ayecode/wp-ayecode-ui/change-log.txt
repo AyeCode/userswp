@@ -1,4 +1,13 @@
-= 0.2.14 - 2024-05-09 =
+= 0.2.17 - 2024-06-20 =
+* Carousel slide swipe in BS modal is not working on touch device - FIXED
+
+= 0.2.16 - 2024-06-13  =
+* Buttons after click when still have :focus can have wrong box-shadow if colour has been changed - FIXED
+
+= 0.2.15 - 2024-05-22  =
+* Checkbox not showing hand cursor on hover - FIXED
+
+= 0.2.14 - 2024-05-09  =
 * Label type top don't have margin to label - FIXED
 * Improvements for aui_lightbox_embed() function - CHANGED
 

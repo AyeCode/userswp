@@ -616,6 +616,7 @@ add_action('uwp_account_menu_display', 'uwp_add_account_menu_links');
  * @return      void
  */
 function uwp_add_account_menu_links() {
+    global $aui_bs5;
 
 	if (isset($_GET['type'])) {
 		$type = strip_tags(esc_sql($_GET['type']));
@@ -635,7 +636,7 @@ function uwp_add_account_menu_links() {
 	$legacy = '<ul class="uwp_account_menu">';
 	ob_start();
 	?>
-    <ul class="navbar-nav m-0 p-0 mt-3 list-unstyled flex-lg-column flex-row flex-wrap" aria-labelledby="account_settings">
+    <ul class="<?php echo $aui_bs5 ? 'nav' : 'navbar-nav'; ?> m-0 p-0 mt-3 list-unstyled flex-lg-column flex-row flex-wrap" aria-labelledby="account_settings">
 		<?php
 		foreach( $account_available_tabs as $tab_id => $tab ) {
 
@@ -655,9 +656,7 @@ function uwp_add_account_menu_links() {
 
 			?>
             <li class="nav-item m-0 p-0 list-unstyled mx-md-2 mx-2">
-                <a class="nav-link text-decoration-none uwp-account-<?php echo esc_attr( $tab_id.' '.$active ); ?>" href="<?php echo esc_url( $tab_url ); ?>">
-					<?php echo '<i class="'.esc_attr($tab["icon"]).' mr-1 fa-fw"></i>'.esc_html($tab['title']); ?>
-                </a>
+                <a class="nav-link text-decoration-none uwp-account-<?php echo esc_attr( $tab_id.' '.$active ); ?>" href="<?php echo esc_url( $tab_url ); ?>"><?php echo '<i class="'.esc_attr($tab["icon"]).' mr-1 fa-fw"></i>'.esc_html($tab['title']); ?></a>
             </li>
 			<?php
 

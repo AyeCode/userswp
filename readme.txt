@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.5
-Stable tag: 1.2.10
+Stable tag: 1.2.11
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -146,8 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.11 - TBD =
+= 1.2.11 - 2024-06-24 =
 * Profile shows incorrect listings count for GD post types - FIXED
+* Security hardening for user uwp_sort_by query and first check user provide key exists - SECURITY
 
 = 1.2.10 =
 * Rotate image when required before crop image - CHANGED

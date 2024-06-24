@@ -726,6 +726,13 @@
             // ayeModal.getOrCreateInstance();
             ayeModal.show();
 
+            /* Support carousel swipe in BS modal on touch device */
+            try {
+                if ('ontouchstart' in document.documentElement || navigator.maxTouchPoints > 0) {
+                    let _bsC = new bootstrap.Carousel('#aui-embed-slider-modal');
+                }
+            } catch(err) {}
+
             // enable ajax load
             //gd_init_carousel_ajax();
         }
