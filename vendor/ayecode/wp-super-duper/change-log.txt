@@ -1,3 +1,24 @@
+= 1.1.45 - 2024-06-20 =
+* Yoast SEO conflict causes JS error on post edit pages - FIXED
+
+= 1.1.44 - 2024-06-13 =
+* Width and Height helper functions added - ADDED
+* Undefined array key warning - FIXED
+
+= 1.1.43 - 2024-06-05 =
+* example block attribute now works for block previews - ADDED
+* Block previews now enabled by default (set example as false to disable) - CHANGED
+* viewportWidth can be set in example attribute to set the preview viewport width - ADDED
+* example argument can be set on individual arguments to pass as the example - ADDED
+* `parent` and `allowedBlocks` block arguments now supported - ADDED
+
+= 1.1.41 - 2024-05-22 =
+* placeholder.png replaced with inline SVG for better block template compatibility - CHANGED
+
+= 1.1.40 - 2024-05-16 =
+* Block Visibility condition not working for CPT non-supported fields - FIXED
+* Block label dynamic name not working for containers - FIXED
+
 = 1.1.39 - 2024-04-18 =
 * Better block recovery - UPDATED
 

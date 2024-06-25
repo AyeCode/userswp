@@ -43,7 +43,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				$sort_by = $meta_key = '';
 				$order   = 'ASC';
 				if ( isset( $_GET['uwp_sort_by'] ) && $_GET['uwp_sort_by'] != '' ) {
-					$sort_by = strip_tags( esc_sql( $_GET['uwp_sort_by'] ) );
+					$sort_by = sanitize_key( strip_tags( esc_sql( $_GET['uwp_sort_by'] ) ) );
 				}
 
 				if ( empty( $sort_by ) ) {
@@ -62,6 +62,14 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 						$order_by = 'meta_value';
 					}
 
+                    // check meta key exists
+                    if ($meta_key && 'user_registered' !== $meta_key) {
+                        $table = new UsersWP_Tables();
+                        if (!in_array($meta_key, $table->get_db_usermeta_columns())) {
+                            $meta_key = '';
+                        }
+                    }
+
 					if ( ! empty( $order_by ) && $meta_key ) {
 						$meta_table_name = uwp_get_table_prefix() . 'uwp_usermeta';
 						$table_name      = uwp_get_table_prefix() . 'uwp_user_sorting';
@@ -69,7 +77,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
                         if('user_registered' == $meta_key){
                             $orderby = $meta_key;
                         } else {
-	                        $orderby = $meta_table_name . '.' . $meta_key;
+                            $orderby = $meta_table_name . '.' . sanitize_key( $meta_key );
                         }
 
 						$vars->query_from    .= " INNER JOIN " . $meta_table_name . " ON (" . $meta_table_name . ".user_id = $wpdb->users.ID)  "; // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching

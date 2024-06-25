@@ -2098,6 +2098,88 @@ function sd_get_nofollow_input( $type = 'nofollow', $overwrite = array() ) {
 }
 
 /**
+ * A helper function for width inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function sd_get_width_input( $type = 'width', $overwrite = array() ) {
+
+    $device_size = '';
+    if ( ! empty( $overwrite['device_type'] ) ) {
+        if ( $overwrite['device_type'] == 'Tablet' ) {
+            $device_size = '-md';
+        } elseif ( $overwrite['device_type'] == 'Desktop' ) {
+            $device_size = '-lg';
+        }
+    }
+    $options = array(
+        '' => __('Default', 'ayecode-connect'),
+        'w' . $device_size . '-25' => '25%',
+        'w' . $device_size . '-50' => '50%',
+        'w' . $device_size . '-75' => '75%',
+        'w' . $device_size . '-100' => '100%',
+        'w' . $device_size . '-auto' => 'auto',
+    );
+
+    $defaults = array(
+        'type'     => 'select',
+        'title'    => __( 'Width', 'ayecode-connect' ),
+        'options'  => $options,
+        'default'  => '',
+        'desc_tip' => true,
+        'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
+    );
+
+    $input = wp_parse_args( $overwrite, $defaults );
+
+    return $input;
+}
+
+/**
+ * A helper function for height inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function sd_get_height_input( $type = 'height', $overwrite = array() ) {
+
+    $device_size = '';
+    if ( ! empty( $overwrite['device_type'] ) ) {
+        if ( $overwrite['device_type'] == 'Tablet' ) {
+            $device_size = '-md';
+        } elseif ( $overwrite['device_type'] == 'Desktop' ) {
+            $device_size = '-lg';
+        }
+    }
+    $options = array(
+        '' => __('Default', 'ayecode-connect'),
+        'h' . $device_size . '-25' => '25%',
+        'h' . $device_size . '-50' => '50%',
+        'h' . $device_size . '-75' => '75%',
+        'h' . $device_size . '-100' => '100%',
+        'h' . $device_size . '-auto' => 'auto',
+    );
+
+    $defaults = array(
+        'type'     => 'select',
+        'title'    => __( 'Height', 'ayecode-connect' ),
+        'options'  => $options,
+        'default'  => '',
+        'desc_tip' => true,
+        'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
+    );
+
+    $input = wp_parse_args( $overwrite, $defaults );
+
+    return $input;
+}
+
+/**
  * @param $type
  * @param $overwrite
  *
@@ -2614,6 +2696,10 @@ function sd_build_aui_class( $args ) {
 		}
 	}
 
+	if ( ! empty( $classes ) ) {
+		$classes = array_unique( array_filter( array_map( 'trim', $classes ) ) );
+	}
+
 	return implode( ' ', $classes );
 }
 
@@ -2753,7 +2839,7 @@ function sd_build_hover_styles( $args, $is_preview = false ) {
 }
 
 /**
- * Try to get a CSS color varibale for a given value.
+ * Try to get a CSS color variable for a given value.
  *
  * @param $var
  *
@@ -2828,7 +2914,9 @@ function sd_get_class_build_keys() {
 		'h100',
 		'overflow',
 		'scrollbars',
-		'float-MTD'
+        'float-MTD',
+        'height-MTD',
+		'width-MTD'
 	);
 
 	return apply_filters( 'sd_class_build_keys', $keys );
@@ -3371,6 +3459,7 @@ function sd_block_check_rule_gd_field( $rule ) {
 		if ( $match_field === '' || ( ! empty( $find_post_keys ) && ( in_array( $match_field, $find_post_keys ) || in_array( $_match_field, $find_post_keys ) ) ) ) {
 			$address_fields = array( 'street2', 'neighbourhood', 'city', 'region', 'country', 'zip', 'latitude', 'longitude' ); // Address fields
 			$field = array();
+			$empty_field = false;
 
 			$standard_fields = sd_visibility_gd_standard_fields();
 
@@ -3389,7 +3478,7 @@ function sd_block_check_rule_gd_field( $rule ) {
 				}
 
 				if ( empty( $field ) ) {
-					return false;
+					$empty_field = true;
 				}
 			}
 
@@ -3410,7 +3499,7 @@ function sd_block_check_rule_gd_field( $rule ) {
 			$is_date = ( ! empty( $field['type'] ) && $field['type'] == 'datepicker' ) || in_array( $match_field, array( 'post_date', 'post_modified' ) ) ? true : false;
 			$is_date = apply_filters( 'geodir_post_badge_is_date', $is_date, $match_field, $field, $args, $find_post );
 
-			$match_value = isset($find_post->{$match_field}) ? esc_attr( trim( $find_post->{$match_field} ) ) : '';
+			$match_value = isset( $find_post->{$match_field} ) && empty( $empty_field ) ? esc_attr( trim( $find_post->{$match_field} ) ) : '';
 			$match_found = $match_field === '' ? true : false;
 
 			if ( ! $match_found ) {
@@ -3457,6 +3546,45 @@ function sd_block_check_rule_gd_field( $rule ) {
 			}
 
 			$match_found = apply_filters( 'geodir_post_badge_check_match_found', $match_found, $args, $find_post );
+		} else {
+			$field = array();
+
+			// Parse search.
+			$search = sd_gd_field_rule_search( $args['search'], $find_post->post_type, $rule, $field, $find_post );
+
+			$match_value = '';
+			$match_found = $match_field === '' ? true : false;
+
+			if ( ! $match_found ) {
+				switch ( $args['condition'] ) {
+					case 'is_equal':
+						$match_found = (bool) ( $search != '' && $match_value == $search );
+						break;
+					case 'is_not_equal':
+						$match_found = (bool) ( $search != '' && $match_value != $search );
+						break;
+					case 'is_greater_than':
+						$match_found = false;
+						break;
+					case 'is_less_than':
+						$match_found = false;
+						break;
+					case 'is_empty':
+						$match_found = true;
+						break;
+					case 'is_not_empty':
+						$match_found = false;
+						break;
+					case 'is_contains':
+						$match_found = false;
+						break;
+					case 'is_not_contains':
+						$match_found = false;
+						break;
+				}
+			}
+
+			$match_found = apply_filters( 'geodir_post_badge_check_match_found_empty', $match_found, $args, $find_post );
 		}
 	}
 

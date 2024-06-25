@@ -367,4 +367,20 @@ class UsersWP_Tables {
 
 	}
 
+    public function get_db_usermeta_columns()
+    {   global $wpdb;
+        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+        $cols = $wpdb->get_results( "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$meta_table' AND  TABLE_SCHEMA ='$wpdb->dbname'");
+
+        $columns = array();
+        if (!empty($cols)) {
+            foreach ($cols as $col) {
+                $columns[] = $col->COLUMN_NAME;
+            }
+        }
+
+        return $columns;
+
+    }
+
 }

@@ -113,7 +113,7 @@ class AUI_Component_Input {
 				$args['class'] .= ' custom-file-input ';
 			} elseif ( $type == 'checkbox' ) {
 				$label_after = true; // if type file we need the label after
-				$args['class'] .= $aui_bs5 ? ' form-check-input' : ' custom-control-input ';
+				$args['class'] .= $aui_bs5 ? ' form-check-input c-pointer ' : ' custom-control-input c-pointer ';
 			} elseif ( $type == 'datepicker' || $type == 'timepicker' ) {
 				$orig_type = $type;
 				$type = 'text';
