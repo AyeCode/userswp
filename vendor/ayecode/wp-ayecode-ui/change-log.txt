@@ -1,3 +1,10 @@
+= 0.2.19 - 2024-07-04 =
+* Video in lightbox is not working - FIXED
+* Stop video playing in slideshow on move to next slide - FIXED
+
+= 0.2.18 - 2024-06-27 =
+* Pagination style conflict on Hello Elementor theme - FIXED
+
 = 0.2.17 - 2024-06-20 =
 * Carousel slide swipe in BS modal is not working on touch device - FIXED
 

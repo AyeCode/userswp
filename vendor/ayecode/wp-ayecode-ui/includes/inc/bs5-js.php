@@ -277,7 +277,7 @@
         var sStyle = '';
         var $body = "", sClass = "w-100 p-0 m-0";
         if (responsive) {
-            $body += '<div class="embed-responsive embed-responsive-16by9">';
+            $body += '<div class="embed-responsive embed-responsive-16by9 ratio ratio-16x9">';
             wClass += ' h-100';
             sClass += ' embed-responsive-item';
         } else {
@@ -291,7 +291,6 @@
         if (responsive) {
             $body += '</div>';
         }
-        console.log('b4-show-modal');
         $m = aui_modal($title,$body,$footer,$dismissible,$class,$dialog_class,$body_class);
 
         // myModalEl.addEventListener('hidden.bs.modal', event => {
@@ -299,7 +298,7 @@
         // });
 
         const auiModal = document.getElementById('aui-modal');
-        auiModal.addEventListener( 'shown.bs.modal', function ( e ) {console.log('show-modal');
+        auiModal.addEventListener( 'shown.bs.modal', function ( e ) {
             iFrame = jQuery( '#embedModal-iframe') ;
 
             jQuery('.ac-preview-loading').addClass('d-flex');
@@ -315,7 +314,6 @@
         });
 
         return $m;
-
     }
 
     function aui_modal($title,$body,$footer,$dismissible,$class,$dialog_class,$body_class) {
@@ -611,7 +609,7 @@
 
         $clicked_href = jQuery($link).attr('href');
         $images = [];
-        $container.find('.aui-lightbox-image').each(function() {
+        $container.find('.aui-lightbox-image, .aui-lightbox-iframe').each(function() {
             var a = this;
             var href = jQuery(a).attr('href');
             if (href) {
@@ -626,7 +624,7 @@
             if($images.length > 1){
                 $i = 0;
                 $carousel  += '<ol class="carousel-indicators position-fixed">';
-                $container.find('.aui-lightbox-image').each(function() {
+                $container.find('.aui-lightbox-image, .aui-lightbox-iframe').each(function() {
                     $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
                     $carousel  += '<li data-bs-target="#aui-embed-slider-modal" data-bs-slide-to="'+$i+'" class="'+$active+'"></li>';
                     $i++;
@@ -676,7 +674,7 @@
                 }
 
 
-                var img = href ? jQuery(a).find('img').clone().attr('src', href ).attr('sizes', sizes ).removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('max-height',css_height).get(0).outerHTML :  jQuery(a).find('img').clone().removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('max-height',css_height).get(0).outerHTML;
+                var img = href ? jQuery(a).find('img').clone().attr('src', href ).attr('sizes', sizes ).removeClass().addClass('mx-auto d-block w-auto rounded').css({'max-height':css_height,'max-width':'98%'}).get(0).outerHTML :  jQuery(a).find('img').clone().removeClass().addClass('mx-auto d-block w-auto rounded').css({'max-height':css_height,'max-width':'98%'}).get(0).outerHTML;
                 $carousel += img;
                 // captions
                 if(jQuery(a).parent().find('.carousel-caption').length ){
@@ -690,14 +688,16 @@
 
             $container.find('.aui-lightbox-iframe').each(function() {
                 var a = this;
+                var css_height = window.innerWidth > window.innerHeight ? '90vh;' : 'auto;';
+                var styleWidth = $images.length > 1 ? 'max-width:70%;' : '';
 
                 $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
-                $carousel += '<div class="carousel-item '+ $active+'"><div class="modal-xl mx-auto embed-responsive embed-responsive-16by9">';
+                $carousel += '<div class="carousel-item '+ $active+'"><div class="modal-xl mx-auto ratio ratio-16x9" style="max-height:'+css_height+styleWidth+'">';
 
                 // iframe
-                var css_height = window.innerWidth > window.innerHeight ? '95vh' : 'auto';
                 var url = jQuery(a).attr('href');
-                var iframe = '<iframe class="embed-responsive-item" style="height:'+css_height +'" src="'+url+'?rel=0&amp;showinfo=0&amp;modestbranding=1&amp;autoplay=1" id="video" allow="autoplay"></iframe>';
+                var iframe = '<div class="ac-preview-loading text-light d-none" style="left:0;top:0;height:'+css_height +'"><div class="spinner-border m-auto" role="status"></div></div>';
+                iframe += '<iframe class="aui-carousel-iframe" style="height:'+css_height +'" src="" data-src="'+url+'?rel=0&amp;showinfo=0&amp;modestbranding=1&amp;autoplay=1" allow="autoplay"></iframe>';
                 var img = iframe ;//.css('height',css_height).get(0).outerHTML;
                 $carousel  += img;
 
@@ -957,6 +957,30 @@
                 window.scrollTo(0, pS);
             });
         }
+
+		$(document).on('slide.bs.carousel', function(el) {
+			var $_modal = $(el.relatedTarget).closest('.aui-carousel-modal:visible').length ? $(el.relatedTarget).closest('.aui-carousel-modal:visible') : '';
+			if ($_modal.find('.carousel-item iframe.aui-carousel-iframe').length) {
+				/* Unset iframe src */
+				$_modal.find('.carousel-item.active iframe.aui-carousel-iframe').each(function(){
+					if ($(this).attr('src')) {
+						$(this).data('src', $(this).attr('src'));
+						$(this).attr('src', '');
+					}
+				});
+				/* Set iframe src */
+				if ($(el.relatedTarget).find('iframe.aui-carousel-iframe').length) {
+					$(el.relatedTarget).find('.ac-preview-loading').removeClass('d-none').addClass('d-flex');
+					var $cIframe = $(el.relatedTarget).find('iframe.aui-carousel-iframe');
+					if (! $cIframe.attr('src') && $cIframe.data('src')) {
+						$cIframe.attr('src', $cIframe.data('src'));
+					}
+					$cIframe.on('load', function(){
+						setTimeout(function(){$_modal.find('.ac-preview-loading').removeClass('d-flex').addClass('d-none');},1250);
+					});
+				}
+			}
+		});
     });
 
     /**

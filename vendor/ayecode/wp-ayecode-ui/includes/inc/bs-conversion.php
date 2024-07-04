@@ -42,6 +42,7 @@ function aui_bs_convert_sd_output( $output, $instance = '', $args = '', $sd = ''
 			'-16by9'    => '-16x9',
 			'-21by9'    => '-21x9',
 			'geodir-lightbox-image' => 'aui-lightbox-image',
+			'geodir-lightbox-iframe' => 'aui-lightbox-iframe',
 			' badge-'   => ' text-bg-',
 			'form-group'   => 'mb-3',
 			'custom-select'   => 'form-select',
