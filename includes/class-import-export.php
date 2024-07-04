@@ -167,7 +167,7 @@ class UsersWP_Import_Export {
 
             if ( $done >= 100 ) {
                 $this->step     = 'done';
-                $new_filename   = 'uwp-users-export-' . date( 'y-m-d-H-i' ) . '.csv';
+                $new_filename   = 'uwp-users-export-' . date( 'y-m-d-H-i' ) . '-' . wp_generate_password(12, false ) . '.csv';
                 $new_file       = $this->export_dir . $new_filename;
 
                 if ( file_exists( $this->file ) ) {
