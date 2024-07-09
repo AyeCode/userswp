@@ -186,6 +186,7 @@ class UsersWP_Files {
 
         include_once ABSPATH . 'wp-admin/includes/file.php';
         include_once ABSPATH . 'wp-admin/includes/media.php';
+        include_once ABSPATH . 'wp-admin/includes/image.php';
 
         $args = wp_parse_args( $args, array(
             'file_key'           => '',
