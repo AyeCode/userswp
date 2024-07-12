@@ -146,8 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.13 =
+= 1.2.13 - TBD =
 * Email notification options in account not saved if only one setting is there - ADDED
+* Users page shows empty p tags on block theme - FIXED
 
 = 1.2.12 - 2024-07-04 =
 * Added random element to export filenames - ADDED

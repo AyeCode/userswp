@@ -56,7 +56,6 @@ class UsersWP_Templates {
 	 * @return string
 	 */
 	public static function setup_singular_page_content( $content ) {
-
 		global $post, $wp_query;
 
 		if ( ! is_uwp_page() ) {
@@ -1332,5 +1331,28 @@ class UsersWP_Templates {
 		$theme_template_path = $theme_root . '/' . $template . '/' . untrailingslashit( uwp_get_theme_template_dir_name() );
 
 		return $theme_template_path;
+	}
+
+	/**
+	 * Check & unset the_content hook.
+	 *
+	 * @since 1.2.13
+	 *
+	 * @param string $content The content.
+	 * @return string The post content.
+	 */
+	public function set_the_content_hook( $content ) {
+		global $wp_query, $post, $uwp_set_wpautop;
+
+		// Prevent empty p tags on block theme.
+		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() && ! empty( $wp_query ) && ! empty( $post ) && $post->ID == get_queried_object_id() && is_uwp_page() ) {
+			if ( $has_filter = has_filter( 'the_content', 'wpautop' ) ) {
+				$uwp_set_wpautop = $has_filter;
+
+				remove_filter( 'the_content', 'wpautop' );
+			}
+		}
+
+		return $content;
 	}
 }

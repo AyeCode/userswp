@@ -721,6 +721,7 @@ final class UsersWP {
 		add_filter( 'the_content', array( $instance, 'author_page_content' ), 10, 1 );
 		add_filter( 'the_content', array( $instance, 'author_box_page_content' ), 10, 1 );
 		add_filter( 'the_content', array( $instance, 'setup_singular_page_content' ), 10, 1 );
+		add_filter( 'the_content', array( $instance, 'set_the_content_hook' ), 5, 1 );
 		add_filter( 'body_class', array( $instance, 'add_body_class' ), 10, 1 );
 
 		// filter the login and register url
