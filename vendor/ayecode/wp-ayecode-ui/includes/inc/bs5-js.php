@@ -960,7 +960,7 @@
 
 		$(document).on('slide.bs.carousel', function(el) {
 			var $_modal = $(el.relatedTarget).closest('.aui-carousel-modal:visible').length ? $(el.relatedTarget).closest('.aui-carousel-modal:visible') : '';
-			if ($_modal.find('.carousel-item iframe.aui-carousel-iframe').length) {
+			if ($_modal && $_modal.find('.carousel-item iframe.aui-carousel-iframe').length) {
 				/* Unset iframe src */
 				$_modal.find('.carousel-item.active iframe.aui-carousel-iframe').each(function(){
 					if ($(this).attr('src')) {

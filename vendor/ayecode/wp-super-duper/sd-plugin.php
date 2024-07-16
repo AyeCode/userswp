@@ -32,3 +32,8 @@ include_once( dirname( __FILE__ ) . "/hello-world.php" );
  * Map example.
  */
 include_once( dirname( __FILE__ ) . "/map.php" );
+
+
+if ( ! function_exists( 'sd_get_class_build_keys' ) ) {
+	include_once( dirname( __FILE__ ) . "/sd-functions.php" );
+}
