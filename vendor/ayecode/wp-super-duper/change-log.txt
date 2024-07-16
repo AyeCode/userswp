@@ -1,5 +1,6 @@
-= 1.2.3 - 2024-07-16 =
+= 1.2.4 - 2024-07-16 =
 * Some blocks not being wrapped inside the block wrapper - FIXED
+* Issue with blocks with no arguments not adding shortcode argument - FIXED
 
 = 1.2.2 - 2024-07-12 =
 * Blocks with `block-save-return` set should not have a sd_shortcode argument - FIXED
