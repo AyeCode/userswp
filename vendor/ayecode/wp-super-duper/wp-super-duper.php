@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.3' );
+	define( 'SUPER_DUPER_VER', '1.2.4' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -2570,7 +2570,7 @@ jQuery(function() {
 						echo "  html: false";
 						echo "},";*/
 
-						if ( ! empty( $this->arguments ) ) {
+
 							echo "attributes : {";
 
 							if ( $show_advanced ) {
@@ -2589,66 +2589,68 @@ jQuery(function() {
 							}
 
 
+							if ( ! empty( $this->arguments ) ) {
 
-							foreach ( $this->arguments as $key => $args ) {
+								foreach ( $this->arguments as $key => $args ) {
 
-								if( $args['type'] == 'image' ||  $args['type'] == 'images' ){
-									$img_drag_drop = true;
-								}
-
-								// set if we should show alignment
-								if ( $key == 'alignment' ) {
-									$show_alignment = true;
-								}
-
-								$extra = '';
-
-								if ( $args['type'] == 'notice' ||  $args['type'] == 'tab' ) {
-									continue;
-								}
-								elseif ( $args['type'] == 'checkbox' ) {
-									$type    = 'boolean';
-									$default = isset( $args['default'] ) && $args['default'] ? 'true' : 'false';
-								} elseif ( $args['type'] == 'number' ) {
-									$type    = 'number';
-									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
-								} elseif ( $args['type'] == 'select' && ! empty( $args['multiple'] ) ) {
-									$type = 'array';
-									if ( isset( $args['default'] ) && is_array( $args['default'] ) ) {
-										$default = ! empty( $args['default'] ) ? "['" . implode( "','", $args['default'] ) . "']" : "[]";
-									} else {
-										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+									if( $args['type'] == 'image' ||  $args['type'] == 'images' ){
+										$img_drag_drop = true;
 									}
-								} elseif ( $args['type'] == 'tagselect' ) {
-									$type    = 'array';
-									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
-								} elseif ( $args['type'] == 'multiselect' ) {
-									$type    = 'array';
-									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
-								} elseif ( $args['type'] == 'image_xy' ) {
-									$type    = 'object';
-									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
-								} elseif ( $args['type'] == 'image' ) {
-									$type    = 'string';
-									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
 
-									// add a field for ID
-//                                    echo $key . "_id : {";
-//                                    echo "type : 'number',";
-//                                    echo "},";
-//                                    echo $key . "_xy : {";
-//                                    echo "type : 'object',";
-//                                    echo "},";
+									// set if we should show alignment
+									if ( $key == 'alignment' ) {
+										$show_alignment = true;
+									}
 
-								} else {
-									$type    = !empty($args['hidden_type']) ? esc_attr($args['hidden_type']) : 'string';
-									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+									$extra = '';
 
+									if ( $args['type'] == 'notice' ||  $args['type'] == 'tab' ) {
+										continue;
+									}
+									elseif ( $args['type'] == 'checkbox' ) {
+										$type    = 'boolean';
+										$default = isset( $args['default'] ) && $args['default'] ? 'true' : 'false';
+									} elseif ( $args['type'] == 'number' ) {
+										$type    = 'number';
+										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+									} elseif ( $args['type'] == 'select' && ! empty( $args['multiple'] ) ) {
+										$type = 'array';
+										if ( isset( $args['default'] ) && is_array( $args['default'] ) ) {
+											$default = ! empty( $args['default'] ) ? "['" . implode( "','", $args['default'] ) . "']" : "[]";
+										} else {
+											$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+										}
+									} elseif ( $args['type'] == 'tagselect' ) {
+										$type    = 'array';
+										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+									} elseif ( $args['type'] == 'multiselect' ) {
+										$type    = 'array';
+										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+									} elseif ( $args['type'] == 'image_xy' ) {
+										$type    = 'object';
+										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+									} elseif ( $args['type'] == 'image' ) {
+										$type    = 'string';
+										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+
+										// add a field for ID
+	//                                    echo $key . "_id : {";
+	//                                    echo "type : 'number',";
+	//                                    echo "},";
+	//                                    echo $key . "_xy : {";
+	//                                    echo "type : 'object',";
+	//                                    echo "},";
+
+									} else {
+										$type    = !empty($args['hidden_type']) ? esc_attr($args['hidden_type']) : 'string';
+										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+
+									}
+									echo $key . " : {";
+									echo "type : '$type',";
+									echo "default : $default,";
+									echo "},";
 								}
-								echo $key . " : {";
-								echo "type : '$type',";
-								echo "default : $default,";
-								echo "},";
 							}
 
 							echo "content : {type : 'string',default: 'Please select the attributes in the block settings'},";
@@ -2662,7 +2664,7 @@ jQuery(function() {
 
 							echo "},";
 
-						}
+
 
 						?>
 
