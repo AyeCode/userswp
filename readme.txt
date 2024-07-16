@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.6
-Stable tag: 1.2.12
+Stable tag: 1.2.13
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -146,7 +146,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.13 - TBD =
+= 1.2.13 - 2024-07-16 =
 * Email notification options in account not saved if only one setting is there - ADDED
 * Users page shows empty p tags on block theme - FIXED
 
