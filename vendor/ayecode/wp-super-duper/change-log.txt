@@ -1,3 +1,18 @@
+= 1.2.3 - 2024-07-16 =
+* Some blocks not being wrapped inside the block wrapper - FIXED
+
+= 1.2.2 - 2024-07-12 =
+* Blocks with `block-save-return` set should not have a sd_shortcode argument - FIXED
+
+= 1.2.1 - 2024-07-10 =
+* `html` argument not wrapped correctly in shortcode with new system for blocks - FIXED
+* Hide advanced border options when border color selected to none - FIXED
+
+= 1.2.0 - 2024-07-09 =
+* Added color options for upcoming dark mode feature - ADDED
+* Improvements to blocks to help prevent broken blocks - CHANGED
+* Blocks now store shortcodes in block param and not in the content - CHANGED
+
 = 1.1.45 - 2024-06-20 =
 * Yoast SEO conflict causes JS error on post edit pages - FIXED
 

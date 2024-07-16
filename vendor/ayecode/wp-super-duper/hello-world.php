@@ -21,12 +21,24 @@ class SD_Hello_World extends WP_Super_Duper {
 			'block-keywords' => "['hello','world']",
 			// used in the block search, MAX 3
 			'block-output'   => array( // the block visual output elements as an array
+//				array(
+//					'element' => 'p',
+//					'title'   => __( 'Placeholder', 'ayecode-connect' ),
+//					'class'   => '[%className%]',
+//					'content' => 'Hello: [%after_text%]' // block properties can be added by wrapping them in [%name%]
+//				)
 				array(
-					'element' => 'p',
-					'title'   => __( 'Placeholder', 'ayecode-connect' ),
-					'class'   => '[%className%]',
+					'element'       => 'BlocksProps',
+					'inner_element' => 'p',
+					'blockProps'    => array(
+						'className'               => '[%WrapClass%]',
+//						'content' => 'Hello: [%after_text%]'
+//						'if_dangerouslySetInnerHTML' => '{__html: blockstrap_build_shape(props.attributes) }',
+					),
 					'content' => 'Hello: [%after_text%]' // block properties can be added by wrapping them in [%name%]
-				)
+
+
+				),
 			),
 			'block-wrap'    => '', // You can specify the type of element to wrap the block `div` or `span` etc.. Or blank for no wrap at all.
 			'class_name'     => __CLASS__,
@@ -90,7 +102,7 @@ class SD_Hello_World extends WP_Super_Duper {
 			$another_input = '';
 		}
 
-		return "Hello: " . $after_text . "" . $another_input;
+		return "Helllo: " . $after_text . "" . $another_input;
 
 	}
 

@@ -1,3 +1,6 @@
+= 0.2.20 - 2024-07-05 =
+* Multiple carousels breaks carousel in modal - FIXED
+
 = 0.2.19 - 2024-07-04 =
 * Video in lightbox is not working - FIXED
 * Stop video playing in slideshow on move to next slide - FIXED
