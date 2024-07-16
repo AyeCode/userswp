@@ -49,7 +49,6 @@ final class UsersWP {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-
 		$this->plugin_name = USERSWP_NAME;
 		$this->version     = USERSWP_VERSION;
 
@@ -90,7 +89,6 @@ final class UsersWP {
 		//admin
 		$this->load_form_builder_actions_and_filters( $this->form_builder );
 		$this->load_menus_actions_and_filters( $this->menus );
-
 	}
 
 	/**
@@ -546,7 +544,6 @@ final class UsersWP {
 	 * @param $instance
 	 */
 	public function load_forms_actions_and_filters( $instance ) {
-
 		// login
 		add_action( 'wp_ajax_nopriv_uwp_ajax_login_form', array( $instance, 'ajax_login_form' ) );
 		add_action( 'wp_ajax_nopriv_uwp_ajax_login', array( $instance, 'process_login' ) );
@@ -592,19 +589,13 @@ final class UsersWP {
 		add_filter( 'uwp_form_input_html_url', array( $instance, 'form_input_url' ), 10, 4 );
 		add_filter( 'uwp_form_input_html_email', array( $instance, 'form_input_email' ), 10, 4 );
 		add_filter( 'uwp_form_input_html_password', array( $instance, 'form_input_password' ), 10, 4 );
-		add_filter( 'uwp_form_input_html_checkbox_register_gdpr', array(
-			$instance,
-			'form_input_register_gdpr'
-		), 10, 4 );
+		add_filter( 'uwp_form_input_html_checkbox_register_gdpr', array( $instance, 'form_input_register_gdpr' ), 10, 4 );
 		add_filter( 'uwp_form_input_html_checkbox_register_tos', array( $instance, 'form_input_register_tos' ), 10, 4 );
 		// Country select
 		add_filter( 'uwp_form_input_html_select_uwp_country', array( $instance, 'form_input_select_country' ), 10, 4 );
 		add_filter( 'uwp_form_input_html_phone', array( $instance, 'form_input_phone' ), 10, 4 );
 		add_filter( 'uwp_form_input_email_email_after', array( $instance, 'register_confirm_email_field' ), 10, 4 );
-		add_filter( 'uwp_form_input_password_password_after', array(
-			$instance,
-			'register_confirm_password_field'
-		), 10, 4 );
+		add_filter( 'uwp_form_input_password_password_after', array( $instance, 'register_confirm_password_field' ), 10, 4 );
 		add_filter( 'uwp_form_input_html_custom_html', array( $instance, 'form_custom_html' ), 10, 4 );
 		add_filter( 'uwp_form_input_html_select_uwp_language', array( $instance, 'form_input_uwp_language' ), 10, 4 );
 
@@ -643,7 +634,7 @@ final class UsersWP {
 	 */
 	public function load_profile_actions_and_filters( $instance ) {
 		add_action( 'template_redirect', array( $instance, 'redirect_author_page' ), 10, 2 );
-		//profile page
+		// Profile page
 		add_filter( 'query_vars', array( $instance, 'profile_query_vars' ), 10, 1 );
 		add_action( 'init', array( $instance, 'rewrite_profile_link' ), 10, 1 );
 		add_filter( 'author_link', array( $instance, 'get_author_link' ), 11, 2 );
@@ -656,10 +647,7 @@ final class UsersWP {
 
 		// Popup and crop functions
 		add_filter( 'ajax_query_attachments_args', array( $instance, 'restrict_attachment_display' ) );
-		add_action( 'uwp_handle_file_upload_error_checks', array(
-			$instance,
-			'handle_file_upload_error_checks'
-		), 10, 4 );
+		add_action( 'uwp_handle_file_upload_error_checks', array( $instance, 'handle_file_upload_error_checks' ), 10, 4 );
 		add_action( 'wp_ajax_uwp_avatar_banner_upload', array( $instance, 'ajax_avatar_banner_upload' ) );
 		add_action( 'wp_ajax_uwp_ajax_image_crop_popup_form', array( $instance, 'ajax_image_crop_popup_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_profile_image_remove', array( $instance, 'ajax_profile_image_remove' ) );
@@ -703,7 +691,6 @@ final class UsersWP {
 	 * @param $instance
 	 */
 	public function load_templates_actions_and_filters( $instance ) {
-
 		add_action( 'template_redirect', array( $instance, 'change_default_password_redirect' ) );
 		add_action( 'uwp_template_fields', array( $instance, 'template_fields' ), 10, 2 );
 		add_action( 'uwp_template_fields', array( $instance, 'template_extra_fields' ), 10, 2 );
@@ -724,7 +711,7 @@ final class UsersWP {
 		add_filter( 'the_content', array( $instance, 'set_the_content_hook' ), 5, 1 );
 		add_filter( 'body_class', array( $instance, 'add_body_class' ), 10, 1 );
 
-		// filter the login and register url
+		// Filter the login and register url
 		add_filter( 'login_url', array( $instance, 'wp_login_url' ), 10, 3 );
 		add_filter( 'register_url', array( $instance, 'wp_register_url' ), 10, 1 );
 		add_filter( 'lostpassword_url', array( $instance, 'wp_lostpassword_url' ), 10, 1 );
@@ -733,7 +720,6 @@ final class UsersWP {
 		if ( defined( 'CT_VERSION' ) ) {
 			add_filter( 'uwp_get_template', array( $instance, 'oxygen_override_template' ), 11, 5 );
 		}
-
 	}
 
 	/**
@@ -764,10 +750,7 @@ final class UsersWP {
 	 */
 	public function load_form_builder_actions_and_filters( $instance ) {
 		// Actions
-		add_action( 'uwp_manage_available_fields_predefined', array(
-			$instance,
-			'manage_available_fields_predefined'
-		) );
+		add_action( 'uwp_manage_available_fields_predefined', array( $instance, 'manage_available_fields_predefined' ) );
 		add_action( 'uwp_manage_available_fields_custom', array( $instance, 'manage_available_fields_custom' ) );
 		add_action( 'uwp_manage_available_fields', array( $instance, 'manage_available_fields' ) );
 		add_action( 'uwp_manage_selected_fields', array( $instance, 'manage_selected_fields' ) );
@@ -784,30 +767,15 @@ final class UsersWP {
 		add_filter( 'uwp_builder_extra_fields_multiselect', array( $instance, 'builder_extra_fields_smr' ), 10, 4 );
 		add_filter( 'uwp_builder_extra_fields_select', array( $instance, 'builder_extra_fields_smr' ), 10, 4 );
 		add_filter( 'uwp_builder_extra_fields_radio', array( $instance, 'builder_extra_fields_smr' ), 10, 4 );
-		add_filter( 'uwp_builder_extra_fields_datepicker', array(
-			$instance,
-			'builder_extra_fields_datepicker'
-		), 10, 4 );
+		add_filter( 'uwp_builder_extra_fields_datepicker', array( $instance, 'builder_extra_fields_datepicker' ), 10, 4 );
 		add_filter( 'uwp_builder_extra_fields_password', array( $instance, 'builder_extra_fields_password' ), 10, 4 );
 		add_filter( 'uwp_builder_extra_fields_email', array( $instance, 'builder_extra_fields_email' ), 10, 4 );
 		add_filter( 'uwp_builder_extra_fields_file', array( $instance, 'builder_extra_fields_file' ), 10, 4 );
 		add_filter( 'uwp_builder_data_type_text', array( $instance, 'builder_data_type_text' ), 10, 4 );
-		add_filter( 'uwp_form_builder_available_fields_head', array(
-			$instance,
-			'register_available_fields_head'
-		), 10, 2 );
-		add_filter( 'uwp_form_builder_available_fields_note', array(
-			$instance,
-			'register_available_fields_note'
-		), 10, 2 );
-		add_filter( 'uwp_form_builder_selected_fields_head', array(
-			$instance,
-			'register_selected_fields_head'
-		), 10, 2 );
-		add_filter( 'uwp_form_builder_selected_fields_note', array(
-			$instance,
-			'register_selected_fields_note'
-		), 10, 2 );
+		add_filter( 'uwp_form_builder_available_fields_head', array( $instance, 'register_available_fields_head' ), 10, 2 );
+		add_filter( 'uwp_form_builder_available_fields_note', array( $instance, 'register_available_fields_note' ), 10, 2 );
+		add_filter( 'uwp_form_builder_selected_fields_head', array( $instance, 'register_selected_fields_head' ), 10, 2 );
+		add_filter( 'uwp_form_builder_selected_fields_note', array( $instance, 'register_selected_fields_note' ), 10, 2 );
 		// htmlvar not needed for taxonomy
 		add_filter( 'uwp_builder_htmlvar_name_taxonomy', array( $instance, 'return_empty_string' ), 10, 4 );
 		// default_value not needed for textarea, html, file, fieldset
@@ -858,18 +826,17 @@ final class UsersWP {
 	public function register_widgets() {
 		global $pagenow;
 
-		$block_widget_init_screens = function_exists('sd_pagenow_exclude') ? sd_pagenow_exclude() : array();
+		$block_widget_init_screens = function_exists( 'sd_pagenow_exclude' ) ? sd_pagenow_exclude() : array();
 
-		if ( is_admin() && $pagenow && in_array($pagenow, $block_widget_init_screens)) {
-			// don't initiate in these conditions.
-		}else{
-
-			$exclude = function_exists('sd_widget_exclude') ? sd_widget_exclude() : array();
+		if ( is_admin() && $pagenow && in_array( $pagenow, $block_widget_init_screens ) ) {
+			// Don't initiate in these conditions.
+		} else {
+			$exclude = function_exists( 'sd_widget_exclude' ) ? sd_widget_exclude() : array();
 			$widgets = $this->get_widgets();
 
-			if( !empty($widgets) ){
+			if ( ! empty( $widgets ) ) {
 				foreach ( $widgets as $widget ) {
-					if(!in_array($widget,$exclude)){
+					if ( ! in_array( $widget, $exclude ) ) {
 						// SD V1 used to extend the widget class. V2 does not, so we cannot call register widget on it.
 						if ( is_subclass_of( $widget, 'WP_Widget' ) ) {
 							register_widget( $widget );
@@ -924,11 +891,25 @@ final class UsersWP {
 	 * @return      void
 	 */
 	public function load_plugin_textdomain() {
+		// Determines the current locale.
+		if ( function_exists( 'determine_locale' ) ) {
+			$locale = determine_locale();
+		} else if ( function_exists( 'get_user_locale' ) ) {
+			$locale = get_user_locale();
+		} else {
+			$locale = get_locale();
+		}
 
-		load_plugin_textdomain( 'userswp', false, basename( dirname( dirname( __FILE__ ) ) ) . '/languages' );
+		/**
+		 * Filter the locale to use for translations.
+		 */
+		$locale = apply_filters( 'plugin_locale', $locale, 'userswp' );
+
+		unload_textdomain( 'userswp' );
+		load_textdomain( 'userswp', WP_LANG_DIR . '/userswp/userswp-' . $locale . '.mo' );
+		load_plugin_textdomain( 'userswp', false, plugin_basename( dirname( USERSWP_PLUGIN_FILE ) ) . '/languages/' );
 
 		do_action( 'uwp_loaded' );
-
 	}
 
 	/**
@@ -943,20 +924,20 @@ final class UsersWP {
 	/**
 	 * Hide admin bar based on settings.
 	 */
-	public function hide_admin_bar(){
-
+	public function hide_admin_bar() {
 		$is_hidden = false;
-		if(is_user_logged_in()){
-			$user = get_userdata(get_current_user_id());
 
-			if($user && isset($user->roles[0])){
+		if ( is_user_logged_in() ) {
+			$user = get_userdata( (int) get_current_user_id() );
+
+			if ( ! empty( $user ) && isset( $user->roles[0] ) ) {
 				$user_role = $user->roles[0];
 				$is_hidden = uwp_get_option( 'hide_admin_bar_'.$user_role );
 			}
 		}
 
-		if($is_hidden){
-			show_admin_bar(false);
+		if ( $is_hidden ) {
+			show_admin_bar( false );
 		}
 	}
 }
