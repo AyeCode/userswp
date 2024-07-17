@@ -3720,6 +3720,9 @@ if(!function_exists('sd_blocks_render_blocks')){
 		if(! empty($parsed_block['attrs']['sd_shortcode_close'])){
 			$content = isset($parsed_block['attrs']['html']) ? $parsed_block['attrs']['html'] : $block_content;
 			$block_content = $parsed_block['attrs']['sd_shortcode'].$content.$parsed_block['attrs']['sd_shortcode_close'];
+
+			$block_content = do_shortcode($block_content);
+
 		}elseif(! empty($parsed_block['attrs']['sd_shortcode'])){
 			$has_warp = false;
 			if($block_content && strpos(trim($block_content), '<div class="wp-block-') === 0 ){
@@ -3733,8 +3736,10 @@ if(!function_exists('sd_blocks_render_blocks')){
 				// Add the shortcode if its not a wrapped block
 				$block_content .= $parsed_block['attrs']['sd_shortcode'];
 			}
+
+			$block_content = do_shortcode($block_content);
 		}
-		return $block_content;
+		return  $block_content;
 	}
 }
 
