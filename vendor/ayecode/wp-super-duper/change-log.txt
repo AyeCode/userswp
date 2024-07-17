@@ -1,3 +1,6 @@
+= 1.2.5 - 2024-07-17 =
+* non FSE themes can fail to render templates with blocks - FIXED
+
 = 1.2.4 - 2024-07-16 =
 * Some blocks not being wrapped inside the block wrapper - FIXED
 * Issue with blocks with no arguments not adding shortcode argument - FIXED
