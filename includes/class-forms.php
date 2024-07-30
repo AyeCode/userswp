@@ -1513,9 +1513,7 @@ class UsersWP_Forms {
 			$custom_url = uwp_get_option( 'login_redirect_custom_url_'.$user_role );
 		}
 
-		if ( $user && $user->has_cap( 'manage_options' ) ) {
-			$redirect_to = admin_url();
-		} elseif ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
+		if  ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
 			$redirect_to = esc_url_raw( $_REQUEST['redirect_to'] );
 		} elseif ( isset( $data['redirect_to'] ) && ! empty( $data['redirect_to'] ) ) {
 			$redirect_to = esc_url_raw( $data['redirect_to'] );
