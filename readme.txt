@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.15 =
+* Allow admin login redirect based on role base login redirect setting for admin role instead of force redirecting to wp-admin - FIXED
+
 = 1.2.14 - 2024-07-17 =
 * non FSE themes can fail to render new blocks - FIXED
 
