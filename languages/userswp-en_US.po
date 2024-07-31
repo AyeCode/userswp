@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.10\n"
+"Project-Id-Version: UsersWP 1.2.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 17:09+0530\n"
-"PO-Revision-Date: 2024-07-16 17:09+0530\n"
+"POT-Creation-Date: 2024-07-31 12:44+0530\n"
+"PO-Revision-Date: 2024-07-31 12:44+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -116,165 +116,165 @@ msgid ""
 "registration, login forms etc."
 msgstr ""
 
-#: admin/class-admin.php:102
+#: admin/class-admin.php:100
 msgid "UsersWP - an AyeCode product!"
 msgstr ""
 
-#: admin/class-admin.php:103
+#: admin/class-admin.php:101
 msgid "Please confirm you wish to connect your site?"
 msgstr ""
 
-#: admin/class-admin.php:104
+#: admin/class-admin.php:102
 #, php-format
 msgid ""
 "<strong>Have a license?</strong> Forget about entering license keys or "
 "downloading zip files, connect your site for instant access. %slearn more%s"
 msgstr ""
 
-#: admin/class-admin.php:105
+#: admin/class-admin.php:103
 msgid "Connect Site"
 msgstr ""
 
-#: admin/class-admin.php:106
+#: admin/class-admin.php:104
 msgid "Connecting..."
 msgstr ""
 
-#: admin/class-admin.php:107
+#: admin/class-admin.php:105
 msgid "This service will only work with a live domain, not a localhost."
 msgstr ""
 
-#: admin/class-admin.php:108
+#: admin/class-admin.php:106
 msgid "Something went wrong, please refresh and try again."
 msgstr ""
 
-#: admin/class-admin.php:242
+#: admin/class-admin.php:240
 msgid "Field key must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:243
+#: admin/class-admin.php:241
 msgid "Option Values must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:244
+#: admin/class-admin.php:242
 msgid "Please do not use special character and spaces in field key."
 msgstr ""
 
-#: admin/class-admin.php:245
+#: admin/class-admin.php:243
 msgid "Field key should be a unique name."
 msgstr ""
 
-#: admin/class-admin.php:246
+#: admin/class-admin.php:244
 msgid "Are you sure you wish to delete this field?"
 msgstr ""
 
-#: admin/class-admin.php:247
+#: admin/class-admin.php:245
 msgid "This field is required."
 msgstr ""
 
-#: admin/class-admin.php:249
+#: admin/class-admin.php:247
 msgid "Choose an image"
 msgstr ""
 
-#: admin/class-admin.php:250
+#: admin/class-admin.php:248
 msgid "Use image"
 msgstr ""
 
-#: admin/class-admin.php:251
+#: admin/class-admin.php:249
 msgid "Are you sure you wish to delete this form?"
 msgstr ""
 
-#: admin/class-admin.php:252
+#: admin/class-admin.php:250
 msgid "Enter register form title"
 msgstr ""
 
-#: admin/class-admin.php:253
+#: admin/class-admin.php:251
 msgid "Updated! Reloading page..."
 msgstr ""
 
-#: admin/class-admin.php:277 admin/class-admin.php:803
+#: admin/class-admin.php:275 admin/class-admin.php:801
 msgid "Activation email has been sent!"
 msgstr ""
 
-#: admin/class-admin.php:280
+#: admin/class-admin.php:278
 msgid "Error while sending activation email. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:283
+#: admin/class-admin.php:281
 msgid "User(s) has been activated!"
 msgstr ""
 
-#: admin/class-admin.php:388
+#: admin/class-admin.php:386
 #, php-format
 msgid ""
 "You can change your profile picture on your <a href=\"%s\">Profile Page</a>."
 msgstr ""
 
-#: admin/class-admin.php:405 admin/class-uwp-admin-menus.php:80
+#: admin/class-admin.php:403 admin/class-uwp-admin-menus.php:80
 #: admin/menus/class-menus.php:291 includes/class-uwp-privacy.php:17
 #: includes/template-functions.php:195
 msgid "UsersWP"
 msgstr ""
 
-#: admin/class-admin.php:471
+#: admin/class-admin.php:469
 msgid "Pending Email Activation"
 msgstr ""
 
-#: admin/class-admin.php:642
+#: admin/class-admin.php:640
 msgid "Change Avatar"
 msgstr ""
 
-#: admin/class-admin.php:644 templates/bootstrap/modal-profile-image.php:16
+#: admin/class-admin.php:642 templates/bootstrap/modal-profile-image.php:16
 msgid "Upload Avatar"
 msgstr ""
 
-#: admin/class-admin.php:654
+#: admin/class-admin.php:652
 msgid "Change Banner"
 msgstr ""
 
-#: admin/class-admin.php:656 templates/bootstrap/modal-profile-image.php:19
+#: admin/class-admin.php:654 templates/bootstrap/modal-profile-image.php:19
 msgid "Upload Banner"
 msgstr ""
 
-#: admin/class-admin.php:711 admin/class-admin.php:728
+#: admin/class-admin.php:709 admin/class-admin.php:726
 msgid "Resend Activation"
 msgstr ""
 
-#: admin/class-admin.php:712
+#: admin/class-admin.php:710
 msgid "Activate User"
 msgstr ""
 
-#: admin/class-admin.php:729
+#: admin/class-admin.php:727
 msgid "Activate Users"
 msgstr ""
 
-#: admin/class-admin.php:827
+#: admin/class-admin.php:825
 msgid "View UsersWP Documentation"
 msgstr ""
 
-#: admin/class-admin.php:828
+#: admin/class-admin.php:826
 msgid "Visit UsersWP support"
 msgstr ""
 
-#: admin/class-admin.php:829
+#: admin/class-admin.php:827
 msgid "View translations"
 msgstr ""
 
-#: admin/class-admin.php:849 admin/class-admin.php:913
+#: admin/class-admin.php:847 admin/class-admin.php:911
 #: includes/class-forms.php:368
 msgid "Something went wrong. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:860
+#: admin/class-admin.php:858
 #, php-format
 msgid "Form %d"
 msgstr ""
 
-#: admin/class-admin.php:904 admin/settings/class-formbuilder.php:293
+#: admin/class-admin.php:902 admin/settings/class-formbuilder.php:293
 #: widgets/register.php:33
 msgid "Form"
 msgstr ""
 
-#: admin/class-admin.php:964
+#: admin/class-admin.php:962
 msgid "Security nonce failed. Please try again."
 msgstr ""
 
@@ -482,7 +482,7 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:380
 #: admin/settings/class-formbuilder.php:396
-#: admin/settings/class-formbuilder.php:421 includes/class-forms.php:1985
+#: admin/settings/class-formbuilder.php:421 includes/class-forms.php:1983
 #, php-format
 msgid "%s"
 msgstr ""
@@ -1449,7 +1449,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:71
 #: admin/settings/class-uwp-settings-general.php:309
-#: includes/class-emails.php:300 includes/class-forms.php:4541
+#: includes/class-emails.php:300 includes/class-forms.php:4539
 #: includes/class-pages.php:325 templates/bootstrap/forgot.php:66
 #: templates/bootstrap/login.php:11 templates/login.php:7
 #: templates/login.php:19 widgets/login.php:50 widgets/login.php:141
@@ -2509,7 +2509,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:537 includes/class-activator.php:579
-#: includes/class-forms.php:4283
+#: includes/class-forms.php:4281
 msgid "Confirm Password"
 msgstr ""
 
@@ -2719,7 +2719,7 @@ msgid "Banner reset successfully."
 msgstr ""
 
 #: includes/class-forms.php:224 includes/class-forms.php:765
-#: includes/class-forms.php:1998
+#: includes/class-forms.php:1996
 msgid "Something went wrong. Please contact site admin."
 msgstr ""
 
@@ -2740,7 +2740,7 @@ msgid ""
 msgstr ""
 
 #: includes/class-forms.php:532 includes/class-forms.php:1114
-#: includes/class-forms.php:1561
+#: includes/class-forms.php:1559
 msgid "Security verification failed. Try again."
 msgstr ""
 
@@ -2770,7 +2770,7 @@ msgstr ""
 msgid "Password you entered during registration."
 msgstr ""
 
-#: includes/class-forms.php:840 includes/class-forms.php:1654
+#: includes/class-forms.php:840 includes/class-forms.php:1652
 msgid "Your login Information :"
 msgstr ""
 
@@ -2853,115 +2853,115 @@ msgstr ""
 msgid "Validation successful. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:1603
+#: includes/class-forms.php:1601
 msgid "Invalid email or user doesn't exists."
 msgstr ""
 
-#: includes/class-forms.php:1621
+#: includes/class-forms.php:1619
 msgid "Your account is not activated yet. Please activate your account first."
 msgstr ""
 
-#: includes/class-forms.php:1655 includes/class-forms.php:1670
+#: includes/class-forms.php:1653 includes/class-forms.php:1668
 #, php-format
 msgid "Username: %s"
 msgstr ""
 
-#: includes/class-forms.php:1656
+#: includes/class-forms.php:1654
 #, php-format
 msgid "Password: %s"
 msgstr ""
 
-#: includes/class-forms.php:1668
+#: includes/class-forms.php:1666
 msgid "You have requested to reset your password for the following account:"
 msgstr ""
 
-#: includes/class-forms.php:1671
+#: includes/class-forms.php:1669
 msgid "If this was by mistake, just ignore this email and nothing will happen."
 msgstr ""
 
-#: includes/class-forms.php:1672
+#: includes/class-forms.php:1670
 msgid ""
 "To reset your password, click the following link and follow the instructions."
 msgstr ""
 
-#: includes/class-forms.php:1701
+#: includes/class-forms.php:1699
 msgid "Please check your email."
 msgstr ""
 
-#: includes/class-forms.php:1783
+#: includes/class-forms.php:1781
 msgid "Password changed successfully."
 msgstr ""
 
-#: includes/class-forms.php:1842
+#: includes/class-forms.php:1840
 msgid "Invalid username."
 msgstr ""
 
-#: includes/class-forms.php:1875
+#: includes/class-forms.php:1873
 #, php-format
 msgid ""
 "Password updated successfully. Please <a href=\"%s\">login</a> with your new "
 "password."
 msgstr ""
 
-#: includes/class-forms.php:2024
+#: includes/class-forms.php:2022
 msgid "This email is already registered, please choose another one."
 msgstr ""
 
-#: includes/class-forms.php:2058
+#: includes/class-forms.php:2056
 msgid ""
 "Account updated successfully. The new address will become active once you "
 "confirm via activation link sent to your new email."
 msgstr ""
 
-#: includes/class-forms.php:2075
+#: includes/class-forms.php:2073
 msgid "Account updated successfully."
 msgstr ""
 
-#: includes/class-forms.php:2108 includes/class-forms.php:2138
+#: includes/class-forms.php:2106 includes/class-forms.php:2136
 msgid "User Information:"
 msgstr ""
 
-#: includes/class-forms.php:2187 includes/class-profile.php:1897
+#: includes/class-forms.php:2185 includes/class-profile.php:1897
 msgid "Invalid access!"
 msgstr ""
 
-#: includes/class-forms.php:2452
+#: includes/class-forms.php:2450
 msgid "Clear field"
 msgstr ""
 
-#: includes/class-forms.php:3161
+#: includes/class-forms.php:3159
 msgid "Username or Email"
 msgstr ""
 
-#: includes/class-forms.php:3484
+#: includes/class-forms.php:3482
 msgid "Please enter a valid URL including https://"
 msgstr ""
 
-#: includes/class-forms.php:3533
+#: includes/class-forms.php:3531
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:3847
+#: includes/class-forms.php:3845
 #, php-format
 msgid ""
 "By using this form I agree to the storage and handling of my data by this "
 "website. View our %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:3934
+#: includes/class-forms.php:3932
 #, php-format
 msgid "I accept the %s %s %s."
 msgstr ""
 
-#: includes/class-forms.php:4201
+#: includes/class-forms.php:4199
 msgid "Site Default"
 msgstr ""
 
-#: includes/class-forms.php:4366
+#: includes/class-forms.php:4364
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/class-forms.php:4519
+#: includes/class-forms.php:4517
 msgid "Privacy settings updated successfully."
 msgstr ""
 
