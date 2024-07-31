@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.6
-Stable tag: 1.2.14
+Stable tag: 1.2.15
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -146,7 +146,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.15 - TBD =
+= 1.2.15 - 2024-07-31 =
 * Allow admin login redirect based on role base login redirect setting for admin role instead of force redirecting to wp-admin - FIXED
 * Logged in non admin user can force synchronize data - SECURITY
 
