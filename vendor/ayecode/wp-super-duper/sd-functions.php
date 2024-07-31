@@ -3714,7 +3714,7 @@ if(!function_exists('sd_blocks_render_blocks')){
 	 * @param $thiss
 	 * @return mixed|string
 	 */
-	function sd_blocks_render_blocks($block_content, $parsed_block, $thiss ){
+	function sd_blocks_render_blocks($block_content, $parsed_block, $thiss = array() ){
 
 		// Check if ita a nested block that needs to be wrapped
 		if(! empty($parsed_block['attrs']['sd_shortcode_close'])){

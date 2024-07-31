@@ -1,3 +1,6 @@
+= 0.2.21 - 2024-07-31 =
+* JS error on FSE theme edit template part page - FIXED
+
 = 0.2.20 - 2024-07-05 =
 * Multiple carousels breaks carousel in modal - FIXED
 

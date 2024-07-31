@@ -1,3 +1,6 @@
+= 1.2.6 - 2024-07-18 =
+* render_block hook only had 2 args prior to WP 5.9 which could cause fatal error when running WP < 5.9 - FIXED
+
 = 1.2.5 - 2024-07-17 =
 * non FSE themes can fail to render templates with blocks - FIXED
 
