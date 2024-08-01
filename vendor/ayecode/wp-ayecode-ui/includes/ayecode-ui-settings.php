@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.21';
+		public $version = '0.2.22';
 
 		/**
 		 * Class textdomain.
@@ -3050,16 +3050,22 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                     var $destEl = jQuery('[data-rule-key="' + rule.key + '"]');
 
                     if (rule.action === 'show' && isTrue) {
-                        if ($destEl.is(':hidden')) {
+                        if ($destEl.is(':hidden') && !$destEl.hasClass('aui-cf-skip-reset')) {
                             aui_cf_field_reset_default_value($destEl);
                         }
                         aui_cf_field_show_element($destEl);
                     } else if (rule.action === 'show' && !isTrue) {
+                        if (!$destEl.is(':hidden') && !$destEl.hasClass('aui-cf-skip-reset')) {
+                            aui_cf_field_reset_default_value($destEl);
+                        }
                         aui_cf_field_hide_element($destEl);
                     } else if (rule.action === 'hide' && isTrue) {
+                        if (!$destEl.is(':hidden') && !$destEl.hasClass('aui-cf-skip-reset')) {
+                            aui_cf_field_reset_default_value($destEl);
+                        }
                         aui_cf_field_hide_element($destEl);
                     } else if (rule.action === 'hide' && !isTrue) {
-                        if ($destEl.is(':hidden')) {
+                        if ($destEl.is(':hidden') && !$destEl.hasClass('aui-cf-skip-reset')) {
                             aui_cf_field_reset_default_value($destEl);
                         }
                         aui_cf_field_show_element($destEl);

@@ -111,7 +111,7 @@ class UsersWP_Notices {
         if ( $updater->is_updating() || ! empty( $_GET['force_sync_data'] ) ) {
             ?>
             <div id="message" class="updated notice notice-alt uwp-message">
-                <p><strong><?php esc_attr_e( 'UsersWP data sync', 'userswp' ); ?></strong> &#8211; <?php esc_attr_e( 'Users data sync is running in the background.', 'userswp' ); ?> <a href="<?php echo esc_url( add_query_arg( 'force_sync_data', 'true', admin_url( 'admin.php?page=userswp' ) ) ); ?>"><?php esc_attr_e( 'Taking a while? Click here to run it now.', 'userswp' ); ?></a></p>
+                <p><strong><?php esc_attr_e( 'UsersWP data sync', 'userswp' ); ?></strong> &#8211; <?php esc_attr_e( 'Users data sync is running in the background.', 'userswp' ); ?> <a href="<?php echo esc_url( add_query_arg( array( 'force_sync_data' => 'true', '_nonce' => wp_create_nonce( 'force_sync_data' ) ), admin_url( 'admin.php?page=userswp' ) ) ); ?>"><?php esc_attr_e( 'Taking a while? Click here to run it now.', 'userswp' ); ?></a></p>
             </div>
             <?php
         }
