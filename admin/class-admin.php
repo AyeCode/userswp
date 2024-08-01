@@ -81,7 +81,7 @@ class UsersWP_Admin {
 			exit;
 		}
 
-		if ( ! empty( $_GET['force_sync_data'] ) && current_user_can( 'manage_options' ) ) {
+		if ( ! empty( $_GET['force_sync_data'] ) && ! empty( $_GET['_nonce'] ) && wp_verify_nonce( sanitize_text_field( $_GET['_nonce'] ), 'force_sync_data' ) && current_user_can( 'manage_options' ) ) {
 			$blog_id = get_current_blog_id();
 			do_action( 'wp_' . $blog_id . '_uwp_updater_cron' );
 			wp_safe_redirect( admin_url( 'admin.php?page=userswp' ) );
