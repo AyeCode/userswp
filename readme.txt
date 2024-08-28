@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.17 =
+* Fix warning mb_convert_encoding is deprecated in PHP 8.2 - Fixed
+
 = 1.2.16 - 2024-08-01 =
 * Secure synchronize data request during install - SECURITY
 
