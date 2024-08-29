@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.6' );
+	define( 'SUPER_DUPER_VER', '1.2.7' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -104,6 +104,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$sd_widget_scripts = true;
 
 				// add shortcode insert button once
+				add_action( 'media_buttons', array( $this, 'wp_media_buttons' ), 1 );
 				add_action( 'media_buttons', array( $this, 'shortcode_insert_button' ) );
 				// generatepress theme sections compatibility
 				if ( function_exists( 'generate_sections_sections_metabox' ) ) {
@@ -5229,6 +5230,20 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 			$content .= '</div></div></form><input type="hidden" id="bsvc_raw_value" name="bsvc_raw_value" value="' . $value . '">';
 
 			return $content;
+		}
+
+		/**
+		 * Handle media_buttons hook.
+		 *
+		 * @since 1.2.7
+		 */
+		public function wp_media_buttons() {
+			global $shortcode_insert_button_once;
+
+			// Fix conflicts with UpSolution Core in header template edit element.
+			if ( defined( 'US_CORE_DIR' ) && ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'us_ajax_hb_get_ebuilder_html' ) {
+				$shortcode_insert_button_once = true;
+			}
 		}
 	}
 }

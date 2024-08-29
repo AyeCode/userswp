@@ -930,8 +930,8 @@
                 cs_scroll  = 'navbar-light';
             }
 
-            navbar.dataset.cso = cs_original
-            navbar.dataset.css = cs_scroll
+            navbar.dataset.cso = cs_original;
+            navbar.dataset.css = cs_scroll;
         }
 
         if($value > 0 ){
