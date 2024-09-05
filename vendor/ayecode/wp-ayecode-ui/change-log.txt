@@ -1,3 +1,6 @@
+= 0.2.25 - 2024-09-05 =
+* Don't apply custom colors to wp-admin - CHANGED
+
 = 0.2.24 - 2024-08-29 =
 * Changes for search form conditional fields - CHANGED
 

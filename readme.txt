@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.6
-Stable tag: 1.2.17
+Stable tag: 1.2.18
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -146,7 +146,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.18 - TBD =
+= 1.2.18 - 2024-09-05 =
 * PHP 8.2 compatibility changes in Emogrifier class to prevent encoding issues - CHANGED
 
 = 1.2.17 - 2024-08-29 =
