@@ -146,8 +146,11 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.18 - TBD =
+* PHP 8.2 compatibility changes in Emogrifier class to prevent encoding issues - CHANGED
+
 = 1.2.17 - 2024-08-29 =
-* Fix warning mb_convert_encoding is deprecated in PHP 8.2 - Fixed
+* Fix warning mb_convert_encoding is deprecated in PHP 8.2 - FIXED
 
 = 1.2.16 - 2024-08-01 =
 * Secure synchronize data request during install - SECURITY
