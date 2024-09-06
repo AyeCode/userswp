@@ -1138,12 +1138,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                         $is_fse = true;
                     }
 
-                    $custom_admin = $is_fse ? true : apply_filters('ayecode_ui_custom_admin', false );
-
-
-					if(!empty($colors) && $custom_admin ){
+					if(!empty($colors)){
 						$d_colors = self::get_colors(true);
-                        //print_r($d_colors);exit;
 
 //						$is_fse = !empty($_REQUEST['postType']) && $_REQUEST['postType']=='wp_template';
 						foreach($colors as $key => $color ){
@@ -1163,7 +1159,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						echo ' body.modal-open #adminmenuwrap{z-index:999} body.modal-open #wpadminbar{z-index:1025}';
 					}
 
-                    if( $aui_bs5 && defined( 'BLOCKSTRAP_VERSION' ) && $custom_admin  ){
+                    if( $aui_bs5 && defined( 'BLOCKSTRAP_VERSION' )  ){
                         $css = '';
                         $theme_settings = wp_get_global_styles();
 
