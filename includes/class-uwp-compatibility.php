@@ -51,7 +51,12 @@ class UsersWP_Compatibility {
 	 */
 	public static function is_elementor( $post_id ) {
 		$document = \Elementor\Plugin::$instance->documents->get( $post_id );
-		return $document->is_built_with_elementor();
+
+		if ( $document && method_exists( $document, 'is_built_with_elementor' ) ) {
+			return $document->is_built_with_elementor();
+		} else {
+			return false; // Or handle the case when it's not built with Elementor
+		}
 	}
 
 	/**

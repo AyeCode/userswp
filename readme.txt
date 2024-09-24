@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.20 -
+* Fix error during event demo import - FIXED
+
 = 1.2.19 - 2024-09-06 =
 * Theme customize AyeCode UI colors settings not working after update - FIXED
 
