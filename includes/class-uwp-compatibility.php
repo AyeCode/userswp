@@ -45,12 +45,35 @@ class UsersWP_Compatibility {
 	}
 
 	/**
+	 * Get the elementor document by page ID.
+	 *
+	 * @since 1.2.20
+	 *
+	 * @param int $post_id The current post ID.
+	 * @return object Elementor document.
+	 */
+	public static function get_elementor_document( $post_id ) {
+		if ( defined( 'ELEMENTOR_VERSION' ) && class_exists( '\Elementor\Plugin' ) ) {
+			$document = \Elementor\Plugin::$instance->documents->get( (int) $post_id );
+		} else {
+			$document = null;
+		}
+
+		return $document;
+	}
+
+	/**
 	 * Check if a page is being edited by elementor.
 	 *
 	 * @return bool
 	 */
 	public static function is_elementor( $post_id ) {
-		$document = \Elementor\Plugin::$instance->documents->get( $post_id );
+		$document = self::get_elementor_document( $post_id );
+
+		if ( empty( $document ) ) {
+			return false;
+		}
+
 		return $document->is_built_with_elementor();
 	}
 
