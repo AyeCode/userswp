@@ -148,6 +148,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.20 - TBD =
 * Elementor compatibility error on Events demo site import - FIXED
+* Delete account field with default key was not deleting column from our usermeta table  - FIXED
 
 = 1.2.19 - 2024-09-06 =
 * Theme customize AyeCode UI colors settings not working after update - FIXED
