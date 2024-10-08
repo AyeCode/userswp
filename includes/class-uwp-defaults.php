@@ -375,16 +375,20 @@ A user has been registered recently on your website.
 	 *
 	 * @return string
 	 */
-	public static function author_box_content_bootstrap() {
+	public static function author_box_content_bootstrap($args = array()) {
+		global $aui_bs5;
+
+		$wrap_class = $aui_bs5 ? sd_build_aui_class($args) : '';
+
 		return apply_filters( 'uwp_author_box_content_bootstrap',
-			'<div class="d-block text-center text-md-left d-md-flex p-3 bg-light">
-  <a href="[#author_link#]"><img src="[#author_image_url#]" class="rounded-circle shadow border border-white border-width-4 mr-3" width="60" height="60" alt="[#author_name#]"></a>
-  <div class="media-body">
-    <h5 class="mt-0">Author: <a href="[#author_link#]">[#author_name#]</a></h5>
-    [uwp_button_group user_id="post_author"]
-    <p>[#author_bio#]</p>
-  </div>
-</div>'
+			'<div class="d-block text-center text-md-left d-md-flex p-3 bg-light ' . esc_attr($wrap_class) . '">
+				<a href="[#author_link#]"><img src="[#author_image_url#]" class="rounded-circle shadow border border-white border-width-4 mr-3" width="60" height="60" alt="[#author_name#]"></a>
+				<div class="media-body">
+					<h5 class="mt-0">Author: <a href="[#author_link#]">[#author_name#]</a></h5>
+					[uwp_button_group user_id="post_author"]
+					<p>[#author_bio#]</p>
+				</div>
+			</div>'
 		);
 	}
 
