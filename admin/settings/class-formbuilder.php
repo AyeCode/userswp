@@ -2672,11 +2672,6 @@ class UsersWP_Form_Builder {
                     return $field_id;
                 }
 
-				$wpdb->query( $wpdb->prepare( "delete from " . $table_name . " where id= %d AND form_id = %d", array( $cf, $form_id ) ) );
-
-				// Also delete register form field
-				$wpdb->query( $wpdb->prepare( "delete from " . $extras_table_name . " where site_htmlvar_name= %s AND form_id = %d ", array( $field->htmlvar_name, $form_id ) ) );
-
 			    // delete the meta column
 				if ( isset($field->htmlvar_name) && $delete_meta ) {
 					$register_forms = uwp_get_option( 'multiple_registration_forms' );
@@ -2695,13 +2690,18 @@ class UsersWP_Form_Builder {
 						}
 					}
 
-					if(isset($custom_fields) && !empty($custom_fields) && count($custom_fields) > 0){
+					if(isset($custom_fields) && !empty($custom_fields) && count($custom_fields) > 1){
                         // Do not delete user meta column if field used in more than one form.
                     } else {
 						$col_name = sanitize_sql_orderby( $field->htmlvar_name );
-						$wpdb->query( "ALTER TABLE `{$meta_table}` DROP COLUMN $col_name" );
+						$wpdb->query( "ALTER TABLE `{$meta_table}` DROP COLUMN `{$col_name}`" );
                     }
 				}
+
+                $wpdb->query( $wpdb->prepare( "delete from " . $table_name . " where id= %d AND form_id = %d", array( $cf, $form_id ) ) );
+
+                // Also delete register form field
+                $wpdb->query( $wpdb->prepare( "delete from " . $extras_table_name . " where site_htmlvar_name= %s AND form_id = %d ", array( $field->htmlvar_name, $form_id ) ) );
 
 				do_action( 'uwp_after_custom_field_deleted', $cf, $field );
 
