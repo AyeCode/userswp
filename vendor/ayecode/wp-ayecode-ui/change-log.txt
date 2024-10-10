@@ -1,3 +1,6 @@
+= 0.2.26 - 2024-09-12 =
+* Primary color setting not working after update - FIXED
+
 = 0.2.25 - 2024-09-05 =
 * Don't apply custom colors to wp-admin - CHANGED
 
