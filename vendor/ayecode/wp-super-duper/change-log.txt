@@ -1,3 +1,17 @@
+= 1.2.13 - 2024-10-10 =
+* sd_template_page_options() not allowing child page selection - FIXED
+* Filter added `sd_template_page_options_limit` to adjust the 500 pages limit - ADDED
+* Multiple blocks with taxonomy linking feature can cause ajax query to loop and freeze browser - FIXED
+* __experimentalGetPreviewDeviceType is deprecated - FIXED
+
+= 1.2.10 - 2024-10-08 =
+* Selecting multiple similar blocks with different settings can cause editor to freeze - FIXED
+* Blocks with content already set will not call a refresh on load - CHANGED
+* New shortcode param could cause some blocks to call the render callback twice on each change - FIXED
+
+= 1.2.9 - 2024-09-12 =
+* Template get_pages call changed to custom query for better memory management - CHANGED
+
 = 1.2.7 - 2024-08-29 =
 * Fix conflicts with UpSolution Core plugin - FIXED
 
