@@ -160,8 +160,6 @@ jQuery(window).on('load', function () {
                 };
 
                 jQuery.post(uwp_admin_ajax.url, data, function (response) {
-                    response = JSON.parse(response);
-
                     if (response.status) {
                         uwp_remove_spin_loader(current_obj);
                         window.location.replace(response.redirect);
@@ -186,11 +184,10 @@ jQuery(window).on('load', function () {
         uwp_get_spin_loader(btn);
 
         jQuery.post(uwp_admin_ajax.url, data, function (response) {
-            response = JSON.parse(response);
             uwp_remove_spin_loader(btn);
             if (response.status) {
                 btn.after('<b class="ml-1 text-success">'+uwp_admin_ajax.form_updated_msg+'</b>');
-                location.reload();
+                window.location.replace(response.redirect);
             } else {
                 console.log(response.message);
             }
@@ -215,8 +212,6 @@ jQuery(window).on('load', function () {
             };
 
             jQuery.post(uwp_admin_ajax.url, data, function (response) {
-                response = JSON.parse(response);
-
                 if (response.status) {
                     uwp_remove_spin_loader(current_obj);
                     window.location.replace(response.redirect);

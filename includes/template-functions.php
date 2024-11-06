@@ -186,6 +186,7 @@ function uwp_get_screen_ids() {
 		'userswp_page_uwp_tools',
 		'userswp_page_uwp_status',
 		'userswp_page_uwp-addons',
+		'userswp_page_uwp_user_types',
 		'profile',
 		'users',
 		'user-edit',
@@ -200,6 +201,7 @@ function uwp_get_screen_ids() {
 		$screen_ids[] = $uwp_screen_id . '_page_uwp_tools';
 		$screen_ids[] = $uwp_screen_id . '_page_uwp_status';
 		$screen_ids[] = $uwp_screen_id . '_page_uwp-addons';
+		$screen_ids[] = $uwp_screen_id . '_page_uwp-user_types';
 	}
 
 	return apply_filters( 'uwp_screen_ids', $screen_ids );
