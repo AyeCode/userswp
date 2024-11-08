@@ -921,6 +921,7 @@ class UsersWP_Admin {
 		$redirect = '';
 		$status  = false;
 		$message = __( 'Something went wrong. Please try again.', 'userswp' );
+
 		if ( ! empty( $type ) && ! empty( $form_id ) && $type === 'update' ) {
 
 			$register_forms = (array) uwp_get_option( 'multiple_registration_forms', array() );
@@ -945,7 +946,10 @@ class UsersWP_Admin {
 			$register_forms = array_values( $register_forms );
 			$register_forms = apply_filters( 'uwp_multiple_registration_forms_update', $register_forms );
 			uwp_update_option( 'multiple_registration_forms', $register_forms );
-			$redirect = admin_url( 'admin.php?page=uwp_user_types' );
+			$redirect = add_query_arg(array(
+				'page' => 'uwp_user_types',
+				'form' => (int) $form_id
+			), admin_url( 'admin.php' ));
 		}
 
 		wp_send_json(

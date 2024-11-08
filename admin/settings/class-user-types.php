@@ -195,7 +195,7 @@ class UsersWP_User_Types {
         </table>
 
         <?php
-        do_action( 'uwp_user_type_form_before_submit', $form_id );
+        do_action( 'uwp_user_type_form_before_submit', $current_form );
         ?>
 
         <div class="bsui">
@@ -233,7 +233,7 @@ class UsersWP_User_Types {
                 ?>
             </th>
             <td>
-                <input id="<?php echo esc_attr( $id ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" class="form-control" required />
+                <input id="<?php echo esc_attr( $id ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" class="form-control" />
             </td>
         </tr>
         <?php
