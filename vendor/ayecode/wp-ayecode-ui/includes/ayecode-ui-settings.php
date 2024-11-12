@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.26';
+		public $version = '0.2.28';
 
 		/**
 		 * Class textdomain.
@@ -460,34 +460,26 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
             $load_fse = false;
 
-			if( is_admin() && !$this->is_aui_screen()){
-				// don't add wp-admin scripts if not requested to
-			}else{
+			if ( is_admin() && ! $this->is_aui_screen() ) {
+				// Don't add wp-admin scripts if not requested to.
+			} else {
 				$css_setting = current_action() == 'wp_enqueue_scripts' ? 'css' : 'css_backend';
-
 				$rtl = is_rtl() && ! $aui_bs5 ? '-rtl' : '';
-
                 $bs_ver = $this->settings['bs_ver'] == '5' ? '-v5' : '';
 
-				if($this->settings[$css_setting]){
+				if ( $this->settings[ $css_setting ] ) {
 					$compatibility = $this->settings[$css_setting]=='core' ? false : true;
 					$url = $this->settings[$css_setting]=='core' ? $this->url.'assets'.$bs_ver.'/css/ayecode-ui'.$rtl.'.css' : $this->url.'assets'.$bs_ver.'/css/ayecode-ui-compatibility'.$rtl.'.css';
-
-
 
 					wp_register_style( 'ayecode-ui', $url, array(), $this->version );
 					wp_enqueue_style( 'ayecode-ui' );
 
-					$current_screen = function_exists('get_current_screen' ) ? get_current_screen() : '';
-
-//					if ( is_admin() && !empty($_REQUEST['postType']) ) {
-					if ( is_admin() && ( !empty($_REQUEST['postType']) || $current_screen->is_block_editor() ) && ( defined( 'BLOCKSTRAP_VERSION' ) || defined( 'AUI_FSE' ) )  ) {
+					if ( is_admin() && ( !empty($_REQUEST['postType']) || self::is_block_editor() ) && ( defined( 'BLOCKSTRAP_VERSION' ) || defined( 'AUI_FSE' ) )  ) {
 						$url = $this->url.'assets'.$bs_ver.'/css/ayecode-ui-fse.css';
 						wp_register_style( 'ayecode-ui-fse', $url, array(), $this->version );
 						wp_enqueue_style( 'ayecode-ui-fse' );
 						$load_fse = true;
 					}
-
 
 					// flatpickr
 					wp_register_style( 'flatpickr', $this->url.'assets'.$bs_ver.'/css/flatpickr.min.css', array(), $this->version );
@@ -546,16 +538,12 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 					// custom changes
 					if ( $load_fse ) {
-						wp_add_inline_style( 'ayecode-ui-fse', self::custom_css($compatibility) );
+						wp_add_inline_style( 'ayecode-ui-fse', self::custom_css($compatibility, true) );
 					}else{
 						wp_add_inline_style( 'ayecode-ui', self::custom_css($compatibility) );
-
 					}
-
 				}
 			}
-
-
 		}
 
 		/**
@@ -1088,33 +1076,28 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			), '', self::minify_css( ob_get_clean() ) );
 		}
 
-
-		public static function custom_css($compatibility = true) {
-            global $aui_bs5;
+		public static function custom_css( $compatibility = true, $is_fse = false ) {
+			global $aui_bs5;
 
 			$colors = array();
+
 			if ( defined( 'BLOCKSTRAP_VERSION' ) ) {
-
-
 				$setting = wp_get_global_settings();
 
-//                print_r(wp_get_global_styles());//exit;
-//                print_r(get_default_block_editor_settings());exit;
-
-//                print_r($setting);echo  '###';exit;
-				if(!empty($setting['color']['palette']['theme'])){
-					foreach($setting['color']['palette']['theme'] as $color){
-						$colors[$color['slug']] = esc_attr($color['color']);
+				if ( ! empty( $setting['color']['palette']['theme'] ) ) {
+					foreach ( $setting['color']['palette']['theme'] as $color ) {
+						$colors[$color['slug']] = esc_attr( $color['color'] );
 					}
 				}
 
-				if(!empty($setting['color']['palette']['custom'])){
-					foreach($setting['color']['palette']['custom'] as $color){
-						$colors[$color['slug']] = esc_attr($color['color']);
+				if ( ! empty( $setting['color']['palette']['custom'] ) ) {
+					foreach ( $setting['color']['palette']['custom'] as $color ) {
+						$colors[$color['slug']] = esc_attr( $color['color'] );
 					}
 				}
-			}else{
-				$settings = get_option('aui_options');
+			} else {
+				$settings = get_option( 'aui_options' );
+
 				$colors = array(
 					'primary'   => ! empty( $settings['color_primary'] ) ? $settings['color_primary'] : AUI_PRIMARY_COLOR,
 					'secondary' => ! empty( $settings['color_secondary'] ) ? $settings['color_secondary'] : AUI_SECONDARY_COLOR
@@ -1122,165 +1105,170 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			}
 
 			ob_start();
+			?><style><?php
+			// BS v3 compat
+			if( self::is_bs3_compat() ){
+				echo self::bs3_compat_css(); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
 
-			?>
-            <style>
-                <?php
+			//$is_fse = false;
+			//if ( is_admin() && ( !empty($_REQUEST['postType']) || self::is_block_editor() ) && ( defined( 'BLOCKSTRAP_VERSION' ) || defined( 'AUI_FSE' ) )  ) {
+				//$is_fse = true;
+			//}
 
-					// BS v3 compat
-					if( self::is_bs3_compat() ){
-						echo self::bs3_compat_css(); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			$custom_front = ! is_admin() ? true : apply_filters('ayecode_ui_custom_front', false );
+			$custom_admin = $is_fse || self::is_preview() ? true : apply_filters('ayecode_ui_custom_admin', false );
+            $bs_custom_css = apply_filters( 'ayecode_ui_bs_custom_css', $custom_admin || $custom_front );
+			//$bs_custom_css = true; // Force true to fix any color issue.
+
+			$colors_css = '';
+			if ( ! empty( $colors ) && $bs_custom_css ) {
+				$d_colors = self::get_colors(true);
+
+				foreach ( $colors as $key => $color ) {
+					if ( ( empty( $d_colors[$key]) || $d_colors[$key] != $color) || $is_fse ) {
+						$var = $is_fse ? "var(--wp--preset--color--$key)" : $color;
+						$compat = $is_fse ? '.editor-styles-wrapper' : $compatibility;
+
+						$colors_css .= $aui_bs5 ? self::css_overwrite_bs5( $key,$var, $compat, $color ) : self::css_overwrite( $key, $var, $compat, $color );
 					}
+				}
+			}
 
-                    $current_screen = function_exists('get_current_screen' ) ? get_current_screen() : '';
-                    $is_fse = false;
-                    if ( is_admin() && ( !empty($_REQUEST['postType']) || $current_screen->is_block_editor() ) && ( defined( 'BLOCKSTRAP_VERSION' ) || defined( 'AUI_FSE' ) )  ) {
-                        $is_fse = true;
-                    }
+			if ( $colors_css ) {
+				echo $colors_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
 
-					if(!empty($colors)){
-						$d_colors = self::get_colors(true);
+			// Set admin bar z-index lower when modal is open.
+			echo ' body.modal-open #wpadminbar{z-index:999}.embed-responsive-16by9 .fluid-width-video-wrapper{padding:0 !important;position:initial}';
 
-//						$is_fse = !empty($_REQUEST['postType']) && $_REQUEST['postType']=='wp_template';
-						foreach($colors as $key => $color ){
-							if((empty( $d_colors[$key]) ||  $d_colors[$key] != $color) || $is_fse ) {
-								$var = $is_fse ? "var(--wp--preset--color--$key)" : $color;
-								$compat = $is_fse ? '.editor-styles-wrapper' : $compatibility;
-								echo $aui_bs5 ? self::css_overwrite_bs5($key,$var,$compat,$color) : self::css_overwrite($key,$var,$compat,$color); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							}
-						}
-					   // exit;
-					}
+			if ( is_admin() ) {
+				echo ' body.modal-open #adminmenuwrap{z-index:999} body.modal-open #wpadminbar{z-index:1025}';
+			}
 
-					// Set admin bar z-index lower when modal is open.
-					echo ' body.modal-open #wpadminbar{z-index:999}.embed-responsive-16by9 .fluid-width-video-wrapper{padding:0 !important;position:initial}';
+			$custom_css = '';
 
-					if(is_admin()){
-						echo ' body.modal-open #adminmenuwrap{z-index:999} body.modal-open #wpadminbar{z-index:1025}';
-					}
+			if ( $aui_bs5 && defined( 'BLOCKSTRAP_VERSION' ) && $bs_custom_css ) {
+				$css = '';
+				$theme_settings = wp_get_global_styles();
 
-                    if( $aui_bs5 && defined( 'BLOCKSTRAP_VERSION' )  ){
-                        $css = '';
-                        $theme_settings = wp_get_global_styles();
+				// Font face
+				if( !empty( $theme_settings['typography']['fontFamily'] ) ){
+					$t_fontface = str_replace( array('var:preset|','font-family|'), array('--wp--preset--','font-family--'), $theme_settings['typography']['fontFamily']  ); //var(--wp--preset--font-family--poppins)
+					$css .= '--bs-body-font-family: ' . esc_attr($t_fontface) . ';';
+				}
 
-//                        print_r( $theme_settings);exit;
+				// font size
+				if( !empty( $theme_settings['typography']['fontSize'] ) ){
+					$css .= '--bs-body-font-size: ' . esc_attr( $theme_settings['typography']['fontSize'] ) . ' ;';
+				}
 
-                        // font face
-                        if( !empty( $theme_settings['typography']['fontFamily'] ) ){
-                            $t_fontface = str_replace( array('var:preset|','font-family|'), array('--wp--preset--','font-family--'), $theme_settings['typography']['fontFamily']  ); //var(--wp--preset--font-family--poppins)
-                            $css .= '--bs-body-font-family: ' . esc_attr($t_fontface) . ';';
-                        }
-
-                        // font size
-                        if( !empty( $theme_settings['typography']['fontSize'] ) ){
-                            $css .= '--bs-body-font-size: ' . esc_attr( $theme_settings['typography']['fontSize'] ) . ' ;';
-                        }
-
-                        // line height
-                         if( !empty( $theme_settings['typography']['lineHeight'] ) ){
-                            $css .= '--bs-body-line-height: ' . esc_attr( $theme_settings['typography']['lineHeight'] ) . ';';
-                        }
+				// line height
+				 if( !empty( $theme_settings['typography']['lineHeight'] ) ){
+					$css .= '--bs-body-line-height: ' . esc_attr( $theme_settings['typography']['lineHeight'] ) . ';';
+				}
 
 
-                           // font weight
-                         if( !empty( $theme_settings['typography']['fontWeight'] ) ){
-                            $css .= '--bs-body-font-weight: ' . esc_attr( $theme_settings['typography']['fontWeight'] ) . ';';
-                        }
+				   // font weight
+				 if( !empty( $theme_settings['typography']['fontWeight'] ) ){
+					$css .= '--bs-body-font-weight: ' . esc_attr( $theme_settings['typography']['fontWeight'] ) . ';';
+				}
 
-                        // Background
-                         if( !empty( $theme_settings['color']['background'] ) ){
-                            $css .= '--bs-body-bg: ' . esc_attr( $theme_settings['color']['background'] ) . ';';
-                        }
+				// Background
+				 if( !empty( $theme_settings['color']['background'] ) ){
+					$css .= '--bs-body-bg: ' . esc_attr( $theme_settings['color']['background'] ) . ';';
+				}
 
-                         // Background Gradient
-                         if( !empty( $theme_settings['color']['gradient'] ) ){
-                            $css .= 'background: ' . esc_attr( $theme_settings['color']['gradient'] ) . ';';
-                        }
+				 // Background Gradient
+				 if( !empty( $theme_settings['color']['gradient'] ) ){
+					$css .= 'background: ' . esc_attr( $theme_settings['color']['gradient'] ) . ';';
+				}
 
-                           // Background Gradient
-                         if( !empty( $theme_settings['color']['gradient'] ) ){
-                            $css .= 'background: ' . esc_attr( $theme_settings['color']['gradient'] ) . ';';
-                        }
+				   // Background Gradient
+				 if( !empty( $theme_settings['color']['gradient'] ) ){
+					$css .= 'background: ' . esc_attr( $theme_settings['color']['gradient'] ) . ';';
+				}
 
-                        // text color
-                        if( !empty( $theme_settings['color']['text'] ) ){
-                            $css .= '--bs-body-color: ' . esc_attr( $theme_settings['color']['text'] ) . ';';
-                        }
-
-
-                        // link colors
-                        if( !empty( $theme_settings['elements']['link']['color']['text'] ) ){
-                            $css .= '--bs-link-color: ' . esc_attr( $theme_settings['elements']['link']['color']['text'] ) . ';';
-                        }
-                        if( !empty( $theme_settings['elements']['link'][':hover']['color']['text'] ) ){
-                            $css .= '--bs-link-hover-color: ' . esc_attr( $theme_settings['elements']['link'][':hover']['color']['text'] ) . ';';
-                        }
+				// text color
+				if( !empty( $theme_settings['color']['text'] ) ){
+					$css .= '--bs-body-color: ' . esc_attr( $theme_settings['color']['text'] ) . ';';
+				}
 
 
+				// link colors
+				if( !empty( $theme_settings['elements']['link']['color']['text'] ) ){
+					$css .= '--bs-link-color: ' . esc_attr( $theme_settings['elements']['link']['color']['text'] ) . ';';
+				}
+				if( !empty( $theme_settings['elements']['link'][':hover']['color']['text'] ) ){
+					$css .= '--bs-link-hover-color: ' . esc_attr( $theme_settings['elements']['link'][':hover']['color']['text'] ) . ';';
+				}
 
-                        if($css){
-                            echo  $is_fse ? 'body.editor-styles-wrapper{' . esc_attr( $css ) . '}' : 'body{' . esc_attr( $css ) . '}';
-                        }
+				if($css){
+					$custom_css .= $is_fse ? 'body.editor-styles-wrapper{' . esc_attr( $css ) . '}' : 'body{' . esc_attr( $css ) . '}';
+				}
 
-                        $bep = $is_fse ? 'body.editor-styles-wrapper ' : '';
+				$bep = $is_fse ? 'body.editor-styles-wrapper ' : '';
 
+				// Headings
+				$headings_css = '';
+				if( !empty( $theme_settings['elements']['heading']['color']['text'] ) ){
+					$headings_css .= "color: " . esc_attr( $theme_settings['elements']['heading']['color']['text'] ) . ";";
+				}
 
-                        // Headings
-                        $headings_css = '';
-                        if( !empty( $theme_settings['elements']['heading']['color']['text'] ) ){
-                            $headings_css .= "color: " . esc_attr( $theme_settings['elements']['heading']['color']['text'] ) . ";";
-                        }
+				// heading background
+				if( !empty( $theme_settings['elements']['heading']['color']['background'] ) ){
+					$headings_css .= 'background: ' . esc_attr( $theme_settings['elements']['heading']['color']['background'] ) . ';';
+				}
 
-                        // heading background
-                        if( !empty( $theme_settings['elements']['heading']['color']['background'] ) ){
-                            $headings_css .= 'background: ' . esc_attr( $theme_settings['elements']['heading']['color']['background'] ) . ';';
-                        }
+				 // heading font family
+				if( !empty( $theme_settings['elements']['heading']['typography']['fontFamily'] ) ){
+					$headings_css .= 'font-family: ' . esc_attr( $theme_settings['elements']['heading']['typography']['fontFamily']  ) . ';';
+				}
 
-                         // heading font family
-                        if( !empty( $theme_settings['elements']['heading']['typography']['fontFamily'] ) ){
-                            $headings_css .= 'font-family: ' . esc_attr( $theme_settings['elements']['heading']['typography']['fontFamily']  ) . ';';
-                        }
+				if( $headings_css ){
+					$custom_css .= "$bep h1,$bep h2,$bep h3, $bep h4,$bep h5,$bep h6{ " . esc_attr( $headings_css ) . "}";
+				}
 
-                        if( $headings_css ){
-                            echo "$bep h1,$bep h2,$bep h3, $bep h4,$bep h5,$bep h6{ " . esc_attr( $headings_css ) . "}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-                        }
+				$hs = array('h1','h2','h3','h4','h5','h6');
 
-                        $hs = array('h1','h2','h3','h4','h5','h6');
+				foreach($hs as $hn){
+					$h_css = '';
+					 if( !empty( $theme_settings['elements'][$hn]['color']['text'] ) ){
+						$h_css .= 'color: ' . esc_attr( $theme_settings['elements'][$hn]['color']['text'] ) . ';';
+					 }
 
-                        foreach($hs as $hn){
-                            $h_css = '';
-                             if( !empty( $theme_settings['elements'][$hn]['color']['text'] ) ){
-                                $h_css .= 'color: ' . esc_attr( $theme_settings['elements'][$hn]['color']['text'] ) . ';';
-                             }
+					  if( !empty( $theme_settings['elements'][$hn]['typography']['fontSize'] ) ){
+						$h_css .= 'font-size: ' . esc_attr( $theme_settings['elements'][$hn]['typography']['fontSize']  ) . ';';
+					 }
 
-                              if( !empty( $theme_settings['elements'][$hn]['typography']['fontSize'] ) ){
-                                $h_css .= 'font-size: ' . esc_attr( $theme_settings['elements'][$hn]['typography']['fontSize']  ) . ';';
-                             }
+					  if( !empty( $theme_settings['elements'][$hn]['typography']['fontFamily'] ) ){
+						$h_css .= 'font-family: ' . esc_attr( $theme_settings['elements'][$hn]['typography']['fontFamily']  ) . ';';
+					 }
 
-                              if( !empty( $theme_settings['elements'][$hn]['typography']['fontFamily'] ) ){
-                                $h_css .= 'font-family: ' . esc_attr( $theme_settings['elements'][$hn]['typography']['fontFamily']  ) . ';';
-                             }
+					 if($h_css){
+						$custom_css .= esc_attr( $bep  . $hn ) . '{'.esc_attr( $h_css ).'}';
+					 }
+				}
+			}
+			
+			if ( $custom_css ) {
+				echo $custom_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
 
-                             if($h_css){
-                                echo esc_attr( $bep  . $hn ) . '{'.esc_attr( $h_css ).'}';
-                             }
-                        }
-                    }
+			// Pagination on Hello Elementor theme.
+			if ( function_exists( 'hello_elementor_setup' ) ) {
+				echo '.aui-nav-links .pagination{justify-content:inherit}';
+			}
+			?></style><?php
+			$custom_css = ob_get_clean();
 
-                    // Pagination on Hello Elementor theme.
-                    if ( function_exists( 'hello_elementor_setup' ) ) {
-                        echo '.aui-nav-links .pagination{justify-content:inherit}';
-                    }
-                ?>
-            </style>
-			<?php
 			/*
 			 * We only add the <script> tags for code highlighting, so we strip them from the output.
 			 */
 			return str_replace( array(
 				'<style>',
 				'</style>'
-			), '', self::minify_css( ob_get_clean() ) );
+			), '', self::minify_css( $custom_css ) );
 		}
 
 		/**
@@ -3127,6 +3115,227 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			$output = ob_get_clean();
 
 			return str_replace( array( '<script>', '</script>' ), '', self::minify_js( $output ) );
+		}
+
+		/**
+		 * Check if block editor page.
+		 *
+		 * @since 0.2.27
+		 *
+		 * @return bool
+		 */
+		public static function is_block_editor() {
+			if ( is_admin() ) {
+				$current_screen = function_exists('get_current_screen' ) ? get_current_screen() : array();
+
+				if ( ! empty( $current_screen ) && $current_screen->is_block_editor() ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/**
+		 * Checks if the current call is a ajax call to get the block content.
+		 *
+		 * This can be used in your widget to return different content as the block content.
+		 *
+		 * @since 0.2.27
+		 *
+		 * @return bool
+		 */
+		public static function is_block_content_call() {
+			$result = false;
+			if ( wp_doing_ajax() && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'super_duper_output_shortcode' ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Tests if the current output is inside a Divi preview.
+		 *
+		 * @since 0.2.27
+		 *
+		 * @return bool
+		 */
+		public static function is_divi_preview() {
+			$result = false;
+			if ( isset( $_REQUEST['et_fb'] ) || isset( $_REQUEST['et_pb_preview'] ) || ( is_admin() && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor' ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Tests if the current output is inside a elementor preview.
+		 *
+		 *
+		 * @since 0.2.27
+		 *
+		 * @return bool
+		 */
+		public static function is_elementor_preview() {
+			$result = false;
+			if ( isset( $_REQUEST['elementor-preview'] ) || ( is_admin() && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor' ) || ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor_ajax' ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Tests if the current output is inside a Beaver builder preview.
+		 *
+		 * @since 0.2.27
+		 *
+		 * @return bool
+		 */
+		public static function is_beaver_preview() {
+			$result = false;
+			if ( isset( $_REQUEST['fl_builder'] ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Tests if the current output is inside a siteorigin builder preview.
+		 *
+		 * @since 0.2.27
+		 *
+		 * @return bool
+		 */
+		public static function is_siteorigin_preview() {
+			$result = false;
+			if ( ! empty( $_REQUEST['siteorigin_panels_live_editor'] ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Tests if the current output is inside a cornerstone builder preview.
+		 *
+		 * @since 0.2.27
+		 *
+		 * @return bool
+		 */
+		public static function is_cornerstone_preview() {
+			$result = false;
+			if ( ! empty( $_REQUEST['cornerstone_preview'] ) || basename( $_SERVER['REQUEST_URI'] ) == 'cornerstone-endpoint' ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Tests if the current output is inside a fusion builder preview.
+		 *
+		 * @return bool
+		 *@since 1.1.0
+		 */
+		public static function is_fusion_preview() {
+			$result = false;
+			if ( ! empty( $_REQUEST['fb-edit'] ) || ! empty( $_REQUEST['fusion_load_nonce'] ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Tests if the current output is inside a Oxygen builder preview.
+		 *
+		 * @return bool
+		 *@since 1.0.18
+		 */
+		public static function is_oxygen_preview() {
+			$result = false;
+			if ( ! empty( $_REQUEST['ct_builder'] ) || ( ! empty( $_REQUEST['action'] ) && ( substr( $_REQUEST['action'], 0, 11 ) === "oxy_render_" || substr( $_REQUEST['action'], 0, 10 ) === "ct_render_" ) ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Check for Kallyas theme Zion builder preview.
+		 *
+		 * @since 0.2.27
+		 *
+		 * @return bool
+		 */
+		public static function is_kallyas_zion_preview() {
+			$result = false;
+
+			if ( function_exists( 'znhg_kallyas_theme_config' ) && ! empty( $_REQUEST['zn_pb_edit'] ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Check for Bricks theme builder preview.
+		 *
+		 * @since 0.2.27
+		 *
+		 * @return bool
+		 */
+		public static function is_bricks_preview() {
+			$result = false;
+
+			if ( function_exists( 'bricks_is_builder' ) && ( bricks_is_builder() || bricks_is_builder_call() ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * General function to check if we are in a preview situation.
+		 *
+		 * @since 0.2.27
+		 *
+		 * @return bool
+		 */
+		public static function is_preview() {
+			$preview = false;
+
+			if ( self::is_block_editor() ) {
+				return true;
+			}
+
+			if( self::is_block_content_call() ) {
+				$preview = true;
+			} elseif ( self::is_divi_preview() ) {
+				$preview = true;
+			} elseif ( self::is_elementor_preview() ) {
+				$preview = true;
+			} elseif ( self::is_beaver_preview() ) {
+				$preview = true;
+			} elseif ( self::is_siteorigin_preview() ) {
+				$preview = true;
+			} elseif ( self::is_cornerstone_preview() ) {
+				$preview = true;
+			} elseif ( self::is_fusion_preview() ) {
+				$preview = true;
+			} elseif ( self::is_oxygen_preview() ) {
+				$preview = true;
+			} elseif( self::is_kallyas_zion_preview() ) {
+				$preview = true;
+			} elseif( self::is_bricks_preview() ) {
+				$preview = true;
+			}
+
+			return $preview;
 		}
 	}
 

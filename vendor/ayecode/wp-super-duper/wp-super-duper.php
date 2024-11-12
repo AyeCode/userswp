@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.13' );
+	define( 'SUPER_DUPER_VER', '1.2.14' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -4506,7 +4506,9 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 
 					$output = $args['before_title'] . $title . $args['after_title'];
 				} else {
-					$title_tag = esc_attr( $instance['widget_title_tag'] );
+					$tag 			= esc_attr( $instance['widget_title_tag'] );
+					$allowed_tags 	= array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'div', 'p' );
+					$title_tag      = in_array( $tag, $allowed_tags, true ) ? esc_attr( $tag ) : 'h2';
 
 					// classes
 					$title_classes = array();

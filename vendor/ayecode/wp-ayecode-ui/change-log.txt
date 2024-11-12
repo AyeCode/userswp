@@ -1,3 +1,11 @@
+= 0.2.28 - 2024-11-12 =
+* iOS fixed images zoomed way in with background cover, changed to scroll for ios - CHANGED
+
+= 0.2.27 - 2024-11-06 =
+* Don't apply custom colors to standard wp-admin pages - CHANGED
+* Carousel in BootStrap modal not working on RTL - FIXED
+* Update FlatPickr JS library to v4.6.13 - CHANGED
+
 = 0.2.26 - 2024-09-12 =
 * Primary color setting not working after update - FIXED
 
