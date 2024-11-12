@@ -1,3 +1,6 @@
+= 1.2.14 - 2024-11-12 =
+* widget_title_tag param now filtered by allowed tags list - CHANGED
+
 = 1.2.13 - 2024-10-10 =
 * sd_template_page_options() not allowing child page selection - FIXED
 * Filter added `sd_template_page_options_limit` to adjust the 500 pages limit - ADDED

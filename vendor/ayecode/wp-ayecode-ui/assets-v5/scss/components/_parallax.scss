@@ -47,3 +47,10 @@ _:-ms-lang(x), .jarallax .jarallax-img {
     width: 100%;
   }
 }
+
+// disable fixed background image on iOS where we have fixed background and cover type
+@supports (-webkit-overflow-scrolling: touch) {
+  .wp-block-blockstrap-blockstrap-widget-container.bg-image-fixed {
+    background-attachment: scroll !important;
+  }
+}
