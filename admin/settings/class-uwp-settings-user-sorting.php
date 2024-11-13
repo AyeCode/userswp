@@ -305,7 +305,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
             <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr( $form_type ); ?>"/>
             <input type="hidden" name="manage_field_type" class="manage_field_type" value="user_sorting">
 			<?php wp_nonce_field( 'uwp-admin-settings','uwp-admin-settings' ); ?>
-            <ul>
+            <ul class="row row-cols-2 px-2 mb-0">
 				<?php
 
 				if ( ! empty( $fields ) ) {
@@ -321,9 +321,9 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 							$field_icon = '<i class="fas fa-sort" aria-hidden="true"></i>';
 						}
 						?>
-                        <li>
+                        <li class="col px-1">
                             <a id="uwp-<?php echo esc_attr( $field['htmlvar_name'] ); ?>"
-                               class="uwp-draggable-form-items"
+                               class="uwp-draggable-form-itemsx btn btn-sm d-block m-0 btn-outline-gray text-dark text-start"
                                data-field_type="<?php echo isset( $field['field_type'] ) ? esc_attr( $field['field_type'] ) : ''; ?>"
                                data-site_title="<?php echo isset( $field['site_title'] ) ? esc_attr( $field['site_title'] ) : ''; ?>"
                                data-field_icon="<?php echo isset( $field['field_icon'] ) ? esc_attr( $field['field_icon'] ) : ''; ?>"
@@ -360,7 +360,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			?>
             <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr( $form_type ); ?>"/>
             <input type="hidden" name="manage_field_type" class="manage_field_type" value="user_sorting">
-            <ul class="uwp-profile-tabs-selected core uwp_form_extras">
+            <ul class="uwp-profile-tabs-selected core uwp_form_extras ps-0 list-group ">
 				<?php
 				$tabs = $wpdb->get_results( "SELECT * FROM  " . $table_name . " order by sort_order asc" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				if ( ! empty( $tabs ) ) {
@@ -496,20 +496,30 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 
 			?>
             <li class="text li-settings" id="licontainer_<?php echo esc_attr( $field_id ); ?>">
-                <i class="fas fa-caret-down toggle-arrow" aria-hidden="true" onclick="uwp_show_hide(this);"></i>
-                <div class="title title<?php echo esc_attr( $field_id ); ?> uwp-fieldset">
+                <div class="title title<?php echo esc_attr( $field_id ); ?> uwp-fieldset hover-shadow dd-form d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx text-start bg-light " onclick="uwp_tabs_item_settings(this);">
 					<?php
 					$nonce = wp_create_nonce( 'uwp_sort_extras_nonce_' . $field_id );
-					echo $field_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					?>
-                    <b><?php echo esc_html( uwp_ucwords( ' ' . $site_title ) ); ?></b>
+                    <div class="  flex-fill font-weight-bold fw-bold">
+                        <?php echo $field_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                        <b><?php echo esc_html( uwp_ucwords( ' ' .  $site_title )  ); ?></b>
+                        <span class="field-type float-end text-end small"><?php echo ' (' . esc_html( uwp_ucwords( $field_type ) ) . ')'; ?></span>
+                    </div>
+                    <div class="dd-handle ui-sortable-handle">
+                        <i class="far fa-trash-alt text-danger ml-2 ms-2" id="delete-16"
+                           onclick="delete_field('<?php echo esc_attr( $field_id ); ?>', '<?php echo esc_attr( wp_create_nonce( 'uwp_sort_delete_nonce_' . $field_id ) ); ?>', '<?php echo esc_attr( $htmlvar_name ); ?>', 'user_sorting');event.stopPropagation();return false;"></i>
+                        <i class="fas fa-grip-vertical text-muted ml-2 ms-2" style="cursor: move" aria-hidden="true"></i>
+                    </div>
 
                 </div>
+
+            <?php // store the form as a template. This saves a load of memory on page load. ?>
+        <script type="text/template" class="dd-setting <?php echo 'dd-type-'.esc_attr( $field_type );?>">
                 <div id="field_frm<?php echo esc_attr( $field_id ); ?>" class="field_frm"
                      style="display:<?php if ( $field_ins_upd == 'submit' ) {
 					     echo 'block;';
 				     } else {
-					     echo 'none;';
+					    // echo 'none;';
 				     } ?>">
 
                     <input type="hidden" name="_wpnonce" id="uwp_sort_extras_nonce"
@@ -524,77 +534,90 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
                     <input type="hidden" name="tab_level" value="<?php echo esc_attr( $tab_level ); ?>"/>
                     <input type="hidden" name="htmlvar_name" value="<?php echo esc_attr( $htmlvar_name ) ?>"/>
 
-                    <ul class="widefat post fixed" style="width:100%;">
 
-                        <li class="uwp-setting-name">
-                            <label for="site_title" class="uwp-tooltip-wrap">
-								<?php
-								echo uwp_help_tip( __( 'This is the text used for the sort option.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								esc_html_e( 'Frontend title', 'userswp' ); ?>
-                            </label>
-                            <div class="uwp-input-wrap">
-                                <input type="text" name="site_title" id="site_title"
-                                       value="<?php echo esc_attr( $site_title ); ?>"/>
-                            </div>
-                        </li>
+                    <?php
+                    // site_title
+                    echo aui()->input(
+                        array(
+                            'id'                => 'site_title',
+                            'name'              => 'site_title',
+                            'label_type'        => 'top',
+                            'label'             => esc_html__( 'Frontend title', 'userswp' ) . uwp_help_tip( __( 'This is the text used for the sort option.', 'userswp' ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                            'type'              =>   'text',
+                            // 'wrap_class'        => uwp_advanced_toggle_class(),
+                            'value' => $site_title,
+                        )
+                    );
 
-                        <li class="uwp-setting-name">
-                            <label for="sort" class="uwp-tooltip-wrap">
-								<?php
-								echo uwp_help_tip( __( 'Select the sort direction: (A-Z or Z-A).', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								esc_html_e( 'Ascending or Descending', 'userswp' ); ?>
-                            </label>
-                            <div class="uwp-input-wrap">
-                                <select name="sort" id="uwp-sort-<?php echo esc_attr( $field->id ); ?>">
-									<?php $value = isset( $field->sort ) && $field->sort == 'desc' ? 'desc' : 'asc'; ?>
-                                    <option value="asc" <?php selected( 'asc', $value, true ); ?>><?php esc_html_e( 'Ascending', 'userswp' ); ?></option>
-                                    <option value="desc" <?php selected( 'desc', $value, true ); ?>><?php esc_html_e( 'Descending', 'userswp' ); ?></option>
-                                </select>
-                            </div>
-                        </li>
 
-                        <li class="uwp-setting-name">
+                    // sort
+                    $value = isset( $field->sort ) && $field->sort == 'desc' ? 'desc' : 'asc';
+                    echo aui()->select(
+                        array(
+                            'id'                => 'uwp-sort-'.esc_attr( $field->id ),
+                            'name'              => 'sort',
+                            'label_type'        => 'top',
+                            'multiple'   => false,
+                            'class'             => ' mw-100',
+                            'options'       => array(
+                                    'asc'  => esc_html__( 'Ascending', 'userswp' ),
+                                    'desc' => esc_html__( 'Descending', 'userswp' ),
+                            ),
+                            'label'              => __('Ascending or Descending','userswp') . uwp_help_tip(__( 'Select the sort direction: (A-Z or Z-A).', 'userswp' ) ) ,  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                            'value'         => $value,
+                            //                                    'wrap_class'    => uwp_advanced_toggle_class(),
+                        )
+                    );
 
-                            <label for="is_default" class="uwp-tooltip-wrap">
-								<?php
-								echo uwp_help_tip( __( 'This sets the option as the overall default sort value, there can be only one.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								esc_html_e( 'Default sort?', 'userswp' ); ?>
-                            </label>
-                            <div class="uwp-input-wrap">
-                                <input type="radio" name="is_default"
-                                       value="1" <?php if ( isset( $field->is_default ) && $field->is_default == 1 ) {
-									echo 'checked="checked"';
-								} ?>/>
-                            </div>
 
-                        </li>
+                    echo aui()->input(
+                        array(
+                            'id' => 'is_default',
+                            'name' => 'is_default',
+                            'type' => 'checkbox', //'!$exclude_privacy_option ? 'hidden' : 'checkbox',
+                            'label_type' => 'horizontal',
+                            'label_col' => '4',
+                            'label' => __( 'Default sort', 'userswp' ) ,
+                            'checked' => isset( $field->is_default ) && $field->is_default == 1,
+                            'value' => '1',
+                            'switch' => 'md',
+                            'label_force_left' => true,
+                            'help_text' => uwp_help_tip( __( 'This sets the option as the overall default sort value, there can be only one.', 'userswp' ) ),
+                        )
+                    );
 
-                        <li class="uwp-setting-name">
-                            <label for="is_active" class="uwp-tooltip-wrap">
-								<?php
-								echo uwp_help_tip( __( 'Set if this sort option is active or not, if not it will not be shown to users.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								esc_html_e( 'Is active?', 'userswp' ); ?>
-                            </label>
-                            <div class="uwp-input-wrap">
-								<?php $value = isset( $field->is_active ) && $field->is_active ? $field->is_active : 0; ?>
-                                <input type="hidden" name="is_active" value="0"/>
-                                <input type="checkbox" name="is_active" value="1" <?php checked( $value, 1, true ); ?> />
-                            </div>
-                        </li>
+                    echo aui()->input(
+                        array(
+                            'id' => 'is_active',
+                            'name' => 'is_active',
+                            'type' => 'checkbox', //'!$exclude_privacy_option ? 'hidden' : 'checkbox',
+                            'label_type' => 'horizontal',
+                            'label_col' => '4',
+                            'label' => __( 'Is active', 'userswp' ) ,
+                            'checked' => isset( $field->is_active ) && $field->is_active,
+                            'value' => '1',
+                            'switch' => 'md',
+                            'label_force_left' => true,
+                            'help_text' => uwp_help_tip( __( 'Set if this sort option is active or not, if not it will not be shown to users.', 'userswp' ) ),
+                        )
+                    );
+                    ?>
+
+
+
+
+
                         <input type="hidden" readonly="readonly" name="sort_order" id="sort_order" value="<?php if ( isset( $field->sort_order ) ) { echo esc_attr( $field->sort_order ); } ?>" size="50"/>
 						<?php do_action( 'uwp_user_sorting_custom_fields', $field_id ); ?>
-                        <li>
+
                             <div class="uwp-input-wrap uwp-tab-actions" data-setting="save_button">
-                                <input type="button" class="button button-primary" name="save" id="save"
-                                       value="<?php esc_attr_e( 'Save', 'userswp' ); ?>"
-                                       onclick="save_field('<?php echo esc_attr( $field_id ); ?>', 'user_sorting')"/>
-                                <a class="item-delete submitdelete deletion"
-                                   id="delete-<?php echo esc_attr( $field_id ); ?>" href="javascript:void(0);"
-                                   onclick="delete_field('<?php echo esc_attr( $field_id ); ?>', '<?php echo esc_attr( wp_create_nonce( 'uwp_sort_delete_nonce_' . $field_id ) ); ?>', '<?php echo esc_attr( $htmlvar_name ); ?>', 'user_sorting')"><?php esc_html_e( "Remove", "userswp" ); ?></a>
+
+                                <a class=" btn btn-link text-muted" href="javascript:void(0);" onclick="uwp_tabs_close_settings(this); return false;"><?php _e("Close","userswp");?></a>
+                                <a href='javascript:void(0);' type="button" class="btn btn-primary"  id="save"
+                                   onclick="save_field('<?php echo esc_attr( $field_id ); ?>', 'user_sorting');return false;"><?php echo esc_attr( __( 'Save', 'userswp' ) ); ?></a>
                             </div>
-                        </li>
-                    </ul>
                 </div>
+        </script>
             </li>
 			<?php
 		}

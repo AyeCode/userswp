@@ -241,6 +241,7 @@ function aui_fa_select_format(option) {
     return '<i class="fa-lg ' + icon + '"></i>  ' + option.text;
 }
 
+// @todo proably not needed
 function uwp_show_hide($this) {
     var is_open = !jQuery($this).parent('.li-settings').find('.field_frm').first().is(':hidden');
     jQuery('.field_frm').hide();
@@ -272,6 +273,7 @@ function uwp_init_advanced_settings() {
         jQuery(".uwp-advanced-toggle").toggleClass("uwpa-hide");
         console.log('toggle');
         jQuery(".uwp-advanced-setting, #default_location_set_address_button").toggleClass("uwpa-show");
+        jQuery(".uwp-advanced-setting, #default_location_set_address_button").collapse('toggle');
     });
 }
 

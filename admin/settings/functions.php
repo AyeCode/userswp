@@ -122,3 +122,21 @@ function uwp_get_register_only_fields(){
 	$reg_only_fields = array('username', 'register_gdpr', 'register_tos', 'subscribe');
 	return apply_filters('uwp_register_mandatory_fields', $reg_only_fields);
 }
+
+
+/**
+ * Get the advances setting toggle CSS class.
+ *
+ *
+ * @param string $default Default CSS class.
+ * @return string CSS class.
+ */
+function uwp_advanced_toggle_class( $default = '' ) {
+    if ( uwp_get_option( 'admin_disable_advanced', false ) ) {
+        $class = '';
+    } else {
+        $class = $default ? $default : 'uwp-advanced-setting collapse in';
+    }
+
+    return $class;
+}
