@@ -37,7 +37,7 @@ class UsersWP_User_Types {
         do_action( 'uwp_user_types_start' );
 
         if ( isset( $_GET['form'] ) ) {
-            self::output_edit_form();
+            self::output_edit_form( $_GET['form'] );
         } else {
             self::display_table();
         }
@@ -46,7 +46,129 @@ class UsersWP_User_Types {
     /**
      * Output the edit form for a user type.
      */
-    private static function output_edit_form(): void {
+    private static function output_edit_form( $form_type ): void {
+        if ( $form_type === 'add' ) {
+            self::display_add_form();
+        } else {
+            self::display_edit_form();
+        }
+    }
+
+    /**
+     * Display the 'add' user type form.
+     */
+    private static function display_add_form(): void {
+		$all_pages = wp_list_pluck( get_pages(), 'post_title', 'ID' );
+		$user_roles = uwp_get_user_roles();
+		$registration_form_actions = uwp_get_registration_form_actions();
+		$current_role = get_option( 'default_role' );
+
+		// Remove admin role
+		unset( $user_roles['administrator'] );
+		?>
+        <div class="multiple-registration-form wrap">
+            <h1 class="wp-heading-inline"><?php esc_html_e( 'Add User Type', 'userswp' ); ?></h1>
+            <form class="uwp_user_type_form" id="uwp_user_type_form" method="POST" style="max-width: 700px;">
+                <input type="hidden" name="action" value="add">
+                <table class="form-table bsui userswp" id="uwp-form-more-options">
+                    <?php
+                    wp_nonce_field( 'uwp-create-register-form-nonce', 'uwp_create_register_form_nonce' );
+                    self::render_text_field(
+                        'uwp_form_title',
+                        'form_title',
+                        __( 'Title:', 'userswp' ),
+                        __( 'Title of the form', 'userswp' ),
+                        '',
+                        array(
+                            'required' => 'required'
+                        )
+                    );
+
+                    if ( ! empty( $user_roles ) && is_array( $user_roles ) ) {
+                        self::render_select_field(
+                            'multiple_registration_user_role',
+                            'user_role',
+                            __( 'User Role to Assign:', 'userswp' ),
+                            __( 'Role to assign when user register via this form.', 'userswp' ),
+                            $user_roles,
+                            $current_role
+                        );
+                        }
+
+                    self::render_select_field(
+                        'uwp_registration_action',
+                        'reg_action',
+                        __( 'Registration Action:', 'userswp' ),
+                        __( 'Select how registration should be handled.', 'userswp' ),
+                        $registration_form_actions,
+                        ''
+                    );
+
+                    self::render_select_field(
+                        'register_redirect_to',
+                        'redirect_to',
+                        __( 'Redirect Page:', 'userswp' ),
+                        __( 'Set the page to redirect the user to after signing up.', 'userswp' ),
+                        self::get_redirect_options(),
+                        '',
+                        false,
+                        array( 'style' => 'display:none;' )
+                    );
+
+                    self::render_text_field(
+                        'register_redirect_custom_url',
+                        'custom_url',
+                        __( 'Custom Redirect URL:', 'userswp' ),
+                        __( 'Set the page to redirect the user to after signing up. If default redirect has been set then WordPress default will be used.', 'userswp' ),
+                        '',
+                        array( 'style' => 'display:none;' )
+                    );
+
+                    self::render_select_field(
+                        'multiple_registration_gdpr_page',
+                        'gdpr_page',
+                        __( 'GDPR Policy Page:', 'userswp' ),
+                        __( 'Page to link when GDPR policy page custom field added to form. If not set then default setting will be used.', 'userswp' ),
+                        $all_pages,
+                        '',
+                        esc_attr__( 'Select a page&hellip;', 'userswp' )
+                    );
+
+                    self::render_select_field(
+                        'multiple_registration_tos_page',
+                        'tos_page',
+                        __( 'TOS Page:', 'userswp' ),
+                        __( 'Page to link when Terms and Conditions custom field added to form. If not set then default setting will be used.', 'userswp' ),
+                        $all_pages,
+                        '',
+                        esc_attr__( 'Select a page&hellip;', 'userswp' )
+                    );
+                    ?>
+                </table>
+
+                <?php
+                do_action( 'uwp_user_type_form_before_submit', array() );
+                ?>
+
+                <div class="bsui">
+                    <div class="alert alert-success x-hidden"></div>
+                    <div class="alert alert-danger x-hidden"></div>
+                </div>
+
+                <div class="bsui">
+                    <button class="btn btn-md btn-primary" id="form_update" type="submit" name="form_update">
+                        <?php esc_html_e( 'Add User Type', 'userswp' ); ?>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <?php
+    }
+
+    /**
+     * Display the 'edit' user type form.
+     */
+    private static function display_edit_form(): void {
         $form_id = isset( $_GET['form'] ) ? (int) $_GET['form'] : 1;
         $register_forms = self::get_register_forms();
 
@@ -58,7 +180,8 @@ class UsersWP_User_Types {
         ?>
         <div class="multiple-registration-form wrap">
             <h1 class="wp-heading-inline"><?php esc_html_e( 'Edit User Type', 'userswp' ); ?></h1>
-            <form class="uwp_user_type_form" id="uwp_user_type_form" method="POST">
+            <form class="uwp_user_type_form" id="uwp_user_type_form" method="POST" style="max-width: 700px;">
+                <input type="hidden" name="action" value="edit">
                 <input type="hidden" name="manage_field_form_id" class="manage_field_form_id"
                         id="manage_field_form_id" value="<?php echo esc_attr( $form_id ); ?>">
                 <?php
@@ -82,13 +205,10 @@ class UsersWP_User_Types {
         ?>
         <div class="wrap">
 			<h1 class="wp-heading-inline"><?php esc_html_e( 'User Types', 'userswp' ); ?></h1>
-            <button data-nonce="<?php echo esc_attr( $nonce ); ?>"
-                class="page-title-action register-form-create"
-                type="button"
-                name="register_form_create"
-                id="form_create">
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=uwp_user_types&form=add' ) ); ?>" class="page-title-action">
                 <?php esc_html_e( 'Add User Type', 'userswp' ); ?>
-            </button>
+            </a>
+
             <p><?php esc_html_e( 'Create and manage different user types with custom roles and registration forms.', 'userswp' ); ?></p>
 
 			<form method="POST">
@@ -129,7 +249,7 @@ class UsersWP_User_Types {
                 'form_title',
                 __( 'Title:', 'userswp' ),
                 __( 'Title of the form', 'userswp' ),
-                ! empty( $current_form['title'] ) ? $current_form['title'] : ''
+                ! empty( $current_form['title'] ) ? $current_form['title'] : '',
             );
 
             if ( ! empty( $user_roles ) && is_array( $user_roles ) ) {
@@ -194,9 +314,12 @@ class UsersWP_User_Types {
             ?>
         </table>
 
-        <?php
-        do_action( 'uwp_user_type_form_before_submit', $current_form );
-        ?>
+        <?php do_action( 'uwp_user_type_form_before_submit', $current_form ); ?>
+
+        <div class="bsui">
+            <div class="alert alert-success x-hidden"></div>
+            <div class="alert alert-danger x-hidden"></div>
+        </div>
 
         <div class="bsui">
             <button class="btn btn-sm btn-primary" id="form_update" type="submit" name="form_update">
@@ -233,7 +356,8 @@ class UsersWP_User_Types {
                 ?>
             </th>
             <td>
-                <input id="<?php echo esc_attr( $id ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" class="form-control" />
+                <input id="<?php echo esc_attr( $id ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" class="bsui form-control" />
+                <div class="invalid-feedback"></div>
             </td>
         </tr>
         <?php

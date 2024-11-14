@@ -49,7 +49,7 @@ class UsersWP_User_Types_Table extends WP_List_Table {
 
     /**
      * Prepares table data for display
-     * 
+     *
      * Gets columns configuration, fetches table data, handles search filtering,
      * sorting, and pagination of items.
      *
@@ -88,7 +88,7 @@ class UsersWP_User_Types_Table extends WP_List_Table {
 
     /**
      * Defines the table columns and their titles
-     * 
+     *
      * @return array Array of column names and their labels
      */
     public function get_columns() {
@@ -113,7 +113,7 @@ class UsersWP_User_Types_Table extends WP_List_Table {
 
     /**
      * Defines sortable columns and their sort direction
-     * 
+     *
      * @return array Array of sortable columns with their sort direction
      */
     public function get_sortable_columns() {
@@ -126,7 +126,7 @@ class UsersWP_User_Types_Table extends WP_List_Table {
 
     /**
      * Fetches and formats the table data
-     * 
+     *
      * @return array Formatted table data
      */
     private function table_data() {
@@ -134,21 +134,23 @@ class UsersWP_User_Types_Table extends WP_List_Table {
         $register_forms = (array) uwp_get_option( 'multiple_registration_forms', array() );
 
         foreach ( $register_forms as $register_form ) {
-            $form_data = array(
-                'id'         => $register_form['id'],
-                'title'      => $register_form['title'],
-                'slug'       => $register_form['slug'] ?? '',
-                'user_role'  => $register_form['user_role'] ?? get_option( 'default_role' ),
-                'reg_action' => $register_form['reg_action'] ?? 'auto_approve',
-            );
+            if ( isset( $register_form['id'], $register_form['title'] ) ) {
+                $form_data = array(
+                    'id'         => (int) $register_form['id'],
+                    'title'      => $register_form['title'],
+                    'slug'       => $register_form['slug'] ?? '',
+                    'user_role'  => $register_form['user_role'] ?? get_option( 'default_role' ),
+                    'reg_action' => $register_form['reg_action'] ?? 'auto_approve',
+                );
 
-            $user_roles = uwp_get_user_roles();
-            $reg_actions = uwp_get_registration_form_actions();
+                $user_roles = uwp_get_user_roles();
+                $reg_actions = uwp_get_registration_form_actions();
 
-            $form_data['user_role'] = $user_roles[ $form_data['user_role'] ] ?? $form_data['user_role'];
-            $form_data['reg_action'] = $reg_actions[ $form_data['reg_action'] ] ?? $form_data['reg_action'];
+                $form_data['user_role'] = $user_roles[ $form_data['user_role'] ] ?? $form_data['user_role'];
+                $form_data['reg_action'] = $reg_actions[ $form_data['reg_action'] ] ?? $form_data['reg_action'];
 
-            $data[] = apply_filters( 'uwp_user_types_table_data', $form_data, $register_form );
+                $data[] = apply_filters( 'uwp_user_types_table_data', (array) $form_data, (array) $register_form );
+            }
         }
 
         return $data;
@@ -156,7 +158,7 @@ class UsersWP_User_Types_Table extends WP_List_Table {
 
     /**
      * Handles default column value display
-     * 
+     *
      * @param array  $item        The current row item
      * @param string $column_name The current column name
      * @return mixed The column value or dash if empty
@@ -170,7 +172,7 @@ class UsersWP_User_Types_Table extends WP_List_Table {
 
     /**
      * Customizes the display of the title column
-     * 
+     *
      * @param array $item The current row item
      * @return string Formatted title cell with row actions
      */
@@ -219,7 +221,7 @@ class UsersWP_User_Types_Table extends WP_List_Table {
 
     /**
      * Handles custom sorting of table data
-     * 
+     *
      * Sorts based on column values using GET parameters for order and direction.
      * Sanitizes input parameters for security.
      *
@@ -249,7 +251,7 @@ class UsersWP_User_Types_Table extends WP_List_Table {
 
     /**
      * Filters table data based on search term
-     * 
+     *
      * Searches through all column values for matches with the search term.
      *
      * @param array  $data   Array of table data
@@ -274,7 +276,7 @@ class UsersWP_User_Types_Table extends WP_List_Table {
 
     /**
      * Defines available bulk actions
-     * 
+     *
      * @return array Array of bulk actions
      */
     protected function get_bulk_actions() {
@@ -286,7 +288,7 @@ class UsersWP_User_Types_Table extends WP_List_Table {
 
     /**
      * Processes bulk actions
-     * 
+     *
      * Adds admin notice after successful deletion.
      */
     public function process_bulk_action() {
@@ -306,7 +308,7 @@ class UsersWP_User_Types_Table extends WP_List_Table {
 
     /**
      * Displays the table navigation
-     * 
+     *
      * @param string $which Location of the nav ('top' or 'bottom')
      */
     protected function display_tablenav( $which ) {
