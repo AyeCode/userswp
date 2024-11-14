@@ -32,15 +32,18 @@ class UsersWP_Form_Builder {
 		}
 
 		$form = '';
-		if(isset($_GET['form']) && !empty($_GET['form'])){
-			$form = '&form='.(int) $_GET['form'];
+		if ( isset( $_GET['form'] ) && ! empty( $_GET['form'] ) ) {
+			$form = '&form=' . (int) $_GET['form'];
         }
 
 		// Get tabs for the form builder page
-		$tabs = apply_filters( 'uwp_form_builder_tabs_array', array(
-			'account'  => __( 'Account', 'userswp' ),
-			'register' => __( 'Register', 'userswp' ),
-		) );
+		$tabs = apply_filters(
+            'uwp_form_builder_tabs_array',
+            array(
+				'account'  => __( 'Account', 'userswp' ),
+				'register' => __( 'Register', 'userswp' ),
+            )
+        );
 
 		?>
         <div class="wrap">
@@ -102,10 +105,13 @@ class UsersWP_Form_Builder {
                     </div>
 					<?php
 
-					$predefined_fields = apply_filters( 'uwp_predefined_fields_tabs', array(
-						'account',
-						'profile-tabs'
-					) );
+					$predefined_fields = apply_filters(
+                        'uwp_predefined_fields_tabs',
+                        array(
+							'account',
+							'profile-tabs',
+                        )
+                    );
 					if ( in_array( $form_type, $predefined_fields ) ) {
 						?>
                         <h3>
@@ -117,10 +123,12 @@ class UsersWP_Form_Builder {
 								<?php do_action( 'uwp_manage_available_fields_predefined', $form_type ); ?>
                             </div>
                         </div>
-					<?php }
+					<?php
+                    }
 
 					$custom_fields = apply_filters( 'uwp_custom_fields_tabs', array( 'account', 'profile-tabs' ) );
-					if ( in_array( $form_type, $custom_fields ) ) { ?>
+					if ( in_array( $form_type, $custom_fields ) ) {
+                    ?>
                         <h3>
 							<?php esc_html_e( 'Custom Fields', 'userswp' ); ?>
                         </h3>
@@ -130,7 +138,8 @@ class UsersWP_Form_Builder {
 								<?php do_action( 'uwp_manage_available_fields_custom', $form_type ); ?>
                             </div>
                         </div>
-					<?php }
+					<?php
+                    }
 					do_action( 'uwp_after_available_fields', $default_tab );
 					?>
                 </div>
@@ -142,14 +151,16 @@ class UsersWP_Form_Builder {
                         <span>
                             <?php
                             $title = __( 'List of fields that will appear in the account form.', 'userswp' );
-                            echo apply_filters( 'uwp_form_builder_selected_fields_head', $title, $form_type ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                            echo apply_filters( 'uwp_form_builder_selected_fields_head', $title, $form_type ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+                            ?>
                         </span>
                     </h3>
 
                     <p>
 						<?php
 						$note = sprintf( __( 'Click to expand and view field related settings. You may drag and drop to arrange fields order on %s form too.', 'userswp' ), $form_type );
-						echo apply_filters( 'uwp_form_builder_selected_fields_note', $note, $form_type ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						echo apply_filters( 'uwp_form_builder_selected_fields_note', $note, $form_type ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+                        ?>
                     </p>
 
                     <div class="inside">
@@ -191,13 +202,13 @@ class UsersWP_Form_Builder {
 
             <div class="inside">
                 <div id="uwp-form-builder-tab-existing" class="uwp-tabs-panel">
-                    <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr($form_type); ?>"/>
+                    <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr( $form_type ); ?>"/>
                     <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">
                     <ul class="core uwp-tabs-selected uwp_form_extras">
 						<?php
-						$form_id         = ! empty( $_GET['form'] ) ? absint($_GET['form']) : 1;
+						$form_id         = ! empty( $_GET['form'] ) ? absint( $_GET['form'] ) : 1;
 						$table_name      = uwp_get_table_prefix() . 'uwp_form_fields';
-						$existing_fields = $wpdb->get_results( "select htmlvar_name from " . $table_name . "  where form_type ='" . $form_type . "' AND form_id = " . $form_id );
+						$existing_fields = $wpdb->get_results( 'select htmlvar_name from ' . $table_name . "  where form_type ='" . $form_type . "' AND form_id = " . $form_id );
 
 						$existing_field_ids = array();
 						if ( ! empty( $existing_fields ) ) {
@@ -217,27 +228,29 @@ class UsersWP_Form_Builder {
 
 								$style = 'style="' . $display . '"';
 								?>
-                                <li class="uwp-tooltip-wrap" <?php echo esc_attr($style); ?>>
-                                    <a id="uwp-<?php echo esc_attr($field['htmlvar_name']); ?>"
-                                       data-field-custom-type="<?php echo esc_attr($type); ?>"
-                                       data-field-type-key="<?php echo esc_attr($field['htmlvar_name']); ?>"
-                                       data-field-type="<?php echo esc_attr($field['field_type']); ?>"
-                                       class="uwp-draggable-form-items"
-                                       href="javascript:void(0);">
+                                <li class="uwp-tooltip-wrap" <?php echo esc_attr( $style ); ?>>
+                                    <a id="uwp-<?php echo esc_attr( $field['htmlvar_name'] ); ?>"
+                                        data-field-custom-type="<?php echo esc_attr( $type ); ?>"
+                                        data-field-type-key="<?php echo esc_attr( $field['htmlvar_name'] ); ?>"
+                                        data-field-type="<?php echo esc_attr( $field['field_type'] ); ?>"
+                                        class="uwp-draggable-form-items"
+                                        href="javascript:void(0);">
 
-										<?php if ( isset( $field['field_icon'] ) && strpos( $field['field_icon'], ' fa-' ) !== false ) {
-											echo '<i class="' . esc_attr($field['field_icon']) . '" aria-hidden="true"></i>';
+										<?php
+                                        if ( isset( $field['field_icon'] ) && strpos( $field['field_icon'], ' fa-' ) !== false ) {
+											echo '<i class="' . esc_attr( $field['field_icon'] ) . '" aria-hidden="true"></i>';
 										} elseif ( isset( $field['field_icon'] ) && $field['field_icon'] ) {
-											echo '<b style="background-image: url("' . esc_url($field['field_icon']) . '")"></b>';
+											echo '<b style="background-image: url("' . esc_url( $field['field_icon'] ) . '")"></b>';
 										} else {
 											echo '<i class="fas fa-cog" aria-hidden="true"></i>';
 										}
 
-										echo ' ' . esc_attr($field['site_title']);
+										echo ' ' . esc_attr( $field['site_title'] );
 
 										if ( isset( $field['help_text'] ) && $field['help_text'] ) {
 											echo uwp_help_tip( $field['help_text'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-										} ?>
+										}
+                                        ?>
                                     </a>
                                 </li>
 								<?php
@@ -270,7 +283,7 @@ class UsersWP_Form_Builder {
 			if ( isset( $form_ids ) && count( $form_ids ) > 0 ) {
 				$form_ids_placeholder = array_fill( 0, count( $form_ids ), '%s' );
 				$form_ids_placeholder = implode( ', ', $form_ids_placeholder );
-				$query                = "SELECT * FROM " . $table_name . " WHERE form_type = 'account' AND form_id IN (" . $form_ids_placeholder . ") ORDER BY sort_order ASC";
+				$query                = 'SELECT * FROM ' . $table_name . " WHERE form_type = 'account' AND form_id IN (" . $form_ids_placeholder . ') ORDER BY sort_order ASC';
 				$custom_fields        = $wpdb->get_results( $wpdb->prepare( $query, $form_ids ), $output );
 			}
 		}
@@ -281,215 +294,55 @@ class UsersWP_Form_Builder {
 	}
 
 	public function multiple_registration_form( $tab = '' ) {
+		if ( ! empty( $tab ) && $tab == 'account' ) {
+			$message = __( 'Add different user types to create custom registration forms with unique roles and redirects.', 'userswp' );
+			$link_url = admin_url( 'admin.php?page=uwp_user_types' );
+			$link_text = __( 'Add User Type', 'userswp' );
 
-		if ( empty( $tab ) || $tab == 'account' ) {
-			$current_form        = ! empty( $_GET['form'] ) ? (int) $_GET['form'] : 1;
-			$register_tab        = admin_url( 'admin.php?page=uwp_form_builder&tab=account' );
-			$register_forms      = uwp_get_option( 'multiple_registration_forms' );
-			$user_roles          = uwp_get_user_roles();
-			$current_role        = get_option( 'default_role' );
-			$actions             = uwp_get_registration_form_actions();
-			$current_action      = uwp_get_option( 'uwp_registration_action', false );
-			$current_title       = __( 'Form', 'userswp' );
-			$current_redirect_to = $current_custom_url = '';
-			$current_gdpr_page   = $current_tos_page = - 1;
-			if ( ! empty( $_GET['form_type'] ) && $_GET['form_type'] === 'new' ) {
-				$new_added    = ! empty( $register_forms ) ? end( $register_forms ) : array();
-				$current_form = ! empty( $new_added['id'] ) ? $new_added['id'] : 1;
-			}
+			$alert_content = wp_kses(
+				sprintf(
+					'%s <a href="%s" class="text-info">%s</a>',
+					$message,
+					$link_url,
+					$link_text
+				),
+				array(
+					'a' => array(
+						'href'  => array(),
+						'class' => array(),
+					),
+				)
+			);
+
 			?>
-            <div class="multiple-registration-form">
-                <form class="uwp_user_type_form" id="uwp_user_type_form" method="POST">
-                    <input type="hidden" name="manage_field_form_id" class="manage_field_form_id"
-                           id="manage_field_form_id"
-                           value="<?php echo esc_attr( $current_form ); ?>">
-					<?php do_action( 'uwp_user_type_form_before', $current_form, $tab ); ?>
-					<?php
-					if ( ! empty( $register_forms ) && is_array( $register_forms ) ) { ?>
-                        <table class="form-table bsui userswp" id="uwp-forms-main">
-                            <tr>
-                                <th><?php esc_html_e( 'Select Form:', 'userswp' ); ?></th>
-                                <td>
-                                    <div class="d-inline-block align-top">
-                                        <select onChange="window.location.replace(jQuery(this).val());"
-                                                name="form_select" id="multiple_registration_select"
-                                                class="small-text aui-select2">
-											<?php
-											foreach ( $register_forms as $key => $forms ) {
-												$form_id     = ! empty( $forms['id'] ) ? $forms['id'] : '';
-												$form_title  = ! empty( $forms['title'] ) ? sanitize_title_with_dashes($forms['title']) : '';
-												$user_role   = ! empty( $forms['user_role'] ) ? $forms['user_role'] : '';
-												$action      = ! empty( $forms['reg_action'] ) ? $forms['reg_action'] : $current_action;
-												$redirect_to = isset( $forms['redirect_to'] ) ? $forms['redirect_to'] : '';
-												$custom_url  = ! empty( $forms['custom_url'] ) ? $forms['custom_url'] : '';
-												$gdpr_page   = ! empty( $forms['gdpr_page'] ) ? (int) $forms['gdpr_page'] : - 1;
-												$tos_page    = ! empty( $forms['tos_page'] ) ? (int) $forms['tos_page'] : - 1;
-												if ( $current_form == $form_id ) {
-													$current_title       = $form_title;
-													$current_action      = $action;
-													$current_redirect_to = $redirect_to;
-													$current_custom_url  = $custom_url;
-													$current_gdpr_page   = $gdpr_page;
-													$current_tos_page    = $tos_page;
-													if ( ! empty( $user_role ) && in_array( $user_role, array_keys( $user_roles ) ) ) {
-														$current_role = $user_role;
-													}
-												}
-												?>
-                                                <option <?php selected( $current_form, $form_id ); ?>
-                                                        value="<?php echo esc_attr( $register_tab . '&form=' . $form_id ); ?>"><?php echo esc_html( wp_sprintf( __( '%s - #%s', 'userswp' ), $form_title, $form_id ) ); ?></option>
-											<?php }
-											?>
-                                        </select>
-                                    </div>
-                                    <div class="d-inline-block align-top">
-                                        <button class="btn btn-sm btn-info register-show-options" type="button"
-                                                id="show_options"><?php esc_html_e( 'Form Options', 'userswp' ); ?></button>
-										<?php if ( ! empty( $current_form ) && $current_form > 1 ) { ?>
-                                            <button data-id="<?php echo esc_attr($current_form); ?>"
-                                                    data-nonce="<?php echo esc_attr( wp_create_nonce( 'uwp-delete-register-form-nonce' ) ); ?>"
-                                                    class="btn btn-sm btn-danger register-form-remove" type="button"
-                                                    name="form_remove"><?php esc_html_e( 'Delete Form', 'userswp' ); ?></button>
-										<?php } ?>
-                                        <button data-nonce="<?php echo esc_attr( wp_create_nonce( 'uwp-create-register-form-nonce' ) ); ?>"
-                                                class="btn btn-sm btn-primary register-form-create" type="button"
-                                                name="register_form_create"
-                                                id="form_create"><?php esc_html_e( 'Create Form', 'userswp' ); ?></button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-					<?php } ?>
-
-                    <table class="form-table bsui userswp" id="uwp-form-more-options" style="display:none;">
-                        <tr>
-                            <th><?php esc_html_e( 'Title:', 'userswp' ); echo uwp_help_tip(__('Title of the form', 'userswp')); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></th>
-                            <td>
-                                <input type="text" name="form_title" value="<?php echo esc_attr($current_title); ?>"
-                                       class="regular-text">
-                            </td>
-							<?php if ( ! empty( $user_roles ) && is_array( $user_roles ) ) { ?>
-                                <th><?php esc_html_e( 'User Role to Assign:', 'userswp' ); echo uwp_help_tip(__('Role to assign when user register via this form.', 'userswp')); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></th>
-                                <td>
-                                    <select name="user_role" id="multiple_registration_user_role"
-                                            class="small-text aui-select2">
-										<?php
-										foreach ( $user_roles as $key => $user_role ) {
-											?>
-                                            <option <?php selected( $current_role, $key ); ?>
-                                                    value="<?php echo esc_attr($key); ?>"><?php echo esc_html( wp_sprintf( __( '%s', 'userswp' ), $user_role ) ); ?></option>
-										<?php }
-										?>
-                                    </select>
-                                </td>
-							<?php } ?>
-                        </tr>
-                        <tr>
-                            <th><?php esc_html_e( 'Registration Action:', 'userswp' ); echo uwp_help_tip(__('Select how registration should be handled.', 'userswp')); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></th>
-                            <td>
-                                <select name="reg_action" id="uwp_registration_action"
-                                        class="small-text aui-select2">
-									<?php
-									foreach ( $actions as $key => $action ) {
-										?>
-                                        <option <?php selected( $current_action, $key ); ?>
-                                                value="<?php echo esc_attr($key); ?>"><?php echo esc_html( wp_sprintf( __( '%s', 'userswp' ), $action ) ); ?></option>
-									<?php } ?>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr style="display:none;">
-                            <th><?php esc_html_e( 'Redirect Page:', 'userswp' ); echo uwp_help_tip(__('Set the page to redirect the user to after signing up.', 'userswp')); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></th>
-                            <td>
-                                <select name="redirect_to" id="register_redirect_to"
-                                        class="small-text aui-select2">
-									<?php
-									$pages         = get_pages();
-									$pages_options = array(
-										'-1' => __( 'Last User Page', 'userswp' ),
-										'0'  => __( 'Default Redirect', 'userswp' ),
-										'-2' => __( 'Custom Redirect', 'userswp' ),
-									);
-									if ( $pages ) {
-										foreach ( $pages as $page ) {
-											$pages_options[ $page->ID ] = $page->post_title;
-										}
-									}
-									foreach ( $pages_options as $key => $option ) {
-										?>
-                                        <option <?php selected( $current_redirect_to, $key ); ?>
-                                                value="<?php echo esc_attr($key); ?>"><?php echo esc_html( wp_sprintf( __( '%s', 'userswp' ), $option ) ); ?></option>
-									<?php } ?>
-                                </select>
-                            </td>
-                            <th><?php esc_html_e( 'Custom Redirect URL:', 'userswp' ); echo uwp_help_tip(__( 'Set the page to redirect the user to after signing up. If default redirect has been set then WordPress default will be used.', 'userswp' )); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></th>
-                            <td>
-                                <input type="text" name="custom_url" id="register_redirect_custom_url"
-                                       class="regular-text" value="<?php echo esc_attr($current_custom_url); ?>">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th><?php esc_html_e( 'GDPR Policy Page:', 'userswp' ); echo uwp_help_tip(__('Page to link when GDPR policy page custom field added to form. If not set then default setting will be used.', 'userswp')); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></th>
-                            <td>
-								<?php
-								$args = array(
-									'name'             => 'gdpr_page',
-									'id'               => 'multiple_registration_gdpr_page',
-									'sort_column'      => 'menu_order',
-									'sort_order'       => 'ASC',
-									'show_option_none' => ' ',
-									'class'            => ' regular-text aui-select2 ',
-									'echo'             => false,
-									'selected'         => (int) $current_gdpr_page > 0 ? (int) $current_gdpr_page : - 1,
-								);
-								echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'userswp' ) . "' id=", wp_dropdown_pages( $args ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								?>
-                            </td>
-                            <th><?php esc_html_e( 'TOS Page:', 'userswp' ); echo uwp_help_tip(__('Page to link when Terms and Conditions custom field added to form. If not set then default setting will be used.', 'userswp')); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped?></th>
-                            <td>
-								<?php
-								$args = array(
-									'name'             => 'tos_page',
-									'id'               => 'multiple_registration_tos_page',
-									'sort_column'      => 'menu_order',
-									'sort_order'       => 'ASC',
-									'show_option_none' => ' ',
-									'class'            => ' regular-text aui-select2 ',
-									'echo'             => false,
-									'selected'         => (int) $current_tos_page > 0 ? (int) $current_tos_page : - 1,
-								);
-								echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'userswp' ) . "' id=", wp_dropdown_pages( $args ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								?>
-                            </td>
-                        </tr>
-						<?php do_action( 'uwp_user_type_form_before_submit', $current_form, $tab ); ?>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <button class="btn btn-sm btn-secondary" id="form_update" type="submit"
-                                        name="form_update"><?php esc_html_e( 'Update', 'userswp' ); ?></button>
-                            </td>
-                        </tr>
-                    </table>
-                    <input type="hidden" name="uwp_update_register_form_nonce" value="<?php echo esc_attr( wp_create_nonce( 'uwp-update-register-form-nonce' ) ); ?>" />
-					<?php do_action( 'uwp_user_type_form_after', $current_form, $tab ); ?>
-                </form>
-            </div>
+			<div class="bsui">
+				<?php
+				aui()->alert(
+					array(
+						'type'        => 'info',
+						'content'     => $alert_content,
+						'dismissible' => false,
+					),
+					true
+				);
+				?>
+			</div>
 			<?php
 		}
 
 		if ( ! empty( $tab ) && $tab == 'register' ) {
-			$current_form = ! empty( $_GET['form'] ) ? absint($_GET['form']) : 1;
+			$current_form = ! empty( $_GET['form'] ) ? absint( $_GET['form'] ) : 1;
 
 			$register_tab   = admin_url( 'admin.php?page=uwp_form_builder&tab=register' );
 			$register_forms = uwp_get_option( 'multiple_registration_forms' );
 			?>
             <div class="multiple-registration-form">
                 <input type="hidden" name="manage_field_form_id" class="manage_field_form_id" id="manage_field_form_id"
-                       value="<?php echo esc_attr( $current_form ); ?>">
+                        value="<?php echo esc_attr( $current_form ); ?>">
                 <table class="form-table bsui userswp">
 					<?php
-					if ( ! empty( $register_forms ) && is_array( $register_forms ) ) { ?>
+					if ( ! empty( $register_forms ) && is_array( $register_forms ) ) {
+                    ?>
                         <tr>
                             <th><?php esc_html_e( 'Select Form:', 'userswp' ); ?></th>
                             <td>
@@ -500,17 +353,19 @@ class UsersWP_Form_Builder {
 										<?php
 										foreach ( $register_forms as $key => $forms ) {
 											$form_id    = ! empty( $forms['id'] ) ? $forms['id'] : '';
-											$form_title = ! empty( $forms['title'] ) ? sanitize_title_with_dashes($forms['title']) : '';
+											$form_title = ! empty( $forms['title'] ) ? sanitize_title_with_dashes( $forms['title'] ) : '';
 											?>
                                             <option <?php selected( $current_form, $form_id ); ?>
-                                                    value="<?php echo esc_attr( $register_tab . '&form=' . $form_id ); ?>"><?php echo esc_html( wp_sprintf( __( '%s - #%s', 'userswp' ), $form_title, $form_id ) ); ?></option>
+                                                    value="<?php echo esc_attr( $register_tab . '&form=' . $form_id ); ?>"><?php echo esc_html( wp_sprintf( __( '%1$s - #%2$s', 'userswp' ), $form_title, $form_id ) ); ?></option>
 										<?php } ?>
                                     </select>
                                 </div>
                             </td>
                         </tr>
-					<?php }
-					if ( ! empty( $current_form ) && $current_form > 0 ) { ?>
+					<?php
+                    }
+					if ( ! empty( $current_form ) && $current_form > 0 ) {
+                    ?>
                         <tr>
                             <th><?php esc_html_e( 'Register Form Shortcode:', 'userswp' ); ?></th>
                             <td>
@@ -524,17 +379,18 @@ class UsersWP_Form_Builder {
 		}
 
 		if ( ! empty( $tab ) && $tab == 'profile-tabs' ) {
-			$current_form = ! empty( $_GET['form'] ) ? absint($_GET['form']) : 1;
+			$current_form = ! empty( $_GET['form'] ) ? absint( $_GET['form'] ) : 1;
 
 			$register_tab   = admin_url( 'admin.php?page=uwp_form_builder&tab=profile-tabs' );
 			$register_forms = uwp_get_option( 'multiple_registration_forms' );
 			?>
             <div class="multiple-registration-form">
                 <input type="hidden" name="manage_field_form_id" class="manage_field_form_id" id="manage_field_form_id"
-                       value="<?php echo esc_attr( $current_form ); ?>">
+                        value="<?php echo esc_attr( $current_form ); ?>">
                 <table class="form-table bsui userswp">
 					<?php
-					if ( ! empty( $register_forms ) && is_array( $register_forms ) ) { ?>
+					if ( ! empty( $register_forms ) && is_array( $register_forms ) ) {
+                    ?>
                         <tr>
                             <th><?php esc_html_e( 'Select Form:', 'userswp' ); ?></th>
                             <td>
@@ -548,7 +404,7 @@ class UsersWP_Form_Builder {
 											$form_title = ! empty( $forms['title'] ) ? $forms['title'] : '';
 											?>
                                             <option <?php selected( $current_form, $form_id ); ?>
-                                                    value="<?php echo esc_attr( $register_tab . '&form=' . $form_id ); ?>"><?php echo esc_html( wp_sprintf( __( '%s - #%s', 'userswp' ), $form_title, $form_id ) ); ?></option>
+                                                    value="<?php echo esc_attr( $register_tab . '&form=' . $form_id ); ?>"><?php echo esc_html( wp_sprintf( __( '%1$s - #%2$s', 'userswp' ), $form_title, $form_id ) ); ?></option>
 										<?php } ?>
                                     </select>
                                 </div>
@@ -571,7 +427,7 @@ class UsersWP_Form_Builder {
 
 	public function custom_available_fields( $type, $form_type ) {
 		?>
-        <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr($form_type); ?>"/>
+        <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr( $form_type ); ?>"/>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">
 		<?php
 		if ( $type == 'predefined' ) {
@@ -584,14 +440,15 @@ class UsersWP_Form_Builder {
             <ul class="full">
                 <li class="uwp-tooltip-wrap">
                     <a id="uwp-fieldset"
-                       class="uwp-draggable-form-items uwp-fieldset"
-                       href="javascript:void(0);"
-                       data-field-custom-type=""
-                       data-field-type="fieldset"
-                       data-field-type-key="fieldset">
+                        class="uwp-draggable-form-items uwp-fieldset"
+                        href="javascript:void(0);"
+                        data-field-custom-type=""
+                        data-field-type="fieldset"
+                        data-field-type-key="fieldset">
                         <i class="fas fa-long-arrow-alt-left " aria-hidden="true"></i>
                         <i class="fas fa-long-arrow-alt-right " aria-hidden="true"></i>
-						<?php esc_html_e( 'Fieldset (section separator)', 'userswp' );
+						<?php
+                        esc_html_e( 'Fieldset (section separator)', 'userswp' );
 						echo uwp_help_tip( __( 'This adds a section separator with a title.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						?>
                     </a>
@@ -609,25 +466,27 @@ class UsersWP_Form_Builder {
 				?>
                 <li class="uwp-tooltip-wrap">
                     <a id="uwp-<?php echo esc_attr( $id ); ?>"
-                       data-field-custom-type="<?php echo esc_attr($type); ?>"
-                       data-field-type-key="<?php echo esc_attr($id); ?>"
-                       data-field-type="<?php echo esc_attr($field['field_type']); ?>"
-                       class="uwp-draggable-form-items"
-                       href="javascript:void(0);">
+                        data-field-custom-type="<?php echo esc_attr( $type ); ?>"
+                        data-field-type-key="<?php echo esc_attr( $id ); ?>"
+                        data-field-type="<?php echo esc_attr( $field['field_type'] ); ?>"
+                        class="uwp-draggable-form-items"
+                        href="javascript:void(0);">
 
-						<?php if ( isset( $field['field_icon'] ) && strpos( $field['field_icon'], ' fa-' ) !== false ) {
-							echo '<i class="' . esc_attr($field['field_icon']) . '" aria-hidden="true"></i>';
+						<?php
+                        if ( isset( $field['field_icon'] ) && strpos( $field['field_icon'], ' fa-' ) !== false ) {
+							echo '<i class="' . esc_attr( $field['field_icon'] ) . '" aria-hidden="true"></i>';
 						} elseif ( isset( $field['field_icon'] ) && $field['field_icon'] ) {
-							echo '<b style="background-image: url("' . esc_url($field['field_icon']) . '")"></b>';
+							echo '<b style="background-image: url("' . esc_url( $field['field_icon'] ) . '")"></b>';
 						} else {
 							echo '<i class="fas fa-cog" aria-hidden="true"></i>';
 						}
 
-						echo ' ' . esc_attr($field['site_title']);
+						echo ' ' . esc_attr( $field['site_title'] );
 
 						if ( isset( $field['help_text'] ) && $field['help_text'] ) {
 							echo uwp_help_tip( $field['help_text'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						} ?>
+						}
+                        ?>
                     </a>
                 </li>
 				<?php
@@ -639,7 +498,6 @@ class UsersWP_Form_Builder {
         </ul>
 
 		<?php
-
 	}
 
 	public function form_fields_predefined( $type = '' ) {
@@ -662,8 +520,8 @@ class UsersWP_Form_Builder {
 				'option_values' => '',
 				'required_msg'  => '',
 				'field_icon'    => 'fas fa-map-marker-alt',
-				'css_class'     => ''
-			)
+				'css_class'     => '',
+			),
 		);
 
 		// Gender
@@ -683,8 +541,8 @@ class UsersWP_Form_Builder {
 				'option_values' => __( 'Male,Female,Other', 'userswp' ),
 				'required_msg'  => '',
 				'field_icon'    => 'fas fa-user',
-				'css_class'     => ''
-			)
+				'css_class'     => '',
+			),
 		);
 
 		$custom_fields['dob'] = array(
@@ -709,9 +567,9 @@ class UsersWP_Form_Builder {
 				'field_icon'         => 'fas fa-birthday-cake',
 				'css_class'          => '',
 				'extra_fields'       => array(
-					'date_range' => 'c-100:c+0'
-				)
-			)
+					'date_range' => 'c-100:c+0',
+				),
+			),
 		);
 
 		// Mobile
@@ -730,8 +588,8 @@ class UsersWP_Form_Builder {
 				'is_required'   => 0,
 				'required_msg'  => '',
 				'field_icon'    => 'fas fa-mobile-alt',
-				'css_class'     => ''
-			)
+				'css_class'     => '',
+			),
 		);
 
 		$custom_fields['register_gdpr'] = array(
@@ -750,18 +608,18 @@ class UsersWP_Form_Builder {
 				'is_required'   => 1,
 				'required_msg'  => '',
 				'field_icon'    => 'fas fa-file',
-				'css_class'     => 'btn-register-gdpr'
-			)
+				'css_class'     => 'btn-register-gdpr',
+			),
 		);
 
 		$custom_fields['register_tos'] = array(
-			'field_type' => 'checkbox',
-			'class'      => 'uwp-register-tos',
-			'field_icon' => 'fas fa-file',
-			'site_title' => __( 'Terms & Conditions', 'userswp' ),
-			'help_text'  => __( 'Adds Register TOS page.', 'userswp' ),
-            'help_text_tip'    => __( 'This will show next to the checkbox, to add a link to the TOS page, use format: %%link_start%% View TOS %%link_end%%', 'userswp' ),
-			'defaults'   => array(
+			'field_type'    => 'checkbox',
+			'class'         => 'uwp-register-tos',
+			'field_icon'    => 'fas fa-file',
+			'site_title'    => __( 'Terms & Conditions', 'userswp' ),
+			'help_text'     => __( 'Adds Register TOS page.', 'userswp' ),
+            'help_text_tip' => __( 'This will show next to the checkbox, to add a link to the TOS page, use format: %%link_start%% View TOS %%link_end%%', 'userswp' ),
+			'defaults'      => array(
 				'admin_title'   => 'Terms & Conditions',
 				'site_title'    => 'Terms & Conditions',
 				'form_label'    => __( 'Terms & Conditions', 'userswp' ),
@@ -772,7 +630,7 @@ class UsersWP_Form_Builder {
 				'required_msg'  => '',
 				'field_icon'    => 'fas fa-file',
 				'css_class'     => 'btn-register-tos',
-			)
+			),
 		);
 
 		// Website
@@ -792,8 +650,8 @@ class UsersWP_Form_Builder {
 				'is_required'   => 0,
 				'required_msg'  => '',
 				'field_icon'    => 'fas fa-link',
-				'css_class'     => 'btn-website'
-			)
+				'css_class'     => 'btn-website',
+			),
 		);
 
 		// Facebook
@@ -813,8 +671,8 @@ class UsersWP_Form_Builder {
 				'is_required'   => 0,
 				'required_msg'  => '',
 				'field_icon'    => 'fab fa-facebook-f',
-				'css_class'     => 'btn-facebook'
-			)
+				'css_class'     => 'btn-facebook',
+			),
 		);
 
 		// Twitter
@@ -834,8 +692,8 @@ class UsersWP_Form_Builder {
 				'is_required'   => 0,
 				'required_msg'  => '',
 				'field_icon'    => 'fab fa-twitter',
-				'css_class'     => 'btn-twitter'
-			)
+				'css_class'     => 'btn-twitter',
+			),
 		);
 
 		// Instagram
@@ -855,8 +713,8 @@ class UsersWP_Form_Builder {
 				'is_required'   => 0,
 				'required_msg'  => '',
 				'field_icon'    => 'fab fa-instagram',
-				'css_class'     => 'btn-instagram'
-			)
+				'css_class'     => 'btn-instagram',
+			),
 		);
 
 		// Linkedin
@@ -876,10 +734,9 @@ class UsersWP_Form_Builder {
 				'is_required'   => 0,
 				'required_msg'  => '',
 				'field_icon'    => 'fab fa-linkedin-in',
-				'css_class'     => 'btn-linkedin'
-			)
+				'css_class'     => 'btn-linkedin',
+			),
 		);
-
 
 		// Flickr
 		$custom_fields['flickr'] = array(
@@ -898,8 +755,8 @@ class UsersWP_Form_Builder {
 				'is_required'   => 0,
 				'required_msg'  => '',
 				'field_icon'    => 'fab fa-flickr',
-				'css_class'     => 'btn-flickr'
-			)
+				'css_class'     => 'btn-flickr',
+			),
 		);
 
 		// GitHub
@@ -919,8 +776,8 @@ class UsersWP_Form_Builder {
 				'is_required'   => 0,
 				'required_msg'  => '',
 				'field_icon'    => 'fab fa-github-alt',
-				'css_class'     => 'btn-github'
-			)
+				'css_class'     => 'btn-github',
+			),
 		);
 
 		// YouTube
@@ -940,8 +797,8 @@ class UsersWP_Form_Builder {
 				'is_required'   => 0,
 				'required_msg'  => '',
 				'field_icon'    => 'fab fa-youtube',
-				'css_class'     => 'btn-youtube'
-			)
+				'css_class'     => 'btn-youtube',
+			),
 		);
 
 		// WordPress
@@ -961,8 +818,8 @@ class UsersWP_Form_Builder {
 				'is_required'   => 0,
 				'required_msg'  => '',
 				'field_icon'    => 'fab fa-wordpress-simple',
-				'css_class'     => 'btn-wordpress'
-			)
+				'css_class'     => 'btn-wordpress',
+			),
 		);
 
 		// Language
@@ -983,10 +840,9 @@ class UsersWP_Form_Builder {
 				'option_values' => '',
 				'required_msg'  => '',
 				'field_icon'    => 'fas fa-language',
-				'css_class'     => ''
-			)
+				'css_class'     => '',
+			),
 		);
-
 
 		return apply_filters( 'uwp_form_fields_predefined', $custom_fields, $type );
 	}
@@ -1005,91 +861,91 @@ class UsersWP_Form_Builder {
 				'class'      => 'uwp-text',
 				'field_icon' => 'fas fa-minus',
 				'site_title' => __( 'Text', 'userswp' ),
-				'help_text'  => __( 'Add any sort of text field, text or numbers', 'userswp' )
+				'help_text'  => __( 'Add any sort of text field, text or numbers', 'userswp' ),
 			),
 			'datepicker'  => array(
 				'field_type' => 'datepicker',
 				'class'      => 'uwp-datepicker',
 				'field_icon' => 'fas fa-calendar-alt',
 				'site_title' => __( 'Date', 'userswp' ),
-				'help_text'  => __( 'Adds a date picker.', 'userswp' )
+				'help_text'  => __( 'Adds a date picker.', 'userswp' ),
 			),
 			'textarea'    => array(
 				'field_type' => 'textarea',
 				'class'      => 'uwp-textarea',
 				'field_icon' => 'fas fa-bars',
 				'site_title' => __( 'Textarea', 'userswp' ),
-				'help_text'  => __( 'Adds a textarea', 'userswp' )
+				'help_text'  => __( 'Adds a textarea', 'userswp' ),
 			),
 			'time'        => array(
 				'field_type' => 'time',
 				'class'      => 'uwp-time',
 				'field_icon' => 'far fa-clock',
 				'site_title' => __( 'Time', 'userswp' ),
-				'help_text'  => __( 'Adds a time picker', 'userswp' )
+				'help_text'  => __( 'Adds a time picker', 'userswp' ),
 			),
 			'checkbox'    => array(
 				'field_type' => 'checkbox',
 				'class'      => 'uwp-checkbox',
 				'field_icon' => 'far fa-check-square',
 				'site_title' => __( 'Checkbox', 'userswp' ),
-				'help_text'  => __( 'Adds a checkbox', 'userswp' )
+				'help_text'  => __( 'Adds a checkbox', 'userswp' ),
 			),
 			'phone'       => array(
 				'field_type' => 'phone',
 				'class'      => 'uwp-phone',
 				'field_icon' => 'fas fa-phone',
 				'site_title' => __( 'Phone', 'userswp' ),
-				'help_text'  => __( 'Adds a phone input', 'userswp' )
+				'help_text'  => __( 'Adds a phone input', 'userswp' ),
 			),
 			'radio'       => array(
 				'field_type' => 'radio',
 				'class'      => 'uwp-radio',
 				'field_icon' => 'far fa-dot-circle',
 				'site_title' => __( 'Radio', 'userswp' ),
-				'help_text'  => __( 'Adds a radio input', 'userswp' )
+				'help_text'  => __( 'Adds a radio input', 'userswp' ),
 			),
 			'email'       => array(
 				'field_type' => 'email',
 				'class'      => 'uwp-email',
 				'field_icon' => 'far fa-envelope',
 				'site_title' => __( 'Email', 'userswp' ),
-				'help_text'  => __( 'Adds a email input', 'userswp' )
+				'help_text'  => __( 'Adds a email input', 'userswp' ),
 			),
 			'select'      => array(
 				'field_type' => 'select',
 				'field_icon' => 'far fa-caret-square-down',
 				'site_title' => __( 'Select', 'userswp' ),
-				'help_text'  => __( 'Adds a select input', 'userswp' )
+				'help_text'  => __( 'Adds a select input', 'userswp' ),
 			),
 			'multiselect' => array(
 				'field_type' => 'multiselect',
 				'class'      => 'uwp-multiselect',
 				'field_icon' => 'far fa-caret-square-down',
 				'site_title' => __( 'Multi Select', 'userswp' ),
-				'help_text'  => __( 'Adds a multiselect input', 'userswp' )
+				'help_text'  => __( 'Adds a multiselect input', 'userswp' ),
 			),
 			'url'         => array(
 				'field_type' => 'url',
 				'class'      => 'uwp-url',
 				'field_icon' => 'fas fa-link',
 				'site_title' => __( 'URL', 'userswp' ),
-				'help_text'  => __( 'Adds a url input', 'userswp' )
+				'help_text'  => __( 'Adds a url input', 'userswp' ),
 			),
 			'editor'      => array(
 				'field_type' => 'editor',
 				'class'      => 'uwp-html',
 				'field_icon' => 'fas fa-code',
 				'site_title' => __( 'HTML', 'userswp' ),
-				'help_text'  => __( 'Adds a wysiwyg editor input', 'userswp' )
+				'help_text'  => __( 'Adds a wysiwyg editor input', 'userswp' ),
 			),
 			'file'        => array(
 				'field_type' => 'file',
 				'class'      => 'uwp-file',
 				'field_icon' => 'fas fa-file',
 				'site_title' => __( 'File Upload', 'userswp' ),
-				'help_text'  => __( 'Adds a file input', 'userswp' )
-			)
+				'help_text'  => __( 'Adds a file input', 'userswp' ),
+			),
 		);
 
 		return apply_filters( 'uwp_form_fields', $custom_fields, $type );
@@ -1117,11 +973,11 @@ class UsersWP_Form_Builder {
 	public function register_available_fields( $form_type ) {
 		global $wpdb;
 
-		$form_id = ! empty( $_GET['form'] ) ? absint($_GET['form']) : 1;
+		$form_id = ! empty( $_GET['form'] ) ? absint( $_GET['form'] ) : 1;
 
 		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
-		$existing_fields = $wpdb->get_results( "select site_htmlvar_name from " . $extras_table_name . "  where form_type ='" . $form_type . "' AND form_id = " . $form_id );
+		$existing_fields = $wpdb->get_results( 'select site_htmlvar_name from ' . $extras_table_name . "  where form_type ='" . $form_type . "' AND form_id = " . $form_id );
 
 		$existing_field_ids = array();
 		if ( ! empty( $existing_fields ) ) {
@@ -1130,7 +986,7 @@ class UsersWP_Form_Builder {
 			}
 		}
 		?>
-        <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr($form_type); ?>"/>
+        <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr( $form_type ); ?>"/>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="register">
         <ul>
 			<?php
@@ -1140,7 +996,6 @@ class UsersWP_Form_Builder {
 			if ( ! empty( $fields ) ) {
 				foreach ( $fields as $field ) {
 					$field = stripslashes_deep( $field ); // strip slashes
-
 
 					$fieldset_width = '';
 					if ( $field['field_type'] == 'fieldset' ) {
@@ -1156,17 +1011,19 @@ class UsersWP_Form_Builder {
 					?>
                     <li <?php echo $style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> >
 
-                        <a id="uwp-<?php echo esc_attr($field['htmlvar_name']); ?>"
-                           class="uwp-draggable-form-items uwp-<?php echo esc_attr($field['field_type']); ?>"
-                           href="javascript:void(0);" data-field-type="<?php echo esc_attr($field['field_type']); ?>">
+                        <a id="uwp-<?php echo esc_attr( $field['htmlvar_name'] ); ?>"
+                            class="uwp-draggable-form-items uwp-<?php echo esc_attr( $field['field_type'] ); ?>"
+                            href="javascript:void(0);" data-field-type="<?php echo esc_attr( $field['field_type'] ); ?>">
 
-							<?php if ( $icon = uwp_get_field_icon( $field['field_icon'] ) ) {
+							<?php
+                            if ( $icon = uwp_get_field_icon( $field['field_icon'] ) ) {
 								echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							} else {
 								echo '<i class="fas fa-cog" aria-hidden="true"></i>';
-							} ?>
+							}
+                            ?>
 
-							<?php echo esc_attr($field['site_title']); ?>
+							<?php echo esc_attr( $field['site_title'] ); ?>
 
                         </a>
                     </li>
@@ -1185,11 +1042,17 @@ class UsersWP_Form_Builder {
 		global $wpdb;
 
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-		$fields     = $wpdb->get_results( $wpdb->prepare( "select field_type, site_title, htmlvar_name, field_icon from " . $table_name . " where form_type = %s and is_register_field = %s and form_id = %d order by sort_order asc", array(
-			'account',
-			'1',
-			$form_id
-		) ), ARRAY_A );
+		$fields     = $wpdb->get_results(
+            $wpdb->prepare(
+                'select field_type, site_title, htmlvar_name, field_icon from ' . $table_name . ' where form_type = %s and is_register_field = %s and form_id = %d order by sort_order asc',
+                array(
+					'account',
+					'1',
+					$form_id,
+                )
+            ),
+            ARRAY_A
+        );
 
 		return apply_filters( 'uwp_register_fields', $fields, $form_type );
 	}
@@ -1209,16 +1072,21 @@ class UsersWP_Form_Builder {
 
 		global $wpdb;
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-		$form_id    = ! empty( $_GET['form'] ) ? absint($_GET['form']) : 1;
+		$form_id    = ! empty( $_GET['form'] ) ? absint( $_GET['form'] ) : 1;
 		?>
-        <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr($form_type); ?>"/>
+        <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr( $form_type ); ?>"/>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">
         <ul class="core uwp-tabs-selected uwp_form_extras">
 			<?php
-			$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE form_type = %s AND form_id = %s ORDER BY sort_order ASC", array(
-				$form_type,
-				$form_id
-			) ) );
+			$fields = $wpdb->get_results(
+                $wpdb->prepare(
+                    'SELECT * FROM ' . $table_name . ' WHERE form_type = %s AND form_id = %s ORDER BY sort_order ASC',
+                    array(
+						$form_type,
+						$form_id,
+                    )
+                )
+            );
 
 			if ( ! empty( $fields ) ) {
 				foreach ( $fields as $field ) {
@@ -1230,9 +1098,9 @@ class UsersWP_Form_Builder {
 					$this->form_field_adminhtml( $field_type, $result_str, $field_ins_upd, $field_type_key );
 				}
 			}
-			?></ul>
+			?>
+            </ul>
 		<?php
-
 	}
 
 	public function form_field_adminhtml( $field_type, $result_str, $field_ins_upd = '', $field_type_key = '', $form_type = false ) {
@@ -1243,7 +1111,7 @@ class UsersWP_Form_Builder {
 
 		if ( ! is_object( $cf ) ) {
 
-			$field_info = $wpdb->get_row( $wpdb->prepare( "select * from " . $table_name . " where id= %d", array( $cf ) ) );
+			$field_info = $wpdb->get_row( $wpdb->prepare( 'select * from ' . $table_name . ' where id= %d', array( $cf ) ) );
 
 		} else {
 			$field_info = $cf;
@@ -1255,7 +1123,6 @@ class UsersWP_Form_Builder {
 		}
 
 		$this->admin_form_field_html( $field_info, $field_type, $field_type_key, $field_ins_upd, $result_str, $form_type );
-
 	}
 
 	/**
@@ -1294,9 +1161,9 @@ class UsersWP_Form_Builder {
 		$field_display = $field_type == 'address' && $field_info->htmlvar_name == 'post' ? 'style="display:none"' : '';
 
 		if ( isset( $cf['field_icon'] ) && strpos( $cf['field_icon'], ' fa-' ) !== false ) {
-			$field_icon = '<i class="' . esc_attr($cf['field_icon']) . '" aria-hidden="true"></i>';
+			$field_icon = '<i class="' . esc_attr( $cf['field_icon'] ) . '" aria-hidden="true"></i>';
 		} elseif ( isset( $cf['field_icon'] ) && $cf['field_icon'] ) {
-			$field_icon = '<b style="background-image: url("' . esc_url($cf['field_icon']) . '")"></b>';
+			$field_icon = '<b style="background-image: url("' . esc_url( $cf['field_icon'] ) . '")"></b>';
 		} else {
 			$field_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
 		}
@@ -1307,7 +1174,7 @@ class UsersWP_Form_Builder {
 			$field_type_name = $field_type;
 		}
 
-		$htmlvar_name = isset($field_info->htmlvar_name) ? sanitize_text_field($field_info->htmlvar_name) : '';
+		$htmlvar_name = isset( $field_info->htmlvar_name ) ? sanitize_text_field( $field_info->htmlvar_name ) : '';
 
 		?>
         <li class="text li-settings" id="licontainer_<?php echo esc_attr( $result_str ); ?>">
@@ -1334,21 +1201,25 @@ class UsersWP_Form_Builder {
 
             <form>
                 <div id="field_frm<?php echo esc_attr( $result_str ); ?>" class="field_frm"
-                     style="display:<?php if ( $field_ins_upd == 'submit' ) {
-					     echo 'block;';
-				     } else {
-					     echo 'none;';
-				     } ?>">
+                    style="display:
+                    <?php
+                    if ( $field_ins_upd == 'submit' ) {
+						echo 'block;';
+					} else {
+										echo 'none;';
+					}
+                    ?>
+                    ">
                     <input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $nonce ); ?>"/>
-                    <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr($form_type); ?>"/>
-                    <input type="hidden" name="field_type" id="field_type" value="<?php echo esc_attr($field_type); ?>"/>
+                    <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr( $form_type ); ?>"/>
+                    <input type="hidden" name="field_type" id="field_type" value="<?php echo esc_attr( $field_type ); ?>"/>
                     <input type="hidden" name="field_type_key" id="field_type_key"
-                           value="<?php echo esc_attr($field_type_key); ?>"/>
+                            value="<?php echo esc_attr( $field_type_key ); ?>"/>
                     <input type="hidden" name="field_id" id="field_id" value="<?php echo esc_attr( $result_str ); ?>"/>
                     <input type="hidden" name="is_active" id="is_active" value="1"/>
 
                     <input type="hidden" name="is_default"
-                           value="<?php echo isset( $field_info->is_default ) ? esc_attr($field_info->is_default) : ''; ?>"/><?php // show in sidebar value?>
+                            value="<?php echo isset( $field_info->is_default ) ? esc_attr( $field_info->is_default ) : ''; ?>"/><?php // show in sidebar value ?>
 
                     <ul class="widefat post fixed" style="width:100%;">
 
@@ -1366,7 +1237,7 @@ class UsersWP_Form_Builder {
 								$value = $cf['defaults']['data_type'];
 							}
 							?>
-                            <input type="hidden" name="data_type" id="data_type" value="<?php echo esc_attr($value); ?>"/>
+                            <input type="hidden" name="data_type" id="data_type" value="<?php echo esc_attr( $value ); ?>"/>
 							<?php
 						}
 
@@ -1387,11 +1258,12 @@ class UsersWP_Form_Builder {
                                 <label for="site_title" class="uwp-tooltip-wrap">
 									<?php
 									echo uwp_help_tip( __( 'This will be the label for the field.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'Field Label:', 'userswp' ); ?>
+									esc_html_e( 'Field Label:', 'userswp' );
+                                    ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="site_title" id="site_title"
-                                           value="<?php echo esc_attr($value); ?>"/>
+                                            value="<?php echo esc_attr( $value ); ?>"/>
                                 </div>
                             </li>
 							<?php
@@ -1414,11 +1286,12 @@ class UsersWP_Form_Builder {
                                 <label for="form_label" class="uwp-tooltip-wrap">
 									<?php
 									echo uwp_help_tip( __( 'If your form label is different, then you can fill this field. Ex: You would like to display "What is your age?" in Form Field but would like to display "DOB" in site. In such cases "What is your age?" should be entered here and "DOB" should be entered in previous field. Note: If this field not filled, then the previous field will be used in Form.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'Form Label: (Optional)', 'userswp' ); ?>
+									esc_html_e( 'Form Label: (Optional)', 'userswp' );
+                                    ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="form_label" id="form_label"
-                                           value="<?php echo esc_attr($value); ?>"/>
+                                            value="<?php echo esc_attr( $value ); ?>"/>
                                 </div>
                             </li>
 							<?php
@@ -1440,18 +1313,18 @@ class UsersWP_Form_Builder {
                             <li class="uwp-setting-name">
                                 <label for="help_text" class="uwp-tooltip-wrap">
 									<?php
-									$tip_text = !empty($cf['help_text_tip']) ? esc_attr($cf['help_text_tip']) : __( 'This will be displayed below the field in the form.', 'userswp' );
+									$tip_text = ! empty( $cf['help_text_tip'] ) ? esc_attr( $cf['help_text_tip'] ) : __( 'This will be displayed below the field in the form.', 'userswp' );
 									echo uwp_help_tip( $tip_text ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'Field Description:', 'userswp' ); ?>
+									esc_html_e( 'Field Description:', 'userswp' );
+                                    ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="help_text" id="help_text"
-                                           value="<?php echo esc_attr($value); ?>"/>
+                                            value="<?php echo esc_attr( $value ); ?>"/>
                                 </div>
                             </li>
 							<?php
 						}
-
 
 						// htmlvar_name
 						if ( has_filter( "uwp_builder_htmlvar_name_{$field_type}" ) ) {
@@ -1470,16 +1343,25 @@ class UsersWP_Form_Builder {
                                 <label for="htmlvar_name" class="uwp-tooltip-wrap">
 									<?php
 									echo uwp_help_tip( __( 'This is a unique identifier used in the HTML, it MUST NOT contain spaces or special characters.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'Field Key :', 'userswp' ); ?>
+									esc_html_e( 'Field Key :', 'userswp' );
+                                    ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="htmlvar_name" id="htmlvar_name" pattern="[a-zA-Z0-9]+"
-                                           title="<?php esc_attr_e( 'Must not contain spaces or special characters', 'userswp' ); ?>"
-                                           value="<?php if ( $value ) {
-										       echo esc_attr( preg_replace( '/uwp_' . $form_type . '_/', '', $value, 1 ) );
-									       } ?>" <?php if ( ! empty( $value ) && $value != '' ) {
-										echo 'readonly="readonly"';
-									} ?> />
+                                            title="<?php esc_attr_e( 'Must not contain spaces or special characters', 'userswp' ); ?>"
+                                            value="
+                                            <?php
+                                            if ( $value ) {
+												echo esc_attr( preg_replace( '/uwp_' . $form_type . '_/', '', $value, 1 ) );
+											}
+                                            ?>
+                                            " 
+                                            <?php
+if ( ! empty( $value ) && $value != '' ) {
+																					echo 'readonly="readonly"';
+									}
+                                    ?>
+                                    />
                                 </div>
                             </li>
 							<?php
@@ -1502,13 +1384,14 @@ class UsersWP_Form_Builder {
                                 <label for="placeholder_value" class="uwp-tooltip-wrap">
 									<?php
 									echo uwp_help_tip( __( 'Display placeholder text for this field.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'Placeholder :', 'userswp' ); ?>
+									esc_html_e( 'Placeholder :', 'userswp' );
+                                    ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="placeholder_value"
-                                           id="placeholder_value_<?php echo esc_attr($result_str); ?>"
-                                           title="<?php esc_attr_e( 'Enter placeholder text for this field.', 'userswp' ); ?>"
-                                           value="<?php echo esc_attr($value); ?>"/>
+                                            id="placeholder_value_<?php echo esc_attr( $result_str ); ?>"
+                                            title="<?php esc_attr_e( 'Enter placeholder text for this field.', 'userswp' ); ?>"
+                                            value="<?php echo esc_attr( $value ); ?>"/>
                                 </div>
                             </li>
 							<?php
@@ -1527,16 +1410,17 @@ class UsersWP_Form_Builder {
 								$value = $cf['defaults']['is_active'];
 							}
 							?>
-                            <li <?php echo esc_attr($field_display); ?> class="uwp-setting-name">
+                            <li <?php echo esc_attr( $field_display ); ?> class="uwp-setting-name">
                                 <label for="is_active" class="uwp-tooltip-wrap">
 									<?php
 									echo uwp_help_tip( __( 'If no is selected then the field will not be displayed anywhere.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'Is active :', 'userswp' ); ?>
+									esc_html_e( 'Is active :', 'userswp' );
+                                    ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="hidden" name="is_active" value="0"/>
                                     <input type="checkbox" name="is_active"
-                                           value="1" <?php checked( $value, 1, true ); ?> />
+                                            value="1" <?php checked( $value, 1, true ); ?> />
                                 </div>
                             </li>
 							<?php
@@ -1555,16 +1439,17 @@ class UsersWP_Form_Builder {
 								$value = $cf['defaults']['for_admin_use'];
 							}
 							?>
-                            <li <?php echo esc_attr($field_display); ?> class="uwp-setting-name uwp-advanced-setting">
+                            <li <?php echo esc_attr( $field_display ); ?> class="uwp-setting-name uwp-advanced-setting">
                                 <label for="for_admin_use" class="uwp-tooltip-wrap">
 									<?php
 									echo uwp_help_tip( __( 'If yes is selected then only site admin can see and edit this field.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'For admin use only? :', 'userswp' ); ?>
+									esc_html_e( 'For admin use only? :', 'userswp' );
+                                    ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="hidden" name="for_admin_use" value="0"/>
                                     <input type="checkbox" name="for_admin_use"
-                                           value="1" <?php checked( $value, 1, true ); ?> />
+                                            value="1" <?php checked( $value, 1, true ); ?> />
                                 </div>
                             </li>
 							<?php
@@ -1583,22 +1468,23 @@ class UsersWP_Form_Builder {
 								$value = $cf['defaults']['is_public'];
 							}
 							?>
-                            <li <?php echo esc_attr($field_display); ?> class="uwp-setting-name uwp-advanced-setting">
+                            <li <?php echo esc_attr( $field_display ); ?> class="uwp-setting-name uwp-advanced-setting">
                                 <label for="is_public" class="uwp-tooltip-wrap">
 									<?php
 									echo uwp_help_tip( __( 'If no is selected then the field will not be visible to other users.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'Is Public :', 'userswp' ); ?>
+									esc_html_e( 'Is Public :', 'userswp' );
+                                    ?>
                                 </label>
                                 <div class="uwp-input-wrap">
 									<?php
-									if ( ! isset($value) ) {
-										$value = "1";
+									if ( ! isset( $value ) ) {
+										$value = '1';
 									}
 									?>
                                     <select name="is_public" class="aui-select2">
-                                        <option value="1" <?php selected( $value, "1" ); ?>><?php echo esc_html__( "Yes", "userswp" ) ?></option>
-                                        <option value="0" <?php selected( $value, "0" ); ?>><?php echo esc_html__( "No", "userswp" ) ?></option>
-                                        <option value="2" <?php selected( $value, "2" ); ?>><?php echo esc_html__( "Let User Decide", "userswp" ) ?></option>
+                                        <option value="1" <?php selected( $value, '1' ); ?>><?php echo esc_html__( 'Yes', 'userswp' ); ?></option>
+                                        <option value="0" <?php selected( $value, '0' ); ?>><?php echo esc_html__( 'No', 'userswp' ); ?></option>
+                                        <option value="2" <?php selected( $value, '2' ); ?>><?php echo esc_html__( 'Let User Decide', 'userswp' ); ?></option>
                                     </select>
 
                                 </div>
@@ -1624,7 +1510,7 @@ class UsersWP_Form_Builder {
 									<?php
 									if ( $field_type == 'checkbox' ) {
 										$tip = __( 'Should the checkbox be checked by default?', 'userswp' );
-									} else if ( $field_type == 'email' ) {
+									} elseif ( $field_type == 'email' ) {
 										$tip = __( 'A default value for the field, usually blank. Ex: info@mysite.com', 'userswp' );
 									} else {
 										$tip = __( 'A default value for the field, usually blank. (for links this will be used as the link text)', 'userswp' );
@@ -1632,7 +1518,8 @@ class UsersWP_Form_Builder {
 									?>
 									<?php
 									echo uwp_help_tip( $tip ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'Default value :', 'userswp' ); ?>
+									esc_html_e( 'Default value :', 'userswp' );
+                                    ?>
                                 </label>
                                 <div class="uwp-input-wrap">
 									<?php if ( $field_type == 'checkbox' ) { ?>
@@ -1640,13 +1527,13 @@ class UsersWP_Form_Builder {
                                             <option value=""><?php esc_html_e( 'Unchecked', 'userswp' ); ?></option>
                                             <option value="1" <?php selected( true, (int) $value === 1 ); ?>><?php esc_html_e( 'Checked', 'userswp' ); ?></option>
                                         </select>
-									<?php } else if ( $field_type == 'email' ) { ?>
+									<?php } elseif ( $field_type == 'email' ) { ?>
                                         <input type="email" name="default_value"
-                                               placeholder="<?php esc_attr_e( 'info@mysite.com', 'userswp' ); ?>"
-                                               id="default_value" value="<?php echo esc_attr( $value ); ?>"/><br/>
+                                                placeholder="<?php esc_attr_e( 'info@mysite.com', 'userswp' ); ?>"
+                                                id="default_value" value="<?php echo esc_attr( $value ); ?>"/><br/>
 									<?php } else { ?>
                                         <input type="text" name="default_value" id="default_value"
-                                               value="<?php echo esc_attr( $value ); ?>"/><br/>
+                                                value="<?php echo esc_attr( $value ); ?>"/><br/>
 									<?php } ?>
                                 </div>
                             </li>
@@ -1661,9 +1548,13 @@ class UsersWP_Form_Builder {
 						}
 						?>
                         <input type="hidden" readonly="readonly" name="sort_order" id="sort_order"
-                               value="<?php if ( isset( $field_info->sort_order ) ) {
-							       echo esc_attr( $field_info->sort_order );
-						       } ?>"/>
+                                value="
+                                <?php
+                                if ( isset( $field_info->sort_order ) ) {
+									echo esc_attr( $field_info->sort_order );
+								}
+                                ?>
+                                "/>
 						<?php
 
 						// is_required
@@ -1683,13 +1574,14 @@ class UsersWP_Form_Builder {
                                 <label for="is_required" class="uwp-tooltip-wrap">
 									<?php
 									echo uwp_help_tip( __( 'Select yes to set field as required', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'Is required :', 'userswp' ); ?>
+									esc_html_e( 'Is required :', 'userswp' );
+                                    ?>
                                 </label>
 
                                 <div class="uwp-input-wrap">
                                     <input type="hidden" name="is_required" value="0"/>
                                     <input type="checkbox" name="is_required"
-                                           value="1" <?php checked( $value, 1, true ); ?> />
+                                            value="1" <?php checked( $value, 1, true ); ?> />
                                 </div>
 
                             </li>
@@ -1710,17 +1602,22 @@ class UsersWP_Form_Builder {
 								$value = $cf['defaults']['required_msg'];
 							}
 							?>
-                            <li class="cf-is-required-msg uwp-setting-name uwp-advanced-setting" <?php if ( ( isset( $field_info->is_required ) && $field_info->is_required == '0' ) || ! isset( $field_info->is_required ) ) {
+                            <li class="cf-is-required-msg uwp-setting-name uwp-advanced-setting" 
+                            <?php
+                            if ( ( isset( $field_info->is_required ) && $field_info->is_required == '0' ) || ! isset( $field_info->is_required ) ) {
 								echo "style='display:none;'";
-							} ?>>
+							}
+                            ?>
+                            >
                                 <label for="required_msg" class="uwp-tooltip-wrap">
 									<?php
 									echo uwp_help_tip( __( 'Enter text for the error message if the field is required and has not fulfilled the requirements.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'Required message:', 'userswp' ); ?>
+									esc_html_e( 'Required message:', 'userswp' );
+                                    ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="required_msg" id="required_msg"
-                                           value="<?php echo esc_attr( $value ); ?>"/>
+                                            value="<?php echo esc_attr( $value ); ?>"/>
                                 </div>
                             </li>
 							<?php
@@ -1757,12 +1654,13 @@ class UsersWP_Form_Builder {
 
                                 <label for="field_icon" class="uwp-tooltip-wrap">
 									<?php
-									echo uwp_help_tip( sprintf( __( 'Upload icon using media and enter its url path, or enter %sfont awesome%s class eg:"fas fa-home"', 'userswp' ), '<a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank" >', '</a>' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'Upload icon :', 'userswp' ); ?>
+									echo uwp_help_tip( sprintf( __( 'Upload icon using media and enter its url path, or enter %1$sfont awesome%2$s class eg:"fas fa-home"', 'userswp' ), '<a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank" >', '</a>' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+									esc_html_e( 'Upload icon :', 'userswp' );
+                                    ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="field_icon" id="field_icon"
-                                           value="<?php echo esc_attr($value); ?>"/>
+                                            value="<?php echo esc_attr( $value ); ?>"/>
                                 </div>
 
                             </li>
@@ -1794,11 +1692,12 @@ class UsersWP_Form_Builder {
                                 <label for="css_class" class="uwp-tooltip-wrap">
 									<?php
 									echo uwp_help_tip( $tip ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'CSS class :', 'userswp' ); ?>
+									esc_html_e( 'CSS class :', 'userswp' );
+                                    ?>
                                 </label>
                                 <div class="uwp-input-wrap">
                                     <input type="text" name="css_class" id="css_class"
-                                           value="<?php echo esc_attr($value); ?>"/>
+                                            value="<?php echo esc_attr( $value ); ?>"/>
                                 </div>
 
                             </li>
@@ -1822,7 +1721,8 @@ class UsersWP_Form_Builder {
                                 <label for="show_in" class="uwp-tooltip-wrap">
 									<?php
 									echo uwp_help_tip( __( 'Select in what locations you want to display this field.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									esc_html_e( 'Show in what locations?:', 'userswp' ); ?>
+									esc_html_e( 'Show in what locations?:', 'userswp' );
+                                    ?>
                                 </label>
                                 <div class="uwp-input-wrap">
 
@@ -1834,22 +1734,25 @@ class UsersWP_Form_Builder {
 										unset( $show_in_locations['[fieldset]'] );
 									}
 
-									if ( ! in_array( $field_type, array(
-										'text',
-										'datepicker',
-										'textarea',
-										'time',
-										'phone',
-										'email',
-										'select',
-										'multiselect',
-										'url',
-										'html',
-										'fieldset',
-										'radio',
-										'checkbox',
-										'file'
-									) ) ) {
+									if ( ! in_array(
+                                        $field_type,
+                                        array(
+											'text',
+											'datepicker',
+											'textarea',
+											'time',
+											'phone',
+											'email',
+											'select',
+											'multiselect',
+											'url',
+											'html',
+											'fieldset',
+											'radio',
+											'checkbox',
+											'file',
+                                        )
+                                    ) ) {
 										unset( $show_in_locations['[own_tab]'] );
 									}
 									?>
@@ -1870,7 +1773,7 @@ class UsersWP_Form_Builder {
 											}
 
 											?>
-                                            <option value="<?php echo esc_attr($key); ?>" <?php selected( $selected, true ); ?>><?php echo esc_html( $val ); ?></option>
+                                            <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $selected, true ); ?>><?php echo esc_html( $val ); ?></option>
 											<?php
 										}
 										?>
@@ -1880,21 +1783,23 @@ class UsersWP_Form_Builder {
 							<?php
 						}
 
-						do_action( 'uwp_admin_extra_custom_fields', $field_info, $cf ); ?>
+						do_action( 'uwp_admin_extra_custom_fields', $field_info, $cf );
+                        ?>
 
                         <li>
                             <label for="save" class="uwp-tooltip-wrap">
                             </label>
                             <div class="uwp-input-wrap uwp-tab-actions" data-setting="save_button">
                                 <input type="button" class="button button-primary" name="save" id="save"
-                                       value="<?php echo esc_attr( __( 'Save', 'userswp' ) ); ?>"
-                                       onclick="save_field('<?php echo esc_attr( $result_str ); ?>')"/>
+                                        value="<?php echo esc_attr( __( 'Save', 'userswp' ) ); ?>"
+                                        onclick="save_field('<?php echo esc_attr( $result_str ); ?>')"/>
 								<?php
                                 $can_delete = apply_filters( 'uwp_cfa_can_delete_field', true, $field_info, $form_type );
-								if ( $can_delete ){ ?>
+								if ( $can_delete ) {
+                                ?>
                                     <a class="item-delete submitdelete deletion" id="delete-16"
-                                       href="javascript:void(0);"
-                                       onclick="delete_field('<?php echo esc_attr( $result_str ); ?>', '<?php echo esc_attr( wp_create_nonce( 'custom_fields_delete_' . $result_str ) ); ?>', '<?php echo esc_attr($htmlvar_name); ?>')"><?php esc_html_e( "Remove", "userswp" ); ?></a>
+                                        href="javascript:void(0);"
+                                        onclick="delete_field('<?php echo esc_attr( $result_str ); ?>', '<?php echo esc_attr( wp_create_nonce( 'custom_fields_delete_' . $result_str ) ); ?>', '<?php echo esc_attr( $htmlvar_name ); ?>')"><?php esc_html_e( 'Remove', 'userswp' ); ?></a>
 								<?php } ?>
 								<?php UsersWP_Settings_Page::toggle_advanced_button(); ?>
                             </div>
@@ -1931,11 +1836,12 @@ class UsersWP_Form_Builder {
             <label for="validation_pattern" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Enter regex expression for HTML5 pattern validation.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				esc_html_e( 'Validation pattern:', 'userswp' ); ?>
+				esc_html_e( 'Validation pattern:', 'userswp' );
+                ?>
             </label>
             <div class="uwp-input-wrap">
                 <input type="text" name="validation_pattern" id="validation_pattern"
-                       value="<?php echo esc_attr( $value ); ?>"/>
+                        value="<?php echo esc_attr( $value ); ?>"/>
             </div>
         </li>
 
@@ -1951,11 +1857,12 @@ class UsersWP_Form_Builder {
             <label for="validation_msg" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Enter a extra validation message to show to the user if validation fails.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				esc_html_e( 'Validation message:', 'userswp' ); ?>
+				esc_html_e( 'Validation message:', 'userswp' );
+                ?>
             </label>
             <div class="uwp-input-wrap">
                 <input type="text" name="validation_msg" id="required_msg"
-                       value="<?php echo esc_attr( $value ); ?>"/>
+                        value="<?php echo esc_attr( $value ); ?>"/>
             </div>
         </li>
 		<?php
@@ -1968,25 +1875,27 @@ class UsersWP_Form_Builder {
 	public function register_selected_fields( $form_type ) {
 		global $wpdb;
 		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
-		$form_id           = ! empty( $_GET['form'] ) ? absint($_GET['form']) : 1;
+		$form_id           = ! empty( $_GET['form'] ) ? absint( $_GET['form'] ) : 1;
 		?>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="register">
-        <ul class="core uwp_form_extras uwp-tabs-selected"><?php
+        <ul class="core uwp_form_extras uwp-tabs-selected">
+        <?php
 
 			$fields = $wpdb->get_results(
 				$wpdb->prepare(
-					"select * from  " . $extras_table_name . " where form_type = %s AND form_id = %d order by sort_order asc",
+					'select * from  ' . $extras_table_name . ' where form_type = %s AND form_id = %d order by sort_order asc',
 					array( $form_type, $form_id )
 				)
 			);
 
 			if ( ! empty( $fields ) ) {
-				foreach ( $fields as $field ) {
-					$result_str    = $field;
-					$field_ins_upd = 'display';
-					$this->register_field_adminhtml( $result_str, $field_ins_upd, false );
+			foreach ( $fields as $field ) {
+$result_str    = $field;
+$field_ins_upd = 'display';
+$this->register_field_adminhtml( $result_str, $field_ins_upd, false );
 				}
-			} ?>
+			}
+            ?>
         </ul>
 		<?php
 	}
@@ -1999,10 +1908,10 @@ class UsersWP_Form_Builder {
 
 		$cf = $result_str;
 		if ( ! is_object( $cf ) && ( is_int( $cf ) || ctype_digit( $cf ) ) ) {
-			$field_info = $wpdb->get_row( $wpdb->prepare( "select * from " . $extras_table_name . " where id= %d", array( $cf ) ) );
+			$field_info = $wpdb->get_row( $wpdb->prepare( 'select * from ' . $extras_table_name . ' where id= %d', array( $cf ) ) );
 		} elseif ( is_object( $cf ) ) {
 			$result_str = $cf->id;
-			$field_info = $wpdb->get_row( $wpdb->prepare( "select * from " . $extras_table_name . " where id= %d", array( (int) $cf->id ) ) );
+			$field_info = $wpdb->get_row( $wpdb->prepare( 'select * from ' . $extras_table_name . ' where id= %d', array( (int) $cf->id ) ) );
 		} else {
 			$field_info = false;
 		}
@@ -2012,7 +1921,6 @@ class UsersWP_Form_Builder {
 		} else {
 			$field_type = $field_info->field_type;
 		}
-
 
 		$field_site_name = '';
 		if ( isset( $request['site_title'] ) ) {
@@ -2049,7 +1957,7 @@ class UsersWP_Form_Builder {
 				$field_info = new stdClass();
 			}
 			$field_info->field_icon = $wpdb->get_var(
-				$wpdb->prepare( "SELECT field_icon FROM " . $table_name . " WHERE htmlvar_name = %s", array( $htmlvar_name ) )
+				$wpdb->prepare( 'SELECT field_icon FROM ' . $table_name . ' WHERE htmlvar_name = %s', array( $htmlvar_name ) )
 			);
 		}
 
@@ -2057,7 +1965,7 @@ class UsersWP_Form_Builder {
 		if ( uwp_is_fa_icon( $icon ) ) {
 			$field_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
 		} elseif ( uwp_is_icon_url( $icon ) ) {
-			$field_icon = '<b style="background-image: url("' . esc_url($icon) . '")"></b>';
+			$field_icon = '<b style="background-image: url("' . esc_url( $icon ) . '")"></b>';
 		} elseif ( isset( $field_info->field_type ) && $field_info->field_type == 'fieldset' ) {
 			$field_icon = '<i class="fas fa-arrows-alt-h" aria-hidden="true"></i>';
 		} else {
@@ -2077,19 +1985,23 @@ class UsersWP_Form_Builder {
                 </div>
 
                 <div id="field_frm<?php echo esc_attr( $result_str ); ?>" class="field_frm"
-                     style="display:<?php if ( $field_ins_upd == 'submit' ) {
-					     echo 'block;';
-				     } else {
-					     echo 'none;';
-				     } ?>">
+                    style="display:
+                    <?php
+                    if ( $field_ins_upd == 'submit' ) {
+						echo 'block;';
+					} else {
+										echo 'none;';
+					}
+                    ?>
+                    ">
                     <input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $nonce ); ?>"/>
                     <input type="hidden" name="field_id" id="field_id" value="<?php echo esc_attr( $result_str ); ?>"/>
-                    <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr($form_type); ?>"/>
-                    <input type="hidden" name="field_type" id="field_type" value="<?php echo esc_attr($field_type); ?>"/>
+                    <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr( $form_type ); ?>"/>
+                    <input type="hidden" name="field_type" id="field_type" value="<?php echo esc_attr( $field_type ); ?>"/>
                     <input type="hidden" name="is_active" id="is_active" value="1"/>
                     <ul class="widefat post fixed" style="width:100%;">
 
-                        <input type="hidden" name="site_htmlvar_name" value="<?php echo esc_attr($htmlvar_name) ?>"/>
+                        <input type="hidden" name="site_htmlvar_name" value="<?php echo esc_attr( $htmlvar_name ); ?>"/>
 
                         <li>
                             <div class="uwp-input-wrap">
@@ -2102,15 +2014,16 @@ class UsersWP_Form_Builder {
 								<?php
 								$no_actions = array( 'username', 'email' );
 								$no_actions = apply_filters( 'uwp_register_fields_without_actions', $no_actions );
-								if ( isset($htmlvar_name) && ! in_array( $htmlvar_name, $no_actions ) ) { ?>
+								if ( isset( $htmlvar_name ) && ! in_array( $htmlvar_name, $no_actions ) ) {
+                                ?>
                                     <input type="button" class="button button-primary" name="save" id="save"
-                                           value="<?php esc_attr_e( 'Save', 'userswp' ); ?>"
-                                           onclick="save_field('<?php echo esc_js( $result_str ); ?>', 'register')"
-                                           style="display: none;"/>
+                                            value="<?php esc_attr_e( 'Save', 'userswp' ); ?>"
+                                            onclick="save_field('<?php echo esc_js( $result_str ); ?>', 'register')"
+                                            style="display: none;"/>
                                     <input type="button" name="delete"
-                                           value="<?php esc_attr_e( 'Delete', 'userswp' ); ?>"
-                                           onclick="delete_field('<?php echo esc_js( $result_str ); ?>', '<?php echo esc_js( $nonce ); ?>','<?php echo esc_js( $htmlvar_name ); ?>', 'register')"
-                                           class="button"/>
+                                            value="<?php esc_attr_e( 'Delete', 'userswp' ); ?>"
+                                            onclick="delete_field('<?php echo esc_js( $result_str ); ?>', '<?php echo esc_js( $nonce ); ?>','<?php echo esc_js( $htmlvar_name ); ?>', 'register')"
+                                            class="button"/>
 								<?php } ?>
 
                             </div>
@@ -2157,18 +2070,21 @@ class UsersWP_Form_Builder {
 				?>
 				<?php
 				echo uwp_help_tip( $tip ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				esc_html_e( 'Option Values :', 'userswp' ); ?>
+				esc_html_e( 'Option Values :', 'userswp' );
+                ?>
             </label>
             <div class="uwp-input-wrap">
 
-				<?php if ( isset( $field_type_key ) && $field_type_key == 'uwp_country' ) {
+				<?php
+                if ( isset( $field_type_key ) && $field_type_key == 'uwp_country' ) {
 
 					// @todo here we should show a multiselect to either include or exclude countries
 					esc_html_e( 'A full country list will be shown', 'userswp' );
                 } elseif ( isset( $field_type_key ) && $field_type_key == 'uwp_language' ) {
 					esc_html_e( 'Available translation languages list will be shown', 'userswp' );
-				} else { ?>
-                    <input type="text" name="option_values" id="option_values" value="<?php echo esc_attr($value); ?>"/>
+				} else {
+                ?>
+                    <input type="text" name="option_values" id="option_values" value="<?php echo esc_attr( $value ); ?>"/>
 				<?php } ?>
 
                 <br/>
@@ -2193,7 +2109,8 @@ class UsersWP_Form_Builder {
             <label for="date_format" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Select the date format.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				esc_html_e( 'Date Format :', 'userswp' ); ?>
+				esc_html_e( 'Date Format :', 'userswp' );
+                ?>
             </label>
             <div class="uwp-input-wrap" style="overflow:inherit;">
 				<?php
@@ -2216,7 +2133,7 @@ class UsersWP_Form_Builder {
 						if ( ! empty( $extra ) && esc_attr( $extra['date_format'] ) == $format ) {
 							$selected = true;
 						}
-						echo "<option " . selected( $selected, true, false ) . " value='" . esc_attr( $format ) . "'>" . esc_html( $format . "       (" . date_i18n( $format, time() ) . ")" ) . "</option>";
+						echo '<option ' . selected( $selected, true, false ) . " value='" . esc_attr( $format ) . "'>" . esc_html( $format . '       (' . date_i18n( $format, time() ) . ')' ) . '</option>';
 					}
 					?>
                 </select>
@@ -2245,13 +2162,14 @@ class UsersWP_Form_Builder {
                 <label for="extra[confirm_password]" class="uwp-tooltip-wrap">
 					<?php
 					echo uwp_help_tip( __( 'Lets you display confirm password form field.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					esc_html_e( 'Display confirm password field?:', 'userswp' ); ?>
+					esc_html_e( 'Display confirm password field?:', 'userswp' );
+                    ?>
                 </label>
 
                 <div class="uwp-input-wrap">
                     <input type="hidden" name="extra[confirm_password]" value="0"/>
                     <input type="checkbox" name="extra[confirm_password]" value="1" <?php checked( $value, 1, true ); ?>
-                           onclick=""/>
+                            onclick=""/>
                 </div>
             </li>
 			<?php
@@ -2276,13 +2194,14 @@ class UsersWP_Form_Builder {
                 <label for="extra[confirm_email]" class="uwp-tooltip-wrap">
 					<?php
 					echo uwp_help_tip( __( 'Lets you display confirm email form field.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					esc_html_e( 'Display confirm email field?:', 'userswp' ); ?>
+					esc_html_e( 'Display confirm email field?:', 'userswp' );
+                    ?>
                 </label>
 
                 <div class="uwp-input-wrap">
                     <input type="hidden" name="extra[confirm_email]" value="0"/>
                     <input type="checkbox" name="extra[confirm_email]" value="1" <?php checked( $value, 1, true ); ?>
-                           onclick=""/>
+                            onclick=""/>
                 </div>
             </li>
 			<?php
@@ -2305,7 +2224,8 @@ class UsersWP_Form_Builder {
             <label for="uwp_file_types" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Select file types to allowed for file uploading. (Select multiple file types by holding down "Ctrl" key.)', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				esc_html_e( 'Allowed file types :', 'userswp' ); ?>
+				esc_html_e( 'Allowed file types :', 'userswp' );
+                ?>
             </label>
             <div class="uwp-input-wrap">
                 <select name="extra[uwp_file_types][]" id="uwp_file_types" multiple="multiple" class="aui-select2"
@@ -2343,24 +2263,37 @@ class UsersWP_Form_Builder {
             <label for="data_type" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Select Custom Field type', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				esc_html_e( 'Field Data Type:', 'userswp' ); ?>
+				esc_html_e( 'Field Data Type:', 'userswp' );
+                ?>
             </label>
             <div class="uwp-input-wrap">
 
                 <select name="data_type" id="data_type" class="aui-select2"
                         onchange="uwp_data_type_changed(this, '<?php echo esc_js( $result_str ); ?>');">
                     <option
-                            value="XVARCHAR" <?php if ( $dt_value == 'VARCHAR' ) {
+                            value="XVARCHAR" 
+                            <?php
+                            if ( $dt_value == 'VARCHAR' ) {
 						echo 'selected="selected"';
-					} ?>><?php esc_html_e( 'Text Field', 'userswp' ); ?></option>
+					}
+                    ?>
+                    ><?php esc_html_e( 'Text Field', 'userswp' ); ?></option>
                     <option
-                            value="INT" <?php if ( $dt_value == 'INT' ) {
+                            value="INT" 
+                            <?php
+                            if ( $dt_value == 'INT' ) {
 						echo 'selected="selected"';
-					} ?>><?php esc_html_e( 'Number Field', 'userswp' ); ?></option>
+					}
+                    ?>
+                    ><?php esc_html_e( 'Number Field', 'userswp' ); ?></option>
                     <option
-                            value="FLOAT" <?php if ( $dt_value == 'FLOAT' ) {
+                            value="FLOAT" 
+                            <?php
+                            if ( $dt_value == 'FLOAT' ) {
 						echo 'selected="selected"';
-					} ?>><?php esc_html_e( 'Decimal Field', 'userswp' ); ?></option>
+					}
+                    ?>
+                    ><?php esc_html_e( 'Decimal Field', 'userswp' ); ?></option>
                 </select>
 
             </div>
@@ -2376,11 +2309,12 @@ class UsersWP_Form_Builder {
 		?>
 
         <li class="decimal-point-wrapper uwp-setting-name uwp-advanced-setting"
-            style="<?php echo ( $dt_value == 'FLOAT' ) ? '' : 'display:none' ?>">
+            style="<?php echo ( $dt_value == 'FLOAT' ) ? '' : 'display:none'; ?>">
             <label for="decimal_point" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Decimal places to display after point', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				esc_html_e( 'Select decimal precision:', 'userswp' ); ?>
+				esc_html_e( 'Select decimal precision:', 'userswp' );
+                ?>
             </label>
             <div class="uwp-input-wrap">
                 <select name="decimal_point" id="decimal_point" class="aui-select2">
@@ -2406,13 +2340,13 @@ class UsersWP_Form_Builder {
 		$value = 0;
 		if ( isset( $field_info->is_register_field ) ) {
 			$value = (int) $field_info->is_register_field;
-		} else if ( isset( $cf['defaults']['is_register_field'] ) && $cf['defaults']['is_register_field'] ) {
+		} elseif ( isset( $cf['defaults']['is_register_field'] ) && $cf['defaults']['is_register_field'] ) {
 			$value = ( $cf['defaults']['is_register_field'] ) ? 1 : 0;
 		}
 
 		if ( isset( $field_info->htmlvar_name ) ) {
 			$htmlvar_name = $field_info->htmlvar_name;
-		} else if ( isset( $cf['defaults']['htmlvar_name'] ) && $cf['defaults']['htmlvar_name'] ) {
+		} elseif ( isset( $cf['defaults']['htmlvar_name'] ) && $cf['defaults']['htmlvar_name'] ) {
 			$htmlvar_name = ( $cf['defaults']['htmlvar_name'] ) ? $cf['defaults']['htmlvar_name'] : '';
 		}
 
@@ -2422,14 +2356,14 @@ class UsersWP_Form_Builder {
 		$register_only_value      = 0;
 		if ( isset( $field_info->is_register_only_field ) ) {
 			$register_only_value = (int) $field_info->is_register_only_field;
-		} else if ( isset( $cf['defaults']['is_register_only_field'] ) && $cf['defaults']['is_register_only_field'] ) {
+		} elseif ( isset( $cf['defaults']['is_register_only_field'] ) && $cf['defaults']['is_register_only_field'] ) {
 			$register_only_value = ( $cf['defaults']['is_register_only_field'] ) ? 1 : 0;
 		}
 
 		$user_sort_value = 0;
 		if ( isset( $field_info->user_sort ) ) {
 			$user_sort_value = (int) $field_info->user_sort;
-		} else if ( isset( $cf['defaults']['user_sort'] ) && $cf['defaults']['user_sort'] ) {
+		} elseif ( isset( $cf['defaults']['user_sort'] ) && $cf['defaults']['user_sort'] ) {
 			$user_sort_value = ( $cf['defaults']['user_sort'] ) ? 1 : 0;
 		}
 
@@ -2438,7 +2372,8 @@ class UsersWP_Form_Builder {
             <label for="is_register_field" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Lets you use this field as register form field, set from register tab above.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				esc_html_e( 'Include this field in register form:', 'userswp' ); ?>
+				esc_html_e( 'Include this field in register form:', 'userswp' );
+                ?>
             </label>
 
 			<?php
@@ -2463,7 +2398,8 @@ class UsersWP_Form_Builder {
             <label for="is_register_only_field" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Lets you use this field as register ONLY form field.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				esc_html_e( 'Include this field ONLY in register form:', 'userswp' ); ?>
+				esc_html_e( 'Include this field ONLY in register form:', 'userswp' );
+                ?>
             </label>
 
 			<?php
@@ -2479,7 +2415,7 @@ class UsersWP_Form_Builder {
                 <div class="uwp-input-wrap">
                     <input type="hidden" name="is_register_only_field" value="0"/>
                     <input type="checkbox" name="is_register_only_field"
-                           value="1" <?php checked( $register_only_value, 1, true ); ?> />
+                            value="1" <?php checked( $register_only_value, 1, true ); ?> />
                 </div>
 			<?php } ?>
         </li>
@@ -2488,7 +2424,8 @@ class UsersWP_Form_Builder {
             <label for="user_sort" class="uwp-tooltip-wrap">
 				<?php
 				echo uwp_help_tip( __( 'Lets you use this field as sorting in the users listing page, set from user sorting tab above.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				esc_html_e( 'Include this field in sorting options:', 'userswp' ); ?>
+				esc_html_e( 'Include this field in sorting options:', 'userswp' );
+                ?>
             </label>
             <input type="hidden" name="user_sort" value="0"/>
             <input type="checkbox" name="user_sort" value="1" <?php checked( $user_sort_value, 1, true ); ?> />
@@ -2498,7 +2435,7 @@ class UsersWP_Form_Builder {
 	}
 
 	public function return_empty_string() {
-		return "";
+		return '';
 	}
 
 	public function register_available_fields_head( $heading, $form_type ) {
@@ -2561,7 +2498,7 @@ class UsersWP_Form_Builder {
 		$field_type_key = isset( $_REQUEST['field_type_key'] ) ? sanitize_text_field( $_REQUEST['field_type_key'] ) : '';
 		$field_action   = isset( $_REQUEST['field_ins_upd'] ) ? sanitize_text_field( $_REQUEST['field_ins_upd'] ) : '';
 		$field_id       = isset( $_REQUEST['field_id'] ) ? sanitize_text_field( $_REQUEST['field_id'] ) : '';
-		$form_id        = isset( $_REQUEST['form_id'] ) ? absint($_REQUEST['form_id']) : 1;
+		$form_id        = isset( $_REQUEST['form_id'] ) ? absint( $_REQUEST['form_id'] ) : 1;
 
 		$field_id = $field_id != '' ? trim( $field_id, '_' ) : $field_id;
 
@@ -2573,7 +2510,7 @@ class UsersWP_Form_Builder {
 		}
 
 		/* ------- check nonce field ------- */
-		if ( isset( $_REQUEST['update'] ) && $_REQUEST['update'] == "update" && isset( $_REQUEST['create_field'] ) && isset( $_REQUEST['manage_field_type'] ) && $_REQUEST['manage_field_type'] == 'custom_fields' ) {
+		if ( isset( $_REQUEST['update'] ) && $_REQUEST['update'] == 'update' && isset( $_REQUEST['create_field'] ) && isset( $_REQUEST['manage_field_type'] ) && $_REQUEST['manage_field_type'] == 'custom_fields' ) {
 			echo $this->set_field_order( $field_ids, $form_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
@@ -2581,7 +2518,6 @@ class UsersWP_Form_Builder {
 		if ( $field_type != '' && $field_id != '' && $field_action == 'new' && isset( $_REQUEST['create_field'] ) && isset( $_REQUEST['manage_field_type'] ) && $_REQUEST['manage_field_type'] == 'custom_fields' ) {
 			$this->form_field_adminhtml( $field_type, $field_id, $field_action, $field_type_key, $form_type );
 		}
-
 
 		/* ---- Delete field ---- */
 		if ( $field_id != '' && $field_action == 'delete' && isset( $_REQUEST['_wpnonce'] ) && isset( $_REQUEST['create_field'] ) && isset( $_REQUEST['manage_field_type'] ) && $_REQUEST['manage_field_type'] == 'custom_fields' ) {
@@ -2621,7 +2557,6 @@ class UsersWP_Form_Builder {
 		}
 
 		wp_die();
-
 	}
 
 	public function set_field_order( $field_ids = array(), $form_id = 1 ) {
@@ -2631,7 +2566,7 @@ class UsersWP_Form_Builder {
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
 		$count = 0;
-		if ( ! empty( $field_ids ) ):
+		if ( ! empty( $field_ids ) ) :
 			$user_meta_info = false;
 			foreach ( $field_ids as $id ) {
 
@@ -2639,17 +2574,17 @@ class UsersWP_Form_Builder {
 
 				$user_meta_info = $wpdb->query(
 					$wpdb->prepare(
-						"update " . $table_name . " set
+						'update ' . $table_name . ' set
 															sort_order=%d
-															where id= %d and form_id = %d",
+															where id= %d and form_id = %d',
 						array( $count, $cf, $form_id )
 					)
 				);
-				$count ++;
+				++$count;
 			}
 
 			return $user_meta_info;
-		else:
+		else :
 			return false;
 		endif;
 	}
@@ -2665,15 +2600,15 @@ class UsersWP_Form_Builder {
 		if ( $field_id != '' ) {
 			$cf = trim( $field_id, '_' );
 
-			if ( $field = $wpdb->get_row( $wpdb->prepare( "select id, htmlvar_name  from " . $table_name . " where id= %d AND form_id = %d", array( $cf, $form_id ) ) ) ) {
+			if ( $field = $wpdb->get_row( $wpdb->prepare( 'select id, htmlvar_name  from ' . $table_name . ' where id= %d AND form_id = %d', array( $cf, $form_id ) ) ) ) {
 
-				$excluded_delete = array('username', 'email');
-			    if(isset($field->htmlvar_name) && in_array($field->htmlvar_name, $excluded_delete)){
+				$excluded_delete = array( 'username', 'email' );
+			    if ( isset( $field->htmlvar_name ) && in_array( $field->htmlvar_name, $excluded_delete ) ) {
                     return $field_id;
                 }
 
 			    // delete the meta column
-				if ( isset($field->htmlvar_name) && $delete_meta ) {
+				if ( isset( $field->htmlvar_name ) && $delete_meta ) {
 					$register_forms = uwp_get_option( 'multiple_registration_forms' );
 					$custom_fields = array();
 
@@ -2685,12 +2620,12 @@ class UsersWP_Form_Builder {
 						if ( isset( $form_ids ) && count( $form_ids ) > 0 ) {
 							$form_ids_placeholder = array_fill( 0, count( $form_ids ), '%d' );
 							$form_ids_placeholder = implode( ', ', $form_ids_placeholder );
-							$query                = $wpdb->prepare("SELECT id FROM " . $table_name . " WHERE form_type = 'account' AND htmlvar_name = '".$field->htmlvar_name."' AND form_id IN (" . $form_ids_placeholder . ") ORDER BY sort_order ASC", $form_ids);
-							$custom_fields        = $wpdb->get_results( $query);
+							$query                = $wpdb->prepare( 'SELECT id FROM ' . $table_name . " WHERE form_type = 'account' AND htmlvar_name = '" . $field->htmlvar_name . "' AND form_id IN (" . $form_ids_placeholder . ') ORDER BY sort_order ASC', $form_ids );
+							$custom_fields        = $wpdb->get_results( $query );
 						}
 					}
 
-					if(isset($custom_fields) && !empty($custom_fields) && count($custom_fields) > 1){
+					if ( isset( $custom_fields ) && ! empty( $custom_fields ) && count( $custom_fields ) > 1 ) {
                         // Do not delete user meta column if field used in more than one form.
                     } else {
 						$col_name = sanitize_sql_orderby( $field->htmlvar_name );
@@ -2698,10 +2633,10 @@ class UsersWP_Form_Builder {
                     }
 				}
 
-                $wpdb->query( $wpdb->prepare( "delete from " . $table_name . " where id= %d AND form_id = %d", array( $cf, $form_id ) ) );
+                $wpdb->query( $wpdb->prepare( 'delete from ' . $table_name . ' where id= %d AND form_id = %d', array( $cf, $form_id ) ) );
 
                 // Also delete register form field
-                $wpdb->query( $wpdb->prepare( "delete from " . $extras_table_name . " where site_htmlvar_name= %s AND form_id = %d ", array( $field->htmlvar_name, $form_id ) ) );
+                $wpdb->query( $wpdb->prepare( 'delete from ' . $extras_table_name . ' where site_htmlvar_name= %s AND form_id = %d ', array( $field->htmlvar_name, $form_id ) ) );
 
 				do_action( 'uwp_after_custom_field_deleted', $cf, $field );
 
@@ -2742,18 +2677,17 @@ class UsersWP_Form_Builder {
 		$old_html_variable_name  = 'uwp_account_' . $cehhtmlvar_name;
 		$check_old_html_variable = $wpdb->get_var(
 			$wpdb->prepare(
-				"select htmlvar_name from " . $table_name . " where id <> %d and htmlvar_name = %s and form_type = %s and form_id = %d",
+				'select htmlvar_name from ' . $table_name . ' where id <> %d and htmlvar_name = %s and form_type = %s and form_id = %d',
 				array( $cf, $old_html_variable_name, $form_type, $form_id )
 			)
 		);
 
 		$check_html_variable = $wpdb->get_var(
 			$wpdb->prepare(
-				"select htmlvar_name from " . $table_name . " where id <> %d and htmlvar_name = %s and form_type = %s and form_id = %d",
+				'select htmlvar_name from ' . $table_name . ' where id <> %d and htmlvar_name = %s and form_type = %s and form_id = %d',
 				array( $cf, $cehhtmlvar_name, $form_type, $form_id )
 			)
 		);
-
 
 		if ( ( ! $check_old_html_variable && ! $check_html_variable ) || $request_field['field_type'] == 'fieldset' ) {
 
@@ -2761,7 +2695,7 @@ class UsersWP_Form_Builder {
 
 				$user_meta_info = $wpdb->get_row(
 					$wpdb->prepare(
-						"select * from " . $table_name . " where id = %d",
+						'select * from ' . $table_name . ' where id = %d',
 						array( $cf )
 					)
 				);
@@ -2779,12 +2713,16 @@ class UsersWP_Form_Builder {
 			$field_type             = sanitize_text_field( $request_field['field_type'] );
 			$data_type              = sanitize_text_field( $request_field['data_type'] );
 			$field_type_key         = isset( $request_field['field_type_key'] ) ? sanitize_text_field( $request_field['field_type_key'] ) : $field_type;
-			$htmlvar_name           = isset( $request_field['htmlvar_name'] ) ? str_replace( array(
-				'-',
-				' ',
-				'"',
-				"'"
-			), array( '_', '', '', '' ), sanitize_title_with_dashes( $request_field['htmlvar_name'] ) ) : null;
+			$htmlvar_name           = isset( $request_field['htmlvar_name'] ) ? str_replace(
+                array(
+					'-',
+					' ',
+					'"',
+					"'",
+                ),
+                array( '_', '', '', '' ),
+                sanitize_title_with_dashes( $request_field['htmlvar_name'] )
+            ) : null;
 			$default_value          = isset( $request_field['default_value'] ) ? sanitize_text_field( $request_field['default_value'] ) : '';
 			$sort_order             = isset( $request_field['sort_order'] ) ? absint( $request_field['sort_order'] ) : '';
 			$is_active              = isset( $request_field['is_active'] ) ? absint( $request_field['is_active'] ) : 1;
@@ -2809,12 +2747,18 @@ class UsersWP_Form_Builder {
 			$user_sort              = isset( $request_field['user_sort'] ) ? absint( $request_field['user_sort'] ) : 0;
 
 			if ( empty( $htmlvar_name ) ) {
-				$htmlvar_name = sanitize_key( str_replace( array( '-', ' ', '"', "'" ), array(
-					'_',
-					'_',
-					'',
-					''
-				), $request_field['site_title'] ) );
+				$htmlvar_name = sanitize_key(
+                    str_replace(
+                        array( '-', ' ', '"', "'" ),
+                        array(
+							'_',
+							'_',
+							'',
+							'',
+                        ),
+                        $request_field['site_title']
+                    )
+                );
 				if ( str_replace( '_', '', $htmlvar_name ) != '' ) {
 					$htmlvar_name = substr( $htmlvar_name, 0, 50 );
 				} else {
@@ -2823,12 +2767,12 @@ class UsersWP_Form_Builder {
 			}
 
 			if ( is_array( $show_in ) ) {
-				$show_in = implode( ",", $request_field['show_in'] );
+				$show_in = implode( ',', $request_field['show_in'] );
 				$show_in = sanitize_text_field( $show_in );
 			}
 
 			if ( is_array( $user_roles ) ) {
-				$user_roles = implode( ",", $request_field['user_roles'] );
+				$user_roles = implode( ',', $request_field['user_roles'] );
 				$user_roles = sanitize_text_field( $user_roles );
 			}
 
@@ -2843,7 +2787,7 @@ class UsersWP_Form_Builder {
 
 			if ( $sort_order == '' ) {
 
-				$last_order = $wpdb->get_var( "SELECT MAX(sort_order) as last_order FROM " . $table_name );
+				$last_order = $wpdb->get_var( 'SELECT MAX(sort_order) as last_order FROM ' . $table_name );
 
 				$sort_order = (int) $last_order + 1;
 			}
@@ -2854,12 +2798,11 @@ class UsersWP_Form_Builder {
 
 				if ( ! in_array( $htmlvar_name, $excluded ) ) {
 					// Create custom columns
-					switch ( $field_type ):
+					switch ( $field_type ) :
 
 						case 'checkbox':
 						case 'multiselect':
 						case 'select':
-
 							$op_size = '500';
 
 							// only make the field as big as it needs to be.
@@ -2882,7 +2825,7 @@ class UsersWP_Form_Builder {
 								}
 							}
 
-							$meta_field_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "`VARCHAR( $op_size ) NULL";
+							$meta_field_add = 'ALTER TABLE ' . $meta_table . ' CHANGE `' . $old_html_variable . '` `' . $htmlvar_name . "`VARCHAR( $op_size ) NULL";
 
 							if ( $default_value != '' ) {
 								$meta_field_add .= " DEFAULT '" . $default_value . "'";
@@ -2901,15 +2844,13 @@ class UsersWP_Form_Builder {
 								$extra_fields = $request_field['multi_display_type'];
 							}
 
-
 							break;
 
 						case 'textarea':
 						case 'editor':
 						case 'url':
 						case 'file':
-
-							$alter_result = $wpdb->query( "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` TEXT NULL" );
+							$alter_result = $wpdb->query( 'ALTER TABLE ' . $meta_table . ' CHANGE `' . $old_html_variable . '` `' . $htmlvar_name . '` TEXT NULL' );
 							if ( $alter_result === false ) {
 								return __( 'Column change failed, you may have too many columns.', 'userswp' );
 							}
@@ -2926,16 +2867,16 @@ class UsersWP_Form_Builder {
 						default:
 							if ( $data_type != 'VARCHAR' && $data_type != '' ) {
 								if ( $data_type == 'FLOAT' && $decimal_point > 0 ) {
-									$default_value_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` DECIMAL(11, " . (int) $decimal_point . ") NULL";
+									$default_value_add = 'ALTER TABLE ' . $meta_table . ' CHANGE `' . $old_html_variable . '` `' . $htmlvar_name . '` DECIMAL(11, ' . (int) $decimal_point . ') NULL';
 								} else {
-									$default_value_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` " . $data_type . " NULL";
+									$default_value_add = 'ALTER TABLE ' . $meta_table . ' CHANGE `' . $old_html_variable . '` `' . $htmlvar_name . '` ' . $data_type . ' NULL';
 								}
 
 								if ( is_numeric( $default_value ) && $default_value != '' ) {
 									$default_value_add .= " DEFAULT '" . $default_value . "'";
 								}
 							} else {
-								$default_value_add = "ALTER TABLE " . $meta_table . " CHANGE `" . $old_html_variable . "` `" . $htmlvar_name . "` VARCHAR( 254 ) NULL";
+								$default_value_add = 'ALTER TABLE ' . $meta_table . ' CHANGE `' . $old_html_variable . '` `' . $htmlvar_name . '` VARCHAR( 254 ) NULL';
 								if ( $default_value != '' ) {
 									$default_value_add .= " DEFAULT '" . $default_value . "'";
 								}
@@ -2955,10 +2896,8 @@ class UsersWP_Form_Builder {
 				}
 
 				$wpdb->query(
-
 					$wpdb->prepare(
-
-						"update " . $table_name . " set
+						'update ' . $table_name . ' set
                             form_type = %s,
                             site_title = %s,
                             form_label = %s,
@@ -2991,8 +2930,7 @@ class UsersWP_Form_Builder {
                             validation_msg = %s,
                             form_id = %d,
                             user_sort = %s
-                            where id = %d",
-
+                            where id = %d',
 						array(
 							$form_type,
 							$site_title,
@@ -3026,10 +2964,9 @@ class UsersWP_Form_Builder {
 							$validation_msg,
 							$form_id,
 							$user_sort,
-							$cf
+							$cf,
 						)
 					)
-
 				);
 
 				$lastid = trim( $cf );
@@ -3038,12 +2975,12 @@ class UsersWP_Form_Builder {
 
 			} else {
 
-				switch ( $field_type ):
+				switch ( $field_type ) :
 
 					case 'checkbox':
 						$data_type = 'TINYINT';
 
-						$meta_field_add = $data_type . "( 1 ) NOT NULL ";
+						$meta_field_add = $data_type . '( 1 ) NOT NULL ';
 						if ( (int) $default_value === 1 ) {
 							$meta_field_add .= " DEFAULT '1'";
 						}
@@ -3099,10 +3036,9 @@ class UsersWP_Form_Builder {
 					case 'editor':
 					case 'url':
 					case 'file':
-
 						$data_type = 'TEXT';
 
-						$meta_field_add = $data_type . " NULL ";
+						$meta_field_add = $data_type . ' NULL ';
 
 						$add_result = uwp_add_column_if_not_exist( $meta_table, $htmlvar_name, $meta_field_add );
 						if ( $add_result === false ) {
@@ -3112,10 +3048,9 @@ class UsersWP_Form_Builder {
 						break;
 
 					case 'datepicker':
-
 						$data_type = 'DATE';
 
-						$meta_field_add = $data_type . " NULL ";
+						$meta_field_add = $data_type . ' NULL ';
 
 						$add_result = uwp_add_column_if_not_exist( $meta_table, $htmlvar_name, $meta_field_add );
 						if ( $add_result === false ) {
@@ -3125,10 +3060,9 @@ class UsersWP_Form_Builder {
 						break;
 
 					case 'time':
-
 						$data_type = 'TIME';
 
-						$meta_field_add = $data_type . " NULL ";
+						$meta_field_add = $data_type . ' NULL ';
 
 						$add_result = uwp_add_column_if_not_exist( $meta_table, $htmlvar_name, $meta_field_add );
 						if ( $add_result === false ) {
@@ -3138,19 +3072,18 @@ class UsersWP_Form_Builder {
 						break;
 
 					default:
-
 						if ( $data_type != 'VARCHAR' && $data_type != '' ) {
-							$meta_field_add = $data_type . " NULL ";
+							$meta_field_add = $data_type . ' NULL ';
 
 							if ( $data_type == 'FLOAT' && $decimal_point > 0 ) {
-								$meta_field_add = "DECIMAL(11, " . (int) $decimal_point . ") NULL ";
+								$meta_field_add = 'DECIMAL(11, ' . (int) $decimal_point . ') NULL ';
 							}
 
 							if ( is_numeric( $default_value ) && $default_value != '' ) {
 								$meta_field_add .= " DEFAULT '" . $default_value . "'";
 							}
 						} else {
-							$meta_field_add = " VARCHAR( 254 ) NULL ";
+							$meta_field_add = ' VARCHAR( 254 ) NULL ';
 
 							if ( $default_value != '' ) {
 								$meta_field_add .= " DEFAULT '" . $default_value . "'";
@@ -3170,10 +3103,8 @@ class UsersWP_Form_Builder {
 				}
 
 				$wpdb->query(
-
 					$wpdb->prepare(
-
-						"insert into " . $table_name . " set
+						'insert into ' . $table_name . ' set
                             form_type = %s,
                             site_title = %s,
                             form_label = %s,
@@ -3205,8 +3136,7 @@ class UsersWP_Form_Builder {
                             validation_pattern = %s,
                             validation_msg = %s,
 						    form_id = %d,
-						    user_sort = %s ",
-
+						    user_sort = %s ',
 						array(
 							$form_type,
 							$site_title,
@@ -3239,11 +3169,9 @@ class UsersWP_Form_Builder {
 							$validation_pattern,
 							$validation_msg,
 							$form_id,
-							$user_sort
+							$user_sort,
 						)
-
 					)
-
 				);
 
 				$lastid = $wpdb->insert_id;
@@ -3254,11 +3182,9 @@ class UsersWP_Form_Builder {
 
 			return (int) $lastid;
 
-
 		} else {
 			return 'invalid_key';
 		}
-
 	}
 
 	public function register_ajax_handler() {
@@ -3281,7 +3207,7 @@ class UsersWP_Form_Builder {
 					}
 				}
 
-				$return = uwp_form_extras_field_order( $field_ids, "register", $form_id );
+				$return = uwp_form_extras_field_order( $field_ids, 'register', $form_id );
 
 				if ( is_array( $return ) ) {
 					$return = json_encode( $return );
@@ -3294,7 +3220,6 @@ class UsersWP_Form_Builder {
 			if ( $field_action == 'new' ) {
 				$form_type = isset( $_REQUEST['form_type'] ) ? sanitize_text_field( $_REQUEST['form_type'] ) : '';
 				$fields    = $this->register_fields( $form_type, $form_id );
-
 
 				$_REQUEST['site_field_id'] = isset( $_REQUEST['field_id'] ) ? sanitize_text_field( $_REQUEST['field_id'] ) : '';
 				$_REQUEST['is_default']    = '0';
@@ -3309,7 +3234,6 @@ class UsersWP_Form_Builder {
 						}
 					}
 				}
-
 
 				$htmlvar_name = isset( $_REQUEST['htmlvar_name'] ) ? sanitize_text_field( $_REQUEST['htmlvar_name'] ) : '';
 
@@ -3339,7 +3263,6 @@ class UsersWP_Form_Builder {
 					}
 				}
 
-
 				$return = $this->register_field_save( $_REQUEST );
 
 				if ( is_int( $return ) ) {
@@ -3362,7 +3285,7 @@ class UsersWP_Form_Builder {
 		if ( $field_id != '' ) {
 			$cf = trim( $field_id, '_' );
 
-			$wpdb->query( $wpdb->prepare( "delete from " . $extras_table_name . " where id= %d ", array( $cf ) ) );
+			$wpdb->query( $wpdb->prepare( 'delete from ' . $extras_table_name . ' where id= %d ', array( $cf ) ) );
 
 			return $field_id;
 
@@ -3387,13 +3310,16 @@ class UsersWP_Form_Builder {
 
 		/*-------- check duplicate validation --------*/
 
-		$site_htmlvar_name = isset( $request_field['site_htmlvar_name'] ) ? sanitize_text_field($request_field['site_htmlvar_name']) : sanitize_text_field($request_field['htmlvar_name']);
+		$site_htmlvar_name = isset( $request_field['site_htmlvar_name'] ) ? sanitize_text_field( $request_field['site_htmlvar_name'] ) : sanitize_text_field( $request_field['htmlvar_name'] );
 		$form_type         = $request_field['form_type'];
 		$field_type        = $request_field['field_type'];
 
-		$check_html_variable = $wpdb->get_var( $wpdb->prepare( "select site_htmlvar_name from " . $extras_table_name . " where id <> %d and site_htmlvar_name = %s and form_type = %s and form_id=%d",
-			array( $cf, $site_htmlvar_name, $form_type, $form_id ) ) );
-
+		$check_html_variable = $wpdb->get_var(
+            $wpdb->prepare(
+                'select site_htmlvar_name from ' . $extras_table_name . ' where id <> %d and site_htmlvar_name = %s and form_type = %s and form_id=%d',
+                array( $cf, $site_htmlvar_name, $form_type, $form_id )
+            )
+        );
 
 		if ( ! $check_html_variable ) {
 
@@ -3401,7 +3327,7 @@ class UsersWP_Form_Builder {
 
 				$user_meta_info = $wpdb->get_row(
 					$wpdb->prepare(
-						"select * from " . $extras_table_name . " where id = %d",
+						'select * from ' . $extras_table_name . ' where id = %d',
 						array( $cf )
 					)
 				);
@@ -3412,54 +3338,49 @@ class UsersWP_Form_Builder {
 				$form_type = 'register';
 			}
 
-			$site_htmlvar_name = sanitize_text_field($request_field['site_htmlvar_name']);
+			$site_htmlvar_name = sanitize_text_field( $request_field['site_htmlvar_name'] );
 			$field_id          = ( isset( $request_field['field_id'] ) && $request_field['field_id'] ) ? str_replace( 'new', '', $request_field['field_id'] ) : '';
 
 			if ( ! empty( $user_meta_info ) ) {
 
 				$wpdb->query(
 					$wpdb->prepare(
-						"update " . $extras_table_name . " set
+						'update ' . $extras_table_name . ' set
 					form_type = %s,
 					field_type = %s,
 					site_htmlvar_name = %s,
 					sort_order = %s,
 					form_id = %d
-					where id = %d",
+					where id = %d',
 						array(
 							$form_type,
 							$field_type,
 							$site_htmlvar_name,
 							$field_id,
 							$form_id,
-							$cf
+							$cf,
 						)
-
 					)
-
 				);
 
 				$lastid = trim( $cf );
 
-
 			} else {
-
 
 				$wpdb->query(
 					$wpdb->prepare(
-
-						"insert into " . $extras_table_name . " set
+						'insert into ' . $extras_table_name . ' set
 					form_type = %s,
 					field_type = %s,
 					site_htmlvar_name = %s,
 					sort_order = %s,
-						form_id = %s",
+						form_id = %s',
 						array(
 							$form_type,
 							$field_type,
 							$site_htmlvar_name,
 							$field_id,
-							$form_id
+							$form_id,
 						)
 					)
 				);
@@ -3469,10 +3390,8 @@ class UsersWP_Form_Builder {
 
 			return (int) $lastid;
 
-
 		} else {
 			return 'invalid_key';
 		}
 	}
-
 }

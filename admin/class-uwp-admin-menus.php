@@ -24,6 +24,7 @@ class UsersWP_Admin_Menus {
     public function __construct() {
         // Add menus
         add_action( 'admin_menu', array( $this, 'admin_menu' ), 9 );
+        add_action( 'admin_menu', array( $this, 'user_types_menu' ), 10 );
 	    add_action( 'admin_menu', array( $this, 'tools_menu' ), 80 );
         add_action( 'admin_menu', array( $this, 'status_menu' ), 90 );
         add_action( 'admin_menu', array( $this, 'addons_menu' ), 99 );
@@ -40,25 +41,25 @@ class UsersWP_Admin_Menus {
         $proceed = false;
         $show_builder = false;
         switch ( $install_type ) {
-            case "single":
-	        case "multi_na_all":
-	        case "multi_not_na":
+            case 'single':
+	        case 'multi_na_all':
+	        case 'multi_not_na':
                 $proceed = true;
                 $show_builder = true;
                 break;
-            case "multi_na_site_id":
+            case 'multi_na_site_id':
 	            $blog_id = null;
-	            if (defined( 'UWP_ROOT_PAGES' )) {
+	            if ( defined( 'UWP_ROOT_PAGES' ) ) {
 		            $blog_id = UWP_ROOT_PAGES;
 	            }
 
 	            $current_blog_id = get_current_blog_id();
-	            if ( !empty($blog_id) && is_int( (int)$blog_id ) && $blog_id == $current_blog_id  ) {
+	            if ( ! empty( $blog_id ) && is_int( (int)$blog_id ) && $blog_id == $current_blog_id ) {
 		            $proceed = true;
 		            $show_builder = true;
 	            }
                 break;
-            case "multi_na_default":
+            case 'multi_na_default':
                 $is_main_site = is_main_site();
                 if ( $is_main_site ) {
                     $proceed = true;
@@ -74,7 +75,6 @@ class UsersWP_Admin_Menus {
             return;
         }
 
-
         add_menu_page(
             __( 'UsersWP Settings', 'userswp' ),
             __( 'UsersWP', 'userswp' ),
@@ -87,7 +87,7 @@ class UsersWP_Admin_Menus {
 
         if ( $show_builder ) {
             add_submenu_page(
-                "userswp",
+                'userswp',
                 __( 'Form Builder', 'userswp' ),
                 __( 'Form Builder', 'userswp' ),
                 'manage_options',
@@ -95,7 +95,6 @@ class UsersWP_Admin_Menus {
                 array( 'UsersWP_Form_Builder', 'output' )
             );
         }
-
     }
 
     /**
@@ -103,9 +102,9 @@ class UsersWP_Admin_Menus {
      */
     public function tools_menu() {
         add_submenu_page(
-            "userswp",
-            __('UsersWP Tools', 'userswp'),
-            __('Tools', 'userswp'),
+            'userswp',
+            __( 'UsersWP Tools', 'userswp' ),
+            __( 'Tools', 'userswp' ),
             'manage_options',
             'uwp_tools',
             array( $this, 'tools_page' )
@@ -115,11 +114,25 @@ class UsersWP_Admin_Menus {
     /**
      * Add menu item.
      */
+    public function user_types_menu() {
+        add_submenu_page(
+            'userswp',
+            __( 'User Types', 'userswp' ),
+            __( 'User Types', 'userswp' ),
+            'manage_options',
+            'uwp_user_types',
+            array( $this, 'user_types_page' )
+        );
+    }
+
+    /**
+     * Add menu item.
+     */
     public function status_menu() {
         add_submenu_page(
-            "userswp",
-            __('Status', 'userswp'),
-            __('Status', 'userswp'),
+            'userswp',
+            __( 'Status', 'userswp' ),
+            __( 'Status', 'userswp' ),
             'manage_options',
             'uwp_status',
             array( $this, 'status_page' )
@@ -130,12 +143,12 @@ class UsersWP_Admin_Menus {
      * Add menu item.
      */
     public function addons_menu() {
-        if ( !apply_filters( 'uwp_show_addons_page', true ) ) {
+        if ( ! apply_filters( 'uwp_show_addons_page', true ) ) {
             return;
         }
 
         add_submenu_page(
-            "userswp",
+            'userswp',
             __( 'UsersWP Extensions', 'userswp' ),
             __( 'Extensions', 'userswp' ),
             'manage_options',
@@ -152,6 +165,13 @@ class UsersWP_Admin_Menus {
 	}
 
     /**
+	 * Init the user types page.
+	 */
+	public function user_types_page() {
+		UsersWP_User_Types::output();
+	}
+
+    /**
      * Init the status page.
      */
     public function status_page() {
@@ -165,5 +185,4 @@ class UsersWP_Admin_Menus {
         $addon_obj = new UsersWP_Admin_Addons();
         $addon_obj->output();
     }
-
 }
