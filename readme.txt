@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.22 - TBD =
+* WordPress 6.7 compatibility changes for translation - CHANGED
+
 = 1.2.21 - 2024-11-12 =
 * Update AUI & SD - CHANGED
 

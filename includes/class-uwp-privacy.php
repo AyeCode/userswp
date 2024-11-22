@@ -20,6 +20,16 @@ class UsersWP_Privacy extends UsersWP_Abstract_Privacy {
         include_once 'class-uwp-privacy-exporters.php';
         include_once 'class-uwp-privacy-erasers.php';
 
+        // Initialize data exporters and erasers.
+        add_action( 'init', array( $this, 'register_erasers_exporters' ) );
+    }
+
+    /**
+     * Initial registration of privacy erasers and exporters.
+     *
+     * Due to the use of translation functions, this should run only after plugins loaded.
+     */
+    public function register_erasers_exporters() {
         // This hook registers userswp data exporters.
         $this->add_exporter( 'uwp-customer-data', __( 'UsersWP User Data', 'userswp' ), array( 'UsersWP_Privacy_Exporters', 'user_data_exporter' ) );
 

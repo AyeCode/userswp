@@ -509,7 +509,7 @@ final class UsersWP {
 		add_action( 'admin_init', array( 'UsersWP_Activator', 'automatic_upgrade' ) );
 		add_action( 'init', array( 'UsersWP_Activator', 'init_background_updater' ), 5 );
 		add_action( 'widgets_init', array( $this, 'register_widgets' ) );
-		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+		add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
 		add_action( 'uwp_flush_rewrite_rules', array( $this, 'flush_rewrite_rules' ) );
 		add_action( 'uwp_language_file_add_string', array( $this, 'register_string' ), 10, 1 );
 		add_action( 'after_setup_theme', array( $this, 'hide_admin_bar' ));
@@ -915,7 +915,7 @@ final class UsersWP {
 		 */
 		$locale = apply_filters( 'plugin_locale', $locale, 'userswp' );
 
-		unload_textdomain( 'userswp' );
+		unload_textdomain( 'userswp', true );
 		load_textdomain( 'userswp', WP_LANG_DIR . '/userswp/userswp-' . $locale . '.mo' );
 		load_plugin_textdomain( 'userswp', false, plugin_basename( dirname( USERSWP_PLUGIN_FILE ) ) . '/languages/' );
 
