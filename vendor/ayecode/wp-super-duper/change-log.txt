@@ -1,3 +1,6 @@
+= 1.2.15 - 2024-11-28 =
+* Class added for Bricks element conversion - ADDED
+
 = 1.2.14 - 2024-11-12 =
 * widget_title_tag param now filtered by allowed tags list - CHANGED
 
