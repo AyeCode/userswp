@@ -161,3 +161,8 @@ body.modal-open .modal{
 .gd-settings-wrap .moxie-shim input{
   font-size: 0 !important;
 }
+/* Prevent BS left padding on ul */
+.select2-dropdown .select2-results > .select2-results__options {
+    padding-left: 0;
+    padding-right: 0;
+}
