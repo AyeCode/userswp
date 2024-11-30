@@ -231,8 +231,8 @@
          * @param {string} message Error message
          */
         handleError: function (error, success, message) {
-            if (success.is(":visible")) success.hide();
-            error.html(message).slideDown();
+            if (success.is(":visible")) success.addClass('d-none');
+            error.html(message).removeClass('d-none').slideDown();
         },
 
         /**
@@ -243,8 +243,8 @@
          * @param {string} message Error message
          */
         handleSuccess: function (error, success, message) {
-            if (error.is(":visible")) error.hide();
-            success.html(message).slideDown();
+            if (error.is(":visible")) error.addClass('d-none');
+            success.html(message).removeClass('d-none').slideDown();
         },
 
         /**

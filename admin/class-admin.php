@@ -882,6 +882,14 @@ class UsersWP_Admin {
         $new_form_id = uwp_get_next_register_form_id();
         if ( $new_form_id ) {
             $register_forms = (array) uwp_get_option( 'multiple_registration_forms', array() );
+            // Filter out invalid items.
+            $register_forms = array_filter(
+                $register_forms,
+                function ( $form ) {
+                return isset( $form['id'] );
+                }
+            );
+
             $register_forms[] = array(
                 'id'          => $new_form_id,
                 'title'       => ! empty( $form_title ) ? $form_title : sprintf( __( 'Form %d', 'userswp' ), $new_form_id ),
@@ -895,7 +903,7 @@ class UsersWP_Admin {
             );
 
             $register_forms = array_values( $register_forms );
-            $register_forms = apply_filters( 'uwp_multiple_registration_forms_update', $new_form_id, $register_forms );
+            $register_forms = apply_filters( 'uwp_multiple_registration_forms_update', $register_forms, $new_form_id );
 
             uwp_update_option( 'multiple_registration_forms', $register_forms );
 
@@ -975,7 +983,7 @@ class UsersWP_Admin {
 
         if ( $status ) {
             $register_forms = array_values( $register_forms );
-            $register_forms = apply_filters( 'uwp_multiple_registration_forms_update', $form_id, $register_forms );
+            $register_forms = apply_filters( 'uwp_multiple_registration_forms_update', $register_forms, $form_id );
             uwp_update_option( 'multiple_registration_forms', $register_forms );
             $redirect = add_query_arg(
                 array(

@@ -151,8 +151,8 @@ class UsersWP_User_Types {
                 ?>
 
                 <div class="bsui">
-                    <div class="alert alert-success x-hidden"></div>
-                    <div class="alert alert-danger x-hidden"></div>
+                    <div class="alert alert-success d-none"></div>
+                    <div class="alert alert-danger d-none"></div>
                 </div>
 
                 <div class="bsui">
@@ -317,8 +317,8 @@ class UsersWP_User_Types {
         <?php do_action( 'uwp_user_type_form_before_submit', $current_form ); ?>
 
         <div class="bsui">
-            <div class="alert alert-success x-hidden"></div>
-            <div class="alert alert-danger x-hidden"></div>
+            <div class="alert alert-success d-none"></div>
+            <div class="alert alert-danger d-none"></div>
         </div>
 
         <div class="bsui">

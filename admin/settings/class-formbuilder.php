@@ -328,7 +328,7 @@ class UsersWP_Form_Builder {
 				?>
 			</div>
 			<?php
-		}
+		} 
 
 		if ( ! empty( $tab ) && $tab == 'register' ) {
 			$current_form = ! empty( $_GET['form'] ) ? absint( $_GET['form'] ) : 1;
