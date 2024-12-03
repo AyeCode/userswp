@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.28';
+		public $version = '0.2.29';
 
 		/**
 		 * Class textdomain.
@@ -521,7 +521,6 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				.bs-tooltip-top .arrow{
 					margin-left:0px;
 				}
-				
 				.custom-switch input[type=checkbox]{
 				    display:none;
 				}
@@ -627,11 +626,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 * Adds the Font Awesome JS.
 		 */
 		public function enqueue_scripts() {
-
 			if( is_admin() && !$this->is_aui_screen()){
-				// don't add wp-admin scripts if not requested to
-			}else {
-
+				// Don't add wp-admin scripts if not requested to.
+			} else {
 				$js_setting = current_action() == 'wp_enqueue_scripts' ? 'js' : 'js_backend';
 
 				$bs_ver = $this->settings['bs_ver'] == '5' ? '-v5' : '';
@@ -655,20 +652,26 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 				$load_inline = false;
 
+				// Load select2 only when required.
+				if ( $this->force_load_select2() ) {
+					$dependency = array( 'select2', 'jquery' );
+				} else {
+					$dependency = array( 'jquery' );
+				}
+
 				if ( $this->settings[ $js_setting ] == 'core-popper' ) {
 					// Bootstrap bundle
 					$url = $this->url . 'assets' . $bs_ver . '/js/bootstrap.bundle.min.js';
-					wp_register_script( 'bootstrap-js-bundle', $url, array(
-						'select2',
-						'jquery'
-					), $this->version, $this->is_bs3_compat() );
-					// if in admin then add to footer for compatibility.
+					wp_register_script( 'bootstrap-js-bundle', $url, $dependency, $this->version, $this->is_bs3_compat() );
+
+					// If in admin then add to footer for compatibility.
 					is_admin() ? wp_enqueue_script( 'bootstrap-js-bundle', '', null, null, true ) : wp_enqueue_script( 'bootstrap-js-bundle' );
+
 					$script = $this->inline_script();
 					wp_add_inline_script( 'bootstrap-js-bundle', $script );
 				} elseif ( $this->settings[ $js_setting ] == 'popper' ) {
-					$url = $this->url . 'assets/js/popper.min.js'; //@todo we need to update this to bs5
-					wp_register_script( 'bootstrap-js-popper', $url, array( 'select2', 'jquery' ), $this->version );
+					$url = $this->url . 'assets/js/popper.min.js'; // @todo we need to update this to bs5
+					wp_register_script( 'bootstrap-js-popper', $url, $dependency, $this->version );
 					wp_enqueue_script( 'bootstrap-js-popper' );
 					$load_inline = true;
 				} else {
@@ -677,13 +680,41 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 				// Load needed inline scripts by faking the loading of a script if the main script is not being loaded
 				if ( $load_inline ) {
-					wp_register_script( 'bootstrap-dummy', '', array( 'select2', 'jquery' ) );
+					wp_register_script( 'bootstrap-dummy', '', $dependency );
 					wp_enqueue_script( 'bootstrap-dummy' );
+
 					$script = $this->inline_script();
 					wp_add_inline_script( 'bootstrap-dummy', $script );
 				}
 			}
+		}
 
+		/**
+		 * Enqueue select2 if called.
+		 *
+		 * @since 0.2.29
+		 */
+		public function force_load_select2() {
+			global $aui_select2_enqueued;
+
+			$conditional_select2 = apply_filters( 'aui_is_conditional_select2', true );
+
+			if ( $conditional_select2 !== true ) {
+				return true;
+			}
+
+			$load = is_admin() && ! $aui_select2_enqueued;
+
+			return apply_filters( 'aui_force_load_select2', $load );
+		}
+
+		/**
+		 * Enqueue select2 if called.
+		 *
+		 * @since 0.2.29
+		 */
+		public function enqueue_select2() {
+			wp_enqueue_script( 'select2' );
 		}
 
 		/**
@@ -2928,6 +2959,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                  * Reset field default value.
                  */
                 function aui_cf_field_reset_default_value($el, bHide, setVal) {
+                    if (!($el && $el.length)) {
+                        return;
+                    }
                     var type = aui_cf_field_get_type($el), key = $el.data('rule-key'), field = aui_cf_field_default_values[key];
                     if (typeof setVal === 'undefined' || (typeof setVal !== 'undefined' && setVal === null)) {
                         setVal = field.value;
@@ -3339,8 +3373,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 	}
 
+	global $ayecode_ui_settings;
+
 	/**
 	 * Run the class if found.
 	 */
-	AyeCode_UI_Settings::instance();
+	$ayecode_ui_settings = AyeCode_UI_Settings::instance();
 }

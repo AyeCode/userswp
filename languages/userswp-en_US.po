@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.18\n"
+"Project-Id-Version: UsersWP 1.2.22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-12 20:16+0530\n"
-"PO-Revision-Date: 2024-11-12 20:16+0530\n"
+"POT-Creation-Date: 2024-11-28 19:15+0530\n"
+"PO-Revision-Date: 2024-11-28 19:15+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -3568,19 +3568,19 @@ msgstr ""
 msgid "The UsersWP user data"
 msgstr ""
 
-#: includes/class-uwp-privacy.php:24 includes/class-uwp-privacy.php:27
+#: includes/class-uwp-privacy.php:34 includes/class-uwp-privacy.php:37
 msgid "UsersWP User Data"
 msgstr ""
 
-#: includes/class-uwp-privacy.php:37
+#: includes/class-uwp-privacy.php:47
 msgid "User data/profile"
 msgstr ""
 
-#: includes/class-uwp-privacy.php:38
+#: includes/class-uwp-privacy.php:48
 msgid "Example privacy texts."
 msgstr ""
 
-#: includes/class-uwp-privacy.php:39
+#: includes/class-uwp-privacy.php:49
 msgid ""
 "We collect information about you during the registration and edit profile "
 "process on our site. This information may include, but is not limited to, "
@@ -3589,33 +3589,33 @@ msgid ""
 "profile."
 msgstr ""
 
-#: includes/class-uwp-privacy.php:40
+#: includes/class-uwp-privacy.php:50
 msgid "Handling this data also allows us to:"
 msgstr ""
 
-#: includes/class-uwp-privacy.php:42
+#: includes/class-uwp-privacy.php:52
 msgid "- Send you important account/order/service information."
 msgstr ""
 
-#: includes/class-uwp-privacy.php:43
+#: includes/class-uwp-privacy.php:53
 msgid ""
 "- Display this information in a public facing manner (such as a web page or "
 "API request) and allow website users to search and view submitted "
 "information."
 msgstr ""
 
-#: includes/class-uwp-privacy.php:44
+#: includes/class-uwp-privacy.php:54
 msgid "- Respond to your queries or complaints."
 msgstr ""
 
-#: includes/class-uwp-privacy.php:45
+#: includes/class-uwp-privacy.php:55
 msgid ""
 "- Set up and administer your account, provide technical and/or customer "
 "support, and to verify your identity. We do this on the basis of our "
 "legitimate business interests."
 msgstr ""
 
-#: includes/class-uwp-privacy.php:47
+#: includes/class-uwp-privacy.php:57
 msgid ""
 "Any profile information provided to this site may be displayed publicly."
 msgstr ""

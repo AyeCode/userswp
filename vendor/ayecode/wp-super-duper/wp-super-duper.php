@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.14' );
+	define( 'SUPER_DUPER_VER', '1.2.15' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -84,6 +84,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					add_action( 'init', array( $this, 'register_fusion_element' ) );
 				}
 
+                // maybe load the Bricks transformer class
+                if( class_exists('\Bricks\Elements', false) ){
+					add_action( 'init', array( $this, 'load_bricks_element_class' ) );
+                }
+
 				// register block
 				if(empty($this->options['output_types']) || in_array('block',$this->options['output_types'])){
 					add_action( 'admin_enqueue_scripts', array( $this, 'register_block' ) );
@@ -137,6 +142,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			do_action( 'wp_super_duper_widget_init', $options, $this );
 		}
+
+        /**
+         * Load the Bricks conversion class if we are running Bricks.
+         * @return void
+         */
+        public function load_bricks_element_class() {
+                    include_once __DIR__ . '/includes/class-super-duper-bricks-element.php';
+        }
 
 		/**
 		 * The register widget function
