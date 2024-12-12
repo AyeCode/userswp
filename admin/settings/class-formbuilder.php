@@ -369,7 +369,7 @@ class UsersWP_Form_Builder {
 
 
 			?>
-                <?php if ( ! empty( $register_forms ) && is_array( $register_forms ) ) { ?>
+                <?php if ( ! empty( $register_forms ) && is_array( $register_forms ) && count( $register_forms ) > 1 ) { ?>
                     <form class="uwp_user_type_form" id="uwp_user_type_form" method="POST">
                         <input type="hidden" name="manage_field_form_id" class="manage_field_form_id" id="manage_field_form_id" value="<?php echo esc_attr( $current_form ); ?>">
                         <?php do_action( 'uwp_user_type_form_before', $current_form, $tab ); ?>
@@ -419,7 +419,7 @@ class UsersWP_Form_Builder {
                 <input type="hidden" name="manage_field_form_id" class="manage_field_form_id" id="manage_field_form_id"
                         value="<?php echo esc_attr( $current_form ); ?>">
 					<?php
-					if ( ! empty( $register_forms ) && is_array( $register_forms ) ) {
+					if ( ! empty( $register_forms ) && is_array( $register_forms ) && count( $register_forms ) > 1  ) {
                     ?>
                         <div class="d-flex align-items-center">
                             <label  class="form-label h1"><i class="fas fa-user me-3 iconbox border-0 fill rounded-circle transition-all btn-translucent-info iconsmallmedium"></i>
@@ -455,7 +455,7 @@ class UsersWP_Form_Builder {
                 <input type="hidden" name="manage_field_form_id" class="manage_field_form_id" id="manage_field_form_id"
                         value="<?php echo esc_attr( $current_form ); ?>">
 					<?php
-					if ( ! empty( $register_forms ) && is_array( $register_forms ) ) {
+					if ( ! empty( $register_forms ) && is_array( $register_forms ) && count( $register_forms ) > 1  ) {
                     ?>
                     <div class="d-flex align-items-center">
                         <label  class="form-label h1"><i class="fas fa-user me-3 iconbox border-0 fill rounded-circle transition-all btn-translucent-info iconsmallmedium"></i>
