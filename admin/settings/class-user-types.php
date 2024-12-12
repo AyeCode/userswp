@@ -249,7 +249,7 @@ class UsersWP_User_Types {
                 'form_title',
                 __( 'Title:', 'userswp' ),
                 __( 'Title of the form', 'userswp' ),
-                ! empty( $current_form['title'] ) ? $current_form['title'] : '',
+                ! empty( $current_form['title'] ) ? $current_form['title'] : ''
             );
 
             if ( ! empty( $user_roles ) && is_array( $user_roles ) ) {
