@@ -384,6 +384,7 @@ function uwp_tabs_close_settings($this) {
  * @param $this
  */
 function uwp_tabs_item_settings($this) {
+
     // if navigating away without save then remove
     if (jQuery('#licontainer_').length && jQuery($this).parent().attr("id") != 'licontainer_') {
         jQuery('#licontainer_').remove();

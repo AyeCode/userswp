@@ -1386,9 +1386,9 @@ function uwp_help_tip( $tip, $allow_html = false ) {
 		$tip = esc_attr( $tip );
 	}
 
-    $ml = $aui_bs5 ? 'ms-2' : 'ml-2';
+    $ml = $aui_bs5 ? 'ms-2 float-end' : 'ml-2 float-right';
 
-	return '<span class="uwp-help-tip fas fa-question-circle text-muted ' . $ml . '" title="' . $tip . '" data-bs-toggle="tooltip" data-bs-html="true"></span>';
+	return '<span class="uwp-help-tip dashicons dashicons-editor-help text-muted ' . $ml . '" title="' . $tip . '" data-bs-toggle="tooltip" data-bs-html="true"></span>';
 }
 
 /**

@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.7
-Stable tag: 1.2.22
+Stable tag: 1.2.23
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -53,7 +53,7 @@ You can chose if you want to hide any section of it and where to show the custom
 
 Or you can redesign the template completely just like you modify any WordPress page. Using shortcodes, blocks or widgets, through the classic editor, Gutenberg or any page builder. 
 
-Otherwise just customize the PHP templates as you wish within your child theme.
+Otherwise, just customize the PHP templates as you wish within your child theme.
 
 = Free Add-ons =
 
@@ -145,6 +145,11 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.23 - 2024-12-12 =
+* Added JS for better compatibility with AyeCode Connect Captcha - ADDED
+* User type functionality moved to its own sub menu - CHANGED
+* Form builder pages now have refreshed UI - CHANGED
 
 = 1.2.22 - 2024-11-28 =
 * WordPress 6.7 compatibility changes for translation - CHANGED

@@ -17,7 +17,6 @@ class Super_Duper_Bricks_Element extends \Bricks\Element {
 		$this->category = !empty($this->widget->options['textdomain']) ? esc_attr( $this->widget->options['textdomain'] ) : 'Super Duper';
 		$this->name     = $this->widget->id_base;
 		$this->icon     = (strpos($block_icon, 'fa') === 0) ? esc_attr($this->widget->options['block-icon']) : 'fas fa-globe-americas';
-//		$this->scripts  = [ 'bricksIsotope' ];
 
 		parent::__construct($element);
 	}
@@ -98,11 +97,49 @@ class Super_Duper_Bricks_Element extends \Bricks\Element {
 	 * @return void
 	 */
 	public function render() {
-		$settings   = $this->settings;
+		$settings   = $this->sd_maybe_convert_values( $this->settings );
 
+
+		// set the AyeCode UI calss on the wrapper
+		$this->set_attribute( '_root', 'class', 'bsui' );
 
 		// we might need to add a placeholder here for previews.
+
+		// add the bricks attributes to wrapper
+		echo "<div {$this->render_attributes( '_root' )}>";
 		echo $this->widget->output($settings);
+		echo '</div>';
+	}
+
+	/**
+	 * Values can never be arrays so convert if bricks setting make it an array.
+	 *
+	 * @param $settings
+	 * @return mixed
+	 */
+	public function sd_maybe_convert_values( $settings ) {
+
+
+		if (!empty($settings)) {
+			foreach( $settings as $k => $v ) {
+				if(is_array($v)) {
+					$value = '';
+					// is color
+					if (isset($v['hex'])) {
+						$value = $v['hex'];
+					} elseif (isset($v['icon'])) {
+						$value = $v['icon'];
+					}
+
+
+					// set the value
+					$settings[$k] = $value;
+				}
+
+			}
+		}
+
+		return $settings;
 	}
 
 	/**
@@ -140,6 +177,11 @@ class Super_Duper_Bricks_Element extends \Bricks\Element {
 				if(!empty($arg['element_require'])) {
 					$arg['required'] = $this->sd_convert_required($arg['element_require']);
 					unset($arg['element_require']);
+				}
+
+				// icons
+				if ('icon' === $key) {
+					$arg['type'] = 'icon';
 				}
 
 				$bricks_args[$key] = $arg;

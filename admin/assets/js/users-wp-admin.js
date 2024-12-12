@@ -354,6 +354,7 @@
                 .on('click', function() {
                     $advancedToggle.toggleClass('uwpa-hide');
                     $advancedElements.toggleClass('uwpa-show');
+                    $advancedElements.collapse('toggle');
                 });
         },
 

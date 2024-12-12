@@ -97,7 +97,9 @@ class UsersWP_User_Types_Table extends WP_List_Table {
             'title'      => __( 'User Type', 'userswp' ),
             'user_role'  => __( 'User Role', 'userswp' ),
             'reg_action' => __( 'Registration Action', 'userswp' ),
-            'slug'       => __( 'Slug', 'userswp' ),
+            'reg_link' => __( 'Register Link', 'userswp' ),
+            'reg_lightbox' => __( 'Register Lightbox', 'userswp' ),
+//            'slug'       => __( 'Slug', 'userswp' ),
         );
         return apply_filters( 'uwp_user_types_table_columns', $columns );
     }
@@ -129,27 +131,43 @@ class UsersWP_User_Types_Table extends WP_List_Table {
      *
      * @return array Formatted table data
      */
-    private function table_data() {
+    private function table_data()
+    {
         $data = array();
-        $register_forms = (array) uwp_get_option( 'multiple_registration_forms', array() );
+        $register_forms = (array)uwp_get_option('multiple_registration_forms', array());
 
-        foreach ( $register_forms as $register_form ) {
-            if ( isset( $register_form['id'], $register_form['title'] ) ) {
-                $form_data = array(
-                    'id'         => (int) $register_form['id'],
-                    'title'      => $register_form['title'],
-                    'slug'       => $register_form['slug'] ?? '',
-                    'user_role'  => $register_form['user_role'] ?? get_option( 'default_role' ),
-                    'reg_action' => $register_form['reg_action'] ?? 'auto_approve',
-                );
+        $register_url = uwp_get_register_page_url();
+        $settings = uwp_get_settings();
+        $register_modal_form = !empty($settings['register_modal_form']) ? $settings['register_modal_form'] : array(1);
+
+        foreach ($register_forms as $register_form) {
+
+            $slug = $register_form['title'] ? sanitize_title_with_dashes($register_form['title']) : '';
+            $reg_link_slug = $register_form['id'] > 1 ? add_query_arg('user_type', $slug, $register_url) : $register_url;
+            $reg_link_id = $register_form['id'] > 1 ? add_query_arg('user_type', absint($register_form['id']), $register_url) : $register_url;
+
+            $copy_link_html = 'onclick="navigator.clipboard.writeText(this.href);aui_toast(\'uwp_user_reg_link_copied\', \'success\', \'' . esc_attr__('Link Copied!', 'userswp') . '\');return false;"';//;
+
+            if (isset($register_form['id'], $register_form['title'])) {
+                $form_data = [
+                    'id' => (int)$register_form['id'],
+                    'title' => $register_form['title'],
+//                    'slug'       => isset($register_form['slug']) ? $register_form['slug'] : '',
+                    'user_role' => isset($register_form['user_role']) ? $register_form['user_role'] : get_option('default_role'),
+                    'reg_action' => isset($register_form['reg_action']) ? $register_form['reg_action'] : 'auto_approve',
+                    'reg_link' => $register_form['id'] > 1
+                        ? '<a href="' . esc_url($reg_link_slug) . '" ' . $copy_link_html . '  >' . esc_html__('Slug', 'userswp') . '</a> | <a href="' . esc_url($reg_link_id) . '" ' . $copy_link_html . '  >' . esc_html__('ID', 'userswp') . '</a>'
+                        : '<a href="' . esc_url($reg_link_id) . '" ' . $copy_link_html . '  >' . esc_html__('Link', 'userswp') . '</a>',
+                    'reg_lightbox' => in_array( $register_form['id'] , $register_modal_form) ? __('Yes', 'userswp') : __('No', 'userswp') . ' (<a href="'.esc_url(admin_url('admin.php?page=userswp&tab=general&section=register') ).'">' . __('change', 'userswp').'</a>)',
+                ];
 
                 $user_roles = uwp_get_user_roles();
                 $reg_actions = uwp_get_registration_form_actions();
 
-                $form_data['user_role'] = $user_roles[ $form_data['user_role'] ] ?? $form_data['user_role'];
-                $form_data['reg_action'] = $reg_actions[ $form_data['reg_action'] ] ?? $form_data['reg_action'];
+                $form_data['user_role'] = isset($user_roles[$form_data['user_role']]) ? $user_roles[$form_data['user_role']] : $form_data['user_role'];
+                $form_data['reg_action'] = isset($reg_actions[$form_data['reg_action']]) ? $reg_actions[$form_data['reg_action']] : $form_data['reg_action'];
 
-                $data[] = apply_filters( 'uwp_user_types_table_data', (array) $form_data, (array) $register_form );
+                $data[] = apply_filters('uwp_user_types_table_data', (array)$form_data, (array)$register_form);
             }
         }
 
@@ -164,7 +182,7 @@ class UsersWP_User_Types_Table extends WP_List_Table {
      * @return mixed The column value or dash if empty
      */
     public function column_default( $item, $column_name ) {
-        $value = $item[ $column_name ] ?? '';
+        $value = isset($item[$column_name]) ? $item[$column_name] : '';
         $value = apply_filters( 'uwp_user_types_table_column_default', $value, $item, $column_name );
 
         return $value === '' ? '&mdash;' : $value;
@@ -189,7 +207,7 @@ class UsersWP_User_Types_Table extends WP_List_Table {
         $actions = array(
             'id'        => sprintf( '<span class="id">ID: %d</span>', $item['id'] ),
             'edit'      => sprintf( '<a href="%s">%s</a>', esc_url( $edit_link ), esc_html__( 'Edit', 'userswp' ) ),
-            'edit-form' => sprintf( '<a href="%s">%s</a>', esc_url( $edit_form_url ), esc_html__( 'Edit Form', 'userswp' ) ),
+            'edit-form' => sprintf( '<a href="%s">%s</a>', esc_url( $edit_form_url ), esc_html__( 'Edit Fields', 'userswp' ) ),
         );
 
         if ( $item['id'] > 1 ) {
