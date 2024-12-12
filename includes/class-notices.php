@@ -81,7 +81,7 @@ class UsersWP_Notices {
             'type' => 'error',
         );
 
-        $messages = apply_filters('uwp_form_error_messages', $messages);
+        $messages = apply_filters('uwp_form_error_messages', $messages, $echo, $user_id );
 
         if (!empty($key) && isset($messages[$key])) {
             $value = $messages[$key];
