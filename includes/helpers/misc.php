@@ -1379,13 +1379,16 @@ function uwp_is_page_builder(){
  * @return string
  */
 function uwp_help_tip( $tip, $allow_html = false ) {
+    global $aui_bs5;
 	if ( $allow_html ) {
 		$tip = uwp_sanitize_tooltip( $tip );
 	} else {
 		$tip = esc_attr( $tip );
 	}
 
-	return '<span class="uwp-help-tip dashicons dashicons-editor-help" title="' . $tip . '"></span>';
+    $ml = $aui_bs5 ? 'ms-2 float-end' : 'ml-2 float-right';
+
+	return '<span class="uwp-help-tip dashicons dashicons-editor-help text-muted ' . $ml . '" title="' . $tip . '" data-bs-toggle="tooltip" data-bs-html="true"></span>';
 }
 
 /**

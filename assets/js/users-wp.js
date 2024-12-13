@@ -394,6 +394,8 @@ function uwp_maybe_reset_recaptcha() {
         var id = jQuery('.uwp-auth-modal .modal-content .g-recaptcha-response').attr('id');
         uwp_reset_captcha(id);
     }
+
+    document.dispatchEvent(new Event('ayecode_reset_captcha'));
 }
 
 /**

@@ -1,3 +1,6 @@
+= 1.2.16 - 2024-12-12 =
+* Changes for Bricks output class to add AyeCode UI class and show icons as icon picker - ADDED
+
 = 1.2.15 - 2024-11-28 =
 * Class added for Bricks element conversion - ADDED
 

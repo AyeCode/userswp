@@ -130,7 +130,7 @@ abstract class UsersWP_Settings_Page {
      * Toggle advanced button.
      *
      */
-	public static function toggle_advanced_button(){
+	public static function toggle_advanced_button($btn_class =  'btn btn-sm btn-primary ms-auto ml-auto uwp-advanced-toggle', $init = true){
 
 		$show = uwp_get_option( 'admin_disable_advanced', false );
 
@@ -147,7 +147,7 @@ abstract class UsersWP_Settings_Page {
 		?>
 		<style>
 			.uwp-advanced-setting{display: none;}
-			.uwp-advanced-setting.uwpa-show{display: block;}
+            .uwp-advanced-setting.uwpa-show{display: block;}
 			tr.uwp-advanced-setting.uwpa-show{display: table-row;}
 			li.uwp-advanced-setting.uwpa-show{display: list-item;}
 			/* Show Advanced */
@@ -161,16 +161,20 @@ abstract class UsersWP_Settings_Page {
 
 		<?php
 
-		echo "<button class='button-primary uwp-advanced-toggle " . esc_attr( $toggle_CSS ) . "' type=\"button\"  >";
+		echo "<button class='".esc_attr($btn_class) ." " . esc_attr( $toggle_CSS ) . "' type=\"button\"  >";
 		echo "<span class='uwpat-text-show'>" . esc_html( $text_show ) . "</span>";
 		echo "<span class='uwpat-text-hide'>" . esc_html( $text_hide ) . "</span>";
 		echo "</button>";
+
+        if ($init) {
+
 
 		?>
 		<script>
 			uwp_init_advanced_settings();
 		</script>
 		<?php
+        }
 	}
 
 	/**

@@ -241,25 +241,28 @@ class UsersWP_Admin {
 			wp_enqueue_script( 'jquery-ui-tooltip' );
 			wp_enqueue_script( 'wp-color-picker' );
 
-			wp_localize_script(
-                'userswp_admin',
-                'uwp_admin_ajax',
-                array(
-					'url'                                => admin_url( 'admin-ajax.php' ),
-					'custom_field_not_blank_var'         => __( 'Field key must not be blank', 'userswp' ),
-					'custom_field_options_not_blank_var' => __( 'Option Values must not be blank', 'userswp' ),
-					'custom_field_not_special_char'      => __( 'Please do not use special character and spaces in field key.', 'userswp' ),
-					'custom_field_unique_name'           => __( 'Field key should be a unique name.', 'userswp' ),
-					'custom_field_delete'                => __( 'Are you sure you wish to delete this field?', 'userswp' ),
-					'custom_field_id_required'           => __( 'This field is required.', 'userswp' ),
-					'img_spacer'                         => admin_url( 'images/media-button-image.gif' ),
-					'txt_choose_image'                   => __( 'Choose an image', 'userswp' ),
-					'txt_use_image'                      => __( 'Use image', 'userswp' ),
-					'delete_register_form'               => __( 'Are you sure you wish to delete this form?', 'userswp' ),
-					'ask_register_form_title'            => __( 'Enter register form title', 'userswp' ),
-					'form_updated_msg'                   => __( 'Updated! Reloading page...', 'userswp' ),
-                )
-            );
+			$ajax_cons_data = array(
+				'url'                                => admin_url( 'admin-ajax.php' ),
+				'custom_field_not_blank_var'         => __( 'Field key must not be blank', 'userswp' ),
+				'custom_field_options_not_blank_var' => __( 'Option Values must not be blank', 'userswp' ),
+				'custom_field_not_special_char'      => __( 'Please do not use special character and spaces in field key.', 'userswp' ),
+				'custom_field_unique_name'           => __( 'Field key should be a unique name.', 'userswp' ),
+				'custom_field_delete'                => __( 'Are you sure you wish to delete this field?', 'userswp' ),
+				'custom_field_id_required'           => __( 'This field is required.', 'userswp' ),
+				'img_spacer'                         => admin_url( 'images/media-button-image.gif' ),
+				'txt_choose_image'                   => __( 'Choose an image', 'userswp' ),
+                'txt_use_image'                      => __( 'Use image', 'userswp' ),
+                'txt_save'                          => __( 'Save', 'userswp' ),
+                'txt_saved'                          => __( 'Saved', 'userswp' ),
+                'txt_delete'                          => __( 'Delete', 'userswp' ),
+                'txt_deleted'                          => __( 'Deleted', 'userswp' ),
+                'txt_cancel'                          => __( 'Cancel', 'userswp' ),
+                'txt_saving'                          => __( 'Saving...', 'userswp' ),
+				'delete_register_form'               => __( 'Are you sure you wish to delete this form?', 'userswp' ),
+				'ask_register_form_title'            => __( 'Enter register form title', 'userswp' ),
+				'form_updated_msg'                   => __( 'Updated! Reloading page...', 'userswp' )
+			);
+			wp_localize_script( "userswp_admin", 'uwp_admin_ajax', $ajax_cons_data );
 		}
 	}
 

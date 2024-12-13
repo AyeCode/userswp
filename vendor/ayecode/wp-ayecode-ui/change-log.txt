@@ -1,3 +1,6 @@
+= 0.2.30 - 2024-12-12 =
+* Minor JS fix for resetting value of field - FIXED
+
 = 0.2.29 - 2024-11-28 =
 * Load Select2 JavaScript only when required - CHANGED
 
