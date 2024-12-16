@@ -139,8 +139,7 @@ class UsersWP_Form_Builder {
                                 <?php }
 
                                 $custom_fields = apply_filters( 'uwp_custom_fields_tabs', array( 'account', 'profile-tabs' ) );
-                                $fields = $this->form_fields_custom( $form_type );
-                                if ( in_array( $form_type, $custom_fields ) && $fields ) { ?>
+                                if ( in_array( $form_type, $custom_fields )  ) { ?>
                                     <h4 class="h6 text-muted"><?php esc_html_e( 'Custom Fields', 'userswp' ); ?></h4>
                                     <div id="uwp-form-builder-tab-custom" class="uwp-tabs-panel">
                                         <?php do_action( 'uwp_manage_available_fields_custom', $form_type ); ?>
