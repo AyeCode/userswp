@@ -121,8 +121,7 @@ abstract class UsersWP_Settings_Page {
 		// check if we need to show advanced or not
 		if(!$this->show_advanced()){return;}
 
-
-		$this->toggle_advanced_button();
+		$this->toggle_advanced_button('button button-primary ms-auto ml-auto uwp-advanced-toggle');
 
 	}
 
