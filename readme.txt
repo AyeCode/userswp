@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.25 - 2024-12-TBD =
+* Show advanced button missing styling on some pages - FIXED
+
 = 1.2.25 - 2024-12-13 =
 * Profile tabs form builder missing nonce field which meant no new fields could be added - FIXED
 
