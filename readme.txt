@@ -147,6 +147,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 == Changelog ==
 
 = 1.2.25 - 2024-12-TBD =
+* Fixed default lightbox registration form with single form selection in "Lightbox Forms" setting - FIXED
 * Show advanced button missing styling on some pages - FIXED
 
 = 1.2.25 - 2024-12-13 =
