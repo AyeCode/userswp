@@ -14,7 +14,7 @@ class UsersWP_Privacy extends UsersWP_Abstract_Privacy {
      * Init - hook into events.
      */
     public function __construct() {
-        parent::__construct( __( 'UsersWP', 'userswp' ) );
+        parent::__construct();
 
         // Include supporting classes.
         include_once 'class-uwp-privacy-exporters.php';
@@ -30,6 +30,8 @@ class UsersWP_Privacy extends UsersWP_Abstract_Privacy {
      * Due to the use of translation functions, this should run only after plugins loaded.
      */
     public function register_erasers_exporters() {
+        $this->name = __( 'UsersWP', 'userswp' );
+
         // This hook registers userswp data exporters.
         $this->add_exporter( 'uwp-customer-data', __( 'UsersWP User Data', 'userswp' ), array( 'UsersWP_Privacy_Exporters', 'user_data_exporter' ) );
 
