@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.7
-Stable tag: 1.2.25
+Stable tag: 1.2.26
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -146,8 +146,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.25 - 2024-12-TBD =
+= 1.2.26 - 2024-12-20 =
 * Show advanced button missing styling on some pages - FIXED
+* Minor styling fixes for form builder fields - CHANGED
+* function _load_textdomain_just_in_time was called incorrectly - FIXED
 
 = 1.2.25 - 2024-12-13 =
 * Profile tabs form builder missing nonce field which meant no new fields could be added - FIXED
