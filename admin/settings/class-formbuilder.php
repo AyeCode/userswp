@@ -319,6 +319,10 @@ class UsersWP_Form_Builder {
 				$form_ids[] = (int) $register_form['id'];
 			}
 
+			if ( in_array( 1, $form_ids ) ) {
+				$form_ids[] = 0;
+			}
+
 			if ( isset( $form_ids ) && count( $form_ids ) > 0 ) {
 				$form_ids_placeholder = array_fill( 0, count( $form_ids ), '%s' );
 				$form_ids_placeholder = implode( ', ', $form_ids_placeholder );
@@ -368,9 +372,9 @@ class UsersWP_Form_Builder {
 
 
 			?>
+			<input type="hidden" name="manage_field_form_id" class="manage_field_form_id" id="manage_field_form_id" value="<?php echo esc_attr( $current_form ); ?>">
                 <?php if ( ! empty( $register_forms ) && is_array( $register_forms ) && count( $register_forms ) > 1 ) { ?>
                     <form class="uwp_user_type_form" id="uwp_user_type_form" method="POST">
-                        <input type="hidden" name="manage_field_form_id" class="manage_field_form_id" id="manage_field_form_id" value="<?php echo esc_attr( $current_form ); ?>">
                         <?php do_action( 'uwp_user_type_form_before', $current_form, $tab ); ?>
 
                         <div class="d-flex align-items-center">
@@ -1040,7 +1044,14 @@ class UsersWP_Form_Builder {
 
 		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
-		$existing_fields = $wpdb->get_results( 'select site_htmlvar_name from ' . $extras_table_name . "  where form_type ='" . $form_type . "' AND form_id = " . $form_id );
+		// Retrieve fields saved with form id 0.
+		if ( $form_id === 1 ) {
+			$where = "AND ( form_id = 1 OR form_id = 0 )";
+		} else {
+			$where = $wpdb->prepare( "AND form_id = %d", $form_id );
+		}
+
+		$existing_fields = $wpdb->get_results( $wpdb->prepare( "SELECT site_htmlvar_name FROM `" . $extras_table_name . "` WHERE form_type = %s {$where}", $form_type ) );
 
 		$existing_field_ids = array();
 		if ( ! empty( $existing_fields ) ) {
@@ -1101,21 +1112,18 @@ class UsersWP_Form_Builder {
 	}
 
 	public function register_fields( $form_type, $form_id = 1 ) {
-
 		global $wpdb;
 
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-		$fields     = $wpdb->get_results(
-            $wpdb->prepare(
-                'select field_type, site_title, htmlvar_name, field_icon from ' . $table_name . ' where form_type = %s and is_register_field = %s and form_id = %d order by sort_order asc',
-                array(
-					'account',
-					'1',
-					$form_id,
-                )
-            ),
-            ARRAY_A
-        );
+
+		// Retrieve fields saved with form id 0.
+		if ( $form_id === 1 ) {
+			$where = "AND ( form_id = 1 OR form_id = 0 )";
+		} else {
+			$where = $wpdb->prepare( "AND form_id = %d", $form_id );
+		}
+
+		$fields = $wpdb->get_results( $wpdb->prepare( "SELECT field_type, site_title, htmlvar_name, field_icon FROM `" . $table_name . "` WHERE form_type = %s AND is_register_field = %s {$where} ORDER BY sort_order ASC", array( 'account', '1' ) ), ARRAY_A );
 
 		return apply_filters( 'uwp_register_fields', $fields, $form_type );
 	}
@@ -1141,15 +1149,14 @@ class UsersWP_Form_Builder {
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">
         <ul class="core uwp-tabs-selected uwp_form_extras ps-0 list-group">
 			<?php
-			$fields = $wpdb->get_results(
-                $wpdb->prepare(
-                    'SELECT * FROM ' . $table_name . ' WHERE form_type = %s AND form_id = %s ORDER BY sort_order ASC',
-                    array(
-						$form_type,
-						$form_id,
-                    )
-                )
-            );
+			// Retrieve fields saved with form id 0.
+			if ( $form_id === 1 ) {
+				$where = "AND ( form_id = 1 OR form_id = 0 )";
+			} else {
+				$where = $wpdb->prepare( "AND form_id = %d", $form_id );
+			}
+
+			$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `" . $table_name . "` WHERE form_type = %s {$where} ORDER BY sort_order ASC", $form_type ) );
 
 			if ( ! empty( $fields ) ) {
 				foreach ( $fields as $field ) {

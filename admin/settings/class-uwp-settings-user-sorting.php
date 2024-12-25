@@ -554,7 +554,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
                     $value = isset( $field->sort ) && $field->sort == 'desc' ? 'desc' : 'asc';
                     echo aui()->select(
                         array(
-                            'id'                => 'uwp-sort-'.esc_attr( $field->id ),
+                            'id'                => 'uwp-sort-'. ( isset( $field->id ) ? esc_attr( $field->id ) : '' ),
                             'name'              => 'sort',
                             'label_type'        => 'top',
                             'multiple'   => false,

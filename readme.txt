@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.27 - TBD =
+* Form Builder new field disappears after account tab is reloaded - FIXED
+
 = 1.2.26 - 2024-12-20 =
 * Show advanced button missing styling on some pages - FIXED
 * Minor styling fixes for form builder fields - CHANGED
