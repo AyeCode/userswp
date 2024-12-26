@@ -148,6 +148,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.27 - TBD =
 * Form Builder new field disappears after account tab is reloaded - FIXED
+* Form Builder close current field tab on field deleted - FIXED
 
 = 1.2.26 - 2024-12-20 =
 * Show advanced button missing styling on some pages - FIXED
