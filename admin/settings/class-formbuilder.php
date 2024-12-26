@@ -267,7 +267,7 @@ class UsersWP_Form_Builder {
 
 								$style = 'style="' . $display . '"';
 								?>
-                                <li class="uwp-tooltip-wrap col px-1 " <?php echo esc_attr( $style ); ?>>
+                                <li class="uwp-tooltip-wrap col px-1"<?php echo ( $display ? ' style="' . esc_attr( $display ) . '"' : '' ); ?>>
                                     <a id="uwp-<?php echo esc_attr( $field['htmlvar_name'] ); ?>"
                                         data-field-custom-type="<?php echo esc_attr( $type ); ?>"
                                         data-field-type-key="<?php echo esc_attr( $field['htmlvar_name'] ); ?>"
@@ -1835,7 +1835,7 @@ class UsersWP_Form_Builder {
 
                                 <a class=" btn btn-link text-muted" href="javascript:void(0);" onclick="uwp_tabs_close_settings(this); return false;"><?php _e("Close","userswp");?></a>
                                 <a href='javascript:void(0);' type="button" class="btn btn-primary"  id="save"
-                                       onclick="save_field('<?php echo esc_attr( $result_str ); ?>');return false;"><?php echo esc_attr( __( 'Save', 'userswp' ) ); ?></a>
+                                       onclick="save_field('<?php echo esc_attr( $result_str ); ?>');jQuery(this).html('<span class=\'spinner-border spinner-border-sm\' role=\'status\'></span> <?php esc_attr_e( 'Saving', 'userswp' ); ?>').addClass('disabled');return false;"><?php echo esc_attr( __( 'Save', 'userswp' ) ); ?></a>
                             </div>
 
                 </script>
