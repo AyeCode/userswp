@@ -148,6 +148,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.28 - 2024-12-30 =
 * Added functionality to reorder user types - ADDED
+* Fixed default lightbox registration form with single form selection in "Lightbox Forms" setting - FIXED
 
 = 1.2.27 - 2024-12-26 =
 * Form Builder new field disappears after account tab is reloaded - FIXED

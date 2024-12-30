@@ -267,7 +267,7 @@ class UsersWP_Form_Builder {
 
 								$style = 'style="' . $display . '"';
 								?>
-                                <li class="uwp-tooltip-wrap col px-1 " <?php echo esc_attr( $style ); ?>>
+                                <li class="uwp-tooltip-wrap col px-1"<?php echo ( $display ? ' style="' . esc_attr( $display ) . '"' : '' ); ?>>
                                     <a id="uwp-<?php echo esc_attr( $field['htmlvar_name'] ); ?>"
                                         data-field-custom-type="<?php echo esc_attr( $type ); ?>"
                                         data-field-type-key="<?php echo esc_attr( $field['htmlvar_name'] ); ?>"
@@ -319,6 +319,10 @@ class UsersWP_Form_Builder {
 				$form_ids[] = (int) $register_form['id'];
 			}
 
+			if ( in_array( 1, $form_ids ) ) {
+				$form_ids[] = 0;
+			}
+
 			if ( isset( $form_ids ) && count( $form_ids ) > 0 ) {
 				$form_ids_placeholder = array_fill( 0, count( $form_ids ), '%s' );
 				$form_ids_placeholder = implode( ', ', $form_ids_placeholder );
@@ -368,9 +372,9 @@ class UsersWP_Form_Builder {
 
 
 			?>
+			<input type="hidden" name="manage_field_form_id" class="manage_field_form_id" id="manage_field_form_id" value="<?php echo esc_attr( $current_form ); ?>">
                 <?php if ( ! empty( $register_forms ) && is_array( $register_forms ) && count( $register_forms ) > 1 ) { ?>
                     <form class="uwp_user_type_form" id="uwp_user_type_form" method="POST">
-                        <input type="hidden" name="manage_field_form_id" class="manage_field_form_id" id="manage_field_form_id" value="<?php echo esc_attr( $current_form ); ?>">
                         <?php do_action( 'uwp_user_type_form_before', $current_form, $tab ); ?>
 
                         <div class="d-flex align-items-center">
@@ -1040,7 +1044,14 @@ class UsersWP_Form_Builder {
 
 		$extras_table_name = uwp_get_table_prefix() . 'uwp_form_extras';
 
-		$existing_fields = $wpdb->get_results( 'select site_htmlvar_name from ' . $extras_table_name . "  where form_type ='" . $form_type . "' AND form_id = " . $form_id );
+		// Retrieve fields saved with form id 0.
+		if ( $form_id === 1 ) {
+			$where = "AND ( form_id = 1 OR form_id = 0 )";
+		} else {
+			$where = $wpdb->prepare( "AND form_id = %d", $form_id );
+		}
+
+		$existing_fields = $wpdb->get_results( $wpdb->prepare( "SELECT site_htmlvar_name FROM `" . $extras_table_name . "` WHERE form_type = %s {$where}", $form_type ) );
 
 		$existing_field_ids = array();
 		if ( ! empty( $existing_fields ) ) {
@@ -1101,21 +1112,18 @@ class UsersWP_Form_Builder {
 	}
 
 	public function register_fields( $form_type, $form_id = 1 ) {
-
 		global $wpdb;
 
 		$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
-		$fields     = $wpdb->get_results(
-            $wpdb->prepare(
-                'select field_type, site_title, htmlvar_name, field_icon from ' . $table_name . ' where form_type = %s and is_register_field = %s and form_id = %d order by sort_order asc',
-                array(
-					'account',
-					'1',
-					$form_id,
-                )
-            ),
-            ARRAY_A
-        );
+
+		// Retrieve fields saved with form id 0.
+		if ( $form_id === 1 ) {
+			$where = "AND ( form_id = 1 OR form_id = 0 )";
+		} else {
+			$where = $wpdb->prepare( "AND form_id = %d", $form_id );
+		}
+
+		$fields = $wpdb->get_results( $wpdb->prepare( "SELECT field_type, site_title, htmlvar_name, field_icon FROM `" . $table_name . "` WHERE form_type = %s AND is_register_field = %s {$where} ORDER BY sort_order ASC", array( 'account', '1' ) ), ARRAY_A );
 
 		return apply_filters( 'uwp_register_fields', $fields, $form_type );
 	}
@@ -1141,15 +1149,14 @@ class UsersWP_Form_Builder {
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">
         <ul class="core uwp-tabs-selected uwp_form_extras ps-0 list-group">
 			<?php
-			$fields = $wpdb->get_results(
-                $wpdb->prepare(
-                    'SELECT * FROM ' . $table_name . ' WHERE form_type = %s AND form_id = %s ORDER BY sort_order ASC',
-                    array(
-						$form_type,
-						$form_id,
-                    )
-                )
-            );
+			// Retrieve fields saved with form id 0.
+			if ( $form_id === 1 ) {
+				$where = "AND ( form_id = 1 OR form_id = 0 )";
+			} else {
+				$where = $wpdb->prepare( "AND form_id = %d", $form_id );
+			}
+
+			$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `" . $table_name . "` WHERE form_type = %s {$where} ORDER BY sort_order ASC", $form_type ) );
 
 			if ( ! empty( $fields ) ) {
 				foreach ( $fields as $field ) {
@@ -1828,7 +1835,7 @@ class UsersWP_Form_Builder {
 
                                 <a class=" btn btn-link text-muted" href="javascript:void(0);" onclick="uwp_tabs_close_settings(this); return false;"><?php _e("Close","userswp");?></a>
                                 <a href='javascript:void(0);' type="button" class="btn btn-primary"  id="save"
-                                       onclick="save_field('<?php echo esc_attr( $result_str ); ?>');return false;"><?php echo esc_attr( __( 'Save', 'userswp' ) ); ?></a>
+                                       onclick="save_field('<?php echo esc_attr( $result_str ); ?>');jQuery(this).html('<span class=\'spinner-border spinner-border-sm\' role=\'status\'></span> <?php esc_attr_e( 'Saving', 'userswp' ); ?>').addClass('disabled');return false;"><?php echo esc_attr( __( 'Save', 'userswp' ) ); ?></a>
                             </div>
 
                 </script>
@@ -2088,8 +2095,8 @@ $this->register_field_adminhtml( $result_str, $field_ins_upd, false );
 			$field_type_key = isset( $_REQUEST['field_type_key'] ) ? esc_html( $_REQUEST['field_type_key'] ) : '';
 		}
 		?>
-        <li class="uwp-setting-name">
-            <label for="option_values" class="uwp-tooltip-wrap">
+        <div class="uwp-setting-name mb-3">
+            <label for="option_values" class="  form-label">
 				<?php
 				$tip = __( 'Option Values should be separated by comma.', 'userswp' );
 				if ( $field_type != 'multiselect' ) {
@@ -2112,20 +2119,27 @@ $this->register_field_adminhtml( $result_str, $field_ins_upd, false );
 
 				<?php
                 if ( isset( $field_type_key ) && $field_type_key == 'uwp_country' ) {
+                    // @todo here we should show a multiselect to either include or exclude countries
+                    echo aui()->alert( array(
+                        'type'    => 'info',
+                        'content' => esc_html__( 'A full country list will be shown', 'userswp' )
+                    ) );
 
-					// @todo here we should show a multiselect to either include or exclude countries
-					esc_html_e( 'A full country list will be shown', 'userswp' );
+
                 } elseif ( isset( $field_type_key ) && $field_type_key == 'uwp_language' ) {
-					esc_html_e( 'Available translation languages list will be shown', 'userswp' );
+                    echo aui()->alert( array(
+                        'type'    => 'info',
+                        'content' => esc_html__( 'Available translation languages list will be shown', 'userswp' )
+                    ) );
 				} else {
                 ?>
-                    <input type="text" name="option_values" id="option_values" value="<?php echo esc_attr( $value ); ?>"/>
+                    <input type="text" name="option_values" id="option_values" class="form-control" value="<?php echo esc_attr( $value ); ?>"/>
 				<?php } ?>
 
                 <br/>
 
             </div>
-        </li>
+        </div>
 		<?php
 
 		$html = ob_get_clean();
@@ -2140,8 +2154,8 @@ $this->register_field_adminhtml( $result_str, $field_ins_upd, false );
 			$extra = unserialize( $field_info->extra_fields );
 		}
 		?>
-        <li class="uwp-setting-name uwp-advanced-setting">
-            <label for="date_format" class="uwp-tooltip-wrap">
+        <div class="uwp-setting-name uwp-advanced-setting mb-3">
+            <label for="date_format" class="  form-label">
 				<?php
 				echo uwp_help_tip( __( 'Select the date format.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				esc_html_e( 'Date Format :', 'userswp' );
@@ -2161,7 +2175,7 @@ $this->register_field_adminhtml( $result_str, $field_ins_upd, false );
 
 				$date_formats = apply_filters( 'uwp_date_formats', $date_formats );
 				?>
-                <select name="extra[date_format]" id="date_format" class="aui-select2">
+                <select name="extra[date_format]" id="date_format" class="aui-selectx2 form-select  mw-100" >
 					<?php
 					foreach ( $date_formats as $format ) {
 						$selected = false;
@@ -2174,7 +2188,7 @@ $this->register_field_adminhtml( $result_str, $field_ins_upd, false );
                 </select>
 
             </div>
-        </li>
+        </div>
 		<?php
 
 		$html = ob_get_clean();
@@ -2261,16 +2275,15 @@ $this->register_field_adminhtml( $result_str, $field_ins_upd, false );
 		$extra_fields   = isset( $field_info->extra_fields ) && $field_info->extra_fields != '' ? maybe_unserialize( $field_info->extra_fields ) : '';
 		$uwp_file_types = ! empty( $extra_fields ) && ! empty( $extra_fields['uwp_file_types'] ) ? $extra_fields['uwp_file_types'] : array( '*' );
 		?>
-        <li class="uwp-setting-name uwp-advanced-setting">
-            <label for="uwp_file_types" class="uwp-tooltip-wrap">
+        <div class="uwp-setting-name uwp-advanced-setting mb-3">
+            <label for="uwp_file_types" class="form-label">
 				<?php
 				echo uwp_help_tip( __( 'Select file types to allowed for file uploading. (Select multiple file types by holding down "Ctrl" key.)', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				esc_html_e( 'Allowed file types :', 'userswp' );
                 ?>
             </label>
             <div class="uwp-input-wrap">
-                <select name="extra[uwp_file_types][]" id="uwp_file_types" multiple="multiple" class="aui-select2"
-                        style="height:100px;width:90%;">
+                <select name="extra[uwp_file_types][]" id="uwp_file_types" multiple="multiple" class="aui-select2 form-select  mw-100" >
                     <option value="*" <?php selected( true, in_array( '*', $uwp_file_types ) ); ?>><?php esc_html_e( 'All types', 'userswp' ); ?></option>
 					<?php foreach ( $allowed_file_types as $format => $types ) { ?>
                         <optgroup
@@ -2282,7 +2295,7 @@ $this->register_field_adminhtml( $result_str, $field_ins_upd, false );
 					<?php } ?>
                 </select>
             </div>
-        </li>
+        </div>
 		<?php
 
 		$html = ob_get_clean();
@@ -2402,13 +2415,13 @@ $this->register_field_adminhtml( $result_str, $field_ins_upd, false );
 		}
 
 		?>
-        <div <?php echo $hide_register_field; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> class="cf-incin-reg-form uwp-setting-name">
+        <div <?php echo $hide_register_field; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> class="cf-incin-reg-form uwp-setting-name mb-3">
 
 			<?php
 			$reg_only_fields = uwp_get_register_only_fields();
 			if ( isset( $htmlvar_name ) && in_array( $htmlvar_name, $reg_only_fields ) ) {
 				?>
-                <label for="is_register_field" class="uwp-tooltip-wrap">
+                <label for="is_register_field" class="  form-label">
                     <?php
                     echo uwp_help_tip( __( 'Lets you use this field as register form field, set from register tab above.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     esc_html_e( 'Include this field in register form:', 'userswp' ); ?>
@@ -2441,12 +2454,12 @@ $this->register_field_adminhtml( $result_str, $field_ins_upd, false );
 			<?php
 			if ( isset( $htmlvar_name ) && in_array( $htmlvar_name, $reg_only_fields ) ) {
 				?>
-                <label for="is_register_only_field" class="uwp-tooltip-wrap">
+                <label for="is_register_only_field" class="form-label">
                     <?php
                     echo uwp_help_tip( __( 'Lets you use this field as register ONLY form field.', 'userswp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     esc_html_e( 'Include this field ONLY in register form:', 'userswp' ); ?>
                 </label>
-                <input type="hidden" name="is_register_only_field" value="1"/>
+                <input type="hidden" name="is_register_only_field" class="form-control" value="1"/>
                 <p><?php esc_html_e( 'This field is applicable only for register form.', 'userswp' ); ?></p>
 				<?php
 			} else {
