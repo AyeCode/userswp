@@ -13,6 +13,7 @@
             this.initMiscHandlers();
             this.initTooltips();
             this.initFormControls();
+            this.initUserTypesReorder();
         },
 
         /**
@@ -254,7 +255,6 @@
         handleRegisterFormRemove: function ($button) {
             const self = this;
             const formId = $button.attr('data-id');
-            const nonce = $button.attr('data-nonce');
 
             self.buttonStatus($button, 'loading');
 
@@ -262,18 +262,17 @@
 
             if (confirmation) {
                 const data = {
-                    'action': 'uwp_ajax_remove_register',
+                    'action': 'uwp_ajax_remove_user_type',
                     'type': 'remove',
                     'form_id': formId,
-                    'nonce': nonce,
+                    'nonce': uwp_admin_ajax.nonces.uwp_delete_user_type
                 };
 
                 $.post(uwp_admin_ajax.url, data, function (response) {
                     if (response.status) {
                         window.location.replace(response.redirect);
-                    } else {
-                        console.log(response.message);
                     }
+
                     self.buttonStatus($button, 'reset');
                 });
             } else {
@@ -326,9 +325,77 @@
         },
 
         /**
+         * Initialize user types reordering functionality
+         */
+        initUserTypesReorder: function () {
+            const table = $('.wp-list-table.usertypes tbody');
+            table.sortable({
+                handle: '.uwp-user-type-handle',
+                axis: 'y',
+                helper: function (e, ui) {
+                    ui.children().each(function () {
+                        $(this).width($(this).width());
+                    });
+                    ui.addClass('uwp-dragging');
+                    return ui;
+                },
+                start: function(e, ui) {
+                    ui.placeholder.addClass('uwp-drag-placeholder');
+                },
+                stop: function(e, ui) {
+                    ui.item.removeClass('uwp-dragging');
+                    table.find('.uwp-drag-placeholder').removeClass('uwp-drag-placeholder');
+                },
+                update: function (event, ui) {
+                    const order = table.find('input[name="user_types[]"]').map(function () {
+                        return $(this).val();
+                    }).get();
+
+                    console.log(uwp_admin_ajax.nonces)
+                    $.ajax({
+                        url: uwp_admin_ajax.url,
+                        type: 'POST',
+                        data: {
+                            action: 'uwp_ajax_reorder_user_types',
+                            order: order,
+                            nonce: uwp_admin_ajax.nonces.uwp_reorder_user_types
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                aui_toast('uwp_reorder_user_types_success', 'success', uwp_admin_ajax.txt_saved);
+                            } else {
+                                aui_toast('uwp_reorder_user_types_error', 'error', uwp_admin_ajax.txt_saving_error);
+                            }
+                        },
+                        error: function () {
+                            aui_toast('uwp_reorder_user_types_error', 'error', uwp_admin_ajax.txt_saving_error);
+                        }
+                    });
+                }
+            });
+        },
+
+        /**
+         * Display an admin notice
+         * 
+         * @param {string} message The message to display
+         * @param {string} type The notice type ('success' or 'error')
+         */
+        showNotice: function (message, type) {
+            const noticeClass = type === 'success' ? 'notice-success' : 'notice-error';
+            const $notice = $(`<div class="notice ${noticeClass} is-dismissible"><p>${message}</p></div>`);
+            $notice.insertAfter('.wp-header-end');
+
+            // Auto-dismiss after 3 seconds
+            setTimeout(function () {
+                $notice.fadeOut(300, function () { $(this).remove(); });
+            }, 3000);
+        },
+
+        /**
          * Initialize form control handlers
          */
-        initFormControls: function() {
+        initFormControls: function () {
             this.initSectionToggles();
             this.initAdvancedSettings();
         },
@@ -336,7 +403,7 @@
         /**
          * Initialize section toggle handlers
          */
-        initSectionToggles: function() {
+        initSectionToggles: function () {
             $(document).on('click', '.toggle-arrow', (e) => {
                 this.handleSectionToggle($(e.currentTarget));
             });
@@ -345,13 +412,13 @@
         /**
          * Initialize advanced settings toggle
          */
-        initAdvancedSettings: function() {
+        initAdvancedSettings: function () {
             const $advancedToggle = $('.uwp-advanced-toggle');
             const $advancedElements = $('.uwp-advanced-setting, #default_location_set_address_button');
 
             $advancedToggle
                 .off('click')
-                .on('click', function() {
+                .on('click', function () {
                     $advancedToggle.toggleClass('uwpa-hide');
                     $advancedElements.toggleClass('uwpa-show');
                     $advancedElements.collapse('toggle');
@@ -362,7 +429,7 @@
          * Handle section toggle visibility
          * @param {jQuery} $toggleElement The clicked toggle element
          */
-        handleSectionToggle: function($toggleElement) {
+        handleSectionToggle: function ($toggleElement) {
             const $parentSettings = $toggleElement.parent('.li-settings');
             const $currentForm = $parentSettings.find('.field_frm').first();
             const isOpen = !$currentForm.is(':hidden');
@@ -398,7 +465,7 @@
          * @param {string} showHide Show/hide parameter (unused but kept for backwards compatibility)
          * @param {string} className The class to toggle visibility on
          */
-        handleRadioVisibility: function(elementId, showHide, className) {
+        handleRadioVisibility: function (elementId, showHide, className) {
             setTimeout(() => {
                 const $element = $(elementId);
                 const $targetElement = $element.closest('.li-settings').find('.' + className);
@@ -484,26 +551,26 @@
     };
 
     // Global function mappings for backward compatibility
-    window.uwp_show_hide = function($element) {
+    window.uwp_show_hide = function ($element) {
         UWP.Admin.handleSectionToggle($($element));
     };
 
-    window.uwp_show_hide_radio = function(id, sh, cl) {
+    window.uwp_show_hide_radio = function (id, sh, cl) {
         UWP.Admin.handleRadioVisibility(id, sh, cl);
     };
 
-    window.uwp_init_advanced_settings = function() {
+    window.uwp_init_advanced_settings = function () {
         UWP.Admin.initAdvancedSettings();
     };
 
-    window.uwp_init_tooltips = function() {
+    window.uwp_init_tooltips = function () {
         UWP.Admin.initTooltips();
     };
 
-    window.uwp_tooltip_version = function() {
+    window.uwp_tooltip_version = function () {
         return UWP.Admin.getTooltipVersion();
     };
-    
+
     // Initialize when document is ready
     $(document).ready(function () {
         UWP.Admin.init();
