@@ -113,8 +113,8 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
 	 * @return mixed|string|bool
 	 */
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
-
         global $wpdb, $post;
+
         $table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
         $defaults = array(
@@ -127,18 +127,21 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
         $args = wp_parse_args( $args, $defaults );
 
         $args = apply_filters( 'uwp_widget_user_meta_args', $args, $widget_args, $this );
+        $user = array();
 
-        if(isset($args['user_id']) && !empty($args['user_id'])){
-	        if('post_author' == $args['user_id'] && $post instanceof WP_Post){
-		        $user = get_userdata($post->post_author);
-	        } else {
-		        $user = get_userdata((int)$args['user_id']);
-	        }
+        if ( ! empty( $args['user_id'] ) ) {
+            if ( 'post_author' == $args['user_id'] ) {
+                if ( ! empty( $post ) && is_object( $post ) && ! empty( $post->post_author ) ) {
+                    $user = get_userdata( (int) $post->post_author );
+                }
+            } else {
+                $user = get_userdata( (int) $args['user_id'] );
+            }
         } else {
-	        $user = uwp_get_displayed_user();
+            $user = uwp_get_displayed_user();
         }
 
-        if(empty($args['key']) || empty($user)){
+        if ( empty( $args['key'] ) || empty( $user ) ) {
             return '';
         }
 
