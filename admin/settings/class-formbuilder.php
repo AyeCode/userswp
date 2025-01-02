@@ -74,22 +74,7 @@ class UsersWP_Form_Builder {
 
             <div class="container-fluid p-0 mt-3">
 
-
-                <?php
-                if($form_type != 'user-sorting') {
-                ?>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card border-0 shadow-sm mb-3 px-0 mw-100">
-                            <div class="card-body">
-                                <?php do_action( 'uwp_before_form_builder_content', $default_tab ); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <?php
-                }
-                ?>
+                <?php do_action( 'uwp_before_form_builder_content', $default_tab ); ?>
 
                 <div id="uwp_form_builder_container" class="row">
                     <div class="col-md-6">
@@ -336,152 +321,100 @@ class UsersWP_Form_Builder {
 		return apply_filters( 'uwp_form_existing_fields', $custom_fields, $type );
 	}
 
+	/**
+     * Render the multiple registration form.
+     *
+     * @param string $tab Current tab.
+     */
 	public function multiple_registration_form( $tab = '' ) {
+        $default_tabs = array( 'account', 'register', 'profile-tabs' );
 
-        $alert_content = wp_kses(
-            sprintf(
-            /* translators: %1$s: URL to add user type, %2$s: Add User Type button text */
-                '%s <a href="%s" class="btn btn-primary btn-sm text-decoration-none ms-auto" role="button">%s</a>',
-                __( 'Add different user types to create custom registration forms with unique roles and redirects.', 'userswp' ),
-                admin_url( 'admin.php?page=uwp_user_types&form=add' ),
-                __( 'Add User Type', 'userswp' )
-            ),
-            array(
-                'a' => array(
-                    'href'  => array(),
-                    'class' => array(),
-                    'role'  => array(),
-                ),
-            )
-        );
+        /**
+         * Filter the tabs that should show the multiple registration form.
+         *
+         * @param array $default_tabs Default tabs.
+         */
+        $tabs = apply_filters( 'uwp_multiple_registration_form_tabs', $default_tabs );
 
-        $maybe_add_user_type =  aui()->alert(
-            array(
-                'type' => 'dark',
-                'class' => 'd-flex align-items-center mb-0',
-                'content' => $alert_content,
-                'dismissible' => false,
-            )
-        );
+        if ( ! in_array( $tab, $tabs, true ) ) {
+            return;
+        }
 
-		if ( ! empty( $tab ) && $tab == 'account' ) {
-			$current_form = ! empty( $_GET['form'] ) ? absint( $_GET['form'] ) : 1;
-			$register_tab        = admin_url( 'admin.php?page=uwp_form_builder&tab=account' );
-			$register_forms      = (array) uwp_get_option( 'multiple_registration_forms', array() );
+        $current_form = isset( $_GET['form'] ) ? absint( $_GET['form'] ) : 1;
+        $register_forms = (array) uwp_get_option( 'multiple_registration_forms', array() );
 
+        ?>
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm mb-3 px-0 mw-100">
+                    <div class="card-body">
+                        <input type="hidden" name="manage_field_form_id" class="manage_field_form_id" id="manage_field_form_id" value="<?php echo esc_attr( $current_form ); ?>">
+                        <?php
+                        if ( ! empty( $register_forms ) && is_array( $register_forms ) && count( $register_forms ) > 1 ) {
+                            $register_tab = admin_url( "admin.php?page=uwp_form_builder&tab={$tab}" );
 
-
-			?>
-			<input type="hidden" name="manage_field_form_id" class="manage_field_form_id" id="manage_field_form_id" value="<?php echo esc_attr( $current_form ); ?>">
-                <?php if ( ! empty( $register_forms ) && is_array( $register_forms ) && count( $register_forms ) > 1 ) { ?>
-                    <form class="uwp_user_type_form" id="uwp_user_type_form" method="POST">
-                        <?php do_action( 'uwp_user_type_form_before', $current_form, $tab ); ?>
-
-                        <div class="d-flex align-items-center">
-                            <label  class="form-label h1"><i class="fas fa-user me-3 iconbox border-0 fill rounded-circle transition-all btn-translucent-info iconsmallmedium"></i>
-                            <?php _e( 'Select user type', 'userswp' ); ?></label>
-                            <div class="ms-3 col-6">
-                                <select onChange="window.location.replace(jQuery(this).val());"
-                                        name="form_select" id="multiple_registration_select"
-                                        class="form-select form-select-lgx">
-                                    <?php
-                                    foreach ( $register_forms as $form ) :
-                                        $form_id = ! empty( $form['id'] ) ? $form['id'] : '';
-                                        $form_title = ! empty( $form['title'] ) ? sanitize_title_with_dashes( $form['title'] ) : '';
-                                        $option_text = sprintf(
-                                        /* translators: %1$s: Form title, %2$s: Form ID */
-                                            __( '%1$s - #%2$s', 'userswp' ),
-                                            $form_title,
-                                            $form_id
-                                        );
-                                        $option_value = esc_url( add_query_arg( 'form', $form_id, $register_tab ) );
-                                        ?>
-                                        <option <?php selected( $current_form, $form_id ); ?> value="<?php echo esc_attr( $option_value ); ?>">
-                                            <?php echo esc_html( $option_text ); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                        </div>
-
-                        <?php do_action( 'uwp_user_type_form_after', $current_form, $tab ); ?>
-                    </form>
-                <?php
-                }else {
-                    echo $maybe_add_user_type;
-                }
-
-		}
-
-		if ( ! empty( $tab ) && $tab == 'register' ) {
-			$current_form = ! empty( $_GET['form'] ) ? absint( $_GET['form'] ) : 1;
-
-			$register_tab   = admin_url( 'admin.php?page=uwp_form_builder&tab=register' );
-			$register_forms = uwp_get_option( 'multiple_registration_forms' );
-			?>
-                <input type="hidden" name="manage_field_form_id" class="manage_field_form_id" id="manage_field_form_id"
-                        value="<?php echo esc_attr( $current_form ); ?>">
-					<?php
-					if ( ! empty( $register_forms ) && is_array( $register_forms ) && count( $register_forms ) > 1  ) {
-                    ?>
-                        <div class="d-flex align-items-center">
-                            <label  class="form-label h1"><i class="fas fa-user me-3 iconbox border-0 fill rounded-circle transition-all btn-translucent-info iconsmallmedium"></i>
-                                <?php _e( 'Select user type', 'userswp' ); ?></label>
-                            <div class="ms-3 col-6">
-                                        <select onChange="window.location.replace(jQuery(this).val());"
-                                                name="multiple-registration-select" id="multiple_registration_select"
-                                                class="form-select aui-select2x">
-                                            <?php
-                                            foreach ( $register_forms as $key => $forms ) {
-                                                $form_id    = ! empty( $forms['id'] ) ? $forms['id'] : '';
-                                                $form_title = ! empty( $forms['title'] ) ? sanitize_title_with_dashes( $forms['title'] ) : '';
-                                                ?>
-                                                <option <?php selected( $current_form, $form_id ); ?> value="<?php echo esc_attr( $register_tab . '&form=' . $form_id ); ?>"><?php echo esc_html( wp_sprintf( __( '%1$s - #%2$s', 'userswp' ), $form_title, $form_id ) ); ?></option>
-                                            <?php } ?>
-                                        </select>
-                                </select>
-                            </div>
-                        </div>
-					<?php
-                    }else {
-                        echo $maybe_add_user_type;
-                    }
-
-		}
-
-		if ( ! empty( $tab ) && $tab == 'profile-tabs' ) {
-			$current_form = ! empty( $_GET['form'] ) ? absint( $_GET['form'] ) : 1;
-
-			$register_tab   = admin_url( 'admin.php?page=uwp_form_builder&tab=profile-tabs' );
-			$register_forms = uwp_get_option( 'multiple_registration_forms' );
-			?>
-                <input type="hidden" name="manage_field_form_id" class="manage_field_form_id" id="manage_field_form_id"
-                        value="<?php echo esc_attr( $current_form ); ?>">
-					<?php
-					if ( ! empty( $register_forms ) && is_array( $register_forms ) && count( $register_forms ) > 1  ) {
-                    ?>
-                    <div class="d-flex align-items-center">
-                        <label  class="form-label h1"><i class="fas fa-user me-3 iconbox border-0 fill rounded-circle transition-all btn-translucent-info iconsmallmedium"></i>
-                            <?php _e( 'Select user type', 'userswp' ); ?></label>
-                        <div class="ms-3 col-6">
-                                    <select onChange="window.location.replace(jQuery(this).val());"
-                                            name="multiple-registration-select" id="multiple_registration_select"
-                                            class="form-select">
-										<?php
-										foreach ( $register_forms as $key => $forms ) {
-											$form_id    = ! empty( $forms['id'] ) ? $forms['id'] : '';
-											$form_title = ! empty( $forms['title'] ) ? $forms['title'] : '';
-											?>
-                                            <option <?php selected( $current_form, $form_id ); ?>
-                                                    value="<?php echo esc_attr( $register_tab . '&form=' . $form_id ); ?>"><?php echo esc_html( wp_sprintf( __( '%1$s - #%2$s', 'userswp' ), $form_title, $form_id ) ); ?></option>
-										<?php } ?>
+                            ?>
+                            <div class="d-flex align-items-center">
+                                <label class="form-label h1">
+                                    <i class="fas fa-user me-3 iconbox border-0 fill rounded-circle transition-all btn-translucent-info iconsmallmedium"></i>
+                                    <?php esc_html_e( 'Select user type', 'userswp' ); ?>
+                                </label>
+                                <div class="ms-3 col-6">
+                                    <select onChange="window.location.replace(jQuery(this).val());" name="form_select" id="multiple_registration_select" class="form-select form-select-lgx">
+                                        <?php
+                                        foreach ( $register_forms as $form ) :
+                                            $form_id = ! empty( $form['id'] ) ? $form['id'] : '';
+                                            $form_title = ! empty( $form['title'] ) ? sanitize_title_with_dashes( $form['title'] ) : '';
+                                            $option_text = sprintf(
+                                                /* translators: %1$s: Form title, %2$s: Form ID */
+                                                esc_html__( '%1$s - #%2$s', 'userswp' ),
+                                                $form_title,
+                                                $form_id
+                                            );
+                                            $option_value = esc_url( add_query_arg( 'form', $form_id, $register_tab ) );
+                                            ?>
+                                            <option <?php selected( $current_form, $form_id ); ?> value="<?php echo esc_attr( $option_value ); ?>">
+                                                <?php echo esc_html( $option_text ); ?>
+                                            </option>
+                                        <?php endforeach; ?>
                                     </select>
-                        </div>
+                                </div>
+                            </div>
+                            <?php
+                        } else {
+                            $alert_content = wp_kses(
+                                sprintf(
+                                    /* translators: %1$s: Alert message, %2$s: URL to add user type, %3$s: Add User Type button text */
+                                    '%1$s <a href="%2$s" class="btn btn-primary btn-sm text-decoration-none ms-auto" role="button">%3$s</a>',
+                                    esc_html__( 'Add different user types to create custom registration forms with unique roles and redirects.', 'userswp' ),
+                                    esc_url( admin_url( 'admin.php?page=uwp_user_types&form=add' ) ),
+                                    esc_html__( 'Add User Type', 'userswp' )
+                                ),
+                                array(
+                                    'a' => array(
+                                        'href'  => array(),
+                                        'class' => array(),
+                                        'role'  => array(),
+                                    ),
+                                )
+                            );
+
+                            aui()->alert(
+                                array(
+                                    'type'        => 'dark',
+                                    'class'       => 'd-flex align-items-center mb-0',
+                                    'content'     => $alert_content,
+                                    'dismissible' => false,
+                                ),
+                                true
+                            );
+                        }
+                        ?>
                     </div>
-					<?php } else {
-                        echo $maybe_add_user_type;
-                    }
-		}
+                </div>
+            </div>
+        </div>
+        <?php
 	}
 
 	public function manage_available_fields_predefined( $form_type ) {

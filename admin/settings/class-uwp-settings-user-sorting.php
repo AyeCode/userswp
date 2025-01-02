@@ -31,7 +31,6 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			add_action( 'wp_ajax_uwp_ajax_user_sorting_action', array( $this, 'ajax_handler' ) );
 			add_action( 'uwp_add_custom_sort_options', array( $this, 'add_custom_sort_options' ) );
 			add_action( 'pre_user_query', array( $this, 'pre_user_query' ), 99 );
-
 		}
 
 		public function pre_user_query( $vars ) {
@@ -56,16 +55,16 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 						$order    = 'DESC';
 						$meta_key = substr( $sort_by, 0, strlen( $sort_by ) - 5 );
 						$order_by = 'meta_value';
-					} else if ( substr( strtolower( $sort_by ), - 4 ) == '_asc' ) {
+					} elseif ( substr( strtolower( $sort_by ), - 4 ) == '_asc' ) {
 						$order    = 'ASC';
 						$meta_key = substr( $sort_by, 0, strlen( $sort_by ) - 4 );
 						$order_by = 'meta_value';
 					}
 
                     // check meta key exists
-                    if ($meta_key && 'user_registered' !== $meta_key) {
+                    if ( $meta_key && 'user_registered' !== $meta_key ) {
                         $table = new UsersWP_Tables();
-                        if (!in_array($meta_key, $table->get_db_usermeta_columns())) {
+                        if ( ! in_array( $meta_key, $table->get_db_usermeta_columns() ) ) {
                             $meta_key = '';
                         }
                     }
@@ -74,19 +73,19 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 						$meta_table_name = uwp_get_table_prefix() . 'uwp_usermeta';
 						$table_name      = uwp_get_table_prefix() . 'uwp_user_sorting';
 
-                        if('user_registered' == $meta_key){
+                        if ( 'user_registered' == $meta_key ) {
                             $orderby = $meta_key;
                         } else {
                             $orderby = $meta_table_name . '.' . sanitize_key( $meta_key );
                         }
 
-						$vars->query_from    .= " INNER JOIN " . $meta_table_name . " ON (" . $meta_table_name . ".user_id = $wpdb->users.ID)  "; // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+						$vars->query_from    .= ' INNER JOIN ' . $meta_table_name . ' ON (' . $meta_table_name . ".user_id = $wpdb->users.ID)  "; // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 						$vars->query_orderby = 'ORDER BY ' . $orderby . ' ' . $order;
 
-						$parent_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM " . $table_name . " WHERE htmlvar_name = %s AND sort = %s AND tab_parent = 0", $meta_key, $order ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+						$parent_id = $wpdb->get_var( $wpdb->prepare( 'SELECT id FROM ' . $table_name . ' WHERE htmlvar_name = %s AND sort = %s AND tab_parent = 0', $meta_key, $order ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 						if ( $parent_id ) {
-							$children = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE tab_parent = %d ORDER BY sort_order ASC", $parent_id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+							$children = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $table_name . ' WHERE tab_parent = %d ORDER BY sort_order ASC', $parent_id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 							if ( $children ) {
 
@@ -118,7 +117,6 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			$tabs['user-sorting'] = __( 'User Sorting', 'userswp' );
 
 			return $tabs;
-
 		}
 
 		/**
@@ -256,7 +254,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				'htmlvar_name' => 'newer',
 				'field_icon'   => 'fas fa-calendar',
 				'sort'         => 'asc',
-				'description'  => __( 'Sort by new user registration', 'userswp' )
+				'description'  => __( 'Sort by new user registration', 'userswp' ),
 			);
 
 			$fields['older'] = array(
@@ -266,7 +264,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				'htmlvar_name' => 'older',
 				'field_icon'   => 'fas fa-calendar',
 				'sort'         => 'desc',
-				'description'  => __( 'Sort by new user registration in descending order', 'userswp' )
+				'description'  => __( 'Sort by new user registration in descending order', 'userswp' ),
 			);
 
 			$fields['display_name'] = array(
@@ -276,7 +274,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				'htmlvar_name' => 'display_name',
 				'field_icon'   => 'fas fa-sort-alpha-up',
 				'sort'         => 'asc',
-				'description'  => __( 'Sort alphabetically by display name in ascending order', 'userswp' )
+				'description'  => __( 'Sort alphabetically by display name in ascending order', 'userswp' ),
 			);
 
 			$fields['first_name'] = array(
@@ -286,7 +284,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				'htmlvar_name' => 'first_name',
 				'field_icon'   => 'fas fa-sort-alpha-up',
 				'sort'         => 'asc',
-				'description'  => __( 'Sort alphabetically by first name in ascending order', 'userswp' )
+				'description'  => __( 'Sort alphabetically by first name in ascending order', 'userswp' ),
 			);
 
 			$fields['last_name'] = array(
@@ -296,7 +294,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				'htmlvar_name' => 'last_name',
 				'field_icon'   => 'fas fa-sort-alpha-up',
 				'sort'         => 'asc',
-				'description'  => __( 'Sort alphabetically by last name in ascending order', 'userswp' )
+				'description'  => __( 'Sort alphabetically by last name in ascending order', 'userswp' ),
 			);
 
 			$fields = apply_filters( 'uwp_add_custom_sort_options', $fields );
@@ -304,7 +302,8 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			?>
             <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr( $form_type ); ?>"/>
             <input type="hidden" name="manage_field_type" class="manage_field_type" value="user_sorting">
-			<?php wp_nonce_field( 'uwp-admin-settings','uwp-admin-settings' ); ?>
+		    <?php wp_nonce_field( 'uwp-admin-settings' ); ?>
+            
             <ul class="row row-cols-2 px-2 mb-0">
 				<?php
 
@@ -323,16 +322,16 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 						?>
                         <li class="col px-1">
                             <a id="uwp-<?php echo esc_attr( $field['htmlvar_name'] ); ?>"
-                               class="uwp-draggable-form-itemsx btn btn-sm d-block m-0 btn-outline-gray text-dark text-start"
-                               data-field_type="<?php echo isset( $field['field_type'] ) ? esc_attr( $field['field_type'] ) : ''; ?>"
-                               data-site_title="<?php echo isset( $field['site_title'] ) ? esc_attr( $field['site_title'] ) : ''; ?>"
-                               data-field_icon="<?php echo isset( $field['field_icon'] ) ? esc_attr( $field['field_icon'] ) : ''; ?>"
-                               data-id="<?php echo isset( $field['htmlvar_name'] ) ? esc_attr( $field['htmlvar_name'] ) : ''; ?>"
-                               data-data_type="<?php echo isset( $field['data_type'] ) ? esc_attr( $field['data_type'] ) : 'VARCHAR'; ?>"
-                               data-tab_parent="<?php echo isset( $field['tab_parent'] ) ? esc_attr( $field['tab_parent'] ) : ''; ?>"
-                               data-tab_level="<?php echo isset( $field['tab_content'] ) ? esc_attr( $field['tab_content'] ) : ''; ?>"
-                               data-sort="<?php echo isset( $field['sort'] ) ? esc_attr( $field['sort'] ) : 'asc'; ?>"
-                               href="javascript:void(0);">
+                                class="uwp-draggable-form-itemsx btn btn-sm d-block m-0 btn-outline-gray text-dark text-start"
+                                data-field_type="<?php echo isset( $field['field_type'] ) ? esc_attr( $field['field_type'] ) : ''; ?>"
+                                data-site_title="<?php echo isset( $field['site_title'] ) ? esc_attr( $field['site_title'] ) : ''; ?>"
+                                data-field_icon="<?php echo isset( $field['field_icon'] ) ? esc_attr( $field['field_icon'] ) : ''; ?>"
+                                data-id="<?php echo isset( $field['htmlvar_name'] ) ? esc_attr( $field['htmlvar_name'] ) : ''; ?>"
+                                data-data_type="<?php echo isset( $field['data_type'] ) ? esc_attr( $field['data_type'] ) : 'VARCHAR'; ?>"
+                                data-tab_parent="<?php echo isset( $field['tab_parent'] ) ? esc_attr( $field['tab_parent'] ) : ''; ?>"
+                                data-tab_level="<?php echo isset( $field['tab_content'] ) ? esc_attr( $field['tab_content'] ) : ''; ?>"
+                                data-sort="<?php echo isset( $field['sort'] ) ? esc_attr( $field['sort'] ) : 'asc'; ?>"
+                                href="javascript:void(0);">
 								<?php echo $field_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 								<?php echo esc_attr( $field['site_title'] ); ?>
                             </a>
@@ -362,7 +361,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
             <input type="hidden" name="manage_field_type" class="manage_field_type" value="user_sorting">
             <ul class="uwp-profile-tabs-selected core uwp_form_extras ps-0 list-group ">
 				<?php
-				$tabs = $wpdb->get_results( "SELECT * FROM  " . $table_name . " order by sort_order asc" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$tabs = $wpdb->get_results( 'SELECT * FROM  ' . $table_name . ' order by sort_order asc' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				if ( ! empty( $tabs ) ) {
 					foreach ( $tabs as $key => $tab ) {
 						$field_ins_upd = 'display';
@@ -375,7 +374,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 						$this->field_adminhtml( $tab->id, $field_ins_upd );
 						$tab_rendered = ob_get_clean();
 
-						$tab_rendered = str_replace( "</li>", "", $tab_rendered );
+						$tab_rendered = str_replace( '</li>', '', $tab_rendered );
 						$child_tabs   = '';
 						foreach ( $tabs as $child_tab ) {
 							if ( $child_tab->tab_parent == $tab->id ) {
@@ -386,17 +385,18 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 						}
 
 						if ( $child_tabs ) {
-							$tab_rendered .= "<ul>";
+							$tab_rendered .= '<ul>';
 							$tab_rendered .= $child_tabs;
-							$tab_rendered .= "</ul>";
+							$tab_rendered .= '</ul>';
 						}
 
 						echo $tab_rendered; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						echo "</li>";
+						echo '</li>';
 
 						unset( $tabs[ $key ] );
 					}
-				} ?>
+				}
+                ?>
             </ul>
 			<?php
 		}
@@ -418,12 +418,12 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			$table_name = uwp_get_table_prefix() . 'uwp_user_sorting';
 
 			if ( ! is_object( $field_id ) && ( is_int( $field_id ) || ctype_digit( $field_id ) ) ) {
-				$field = $wpdb->get_row( $wpdb->prepare( "select * from " . $table_name . " where id= %d", array( $field_id ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$field = $wpdb->get_row( $wpdb->prepare( 'select * from ' . $table_name . ' where id= %d', array( $field_id ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			} elseif ( is_object( $field_id ) ) {
 				$field_id = $field_id->id;
-				$field    = $wpdb->get_row( $wpdb->prepare( "select * from " . $table_name . " where id= %d", array( (int) $field_id->id ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$field    = $wpdb->get_row( $wpdb->prepare( 'select * from ' . $table_name . ' where id= %d', array( (int) $field_id->id ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			} elseif ( isset( $field_id ) && ! empty( $field_id ) ) {
-				$field = $wpdb->get_row( $wpdb->prepare( "select * from " . $table_name . " where htmlvar_name= %s", array( $field_id ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$field = $wpdb->get_row( $wpdb->prepare( 'select * from ' . $table_name . ' where htmlvar_name= %s', array( $field_id ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			} else {
 				$field = array();
 			}
@@ -494,130 +494,114 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				$tab_level = 0;
 			}
 
+            $nonce = wp_create_nonce( 'uwp_sort_extras_nonce_' . $field_id );
 			?>
             <li class="text li-settings" id="licontainer_<?php echo esc_attr( $field_id ); ?>">
                 <div class="title title<?php echo esc_attr( $field_id ); ?> uwp-fieldset hover-shadow dd-form d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx text-start bg-light " onclick="uwp_tabs_item_settings(this);">
 					<?php
-					$nonce = wp_create_nonce( 'uwp_sort_extras_nonce_' . $field_id );
 					?>
                     <div class="  flex-fill font-weight-bold fw-bold">
                         <?php echo $field_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                        <b><?php echo esc_html( uwp_ucwords( ' ' .  $site_title )  ); ?></b>
+                        <b><?php echo esc_html( uwp_ucwords( ' ' . $site_title ) ); ?></b>
                         <span class="field-type float-end text-end small"><?php echo ' (' . esc_html( uwp_ucwords( $field_type ) ) . ')'; ?></span>
                     </div>
                     <div class="dd-handle ui-sortable-handle">
                         <i class="far fa-trash-alt text-danger ml-2 ms-2" id="delete-16"
-                           onclick="delete_field('<?php echo esc_attr( $field_id ); ?>', '<?php echo esc_attr( wp_create_nonce( 'uwp_sort_delete_nonce_' . $field_id ) ); ?>', '<?php echo esc_attr( $htmlvar_name ); ?>', 'user_sorting');event.stopPropagation();return false;"></i>
+                            onclick="delete_field('<?php echo esc_attr( $field_id ); ?>', '<?php echo esc_attr( wp_create_nonce( 'uwp_sort_delete_nonce_' . $field_id ) ); ?>', '<?php echo esc_attr( $htmlvar_name ); ?>', 'user_sorting');event.stopPropagation();return false;"></i>
                         <i class="fas fa-grip-vertical text-muted ml-2 ms-2" style="cursor: move" aria-hidden="true"></i>
                     </div>
 
                 </div>
 
-            <?php // store the form as a template. This saves a load of memory on page load. ?>
-        <script type="text/template" class="dd-setting <?php echo 'dd-type-'.esc_attr( $field_type );?>">
-                <div id="field_frm<?php echo esc_attr( $field_id ); ?>" class="field_frm"
-                     style="display:<?php if ( $field_ins_upd == 'submit' ) {
-					     echo 'block;';
-				     } else {
-					    // echo 'none;';
-				     } ?>">
+                <?php // store the form as a template. This saves a load of memory on page load. ?>
+                <script type="text/template" class="dd-setting <?php echo 'dd-type-' . esc_attr( $field_type ); ?>">
+                    <div id="field_frm<?php echo esc_attr( $field_id ); ?>" class="field_frm" style="<?php echo ( $field_ins_upd == 'submit' ) ? 'display:block;' : ''; ?>">
 
-                    <input type="hidden" name="_wpnonce" id="uwp_sort_extras_nonce"
-                           value="<?php echo esc_attr( $nonce ); ?>"/>
-                    <input type="hidden" name="field_id" id="field_id" value="<?php echo esc_attr( $field_id ); ?>"/>
-                    <input type="hidden" name="form_type" id="form_type" value="user_sorting"/>
-                    <input type="hidden" name="field_icon" id="field_icon" value="<?php echo esc_attr( $icon ); ?>"/>
-                    <input type="hidden" name="field_type" id="field_type"
-                           value="<?php echo esc_attr( $field_type ); ?>"/>
-                    <input type="hidden" name="data_type" id="data_type" value="<?php echo esc_attr( $data_type ); ?>"/>
-                    <input type="hidden" name="tab_parent" value="<?php echo esc_attr( $tab_parent ); ?>"/>
-                    <input type="hidden" name="tab_level" value="<?php echo esc_attr( $tab_level ); ?>"/>
-                    <input type="hidden" name="htmlvar_name" value="<?php echo esc_attr( $htmlvar_name ) ?>"/>
+                        <input type="hidden" name="_wpnonce" id="uwp_sort_extras_nonce" value="<?php echo esc_attr( $nonce ); ?>"/>
+                        <input type="hidden" name="field_id" id="field_id" value="<?php echo esc_attr( $field_id ); ?>"/>
+                        <input type="hidden" name="form_type" id="form_type" value="user_sorting"/>
+                        <input type="hidden" name="field_icon" id="field_icon" value="<?php echo esc_attr( $icon ); ?>"/>
+                        <input type="hidden" name="field_type" id="field_type"  value="<?php echo esc_attr( $field_type ); ?>"/>
+                        <input type="hidden" name="data_type" id="data_type" value="<?php echo esc_attr( $data_type ); ?>"/>
+                        <input type="hidden" name="tab_parent" value="<?php echo esc_attr( $tab_parent ); ?>"/>
+                        <input type="hidden" name="tab_level" value="<?php echo esc_attr( $tab_level ); ?>"/>
+                        <input type="hidden" name="htmlvar_name" value="<?php echo esc_attr( $htmlvar_name ); ?>"/>
 
+                        <?php
+                        // site_title
+                        echo aui()->input(
+                            array(
+                                'id'         => 'site_title',
+                                'name'       => 'site_title',
+                                'label_type' => 'top',
+                                'label'      => esc_html__( 'Frontend title', 'userswp' ) . uwp_help_tip( __( 'This is the text used for the sort option.', 'userswp' ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                'type'       => 'text',
+                                // 'wrap_class'        => uwp_advanced_toggle_class(),
+                                'value'      => $site_title,
+                            )
+                        );
 
-                    <?php
-                    // site_title
-                    echo aui()->input(
-                        array(
-                            'id'                => 'site_title',
-                            'name'              => 'site_title',
-                            'label_type'        => 'top',
-                            'label'             => esc_html__( 'Frontend title', 'userswp' ) . uwp_help_tip( __( 'This is the text used for the sort option.', 'userswp' ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-                            'type'              =>   'text',
-                            // 'wrap_class'        => uwp_advanced_toggle_class(),
-                            'value' => $site_title,
-                        )
-                    );
+                        // sort
+                        $value = isset( $field->sort ) && $field->sort == 'desc' ? 'desc' : 'asc';
+                        echo aui()->select(
+                            array(
+                                'id'         => 'uwp-sort-' . ( isset( $field->id ) ? esc_attr( $field->id ) : '' ),
+                                'name'       => 'sort',
+                                'label_type' => 'top',
+                                'multiple'   => false,
+                                'class'      => ' mw-100',
+                                'options'    => array(
+                                        'asc'  => esc_html__( 'Ascending', 'userswp' ),
+                                        'desc' => esc_html__( 'Descending', 'userswp' ),
+                                ),
+                                'label'      => __( 'Ascending or Descending', 'userswp' ) . uwp_help_tip( __( 'Select the sort direction: (A-Z or Z-A).', 'userswp' ) ),  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                'value'      => $value,
+                                //                                    'wrap_class'    => uwp_advanced_toggle_class(),
+                            )
+                        );
 
+                        echo aui()->input(
+                            array(
+                                'id'               => 'is_default',
+                                'name'             => 'is_default',
+                                'type'             => 'checkbox', //'!$exclude_privacy_option ? 'hidden' : 'checkbox',
+                                'label_type'       => 'horizontal',
+                                'label_col'        => '4',
+                                'label'            => __( 'Default sort', 'userswp' ),
+                                'checked'          => isset( $field->is_default ) && $field->is_default == 1,
+                                'value'            => '1',
+                                'switch'           => 'md',
+                                'label_force_left' => true,
+                                'help_text'        => uwp_help_tip( __( 'This sets the option as the overall default sort value, there can be only one.', 'userswp' ) ),
+                            )
+                        );
 
-                    // sort
-                    $value = isset( $field->sort ) && $field->sort == 'desc' ? 'desc' : 'asc';
-                    echo aui()->select(
-                        array(
-                            'id'                => 'uwp-sort-'. ( isset( $field->id ) ? esc_attr( $field->id ) : '' ),
-                            'name'              => 'sort',
-                            'label_type'        => 'top',
-                            'multiple'   => false,
-                            'class'             => ' mw-100',
-                            'options'       => array(
-                                    'asc'  => esc_html__( 'Ascending', 'userswp' ),
-                                    'desc' => esc_html__( 'Descending', 'userswp' ),
-                            ),
-                            'label'              => __('Ascending or Descending','userswp') . uwp_help_tip(__( 'Select the sort direction: (A-Z or Z-A).', 'userswp' ) ) ,  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-                            'value'         => $value,
-                            //                                    'wrap_class'    => uwp_advanced_toggle_class(),
-                        )
-                    );
+                        echo aui()->input(
+                            array(
+                                'id'               => 'is_active',
+                                'name'             => 'is_active',
+                                'type'             => 'checkbox', //'!$exclude_privacy_option ? 'hidden' : 'checkbox',
+                                'label_type'       => 'horizontal',
+                                'label_col'        => '4',
+                                'label'            => __( 'Is active', 'userswp' ),
+                                'checked'          => isset( $field->is_active ) && $field->is_active,
+                                'value'            => '1',
+                                'switch'           => 'md',
+                                'label_force_left' => true,
+                                'help_text'        => uwp_help_tip( __( 'Set if this sort option is active or not, if not it will not be shown to users.', 'userswp' ) ),
+                            )
+                        );
+                        ?>
+                        <input type="hidden" readonly="readonly" name="sort_order" id="sort_order" value="<?php echo (isset( $field->sort_order )) ? esc_attr( $field->sort_order ) : ''; ?>" size="50"/>
+                        <?php do_action( 'uwp_user_sorting_custom_fields', $field_id ); ?>
 
-
-                    echo aui()->input(
-                        array(
-                            'id' => 'is_default',
-                            'name' => 'is_default',
-                            'type' => 'checkbox', //'!$exclude_privacy_option ? 'hidden' : 'checkbox',
-                            'label_type' => 'horizontal',
-                            'label_col' => '4',
-                            'label' => __( 'Default sort', 'userswp' ) ,
-                            'checked' => isset( $field->is_default ) && $field->is_default == 1,
-                            'value' => '1',
-                            'switch' => 'md',
-                            'label_force_left' => true,
-                            'help_text' => uwp_help_tip( __( 'This sets the option as the overall default sort value, there can be only one.', 'userswp' ) ),
-                        )
-                    );
-
-                    echo aui()->input(
-                        array(
-                            'id' => 'is_active',
-                            'name' => 'is_active',
-                            'type' => 'checkbox', //'!$exclude_privacy_option ? 'hidden' : 'checkbox',
-                            'label_type' => 'horizontal',
-                            'label_col' => '4',
-                            'label' => __( 'Is active', 'userswp' ) ,
-                            'checked' => isset( $field->is_active ) && $field->is_active,
-                            'value' => '1',
-                            'switch' => 'md',
-                            'label_force_left' => true,
-                            'help_text' => uwp_help_tip( __( 'Set if this sort option is active or not, if not it will not be shown to users.', 'userswp' ) ),
-                        )
-                    );
-                    ?>
-
-
-
-
-
-                        <input type="hidden" readonly="readonly" name="sort_order" id="sort_order" value="<?php if ( isset( $field->sort_order ) ) { echo esc_attr( $field->sort_order ); } ?>" size="50"/>
-						<?php do_action( 'uwp_user_sorting_custom_fields', $field_id ); ?>
-
-                            <div class="uwp-input-wrap uwp-tab-actions" data-setting="save_button">
-
-                                <a class=" btn btn-link text-muted" href="javascript:void(0);" onclick="uwp_tabs_close_settings(this); return false;"><?php _e("Close","userswp");?></a>
-                                <a href='javascript:void(0);' type="button" class="btn btn-primary"  id="save"
-                                   onclick="save_field('<?php echo esc_attr( $field_id ); ?>', 'user_sorting');return false;"><?php echo esc_attr( __( 'Save', 'userswp' ) ); ?></a>
-                            </div>
-                </div>
-        </script>
+                        <div class="uwp-input-wrap uwp-tab-actions" data-setting="save_button">
+                            <a class=" btn btn-link text-muted" href="javascript:void(0);" onclick="uwp_tabs_close_settings(this); return false;"><?php _e( 'Close', 'userswp' ); ?></a>
+                            <a href='javascript:void(0);' type="button" class="btn btn-primary"  id="save"
+                                onclick="save_field('<?php echo esc_attr( $field_id ); ?>', 'user_sorting');return false;"><?php echo esc_attr( __( 'Save', 'userswp' ) ); ?></a>
+                        </div>
+                    </div>
+                </script>
             </li>
 			<?php
 		}
@@ -657,7 +641,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 
 				/* ---- Show field form in admin ---- */
 				if ( $field_action == 'new' ) {
-					if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'uwp-admin-settings') ) {
+					if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'uwp-admin-settings' ) ) {
 						return;
 					}
 					$htmlvar_name = isset( $_REQUEST['htmlvar_name'] ) ? sanitize_text_field( $_REQUEST['htmlvar_name'] ) : sanitize_text_field( $_REQUEST['tab_key'] );
@@ -718,12 +702,16 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			$data_type    = isset( $request_field['data_type'] ) ? sanitize_text_field( $request_field['data_type'] ) : 'VARCHAR';
 			$field_type   = isset( $request_field['field_type'] ) ? sanitize_text_field( $request_field['field_type'] ) : '';
 			$site_title   = isset( $request_field['site_title'] ) ? sanitize_text_field( $request_field['site_title'] ) : '';
-			$htmlvar_name = ! empty( $request_field['htmlvar_name'] ) ? sanitize_text_field( $request_field['htmlvar_name'] ) : str_replace( array(
-				'-',
-				' ',
-				'"',
-				"'"
-			), array( '_', '', '', '' ), sanitize_title_with_dashes( $request_field['site_title'] ) );
+			$htmlvar_name = ! empty( $request_field['htmlvar_name'] ) ? sanitize_text_field( $request_field['htmlvar_name'] ) : str_replace(
+                array(
+					'-',
+					' ',
+					'"',
+					"'",
+                ),
+                array( '_', '', '', '' ),
+                sanitize_title_with_dashes( $request_field['site_title'] )
+            );
 			$tab_parent   = ! empty( $request_field['tab_parent'] ) ? sanitize_text_field( $request_field['tab_parent'] ) : 0;
 			$tab_level    = ! empty( $request_field['tab_level'] ) ? sanitize_text_field( $request_field['tab_level'] ) : 0;
 			$field_icon   = isset( $request_field['field_icon'] ) ? sanitize_text_field( $request_field['field_icon'] ) : '';
@@ -734,7 +722,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			$total_tabs = $wpdb->get_var( "SELECT COUNT(id) FROM {$table_name}" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 			if ( isset( $is_default ) && $is_default > 0 ) {
-				$wpdb->query( "update " . $table_name . " set is_default='0' where is_default='1'" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$wpdb->query( 'update ' . $table_name . " set is_default='0' where is_default='1'" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			}
 
 			$data = array(
@@ -794,7 +782,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 
 			if ( $field_id != '' ) {
 				$cf = trim( $field_id, '_' );
-				$wpdb->query( $wpdb->prepare( "delete from " . $table_name . " where id= %d ", array( $cf ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$wpdb->query( $wpdb->prepare( 'delete from ' . $table_name . ' where id= %d ', array( $cf ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 				return $field_id;
 			} else {
@@ -822,20 +810,20 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 						array(
 							'sort_order' => $index,
 							'tab_level'  => (int) $tab['tab_level'],
-							'tab_parent' => (int) $tab['tab_parent']
+							'tab_parent' => (int) $tab['tab_parent'],
 						),
 						array( 'id' => absint( $tab['id'] ) ),
 						array( '%d', '%d', '%d' )
 					);
-					$count ++;
+					++$count;
 				}
 				if ( $result !== false ) {
 					return true;
 				} else {
-					return new WP_Error( 'failed', __( "Failed to sort tab items.", "userswp" ) );
+					return new WP_Error( 'failed', __( 'Failed to sort tab items.', 'userswp' ) );
 				}
 			} else {
-				return new WP_Error( 'failed', __( "Failed to sort tab items.", "userswp" ) );
+				return new WP_Error( 'failed', __( 'Failed to sort tab items.', 'userswp' ) );
 			}
 		}
 
@@ -850,7 +838,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			global $wpdb;
 			$table_name = uwp_get_table_prefix() . 'uwp_form_fields';
 
-			$custom_fields = $wpdb->get_results( "select data_type,field_type,site_title,htmlvar_name,field_icon from " . $table_name . " where is_active='1' and user_sort='1' AND field_type != 'fieldset' order by sort_order asc", 'ARRAY_A' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$custom_fields = $wpdb->get_results( 'select data_type,field_type,site_title,htmlvar_name,field_icon from ' . $table_name . " where is_active='1' and user_sort='1' AND field_type != 'fieldset' order by sort_order asc", 'ARRAY_A' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 			if ( ! empty( $custom_fields ) ) {
 
@@ -861,7 +849,6 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 
 			return $fields;
 		}
-
 	}
 
 }
