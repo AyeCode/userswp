@@ -89,7 +89,7 @@ function uwp_string_to_options($input = '', $translated = false)
 
 	if (!empty($input_arr)) {
 		foreach ($input_arr as $input_str) {
-			$input_str = trim($input_str);
+			$input_str = trim( stripslashes( $input_str ) );
 
 			if (strpos($input_str, "/") !== false) {
 				$input_str = explode("/", $input_str, 2);
@@ -1809,7 +1809,7 @@ function uwp_get_sort_by_order_list(){
 		foreach ( $sort_options_raw as $sort ) {
 			$sort = stripslashes_deep( $sort );
 
-			$sort->site_title = __( $sort->site_title, 'userswp' );
+			$sort->site_title = __( wp_unslash( $sort->site_title ), 'userswp' );
 
 			if ( $sort->htmlvar_name == 'comment_count' ) {
 				$sort->htmlvar_name = 'rating_count';
@@ -1821,7 +1821,7 @@ function uwp_get_sort_by_order_list(){
                 elseif($sort->sort == 'desc'){$key = esc_attr($sort->htmlvar_name."_desc");}
 			}
 
-			$sort_options[$key] = $sort->site_title;
+			$sort_options[$key] = wp_unslash( $sort->site_title );
 		}
 	}
 

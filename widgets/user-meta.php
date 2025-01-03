@@ -95,7 +95,7 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
         $keys[] = __('Select Key','userswp');
         if(!empty($fields)){
             foreach($fields as $field){
-	            $keys[ $field->htmlvar_name ] = $field->htmlvar_name . ' ( ' . __( $field->site_title, 'userswp' ) . ' )';
+	            $keys[ $field->htmlvar_name ] = $field->htmlvar_name . ' ( ' . __( stripslashes( $field->site_title ), 'userswp' ) . ' )';
             }
         }
 
@@ -191,7 +191,7 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
                 $output = $icon.$value;
                 break;
             case 'label-value':
-                $output = '<div class="uwp-user-meta-key">'. $field->site_title . '<span class="uwp-profile-extra-sep">:</span></div><div class="uwp-user-meta-value">'.$value.'</div>';
+                $output = '<div class="uwp-user-meta-key">'. __( stripslashes( $field->site_title ), 'userswp' ) . '<span class="uwp-profile-extra-sep">:</span></div><div class="uwp-user-meta-value">'.$value.'</div>';
                 break;
             case 'label':
                 return $field->site_title;
@@ -203,7 +203,7 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
                 $output = '<div class="uwp-user-meta-value">'.strip_tags($value).'</div>';
                 break;
             default:
-                $output = '<div class="uwp-user-meta-key">'. $icon . $field->site_title . '<span class="uwp-profile-extra-sep">:</span></div><div class="uwp-user-meta-value">'. $value. '</div>';
+                $output = '<div class="uwp-user-meta-key">'. $icon . __( stripslashes( $field->site_title ), 'userswp' ) . '<span class="uwp-profile-extra-sep">:</span></div><div class="uwp-user-meta-value">'. $value. '</div>';
         }
 
         //wrap output in a div
