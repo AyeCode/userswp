@@ -323,7 +323,7 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 				if ( apply_filters( 'uwp_badge_field_skip_key', false, $field ) ) {
 					continue;
 				}
-				$keys[ $field->htmlvar_name ] = $field->htmlvar_name . ' ( ' . __( $field->site_title, 'userswp' ) . ' )';
+				$keys[ $field->htmlvar_name ] = $field->htmlvar_name . ' ( ' . __( wp_unslash( $field->site_title ), 'userswp' ) . ' )';
 			}
 		}
 
