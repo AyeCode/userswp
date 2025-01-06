@@ -431,7 +431,7 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 			if ( isset( $request['site_title'] ) ) {
 				$site_title = esc_attr( $request['site_title'] );
 			} elseif ( $field && isset( $field->site_title ) ) {
-				$site_title = $field->site_title;
+				$site_title = wp_unslash( $field->site_title );
 			} else {
 				$site_title = '';
 			}
