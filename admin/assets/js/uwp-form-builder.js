@@ -42,7 +42,7 @@
                 const manageFieldType = $element.closest('#uwp-available-fields').find(".manage_field_type").val();
                 const fieldDataType = $element.data('data_type');
                 const customType = $element.data("field-custom-type");
-                const formId = $('.manage_field_form_id').val();
+                const formId = $('[name="manage_field_form_id"]').val();
                 const nonce = $('[name="_wpnonce"]').val();
 
                 let data = {
@@ -207,12 +207,12 @@
         updateFieldOrder: function ($sortable) {
             const manageFieldType = $sortable.closest('#uwp-selected-fields').find(".manage_field_type").val();
             const order = $sortable.sortable("serialize") + '&update=update&manage_field_type=' + manageFieldType;
-            const formId = $('.manage_field_form_id').val();
+            const formId = $('[name="manage_field_form_id"]').val();
             const formIdParam = '&form_id=' + formId;
             const actionType = UWP.Form_Builder.getActionType(manageFieldType);
             const action = actionType.action;
 
-            $.get(uwp_admin_ajax.url + '?action=' + action + '&create_field=true', order + formIdParam, function () {});
+            $.get(uwp_admin_ajax.url + '?action=' + action + '&create_field=true', order + formIdParam, function () { });
         },
 
         /**
@@ -226,7 +226,7 @@
                 startDepthCount: 0
             });
             const $order = {};
-            const formId = $('.manage_field_form_id').val();
+            const formId = $('[name="manage_field_form_id"]').val();
 
             $.each($tabs, function (index, tab) {
                 if (tab.id) {
@@ -257,7 +257,7 @@
          * @param {string} type - The field type
          */
         saveField: function (id, type) {
-            const formId = $('.manage_field_form_id').val();
+            const formId = $('[name="manage_field_form_id"]').val();
             const formIdParam = '&form_id=' + formId;
             const actionType = UWP.Form_Builder.getActionType(type);
             const action = actionType.action;
@@ -281,15 +281,15 @@
                 }
             }
 
-            const fieldRequest = type === 'register' ?
-                $(`#licontainer_${id} form`).find("select, textarea, input").serialize() :
-                $('.uwp-form-settings-form').find("select, textarea, input").serialize();
+            const requestData = type === 'register' ?
+                $(`#licontainer_${id} form`).serializeObject() :
+                $('.uwp-form-settings-form').serializeObject();
 
-            const requestData = 'create_field=true&field_ins_upd=submit&' + fieldRequest;
+            requestData['create_field'] = true;
+            requestData['field_ins_upd'] = 'submit';
 
-            $.ajax({
+            $.post({
                 'url': `${uwp_admin_ajax.url}?action=${action}&manage_field_type=${manageFieldType}${formIdParam}`,
-                'type': 'POST',
                 'data': requestData,
                 'beforeSend': function () {
                     $('.uwp-form-settings-form #save').html('<span class="spinner-border spinner-border-sm" role="status"></span> ' + uwp_admin_ajax.txt_saving).addClass('disabled');
@@ -324,21 +324,21 @@
          * @param {string} type - The field type
          */
         deleteField: function (id, nonce, deleteId, type) {
-            const formId = $('.manage_field_form_id').val();
-            const formIdParam = '&form_id=' + formId;
+            const formId = $('[name="manage_field_form_id"]').val();
             const actionType = UWP.Form_Builder.getActionType(type);
-            const action = actionType.action;
-            const manageFieldType = actionType.fieldType;
 
             aui_confirm(uwp_admin_ajax.custom_field_delete, uwp_admin_ajax.txt_delete, uwp_admin_ajax.txt_cancel, true).then(function (confirmed) {
                 if (confirmed) {
                     if (id.substring(0, 3) === "new") {
                         $(`#licontainer_${id}`).remove();
                     } else {
-                        $.get(`${uwp_admin_ajax.url}?action=${action}&create_field=true&manage_field_type=${manageFieldType}${formIdParam}`, {
+                        $.get(`${uwp_admin_ajax.url}`, {
+                            action: actionType.action,
+                            create_field: true,
+                            field_ins_upd: 'delete',
+                            manage_field_type: actionType.fieldType,
                             field_id: id,
                             form_id: formId,
-                            field_ins_upd: 'delete',
                             _wpnonce: nonce
                         },
                             function () {
@@ -464,5 +464,23 @@
     $(document).ready(function () {
         UWP.Form_Builder.init();
     });
+
+    $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+
+                o[this.name] = this.value || '';
+                // o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
 
 })(jQuery);

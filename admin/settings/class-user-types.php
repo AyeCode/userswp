@@ -33,7 +33,7 @@ class UsersWP_User_Types {
      *
      * @param string $tab Current tab.
      */
-    public static function output( string $tab = '' ): void {
+    public static function output( string $tab = '' ) {
         do_action( 'uwp_user_types_start' );
 
         if ( isset( $_GET['form'] ) ) {
@@ -46,7 +46,7 @@ class UsersWP_User_Types {
     /**
      * Output the edit form for a user type.
      */
-    private static function output_edit_form( $form_type ): void {
+    private static function output_edit_form( $form_type ) {
         if ( $form_type === 'add' ) {
             self::display_add_form();
         } else {
@@ -57,7 +57,7 @@ class UsersWP_User_Types {
     /**
      * Display the 'add' user type form.
      */
-    private static function display_add_form(): void {
+    private static function display_add_form() {
 		$all_pages = wp_list_pluck( get_pages(), 'post_title', 'ID' );
 		$user_roles = uwp_get_user_roles();
 		$registration_form_actions = uwp_get_registration_form_actions();
@@ -168,7 +168,7 @@ class UsersWP_User_Types {
     /**
      * Display the 'edit' user type form.
      */
-    private static function display_edit_form(): void {
+    private static function display_edit_form() {
         $form_id = isset( $_GET['form'] ) ? (int) $_GET['form'] : 1;
         $register_forms = self::get_register_forms();
 
@@ -198,7 +198,7 @@ class UsersWP_User_Types {
     /**
      * Output the user types list.
      */
-    private static function display_table(): void {
+    private static function display_table() {
         $nonce = wp_create_nonce( 'uwp-create-register-form-nonce' );
         $table = new UsersWP_User_Types_Table();
         $table->prepare_items();
@@ -223,7 +223,7 @@ class UsersWP_User_Types {
      *
      * @param int $form_id The form ID.
      */
-    public static function update_form( int $form_id ): void {
+    public static function update_form( int $form_id ) {
         $register_forms = self::get_register_forms();
         $form_key = array_search( $form_id, wp_list_pluck( $register_forms, 'id' ) );
         $current_form = $register_forms[ $form_key ];
@@ -342,7 +342,7 @@ class UsersWP_User_Types {
      * @param string $value       Field value.
      * @param array $attributes       Field attributes.
      */
-    private static function render_text_field( string $id, string $name, string $label, string $description, string $value, array $attributes = array() ): void {
+    private static function render_text_field( string $id, string $name, string $label, string $description, string $value, array $attributes = array() ) {
         $attr_string = '';
         foreach ( $attributes as $attr => $attr_value ) {
             $attr_string .= ' ' . $attr . '="' . esc_attr( $attr_value ) . '"';
@@ -375,7 +375,7 @@ class UsersWP_User_Types {
      * @param string $placeholder       Field placeholder.
      * @param array $attributes       Field attributes.
      */
-    private static function render_select_field( string $id, string $name, string $label, string $description, array $options, string $value, $placeholder = null, array $attributes = array() ): void {
+    private static function render_select_field( string $id, string $name, string $label, string $description, array $options, string $value, $placeholder = null, array $attributes = array() ) {
         $placeholder = is_null( $placeholder ) ? sprintf( __( 'Select a %s&hellip;', 'userswp' ), strtolower( $label ) ) : $placeholder;
         $attr_string = '';
         foreach ( $attributes as $attr => $attr_value ) {
