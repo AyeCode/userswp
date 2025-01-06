@@ -31,8 +31,10 @@ class UsersWP_Form_Builder {
                 }
             );
 
+            $default_form = array_shift( $default_form );
+
             if ( isset( $default_form['id'] ) ) {
-                $current_form_id = $default_form['id'];
+                $current_form_id = (int) $default_form['id'];
             } else {
                 $current_form = reset( $register_forms );
                 $current_form_id = isset( $current_form['id'] ) ? absint( $current_form['id'] ) : 1;
