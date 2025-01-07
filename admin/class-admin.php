@@ -52,7 +52,8 @@ class UsersWP_Admin {
 
 		add_action( 'wp_ajax_uwp_ajax_create_register', array( $this, 'process_create_register_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_update_register', array( $this, 'process_update_register_form' ) );
-		add_action( 'wp_ajax_uwp_ajax_remove_register', array( $this, 'process_remove_register_form' ) );
+		add_action( 'wp_ajax_uwp_ajax_remove_user_type', array( $this, 'process_remove_register_form' ) );
+		add_action( 'wp_ajax_uwp_ajax_reorder_user_types', array( $this, 'reorder_user_types' ) );
 
 		// Register with the deactivation survey class.
 		if ( class_exists( 'AyeCode_Deactivation_Survey' ) ) {
@@ -241,8 +242,16 @@ class UsersWP_Admin {
 			wp_enqueue_script( 'jquery-ui-tooltip' );
 			wp_enqueue_script( 'wp-color-picker' );
 
+            if ( 'userswp_page_uwp_user_types' === $screen_id ) {
+                wp_enqueue_script( 'jquery-ui-sortable' );
+            }
+
 			$ajax_cons_data = array(
 				'url'                                => admin_url( 'admin-ajax.php' ),
+                'nonces'                             => array(
+                    'uwp_delete_user_type'   => wp_create_nonce( 'uwp_delete_user_types' ),
+                    'uwp_reorder_user_types' => wp_create_nonce( 'uwp_reorder_user_types' ),
+                ),
 				'custom_field_not_blank_var'         => __( 'Field key must not be blank', 'userswp' ),
 				'custom_field_options_not_blank_var' => __( 'Option Values must not be blank', 'userswp' ),
 				'custom_field_not_special_char'      => __( 'Please do not use special character and spaces in field key.', 'userswp' ),
@@ -252,17 +261,19 @@ class UsersWP_Admin {
 				'img_spacer'                         => admin_url( 'images/media-button-image.gif' ),
 				'txt_choose_image'                   => __( 'Choose an image', 'userswp' ),
                 'txt_use_image'                      => __( 'Use image', 'userswp' ),
-                'txt_save'                          => __( 'Save', 'userswp' ),
+                'txt_save'                           => __( 'Save', 'userswp' ),
                 'txt_saved'                          => __( 'Saved', 'userswp' ),
-                'txt_delete'                          => __( 'Delete', 'userswp' ),
-                'txt_deleted'                          => __( 'Deleted', 'userswp' ),
-                'txt_cancel'                          => __( 'Cancel', 'userswp' ),
-                'txt_saving'                          => __( 'Saving...', 'userswp' ),
+                'txt_delete'                         => __( 'Delete', 'userswp' ),
+                'txt_deleted'                        => __( 'Deleted', 'userswp' ),
+                'txt_cancel'                         => __( 'Cancel', 'userswp' ),
+                'txt_saving'                         => __( 'Saving...', 'userswp' ),
+                'txt_saving_error'                   => __( 'An error occurred while saving. Please try again.', 'userswp' ),
 				'delete_register_form'               => __( 'Are you sure you wish to delete this form?', 'userswp' ),
 				'ask_register_form_title'            => __( 'Enter register form title', 'userswp' ),
-				'form_updated_msg'                   => __( 'Updated! Reloading page...', 'userswp' )
+				'form_updated_msg'                   => __( 'Updated! Reloading page...', 'userswp' ),
 			);
-			wp_localize_script( "userswp_admin", 'uwp_admin_ajax', $ajax_cons_data );
+
+			wp_localize_script( 'userswp_admin', 'uwp_admin_ajax', $ajax_cons_data );
 		}
 	}
 
@@ -1005,9 +1016,39 @@ class UsersWP_Admin {
         );
     }
 
+    public function reorder_user_types() {
+        check_ajax_referer( 'uwp_reorder_user_types', 'nonce' );
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array( 'message' => __( 'You do not have permission to perform this action.', 'userswp' ) ) );
+        }
+
+        $order = isset( $_POST['order'] ) ? array_map( 'absint', $_POST['order'] ) : array();
+
+        if ( empty( $order ) ) {
+            wp_send_json_error( array( 'message' => __( 'Invalid order data.', 'userswp' ) ) );
+        }
+
+        $register_forms = (array) uwp_get_option( 'multiple_registration_forms', array() );
+        $new_order = array();
+
+        foreach ( $order as $id ) {
+            foreach ( $register_forms as $form ) {
+                if ( (int) $form['id'] === (int) $id ) {
+                    $new_order[] = $form;
+                    break;
+                }
+            }
+        }
+
+        uwp_update_option( 'multiple_registration_forms', $new_order );
+
+        wp_send_json_success( array( 'message' => __( 'User types order updated successfully.', 'userswp' ) ) );
+    }
+
 	public function process_remove_register_form() {
 
-		check_ajax_referer( 'uwp-delete-register-form-nonce', 'nonce' );
+		check_ajax_referer( 'uwp_delete_user_types', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
