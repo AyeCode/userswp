@@ -1863,11 +1863,11 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 			);
 
 			if ( ! empty( $fields ) ) {
-		foreach ( $fields as $field ) {
-					$result_str    = $field;
-					$field_ins_upd = 'display';
-					$this->register_field_adminhtml( $result_str, $field_ins_upd, false );
-			}
+                foreach ( $fields as $field ) {
+                    $result_str    = $field;
+                    $field_ins_upd = 'display';
+                    $this->register_field_adminhtml( $result_str, $field_ins_upd, false );
+                }
 			}
             ?>
         </ul>
@@ -2613,7 +2613,9 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 
 			if ( $field = $wpdb->get_row( $wpdb->prepare( 'select id, htmlvar_name FROM ' . $table_name . ' WHERE id= %d AND form_id = %d', array( (int) $cf, (int) $form_id ) ) ) ) {
 
-				$excluded_delete = array( 'username', 'email' );
+				$excluded_delete = array( 'email' );
+                $excluded_delete = apply_filters( 'uwp_register_fields_exculde_delete', $excluded_delete );
+
 			    if ( isset( $field->htmlvar_name ) && in_array( $field->htmlvar_name, $excluded_delete ) ) {
                     return $field_id;
                 }
@@ -3296,7 +3298,7 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 		if ( $field_id != '' ) {
 			$cf = trim( $field_id, '_' );
 
-			$wpdb->query( $wpdb->prepare( 'delete from ' . $extras_table_name . ' where id= %d ', array( $cf ) ) );
+			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $extras_table_name . ' WHERE id= %d ', array( $cf ) ) );
 
 			return $field_id;
 
