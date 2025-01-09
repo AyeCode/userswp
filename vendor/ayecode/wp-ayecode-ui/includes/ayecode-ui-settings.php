@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.30';
+		public $version = '0.2.31';
 
 		/**
 		 * Class textdomain.
@@ -733,30 +733,39 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			wp_enqueue_script( 'iconpicker' );
 		}
 
+        /**
+         * Get the url path to the current folder.
+         *
+         * This can be called very early, hence the need for the dynamic way of getting the URL.
+         *
+         * @since 0.2.31 changed to support edge cases like bitnami containers.
+         * @return string
+         */
+        public function get_url() {
+            $content_dir = wp_normalize_path( untrailingslashit( WP_CONTENT_DIR ) );
+            $content_url = untrailingslashit( WP_CONTENT_URL );
+
+            // maybe Replace http:// to https://.
+            if ( strpos( $content_url, 'http://' ) === 0 && strpos( plugins_url(), 'https://' ) === 0 ) {
+                $content_url = str_replace( 'http://', 'https://', $content_url );
+            }
+
+            // First find where in the path our content directory starts
+            $content_basename = basename($content_dir);
+            $file_dir = str_replace( "/includes", "", wp_normalize_path( dirname( __FILE__ ) ) );
+
+            // Find the relative path by matching from content directory name
+            $after_content = substr($file_dir, strpos($file_dir, '/' . $content_basename . '/') + strlen('/' . $content_basename . '/'));
+
+            // Build URL using WP_CONTENT_URL and the relative path
+            $url = trailingslashit($content_url) . $after_content;
+
+            return trailingslashit($url);
+        }
+
 		/**
 		 * Get the url path to the current folder.
-		 *
-		 * @return string
-		 */
-		public function get_url() {
-			$content_dir = wp_normalize_path( untrailingslashit( WP_CONTENT_DIR ) );
-			$content_url = untrailingslashit( WP_CONTENT_URL );
-
-			// Replace http:// to https://.
-			if ( strpos( $content_url, 'http://' ) === 0 && strpos( plugins_url(), 'https://' ) === 0 ) {
-				$content_url = str_replace( 'http://', 'https://', $content_url );
-			}
-
-			// Check if we are inside a plugin
-			$file_dir = str_replace( "/includes", "", wp_normalize_path( dirname( __FILE__ ) ) );
-			$url = str_replace( $content_dir, $content_url, $file_dir );
-
-			return trailingslashit( $url );
-		}
-
-		/**
-		 * Get the url path to the current folder.
-		 *
+		 * @todo remove
 		 * @return string
 		 */
 		public function get_url_old() {
