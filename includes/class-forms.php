@@ -4807,9 +4807,12 @@ class UsersWP_Forms {
 
 		// do we need country code script in ajax?
 		$country_field = false;
+        $lightbox_forms = uwp_get_option( 'register_modal_form', 1 );
 
 		if ( isset( $_POST['form_id'] ) && ! empty( $_POST['form_id'] ) ) {
 			$form_id = (int)$_POST['form_id'];
+        } elseif ( is_array( $lightbox_forms ) && count( $lightbox_forms ) > 0 ) {
+			$form_id = reset( $lightbox_forms );
 		} else {
 			$form_id = 1;
 		}
@@ -4837,7 +4840,7 @@ class UsersWP_Forms {
 			$args['id'] = $form_id;
 		}
 
-		$args['limit'] = uwp_get_option( 'register_modal_form', 1 );
+		$args['limit'] = $lightbox_forms;
 
 		// get template
 		uwp_get_template( 'bootstrap/register.php', $args );

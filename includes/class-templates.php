@@ -539,7 +539,7 @@ class UsersWP_Templates {
 
 
 				?>
-                <div class="btn-group btn-group-sm mb-2" role="group" id="<?php echo esc_attr( $id ); ?>">
+                <div class="btn-group btn-group-sm d-flex mb-2" role="group" id="<?php echo esc_attr( $id ); ?>">
 				<?php
 				$options = array_chunk( $options, 5, true );
 				$current_url   = uwp_current_page_url();
@@ -550,7 +550,7 @@ class UsersWP_Templates {
 						echo aui()->button( array(  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'type'    => 'a',
 							'href'    => esc_url( $url ),
-							'class'   => 'btn btn-secondary '. esc_attr( $active ),
+							'class'   => 'btn btn-outline-primary '. esc_attr( $active ),
 							'content' => esc_attr( $val ),
 							'extra_attributes'  => array('data-form_id'=> esc_attr( $id ) )
 						) );
