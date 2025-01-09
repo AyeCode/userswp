@@ -1863,11 +1863,11 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 			);
 
 			if ( ! empty( $fields ) ) {
-		foreach ( $fields as $field ) {
-					$result_str    = $field;
-					$field_ins_upd = 'display';
-					$this->register_field_adminhtml( $result_str, $field_ins_upd, false );
-			}
+                foreach ( $fields as $field ) {
+                    $result_str    = $field;
+                    $field_ins_upd = 'display';
+                    $this->register_field_adminhtml( $result_str, $field_ins_upd, false );
+                }
 			}
             ?>
         </ul>
@@ -1945,9 +1945,12 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 		} else {
 			$field_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
 		}
+
+        $no_actions = array( 'email' );
+        $no_actions = apply_filters( 'uwp_register_fields_without_actions', $no_actions );
 		?>
         <li class="text li-settings" id="licontainer_<?php echo esc_attr( $result_str ); ?>">
-        <form>
+            <form>
                 <div class="title title<?php echo esc_attr( $result_str ); ?> uwp-fieldset  hover-shadow dd-form d-flex justify-content-between rounded list-group-item border rounded-smx text-start bg-light">
 					<?php
 					$nonce = wp_create_nonce( 'uwp_form_extras_nonce' . $result_str );
@@ -1957,11 +1960,7 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
                         <b><?php echo esc_html( uwp_ucwords( ' ' . $field_site_name ) ); ?></b>
                     </div>
                     <div class="dd-handle ui-sortable-handle">
-                        <?php
-                        $no_actions = array( 'username', 'email' );
-                        $no_actions = apply_filters( 'uwp_register_fields_without_actions', $no_actions );
-                        if ( isset( $htmlvar_name ) && ! in_array( $htmlvar_name, $no_actions ) ) {
-                        ?>
+                        <?php if ( isset( $htmlvar_name ) && ! in_array( $htmlvar_name, $no_actions ) ) { ?>
                             <i class="far fa-trash-alt text-danger ml-2 ms-2 c-pointer" id="delete-16"
                                 onclick="delete_field('<?php echo esc_js( $result_str ); ?>', '<?php echo esc_js( $nonce ); ?>','<?php echo esc_js( $htmlvar_name ); ?>', 'register')"
                             ></i>
@@ -1988,11 +1987,7 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 
                         <li>
                             <div class="uwp-input-wrap">
-								<?php
-								$no_actions = array( 'username', 'email' );
-								$no_actions = apply_filters( 'uwp_register_fields_without_actions', $no_actions );
-								if ( isset( $htmlvar_name ) && ! in_array( $htmlvar_name, $no_actions ) ) {
-                                ?>
+								<?php if ( isset( $htmlvar_name ) && ! in_array( $htmlvar_name, $no_actions ) ) { ?>
                                     <input type="button" class="button button-primary" name="save" id="save"
                                             value="<?php esc_attr_e( 'Save', 'userswp' ); ?>"
                                             onclick="save_field('<?php echo esc_js( $result_str ); ?>', 'register')"
@@ -2008,10 +2003,7 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
                     </ul>
 
                 </div>
-
-
-        </form>
-
+            </form>
         </li>
 		<?php
 	}
@@ -2621,7 +2613,9 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 
 			if ( $field = $wpdb->get_row( $wpdb->prepare( 'select id, htmlvar_name FROM ' . $table_name . ' WHERE id= %d AND form_id = %d', array( (int) $cf, (int) $form_id ) ) ) ) {
 
-				$excluded_delete = array( 'username', 'email' );
+				$excluded_delete = array( 'email' );
+                $excluded_delete = apply_filters( 'uwp_register_fields_exculde_delete', $excluded_delete );
+
 			    if ( isset( $field->htmlvar_name ) && in_array( $field->htmlvar_name, $excluded_delete ) ) {
                     return $field_id;
                 }
@@ -3304,7 +3298,7 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 		if ( $field_id != '' ) {
 			$cf = trim( $field_id, '_' );
 
-			$wpdb->query( $wpdb->prepare( 'delete from ' . $extras_table_name . ' where id= %d ', array( $cf ) ) );
+			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $extras_table_name . ' WHERE id= %d ', array( $cf ) ) );
 
 			return $field_id;
 
