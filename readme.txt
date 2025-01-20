@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.29 - TBD =
+* Username field in the registration form is now optional - CHANGED
+
 = 1.2.28 - 2025-01-09 =
 * Added functionality to reorder user types - ADDED
 * Fixed default lightbox registration form with single form selection in "Lightbox Forms" setting - FIXED
