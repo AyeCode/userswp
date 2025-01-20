@@ -410,7 +410,7 @@ class UsersWP_User_Types {
         <?php
     }
 
-    private static function get_redirect_options(): array {
+    private static function get_redirect_options() {
         $pages = get_pages();
         $pages_options = array(
             '-1' => __( 'Last User Page', 'userswp' ),

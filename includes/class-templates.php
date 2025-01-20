@@ -549,7 +549,7 @@ class UsersWP_Templates {
 						$url = esc_url_raw( add_query_arg( array( 'uwp_form_id' => $id ), $current_url ) );
 						echo aui()->button( array(  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							'type'    => 'a',
-							'href'    => esc_url( $url ),
+							'href'    => '#',
 							'class'   => 'btn btn-outline-primary '. esc_attr( $active ),
 							'content' => esc_attr( $val ),
 							'extra_attributes'  => array('data-form_id'=> esc_attr( $id ) )
