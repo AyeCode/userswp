@@ -13,7 +13,7 @@
  */
 function uwp_get_option( $key = '', $default = false, $cache = true ) {
 
-    if ($cache) {
+    if ( $cache ) {
         global $uwp_options;
     } else {
         $uwp_options = get_option( 'uwp_settings' );
@@ -22,7 +22,6 @@ function uwp_get_option( $key = '', $default = false, $cache = true ) {
     $value = isset( $uwp_options[ $key ] ) ? $uwp_options[ $key ] : $default;
     $value = apply_filters( 'uwp_get_option', $value, $key, $default );
     return apply_filters( 'uwp_get_option_' . $key, $value, $key, $default );
-
 }
 
 /**
@@ -36,22 +35,22 @@ function uwp_get_option( $key = '', $default = false, $cache = true ) {
  *
  * @return      bool                        Update success or not?.
  */
-function uwp_update_option( $key = false, $value = '') {
+function uwp_update_option( $key = false, $value = '' ) {
 
-    if (!$key ) {
+    if ( ! $key ) {
         return false;
     }
 
-    $settings = get_option( 'uwp_settings', array());
+    $settings = get_option( 'uwp_settings', array() );
 
-    if( !is_array( $settings ) ) {
+    if ( ! is_array( $settings ) ) {
         $settings = array();
     }
 
     $settings[ $key ] = $value;
 
     $settings = apply_filters( 'uwp_update_option', $settings, $key, $value );
-    $settings =  apply_filters( 'uwp_update_option_' . $key, $settings, $key, $value );
+    $settings = apply_filters( 'uwp_update_option_' . $key, $settings, $key, $value );
 
     $updated = update_option( 'uwp_settings', $settings );
 
@@ -61,7 +60,6 @@ function uwp_update_option( $key = false, $value = '') {
     }
 
     return $updated;
-
 }
 
 /**
@@ -118,9 +116,9 @@ function uwp_get_settings() {
     return apply_filters( 'uwp_get_settings', $settings );
 }
 
-function uwp_get_register_only_fields(){
-	$reg_only_fields = array('username', 'register_gdpr', 'register_tos', 'subscribe');
-	return apply_filters('uwp_register_mandatory_fields', $reg_only_fields);
+function uwp_get_register_only_fields() {
+	$reg_only_fields = array( 'register_gdpr', 'register_tos', 'subscribe' );
+	return apply_filters( 'uwp_register_mandatory_fields', $reg_only_fields );
 }
 
 
