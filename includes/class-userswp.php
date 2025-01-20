@@ -539,6 +539,8 @@ final class UsersWP {
 		add_filter( 'uwp_update_usermeta', array( $instance, 'modify_datepicker_value_on_update' ), 10, 3 );
 		add_filter( 'uwp_get_usermeta', array( $instance, 'modify_datepicker_value_on_get' ), 10, 4 );
 		add_action( 'get_user_metadata', array( $instance, 'dynamically_add_user_meta' ), 10, 4 );
+		// enqueue select2 on auth pages.
+		add_filter( 'aui_is_conditional_select2', array( $this, 'enqueue_select2_on_auth_pages'), 10, 1 );
 	}
 
 	public function load_files_actions_and_filters( $instance ) {
@@ -920,6 +922,19 @@ final class UsersWP {
 		load_plugin_textdomain( 'userswp', false, plugin_basename( dirname( USERSWP_PLUGIN_FILE ) ) . '/languages/' );
 
 		do_action( 'uwp_loaded' );
+	}
+
+	/**
+	 * Ensure Select2 is enqueued in auth pages only if not already done.
+	 * 
+	 * @return      void
+	 * 
+	 * @since 1.2.29
+	 */
+	public function enqueue_select2_on_auth_pages() {
+		if ( ! wp_script_is( 'select2', 'enqueued' ) ) {
+			wp_enqueue_script( 'select2' );
+		}
 	}
 
 	/**

@@ -361,25 +361,14 @@ class UsersWP_Admin {
                         var value = jQuery(this).val();
                         var register_redirect_obj = jQuery('#register_redirect_to');
 
-                        if ('auto_approve_login' === value) {
-                            register_redirect_obj.parent().parent().show();
-                        } else {
-                            register_redirect_obj.parent().parent().hide();
-                        }
+						register_redirect_obj.parents('tr').toggle(value === 'auto_approve_login');
                     }).change();
 
                     var register_redirect_to = jQuery('#register_redirect_to');
                     register_redirect_to.on('change', function () {
                         var value = jQuery(this).val();
                         var register_redirect_custom_obj = jQuery('#register_redirect_custom_url');
-
-                        if ('-2' === value) {
-                            register_redirect_custom_obj.parent().show();
-                            register_redirect_custom_obj.parent().prev().show();
-                        } else {
-                            register_redirect_custom_obj.parent().hide();
-                            register_redirect_custom_obj.parent().prev().hide();
-                        }
+						register_redirect_custom_obj.parents('tr').toggle(value === '-2');
                     }).change();
                 });
             </script>

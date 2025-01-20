@@ -146,6 +146,12 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.29 - TBD =
+* Username field in the registration form is now optional - CHANGED
+* Fixed an issue where selecting multiple options under "Show in what locations?" only saved one option - FIXED
+* Fixed Select2 error preventing multiselect dropdown in the Lightbox register form. - FIXED
+* Fixed visibility issue of Custom Redirect URL field in the user type form when 'Custom Redirect' is selected. - FIXED
+
 = 1.2.28 - 2025-01-09 =
 * Added functionality to reorder user types - ADDED
 * Fixed default lightbox registration form with single form selection in "Lightbox Forms" setting - FIXED

@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.22
  */
 class UWP_Author_Box_Widget extends WP_Super_Duper {
+    public $arguments;
 
     /**
      * Register the profile widget with WordPress.
@@ -29,21 +30,74 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
                 'classname'   => 'uwp_widgets uwp_widget_author_box bsui',
                 'description' => esc_html__('Displays author box.','userswp'),
             ),
-            'arguments'     => array(
-                'title'  => array(
-                    'title'       => __( 'Widget title', 'userswp' ),
-                    'desc'        => __( 'Enter widget title.', 'userswp' ),
-                    'type'        => 'text',
-                    'desc_tip'    => true,
-                    'default'     => '',
-                    'advanced'    => false
-                ),
-            )
-
         );
 
 
         parent::__construct( $options );
+    }
+
+    /**
+     * Set widget arguments.
+     *
+     */
+    public function set_arguments()
+    {
+        $arguments = array(
+            'title'  => array(
+                'title'       => __('Widget title', 'userswp'),
+                'desc'        => __('Enter widget title.', 'userswp'),
+                'type'        => 'text',
+                'desc_tip'    => true,
+                'default'     => '',
+                'advanced'    => false
+            )
+        );
+
+        // margins mobile
+        $arguments['mt'] = sd_get_margin_input('mt', array('device_type' => 'Mobile'));
+        $arguments['mr'] = sd_get_margin_input('mr', array('device_type' => 'Mobile'));
+        $arguments['mb'] = sd_get_margin_input('mb', array('device_type' => 'Mobile'));
+        $arguments['ml'] = sd_get_margin_input('ml', array('device_type' => 'Mobile'));
+
+        // margins tablet
+        $arguments['mt_md'] = sd_get_margin_input('mt', array('device_type' => 'Tablet'));
+        $arguments['mr_md'] = sd_get_margin_input('mr', array('device_type' => 'Tablet'));
+        $arguments['mb_md'] = sd_get_margin_input('mb', array('device_type' => 'Tablet'));
+        $arguments['ml_md'] = sd_get_margin_input('ml', array('device_type' => 'Tablet'));
+
+        // margins desktop
+        $arguments['mt_lg'] = sd_get_margin_input('mt', array('device_type' => 'Desktop'));
+        $arguments['mr_lg'] = sd_get_margin_input('mr', array('device_type' => 'Desktop'));
+        $arguments['mb_lg'] = sd_get_margin_input('mb', array('device_type' => 'Desktop'));
+        $arguments['ml_lg'] = sd_get_margin_input('ml', array('device_type' => 'Desktop'));
+
+        // padding
+        $arguments['pt'] = sd_get_padding_input('pt', array('device_type' => 'Mobile'));
+        $arguments['pr'] = sd_get_padding_input('pr', array('device_type' => 'Mobile'));
+        $arguments['pb'] = sd_get_padding_input('pb', array('device_type' => 'Mobile'));
+        $arguments['pl'] = sd_get_padding_input('pl', array('device_type' => 'Mobile'));
+
+        // padding tablet
+        $arguments['pt_md'] = sd_get_padding_input('pt', array('device_type' => 'Tablet'));
+        $arguments['pr_md'] = sd_get_padding_input('pr', array('device_type' => 'Tablet'));
+        $arguments['pb_md'] = sd_get_padding_input('pb', array('device_type' => 'Tablet'));
+        $arguments['pl_md'] = sd_get_padding_input('pl', array('device_type' => 'Tablet'));
+
+        // padding desktop
+        $arguments['pt_lg'] = sd_get_padding_input('pt', array('device_type' => 'Desktop'));
+        $arguments['pr_lg'] = sd_get_padding_input('pr', array('device_type' => 'Desktop'));
+        $arguments['pb_lg'] = sd_get_padding_input('pb', array('device_type' => 'Desktop'));
+        $arguments['pl_lg'] = sd_get_padding_input('pl', array('device_type' => 'Desktop'));
+
+        // border
+        $arguments['border']       = sd_get_border_input('border');
+        $arguments['rounded']      = sd_get_border_input('rounded');
+        $arguments['rounded_size'] = sd_get_border_input('rounded_size');
+
+        // shadow
+        $arguments['shadow'] = sd_get_shadow_input('shadow');
+
+        return apply_filters('uwp_author_box_widget_arguments', $arguments);
     }
 
 	/**
@@ -59,6 +113,11 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
 
         global $post, $wpdb;
 
+        // Ensure we have an array.
+		if ( ! is_array( $args ) ) {
+			$args = array();
+		}
+
         if(empty($post->ID)){
             return '';
         }
@@ -72,7 +131,7 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
         $design_style = uwp_get_option("design_style",'bootstrap');
         if( $design_style =='bootstrap'){
             $output = uwp_get_option('author_box_content_bootstrap');
-            if(!$output){$output = UsersWP_Defaults::author_box_content_bootstrap();}
+            if(!$output){$output = UsersWP_Defaults::author_box_content_bootstrap( $args );}
         }else{
             $output = uwp_get_option('author_box_content');
             if(!$output){$output = UsersWP_Defaults::author_box_content();}
