@@ -470,12 +470,6 @@ $pages            = UsersWP_Status::get_pages();
 		if ( ! empty( $plugin['name'] ) ) {
 			$dirname = dirname( $plugin['plugin'] );
 
-			// Link the plugin name to the plugin url if available.
-			$plugin_name = esc_html( $plugin['name'] );
-			if ( ! empty( $plugin['url'] ) ) {
-				$plugin_name = '<a href="' . esc_url( $plugin['url'] ) . '" aria-label="' . esc_attr__( 'Visit plugin homepage' , 'userswp' ) . '" target="_blank">' . $plugin_name . '</a>';
-			}
-
 			$version_string = '';
 			$network_string = '';
 			if ( ! empty( $plugin['latest_verison'] ) && version_compare( $plugin['latest_verison'], $plugin['version'], '>' ) ) {
@@ -488,7 +482,11 @@ $pages            = UsersWP_Status::get_pages();
 			}
 			?>
 			<tr>
-				<td><?php echo esc_html( $plugin_name ); ?></td>
+				<td>
+				<?php if ( ! empty( $plugin['url'] ) ) { ?>
+				<a href="<?php echo esc_url( $plugin['url'] ); ?>" aria-label="<?php esc_attr_e( 'Visit plugin homepage' , 'userswp' ); ?>" target="_blank"><?php echo esc_html( $plugin['name'] ); ?></a>
+				<?php } else { echo esc_html( $plugin['name'] ); } ?>
+				</td>
 				<td><?php
 					/* translators: %s: plugin author */
 					printf( esc_html__( 'by %s', 'userswp' ), esc_html( $plugin['author_name'] ) );
@@ -513,34 +511,36 @@ $pages            = UsersWP_Status::get_pages();
 	foreach ( $pages as $page ) {
 		$error   = false;
 
+		echo '<tr><td data-export-label="' . esc_attr( $page['page_name'] ) . '">';
 		if ( $page['page_id'] ) {
-			$page_name = '<a href="' . get_edit_post_link( $page['page_id'] ) . '" aria-label="' . sprintf( esc_html__( 'Edit %s page', 'userswp' ), esc_html( $page['page_name'] ) ) . '">' . esc_html( $page['page_name'] ) . '</a>';
+			echo '<a href="' . esc_url( get_edit_post_link( $page['page_id'] ) ) . '" aria-label="' . esc_attr( wp_sprintf( __( 'Edit %s page', 'userswp' ), $page['page_name'] ) ) . '">' . esc_html( $page['page_name'] ) . '</a>';
 		} else {
-			$page_name = esc_html( $page['page_name'] );
+			echo esc_html( $page['page_name'] );
 		}
+		echo ':</td><td>';
 
-		echo '<tr><td data-export-label="' . esc_attr( $page_name ) . '">' . esc_html( $page_name ) . ':</td><td>';
+		$has_shortcode = false;
 		// Page ID check.
 		if ( ! $page['page_set'] ) {
 			echo '<mark class="error"><span class="dashicons dashicons-warning"></span> ' . esc_html__( 'Page not set', 'userswp' ) . '</mark>';
 			$error = true;
-		} elseif ( ! $page['page_exists'] ) {
+		} else if ( ! $page['page_exists'] ) {
 			echo '<mark class="error"><span class="dashicons dashicons-warning"></span> ' . esc_html__( 'Page ID is set, but the page does not exist', 'userswp' ) . '</mark>';
 			$error = true;
-		} elseif ( ! $page['page_visible'] ) {
-			echo '<mark class="error"><span class="dashicons dashicons-warning"></span> ' . sprintf( esc_html__( 'Page visibility should be <a href="%s" target="_blank">public</a>', 'userswp' ), 'https://codex.wordpress.org/Content_Visibility' ) . '</mark>';
+		} else if ( ! $page['page_visible'] ) {
+			echo '<mark class="error"><span class="dashicons dashicons-warning"></span> ' . wp_kses_post( wp_sprintf( __( 'Page visibility should be <a href="%s" target="_blank">public</a>', 'userswp' ), 'https://codex.wordpress.org/Content_Visibility' ) ) . '</mark>';
 			$error = true;
 		} else {
 			// Shortcode check
-			if ( $page['shortcode_required'] ) {
-				if ( ! $page['shortcode_present'] ) {
-					echo '<mark class="error"><span class="dashicons dashicons-warning"></span> ' . sprintf( esc_html__( 'Page does not contains the shortcode.', 'userswp' ), esc_html( $page['shortcode'] ) ) . '</mark>';
-					$error = true;
-				}
+			if ( $page['shortcode_present'] ) {
+				$has_shortcode = true;
 			}
 		}
 
 		if ( ! $error ) {
+			if ( $has_shortcode ) {
+				echo '<span class="dashicons dashicons-shortcode" title="' . esc_attr( wp_sprintf( __( 'Page contains shortcode %s', 'userswp' ), $page['shortcode'] ) ) . '"></span> ';
+			}
 			echo '<mark class="yes">#' . absint( $page['page_id'] ) . ' - ' . esc_html( str_replace( home_url(), '', get_permalink( $page['page_id'] ) ) ) . '</mark>';
 		}
 		echo '</td></tr>';
