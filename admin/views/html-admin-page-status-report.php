@@ -539,7 +539,7 @@ $pages            = UsersWP_Status::get_pages();
 
 		if ( ! $error ) {
 			if ( $has_shortcode ) {
-				echo '<span class="dashicons dashicons-shortcode" title="' . esc_attr( wp_sprintf( __( 'Page contains shortcode %s', 'userswp' ), $page['shortcode'] ) ) . '"></span> ';
+				echo '<span class="dashicons dashicons-shortcode" title="' . esc_attr( wp_sprintf( __( 'Page contains shortcode %s', 'userswp' ), $page['shortcode'] ) ) . '"><font style="display:none">[/]</font></span> ';
 			}
 			echo '<mark class="yes">#' . absint( $page['page_id'] ) . ' - ' . esc_html( str_replace( home_url(), '', get_permalink( $page['page_id'] ) ) ) . '</mark>';
 		}
