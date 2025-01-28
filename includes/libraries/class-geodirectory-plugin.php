@@ -899,7 +899,7 @@ class UsersWP_GeoDirectory_Plugin {
 				$subtabs[ $list->post_name ] = array(
 					'id'    => $list->ID,
 					'title' => $list->post_title,
-					'count' => count( $this->get_listings_from_list( $list->ID ) ),
+					'count' => count( $this->get_listings_from_list( $list->ID ) )
 				);
 			}
 		}
@@ -968,10 +968,10 @@ class UsersWP_GeoDirectory_Plugin {
 		}
 
 		$post_ids = $this->get_listings_from_list( $active_id );
-		$paged    = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
 		if ( ! empty( $post_ids ) ) {
-			ob_start();
+			$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+
 			$query_args = array(
 				'is_geodir_loop' => true,
 				'gd_location'    => false,
@@ -994,14 +994,18 @@ class UsersWP_GeoDirectory_Plugin {
 			}
 
 			$the_query = new WP_Query( $query_args );
-
-			$args                               = array();
-			$args['template_args']['the_query'] = $the_query;
-			$args['template_args']['title']     = $subtabs[ $active_tab ]['title'];
-
-			uwp_get_template( "bootstrap/loop-posts.php", $args );
-			echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		} else {
+			$the_query = array();
 		}
+
+		$args                               = array();
+		$args['template_args']['the_query'] = $the_query;
+		$args['template_args']['title']     = $subtabs[ $active_tab ]['title'];
+		$args['template_args']['list_data'] = isset( $subtabs[ $active_tab ] ) ? $subtabs[ $active_tab ] : array();
+
+		ob_start();
+		uwp_get_template( "bootstrap/loop-posts.php", $args );
+		echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	public function get_listings_from_list( $list_id ) {
