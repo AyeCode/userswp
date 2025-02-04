@@ -147,6 +147,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 == Changelog ==
 
 = 1.2.29 - TBD =
+* Fixed an issue where fields required in the "Account" tab were incorrectly validated in the Registration Form. - FIXED
 * Username field in the registration form is now optional - CHANGED
 * Fixed an issue where selecting multiple options under "Show in what locations?" only saved one option - FIXED
 * Fixed Select2 error preventing multiselect dropdown in the Lightbox register form. - FIXED
