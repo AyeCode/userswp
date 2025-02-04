@@ -329,7 +329,7 @@
          */
         initUserTypesReorder: function () {
             const table = $('.wp-list-table.usertypes tbody, .wp-list-table.membershiptypes tbody');
-            table.sortable({
+            table.length && table.sortable({
                 handle: '.uwp-user-type-handle',
                 axis: 'y',
                 helper: function (e, ui) {
@@ -351,7 +351,6 @@
                         return $(this).val();
                     }).get();
 
-                    console.log(uwp_admin_ajax.nonces)
                     $.ajax({
                         url: uwp_admin_ajax.url,
                         type: 'POST',

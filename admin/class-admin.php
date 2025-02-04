@@ -50,6 +50,11 @@ class UsersWP_Admin {
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
 		add_filter( 'aui_screen_ids', array( $this, 'add_aui_screens' ), 20, 1 );
 
+		add_action( 'admin_notices', array( $this, 'add_user_type_updated_notice' ) );
+        add_action( 'manage_users_extra_tablenav', array( $this, 'add_bulk_user_type_dropdown' ) );
+        add_action( 'admin_init', array( $this, 'handle_bulk_user_type_change' ) );
+        add_action( 'admin_footer', array( $this, 'add_validation_script' ) );
+
 		add_action( 'wp_ajax_uwp_ajax_create_register', array( $this, 'process_create_register_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_update_register', array( $this, 'process_update_register_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_remove_user_type', array( $this, 'process_remove_register_form' ) );
@@ -1132,4 +1137,117 @@ class UsersWP_Admin {
 
 		return $screen_ids;
 	}
+
+	/**
+     * Adds a notice after updating user type.
+     */
+    public function add_user_type_updated_notice() {
+        if ( isset( $_GET['user_type_updated'] ) && 'true' === $_GET['user_type_updated'] ) {
+            ?>
+            <div class="updated notice is-dismissible">
+                <p><?php esc_html_e( 'User type updated successfully.', 'userswp' ); ?></p>
+            </div>
+            <?php
+        }
+    }
+
+    /**
+     * Adds a bulk action dropdown for changing user types on the Users list table.
+     *
+     * @param string $which The position of the table (top or bottom).
+     */
+    public function add_bulk_user_type_dropdown( $which ) {
+        if ( ! is_admin() || 'users' !== get_current_screen()->id || 'top' !== $which ) {
+            return;
+        }
+
+        $user_types = UsersWP_User_Types::get_register_forms();
+
+        if ( empty( $user_types ) ) {
+            return;
+        }
+
+        $options = array_map( function( $user_type ) {
+            return sprintf(
+                '<option value="%d">%s</option>',
+                absint( $user_type['id'] ),
+                esc_html( $user_type['title'] )
+            );
+        }, $user_types );
+
+        ?>
+        <div class="alignleft actions">
+            <label class="screen-reader-text" for="new_user_type">
+                <?php esc_html_e( 'Change user type to…', 'userswp' ); ?>
+            </label>
+            <select name="new_user_type" id="new_user_type">
+                <option value=""><?php esc_html_e( 'Change user type to…', 'userswp' ); ?></option>
+                <?php echo implode( '', $options ); ?>
+            </select>
+            <input type="submit" name="change_user_type" id="change_user_type" class="button" value="<?php esc_attr_e( 'Change', 'userswp' ); ?>">
+        </div>
+        <?php
+    }
+
+    /**
+     * Handles the bulk user type change.
+     */
+    public function handle_bulk_user_type_change() {
+        if ( ! isset( $_GET['change_user_type'], $_GET['new_user_type'] ) ) {
+            return;
+        }
+
+        $new_user_type = absint( $_GET['new_user_type'] );
+
+        if ( ! $new_user_type ) {
+            return;
+        }
+
+		$users = isset( $_REQUEST['users'] ) && ! empty( $_REQUEST['users'] ) ? (array) $_REQUEST['users'] : array();
+
+        if ( ! empty( $users ) ) {
+            array_map( function( $user_id ) use ( $new_user_type ) {
+                update_user_meta( absint( $user_id ), '_uwp_register_form_id', (int) $new_user_type );
+            }, $users );
+        } 
+
+        wp_safe_redirect( add_query_arg( 'user_type_updated', 'true', admin_url( 'users.php' ) ) );
+        exit;
+    }
+
+    /**
+     * Adds JavaScript validation script.
+     */
+    public function add_validation_script() {
+        ?>
+        <script type="text/javascript">
+        (function($) {
+            $(document).ready(function() {
+                var $errorNotice = $('<div id="no-user-type-selected" class="notice notice-error is-dismissible" style="display:none;"><p><?php esc_html_e( 'Please select a user type to perform this action.', 'userswp' ); ?></p><button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'userswp' ); ?></span></button></div>');
+            
+                $('#wpbody-content').prepend($errorNotice);
+
+                $('#change_user_type').on('click', function(e) {
+                    if ($('#new_user_type').val() === '') {
+                        e.preventDefault();
+                        showErrorNotice();
+                    }
+                });
+
+                $errorNotice.find('.notice-dismiss').on('click', function() {
+                    hideErrorNotice();
+                });
+
+                function showErrorNotice() {
+                    $errorNotice.fadeIn(300);
+                }
+
+                function hideErrorNotice() {
+                    $errorNotice.fadeOut(300);
+                }
+            });
+        })(jQuery);
+        </script>
+        <?php
+    }
 }
