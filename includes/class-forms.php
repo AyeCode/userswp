@@ -4279,7 +4279,7 @@ class UsersWP_Forms {
 			$result = $file_obj->validate_uploads( $_FILES, 'account', true, $fields );
 			if ( ! is_wp_error( $result ) ) {
 				foreach ( $fields as $field ) {
-					$value = $result[ $field->htmlvar_name ];
+					$value = isset( $result[ $field->htmlvar_name ] ) ? $result[ $field->htmlvar_name ] : '';
 					if ( $value == '0' || ! empty( $value ) ) {
 						uwp_update_usermeta( $user_id, $field->htmlvar_name, $value );
 					}

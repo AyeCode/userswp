@@ -464,6 +464,24 @@ function uwp_get_register_form_id( $user_id ) {
 	return ! empty( $form_id ) ? (int) $form_id : 1;
 }
 
+/**
+ * Get user regsitration form by form ID.
+ *
+ * @param int $form_id The ID of the registration form.
+ * @return array|false The user type array if found, false otherwise.
+ */
+function uwp_get_user_register_form( int $form_id ) {
+	$register_forms = (array) UsersWP_User_Types::get_register_forms();
+
+	foreach ( $register_forms as $register_form ) {
+		if ( isset( $register_form['id'] ) && (int) $register_form['id'] === (int) $form_id ) {
+			return $register_form;
+		}
+	}
+
+	return false;
+}
+
 function uwp_get_register_fields_htmlvar( $form_id = 1 ) {
 
 	$fields = get_register_form_fields( $form_id );

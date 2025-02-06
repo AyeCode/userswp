@@ -54,6 +54,12 @@ class UsersWP_Admin {
         add_action( 'manage_users_extra_tablenav', array( $this, 'add_bulk_user_type_dropdown' ) );
         add_action( 'admin_init', array( $this, 'handle_bulk_user_type_change' ) );
         add_action( 'admin_footer', array( $this, 'add_validation_script' ) );
+		add_filter( 'manage_users_columns', array( $this, 'add_user_type_column' ) );
+		add_action( 'manage_users_custom_column', array( $this, 'display_user_type_column' ), 10, 3 );
+		add_action( 'edit_user_profile', array( $this, 'display_admin_change_user_type' ), 10, 1 );
+		add_action( 'show_user_profile', array( $this, 'display_admin_change_user_type' ), 10, 1 );
+		add_action( 'personal_options_update', array( $this, 'update_user_type' ) );
+		add_action( 'edit_user_profile_update', array( $this, 'update_user_type' ) );
 
 		add_action( 'wp_ajax_uwp_ajax_create_register', array( $this, 'process_create_register_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_update_register', array( $this, 'process_update_register_form' ) );
@@ -577,8 +583,9 @@ class UsersWP_Admin {
 						if ( $field->field_type == 'fieldset' ) {
 							?>
                             <tr style="margin: 0; padding: 0">
-                                <th class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3
-                                            style="margin: 10px 0;"><?php echo esc_html( $field->site_title ); ?></h3></th>
+                                <th class="uwp-profile-extra-key" style="margin: 0; padding: 0">
+									<h5 class="mt-2 mb-2"><?php echo esc_html( $field->site_title ); ?></h5>
+								</th>
                                 <td></td>
                             </tr>
 							<?php
@@ -632,9 +639,9 @@ class UsersWP_Admin {
 						if ( $field->field_type == 'fieldset' ) {
 							?>
                             <tr style="margin: 0; padding: 0">
-                                <th class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3
-                                            style="margin: 10px 0;">
-										<?php echo esc_html( $field->site_title ); ?></h3></th>
+                                <th class="uwp-profile-extra-key" style="margin: 0; padding: 0">
+									<h5 class="mt-2 mb-2"><?php echo esc_html( $field->site_title ); ?></h5>
+								</th>
                                 <td></td>
                             </tr>
 							<?php
@@ -1087,7 +1094,7 @@ class UsersWP_Admin {
 
         if ( empty( $register_forms ) || ! is_array( $register_forms ) ) {
             return $status;
-            }
+		}
 
         foreach ( $register_forms as $key => $register_form ) {
             if ( empty( $register_form['id'] ) || (int) $register_form['id'] !== $form_id ) {
@@ -1136,6 +1143,108 @@ class UsersWP_Admin {
 		$screen_ids[] = 'uwp-setup';
 
 		return $screen_ids;
+	}
+
+	/**
+	 * Adds a new user type column to the users list table.
+	 *
+	 * @param array $columns Existing columns in the users list table.
+	 * @return array Modified columns array with the new user type column.
+	 */
+	public function add_user_type_column( array $columns ) {
+		$columns['uwp_user_type'] = __( 'User Type', 'userswp' );
+		return $columns;
+	}
+
+	/**
+	 * Displays user type in the user list column.
+	 *
+	 * @param string $value       Current column value.
+	 * @param string $column_name Column name being displayed.
+	 * @param int    $user_id     Current user ID.
+	 * @return string user type title.
+	 */
+	public function display_user_type_column( $value, $column_name, $user_id ) {
+		if ( 'uwp_user_type' === $column_name ) {
+			$form_id 		= uwp_get_register_form_id( $user_id );
+			$uwp_user_type 	= uwp_get_user_register_form( $form_id );
+
+			if ( ! isset( $uwp_user_type['id'], $uwp_user_type['title'] ) ) {
+				return '&mdash;';
+			}
+
+			return $uwp_user_type['title'];
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Display user type options in the admin user edit screen.
+	 *
+	 * @param WP_User $user The WP user object.
+	 * @return void
+	 */
+	public function display_admin_change_user_type( $user ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$register_forms = UsersWP_User_Types::get_register_forms();
+		$user_type_id   = (int) uwp_get_register_form_id( $user->ID );
+		?>
+		<table class="form-table">
+			<tbody>
+				<tr>
+					<th>
+						<label for="uwp_user_type_id" class="fw-semibold">
+							<?php esc_html_e( 'User Type', 'userswp' ); ?>
+						</label>
+					</th>
+					<td>
+						<select name="uwp_user_type_id" id="uwp_user_type_id" class="regular-text">
+							<?php foreach ( $register_forms as $form ) : ?>
+								<?php 
+								$form_id = absint( $form['id'] ); 
+								$is_current = ( $form_id === $user_type_id );
+								?>
+								<option value="<?php echo esc_attr( $form_id ); ?>" <?php selected( $form_id, $user_type_id ); ?>>
+									<?php echo esc_html( $form['title'] ); ?><?php echo $is_current ? ' (' . esc_html__( 'Active', 'userswp' ) . ')' : ''; ?>
+								</option>
+							<?php endforeach; ?>
+						</select>
+						<p class="description">
+							<?php esc_html_e( "Select the user type for this account.", 'userswp' ); ?>
+						</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<?php
+	}
+
+	/**
+	 * Update user membership.
+	 *
+	 * @param int $user_id The ID of the user to update.
+	 * @return void
+	 */
+	public function update_user_type( $user_id ) {
+		// Check user capabilities and nonce.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$user_type_id = isset( $_POST['uwp_user_type_id'] ) ? absint( $_POST['uwp_user_type_id'] ) : 0;
+
+		// Validate new membership.
+		$uwp_user_type 	= uwp_get_user_register_form( $user_type_id );
+		if ( ! $uwp_user_type ) {
+			return;
+		}
+
+		update_user_meta( absint( $user_id ), '_uwp_register_form_id', (int) $user_type_id );
+
 	}
 
 	/**
