@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.30 - TBD =
+* Added the ability to change user type from the edit user page - ADDED
+
 = 1.2.29 - 2025-02-04 =
 * Fixed an issue where fields required in the "Account" tab were incorrectly validated in the Registration Form. - FIXED
 * Bulk user type change functionality added to Users list table - ADDED

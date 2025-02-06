@@ -570,7 +570,7 @@ class UsersWP_Admin {
 		if ( $fields ) {
 			?>
             <div class="uwp-profile-extra">
-                <table class="uwp-profile-extra-table form-table bsui">
+                <table class="uwp-profile-extra-table form-table">
 					<?php
 					foreach ( $fields as $field ) {
 
@@ -582,9 +582,9 @@ class UsersWP_Admin {
 
 						if ( $field->field_type == 'fieldset' ) {
 							?>
-                            <tr style="margin: 0; padding: 0">
-                                <th class="uwp-profile-extra-key" style="margin: 0; padding: 0">
-									<h5 class="mt-2 mb-2"><?php echo esc_html( $field->site_title ); ?></h5>
+                            <tr>
+                                <th class="uwp-profile-extra-key">
+									<h2><?php echo esc_html( $field->site_title ); ?></h2>
 								</th>
                                 <td></td>
                             </tr>
@@ -593,7 +593,7 @@ class UsersWP_Admin {
                         ?>
                             <tr>
                                 <th class="uwp-profile-extra-key"><?php echo esc_html( $field->site_title ); ?></th>
-                                <td class="uwp-profile-extra-value">
+                                <td class="uwp-profile-extra-value bsui">
 									<?php
 									$templates_obj = new UsersWP_Templates();
 									$templates_obj->template_fields_html( $field, 'account', $user->ID );
@@ -638,9 +638,9 @@ class UsersWP_Admin {
 
 						if ( $field->field_type == 'fieldset' ) {
 							?>
-                            <tr style="margin: 0; padding: 0">
-                                <th class="uwp-profile-extra-key" style="margin: 0; padding: 0">
-									<h5 class="mt-2 mb-2"><?php echo esc_html( $field->site_title ); ?></h5>
+                            <tr>
+                                <th class="uwp-profile-extra-key">
+									<h2><?php echo esc_html( $field->site_title ); ?></h2>
 								</th>
                                 <td></td>
                             </tr>
@@ -649,7 +649,7 @@ class UsersWP_Admin {
                         ?>
                             <tr>
                                 <th class="uwp-profile-extra-key"><?php echo esc_html( $field->site_title ); ?></th>
-                                <td class="uwp-profile-extra-value">
+                                <td class="uwp-profile-extra-value bsui">
 									<?php
 									if ( $field->htmlvar_name == 'avatar' ) {
 										$value = uwp_get_usermeta( $user->ID, 'avatar_thumb', '' );
@@ -1192,6 +1192,8 @@ class UsersWP_Admin {
 
 		$register_forms = UsersWP_User_Types::get_register_forms();
 		$user_type_id   = (int) uwp_get_register_form_id( $user->ID );
+
+		ob_start();
 		?>
 		<table class="form-table">
 			<tbody>
@@ -1221,6 +1223,9 @@ class UsersWP_Admin {
 			</tbody>
 		</table>
 		<?php
+
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo apply_filters( 'uwp_admin_change_user_type_display', ob_get_clean(), $user );
 	}
 
 	/**
@@ -1230,21 +1235,23 @@ class UsersWP_Admin {
 	 * @return void
 	 */
 	public function update_user_type( $user_id ) {
-		// Check user capabilities and nonce.
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
-		$user_type_id = isset( $_POST['uwp_user_type_id'] ) ? absint( $_POST['uwp_user_type_id'] ) : 0;
+		check_admin_referer( 'update-user_' . $user_id );
 
-		// Validate new membership.
-		$uwp_user_type 	= uwp_get_user_register_form( $user_type_id );
-		if ( ! $uwp_user_type ) {
-			return;
+		if ( isset( $_POST['uwp_user_type_id'] ) && ! empty( $_POST['uwp_user_type_id'] ) ) {
+			$user_type_id = absint( $_POST['uwp_user_type_id'] );
+
+			// Validate new membership.
+			$uwp_user_type = uwp_get_user_register_form( $user_type_id );
+			if ( ! $uwp_user_type ) {
+				return;
+			}
+
+			update_user_meta( $user_id, '_uwp_register_form_id', $user_type_id );
 		}
-
-		update_user_meta( absint( $user_id ), '_uwp_register_form_id', (int) $user_type_id );
-
 	}
 
 	/**
@@ -1284,29 +1291,33 @@ class UsersWP_Admin {
             );
         }, $user_types );
 
+		ob_start();
         ?>
         <div class="alignleft actions">
-            <label class="screen-reader-text" for="new_user_type">
+            <label class="screen-reader-text" for="uwp_new_user_type">
                 <?php esc_html_e( 'Change user type to…', 'userswp' ); ?>
             </label>
-            <select name="new_user_type" id="new_user_type">
+            <select name="uwp_new_user_type" id="uwp_new_user_type">
                 <option value=""><?php esc_html_e( 'Change user type to…', 'userswp' ); ?></option>
                 <?php echo implode( '', $options ); ?>
             </select>
-            <input type="submit" name="change_user_type" id="change_user_type" class="button" value="<?php esc_attr_e( 'Change', 'userswp' ); ?>">
+            <input type="submit" name="uwp_change_user_type" id="uwp_change_user_type" class="button" value="<?php esc_attr_e( 'Change', 'userswp' ); ?>">
         </div>
         <?php
+
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo apply_filters( 'uwp_bulk_change_user_type_display', ob_get_clean() );
     }
 
     /**
      * Handles the bulk user type change.
      */
     public function handle_bulk_user_type_change() {
-        if ( ! isset( $_GET['change_user_type'], $_GET['new_user_type'] ) ) {
+        if ( ! isset( $_GET['uwp_change_user_type'], $_GET['uwp_new_user_type'] ) ) {
             return;
         }
 
-        $new_user_type = absint( $_GET['new_user_type'] );
+        $new_user_type = absint( $_GET['uwp_new_user_type'] );
 
         if ( ! $new_user_type ) {
             return;
@@ -1328,32 +1339,57 @@ class UsersWP_Admin {
      * Adds JavaScript validation script.
      */
     public function add_validation_script() {
+		$screen = get_current_screen();
+
+		if ( 'users' !== $screen->id ) {
+			return;
+		}
         ?>
         <script type="text/javascript">
         (function($) {
             $(document).ready(function() {
-                var $errorNotice = $('<div id="no-user-type-selected" class="notice notice-error is-dismissible" style="display:none;"><p><?php esc_html_e( 'Please select a user type to perform this action.', 'userswp' ); ?></p><button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'userswp' ); ?></span></button></div>');
-            
-                $('#wpbody-content').prepend($errorNotice);
+				var $userTypeErrorNotice = $(
+					'<div id="no-user-type-selected" class="notice notice-error is-dismissible" style="display:none;">' +
+						'<p><?php esc_html_e( "Please select a user type to perform this action.", "userswp" ); ?></p>' +
+						'<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( "Dismiss this notice.", "userswp" ); ?></span></button>' +
+					'</div>',
+				);
 
-                $('#change_user_type').on('click', function(e) {
-                    if ($('#new_user_type').val() === '') {
-                        e.preventDefault();
-                        showErrorNotice();
-                    }
-                });
+				var $itemSelectionErrorNotice = $(
+					'<div id="no-item-selected" class="notice notice-error is-dismissible" style="display:none;">' +
+						'<p><?php esc_html_e( "Please select at least one item to perform this action on.", "userswp" ); ?></p>' +
+						'<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( "Dismiss this notice.", "userswp" ); ?></span></button>' +
+					'</div>',
+				);
 
-                $errorNotice.find('.notice-dismiss').on('click', function() {
-                    hideErrorNotice();
-                });
+				$("#wpbody-content").prepend($userTypeErrorNotice, $itemSelectionErrorNotice)
 
-                function showErrorNotice() {
-                    $errorNotice.fadeIn(300);
-                }
+				$("#uwp_change_user_type").on("click", (e) => {
+					if ($('input[name="users[]"]:checked').length === 0) {
+						e.preventDefault();
+						showErrorNotice($itemSelectionErrorNotice);
+						hideErrorNotice($userTypeErrorNotice);
+					} else if ($("#new_user_type").val() === "") {
+						e.preventDefault();
+						showErrorNotice($userTypeErrorNotice);
+						hideErrorNotice($itemSelectionErrorNotice);
+					} else {
+						hideErrorNotice($userTypeErrorNotice);
+						hideErrorNotice($itemSelectionErrorNotice);
+					}
+				});
 
-                function hideErrorNotice() {
-                    $errorNotice.fadeOut(300);
-                }
+				$(".notice-dismiss").on("click", function () {
+					hideErrorNotice($(this).closest(".notice"));
+				})
+
+				function showErrorNotice($notice) {
+					$notice.fadeIn(300);
+				}
+
+				function hideErrorNotice($notice) {
+					$notice.fadeOut(300);
+				}
             });
         })(jQuery);
         </script>
