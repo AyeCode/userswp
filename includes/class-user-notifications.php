@@ -106,7 +106,7 @@ class UsersWP_Notifications {
 	        $message = apply_filters('uwp_notification_update_success_message', __('Notification settings updated successfully.', 'userswp'));
 	        $message = aui()->alert(array(
 			        'type'=>'success',
-			        'content'=> $message.print_r($_POST, true)
+			        'content'=> $message
 		        )
 	        );
 	        $uwp_notices[] = array('account' => $message);
