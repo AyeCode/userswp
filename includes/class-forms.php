@@ -4843,7 +4843,7 @@ class UsersWP_Forms {
 		$args['limit'] = $lightbox_forms;
 
 		// get template
-		uwp_get_template( 'bootstrap/register.php', $args );
+		uwp_get_template( 'bootstrap/register.php', $args ); 
 
 		// only show the JS if NOT doing a block render
 		if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] != 'super_duper_output_shortcode' ) {
