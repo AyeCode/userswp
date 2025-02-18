@@ -1781,7 +1781,7 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 
                         <a class=" btn btn-link text-muted" href="javascript:void(0);" onclick="uwp_tabs_close_settings(this); return false;"><?php _e( 'Close', 'userswp' ); ?></a>
                         <a href='javascript:void(0);' type="button" class="btn btn-primary"  id="save"
-                                onclick="save_field('<?php echo esc_attr( $result_str ); ?>');jQuery(this).html('<span class=\'spinner-border spinner-border-sm\' role=\'status\'></span> <?php esc_attr_e( 'Saving', 'userswp' ); ?>').addClass('disabled');return false;"><?php echo esc_attr( __( 'Save', 'userswp' ) ); ?></a>
+                                onclick="save_field('<?php echo esc_attr( $result_str ); ?>');"><?php echo esc_attr( __( 'Save', 'userswp' ) ); ?></a>
                     </div>
                 </script>
             </div>
