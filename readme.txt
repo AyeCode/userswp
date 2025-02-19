@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.7
-Stable tag: 1.2.29
+Stable tag: 1.2.30
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -146,9 +146,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.30 - TBD =
+= 1.2.30 - 2025-02-19 =
 * Fixed issue with switching between multiple user types forms on the register page - FIXED  
 * Added the ability to change user type from the edit user page - ADDED
+* Changes for upcoming Membership addon beta - CHANGED
 
 = 1.2.29 - 2025-02-04 =
 * Fixed an issue where fields required in the "Account" tab were incorrectly validated in the Registration Form. - FIXED
