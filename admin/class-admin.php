@@ -54,6 +54,12 @@ class UsersWP_Admin {
         add_action( 'manage_users_extra_tablenav', array( $this, 'add_bulk_user_type_dropdown' ) );
         add_action( 'admin_init', array( $this, 'handle_bulk_user_type_change' ) );
         add_action( 'admin_footer', array( $this, 'add_validation_script' ) );
+		add_filter( 'manage_users_columns', array( $this, 'add_user_type_column' ) );
+		add_action( 'manage_users_custom_column', array( $this, 'display_user_type_column' ), 10, 3 );
+		add_action( 'edit_user_profile', array( $this, 'display_admin_change_user_type' ), 10, 1 );
+		add_action( 'show_user_profile', array( $this, 'display_admin_change_user_type' ), 10, 1 );
+		add_action( 'personal_options_update', array( $this, 'update_user_type' ) );
+		add_action( 'edit_user_profile_update', array( $this, 'update_user_type' ) );
 
 		add_action( 'wp_ajax_uwp_ajax_create_register', array( $this, 'process_create_register_form' ) );
 		add_action( 'wp_ajax_uwp_ajax_update_register', array( $this, 'process_update_register_form' ) );
@@ -564,7 +570,7 @@ class UsersWP_Admin {
 		if ( $fields ) {
 			?>
             <div class="uwp-profile-extra">
-                <table class="uwp-profile-extra-table form-table bsui">
+                <table class="uwp-profile-extra-table form-table">
 					<?php
 					foreach ( $fields as $field ) {
 
@@ -576,9 +582,10 @@ class UsersWP_Admin {
 
 						if ( $field->field_type == 'fieldset' ) {
 							?>
-                            <tr style="margin: 0; padding: 0">
-                                <th class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3
-                                            style="margin: 10px 0;"><?php echo esc_html( $field->site_title ); ?></h3></th>
+                            <tr>
+                                <th class="uwp-profile-extra-key">
+									<h2><?php echo esc_html( $field->site_title ); ?></h2>
+								</th>
                                 <td></td>
                             </tr>
 							<?php
@@ -586,7 +593,7 @@ class UsersWP_Admin {
                         ?>
                             <tr>
                                 <th class="uwp-profile-extra-key"><?php echo esc_html( $field->site_title ); ?></th>
-                                <td class="uwp-profile-extra-value">
+                                <td class="uwp-profile-extra-value bsui">
 									<?php
 									$templates_obj = new UsersWP_Templates();
 									$templates_obj->template_fields_html( $field, 'account', $user->ID );
@@ -631,10 +638,10 @@ class UsersWP_Admin {
 
 						if ( $field->field_type == 'fieldset' ) {
 							?>
-                            <tr style="margin: 0; padding: 0">
-                                <th class="uwp-profile-extra-key" style="margin: 0; padding: 0"><h3
-                                            style="margin: 10px 0;">
-										<?php echo esc_html( $field->site_title ); ?></h3></th>
+                            <tr>
+                                <th class="uwp-profile-extra-key">
+									<h2><?php echo esc_html( $field->site_title ); ?></h2>
+								</th>
                                 <td></td>
                             </tr>
 							<?php
@@ -642,7 +649,7 @@ class UsersWP_Admin {
                         ?>
                             <tr>
                                 <th class="uwp-profile-extra-key"><?php echo esc_html( $field->site_title ); ?></th>
-                                <td class="uwp-profile-extra-value">
+                                <td class="uwp-profile-extra-value bsui">
 									<?php
 									if ( $field->htmlvar_name == 'avatar' ) {
 										$value = uwp_get_usermeta( $user->ID, 'avatar_thumb', '' );
@@ -1087,7 +1094,7 @@ class UsersWP_Admin {
 
         if ( empty( $register_forms ) || ! is_array( $register_forms ) ) {
             return $status;
-            }
+		}
 
         foreach ( $register_forms as $key => $register_form ) {
             if ( empty( $register_form['id'] ) || (int) $register_form['id'] !== $form_id ) {
@@ -1139,6 +1146,115 @@ class UsersWP_Admin {
 	}
 
 	/**
+	 * Adds a new user type column to the users list table.
+	 *
+	 * @param array $columns Existing columns in the users list table.
+	 * @return array Modified columns array with the new user type column.
+	 */
+	public function add_user_type_column( array $columns ) {
+		$columns['uwp_user_type'] = __( 'User Type', 'userswp' );
+		return $columns;
+	}
+
+	/**
+	 * Displays user type in the user list column.
+	 *
+	 * @param string $value       Current column value.
+	 * @param string $column_name Column name being displayed.
+	 * @param int    $user_id     Current user ID.
+	 * @return string user type title.
+	 */
+	public function display_user_type_column( $value, $column_name, $user_id ) {
+		if ( 'uwp_user_type' === $column_name ) {
+			$form_id 		= uwp_get_register_form_id( $user_id );
+			$uwp_user_type 	= uwp_get_user_register_form( $form_id );
+
+			if ( ! isset( $uwp_user_type['id'], $uwp_user_type['title'] ) ) {
+				return '&mdash;';
+			}
+
+			return $uwp_user_type['title'];
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Display user type options in the admin user edit screen.
+	 *
+	 * @param WP_User $user The WP user object.
+	 * @return void
+	 */
+	public function display_admin_change_user_type( $user ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$register_forms = UsersWP_User_Types::get_register_forms();
+		$user_type_id   = (int) uwp_get_register_form_id( $user->ID );
+
+		ob_start();
+		?>
+		<table class="form-table">
+			<tbody>
+				<tr>
+					<th>
+						<label for="uwp_user_type_id" class="fw-semibold">
+							<?php esc_html_e( 'User Type', 'userswp' ); ?>
+						</label>
+					</th>
+					<td>
+						<select name="uwp_user_type_id" id="uwp_user_type_id" class="regular-text">
+							<?php foreach ( $register_forms as $form ) : ?>
+								<?php 
+								$form_id = absint( $form['id'] ); 
+								$is_current = ( $form_id === $user_type_id );
+								?>
+								<option value="<?php echo esc_attr( $form_id ); ?>" <?php selected( $form_id, $user_type_id ); ?>>
+									<?php echo esc_html( $form['title'] ); ?><?php echo $is_current ? ' (' . esc_html__( 'Active', 'userswp' ) . ')' : ''; ?>
+								</option>
+							<?php endforeach; ?>
+						</select>
+						<p class="description">
+							<?php esc_html_e( "Select the user type for this account.", 'userswp' ); ?>
+						</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<?php
+
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo apply_filters( 'uwp_admin_change_user_type_display', ob_get_clean(), $user );
+	}
+
+	/**
+	 * Update user membership.
+	 *
+	 * @param int $user_id The ID of the user to update.
+	 * @return void
+	 */
+	public function update_user_type( $user_id ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		check_admin_referer( 'update-user_' . $user_id );
+
+		if ( isset( $_POST['uwp_user_type_id'] ) && ! empty( $_POST['uwp_user_type_id'] ) ) {
+			$user_type_id = absint( $_POST['uwp_user_type_id'] );
+
+			// Validate new membership.
+			$uwp_user_type = uwp_get_user_register_form( $user_type_id );
+			if ( ! $uwp_user_type ) {
+				return;
+			}
+
+			update_user_meta( $user_id, '_uwp_register_form_id', $user_type_id );
+		}
+	}
+
+	/**
      * Adds a notice after updating user type.
      */
     public function add_user_type_updated_notice() {
@@ -1175,29 +1291,33 @@ class UsersWP_Admin {
             );
         }, $user_types );
 
+		ob_start();
         ?>
         <div class="alignleft actions">
-            <label class="screen-reader-text" for="new_user_type">
+            <label class="screen-reader-text" for="uwp_new_user_type">
                 <?php esc_html_e( 'Change user type to…', 'userswp' ); ?>
             </label>
-            <select name="new_user_type" id="new_user_type">
+            <select name="uwp_new_user_type" id="uwp_new_user_type">
                 <option value=""><?php esc_html_e( 'Change user type to…', 'userswp' ); ?></option>
                 <?php echo implode( '', $options ); ?>
             </select>
-            <input type="submit" name="change_user_type" id="change_user_type" class="button" value="<?php esc_attr_e( 'Change', 'userswp' ); ?>">
+            <input type="submit" name="uwp_change_user_type" id="uwp_change_user_type" class="button" value="<?php esc_attr_e( 'Change', 'userswp' ); ?>">
         </div>
         <?php
+
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo apply_filters( 'uwp_bulk_change_user_type_display', ob_get_clean() );
     }
 
     /**
      * Handles the bulk user type change.
      */
     public function handle_bulk_user_type_change() {
-        if ( ! isset( $_GET['change_user_type'], $_GET['new_user_type'] ) ) {
+        if ( ! isset( $_GET['uwp_change_user_type'], $_GET['uwp_new_user_type'] ) ) {
             return;
         }
 
-        $new_user_type = absint( $_GET['new_user_type'] );
+        $new_user_type = absint( $_GET['uwp_new_user_type'] );
 
         if ( ! $new_user_type ) {
             return;
@@ -1219,32 +1339,57 @@ class UsersWP_Admin {
      * Adds JavaScript validation script.
      */
     public function add_validation_script() {
+		$screen = get_current_screen();
+
+		if ( 'users' !== $screen->id ) {
+			return;
+		}
         ?>
         <script type="text/javascript">
         (function($) {
             $(document).ready(function() {
-                var $errorNotice = $('<div id="no-user-type-selected" class="notice notice-error is-dismissible" style="display:none;"><p><?php esc_html_e( 'Please select a user type to perform this action.', 'userswp' ); ?></p><button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'userswp' ); ?></span></button></div>');
-            
-                $('#wpbody-content').prepend($errorNotice);
+				var $userTypeErrorNotice = $(
+					'<div id="no-user-type-selected" class="notice notice-error is-dismissible" style="display:none;">' +
+						'<p><?php esc_html_e( "Please select a user type to perform this action.", "userswp" ); ?></p>' +
+						'<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( "Dismiss this notice.", "userswp" ); ?></span></button>' +
+					'</div>',
+				);
 
-                $('#change_user_type').on('click', function(e) {
-                    if ($('#new_user_type').val() === '') {
-                        e.preventDefault();
-                        showErrorNotice();
-                    }
-                });
+				var $itemSelectionErrorNotice = $(
+					'<div id="no-item-selected" class="notice notice-error is-dismissible" style="display:none;">' +
+						'<p><?php esc_html_e( "Please select at least one item to perform this action on.", "userswp" ); ?></p>' +
+						'<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( "Dismiss this notice.", "userswp" ); ?></span></button>' +
+					'</div>',
+				);
 
-                $errorNotice.find('.notice-dismiss').on('click', function() {
-                    hideErrorNotice();
-                });
+				$("#wpbody-content").prepend($userTypeErrorNotice, $itemSelectionErrorNotice)
 
-                function showErrorNotice() {
-                    $errorNotice.fadeIn(300);
-                }
+				$("#uwp_change_user_type").on("click", (e) => {
+					if ($('input[name="users[]"]:checked').length === 0) {
+						e.preventDefault();
+						showErrorNotice($itemSelectionErrorNotice);
+						hideErrorNotice($userTypeErrorNotice);
+					} else if ($("#new_user_type").val() === "") {
+						e.preventDefault();
+						showErrorNotice($userTypeErrorNotice);
+						hideErrorNotice($itemSelectionErrorNotice);
+					} else {
+						hideErrorNotice($userTypeErrorNotice);
+						hideErrorNotice($itemSelectionErrorNotice);
+					}
+				});
 
-                function hideErrorNotice() {
-                    $errorNotice.fadeOut(300);
-                }
+				$(".notice-dismiss").on("click", function () {
+					hideErrorNotice($(this).closest(".notice"));
+				})
+
+				function showErrorNotice($notice) {
+					$notice.fadeIn(300);
+				}
+
+				function hideErrorNotice($notice) {
+					$notice.fadeOut(300);
+				}
             });
         })(jQuery);
         </script>

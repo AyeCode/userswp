@@ -3796,4 +3796,3 @@ if(!function_exists('sd_blocks_render_blocks')){
 }
 
 add_filter('render_block', 'sd_blocks_render_blocks',10,3);
-
