@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.29\n"
+"Project-Id-Version: UsersWP 1.2.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-04 22:30+0530\n"
-"PO-Revision-Date: 2025-02-04 22:32+0530\n"
+"POT-Creation-Date: 2025-02-19 17:06+0000\n"
+"PO-Revision-Date: 2025-02-19 17:07+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -20,10 +20,12 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: vendor\n"
 
 #: admin/assets/js/users-wp-admin.js:198
+#: admin/assets/js/users-wp-admin.min.js:1
 msgid "Form title is required."
 msgstr ""
 
 #: admin/assets/js/users-wp-admin.js:223
+#: admin/assets/js/users-wp-admin.min.js:1
 msgid "There is something that went wrong!"
 msgstr ""
 
@@ -124,208 +126,213 @@ msgid ""
 "registration, login forms etc."
 msgstr ""
 
-#: admin/class-admin.php:108
+#: admin/class-admin.php:114
 msgid "UsersWP - an AyeCode product!"
 msgstr ""
 
-#: admin/class-admin.php:109
+#: admin/class-admin.php:115
 msgid "Please confirm you wish to connect your site?"
 msgstr ""
 
-#: admin/class-admin.php:110
+#: admin/class-admin.php:116
 #, php-format
 msgid ""
 "<strong>Have a license?</strong> Forget about entering license keys or "
-"downloading zip files, connect your site for instant access. %1$slearn "
-"more%2$s"
+"downloading zip files, connect your site for instant access. %1$slearn more"
+"%2$s"
 msgstr ""
 
-#: admin/class-admin.php:111
+#: admin/class-admin.php:117
 msgid "Connect Site"
 msgstr ""
 
-#: admin/class-admin.php:112
+#: admin/class-admin.php:118
 msgid "Connecting..."
 msgstr ""
 
-#: admin/class-admin.php:113
+#: admin/class-admin.php:119
 msgid "This service will only work with a live domain, not a localhost."
 msgstr ""
 
-#: admin/class-admin.php:114
+#: admin/class-admin.php:120
 msgid "Something went wrong, please refresh and try again."
 msgstr ""
 
-#: admin/class-admin.php:260
+#: admin/class-admin.php:266
 msgid "Field key must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:261
+#: admin/class-admin.php:267
 msgid "Option Values must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:262
+#: admin/class-admin.php:268
 msgid "Please do not use special character and spaces in field key."
 msgstr ""
 
-#: admin/class-admin.php:263
+#: admin/class-admin.php:269
 msgid "Field key should be a unique name."
 msgstr ""
 
-#: admin/class-admin.php:264
+#: admin/class-admin.php:270
 msgid "Are you sure you wish to delete this field?"
 msgstr ""
 
-#: admin/class-admin.php:265
+#: admin/class-admin.php:271
 msgid "This field is required."
 msgstr ""
 
-#: admin/class-admin.php:267
+#: admin/class-admin.php:273
 msgid "Choose an image"
 msgstr ""
 
-#: admin/class-admin.php:268
+#: admin/class-admin.php:274
 msgid "Use image"
 msgstr ""
 
-#: admin/class-admin.php:269 admin/settings/class-formbuilder.php:1784
+#: admin/class-admin.php:275 admin/settings/class-formbuilder.php:1784
 #: admin/settings/class-formbuilder.php:1992
 #: admin/settings/class-uwp-settings-profile-tabs.php:833
 #: admin/settings/class-uwp-settings-user-sorting.php:601
 msgid "Save"
 msgstr ""
 
-#: admin/class-admin.php:270
+#: admin/class-admin.php:276
 msgid "Saved"
 msgstr ""
 
-#: admin/class-admin.php:271 admin/settings/class-formbuilder.php:1996
+#: admin/class-admin.php:277 admin/settings/class-formbuilder.php:1996
 #: admin/tables/class-user-types-table.php:314
 msgid "Delete"
 msgstr ""
 
-#: admin/class-admin.php:272
+#: admin/class-admin.php:278
 msgid "Deleted"
 msgstr ""
 
-#: admin/class-admin.php:273
+#: admin/class-admin.php:279
 msgid "Cancel"
 msgstr ""
 
-#: admin/class-admin.php:274
+#: admin/class-admin.php:280
 msgid "Saving..."
 msgstr ""
 
-#: admin/class-admin.php:275
+#: admin/class-admin.php:281
 msgid "An error occurred while saving. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:276
+#: admin/class-admin.php:282
 msgid "Are you sure you wish to delete this form?"
 msgstr ""
 
-#: admin/class-admin.php:277
+#: admin/class-admin.php:283
 msgid "Enter register form title"
 msgstr ""
 
-#: admin/class-admin.php:278
+#: admin/class-admin.php:284
 msgid "Updated! Reloading page..."
 msgstr ""
 
-#: admin/class-admin.php:302 admin/class-admin.php:821
+#: admin/class-admin.php:308 admin/class-admin.php:828
 msgid "Activation email has been sent!"
 msgstr ""
 
-#: admin/class-admin.php:305
+#: admin/class-admin.php:311
 msgid "Error while sending activation email. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:308
+#: admin/class-admin.php:314
 msgid "User(s) has been activated!"
 msgstr ""
 
-#: admin/class-admin.php:401
+#: admin/class-admin.php:407
 #, php-format
 msgid ""
 "You can change your profile picture on your <a href=\"%s\">Profile Page</a>."
 msgstr ""
 
-#: admin/class-admin.php:418 admin/class-uwp-admin-menus.php:80
+#: admin/class-admin.php:424 admin/class-uwp-admin-menus.php:80
 #: admin/menus/class-menus.php:291 includes/class-uwp-privacy.php:33
 #: includes/template-functions.php:196
 msgid "UsersWP"
 msgstr ""
 
-#: admin/class-admin.php:484
+#: admin/class-admin.php:490
 msgid "Pending Email Activation"
 msgstr ""
 
-#: admin/class-admin.php:659
+#: admin/class-admin.php:666
 msgid "Change Avatar"
 msgstr ""
 
-#: admin/class-admin.php:661 templates/bootstrap/modal-profile-image.php:16
+#: admin/class-admin.php:668 templates/bootstrap/modal-profile-image.php:16
 msgid "Upload Avatar"
 msgstr ""
 
-#: admin/class-admin.php:671
+#: admin/class-admin.php:678
 msgid "Change Banner"
 msgstr ""
 
-#: admin/class-admin.php:673 templates/bootstrap/modal-profile-image.php:19
+#: admin/class-admin.php:680 templates/bootstrap/modal-profile-image.php:19
 msgid "Upload Banner"
 msgstr ""
 
-#: admin/class-admin.php:729 admin/class-admin.php:746
+#: admin/class-admin.php:736 admin/class-admin.php:753
 msgid "Resend Activation"
 msgstr ""
 
-#: admin/class-admin.php:730
+#: admin/class-admin.php:737
 msgid "Activate User"
 msgstr ""
 
-#: admin/class-admin.php:747
+#: admin/class-admin.php:754
 msgid "Activate Users"
 msgstr ""
 
-#: admin/class-admin.php:847
+#: admin/class-admin.php:854
 msgid "View UsersWP Documentation"
 msgstr ""
 
-#: admin/class-admin.php:848
+#: admin/class-admin.php:855
 msgid "Visit UsersWP support"
 msgstr ""
 
-#: admin/class-admin.php:849
+#: admin/class-admin.php:856
 msgid "View translations"
 msgstr ""
 
-#: admin/class-admin.php:871 admin/class-admin.php:957 widgets/register.php:33
+#: admin/class-admin.php:878 admin/class-admin.php:964 widgets/register.php:33
 msgid "Form"
 msgstr ""
 
-#: admin/class-admin.php:903
+#: admin/class-admin.php:910
 #, php-format
 msgid "Form %d"
 msgstr ""
 
-#: admin/class-admin.php:1017
+#: admin/class-admin.php:1024
 msgid "You do not have permission to perform this action."
 msgstr ""
 
-#: admin/class-admin.php:1023
+#: admin/class-admin.php:1030
 msgid "Invalid order data."
 msgstr ""
 
-#: admin/class-admin.php:1040
+#: admin/class-admin.php:1047
 msgid "User types order updated successfully."
 msgstr ""
 
-#: admin/class-admin.php:1055
+#: admin/class-admin.php:1062
 msgid "Security nonce failed. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:1187 templates/change.php:7
+#: admin/class-admin.php:1155 admin/tables/class-user-types-table.php:40
+#: admin/tables/class-user-types-table.php:99
+msgid "User Type"
+msgstr ""
+
+#: admin/class-admin.php:1304 templates/change.php:7
 msgid "Change"
 msgstr ""
 
@@ -349,8 +356,8 @@ msgstr ""
 #: admin/class-uwp-admin-help.php:65
 #, php-format
 msgid ""
-"Should you need help understanding, using, or extending UsersWP <a "
-"href=\"%1$s\">please read our documentation</a>. You will find all kinds of "
+"Should you need help understanding, using, or extending UsersWP <a href="
+"\"%1$s\">please read our documentation</a>. You will find all kinds of "
 "resources including snippets, tutorials and much more.,"
 msgstr ""
 
@@ -378,11 +385,11 @@ msgstr ""
 #: admin/class-uwp-admin-help.php:75
 #, php-format
 msgid ""
-"If you find a bug within UsersWP core you can create a ticket via <a "
-"href=\"%1$s\">Github issues</a>. Ensure you read the <a "
-"href=\"%2$s\">contribution guide</a> prior to submitting your report. To "
-"help us solve your issue, please be as descriptive as possible and include "
-"your <a href=\"%3$s\">system status report</a>"
+"If you find a bug within UsersWP core you can create a ticket via <a href="
+"\"%1$s\">Github issues</a>. Ensure you read the <a href=\"%2$s"
+"\">contribution guide</a> prior to submitting your report. To help us solve "
+"your issue, please be as descriptive as possible and include your <a href="
+"\"%3$s\">system status report</a>"
 msgstr ""
 
 #: admin/class-uwp-admin-help.php:76
@@ -964,8 +971,8 @@ msgstr ""
 #: admin/settings/class-formbuilder.php:1663
 #, php-format
 msgid ""
-"Upload icon using media and enter its url path, or enter %1$sfont "
-"awesome%2$s class eg:\"fas fa-home\""
+"Upload icon using media and enter its url path, or enter %1$sfont awesome"
+"%2$s class eg:\"fas fa-home\""
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1671
@@ -1002,10 +1009,6 @@ msgstr ""
 #: admin/settings/class-uwp-settings-user-sorting.php:599
 #: widgets/profile-section.php:41
 msgid "Close"
-msgstr ""
-
-#: admin/settings/class-formbuilder.php:1784
-msgid "Saving"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1818
@@ -2589,11 +2592,6 @@ msgid ""
 "users."
 msgstr ""
 
-#: admin/tables/class-user-types-table.php:40
-#: admin/tables/class-user-types-table.php:99
-msgid "User Type"
-msgstr ""
-
 #: admin/tables/class-user-types-table.php:100
 msgid "User Role"
 msgstr ""
@@ -2625,8 +2623,8 @@ msgstr ""
 #: admin/views/html-admin-page-addons.php:93
 #, php-format
 msgid ""
-"All of our UsersWP Addons can be found on UsersWP.io here: <a "
-"href=\"%s\">UsersWP Addons</a>"
+"All of our UsersWP Addons can be found on UsersWP.io here: <a href=\"%s"
+"\">UsersWP Addons</a>"
 msgstr ""
 
 #: admin/views/html-admin-page-addons.php:96
@@ -2694,8 +2692,8 @@ msgstr ""
 #, php-format
 msgid ""
 "If you are modifying userswp on a parent theme that you did not build "
-"personally we recommend using a child theme. See: <a href=\"%s\" "
-"target=\"_blank\">How to create a child theme</a>"
+"personally we recommend using a child theme. See: <a href=\"%s\" target="
+"\"_blank\">How to create a child theme</a>"
 msgstr ""
 
 #: admin/views/html-admin-page-status.php:12
@@ -2866,12 +2864,12 @@ msgstr ""
 msgid "[[#site_name#]] New account registration"
 msgstr ""
 
-#: db-language.php:78 includes/class-uwp-defaults.php:345
+#: db-language.php:78
 msgid ""
-"Dear Admin,\n"
-"\n"
-"A user has been registered recently on your website.\n"
-"\n"
+"Dear Admin,\r\n"
+"\r\n"
+"A user has been registered recently on your website.\r\n"
+"\r\n"
 "[#extras#]"
 msgstr ""
 
@@ -2879,15 +2877,15 @@ msgstr ""
 msgid "[#site_name#] - Account has been deleted by a user."
 msgstr ""
 
-#: db-language.php:84 includes/class-uwp-defaults.php:317
+#: db-language.php:84
 msgid ""
-"Dear Admin,\n"
-"\n"
-"User has deleted own account from the site.\n"
-"\n"
-"[#login_details#]\n"
-"\n"
-"Thank you,\n"
+"Dear Admin,\r\n"
+"\r\n"
+"User has deleted own account from the site.\r\n"
+"\r\n"
+"[#login_details#]\r\n"
+"\r\n"
+"Thank you,\r\n"
 "[#site_name_url#]"
 msgstr ""
 
@@ -2913,17 +2911,17 @@ msgstr ""
 msgid "[[#site_name#]] New User Registration"
 msgstr ""
 
-#: db-language.php:104 includes/class-uwp-defaults.php:65
+#: db-language.php:104
 msgid ""
-"Dear Admin,\n"
-"\n"
-"New user registration on your site: [#site_name#]\n"
-"\n"
-"Username: [#username#]\n"
-"\n"
-"Email: [#user_email#]\n"
-"\n"
-"Thank you,\n"
+"Dear Admin,\r\n"
+"\r\n"
+"New user registration on your site: [#site_name#]\r\n"
+"\r\n"
+"Username: [#username#]\r\n"
+"\r\n"
+"Email: [#user_email#]\r\n"
+"\r\n"
+"Thank you,\r\n"
 "[#site_name_url#]"
 msgstr ""
 
@@ -3841,6 +3839,41 @@ msgstr ""
 msgid "Notification settings updated successfully."
 msgstr ""
 
+#: includes/class-uwp-defaults.php:65
+msgid ""
+"Dear Admin,\n"
+"\n"
+"New user registration on your site: [#site_name#]\n"
+"\n"
+"Username: [#username#]\n"
+"\n"
+"Email: [#user_email#]\n"
+"\n"
+"Thank you,\n"
+"[#site_name_url#]"
+msgstr ""
+
+#: includes/class-uwp-defaults.php:317
+msgid ""
+"Dear Admin,\n"
+"\n"
+"User has deleted own account from the site.\n"
+"\n"
+"[#login_details#]\n"
+"\n"
+"Thank you,\n"
+"[#site_name_url#]"
+msgstr ""
+
+#: includes/class-uwp-defaults.php:345
+msgid ""
+"Dear Admin,\n"
+"\n"
+"A user has been registered recently on your website.\n"
+"\n"
+"[#extras#]"
+msgstr ""
+
 #: includes/class-uwp-privacy-exporters.php:27
 msgid "UsersWP user data"
 msgstr ""
@@ -4057,7 +4090,7 @@ msgstr ""
 msgid "Require Email Activation"
 msgstr ""
 
-#: includes/helpers/forms.php:540 widgets/profile-tabs.php:47
+#: includes/helpers/forms.php:558 widgets/profile-tabs.php:47
 msgid "Default"
 msgstr ""
 
@@ -4386,8 +4419,8 @@ msgstr ""
 #, php-format
 msgid ""
 "You can not access this page directly. Follow the password reset link you "
-"received in your email. To request new password reset link <a "
-"href=\"%s\">visit here</a>."
+"received in your email. To request new password reset link <a href=\"%s"
+"\">visit here</a>."
 msgstr ""
 
 #: templates/bootstrap/user-avatar.php:34 templates/profile-header.php:70

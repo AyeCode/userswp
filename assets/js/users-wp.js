@@ -531,6 +531,57 @@ function uwp_switch_reg_form_init() {
         var form_id = jQuery(this).attr('data-form_id');
         uwp_modal_register_form(form_id);
     });
+
+    jQuery( '#uwp-form-select a' ).on( 'click', function( e ) {
+        e.preventDefault(e);
+        var self = jQuery(this);
+        var form_id = self.attr('data-form_id');
+        var form = self.parents('form');
+        jQuery('#uwp-form-select a').removeClass('active');
+       
+        var data = {
+            'action': 'uwp_ajax_register_form', // deliberately no nonce for caching reasons
+            'form_id': form_id,
+        };
+
+        jQuery.ajax({
+            type: "POST",
+            url: uwp_localize_data.ajaxurl,
+            data: data,
+            beforeSend: function() {
+                self.addClass('active');
+                var $inputDivs = form.find('input, select, textarea');
+                var $placeholder = '<div class="badge badge-pill badge-light p-3 mt-3 w-100 bg-loading">&nbsp;</div>';
+
+                // Replace each input's parent div with the placeholder
+                $inputDivs.each(function() {
+                    jQuery(this).replaceWith($placeholder);
+                });
+
+                // Remove everything else in the form except the placeholders
+                form.children().not('.badge, #uwp-form-select').remove();
+            },
+            success: function(data) {
+                if(data.success){
+                    var $returnedForm = jQuery(data.data).find('form');
+
+                    var $formSelector = form.find('#uwp-form-select');
+                  
+                    form.html($returnedForm.html());
+
+                    if (!$returnedForm.find('#uwp-form-select').length && !$returnedForm.find('#uwp-form-select-ajax').length && $formSelector) {
+                        form.prepend($formSelector);
+                    } 
+
+                    form.find('#uwp-form-select-ajax').attr('id', 'uwp-form-select');
+                }
+
+                uwp_init_auth_modal();
+                aui_init_select2();
+                uwp_switch_reg_form_init();
+            }
+        });
+    });
 }
 
 /**
