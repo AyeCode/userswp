@@ -781,6 +781,8 @@ class UsersWP_Templates {
 				}
 			}
 
+			$redirect_to = apply_filters('uwp_login_redirect_to', $redirect_to, $args);
+
 			if ( $redirect_to ) {
 				echo '<input type="hidden" name="redirect_to" value="' . esc_url( $redirect_to ) . '"/>';
 			}
@@ -808,6 +810,8 @@ class UsersWP_Templates {
 					}
 				}
 			}
+
+			$redirect_to = apply_filters('uwp_register_redirect_to', $redirect_to, $args);
 
 			if ( $redirect_to ) {
 				echo '<input type="hidden" name="redirect_to" value="' . esc_url( $redirect_to ) . '"/>';
