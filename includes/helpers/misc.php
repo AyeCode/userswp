@@ -146,7 +146,7 @@ function uwp_resizeThumbnailImage( $thumb_image_name, $image, $x, $y, $src_w, $s
 	$imageType = image_type_to_mime_type( $imageType );
 
 	if ( function_exists( 'wp_crop_image' ) ) {
-		$wp_crop = ! in_array( $imageType, array( 'image/gif', 'image/pjpeg', 'image/jpeg', 'image/jpg', 'image/png', 'image/x-png' ) ) ? true : false;
+		$wp_crop = ! in_array( $imageType, array( 'image/gif', 'image/pjpeg', 'image/jpeg', 'image/jpg', 'image/png', 'image/x-png', 'image/webp' ) ) ? true : false;
 		$wp_crop = apply_filters( 'uwp_resize_image_use_wp_crop_image', $wp_crop, $imageType, $image, $thumb_image_name, $x, $y, $src_w, $src_h, $scale );
 
 		if ( $wp_crop ) {
@@ -183,6 +183,13 @@ function uwp_resizeThumbnailImage( $thumb_image_name, $image, $x, $y, $src_w, $s
 				imagesavealpha( $newImage, true );
 			}
 			break;
+		case "image/webp":
+			if (function_exists('imagecreatefromwebp')) {
+				$source = imagecreatefromwebp($image);
+				imagealphablending($newImage, false);
+				imagesavealpha($newImage, true);
+			}
+			break;
 	}
 
 	imagecopyresampled( $newImage, $source, 0, 0, $x, $y, $newImageWidth, $newImageHeight, $src_w, $src_h );
@@ -202,10 +209,19 @@ function uwp_resizeThumbnailImage( $thumb_image_name, $image, $x, $y, $src_w, $s
 		case "image/x-png":
 			imagepng( $newImage, $thumb_image_name );
 			break;
+		case "image/webp":
+			if (function_exists('imagewebp')) {
+				imagewebp( $newImage, $thumb_image_name, $quality );
+			} else {
+				imagepng( $newImage, $thumb_image_name );
+			}
+			break;
 	}
 
 	chmod( $thumb_image_name, 0777 );
-
+	imagedestroy($newImage);
+	imagedestroy($source);
+	
 	return $thumb_image_name;
 }
 

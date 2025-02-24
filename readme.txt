@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.31 - TBD =
+* Fixed WebP avatar uploads - FIXED
+
 = 1.2.30 - 2025-02-19 =
 * Fixed issue with switching between multiple user types forms on the register page - FIXED  
 * Added the ability to change user type from the edit user page - ADDED
