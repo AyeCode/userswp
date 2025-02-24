@@ -1000,7 +1000,7 @@ class UsersWP_GeoDirectory_Plugin {
 
 		$args                               = array();
 		$args['template_args']['the_query'] = $the_query;
-		$args['template_args']['title']     = $subtabs[ $active_tab ]['title'];
+		$args['template_args']['title']     = $active_tab && ! empty( $subtabs ) && ! empty( $subtabs[ $active_tab ]['title'] ) ? $subtabs[ $active_tab ]['title'] : '';
 		$args['template_args']['list_data'] = isset( $subtabs[ $active_tab ] ) ? $subtabs[ $active_tab ] : array();
 
 		ob_start();

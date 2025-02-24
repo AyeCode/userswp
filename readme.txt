@@ -148,6 +148,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.31 - TBD =
 * Fixed WebP avatar uploads - FIXED
+* PHP notice on profile lists page - FIXED
 
 = 1.2.30 - 2025-02-19 =
 * Fixed issue with switching between multiple user types forms on the register page - FIXED  
