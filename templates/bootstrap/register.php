@@ -46,12 +46,15 @@ do_action( 'uwp_template_before', 'register', $args ); ?>
                 <form class="uwp-registration-form uwp_form" method="post" enctype="multipart/form-data">
 					<?php
 					do_action( 'uwp_template_fields', 'register', $args );
-					echo aui()->button( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+					$button_args = apply_filters( 'uwp_register_button_args', array(
 						'type'    => 'submit',
 						'class'   => 'btn btn-primary btn-block text-uppercase uwp_register_submit',
 						'content' => esc_html__( 'Create Account', 'userswp' ),
 						'name'    => 'uwp_register_submit',
-					) );
+					), $args );
+				
+					echo aui()->button( $button_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					?>
                 </form>
 
