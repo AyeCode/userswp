@@ -12,6 +12,7 @@ class UsersWP_Admin_Setup_Wizard {
 
 	public function __construct() {
 
+		add_action( 'admin_init', array( $this, 'remove_deprecated_functions' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menus' ) );
 		add_action( 'current_screen', array( $this, 'setup_wizard' ) );
 		add_action( 'uwp_wizard_content_general_settings', array( $this, 'content_general_settings' ) );
@@ -21,6 +22,12 @@ class UsersWP_Admin_Setup_Wizard {
 		add_action( 'admin_notices', array( $this, 'setup_wizard_notice' ) );
 		add_action( 'wp_loaded', array( $this, 'hide_wizard_notices' ) );
 
+	}
+
+	public function remove_deprecated_functions() {
+		// removes deprecated warnings from page
+		remove_action('admin_print_styles', 'print_emoji_styles');
+		remove_action( 'admin_head', 'wp_admin_bar_header' );
 	}
 
 	public function setup_wizard_notice() {
@@ -610,8 +617,8 @@ class UsersWP_Admin_Setup_Wizard {
 				if ( ! empty( $recommend_wp_plugins ) ) {
 					echo "<ul>";
 
-					$installed_text  = '<i class="fas fa-check-circle" aria-hidden="true"></i> ' . __( 'Installed', 'userswp' );
-					$installing_text = '<i class="fas fa-sync fa-spin" aria-hidden="true"></i> ' . __( 'Installing', 'userswp' );
+					$installed_text  = '<i class="fas fa-check-circle" aria-hidden="true"></i> ' . esc_html__( 'Installed', 'userswp' );
+					$installing_text = '<i class="fas fa-sync fa-spin" aria-hidden="true"></i> ' . esc_html__( 'Installing', 'userswp' );
 
 					echo "<input type='hidden' id='uwp-installing-text' value='" . esc_attr( $installing_text ) . "' >";
 					echo "<input type='hidden' id='uwp-installed-text' value='" . esc_attr( $installed_text ) . "' >";
@@ -642,7 +649,7 @@ class UsersWP_Admin_Setup_Wizard {
 							if ( ! empty( $plugin_status ) ) {
 								$plugin_status = $installed_text;
 							}
-							echo " | <span class='uwp-plugin-status'>" . esc_html( $plugin_status ) . "</span>";
+							echo " | <span class='uwp-plugin-status'>" . $plugin_status . "</span>";
 						}
 						echo "</li>";
 
