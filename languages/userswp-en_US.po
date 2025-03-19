@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.30\n"
+"Project-Id-Version: UsersWP 1.2.31\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-19 17:06+0000\n"
-"PO-Revision-Date: 2025-02-19 17:07+0000\n"
+"POT-Creation-Date: 2025-03-19 16:36+0530\n"
+"PO-Revision-Date: 2025-03-19 16:38+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -15,7 +15,7 @@ msgstr ""
 "_nx:1,2;_x;_ex;esc_attr_e;esc_attr__\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: vendor\n"
 
@@ -29,98 +29,90 @@ msgstr ""
 msgid "There is something that went wrong!"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:76
+#: admin/class-admin-setup-wizard.php:83
 msgid "Introduction"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:81
+#: admin/class-admin-setup-wizard.php:88
 msgid "Content"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:86
+#: admin/class-admin-setup-wizard.php:93
 msgid "Recommend"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:91
+#: admin/class-admin-setup-wizard.php:98
 msgid "Ready!"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:239
-#: admin/class-admin-setup-wizard.php:244
+#: admin/class-admin-setup-wizard.php:246
+#: admin/class-admin-setup-wizard.php:251
 msgid "General Settings"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:248
+#: admin/class-admin-setup-wizard.php:255
 msgid "How will you use UsersWP"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:249
+#: admin/class-admin-setup-wizard.php:256
 msgid "Menus"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:250
+#: admin/class-admin-setup-wizard.php:257
 msgid "Dummy Users"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:274
-#: admin/class-admin-setup-wizard.php:659
+#: admin/class-admin-setup-wizard.php:281
+#: admin/class-admin-setup-wizard.php:666
 msgid "Continue"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:443
+#: admin/class-admin-setup-wizard.php:450
 msgid "Insert menu items"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:468
+#: admin/class-admin-setup-wizard.php:475
 #, php-format
 msgid ""
 "Dummy Users for Testing. Password for all dummy users: <strong>%s</strong>"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:472 includes/class-tools.php:859
+#: admin/class-admin-setup-wizard.php:479 includes/class-tools.php:859
 msgid "Remove"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:476
+#: admin/class-admin-setup-wizard.php:483
 msgid "Create Users"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:613 includes/class-addons.php:229
-msgid "Installed"
-msgstr ""
-
-#: admin/class-admin-setup-wizard.php:614 includes/class-addons.php:231
-msgid "Installing"
-msgstr ""
-
-#: admin/class-admin-setup-wizard.php:661 includes/class-addons.php:193
+#: admin/class-admin-setup-wizard.php:668 includes/class-addons.php:193
 #: includes/class-addons.php:230
 msgid "Install"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:675
+#: admin/class-admin-setup-wizard.php:682
 msgid ""
 "Allows you to install any purchased AyeCode Ltd product add-ons without a "
 "zip file. It also installs and activates licences automatically, so there is "
 "no need to copy/paste licenses."
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:680
+#: admin/class-admin-setup-wizard.php:687
 msgid "UsersWP – Social Login"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:681
+#: admin/class-admin-setup-wizard.php:688
 msgid ""
 "This plugin lets your user to register and login with popular sites like "
 "Facebook, Google, Twitter, LinkedIn, Instagram, Yahoo, WordPress, vkontakte "
 "etc."
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:686
+#: admin/class-admin-setup-wizard.php:693
 msgid "UsersWP – ReCaptcha"
 msgstr ""
 
-#: admin/class-admin-setup-wizard.php:687
+#: admin/class-admin-setup-wizard.php:694
 msgid ""
 "This plugin allows you to implement a super security captcha into forms like "
 "registration, login forms etc."
@@ -138,8 +130,8 @@ msgstr ""
 #, php-format
 msgid ""
 "<strong>Have a license?</strong> Forget about entering license keys or "
-"downloading zip files, connect your site for instant access. %1$slearn more"
-"%2$s"
+"downloading zip files, connect your site for instant access. %1$slearn "
+"more%2$s"
 msgstr ""
 
 #: admin/class-admin.php:117
@@ -356,8 +348,8 @@ msgstr ""
 #: admin/class-uwp-admin-help.php:65
 #, php-format
 msgid ""
-"Should you need help understanding, using, or extending UsersWP <a href="
-"\"%1$s\">please read our documentation</a>. You will find all kinds of "
+"Should you need help understanding, using, or extending UsersWP <a "
+"href=\"%1$s\">please read our documentation</a>. You will find all kinds of "
 "resources including snippets, tutorials and much more.,"
 msgstr ""
 
@@ -385,11 +377,11 @@ msgstr ""
 #: admin/class-uwp-admin-help.php:75
 #, php-format
 msgid ""
-"If you find a bug within UsersWP core you can create a ticket via <a href="
-"\"%1$s\">Github issues</a>. Ensure you read the <a href=\"%2$s"
-"\">contribution guide</a> prior to submitting your report. To help us solve "
-"your issue, please be as descriptive as possible and include your <a href="
-"\"%3$s\">system status report</a>"
+"If you find a bug within UsersWP core you can create a ticket via <a "
+"href=\"%1$s\">Github issues</a>. Ensure you read the <a "
+"href=\"%2$s\">contribution guide</a> prior to submitting your report. To "
+"help us solve your issue, please be as descriptive as possible and include "
+"your <a href=\"%3$s\">system status report</a>"
 msgstr ""
 
 #: admin/class-uwp-admin-help.php:76
@@ -893,13 +885,13 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:1494
 #: admin/tables/class-user-types-table.php:166 includes/class-profile.php:465
-#: includes/class-templates.php:1125
+#: includes/class-templates.php:1129
 msgid "Yes"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1495
 #: admin/tables/class-user-types-table.php:166 includes/class-profile.php:467
-#: includes/class-templates.php:1124
+#: includes/class-templates.php:1128
 msgid "No"
 msgstr ""
 
@@ -971,8 +963,8 @@ msgstr ""
 #: admin/settings/class-formbuilder.php:1663
 #, php-format
 msgid ""
-"Upload icon using media and enter its url path, or enter %1$sfont awesome"
-"%2$s class eg:\"fas fa-home\""
+"Upload icon using media and enter its url path, or enter %1$sfont "
+"awesome%2$s class eg:\"fas fa-home\""
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1671
@@ -1678,7 +1670,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:72
 #: includes/class-account.php:46 includes/class-pages.php:329
-#: includes/helpers/misc.php:600 includes/helpers/tabs.php:129
+#: includes/helpers/misc.php:616 includes/helpers/tabs.php:129
 #: templates/bootstrap/change.php:17 widgets/change.php:47
 #: widgets/change.php:95
 msgid "Change Password"
@@ -1756,7 +1748,7 @@ msgid ""
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:141
-#: includes/helpers/misc.php:1349
+#: includes/helpers/misc.php:1365
 msgid "Please enter valid strong password."
 msgstr ""
 
@@ -2383,17 +2375,17 @@ msgid "This will be the icon for profile tab."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:743
-#: includes/class-templates.php:1157
+#: includes/class-templates.php:1161
 msgid "Anyone"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:744
-#: includes/class-templates.php:1158
+#: includes/class-templates.php:1162
 msgid "Logged in"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:745
-#: includes/class-templates.php:1159
+#: includes/class-templates.php:1163
 msgid "Author only"
 msgstr ""
 
@@ -2408,7 +2400,7 @@ msgid "%s (Not Changeable)"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:775
-#: includes/class-templates.php:1142 includes/helpers/misc.php:594
+#: includes/class-templates.php:1146 includes/helpers/misc.php:610
 #: includes/helpers/tabs.php:137
 msgid "Privacy"
 msgstr ""
@@ -2623,8 +2615,8 @@ msgstr ""
 #: admin/views/html-admin-page-addons.php:93
 #, php-format
 msgid ""
-"All of our UsersWP Addons can be found on UsersWP.io here: <a href=\"%s"
-"\">UsersWP Addons</a>"
+"All of our UsersWP Addons can be found on UsersWP.io here: <a "
+"href=\"%s\">UsersWP Addons</a>"
 msgstr ""
 
 #: admin/views/html-admin-page-addons.php:96
@@ -2692,8 +2684,8 @@ msgstr ""
 #, php-format
 msgid ""
 "If you are modifying userswp on a parent theme that you did not build "
-"personally we recommend using a child theme. See: <a href=\"%s\" target="
-"\"_blank\">How to create a child theme</a>"
+"personally we recommend using a child theme. See: <a href=\"%s\" "
+"target=\"_blank\">How to create a child theme</a>"
 msgstr ""
 
 #: admin/views/html-admin-page-status.php:12
@@ -2947,7 +2939,7 @@ msgstr ""
 msgid "Update Account"
 msgstr ""
 
-#: includes/class-account.php:81 includes/helpers/misc.php:598
+#: includes/class-account.php:81 includes/helpers/misc.php:614
 #: includes/helpers/tabs.php:156
 msgid "Delete Account"
 msgstr ""
@@ -3020,6 +3012,14 @@ msgstr ""
 
 #: includes/class-addons.php:228
 msgid "Deactivate"
+msgstr ""
+
+#: includes/class-addons.php:229
+msgid "Installed"
+msgstr ""
+
+#: includes/class-addons.php:231
+msgid "Installing"
 msgstr ""
 
 #: includes/class-addons.php:232
@@ -3755,31 +3755,31 @@ msgstr ""
 msgid "More"
 msgstr ""
 
-#: includes/class-templates.php:1103
+#: includes/class-templates.php:1107
 msgid "Field"
 msgstr ""
 
-#: includes/class-templates.php:1106
+#: includes/class-templates.php:1110
 msgid "Is Public?"
 msgstr ""
 
-#: includes/class-templates.php:1139
+#: includes/class-templates.php:1143
 msgid "Tab Name"
 msgstr ""
 
-#: includes/class-templates.php:1178
+#: includes/class-templates.php:1182
 msgid " (Default)"
 msgstr ""
 
-#: includes/class-templates.php:1193
+#: includes/class-templates.php:1197
 msgid "Hide profile from the users listing page."
 msgstr ""
 
-#: includes/class-templates.php:1209
+#: includes/class-templates.php:1213
 msgid "Make the whole profile private"
 msgstr ""
 
-#: includes/class-templates.php:1217 includes/class-user-notifications.php:69
+#: includes/class-templates.php:1221 includes/class-user-notifications.php:69
 #: templates/bootstrap/change.php:29 templates/change.php:13
 #: templates/reset.php:17
 msgid "Submit"
@@ -4094,47 +4094,47 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: includes/helpers/misc.php:596
+#: includes/helpers/misc.php:612
 msgid "E-Mail Notifications"
 msgstr ""
 
-#: includes/helpers/misc.php:602
+#: includes/helpers/misc.php:618
 msgid "Two-factor Authentication Settings"
 msgstr ""
 
-#: includes/helpers/misc.php:1339
+#: includes/helpers/misc.php:1355
 msgid "more"
 msgstr ""
 
-#: includes/helpers/misc.php:1340
+#: includes/helpers/misc.php:1356
 msgid "less"
 msgstr ""
 
-#: includes/helpers/misc.php:1341
+#: includes/helpers/misc.php:1357
 msgid "Something went wrong."
 msgstr ""
 
-#: includes/helpers/misc.php:1342
+#: includes/helpers/misc.php:1358
 msgid "Something went wrong, please retry."
 msgstr ""
 
-#: includes/helpers/misc.php:1529 widgets/output-location.php:90
+#: includes/helpers/misc.php:1545 widgets/output-location.php:90
 msgid "Users Page"
 msgstr ""
 
-#: includes/helpers/misc.php:1530 widgets/output-location.php:91
+#: includes/helpers/misc.php:1546 widgets/output-location.php:91
 msgid "More info tab"
 msgstr ""
 
-#: includes/helpers/misc.php:1531
+#: includes/helpers/misc.php:1547
 msgid "Profile side (non bootstrap)"
 msgstr ""
 
-#: includes/helpers/misc.php:1532
+#: includes/helpers/misc.php:1548
 msgid "Fieldset"
 msgstr ""
 
-#: includes/helpers/misc.php:1763
+#: includes/helpers/misc.php:1779
 #, php-format
 msgid ""
 "%s requires a newer version of UsersWP and will not run until the UsersWP "
@@ -4419,8 +4419,8 @@ msgstr ""
 #, php-format
 msgid ""
 "You can not access this page directly. Follow the password reset link you "
-"received in your email. To request new password reset link <a href=\"%s"
-"\">visit here</a>."
+"received in your email. To request new password reset link <a "
+"href=\"%s\">visit here</a>."
 msgstr ""
 
 #: templates/bootstrap/user-avatar.php:34 templates/profile-header.php:70
@@ -4445,10 +4445,6 @@ msgstr ""
 
 #: templates/modal-profile-image-crop.php:43
 msgid "Apply"
-msgstr ""
-
-#: templates/register.php:17
-msgid "Create Account"
 msgstr ""
 
 #: templates/search-form.php:11

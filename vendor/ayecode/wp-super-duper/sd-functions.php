@@ -3316,6 +3316,17 @@ function sd_render_block( $block_content, $block, $instance = '' ) {
 	$attributes = json_decode( $block['attrs']['visibility_conditions'], true );
 	$rules = ! empty( $attributes ) ? sd_block_parse_rules( $attributes ) : array();
 
+	// remove rules with missing validators.
+	$valid_rules = sd_visibility_rules_options();
+
+	if ( ! empty( $rules ) ) {
+		foreach ( $rules as $key => $rule ) {
+			if ( ! isset( $valid_rules[ $rule['type'] ] ) ) {
+				unset( $rules[ $key ] );
+			}
+		}
+	}
+
 	// No rules set.
 	if ( empty( $rules ) ) {
 		return $block_content;
@@ -3376,7 +3387,7 @@ function sd_render_block( $block_content, $block, $instance = '' ) {
 			}
 
 			if ( $valid_type ) {
-				$block_content = '<div class="' . esc_attr( wp_get_block_default_classname( $instance->name ) ) . ' sd-block-has-rule">' . $content . '</div>';
+				$block_content = '<div class="' . esc_attr( wp_get_block_default_classname( $instance->name ) ) . ' sd-block-has-rule' . ( $output_condition['type'] == 'hide' ? ' sd-block-hide-rule' : '' ) . '">' . $content . '</div>';
 			}
 		}
 	}
@@ -3767,6 +3778,15 @@ if(!function_exists('sd_blocks_render_blocks')){
 	 * @return mixed|string
 	 */
 	function sd_blocks_render_blocks($block_content, $parsed_block, $thiss = array() ){
+		// Check hide block visibility conditions.
+		if ( ! empty( $parsed_block ) && ! empty( $parsed_block['attrs']['visibility_conditions'] ) && $block_content && strpos( strrev( $block_content ), strrev( ' sd-block-has-rule sd-block-hide-rule"></div>' ) ) === 0 && ! empty( $thiss ) && $thiss->name ) {
+			$match_content = '<div class="' . esc_attr( wp_get_block_default_classname( $thiss->name ) ) . ' sd-block-has-rule sd-block-hide-rule"></div>';
+
+			// Return empty content to hide block.
+			if ( $block_content == $match_content ) {
+				return '';
+			}
+		}
 
 		// Check if ita a nested block that needs to be wrapped
 		if(! empty($parsed_block['attrs']['sd_shortcode_close'])){
@@ -3796,3 +3816,4 @@ if(!function_exists('sd_blocks_render_blocks')){
 }
 
 add_filter('render_block', 'sd_blocks_render_blocks',10,3);
+

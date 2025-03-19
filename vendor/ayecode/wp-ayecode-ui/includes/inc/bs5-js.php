@@ -14,7 +14,15 @@
 
             // Make sure its always expanded
             jQuery(this).addClass('navbar-expand');
-
+            jQuery(this).off('shown.bs.tab').on('shown.bs.tab', function (e) {
+                if (jQuery(e.target).closest('.dropdown-menu').hasClass('greedy-links')) {
+                    jQuery(e.target).closest('.greedy').find('.greedy-btn.dropdown').attr('aria-expanded', 'false');
+                    jQuery(e.target).closest('.greedy-links').removeClass('show').addClass('d-none');
+                }
+            });
+            jQuery(document).off('mousemove', '.greedy-btn').on('mousemove', '.greedy-btn', function(e){
+                jQuery('.dropdown-menu.greedy-links').removeClass('d-none');
+            });
             // vars
             var $vlinks = '';
             var $dDownClass = '';
@@ -31,7 +39,7 @@
                 return false;
             }
 
-            jQuery($vlinks).append('<li class="nav-item list-unstyled ml-auto greedy-btn d-none dropdown"><a href="javascript:void(0)" data-bs-toggle="collapse" class="nav-link greedy-nav-link"><i class="fas fa-ellipsis-h"></i> <span class="greedy-count badge bg-dark rounded-pill"></span></a><ul class="greedy-links dropdown-menu dropdown-menu-end '+$dDownClass+'"></ul></li>');
+            jQuery($vlinks).append('<li class="nav-item list-unstyled ml-auto greedy-btn d-none dropdown"><button data-bs-toggle="collapse" class="nav-link greedy-nav-link" role="button"><i class="fas fa-ellipsis-h"></i> <span class="greedy-count badge bg-dark rounded-pill"></span></button><ul class="greedy-links dropdown-menu dropdown-menu-end '+$dDownClass+'"></ul></li>');
 
             var $hlinks = jQuery(this).find('.greedy-links');
             var $btn = jQuery(this).find('.greedy-btn');
@@ -63,12 +71,12 @@
                 // There is not enough space
                 if (numOfVisibleItems > 1 && requiredSpace > availableSpace) {
                     var $li = $vlinks.children().last().prev();
-                    $li.addClass(ddItemClass);
+                    $li.removeClass('nav-item').addClass(ddItemClass);
                     if (!jQuery($hlinks).children().length) {
-                        $li.find('.nav-link').addClass('rounded-0 rounded-bottom');
+                        $li.find('.nav-link').addClass('w-100 dropdown-item rounded-0 rounded-bottom');
                     } else {
                         jQuery($hlinks).find('.nav-link').removeClass('rounded-top');
-                        $li.find('.nav-link').addClass('rounded-0 rounded-top');
+                        $li.find('.nav-link').addClass('w-100 dropdown-item rounded-0 rounded-top');
                     }
                     $li.prependTo($hlinks);
                     numOfVisibleItems -= 1;
