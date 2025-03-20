@@ -14,7 +14,23 @@ $form_title = apply_filters( 'uwp_template_form_title', $form_title, 'register' 
 			<?php do_action( 'uwp_template_display_notices', 'register' ); ?>
             <form class="uwp-registration-form uwp_form" method="post" enctype="multipart/form-data">
 				<?php do_action( 'uwp_template_fields', 'register', $args ); ?>
-                <input name="uwp_register_submit" value="<?php esc_attr_e( 'Create Account', 'userswp' ); ?>" type="submit">
+
+                <?php 
+                $button_args = apply_filters( 'uwp_register_button_args', array(
+                    'type'    => 'submit',
+                    'class'   => 'uwp_register_submit',
+                    'content' => esc_html__( 'Create Account', 'userswp' ),
+                    'name'    => 'uwp_register_submit',
+                ), $args );
+
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                printf( '<input type="%s" class="%s" name="%s" value="%s">', 
+                    esc_attr( $button_args['type'] ), 
+                    esc_attr( $button_args['class'] ), 
+                    esc_attr( $button_args['name'] ), 
+                    esc_attr( $button_args['content'] ) 
+                );
+                ?>
             </form>
             <div class="uwp-footer-link uwp-login-now"><?php esc_html_e( 'Already a member?', 'userswp' ); ?> <a
                         rel="nofollow"

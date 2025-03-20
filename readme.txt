@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
 Tested up to: 6.7
-Stable tag: 1.2.30
+Stable tag: 1.2.31
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -146,9 +146,12 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.31 - TBD =
+= 1.2.31 - 2025-03-19 =
 * Fixed WebP avatar uploads - FIXED
 * PHP notice on profile lists page - FIXED
+* PHP warnings on setup wizard page - FIXED
+* Super Duper updated to v1.2.19 - UPDATED
+* AyeCode UI updated to v0.2.34 - UPDATED
 
 = 1.2.30 - 2025-02-19 =
 * Fixed issue with switching between multiple user types forms on the register page - FIXED  

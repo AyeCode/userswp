@@ -1,3 +1,12 @@
+= 0.2.34 - 2025-02-27 =
+* Greedy menu should auto close on tab select - CHANGED
+
+= 0.2.33 - 2025-02-20 =
+* Some hosts can show wp-content folder twice in asset URLs - FIXED
+
+= 0.2.32 - 2025-02-13 =
+* Astra theme woocommerce compatibility CSS breaks select2 in modals - FIXED
+
 = 0.2.31 - 2025-01-09 =
 * Changes to the get_url() function for getting asset URLs to better support docker containers - CHANGED
 
