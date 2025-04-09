@@ -568,7 +568,7 @@ class UsersWP_Mails {
 
 		$subject      = self::get_subject( $email_name, $email_vars, $is_admin );
 		$message_body = self::get_content( $email_name, $email_vars, $is_admin );
-		$headers      = self::get_headers( $email_name, $email_vars, $is_admin );
+		$headers      = self::get_headers( $email_name, $email_vars );
 		$attachments  = self::get_attachments( $email_name, $email_vars, $is_admin );
 
 		$plain_text = self::get_email_type() != 'html' ? true : false;
@@ -617,9 +617,9 @@ class UsersWP_Mails {
 		// Switch language to user language.
 		do_action( 'wpml_switch_language_for_email', $to );
 
-		$subject      = self::get_subject( $email_name, $email_vars, $is_admin );
+		$subject = self::get_subject( $email_name, $email_vars, $is_admin );
 		$subject = !empty($subject) ? $subject : UsersWP_Defaults::wp_new_user_notification_email_subject();
-		$headers      = self::get_headers( $email_name, $email_vars, $is_admin );
+		$headers = self::get_headers( $email_name, $email_vars );
 		$message = self::get_content( $email_name, $email_vars, $is_admin );
 		$message = !empty($message) ? $message : UsersWP_Defaults::wp_new_user_notification_email_content();
 
@@ -683,9 +683,9 @@ class UsersWP_Mails {
 		// Switch language to user language.
 		do_action( 'wpml_switch_language_for_email', $to );
 
-		$subject      = self::get_subject( $email_name, $email_vars, $is_admin );
+		$subject = self::get_subject( $email_name, $email_vars, $is_admin );
 		$subject = !empty($subject) ? $subject : UsersWP_Defaults::wp_new_user_notification_email_subject_admin();
-		$headers      = self::get_headers( $email_name, $email_vars, $is_admin );
+		$headers = self::get_headers( $email_name, $email_vars );
 		$message = self::get_content( $email_name, $email_vars, $is_admin );
 		$message = !empty($message) ? $message : UsersWP_Defaults::wp_new_user_notification_email_content_admin();
 
