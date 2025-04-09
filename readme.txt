@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.32 - TBD =
+* New user email failed to send due to incorrect email from - FIXED
+
 = 1.2.31 - 2025-03-19 =
 * Fixed WebP avatar uploads - FIXED
 * PHP notice on profile lists page - FIXED
