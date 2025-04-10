@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 4.9
-Tested up to: 6.7
-Stable tag: 1.2.31
+Tested up to: 6.8
+Stable tag: 1.2.32
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -146,7 +146,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.32 - TBD =
+= 1.2.32 - 2025-04-10 =
 * New user email failed to send due to incorrect email from - FIXED
 
 = 1.2.31 - 2025-03-19 =
