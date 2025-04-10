@@ -1,3 +1,10 @@
+= 1.2.21 - 2025-03-27 =
+* Added more container class options for creating list groups - ADDED
+
+= 1.2.20 - 2025-03-20 =
+* Advance Search Filters options are not available in Bricks GD > Search element - FIXED
+* GD > Map bricks element don't render map zoom control - FIXED
+
 = 1.2.19 - 2025-02-20 =
 * BS > Nav Item hide block condition is not working - FIXED
 

@@ -15,49 +15,49 @@ $utilities: map-merge(
   $utilities,
   (
     // Border (sides)
-    'border-top': (
-      property: border-top,
-      responsive: true,
-      values: (
-        null: $border-width solid $border-color,
-        0: 0,
-      )
-    ),
-    'border-end': (
-      property: border-right,
-      class: border-end,
-      responsive: true,
-      values: (
-        null: $border-width solid $border-color,
-        0: 0,
-      )
-    ),
-    'border-bottom': (
-      property: border-bottom,
-      responsive: true,
-      values: (
-        null: $border-width solid $border-color,
-        0: 0,
-      )
-    ),
-    'border-start': (
-      property: border-left,
-      class: border-start,
-      responsive: true,
-      values: (
-        null: $border-width solid $border-color,
-        0: 0,
-      )
-    ),
-    'border': (
-      property: border,
-      class: border,
-      responsive: true,
-      values: (
-        null: $border-width solid $border-color,
-        0: 0,
-      )
-    ),
+    //'border-top': (
+    //  property: border-top,
+    //  responsive: true,
+    //  values: (
+    //    null: $border-width solid $border-color,
+    //    0: 0,
+    //  )
+    //),
+    //'border-end': (
+    //  property: border-right,
+    //  class: border-end,
+    //  responsive: true,
+    //  values: (
+    //    null: $border-width solid $border-color,
+    //    0: 0,
+    //  )
+    //),
+    //'border-bottom': (
+    //  property: border-bottom,
+    //  responsive: true,
+    //  values: (
+    //    null: $border-width solid $border-color,
+    //    0: 0,
+    //  )
+    //),
+    //'border-start': (
+    //  property: border-left,
+    //  class: border-start,
+    //  responsive: true,
+    //  values: (
+    //    null: $border-width solid $border-color,
+    //    0: 0,
+    //  )
+    //),
+    //'border': (
+    //  property: border,
+    //  class: border,
+    //  responsive: true,
+    //  values: (
+    //    null: $border-width solid $border-color,
+    //    0: 0,
+    //  )
+    //),
 
     // Border colors
     'border-color': map-merge(
