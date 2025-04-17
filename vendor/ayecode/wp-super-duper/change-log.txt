@@ -1,3 +1,6 @@
+= 1.2.22 - 2025-04-17 =
+* Extra sanitation for widget titles - ADDED
+
 = 1.2.21 - 2025-03-27 =
 * Added more container class options for creating list groups - ADDED
 

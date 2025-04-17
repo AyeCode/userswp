@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.21' );
+	define( 'SUPER_DUPER_VER', '1.2.22' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -1567,6 +1567,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			$this->arguments = apply_filters( 'wp_super_duper_arguments', $this->arguments, $this->options, $this->instance );
 			$this->arguments = $this->add_name_from_key( $this->arguments, true );
+
+            if( !empty( $this->arguments['title']['value'] ) ){
+                $this->arguments['title']['value'] = wp_kses_post( $this->arguments['title']['value'] );
+            }
 
 			return $this->arguments;
 		}
@@ -4980,6 +4984,11 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					}
 				}
 			}
+
+            // maybe sanitize widget title
+            if(!empty($instance['title'])) {
+                $instance['title'] = wp_kses_post( $instance['title'] );
+            }
 
 			return $instance;
 		}
