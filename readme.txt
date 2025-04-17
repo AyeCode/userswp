@@ -2,9 +2,9 @@
 Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
-Requires at least: 4.9
+Requires at least: 5.0
 Tested up to: 6.8
-Stable tag: 1.2.32
+Stable tag: 1.2.33
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -97,7 +97,7 @@ UsersWP is 100% translatable.
 
 = Minimum Requirements =
 
-* WordPress 4.9 or greater
+* WordPress 5.0 or greater
 
 * PHP version 5.6 or greater
 
@@ -145,6 +145,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.33 - 2025-04-17 =
+* WordPress v6.8 compatibility check - CHANGED
 
 = 1.2.32 - 2025-04-10 =
 * New user email failed to send due to incorrect email from - FIXED
