@@ -92,7 +92,7 @@ if ( ! $uwp_in_user_loop ){ ?>
 			<?php } ?>
 
             <div class="col-12 <?php if ( ! $uwp_in_user_loop ) {
-				echo $hide_avatar ? "col-xl-8" : "col-xl-6"; ?> text-xl-left pt-xl-1<?php } ?> text-center ">
+				echo $hide_avatar ? "col-xl-8" : "col-xl-6"; ?> text-xl-left text-xl-start pt-xl-1<?php } ?> text-center ">
                 <ul class="list-group border-0 m-0 p-0 bg-transparent">
                     <li class="list-group-item border-0 m-0 p-0 bg-transparent uwp-profile-title">
 						<?php
@@ -119,7 +119,7 @@ if ( ! $uwp_in_user_loop ){ ?>
             <div class="row justify-content-center">
                 <div class="col">
                 </div>
-                <div class="col-12 <?php echo $hide_avatar ? "col-xl-8" : "col-xl-6"; ?> text-xl-left pt-xl-1">
+                <div class="col-12 <?php echo $hide_avatar ? "col-xl-8" : "col-xl-6"; ?> text-xl-start text-xl-end pt-xl-1">
 					<?php
 					echo do_shortcode( "[uwp_user_actions]" );
 					?>
