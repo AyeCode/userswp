@@ -1,5 +1,4 @@
 jQuery(window).on('load',function () {
-
     // Enable auth modals
     uwp_init_auth_modal();uwp_switch_reg_form_init();
 });
@@ -28,7 +27,7 @@ jQuery(window).on('load',function () {
 
         });
 
-        $(".uwp_more_link").click(function(){
+        $(".uwp_more_link").on('click', function(){
             if($(this).hasClass("uwp_less")) {
                 $(this).removeClass("uwp_less");
                 $(this).html(moretext);
@@ -255,8 +254,8 @@ function uwp_init_auth_modal(){
 
     // open login form
     if(uwp_localize_data.login_modal) {
-        jQuery('.users-wp-login-nav a, .uwp-login-link').unbind('click');
-        jQuery(".users-wp-login-nav a, .uwp-login-link").click(function (e) {
+        jQuery('.users-wp-login-nav a, .uwp-login-link').off('click');
+        jQuery(".users-wp-login-nav a, .uwp-login-link").on('click', function (e) {
             uwp_cancelBubble(e);
             uwp_modal_login_form();
             return false;
@@ -265,8 +264,8 @@ function uwp_init_auth_modal(){
 
     // open the register form
     if(uwp_localize_data.register_modal) {
-        jQuery('.users-wp-register-nav a, .uwp-register-link').unbind('click');
-        jQuery(".users-wp-register-nav a, .uwp-register-link").click(function (e) {
+        jQuery('.users-wp-register-nav a, .uwp-register-link').off('click');
+        jQuery(".users-wp-register-nav a, .uwp-register-link").on('click', function (e) {
             uwp_cancelBubble(e);
             uwp_modal_register_form();
             return false;
@@ -275,8 +274,8 @@ function uwp_init_auth_modal(){
 
     // open the forgot password form
     if(uwp_localize_data.forgot_modal) {
-        jQuery('.users-wp-forgot-nav a, .uwp-forgot-password-link').unbind('click');
-        jQuery(".users-wp-forgot-nav a, .uwp-forgot-password-link").click(function (e) {
+        jQuery('.users-wp-forgot-nav a, .uwp-forgot-password-link').off('click');
+        jQuery(".users-wp-forgot-nav a, .uwp-forgot-password-link").on('click', function (e) {
             uwp_cancelBubble(e);
             uwp_modal_forgot_password_form();
             return false;
@@ -538,7 +537,7 @@ function uwp_switch_reg_form_init() {
         var form_id = self.attr('data-form_id');
         var form = self.parents('form');
         jQuery('#uwp-form-select a').removeClass('active');
-       
+
         var data = {
             'action': 'uwp_ajax_register_form', // deliberately no nonce for caching reasons
             'form_id': form_id,
@@ -566,12 +565,12 @@ function uwp_switch_reg_form_init() {
                     var $returnedForm = jQuery(data.data).find('form');
 
                     var $formSelector = form.find('#uwp-form-select');
-                  
+
                     form.html($returnedForm.html());
 
                     if (!$returnedForm.find('#uwp-form-select').length && !$returnedForm.find('#uwp-form-select-ajax').length && $formSelector) {
                         form.prepend($formSelector);
-                    } 
+                    }
 
                     form.find('#uwp-form-select-ajax').attr('id', 'uwp-form-select');
                 }
