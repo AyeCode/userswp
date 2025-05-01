@@ -1076,7 +1076,7 @@
 
 	<?php
 	// FSE tweaks.
-	if(!empty($_REQUEST['postType'])){ ?>
+	if(!empty($_REQUEST['postType']) || !empty($_REQUEST['canvas']) ){ ?>
     function aui_fse_set_data_scroll() {
         console.log('init scroll');
         let Iframe = document.getElementsByClassName("edit-site-visual-editor__editor-canvas");
