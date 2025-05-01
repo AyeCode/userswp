@@ -13,26 +13,26 @@
 })(function($, window, document, undefined) {
 	"use strict";
 	var pluginName = "countrySelect", id = 1, // give each instance its own ID for namespaced event handling
-	defaults = {
-		// Default country
-		defaultCountry: "",
-		// Position the selected flag inside or outside of the input
-		defaultStyling: "inside",
-		// Display only these countries
-		onlyCountries: [],
-		// The countries at the top of the list. Defaults to United States and United Kingdom
-		preferredCountries: [ "us", "gb" ]
-	}, keys = {
-		UP: 38,
-		DOWN: 40,
-		ENTER: 13,
-		ESC: 27,
-		PLUS: 43,
-		A: 65,
-		Z: 90
-	}, windowLoaded = false;
+		defaults = {
+			// Default country
+			defaultCountry: "",
+			// Position the selected flag inside or outside of the input
+			defaultStyling: "inside",
+			// Display only these countries
+			onlyCountries: [],
+			// The countries at the top of the list. Defaults to United States and United Kingdom
+			preferredCountries: [ "us", "gb" ]
+		}, keys = {
+			UP: 38,
+			DOWN: 40,
+			ENTER: 13,
+			ESC: 27,
+			PLUS: 43,
+			A: 65,
+			Z: 90
+		}, windowLoaded = false;
 	// keep track of if the window.load event has fired as impossible to check after the fact
-	$(window).load(function() {
+	$(window).on('load', function() {
 		windowLoaded = true;
 	});
 	function Plugin(element, options) {
@@ -249,7 +249,7 @@
 		// decide where to position dropdown (depends on position within viewport, and scroll)
 		_setDropdownPosition: function() {
 			var inputTop = this.countryInput.offset().top, windowTop = $(window).scrollTop(),
-			dropdownFitsBelow = inputTop + this.countryInput.outerHeight() + this.dropdownHeight < windowTop + $(window).height(), dropdownFitsAbove = inputTop - this.dropdownHeight > windowTop;
+				dropdownFitsBelow = inputTop + this.countryInput.outerHeight() + this.dropdownHeight < windowTop + $(window).height(), dropdownFitsAbove = inputTop - this.dropdownHeight > windowTop;
 			// dropdownHeight - 1 for border
 			var cssTop = !dropdownFitsBelow && dropdownFitsAbove ? "-" + (this.dropdownHeight - 1) + "px" : "";
 			this.countryList.css("top", cssTop);
@@ -517,8 +517,8 @@
 		}
 	};
 	/********************
-   *  STATIC METHODS
-   ********************/
+	 *  STATIC METHODS
+	 ********************/
 	// get the country data object
 	$.fn[pluginName].getCountryData = function() {
 		return allCountries;

@@ -146,6 +146,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.4 - TBD =
+* Fixed alignment issue with the profile header username - FIXED
+* Showing warnings for deprecated jQuery functions - FIXED
+
 = 1.2.33 - 2025-04-17 =
 * WordPress v6.8 compatibility check - CHANGED
 
