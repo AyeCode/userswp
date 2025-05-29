@@ -715,7 +715,7 @@ class UsersWP_Admin_Setup_Wizard {
             <h2><?php esc_html_e( 'Learn more', 'userswp' ); ?></h2>
             <ul>
                 <li class="uwp-getting-started">
-                    <a href="https://userswp.io/docs/?utm_source=setupwizard&utm_medium=product&utm_content=getting-started&utm_campaign=userswpplugin"
+                    <a href="https://userswp.io/documentation/?utm_source=setupwizard&utm_medium=product&utm_content=getting-started&utm_campaign=userswpplugin"
                        target="_blank"><?php esc_html_e( 'Getting started guide', 'userswp' ); ?></a>
                 </li>
                 <li class="uwp-newsletter">

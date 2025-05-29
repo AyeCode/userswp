@@ -4,7 +4,7 @@ Community made patches, localisations, bug reports and contributions are always 
 
 When contributing please ensure you follow the guidelines below so that we can keep on top of things.
 
-__Please Note:__ GitHub is for bug reports and contributions only - if you have a support question or a request for a customization don't post here, go to our [Support page](https://userswp.io/support/) instead.
+__Please Note:__ GitHub is for bug reports and contributions only - if you have a support question or a request for a customization don't post here, go to our [Support page](https://userswp.io/documentation/) instead.
 
 ## Getting Started
 
@@ -32,7 +32,7 @@ __Please Note:__ GitHub is for bug reports and contributions only - if you have 
 At this point you're waiting on us to merge your pull request. We'll review all pull requests, and make suggestions and changes if necessary.
 
 # Additional Resources
-* [UsersWP Developer's Codex](https://userswp.io/docs/)
+* [UsersWP Developer's Codex](https://userswp.io/documentation/)
 * [General GitHub Documentation](https://help.github.com/)
 * [GitHub Pull Request documentation](https://help.github.com/send-pull-requests/)
 * [PHPUnit Tests Guide](https://phpunit.de/manual/current/en/writing-tests-for-phpunit.html)
