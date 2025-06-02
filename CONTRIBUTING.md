@@ -32,7 +32,7 @@ __Please Note:__ GitHub is for bug reports and contributions only - if you have 
 At this point you're waiting on us to merge your pull request. We'll review all pull requests, and make suggestions and changes if necessary.
 
 # Additional Resources
-* [UsersWP Developer's Codex](https://userswp.io/docs/)
+* [UsersWP Developer's Codex](https://userswp.io/documentation/)
 * [General GitHub Documentation](https://help.github.com/)
 * [GitHub Pull Request documentation](https://help.github.com/send-pull-requests/)
 * [PHPUnit Tests Guide](https://phpunit.de/manual/current/en/writing-tests-for-phpunit.html)

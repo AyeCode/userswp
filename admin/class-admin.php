@@ -73,7 +73,7 @@ class UsersWP_Admin {
 					'slug'              => 'userswp',
 					'version'           => USERSWP_VERSION,
 					'support_url'       => 'https://userswp.io/support/',
-					'documentation_url' => 'https://docs.userswp.io/',
+					'documentation_url' => 'https://userswp.io/documentation/',
 					'activated'         => get_option( 'uwp_installed_on', 0 ),
                 )
             );
@@ -851,7 +851,7 @@ class UsersWP_Admin {
 	public static function plugin_row_meta( $links, $file ) {
 		if ( USERSWP_PLUGIN_BASENAME == $file ) {
 			$row_meta = array(
-				'docs'        => '<a href="' . esc_url( 'https://docs.userswp.io/' ) . '" aria-label="' . esc_attr__( 'View UsersWP Documentation', 'userswp' ) . '">' . esc_html__( 'Docs', 'userswp' ) . '</a>',
+				'docs'        => '<a href="' . esc_url( 'https://userswp.io/documentation/' ) . '" aria-label="' . esc_attr__( 'View UsersWP Documentation', 'userswp' ) . '">' . esc_html__( 'Docs', 'userswp' ) . '</a>',
 				'support'     => '<a href="' . esc_url( 'https://userswp.io/support/' ) . '" aria-label="' . esc_attr__( 'Visit UsersWP support', 'userswp' ) . '">' . esc_html__( 'Support', 'userswp' ) . '</a>',
 				'translation' => '<a href="' . esc_url( 'https://userswp.io/translate/projects' ) . '" aria-label="' . esc_attr__( 'View translations', 'userswp' ) . '">' . esc_html__( 'Translations', 'userswp' ) . '</a>',
 			);
