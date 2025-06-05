@@ -680,6 +680,10 @@ function uwp_modal_forgot_password_form_process(){
             if(data.success){
                 $button.html($button_text).prop('disabled', true);// remove spinner
                 jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
+
+                setTimeout(function(){
+                    jQuery('.uwp-auth-modal').modal('hide');
+                }, 2000);
             }else if(data.success===false){
                 jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
                 $button.html($button_text).prop('disabled', false);// enable submit
