@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.35 - TBD =
+* Close forget password popup after successful form submission - FIXED
+
 = 1.2.34 - 2025-05-01 =
 * Fixed alignment issue with the profile header username - FIXED
 * Showing warnings for deprecated jQuery functions - FIXED
