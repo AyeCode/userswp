@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.34\n"
+"Project-Id-Version: UsersWP 1.2.35\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-01 19:05+0530\n"
-"PO-Revision-Date: 2025-05-01 19:05+0530\n"
+"POT-Creation-Date: 2025-06-12 19:38+0530\n"
+"PO-Revision-Date: 2025-06-12 19:38+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -4397,11 +4397,11 @@ msgstr ""
 msgid "Sort By"
 msgstr ""
 
-#: templates/bootstrap/users-actions.php:112
-#: templates/bootstrap/users-actions.php:119
-#: templates/bootstrap/users-actions.php:126
-#: templates/bootstrap/users-actions.php:133
-#: templates/bootstrap/users-actions.php:140 templates/users-actions.php:23
+#: templates/bootstrap/users-actions.php:120
+#: templates/bootstrap/users-actions.php:128
+#: templates/bootstrap/users-actions.php:136
+#: templates/bootstrap/users-actions.php:144
+#: templates/bootstrap/users-actions.php:152 templates/users-actions.php:23
 #: templates/users-actions.php:24 templates/users-actions.php:25
 #: templates/users-actions.php:26
 #, php-format
