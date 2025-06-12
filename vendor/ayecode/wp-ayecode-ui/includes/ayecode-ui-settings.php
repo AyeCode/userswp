@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.36';
+		public $version = '0.2.37';
 
 		/**
 		 * Class textdomain.
@@ -855,14 +855,16 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 * @return array The array of settings.
 		 */
 		public function get_settings() {
-
 			$db_settings = get_option( 'ayecode-ui-settings' );
 
-            // Maybe show default version notice
-			$site_install_date = new DateTime( self::get_site_install_date() );
-			$switch_over_date = new DateTime("2024-02-01");
-			if ( empty( $db_settings ) && $site_install_date < $switch_over_date ) {
-				add_action( 'admin_notices', array( $this, 'show_admin_version_notice' ) );
+			// Maybe show default version notice
+			if ( empty( $db_settings ) ) {
+				$site_install_date = new DateTime( self::get_site_install_date() );
+				$switch_over_date = new DateTime( "2024-02-01" );
+
+				if ( $site_install_date < $switch_over_date ) {
+					add_action( 'admin_notices', array( $this, 'show_admin_version_notice' ) );
+				}
 			}
 
 			$js_default = 'core-popper';

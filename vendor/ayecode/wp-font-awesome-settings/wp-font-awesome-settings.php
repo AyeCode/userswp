@@ -33,7 +33,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '1.1.7';
+		public $version = '1.1.8';
 
 		/**
 		 * Class textdomain.
@@ -122,7 +122,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 
 			}
 
-            // Set a constant if pro enbaled
+            // Set a constant if pro enabled
 			if ( ! defined( 'FAS_PRO' ) && $this->settings['pro'] ) {
 				define( 'FAS_PRO', true );
 			}
@@ -182,13 +182,21 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 						add_filter( 'block_editor_settings_all', array( $this, 'enqueue_editor_styles' ), 10, 2 );
 					}
 				} else {
+					$enqueue = false;
+
 					if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'frontend' ) {
+						$enqueue = true;
 						add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 5000 );
 					}
 
 					if ( $this->settings['enqueue'] == '' || $this->settings['enqueue'] == 'backend' ) {
+						$enqueue = true;
 						add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 5000 );
 						add_filter( 'block_editor_settings_all', array( $this, 'enqueue_editor_scripts' ), 10, 2 );
+					}
+
+					if ( $enqueue ) {
+						add_filter( 'script_loader_tag', array( $this, 'script_loader_tag' ), 20, 3 );
 					}
 				}
 
@@ -226,10 +234,10 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @return array
 		 */
-		public function enqueue_editor_scripts( $editor_settings, $block_editor_context ){
-
+		public function enqueue_editor_scripts( $editor_settings, $block_editor_context ) {
 			$url = $this->get_url();
-			$editor_settings['__unstableResolvedAssets']['scripts'] .= "<script src='$url' id='font-awesome-js'></script>";
+
+			$editor_settings['__unstableResolvedAssets']['scripts'] .= "<script src='$url' id='font-awesome-js' defer crossorigin='anonymous'></script>";
 
 			return $editor_settings;
 		}
@@ -292,7 +300,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			$sub     = $this->settings['pro'] ? 'pro' : 'use';
 			$type    = $this->settings['type'];
 			$version = $this->settings['version'];
-			$kit_url = $this->settings['kit-url'] ? esc_url( $this->settings['kit-url'] ) : '';
+			$kit_url = $this->settings['kit-url'] ? sanitize_text_field( $this->settings['kit-url'] ) : '';
 			$url     = '';
 
 			if ( $type == 'KIT' && $kit_url ) {
@@ -482,7 +490,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
                                     <span><?php
 										echo wp_sprintf(
 											__( 'Requires a free account with Font Awesome. %sGet kit url%s', 'ayecode-connect' ),
-											'<a rel="noopener noreferrer" target="_blank" href="https://fontawesome.com/kits"><i class="fas fa-external-link-alt"></i>',
+											'<a rel="noopener noreferrer" target="_blank" href="https://fontawesome.com/kits"><i class="fas fa-external-link-alt"></i> ',
 											'</a>'
 										);
 										?></span>
@@ -1000,6 +1008,31 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			}
 
 			echo '<meta name="generator" content="WP Font Awesome Settings v' . esc_attr( $this->version ) . '"' . ( ! empty( $source[0] ) ? ' data-ac-source="' . esc_attr( $source[0] ) . '"' : '' ) . ' />';
+		}
+
+		/**
+		 * Add extra parameters to the script tag.
+		 *
+		 * Add crossorigin="anonymous" to prevent OpaqueResponseBlocking
+		 * (NS_BINDING_ABORTED) http error.
+		 *
+		 * @since 1.1.8
+		 *
+		 * @param string $tag The script tag.
+		 * @param string $handle The script handle.
+		 * @param string $src The script url.
+		 * @return string The script tag.
+		 */
+		public function script_loader_tag( $tag, $handle, $src ) {
+			if ( ( $handle == 'font-awesome' || $handle == 'font-awesome-shims' ) && ( strpos( $src, "kit.fontawesome.com" ) !== false || strpos( $src, ".fontawesome.com/releases/" ) !== false ) ) {
+				$tag = preg_replace(
+					'/<script[\s]+(.*?)>/',
+					'<script defer crossorigin="anonymous" \1>',
+					$tag
+				);
+			}
+
+			return $tag;
 		}
 	}
 
