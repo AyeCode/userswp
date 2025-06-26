@@ -146,6 +146,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.36 - 2025-06-TBD =
+* Restrict wp-admin conflicts with MailPoet manage subscription - FIXED
+
 = 1.2.35 - 2025-06-12 =
 * Close forget password popup after successful form submission - FIXED
 * Add nofollow attribute to sorting dropdown links - CHANGED
