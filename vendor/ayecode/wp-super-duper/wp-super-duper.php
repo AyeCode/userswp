@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.22' );
+	define( 'SUPER_DUPER_VER', '1.2.23' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -2632,95 +2632,80 @@ jQuery(function() {
 							$this->options['block-wrap'] = '';
 						}
 
-						// maybe load the drag/drop functions.
+						// Maybe load the drag/drop functions.
 						$img_drag_drop = false;
-
 						$show_alignment = false;
-						// align feature
-						/*echo "supports: {";
-						echo "	align: true,";
-						echo "  html: false";
-						echo "},";*/
-
-
+	
 							echo "attributes : {";
 
 							if ( $show_advanced ) {
 								echo "show_advanced: {";
-								echo "	type: 'boolean',";
-								echo "  default: false,";
+								echo "  type: 'boolean',";
+								echo "  default: false";
 								echo "},";
 							}
 
-							// block wrap element
+							// Block wrap element
 							if ( ! empty( $this->options['block-wrap'] ) ) { //@todo we should validate this?
 								echo "block_wrap: {";
-								echo "	type: 'string',";
-								echo "  default: '" . esc_attr( $this->options['block-wrap'] ) . "',";
+								echo "  type: 'string',";
+								echo "  default: '" . esc_attr( $this->options['block-wrap'] ) . "'";
 								echo "},";
 							}
 
-
 							if ( ! empty( $this->arguments ) ) {
-
 								foreach ( $this->arguments as $key => $args ) {
-
-									if( $args['type'] == 'image' ||  $args['type'] == 'images' ){
+									if ( $args['type'] == 'image' ||  $args['type'] == 'images' ) {
 										$img_drag_drop = true;
 									}
 
-									// set if we should show alignment
+									// Set if we should show alignment.
 									if ( $key == 'alignment' ) {
 										$show_alignment = true;
 									}
 
 									$extra = '';
+									$_default = isset( $args['default'] ) && ! is_null( $args['default'] ) ? $args['default'] : '';
+
+									if ( ! empty( $_default ) ) {
+										$_default = wp_slash( $_default );
+									}
 
 									if ( $args['type'] == 'notice' ||  $args['type'] == 'tab' ) {
 										continue;
-									}
-									elseif ( $args['type'] == 'checkbox' ) {
+									} else if ( $args['type'] == 'checkbox' ) {
 										$type    = 'boolean';
-										$default = isset( $args['default'] ) && $args['default'] ? 'true' : 'false';
-									} elseif ( $args['type'] == 'number' ) {
+										$default = $_default ? 'true' : 'false';
+									} else if ( $args['type'] == 'number' ) {
 										$type    = 'number';
-										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
-									} elseif ( $args['type'] == 'select' && ! empty( $args['multiple'] ) ) {
+										$default = "'" . $_default . "'";
+									} else if ( $args['type'] == 'select' && ! empty( $args['multiple'] ) ) {
 										$type = 'array';
 										if ( isset( $args['default'] ) && is_array( $args['default'] ) ) {
-											$default = ! empty( $args['default'] ) ? "['" . implode( "','", $args['default'] ) . "']" : "[]";
+											$default = ! empty( $_default ) ? "['" . implode( "','", $_default ) . "']" : "[]";
 										} else {
-											$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+											$default = "'" . $_default . "'";
 										}
-									} elseif ( $args['type'] == 'tagselect' ) {
+									} else if ( $args['type'] == 'tagselect' ) {
 										$type    = 'array';
-										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
-									} elseif ( $args['type'] == 'multiselect' ) {
+										$default = "'" . $_default . "'";
+									} else if ( $args['type'] == 'multiselect' ) {
 										$type    = 'array';
-										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
-									} elseif ( $args['type'] == 'image_xy' ) {
+										$default = "'" . $_default . "'";
+									} else if ( $args['type'] == 'image_xy' ) {
 										$type    = 'object';
-										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
-									} elseif ( $args['type'] == 'image' ) {
+										$default = "'" . $_default . "'";
+									} else if ( $args['type'] == 'image' ) {
 										$type    = 'string';
-										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
-
-										// add a field for ID
-	//                                    echo $key . "_id : {";
-	//                                    echo "type : 'number',";
-	//                                    echo "},";
-	//                                    echo $key . "_xy : {";
-	//                                    echo "type : 'object',";
-	//                                    echo "},";
-
+										$default = "'" . $_default . "'";
 									} else {
-										$type    = !empty($args['hidden_type']) ? esc_attr($args['hidden_type']) : 'string';
-										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
-
+										$type    = ! empty( $args['hidden_type'] ) ? esc_attr( $args['hidden_type'] ) : 'string';
+										$default = "'" . $_default . "'";
 									}
+
 									echo $key . " : {";
 									echo "type : '$type',";
-									echo "default : $default,";
+									echo "default : $default";
 									echo "},";
 								}
 							}
@@ -2728,27 +2713,19 @@ jQuery(function() {
 							echo "content : {type : 'string',default: 'Please select the attributes in the block settings'},";
 							echo "sd_shortcode : {type : 'string',default: ''},";
 
-							if(!empty($this->options['nested-block']) || !empty($this->arguments['html']) ){
+							if ( ! empty( $this->options['nested-block'] ) || ! empty( $this->arguments['html'] ) ) {
 								echo "sd_shortcode_close : {type : 'string',default: ''},";
 							}
 
-							echo "className: { type: 'string', default: '' },";
-
+							echo "className: { type: 'string', default: '' }";
 							echo "},";
-
-
-
 						?>
-
 						// The "edit" property must be a valid function.
 						edit: function (props) {
-
 							const selectedBlock = wp.data.select('core/block-editor').getSelectedBlock();
-
 <?php
 // only include the drag/drop functions if required.
-if( $img_drag_drop ){
-
+if ( $img_drag_drop ) {
 ?>
 
 function enableDragSort(listClass) {

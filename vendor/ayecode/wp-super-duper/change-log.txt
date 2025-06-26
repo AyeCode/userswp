@@ -1,3 +1,6 @@
+= 1.2.23 - 2025-06-18 =
+* Single quote in setting default attribute causes JS error - FIXED
+
 = 1.2.22 - 2025-04-17 =
 * Extra sanitation for widget titles - ADDED
 

@@ -47,9 +47,9 @@
             'dev_requirement' => false,
         ),
         'ayecode/wp-super-duper' => array(
-            'pretty_version' => '1.2.22',
-            'version' => '1.2.22.0',
-            'reference' => 'ed2caeb00da6c5306261077890e756e19bb2dbc4',
+            'pretty_version' => '1.2.23',
+            'version' => '1.2.23.0',
+            'reference' => 'a5fec10e0451fd497d5ab78cdfdf6dae7d181239',
             'type' => 'library',
             'install_path' => __DIR__ . '/../ayecode/wp-super-duper',
             'aliases' => array(),
