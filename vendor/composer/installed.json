@@ -206,24 +206,24 @@
         },
         {
             "name": "ayecode/wp-super-duper",
-            "version": "1.2.22",
-            "version_normalized": "1.2.22.0",
+            "version": "1.2.23",
+            "version_normalized": "1.2.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/wp-super-duper.git",
-                "reference": "ed2caeb00da6c5306261077890e756e19bb2dbc4"
+                "reference": "a5fec10e0451fd497d5ab78cdfdf6dae7d181239"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/ed2caeb00da6c5306261077890e756e19bb2dbc4",
-                "reference": "ed2caeb00da6c5306261077890e756e19bb2dbc4",
+                "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/a5fec10e0451fd497d5ab78cdfdf6dae7d181239",
+                "reference": "a5fec10e0451fd497d5ab78cdfdf6dae7d181239",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "~1.0",
                 "php": ">=5.4.0"
             },
-            "time": "2025-04-17T09:30:25+00:00",
+            "time": "2025-06-18T13:59:39+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -255,7 +255,7 @@
             ],
             "support": {
                 "issues": "https://github.com/AyeCode/wp-super-duper/issues",
-                "source": "https://github.com/AyeCode/wp-super-duper/tree/1.2.22"
+                "source": "https://github.com/AyeCode/wp-super-duper/tree/1.2.23"
             },
             "install-path": "../ayecode/wp-super-duper"
         },
