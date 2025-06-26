@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.35\n"
+"Project-Id-Version: UsersWP 1.2.36\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-12 19:38+0530\n"
-"PO-Revision-Date: 2025-06-12 19:38+0530\n"
+"POT-Creation-Date: 2025-06-26 19:48+0530\n"
+"PO-Revision-Date: 2025-06-26 19:48+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -150,181 +150,181 @@ msgstr ""
 msgid "Something went wrong, please refresh and try again."
 msgstr ""
 
-#: admin/class-admin.php:266
+#: admin/class-admin.php:275
 msgid "Field key must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:267
+#: admin/class-admin.php:276
 msgid "Option Values must not be blank"
 msgstr ""
 
-#: admin/class-admin.php:268
+#: admin/class-admin.php:277
 msgid "Please do not use special character and spaces in field key."
 msgstr ""
 
-#: admin/class-admin.php:269
+#: admin/class-admin.php:278
 msgid "Field key should be a unique name."
 msgstr ""
 
-#: admin/class-admin.php:270
+#: admin/class-admin.php:279
 msgid "Are you sure you wish to delete this field?"
 msgstr ""
 
-#: admin/class-admin.php:271
+#: admin/class-admin.php:280
 msgid "This field is required."
 msgstr ""
 
-#: admin/class-admin.php:273
+#: admin/class-admin.php:282
 msgid "Choose an image"
 msgstr ""
 
-#: admin/class-admin.php:274
+#: admin/class-admin.php:283
 msgid "Use image"
 msgstr ""
 
-#: admin/class-admin.php:275 admin/settings/class-formbuilder.php:1784
+#: admin/class-admin.php:284 admin/settings/class-formbuilder.php:1784
 #: admin/settings/class-formbuilder.php:1992
 #: admin/settings/class-uwp-settings-profile-tabs.php:833
 #: admin/settings/class-uwp-settings-user-sorting.php:601
 msgid "Save"
 msgstr ""
 
-#: admin/class-admin.php:276
+#: admin/class-admin.php:285
 msgid "Saved"
 msgstr ""
 
-#: admin/class-admin.php:277 admin/settings/class-formbuilder.php:1996
+#: admin/class-admin.php:286 admin/settings/class-formbuilder.php:1996
 #: admin/tables/class-user-types-table.php:314
 msgid "Delete"
 msgstr ""
 
-#: admin/class-admin.php:278
+#: admin/class-admin.php:287
 msgid "Deleted"
 msgstr ""
 
-#: admin/class-admin.php:279
+#: admin/class-admin.php:288
 msgid "Cancel"
 msgstr ""
 
-#: admin/class-admin.php:280
+#: admin/class-admin.php:289
 msgid "Saving..."
 msgstr ""
 
-#: admin/class-admin.php:281
+#: admin/class-admin.php:290
 msgid "An error occurred while saving. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:282
+#: admin/class-admin.php:291
 msgid "Are you sure you wish to delete this form?"
 msgstr ""
 
-#: admin/class-admin.php:283
+#: admin/class-admin.php:292
 msgid "Enter register form title"
 msgstr ""
 
-#: admin/class-admin.php:284
+#: admin/class-admin.php:293
 msgid "Updated! Reloading page..."
 msgstr ""
 
-#: admin/class-admin.php:308 admin/class-admin.php:828
+#: admin/class-admin.php:317 admin/class-admin.php:837
 msgid "Activation email has been sent!"
 msgstr ""
 
-#: admin/class-admin.php:311
+#: admin/class-admin.php:320
 msgid "Error while sending activation email. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:314
+#: admin/class-admin.php:323
 msgid "User(s) has been activated!"
 msgstr ""
 
-#: admin/class-admin.php:407
+#: admin/class-admin.php:416
 #, php-format
 msgid ""
 "You can change your profile picture on your <a href=\"%s\">Profile Page</a>."
 msgstr ""
 
-#: admin/class-admin.php:424 admin/class-uwp-admin-menus.php:80
+#: admin/class-admin.php:433 admin/class-uwp-admin-menus.php:80
 #: admin/menus/class-menus.php:291 includes/class-uwp-privacy.php:33
 #: includes/template-functions.php:196
 msgid "UsersWP"
 msgstr ""
 
-#: admin/class-admin.php:490
+#: admin/class-admin.php:499
 msgid "Pending Email Activation"
 msgstr ""
 
-#: admin/class-admin.php:666
+#: admin/class-admin.php:675
 msgid "Change Avatar"
 msgstr ""
 
-#: admin/class-admin.php:668 templates/bootstrap/modal-profile-image.php:16
+#: admin/class-admin.php:677 templates/bootstrap/modal-profile-image.php:16
 msgid "Upload Avatar"
 msgstr ""
 
-#: admin/class-admin.php:678
+#: admin/class-admin.php:687
 msgid "Change Banner"
 msgstr ""
 
-#: admin/class-admin.php:680 templates/bootstrap/modal-profile-image.php:19
+#: admin/class-admin.php:689 templates/bootstrap/modal-profile-image.php:19
 msgid "Upload Banner"
 msgstr ""
 
-#: admin/class-admin.php:736 admin/class-admin.php:753
+#: admin/class-admin.php:745 admin/class-admin.php:762
 msgid "Resend Activation"
 msgstr ""
 
-#: admin/class-admin.php:737
+#: admin/class-admin.php:746
 msgid "Activate User"
 msgstr ""
 
-#: admin/class-admin.php:754
+#: admin/class-admin.php:763
 msgid "Activate Users"
 msgstr ""
 
-#: admin/class-admin.php:854
+#: admin/class-admin.php:863
 msgid "View UsersWP Documentation"
 msgstr ""
 
-#: admin/class-admin.php:855
+#: admin/class-admin.php:864
 msgid "Visit UsersWP support"
 msgstr ""
 
-#: admin/class-admin.php:856
+#: admin/class-admin.php:865
 msgid "View translations"
 msgstr ""
 
-#: admin/class-admin.php:878 admin/class-admin.php:964 widgets/register.php:33
+#: admin/class-admin.php:887 admin/class-admin.php:973 widgets/register.php:33
 msgid "Form"
 msgstr ""
 
-#: admin/class-admin.php:910
+#: admin/class-admin.php:919
 #, php-format
 msgid "Form %d"
 msgstr ""
 
-#: admin/class-admin.php:1024
+#: admin/class-admin.php:1033
 msgid "You do not have permission to perform this action."
 msgstr ""
 
-#: admin/class-admin.php:1030
+#: admin/class-admin.php:1039
 msgid "Invalid order data."
 msgstr ""
 
-#: admin/class-admin.php:1047
+#: admin/class-admin.php:1056
 msgid "User types order updated successfully."
 msgstr ""
 
-#: admin/class-admin.php:1062
+#: admin/class-admin.php:1071
 msgid "Security nonce failed. Please try again."
 msgstr ""
 
-#: admin/class-admin.php:1155 admin/tables/class-user-types-table.php:40
+#: admin/class-admin.php:1164 admin/tables/class-user-types-table.php:40
 #: admin/tables/class-user-types-table.php:99
 msgid "User Type"
 msgstr ""
 
-#: admin/class-admin.php:1304 templates/change.php:7
+#: admin/class-admin.php:1313 templates/change.php:7
 msgid "Change"
 msgstr ""
 
