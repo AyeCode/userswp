@@ -131,6 +131,15 @@ class UsersWP_Admin {
 
 		// Checking action in request to allow ajax request go through
 		if ( ! empty( $restricted_roles ) && is_user_logged_in() && ! wp_doing_ajax() && ! wp_doing_cron() ) {
+			$action = ! empty( $_POST['action'] ) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : '';
+
+			/*
+			 * Prevent conflicts with MailPoet plugin.
+			 */
+			if ( in_array( $action, array( 'mailpoet_subscription_update' ) ) ) {
+				return;
+			}
+
 			$roles = wp_get_current_user()->roles;
 
 			$prevent = false;
