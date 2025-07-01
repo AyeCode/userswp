@@ -71,6 +71,8 @@ UsersWP can be extended with several add-ons. Few examples are:
 * [Easy Digital Downloads](https://userswp.io/downloads/easy-digital-downloads/) - Display “Downloads” and “Purchases” tab in user profile pages.
 * [WP Job Manager](https://userswp.io/downloads/wp-job-manager/) - Connects WP Job Manager with UsersWP, display Jobs tab in user profile pages.
 * [MailChimp](https://userswp.io/downloads/mailchimp/) - Allows the user to subscribe to your newsletters via Mailchimp during registration.
+* [MailerLite](https://userswp.io/downloads/mailerlite/) - Allows the user to subscribe to your newsletters via MailerLite during registration.
+* [MailPoet](https://userswp.io/downloads/mailpoet/) - Allows the user to subscribe to your newsletters via MailPoet during registration.
 * [Moderation](https://userswp.io/downloads/moderation/) - Lets you manually approve or reject user signups.
 * [Restrict User Signups](https://userswp.io/downloads/restrict-user-signups/) - Restrict usernames and emails or even email domains to prevent spam.
 * [myCRED](https://userswp.io/downloads/mycred/) - myCRED add on for UsersWP, earn points and lets users send points.
@@ -86,6 +88,8 @@ UsersWP can be extended with several add-ons. Few examples are:
 * [Advanced Search](https://userswp.io/downloads/advanced-search/) - Extends the regular UsersWP search form by adding options to filter by custom fields.
 * [Groups](https://userswp.io/downloads/groups/) - Easily create a community with discussion groups like Facebook.
 * [User to User Private Messages](https://userswp.io/downloads/private-messages/) - Allow your users to send each other private messages in a Facebook-like chat.
+* [Membership](https://userswp.io/downloads/membership-plugin/) - Add Membership functionality to your WordPress website!
+* [Dashboard](https://userswp.io/downloads/dashboard/) - Manage everything from one simple, easy-to-use dashboard.
 
 There are many others and we release new Add-ons frequently. You can see the full collection here: [UsersWP Premium Add-ons](https://userswp.io/downloads/category/addons/)
 
@@ -145,6 +149,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.37 - TBD =
+* Option to set maximum username length in register form - ADDED
 
 = 1.2.36 - 2025-06-26 =
 * Restrict wp-admin conflicts with MailPoet manage subscription - FIXED

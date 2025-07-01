@@ -232,11 +232,11 @@ class UsersWP_Validation {
                         $errors->add('username_exists', __('<strong>Error</strong>: This username is already registered. Please choose another one.', 'userswp'));
                         return $errors;
                     }
-                    $username_length = uwp_get_option( 'register_username_length');
-                    $username_length = !empty($username_length) ? (int)$username_length : 4;
+                    $username_length = uwp_get_option( 'register_username_length', 4);
+                    $username_length_max = uwp_get_option( 'register_username_length_max', 20);
 
-                    if(!empty($sanitized_value) && strlen($sanitized_value) < $username_length) {
-	                    $errors->add('username_length', sprintf(__('<strong>Error</strong>: Username must be %s characters or more.', 'userswp'), $username_length));
+                    if(!empty($sanitized_value) && (strlen($sanitized_value) < $username_length || strlen($sanitized_value) > $username_length_max)) {
+	                    $errors->add('username_length', sprintf(__('<strong>Error</strong>: Username must be between %s and %s characters.', 'userswp'), $username_length, $username_length_max));
 	                    return $errors;
                     }
                 }
