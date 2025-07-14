@@ -151,6 +151,15 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'default'  => '4',
 		            'advanced' => true,
 	            ),
+                array(
+                    'id'   => 'register_username_length_max',
+                    'name' => __( 'Username Maximum Length', 'userswp' ),
+                    'desc' => __( 'Maximum username character limit required for registration.', 'userswp' ),
+                    'desc_tip' => true,
+                    'type' => 'number',
+                    'default'  => '20',
+                    'advanced' => true,
+                ),
 	            array(
 		            'id'   => 'register_password_min_length',
 		            'name' => __( 'Minimum Password Limit', 'userswp' ),
