@@ -152,6 +152,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.37 - TBD =
 * Option to set maximum username length in register form - ADDED
+* Added a hook to filter main script loading - CHANGED
 
 = 1.2.36 - 2025-06-26 =
 * Restrict wp-admin conflicts with MailPoet manage subscription - FIXED
