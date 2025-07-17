@@ -137,17 +137,18 @@ class AUI_Component_Input {
 				// enqueue the script
 				$aui_settings = AyeCode_UI_Settings::instance();
 				$aui_settings->enqueue_flatpickr();
-			} elseif ( $type == 'iconpicker' ) {
+			} else if ( $type == 'iconpicker' ) {
 				$type = 'text';
-				//$args['class'] .= ' aui-flatpickr bg-initial ';
-//				$args['class'] .= ' bg-initial ';
+
+				// Validate FA icon.
+				$args['value'] = AUI_Component_Helper::sanitize_fa_icon( $args['value'], $args );
 
 				$args['extra_attributes']['data-aui-init'] = 'iconpicker';
 				$args['extra_attributes']['data-placement'] = 'bottomRight';
 
 				$args['input_group_right'] = '<span class="input-group-addon input-group-text c-pointer"></span>';
-//				$args['input_group_right_inside'] = true;
-				// enqueue the script
+
+				// Enqueue the script
 				$aui_settings = AyeCode_UI_Settings::instance();
 				$aui_settings->enqueue_iconpicker();
 			}

@@ -1,3 +1,6 @@
+= 1.2.24 - 2025-07-03 =
+* Divi 5 don't renders add shortcode button in text block - FIXED
+
 = 1.2.23 - 2025-06-18 =
 * Single quote in setting default attribute causes JS error - FIXED
 

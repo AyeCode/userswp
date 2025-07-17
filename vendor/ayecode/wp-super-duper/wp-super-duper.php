@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.23' );
+	define( 'SUPER_DUPER_VER', '1.2.24' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -115,8 +115,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				if ( function_exists( 'generate_sections_sections_metabox' ) ) {
 					add_action( 'generate_sections_metabox', array( $this, 'shortcode_insert_button_script' ) );
 				}
+
 				/* Load script on Divi theme builder page */
-				if ( function_exists( 'et_builder_is_tb_admin_screen' ) && et_builder_is_tb_admin_screen() ) {
+				if ( ( function_exists( 'et_builder_is_tb_admin_screen' ) && et_builder_is_tb_admin_screen() ) || ( function_exists( 'et_builder_d5_enabled' ) && et_builder_d5_enabled() && isset( $_GET['et_fb'] ) && '1' === $_GET['et_fb'] && et_pb_is_allowed( 'use_visual_builder' ) ) ) {
 					add_thickbox();
 					add_action( 'admin_footer', array( $this, 'shortcode_insert_button_script' ) );
 				}
@@ -309,24 +310,17 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 				?>
 				<div class="sd-shortcode-settings"></div>
-
 			</div>
-
 			<div class="sd-shortcode-right-wrap">
 				<textarea id='sd-shortcode-output' disabled></textarea>
 				<div id='sd-shortcode-output-actions'>
 					<?php if ( $editor_id != '' ) { ?>
-						<button class="button sd-insert-shortcode-button"
-								onclick="sd_insert_shortcode(<?php if ( ! empty( $editor_id ) ) {
-									echo "'" . $editor_id . "'";
-								} ?>)"><?php _e( 'Insert shortcode', 'ayecode-connect' ); ?></button>
+						<button class="button sd-insert-shortcode-button" onclick="sd_insert_shortcode(<?php if ( ! empty( $editor_id ) ) { echo "'" . $editor_id . "'"; } ?>)"><?php esc_html_e( 'Insert shortcode', 'ayecode-connect' ); ?></button>
 					<?php } ?>
-					<button class="button"
-							onclick="sd_copy_to_clipboard()"><?php _e( 'Copy shortcode' ); ?></button>
+					<button class="button" onclick="sd_copy_to_clipboard()"><?php esc_html_e( 'Copy shortcode' ); ?></button>
 				</div>
 			</div>
 			<?php
-
 			$html = ob_get_clean();
 
 			if ( wp_doing_ajax() ) {
@@ -348,13 +342,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				if ( $should_die ) {
 					wp_die();
 				}
-
 			} else {
 				return $html;
 			}
 
 			return '';
-
 		}
 
 		/**
@@ -430,7 +422,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 			add_thickbox();
 
-
 			/**
 			 * Cornerstone makes us play dirty tricks :/
 			 * All media_buttons are removed via JS unless they are two specific id's so we wrap our content in this ID so it is not removed.
@@ -502,11 +493,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				 */
 				function sd_so_show_hide(form) {
 					jQuery(form).find(".sd-argument").each(function () {
-
 						var $element_require = jQuery(this).data('element_require');
 
 						if ($element_require) {
-
 							$element_require = $element_require.replace("&#039;", "'"); // replace single quotes
 							$element_require = $element_require.replace("&quot;", '"'); // replace double quotes
 
@@ -774,7 +763,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							if (input) {
 								sd_setNativeValue(input, textareaValue);
 							}
-
 						}
 						tb_remove();
 					}
@@ -796,7 +784,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 					element.dispatchEvent(event);
 				}
-				<?php }?>
+				<?php } ?>
 
 				/*
 				 Copies the shortcode to the clipboard.
@@ -964,6 +952,17 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							jQuery(this).closest('.et-fb-form__group').find('.et-fb-form__label-text').append(sd_shortcode_button());
 						}
 					});
+					/* Divi 5 */
+					jQuery(document).on('focusin', '.et-vb-tinymce-html-input', function () {
+						var $etEl = jQuery(this).closest('.et-vb-field-richtext').find('.et-vb-field-richtext-buttons');
+						if (!$etEl.find('.sd-lable-shortcode-inserter').length) {
+							if ($etEl.find('.et-vb-switch-editor-mode').length) {
+								$etEl.find('.et-vb-switch-editor-mode').before(sd_shortcode_button());
+							} else {
+								$etEl.append(sd_shortcode_button());
+							}
+						}
+					});
 
 					// Beaver
 					jQuery(document).on('focusin', '.fl-code-field', function () {
@@ -1004,7 +1003,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							jQuery('<li style="text-align: center;padding: 5px;list-style: none;">' + sd_shortcode_button() + '</li>').insertBefore('.cs-action-toggle-custom-css');
 						}
 					}, 2000);
-
 
 					// WP Bakery, code editor does not render shortcodes.
 //					jQuery(document).on('focusin', '.wpb-textarea_raw_html', function () {
@@ -1946,7 +1944,7 @@ function sd_block_visibility_init() {
 		jQuery(this).closest('.bs-vc-rule').remove();
 	});
 }
-function sd_block_visibility_render_fields(oValue) {console.log(oValue);
+function sd_block_visibility_render_fields(oValue) {
 	if (typeof oValue == 'object' && oValue.rule1 && typeof oValue.rule1 == 'object') {
 		for(k = 1; k <= Object.keys(oValue).length; k++) {
 			if (oValue['rule' + k] && oValue['rule' + k].type) {
@@ -2951,12 +2949,9 @@ const { deviceType } = typeof wp.data.useSelect !== 'undefined' ? wp.data.useSel
     }
 }, []) : '';
 <?php } ?>
-							var content = props.attributes.content;
-							//console.log(props.attributes);
-                            var shortcode = '';
+							var content = props.attributes.content, shortcode = '';
 
 							function onChangeContent($type) {
-
 								$refresh = false;
 								// Set the old content the same as the new one so we only compare all other attributes
 								if(typeof(prev_attributes[props.clientId]) != 'undefined'){
@@ -2967,21 +2962,14 @@ const { deviceType } = typeof wp.data.useSelect !== 'undefined' ? wp.data.useSel
 								}else if(props.attributes.content === ""){
 									// if first load and content empty then refresh
 									$refresh = true;
-
-								}else{
-
+								} else {
 									// if not new and has content then set it so we dont go fetch it
 									if(props.attributes.content && props.attributes.content !== 'Please select the attributes in the block settings'){
 										prev_attributes[props.clientId] = props.attributes;
 									}
-
 								}
 
-
-
 								if ( ( !is_fetching &&  JSON.stringify(prev_attributes[props.clientId]) != JSON.stringify(props.attributes) ) || $refresh  ) {
-
-
 									is_fetching = true;
 
 									var data = {
@@ -2998,7 +2986,6 @@ const { deviceType } = typeof wp.data.useSelect !== 'undefined' ? wp.data.useSel
 									jQuery.post(ajaxurl, data, function (response) {
 										return response;
 									}).then(function (env) {
-
 										// if the content is empty then we place some placeholder text
 										if (env == '') {
 											env = "<div style='background:#0185ba33;padding: 10px;border: 4px #ccc dashed;'>" + "<?php _e( 'Placeholder for:', 'ayecode-connect' );?> " + props.name + "</div>";
@@ -3020,20 +3007,14 @@ const { deviceType } = typeof wp.data.useSelect !== 'undefined' ? wp.data.useSel
 										}
 										?>
 
-
 										// if AUI is active call the js init function
 										if (typeof aui_init === "function") {
 											aui_init();
 										}
 									});
-
-
 								}
 
-
-
 								return props.attributes.content;
-
 							}
 
 							<?php
@@ -3041,14 +3022,11 @@ const { deviceType } = typeof wp.data.useSelect !== 'undefined' ? wp.data.useSel
 								echo  $this->options['block-edit-js'] ; // strings have to be in single quotes, may cause issues
 							}
 
-
-
-
 							if(empty($this->options['block-save-return'])){
 							?>
 								///////////////////////////////////////////////////////////////////////
 
-									 // build the shortcode.
+								// build the shortcode.
 								shortcode = "[<?php echo $this->options['base_id'];?>";
 								<?php
 
