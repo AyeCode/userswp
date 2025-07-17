@@ -56,7 +56,7 @@ do_action( 'uwp_template_before', 'login', $args ); ?>
 	                        'id'    => esc_html( $id ),
 	                        'name'    =>  'remember_me',
 	                        'value' =>  'forever',
-	                        'label' => esc_html__( 'Remember Me', 'userswp' ),
+	                        'label' => __( 'Remember Me', 'userswp' ),
                         ));
                         ?>
 					</div>

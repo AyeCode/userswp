@@ -1884,3 +1884,18 @@ function uwp_get_default_sort(){
 	return $default_sort;
 
 }
+
+function uwp_get_username( $user_id = 0 ) {
+	$user_data = get_userdata( $user_id );
+
+	if ( ! $user_data ) {
+		return '';
+	}
+
+	$display_name = ! empty( $user_data->display_name ) ? $user_data->display_name : '';
+	if ( empty( $display_name ) && ! empty( $user_data ) ) {
+		$display_name = $user_data->user_login;
+	}
+
+	return apply_filters( 'uwp_get_username', $display_name, $user_id, $user_data );
+}

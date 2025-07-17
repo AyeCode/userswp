@@ -13,7 +13,7 @@
                 <div class="uwp-remember-me">
                     <label style="display: inline-block;" for="remember_me<?php if(wp_doing_ajax()){echo "_ajax";}?>">
                         <input name="remember_me" id="remember_me<?php if(wp_doing_ajax()){echo "_ajax";}?>" value="forever" type="checkbox">
-                        <?php esc_html_e( 'Remember Me', 'userswp' ); ?>
+                        <?php _e( 'Remember Me', 'userswp' ); ?>
                     </label>
                 </div>
                 <input type="submit" name="uwp_login_submit" value="<?php esc_attr_e( 'Login', 'userswp' ); ?>">

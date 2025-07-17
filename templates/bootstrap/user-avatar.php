@@ -33,7 +33,7 @@ if(!$uwp_in_user_loop){ ?><div class="card shadow-0 border-0 mw-100 bg-transpare
 			<img class="rounded-circle shadow border border-white border-width-4 p-0 mw-100"
 			     src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php esc_attr_e("User avatar","userswp");?>" height="<?php echo esc_attr( $size ); ?>" width="<?php echo esc_attr( $size ); ?>">
 			<?php if ($uwp_in_user_loop || 1==$link) {echo '</a>';} ?>
-
+			<?php do_action('uwp_after_user_avatar',$user->ID); ?>   
 			<?php if (!$uwp_in_user_loop && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && $allow_change ) { ?>
 				<div class="card-img-overlay d-flex p-0">
 					<?php

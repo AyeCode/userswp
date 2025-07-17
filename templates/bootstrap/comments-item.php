@@ -1,14 +1,10 @@
 <?php
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 global $comment;
 $comment = isset( $args['template_args']['comment'] ) ? $args['template_args']['comment'] : '';
 $avatar_url = get_avatar_url( $comment->comment_author_email, array( 'size' => 500 ) );
-$user_name = isset($comment->comment_author) ? $comment->comment_author : '';
-$user = !empty($comment->user_id) ? get_userdata( $comment->user_id ) : '';
-if(!empty($user->display_name)) { $user_name = esc_attr( $user->display_name );}
 ?>
 <div class="card mb-5">
 
@@ -19,8 +15,11 @@ if(!empty($user->display_name)) { $user_name = esc_attr( $user->display_name );}
 	<div class="card-body">
 		<div class="row justify-content-center">
 			<div class="col-5 col-md-2 mb-3 col-xl-2 text-center">
-				<img src="<?php echo esc_url_raw( $avatar_url ); ?>" class="align-self-start img-thumbnail rounded-circle mx-auto d-block" alt="...">
-                <cite><?php echo esc_attr($user_name);?></cite>
+				<?php 
+					$args = array('class' => 'align-self-start img-thumbnail rounded-circle mx-auto d-block');
+					echo get_avatar($comment->user_id,'',esc_url($avatar_url),'',$args);
+				?>
+                <cite><?php echo uwp_get_username($comment->user_id); ?></cite>
 			</div>
 			<div class="col-12 col-md-10 col-xl-10 text-muted">
 				<?php
