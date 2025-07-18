@@ -30,8 +30,8 @@ if(!$uwp_in_user_loop){ ?><div class="card shadow-0 border-0 mw-100 bg-transpare
 
 		<div class="col <?php if($uwp_in_user_loop){?>col-5<?php }?> text-center tofront ">
 			<?php if ($uwp_in_user_loop || 1==$link) { echo '<a href="'.esc_url(get_author_posts_url($user->ID)).'" title="'.esc_attr( $user->display_name ).'">';} ?>
-			<img class="rounded-circle shadow border border-white border-width-4 p-0 mw-100"
-			     src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php esc_attr_e("User avatar","userswp");?>" height="<?php echo esc_attr( $size ); ?>" width="<?php echo esc_attr( $size ); ?>">
+			<?php $avatar_args = array('class' => 'rounded-circle shadow border border-white border-width-4 p-0 mw-100', "width" => $size);
+				echo get_avatar($user_id,$size,esc_url( $avatar_url ),'User avatar',$avatar_args); ?>
 			<?php if ($uwp_in_user_loop || 1==$link) {echo '</a>';} ?>
 			<?php do_action('uwp_after_user_avatar',$user->ID); ?>   
 			<?php if (!$uwp_in_user_loop && is_user_logged_in() && ( get_current_user_id() == $user->ID ) && $allow_change ) { ?>
