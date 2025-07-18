@@ -477,4 +477,23 @@ class AUI_Component_Helper {
 
 		return $filtered;
 	}
+
+	/**
+	 * Sanitize FontAwesome icon.
+	 *
+	 * @param string $icon Icon string.
+	 * @param array $args Extra args.
+	 * @return string Sanitized icon.
+	 */
+	public static function sanitize_fa_icon( $icon, $args = array() ) {
+		if ( ! is_scalar( $icon ) ) {
+			return "";
+		}
+
+		$pattern = '/[^0-9a-zA-Z\-_ ]/';
+
+		$sanitized_icon = preg_replace( $pattern, '', trim( $icon ) );
+
+		return apply_filters( 'ayecode_ui_sanitize_fa_icon', $sanitized_icon, $icon, $args );
+	}
 }

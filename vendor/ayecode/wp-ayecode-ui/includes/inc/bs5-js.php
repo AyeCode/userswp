@@ -309,7 +309,7 @@
         auiModal.addEventListener( 'shown.bs.modal', function ( e ) {
             iFrame = jQuery( '#embedModal-iframe') ;
 
-            jQuery('.ac-preview-loading').addClass('d-flex');
+            jQuery('.ac-preview-loading').removeClass('d-none').addClass('d-flex');
 
             iFrame.attr({
                 src: $url
@@ -611,6 +611,21 @@
         const myModalEl = document.getElementById('aui-carousel-modal');
         myModalEl.addEventListener('hidden.bs.modal', event => {
             jQuery(".aui-carousel-modal iframe").attr('src', '');
+        });
+
+        jQuery('.aui-carousel-modal').on('shown.bs.modal', function(e) {
+            jQuery('.aui-carousel-modal .carousel-item.active').find('iframe').each(function() {
+                var $iframe = jQuery(this);
+                $iframe.parent().find('.ac-preview-loading').removeClass('d-none').addClass('d-flex');
+                if (!$iframe.attr('src') && $iframe.data('src')) {
+                    $iframe.attr('src', $iframe.data('src'));
+                }
+                $iframe.on('load', function() {
+                    setTimeout(function() {
+                        $iframe.parent().find('.ac-preview-loading').removeClass('d-flex').addClass('d-none');
+                    }, 1250);
+                });
+            });
         });
 
         $container = jQuery($link).closest('.aui-gallery');
