@@ -100,6 +100,13 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				}
 			}
 
+			if ( is_uwp_users_page() && !empty($_GET['uwp_sort_by']) ) {
+				if ($_GET['uwp_sort_by'] === 'random_asc' || $_GET['uwp_sort_by'] === 'random_desc') {
+					// Random order
+					$vars->query_orderby = 'ORDER BY RAND()';
+				}
+			}
+
 			return $vars;
 		}
 
@@ -296,6 +303,16 @@ if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 				'sort'         => 'asc',
 				'description'  => __( 'Sort alphabetically by last name in ascending order', 'userswp' ),
 			);
+
+            $fields['random'] = array(
+                'data_type'    => '',
+                'field_type'   => 'text',
+                'site_title'   => __( 'Random', 'userswp' ),
+                'htmlvar_name' => 'random',
+                'field_icon'   => 'fa-solid fa-shuffle',
+                'sort'         => '',
+                'description'  => __( 'Sort users by random', 'userswp' )
+            );
 
 			$fields = apply_filters( 'uwp_add_custom_sort_options', $fields );
 
