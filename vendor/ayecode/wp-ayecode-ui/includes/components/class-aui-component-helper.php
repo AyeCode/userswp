@@ -116,7 +116,7 @@ class AUI_Component_Helper {
 			$classes = array_map( "trim", $classes );
 			$classes = array_map( "sanitize_html_class", $classes );
 			if ( ! empty( $classes ) ) {
-				$output = implode( " ", $classes );
+				$output = implode( " ", array_filter( $classes ) );
 			}
 		}
 

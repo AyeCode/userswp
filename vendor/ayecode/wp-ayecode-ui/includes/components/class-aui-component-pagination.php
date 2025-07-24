@@ -95,7 +95,7 @@ class AUI_Component_Pagination {
 				$output .= '</section>';
 			}
 
-			$output = str_replace( "screen-reader-text", "screen-reader-text sr-only", $output );
+			$output = str_replace( "screen-reader-text", "screen-reader-text sr-only" . ( $aui_bs5 ? ' visually-hidden' : '' ), $output );
 			$output = str_replace( "nav-links", "aui-nav-links", $output );
 		}
 
