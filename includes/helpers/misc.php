@@ -1477,7 +1477,7 @@ function uwp_delete_account_email_tags( $inline = true ){
 function uwp_authbox_tags( $inline = true ){
 	global $wpdb;
 
-	$tags = array( '[#post_id#]', '[#author_id#]', '[#author_name#]', '[#author_link#]', '[#author_bio#]', '[#author_image#]', '[#author_image_url#]', '[#post_modified#]', '[#post_date#]', '[#author_nicename#]', '[#author_registered#]', '[#author_website#]' );
+	$tags = array( '[#post_id#]', '[#author_id#]', '[#author_display_name#]',  '[#author_name#]', '[#author_link#]', '[#author_bio#]', '[#author_image#]', '[#author_image_url#]', '[#post_modified#]', '[#post_date#]', '[#author_nicename#]', '[#author_registered#]', '[#author_website#]' );
 
 	$tags = apply_filters('uwp_author_box_default_tags', $tags, $inline);
 
@@ -1883,4 +1883,16 @@ function uwp_get_default_sort(){
 
 	return $default_sort;
 
+}
+
+function uwp_get_username( $user_id ) {
+	$user_data = get_userdata( $user_id );
+
+	if ( ! $user_data ) {
+		return '';
+	}
+
+	$display_name = ! empty( $user_data->display_name ) ? $user_data->display_name : $user_data->user_login;
+
+	return apply_filters( 'uwp_get_username', $display_name, $user_id, $user_data );
 }

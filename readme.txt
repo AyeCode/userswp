@@ -150,6 +150,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.38 - TBD =
+* Option to allow user sorting by random - ADDED
+
 = 1.2.37 - 2025-07-17 =
 * Option to set maximum username length in register form - ADDED
 * Added a hook to filter main script loading - CHANGED

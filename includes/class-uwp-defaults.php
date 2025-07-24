@@ -363,7 +363,7 @@ A user has been registered recently on your website.
                     <a href="[#author_link#]">[#author_image#]</a>
                 </div>
                 <div class="media-body">
-                    <h3>Author: <a href="[#author_link#]">[#author_name#]</a></h3>
+                    <h3>Author: <a href="[#author_link#]">[#author_display_name#]</a></h3>
                     <p>[#author_bio#]</p>
                 </div>
             </div>'
@@ -384,7 +384,7 @@ A user has been registered recently on your website.
 			'<div class="d-block text-center text-md-left d-md-flex p-3 bg-light ' . esc_attr($wrap_class) . '">
 				<a href="[#author_link#]"><img src="[#author_image_url#]" class="rounded-circle shadow border border-white border-width-4 mr-3" width="60" height="60" alt="[#author_name#]"></a>
 				<div class="media-body">
-					<h5 class="mt-0">Author: <a href="[#author_link#]">[#author_name#]</a></h5>
+					<h5 class="mt-0">Author: <a href="[#author_link#]">[#author_display_name#]</a></h5>
 					[uwp_button_group user_id="post_author"]
 					<p>[#author_bio#]</p>
 				</div>

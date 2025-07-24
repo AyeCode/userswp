@@ -145,6 +145,7 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
         $author_link = uwp_build_profile_tab_url($author_id);
         $user = get_user_by('id', $author_id);
         $author_name = esc_attr( $user->display_name );
+        $author_display_name = uwp_get_username($user->ID);
         $author_bio = get_user_meta($author_id, 'description', true);
 	    $limit_words = apply_filters('uwp_author_bio_content_limit', uwp_get_option('author_box_bio_limit', 200));
 	    $author_bio = wp_trim_words( $author_bio, $limit_words, '...' );
@@ -160,6 +161,7 @@ class UWP_Author_Box_Widget extends WP_Super_Duper {
             '[#post_date#]' => esc_attr( $post->post_date ),
             '[#author_id#]' => absint( $post->post_author ),
             '[#author_name#]' => esc_attr( $author_name ),
+            '[#author_display_name#]' => $author_display_name,
             '[#author_link#]' => esc_url( $author_link ),
             '[#author_bio#]' => esc_textarea( $author_bio ),
             '[#author_image#]' => get_avatar($post->post_author, $avatar_size),
