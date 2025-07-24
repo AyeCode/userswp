@@ -1,3 +1,7 @@
+= 0.2.40 - 2025-07-27 =
+* .sr-only with BS5 forces to display hidden label - FIXED
+* FontAwesome 7 compatibility changes - CHANGED
+
 = 0.2.39 - 2025-07-17 =
 * Added args in FA icon sanitization hook - CHANGED
 
