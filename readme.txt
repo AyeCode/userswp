@@ -150,6 +150,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.39 - TBD =
+* Frontend body class for the user type - ADDED
+
 = 1.2.38 - 2025-07-24 =
 * Option to allow user sorting by random - ADDED
 

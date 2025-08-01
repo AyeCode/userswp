@@ -1028,6 +1028,10 @@ class UsersWP_Templates {
 			}
 		}
 
+        if(is_user_logged_in()){
+            $classes[] = 'uwp-user-type-'.uwp_get_register_form_id( get_current_user_id() );
+        }
+
 		return $classes;
 	}
 
