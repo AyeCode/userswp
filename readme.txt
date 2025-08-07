@@ -152,6 +152,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.39 - TBD =
 * Frontend body class for the user type - ADDED
+* Profile tab listings should use GD archive item template - CHANGED
 
 = 1.2.38 - 2025-07-24 =
 * Option to allow user sorting by random - ADDED
