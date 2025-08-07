@@ -883,130 +883,166 @@ class UsersWP_GeoDirectory_Plugin {
 	 *
 	 * @return      void
 	 */
-	public function add_profile_gd_lists_tab_content( $user ) {
+    public function add_profile_gd_lists_tab_content($user)
+    {
 
-		if ( ! class_exists( 'GeoDir_Lists' ) ) {
-			return;
-		}
-
-		$subtab     = get_query_var( 'uwp_subtab' );
-		$uwp_tab = get_query_var('uwp_tab');
-		$type       = geodir_lists_slug();
-		$user_lists = GeoDir_Lists_Data::get_user_lists( $user->ID );
-		$subtabs    = array();
-		if ( ! empty( $user_lists ) ) {
-			foreach ( $user_lists as $list ) {
-				$subtabs[ $list->post_name ] = array(
-					'id'    => $list->ID,
-					'title' => $list->post_title,
-					'count' => count( $this->get_listings_from_list( $list->ID ) )
-				);
-			}
-		}
-
-		if ( ! empty( $subtabs ) ) {
-			$subtab_keys = array_keys( $subtabs );
-			$default_tab = isset($subtab_keys[0]) ? $subtab_keys[0] : '';
-		} else {
-			$default_tab = '';
-		}
-
-		$default_tab = apply_filters( 'uwp_default_gd_lists_subtab', $default_tab, $user, $type );
-		$active_tab  = ! empty( $subtab ) && array_key_exists( $subtab, $subtabs ) ? $subtab : $default_tab;
-		if(! empty( $active_tab ) && isset($subtabs[ $active_tab ]['id'])){
-			$active_id = $subtabs[ $active_tab ]['id'];
-        } elseif(isset($subtabs[ $default_tab ]['id'])){
-			$active_id = $subtabs[ $default_tab ]['id'];
-        } else {
-			$active_id = '';
+        if (!class_exists('GeoDir_Lists')) {
+            return;
         }
 
-		if ( uwp_get_option( "design_style", 'bootstrap' ) ) {
-			if ( is_array( $subtabs ) && count( $subtabs ) > 0 ) {
-				?>
+        $subtab = get_query_var('uwp_subtab');
+        $uwp_tab = get_query_var('uwp_tab');
+        $type = geodir_lists_slug();
+        $user_lists = GeoDir_Lists_Data::get_user_lists($user->ID);
+        $subtabs = array();
+        if (!empty($user_lists)) {
+            foreach ($user_lists as $list) {
+                $subtabs[$list->post_name] = array(
+                    'id' => $list->ID,
+                    'title' => $list->post_title,
+                    'count' => count($this->get_listings_from_list($list->ID))
+                );
+            }
+        }
+
+        if (!empty($subtabs)) {
+            $subtab_keys = array_keys($subtabs);
+            $default_tab = isset($subtab_keys[0]) ? $subtab_keys[0] : '';
+        } else {
+            $default_tab = '';
+        }
+
+        $default_tab = apply_filters('uwp_default_gd_lists_subtab', $default_tab, $user, $type);
+        $active_tab = !empty($subtab) && array_key_exists($subtab, $subtabs) ? $subtab : $default_tab;
+        if (!empty($active_tab) && isset($subtabs[$active_tab]['id'])) {
+            $active_id = $subtabs[$active_tab]['id'];
+        } elseif (isset($subtabs[$default_tab]['id'])) {
+            $active_id = $subtabs[$default_tab]['id'];
+        } else {
+            $active_id = '';
+        }
+
+        if (uwp_get_option("design_style", 'bootstrap')) {
+            if (is_array($subtabs) && count($subtabs) > 0) {
+                ?>
                 <div class="pb-3">
-					<?php
-					foreach ( $subtabs as $tab_id => $tab ) {
-						$tab_url = uwp_build_profile_tab_url( $user->ID, $uwp_tab, $tab_id );
-						$active  = $active_tab == $tab_id ? 'btn-primary' : 'btn-outline-primary';
-						?>
-                        <a id="uwp-profile-gd-<?php echo esc_attr($tab_id); ?>" href="<?php echo esc_url( $tab_url ); ?>"
+                    <?php
+                    foreach ($subtabs as $tab_id => $tab) {
+                        $tab_url = uwp_build_profile_tab_url($user->ID, $uwp_tab, $tab_id);
+                        $active = $active_tab == $tab_id ? 'btn-primary' : 'btn-outline-primary';
+                        ?>
+                        <a id="uwp-profile-gd-<?php echo esc_attr($tab_id); ?>" href="<?php echo esc_url($tab_url); ?>"
                            class=" btn btn-sm <?php echo esc_attr($active); ?>">
-							<?php echo esc_html__( $tab['title'], 'userswp' ); ?>
-                            <span class="badge badge-light ml-1"><?php echo esc_html( $tab['count'] ); ?></span>
+                            <?php echo esc_html__($tab['title'], 'userswp'); ?>
+                            <span class="badge badge-light ml-1"><?php echo esc_html($tab['count']); ?></span>
                         </a>
-						<?php
-					}
-					?>
+                        <?php
+                    }
+                    ?>
                 </div>
-				<?php
-			}
-		} else {
-			if ( ! empty( $subtabs ) ) { ?>
+                <?php
+            }
+        } else {
+            if (!empty($subtabs)) { ?>
                 <div class="uwp-profile-subcontent">
                     <div class="uwp-profile-subnav">
                         <ul class="item-list-subtabs-ul">
-							<?php
-							foreach ( $subtabs as $tab_id => $tab ) {
-								$tab_url = uwp_build_profile_tab_url( $user->ID, $type, $tab_id );
-								$active  = $active_tab == $tab_id ? ' active' : '';
-								?>
-                                <li id="uwp-profile-gd-<?php echo esc_attr($tab_id); ?>" class="<?php echo esc_attr($active); ?>">
-                                    <a href="<?php echo esc_url( $tab_url ); ?>">
+                            <?php
+                            foreach ($subtabs as $tab_id => $tab) {
+                                $tab_url = uwp_build_profile_tab_url($user->ID, $type, $tab_id);
+                                $active = $active_tab == $tab_id ? ' active' : '';
+                                ?>
+                                <li id="uwp-profile-gd-<?php echo esc_attr($tab_id); ?>"
+                                    class="<?php echo esc_attr($active); ?>">
+                                    <a href="<?php echo esc_url($tab_url); ?>">
                                     <span
                                             class="uwp-profile-tab-label uwp-profile-gd-<?php echo esc_attr($tab_id); ?>-label "><span
-                                                class="uwp-profile-tab-sub-ul-count uwp-profile-sub-ul-gd-<?php echo esc_attr($tab_id); ?>-count"><?php echo esc_html( $tab['count'] ); ?></span> <?php echo esc_html__( $tab['title'], 'userswp' ); ?></span>
+                                                class="uwp-profile-tab-sub-ul-count uwp-profile-sub-ul-gd-<?php echo esc_attr($tab_id); ?>-count"><?php echo esc_html($tab['count']); ?></span> <?php echo esc_html__($tab['title'], 'userswp'); ?></span>
                                     </a>
                                 </li>
-								<?php
-							}
-							?>
+                                <?php
+                            }
+                            ?>
                         </ul>
                     </div>
                 </div>
-			<?php }
-		}
+            <?php }
+        }
 
-		$post_ids = $this->get_listings_from_list( $active_id );
+        $post_ids = $this->get_listings_from_list($active_id);
 
-		if ( ! empty( $post_ids ) ) {
-			$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+        if (!empty($post_ids)) {
+            $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
 
-			$query_args = array(
-				'is_geodir_loop' => true,
-				'gd_location'    => false,
-				'post_type'      => geodir_get_posttypes(),
-				'post__in'       => $post_ids,
-				'post_status'    => array( 'publish' ),
-				'posts_per_page' => uwp_get_option( 'profile_no_of_items', 10 ),
-				'paged'          => $paged,
-			);
+            $query_args = array(
+                'is_geodir_loop' => true,
+                'gd_location' => false,
+                'post_type' => geodir_get_posttypes(),
+                'post__in' => $post_ids,
+                'post_status' => array('publish'),
+                'posts_per_page' => uwp_get_option('profile_no_of_items', 10),
+                'paged' => $paged,
+            );
 
-			if ( get_current_user_id() == $user->ID ) {
-				$query_args['post_status'] = array(
-					'publish',
-					'draft',
-					'private',
-					'pending',
-					'gd-closed',
-					'gd-expired'
-				);
-			}
+            if (get_current_user_id() == $user->ID) {
+                $query_args['post_status'] = array(
+                    'publish',
+                    'draft',
+                    'private',
+                    'pending',
+                    'gd-closed',
+                    'gd-expired'
+                );
+            }
 
-			$the_query = new WP_Query( $query_args );
-		} else {
-			$the_query = array();
-		}
+            $the_query = new WP_Query($query_args);
+        } else {
+            $the_query = array();
+        }
 
-		$args                               = array();
-		$args['template_args']['the_query'] = $the_query;
-		$args['template_args']['title']     = $active_tab && ! empty( $subtabs ) && ! empty( $subtabs[ $active_tab ]['title'] ) ? $subtabs[ $active_tab ]['title'] : '';
-		$args['template_args']['list_data'] = isset( $subtabs[ $active_tab ] ) ? $subtabs[ $active_tab ] : array();
+        $args = array();
+        $args['template_args']['the_query'] = $the_query;
+        $args['template_args']['title'] = $active_tab && !empty($subtabs) && !empty($subtabs[$active_tab]['title']) ? $subtabs[$active_tab]['title'] : '';
+        $args['template_args']['list_data'] = isset($subtabs[$active_tab]) ? $subtabs[$active_tab] : array();
+        $title = isset($args['template_args']['title']) ? $args['template_args']['title'] : '';
+        $found_posts = !empty($the_query) && !empty($the_query->found_posts) ? $the_query->found_posts : 0;
 
-		ob_start();
-		uwp_get_template( "bootstrap/loop-posts.php", $args );
-		echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	}
+        if ($found_posts) {
+            $widget_args = array(
+                'column_gap_class' => 'mb-4',
+                'row_gap_class' => '',
+                'card_border_class' => 'border-0',
+                'card_shadow_class' => '',
+                'layout' => '2',
+            );
+
+            $template_args = apply_filters('uwp_profile_tab_lists_args', $widget_args);
+            $gd_layout_class = geodir_convert_listing_view_class($widget_args['layout']);
+            ?>
+            <div class="container mb-1">
+                <div class="row">
+                    <div class="col-sm p-0 uwp-loop-posts-title">
+                        <h3><?php echo esc_html($title); ?></h3>
+                    </div>
+                </div>
+            </div>
+            <?php do_action('uwp_profile_posts_loop_wrap_start', $args, $found_posts); ?>
+            <div class="row row-cols-1 row-cols-sm-2 geodir-category-list-view <?php echo $gd_layout_class; ?>">
+                <?php
+                while ($the_query->have_posts()) : $the_query->the_post();
+                    echo geodir_get_template_html("bootstrap/content-listing.php", array(
+                        'column_gap_class' => $template_args['column_gap_class'],
+                        'row_gap_class' => $template_args['row_gap_class'],
+                        'card_border_class' => $template_args['card_border_class'],
+                        'card_shadow_class' => $template_args['card_shadow_class'],
+                    ));
+                endwhile;
+                ?>
+            </div>
+            <?php
+            do_action('uwp_profile_pagination', $the_query->max_num_pages);
+        }
+    }
 
 	public function get_listings_from_list( $list_id ) {
 		global $wpdb;
@@ -1077,8 +1113,6 @@ class UsersWP_GeoDirectory_Plugin {
 		if ( uwp_get_option( "design_style", 'bootstrap' ) ) {
 			self::get_bootstrap_listings( $user, $post_type );
 		} else {
-			$gd_post_types = geodir_get_posttypes( 'array' );
-
 			$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
 			if ( ! empty( $user ) && ! empty( $user->ID ) && (int) get_current_user_id() == (int) $user->ID ) {
@@ -1283,11 +1317,43 @@ class UsersWP_GeoDirectory_Plugin {
 		// The Query
 		$the_query     = new WP_Query( $query_args );
 
-		$args                               = array();
-		$args['template_args']['the_query'] = $the_query;
-		$args['template_args']['title']     = geodir_post_type_name( $post_type , true );
+        $title = geodir_post_type_name( $post_type , true );
+		$found_posts = ! empty( $the_query ) && ! empty( $the_query->found_posts ) ? $the_query->found_posts : 0;
 
-		uwp_get_template( "bootstrap/loop-posts.php", $args );
+		if($found_posts) {
+            $widget_args = array(
+                'column_gap_class'  => 'mb-4',
+                'row_gap_class'  => '',
+                'card_border_class'  => 'border-0',
+                'card_shadow_class'  => '',
+                'layout'  => '2',
+            );
+
+            $template_args = apply_filters( 'uwp_profile_tab_listings_args', $widget_args );
+            $gd_layout_class = geodir_convert_listing_view_class( $widget_args['layout'] );
+            ?>
+            <div class="container mb-1">
+                <div class="row">
+                    <div class="col-sm p-0 uwp-loop-posts-title">
+                        <h3><?php echo esc_html( $title ); ?></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-cols-1 row-cols-sm-2 geodir-category-list-view <?php echo $gd_layout_class; ?>">
+                <?php
+                    while ( $the_query->have_posts() ) :  $the_query->the_post();
+                        echo geodir_get_template_html( "bootstrap/content-listing.php", array(
+                            'column_gap_class'   => $template_args['column_gap_class'],
+                            'row_gap_class'   => $template_args['row_gap_class'],
+                            'card_border_class'   => $template_args['card_border_class'],
+                            'card_shadow_class'   => $template_args['card_shadow_class'],
+                        ) );
+                    endwhile;
+                ?>
+            </div>
+            <?php
+			do_action( 'uwp_profile_pagination', $the_query->max_num_pages );
+		}
 	}
 
 	/**
@@ -1330,7 +1396,6 @@ class UsersWP_GeoDirectory_Plugin {
 		if ( uwp_get_option( "design_style", 'bootstrap' ) ) {
 			self::get_bootstrap_reviews( $user, $post_type );
 		} else {
-			$gd_post_types = geodir_get_posttypes( 'array' );
 
 			$paged  = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 			$limit  = uwp_get_option( 'profile_no_of_items', 10 );
@@ -1506,8 +1571,6 @@ class UsersWP_GeoDirectory_Plugin {
 		if ( uwp_get_option( "design_style", 'bootstrap' ) ) {
 			self::get_bootstrap_favorites( $user, $post_type );
 		} else {
-			$gd_post_types = geodir_get_posttypes( 'array' );
-
 			$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
 			$user_fav_posts = geodir_get_user_favourites( $user->ID );
@@ -1688,39 +1751,73 @@ class UsersWP_GeoDirectory_Plugin {
 	 * @param       string $post_type Post type
 	 *
 	 */
-	public function get_bootstrap_favorites( $user, $post_type ) {
+    public function get_bootstrap_favorites($user, $post_type)
+    {
+        $favorite_ids = geodir_get_user_favourites($user->ID);
+        if ($favorite_ids) {
 
-		$favorite_ids = geodir_get_user_favourites( $user->ID );
-		if ( $favorite_ids ) {
+            $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
 
-			$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+            if (!empty($user) && !empty($user->ID) && (int)get_current_user_id() == (int)$user->ID) {
+                $post_status = geodir_get_post_stati('author-archive', array('post_type' => $post_type));
+            } else {
+                $post_status = geodir_get_post_stati('public', array('post_type' => $post_type));
+            }
 
-			if ( ! empty( $user ) && ! empty( $user->ID ) && (int) get_current_user_id() == (int) $user->ID ) {
-				$post_status = geodir_get_post_stati( 'author-archive', array( 'post_type' => $post_type ) );
-			} else {
-				$post_status = geodir_get_post_stati( 'public', array( 'post_type' => $post_type ) );
-			}
+            $args = array(
+                'post_type' => $post_type,
+                'post_status' => $post_status,
+                'posts_per_page' => uwp_get_option('profile_no_of_items', 10),
+                'paged' => $paged,
+                'post__in' => $favorite_ids,
+                'uwp_geodir_query' => true
+            );
 
-			$args = array(
-				'post_type'      => $post_type,
-				'post_status'    => $post_status,
-				'posts_per_page' => uwp_get_option( 'profile_no_of_items', 10 ),
-				'paged'          => $paged,
-				'post__in'       => $favorite_ids,
-				'uwp_geodir_query' => true
-			);
+            $args = apply_filters('uwp_listing_query_args', $args, $user, $post_type);
 
-			$args = apply_filters( 'uwp_listing_query_args', $args, $user, $post_type );
+            // The Query
+            $the_query = new WP_Query($args);
 
-			// The Query
-			$the_query     = new WP_Query( $args );
+            $args['template_args']['the_query'] = $the_query;
+            $title = geodir_post_type_name($post_type, true);
+            $found_posts = !empty($the_query) && !empty($the_query->found_posts) ? $the_query->found_posts : 0;
 
-			$args['template_args']['the_query'] = $the_query;
-			$args['template_args']['title']     = geodir_post_type_name( $post_type , true );
+            if ($found_posts) {
+                $widget_args = array(
+                    'column_gap_class' => 'mb-4',
+                    'row_gap_class' => '',
+                    'card_border_class' => 'border-0',
+                    'card_shadow_class' => '',
+                    'layout' => '2',
+                );
 
-			uwp_get_template( "bootstrap/loop-posts.php", $args );
-		}
-	}
+                $template_args = apply_filters('uwp_profile_tab_favorites_args', $widget_args);
+                $gd_layout_class = geodir_convert_listing_view_class($widget_args['layout']);
+                ?>
+                <div class="container mb-1">
+                    <div class="row">
+                        <div class="col-sm p-0 uwp-loop-posts-title">
+                            <h3><?php echo esc_html($title); ?></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-cols-1 row-cols-sm-2 geodir-category-list-view <?php echo $gd_layout_class; ?>">
+                    <?php
+                    while ($the_query->have_posts()) : $the_query->the_post();
+                        echo geodir_get_template_html("bootstrap/content-listing.php", array(
+                            'column_gap_class' => $template_args['column_gap_class'],
+                            'row_gap_class' => $template_args['row_gap_class'],
+                            'card_border_class' => $template_args['card_border_class'],
+                            'card_shadow_class' => $template_args['card_shadow_class'],
+                        ));
+                    endwhile;
+                    ?>
+                </div>
+                <?php
+                do_action('uwp_profile_pagination', $the_query->max_num_pages);
+            }
+        }
+    }
 
 	/**
 	 * Returns login URL for GD V1 login form
