@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.38\n"
+"Project-Id-Version: UsersWP 1.2.39\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-24 17:49+0530\n"
-"PO-Revision-Date: 2025-07-24 17:49+0530\n"
+"POT-Creation-Date: 2025-08-07 17:32+0530\n"
+"PO-Revision-Date: 2025-08-07 17:32+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -885,13 +885,13 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:1494
 #: admin/tables/class-user-types-table.php:166 includes/class-profile.php:465
-#: includes/class-templates.php:1129
+#: includes/class-templates.php:1133
 msgid "Yes"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1495
 #: admin/tables/class-user-types-table.php:166 includes/class-profile.php:467
-#: includes/class-templates.php:1128
+#: includes/class-templates.php:1132
 msgid "No"
 msgstr ""
 
@@ -2383,17 +2383,17 @@ msgid "This will be the icon for profile tab."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:743
-#: includes/class-templates.php:1161
+#: includes/class-templates.php:1165
 msgid "Anyone"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:744
-#: includes/class-templates.php:1162
+#: includes/class-templates.php:1166
 msgid "Logged in"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:745
-#: includes/class-templates.php:1163
+#: includes/class-templates.php:1167
 msgid "Author only"
 msgstr ""
 
@@ -2408,7 +2408,7 @@ msgid "%s (Not Changeable)"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:775
-#: includes/class-templates.php:1146 includes/helpers/misc.php:610
+#: includes/class-templates.php:1150 includes/helpers/misc.php:610
 #: includes/helpers/tabs.php:137
 msgid "Privacy"
 msgstr ""
@@ -2766,7 +2766,7 @@ msgid "<strong>Error</strong>: Super Administrators cannot be deleted."
 msgstr ""
 
 #: includes/class-activator.php:357 includes/class-activator.php:633
-#: includes/libraries/class-geodirectory-plugin.php:1927
+#: includes/libraries/class-geodirectory-plugin.php:2024
 msgid "Username"
 msgstr ""
 
@@ -3577,31 +3577,31 @@ msgstr ""
 msgid "More"
 msgstr ""
 
-#: includes/class-templates.php:1107
+#: includes/class-templates.php:1111
 msgid "Field"
 msgstr ""
 
-#: includes/class-templates.php:1110
+#: includes/class-templates.php:1114
 msgid "Is Public?"
 msgstr ""
 
-#: includes/class-templates.php:1143
+#: includes/class-templates.php:1147
 msgid "Tab Name"
 msgstr ""
 
-#: includes/class-templates.php:1182
+#: includes/class-templates.php:1186
 msgid " (Default)"
 msgstr ""
 
-#: includes/class-templates.php:1197
+#: includes/class-templates.php:1201
 msgid "Hide profile from the users listing page."
 msgstr ""
 
-#: includes/class-templates.php:1213
+#: includes/class-templates.php:1217
 msgid "Make the whole profile private"
 msgstr ""
 
-#: includes/class-templates.php:1221 includes/class-user-notifications.php:69
+#: includes/class-templates.php:1225 includes/class-user-notifications.php:69
 #: templates/bootstrap/change.php:29 templates/change.php:13
 #: templates/reset.php:17
 msgid "Submit"
@@ -4283,7 +4283,7 @@ msgid "Listings"
 msgstr ""
 
 #: includes/libraries/class-geodirectory-plugin.php:333
-#: includes/libraries/class-geodirectory-plugin.php:1487 upgrade.php:219
+#: includes/libraries/class-geodirectory-plugin.php:1552 upgrade.php:219
 msgid "Reviews"
 msgstr ""
 
@@ -4295,49 +4295,49 @@ msgstr ""
 msgid "Lists"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1212
-#: includes/libraries/class-geodirectory-plugin.php:1429
-#: includes/libraries/class-geodirectory-plugin.php:1640
+#: includes/libraries/class-geodirectory-plugin.php:1246
+#: includes/libraries/class-geodirectory-plugin.php:1494
+#: includes/libraries/class-geodirectory-plugin.php:1703
 msgid "Edit Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1219
-#: includes/libraries/class-geodirectory-plugin.php:1438
-#: includes/libraries/class-geodirectory-plugin.php:1649
+#: includes/libraries/class-geodirectory-plugin.php:1253
+#: includes/libraries/class-geodirectory-plugin.php:1503
+#: includes/libraries/class-geodirectory-plugin.php:1712
 msgid "Delete Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1242
+#: includes/libraries/class-geodirectory-plugin.php:1276
 #: templates/loop-posts.php:28
 #, php-format
 msgid "No %s found."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1307
+#: includes/libraries/class-geodirectory-plugin.php:1373
 msgid "View"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1891
+#: includes/libraries/class-geodirectory-plugin.php:1988
 msgid "Published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1894
+#: includes/libraries/class-geodirectory-plugin.php:1991
 msgid "Pending"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1897
+#: includes/libraries/class-geodirectory-plugin.php:1994
 msgid "Closed"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1900
+#: includes/libraries/class-geodirectory-plugin.php:1997
 msgid "Expired"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1903
+#: includes/libraries/class-geodirectory-plugin.php:2000
 msgid "Not published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1908
+#: includes/libraries/class-geodirectory-plugin.php:2005
 msgid "Status: "
 msgstr ""
 

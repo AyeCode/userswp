@@ -1,3 +1,6 @@
+= 1.2.25 - 2025-08-07 =
+* Divi 5 don't renders add shortcode button in code block - FIXED
+
 = 1.2.24 - 2025-07-03 =
 * Divi 5 don't renders add shortcode button in text block - FIXED
 
