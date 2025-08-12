@@ -62,7 +62,7 @@ class UsersWP_Seo {
             'type' => 'radio',
             'default' => self::get_default_sep(),
             'class' => 'uwp-seo-meta-separator',
-            'desc' 	=> __('Choose the symbol to use as your title separator. This will display, for instance, between your user profile title and site name. Symbols are shown in the size they will appear in the search results.', 'uwp-groups'),
+            'desc' 	=> __('Choose the symbol to use as your title separator. This will display, for instance, between your user profile title and site name. Symbols are shown in the size they will appear in the search results.', 'userswp'),
             'desc_tip' => true,
             'advanced'  => true,
             'placeholder' => '',
@@ -83,7 +83,7 @@ class UsersWP_Seo {
             'type' => 'text',
             'default' => '',
             'class' => 'large-text',
-            'desc' 	=> __('Available SEO tags:', 'uwp-groups') . ' '.self::get_seo_tags(true),
+            'desc' 	=> __('Available SEO tags:', 'userswp') . ' '.self::get_seo_tags(true),
             'desc_tip' => false,
             'advanced'  => true,
             'placeholder' => $this->get_default_meta_title(),
@@ -98,7 +98,7 @@ class UsersWP_Seo {
             'desc_tip' => true,
             'advanced'  => true,
             'placeholder' => $this->get_default_meta_description(),
-            'custom_desc' => __('Available SEO tags:', 'uwp-groups') . ' '.self::get_seo_tags(true),
+            'custom_desc' => __('Available SEO tags:', 'userswp') . ' '.self::get_seo_tags(true),
         );
 
         $settings[] = array(

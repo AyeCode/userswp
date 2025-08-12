@@ -1330,7 +1330,8 @@ class UsersWP_GeoDirectory_Plugin {
             );
 
             $template_args = apply_filters( 'uwp_profile_tab_listings_args', $widget_args );
-            $gd_layout_class = geodir_convert_listing_view_class( $widget_args['layout'] );
+
+            $gd_layout_class = geodir_convert_listing_view_class( $template_args['layout'] );
             ?>
             <div class="container mb-1">
                 <div class="row">
@@ -1339,7 +1340,7 @@ class UsersWP_GeoDirectory_Plugin {
                     </div>
                 </div>
             </div>
-            <div class="row row-cols-1 row-cols-sm-2 geodir-category-list-view <?php echo $gd_layout_class; ?>">
+            <div class="row row-cols-1 row-cols-sm-2 geodir-category-list-view <?php echo esc_attr( $gd_layout_class ); ?>">
                 <?php
                     while ( $the_query->have_posts() ) :  $the_query->the_post();
                         echo geodir_get_template_html( "bootstrap/content-listing.php", array(
