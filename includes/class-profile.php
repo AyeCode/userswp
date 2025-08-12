@@ -811,11 +811,11 @@ class UsersWP_Profile {
 			'prev_text' => sprintf(
 				'%s <span class="nav-prev-text sr-only">%s</span>',
 				'<i class="fas fa-chevron-left"></i>',
-				__( 'Newer posts', 'ayetheme' )
+				__( 'Newer posts', 'userswp' )
 			),
 			'next_text' => sprintf(
 				'<span class="nav-next-text sr-only">%s</span> %s',
-				__( 'Older posts', 'ayetheme' ),
+				__( 'Older posts', 'userswp' ),
 				'<i class="fas fa-chevron-right"></i>'
 			),
 		);
@@ -824,9 +824,9 @@ class UsersWP_Profile {
 		if ( $total > 1 ) {
 			$args = wp_parse_args( $args, array(
 				'mid_size'           => 1,
-				'prev_text'          => _x( 'Previous', 'previous set of posts' ),
-				'next_text'          => _x( 'Next', 'next set of posts' ),
-				'screen_reader_text' => __( 'Posts navigation' ),
+				'prev_text'          => _x( 'Previous', 'previous set of posts', 'userswp' ),
+				'next_text'          => _x( 'Next', 'next set of posts', 'userswp' ),
+				'screen_reader_text' => __( 'Posts navigation', 'userswp' ),
 				'total'              => $total,
 			) );
 

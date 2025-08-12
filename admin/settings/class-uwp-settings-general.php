@@ -514,7 +514,7 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 	            ),
                 array(
                     'id'   => 'users_excluded_from_list',
-                    'name' => __( 'Users to exclude', 'uwp-messaging' ),
+                    'name' => __( 'Users to exclude', 'userswp' ),
                     'desc' => __( 'Select users to exclude from the users listing.', 'userswp' ),
                     'desc_tip' => true,
                     'type' => 'multiselect',

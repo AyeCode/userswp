@@ -119,7 +119,7 @@ $total_users = $users_count['total_users'];
     <div class="postbox uwp-export-users">
         <h3><span><?php esc_html_e( 'Export Users Data', 'userswp' ); ?></span></h3>
         <div class="inside uwp-export-users-form">
-            <p><?php esc_html_e( 'Download a CSV of all users data for usersWP.', 'invoicing' ); ?></p>
+            <p><?php esc_html_e( 'Download a CSV of all users data for usersWP.', 'userswp' ); ?></p>
             <table class="form-table">
                 <tbody>
                 <tr>
@@ -138,9 +138,9 @@ $total_users = $users_count['total_users'];
     </div>
 
     <div class="postbox">
-        <h3><span><?php esc_html_e( 'Import Users' ); ?></span></h3>
+        <h3><span><?php esc_html_e( 'Import Users', 'userswp' ); ?></span></h3>
         <div class="inside" id="uwp-imp-container">
-            <p><?php esc_html_e( 'Import the users data from a .csv file. This file can be obtained by exporting the data on another site using the form above.' ); ?></p>
+            <p><?php esc_html_e( 'Import the users data from a .csv file. This file can be obtained by exporting the data on another site using the form above.', 'userswp' ); ?></p>
                 <p class="uwp-imp-uploaded-file">
                     <a id="uwp-imp-browse" class="button file-selector button-primary" href="#"><?php esc_html_e( 'Select File', 'userswp' ); ?></a>
                 </p>

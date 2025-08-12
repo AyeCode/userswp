@@ -151,7 +151,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 == Changelog ==
 
 = 1.2.40 - 2025-08-TBD =
-* Asign default role to new user before user inserted - CHANGED
+* Assign default role to new user before user inserted - CHANGED
 
 = 1.2.39 - 2025-08-07 =
 * Frontend body class for the user type - ADDED

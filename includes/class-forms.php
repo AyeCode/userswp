@@ -2523,7 +2523,7 @@ class UsersWP_Forms {
 						'validation_text'    => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
 						'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
 						'extra_attributes'   => $extra_attributes, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						'input_group_right'  => '<div class="input-group-text px-2 bg-transparent border-0x" onclick="jQuery(this).parent().parent().find(\'input\').val(\'\');"><i class="fas fa-times uwp-search-input-label-clear text-muted c-pointer" title="' . esc_attr__( 'Clear field', 'uwp-search' ) . '" ></i></div>',
+						'input_group_right'  => '<div class="input-group-text px-2 bg-transparent border-0x" onclick="jQuery(this).parent().parent().find(\'input\').val(\'\');"><i class="fas fa-times uwp-search-input-label-clear text-muted c-pointer" title="' . esc_attr__( 'Clear field', 'userswp' ) . '" ></i></div>',
 					)
 				);
 			} else {
