@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 5.0
 Tested up to: 6.8
-Stable tag: 1.2.39
+Stable tag: 1.2.40
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -150,7 +150,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.40 - 2025-08-TBD =
+= 1.2.40 - 2025-08-14 =
 * Assign default role to new user before user inserted - CHANGED
 
 = 1.2.39 - 2025-08-07 =

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.39\n"
+"Project-Id-Version: UsersWP 1.2.40\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-07 17:32+0530\n"
-"PO-Revision-Date: 2025-08-07 17:32+0530\n"
+"POT-Creation-Date: 2025-08-14 20:28+0530\n"
+"PO-Revision-Date: 2025-08-14 20:28+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1661,7 +1661,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:71
 #: admin/settings/class-uwp-settings-general.php:318
-#: includes/class-emails.php:300 includes/class-forms.php:4777
+#: includes/class-emails.php:300 includes/class-forms.php:4781
 #: includes/class-pages.php:325 templates/bootstrap/forgot.php:66
 #: templates/bootstrap/login.php:11 templates/login.php:7
 #: templates/login.php:19 widgets/login.php:50 widgets/login.php:141
@@ -2766,7 +2766,7 @@ msgid "<strong>Error</strong>: Super Administrators cannot be deleted."
 msgstr ""
 
 #: includes/class-activator.php:357 includes/class-activator.php:633
-#: includes/libraries/class-geodirectory-plugin.php:2024
+#: includes/libraries/class-geodirectory-plugin.php:2025
 msgid "Username"
 msgstr ""
 
@@ -2787,7 +2787,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:530 includes/class-activator.php:572
-#: includes/class-forms.php:4511
+#: includes/class-forms.php:4515
 msgid "Confirm Password"
 msgstr ""
 
@@ -3004,8 +3004,8 @@ msgstr ""
 msgid "Banner reset successfully."
 msgstr ""
 
-#: includes/class-forms.php:225 includes/class-forms.php:768
-#: includes/class-forms.php:2056
+#: includes/class-forms.php:225 includes/class-forms.php:772
+#: includes/class-forms.php:2060
 msgid "Something went wrong. Please contact site admin."
 msgstr ""
 
@@ -3029,8 +3029,8 @@ msgid ""
 "for you, you can remove this warning by <a href=\"%s\">clicking here</a>."
 msgstr ""
 
-#: includes/class-forms.php:531 includes/class-forms.php:1117
-#: includes/class-forms.php:1601
+#: includes/class-forms.php:531 includes/class-forms.php:1121
+#: includes/class-forms.php:1605
 msgid "Security verification failed. Try again."
 msgstr ""
 
@@ -3048,231 +3048,231 @@ msgstr ""
 msgid "Sorry, that username is not allowed."
 msgstr ""
 
-#: includes/class-forms.php:811 includes/helpers/forms.php:273
+#: includes/class-forms.php:815 includes/helpers/forms.php:273
 msgid "To activate your account, visit the following address:"
 msgstr ""
 
-#: includes/class-forms.php:815 includes/helpers/forms.php:277
+#: includes/class-forms.php:819 includes/helpers/forms.php:277
 msgid "Please activate your account :"
 msgstr ""
 
-#: includes/class-forms.php:838
+#: includes/class-forms.php:842
 msgid "Password you entered during registration."
 msgstr ""
 
-#: includes/class-forms.php:841 includes/class-forms.php:1698
+#: includes/class-forms.php:845 includes/class-forms.php:1702
 msgid "Your login Information :"
 msgstr ""
 
-#: includes/class-forms.php:842 includes/class-forms.php:878
+#: includes/class-forms.php:846 includes/class-forms.php:882
 msgid "Username:"
 msgstr ""
 
-#: includes/class-forms.php:843
+#: includes/class-forms.php:847
 msgid "Password:"
 msgstr ""
 
-#: includes/class-forms.php:875
+#: includes/class-forms.php:879
 msgid "User Information :"
 msgstr ""
 
-#: includes/class-forms.php:876
+#: includes/class-forms.php:880
 msgid "First Name:"
 msgstr ""
 
-#: includes/class-forms.php:877
+#: includes/class-forms.php:881
 msgid "Last Name:"
 msgstr ""
 
-#: includes/class-forms.php:879
+#: includes/class-forms.php:883
 msgid "Email:"
 msgstr ""
 
-#: includes/class-forms.php:923
+#: includes/class-forms.php:927
 msgid "Account registered successfully. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:951
+#: includes/class-forms.php:955
 #, php-format
 msgid ""
 "An email has been sent to your registered email address. Please click the "
 "activation link to proceed. <a href=\"%s\">Resend</a>."
 msgstr ""
 
-#: includes/class-forms.php:964
+#: includes/class-forms.php:968
 msgid "Your account is under moderation. We will email you once its approved."
 msgstr ""
 
-#: includes/class-forms.php:972
+#: includes/class-forms.php:976
 #, php-format
 msgid ""
 "Account registered successfully. A password has been generated and mailed to "
 "your registered Email ID. Please login %1$shere%2$s."
 msgstr ""
 
-#: includes/class-forms.php:974
+#: includes/class-forms.php:978
 #, php-format
 msgid "Account registered successfully. Please login %1$shere%2$s"
 msgstr ""
 
-#: includes/class-forms.php:1218
+#: includes/class-forms.php:1222
 msgid "Login successful. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:1263
+#: includes/class-forms.php:1267
 msgid "Failed to create a login nonce."
 msgstr ""
 
-#: includes/class-forms.php:1293
+#: includes/class-forms.php:1297
 msgid "Authentication Code"
 msgstr ""
 
-#: includes/class-forms.php:1322
+#: includes/class-forms.php:1326
 msgid "Verification Code"
 msgstr ""
 
-#: includes/class-forms.php:1376
+#: includes/class-forms.php:1380
 msgid "Enter backup code"
 msgstr ""
 
-#: includes/class-forms.php:1427
+#: includes/class-forms.php:1431
 msgid "Invalid user data. Please try again."
 msgstr ""
 
-#: includes/class-forms.php:1442
+#: includes/class-forms.php:1446
 msgid "Invalid request! Please try again."
 msgstr ""
 
-#: includes/class-forms.php:1474 includes/class-forms.php:1499
+#: includes/class-forms.php:1478 includes/class-forms.php:1503
 msgid "Invalid verification code."
 msgstr ""
 
-#: includes/class-forms.php:1490
+#: includes/class-forms.php:1494
 msgid "A new code has been sent."
 msgstr ""
 
-#: includes/class-forms.php:1515
+#: includes/class-forms.php:1519
 msgid "Invalid backup code."
 msgstr ""
 
-#: includes/class-forms.php:1537
+#: includes/class-forms.php:1541
 msgid "Validation successful. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:1645
+#: includes/class-forms.php:1649
 msgid "Invalid email or user doesn't exists."
 msgstr ""
 
-#: includes/class-forms.php:1665
+#: includes/class-forms.php:1669
 msgid "Your account is not activated yet. Please activate your account first."
 msgstr ""
 
-#: includes/class-forms.php:1699 includes/class-forms.php:1714
+#: includes/class-forms.php:1703 includes/class-forms.php:1718
 #, php-format
 msgid "Username: %s"
 msgstr ""
 
-#: includes/class-forms.php:1700
+#: includes/class-forms.php:1704
 #, php-format
 msgid "Password: %s"
 msgstr ""
 
-#: includes/class-forms.php:1712
+#: includes/class-forms.php:1716
 msgid "You have requested to reset your password for the following account:"
 msgstr ""
 
-#: includes/class-forms.php:1715
+#: includes/class-forms.php:1719
 msgid "If this was by mistake, just ignore this email and nothing will happen."
 msgstr ""
 
-#: includes/class-forms.php:1716
+#: includes/class-forms.php:1720
 msgid ""
 "To reset your password, click the following link and follow the instructions."
 msgstr ""
 
-#: includes/class-forms.php:1749
+#: includes/class-forms.php:1753
 msgid "Please check your email."
 msgstr ""
 
-#: includes/class-forms.php:1834
+#: includes/class-forms.php:1838
 msgid "Password changed successfully."
 msgstr ""
 
-#: includes/class-forms.php:1895
+#: includes/class-forms.php:1899
 msgid "Invalid username."
 msgstr ""
 
-#: includes/class-forms.php:1929
+#: includes/class-forms.php:1933
 #, php-format
 msgid ""
 "Password updated successfully. Please <a href=\"%s\">login</a> with your new "
 "password."
 msgstr ""
 
-#: includes/class-forms.php:2042
+#: includes/class-forms.php:2046
 #, php-format
 msgid "%s"
 msgstr ""
 
-#: includes/class-forms.php:2083
+#: includes/class-forms.php:2087
 msgid "This email is already registered, please choose another one."
 msgstr ""
 
-#: includes/class-forms.php:2117
+#: includes/class-forms.php:2121
 msgid ""
 "Account updated successfully. The new address will become active once you "
 "confirm via activation link sent to your new email."
 msgstr ""
 
-#: includes/class-forms.php:2135
+#: includes/class-forms.php:2139
 msgid "Account updated successfully."
 msgstr ""
 
-#: includes/class-forms.php:2168 includes/class-forms.php:2198
+#: includes/class-forms.php:2172 includes/class-forms.php:2202
 msgid "User Information:"
 msgstr ""
 
-#: includes/class-forms.php:2247 includes/class-profile.php:1897
+#: includes/class-forms.php:2251 includes/class-profile.php:1897
 msgid "Invalid access!"
 msgstr ""
 
-#: includes/class-forms.php:2522
+#: includes/class-forms.php:2526
 msgid "Clear field"
 msgstr ""
 
-#: includes/class-forms.php:3283
+#: includes/class-forms.php:3287
 msgid "Username or Email"
 msgstr ""
 
-#: includes/class-forms.php:3644
+#: includes/class-forms.php:3648
 msgid "Please enter a valid URL including https://"
 msgstr ""
 
-#: includes/class-forms.php:3707
+#: includes/class-forms.php:3711
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:4054
+#: includes/class-forms.php:4058
 #, php-format
 msgid ""
 "By using this form I agree to the storage and handling of my data by this "
 "website. View our %1$s %2$s %3$s."
 msgstr ""
 
-#: includes/class-forms.php:4147
+#: includes/class-forms.php:4151
 #, php-format
 msgid "I accept the %1$s %2$s %3$s."
 msgstr ""
 
-#: includes/class-forms.php:4427
+#: includes/class-forms.php:4431
 msgid "Site Default"
 msgstr ""
 
-#: includes/class-forms.php:4599
+#: includes/class-forms.php:4603
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/class-forms.php:4754
+#: includes/class-forms.php:4758
 msgid "Privacy settings updated successfully."
 msgstr ""
 
@@ -4283,7 +4283,7 @@ msgid "Listings"
 msgstr ""
 
 #: includes/libraries/class-geodirectory-plugin.php:333
-#: includes/libraries/class-geodirectory-plugin.php:1552 upgrade.php:219
+#: includes/libraries/class-geodirectory-plugin.php:1553 upgrade.php:219
 msgid "Reviews"
 msgstr ""
 
@@ -4296,14 +4296,14 @@ msgid "Lists"
 msgstr ""
 
 #: includes/libraries/class-geodirectory-plugin.php:1246
-#: includes/libraries/class-geodirectory-plugin.php:1494
-#: includes/libraries/class-geodirectory-plugin.php:1703
+#: includes/libraries/class-geodirectory-plugin.php:1495
+#: includes/libraries/class-geodirectory-plugin.php:1704
 msgid "Edit Listing"
 msgstr ""
 
 #: includes/libraries/class-geodirectory-plugin.php:1253
-#: includes/libraries/class-geodirectory-plugin.php:1503
-#: includes/libraries/class-geodirectory-plugin.php:1712
+#: includes/libraries/class-geodirectory-plugin.php:1504
+#: includes/libraries/class-geodirectory-plugin.php:1713
 msgid "Delete Listing"
 msgstr ""
 
@@ -4313,31 +4313,31 @@ msgstr ""
 msgid "No %s found."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1373
+#: includes/libraries/class-geodirectory-plugin.php:1374
 msgid "View"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1988
+#: includes/libraries/class-geodirectory-plugin.php:1989
 msgid "Published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1991
+#: includes/libraries/class-geodirectory-plugin.php:1992
 msgid "Pending"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1994
+#: includes/libraries/class-geodirectory-plugin.php:1995
 msgid "Closed"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1997
+#: includes/libraries/class-geodirectory-plugin.php:1998
 msgid "Expired"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:2000
+#: includes/libraries/class-geodirectory-plugin.php:2001
 msgid "Not published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:2005
+#: includes/libraries/class-geodirectory-plugin.php:2006
 msgid "Status: "
 msgstr ""
 
