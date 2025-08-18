@@ -560,6 +560,7 @@ class UsersWP_Profile {
 	 * @return array
 	 */
 	public function get_tabs() {
+		global $uwp_profile_doing_tab, $uwp_profile_first_tab;
 
 		// get the settings
 		global $uwp_profile_tabs_array;
@@ -572,7 +573,12 @@ class UsersWP_Profile {
 			// get the tab contents first so we can decide to output the tab head
 			$tabs_content = array();
 			foreach ( $tabs as $tab ) {
+				$uwp_profile_doing_tab = $tab->tab_key;
 				$tabs_content[ $tab->id . "tab" ] = $this->tab_content( $tab );
+
+				if ( ! ( isset( $tab->tab_level ) && $tab->tab_level > 0 ) && empty( $uwp_profile_first_tab ) && ! empty( $tabs_content[ $tab->id . "tab" ] ) ) {
+					$uwp_profile_first_tab = $tab->tab_key;
+				}
 			}
 
 			// setup the array
