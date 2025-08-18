@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.24' );
+	define( 'SUPER_DUPER_VER', '1.2.25' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -944,7 +944,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					});
 
 					// The below tries to add the shortcode builder button to the builders own raw/shortcode sections.
-
+					<?php if ( function_exists( 'et_setup_theme' ) ) { ?>
 					// DIVI
 					jQuery(document).on('focusin', '.et-fb-codemirror', function () {
 						// insert the shortcode button to the textarea lable if not there already
@@ -963,6 +963,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							}
 						}
 					});
+					jQuery(document).on('focusin', '.et-vb-code', function() {
+						var $etEl = jQuery(this).closest('.et-vb-field').find('.et-vb-field-label .et-vb-field-label-buttons');
+						if (!$etEl.find('.sd-lable-shortcode-inserter').length) {
+							$etEl.prepend(sd_shortcode_button());
+							$etEl.find('.sd-lable-shortcode-inserter').addClass('et-vb-field-button');
+						}
+					});
+					<?php } ?>
 
 					// Beaver
 					jQuery(document).on('focusin', '.fl-code-field', function () {

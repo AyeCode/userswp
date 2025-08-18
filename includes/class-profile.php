@@ -560,6 +560,7 @@ class UsersWP_Profile {
 	 * @return array
 	 */
 	public function get_tabs() {
+		global $uwp_profile_doing_tab, $uwp_profile_first_tab;
 
 		// get the settings
 		global $uwp_profile_tabs_array;
@@ -572,7 +573,12 @@ class UsersWP_Profile {
 			// get the tab contents first so we can decide to output the tab head
 			$tabs_content = array();
 			foreach ( $tabs as $tab ) {
+				$uwp_profile_doing_tab = $tab->tab_key;
 				$tabs_content[ $tab->id . "tab" ] = $this->tab_content( $tab );
+
+				if ( ! ( isset( $tab->tab_level ) && $tab->tab_level > 0 ) && empty( $uwp_profile_first_tab ) && ! empty( $tabs_content[ $tab->id . "tab" ] ) ) {
+					$uwp_profile_first_tab = $tab->tab_key;
+				}
 			}
 
 			// setup the array
@@ -811,11 +817,11 @@ class UsersWP_Profile {
 			'prev_text' => sprintf(
 				'%s <span class="nav-prev-text sr-only">%s</span>',
 				'<i class="fas fa-chevron-left"></i>',
-				__( 'Newer posts', 'ayetheme' )
+				__( 'Newer posts', 'userswp' )
 			),
 			'next_text' => sprintf(
 				'<span class="nav-next-text sr-only">%s</span> %s',
-				__( 'Older posts', 'ayetheme' ),
+				__( 'Older posts', 'userswp' ),
 				'<i class="fas fa-chevron-right"></i>'
 			),
 		);
@@ -824,9 +830,9 @@ class UsersWP_Profile {
 		if ( $total > 1 ) {
 			$args = wp_parse_args( $args, array(
 				'mid_size'           => 1,
-				'prev_text'          => _x( 'Previous', 'previous set of posts' ),
-				'next_text'          => _x( 'Next', 'next set of posts' ),
-				'screen_reader_text' => __( 'Posts navigation' ),
+				'prev_text'          => _x( 'Previous', 'previous set of posts', 'userswp' ),
+				'next_text'          => _x( 'Next', 'next set of posts', 'userswp' ),
+				'screen_reader_text' => __( 'Posts navigation', 'userswp' ),
 				'total'              => $total,
 			) );
 

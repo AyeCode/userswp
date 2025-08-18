@@ -114,11 +114,11 @@ class UsersWP_Import_Export {
         $extension = explode( '.', $_FILES['import_file']['name'] );
         $extension = end( $extension );
         if( $extension != 'json' ) {
-            wp_die( esc_html( wp_sprintf( __( 'Please upload a valid .json file. %sGo Back%s' ), '<a href="' . esc_url( admin_url( 'admin.php?page=userswp&tab=import-export&section=settings' ) ) . '">', '</a>' ) ) );
+            wp_die( esc_html( wp_sprintf( __( 'Please upload a valid .json file. %sGo Back%s', 'userswp' ), '<a href="' . esc_url( admin_url( 'admin.php?page=userswp&tab=import-export&section=settings' ) ) . '">', '</a>' ) ) );
         }
         $import_file = $_FILES['import_file']['tmp_name'];
         if( empty( $import_file ) ) {
-            wp_die( esc_html( wp_sprintf( __( 'Please upload a file to import. %sGo Back%s' ), '<a href="' . esc_url( admin_url( 'admin.php?page=userswp&tab=import-export&section=settings' ) ) . '">', '</a>' ) ) );
+            wp_die( esc_html( wp_sprintf( __( 'Please upload a file to import. %sGo Back%s', 'userswp' ), '<a href="' . esc_url( admin_url( 'admin.php?page=userswp&tab=import-export&section=settings' ) ) . '">', '</a>' ) ) );
         }
         // Retrieve the settings from the file and convert the json object to an array.
         $settings = (array) json_decode( file_get_contents( $import_file ), true );

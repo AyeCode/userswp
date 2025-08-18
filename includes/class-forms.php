@@ -698,6 +698,28 @@ class UsersWP_Forms {
 			'user_url'     => esc_url_raw( $user_url ),
 		);
 
+		$form_id = 1;
+
+		if ( ! empty( $data['uwp_register_form_id'] ) ) {
+			$form_id = (int) $data['uwp_register_form_id'];
+		}
+
+		// Set user role by form.
+		$user_role = uwp_get_register_form_by( $form_id, 'user_role' );
+
+		if ( ! empty( $user_role ) ) {
+			$user_roles  = uwp_get_user_roles();
+			$chosen_role = strtolower( $user_role );
+
+			if ( ! empty( $user_roles ) ) {
+				$wp_roles = wp_roles();
+
+				if ( $wp_roles->is_role( $chosen_role ) && in_array( $chosen_role, array_keys( $user_roles ) ) ) {
+					$args['role'] = $chosen_role;
+				}
+			}
+		}
+
 		$user_id = wp_insert_user( $args );
 
 		if ( is_wp_error( $user_id ) ) {
@@ -718,27 +740,9 @@ class UsersWP_Forms {
 
 		$result = apply_filters( 'uwp_before_extra_fields_save', $result, 'register', $user_id );
 
-		$form_id = 1;
-
-		if ( isset( $data['uwp_register_form_id'] ) && ! empty( $data['uwp_register_form_id'] ) ) {
+		// Save user form id.
+		if ( ! empty( $data['uwp_register_form_id'] ) ) {
 			update_user_meta( $user_id, '_uwp_register_form_id', (int) $data['uwp_register_form_id'] );
-			$form_id = (int) $data['uwp_register_form_id'];
-		}
-
-		$user_role = uwp_get_register_form_by( $form_id, 'user_role' );
-
-		if ( isset( $user_role ) && ! empty( $user_role ) ) {
-			$user_roles  = uwp_get_user_roles();
-			$chosen_role = strtolower( $user_role );
-			if ( ! empty( $user_roles ) ) {
-				$wp_roles = wp_roles();
-				if ( $wp_roles->is_role( $chosen_role ) && in_array( $chosen_role, array_keys( $user_roles ) ) ) {
-					$new_user = get_userdata( $user_id );
-					if ( $new_user ) {
-						$new_user->set_role( $chosen_role );
-					}
-				}
-			}
 		}
 
 		$save_result = $this->save_user_extra_fields( $user_id, $result, 'register' );
@@ -2519,7 +2523,7 @@ class UsersWP_Forms {
 						'validation_text'    => $validation_text != '' ? esc_attr( $validation_text ) : esc_attr( $required_msg ),
 						'validation_pattern' => ! empty( $field->validation_pattern ) ? esc_attr( wp_unslash( $field->validation_pattern ) ) : '',
 						'extra_attributes'   => $extra_attributes, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						'input_group_right'  => '<div class="input-group-text px-2 bg-transparent border-0x" onclick="jQuery(this).parent().parent().find(\'input\').val(\'\');"><i class="fas fa-times uwp-search-input-label-clear text-muted c-pointer" title="' . esc_attr__( 'Clear field', 'uwp-search' ) . '" ></i></div>',
+						'input_group_right'  => '<div class="input-group-text px-2 bg-transparent border-0x" onclick="jQuery(this).parent().parent().find(\'input\').val(\'\');"><i class="fas fa-times uwp-search-input-label-clear text-muted c-pointer" title="' . esc_attr__( 'Clear field', 'userswp' ) . '" ></i></div>',
 					)
 				);
 			} else {
