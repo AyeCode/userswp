@@ -150,6 +150,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.41 - 2025-08-TBD =
+* Author actions not visible in listings tab when default tab is empty - FIXED
+
 = 1.2.40 - 2025-08-14 =
 * Assign default role to new user before user inserted - CHANGED
 
