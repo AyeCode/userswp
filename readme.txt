@@ -152,6 +152,8 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.41 - 2025-08-TBD =
 * Author actions not visible in listings tab when default tab is empty - FIXED
+* Register form submit button is not translatable - FIXED
+* Option added to set register form button custom title - ADDED
 
 = 1.2.40 - 2025-08-14 =
 * Assign default role to new user before user inserted - CHANGED
@@ -209,7 +211,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 * Fixed default lightbox registration form with single form selection in "Lightbox Forms" setting - FIXED
 * Fixed issue with the display of the Form Builder Fieldset field - FIXED
 * [uwp_user_meta] add compatibility for GeoDirectory post - ADDED
-* Single quote in slect field label, required/validation message shows unwanted backslash - FIXED
+* Single quote in select field label, required/validation message shows unwanted backslash - FIXED
 * Register form submit button is not spinning on AJAX submit - FIXED
 
 = 1.2.27 - 2024-12-26 =
