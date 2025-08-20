@@ -2,7 +2,7 @@
 /**
  * Register template (default)
  *
- * @ver 1.0.1
+ * @ver 1.2.41
  */
 
 global $aui_bs5;
@@ -10,6 +10,13 @@ global $aui_bs5;
 $css_class = ! empty( $args['css_class'] ) ? esc_attr( $args['css_class'] ) : 'border-0';
 $form_title = ! empty( $args['form_title'] ) || $args['form_title']=='0' ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Register', 'userswp' );
 $form_title = apply_filters( 'uwp_template_form_title', $form_title, 'register' );
+$button_title = uwp_get_option( 'register_form_button_title' );
+if ( $button_title ) {
+	$button_title = __( wp_unslash( $button_title ), 'userswp' );
+} else {
+	$button_title = __( 'Create account', 'userswp' );
+}
+$button_title = apply_filters( 'uwp_register_form_button_title', $button_title );
 do_action( 'uwp_template_before', 'register', $args ); ?>
     <div class="row">
         <div class="card mx-auto container-fluid p-0 <?php echo esc_attr( $css_class ); ?>" >
@@ -50,7 +57,7 @@ do_action( 'uwp_template_before', 'register', $args ); ?>
 					$button_args = apply_filters( 'uwp_register_button_args', array(
 						'type'    => 'submit',
 						'class'   => 'btn btn-primary btn-block text-uppercase uwp_register_submit',
-						'content' => esc_html__( 'Create Account', 'userswp' ),
+						'content' => esc_html( $button_title ),
 						'name'    => 'uwp_register_submit',
 					), $args );
 				

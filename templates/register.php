@@ -1,7 +1,14 @@
 <?php do_action( 'uwp_template_before', 'register' );
 $css_class = ! empty( $args['css_class'] ) ? esc_attr( $args['css_class'] ) : '';
 $form_title = ! empty( $args['form_title'] ) ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Register', 'userswp' );
-$form_title = apply_filters( 'uwp_template_form_title', $form_title, 'register' );
+$form_title = apply_filters( 'uwp_template_form_button_title', $form_title, 'register' );
+$button_title = uwp_get_option( 'register_form_button_title' );
+if ( $button_title ) {
+	$button_title = __( wp_unslash( $button_title ), 'userswp' );
+} else {
+	$button_title = __( 'Create account', 'userswp' );
+}
+$button_title = apply_filters( 'uwp_register_form_title', $button_title );
 ?>
     <div class="uwp-content-wrap <?php echo esc_attr( $css_class ); ?>">
         <div class="uwp-registration">
@@ -19,7 +26,7 @@ $form_title = apply_filters( 'uwp_template_form_title', $form_title, 'register' 
                 $button_args = apply_filters( 'uwp_register_button_args', array(
                     'type'    => 'submit',
                     'class'   => 'uwp_register_submit',
-                    'content' => esc_html__( 'Create Account', 'userswp' ),
+                    'content' => esc_html( $button_title ),
                     'name'    => 'uwp_register_submit',
                 ), $args );
 

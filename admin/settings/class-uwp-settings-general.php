@@ -116,6 +116,16 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'default'  => '1',
 		            'desc_tip' => true,
 	            ),
+				array(
+					'id' => 'register_form_button_title',
+					'type' => 'text',
+					'name' => __( 'Register Form Button Title', 'userswp' ),
+					'desc' => __( 'Enter the register form button title.', 'userswp' ),
+					'placeholder' => __( 'Create account', 'userswp' ),
+					'default' => '',
+					'desc_tip' => true,
+					'advanced' => true
+				),
                 array(
                     'id'   => 'wp_register_redirect',
                     'name' => __( 'Redirect Admin Default Register Page', 'userswp' ),
