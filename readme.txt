@@ -150,6 +150,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.42 - TBD =
+* escape disable_greedy argument value in profile and profile header shortcodes - FIXED
+
 = 1.2.41 - 2025-08-21 =
 * Author actions not visible in listings tab when default tab is empty - FIXED
 * Register form submit button is not translatable - FIXED
