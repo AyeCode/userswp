@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 5.0
 Tested up to: 6.8
-Stable tag: 1.2.41
+Stable tag: 1.2.43
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -149,6 +149,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.43 - 2025-08-25 =
+* escape disable_greedy argument value in profile and profile header shortcodes - FIXED
 
 = 1.2.41 - 2025-08-21 =
 * Author actions not visible in listings tab when default tab is empty - FIXED
