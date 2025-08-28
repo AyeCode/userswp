@@ -2387,19 +2387,19 @@ function sd_build_aui_class( $args ) {
 	}
 	if ( isset( $args['mr_md'] ) && $args['mr_md'] !== '' ) {
 		$classes[] = $p_mr . 'md-' . sanitize_html_class( $args['mr_md'] );
-		$mt_md     = $args['mr_md'];
+		$mr_md     = $args['mr_md'];
 	} else {
 		$mr_md = null;
 	}
 	if ( isset( $args['mb_md'] ) && $args['mb_md'] !== '' ) {
 		$classes[] = 'mb-md-' . sanitize_html_class( $args['mb_md'] );
-		$mt_md     = $args['mb_md'];
+		$mb_md     = $args['mb_md'];
 	} else {
 		$mb_md = null;
 	}
 	if ( isset( $args['ml_md'] ) && $args['ml_md'] !== '' ) {
 		$classes[] = $p_ml . 'md-' . sanitize_html_class( $args['ml_md'] );
-		$mt_md     = $args['ml_md'];
+		$ml_md     = $args['ml_md'];
 	} else {
 		$ml_md = null;
 	}

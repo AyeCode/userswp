@@ -1,3 +1,6 @@
+= 1.2.26 - 2025-08-28 =
+* In some cases it shows $ml_md not found notice - FIXED
+
 = 1.2.25 - 2025-08-07 =
 * Divi 5 don't renders add shortcode button in code block - FIXED
 
