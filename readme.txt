@@ -150,6 +150,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.44 - 2025-06-TBD =
+* Merge AUI 0.2.41 & SD 1.2.26 - CHANGED
+
 = 1.2.43 - 2025-08-25 =
 * escape disable_greedy argument value in profile and profile header shortcodes - FIXED
 

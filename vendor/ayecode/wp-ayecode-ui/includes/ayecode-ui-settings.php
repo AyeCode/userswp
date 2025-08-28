@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.40';
+		public $version = '0.2.41';
 
 		/**
 		 * Class textdomain.
@@ -1475,6 +1475,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                 // pagination
 				$output .= $prefix . ' .pagination{--bs-pagination-hover-color: var(--bs-'.esc_attr($type).'); --bs-pagination-active-bg: var(--bs-'.esc_attr($type).');}';
 
+			} else if ( $aui_bs5 ) {
+				$output .= $prefix . ' .text-' . sanitize_key( $type ) . '{color: var(--bs-' . sanitize_key( $type ) . ') !important;}';
 			}
 
 			$output .= $prefix . ' .link-'.esc_attr($type).' {color: var(--bs-'.esc_attr($type).'-rgb) !important;}';
@@ -1524,7 +1526,6 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 //            ';
 			$output .= '}';
 
-
             // button hover
 			$output .= $prefix . ' .btn-'.esc_attr($type).':hover{';
 			$output .= ' 
@@ -1532,8 +1533,13 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
             }
             ';
 
-
 			if ( $aui_bs5 ) {
+				// translucent primary
+				if ( $type == 'primary' ) {
+					$output .= $prefix . ' .btn-translucent-primary{color:rgb(var(--bs-primary-rgb));}';
+					$output .= $prefix . ' .btn-translucent-primary:hover,' . $prefix . ' .btn-translucent-primary:focus,' . $prefix . ' .btn-translucent-primary.focus{background-color: rgb(var(--bs-primary-rgb));}';
+				}
+
 //				$output .= $is_var ? 'html body {--bs-'.esc_attr($type).'-rgb: '.$color_code.'; }' : 'html body {--bs-'.esc_attr($type).'-rgb: '.self::hex_to_rgb($color_code).'; }';
 				$output .= 'html body {--bs-'.esc_attr($type).': '.esc_attr($color_code).'; }';
 				$output .= 'html body {--bs-'.esc_attr($type).'-rgb: '.$rgb.'; }';

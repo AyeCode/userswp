@@ -1,3 +1,7 @@
+= 0.2.41 - 2025-08-28 =
+* .btn-translucent-primary class don't reflects theme color palette - FIXED
+* .text-* class don't reflects theme color palette - FIXED
+
 = 0.2.40 - 2025-07-27 =
 * .sr-only with BS5 forces to display hidden label - FIXED
 * FontAwesome 7 compatibility changes - CHANGED
