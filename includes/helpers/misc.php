@@ -1751,16 +1751,20 @@ function uwp_get_activation_link($user_id){
 	$wpdb->update( $wpdb->users, array( 'user_activation_key' => time().":".$hashed ), array( 'user_login' => $user_data->user_login ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	update_user_meta( $user_id, 'uwp_mod', 'email_unconfirmed' );
 
+	$activation_args = array(
+		'uwp_activate' => 'yes',
+		'key' => $key,
+		'login' => $user_data->user_login
+	);
+	
+	$activation_args = apply_filters( 'uwp_activation_link_args', $activation_args, $user_id, $user_data );
+	
 	$activation_link = add_query_arg(
-		array(
-			'uwp_activate' => 'yes',
-			'key' => $key,
-			'login' => $user_data->user_login
-		),
+		$activation_args,
 		home_url('/login/')
 	);
 
-	return $activation_link;
+	return apply_filters( 'uwp_activation_link', $activation_link, $user_id, $user_data, $activation_args );
 }
 
 /**
