@@ -9,102 +9,111 @@
  */
 class UsersWP_Meta {
 
-    /**
-     * Gets UsersWP user meta value using key.
-     *
-     * @since       1.0.0
-     * @package     userswp
-     * 
-     * @param       int|bool        $user_id        User ID.
-     * @param       string          $key            User meta Key.
-     * @param       bool|string     $default        Default value.
-     * 
-     * @return      string                          User meta Value.
-     */
-    public function get_usermeta( $user_id = false, $key = '', $default = false ) {
-        if (!$user_id) {
-            return $default;
-        }
+	/**
+	 * Gets UsersWP user meta value using key.
+	 *
+	 * @since       1.0.0
+	 * @package     userswp
+	 * 
+	 * @param       int|bool        $user_id        User ID.
+	 * @param       string          $key            User meta Key.
+	 * @param       bool|string     $default        Default value.
+	 * 
+	 * @return      string                          User meta Value.
+	 */
+	public function get_usermeta( $user_id = false, $key = '', $default = false ) {
+		global $wpdb;
 
-        if(!$key){
-        	return $default;
-        }
+		if ( ! $user_id ) {
+			return $default;
+		}
 
-        global $wpdb;
-        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+		if ( ! $key ) {
+			return $default;
+		}
 
-        if (uwp_str_ends_with($key, '_privacy')) {
-	        if (uwp_str_ends_with($key, '_tab_privacy')) {
-		        $obj_key = $user_id.'_tabs_privacy';
-		        $row = wp_cache_get( $obj_key, 'uwp_usermeta_tabs_privacy' );
-		        if ( ! $row ) {
-			        $row = $wpdb->get_row($wpdb->prepare("SELECT tabs_privacy FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
-			        wp_cache_set( $obj_key, $row, 'uwp_usermeta_tabs_privacy' );
-		        }
+		$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 
-		        $value = false;
-		        if (!empty($row)) {
-			        $public_fields = isset($row['tabs_privacy']) ? maybe_unserialize($row['tabs_privacy']) : $default;
-			        $public_fields_keys = is_array($public_fields) ? array_keys($public_fields) : $public_fields;
-			        if (is_array($public_fields) && in_array($key, $public_fields_keys)) {
-				        $value = $public_fields[$key];
-			        }
-		        }
-	        } else {
-		        $obj_key = $user_id.'_user_privacy';
-		        $row = wp_cache_get( $obj_key, 'uwp_usermeta_user_privacy' );
-		        if ( ! $row ) {
-			        $row = $wpdb->get_row($wpdb->prepare("SELECT user_privacy FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
-			        wp_cache_set( $obj_key, $row, 'uwp_usermeta_user_privacy' );
-		        }
+		if ( uwp_str_ends_with( $key, '_privacy' ) ) {
+			if ( uwp_str_ends_with( $key, '_tab_privacy' ) ) {
+				$obj_key = $user_id.'_tabs_privacy';
+				$row = wp_cache_get( $obj_key, 'uwp_usermeta_tabs_privacy' );
 
-		        $value = 'yes';
-		        if (!empty($row)) {
-			        $output = isset($row['user_privacy']) ? $row['user_privacy'] : $default;
-			        $public_fields = explode(',', $output);
-			        if (in_array($key, $public_fields)) {
-				        $value = 'no';
-			        }
-		        }
-	        }
-        } else {
-            $value = null;
-            $user_data = get_userdata($user_id);
+				if ( ! $row ) {
+					$row = $wpdb->get_row( $wpdb->prepare( "SELECT tabs_privacy FROM `{$meta_table}` WHERE user_id = %d", $user_id ), ARRAY_A );
+					wp_cache_set( $obj_key, $row, 'uwp_usermeta_tabs_privacy' );
+				}
 
-	        if (!$user_data) {
-		        return $value;
-	        }
+				$value = false;
 
-            switch ($key){
-                case 'email': $value = $user_data->user_email; break;
-                case 'username': $value = $user_data->user_login; break;
-                case 'user_nicename': $value = $user_data->user_nicename; break;
-                case 'bio': $value = $user_data->description; break;
-                case 'uwp_language': $value = $user_data->locale; break;
-                default :
+				if ( ! empty( $row ) ) {
+					$public_fields = isset( $row['tabs_privacy'] ) ? maybe_unserialize( $row['tabs_privacy'] ) : $default;
+					$public_fields_keys = is_array( $public_fields ) ? array_keys( $public_fields ) : $public_fields;
+
+					if ( is_array( $public_fields ) && in_array( $key, $public_fields_keys ) ) {
+						$value = $public_fields[ $key ];
+					}
+				}
+			} else {
+				$obj_key = $user_id.'_user_privacy';
+				$row = wp_cache_get( $obj_key, 'uwp_usermeta_user_privacy' );
+
+				if ( ! $row ) {
+					$row = $wpdb->get_row( $wpdb->prepare("SELECT user_privacy FROM `{$meta_table}` WHERE user_id = %d", $user_id ), ARRAY_A );
+					wp_cache_set( $obj_key, $row, 'uwp_usermeta_user_privacy' );
+				}
+
+				$value = 'yes';
+
+				if ( ! empty( $row ) ) {
+					$output = isset( $row['user_privacy'] ) ? $row['user_privacy'] : $default;
+					$public_fields = explode( ',', $output );
+
+					if ( in_array( $key, $public_fields ) ) {
+						$value = 'no';
+					}
+				}
+			}
+		} else {
+			$value = null;
+			$user_data = get_userdata( $user_id );
+
+			if ( ! $user_data ) {
+				return $value;
+			}
+
+			switch ( $key ) {
+				case 'email': $value = $user_data->user_email; break;
+				case 'username': $value = $user_data->user_login; break;
+				case 'user_nicename': $value = $user_data->user_nicename; break;
+				case 'bio': $value = $user_data->description; break;
+				case 'uwp_language': $value = $user_data->locale; break;
+				default :
 					$obj_key = $user_id.'_'.$key;
-	                $row = wp_cache_get( $obj_key, 'uwp_usermeta' );
-	                if ( ! $row ) {
-	                	if(uwp_column_exist($meta_table, $key)){
-			                $row = $wpdb->get_row($wpdb->prepare("SELECT {$key} FROM {$meta_table} WHERE user_id = %d", $user_id), ARRAY_A);
-			                wp_cache_set( $obj_key, $row, 'uwp_usermeta' );
-		                }
-	                }
+					$row = wp_cache_get( $obj_key, 'uwp_usermeta' );
 
-                    if (!empty($row)) {
-                        $value = isset($row[$key]) ? $row[$key] : $default;
-                    } else {
-                        $value = $default;
-                    }
-                    break;
-            }
-        }
+					if ( ! $row ) {
+						if ( in_array( $key, array( 'user_id', 'user_ip', 'user_privacy', 'tabs_privacy', 'username', 'email', 'first_name', 'last_name', 'avatar_thumb', 'banner_thumb', 'display_name', 'user_url', 'bio' ) ) || uwp_column_exist( $meta_table, $key ) ) {
+							$row = $wpdb->get_row( $wpdb->prepare( "SELECT `{$key}` FROM `{$meta_table}` WHERE user_id = %d", $user_id ), ARRAY_A );
+							wp_cache_set( $obj_key, $row, 'uwp_usermeta' );
+						}
+					}
 
-        $value = uwp_maybe_unserialize($key, $value);
-        $value = wp_unslash($value);
-        $value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
-        return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
-    }
+					if ( ! empty( $row ) ) {
+						$value = isset( $row[ $key ] ) ? $row[ $key ] : $default;
+					} else {
+						$value = $default;
+					}
+					break;
+			}
+		}
+
+		$value = uwp_maybe_unserialize($key, $value);
+		$value = wp_unslash($value);
+		$value = apply_filters( 'uwp_get_usermeta', $value, $user_id, $key, $default );
+
+		return apply_filters( 'uwp_get_usermeta_' . $key, $value, $user_id, $key, $default );
+	}
 
     /**
      * Updates UsersWP user meta value using key.
@@ -118,64 +127,67 @@ class UsersWP_Meta {
      * 
      * @return      bool                            Update success or not?.
      */
-    public function update_usermeta( $user_id, $key, $value ) {
+	public function update_usermeta( $user_id, $key, $value ) {
+		global $wpdb;
 
-        if (!$user_id || !$key ) {
-            return false;
-        }
+		if ( ! $user_id || ! $key ) {
+			return false;
+		}
 
-        global $wpdb;
-        $meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
-	    $cache_group = 'uwp_usermeta';
-	    $obj_key = $user_id . '_' . $key;
+		$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
+		$cache_group = 'uwp_usermeta';
+		$obj_key = $user_id . '_' . $key;
 
-	    if (uwp_str_ends_with($key, '_privacy')) {
-		    if ( 'tabs_privacy' == $key ) {
-			    $obj_key = $user_id . '_tabs_privacy';
+		if ( ! in_array( $key, array( 'user_id', 'user_ip', 'user_privacy', 'tabs_privacy', 'username', 'email', 'first_name', 'last_name', 'avatar_thumb', 'banner_thumb', 'display_name', 'user_url', 'bio' ) ) && ! uwp_column_exist( $meta_table, $key ) ) {
+			return false;
+		}
+
+		if ( uwp_str_ends_with( $key, '_privacy' ) ) {
+			if ( 'tabs_privacy' == $key ) {
+				$obj_key = $user_id . '_tabs_privacy';
 				$cache_group = 'uwp_usermeta_tab_privacy';
-		    } elseif('user_privacy' == $key) {
-			    $obj_key = $user_id . '_user_privacy';
-			    $cache_group = 'uwp_usermeta_user_privacy';
-		    }
-	    }
+			} elseif('user_privacy' == $key) {
+				$obj_key = $user_id . '_user_privacy';
+				$cache_group = 'uwp_usermeta_user_privacy';
+			}
+		}
 
-        $user_meta_info = $wpdb->get_col( $wpdb->prepare( "SELECT $key FROM $meta_table WHERE user_id = %d", $user_id ) );
+		$user_meta_info = $wpdb->get_col( $wpdb->prepare( "SELECT `{$key}` FROM `{$meta_table}` WHERE user_id = %d", $user_id ) );
 
-        $value = apply_filters( 'uwp_update_usermeta', $value, $user_id, $key, $user_meta_info );
-        $value =  apply_filters( 'uwp_update_usermeta_' . $key, $value, $user_id, $key, $user_meta_info );
+		$value = apply_filters( 'uwp_update_usermeta', $value, $user_id, $key, $user_meta_info );
+		$value = apply_filters( 'uwp_update_usermeta_' . $key, $value, $user_id, $key, $user_meta_info );
 
-        do_action( 'uwp_before_update_usermeta', $user_id, $key, $value, $user_meta_info );
+		do_action( 'uwp_before_update_usermeta', $user_id, $key, $value, $user_meta_info );
 
-        $value = uwp_maybe_serialize($key, $value);
+		$value = uwp_maybe_serialize( $key, $value );
 
-        if (!empty($user_meta_info)) {
-	        $result = $wpdb->update(
-                $meta_table,
-                array($key => $value),
-                array('user_id' => $user_id),
-                array('%s'),
-                array('%d')
-            );
+		if ( ! empty( $user_meta_info ) ) {
+			$result = $wpdb->update(
+				$meta_table,
+				array( $key => $value ),
+				array( 'user_id' => $user_id ),
+				array('%s'),
+				array('%d')
+			);
 
-	        if ( ! $result ) {
-		        return false;
-	        }
+			if ( ! $result ) {
+				return false;
+			}
+		} else {
+			$result = $wpdb->insert(
+				$meta_table,
+				array( 'user_id' => $user_id, $key => $value )
+			);
 
-        } else {
-	        $result = $wpdb->insert(
-                $meta_table,
-                array('user_id' => $user_id, $key => $value)
-            );
+			if ( ! $result ) {
+				return false;
+			}
+		}
 
-	        if ( ! $result ) {
-		        return false;
-	        }
-        }
+		wp_cache_delete( $obj_key, $cache_group );
 
-	    wp_cache_delete( $obj_key, $cache_group );
-
-        return true;
-    }
+		return true;
+	}
 
     /**
      * Gets UsersWP user meta row using user ID.

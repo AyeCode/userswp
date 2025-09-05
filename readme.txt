@@ -150,7 +150,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.44 - 2025-06-28 =
+= 1.2.45 - 2025-09-TBD =
+* Extra sanitization and escaping during remove file field value - FIXED/SECURITY
+
+= 1.2.44 - 2025-08-28 =
 * Merge AUI 0.2.41 & SD 1.2.26 - CHANGED
 
 = 1.2.43 - 2025-08-25 =
