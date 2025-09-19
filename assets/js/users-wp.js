@@ -606,18 +606,14 @@ function uwp_modal_register_form_process(){
                 if(data.data.message){
                     jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data.message);
                     jQuery(".modal-content form.uwp-registration-form").trigger('reset');
-                    // Show success message for 1 second before redirecting.
                     setTimeout(function(){
                         if(data.data.redirect){
                             window.location = data.data.redirect;
-                        }else{
-                            location.reload();
                         }
-                    }, 1000);
+                    }, 3000);
                 }else{
                     jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data.message);
                 }
-
 
             }else if(data.success===false){
                 jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data.message);

@@ -150,6 +150,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.46 - TBD =
+* Window reload on user ajax registration prevent users to read the success message - FIXED
+
 = 1.2.45 - 2025-09-05 =
 * Extra sanitization and escaping during remove file field value - FIXED/SECURITY
 
