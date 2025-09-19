@@ -651,7 +651,11 @@ class UsersWP_Templates {
 			$user_data = get_userdata( $user_id );
 
 			if ( $field->htmlvar_name == 'email' ) {
-				$value = $user_data->user_email;
+				if(!empty($user_data)) {
+					$value = $user_data->user_email;
+				}else{
+					$value              = '';
+				}
 			} elseif ( $field->htmlvar_name == 'password' ) {
 				$value              = '';
 				$field->is_required = 0;
