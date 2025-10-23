@@ -151,6 +151,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 == Changelog ==
 
 = 1.2.46 - TBD =
+* Users list page search and sorting functionality - FIXED
 * Dynamic tax field labels for GetPaid integration - ADDED
 * Window reload on user ajax registration prevent users to read the success message - FIXED
 
