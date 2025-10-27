@@ -152,6 +152,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.46 - TBD =
 * Window reload on user ajax registration prevent users to read the success message - FIXED
+* Unable to customize login/account page templates with Breakdance builder - FIXED
 
 = 1.2.45 - 2025-09-05 =
 * Extra sanitization and escaping during remove file field value - FIXED/SECURITY
