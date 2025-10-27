@@ -34,6 +34,9 @@ class UsersWP_Invoicing_Plugin {
             add_action( 'uwp_dashboard_links', array( $this, 'dashboard_output' ), 10, 2 );
 
         }
+        
+        // Dynamic tax label integration.
+        add_filter( 'uwp_get_form_label', array( $this, 'dynamic_tax_label' ), 10, 2 );
 
         do_action( 'uwp_wpi_setup_actions', $this );
     }
@@ -178,6 +181,38 @@ class UsersWP_Invoicing_Plugin {
                  AND post_type = "wpi_invoice"'
         );
         return $count;
+    }
+    
+    /**
+     * Filter form labels for GetPaid VAT number field to use dynamic tax names.
+     *
+     * @since 1.2.8
+     * @param string $label Current field label.
+     * @param object $field Field configuration object.
+     * @return string Modified label for tax fields.
+     */
+    public function dynamic_tax_label( $label, $field ) {
+        
+        // Only modify GetPaid VAT number field.
+        if ( ! isset( $field->htmlvar_name ) || '_wpinv_vat_number' !== $field->htmlvar_name ) {
+            return $label;
+        }
+        
+        // Check if GetPaid's dynamic tax label function exists.
+        if ( ! function_exists( 'getpaid_get_tax_name_for_country' ) ) {
+            return $label;
+        }
+        
+        // Get the tax name based on store's default country.
+        $country = function_exists( 'wpinv_get_default_country' ) ? wpinv_get_default_country() : '';
+        
+        if ( empty( $country ) ) {
+            return $label;
+        }
+        
+        $tax_name = getpaid_get_tax_name_for_country( $country );
+        
+        return sprintf( __( '%s Number', 'userswp' ), $tax_name );
     }
 }
 $userswp_wpinv = UsersWP_Invoicing_Plugin::get_instance();
