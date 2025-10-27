@@ -144,6 +144,10 @@ class UWP_Login_Widget extends WP_Super_Duper {
             'redirect_to' => '',
         );
 
+        if ( $this->is_preview() ) {
+            return;
+        }
+
         /**
          * Parse incoming $args into an array and merge it with $defaults
          */
