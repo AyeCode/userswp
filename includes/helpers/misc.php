@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Converts string value to options array.
  * Used in select, multiselect and radio fields.
@@ -89,7 +90,7 @@ function uwp_string_to_options($input = '', $translated = false)
 
 	if (!empty($input_arr)) {
 		foreach ($input_arr as $input_str) {
-			$input_str = trim( stripslashes( $input_str ) );
+			$input_str = trim(stripslashes($input_str));
 
 			if (strpos($input_str, "/") !== false) {
 				$input_str = explode("/", $input_str, 2);
@@ -132,27 +133,28 @@ function uwp_string_to_options($input = '', $translated = false)
  *
  * @return      mixed                               Resized image.
  */
-function uwp_resizeThumbnailImage( $thumb_image_name, $image, $x, $y, $src_w, $src_h, $scale, $wp_error = false ) {
+function uwp_resizeThumbnailImage($thumb_image_name, $image, $x, $y, $src_w, $src_h, $scale, $wp_error = false)
+{
 	uwp_set_php_limits();
 
 	// Ignore image creation warnings
-	@ini_set( 'gd.jpeg_ignore_warning', 1 );
+	@ini_set('gd.jpeg_ignore_warning', 1);
 
-	$newImageWidth = ceil( $src_w * $scale );
-	$newImageHeight = ceil( $src_h * $scale );
+	$newImageWidth = ceil($src_w * $scale);
+	$newImageHeight = ceil($src_h * $scale);
 
 	/** @noinspection PhpUnusedLocalVariableInspection */
-	list( $imagewidth, $imageheight, $imageType ) = getimagesize( $image );
-	$imageType = image_type_to_mime_type( $imageType );
+	list($imagewidth, $imageheight, $imageType) = getimagesize($image);
+	$imageType = image_type_to_mime_type($imageType);
 
-	if ( function_exists( 'wp_crop_image' ) ) {
-		$wp_crop = ! in_array( $imageType, array( 'image/gif', 'image/pjpeg', 'image/jpeg', 'image/jpg', 'image/png', 'image/x-png', 'image/webp' ) ) ? true : false;
-		$wp_crop = apply_filters( 'uwp_resize_image_use_wp_crop_image', $wp_crop, $imageType, $image, $thumb_image_name, $x, $y, $src_w, $src_h, $scale );
+	if (function_exists('wp_crop_image')) {
+		$wp_crop = ! in_array($imageType, array('image/gif', 'image/pjpeg', 'image/jpeg', 'image/jpg', 'image/png', 'image/x-png', 'image/webp')) ? true : false;
+		$wp_crop = apply_filters('uwp_resize_image_use_wp_crop_image', $wp_crop, $imageType, $image, $thumb_image_name, $x, $y, $src_w, $src_h, $scale);
 
-		if ( $wp_crop ) {
-			$cropped = wp_crop_image( $image, $x, $y, $src_w, $src_h, $newImageWidth, $newImageHeight, false, $thumb_image_name );
+		if ($wp_crop) {
+			$cropped = wp_crop_image($image, $x, $y, $src_w, $src_h, $newImageWidth, $newImageHeight, false, $thumb_image_name);
 
-			if ( $wp_error && is_wp_error( $cropped ) ) {
+			if ($wp_error && is_wp_error($cropped)) {
 				return $cropped;
 			}
 
@@ -160,27 +162,27 @@ function uwp_resizeThumbnailImage( $thumb_image_name, $image, $x, $y, $src_w, $s
 		}
 	}
 
-	$newImage = imagecreatetruecolor( $newImageWidth, $newImageHeight );
+	$newImage = imagecreatetruecolor($newImageWidth, $newImageHeight);
 	$source = false;
 
-	switch( $imageType ) {
+	switch ($imageType) {
 		case "image/gif":
-			$source = imagecreatefromgif( $image );
+			$source = imagecreatefromgif($image);
 			break;
 		case "image/pjpeg":
 		case "image/jpeg":
 		case "image/jpg":
-			$source = imagecreatefromjpeg( $image );
+			$source = imagecreatefromjpeg($image);
 			break;
 		case "image/png":
 		case "image/x-png":
-			$source = imagecreatefrompng( $image );
-			if ( apply_filters( 'uwp_keep_png_transperent', true, $thumb_image_name, $image, $x, $y, $src_w, $src_h ) ) {
-				$background = imagecolorallocate( $newImage, 0, 0, 0 );
+			$source = imagecreatefrompng($image);
+			if (apply_filters('uwp_keep_png_transperent', true, $thumb_image_name, $image, $x, $y, $src_w, $src_h)) {
+				$background = imagecolorallocate($newImage, 0, 0, 0);
 
-				imagecolortransparent( $newImage, $background );
-				imagealphablending( $newImage, false );
-				imagesavealpha( $newImage, true );
+				imagecolortransparent($newImage, $background);
+				imagealphablending($newImage, false);
+				imagesavealpha($newImage, true);
 			}
 			break;
 		case "image/webp":
@@ -192,65 +194,66 @@ function uwp_resizeThumbnailImage( $thumb_image_name, $image, $x, $y, $src_w, $s
 			break;
 	}
 
-	imagecopyresampled( $newImage, $source, 0, 0, $x, $y, $newImageWidth, $newImageHeight, $src_w, $src_h );
+	imagecopyresampled($newImage, $source, 0, 0, $x, $y, $newImageWidth, $newImageHeight, $src_w, $src_h);
 
-	$quality = apply_filters( 'uwp_resize_thumb_quality', 100 );
+	$quality = apply_filters('uwp_resize_thumb_quality', 100);
 
-	switch( $imageType ) {
+	switch ($imageType) {
 		case "image/gif":
-			imagegif( $newImage, $thumb_image_name );
+			imagegif($newImage, $thumb_image_name);
 			break;
 		case "image/pjpeg":
 		case "image/jpeg":
 		case "image/jpg":
-			imagejpeg( $newImage, $thumb_image_name, $quality );
+			imagejpeg($newImage, $thumb_image_name, $quality);
 			break;
 		case "image/png":
 		case "image/x-png":
-			imagepng( $newImage, $thumb_image_name );
+			imagepng($newImage, $thumb_image_name);
 			break;
 		case "image/webp":
 			if (function_exists('imagewebp')) {
-				imagewebp( $newImage, $thumb_image_name, $quality );
+				imagewebp($newImage, $thumb_image_name, $quality);
 			} else {
-				imagepng( $newImage, $thumb_image_name );
+				imagepng($newImage, $thumb_image_name);
 			}
 			break;
 	}
 
-	chmod( $thumb_image_name, 0777 );
+	chmod($thumb_image_name, 0777);
 	imagedestroy($newImage);
 	imagedestroy($source);
-	
+
 	return $thumb_image_name;
 }
 
 /**
  * Try to set higher limits on the fly
  */
-function uwp_set_php_limits() {
-	error_reporting( 0 );
+function uwp_set_php_limits()
+{
+	error_reporting(0);
 
 	// try to set higher limits for import
-	$max_input_time     = ini_get( 'max_input_time' );
-	$max_execution_time = ini_get( 'max_execution_time' );
-	$memory_limit       = ini_get( 'memory_limit' );
+	$max_input_time     = ini_get('max_input_time');
+	$max_execution_time = ini_get('max_execution_time');
+	$memory_limit       = ini_get('memory_limit');
 
-	if ( $max_input_time !== 0 && $max_input_time != -1 && ( ! $max_input_time || $max_input_time < 3000 ) ) {
-		ini_set( 'max_input_time', 3000 );
+	if ($max_input_time !== 0 && $max_input_time != -1 && (! $max_input_time || $max_input_time < 3000)) {
+		ini_set('max_input_time', 3000);
 	}
 
-	if ( $max_execution_time !== 0 && ( ! $max_execution_time || $max_execution_time < 3000 ) ) {
-		ini_set( 'max_execution_time', 3000 );
+	if ($max_execution_time !== 0 && (! $max_execution_time || $max_execution_time < 3000)) {
+		ini_set('max_execution_time', 3000);
 	}
 
-	if ( $memory_limit && str_replace( 'M', '', $memory_limit ) ) {
-		if ( str_replace( 'M', '', $memory_limit ) < 256 ) {
-			ini_set( 'memory_limit', '256M' );
+	if ($memory_limit && str_replace('M', '', $memory_limit)) {
+		if (str_replace('M', '', $memory_limit) < 256) {
+			ini_set('memory_limit', '256M');
 		}
 	}
 
-	ini_set( 'auto_detect_line_endings', true );
+	ini_set('auto_detect_line_endings', true);
 }
 
 /**
@@ -263,21 +266,23 @@ function uwp_set_php_limits() {
  *
  * @return      void
  */
-function uwp_error_log($log){
+function uwp_error_log($log)
+{
 	/*
 	 * A filter to override the debugging setting for function uwp_error_log().
 	 */
-	$should_log = apply_filters( 'uwp_log_errors', uwp_get_option('enable_uwp_error_log', 0));
-	if ( 1 == $should_log ) {
-		if ( is_array( $log ) || is_object( $log ) ) {
-			error_log( print_r( $log, true ) );
+	$should_log = apply_filters('uwp_log_errors', uwp_get_option('enable_uwp_error_log', 0));
+	if (1 == $should_log) {
+		if (is_array($log) || is_object($log)) {
+			error_log(print_r($log, true));
 		} else {
-			error_log( $log );
+			error_log($log);
 		}
 	}
 }
 
-function uwp_get_excluded_users_list() {
+function uwp_get_excluded_users_list()
+{
 
 	$args = array(
 		'fields' => 'ID',
@@ -300,9 +305,9 @@ function uwp_get_excluded_users_list() {
 	$exclude_users = $inactive_users->get_results();
 
 	$excluded_globally = uwp_get_option('users_excluded_from_list');
-	if ( !empty($excluded_globally) ) {
+	if (!empty($excluded_globally)) {
 
-		if(is_array($excluded_globally)) {
+		if (is_array($excluded_globally)) {
 			$exclude_users = array_merge($exclude_users, $excluded_globally);
 		} else {
 			$excluded_users = str_replace(' ', '', $excluded_globally);
@@ -315,143 +320,211 @@ function uwp_get_excluded_users_list() {
 }
 
 /**
- * Prints the users page main content.
+ * Retrieves a list of users with optional filtering, searching, and sorting.
  *
- * @since       1.0.0
- * @package     userswp
+ * @since 1.0.0
+ * @package userswp
  *
- * @return   array $users array of users
+ * @param array $roles Optional. Array of user roles to filter by. Default empty array.
+ * @return array {
+ *     Array of users and pagination data.
+ *
+ *     @type array  $users       Array of WP_User objects.
+ *     @type int    $total_users Total number of users found.
+ * }
  */
-function get_uwp_users_list($roles = array()) {
-
+function get_uwp_users_list( $roles = array() )
+{
 	global $wpdb;
 
+	// Sanitize and validate input parameters
 	$keyword = false;
-	if (isset($_GET['uwps']) && $_GET['uwps'] != '') {
-		$keyword = stripslashes(strip_tags($_GET['uwps']));
+	if ( isset( $_GET['uwps'] ) && ! empty( $_GET['uwps'] ) ) {
+		$keyword = sanitize_text_field( wp_unslash( $_GET['uwps'] ) );
 	}
 
-	if ( is_front_page() ) {
-		$paged = ( get_query_var( 'page' ) ) ? absint( get_query_var( 'page' ) ) : 1;
+	// Get pagination parameter with proper fallback
+	$paged = 1;
+	if ( isset( $_GET['paged'] ) && ! empty( $_GET['paged'] ) ) {
+		$paged = absint( $_GET['paged'] );
+	} elseif ( is_front_page() ) {
+		$page_var = get_query_var( 'page' );
+		$paged = absint( $page_var ) > 0 ? absint( $page_var ) : 1;
 	} else {
-		$paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+		$paged_var = get_query_var( 'paged' );
+		$paged = absint( $paged_var ) > 0 ? absint( $paged_var ) : 1;
 	}
 
-	$number = uwp_get_option('users_no_of_items', 10);
-	$number = !empty($number) ? $number : 10;
+	// Get number of items per page
+	$number = absint( uwp_get_option( 'users_no_of_items', 10 ) );
+	$number = $number > 0 ? $number : 10;
 
+	// Get search where clause from filters
 	$where = '';
-	$where = apply_filters('uwp_users_search_where', $where, $keyword);
+	$where = apply_filters( 'uwp_users_search_where', $where, $keyword );
 
+	// Get excluded users list
 	$exclude_users = uwp_get_excluded_users_list();
-	$exclude_users = apply_filters('uwp_excluded_users_from_list', $exclude_users, $where, $keyword);
-	$exclude_users = !empty($exclude_users) ? array_unique($exclude_users): array();
+	$exclude_users = apply_filters( 'uwp_excluded_users_from_list', $exclude_users, $where, $keyword );
+	$exclude_users = ! empty( $exclude_users ) ? array_unique( $exclude_users ) : array();
 
-	$exclude_query = ' ';$order_by = 'uwp_meta_value'; $order = 'ASC';
+	// Initialize sorting parameters
+	$exclude_query = ' ';
+	$order_by = 'uwp_meta_value'; 
+	$order = 'ASC';
+	$meta_key = '';
 
-	if (isset($_GET['uwp_sort_by']) && $_GET['uwp_sort_by'] != '') {
-		$sort_by = strip_tags(esc_sql($_GET['uwp_sort_by']));
-	} else {
-		$sort_by = '';
-    }
+	// Get and sanitize sort parameter
+	$sort_by = '';
+	if ( isset( $_GET['uwp_sort_by'] ) && ! empty( $_GET['uwp_sort_by'] ) ) {
+		$sort_by = sanitize_text_field( wp_unslash( $_GET['uwp_sort_by'] ) );
+	}
 
-	if ($sort_by) {
-		switch ( $sort_by ) {
-			case "newer":
-				$order_by = 'registered';
-				$order    = 'DESC';
-				break;
-			case "older":
-				$order_by = 'registered';
+	// Process sorting parameters
+	if ( ! empty( $sort_by ) ) {
+		// Handle special cases for newer/older
+		if ( 'newer' === $sort_by ) {
+			$order_by = 'user_registered';
+			$order    = 'DESC';
+		} elseif ( 'older' === $sort_by ) {
+			$order_by = 'user_registered';
+			$order    = 'ASC';
+		} else {
+			// Handle _asc and _desc suffixes
+			if ( substr( $sort_by, -4 ) === '_asc' ) {
+				$order_by = substr( $sort_by, 0, -4 );
 				$order    = 'ASC';
-				break;
+			} elseif ( substr( $sort_by, -5 ) === '_desc' ) {
+				$order_by = substr( $sort_by, 0, -5 );
+				$order    = 'DESC';
+			} else {
+				// Default to ASC if no suffix
+				$order_by = $sort_by;
+				$order    = 'ASC';
+			}
 		}
 	}
 
-	if(!empty($exclude_users)) {
-		$exclude_users_list = implode(',', $exclude_users);
-		$exclude_query = 'AND '. $wpdb->users.'.ID NOT IN ('.$exclude_users_list.')';
+	// Build exclude query for excluded users
+	if ( ! empty( $exclude_users ) ) {
+		$exclude_users_list = implode( ',', array_map( 'absint', $exclude_users ) );
+		$exclude_query = 'AND ' . $wpdb->users . '.ID NOT IN (' . $exclude_users_list . ')';
 	}
 
 	$users = array();
 
-	if($keyword || $where ) {
+	// Check if we have search criteria
+	if ( $keyword || $where ) {
 
-		if (empty($where)) {
-			$user_query = $wpdb->prepare("SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.*
-            FROM $wpdb->users
-            INNER JOIN $wpdb->usermeta
-            ON ( $wpdb->users.ID = $wpdb->usermeta.user_id )
-            WHERE 1=1
-            $exclude_query
-            AND ( 
-                ( $wpdb->usermeta.meta_key = 'first_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
-                OR 
-                ( $wpdb->usermeta.meta_key = 'last_name' AND $wpdb->usermeta.meta_value LIKE %s ) 
-                OR user_login LIKE %s OR user_nicename LIKE %s OR display_name LIKE %s
-            )
-            ORDER BY display_name ASC",
-				array(
-					'%' . $keyword . '%',
-					'%' . $keyword . '%',
-					'%' . $keyword . '%',
-					'%' . $keyword . '%',
-					'%' . $keyword . '%',
+		// Build search query based on whether we have custom where clause
+		if ( empty( $where ) ) {
+			// Standard search query with keyword
+			$search_term = '%' . $wpdb->esc_like( $keyword ) . '%';
+			$user_query = $wpdb->prepare(
+				"SELECT DISTINCT SQL_CALC_FOUND_ROWS {$wpdb->users}.*
+				FROM {$wpdb->users}
+				LEFT JOIN {$wpdb->usermeta} AS first_name_meta ON ( {$wpdb->users}.ID = first_name_meta.user_id AND first_name_meta.meta_key = 'first_name' )
+				LEFT JOIN {$wpdb->usermeta} AS last_name_meta ON ( {$wpdb->users}.ID = last_name_meta.user_id AND last_name_meta.meta_key = 'last_name' )
+				LEFT JOIN {$wpdb->usermeta} AS nickname_meta ON ( {$wpdb->users}.ID = nickname_meta.user_id AND nickname_meta.meta_key = 'nickname' )
+				WHERE 1=1
+				{$exclude_query}
+				AND ( 
+					first_name_meta.meta_value LIKE %s 
+					OR last_name_meta.meta_value LIKE %s 
+					OR nickname_meta.meta_value LIKE %s
+					OR user_login LIKE %s 
+					OR user_nicename LIKE %s 
+					OR display_name LIKE %s
 				)
+				ORDER BY display_name ASC",
+				$search_term,
+				$search_term,
+				$search_term,
+				$search_term,
+				$search_term,
+				$search_term
 			);
-		} else{
+		} else {
+			// Custom where clause with uwp_usermeta table
 			$usermeta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 			$keyword_query = '';
 
-			if($keyword) {
-				$keyword_query = " AND (( $wpdb->usermeta.meta_key = 'first_name' AND $wpdb->usermeta.meta_value LIKE '$keyword' ) 
-                OR ( $wpdb->usermeta.meta_key = 'last_name' AND $wpdb->usermeta.meta_value LIKE '$keyword' ) 
-                OR 'user_login' LIKE '$keyword' OR 'user_nicename' LIKE '$keyword' OR 'display_name' LIKE '$keyword')";
+			if ( $keyword ) {
+				$search_term = '%' . $wpdb->esc_like( $keyword ) . '%';
+				$keyword_query = $wpdb->prepare(
+					" AND (( {$wpdb->usermeta}.meta_key = 'first_name' AND {$wpdb->usermeta}.meta_value LIKE %s ) 
+					OR ( {$wpdb->usermeta}.meta_key = 'last_name' AND {$wpdb->usermeta}.meta_value LIKE %s ) 
+					OR ( {$wpdb->usermeta}.meta_key = 'nickname' AND {$wpdb->usermeta}.meta_value LIKE %s )
+					OR user_login LIKE %s 
+					OR user_nicename LIKE %s 
+					OR display_name LIKE %s)", 
+					$search_term,
+					$search_term,
+					$search_term,
+					$search_term,
+					$search_term,
+					$search_term
+				);
 			}
 
-			$user_query = "SELECT DISTINCT SQL_CALC_FOUND_ROWS $wpdb->users.* FROM $wpdb->users
-            INNER JOIN $wpdb->usermeta ON ( $wpdb->users.ID = $wpdb->usermeta.user_id )
-            INNER JOIN $usermeta_table ON ( $wpdb->users.ID = $usermeta_table.user_id )
-            WHERE 1=1 $keyword_query $exclude_query  $where ORDER BY display_name ASC";
+			$user_query = "SELECT DISTINCT SQL_CALC_FOUND_ROWS {$wpdb->users}.* 
+				FROM {$wpdb->users}
+				INNER JOIN {$wpdb->usermeta} ON ( {$wpdb->users}.ID = {$wpdb->usermeta}.user_id )
+				INNER JOIN {$usermeta_table} ON ( {$wpdb->users}.ID = {$usermeta_table}.user_id )
+				WHERE 1=1 {$keyword_query} {$exclude_query} {$where} 
+				ORDER BY display_name ASC";
 		}
 
-		$user_results = $wpdb->get_results($user_query); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$get_users = wp_list_pluck($user_results, 'ID');
+		// Execute search query
+		$user_results = $wpdb->get_results( $user_query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$get_users = wp_list_pluck( $user_results, 'ID' );
 
-		if(isset($roles) && is_array($roles) && count($roles) > 0){
-			$users = get_users( array( 'role__in' => $roles, 'fields' => array('ID') ) );
-			$users = wp_list_pluck( $users, 'ID' );
-			if($get_users && count($get_users) > 0 && $users && count($users) > 0){
-				foreach ($get_users as $key => $get_user){
-					if(!in_array($get_user, $users)){
-						unset($get_users[$key]);
-					}
-				}
+		// Filter by roles if specified
+		if ( ! empty( $roles ) && is_array( $roles ) ) {
+			$role_users = get_users( array( 
+				'role__in' => $roles, 
+				'fields' => array( 'ID' ) 
+			) );
+			$role_user_ids = wp_list_pluck( $role_users, 'ID' );
+			
+			if ( ! empty( $get_users ) && ! empty( $role_user_ids ) ) {
+				$get_users = array_intersect( $get_users, $role_user_ids );
 			}
 		}
 
-		if(!empty($get_users) && is_array($get_users) && count($get_users) > 0){
-
+		// Process results if we have users
+		if ( ! empty( $get_users ) && is_array( $get_users ) ) {
+			// Prepare WP_User_Query arguments
 			$args = array(
 				'include' => $get_users,
-				'number' => (int) $number,
-				'paged' => (int) $paged,
+				'number' => $number,
+				'paged' => $paged,
 			);
 
-			if(!empty($exclude_users)) {
+			// Add exclude users if any
+			if ( ! empty( $exclude_users ) ) {
 				$args['exclude'] = $exclude_users;
 			}
 
-			if(!empty($meta_key)) {
+			// Add meta_key if specified
+			if ( ! empty( $meta_key ) ) {
 				$args['meta_key'] = $meta_key;
 			}
 
-			if(!empty($order_by) && !empty($order) ) {
-				$args['orderby'] = $order_by;
-				$args['order'] = $order;
+			// Handle sorting
+			if ( ! empty( $order_by ) && ! empty( $order ) ) {
+				if ( in_array( $order_by, array( 'first_name', 'last_name' ), true ) ) {
+					$args['meta_key'] = $order_by;
+					$args['orderby'] = 'meta_value';
+					$args['order'] = $order;
+				} else {
+					$args['orderby'] = $order_by;
+					$args['order'] = $order;
+				}
 			}
 
-			$uwp_users_query = new WP_User_Query($args);
+			// Execute WP_User_Query
+			$uwp_users_query = new WP_User_Query( $args );
 			$users['users'] = $uwp_users_query->get_results();
 			$users['total_users'] = $uwp_users_query->get_total();
 
@@ -459,49 +532,47 @@ function get_uwp_users_list($roles = array()) {
 			$users['users'] = array();
 			$users['total_users'] = 0;
 		}
-
 	} else {
+		// No search criteria - get all users with optional role filtering
 		$args = array(
-			'number' => (int) $number,
-			'paged' => (int) $paged,
+			'number' => $number,
+			'paged' => $paged,
 		);
 
-		$roles_args = array(
-			'fields' => array('ID'),
-		);
-
-		if(!empty($exclude_users)) {
+		// Add exclude users if any
+		if ( ! empty( $exclude_users ) ) {
 			$args['exclude'] = $exclude_users;
-			$roles_args['exclude'] = $exclude_users;
 		}
 
-		if(isset($roles) && is_array($roles) && count($roles) > 0){
-			$include_users = array();
-			$roles_args['role__in'] = $roles;
-			$users = get_users( $roles_args );
-			$users = wp_list_pluck( $users, 'ID' );
-			if($users && count($users) > 0){
-				$include_users = array_merge($include_users, $users);
-				$args['include'] = $include_users;
-			}
+		// Filter by roles if specified
+		if ( ! empty( $roles ) && is_array( $roles ) ) {
+			$args['role__in'] = $roles;
 		}
 
-		if(!empty($meta_key)) {
+		// Add meta_key if specified
+		if ( ! empty( $meta_key ) ) {
 			$args['meta_key'] = $meta_key;
 		}
 
-		if(!empty($order_by) && !empty($order) ) {
-			$args['orderby'] = $order_by;
-			$args['order'] = $order;
+		// Handle sorting
+		if ( ! empty( $order_by ) && ! empty( $order ) ) {
+			if ( in_array( $order_by, array( 'first_name', 'last_name' ), true ) ) {
+				$args['meta_key'] = $order_by;
+				$args['orderby'] = 'meta_value';
+				$args['order'] = $order;
+			} else {
+				$args['orderby'] = $order_by;
+				$args['order'] = $order;
+			}
 		}
 
-		$uwp_users_query = new WP_User_Query($args);
+		// Execute WP_User_Query
+		$uwp_users_query = new WP_User_Query( $args );
 		$users['users'] = $uwp_users_query->get_results();
 		$users['total_users'] = $uwp_users_query->get_total();
 	}
 
 	return $users;
-
 }
 
 /**
@@ -512,14 +583,15 @@ function get_uwp_users_list($roles = array()) {
  *
  * @return      string      Layout class.
  */
-function uwp_get_layout_class($layout, $count_only = false) {
-	if(!$layout){
-		if(uwp_get_option("design_style",'bootstrap')){
-            $value = '3col';
-        } else {
+function uwp_get_layout_class($layout, $count_only = false)
+{
+	if (!$layout) {
+		if (uwp_get_option("design_style", 'bootstrap')) {
+			$value = '3col';
+		} else {
 			$value = 'list';
-        }
-	    $layout = uwp_get_option('users_default_layout', $value);
+		}
+		$layout = uwp_get_option('users_default_layout', $value);
 	}
 
 	switch ($layout) {
@@ -554,20 +626,20 @@ function uwp_get_layout_class($layout, $count_only = false) {
 			$col_count = 1;
 	}
 
-	if($count_only){
+	if ($count_only) {
 		return $col_count;
 	}
 
-	if(uwp_get_option("design_style",'bootstrap')){
-	    return $bs_class;
-    }
+	if (uwp_get_option("design_style", 'bootstrap')) {
+		return $bs_class;
+	}
 
 	return $class;
 }
 
-add_filter( 'uwp_users_list_ul_extra_class', 'uwp_get_layout_class', 10, 1 );
+add_filter('uwp_users_list_ul_extra_class', 'uwp_get_layout_class', 10, 1);
 
-add_filter( 'get_user_option_metaboxhidden_nav-menus', 'uwp_always_nav_menu_visibility', 10, 3 );
+add_filter('get_user_option_metaboxhidden_nav-menus', 'uwp_always_nav_menu_visibility', 10, 3);
 
 /**
  * Filters nav menu visibility option value.
@@ -581,10 +653,10 @@ add_filter( 'get_user_option_metaboxhidden_nav-menus', 'uwp_always_nav_menu_visi
  *
  * @return      array                   Filtered value.
  */
-function uwp_always_nav_menu_visibility( $result, $option, $user )
+function uwp_always_nav_menu_visibility($result, $option, $user)
 {
-	if( is_array($result) && in_array( 'add-users-wp-nav-menu', $result ) ) {
-		$result = array_diff( $result, array( 'add-users-wp-nav-menu' ) );
+	if (is_array($result) && in_array('add-users-wp-nav-menu', $result)) {
+		$result = array_diff($result, array('add-users-wp-nav-menu'));
 	}
 
 	return $result;
@@ -604,18 +676,19 @@ add_filter('uwp_account_page_title', 'uwp_account_privacy_page_title', 10, 2);
  *
  * @return      string             Title.
  */
-function uwp_account_privacy_page_title($title, $type) {
+function uwp_account_privacy_page_title($title, $type)
+{
 
 	if ($type == 'privacy') {
-		$title = __( 'Privacy', 'userswp' );
+		$title = __('Privacy', 'userswp');
 	} elseif ($type == 'notifications') {
-		$title = __( 'E-Mail Notifications', 'userswp' );
+		$title = __('E-Mail Notifications', 'userswp');
 	} elseif ($type == 'delete-account') {
-		$title = __( 'Delete Account', 'userswp' );
+		$title = __('Delete Account', 'userswp');
 	} elseif ($type == 'change-password') {
-		$title = __( 'Change Password', 'userswp' );
-    } elseif ($type == 'wp2fa') {
-		$title = __( 'Two-factor Authentication Settings', 'userswp' );
+		$title = __('Change Password', 'userswp');
+	} elseif ($type == 'wp2fa') {
+		$title = __('Two-factor Authentication Settings', 'userswp');
 	}
 
 	return $title;
@@ -631,8 +704,9 @@ add_action('uwp_account_menu_display', 'uwp_add_account_menu_links');
  *
  * @return      void
  */
-function uwp_add_account_menu_links() {
-    global $aui_bs5;
+function uwp_add_account_menu_links()
+{
+	global $aui_bs5;
 
 	if (isset($_GET['type'])) {
 		$type = strip_tags(esc_sql($_GET['type']));
@@ -651,10 +725,10 @@ function uwp_add_account_menu_links() {
 
 	$legacy = '<ul class="uwp_account_menu">';
 	ob_start();
-	?>
-    <ul class="<?php echo $aui_bs5 ? 'nav' : 'navbar-nav'; ?> m-0 p-0 mt-3 list-unstyled flex-lg-column flex-row flex-wrap" aria-labelledby="account_settings">
+?>
+	<ul class="<?php echo $aui_bs5 ? 'nav' : 'navbar-nav'; ?> m-0 p-0 mt-3 list-unstyled flex-lg-column flex-row flex-wrap" aria-labelledby="account_settings">
 		<?php
-		foreach( $account_available_tabs as $tab_id => $tab ) {
+		foreach ($account_available_tabs as $tab_id => $tab) {
 
 			if ($tab_id == 'account') {
 				$tab_url = $account_page_link;
@@ -670,24 +744,24 @@ function uwp_add_account_menu_links() {
 
 			$active = $type == $tab_id ? ' active' : '';
 
-			?>
-            <li class="nav-item m-0 p-0 list-unstyled mx-md-2 mx-2">
-                <a class="nav-link text-decoration-none uwp-account-<?php echo esc_attr( $tab_id.' '.$active ); ?>" href="<?php echo esc_url( $tab_url ); ?>"><?php echo '<i class="'.esc_attr($tab["icon"]).' mr-1 fa-fw"></i>'.esc_html($tab['title']); ?></a>
-            </li>
-			<?php
+		?>
+			<li class="nav-item m-0 p-0 list-unstyled mx-md-2 mx-2">
+				<a class="nav-link text-decoration-none uwp-account-<?php echo esc_attr($tab_id . ' ' . $active); ?>" href="<?php echo esc_url($tab_url); ?>"><?php echo '<i class="' . esc_attr($tab["icon"]) . ' mr-1 fa-fw"></i>' . esc_html($tab['title']); ?></a>
+			</li>
+		<?php
 
-			$legacy .= '<li id="uwp-account-'.$tab_id.'">';
-			$legacy .= '<a class="'.$active.'" href="'.esc_url( $tab_url ).'">';
-			$legacy .= '<i class="'.esc_attr($tab["icon"]).'"></i>'.esc_html($tab["title"]);
+			$legacy .= '<li id="uwp-account-' . $tab_id . '">';
+			$legacy .= '<a class="' . $active . '" href="' . esc_url($tab_url) . '">';
+			$legacy .= '<i class="' . esc_attr($tab["icon"]) . '"></i>' . esc_html($tab["title"]);
 			$legacy .= '</a></li>';
 		}
 		?>
-    </ul>
+	</ul>
 	<?php
 	$legacy .=  '</ul>';
 	$bs_output = ob_get_clean();
 	$style = uwp_get_option('design_style', 'bootstrap');
-	if(!empty($style)){
+	if (!empty($style)) {
 		echo $bs_output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	} else {
 		echo $legacy; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -722,7 +796,7 @@ function uwp_form_extras_field_order($field_ids = array(), $form_type = 'registe
 				array(
 					'sort_order' => $count,
 				),
-				array( 'id' => $cf, 'form_id' => $form_id )
+				array('id' => $cf, 'form_id' => $form_id)
 			);
 
 			$count++;
@@ -745,7 +819,8 @@ function uwp_form_extras_field_order($field_ids = array(), $form_type = 'registe
  *
  * @return      string                  Converted string.
  */
-function uwp_ucwords($string, $charset='UTF-8') {
+function uwp_ucwords($string, $charset = 'UTF-8')
+{
 	if (function_exists('mb_convert_case')) {
 		return mb_convert_case($string, MB_CASE_TITLE, $charset);
 	} else {
@@ -786,7 +861,6 @@ function uwp_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 
 {
 	$table = new UsersWP_Tables();
 	return $table->add_column_if_not_exist($db, $column, $column_attr);
-
 }
 
 /**
@@ -797,13 +871,14 @@ function uwp_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 
  *
  * @return      array   Excluded custom fields.
  */
-function uwp_get_excluded_fields() {
+function uwp_get_excluded_fields()
+{
 	$excluded = array(
 		'password',
 		'confirm_password',
 		'user_privacy',
 	);
-	return apply_filters('uwp_excluded_fields',$excluded);
+	return apply_filters('uwp_excluded_fields', $excluded);
 }
 
 /**
@@ -817,7 +892,8 @@ function uwp_get_excluded_fields() {
  *
  * @return      string                          Formatted currency.
  */
-function uwp_currency_format_number($number='',$cf=''){
+function uwp_currency_format_number($number = '', $cf = '')
+{
 
 	$cs = isset($cf['extra_fields']) ? maybe_unserialize($cf['extra_fields']) : '';
 
@@ -826,34 +902,44 @@ function uwp_currency_format_number($number='',$cf=''){
 	$decimal_display = isset($cf['decimal_display']) && $cf['decimal_display'] ? $cf['decimal_display'] : 'if';
 	$decimalpoint = '.';
 
-	if(isset($cs['decimal_separator']) && $cs['decimal_separator']=='comma'){
+	if (isset($cs['decimal_separator']) && $cs['decimal_separator'] == 'comma') {
 		$decimalpoint = ',';
 	}
 
 	$separator = ',';
 
-	if(isset($cs['thousand_separator'])){
-		if($cs['thousand_separator']=='comma'){$separator = ',';}
-		if($cs['thousand_separator']=='slash'){$separator = '\\';}
-		if($cs['thousand_separator']=='period'){$separator = '.';}
-		if($cs['thousand_separator']=='space'){$separator = ' ';}
-		if($cs['thousand_separator']=='none'){$separator = '';}
+	if (isset($cs['thousand_separator'])) {
+		if ($cs['thousand_separator'] == 'comma') {
+			$separator = ',';
+		}
+		if ($cs['thousand_separator'] == 'slash') {
+			$separator = '\\';
+		}
+		if ($cs['thousand_separator'] == 'period') {
+			$separator = '.';
+		}
+		if ($cs['thousand_separator'] == 'space') {
+			$separator = ' ';
+		}
+		if ($cs['thousand_separator'] == 'none') {
+			$separator = '';
+		}
 	}
 
 	$currency_symbol_placement = isset($cs['currency_symbol_placement']) ? $cs['currency_symbol_placement'] : 'left';
 
-	if($decimals>0 && $decimal_display=='if'){
-		if(is_int($number) || floor( $number ) == $number)
+	if ($decimals > 0 && $decimal_display == 'if') {
+		if (is_int($number) || floor($number) == $number)
 			$decimals = 0;
 	}
 
-	$number = number_format($number,$decimals,$decimalpoint,$separator);
+	$number = number_format($number, $decimals, $decimalpoint, $separator);
 
 
 
-	if($currency_symbol_placement=='left'){
+	if ($currency_symbol_placement == 'left') {
 		$number = $symbol . $number;
-	}else{
+	} else {
 		$number = $number . $symbol;
 	}
 
@@ -870,7 +956,8 @@ function uwp_currency_format_number($number='',$cf=''){
  *
  * @return      bool
  */
-function uwp_can_make_profile_private() {
+function uwp_can_make_profile_private()
+{
 	$make_profile_private = apply_filters('uwp_user_can_make_profile_private', false);
 	return $make_profile_private;
 }
@@ -883,18 +970,19 @@ function uwp_can_make_profile_private() {
  *
  * @return      string      Installation type.
  */
-function uwp_get_installation_type() {
+function uwp_get_installation_type()
+{
 	// *. Single Site
 	if (!is_multisite()) {
 		return "single";
 	} else {
 		// Multisite
-		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		if (! function_exists('is_plugin_active_for_network')) {
+			require_once(ABSPATH . '/wp-admin/includes/plugin.php');
 		}
 
 		// Network active.
-		if ( is_plugin_active_for_network( 'userswp/userswp.php' ) ) {
+		if (is_plugin_active_for_network('userswp/userswp.php')) {
 			if (defined('UWP_ROOT_PAGES')) {
 				if (UWP_ROOT_PAGES == 'all') {
 					// *. Multisite - Network Active - Pages on all sites
@@ -923,7 +1011,8 @@ function uwp_get_installation_type() {
  *
  * @return      string      Table prefix
  */
-function uwp_get_table_prefix() {
+function uwp_get_table_prefix()
+{
 	$tables = new UsersWP_Tables();
 	return $tables->get_table_prefix();
 }
@@ -936,7 +1025,8 @@ function uwp_get_table_prefix() {
  *
  * @return      string      Table prefix
  */
-function get_usermeta_table_prefix() {
+function get_usermeta_table_prefix()
+{
 	$tables = new UsersWP_Tables();
 	return $tables->get_usermeta_table_prefix();
 }
@@ -953,7 +1043,8 @@ function get_usermeta_table_prefix() {
  *
  * @return      string                  Converted custom field value string.
  */
-function uwp_maybe_serialize($key, $value) {
+function uwp_maybe_serialize($key, $value)
+{
 	$field = uwp_get_custom_field_info($key);
 	if (isset($field->field_type) && $field->field_type == 'multiselect' && is_array($value)) {
 		$value = implode(",", $value);
@@ -972,7 +1063,8 @@ function uwp_maybe_serialize($key, $value) {
  *
  * @return      array                   Converted custom field value array.
  */
-function uwp_maybe_unserialize($key, $value) {
+function uwp_maybe_unserialize($key, $value)
+{
 	$field = uwp_get_custom_field_info($key);
 	if (isset($field->field_type) && $field->field_type == 'multiselect' && $value) {
 		$value = explode(",", $value);
@@ -1002,7 +1094,8 @@ function uwp_create_tables()
  *
  * @return      string      IP address.
  */
-function uwp_get_ip() {
+function uwp_get_ip()
+{
 	if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
 		//check ip from share internet
 		$ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -1065,20 +1158,21 @@ function uwp_str_ends_with($haystack, $needle)
  *
  * @return      string                  Font awesome icon value.
  */
-function uwp_field_type_to_fa_icon($type) {
+function uwp_field_type_to_fa_icon($type)
+{
 	$field_types = array(
 		'text' => 'fas fa-minus',
 		'datepicker' => 'fas fa-calendar-alt',
 		'textarea' => 'fas fa-bars',
-		'time' =>'far fa-clock',
-		'checkbox' =>'far fa-check-square',
-		'phone' =>'far fa-phone',
-		'radio' =>'far fa-dot-circle',
-		'email' =>'far fa-envelope',
-		'select' =>'far fa-caret-square-down',
-		'multiselect' =>'far fa-caret-square-down',
-		'url' =>'fas fa-link',
-		'file' =>'fas fa-file'
+		'time' => 'far fa-clock',
+		'checkbox' => 'far fa-check-square',
+		'phone' => 'far fa-phone',
+		'radio' => 'far fa-dot-circle',
+		'email' => 'far fa-envelope',
+		'select' => 'far fa-caret-square-down',
+		'multiselect' => 'far fa-caret-square-down',
+		'url' => 'fas fa-link',
+		'file' => 'fas fa-file'
 	);
 
 	if (isset($field_types[$type])) {
@@ -1086,7 +1180,6 @@ function uwp_field_type_to_fa_icon($type) {
 	} else {
 		return "";
 	}
-
 }
 
 /**
@@ -1096,9 +1189,10 @@ function uwp_field_type_to_fa_icon($type) {
  *
  * @return True if WPML is active else False.
  */
-function uwp_is_wpml() {
-	if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) && function_exists( 'icl_object_id' ) ) {
-	    return true;
+function uwp_is_wpml()
+{
+	if (defined('ICL_SITEPRESS_VERSION') && ! ICL_PLUGIN_INACTIVE && class_exists('SitePress') && function_exists('icl_object_id')) {
+		return true;
 	}
 
 	return false;
@@ -1119,12 +1213,13 @@ function uwp_is_wpml() {
  *
  * @return int|NULL
  */
-function uwp_wpml_object_id( $element_id, $element_type = 'post', $return_original_if_missing = false, $ulanguage_code = null ) {
-	if ( uwp_is_wpml() ) {
-		if ( function_exists( 'wpml_object_id_filter' ) ) {
-			return apply_filters( 'wpml_object_id', $element_id, $element_type, $return_original_if_missing, $ulanguage_code );
+function uwp_wpml_object_id($element_id, $element_type = 'post', $return_original_if_missing = false, $ulanguage_code = null)
+{
+	if (uwp_is_wpml()) {
+		if (function_exists('wpml_object_id_filter')) {
+			return apply_filters('wpml_object_id', $element_id, $element_type, $return_original_if_missing, $ulanguage_code);
 		} else {
-			return icl_object_id( $element_id, $element_type, $return_original_if_missing, $ulanguage_code );
+			return icl_object_id($element_id, $element_type, $return_original_if_missing, $ulanguage_code);
 		}
 	}
 
@@ -1136,22 +1231,24 @@ function uwp_wpml_object_id( $element_id, $element_type = 'post', $return_origin
  *
  * @return bool
  */
-function uwp_is_localhost(){
+function uwp_is_localhost()
+{
 	$localhost = false;
 
-	if( isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME']=='localhost' ){
+	if (isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] == 'localhost') {
 		$localhost = true;
-	}elseif(isset($_SERVER['SERVER_ADDR']) && ( $_SERVER['SERVER_ADDR'] == '127.0.0.1' || $_SERVER['SERVER_ADDR'] == '::1' )  ){
+	} elseif (isset($_SERVER['SERVER_ADDR']) && ($_SERVER['SERVER_ADDR'] == '127.0.0.1' || $_SERVER['SERVER_ADDR'] == '::1')) {
 		$localhost = true;
 	}
 
 	return $localhost;
 }
 
-function uwp_get_default_avatar_uri(){
+function uwp_get_default_avatar_uri()
+{
 	$default = uwp_get_option('profile_default_profile', '');
-	if(empty($default)){
-		$default = USERSWP_PLUGIN_URL."assets/images/no_profile.png";
+	if (empty($default)) {
+		$default = USERSWP_PLUGIN_URL . "assets/images/no_profile.png";
 	} else {
 		$default = wp_get_attachment_url($default);
 	}
@@ -1159,15 +1256,17 @@ function uwp_get_default_avatar_uri(){
 	return apply_filters('uwp_default_avatar_uri', $default);
 }
 
-function uwp_get_default_thumb_uri(){
-	$thumb_url = USERSWP_PLUGIN_URL."assets/images/no_thumb.png";
+function uwp_get_default_thumb_uri()
+{
+	$thumb_url = USERSWP_PLUGIN_URL . "assets/images/no_thumb.png";
 	return apply_filters('uwp_default_thumb_uri', $thumb_url);
 }
 
-function uwp_get_default_banner_uri(){
+function uwp_get_default_banner_uri()
+{
 	$banner = uwp_get_option('profile_default_banner', '');
-	if(empty($banner)) {
-		$banner_url = USERSWP_PLUGIN_URL."assets/images/banner.png";
+	if (empty($banner)) {
+		$banner_url = USERSWP_PLUGIN_URL . "assets/images/banner.png";
 	} else {
 		$banner_url = wp_get_attachment_url($banner);
 	}
@@ -1181,16 +1280,17 @@ function uwp_get_default_banner_uri(){
  *
  * @return array updated upload variable array.
  */
-function uwp_handle_multisite_profile_image($uploads){
-	if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+function uwp_handle_multisite_profile_image($uploads)
+{
+	if (! function_exists('is_plugin_active_for_network')) {
+		require_once(ABSPATH . '/wp-admin/includes/plugin.php');
 	}
 
 	// Network active.
-	if ( is_plugin_active_for_network( 'userswp/userswp.php' ) ) {
+	if (is_plugin_active_for_network('userswp/userswp.php')) {
 		$main_site = get_network()->site_id;
-		switch_to_blog( $main_site );
-		remove_filter( 'upload_dir', 'uwp_handle_multisite_profile_image');
+		switch_to_blog($main_site);
+		remove_filter('upload_dir', 'uwp_handle_multisite_profile_image');
 		$uploads = wp_upload_dir();
 		restore_current_blog();
 	}
@@ -1207,10 +1307,11 @@ function uwp_handle_multisite_profile_image($uploads){
  * @param $size
  * @return int
  */
-function uwp_let_to_num( $size ) {
-	$l   = substr( $size, -1 );
-	$ret = substr( $size, 0, -1 );
-	switch ( strtoupper( $l ) ) {
+function uwp_let_to_num($size)
+{
+	$l   = substr($size, -1);
+	$ret = substr($size, 0, -1);
+	switch (strtoupper($l)) {
 		case 'P':
 			$ret *= 1024;
 		case 'T':
@@ -1225,29 +1326,30 @@ function uwp_let_to_num( $size ) {
 	return $ret;
 }
 
-function uwp_format_decimal($number, $dp = false, $trim_zeros = false){
+function uwp_format_decimal($number, $dp = false, $trim_zeros = false)
+{
 	$locale   = localeconv();
-	$decimals = array( uwp_get_decimal_separator(), $locale['decimal_point'], $locale['mon_decimal_point'] );
+	$decimals = array(uwp_get_decimal_separator(), $locale['decimal_point'], $locale['mon_decimal_point']);
 
 	// Remove locale from string.
-	if ( ! is_float( $number ) ) {
-		$number = str_replace( $decimals, '.', $number );
-		$number = preg_replace( '/[^0-9\.,-]/', '', uwp_clean( $number ) );
+	if (! is_float($number)) {
+		$number = str_replace($decimals, '.', $number);
+		$number = preg_replace('/[^0-9\.,-]/', '', uwp_clean($number));
 	}
 
-	if ( false !== $dp ) {
-		$dp     = intval( '' == $dp ? uwp_get_decimal_separator() : $dp );
-		$number = number_format( floatval( $number ), $dp, '.', '' );
+	if (false !== $dp) {
+		$dp     = intval('' == $dp ? uwp_get_decimal_separator() : $dp);
+		$number = number_format(floatval($number), $dp, '.', '');
 		// DP is false - don't use number format, just return a string in our format
-	} elseif ( is_float( $number ) ) {
+	} elseif (is_float($number)) {
 		// DP is false - don't use number format, just return a string using whatever is given. Remove scientific notation using sprintf.
-		$number     = str_replace( $decimals, '.', sprintf( '%.' . uwp_get_rounding_precision() . 'f', $number ) );
+		$number     = str_replace($decimals, '.', sprintf('%.' . uwp_get_rounding_precision() . 'f', $number));
 		// We already had a float, so trailing zeros are not needed.
 		$trim_zeros = true;
 	}
 
-	if ( $trim_zeros && strstr( $number, '.' ) ) {
-		$number = rtrim( rtrim( $number, '0' ), '.' );
+	if ($trim_zeros && strstr($number, '.')) {
+		$number = rtrim(rtrim($number, '0'), '.');
 	}
 
 	return $number;
@@ -1258,9 +1360,10 @@ function uwp_format_decimal($number, $dp = false, $trim_zeros = false){
  * @since  1.0.20
  * @return string
  */
-function uwp_get_decimal_separator() {
-	$separator = apply_filters( 'uwp_decimal_separator', '.' );
-	return $separator ? stripslashes( $separator ) : '.';
+function uwp_get_decimal_separator()
+{
+	$separator = apply_filters('uwp_decimal_separator', '.');
+	return $separator ? stripslashes($separator) : '.';
 }
 
 /**
@@ -1270,10 +1373,11 @@ function uwp_get_decimal_separator() {
  * @since 1.0.20
  * @return int
  */
-function uwp_get_rounding_precision() {
+function uwp_get_rounding_precision()
+{
 	$precision = uwp_get_decimal_separator() + 2;
-	if ( defined(UWP_ROUNDING_PRECISION) && absint( UWP_ROUNDING_PRECISION ) > $precision ) {
-		$precision = absint( UWP_ROUNDING_PRECISION );
+	if (defined(UWP_ROUNDING_PRECISION) && absint(UWP_ROUNDING_PRECISION) > $precision) {
+		$precision = absint(UWP_ROUNDING_PRECISION);
 	}
 	return $precision;
 }
@@ -1286,14 +1390,14 @@ function uwp_get_rounding_precision() {
  *
  * @return string|array
  */
-function uwp_clean( $var ) {
+function uwp_clean($var)
+{
 
-	if ( is_array( $var ) ) {
-		return array_map( 'uwp_clean', $var );
+	if (is_array($var)) {
+		return array_map('uwp_clean', $var);
 	} else {
-		return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
+		return is_scalar($var) ? sanitize_text_field($var) : $var;
 	}
-
 }
 
 /**
@@ -1304,28 +1408,31 @@ function uwp_clean( $var ) {
  * @param string $name Constant name.
  * @param string $value Value.
  */
-function uwp_maybe_define( $name, $value ) {
-	if ( ! defined( $name ) ) {
-		define( $name, $value );
+function uwp_maybe_define($name, $value)
+{
+	if (! defined($name)) {
+		define($name, $value);
 	}
 }
 
-function uwp_insert_usermeta(){
+function uwp_insert_usermeta()
+{
 	global $wpdb;
-	$sort= "user_registered";
+	$sort = "user_registered";
 
-	$all_users_id = $wpdb->get_col( $wpdb->prepare( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		"SELECT $wpdb->users.ID FROM $wpdb->users ORDER BY %s ASC"
-		, $sort ));
+	$all_users_id = $wpdb->get_col($wpdb->prepare( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		"SELECT $wpdb->users.ID FROM $wpdb->users ORDER BY %s ASC",
+		$sort
+	));
 
 	//we got all the IDs, now loop through them to get individual IDs
-	foreach ( $all_users_id as $user_id ) {
+	foreach ($all_users_id as $user_id) {
 		$user_data = get_userdata($user_id);
 
 		$meta_table = get_usermeta_table_prefix() . 'uwp_usermeta';
 		$user_meta = array(
 			'username' => $user_data->user_login,
-			'email' => sanitize_email( $user_data->user_email ),
+			'email' => sanitize_email($user_data->user_email),
 			'first_name' => $user_data->first_name,
 			'last_name' => $user_data->last_name,
 			'display_name' => $user_data->display_name,
@@ -1333,13 +1440,13 @@ function uwp_insert_usermeta(){
 
 		$users = $wpdb->get_var($wpdb->prepare("SELECT COUNT(user_id) FROM {$meta_table} WHERE user_id = %d", $user_id)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
-		if(!empty($users)) {
+		if (!empty($users)) {
 			$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$meta_table,
 				$user_meta,
 				array('user_id' => $user_id)
 			);
-		}  else {
+		} else {
 			$user_meta['user_id'] = $user_id;
 			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$meta_table,
@@ -1349,37 +1456,41 @@ function uwp_insert_usermeta(){
 	}
 }
 
-function uwp_get_localize_data(){
+function uwp_get_localize_data()
+{
 	$uwp_localize_data = array(
 		'uwp_more_char_limit' => 100,
-		'uwp_more_text' => __('more','userswp'),
-		'uwp_less_text' => __('less','userswp'),
-		'error' => __('Something went wrong.','userswp'),
-		'error_retry' => __('Something went wrong, please retry.','userswp'),
+		'uwp_more_text' => __('more', 'userswp'),
+		'uwp_less_text' => __('less', 'userswp'),
+		'error' => __('Something went wrong.', 'userswp'),
+		'error_retry' => __('Something went wrong, please retry.', 'userswp'),
 		'uwp_more_ellipses_text' => '...',
 		'ajaxurl' => admin_url('admin-ajax.php'),
-		'login_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("login_modal",1) ? 1 : '',
-		'register_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("register_modal",1) ? 1 : '',
-		'forgot_modal' => uwp_get_option("design_style",'bootstrap')=='bootstrap' && uwp_get_option("forgot_modal",1) ? 1 : '',
-		'uwp_pass_strength' => uwp_get_option("register_min_password_strength",0),
-		'uwp_strong_pass_msg' => uwp_get_option("register_uwp_strong_pass_msg",__("Please enter valid strong password.", "userswp")),
+		'login_modal' => uwp_get_option("design_style", 'bootstrap') == 'bootstrap' && uwp_get_option("login_modal", 1) ? 1 : '',
+		'register_modal' => uwp_get_option("design_style", 'bootstrap') == 'bootstrap' && uwp_get_option("register_modal", 1) ? 1 : '',
+		'forgot_modal' => uwp_get_option("design_style", 'bootstrap') == 'bootstrap' && uwp_get_option("forgot_modal", 1) ? 1 : '',
+		'uwp_pass_strength' => uwp_get_option("register_min_password_strength", 0),
+		'uwp_strong_pass_msg' => uwp_get_option("register_uwp_strong_pass_msg", __("Please enter valid strong password.", "userswp")),
 		'default_banner' => uwp_get_default_banner_uri(),
-		'basicNonce' => esc_attr( wp_create_nonce( 'uwp_basic_nonce' ) )
+		'basicNonce' => esc_attr(wp_create_nonce('uwp_basic_nonce'))
 	);
 
 	return apply_filters('uwp_localize_data', $uwp_localize_data);
 }
 
-function uwp_is_page_builder(){
-	if(
-		(isset($_GET['elementor-preview']) && $_GET['elementor-preview'] > 0) // elementor
+function uwp_is_page_builder() {
+	if (
+		( isset( $_GET['elementor-preview'] ) && $_GET['elementor-preview'] > 0 ) // elementor
 		|| isset( $_REQUEST['et_fb'] ) || isset( $_REQUEST['et_pb_preview'] ) // divi
 		|| isset( $_REQUEST['fl_builder'] ) // beaver
 		|| ! empty( $_REQUEST['siteorigin_panels_live_editor'] ) // siteorigin
 		|| ! empty( $_REQUEST['cornerstone_preview'] ) // cornerstone
 		|| ! empty( $_REQUEST['fb-edit'] ) || ! empty( $_REQUEST['fusion_load_nonce'] ) // fusion builder
 		|| ! empty( $_REQUEST['ct_builder'] ) || ( ! empty( $_REQUEST['action'] ) && ( substr( $_REQUEST['action'], 0, 11 ) === "oxy_render_"  || substr( $_REQUEST['action'], 0, 10 ) === "ct_render_" )  ) // oxygen
-	){
+		|| ( function_exists( 'bricks_is_builder' ) && ( bricks_is_builder() || bricks_is_builder_call() ) ) // Bricks Builder
+		|| ( \function_exists( 'Breakdance\\isRequestFromBuilderIframe' ) && ( \Breakdance\isRequestFromBuilderIframe() || \Breakdance\isRequestFromBuilderSsr() ) ) // Breakdance Builder
+		|| ( function_exists( 'znhg_kallyas_theme_config' ) && ! empty( $_REQUEST['zn_pb_edit'] ) ) // Kallyas theme Zion builder
+	) {
 		return true; // builder.
 	}
 
@@ -1394,15 +1505,16 @@ function uwp_is_page_builder(){
  *
  * @return string
  */
-function uwp_help_tip( $tip, $allow_html = false ) {
-    global $aui_bs5;
-	if ( $allow_html ) {
-		$tip = uwp_sanitize_tooltip( $tip );
+function uwp_help_tip($tip, $allow_html = false)
+{
+	global $aui_bs5;
+	if ($allow_html) {
+		$tip = uwp_sanitize_tooltip($tip);
 	} else {
-		$tip = esc_attr( $tip );
+		$tip = esc_attr($tip);
 	}
 
-    $ml = $aui_bs5 ? 'ms-2 float-end' : 'ml-2 float-right';
+	$ml = $aui_bs5 ? 'ms-2 float-end' : 'ml-2 float-right';
 
 	return '<span class="uwp-help-tip dashicons dashicons-editor-help text-muted ' . $ml . '" title="' . $tip . '" data-bs-toggle="tooltip" data-bs-html="true"></span>';
 }
@@ -1415,8 +1527,9 @@ function uwp_help_tip( $tip, $allow_html = false ) {
  * @param string $var
  * @return string
  */
-function uwp_sanitize_tooltip( $var ) {
-	return htmlspecialchars( wp_kses( html_entity_decode( $var ), array(
+function uwp_sanitize_tooltip($var)
+{
+	return htmlspecialchars(wp_kses(html_entity_decode($var), array(
 		'br'     => array(),
 		'em'     => array(),
 		'strong' => array(),
@@ -1426,58 +1539,62 @@ function uwp_sanitize_tooltip( $var ) {
 		'li'     => array(),
 		'ol'     => array(),
 		'p'      => array(),
-	) ) );
+	)));
 }
 
-function uwp_all_email_tags( $inline = true, $extra_tags = array() ){
-	$tags = array( '[#site_name#]', '[#site_name_url#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#user_email#]', '[#first_name#]', '[#last_name#]','[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#profile_link#]' );
+function uwp_all_email_tags($inline = true, $extra_tags = array())
+{
+	$tags = array('[#site_name#]', '[#site_name_url#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#user_email#]', '[#first_name#]', '[#last_name#]', '[#login_details#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', '[#profile_link#]');
 
-	if(is_array($extra_tags) && count($extra_tags) > 0){
+	if (is_array($extra_tags) && count($extra_tags) > 0) {
 		$tags = array_merge($extra_tags, $tags);
 	}
 
-	$tags = apply_filters( 'uwp_all_email_tags', $tags );
+	$tags = apply_filters('uwp_all_email_tags', $tags);
 
-	if ( $inline ) {
-		$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+	if ($inline) {
+		$tags = '<code>' . implode('</code> <code>', $tags) . '</code>';
 	}
 
 	return $tags;
 }
 
-function uwp_wp_new_user_notification_tags( $inline = true, $extra_tags = array() ){
-	$tags = array( '[#site_name#]', '[#site_name_url#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#user_email#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]', );
+function uwp_wp_new_user_notification_tags($inline = true, $extra_tags = array())
+{
+	$tags = array('[#site_name#]', '[#site_name_url#]', '[#to_name#]', '[#from_name#]', '[#from_email#]', '[#user_name#]', '[#username#]', '[#user_email#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]',);
 
-	if(is_array($extra_tags) && count($extra_tags) > 0){
+	if (is_array($extra_tags) && count($extra_tags) > 0) {
 		$tags = array_merge($tags, $extra_tags);
 	}
 
-	$tags = apply_filters( 'uwp_wp_new_user_notification_email_tags', $tags );
+	$tags = apply_filters('uwp_wp_new_user_notification_email_tags', $tags);
 
-	if ( $inline ) {
-		$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+	if ($inline) {
+		$tags = '<code>' . implode('</code> <code>', $tags) . '</code>';
 	}
 
 	return $tags;
 }
 
 
-function uwp_delete_account_email_tags( $inline = true ){
-	$tags = array( '[#site_name#]', '[#site_name_url#]', '[#from_name#]', '[#from_email#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]' );
+function uwp_delete_account_email_tags($inline = true)
+{
+	$tags = array('[#site_name#]', '[#site_name_url#]', '[#from_name#]', '[#from_email#]', '[#date_time#]', '[#current_date#]', '[#login_url#]', '[#user_login#]');
 
-	$tags = apply_filters( 'uwp_delete_account_email_tags', $tags );
+	$tags = apply_filters('uwp_delete_account_email_tags', $tags);
 
-	if ( $inline ) {
-		$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+	if ($inline) {
+		$tags = '<code>' . implode('</code> <code>', $tags) . '</code>';
 	}
 
 	return $tags;
 }
 
-function uwp_authbox_tags( $inline = true ){
+function uwp_authbox_tags($inline = true)
+{
 	global $wpdb;
 
-	$tags = array( '[#post_id#]', '[#author_id#]', '[#author_display_name#]',  '[#author_name#]', '[#author_link#]', '[#author_bio#]', '[#author_image#]', '[#author_image_url#]', '[#post_modified#]', '[#post_date#]', '[#author_nicename#]', '[#author_registered#]', '[#author_website#]' );
+	$tags = array('[#post_id#]', '[#author_id#]', '[#author_display_name#]',  '[#author_name#]', '[#author_link#]', '[#author_bio#]', '[#author_image#]', '[#author_image_url#]', '[#post_modified#]', '[#post_date#]', '[#author_nicename#]', '[#author_registered#]', '[#author_website#]');
 
 	$tags = apply_filters('uwp_author_box_default_tags', $tags, $inline);
 
@@ -1487,48 +1604,48 @@ function uwp_authbox_tags( $inline = true ){
 
 	$columns = $wpdb->get_col("show columns from $table_name"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
-	$extra_tags = array_diff($columns,$excluded);
+	$extra_tags = array_diff($columns, $excluded);
 
-	if( !empty( $extra_tags ) && '' != $extra_tags ) {
+	if (!empty($extra_tags) && '' != $extra_tags) {
 
-		foreach ( $extra_tags as $tag_val ) {
-			$tags[] = '[#'.$tag_val.'#]';
+		foreach ($extra_tags as $tag_val) {
+			$tags[] = '[#' . $tag_val . '#]';
 		}
-
 	}
 
-	$tags = apply_filters( 'uwp_all_author_box_tags', $tags );
+	$tags = apply_filters('uwp_all_author_box_tags', $tags);
 
-	if ( $inline ) {
-		$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
+	if ($inline) {
+		$tags = '<code>' . implode('</code> <code>', $tags) . '</code>';
 	}
 
 	return $tags;
 }
 
-function uwp_get_posttypes() {
+function uwp_get_posttypes()
+{
 
-	$exclude_posts = array('attachment','revision','nav_menu_item','custom_css','uwp-post');
+	$exclude_posts = array('attachment', 'revision', 'nav_menu_item', 'custom_css', 'uwp-post');
 	$exclude_posttype = apply_filters('uwp_exclude_register_posttype', $exclude_posts);
 
-	$all_posttyps = get_post_types(array('public'   => true,),'objects');
+	$all_posttyps = get_post_types(array('public'   => true,), 'objects');
 
 	$display_posttypes = array();
 
-	if( !empty( $all_posttyps ) && '' != $all_posttyps ) {
-		foreach ( $all_posttyps as $pt_keys => $pt_values ) {
+	if (!empty($all_posttyps) && '' != $all_posttyps) {
+		foreach ($all_posttyps as $pt_keys => $pt_values) {
 
-			if( !in_array($pt_values->name,$exclude_posttype) ) {
+			if (!in_array($pt_values->name, $exclude_posttype)) {
 				$display_posttypes[$pt_values->name] = $pt_values->label;
 			}
-
 		}
 	}
 
 	return $display_posttypes;
 }
 
-function uwp_get_user_by_author_slug(){
+function uwp_get_user_by_author_slug()
+{
 	$url_type = apply_filters('uwp_profile_url_type', 'slug');
 	$author_slug = get_query_var('uwp_profile');
 	if ($url_type == 'id') {
@@ -1540,7 +1657,8 @@ function uwp_get_user_by_author_slug(){
 	return $user;
 }
 
-function uwp_get_show_in_locations(){
+function uwp_get_show_in_locations()
+{
 	$show_in_locations = array(
 		"[users]" => __("Users Page", 'userswp'),
 		"[more_info]" => __("More info tab", 'userswp'),
@@ -1553,34 +1671,37 @@ function uwp_get_show_in_locations(){
 	return $show_in_locations;
 }
 
-function uwp_get_displayed_user(){
+function uwp_get_displayed_user()
+{
 	global $uwp_user;
 	$user = uwp_get_user_by_author_slug(); // for user displayed in profile
 
-	if(!$user && is_user_logged_in()){
+	if (!$user && is_user_logged_in()) {
 		$user = get_userdata(get_current_user_id()); // for user currently logged in
 	}
 
-	if(isset($uwp_user) && !empty($uwp_user) && $uwp_user instanceof WP_User){ // for user displaying in loop
+	if (isset($uwp_user) && !empty($uwp_user) && $uwp_user instanceof WP_User) { // for user displaying in loop
 		$user = $uwp_user;
 	}
 
 	return apply_filters('uwp_get_displayed_user', $user);
 }
 
-function uwp_is_gdv2(){
+function uwp_is_gdv2()
+{
 
-	if(defined('GEODIRECTORY_VERSION') && version_compare(GEODIRECTORY_VERSION,'2.0.0.0', '>=') ) {
+	if (defined('GEODIRECTORY_VERSION') && version_compare(GEODIRECTORY_VERSION, '2.0.0.0', '>=')) {
 		return true;
 	}
 
 	return false;
 }
 
-function uwp_get_blogname() {
-	$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+function uwp_get_blogname()
+{
+	$blogname = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
 
-	return apply_filters( 'uwp_get_blogname', $blogname );
+	return apply_filters('uwp_get_blogname', $blogname);
 }
 
 /**
@@ -1591,21 +1712,22 @@ function uwp_get_blogname() {
  * @param string $color Color.
  * @return array $rgb.
  */
-function uwp_rgb_from_hex( $color ) {
-	$color = str_replace( '#', '', $color );
+function uwp_rgb_from_hex($color)
+{
+	$color = str_replace('#', '', $color);
 
 	// Convert shorthand colors to full format, e.g. "FFF" -> "FFFFFF"
-	$color = preg_replace( '~^(.)(.)(.)$~', '$1$1$2$2$3$3', $color );
-	if ( empty( $color ) ) {
+	$color = preg_replace('~^(.)(.)(.)$~', '$1$1$2$2$3$3', $color);
+	if (empty($color)) {
 		return NULL;
 	}
 
-	$color = str_split( $color );
+	$color = str_split($color);
 
 	$rgb      = array();
-	$rgb['R'] = hexdec( $color[0].$color[1] );
-	$rgb['G'] = hexdec( $color[2].$color[3] );
-	$rgb['B'] = hexdec( $color[4].$color[5] );
+	$rgb['R'] = hexdec($color[0] . $color[1]);
+	$rgb['G'] = hexdec($color[2] . $color[3]);
+	$rgb['B'] = hexdec($color[4] . $color[5]);
 
 	return $rgb;
 }
@@ -1619,20 +1741,21 @@ function uwp_rgb_from_hex( $color ) {
  * @param int $factor Optional. Factor. Default 30.
  * @return string $color.
  */
-function uwp_hex_darker( $color, $factor = 30 ) {
-	$base  = uwp_rgb_from_hex( $color );
-	if ( empty( $base ) ) {
+function uwp_hex_darker($color, $factor = 30)
+{
+	$base  = uwp_rgb_from_hex($color);
+	if (empty($base)) {
 		return $color;
 	}
 
 	$color = '#';
-	foreach ( $base as $k => $v ) {
+	foreach ($base as $k => $v) {
 		$amount      = $v / 100;
-		$amount      = round( $amount * $factor );
+		$amount      = round($amount * $factor);
 		$new_decimal = $v - $amount;
 
-		$new_hex_component = dechex( $new_decimal );
-		if ( strlen( $new_hex_component ) < 2 ) {
+		$new_hex_component = dechex($new_decimal);
+		if (strlen($new_hex_component) < 2) {
 			$new_hex_component = "0" . $new_hex_component;
 		}
 		$color .= $new_hex_component;
@@ -1650,22 +1773,23 @@ function uwp_hex_darker( $color, $factor = 30 ) {
  * @param int $factor Optional. factor. Default 30.
  * @return string $color.
  */
-function uwp_hex_lighter( $color, $factor = 30 ) {
-	$base  = uwp_rgb_from_hex( $color );
-	if ( empty( $base ) ) {
+function uwp_hex_lighter($color, $factor = 30)
+{
+	$base  = uwp_rgb_from_hex($color);
+	if (empty($base)) {
 		return $color;
 	}
 
 	$color = '#';
 
-	foreach ( $base as $k => $v ) {
+	foreach ($base as $k => $v) {
 		$amount      = 255 - $v;
 		$amount      = $amount / 100;
-		$amount      = round( $amount * $factor );
+		$amount      = round($amount * $factor);
 		$new_decimal = $v + $amount;
 
-		$new_hex_component = dechex( $new_decimal );
-		if ( strlen( $new_hex_component ) < 2 ) {
+		$new_hex_component = dechex($new_decimal);
+		if (strlen($new_hex_component) < 2) {
 			$new_hex_component = "0" . $new_hex_component;
 		}
 		$color .= $new_hex_component;
@@ -1684,17 +1808,18 @@ function uwp_hex_lighter( $color, $factor = 30 ) {
  * @param string $light Optional. Light. Default #FFFFFF.
  * @return string
  */
-function uwp_light_or_dark( $color, $dark = '#000000', $light = '#FFFFFF' ) {
-	$hex = str_replace( '#', '', $color );
-	if ( empty( $hex ) ) {
+function uwp_light_or_dark($color, $dark = '#000000', $light = '#FFFFFF')
+{
+	$hex = str_replace('#', '', $color);
+	if (empty($hex)) {
 		return $color;
 	}
 
-	$c_r = hexdec( substr( $hex, 0, 2 ) );
-	$c_g = hexdec( substr( $hex, 2, 2 ) );
-	$c_b = hexdec( substr( $hex, 4, 2 ) );
+	$c_r = hexdec(substr($hex, 0, 2));
+	$c_g = hexdec(substr($hex, 2, 2));
+	$c_b = hexdec(substr($hex, 4, 2));
 
-	$brightness = ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
+	$brightness = (($c_r * 299) + ($c_g * 587) + ($c_b * 114)) / 1000;
 
 	return $brightness > 155 ? $dark : $light;
 }
@@ -1707,13 +1832,14 @@ function uwp_light_or_dark( $color, $dark = '#000000', $light = '#FFFFFF' ) {
  * @param string $hex hex.
  * @return string
  */
-function uwp_format_hex( $hex ) {
-	$hex = trim( str_replace( '#', '', $hex ) );
-	if ( empty( $hex ) ) {
+function uwp_format_hex($hex)
+{
+	$hex = trim(str_replace('#', '', $hex));
+	if (empty($hex)) {
 		return NULL;
 	}
 
-	if ( strlen( $hex ) == 3 ) {
+	if (strlen($hex) == 3) {
 		$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
 	}
 
@@ -1729,42 +1855,43 @@ function uwp_format_hex( $hex ) {
  *
  * @return string $activation_link
  */
-function uwp_get_activation_link($user_id){
+function uwp_get_activation_link($user_id)
+{
 
 	global $wpdb, $wp_hasher;
 
-	if(!$user_id){
+	if (!$user_id) {
 		return false;
 	}
 
 	$user_data = get_userdata($user_id);
 
-	$key = wp_generate_password( 20, false );
+	$key = wp_generate_password(20, false);
 
-	do_action( 'uwp_activation_key', $user_data->user_login, $key );
+	do_action('uwp_activation_key', $user_data->user_login, $key);
 
-	if ( empty( $wp_hasher ) ) {
+	if (empty($wp_hasher)) {
 		require_once ABSPATH . 'wp-includes/class-phpass.php';
-		$wp_hasher = new PasswordHash( 8, true );
+		$wp_hasher = new PasswordHash(8, true);
 	}
-	$hashed = $wp_hasher->HashPassword( $key );
-	$wpdb->update( $wpdb->users, array( 'user_activation_key' => time().":".$hashed ), array( 'user_login' => $user_data->user_login ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-	update_user_meta( $user_id, 'uwp_mod', 'email_unconfirmed' );
+	$hashed = $wp_hasher->HashPassword($key);
+	$wpdb->update($wpdb->users, array('user_activation_key' => time() . ":" . $hashed), array('user_login' => $user_data->user_login)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+	update_user_meta($user_id, 'uwp_mod', 'email_unconfirmed');
 
 	$activation_args = array(
 		'uwp_activate' => 'yes',
 		'key' => $key,
 		'login' => $user_data->user_login
 	);
-	
-	$activation_args = apply_filters( 'uwp_activation_link_args', $activation_args, $user_id, $user_data );
-	
+
+	$activation_args = apply_filters('uwp_activation_link_args', $activation_args, $user_id, $user_data);
+
 	$activation_link = add_query_arg(
 		$activation_args,
 		home_url('/login/')
 	);
 
-	return apply_filters( 'uwp_activation_link', $activation_link, $user_id, $user_data, $activation_args );
+	return apply_filters('uwp_activation_link', $activation_link, $user_id, $user_data, $activation_args);
 }
 
 /**
@@ -1775,15 +1902,16 @@ function uwp_get_activation_link($user_id){
  *
  * @return bool
  */
-function uwp_min_version_check( $name, $version ) {
-	if ( version_compare( USERSWP_VERSION, $version, '<' ) ) {
-		add_action( 'admin_notices', function () use ( &$name ) {
-			?>
-            <div class="notice notice-error is-dismissible">
-                <p><?php echo esc_html( wp_sprintf( __( "%s requires a newer version of UsersWP and will not run until the UsersWP plugin is updated.", "userswp" ), $name ) ); ?></p>
-            </div>
-			<?php
-		} );
+function uwp_min_version_check($name, $version)
+{
+	if (version_compare(USERSWP_VERSION, $version, '<')) {
+		add_action('admin_notices', function () use (&$name) {
+	?>
+			<div class="notice notice-error is-dismissible">
+				<p><?php echo esc_html(wp_sprintf(__("%s requires a newer version of UsersWP and will not run until the UsersWP plugin is updated.", "userswp"), $name)); ?></p>
+			</div>
+<?php
+		});
 
 		return false;
 	}
@@ -1791,57 +1919,61 @@ function uwp_min_version_check( $name, $version ) {
 	return true;
 }
 
-function uwp_get_user_roles($exclude = array()) {
+function uwp_get_user_roles($exclude = array())
+{
 	$user_roles = array();
-	if ( !function_exists('get_editable_roles') ) {
-		require_once( ABSPATH . '/wp-admin/includes/user.php' );
+	if (!function_exists('get_editable_roles')) {
+		require_once(ABSPATH . '/wp-admin/includes/user.php');
 	}
 
 	$wp_roles = get_editable_roles();
-	if(!empty($wp_roles) && is_array($wp_roles)) {
-		foreach ( $wp_roles as $role => $details ) {
-			if ( in_array( $role, $exclude ) ) {
+	if (!empty($wp_roles) && is_array($wp_roles)) {
+		foreach ($wp_roles as $role => $details) {
+			if (in_array($role, $exclude)) {
 			} else {
-				$user_roles[ esc_attr( $role ) ] = !empty($details['name']) ? translate_user_role( $details['name'] ): $role;
+				$user_roles[esc_attr($role)] = !empty($details['name']) ? translate_user_role($details['name']) : $role;
 			}
-
 		}
 	}
 
 	return $user_roles;
 }
 
-function uwp_get_sort_by_order_list(){
+function uwp_get_sort_by_order_list()
+{
 
 	$cache = wp_cache_get("uwp_get_sort_options");
-	if($cache !== false){
+	if ($cache !== false) {
 		return $cache;
 	}
 
 	global $wpdb;
 	$table_name = uwp_get_table_prefix() . 'uwp_user_sorting';
 
-	$sort_options_raw = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . $table_name . " WHERE is_active = %d AND field_type != 'address' AND tab_parent = '0' ORDER BY sort_order ASC", array( 1 ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+	$sort_options_raw = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE is_active = %d AND field_type != 'address' AND tab_parent = '0' ORDER BY sort_order ASC", array(1))); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 
 	$sort_options = array();
 
-	if ( ! empty( $sort_options_raw ) && count( $sort_options_raw ) > 1 ) {
-		foreach ( $sort_options_raw as $sort ) {
-			$sort = stripslashes_deep( $sort );
+	if (! empty($sort_options_raw) && count($sort_options_raw) > 1) {
+		foreach ($sort_options_raw as $sort) {
+			$sort = stripslashes_deep($sort);
 
-			$sort->site_title = __( wp_unslash( $sort->site_title ), 'userswp' );
+			$sort->site_title = __(wp_unslash($sort->site_title), 'userswp');
 
-			if ( $sort->htmlvar_name == 'comment_count' ) {
+			if ($sort->htmlvar_name == 'comment_count') {
 				$sort->htmlvar_name = 'rating_count';
 			}
 
 			$key = $sort->htmlvar_name;
-			if ( !in_array($key, array('newer', 'older')) ) {
-				if($sort->sort == 'asc'){$key = esc_attr($sort->htmlvar_name."_asc");}
-                elseif($sort->sort == 'desc'){$key = esc_attr($sort->htmlvar_name."_desc");}
+			if (!in_array($key, array('newer', 'older'))) {
+				if ($sort->sort == 'asc') {
+					$key = esc_attr($sort->htmlvar_name . "_asc");
+				} elseif ($sort->sort == 'desc') {
+					$key = esc_attr($sort->htmlvar_name . "_desc");
+				}
 			}
 
-			$sort_options[$key] = wp_unslash( $sort->site_title );
+			$sort_options[$key] = wp_unslash($sort->site_title);
 		}
 	}
 
@@ -1850,53 +1982,54 @@ function uwp_get_sort_by_order_list(){
 	 *
 	 * @param array $sort_options Unfiltered sort field array.
 	 */
-	$sort_options = apply_filters( 'uwp_available_users_layout', $sort_options );
+	$sort_options = apply_filters('uwp_available_users_layout', $sort_options);
 
-	wp_cache_set("uwp_get_sort_options", $sort_options );
+	wp_cache_set("uwp_get_sort_options", $sort_options);
 
 	return $sort_options;
 }
 
-function uwp_get_default_sort(){
+function uwp_get_default_sort()
+{
 
 	$cache = wp_cache_get("uwp_get_default_sort");
 
-	if($cache !== false){
+	if ($cache !== false) {
 		return $cache;
 	}
 
 	$default_sort = 'newer_asc';
 
-    global $wpdb;
+	global $wpdb;
 	$table_name = uwp_get_table_prefix() . 'uwp_user_sorting';
 
-	$field = $wpdb->get_row("SELECT htmlvar_name, sort, field_type FROM " . $table_name . " WHERE is_active = 1 AND is_default = 1 ORDER BY sort_order ASC" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-	if ( ! empty( $field ) ) {
-		if ( $field->field_type == 'random' ) {
+	$field = $wpdb->get_row("SELECT htmlvar_name, sort, field_type FROM " . $table_name . " WHERE is_active = 1 AND is_default = 1 ORDER BY sort_order ASC"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+	if (! empty($field)) {
+		if ($field->field_type == 'random') {
 			$default_sort = 'random';
-		} elseif ( 'newer' == $field->htmlvar_name) {
-            $default_sort = 'user_registered_desc';
-		} elseif ( 'older' == $field->htmlvar_name ) {
+		} elseif ('newer' == $field->htmlvar_name) {
+			$default_sort = 'user_registered_desc';
+		} elseif ('older' == $field->htmlvar_name) {
 			$default_sort = 'user_registered_asc';
-		}else {
+		} else {
 			$default_sort = $field->htmlvar_name . '_' . $field->sort;
 		}
 	}
 
-	wp_cache_set("uwp_get_default_sort", $default_sort );
+	wp_cache_set("uwp_get_default_sort", $default_sort);
 
 	return $default_sort;
-
 }
 
-function uwp_get_username( $user_id ) {
-	$user_data = get_userdata( $user_id );
+function uwp_get_username($user_id)
+{
+	$user_data = get_userdata($user_id);
 
-	if ( ! $user_data ) {
+	if (! $user_data) {
 		return '';
 	}
 
-	$display_name = ! empty( $user_data->display_name ) ? $user_data->display_name : $user_data->user_login;
+	$display_name = ! empty($user_data->display_name) ? $user_data->display_name : $user_data->user_login;
 
-	return apply_filters( 'uwp_get_username', $display_name, $user_id, $user_data );
+	return apply_filters('uwp_get_username', $display_name, $user_id, $user_data);
 }
