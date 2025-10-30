@@ -254,8 +254,8 @@ function uwp_init_auth_modal(){
 
     // open login form
     if(uwp_localize_data.login_modal) {
-        jQuery('.users-wp-login-nav a, .uwp-login-link').off('click');
-        jQuery(".users-wp-login-nav a, .uwp-login-link").on('click', function (e) {
+        jQuery('.users-wp-login-nav a, .uwp-login-link, [data-uwp-link="login"]').off('click');
+        jQuery('.users-wp-login-nav a, .uwp-login-link, [data-uwp-link="login"]').on('click', function (e) {
             uwp_cancelBubble(e);
             uwp_modal_login_form();
             return false;
@@ -264,8 +264,8 @@ function uwp_init_auth_modal(){
 
     // open the register form
     if(uwp_localize_data.register_modal) {
-        jQuery('.users-wp-register-nav a, .uwp-register-link').off('click');
-        jQuery(".users-wp-register-nav a, .uwp-register-link").on('click', function (e) {
+        jQuery('.users-wp-register-nav a, .uwp-register-link, [data-uwp-link="register"]').off('click');
+        jQuery('.users-wp-register-nav a, .uwp-register-link, [data-uwp-link="register"]').on('click', function (e) {
             uwp_cancelBubble(e);
             uwp_modal_register_form();
             return false;
@@ -274,8 +274,8 @@ function uwp_init_auth_modal(){
 
     // open the forgot password form
     if(uwp_localize_data.forgot_modal) {
-        jQuery('.users-wp-forgot-nav a, .uwp-forgot-password-link').off('click');
-        jQuery(".users-wp-forgot-nav a, .uwp-forgot-password-link").on('click', function (e) {
+        jQuery('.users-wp-forgot-nav a, .uwp-forgot-password-link, [data-uwp-link="forgot-password"]').off('click');
+        jQuery('.users-wp-forgot-nav a, .uwp-forgot-password-link, [data-uwp-link="forgot-password"]').on('click', function (e) {
             uwp_cancelBubble(e);
             uwp_modal_forgot_password_form();
             return false;
