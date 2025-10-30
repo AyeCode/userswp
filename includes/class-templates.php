@@ -525,21 +525,44 @@ class UsersWP_Templates {
 		$form_id = ! empty( $args['id'] ) ? (int) $args['id'] : uwp_get_option('register_modal_form', 1);
 		if ( $form_type == 'register' ) {
 			$fields = get_register_form_fields($form_id);
-			$form_limit = ! empty( $args['limit'] ) ? $args['limit'] : '';
+			// Use limit from args, otherwise fall back to the register_modal_form setting.
+			$form_limit = ! empty( $args['limit'] ) ? $args['limit'] : uwp_get_option('register_modal_form', '');
 			if(isset($form_limit) && !is_array($form_limit)){
 				$form_limit = explode(',', $form_limit);
 			}
 
-			if(isset($form_limit) && !empty($form_limit) && count($form_limit) > 1){
+		if(isset($form_limit) && !empty($form_limit) && count($form_limit) > 1){
 
-				$form_limit = array_map('uwp_clean', $form_limit);
-				$form_limit = array_map('trim', $form_limit);
-				$options  = uwp_get_register_forms_dropdown_options($form_limit);
-				$id         = wp_doing_ajax() ? "uwp-form-select-ajax" : 'uwp-form-select';
+			$form_limit = array_map('uwp_clean', $form_limit);
+			$form_limit = array_map('trim', $form_limit);
+			$options  = uwp_get_register_forms_dropdown_options($form_limit);
+			$selector_id = wp_doing_ajax() ? "uwp-form-select-ajax" : 'uwp-form-select';
+			$display_style = uwp_get_option('register_form_display_style', 'buttons');
 
-
+			if ( $display_style === 'select' ) {
+				// Render as select dropdown.
+				$selector_label = apply_filters( 'uwp_account_type_selector_label', __('Account Type', 'userswp'), $form_type, $args );
 				?>
-                <div class="btn-group btn-group-sm d-flex mb-2" role="group" id="<?php echo esc_attr( $id ); ?>">
+				<div class="form-group mb-3" id="<?php echo esc_attr( $selector_id ); ?>">
+					<label for="uwp-form-type-select" class="form-label"><?php echo esc_html( $selector_label ); ?></label>
+					<select id="uwp-form-type-select" class="form-select aui-select2 w-100" data-form-selector="select">
+						<?php
+						foreach ( $options as $option_id => $option_label ) {
+							$selected = $form_id == $option_id ? 'selected' : '';
+							?>
+							<option value="<?php echo esc_attr( $option_id ); ?>" <?php echo esc_attr( $selected ); ?> data-form_id="<?php echo esc_attr( $option_id ); ?>">
+								<?php echo esc_html( $option_label ); ?>
+							</option>
+							<?php
+						}
+						?>
+					</select>
+				</div>
+				<?php
+			} else {
+				// Render as button groups (default)
+				?>
+				<div class="btn-group btn-group-sm d-flex mb-3" role="group" id="<?php echo esc_attr( $selector_id ); ?>">
 				<?php
 				$options = array_chunk( $options, 5, true );
 				$current_url   = uwp_current_page_url();
@@ -564,11 +587,11 @@ class UsersWP_Templates {
 						$active = $form_id == $id ? 'active' : '';
 						$url = esc_url_raw( add_query_arg( array( 'uwp_form_id' => $id ), $current_url ) );
 						?>
-                        <div class="btn-group" role="group">
-                            <button id="uwp-form-select-dropdown" type="button" class="btn btn-secondary dropdown-toggle" data-<?php echo ( $aui_bs5 ? 'bs-' : '' ); ?>toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <?php esc_attr_e('More', 'userswp'); ?>
-                            </button>
-                            <div class="dropdown-menu mt-3" aria-labelledby="uwp-form-select">
+						<div class="btn-group" role="group">
+							<button id="uwp-form-select-dropdown" type="button" class="btn btn-secondary dropdown-toggle" data-<?php echo ( $aui_bs5 ? 'bs-' : '' ); ?>toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<?php esc_attr_e('More', 'userswp'); ?>
+							</button>
+							<div class="dropdown-menu mt-3" aria-labelledby="uwp-form-select">
 								<?php
 								echo aui()->button( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'type'    => 'a',
@@ -578,15 +601,16 @@ class UsersWP_Templates {
 									'extra_attributes'  => array('data-form_id'=> esc_attr( $id ) )
 								) );
 								?>
-                            </div>
-                        </div>
+							</div>
+						</div>
 						<?php
 					}
 				}
 				?>
-                </div>
+				</div>
 				<?php
 			}
+		}
 		} elseif ( $form_type == 'account' ) {
 			$fields = get_account_form_fields();
 		} elseif ( $form_type == 'change' ) {
