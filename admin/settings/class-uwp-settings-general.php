@@ -109,11 +109,23 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 	            ),
 	            array(
 		            'id'   => 'register_modal_form',
-		            'name' => __( 'Lightbox Form(s)', 'userswp' ),
-		            'desc' => __( 'Choose form(s) to display in lighbox. You can select multiple forms.','userswp'),
+		            'name' => __( 'Register Form(s)', 'userswp' ),
+		            'desc' => __( 'Choose form(s) to display on registration pages. When multiple forms are selected, users can choose their user type. Applies to both lightbox and normal registration forms.','userswp'),
 		            'type' => 'multiselect',
 		            'options'  => uwp_get_register_forms_dropdown_options(),
 		            'default'  => '1',
+		            'desc_tip' => true,
+	            ),
+	            array(
+		            'id'   => 'register_form_display_style',
+		            'name' => __( 'User Type Selector Style', 'userswp' ),
+		            'desc' => __( 'Choose how to display the user type selector when multiple forms are available. Button groups work best for 2-5 user types, while select field is better for many types.','userswp'),
+		            'type' => 'select',
+		            'options'  => array(
+			            'buttons' => __( 'Button Groups', 'userswp' ),
+			            'select'  => __( 'Select Field (Dropdown)', 'userswp' ),
+		            ),
+		            'default'  => 'buttons',
 		            'desc_tip' => true,
 	            ),
 				array(
