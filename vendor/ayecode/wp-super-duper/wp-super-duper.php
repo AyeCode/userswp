@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.26' );
+	define( 'SUPER_DUPER_VER', '1.2.28' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -2791,9 +2791,26 @@ function handleDrop(item) {
 }
 <?php } ?>
 
-							if (typeof(props.attributes.styleid) !== 'undefined'){
-								if(props.attributes.styleid==''){ props.setAttributes({ 'styleid': 'block-'+(Math.random() + 1).toString(36).substring(2) } ); }
-							}
+	if (typeof(props.attributes.styleid) !== 'undefined') {
+		var _styleId = props.attributes.styleid, setStyleId;
+		if (!window.sdStyleId) {
+			window.sdStyleId = [];
+		}
+		if (_styleId) {
+			if (window.sdStyleId && window.sdStyleId[_styleId] && window.sdStyleId[_styleId] != props.clientId) {
+				setStyleId = true;
+			}
+		} else {
+			setStyleId = true;
+		}
+		if (setStyleId) {
+			_styleId = 'block-' + (Math.random() + 1).toString(36).substring(2);
+		}
+		window.sdStyleId[_styleId] = props.clientId;
+		if (setStyleId) {
+			props.setAttributes({'styleid': _styleId});
+		}
+	}
 
 							<?php
 							if(!empty($this->options['block-edit-raw'])) {
@@ -3561,6 +3578,8 @@ el('div',{className: 'bsui'},
 		}
 
 		public function build_block_arguments( $key, $args ) {
+			global $aui_bs5;
+
 			$custom_attributes = ! empty( $args['custom_attributes'] ) ? $this->array_to_attributes( $args['custom_attributes'] ) : '';
 			$options           = '';
 			$extra             = '';
@@ -3975,7 +3994,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 				$type = 'AlignmentToolbar'; // @todo this does not seem to work but cant find a example
 			} else if ( $args['type'] == 'margins' ) {
 
-			} else if ( $args['type'] == 'visibility_conditions' && ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) ) {
+			} else if ( $args['type'] == 'visibility_conditions' && $this->supports_block_visibility() ) {
 				$type = 'TextControl';
 				$value = "(props.attributes.$key ? props.attributes.$key : '')";
 				$args['type'] = 'text';
@@ -3983,7 +4002,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 				$bsvc_title = esc_attr( addslashes( $args['title'] ) );
 				$bsvc_body = $this->block_visibility_fields( $args );
 				// @TODO reset button
-				$bsvc_footer = '<button type="button" class="btn btn-danger d-none">' . __( 'Reset', 'ayecode-connect' ) . '</button><button type="button" class="btn btn-secondary bs-vc-close text-white" data-bs-dismiss="modal">' . __( 'Close', 'ayecode-connect' ) . '</button><button type="button" class="btn btn-primary bs-vc-save">' . __( 'Save Rules', 'ayecode-connect' ) . '</button>';
+				$bsvc_footer = '<button type="button" class="btn btn-danger d-none">' . __( 'Reset', 'ayecode-connect' ) . '</button>' . ( $aui_bs5 ? '<button type="button" class="btn btn-secondary bs-vc-close text-white" data-bs-dismiss="modal">' . __( 'Close', 'ayecode-connect' ) . '</button>' : '<button type="button" class="close btn btn-secondary bs-vc-close text-white" data-dismiss="modal" aria-label="' . esc_attr__( 'Close', 'ayecode-connect' ) . '"><span aria-hidden="true">&times;</span></button>' ) . '<button type="button" class="btn btn-primary bs-vc-save">' . __( 'Save Rules', 'ayecode-connect' ) . '</button>';
 				$after_elements .= "el('div', {className: 'components-base-control bs-vc-button-wrap'}, el(wp.components.Button, {
 						className: 'components-button components-circular-option-picker__clear is-primary is-smallx',
 						onClick: function() {
@@ -4475,6 +4494,17 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 		}
 
 		/**
+		 * Check for Breakdance builder preview.
+		 *
+		 * @since 1.2.28
+		 *
+		 * @return bool True when preview page otherwise false.
+		 */
+		public function is_breakdance_preview() {
+			return ( \function_exists( 'Breakdance\\isRequestFromBuilderIframe' ) && ( \Breakdance\isRequestFromBuilderIframe() || \Breakdance\isRequestFromBuilderSsr() ) );
+		}
+
+		/**
 		 * General function to check if we are in a preview situation.
 		 *
 		 * @return bool
@@ -4501,6 +4531,8 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 			} elseif( $this->is_block_content_call() ) {
 				$preview = true;
 			} elseif( $this->is_bricks_preview() ) {
+				$preview = true;
+			} elseif( $this->is_breakdance_preview() ) {
 				$preview = true;
 			}
 
@@ -5088,19 +5120,21 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 		}
 
 		public function block_visibility_fields( $args ) {
+			global $aui_bs5;
+
 			$value = ! empty( $args['value'] ) ? esc_attr( $args['value'] ) : '';
 			$content = '<div class="bs-vc-rule-template d-none">';
-				$content .= '<div class="p-3 pb-0 mb-3 border border-1 rounded-1 position-relative bs-vc-rule" data-bs-index="BSVCINDEX" >';
+				$content .= '<div class="px-3 pt-3 pb-0 mb-3 border border-1 rounded-1 position-relative bs-vc-rule" data-bs-index="BSVCINDEX" >';
 					$content .= '<div class="row">';
 						$content .= '<div class="col-sm-12">';
-							$content .= '<div class="bs-rule-action position-absolute top-0 end-0 p-2 zindex-5"><span class="text-danger c-pointer bs-vc-remove-rule" title="' . esc_attr__( 'Remove Rule', 'ayecode-connect' ) . '"><i class="fas fa-circle-minus fs-6"></i></span></div>';
+							$content .= '<div class="bs-rule-action position-absolute top-0 end-0 right-0 p-2 zindex-5"' . ( $aui_bs5 ? '' : ' style="top:0!important;right:0!important;z-index:5!important;"' ) . '><span class="text-danger c-pointer bs-vc-remove-rule" title="' . esc_attr__( 'Remove Rule', 'ayecode-connect' ) . '"><i class="fas fa-circle-minus fs-6"></i></span></div>';
 							$content .= aui()->select(
 								array(
 									'id'          => 'bsvc_rule_BSVCINDEX',
 									'name'        => 'bsvc_rule_BSVCINDEX',
 									'label'       => __( 'Rule', 'ayecode-connect' ),
 									'placeholder' => __( 'Select Rule...', 'ayecode-connect' ),
-									'class'       => 'bsvc_rule form-select-sm no-select2 mw-100',
+									'class'       => 'bsvc_rule ' . ( $aui_bs5 ? 'form-select-sm' : 'custom-select-sm' ) . ' no-select2 mw-100',
 									'options'     => sd_visibility_rules_options(),
 									'default'     => '',
 									'value'       => '',
@@ -5115,6 +5149,10 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 
 						$content .= '</div>';
 
+						if ( ! $aui_bs5 ) {
+							$content = str_replace( 'input-group"', 'input-group input-group-sm"', $content );
+						}
+
 						if ( class_exists( 'GeoDirectory' ) ) {
 							$content .= '<div class="col-md-7 col-sm-12">';
 
@@ -5124,7 +5162,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 										'name'        => 'bsvc_gd_field_BSVCINDEX',
 										'label'       => __( 'FIELD', 'ayecode-connect' ),
 										'placeholder' => __( 'FIELD', 'ayecode-connect' ),
-										'class'       => 'bsvc_gd_field form-select-sm no-select2 mw-100',
+										'class'       => 'bsvc_gd_field ' . ( $aui_bs5 ? 'form-select-sm' : 'custom-select-sm' ) . ' no-select2 mw-100',
 										'options'     => sd_visibility_gd_field_options(),
 										'default'     => '',
 										'value'       => '',
@@ -5146,7 +5184,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 										'name'        => 'bsvc_gd_field_condition_BSVCINDEX',
 										'label'       => __( 'CONDITION', 'ayecode-connect' ),
 										'placeholder' => __( 'CONDITION', 'ayecode-connect' ),
-										'class'       => 'bsvc_gd_field_condition form-select-sm no-select2 mw-100',
+										'class'       => 'bsvc_gd_field_condition ' . ( $aui_bs5 ? 'form-select-sm' : 'custom-select-sm' ) . ' no-select2 mw-100',
 										'options'     => sd_visibility_field_condition_options(),
 										'default'     => '',
 										'value'       => '',
@@ -5183,14 +5221,14 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 
 					$content .= '</div>';
 
-					$content .= '<div class="row aui-conditional-field" data-element-require="jQuery(form).find(\'[name=bsvc_rule_BSVCINDEX]\').val()==\'user_roles\'" data-argument="bsvc_user_roles_BSVCINDEX_1"><label for="bsvc_user_roles_BSVCINDEX_1" class="form-label mb-3">' . __( 'Select User Roles:', 'ayecode-connect' ) . '</label>';
+					$content .= '<div class="row aui-conditional-field" data-element-require="jQuery(form).find(\'[name=bsvc_rule_BSVCINDEX]\').val()==\'user_roles\'" data-argument="bsvc_user_roles_BSVCINDEX_1"><label for="bsvc_user_roles_BSVCINDEX_1" class="form-label mb-3' . ( $aui_bs5 ? '' : ' ml-3 w-100' ) . '">' . __( 'Select User Roles:', 'ayecode-connect' ) . '</label>';
 						$role_options = sd_user_roles_options();
 
 						$role_option_i = 0;
 						foreach ( $role_options as $role_option_key => $role_option_name ) {
 							$role_option_i++;
 
-							$content .= '<div class="col-sm-6">';
+							$content .= '<div class="col-sm-6' . ( $aui_bs5 ? '' : ' mb-2' ) . '">';
 							$content .= aui()->input(
 								array(
 									'id'               => 'bsvc_user_roles_BSVCINDEX_' . $role_option_i,
@@ -5207,7 +5245,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 							$content .= '</div>';
 						}
 					$content .= '</div>';
-					$content .= '<div class="bs-vc-sep-wrap text-center position-absolute top-0 mt-n3"><div class="bs-vc-sep-cond d-inline-block badge text-dark bg-gray mt-1">' . esc_html__( 'AND', 'ayecode-connect' ) . '</div></div>';
+					$content .= '<div class="bs-vc-sep-wrap text-center position-absolute top-0 mt-n3"' . ( $aui_bs5 ? '' : ' style="top:0!important;"' ) . '><div class="bs-vc-sep-cond d-inline-block badge text-dark bg-gray mt-1">' . esc_html__( 'AND', 'ayecode-connect' ) . '</div></div>';
 				$content .= '</div>';
 			$content .= '</div>';
 			$content .= '<form id="bs-vc-modal-form" class="bs-vc-modal-form">';
@@ -5220,7 +5258,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'        => 'bsvc_output',
 					'label'       => __( 'What should happen if rules met.', 'ayecode-connect' ),
 					'placeholder' => __( 'Show Block', 'ayecode-connect' ),
-					'class'       => 'bsvc_output form-select-sm no-select2 mw-100',
+					'class'       => 'bsvc_output ' . ( $aui_bs5 ? 'form-select-sm' : 'custom-select-sm' ) . ' no-select2 mw-100',
 					'options'     => sd_visibility_output_options(),
 					'default'     => '',
 					'value'       => '',
@@ -5240,7 +5278,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'            => 'bsvc_page',
 					'label'           => __( 'Page Content', 'ayecode-connect' ),
 					'placeholder'     => __( 'Select Page ID...', 'ayecode-connect' ),
-					'class'           => 'bsvc_page form-select-sm no-select2 mw-100',
+					'class'           => 'bsvc_page ' . ( $aui_bs5 ? 'form-select-sm' : 'custom-select-sm' ) . ' no-select2 mw-100',
 					'options'         => sd_template_page_options(),
 					'default'         => '',
 					'value'           => '',
@@ -5256,7 +5294,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'        => 'bsvc_tmpl_part',
 					'label'       => __( 'Template Part', 'ayecode-connect' ),
 					'placeholder' => __( 'Select Template Part...', 'ayecode-connect' ),
-					'class'       => 'bsvc_tmpl_part form-select-sm no-select2 mw-100',
+					'class'       => 'bsvc_tmpl_part ' . ( $aui_bs5 ? 'form-select-sm' : 'custom-select-sm' ) . ' no-select2 mw-100',
 					'options'     => sd_template_part_options(),
 					'default'     => '',
 					'value'       => '',
@@ -5275,7 +5313,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'             => 'bsvc_message_type',
 					'label'            => __( 'Custom Message Type', 'ayecode-connect' ),
 					'placeholder'      => __( 'Default (none)', 'ayecode-connect' ),
-					'class'            => 'bsvc_message_type form-select-sm no-select2 mw-100',
+					'class'            => 'bsvc_message_type ' . ( $aui_bs5 ? 'form-select-sm' : 'custom-select-sm' ) . ' no-select2 mw-100',
 					'options'          => sd_aui_colors(),
 					'default'          => '',
 					'value'            => '',
@@ -5312,7 +5350,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'        => 'bsvc_output_n',
 					'label'       => __( 'What should happen if rules NOT met.', 'ayecode-connect' ),
 					'placeholder' => __( 'Show Block', 'ayecode-connect' ),
-					'class'       => 'bsvc_output_n form-select-sm no-select2 mw-100',
+					'class'       => 'bsvc_output_n ' . ( $aui_bs5 ? 'form-select-sm' : 'custom-select-sm' ) . ' no-select2 mw-100',
 					'options'     => sd_visibility_output_options(),
 					'default'     => '',
 					'value'       => '',
@@ -5332,7 +5370,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'            => 'bsvc_page_n',
 					'label'           => __( 'Page Content', 'ayecode-connect' ),
 					'placeholder'     => __( 'Select Page ID...', 'ayecode-connect' ),
-					'class'           => 'bsvc_page_n form-select-sm no-select2 mw-100',
+					'class'           => 'bsvc_page_n ' . ( $aui_bs5 ? 'form-select-sm' : 'custom-select-sm' ) . ' no-select2 mw-100',
 					'options'         => sd_template_page_options(),
 					'default'         => '',
 					'value'           => '',
@@ -5348,7 +5386,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'        => 'bsvc_tmpl_part_n',
 					'label'       => __( 'Template Part', 'ayecode-connect' ),
 					'placeholder' => __( 'Select Template Part...', 'ayecode-connect' ),
-					'class'       => 'bsvc_tmpl_part_n form-select-sm no-select2 mw-100',
+					'class'       => 'bsvc_tmpl_part_n ' . ( $aui_bs5 ? 'form-select-sm' : 'custom-select-sm' ) . ' no-select2 mw-100',
 					'options'     => sd_template_part_options(),
 					'default'     => '',
 					'value'       => '',
@@ -5367,7 +5405,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'             => 'bsvc_message_type_n',
 					'label'            => __( 'Custom Message Type', 'ayecode-connect' ),
 					'placeholder'      => __( 'Default (none)', 'ayecode-connect' ),
-					'class'            => 'bsvc_message_type_n form-select-sm no-select2 mw-100',
+					'class'            => 'bsvc_message_type_n ' . ( $aui_bs5 ? 'form-select-sm' : 'custom-select-sm' ) . ' no-select2 mw-100',
 					'options'          => sd_aui_colors(),
 					'default'          => '',
 					'value'            => '',
@@ -5414,6 +5452,51 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 			if ( defined( 'US_CORE_DIR' ) && ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'us_ajax_hb_get_ebuilder_html' ) {
 				$shortcode_insert_button_once = true;
 			}
+		}
+
+		/**
+		 * Check if supports block visibility.
+		 *
+		 * @since 1.2.28
+		 * @return bool True if site supports block visibility else False.
+		 */
+		public function supports_block_visibility() {
+			// FSE Theme.
+			if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+				return true;
+			}
+
+			// BlockStrap Block Builder.
+			if ( defined( 'BLOCKSTRAP_BLOCKS_VERSION' ) ) {
+				return true;
+			}
+
+			return $this->is_gutenberg();
+		}
+
+		/**
+		 * Check if Gutenberg is in use.
+		 *
+		 * @since 1.2.28
+		 * @return bool True if site uses Gutenberg else False.
+		 */
+		public function is_gutenberg() {
+			global $wp_version;
+
+			$is_gutenberg = true;
+
+			// If less than v5.
+			if ( version_compare( $wp_version, '5.0.0', '<' ) ) {
+				$is_gutenberg = false;
+			}
+
+			if ( class_exists( 'Classic_Editor' ) ) {
+				$is_gutenberg = false; // Classic Editor plugin is active.
+			} else if ( geodir_is_classicpress() ) {
+				$is_gutenberg = false; // Site is using ClassicPress.
+			}
+
+			return $is_gutenberg;
 		}
 	}
 }

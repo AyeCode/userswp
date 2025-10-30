@@ -1,3 +1,11 @@
+= 1.2.28 - 2025-10-30 =
+* Add Block Visibility support for non FSE themes - ADDED
+* Detect Breakdance builder preview - ADDED
+* Check function mb_strtolower exists or not - FIXED
+
+= 1.2.27 - 2025-10-16 =
+* Hover style is not working on clone BS element - FIXED
+
 = 1.2.26 - 2025-08-28 =
 * In some cases it shows $ml_md not found notice - FIXED
 

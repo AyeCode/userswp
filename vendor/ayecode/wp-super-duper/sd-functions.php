@@ -2297,7 +2297,11 @@ function sd_parse_custom_attributes( $attributes_string, $delimiter = ',' ) {
 	foreach ( $attributes as $attribute ) {
 		$attr_key_value = explode( '|', $attribute );
 
-		$attr_key = mb_strtolower( $attr_key_value[0] );
+		if ( function_exists( 'mb_strtolower' ) ) {
+			$attr_key = mb_strtolower( $attr_key_value[0] );
+		} else {
+			$attr_key = strtolower( $attr_key_value[0] );
+		}
 
 		// Remove any not allowed characters.
 		preg_match( '/[-_a-z0-9]+/', $attr_key, $attr_key_matches );
