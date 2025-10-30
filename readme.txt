@@ -156,6 +156,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 * Window reload on user ajax registration prevent users to read the success message - FIXED
 * Unable to customize login/account page templates with Breakdance builder - FIXED
 * Show placeholder for uwp_login shortcode on editor - CHANGED
+* User type selector now displays on both lightbox and normal registration forms - ADDED
 
 = 1.2.45 - 2025-09-05 =
 * Extra sanitization and escaping during remove file field value - FIXED/SECURITY

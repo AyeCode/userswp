@@ -539,12 +539,12 @@ class UsersWP_Templates {
 			$selector_id = wp_doing_ajax() ? "uwp-form-select-ajax" : 'uwp-form-select';
 			$display_style = uwp_get_option('register_form_display_style', 'buttons');
 
-			// Check if we should display as select field or button groups
 			if ( $display_style === 'select' ) {
-				// Render as select dropdown
+				// Render as select dropdown.
+				$selector_label = apply_filters( 'uwp_account_type_selector_label', __('Account Type', 'userswp'), $form_type, $args );
 				?>
 				<div class="form-group mb-3" id="<?php echo esc_attr( $selector_id ); ?>">
-					<label for="uwp-form-type-select" class="form-label"><?php esc_html_e('Account Type', 'userswp'); ?></label>
+					<label for="uwp-form-type-select" class="form-label"><?php echo esc_html( $selector_label ); ?></label>
 					<select id="uwp-form-type-select" class="form-select aui-select2 w-100" data-form-selector="select">
 						<?php
 						foreach ( $options as $option_id => $option_label ) {
