@@ -562,7 +562,7 @@ class UsersWP_Templates {
 			} else {
 				// Render as button groups (default)
 				?>
-				<div class="btn-group btn-group-sm d-flex mb-2" role="group" id="<?php echo esc_attr( $selector_id ); ?>">
+				<div class="btn-group btn-group-sm d-flex mb-3" role="group" id="<?php echo esc_attr( $selector_id ); ?>">
 				<?php
 				$options = array_chunk( $options, 5, true );
 				$current_url   = uwp_current_page_url();
