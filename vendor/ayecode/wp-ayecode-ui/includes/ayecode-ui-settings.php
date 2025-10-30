@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.41';
+		public $version = '0.2.42';
 
 		/**
 		 * Class textdomain.
@@ -3360,6 +3360,17 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 
 		/**
+		 * Check for Breakdance builder preview.
+		 *
+		 * @since 0.2.42
+		 *
+		 * @return bool True when preview page otherwise false.
+		 */
+		public static function is_breakdance_preview() {
+			return ( \function_exists( 'Breakdance\\isRequestFromBuilderIframe' ) && ( \Breakdance\isRequestFromBuilderIframe() || \Breakdance\isRequestFromBuilderSsr() ) );
+		}
+
+		/**
 		 * General function to check if we are in a preview situation.
 		 *
 		 * @since 0.2.27
@@ -3392,6 +3403,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			} elseif( self::is_kallyas_zion_preview() ) {
 				$preview = true;
 			} elseif( self::is_bricks_preview() ) {
+				$preview = true;
+			} elseif( self::is_breakdance_preview() ) {
 				$preview = true;
 			}
 

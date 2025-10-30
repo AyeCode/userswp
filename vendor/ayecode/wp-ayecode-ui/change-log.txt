@@ -1,3 +1,6 @@
+= 0.2.42 - 2025-10-30 =
+* Detect Breakdance builder preview - ADDED
+
 = 0.2.41 - 2025-08-28 =
 * .btn-translucent-primary class don't reflects theme color palette - FIXED
 * .text-* class don't reflects theme color palette - FIXED
