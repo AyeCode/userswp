@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.28' );
+	define( 'SUPER_DUPER_VER', '1.2.29' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -5492,11 +5492,27 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 
 			if ( class_exists( 'Classic_Editor' ) ) {
 				$is_gutenberg = false; // Classic Editor plugin is active.
-			} else if ( geodir_is_classicpress() ) {
+			} else if ( $this->is_classicpress() ) {
 				$is_gutenberg = false; // Site is using ClassicPress.
 			}
 
 			return $is_gutenberg;
+		}
+
+		/**
+		 * Check if ClassicPress is in use.
+		 *
+		 * @since 1.2.29
+		 * @return bool True if site uses ClassicPress else False.
+		 */
+		public function is_classicpress() {
+			if ( function_exists( 'classicpress_version' ) ) {
+				$is_classicpress = true;
+			} else {
+				$is_classicpress = false;
+			}
+
+			return $is_classicpress;
 		}
 	}
 }
