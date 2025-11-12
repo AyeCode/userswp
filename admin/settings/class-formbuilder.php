@@ -2552,7 +2552,7 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 					$tags = '';
 				}
 
-				if ( $tags != 'skip_field' ) {
+				if ( $tags != 'skip_field' && !empty( $_REQUEST[ $pkey ] ) ) {
 					$_REQUEST[ $pkey ] = strip_tags( $_REQUEST[ $pkey ], $tags );
 				}
 			}

@@ -150,6 +150,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.48 - 2025-TBD =
+* Check nonce while changing the user type for bulk users - FIXED/SECURITY
+
 = 1.2.47 - 2025-10-31 =
 * Merge SD 1.2.29 - CHANGED
 
