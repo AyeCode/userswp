@@ -1330,6 +1330,10 @@ class UsersWP_Admin {
             wp_die( __( 'Security check failed. Please try again.' ) );
         }
 
+        if ( ! current_user_can( 'edit_users' ) ) {
+            wp_die( __( 'You do not have permission to perform this action.' ) );
+        }
+
         $new_user_type = absint( $_GET['uwp_new_user_type'] );
 
         if ( ! $new_user_type ) {

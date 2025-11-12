@@ -1162,7 +1162,10 @@ class UsersWP_Forms {
 
 		remove_action( 'authenticate', 'gglcptch_login_check', 21 );
 
-        userswp_disable_wp2fa_temporarily();
+		global $wp2fa;
+		if ( wp_doing_ajax() && isset( $wp2fa ) && ! empty( $wp2fa ) ) {
+			remove_action( 'wp_login', array( $wp2fa->login, 'wp_login' ), 20 );
+		}
 
 		$user = wp_signon(
 			array(
@@ -1172,11 +1175,9 @@ class UsersWP_Forms {
 			)
 		);
 
-        //userswp_restore_wp2fa_hooks();
-
 		add_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
 
-		if ( wp_doing_ajax() && ! is_wp_error( $user ) && function_exists('\WP2FA\Admin\Helpers\User_Helper') && \WP2FA\Admin\Helpers\User_Helper($user->ID) ) {
+		if ( wp_doing_ajax() && ! is_wp_error( $user ) && isset( $wp2fa ) && ! empty( $wp2fa ) ) {
 
 			$two_fa = $this->check_2fa( $user );
 			if ( isset( $two_fa ) && ! empty( $two_fa ) ) {
@@ -1249,6 +1250,7 @@ class UsersWP_Forms {
 			$user = wp_get_current_user();
 		}
 
+		global $wp2fa;
 		$errors = new WP_Error();
 
 		if ( ! \WP2FA\Admin\Helpers\User_Helper::is_user_using_two_factor( $user->ID ) ) {
@@ -1432,6 +1434,8 @@ class UsersWP_Forms {
 
 			wp_send_json_error( array( 'message' => $message ) );
 		}
+
+		global $wp2fa;
 
 		$nonce = ( isset( $_POST['wp-auth-nonce'] ) ) ? sanitize_textarea_field( wp_unslash( $_POST['wp-auth-nonce'] ) ) : '';
 		if ( true !== \WP2FA\Authenticator\Login::verify_login_nonce( $user->ID, $nonce ) ) {
