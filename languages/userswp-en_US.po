@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.47\n"
+"Project-Id-Version: UsersWP 1.2.48\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 11:19+0530\n"
-"PO-Revision-Date: 2025-10-31 11:19+0530\n"
+"POT-Creation-Date: 2025-11-12 16:42+0530\n"
+"PO-Revision-Date: 2025-11-12 16:42+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -15,7 +15,7 @@ msgstr ""
 "_nx:1,2;_x;_ex;esc_attr_e;esc_attr__\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: vendor\n"
 
@@ -303,7 +303,7 @@ msgstr ""
 msgid "Form %d"
 msgstr ""
 
-#: admin/class-admin.php:1033
+#: admin/class-admin.php:1033 admin/class-admin.php:1334
 msgid "You do not have permission to perform this action."
 msgstr ""
 
@@ -326,6 +326,10 @@ msgstr ""
 
 #: admin/class-admin.php:1313 templates/change.php:7
 msgid "Change"
+msgstr ""
+
+#: admin/class-admin.php:1330
+msgid "Security check failed. Please try again."
 msgstr ""
 
 #: admin/class-uwp-admin-help.php:38

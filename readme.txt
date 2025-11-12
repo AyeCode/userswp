@@ -2,9 +2,9 @@
 Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
-Requires at least: 5.0
+Requires at least: 6.1
 Tested up to: 6.8
-Stable tag: 1.2.47
+Stable tag: 1.2.48
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -90,6 +90,8 @@ UsersWP can be extended with several add-ons. Few examples are:
 * [User to User Private Messages](https://userswp.io/downloads/private-messages/) - Allow your users to send each other private messages in a Facebook-like chat.
 * [Membership](https://userswp.io/downloads/membership-plugin/) - Add Membership functionality to your WordPress website!
 * [Dashboard](https://userswp.io/downloads/dashboard/) - Manage everything from one simple, easy-to-use dashboard.
+* [MailerLite](https://userswp.io/downloads/mailerlite/) - Capture newsletter subscribers during registration to your mailerlite newsletter list.
+* [MailPoet](https://userswp.io/downloads/mailpoet/) - Capture newsletter subscribers during registration to your mailpoet newsletter list.
 
 There are many others and we release new Add-ons frequently. You can see the full collection here: [UsersWP Premium Add-ons](https://userswp.io/downloads/category/addons/)
 
@@ -149,6 +151,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.48 - 2025-11-12 =
+* Check nonce while changing the user type for bulk users - FIXED/SECURITY
 
 = 1.2.47 - 2025-10-31 =
 * Merge SD 1.2.29 - CHANGED
