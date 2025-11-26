@@ -152,6 +152,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.49 - 2025-11-27 =
+* Check nonce while changing the order in register form builder - FIXED/SECURITY
+
 = 1.2.48 - 2025-11-12 =
 * Check nonce while changing the user type for bulk users - FIXED/SECURITY
 

@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! class_exists( 'UsersWP_Settings_User_Sorting', false ) ) {
 
 	/**
-	 * UsersWP_Settings_Email.
+	 * UsersWP_Settings_User_Sorting.
 	 */
 	class UsersWP_Settings_User_Sorting {
 

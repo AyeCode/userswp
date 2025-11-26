@@ -206,9 +206,10 @@
          */
         updateFieldOrder: function ($sortable) {
             const manageFieldType = $sortable.closest('#uwp-selected-fields').find(".manage_field_type").val();
+            const nonce = $sortable.closest('#uwp-selected-fields').find(".uwp_create_field_nonce").val();
             const order = $sortable.sortable("serialize") + '&update=update&manage_field_type=' + manageFieldType;
             const formId = $('[name="manage_field_form_id"]').val();
-            const formIdParam = '&form_id=' + formId;
+            const formIdParam = '&form_id=' + formId + '&_wpnonce=' + nonce;
             const actionType = UWP.Form_Builder.getActionType(manageFieldType);
             const action = actionType.action;
 
