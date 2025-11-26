@@ -468,8 +468,8 @@ class UsersWP_Forms {
 				} elseif ( ! empty( $notice ) ) {
 						echo wp_kses_post( $notice );
 				}
-}
-}
+            }
+        }
 
 		if ( $type == 'change' ) {
 			$user_id      = get_current_user_id();

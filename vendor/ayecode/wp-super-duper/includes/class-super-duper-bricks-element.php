@@ -178,6 +178,22 @@ class Super_Duper_Bricks_Element extends \Bricks\Element {
 
 				$arg['rerender'] = true;
 
+				// Convert checkbox to select, because Bricks settings don't save un-checked checkbox value.
+				if ( isset( $arg['type'] ) && $arg['type'] == 'checkbox' && empty( $arg['multiple'] ) ) {
+					$arg['type'] = 'select';
+
+					if ( ! empty( $arg['value'] ) && is_scalar( $arg['value'] ) && $arg['value'] !== '0' ) {
+						$checked_value = $arg['value'];
+					} else {
+						$checked_value = '1';
+					}
+
+					$arg['options'] = array(
+						$checked_value => _x( 'Yes', 'Widget option: Yes', 'geodirectory' ),
+						'0' => _x( 'No', 'Widget option: No', 'geodirectory' )
+					);
+				}
+
 				// required
 				if( ! empty( $arg['element_require'] ) ) {
 					$arg['required'] = $this->sd_convert_required( $arg['element_require'] );

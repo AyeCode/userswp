@@ -1107,6 +1107,7 @@ class UsersWP_Form_Builder {
 		?>
         <input type="hidden" name="form_type" id="form_type" value="<?php echo esc_attr( $form_type ); ?>"/>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="custom_fields">
+        <input type="hidden" name="uwp_create_field_nonce" class="uwp_create_field_nonce" value="<?php echo wp_create_nonce( 'uwp_create_field_nonce' ); ?>"/>
         <ul class="core uwp-tabs-selected uwp_form_extras ps-0 list-group">
 			<?php
 			// Retrieve fields saved with form id 0.
@@ -1852,6 +1853,7 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 		$form_id           = self::get_form_id()
 		?>
         <input type="hidden" name="manage_field_type" class="manage_field_type" value="register">
+        <input type="hidden" name="uwp_create_field_nonce" class="uwp_create_field_nonce" value="<?php echo wp_create_nonce( 'uwp_create_field_nonce' ); ?>"/>
         <ul class="core uwp_form_extras uwp-tabs-selected  ps-0 list-group ">
         <?php
 
@@ -2522,7 +2524,10 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 
 		/* ------- check nonce field ------- */
 		if ( isset( $_REQUEST['update'] ) && $_REQUEST['update'] == 'update' && isset( $_REQUEST['create_field'] ) && isset( $_REQUEST['manage_field_type'] ) && $_REQUEST['manage_field_type'] == 'custom_fields' ) {
-			echo $this->set_field_order( $field_ids, $form_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'uwp_create_field_nonce' ) ) {
+                return;
+            }
+            echo $this->set_field_order( $field_ids, $form_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		/* ---- Show field form in admin ---- */
@@ -2552,7 +2557,7 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 					$tags = '';
 				}
 
-				if ( $tags != 'skip_field' ) {
+				if ( $tags != 'skip_field' && !empty( $_REQUEST[ $pkey ] ) ) {
 					$_REQUEST[ $pkey ] = strip_tags( $_REQUEST[ $pkey ], $tags );
 				}
 			}
@@ -3211,8 +3216,12 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 			$field_id     = isset( $_REQUEST['field_id'] ) ? trim( sanitize_text_field( $_REQUEST['field_id'] ), '_' ) : '';
 			$field_action = isset( $_REQUEST['field_ins_upd'] ) ? sanitize_text_field( $_REQUEST['field_ins_upd'] ) : '';
 
-			/* ------- check nonce field ------- */
-			if ( isset( $_REQUEST['update'] ) && $_REQUEST['update'] == 'update' ) {
+			/* ------- update order of fields ------- */
+			if ( isset( $_REQUEST['update'] ) && $_REQUEST['update'] == 'update' && isset( $_REQUEST['_wpnonce'] )) {
+                if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'uwp_create_field_nonce' ) ) {
+                    return;
+                }
+
 				$field_ids = array();
 				if ( ! empty( $_REQUEST['licontainer'] ) && is_array( $_REQUEST['licontainer'] ) ) {
 					foreach ( $_REQUEST['licontainer'] as $lic_id ) {
