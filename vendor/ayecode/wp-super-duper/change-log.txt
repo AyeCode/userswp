@@ -1,3 +1,6 @@
+= 1.2.30 - 2025-11-13 =
+* Bricks block settings don't saves default value properly - FIXED
+
 = 1.2.29 - 2025-10-31 =
 * Shows error when GeoDirectory is not active - FIXED
 
