@@ -152,6 +152,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.51 - 2025-12-TBD =
+* Field option Is Public don't saves with No option - FIXED
+
 = 1.2.50 - 2025-12-03 =
 * WordPress v6.9 compatibility check - CHANGED
 

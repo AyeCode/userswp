@@ -985,7 +985,10 @@ else{$eli.attr(\'type\',\'password\');}"
 							}
 						} elseif ( $args['value'] === $val ) {
 							$selected = selected( $args['value'], $val, false );
+						} elseif ( ( $args['value'] === '0' || $args['value'] === 0 ) && ( $val === '0' || $val === 0 ) ) {
+							$selected = selected( $args['value'], $val, false );
 						}
+
 						$output .= '<option value="' . esc_attr( $val ) . '" ' . $selected . '>' . esc_attr( $name ) . '</option>';
 					}
 				}

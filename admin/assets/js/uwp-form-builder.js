@@ -293,7 +293,8 @@
                 'url': `${uwp_admin_ajax.url}?action=${action}&manage_field_type=${manageFieldType}${formIdParam}`,
                 'data': requestData,
                 'beforeSend': function () {
-                    $('.uwp-form-settings-form #save').html('<span class="spinner-border spinner-border-sm" role="status"></span> ' + uwp_admin_ajax.txt_saving).addClass('disabled');
+                    var $loader = $('.uwp-form-settings-form #save').length ? $('.uwp-form-settings-form #save') : $('.uwp-form-settings-form').parent().find('#save');
+                    $loader.html('<span class="spinner-border spinner-border-sm" role="status"></span> ' + uwp_admin_ajax.txt_saving).addClass('disabled');
                 },
                 'success': function (result) {
                     if ($.trim(result) === 'invalid_key') {
