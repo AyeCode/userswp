@@ -371,14 +371,16 @@ class UsersWP_Meta {
      * 
      * @return      string                      Date string.
      */
-    public function modify_datepicker_value_on_update($value, $user_id, $key) {
-        // modify timestamp to date
-        if (is_int($value)) {
-            $field_info = uwp_get_custom_field_info($key);
-            if ($field_info->field_type == 'datepicker') {
-                $value = date('Y-m-d', $value);
+    public function modify_datepicker_value_on_update( $value, $user_id, $key ) {
+        // Modify timestamp to date
+        if ( is_int( $value ) ) {
+            $field_info = uwp_get_custom_field_info( $key );
+
+            if ( ! empty( $field_info ) && $field_info->field_type == 'datepicker' ) {
+                $value = date( 'Y-m-d', $value );
             }
         }
+
         return $value;
     }
 

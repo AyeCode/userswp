@@ -661,8 +661,8 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                 <div class="title title<?php echo esc_attr( $result_str ); ?> uwp-fieldset hover-shadow dd-form d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx text-start bg-light " onclick="uwp_tabs_item_settings(this);">
                     <div class="  flex-fill font-weight-bold fw-bold">
                         <?php echo $field_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                        <b><?php echo esc_html( uwp_ucwords( ' ' . $field_site_name ) ); ?></b>
-                        <span class="field-type float-end text-end small"><?php echo ' (' . esc_html( uwp_ucwords( $tab_type ) ) . ')'; ?></span>
+                        <b><?php echo ' ' . esc_html( $field_site_name ); ?></b>
+                        <span class="field-type float-end text-end small"><?php echo ' (' . esc_html( ucfirst( $tab_type ) ) . ')'; ?></span>
                     </div>
                     <div class="dd-handle ui-sortable-handle">
                         <i class="far fa-trash-alt text-danger ml-2 ms-2" id="delete-16"

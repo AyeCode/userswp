@@ -1216,12 +1216,12 @@ class UsersWP_Form_Builder {
                     <?php if ( $field_type == 'fieldset' ) { ?>
                         <i class="fas fa-long-arrow-alt-left " aria-hidden="true"></i>
                         <i class="fas fa-long-arrow-alt-right " aria-hidden="true"></i>
-                        <b><?php echo esc_html( uwp_ucwords( __( 'Fieldset:', 'userswp' ) ) ); ?></b>
-                        <span class="field-type float-end text-end small"><?php echo ' (' . esc_html( uwp_ucwords( $field_site_title ) ) . ')'; ?></span>
+                        <b><?php echo esc_html( __( 'Fieldset:', 'userswp' ) ); ?></b>
+                        <span class="field-type float-end text-end small"><?php echo ' (' . esc_html( $field_site_title ) . ')'; ?></span>
                     <?php } else { ?>
                         <?php echo $field_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                        <b><?php echo esc_html( uwp_ucwords( ' ' . $field_site_title ) ); ?></b>
-                        <span class="field-type float-end text-end small"><?php echo ' (' . esc_html( uwp_ucwords( $field_type_name ) ) . ')'; ?></span>
+                        <b><?php echo esc_html( ' ' . $field_site_title ); ?></b>
+                        <span class="field-type float-end text-end small"><?php echo ' (' . esc_html( ucfirst( $field_type_name ) ) . ')'; ?></span>
                     <?php } ?>
                 </div>
                 <div class="dd-handle ui-sortable-handle">
@@ -1473,18 +1473,17 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 
                     // is_public
                     if ( has_filter( "uwp_builder_is_public_{$field_type}" ) ) {
-
                         echo apply_filters( "uwp_builder_is_public_{$field_type}", '', $result_str, $cf, $field_info ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
                     } else {
                         $value = '';
+
                         if ( isset( $field_info->is_public ) ) {
-                            $value = esc_attr( $field_info->is_public );
-                        } elseif ( isset( $cf['defaults']['is_public'] ) && $cf['defaults']['is_public'] ) {
-                            $value = $cf['defaults']['is_public'];
+                            $value = (int) $field_info->is_public;
+                        } elseif ( isset( $cf['defaults']['is_public'] ) && ( $cf['defaults']['is_public'] || $cf['defaults']['is_public'] === '0' || $cf['defaults']['is_public'] === 0 ) ) {
+                            $value = (int) $cf['defaults']['is_public'];
                         }
 
-                        echo aui()->select(
+                        aui()->select(
                             array(
                                 'id'         => 'is_public',
                                 'name'       => 'is_public',
@@ -1494,14 +1493,14 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
                                 'options'    => array(
                                     '1' => __( 'Yes', 'userswp' ),
                                     '0' => __( 'No', 'userswp' ),
-                                    '2' => __( 'Let User Decide', 'userswp' ),
+                                    '2' => __( 'Let User Decide', 'userswp' )
                                 ),
                                 'label'      => __( 'Is Public', 'userswp' ) . uwp_help_tip( __( 'If no is selected then the field will not be visible to other users.', 'userswp' ) ),
                                 'value'      => $value,
-                                'wrap_class' => uwp_advanced_toggle_class(),
-                            )
+                                'wrap_class' => uwp_advanced_toggle_class()
+                            ),
+                            true
                         );
-
                     }
 
                     // default_value
@@ -1914,7 +1913,6 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 			}
 			$field_info = stripslashes_deep( $field_info ); // strip slashes
 		}
-		$field_site_name = sanitize_title( $field_site_name );
 
 		if ( isset( $request['form_type'] ) ) {
 			$form_type = esc_attr( $request['form_type'] );
@@ -1959,7 +1957,8 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
 					?>
                     <div class="  flex-fill font-weight-bold fw-bold">
                         <?php echo $field_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                        <b><?php echo esc_html( uwp_ucwords( ' ' . $field_site_name ) ); ?></b>
+                        <b><?php echo ' ' . esc_html( $field_site_name ); ?></b>
+                        <span class="field-type float-end text-end small"><?php echo ' (' . esc_html( ucfirst( $field_type ) ) . ')'; ?></span>
                     </div>
                     <div class="dd-handle ui-sortable-handle">
                         <?php if ( isset( $htmlvar_name ) && ! in_array( $htmlvar_name, $no_actions ) ) { ?>
