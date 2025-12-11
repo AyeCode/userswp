@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.50\n"
+"Project-Id-Version: UsersWP 1.2.51\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-03 12:06+0530\n"
-"PO-Revision-Date: 2025-12-03 12:06+0530\n"
+"POT-Creation-Date: 2025-12-11 16:28+0530\n"
+"PO-Revision-Date: 2025-12-11 16:28+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -15,7 +15,7 @@ msgstr ""
 "_nx:1,2;_x;_ex;esc_attr_e;esc_attr__\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.5\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: vendor\n"
 
@@ -182,8 +182,8 @@ msgstr ""
 msgid "Use image"
 msgstr ""
 
-#: admin/class-admin.php:284 admin/settings/class-formbuilder.php:1785
-#: admin/settings/class-formbuilder.php:1994
+#: admin/class-admin.php:284 admin/settings/class-formbuilder.php:1784
+#: admin/settings/class-formbuilder.php:1993
 #: admin/settings/class-uwp-settings-profile-tabs.php:833
 #: admin/settings/class-uwp-settings-user-sorting.php:618
 msgid "Save"
@@ -193,7 +193,7 @@ msgstr ""
 msgid "Saved"
 msgstr ""
 
-#: admin/class-admin.php:286 admin/settings/class-formbuilder.php:1998
+#: admin/class-admin.php:286 admin/settings/class-formbuilder.php:1997
 #: admin/tables/class-user-types-table.php:314
 msgid "Delete"
 msgstr ""
@@ -785,7 +785,7 @@ msgid "Adds a email input"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:945
-#: admin/settings/class-formbuilder.php:2292
+#: admin/settings/class-formbuilder.php:2291
 msgid "Select"
 msgstr ""
 
@@ -827,7 +827,7 @@ msgid "Adds a file input"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1219
-#: admin/settings/class-formbuilder.php:1910
+#: admin/settings/class-formbuilder.php:1909
 msgid "Fieldset:"
 msgstr ""
 
@@ -887,309 +887,309 @@ msgstr ""
 msgid "If yes is selected then only site admin can see and edit this field."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1495
+#: admin/settings/class-formbuilder.php:1494
 #: admin/tables/class-user-types-table.php:166 includes/class-profile.php:465
 #: includes/class-templates.php:1161
 msgid "Yes"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1496
+#: admin/settings/class-formbuilder.php:1495
 #: admin/tables/class-user-types-table.php:166 includes/class-profile.php:467
 #: includes/class-templates.php:1160
 msgid "No"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1497
+#: admin/settings/class-formbuilder.php:1496
 msgid "Let User Decide"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1499
+#: admin/settings/class-formbuilder.php:1498
 msgid "Is Public"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1499
+#: admin/settings/class-formbuilder.php:1498
 msgid "If no is selected then the field will not be visible to other users."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1522
+#: admin/settings/class-formbuilder.php:1521
 msgid "Should the checkbox be checked by default?"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1524
+#: admin/settings/class-formbuilder.php:1523
 msgid "A default value for the field, usually blank. Ex: info@mysite.com"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1526
+#: admin/settings/class-formbuilder.php:1525
 msgid ""
 "A default value for the field, usually blank. (for links this will be used "
 "as the link text)"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1538
+#: admin/settings/class-formbuilder.php:1537
 msgid "Unchecked"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1539
+#: admin/settings/class-formbuilder.php:1538
 msgid "Checked"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1541
-#: admin/settings/class-formbuilder.php:1552
+#: admin/settings/class-formbuilder.php:1540
+#: admin/settings/class-formbuilder.php:1551
 msgid "Default value"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1556
+#: admin/settings/class-formbuilder.php:1555
 msgid "info@mysite.com"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1592
+#: admin/settings/class-formbuilder.php:1591
 msgid "Is required"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1597
+#: admin/settings/class-formbuilder.php:1596
 msgid "Select yes to set field as required"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1622
+#: admin/settings/class-formbuilder.php:1621
 msgid "Required message"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1622
+#: admin/settings/class-formbuilder.php:1621
 msgid ""
 "Enter text for the error message if the field is required and has not "
 "fulfilled the requirements."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1664
+#: admin/settings/class-formbuilder.php:1663
 msgid "Icon"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1664
+#: admin/settings/class-formbuilder.php:1663
 #, php-format
 msgid ""
 "Upload icon using media and enter its url path, or enter %1$sfont "
 "awesome%2$s class eg:\"fas fa-home\""
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1672
+#: admin/settings/class-formbuilder.php:1671
 #: admin/settings/class-uwp-settings-profile-tabs.php:736
 msgid "For pro icon variants (light, thin, duotone), paste the class here"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1692
+#: admin/settings/class-formbuilder.php:1691
 msgid "Enter custom css class for field custom style."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1694
+#: admin/settings/class-formbuilder.php:1693
 msgid "(Enter class `uwp-comma-list` to show list as comma separated)"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1702
+#: admin/settings/class-formbuilder.php:1701
 msgid "CSS class"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1765
+#: admin/settings/class-formbuilder.php:1764
 msgid "Show in what locations?"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1765
+#: admin/settings/class-formbuilder.php:1764
 msgid "Select in what locations you want to display this field."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1767
+#: admin/settings/class-formbuilder.php:1766
 msgid "Select locations"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1783
+#: admin/settings/class-formbuilder.php:1782
 #: admin/settings/class-uwp-settings-profile-tabs.php:827
 #: admin/settings/class-uwp-settings-user-sorting.php:616
 #: widgets/profile-section.php:41
 msgid "Close"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1819
+#: admin/settings/class-formbuilder.php:1818
 msgid "Validation Pattern"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1819
+#: admin/settings/class-formbuilder.php:1818
 msgid "Enter regex expression for HTML5 pattern validation."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1838
+#: admin/settings/class-formbuilder.php:1837
 msgid "Validation Message"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:1838
+#: admin/settings/class-formbuilder.php:1837
 msgid ""
 "Enter a extra validation message to show to the user if validation fails."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2033
+#: admin/settings/class-formbuilder.php:2032
 msgid "Option Values should be separated by comma."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2035
+#: admin/settings/class-formbuilder.php:2034
 msgid ""
 "If using for a tick filter place a / and then either a 1 for true or 0 for "
 "false"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2036
+#: admin/settings/class-formbuilder.php:2035
 msgid "eg: No Dogs Allowed/0,Dogs Allowed/1"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2039
+#: admin/settings/class-formbuilder.php:2038
 msgid "Like: Apple,Bannana,Pear,Peach"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2040
+#: admin/settings/class-formbuilder.php:2039
 msgid ""
 "Or you can show Selection/Value shown: Pets Allowed/Yes,Pets not Allowed/No"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2041
+#: admin/settings/class-formbuilder.php:2040
 msgid ""
 "- If using OPTGROUP tag to grouping options, use {optgroup}OPTGROUP-LABEL|"
 "OPTION-1,OPTION-2{/optgroup}"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2042
+#: admin/settings/class-formbuilder.php:2041
 msgid ""
 "eg: {optgroup}Pets Allowed|No Dogs Allowed/0,Dogs Allowed/1{/optgroup},"
 "{optgroup}Sports|Cricket/Cricket,Football/Football,Hockey{/optgroup}"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2095
+#: admin/settings/class-formbuilder.php:2094
 msgid "Select the date format."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2153
+#: admin/settings/class-formbuilder.php:2152
 msgid "Display confirm password field"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2158
+#: admin/settings/class-formbuilder.php:2157
 msgid "Lets you display confirm password form field."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2188
+#: admin/settings/class-formbuilder.php:2187
 msgid "Display confirm email field"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2193
+#: admin/settings/class-formbuilder.php:2192
 msgid "Lets you display confirm email form field."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2216
+#: admin/settings/class-formbuilder.php:2215
 msgid ""
 "Select file types to allowed for file uploading. (Select multiple file types "
 "by holding down \"Ctrl\" key.)"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2225
+#: admin/settings/class-formbuilder.php:2224
 #, php-format
 msgid "%s formats"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2265
+#: admin/settings/class-formbuilder.php:2264
 msgid "CHARACTER"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2266
+#: admin/settings/class-formbuilder.php:2265
 msgid "NUMBER"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2267
+#: admin/settings/class-formbuilder.php:2266
 msgid "DECIMAL"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2269
+#: admin/settings/class-formbuilder.php:2268
 msgid "Data Type"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2269
+#: admin/settings/class-formbuilder.php:2268
 msgid "Select Custom Field type"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2304
+#: admin/settings/class-formbuilder.php:2303
 msgid "Decimal points"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2304
+#: admin/settings/class-formbuilder.php:2303
 msgid "Decimals to display after point."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2359
-#: admin/settings/class-formbuilder.php:2379
+#: admin/settings/class-formbuilder.php:2358
+#: admin/settings/class-formbuilder.php:2378
 msgid ""
 "Lets you use this field as register form field, set from register tab above."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2374
+#: admin/settings/class-formbuilder.php:2373
 msgid "Include this field in register form"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2394
-#: admin/settings/class-formbuilder.php:2414
+#: admin/settings/class-formbuilder.php:2393
+#: admin/settings/class-formbuilder.php:2413
 msgid "Lets you use this field as register ONLY form field."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2409
+#: admin/settings/class-formbuilder.php:2408
 msgid "Include this field ONLY in register form"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2433
+#: admin/settings/class-formbuilder.php:2432
 msgid "Include this field in sorting options"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2438
+#: admin/settings/class-formbuilder.php:2437
 msgid ""
 "Lets you use this field as sorting in the users listing page, set from user "
 "sorting tab above."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2457
+#: admin/settings/class-formbuilder.php:2456
 msgid "Available register form fields."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2467
+#: admin/settings/class-formbuilder.php:2466
 msgid ""
 "Click on any box below to make it appear in register form. To make a field "
 "available here, go to account tab and expand any field from selected fields "
 "panel and tick the checkbox saying 'Include this field in register form'."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2477
+#: admin/settings/class-formbuilder.php:2476
 msgid "List of fields that will appear in the register form."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2488
+#: admin/settings/class-formbuilder.php:2487
 msgid ""
 "Click to expand and view field related settings. You may drag and drop to "
 "arrange fields order in register form."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:2854
-#: admin/settings/class-formbuilder.php:2873
-#: admin/settings/class-formbuilder.php:2905
+#: admin/settings/class-formbuilder.php:2853
+#: admin/settings/class-formbuilder.php:2872
+#: admin/settings/class-formbuilder.php:2904
 msgid "Column change failed, you may have too many columns."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:3008
-#: admin/settings/class-formbuilder.php:3050
-#: admin/settings/class-formbuilder.php:3063
-#: admin/settings/class-formbuilder.php:3113 includes/class-tools.php:82
+#: admin/settings/class-formbuilder.php:3007
+#: admin/settings/class-formbuilder.php:3049
+#: admin/settings/class-formbuilder.php:3062
+#: admin/settings/class-formbuilder.php:3112 includes/class-tools.php:82
 msgid ""
 "Column creation failed, you may have too many columns or the default value "
 "does not match with field data type."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:3075
+#: admin/settings/class-formbuilder.php:3074
 msgid ""
 "Column creation failed, you may have too many columns or the default value "
 "must have in valid date format."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:3087
+#: admin/settings/class-formbuilder.php:3086
 msgid ""
 "Column creation failed, you may have too many columns or the default value "
 "must have in valid time format."
