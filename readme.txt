@@ -152,6 +152,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.52 - TBD =
+* Fixed issue with the profile url page not working if child page - FIXED
+
 = 1.2.51 - 2025-12-11 =
 * Field option Is Public does not save with No option - FIXED
 

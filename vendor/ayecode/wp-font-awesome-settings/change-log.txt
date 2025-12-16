@@ -1,9 +1,6 @@
 = 1.1.10 - 2025-07-24 =
 * Prevent loading FA7 until compatibility testing is complete - CHANGED
 
-= 1.1.8 - 2025-05-29 =
-* Icons are not loading when Font Awesome Kits is active - FIXED
-
 = 1.1.7 - 2023-12-14 =
 * Update textdomain - CHANGED
 

@@ -805,7 +805,7 @@ if ( ! class_exists( 'UsersWP_Settings_Profile_Tabs', false ) ) {
                                 array(
                                 'id'          => 'tab_content',
                                 'name'        => 'tab_content',
-                                'placeholder' => __( 'Add shortcode here.', 'userswp' ),
+                                'placeholder' => __( 'Add shortcode here. (click in this box to show shortcode builder)', 'userswp' ),
                                 'value'       => wp_kses_post( stripslashes( $tab_content ) ),
                                 'help_text'   => __( 'Content to display in profile tab. Shortcode allowed.', 'userswp' ), // . WP_Super_Duper::shortcode_button("'tab_content'"), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped,
                                 'label_type'  => 'top',
