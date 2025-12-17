@@ -1153,7 +1153,7 @@ class UsersWP_Profile {
 	 */
 	public function profile_slug( $slug = 'profile' ) {
 		if ( $page_id = uwp_get_page_id( 'profile_page', false ) ) {
-			if ( $_slug = get_post_field( 'post_name', absint( $page_id ) ) ) {
+			if ( $_slug = get_page_uri( absint( $page_id ) ) ) {
 				$slug = $_slug;
 			}
 		}
