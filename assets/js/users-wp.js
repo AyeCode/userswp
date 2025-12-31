@@ -538,6 +538,8 @@ function uwp_load_register_form(form_id, form, activeElement) {
         url: uwp_localize_data.ajaxurl,
         data: data,
         beforeSend: function() {
+            jQuery(document).trigger('uwp_form_loading', { form_id, form });
+
             if (activeElement) {
                 activeElement.addClass('active');
             }
@@ -564,6 +566,8 @@ function uwp_load_register_form(form_id, form, activeElement) {
                 }
 
                 form.find('#uwp-form-select-ajax').attr('id', 'uwp-form-select');
+
+                jQuery(document).trigger('uwp_form_loaded', { form_id, form, html: data.data });
             }
 
             uwp_init_auth_modal();
@@ -575,20 +579,20 @@ function uwp_load_register_form(form_id, form, activeElement) {
 
 function uwp_switch_reg_form_init() {
     // Handle button clicks for lightbox (AJAX modal)
-    jQuery( '#uwp-form-select-ajax a' ).on( 'click', function( e ) {
+    jQuery( '#uwp-form-select-ajax a' ).off( 'click.uwpSwitchRegForm' ).on( 'click.uwpSwitchRegForm', function( e ) {
         e.preventDefault(e);
         var form_id = jQuery(this).attr('data-form_id');
         uwp_modal_register_form(form_id);
     });
 
     // Handle select dropdown for lightbox (AJAX modal)
-    jQuery( '#uwp-form-select-ajax select#uwp-form-type-select' ).on( 'change', function( e ) {
+    jQuery( '#uwp-form-select-ajax select#uwp-form-type-select' ).off( 'change.uwpSwitchRegForm' ).on( 'change.uwpSwitchRegForm', function( e ) {
         var form_id = jQuery(this).find('option:selected').attr('data-form_id');
         uwp_modal_register_form(form_id);
     });
 
     // Handle button clicks for normal forms
-    jQuery( '#uwp-form-select a' ).on( 'click', function( e ) {
+    jQuery( '#uwp-form-select a' ).off( 'click.uwpSwitchRegForm' ).on( 'click.uwpSwitchRegForm', function( e ) {
         e.preventDefault(e);
         var self = jQuery(this);
         var form_id = self.attr('data-form_id');
@@ -599,7 +603,7 @@ function uwp_switch_reg_form_init() {
     });
 
     // Handle select dropdown for normal forms
-    jQuery( '#uwp-form-select select#uwp-form-type-select' ).on( 'change', function( e ) {
+    jQuery( '#uwp-form-select select#uwp-form-type-select' ).off( 'change.uwpSwitchRegForm' ).on( 'change.uwpSwitchRegForm', function( e ) {
         var self = jQuery(this);
         var form_id = self.find('option:selected').attr('data-form_id');
         var form = self.parents('form');
