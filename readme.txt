@@ -154,6 +154,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.53 - TBD =
 * Prevent duplicate event handlers in registration form switcher causing multiple AJAX requests - FIXED
+* Password strength doesn't enable/disable register button based on Minimum password strength setting - FIXED
 
 = 1.2.52 - 2025-12-18 =
 * Fixed issue with the profile url page not working if child page - FIXED
