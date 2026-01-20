@@ -109,7 +109,7 @@ $uwp_chunk_sizes = array(
 $uwp_chunk_sizes = apply_filters('uwp_ie_csv_chunks_options', $uwp_chunk_sizes);
 $uwp_chunk_sizes_opts = '';
 foreach ($uwp_chunk_sizes as $value => $title) {
-    $uwp_chunk_sizes_opts .= '<option value="' . $value . '" ' . selected($value, 5000, false) . '>' . $title . '</option>';
+    $uwp_chunk_sizes_opts .= '<option value="' . esc_attr($value) . '" ' . selected($value, 5000, false) . '>' . esc_attr($title) . '</option>';
 }
 
 $users_count = count_users();
@@ -124,7 +124,7 @@ $total_users = $users_count['total_users'];
                 <tbody>
                 <tr>
                     <th class=""><label for="uwp_ie_chunk_size"><?php esc_html_e( 'Max entries per csv file:', 'userswp' );?></label></th>
-                    <td><select name="uwp_ie_chunk_size" class="aui-select2" id="uwp_ie_chunk_size" data-ucount = "<?php echo esc_attr( $total_users );?>" style="min-width:140px"><?php echo esc_attr( $uwp_chunk_sizes_opts );?></select><p class="description"><?php esc_html_e( 'The maximum number of entries per csv file (default to 5000, you might want to lower this to prevent memory issues.)', 'userswp' );?></p></td>
+                    <td><select name="uwp_ie_chunk_size" class="aui-select2" id="uwp_ie_chunk_size" data-ucount = "<?php echo esc_attr( $total_users );?>" style="min-width:140px"><?php echo $uwp_chunk_sizes_opts; ?></select><p class="description"><?php esc_html_e( 'The maximum number of entries per csv file (default to 5000, you might want to lower this to prevent memory issues.)', 'userswp' );?></p></td>
                 </tr>
                 </tbody>
             </table>

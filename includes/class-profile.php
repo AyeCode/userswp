@@ -1509,8 +1509,17 @@ class UsersWP_Profile {
 	 * @return      void
 	 */
 	public function ajax_avatar_banner_upload() {
-		// Image upload handler
-		// todo: security checks
+
+        if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( $_POST['security'], 'uwp_avatar_banner_upload_nonce' ) ) {
+            $result['error'] = aui()->alert( array(
+                'type'    => 'danger',
+                'content' => __( "Security check failed.", "userswp" )
+            ) );
+            $return          = json_encode( $result );
+            echo $return; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            die();
+        }
+
 		$type   = strip_tags( esc_sql( $_POST['uwp_popup_type'] ) );
 		$result = array();
 
@@ -1764,6 +1773,8 @@ class UsersWP_Profile {
 
 		$content_wrap = $design_style == 'bootstrap' ? '.uwp-profile-image-change-modal .modal-content' : '#uwp-popup-modal-wrap';
 		$bg_color = apply_filters('uwp_crop_image_bg_color', '', $type);
+
+        $ajax_nonce = wp_create_nonce( 'uwp_avatar_banner_upload_nonce' );
 		?>
 
         <script type="text/javascript">
@@ -1805,6 +1816,8 @@ class UsersWP_Profile {
                         // our AJAX identifier
                         fd.append('action', 'uwp_avatar_banner_upload');
                         fd.append('uwp_popup_type', '<?php echo esc_attr( $type ); ?>');
+                        // Add nonce for security
+                        fd.append('security', '<?php echo esc_js( $ajax_nonce ); ?>');
 
                         $("#progressBar").show().removeClass('d-none');
 
@@ -1853,7 +1866,8 @@ class UsersWP_Profile {
                                         minSize: [uwp_full_width, uwp_full_height]
                                     });
                                 }
-                            }
+                            },
+
                         });
                     });
 

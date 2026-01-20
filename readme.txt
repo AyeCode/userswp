@@ -152,6 +152,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.54 - 2026-01-TBD =
+* Max entries per csv file option in Import/Export setting not showing options - FIXED
+* Check nonce while profile image and cover image crop - FIXED/SECURITY
+
 = 1.2.53 - 2026-01-08 =
 * Prevent duplicate event handlers in registration form switcher causing multiple AJAX requests - FIXED
 * Password strength doesn't enable/disable register button based on Minimum password strength setting - FIXED
