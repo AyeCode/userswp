@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 6.1
 Tested up to: 6.9
-Stable tag: 1.2.53
+Stable tag: 1.2.54
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -152,10 +152,11 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.54 - 2026-01-TBD =
+= 1.2.54 - 2026-01-22 =
 * Max entries per csv file option in Import/Export setting not showing options - FIXED
 * Check nonce while profile image and cover image crop - FIXED/SECURITY
 * Redirect profile page to login instead of home page if accessed without login - FIXED
+* Merge AUI 0.2.43, SD 1.2.31 & AyeCode Connect Helper 1.0.5 - CHANGED
 
 = 1.2.53 - 2026-01-08 =
 * Prevent duplicate event handlers in registration form switcher causing multiple AJAX requests - FIXED
