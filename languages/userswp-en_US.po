@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.53\n"
+"Project-Id-Version: UsersWP 1.2.54\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-08 19:39+0530\n"
-"PO-Revision-Date: 2026-01-08 19:39+0530\n"
+"POT-Creation-Date: 2026-01-22 20:09+0530\n"
+"PO-Revision-Date: 2026-01-22 20:09+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -889,13 +889,13 @@ msgstr ""
 
 #: admin/settings/class-formbuilder.php:1494
 #: admin/tables/class-user-types-table.php:166 includes/class-profile.php:465
-#: includes/class-templates.php:1161
+#: includes/class-templates.php:1162
 msgid "Yes"
 msgstr ""
 
 #: admin/settings/class-formbuilder.php:1495
 #: admin/tables/class-user-types-table.php:166 includes/class-profile.php:467
-#: includes/class-templates.php:1160
+#: includes/class-templates.php:1161
 msgid "No"
 msgstr ""
 
@@ -2419,17 +2419,17 @@ msgid "This will be the icon for profile tab."
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:743
-#: includes/class-templates.php:1193
+#: includes/class-templates.php:1194
 msgid "Anyone"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:744
-#: includes/class-templates.php:1194
+#: includes/class-templates.php:1195
 msgid "Logged in"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:745
-#: includes/class-templates.php:1195
+#: includes/class-templates.php:1196
 msgid "Author only"
 msgstr ""
 
@@ -2444,7 +2444,7 @@ msgid "%s (Not Changeable)"
 msgstr ""
 
 #: admin/settings/class-uwp-settings-profile-tabs.php:775
-#: includes/class-templates.php:1178 includes/helpers/misc.php:683
+#: includes/class-templates.php:1179 includes/helpers/misc.php:683
 #: includes/helpers/tabs.php:137
 msgid "Privacy"
 msgstr ""
@@ -3268,7 +3268,7 @@ msgstr ""
 msgid "User Information:"
 msgstr ""
 
-#: includes/class-forms.php:2251 includes/class-profile.php:1903
+#: includes/class-forms.php:2251 includes/class-profile.php:1917
 msgid "Invalid access!"
 msgstr ""
 
@@ -3327,6 +3327,7 @@ msgid "Invalid export request found."
 msgstr ""
 
 #: includes/class-import-export.php:148 includes/class-import-export.php:508
+#: includes/class-profile.php:1516
 msgid "Security check failed."
 msgstr ""
 
@@ -3589,19 +3590,19 @@ msgstr ""
 msgid "The uploaded file is too small. Minimum image height should be %s px"
 msgstr ""
 
-#: includes/class-profile.php:1520
+#: includes/class-profile.php:1529
 msgid "Invalid request!"
 msgstr ""
 
-#: includes/class-profile.php:1541
+#: includes/class-profile.php:1550
 msgid "No fields available"
 msgstr ""
 
-#: includes/class-profile.php:1705
+#: includes/class-profile.php:1714
 msgid "Loading Form ..."
 msgstr ""
 
-#: includes/class-profile.php:1800
+#: includes/class-profile.php:1811
 msgid "File too big."
 msgstr ""
 
@@ -3609,39 +3610,39 @@ msgstr ""
 msgid "Profile Page"
 msgstr ""
 
-#: includes/class-templates.php:544
+#: includes/class-templates.php:545
 msgid "Account Type"
 msgstr ""
 
-#: includes/class-templates.php:592
+#: includes/class-templates.php:593
 msgid "More"
 msgstr ""
 
-#: includes/class-templates.php:1139
+#: includes/class-templates.php:1140
 msgid "Field"
 msgstr ""
 
-#: includes/class-templates.php:1142
+#: includes/class-templates.php:1143
 msgid "Is Public?"
 msgstr ""
 
-#: includes/class-templates.php:1175
+#: includes/class-templates.php:1176
 msgid "Tab Name"
 msgstr ""
 
-#: includes/class-templates.php:1214
+#: includes/class-templates.php:1215
 msgid " (Default)"
 msgstr ""
 
-#: includes/class-templates.php:1229
+#: includes/class-templates.php:1230
 msgid "Hide profile from the users listing page."
 msgstr ""
 
-#: includes/class-templates.php:1245
+#: includes/class-templates.php:1246
 msgid "Make the whole profile private"
 msgstr ""
 
-#: includes/class-templates.php:1253 includes/class-user-notifications.php:69
+#: includes/class-templates.php:1254 includes/class-user-notifications.php:69
 #: templates/bootstrap/change.php:29 templates/change.php:13
 #: templates/reset.php:17
 msgid "Submit"
