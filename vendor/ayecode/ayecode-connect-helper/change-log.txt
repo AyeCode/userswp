@@ -1,3 +1,6 @@
+= 1.0.5 - 2026-01-20 =
+* Extra sanitization for AyeCode Connect plugin install request - FIXED/SECURITY
+
 = 1.0.4 - 2023-12-14 =
 * Update textdomain - CHANGED
 
