@@ -328,7 +328,8 @@ class UsersWP_Templates {
 						wp_safe_redirect( $profile_url );
 						exit();
 					} else {
-						$redirect_to = apply_filters( 'uwp_no_login_profile_redirect', home_url( '/' ) );
+						$redirect_to = apply_filters( 'uwp_no_login_profile_redirect', uwp_get_page_link('login') );
+                        $redirect_to = add_query_arg('redirect_to', urlencode(get_permalink($profile_page)), $redirect_to);
 						wp_safe_redirect( $redirect_to );
 						exit();
 					}
