@@ -155,6 +155,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 = 1.2.54 - 2026-01-TBD =
 * Max entries per csv file option in Import/Export setting not showing options - FIXED
 * Check nonce while profile image and cover image crop - FIXED/SECURITY
+* Redirect profile page to login instead of home page if accessed without login - FIXED
 
 = 1.2.53 - 2026-01-08 =
 * Prevent duplicate event handlers in registration form switcher causing multiple AJAX requests - FIXED

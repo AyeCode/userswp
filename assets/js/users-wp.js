@@ -447,7 +447,7 @@ function uwp_modal_login_form_process(){
                 }
 
             }else if(data.success===false){
-                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data.message);
+                jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data);
                 jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').html($button_text).prop('disabled', false);// enable submit
                 uwp_maybe_reset_recaptcha();
             }
