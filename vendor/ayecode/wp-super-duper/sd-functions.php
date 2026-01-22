@@ -232,7 +232,7 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 			'rounded-bottom' => 'rounded-bottom',
 			'rounded-left'   => 'rounded-left',
 		);
-		$defaults['element_require'] = '([%border%]&&[%border%]!="0")';
+		$defaults['element_require'] = '(([%border%]&&[%border%]!="0")||[%rounded%])';
 	} elseif ( 'rounded_size' === $type ) {
 		$defaults['title'] = __( 'Border radius size', 'ayecode-connect' );
 
@@ -254,7 +254,7 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 				'lg' => __( 'Large', 'ayecode-connect' ),
 			);
 		}
-		$defaults['element_require'] = '([%border%]&&[%border%]!="0")';
+		$defaults['element_require'] = '(([%border%]&&[%border%]!="0")||[%rounded_size%]!="")';
 	} elseif ( 'width' === $type ) { // BS%
 		$defaults['title']           = __( 'Border width', 'ayecode-connect' );
 		$defaults['options']         = array(
