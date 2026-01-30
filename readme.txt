@@ -152,6 +152,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.55 - 2026-TBD =
+* Allow to resend activation email from forgot password form if account is not activated - ADDED
+
 = 1.2.54 - 2026-01-22 =
 * Max entries per csv file option in Import/Export setting not showing options - FIXED
 * Check nonce while profile image and cover image crop - FIXED/SECURITY
