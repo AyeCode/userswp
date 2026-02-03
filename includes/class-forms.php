@@ -4917,10 +4917,13 @@ class UsersWP_Forms {
 
 		// add the modal error container
 		add_action( 'uwp_template_display_notices', array( $this, 'modal_error_container' ) );
-
+        $args = array(
+            'form_title' => '',
+            'css_class'     => ''
+        );
 		// get the form
 		ob_start();
-		uwp_get_template( 'bootstrap/forgot.php' );
+		uwp_get_template( 'bootstrap/forgot.php', $args );
 		$form = ob_get_clean();
 
         // bs5
