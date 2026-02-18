@@ -1663,17 +1663,25 @@ class UsersWP_Forms {
 		// make sure user account is active before account reset
 		$mod_value = get_user_meta( $user_data->ID, 'uwp_mod', true );
 		if ( $mod_value == 'email_unconfirmed' ) {
+            $resend_link = uwp_get_forgot_page_url();
+			$resend_link = add_query_arg(
+				array(
+					'user_id' => $user_data->ID,
+					'action'  => 'uwp_resend',
+					'_nonce'  => wp_create_nonce('uwp_resend'),
+				),
+				$resend_link
+			);
 			$message = aui()->alert(
                 array(
 					'type'    => 'error',
-					'content' => __( 'Your account is not activated yet. Please activate your account first.', 'userswp' ),
+					'content' => sprintf(__('Your account is not activated yet. Please activate your account first. <a href="%s">Resend</a>.', 'userswp'), $resend_link),
                 )
 			);
 			if ( wp_doing_ajax() ) {
 				wp_send_json_error( $message );
 			} else {
 				$uwp_notices[] = array( 'forgot' => $message );
-
 				return;
 			}
 		}
@@ -4909,10 +4917,13 @@ class UsersWP_Forms {
 
 		// add the modal error container
 		add_action( 'uwp_template_display_notices', array( $this, 'modal_error_container' ) );
-
+        $args = array(
+            'form_title' => '',
+            'css_class'     => ''
+        );
 		// get the form
 		ob_start();
-		uwp_get_template( 'bootstrap/forgot.php' );
+		uwp_get_template( 'bootstrap/forgot.php', $args );
 		$form = ob_get_clean();
 
         // bs5
