@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 6.1
 Tested up to: 6.9
-Stable tag: 1.2.54
+Stable tag: 1.2.55
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -152,7 +152,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.55 - 2026-TBD =
+= 1.2.55 - 2026-02-19 =
 * Allow to resend activation email from forgot password form if account is not activated - ADDED
 
 = 1.2.54 - 2026-01-22 =
