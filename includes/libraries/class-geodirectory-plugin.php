@@ -979,7 +979,7 @@ class UsersWP_GeoDirectory_Plugin {
                 'post_type' => geodir_get_posttypes(),
                 'post__in' => $post_ids,
                 'post_status' => array('publish'),
-                'posts_per_page' => uwp_get_option('profile_no_of_items', 10),
+                'posts_per_page' => self::get_items_per_page( 'listings' ),
                 'paged' => $paged,
             );
 
@@ -1131,7 +1131,7 @@ class UsersWP_GeoDirectory_Plugin {
 			$args = array(
 				'post_type'        => $post_type,
 				'post_status'      => $post_status,
-				'posts_per_page'   => uwp_get_option( 'profile_no_of_items', 10 ),
+				'posts_per_page'   => self::get_items_per_page( 'listings' ),
 				'author'           => $user->ID,
 				'paged'            => $paged,
 				'uwp_geodir_query' => true
@@ -1313,7 +1313,7 @@ class UsersWP_GeoDirectory_Plugin {
 		$query_args = array(
 			'post_type'        => $post_type,
 			'post_status'      => $post_status,
-			'posts_per_page'   => uwp_get_option( 'profile_no_of_items', 10 ),
+			'posts_per_page'   => self::get_items_per_page( 'listings' ),
 			'author'           => $user->ID,
 			'paged'            => $paged,
 			'uwp_geodir_query' => true
@@ -1417,7 +1417,7 @@ class UsersWP_GeoDirectory_Plugin {
 		} else {
 
 			$paged  = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
-			$limit  = uwp_get_option( 'profile_no_of_items', 10 );
+			$limit  = self::get_items_per_page( 'reviews' );
 			$offset = ( $paged - 1 ) * $limit;
 
 			$total_reviews = $this->geodir_get_reviews_by_user_id( $post_type, $user->ID, true, $offset, $limit );
@@ -1607,7 +1607,7 @@ class UsersWP_GeoDirectory_Plugin {
 			$args = array(
 				'post_type'      => $post_type,
 				'post_status'    => $post_status,
-				'posts_per_page' => uwp_get_option( 'profile_no_of_items', 10 ),
+				'posts_per_page' => self::get_items_per_page( 'favorites' ),
 				'post__in'       => $user_fav_posts,
 				'paged'          => $paged,
 				'uwp_geodir_query' => true
@@ -1786,7 +1786,7 @@ class UsersWP_GeoDirectory_Plugin {
             $args = array(
                 'post_type' => $post_type,
                 'post_status' => $post_status,
-                'posts_per_page' => uwp_get_option('profile_no_of_items', 10),
+                'posts_per_page' => self::get_items_per_page( 'favorites' ),
                 'paged' => $paged,
                 'post__in' => $favorite_ids,
                 'uwp_geodir_query' => true
@@ -2227,6 +2227,16 @@ class UsersWP_GeoDirectory_Plugin {
 		}
 
 		return $count;
+	}
+
+	public static function get_items_per_page( $item = '' ) {
+		$per_page = (int) uwp_get_option( 'profile_no_of_items', 10 );
+
+		if ( $per_page < 1 ) {
+			$per_page = 10;
+		}
+
+		return (int) apply_filters( 'uwp_geodir_items_per_page', $per_page, $item );
 	}
 }
 

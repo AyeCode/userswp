@@ -152,6 +152,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.56 - 2026-02-TBD =
+* Empty value for no. of items in profile tabs causes the notice - FIXED
+
 = 1.2.55 - 2026-02-19 =
 * Allow to resend activation email from forgot password form if account is not activated - ADDED
 
