@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.43';
+		public $version = '0.2.44';
 
 		/**
 		 * Class textdomain.
@@ -2655,7 +2655,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                     if (!$('[data-has-rule]').length) {
                         return;
                     }
-                    $('input.select2-search__field').attr('data-ignore-rule','');
+                    $('input.select2-search__field,.aui-cf-ignore-rule').attr('data-ignore-rule','');
                     $('[data-rule-key]').on('change keypress keyup gdclear', 'input, textarea', function() {
                         if (!$(this).hasClass('select2-search__field')) {
                             aui_cf_field_apply_rules($(this));
@@ -2884,7 +2884,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                  * Get the field element.
                  */
                 function aui_cf_field_get_element($el) {
-                    var el = $el.find('input:not("[data-ignore-rule]"),textarea,select'), type = aui_cf_field_get_type($el);
+                    var el = $el.find('input,textarea,select').not('[data-ignore-rule]'), type = aui_cf_field_get_type($el);
                     if (type && window._aui_cf_field_elements && typeof window._aui_cf_field_elements == 'object' && typeof window._aui_cf_field_elements[type] != 'undefined') {
                         el = window._aui_cf_field_elements[type];
                     }
@@ -2906,19 +2906,19 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
                     if ($el.is(':checkbox')) {
                         current_value = '';
-                        if ($el.parents('[data-rule-key]').find('input:checked').length > 1) {
-                            $el.parents('[data-rule-key]').find('input:checked').each(function() {
+                        if ($el.parents('[data-rule-key]').find('input:checked').not('[data-ignore-rule]').length > 1) {
+                            $el.parents('[data-rule-key]').find('input:checked').not('[data-ignore-rule]').each(function() {
                                 current_value = current_value + jQuery(this).val() + ' ';
                             });
                         } else {
-                            if ($el.parents('[data-rule-key]').find('input:checked').length >= 1) {
-                                current_value = $el.parents('[data-rule-key]').find('input:checked').val();
+                            if ($el.parents('[data-rule-key]').find('input:checked').not('[data-ignore-rule]').length >= 1) {
+                                current_value = $el.parents('[data-rule-key]').find('input:checked').not('[data-ignore-rule]').val();
                             }
                         }
                     }
 
                     if ($el.is(':radio')) {
-                        current_value = $el.parents('[data-rule-key]').find('input[type=radio]:checked').val();
+                        current_value = $el.parents('[data-rule-key]').find('input[type=radio]:checked').not('[data-ignore-rule]').val();
                     }
 
                     return current_value;
@@ -2936,7 +2936,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                         case 'date':
                         case 'textarea':
                         case 'select':
-                            value = $el.find('input:text,input[type="number"],textarea,select').val();
+                            value = $el.find('input:text,input[type="number"],textarea,select').not('[data-ignore-rule]').val();
                             break;
                         case 'phone':
                         case 'email':
@@ -2945,27 +2945,27 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                         case 'hidden':
                         case 'password':
                         case 'file':
-                            value = $el.find('input[type="' + type + '"]').val();
+                            value = $el.find('input[type="' + type + '"]').not('[data-ignore-rule]').val();
                             break;
                         case 'multiselect':
-                            value = $el.find('select').val();
+                            value = $el.find('select').not('[data-ignore-rule]').val();
                             break;
                         case 'radio':
-                            if ($el.find('input[type="radio"]:checked').length >= 1) {
-                                value = $el.find('input[type="radio"]:checked').val();
+                            if ($el.find('input[type="radio"]:checked').not('[data-ignore-rule]').length >= 1) {
+                                value = $el.find('input[type="radio"]:checked').not('[data-ignore-rule]').val();
                             }
                             break;
                         case 'checkbox':
-                            if ($el.find('input[type="checkbox"]:checked').length >= 1) {
-                                if ($el.find('input[type="checkbox"]:checked').length > 1) {
+                            if ($el.find('input[type="checkbox"]:checked').not('[data-ignore-rule]').length >= 1) {
+                                if ($el.find('input[type="checkbox"]:checked').not('[data-ignore-rule]').length > 1) {
                                     var values = [];
                                     values.push(value);
-                                    $el.find('input[type="checkbox"]:checked').each(function() {
+                                    $el.find('input[type="checkbox"]:checked').not('[data-ignore-rule]').each(function() {
                                         values.push(jQuery(this).val());
                                     });
                                     value = values;
                                 } else {
-                                    value = $el.find('input[type="checkbox"]:checked').val();
+                                    value = $el.find('input[type="checkbox"]:checked').not('[data-ignore-rule]').val();
                                 }
                             }
                             break;
@@ -2998,7 +2998,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                         case 'number':
                         case 'date':
                         case 'textarea':
-                            $el.find('input:text,input[type="number"],textarea').val(setVal);
+                            $el.find('input:text,input[type="number"],textarea').not('[data-ignore-rule]').val(setVal);
                             break;
                         case 'phone':
                         case 'email':
@@ -3007,45 +3007,47 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                         case 'hidden':
                         case 'password':
                         case 'file':
-                            $el.find('input[type="' + type + '"]').val(setVal);
+                            $el.find('input[type="' + type + '"]:not("[data-ignore-rule]")').val(setVal);
                             break;
                         case 'select':
-                            $el.find('select').find('option').prop('selected', false);
-                            $el.find('select').val(setVal);
-                            $el.find('select').trigger('change');
+                            var $elSelect = $el.find('select').not('[data-ignore-rule]');
+                            $elSelect.find('option').prop('selected', false);
+                            $elSelect.val(setVal);
+                            $elSelect.trigger('change');
                             break;
                         case 'multiselect':
-                            $el.find('select').find('option').prop('selected', false);
-                            if ((typeof setVal === 'object' || typeof setVal === 'array') && !setVal.length && $el.find('select option:first').text() == '') {
-                                $el.find('select option:first').remove(); // Clear first option to show placeholder.
+                            var $elSelect = $el.find('select').not('[data-ignore-rule]');
+                            $elSelect.find('option').prop('selected', false);
+                            if ((typeof setVal === 'object' || typeof setVal === 'array') && !setVal.length && $elSelect.find('option:first').text() == '') {
+                                $elSelect.find('option:first').remove(); // Clear first option to show placeholder.
                             }
                             if (typeof setVal === 'string') {
-                                $el.find('select').val(setVal);
+                                $elSelect.val(setVal);
                             } else {
                                 jQuery.each(setVal, function(i, v) {
-                                    $el.find('select').find('option[value="' + v + '"]').prop('selected', true);
+                                    $elSelect.find('option[value="' + v + '"]').prop('selected', true);
                                 });
                             }
-                            $el.find('select').trigger('change');
+                            $elSelect.trigger('change');
                             break;
                         case 'checkbox':
-                            if ($el.find('input[type="checkbox"]:checked').length >= 1) {
-                                $el.find('input[type="checkbox"]:checked').prop('checked', false).removeAttr('checked');
+                            if ($el.find('input[type="checkbox"]:checked').not('[data-ignore-rule]').length >= 1) {
+                                $el.find('input[type="checkbox"]:checked').not('[data-ignore-rule]').prop('checked', false).removeAttr('checked');
                             }
                             if (Array.isArray(setVal)) {
                                 jQuery.each(setVal, function(i, v) {
-                                    $el.find('input[type="checkbox"][value="' + v + '"]').prop('checked', true);
+                                    $el.find('input[type="checkbox"][value="' + v + '"]').not('[data-ignore-rule]').prop('checked', true);
                                 });
                             } else {
-                                $el.find('input[type="checkbox"][value="' + setVal + '"]').prop('checked', true);
+                                $el.find('input[type="checkbox"][value="' + setVal + '"]').not('[data-ignore-rule]').prop('checked', true);
                             }
                             break;
                         case 'radio':
                             setTimeout(function() {
-                                if ($el.find('input[type="radio"]:checked').length >= 1) {
-                                    $el.find('input[type="radio"]:checked').prop('checked', false).removeAttr('checked');
+                                if ($el.find('input[type="radio"]:checked').not('[data-ignore-rule]').length >= 1) {
+                                    $el.find('input[type="radio"]:checked').not('[data-ignore-rule]').prop('checked', false).removeAttr('checked');
                                 }
-                                $el.find('input[type="radio"][value="' + setVal + '"]').prop('checked', true);
+                                $el.find('input[type="radio"][value="' + setVal + '"]').not('[data-ignore-rule]').prop('checked', true);
                             }, 100);
                             break;
                         default:
