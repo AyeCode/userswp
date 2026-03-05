@@ -223,14 +223,23 @@
      * Initiate tooltips on the page.
      */
     function aui_init_tooltips(){
-        jQuery('[data-toggle="tooltip"]').tooltip();
-        jQuery('[data-toggle="popover"]').popover();
-        jQuery('[data-toggle="popover-html"]').popover({
-            html: true
-        });
+        if (typeof jQuery.fn.tooltip === 'function') {
+            jQuery('[data-toggle="tooltip"]').tooltip();
+        } else {
+            console.log('jQuery.fn.tooltip not found');
+        }
 
-        // fix popover container compatibility
-        jQuery('[data-toggle="popover"],[data-toggle="popover-html"]').on('inserted.bs.popover', function () {
+        if (typeof jQuery.fn.popover === 'function') {
+            jQuery('[data-toggle="popover"]').popover();
+            jQuery('[data-toggle="popover-html"]').popover({
+                html: true
+            });
+        } else {
+            console.log('jQuery.fn.popover not found');
+        }
+
+        // Fix popover container compatibility.
+        jQuery('[data-toggle="popover"],[data-toggle="popover-html"]').on('inserted.bs.popover', function() {
             jQuery('body > .popover').wrapAll("<div class='bsui' />");
         });
     }

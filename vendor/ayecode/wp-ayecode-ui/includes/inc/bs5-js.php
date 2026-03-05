@@ -240,15 +240,24 @@
      * Initiate tooltips on the page.
      */
     function aui_init_tooltips(){
-        jQuery('[data-bs-toggle="tooltip"]').tooltip();
-        jQuery('[data-bs-toggle="popover"]').popover();
-        jQuery('[data-bs-toggle="popover-html"]').popover({
-            html: true,
-            sanitize: false
-        });
+        if (typeof jQuery.fn.tooltip === 'function') {
+            jQuery('[data-bs-toggle="tooltip"]').tooltip();
+        } else {
+            console.log('jQuery.fn.tooltip not found');
+        }
+
+        if (typeof jQuery.fn.popover === 'function') {
+            jQuery('[data-bs-toggle="popover"]').popover();
+            jQuery('[data-bs-toggle="popover-html"]').popover({
+                html: true,
+                sanitize: false
+            });
+        } else {
+            console.log('jQuery.fn.popover not found');
+        }
 
         // fix popover container compatibility
-        jQuery('[data-bs-toggle="popover"],[data-bs-toggle="popover-html"]').on('inserted.bs.popover', function () {
+        jQuery('[data-bs-toggle="popover"],[data-bs-toggle="popover-html"]').on('inserted.bs.popover', function() {
             jQuery('body > .popover').wrapAll("<div class='bsui' />");
         });
     }

@@ -1,3 +1,8 @@
+= 0.2.44 - 2026-03-05 =
+* BS5 conversion breaks inline padding and margin styles - FIXED
+* Checks for the tooltip & popover functions before using to prevent errors - FIXED
+* Conditional fields resets hidden input field values - FIXED
+
 = 0.2.43 - 2026-01-22 =
 * Dropdown does not show the option selected if the field value is 0 - FIXED
 
