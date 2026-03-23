@@ -152,6 +152,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.58 - 2026-03-TBD =
+* UsersWP import workflow CSV import security improvement - FIXED/SECURITY
+
 = 1.2.57 - 2026-03-10 =
 * Re-release to resolve a deployment failure caused by GitHub service outage - FIXED
 
