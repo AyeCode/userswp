@@ -1881,7 +1881,7 @@ function uwp_get_activation_link($user_id)
 	$activation_args = array(
 		'uwp_activate' => 'yes',
 		'key' => $key,
-		'login' => $user_data->user_login
+		'login' => rawurlencode($user_data->user_login)
 	);
 
 	$activation_args = apply_filters('uwp_activation_link_args', $activation_args, $user_id, $user_data);
