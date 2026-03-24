@@ -22,6 +22,44 @@ class UsersWP_Import_Export {
 	private $file;
 	private $filename;
 
+    /**
+     * Columns that are NEVER writable via CSV import.
+     * Denylist wins over allowlist — a column here can never be accidentally
+     * re-enabled by adding it to $import_meta_allowlist.
+     *
+     * @var array
+     */
+    private static $import_meta_denylist = array(
+        'user_id',       // Primary key — never importable.
+        'old_password',  // Credential-adjacent — must not be set via import.
+    );
+
+    /**
+     * Columns that ARE permitted in a CSV import (positive / allowlist).
+     * Everything not listed here is silently skipped — default-deny.
+     * Add new safe meta keys here deliberately; never use a wildcard.
+     *
+     * @var array
+     */
+    private static $import_meta_allowlist = array(
+        // Core WP user fields
+        'username',
+        'email',
+        'display_name',
+        'first_name',
+        'last_name',
+        'description',
+        'user_url',
+        'user_registered',
+        'role',
+        // uwp_usermeta safe fields
+        'bio',
+        'phone',
+        'user_privacy',
+        'avatar_thumb',
+        'banner_thumb',
+    );
+
 
     public function __construct() {
         global $wp_filesystem;
@@ -807,42 +845,6 @@ class UsersWP_Import_Export {
     }
 
     /**
-     * Columns that are NEVER writable via CSV import.
-     * Denylist wins over allowlist — a column here can never be accidentally
-     * re-enabled by adding it to $import_meta_allowlist.
-     *
-     * @var array
-     */
-    private static $import_meta_denylist = array(
-        'user_id',       // Primary key — never importable.
-        'old_password',  // Credential-adjacent — must not be set via import.
-    );
-
-    /**
-     * Columns that ARE permitted in a CSV import (positive / allowlist).
-     * Everything not listed here is silently skipped — default-deny.
-     * Add new safe meta keys here deliberately; never use a wildcard.
-     *
-     * @var array
-     */
-    private static $import_meta_allowlist = array(
-        // Core WP user fields
-        'username',
-        'email',
-        'display_name',
-        'first_name',
-        'last_name',
-        'description',
-        'user_url',
-        'user_registered',
-        'role',
-        // uwp_usermeta safe fields
-        'bio',
-        'phone',
-        'user_privacy',
-    );
-
-    /**
      * Sanitize a single CSV import value.
      *
      * CSV data is always a plain string. There is no legitimate reason for it
@@ -855,18 +857,67 @@ class UsersWP_Import_Export {
      * @return string        A safe scalar string ready for DB insertion.
      */
     private function sanitize_import_value( $key, $value ) {
-        // PHP serialization type prefixes: a: b: d: i: O: s: N; C:
+        // Reject serialized payloads
         if ( is_string( $value ) && preg_match( '/^[aAbBdDiIoOsScCnN][:;]/', ltrim( $value ) ) ) {
             if ( function_exists( 'uwp_log' ) ) {
+                uwp_log( sprintf( 'Import security: serialized payload in column "%s" — discarded.', esc_attr( $key ) ) );
+            }
+            return '';
+        }
+
+        // File path columns: validate as a URL pointing inside the uploads directory only
+        if ( in_array( $key, array( 'avatar_thumb', 'banner_thumb' ), true ) ) {
+            return $this->sanitize_import_thumb( $value );
+        }
+
+        return sanitize_text_field( (string) $value );
+    }
+
+    /**
+     * Sanitizes a thumbnail path value from CSV import.
+     *
+     * Validates that the given path is a real, existing file located within
+     * the WordPress uploads directory, preventing path traversal attacks and
+     * references to arbitrary files outside the uploads directory.
+     *
+     * @param  string $value Raw thumbnail path value from the CSV row.
+     * @return string        Resolved absolute path if valid, empty string otherwise.
+     */
+    private function sanitize_import_thumb( $value ) {
+        $value = trim( (string) $value );
+
+        if ( empty( $value ) ) {
+            return '';
+        }
+
+        // Resolve any ../ traversal attempts before comparison
+        $real = realpath( $value );
+
+        if ( $real === false ) {
+            return ''; // Path doesn't exist on disk — reject
+        }
+
+        // Must stay within the uploads directory
+        $uploads  = wp_upload_dir();
+        $base_dir = trailingslashit( realpath( $uploads['basedir'] ) );
+
+        if ( strpos( $real . DIRECTORY_SEPARATOR, $base_dir ) !== 0 ) {
+            if ( function_exists( 'uwp_log' ) ) {
                 uwp_log( sprintf(
-                    'Import security: serialized payload detected in column "%s" — value discarded.',
-                    esc_attr( $key )
+                    'Import security: thumb path "%s" is outside uploads directory — discarded.',
+                    esc_attr( $value )
                 ) );
             }
             return '';
         }
 
-        return sanitize_text_field( (string) $value );
+        // Must be an allowed image extension
+        $ext = strtolower( pathinfo( $real, PATHINFO_EXTENSION ) );
+        if ( ! in_array( $ext, array( 'jpg', 'jpeg', 'png', 'gif', 'webp' ), true ) ) {
+            return '';
+        }
+
+        return $real; // Return the resolved, canonical path
     }
 
     /**
