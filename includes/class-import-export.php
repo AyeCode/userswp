@@ -22,6 +22,44 @@ class UsersWP_Import_Export {
 	private $file;
 	private $filename;
 
+    /**
+     * Columns that are NEVER writable via CSV import.
+     * Denylist wins over allowlist — a column here can never be accidentally
+     * re-enabled by adding it to $import_meta_allowlist.
+     *
+     * @var array
+     */
+    private static $import_meta_denylist = array(
+        'user_id',       // Primary key — never importable.
+        'old_password',  // Credential-adjacent — must not be set via import.
+    );
+
+    /**
+     * Columns that ARE permitted in a CSV import (positive / allowlist).
+     * Everything not listed here is silently skipped — default-deny.
+     * Add new safe meta keys here deliberately; never use a wildcard.
+     *
+     * @var array
+     */
+    private static $import_meta_allowlist = array(
+        // Core WP user fields
+        'username',
+        'email',
+        'display_name',
+        'first_name',
+        'last_name',
+        'description',
+        'user_url',
+        'user_registered',
+        'role',
+        // uwp_usermeta safe fields
+        'bio',
+        'phone',
+        'user_privacy',
+        'avatar_thumb',
+        'banner_thumb',
+    );
+
 
     public function __construct() {
         global $wp_filesystem;
@@ -44,7 +82,6 @@ class UsersWP_Import_Export {
         add_action( 'wp_ajax_uwp_ajax_export_users', array( $this, 'process_users_export' ) );
         add_action( 'wp_ajax_uwp_ajax_import_users', array( $this, 'process_users_import' ) );
         add_action( 'wp_ajax_uwp_ie_upload_file', array( $this, 'ie_upload_file' ) );
-        add_action( 'wp_ajax_nopriv_uwp_ie_upload_file', array( $this, 'ie_upload_file' ) );
         add_action( 'admin_notices', array($this, 'ie_admin_notice') );
         add_filter( 'uwp_get_export_users_status', array( $this, 'get_export_users_status' ) );
         add_filter( 'uwp_get_import_users_status', array( $this, 'get_import_users_status' ) );
@@ -458,9 +495,11 @@ class UsersWP_Import_Export {
 	 */
     public function ie_upload_file(){
 
-        if ( !(!empty($_REQUEST['nonce']) && wp_verify_nonce( $_REQUEST['nonce'], 'uwp-ie-file-upload-nonce' )) ) {
-            echo 'error';return;
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array( 'message' => __( 'Permission denied.', 'userswp' ) ), 403 );
         }
+
+        check_ajax_referer( 'uwp-ie-file-upload-nonce', 'nonce' );
 
         $upload_data = array(
             'name'     => $_FILES['import_file']['name'],
@@ -670,10 +709,13 @@ class UsersWP_Import_Export {
 
                 if( !is_wp_error( $user_id ) ){
                     foreach ($row as $key => $value){
-                        if(!in_array($key, $exclude)){
-                            $value = maybe_unserialize($value);
-                            uwp_update_usermeta($user_id, $key, $value);
+                        //Only write columns on the allowlist; denylist always wins.
+                        if ( ! $this->is_importable_column( $key ) ) {
+                            continue;
                         }
+                        //Never deserialize CSV input. Cast to safe scalar string.
+                        $value = $this->sanitize_import_value( $key, $value );
+                        uwp_update_usermeta($user_id, $key, $value);
                     }
                 } else {
                     $return['msg'] = sprintf(__('Row - %s Error: %s','userswp'), $this->imp_step, $user_id->get_error_message());
@@ -800,6 +842,99 @@ class UsersWP_Import_Export {
     public function allowed_upload_mimes($mimes = array()) {
 	    $mimes['csv'] = "text/csv";
 	    return $mimes;
+    }
+
+    /**
+     * Sanitize a single CSV import value.
+     *
+     * CSV data is always a plain string. There is no legitimate reason for it
+     * to contain serialized PHP. We detect the serialization type-prefix
+     * signatures, reject them with a log entry, and return an empty string.
+     * All other values are cast to string and sanitized with sanitize_text_field().
+     *
+     * @param  string $key   The CSV column / meta key name.
+     * @param  mixed  $value The raw value from the CSV row.
+     * @return string        A safe scalar string ready for DB insertion.
+     */
+    private function sanitize_import_value( $key, $value ) {
+        // Reject serialized payloads
+        if ( is_string( $value ) && preg_match( '/^[aAbBdDiIoOsScCnN][:;]/', ltrim( $value ) ) ) {
+            if ( function_exists( 'uwp_log' ) ) {
+                uwp_log( sprintf( 'Import security: serialized payload in column "%s" — discarded.', esc_attr( $key ) ) );
+            }
+            return '';
+        }
+
+        // File path columns: validate as a URL pointing inside the uploads directory only
+        if ( in_array( $key, array( 'avatar_thumb', 'banner_thumb' ), true ) ) {
+            return $this->sanitize_import_thumb( $value );
+        }
+
+        return sanitize_text_field( (string) $value );
+    }
+
+    /**
+     * Sanitizes a thumbnail path value from CSV import.
+     *
+     * Validates that the given path is a real, existing file located within
+     * the WordPress uploads directory, preventing path traversal attacks and
+     * references to arbitrary files outside the uploads directory.
+     *
+     * @param  string $value Raw thumbnail path value from the CSV row.
+     * @return string        Resolved absolute path if valid, empty string otherwise.
+     */
+    private function sanitize_import_thumb( $value ) {
+        $value = trim( (string) $value );
+
+        if ( empty( $value ) ) {
+            return '';
+        }
+
+        // Resolve any ../ traversal attempts before comparison
+        $real = realpath( $value );
+
+        if ( $real === false ) {
+            return ''; // Path doesn't exist on disk — reject
+        }
+
+        // Must stay within the uploads directory
+        $uploads  = wp_upload_dir();
+        $base_dir = trailingslashit( realpath( $uploads['basedir'] ) );
+
+        if ( strpos( $real . DIRECTORY_SEPARATOR, $base_dir ) !== 0 ) {
+            if ( function_exists( 'uwp_log' ) ) {
+                uwp_log( sprintf(
+                    'Import security: thumb path "%s" is outside uploads directory — discarded.',
+                    esc_attr( $value )
+                ) );
+            }
+            return '';
+        }
+
+        // Must be an allowed image extension
+        $ext = strtolower( pathinfo( $real, PATHINFO_EXTENSION ) );
+        if ( ! in_array( $ext, array( 'jpg', 'jpeg', 'png', 'gif', 'webp' ), true ) ) {
+            return '';
+        }
+
+        return $real; // Return the resolved, canonical path
+    }
+
+    /**
+     * Return true only when the given column name is permitted for CSV import.
+     *
+     * @param  string $column The CSV column / meta key name.
+     * @return bool
+     */
+    private function is_importable_column( $column ) {
+        $column = strtolower( trim( (string) $column ) );
+
+        // Denylist is checked first — it unconditionally blocks.
+        if ( in_array( $column, self::$import_meta_denylist, true ) ) {
+            return false;
+        }
+
+        return in_array( $column, self::$import_meta_allowlist, true );
     }
 
 	/**
