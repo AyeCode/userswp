@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.57\n"
+"Project-Id-Version: UsersWP 1.2.58\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-10 20:15+0530\n"
-"PO-Revision-Date: 2026-03-10 20:18+0530\n"
+"POT-Creation-Date: 2026-03-26 11:22+0530\n"
+"PO-Revision-Date: 2026-03-26 11:22+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -15,7 +15,7 @@ msgstr ""
 "_nx:1,2;_x;_ex;esc_attr_e;esc_attr__\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: vendor\n"
 
@@ -1665,7 +1665,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:71
 #: admin/settings/class-uwp-settings-general.php:340
-#: includes/class-emails.php:300 includes/class-forms.php:4789
+#: includes/class-emails.php:300 includes/class-forms.php:4792
 #: includes/class-pages.php:325 templates/bootstrap/forgot.php:66
 #: templates/bootstrap/login.php:11 templates/login.php:7
 #: templates/login.php:19 widgets/login.php:50 widgets/login.php:141
@@ -2823,7 +2823,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:530 includes/class-activator.php:572
-#: includes/class-forms.php:4523
+#: includes/class-forms.php:4526
 msgid "Confirm Password"
 msgstr ""
 
@@ -3040,16 +3040,16 @@ msgstr ""
 msgid "Banner reset successfully."
 msgstr ""
 
-#: includes/class-forms.php:225 includes/class-forms.php:772
-#: includes/class-forms.php:2068
+#: includes/class-forms.php:225 includes/class-forms.php:775
+#: includes/class-forms.php:2071
 msgid "Something went wrong. Please contact site admin."
 msgstr ""
 
-#: includes/class-forms.php:368
+#: includes/class-forms.php:371
 msgid "Something went wrong. Please try again."
 msgstr ""
 
-#: includes/class-forms.php:484
+#: includes/class-forms.php:487
 #, php-format
 msgid ""
 "We have removed the system generated password warning for you. From this "
@@ -3057,7 +3057,7 @@ msgid ""
 "page, <a href=\"%s\">click here</a>."
 msgstr ""
 
-#: includes/class-forms.php:493
+#: includes/class-forms.php:496
 #, php-format
 msgid ""
 "<strong>Warning</strong>: It seems like you are using a system generated "
@@ -3065,336 +3065,340 @@ msgid ""
 "for you, you can remove this warning by <a href=\"%s\">clicking here</a>."
 msgstr ""
 
-#: includes/class-forms.php:531 includes/class-forms.php:1121
-#: includes/class-forms.php:1605
+#: includes/class-forms.php:534 includes/class-forms.php:1124
+#: includes/class-forms.php:1608
 msgid "Security verification failed. Try again."
 msgstr ""
 
-#: includes/class-forms.php:548
+#: includes/class-forms.php:551
 msgid "Security hash failed. Try again."
 msgstr ""
 
-#: includes/class-forms.php:564
+#: includes/class-forms.php:567
 msgid ""
 "User registration is currently not allowed. Please check settings of your "
 "site."
 msgstr ""
 
-#: includes/class-forms.php:679
+#: includes/class-forms.php:682
 msgid "Sorry, that username is not allowed."
 msgstr ""
 
-#: includes/class-forms.php:815 includes/helpers/forms.php:273
+#: includes/class-forms.php:818 includes/helpers/forms.php:273
 msgid "To activate your account, visit the following address:"
 msgstr ""
 
-#: includes/class-forms.php:819 includes/helpers/forms.php:277
+#: includes/class-forms.php:822 includes/helpers/forms.php:277
 msgid "Please activate your account :"
 msgstr ""
 
-#: includes/class-forms.php:842
+#: includes/class-forms.php:845
 msgid "Password you entered during registration."
 msgstr ""
 
-#: includes/class-forms.php:845 includes/class-forms.php:1710
+#: includes/class-forms.php:848 includes/class-forms.php:1713
 msgid "Your login Information :"
 msgstr ""
 
-#: includes/class-forms.php:846 includes/class-forms.php:882
+#: includes/class-forms.php:849 includes/class-forms.php:885
 msgid "Username:"
 msgstr ""
 
-#: includes/class-forms.php:847
+#: includes/class-forms.php:850
 msgid "Password:"
 msgstr ""
 
-#: includes/class-forms.php:879
+#: includes/class-forms.php:882
 msgid "User Information :"
 msgstr ""
 
-#: includes/class-forms.php:880
+#: includes/class-forms.php:883
 msgid "First Name:"
 msgstr ""
 
-#: includes/class-forms.php:881
+#: includes/class-forms.php:884
 msgid "Last Name:"
 msgstr ""
 
-#: includes/class-forms.php:883
+#: includes/class-forms.php:886
 msgid "Email:"
 msgstr ""
 
-#: includes/class-forms.php:927
+#: includes/class-forms.php:930
 msgid "Account registered successfully. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:955
+#: includes/class-forms.php:958
 #, php-format
 msgid ""
 "An email has been sent to your registered email address. Please click the "
 "activation link to proceed. <a href=\"%s\">Resend</a>."
 msgstr ""
 
-#: includes/class-forms.php:968
+#: includes/class-forms.php:971
 msgid "Your account is under moderation. We will email you once its approved."
 msgstr ""
 
-#: includes/class-forms.php:976
+#: includes/class-forms.php:979
 #, php-format
 msgid ""
 "Account registered successfully. A password has been generated and mailed to "
 "your registered Email ID. Please login %1$shere%2$s."
 msgstr ""
 
-#: includes/class-forms.php:978
+#: includes/class-forms.php:981
 #, php-format
 msgid "Account registered successfully. Please login %1$shere%2$s"
 msgstr ""
 
-#: includes/class-forms.php:1222
+#: includes/class-forms.php:1225
 msgid "Login successful. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:1267
+#: includes/class-forms.php:1270
 msgid "Failed to create a login nonce."
 msgstr ""
 
-#: includes/class-forms.php:1297
+#: includes/class-forms.php:1300
 msgid "Authentication Code"
 msgstr ""
 
-#: includes/class-forms.php:1326
+#: includes/class-forms.php:1329
 msgid "Verification Code"
 msgstr ""
 
-#: includes/class-forms.php:1380
+#: includes/class-forms.php:1383
 msgid "Enter backup code"
 msgstr ""
 
-#: includes/class-forms.php:1431
+#: includes/class-forms.php:1434
 msgid "Invalid user data. Please try again."
 msgstr ""
 
-#: includes/class-forms.php:1446
+#: includes/class-forms.php:1449
 msgid "Invalid request! Please try again."
 msgstr ""
 
-#: includes/class-forms.php:1478 includes/class-forms.php:1503
+#: includes/class-forms.php:1481 includes/class-forms.php:1506
 msgid "Invalid verification code."
 msgstr ""
 
-#: includes/class-forms.php:1494
+#: includes/class-forms.php:1497
 msgid "A new code has been sent."
 msgstr ""
 
-#: includes/class-forms.php:1519
+#: includes/class-forms.php:1522
 msgid "Invalid backup code."
 msgstr ""
 
-#: includes/class-forms.php:1541
+#: includes/class-forms.php:1544
 msgid "Validation successful. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:1649
+#: includes/class-forms.php:1652
 msgid "Invalid email or user doesn't exists."
 msgstr ""
 
-#: includes/class-forms.php:1678
+#: includes/class-forms.php:1681
 #, php-format
 msgid ""
 "Your account is not activated yet. Please activate your account first. <a "
 "href=\"%s\">Resend</a>."
 msgstr ""
 
-#: includes/class-forms.php:1711 includes/class-forms.php:1726
+#: includes/class-forms.php:1714 includes/class-forms.php:1729
 #, php-format
 msgid "Username: %s"
 msgstr ""
 
-#: includes/class-forms.php:1712
+#: includes/class-forms.php:1715
 #, php-format
 msgid "Password: %s"
 msgstr ""
 
-#: includes/class-forms.php:1724
+#: includes/class-forms.php:1727
 msgid "You have requested to reset your password for the following account:"
 msgstr ""
 
-#: includes/class-forms.php:1727
+#: includes/class-forms.php:1730
 msgid "If this was by mistake, just ignore this email and nothing will happen."
 msgstr ""
 
-#: includes/class-forms.php:1728
+#: includes/class-forms.php:1731
 msgid ""
 "To reset your password, click the following link and follow the instructions."
 msgstr ""
 
-#: includes/class-forms.php:1761
+#: includes/class-forms.php:1764
 msgid "Please check your email."
 msgstr ""
 
-#: includes/class-forms.php:1846
+#: includes/class-forms.php:1849
 msgid "Password changed successfully."
 msgstr ""
 
-#: includes/class-forms.php:1907
+#: includes/class-forms.php:1910
 msgid "Invalid username."
 msgstr ""
 
-#: includes/class-forms.php:1941
+#: includes/class-forms.php:1944
 #, php-format
 msgid ""
 "Password updated successfully. Please <a href=\"%s\">login</a> with your new "
 "password."
 msgstr ""
 
-#: includes/class-forms.php:2054
+#: includes/class-forms.php:2057
 #, php-format
 msgid "%s"
 msgstr ""
 
-#: includes/class-forms.php:2095
+#: includes/class-forms.php:2098
 msgid "This email is already registered, please choose another one."
 msgstr ""
 
-#: includes/class-forms.php:2129
+#: includes/class-forms.php:2132
 msgid ""
 "Account updated successfully. The new address will become active once you "
 "confirm via activation link sent to your new email."
 msgstr ""
 
-#: includes/class-forms.php:2147
+#: includes/class-forms.php:2150
 msgid "Account updated successfully."
 msgstr ""
 
-#: includes/class-forms.php:2180 includes/class-forms.php:2210
+#: includes/class-forms.php:2183 includes/class-forms.php:2213
 msgid "User Information:"
 msgstr ""
 
-#: includes/class-forms.php:2259 includes/class-profile.php:1917
+#: includes/class-forms.php:2262 includes/class-profile.php:1917
 msgid "Invalid access!"
 msgstr ""
 
-#: includes/class-forms.php:2534
+#: includes/class-forms.php:2537
 msgid "Clear field"
 msgstr ""
 
-#: includes/class-forms.php:3295
+#: includes/class-forms.php:3298
 msgid "Username or Email"
 msgstr ""
 
-#: includes/class-forms.php:3656
+#: includes/class-forms.php:3659
 msgid "Please enter a valid URL including https://"
 msgstr ""
 
-#: includes/class-forms.php:3719
+#: includes/class-forms.php:3722
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:4066
+#: includes/class-forms.php:4069
 #, php-format
 msgid ""
 "By using this form I agree to the storage and handling of my data by this "
 "website. View our %1$s %2$s %3$s."
 msgstr ""
 
-#: includes/class-forms.php:4159
+#: includes/class-forms.php:4162
 #, php-format
 msgid "I accept the %1$s %2$s %3$s."
 msgstr ""
 
-#: includes/class-forms.php:4439
+#: includes/class-forms.php:4442
 msgid "Site Default"
 msgstr ""
 
-#: includes/class-forms.php:4611
+#: includes/class-forms.php:4614
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/class-forms.php:4766
+#: includes/class-forms.php:4769
 msgid "Privacy settings updated successfully."
 msgstr ""
 
-#: includes/class-import-export.php:117
+#: includes/class-import-export.php:154
 #, php-format
 msgid "Please upload a valid .json file. %sGo Back%s"
 msgstr ""
 
-#: includes/class-import-export.php:121
+#: includes/class-import-export.php:158
 #, php-format
 msgid "Please upload a file to import. %sGo Back%s"
 msgstr ""
 
-#: includes/class-import-export.php:136
+#: includes/class-import-export.php:173
 msgid "Invalid export request found."
 msgstr ""
 
-#: includes/class-import-export.php:148 includes/class-import-export.php:508
+#: includes/class-import-export.php:185 includes/class-import-export.php:547
 #: includes/class-profile.php:1516
 msgid "Security check failed."
 msgstr ""
 
-#: includes/class-import-export.php:153 includes/class-import-export.php:226
+#: includes/class-import-export.php:190 includes/class-import-export.php:263
 msgid "Filesystem ERROR: "
 msgstr ""
 
-#: includes/class-import-export.php:185
+#: includes/class-import-export.php:222
 msgid "No data found for export."
 msgstr ""
 
-#: includes/class-import-export.php:222
+#: includes/class-import-export.php:259
 msgid "Filesystem ERROR: Could not access filesystem."
 msgstr ""
 
-#: includes/class-import-export.php:236
+#: includes/class-import-export.php:273
 #, php-format
 msgid ""
 "Filesystem ERROR: Export location %s is not writable, check your file "
 "permissions."
 msgstr ""
 
-#: includes/class-import-export.php:240
+#: includes/class-import-export.php:277
 #, php-format
 msgid ""
 "Filesystem ERROR: Could not create directory %s. This is usually due to "
 "inconsistent file permissions."
 msgstr ""
 
-#: includes/class-import-export.php:496
+#: includes/class-import-export.php:499
+msgid "Permission denied."
+msgstr ""
+
+#: includes/class-import-export.php:535
 msgid "Invalid import request found."
 msgstr ""
 
-#: includes/class-import-export.php:521
+#: includes/class-import-export.php:560
 msgid "Invalid file type, please upload .csv file."
 msgstr ""
 
-#: includes/class-import-export.php:545
+#: includes/class-import-export.php:584
 msgid "Total "
 msgstr ""
 
-#: includes/class-import-export.php:555
+#: includes/class-import-export.php:594
 msgid "Users import completed."
 msgstr ""
 
-#: includes/class-import-export.php:562
+#: includes/class-import-export.php:601
 msgid "No valid data found for import."
 msgstr ""
 
-#: includes/class-import-export.php:579
+#: includes/class-import-export.php:618
 msgid "No csv file found."
 msgstr ""
 
-#: includes/class-import-export.php:591
+#: includes/class-import-export.php:630
 #, php-format
 msgid "Row - %s Error: Skipped due to invalid/no data."
 msgstr ""
 
-#: includes/class-import-export.php:653
+#: includes/class-import-export.php:692
 #, php-format
 msgid "Row - %s Error: User could not be created."
 msgstr ""
 
-#: includes/class-import-export.php:679
+#: includes/class-import-export.php:721
 #, php-format
 msgid "Row - %s Error: %s"
 msgstr ""

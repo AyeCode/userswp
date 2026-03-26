@@ -319,6 +319,9 @@ class UsersWP_Forms {
 	 */
 	public function normalize_url( $url ) {
 
+        if ( empty( $url ) ) {
+            return '';
+        }
 		// Normalize.
 		$url = wp_normalize_path( $url );
 
