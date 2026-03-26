@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 6.1
 Tested up to: 6.9
-Stable tag: 1.2.57
+Stable tag: 1.2.58
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -152,7 +152,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.58 - 2026-03-TBD =
+= 1.2.58 - 2026-03-26 =
 * UsersWP import workflow CSV import security improvement - FIXED/SECURITY
 * Invalid activation link for usernames that contain spaces or special characters - FIXED
 
