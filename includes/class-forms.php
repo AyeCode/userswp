@@ -2258,30 +2258,42 @@ class UsersWP_Forms {
             wp_die( -1 );
         }
 
+        // Access control: must be logged in, and either own the record or be admin
         if ( ! ( is_user_logged_in() && ( $user_id === (int) get_current_user_id() || current_user_can( 'manage_options' ) ) ) ) {
             wp_send_json_error( __( 'Invalid access!', 'userswp' ) );
         }
 
-        $allowed_fields = array( 'banner_thumb', 'avatar_thumb' );
+        // --- FIX 1: Look up the field from the form fields registry ---
+        // This validates $htmlvar is a real registered field AND lets us read its properties
+        global $wpdb;
+        $field = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM " . uwp_get_table_prefix() . "uwp_form_fields WHERE htmlvar_name = %s LIMIT 1",
+                $htmlvar
+            )
+        );
 
-        if ( ! in_array( $htmlvar, $allowed_fields, true ) ) {
+        if ( $field && ! empty( $field->for_admin_use ) ) {
+            wp_send_json_error( __( 'Invalid access!', 'userswp' ) );
+        }
+
+        if ( empty( $field ) ) {
             wp_send_json_error( __( 'Invalid field!', 'userswp' ) );
         }
 
-        if ( ! current_user_can( 'manage_options' ) ) {
-            global $wpdb;
-            $field = $wpdb->get_row(
-                $wpdb->prepare(
-                    "SELECT for_admin_use FROM " . uwp_get_table_prefix() . "uwp_form_fields WHERE htmlvar_name = %s LIMIT 1",
-                    $htmlvar
-                )
-            );
+        // --- FIX 2: Ensure the field is actually a file/image upload type ---
+        $upload_field_types = array( 'file', 'image' );
 
-            if ( $field && ! empty( $field->for_admin_use ) ) {
-                wp_send_json_error( __( 'Invalid access!', 'userswp' ) );
-            }
+        if ( ! in_array( $field->field_type, $upload_field_types, true ) ) {
+            wp_send_json_error( __( 'Invalid field type!', 'userswp' ) );
         }
 
+        // --- FIX 3: Block non-admins from clearing admin-only fields ---
+        if ( ! empty( $field->for_admin_use ) && ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( __( 'Invalid access!', 'userswp' ) );
+        }
+
+        // Resolve file path and type for built-in avatar/banner fields
         if ( $htmlvar === 'banner_thumb' ) {
             $file = uwp_get_usermeta( $user_id, 'banner_thumb' );
             $type = 'banner';
@@ -2289,10 +2301,12 @@ class UsersWP_Forms {
             $file = uwp_get_usermeta( $user_id, 'avatar_thumb' );
             $type = 'avatar';
         } else {
-            // Unreachable after whitelist check, but kept as a safe fallback
-            wp_send_json_error( __( 'Invalid field!', 'userswp' ) );
+            // Custom upload field added via form builder
+            $file = uwp_get_usermeta( $user_id, $htmlvar );
+            $type = null;
         }
 
+        // --- FIX 4: Only write to DB after all validation has passed ---
         uwp_update_usermeta( $user_id, $htmlvar, '' );
 
         if ( $file ) {
@@ -2302,10 +2316,14 @@ class UsersWP_Forms {
 
             if ( is_file( $unlink_file ) && file_exists( $unlink_file ) ) {
                 @unlink( $unlink_file );
-                $unlink_ori_file = str_replace( '_uwp_' . $type . '_thumb' . '.', '.', $unlink_file );
 
-                if ( is_file( $unlink_ori_file ) && file_exists( $unlink_ori_file ) ) {
-                    @unlink( $unlink_ori_file );
+                // For avatar/banner, also remove the original (non-thumb) file
+                if ( $type ) {
+                    $unlink_ori_file = str_replace( '_uwp_' . $type . '_thumb' . '.', '.', $unlink_file );
+
+                    if ( is_file( $unlink_ori_file ) && file_exists( $unlink_ori_file ) ) {
+                        @unlink( $unlink_ori_file );
+                    }
                 }
             }
         }
