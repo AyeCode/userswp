@@ -34,10 +34,10 @@ $image_url = !empty($args['image_url']) ? esc_url( $args['image_url'] ) : '';
 				<div class="uwp-<?php echo esc_attr( $type ); ?>-crop-p-wrap">
 					<div id="<?php echo esc_attr( $type ); ?>-crop-actions">
 						<form class="uwp-crop-form" method="post">
-							<input type="hidden" name="x" value="" id="<?php echo esc_attr( $type ); ?>-x" />
-							<input type="hidden" name="y" value="" id="<?php echo esc_attr( $type ); ?>-y" />
-							<input type="hidden" name="w" value="" id="<?php echo esc_attr( $type ); ?>-w" />
-							<input type="hidden" name="h" value="" id="<?php echo esc_attr( $type ); ?>-h" />
+							<input type="hidden" name="uwpx" value="" id="<?php echo esc_attr( $type ); ?>-x" />
+							<input type="hidden" name="uwpy" value="" id="<?php echo esc_attr( $type ); ?>-y" />
+							<input type="hidden" name="uwpw" value="" id="<?php echo esc_attr( $type ); ?>-w" />
+							<input type="hidden" name="uwph" value="" id="<?php echo esc_attr( $type ); ?>-h" />
 							<input type="hidden" id="uwp-<?php echo esc_attr( $type ); ?>-crop-image" name="uwp_crop" value="<?php echo esc_attr( $image_url ); ?>" />
 							<input type="hidden" name="uwp_crop_nonce" value="<?php echo esc_attr( wp_create_nonce( 'uwp_crop_nonce_'.$type ) ); ?>" />
 							<input type="submit" name="uwp_<?php echo esc_attr( $type ); ?>_crop" value="<?php esc_attr_e('Apply', 'userswp'); ?>" class="button button-primary" id="save_uwp_<?php echo esc_attr( $type ); ?>" />

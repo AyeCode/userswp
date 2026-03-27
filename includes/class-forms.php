@@ -103,25 +103,24 @@ class UsersWP_Forms {
 		}
 
 		if ( $processed ) {
-
 			if ( is_wp_error( $errors ) ) {
-				echo aui()->alert(
-                    array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					'type'    => 'error',
-					'class'   => 'text-center',
-					'content' => wp_kses_post( $errors->get_error_message() ),
-                    )
-                );
-			} elseif ( $redirect ) {
+				aui()->alert(
+					array(
+						'type'    => 'error',
+						'content' => wp_kses_post( $errors->get_error_message() )
+					),
+					true
+				);
+			} else if ( $redirect ) {
 					wp_safe_redirect( $redirect );
 					exit();
-				} else {
-				echo aui()->alert(
-				array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				'type'    => 'success',
-				'class'   => 'text-center',
-				'content' => wp_kses_post( $message ),
-                    )
+			} else {
+				aui()->alert(
+					array(
+						'type'    => 'success',
+						'content' => wp_kses_post( $message )
+					),
+					true
 				);
 			}
 		}
@@ -197,12 +196,34 @@ class UsersWP_Forms {
 	 */
 	public function process_image_crop( $data = array(), $type = 'avatar', $unlink_prev_img = false ) {
 		global $wpdb;
+
 		if ( ! is_user_logged_in() ) {
 			return false;
 		}
 
 		if ( empty( $_POST['uwp_crop_nonce'] ) || ! wp_verify_nonce( $_POST['uwp_crop_nonce'], 'uwp_crop_nonce_' . $type ) ) {
 			return;
+		}
+
+		$image_url = ! empty( $data['uwp_crop'] ) ? esc_url( $data['uwp_crop'] ) : '';
+
+		if ( empty( $image_url ) ) {
+			return new WP_Error( 'empty_image', __( 'Upload valid image.', 'userswp' ) );
+		}
+
+		// Ensure we have a valid URL with an allowed meme type.
+		$image_url = $this->normalize_url( $image_url );
+
+		$content_url = str_replace( array( 'https://', 'http://' ) , '', untrailingslashit( WP_CONTENT_URL ) );
+		$_image_url = str_replace( array( 'https://', 'http://' ), '', $image_url );
+		if ( strpos( $_image_url, $content_url ) !== 0 ) {
+			return new WP_Error( 'invalid_image', __( 'Invalid image url.', 'userswp' ) );
+		}
+
+		$filetype = wp_check_filetype( $image_url );
+
+		if ( empty( $filetype['ext'] ) ) {
+			return new WP_Error( 'invalid_image', __( 'Invalid image type.', 'userswp' ) );
 		}
 
 		// If is current user's profile (profile.php)
@@ -214,19 +235,6 @@ class UsersWP_Forms {
 			// Otherwise something is wrong.
 		} else {
 			$user_id = get_current_user_id();
-		}
-
-		// Ensure we have a valid URL with an allowed meme type.
-		$image_url = $this->normalize_url( esc_url( $data['uwp_crop'] ) );
-		$filetype  = wp_check_filetype( $image_url );
-
-		$errors = new WP_Error();
-		if ( empty( $image_url ) || empty( $filetype['ext'] ) ) {
-			$errors->add( 'something_wrong', __( 'Something went wrong. Please contact site admin.', 'userswp' ) );
-		}
-
-		if ( $errors->has_errors() ) {
-			return $errors;
 		}
 
 		// Retrieve current thumbnail.
@@ -253,11 +261,12 @@ class UsersWP_Forms {
 			$name                 = sanitize_file_name( pathinfo( $image_path, PATHINFO_FILENAME ) ); //file name without extension
 			$thumb_image_name     = $name . $thumb_postfix . '.' . $ext;
 			$thumb_image_location = str_replace( $name . '.' . $ext, $thumb_image_name, $image_path );
+
 			//Get the new coordinates to crop the image.
-			$x = $data['x'];
-			$y = $data['y'];
-			$w = $data['w'];
-			$h = $data['h'];
+			$x = $data['uwpx'];
+			$y = $data['uwpy'];
+			$w = $data['uwpw'];
+			$h = $data['uwph'];
 			//Scale the image based on cropped width setting
 			$scale = $full_width / $w;
 			//$scale = 1; // no scaling

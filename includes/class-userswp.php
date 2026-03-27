@@ -571,7 +571,7 @@ final class UsersWP {
 
 		// general
 		add_action( 'init', array( $instance, 'init_notices' ), 1 );
-		add_action( 'uwp_loaded', array( $instance, 'handler' ) );
+		add_action( 'init', array( $instance, 'handler' ), 11 );
 		add_action( 'init', array( $instance, 'privacy_submit_handler' ) );
 		add_action( 'uwp_template_display_notices', array( $instance, 'display_notices' ), 10, 1 );
 		add_action( 'wp_ajax_uwp_upload_file_remove', array( $instance, 'upload_file_remove' ) );

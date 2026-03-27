@@ -36,28 +36,28 @@ $image_url = !empty($args['image_url']) ? esc_url( $args['image_url'] ) : '';
                 echo aui()->input(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	                'type'  =>  'hidden',
 	                'id'    =>  esc_html( $type.'-x' ),
-	                'name'  =>  'x',
+	                'name'  =>  'uwpx',
 	                'value' =>  '',
 	                'no_wrap' => true,
                 ));
                 echo aui()->input(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	                'type'  =>  'hidden',
 	                'id'    =>  esc_html( $type.'-y' ),
-	                'name'  =>  'y',
+	                'name'  =>  'uwpy',
 	                'value' =>  '',
 	                'no_wrap' => true,
                 ));
                 echo aui()->input(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	                'type'  =>  'hidden',
 	                'id'    =>  esc_html( $type.'-w' ),
-	                'name'  =>  'w',
+	                'name'  =>  'uwpw',
 	                'value' =>  '',
 	                'no_wrap' => true,
                 ));
                 echo aui()->input(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	                'type'  =>  'hidden',
 	                'id'    =>  esc_html( $type.'-h' ),
-	                'name'  =>  'h',
+	                'name'  =>  'uwph',
 	                'value' =>  '',
 	                'no_wrap' => true,
                 ));
