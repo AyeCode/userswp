@@ -152,6 +152,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.59 - 2026-03-30 =
+* Improper Access Control fixes - FIXED/SECURITY
+
 = 1.2.58 - 2026-03-26 =
 * UsersWP import workflow CSV import security improvement - FIXED/SECURITY
 * Invalid activation link for usernames that contain spaces or special characters - FIXED

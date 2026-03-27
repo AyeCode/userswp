@@ -2249,52 +2249,70 @@ class UsersWP_Forms {
 	 * @since   1.0.0
 	 */
 	public function upload_file_remove() {
-		check_ajax_referer( 'uwp_basic_nonce', 'security' );
+        check_ajax_referer( 'uwp_basic_nonce', 'security' );
 
-		$htmlvar = esc_sql( strip_tags( $_POST['htmlvar'] ) );
-		$user_id = ! empty( $_POST['uid'] ) ? absint( $_POST['uid'] ) : 0;
+        $htmlvar = sanitize_key( $_POST['htmlvar'] ?? '' );
+        $user_id = ! empty( $_POST['uid'] ) ? absint( $_POST['uid'] ) : 0;
 
-		if ( empty( $user_id ) ) {
-			wp_die( -1 );
-		}
+        if ( empty( $user_id ) || empty( $htmlvar ) ) {
+            wp_die( -1 );
+        }
 
-		if ( ! ( is_user_logged_in() && ( $user_id == (int) get_current_user_id() || current_user_can( 'manage_options' ) ) ) ) {
-			wp_send_json_error( __( 'Invalid access!', 'userswp' ) );
-		}
+        if ( ! ( is_user_logged_in() && ( $user_id === (int) get_current_user_id() || current_user_can( 'manage_options' ) ) ) ) {
+            wp_send_json_error( __( 'Invalid access!', 'userswp' ) );
+        }
 
-		// Remove file
-		if ( $htmlvar == 'banner_thumb' ) {
-			$file = uwp_get_usermeta( $user_id, 'banner_thumb' );
-			$type = 'banner';
-		} elseif ( $htmlvar == 'avatar_thumb' ) {
-			$file = uwp_get_usermeta( $user_id, 'avatar_thumb' );
-			$type = 'avatar';
-		} else {
-			$file = '';
-			$type = '';
-		}
+        $allowed_fields = array( 'banner_thumb', 'avatar_thumb' );
 
-		uwp_update_usermeta( $user_id, $htmlvar, '' );
+        if ( ! in_array( $htmlvar, $allowed_fields, true ) ) {
+            wp_send_json_error( __( 'Invalid field!', 'userswp' ) );
+        }
 
-		if ( $file ) {
-			$uploads     = wp_upload_dir();
-			$upload_path = $uploads['basedir'];
-			$unlink_file = untrailingslashit( $upload_path ) . '/' . ltrim( $file, '/' );
+        if ( ! current_user_can( 'manage_options' ) ) {
+            global $wpdb;
+            $field = $wpdb->get_row(
+                $wpdb->prepare(
+                    "SELECT for_admin_use FROM " . uwp_get_table_prefix() . "uwp_form_fields WHERE htmlvar_name = %s LIMIT 1",
+                    $htmlvar
+                )
+            );
 
-			if ( is_file( $unlink_file ) && file_exists( $unlink_file ) ) {
-				@unlink( $unlink_file );
-				$unlink_ori_file = str_replace( '_uwp_' . $type . '_thumb' . '.', '.', $unlink_file );
+            if ( $field && ! empty( $field->for_admin_use ) ) {
+                wp_send_json_error( __( 'Invalid access!', 'userswp' ) );
+            }
+        }
 
-				if ( is_file( $unlink_ori_file ) && file_exists( $unlink_ori_file ) ) {
-					@unlink( $unlink_ori_file );
-				}
-			}
-		}
+        if ( $htmlvar === 'banner_thumb' ) {
+            $file = uwp_get_usermeta( $user_id, 'banner_thumb' );
+            $type = 'banner';
+        } elseif ( $htmlvar === 'avatar_thumb' ) {
+            $file = uwp_get_usermeta( $user_id, 'avatar_thumb' );
+            $type = 'avatar';
+        } else {
+            // Unreachable after whitelist check, but kept as a safe fallback
+            wp_send_json_error( __( 'Invalid field!', 'userswp' ) );
+        }
 
-		wp_send_json_success();
+        uwp_update_usermeta( $user_id, $htmlvar, '' );
 
-		wp_die();
-	}
+        if ( $file ) {
+            $uploads     = wp_upload_dir();
+            $upload_path = $uploads['basedir'];
+            $unlink_file = untrailingslashit( $upload_path ) . '/' . ltrim( $file, '/' );
+
+            if ( is_file( $unlink_file ) && file_exists( $unlink_file ) ) {
+                @unlink( $unlink_file );
+                $unlink_ori_file = str_replace( '_uwp_' . $type . '_thumb' . '.', '.', $unlink_file );
+
+                if ( is_file( $unlink_ori_file ) && file_exists( $unlink_ori_file ) ) {
+                    @unlink( $unlink_ori_file );
+                }
+            }
+        }
+
+        wp_send_json_success();
+        wp_die();
+    }
 
 	/**
 	 * Form field template for datepicker field type.
