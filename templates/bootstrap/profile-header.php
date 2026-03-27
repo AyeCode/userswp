@@ -23,7 +23,9 @@ if ( ! $user ) {
 	return;
 }
 
-if ( ! $uwp_in_user_loop ){ ?>
+if ( ! $uwp_in_user_loop ) {
+do_action( 'uwp_template_display_notices', 'profile' );
+?>
 <div class="card shadow-0 border-0 mw-100"><?php }
 
 	if ( ! $hide_cover ) {
