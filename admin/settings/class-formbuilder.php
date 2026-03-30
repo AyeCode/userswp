@@ -1818,7 +1818,7 @@ $extra_attributes['readonly'] = 'readonly'; $class = 'bg-opacity-50 bg-gray';  }
                 'label'      => __( 'Validation Pattern', 'userswp' ) . uwp_help_tip( __( 'Enter regex expression for HTML5 pattern validation.', 'userswp' ) ),
                 'type'       => 'text',
                 'wrap_class' => uwp_advanced_toggle_class(),
-                'value'      => addslashes_gpc( $value ), // Keep slashes
+                'value'      => wp_slash( $value ), // Keep slashes
             )
         );
 

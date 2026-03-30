@@ -154,6 +154,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.59 - 2026-03-TBD =
 * Improve image validation during the cropping process - FIXED/SECURITY
+* Improper Access Control fixes - FIXED/SECURITY
 
 = 1.2.58 - 2026-03-26 =
 * UsersWP import workflow CSV import security improvement - FIXED/SECURITY
