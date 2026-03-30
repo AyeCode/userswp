@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.58\n"
+"Project-Id-Version: UsersWP 1.2.59\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-26 11:22+0530\n"
-"PO-Revision-Date: 2026-03-26 11:22+0530\n"
+"POT-Creation-Date: 2026-03-30 13:53+0530\n"
+"PO-Revision-Date: 2026-03-30 13:54+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -15,7 +15,7 @@ msgstr ""
 "_nx:1,2;_x;_ex;esc_attr_e;esc_attr__\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.5\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: vendor\n"
 
@@ -1665,7 +1665,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:71
 #: admin/settings/class-uwp-settings-general.php:340
-#: includes/class-emails.php:300 includes/class-forms.php:4792
+#: includes/class-emails.php:300 includes/class-forms.php:4836
 #: includes/class-pages.php:325 templates/bootstrap/forgot.php:66
 #: templates/bootstrap/login.php:11 templates/login.php:7
 #: templates/login.php:19 widgets/login.php:50 widgets/login.php:141
@@ -2823,7 +2823,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:530 includes/class-activator.php:572
-#: includes/class-forms.php:4526
+#: includes/class-forms.php:4570
 msgid "Confirm Password"
 msgstr ""
 
@@ -3040,16 +3040,23 @@ msgstr ""
 msgid "Banner reset successfully."
 msgstr ""
 
-#: includes/class-forms.php:225 includes/class-forms.php:775
-#: includes/class-forms.php:2071
-msgid "Something went wrong. Please contact site admin."
+#: includes/class-forms.php:211
+msgid "Upload valid image."
 msgstr ""
 
-#: includes/class-forms.php:371
+#: includes/class-forms.php:220
+msgid "Invalid image url."
+msgstr ""
+
+#: includes/class-forms.php:226
+msgid "Invalid image type."
+msgstr ""
+
+#: includes/class-forms.php:380
 msgid "Something went wrong. Please try again."
 msgstr ""
 
-#: includes/class-forms.php:487
+#: includes/class-forms.php:496
 #, php-format
 msgid ""
 "We have removed the system generated password warning for you. From this "
@@ -3057,7 +3064,7 @@ msgid ""
 "page, <a href=\"%s\">click here</a>."
 msgstr ""
 
-#: includes/class-forms.php:496
+#: includes/class-forms.php:505
 #, php-format
 msgid ""
 "<strong>Warning</strong>: It seems like you are using a system generated "
@@ -3065,253 +3072,277 @@ msgid ""
 "for you, you can remove this warning by <a href=\"%s\">clicking here</a>."
 msgstr ""
 
-#: includes/class-forms.php:534 includes/class-forms.php:1124
-#: includes/class-forms.php:1608
+#: includes/class-forms.php:543 includes/class-forms.php:1133
+#: includes/class-forms.php:1617
 msgid "Security verification failed. Try again."
 msgstr ""
 
-#: includes/class-forms.php:551
+#: includes/class-forms.php:560
 msgid "Security hash failed. Try again."
 msgstr ""
 
-#: includes/class-forms.php:567
+#: includes/class-forms.php:576
 msgid ""
 "User registration is currently not allowed. Please check settings of your "
 "site."
 msgstr ""
 
-#: includes/class-forms.php:682
+#: includes/class-forms.php:691
 msgid "Sorry, that username is not allowed."
 msgstr ""
 
-#: includes/class-forms.php:818 includes/helpers/forms.php:273
+#: includes/class-forms.php:784 includes/class-forms.php:2080
+msgid "Something went wrong. Please contact site admin."
+msgstr ""
+
+#: includes/class-forms.php:827 includes/helpers/forms.php:273
 msgid "To activate your account, visit the following address:"
 msgstr ""
 
-#: includes/class-forms.php:822 includes/helpers/forms.php:277
+#: includes/class-forms.php:831 includes/helpers/forms.php:277
 msgid "Please activate your account :"
 msgstr ""
 
-#: includes/class-forms.php:845
+#: includes/class-forms.php:854
 msgid "Password you entered during registration."
 msgstr ""
 
-#: includes/class-forms.php:848 includes/class-forms.php:1713
+#: includes/class-forms.php:857 includes/class-forms.php:1722
 msgid "Your login Information :"
 msgstr ""
 
-#: includes/class-forms.php:849 includes/class-forms.php:885
+#: includes/class-forms.php:858 includes/class-forms.php:894
 msgid "Username:"
 msgstr ""
 
-#: includes/class-forms.php:850
+#: includes/class-forms.php:859
 msgid "Password:"
 msgstr ""
 
-#: includes/class-forms.php:882
+#: includes/class-forms.php:891
 msgid "User Information :"
 msgstr ""
 
-#: includes/class-forms.php:883
+#: includes/class-forms.php:892
 msgid "First Name:"
 msgstr ""
 
-#: includes/class-forms.php:884
+#: includes/class-forms.php:893
 msgid "Last Name:"
 msgstr ""
 
-#: includes/class-forms.php:886
+#: includes/class-forms.php:895
 msgid "Email:"
 msgstr ""
 
-#: includes/class-forms.php:930
+#: includes/class-forms.php:939
 msgid "Account registered successfully. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:958
+#: includes/class-forms.php:967
 #, php-format
 msgid ""
 "An email has been sent to your registered email address. Please click the "
 "activation link to proceed. <a href=\"%s\">Resend</a>."
 msgstr ""
 
-#: includes/class-forms.php:971
+#: includes/class-forms.php:980
 msgid "Your account is under moderation. We will email you once its approved."
 msgstr ""
 
-#: includes/class-forms.php:979
+#: includes/class-forms.php:988
 #, php-format
 msgid ""
 "Account registered successfully. A password has been generated and mailed to "
 "your registered Email ID. Please login %1$shere%2$s."
 msgstr ""
 
-#: includes/class-forms.php:981
+#: includes/class-forms.php:990
 #, php-format
 msgid "Account registered successfully. Please login %1$shere%2$s"
 msgstr ""
 
-#: includes/class-forms.php:1225
+#: includes/class-forms.php:1234
 msgid "Login successful. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:1270
+#: includes/class-forms.php:1279
 msgid "Failed to create a login nonce."
 msgstr ""
 
-#: includes/class-forms.php:1300
+#: includes/class-forms.php:1309
 msgid "Authentication Code"
 msgstr ""
 
-#: includes/class-forms.php:1329
+#: includes/class-forms.php:1338
 msgid "Verification Code"
 msgstr ""
 
-#: includes/class-forms.php:1383
+#: includes/class-forms.php:1392
 msgid "Enter backup code"
 msgstr ""
 
-#: includes/class-forms.php:1434
+#: includes/class-forms.php:1443
 msgid "Invalid user data. Please try again."
 msgstr ""
 
-#: includes/class-forms.php:1449
+#: includes/class-forms.php:1458
 msgid "Invalid request! Please try again."
 msgstr ""
 
-#: includes/class-forms.php:1481 includes/class-forms.php:1506
+#: includes/class-forms.php:1490 includes/class-forms.php:1515
 msgid "Invalid verification code."
 msgstr ""
 
-#: includes/class-forms.php:1497
+#: includes/class-forms.php:1506
 msgid "A new code has been sent."
 msgstr ""
 
-#: includes/class-forms.php:1522
+#: includes/class-forms.php:1531
 msgid "Invalid backup code."
 msgstr ""
 
-#: includes/class-forms.php:1544
+#: includes/class-forms.php:1553
 msgid "Validation successful. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:1652
+#: includes/class-forms.php:1661
 msgid "Invalid email or user doesn't exists."
 msgstr ""
 
-#: includes/class-forms.php:1681
+#: includes/class-forms.php:1690
 #, php-format
 msgid ""
 "Your account is not activated yet. Please activate your account first. <a "
 "href=\"%s\">Resend</a>."
 msgstr ""
 
-#: includes/class-forms.php:1714 includes/class-forms.php:1729
+#: includes/class-forms.php:1723 includes/class-forms.php:1738
 #, php-format
 msgid "Username: %s"
 msgstr ""
 
-#: includes/class-forms.php:1715
+#: includes/class-forms.php:1724
 #, php-format
 msgid "Password: %s"
 msgstr ""
 
-#: includes/class-forms.php:1727
+#: includes/class-forms.php:1736
 msgid "You have requested to reset your password for the following account:"
 msgstr ""
 
-#: includes/class-forms.php:1730
+#: includes/class-forms.php:1739
 msgid "If this was by mistake, just ignore this email and nothing will happen."
 msgstr ""
 
-#: includes/class-forms.php:1731
+#: includes/class-forms.php:1740
 msgid ""
 "To reset your password, click the following link and follow the instructions."
 msgstr ""
 
-#: includes/class-forms.php:1764
+#: includes/class-forms.php:1773
 msgid "Please check your email."
 msgstr ""
 
-#: includes/class-forms.php:1849
+#: includes/class-forms.php:1858
 msgid "Password changed successfully."
 msgstr ""
 
-#: includes/class-forms.php:1910
+#: includes/class-forms.php:1919
 msgid "Invalid username."
 msgstr ""
 
-#: includes/class-forms.php:1944
+#: includes/class-forms.php:1953
 #, php-format
 msgid ""
 "Password updated successfully. Please <a href=\"%s\">login</a> with your new "
 "password."
 msgstr ""
 
-#: includes/class-forms.php:2057
+#: includes/class-forms.php:2066
 #, php-format
 msgid "%s"
 msgstr ""
 
-#: includes/class-forms.php:2098
+#: includes/class-forms.php:2107
 msgid "This email is already registered, please choose another one."
 msgstr ""
 
-#: includes/class-forms.php:2132
+#: includes/class-forms.php:2141
 msgid ""
 "Account updated successfully. The new address will become active once you "
 "confirm via activation link sent to your new email."
 msgstr ""
 
-#: includes/class-forms.php:2150
+#: includes/class-forms.php:2159
 msgid "Account updated successfully."
 msgstr ""
 
-#: includes/class-forms.php:2183 includes/class-forms.php:2213
+#: includes/class-forms.php:2192 includes/class-forms.php:2222
 msgid "User Information:"
 msgstr ""
 
-#: includes/class-forms.php:2262 includes/class-profile.php:1917
+#: includes/class-forms.php:2267
+msgid "Access denied!"
+msgstr ""
+
+#: includes/class-forms.php:2275
+msgid "Invalid data!"
+msgstr ""
+
+#: includes/class-forms.php:2281 includes/class-profile.php:1917
 msgid "Invalid access!"
 msgstr ""
 
-#: includes/class-forms.php:2537
+#: includes/class-forms.php:2300
+msgid "Invalid field!"
+msgstr ""
+
+#: includes/class-forms.php:2306
+msgid "You are not allowed to perform this action!"
+msgstr ""
+
+#: includes/class-forms.php:2311
+msgid "Invalid field type!"
+msgstr ""
+
+#: includes/class-forms.php:2581
 msgid "Clear field"
 msgstr ""
 
-#: includes/class-forms.php:3298
+#: includes/class-forms.php:3342
 msgid "Username or Email"
 msgstr ""
 
-#: includes/class-forms.php:3659
+#: includes/class-forms.php:3703
 msgid "Please enter a valid URL including https://"
 msgstr ""
 
-#: includes/class-forms.php:3722
+#: includes/class-forms.php:3766
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:4069
+#: includes/class-forms.php:4113
 #, php-format
 msgid ""
 "By using this form I agree to the storage and handling of my data by this "
 "website. View our %1$s %2$s %3$s."
 msgstr ""
 
-#: includes/class-forms.php:4162
+#: includes/class-forms.php:4206
 #, php-format
 msgid "I accept the %1$s %2$s %3$s."
 msgstr ""
 
-#: includes/class-forms.php:4442
+#: includes/class-forms.php:4486
 msgid "Site Default"
 msgstr ""
 
-#: includes/class-forms.php:4614
+#: includes/class-forms.php:4658
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/class-forms.php:4769
+#: includes/class-forms.php:4813
 msgid "Privacy settings updated successfully."
 msgstr ""
 
@@ -4447,7 +4478,7 @@ msgstr ""
 msgid "Note: Max upload image size: %s"
 msgstr ""
 
-#: templates/bootstrap/profile-header.php:34
+#: templates/bootstrap/profile-header.php:36
 #: templates/bootstrap/user-cover.php:30 templates/user-cover.php:31
 msgid "User banner image"
 msgstr ""
