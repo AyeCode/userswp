@@ -106,8 +106,9 @@ jQuery(window).on('load',function () {
         $( '.uwp_upload_file_remove' ).on( 'click', function( event ) {
             event.preventDefault();
 
-            var htmlvar =  $( this ).data( 'htmlvar' );
-            var uid =  $( this ).data( 'uid' );
+            var $this = $(this);
+            var htmlvar =  $this.data( 'htmlvar' );
+            var uid =  $this.data( 'uid' );
 
             var data = {
                 'action': 'uwp_upload_file_remove',
@@ -116,17 +117,25 @@ jQuery(window).on('load',function () {
                 'security': uwp_localize_data.basicNonce
             };
 
+            if ($this.closest("form").find('.uwp-field-error').length) {
+                $this.closest("form").find('.uwp-field-error').remove();
+            }
+
             jQuery.ajax({
                 url: uwp_localize_data.ajaxurl,
                 type: 'POST',
                 data: data,
                 dataType: 'json'
             }).done(function(res, textStatus, jqXHR) {
-                if (typeof res == 'object' && res.success) {
-                    $("#"+htmlvar+"_row").find(".uwp_file_preview_wrap").remove();
-                    $("#"+htmlvar).closest("td").find(".uwp_file_preview_wrap").remove();
-                    if($('input[name='+htmlvar+']').data( 'is-required' )){
-                        $('input[name='+htmlvar+']').prop('required',true);
+                if (res && typeof res == 'object') {
+                    if (res.success) {
+                        $("#"+htmlvar+"_row").find(".uwp_file_preview_wrap").remove();
+                        $("#"+htmlvar).closest("td").find(".uwp_file_preview_wrap").remove();
+                        if($('input[name='+htmlvar+']').data( 'is-required' )){
+                            $('input[name='+htmlvar+']').prop('required',true);
+                        }
+                    } else if (res.data && typeof res.data == 'object' && res.data.message) {
+                        $this.parent(".uwp_file_preview_wrap").append('<div class="uwp-field-error">' + res.data.message + '</div>');
                     }
                 }
             });
