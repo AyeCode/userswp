@@ -599,9 +599,7 @@
             } );
 
         });
-
     }
-
 
     /**
      * Open a lightbox when an embed item is clicked.
@@ -665,8 +663,6 @@
                 $carousel  += '</ol>';
             }
 
-
-
             // items
             $i = 0;
             $rtl_class = '<?php echo is_rtl() ? 'justify-content-end' : 'justify-content-start'; ?>'; 
@@ -685,12 +681,17 @@
                 if (srcset) {
                     var sources = srcset.split(',')
                         .map(s => {
-                            var parts = s.trim().split(' ');
-                            return {
-                                width: parseInt(parts[1].replace('w', '')),
-                                descriptor: parts[1].replace('w', 'px')  // Ensuring the descriptor is in pixels
-                            };
+                            // Using regex /\s+/ handles multiple spaces between the URL and width
+                            var parts = s.trim().split(/\s+/).filter(Boolean);
+                            if (parts.length >= 2) {
+                                return {
+                                    width: parseInt(parts[1].replace('w', '')),
+                                    descriptor: parts[1].replace('w', 'px') // Ensuring the descriptor is in pixels
+                                };
+                            }
+                            return null;
                         })
+                        .filter(item => item !== null) // Remove any empty entries
                         .sort((a, b) => b.width - a.width); // Sort from largest to smallest for proper descending order
 
                     // Build the sizes string
@@ -703,9 +704,7 @@
                             return `(max-width: ${source.width - 1}px) ${array[index - 1].descriptor}`;
                         }
                     }).reverse().join(', '); // Reverse to start from smallest to largest for logical order
-
                 }
-
 
                 var img = href ? jQuery(a).find('img').clone().attr('src', href ).attr('sizes', sizes ).removeClass().addClass('mx-auto d-block w-auto rounded').css({'max-height':css_height,'max-width':'98%'}).get(0).outerHTML :  jQuery(a).find('img').clone().removeClass().addClass('mx-auto d-block w-auto rounded').css({'max-height':css_height,'max-width':'98%'}).get(0).outerHTML;
                 $carousel += img;
@@ -736,10 +735,8 @@
 
                 $carousel  += '</div></div>';
                 $i++;
-
             });
             $carousel  += '</div>';
-
 
             // next/prev indicators
             if($images.length > 1) {

@@ -1,3 +1,6 @@
+= 0.2.45 - 2026-03-26 =
+* Comma in image srcset url may break image lightbox popup - FIXED
+
 = 0.2.44 - 2026-03-05 =
 * BS5 conversion breaks inline padding and margin styles - FIXED
 * Checks for the tooltip & popover functions before using to prevent errors - FIXED
