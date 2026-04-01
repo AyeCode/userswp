@@ -33,7 +33,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '1.1.10';
+		public $version = '1.1.11';
 
 		/**
 		 * Class textdomain.
@@ -341,10 +341,10 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 * @return string The filtered url.
 		 */
 		public function remove_font_awesome( $url, $original_url, $_context ) {
-
 			if ( $_context == 'display'
 			     && ( strstr( $url, "fontawesome" ) !== false || strstr( $url, "font-awesome" ) !== false )
 			     && ( strstr( $url, ".js" ) !== false || strstr( $url, ".css" ) !== false )
+			     && ( strpos( $url, "iconpicker" ) === false )
 			) {// it's a font-awesome-url (probably)
 
 				if ( strstr( $url, "wpfas=true" ) !== false ) {
@@ -358,7 +358,6 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 				} else {
 					$url = ''; // removing the url removes the file
 				}
-
 			}
 
 			return $url;

@@ -155,24 +155,24 @@
         },
         {
             "name": "ayecode/wp-font-awesome-settings",
-            "version": "1.1.10",
-            "version_normalized": "1.1.10.0",
+            "version": "1.1.11",
+            "version_normalized": "1.1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/wp-font-awesome-settings.git",
-                "reference": "19c97500928f43f020baadb7d5c5477b0ebd9184"
+                "reference": "bfdcf3d9a44e22e5548682f1a311d78cb9838051"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/19c97500928f43f020baadb7d5c5477b0ebd9184",
-                "reference": "19c97500928f43f020baadb7d5c5477b0ebd9184",
+                "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/bfdcf3d9a44e22e5548682f1a311d78cb9838051",
+                "reference": "bfdcf3d9a44e22e5548682f1a311d78cb9838051",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "~1.0",
                 "php": ">=5.6.0"
             },
-            "time": "2025-07-24T11:04:01+00:00",
+            "time": "2026-04-01T07:09:57+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -200,7 +200,7 @@
             ],
             "support": {
                 "issues": "https://github.com/AyeCode/wp-font-awesome-settings/issues",
-                "source": "https://github.com/AyeCode/wp-font-awesome-settings/tree/1.1.10"
+                "source": "https://github.com/AyeCode/wp-font-awesome-settings/tree/1.1.11"
             },
             "install-path": "../ayecode/wp-font-awesome-settings"
         },
