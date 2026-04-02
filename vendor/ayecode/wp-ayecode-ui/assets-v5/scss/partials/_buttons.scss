@@ -14,6 +14,11 @@
   color: $white;
 }
 
+.btn-x-twitter {
+  @include button-variant($brand-x-twitter, $white);
+  color: $white;
+}
+
 .btn-instagram {
   @include button-variant($brand-instagram, $white);
   background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
