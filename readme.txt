@@ -152,6 +152,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.60 - 2026-04-TBD =
+* WordPress 7.0 compatibility - COMPATIBILITY
+
 = 1.2.59 - 2026-03-30 =
 * Improve image validation during the cropping process - FIXED/SECURITY
 * Improper Access Control fixes - FIXED/SECURITY
