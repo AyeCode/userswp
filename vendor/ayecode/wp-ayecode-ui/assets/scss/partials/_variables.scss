@@ -1,6 +1,7 @@
 // Custom Colors
 $brand-facebook: #3b5998;
 $brand-twitter: #55acee;
+$brand-x-twitter: #272c30;
 $brand-instagram: #125688;
 $brand-linkedin: #0976b4;
 $brand-flickr: #f8457e;
@@ -17,6 +18,7 @@ $branding-colors: map-merge(
                 (
                         "facebook": $brand-facebook,
                         "twitter": $brand-twitter,
+                        "x-twitter": $brand-x-twitter,
                         "instagram": $brand-instagram,
                         "linkedin": $brand-linkedin,
                         "flickr": $brand-flickr,

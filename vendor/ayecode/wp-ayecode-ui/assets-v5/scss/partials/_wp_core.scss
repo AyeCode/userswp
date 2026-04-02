@@ -122,6 +122,61 @@ body.modal-open .modal{
   content: none;
 }
 
+/* WordPress 7 Compatibility */
+.wp-admin {
+  .form-check-input {
+    min-width: 1rem;
+    min-height: 1rem;
+
+    &[type="radio"],
+    &[type="checkbox"] {
+      &:checked::before {
+        content: none;
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 0.25rem rgba(var(--wp-admin-theme-color--rgb, var(--bs-primary-rgb)), 0.15);
+      }
+    }
+  }
+}
+
+.wp-admin {
+  .form-switch.custom-switch-md {
+    white-space: nowrap;
+
+    .form-check-label {
+      word-wrap: break-word;
+      white-space: normal;
+    }
+
+    .form-check-input {
+      margin-top: .3rem;
+    }
+  }
+}
+
+
+.wp-admin {
+  .select2-container--bootstrap-5 {
+    .select2-search--inline {
+      .select2-search__field {
+        min-height: inherit;
+        width: 100% !important;
+        margin-top: 0.2rem !important;
+      }
+    }
+
+    .select2-dropdown {
+      .select2-search {
+        .select2-search__field {
+          width: calc(100% - 2.25rem) !important;
+        }
+      }
+    }
+  }
+}
+
 .zi-1 {
     z-index: 1 !important
 }

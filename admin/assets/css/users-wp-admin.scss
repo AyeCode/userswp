@@ -141,3 +141,27 @@ span.uwp-custom-desc code.uwp-tag-copied:after {content: " ";position: absolute;
     border: 1px dashed #007cba;
     visibility: visible !important;
 }
+
+.wp-admin {
+  .single_select_page {
+    .select2-container {
+      width: 25em;
+
+      @media only screen and (max-width: 600px) {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .wrap.userswp {
+    .select2-selection--multiple {
+      .select2-selection__choice {
+        .select2-selection__choice__remove {
+          padding-right: 0;
+        }
+      }
+    }
+  }
+}
+

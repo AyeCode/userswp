@@ -1,3 +1,9 @@
+= 0.2.47 - 2026-04-02 =
+* WordPress 7.0 compatibility - COMPATIBILITY
+
+= 0.2.46 - 2026-04-01 =
+* Class .btn-x-twitter variation added - ADDED
+
 = 0.2.45 - 2026-03-26 =
 * Comma in image srcset url may break image lightbox popup - FIXED
 
