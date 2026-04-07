@@ -182,9 +182,12 @@ class UsersWP_Validation {
 		                    $sanitized_value = wp_kses_post( strip_shortcodes( $value ) );
 		                    break;
 
+                        case 'url':
+                            $sanitized_value = sanitize_url( wp_unslash( $value ) );
+                            break;
+
                         default:
                             $sanitized_value = sanitize_text_field($value);
-
                     }
                 }
 

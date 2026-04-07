@@ -388,10 +388,16 @@ function uwp_get_user_badge($args){
 				// will be replace in condition check
 			}
 
-			//link url, replace vars
-			if( !empty( $args['link'] ) && $args['link'] = str_replace("%%input%%", $match_value,$args['link']) ){
+			// link url, replace vars
+			if ( ! empty( $args['link'] ) && $args['link'] = str_replace( "%%input%%", $match_value, $args['link'] ) ) {
 				// will be replace in condition check
+				if ( ! empty( $field->field_type ) && $field->field_type == 'url' ) {
+					$args['link'] = esc_url( $args['link'] );
+				} else {
+					$args['link'] = esc_attr( $args['link'] );
+				}
 			}
+
 			if( !empty( $args['link'] ) && $user_id && $args['link'] = str_replace("%%profile_url%%", uwp_build_profile_tab_url($user_id),$args['link']) ){
 				// will be replace in condition check
 			}
