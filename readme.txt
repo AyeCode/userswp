@@ -152,6 +152,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.61 - 2026-04-TBD =
+* Display error message for strong password in register form - FIXED
+
 = 1.2.60 - 2026-04-02 =
 * WordPress 7.0 compatibility - COMPATIBILITY
 
