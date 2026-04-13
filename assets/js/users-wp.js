@@ -779,11 +779,11 @@ function uwp_checkPasswordStrength( $pass1,
             break;
 
         case 2:
-            $strengthResult.addClass( 'bad bg-warning' ).html( pwsL10n.bad ).width('50%');
+            $strengthResult.addClass( 'bad bg-danger' ).html( pwsL10n.bad ).width('50%');
             break;
 
         case 3:
-            $strengthResult.addClass( 'good bg-success' ).html( pwsL10n.good ).width('75%');
+            $strengthResult.addClass( 'good bg-warning' ).html( pwsL10n.good ).width('75%');
             break;
 
         case 4:
@@ -813,7 +813,7 @@ function uwp_checkPasswordStrength( $pass1,
         } else if(3 == parseInt(uwp_localize_data.uwp_pass_strength) && (strength === 3 || strength === 4)){
             $submitButton.removeAttr( 'disabled' );
         } else {
-            $container.append("<small>"+uwp_localize_data.uwp_strong_pass_msg+"</small>");
+            $container.append("<small class='text-danger'>"+uwp_localize_data.uwp_strong_pass_msg+"</small>");
         }
     }
 
