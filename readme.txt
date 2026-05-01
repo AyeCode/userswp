@@ -152,6 +152,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.62 - 2026-05-TBD =
+* Default list URL not working when lists are set as the first profile tab - FIXED
+
 = 1.2.61 - 2026-04-08 =
 * Sanitize URL field types before saving - FIXED/SECURITY
 
