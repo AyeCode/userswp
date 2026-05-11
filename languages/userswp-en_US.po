@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.61\n"
+"Project-Id-Version: UsersWP 1.2.62\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-08 18:20+0530\n"
-"PO-Revision-Date: 2026-04-08 18:28+0530\n"
+"POT-Creation-Date: 2026-05-07 20:52+0530\n"
+"PO-Revision-Date: 2026-05-07 20:53+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -2802,7 +2802,7 @@ msgid "<strong>Error</strong>: Super Administrators cannot be deleted."
 msgstr ""
 
 #: includes/class-activator.php:357 includes/class-activator.php:633
-#: includes/libraries/class-geodirectory-plugin.php:2056
+#: includes/libraries/class-geodirectory-plugin.php:2061
 msgid "Username"
 msgstr ""
 
@@ -4362,7 +4362,7 @@ msgid "Listings"
 msgstr ""
 
 #: includes/libraries/class-geodirectory-plugin.php:333
-#: includes/libraries/class-geodirectory-plugin.php:1571 upgrade.php:219
+#: includes/libraries/class-geodirectory-plugin.php:1576 upgrade.php:219
 msgid "Reviews"
 msgstr ""
 
@@ -4374,49 +4374,49 @@ msgstr ""
 msgid "Lists"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1253
-#: includes/libraries/class-geodirectory-plugin.php:1513
-#: includes/libraries/class-geodirectory-plugin.php:1722
+#: includes/libraries/class-geodirectory-plugin.php:1258
+#: includes/libraries/class-geodirectory-plugin.php:1518
+#: includes/libraries/class-geodirectory-plugin.php:1727
 msgid "Edit Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1260
-#: includes/libraries/class-geodirectory-plugin.php:1522
-#: includes/libraries/class-geodirectory-plugin.php:1731
+#: includes/libraries/class-geodirectory-plugin.php:1265
+#: includes/libraries/class-geodirectory-plugin.php:1527
+#: includes/libraries/class-geodirectory-plugin.php:1736
 msgid "Delete Listing"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1283
+#: includes/libraries/class-geodirectory-plugin.php:1288
 #: templates/loop-posts.php:28
 #, php-format
 msgid "No %s found."
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:1392
+#: includes/libraries/class-geodirectory-plugin.php:1397
 msgid "View"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:2020
+#: includes/libraries/class-geodirectory-plugin.php:2025
 msgid "Published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:2023
+#: includes/libraries/class-geodirectory-plugin.php:2028
 msgid "Pending"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:2026
+#: includes/libraries/class-geodirectory-plugin.php:2031
 msgid "Closed"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:2029
+#: includes/libraries/class-geodirectory-plugin.php:2034
 msgid "Expired"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:2032
+#: includes/libraries/class-geodirectory-plugin.php:2037
 msgid "Not published"
 msgstr ""
 
-#: includes/libraries/class-geodirectory-plugin.php:2037
+#: includes/libraries/class-geodirectory-plugin.php:2042
 msgid "Status: "
 msgstr ""
 

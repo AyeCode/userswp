@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 6.1
 Tested up to: 7.0
-Stable tag: 1.2.61
+Stable tag: 1.2.62
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -152,7 +152,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.62 - 2026-05-TBD =
+= 1.2.62 - 2026-05-07 =
 * Default list URL not working when lists are set as the first profile tab - FIXED
 * Display error message for strong password in register form - FIXED
 
