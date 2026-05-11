@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 6.1
 Tested up to: 7.0
-Stable tag: 1.2.62
+Stable tag: 1.2.63
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -92,6 +92,13 @@ UsersWP can be extended with several add-ons. Few examples are:
 * [Dashboard](https://userswp.io/downloads/dashboard/) - Manage everything from one simple, easy-to-use dashboard.
 * [MailerLite](https://userswp.io/downloads/mailerlite/) - Capture newsletter subscribers during registration to your mailerlite newsletter list.
 * [MailPoet](https://userswp.io/downloads/mailpoet/) - Capture newsletter subscribers during registration to your mailpoet newsletter list.
+* [Constant Contact](https://userswp.io/downloads/constant-contact/) - Capture newsletter subscribers during registration to your Constant Contact newsletter list.
+* [Campaign Monitor](https://userswp.io/downloads/campaign-monitor/) - Capture newsletter subscribers during registration to your Campaign Monitor newsletter list.
+* [GetResponse](https://userswp.io/downloads/getresponse/) - Capture newsletter subscribers during registration to your GetResponse newsletter list.
+* [Active Campaign](https://userswp.io/downloads/active-campaign/) - Capture newsletter subscribers during registration to your Active Campaign newsletter list.
+* [Brevo](https://userswp.io/downloads/brevo/) - Capture newsletter subscribers during registration to your Brevo newsletter list.
+* [Aweber](https://userswp.io/downloads/aweber/) - Capture newsletter subscribers during registration to your Aweber newsletter list.
+* [The Newsletter](https://userswp.io/downloads/the-newsletter/) - Capture newsletter subscribers during registration to your The Newsletter newsletter list.
 
 There are many others and we release new Add-ons frequently. You can see the full collection here: [UsersWP Premium Add-ons](https://userswp.io/downloads/category/addons/)
 
@@ -154,10 +161,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.63 - 2026-05-11 =
 * Consider form ID in register nonce for more security - FIXED/SECURITY
+* Display error message for strong password in register form - FIXED
 
 = 1.2.62 - 2026-05-07 =
 * Default list URL not working when lists are set as the first profile tab - FIXED
-* Display error message for strong password in register form - FIXED
 
 = 1.2.61 - 2026-04-08 =
 * Sanitize URL field types before saving - FIXED/SECURITY
