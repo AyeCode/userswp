@@ -152,6 +152,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.63 - 2026-05-11 =
+* Consider form ID in register nonce for more security - FIXED/SECURITY
+
 = 1.2.62 - 2026-05-07 =
 * Default list URL not working when lists are set as the first profile tab - FIXED
 * Display error message for strong password in register form - FIXED
