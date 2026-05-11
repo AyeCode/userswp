@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.62\n"
+"Project-Id-Version: UsersWP 1.2.63\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 20:52+0530\n"
-"PO-Revision-Date: 2026-05-07 20:53+0530\n"
+"POT-Creation-Date: 2026-05-11 15:36+0530\n"
+"PO-Revision-Date: 2026-05-11 15:36+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -15,7 +15,7 @@ msgstr ""
 "_nx:1,2;_x;_ex;esc_attr_e;esc_attr__\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: vendor\n"
 
@@ -1665,7 +1665,7 @@ msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:71
 #: admin/settings/class-uwp-settings-general.php:340
-#: includes/class-emails.php:300 includes/class-forms.php:4836
+#: includes/class-emails.php:299 includes/class-forms.php:4836
 #: includes/class-pages.php:325 templates/bootstrap/forgot.php:66
 #: templates/bootstrap/login.php:11 templates/login.php:7
 #: templates/login.php:19 widgets/login.php:50 widgets/login.php:141
@@ -1789,7 +1789,7 @@ msgid ""
 msgstr ""
 
 #: admin/settings/class-uwp-settings-general.php:163
-#: includes/helpers/misc.php:1473
+#: includes/helpers/misc.php:1474
 msgid "Please enter valid strong password."
 msgstr ""
 
@@ -2986,7 +2986,7 @@ msgstr ""
 msgid "Dec"
 msgstr ""
 
-#: includes/class-emails.php:531
+#: includes/class-emails.php:530
 #, php-format
 msgid ""
 "Email from UsersWP failed to send.\n"
@@ -3072,22 +3072,22 @@ msgid ""
 "for you, you can remove this warning by <a href=\"%s\">clicking here</a>."
 msgstr ""
 
-#: includes/class-forms.php:543 includes/class-forms.php:1133
+#: includes/class-forms.php:549 includes/class-forms.php:1133
 #: includes/class-forms.php:1617
 msgid "Security verification failed. Try again."
 msgstr ""
 
-#: includes/class-forms.php:560
+#: includes/class-forms.php:566
 msgid "Security hash failed. Try again."
 msgstr ""
 
-#: includes/class-forms.php:576
+#: includes/class-forms.php:582
 msgid ""
 "User registration is currently not allowed. Please check settings of your "
 "site."
 msgstr ""
 
-#: includes/class-forms.php:691
+#: includes/class-forms.php:697
 msgid "Sorry, that username is not allowed."
 msgstr ""
 
@@ -4161,39 +4161,39 @@ msgstr ""
 msgid "Two-factor Authentication Settings"
 msgstr ""
 
-#: includes/helpers/misc.php:1463
+#: includes/helpers/misc.php:1464
 msgid "more"
 msgstr ""
 
-#: includes/helpers/misc.php:1464
+#: includes/helpers/misc.php:1465
 msgid "less"
 msgstr ""
 
-#: includes/helpers/misc.php:1465
+#: includes/helpers/misc.php:1466
 msgid "Something went wrong."
 msgstr ""
 
-#: includes/helpers/misc.php:1466
+#: includes/helpers/misc.php:1467
 msgid "Something went wrong, please retry."
 msgstr ""
 
-#: includes/helpers/misc.php:1663 widgets/output-location.php:90
+#: includes/helpers/misc.php:1664 widgets/output-location.php:90
 msgid "Users Page"
 msgstr ""
 
-#: includes/helpers/misc.php:1664 widgets/output-location.php:91
+#: includes/helpers/misc.php:1665 widgets/output-location.php:91
 msgid "More info tab"
 msgstr ""
 
-#: includes/helpers/misc.php:1665
+#: includes/helpers/misc.php:1666
 msgid "Profile side (non bootstrap)"
 msgstr ""
 
-#: includes/helpers/misc.php:1666
+#: includes/helpers/misc.php:1667
 msgid "Fieldset"
 msgstr ""
 
-#: includes/helpers/misc.php:1911
+#: includes/helpers/misc.php:1912
 #, php-format
 msgid ""
 "%s requires a newer version of UsersWP and will not run until the UsersWP "

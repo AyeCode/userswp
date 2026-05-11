@@ -536,7 +536,13 @@ class UsersWP_Forms {
 			wp_die( esc_html__( 'No spam please!', 'userswp' ) );
 		}
 
-		if ( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce' ) ) {
+        $form_id = 1;
+
+		if ( ! empty( $data['uwp_register_form_id'] ) ) {
+			$form_id = (int) $data['uwp_register_form_id'];
+		}
+
+		if ( ! isset( $data['uwp_register_nonce'] ) || ! wp_verify_nonce( $data['uwp_register_nonce'], 'uwp-register-nonce-' . $form_id ) ) {
 			$message = aui()->alert(
                 array(
 					'type'    => 'error',
@@ -709,12 +715,6 @@ class UsersWP_Forms {
 			'last_name'    => esc_attr( $last_name ),
 			'user_url'     => esc_url_raw( $user_url ),
 		);
-
-		$form_id = 1;
-
-		if ( ! empty( $data['uwp_register_form_id'] ) ) {
-			$form_id = (int) $data['uwp_register_form_id'];
-		}
 
 		// Set user role by form.
 		$user_role = uwp_get_register_form_by( $form_id, 'user_role' );
