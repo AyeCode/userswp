@@ -849,7 +849,7 @@ class UsersWP_Templates {
 			$hash = substr( hash( 'SHA256', AUTH_KEY . site_url() ), 0, 25 );
 			echo '<input type="hidden" name="uwp_register_hash" value="' . esc_html( $hash ) . '" style="display:none !important; visibility:hidden !important;" />';
 			echo '<input type="hidden" name="uwp_register_hp" value="" style="display:none !important; visibility:hidden !important;" size="25" autocomplete="off" />';
-			echo '<input type="hidden" name="uwp_register_nonce" value="' . esc_attr( wp_create_nonce( 'uwp-register-nonce' ) ) . '" />';
+			echo '<input type="hidden" name="uwp_register_nonce" value="' . esc_attr( wp_create_nonce( 'uwp-register-nonce-'. $form_id ) ) . '" />';
 			echo '<input type="hidden" name="uwp_register_form_id" value="' . absint($form_id) . '">';
 		} elseif ( $form_type == 'change' ) {
 			echo '<input type="hidden" name="uwp_change_nonce" value="' . esc_attr( wp_create_nonce( 'uwp-change-nonce' ) ) . '" />';
