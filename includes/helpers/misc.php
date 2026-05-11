@@ -1458,6 +1458,7 @@ function uwp_insert_usermeta()
 
 function uwp_get_localize_data()
 {
+    $pass_msg = uwp_get_option("register_uwp_strong_pass_msg");
 	$uwp_localize_data = array(
 		'uwp_more_char_limit' => 100,
 		'uwp_more_text' => __('more', 'userswp'),
@@ -1470,7 +1471,7 @@ function uwp_get_localize_data()
 		'register_modal' => uwp_get_option("design_style", 'bootstrap') == 'bootstrap' && uwp_get_option("register_modal", 1) ? 1 : '',
 		'forgot_modal' => uwp_get_option("design_style", 'bootstrap') == 'bootstrap' && uwp_get_option("forgot_modal", 1) ? 1 : '',
 		'uwp_pass_strength' => uwp_get_option("register_min_password_strength", 0),
-		'uwp_strong_pass_msg' => uwp_get_option("register_uwp_strong_pass_msg", __("Please enter valid strong password.", "userswp")),
+		'uwp_strong_pass_msg' => !empty($pass_msg) ? $pass_msg : __("Please enter valid strong password.", "userswp"),
 		'default_banner' => uwp_get_default_banner_uri(),
 		'basicNonce' => esc_attr(wp_create_nonce('uwp_basic_nonce'))
 	);
