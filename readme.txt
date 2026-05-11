@@ -154,6 +154,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.62 - 2026-05-07 =
 * Default list URL not working when lists are set as the first profile tab - FIXED
+* Display error message for strong password in register form - FIXED
 
 = 1.2.61 - 2026-04-08 =
 * Sanitize URL field types before saving - FIXED/SECURITY
