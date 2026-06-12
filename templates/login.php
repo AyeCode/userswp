@@ -1,4 +1,12 @@
-<?php do_action('uwp_template_before', 'login'); ?>
+<?php
+
+$button_title = uwp_get_option( 'login_form_button_title' );
+$button_title = $button_title
+        ? __( wp_unslash( $button_title ), 'userswp' )
+        : __( 'Login', 'userswp' );
+$button_title = apply_filters( 'uwp_login_form_button_title', $button_title );
+
+do_action('uwp_template_before', 'login'); ?>
     <div class="uwp-content-wrap">
         <div class="uwp-login" <?php if(!empty($uwp_login_widget_args['form_padding'])){echo "style='padding:".absint($uwp_login_widget_args['form_padding'])."px'";}?>>
             <div class="uwp-lf-icon"><i class="fas fa-user fa-fw"></i></div>
@@ -16,7 +24,7 @@
                         <?php _e( 'Remember Me', 'userswp' ); ?>
                     </label>
                 </div>
-                <input type="submit" name="uwp_login_submit" value="<?php esc_attr_e( 'Login', 'userswp' ); ?>">
+                <input type="submit" name="uwp_login_submit" value="<?php esc_html( $button_title ); ?>">
             </form>
             <div class="uwp-login-links">
                 <div class="uwp-footer-link uwp-register-now"><?php esc_html_e( 'Not a member?', 'userswp' ); ?> <a rel="nofollow" href="<?php echo esc_url( uwp_get_register_page_url() ); ?>"><?php echo uwp_get_option("register_link_title") ? esc_html( uwp_get_option("register_link_title" ) ) : esc_html__( 'Create account', 'userswp' ); ?></a></div>

@@ -161,6 +161,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.64 - TBD = 
 * Registration form titles with non-ASCII characters mangled by the activator - FIXED
+* Option to change login button text in login form - ADDED
 
 = 1.2.63 - 2026-05-11 =
 * Consider form ID in register nonce for more security - FIXED/SECURITY
