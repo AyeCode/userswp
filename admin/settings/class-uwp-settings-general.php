@@ -138,6 +138,16 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 					'desc_tip' => true,
 					'advanced' => true
 				),
+	            array(
+		            'id' => 'login_link_title',
+		            'name' => __( 'Login Link Title', 'userswp' ),
+		            'desc' => __( 'Enter the login link title.', 'userswp' ),
+		            'type' => 'text',
+		            'default'  => '',
+		            'placeholder'  => __( 'Login', 'userswp' ),
+		            'desc_tip' => true,
+		            'advanced' => true,
+	            ),
                 array(
                     'id'   => 'wp_register_redirect',
                     'name' => __( 'Redirect Admin Default Register Page', 'userswp' ),
@@ -260,6 +270,16 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'class' => 'uwp-login-redirect-custom-url',
 	            ),
 	            array(
+		            'id' => 'login_form_button_title',
+		            'type' => 'text',
+		            'name' => __( 'Login Form Button Title', 'userswp' ),
+		            'desc' => __( 'Enter the login form button title.', 'userswp' ),
+		            'placeholder' => __( 'Login', 'userswp' ),
+		            'default' => '',
+		            'desc_tip' => true,
+		            'advanced' => true
+	            ),
+	            array(
 		            'id' => 'register_link_title',
 		            'name' => __( 'Register Link Title', 'userswp' ),
 		            'desc' => __( 'Enter the register link title.', 'userswp' ),
@@ -330,16 +350,6 @@ class UsersWP_Settings_General extends UsersWP_Settings_Page {
 		            'desc' => __( 'When enabled some forgot password links will open in a lightbox instead of changing page.','userswp'),
 		            'type' => 'checkbox',
 		            'default'  => '1',
-	            ),
-	            array(
-		            'id' => 'login_link_title',
-		            'name' => __( 'Login Link Title', 'userswp' ),
-		            'desc' => __( 'Enter the login link title.', 'userswp' ),
-		            'type' => 'text',
-		            'default'  => '',
-		            'placeholder'  => __( 'Login', 'userswp' ),
-		            'desc_tip' => true,
-		            'advanced' => true,
 	            ),
 	            array(
 		            'id' => 'profile_link_title',
