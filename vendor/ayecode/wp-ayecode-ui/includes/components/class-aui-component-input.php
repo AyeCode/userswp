@@ -189,7 +189,7 @@ class AUI_Component_Input {
 			}
 
 			// value
-			if ( ! empty( $args['value'] ) ) {
+			if ( ! empty( $args['value'] ) || ( is_scalar( $args['value'] ) && ( $args['value'] === '0' || $args['value'] === 0 ) ) ) {
 				$output .= AUI_Component_Helper::value( $args['value'] );
 			}
 

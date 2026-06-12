@@ -41,7 +41,7 @@ $type = isset($_POST['type']) && $_POST['type'] == 'avatar' ? 'avatar' : 'banner
 				<div class="uwp-<?php echo esc_attr( $type ); ?>-crop-p-wrap">
 					<div id="<?php echo esc_attr( $type ); ?>-crop-actions">
 						<form class="uwp-crop-form" method="post">
-                            <input type="hidden" name="uwp_reset_nonce" id="uwp_reset_nonce" value="<?php echo esc_attr( wp_create_nonce( 'uwp_reset_nonce_'.$type ) ); ?>">
+                            <input type="hidden" name="uwp_reset_nonce" id="uwp_reset_nonce" value="<?php echo esc_attr( wp_create_nonce( 'uwp_reset_nonce_' . $type . '_' . $user_id ) ); ?>">
 							<input type="submit" name="uwp_<?php echo esc_attr( $type ); ?>_reset" value="<?php esc_html_e('Reset to Default', 'userswp'); ?>" class="button button-primary" id="reset_uwp_<?php echo esc_attr( $type ); ?>" />
 							<input type="submit" name="uwp_<?php echo esc_attr( $type ); ?>_crop" disabled="disabled" value="<?php esc_html_e('Apply', 'userswp'); ?>" class="button button-primary" id="save_uwp_<?php echo esc_attr( $type ); ?>" />
 						</form>

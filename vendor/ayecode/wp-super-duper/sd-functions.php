@@ -3826,3 +3826,27 @@ if(!function_exists('sd_blocks_render_blocks')){
 
 add_filter('render_block', 'sd_blocks_render_blocks',10,3);
 
+/**
+ * Disable additional CSS for SD blocks.
+ *
+ * @since 1.2.32
+ *
+ * @param array $options Block options.
+ * @return array Filtered block options.
+ */
+function sd_disable_additional_css( $options ) {
+	if ( ! is_array( $options ) ) {
+		return $options;
+	}
+
+	if ( ! isset( $options['block-supports'] ) ) {
+		$options['block-supports'] = array();
+	}
+
+	if ( ! isset( $options['block-supports']['customCSS'] ) ) {
+		$options['block-supports']['customCSS'] = false;
+	}
+
+	return $options;
+}
+add_filter( 'wp_super_duper_options', 'sd_disable_additional_css', 10, 1 );

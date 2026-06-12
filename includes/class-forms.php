@@ -361,18 +361,16 @@ class UsersWP_Forms {
 			return false;
 		}
 
-		if ( empty( $_POST['uwp_reset_nonce'] ) || ! wp_verify_nonce( $_POST['uwp_reset_nonce'], 'uwp_reset_nonce_' . $type ) ) {
-			return;
-		}
-
 		if ( is_admin() && defined( 'IS_PROFILE_PAGE' ) && IS_PROFILE_PAGE ) {
 			$user_id = get_current_user_id();
-			// If is another user's profile page
-		} elseif ( is_admin() && ! empty( $_GET['user_id'] ) && is_numeric( $_GET['user_id'] ) ) {
+		} elseif ( is_admin() && current_user_can( 'manage_options' ) && ! empty( $_GET['user_id'] ) && is_numeric( $_GET['user_id'] ) ) {
 			$user_id = absint( $_GET['user_id'] );
-			// Otherwise something is wrong.
 		} else {
 			$user_id = get_current_user_id();
+		}
+
+		if ( empty( $_POST['uwp_reset_nonce'] ) || ! wp_verify_nonce( $_POST['uwp_reset_nonce'], 'uwp_reset_nonce_' . $type . '_' . $user_id ) ) {
+			return;
 		}
 
 		$errors = new WP_Error();

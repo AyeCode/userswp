@@ -83,7 +83,7 @@ $type  = isset( $_POST['type'] ) && $_POST['type'] == 'avatar' ? 'avatar' : 'ban
 					'type'    => 'hidden',
 					'name'    => 'uwp_reset_nonce',
 					'id'      => 'uwp_reset_nonce',
-					'value'   => esc_html( wp_create_nonce( 'uwp_reset_nonce_'.$type ) ),
+					'value'   => esc_html( wp_create_nonce( 'uwp_reset_nonce_' . $type . '_' . $user_id ) ),
 					'no_wrap' => true,
 				) );
 				echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
