@@ -1761,6 +1761,14 @@ class UsersWP_Profile {
 	 */
 	public function crop_submit_form( $type = 'avatar' ) {
 
+		if ( is_admin() && defined( 'IS_PROFILE_PAGE' ) && IS_PROFILE_PAGE ) {
+			$user_id = get_current_user_id();
+		} elseif ( is_admin() && current_user_can( 'manage_options' ) && ! empty( $_GET['user_id'] ) && is_numeric( $_GET['user_id'] ) ) {
+			$user_id = absint( $_GET['user_id'] );
+		} else {
+			$user_id = get_current_user_id();
+		}
+
 		ob_start();
 
 		// get file sizes
@@ -1769,7 +1777,7 @@ class UsersWP_Profile {
 
 		$design_style = uwp_get_option( "design_style", 'bootstrap' );
 		$template     = $design_style ? $design_style . "/modal-profile-image.php" : "modal-profile-image.php";
-		uwp_get_template( $template );
+		uwp_get_template( $template, array( 'user_id' => $user_id ) );
 
 		$content_wrap = $design_style == 'bootstrap' ? '.uwp-profile-image-change-modal .modal-content' : '#uwp-popup-modal-wrap';
 		$bg_color = apply_filters('uwp_crop_image_bg_color', '', $type);

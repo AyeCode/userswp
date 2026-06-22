@@ -10,6 +10,12 @@ global $aui_bs5;
 $css_class = !empty($args['css_class']) ? esc_attr( $args['css_class'] ) : 'border-0';
 $form_title = ! empty( $args['form_title'] ) || $args['form_title']=='0' ? esc_attr__( $args['form_title'], 'userswp' ) : __( 'Login', 'userswp' );
 $form_title = apply_filters( 'uwp_template_form_title', $form_title, 'login' );
+$button_title = uwp_get_option( 'login_form_button_title' );
+$button_title = $button_title
+        ? __( wp_unslash( $button_title ), 'userswp' )
+        : __( 'Login', 'userswp' );
+$button_title = apply_filters( 'uwp_login_form_button_title', $button_title );
+
 do_action( 'uwp_template_before', 'login', $args ); ?>
 <div class="row">
 	<div class="card mx-auto container-fluid p-0 <?php echo esc_attr( $css_class ); ?>" >
@@ -65,7 +71,7 @@ do_action( 'uwp_template_before', 'login', $args ); ?>
 					echo aui()->button(array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'       =>  'submit',
 						'class'      => 'btn btn-primary btn-block text-uppercase uwp_login_submit',
-						'content'    => esc_html__( 'Login', 'userswp' ),
+						'content'    => esc_html( $button_title ),
 						'name'       => 'uwp_login_submit',
 					));
 					?>

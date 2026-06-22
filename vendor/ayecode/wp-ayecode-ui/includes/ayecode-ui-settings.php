@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.47';
+		public $version = '0.2.49';
 
 		/**
 		 * Class textdomain.
@@ -487,7 +487,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					// fix some wp-admin issues
 					if(is_admin()){
 						$custom_css = "
-                body{
+                body:not(.editor-styles-wrapper){
                     background-color: #f1f1f1;
                     font-family: -apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Oxygen-Sans,Ubuntu,Cantarell,\"Helvetica Neue\",sans-serif;
                     font-size:13px;

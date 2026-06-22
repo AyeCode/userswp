@@ -1,3 +1,6 @@
+= 1.2.32 - 2026-06-10 =
+* Disable additional CSS option for SD blocks - CHANGED
+
 = 1.2.31 - 2026-01-22 =
 * Border radius can't be unset when border is set to default - FIXED
 

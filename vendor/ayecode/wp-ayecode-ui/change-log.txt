@@ -1,3 +1,9 @@
+= 0.2.49 - 2026-06-10 =
+* Background color conflict in Gutenberg editor - FIXED
+
+= 0.2.48 - 2026-05-14 =
+* Default value of 0 was ignored in Input fields - FIXED
+
 = 0.2.47 - 2026-04-02 =
 * WordPress 7.0 compatibility - COMPATIBILITY
 
