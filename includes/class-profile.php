@@ -397,7 +397,9 @@ class UsersWP_Profile {
 					foreach ( $value as $v ) {
 						if ( ! empty( $v ) ) {
 							$data          = $this->uwp_array_search( $option_values_arr, 'value', $v );
-							$array_value[] = $data[0]['label'];
+                            if ( ! empty( $data ) && isset( $data[0]['label'] ) ) {
+                                $array_value[] = $data[0]['label'];
+                            }
 						}
 
 					}

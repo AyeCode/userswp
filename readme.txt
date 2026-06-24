@@ -159,6 +159,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.65 - 2026-06-24 =
+* Custom field deleted option provokes lots of warnings in debug.log - FIXED
+
 = 1.2.64 - 2026-06-12 =
 * Registration form titles with non-ASCII characters mangled by the activator - FIXED
 * Option to change login button text in login form - ADDED
