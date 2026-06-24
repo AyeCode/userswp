@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.49';
+		public $version = '0.2.50';
 
 		/**
 		 * Class textdomain.
@@ -401,15 +401,14 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @return bool
 		 */
-		public function is_aui_screen(){
-//			echo '###';exit;
+		public function is_aui_screen() {
 			$load = false;
-			// check if we should load or not
+
+			// Check if we should load or not
 			if ( is_admin() ) {
 				// Only enable on set pages
 				$aui_screens = array(
 					'page',
-                    //'docs',
 					'post',
 					'settings_page_ayecode-ui-settings',
 					'appearance_page_gutenberg-widgets',
@@ -417,24 +416,20 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					'ayecode-ui-settings',
 					'site-editor'
 				);
+
 				$screen_ids = apply_filters( 'aui_screen_ids', $aui_screens );
+				$screen     = function_exists( 'get_current_screen' ) ? get_current_screen() : array();
 
-				$screen = get_current_screen();
-
-//				echo '###'.$screen->id;
-
-				// check if we are on a AUI screen
+				// Check if we are on a AUI screen
 				if ( $screen && in_array( $screen->id, $screen_ids ) ) {
 					$load = true;
 				}
 
-				//load for widget previews in WP 5.8
-				if( !empty($_REQUEST['legacy-widget-preview'])){
+				// Load for widget previews in WP 5.8
+				if ( ! empty( $_REQUEST['legacy-widget-preview'] ) ) {
 					$load = true;
 				}
 			}
-
-
 
 			return apply_filters( 'aui_load_on_admin' , $load );
 		}
@@ -3188,7 +3183,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 */
 		public static function is_block_editor() {
 			if ( is_admin() ) {
-				$current_screen = function_exists('get_current_screen' ) ? get_current_screen() : array();
+				$current_screen = function_exists( 'get_current_screen' ) ? get_current_screen() : array();
 
 				if ( ! empty( $current_screen ) && $current_screen->is_block_editor() ) {
 					return true;

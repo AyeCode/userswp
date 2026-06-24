@@ -1,3 +1,6 @@
+= 0.2.50 - 2026-06-24 =
+* Check get_current_screen exists to prevent error - FIXED
+
 = 0.2.49 - 2026-06-10 =
 * Background color conflict in Gutenberg editor - FIXED
 
