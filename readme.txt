@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 6.1
 Tested up to: 7.0
-Stable tag: 1.2.64
+Stable tag: 1.2.65
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -161,6 +161,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 = 1.2.65 - 2026-06-24 =
 * Custom field deleted option provokes lots of warnings in debug.log - FIXED
+* Merge AUI 0.2.50 & SD 1.2.33 - CHANGED
 
 = 1.2.64 - 2026-06-12 =
 * Registration form titles with non-ASCII characters mangled by the activator - FIXED
