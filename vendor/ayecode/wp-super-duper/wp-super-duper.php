@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.32' );
+	define( 'SUPER_DUPER_VER', '1.2.33' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -240,6 +240,16 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					// Group
 					if ( isset( $val['group'] ) ) {
 						$param['group'] = $val['group'];
+
+						if ( ! empty( $param['group'] ) ) {
+							// Fusion Builder converts the group name into a tab ID without sanitization and assigns it to the href.
+							// Replace some punctuation symbols.
+							$param['group'] = preg_replace( '/[\&,\(\)\:\/\\\\]/u', ' ', $param['group'] );
+							// Remove ' ".
+							$param['group'] = preg_replace( '/[\'\"]/u', '', $param['group'] );
+							// Replace consecutive spaces with single space.
+							$param['group'] = preg_replace( '/\s+/', ' ', $param['group'] );
+						}
 					}
 
 					// value

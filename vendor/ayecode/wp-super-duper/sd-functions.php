@@ -3405,8 +3405,37 @@ function sd_render_block( $block_content, $block, $instance = '' ) {
 }
 add_filter( 'render_block', 'sd_render_block', 9, 3 );
 
+/**
+ * Safely fetches page content after checking viewing permissions.
+ *
+ * @param int  $post_id      The ID of the post/page.
+ * @param bool $bypass_check Set to true only if called from a secure, trusted admin context.
+ * @return string
+ */
+function sd_get_safe_post_content( $post_id, $bypass_check = false ) {
+	$post_id = (int) $post_id;
+
+	if ( $post_id <= 0 ) {
+		return '';
+	}
+
+	if ( ! $bypass_check ) {
+		$post = get_post( $post_id );
+
+		if ( empty( $post ) ) {
+			return '';
+		}
+
+		if ( ( ! is_post_publicly_viewable( $post ) && ! current_user_can( 'read_post', $post_id ) ) || post_password_required( $post ) ) {
+			return '';
+		}
+	}
+
+	return get_post_field( 'post_content', $post_id );
+}
+
 function sd_get_page_content( $page_id ) {
-	$content = $page_id > 0 ? get_post_field( 'post_content', (int) $page_id ) : '';
+	$content = sd_get_safe_post_content( (int) $page_id );
 
 	// Maybe bypass content
 	$bypass_content = apply_filters( 'sd_bypass_page_content', '', $content, $page_id );
