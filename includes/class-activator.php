@@ -23,6 +23,9 @@ class UsersWP_Activator {
         '1.2.3'    => array(
 	        'uwp_upgrade_1230',
         ),
+        '1.2.66'   => array(
+	        'uwp_upgrade_1266',
+        ),
     );
 
 
@@ -81,8 +84,8 @@ class UsersWP_Activator {
     public static function install() {
 
 	    uwp_generate_default_pages();
-        self::add_default_options();
 	    uwp_create_tables();
+        self::add_default_options();
 
         // run update functions if needed
         if ( self::needs_db_update() ) {

@@ -288,6 +288,7 @@ class UsersWP_Admin {
                 'txt_cancel'                         => __( 'Cancel', 'userswp' ),
                 'txt_saving'                         => __( 'Saving...', 'userswp' ),
                 'txt_saving_error'                   => __( 'An error occurred while saving. Please try again.', 'userswp' ),
+				'txt_copied'                           => __( 'Copied!', 'userswp' ),
 				'delete_register_form'               => __( 'Are you sure you wish to delete this form?', 'userswp' ),
 				'ask_register_form_title'            => __( 'Enter register form title', 'userswp' ),
 				'form_updated_msg'                   => __( 'Updated! Reloading page...', 'userswp' ),
