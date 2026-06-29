@@ -137,16 +137,17 @@ function get_change_form_fields() {
  * @param array      $data   Submitted form data
  * @param string     $type   Form type.
  * @param array|bool $fields Fields applicable for validation.
+ * @param string     $extra_where    Extra where query.
  *
  * @return      array|mixed|WP_Error   Validated form data.
  * @since       1.0.0
  * @package     userswp
  *
  */
-function uwp_validate_fields( $data, $type, $fields = false ) {
+function uwp_validate_fields( $data, $type, $fields = false, $extra_where = '' ) {
 	$validation = new UsersWP_Validation();
 
-	return $validation->validate_fields( $data, $type, $fields );
+	return $validation->validate_fields( $data, $type, $fields, $extra_where );
 }
 
 /**

@@ -18,11 +18,11 @@ class UsersWP_Validation {
      * @param       array       $data           Submitted form data
      * @param       string      $type           Form type.
      * @param       array|bool  $fields         Fields applicable for validation.
+     * @param       string      $extra_where    Extra where query.
      *
      * @return      array|mixed|WP_Error   Validated form data.
      */
-    public function validate_fields($data, $type, $fields = false) {
-
+    public function validate_fields( $data, $type, $fields = false, $extra_where = '' ) {
         $errors = new WP_Error();
 
         $errors = apply_filters('uwp_validate_fields_before', $errors, $data, $type);
@@ -45,7 +45,7 @@ class UsersWP_Validation {
             } elseif ($type == 'change') {
                 $fields = get_change_validate_form_fields();
             } elseif ($type == 'account') {
-	            $fields = get_account_form_fields();
+	            $fields = get_account_form_fields( $extra_where );
             } else {
                 $fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . $table_name . " WHERE form_type = %s AND field_type != 'fieldset' AND field_type != 'file' AND is_active = '1' ORDER BY sort_order ASC", array($type)));
             }
@@ -184,6 +184,15 @@ class UsersWP_Validation {
 
                         case 'url':
                             $sanitized_value = sanitize_url( wp_unslash( $value ) );
+                            break;
+
+                        case 'file':
+                            $sanitized_value = sanitize_text_field( $value );
+
+                            // Validate the file path.
+                            if ( $sanitized_value && validate_file( $sanitized_value ) !== 0 ) {
+                                $sanitized_value = '';
+                            }
                             break;
 
                         default:

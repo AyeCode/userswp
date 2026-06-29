@@ -1986,7 +1986,7 @@ class UsersWP_Forms {
 
 		do_action( 'uwp_before_validate', 'account' );
 
-		$result = uwp_validate_fields( $data, 'account' );
+		$result = uwp_validate_fields( $data, 'account', false, "AND `field_type` != 'file'" );
 
 		$result = apply_filters( 'uwp_validate_result', $result, 'account', $data );
 
@@ -2314,20 +2314,26 @@ class UsersWP_Forms {
 
 		uwp_update_usermeta( $user_id, $htmlvar, '' );
 
-		if ( $value ) {
+		if ( $value && validate_file( $value ) === 0 ) {
 			$uploads     = wp_upload_dir();
 			$upload_path = $uploads['basedir'];
-			$unlink_file = untrailingslashit( $upload_path ) . '/' . ltrim( $value, '/' );
+
+			if ( strpos( $value, 'http://' ) === 0 || strpos( $value, 'https://' ) === 0 ) {
+				// Get the relative url.
+				$value = uwp_get_file_relative_url( $value );
+			}
+
+			$unlink_file = untrailingslashit( $upload_path ) . '/' . trim( $value, '/\\' );
 
 			if ( is_file( $unlink_file ) && file_exists( $unlink_file ) ) {
-				@unlink( $unlink_file );
+				wp_delete_file( $unlink_file );
 
 				// For avatar/banner, also remove the original (non-thumb) file.
 				if ( $type ) {
 					$unlink_ori_file = str_replace( '_uwp_' . $type . '_thumb' . '.', '.', $unlink_file );
 
 					if ( is_file( $unlink_ori_file ) && file_exists( $unlink_ori_file ) ) {
-						@unlink( $unlink_ori_file );
+						wp_delete_file( $unlink_ori_file );
 					}
 				}
 			}
