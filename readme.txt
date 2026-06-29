@@ -159,8 +159,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.66 - 2026-TBD =
+= 1.2.66 - 2026-06-TBD =
 * redirect_to link encoding issue on Login and registration form - FIXED
+* Enhanced validation for file field deletion - FIXED/SECURITY
 
 = 1.2.65 - 2026-06-24 =
 * Custom field deleted option provokes lots of warnings in debug.log - FIXED

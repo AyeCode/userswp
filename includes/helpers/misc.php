@@ -2034,3 +2034,79 @@ function uwp_get_username($user_id)
 
 	return apply_filters('uwp_get_username', $display_name, $user_id, $user_data);
 }
+
+/**
+ * File relative url.
+ *
+ * @since 1.2.66
+ *
+ * @param string $url URL.
+ * @param bool $full_path Optional. Full Path. Default false.
+ * @return string
+ */
+function uwp_get_file_relative_url( $url, $full_path = false ) {
+	$url = trim( $url );
+
+	if ( !$url ) {
+		return $url;
+	}
+
+	$relative_url = $url;
+	$url = trim( $url, '/\\' ); // clean slashes
+
+	$upload_dir = wp_upload_dir();
+	$upload_basedir = $upload_dir['basedir'];
+	$upload_baseurl = $upload_dir['baseurl'];
+	$content_dir = untrailingslashit( WP_CONTENT_DIR );
+	$content_url = untrailingslashit( WP_CONTENT_URL );
+
+	if ( strpos( $upload_baseurl, 'https://' ) === 0 ) {
+		$https = 'https://';
+		$match_upload_baseurl = str_replace( 'https://', '', $upload_baseurl );
+		$content_url = str_replace( 'http://', 'https://', $content_url );
+	} else {
+		$https = 'http://';
+		$match_upload_baseurl = str_replace( 'http://', '', $upload_baseurl );
+		$content_url = str_replace( 'https://', 'http://', $content_url );
+	}
+
+	$match_content_url = strpos( $content_url, 'https://' ) === 0 ? str_replace( 'https://', '', $content_url ) : str_replace( 'http://', '', $content_url );
+	$match_url = strpos( $url, 'https://' ) === 0 ? str_replace( 'https://', '', $url ) : str_replace( 'http://', '', $url );
+
+	// www.
+	$www = '';
+	if ( strpos( $match_upload_baseurl, 'www.' ) === 0 ) {
+		$www = 'www.';
+		$match_upload_baseurl = str_replace( 'www.', '', $match_upload_baseurl );
+	}
+	if ( strpos( $match_content_url, 'www.' ) === 0 ) {
+		$match_content_url = str_replace( 'www.', '', $match_content_url );
+	}
+	if ( strpos( $match_url, 'www.' ) === 0 ) {
+		$match_url = str_replace( 'www.', '', $match_url );
+	}
+
+	if ( $full_path ) {
+		if ( strpos( $relative_url, 'http://' ) === 0 || strpos( $relative_url, 'https://' ) === 0 ) {
+			if ( strpos( $match_url, $match_upload_baseurl ) === 0 || strpos( $match_url, $match_content_url ) === 0 ) {
+				$relative_url = $https . $www . $match_url;
+			}
+		} else {
+			if ( is_file( $content_dir . '/' . $match_url ) && file_exists( $content_dir . '/' . $match_url ) ) { // url contains content url
+				$relative_url = $content_url . '/' . $match_url;
+			} elseif ( is_file( $upload_basedir . '/' . $match_url ) && file_exists( $upload_basedir . '/' . $match_url ) ) { // url contains content url
+				$relative_url = $upload_baseurl . '/' . $match_url;
+			}
+		}
+	} else {
+		if ( strpos( $match_url, $match_upload_baseurl ) === 0 ) { // url contains uploads baseurl
+			$relative_url = str_replace( $match_upload_baseurl, '', $match_url );
+		} elseif ( strpos( $match_url, $match_content_url ) === 0 ) { // url contains content url
+			$relative_url = str_replace( $match_content_url, '', $match_url );
+		}
+
+		$relative_url = trim( $relative_url, '/\\' );
+	}
+
+	return apply_filters( 'uwp_get_file_relative_url', $relative_url, $url, $full_path );
+}
