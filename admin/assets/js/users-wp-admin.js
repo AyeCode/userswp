@@ -301,6 +301,43 @@
                 }, 1000);
             });
 
+            // Invite code registration link copy handler
+            $(document).on('click', '.uwp-copy-invite-link', function (e) {
+                e.preventDefault();
+                const $link = $(this);
+                const link = $link.data('link');
+                if (!link) {
+                    return;
+                }
+
+                const showCopied = function () {
+                    const $icon = $link.find('i').first();
+                    const originalClass = $icon.attr('class');
+                    const originalTitle = $link.attr('title');
+                    $link.attr('title', uwp_admin_ajax.txt_copied || 'Copied!');
+                    $icon.removeClass('fa-link').addClass('fa-check');
+                    setTimeout(function () {
+                        $link.attr('title', originalTitle || '');
+                        $icon.attr('class', originalClass);
+                    }, 1500);
+                };
+
+                const fallbackCopy = function () {
+                    const $temp = $('<textarea>');
+                    $('body').append($temp);
+                    $temp.val(link).select();
+                    document.execCommand('copy');
+                    $temp.remove();
+                    showCopied();
+                };
+
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(link).then(showCopied).catch(fallbackCopy);
+                } else {
+                    fallbackCopy();
+                }
+            });
+
             // SEO meta separator handler
             $('input.uwp-seo-meta-separator').on('change', function () {
                 if ($(this).attr("checked") === "checked") {

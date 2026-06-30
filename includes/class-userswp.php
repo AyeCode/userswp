@@ -38,6 +38,7 @@ final class UsersWP {
 	protected $tools;
 	protected $tables;
 	protected $notifications;
+	public $invite_codes;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -72,6 +73,7 @@ final class UsersWP {
 		$this->ajax          = new UsersWP_Ajax();
 		$this->files         = new UsersWP_Files();
 		$this->notifications = new UsersWP_Notifications();
+		$this->invite_codes  = new UsersWP_Invite_Codes();
 
 		// actions and filters
 		$this->load_assets_actions_and_filters( $this->assets );
@@ -85,6 +87,7 @@ final class UsersWP {
 		$this->load_templates_actions_and_filters( $this->templates );
 		$this->load_tools_actions_and_filters( $this->tools );
 		$this->load_notifications_actions_and_filters( $this->notifications );
+		$this->load_invite_codes_actions_and_filters( $this->invite_codes );
 
 		//admin
 		$this->load_form_builder_actions_and_filters( $this->form_builder );
@@ -448,6 +451,11 @@ final class UsersWP {
 		require_once dirname( dirname( __FILE__ ) ) . '/includes/class-status.php';
 
 		/**
+		 * The class responsible for invite codes functionality.
+		 */
+		require_once dirname( dirname( __FILE__ ) ) . '/includes/class-invite-codes.php';
+
+		/**
 		 * The class responsible for extensions screen functions on admin side
 		 */
 		require_once dirname( dirname( __FILE__ ) ) . '/includes/libraries/class-ayecode-addons.php';
@@ -753,6 +761,15 @@ final class UsersWP {
 	public function load_notifications_actions_and_filters( $instance ) {
 		add_action( 'uwp_account_form_display', array( $instance, 'user_notifications_form_front' ), 10, 1 );
 		add_action( 'init', array( $instance, 'notification_submit_handler' ) );
+	}
+
+	/**
+	 * Actions for invite codes
+	 *
+	 * @param $instance
+	 */
+	public function load_invite_codes_actions_and_filters( $instance ) {
+		$instance->init_invite_code_field_renderer();
 	}
 
 	/**

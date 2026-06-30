@@ -445,3 +445,59 @@ function uwp_upgrade_1225() {
 		}
 	}
 }
+
+/**
+ * Create the invite codes table for existing installations.
+ *
+ * @since 1.2.66
+ */
+function uwp_upgrade_1266() {
+	if ( uwp_get_option( 'uwp_invite_codes_table_created' ) ) {
+		return;
+	}
+
+	if ( ! function_exists( 'uwp_invite_code_table_name' ) ) {
+		return;
+	}
+
+	global $wpdb;
+	$table_name = uwp_invite_code_table_name();
+
+	if ( $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) ) === $table_name ) {
+		uwp_update_option( 'uwp_invite_codes_table_created', 1 );
+		return;
+	}
+
+	$collate = '';
+	if ( $wpdb->has_cap( 'collation' ) ) {
+		if ( ! empty( $wpdb->charset ) ) {
+			$collate = "DEFAULT CHARACTER SET $wpdb->charset";
+		}
+		if ( ! empty( $wpdb->collate ) ) {
+			$collate .= " COLLATE $wpdb->collate";
+		}
+	}
+
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+	$sql = "CREATE TABLE " . $table_name . " (
+		id int(11) NOT NULL AUTO_INCREMENT,
+		code varchar(32) NOT NULL,
+		created_by bigint(20) NOT NULL DEFAULT 0,
+		form_id int(11) NOT NULL DEFAULT 0,
+		usage_limit int(11) NOT NULL DEFAULT 1,
+		usage_count int(11) NOT NULL DEFAULT 0,
+		expiry_date datetime NULL DEFAULT NULL,
+		is_active tinyint(1) NOT NULL DEFAULT 1,
+		created_at datetime NOT NULL,
+		updated_at datetime NOT NULL,
+		used_by text NULL DEFAULT NULL,
+		PRIMARY KEY  (id),
+		UNIQUE KEY code (code),
+		KEY created_by (created_by)
+	) $collate;";
+
+	dbDelta( $sql );
+
+	uwp_update_option( 'uwp_invite_codes_table_created', 1 );
+}

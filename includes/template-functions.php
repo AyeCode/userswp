@@ -187,6 +187,7 @@ function uwp_get_screen_ids() {
 		'userswp_page_uwp_status',
 		'userswp_page_uwp-addons',
 		'userswp_page_uwp_user_types',
+		'userswp_page_uwp_invite_codes',
 		'profile',
 		'users',
 		'user-edit',

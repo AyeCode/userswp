@@ -180,6 +180,29 @@ class UsersWP_Tables {
 
 		dbDelta($tabs_tbl_query);
 
+		// invite codes table
+		$invite_codes_table_name = uwp_get_table_prefix() . 'uwp_invite_codes';
+		$invite_codes_tbl = "CREATE TABLE " . $invite_codes_table_name . " (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			code varchar(32) NOT NULL,
+			created_by bigint(20) NOT NULL DEFAULT 0,
+			form_id int(11) NOT NULL DEFAULT 0,
+			usage_limit int(11) NOT NULL DEFAULT 1,
+			usage_count int(11) NOT NULL DEFAULT 0,
+			expiry_date datetime NULL DEFAULT NULL,
+			is_active tinyint(1) NOT NULL DEFAULT 1,
+			created_at datetime NOT NULL,
+			updated_at datetime NOT NULL,
+			used_by text NULL DEFAULT NULL,
+			PRIMARY KEY  (id),
+			UNIQUE KEY code (code),
+			KEY created_by (created_by)
+		) $collate;";
+
+		$invite_codes_tbl = apply_filters( 'uwp_before_invite_codes_table_create', $invite_codes_tbl );
+
+		dbDelta( $invite_codes_tbl );
+
 	}
 
 	/**
@@ -198,6 +221,7 @@ class UsersWP_Tables {
 		$tables[] = $wpdb->prefix . 'uwp_form_extras';
 		$tables[] = $wpdb->prefix . 'uwp_usermeta';
 		$tables[] = $wpdb->prefix . 'uwp_profile_tabs';
+		$tables[] = $wpdb->prefix . 'uwp_invite_codes';
 		return $tables;
 	}
 
