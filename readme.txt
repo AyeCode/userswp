@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 6.1
 Tested up to: 7.0
-Stable tag: 1.2.66
+Stable tag: 1.2.67
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -162,6 +162,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 = 1.2.67 - 2026-06-30 =
 * Password reset and activation links failing as "invalid or expired" on WordPress 6.8+ due to a hashing mismatch with core's new wp_fast_hash() key storage. - FIXED
 * WP2FA compatibility in login lightbox - FIXED
+* Missing WP 2FA provider bypassed login - FIXED
 
 = 1.2.66 - 2026-06-29 =
 * redirect_to link encoding issue on Login and registration form - FIXED
