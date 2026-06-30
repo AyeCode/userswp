@@ -1,3 +1,6 @@
+= 0.2.51 - 2026-06-30 =
+* Modal backdrop covering the modal inside a sticky element - FIXED
+
 = 0.2.50 - 2026-06-24 =
 * Check get_current_screen exists to prevent error - FIXED
 

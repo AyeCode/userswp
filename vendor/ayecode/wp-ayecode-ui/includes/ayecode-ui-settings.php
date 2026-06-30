@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.50';
+		public $version = '0.2.51';
 
 		/**
 		 * Class textdomain.
@@ -1185,6 +1185,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			if ( is_admin() ) {
 				echo ' body.modal-open #adminmenuwrap{z-index:999} body.modal-open #wpadminbar{z-index:1025}';
 			}
+
+			/* Prevent the backdrop from covering the modal inside a sticky element */
+			echo 'body.modal-open .sticky:has(.modal),body.modal-open .sticky-top:has(.modal){position:static!important}';
 
 			$custom_css = '';
 
