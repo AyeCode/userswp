@@ -62,9 +62,9 @@ class UsersWP_Validation {
         $enable_confirm_email_field = isset($email_extra['confirm_email']) ? $email_extra['confirm_email'] : '0';
 
         $password_field = uwp_get_custom_field_info('password','account');
-        $enable_password = isset($data['password']) && $password_field->is_active ? 1 : 0;
+        $enable_password = isset($data['password']) && !empty($password_field) && $password_field->is_active ? 1 : 0;
         $password_extra = array();
-        if (isset($password_field->extra_fields) && $password_field->extra_fields != '') {
+        if (!empty($password_field) && isset($password_field->extra_fields) && $password_field->extra_fields != '') {
             $password_extra = unserialize($password_field->extra_fields);
         }
         

@@ -1871,11 +1871,15 @@ function uwp_get_activation_link($user_id)
 
 	do_action('uwp_activation_key', $user_data->user_login, $key);
 
-	if (empty($wp_hasher)) {
-		require_once ABSPATH . 'wp-includes/class-phpass.php';
-		$wp_hasher = new PasswordHash(8, true);
+	if ( function_exists( 'wp_fast_hash' ) ) {
+		$hashed = wp_fast_hash( $key );
+	} else {
+		if ( empty( $wp_hasher ) ) {
+			require_once ABSPATH . 'wp-includes/class-phpass.php';
+			$wp_hasher = new PasswordHash( 8, true );
+		}
+		$hashed = $wp_hasher->HashPassword( $key );
 	}
-	$hashed = $wp_hasher->HashPassword($key);
 	$wpdb->update($wpdb->users, array('user_activation_key' => time() . ":" . $hashed), array('user_login' => $user_data->user_login)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	update_user_meta($user_id, 'uwp_mod', 'email_unconfirmed');
 
