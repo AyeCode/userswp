@@ -1176,6 +1176,9 @@ class UsersWP_Forms {
 		if ( wp_doing_ajax() && isset( $wp2fa ) && ! empty( $wp2fa ) ) {
 			remove_action( 'wp_login', array( $wp2fa->login, 'wp_login' ), 20 );
 		}
+		if ( wp_doing_ajax() && class_exists( '\WP2FA\Authenticator\Login' ) ) {
+			remove_action( 'wp_login', array( 'WP2FA\Authenticator\Login', 'wp_login' ), 20 );
+		}
 
 		$user = wp_signon(
 			array(
@@ -1186,8 +1189,12 @@ class UsersWP_Forms {
 		);
 
 		add_action( 'authenticate', 'gglcptch_login_check', 21, 1 );
+		if ( wp_doing_ajax() && class_exists( '\WP2FA\Authenticator\Login' ) ) {
+			add_action( 'wp_login', array( 'WP2FA\Authenticator\Login', 'wp_login' ), 20, 2 );
+		}
 
-		if ( wp_doing_ajax() && ! is_wp_error( $user ) && isset( $wp2fa ) && ! empty( $wp2fa ) ) {
+		$wp2fa_available = ( isset( $wp2fa ) && ! empty( $wp2fa ) ) || class_exists( '\WP2FA\Authenticator\Login' );
+		if ( wp_doing_ajax() && ! is_wp_error( $user ) && $wp2fa_available ) {
 
 			$two_fa = $this->check_2fa( $user );
 			if ( isset( $two_fa ) && ! empty( $two_fa ) ) {
@@ -1279,7 +1286,10 @@ class UsersWP_Forms {
 			return $errors;
 		}
 
-		$provider = \WP2FA\Authenticator\Login::get_available_providers_for_user( $user );
+		$provider = $this->get_wp2fa_provider_for_user( $user );
+		if ( empty( $provider ) ) {
+			return;
+		}
 
 		ob_start();
 		?>
@@ -1332,7 +1342,7 @@ class UsersWP_Forms {
                         array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'type'             => 'tel',
 						'id'               => 'authcode',
-						'name'             => 'wp-2fa-email-code',
+						'name'             => 'authcode',
 						'placeholder'      => esc_attr__( 'Verification Code', 'userswp' ),
 						'value'            => '',
 						'label'            => esc_html__( 'Verification Code', 'userswp' ),
@@ -1369,7 +1379,7 @@ class UsersWP_Forms {
 		</div>
 
 		<?php
-		$codes_remaining = \WP2FA\Authenticator\Backup_Codes::codes_remaining_for_user( $user );
+		$codes_remaining = $this->get_wp2fa_backup_codes_remaining( $user );
 		if ( isset( $codes_remaining ) && $codes_remaining > 0 ) {
 			?>
 			<div class="uwp-2fa-methods-wrap" style="display:none;">
@@ -1427,6 +1437,71 @@ class UsersWP_Forms {
 		return ob_get_clean();
 	}
 
+	public function get_wp2fa_provider_for_user( $user ) {
+		if ( class_exists( '\WP2FA\Authenticator\Login' ) && method_exists( '\WP2FA\Authenticator\Login', 'get_available_providers_for_user' ) ) {
+			$provider = \WP2FA\Authenticator\Login::get_available_providers_for_user( $user );
+			if ( is_array( $provider ) ) {
+				$provider = key( $provider );
+			}
+
+			return $provider;
+		}
+
+		if ( class_exists( '\WP2FA\Admin\Helpers\User_Helper' ) && method_exists( '\WP2FA\Admin\Helpers\User_Helper', 'get_enabled_method_for_user' ) ) {
+			return \WP2FA\Admin\Helpers\User_Helper::get_enabled_method_for_user( $user );
+		}
+
+		return '';
+	}
+
+	public function get_wp2fa_backup_codes_remaining( $user ) {
+		if ( class_exists( '\WP2FA\Methods\Backup_Codes' ) && method_exists( '\WP2FA\Methods\Backup_Codes', 'codes_remaining_for_user' ) ) {
+			return \WP2FA\Methods\Backup_Codes::codes_remaining_for_user( $user );
+		}
+
+		if ( class_exists( '\WP2FA\Authenticator\Backup_Codes' ) && method_exists( '\WP2FA\Authenticator\Backup_Codes', 'codes_remaining_for_user' ) ) {
+			return \WP2FA\Authenticator\Backup_Codes::codes_remaining_for_user( $user );
+		}
+
+		return 0;
+	}
+
+	public function validate_wp2fa_totp_authentication( $user ) {
+		if ( class_exists( '\WP2FA\Methods\TOTP' ) && method_exists( '\WP2FA\Methods\TOTP', 'validate_totp_authentication' ) ) {
+			return \WP2FA\Methods\TOTP::validate_totp_authentication( $user );
+		}
+
+		if ( class_exists( '\WP2FA\Authenticator\Login' ) && method_exists( '\WP2FA\Authenticator\Login', 'validate_totp_authentication' ) ) {
+			return \WP2FA\Authenticator\Login::validate_totp_authentication( $user );
+		}
+
+		return false;
+	}
+
+	public function validate_wp2fa_email_authentication( $user ) {
+		if ( class_exists( '\WP2FA\Authenticator\Login' ) && method_exists( '\WP2FA\Authenticator\Login', 'validate_email_authentication' ) ) {
+			return \WP2FA\Authenticator\Login::validate_email_authentication( $user );
+		}
+
+		if ( class_exists( '\WP2FA\Authenticator\Authentication' ) && method_exists( '\WP2FA\Authenticator\Authentication', 'validate_token' ) && isset( $_REQUEST['authcode'] ) ) {
+			return \WP2FA\Authenticator\Authentication::validate_token( $user, sanitize_text_field( wp_unslash( $_REQUEST['authcode'] ) ) );
+		}
+
+		return false;
+	}
+
+	public function validate_wp2fa_backup_codes( $user ) {
+		if ( class_exists( '\WP2FA\Methods\Backup_Codes' ) && method_exists( '\WP2FA\Methods\Backup_Codes', 'validate_backup_codes' ) ) {
+			return \WP2FA\Methods\Backup_Codes::validate_backup_codes( $user );
+		}
+
+		if ( class_exists( '\WP2FA\Authenticator\Backup_Codes' ) && method_exists( '\WP2FA\Authenticator\Backup_Codes', 'validate_backup_codes' ) ) {
+			return \WP2FA\Authenticator\Backup_Codes::validate_backup_codes( $user );
+		}
+
+		return false;
+	}
+
 	public function process_login_2fa() {
 		if ( ! isset( $_POST['uwp-auth-id'], $_POST['wp-auth-nonce'] ) ) {
 			return;
@@ -1462,8 +1537,8 @@ class UsersWP_Forms {
 
 		if ( isset( $_POST['provider'] ) ) {
 			$provider  = sanitize_textarea_field( wp_unslash( $_POST['provider'] ) );
-			$providers = \WP2FA\Authenticator\Login::get_available_providers_for_user( $user );
-			if ( isset( $providers[ $provider ] ) ) {
+			$providers = $this->get_wp2fa_provider_for_user( $user );
+			if ( is_array( $providers ) && isset( $providers[ $provider ] ) ) {
 				$provider = $providers[ $provider ];
 			} elseif ( isset( $provider ) ) {
 				$provider = $provider;
@@ -1478,7 +1553,7 @@ class UsersWP_Forms {
 		}
 
 		// Validate TOTP.
-		if ( 'totp' === $provider && true !== \WP2FA\Authenticator\Login::validate_totp_authentication( $user ) ) {
+		if ( 'totp' === $provider && true !== $this->validate_wp2fa_totp_authentication( $user ) ) {
 
 			do_action( 'wp_login_failed', $user->user_login );
 
@@ -1493,7 +1568,7 @@ class UsersWP_Forms {
 		}
 
 		// Validate Email.
-		if ( 'email' === $provider && true !== \WP2FA\Authenticator\Login::validate_email_authentication( $user ) ) {
+		if ( 'email' === $provider && true !== $this->validate_wp2fa_email_authentication( $user ) ) {
 
 			do_action( 'wp_login_failed', $user->user_login );
 
@@ -1519,7 +1594,7 @@ class UsersWP_Forms {
 		}
 
 		// Backup Codes.
-		if ( 'backup_codes' === $provider && true !== \WP2FA\Authenticator\Login::validate_backup_codes( $user ) ) {
+		if ( 'backup_codes' === $provider && true !== $this->validate_wp2fa_backup_codes( $user ) ) {
 
 			do_action( 'wp_login_failed', $user->user_login );
 
@@ -1544,6 +1619,9 @@ class UsersWP_Forms {
 		wp_set_auth_cookie( $user->ID, $rememberme );
 
 		do_action( 'two_factor_user_authenticated', $user );
+		if ( defined( 'WP_2FA_PREFIX' ) ) {
+			do_action( WP_2FA_PREFIX . 'user_authenticated', $user );
+		}
 
 		$message = aui()->alert(
             array(
@@ -1708,7 +1786,6 @@ class UsersWP_Forms {
 
 		$as_password = apply_filters( 'uwp_forgot_message_as_password', false );
 
-		global $wpdb, $wp_hasher;
 		$reset_link = '';
 
 		if ( $as_password ) {
@@ -1722,15 +1799,19 @@ class UsersWP_Forms {
 			$message .= '<p>' . sprintf( __( 'Password: %s', 'userswp' ), $new_pass ) . '</p>';
 
 		} else {
-			$key = wp_generate_password( 20, false );
-			do_action( 'retrieve_password_key', $user_data->user_login, $key );
+			// Use WordPress core to generate, hash (wp_fast_hash in WP 6.8+), and store the reset key.
+			// This ensures compatibility with check_password_reset_key() on all WP versions.
+			$key = get_password_reset_key( $user_data );
 
-			if ( empty( $wp_hasher ) ) {
-				require_once ABSPATH . 'wp-includes/class-phpass.php';
-				$wp_hasher = new PasswordHash( 8, true );
+			if ( is_wp_error( $key ) ) {
+				if ( wp_doing_ajax() ) {
+					wp_send_json_error( $key->get_error_message() );
+				} else {
+					$uwp_notices[] = array( 'forgot' => aui()->alert( array( 'type' => 'error', 'content' => $key->get_error_message() ) ) );
+					return;
+				}
 			}
-			$hashed = $wp_hasher->HashPassword( $key );
-			$wpdb->update( $wpdb->users, array( 'user_activation_key' => time() . ':' . $hashed ), array( 'user_login' => $user_data->user_login ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
 			$message    = '<p>' . __( 'You have requested to reset your password for the following account:', 'userswp' ) . '</p>';
 			$message    .= home_url( '/' ) . '</p>';
 			$message    .= '<p>' . sprintf( __( 'Username: %s', 'userswp' ), $user_data->user_login ) . '</p>';
@@ -1986,7 +2067,7 @@ class UsersWP_Forms {
 
 		do_action( 'uwp_before_validate', 'account' );
 
-		$result = uwp_validate_fields( $data, 'account', false, "AND `field_type` != 'file'" );
+		$result = uwp_validate_fields( $data, 'account' );
 
 		$result = apply_filters( 'uwp_validate_result', $result, 'account', $data );
 
