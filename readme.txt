@@ -159,6 +159,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.68 - 2026-07-TBD =
+* Login button text was blank for non-bootstrap design. - FIXED
+
 = 1.2.67 - 2026-06-30 =
 * Password reset and activation links failing as "invalid or expired" on WordPress 6.8+ due to a hashing mismatch with core's new wp_fast_hash() key storage. - FIXED
 * WP2FA compatibility in login lightbox - FIXED

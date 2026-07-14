@@ -24,7 +24,7 @@ do_action('uwp_template_before', 'login'); ?>
                         <?php _e( 'Remember Me', 'userswp' ); ?>
                     </label>
                 </div>
-                <input type="submit" name="uwp_login_submit" value="<?php esc_html( $button_title ); ?>">
+                <input type="submit" name="uwp_login_submit" value="<?php echo esc_html( $button_title ); ?>">
             </form>
             <div class="uwp-login-links">
                 <div class="uwp-footer-link uwp-register-now"><?php esc_html_e( 'Not a member?', 'userswp' ); ?> <a rel="nofollow" href="<?php echo esc_url( uwp_get_register_page_url() ); ?>"><?php echo uwp_get_option("register_link_title") ? esc_html( uwp_get_option("register_link_title" ) ) : esc_html__( 'Create account', 'userswp' ); ?></a></div>
