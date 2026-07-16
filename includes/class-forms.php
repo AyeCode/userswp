@@ -1745,7 +1745,10 @@ class UsersWP_Forms {
 
 		do_action( 'uwp_after_validate', $result, 'forgot', $data );
 
-		$user_data = get_user_by( 'email', $data['email'] );
+		$login_or_email = trim( $data['email'] );
+		$user_data      = is_email( $login_or_email )
+			? get_user_by( 'email', $login_or_email )
+			: get_user_by( 'login', $login_or_email );
 
 		// if no user we fake it and bail
 		if ( ! $user_data ) {
@@ -1753,7 +1756,7 @@ class UsersWP_Forms {
                 'uwp_forgot_error_message',
                 array(
 					'type'    => 'error',
-					'content' => __( 'Invalid email or user doesn\'t exists.', 'userswp' ),
+					'content' => __( 'Invalid username/email or user doesn\'t exist.', 'userswp' ),
                 )
             );
 
@@ -3918,15 +3921,24 @@ class UsersWP_Forms {
 			$required_msg = ( ! empty( $field->is_required ) && $field->required_msg != '') ? __( stripslashes( $field->required_msg ), 'userswp' ) : '';
 			$validation_text = ! empty( $field->validation_msg ) ? __( stripslashes( $field->validation_msg ), 'userswp' ) : '';
 
+			$is_forgot_email  = ( $form_type === 'forgot' && $field->htmlvar_name === 'email' );
+			$input_type       = $is_forgot_email ? 'text' : 'email';
+			if ( $is_forgot_email ) {
+				$site_title  = __( 'Username or Email', 'userswp' );
+				$placeholder = $site_title . ( ! empty( $field->is_required ) ? ' *' : '' );
+			} else {
+				$placeholder = uwp_get_field_placeholder( $field );
+			}
+
 			if ( $design_style ) {
 				$required = ! empty( $field->is_required ) ? ' <span class="text-danger">*</span>' : '';
 
 				echo aui()->input(
                     array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					'type'               => 'email',
+					'type'               => $input_type,
 					'id'                 => esc_attr( $field->htmlvar_name ),
 					'name'               => esc_attr( $field->htmlvar_name ),
-					'placeholder'        => esc_attr( uwp_get_field_placeholder( $field ) ),
+					'placeholder'        => esc_attr( $placeholder ),
 					'title'              => esc_html( $site_title ),
 					'value'              => esc_attr( wp_unslash( $value ) ),
 					'required'           => (bool) $field->is_required,
@@ -3964,7 +3976,7 @@ class UsersWP_Forms {
 					<input name="<?php echo esc_attr( $field->htmlvar_name ); ?>"
 							class="<?php echo esc_attr( $field->css_class ); ?> uwp_textfield <?php echo esc_attr( $bs_form_control ); ?>"
 							id="<?php echo esc_attr( $field->htmlvar_name ); ?>"
-							placeholder="<?php echo esc_attr( uwp_get_field_placeholder( $field ) ); ?>"
+							placeholder="<?php echo esc_attr( $placeholder ); ?>"
 							value="<?php echo esc_attr( stripslashes( $value ) ); ?>"
 							title="<?php echo esc_attr( $site_title ); ?>"
 						<?php
@@ -3972,7 +3984,7 @@ class UsersWP_Forms {
 							echo 'required="required"';
 						}
                         ?>
-							type="email"
+							type="<?php echo esc_attr( $input_type ); ?>"
 					/>
 					<span class="uwp_message_note"><?php echo wp_kses_post( uwp_get_field_description( $field ) ); ?></span>
 					<?php if ( $field->is_required ) { ?>
