@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.68\n"
+"Project-Id-Version: UsersWP 1.2.69\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-15 20:03+0530\n"
-"PO-Revision-Date: 2026-07-15 20:04+0530\n"
+"POT-Creation-Date: 2026-07-22 11:20+0530\n"
+"PO-Revision-Date: 2026-07-22 11:20+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1666,7 +1666,7 @@ msgstr ""
 #: admin/settings/class-uwp-settings-general.php:71
 #: admin/settings/class-uwp-settings-general.php:147
 #: admin/settings/class-uwp-settings-general.php:277
-#: includes/class-emails.php:299 includes/class-forms.php:4940
+#: includes/class-emails.php:299 includes/class-forms.php:4952
 #: includes/class-pages.php:325 templates/bootstrap/forgot.php:66
 #: templates/bootstrap/login.php:11 templates/bootstrap/login.php:16
 #: templates/login.php:6 templates/login.php:15 widgets/login.php:50
@@ -2833,7 +2833,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:530 includes/class-activator.php:572
-#: includes/class-forms.php:4674
+#: includes/class-forms.php:4686
 msgid "Confirm Password"
 msgstr ""
 
@@ -3101,7 +3101,7 @@ msgstr ""
 msgid "Sorry, that username is not allowed."
 msgstr ""
 
-#: includes/class-forms.php:782 includes/class-forms.php:2178
+#: includes/class-forms.php:782 includes/class-forms.php:2181
 msgid "Something went wrong. Please contact site admin."
 msgstr ""
 
@@ -3117,7 +3117,7 @@ msgstr ""
 msgid "Password you entered during registration."
 msgstr ""
 
-#: includes/class-forms.php:855 includes/class-forms.php:1816
+#: includes/class-forms.php:855 includes/class-forms.php:1819
 msgid "Your login Information :"
 msgstr ""
 
@@ -3220,143 +3220,143 @@ msgstr ""
 msgid "Validation successful. Redirecting..."
 msgstr ""
 
-#: includes/class-forms.php:1756
-msgid "Invalid email or user doesn't exists."
+#: includes/class-forms.php:1759
+msgid "Invalid username/email or user doesn't exist."
 msgstr ""
 
-#: includes/class-forms.php:1785
+#: includes/class-forms.php:1788
 #, php-format
 msgid ""
 "Your account is not activated yet. Please activate your account first. <a "
 "href=\"%s\">Resend</a>."
 msgstr ""
 
-#: includes/class-forms.php:1817 includes/class-forms.php:1836
+#: includes/class-forms.php:1820 includes/class-forms.php:1839
 #, php-format
 msgid "Username: %s"
 msgstr ""
 
-#: includes/class-forms.php:1818
+#: includes/class-forms.php:1821
 #, php-format
 msgid "Password: %s"
 msgstr ""
 
-#: includes/class-forms.php:1834
+#: includes/class-forms.php:1837
 msgid "You have requested to reset your password for the following account:"
 msgstr ""
 
-#: includes/class-forms.php:1837
+#: includes/class-forms.php:1840
 msgid "If this was by mistake, just ignore this email and nothing will happen."
 msgstr ""
 
-#: includes/class-forms.php:1838
+#: includes/class-forms.php:1841
 msgid ""
 "To reset your password, click the following link and follow the instructions."
 msgstr ""
 
-#: includes/class-forms.php:1871
+#: includes/class-forms.php:1874
 msgid "Please check your email."
 msgstr ""
 
-#: includes/class-forms.php:1956
+#: includes/class-forms.php:1959
 msgid "Password changed successfully."
 msgstr ""
 
-#: includes/class-forms.php:2017
+#: includes/class-forms.php:2020
 msgid "Invalid username."
 msgstr ""
 
-#: includes/class-forms.php:2051
+#: includes/class-forms.php:2054
 #, php-format
 msgid ""
 "Password updated successfully. Please <a href=\"%s\">login</a> with your new "
 "password."
 msgstr ""
 
-#: includes/class-forms.php:2164
+#: includes/class-forms.php:2167
 #, php-format
 msgid "%s"
 msgstr ""
 
-#: includes/class-forms.php:2205
+#: includes/class-forms.php:2208
 msgid "This email is already registered, please choose another one."
 msgstr ""
 
-#: includes/class-forms.php:2239
+#: includes/class-forms.php:2242
 msgid ""
 "Account updated successfully. The new address will become active once you "
 "confirm via activation link sent to your new email."
 msgstr ""
 
-#: includes/class-forms.php:2257
+#: includes/class-forms.php:2260
 msgid "Account updated successfully."
 msgstr ""
 
-#: includes/class-forms.php:2290 includes/class-forms.php:2320
+#: includes/class-forms.php:2293 includes/class-forms.php:2323
 msgid "User Information:"
 msgstr ""
 
-#: includes/class-forms.php:2365
+#: includes/class-forms.php:2368
 msgid "Access denied!"
 msgstr ""
 
-#: includes/class-forms.php:2373
+#: includes/class-forms.php:2376
 msgid "Invalid data!"
 msgstr ""
 
-#: includes/class-forms.php:2379 includes/class-profile.php:1927
+#: includes/class-forms.php:2382 includes/class-profile.php:1927
 msgid "Invalid access!"
 msgstr ""
 
-#: includes/class-forms.php:2398
+#: includes/class-forms.php:2401
 msgid "Invalid field!"
 msgstr ""
 
-#: includes/class-forms.php:2404
+#: includes/class-forms.php:2407
 msgid "You are not allowed to perform this action!"
 msgstr ""
 
-#: includes/class-forms.php:2409
+#: includes/class-forms.php:2412
 msgid "Invalid field type!"
 msgstr ""
 
-#: includes/class-forms.php:2685
+#: includes/class-forms.php:2688
 msgid "Clear field"
 msgstr ""
 
-#: includes/class-forms.php:3446
+#: includes/class-forms.php:3449 includes/class-forms.php:3927
 msgid "Username or Email"
 msgstr ""
 
-#: includes/class-forms.php:3807
+#: includes/class-forms.php:3810
 msgid "Please enter a valid URL including https://"
 msgstr ""
 
-#: includes/class-forms.php:3870
+#: includes/class-forms.php:3873
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:4217
+#: includes/class-forms.php:4229
 #, php-format
 msgid ""
 "By using this form I agree to the storage and handling of my data by this "
 "website. View our %1$s %2$s %3$s."
 msgstr ""
 
-#: includes/class-forms.php:4310
+#: includes/class-forms.php:4322
 #, php-format
 msgid "I accept the %1$s %2$s %3$s."
 msgstr ""
 
-#: includes/class-forms.php:4590
+#: includes/class-forms.php:4602
 msgid "Site Default"
 msgstr ""
 
-#: includes/class-forms.php:4762
+#: includes/class-forms.php:4774
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/class-forms.php:4917
+#: includes/class-forms.php:4929
 msgid "Privacy settings updated successfully."
 msgstr ""
 
@@ -4054,95 +4054,99 @@ msgstr ""
 msgid "<strong>Error</strong>: Permission denied."
 msgstr ""
 
-#: includes/class-validation.php:208
+#: includes/class-validation.php:212
 #, php-format
 msgid "<strong>Error</strong>: %s %s"
 msgstr ""
 
-#: includes/class-validation.php:211
+#: includes/class-validation.php:215
 #, php-format
 msgid "<strong>Error</strong>: %s cannot be empty."
 msgstr ""
 
-#: includes/class-validation.php:218
+#: includes/class-validation.php:223
+msgid "<strong>Error</strong>: Please enter a valid username or email address."
+msgstr ""
+
+#: includes/class-validation.php:228
 msgid "<strong>Error</strong>: The email address isn&#8217;t correct."
 msgstr ""
 
-#: includes/class-validation.php:225
+#: includes/class-validation.php:235
 msgid ""
 "<strong>Error</strong>: This email is already registered, please choose "
 "another one."
 msgstr ""
 
-#: includes/class-validation.php:231
+#: includes/class-validation.php:241
 msgid "<strong>Error</strong>: This email doesn't exists."
 msgstr ""
 
-#: includes/class-validation.php:235
+#: includes/class-validation.php:245
 msgid ""
 "<strong>Error</strong>: This username is invalid because it uses illegal "
 "characters. Please enter a valid username."
 msgstr ""
 
-#: includes/class-validation.php:244
+#: includes/class-validation.php:254
 msgid ""
 "<strong>Error</strong>: This username is already registered. Please choose "
 "another one."
 msgstr ""
 
-#: includes/class-validation.php:251
+#: includes/class-validation.php:261
 #, php-format
 msgid "<strong>Error</strong>: Username must be between %s and %s characters."
 msgstr ""
 
-#: includes/class-validation.php:260 upgrade.php:388
+#: includes/class-validation.php:270 upgrade.php:388
 msgid "You must read and accept our GDPR policy."
 msgstr ""
 
-#: includes/class-validation.php:263
+#: includes/class-validation.php:273
 msgid "You must accept our terms and conditions."
 msgstr ""
 
-#: includes/class-validation.php:302
+#: includes/class-validation.php:312
 msgid "<strong>Error</strong>: Please enter your old password"
 msgstr ""
 
-#: includes/class-validation.php:308
+#: includes/class-validation.php:318
 msgid "<strong>Error</strong>: Incorrect old password"
 msgstr ""
 
-#: includes/class-validation.php:313
+#: includes/class-validation.php:323
 msgid ""
 "<strong>Error</strong>: The old password and the new password are the same"
 msgstr ""
 
-#: includes/class-validation.php:322
+#: includes/class-validation.php:332
 msgid "<strong>Error</strong>: Please enter your Email"
 msgstr ""
 
-#: includes/class-validation.php:327
+#: includes/class-validation.php:337
 msgid "<strong>Error</strong>: Please fill Confirm Email field"
 msgstr ""
 
-#: includes/class-validation.php:332
+#: includes/class-validation.php:342
 msgid "<strong>Error</strong>: Email and Confirm email not match"
 msgstr ""
 
-#: includes/class-validation.php:341
+#: includes/class-validation.php:351
 msgid "Please enter a password"
 msgstr ""
 
-#: includes/class-validation.php:352
+#: includes/class-validation.php:362
 #, php-format
 msgid "<strong>Error</strong>: Password must be %s characters or less."
 msgstr ""
 
-#: includes/class-validation.php:354
+#: includes/class-validation.php:364
 #, php-format
 msgid "<strong>Error</strong>: Password must be %s characters or more."
 msgstr ""
 
-#: includes/class-validation.php:373
+#: includes/class-validation.php:383
 msgid "<strong>Error</strong>: Passwords do not match."
 msgstr ""
 
