@@ -133,7 +133,11 @@ class UsersWP_Validation {
                     case 'uwp_forgot_email':
                     case 'email':
                     case 'confirm_email':
-                        $sanitized_value = sanitize_email($value);
+                        if ($type == 'forgot' && $field->htmlvar_name == 'email') {
+                            $sanitized_value = is_email($value) ? sanitize_email($value) : sanitize_user($value);
+                        } else {
+                            $sanitized_value = sanitize_email($value);
+                        }
                         $sanitized = true;
                         break;
 
@@ -214,7 +218,13 @@ class UsersWP_Validation {
                     }
                 }
 
-                if ($field->field_type == 'email' && !empty($sanitized_value) && !is_email($sanitized_value)) {
+                if ($type == 'forgot' && $field->htmlvar_name == 'email') {
+                    if (!empty($sanitized_value) && !is_email($sanitized_value) && !validate_username($sanitized_value)) {
+                        $incorrect_username_or_email_error_msg = apply_filters('uwp_incorrect_username_or_email_error_msg', __('<strong>Error</strong>: Please enter a valid username or email address.', 'userswp'));
+                        $errors->add('invalid_username_or_email', $incorrect_username_or_email_error_msg);
+                        return $errors;
+                    }
+                } elseif ($field->field_type == 'email' && !empty($sanitized_value) && !is_email($sanitized_value)) {
                     $incorrect_email_error_msg = apply_filters('uwp_incorrect_email_error_msg', __('<strong>Error</strong>: The email address isn&#8217;t correct.', 'userswp'));
                     $errors->add('invalid_email', $incorrect_email_error_msg);
                     return $errors;
