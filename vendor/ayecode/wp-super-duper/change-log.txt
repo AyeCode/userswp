@@ -1,3 +1,6 @@
+= 1.2.34 - 2026-07-29 =
+* Fix missing textdomain - FIXED
+
 = 1.2.33 - 2026-06-24 =
 * Fusion Builder tab errors when SD block group name contains special characters (like \/' etc) - FIXED
 * Validate fallback page data before rendering in block visibility - FIXED
