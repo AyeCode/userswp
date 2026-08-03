@@ -159,6 +159,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.70 - 2026-08-03 =
+* Badge Widget Variable Substitution - FIXED/SECURITY
+
 = 1.2.69 - 2026-07-22 =
 * Allow username or email on the forgot Password form - FIXED
 
