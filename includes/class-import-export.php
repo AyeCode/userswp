@@ -631,12 +631,12 @@ class UsersWP_Import_Export {
                     continue;
                 }
 
-                $username = isset($row['username']) ? $row['username'] : '';
-                $email = isset($row['email']) ? $row['email'] : '';
-                $first_name = isset($row['first_name']) ? $row['first_name'] : '';
-                $last_name = isset($row['last_name']) ? $row['last_name'] : '';
-                $bio = isset($row['bio']) ? $row['bio'] : '';
-                $display_name = isset($row['display_name']) ? $row['display_name'] : '';
+                $username = isset($row['username']) ? sanitize_user($row['username']) : '';
+                $email = isset($row['email']) ? sanitize_email($row['email']) : '';
+                $first_name = isset($row['first_name']) ? sanitize_text_field($row['first_name']) : '';
+                $last_name = isset($row['last_name']) ? sanitize_text_field($row['last_name']) : '';
+                $bio = isset($row['bio']) ? sanitize_textarea_field($row['bio']) : '';
+                $display_name = isset($row['display_name']) ? sanitize_text_field($row['display_name']) : '';
                 $password = wp_generate_password();
                 $exclude = array('user_id');
                 $exclude = apply_filters('uwp_import_exclude_columns', $exclude, $row);
@@ -644,7 +644,6 @@ class UsersWP_Import_Export {
                 if(isset($row['username']) && username_exists($row['username'])){
                     $user = get_user_by('login', $row['username']);
                     $user_id = $user->ID;
-                    $email = $row['email'];
                     if( !empty( $email ) && $update_existing = apply_filters('uwp_import_update_users', false, $row, $user_id) ) {
                         $args = array(
                             'ID'         => $user_id,
@@ -663,7 +662,7 @@ class UsersWP_Import_Export {
                     $user = get_user_by('ID', $row['user_id']);
                     if(false === $user){
                         $userdata = array(
-                            'user_login'  =>  $row['username'],
+                            'user_login'  =>  $username,
                             'user_email'  =>  $email,
                             'user_pass'   =>  $password,
                             'first_name' => $first_name,

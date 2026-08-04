@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.69\n"
+"Project-Id-Version: UsersWP 1.2.70\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-22 11:20+0530\n"
-"PO-Revision-Date: 2026-07-22 11:20+0530\n"
+"POT-Creation-Date: 2026-08-03 15:25+0530\n"
+"PO-Revision-Date: 2026-08-03 15:26+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -15,7 +15,7 @@ msgstr ""
 "_nx:1,2;_x;_ex;esc_attr_e;esc_attr__\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: vendor\n"
 
@@ -611,7 +611,7 @@ msgstr ""
 msgid "Let users enter their website url."
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:689 includes/helpers/pages.php:576
+#: admin/settings/class-formbuilder.php:689 includes/helpers/pages.php:582
 msgid "Facebook"
 msgstr ""
 
@@ -623,7 +623,7 @@ msgstr ""
 msgid "Facebook url"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:710 includes/helpers/pages.php:577
+#: admin/settings/class-formbuilder.php:710 includes/helpers/pages.php:583
 msgid "Twitter"
 msgstr ""
 
@@ -635,7 +635,7 @@ msgstr ""
 msgid "Twitter url"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:731 includes/helpers/pages.php:578
+#: admin/settings/class-formbuilder.php:731 includes/helpers/pages.php:584
 msgid "Instagram"
 msgstr ""
 
@@ -647,7 +647,7 @@ msgstr ""
 msgid "Instagram url"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:752 includes/helpers/pages.php:579
+#: admin/settings/class-formbuilder.php:752 includes/helpers/pages.php:585
 msgid "Linkedin"
 msgstr ""
 
@@ -659,7 +659,7 @@ msgstr ""
 msgid "Linkedin url"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:773 includes/helpers/pages.php:580
+#: admin/settings/class-formbuilder.php:773 includes/helpers/pages.php:586
 msgid "Flickr"
 msgstr ""
 
@@ -671,7 +671,7 @@ msgstr ""
 msgid "Flickr url"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:794 includes/helpers/pages.php:581
+#: admin/settings/class-formbuilder.php:794 includes/helpers/pages.php:587
 msgid "GitHub"
 msgstr ""
 
@@ -683,7 +683,7 @@ msgstr ""
 msgid "GitHub url"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:815 includes/helpers/pages.php:582
+#: admin/settings/class-formbuilder.php:815 includes/helpers/pages.php:588
 msgid "YouTube"
 msgstr ""
 
@@ -695,7 +695,7 @@ msgstr ""
 msgid "YouTube url"
 msgstr ""
 
-#: admin/settings/class-formbuilder.php:836 includes/helpers/pages.php:583
+#: admin/settings/class-formbuilder.php:836 includes/helpers/pages.php:589
 msgid "WordPress"
 msgstr ""
 
@@ -3438,12 +3438,12 @@ msgstr ""
 msgid "Row - %s Error: Skipped due to invalid/no data."
 msgstr ""
 
-#: includes/class-import-export.php:692
+#: includes/class-import-export.php:691
 #, php-format
 msgid "Row - %s Error: User could not be created."
 msgstr ""
 
-#: includes/class-import-export.php:721
+#: includes/class-import-export.php:720
 #, php-format
 msgid "Row - %s Error: %s"
 msgstr ""
@@ -4218,75 +4218,75 @@ msgid ""
 "plugin is updated."
 msgstr ""
 
-#: includes/helpers/pages.php:550
+#: includes/helpers/pages.php:556
 msgid "Primary"
 msgstr ""
 
-#: includes/helpers/pages.php:551
+#: includes/helpers/pages.php:557
 msgid "Secondary"
 msgstr ""
 
-#: includes/helpers/pages.php:552
+#: includes/helpers/pages.php:558
 msgid "Success"
 msgstr ""
 
-#: includes/helpers/pages.php:553
+#: includes/helpers/pages.php:559
 msgid "Danger"
 msgstr ""
 
-#: includes/helpers/pages.php:554
+#: includes/helpers/pages.php:560
 msgid "Warning"
 msgstr ""
 
-#: includes/helpers/pages.php:555
+#: includes/helpers/pages.php:561
 msgid "Info"
 msgstr ""
 
-#: includes/helpers/pages.php:556
+#: includes/helpers/pages.php:562
 msgid "Light"
 msgstr ""
 
-#: includes/helpers/pages.php:557
+#: includes/helpers/pages.php:563
 msgid "Dark"
 msgstr ""
 
-#: includes/helpers/pages.php:558
+#: includes/helpers/pages.php:564
 msgid "White"
 msgstr ""
 
-#: includes/helpers/pages.php:559
+#: includes/helpers/pages.php:565
 msgid "Purple"
 msgstr ""
 
-#: includes/helpers/pages.php:560
+#: includes/helpers/pages.php:566
 msgid "Salmon"
 msgstr ""
 
-#: includes/helpers/pages.php:561
+#: includes/helpers/pages.php:567
 msgid "Cyan"
 msgstr ""
 
-#: includes/helpers/pages.php:562
+#: includes/helpers/pages.php:568
 msgid "Gray"
 msgstr ""
 
-#: includes/helpers/pages.php:563
+#: includes/helpers/pages.php:569
 msgid "Indigo"
 msgstr ""
 
-#: includes/helpers/pages.php:564
+#: includes/helpers/pages.php:570
 msgid "Orange"
 msgstr ""
 
-#: includes/helpers/pages.php:584
+#: includes/helpers/pages.php:590
 msgid "Google"
 msgstr ""
 
-#: includes/helpers/pages.php:585
+#: includes/helpers/pages.php:591
 msgid "Yahoo"
 msgstr ""
 
-#: includes/helpers/pages.php:586
+#: includes/helpers/pages.php:592
 msgid "Vkontakte"
 msgstr ""
 

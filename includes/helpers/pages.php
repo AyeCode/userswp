@@ -381,10 +381,16 @@ function uwp_get_user_badge($args){
 			if ( empty( $badge ) && empty($args['icon_class']) ) {
 				$badge = isset($field->site_title) ? $field->site_title : '';
 			}
-			if( !empty( $badge ) && $badge = str_replace("%%input%%", $match_value,$badge) ){
+			// Decode entities in the admin-authored template text now, before any
+			// untrusted user values are substituted in below. Decoding after
+			// substitution would undo the escaping applied to those values.
+			if ( ! empty( $badge ) ) {
+				$badge = wp_specialchars_decode( $badge, ENT_QUOTES );
+			}
+			if( !empty( $badge ) && $badge = str_replace("%%input%%", esc_html( (string) $match_value ), $badge) ){
 				// will be replace in condition check
 			}
-			if( !empty( $badge ) && $user_id && $badge = str_replace("%%profile_url%%", uwp_build_profile_tab_url($user_id),$badge) ){
+			if( !empty( $badge ) && $user_id && $badge = str_replace("%%profile_url%%", esc_url( uwp_build_profile_tab_url($user_id) ),$badge) ){
 				// will be replace in condition check
 			}
 
@@ -429,7 +435,7 @@ function uwp_get_user_badge($args){
 				$new_window = ' target="_blank" ';
 			}
 
-			$badge = ! empty( $badge ) ? __( wp_specialchars_decode( $badge, ENT_QUOTES ), 'userswp' ) : '';
+			$badge = ! empty( $badge ) ? __( $badge, 'userswp' ) : '';
 
 			// phone & email link
 			if ( ! empty( $field ) && ! empty( $field->field_type ) && ! empty( $args['link'] ) && strpos( $args['link'], 'http' ) !== 0 ) {
@@ -596,6 +602,9 @@ function uwp_replace_variables($text, $user_id = ''){
 			foreach($user_data as $key => $val) {
 				if ( ! in_array( $key, $excluded_fields ) ) {
 					$val  = apply_filters( 'uwp_replace_variables_' . $key, $val, $text );
+					if ( is_scalar( $val ) ) {
+						$val = esc_html( (string) $val );
+					}
 					$text = str_replace( '%%' . $key . '%%', $val, $text );
 				}
 			}
