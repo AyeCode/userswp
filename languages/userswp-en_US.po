@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.70\n"
+"Project-Id-Version: UsersWP 1.2.71\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-03 15:25+0530\n"
-"PO-Revision-Date: 2026-08-03 15:26+0530\n"
+"POT-Creation-Date: 2026-08-17 14:16+0530\n"
+"PO-Revision-Date: 2026-08-17 14:16+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1666,7 +1666,7 @@ msgstr ""
 #: admin/settings/class-uwp-settings-general.php:71
 #: admin/settings/class-uwp-settings-general.php:147
 #: admin/settings/class-uwp-settings-general.php:277
-#: includes/class-emails.php:299 includes/class-forms.php:4952
+#: includes/class-emails.php:299 includes/class-forms.php:4972
 #: includes/class-pages.php:325 templates/bootstrap/forgot.php:66
 #: templates/bootstrap/login.php:11 templates/bootstrap/login.php:16
 #: templates/login.php:6 templates/login.php:15 widgets/login.php:50
@@ -2833,7 +2833,7 @@ msgid "New Password"
 msgstr ""
 
 #: includes/class-activator.php:530 includes/class-activator.php:572
-#: includes/class-forms.php:4686
+#: includes/class-forms.php:4706
 msgid "Confirm Password"
 msgstr ""
 
@@ -3101,7 +3101,7 @@ msgstr ""
 msgid "Sorry, that username is not allowed."
 msgstr ""
 
-#: includes/class-forms.php:782 includes/class-forms.php:2181
+#: includes/class-forms.php:782 includes/class-forms.php:2194
 msgid "Something went wrong. Please contact site admin."
 msgstr ""
 
@@ -3273,90 +3273,90 @@ msgid ""
 "password."
 msgstr ""
 
-#: includes/class-forms.php:2167
+#: includes/class-forms.php:2180
 #, php-format
 msgid "%s"
 msgstr ""
 
-#: includes/class-forms.php:2208
+#: includes/class-forms.php:2221
 msgid "This email is already registered, please choose another one."
 msgstr ""
 
-#: includes/class-forms.php:2242
+#: includes/class-forms.php:2255
 msgid ""
 "Account updated successfully. The new address will become active once you "
 "confirm via activation link sent to your new email."
 msgstr ""
 
-#: includes/class-forms.php:2260
+#: includes/class-forms.php:2273
 msgid "Account updated successfully."
 msgstr ""
 
-#: includes/class-forms.php:2293 includes/class-forms.php:2323
+#: includes/class-forms.php:2306 includes/class-forms.php:2336
 msgid "User Information:"
 msgstr ""
 
-#: includes/class-forms.php:2368
+#: includes/class-forms.php:2381
 msgid "Access denied!"
 msgstr ""
 
-#: includes/class-forms.php:2376
+#: includes/class-forms.php:2389
 msgid "Invalid data!"
 msgstr ""
 
-#: includes/class-forms.php:2382 includes/class-profile.php:1927
+#: includes/class-forms.php:2395 includes/class-profile.php:1927
 msgid "Invalid access!"
 msgstr ""
 
-#: includes/class-forms.php:2401
+#: includes/class-forms.php:2414
 msgid "Invalid field!"
 msgstr ""
 
-#: includes/class-forms.php:2407
+#: includes/class-forms.php:2420
 msgid "You are not allowed to perform this action!"
 msgstr ""
 
-#: includes/class-forms.php:2412
+#: includes/class-forms.php:2425
 msgid "Invalid field type!"
 msgstr ""
 
-#: includes/class-forms.php:2688
+#: includes/class-forms.php:2708
 msgid "Clear field"
 msgstr ""
 
-#: includes/class-forms.php:3449 includes/class-forms.php:3927
+#: includes/class-forms.php:3469 includes/class-forms.php:3947
 msgid "Username or Email"
 msgstr ""
 
-#: includes/class-forms.php:3810
+#: includes/class-forms.php:3830
 msgid "Please enter a valid URL including https://"
 msgstr ""
 
-#: includes/class-forms.php:3873
+#: includes/class-forms.php:3893
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/class-forms.php:4229
+#: includes/class-forms.php:4249
 #, php-format
 msgid ""
 "By using this form I agree to the storage and handling of my data by this "
 "website. View our %1$s %2$s %3$s."
 msgstr ""
 
-#: includes/class-forms.php:4322
+#: includes/class-forms.php:4342
 #, php-format
 msgid "I accept the %1$s %2$s %3$s."
 msgstr ""
 
-#: includes/class-forms.php:4602
+#: includes/class-forms.php:4622
 msgid "Site Default"
 msgstr ""
 
-#: includes/class-forms.php:4774
+#: includes/class-forms.php:4794
 msgid "Confirm Email"
 msgstr ""
 
-#: includes/class-forms.php:4929
+#: includes/class-forms.php:4949
 msgid "Privacy settings updated successfully."
 msgstr ""
 
