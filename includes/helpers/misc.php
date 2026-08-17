@@ -2103,13 +2103,21 @@ function uwp_get_file_relative_url( $url, $full_path = false ) {
 			}
 		}
 	} else {
+		if ( substr_count( $match_url, $match_upload_baseurl ) > 1 || substr_count( $match_url, $match_content_url ) > 1 ) {
+			return '';
+		}
+
 		if ( strpos( $match_url, $match_upload_baseurl ) === 0 ) { // url contains uploads baseurl
-			$relative_url = str_replace( $match_upload_baseurl, '', $match_url );
+			$relative_url = substr( $match_url, strlen( $match_upload_baseurl ) );
 		} elseif ( strpos( $match_url, $match_content_url ) === 0 ) { // url contains content url
-			$relative_url = str_replace( $match_content_url, '', $match_url );
+			$relative_url = substr( $match_url, strlen( $match_content_url ) );
 		}
 
 		$relative_url = trim( $relative_url, '/\\' );
+
+		if ( false !== strpos( $relative_url, '..' ) ) {
+			return '';
+		}
 	}
 
 	return apply_filters( 'uwp_get_file_relative_url', $relative_url, $url, $full_path );
