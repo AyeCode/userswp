@@ -1,3 +1,6 @@
+= 0.2.52 - 2026-08-18 =
+* Enqueue block editor styles via block assets for iframe compatibility - COMPATIBILITY
+
 = 0.2.51 - 2026-06-30 =
 * Modal backdrop covering the modal inside a sticky element - FIXED
 

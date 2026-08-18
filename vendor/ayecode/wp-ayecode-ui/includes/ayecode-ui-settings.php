@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.51';
+		public $version = '0.2.52';
 
 		/**
 		 * Class textdomain.
@@ -334,6 +334,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			}
 			if ( $this->settings['css_backend'] && $this->load_admin_scripts() ) {
 				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_style' ), 1 );
+				// WordPress 6.9+ iframe compatibility.
+				add_action( 'enqueue_block_assets', [ $this, 'enqueue_block_assets' ], 100 );
 			}
 
 			// maybe load JS
@@ -450,93 +452,108 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		/**
 		 * Adds the styles.
 		 */
-		public function enqueue_style() {
-            global $aui_bs5;
+		public function enqueue_style( $context = '' ) {
+			global $aui_bs5;
 
-            $load_fse = false;
+			$load_fse = false;
 
 			if ( is_admin() && ! $this->is_aui_screen() ) {
 				// Don't add wp-admin scripts if not requested to.
 			} else {
 				$css_setting = current_action() == 'wp_enqueue_scripts' ? 'css' : 'css_backend';
-				$rtl = is_rtl() && ! $aui_bs5 ? '-rtl' : '';
-                $bs_ver = $this->settings['bs_ver'] == '5' ? '-v5' : '';
+				$rtl         = is_rtl() && ! $aui_bs5 ? '-rtl' : '';
+				$bs_ver      = $this->settings['bs_ver'] == '5' ? '-v5' : '';
 
 				if ( $this->settings[ $css_setting ] ) {
-					$compatibility = $this->settings[$css_setting]=='core' ? false : true;
-					$url = $this->settings[$css_setting]=='core' ? $this->url.'assets'.$bs_ver.'/css/ayecode-ui'.$rtl.'.css' : $this->url.'assets'.$bs_ver.'/css/ayecode-ui-compatibility'.$rtl.'.css';
+					$compatibility = $this->settings[ $css_setting ] == 'core' ? false : true;
+					$base_url      = $this->url . 'assets' . $bs_ver . '/css/';
+					$url           = $this->settings[ $css_setting ] == 'core' ? $base_url . 'ayecode-ui' . $rtl . '.css' : $base_url . 'ayecode-ui-compatibility' . $rtl . '.css';
 
 					wp_register_style( 'ayecode-ui', $url, array(), $this->version );
 					wp_enqueue_style( 'ayecode-ui' );
 
-					if ( is_admin() && ( !empty($_REQUEST['postType']) || self::is_block_editor() ) && ( defined( 'BLOCKSTRAP_VERSION' ) || defined( 'AUI_FSE' ) )  ) {
-						$url = $this->url.'assets'.$bs_ver.'/css/ayecode-ui-fse.css';
+					if ( is_admin() && ( ! empty( $_REQUEST['postType'] ) || self::is_block_editor() ) && ( defined( 'BLOCKSTRAP_VERSION' ) || defined( 'AUI_FSE' ) )  ) {
+						$url      = $base_url . 'ayecode-ui-fse.css';
+						$load_fse = true;
+
 						wp_register_style( 'ayecode-ui-fse', $url, array(), $this->version );
 						wp_enqueue_style( 'ayecode-ui-fse' );
-						$load_fse = true;
 					}
 
-					// flatpickr
-					wp_register_style( 'flatpickr', $this->url.'assets'.$bs_ver.'/css/flatpickr.min.css', array(), $this->version );
+					// Flatpickr
+					wp_register_style( 'flatpickr', $base_url . 'flatpickr.min.css', array(), $this->version );
 
-					// fix some wp-admin issues
-					if(is_admin()){
-						$custom_css = "
-                body:not(.editor-styles-wrapper){
-                    background-color: #f1f1f1;
-                    font-family: -apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Oxygen-Sans,Ubuntu,Cantarell,\"Helvetica Neue\",sans-serif;
-                    font-size:13px;
-                }
-                a {
-				    color: #0073aa;
-				    text-decoration: underline;
-				}
-                label {
-				    display: initial;
-				    margin-bottom: 0;
-				}
-				input, select {
-				    margin: 1px;
-				    line-height: initial;
-				}
-				th, td, div, h2 {
-				    box-sizing: content-box;
-				}
-				h1, h2, h3, h4, h5, h6 {
-				    display: block;
-				    font-weight: 600;
-				}
-				h2,h3 {
-				    font-size: 1.3em;
-				    margin: 1em 0
-				}
-				.blocks-widgets-container .bsui *{
-					box-sizing: border-box;
-				}
-				.bs-tooltip-top .arrow{
-					margin-left:0px;
-				}
-				.custom-switch input[type=checkbox]{
-				    display:none;
-				}
-                ";
+					// Fix some wp-admin issues
+					if ( is_admin() ) {
+$custom_css = "
+body:not(.editor-styles-wrapper){
+	background-color: #f1f1f1;
+	font-family: -apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Oxygen-Sans,Ubuntu,Cantarell,\"Helvetica Neue\",sans-serif;
+	font-size:13px;
+}
+a {
+	color: #0073aa;
+	text-decoration: underline;
+}
+label {
+	display: initial;
+	margin-bottom: 0;
+}
+input, select {
+	margin: 1px;
+	line-height: initial;
+}
+th, td, div, h2 {
+	box-sizing: content-box;
+}
+h1, h2, h3, h4, h5, h6 {
+	display: block;
+	font-weight: 600;
+}
+h2,h3 {
+	font-size: 1.3em;
+	margin: 1em 0
+}
+.blocks-widgets-container .bsui *{
+	box-sizing: border-box;
+}
+.bs-tooltip-top .arrow{
+	margin-left:0px;
+}
+.custom-switch input[type=checkbox]{
+	display:none;
+}
+";
 
-						// @todo, remove once fixed :: fix for this bug https://github.com/WordPress/gutenberg/issues/14377
-						$custom_css .= "
-						.edit-post-sidebar input[type=color].components-text-control__input{
-						    padding: 0;
-						}
-					";
+// @todo, remove once fixed :: fix for this bug https://github.com/WordPress/gutenberg/issues/14377
+$custom_css .= "
+.edit-post-sidebar input[type=color].components-text-control__input{
+	padding: 0;
+}
+";
+
 						wp_add_inline_style( 'ayecode-ui', $custom_css );
 					}
 
-					// custom changes
+					// Custom changes.
 					if ( $load_fse ) {
-						wp_add_inline_style( 'ayecode-ui-fse', self::custom_css($compatibility, true) );
-					}else{
-						wp_add_inline_style( 'ayecode-ui', self::custom_css($compatibility) );
+						wp_add_inline_style( 'ayecode-ui-fse', self::custom_css( $compatibility, true ) );
+					} else {
+						wp_add_inline_style( 'ayecode-ui', self::custom_css( $compatibility ) );
 					}
 				}
+			}
+		}
+
+		/**
+		 * Enqueue styles for block assets (both editor and frontend).
+		 * This ensures compatibility with WordPress 6.9+ requirements.
+		 */
+		public function enqueue_block_assets() {
+			global $wp_version;
+
+			if ( is_admin() && version_compare( $wp_version, '6.9', '>=' ) ) {
+				$this->enqueue_style( 'block_assets' );
 			}
 		}
 
