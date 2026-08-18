@@ -1,3 +1,6 @@
+= 1.2.35 - 2026-08-18 =
+* Block api version modified to v3 for iframe compatibility - COMPATIBILITY
+
 = 1.2.34 - 2026-07-29 =
 * Fix missing textdomain - FIXED
 

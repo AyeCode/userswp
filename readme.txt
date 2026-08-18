@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 6.1
 Tested up to: 7.0
-Stable tag: 1.2.71
+Stable tag: 1.2.72
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -158,6 +158,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.72 - 2026-08-18 =
+* Merge AUI 0.2.52 & SD 1.2.35 - CHANGED
 
 = 1.2.71 - 2026-08-17 =
 * Arbitrary File Deletion via upload_file_remove() AJAX handler - FIXED/SECURITY
