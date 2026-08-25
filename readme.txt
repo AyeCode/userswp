@@ -3,7 +3,7 @@ Contributors: stiofansisland, paoltaia, ayecode, ismiaini
 Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 6.1
-Tested up to: 7.0
+Tested up to: 7.1
 Stable tag: 1.2.72
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -106,15 +106,17 @@ Should you find any bug, please report it in the [support forum](https://userswp
 
 UsersWP is 100% translatable.
 
+== Security ==
+
+To report a security vulnerability, please review our [vulnerability disclosure policy](https://ayecode.io/vulnerability-disclosure-policy/).
+
 == Installation ==
 
 = Minimum Requirements =
 
-* WordPress 5.0 or greater
-
-* PHP version 5.6 or greater
-
-* MySQL version 5.0 or greater
+* WordPress 6.1 or greater
+* PHP version 7.2 or greater
+* MySQL version 8.0 or greater
 
 = Automatic installation =
 
