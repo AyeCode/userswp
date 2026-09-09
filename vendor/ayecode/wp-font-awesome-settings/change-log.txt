@@ -1,3 +1,6 @@
+= 1.1.12 - 2026-08-18 =
+* Skip offline download on latest version check request - FIXED
+
 = 1.1.11 - 2026-04-01 =
 * Font Awesome dequeue setting also removes the iconpicker script - FIXED
 
