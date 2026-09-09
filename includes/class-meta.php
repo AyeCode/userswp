@@ -145,7 +145,7 @@ class UsersWP_Meta {
 		if ( uwp_str_ends_with( $key, '_privacy' ) ) {
 			if ( 'tabs_privacy' == $key ) {
 				$obj_key = $user_id . '_tabs_privacy';
-				$cache_group = 'uwp_usermeta_tab_privacy';
+				$cache_group = 'uwp_usermeta_tabs_privacy';
 			} elseif('user_privacy' == $key) {
 				$obj_key = $user_id . '_user_privacy';
 				$cache_group = 'uwp_usermeta_user_privacy';
