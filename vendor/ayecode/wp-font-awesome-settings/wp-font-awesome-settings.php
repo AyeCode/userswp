@@ -33,7 +33,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '1.1.11';
+		public $version = '1.1.12';
 
 		/**
 		 * Class textdomain.
@@ -43,7 +43,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		public $textdomain = 'font-awesome-settings';
 
 		/**
-		 * Latest version of Font Awesome at time of publish published.
+		 * Latest version of Font Awesome at time of published.
 		 *
 		 * @var string
 		 */
@@ -501,14 +501,23 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
                                     <select name="wp-font-awesome-settings[version]" id="wpfas-version">
                                         <?php /* @todo Remove after FA7 compatibility */ ?>
                                         <option value="" <?php selected( $this->settings['version'], '' ); ?>><?php echo wp_sprintf( __( '%s (default)', 'ayecode-connect' ), '6.7.2' ); ?></option>
-                                        <?php $latest_version = $this->get_latest_version( false, true ); if ( $latest_version && version_compare( $latest_version, '7.0.0', '>' ) ) { ?>
+                                        <?php $latest_version = $this->get_latest_version( false, true, true ); if ( $latest_version && version_compare( $latest_version, '7.0.0', '>' ) ) { ?>
                                         <option value="<?php echo esc_attr( $latest_version ); ?>" <?php selected( $this->settings['version'], $latest_version ); ?>><?php echo esc_html( $latest_version ); ?></option>
                                         <?php } ?>
                                         <?php /* @todo Remove after after FA7 compatibility */ ?>
 
                                         <?php /* @todo Un-comment after FA7 compatibility */ ?>
                                         <?php /* ?><option value="" <?php selected( $this->settings['version'], '' ); ?>><?php echo wp_sprintf( __( 'Latest - %s (default)', 'ayecode-connect' ), $this->get_latest_version() ); ?></option><?php */ ?>
+                                        <option value="7.3.0" <?php selected( $this->settings['version'], '7.3.0' ); ?>>7.3.0</option>
+                                        <option value="7.2.0" <?php selected( $this->settings['version'], '7.2.0' ); ?>>7.2.0</option>
+                                        <option value="7.1.0" <?php selected( $this->settings['version'], '7.1.0' ); ?>>7.1.0</option>
                                         <option value="7.0.0" <?php selected( $this->settings['version'], '7.0.0' ); ?>>7.0.0</option>
+                                        <option value="6.7.1" <?php selected( $this->settings['version'], '6.7.1' ); ?>>6.7.1</option>
+                                        <option value="6.7.0" <?php selected( $this->settings['version'], '6.7.0' ); ?>>6.7.0</option>
+                                        <option value="6.6.0" <?php selected( $this->settings['version'], '6.6.0' ); ?>>6.6.0</option>
+                                        <option value="6.5.2" <?php selected( $this->settings['version'], '6.5.2' ); ?>>6.5.2</option>
+                                        <option value="6.5.1" <?php selected( $this->settings['version'], '6.5.1' ); ?>>6.5.1</option>
+                                        <option value="6.5.0" <?php selected( $this->settings['version'], '6.5.0' ); ?>>6.5.0</option>
                                         <option value="6.4.2" <?php selected( $this->settings['version'], '6.4.2' ); ?>>6.4.2</option>
                                         <option value="6.1.0" <?php selected( $this->settings['version'], '6.1.0' ); ?>>6.1.0</option>
                                         <option value="6.0.0" <?php selected( $this->settings['version'], '6.0.0' ); ?>>6.0.0</option>
@@ -645,7 +654,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 * @since 1.0.7
 		 * @return mixed|string The latest version number found.
 		 */
-		public function get_latest_version( $force_api = false, $force_latest = false ) {
+		public function get_latest_version( $force_api = false, $force_latest = false, $skip_download = false ) {
 			$latest_version = $this->latest;
 
 			$cache = get_transient( 'wp-font-awesome-settings-version' );
@@ -668,7 +677,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			}
 
 			// Check and auto download fonts locally.
-			if ( empty( $this->settings['pro'] ) && empty( $this->settings['version'] ) && $this->settings['type'] != 'KIT' && ! empty( $this->settings['local'] ) && ! empty( $this->settings['local_version'] ) && ! empty( $latest_version ) ) {
+			if ( ! $skip_download && empty( $this->settings['pro'] ) && empty( $this->settings['version'] ) && $this->settings['type'] != 'KIT' && ! empty( $this->settings['local'] ) && ! empty( $this->settings['local_version'] ) && ! empty( $latest_version ) ) {
 				if ( version_compare( $latest_version, $this->settings['local_version'], '>' ) && is_admin() && ! wp_doing_ajax() ) {
 					$this->download_package( $latest_version );
 				}
