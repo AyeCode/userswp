@@ -161,6 +161,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.73 - 2026-09-TBD =
+* Privacy tab settings on the Account page now reflect immediately after saving, without needing to flush the object cache. - FIXED
+
 = 1.2.72 - 2026-08-18 =
 * Merge AUI 0.2.52 & SD 1.2.35 - CHANGED
 
