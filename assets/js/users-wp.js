@@ -934,3 +934,105 @@ function uwp_gd_delete_post($post_id){
         return false;
     }
 }
+
+/**
+ * Use the same two-step AJAX login flow on an in-page form as the login modal.
+ * This lets Wordfence validate the password first and return a separate 2FA form.
+ */
+(function ($) {
+    $(document).ready(function () {
+        if (!uwp_localize_data.wordfence_2fa_active) {
+            return;
+        }
+
+        $('form.uwp-login-form').each(function () {
+            var $form = $(this);
+
+            if ($form.closest('#uwp_login_modal, .uwp-auth-modal').length) {
+                return;
+            }
+
+            $form.on('submit.uwpPageLogin', function (e) {
+                e.preventDefault();
+                uwp_page_login_process($form);
+            });
+        });
+    });
+
+    function uwp_page_login_process($form) {
+        var $submit = $form.find('.uwp_login_submit');
+        var buttonText = $submit.html();
+
+        $form.prev('.alert').remove();
+        $submit.prop('disabled', true);
+
+        $.post(uwp_localize_data.ajaxurl, $form.serialize() + '&action=uwp_ajax_login', function (response) {
+            if (typeof response === 'string') {
+                response = $.parseJSON(response);
+            }
+
+            if (response.success === true && response.data && response.data.is_2fa) {
+                var $twoFactorMarkup = $(response.data.html);
+                var $twoFactorForm = $twoFactorMarkup.filter('form.validate_2fa_form')
+                    .add($twoFactorMarkup.find('form.validate_2fa_form')).first();
+
+                $form.replaceWith($twoFactorMarkup);
+                bind_2fa_form($twoFactorForm);
+                $twoFactorForm.find('input:visible:enabled:first').trigger('focus');
+                return;
+            }
+
+            if (response.success === true) {
+                if (response.data && response.data.message) {
+                    $form.before(response.data.message);
+                }
+                window.setTimeout(function () {
+                    if (response.data && response.data.redirect) {
+                        window.location.href = response.data.redirect;
+                    } else {
+                        window.location.reload();
+                    }
+                }, 1000);
+                return;
+            }
+
+            $form.before(response.data && response.data.message ? response.data.message : response.message);
+            $submit.html(buttonText).prop('disabled', false);
+            document.dispatchEvent(new Event('ayecode_reset_captcha'));
+        }).fail(function () {
+            $submit.html(buttonText).prop('disabled', false);
+        });
+    }
+
+    function bind_2fa_form($form) {
+        $form.on('submit.uwpPageLogin2fa', function (e) {
+            e.preventDefault();
+
+            var $submit = $form.find('.uwp-2fa-submit');
+            $form.prev('.alert').remove();
+            $submit.prop('disabled', true);
+
+            $.post(uwp_localize_data.ajaxurl, $form.serialize() + '&action=uwp_ajax_login_process_2fa', function (response) {
+                if (typeof response === 'string') {
+                    response = $.parseJSON(response);
+                }
+
+                $form.before(response.data && response.data.message ? response.data.message : response.message);
+
+                if (response.success === true) {
+                    window.setTimeout(function () {
+                        if (response.data && response.data.redirect) {
+                            window.location.href = response.data.redirect;
+                        } else {
+                            window.location.reload();
+                        }
+                    }, 1000);
+                } else {
+                    $submit.prop('disabled', false);
+                }
+            }).fail(function () {
+                $submit.prop('disabled', false);
+            });
+        });
+    }
+})(jQuery);
