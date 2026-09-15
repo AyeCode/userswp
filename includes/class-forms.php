@@ -1217,6 +1217,18 @@ class UsersWP_Forms {
 			}
 		}
 
+		if ( wp_doing_ajax() && is_wp_error( $user ) && $this->wordfence_2fa_available() ) {
+			$wfls_2fa = $this->check_wordfence_2fa( $user, $result );
+			if ( ! empty( $wfls_2fa ) ) {
+				wp_send_json_success(
+                    array(
+						'html'   => $wfls_2fa,
+						'is_2fa' => true,
+                    )
+                );
+			}
+		}
+
 		if ( is_wp_error( $user ) ) {
 			$message = aui()->alert(
                 array(
@@ -1437,6 +1449,108 @@ class UsersWP_Forms {
 		return ob_get_clean();
 	}
 
+	/**
+	 * Checks if the Wordfence Login Security module (2FA) is available.
+	 *
+	 * @since       1.2.5
+	 * @package     userswp
+	 *
+	 * @return bool
+	 */
+	public function wordfence_2fa_available() {
+		return class_exists( '\WordfenceLS\Controller_Users' ) && class_exists( '\WordfenceLS\Controller_TOTP' );
+	}
+
+	/**
+	 * Checks whether Wordfence's 2FA requires a verification code for the
+	 * failed login attempt and, if so, returns the markup for the code entry form.
+	 *
+	 * @since       1.2.5
+	 * @package     userswp
+	 *
+	 * @param WP_Error $error  The error returned by wp_signon().
+	 * @param array    $result The validated login fields (username/password).
+	 *
+	 * @return string|void The 2FA form markup, or nothing if not applicable.
+	 */
+	public function check_wordfence_2fa( $error, $result ) {
+		if ( 1 == uwp_get_option( 'disable_wordfence_2fa' ) ) {
+			return;
+		}
+
+		if ( ! $this->wordfence_2fa_available() ) {
+			return;
+		}
+
+		if ( ! is_wp_error( $error ) || 'wfls_twofactor_required' !== $error->get_error_code() ) {
+			return;
+		}
+
+		$username = ! empty( $result['username'] ) ? $result['username'] : '';
+		if ( empty( $username ) ) {
+			return;
+		}
+
+		$user = is_email( $username ) ? get_user_by( 'email', $username ) : get_user_by( 'login', $username );
+		if ( ! $user ) {
+			return;
+		}
+
+		if ( ! \WordfenceLS\Controller_Users::shared()->has_2fa_active( $user ) ) {
+			return;
+		}
+
+		if ( \WordfenceLS\Controller_Users::shared()->has_remembered_2fa( $user ) ) {
+			return;
+		}
+
+		$login_nonce = wp_create_nonce( 'uwp-wfls-2fa-' . $user->ID );
+
+		ob_start();
+		?>
+
+		<div class="uwp-2fa-methods-wrap">
+			<form name="validate_2fa_form" id="validate_2fa_form" class="validate_2fa_form" action="" method="post"
+					autocomplete="off">
+				<input type="hidden" name="provider" id="provider" value="wordfence"/>
+				<input type="hidden" name="uwp-auth-id" id="uwp-auth-id" value="<?php echo esc_attr( $user->ID ); ?>"/>
+				<input type="hidden" name="wp-auth-nonce" id="wp-auth-nonce"
+						value="<?php echo esc_attr( $login_nonce ); ?>"/>
+
+				<p><?php esc_html_e( 'Please enter the authentication code from your two-factor authentication app, or a recovery code, to login:', 'userswp' ); ?></p>
+
+				<?php
+				echo aui()->input(
+                    array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						'type'             => 'text',
+						'id'               => 'authcode',
+						'name'             => 'authcode',
+						'placeholder'      => esc_attr__( 'Authentication Code', 'userswp' ),
+						'value'            => '',
+						'label'            => esc_html__( 'Authentication Code', 'userswp' ),
+						'extra_attributes' => array(
+                        'autocomplete' => 'one-time-code',
+                        ),
+                    )
+                );
+
+				echo aui()->button(
+                    array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						'type'    => 'submit',
+						'class'   => 'btn btn-primary btn-block text-uppercase uwp-2fa-submit',
+						'name'    => 'submit',
+						'icon'    => '',
+						'content' => esc_html__( 'Log In', 'userswp' ),
+                    )
+                );
+				?>
+			</form>
+		</div>
+
+		<?php
+		return ob_get_clean();
+	}
+
 	public function get_wp2fa_provider_for_user( $user ) {
 		if ( class_exists( '\WP2FA\Authenticator\Login' ) && method_exists( '\WP2FA\Authenticator\Login', 'get_available_providers_for_user' ) ) {
 			$provider = \WP2FA\Authenticator\Login::get_available_providers_for_user( $user );
@@ -1502,6 +1616,75 @@ class UsersWP_Forms {
 		return false;
 	}
 
+	/**
+	 * Validates the Wordfence 2FA code submitted from the uwp-2fa form and,
+	 * if valid, completes the login by setting the auth cookie.
+	 *
+	 * @since       1.2.5
+	 * @package     userswp
+	 *
+	 * @param WP_User $user The user attempting to complete 2FA login.
+	 *
+	 * @return void
+	 */
+	public function process_login_wordfence_2fa( $user ) {
+		if ( ! $this->wordfence_2fa_available() ) {
+			$message = aui()->alert(
+				array(
+					'type'    => 'error',
+					'content' => __( 'Invalid request! Please try again.', 'userswp' ),
+				)
+			);
+
+			wp_send_json_error( array( 'message' => $message ) );
+		}
+
+		$nonce = ( isset( $_POST['wp-auth-nonce'] ) ) ? sanitize_textarea_field( wp_unslash( $_POST['wp-auth-nonce'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'uwp-wfls-2fa-' . $user->ID ) ) {
+			$message = aui()->alert(
+				array(
+					'type'    => 'error',
+					'content' => __( 'Invalid request! Please try again.', 'userswp' ),
+				)
+			);
+
+			wp_send_json_error( array( 'message' => $message ) );
+		}
+
+		$code = isset( $_POST['authcode'] ) ? sanitize_text_field( wp_unslash( $_POST['authcode'] ) ) : '';
+
+		if ( empty( $code ) || true !== \WordfenceLS\Controller_TOTP::shared()->validate_2fa( $user, $code ) ) {
+			do_action( 'wp_login_failed', $user->user_login );
+
+			$message = aui()->alert(
+				array(
+					'type'    => 'error',
+					'content' => __( 'Invalid verification code.', 'userswp' ),
+				)
+			);
+
+			wp_send_json_error( array( 'message' => $message ) );
+		}
+
+		$remember = ( isset( $_REQUEST['rememberme'] ) ) ? filter_var( $_REQUEST['rememberme'], FILTER_VALIDATE_BOOLEAN ) : false;
+
+		// Complete the login the same way wp_signon() would have, now that 2FA has been verified.
+		wp_set_auth_cookie( $user->ID, $remember );
+		wp_set_current_user( $user->ID );
+
+		do_action( 'wp_login', $user->user_login, $user );
+
+		$message = aui()->alert(
+			array(
+				'type'    => 'success',
+				'content' => __( 'Validation successful. Redirecting...', 'userswp' ),
+			)
+		);
+
+		wp_send_json_success( array( 'message' => $message ) );
+	}
+
 	public function process_login_2fa() {
 		global $wp2fa;
 
@@ -1523,6 +1706,18 @@ class UsersWP_Forms {
 			wp_send_json_error( array( 'message' => $message ) );
 		}
 
+		if ( isset( $_POST['provider'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$provider = sanitize_textarea_field( wp_unslash( $_POST['provider'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		} else {
+			$provider = '';
+		}
+
+		if ( 'wordfence' === $provider ) {
+			$this->process_login_wordfence_2fa( $user );
+
+			return;
+		}
+
 		$nonce = ( isset( $_POST['wp-auth-nonce'] ) ) ? sanitize_textarea_field( wp_unslash( $_POST['wp-auth-nonce'] ) ) : '';
 
 		if ( true !== \WP2FA\Authenticator\Login::verify_login_nonce( $user->ID, $nonce ) ) {
@@ -1534,12 +1729,6 @@ class UsersWP_Forms {
 			);
 
 			wp_send_json_error( array( 'message' => $message ) );
-		}
-
-		if ( isset( $_POST['provider'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$provider = sanitize_textarea_field( wp_unslash( $_POST['provider'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		} else {
-			$provider = '';
 		}
 
 		$error = '';
