@@ -161,6 +161,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.74 - 2026-09-TBD =
+* Update AUI 0.2.54 and SD 1.2.36 - CHANGED
+
 = 1.2.73 - 2026-09-15 =
 * Privacy tab settings on the Account page now reflect immediately after saving, without needing to flush the object cache. - FIXED
 * Support for Wordfence 2FA in login form - ADDED

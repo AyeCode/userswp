@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.35' );
+	define( 'SUPER_DUPER_VER', '1.2.36' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -291,32 +291,34 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @return string
 		 */
 		public static function get_picker( $editor_id = '' ) {
+			global $sd_widgets;
 
-			ob_start();
+			if ( wp_doing_ajax() ) {
+				check_ajax_referer( 'super_duper_picker', '_ajax_nonce' );
+			}
+
 			if ( isset( $_POST['editor_id'] ) ) {
-				$editor_id = esc_attr( $_POST['editor_id'] );
+				$editor_id = sanitize_text_field( wp_unslash( $_POST['editor_id'] ) );
 			} elseif ( isset( $_REQUEST['et_fb'] ) ) {
 				$editor_id = 'main_content_content_vb_tiny_mce';
 			}
 
-			global $sd_widgets;
+			ksort( $sd_widgets );
 
-//			print_r($sd_widgets);exit;
+			ob_start();
 			?>
-
 			<div class="sd-shortcode-left-wrap">
 				<?php
-				ksort( $sd_widgets );
-				//				print_r($sd_widgets);exit;
 				if ( ! empty( $sd_widgets ) ) {
 					echo '<select class="widefat" onchange="sd_get_shortcode_options(this);">';
 					echo "<option>" . __( 'Select shortcode', 'ayecode-connect' ) . "</option>";
 					foreach ( $sd_widgets as $shortcode => $class ) {
-						if(!empty($class['output_types']) && !in_array('shortcode', $class['output_types'])){ continue; }
-						echo "<option value='" . esc_attr( $shortcode ) . "'>" . esc_attr( $shortcode ) . " (" . esc_attr( $class['name'] ) . ")</option>";
+						if ( ! empty( $class['output_types'] ) && ! in_array( 'shortcode', $class['output_types'] ) ) {
+							continue;
+						}
+						echo "<option value='" . esc_attr( $shortcode ) . "'>" . esc_html( $shortcode ) . " (" . esc_html( $class['name'] ) . ")</option>";
 					}
 					echo "</select>";
-
 				}
 				?>
 				<div class="sd-shortcode-settings"></div>
@@ -325,7 +327,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				<textarea id='sd-shortcode-output' disabled></textarea>
 				<div id='sd-shortcode-output-actions'>
 					<?php if ( $editor_id != '' ) { ?>
-						<button class="button sd-insert-shortcode-button" onclick="sd_insert_shortcode(<?php if ( ! empty( $editor_id ) ) { echo "'" . $editor_id . "'"; } ?>)"><?php esc_html_e( 'Insert Shortcode', 'ayecode-connect' ); ?></button> 
+						<button class="button sd-insert-shortcode-button" onclick="sd_insert_shortcode(<?php if ( ! empty( $editor_id ) ) { echo "'" . esc_js( $editor_id ) . "'"; } ?>)"><?php esc_html_e( 'Insert Shortcode', 'ayecode-connect' ); ?></button> 
 					<?php } ?>
 					<button class="button" onclick="sd_copy_to_clipboard()"><?php esc_html_e( 'Copy Shortcode', 'ayecode-connect' ); ?></button>
 				</div>
@@ -389,7 +391,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		public static function get_widget_settings() {
 			global $sd_widgets;
 
-			$shortcode = isset( $_REQUEST['shortcode'] ) && $_REQUEST['shortcode'] ? sanitize_title_with_dashes( $_REQUEST['shortcode'] ) : '';
+			$shortcode = isset( $_REQUEST['shortcode'] ) && $_REQUEST['shortcode'] ? sanitize_title_with_dashes( wp_unslash( $_REQUEST['shortcode'] ) ) : '';
 			if ( ! $shortcode ) {
 				wp_die();
 			}
@@ -408,7 +410,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			ob_start();
 			$widget->form( array() );
 			$form = ob_get_clean();
-			echo "<form id='$shortcode'>" . $form . "<div class=\"widget-control-save\"></div></form>";
+			echo "<form id='" . esc_attr( $shortcode ) . "'>" . $form . "<div class=\"widget-control-save\"></div></form>";
 			echo "<style>" . $widget->widget_css() . "</style>";
 			echo "<script>" . $widget->widget_js() . "</script>";
 			?>
