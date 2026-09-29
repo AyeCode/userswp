@@ -1263,39 +1263,57 @@ class UsersWP_Templates {
 	/**
 	 * Redirects the user to login page when email not confirmed.
 	 *
+	 * @since   1.0.0
+	 * @package userswp
+	 *
 	 * @param string $username Username.
-	 * @param object $user     User object.
+	 * @param object $user     Logged in user object.
 	 *
-	 * @return      void
-	 * @package     userswp
-	 *
-	 * @since       1.0.0
+	 * @return void
 	 */
 	public function unconfirmed_login_redirect( $username, $user ) {
-		if ( ! is_wp_error( $user ) ) {
-			$mod_value = get_user_meta( $user->ID, 'uwp_mod', true );
-			if ( $mod_value == 'email_unconfirmed' ) {
-				if ( ! in_array( 'administrator', $user->roles ) ) {
-					$login_page = uwp_get_page_id( 'login_page', false );
-					if ( $login_page ) {
-						$redirect_to = add_query_arg( array(
-							'uwp_err' => 'act_pending',
-							'user_id' => $user->ID
-						), get_permalink( $login_page ) );
-						wp_destroy_current_session();
-						wp_clear_auth_cookie();
-						if ( wp_doing_ajax() ) {
-							global $userswp;
-							$message = $userswp->notices->form_notice_by_key( 'act_pending', false, $user->ID );
-							wp_send_json_error( $message );
-						} else {
-							wp_redirect( $redirect_to );
-						}
-						exit();
-					}
-				}
-			}
+		if ( ! $user instanceof WP_User ) {
+			return;
 		}
+
+		if ( 'email_unconfirmed' !== get_user_meta( $user->ID, 'uwp_mod', true ) ) {
+			return;
+		}
+
+		if ( in_array( 'administrator', (array) $user->roles, true ) ) {
+			return;
+		}
+
+		// wp_destroy_current_session() reads the token from $_COOKIE, which does not
+		// yet contain the cookie issued during this request, so destroy by user instead.
+		WP_Session_Tokens::get_instance( $user->ID )->destroy_all();
+		wp_clear_auth_cookie();
+		wp_set_current_user( 0 );
+
+		global $userswp;
+
+		$message = $userswp->notices->form_notice_by_key( 'act_pending', false, $user->ID );
+
+		if ( wp_doing_ajax() ) {
+			wp_send_json_error( array( 'message' => $message ) );
+		}
+
+		$login_page = uwp_get_page_id( 'login_page', false );
+
+		if ( ! $login_page ) {
+			return;
+		}
+
+		$redirect_to = add_query_arg(
+			array(
+				'uwp_err' => 'act_pending',
+				'user_id' => $user->ID,
+			),
+			get_permalink( $login_page )
+		);
+
+		wp_safe_redirect( $redirect_to );
+		exit;
 	}
 
 	/**

@@ -161,6 +161,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.75 - 2026-09-TBD =
+* Login via modal/AJAX shows no error message when the account is not yet activated - FIXED
+
 = 1.2.74 - 2026-09-16 =
 * Update AUI 0.2.54 and SD 1.2.36 - CHANGED
 
