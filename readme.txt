@@ -161,7 +161,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.76 - TBD =
+= 1.2.76 - 2026-09-30 =
 * Arbitrary File Deletion via avatar/banner image crop - FIXED/SECURITY
 
 = 1.2.75 - 2026-09-30 =
