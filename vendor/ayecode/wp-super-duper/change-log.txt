@@ -1,3 +1,6 @@
+= 1.2.37 - 2026-09-30 =
+* Added extra sanitization for CSS color values - FIXED/SECURITY
+
 = 1.2.36 - 2026-09-16 =
 * Added extra sanitization in shortcode button to prevent XSS vulnerability - FIXED/SECURITY
 

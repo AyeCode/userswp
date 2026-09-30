@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.54';
+		public $version = '0.2.56';
 
 		/**
 		 * Class textdomain.
@@ -152,22 +152,23 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 * Setup some constants.
 		 */
 		public function constants(){
-			define( 'AUI_PRIMARY_COLOR_ORIGINAL', "#1e73be" );
-			define( 'AUI_SECONDARY_COLOR_ORIGINAL', '#6c757d' );
-			define( 'AUI_INFO_COLOR_ORIGINAL', '#17a2b8' );
-			define( 'AUI_WARNING_COLOR_ORIGINAL', '#ffc107' );
-			define( 'AUI_DANGER_COLOR_ORIGINAL', '#dc3545' );
-			define( 'AUI_SUCCESS_COLOR_ORIGINAL', '#44c553' );
-			define( 'AUI_LIGHT_COLOR_ORIGINAL', '#f8f9fa' );
-			define( 'AUI_DARK_COLOR_ORIGINAL', '#343a40' );
-			define( 'AUI_WHITE_COLOR_ORIGINAL', '#fff' );
-			define( 'AUI_PURPLE_COLOR_ORIGINAL', '#ad6edd' );
-			define( 'AUI_SALMON_COLOR_ORIGINAL', '#ff977a' );
-			define( 'AUI_CYAN_COLOR_ORIGINAL', '#35bdff' );
-			define( 'AUI_GRAY_COLOR_ORIGINAL', '#ced4da' );
-			define( 'AUI_INDIGO_COLOR_ORIGINAL', '#502c6c' );
-			define( 'AUI_ORANGE_COLOR_ORIGINAL', '#orange' );
-			define( 'AUI_BLACK_COLOR_ORIGINAL', '#000' );
+			// Another copy of this package may have defined these already.
+			defined( 'AUI_PRIMARY_COLOR_ORIGINAL' ) || define( 'AUI_PRIMARY_COLOR_ORIGINAL', "#1e73be" );
+			defined( 'AUI_SECONDARY_COLOR_ORIGINAL' ) || define( 'AUI_SECONDARY_COLOR_ORIGINAL', '#6c757d' );
+			defined( 'AUI_INFO_COLOR_ORIGINAL' ) || define( 'AUI_INFO_COLOR_ORIGINAL', '#17a2b8' );
+			defined( 'AUI_WARNING_COLOR_ORIGINAL' ) || define( 'AUI_WARNING_COLOR_ORIGINAL', '#ffc107' );
+			defined( 'AUI_DANGER_COLOR_ORIGINAL' ) || define( 'AUI_DANGER_COLOR_ORIGINAL', '#dc3545' );
+			defined( 'AUI_SUCCESS_COLOR_ORIGINAL' ) || define( 'AUI_SUCCESS_COLOR_ORIGINAL', '#44c553' );
+			defined( 'AUI_LIGHT_COLOR_ORIGINAL' ) || define( 'AUI_LIGHT_COLOR_ORIGINAL', '#f8f9fa' );
+			defined( 'AUI_DARK_COLOR_ORIGINAL' ) || define( 'AUI_DARK_COLOR_ORIGINAL', '#343a40' );
+			defined( 'AUI_WHITE_COLOR_ORIGINAL' ) || define( 'AUI_WHITE_COLOR_ORIGINAL', '#fff' );
+			defined( 'AUI_PURPLE_COLOR_ORIGINAL' ) || define( 'AUI_PURPLE_COLOR_ORIGINAL', '#ad6edd' );
+			defined( 'AUI_SALMON_COLOR_ORIGINAL' ) || define( 'AUI_SALMON_COLOR_ORIGINAL', '#ff977a' );
+			defined( 'AUI_CYAN_COLOR_ORIGINAL' ) || define( 'AUI_CYAN_COLOR_ORIGINAL', '#35bdff' );
+			defined( 'AUI_GRAY_COLOR_ORIGINAL' ) || define( 'AUI_GRAY_COLOR_ORIGINAL', '#ced4da' );
+			defined( 'AUI_INDIGO_COLOR_ORIGINAL' ) || define( 'AUI_INDIGO_COLOR_ORIGINAL', '#502c6c' );
+			defined( 'AUI_ORANGE_COLOR_ORIGINAL' ) || define( 'AUI_ORANGE_COLOR_ORIGINAL', '#orange' );
+			defined( 'AUI_BLACK_COLOR_ORIGINAL' ) || define( 'AUI_BLACK_COLOR_ORIGINAL', '#000' );
 
 			if ( ! defined( 'AUI_PRIMARY_COLOR' ) ) {
 				define( 'AUI_PRIMARY_COLOR', AUI_PRIMARY_COLOR_ORIGINAL );
@@ -745,50 +746,50 @@ $custom_css .= "
 			wp_enqueue_script( 'iconpicker' );
 		}
 
-        /**
-         * Get the url path to the current folder.
-         *
-         * This can be called very early, hence the need for the dynamic way of getting the URL.
-         *
-         * @since 0.2.31 changed to support edge cases like bitnami containers.
-         * @return string
-         */
-        public function get_url() {
-            $content_dir = wp_normalize_path( untrailingslashit( WP_CONTENT_DIR ) );
-            $content_url = untrailingslashit( WP_CONTENT_URL );
+		/**
+		 * Get the url path to the current folder.
+		 *
+		 * This can be called very early, hence the need for the dynamic way of getting the URL.
+		 *
+		 * @since 0.2.31 changed to support edge cases like bitnami containers.
+		 * @return string
+		 */
+		public function get_url() {
+			$content_dir = wp_normalize_path( untrailingslashit( WP_CONTENT_DIR ) );
+			$content_url = untrailingslashit( WP_CONTENT_URL );
 
-            // maybe Replace http:// to https://.
-            if ( strpos( $content_url, 'http://' ) === 0 && strpos( plugins_url(), 'https://' ) === 0 ) {
-                $content_url = str_replace( 'http://', 'https://', $content_url );
-            }
+			// maybe Replace http:// to https://.
+			if ( strpos( $content_url, 'http://' ) === 0 && strpos( plugins_url(), 'https://' ) === 0 ) {
+				$content_url = str_replace( 'http://', 'https://', $content_url );
+			}
 
-            // First find where in the path our content directory starts
-            $content_basename = basename($content_dir);
-            $file_dir = str_replace( "/includes", "", wp_normalize_path( dirname( __FILE__ ) ) );
+			// First find where in the path our content directory starts
+			$content_basename = basename($content_dir);
+			$file_dir = str_replace( "/includes", "", wp_normalize_path( dirname( __FILE__ ) ) );
 
-            // Find the relative path by matching from content directory name
-            $after_content = substr($file_dir, strpos($file_dir, '/' . $content_basename . '/') + strlen('/' . $content_basename . '/'));
+			// Find the relative path by matching from content directory name
+			$after_content = substr($file_dir, strpos($file_dir, '/' . $content_basename . '/') + strlen('/' . $content_basename . '/'));
 
-            // Build URL using WP_CONTENT_URL and the relative path
-            $url = trailingslashit($content_url) . $after_content;
+			// Build URL using WP_CONTENT_URL and the relative path
+			$url = trailingslashit($content_url) . $after_content;
 
-            // some hosts end up with /wp-content/wp-content/
-            $url = str_replace( '/wp-content/wp-content/', '/wp-content/', $url );
+			// some hosts end up with /wp-content/wp-content/
+			$url = str_replace( '/wp-content/wp-content/', '/wp-content/', $url );
 
-            /**
-             * Filters the URL to the AyeCode UI folder.
-             *
-             * Useful when the folder URL can't be worked out from its path, e.g. a symlinked plugin.
-             *
-             * @since 0.2.54
-             *
-             * @param string $url      The AyeCode UI folder URL.
-             * @param string $file_dir The AyeCode UI folder path.
-             */
-            $url = apply_filters( 'ayecode_ui_url', $url, $file_dir );
+			/**
+			 * Filters the URL to the AyeCode UI folder.
+			 *
+			 * Useful when the folder URL can't be worked out from its path, e.g. a symlinked plugin.
+			 *
+			 * @since 0.2.54
+			 *
+			 * @param string $url      The AyeCode UI folder URL.
+			 * @param string $file_dir The AyeCode UI folder path.
+			 */
+			$url = apply_filters( 'ayecode_ui_url', $url, $file_dir );
 
-            return trailingslashit($url);
-        }
+			return trailingslashit($url);
+		}
 
 		/**
 		 * Get the url path to the current folder.
@@ -1359,6 +1360,13 @@ $custom_css .= "
 		}
 
 		public static function hex_to_rgb( $hex ) {
+			$hex = trim( (string) $hex );
+
+			// CSS variables can't be resolved to RGB server side.
+			if ( $hex === '' || strpos( $hex, 'var(' ) !== false ) {
+				return '';
+			}
+
 			// Remove '#' if present
 			$hex = str_replace( '#', '', $hex );
 
@@ -1373,8 +1381,13 @@ $custom_css .= "
 				return $rgb;
 			}
 
-			// Convert 3-digit hex to 6-digit hex
-			if ( strlen( $hex ) == 3 ) {
+			// Only 3, 4, 6 or 8 digit hex can be converted, anything else (named colours, hsl() etc.) would give a wrong value.
+			if ( ! preg_match( '/^([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i', $hex ) ) {
+				return '';
+			}
+
+			// Convert 3 or 4 digit hex to 6-digit hex (alpha is ignored)
+			if ( strlen( $hex ) <= 4 ) {
 				$hex = str_repeat( substr( $hex, 0, 1 ), 2 ) . str_repeat( substr( $hex, 1, 1 ), 2 ) . str_repeat( substr( $hex, 2, 1 ), 2 );
 			}
 
@@ -1385,6 +1398,32 @@ $custom_css .= "
 
 			// Return RGB values as an array
 			return $r . ',' . $g . ',' . $b;
+		}
+
+		/**
+		 * Replace --bs-{type}-rgb usages when the color has no RGB value (eg a CSS variable).
+		 *
+		 * rgba(var(--bs-{type}-rgb), .5) would be invalid without the -rgb variable, so use color-mix() on the color itself.
+		 *
+		 * @param string $css The generated CSS.
+		 * @param string $type The color slug.
+		 * @param string $color_code The color value.
+		 *
+		 * @return string
+		 */
+		public static function css_rgb_fallback( $css, $type, $color_code ) {
+			$type = preg_quote( $type, '/' );
+
+			// A comma triplet is required here, so leave the value from the stylesheet in place.
+			$css = preg_replace( '/--bs-btn-focus-shadow-rgb:\s*var\(--bs-' . $type . '-rgb\);/', '', $css );
+
+			return preg_replace_callback( '/rgba?\(\s*var\(--bs-' . $type . '-rgb\)\s*(?:,\s*([0-9]*\.?[0-9]+)\s*)?\)/', function( $m ) use ( $color_code ) {
+				if ( ! isset( $m[1] ) || (float) $m[1] >= 1 ) {
+					return $color_code;
+				}
+
+				return 'color-mix(in srgb, ' . $color_code . ' ' . round( (float) $m[1] * 100, 2 ) . '%, transparent)';
+			}, $css );
 		}
 
 		/**
@@ -1506,7 +1545,7 @@ $custom_css .= "
 				$output .= $prefix . ' .text-' . sanitize_key( $type ) . '{color: var(--bs-' . sanitize_key( $type ) . ') !important;}';
 			}
 
-			$output .= $prefix . ' .link-'.esc_attr($type).' {color: var(--bs-'.esc_attr($type).'-rgb) !important;}';
+			$output .= $prefix . ' .link-'.esc_attr($type).' {color: var(--bs-'.esc_attr($type).') !important;}';
 			$output .= $prefix . ' .link-'.esc_attr($type).':hover {color: rgba(var(--bs-'.esc_attr($type).'-rgb), .8) !important;}';
 
 			//  buttons
@@ -1516,7 +1555,7 @@ $custom_css .= "
             --bs-btn-border-color: '.esc_attr($color_code).';
             --bs-btn-hover-bg: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
             --bs-btn-hover-border-color: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
-            --bs-btn-focus-shadow-rgb: --bs-'.esc_attr($type).'-rgb;
+            --bs-btn-focus-shadow-rgb: var(--bs-'.esc_attr($type).'-rgb);
             --bs-btn-active-bg: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
             --bs-btn-active-border-color: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
             --bs-btn-active-shadow: unset;
@@ -1538,7 +1577,7 @@ $custom_css .= "
             --bs-btn-border-color: '.esc_attr($color_code).';
             --bs-btn-hover-bg: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
             --bs-btn-hover-border-color: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
-            --bs-btn-focus-shadow-rgb: --bs-'.esc_attr($type).'-rgb;
+            --bs-btn-focus-shadow-rgb: var(--bs-'.esc_attr($type).'-rgb);
             --bs-btn-active-bg: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
             --bs-btn-active-border-color: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
             --bs-btn-active-shadow: unset;
@@ -1569,14 +1608,13 @@ $custom_css .= "
 
 //				$output .= $is_var ? 'html body {--bs-'.esc_attr($type).'-rgb: '.$color_code.'; }' : 'html body {--bs-'.esc_attr($type).'-rgb: '.self::hex_to_rgb($color_code).'; }';
 				$output .= 'html body {--bs-'.esc_attr($type).': '.esc_attr($color_code).'; }';
-				$output .= 'html body {--bs-'.esc_attr($type).'-rgb: '.$rgb.'; }';
+
+				if ( $rgb !== '' ) {
+					$output .= 'html body {--bs-' . esc_attr( $type ) . '-rgb: ' . $rgb . '; }';
+				}
 			}
 
-
 			if ( $is_custom ) {
-
-//				echo '###'.$type;exit;
-
 				// build rules into each type
 				foreach($selectors as $selector => $types){
 					$selector = $compatibility ? $compatibility . " ".$selector : $selector;
@@ -1677,6 +1715,16 @@ $custom_css .= "
 			if ( $aui_bs5 ) {
 //				$output .= $is_var ? '' : $prefix ." .alert-{$type} {background-color: ".$color_code."20;    border-color: ".$color_code."30;color:$darker_40} ";
 				$output .= $prefix ." .alert-{$type} {--bs-alert-bg: rgba(var(--bs-{$type}-rgb), .1 ) !important;--bs-alert-border-color: rgba(var(--bs-{$type}-rgb), .25 ) !important;--bs-alert-color: rgba(var(--bs-{$type}-rgb), 1 ) !important;} ";
+			}
+
+			if ( $rgb === '' ) {
+				// The stylesheet builds these from --bs-{type}-rgb, which is not set for this color.
+				if ( $aui_bs5 ) {
+					$output .= $prefix . " .bg-{$type}{background-color: color-mix(in srgb, $color_code calc(var(--bs-bg-opacity, 1) * 100%), transparent) !important;} ";
+					$output .= $prefix . " .border-{$type}{border-color: color-mix(in srgb, $color_code calc(var(--bs-border-opacity, 1) * 100%), transparent) !important;} ";
+				}
+
+				$output = self::css_rgb_fallback( $output, $type, $color_code );
 			}
 
 			return $output;
@@ -1797,7 +1845,10 @@ $custom_css .= "
 
 			if ( $aui_bs5 ) {
 //				$output .= $is_var ? 'html body {--bs-'.esc_attr($type).'-rgb: '.$color_code.'; }' : 'html body {--bs-'.esc_attr($type).'-rgb: '.self::hex_to_rgb($color_code).'; }';
-				$output .= 'html body {--bs-'.esc_attr($type).'-rgb: '.$rgb.'; }';
+
+				if ( $rgb !== '' ) {
+					$output .= 'html body {--bs-' . esc_attr( $type ) . '-rgb: ' . $rgb . '; }';
+				}
 			}
 
 			// build rules into each type
@@ -1893,6 +1944,16 @@ $custom_css .= "
 			if ( $aui_bs5 ) {
 //				$output .= $is_var ? '' : $prefix ." .alert-{$type} {background-color: ".$color_code."20;    border-color: ".$color_code."30;color:$darker_40} ";
 				$output .= $prefix ." .alert-{$type} {--bs-alert-bg: rgba(var(--bs-{$type}-rgb), .1 ) !important;--bs-alert-border-color: rgba(var(--bs-{$type}-rgb), .25 ) !important;--bs-alert-color: rgba(var(--bs-{$type}-rgb), 1 ) !important;} ";
+			}
+
+			if ( $rgb === '' ) {
+				// The stylesheet builds these from --bs-{type}-rgb, which is not set for this color.
+				if ( $aui_bs5 ) {
+					$output .= $prefix . " .bg-{$type}{background-color: color-mix(in srgb, $color_code calc(var(--bs-bg-opacity, 1) * 100%), transparent) !important;} ";
+					$output .= $prefix . " .border-{$type}{border-color: color-mix(in srgb, $color_code calc(var(--bs-border-opacity, 1) * 100%), transparent) !important;} ";
+				}
+
+				$output = self::css_rgb_fallback( $output, $type, $color_code );
 			}
 
 			return $output;

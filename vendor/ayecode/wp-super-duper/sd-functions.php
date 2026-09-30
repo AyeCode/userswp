@@ -2766,15 +2766,14 @@ function sd_build_aui_class( $args ) {
  * @return array
  */
 function sd_build_aui_styles( $args ) {
-
 	$styles = array();
 
 	// background color
 	if ( ! empty( $args['bg'] ) && $args['bg'] !== '' ) {
 		if ( $args['bg'] == 'custom-color' ) {
-			$styles['background-color'] = $args['bg_color'];
+			$styles['background-color'] = sd_sanitize_css_color( $args['bg_color'] );
 		} elseif ( $args['bg'] == 'custom-gradient' ) {
-			$styles['background-image'] = $args['bg_gradient'];
+			$styles['background-image'] = sd_sanitize_css_color( $args['bg_gradient'] );
 
 			// use background on text.
 			if ( ! empty( $args['bg_on_text'] ) && $args['bg_on_text'] ) {
@@ -2830,7 +2829,7 @@ function sd_build_aui_styles( $args ) {
 
 	// font color
 	if ( ! empty( $args['text_color_custom'] ) && $args['text_color_custom'] !== '' ) {
-		$styles['color'] = esc_attr( $args['text_color_custom'] );
+		$styles['color'] = sd_sanitize_css_color( $args['text_color_custom'] );
 	}
 
 	// font line height
@@ -2864,26 +2863,37 @@ function sd_build_aui_styles( $args ) {
  */
 function sd_build_hover_styles( $args, $is_preview = false ) {
 	$rules = '';
+
 	// text color
 	if ( ! empty( $args['styleid'] ) ) {
-		$styleid = $is_preview ? 'html .editor-styles-wrapper .' . esc_attr( $args['styleid'] ) : 'html .' . esc_attr( $args['styleid'] );
+		// The style id is used as a CSS class selector, so only class-safe characters may survive.
+		$styleid_classes = array_filter( array_map( 'sanitize_html_class', explode( ' ', (string) $args['styleid'] ) ) );
 
-		// text
+		if ( empty( $styleid_classes ) ) {
+			return '';
+		}
+
+		$styleid_class = implode( '.', $styleid_classes );
+		$styleid       = $is_preview ? 'html .editor-styles-wrapper .' . $styleid_class : 'html .' . $styleid_class;
+
+		// text_color_hover
 		if ( ! empty( $args['text_color_hover'] ) ) {
 			$key    = 'custom' === $args['text_color_hover'] && ! empty( $args['text_color_hover_custom'] ) ? 'text_color_hover_custom' : 'text_color_hover';
-			$color  = sd_get_color_from_var( $args[ $key ] );
+			$color  = sd_sanitize_css_color( $args[ $key ], 'inherit' );
+			$color  = sd_get_color_from_var( $color );
 			$rules .= $styleid . ':hover {color: ' . $color . ' !important;} ';
 		}
 
-		// bg
+		// bg_hover
 		if ( ! empty( $args['bg_hover'] ) ) {
 			if ( 'custom-gradient' === $args['bg_hover'] ) {
-				$color  = $args['bg_hover_gradient'];
+				$color  = sd_sanitize_css_color( $args['bg_hover_gradient'], 'inherit' );
 				$rules .= $styleid . ':hover {background-image: ' . $color . ' !important;} ';
 				$rules .= $styleid . '.btn:hover {border-color: transparent !important;} ';
 			} else {
 				$key    = 'custom-color' === $args['bg_hover'] ? 'bg_hover_color' : 'bg_hover';
-				$color  = sd_get_color_from_var( $args[ $key ] );
+				$color  = sd_sanitize_css_color( $args[ $key ], 'inherit' );
+				$color  = sd_get_color_from_var( $color );
 				$rules .= $styleid . ':hover {background: ' . $color . ' !important;} ';
 				$rules .= $styleid . '.btn:hover {border-color: ' . $color . ' !important;} ';
 			}
@@ -2901,13 +2911,42 @@ function sd_build_hover_styles( $args, $is_preview = false ) {
  * @return mixed|string
  */
 function sd_get_color_from_var( $var ) {
-
 	//sanitize_hex_color() @todo this does not cover transparency
 	if ( strpos( $var, '#' ) === false ) {
 		$var = defined( 'BLOCKSTRAP_BLOCKS_VERSION' ) ? 'var(--wp--preset--color--' . esc_attr( $var ) . ')' : 'var(--' . esc_attr( $var ) . ')';
 	}
 
 	return $var;
+}
+
+/**
+ * Sanitizes a CSS color value.
+ *
+ * @since 1.2.37
+ *
+ * @param string $color   The color value to sanitize.
+ * @param string $default Optional. Value to return when the color is empty or unsafe. Default empty.
+ * @return string Sanitized color value or default.
+ */
+function sd_sanitize_css_color( $color, $default = '' ) {
+	if ( ! is_scalar( $color ) || $color === '' ) {
+		return $default;
+	}
+
+	// Remove CSS comments, which can hide things like expression/**/( or url/**/(.
+	$color = preg_replace( '#/\*.*?(\*/|$)#s', '', (string) $color );
+
+	// Keep only the part before the first ; { or }.
+	$color = trim( preg_split( '/[;{}]/', $color )[0] );
+
+	// Allow trailing !important.
+	$value = preg_replace( '/\s*!important$/i', '', $color );
+
+	if ( $value === '' || preg_match( '/[^\w\s#%.,()\/*+-]|url\s*\(|expression\s*\(/i', $value ) ) {
+		return $default;
+	}
+
+	return $color;
 }
 
 /**

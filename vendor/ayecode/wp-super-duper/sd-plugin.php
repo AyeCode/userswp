@@ -5,13 +5,13 @@
  * @wordpress-plugin
  * Plugin Name: Super Duper - Examples
  * Description: This is a Hello World test plugin for WP Super Duper Class.
- * Version: 1.2.36
+ * Version: 1.2.37
  * Author: AyeCode
  * Author URI: https://ayecode.io
  * Text Domain: super-duper
  * Domain Path: /languages
  * Requires at least: 6.0
- * Tested up to: 7.0
+ * Tested up to: 7.1
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -3,7 +3,7 @@
 Plugin Name: AyeCode UI
 Plugin URI: https://ayecode.io/
 Description: This is an example plugin to test AyeCode UI Quickly.
-Version: 0.2.54
+Version: 0.2.56
 Author: AyeCode Ltd
 Author URI: https://userswp.io
 License: GPL-2.0+
@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 Text Domain: ayecode-ui
 Domain Path: /languages
 Requires at least: 6.0
-Tested up to: 7.0
+Tested up to: 7.1
 */
 
 // If this file is called directly, abort.

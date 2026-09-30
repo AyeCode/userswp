@@ -140,7 +140,7 @@
         jQuery("select.aui-select2").each(function() {
             if (!jQuery(this).hasClass("select2-hidden-accessible")) {
                 select2Args = jQuery.extend({}, select2Locale);
-                if (jQuery(this).closest('.modal.show').length) {
+                if (jQuery(this).closest('.modal.show').length && jQuery(this).closest('.modal-body').length) {
                     // Keep the dropdown inside the modal to prevent focus trapping.
                     select2Args.dropdownParent = jQuery(this).closest('.modal-body');
                 }

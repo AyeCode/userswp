@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.36' );
+	define( 'SUPER_DUPER_VER', '1.2.37' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -5060,11 +5060,11 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 		/**
 		 * Encode shortcodes tags.
 		 *
+		 * @since 1.0.28
+		 *
 		 * @param string $content Content to search for shortcode tags.
 		 *
-*@return string Content with shortcode tags removed.
-		 *@since 1.0.28
-		 *
+		 * @return string Content with shortcode tags removed.
 		 */
 		public function encode_shortcodes( $content ) {
 			// Avoids existing encoded tags.
@@ -5098,11 +5098,11 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 		/**
 		 * Remove encoded shortcod tags.
 		 *
+		 * @since 1.0.28
+		 *
 		 * @param string $content Content to search for shortcode tags.
 		 *
-*@return string Content with decoded shortcode tags.
-		 *@since 1.0.28
-		 *
+		 * @return string Content with decoded shortcode tags.
 		 */
 		public function decode_shortcodes( $content ) {
 			$trans   = array(
