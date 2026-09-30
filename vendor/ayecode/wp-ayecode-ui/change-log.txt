@@ -1,3 +1,10 @@
+= 0.2.56 - 2026-09-30 =
+* Guard the colour constants against a second copy - CHANGED
+
+= 0.2.55 - 2026-09-23 =
+* Colors render near-black when a theme.json palette color is a CSS variable - FIXED
+* --bs-btn-focus-shadow-rgb value missing var() - FIXED
+
 = 0.2.54 - 2026-09-16 =
 * Added ayecode_ui_url filter to override the AyeCode UI folder URL - ADDED
 
