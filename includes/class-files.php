@@ -74,6 +74,11 @@ class UsersWP_Files {
 
                 } else {
 
+                    // Record this upload so the crop handler only accepts the user's own file.
+                    if ( in_array( $field->htmlvar_name, array( 'avatar', 'banner' ), true ) && get_current_user_id() ) {
+                        update_user_meta( get_current_user_id(), '_uwp_pending_' . $field->htmlvar_name . '_upload', $uploaded_file->url );
+                    }
+
                     $file_urls[] = array(
                         'url'  => $uploaded_file->url,
                         'path' => $uploaded_file->path,
