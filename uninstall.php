@@ -55,7 +55,7 @@ function uwp_uninstall() {
 			delete_metadata( $meta_type, $user_id, $row->htmlvar_name, $meta_value, $delete_all );
 		}
 
-		// Remove avatar/banner crop bookkeeping meta stored outside the form fields.
+		// Remove crop meta stored outside the form fields.
 		foreach ( array( 'avatar', 'banner' ) as $uwp_image_type ) {
 			delete_metadata( $meta_type, $user_id, '_uwp_' . $uwp_image_type . '_original', $meta_value, $delete_all );
 			delete_metadata( $meta_type, $user_id, '_uwp_pending_' . $uwp_image_type . '_upload', $meta_value, $delete_all );

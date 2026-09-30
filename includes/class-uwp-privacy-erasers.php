@@ -34,7 +34,7 @@ class UsersWP_Privacy_Erasers {
         if ( $user && $user->ID ) {
             uwp_delete_usermeta_row($user->ID);
 
-            // Remove avatar/banner crop bookkeeping meta stored outside the uwp_usermeta table.
+            // Remove crop meta stored outside the uwp_usermeta table.
             foreach ( array( 'avatar', 'banner' ) as $uwp_image_type ) {
                 delete_user_meta( $user->ID, '_uwp_' . $uwp_image_type . '_original' );
                 delete_user_meta( $user->ID, '_uwp_pending_' . $uwp_image_type . '_upload' );

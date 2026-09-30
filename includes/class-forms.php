@@ -220,8 +220,7 @@ class UsersWP_Forms {
 			return new WP_Error( 'invalid_image', __( 'Invalid image url.', 'userswp' ) );
 		}
 
-		// Only allow cropping the image the current user just uploaded. Normalize the stored value
-		// the same way as $image_url above so the strict comparison matches.
+		// Only allow cropping the image the current user just uploaded (normalized like $image_url).
 		$pending_key = '_uwp_pending_' . $type . '_upload';
 		$pending_url = get_user_meta( get_current_user_id(), $pending_key, true );
 		$pending_url = $pending_url ? str_replace( array( 'https://', 'http://' ), '', $this->normalize_url( esc_url( $pending_url ) ) ) : '';
@@ -310,8 +309,7 @@ class UsersWP_Forms {
 			$original_key  = '_uwp_' . $type . '_original';
 			$prev_original = get_user_meta( $user_id, $original_key, true );
 
-			// Finalise only when the thumbnail was actually created (resize returns a path even on
-			// failure), leaving the gate in place so a failed/refreshed crop can be retried.
+			// Finalise only if the thumbnail was created (resize returns a path even on failure), so a failed crop can be retried.
 			if ( is_file( $thumb_image_location ) ) {
 				delete_user_meta( get_current_user_id(), $pending_key );
 				$relative_original = ltrim( wp_normalize_path( str_replace( wp_normalize_path( untrailingslashit( $upload_path ) ), '', wp_normalize_path( $image_path ) ) ), '/' );
@@ -322,7 +320,6 @@ class UsersWP_Forms {
 			$real_upload_path = realpath( $upload_path );
 			$real_unlink_img  = $unlink_img ? realpath( $unlink_img ) : false;
 
-			// Delete the previous UsersWP thumbnail only if it is inside the uploads dir.
 			if ( $real_upload_path && $real_unlink_img && realpath( $thumb_image_location ) !== $real_unlink_img
 				&& false !== strpos( basename( $real_unlink_img ), $thumb_postfix . '.' )
 				&& 0 === strpos( $real_unlink_img, $real_upload_path . DIRECTORY_SEPARATOR )
@@ -2691,7 +2688,7 @@ class UsersWP_Forms {
 			}
 		}
 
-		// Clear the crop bookkeeping meta so the removed avatar/banner leaves nothing behind.
+		// Clear crop bookkeeping meta.
 		if ( $type ) {
 			delete_user_meta( $user_id, '_uwp_' . $type . '_original' );
 			delete_user_meta( $user_id, '_uwp_pending_' . $type . '_upload' );
