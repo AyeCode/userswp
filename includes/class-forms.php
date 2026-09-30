@@ -290,6 +290,13 @@ class UsersWP_Forms {
 			}
 
 			$cropped = uwp_resizeThumbnailImage( $thumb_image_location, $image_path, $x, $y, $w, $h, $scale );
+
+			// Resize returns a path even on failure; bail before touching meta or files so the crop can be retried.
+			clearstatcache( true, $thumb_image_location );
+			if ( ! is_file( $thumb_image_location ) ) {
+				return new WP_Error( 'crop_failed', __( 'Could not crop the image. Please try again.', 'userswp' ) );
+			}
+
 			$cropped = str_replace( $upload_path, $upload_url, $cropped );
 
 			// Remove previous avatar/banner
@@ -309,12 +316,9 @@ class UsersWP_Forms {
 			$original_key  = '_uwp_' . $type . '_original';
 			$prev_original = get_user_meta( $user_id, $original_key, true );
 
-			// Finalise only if the thumbnail was created (resize returns a path even on failure), so a failed crop can be retried.
-			if ( is_file( $thumb_image_location ) ) {
-				delete_user_meta( get_current_user_id(), $pending_key );
-				$relative_original = ltrim( wp_normalize_path( str_replace( wp_normalize_path( untrailingslashit( $upload_path ) ), '', wp_normalize_path( $image_path ) ) ), '/' );
-				update_user_meta( $user_id, $original_key, $relative_original );
-			}
+			delete_user_meta( get_current_user_id(), $pending_key );
+			$relative_original = ltrim( wp_normalize_path( str_replace( wp_normalize_path( untrailingslashit( $upload_path ) ), '', wp_normalize_path( $image_path ) ) ), '/' );
+			update_user_meta( $user_id, $original_key, $relative_original );
 
 			// Enforce containment inside uploads before deleting, matching upload_file_remove().
 			$real_upload_path = realpath( $upload_path );
@@ -425,7 +429,7 @@ class UsersWP_Forms {
 
 		if ( in_array( $type, array( 'avatar', 'banner' ), true ) ) {
 			delete_user_meta( $user_id, '_uwp_' . $type . '_original' );
-			delete_user_meta( $user_id, '_uwp_pending_' . $type . '_upload' );
+			delete_user_meta( get_current_user_id(), '_uwp_pending_' . $type . '_upload' );
 		}
 
 		if ( is_admin() ) {
@@ -2675,12 +2679,16 @@ class UsersWP_Forms {
 				&& strpos( $real_unlink_file, $real_upload_path . DIRECTORY_SEPARATOR ) === 0 ) {
 				wp_delete_file( $real_unlink_file );
 
-				// For avatar/banner, also remove the original (non-thumb) file.
+				// For avatar/banner, also remove the original (non-thumb) file, only if it is the exact file this user cropped.
 				if ( $type ) {
-					$unlink_ori_file = str_replace( '_uwp_' . $type . '_thumb' . '.', '.', $real_unlink_file );
+					$unlink_ori_file      = str_replace( '_uwp_' . $type . '_thumb' . '.', '.', $real_unlink_file );
 					$real_unlink_ori_file = realpath( $unlink_ori_file );
+					$prev_original        = get_user_meta( $user_id, '_uwp_' . $type . '_original', true );
+					$expected_original    = $prev_original ? realpath( untrailingslashit( $upload_path ) . '/' . $prev_original ) : false;
 
-					if ( $real_unlink_ori_file && is_file( $real_unlink_ori_file )
+					if ( $expected_original && $real_unlink_ori_file && $expected_original === $real_unlink_ori_file
+						&& $real_unlink_ori_file !== $real_unlink_file
+						&& is_file( $real_unlink_ori_file )
 						&& strpos( $real_unlink_ori_file, $real_upload_path . DIRECTORY_SEPARATOR ) === 0 ) {
 						wp_delete_file( $real_unlink_ori_file );
 					}
@@ -2688,10 +2696,10 @@ class UsersWP_Forms {
 			}
 		}
 
-		// Clear crop bookkeeping meta.
+		// Clear crop bookkeeping meta (pending upload is stored against the uploader).
 		if ( $type ) {
 			delete_user_meta( $user_id, '_uwp_' . $type . '_original' );
-			delete_user_meta( $user_id, '_uwp_pending_' . $type . '_upload' );
+			delete_user_meta( get_current_user_id(), '_uwp_pending_' . $type . '_upload' );
 		}
 
 		wp_send_json_success();
