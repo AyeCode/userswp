@@ -161,7 +161,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.77 - TBD =
+= 1.2.77 - 2026-10-07 =
 * Fatal error during login 2FA on invalid code with themes that hook wp_login_failed - FIXED
 
 = 1.2.76 - 2026-09-30 =

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.76\n"
+"Project-Id-Version: UsersWP 1.2.77\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 19:32+0530\n"
-"PO-Revision-Date: 2026-09-30 19:34+0530\n"
+"POT-Creation-Date: 2026-10-07 19:37+0530\n"
+"PO-Revision-Date: 2026-10-07 19:41+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -3205,8 +3205,10 @@ msgstr ""
 msgid "Invalid request! Please try again."
 msgstr ""
 
-#: includes/class-forms.php:1704 includes/class-forms.php:1812
-#: includes/class-forms.php:1836
+#: includes/class-forms.php:1699 includes/class-forms.php:1704
+#: includes/class-forms.php:1807 includes/class-forms.php:1812
+#: includes/class-forms.php:1821 includes/class-forms.php:1836
+#: includes/class-forms.php:1846
 msgid "Invalid verification code."
 msgstr ""
 
