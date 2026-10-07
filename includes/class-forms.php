@@ -1696,7 +1696,7 @@ class UsersWP_Forms {
 		$code = isset( $_POST['authcode'] ) ? sanitize_text_field( wp_unslash( $_POST['authcode'] ) ) : '';
 
 		if ( empty( $code ) || true !== \WordfenceLS\Controller_TOTP::shared()->validate_2fa( $user, $code ) ) {
-			do_action( 'wp_login_failed', $user->user_login );
+			do_action( 'wp_login_failed', $user->user_login, new WP_Error( 'invalid_2fa_code', __( 'Invalid verification code.', 'userswp' ) ) );
 
 			$message = aui()->alert(
 				array(
@@ -1785,7 +1785,7 @@ class UsersWP_Forms {
 		}
 
 		if ( $error ) {
-			do_action( 'wp_login_failed', $user->user_login );
+			do_action( 'wp_login_failed', $user->user_login, new WP_Error( 'invalid_2fa', $error ) );
 
 			$message = aui()->alert(
 				array(
@@ -1804,7 +1804,7 @@ class UsersWP_Forms {
 
 		// Validate TOTP.
 		if ( 'totp' === $provider && true !== $this->validate_wp2fa_totp_authentication( $user ) ) {
-			do_action( 'wp_login_failed', $user->user_login );
+			do_action( 'wp_login_failed', $user->user_login, new WP_Error( 'invalid_2fa_code', __( 'Invalid verification code.', 'userswp' ) ) );
 
 			$message = aui()->alert(
 				array(
@@ -1818,7 +1818,7 @@ class UsersWP_Forms {
 
 		// Validate Email.
 		if ( 'email' === $provider && true !== $this->validate_wp2fa_email_authentication( $user ) ) {
-			do_action( 'wp_login_failed', $user->user_login );
+			do_action( 'wp_login_failed', $user->user_login, new WP_Error( 'invalid_2fa_code', __( 'Invalid verification code.', 'userswp' ) ) );
 
 			if ( isset( $_REQUEST['wp-2fa-email-code-resend'] ) && 1 == $_REQUEST['wp-2fa-email-code-resend'] ) {
 				$message = aui()->alert(
@@ -1843,7 +1843,7 @@ class UsersWP_Forms {
 
 		// Backup Codes.
 		if ( 'backup_codes' === $provider && true !== $this->validate_wp2fa_backup_codes( $user ) ) {
-			do_action( 'wp_login_failed', $user->user_login );
+			do_action( 'wp_login_failed', $user->user_login, new WP_Error( 'invalid_2fa_code', __( 'Invalid verification code.', 'userswp' ) ) );
 
 			$message = aui()->alert(
 				array(
