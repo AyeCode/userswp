@@ -980,7 +980,7 @@ class UsersWP_Forms {
 					);
 					$response = array(
 						'message'  => $message,
-						'redirect' => $redirect_to,
+						'redirect' => $redirect_to ? wp_validate_redirect( $redirect_to, home_url( '/' ) ) : '', // the JS follows it, so the same host check as wp_safe_redirect(); empty means reload
 					);
 					wp_send_json_success( $response );
 				} else {
@@ -1122,7 +1122,7 @@ class UsersWP_Forms {
 		}
 
 		if ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
-			$redirect_to = esc_url_raw( $_REQUEST['redirect_to'] );
+			$redirect_to = esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) );
 		} elseif ( isset( $data['redirect_to'] ) && ! empty( $data['redirect_to'] ) ) {
 			$redirect_to = esc_url_raw( $data['redirect_to'] );
 		} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id > 0 ) {
@@ -1296,6 +1296,7 @@ class UsersWP_Forms {
 				$redirect_to = '';
 			    if ( 1 == uwp_get_option( 'login_modal_enable_redirect' ) ) {
 				    $redirect_to = $this->get_login_redirect_url( $data, $user );
+				    $redirect_to = $redirect_to ? wp_validate_redirect( $redirect_to, home_url( '/' ) ) : ''; // the JS follows it, so the same host check as wp_safe_redirect(); empty means reload
                 }
 				wp_send_json_success(
                     array(
@@ -1897,7 +1898,7 @@ class UsersWP_Forms {
 		}
 
 		if ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
-			$redirect_to = esc_url_raw( $_REQUEST['redirect_to'] );
+			$redirect_to = esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) );
 		} elseif ( isset( $data['redirect_to'] ) && ! empty( $data['redirect_to'] ) ) {
 			$redirect_to = esc_url_raw( $data['redirect_to'] );
 		} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id > 0 ) {
