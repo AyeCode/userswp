@@ -222,10 +222,10 @@ class UsersWP_Templates {
 		           ( $change_page && ( (int) $change_page == $current_page_id ) ) ) {
 			if ( ! is_user_logged_in() ) {
 				if ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
-					$redirect_to = esc_url( $_REQUEST['redirect_to'] );
+					$redirect_to = esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) );
 					$login_page = add_query_arg(
 						array(
-							'redirect_to' => $redirect_to,
+							'redirect_to' => urlencode( $redirect_to ),
 						),
 						get_permalink($login_page)
 					);
@@ -350,7 +350,7 @@ class UsersWP_Templates {
 	public function logout_redirect() {
 		$redirect_page_id = uwp_get_page_id( 'logout_redirect_to' );
 		if ( isset( $_REQUEST['redirect_to'] ) ) {
-			$redirect_to = esc_url( $_REQUEST['redirect_to'] );
+			$redirect_to = esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) );
 		} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id > 0 ) {
 			$redirect_to = get_permalink( $redirect_page_id );
 		} else {
@@ -399,10 +399,10 @@ class UsersWP_Templates {
 			$block_wp_reg = uwp_get_option( 'wp_register_redirect' );
 			if ( $reg_page_id && $block_wp_reg == '1' ) {
 
-				$redirect    = isset( $_REQUEST['redirect_to'] ) ? esc_url( $_REQUEST['redirect_to'] ) : '';
+				$redirect    = isset( $_REQUEST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) ) : '';
 				$redirect_to = get_permalink( $reg_page_id );
 				if ( $redirect ) {
-					$redirect_to = add_query_arg( 'redirect_to', $redirect, $redirect_to );
+					$redirect_to = add_query_arg( 'redirect_to', urlencode( $redirect ), $redirect_to );
 				}
 				wp_safe_redirect( $redirect_to );
 				exit();
@@ -440,8 +440,8 @@ class UsersWP_Templates {
 			if ( $redirect ) {
 				$login_url = add_query_arg( 'redirect_to', urlencode( $redirect ), $login_page );
 			} elseif ( isset( $redirect_page_id ) && (int) $redirect_page_id == - 1 && wp_get_referer() ) {
-				$redirect_to = esc_url( wp_get_referer() );
-				$login_url   = add_query_arg( 'redirect_to', $redirect_to, $login_page );
+				$redirect_to = esc_url_raw( wp_get_referer() );
+				$login_url   = add_query_arg( 'redirect_to', urlencode( $redirect_to ), $login_page );
 			} elseif ( isset( $redirect_page_id ) && $redirect_page_id > 0 ) {
 				$redirect_to = get_permalink( $redirect_page_id );
 				$login_url   = add_query_arg( 'redirect_to', $redirect_to, $login_page );
@@ -466,11 +466,11 @@ class UsersWP_Templates {
 		$register_page_id = uwp_get_page_id( 'register_page' );
 		$redirect_page_id = uwp_get_page_id( 'register_redirect_to' );
 
-		$redirect = isset( $_REQUEST['redirect_to'] ) ? esc_url( $_REQUEST['redirect_to'] ) : '';
+		$redirect = isset( $_REQUEST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) ) : '';
 		if ( isset( $register_page_id ) && $register_page_id > 0 ) {
 			$register_page = get_permalink( $register_page_id );
 			if ( $register_url && isset( $redirect ) && ! empty( $redirect ) ) {
-				$register_url = add_query_arg( 'redirect_to', $redirect, $register_page );
+				$register_url = add_query_arg( 'redirect_to', urlencode( $redirect ), $register_page );
 			} elseif ( (int) $redirect_page_id > 0 ) {
 				$redirect_to  = get_permalink( $redirect_page_id );
 				$register_url = add_query_arg( 'redirect_to', $redirect_to, $register_page );
@@ -496,10 +496,10 @@ class UsersWP_Templates {
 			return $lostpassword_url;
 		}
 
-		$redirect = isset( $_REQUEST['redirect_to'] ) ? esc_url( $_REQUEST['redirect_to'] ) : '';
+		$redirect = isset( $_REQUEST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) ) : '';
 		if ( $forgot_page_url ) {
 			if ( $forgot_page_url && isset( $redirect ) && ! empty( $redirect ) ) {
-				$lostpassword_url = add_query_arg( 'redirect_to', $redirect, $forgot_page_url );
+				$lostpassword_url = add_query_arg( 'redirect_to', urlencode( $redirect ), $forgot_page_url );
 			} else {
 				$lostpassword_url = $forgot_page_url;
 			}
@@ -798,7 +798,7 @@ class UsersWP_Templates {
 			if ( isset( $args['redirect_to'] ) && ! empty( $args['redirect_to'] ) ) {
 				$redirect_to = $args['redirect_to'];
 			} elseif ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
-				$redirect_to = esc_url( urldecode( $_REQUEST['redirect_to'] ) );
+				$redirect_to = esc_url_raw( urldecode( wp_unslash( $_REQUEST['redirect_to'] ) ) );
 			} else {
 				if ( - 1 == uwp_get_option( 'login_redirect_to', - 1 ) ) {
 					$referer = wp_get_referer();
@@ -831,7 +831,7 @@ class UsersWP_Templates {
 				if ( - 1 ==  $redirect_to_value) {
 					$referer = wp_get_referer();
 					if ( isset( $_REQUEST['redirect_to'] ) && ! empty( $_REQUEST['redirect_to'] ) ) {
-						$redirect_to = esc_url( urldecode( $_REQUEST['redirect_to'] ) );
+						$redirect_to = esc_url_raw( urldecode( wp_unslash( $_REQUEST['redirect_to'] ) ) );
 					} else if ( isset( $referer ) && ! empty( $referer ) ) {
 						$redirect_to = $referer;
 					} else {
@@ -1009,7 +1009,7 @@ class UsersWP_Templates {
 		}
 
 		if ( ! empty( $custom_redirect ) ) {
-			$redirect = esc_url( $custom_redirect );
+			$redirect = esc_url_raw( $custom_redirect );
 		} else if ( isset($redirect_page_id) && !empty($redirect_page_id) ) {
 			if ( uwp_is_wpml() ) {
 				$wpml_page_id = uwp_wpml_object_id( $redirect_page_id, 'page', true, ICL_LANGUAGE_CODE );
