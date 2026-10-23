@@ -41,7 +41,7 @@ function uwp_build_profile_tab_url($user_id, $tab = false, $subtab = false) {
 function uwp_get_register_page_url() {
     $register_url = uwp_get_page_link('register');
     if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
-        $redirect_to  = rawurlencode( $_REQUEST['redirect_to'] );
+        $redirect_to  = rawurlencode( esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) ) );
         $register_url = add_query_arg('redirect_to', $redirect_to, $register_url);
     }
     return $register_url;
@@ -58,8 +58,8 @@ function uwp_get_register_page_url() {
 function uwp_get_login_page_url() {
     $login_url = uwp_get_page_link('login');
     if (isset($_REQUEST['redirect_to']) && !empty($_REQUEST['redirect_to'])) {
-        $redirect_to = esc_url($_REQUEST['redirect_to']);
-        $login_url = add_query_arg('redirect_to', $redirect_to, $login_url);
+        $redirect_to = esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) );
+        $login_url = add_query_arg('redirect_to', urlencode( $redirect_to ), $login_url);
     }
     return $login_url;
 }

@@ -1892,13 +1892,13 @@ class UsersWP_GeoDirectory_Plugin {
 				$parsed = wp_parse_url( $url );
 				parse_str( $parsed['query'], $query );
 				$uwp_url = add_query_arg( array(
-					'redirect_to' => $query['redirect_add_listing'],
+					'redirect_to' => rawurlencode( $query['redirect_add_listing'] ),
 				), $uwp_url );
 			}
 
 			if ( isset( $args['redirect_to'] ) && ! empty( $args['redirect_to'] ) ) {
 				$uwp_url = add_query_arg( array(
-					'redirect_to' => $args['redirect_to'],
+					'redirect_to' => rawurlencode( $args['redirect_to'] ),
 				), $uwp_url );
 			}
 
