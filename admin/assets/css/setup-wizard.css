@@ -36,3 +36,6 @@ select.uwp-select {width: 100%;padding: 5px 10px;max-width: 100%;}
 .uwp-wizard-menu-result:empty {display: none;}
 .button.uwp_remove_dummy_users_button {background: #ff0303;border-color: #ff0303;}
 .button.uwp_remove_dummy_users_button:hover {background: #e90707;border-color: #e90707;}
+/* WP 7.0+ draws a white tick on var(--wp-admin-theme-color), which can be missing on this standalone page. Use native controls instead. */
+.uwp-setup-content input[type="checkbox"] {-webkit-appearance: checkbox;appearance: auto;}
+.uwp-setup-content input[type="radio"] {-webkit-appearance: radio;appearance: auto;}
