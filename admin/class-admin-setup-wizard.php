@@ -152,7 +152,7 @@ class UsersWP_Admin_Setup_Wizard {
 			<?php wp_print_scripts( 'uwp-setup' ); ?>
 			<?php do_action( 'admin_head' ); ?>
         </head>
-        <body class="uwp-setup wp-core-ui">
+        <body class="uwp-setup wp-core-ui admin-color-<?php echo esc_attr( sanitize_html_class( get_user_option( 'admin_color' ), 'modern' ) ); ?>">
         <h1 id="uwp-logo">
             <a href="https://userswp.io/"><span class="dashicons dashicons-groups"></span>
                 <span><span class="text-secondary">Users</span><span class="text-primary">WP</span></span>
