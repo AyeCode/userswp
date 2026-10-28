@@ -452,6 +452,24 @@ function uwp_maybe_reset_recaptcha() {
 }
 
 /**
+ * Show an error in the auth modal and reset the button when an ajax request fails
+ * or returns something other than a JSON response.
+ */
+function uwp_modal_ajax_error(xhr, $button, button_text) {
+    var message = '';
+    if (xhr && xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
+        message = xhr.responseJSON.data.message;
+    } else {
+        var text = uwp_localize_data.error_retry ? uwp_localize_data.error_retry : 'Something went wrong, please retry.';
+        message = jQuery('<div class="alert alert-danger" role="alert"></div>').text(text);
+    }
+    jQuery('.uwp-auth-modal .modal-content .modal-error').html(message);
+    if ($button && $button.length) {
+        $button.html(button_text).prop('disabled', false);
+    }
+}
+
+/**
  * Submit the login form via ajax.
  */
 function uwp_modal_login_form_process(){
@@ -461,12 +479,22 @@ function uwp_modal_login_form_process(){
         type: "POST",
         url: uwp_localize_data.ajaxurl,
         data: data,
+        dataType: 'json',
         beforeSend: function() {
             jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').html('<i class="fas fa-circle-notch fa-spin"></i> ' + $button_text).prop('disabled', true);// disable submit
             jQuery('.uwp-auth-modal .modal-content .modal-error').html(''); // clear error messages
             return uwp_maybe_check_recaptcha('login');
         },
+        error: function(xhr) {
+            uwp_modal_ajax_error(xhr, jQuery('.uwp-auth-modal .modal-content .uwp_login_submit'), $button_text);
+            uwp_maybe_reset_recaptcha();
+        },
         success: function(data) {
+            if (!data || typeof data !== 'object' || typeof data.success === 'undefined') {
+                uwp_modal_ajax_error(null, jQuery('.uwp-auth-modal .modal-content .uwp_login_submit'), $button_text);
+                uwp_maybe_reset_recaptcha();
+                return;
+            }
             if(data.success==true){
                 jQuery('.uwp-auth-modal .modal-content .uwp_login_submit').html($button_text).prop('disabled', true);// remove spinner
                 jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data.message);
@@ -515,16 +543,24 @@ function uwp_modal_login_form_2fa_process(type, fields, $button){
     if (!$button) {
         $button = jQuery('.uwp-auth-modal .modal-content '+type).find('.uwp-2fa-submit');
     }
-    $button_text = $button.html();
+    var $button_text = $button.html();
     jQuery.ajax({
         type: "POST",
         url: uwp_localize_data.ajaxurl,
         data: data,
+        dataType: 'json',
         beforeSend: function() {
             $button.html('<i class="fas fa-circle-notch fa-spin"></i> ' + $button_text).prop('disabled', true);// disable submit
             jQuery('.uwp-auth-modal .modal-content .modal-error').html(''); // clear error messages
         },
+        error: function(xhr) {
+            uwp_modal_ajax_error(xhr, $button, $button_text);
+        },
         success: function(data) {
+            if (!data || typeof data !== 'object' || typeof data.success === 'undefined') {
+                uwp_modal_ajax_error(null, $button, $button_text);
+                return;
+            }
             if(data.success==true){
                 $button.html($button_text).prop('disabled', true);// remove spinner
                 jQuery('.uwp-auth-modal .modal-content .modal-error').html(data.data.message);

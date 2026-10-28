@@ -165,6 +165,7 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 * A redirect_to with more than one query arg lost everything after the first on log in, log out, register and lost password links - FIXED
 * AJAX log in and register could redirect to another site through redirect_to; the redirect is now limited to allowed hosts, as for normal log in - FIXED/SECURITY
 * Setup wizard checkboxes buttons look unchecked on WordPress 7.0+ even when checked - FIXED
+* WP 2FA email verification code not sent and login button keeps spinning in login lightbox - FIXED
 
 = 1.2.77 - 2026-10-07 =
 * Fatal error during login 2FA on invalid code with themes that hook wp_login_failed - FIXED
