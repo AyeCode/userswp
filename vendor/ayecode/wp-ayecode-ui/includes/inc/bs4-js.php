@@ -275,6 +275,10 @@
     }
 
     function aui_modal_iframe($title,$url,$footer,$dismissible,$class,$dialog_class,$body_class,responsive){
+        $url = aui_sanitize_url($url);
+        if (!$url) {
+            return;
+        }
         if(!$body_class){$body_class = 'p-0';}
         var wClass = 'text-center position-absolute w-100 text-dark overlay overlay-white p-0 m-0 d-none d-flex justify-content-center align-items-center';
         var $body = "", sClass = "w-100 p-0 m-0";
@@ -302,7 +306,7 @@
             });
 
             //resize the iframe once loaded.
-            iFrame.load(function() {
+            iFrame.on('load', function() {
                 jQuery('.ac-preview-loading').removeClass('d-flex');
             });
         });
@@ -644,8 +648,8 @@
 
                 // iframe
                 var css_height = window.innerWidth > window.innerHeight ? '95vh' : 'auto';
-                var url = jQuery(a).attr('href');
-                var iframe = '<iframe class="embed-responsive-item" style="height:'+css_height +'" src="'+url+'?rel=0&amp;showinfo=0&amp;modestbranding=1&amp;autoplay=1" id="video" allow="autoplay"></iframe>';
+                var url = aui_sanitize_url(jQuery(a).attr('href'),{fallback:'about:blank'});
+                var iframe = url ? jQuery('<iframe class="embed-responsive-item" id="video" allow="autoplay"></iframe>').attr('style', 'height:' + css_height).attr('src', url + '?rel=0&showinfo=0&modestbranding=1&autoplay=1').get(0).outerHTML : '';
                 var img = iframe ;//.css('height',css_height).get(0).outerHTML;
                 $carousel += img;
 
@@ -689,7 +693,7 @@
      */
     function aui_init_modal_iframe() {
         jQuery('.aui-has-embed, [data-aui-embed="iframe"]').each(function(e){
-            if (!jQuery(this).hasClass('aui-modal-iframed') && jQuery(this).data('embed-url')) {
+            if (!jQuery(this).hasClass('aui-modal-iframed') && jQuery(this).data('embed-url') && aui_sanitize_url(jQuery(this).data('embed-url'))) {
                 jQuery(this).addClass('aui-modal-iframed');
 
                 jQuery(this).on("click",function(e1) {
@@ -995,18 +999,191 @@
 
     // fire when URL changes also.
     let FSElastUrl = location.href;
-    new MutationObserver(() => {
+
+    /**
+     * Re-bind the scroll handler when the editor navigates to another template or page.
+     *
+     * This used to run from a MutationObserver watching the whole document, so it was
+     * called for every DOM change the editor made, typing included, just to compare a
+     * URL. Watching the URL itself does the same job for a fraction of the cost.
+     */
+    function aui_fse_check_url_change(){
         const url = location.href;
-        if (url !== FSElastUrl) {
-            FSElastUrl = url;
-            aui_fse_set_data_scroll();
-            // fire a second time incase of load delays.
-            setTimeout(function(){
-                aui_fse_set_data_scroll();
-            }, 2000);
+
+        if ( url === FSElastUrl ) {
+            return;
         }
-    }).observe(document, {subtree: true, childList: true});
-	<?php } ?>
 
+        FSElastUrl = url;
+        aui_fse_set_data_scroll();
 
+        // fire a second time incase of load delays.
+        setTimeout(function(){
+            aui_fse_set_data_scroll();
+        }, 2000);
+    }
+
+    window.addEventListener('popstate', aui_fse_check_url_change);
+    window.addEventListener('hashchange', aui_fse_check_url_change);
+
+    // The editor navigates with history.pushState(), which fires no event, so poll too.
+    setInterval(aui_fse_check_url_change, 500);
+<?php } ?>
+/**
+ * Sanitizes and validates a URL for safe use in an HTML attribute or a DOM property.
+ *
+ * @param {string} url - The URL to sanitize.
+ * @param {Object} [options] - Configuration options.
+ * @param {boolean} [options.allowRelative=false] - Allow same-origin relative URLs.
+ * @param {string} [options.baseOrigin=''] - Base URL for relative URLs when there is no window (SSR).
+ * @param {string[]|null} [options.allowedDomains=null] - Exact hostnames to allow (e.g. 'www.youtube.com').
+ *        null = no allowlist, [] = block all. A non-array, or any entry that is not a valid
+ *        hostname string, blocks all URLs.
+ * @returns {string} The sanitized URL, or fallback.
+ */
+function aui_sanitize_url(url, options) {
+    const FALLBACK_URL = ''; // '' OR 'about:blank'
+    const {
+		fallback = FALLBACK_URL,
+		allowRelative = false,
+		baseOrigin = '',
+		allowedDomains = null
+	  } = options || {};
+
+    if (typeof url !== 'string' || url.trim() === '') {
+        return fallback;
+    }
+
+    // Validate and normalize the allowlist up front (fail closed if malformed).
+    // Entries are normalized by the same parser as the URL (case, trailing spaces, IDN -> punycode).
+    let allowedHosts = null;
+
+    if (allowedDomains !== null) {
+        if (!Array.isArray(allowedDomains)) {
+            return fallback;
+        }
+
+        allowedHosts = [];
+
+        for (const domain of allowedDomains) {
+            if (typeof domain !== 'string' || domain.trim() === '') {
+                return fallback;
+            }
+
+            try {
+                allowedHosts.push(new URL('https://' + domain.trim()).hostname);
+            } catch (e) {
+                return fallback;
+            }
+        }
+    }
+
+    // Resolve the base used for relative URLs.
+    let currentOrigin = 'http://localhost';
+    let currentHref = 'http://localhost/';
+
+    if (typeof window !== 'undefined') {
+        currentOrigin = window.location.origin;
+        currentHref = window.location.href;
+    } else if (baseOrigin) {
+        try {
+            const normalizedBase = new URL(baseOrigin);
+            currentOrigin = normalizedBase.origin;
+            currentHref = normalizedBase.href;
+        } catch (e) {
+            return fallback;
+        }
+    }
+
+    // Parse with the native WHATWG URL parser (the same parser the browser uses to load the URL).
+    let parsed;
+    let isRelative = false;
+
+    try {
+        parsed = new URL(url);
+    } catch (e) {
+        if (!allowRelative) {
+            return fallback;
+        }
+
+        // On the server, never resolve relative URLs against the localhost placeholder.
+        if (typeof window === 'undefined' && !baseOrigin) {
+            return fallback;
+        }
+
+        try {
+            parsed = new URL(url, currentHref);
+            isRelative = true;
+        } catch (e2) {
+            return fallback;
+        }
+    }
+
+    // Only http and https.
+    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+        return fallback;
+    }
+
+    // Hostnames are not percent-encoded by the parser, so allow only real hostname characters
+    // (IDNs are already punycode here) or a bracketed IPv6 address. Blocks quotes, "=", "&", etc.
+    if (!/^(?:[a-z0-9_-]+\.)*[a-z0-9_-]+\.?$|^\[[0-9a-f:.]+\]$/.test(parsed.hostname)) {
+        return fallback;
+    }
+
+    // Relative URLs must stay on the current origin (blocks //evil.com, /\evil.com).
+    if (isRelative && parsed.origin !== currentOrigin) {
+        return fallback;
+    }
+
+    // No credentials (blocks https://google.com@evil.com).
+    if (parsed.username || parsed.password) {
+        return fallback;
+    }
+
+    // Exact hostname allowlist.
+    if (allowedHosts !== null && !allowedHosts.includes(parsed.hostname)) {
+        return fallback;
+    }
+
+    // The parser encodes " < > and spaces but not ' in the path, so encode quotes for any attribute quoting style.
+    return parsed.href.replace(/'/g, '%27').replace(/"/g, '%22');
+}
+
+/**
+ * Strip HTML tags.
+ * 
+ * @param {string} text - Text to strip the HTML tags from.
+ * @return {string} Stripped text.
+ */
+function aui_stripTags(text) {
+	if ('string' !== typeof text) {
+		return '';
+	}
+
+	const domParser = new DOMParser();
+	const htmlDocument = domParser.parseFromString(text, 'text/html');
+
+	// Self-assignment forces browser encoding/sanitization
+	htmlDocument.body.innerText = htmlDocument.body.innerText;
+
+	return htmlDocument.body.innerHTML;
+}
+
+/**
+ * Strip HTML tags and convert HTML entities.
+ * 
+ * @param {string} text - Text to strip tags and convert HTML entities.
+ * @return {string} Sanitized text.
+ */
+function aui_stripTagsEscHTML(text) {
+	let _text = aui_stripTags(text);
+	const textarea = document.createElement('textarea');
+
+	try {
+		textarea.textContent = _text;
+		_text = aui_stripTags(textarea.value);
+	} catch (er) {}
+
+	return _text;
+}
 </script>

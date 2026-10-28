@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.56';
+		public $version = '0.2.58';
 
 		/**
 		 * Class textdomain.
@@ -167,7 +167,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			defined( 'AUI_CYAN_COLOR_ORIGINAL' ) || define( 'AUI_CYAN_COLOR_ORIGINAL', '#35bdff' );
 			defined( 'AUI_GRAY_COLOR_ORIGINAL' ) || define( 'AUI_GRAY_COLOR_ORIGINAL', '#ced4da' );
 			defined( 'AUI_INDIGO_COLOR_ORIGINAL' ) || define( 'AUI_INDIGO_COLOR_ORIGINAL', '#502c6c' );
-			defined( 'AUI_ORANGE_COLOR_ORIGINAL' ) || define( 'AUI_ORANGE_COLOR_ORIGINAL', '#orange' );
+			defined( 'AUI_ORANGE_COLOR_ORIGINAL' ) || define( 'AUI_ORANGE_COLOR_ORIGINAL', '#fbb500' );
 			defined( 'AUI_BLACK_COLOR_ORIGINAL' ) || define( 'AUI_BLACK_COLOR_ORIGINAL', '#000' );
 
 			if ( ! defined( 'AUI_PRIMARY_COLOR' ) ) {
@@ -297,16 +297,17 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 * Initiate the settings and add the required action hooks.
 		 */
 		public function init() {
-            global $aui_bs5;
+			global $aui_bs5;
 
 			// Maybe fix settings
-			if ( ! empty( $_REQUEST['aui-fix-admin'] ) && !empty($_REQUEST['nonce']) && wp_verify_nonce( $_REQUEST['nonce'], "aui-fix-admin" ) ) {
+			if ( ! empty( $_REQUEST['aui-fix-admin'] ) && ! empty( $_REQUEST['nonce'] ) && is_string( $_REQUEST['nonce'] ) && current_user_can( 'manage_options' ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), "aui-fix-admin" ) ) {
 				$db_settings = get_option( 'ayecode-ui-settings' );
-				if ( ! empty( $db_settings ) ) {
+				if ( ! empty( $db_settings ) && is_array( $db_settings ) ) {
 					$db_settings['css_backend'] = 'compatibility';
 					$db_settings['js_backend'] = 'core-popper';
 					update_option( 'ayecode-ui-settings', $db_settings );
 					wp_safe_redirect(admin_url("options-general.php?page=ayecode-ui-settings&updated=true"));
+					exit;
 				}
 			}
 
@@ -354,7 +355,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			}
 
 			// Maybe show backend style error
-			if( $this->settings['css_backend'] != 'compatibility' || $this->settings['js_backend'] != 'core-popper' ){
+			if( ( $this->settings['css_backend'] != 'compatibility' || $this->settings['js_backend'] != 'core-popper' ) && is_admin() && current_user_can( 'manage_options' ) ) {
 				add_action( 'admin_notices', array( $this, 'show_admin_style_notice' ) );
 			}
 
@@ -375,15 +376,23 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @return bool
 		 */
-		public function load_admin_scripts(){
+		public function load_admin_scripts() {
 			$result = true;
 
-			// check if specifically disabled
-			if(!empty($this->settings['disable_admin'])){
-				$url_parts = explode("\n",$this->settings['disable_admin']);
-				foreach($url_parts as $part){
-					if( strpos($_SERVER['REQUEST_URI'], trim($part)) !== false ){
-						return false; // return early, no point checking further
+			// Check if specifically disabled
+			if ( ! empty( $this->settings['disable_admin'] ) && is_string( $this->settings['disable_admin'] ) ) {
+				$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+				$url_parts   = explode( "\n", $this->settings['disable_admin'] );
+
+				foreach( $url_parts as $part ) {
+					$part = trim( $part );
+
+					if ( $part === '' ) {
+						continue;
+					}
+
+					if ( strpos( $request_uri, $part ) !== false ) {
+						return false;
 					}
 				}
 			}
@@ -443,7 +452,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 * @return bool
 		 */
 		public static function is_block_theme() {
-			if ( function_exists( 'wp_is_block_theme' && wp_is_block_theme() ) ) {
+			if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 				return true;
 			}
 
@@ -883,12 +892,17 @@ $custom_css .= "
 			$db_settings = get_option( 'ayecode-ui-settings' );
 
 			// Maybe show default version notice
-			if ( empty( $db_settings ) ) {
-				$site_install_date = new DateTime( self::get_site_install_date() );
-				$switch_over_date = new DateTime( "2024-02-01" );
+			if ( empty( $db_settings ) && is_admin() && ! wp_doing_ajax() ) {
+				try {
+					$install_date      = self::get_site_install_date();
+					$site_install_date = new DateTime( $install_date ? $install_date : 'now' );
+					$switch_over_date  = new DateTime( "2024-02-01" );
 
-				if ( $site_install_date < $switch_over_date ) {
-					add_action( 'admin_notices', array( $this, 'show_admin_version_notice' ) );
+					if ( $site_install_date < $switch_over_date ) {
+						add_action( 'admin_notices', array( $this, 'show_admin_version_notice' ) );
+					}
+				} catch ( Exception $e ) {
+					// Invalid date, skip the notice.
 				}
 			}
 
@@ -2247,7 +2261,7 @@ $custom_css .= "
 		 * @return  string
 		 */
 		public static function css_hex_lighten_darken($hexCode, $adjustPercent) {
-			$hexCode = ltrim($hexCode, '#');
+			$hexCode = ltrim( (string) $hexCode, '#');
 
 			if ( strpos( $hexCode, 'rgba(' ) !== false || strpos( $hexCode, 'rgb(' ) !== false ) {
 				return $hexCode;
@@ -2423,8 +2437,8 @@ $custom_css .= "
 				'day_s1_2' => _x( 'M', 'Monday initial', 'ayecode-connect' ),
 				'day_s1_3' => _x( 'T', 'Tuesday initial', 'ayecode-connect' ),
 				'day_s1_4' => _x( 'W', 'Wednesday initial', 'ayecode-connect' ),
-				'day_s1_5' => _x( 'T', 'Friday initial', 'ayecode-connect' ),
-				'day_s1_6' => _x( 'F', 'Thursday initial', 'ayecode-connect' ),
+				'day_s1_5' => _x( 'T', 'Thursday initial', 'ayecode-connect' ),
+				'day_s1_6' => _x( 'F', 'Friday initial', 'ayecode-connect' ),
 				'day_s1_7' => _x( 'S', 'Saturday initial', 'ayecode-connect' ),
 				'day_s2_1' => __( 'Su', 'ayecode-connect' ),
 				'day_s2_2' => __( 'Mo', 'ayecode-connect' ),
@@ -2492,7 +2506,7 @@ $custom_css .= "
 
 			for ( $i = 1; $i <= 7; $i ++ ) {
 				$day_s3[] = addslashes( $params[ 'day_s3_' . $i ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				$day_s5[] = addslashes( $params[ 'day_s3_' . $i ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$day_s5[] = addslashes( $params[ 'day_s5_' . $i ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 
 			$month_s = array();
@@ -2963,7 +2977,7 @@ $custom_css .= "
                     });
 
                     /* Trigger field change */
-                    if ($keys.length) {
+                    if (Object.keys($keys).length) {
                         $el.trigger('aui_cf_field_on_change');
                     }
                 }
@@ -3113,7 +3127,7 @@ $custom_css .= "
                                 $elSelect.val(setVal);
                             } else {
                                 jQuery.each(setVal, function(i, v) {
-                                    $elSelect.find('option[value="' + v + '"]').prop('selected', true);
+                                    $elSelect.find('option').filter(function() { return this.value == v; }).prop('selected', true);
                                 });
                             }
                             $elSelect.trigger('change');
@@ -3124,10 +3138,10 @@ $custom_css .= "
                             }
                             if (Array.isArray(setVal)) {
                                 jQuery.each(setVal, function(i, v) {
-                                    $el.find('input[type="checkbox"][value="' + v + '"]').not('[data-ignore-rule]').prop('checked', true);
+                                    $el.find('input[type="checkbox"]').not('[data-ignore-rule]').filter(function() { return this.value == v; }).prop('checked', true);
                                 });
                             } else {
-                                $el.find('input[type="checkbox"][value="' + setVal + '"]').not('[data-ignore-rule]').prop('checked', true);
+                                $el.find('input[type="checkbox"]').not('[data-ignore-rule]').filter(function() { return this.value == setVal; }).prop('checked', true);
                             }
                             break;
                         case 'radio':
@@ -3135,7 +3149,7 @@ $custom_css .= "
                                 if ($el.find('input[type="radio"]:checked').not('[data-ignore-rule]').length >= 1) {
                                     $el.find('input[type="radio"]:checked').not('[data-ignore-rule]').prop('checked', false).removeAttr('checked');
                                 }
-                                $el.find('input[type="radio"][value="' + setVal + '"]').not('[data-ignore-rule]').prop('checked', true);
+                                $el.find('input[type="radio"]').not('[data-ignore-rule]').filter(function() { return this.value == setVal; }).prop('checked', true);
                             }, 100);
                             break;
                         default:
@@ -3378,7 +3392,7 @@ $custom_css .= "
 		 */
 		public static function is_cornerstone_preview() {
 			$result = false;
-			if ( ! empty( $_REQUEST['cornerstone_preview'] ) || basename( $_SERVER['REQUEST_URI'] ) == 'cornerstone-endpoint' ) {
+			if ( ! empty( $_REQUEST['cornerstone_preview'] ) || ( isset( $_SERVER['REQUEST_URI'] ) && basename( $_SERVER['REQUEST_URI'] ) == 'cornerstone-endpoint' ) ) {
 				$result = true;
 			}
 
@@ -3408,7 +3422,7 @@ $custom_css .= "
 		 */
 		public static function is_oxygen_preview() {
 			$result = false;
-			if ( ! empty( $_REQUEST['ct_builder'] ) || ( ! empty( $_REQUEST['action'] ) && ( substr( $_REQUEST['action'], 0, 11 ) === "oxy_render_" || substr( $_REQUEST['action'], 0, 10 ) === "ct_render_" ) ) ) {
+			if ( ! empty( $_REQUEST['ct_builder'] ) || ( ! empty( $_REQUEST['action'] ) && is_string( $_REQUEST['action'] ) && ( substr( $_REQUEST['action'], 0, 11 ) === "oxy_render_" || substr( $_REQUEST['action'], 0, 10 ) === "ct_render_" ) ) ) {
 				$result = true;
 			}
 

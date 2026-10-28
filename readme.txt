@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 6.1
 Tested up to: 7.1
-Stable tag: 1.2.77
+Stable tag: 1.2.78
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -161,11 +161,12 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
-= 1.2.78 - 2026-10-TBD =
+= 1.2.78 - 2026-10-28 =
 * A redirect_to with more than one query arg lost everything after the first on log in, log out, register and lost password links - FIXED
 * AJAX log in and register could redirect to another site through redirect_to; the redirect is now limited to allowed hosts, as for normal log in - FIXED/SECURITY
 * Setup wizard checkboxes buttons look unchecked on WordPress 7.0+ even when checked - FIXED
 * WP 2FA email verification code not sent and login button keeps spinning in login lightbox - FIXED
+* Update AUI 0.2.58 and SD 1.2.38 - CHANGED
 
 = 1.2.77 - 2026-10-07 =
 * Fatal error during login 2FA on invalid code with themes that hook wp_login_failed - FIXED

@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.37' );
+	define( 'SUPER_DUPER_VER', '1.2.38' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -65,11 +65,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 			}
 
-			// init parent
-			if(empty($this->options['output_types']) || in_array('widget',$this->options['output_types'])){
+			// Init parent
+			if ( $this->is_widget_output() ) {
 				parent::__construct( $options['base_id'], $options['name'], $options['widget_ops'] );
+			} else {
+				// Block/shortcode only, so WP_Widget is not set up and name/id_base stay empty.
+				// Keep it out of the WP widget list when it is added via register_widget().
+				add_action( 'widgets_init', array( __CLASS__, 'remove_non_widgets' ), PHP_INT_MAX - 100 );
 			}
-
 
 			if ( isset( $options['class_name'] ) ) {
 				// register widget
@@ -77,7 +80,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 				// register shortcode, this needs to be done even for blocks and widgets
 				$this->register_shortcode();
-
 
 				// Fusion Builder (avada) support
 				if ( function_exists( 'fusion_builder_map' ) ) {
@@ -157,8 +159,44 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @return void
 		 */
 		public function _register() {
-			if(empty($this->options['output_types']) || in_array('widget',$this->options['output_types'])){
+			if ( $this->is_widget_output() ) {
 				parent::_register();
+			}
+		}
+
+		/**
+		 * Check if this class outputs a widget.
+		 *
+		 * @since 1.2.38
+		 *
+		 * @return bool
+		 */
+		public function is_widget_output() {
+			return empty( $this->options['output_types'] ) || in_array( 'widget', $this->options['output_types'] );
+		}
+
+		/**
+		 * Remove block/shortcode only classes from the WP widget list.
+		 *
+		 * These are not real widgets and have no name or id_base. Plugins that
+		 * read the widget list (like SeedProd) can break on the empty name.
+		 * The block and shortcode are set up in the constructor, so they keep working.
+		 *
+		 * @since 1.2.38
+		 *
+		 * @return void
+		 */
+		public static function remove_non_widgets() {
+			global $wp_widget_factory;
+
+			if ( empty( $wp_widget_factory->widgets ) ) {
+				return;
+			}
+
+			foreach ( $wp_widget_factory->widgets as $key => $widget ) {
+				if ( $widget instanceof WP_Super_Duper && ! $widget->is_widget_output() ) {
+					unset( $wp_widget_factory->widgets[ $key ] );
+				}
 			}
 		}
 

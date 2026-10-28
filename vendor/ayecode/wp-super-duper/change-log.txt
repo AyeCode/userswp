@@ -1,3 +1,6 @@
+= 1.2.38 - 2026-10-20 =
+* SeedProd builder JS error when block/shortcode only classes are registered with register_widget() - FIXED
+
 = 1.2.37 - 2026-09-30 =
 * Added extra sanitization for CSS color values - FIXED/SECURITY
 

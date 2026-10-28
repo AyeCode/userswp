@@ -211,7 +211,7 @@ class AUI_Component_Input {
 
 			// step (for numbers)
 			if ( ! empty( $args['step'] ) ) {
-				$output .= ' step="' . $args['step'] . '" ';
+				$output .= ' step="' . esc_attr( $args['step'] ) . '" ';
 			}
 
 			// required
@@ -553,6 +553,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'input_group_right'        => '',
 			'input_group_left'         => '',
 			'input_group_right_inside' => false,
+			'input_group_left_inside'  => false,
 			'form_group_class'      => '',
 			'help_text'          => '',
 			'validation_text'    => '',
@@ -679,7 +680,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 
 			// class
-			$class = ! empty( $args['class'] ) ? $args['class'] : '';
+			$class = ! empty( $args['class'] ) ? AUI_Component_Helper::esc_classes( $args['class'] ) : '';
 			$output .= ' class="form-control ' . $class . '" ';
 
 			// extra attributes
@@ -693,7 +694,10 @@ else{$eli.attr(\'type\',\'password\');}"
 			// value
 			if ( ! empty( $args['value'] ) ) {
 				if ( ! empty( $args['allow_tags'] ) ) {
-					$output .= AUI_Component_Helper::sanitize_html_field( $args['value'], $args ); // Sanitize HTML.
+					$textarea_value = AUI_Component_Helper::sanitize_html_field( $args['value'], $args ); // Sanitize HTML.
+
+					// A closing textarea tag would end the field early and let the rest render as HTML.
+					$output .= is_string( $textarea_value ) ? preg_replace( '#</(textarea)#i', '&lt;/$1', $textarea_value ) : '';
 				} else {
 					$output .= AUI_Component_Helper::sanitize_textarea_field( $args['value'] );
 				}
@@ -974,7 +978,7 @@ else{$eli.attr(\'type\',\'password\');}"
 								$selected = selected( $option_value, $args['value'], false );
 							}
 
-							$output .= '<option value="' . esc_attr( $option_value ) . '" ' . $selected . ' '.$extra_attributes .'>' . $option_label . '</option>';
+							$output .= '<option value="' . esc_attr( $option_value ) . '" ' . $selected . ' '.$extra_attributes .'>' . esc_html( $option_label ) . '</option>';
 						}
 					} else {
 						if ( ! empty( $args['value'] ) ) {
@@ -1296,7 +1300,7 @@ else{$eli.attr(\'type\',\'password\');}"
 				$uniq_class .= '-' . $args['id'];
 			}
 
-			if ( isset( $args['value'] ) || $args['value'] !== "" ) {
+			if ( isset( $args['value'] ) && $args['value'] !== "" ) {
 				$uniq_class .= '-' . $args['value'];
 			} else {
 				$uniq_class .= '-' . $count;
